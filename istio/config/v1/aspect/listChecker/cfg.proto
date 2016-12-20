@@ -20,16 +20,12 @@ package istio.config.v1.aspect.listChecker;
 // Config - User visible configuration of this aspect
 // Must be defined as a proto
 message Config {
-  // checkBlackList determines if this behaves like a blacklist
-  bool checkBlackList=1;
-  // List if defined inline
-  repeated string list=2;
-  // ProviderURL if list is externally maintained, url to it
-  string ProviderURL=3;
+  // check_blacklist determines if this behaves like a blacklist
+  bool check_blacklist = 1;
 }
 
 // Input - User mappable input provided at config time
 message Input {
   // CheckList verifies whether the given symbol is on the list.
-  string symbol=1;
+  string symbol = 1;
 }
