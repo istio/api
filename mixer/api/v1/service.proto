@@ -22,16 +22,41 @@ import "mixer/api/v1/quota.proto";
 
 // The Istio Mixer API
 service Mixer {
-  // Checks preconditions before performing an operation.
-  // The preconditions enforced depend on the set of supplied attributes
-  // and the active configuration.
-  rpc Check(stream CheckRequest) returns (stream CheckResponse) {}
+    // Checks preconditions before performing an operation.
+    // The preconditions enforced depend on the set of supplied attributes
+    // and the active configuration.
+    rpc Check (CheckRequest) returns (CheckResponse) {
+    }
 
-  // Reports telemetry, such as logs and metrics.
-  // The reported information depends on the set of supplied attributes
-  // and the active configuration.
-  rpc Report(stream ReportRequest) returns (stream ReportResponse) {}
+    // Reports telemetry, such as logs and metrics.
+    // The reported information depends on the set of supplied attributes
+    // and the active configuration.
+    rpc Report (ReportRequest) returns (ReportResponse) {
+    }
 
-  // Quota allocates and releases quota.
-  rpc Quota(stream QuotaRequest) returns (stream QuotaResponse) {}
+    // Quota allocates and releases quota.
+    rpc Quota (QuotaRequest) returns (QuotaResponse) {
+    }
+
+    // WARNING: The Streaming* RPCs are considering EXPERIMENTAL and are not
+    // supported at this time.
+
+    // EXPERIMENTAL: DO NOT USE
+    // Checks preconditions before performing an operation.
+    // The preconditions enforced depend on the set of supplied attributes
+    // and the active configuration.
+    rpc StreamingCheck (stream StreamingCheckRequest) returns (stream StreamingCheckResponse) {
+    }
+
+    // EXPERIMENTAL: DO NOT USE
+    // Reports telemetry, such as logs and metrics.
+    // The reported information depends on the set of supplied attributes
+    // and the active configuration.
+    rpc StreamingReport (stream StreamingReportRequest) returns (stream StreamingReportResponse) {
+    }
+
+    // EXPERIMENTAL: DO NOT USE
+    // Quota allocates and releases quota.
+    rpc StreamingQuota (stream StreamingQuotaRequest) returns (stream StreamingQuotaResponse) {
+    }
 }

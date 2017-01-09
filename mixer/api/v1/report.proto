@@ -21,17 +21,28 @@ import "mixer/api/v1/attributes.proto";
 
 // Used to report telemetry after performing an action.
 message ReportRequest {
-  // Index within the stream for this request, used to match to responses
-  int64 request_index = 1;
-
-  // The attributes to use for this request
-  Attributes attribute_update = 2;
+    // The set of attributes to use for this request.
+    map<string, string> attributes = 1;
 }
 
 message ReportResponse {
-  // Index of the request this response is associated with
-  int64 request_index = 1;
+    // Indicates whether the report was successfully processed or not
+    google.rpc.Status result = 1;
+}
 
-  // Indicates whether the report was processed or not
-  google.rpc.Status result = 2;
+// Used to report telemetry after performing an action.
+message StreamingReportRequest {
+    // Index within the stream for this request, used to match to responses
+    int64 request_index = 1;
+
+    // The attributes to use for this request
+    Attributes attribute_update = 2;
+}
+
+message StreamingReportResponse {
+    // Index of the request this response is associated with
+    int64 request_index = 1;
+
+    // Indicates whether the report was processed or not
+    google.rpc.Status result = 2;
 }

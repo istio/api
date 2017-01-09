@@ -19,22 +19,9 @@ package istio.mixer.v1;
 import "google/rpc/status.proto";
 import "mixer/api/v1/attributes.proto";
 
-message QuotaRequest {
-  // Index within the stream for this request, used to match to responses
-  int64 request_index = 1;
-
-  // The attributes to use for this request
-  Attributes attribute_update = 2;
-
-  // what kind of quota operation to perform
-  OperationKind kind = 3;
-
-  // Used for deduplicating quota allocation/free calls in the case of
-  // failed RPCs are retries. This should be a UUID per call, where the same
-  // UUID is used for retries of the same quota allocation or release call.
-  string deduplication_id = 4;
-
-  enum OperationKind {
+// Describes the type of quota operation to apply for an incoming request
+enum QuotaOperationKind {
+    // Allocation mode not specified.
     QUOTA_MODE_UNSPECIFIED = 0;
 
     // Allocate the specified amount, fail if insufficient resources available.
@@ -48,7 +35,19 @@ message QuotaRequest {
 
     // Return the current content of the quota value cell.
     QUERY = 4;
-  }
+}
+
+message QuotaRequest {
+    // The attributes to use for this request
+    map<string, string> attributes = 1;
+
+    // what kind of quota operation to perform
+    QuotaOperationKind operation_kind = 2;
+
+    // Used for deduplicating quota allocation/free calls in the case of
+    // failed RPCs are retries. This should be a UUID per call, where the same
+    // UUID is used for retries of the same quota allocation or release call.
+    string deduplication_id = 4;
 }
 
 // Used to update quota values before and/or after performing an action.
@@ -57,16 +56,48 @@ message QuotaRequest {
 // Quotas can also be used to impose upper limits on the number of specific
 // resources exposed by a service to its consumers.
 message QuotaResponse {
-  // Index of the request this response is associated with
-  int64 request_index = 1;
+    // Result of the requested quota operation
+    oneof result {
+        // The effective amount of quota
+        uint64 effective_amount = 2;
 
-  // Results, one for each operation in the request.
-  // This map is indexed by the quota_operation_id of the individual quota operations.
-  oneof result {
-    // The effective amount of quota
-    uint64 effective_amount = 2;
+        // An error indication in case the quota operation failed
+        google.rpc.Status error = 3;
+    }
+}
 
-    // An error indication in case the quota operation failed
-    google.rpc.Status error = 3;
-  }
+message StreamingQuotaRequest {
+    // Index within the stream for this request, used to match to responses
+    int64 request_index = 1;
+
+    // The attributes to use for this request
+    Attributes attribute_update = 2;
+
+    // what kind of quota operation to perform
+    QuotaOperationKind kind = 3;
+
+    // Used for deduplicating quota allocation/free calls in the case of
+    // failed RPCs are retries. This should be a UUID per call, where the same
+    // UUID is used for retries of the same quota allocation or release call.
+    string deduplication_id = 4;
+}
+
+// Used to update quota values before and/or after performing an action.
+//
+// A common use case for quotas is to implement rate limits within a service.
+// Quotas can also be used to impose upper limits on the number of specific
+// resources exposed by a service to its consumers.
+message StreamingQuotaResponse {
+    // Index of the request this response is associated with
+    int64 request_index = 1;
+
+    // Results, one for each operation in the request.
+    // This map is indexed by the quota_operation_id of the individual quota operations.
+    oneof result {
+        // The effective amount of quota
+        uint64 effective_amount = 2;
+
+        // An error indication in case the quota operation failed
+        google.rpc.Status error = 3;
+    }
 }
