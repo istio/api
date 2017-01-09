@@ -21,6 +21,17 @@ import "mixer/api/v1/attributes.proto";
 
 // Used to verify preconditions before performing an action.
 message CheckRequest {
+    // The attributes to use for this request
+    map<string, string> attributes = 1;
+}
+
+message CheckResponse {
+    // Indicates whether or not the preconditions succeeded
+    google.rpc.Status result = 1;
+}
+
+// Used to verify preconditions before performing an action.
+message StreamingCheckRequest {
   // Index within the stream for this request, used to match to responses
   int64 request_index = 1;
 
@@ -28,7 +39,7 @@ message CheckRequest {
   Attributes attribute_update = 2;
 }
 
-message CheckResponse {
+message StreamingCheckResponse {
   // Index of the request this response is associated with
   int64 request_index = 1;
 
