@@ -15,112 +15,189 @@
 syntax = "proto3";
 
 import "google/protobuf/any.proto";
-import "google/protobuf/struct.proto";
-import "istio.common.v1.config/cfg.proto";
-
 package istio.proxy.v1.config;
 
-
-// Encapsulates the routing related configurations for the proxy
-message RoutingConfig {
-  string subject = 1;
-  string version = 2;
-  repeated RoutingRule rules = 3;
+// Routing related configurations for the proxy
+message RouteConfig {
+  string version = 1;
+  repeated RouteRule rules = 2;
 }
-
 
 // A single routing rule
-message RoutingRule {
-  string selector = 1; // expression based on attributes
-  Aspect aspect = 2; // Aspect.kind == "routing"
-  repeated AspectRule rules = 3;
+message RouteRule {
+  // Set of conditions that must be satisfied, such as src labels, request
+  // attributes, etc.
+  // TODO: Merge with the proposal for deriving request metadata in K8S.
+  MatchCondition match = 1;
+  // 1 or more upstream clusters for this route. Each cluster represents a
+  // specific version of the same service, with weights that determine
+  // cluster selection.
+  repeated VersionedService upstreamVersion = 2;
+  // optional faults that can be injected into the API calls
+  // TODO: This should move into UpstreamSpec, i.e. fault per upstream version
+  FaultInjection fault = 3;
+  // Other things? such as enabling tracing, etc. ?
 }
 
+// Route match attributes
+message MatchCondition {
+  enum Protocol {
+    HTTP = 0;
+    TCP = 1;
+  }
+  Protocol protocol = 1;
+  uint32 port = 2;
+  // One or more tags that identify the calling service.
+  // N.B. Tags can be arbitrary strings (includes key=value pairs)
+  repeated string tags = 3;
 
-// This is the format of "params" in an Aspect with kind=routing
-message RoutingAspectParams {
-  repeated RouteSpec target = 1;
-  repeated FaultSpec fault = 2;
+  message HTTPAttributes {
+    string scheme = 1; //http|https
+    string authority = 2; // host|authority
+    string path = 3; //uri
+    // Match HTTP requests based on the specified header
+    map<string, string> httpMatchHeaders = 4;
+  }
+  HTTPAttributes httpAttributes = 4;
 }
 
+// Describes a cluster of instances implementing a (version of) service
+message VersionedService {
+  // If there are multiple versions of the same service (e.g., in A/B
+  // testing), weight determines the chances of a particular version
+  // getting selected. Max is 1000. Sum of weights across versions should
+  // add up to 1000.
+  uint32 weight = 1;
 
-message RouteSpec {
-  DstServiceSpec dstServiceVersion = 1;
-  uint32 weight = 2;
-}
+  // Specify a set of tags associated with the service (used in service
+  // discovery). N.B. Tags can be arbitrary strings (includes key=value
+  // pairs)
+  repeated string tags = 2; // labels or tags
 
-
-message DstServiceSpec {
-  message LBPolicy {
-    enum Policy {
-      ROUND_ROBIN = 0;
-      LEAST_CONN = 1;
-      IP_HASH = 2;
-    }
-    Policy name = 1;
-    google.protobuf.Any customAttributes=2;
-  }
-
-  message Timeout {
-    float duration = 1; 
-    string overrideHeaderName = 2;
-  }
-
-  message Retries {
-    int32 duration = 1;
-    string overrideHeaderName = 2;
-    google.protobuf.Any customAttributes=2;
-  }
-
-  message CircuitBreaker {
-    uint32 successThreshold = 1;
-    uint32 failureThreshold = 2;
-    uint32 resetTimeout = 3;
-    google.protobuf.Any customAttributes=4;
-  }
-
-string name = 1;
-  repeated string selector = 2; // labels or tags?
+  // User can override service discovery and specify a list of hosts for
+  // the service. TODO: either tags or hosts. Not both.
   repeated string hosts = 3;
-  LBPolicy lbPolicy = 4;
-  Timeout connectionTimeout = 5;
-  Timeout readTimeout = 6;
-  Timeout writeTimeout = 7;
-  Retries retries = 8;
-  CircuitBreaker circuitBreaker = 9;
-  string healthCheck = 10;
+
+  // Should be either http://.. or tcp://.. 
+  string healthCheckEndpoint = 4;
+  LoadBalancingPolicy lbPolicy = 5;
+  TimeoutPolicy timeout = 6;
+  RetryPolicy retries = 7;
+  CircuitBreakerPolicy circuitBreaker = 8;
 }
 
+message LoadBalancingPolicy {
+  enum Policy {
+    ROUND_ROBIN = 0;
+    LEAST_CONN = 1;
+    IP_HASH = 2;
+    OTHER = 3;
+  }
+  Policy name = 1;
+  //Custom policy implementations
+  google.protobuf.Any lbPolicyImpl=2;
+}
 
-message FaultSpec {
+// Request timeout (implies read/write/connect timeouts)
+message TimeoutPolicy {
+  // timeout is per attempt, when retries are specified as well.
+  // seconds.nanoseconds format
+  double timeout = 1;
+  // Caller could specify timeout via HTTP header to the proxy, if the
+  // proxy supports such a feature.
+  string overrideHeaderName = 2;
+  // For proxies that support custom timeout policies
+  google.protobuf.Any timeoutPolicyImpl=3;
+}
+
+message RetryPolicy {
+  // number of times the request should be retried.
+  // total timeout would be attempts * timeout
+  uint32 attempts = 1;
+  // Caller could specify retry attempts via HTTP header to the proxy, if the
+  // proxy supports such a feature.
+  string overrideHeaderName = 2;
+  // For proxies that support custom retry policies
+  google.protobuf.Any retryPolicyImpl=3;
+}
+
+// A minimal circuit breaker configuration
+message CircuitBreakerPolicy {
+  // (for an unhealthy service) number of consecutive requests that
+  // should succeed before the service is marked healthy.
+  uint32 successThreshold = 1;
+
+  // (for a healthy service) number of consecutive requests that
+  // can fail before the service is marked unhealthy.
+  uint32 failureThreshold = 2;
+
+  // When a healthy service becomes unhealthy, duration to wait before
+  // attempting to send requests to that service.
+  double resetTimeout = 3;
+
+  // For proxies that support custom circuit breaker policies.
+  google.protobuf.Any cbPolicyImpl=4;
+}
+
+// Fault Injection policies
+message FaultInjection {
+  oneof proto_faults {
+    HTTPFaultInjection httpFault = 1;
+    TCPFaultInjection tcpFault = 2;
+  }
+}
+
+// Fault injection for HTTP based services
+message HTTPFaultInjection {
+  // Abort HTTP request attempts and return error codes back to caller.
   message Abort {
-    uint32 percent = 1;
+    // percentage of requests to be aborted with 
+    float  percent = 1;
     string grpcStatus = 2;
     string http2Error = 3;
     uint32 httpStatus = 4;
     string overrideHeaderName = 5;
   }
-  message HttpFixedDelay {
-    uint32 percent = 1;
-    uint32 duration = 2;
+
+  message FixedDelay {
+    float percent = 1;
+    // delay duration in seconds.nanoseconds
+    double fixedDelay = 2;
+    // Specify delay duration as part of HTTP request
     string overrideHeaderName = 3;
   }
-  message HttpExponentialDelay {
-    uint32 percent = 1;
-    uint32 meanDuration = 2;
-  }
-  message TcpBandwidthThrottle {
-    uint32 percent = 1;
-    uint32 bandwidth = 2;
+  message ExponentialDelay {
+    float percent = 1;
+    double meanDelay = 2;
   }
   message Delay {
     string type = 1;
-    oneof delay_type {
-      HttpFixedDelay fixeddelay=2;
-      HttpExponentialDelay expdelay=3;
-      HcpBandwidthThrottle tcpdelay=4;
+    oneof http_delay_type {
+      FixedDelay fixeddelay=2;
+      ExponentialDelay expdelay=3;
     }
   }
-  Abort abortSpec = 1;
-  Delay delaySpec = 2;
+  Abort abortPolicy = 1;
+  Delay delayPolicy = 2;
+  // Only requests with these HTTP headers will be subjected to fault
+  // injection
+  map<string, string> httpMatchHeaders = 3;
+}
+
+// Fault injection for TCP based services
+message TCPFaultInjection {
+  message Abort {
+    // percentage of connection attempts to be terminated/reset 
+    float  percent = 1;
+  }
+
+ // Only bandwidth throttling is supported.
+  message Delay {
+    // percentage of connections to throttle.
+    float percent = 1;
+    // bandwidth in "bits" per second
+    uint64 bandwidth_bps = 2;
+  }
+  Abort abortPolicy = 1;
+  Delay delayPolicy = 2;
 }
