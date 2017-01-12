@@ -1,0 +1,126 @@
+// Copyright 2016 IBM Corporation
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/struct.proto";
+import "istio.common.v1.config/cfg.proto";
+
+package istio.proxy.v1.config;
+
+
+// Encapsulates the routing related configurations for the proxy
+message RoutingConfig {
+  string subject = 1;
+  string version = 2;
+  repeated RoutingRule rules = 3;
+}
+
+
+// A single routing rule
+message RoutingRule {
+  string selector = 1; // expression based on attributes
+  Aspect aspect = 2; // Aspect.kind == "routing"
+  repeated AspectRule rules = 3;
+}
+
+
+// This is the format of "params" in an Aspect with kind=routing
+message RoutingAspectParams {
+  repeated RouteSpec target = 1;
+  repeated FaultSpec fault = 2;
+}
+
+
+message RouteSpec {
+  DstServiceSpec dstServiceVersion = 1;
+  uint32 weight = 2;
+}
+
+
+message DstServiceSpec {
+  message LBPolicy {
+    enum Policy {
+      ROUND_ROBIN = 0;
+      LEAST_CONN = 1;
+      IP_HASH = 2;
+    }
+    Policy name = 1;
+    google.protobuf.Any customAttributes=2;
+  }
+
+  message Timeout {
+    float duration = 1; 
+    string overrideHeaderName = 2;
+  }
+
+  message Retries {
+    int32 duration = 1;
+    string overrideHeaderName = 2;
+    google.protobuf.Any customAttributes=2;
+  }
+
+  message CircuitBreaker {
+    uint32 successThreshold = 1;
+    uint32 failureThreshold = 2;
+    uint32 resetTimeout = 3;
+    google.protobuf.Any customAttributes=4;
+  }
+
+string name = 1;
+  repeated string selector = 2; // labels or tags?
+  repeated string hosts = 3;
+  LBPolicy lbPolicy = 4;
+  Timeout connectionTimeout = 5;
+  Timeout readTimeout = 6;
+  Timeout writeTimeout = 7;
+  Retries retries = 8;
+  CircuitBreaker circuitBreaker = 9;
+  string healthCheck = 10;
+}
+
+
+message FaultSpec {
+  message Abort {
+    uint32 percent = 1;
+    string grpcStatus = 2;
+    string http2Error = 3;
+    uint32 httpStatus = 4;
+    string overrideHeaderName = 5;
+  }
+  message HttpFixedDelay {
+    uint32 percent = 1;
+    uint32 duration = 2;
+    string overrideHeaderName = 3;
+  }
+  message HttpExponentialDelay {
+    uint32 percent = 1;
+    uint32 meanDuration = 2;
+  }
+  message TcpBandwidthThrottle {
+    uint32 percent = 1;
+    uint32 bandwidth = 2;
+  }
+  message Delay {
+    string type = 1;
+    oneof delay_type {
+      HttpFixedDelay fixeddelay=2;
+      HttpExponentialDelay expdelay=3;
+      HcpBandwidthThrottle tcpdelay=4;
+    }
+  }
+  Abort abortSpec = 1;
+  Delay delaySpec = 2;
+}
