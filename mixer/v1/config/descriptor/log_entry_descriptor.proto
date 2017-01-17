@@ -41,8 +41,8 @@ message LogEntryDescriptor {
         // Indicates a payload format of raw text.
         TEXT = 0;
 
-        // Indicates a structured payload (JSON object).
-        STRUCTURED = 1;
+        // Indicates that the payload is a serialized JSON object.
+        JSON = 1;
     }
 
     // Format of the value of the payload attribute.
