@@ -40,9 +40,9 @@ package istio.proxy.v1.config;
 // evolution of upstream microservices.
 
 // One or more tags uniquely identify each version of the
-// microservice. Tags can be arbitrary strings (includes key=value
-// pairs). The interpretation of tags is specific to the platform (e.g., in
-// kubernetes, tag strings are interpreted as pod labels (key:value))
+// microservice. Tags can be arbitrary strings. Parsing of tags is specific
+// to the platform (e.g., in kubernetes, each tag string could be parsed
+// into a pod label (key:value))
 
 // A deployment of a particular version of the microservice is referred to
 // as an UpstreamCluster. The UpstreamCluster can be identified uniquely
@@ -155,8 +155,8 @@ message L4MatchAttributes {
 }
 
 // One or more tags that uniquely identify an upstream or downstream
-// cluster. Tags can be arbitrary strings (includes key=value pairs). The
-// interpretation of tags is specific to the platform (e.g., kubernetes vs VMs)
+// cluster. Tags can be arbitrary strings. The interpretation of tags is
+// specific to the platform (e.g., kubernetes vs VMs)
 message Tags {
   repeated string tags = 1;
 }
