@@ -19,34 +19,37 @@ package istio.proxy.v1.config;
 
 // Glossary & concepts
 
-// Downstream service - client (browser or another microservice) calling
-// the proxy/sidecar (typically to reach another microservice).
+// Cluster - set of pods/VMs/containers where the service is running. The
+// members of a cluster share one or more common attributes. For e.g., all
+// pods in a cluster could share a common set of labels, or be running the
+// same version of the application binary.
+
+// Multiple clusters/service - In a continuous deployment scenario, for a
+// given service, there can be multiple clusters running potentially
+// different variants of the application binary. These variants are not
+// necessarily different API versions. They could be iterative changes to
+// the same service, deployed in different environments (prod, staging,
+// dev, etc.). Common scenarios where this occurs include A/B testing,
+// canary rollouts, etc. The choice of a particular cluster can be decided
+// based on various criterion (headers, url, etc.) and/or by weights
+// assigned to each cluster.
+
+// One or more tags uniquely identify each cluster in a service. Tags can
+// be arbitrary strings. Parsing of tags is specific to the platform (e.g.,
+// in kubernetes, each tag string could be parsed into a pod label
+// (key:value))
+
+// Downstream service/cluster - client (browser or another service cluster)
+// calling the proxy/sidecar (typically to reach another service).
 
 // Upstream service - The remote service to which the proxy/sidecar is
-// talking to, on behalf of the Downstream service.
+// talking to, on behalf of the Downstream service. Upstream cluster refers
+// to the cluster handling the request to the upstream service.
 
-// In a continuous deployment scenario, for a given microservice, multiple
-// versions of the same service with slightly differing functionality could
-// be running concurrently. These versions are not necessarily API
-// versions. They could be iterative changes to the same service, deployed
-// in different environments (prod, staging, dev, etc.). Common scenarios
-// where this occurs include A/B testing, canary rollouts, etc. The choice
-// of a particular version can be decided based on various criterion
-// (headers, url, etc.) and/or by weights assigned to each version.
-
-// Applications address only the logical microservice without knowledge of
-// individual versions. The actual choice of the version is determined by
-// the proxy, enabling the application code to decouple itself from the
-// evolution of upstream microservices.
-
-// One or more tags uniquely identify each version of the
-// microservice. Tags can be arbitrary strings. Parsing of tags is specific
-// to the platform (e.g., in kubernetes, each tag string could be parsed
-// into a pod label (key:value))
-
-// A deployment of a particular version of the microservice is referred to
-// as an UpstreamCluster. The UpstreamCluster can be identified uniquely
-// using the tags described above.
+// Applications address only the upstream service without knowledge of
+// individual upstream clusters. The actual choice of the cluster is
+// determined by the proxy, enabling the application code to decouple
+// itself from the evolution of dependent services.
 
 // Proxy level global configurations go here
 message ProxyConfig {
@@ -62,7 +65,7 @@ message ProxyConfig {
   // receive a HTTP 404.
   repeated RouteRule route_rules = 2;
   
-  // RouteRule determines the UpstreamCluster to which traffic should be
+  // RouteRule determines the upstream cluster to which traffic should be
   // routed to.  The UpstreamClusterPolicy describes policies that
   // determine how to handle traffic (load balancing policies, failure
   // recovery policies such as timeouts, retries, circuit breakers), etc.
@@ -70,38 +73,37 @@ message ProxyConfig {
 }
 
 // Describes rules for routing a request/connection to an upstream
-// microservice, based on attributes associated with the request/connection
+// service, based on attributes associated with the request/connection
 // and downstream service invoking the API call. The choice of the specific
-// version of the upstream microservice (i.e. upstream cluster) to route
-// the request/connection to will be determined by the routing rule.
+// upstream cluster will be determined by the routing rule.
 message RouteRule {
   oneof rule {
-    L4RouteRule l4_route_rule = 1;
+    Layer4RouteRule layer4_route_rule = 1;
     HttpRouteRule http_route_rule = 2;
   }
 }
 
-// Routes incoming Tcp/Udp traffic to one of the upstream clusters based on
-// match criterion.
-message L4RouteRule {
-  // Set of conditions that must be satisfied, such as downstream service
+// Routes incoming Tcp/Udp traffic to one of the clusters of a service
+// based on match criterion.
+message Layer4RouteRule {
+  // Set of conditions that must be satisfied, such as downstream cluster
   // labels, connection attributes, etc.
-  BaseMatchCondition match = 1;
+  Layer4MatchCondition match = 1;
 
   // Each routing rule is associated with one or more upstream clusters,
-  // where each cluster represents a version of the upstream microservice
   // (see glossary in beginning of document). Weights associated with the
   // cluster determine the proportion of traffic it receives.
   repeated WeightedCluster weighted_clusters = 2;
 
-  // Faults can be injected into the API calls by the proxy, for testing
-  // the failure recovery capabilities of downstream services.  Faults
-  // include aborting the request/connection from downstream service,
-  // delaying the proxying of request/connection to the upstream service,
-  // and throttling the bandwidth of the connection (either end).
+  // Faults can be injected into the connections from downstream by the
+  // proxy, for testing the failure recovery capabilities of downstream
+  // services.  Faults include aborting the request/connection from
+  // downstream service, delaying the proxying of request/connection to the
+  // upstream service, and throttling the bandwidth of the connection
+  // (either end).
 
   // TODO: This should be done on per-cluster basis.
-  L4FaultInjection fault = 3;
+  Layer4FaultInjection fault = 3;
 }
 
 // Routes Http requests to one of the upstream clusters based on
@@ -114,14 +116,13 @@ message HttpRouteRule {
   // TODO: add redirect support
 
   // Each routing rule is associated with one or more upstream clusters,
-  // where each cluster represents a version of the upstream microservice
   // (see glossary in beginning of document). Weights associated with the
   // cluster determine the proportion of traffic it receives.
   repeated WeightedCluster weighted_clusters = 2;
 
-  // Faults can be injected into the API calls by the proxy, for testing
-  // the failure recovery capabilities of downstream services.  Faults
-  // include aborting the Http request from downstream service,
+  // Faults can be injected into the API calls by the proxy, for
+  // testing the failure recovery capabilities of downstream services.
+  // Faults include aborting the Http request from downstream service,
   // delaying the proxying of request to the upstream service, or both.
   // TODO: This should move into UpstreamCluster
   HttpFaultInjection fault = 3;
@@ -131,17 +132,17 @@ message HttpRouteRule {
 
 // Basic routing rule match criterion using Tcp attributes and downstream
 // service tags
-message BaseMatchCondition {
+message Layer4MatchCondition {
   // Set of layer 4 match attributes such as src ip/port, dst ip/port and
   // protocol
-  L4MatchAttributes l4_match = 1;
+  Layer4MatchAttributes layer4_attributes = 1;
 
-  // Identify the downstream service initiating the connection.
-  Tags downstream_tags = 2;
+  // Identify the downstream cluster initiating the connection.
+  ClusterIdentifier src_cluster = 2;
 }
 
-// L4 connection match attributes
-message L4MatchAttributes {
+// Layer4 connection match attributes
+message Layer4MatchAttributes {
   // IPv4 or IPv6
   string src_ip = 1;
   // source port
@@ -157,14 +158,14 @@ message L4MatchAttributes {
 // One or more tags that uniquely identify an upstream or downstream
 // cluster. Tags can be arbitrary strings. The interpretation of tags is
 // specific to the platform (e.g., kubernetes vs VMs)
-message Tags {
+message ClusterIdentifier {
   repeated string tags = 1;
 }
 
 message WeightedCluster {
-  // Tags that uniquely identify the upstream cluster. These tags must be
-  // the same as those used in the definition of the UpstreamCluster.
-  Tags upstream_tags = 1;
+  // Unique identity of the upstream cluster. Must be the same as those used
+  // in the definition of the UpstreamClusterPolicy.
+  ClusterIdentifier dst_cluster = 1;
 
   // The proportion of connections to be forwarded to the upstream
   // cluster. Max is 100. Sum of weights across versions should add up to
@@ -177,46 +178,48 @@ message WeightedCluster {
 
 // Http/1.1|Http/2|gRPC routing rule match criterion built on top of BaseMatchCondition
 message HttpMatchCondition {
-  // Set of Layer 4 match attributes and downstream tags
-  BaseMatchAttributes base_match_attributes = 1;
+  // Set of layer 4 match attributes such as src ip/port, dst ip/port and
+  // protocol
+  Layer4MatchAttributes layer4_attributes = 1;
+
+  // Identify the downstream cluster initiating the connection.
+  ClusterIdentifier src_cluster = 2;
 
   // Set of Http request level match attributes
-  string scheme = 2;
+  string scheme = 3;
 
   oneof amatch {
     // exact match with the Http path (:path)
-    string authority_match = 3;
+    string authority_match = 4;
     // prefix match on the path
-    string authority_prefix = 4;
+    string authority_prefix = 5;
     // Posix style regular expressions. Throw error if the user's chosen
     // proxy does not support this.
-    string authority_regex = 5;
+    string authority_regex = 6;
   }
 
   oneof uri_match {
     // exact match with the Http path (:path)
-    string path = 6;
+    string path = 7;
     // prefix match on the path
-    string prefix = 7;
+    string prefix = 8;
     // Posix style regular expressions.  Throw error if the user's chosen
     // proxy does not support this.
-    string regex = 8;
+    string regex = 9;
   }
 
   // Match Http requests based on the specified headers
-  map<string, string> http_match_headers = 9;
+  map<string, string> http_match_headers = 10;
 }
 
-// Describes the load balancing and failure recovery policies for a
-// particular version of an upstream service. N.B. that these are enforced
-// on egress connections/requests. i.e. enforced at the downstream service
-// (caller).
+// Describes the load balancing and failure recovery policies for a an
+// upstream cluster. N.B. that these are enforced on egress
+// connections/requests. i.e. enforced at the downstream service (caller).
 message UpstreamClusterPolicy {
-  // Tags that uniquely identify the upstream cluster, i.e. a particular
-  // version/deployment of the microservice.  These tags are used by the
-  // service discovery component of the proxy to identify the IP addresses
-  // of the pods|VMs running this service.
-  Tags upstream_tags = 1;
+  // Unique identifier of the upstream cluster. The tags in the cluster
+  // identifier are used by the service discovery component of the proxy to
+  // identify the IP addresses of the pods|VMs running this service.
+  ClusterIdentifier cluster = 1;
 
   // Should be either http://.. or tcp://.. 
   string health_check_endpoint = 2;
@@ -226,7 +229,7 @@ message UpstreamClusterPolicy {
   CircuitBreakerPolicy circuit_breaker = 6;
 }
 
-// Load balancing policy to use when forwarding traffic to upstream services.
+// Load balancing policy to use when forwarding traffic to upstream clusters.
 message LoadBalancingPolicy {
   enum SimpleLBPolicy {
     // These four simple load balancing policies have literally no
@@ -263,7 +266,7 @@ message TimeoutPolicy {
 
 message RetryPolicy {
   message SimpleRetryPolicy {
-    // number of times the request to the upstream service should be retried.
+    // number of times the request to the upstream cluster should be retried.
     // total timeout would be attempts * timeout
     uint32 attempts = 1;
     // Downstream Service could specify retry attempts via Http header to
@@ -280,16 +283,16 @@ message RetryPolicy {
 // A minimal circuit breaker configuration
 message CircuitBreakerPolicy {
   message SimpleCircuitBreakerPolicy {
-    // (for an unhealthy upstream service) number of consecutive requests that
-    // should succeed before the upstream service is marked healthy.
+    // (for an unhealthy upstream cluster) number of consecutive requests that
+    // should succeed before the upstream cluster is marked healthy.
     uint32 success_threshold = 1;
 
-    // (for a healthy upstream service) number of consecutive requests that
-    // can fail before the upstream service is marked unhealthy.
+    // (for a healthy upstream cluster) number of consecutive requests that
+    // can fail before the upstream cluster is marked unhealthy.
     uint32 failure_threshold = 2;
 
-    // When a healthy upstream service becomes unhealthy, duration to wait before
-    // attempting to send requests to that upstream service.
+    // When a healthy upstream cluster becomes unhealthy, duration to wait before
+    // attempting to send requests to that upstream cluster.
     // format seconds.nanoseconds
     double reset_timeout_seconds = 3;
   }
@@ -303,14 +306,14 @@ message CircuitBreakerPolicy {
 // Faults can be injected into the API calls by the proxy, for testing the
 // failure recovery capabilities of downstream services.  Faults include
 // aborting the Http request from downstream service, delaying the proxying
-// of request to the upstream service, or both.
+// of request to the upstream clusters, or both.
 message HttpFaultInjection {
-  // Delay requests before forwarding to upstream service, emulating
+  // Delay requests before forwarding to upstream cluster, emulating
   // various failures such as network issues, overloaded upstream service, etc.
   Delay delay = 1;
 
   // Abort Http request attempts and return error codes back to downstream
-  // service, giving the impression that the Upstream service is faulty.
+  // service, giving the impression that the upstream service is faulty.
   // N.B. Both delay and abort can be specified simultaneously. In such
   // cases, a request would be first delayed and then aborted with an error
   // code.
@@ -328,7 +331,7 @@ message HttpFaultInjection {
     }
   }
 
-  // Add a fixed delay before forwarding the request upstream
+  // Add a fixed delay before forwarding the request to upstream cluster
   message FixedDelay {
     // percentage of requests on which the delay will be injected
     float percent = 1;
@@ -338,7 +341,8 @@ message HttpFaultInjection {
     string override_header_name = 3;
   }
 
-  // Determine the delay to be added based on an exponential function
+  // Add a delay (based on an exponential function) before forwarding the
+  // request to upstream cluster
   message ExponentialDelay {
     // percentage of requests on which the delay will be injected
     float percent = 1;
@@ -364,11 +368,11 @@ message HttpFaultInjection {
   }
 }
 
-// Faults can be injected into the L4 traffic forwarded by the proxy, for
+// Faults can be injected into the Layer4 traffic forwarded by the proxy, for
 // testing the failure recovery capabilities of downstream services.
 // Faults include terminating established Tcp connections, throttling the
 // upstream/downstream bandwidth (for Tcp|Udp), or both.
-message L4FaultInjection {
+message Layer4FaultInjection {
   // Unlike Http services, we have very little context for raw Tcp|Udp
   // connections. We could throttle bandwidth of the connections (slow down
   // the connection) and/or abruptly reset the Tcp connection after it has
@@ -376,7 +380,7 @@ message L4FaultInjection {
   Throttle throttle = 1;
   Terminate terminate = 2;
 
- // Bandwidth throttling for Tcp and Udp
+ // Bandwidth throttling for Tcp and Udp connections
   message Throttle {
     // percentage of connections to throttle.
     float percent = 1;
