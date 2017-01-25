@@ -34,10 +34,11 @@ package istio.proxy.v1.config;
 // based on various criterion (headers, url, etc.) and/or by weights
 // assigned to each cluster.
 
-// One or more tags uniquely identify each cluster in a service. Tags can
-// be arbitrary strings. Parsing of tags is specific to the platform (e.g.,
-// in kubernetes, each tag string could be parsed into a pod label
-// (key:value))
+// Cluster identifier: A name and one or more tags uniquely identify each
+// cluster in a service. Names and tags can be arbitrary strings. Parsing
+// of names and tags is specific to the platform (e.g., in kubernetes, name
+// could correspond to the service Name, while each tag string could be
+// parsed into a pod label (key:value))
 
 // Downstream service/cluster - client (browser or another service cluster)
 // calling the proxy/sidecar (typically to reach another service).
@@ -53,8 +54,8 @@ package istio.proxy.v1.config;
 
 // Proxy level global configurations go here
 message ProxyConfig {
-  // config specification version. defaults to 1.0
-  string version = 1;
+  // config specification version.
+  int32 version = 1;
 
   // Traffic routing (http|tcp) related configurations for the
   // proxy/sidecar.  The configuration generated for the proxy will
@@ -77,18 +78,18 @@ message ProxyConfig {
 // and downstream service invoking the API call. The choice of the specific
 // upstream cluster will be determined by the routing rule.
 message RouteRule {
-  oneof rule {
-    Layer4RouteRule layer4_route_rule = 1;
-    HttpRouteRule http_route_rule = 2;
+  oneof route_rule {
+    L4RouteRule layer4 = 1;
+    HttpRouteRule http = 2;
   }
 }
 
 // Routes incoming Tcp/Udp traffic to one of the clusters of a service
 // based on match criterion.
-message Layer4RouteRule {
+message L4RouteRule {
   // Set of conditions that must be satisfied, such as downstream cluster
   // labels, connection attributes, etc.
-  Layer4MatchCondition match = 1;
+  L4MatchCondition match = 1;
 
   // Each routing rule is associated with one or more upstream clusters,
   // (see glossary in beginning of document). Weights associated with the
@@ -103,7 +104,7 @@ message Layer4RouteRule {
   // (either end).
 
   // TODO: This should be done on per-cluster basis.
-  Layer4FaultInjection fault = 3;
+  L4FaultInjection fault = 3;
 }
 
 // Routes Http requests to one of the upstream clusters based on
@@ -131,18 +132,18 @@ message HttpRouteRule {
 }
 
 // Basic routing rule match criterion using Tcp attributes and downstream
-// service tags
-message Layer4MatchCondition {
+// cluster identifier
+message L4MatchCondition {
   // Set of layer 4 match attributes such as src ip/port, dst ip/port and
   // protocol
-  Layer4MatchAttributes layer4_attributes = 1;
+  L4MatchAttributes l4attributes = 1;
 
   // Identify the downstream cluster initiating the connection.
   ClusterIdentifier src_cluster = 2;
 }
 
-// Layer4 connection match attributes
-message Layer4MatchAttributes {
+// L4 connection match attributes
+message L4MatchAttributes {
   // IPv4 or IPv6
   string src_ip = 1;
   // source port
@@ -155,11 +156,14 @@ message Layer4MatchAttributes {
   string protocol = 5;
 }
 
-// One or more tags that uniquely identify an upstream or downstream
-// cluster. Tags can be arbitrary strings. The interpretation of tags is
-// specific to the platform (e.g., kubernetes vs VMs)
+// A name and one or more tags uniquely identify an upstream or downstream
+// cluster. Names and tags can be arbitrary strings, and their
+// interpretation is specific to the underlying platform (e.g., in
+// kubernetes, name field could correspond to the service Name, while each
+// tag string could be parsed into a pod label (key:value))
 message ClusterIdentifier {
-  repeated string tags = 1;
+  string name = 1;
+  repeated string tags = 2;
 }
 
 message WeightedCluster {
@@ -180,7 +184,7 @@ message WeightedCluster {
 message HttpMatchCondition {
   // Set of layer 4 match attributes such as src ip/port, dst ip/port and
   // protocol
-  Layer4MatchAttributes layer4_attributes = 1;
+  L4MatchAttributes l4attributes = 1;
 
   // Identify the downstream cluster initiating the connection.
   ClusterIdentifier src_cluster = 2;
@@ -188,28 +192,29 @@ message HttpMatchCondition {
   // Set of Http request level match attributes
   string scheme = 3;
 
-  oneof amatch {
-    // exact match with the Http path (:path)
-    string authority_match = 4;
-    // prefix match on the path
-    string authority_prefix = 5;
-    // Posix style regular expressions. Throw error if the user's chosen
-    // proxy does not support this.
-    string authority_regex = 6;
-  }
+  // Match based on authority
+  StringMatch authority = 4;
 
-  oneof uri_match {
-    // exact match with the Http path (:path)
-    string path = 7;
-    // prefix match on the path
-    string prefix = 8;
-    // Posix style regular expressions.  Throw error if the user's chosen
-    // proxy does not support this.
-    string regex = 9;
-  }
+  // Match based on URI
+  StringMatch uri = 5;
 
   // Match Http requests based on the specified headers
-  map<string, string> http_match_headers = 10;
+  // Support exact/prefix/regex match on header values
+  map<string, StringMatch> headers = 6;
+}
+
+// Describes how to matches a given string (exact match, prefix-based match
+// or posix style regex based match).
+message StringMatch {
+  enum MatchType {
+    EXACT = 0;
+    PREFIX = 1;
+    // posix style regex match. Throw error if user's chosen proxy does not
+    // support posix regex.
+    REGEX = 2;
+  }
+  MatchType match_type = 1;
+  string match_string = 2;
 }
 
 // Describes the load balancing and failure recovery policies for a an
@@ -223,7 +228,7 @@ message UpstreamClusterPolicy {
 
   // Should be either http://.. or tcp://.. 
   string health_check_endpoint = 2;
-  LoadBalancingPolicy lb = 3;
+  LoadBalancingPolicy lb_policy = 3;
   TimeoutPolicy timeout = 4;
   RetryPolicy retry = 5;
   CircuitBreakerPolicy circuit_breaker = 6;
@@ -239,10 +244,10 @@ message LoadBalancingPolicy {
     IP_HASH = 2;
     RANDOM = 3;
   }
-  oneof lbpolicy {
-    SimpleLBPolicy policy_name = 1;
+  oneof lb_policy {
+    SimpleLBPolicy name = 1;
     //Custom policy implementations
-    google.protobuf.Any custom_lb_policy_impl = 2;
+    google.protobuf.Any custom_impl = 2;
   }
 }
 
@@ -257,13 +262,14 @@ message TimeoutPolicy {
     // proxy, if the proxy supports such a feature.
     string override_header_name = 2;
   }
-  oneof timeoutpolicy {
+  oneof timeout_policy {
     SimpleTimeoutPolicy simple_timeout = 1;
     // For proxies that support custom timeout policies
-    google.protobuf.Any custom_timeout_policy_impl = 2;
+    google.protobuf.Any custom_impl = 2;
   }
 }
 
+// Retry policy to use when a request to the upstream cluster fails.
 message RetryPolicy {
   message SimpleRetryPolicy {
     // number of times the request to the upstream cluster should be retried.
@@ -273,14 +279,14 @@ message RetryPolicy {
     // the proxy, if the proxy supports such a feature.
     string override_header_name = 2;
   }
-  oneof retrypolicy {
+  oneof retry_policy {
     SimpleRetryPolicy simple_retry = 1;
     // For proxies that support custom retry policies
-    google.protobuf.Any custom_retry_policy_impl = 2;
+    google.protobuf.Any custom_impl = 2;
   }
 }
 
-// A minimal circuit breaker configuration
+// A minimal circuit breaker configuration for the upstream cluster.
 message CircuitBreakerPolicy {
   message SimpleCircuitBreakerPolicy {
     // (for an unhealthy upstream cluster) number of consecutive requests that
@@ -296,10 +302,10 @@ message CircuitBreakerPolicy {
     // format seconds.nanoseconds
     double reset_timeout_seconds = 3;
   }
-  oneof cbpolicy {
+  oneof cb_policy {
     SimpleCircuitBreakerPolicy simple_cb = 1;
     // For proxies that support custom circuit breaker policies.
-    google.protobuf.Any custom_cb_policy_impl = 2;
+    google.protobuf.Any custom_impl = 2;
   }
 }
 
@@ -321,7 +327,7 @@ message HttpFaultInjection {
   
   // Only requests with these Http headers will be subjected to fault
   // injection
-  map<string, string> http_match_headers = 3;
+  map<string, StringMatch> headers = 3;
 
   // Either a fixed delay or exponential delay.
   message Delay {
@@ -368,15 +374,15 @@ message HttpFaultInjection {
   }
 }
 
-// Faults can be injected into the Layer4 traffic forwarded by the proxy, for
+// Faults can be injected into the L4 traffic forwarded by the proxy, for
 // testing the failure recovery capabilities of downstream services.
 // Faults include terminating established Tcp connections, throttling the
 // upstream/downstream bandwidth (for Tcp|Udp), or both.
-message Layer4FaultInjection {
+message L4FaultInjection {
   // Unlike Http services, we have very little context for raw Tcp|Udp
   // connections. We could throttle bandwidth of the connections (slow down
-  // the connection) and/or abruptly reset the Tcp connection after it has
-  // been established.
+  // the connection) and/or abruptly reset (terminate) the Tcp connection
+  // after it has been established.
   Throttle throttle = 1;
   Terminate terminate = 2;
 
@@ -406,6 +412,8 @@ message Layer4FaultInjection {
     double throttle_for_seconds = 6;
   }
 
+  // Abruptly reset (terminate) the Tcp connection after it has been
+  // established, emulating remote server crash or link failure.
   message Terminate {
     // percentage of established Tcp connections to be terminated/reset
     float percent = 1;
