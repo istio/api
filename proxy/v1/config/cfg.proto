@@ -44,8 +44,10 @@ package istio.proxy.v1.config;
 // calling the proxy/sidecar (typically to reach another service).
 
 // Upstream service - The remote service to which the proxy/sidecar is
-// talking to, on behalf of the Downstream service. Upstream cluster refers
-// to the cluster handling the request to the upstream service.
+// talking to, on behalf of the Downstream service. There can be one or
+// more upstream clusters for a given upstream service (see the discussion
+// on versions above). The proxy would choose the upstream cluster based on
+// various routing rules.
 
 // Applications address only the upstream service without knowledge of
 // individual upstream clusters. The actual choice of the cluster is
@@ -55,22 +57,34 @@ package istio.proxy.v1.config;
 // Proxy level global configurations go here
 message ProxyConfig {
   // config specification version.
-  int32 version = 1;
+  int32 revision = 1;
 
-  // Traffic routing (http|tcp) related configurations for the
+  // Traffic routing (http|l4) related configurations for the
   // proxy/sidecar.  The configuration generated for the proxy will
   // preserve the order of rules specified by the user in the Istio config.
-  // When a Http request matches multiple route rules, the first rule to
-  // match will/should be chosen by proxy implementations N.B.: When a
-  // request does not match any rule for Http, the downstream service would
-  // receive a HTTP 404.
+
+  // Requests can match either a l4 or Http (l7) rule, but not both. A
+  // request can match multiple Http (l7) rules, but it can match only one
+  // L4 rule. This can be enforced by checking the match attributes. A Http
+  // match rule matches on both L4 and L7 attributes, while a L4 rule
+  // matches based only on L4 attributes. Any duplication or collision in
+  // the match attributes between two L4 rules or between a L4 and L7 rule
+  // should throw an error.
+
+  // Since a Http request can match multiple route rules (e.g., there are
+  // two routes for the prefix /foo, with differing Http match attributes
+  // such as Http headers), the first rule to match will/should be chosen
+  // by proxy implementations N.B.: When a request does not match any rule
+  // for Http, the downstream service would receive a HTTP 404.
   repeated RouteRule route_rules = 2;
   
   // RouteRule determines the upstream cluster to which traffic should be
-  // routed to.  The UpstreamClusterPolicy describes policies that
-  // determine how to handle traffic (load balancing policies, failure
-  // recovery policies such as timeouts, retries, circuit breakers), etc.
-  repeated UpstreamClusterPolicy upstream_cluster_policies = 3;
+  // routed to.  The UpstreamCluster describes how to obtain cluster
+  // members (through discovery or through static configuration), and
+  // policies that determine how to handle traffic (load balancing
+  // policies, failure recovery policies such as timeouts, retries, circuit
+  // breakers), etc.
+  repeated UpstreamCluster upstream_clusters = 3;
 }
 
 // Describes rules for routing a request/connection to an upstream
@@ -144,16 +158,23 @@ message L4MatchCondition {
 
 // L4 connection match attributes
 message L4MatchAttributes {
-  // IPv4 or IPv6
-  string src_ip = 1;
+  // IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or
+  // just a.b.c.d
+  repeated string src_ip_subnet = 1;
   // source port
   uint32 src_port = 2;
-  // IPv4 or IPv6
-  string dst_ip = 3;
+  // IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or
+  // just a.b.c.d
+  repeated string dst_ip_subnet = 3;
   // destination port
   uint32 dst_port = 4;
+
   // protocol Tcp|Udp
-  string protocol = 5;
+  enum L4Protocol {
+    TCP = 0;
+    UDP = 1;
+  }
+  L4Protocol protocol = 5;
 }
 
 // A name and one or more tags uniquely identify an upstream or downstream
@@ -166,6 +187,9 @@ message ClusterIdentifier {
   repeated string tags = 2;
 }
 
+// Each routing rule is associated with one or more upstream clusters,
+// (see glossary in beginning of document). Weights associated with the
+// cluster determine the proportion of traffic it receives.
 message WeightedCluster {
   // Unique identity of the upstream cluster. Must be the same as those used
   // in the definition of the UpstreamClusterPolicy.
@@ -206,26 +230,33 @@ message HttpMatchCondition {
 // Describes how to matches a given string (exact match, prefix-based match
 // or posix style regex based match).
 message StringMatch {
-  enum MatchType {
-    EXACT = 0;
-    PREFIX = 1;
+  oneof match_type {
+    string exact = 1;
+    string prefix = 2;
     // posix style regex match. Throw error if user's chosen proxy does not
     // support posix regex.
-    REGEX = 2;
+    string regex = 3;
   }
-  MatchType match_type = 1;
-  string match_string = 2;
 }
 
-// Describes the load balancing and failure recovery policies for a an
-// upstream cluster. N.B. that these are enforced on egress
-// connections/requests. i.e. enforced at the downstream service (caller).
-message UpstreamClusterPolicy {
-  // Unique identifier of the upstream cluster. The tags in the cluster
-  // identifier are used by the service discovery component of the proxy to
-  // identify the IP addresses of the pods|VMs running this service.
-  ClusterIdentifier cluster = 1;
+// Describes how to identify members of a specific upstream cluster along
+// with load balancing and failure recovery policies for the cluster.  The
+// load balancing/failure recovery policies are cluster specific. For a
+// given upstream service, one can have multiple upstream clusters running
+// different versions of the service, each with a different
+// policy.
 
+// N.B. The policies are enforced on egress connections or requests,
+// i.e., enforced when the downstream service (caller) is opening a
+// connection/sending a request via the proxy to the upstream service.
+message UpstreamCluster {
+  // Unique identifier of the upstream cluster. The name and tags in the
+  // cluster identifier are used by the service discovery component of the
+  // proxy to identify the IP addresses of the pods|VMs running this
+  // service.
+  // TODO: Need to have a way to statically specify the hosts/IPs.
+  ClusterIdentifier cluster = 1;
+  
   // Should be either http://.. or tcp://.. 
   string health_check_endpoint = 2;
   LoadBalancingPolicy lb_policy = 3;
@@ -320,9 +351,12 @@ message HttpFaultInjection {
 
   // Abort Http request attempts and return error codes back to downstream
   // service, giving the impression that the upstream service is faulty.
-  // N.B. Both delay and abort can be specified simultaneously. In such
-  // cases, a request would be first delayed and then aborted with an error
-  // code.
+  // N.B. Both delay and abort can be specified simultaneously. Delay and
+  // Abort are independent of one another. For e.g., if Delay is restricted
+  // to 5% of requests while Abort is restricted to 10% of requests, the
+  // 10% in abort specification applies to all requests directed to the
+  // service. It may be the case that one or more requests being aborted
+  // were also delayed.
   Abort abort = 2;
   
   // Only requests with these Http headers will be subjected to fault
@@ -343,7 +377,8 @@ message HttpFaultInjection {
     float percent = 1;
     // delay duration in seconds.nanoseconds
     double fixed_delay_seconds = 2;
-    // Specify delay duration as part of Http request
+    // Specify delay duration as part of Http request.
+    // TODO: The semantics and syntax of the headers is undefined.
     string override_header_name = 3;
   }
 
@@ -354,6 +389,9 @@ message HttpFaultInjection {
     float percent = 1;
     // mean delay needed to derive the exponential delay values
     double mean_delay_seconds = 2;
+    // Specify mean delay duration as part of Http request.
+    // TODO: The semantics and syntax of the headers is undefined.
+    string override_header_name = 3;
   }
 
   // Abort Http request attempts and return error codes back to downstream
@@ -369,7 +407,8 @@ message HttpFaultInjection {
       string http2_error = 3;
       uint32 http_status = 4;
     }
-    // Specify abort code as part of Http request
+    // Specify abort code as part of Http request.
+    // TODO: The semantics and syntax of the headers is undefined.    
     string override_header_name = 5;
   }
 }
@@ -383,6 +422,8 @@ message L4FaultInjection {
   // connections. We could throttle bandwidth of the connections (slow down
   // the connection) and/or abruptly reset (terminate) the Tcp connection
   // after it has been established.
+
+  // We first throttle (if set) and then terminate the connection.
   Throttle throttle = 1;
   Terminate terminate = 2;
 
@@ -417,5 +458,10 @@ message L4FaultInjection {
   message Terminate {
     // percentage of established Tcp connections to be terminated/reset
     float percent = 1;
+
+    // Wait for X seconds after the connection is established, before
+    // terminating the connection. Set to 0 to terminate immediately on
+    // connection establishment.
+    double terminate_after_seconds = 2;
   }
 }
