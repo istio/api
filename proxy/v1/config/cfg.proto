@@ -17,7 +17,7 @@ syntax = "proto3";
 import "google/protobuf/any.proto";
 import "google/protobuf/wrappers.proto";
 
-package istio.proxy.v1.config;
+package istio.proxy.v1alpha.config;
 
 // Glossary & concepts
 
@@ -144,7 +144,10 @@ message HttpRouteRule {
   // TODO: This should move into UpstreamCluster
   HttpFaultInjection fault = 3;
 
-  // Other things? such as tracing, etc. ?
+  // Custom properties per rule (depends on proxy), such as open tracing,
+  // access log formats, etc. Some of these will be defined in future
+  // iterations.
+  google.protobuf.Any custom_impl = 4;
 }
 
 // Basic routing rule match criterion using Tcp attributes and downstream
@@ -164,12 +167,12 @@ message L4MatchAttributes {
   // just a.b.c.d
   repeated string src_ip_subnet = 1;
   // source port
-  uint32 src_port = 2;
+  google.protobuf.UInt32Value src_port = 2;
   // IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or
   // just a.b.c.d
   repeated string dst_ip_subnet = 3;
   // destination port
-  uint32 dst_port = 4;
+  google.protobuf.UInt32Value dst_port = 4;
 
   // protocol Tcp|Udp
   enum L4Protocol {
