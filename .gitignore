@@ -1,7 +1,3 @@
-.gitignore
-.idea
-*.pb.go
-
 # Compiled Object files
 *.slo
 *.lo
