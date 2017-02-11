@@ -87,6 +87,64 @@ message ProxyConfig {
   // policies, failure recovery policies such as timeouts, retries, circuit
   // breakers), etc.
   repeated UpstreamCluster upstream_clusters = 3;
+
+  // specify attributes proxy extracted from request for mixer.
+  repeated MixerAttributeRule mixer_attribute_rules = 4;
+}
+
+// Describes rules for proxy to extract attributes for a request.
+message MixerAttributeRule {
+  // If a request matches the condition, the attribute rule applies.
+  oneof match {
+    L4MatchCondition l4 = 1;
+    HttpMatchCondition match = 2;
+  }
+
+  // The attributes for Check call. Only one should be used for
+  // a request. If multiple rules match, the first one will be used.
+  // If none matched, send all attributes proxy can extract.
+ CheckAttributes check_attributes = 3;
+
+  // The attributes for Report call. Only one should be used for
+  // a request. If multiple rules match, the first one will be used.
+  // If none matched, send all attributes proxy can extract.
+  ReportAttributes report_attributes = 4;
+
+  // The quota attributes. A request may send multiple quota metrics.
+  // If none matched, not need to call quota.
+  repeated QuotaAttributes quota_attributes = 4;
+}
+
+// Describes attributes for check call.
+message CheckAttributes {
+  // List attributes for Check calls.
+  // If absent, send all attributes that proxy can extract.
+  repeated string request_attributes = 1;
+
+  // List attributes proxy should use for calculating cache key.
+  // If absent, all attributes should be used for cache key.
+  repeated string cache_key_attributes = 2;
+}
+
+// Describes attributes for report call.
+message ReportAttributes {
+  // List attributes for Report calls.
+  // If absent, send all attributes that proxy can extract.
+  repeated string request_attributes = 1;
+}
+
+// Describes attributes for quota call.
+message QuotaAttributes {
+  // List attributes for quota call.
+  // It must have at least one attribute.
+  repeated string request_attributes = 1;
+
+  // List attributes proxy should use for calculating cache key.
+  // If absent, all attributes should be used for cache key.
+  repeated string cache_key_attributes = 2;
+
+  // Amount of quota should be allocated for this request.
+  int64 amount = 3;
 }
 
 // Describes rules for routing a request/connection to an upstream
