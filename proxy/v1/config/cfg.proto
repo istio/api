@@ -160,7 +160,7 @@ message ReportAttributes {
 message QuotaMetric {
   // A list of attributes for a quota metric that the proxy should
   // send to the mixer in the quota request call.
-  Repeated string request_attributes = 1;
+  repeated string request_attributes = 1;
 
   // The amount of quota units should be allocated for the request.
   int64 amount = 2;
@@ -168,10 +168,11 @@ message QuotaMetric {
   // Specifies how the pre-allocated quota units should be cached.
   // The proxy can pre-allocate certain quota units for the quota
   // metric and cache them in order to reduce number of quota calls.
-  QuotaReqeustCache cache = 3;
+  QuotaRequestCache cache = 3;
 }
 
-message QuotaReqeustCache {
+// Specifies how the pre-allocated quota units should be cached.
+message QuotaRequestCache {
   // A list of attributes the proxy can use to calculate the cache
   // key. If absent, all attributes in the quota request should be
   // used for cache key.
