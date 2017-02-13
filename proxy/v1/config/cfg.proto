@@ -88,63 +88,90 @@ message ProxyConfig {
   // breakers), etc.
   repeated UpstreamCluster upstream_clusters = 3;
 
-  // specify attributes proxy extracted from request for mixer.
+  // Specifies the set of rules on how the proxy should communicate
+  // with the mixer. For example, they specify what attributes the
+  // proxy should provide to the mixer and how the proxy should cache
+  // the requests.
   repeated MixerAttributeRule mixer_attribute_rules = 4;
 }
 
-// Describes rules for proxy to extract attributes for a request.
+// Describes a rule on how the proxy should communicate with the mixer.
 message MixerAttributeRule {
-  // If a request matches the condition, the attribute rule applies.
+  // If a request matches the condition, the rule should apply.
   oneof match {
     L4MatchCondition l4 = 1;
     HttpMatchCondition match = 2;
   }
 
-  // The attributes for Check call. Only one should be used for
-  // a request. If multiple rules match, the first one will be used.
-  // If none matched, send all attributes proxy can extract.
+  // Specifies the attributes the proxy should send for the check call.
+  // Only one rule should be used for a request. If multiple rules
+  // match, the first one will be used.
+  // If none matched, the proxy should send all attributes it can
+  // extract.
  CheckAttributes check_attributes = 3;
 
-  // The attributes for Report call. Only one should be used for
-  // a request. If multiple rules match, the first one will be used.
-  // If none matched, send all attributes proxy can extract.
+  // Specifies the attributes the proxy should send for the report call.
+  // Only one rule should be used for a request. If multiple rules
+  // match, the first one will be used.
+  // If none matched, the proxy should send all attributes it can
+  // extract.
   ReportAttributes report_attributes = 4;
 
-  // The quota attributes. A request may send multiple quota metrics.
-  // If none matched, not need to call quota.
+  // Specifies the set of quota metrics the proxy should allocate
+  // from the mixer.
+  // If empty, the proxy doesn't need to make the quota call.
   repeated QuotaAttributes quota_attributes = 4;
 }
 
-// Describes attributes for check call.
+// Describes the attributes the proxy should send for the check call.
 message CheckAttributes {
-  // List attributes for Check calls.
-  // If absent, send all attributes that proxy can extract.
+  // A list of attributes the proxy should send for the check call.
+  // If empty, the proxy should send all attributes it can extract.
   repeated string request_attributes = 1;
 
-  // List attributes proxy should use for calculating cache key.
-  // If absent, all attributes should be used for cache key.
-  repeated string cache_key_attributes = 2;
+  // Specifies how the proxy should cache the check requests.
+  CheckRequestCache cache = 2;
 }
 
-// Describes attributes for report call.
+// Specifies how the proxy should cache the check requests.
+message CheckRequestCache {
+  // A list of attributes the proxy can use to calculate the cache
+  // key. If absent, all attributes in the check request should be
+  // used for cache key.
+  repeated string key_attributes = 1;
+
+  // Specifies how long a cached request item should live in second.
+  // If the mixer response has cache time_to_live, it will override
+  // the one from the config.
+  int64 time_to_live = 2;
+}
+
+// Describes the attributes the proxy should send for the report call.
 message ReportAttributes {
-  // List attributes for Report calls.
-  // If absent, send all attributes that proxy can extract.
+  // A list of attributes the proxy should send for the report call.
+  // If absent, send all attributes the proxy can extract.
   repeated string request_attributes = 1;
 }
 
-// Describes attributes for quota call.
+// Describes the attributes for a quoa metric.
 message QuotaAttributes {
-  // List attributes for quota call.
-  // It must have at least one attribute.
+  // A list of attributes for a quota metric.
   repeated string request_attributes = 1;
 
-  // List attributes proxy should use for calculating cache key.
-  // If absent, all attributes should be used for cache key.
-  repeated string cache_key_attributes = 2;
+  // The amount of quota units should be allocated for the request.
+  int64 amount = 2;
 
-  // Amount of quota should be allocated for this request.
-  int64 amount = 3;
+  // Specifies how the pre-allocated quota units should be cached.
+  // The proxy can pre-allocate certain quota units for the quota
+  // metric and cache them in order to reduce number of quota calls.
+  QuotaReqeustCache cache = 3;
+}
+
+message QuotaReqeustCache {
+  // A list of attributes the proxy can use to calculate the cache
+  // key. If absent, all attributes in the request should be used
+  // for cache key.
+  repeated string key_attributes = 1;
 }
 
 // Describes rules for routing a request/connection to an upstream
