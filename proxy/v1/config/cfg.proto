@@ -118,9 +118,12 @@ message MixerAttributeRule {
   ReportAttributes report_attributes = 4;
 
   // Specifies the set of quota metrics the proxy should allocate
-  // from the mixer.
+  // from the mixer. The proxy should make a quota call to the mixer
+  // for each metric.
   // If empty, the proxy doesn't need to make the quota call.
-  repeated QuotaAttributes quota_attributes = 4;
+  // For example, a request may need to allocate two quota metrics:
+  // a database_read_metric, and a project_write_metric.
+  repeated QuotaMetric quota_metrics = 5;
 }
 
 // Describes the attributes the proxy should send for the check call.
@@ -154,9 +157,10 @@ message ReportAttributes {
 }
 
 // Describes the attributes for a quoa metric.
-message QuotaAttributes {
-  // A list of attributes for a quota metric.
-  repeated string request_attributes = 1;
+message QuotaMetric {
+  // A list of attributes for a quota metric that the proxy should
+  // send to the mixer in the quota request call.
+  Repeated string request_attributes = 1;
 
   // The amount of quota units should be allocated for the request.
   int64 amount = 2;
@@ -169,8 +173,8 @@ message QuotaAttributes {
 
 message QuotaReqeustCache {
   // A list of attributes the proxy can use to calculate the cache
-  // key. If absent, all attributes in the request should be used
-  // for cache key.
+  // key. If absent, all attributes in the quota request should be
+  // used for cache key.
   repeated string key_attributes = 1;
 }
 
