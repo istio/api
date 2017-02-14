@@ -1,0 +1,42 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+import "mixer/v1/config/descriptor/attribute_descriptor.proto";
+import "mixer/v1/config/descriptor/label_descriptor.proto";
+import "mixer/v1/config/descriptor/metric_descriptor.proto";
+import "mixer/v1/config/descriptor/quota_descriptor.proto";
+import "mixer/v1/config/descriptor/log_entry_descriptor.proto";
+import "mixer/v1/config/descriptor/monitored_resource_descriptor.proto";
+import "mixer/v1/config/descriptor/principal_descriptor.proto";
+
+package istio.mixer.v1.config.descriptor;
+
+// Istio Definitions
+// An istio definition proto message may contain some or all definition types.
+// Messages are combined by runtime to form the effective definition.
+// In many cases attribute definitions (vocabulary) are available as separate messages. 
+// Every descriptor proto defined in this package should be represented here.
+message Definitions {
+  string subject = 1;
+  string revision = 2;
+  repeated istio.mixer.v1.config.descriptor.AttributeDescriptor attributes = 3;
+  repeated istio.mixer.v1.config.descriptor.LabelDescriptor labels = 4;
+  repeated istio.mixer.v1.config.descriptor.MetricDescriptor metrics = 5;
+  repeated istio.mixer.v1.config.descriptor.QuotaDescriptor quotas = 6;
+  repeated istio.mixer.v1.config.descriptor.LogEntryDescriptor logEntries = 7;
+  repeated istio.mixer.v1.config.descriptor.MonitoredResourceDescriptor monitoredResources = 8;
+  repeated istio.mixer.v1.config.descriptor.PrincipalDescriptor pricipals = 9;
+}
