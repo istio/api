@@ -14,9 +14,9 @@
 
 syntax = "proto3";
 
-package istio.mixer.v1.config.descriptor;
+package istio.mixer.descriptor;
 
-import "mixer/v1/config/descriptor/value_type.proto";
+import "mixer/descriptor/value_type.proto";
 
 // An `AttributeDescriptor` describes the schema of an Istio attribute type.
 //

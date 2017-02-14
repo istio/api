@@ -14,15 +14,15 @@
 
 syntax = "proto3";
 
-import "mixer/v1/config/descriptor/attribute_descriptor.proto";
-import "mixer/v1/config/descriptor/label_descriptor.proto";
-import "mixer/v1/config/descriptor/metric_descriptor.proto";
-import "mixer/v1/config/descriptor/quota_descriptor.proto";
-import "mixer/v1/config/descriptor/log_entry_descriptor.proto";
-import "mixer/v1/config/descriptor/monitored_resource_descriptor.proto";
-import "mixer/v1/config/descriptor/principal_descriptor.proto";
+import "mixer/descriptor/attribute_descriptor.proto";
+import "mixer/descriptor/label_descriptor.proto";
+import "mixer/descriptor/metric_descriptor.proto";
+import "mixer/descriptor/quota_descriptor.proto";
+import "mixer/descriptor/log_entry_descriptor.proto";
+import "mixer/descriptor/monitored_resource_descriptor.proto";
+import "mixer/descriptor/principal_descriptor.proto";
 
-package istio.mixer.v1.config.descriptor;
+package istio.mixer.descriptor;
 
 // Istio Definitions
 // An istio definition proto message may contain some or all definition types.

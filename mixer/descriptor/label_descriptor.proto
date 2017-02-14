@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc.
+// Copyright 2017 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,15 +14,18 @@
 
 syntax = "proto3";
 
-package istio.mixer.v1.config.descriptor;
+package istio.mixer.descriptor;
 
-// Defines a a security principal.
-//
-// A principal is described by a set of attributes.
-message PrincipalDescriptor {
-  // The name of this descriptor.
-  string name = 1;
+import "mixer/descriptor/value_type.proto";
 
-  // The set of attributes which are used to describe a specific security principal.
-  repeated string attributes = 2;
+// A `LabelDescriptor` describes the schema of a label (or dimension) used in other descriptors.
+message LabelDescriptor {
+    // The name of this descriptor, referenced from other descriptors.
+    string name = 1;
+
+    // An optional human-readable description of the attribute's purpose.
+    string description = 2;
+
+    // The type of data carried by this label
+    ValueType value_type = 3;
 }

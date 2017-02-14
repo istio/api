@@ -14,10 +14,10 @@
 
 syntax = "proto3";
 
-package istio.mixer.v1.config.descriptor;
+package istio.mixer.descriptor;
 
-import "mixer/v1/config/descriptor/label_descriptor.proto";
-import "mixer/v1/config/descriptor/value_type.proto";
+import "mixer/descriptor/label_descriptor.proto";
+import "mixer/descriptor/value_type.proto";
 
 // Defines a metric type and its schema.
 //

@@ -14,7 +14,7 @@
 
 syntax = "proto3";
 
-package istio.mixer.v1.config.descriptor;
+package istio.mixer.descriptor;
 
 // An object that describes the schema of a `MonitoredResource`. A
 // `MonitoredResource` is used to define a type of resources for
