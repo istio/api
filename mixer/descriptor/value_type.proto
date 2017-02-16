@@ -14,7 +14,7 @@
 
 syntax = "proto3";
 
-package istio.mixer.v1.config.descriptor;
+package istio.mixer.descriptor;
 
 // ValueType describes the types that values in the Istio system can take. These are used to describe the type of
 // Attributes at run time, describe the type of the result of evaluating an expression, and to describe the runtime
