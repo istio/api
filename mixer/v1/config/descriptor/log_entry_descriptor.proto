@@ -53,7 +53,7 @@ message LogEntryDescriptor {
     string log_template = 5;
 
     // Labels describe the parameters of this log's template string. At runtime expressions will be evaluated to provide
-    // values for each label. These expressions are mapped to label names in the service config as part of configuring
-    // the application and access log aspects.
+    // values for each label. Label names are mapped to expressions in the service config as part of configuring the
+    // application and access log aspects.
     repeated LabelDescriptor labels = 6;
 }
