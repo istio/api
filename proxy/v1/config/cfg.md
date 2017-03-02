@@ -3,15 +3,15 @@
 
 ## Table of Contents
 * [Glossary & Concepts](#cfg.proto)
- * [Routing Rules](#istio.proxy.v1alpha.config.RouteRule)
-  * [Match Conditions](#istio.proxy.v1alpha.config.MatchCondition)
-  * [Weighted Routing to Different Destination Service Versions](#istio.proxy.v1alpha.config.DestinationWeight)
-  * [HTTP Req Retries](#istio.proxy.v1alpha.config.HTTPRetry)
-  * [HTTP Req Timeouts](#istio.proxy.v1alpha.config.HTTPTimeout)
- * [Destination Service Version Policies](#istio.proxy.v1alpha.config.Destination)
-  * [Load Balancing](#istio.proxy.v1alpha.config.LoadBalancing)
-  * [Circuit Breakers](#istio.proxy.v1alpha.config.CircuitBreaker)
-  * [Fault Injection](#istio.proxy.v1alpha.config.HTTPFaultInjection)
+  * [Routing Rules](#istio.proxy.v1alpha.config.RouteRule)
+    * [Match Conditions](#istio.proxy.v1alpha.config.MatchCondition)
+    * [Weighted Routing to Different Destination Service Versions](#istio.proxy.v1alpha.config.DestinationWeight)
+    * [HTTP Req Retries](#istio.proxy.v1alpha.config.HTTPRetry)
+    * [HTTP Req Timeouts](#istio.proxy.v1alpha.config.HTTPTimeout)
+  * [Destination Policies](#istio.proxy.v1alpha.config.DestinationPolicy)
+    * [Load Balancing](#istio.proxy.v1alpha.config.LoadBalancing)
+    * [Circuit Breakers](#istio.proxy.v1alpha.config.CircuitBreaker)
+    * [Fault Injection](#istio.proxy.v1alpha.config.HTTPFaultInjection)
 * [Scalar Value Types](#scalar-value-types)
 
 <a name="cfg.proto"/>
@@ -196,9 +196,9 @@ Request timeout: wait time until a response is received. Does not
 | override_header_name | [string](#string) | optional | Downstream service could specify timeout via Http header to the/ proxy, if the proxy supports such a feature. |
 
 
-<a name="istio.proxy.v1alpha.config.Destination"/>
-### Destination Service Version Policies
-Destination declares policies that determine how to handle traffic for a
+<a name="istio.proxy.v1alpha.config.DestinationPolicy"/>
+### Destination Policies
+DestinationPolicy declares policies that determine how to handle traffic for a
 / destination service (load balancing policies, failure recovery policies such
 / as timeouts, retries, circuit breakers, etc).  Policies are applicable per
 / individual service versions. ONLY ONE policy can be defined per service version.
@@ -210,15 +210,15 @@ Destination declares policies that determine how to handle traffic for a
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | destination | [string](#string) | optional | REQUIRED. Service name for which the service version is defined. The/ value MUST be a fully-qualified domain name,/ e.g. "my-service.default.svc.cluster.local". |
-| tags | [Destination.TagsEntry](#istio.proxy.v1alpha.config.Destination.TagsEntry) | repeated | Service version destination identifier for the destination service./ The identifier is qualified by the destination service name, e.g. version/ "env=prod" in "my-service.default.svc.cluster.local".N.B. The map is used instead of pstruct due to lack of serialization supportin golang protobuf library (see https://github.com/golang/protobuf/pull/208) |
+| tags | [DestinationPolicy.TagsEntry](#istio.proxy.v1alpha.config.DestinationPolicy.TagsEntry) | repeated | Service version destination identifier for the destination service./ The identifier is qualified by the destination service name, e.g. version/ "env=prod" in "my-service.default.svc.cluster.local".N.B. The map is used instead of pstruct due to lack of serialization supportin golang protobuf library (see https://github.com/golang/protobuf/pull/208) |
 | load_balancing | [LoadBalancing](#istio.proxy.v1alpha.config.LoadBalancing) | optional | Load balancing policy |
 | circuit_breaker | [CircuitBreaker](#istio.proxy.v1alpha.config.CircuitBreaker) | optional | Circuit breaker policy |
 | http_fault | [HTTPFaultInjection](#istio.proxy.v1alpha.config.HTTPFaultInjection) | optional | L7 fault injection policy applies to Http traffic |
 | custom | [Any](#google.protobuf.Any) | optional | Other custom policy implementations |
 
 
-<a name="istio.proxy.v1alpha.config.Destination.TagsEntry"/>
-### Destination.TagsEntry
+<a name="istio.proxy.v1alpha.config.DestinationPolicy.TagsEntry"/>
+### DestinationPolicy.TagsEntry
 
 
 | Field | Type | Label | Description |
