@@ -267,7 +267,7 @@ Circuit breaker configuration.
 | max_connections | [int32](#int32) | optional | Maximum number of connections to a backend. |
 | http_max_pending_requests | [int32](#int32) | optional | Maximum number of pending requests to a backend. |
 | http_max_requests | [int32](#int32) | optional | Maximum number of requests to a backend. |
-| sleep_window | [string](#string) | optional | Minimum time the circuit will be closed. |
+| sleep_window | [double](#double) | optional | Minimum time the circuit will be closed. In floating point seconds format. |
 | http_consecutive_errors | [int32](#int32) | optional | Number of 5XX errors before circuit is opened. |
 | http_detection_interval | [int32](#int32) | optional | Interval for checking state of hystrix circuit. |
 | http_max_requests_per_connection | [int32](#int32) | optional | Maximum number of requests per connection to a backend. |

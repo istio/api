@@ -272,8 +272,8 @@ message CircuitBreaker {
     /// Maximum number of requests to a backend.
     int32 http_max_requests = 6;
 
-    /// Minimum time the circuit will be closed.
-    string sleep_window = 7;
+    /// Minimum time the circuit will be closed. In floating point seconds format.
+    double sleep_window_seconds = 7;
 
     /// Number of 5XX errors before circuit is opened.
     int32 http_consecutive_errors = 8;
