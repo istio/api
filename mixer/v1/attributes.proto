@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc.
+// Copyright 2016 Istio Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@ syntax = "proto3";
 
 package istio.mixer.v1;
 
+import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 
 // An instance of this message is delivered to the mixer with every
@@ -98,9 +99,17 @@ message Attributes {
   map<int32, double> double_attributes = 6;
   map<int32, bool> bool_attributes = 7;
   map<int32, google.protobuf.Timestamp> timestamp_attributes = 8;
-  map<int32, bytes> bytes_attributes = 9;
+  map<int32, google.protobuf.Duration> duration_attributes = 9;
+  map<int32, bytes> bytes_attributes = 10;
+  map<int32, StringMap> stringMap_attributes = 11;
 
   // Attributes that should be removed from the specified attribute context. Deleting
   // attributes which aren't currently in the attribute context is not considered an error.
-  repeated int32 deleted_attributes = 10;
+  repeated int32 deleted_attributes = 12;
+}
+
+// A map of string to string. The keys in these maps are from the current
+// dictionary.
+message StringMap {
+  map<int32, string> map = 1;
 }

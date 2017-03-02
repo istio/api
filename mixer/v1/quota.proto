@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc.
+// Copyright 2016 Istio Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@ syntax = "proto3";
 
 package istio.mixer.v1;
 
+import "google/protobuf/timestamp.proto";
 import "google/rpc/status.proto";
 import "mixer/v1/attributes.proto";
 
@@ -26,47 +27,33 @@ message QuotaRequest {
   // The attributes to use for this request
   Attributes attribute_update = 2;
 
-  // what kind of quota operation to perform
-  OperationKind kind = 3;
-
   // Used for deduplicating quota allocation/free calls in the case of
   // failed RPCs and retries. This should be a UUID per call, where the same
-  // UUID is used for retries of the same quota allocation or release call.
-  string deduplication_id = 4;
+  // UUID is used for retries of the same quota allocation call.
+  string deduplication_id = 3;
 
-  enum OperationKind {
-    QUOTA_MODE_UNSPECIFIED = 0;
+  // The quota to allocate from.
+  string quota = 4;
 
-    // Allocate the specified amount, fail if insufficient resources available.
-    ALLOC_NORMAL = 1;
+  // The amount of quota to allocate.
+  int64 amount = 5;
 
-    // Allocate from 0 to the specified amount, never fails.
-    ALLOC_BEST_EFFORT = 2;
-
-    // Release from 0 to the specified amount, never fails.
-    RELEASE_BEST_EFFORT = 3;
-
-    // Return the current content of the quota value cell.
-    QUERY = 4;
-  }
+  // If true, allows a response to return less quota than requested. When
+  // false, the exact requested amount is returned or 0 if not enough quota
+  // was available.
+  bool best_effort = 6;
 }
 
-// Used to update quota values before and/or after performing an action.
-//
-// A common use case for quotas is to implement rate limits within a service.
-// Quotas can also be used to impose upper limits on the number of specific
-// resources exposed by a service to its consumers.
 message QuotaResponse {
-  // Index of the request this response is associated with
+  // Index of the request this response is associated with.
   int64 request_index = 1;
 
-  // Results, one for each operation in the request.
-  // This map is indexed by the quota_operation_id of the individual quota operations.
-  oneof result {
-    // The effective amount of quota
-    uint64 effective_amount = 2;
+  // Indicates whether the quota request was successfully processed.
+  google.rpc.Status result = 2;
 
-    // An error indication in case the quota operation failed
-    google.rpc.Status error = 3;
-  }
+  // The time at which the returned quota expires, this is 0 for non-expiring quotas.
+  google.protobuf.Timestamp expiration = 3;
+
+  // The total amount of quota returned, may be less than requested.
+  int64 amount = 4;
 }
