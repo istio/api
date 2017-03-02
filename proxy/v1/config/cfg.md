@@ -52,20 +52,21 @@ description.
 
 <a name="istio.proxy.v1alpha.config.RouteRule"/>
 ### Route Rules
+
 Route rule provides a custom routing policy based on the source and
-/ destination service versions and connection/request metadata.  The rule must
-/ provide a set of conditions for each protocol (TCP, UDP, HTTP) that the
-/ destination service exposes on its ports. The rule applies only to the ports
-/ on the destination service for which it provides protocol-specific match
-/ condition, e.g. if the rule does not specify TCP condition, the rule does
-/ not apply to TCP traffic towards the destination service.
+destination service versions and connection/request metadata.  The rule must
+provide a set of conditions for each protocol (TCP, UDP, HTTP) that the
+destination service exposes on its ports. The rule applies only to the ports
+on the destination service for which it provides protocol-specific match
+condition, e.g. if the rule does not specify TCP condition, the rule does
+not apply to TCP traffic towards the destination service.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| destination | [string](#string) | optional | REQUIRED: Destination uniquely identifies the destination associated/ with this routing rule.  This field is applicable for hostname-based/ resolution for HTTP traffic as well as IP-based resolution for/ TCP/UDP traffic. The value MUST be a fully-qualified domain name,/ e.g. "my-service.default.svc.cluster.local". |
-| precedence | [int32](#int32) | optional | Precedence is used to disambiguate the order of application of rules/ for the same destination service. A higher number takes priority. If/ not specified, the value is assumed to be 0.  The order of/ application for rules with the same precedence is unspecified. |
-| match | [MatchCondition](#istio.proxy.v1alpha.config.MatchCondition) | optional | Optional match condtions to be satisfied for the route rule to be/ activated. If match is omitted, the route rule applies only to HTTP/ traffic. |
-| route | [DestinationWeight](#istio.proxy.v1alpha.config.DestinationWeight) | repeated | Each routing rule is associated with one or more service version destinations/ (see glossary in beginning of document). Weights associated with the service/ version determine the proportion of traffic it receives. |
+| destination | [string](#string) | optional | REQUIRED: Destination uniquely identifies the destination associated with this routing rule.  This field is applicable for hostname-based resolution for HTTP traffic as well as IP-based resolution for TCP/UDP traffic. The value MUST be a fully-qualified domain name, e.g. "my-service.default.svc.cluster.local". |
+| precedence | [int32](#int32) | optional | Precedence is used to disambiguate the order of application of rules for the same destination service. A higher number takes priority. If not specified, the value is assumed to be 0.  The order of application for rules with the same precedence is unspecified. |
+| match | [MatchCondition](#istio.proxy.v1alpha.config.MatchCondition) | optional | Optional match condtions to be satisfied for the route rule to be activated. If match is omitted, the route rule applies only to HTTP traffic. |
+| route | [DestinationWeight](#istio.proxy.v1alpha.config.DestinationWeight) | repeated | Each routing rule is associated with one or more service version destinations (see glossary in beginning of document). Weights associated with the service version determine the proportion of traffic it receives. |
 | http_req_timeout | [HTTPTimeout](#istio.proxy.v1alpha.config.HTTPTimeout) | optional | Timeout policy for HTTP requests. |
 | http_req_retries | [HTTPRetry](#istio.proxy.v1alpha.config.HTTPRetry) | optional | Retry policy for HTTP requests. |
 
@@ -73,18 +74,18 @@ Route rule provides a custom routing policy based on the source and
 <a name="istio.proxy.v1alpha.config.MatchCondition"/>
 ### Match Conditions
 Match condition specifies a set of criterion to be met in order for the
-/ route rule to be applied to the connection or HTTP request.  The
-/ condition provides distinct set of conditions for each protocol with
-/ the intention that conditions apply only to the service ports that
-/ match the protocol.
+ route rule to be applied to the connection or HTTP request.  The
+ condition provides distinct set of conditions for each protocol with
+ the intention that conditions apply only to the service ports that
+ match the protocol.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| source | [string](#string) | optional | Identifies the service initiating a connection or a request by its/ name. If specified, name MUST BE a fully qualified domain name such/ as foo.bar.com |
-| source_tags | [MatchCondition.SourceTagsEntry](#istio.proxy.v1alpha.config.MatchCondition.SourceTagsEntry) | repeated | Identifies the source service version. The identifier is interpreted/ by the platform to match a service version for the source service.N.B. The map is used instead of pstruct due to lack of serialization supportin golang protobuf library (see https://github.com/golang/protobuf/pull/208) |
+| source | [string](#string) | optional | Identifies the service initiating a connection or a request by its name. If specified, name MUST BE a fully qualified domain name such as foo.bar.com |
+| source_tags | [MatchCondition.SourceTagsEntry](#istio.proxy.v1alpha.config.MatchCondition.SourceTagsEntry) | repeated | Identifies the source service version. The identifier is interpreted by the platform to match a service version for the source service.N.B. The map is used instead of pstruct due to lack of serialization supportin golang protobuf library (see https://github.com/golang/protobuf/pull/208) |
 | tcp | [L4MatchAttributes](#istio.proxy.v1alpha.config.L4MatchAttributes) | optional | Set of layer 4 match conditions based on the IP ranges. INCOMPLETE implementation |
 | udp | [L4MatchAttributes](#istio.proxy.v1alpha.config.L4MatchAttributes) | optional |  |
-| http | [MatchCondition.HttpEntry](#istio.proxy.v1alpha.config.MatchCondition.HttpEntry) | repeated | Set of HTTP match conditions based on HTTP/1.1, HTTP/2, GRPC request metadata,/ such as "uri", "scheme", "authority"./ The header keys are case-insensitive. |
+| http | [MatchCondition.HttpEntry](#istio.proxy.v1alpha.config.MatchCondition.HttpEntry) | repeated | Set of HTTP match conditions based on HTTP/1.1, HTTP/2, GRPC request metadata, such as "uri", "scheme", "authority". The header keys are case-insensitive. |
 
 
 <a name="istio.proxy.v1alpha.config.MatchCondition.HttpEntry"/>
@@ -110,19 +111,19 @@ Match condition specifies a set of criterion to be met in order for the
 <a name="istio.proxy.v1alpha.config.L4MatchAttributes"/>
 ### L4MatchAttributes
 L4 connection match attributes. Note that L4 connection matching
-/ support is incomplete.
+ support is incomplete.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| source_subnet | [string](#string) | repeated | IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or/ just a.b.c.d |
-| destination_subnet | [string](#string) | repeated | IPv4 or IPv6 ip address of destination with optional subnet./ E.g., a.b.c.d/xx form or just a.b.c.d. This is only valid when the destination/ service has several IPs and the application explicitly specifies a particular IP. |
+| source_subnet | [string](#string) | repeated | IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or just a.b.c.d |
+| destination_subnet | [string](#string) | repeated | IPv4 or IPv6 ip address of destination with optional subnet. E.g., a.b.c.d/xx form or just a.b.c.d. This is only valid when the destination service has several IPs and the application explicitly specifies a particular IP. |
 
 
 <a name="istio.proxy.v1alpha.config.StringMatch"/>
 ### StringMatch
 Describes how to matches a given string (exact match, prefix-based
-/ match or posix style regex based match). Match is case-sensitive. NOTE:
-/ use of regex depends on the specific proxy implementation.
+ match or posix style regex based match). Match is case-sensitive. NOTE:
+ use of regex depends on the specific proxy implementation.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
@@ -135,14 +136,14 @@ Describes how to matches a given string (exact match, prefix-based
 <a name="istio.proxy.v1alpha.config.DestinationWeight"/>
 ### Weighted Routing to Different Destination Service Versions
 Each routing rule is associated with one or more service versions (see
-/ glossary in beginning of document). Weights associated with the version
-/ determine the proportion of traffic it receives.
+ glossary in beginning of document). Weights associated with the version
+ determine the proportion of traffic it receives.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| destination | [string](#string) | optional | Destination uniquely identifies the destination service. If not/ specified, the value is inherited from the parent route rule. Value/ must be in fully qualified domain name format (e.g.,/ "my-service.default.svc.cluster.local"). |
+| destination | [string](#string) | optional | Destination uniquely identifies the destination service. If not specified, the value is inherited from the parent route rule. Value must be in fully qualified domain name format (e.g., "my-service.default.svc.cluster.local"). |
 | tags | [DestinationWeight.TagsEntry](#istio.proxy.v1alpha.config.DestinationWeight.TagsEntry) | repeated | Service version identifier for the destination service.N.B. The map is used instead of pstruct due to lack of serialization supportin golang protobuf library (see https://github.com/golang/protobuf/pull/208) |
-| weight | [int32](#int32) | optional | The proportion of traffic to be forwarded to the service version. Max/ is 100. Sum of weights across destinations should add up to 100. If/ there is only destination in a rule, the weight value is assumed to/ be 100. |
+| weight | [int32](#int32) | optional | The proportion of traffic to be forwarded to the service version. Max is 100. Sum of weights across destinations should add up to 100. If there is only destination in a rule, the weight value is assumed to be 100. |
 
 
 <a name="istio.proxy.v1alpha.config.DestinationWeight.TagsEntry"/>
@@ -171,14 +172,14 @@ Retry policy to use when a request fails.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| attempts | [int32](#int32) | optional | Number of retries for a given request. The interval between retries/ will be determined automatically (25ms+). Actual number of retries/ attempted depends on the http_timeout |
-| override_header_name | [string](#string) | optional | Downstream Service could specify retry attempts via Http header to/ the proxy, if the proxy supports such a feature. |
+| attempts | [int32](#int32) | optional | Number of retries for a given request. The interval between retries will be determined automatically (25ms+). Actual number of retries attempted depends on the http_timeout |
+| override_header_name | [string](#string) | optional | Downstream Service could specify retry attempts via Http header to the proxy, if the proxy supports such a feature. |
 
 
 <a name="istio.proxy.v1alpha.config.HTTPTimeout"/>
 ### HTTP Req Timeouts
 Request timeout: wait time until a response is received. Does not
-/ indicate the time for the entire response to arrive.
+ indicate the time for the entire response to arrive.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
@@ -192,25 +193,25 @@ Request timeout: wait time until a response is received. Does not
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| timeout_seconds | [double](#double) | optional | Timeout for a HTTP request. Includes retries as well. Unit is in/ floating point seconds. Default 15 seconds. Specified in/ seconds.nanoseconds format |
-| override_header_name | [string](#string) | optional | Downstream service could specify timeout via Http header to the/ proxy, if the proxy supports such a feature. |
+| timeout_seconds | [double](#double) | optional | Timeout for a HTTP request. Includes retries as well. Unit is in floating point seconds. Default 15 seconds. Specified in seconds.nanoseconds format |
+| override_header_name | [string](#string) | optional | Downstream service could specify timeout via Http header to the proxy, if the proxy supports such a feature. |
 
 
 <a name="istio.proxy.v1alpha.config.DestinationPolicy"/>
 ### Destination Policies
 DestinationPolicy declares policies that determine how to handle traffic for a
-/ destination service (load balancing policies, failure recovery policies such
-/ as timeouts, retries, circuit breakers, etc).  Policies are applicable per
-/ individual service versions. ONLY ONE policy can be defined per service version.
-/
-/ Note that these policies are enforced on client-side connections or
-/ requests, i.e., enforced when the service is opening a
-/ connection/sending a request via the proxy to the destination.
+ destination service (load balancing policies, failure recovery policies such
+ as timeouts, retries, circuit breakers, etc).  Policies are applicable per
+ individual service versions. ONLY ONE policy can be defined per service version.
+
+ Note that these policies are enforced on client-side connections or
+ requests, i.e., enforced when the service is opening a
+ connection sending a request via the proxy to the destination.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| destination | [string](#string) | optional | REQUIRED. Service name for which the service version is defined. The/ value MUST be a fully-qualified domain name,/ e.g. "my-service.default.svc.cluster.local". |
-| tags | [DestinationPolicy.TagsEntry](#istio.proxy.v1alpha.config.DestinationPolicy.TagsEntry) | repeated | Service version destination identifier for the destination service./ The identifier is qualified by the destination service name, e.g. version/ "env=prod" in "my-service.default.svc.cluster.local".N.B. The map is used instead of pstruct due to lack of serialization supportin golang protobuf library (see https://github.com/golang/protobuf/pull/208) |
+| destination | [string](#string) | optional | REQUIRED. Service name for which the service version is defined. The value MUST be a fully-qualified domain name, e.g. "my-service.default.svc.cluster.local". |
+| tags | [DestinationPolicy.TagsEntry](#istio.proxy.v1alpha.config.DestinationPolicy.TagsEntry) | repeated | Service version destination identifier for the destination service. The identifier is qualified by the destination service name, e.g. version "env=prod" in "my-service.default.svc.cluster.local".N.B. The map is used instead of pstruct due to lack of serialization supportin golang protobuf library (see https://github.com/golang/protobuf/pull/208) |
 | load_balancing | [LoadBalancing](#istio.proxy.v1alpha.config.LoadBalancing) | optional | Load balancing policy |
 | circuit_breaker | [CircuitBreaker](#istio.proxy.v1alpha.config.CircuitBreaker) | optional | Circuit breaker policy |
 | http_fault | [HTTPFaultInjection](#istio.proxy.v1alpha.config.HTTPFaultInjection) | optional | L7 fault injection policy applies to Http traffic |
@@ -276,21 +277,21 @@ Circuit breaker configuration.
 <a name="istio.proxy.v1alpha.config.HTTPFaultInjection"/>
 ### Fault Injection
 Faults can be injected into the API calls by the proxy, for testing the
-/ failure recovery capabilities of downstream services.  Faults include
-/ aborting the Http request from downstream service, delaying the proxying of
-/ requests, or both. MUST specify either delay or abort or both.
+ failure recovery capabilities of downstream services.  Faults include
+ aborting the Http request from downstream service, delaying the proxying of
+ requests, or both. MUST specify either delay or abort or both.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| delay | [HTTPFaultInjection.Delay](#istio.proxy.v1alpha.config.HTTPFaultInjection.Delay) | optional | Delay requests before forwarding, emulating various failures such as/ network issues, overloaded upstream service, etc. |
-| abort | [HTTPFaultInjection.Abort](#istio.proxy.v1alpha.config.HTTPFaultInjection.Abort) | optional | Abort Http request attempts and return error codes back to downstream/ service, giving the impression that the upstream service is faulty./ N.B. Both delay and abort can be specified simultaneously. Delay and/ Abort are independent of one another. For e.g., if Delay is restricted/ to 5% of requests while Abort is restricted to 10% of requests, the/ 10% in abort specification applies to all requests directed to the/ service. It may be the case that one or more requests being aborted/ were also delayed. |
-| headers | [HTTPFaultInjection.HeadersEntry](#istio.proxy.v1alpha.config.HTTPFaultInjection.HeadersEntry) | repeated | Only requests with these Http headers will be subjected to fault/ injection |
+| delay | [HTTPFaultInjection.Delay](#istio.proxy.v1alpha.config.HTTPFaultInjection.Delay) | optional | Delay requests before forwarding, emulating various failures such as network issues, overloaded upstream service, etc. |
+| abort | [HTTPFaultInjection.Abort](#istio.proxy.v1alpha.config.HTTPFaultInjection.Abort) | optional | Abort Http request attempts and return error codes back to downstream service, giving the impression that the upstream service is faulty. N.B. Both delay and abort can be specified simultaneously. Delay and Abort are independent of one another. For e.g., if Delay is restricted to 5% of requests while Abort is restricted to 10% of requests, the 10% in abort specification applies to all requests directed to the service. It may be the case that one or more requests being aborted were also delayed. |
+| headers | [HTTPFaultInjection.HeadersEntry](#istio.proxy.v1alpha.config.HTTPFaultInjection.HeadersEntry) | repeated | Only requests with these Http headers will be subjected to fault injection |
 
 
 <a name="istio.proxy.v1alpha.config.HTTPFaultInjection.Abort"/>
 ### HTTPFaultInjection.Abort
 Abort Http request attempts and return error codes back to downstream
-/ service.
+ service.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
@@ -304,7 +305,7 @@ Abort Http request attempts and return error codes back to downstream
 <a name="istio.proxy.v1alpha.config.HTTPFaultInjection.Delay"/>
 ### HTTPFaultInjection.Delay
 MUST specify either a fixed delay or exponential delay. Exponential
-/ delay is unsupported at the moment.
+ delay is unsupported at the moment.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
@@ -316,7 +317,7 @@ MUST specify either a fixed delay or exponential delay. Exponential
 <a name="istio.proxy.v1alpha.config.HTTPFaultInjection.ExponentialDelay"/>
 ### HTTPFaultInjection.ExponentialDelay
 Add a delay (based on an exponential function) before forwarding the
-/ request
+ request
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
