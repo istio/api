@@ -283,6 +283,9 @@ message CircuitBreaker {
 
     /// Maximum number of requests per connection to a backend.
     int32 http_max_requests_per_connection = 7;
+
+    /// Maximum % of hosts in the destination service that can be ejected due to circuit breaking. Defaults to 10%.
+    int32 http_max_ejection_percent = 8;
   }
   oneof cb_policy {
     SimpleCircuitBreakerPolicy simple_cb = 1;

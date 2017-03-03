@@ -269,8 +269,9 @@ Circuit breaker configuration.
 | http_max_requests | [int32](#int32) | optional | Maximum number of requests to a backend. |
 | sleep_window | [double](#double) | optional | Minimum time the circuit will be closed. In floating point seconds format. |
 | http_consecutive_errors | [int32](#int32) | optional | Number of 5XX errors before circuit is opened. |
-| http_detection_interval | [int32](#int32) | optional | Interval for checking state of hystrix circuit. |
+| http_detection_interval_seconds | [double](#int32) | optional | Interval for checking state of hystrix circuit. |
 | http_max_requests_per_connection | [int32](#int32) | optional | Maximum number of requests per connection to a backend. |
+| http_max_ejection_percent | [int32](#int32) | optional | Maximum percentage of hosts in the destination service that can be ejected due to circuit breaking. Defaults to 10%. |
 
 
 <a name="istio.proxy.v1alpha.config.HTTPFaultInjection"/>
