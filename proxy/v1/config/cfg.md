@@ -8,10 +8,10 @@
     * [Weighted Routing to Different Destination Service Versions](#istio.proxy.v1alpha.config.DestinationWeight)
     * [HTTP Req Retries](#istio.proxy.v1alpha.config.HTTPRetry)
     * [HTTP Req Timeouts](#istio.proxy.v1alpha.config.HTTPTimeout)
+    * [HTTP Fault Injection](#istio.proxy.v1alpha.config.HTTPFaultInjection)    
   * [Destination Policies](#istio.proxy.v1alpha.config.DestinationPolicy)
     * [Load Balancing](#istio.proxy.v1alpha.config.LoadBalancing)
     * [Circuit Breakers](#istio.proxy.v1alpha.config.CircuitBreaker)
-    * [Fault Injection](#istio.proxy.v1alpha.config.HTTPFaultInjection)
 
 <a name="cfg.proto"/>
 <p align="right"><a href="#top">Top</a></p>
@@ -68,7 +68,7 @@ not apply to TCP traffic towards the destination service.
 | route | [DestinationWeight](#istio.proxy.v1alpha.config.DestinationWeight) | repeated | Each routing rule is associated with one or more service version destinations (see glossary in beginning of document). Weights associated with the service version determine the proportion of traffic it receives. |
 | http_req_timeout | [HTTPTimeout](#istio.proxy.v1alpha.config.HTTPTimeout) | optional | Timeout policy for HTTP requests. |
 | http_req_retries | [HTTPRetry](#istio.proxy.v1alpha.config.HTTPRetry) | optional | Retry policy for HTTP requests. |
-
+| http_fault | [HTTPFaultInjection](#istio.proxy.v1alpha.config.HTTPFaultInjection) | optional | L7 fault injection policy applies to Http traffic |
 
 <a name="istio.proxy.v1alpha.config.MatchCondition"/>
 ### Match Conditions
@@ -84,7 +84,7 @@ Match condition specifies a set of criterion to be met in order for the
 | source_tags | [MatchCondition.SourceTagsEntry](#istio.proxy.v1alpha.config.MatchCondition.SourceTagsEntry) | repeated | Identifies the source service version. The identifier is interpreted by the platform to match a service version for the source service.N.B. The map is used instead of pstruct due to lack of serialization supportin golang protobuf library (see https://github.com/golang/protobuf/pull/208) |
 | tcp | [L4MatchAttributes](#istio.proxy.v1alpha.config.L4MatchAttributes) | optional | Set of layer 4 match conditions based on the IP ranges. INCOMPLETE implementation |
 | udp | [L4MatchAttributes](#istio.proxy.v1alpha.config.L4MatchAttributes) | optional |  |
-| http | [MatchCondition.HttpEntry](#istio.proxy.v1alpha.config.MatchCondition.HttpEntry) | repeated | Set of HTTP match conditions based on HTTP/1.1, HTTP/2, GRPC request metadata, such as "uri", "scheme", "authority". The header keys are case-insensitive. |
+| httpHeaders | [MatchCondition.HttpEntry](#istio.proxy.v1alpha.config.MatchCondition.HttpEntry) | repeated | Set of HTTP match conditions based on HTTP/1.1, HTTP/2, GRPC request metadata, such as "uri", "scheme", "authority". The header keys are case-insensitive. |
 
 
 <a name="istio.proxy.v1alpha.config.MatchCondition.HttpEntry"/>
@@ -213,7 +213,6 @@ DestinationPolicy declares policies that determine how to handle traffic for a
 | tags | [DestinationPolicy.TagsEntry](#istio.proxy.v1alpha.config.DestinationPolicy.TagsEntry) | repeated | Service version destination identifier for the destination service. The identifier is qualified by the destination service name, e.g. version "env=prod" in "my-service.default.svc.cluster.local".N.B. The map is used instead of pstruct due to lack of serialization supportin golang protobuf library (see https://github.com/golang/protobuf/pull/208) |
 | load_balancing | [LoadBalancing](#istio.proxy.v1alpha.config.LoadBalancing) | optional | Load balancing policy |
 | circuit_breaker | [CircuitBreaker](#istio.proxy.v1alpha.config.CircuitBreaker) | optional | Circuit breaker policy |
-| http_fault | [HTTPFaultInjection](#istio.proxy.v1alpha.config.HTTPFaultInjection) | optional | L7 fault injection policy applies to Http traffic |
 | custom | [Any](#google.protobuf.Any) | optional | Other custom policy implementations |
 
 
