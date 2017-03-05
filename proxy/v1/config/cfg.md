@@ -84,7 +84,7 @@ Match condition specifies a set of criterion to be met in order for the
 | source_tags | [MatchCondition.SourceTagsEntry](#istio.proxy.v1alpha.config.MatchCondition.SourceTagsEntry) | repeated | Identifies the source service version. The identifier is interpreted by the platform to match a service version for the source service.N.B. The map is used instead of pstruct due to lack of serialization supportin golang protobuf library (see https://github.com/golang/protobuf/pull/208) |
 | tcp | [L4MatchAttributes](#istio.proxy.v1alpha.config.L4MatchAttributes) | optional | Set of layer 4 match conditions based on the IP ranges. INCOMPLETE implementation |
 | udp | [L4MatchAttributes](#istio.proxy.v1alpha.config.L4MatchAttributes) | optional |  |
-| httpHeaders | [MatchCondition.HttpEntry](#istio.proxy.v1alpha.config.MatchCondition.HttpEntry) | repeated | Set of HTTP match conditions based on HTTP/1.1, HTTP/2, GRPC request metadata, such as "uri", "scheme", "authority". The header keys are case-insensitive. |
+| http_headers | [MatchCondition.HttpEntry](#istio.proxy.v1alpha.config.MatchCondition.HttpEntry) | repeated | Set of HTTP match conditions based on HTTP/1.1, HTTP/2, GRPC request metadata, such as "uri", "scheme", "authority". The header keys are case-insensitive. |
 
 
 <a name="istio.proxy.v1alpha.config.MatchCondition.HttpEntry"/>

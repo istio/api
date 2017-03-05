@@ -158,7 +158,7 @@ message MatchCondition {
   /// Set of HTTP match conditions based on HTTP/1.1, HTTP/2, GRPC request metadata,
   /// such as "uri", "scheme", "authority".
   /// The header keys are case-insensitive.
-  map<string, StringMatch> httpHeaders = 5;
+  map<string, StringMatch> http_headers = 5;
 }
 
 /// Each routing rule is associated with one or more service versions (see
