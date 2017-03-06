@@ -298,7 +298,6 @@ Abort Http request attempts and return error codes back to downstream
 | grpc_status | [string](#string) | optional |  |
 | http2_error | [string](#string) | optional |  |
 | http_status | [int32](#int32) | optional |  |
-| override_header_name | [string](#string) | optional |  |
 
 
 <a name="istio.proxy.v1alpha.config.HTTPFaultInjection.Delay"/>
@@ -308,39 +307,6 @@ MUST specify either a fixed delay or exponential delay. Exponential
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| fixed_delay | [HTTPFaultInjection.FixedDelay](#istio.proxy.v1alpha.config.HTTPFaultInjection.FixedDelay) | optional |  |
-| exp_delay | [HTTPFaultInjection.ExponentialDelay](#istio.proxy.v1alpha.config.HTTPFaultInjection.ExponentialDelay) | optional |  |
-| override_header_name | [string](#string) | optional |  |
-
-
-<a name="istio.proxy.v1alpha.config.HTTPFaultInjection.ExponentialDelay"/>
-### HTTPFaultInjection.ExponentialDelay
-Add a delay (based on an exponential function) before forwarding the
- request
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
 | percent | [float](#float) | optional | percentage of requests on which the delay will be injected |
-| mean_delay_seconds | [double](#double) | optional | mean delay needed to derive the exponential delay values |
-
-
-<a name="istio.proxy.v1alpha.config.HTTPFaultInjection.FixedDelay"/>
-### HTTPFaultInjection.FixedDelay
-Add a fixed delay before forwarding the request
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| percent | [float](#float) | optional | percentage of requests on which the delay will be injected |
-| fixed_delay_seconds | [double](#double) | optional | delay duration in seconds.nanoseconds |
-
-
-<a name="istio.proxy.v1alpha.config.HTTPFaultInjection.HeadersEntry"/>
-### HTTPFaultInjection.HeadersEntry
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) | optional |  |
-| value | [StringMatch](#istio.proxy.v1alpha.config.StringMatch) | optional |  |
-
-
+| fixed_delay_seconds | [double](#double) | optional | Add a fixed delay before forwarding the request. Delay duration in seconds.nanoseconds |
+| exponential_delay_seconds | [double](#double) | optional | Add a delay (based on an exponential function) before forwarding the request. mean delay needed to derive the exponential delay values |
