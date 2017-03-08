@@ -129,9 +129,9 @@ message GlobalConfig {
   // TODO: remove these in https://github.com/istio/api/pull/45
   repeated istio.mixer.v1.config.descriptor.LogEntryDescriptor logs = 3;
   repeated istio.mixer.v1.config.descriptor.MetricDescriptor metrics = 4;
-  repeated istio.mixer.v1.config.descriptor.QuotaDescriptor quotas = 5;
-  repeated istio.mixer.v1.config.descriptor.MonitoredResourceDescriptor monitored_resources = 6;
-  repeated istio.mixer.v1.config.descriptor.PrincipalDescriptor principals = 7;
+  repeated istio.mixer.v1.config.descriptor.MonitoredResourceDescriptor monitored_resources = 5;
+  repeated istio.mixer.v1.config.descriptor.PrincipalDescriptor principals = 6;
+  repeated istio.mixer.v1.config.descriptor.QuotaDescriptor quotas = 7;
 }
 
 // ClientConfig defines configuration from a client perspective.
