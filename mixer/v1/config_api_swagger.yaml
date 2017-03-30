@@ -6,7 +6,7 @@ swagger: '2.0'
 info:
   version: "0.1.0"
   title: Istio Mixer Configuration API
-  description: The mixer Configuration API allows users to configure all facets of a mixer deployment.
+  description: The mixer configuration API allows users to configure all facets of a mixer deployment.
     The mixer configuration is organized in `scope -> subject -> rule` hierarchy.
     __scope__ and __subject__ are analogous to a `manager > employee` relationship. A __manager__(`scope`)  may configure any direct or indirect __reports__ (`subject`) including self.
     
@@ -98,7 +98,7 @@ paths:
     get:
       operationId: listRules
       description: |
-        Gets `Rules` under the given scope, subject.
+        Gets `rules` under the given scope, subject.
       parameters:
       - name: selector
         in: query
@@ -107,7 +107,7 @@ paths:
         required: false
       responses:
         200:
-          description: List of Rules.
+          description: List of rules.
           schema:
             type: array
             items:
