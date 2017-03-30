@@ -5,18 +5,18 @@ swagger: '2.0'
 # for details
 info:
   version: "0.1.0"
-  title: Istio Mixer Config API
-  description: Mixer Configuration API allows users to configure all facets of a mixer deployment.
-    Mixer configuration is organized in `scope -> subject -> rule` hierarchy.
-    __scope__ and __subject__ are analogous to `manager > employee` relationship. A __manager__(`scope`)  may configure any direct or indirect __reports__ (`subject`) including self.
+  title: Istio Mixer Configuration API
+  description: The mixer Configuration API allows users to configure all facets of a mixer deployment.
+    The mixer configuration is organized in `scope -> subject -> rule` hierarchy.
+    __scope__ and __subject__ are analogous to a `manager > employee` relationship. A __manager__(`scope`)  may configure any direct or indirect __reports__ (`subject`) including self.
     
     
     * __scope__ models a scope of authority. It pertains to the authority that is configuring the system.
       `global`, `namespace:ns1.cluster.local` are examples of scopes. Rules contained in a scope can only affect that scope.
       
       Scopes are hierarchical. 
-      Given a kubernetes style fully qualified service name `svc1.ns1.cluster.local`, 
-      it can be easily determined that the following scopes apply -
+      Given a fully-qualified Kubernetes-style service name such as `svc1.ns1.cluster.local`, 
+      it can be determined that the following scopes apply -
       `service:svc1.ns1.cluster.local`, `namespace:ns1.cluster.local`,  `global`
         
     * __subject__ models the entity (often service) being configured. In order for a `scope` to configure a `subject`, the `scope` must contain the `subject`
@@ -25,12 +25,12 @@ info:
     
     Consider `/scopes/{scope}/subjects/{subject}/rules`, subject must be contained within the scope. 
     
-    * `/scopes/namespace:ns1./subjects/service:svc1.ns1./rules` is valid because service svc1 is contained in namespace ns1. Therefore scope `namespace:ns1.` may define policy that affects `service:svc1.ns1.`
+    * `/scopes/namespace:ns1./subjects/service:svc1.ns1./rules` is valid because service svc1 is contained in namespace ns1. Therefore scope `namespace:ns1.` may define policies that affect `service:svc1.ns1.`
     
     * `/scopes/namespace:ns1./subjects/service:svc1.ns2./rules` is __not valid__, because svc1.ns2 __is not__ contained in namespace ns1.
     
     
-    __scope__ and __subject__ variables have the same domain with `scope >= subject`.
+    __scope__ and __subject__ draw from the same set of values with `scope >= subject`.
    
     
 host: localhost:8080    
@@ -79,9 +79,9 @@ paths:
           $ref: '#/definitions/policy'
       responses:
         201:
-          description: Created the policy for a scope-subject.
+          description: Created the policy for a scope, subject.
         403:
-          description: User not authorized for scope
+          description: Caller not authorized for scope
         404:
           description: Scope or subject not found
 
@@ -98,12 +98,12 @@ paths:
     get:
       operationId: listRules
       description: |
-        Gets `Rules` under the given scope-subject.
+        Gets `Rules` under the given scope, subject.
       parameters:
       - name: selector
         in: query
         type: string
-        description: only return rules that contain the given selector
+        description: Only return rules that contain the given selector
         required: false
       responses:
         200:
@@ -127,11 +127,11 @@ paths:
               type: string
       responses:
         201:
-          description: Create a rule for a scope-subject.
+          description: Create a rule for a scope, subject.
           schema:
             $ref: '#/definitions/ruleResponse'
         403:
-          description: User not authorized for scope
+          description: Caller not authorized for scope
         404:
           description: Scope, subject, rule or aspect not found
         409:
@@ -143,7 +143,7 @@ paths:
     put:
       operationId: replaceRules
       description: |
-        Creates or replaces aspect list.
+        Creates or replaces a rule's list of aspects
       parameters:
       - name: scope
         in: path
@@ -168,11 +168,11 @@ paths:
           $ref: '#/definitions/replaceRulesRequest'
       responses:
         200:
-          description: Replaced aspect list
+          description: Replaced the list aspects
           schema:
             $ref: '#/definitions/ruleResponse'
         403:
-          description: User not authorized for scope
+          description: Caller not authorized for scope
         404:
           description: Scope, subject, rule or aspect not found
         409:
@@ -181,7 +181,7 @@ paths:
   /scopes/{scope}/subjects/{subject}/rules/{ruleid}:
     delete:
       operationId: deleteRule
-      description: Delete rule specified by rule id
+      description: Delete a rule specified by the rule id
       parameters:
       - name: scope
         in: path
@@ -199,39 +199,39 @@ paths:
         204:
           description: OK
         403:
-          description: User not authorized for scope
+          description: Caller not authorized for scope
         404:
           description: Scope, subject or rule not found
         422:
           description: Subject is not contained within the scope
         default:
-          description: unexpected error
+          description: Unexpected error
           schema:
             $ref: '#/definitions/errorResponse'
             
-  /scopes/{scope}/adapters/{impl_name}/{adapter_name}:
+  /scopes/{scope}/adapters/{adapter_name}/{config_name}:
     parameters:
     - name: scope
       in: path
       type: string
       required: true
-    - name: impl_name
+    - name: adapter_name
       description: Name of the adapter implementation
       in: path
       type: string
       required: true
-    - name: adapter_name
+    - name: config_name
       description: |
         An adapter implementation can be instantiated with multiple sets of parameters.
-        adapter_name makes a parameter set addressable.
+        config_name makes a parameter set addressable.
       in: path
       type: string
       required: true
     put:
       operationId: replaceAdapter
       description: |
-        Creates or replaces an adapter.
-        To define an adater of type `stdioLogger` 
+        Creates or replaces a named adapter configuration.
+        To define an adapter configuration of type `stdioLogger` 
         `PUT /adapters/stdioLogger/default` with 
         `{"params": {"logStream": "STDERR"}}`
       parameters:
@@ -244,7 +244,7 @@ paths:
         200:
           description: Replaced Adapter
         403:
-          description: User not authorized for scope
+          description: Caller not authorized for scope
         404:
           description: Scope or impl_name not found
     
@@ -270,7 +270,7 @@ paths:
         200:
           description: Found descriptor
         403:
-          description: User not authorized for scope
+          description: Caller not authorized for scope
         404:
           description: Scope, descriptor_type or descriptor_name not found
           
@@ -287,7 +287,7 @@ paths:
         200:
           description: Replaced descriptor
         403:
-          description: User not authorized for scope
+          description: Caller not authorized for scope
         404:
           description: Scope or descriptor_type not found
 
@@ -316,7 +316,9 @@ definitions:
         type: string
       revision:
         type: string
-        description: used for optimistic concurrency
+        description: |
+                Used for optimistic concurrency. If the revision specified in the request
+                does not match the revision on the server, the update is rejected.
       aspects:
         type: array
         items:
@@ -353,10 +355,10 @@ definitions:
       message:
         type: string
   aspectListMap:
-    description: map[aspectKind] aspectList
+    description: "map <aspectKind, aspectList>"
     type: object
   policy:
-    description: list of aspect AspectRule
+    description: list of rules
     type: object
     properties:
       scope:
@@ -371,19 +373,14 @@ definitions:
           $ref: '#/definitions/ruleInfo'
   descriptor:
     description: |
-      payload while creating and fetching descriptors. 
+      Payload while creating and fetching descriptors. 
       The contents depend on descriptor_type. 
       See https://github.com/istio/api/tree/master/mixer/v1/config/descriptor for details.
     type: object
   adapter:
-    description: adapter definition
+    description: Adapter configuration definition
     type: object
     properties:
-      kind:
-        description: |
-          optional array of kinds. It can be specified to restrict the `kinds` that the adapter provides. If kind is unspecified, it is left to the adapter  
-        type: array
-        items:
-          type: string
       params:
+        description: Params schema is specified by the adapter at /api/v1/schema/adapters/adapter_name 
         type: object
