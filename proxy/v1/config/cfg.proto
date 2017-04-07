@@ -59,7 +59,7 @@ option go_package = "config";
 // service mesh.
 message ProxyMeshConfig {
   // Address of the egress proxy service
-  // istio-egress:80
+  // (e.g. "istio-egress:80")
   string egress_proxy_address = 1;
 
   // Address of the discovery service exposing SDS, CDS, RDS (e.g.
