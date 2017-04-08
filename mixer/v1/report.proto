@@ -27,6 +27,7 @@ option (gogoproto.gostring_all) = false;
 // Used to report telemetry after performing an action.
 message ReportRequest {
   // Index within the stream for this request, used to match to responses
+  // TO BE REMOVED
   int64 request_index = 1;
 
   // The attributes to use for this request
@@ -35,11 +36,13 @@ message ReportRequest {
 
 message ReportResponse {
   // Index of the request this response is associated with
+  // TO BE REMOVED
   int64 request_index = 1;
 
   // The attributes to use for this response
   Attributes attribute_update = 2;
 
   // Indicates whether the report was processed or not
+  // TO BE REMOVED
   google.rpc.Status result = 3 [(gogoproto.nullable) = false];
 }

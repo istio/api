@@ -27,6 +27,7 @@ option (gogoproto.gostring_all) = false;
 
 message QuotaRequest {
   // Index within the stream for this request, used to match to responses
+  // TO BE REMOVED
   int64 request_index = 1;
 
   // The attributes to use for this request
@@ -51,12 +52,14 @@ message QuotaRequest {
 
 message QuotaResponse {
   // Index of the request this response is associated with.
+  // TO BE REMOVED
   int64 request_index = 1;
 
   // The attributes to use for this response
   Attributes attribute_update = 2;
 
   // Indicates whether the quota request was successfully processed.
+  // TO BE REMOVED
   google.rpc.Status result = 3 [(gogoproto.nullable) = false];
 
   // The amount of time the returned quota can be considered valid, this is 0 for non-expiring quotas.
