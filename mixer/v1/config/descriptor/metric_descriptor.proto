@@ -38,7 +38,7 @@ import "mixer/v1/config/descriptor/value_type.proto";
 //        value_type: INT64
 //
 // To actually report metrics at run time a mapping from attributes to a metric's labels must be provided.
-// This is provided in the service's config; using our above descriptor we might describe the metric as:
+// This is provided in the aspect config; using our above descriptor we might describe the metric as:
 //
 //    metric:
 //      descriptor: "response_code" # must match metric_descriptor.name

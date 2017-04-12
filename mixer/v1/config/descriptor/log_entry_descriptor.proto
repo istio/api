@@ -52,8 +52,8 @@ message LogEntryDescriptor {
   // TODO: unify templates to use our expression language when its finalized
   string log_template = 5;
 
-  // Labels describe the parameters of this log's template string. At runtime expressions will be evaluated to provide
-  // values for each label. Label names are mapped to expressions in the service config as part of configuring the
-  // application and access log aspects.
+  // Labels describe the parameters of this log's template string. The log definition allows the user to
+  // map attribute expressions to actual values for these labels at run time; the result of the evaluation
+  // must be of the type described by the kind for each label.
   map<string, ValueType> labels = 6;
 }
