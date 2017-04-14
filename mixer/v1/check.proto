@@ -28,6 +28,7 @@ option (gogoproto.gostring_all) = false;
 // Used to verify preconditions before performing an action.
 message CheckRequest {
   // Index within the stream for this request, used to match to responses
+  // TO BE REMOVED
   int64 request_index = 1;
 
   // The attributes to use for this request
@@ -36,12 +37,14 @@ message CheckRequest {
 
 message CheckResponse {
   // Index of the request this response is associated with
+  // TO BE REMOVED
   int64 request_index = 1;
 
   // The attributes to use for this response
   Attributes attribute_update = 2;
 
   // Indicates whether or not the preconditions succeeded
+  // TO BE REMOVED
   google.rpc.Status result = 3 [(gogoproto.nullable) = false];
 
   // The amount of time for which this result can be considered valid, given the same inputs

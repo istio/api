@@ -20,18 +20,31 @@ import "mixer/v1/check.proto";
 import "mixer/v1/report.proto";
 import "mixer/v1/quota.proto";
 
-// The Istio Mixer API
+// The Istio mixer API
 service Mixer {
   // Checks preconditions before performing an operation.
   // The preconditions enforced depend on the set of supplied attributes
   // and the active configuration.
   rpc Check(stream CheckRequest) returns (stream CheckResponse) {}
 
+  // Checks preconditions before performing an operation.
+  // The preconditions enforced depend on the set of supplied attributes
+  // and the active configuration.
+  rpc Check2(CheckRequest) returns (CheckResponse) {}
+
   // Reports telemetry, such as logs and metrics.
   // The reported information depends on the set of supplied attributes
   // and the active configuration.
   rpc Report(stream ReportRequest) returns (stream ReportResponse) {}
 
+  // Reports telemetry, such as logs and metrics.
+  // The reported information depends on the set of supplied attributes
+  // and the active configuration.
+  rpc Report2(ReportRequest) returns (ReportResponse) {}
+
   // Quota allocates and releases quota.
   rpc Quota(stream QuotaRequest) returns (stream QuotaResponse) {}
+
+  // Quota allocates quota.
+  rpc Quota2(QuotaRequest) returns (QuotaResponse) {}
 }

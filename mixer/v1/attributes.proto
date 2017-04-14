@@ -27,14 +27,14 @@ option (gogoproto.gostring_all) = false;
 // An instance of this message is delivered to the mixer with every
 // API call.
 //
-// The general idea is to leverage the stateful gRPC streams from the
-// proxy to the mixer to keep to a minimum the 'attribute chatter'.
+// The general idea is to leverage gRPC connections to maintain a stateful
+// protocol client to the mixer to keep to a minimum the 'attribute chatter'.
 // Only delta attributes are sent over, multiple concurrent attribute
-// contexts can be used to avoid thrashing, and attribute indices are used to
+// contexts can be used to avoid thrashing, and dictionary indices are used to
 // keep the wire protocol maximally efficient.
 //
 // Producing this message is the responsibility of the mixer's client
-// library which is linked into different proxy implementations.
+// library which is linked into different proxy implementations and services.
 //
 // The processing order for this state in the mixer is:
 //
@@ -42,59 +42,43 @@ option (gogoproto.gostring_all) = false;
 //
 //   * The requested attribute context is looked up. If no such context has been defined, a
 //     new context is automatically created and initialized to the empty state. When a gRPC
-//     stream is first created, there are no attribute contexts for the stream.
+//     connection is first created, there are no attribute contexts for the connection.
 //
 //   * If reset_context is true, then the attribute context is reset to the
 //     empty state.
 //
-//   * All attributes to deleted are removed from the attribute context.
+//   * All attributes to delete are removed from the attribute context.
 //
 //   * All attribute changes are applied to the attribute context.
 //
+// Attributes are referenced with integer indices which are relative
+// to the gRPC connection's current dictionary.
 message Attributes {
-  // A dictionary that provides a mapping of shorthand index values to
-  // attribute names.
+  // A dictionary that provides a mapping of index values to attribute names.
   //
-  // This is intended to leverage the stateful gRPC stream from the
-  // proxy to the mixer. This dictionary is sent over only when a
-  // stream to the mixer is first established and when the proxy's
-  // configuration changes and different attributes may be produced.
+  // This dictionary is normally sent only when a new gRPC connection
+  // is first established and very seldom afterwards.
   //
-  // Once a dictionary has been sent over, it stays in effect until
+  // Once a dictionary has been sent, it stays in effect until
   // a new dictionary is sent to replace it. The first request sent on a
-  // stream must include a dictionary, otherwise the mixer can't process
+  // connection must include a dictionary, otherwise the mixer can't process
   // any attribute updates.
-  //
-  // Dictionaries are independent of the attribute context and are thus global
-  // to each gRPC stream.
   map<int32, string> dictionary = 1;
 
   // The attribute context against which to operate.
   //
-  // The mixer keeps different contexts live for any proxy gRPC stream. This
-  // allows the proxy to maintain multiple concurrent 'bags of attributes'
+  // The mixer keeps different contexts live for any gRPC connection. This
+  // allows the client to maintain multiple concurrent 'bags of attributes'
   // within the mixer.
   //
-  // If the proxy doesn't want to leverage multiple contexts, it just passes
+  // If the client doesn't want to leverage multiple contexts, it just passes
   // 0 here for every request.
   //
-  // The proxy is configured to use a maximum number of attribute contexts in order
-  // to prevent an explosion of contexts in the mixer's memory space.
-  //
-  // TODO: Consider removing support for this feature. The proxy can achieve
-  // the same effect using multiple gRPC streams. The benefit of using streams
-  // would be that the mixer would be in control of the maximum number of streams
-  // it allows, whereas with the current model the proxy could overwhelm the
-  // mixer by creating too many contexts.
+  // There can be at most 64 contexts (0..63)
   int32 attribute_context = 2;
 
   // When true, resets the current attribute context to the empty state before
   // applying any incoming attributes.
-  //
-  // Resetting contexts is useful to constrain the amount of resources used by
-  // the mixer. The proxy needs to intelligently manage a pool of contexts.
-  // It may be useful to reset a context when certain big events happen, such
-  // as when an HTTP2 connection into the proxy terminates.
   bool reset_context = 3;
 
   // Attributes being updated within the specified attribute context. These maps
@@ -111,11 +95,6 @@ message Attributes {
   // Attributes that should be removed from the specified attribute context. Deleting
   // attributes which aren't currently in the attribute context is not considered an error.
   repeated int32 deleted_attributes = 12;
-
-  // TODO: temporary workaround for gogoprotobuf code gen error (https://github.com/gogo/protobuf/issues/273). Remove
-  // when issue is fixed.
-  map<int32, google.protobuf.Timestamp> timestamp_attributes_HACK = 13 [(gogoproto.nullable) = false, (gogoproto.stdtime) = false];
-  map<int32, google.protobuf.Duration> duration_attributes_HACK = 14 [(gogoproto.nullable) = false, (gogoproto.stdduration) = false];
 }
 
 // A map of string to string. The keys in these maps are from the current
