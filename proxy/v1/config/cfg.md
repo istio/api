@@ -172,7 +172,7 @@ Retry policy to use when a request fails.
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | attempts | [int32](#int32) | optional | Number of retries for a given request. The interval between retries will be determined automatically (25ms+). Actual number of retries attempted depends on the http_timeout |
-| per_try_timeout_seconds | [double](#double) | optional | Timeout per retry attempt for a given request. Specified in seconds.nanoseconds format. |
+| per_try_timeout | [google.protobuf.Duration](#double) | optional | Timeout per retry attempt for a given request. format: 1s/1ms/1us/1ns. |
 | override_header_name | [string](#string) | optional | Downstream Service could specify retry attempts via Http header to the proxy, if the proxy supports such a feature. |
 
 
@@ -193,7 +193,7 @@ Request timeout: wait time until a response is received. Does not
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| timeout_seconds | [double](#double) | optional | Timeout for a HTTP request. Includes retries as well. Unit is in floating point seconds. Default 15 seconds. Specified in seconds.nanoseconds format |
+| timeout | [google.protobuf.Duration](#double) | optional | Timeout for a HTTP request. Includes retries as well. Default 15s. format: 1s/1ms/1us/1ns. |
 | override_header_name | [string](#string) | optional | Downstream service could specify timeout via Http header to the proxy, if the proxy supports such a feature. |
 
 
@@ -267,9 +267,9 @@ Circuit breaker configuration.
 | max_connections | [int32](#int32) | optional | Maximum number of connections to a backend. |
 | http_max_pending_requests | [int32](#int32) | optional | Maximum number of pending requests to a backend. |
 | http_max_requests | [int32](#int32) | optional | Maximum number of requests to a backend. |
-| sleep_window | [double](#double) | optional | Minimum time the circuit will be closed. In floating point seconds format. |
+| sleep_window | [google.protobuf.Duration](#double) | optional | Minimum time the circuit will be closed. format: 1s/1ms/1us/1ns. |
 | http_consecutive_errors | [int32](#int32) | optional | Number of 5XX errors before circuit is opened. |
-| http_detection_interval_seconds | [double](#int32) | optional | Interval for checking state of hystrix circuit. |
+| http_detection_interval | [google.protobuf.Duration](#int32) | optional | Interval for checking state of hystrix circuit. |
 | http_max_requests_per_connection | [int32](#int32) | optional | Maximum number of requests per connection to a backend. |
 | http_max_ejection_percent | [int32](#int32) | optional | Maximum percentage of hosts in the destination service that can be ejected due to circuit breaking. Defaults to 10%. |
 
@@ -309,5 +309,5 @@ MUST specify either a fixed delay or exponential delay. Exponential
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | percent | [float](#float) | optional | percentage of requests on which the delay will be injected |
-| fixed_delay_seconds | [double](#double) | optional | Add a fixed delay before forwarding the request. Delay duration in seconds.nanoseconds |
-| exponential_delay_seconds | [double](#double) | optional | Add a delay (based on an exponential function) before forwarding the request. mean delay needed to derive the exponential delay values |
+| fixed_delay | [google.protobuf.Duration](#double) | optional | Add a fixed delay before forwarding the request. format: 1s/1ms/1us/1ns. |
+| exponential_delay | [google.protobuf.Duration](#double) | optional | Add a delay (based on an exponential function) before forwarding the request. mean delay needed to derive the exponential delay values |
