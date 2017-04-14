@@ -16,12 +16,12 @@ syntax = "proto3";
 
 import "google/protobuf/struct.proto";
 
-import "mixer/v1/config/descriptor/attribute_descriptor.proto";
 import "mixer/v1/config/descriptor/log_entry_descriptor.proto";
 import "mixer/v1/config/descriptor/metric_descriptor.proto";
 import "mixer/v1/config/descriptor/monitored_resource_descriptor.proto";
 import "mixer/v1/config/descriptor/principal_descriptor.proto";
 import "mixer/v1/config/descriptor/quota_descriptor.proto";
+import "mixer/v1/config/descriptor/value_type.proto";
 
 
 package istio.mixer.v1.config;
@@ -177,9 +177,18 @@ message AttributeManifest {
   // `attributes` kind adapter in Mixer.
   string name = 2;
 
-  // The set of attributes this Istio component will be responsible for
-  // producing at runtime.
-  repeated istio.mixer.v1.config.descriptor.AttributeDescriptor attributes = 3;
+  // AttributeInfo describes the type of an attribute named in this configuration. 
+  message AttributeInfo {
+    // Optional. A human-readable description of the attribute's purpose.
+    string description = 1;
+
+    // Required. The type of data carried by this attribute.
+    istio.mixer.v1.config.descriptor.ValueType value_type = 2;
+  }
+  // The set of attributes this Istio component will be responsible for producing at runtime.
+  // We map from attribute name to the attribute's specification. Attribute names must be
+  // unique across all manifests in the configuration.
+  map<string, AttributeInfo> attributes = 3;
 }
 
 // Uri represents a properly formed URI.
