@@ -154,7 +154,6 @@ message MetricDescriptor {
       repeated double bounds = 1;
     }
 
-
     // Exactly one of these three fields must be set.
     oneof definition {
       // The linear buckets.
