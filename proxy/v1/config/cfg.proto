@@ -106,16 +106,16 @@ message ProxyMeshConfig {
     // Disables Ingress controller.
     OFF = 0;
 
-    // Ingress resources are applied only if annotated with the configured ingress class.
-    // This mode is suitable for a controller which is a running as a secondary ingress controller (e.g., in addition
-    // to a cloud-provided ingress controller).
-    STRICT = 1;
-
     // Ingress resources are applied if annotated with the configured ingress class,
     // or not annotated with an ingress class at all.
     // This mode is suitable for a controller running as the cluster's default ingress controller, which is expected
     // to also process ingress resources not annotated at all.
-    DEFAULT = 2;
+    DEFAULT = 1;
+
+    // Ingress resources are applied only if annotated with the configured ingress class.
+    // This mode is suitable for a controller which is a running as a secondary ingress controller (e.g., in addition
+    // to a cloud-provided ingress controller).
+    STRICT = 2;
   }
 
   // Defines whether to use Istio ingress proxy for annotated or all ingress resources
