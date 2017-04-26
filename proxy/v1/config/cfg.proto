@@ -133,6 +133,9 @@ message ProxyMeshConfig {
 
   // Path to the secrets used by the authentication policy
   string auth_certs_path = 101;
+
+  // Optional service fronting the ingress controllers
+  string ingress_service = 102;
 }
 
 /// DestinationPolicy declares policies that determine how to handle traffic for a
