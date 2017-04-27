@@ -50,10 +50,10 @@ package istio.mixer.v1.config;
 message ServiceConfig {
   option deprecated = true;
 
-  // subject is unique for a config type
+  // Optional. Subject is unique for a config type.
   // 2 config with the same subject will overwrite each other
   string subject = 1;
-  // revision of this config. This is assigned by the server
+  // Optional. revision of this config. This is assigned by the server
   string revision = 2;
   repeated AspectRule rules = 3;
 }
@@ -62,17 +62,17 @@ message ServiceConfig {
 // selector is `true`. The selectors of the this rule's child AspectRules are only
 // evaluated if this rule's selector is true.
 message AspectRule {
-  // Selector is an attribute based predicate. When Mixer receives a request it
-  // evaluates all selectors in scope and executes the rules for all selectors
-  // that evaluated to true.
+  // Required. Selector is an attribute based predicate. When Mixer receives a
+  // request it evaluates all selectors in scope and executes the rules for all
+  // selectors that evaluated to true.
   //
   // A few example selectors:
   //
   // * an empty selector evaluates to `true`
-  // * `true`, a boolean literal, a rule with this selector will always be executed
+  // * `true`, a boolean literal; a rule with this selector will always be executed
   // * `target.service == ratings*` selects any request targeting a service whose
   // name starts with "ratings"
-  // * `attr1 == "20" && attr2 == "30"` logical AND, OR, and NOT are also available.
+  // * `attr1 == "20" && attr2 == "30"` logical AND, OR, and NOT are also available
   string selector = 1;
   // The aspects that apply when selector evaluates to `true`.
   repeated Aspect aspects = 2;
@@ -108,7 +108,7 @@ message Aspect {
   // Optional. The name of the adapter this Aspect targets. If no name is provided,
   // Mixer will use the adapter of the target kind named "default".
   string adapter = 2;
-  // Struct representation of a proto defined by each aspect kind.
+  // Required. Struct representation of a proto defined by each aspect kind.
   google.protobuf.Struct params = 4;
 }
 
@@ -132,15 +132,15 @@ message Adapter {
   // specify a name, the Adapter named "default" of the same `kind` is used to execute
   // the intention described by the [AspectRule][istio.mixer.v1.config.AspectRule]s.
   string name = 1;
-  // The aspect this implementation with these params will implement; a single
-  // adapter implementation may implement many aspects, but an `Adapter` entry is
-  // required per kind.
+  // Required. The aspect this implementation with these params will implement;
+  // a single adapter implementation may implement many aspects, but an `Adapter`
+  // entry is required per kind.
   string kind = 2;
-  // The name of a specific adapter implementation. An adapter's implementation
-  // name is typically a constant in its code.
+  // Required. The name of a specific adapter implementation. An adapter's
+  // implementation name is typically a constant in its code.
   string impl = 3;
-  // Struct representation of a proto defined by the implementation; this varies
-  // depending on `impl`.
+  // Optional, depends on adapter implementation. Struct representation of a
+  // proto defined by the implementation; this varies depending on `impl`.
   google.protobuf.Struct params = 4;
 }
 
@@ -153,9 +153,10 @@ message Adapter {
 message GlobalConfig {
   option deprecated = true;
 
+  // Optional.
   string revision = 1;
-  repeated Adapter adapters = 2;
 
+  repeated Adapter adapters = 2;
   repeated AttributeManifest manifests = 3;
 
   // TODO: remove these in https://github.com/istio/api/pull/45
@@ -169,6 +170,7 @@ message GlobalConfig {
 // AttributeManifest describes a set of Attributes produced by some component
 // of an Istio deployment.
 message AttributeManifest {
+  // Optional. The revision of this document. Assigned by server.
   string revision = 1;
   // Required. Name of the component producing these attributes. This can be
   // the proxy (with the canonical name "istio-proxy") or the name of an
