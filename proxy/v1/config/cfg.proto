@@ -49,7 +49,6 @@ syntax = "proto3";
 
 import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
-import "google/protobuf/wrappers.proto";
 
 package istio.proxy.v1alpha.config;
 option go_package = "config";
@@ -464,7 +463,7 @@ message L4FaultInjection {
       /// starting bandwidth throttling. This would allow us to inject fault
       /// after the application protocol (e.g., MySQL) has had time to
       /// establish sessions/whatever handshake necessary.
-      google.protobuf.Duration throttle_after = 4;
+      google.protobuf.Duration throttle_after_period = 4;
 
       /// Alternatively, we could wait for a certain number of bytes to be
       /// transferred to upstream before throttling the bandwidth.
@@ -473,7 +472,7 @@ message L4FaultInjection {
 
     /// Stop throttling after the given duration. If not set, the connection
     /// will be throttled for its lifetime.
-    google.protobuf.Duration throttle_for = 6;
+    google.protobuf.Duration throttle_for_period = 6;
   }
 
   /// Abruptly reset (terminate) the Tcp connection after it has been
@@ -488,6 +487,6 @@ message L4FaultInjection {
 
     // TODO: see if it makes sense to create a generic Duration type to
     // express time interval related configs.
-    google.protobuf.Duration terminate_after = 2;
+    google.protobuf.Duration terminate_after_period = 2;
   }
 }
