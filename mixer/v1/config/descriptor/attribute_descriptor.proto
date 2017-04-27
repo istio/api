@@ -24,7 +24,7 @@ import "mixer/v1/config/descriptor/value_type.proto";
 //
 // Istio uses `attributes` to describe runtime activities of Istio services.
 // An Istio attribute carries a specific piece of information about an activity,
-// such as the error code of an API request, the latency of an API request, the
+// such as the error code of an API request, the latency of an API request, or the
 // original IP address of a TCP connection. The attributes are often generated
 // and consumed by different services. For example, a frontend service can
 // generate an authenticated user attribute and pass it to a backend service for
@@ -41,8 +41,8 @@ import "mixer/v1/config/descriptor/value_type.proto";
 // ## Design
 //
 // Each Istio attribute must conform to an Istio attribute type. The
-// `AttributeDescriptor` is used to define attribute types. Each type has a
-// globally unique type name, the type of the value, and a detailed description
+// `AttributeDescriptor` is used to define attribute types. Each attribute has
+// a globally unique type name, the type of the value, and a detailed description
 // that explains the semantics of the attribute type.
 //
 // The runtime presentation of an attribute is intentionally left out of this

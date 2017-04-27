@@ -26,29 +26,29 @@ import "mixer/v1/config/descriptor/value_type.proto";
 // The following is an example descriptor for a metric capturing the number of RPCs served, dimensioned
 // by the method being called and response code returned by the server:
 //
-//    metric_descriptor:
-//      name: "response_code"
-//      kind: COUNTER
-//      value: I64
-//      labels:
-//        name: api_method
-//        value_type: STRING
-//      labels:
-//        name: response_code
-//        value_type: INT64
+// ```yaml
+// metrics:
+//   name: "response_code"
+//   kind: COUNTER
+//   value: INT64
+//   labels:
+//     apiMethod: STRING
+//     responseCode: INT64
+// ```
 //
 // To actually report metrics at run time a mapping from attributes to a metric's labels must be provided.
 // This is provided in the aspect config; using our above descriptor we might describe the metric as:
 //
-//    metric:
-//      descriptor: "response_code" # must match metric_descriptor.name
-//      value: $requestCount        # Istio expression syntax for the attribute named "request_count"
-//      labels:
-//        # either the attribute named 'apiMethod' or the literal string 'unknown'; must eval to a string
-//        api_method: $apiMethod | "unknown"
-//        # either the attribute named 'responseCode' or the literal int64 500; must eval to an int64
-//        response_code: $responseCode | 500
-//
+// ```yaml
+// metric:
+//   descriptor: "response_code" # must match metric_descriptor.name
+//   value: request.count        # expression syntax for the attribute named "request.count"
+//   labels:
+//     # either the attribute named 'api.method' or the literal string 'unknown'; must eval to a string
+//     apiMethod: api.method | "unknown"
+//     # either the attribute named 'response.code' or the literal int64 500; must eval to an int64
+//     responseCode: response.code | 500
+//```
 message MetricDescriptor {
   // The name of this descriptor. This is used to refer to this descriptor in other contexts.
   string name = 1;
@@ -98,13 +98,13 @@ message MetricDescriptor {
     // (except overflow and underflow). Each bucket represents a constant
     // absolute uncertainty on the specific value in the bucket.
     //
-    // There are `num_finite_buckets + 2` (= N) buckets. The two additional
+    // There are `num_finite_buckets + 2` (= `N`) buckets. The two additional
     // buckets are the underflow and overflow buckets.
     //
     // Bucket `i` has the following boundaries:
     //
-    //    Upper bound (0 <= i < N-1):     offset + (width * i).
-    //    Lower bound (1 <= i < N):       offset + (width * (i - 1)).
+    // * Upper bound (`0 <= i < N-1`): `offset + (width * i)`
+    // * Lower bound (`1 <= i < N`): `offset + (width * (i - 1))`
     message Linear {
       // Must be greater than 0.
       int32 num_finite_buckets = 1;
@@ -120,13 +120,13 @@ message MetricDescriptor {
     // proportional to the value of the lower bound. Each bucket represents a
     // constant relative uncertainty on a specific value in the bucket.
     //
-    // There are `num_finite_buckets + 2` (= N) buckets. The two additional
+    // There are `num_finite_buckets + 2` (= `N`) buckets. The two additional
     // buckets are the underflow and overflow buckets.
     //
     // Bucket `i` has the following boundaries:
     //
-    //    Upper bound (0 <= i < N-1):     scale * (growth_factor ^ i).
-    //    Lower bound (1 <= i < N):       scale * (growth_factor ^ (i - 1)).
+    // * Upper bound (0 <= i < N-1): `scale * (growth_factor ^ i)`
+    // * Lower bound (1 <= i < N): `scale * (growth_factor ^ (i - 1))`
     message Exponential {
       // Must be greater than 0.
       int32 num_finite_buckets = 1;
@@ -140,11 +140,11 @@ message MetricDescriptor {
 
     // Specifies a set of buckets with arbitrary widths.
     //
-    // There are `size(bounds) + 1` (= N) buckets. Bucket `i` has the following
+    // There are `size(bounds) + 1` (= `N`) buckets. Bucket `i` has the following
     // boundaries:
     //
-    //    Upper bound (0 <= i < N-1):     bounds[i]
-    //    Lower bound (1 <= i < N);       bounds[i - 1]
+    // * Upper bound (`0 <= i < N-1`): `bounds[i]`
+    // * Lower bound (`1 <= i < N`): `bounds[i - 1]`
     //
     // The `bounds` field must contain at least one element. If `bounds` has
     // only one element, then there are no finite buckets, and that single
