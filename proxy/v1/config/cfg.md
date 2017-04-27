@@ -1,5 +1,5 @@
 # Routing Rule Config Documentation
-<a name="top"/>
+
 
 ## Table of Contents
 * [Glossary & Concepts](#cfg.proto)
@@ -13,10 +13,7 @@
     * [Load Balancing](#istio.proxy.v1alpha.config.LoadBalancing)
     * [Circuit Breakers](#istio.proxy.v1alpha.config.CircuitBreaker)
 
-<a name="cfg.proto"/>
-<p align="right"><a href="#top">Top</a></p>
-
-## Glossary & Concepts
+## <a name="cfg.proto"/>Glossary & Concepts
 
 Service is a unit of an application with a unique name that other services
 use to refer to the functionality being called. Service instances are
@@ -49,8 +46,7 @@ Most fields in this configuration are optional and fallback to sensible
 defaults. Mandatory fields contain the word REQUIRED in the
 description.
 
-<a name="istio.proxy.v1alpha.config.RouteRule"/>
-### Route Rules
+### <a name="istio.proxy.v1alpha.config.RouteRule"/>Route Rules
 
 Route rule provides a custom routing policy based on the source and
 destination service versions and connection/request metadata.  The rule must
@@ -70,8 +66,8 @@ not apply to TCP traffic towards the destination service.
 | http_req_retries | [HTTPRetry](#istio.proxy.v1alpha.config.HTTPRetry) | optional | Retry policy for HTTP requests. |
 | http_fault | [HTTPFaultInjection](#istio.proxy.v1alpha.config.HTTPFaultInjection) | optional | L7 fault injection policy applies to Http traffic |
 
-<a name="istio.proxy.v1alpha.config.MatchCondition"/>
-### Match Conditions
+### <a name="istio.proxy.v1alpha.config.MatchCondition"/>Match Conditions
+
 Match condition specifies a set of criterion to be met in order for the
  route rule to be applied to the connection or HTTP request.  The
  condition provides distinct set of conditions for each protocol with
@@ -86,10 +82,7 @@ Match condition specifies a set of criterion to be met in order for the
 | udp | [L4MatchAttributes](#istio.proxy.v1alpha.config.L4MatchAttributes) | optional |  |
 | http_headers | [MatchCondition.HttpEntry](#istio.proxy.v1alpha.config.MatchCondition.HttpEntry) | repeated | Set of HTTP match conditions based on HTTP/1.1, HTTP/2, GRPC request metadata, such as "uri", "scheme", "authority". The header keys are case-insensitive. |
 
-
-<a name="istio.proxy.v1alpha.config.MatchCondition.HttpEntry"/>
-### MatchCondition.HttpEntry
-
+### <a name="istio.proxy.v1alpha.config.MatchCondition.HttpEntry"/>MatchCondition.HttpEntry
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
@@ -97,18 +90,15 @@ Match condition specifies a set of criterion to be met in order for the
 | value | [StringMatch](#istio.proxy.v1alpha.config.StringMatch) | optional |  |
 
 
-<a name="istio.proxy.v1alpha.config.MatchCondition.SourceTagsEntry"/>
-### MatchCondition.SourceTagsEntry
-
+### <a name="istio.proxy.v1alpha.config.MatchCondition.SourceTagsEntry"/>MatchCondition.SourceTagsEntry
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | key | [string](#string) | optional |  |
 | value | [string](#string) | optional |  |
 
+### <a name="istio.proxy.v1alpha.config.L4MatchAttributes"/>L4MatchAttributes
 
-<a name="istio.proxy.v1alpha.config.L4MatchAttributes"/>
-### L4MatchAttributes
 L4 connection match attributes. Note that L4 connection matching
  support is incomplete.
 
@@ -117,9 +107,8 @@ L4 connection match attributes. Note that L4 connection matching
 | source_subnet | [string](#string) | repeated | IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or just a.b.c.d |
 | destination_subnet | [string](#string) | repeated | IPv4 or IPv6 ip address of destination with optional subnet. E.g., a.b.c.d/xx form or just a.b.c.d. This is only valid when the destination service has several IPs and the application explicitly specifies a particular IP. |
 
+### <a name="istio.proxy.v1alpha.config.StringMatch"/>StringMatch
 
-<a name="istio.proxy.v1alpha.config.StringMatch"/>
-### StringMatch
 Describes how to matches a given string (exact match, prefix-based
  match or posix style regex based match). Match is case-sensitive. NOTE:
  use of regex depends on the specific proxy implementation.
@@ -130,10 +119,8 @@ Describes how to matches a given string (exact match, prefix-based
 | prefix | [string](#string) | optional |  |
 | regex | [string](#string) | optional |  |
 
+### <a name="istio.proxy.v1alpha.config.DestinationWeight"/>Weighted Routing to Different Destination Service Versions
 
-
-<a name="istio.proxy.v1alpha.config.DestinationWeight"/>
-### Weighted Routing to Different Destination Service Versions
 Each routing rule is associated with one or more service versions (see
  glossary in beginning of document). Weights associated with the version
  determine the proportion of traffic it receives.
@@ -144,19 +131,15 @@ Each routing rule is associated with one or more service versions (see
 | tags | [DestinationWeight.TagsEntry](#istio.proxy.v1alpha.config.DestinationWeight.TagsEntry) | repeated | Service version identifier for the destination service.N.B. The map is used instead of pstruct due to lack of serialization supportin golang protobuf library (see https://github.com/golang/protobuf/pull/208) |
 | weight | [int32](#int32) | optional | The proportion of traffic to be forwarded to the service version. Max is 100. Sum of weights across destinations should add up to 100. If there is only destination in a rule, the weight value is assumed to be 100. |
 
-
-<a name="istio.proxy.v1alpha.config.DestinationWeight.TagsEntry"/>
-### DestinationWeight.TagsEntry
-
+### <a name="istio.proxy.v1alpha.config.DestinationWeight.TagsEntry"/>DestinationWeight.TagsEntry
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | key | [string](#string) | optional |  |
 | value | [string](#string) | optional |  |
 
+### <a name="istio.proxy.v1alpha.config.HTTPRetry"/>HTTP Req Retries
 
-<a name="istio.proxy.v1alpha.config.HTTPRetry"/>
-### HTTP Req Retries
 Retry policy to use when a request fails.
 
 | Field | Type | Label | Description |
@@ -164,10 +147,7 @@ Retry policy to use when a request fails.
 | simple_retry | [HTTPRetry.SimpleRetryPolicy](#istio.proxy.v1alpha.config.HTTPRetry.SimpleRetryPolicy) | optional |  |
 | custom | [Any](#google.protobuf.Any) | optional | For proxies that support custom retry policies |
 
-
-<a name="istio.proxy.v1alpha.config.HTTPRetry.SimpleRetryPolicy"/>
-### HTTPRetry.SimpleRetryPolicy
-
+### <a name="istio.proxy.v1alpha.config.HTTPRetry.SimpleRetryPolicy"/>HTTPRetry.SimpleRetryPolicy
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
@@ -175,9 +155,8 @@ Retry policy to use when a request fails.
 | per_try_timeout_seconds | [double](#double) | optional | Timeout per retry attempt for a given request. Specified in seconds.nanoseconds format. |
 | override_header_name | [string](#string) | optional | Downstream Service could specify retry attempts via Http header to the proxy, if the proxy supports such a feature. |
 
+### <a name="istio.proxy.v1alpha.config.HTTPTimeout"/>HTTP Req Timeouts
 
-<a name="istio.proxy.v1alpha.config.HTTPTimeout"/>
-### HTTP Req Timeouts
 Request timeout: wait time until a response is received. Does not
  indicate the time for the entire response to arrive.
 
@@ -186,19 +165,14 @@ Request timeout: wait time until a response is received. Does not
 | simple_timeout | [HTTPTimeout.SimpleTimeoutPolicy](#istio.proxy.v1alpha.config.HTTPTimeout.SimpleTimeoutPolicy) | optional |  |
 | custom | [Any](#google.protobuf.Any) | optional | For proxies that support custom timeout policies |
 
-
-<a name="istio.proxy.v1alpha.config.HTTPTimeout.SimpleTimeoutPolicy"/>
-### HTTPTimeout.SimpleTimeoutPolicy
-
+### <a name="istio.proxy.v1alpha.config.HTTPTimeout.SimpleTimeoutPolicy"/>HTTPTimeout.SimpleTimeoutPolicy
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | timeout_seconds | [double](#double) | optional | Timeout for a HTTP request. Includes retries as well. Unit is in floating point seconds. Default 15 seconds. Specified in seconds.nanoseconds format |
 | override_header_name | [string](#string) | optional | Downstream service could specify timeout via Http header to the proxy, if the proxy supports such a feature. |
 
-
-<a name="istio.proxy.v1alpha.config.DestinationPolicy"/>
-### Destination Policies
+### <a name="istio.proxy.v1alpha.config.DestinationPolicy"/>Destination Policies
 DestinationPolicy declares policies that determine how to handle traffic for a
  destination service (load balancing policies, failure recovery policies such
  as timeouts, retries, circuit breakers, etc).  Policies are applicable per
@@ -216,19 +190,15 @@ DestinationPolicy declares policies that determine how to handle traffic for a
 | circuit_breaker | [CircuitBreaker](#istio.proxy.v1alpha.config.CircuitBreaker) | optional | Circuit breaker policy |
 | custom | [Any](#google.protobuf.Any) | optional | Other custom policy implementations |
 
-
-<a name="istio.proxy.v1alpha.config.DestinationPolicy.TagsEntry"/>
-### DestinationPolicy.TagsEntry
-
+### <a name="istio.proxy.v1alpha.config.DestinationPolicy.TagsEntry"/>DestinationPolicy.TagsEntry
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | key | [string](#string) | optional |  |
 | value | [string](#string) | optional |  |
 
+### <a name="istio.proxy.v1alpha.config.LoadBalancing"/>Load Balancing
 
-<a name="istio.proxy.v1alpha.config.LoadBalancing"/>
-### Load Balancing
 Load balancing policy to use when forwarding traffic.
 
 | Field | Type | Label | Description |
@@ -236,9 +206,8 @@ Load balancing policy to use when forwarding traffic.
 | name | [LoadBalancing.SimpleLBPolicy](#istio.proxy.v1alpha.config.LoadBalancing.SimpleLBPolicy) | optional |  |
 | custom | [Any](#google.protobuf.Any) | optional | Custom LB policy implementations |
 
+### <a name="istio.proxy.v1alpha.config.LoadBalancing.SimpleLBPolicy"/>LoadBalancing.SimpleLBPolicy
 
-<a name="istio.proxy.v1alpha.config.LoadBalancing.SimpleLBPolicy"/>
-### LoadBalancing.SimpleLBPolicy
 Common load balancing policies supported in Istio service mesh.
 
 | Name | Number | Description |
@@ -247,9 +216,8 @@ Common load balancing policies supported in Istio service mesh.
 | LEAST_CONN | 1 |  |
 | RANDOM | 2 |  |
 
+### <a name="istio.proxy.v1alpha.config.CircuitBreaker"/>Circuit Breakers
 
-<a name="istio.proxy.v1alpha.config.CircuitBreaker"/>
-### Circuit Breakers
 Circuit breaker configuration.
 
 | Field | Type | Label | Description |
@@ -257,10 +225,7 @@ Circuit breaker configuration.
 | simple_cb | [CircuitBreaker.SimpleCircuitBreakerPolicy](#istio.proxy.v1alpha.config.CircuitBreaker.SimpleCircuitBreakerPolicy) | optional |  |
 | custom | [Any](#google.protobuf.Any) | optional | For proxies that support custom circuit breaker policies. |
 
-
-<a name="istio.proxy.v1alpha.config.CircuitBreaker.SimpleCircuitBreakerPolicy"/>
-### CircuitBreaker.SimpleCircuitBreakerPolicy
-
+### <a name="istio.proxy.v1alpha.config.CircuitBreaker.SimpleCircuitBreakerPolicy"/>CircuitBreaker.SimpleCircuitBreakerPolicy
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
@@ -273,9 +238,8 @@ Circuit breaker configuration.
 | http_max_requests_per_connection | [int32](#int32) | optional | Maximum number of requests per connection to a backend. |
 | http_max_ejection_percent | [int32](#int32) | optional | Maximum percentage of hosts in the destination service that can be ejected due to circuit breaking. Defaults to 10%. |
 
+### <a name="istio.proxy.v1alpha.config.HTTPFaultInjection"/>Fault Injection
 
-<a name="istio.proxy.v1alpha.config.HTTPFaultInjection"/>
-### Fault Injection
 Faults can be injected into the API calls by the proxy, for testing the
  failure recovery capabilities of downstream services.  Faults include
  aborting the Http request from downstream service, delaying the proxying of
@@ -287,9 +251,8 @@ Faults can be injected into the API calls by the proxy, for testing the
 | abort | [HTTPFaultInjection.Abort](#istio.proxy.v1alpha.config.HTTPFaultInjection.Abort) | optional | Abort Http request attempts and return error codes back to downstream service, giving the impression that the upstream service is faulty. N.B. Both delay and abort can be specified simultaneously. Delay and Abort are independent of one another. For e.g., if Delay is restricted to 5% of requests while Abort is restricted to 10% of requests, the 10% in abort specification applies to all requests directed to the service. It may be the case that one or more requests being aborted were also delayed. |
 | headers | [HTTPFaultInjection.HeadersEntry](#istio.proxy.v1alpha.config.HTTPFaultInjection.HeadersEntry) | repeated | Only requests with these Http headers will be subjected to fault injection |
 
+### <a name="istio.proxy.v1alpha.config.HTTPFaultInjection.Abort"/>HTTPFaultInjection.Abort
 
-<a name="istio.proxy.v1alpha.config.HTTPFaultInjection.Abort"/>
-### HTTPFaultInjection.Abort
 Abort Http request attempts and return error codes back to downstream
  service.
 
@@ -300,9 +263,8 @@ Abort Http request attempts and return error codes back to downstream
 | http2_error | [string](#string) | optional |  |
 | http_status | [int32](#int32) | optional |  |
 
+### <a name="istio.proxy.v1alpha.config.HTTPFaultInjection.Delay"/>HTTPFaultInjection.Delay
 
-<a name="istio.proxy.v1alpha.config.HTTPFaultInjection.Delay"/>
-### HTTPFaultInjection.Delay
 MUST specify either a fixed delay or exponential delay. Exponential
  delay is unsupported at the moment.
 
