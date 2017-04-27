@@ -308,7 +308,7 @@ message LoadBalancing {
 message HTTPTimeout {
   message SimpleTimeoutPolicy {
     /// Timeout for a HTTP request. Includes retries as well.
-    /// Default 15s. format: 1s/1ms/1us/1ns
+    /// Default 15s. format: 1h/1m/1s/1ms. Millisecond granularity.
     google.protobuf.Duration timeout = 1;
     /// Downstream service could specify timeout via Http header to the
     /// proxy, if the proxy supports such a feature.
@@ -329,7 +329,7 @@ message HTTPRetry {
     /// attempted depends on the http_timeout
     int32 attempts = 1;
     /// Timeout per retry attempt for a given request. 
-    /// format: 1s/1ms/1us/1ns.
+    /// format: 1h/1m/1s/1ms. Millisecond granularity.
     google.protobuf.Duration per_try_timeout = 2;
     /// Downstream Service could specify retry attempts via Http header to
     /// the proxy, if the proxy supports such a feature.
@@ -354,13 +354,13 @@ message CircuitBreaker {
     /// Maximum number of requests to a backend.
     int32 http_max_requests = 3;
 
-    /// Minimum time the circuit will be closed. format: 1s/1ms/1us/1ns.
+    /// Minimum time the circuit will be closed. format: 1h/1m/1s/1ms. Millisecond granularity.
     google.protobuf.Duration sleep_window = 4;
 
     /// Number of 5XX errors before circuit is opened.
     int32 http_consecutive_errors = 5;
 
-    /// Interval for checking state of hystrix circuit. format: 1s/1ms/1us/1ns
+    /// Interval for checking state of hystrix circuit. format: 1h/1m/1s/1ms. Millisecond granularity.
     google.protobuf.Duration http_detection_interval = 6;
 
     /// Maximum number of requests per connection to a backend.
@@ -401,7 +401,7 @@ message HTTPFaultInjection {
     /// percentage of requests on which the delay will be injected
     float percent = 1;
     oneof http_delay_type {
-      /// Add a fixed delay before forwarding the request. format: 1s/1ms/1us/1ns
+      /// Add a fixed delay before forwarding the request. format: 1h/1m/1s/1ms. Millisecond granularity.
       google.protobuf.Duration fixed_delay = 2;
       /// Add a delay (based on an exponential function) before forwarding
       /// the request. mean delay needed to derive the exponential delay
