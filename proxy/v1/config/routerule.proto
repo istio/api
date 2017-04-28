@@ -91,8 +91,8 @@ message RouteRule {
   // traffic.
   MatchCondition match = 3;
 
-  // Each routing rule is associated with one or more service version
-  // destinations (see glossary in beginning of document). Weights
+  // REQUIRED. Each routing rule is associated with one or more service
+  // version destinations (see glossary in beginning of document). Weights
   // associated with the service version determine the proportion of
   // traffic it receives.
   repeated DestinationWeight route = 4;
@@ -127,6 +127,7 @@ message RouteRule {
 //         Cookie:
 //           regex: "^(.*?;)?(user=jason)(;.*)?$"
 //
+// MatchCondition CANNOT BE empty. Atleast one of source or httpHeaders must be specified.
 message MatchCondition {
   // Identifies the service initiating a connection or a request by its
   // name. If specified, name MUST BE a fully qualified domain name such
@@ -176,11 +177,11 @@ message DestinationWeight {
   string destination = 1;
 
   // Service version identifier for the destination service.
-  // N.B. The map is used instead of pstruct due to lack of serialization support
-  // in golang protobuf library (see https://github.com/golang/protobuf/pull/208)
+  // (-- N.B. The map is used instead of pstruct due to lack of serialization support
+  // in golang protobuf library (see https://github.com/golang/protobuf/pull/208) --)
   map<string, string> tags = 2;
 
-  // The proportion of traffic to be forwarded to the service
+  // REQUIRED. The proportion of traffic to be forwarded to the service
   // version. (0-100). Sum of weights across destinations SHOULD BE ==
   // 100. If there is only destination in a rule, the weight value is
   // assumed to be 100.
@@ -224,7 +225,7 @@ message StringMatch {
 //
 message HTTPTimeout {
   message SimpleTimeoutPolicy {
-    // Timeout for a HTTP request. Includes retries as well.  Default
+    // REQUIRED. Timeout for a HTTP request. Includes retries as well.  Default
     // 15s. format: 1h/1m/1s/1ms. MUST BE >=1ms. It is possible to control
     // timeout per request by supplying the timeout value via
     // x-envoy-upstream-rq-timeout-ms HTTP header.
@@ -240,15 +241,26 @@ message HTTPTimeout {
   }
 }
 
-// Retry policy to use when a request fails.
+// Describes the retry policy to use when a HTTP request fails. For
+// example, the following rule sets the maximum number of retries to 3 when
+// calling ratings:v1 service, with a 2s timeout per retry attempt.
+//
+//     destination: "ratings.default.svc.cluster.local"
+//     route:
+//     - tags:
+//         version: v1
+//       httpReqRetries:
+//         simpleRetry:
+//           attempts: 3
+//           perTryTimeout: 2s
+//
 message HTTPRetry {
   message SimpleRetryPolicy {
-    // Number of retries for a given request. The interval between retries
-    // will be determined automatically (25ms+). Actual number of retries
-    // attempted depends on the http_timeout
+    // REQUIRED. Number of retries for a given request. The interval
+    // between retries will be determined automatically (25ms+). Actual
+    // number of retries attempted depends on the httpReqTimeout.
     int32 attempts = 1;
-    // Timeout per retry attempt for a given request. 
-    // format: 1h/1m/1s/1ms. Millisecond granularity.
+    // Timeout per retry attempt for a given request. format: 1h/1m/1s/1ms. MUST BE >=1ms.
     google.protobuf.Duration per_try_timeout = 2;
     // (-- Downstream Service could specify retry attempts via Http header to
     // Envoy, if Envoy supports such a feature. --)
