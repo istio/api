@@ -130,9 +130,9 @@ message CircuitBreaker {
   // "v1" backends. 
   //
   //     destination: reviews.default.svc.cluster.local
-  //     - policy:
-  //         tags:
-  //           version: v1
+  //     policy:
+  //     - tags:
+  //         version: v1
   //       circuitBreaker:
   //         simpleCb:
   //           maxConnections: 100
@@ -144,9 +144,9 @@ message CircuitBreaker {
   // consecutive times with 5XX error code will be ejected for 15 minutes.
   //
   //     destination: reviews.default.svc.cluster.local
-  //     - policy:
-  //         tags:
-  //           version: v1
+  //     policy:
+  //     - tags:
+  //         version: v1
   //       circuitBreaker:
   //         simpleCb:
   //           maxConnections: 100

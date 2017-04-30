@@ -77,7 +77,7 @@ message HTTPFaultInjection {
   // pre-specified error code. The following example will return an HTTP
   // 400 error code for 10% of the requests to the "ratings" service "v1".
   //
-  //     destination: "ratings.default.svc.cluster.local"
+  //     destination: ratings.default.svc.cluster.local
   //     route:
   //     - tags:
   //         version: v1

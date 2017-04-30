@@ -97,6 +97,7 @@ message ProxyMeshConfig {
   IngressControllerMode ingress_controller_mode = 22;
 
   enum AuthPolicy {
+    // Do not encrypt Envoy to Envoy traffic.
     NONE = 0;
 
     // Envoy to Envoy traffic is wrapped into mutual TLS connections.

@@ -80,13 +80,14 @@ message RouteRule {
   // e.g. "my-service.default.svc.cluster.local".
   string destination = 1;
 
-  // Precedence is used to disambiguate the order of application of rules
-  // for the same destination service. A higher number takes priority. If
-  // not specified, the value is assumed to be 0.  The order of
-  // application for rules with the same precedence is unspecified.
+  // RECOMMENDED. Precedence is used to disambiguate the order of
+  // application of rules for the same destination service. A higher number
+  // takes priority. If not specified, the value is assumed to be 0.  The
+  // order of application for rules with the same precedence is
+  // unspecified.
   int32 precedence = 2;
 
-  // Optional match condtions to be satisfied for the route rule to be
+  // Match condtions to be satisfied for the route rule to be
   // activated. If match is omitted, the route rule applies only to HTTP
   // traffic.
   MatchCondition match = 3;
@@ -115,8 +116,9 @@ message RouteRule {
 // condition provides distinct set of conditions for each protocol with the
 // intention that conditions apply only to the service ports that match the
 // protocol. For example, the following route rule restricts the rule to
-// only requests originating from "reviews:v2", with the "Cookie" header
-// containing "user=jason".
+// match only requests originating from "reviews:v2", accessing ratings
+// service where the URL path starts with /ratings/v2/ and the request
+// contains a "cookie" with value "user=jason",
 //
 //     destination: ratings.default.svc.cluster.local
 //     match:
@@ -124,10 +126,13 @@ message RouteRule {
 //       sourceTags:
 //         version: v2
 //       httpHeaders:
-//         Cookie:
+//         cookie:
 //           regex: "^(.*?;)?(user=jason)(;.*)?$"
+//         uri:
+//           prefix: "/ratings/v2/"
 //
-// MatchCondition CANNOT BE empty. Atleast one of source or httpHeaders must be specified.
+// MatchCondition CANNOT BE empty. Atleast one of source, source_tags or
+// http_headers must be specified.
 message MatchCondition {
   // Identifies the service initiating a connection or a request by its
   // name. If specified, name MUST BE a fully qualified domain name such
@@ -202,12 +207,14 @@ message L4MatchAttributes {
   repeated string destination_subnet = 2;
 }
 
-// Describes how to matches a given string (exact match, prefix-based match
-// or ECMAscript style regex-based match). Match is case-sensitive.
+// Describes how to match a given string in HTTP headers. Match is case-sensitive.
 message StringMatch {
   oneof match_type {
+    // exact string match
     string exact = 1;
+    // prefix-based match
     string prefix = 2;
+    // ECMAscript style regex-based match
     string regex = 3;
   }
 }
@@ -215,7 +222,7 @@ message StringMatch {
 // Describes HTTP request timeout. For example, the following rule sets a
 // 10 second timeout for calls to the ratings:v1 service
 //
-//     destination: "ratings.default.svc.cluster.local"
+//     destination: ratings.default.svc.cluster.local
 //     route:
 //     - tags:
 //         version: v1
@@ -245,7 +252,7 @@ message HTTPTimeout {
 // example, the following rule sets the maximum number of retries to 3 when
 // calling ratings:v1 service, with a 2s timeout per retry attempt.
 //
-//     destination: "ratings.default.svc.cluster.local"
+//     destination: ratings.default.svc.cluster.local
 //     route:
 //     - tags:
 //         version: v1
