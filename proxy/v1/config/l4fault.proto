@@ -14,7 +14,6 @@
 
 syntax = "proto3";
 
-import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 
 package istio.proxy.v1alpha.config;
@@ -29,7 +28,6 @@ option go_package = "config";
 // with the rate limiting policy enforcement provided by the Mixer
 // component. L4 fault injection is not supported at the moment. --)
 message L4FaultInjection {
-  option (google.api.message_visibility).restriction = "NOT_IMPLEMENTED";
   // Unlike Http services, we have very little context for raw Tcp|Udp
   // connections. We could throttle bandwidth of the connections (slow down
   // the connection) and/or abruptly reset (terminate) the Tcp connection

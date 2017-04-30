@@ -78,7 +78,7 @@ message DestinationVersionPolicy {
   CircuitBreaker circuit_breaker = 3;
 
   //(-- Other custom policy implementations --)
-  google.protobuf.Any custom = 100 [(google.api.field_visibility).restriction = "NOT_IMPLEMENTED"];
+  google.protobuf.Any custom = 100 ;
 }
 
 // Load balancing policy to use when forwarding traffic. These policies
@@ -111,7 +111,7 @@ message LoadBalancing {
     // Load balancing policy name (as defined in SimpleLBPolicy below)
     SimpleLBPolicy name = 1;
     //(-- Custom LB policy implementations --)
-    google.protobuf.Any custom = 2 [(google.api.field_visibility).restriction = "NOT_IMPLEMENTED"];
+    google.protobuf.Any custom = 2 ;
   }
 }
 
@@ -189,6 +189,6 @@ message CircuitBreaker {
   oneof cb_policy {
     SimpleCircuitBreakerPolicy simple_cb = 1;
     //(-- For proxies that support custom circuit breaker policies. --)
-    google.protobuf.Any custom = 2 [(google.api.field_visibility).restriction = "NOT_IMPLEMENTED"];
+    google.protobuf.Any custom = 2 ;
   }
 }

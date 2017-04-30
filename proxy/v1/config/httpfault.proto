@@ -16,7 +16,6 @@
 
 syntax = "proto3";
 
-import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 
 package istio.proxy.v1alpha.config;
@@ -66,11 +65,11 @@ message HTTPFaultInjection {
       // (-- Add a delay (based on an exponential function) before forwarding
       // the request. mean delay needed to derive the exponential delay
       // values --)
-      google.protobuf.Duration exponential_delay = 3 [(google.api.field_visibility).restriction = "NOT_IMPLEMENTED"];
+      google.protobuf.Duration exponential_delay = 3 ;
     }
     // (-- Specify delay duration as part of Http request.
     // TODO: The semantics and syntax of the headers is undefined. --)
-    string override_header_name = 4 [(google.api.field_visibility).restriction = "NOT_IMPLEMENTED"];
+    string override_header_name = 4 ;
   }
 
   // Abort specification is used to prematurely abort a request with a
@@ -94,13 +93,13 @@ message HTTPFaultInjection {
     // percentage of requests to be aborted with the error code provided (0-100).
     float percent = 1;
     oneof error_type {
-      string grpc_status = 2 [(google.api.field_visibility).restriction = "NOT_IMPLEMENTED"];
-      string http2_error = 3 [(google.api.field_visibility).restriction = "NOT_IMPLEMENTED"];
+      string grpc_status = 2 ;
+      string http2_error = 3 ;
       // REQUIRED. HTTP status code to use to abort the Http request.
       int32 http_status = 4;
     }
     // (-- Specify abort code as part of Http request.
     // TODO: The semantics and syntax of the headers is undefined. --)
-    string override_header_name = 5 [(google.api.field_visibility).restriction = "NOT_IMPLEMENTED"];
+    string override_header_name = 5 ;
   }
 }

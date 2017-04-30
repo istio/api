@@ -20,6 +20,9 @@ import "google/protobuf/duration.proto";
 package istio.proxy.v1alpha.config;
 option go_package = "config";
 
+import "httpfault.proto";
+import "l4fault.proto";
+
 // Glossary & concepts
 //
 // Service is a unit of an application with a unique name that other services
@@ -108,7 +111,7 @@ message RouteRule {
   HTTPFaultInjection http_fault = 7;
 
   //(-- L4 fault injection policy applies to Tcp/Udp (not HTTP) traffic --)
-  L4FaultInjection l4_fault = 8 [(google.api.field_visibility).restriction = "NOT_IMPLEMENTED"];
+  L4FaultInjection l4_fault = 8 ;
 }
 
 // Match condition specifies a set of criterion to be met in order for the
@@ -144,10 +147,10 @@ message MatchCondition {
   map<string, string> source_tags = 2;
 
   // (-- Set of layer 4 match conditions based on the IP ranges --)
-  L4MatchAttributes tcp = 3 [(google.api.field_visibility).restriction = "NOT_IMPLEMENTED"];
+  L4MatchAttributes tcp = 3 ;
 
   // (-- Set of layer 4 match conditions based on the IP ranges --)
-  L4MatchAttributes udp = 4 [(google.api.field_visibility).restriction = "NOT_IMPLEMENTED"];
+  L4MatchAttributes udp = 4 ;
 
   // Set of HTTP match conditions based on HTTP/1.1, HTTP/2, GRPC request
   // metadata, such as "uri", "scheme", "authority".  The header keys are
@@ -196,7 +199,6 @@ message DestinationWeight {
 // (-- L4 connection match attributes. Note that L4 connection matching
 // support is incomplete. --)
 message L4MatchAttributes {
-  option (google.api.message_visibility).restriction = "NOT_IMPLEMENTED";
   // IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or
   // just a.b.c.d
   repeated string source_subnet = 1;
@@ -239,12 +241,12 @@ message HTTPTimeout {
     google.protobuf.Duration timeout = 1;
     // (-- Downstream service could specify timeout via Http header to 
     // Envoy, if Envoy supports such a feature. --)
-    string override_header_name = 2 [(google.api.field_visibility).restriction = "NOT_IMPLEMENTED"];
+    string override_header_name = 2 ;
   }
   oneof timeout_policy {
     SimpleTimeoutPolicy simple_timeout = 1;
     //(-- For proxies that support custom timeout policies --)
-    google.protobuf.Any custom = 2 [(google.api.field_visibility).restriction = "NOT_IMPLEMENTED"];
+    google.protobuf.Any custom = 2 ;
   }
 }
 
@@ -271,11 +273,11 @@ message HTTPRetry {
     google.protobuf.Duration per_try_timeout = 2;
     // (-- Downstream Service could specify retry attempts via Http header to
     // Envoy, if Envoy supports such a feature. --)
-    string override_header_name = 3 [(google.api.field_visibility).restriction = "NOT_IMPLEMENTED"];
+    string override_header_name = 3 ;
   }
   oneof retry_policy {
     SimpleRetryPolicy simple_retry = 1;
     // (-- For proxies that support custom retry policies --)
-    google.protobuf.Any custom = 2 [(google.api.field_visibility).restriction = "NOT_IMPLEMENTED"];
+    google.protobuf.Any custom = 2 ;
   }
 }
