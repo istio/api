@@ -207,8 +207,11 @@ message RouteRule {
   ///L7 fault injection policy applies to Http traffic
   HTTPFaultInjection http_fault = 7;
 
+  // TODO Redirect only for HTTP request?
+  HTTPRedirect http_redirect = 8;
+
   ///@exclude L4 fault injection policy applies to Tcp/Udp (not Http) traffic
-  L4FaultInjection l4_fault = 8;
+  L4FaultInjection l4_fault = 9;
 }
 
 /// Match condition specifies a set of criterion to be met in order for the
@@ -489,4 +492,13 @@ message L4FaultInjection {
     // express time interval related configs.
     google.protobuf.Duration terminate_after_period = 2;
   }
+}
+
+// In the event of a 302 redirect response, the host and path will be overwritten with these values
+message HTTPRedirect {
+  // On a redirect, overwrite the Path portion of the URL with this value
+  string uri = 1;
+
+  // On a redirect, overwrite the Host portion of the URL with this value
+  string authority = 2;
 }
