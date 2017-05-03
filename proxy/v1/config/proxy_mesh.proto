@@ -30,7 +30,7 @@ message ProxyMeshConfig {
   // Address of the mixer service (e.g. _istio-mixer:9090_).
   string mixer_address = 3;
 
-  // Address of the Zipkin service (e.g. _zipkin:9144_).
+  // Address of the Zipkin service (e.g. _zipkin:9411_).
   string zipkin_address = 4;
 
   // Port on which egress envoy should listen for incoming connections from
