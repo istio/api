@@ -91,19 +91,17 @@ message RouteRule {
   // traffic.
   MatchCondition match = 3;
 
-  oneof action_type {
-    // SOMETIMES REQUIRED. A routing rule can either redirect traffic or
-    // forward traffic. The forwarding target can be one of several versions
-    // of a service (see glossary in beginning of document). Weights
-    // associated with the service version determine the proportion of
-    // traffic it receives.
-    repeated DestinationWeight route = 4;
+  // SOMETIMES REQUIRED. A routing rule can either redirect traffic or
+  // forward traffic. The forwarding target can be one of several versions
+  // of a service (see glossary in beginning of document). Weights
+  // associated with the service version determine the proportion of
+  // traffic it receives.
+  repeated DestinationWeight route = 4;
 
-    // SOMETIMES REQUIRED. A routing rule can either redirect traffic or
-    // forward traffic. The redirect primitive can be used to send a HTTP 302
-    // redirect to a different URI or Authority.
-    HTTPRedirect redirect = 5;
-  }
+  // SOMETIMES REQUIRED. A routing rule can either redirect traffic or
+  // forward traffic. The redirect primitive can be used to send a HTTP 302
+  // redirect to a different URI or Authority.
+  HTTPRedirect redirect = 5;
 
   // Rewrite HTTP URIs and Authority headers. Rewrite cannot be used with
   // Redirect primitive. Rewrite will be performed before forwarding.
