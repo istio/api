@@ -91,17 +91,19 @@ message RouteRule {
   // traffic.
   MatchCondition match = 3;
 
-  // SOMETIMES REQUIRED. A routing rule can either redirect traffic or
-  // forward traffic. The forwarding target can be one of several versions
-  // of a service (see glossary in beginning of document). Weights
-  // associated with the service version determine the proportion of
-  // traffic it receives.
-  repeated DestinationWeight route = 4;
+  oneof action_type {
+    // SOMETIMES REQUIRED. A routing rule can either redirect traffic or
+    // forward traffic. The forwarding target can be one of several versions
+    // of a service (see glossary in beginning of document). Weights
+    // associated with the service version determine the proportion of
+    // traffic it receives.
+    repeated DestinationWeight route = 4;
 
-  // SOMETIMES REQUIRED. A routing rule can either redirect traffic or
-  // forward traffic. The redirect primitive can be used to send a HTTP 302
-  // redirect to a different URI or Authority.
-  HTTPRedirect redirect = 5;
+    // SOMETIMES REQUIRED. A routing rule can either redirect traffic or
+    // forward traffic. The redirect primitive can be used to send a HTTP 302
+    // redirect to a different URI or Authority.
+    HTTPRedirect redirect = 5;
+  }
 
   // Rewrite HTTP URIs and Authority headers. Rewrite cannot be used with
   // Redirect primitive. Rewrite will be performed before forwarding.
@@ -159,16 +161,17 @@ message MatchCondition {
   L4MatchAttributes udp = 4 ;
 
   // Set of HTTP match conditions based on HTTP/1.1, HTTP/2, GRPC request
-  // metadata, such as "uri", "scheme", "authority".  The header keys are
+  // metadata, such as _uri_, _scheme_, _authority_.  The header keys are
   // case-insensitive.
   //
-  // *Note:* The keys 'uri', 'scheme', 'method', and 'authority' correspond
-  // *to URI, the protocol scheme (HTTP|HTTPS|etc), HTTP method
-  // *(GET|POST|etc), and the HTTP Host header respectively.
+  // *Note 1:* The keys _uri_, _scheme_, _method_, and _authority_ correspond
+  // to URI, protocol scheme (e.g., HTTP, HTTPS), HTTP method
+  // (e.g., GET, POST), and the HTTP Host header respectively.
   //
-  // 'uri' can be used to perform URL matches. For URL matches ('uri' header),
-  // only prefix and exact matches are supported. For other HTTP headers,
-  // exact, prefix and ECMA style regular expression matches are supported.
+  // *Note 2:* _uri_ can be used to perform URL matches. For URL matches
+  // (_uri_), only prefix and exact (see StringMatch) matches are
+  // supported. For other HTTP headers, exact, prefix and ECMA style
+  // regular expression matches are supported.
   map<string, StringMatch> http_headers = 5;
 }
 
@@ -232,7 +235,7 @@ message L4MatchAttributes {
 //         uri:
 //          exact: /v1/getProductRatings
 //     redirect:
-//       path: /v1/bookRatings
+//       uri: /v1/bookRatings
 //       authority: bookratings.default.svc.cluster.local
 //
 message HTTPRedirect {
