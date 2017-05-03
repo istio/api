@@ -210,8 +210,11 @@ message RouteRule {
   // TODO Redirect only for HTTP request?
   HTTPRedirect http_redirect = 8;
 
+  // TODO Rewrite only for HTTP requests?
+  HTTPRewrite http_rewrite = 9;
+
   ///@exclude L4 fault injection policy applies to Tcp/Udp (not Http) traffic
-  L4FaultInjection l4_fault = 9;
+  L4FaultInjection l4_fault = 10;
 }
 
 /// Match condition specifies a set of criterion to be met in order for the
@@ -500,5 +503,14 @@ message HTTPRedirect {
   string uri = 1;
 
   // On a redirect, overwrite the Host portion of the URL with this value
+  string authority = 2;
+}
+
+// In the event of a match, the host and path will be overwritten with these values during forwarding
+message HTTPRewrite {
+  // overwrite the Path portion of the URL with this value
+  string path = 1;
+
+  // overwrite the Host header with this value
   string authority = 2;
 }
