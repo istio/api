@@ -115,4 +115,10 @@ message ProxyMeshConfig {
 
   // Path to the secrets used by the authentication policy.
   string auth_certs_path = 101;
+  
+  // Fully qualified name of sidecar init container for Kubernetes pod injection.
+  string sidecar_init_image = 200;
+  
+  // Fully qualified name of sidecar proxy container for Kubernetes pod injection.
+  string sidecar_proxy_image = 201;
 }
