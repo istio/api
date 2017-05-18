@@ -166,7 +166,7 @@ message CircuitBreaker {
   //           httpConsecutiveErrors: 7
   //           sleepWindow: 15m
   //           httpDetectionInterval: 5m
-  //      ```
+  //     ```
   //           
   message SimpleCircuitBreakerPolicy {
     // Maximum number of connections to a backend.
