@@ -33,11 +33,11 @@ message ProxyMeshConfig {
   // Address of the Zipkin service (e.g. _zipkin:9411_).
   string zipkin_address = 4;
 
-  // Port on which egress envoy should listen for incoming connections from
+  // Port on which envoy should listen for incoming connections from
   // other services.
   int32 proxy_listen_port = 5;
 
-  // Port on which egress envoy should listen for administrative commands.
+  // Port on which envoy should listen for administrative commands.
   int32 proxy_admin_port = 6;
 
   // The time in seconds that Envoy will drain connections during a hot
