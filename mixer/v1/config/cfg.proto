@@ -83,7 +83,7 @@ message ServiceConfig {
 
   // Optional. List of actions that apply for this service
   // TODO: Rename this to rules once we delete the AspectRule field.
-  repeated ActionRule action_rules = 5;
+  repeated Rule action_rules = 5;
 }
 
 // An AspectRule is a selector and a set of intentions to be executed when the
