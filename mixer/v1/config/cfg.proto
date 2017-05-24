@@ -197,7 +197,7 @@ message GlobalConfig {
   repeated Handler handlers = 9;
 
   // Optional. List of types that can be referenced from [Constructors][istio.mixer.v1.config.Constructor.type]
-  repeated Types types = 10;
+  repeated Type types = 10;
 }
 
 // AttributeManifest describes a set of Attributes produced by some component
@@ -439,7 +439,7 @@ message Type {
   // Required. The name of a specific template this type belongs to.
   string template = 2;
 
-  // Optional, depends on template referenced by this type. Struct representation of a
+  // Required, depends on template referenced by this type. Struct representation of a
   // proto defined for the template; this varies depending on `template`.
   google.protobuf.Struct params = 3;
 }
