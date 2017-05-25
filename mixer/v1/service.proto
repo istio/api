@@ -14,6 +14,8 @@
 
 syntax = "proto3";
 
+option cc_generic_services = true;
+
 package istio.mixer.v1;
 
 import "mixer/v1/check.proto";
