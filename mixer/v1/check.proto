@@ -18,6 +18,7 @@ package istio.mixer.v1;
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
+import "google/rpc/status.proto";
 import "mixer/v1/attributes.proto";
 
 option (gogoproto.goproto_getters_all) = false;
@@ -31,10 +32,15 @@ message CheckRequest {
 }
 
 message CheckResponse {
-  // The attributes to use for this response
-  Attributes attributes = 1 [(gogoproto.nullable) = false];
+  // The thumbs-up/thumbs-down decision for the precondition check.
+  // A status code of OK indicates all preconditions were satisfied. Any other code indicates not
+  // all preconditions were satisfied.
+  google.rpc.Status status = 1 [(gogoproto.nullable) = false];
 
-  // The amount of time for which this result can be considered valid, given the same inputs
+  // The attributes to use for this response
+  Attributes attributes = 2 [(gogoproto.nullable) = false];
+
+  // The amount of time for which this result can be considered valid, given the same inputs.
   //
   // Caching of results is based on the set of supplied attributes.
   // Given the exact same set of attributes, the result of a previous
@@ -45,5 +51,10 @@ message CheckResponse {
   // can lead to changes in the result of Check. Determining this precise subset
   // of attributes is handled by the Istio configuration system, and made available
   // out-of-band to clients.
-  google.protobuf.Duration expiration = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+  google.protobuf.Duration expiration_duration = 3 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+
+  // The number of Check calls for which this result can be considered valid, given the same inputs.
+  //
+  // Refer to the description of the `expiration_duration` field for more information on caching.
+  int32 expiration_count = 4;
 }
