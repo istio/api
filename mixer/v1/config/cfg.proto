@@ -33,17 +33,34 @@ package istio.mixer.v1.config;
 // ```yaml
 // subject: "namespace:ns1"
 // revision: "1011"
-// rules:
+// actionRules:
 // - selector: target.service == "*"
-//   aspects:
-//   - kind: metrics
-//     params:
-//       metrics: # defines metric collection across the board.
-//       - descriptorName: response_time_by_status_code
-//         value: response.time
-//         labels:
-//           statusCode: response.code
-// ```
+//   actions:
+//   - handler: prometheus-handler
+//     instances:
+//     - RequestCountByService
+//
+// handlers:
+// - name: prometheus-handler
+//   adapter: prometheus
+//   params:
+//
+// constructors:
+// - name: RequestCountByService
+//   type: RequestCounter
+//   params:
+//     value: 1
+//     dimensions:
+//       source: origin.service
+//       target_ip: destination.ip
+//
+// types:
+// - name: RequestCounter
+//   template: MetricTemplate
+//   params:
+//     value: INT64
+//     dimensions:
+//       source: STRING
 //
 // (== deprecation_description ServiceConfig is deprecated, see the Config API's
 // swagger spec. ==)
@@ -55,7 +72,18 @@ message ServiceConfig {
   string subject = 1;
   // Optional. revision of this config. This is assigned by the server
   string revision = 2;
-  repeated AspectRule rules = 3;
+
+  // This is about to get deprecated. The configuration will move to
+  // [action_rules][istio.mixer.v1.config.ServiceConfig.action_rules].
+  // (== deprecation_description Please use action_rules to express the intention associated with this ServiceConfig ==)
+  repeated AspectRule rules = 3 [deprecated = true];
+
+  // Optional. List of constructors that can be referenced from [actions][istio.mixer.v1.config.Action.instances]
+  repeated Constructor constructors = 4;
+
+  // Optional. List of actions that apply for this service
+  // TODO: Rename this to rules once we delete the AspectRule field.
+  repeated Rule action_rules = 5;
 }
 
 // An AspectRule is a selector and a set of intentions to be executed when the
@@ -76,6 +104,7 @@ message AspectRule {
   string selector = 1;
   // The aspects that apply when selector evaluates to `true`.
   repeated Aspect aspects = 2;
+
   // Nested aspect rules; their selectors are evaluated if this selector
   // predicate evaluates to `true`.
   repeated AspectRule rules = 3;
@@ -127,7 +156,7 @@ message Aspect {
 // params:
 // ```
 message Adapter {
-  // Required, must be unique per `kind`. Used by [Aspect][istio.mixer.v1.config.Aspect]
+  // Required. must be unique per `kind`. Used by [Aspect][istio.mixer.v1.config.Aspect]
   // to refer to this adapter. The name "default" is special: when an Aspect does not
   // specify a name, the Adapter named "default" of the same `kind` is used to execute
   // the intention described by the [AspectRule][istio.mixer.v1.config.AspectRule]s.
@@ -139,7 +168,7 @@ message Adapter {
   // Required. The name of a specific adapter implementation. An adapter's
   // implementation name is typically a constant in its code.
   string impl = 3;
-  // Optional, depends on adapter implementation. Struct representation of a
+  // Optional. Depends on adapter implementation. Struct representation of a
   // proto defined by the implementation; this varies depending on `impl`.
   google.protobuf.Struct params = 4;
 }
@@ -165,6 +194,12 @@ message GlobalConfig {
   repeated istio.mixer.v1.config.descriptor.MonitoredResourceDescriptor monitored_resources = 6;
   repeated istio.mixer.v1.config.descriptor.PrincipalDescriptor principals = 7;
   repeated istio.mixer.v1.config.descriptor.QuotaDescriptor quotas = 8;
+
+  // Optional. List of handlers that can be referenced from [actions][istio.mixer.v1.config.Action.handler]
+  repeated Handler handlers = 9;
+
+  // Optional. List of types that can be referenced from [constructors][istio.mixer.v1.config.Constructor.type]
+  repeated Type types = 10;
 }
 
 // AttributeManifest describes a set of Attributes produced by some component
@@ -259,4 +294,162 @@ message DnsName {
 // EmailAddress holds a properly formatted email address.
 message EmailAddress {
   string value = 1;
+}
+
+
+// An Rule is a selector and a set of intentions to be executed when the
+// selector is `true`
+//
+// The following example instructs Mixer to invoke 'prometheus-handler' handler for all services and pass it the object
+// constructed using the 'RequestCountByService' constructor.
+//
+// ```yaml
+// action_rules:
+// - selector: target.service == "*"
+//   actions:
+//   - handler: prometheus-handler
+//     instances:
+//     - RequestCountByService
+// ```
+message Rule {
+  // Required. Selector is an attribute based predicate. When Mixer receives a
+  // request it evaluates all selectors in scope and executes the `actions` for all
+  // selectors that evaluated to true.
+  //
+  // A few example selectors:
+  //
+  // * an empty selector evaluates to `true`
+  // * `true`, a boolean literal; a rule with this selector will always be executed
+  // * `target.service == ratings*` selects any request targeting a service whose
+  // name starts with "ratings"
+  // * `attr1 == "20" && attr2 == "30"` logical AND, OR, and NOT are also available
+  string selector = 1;
+
+  // Optional. The actions that will be executed when selector evaluates to `true`.
+  repeated Action actions = 2;
+
+  // Optional. Nested action rules; their selectors are evaluated if this selector
+  // predicate evaluates to `true`.
+  // TODO: Rename this to rules once we delete the AspectRule field.
+  repeated Rule action_rules = 3;
+}
+
+// Action describes which [Handler][istio.mixer.v1.config.Handler] to invoke and what data to pass to it for processing.
+//
+// The following example instructs Mixer to invoke 'prometheus-handler' handler and pass it the object
+// constructed using the constructor 'RequestCountByService'
+//
+// ```yaml
+// - handler: prometheus-handler
+//   instances:
+//   - RequestCountByService
+// ```
+message Action {
+  // Required: The handler to invoke. Must match the `name` of a [Handler][istio.mixer.v1.config.Handler.name] in scope.
+  string handler = 2;
+
+  // Required: The name must match the `name` of the [Constructor][istio.mixer.v1.config.Constructor.name]s in scope.
+  // Referenced constructors are evaluated by resolving the attributes/literals for all the fields.
+  // The constructed objects are then passed to the `handler` referenced within this action.
+  repeated string instances = 3;
+}
+
+// Constructor tell Mixer how to create instances of particular [Type][istio.mixer.v1.config.Type].
+//
+// Constructor is defined by the operator. Constructor is defined relative to a known
+// `Type`. Their purpose is to tell Mixer how to use attributes or literals to produce
+// instances of the specified `Type` at runtime.
+//
+// The following example instructs Mixer to construct an object for type 'RequestCounter'
+// and it also provides mapping between fields of the type and attributes/literals. This construtor
+// can be referenced by [Actions][istio.mixer.v1.config.Action] using name 'RequestCountByService'.
+//
+// ```yaml
+// - name: RequestCountByService
+//   type: RequestCounter
+//   params:
+//     value: 1
+//     dimensions:
+//       source: origin.service
+//       target_ip: destination.ip
+// ```
+message Constructor {
+  // Required. Name of the constructor
+  //
+  // Must be unique in the entire mixer configuration. Used by [Action][istio.mixer.v1.config.Action] to refer
+  // to this constructor.
+  string name = 1;
+
+  // Required. The value must match the `name` of one of the [Types][istio.mixer.v1.config.Type.name] in scope.
+  // It points to the `Type` this constructor intend to construct.
+  string type = 2;
+
+  // Required. Depends on referenced `Type`. Struct representation of a
+  // proto defined by the [Type][istio.mixer.v1.config.Type]; this varies depending on the value of field `type`.
+  google.protobuf.Struct params = 3;
+}
+
+// Handler allows the operator to configure a specific adapter implementation.
+// Each adapter implementation defines its own `params` proto.
+//
+// In the following example we define a `metrics` adapter using the Mixer's prepackaged
+// prometheus adapter. This adapter doesn't require any parameters.
+//
+// ```yaml
+// name: prometheus-handler
+// adapter: prometheus
+// params:
+// ```
+message Handler {
+  // Required. Must be unique in the entire mixer configuration. Used by [Actions][istio.mixer.v1.config.Action.handler]
+  // to refer to this handler.
+  string name = 1;
+  // Required. The name of a specific adapter implementation. An adapter's
+  // implementation name is typically a constant in its code.
+  string adapter = 2;
+  // Optional. Depends on adapter implementation. Struct representation of a
+  // proto defined by the adapter implementation; this varies depending on the value of field `adapter`.
+  google.protobuf.Struct params = 3;
+}
+
+// A `Type` describes the shape of an object that can be constructed using a
+// [Constructor][istio.mixer.v1.config.Constructor].
+//
+// A `Type` is based on a specific `Template`. A `Template` describes a category of `Type`s. Each of the types
+// conforming to the `Template` describes the shape of an object that can be constructed at runtime.
+//
+// In the following example we define a 'MetricTemplate' template, which requires that any `Type` associated with it to
+// declare ValueType associated with 'value' and 'dimensions' field. The example also declares a 'RequestCounter'
+// `Type` which is based on `Template` 'MetricTemplate'. 'RequestCounter' expresses that 'value' field be of type
+// 'INT64' and 'source' dimension be of type STRING.
+//
+// ```yaml
+// - name: RequestCounter
+//   template: MetricTemplate
+//   params:
+//     value: INT64
+//     dimensions:
+//       source: STRING
+// ```
+//
+// Sample MetricTemplate
+//
+// ```proto
+// message MetricTemplate {
+//   string name;
+//   ValueType value;
+//   map<string, ValueType> dimensions;
+// }
+// ```
+message Type {
+  // Required. Name of the type. Must be unique in the entire mixer configuration. Used by
+  // [Constructor][istio.mixer.v1.config.Constructor.type] which tells the mixer how to construct this type.
+  string name = 1;
+  // Required. The name of a specific template this type belongs to. The value must match the name of the available
+  // template in scope.
+  string template = 2;
+
+  // Optional. Depends on referenced `template`. Struct representation of a
+  // proto defined by the Template; this varies depending on the value of field `template`.
+  google.protobuf.Struct params = 3;
 }
