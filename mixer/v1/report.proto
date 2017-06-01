@@ -23,12 +23,19 @@ option (gogoproto.goproto_getters_all) = false;
 option (gogoproto.equal_all) = false;
 option (gogoproto.gostring_all) = false;
 
-// Used to report telemetry after performing an action.
+// Used to report telemetry after performing one or more actions.
 message ReportRequest {
   // The attributes to use for this request.
   //
-  // These attributes are delta-encoded. In other words, each individual
-  // set of attributes is used to modify the previous set. This eliminates
+  // Each `Attributes` element represents the state of a single action. Multiple actions
+  // can be provided in a single message in order to improve communication efficiency. The
+  // client can accumulate a set of actions and send them all in one single message.
+  //
+  // Although each `Attributes` message is semantically treated as an independent
+  // stand-alone entity unrelated to the other attributes within the message, this
+  // message format leverages delta-encoding between attribute messages in order to
+  // substantial reduce the request size and improve end-to-end efficiency. each
+  // individual set of attributes is used to modify the previous set. This eliminates
   // the need to redundantly send the same attributes multiple times over within
   // a single request.
   //

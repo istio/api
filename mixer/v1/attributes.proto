@@ -24,8 +24,35 @@ option (gogoproto.goproto_getters_all) = false;
 option (gogoproto.equal_all) = false;
 option (gogoproto.gostring_all) = false;
 
-// An instance of this message is delivered to Mixer with many
-// API call.
+// Attributes represents a set of typed name/value pairs. Many of Mixer's
+// API either consume and/or return attributes.
+//
+// Istio uses attributes to control the runtime behavior of services running in the service mesh.
+// Attributes are named and typed pieces of metadata describing ingress and egress traffic and the
+// environment this traffic occurs in. An Istio attribute carries a specific piece
+// of information such as the error code of an API request, the latency of an API request, or the
+// original IP address of a TCP connection. For example:
+//
+// ```
+// request.path: xyz/abc
+// request.size: 234
+// request.time: 12:34:56.789 04/17/2017
+// source.ip: 192.168.0.1
+// target.service: example
+// ```
+//
+// A given Istio deployment has a fixed vocabulary of attributes that it understands.
+// The specific vocabulary is determined by the set of attribute producers being used
+// in the deployment. The primary attribute producer in Istio is Envoy, although
+// specialized Mixer adapters and services can also generate attributes.
+//
+// The common baseline set of attributes available in most Istio deployments is defined
+// [here](https://istio.io/docs/reference/config/mixer/attribute-vocabulary.html).
+//
+// Attributes are strongly typed. The supported attribute types are defined by
+// [ValueType](https://github.com/istio/api/blob/master/mixer/v1/config/descriptor/value_type.proto).
+// Each type of value is encoded into one of the so-called transport types present
+// in this message.
 //
 // Within this message, strings are referenced using integer indices into
 // one of two string dictionaries. Positive integers index into the global
