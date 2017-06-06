@@ -72,6 +72,10 @@ package istio.proxy.v1.config;
 //       weight: 100
 //
 message RouteRule {
+  // REQUIRED: Route rules have unique names to allow multiple rules
+  // for the same destination, e.g. "my-rule".
+  string name = 11;
+
   // REQUIRED: Destination uniquely identifies the destination associated
   // with this routing rule.  This field is applicable for hostname-based
   // resolution for HTTP traffic as well as IP-based resolution for
