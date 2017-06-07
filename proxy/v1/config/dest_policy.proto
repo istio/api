@@ -18,7 +18,7 @@ import "google/protobuf/duration.proto";
 
 package istio.proxy.v1.config;
 
-// DestinationPolicy defines client/caller-side policies that determine how
+// DestinationRule defines client/caller-side policies that determine how
 // to handle traffic bound to a particular destination service. The policy
 // specifies configuration for load balancing and circuit breakers.  For
 // example, a simple load balancing policy for the reviews service would
@@ -33,7 +33,7 @@ package istio.proxy.v1.config;
 //
 // Policies are applicable per individual service versions. ONLY
 // ONE policy can be defined per service version. Policy CANNOT be empty.
-message DestinationPolicy {
+message DestinationRule {
   // REQUIRED. Service name for which the service version is defined. The
   // value MUST BE a fully-qualified domain name,
   // e.g. _my-service.default.svc.cluster.local_.
@@ -67,9 +67,7 @@ message DestinationPolicy {
 message DestinationVersionPolicy {
   // Optional set of tags that identify a particular version of the
   // destination service. If omitted, the policy will apply to all versions
-  // of the service. (-- N.B. The map is used instead of
-  // pstruct due to lack of serialization support in golang protobuf
-  // library (see https://github.com/golang/protobuf/pull/208) --)
+  // of the service.
   map<string, string> tags = 1;
 
   // Load balancing policy.
