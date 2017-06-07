@@ -66,6 +66,7 @@ package istio.proxy.v1.config;
 // "reviews" service to version "v1" can be specified as follows:
 //
 //     destination: reviews.default.svc.cluster.local
+//     name: my-rule
 //     route:
 //     - tags:
 //         version: v1
@@ -134,6 +135,7 @@ message RouteRule {
 // contains a "cookie" with value "user=jason",
 //
 //     destination: ratings.default.svc.cluster.local
+//     name: my-rule
 //     match:
 //       source: reviews.default.svc.cluster.local
 //       sourceTags:
@@ -185,6 +187,7 @@ message MatchCondition {
 // "v1".
 //
 //     destination: reviews.default.svc.cluster.local
+//     name: my-rule
 //     route:
 //     - tags:
 //         version: v2
@@ -232,6 +235,7 @@ message L4MatchAttributes {
 // /v1/bookRatings provided by the bookratings service.
 //
 //     destination: ratings.default.svc.cluster.local
+//     name: my-rule
 //     match:
 //       httpHeaders:
 //         uri:
@@ -258,6 +262,7 @@ message HTTPRedirect {
 // ratings service before making the actual API call.
 //
 //     destination: ratings.default.svc.cluster.local
+//     name: my-rule
 //     match:
 //       httpHeaders:
 //         uri:
@@ -294,6 +299,7 @@ message StringMatch {
 // 10 second timeout for calls to the ratings:v1 service
 //
 //     destination: ratings.default.svc.cluster.local
+//     name: my-rule
 //     route:
 //     - tags:
 //         version: v1
@@ -324,6 +330,7 @@ message HTTPTimeout {
 // calling ratings:v1 service, with a 2s timeout per retry attempt.
 //
 //     destination: ratings.default.svc.cluster.local
+//     name: my-rule
 //     route:
 //     - tags:
 //         version: v1
