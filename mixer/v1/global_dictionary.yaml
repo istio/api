@@ -150,7 +150,7 @@
 - x-request-id
 - x-requested-with
 
-# Popular context types
+# Popular content-type
 - application/json
 - application/xml
 - gzip
