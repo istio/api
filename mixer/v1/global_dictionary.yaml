@@ -22,7 +22,7 @@
 #
 # Important update rules:
 # * never remove, only add new words.
-# * must be lower case since http headers are case insensitive.
+# * http headers should be lower case.
 # * not duplication, all words have to be unique.
 #
 # Tools:
@@ -70,25 +70,35 @@
 - response.duration
 - response.code
 
-# Section 2: HTTP headers
-# extracted from https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
-
-# Request fields
-- accept
+# Section 2: HTTP common headers extracted from
+# https://tools.ietf.org/html/rfc7541#appendix-A
+- :authority
+- :method
+- :path
+- :scheme
+- :status
 - accept-charset
 - accept-encoding
 - accept-language
-- accept-datetime
+- accept-ranges
+- accept
+- access-control-allow
+- age
+- allow
 - authorization
 - cache-control
-- connection
-- cookie
+- content-disposition
+- content-encoding
+- content-language
 - content-length
-- content-md5
+- content-location
+- content-range
 - content-type
+- cookie
 - date
+- etag
 - expect
-- forwarded
+- expires
 - from
 - host
 - if-match
@@ -96,80 +106,28 @@
 - if-none-match
 - if-range
 - if-unmodified-since
-- max-forwards
-- origin
-- pragma
-- proxy-authorization
-- range
-- referer
-- te
-- user-agent
-- upgrade
-- via
-- warning
-
-# Common non-standard request fields
-- x-api-key
-- x-requested-with
-- dnt
-- x-forwarded-for
-- x-forwarded-host
-- x-forwarded-proto
-- front-end-https
-- x-http-method-override
-- x-att-deviceid
-- x-wap-profile
-- proxy-connection
-- x-uidh
-- x-csrf-token
-- x-request-id
-- x-correlation-id
-
-# Response fields
-- access-control-allow-origin
-- accept-patch
-- accept-ranges
-- age
-- allow
-- alt-svc
-- content-disposition
-- content-encoding
-- content-language
-- content-location
-- content-range
-- etag
-- expires
 - last-modified
 - link
 - location
-- p3p
+- max-forwards
 - proxy-authenticate
-- public-key-pins
+- proxy-authorization
+- range
+- referer
 - refresh
 - retry-after
 - server
 - set-cookie
-- strict-transport-security
-- trailer
+- strict-transport-sec
 - transfer-encoding
-- tk
-- x-frame-options
+- user-agent
+- vary
+- via
+- www-authenticate
 
-# Common non-standard response fields
-- status
-- x-xss-protection
-- content-security-policy
-- x-content-security-policy
-- x-webkit-csp
-- x-content-type-options
-- x-powered-by
-- x-ua-compatible
-- x-content-duration
-- upgrade-insecure-requests
-
-# HTTP2 headers
-- :status
-- :method
-- :scheme
-- :authority
-- :path
+# HTTP methods
+- GET
+- POST
+- PUT
+- PATCH
+- DELETE
