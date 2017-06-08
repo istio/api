@@ -21,7 +21,7 @@
 # The main reason using yaml format is that it allows comments like this.
 #
 # Important update rules:
-# * never remove, only add new words.
+# * never remove, only add words at the end of file.
 # * http headers should be lower case.
 # * not duplication, all words have to be unique.
 #
@@ -77,6 +77,12 @@
 - :path
 - :scheme
 - :status
+- access-control-allow-origin
+- access-control-allow-methods
+- access-control-allow-headers
+- access-control-max-age
+- access-control-request-method
+- access-control-request-headers
 - accept-charset
 - accept-encoding
 - accept-language
@@ -106,6 +112,7 @@
 - if-none-match
 - if-range
 - if-unmodified-since
+- keep-alive
 - last-modified
 - link
 - location
@@ -128,6 +135,26 @@
 # HTTP methods
 - GET
 - POST
-- PUT
-- PATCH
-- DELETE
+
+# Common strings
+- http
+- envoy
+- '200'
+- Keep-Alive
+- chunked
+- x-envoy-service-time
+- x-forwarded-for
+- x-forwarded-host
+- x-forwarded-proto
+- x-http-method-override
+- x-request-id
+- x-requested-with
+
+# Popular context types
+- application/json
+- application/xml
+- gzip
+- text/html
+- text/html; charset=utf-8
+- text/plain
+- text/plain; charset=utf-8
