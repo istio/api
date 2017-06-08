@@ -1,0 +1,175 @@
+# Copyright 2017 Istio Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+################################################################################
+#
+#
+# This is the global dictionary used by mixer client and server
+# for sending mixer attributes.
+#
+# The main reason using yaml format is that it allows comments like this.
+#
+# Important update rules:
+# * never remove, only add new words.
+# * must be lower case since http headers are case insensitive.
+# * not duplication, all words have to be unique.
+#
+# Tools:
+# 1) It can be converted to json by:
+#  python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), \
+#  sys.stdout, indent=4)' < global_dictionary.yaml
+#
+# 2) Use this to detect uniqueness and print out duplication:
+#  python -c 'import yaml, collections; print [item for item, count in \
+#  collections.Counter(yaml.load(open("global_dictionary.yaml"))).items() if count > 1]'
+#
+
+# Section 1: Standard Istio attribute vocabulary
+# https://istio.io/docs/reference/config/mixer/attribute-vocabulary.html
+
+- source.ip
+- source.port
+- source.name
+- source.uid
+- source.namespace
+- source.labels
+- source.user
+- target.ip
+- target.port
+- target.service
+- target.name
+- target.uid
+- target.namespace
+- target.labels
+- target.user
+- request.headers
+- request.id
+- request.path
+- request.host
+- request.method
+- request.reason
+- request.referer
+- request.scheme
+- request.size
+- request.time
+- request.useragent
+- response.headers
+- response.size
+- response.time
+- response.duration
+- response.code
+
+# Section 2: HTTP headers
+# extracted from https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
+
+# Request fields
+- accept
+- accept-charset
+- accept-encoding
+- accept-language
+- accept-datetime
+- authorization
+- cache-control
+- connection
+- cookie
+- content-length
+- content-md5
+- content-type
+- date
+- expect
+- forwarded
+- from
+- host
+- if-match
+- if-modified-since
+- if-none-match
+- if-range
+- if-unmodified-since
+- max-forwards
+- origin
+- pragma
+- proxy-authorization
+- range
+- referer
+- te
+- user-agent
+- upgrade
+- via
+- warning
+
+# Common non-standard request fields
+- x-api-key
+- x-requested-with
+- dnt
+- x-forwarded-for
+- x-forwarded-host
+- x-forwarded-proto
+- front-end-https
+- x-http-method-override
+- x-att-deviceid
+- x-wap-profile
+- proxy-connection
+- x-uidh
+- x-csrf-token
+- x-request-id
+- x-correlation-id
+
+# Response fields
+- access-control-allow-origin
+- accept-patch
+- accept-ranges
+- age
+- allow
+- alt-svc
+- content-disposition
+- content-encoding
+- content-language
+- content-location
+- content-range
+- etag
+- expires
+- last-modified
+- link
+- location
+- p3p
+- proxy-authenticate
+- public-key-pins
+- refresh
+- retry-after
+- server
+- set-cookie
+- strict-transport-security
+- trailer
+- transfer-encoding
+- tk
+- x-frame-options
+
+# Common non-standard response fields
+- status
+- x-xss-protection
+- content-security-policy
+- x-content-security-policy
+- x-webkit-csp
+- x-content-type-options
+- x-powered-by
+- x-ua-compatible
+- x-content-duration
+- upgrade-insecure-requests
+
+# HTTP2 headers
+- :status
+- :method
+- :scheme
+- :authority
+- :path
