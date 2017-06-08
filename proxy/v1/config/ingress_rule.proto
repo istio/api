@@ -22,7 +22,7 @@ package istio.proxy.v1.config;
 // proxy serves as an ingress proxy for the entire mesh, but can also be
 // addressed from inside the mesh.  Each ingress rule defines a destination
 // service and port. Rules that do not resolve to a service or a port in the
-// mesh are ignored.
+// mesh should be ignored.
 //
 // The routing rules for the destination service are applied at the ingress
 // proxy. That means the routing rule match conditions are composed and its
@@ -37,6 +37,7 @@ message IngressRule {
   int32 port = 2;
 
   // Optional TLS secret path to apply server-side TLS context on the port.
+  // It is up to the underlying secret store to interpret the path to the secret.
   string tls_secret = 3;
 
   // RECOMMENDED. Precedence is used to disambiguate the order of application
@@ -45,7 +46,7 @@ message IngressRule {
   // precedence is unspecified.
   int32 precedence = 4;
 
-  // Match condtions to be satisfied for the ingress rule to be
+  // Match conditions to be satisfied for the ingress rule to be
   // activated.
   MatchCondition match = 5;
 
