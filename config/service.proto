@@ -14,7 +14,7 @@
 
 syntax = "proto3";
 
-package istio.v1.config;
+package istio.config.v1;
 
 import "google/rpc/status.proto";
 import "google/protobuf/struct.proto";
@@ -47,6 +47,19 @@ service Service {
             get: "/v1/{meta.api_group}/{meta.object_type}"
             additional_bindings: {
               get: "/v1/{meta.api_group}/{meta.object_type}/{meta.object_group}"
+            };
+        };
+  };
+
+  // Get a list of object types.
+  // Lists all object types or all object types 
+  // within an api group.
+  rpc ListObjectTypes(ListObjectTypesRequest) returns (ObjectTypeList) {
+        option (google.api.http) = {
+						// meta.object_group can be specified as a query parameter
+            get: "/v1"
+            additional_bindings: {
+              get: "/v1/{meta.api_group}"
             };
         };
   };
@@ -97,9 +110,14 @@ message ObjectFieldSelector {
   bool source_data = 2;
 }
 
+message ListObjectTypesRequest {
+  // meta is the metadata associated with the root where listing begins.
+  Meta meta = 1;
+}
+
 message ListObjectsRequest {
   // meta is the metadata associated with the root where listing begins.
-  ObjectMeta meta = 1;
+  Meta meta = 1;
 
   // select selects fields to include in the result.
   ObjectFieldSelector select = 2; 
@@ -107,7 +125,7 @@ message ListObjectsRequest {
 
 message UpdateObjectRequest {
   // meta is the metadata associated with the object.
-  ObjectMeta meta = 1;
+  Meta meta = 1;
   
   // source_data is the data as it was specified in json / yaml format.
   google.protobuf.Struct source_data = 2;
@@ -115,7 +133,7 @@ message UpdateObjectRequest {
 
 message CreateObjectRequest {
   // meta is the metadata associated with the object.
-  ObjectMeta meta = 1;
+  Meta meta = 1;
   
   // source_data is the data as it was specified in json / yaml format.
   google.protobuf.Struct source_data = 2;
@@ -123,7 +141,7 @@ message CreateObjectRequest {
 
 message GetObjectRequest {
   // meta is the metadata associated with the object.
-  ObjectMeta meta = 1;
+  Meta meta = 1;
 
   // select selects fields to include in the result.
   ObjectFieldSelector select = 2; 
@@ -131,13 +149,13 @@ message GetObjectRequest {
 
 message DeleteObjectRequest {
   // meta is the metadata associated with the object.
-  ObjectMeta meta = 1;
+  Meta meta = 1;
 }
 
 // Object
 message Object {
   // meta is the metadata associated with the object.
-  ObjectMeta meta = 1;
+  Meta meta = 1;
 
   // source_data is the data as it was specified in json / yaml format.
   google.protobuf.Struct source_data = 2;
@@ -150,18 +168,25 @@ message Object {
   bytes data = 3; 
 }
 
-// 
+message ObjectTypeList {
+  // meta is the metadata associated with this list.
+  Meta meta = 1;
+  
+  // list of objects returned.
+  repeated Meta object_types = 2;
+}
+
 message ObjectList {
   // meta is the metadata associated with this list.
-  ObjectMeta meta = 1;
+  Meta meta = 1;
   
   // list of objects returned.
   repeated Object objects = 2;
 } 
 
 
-// ObjectMeta
-message ObjectMeta {
+// Meta
+message Meta {
   // api_group is the top level delegation.
   // All messages from an api group are handled by the same delegation handler.
   string api_group = 1;
@@ -198,7 +223,7 @@ message WatchRequest {
 
 message WatchCreateRequest {
   // used to identify 
-  ObjectMeta key = 1;
+  Meta key = 1;
 
   // start watching from this revision.
   int64 start_revision = 2; 
@@ -249,7 +274,7 @@ message Event {
   // kv holds the KeyValue for the event.
   // A PUT event contains current kv pair.
   // A PUT event with kv.Version=1 indicates the creation of a key.
-  // A DELETE/EXPIRE event contains the deleted key with
+  // A DELETE event contains the deleted key with
   // its modification revision set to the revision of deletion.
   Object kv = 2;
 
