@@ -1,0 +1,280 @@
+// Copyright 2017 Istio Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package istio.config;
+
+import "google/rpc/status.proto";
+import "google/protobuf/struct.proto";
+import "google/api/annotations.proto";
+
+// The Istio Config API service follows
+// the kubenertes API server delegation and resource model.
+// /apiGroup/version/objecttype/{namespace}/objectname  -->
+//
+// It generalizes the concept of namespace to an arbitrary grouping.
+//
+// /apiGroup/version/objecttype/{objectGroup}/objectname
+// + etcdv3 stream watch API
+service IstioConfig {
+  // Get a single object.
+  rpc GetObject(GetObjectRequest) returns (GetObjectResponse) {
+        option (google.api.http) = {
+            get: "/v1/{meta.api_group}/{meta.object_type}/{meta.object_group}/{meta.name}"
+        };
+  };
+
+  // Get a list of objects.
+  // other arguments like meta.object_group, meta.name are optional
+  // This lets one list all object of a type, or all object of a type
+  // that is within an object group.
+  rpc ListObjects(ListObjectsRequest) returns (ListObjectsResponse) {
+        option (google.api.http) = {
+            get: "/v1/{meta.api_group}/{meta.object_type}" // ?meta.object_group=group1}"
+            additional_bindings: {
+              get: "/v1/{meta.api_group}/{meta.object_type}/meta.object_group}"
+            };
+        };
+  };
+
+  // Create an object. This may result in configuration validation errors.
+  // Referrential integrity is not generally guranteed, however individual validators
+  // may decide to validate for it.
+  rpc CreateObject(CreateObjectRequest) returns (CreateObjectResponse) {
+        option (google.api.http) = {
+            post: "/v1/{meta.api_group}/{meta.object_type}/{meta.object_group}"
+            body: "source_data"
+        };
+  };
+
+  // Update a single object. May return validation errors.
+  rpc UpdateObject(UpdateObjectRequest) returns (UpdateObjectResponse) {
+        option (google.api.http) = {
+            put: "/v1/{meta.api_group}/{meta.object_type}/{meta.object_group}/{meta.name}"
+            body: "source_data"
+        };
+  };
+
+  // Delete a single object. May return validation errors.
+  rpc DeleteObject(DeleteObjectRequest) returns (google.rpc.Status) {
+        option (google.api.http) = {
+            delete: "/v1/{meta.api_group}/{meta.object_type}/{meta.object_group}/{meta.name}"
+        };
+  };
+  
+  // Watch method is borrowed from etcdv3 bi-directional streaming watches.
+  // Watch watches for events happening or that have happened. Both input and output
+  // are streams; the input stream is for creating and canceling watchers and the output
+  // stream sends events. One watch RPC can watch on multiple key roots, streaming events
+  // for several watches at once. 
+  rpc Watch(stream WatchRequest) returns (stream WatchResponse) {
+      option (google.api.http) = {
+        post: "/v1/events:watch"
+        body: "*"
+    };
+  }
+}
+
+message ObjectFieldSelector {
+  // if true object(s) should include data.
+  bool data = 1;
+
+  // if true object(s) should include source_data.
+  bool source_data = 2;
+}
+
+message ListObjectsResponse {
+  google.rpc.Status status = 1;
+
+  ObjectList list = 2;
+}
+
+message ListObjectsRequest {
+  // meta is the metadata associated with the root where listing begins.
+  ObjectMeta meta = 1;
+
+  // select selects fields to include in the result.
+  ObjectFieldSelector select = 2; 
+}
+
+message UpdateObjectRequest {
+  // meta is the metadata associated with the object.
+  ObjectMeta meta = 1;
+  
+  // source_data is the data as it was specified in json / yaml format.
+  google.protobuf.Struct source_data = 2;
+}
+
+message UpdateObjectResponse {
+  google.rpc.Status status = 1;
+
+  Object object = 2;
+}
+
+message CreateObjectResponse {
+  google.rpc.Status status = 1;
+
+  Object object = 2;
+}
+
+message CreateObjectRequest {
+  // meta is the metadata associated with the object.
+  ObjectMeta meta = 1;
+  
+  // source_data is the data as it was specified in json / yaml format.
+  google.protobuf.Struct source_data = 2;
+}
+
+message GetObjectResponse {
+  google.rpc.Status status = 1;
+
+  Object object = 2;
+}
+
+message GetObjectRequest {
+  // meta is the metadata associated with the object.
+  ObjectMeta meta = 1;
+
+  // select selects fields to include in the result.
+  ObjectFieldSelector select = 2; 
+}
+
+message DeleteObjectRequest {
+  // meta is the metadata associated with the object.
+  ObjectMeta meta = 1;
+}
+
+// Object
+message Object {
+  // meta is the metadata associated with the object.
+  ObjectMeta meta = 1;
+
+  // source_data is the data as it was specified in json / yaml format.
+  google.protobuf.Struct source_data = 2;
+
+  // data is the binary encoded protobuf data
+  // Both representations are useful. 
+  // For example:
+  // `souce_data` contains an expressions in text form 
+  // `data` may contain parsed AST
+  bytes data = 3; 
+}
+
+// 
+message ObjectList {
+  // meta is the metadata associated with this list.
+  ObjectMeta meta = 1;
+  
+  // list of objects returned.
+  repeated Object objects = 2;
+} 
+
+
+// ObjectMeta
+message ObjectMeta {
+  // api_group is the top level delegation.
+  // All messages from an api group are handled by the same delegation handler.
+  string api_group = 1;
+
+  // objectType is the type of an object.
+  // route-rule, metrics-type, metrics-ctor, ...
+  string object_type = 2;
+
+  // objectGroup is an arbitrary hierarchical grouping of resources.
+  // For Mixer configuration object_group == mesh, svc:svc1, svc:svc2 ...
+  // For Proxy it can be mesh, destination. 
+  string object_group = 3;
+
+  // name of the object.
+  string name = 4;
+
+  // version
+  // version of the object.
+  int64 version = 5;
+
+  // labels
+  // labels associated with the object.
+  map<string, string> labels = 6;
+}
+
+// watchers follows etcdv3 watch pattern.
+message WatchRequest {
+  // request_union is a request to either create a new watcher or cancel an existing watcher.
+  oneof request_union {
+    WatchCreateRequest create_request = 1;
+    WatchCancelRequest cancel_request = 2;
+  }
+}
+
+message WatchCreateRequest {
+  // used to identify 
+  ObjectMeta key = 1;
+
+  // start watching from this revision.
+  int64 start_revision = 2; 
+
+
+  enum FilterType {
+    // filter out put event.
+    NOPUT = 0;
+    // filter out delete event.
+    NODELETE = 1;
+  }
+  // filters filter the events at server side before it sends back to the watcher.
+  repeated FilterType filters = 3;
+}
+
+message WatchCancelRequest {
+  // watch_id is the watcher id to cancel so that no more events are transmitted.
+  int64 watch_id = 1;
+}
+
+message WatchResponse {
+  // watch_id is the ID of the watcher that corresponds to the response.
+  int64 watch_id = 1;
+  // created is set to true if the response is for a create watch request.
+  // The client should record the watch_id and expect to receive events for
+  // the created watcher from the same stream.
+  // All events sent to the created watcher will attach with the same watch_id.
+  bool created = 2;
+  // canceled is set to true if the response is for a cancel watch request.
+  // No further events will be sent to the canceled watcher.
+  bool canceled = 3;
+
+  // if watcher could not be created or had to be aborted status is NON-OK.
+  google.rpc.Status status = 4;
+
+  repeated Event events = 5;
+}
+
+message Event {
+  enum EventType {
+    UPDATE = 0;  // ADD and UPDATE
+    DELETE = 1;
+  }
+  // type is the kind of event. If type is a PUT, it indicates
+  // new data has been stored to the key. If type is a DELETE,
+  // it indicates the key was deleted.
+  EventType type = 1;
+  // kv holds the KeyValue for the event.
+  // A PUT event contains current kv pair.
+  // A PUT event with kv.Version=1 indicates the creation of a key.
+  // A DELETE/EXPIRE event contains the deleted key with
+  // its modification revision set to the revision of deletion.
+  Object kv = 2;
+
+  // prev_kv holds the key-value pair before the event happens.
+  Object prev_kv = 3;
+}
