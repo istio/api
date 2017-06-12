@@ -28,12 +28,15 @@ import "google/api/annotations.proto";
 // It generalizes the concept of namespace to an arbitrary grouping.
 //
 // /apiGroup/version/objecttype/{objectGroup}/objectname
+// 
+// api_group = /mixer/v1  or
+// api_group = /proxy/v1
 // + etcdv3 stream watch API
 service Service {
   // Get a single object.
   rpc GetObject(GetObjectRequest) returns (Object) {
         option (google.api.http) = {
-            get: "/v1/{meta.api_group}/{meta.object_type}/{meta.object_group}/{meta.name}"
+            get: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}/{meta.name}"
         };
   };
 
@@ -44,9 +47,9 @@ service Service {
   rpc ListObjects(ListObjectsRequest) returns (ObjectList) {
         option (google.api.http) = {
 						// meta.object_group can be specified as a query parameter
-            get: "/v1/{meta.api_group}/{meta.object_type}"
+            get: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}"
             additional_bindings: {
-              get: "/v1/{meta.api_group}/{meta.object_type}/{meta.object_group}"
+              get: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}"
             };
         };
   };
@@ -56,10 +59,9 @@ service Service {
   // within an api group.
   rpc ListObjectTypes(ListObjectTypesRequest) returns (ObjectTypeList) {
         option (google.api.http) = {
-						// meta.object_group can be specified as a query parameter
-            get: "/v1"
+        	get: "/{meta.api_group}/{meta.api_group_version}"
             additional_bindings: {
-              get: "/v1/{meta.api_group}"
+              get: "/"
             };
         };
   };
@@ -69,7 +71,7 @@ service Service {
   // may decide to validate for it.
   rpc CreateObject(CreateObjectRequest) returns (Object) {
         option (google.api.http) = {
-            post: "/v1/{meta.api_group}/{meta.object_type}/{meta.object_group}"
+            post: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}"
             body: "source_data"
         };
   };
@@ -77,7 +79,7 @@ service Service {
   // Update a single object. May return validation errors.
   rpc UpdateObject(UpdateObjectRequest) returns (Object) {
         option (google.api.http) = {
-            put: "/v1/{meta.api_group}/{meta.object_type}/{meta.object_group}/{meta.name}"
+            put: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}/{meta.name}"
             body: "source_data"
         };
   };
@@ -85,7 +87,7 @@ service Service {
   // Delete a single object. May return validation errors.
   rpc DeleteObject(DeleteObjectRequest) returns (google.protobuf.Empty) {
         option (google.api.http) = {
-            delete: "/v1/{meta.api_group}/{meta.object_type}/{meta.object_group}/{meta.name}"
+            delete: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}/{meta.name}"
         };
   };
   
@@ -96,13 +98,13 @@ service Service {
   // for several watches at once. 
   rpc Watch(stream WatchRequest) returns (stream WatchResponse) {
       option (google.api.http) = {
-        post: "/v1/events:watch"
+        post: "/events/v1:watch"
         body: "*"
     };
   }
 }
 
-message ObjectFieldSelector {
+message ObjectFieldInclude {
   // if true object(s) should include data.
   bool data = 1;
 
@@ -120,7 +122,7 @@ message ListObjectsRequest {
   Meta meta = 1;
 
   // select selects fields to include in the result.
-  ObjectFieldSelector select = 2; 
+  ObjectFieldInclude incl = 2; 
 }
 
 message UpdateObjectRequest {
@@ -143,8 +145,8 @@ message GetObjectRequest {
   // meta is the metadata associated with the object.
   Meta meta = 1;
 
-  // select selects fields to include in the result.
-  ObjectFieldSelector select = 2; 
+  // incl(ude) selects fields to include in the result.
+  ObjectFieldInclude incl = 2; 
 }
 
 message DeleteObjectRequest {
@@ -163,8 +165,8 @@ message Object {
   // data is the binary encoded protobuf data
   // Both representations are useful. 
   // For example:
-  // `souce_data` contains an expressions in text form 
-  // `data` may contain parsed AST
+  // If `souce_data` contains an expressions in text form 
+  // `data` may contain a parsed AST
   bytes data = 3; 
 }
 
@@ -189,27 +191,35 @@ message ObjectList {
 message Meta {
   // api_group is the top level delegation.
   // All messages from an api group are handled by the same delegation handler.
+	// api group itself is versioned.
   string api_group = 1;
+
+	// every api group is independently versioned.  
+	string api_group_version = 2;
 
   // objectType is the type of an object.
   // route-rule, metrics-type, metrics-ctor, ...
-  string object_type = 2;
+  string object_type = 3;
 
   // objectGroup is an arbitrary hierarchical grouping of resources.
   // For Mixer configuration object_group == mesh, svc:svc1, svc:svc2 ...
   // For Proxy it can be mesh, destination. 
-  string object_group = 3;
+  string object_group = 4;
 
   // name of the object.
-  string name = 4;
+  string name = 5;
+
+	// uid assigned to the object. Only used when a new object is created 
+	// in the same place as before.
+	string uid = 6;
 
   // revision
   // revision of the repository, the last time Object was updated.
-  int64 revision = 5;
+  int64 revision = 7;
 
   // labels
   // labels associated with the object.
-  map<string, string> labels = 6;
+  map<string, string> labels = 8;
 }
 
 // watchers follows etcdv3 watch pattern.
