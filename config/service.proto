@@ -14,7 +14,7 @@
 
 syntax = "proto3";
 
-package istio.config;
+package istio.v1.config;
 
 import "google/rpc/status.proto";
 import "google/protobuf/struct.proto";
@@ -29,7 +29,7 @@ import "google/api/annotations.proto";
 //
 // /apiGroup/version/objecttype/{objectGroup}/objectname
 // + etcdv3 stream watch API
-service IstioConfig {
+service Service {
   // Get a single object.
   rpc GetObject(GetObjectRequest) returns (Object) {
         option (google.api.http) = {
@@ -43,9 +43,10 @@ service IstioConfig {
   // that is within an object group.
   rpc ListObjects(ListObjectsRequest) returns (ObjectList) {
         option (google.api.http) = {
-            get: "/v1/{meta.api_group}/{meta.object_type}" // ?meta.object_group=group1}"
+						// meta.object_group can be specified as a query parameter
+            get: "/v1/{meta.api_group}/{meta.object_type}"
             additional_bindings: {
-              get: "/v1/{meta.api_group}/{meta.object_type}/meta.object_group}"
+              get: "/v1/{meta.api_group}/{meta.object_type}/{meta.object_group}"
             };
         };
   };
