@@ -18,6 +18,7 @@ package istio.config;
 
 import "google/rpc/status.proto";
 import "google/protobuf/struct.proto";
+import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 
 // The Istio Config API service follows
@@ -30,7 +31,7 @@ import "google/api/annotations.proto";
 // + etcdv3 stream watch API
 service IstioConfig {
   // Get a single object.
-  rpc GetObject(GetObjectRequest) returns (GetObjectResponse) {
+  rpc GetObject(GetObjectRequest) returns (Object) {
         option (google.api.http) = {
             get: "/v1/{meta.api_group}/{meta.object_type}/{meta.object_group}/{meta.name}"
         };
@@ -40,7 +41,7 @@ service IstioConfig {
   // other arguments like meta.object_group, meta.name are optional
   // This lets one list all object of a type, or all object of a type
   // that is within an object group.
-  rpc ListObjects(ListObjectsRequest) returns (ListObjectsResponse) {
+  rpc ListObjects(ListObjectsRequest) returns (ObjectList) {
         option (google.api.http) = {
             get: "/v1/{meta.api_group}/{meta.object_type}" // ?meta.object_group=group1}"
             additional_bindings: {
@@ -52,7 +53,7 @@ service IstioConfig {
   // Create an object. This may result in configuration validation errors.
   // Referrential integrity is not generally guranteed, however individual validators
   // may decide to validate for it.
-  rpc CreateObject(CreateObjectRequest) returns (CreateObjectResponse) {
+  rpc CreateObject(CreateObjectRequest) returns (Object) {
         option (google.api.http) = {
             post: "/v1/{meta.api_group}/{meta.object_type}/{meta.object_group}"
             body: "source_data"
@@ -60,7 +61,7 @@ service IstioConfig {
   };
 
   // Update a single object. May return validation errors.
-  rpc UpdateObject(UpdateObjectRequest) returns (UpdateObjectResponse) {
+  rpc UpdateObject(UpdateObjectRequest) returns (Object) {
         option (google.api.http) = {
             put: "/v1/{meta.api_group}/{meta.object_type}/{meta.object_group}/{meta.name}"
             body: "source_data"
@@ -68,7 +69,7 @@ service IstioConfig {
   };
 
   // Delete a single object. May return validation errors.
-  rpc DeleteObject(DeleteObjectRequest) returns (google.rpc.Status) {
+  rpc DeleteObject(DeleteObjectRequest) returns (google.protobuf.Empty) {
         option (google.api.http) = {
             delete: "/v1/{meta.api_group}/{meta.object_type}/{meta.object_group}/{meta.name}"
         };
@@ -95,12 +96,6 @@ message ObjectFieldSelector {
   bool source_data = 2;
 }
 
-message ListObjectsResponse {
-  google.rpc.Status status = 1;
-
-  ObjectList list = 2;
-}
-
 message ListObjectsRequest {
   // meta is the metadata associated with the root where listing begins.
   ObjectMeta meta = 1;
@@ -117,30 +112,12 @@ message UpdateObjectRequest {
   google.protobuf.Struct source_data = 2;
 }
 
-message UpdateObjectResponse {
-  google.rpc.Status status = 1;
-
-  Object object = 2;
-}
-
-message CreateObjectResponse {
-  google.rpc.Status status = 1;
-
-  Object object = 2;
-}
-
 message CreateObjectRequest {
   // meta is the metadata associated with the object.
   ObjectMeta meta = 1;
   
   // source_data is the data as it was specified in json / yaml format.
   google.protobuf.Struct source_data = 2;
-}
-
-message GetObjectResponse {
-  google.rpc.Status status = 1;
-
-  Object object = 2;
 }
 
 message GetObjectRequest {
