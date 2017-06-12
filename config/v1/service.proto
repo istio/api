@@ -203,9 +203,9 @@ message Meta {
   // name of the object.
   string name = 4;
 
-  // version
-  // version of the object.
-  int64 version = 5;
+  // revision
+  // revision of the repository, the last time Object was updated.
+  int64 revision = 5;
 
   // labels
   // labels associated with the object.
@@ -227,7 +227,6 @@ message WatchCreateRequest {
 
   // start watching from this revision.
   int64 start_revision = 2; 
-
 
   enum FilterType {
     // filter out put event.
