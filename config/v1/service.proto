@@ -1,5 +1,5 @@
 // Copyright 2017 Istio Authors
-//
+// vim: set expandtab ts=2 sw=2:
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -35,9 +35,9 @@ import "google/api/annotations.proto";
 service Service {
   // Get a single object.
   rpc GetObject(GetObjectRequest) returns (Object) {
-        option (google.api.http) = {
-            get: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}/{meta.name}"
-        };
+    option (google.api.http) = {
+      get: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}/{meta.name}"
+    };
   };
 
   // Get a list of objects.
@@ -45,50 +45,50 @@ service Service {
   // This lets one list all object of a type, or all object of a type
   // that is within an object group.
   rpc ListObjects(ListObjectsRequest) returns (ObjectList) {
-        option (google.api.http) = {
-						// meta.object_group can be specified as a query parameter
-            get: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}"
-            additional_bindings: {
-              get: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}"
-            };
-        };
+    option (google.api.http) = {
+      // meta.object_group can be specified as a query parameter
+      get: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}"
+      additional_bindings: {
+        get: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}"
+      };
+    };
   };
 
   // Get a list of object types.
   // Lists all object types or all object types 
   // within an api group.
   rpc ListObjectTypes(ListObjectTypesRequest) returns (ObjectTypeList) {
-        option (google.api.http) = {
-        	get: "/{meta.api_group}/{meta.api_group_version}"
-            additional_bindings: {
-              get: "/"
-            };
-        };
+    option (google.api.http) = {
+      get: "/{meta.api_group}/{meta.api_group_version}"
+      additional_bindings: {
+        get: "/"
+      };
+    };
   };
 
   // Create an object. This may result in configuration validation errors.
   // Referrential integrity is not generally guranteed, however individual validators
   // may decide to validate for it.
   rpc CreateObject(CreateObjectRequest) returns (Object) {
-        option (google.api.http) = {
-            post: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}"
-            body: "source_data"
-        };
+    option (google.api.http) = {
+      post: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}"
+      body: "source_data"
+    };
   };
 
   // Update a single object. May return validation errors.
   rpc UpdateObject(UpdateObjectRequest) returns (Object) {
-        option (google.api.http) = {
-            put: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}/{meta.name}"
-            body: "source_data"
-        };
+    option (google.api.http) = {
+      put: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}/{meta.name}"
+      body: "source_data"
+    };
   };
 
   // Delete a single object. May return validation errors.
   rpc DeleteObject(DeleteObjectRequest) returns (google.protobuf.Empty) {
-        option (google.api.http) = {
-            delete: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}/{meta.name}"
-        };
+    option (google.api.http) = {
+      delete: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}/{meta.name}"
+    };
   };
   
   // Watch method is borrowed from etcdv3 bi-directional streaming watches.
@@ -97,11 +97,11 @@ service Service {
   // stream sends events. One watch RPC can watch on multiple key roots, streaming events
   // for several watches at once. 
   rpc Watch(stream WatchRequest) returns (stream WatchResponse) {
-      option (google.api.http) = {
-        post: "/events/v1:watch"
-        body: "*"
+    option (google.api.http) = {
+      post: "/events/v1:watch"
+      body: "*"
     };
-  }
+  };
 }
 
 message ObjectFieldInclude {
@@ -121,7 +121,8 @@ message ListObjectsRequest {
   // meta is the metadata associated with the root where listing begins.
   Meta meta = 1;
 
-  // select selects fields to include in the result.
+  // incl(ude) selects fields to include in the result. 
+  // `include` is a reserved word. so not used here.
   ObjectFieldInclude incl = 2; 
 }
 
@@ -146,6 +147,7 @@ message GetObjectRequest {
   Meta meta = 1;
 
   // incl(ude) selects fields to include in the result.
+  // `include` is a reserved word. so not used here.
   ObjectFieldInclude incl = 2; 
 }
 
@@ -191,11 +193,11 @@ message ObjectList {
 message Meta {
   // api_group is the top level delegation.
   // All messages from an api group are handled by the same delegation handler.
-	// api group itself is versioned.
+  // api group itself is versioned.
   string api_group = 1;
 
-	// every api group is independently versioned.  
-	string api_group_version = 2;
+  // every api group is independently versioned.  
+  string api_group_version = 2;
 
   // objectType is the type of an object.
   // route-rule, metrics-type, metrics-ctor, ...
@@ -209,9 +211,9 @@ message Meta {
   // name of the object.
   string name = 5;
 
-	// uid assigned to the object. Only used when a new object is created 
-	// in the same place as before.
-	string uid = 6;
+  // uid assigned to the object. Only used when a new object is created 
+  // in the same place as before.
+  string uid = 6;
 
   // revision
   // revision of the repository, the last time Object was updated.
@@ -253,22 +255,33 @@ message WatchCancelRequest {
   int64 watch_id = 1;
 }
 
-message WatchResponse {
-  // watch_id is the ID of the watcher that corresponds to the response.
-  int64 watch_id = 1;
-  // created is set to true if the response is for a create watch request.
+enum WatchResponseType {
+  // Reponse only contains data.
+  DATA = 0;
+
+  // If the response is for a create watch request.
   // The client should record the watch_id and expect to receive events for
   // the created watcher from the same stream.
   // All events sent to the created watcher will attach with the same watch_id.
-  bool created = 2;
+  WATCH_CREATED = 1;
+
   // canceled is set to true if the response is for a cancel watch request.
   // No further events will be sent to the canceled watcher.
-  bool canceled = 3;
+  WATCH_CANCELED = 2;
+}
+
+message WatchResponse {
+  // watch_id is the ID of the watcher that corresponds to the response.
+  int64 watch_id = 1;
+
+  // response_type specifies if this message is responding to
+  // a watch creation request, watch removal request 
+  WatchResponseType response_type = 2;
 
   // if watcher could not be created or had to be aborted status is NON-OK.
-  google.rpc.Status status = 4;
+  google.rpc.Status status = 3;
 
-  repeated Event events = 5;
+  repeated Event events = 4;
 }
 
 message Event {
