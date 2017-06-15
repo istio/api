@@ -14,15 +14,15 @@
 
 syntax = "proto3";
 
-package istio.config.v1;
+package istio.galley.v1;
 
 import "google/rpc/status.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 
-// The Istio Config API service follows
-// the kubenertes API server delegation and resource model.
+// Galley follows
+// the Kubenertes API server delegation and resource model.
 // /apiGroup/version/objecttype/{namespace}/objectname  -->
 //
 // It generalizes the concept of namespace to an arbitrary grouping.
@@ -31,8 +31,7 @@ import "google/api/annotations.proto";
 // 
 // api_group = /mixer/v1  or
 // api_group = /proxy/v1
-// + etcdv3 stream watch API
-service Service {
+service Galley {
   // Get a single object.
   rpc GetObject(GetObjectRequest) returns (Object) {
     option (google.api.http) = {
@@ -41,8 +40,8 @@ service Service {
   };
 
   // Get a list of objects.
-  // other arguments like meta.object_group, meta.name are optional
-  // This lets one list all object of a type, or all object of a type
+  // Other arguments like meta.object_group, meta.name are optional
+  // This lets the caller list all objects of a type, or all objects of a type
   // that is within an object group.
   rpc ListObjects(ListObjectsRequest) returns (ObjectList) {
     option (google.api.http) = {
@@ -67,9 +66,8 @@ service Service {
   };
 
   // Create an object. This may result in configuration validation errors.
-  // Referrential integrity is not generally guranteed, however individual validators
-  // may decide to validate for it.
-  rpc CreateObject(CreateObjectRequest) returns (Object) {
+  // Referential integrity should be maximally enforced, except where not possible or desirable.
+  rpc CreateObject(ObjectRequest) returns (Object) {
     option (google.api.http) = {
       post: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}"
       body: "source_data"
@@ -77,7 +75,7 @@ service Service {
   };
 
   // Update a single object. May return validation errors.
-  rpc UpdateObject(UpdateObjectRequest) returns (Object) {
+  rpc UpdateObject(ObjectRequest) returns (Object) {
     option (google.api.http) = {
       put: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}/{meta.name}"
       body: "source_data"
@@ -95,12 +93,11 @@ service Service {
 
 // Watcher service is designed to efficiently watch mutiple subtrees of the resource tree.
 service Watcher { 
-  // Watch method is borrowed from etcdv3 bi-directional streaming watches.
   // Watch watches for events happening or that have happened. Both input and output
-  // are streams; the input stream is for creating and canceling watchers and the output
+  // are streams; the input stream is for creating and cancelling watchers and the output
   // stream sends events. One watch RPC can watch on multiple key roots, streaming events
   // for several watches at once. 
-  // The watch creation call will result in returning the current state of the subtree
+  // The watch creation call will result in returning the current state of the subtree.
   rpc Watch(stream WatchRequest) returns (stream WatchResponse) {
     option (google.api.http) = {
       post: "/events/v1:watch"
@@ -128,23 +125,22 @@ message ListObjectsRequest {
 
   // incl(ude) selects fields to include in the result. 
   // `include` is a reserved word. so not used here.
-  ObjectFieldInclude incl = 2; 
+  ObjectFieldInclude include_fields= 2; 
 }
 
-message UpdateObjectRequest {
+message ObjectRequest {
   // meta is the metadata associated with the object.
   Meta meta = 1;
-  
-  // source_data is the data as it was specified in json / yaml format.
-  google.protobuf.Struct source_data = 2;
-}
 
-message CreateObjectRequest {
-  // meta is the metadata associated with the object.
-  Meta meta = 1;
-  
+  // oneof source_data or data
+  // Note: an actual oneof is not used here because
+  // grpc gateway does not handle oneoff in request body
+ 
   // source_data is the data as it was specified in json / yaml format.
   google.protobuf.Struct source_data = 2;
+ 
+  // data is protos encoded as bytes only specify  
+  bytes data = 3; 
 }
 
 message GetObjectRequest {
@@ -153,7 +149,7 @@ message GetObjectRequest {
 
   // incl(ude) selects fields to include in the result.
   // `include` is a reserved word. so not used here.
-  ObjectFieldInclude incl = 2; 
+  ObjectFieldInclude include_fields= 2; 
 }
 
 message DeleteObjectRequest {
@@ -172,7 +168,7 @@ message Object {
   // data is the binary encoded protobuf data
   // Both representations are useful. 
   // For example:
-  // If `souce_data` contains an expressions in text form 
+  // If `source_data` contains an expressions in text form 
   // `data` may contain a parsed AST
   bytes data = 3; 
 }
@@ -220,18 +216,19 @@ message Meta {
   // in the same place as before.
   string uid = 6;
 
-  // revision
   // revision of the repository, the last time Object was updated.
   int64 revision = 7;
 
-  // labels
   // labels associated with the object.
   map<string, string> labels = 8;
 }
 
-// watchers follows etcdv3 watch pattern.
+// WatchRequest creates on cancels a watch.
+// Create and cancel are part of the same message because the WatchRequest message
+// is used in a streaming API. The client may add new watchers and remove old watchers
+// on an existing stream.
 message WatchRequest {
-  // request_union is a request to either create a new watcher or cancel an existing watcher.
+  // request_union indicates whether to create a new watcher or cancel an existing watcher.
   oneof request_union {
     WatchCreateRequest create_request = 1;
     WatchCancelRequest cancel_request = 2;
@@ -242,18 +239,10 @@ message WatchCreateRequest {
   // used to identify the watched subtree
   Meta subtree = 1;
 
-  // start watching from this revision.
+  // start watching from this revision of the repository.
+  // If the requested revision is not available, the watch request should fail.
   // if not specified "now" is used.
   int64 start_revision = 2; 
-
-  enum FilterType {
-    // filter out put event.
-    NOPUT = 0;
-    // filter out delete event.
-    NODELETE = 1;
-  }
-  // filters filter the events at server side before it sends back to the watcher.
-  repeated FilterType filters = 3;
 }
 
 message WatchCancelRequest {
@@ -303,7 +292,7 @@ message WatchResponse {
 
 message Event {
   enum EventType {
-    UPDATE = 0;  // ADD and UPDATE
+    PUT = 0;  // ADD and UPDATE
     DELETE = 1;
   }
   // type is the kind of event. If type is a PUT, it indicates
