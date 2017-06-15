@@ -90,12 +90,17 @@ service Service {
       delete: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}/{meta.name}"
     };
   };
-  
+};
+
+
+// Watcher service is designed to efficiently watch mutiple subtrees of the resource tree.
+service Watcher { 
   // Watch method is borrowed from etcdv3 bi-directional streaming watches.
   // Watch watches for events happening or that have happened. Both input and output
   // are streams; the input stream is for creating and canceling watchers and the output
   // stream sends events. One watch RPC can watch on multiple key roots, streaming events
   // for several watches at once. 
+  // The watch creation call will result in returning the current state of the subtree
   rpc Watch(stream WatchRequest) returns (stream WatchResponse) {
     option (google.api.http) = {
       post: "/events/v1:watch"
@@ -234,10 +239,11 @@ message WatchRequest {
 }
 
 message WatchCreateRequest {
-  // used to identify 
-  Meta key = 1;
+  // used to identify the watched subtree
+  Meta subtree = 1;
 
   // start watching from this revision.
+  // if not specified "now" is used.
   int64 start_revision = 2; 
 
   enum FilterType {
@@ -255,34 +261,45 @@ message WatchCancelRequest {
   int64 watch_id = 1;
 }
 
-enum WatchResponseType {
-  // Reponse only contains data.
-  DATA = 0;
+// Indicates that watch was successfully canceled.
+message WatchCanceled {
+}
 
-  // If the response is for a create watch request.
-  // The client should record the watch_id and expect to receive events for
-  // the created watcher from the same stream.
-  // All events sent to the created watcher will attach with the same watch_id.
-  WATCH_CREATED = 1;
+// Indicates that a watch was successfully created.
+message WatchCreated {
+  // returns the initial_state of the specified subtree. Watch stream will begin 
+  // at the revision.
+  repeated Object initial_state = 1;
+}
 
-  // canceled is set to true if the response is for a cancel watch request.
-  // No further events will be sent to the canceled watcher.
-  WATCH_CANCELED = 2;
+// WatchEvents indicates that this message contains events from the watch stream.
+message WatchEvents {
+  // returns events for the specified watch id. 
+  repeated Event events = 4;
 }
 
 message WatchResponse {
   // watch_id is the ID of the watcher that corresponds to the response.
   int64 watch_id = 1;
 
-  // response_type specifies if this message is responding to
-  // a watch creation request, watch removal request 
-  WatchResponseType response_type = 2;
-
   // if watcher could not be created or had to be aborted status is NON-OK.
-  google.rpc.Status status = 3;
+  // client should not look at other fields if status is not OK and remove
+  // watch_id from the watch set.
+  google.rpc.Status status = 2;
 
-  repeated Event events = 4;
-}
+  oneof response_union {
+    // Watch was successfully created. Client should record the watch_id for this watch.
+    // The response also contains the current state of the watched subtree.
+    WatchCreated created = 3;
+
+    // response contains events from a watched subtree.
+    WatchEvents events = 4;
+    
+    // a previous watch was successfully canceled.
+    // No further events will be sent to the canceled watcher.
+    WatchCanceled canceled = 5; 
+  };
+};
 
 message Event {
   enum EventType {
