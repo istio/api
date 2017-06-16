@@ -27,15 +27,15 @@ import "google/api/annotations.proto";
 //
 // It generalizes the concept of namespace to an arbitrary grouping.
 //
-// /apiGroup/version/objecttype/{objectGroup}/objectname
+// /apiGroup//objecttype/version/{objectGroup}/objectname
 // 
-// api_group = /mixer/v1  or
-// api_group = /proxy/v1
+// api_group = /core/
+// api_group = /vendor1
 service Galley {
   // Get a single object.
   rpc GetObject(GetObjectRequest) returns (Object) {
     option (google.api.http) = {
-      get: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}/{meta.name}"
+      get: "/{meta.api_group}/{meta.object_type}/{meta.object_type_version}/{meta.object_group}/{meta.name}"
     };
   };
 
@@ -46,9 +46,9 @@ service Galley {
   rpc ListObjects(ListObjectsRequest) returns (ObjectList) {
     option (google.api.http) = {
       // meta.object_group can be specified as a query parameter
-      get: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}"
+      get: "/{meta.api_group}/{meta.object_type}/{meta.object_type_version}"
       additional_bindings: {
-        get: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}"
+        get: "/{meta.api_group}/{meta.object_type}/{meta.object_type_version}/{meta.object_group}"
       };
     };
   };
@@ -58,7 +58,7 @@ service Galley {
   // within an api group.
   rpc ListObjectTypes(ListObjectTypesRequest) returns (ObjectTypeList) {
     option (google.api.http) = {
-      get: "/{meta.api_group}/{meta.api_group_version}"
+      get: "/{meta.api_group}"
       additional_bindings: {
         get: "/"
       };
@@ -69,7 +69,7 @@ service Galley {
   // Referential integrity should be maximally enforced, except where not possible or desirable.
   rpc CreateObject(ObjectRequest) returns (Object) {
     option (google.api.http) = {
-      post: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}"
+      post: "/{meta.api_group}/{meta.object_type}/{meta.object_type_version}/{meta.object_group}"
       body: "source_data"
     };
   };
@@ -77,7 +77,7 @@ service Galley {
   // Update a single object. May return validation errors.
   rpc UpdateObject(ObjectRequest) returns (Object) {
     option (google.api.http) = {
-      put: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}/{meta.name}"
+      put: "/{meta.api_group}/{meta.object_type}/{meta.object_type_version}/{meta.object_group}/{meta.name}"
       body: "source_data"
     };
   };
@@ -85,7 +85,7 @@ service Galley {
   // Delete a single object. May return validation errors.
   rpc DeleteObject(DeleteObjectRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/{meta.api_group}/{meta.api_group_version}/{meta.object_type}/{meta.object_group}/{meta.name}"
+      delete: "/{meta.api_group}/{meta.object_type}/{meta.object_type_version}/{meta.object_group}/{meta.name}"
     };
   };
 };
@@ -104,28 +104,69 @@ service Watcher {
       body: "*"
     };
   };
-}
+};
 
-message ObjectFieldInclude {
-  // if true object(s) should include data.
-  bool data = 1;
 
-  // if true object(s) should include source_data.
-  bool source_data = 2;
+// Object validator service validates objects before they are committed to storage.
+// Galley maintains a map of object_types to validators. A single validator may validate many types.
+// For example MixerValidator Service should validate all Mixer resources.
+service ObjectValidator {
+  // Validate the resource and convert it to typed proto if applicable
+  // if Object.source_data is specified, it should be converted 
+  // to the appropriate proto representation.
+  // Every attempt should be made to do a deep validation.
+  // If full validation requires referential integrity checks, this service should use the
+  // GalleyWatch Service to maintain current view of configuration.
+  //
+  // For example A Mixer rule consists of a selector expression and a named handler amongst other things. 
+  // Mixer validator should check 
+  // 1. expression syntax is valid
+  // 2. expression uses known attributes
+  // 3. Rule refers to a known handler
+  // 4. Any other semantic check that is required for full validation.
+  //
+  // It should convert untyped proto into typed proto and return binary encoding of it in Object.data.
+  // 
+  // On validation failure, it should return a validation error with text.
+  rpc ValidateAndConvert(ValidationRequest) returns (Object) {
+    option (google.api.http) = {
+      post: "/resources/v1:validate"
+      body: "*"
+    };
+  };
+};
+
+message ValidationRequest {
+  oneof request_union {
+    // This object should be validated and converted to binary encoded proto.
+    Object object = 1;
+
+    // If this object was deleted.
+    // In this case Validator should check referential integrity.
+    // Only metadata about the object being deleted is sent.
+    Meta deleted = 2;
+  }
+
+  // Object should be validated against this revision of the repository.
+  // If validator or the object is agnostic to repository versions, this will be ignored.
+  // This is useful for referential integrity checking. 
+  int64 validation_revision = 3;
 }
 
 message ListObjectTypesRequest {
   // meta is the metadata associated with the root where listing begins.
   Meta meta = 1;
+
+  // paged result, set to empty on first page.
+  string page_token = 2;
 }
 
 message ListObjectsRequest {
   // meta is the metadata associated with the root where listing begins.
   Meta meta = 1;
 
-  // incl(ude) selects fields to include in the result. 
-  // `include` is a reserved word. so not used here.
-  ObjectFieldInclude include_fields= 2; 
+  // paged result, set to empty on first page.
+  string page_token = 2;
 }
 
 message ObjectRequest {
@@ -133,23 +174,17 @@ message ObjectRequest {
   Meta meta = 1;
 
   // oneof source_data or data
-  // Note: an actual oneof is not used here because
-  // grpc gateway does not handle oneoff in request body
  
   // source_data is the data as it was specified in json / yaml format.
   google.protobuf.Struct source_data = 2;
  
-  // data is protos encoded as bytes only specify  
+  // data is protos encoded as bytes. 
   bytes data = 3; 
 }
 
 message GetObjectRequest {
   // meta is the metadata associated with the object.
   Meta meta = 1;
-
-  // incl(ude) selects fields to include in the result.
-  // `include` is a reserved word. so not used here.
-  ObjectFieldInclude include_fields= 2; 
 }
 
 message DeleteObjectRequest {
@@ -157,7 +192,7 @@ message DeleteObjectRequest {
   Meta meta = 1;
 }
 
-// Object
+// Object is the concrete representation of a resource.
 message Object {
   // meta is the metadata associated with the object.
   Meta meta = 1;
@@ -179,6 +214,10 @@ message ObjectTypeList {
   
   // list of objects returned.
   repeated Meta object_types = 2;
+
+  // If next_page_token is not empty, this is a paged result.
+  // use this value in the next request.
+  string next_page_token = 3;
 }
 
 message ObjectList {
@@ -187,22 +226,25 @@ message ObjectList {
   
   // list of objects returned.
   repeated Object objects = 2;
+
+  // If next_page_token is not empty, this is a paged result.
+  // use this value in the next request.
+  string next_page_token = 3;
 } 
 
 
 // Meta
 message Meta {
-  // api_group is the top level delegation.
-  // All messages from an api group are handled by the same delegation handler.
-  // api group itself is versioned.
+  // api_group is the top level delegation and extension point.
   string api_group = 1;
 
-  // every api group is independently versioned.  
-  string api_group_version = 2;
-
   // objectType is the type of an object.
-  // route-rule, metrics-type, metrics-ctor, ...
-  string object_type = 3;
+  // It corresponds to a behavior being configured.
+  // route-rule, metrics, logs, ...
+  string object_type = 2;
+  
+  // every object type is independently versioned.  
+  string object_type_version = 3;
 
   // objectGroup is an arbitrary hierarchical grouping of resources.
   // For Mixer configuration object_group == mesh, svc:svc1, svc:svc2 ...
@@ -212,9 +254,9 @@ message Meta {
   // name of the object.
   string name = 5;
 
-  // uid assigned to the object. Only used when a new object is created 
+  // uuid assigned to the object. Only used when a new object is created 
   // in the same place as before.
-  string uid = 6;
+  string uuid = 6;
 
   // revision of the repository, the last time Object was updated.
   int64 revision = 7;
@@ -259,6 +301,9 @@ message WatchCreated {
   // returns the initial_state of the specified subtree. Watch stream will begin 
   // at the revision.
   repeated Object initial_state = 1;
+
+  // Revision of the tree described in the initial state.
+  int64 current_revision = 2;
 }
 
 // WatchEvents indicates that this message contains events from the watch stream.
@@ -267,11 +312,20 @@ message WatchEvents {
   repeated Event events = 4;
 }
 
+// WatchProgress message is sent periodically.
+message WatchProgress {
+  // Revision of the repository when this event was sent.
+  int64 current_revision = 1;
+}
+
+
+// The client should WatchResponse
 message WatchResponse {
   // watch_id is the ID of the watcher that corresponds to the response.
+  // watch_id does not apply to the unsolicited "Progress" message.
   int64 watch_id = 1;
 
-  // if watcher could not be created or had to be aborted status is NON-OK.
+  // if a watcher could not be created or had to be aborted status is NON-OK.
   // client should not look at other fields if status is not OK and remove
   // watch_id from the watch set.
   google.rpc.Status status = 2;
@@ -287,8 +341,13 @@ message WatchResponse {
     // a previous watch was successfully canceled.
     // No further events will be sent to the canceled watcher.
     WatchCanceled canceled = 5; 
+
+    // Server sends periodic messages of progress when no actual watches fire.
+    // The client knows it is caught up to a certain revision of the repository.
+    WatchProgress progress = 6; 
   };
 };
+
 
 message Event {
   enum EventType {
@@ -299,6 +358,7 @@ message Event {
   // new data has been stored to the key. If type is a DELETE,
   // it indicates the key was deleted.
   EventType type = 1;
+
   // kv holds the KeyValue for the event.
   // A PUT event contains current kv pair.
   // A PUT event with kv.Version=1 indicates the creation of a key.
