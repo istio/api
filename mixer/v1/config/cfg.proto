@@ -297,11 +297,11 @@ message EmailAddress {
 }
 
 
-// An Rule is a selector and a set of intentions to be executed when the
+// A Rule is a selector and a set of intentions to be executed when the
 // selector is `true`
 //
-// The following example instructs Mixer to invoke 'prometheus-handler' handler for all services and pass it the object
-// constructed using the 'RequestCountByService' constructor.
+// The following example instructs Mixer to invoke 'prometheus-handler' handler for all services and pass it the
+// instance constructed using the 'RequestCountByService' constructor.
 //
 // ```yaml
 // action_rules:
@@ -330,8 +330,7 @@ message Rule {
 
   // Optional. Nested action rules; their selectors are evaluated if this selector
   // predicate evaluates to `true`.
-  // TODO: Rename this to rules once we delete the AspectRule field.
-  repeated Rule action_rules = 3;
+  repeated Rule rules = 3;
 }
 
 // Action describes which [Handler][istio.mixer.v1.config.Handler] to invoke and what data to pass to it for processing.
@@ -345,24 +344,25 @@ message Rule {
 //   - RequestCountByService
 // ```
 message Action {
-  // Required: The handler to invoke. Must match the `name` of a [Handler][istio.mixer.v1.config.Handler.name] in scope.
+  // Required. The handler to invoke. Must match the `name` of a [Handler][istio.mixer.v1.config.Handler.name] in scope.
   string handler = 2;
 
-  // Required: The name must match the `name` of the [Constructor][istio.mixer.v1.config.Constructor.instance_name]s in scope.
+  // Required. Each value must match the `instance_name` of the
+  // [Constructor][istio.mixer.v1.config.Constructor.instance_name]s in scope.
   // Referenced constructors are evaluated by resolving the attributes/literals for all the fields.
   // The constructed objects are then passed to the `handler` referenced within this action.
   repeated string instances = 3;
 }
 
-// Constructor tell Mixer how to create instances for particular template.
+// A Constructor tells Mixer how to create instances for particular template.
 //
 // Constructor is defined by the operator. Constructor is defined relative to a known
 // template. Their purpose is to tell Mixer how to use attributes or literals to produce
 // instances of the specified template at runtime.
 //
-// The following example instructs Mixer to construct an object associated with template
-// 'istio.mixer.adapter.metric.Metric' and it also provides mapping between template specific fields and
-// attributes/literals. This construtor can be referenced by [Actions][istio.mixer.v1.config.Action] using name
+// The following example instructs Mixer to construct an instance associated with template
+// 'istio.mixer.adapter.metric.Metric'. It provides a mapping from the template's fields to expressions.
+// Instances produced with this constructor can be referenced by [Actions][istio.mixer.v1.config.Action] using name
 // 'RequestCountByService'.
 //
 // ```yaml
@@ -375,13 +375,13 @@ message Action {
 //       target_ip: destination.ip
 // ```
 message Constructor {
-  // Required. Name of the constructor
+  // Required. The name of this constructor
   //
-  // Must be unique in the entire mixer configuration. Used by [Action][istio.mixer.v1.config.Action] to refer
-  // to this constructor.
+  // Must be unique amongst other Constructors in scope. Used by [Action][istio.mixer.v1.config.Action] to refer
+  // to an instance produced by this constructor.
   string instance_name = 1;
 
-  // Required. The name of a specific template this constructor is associated with.
+  // Required. The name of the template this constructor creates instances for.
   // The value must match the name of the available template in scope.
   string template_name = 2;
 
