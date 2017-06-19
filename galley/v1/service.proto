@@ -136,8 +136,9 @@ service ObjectValidator {
   };
 };
 
-message ValidationRequest {
-  oneof request_union {
+// Validation repesents individual change to be validated.
+message Validation {
+  oneof validation_union {
     // This object should be validated and converted to binary encoded proto.
     Object object = 1;
 
@@ -146,9 +147,15 @@ message ValidationRequest {
     // Only metadata about the object being deleted is sent.
     Meta deleted = 2;
   }
+}
 
-  // Object should be validated against this revision of the repository.
-  // If validator or the object is agnostic to repository versions, this will be ignored.
+message ValidationRequest {
+  // Supports multiple ordered changes to be validated together.
+  // When a large config is pushed into Galley, batching
+  // validation requests is an optimization.
+  repeated Validation validations = 1;
+  // Objects should be validated against this revision of the repository.
+  // If the validator or the object is agnostic to repository versions, this can be ignored.
   // This is useful for referential integrity checking. 
   int64 validation_revision = 3;
 }
