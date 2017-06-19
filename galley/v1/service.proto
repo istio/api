@@ -166,6 +166,9 @@ message ListObjectTypesRequest {
 
   // paged result, set to empty on first page.
   string page_token = 2;
+
+  // If non zero, response should have at most these number of entries.
+  int32 max_page_size = 3;
 }
 
 message ListObjectsRequest {
@@ -174,6 +177,9 @@ message ListObjectsRequest {
 
   // paged result, set to empty on first page.
   string page_token = 2;
+
+  // If non zero, response should have at most these number of entries.
+  int32 max_page_size = 3;
 }
 
 message ObjectRequest {
