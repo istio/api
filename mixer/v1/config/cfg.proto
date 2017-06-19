@@ -383,10 +383,10 @@ message Constructor {
 
   // Required. The name of the template this constructor creates instances for.
   // The value must match the name of the available template in scope.
-  string template_name = 2;
+  string template = 2;
 
   // Required. Depends on referenced template. Struct representation of a
-  // proto defined by the template; this varies depending on the value of field `template_name`.
+  // proto defined by the template; this varies depending on the value of field `template`.
   google.protobuf.Struct params = 3;
 }
 
