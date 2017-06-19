@@ -58,7 +58,7 @@ package istio.mixer.v1.config;
 //
 // constructors:
 // - instanceName: RequestCountByService
-//   templateName: istio.mixer.adapter.metric.Metric
+//   template: istio.mixer.adapter.metric.Metric
 //   params:
 //     value: 1
 //     dimensions:
@@ -367,7 +367,7 @@ message Action {
 //
 // ```yaml
 // - instanceName: RequestCountByService
-//   templateName: istio.mixer.adapter.metric.Metric
+//   template: istio.mixer.adapter.metric.Metric
 //   params:
 //     value: 1
 //     dimensions:
