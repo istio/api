@@ -33,22 +33,22 @@ import "google/api/annotations.proto";
 // api_group = /vendor1
 service Galley {
   // Get a single object.
-  rpc GetObject(GetObjectRequest) returns (Object) {
+  rpc GetObject(GetObjectRequest) returns (ConfigObject) {
     option (google.api.http) = {
-      get: "/{meta.api_group}/{meta.object_type}/{meta.object_type_version}/{meta.object_group}/{meta.name}"
+      get: "/{key.api_group}/{key.object_type}/{key.object_type_version}/{key.object_group}/{key.name}"
     };
   };
 
   // Get a list of objects.
-  // Other arguments like meta.object_group, meta.name are optional
+  // Other arguments like query.object_group, query.name are optional
   // This lets the caller list all objects of a type, or all objects of a type
   // that is within an object group.
   rpc ListObjects(ListObjectsRequest) returns (ObjectList) {
     option (google.api.http) = {
       // meta.object_group can be specified as a query parameter
-      get: "/{meta.api_group}/{meta.object_type}/{meta.object_type_version}"
+      get: "/{query.api_group}/{query.object_type}/{query.object_type_version}"
       additional_bindings: {
-        get: "/{meta.api_group}/{meta.object_type}/{meta.object_type_version}/{meta.object_group}"
+        get: "/{query.api_group}/{query.object_type}/{query.object_type_version}/{query.object_group}"
       };
     };
   };
@@ -67,17 +67,17 @@ service Galley {
 
   // Create an object. This may result in configuration validation errors.
   // Referential integrity should be maximally enforced, except where not possible or desirable.
-  rpc CreateObject(ObjectRequest) returns (Object) {
+  rpc CreateObject(ObjectRequest) returns (ConfigObject) {
     option (google.api.http) = {
-      post: "/{meta.api_group}/{meta.object_type}/{meta.object_type_version}/{meta.object_group}"
+      post: "/{key.api_group}/{key.object_type}/{key.object_type_version}/{key.object_group}"
       body: "source_data"
     };
   };
 
   // Update a single object. May return validation errors.
-  rpc UpdateObject(ObjectRequest) returns (Object) {
+  rpc UpdateObject(ObjectRequest) returns (ConfigObject) {
     option (google.api.http) = {
-      put: "/{meta.api_group}/{meta.object_type}/{meta.object_type_version}/{meta.object_group}/{meta.name}"
+      put: "/{key.api_group}/{key.object_type}/{key.object_type_version}/{key.object_group}/{key.name}"
       body: "source_data"
     };
   };
@@ -110,7 +110,7 @@ service Watcher {
 // Object validator service validates objects before they are committed to storage.
 // Galley maintains a map of object_types to validators. A single validator may validate many types.
 // For example MixerValidator Service should validate all Mixer resources.
-service ObjectValidator {
+service ObjectValidatorAndConverter {
   // Validate the resource and convert it to typed proto if applicable
   // if Object.source_data is specified, it should be converted 
   // to the appropriate proto representation.
@@ -128,7 +128,7 @@ service ObjectValidator {
   // It should convert untyped proto into typed proto and return binary encoding of it in Object.data.
   // 
   // On validation failure, it should return a validation error with text.
-  rpc ValidateAndConvert(ValidationRequest) returns (Object) {
+  rpc ValidateAndConvert(ValidationRequest) returns (ConfigObject) {
     option (google.api.http) = {
       post: "/resources/v1:validate"
       body: "*"
@@ -140,7 +140,7 @@ service ObjectValidator {
 message Validation {
   oneof validation_union {
     // This object should be validated and converted to binary encoded proto.
-    Object object = 1;
+    ConfigObject object = 1;
 
     // If this object was deleted.
     // In this case Validator should check referential integrity.
@@ -162,7 +162,7 @@ message ValidationRequest {
 
 message ListObjectTypesRequest {
   // meta is the metadata associated with the root where listing begins.
-  Meta meta = 1;
+  Meta query = 1;
 
   // paged result, set to empty on first page.
   string page_token = 2;
@@ -173,7 +173,7 @@ message ListObjectTypesRequest {
 
 message ListObjectsRequest {
   // meta is the metadata associated with the root where listing begins.
-  Meta meta = 1;
+  Meta query = 1;
 
   // paged result, set to empty on first page.
   string page_token = 2;
@@ -183,8 +183,8 @@ message ListObjectsRequest {
 }
 
 message ObjectRequest {
-  // meta is the metadata associated with the object.
-  Meta meta = 1;
+  // key associated with the requested object.
+  Meta key = 1;
 
   // oneof source_data or data
  
@@ -196,17 +196,17 @@ message ObjectRequest {
 }
 
 message GetObjectRequest {
-  // meta is the metadata associated with the object.
-  Meta meta = 1;
+  // key associated with the object to fetch.
+  Meta key = 1;
 }
 
 message DeleteObjectRequest {
-  // meta is the metadata associated with the object.
-  Meta meta = 1;
+  // key associated with the requested object.
+  Meta key = 1;
 }
 
-// Object is the concrete representation of a resource.
-message Object {
+// ConfigObject is the concrete representation of a resource.
+message ConfigObject {
   // meta is the metadata associated with the object.
   Meta meta = 1;
 
@@ -238,7 +238,7 @@ message ObjectList {
   Meta meta = 1;
   
   // list of objects returned.
-  repeated Object objects = 2;
+  repeated ConfigObject objects = 2;
 
   // If next_page_token is not empty, this is a paged result.
   // use this value in the next request.
@@ -246,7 +246,7 @@ message ObjectList {
 } 
 
 
-// Meta
+// Meta is the metadata associated with an object.
 message Meta {
   // api_group is the top level delegation and extension point.
   string api_group = 1;
@@ -271,7 +271,7 @@ message Meta {
   // in the same place as before.
   string uuid = 6;
 
-  // revision of the repository, the last time Object was updated.
+  // revision of the repository, the last time ConfigObject was updated.
   int64 revision = 7;
 
   // labels associated with the object.
@@ -313,9 +313,9 @@ message WatchCanceled {
 message WatchCreated {
   // returns the initial_state of the specified subtree. Watch stream will begin 
   // at the revision.
-  repeated Object initial_state = 1;
+  repeated ConfigObject initial_state = 1;
 
-  // Revision of the tree described in the initial state.
+  // Revision of the repository when the initial state was produced.
   int64 current_revision = 2;
 }
 
@@ -377,8 +377,8 @@ message Event {
   // A PUT event with kv.Version=1 indicates the creation of a key.
   // A DELETE event contains the deleted key with
   // its modification revision set to the revision of deletion.
-  Object kv = 2;
+  ConfigObject kv = 2;
 
   // prev_kv holds the key-value pair before the event happens.
-  Object prev_kv = 3;
+  ConfigObject prev_kv = 3;
 }
