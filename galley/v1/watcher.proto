@@ -90,7 +90,6 @@ message WatchProgress {
 }
 
 
-// The client should WatchResponse
 message WatchResponse {
   // watch_id is the ID of the watcher that corresponds to the response.
   // watch_id does not apply to the unsolicited "Progress" message.
@@ -137,6 +136,6 @@ message Event {
   // its modification revision set to the revision of deletion.
   ConfigObject kv = 2;
 
-  // prev_kv holds the key-value pair before the event happens.
+  // prev_kv holds the key-value pair before the event happened.
   ConfigObject prev_kv = 3;
 }

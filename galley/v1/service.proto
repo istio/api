@@ -15,9 +15,9 @@ syntax = "proto3";
 
 package istio.galley.v1;
 
-import "google/protobuf/struct.proto";
-import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+import "google/rpc/status.proto";
 
 // Galley follows
 // the Kubenertes API server delegation and resource model.
@@ -28,7 +28,7 @@ import "google/api/annotations.proto";
 // /apiGroup/objecttype/version/{objectGroup}/objectname
 // 
 // apiGroup = /core/
-// apiGroup = /vendor1
+// apiGroup = /vendor1/
 service Galley {
   // Get a single object.
   rpc GetObject(GetObjectRequest) returns (ConfigObject) {
@@ -41,7 +41,7 @@ service Galley {
   // Other arguments like query.object_group, query.name are optional
   // This lets the caller list all objects of a type, or all objects of a type
   // that is within an object group.
-  rpc ListObjects(ListObjectsRequest) returns (ObjectList) {
+  rpc ListObjects(ListObjectsRequest) returns (ListObjectsResponse) {
     option (google.api.http) = {
       // meta.object_group can be specified as a query parameter
       get: "/{query.api_group}/{query.object_type}/{query.object_type_version}"
@@ -54,7 +54,7 @@ service Galley {
   // Get a list of object types.
   // Lists all object types or all object types 
   // within an api group.
-  rpc ListObjectTypes(ListObjectTypesRequest) returns (ObjectTypeList) {
+  rpc ListObjectTypes(ListObjectTypesRequest) returns (ListObjectTypesResponse) {
     option (google.api.http) = {
       get: "/{meta.api_group}"
       additional_bindings: {
@@ -65,7 +65,7 @@ service Galley {
 
   // Create an object. This may result in configuration validation errors.
   // Referential integrity should be maximally enforced, except where not possible or desirable.
-  rpc CreateObject(ObjectRequest) returns (ConfigObject) {
+  rpc CreateObject(UpdateObjectRequest) returns (UpdateObjectResponse) {
     option (google.api.http) = {
       post: "/{key.api_group}/{key.object_type}/{key.object_type_version}/{key.object_group}"
       body: "source_data"
@@ -73,7 +73,7 @@ service Galley {
   };
 
   // Update a single object. May return validation errors.
-  rpc UpdateObject(ObjectRequest) returns (ConfigObject) {
+  rpc UpdateObject(UpdateObjectRequest) returns (UpdateObjectResponse) {
     option (google.api.http) = {
       put: "/{key.api_group}/{key.object_type}/{key.object_type_version}/{key.object_group}/{key.name}"
       body: "source_data"
@@ -81,64 +81,50 @@ service Galley {
   };
 
   // Delete a single object. May return validation errors.
-  rpc DeleteObject(DeleteObjectRequest) returns (google.protobuf.Empty) {
+  rpc DeleteObject(DeleteObjectRequest) returns (DeleteObjectResponse) {
     option (google.api.http) = {
       delete: "/{meta.api_group}/{meta.object_type}/{meta.object_type_version}/{meta.object_group}/{meta.name}"
     };
   };
 };
 
-// Object validator service validates objects before they are committed to storage.
-// Galley maintains a map of object_types to validators. A single validator may validate many types.
-// For example MixerValidator Service should validate all Mixer resources.
-service ObjectValidatorAndTransformer {
-  // Validate the resource and convert it to typed proto if applicable
-  // if Object.source_data is specified, it should be converted 
-  // to the appropriate proto representation.
-  // Every attempt should be made to do a deep validation.
-  // If full validation requires referential integrity checks, this service should use the
-  // GalleyWatch Service to maintain current view of configuration.
-  //
-  // For example a Mixer rule consists of a selector expression and a named handler amongst other things. 
-  // Mixer validator should check 
-  // 1. expression syntax is valid
-  // 2. expression uses known attributes
-  // 3. Rule refers to a known handler
-  // 4. Any other semantic check that is required for full validation.
-  //
-  // It should convert untyped proto into typed proto and return binary encoding of it in Object.data.
-  // 
-  // On validation failure, it should return a validation error with text.
-  rpc ValidateAndTransform(ValidationRequest) returns (ConfigObject) {
-    option (google.api.http) = {
-      post: "/resources/v1:validate"
-      body: "*"
-    };
-  };
-};
 
-// Validation repesents individual change to be validated.
-message Validation {
-  oneof validation_union {
-    // This object should be validated and converted to binary encoded proto.
-    ConfigObject object = 1;
+// DeleteObjectResponse is returned when an attempt is made to delete an object
+// from the store.
+message DeleteObjectResponse{
+  // result of the operation
+  // if status == INVALID_ARGUMENT
+  // check errors for details.
+  google.rpc.Status status = 1; 
 
-    // If this object was deleted.
-    // In this case Validator should check referential integrity.
-    // Only metadata about the object being deleted is sent.
-    Meta deleted = 2;
-  }
+  repeated ValidationError validation_errors = 2;
 }
 
-message ValidationRequest {
-  // Supports multiple ordered changes to be validated together.
-  // When a large config is pushed into Galley, batching
-  // validation requests is an optimization.
-  repeated Validation validations = 1;
-  // Objects should be validated against this revision of the repository.
-  // If the validator or the object is agnostic to repository versions, this can be ignored.
-  // This is useful for referential integrity checking. 
-  int64 validation_revision = 3;
+// UpdateObjectResponse is returned when an attempt is made to update the store. 
+// ADD or UPDATE operations.
+message UpdateObjectResponse {
+  // result of the operation
+  // if status == INVALID_ARGUMENT
+  // check errors for details.
+  google.rpc.Status status = 1; 
+
+  // state of the object after the change.
+  ConfigObject object = 2;
+
+  // errors if st
+  repeated ValidationError validation_errors = 3;
+}
+
+message ValidationError {
+  // The key of the object where error was detected.
+  // This may not be the object that introduced the error.
+  string key = 1;
+  // The primary field that was in error, if available.
+  string field = 2;
+  // The line number on which error occurred, if available.
+  int32 line_number = 3;
+  // Textual error message.
+  string error = 4;
 }
 
 message ListObjectTypesRequest {
@@ -163,7 +149,7 @@ message ListObjectsRequest {
   int32 max_page_size = 3;
 }
 
-message ObjectRequest {
+message UpdateObjectRequest {
   // key associated with the requested object.
   Meta key = 1;
 
@@ -204,7 +190,7 @@ message ConfigObject {
   bytes data = 3; 
 }
 
-message ObjectTypeList {
+message ListObjectTypesResponse {
   // meta is the metadata associated with this list.
   Meta meta = 1;
   
@@ -216,7 +202,7 @@ message ObjectTypeList {
   string next_page_token = 3;
 }
 
-message ObjectList {
+message ListObjectsResponse {
   // meta is the metadata associated with this list.
   Meta meta = 1;
   
@@ -234,7 +220,7 @@ message Meta {
   // api_group is the top level delegation and extension point.
   string api_group = 1;
 
-  // objectType is the type of an object.
+  // object_type is the type of an object.
   // It corresponds to a behavior being configured.
   // route-rule, metrics, logs, ...
   string object_type = 2;
@@ -242,7 +228,7 @@ message Meta {
   // every object type is independently versioned.  
   string object_type_version = 3;
 
-  // objectGroup is an arbitrary hierarchical grouping of resources.
+  // object_group is an arbitrary hierarchical grouping of resources.
   // For Mixer configuration object_group == mesh, svc:svc1, svc:svc2 ...
   // For Proxy it can be mesh, destination. 
   string object_group = 4;
