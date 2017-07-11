@@ -1,0 +1,141 @@
+// Copyright 2017 Istio Authors
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package istio.galley.v1;
+
+import "google/rpc/status.proto";
+import "google/api/annotations.proto";
+
+import "service.proto";
+
+// Galley Watcher service is designed to efficiently watch mutiple subtrees of the resource tree.
+service Watcher { 
+  // Watch watches for events happening or that have happened. Both input and output
+  // are streams; the input stream is for creating and cancelling watchers and the output
+  // stream sends events. One watch RPC can watch on multiple key roots, streaming events
+  // for several watches at once. 
+  // The watch creation call will result in returning the current state of the subtree.
+  rpc Watch(stream WatchRequest) returns (stream WatchResponse) {
+    option (google.api.http) = {
+      post: "/events/v1:watch"
+      body: "*"
+    };
+  };
+};
+
+
+// WatchRequest creates on cancels a watch.
+// Create and cancel are part of the same message because the WatchRequest message
+// is used in a streaming API. The client may add new watchers and remove old watchers
+// on an existing stream.
+message WatchRequest {
+  // request_union indicates whether to create a new watcher or cancel an existing watcher.
+  oneof request_union {
+    WatchCreateRequest create_request = 1;
+    WatchCancelRequest cancel_request = 2;
+  }
+}
+
+message WatchCreateRequest {
+  // used to identify the watched subtree
+  Meta subtree = 1;
+
+  // start watching from this revision of the repository.
+  // If the requested revision is not available, the watch request should fail.
+  // if not specified "now" is used.
+  int64 start_revision = 2; 
+}
+
+message WatchCancelRequest {
+  // watch_id is the watcher id to cancel so that no more events are transmitted.
+  int64 watch_id = 1;
+}
+
+// Indicates that watch was successfully canceled.
+message WatchCanceled {
+}
+
+// Indicates that a watch was successfully created.
+message WatchCreated {
+  // returns the initial_state of the specified subtree. Watch stream will begin 
+  // at the revision.
+  repeated ConfigObject initial_state = 1;
+
+  // Revision of the repository when the initial state was produced.
+  int64 current_revision = 2;
+}
+
+// WatchEvents indicates that this message contains events from the watch stream.
+message WatchEvents {
+  // returns events for the specified watch id. 
+  repeated Event events = 4;
+}
+
+// WatchProgress message is sent periodically.
+message WatchProgress {
+  // Revision of the repository when this event was sent.
+  int64 current_revision = 1;
+}
+
+
+message WatchResponse {
+  // watch_id is the ID of the watcher that corresponds to the response.
+  // watch_id does not apply to the unsolicited "Progress" message.
+  int64 watch_id = 1;
+
+  // if a watcher could not be created or had to be aborted status is NON-OK.
+  // client should not look at other fields if status is not OK and remove
+  // watch_id from the watch set.
+  google.rpc.Status status = 2;
+
+  oneof response_union {
+    // Watch was successfully created. Client should record the watch_id for this watch.
+    // The response also contains the current state of the watched subtree.
+    WatchCreated created = 3;
+
+    // response contains events from a watched subtree.
+    WatchEvents events = 4;
+    
+    // a previous watch was successfully canceled.
+    // No further events will be sent to the canceled watcher.
+    WatchCanceled canceled = 5; 
+
+    // Server sends periodic messages of progress when no actual watches fire.
+    // The client knows it is caught up to a certain revision of the repository.
+    WatchProgress progress = 6; 
+  };
+};
+
+
+message Event {
+  enum EventType {
+    PUT = 0;  // ADD and UPDATE
+    DELETE = 1;
+  }
+  // type is the kind of event. If type is a PUT, it indicates
+  // new data has been stored to the key. If type is a DELETE,
+  // it indicates the key was deleted.
+  EventType type = 1;
+
+  // kv holds the KeyValue for the event.
+  // A PUT event contains current kv pair.
+  // A PUT event with kv.Version=1 indicates the creation of a key.
+  // A DELETE event contains the deleted key with
+  // its modification revision set to the revision of deletion.
+  ConfigObject kv = 2;
+
+  // prev_kv holds the key-value pair before the event happened.
+  ConfigObject prev_kv = 3;
+}

@@ -1,0 +1,249 @@
+// Copyright 2017 Istio Authors
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package istio.galley.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+import "google/rpc/status.proto";
+
+// Galley follows
+// the Kubenertes API server delegation and resource model.
+// /apiGroup/version/objecttype/{namespace}/objectname
+//
+// It generalizes the concept of namespace to an arbitrary grouping.
+//
+// /apiGroup/objecttype/version/{objectGroup}/objectname
+// 
+// apiGroup = /core/
+// apiGroup = /vendor1/
+service Galley {
+  // Get a single object.
+  rpc GetObject(GetObjectRequest) returns (ConfigObject) {
+    option (google.api.http) = {
+      get: "/{key.api_group}/{key.object_type}/{key.object_type_version}/{key.object_group}/{key.name}"
+    };
+  };
+
+  // Get a list of objects.
+  // Other arguments like query.object_group, query.name are optional
+  // This lets the caller list all objects of a type, or all objects of a type
+  // that is within an object group.
+  rpc ListObjects(ListObjectsRequest) returns (ListObjectsResponse) {
+    option (google.api.http) = {
+      // meta.object_group can be specified as a query parameter
+      get: "/{query.api_group}/{query.object_type}/{query.object_type_version}"
+      additional_bindings: {
+        get: "/{query.api_group}/{query.object_type}/{query.object_type_version}/{query.object_group}"
+      };
+    };
+  };
+
+  // Get a list of object types.
+  // Lists all object types or all object types 
+  // within an api group.
+  rpc ListObjectTypes(ListObjectTypesRequest) returns (ListObjectTypesResponse) {
+    option (google.api.http) = {
+      get: "/{meta.api_group}"
+      additional_bindings: {
+        get: "/"
+      };
+    };
+  };
+
+  // Create an object. This may result in configuration validation errors.
+  // Referential integrity should be maximally enforced, except where not possible or desirable.
+  rpc CreateObject(UpdateObjectRequest) returns (UpdateObjectResponse) {
+    option (google.api.http) = {
+      post: "/{key.api_group}/{key.object_type}/{key.object_type_version}/{key.object_group}"
+      body: "source_data"
+    };
+  };
+
+  // Update a single object. May return validation errors.
+  rpc UpdateObject(UpdateObjectRequest) returns (UpdateObjectResponse) {
+    option (google.api.http) = {
+      put: "/{key.api_group}/{key.object_type}/{key.object_type_version}/{key.object_group}/{key.name}"
+      body: "source_data"
+    };
+  };
+
+  // Delete a single object. May return validation errors.
+  rpc DeleteObject(DeleteObjectRequest) returns (DeleteObjectResponse) {
+    option (google.api.http) = {
+      delete: "/{meta.api_group}/{meta.object_type}/{meta.object_type_version}/{meta.object_group}/{meta.name}"
+    };
+  };
+};
+
+
+// DeleteObjectResponse is returned when an attempt is made to delete an object
+// from the store.
+message DeleteObjectResponse{
+  // result of the operation
+  // if status == INVALID_ARGUMENT
+  // check errors for details.
+  google.rpc.Status status = 1; 
+
+  repeated ValidationError validation_errors = 2;
+}
+
+// UpdateObjectResponse is returned when an attempt is made to update the store. 
+// ADD or UPDATE operations.
+message UpdateObjectResponse {
+  // result of the operation
+  // if status == INVALID_ARGUMENT
+  // check errors for details.
+  google.rpc.Status status = 1; 
+
+  // state of the object after the change.
+  ConfigObject object = 2;
+
+  // errors if st
+  repeated ValidationError validation_errors = 3;
+}
+
+message ValidationError {
+  // The key of the object where error was detected.
+  // This may not be the object that introduced the error.
+  string key = 1;
+  // The primary field that was in error, if available.
+  string field = 2;
+  // The line number on which error occurred, if available.
+  int32 line_number = 3;
+  // Textual error message.
+  string error = 4;
+}
+
+message ListObjectTypesRequest {
+  // meta is the metadata associated with the root where listing begins.
+  Meta query = 1;
+
+  // paged result, set to empty on first page.
+  string page_token = 2;
+
+  // If non zero, response should have at most these number of entries.
+  int32 max_page_size = 3;
+}
+
+message ListObjectsRequest {
+  // meta is the metadata associated with the root where listing begins.
+  Meta query = 1;
+
+  // paged result, set to empty on first page.
+  string page_token = 2;
+
+  // If non zero, response should have at most these number of entries.
+  int32 max_page_size = 3;
+}
+
+message UpdateObjectRequest {
+  // key associated with the requested object.
+  Meta key = 1;
+
+  // oneof source_data or data
+ 
+  // source_data is the data as it was specified in json / yaml format.
+  google.protobuf.Struct source_data = 2;
+ 
+  // data is the binary encoded protobuf data
+  // For example:
+  // If `source_data` contains an expressions in text form 
+  // `data` may contain a parsed AST
+  bytes data = 3; 
+}
+
+message GetObjectRequest {
+  // key associated with the object to fetch.
+  Meta key = 1;
+}
+
+message DeleteObjectRequest {
+  // key associated with the requested object.
+  Meta key = 1;
+}
+
+// ConfigObject is the concrete representation of a resource.
+message ConfigObject {
+  // meta is the metadata associated with the object.
+  Meta meta = 1;
+
+  // source_data is the data as it was specified in json / yaml format.
+  google.protobuf.Struct source_data = 2;
+
+  // data is the binary encoded protobuf data
+  // For example:
+  // If `source_data` contains an expressions in text form 
+  // `data` may contain a parsed AST
+  bytes data = 3; 
+}
+
+message ListObjectTypesResponse {
+  // meta is the metadata associated with this list.
+  Meta meta = 1;
+  
+  // list of objects returned.
+  repeated Meta object_types = 2;
+
+  // If next_page_token is not empty, this is a paged result.
+  // use this value in the next request.
+  string next_page_token = 3;
+}
+
+message ListObjectsResponse {
+  // meta is the metadata associated with this list.
+  Meta meta = 1;
+  
+  // list of objects returned.
+  repeated ConfigObject objects = 2;
+
+  // If next_page_token is not empty, this is a paged result.
+  // use this value in the next request.
+  string next_page_token = 3;
+} 
+
+
+// Meta is the metadata associated with an object.
+message Meta {
+  // api_group is the top level delegation and extension point.
+  string api_group = 1;
+
+  // object_type is the type of an object.
+  // It corresponds to a behavior being configured.
+  // route-rule, metrics, logs, ...
+  string object_type = 2;
+  
+  // every object type is independently versioned.  
+  string object_type_version = 3;
+
+  // object_group is an arbitrary hierarchical grouping of resources.
+  // For Mixer configuration object_group == mesh, svc:svc1, svc:svc2 ...
+  // For Proxy it can be mesh, destination. 
+  string object_group = 4;
+
+  // name of the object.
+  string name = 5;
+
+  // uuid assigned to the object. Only used when a new object is created 
+  // in the same place as before.
+  string uuid = 6;
+
+  // revision of the repository, the last time ConfigObject was updated.
+  int64 revision = 7;
+
+  // labels associated with the object.
+  map<string, string> labels = 8;
+}
+
