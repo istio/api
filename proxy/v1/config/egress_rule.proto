@@ -1,0 +1,57 @@
+// Copyright 2017 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+package istio.proxy.v1.config;
+
+// Egress rules are routing rules applied to each proxy. The rules specify
+// which domains must be redirected outside of the mesh.
+//
+// An example rule - redirect all the traffic to *cnn.com and *cnn.it outside of the mesh
+//
+// type: egress-rule
+// spec:
+//   name: cnn
+//   domains:
+//     - "*cnn.com"
+//     - "*cnn.it"
+//   ports:
+//     - port: 80
+//	 protocol: http
+//     - port: 443
+//	 protocol: https
+//   use_egress_proxy: true
+//
+// WARNING: This API is experimental and under active development
+message EgressRule {
+  message Port {
+	int32 port = 1;
+	string protocol = 2; // the protocol to expect on the port
+  }
+
+  // REQUIRED: Egress rules have unique names to allow multiple rules, e.g.
+  // "my-egress-rule
+  string name = 1;
+
+  // list of domains to redirect outside of the mesh
+  repeated string domains = 2;
+
+  // list of ports to listen on
+  repeated Port ports = 3;
+
+  // should the external traffic be directed thru the egress proxy
+  // if false, the traffic will bypass the egress proxy
+  bool use_egress_proxy = 4;
+}
