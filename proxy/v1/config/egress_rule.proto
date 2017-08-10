@@ -53,5 +53,5 @@ message EgressRule {
 
   // should the external traffic be directed thru the egress proxy
   // if false, the traffic will bypass the egress proxy
-  bool use_egress_proxy = 4;
+  optional bool use_egress_proxy = 4 [default = true];
 }
