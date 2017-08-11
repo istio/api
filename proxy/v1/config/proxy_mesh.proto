@@ -80,7 +80,7 @@ message ProxyMeshConfig {
   // observed.
   string application_namespace = 13;
 
-  // File address for the proxy access log (e.g. /dev/stderr)
+  // File address for the proxy access log (e.g. /dev/stdout)
   string access_log_file = 14;
 
   // File address for the proxy error and debug log (e.g. /dev/stderr)
