@@ -43,8 +43,7 @@ message EgressRule {
 	string protocol = 2; // the protocol to expect on the port
   }
 
-  // REQUIRED: Egress rules have unique names to allow multiple rules, e.g.
-  // "my-egress-rule
+  // REQUIRED: Egress rules have unique names, e.g. "my-egress-rule"
   string name = 1;
 
   // REQUIRED: list of domains to redirect outside of the mesh.
