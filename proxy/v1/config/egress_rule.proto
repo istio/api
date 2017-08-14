@@ -37,7 +37,6 @@ package istio.proxy.v1.config;
 //	 protocol: https
 //   use_egress_proxy: true
 //
-// WARNING: This API is experimental and under active development
 message EgressRule {
   message Port {
 	int32 port = 1;
