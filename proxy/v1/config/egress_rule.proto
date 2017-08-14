@@ -32,9 +32,9 @@ package istio.proxy.v1.config;
 //     - "*cnn.it"
 //   ports:
 //     - port: 80
-//	 protocol: http
+//       protocol: http
 //     - port: 443
-//	 protocol: https
+//       protocol: https
 //   use_egress_proxy: true
 //
 message EgressRule {
