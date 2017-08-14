@@ -39,8 +39,8 @@ package istio.proxy.v1.config;
 //
 message EgressRule {
   message Port {
-	int32 port = 1;
-	string protocol = 2; // the protocol to expect on the port
+	int32 port = 1;      // the number of the port on which the external services are available
+	string protocol = 2; // the protocol to communicate with the external services
   }
 
   // REQUIRED: Egress rules have unique names, e.g. "my-egress-rule"
