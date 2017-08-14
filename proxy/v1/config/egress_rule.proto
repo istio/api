@@ -47,8 +47,8 @@ message EgressRule {
   // "my-egress-rule
   string name = 1;
 
-  // REQUIRED: list of domains to redirect outside of the mesh
-  // domains are according to the definion of Envoy's domain of virtual hosts.
+  // REQUIRED: list of domains to redirect outside of the mesh.
+  // The domains are according to the definion of Envoy's domain of virtual hosts.
   // See https://lyft.github.io/envoy/docs/configuration/http_conn_man/route_config/vhost.html#config-http-conn-man-route-table-vhost
   //
   // Wildcard hosts are supported in the form of “*.foo.com” or “*-bar.foo.com”.
