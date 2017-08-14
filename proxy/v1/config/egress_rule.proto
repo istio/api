@@ -16,8 +16,8 @@ syntax = "proto3";
 
 package istio.proxy.v1.config;
 
-// Egress rules are routing rules applied to each proxy. The rules specify which domains
-// must be redirected outside of the mesh. Currently, only two protocols are supported:
+// Egress rules specify which domains outside of the mesh are allowed to be accessed from
+// the microservices of the mesh. Currently, only two protocols are supported:
 // HTTP and HTTPS. For HTTPS, the applications in the mesh will send HTTP requests to the
 // appropriate port, e.g. GET http:/gmail.com:443. The Egress or the sidecar proxy will 
 // perform TLS origination.
