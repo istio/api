@@ -22,7 +22,7 @@ package istio.proxy.v1.config;
 // appropriate port, e.g. GET http:/gmail.com:443. The Egress or the sidecar proxy will 
 // perform TLS origination.
 //
-// An example rule - redirect all the traffic to *cnn.com and *cnn.it outside of the mesh
+// An example rule - allow traffic to *cnn.com and *cnn.it domains that are not part of the mesh
 //
 // type: egress-rule
 // spec:
