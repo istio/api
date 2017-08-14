@@ -22,7 +22,7 @@ package istio.proxy.v1.config;
 // appropriate port, e.g. GET http:/gmail.com:443. The Egress or the sidecar proxy will 
 // perform TLS origination.
 //
-// An example rule - allow traffic to *cnn.com and *cnn.it domains that are not part of the mesh
+// An example rule - allow traffic to *cnn.com and *cnn.it domains that are not part of the mesh.
 //
 // type: egress-rule
 // spec:
@@ -42,14 +42,14 @@ message EgressRule {
   // It is comprised of a port number and a protocol to communicate with the
   // external services through that port number.
   message Port {
-        // the number of the port on which the external services are available
+        // The number of the port on which the external services are available.
 	int32 port = 1;
-	// the protocol to communicate with the external services
-	// currently supported HTTP and HTTPS
+	// The protocol to communicate with the external services.
+	// Currently supported HTTP and HTTPS
 	string protocol = 2;
   }
 
-  // REQUIRED: Egress rules have unique names, e.g. "my-egress-rule"
+  // REQUIRED: Egress rules have unique names, e.g. "my-egress-rule".
   string name = 1;
 
   // REQUIRED: list of domains to redirect outside of the mesh.
@@ -59,7 +59,7 @@ message EgressRule {
   // but not “-bar.foo.com”.  Additionally, a special entry “*” is allowed which will match any host/authority header.
   repeated string domains = 2;
 
-  // REQUIRED: list of ports on which the external services are available
+  // REQUIRED: list of ports on which the external services are available.
   repeated Port ports = 3;
 
   // Forward all the external traffic through a dedicated egress proxy. It is used in some scenarios
