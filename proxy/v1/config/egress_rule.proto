@@ -53,7 +53,7 @@ message EgressRule {
   // but not “-bar.foo.com”.  Additionally, a special entry “*” is allowed which will match any host/authority header.
   repeated string domains = 2;
 
-  // REQUIRED: list of ports to listen on
+  // REQUIRED: list of ports on which the external hosts are available
   repeated Port ports = 3;
 
   // should the external traffic be directed thru the egress proxy
