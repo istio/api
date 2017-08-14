@@ -38,6 +38,9 @@ package istio.proxy.v1.config;
 //   use_egress_proxy: true
 //
 message EgressRule {
+  // This message defines a port on which the external services are available.
+  // It is comprised of a port number and a protocol to communicate with the
+  // external services thru that port number.
   message Port {
         // the number of the port on which the external services are available
 	int32 port = 1;
