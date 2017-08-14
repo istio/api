@@ -62,7 +62,10 @@ message EgressRule {
   // REQUIRED: list of ports on which the external services are available
   repeated Port ports = 3;
 
-  // should the external traffic be directed thru the egress proxy
-  // if false, the traffic will bypass the egress proxy
+  // Forward all the external traffic through a dedicated egress proxy. It is used in some scenarios
+  // where there is a requirement that all the external traffic goes through special dedicated nodes/pods.
+  // These dedicated egress nodes could then be more closely monitored for security vulnerabilities.
+  //
+  // The default is flase, i.e. the sidecar forwards external traffic directly to the external service.
   bool use_egress_proxy = 4;
 }
