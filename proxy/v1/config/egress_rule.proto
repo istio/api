@@ -66,6 +66,6 @@ message EgressRule {
   // where there is a requirement that all the external traffic goes through special dedicated nodes/pods.
   // These dedicated egress nodes could then be more closely monitored for security vulnerabilities.
   //
-  // The default is flase, i.e. the sidecar forwards external traffic directly to the external service.
+  // The default is false, i.e. the sidecar forwards external traffic directly to the external service.
   bool use_egress_proxy = 4;
 }
