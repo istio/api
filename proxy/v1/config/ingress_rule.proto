@@ -55,15 +55,15 @@ message IngressRule {
   // REQUIRED: Destination uniquely identifies the destination service. Value
   // must be in fully qualified domain name format (e.g.,
   // "my-service.default.svc.cluster.local").
-  string destination = 6;
+  string dst = 6;
 
   // REQUIRED: Destination port identifies a port on the destination service for routing.
-  oneof destination_service_port {
+  oneof dst_service_port {
     // Identifies the destination service port by value
-    int32 destination_port = 7;
+    int32 dst_port = 7;
 
     // Identifies the destination service port by name
-    string destination_port_name = 8;
+    string dst_port_name = 8;
   }
 }
 

@@ -42,7 +42,7 @@ message HTTPFaultInjection {
   // in 10% of the requests to the "v1" version of the "reviews"
   // service.
   //
-  //     destination: reviews.default.svc.cluster.local
+  //     dst: reviews.default.svc.cluster.local
   //     route:
   //     - labels:
   //         version: v1
@@ -75,7 +75,7 @@ message HTTPFaultInjection {
   // pre-specified error code. The following example will return an HTTP
   // 400 error code for 10% of the requests to the "ratings" service "v1".
   //
-  //     destination: ratings.default.svc.cluster.local
+  //     dst: ratings.default.svc.cluster.local
   //     route:
   //     - labels:
   //         version: v1

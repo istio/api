@@ -65,7 +65,7 @@ package istio.proxy.v1.config;
 // For example, a simple rule to send 100% of incoming traffic for a
 // "reviews" service to version "v1" can be specified as follows:
 //
-//     destination: reviews.default.svc.cluster.local
+//     dst: reviews.default.svc.cluster.local
 //     name: my-rule
 //     route:
 //     - labels:
@@ -82,7 +82,7 @@ message RouteRule {
   // resolution for HTTP traffic as well as IP-based resolution for
   // TCP/UDP traffic. The value MUST BE a fully-qualified domain name,
   // e.g. "my-service.default.svc.cluster.local".
-  string destination = 1;
+  string dst = 1;
 
   // RECOMMENDED. Precedence is used to disambiguate the order of
   // application of rules for the same destination service. A higher number
@@ -101,7 +101,7 @@ message RouteRule {
   // of a service (see glossary in beginning of document). Weights
   // associated with the service version determine the proportion of
   // traffic it receives.
-  repeated DestinationWeight route = 4;
+  repeated DstWeight route = 4;
 
   // REQUIRED (route|redirect). A routing rule can either redirect traffic or
   // forward traffic. The redirect primitive can be used to send a HTTP 302
@@ -134,11 +134,11 @@ message RouteRule {
 // service where the URL path starts with /ratings/v2/ and the request
 // contains a "cookie" with value "user=jason",
 //
-//     destination: ratings.default.svc.cluster.local
+//     dst: ratings.default.svc.cluster.local
 //     name: my-rule
 //     match:
-//       source: reviews.default.svc.cluster.local
-//       sourceLabels:
+//       src: reviews.default.svc.cluster.local
+//       srcLabels:
 //         version: v2
 //       httpHeaders:
 //         cookie:
@@ -146,17 +146,17 @@ message RouteRule {
 //         uri:
 //           prefix: "/ratings/v2/"
 //
-// MatchCondition CANNOT BE empty. Atleast one of source, source_labels or
+// MatchCondition CANNOT BE empty. Atleast one of source, src_labels or
 // http_headers must be specified.
 message MatchCondition {
   // Identifies the service initiating a connection or a request by its
   // name. If specified, name MUST BE a fully qualified domain name such
   // as foo.bar.com
-  string source = 1;
+  string src = 1;
 
   // One or more labels that uniquely identify the source service version. In
   // Kubernetes, labels correspond to the labels associated with pods.
-  map<string, string> source_labels = 2;
+  map<string, string> src_labels = 2;
 
   // (-- Set of layer 4 match conditions based on the IP ranges --)
   L4MatchAttributes tcp = 3 ;
@@ -186,7 +186,7 @@ message MatchCondition {
 // instances with the "v2" label and the remaining traffic (i.e., 75%) to
 // "v1".
 //
-//     destination: reviews.default.svc.cluster.local
+//     dst: reviews.default.svc.cluster.local
 //     name: my-rule
 //     route:
 //     - labels:
@@ -196,12 +196,12 @@ message MatchCondition {
 //         version: v1
 //       weight: 75
 //
-message DestinationWeight {
+message DstWeight {
   // Destination uniquely identifies the destination service. If not
   // specified, the value is inherited from the parent route rule. Value
   // must be in fully qualified domain name format (e.g.,
   // "my-service.default.svc.cluster.local").
-  string destination = 1;
+  string dst = 1;
 
   // Service version identifier for the destination service.
   // (-- N.B. The map is used instead of pstruct due to lack of serialization support
@@ -220,12 +220,12 @@ message DestinationWeight {
 message L4MatchAttributes {
   // IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or
   // just a.b.c.d
-  repeated string source_subnet = 1;
+  repeated string src_subnet = 1;
 
   // IPv4 or IPv6 ip address of destination with optional subnet.
   // E.g., a.b.c.d/xx form or just a.b.c.d. This is only valid when the destination
   // service has several IPs and the application explicitly specifies a particular IP.
-  repeated string destination_subnet = 2;
+  repeated string dst_subnet = 2;
 }
 
 // HTTPRedirect can be used to send a 302 redirect response to the caller,
@@ -234,7 +234,7 @@ message L4MatchAttributes {
 // requests for /v1/getProductRatings API on the ratings service to
 // /v1/bookRatings provided by the bookratings service.
 //
-//     destination: ratings.default.svc.cluster.local
+//     dst: ratings.default.svc.cluster.local
 //     name: my-rule
 //     match:
 //       httpHeaders:
@@ -257,11 +257,11 @@ message HTTPRedirect {
  
 // HTTPRewrite can be used to rewrite specific parts of a HTTP request
 // before forwarding the request to the destination. Rewrite primitive can
-// be used only with the DestinationWeights. The following example
+// be used only with the DstWeights. The following example
 // demonstrates how to rewrite the URL prefix for api call (/ratings) to
 // ratings service before making the actual API call.
 //
-//     destination: ratings.default.svc.cluster.local
+//     dst: ratings.default.svc.cluster.local
 //     name: my-rule
 //     match:
 //       httpHeaders:
@@ -298,7 +298,7 @@ message StringMatch {
 // Describes HTTP request timeout. For example, the following rule sets a
 // 10 second timeout for calls to the ratings:v1 service
 //
-//     destination: ratings.default.svc.cluster.local
+//     dst: ratings.default.svc.cluster.local
 //     name: my-rule
 //     route:
 //     - labels:
@@ -329,7 +329,7 @@ message HTTPTimeout {
 // example, the following rule sets the maximum number of retries to 3 when
 // calling ratings:v1 service, with a 2s timeout per retry attempt.
 //
-//     destination: ratings.default.svc.cluster.local
+//     dst: ratings.default.svc.cluster.local
 //     name: my-rule
 //     route:
 //     - labels:
