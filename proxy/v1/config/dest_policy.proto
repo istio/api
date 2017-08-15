@@ -42,7 +42,7 @@ message DestinationPolicy {
 }
 
 // A destination policy can be restricted to a particular version of a
-// service or applied to all versions. The tags field in the
+// service or applied to all versions. The labels field in the
 // DestinationVersionPolicy allow restricting the scope of a
 // DestinationPolicy. For example, the following load balancing policy
 // applies to version v1 of the reviews service running in the prod
@@ -50,25 +50,25 @@ message DestinationPolicy {
 //
 //     destination: reviews.default.svc.cluster.local
 //     policy:
-//     - tags:
+//     - labels:
 //         env: prod
 //         version: v1
 //       loadBalancing: 
 //         name: RANDOM
 //
-// If tags are omitted, the policy applies for all versions of the
+// If labels are omitted, the policy applies for all versions of the
 // service. Policy CANNOT BE empty.
 // *Note:* Destination policies will be applied only if the corresponding
-// tagged instances are explicity routed to. In other words, for every
+// labelged instances are explicity routed to. In other words, for every
 // destination policy defined, atleast one route rule must refer to the
 // service version indicated in the destination policy.
 message DestinationVersionPolicy {
-  // Optional set of tags that identify a particular version of the
+  // Optional set of labels that identify a particular version of the
   // destination service. If omitted, the policy will apply to all versions
   // of the service. (-- N.B. The map is used instead of
   // pstruct due to lack of serialization support in golang protobuf
   // library (see https://github.com/golang/protobuf/pull/208) --)
-  map<string, string> tags = 1;
+  map<string, string> labels = 1;
 
   // Load balancing policy.
   LoadBalancing load_balancing = 2;
@@ -132,7 +132,7 @@ message CircuitBreaker {
   //
   //     destination: reviews.default.svc.cluster.local
   //     policy:
-  //     - tags:
+  //     - labels:
   //         version: v1
   //       circuitBreaker:
   //         simpleCb:
@@ -146,7 +146,7 @@ message CircuitBreaker {
   //
   //     destination: reviews.default.svc.cluster.local
   //     policy:
-  //     - tags:
+  //     - labels:
   //         version: v1
   //       circuitBreaker:
   //         simpleCb:

@@ -44,7 +44,7 @@ message HTTPFaultInjection {
   //
   //     destination: reviews.default.svc.cluster.local
   //     route:
-  //     - tags:
+  //     - labels:
   //         version: v1
   //     httpFault:
   //       delay:
@@ -77,7 +77,7 @@ message HTTPFaultInjection {
   //
   //     destination: ratings.default.svc.cluster.local
   //     route:
-  //     - tags:
+  //     - labels:
   //         version: v1
   //     httpFault:
   //       abort:

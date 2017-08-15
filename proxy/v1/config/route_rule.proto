@@ -68,7 +68,7 @@ package istio.proxy.v1.config;
 //     destination: reviews.default.svc.cluster.local
 //     name: my-rule
 //     route:
-//     - tags:
+//     - labels:
 //         version: v1
 //       weight: 100
 //
@@ -138,7 +138,7 @@ message RouteRule {
 //     name: my-rule
 //     match:
 //       source: reviews.default.svc.cluster.local
-//       sourceTags:
+//       sourceLabels:
 //         version: v2
 //       httpHeaders:
 //         cookie:
@@ -146,7 +146,7 @@ message RouteRule {
 //         uri:
 //           prefix: "/ratings/v2/"
 //
-// MatchCondition CANNOT BE empty. Atleast one of source, source_tags or
+// MatchCondition CANNOT BE empty. Atleast one of source, source_labels or
 // http_headers must be specified.
 message MatchCondition {
   // Identifies the service initiating a connection or a request by its
@@ -154,9 +154,9 @@ message MatchCondition {
   // as foo.bar.com
   string source = 1;
 
-  // One or more tags that uniquely identify the source service version. In
-  // Kubernetes, tags correspond to the labels associated with pods.
-  map<string, string> source_tags = 2;
+  // One or more labels that uniquely identify the source service version. In
+  // Kubernetes, labels correspond to the labels associated with pods.
+  map<string, string> source_labels = 2;
 
   // (-- Set of layer 4 match conditions based on the IP ranges --)
   L4MatchAttributes tcp = 3 ;
@@ -183,16 +183,16 @@ message MatchCondition {
 // glossary in beginning of document). Weights associated with the version
 // determine the proportion of traffic it receives. For example, the
 // following rule will route 25% of traffic for the "reviews" service to
-// instances with the "v2" tag and the remaining traffic (i.e., 75%) to
+// instances with the "v2" label and the remaining traffic (i.e., 75%) to
 // "v1".
 //
 //     destination: reviews.default.svc.cluster.local
 //     name: my-rule
 //     route:
-//     - tags:
+//     - labels:
 //         version: v2
 //       weight: 25
-//     - tags:
+//     - labels:
 //         version: v1
 //       weight: 75
 //
@@ -206,7 +206,7 @@ message DestinationWeight {
   // Service version identifier for the destination service.
   // (-- N.B. The map is used instead of pstruct due to lack of serialization support
   // in golang protobuf library (see https://github.com/golang/protobuf/pull/208) --)
-  map<string, string> tags = 2;
+  map<string, string> labels = 2;
 
   // REQUIRED. The proportion of traffic to be forwarded to the service
   // version. (0-100). Sum of weights across destinations SHOULD BE ==
@@ -270,7 +270,7 @@ message HTTPRedirect {
 //     rewrite:
 //       uri: /v1/bookRatings
 //     route:
-//     - tags:
+//     - labels:
 //         version: v1
 //
 message HTTPRewrite {
@@ -301,7 +301,7 @@ message StringMatch {
 //     destination: ratings.default.svc.cluster.local
 //     name: my-rule
 //     route:
-//     - tags:
+//     - labels:
 //         version: v1
 //     httpReqTimeout:
 //       simpleTimeout:
@@ -332,7 +332,7 @@ message HTTPTimeout {
 //     destination: ratings.default.svc.cluster.local
 //     name: my-rule
 //     route:
-//     - tags:
+//     - labels:
 //         version: v1
 //     httpReqRetries:
 //       simpleRetry:
