@@ -126,8 +126,10 @@ message RouteRule {
 
   // Indicates that a HTTP/1.1 client connection to this particular route
   // should be allowed (and expected) to upgrade to a WebSocket connection.
-  // The default is false.
-  bool use_websocket = 11;
+  // The default is false. Envoy expects the first request to this route
+  // to contain the WebSocket upgrade headers. Otherwise, the request
+  // will be rejected.
+  bool websocket_upgrade = 11;
 }
 
 // Match condition specifies a set of criterion to be met in order for the
