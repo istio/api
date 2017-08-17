@@ -129,7 +129,7 @@ message RouteRule {
   // The default is false. Envoy expects the first request to this route
   // to contain the WebSocket upgrade headers. Otherwise, the request
   // will be rejected.
-  bool websocket_upgrade = 11;
+  bool websocket_upgrade = 12;
 }
 
 // Match condition specifies a set of criterion to be met in order for the
