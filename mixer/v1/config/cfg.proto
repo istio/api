@@ -34,7 +34,7 @@ package istio.mixer.v1.config;
 // subject: "namespace:ns1"
 // revision: "1011"
 // rules:
-// - selector: target.service == "*"
+// - selector: destination.service == "*"
 //   aspects:
 //   - kind: metrics
 //     params:
@@ -45,7 +45,7 @@ package istio.mixer.v1.config;
 //           statusCode: response.code
 //
 // actionRules:
-// - selector: target.service == "*"
+// - selector: destination.service == "*"
 //   actions:
 //   - handler: prometheus-handler
 //     instances:
@@ -100,7 +100,7 @@ message AspectRule {
   //
   // * an empty selector evaluates to `true`
   // * `true`, a boolean literal; a rule with this selector will always be executed
-  // * `target.service == ratings*` selects any request targeting a service whose
+  // * `destination.service == ratings*` selects any request targeting a service whose
   // name starts with "ratings"
   // * `attr1 == "20" && attr2 == "30"` logical AND, OR, and NOT are also available
   string selector = 1;
@@ -131,7 +131,7 @@ message AspectRule {
 //     labels:
 //       src_consumer_id: source.user | source.uid
 //       target_response_status_code: response.code
-//       target_service_name: target.service
+//       target_service_name: destination.service
 // ```
 message Aspect {
   // Required. The kind of aspect this intent is targeting.
@@ -305,7 +305,7 @@ message EmailAddress {
 //
 // ```yaml
 // actionRules:
-// - selector: target.service == "*"
+// - selector: destination.service == "*"
 //   actions:
 //   - handler: prometheus-handler
 //     instances:
@@ -320,7 +320,7 @@ message Rule {
   //
   // * an empty selector evaluates to `true`
   // * `true`, a boolean literal; a rule with this selector will always be executed
-  // * `target.service == ratings*` selects any request targeting a service whose
+  // * `destination.service == ratings*` selects any request targeting a service whose
   // name starts with "ratings"
   // * `attr1 == "20" && attr2 == "30"` logical AND, OR, and NOT are also available
   string selector = 1;
