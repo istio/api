@@ -67,7 +67,7 @@ package istio.proxy.v1.config;
 //
 //   metadata:
 //     name: my-rule
-//     namespace: my-namespace # optional (default is "default" or value specified with "kubectctl -n")
+//     namespace: default # optional (default is "default" or value specified with "kubectl -n")
 //   spec:
 //     destination:
 //       name: reviews
@@ -78,7 +78,7 @@ package istio.proxy.v1.config;
 //       weight: 100
 //
 message RouteRule {
-  // REQUIRED: Destination uniquely identifies the destination associated
+  // Required: Destination uniquely identifies the destination associated
   // with this routing rule. This field is applicable for hostname-based
   // resolution for HTTP traffic as well as IP-based resolution for
   // TCP/UDP traffic.
@@ -96,14 +96,14 @@ message RouteRule {
   // traffic.
   MatchCondition match = 3;
 
-  // REQUIRED (route|redirect). A routing rule can either redirect traffic or
+  // Required (route|redirect). A routing rule can either redirect traffic or
   // forward traffic. The forwarding target can be one of several versions
   // of a service (see glossary in beginning of document). Weights
   // associated with the service version determine the proportion of
   // traffic it receives.
   repeated DestinationWeight route = 4;
 
-  // REQUIRED (route|redirect). A routing rule can either redirect traffic or
+  // Required (route|redirect). A routing rule can either redirect traffic or
   // forward traffic. The redirect primitive can be used to send a HTTP 302
   // redirect to a different URI or Authority.
   HTTPRedirect redirect = 5;
@@ -141,6 +141,10 @@ message Destination {
 
   // Optional namespace of the service. Defaults to value of metadata.namespace.
   string namespace = 2;
+
+  // (-- Domain suffix used to construct the service FQDN in implementations that
+  // support such specification. --)
+  string domain = 3;
 }
 
 // Match condition specifies a set of criterion to be met in order for the
@@ -191,12 +195,15 @@ message MatchSource {
   // Optional namespace of the source service. Defaults to value of metadata.namespace.
   string namespace = 2;
 
-  // One or more labels that uniquely identify the source service version. In
-  // Kubernetes, labels correspond to the labels associated with pods.
-  map<string, string> labels = 3;
+  // (-- Domain suffix used to construct the service FQDN in implementations that
+  // support such specification. --)
+  string domain = 3;
+
+  // One or more labels that uniquely identify the source service version.
+  map<string, string> labels = 4;
 }
 
-// MatchRequest specifies propeties of the service request.
+// MatchRequest specifies properties of the service request.
 message MatchRequest {
   // Set of HTTP match conditions based on HTTP/1.1, HTTP/2, GRPC request
   // metadata, such as _uri_, _scheme_, _authority_.  The header keys must be
@@ -251,7 +258,7 @@ message DestinationWeight {
   // in golang protobuf library (see https://github.com/golang/protobuf/pull/208) --)
   map<string, string> labels = 2;
 
-  // REQUIRED. The proportion of traffic to be forwarded to the service
+  // Required. The proportion of traffic to be forwarded to the service
   // version. (0-100). Sum of weights across destinations SHOULD BE ==
   // 100. If there is only destination in a rule, the weight value is
   // assumed to be 100.
@@ -349,7 +356,7 @@ message HTTPRewrite {
 //
 message HTTPTimeout {
   message SimpleTimeoutPolicy {
-    // REQUIRED. Timeout for a HTTP request. Includes retries as well.  Default
+    // Required. Timeout for a HTTP request. Includes retries as well.  Default
     // 15s. format: 1h/1m/1s/1ms. MUST BE >=1ms. It is possible to control
     // timeout per request by supplying the timeout value via
     // x-envoy-upstream-rq-timeout-ms HTTP header.
@@ -384,7 +391,7 @@ message HTTPTimeout {
 //
 message HTTPRetry {
   message SimpleRetryPolicy {
-    // REQUIRED. Number of retries for a given request. The interval
+    // Required. Number of retries for a given request. The interval
     // between retries will be determined automatically (25ms+). Actual
     // number of retries attempted depends on the httpReqTimeout.
     int32 attempts = 1;

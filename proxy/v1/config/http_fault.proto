@@ -102,7 +102,7 @@ message HTTPFaultInjection {
     oneof error_type {
       string grpc_status = 2 ;
       string http2_error = 3 ;
-      // REQUIRED. HTTP status code to use to abort the Http request.
+      // Required. HTTP status code to use to abort the Http request.
       int32 http_status = 4;
     }
     // (-- Specify abort code as part of Http request.

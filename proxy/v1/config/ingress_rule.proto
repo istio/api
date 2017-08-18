@@ -31,7 +31,7 @@ package istio.proxy.v1.config;
 //
 // WARNING: This API is experimental and under active development
 message IngressRule {
-  // REQUIRED: Port on which the ingress proxy listens and applies the rule.
+  // Required: Port on which the ingress proxy listens and applies the rule.
   int32 port = 1;
 
   // Optional TLS secret path to apply server-side TLS context on the port.
@@ -48,10 +48,10 @@ message IngressRule {
   // activated.
   MatchCondition match = 4;
 
-  // REQUIRED: Destination uniquely identifies the destination service.
+  // Required: Destination uniquely identifies the destination service.
   Destination destination = 5;
 
-  // REQUIRED: Destination port identifies a port on the destination service for routing.
+  // Required: Destination port identifies a port on the destination service for routing.
   oneof destination_service_port {
     // Identifies the destination service port by value
     int32 destination_port = 6;

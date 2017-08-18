@@ -26,15 +26,16 @@ package istio.proxy.v1.config;
 //
 //     metadata:
 //       name: reviews
+//       namespace: default # optional (default is "default" or value specified with "kubectl -n")
 //     spec:
 //       policy:
 //       - loadBalancing:
 //           name: RANDOM
 //
-// A single DestinationPolicy resource includes configuration for all service versions. ONLY
-// ONE policy can be defined per service version. Policy CANNOT be empty.
+// A single DestinationPolicy resource includes configuration for all service versions. Only
+// one policy can be defined per service version. Policy CANNOT be empty.
 message DestinationPolicy {
-  // REQUIRED. List of policies, one per service version.
+  // Required. List of policies, one per service version.
   repeated DestinationVersionPolicy policy = 2;
 }
 
@@ -56,7 +57,7 @@ message DestinationPolicy {
 //           name: RANDOM
 //
 // If labels are omitted, the policy applies for all versions of the
-// service. Policy CANNOT BE empty.
+// service. Policy CANNOT be empty.
 // *Note:* Destination policies will be applied only if the corresponding
 // tagged instances are explicity routed to. In other words, for every
 // destination policy defined, atleast one route rule must refer to the
