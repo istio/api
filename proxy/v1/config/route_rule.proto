@@ -211,11 +211,11 @@ message MatchRequest {
   //
   // Header values are case-sensitive and formatted as follows:
   //
-  // *"value"* for exact string match
+  // *exact: "value"* or just *"value"* for exact string match
   //
-  // *"^value"* for prefix-based match
+  // *prefix: "value"* for prefix-based match
   //
-  // *"/value/"* for ECMAscript style regex-based match (TODO: will this conflict with exact uri match? should we use | instead of / here?
+  // *regex: "value"* for ECMAscript style regex-based match
   //
   // *Note 1:* The keys _uri_, _scheme_, _method_, and _authority_ correspond
   // to URI, protocol scheme (e.g., HTTP, HTTPS), HTTP method
@@ -225,7 +225,7 @@ message MatchRequest {
   // (_uri_), only prefix and exact matches are
   // supported. For other HTTP headers, exact, prefix and ECMA style
   // regular expression matches are supported.
-  map<string, string> headers = 1;
+  map<string, StringMatch> headers = 1;
 }
 
 // Each routing rule is associated with one or more service versions (see
@@ -337,6 +337,18 @@ message HTTPRewrite {
 
   // rewrite the Authority/Host header with this value.
   string authority = 2;
+}
+
+// Describes how to match a given string in HTTP headers. Match is case-sensitive.
+message StringMatch {
+  oneof match_type {
+    // exact string match
+    string exact = 1;
+    // prefix-based match
+    string prefix = 2;
+    // ECMAscript style regex-based match
+    string regex = 3;
+  }
 }
 
 // Describes HTTP request timeout. For example, the following rule sets a
