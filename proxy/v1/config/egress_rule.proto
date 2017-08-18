@@ -27,6 +27,8 @@ package istio.proxy.v1.config;
 //   ports:
 //     - port: 80
 //       protocol: http
+//     - port: 8080
+//       protocol: http
 //   use_egress_proxy: true
 //
 message EgressRule {
