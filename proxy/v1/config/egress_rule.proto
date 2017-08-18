@@ -17,10 +17,7 @@ syntax = "proto3";
 package istio.proxy.v1.config;
 
 // Egress rules specify which domains outside of the mesh are allowed to be accessed by
-// the microservices of the mesh. Currently, only two protocols are supported:
-// HTTP and HTTPS. For HTTPS, the applications in the mesh will send HTTP requests to the
-// appropriate port, e.g. GET http:/gmail.com:443. The Egress or the sidecar proxy will 
-// perform TLS origination.
+// the microservices of the mesh. Currently, only HTTP is supported.
 //
 // An example rule - allow traffic to *cnn.com and *cnn.it domains that are not part of the mesh.
 //
@@ -33,8 +30,6 @@ package istio.proxy.v1.config;
 //   ports:
 //     - port: 80
 //       protocol: http
-//     - port: 443
-//       protocol: https
 //   use_egress_proxy: true
 //
 message EgressRule {
@@ -45,7 +40,7 @@ message EgressRule {
         // The number of the port on which the external services are available.
 	int32 port = 1;
 	// The protocol to communicate with the external services.
-	// Currently supported HTTP and HTTPS
+	// Currently only HTTP is supported.
 	string protocol = 2;
   }
 
