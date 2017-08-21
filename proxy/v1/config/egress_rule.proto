@@ -24,19 +24,19 @@ package istio.proxy.v1.config;
 //
 // An example rule - allow traffic to *cnn.com and *cnn.it domains that are not part of the mesh.
 //
-// kind: EgressRule
-// metadata:
-//   name: cnn-egress-rule
-// spec:
-//   domains:
-//     - "*cnn.com"
-//     - "*cnn.it"
-//   ports:
-//     - port: 80
-//       protocol: http
-//     - port: 443
-//       protocol: https
-//   use_egress_proxy: true
+//     kind: EgressRule
+//     metadata:
+//       name: cnn-egress-rule
+//     spec:
+//       domains:
+//         - "*cnn.com"
+//         - "*cnn.it"
+//       ports:
+//         - port: 80
+//           protocol: http
+//         - port: 443
+//           protocol: https
+//       use_egress_proxy: true
 //
 message EgressRule {
   // This message defines a port on which the external services are available.
@@ -50,14 +50,14 @@ message EgressRule {
 	string protocol = 2;
   }
 
-  // Required: list of domains to redirect outside of the mesh.
+  // REQUIRED: list of domains to redirect outside of the mesh.
   // The domains are according to the definion of Envoy's domain of virtual hosts:
   // Wildcard hosts are supported in the form of “*.foo.com” or “*-bar.foo.com”.
   // Note that the wildcard will not match the empty string. e.g. “*-bar.foo.com” will match “baz-bar.foo.com” 
   // but not “-bar.foo.com”.  Additionally, a special entry “*” is allowed which will match any host/authority header.
   repeated string domains = 2;
 
-  // Required: list of ports on which the external services are available.
+  // REQUIRED: list of ports on which the external services are available.
   repeated Port ports = 3;
 
   // Forward all the external traffic through a dedicated egress proxy. It is used in some scenarios

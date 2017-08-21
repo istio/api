@@ -65,20 +65,20 @@ package istio.proxy.v1.config;
 // For example, a simple rule to send 100% of incoming traffic for a
 // "reviews" service to version "v1" can be specified as follows:
 //
-//   metadata:
-//     name: my-rule
-//     namespace: default # optional (default is "default" or value specified with "kubectl -n")
-//   spec:
-//     destination:
-//       name: reviews
-//       namespace: my-namespace # optional (default is metadata.namespace)
-//     route:
-//     - labels:
-//         version: v1
-//       weight: 100
+//     metadata:
+//       name: my-rule
+//       namespace: default # optional (default is "default" or value specified with "-n" argument when created)
+//     spec:
+//       destination:
+//         name: reviews
+//         namespace: my-namespace # optional (default is metadata namespace field)
+//       route:
+//       - labels:
+//           version: v1
+//         weight: 100
 //
 message RouteRule {
-  // Required: Destination uniquely identifies the destination associated
+  // REQUIRED: Destination uniquely identifies the destination associated
   // with this routing rule. This field is applicable for hostname-based
   // resolution for HTTP traffic as well as IP-based resolution for
   // TCP/UDP traffic.
@@ -96,14 +96,14 @@ message RouteRule {
   // traffic.
   MatchCondition match = 3;
 
-  // Required (route|redirect). A routing rule can either redirect traffic or
+  // REQUIRED (route|redirect). A routing rule can either redirect traffic or
   // forward traffic. The forwarding target can be one of several versions
   // of a service (see glossary in beginning of document). Weights
   // associated with the service version determine the proportion of
   // traffic it receives.
   repeated DestinationWeight route = 4;
 
-  // Required (route|redirect). A routing rule can either redirect traffic or
+  // REQUIRED (route|redirect). A routing rule can either redirect traffic or
   // forward traffic. The redirect primitive can be used to send a HTTP 302
   // redirect to a different URI or Authority.
   HTTPRedirect redirect = 5;
@@ -133,17 +133,16 @@ message RouteRule {
 }
 
 // Destination uniquely identifies the destination service.
-// The FQDN of a service is composed from the name, namespace, and implementation-specific domainSuffix
-// (e.g. on Kubernetes, "reviews" + "default" + "svc.cluster.local" -> "reviews.default.svc.cluster.local")
+// The FQDN of a destinatin service is composed from the name, namespace, and implementation-specific domain suffix
+// (e.g. on Kubernetes, "reviews" + "default" + "svc.cluster.local" -> "reviews.default.svc.cluster.local").
 message Destination {
   // The short name of the service such as "foo".
   string name = 1;
 
-  // Optional namespace of the service. Defaults to value of metadata.namespace.
+  // Optional namespace of the service. Defaults to value of the metadata namespace field.
   string namespace = 2;
 
-  // (-- Domain suffix used to construct the service FQDN in implementations that
-  // support such specification. --)
+  // Domain suffix used to construct the service FQDN in implementations that support such specification.
   string domain = 3;
 }
 
@@ -156,22 +155,25 @@ message Destination {
 // service where the URL path starts with /ratings/v2/ and the request
 // contains a "cookie" with value "user=jason",
 //
-//   metadata:
-//     name: my-rule
-//   spec:
-//     destination:
-//       name: ratings
-//     match:
-//       source:
-//         name: reviews
-//         labels:
-//           version: v2
-//       request:
-//         headers:
-//           cookie: "/^(.*?;)?(user=jason)(;.*)?/"
-//           uri: "^/ratings/v2/"
+//     metadata:
+//       name: my-rule
+//       namespace: default
+//     spec:
+//       destination:
+//         name: ratings
+//       match:
+//         source:
+//           name: reviews
+//           labels:
+//             version: v2
+//         request:
+//           headers:
+//             cookie:
+//               regex: "^(.*?;)?(user=jason)(;.*)?"
+//             uri:
+//               prefix: "/ratings/v2/"
 //
-// MatchCondition CANNOT BE empty. Atleast one source or
+// MatchCondition CANNOT be empty. At least one source or
 // request header must be specified.
 message MatchCondition {
   // Identifies the service initiating a connection or a request.
@@ -183,27 +185,28 @@ message MatchCondition {
   // (-- Set of layer 4 match conditions based on the IP ranges --)
   L4MatchAttributes udp = 3 ;
 
-  // Properties of the request.
+  // Attributes of an HTTP request to match.
   MatchRequest request = 4 ;
 }
 
 // MatchSource identifies the service and optionally service version initiating the request.
+// The FQDN of a source service is composed from the name, namespace, and implementation-specific domain suffix
+// (e.g. on Kubernetes, "reviews" + "default" + "svc.cluster.local" -> "reviews.default.svc.cluster.local").
 message MatchSource {
   // The short name of the service such as "foo".
   string name = 1;
 
-  // Optional namespace of the source service. Defaults to value of metadata.namespace.
+  // Optional namespace of the source service. Defaults to value of metadata namespace field.
   string namespace = 2;
 
-  // (-- Domain suffix used to construct the service FQDN in implementations that
-  // support such specification. --)
+  // Domain suffix used to construct the service FQDN in implementations that support such specification.
   string domain = 3;
 
   // One or more labels that uniquely identify the source service version.
   map<string, string> labels = 4;
 }
 
-// MatchRequest specifies properties of the service request.
+// MatchRequest specifies the attributes of an HTTP request to be used for matching a request.
 message MatchRequest {
   // Set of HTTP match conditions based on HTTP/1.1, HTTP/2, GRPC request
   // metadata, such as _uri_, _scheme_, _authority_.  The header keys must be
@@ -235,18 +238,19 @@ message MatchRequest {
 // instances with the "v2" tag and the remaining traffic (i.e., 75%) to
 // "v1".
 //
-//   metadata:
-//     name: my-rule
-//   spec:
-//     destination:
-//       name: reviews
-//     route:
-//     - labels:
-//         version: v2
-//       weight: 25
-//     - labels:
-//         version: v1
-//       weight: 75
+//     metadata:
+//       name: my-rule
+//       namespace: default
+//     spec:
+//       destination:
+//         name: reviews
+//       route:
+//       - labels:
+//           version: v2
+//         weight: 25
+//       - labels:
+//           version: v1
+//         weight: 75
 //
 message DestinationWeight {
   // Optional destination uniquely identifies the destination service. If not
@@ -258,7 +262,7 @@ message DestinationWeight {
   // in golang protobuf library (see https://github.com/golang/protobuf/pull/208) --)
   map<string, string> labels = 2;
 
-  // Required. The proportion of traffic to be forwarded to the service
+  // REQUIRED. The proportion of traffic to be forwarded to the service
   // version. (0-100). Sum of weights across destinations SHOULD BE ==
   // 100. If there is only destination in a rule, the weight value is
   // assumed to be 100.
@@ -284,18 +288,19 @@ message L4MatchAttributes {
 // requests for /v1/getProductRatings API on the ratings service to
 // /v1/bookRatings provided by the bookratings service.
 //
-//   metadata:
-//     name: my-rule
-//   spec:
-//     destination:
-//       name: ratings
-//     match:
-//       request:
-//         headers:
-//           uri: /v1/getProductRatings
-//     redirect:
-//       uri: /v1/bookRatings
-//       authority: bookratings.default.svc.cluster.local
+//     metadata:
+//       name: my-rule
+//       namespace: default
+//     spec:
+//       destination:
+//         name: ratings
+//       match:
+//         request:
+//           headers:
+//             uri: /v1/getProductRatings
+//       redirect:
+//         uri: /v1/bookRatings
+//         authority: bookratings.default.svc.cluster.local
 //
 message HTTPRedirect {
   // On a redirect, overwrite the Path portion of the URL with this
@@ -314,20 +319,22 @@ message HTTPRedirect {
 // demonstrates how to rewrite the URL prefix for api call (/ratings) to
 // ratings service before making the actual API call.
 //
-//   metadata:
-//     name: my-rule
-//   spec:
-//     destination:
-//       name: ratings
-//     match:
-//       request:
-//         headers:
-//           uri: ^/ratings
-//     rewrite:
-//       uri: /v1/bookRatings
-//     route:
-//     - labels:
-//         version: v1
+//     metadata:
+//       name: my-rule
+//       namespace: default
+//     spec:
+//       destination:
+//         name: ratings
+//       match:
+//         request:
+//           headers:
+//             uri:
+//               prefix: /ratings
+//       rewrite:
+//         uri: /v1/bookRatings
+//       route:
+//       - labels:
+//           version: v1
 //
 message HTTPRewrite {
   // rewrite the Path (or the prefix) portion of the URI with this
@@ -354,21 +361,22 @@ message StringMatch {
 // Describes HTTP request timeout. For example, the following rule sets a
 // 10 second timeout for calls to the ratings:v1 service
 //
-//   metadata:
-//     name: my-rule
-//   spec:
-//     destination:
-//       name: ratings
-//     route:
-//     - labels:
-//         version: v1
-//     httpReqTimeout:
-//       simpleTimeout:
-//         timeout: 10s
+//     metadata:
+//       name: my-rule
+//       namespace: default
+//     spec:
+//       destination:
+//         name: ratings
+//       route:
+//       - labels:
+//           version: v1
+//       httpReqTimeout:
+//         simpleTimeout:
+//           timeout: 10s
 //
 message HTTPTimeout {
   message SimpleTimeoutPolicy {
-    // Required. Timeout for a HTTP request. Includes retries as well.  Default
+    // REQUIRED. Timeout for a HTTP request. Includes retries as well.  Default
     // 15s. format: 1h/1m/1s/1ms. MUST BE >=1ms. It is possible to control
     // timeout per request by supplying the timeout value via
     // x-envoy-upstream-rq-timeout-ms HTTP header.
@@ -388,22 +396,23 @@ message HTTPTimeout {
 // example, the following rule sets the maximum number of retries to 3 when
 // calling ratings:v1 service, with a 2s timeout per retry attempt.
 //
-//   metadata:
-//     name: my-rule
-//   spec:
-//     destination:
-//       name: ratings
-//     route:
-//     - labels:
-//         version: v1
-//     httpReqRetries:
-//       simpleRetry:
-//         attempts: 3
-//         perTryTimeout: 2s
+//     metadata:
+//       name: my-rule
+//       namespace: default
+//     spec:
+//       destination:
+//         name: ratings
+//       route:
+//       - labels:
+//           version: v1
+//       httpReqRetries:
+//         simpleRetry:
+//           attempts: 3
+//           perTryTimeout: 2s
 //
 message HTTPRetry {
   message SimpleRetryPolicy {
-    // Required. Number of retries for a given request. The interval
+    // REQUIRED. Number of retries for a given request. The interval
     // between retries will be determined automatically (25ms+). Actual
     // number of retries attempted depends on the httpReqTimeout.
     int32 attempts = 1;
