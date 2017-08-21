@@ -67,7 +67,7 @@ package istio.proxy.v1.config;
 //
 //     metadata:
 //       name: my-rule
-//       namespace: default # optional (default is "default" or value specified with "-n" argument when created)
+//       namespace: default # optional (default is "default")
 //     spec:
 //       destination:
 //         name: reviews
@@ -133,7 +133,7 @@ message RouteRule {
 }
 
 // Destination uniquely identifies the destination service.
-// The FQDN of a destinatin service is composed from the name, namespace, and implementation-specific domain suffix
+// The FQDN of a destination service is composed from the name, namespace, and implementation-specific domain suffix
 // (e.g. on Kubernetes, "reviews" + "default" + "svc.cluster.local" -> "reviews.default.svc.cluster.local").
 message Destination {
   // The short name of the service such as "foo".

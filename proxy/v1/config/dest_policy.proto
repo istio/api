@@ -26,7 +26,7 @@ package istio.proxy.v1.config;
 //
 //     metadata:
 //       name: reviews
-//       namespace: default # optional (default is "default" or value specified with "-n" argument when created)
+//       namespace: default # optional (default is "default")
 //     spec:
 //       policy:
 //       - loadBalancing:
