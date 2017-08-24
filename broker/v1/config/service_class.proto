@@ -21,24 +21,22 @@ message ServiceClass {
   Deployment deployment = 1;
 
   // REQUIRED. Service listing information for the public catalog.
-  Catalog catalog = 2;
+  CatalogService catalog = 2;
 
   // REQUIRED. List of the names of service plan. The name is a serviceplan resource
   // object name. e.g. monthly-service-plan
-  repeated string plan = 3;
+  repeated string plans = 3;
 }
 
 // Defines how the service instances are deployed.
 message Deployment {
   // For truely multi-tenant service, the deployed service instance name.
-  // MUST BE a fully-qualified domain name,
-  // e.g. _my-service.default.svc.cluster.local_.
   string instance = 1;
 }
 
 // Defines Istio supported public service listing information. These are subset
 // of OSBI service field defined in https://github.com/openservicebrokerapi
-message Catalog {
+message CatalogService {
   // REQUIRED. Public service name.
   string name = 1;
 

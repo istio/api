@@ -18,12 +18,12 @@ package istio.broker.v1.config;
 // ServicePlan defines a service plan that are available through open service broker api.
 message ServicePlan {
   // REQUIRED public plan information.
-  Plan plan = 1;
+  CatalogPlan plan = 1;
 }
 
 // Plan defines Istio supported public plan listing information. These are subset
 // of OSBI plan field defined in https://github.com/openservicebrokerapi
-message Plan {
+message CatalogPlan {
   // REQUIRED. Public service name.
   string name = 1;
 
