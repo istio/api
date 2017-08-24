@@ -82,7 +82,11 @@ message RouteRule {
   // with this routing rule. This field is applicable for hostname-based
   // resolution for HTTP traffic as well as IP-based resolution for
   // TCP/UDP traffic.
-  Destination destination = 1;
+  //
+  // *Note:* The route rule destination specification represents all version
+  // of the service and therefore the IstioService's labels field MUST be empty.
+  //
+  IstioService destination = 1;
 
   // RECOMMENDED. Precedence is used to disambiguate the order of
   // application of rules for the same destination service. A higher number
@@ -132,18 +136,27 @@ message RouteRule {
   L4FaultInjection l4_fault = 11;
 }
 
-// Destination uniquely identifies the destination service.
-// The FQDN of a destination service is composed from the name, namespace, and implementation-specific domain suffix
+// IstioService identifies a service and optionally service version.
+// The FQDN of the service is composed from the name, namespace, and implementation-specific domain suffix
 // (e.g. on Kubernetes, "reviews" + "default" + "svc.cluster.local" -> "reviews.default.svc.cluster.local").
-message Destination {
+message IstioService {
   // The short name of the service such as "foo".
   string name = 1;
 
-  // Optional namespace of the service. Defaults to value of the metadata namespace field.
+  // Optional namespace of the service. Defaults to value of metadata namespace field.
   string namespace = 2;
 
   // Domain suffix used to construct the service FQDN in implementations that support such specification.
   string domain = 3;
+
+  // The service FQDN.
+  string service = 4;
+
+  // Optional one or more labels that uniquely identify the service version.
+  //
+  // *Note:* When used for a RouteRule destination, labels MUST be empty.
+  //
+  map<string, string> labels = 4;
 }
 
 // Match condition specifies a set of criterion to be met in order for the
@@ -177,7 +190,7 @@ message Destination {
 // request header must be specified.
 message MatchCondition {
   // Identifies the service initiating a connection or a request.
-  MatchService source = 1;
+  IstioService source = 1;
 
   // (-- Set of layer 4 match conditions based on the IP ranges --)
   L4MatchAttributes tcp = 2 ;
@@ -187,23 +200,6 @@ message MatchCondition {
 
   // Attributes of an HTTP request to match.
   MatchRequest request = 4 ;
-}
-
-// MatchService identifies a service and optionally service version.
-// The FQDN of the service is composed from the name, namespace, and implementation-specific domain suffix
-// (e.g. on Kubernetes, "reviews" + "default" + "svc.cluster.local" -> "reviews.default.svc.cluster.local").
-message MatchService {
-  // The short name of the service such as "foo".
-  string name = 1;
-
-  // Optional namespace of the service. Defaults to value of metadata namespace field.
-  string namespace = 2;
-
-  // Domain suffix used to construct the service FQDN in implementations that support such specification.
-  string domain = 3;
-
-  // Optional one or more labels that uniquely identify the service version.
-  map<string, string> labels = 4;
 }
 
 // MatchRequest specifies the attributes of an HTTP request to be used for matching a request.

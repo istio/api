@@ -25,22 +25,41 @@ package istio.proxy.v1.config;
 // look as follows:
 //
 //     metadata:
-//       name: reviews
+//       name: reviews-lb-policy
 //       namespace: default # optional (default is "default")
 //     spec:
+//       destination:
+//         name: reviews
 //       policy:
 //       - loadBalancing:
 //           name: RANDOM
 //
-// The FQDN of the destination service is composed from the metadata name and namespace fields, along with
+// The FQDN of the destination service is composed from the destination name and meta namespace fields, along with
 // a platform-specific domain suffix
 // (e.g. on Kubernetes, "reviews" + "default" + "svc.cluster.local" -> "reviews.default.svc.cluster.local").
 //
 // A single DestinationPolicy resource includes configuration for all service versions. Only
 // one policy can be defined per service version. Policy CANNOT be empty.
 message DestinationPolicy {
-  // REQUIRED. List of policies, one per service version.
-  repeated DestinationVersionPolicy policy = 2;
+  // Optional: Destination uniquely identifies the destination service associated
+  // with this policy.
+  IstioService destination = 1;
+
+  // Optional: Source uniquely identifies the source service associated
+  // with this policy.
+  IstioService source = 2;
+
+  // Load balancing policy.
+  LoadBalancing load_balancing = 3;
+
+  // Circuit breaker policy.
+  CircuitBreaker circuit_breaker = 4;
+
+  // REQUIRED. List of policies, one per service version. # DEPRECATED: will be removed soon
+  repeated DestinationVersionPolicy policy = 5;
+
+  //(-- Other custom policy implementations --)
+  google.protobuf.Any custom = 100 ;
 }
 
 // A destination policy can be restricted to a particular version of a
@@ -51,15 +70,15 @@ message DestinationPolicy {
 // environment:
 //
 //     metadata:
-//       name: reviews
+//       name: reviews-lb-policy
 //       namespace: default
 //     spec:
+//       destination:
+//         name: reviews
 //       policy:
-//       - destination:
-//           name: reviews # Optional: default is metadata name
-//           labels:
-//             env: prod
-//             version: v1
+//       - labels:
+//           env: prod
+//           version: v1
 //         loadBalancing:
 //           name: RANDOM
 //
@@ -67,22 +86,21 @@ message DestinationPolicy {
 // service. Policy CANNOT be empty.
 // *Note:* Destination policies will be applied only if the corresponding
 // tagged instances are explicity routed to. In other words, for every
-// destination policy defined, atleast one route rule must refer to the
+// destination policy defined, at least one route rule must refer to the
 // service version indicated in the destination policy.
 message DestinationVersionPolicy {
-  // Optional: Destination uniquely identifies the destination service associated
-  // with this policy.
-  MatchService destination = 1;
-
-  // Optional: Source uniquely identifies the source service associated
-  // with this policy.
-  MatchService source = 2;
+  // Optional set of labels that identify a particular version of the
+  // destination service. If omitted, the policy will apply to all versions
+  // of the service. (-- N.B. The map is used instead of
+  // pstruct due to lack of serialization support in golang protobuf
+  // library (see https://github.com/golang/protobuf/pull/208) --)
+  map<string, string> labels = 1;
 
   // Load balancing policy.
-  LoadBalancing load_balancing = 3;
+  LoadBalancing load_balancing = 2;
 
   // Circuit breaker policy.
-  CircuitBreaker circuit_breaker = 4;
+  CircuitBreaker circuit_breaker = 3;
 
   //(-- Other custom policy implementations --)
   google.protobuf.Any custom = 100 ;
@@ -94,9 +112,11 @@ message DestinationVersionPolicy {
 // supported by Envoy. Example,
 //
 //     metadata:
-//       name: reviews
+//       name: reviews-lb-policy
 //       namespace: default
 //     spec:
+//       destination:
+//         name: reviews
 //       policy:
 //       - loadBalancing:
 //           name: RANDOM
@@ -142,14 +162,14 @@ message CircuitBreaker {
   // "v1" backends. 
   //
   //     metadata:
-  //       name: reviews
+  //       name: reviews-cb-policy
   //       namespace: default
   //     spec:
+  //       destination:
+  //         name: reviews
   //       policy:
-  //       - destination:
-  //           name: reviews
-  //           labels:
-  //             version: v1
+  //       - labels:
+  //           version: v1
   //         circuitBreaker:
   //           simpleCb:
   //             maxConnections: 100
@@ -161,14 +181,14 @@ message CircuitBreaker {
   // consecutive times with 5XX error code will be ejected for 15 minutes.
   //
   //     metadata:
-  //       name: reviews
+  //       name: reviews-cb-policy
   //       namespace: default
   //     spec:
+  //       destination:
+  //         name: reviews
   //       policy:
-  //       - destination:
-  //           name: reviews
-  //           labels:
-  //             version: v1
+  //       - labels:
+  //           version: v1
   //         circuitBreaker:
   //           simpleCb:
   //             maxConnections: 100
