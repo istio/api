@@ -177,7 +177,7 @@ message Destination {
 // request header must be specified.
 message MatchCondition {
   // Identifies the service initiating a connection or a request.
-  MatchSource source = 1;
+  MatchService source = 1;
 
   // (-- Set of layer 4 match conditions based on the IP ranges --)
   L4MatchAttributes tcp = 2 ;
@@ -189,20 +189,20 @@ message MatchCondition {
   MatchRequest request = 4 ;
 }
 
-// MatchSource identifies the service and optionally service version initiating the request.
-// The FQDN of a source service is composed from the name, namespace, and implementation-specific domain suffix
+// MatchService identifies a service and optionally service version.
+// The FQDN of the service is composed from the name, namespace, and implementation-specific domain suffix
 // (e.g. on Kubernetes, "reviews" + "default" + "svc.cluster.local" -> "reviews.default.svc.cluster.local").
-message MatchSource {
+message MatchService {
   // The short name of the service such as "foo".
   string name = 1;
 
-  // Optional namespace of the source service. Defaults to value of metadata namespace field.
+  // Optional namespace of the service. Defaults to value of metadata namespace field.
   string namespace = 2;
 
   // Domain suffix used to construct the service FQDN in implementations that support such specification.
   string domain = 3;
 
-  // One or more labels that uniquely identify the source service version.
+  // Optional one or more labels that uniquely identify the service version.
   map<string, string> labels = 4;
 }
 

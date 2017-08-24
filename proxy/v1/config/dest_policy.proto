@@ -55,9 +55,11 @@ message DestinationPolicy {
 //       namespace: default
 //     spec:
 //       policy:
-//       - labels:
-//           env: prod
-//           version: v1
+//       - destination:
+//           name: reviews # Optional: default is metadata name
+//           labels:
+//             env: prod
+//             version: v1
 //         loadBalancing:
 //           name: RANDOM
 //
@@ -68,18 +70,19 @@ message DestinationPolicy {
 // destination policy defined, atleast one route rule must refer to the
 // service version indicated in the destination policy.
 message DestinationVersionPolicy {
-  // Optional set of labels that identify a particular version of the
-  // destination service. If omitted, the policy will apply to all versions
-  // of the service. (-- N.B. The map is used instead of
-  // pstruct due to lack of serialization support in golang protobuf
-  // library (see https://github.com/golang/protobuf/pull/208) --)
-  map<string, string> labels = 1;
+  // Optional: Destination uniquely identifies the destination service associated
+  // with this policy.
+  MatchService destination = 1;
+
+  // Optional: Source uniquely identifies the source service associated
+  // with this policy.
+  MatchService source = 2;
 
   // Load balancing policy.
-  LoadBalancing load_balancing = 2;
+  LoadBalancing load_balancing = 3;
 
   // Circuit breaker policy.
-  CircuitBreaker circuit_breaker = 3;
+  CircuitBreaker circuit_breaker = 4;
 
   //(-- Other custom policy implementations --)
   google.protobuf.Any custom = 100 ;
@@ -143,8 +146,10 @@ message CircuitBreaker {
   //       namespace: default
   //     spec:
   //       policy:
-  //       - labels:
-  //           version: v1
+  //       - destination:
+  //           name: reviews
+  //           labels:
+  //             version: v1
   //         circuitBreaker:
   //           simpleCb:
   //             maxConnections: 100
@@ -160,8 +165,10 @@ message CircuitBreaker {
   //       namespace: default
   //     spec:
   //       policy:
-  //       - labels:
-  //           version: v1
+  //       - destination:
+  //           name: reviews
+  //           labels:
+  //             version: v1
   //         circuitBreaker:
   //           simpleCb:
   //             maxConnections: 100
