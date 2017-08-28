@@ -15,22 +15,27 @@ syntax = "proto3";
 
 package istio.broker.v1.config;
 
-// ServicePlan defines the type of service availability to Istio service consumers.
+// ServicePlan defines the type of services available to Istio service consumers.
+// One or more services are included in a plan. The plan is flexible and subject to change
+// along with business requirements.
 message ServicePlan {
   // Required. public plan information.
   CatalogPlan plan = 1;
+
+  // Required. List of the names of serviceclass. ServiceClass is a type CRD resource.
+  repeated string services = 2;
 }
 
-// CatalogPlan defines Istio supported public plan listing information. These are subset
-// of OSBI plan fields defined in https://github.com/openservicebrokerapi
+// CatalogPlan defines listing information for this service plan within the exposed catalog.
+// The message is a subset of OSBI plan fields defined in https://github.com/openservicebrokerapi
 message CatalogPlan {
-  // Required. Public service name.
+  // Required. Public service plan name.
   string name = 1;
 
-  // Required. Public unique service guid.
+  // Required. Public unique service plan guid.
   string id = 2;
 
-  // Required. Public short service description.
+  // Required. Public short service plan description.
   string description = 3;
 }
 
