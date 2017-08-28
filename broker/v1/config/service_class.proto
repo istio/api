@@ -43,5 +43,3 @@ message CatalogEntry {
   // Required. Public short service description.
   string description = 3;
 }
-
-Listing information for this service within the exposed catalog.
