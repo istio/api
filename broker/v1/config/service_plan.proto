@@ -15,22 +15,22 @@ syntax = "proto3";
 
 package istio.broker.v1.config;
 
-// ServicePlan defines a service plan that are available through open service broker api.
+// ServicePlan defines the type of service availability to Istio service consumers.
 message ServicePlan {
-  // REQUIRED public plan information.
+  // Required. public plan information.
   CatalogPlan plan = 1;
 }
 
-// Plan defines Istio supported public plan listing information. These are subset
-// of OSBI plan field defined in https://github.com/openservicebrokerapi
+// CatalogPlan defines Istio supported public plan listing information. These are subset
+// of OSBI plan fields defined in https://github.com/openservicebrokerapi
 message CatalogPlan {
-  // REQUIRED. Public service name.
+  // Required. Public service name.
   string name = 1;
 
-  // REQUIRED. Public unique service guid.
+  // Required. Public unique service guid.
   string id = 2;
 
-  // REQUIRED. Public short service description.
+  // Required. Public short service description.
   string description = 3;
 }
 

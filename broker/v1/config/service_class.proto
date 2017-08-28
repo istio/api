@@ -15,34 +15,34 @@ syntax = "proto3";
 
 package istio.broker.v1.config;
 
-// ServiceClass defines a service that are exposed through open service broker api.
+// ServiceClass defines a service that are exposed to Istio service consumers.
 message ServiceClass {
-  // REQUIRED. Istio deployment spec for the service class.
+  // Required. Istio deployment spec for the service class.
   Deployment deployment = 1;
 
-  // REQUIRED. Service listing information for the public catalog.
-  CatalogService catalog = 2;
+  // Required. Listing information for the public catalog.
+  CatalogEntry entry = 2;
 
-  // REQUIRED. List of the names of service plan. The name is a serviceplan resource
+  // Required. List of the names of service plan. The name is a serviceplan resource
   // object name. e.g. monthly-service-plan
   repeated string plans = 3;
 }
 
-// Defines how the service instances are deployed.
+// Deployment defines how the service instances are deployed.
 message Deployment {
   // For truely multi-tenant service, the deployed service instance name.
   string instance = 1;
 }
 
-// Defines Istio supported public service listing information. These are subset
-// of OSBI service field defined in https://github.com/openservicebrokerapi
-message CatalogService {
-  // REQUIRED. Public service name.
+// CatalogEntry defines Istio supported public service listing information. These are subset
+// of OSBI service fields defined in https://github.com/openservicebrokerapi
+message CatalogEntry {
+  // Required. Public service name.
   string name = 1;
 
-  // REQUIRED. Public unique service guid.
+  // Required. Public unique service guid.
   string id = 2;
 
-  // REQUIRED. Public short service description.
+  // Required. Public short service description.
   string description = 3;
 }
