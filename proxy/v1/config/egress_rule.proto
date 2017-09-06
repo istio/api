@@ -54,7 +54,7 @@ message EgressRule {
 
   // REQUIRED: Hostname or a wildcard domain name associated with the external service.
   // ONLY the "service" field of destination will be taken into consideration. Name,
-  // namespace and domain are ignored. Routing rules and destination policies that
+  // namespace, domain and labels are ignored. Routing rules and destination policies that
   // refer to these external services must have identical specification for the destination
   // as the corresponding egress rule. Wildcard domain specifications must conform to format
   // allowed by Envoy's Virtual Host specification, such as “*.foo.com” or “*-bar.foo.com”.
