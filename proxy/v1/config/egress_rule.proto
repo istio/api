@@ -14,6 +14,8 @@
 
 syntax = "proto3";
 
+import "proxy/v1/config/route_rule.proto";
+
 package istio.proxy.v1.config;
 
 // Egress rules describe the properties of a service outside Istio. When transparent proxying
@@ -32,7 +34,8 @@ package istio.proxy.v1.config;
 //     metadata:
 //       name: foo-egress-rule
 //     spec:
-//       destination: *.foo.com
+//       destination:
+//         service: *.foo.com
 //       ports:
 //         - port: 80
 //           protocol: http
@@ -50,11 +53,14 @@ message EgressRule {
   }
 
   // REQUIRED: Hostname or a wildcard domain name associated with the external service.
-  // Wildcard domain specifications must conform to format allowed by Envoy's Virtual Host
-  // specification, such as “*.foo.com” or “*-bar.foo.com”. The character '*' indicates a
-  // non-empty string. So, a wildcard domain of form “*-bar.foo.com” will match “baz-bar.foo.com”
-  // but not “-bar.foo.com”.
-  string destination = 2;
+  // ONLY the "service" field of destination will be taken into consideration. Name,
+  // namespace and domain are ignored. Routing rules and destination policies that
+  // refer to these external services must have identical specification for the destination
+  // as the corresponding egress rule. Wildcard domain specifications must conform to format
+  // allowed by Envoy's Virtual Host specification, such as “*.foo.com” or “*-bar.foo.com”.
+  // The character '*' in a domain specification indicates a non-empty string. Hence, a wildcard
+  // domain of form “*-bar.foo.com” will match “baz-bar.foo.com” but not “-bar.foo.com”.
+  IstioService destination = 2;
 
   // REQUIRED: list of ports on which the external service is available.
   repeated Port ports = 3;
