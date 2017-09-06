@@ -32,8 +32,7 @@ package istio.proxy.v1.config;
 //     metadata:
 //       name: foo-egress-rule
 //     spec:
-//       destination:
-//         name: "*.foo.com"
+//       destination: *.foo.com
 //       ports:
 //         - port: 80
 //           protocol: http
