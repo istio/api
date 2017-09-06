@@ -28,7 +28,7 @@ package istio.proxy.v1.config;
 // be accessed over HTTP (e.g., http://gmail.com:443). The sidecar will automatically upgrade
 // the connection to TLS when initiating a connection with the external service.
 //
-// For example, the following egress rule describes set of services hosted in the *.foo.com domain
+// For example, the following egress rule describes the set of services hosted under the *.foo.com domain
 //
 //     kind: EgressRule
 //     metadata:
