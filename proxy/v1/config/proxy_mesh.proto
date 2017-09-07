@@ -138,4 +138,29 @@ message ProxyMeshConfig {
 
   // Path to the secrets used by the authentication policy.
   string auth_certs_path = 101;
+  
+  enum ProxyMode {
+    // Select this option if iptable rules are setup to transparently 
+    // redirect all traffic entering and leaving a pod/container/VM via the 
+    // sidecar. This is the default option for deploying Istio proxies, without
+    // requiring changes to applications.
+    TRANSPARENT = 0;
+
+    // Explicit proxying requires applications to consciously communicate
+    // with the sidecar in the pod/container/VM. In case of HTTP, applications
+    // can use the HTTP_PROXY environment variable without code changes in the application.
+    // For other TCP-based protocols, the application is expected to explicitly
+    // communicate with the sidecar to forward traffic to the destination.
+    // *Note*: Multiple HTTP-based services (not HTTPS) can listen on the same port (e.g., 80).
+    // However, each TCP-based service must listen on a globally unique port. This port
+    // needs to be registered with the service registry. In addition, if the sidecar is
+    // used for handling inbound TCP traffic, it will listen on the registered port for
+    // the TCP service. Hence, the application needs to listen on a different port and
+    // explicitly configure Envoy to redirect inbound traffic on the service port to 
+    // a different local port on which the application is listening for connections.
+    EXPLICIT = 1;
+  }
+
+  // Describes how Istio proxies will be receiving traffic from applications.
+  ProxyMode proxy_mode = 26;
 }
