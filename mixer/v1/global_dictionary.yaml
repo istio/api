@@ -46,7 +46,8 @@
 - source.labels
 - source.user
 
-# target.* attributes have been moved to destination.*  
+# target.* attributes have been renamed to destination.*
+# They cannot be removed from this append only dictionary.
 - target.ip
 - target.port
 - target.service
