@@ -304,7 +304,6 @@ message EmailAddress {
 // instance constructed using the 'RequestCountByService' instance.
 //
 // ```yaml
-// rule:
 // - match: destination.service == "*"
 //   actions:
 //   - handler: prometheus-handler
