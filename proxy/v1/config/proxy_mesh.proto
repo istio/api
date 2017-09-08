@@ -20,10 +20,11 @@ package istio.proxy.v1.config;
 
 // ProxyConfig defines variables for individual Envoy instances.
 message ProxyConfig {
-  // Path to the generated configuration file directory
+  // Path to the generated configuration file directory.
+  // Proxy agent generates the actual configuration and stores it in this directory.
   string config_path = 1;
 
-  // Path to Envoy binary
+  // Path to the proxy binary
   string binary_path = 2;
 
   // Service cluster defines the name for the service_cluster that is
@@ -31,7 +32,6 @@ message ProxyConfig {
   // _--service-cluster_ flag in Envoy.  In a typical Envoy deployment, the
   // _service-cluster_ flag is used to identify the caller, for
   // source-based routing scenarios.
-  //
   //
   // Since Istio does not assign a local service/service version to each
   // Envoy instance, the name is same for all of them.  However, the
@@ -54,7 +54,7 @@ message ProxyConfig {
   // Address of the discovery service exposing xDS (e.g. _istio-pilot:8080_).
   string discovery_address = 6;
 
-  // Polling interval for service discovery (EDS, CDS, LDS). (MUST BE >=1ms)
+  // Polling interval for service discovery (used by EDS, CDS, LDS, but not RDS). (MUST BE >=1ms)
   google.protobuf.Duration discovery_refresh_delay = 7;
 
   // Address of the Zipkin service (e.g. _zipkin:9411_).
@@ -71,13 +71,14 @@ message ProxyConfig {
 }
 
 
-// ProxyMeshConfig defines mesh-wide variables shared by all Envoy instances in the
+// MeshConfig defines mesh-wide variables shared by all Envoy instances in the
 // Istio service mesh.
 message MeshConfig {
   // Address of the egress Envoy service (e.g. _istio-egress:80_).
   string egress_proxy_address = 1;
 
   // Address of the mixer service (e.g. _istio-mixer:9090_).
+  // Empty value disables Mixer checks and telemetry.
   string mixer_address = 2;
 
   // Disable policy checks by the mixer service. Metrics will still be
@@ -140,13 +141,18 @@ message MeshConfig {
   // Polling interval for RDS (MUST BE >=1ms)
   google.protobuf.Duration rds_refresh_delay = 11;
 
-  // Address of the Zipkin service (note the duplication from the ProxyConfig) (e.g. _zipkin:9411_).
-  string zipkin_address = 12;
+  // Flag to control generation of trace spans and request IDs.
+  // Requires a trace span collector defined in the proxy configuration.
+  bool enable_tracing = 12;
 
   // File address for the proxy access log (e.g. /dev/stdout).
   // Empty value disables access logging.
   string access_log_file = 13;
 
-  // Default proxy config for injected proxies
+  // Default proxy config used by the proxy injection mechanism operating in the mesh
+  // (e.g. Kubernetes admission controller)
+  // In case of Kubernetes, the proxy config is applied once during the injection process,
+  // and remain constant for the duration of the pod. The rest of the mesh config can be changed
+  // at runtime and config gets distributed dynamically.
   ProxyConfig default_config = 14;
 }
