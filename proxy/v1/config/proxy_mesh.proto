@@ -68,10 +68,6 @@ message ProxyConfig {
 
   // Port on which Envoy should listen for administrative commands.
   int32 proxy_admin_port = 11;
-
-  // File address for the proxy access log (e.g. /dev/stdout).
-  // Empty value disables access logging.
-  string access_log_file = 12;
 }
 
 
@@ -146,4 +142,8 @@ message ProxyMeshConfig {
 
   // Address of the Zipkin service (note the duplication from the ProxyConfig) (e.g. _zipkin:9411_).
   string zipkin_address = 12;
+
+  // File address for the proxy access log (e.g. /dev/stdout).
+  // Empty value disables access logging.
+  string access_log_file = 13;
 }
