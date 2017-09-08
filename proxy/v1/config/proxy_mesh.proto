@@ -20,6 +20,12 @@ package istio.proxy.v1.config;
 
 // ProxyConfig defines variables for individual Envoy instances.
 message ProxyConfig {
+  // Path to the generated configuration file directory
+  string config_path = 1;
+
+  // Path to Envoy binary
+  string binary_path = 2;
+
   // Service cluster defines the name for the service_cluster that is
   // shared by all Envoy instances. This setting corresponds to
   // _--service-cluster_ flag in Envoy.  In a typical Envoy deployment, the
@@ -34,38 +40,38 @@ message ProxyConfig {
   // receives API calls from Envoy, it uses the value of the _service-node_
   // flag to compute routes that are relative to the service instances
   // located at that IP address.
-  string service_cluster = 1;
+  string service_cluster = 3;
 
   // The time in seconds that Envoy will drain connections during a hot
   // restart. MUST be >=1s (e.g., _1s/1m/1h_)
-  google.protobuf.Duration drain_duration = 2;
+  google.protobuf.Duration drain_duration = 4;
 
   // The time in seconds that Envoy will wait before shutting down the
   // parent process during a hot restart. MUST be >=1s (e.g., _1s/1m/1h_).
   // MUST BE greater than _drain_duration_ parameter.
-  google.protobuf.Duration parent_shutdown_duration = 3;
+  google.protobuf.Duration parent_shutdown_duration = 5;
 
   // Address of the discovery service exposing xDS (e.g. _istio-pilot:8080_).
-  string discovery_address = 4;
+  string discovery_address = 6;
 
-  // Polling interval for service discovery. (MUST BE >=1ms)
-  google.protobuf.Duration discovery_refresh_delay = 5;
+  // Polling interval for service discovery (EDS, CDS, LDS). (MUST BE >=1ms)
+  google.protobuf.Duration discovery_refresh_delay = 7;
 
   // Address of the Zipkin service (e.g. _zipkin:9411_).
-  string zipkin_address = 6;
+  string zipkin_address = 8;
 
   // Connection timeout used by Envoy for supporting services. (MUST BE >=1ms)
-  google.protobuf.Duration connect_timeout = 7;
+  google.protobuf.Duration connect_timeout = 9;
 
   // IP Address and Port of a statsd UDP listener (e.g. _10.75.241.127:9125_).
-  string statsd_udp_address = 8;
+  string statsd_udp_address = 10;
 
   // Port on which Envoy should listen for administrative commands.
-  int32 proxy_admin_port = 9;
+  int32 proxy_admin_port = 11;
 
   // File address for the proxy access log (e.g. /dev/stdout).
   // Empty value disables access logging.
-  string access_log_file = 10;
+  string access_log_file = 12;
 }
 
 
@@ -134,4 +140,10 @@ message ProxyMeshConfig {
   // Authentication policy defines the global switch to control authentication
   // for Envoy-to-Envoy communication.
   AuthPolicy auth_policy = 10;
+
+  // Polling interval for RDS (MUST BE >=1ms)
+  google.protobuf.Duration rds_refresh_delay = 11;
+
+  // Address of the Zipkin service (note the duplication from the ProxyConfig) (e.g. _zipkin:9411_).
+  string zipkin_address = 12;
 }
