@@ -73,7 +73,7 @@ message ProxyConfig {
 
 // ProxyMeshConfig defines mesh-wide variables shared by all Envoy instances in the
 // Istio service mesh.
-message ProxyMeshConfig {
+message MeshConfig {
   // Address of the egress Envoy service (e.g. _istio-egress:80_).
   string egress_proxy_address = 1;
 
@@ -146,4 +146,7 @@ message ProxyMeshConfig {
   // File address for the proxy access log (e.g. /dev/stdout).
   // Empty value disables access logging.
   string access_log_file = 13;
+
+  // Default proxy config for injected proxies
+  ProxyConfig default_config = 14;
 }
