@@ -68,6 +68,9 @@ message ProxyConfig {
 
   // Port on which Envoy should listen for administrative commands.
   int32 proxy_admin_port = 11;
+  
+  // The availability zone where this Envoy instance is running
+  string availability_zone = 12;
 }
 
 
