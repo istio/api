@@ -59,6 +59,10 @@ message DestinationPolicy {
   // REQUIRED. List of policies, one per service version. # DEPRECATED: will be removed soon
   repeated DestinationVersionPolicy policy = 5;
 
+  // Optional: Whether to disable Auth. This is used when MTLS is turned on, but
+  // we want to disable auth for traffic to api server.
+  bool disable_auth = 6;
+
   //(-- Other custom policy implementations --)
   google.protobuf.Any custom = 100 ;
 }
