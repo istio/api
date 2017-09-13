@@ -57,8 +57,8 @@ package istio.proxy.v1.config;
 //         labels:
 //           env: prod
 //           version: v1
-//         loadBalancing:
-//           name: ROUND_ROBIN
+//       loadBalancing:
+//         name: ROUND_ROBIN
 //
 // *Note:* Destination policies will be applied only if the corresponding
 // tagged instances are explicity routed to. In other words, for every
@@ -94,8 +94,8 @@ message DestinationPolicy {
 //     spec:
 //       destination:
 //         name: reviews
-//         loadBalancing:
-//           name: RANDOM
+//       loadBalancing:
+//         name: RANDOM
 //
 message LoadBalancing {
   // Load balancing algorithms supported by Envoy proxy.
@@ -145,9 +145,9 @@ message CircuitBreaker {
   //         name: reviews
   //         labels:
   //           version: v1
-  //         circuitBreaker:
-  //           simpleCb:
-  //             maxConnections: 100
+  //       circuitBreaker:
+  //         simpleCb:
+  //           maxConnections: 100
   //
   // The following destination policy sets a limit of 100 connections and
   // 1000 concurrent requests, with no more than 10 req/connection to
@@ -163,14 +163,14 @@ message CircuitBreaker {
   //         name: reviews
   //         labels:
   //           version: v1
-  //         circuitBreaker:
-  //           simpleCb:
-  //             maxConnections: 100
-  //             httpMaxRequests: 1000
-  //             httpMaxRequestsPerConnection: 10
-  //             httpConsecutiveErrors: 7
-  //             sleepWindow: 15m
-  //             httpDetectionInterval: 5m
+  //       circuitBreaker:
+  //         simpleCb:
+  //           maxConnections: 100
+  //           httpMaxRequests: 1000
+  //           httpMaxRequestsPerConnection: 10
+  //           httpConsecutiveErrors: 7
+  //           sleepWindow: 15m
+  //           httpDetectionInterval: 5m
   //           
   message SimpleCircuitBreakerPolicy {
     // Maximum number of connections to a backend.
