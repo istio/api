@@ -73,6 +73,10 @@ message ProxyConfig {
   // Envoy as a sidecar in Kubernetes, this flag must be one of the availability
   // zones assigned to a node using failure-domain.beta.kubernetes.io/zone annotation.
   string availability_zone = 12;
+
+  // Authentication policy defines the global switch to control authentication
+  // for Envoy-to-Envoy communication for infra components Mixer and Pilot.
+  AuthPolicy infra_auth_policy = 13;
 }
 
 
