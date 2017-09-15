@@ -18,6 +18,14 @@ import "google/protobuf/duration.proto";
 
 package istio.proxy.v1.config;
 
+  enum AuthPolicy {
+    // Do not encrypt Envoy to Envoy traffic.
+    NONE = 0;
+
+    // Envoy to Envoy traffic is wrapped into mutual TLS connections.
+    MUTUAL_TLS = 1;
+  }
+
 // ProxyConfig defines variables for individual Envoy instances.
 message ProxyConfig {
   // Path to the generated configuration file directory.
@@ -134,14 +142,6 @@ message MeshConfig {
 
   // Defines whether to use Istio ingress controller for annotated or all ingress resources.
   IngressControllerMode ingress_controller_mode = 9;
-
-  enum AuthPolicy {
-    // Do not encrypt Envoy to Envoy traffic.
-    NONE = 0;
-
-    // Envoy to Envoy traffic is wrapped into mutual TLS connections.
-    MUTUAL_TLS = 1;
-  }
 
   // Authentication policy defines the global switch to control authentication
   // for Envoy-to-Envoy communication.
