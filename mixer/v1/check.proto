@@ -99,11 +99,20 @@ message CheckResponse {
   }
 
   message QuotaRequirement {
-    // the quota metric name.
-    string name = 1;
+    message Requirement {
+      // the quota metric name.
+      string name = 1;
 
-    // The amount to charge.
-    int64 amount = 2;
+      // The amount to charge.
+      int64 amount = 2;
+    }
+
+    // Return required qutoas and their amounts.
+    repeated Requirement requirements = 1;
+
+    // The total set of attributes that were used in producing the result
+    // along with matching conditions.
+    ReferencedAttributes referenced_attributes = 2 [(gogoproto.nullable) = false];
   }
 
   // The precondition check results.
@@ -113,7 +122,7 @@ message CheckResponse {
   map<string, QuotaResult> quotas = 3 [(gogoproto.nullable) = false];
 
   // Return required qutoas and their amounts.
-  repeated QuotaRequirement quota_requirements = 4;
+  QuotaRequirement quota_requirements = 4;
 }
 
 // Describes the attributes that were used to determine the response.
