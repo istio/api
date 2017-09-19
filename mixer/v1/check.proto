@@ -52,6 +52,11 @@ message CheckRequest {
   string deduplication_id = 3;
 
   // The individual quotas to allocate
+  // If this feild is not empty,  Mixer only charges quota metrics specified in this field.
+  // If this field is empty, Mixer needs to figure out which quotas are required,
+  // returns them in the quota_requirements field in the Check Response.
+  // Mixer also charges the required quotas as if this field is filled for
+  // all required metrics as their amounts as required amounts and best_effort=false.
   map<string, QuotaParams> quotas = 4 [(gogoproto.nullable) = false];
 }
 
@@ -93,11 +98,22 @@ message CheckResponse {
     ReferencedAttributes referenced_attributes = 5 [(gogoproto.nullable) = false];
   }
 
+  message QuotaRequirement {
+    // the quota metric name.
+    string name = 1;
+
+    // The amount to charge.
+    int64 amount = 2;
+  }
+
   // The precondition check results.
   PreconditionResult precondition = 2 [(gogoproto.nullable) = false];
 
   // The resulting quota, one entry per requested quota.
   map<string, QuotaResult> quotas = 3 [(gogoproto.nullable) = false];
+
+  // Return required qutoas and their amounts.
+  repeated QuotaRequirement quota_requirements = 4;
 }
 
 // Describes the attributes that were used to determine the response.
