@@ -52,12 +52,11 @@ message CheckRequest {
   string deduplication_id = 3;
 
   // The individual quotas to allocate
-  // If this feild is not empty,  Mixer only charges quota metrics specified in this field.
-  // If this field is empty, Mixer needs to figure out which quotas are required,
-  // returns them in the quota_requirements field in the Check Response.
-  // Mixer also charges the required quotas as if this field is filled for
-  // all required metrics as their amounts as required amounts and best_effort=false.
   map<string, QuotaParams> quotas = 4 [(gogoproto.nullable) = false];
+
+  // If true, server should check quota requirements, return the result
+  // in quota_requirements fields in the CheckResponse.
+  bool check_quota_requirement = 5;
 }
 
 message CheckResponse {
@@ -108,11 +107,14 @@ message CheckResponse {
     }
 
     // Return required qutoas and their amounts.
+    // Empty list is a valid result. It means quota is not required for the call.
     repeated Requirement requirements = 1;
 
+    // The amount of time for which this result can be considered valid.
+    google.protobuf.Duration valid_duration = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+
     // The total set of attributes that were used in producing the result
-    // along with matching conditions.
-    ReferencedAttributes referenced_attributes = 2 [(gogoproto.nullable) = false];
+    ReferencedAttributes referenced_attributes = 3 [(gogoproto.nullable) = false];
   }
 
   // The precondition check results.
@@ -121,7 +123,7 @@ message CheckResponse {
   // The resulting quota, one entry per requested quota.
   map<string, QuotaResult> quotas = 3 [(gogoproto.nullable) = false];
 
-  // Return required qutoas and their amounts.
+  // Return quota requirements.
   QuotaRequirement quota_requirements = 4;
 }
 
