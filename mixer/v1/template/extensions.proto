@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package istio.mixer.v1.config.template;
+package istio.mixer.v1.template;
 import "google/protobuf/descriptor.proto";
 
 enum TemplateVariety {
