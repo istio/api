@@ -56,6 +56,8 @@ message CheckRequest {
 
   // If true, server should check quota requirements, return the result
   // in quota_requirements fields in the CheckResponse.
+  // If true, "quotas" field is ignored, server should charge quotas based on the new
+  // quota requirements, and return the charging results in "quotas" fields in CheckResponse.
   bool check_quota_requirement = 5;
 }
 
@@ -114,6 +116,7 @@ message CheckResponse {
     google.protobuf.Duration valid_duration = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
 
     // The total set of attributes that were used in producing the result
+    // Client should use used attributes to calculate key for caching the result.
     ReferencedAttributes referenced_attributes = 3 [(gogoproto.nullable) = false];
   }
 
