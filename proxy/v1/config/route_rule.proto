@@ -156,7 +156,7 @@ message IstioService {
   //
   // *Note:* When used for a RouteRule destination, labels MUST be empty.
   //
-  map<string, string> labels = 4;
+  map<string, string> labels = 5;
 }
 
 // Match condition specifies a set of criterion to be met in order for the
@@ -220,9 +220,8 @@ message MatchRequest {
   // to URI, protocol scheme (e.g., HTTP, HTTPS), HTTP method
   // (e.g., GET, POST), and the HTTP Host header respectively.
   //
-  // *Note 2:* _uri_ can be used to perform URL matches. For URL matches
-  // (_uri_), only prefix and exact matches are
-  // supported. For other HTTP headers, exact, prefix and ECMA style
+  // *Note 2:* _uri_ can be used to perform URL matches. 
+  // For all HTTP headers including _uri_, exact, prefix and ECMA style
   // regular expression matches are supported.
   map<string, StringMatch> headers = 1;
 }
@@ -251,7 +250,7 @@ message MatchRequest {
 message DestinationWeight {
   // Optional destination uniquely identifies the destination service. If not
   // specified, the value is inherited from the parent route rule.
-  string destination = 1;
+  IstioService destination = 1;
 
   // Service version identifier for the destination service.
   // (-- N.B. The map is used instead of pstruct due to lack of serialization support
