@@ -53,6 +53,12 @@ message CheckRequest {
 
   // The individual quotas to allocate
   map<string, QuotaParams> quotas = 4 [(gogoproto.nullable) = false];
+
+  // If true, server should check quota requirements, return the result
+  // in quota_requirements fields in the CheckResponse.
+  // If true, "quotas" field is ignored, server should charge quotas based on the new
+  // quota requirements, and return the charging results in "quotas" fields in CheckResponse.
+  bool check_quota_requirement = 5;
 }
 
 message CheckResponse {
@@ -93,11 +99,35 @@ message CheckResponse {
     ReferencedAttributes referenced_attributes = 5 [(gogoproto.nullable) = false];
   }
 
+  message QuotaRequirement {
+    message Requirement {
+      // the quota metric name.
+      string name = 1;
+
+      // The amount to charge.
+      int64 amount = 2;
+    }
+
+    // Return required qutoas and their amounts.
+    // Empty list is a valid result. It means quota is not required for the call.
+    repeated Requirement requirements = 1;
+
+    // The amount of time for which this result can be considered valid.
+    google.protobuf.Duration valid_duration = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
+
+    // The total set of attributes that were used in producing the result
+    // Client should use used attributes to calculate key for caching the result.
+    ReferencedAttributes referenced_attributes = 3 [(gogoproto.nullable) = false];
+  }
+
   // The precondition check results.
   PreconditionResult precondition = 2 [(gogoproto.nullable) = false];
 
   // The resulting quota, one entry per requested quota.
   map<string, QuotaResult> quotas = 3 [(gogoproto.nullable) = false];
+
+  // Return quota requirements.
+  QuotaRequirement quota_requirements = 4;
 }
 
 // Describes the attributes that were used to determine the response.
