@@ -134,6 +134,9 @@ message RouteRule {
 
   //(-- L4 fault injection policy applies to Tcp/Udp (not HTTP) traffic --)
   L4FaultInjection l4_fault = 11;
+
+  //Decorator to enhance the observability information produced by the route
+  Decorator decorator = 12;
 }
 
 // IstioService identifies a service and optionally service version.
@@ -339,6 +342,31 @@ message HTTPRewrite {
 
   // rewrite the Authority/Host header with this value.
   string authority = 2;
+}
+
+// Decorator can be used to enhance observability information
+// reported about the service route invocations.
+//
+//     metadata:
+//       name: my-rule
+//       namespace: default
+//     spec:
+//       destination:
+//         name: ratings
+//       match:
+//         request:
+//           headers:
+//             uri:
+//               prefix: /ratings
+//       decorator:
+//         operation: get_ratings
+//       route:
+//       - labels:
+//           version: v1
+//
+message Decorator {
+  // the operation name to associate with the route.
+  string operation = 1;
 }
 
 // Describes how to match a given string in HTTP headers. Match is case-sensitive.
