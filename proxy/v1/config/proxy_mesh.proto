@@ -85,6 +85,10 @@ message ProxyConfig {
   // Authentication policy defines the global switch to control authentication
   // for Envoy-to-Envoy communication for infra components Mixer and Pilot.
   AuthPolicy infra_auth_policy = 13;
+
+  // Address of the mixer service (e.g. _istio-mixer:9090_).
+  // Used by the proxy in front of mixer
+  string mixer_address = 14;
 }
 
 
