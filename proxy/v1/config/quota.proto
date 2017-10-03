@@ -30,13 +30,11 @@ package istio.proxy.v1.config;
 //         namespace: my-namespace # optional (default is metadata namespace field)
 //       config:
 //         - rules
-//           match:
-//             api.operation:
-//               exact: create_book
-//           quota: request_count
-//           amount: 1
+//           - quotas:
+//               quota: request_count
+//               amount: 1
 //
-// Example2, For HTTP POST requests and path are prefixed with "//books",
+// Example2, For HTTP POST requests and path are prefixed with "/books" or "/shelves"
 //    charge two quotas:
 //    1) write_count of 1 mount
 //    2) request_count of 5 amount.
@@ -46,35 +44,39 @@ package istio.proxy.v1.config;
 //         name: foo-service
 //         namespace: my-namespace # optional (default is metadata namespace field)
 //       config:
-//         - rules
-//           match:
-//             request.headers.path:
-//               prefix: //books
-//             request.http_method:
-//               exact: POST
-//           quota: write_count
-//           amount: 1
-//         - rules
-//           match:
-//             request.headers.path:
-//               prefix: //books
-//             request.http_method:
-//               exact: POST
-//           quota: request_count
-//           amount: 5
-//
+//         - rules:
+//           - match_or:
+//               match_and:
+//                 request.headers.path:
+//                   prefix: /books
+//                 request.http_method:
+//                   exact: POST
+//           - match_or:
+//               match_and:
+//                 request.headers.path:
+//                   prefix: /shelves
+//                 request.http_method:
+//                   exact: POST
+//           - quotas:
+//               quota: write_count
+//               amount: 1
+//           - quotas:
+//               quota: request_count
+//               amount: 5
 
-// Quota specifies quota runtime config stored in CRD.
-message Quota {
-  // REQUIRED: Destination uniquely identifies the destination service targeted
-  // for this quota rule.
+// QuotaSpec specifies quota runtime specification stored in CRD.
+message QuotaSpec {
+  // REQUIRED: Destination uniquely identifies the destination service
+  // targeted for this quota spec.
   // For Ingress proxy, it is the external DNS name for the mesh.
   // For side car porxy, it is the backend service of the proxy.
-  // Pilot uses this field to distribute the Quota config to Proxy.
+  // Pilot uses this field to identify which proxy to distribute the
+  // Quota config to.
+  // It is defined in route_rule.proto
   IstioService destination = 1;
 
   // Quota config.
-  QuotaConfig config = 2
+  QuotaConfig config = 2;
 }
 
 // Specifies quota config used by Proxy.
@@ -86,16 +88,28 @@ message QuotaConfig {
 
 // QuotaRule specifies a quota rule
 message QuotaRule {
+  // If empty, match all request.
+  // The final result is "OR" of all match_or results.
+  repeated MatchAnd match_or = 1;
+
+  // The list of quotas to charge.
+  repeated Quota quotas = 2;
+}
+
+// MatchAnd specifies multiple conditions.
+// The final result is "AND" of all condition results.
+message MatchAnd {
   // Map of attribute names to StringMatch type.
   // Each map element specifies one condition to match.
-  // All conditions have to be satisfied.
-  // If empty, match all request.
-  map<string, StringMatch> match = 1;
+  // StringMatch is defined in route_rule.proto
+  map<string, StringMatch> match_and = 1;
+}
 
+message Quota {
   // The quota name to charge
-  string quota = 2;
+  string quota = 1;
 
   // The quota amount to charge
-  int64  amount = 3;
+  int64  amount = 2;
 }
 
