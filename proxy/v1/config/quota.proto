@@ -1,0 +1,101 @@
+// Copyright 2017 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "proxy/v1/config/route_rule.proto";
+
+package istio.proxy.v1.config;
+
+// Specifies a runtime quota rule.
+//  * Use Istio attributes to match match requests
+//  * Specifies quota name and amount for matched requests.
+//
+// Example1, use "request_count" quota with 1 amount for all requests.
+//
+//     spec:
+//       destination:
+//         name: foo-service
+//         namespace: my-namespace # optional (default is metadata namespace field)
+//       config:
+//         - rules
+//           match:
+//             api.operation:
+//               exact: create_book
+//           quota: request_count
+//           amount: 1
+//
+// Example2, For HTTP POST requests and path are prefixed with "//books",
+//    charge two quotas:
+//    1) write_count of 1 mount
+//    2) request_count of 5 amount.
+//
+//     spec:
+//       destination:
+//         name: foo-service
+//         namespace: my-namespace # optional (default is metadata namespace field)
+//       config:
+//         - rules
+//           match:
+//             request.headers.path:
+//               prefix: //books
+//             request.http_method:
+//               exact: POST
+//           quota: write_count
+//           amount: 1
+//         - rules
+//           match:
+//             request.headers.path:
+//               prefix: //books
+//             request.http_method:
+//               exact: POST
+//           quota: request_count
+//           amount: 5
+//
+
+// Quota specifies quota runtime config stored in CRD.
+message Quota {
+  // REQUIRED: Destination uniquely identifies the destination service targeted
+  // for this quota rule.
+  // For Ingress proxy, it is the external DNS name for the mesh.
+  // For side car porxy, it is the backend service of the proxy.
+  // Pilot uses this field to distribute the Quota config to Proxy.
+  IstioService destination = 1;
+
+  // Quota config.
+  QuotaConfig config = 2
+}
+
+// Specifies quota config used by Proxy.
+// This message will be send to Proxy in Envoy Mixer config.
+message QuotaConfig {
+  // A list of Quota rules.
+  repeated QuotaRule rules = 1;
+}
+
+// QuotaRule specifies a quota rule
+message QuotaRule {
+  // Map of attribute names to StringMatch type.
+  // Each map element specifies one condition to match.
+  // All conditions have to be satisfied.
+  // If empty, match all request.
+  map<string, StringMatch> match = 1;
+
+  // The quota name to charge
+  string quota = 2;
+
+  // The quota amount to charge
+  int64  amount = 3;
+}
+
