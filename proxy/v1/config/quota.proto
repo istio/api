@@ -18,16 +18,15 @@ import "proxy/v1/config/route_rule.proto";
 
 package istio.proxy.v1.config;
 
-// Specifies a runtime quota rule.
-//  * Use Istio attributes to match match requests
-//  * Specifies quota name and amount for matched requests.
+// Specifies runtime quota rules.
+//  * Uses Istio attributes to match individual requests
+//  * Specifies list of quotas to use for matched requests.
 //
 // Example1, use "request_count" quota with 1 amount for all requests.
 //
 //     spec:
 //       destination:
 //         name: foo-service
-//         namespace: my-namespace # optional (default is metadata namespace field)
 //       config:
 //         - rules
 //           - quotas:
@@ -36,13 +35,12 @@ package istio.proxy.v1.config;
 //
 // Example2, For HTTP POST requests and path are prefixed with "/books" or "/shelves"
 //    charge two quotas:
-//    1) write_count of 1 mount
+//    1) write_count of 1 amount
 //    2) request_count of 5 amount.
 //
 //     spec:
 //       destination:
 //         name: foo-service
-//         namespace: my-namespace # optional (default is metadata namespace field)
 //       config:
 //         - rules:
 //           - match:
@@ -64,27 +62,26 @@ package istio.proxy.v1.config;
 //               quota: request_count
 //               amount: 5
 
-// QuotaSpec specifies quota runtime specification stored in CRD.
+// Specifies quota runtime specification stored in CRD.
 message QuotaSpec {
   // REQUIRED: Destination uniquely identifies the destination service
   // targeted for this quota spec.
   // For Ingress proxy, it is the external DNS name for the mesh.
-  // For side car porxy, it is the backend service of the proxy.
-  // It is defined in route_rule.proto
+  // For sidecar porxy, it is the backend service of the proxy.
   IstioService destination = 1;
 
   // Quota config.
   QuotaConfig config = 2;
 }
 
-// Specifies quota config used by Proxy.
-// This message will be send to Proxy in Envoy Mixer config.
+// Determines the quotas used for individual requests.
 message QuotaConfig {
   // A list of Quota rules.
   repeated QuotaRule rules = 1;
 }
 
-// QuotaRule specifies a quota rule
+// Specifies a rule with list of matches and list of quotas
+// If any of matches is satisfied, the list of quotas will be used.
 message QuotaRule {
   // If empty, match all request.
   // The final result is "OR" of all match results.
@@ -94,7 +91,7 @@ message QuotaRule {
   repeated Quota quotas = 2;
 }
 
-// MatchClause specifies a match clause with multiple conditions.
+// Specifies a match clause with multiple conditions.
 // The final result is "AND" of all condition results.
 message MatchClause {
   // Map of attribute names to StringMatch type.
@@ -103,6 +100,7 @@ message MatchClause {
   map<string, StringMatch> clause = 1;
 }
 
+// Specifies a quota to use with quota name and amount.
 message Quota {
   // The quota name to charge
   string quota = 1;
