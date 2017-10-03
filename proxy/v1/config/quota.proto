@@ -96,7 +96,6 @@ message QuotaRule {
 message MatchClause {
   // Map of attribute names to StringMatch type.
   // Each map element specifies one condition to match.
-  // StringMatch is defined in route_rule.proto
   map<string, StringMatch> clause = 1;
 }
 
