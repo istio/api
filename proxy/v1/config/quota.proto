@@ -45,14 +45,14 @@ package istio.proxy.v1.config;
 //         namespace: my-namespace # optional (default is metadata namespace field)
 //       config:
 //         - rules:
-//           - match_or:
-//               match_and:
+//           - match:
+//               clause:
 //                 request.headers.path:
 //                   prefix: /books
 //                 request.http_method:
 //                   exact: POST
-//           - match_or:
-//               match_and:
+//           - match:
+//               clause:
 //                 request.headers.path:
 //                   prefix: /shelves
 //                 request.http_method:
@@ -70,8 +70,6 @@ message QuotaSpec {
   // targeted for this quota spec.
   // For Ingress proxy, it is the external DNS name for the mesh.
   // For side car porxy, it is the backend service of the proxy.
-  // Pilot uses this field to identify which proxy to distribute the
-  // Quota config to.
   // It is defined in route_rule.proto
   IstioService destination = 1;
 
@@ -89,20 +87,20 @@ message QuotaConfig {
 // QuotaRule specifies a quota rule
 message QuotaRule {
   // If empty, match all request.
-  // The final result is "OR" of all match_or results.
-  repeated MatchAnd match_or = 1;
+  // The final result is "OR" of all match results.
+  repeated MatchClause match = 1;
 
   // The list of quotas to charge.
   repeated Quota quotas = 2;
 }
 
-// MatchAnd specifies multiple conditions.
+// MatchClause specifies a match clause with multiple conditions.
 // The final result is "AND" of all condition results.
-message MatchAnd {
+message MatchClause {
   // Map of attribute names to StringMatch type.
   // Each map element specifies one condition to match.
   // StringMatch is defined in route_rule.proto
-  map<string, StringMatch> match_and = 1;
+  map<string, StringMatch> clause = 1;
 }
 
 message Quota {
