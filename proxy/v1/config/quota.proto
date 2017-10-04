@@ -81,7 +81,7 @@ message QuotaConfig {
 }
 
 // Specifies a rule with list of matches and list of quotas
-// If any of matches is satisfied, the list of quotas will be used.
+// If any clause matched, the list of quotas will be used.
 message QuotaRule {
   // If empty, match all request.
   // The final result is "OR" of all match results.
