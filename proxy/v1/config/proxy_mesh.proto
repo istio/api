@@ -91,7 +91,7 @@ message ProxyConfig {
   string mixer_address = 14;
 
   // Pilot subject alternate name used for mutula TLS
-  repeated string pilot_san = 14;
+  repeated string pilot_san = 15;
 }
 
 
