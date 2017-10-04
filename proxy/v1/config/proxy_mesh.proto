@@ -89,6 +89,9 @@ message ProxyConfig {
   // Address of the mixer service (e.g. _istio-mixer:9090_).
   // Used by the proxy in front of mixer
   string mixer_address = 14;
+
+  // Pilot subject alternate name used for mutula TLS
+  repeated string pilot_san = 14;
 }
 
 
