@@ -1,0 +1,75 @@
+// Copyright 2017 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+package istio.proxy.v1.config;
+
+// Specifies service IDL to generate API attributes defined in
+//  https://goo.gl/3WTUfW
+
+// Specifies service IDL specification stored in CRD.
+message ServiceIDLSpec {
+  // REQUIRED: Destination uniquely identifies the destination service
+  // targeted for this quota spec.
+  // For Ingress proxy, it is the external DNS name for the mesh.
+  // For sidecar porxy, it is the backend service of the proxy.
+  IstioService destination = 1;
+
+  // Service IDL.
+  ServiceIDL service = 2;
+}
+
+// Determines the quotas used for individual requests.
+message ServiceIDL {
+  // service name, for api.service attribute
+  // For OpenAPI, it is from "title" inside "Info" object.
+  string name = 1;
+
+  // service version, for api.version attribute
+  // For OpenAPI, it is from "version" inside "Info" object.
+  string version = 2;
+  
+  // A list of Path rules.
+  repeated PathPattern paths = 3;
+}
+
+// Specifies a URL path pattern to map to an API operation.
+message PathPattern {
+  // If the path pattern is matched, the api.operation value.
+  string operation = 1;
+  
+  // Determines the URL pattern to match. This pattern can be
+  // used with any of the {get|put|post|delete|patch} methods.
+  // For gRPC, it will use:
+  //    post = /service_name/method
+  oneof pattern {
+
+    // Used for listing and getting information about resources.
+    string get = 2;
+
+    // Used for updating a resource.
+    string put = 3;
+
+    // Used for creating a resource.
+    string post = 4;
+
+    // Used for deleting a resource.
+    string delete = 5;
+
+    // Used for updating a resource.
+    string patch = 6;
+  }		      
+}
+
