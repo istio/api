@@ -28,15 +28,19 @@ package istio.proxy.v1.config;
 //       destination:
 //         name: foo-service
 //       service:
-//         - attributes
+//         attributes
 //            api.service: FOO
 //            api.version: 0.2.7
 //         - patterns:
-//            get: /books/{*}
-//            api.operation: get_book_with_id
+//            http_method: GET
+//            path: /books/{id}
+//            attributes:
+//              api.operation: get_book_with_id
 //         - patterns:
-//            post: /books
-//            api.operation: create_a new_book
+//            http_method: POST
+//            path: /books
+//            attributes:
+//              api.operation: create_a new_book
 //
 // Example2:  Two APIs HTTP service with different prefix /foo and /bar.
 //
@@ -45,25 +49,33 @@ package istio.proxy.v1.config;
 //         name: foo-service
 //       service:
 //         - patterns:
-//            get: /foo/books/{*}
-//            api.operation: get_book_with_id
-//            api.service: FOO
-//            api.version: 0.2.7
+//            http_method: GET
+//            path: /foo/books/{*}
+//            attributes:
+//              api.operation: get_book_with_id
+//              api.service: FOO
+//              api.version: 0.2.7
 //         - patterns:
-//            post: /foo/books
-//            api.operation: create_a new_book
-//            api.service: FOO
-//            api.version: 0.2.7
+//            http_method: POST
+//            path: /foo/books
+//            attributes:
+//              api.operation: create_a new_book
+//              api.service: FOO
+//              api.version: 0.2.7
 //         - patterns:
-//            get: /bar/books/{*}
-//            api.operation: get_book_with_id
-//            api.service: BAR
-//            api.version: 0.3.1
+//            http_method: GET
+//            path: /bar/books/{id}
+//            attributes:
+//              api.operation: get_book_with_id
+//              api.service: BAR
+//              api.version: 0.3.1
 //         - patterns:
-//            post: /bar/books
-//            api.operation: create_a new_book
-//            api.service: BAR
-//            api.version: 0.3.1
+//            http_method: POST
+//            path: /bar/books
+//            attributes:
+//              api.operation: create_a new_book
+//              api.service: BAR
+//              api.version: 0.3.1
 //
 // Example3:  A gRPC service
 //
@@ -71,15 +83,19 @@ package istio.proxy.v1.config;
 //       destination:
 //         name: foo-service
 //       service:
-//         - attributes
+//         attributes:
 //            api.service: istio.mixer
 //            api.version: 0.2.7
 //         - patterns:
-//            post: /istio.mixer.v1/Check
-//            api.operation: istio.mixer.v1.Check
+//            http_method: POST
+//            path: /istio.mixer.v1/Check
+//            attributes:
+//              api.operation: istio.mixer.v1.Check
 //         - patterns:
-//            post: /istio.mixer.v1/Report
-//            api.operation: istio.mixer.v1.Report
+//            http_method: POST
+//            path: /istio.mixer.v1/Report
+//            attributes:
+//              api.operation: istio.mixer.v1.Report
 //
 //
 // Specifies service IDL with service destination.
@@ -109,28 +125,12 @@ message HttpPattern {
   // attributes that should be generated if the pattern is matched
   map<string, string> attributes = 1;
 
-  // Determines the path pattern to match. This pattern can be
-  // used with any of the {get|put|post|delete|patch} methods.
-  //
-  // For gRPC, it always uses "post" method. Its path will be
-  // /service_name/method. So the "pattern" will be:
-  // post: /service_name/method
-  oneof pattern {
+  // http method in upper case. gRPC is always POST.
+  string http_method = 2;
 
-    // Used for listing and getting information about resources.
-    string get = 2;
-
-    // Used for updating a resource.
-    string put = 3;
-
-    // Used for creating a resource.
-    string post = 4;
-
-    // Used for deleting a resource.
-    string delete = 5;
-
-    // Used for updating a resource.
-    string patch = 6;
-  }		      
+  // URL path without host part. It always starts with a slash /.
+  // It supports OpenAPI path templating, such as /books/{id}
+  // For gRPC, the path is "/service_name/method".
+  string path = 3;
 }
 
