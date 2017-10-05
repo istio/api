@@ -123,6 +123,7 @@ message ServiceIDL {
 // Specifies a HTTP pattern based on path and method.
 message HttpPattern {
   // attributes that should be generated if the pattern is matched
+  // They will overwrite the global attributes defined in ServiceIDL.
   map<string, string> attributes = 1;
 
   // http method in upper case. gRPC is always POST.
