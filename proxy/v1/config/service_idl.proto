@@ -14,6 +14,7 @@
 
 syntax = "proto3";
 
+import "proxy/v1/config/attributes.proto";
 import "proxy/v1/config/route_rule.proto";
 
 package istio.proxy.v1.config;
@@ -115,7 +116,7 @@ message ServiceIDLSpec {
 // Determines the API attributes to be generated based on HTTP patterns.
 message ServiceIDL {
   // global attributes for all requests
-  map<string, string> attributes = 1;
+  Attributes attributes = 1;
 
   // A list of HTTP paterns to match.
   // Either none or one should be matched.
@@ -126,7 +127,7 @@ message ServiceIDL {
 message HttpPattern {
   // attributes that should be generated if the pattern is matched
   // They will overwrite the global attributes defined in ServiceIDL.
-  map<string, string> attributes = 1;
+  Attributes attributes = 1;
 
   // http method in upper case. gRPC is always POST.
   string http_method = 2;
