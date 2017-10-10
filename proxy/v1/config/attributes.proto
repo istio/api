@@ -25,14 +25,7 @@ package istio.proxy.v1.config;
 //  * Client Proxy to pass attributes to server Proxy.
 //
 
-// Specifies attributes to config Istio Proxy.
-// It represents the same data as ::istio:;mixer::v1::attributes defined in
-// mixer/v1/attributes.proto but in different formats.
-// ::istio:;mixer::v1::attributes was defined for transport optimizated.
-// It uses global dictionary and per-message dictionary to compress the data
-// for data transport.
-// This one is targeted for Proxy configuration, not need to compress data,
-// it should be easy to use.
+// Defines attributes for use in proxy configuration.
 message Attributes {
   // A list of attributes.
   repeated Attribute attributes = 1;
@@ -43,6 +36,7 @@ message Attribute {
   // The attribute name.
   string name = 1;
 
+  // The attribute value.
   oneof value {
     string string_value = 2;
     int64 int64_value = 3;
