@@ -13,6 +13,7 @@ gogoslick_proto_library(
     ],
     protos = [":protos"],
     verbose = 0,
+    visibility = ["//visibility:public"],
     with_grpc = False,
     deps = [
         "@com_github_gogo_protobuf//proto:go_default_library",
