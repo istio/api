@@ -49,8 +49,6 @@ go_library(
   deps = [
       "@com_github_gogo_protobuf//proto:go_default_library",
       "@com_github_gogo_protobuf//protoc-gen-gogo/descriptor:go_default_library",
-      "@com_github_gogo_protobuf//sortkeys:go_default_library",
-      "@com_github_gogo_protobuf//types:go_default_library",
       "//mixer/v1/config/descriptor:go_default_library",
   ],
 )
