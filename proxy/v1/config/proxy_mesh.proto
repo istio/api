@@ -88,7 +88,7 @@ message ProxyConfig {
 
   // Address of the mixer service (e.g. __istio-mixer:15004_).
   // Used by the proxy in front of mixer as the port to listen to,
-  // The value is copied here from MeshConfig.mixer_address
+  // The value must be the same as MeshConfig.mixer_address
   string mixer_address = 14;
 
   // Pilot subject alternate name used for mutual TLS
@@ -151,6 +151,7 @@ message MeshConfig {
   // Defines whether to use Istio ingress controller for annotated or all ingress resources.
   IngressControllerMode ingress_controller_mode = 9;
 
+  // TODO AuthPolicy needs to be removed and merged with AuthPolicy defined above  
   enum AuthPolicy {
     // Do not encrypt Envoy to Envoy traffic.
     NONE = 0;
