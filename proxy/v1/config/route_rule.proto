@@ -135,7 +135,8 @@ message RouteRule {
   //(-- L4 fault injection policy applies to Tcp/Udp (not HTTP) traffic --)
   L4FaultInjection l4_fault = 11;
   
-  // Ingress specification exposes a service externally to the cluster
+  // Ingress specification exposes a service externally to the cluster.
+  // Note that if specified, this rule applies to a specific port on the cluster ingress.
   Ingress ingress = 12;
 }
 
