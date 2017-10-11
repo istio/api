@@ -58,6 +58,7 @@ def go_istio_api_dependencies():
 
     X_IMPORTS_BUILD_FILE = """
 package(default_visibility = ["//visibility:public"])
+
 load("@io_bazel_rules_go//go:def.bzl", "go_binary")
 load("@io_bazel_rules_go//go:def.bzl", "go_prefix")
 
@@ -95,32 +96,8 @@ go_binary(
     GOOGLEAPIS_BUILD_FILE = """
 package(default_visibility = ["//visibility:public"])
 
-load("@io_bazel_rules_go//go:def.bzl", "go_prefix")
-go_prefix("github.com/googleapis/googleapis")
-
-load("@org_pubref_rules_protobuf//gogo:rules.bzl", "gogoslick_proto_library")
-
-gogoslick_proto_library(
-    name = "google/rpc",
-    protos = [":google/rpc_protos"],
-    importmap = {
-        "google/protobuf/any.proto": "github.com/gogo/protobuf/types",
-        "google/protobuf/duration.proto": "github.com/gogo/protobuf/types",
-    },
-    imports = [
-        "../../external/com_github_google_protobuf/src",
-    ],
-    inputs = [
-        "@com_github_google_protobuf//:well_known_protos",
-    ],
-    deps = [
-        "@com_github_gogo_protobuf//types:go_default_library",
-    ],
-    verbose = 0,
-)
-
 filegroup(
-    name = "google/rpc_protos",
+    name = "protos",
     srcs = [
         "google/rpc/code.proto",
         "google/rpc/error_details.proto",
@@ -152,6 +129,11 @@ filegroup(
 )
 
 filegroup(
+    name = "error_details_proto",
+    srcs = [ "google/rpc/error_details.proto" ],
+)
+
+filegroup(
     name = "label_proto",
     srcs = [
         "google/api/label.proto",
@@ -173,4 +155,5 @@ filegroup(
         build_file_content = GOOGLEAPIS_BUILD_FILE,
         strip_prefix = "googleapis-" + GOOGLEAPIS_SHA,
         urls = ["https://github.com/googleapis/googleapis/archive/" + GOOGLEAPIS_SHA + ".tar.gz"],
+        workspace_file_content = "",
     )
