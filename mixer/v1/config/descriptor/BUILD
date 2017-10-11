@@ -1,7 +1,7 @@
 load("@org_pubref_rules_protobuf//gogo:rules.bzl", "gogoslick_proto_library")
 
 gogoslick_proto_library(
-    name = "mixer/v1/config/descriptor",
+    name = "go_default_library",
     importmap = {
         "google/protobuf/duration.proto": "github.com/gogo/protobuf/types",
     },
