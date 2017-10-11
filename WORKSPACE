@@ -14,10 +14,6 @@ load("//:api.bzl", "go_istio_api_dependencies")
 
 go_istio_api_dependencies()
 
-load("//:googleapis.bzl", "go_googleapis_repositories")
-
-go_googleapis_repositories()
-
 bind(
     name = "protoc",
     actual = "@com_github_google_protobuf//:protoc",
