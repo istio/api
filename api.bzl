@@ -165,9 +165,12 @@ filegroup(
     ],
 )
 """
-    native.new_git_repository(
+
+    GOOGLEAPIS_SHA = "13ac2436c5e3d568bd0e938f6ed58b77a48aba15" # Oct 21, 2016 (only release pre-dates sha)
+
+    native.new_http_archive(
         name = "com_github_googleapis_googleapis",
         build_file_content = GOOGLEAPIS_BUILD_FILE,
-        commit = "13ac2436c5e3d568bd0e938f6ed58b77a48aba15", # Oct 21, 2016 (only release pre-dates sha)
-        remote = "https://github.com/googleapis/googleapis.git",
-		)
+        strip_prefix = "googleapis-" + GOOGLEAPIS_SHA,
+        urls = ["https://github.com/googleapis/googleapis/archive/" + GOOGLEAPIS_SHA + ".tar.gz"],
+    )
