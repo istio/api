@@ -86,11 +86,11 @@ message ProxyConfig {
   // for Envoy-to-Envoy communication for infra components Mixer and Pilot.
   AuthPolicy infra_auth_policy = 13;
 
-  // Address of the mixer service (e.g. _istio-mixer:9090_).
+  // Address of the mixer service (e.g. _localhost:9090_).
   // Used by the proxy in front of mixer
   string mixer_address = 14;
 
-  // Pilot subject alternate name used for mutula TLS
+  // Pilot subject alternate name used for mutual TLS
   repeated string pilot_san = 15;
 }
 
