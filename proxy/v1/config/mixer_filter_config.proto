@@ -20,32 +20,54 @@ import "proxy/v1/config/service_idl.proto";
 
 package istio.proxy.v1.config;
 
-// Specifies config for Envoy mixer filter.
-message MixerFilterConfig {
-  // Send these attributes to Mixer.
-  Attributes mixer_attributes = 1;
+// Defines mixer control config.
+// It can be defined Envoy route opaque config.
+// This is a per-route config. Defferent upstream routes can have different
+// config.
+// This will be distributed by Envoy RDS.
+message MixerControlConfig {
+  // The flag to call Mixer Check
+  bool call_mixer_check = 1;
+  // The flag to call Mixer Report
+  bool call_mixer_Report = 2;
+  // The flag to forward attributes to upstream.
+  bool enable_forward_attributes = 3;
+
+  // Send these attributes to Mixer in both Check and Report.
+  Attributes mixer_attributes = 4;
 
   // Forward these attributes to upstream.
-  Attributes forward_attributes = 2;
+  Attributes forward_attributes = 5;
 
+  // Service IDL to generate API attributes.
+  ServiceIDL service_idl = 6;
+
+  // Quota config
+  QuotaConfig quota_config = 7;
+}
+
+// Specifies config for Envoy mixer filter.
+// This is a global config for each Mixer filter.
+// This will be distributed by Envoy LDS.
+message MixerFilterConfig {
   // The flag to disable check cache.
-  bool disable_check_cache = 3;
+  bool disable_check_cache = 1;
   // The flag to disable quota cache.
-  bool disable_quota_cache = 4;
+  bool disable_quota_cache = 2;
   // The flag to disable report batch.
-  bool disable_report_batch = 5;
+  bool disable_report_batch = 3;
 
   // Specifies the policy when failed to connect to Mixer server.
   // valid values are: [open|close]
-  string network_fail_policy = 6;
+  string network_fail_policy = 4;
 
   // The flag to disable check/quota calls for TCP filter.
-  bool disable_tcp_check_calls = 7;
+  bool disable_tcp_check_calls = 5;
 
-  // Service IDL to generate API attributes.
-  ServiceIDL service_idl = 8;
-
-  // Quota config
-  QuotaConfig quota_config = 9;
+  // Specifies the default control config.
+  // MixerControlConfig can be defined in Envoy http route opaque config too.
+  // If so , "mixer_attributes" and "forward_attributes" fields will be
+  // conbined, and other fields will over-write; route specific config will
+  // over-write this default one.
+  MixerControlConfig control_config = 6;
 }
-
