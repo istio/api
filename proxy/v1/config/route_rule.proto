@@ -134,6 +134,27 @@ message RouteRule {
 
   //(-- L4 fault injection policy applies to Tcp/Udp (not HTTP) traffic --)
   L4FaultInjection l4_fault = 11;
+  
+  // Ingress specification exposes a service externally to the cluster
+  Ingress ingress = 12;
+}
+
+// Ingress specification for exposing a destination port externally
+message Ingress {
+  // REQUIRED: Port to expose the destination service on.
+  int32 port = 1;
+  
+  // Optional TLS secret path to apply on the exposed port.
+  string tls_secret = 2;
+
+  // REQUIRED: Destination port identifies a port on the destination service for routing.
+  oneof destination_service_port {
+    // Identifies the destination service port by value
+    int32 destination_port = 3;
+
+    // Identifies the destination service port by name
+    string destination_port_name = 4;
+  }
 }
 
 // IstioService identifies a service and optionally service version.
