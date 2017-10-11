@@ -44,12 +44,12 @@ genrule(
 )
 
 go_library(
-  name = "go_default_library",
-  visibility = ["//visibility:public"],
-  srcs = ["fixed_cfg.pb.go"],
-  deps = [
-      "@com_github_gogo_protobuf//proto:go_default_library",
-      "@com_github_gogo_protobuf//protoc-gen-gogo/descriptor:go_default_library",
-      "//mixer/v1/config/descriptor:go_default_library",
-  ],
+    name = "go_default_library",
+    visibility = ["//visibility:public"],
+    srcs = ["fixed_cfg.pb.go"],
+    deps = [
+        "@com_github_gogo_protobuf//proto:go_default_library",
+        "@com_github_gogo_protobuf//protoc-gen-gogo/descriptor:go_default_library",
+        "//mixer/v1/config/descriptor:go_default_library",
+    ],
 )
