@@ -85,7 +85,7 @@ message QuotaConfig {
 message QuotaRule {
   // If empty, match all request.
   // The final result is "OR" of all match results.
-  repeated MatchClause match = 1;
+  repeated AttributeMatch match = 1;
 
   // The list of quotas to charge.
   repeated Quota quotas = 2;
@@ -93,7 +93,7 @@ message QuotaRule {
 
 // Specifies a match clause with multiple conditions.
 // The final result is "AND" of all condition results.
-message MatchClause {
+message AttributeMatch {
   // Map of attribute names to StringMatch type.
   // Each map element specifies one condition to match.
   map<string, StringMatch> clause = 1;
