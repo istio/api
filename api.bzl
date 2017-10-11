@@ -102,11 +102,7 @@ load("@org_pubref_rules_protobuf//gogo:rules.bzl", "gogoslick_proto_library")
 
 gogoslick_proto_library(
     name = "google/rpc",
-    protos = [
-        "google/rpc/code.proto",
-        "google/rpc/error_details.proto",
-        "google/rpc/status.proto",
-    ],
+    protos = [":google/rpc_protos"],
     importmap = {
         "google/protobuf/any.proto": "github.com/gogo/protobuf/types",
         "google/protobuf/duration.proto": "github.com/gogo/protobuf/types",
@@ -121,6 +117,15 @@ gogoslick_proto_library(
         "@com_github_gogo_protobuf//types:go_default_library",
     ],
     verbose = 0,
+)
+
+filegroup(
+    name = "google/rpc_protos",
+    srcs = [
+        "google/rpc/code.proto",
+        "google/rpc/error_details.proto",
+        "google/rpc/status.proto",
+    ],
 )
 
 load("@org_pubref_rules_protobuf//cpp:rules.bzl", "cc_proto_library")
@@ -165,4 +170,4 @@ filegroup(
         build_file_content = GOOGLEAPIS_BUILD_FILE,
         commit = "13ac2436c5e3d568bd0e938f6ed58b77a48aba15", # Oct 21, 2016 (only release pre-dates sha)
         remote = "https://github.com/googleapis/googleapis.git",
-    )
+		)
