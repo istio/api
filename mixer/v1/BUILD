@@ -21,12 +21,7 @@ gogoslick_proto_library(
         "@com_github_googleapis_googleapis//:status_proto",
         "@com_github_gogo_protobuf//gogoproto:go_default_library_protos",
     ],
-    protos = [
-        "attributes.proto",
-        "check.proto",
-        "report.proto",
-        "service.proto",
-    ],
+    protos = [":protos"],
     verbose = 0,
     visibility = ["//visibility:public"],
     with_grpc = True,
@@ -36,6 +31,17 @@ gogoslick_proto_library(
         "@com_github_gogo_protobuf//types:go_default_library",
         "@com_github_googleapis_googleapis//:google/rpc",
     ],
+)
+
+filegroup(
+    name = "protos",
+    srcs = [
+        "attributes.proto",
+        "check.proto",
+        "report.proto",
+        "service.proto",
+    ],
+    visibility = ["//visibility:public"],
 )
 
 filegroup(
