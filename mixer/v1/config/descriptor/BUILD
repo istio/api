@@ -7,6 +7,7 @@ gogoslick_proto_library(
     },
     imports = [
         "external/com_github_google_protobuf/src",
+        "../../external/com_github_google_protobuf/src",
     ],
     inputs = [
         "@com_github_google_protobuf//:well_known_protos",

@@ -17,6 +17,7 @@ gogo_proto_compile(
     },
     imports = [
         "external/com_github_google_protobuf/src",
+        "../../external/com_github_google_protobuf/src",
     ],
     inputs = [
         "//mixer/v1/config/descriptor:protos",
