@@ -26,6 +26,13 @@ gogoslick_proto_library(
 
 filegroup(
     name = "protos",
-    srcs = glob(["*.proto"]),
+    srcs = [
+        "log_entry_descriptor.proto",
+        "metric_descriptor.proto",
+        "monitored_resource_descriptor.proto",
+        "principal_descriptor.proto",
+        "quota_descriptor.proto",
+        "value_type.proto",
+    ],
     visibility = ["//visibility:public"],
 )
