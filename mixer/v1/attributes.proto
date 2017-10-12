@@ -55,6 +55,10 @@ option (gogoproto.gostring_all) = false;
 // in this message.
 //
 // Defines a list of attributes in uncompressed format.
+// Following places may use this message:
+// 1) Configure Istio/Proxy with static per-proxy attributes, such as source.uid.
+// 2) Service IDL definition to extract api attributes for active requests.
+// 3) Forward attributes from client proxy to server proxy for HTTP requests.
 message UncompressedAttributes {
   // A list of attributes.
   repeated Attribute attributes = 1;
