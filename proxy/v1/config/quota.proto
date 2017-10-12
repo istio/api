@@ -1,0 +1,174 @@
+// Copyright 2017 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "proxy/v1/config/route_rule.proto";
+
+package istio.proxy.v1.config;
+
+// Specifies runtime quota rules.
+//  * Uses Istio attributes to match individual requests
+//  * Specifies list of quotas to use for matched requests.
+//
+// Example1, use "request_count" quota with 1 amount for all requests.
+//
+//     spec:
+//       destination:
+//         name: foo-service
+//       config:
+//         - rules
+//           - quotas:
+//               quota: request_count
+//               amount: 1
+//
+// Example2, For HTTP POST requests and path are prefixed with "/books" or "/shelves"
+//    charge two quotas:
+//    1) write_count of 1 amount
+//    2) request_count of 5 amount.
+//
+//     spec:
+//       destination:
+//         name: foo-service
+//       config:
+//         - rules:
+//           - match:
+//               clause:
+//                 request.headers.path:
+//                   prefix: /books
+//                 request.http_method:
+//                   exact: POST
+//           - match:
+//               clause:
+//                 request.headers.path:
+//                   prefix: /shelves
+//                 request.http_method:
+//                   exact: POST
+//           - quotas:
+//               quota: write_count
+//               amount: 1
+//           - quotas:
+//               quota: request_count
+//               amount: 5
+
+// Specifies quota runtime specification stored in CRD.
+message QuotaSpec {
+  // REQUIRED: Destination uniquely identifies the destination service
+  // targeted for this quota spec.
+  // For Ingress proxy, it is the external DNS name for the mesh.
+  // For sidecar porxy, it is the backend service of the proxy.
+  IstioService destination = 1;
+
+  // Quota config.
+  QuotaConfig config = 2;
+}
+
+// Determines the quotas used for individual requests.
+message QuotaConfig {
+  // A list of Quota rules.
+  repeated QuotaRule rules = 1;
+}
+
+// Specifies a rule with list of matches and list of quotas
+// If any clause matched, the list of quotas will be used.
+message QuotaRule {
+  // If empty, match all request.
+  // If any of match is true, it is matched.
+  repeated AttributeMatch match = 1;
+
+  // The list of quotas to charge.
+  repeated Quota quotas = 2;
+}
+
+// Specifies a match clause to match attributes.
+// The final result is "AND" of all condition results.
+message AttributeMatch {
+  // Map of attribute names to AttributeValueMatch type.
+  // Each map element specifies one condition to match.
+  map<string, AttributeValueMatch> clause = 1;
+}
+
+// Describes how to match an attribute value.
+message AttributeValueMatch {
+  oneof match_type {
+    // == string type
+    // exact string match
+    string string_exact = 1;
+    // prefix-based match
+    string string_prefix = 2;
+    // ECMAscript style regex-based match
+    string string_regex = 3;
+
+    // == string map subkey type, value format is subkey/value.
+    // e.g.
+    //    clause:
+    //       request.headers:
+    //          string_map_exact: method/POST
+    // is the same as:
+    //   attributes[requst.headers][method] == POST
+    //
+    // exact string match
+    string string_map_exact = 1;
+    // prefix-based match
+    string string_map_prefix = 2;
+    // ECMAscript style regex-based match
+    string string_map_regex = 3;
+
+    // == bytes type
+    // exact bytes match
+    bytes bytes_exact = 14;
+    // prefix-based match
+    bytes bytes_prefix = 15;
+
+    // bool eq
+    bool bool_eq = 13;
+
+    // int64 less than
+    int64 int64_lt = 3;
+    // int64 less and equal
+    int64 int64_le = 4;
+    // int64 equal
+    int64 int64_eq = 5;
+    // int64 greater than
+    int64 int64_gt = 6;
+    // int64 greater and equal
+    int64 int64_ge = 7;
+    
+    // double less than
+    double double_lt = 8;
+    // double less and equal
+    double double_le = 9;
+    // double equal
+    double double_eq = 10;
+    // double greater than
+    double double_gt = 11;
+    // double greater and equal
+    double double_ge = 12;
+
+    // prefix-based match
+    string string_prefix = 2;
+    // ECMAscript style regex-based match
+    string string_regex = 3;
+  }
+}
+
+// Specifies a quota to use with quota name and amount.
+message Quota {
+  // The quota name to charge
+  string quota = 1;
+
+  // The quota amount to charge
+  int64  amount = 2;
+}
+
