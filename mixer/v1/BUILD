@@ -36,6 +36,7 @@ gogoslick_proto_library(
 cc_proto_library(
     name = "cc_protos",
     deps = [":mixer_protos"],
+    visibility = ["//visibility:public"],
 )
 
 proto_library(

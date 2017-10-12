@@ -1,8 +1,7 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_repository")
 
 def protobuf_repositories(bind=True):
-    # PROTOBUF_SHA = "52ab3b07ac9a6889ed0ac9bf21afd8dab8ef0014" # Oct 4, 2016 (match pubref dep)
-    PROTOBUF_SHA = "c4083bb3d1231f8a94f2f000434e38528bdff64a" # 
+    PROTOBUF_SHA = "c4083bb3d1231f8a94f2f000434e38528bdff64a" # Oct 10, 2017
 
     native.http_archive(
         name = "com_google_protobuf",
@@ -33,33 +32,8 @@ def protobuf_repositories(bind=True):
             actual = "@com_google_protobuf//:protoc",
         )
 
-        native.bind(
-            name = "protobuf",
-            actual = "@com_google_protobuf//:protobuf",
-        )
-
-        native.bind(
-            name = "cc_wkt_protos",
-            actual = "@com_google_protobuf//:cc_wkt_protos",
-        )
-
-        native.bind(
-            name = "cc_wkt_protos_genproto",
-            actual = "@com_google_protobuf//:cc_wkt_protos_genproto",
-        )
-
-        native.bind(
-            name = "protobuf_compiler",
-            actual = "@com_google_protobuf//:protoc_lib",
-        )
-
-        native.bind(
-            name = "protobuf_clib",
-            actual = "@com_google_protobuf//:protoc_lib",
-        )
-
-def go_istio_api_dependencies():
-    protobuf_repositories()
+def go_istio_api_dependencies(bind=True):
+    protobuf_repositories(bind)
 
     native.git_repository(
         name = "org_pubref_rules_protobuf",
