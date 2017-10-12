@@ -83,7 +83,7 @@ message UnCompressedAttributes {
   }
 }
 
-// Definea a list of attributes in compressed format optimized for transport.
+// Defines a list of attributes in compressed format optimized for transport.
 // Within this message, strings are referenced using integer indices into
 // one of two string dictionaries. Positive integers index into the global
 // deployment-wide dictionary, whereas negative integers index into the message-level
