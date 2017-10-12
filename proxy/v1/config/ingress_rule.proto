@@ -18,19 +18,10 @@ import "proxy/v1/config/route_rule.proto";
 
 package istio.proxy.v1.config;
 
-// Ingress rules are routing rules applied to the ingress proxy pool. The
-// ingress proxes serve as the receiving edge proxy for the entire mesh, but
-// can also be addressed from inside the mesh.  Each ingress rule defines a
-// destination service and port. Rules that do not resolve to a service or a
-// port in the mesh should be ignored.
-//
-// The routing rules for the destination service are applied at the ingress
-// proxy. That means the routing rule match conditions are composed and its
-// actions are enforced. The traffic splitting for the destination service is
-// also effective.
-//
-// WARNING: This API is experimental and under active development
-message IngressRule {
+// INTERNAL USE ONLY. Map from K8S ingress into a partial Istio rule
+// which is then used to map into actual route rules. This is an incomplete
+// implementation. Bare minimal Kubernetes ingress specifications are supported.
+message K8SIngressRule {
   // REQUIRED: Port on which the ingress proxy listens and applies the rule.
   int32 port = 1;
 
@@ -65,3 +56,233 @@ message IngressRule {
   }
 }
 
+// Ingress rules are rules applied to the load balancers operating at the
+// edge of the mesh receiving incoming HTTP/TCP connections. These rules
+// describe a set of ports that should be exposed outside the mesh, the type
+// of protocol to use, SNI configuration for the load balancer and a reference to
+// a set of routing rules that shold be applied on the load balancer.
+// Note that the final set of routing rules applicable at the load balancer are still
+// dependant on the source labels associated with a routing rule.
+//
+// For example, the following ingress rule sets up the Envoy sidecar to act as a
+// load balancer exposing port 80 (http), 443 (https), and port 2379 (TCP).
+// While Istio will configure Envoy to listen on these ports, it is the responsibility
+// of the user to ensure that external traffic to these ports are allowed into the
+// mesh.
+//
+//     metadata:
+//       name: my-ingress
+//     spec:
+//       servers:
+//       - port: 80
+//         protocol: HTTP
+//         ruleSelector:
+//         - labels:
+//             istio: ingress-http # only rules that have this label in metadata will be applied.
+//       - port: 443
+//         protocol: HTTP
+//         secure: true #enables HTTPS on this port
+//         ruleSelector:
+//         - labels:
+//             istio: ingress-tls
+//       - port: 2379 #to expose internal service via external port 2379
+//         protocol: TCP
+//         backend:
+//           name: myRedis #service name
+//           port: 1234
+//       secrets:
+//       - host: foo.bar.com
+//         serverSecret: server.crt
+//         clientSecret: client.ca-bundle
+//       - host: example.com
+//         serverSecret: server.crt
+//
+// The following routing rule exposes the "reviews" microservice via the Ingress load balancer
+// by specifying the rule selection label istio: ingress-http
+//
+//     metadata:
+//       name: reviews-versions
+//       namespace: foo
+//       labels:
+//         - istio: ingress-http # Applicable internally as well as at ingress
+//     spec:
+//       destination:
+//         name: reviews
+//       match:
+//         request:
+//           headers:
+//             authority:
+//               exact: foo.bar.com
+//       route:
+//       - labels:
+//           version: v1
+//         weight: 80
+//       - labels:
+//           version: v2
+//         weight: 20
+//
+// Note that the routing rule above will be applicable inside the service mesh as well, to all
+// services invoking the reviews API. The label selectors on the rule are applicable only for
+// the ingress load balancers. In order to restrict the routing rule above to be applicable
+// only at the Ingress load balancer, use the source match option such that the rule will
+// be applicable only to instances belonging to the load balancer.
+//
+// For example, let us assume that the ingress pods/VMs have a label called role: ingress
+//
+//     metadata:
+//       name: reviews-versions-ingress-only
+//       namespace: foo
+//       labels:
+//         - istio: ingress-http # Applicable internally as well as at ingress using rule labels
+//     spec:
+//       destination:
+//         name: reviews
+//       match:
+//         request:
+//           headers:
+//             authority:
+//               exact: foo.bar.com
+//         source:
+//           labels:
+//             role: ingress # Restrict this rule to instances with this label only
+//       route:
+//       - labels:
+//           version: v1
+//         weight: 80
+//       - labels:
+//           version: v2
+//         weight: 20
+//
+message IngressRule {
+  // REQUIRED: Details about the port on which the ingress proxy listens and applies rules
+  repeated Server servers = 1;
+
+  // Optional names of secrets holding the server-side TLS certificate and the CA certificates
+  // to validate client connections.
+  repeated Secret secrets = 2;
+}
+
+// Server describes the properties of the proxy on a given load balancer port.
+// For example,
+//     metadata:
+//       name: my-ingress
+//     spec:
+//       servers:
+//       - port: 80
+//         protocol: HTTP #includes HTTP2|GRPC
+//         ruleSelector:
+//         - labels:
+//             istio: ingress-http # only rules that have this label in metadata will be applied.
+//
+message Server {
+  // REQUIRED: The Port on which Envoy should listen for incoming connections
+  int32 port = 1;
+
+  // Optional: Indicates whether connections to this port should be secured using TLS.
+  // If set to true, Envoy will use the certficates specified in the secrets section. Default
+  // is false.
+  bool secure = 2;
+
+  // REQUIRED: The protocol associated with this port. The protocol should be one of
+  // HTTP|HTTP2|GRPC|MONGO|REDIS|TCP.
+  string protocol = 3;
+
+  // List of routes to expose via this port. Currently applicable only to
+  // HTTP|HTTP2|GRPC.  // Only one of rules or backend is allowed.
+  RuleSelector rule_selector = 4;
+}
+
+// Rule identifies a set of routing rules by name, namespace or by labels.
+// At least one of the fields must be specified for a rule selector to be valid.
+// For example, the following rule selects all rules from "mynamespace" with the label
+// "istio: ingress-http"
+//
+//     metadata:
+//       name: my-ingress
+//       namespace: mynamespace
+//     spec:
+//       servers:
+//       - port: 80
+//         protocol: HTTP
+//         ruleSelector:
+//         - labels:
+//             istio: ingress-http
+//
+// The following rule selects rules from "experiment" namespace and applies them
+// on port 80
+//
+//     metadata:
+//       name: my-ingress
+//       namespace: mynamespace
+//     spec:
+//       servers:
+//       - port: 80
+//         protocol: HTTP
+//         ruleSelector:
+//         - namespace: experiment
+//
+// And the following rule selects a particular rule called newReviews from the
+// experiment namespace and applies it on port 80
+//
+//     metadata:
+//       name: my-ingress
+//       namespace: mynamespace
+//     spec:
+//       servers:
+//       - port: 80
+//         protocol: HTTP
+//         ruleSelector:
+//         - name: newReviews
+//           namespace: experiment
+//
+//
+message RuleSelector {
+  // The short name of the service such as "my-rule".
+  string name = 1;
+
+  // Namespace associated with the rules. Defaults to value of metadata namespace field.
+  string namespace = 2;
+
+  // One or more labels that select a set of rules in the namespace.
+  map<string, string> labels = 3;
+}
+
+// Secret describes the server-side TLS certificate and CA cert (for client authentication)
+// for a particular host exposed by the ingress load balancer. These hosts are not resolved
+// in any way. Its upto the end user to ensure that the DNS resolves these hosts to the
+// ingress load balancer
+//
+// For example, the following is an example of secret specification for port 443
+//     metadata:
+//       name: my-ingress
+//       namespace: mynamespace
+//     spec:
+//       servers:
+//       - port: 443
+//         protocol: HTTP
+//         secure: true
+//         ruleSelector:
+//         - name: newReviews
+//           namespace: experiment
+//       secrets:
+//       - host: foo.bar.com
+//         serverSecret: server.crt
+//         clientSecret: client.ca-bundle
+//       - host: example.com
+//         serverSecret: server.crt
+//
+message Secret {
+  // REQUIRED: The Hostname associated with the server certificate. For wildcard hostname, use *
+  string host = 1;
+
+  // REQUIRED: The name of the secret holding the server-side TLS certificate to use.
+  // It is the responsibility of the underlying platform to mount the secret as a file
+  // under /etc/istio/ingress-certs with the same name as the secret.
+  string server_secret = 2;
+
+  // To use mutual TLS for external clients, specify the name of the secret holding the
+  // CA certificate to validate the client's certificate. It is the responsibility of the
+  // underlying platform to mount the secret as a file under /etc/istio/ingress-certs with
+  // the same name as the secret.
+  string server_secret = 3;
+}
