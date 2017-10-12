@@ -174,6 +174,17 @@ message IngressRule {
 //         - labels:
 //             istio: ingress-http # only rules that have this label in metadata will be applied.
 //
+// Another example
+//     metadata:
+//       name: my-tcp-ingress
+//     spec:
+//       servers:
+//       - port: 2379
+//         protocol: Redis
+//         backend:
+//           name: redis
+//           port: 2379
+
 message Server {
   // REQUIRED: The Port on which Envoy should listen for incoming connections
   int32 port = 1;
@@ -188,8 +199,12 @@ message Server {
   string protocol = 3;
 
   // List of routes to expose via this port. Currently applicable only to
-  // HTTP|HTTP2|GRPC.  // Only one of rules or backend is allowed.
+  // HTTP|HTTP2|GRPC. ONLY ONE OF rules or backend is allowed.
   RuleSelector rule_selector = 4;
+
+  // Forward TCP connections on the ingress port to a specific service within
+  // the mesh. ONLY ONE OF rules or backend is allowed.
+  Backend backend = 5;
 }
 
 // Rule identifies a set of routing rules by name, namespace or by labels.
@@ -245,6 +260,18 @@ message RuleSelector {
 
   // One or more labels that select a set of rules in the namespace.
   map<string, string> labels = 3;
+}
+
+// Backend describes a service with a port that is the recipient of TCP connections
+// arriving at the ingress load balancer. Backends are typically used in the context
+// of TCP services such as Mongo/Redis/plain TCP connections.
+message Backend {
+  // REQUIRED: Name of the service inside the mesh for which connections are being
+  // proxied
+  string name = 1;
+
+  // REQUIRED: Port number to which the connections should be forwarded to.
+  int32 port = 2;
 }
 
 // Secret describes the server-side TLS certificate and CA cert (for client authentication)
