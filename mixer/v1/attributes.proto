@@ -55,7 +55,7 @@ option (gogoproto.gostring_all) = false;
 // in this message.
 //
 // Defines a list of attributes in uncompressed format.
-message UnCompressedAttributes {
+message UncompressedAttributes {
   // A list of attributes.
   repeated Attribute attributes = 1;
 
