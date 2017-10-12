@@ -284,5 +284,5 @@ message Secret {
   // CA certificate to validate the client's certificate. It is the responsibility of the
   // underlying platform to mount the secret as a file under /etc/istio/ingress-certs with
   // the same name as the secret.
-  string server_secret = 3;
+  string client_secret = 3;
 }
