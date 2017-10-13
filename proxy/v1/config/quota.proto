@@ -14,6 +14,7 @@
 
 syntax = "proto3";
 
+import "proxy/v1/config/attribute_match.proto";
 import "proxy/v1/config/route_rule.proto";
 
 package istio.proxy.v1.config;
@@ -22,7 +23,8 @@ package istio.proxy.v1.config;
 //  * Uses Istio attributes to match individual requests
 //  * Specifies list of quotas to use for matched requests.
 //
-// Example1, use "request_count" quota with 1 amount for all requests.
+// Example1:
+// Charge "request_count" quota with 1 amount for all requests.
 //
 //     spec:
 //       destination:
@@ -33,10 +35,11 @@ package istio.proxy.v1.config;
 //               quota: request_count
 //               amount: 1
 //
-// Example2, For HTTP POST requests and path are prefixed with "/books" or "/shelves"
-//    charge two quotas:
-//    1) write_count of 1 amount
-//    2) request_count of 5 amount.
+// Example2:
+// For HTTP POST requests with path are prefixed with /books or
+// api.operation is create_books, charge two quotas:
+// * write_count of 1 amount
+// *request_count of 5 amount.
 //
 //     spec:
 //       destination:
@@ -45,16 +48,16 @@ package istio.proxy.v1.config;
 //         - rules:
 //           - match:
 //               clause:
-//                 request.headers.path:
-//                   prefix: /books
+//                 request.headers:
+//                   string_map_prefix:
+//                     sub_key: path
+//                     value: /books
 //                 request.http_method:
-//                   exact: POST
+//                   string_exact: POST
 //           - match:
 //               clause:
-//                 request.headers.path:
-//                   prefix: /shelves
-//                 request.http_method:
-//                   exact: POST
+//                 api.operation:
+//                   string_exact: create_books
 //           - quotas:
 //               quota: write_count
 //               amount: 1
@@ -80,7 +83,7 @@ message QuotaConfig {
   repeated QuotaRule rules = 1;
 }
 
-// Specifies a rule with list of matches and list of quotas
+// Specifies a rule with list of matches and list of quotas.
 // If any clause matched, the list of quotas will be used.
 message QuotaRule {
   // If empty, match all request.
@@ -89,78 +92,6 @@ message QuotaRule {
 
   // The list of quotas to charge.
   repeated Quota quotas = 2;
-}
-
-// Specifies a match clause to match attributes.
-// The final result is "AND" of all condition results.
-message AttributeMatch {
-  // Map of attribute names to AttributeValueMatch type.
-  // Each map element specifies one condition to match.
-  map<string, AttributeValueMatch> clause = 1;
-}
-
-// Describes how to match an attribute value.
-message AttributeValueMatch {
-  oneof match_type {
-    // == string type
-    // exact string match
-    string string_exact = 1;
-    // prefix-based match
-    string string_prefix = 2;
-    // ECMAscript style regex-based match
-    string string_regex = 3;
-
-    // == string map subkey type, value format is subkey/value.
-    // e.g.
-    //    clause:
-    //       request.headers:
-    //          string_map_exact: method/POST
-    // is the same as:
-    //   attributes[requst.headers][method] == POST
-    //
-    // exact string match
-    string string_map_exact = 1;
-    // prefix-based match
-    string string_map_prefix = 2;
-    // ECMAscript style regex-based match
-    string string_map_regex = 3;
-
-    // == bytes type
-    // exact bytes match
-    bytes bytes_exact = 14;
-    // prefix-based match
-    bytes bytes_prefix = 15;
-
-    // bool eq
-    bool bool_eq = 13;
-
-    // int64 less than
-    int64 int64_lt = 3;
-    // int64 less and equal
-    int64 int64_le = 4;
-    // int64 equal
-    int64 int64_eq = 5;
-    // int64 greater than
-    int64 int64_gt = 6;
-    // int64 greater and equal
-    int64 int64_ge = 7;
-    
-    // double less than
-    double double_lt = 8;
-    // double less and equal
-    double double_le = 9;
-    // double equal
-    double double_eq = 10;
-    // double greater than
-    double double_gt = 11;
-    // double greater and equal
-    double double_ge = 12;
-
-    // prefix-based match
-    string string_prefix = 2;
-    // ECMAscript style regex-based match
-    string string_regex = 3;
-  }
 }
 
 // Specifies a quota to use with quota name and amount.
