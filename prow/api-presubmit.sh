@@ -25,8 +25,3 @@ set -e
 set -u
 # Print commands
 set -x
-
-echo "=== Bazel Build ==="
-bazel version
-bazel build //...
-
