@@ -14,10 +14,10 @@
 
 syntax = "proto3";
 
-import "proxy/v1/config/attribute_match.proto";
-import "proxy/v1/config/route_rule.proto";
-
 package istio.proxy.v1.config;
+
+import "mixer/v1/attribute_match.proto";
+import "proxy/v1/config/route_rule.proto";
 
 // Specifies runtime quota rules.
 //  * Uses Istio attributes to match individual requests
@@ -88,7 +88,7 @@ message QuotaConfig {
 message QuotaRule {
   // If empty, match all request.
   // If any of match is true, it is matched.
-  repeated AttributeMatch match = 1;
+  repeated istio.mixer.v1.AttributeMatch match = 1;
 
   // The list of quotas to charge.
   repeated Quota quotas = 2;
