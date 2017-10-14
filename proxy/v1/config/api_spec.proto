@@ -16,17 +16,17 @@ syntax = "proto3";
 
 package istio.proxy.v1.config;
 
-// APISpec defines the canonical configuration for generating API
-// related attributes from HTTP request based on the method and uri
-// templated path matches. It is sufficient for defining the API
+// APISpec defines the canonical configuration for generating
+// API-related attributes from HTTP requests based on the method and
+// uri templated path matches. It is sufficient for defining the API
 // surface of a service for the purposes of API attribute
 // generation. It is not intended to represent auth, quota,
 // documentation, or other information commonly found in other API
-// specification, e.g. OpenAPI.
+// specifications, e.g. OpenAPI.
 //
 // Existing standards that define operations (or methods) in terms of
 // HTTP methods and paths can be normalized to this format for use in
-// Istio. For example, a simple petstore api described by OpenAPIv2
+// Istio. For example, a simple petstore API described by OpenAPIv2
 // [here](https://github.com/googleapis/gnostic/blob/master/examples/v2.0/yaml/petstore-simple.yaml)
 // can be represented with the following APISpec.
 //
@@ -34,6 +34,7 @@ package istio.proxy.v1.config;
 //     kind: APISpec
 //     metadata:
 //       name: petstore
+//       namespace: default
 //     spec:
 //       attributes:
 //         api.service: petstore.swagger.io
@@ -41,25 +42,25 @@ package istio.proxy.v1.config;
 //       patterns:
 //       - attributes:
 //           api.operation: findPets
-//         httpMethod: get
+//         httpMethod: GET
 //         uriTemplate: /api/pets
 //       - attributes:
 //           api.operation: addPet
-//         httpMethod: post
+//         httpMethod: POST
 //         uriTemplate: /api/pets
 //       - attributes:
 //           api.operation: findPetById
-//         httpMethod: get
+//         httpMethod: GET
 //         uriTemplate: /api/pets/{id}
 //       - attributes:
 //           api.operation: deletePet
-//         httpMethod: delete
+//         httpMethod: DELETE
 //         uriTemplate: /api/pets/{id}
 //
 message APISpec {
   // List of attributes that are generated when *any* of the HTTP
   // patterns match. This list typically includes the "api.service"
-  // and "api.version".
+  // and "api.version" attributes.
   UncompressedAttributes attributes = 1;
 
   // List of HTTP patterns to match.
@@ -74,16 +75,34 @@ message APISpec {
 message APISpecHTTPPattern {
   // List of attributes that are generated if the HTTP request matches
   // the specified http_method and uri_template. This typically
-  // includes the "api.operation".
+  // includes the "api.operation" attribute.
   repeated UncompressedAttributes attributes = 1;
 
-  // HTTP request method to match against. Defined by
-  // https://tools.ietf.org/html/rfc7231#page-21.
+  // HTTP request method to match against as defined by
+  // [rfc7231](https://tools.ietf.org/html/rfc7231#page-21). For
+  // example: GET, HEAD, POST, PUT, DELETE.
   string http_method = 2;
 
-  // URI template to match against. Defined by
-  // https://tools.ietf.org/html/rfc6570.
+  // URI template to match against as defined by
+  // [rfc6570](https://tools.ietf.org/html/rfc6570). For example, the
+  // following are valid URI templates:
+  //
+  //    /pets
+  // 	/pets/{id}
+  // 	/dictionary/{term:1}/{term}
+  // 	/search{?q*,lang}
+  //
   string uri_template = 3;
+}
+
+message APISpecReference {
+  // REQUIRED. The short name of the APISpec. This is the resource
+  // name defined by the metadata name field.
+  string name = 1;
+
+  // Optional namespace of the APISpec. Defaults to the encompassing
+  // APISpecBinding's metadata namespace field.
+  string namespace = 2;
 }
 
 // APISpecBinding defines the binding between APISpecs and one or more
@@ -91,16 +110,6 @@ message APISpecHTTPPattern {
 message APISpecBinding {
   // REQUIRED. One or more services to map the listed APISpec onto.
   repeated IstioService services = 1;
-
-  message APISpecReference {
-    // REQUIRED. The short name of the APISpec. This is the resource
-    // name defined by the metadata name field.
-    string name = 1;
-
-    // Optional namespace of the APISpec. Defaults to the value of the
-    // metadata namespace field.
-    string namespace = 2;
-  }
 
   // REQUIRED. One or more APISpec references that should be mapped to
   // the specified service(s). The aggregate collection of match
