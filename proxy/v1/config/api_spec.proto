@@ -75,6 +75,9 @@ message APISpec {
 //
 //     pattern:
 //     - attributes
+//         api.operation: doFooBar
+//       httpMethod: GET
+//       uriTemplate: /foo/bar
 //
 message APISpecHTTPPattern {
   // List of attributes that are generated if the HTTP request matches
@@ -104,7 +107,6 @@ message APISpecHTTPPattern {
 // IstioService. For example, the following defines an
 // APISpecReference for service `foo` in namespace `bar`.
 //
-//     apispec:
 //     - name: foo
 //       namespace: bar
 //
