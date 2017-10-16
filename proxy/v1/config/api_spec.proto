@@ -72,6 +72,10 @@ message APISpec {
 // generated if both the http_method and uri_template match. In
 // addition, the top-level list of attributes in the APISpec is also
 // generated.
+//
+//     pattern:
+//     - attributes
+//
 message APISpecHTTPPattern {
   // List of attributes that are generated if the HTTP request matches
   // the specified http_method and uri_template. This typically
@@ -87,14 +91,23 @@ message APISpecHTTPPattern {
   // [rfc6570](https://tools.ietf.org/html/rfc6570). For example, the
   // following are valid URI templates:
   //
-  //    /pets
-  // 	/pets/{id}
-  // 	/dictionary/{term:1}/{term}
-  // 	/search{?q*,lang}
+  //     /pets
+  //     /pets/{id}
+  //     /dictionary/{term:1}/{term}
+  //     /search{?q*,lang}
   //
   string uri_template = 3;
 }
 
+// APISpecReference defines a reference to an APISpec. This is
+// typically used for establishing bindings between an APISpec and an
+// IstioService. For example, the following defines an
+// APISpecReference for service `foo` in namespace `bar`.
+//
+//     apispec:
+//     - name: foo
+//       namespace: bar
+//
 message APISpecReference {
   // REQUIRED. The short name of the APISpec. This is the resource
   // name defined by the metadata name field.
@@ -106,7 +119,22 @@ message APISpecReference {
 }
 
 // APISpecBinding defines the binding between APISpecs and one or more
-// IstioService.
+// IstioService. For example, the following establishes a binding
+// between the petstore APISpec and service `foo` in namespace `bar`
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: APISpecBinding
+//     metadata:
+//       name: my-binding
+//       namespace: default
+//     spec:
+//       services:
+//       - name: foo
+//         namespace: bar
+//       apispecs:
+//       - name: petstore
+//         namespace: default
+//
 message APISpecBinding {
   // REQUIRED. One or more services to map the listed APISpec onto.
   repeated IstioService services = 1;
