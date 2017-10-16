@@ -120,7 +120,7 @@ message APISpecReference {
 
 // APISpecBinding defines the binding between APISpecs and one or more
 // IstioService. For example, the following establishes a binding
-// between the petstore APISpec and service `foo` in namespace `bar`
+// between the APISpec `petstore` and service `foo` in namespace `bar`.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: APISpecBinding
