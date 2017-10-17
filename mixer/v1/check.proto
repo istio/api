@@ -53,6 +53,12 @@ message CheckRequest {
 
   // The individual quotas to allocate
   map<string, QuotaParams> quotas = 4 [(gogoproto.nullable) = false];
+
+  // Service_name is the canonical name of the destination service.
+  // It must be unique for a particular mesh.
+  // Service_name determines the configuration resources that are inspected during the request.
+  // If the caller can unambiguously determine the destination service, service_name must be specified.
+  string service_name = 5;
 }
 
 message CheckResponse {
