@@ -60,7 +60,7 @@ message MixerFilterConfig {
     // If network fails, request is passed to the backend.
     FAIL_OPEN = 0;
     // If network fails, request is rejected.
-    FAIL_CLOSE = 0;
+    FAIL_CLOSE = 1;
   }
   // Specifies the policy when failed to connect to Mixer server.
   NetworkFailPolicy network_fail_policy = 4;
