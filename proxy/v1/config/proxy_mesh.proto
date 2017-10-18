@@ -88,6 +88,10 @@ message ProxyConfig {
 
   // Subject alternate name(s) used in the certificate for pilot
   repeated string pilot_san = 14;
+  
+  // File path of custom proxy configuration, currently used by proxies
+  // in front of Mixer and Pilot.
+  string custom_config_file = 15;
 }
 
 
