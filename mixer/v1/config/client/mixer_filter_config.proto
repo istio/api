@@ -58,9 +58,9 @@ message MixerFilterConfig {
 
   enum NetworkFailPolicy {
     // If network fails, request is passed to the backend.
-    OPEN = 0;
+    FAIL_OPEN = 0;
     // If network fails, request is rejected.
-    CLOSE = 0;
+    FAIL_CLOSE = 0;
   }
   // Specifies the policy when failed to connect to Mixer server.
   NetworkFailPolicy network_fail_policy = 4;
