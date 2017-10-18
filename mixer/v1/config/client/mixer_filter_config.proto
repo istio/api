@@ -39,10 +39,10 @@ message MixerControlConfig {
   Attributes forward_attributes = 5;
 
   // API specification to generate API attributes.
-  APISpec api_spec = 6;
+  repeated APISpec api_spec = 6;
 
   // Quota specification to generate quota requirement.
-  QuotaSpec quota_spec = 7;
+  repeated QuotaSpec quota_spec = 7;
 }
 
 // Specifies config for Envoy Mixer HTTP filter and TCP filter.
