@@ -24,10 +24,10 @@ package istio.mixer.v1.config.client;
 // It is per-route for upstream if it is from Envoy route opaque config.
 message MixerControlConfig {
   // If true, call Mixer Check.
-  bool call_mixer_check = 1;
+  bool enable_mixer_check = 1;
 
   // If true, call Mixer Report.
-  bool call_mixer_Report = 2;
+  bool enable_mixer_Report = 2;
 
   // If true, disable forwarding any attributes to upstream.
   bool disable_forward_attributes = 3;
@@ -56,17 +56,17 @@ message MixerFilterConfig {
   // The flag to disable report batch.
   bool disable_report_batch = 3;
 
+  enum NetworkFailPolicy {
+    // If network fails, request is passed to the backend.
+    OPEN = 0;
+    // If network fails, request is rejected.
+    CLOSE = 0;
+  }
   // Specifies the policy when failed to connect to Mixer server.
-  // valid values are: [open|close]
-  string network_fail_policy = 4;
+  NetworkFailPolicy network_fail_policy = 4;
 
   // Specifies the default Mixer control config.
-  // If one is defined in upstream route table, their fields should be combined
-  // with following rules:
-  // * bool fields will be over-write; route config one over-write default one.
-  // * api_spec and quota_spec; if route config one is not empty, use route config one,
-  //   otherwise use the default one.
-  // * mixer_attributes, and forward_attributes; combine both route config one with
-  //   default one.
+  // If one is defined in upstream route table, per-route mixer control config
+  // takes precedence over the default mixer control config.
   MixerControlConfig control_config = 5;
 }
