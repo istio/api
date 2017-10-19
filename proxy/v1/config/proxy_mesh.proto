@@ -85,13 +85,10 @@ message ProxyConfig {
   // Authentication policy defines the global switch to control authentication
   // for Envoy-to-Envoy communication for istio components Mixer and Pilot.
   AuthenticationPolicy control_plane_auth_policy = 13;
-
-  // Subject alternate name(s) used in the certificate for pilot
-  repeated string pilot_san = 14;
   
   // File path of custom proxy configuration, currently used by proxies
   // in front of Mixer and Pilot.
-  string custom_config_file = 15;
+  string custom_config_file = 14;
 }
 
 
