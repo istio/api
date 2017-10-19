@@ -54,7 +54,7 @@ option (gogoproto.gostring_all) = false;
 // Each type of value is encoded into one of the so-called transport types present
 // in this message.
 //
-// Defines a list of attributes in uncompressed format.
+// Defines a map of attributes in uncompressed format.
 // Following places may use this message:
 // 1) Configure Istio/Proxy with static per-proxy attributes, such as source.uid.
 // 2) Service IDL definition to extract api attributes for active requests.
