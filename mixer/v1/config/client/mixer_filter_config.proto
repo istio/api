@@ -62,15 +62,20 @@ message MixerFilterConfig {
 
   // Map of control configuration indexed by destination.service. This
   // is used to support per-service configuration for cases where a
-  // mixerclient serves multiple services.
+  // mixerclient serves multiple services. Takes precedence over 
+  // default_control_configs if destination.service match is found.
   map<string, MixerControlConfig> control_configs = 5;
+  
+  // Default control configuration when no destination.service match is 
+  // found.
+  MixerControlConfig default_control_configs = 6;
 
   // Default attributes to send to Mixer in both Check and
   // Report. This typically includes "destination.ip" and
   // "destination.uid" attributes.
-  Attributes mixer_attributes = 6;
+  Attributes mixer_attributes = 7;
 
   // Default attributes to forward to upstream. This typically
   // includes the "source.ip" and "source.uid" attributes.
-  Attributes forward_attributes = 7;
+  Attributes forward_attributes = 8;
 }
