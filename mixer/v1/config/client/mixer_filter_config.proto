@@ -62,13 +62,12 @@ message MixerFilterConfig {
 
   // Map of control configuration indexed by destination.service. This
   // is used to support per-service configuration for cases where a
-  // mixerclient serves multiple services. Takes precedence over 
-  // default_control_configs if destination.service match is found.
+  // mixerclient serves multiple services. 
   map<string, MixerControlConfig> control_configs = 5;
   
-  // Default control configuration when no destination.service match is 
-  // found.
-  MixerControlConfig default_control_configs = 6;
+  // Default destination service name if none was specified in the 
+  // client request.
+  string default_destination_service = 6;
 
   // Default attributes to send to Mixer in both Check and
   // Report. This typically includes "destination.ip" and
