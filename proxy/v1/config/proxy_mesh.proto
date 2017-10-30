@@ -25,7 +25,7 @@ package istio.proxy.v1.config;
 enum AuthenticationPolicy {
   // Use the policy defined by the parent scope. Should not be used for mesh’s
   // policy.
-  INHERIT = -1;
+  INHERIT = 1000;
 
   // Do not encrypt Envoy to Envoy traffic.
   NONE = 0;
