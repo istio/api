@@ -41,7 +41,7 @@ package istio.proxy.v1.config;
 // *Source* - downstream client (browser or another service) calling the
 // Envoy proxy/sidecar (typically to reach another service).
 //
-// *Destination* - The remote upstream service to which the Envoy proxy/sidecar is
+// *Host/Destination* - The remote upstream service to which the Envoy proxy/sidecar is
 // talking to, on behalf of the source service. There can be one or more
 // service versions for a given service (see the discussion on versions above).
 // Envoy would choose the version based on various routing rules.
@@ -70,16 +70,16 @@ package istio.proxy.v1.config;
 //       name: my-rule
 //       namespace: default # optional (default is "default")
 //     spec:
-//       destination:
+//       host:
 //         name: reviews
-//         namespace: my-namespace # optional (default is metadata namespace field)
+//         domain: my-namespace.svc.cluster.local # optional (default is metadata namespace field)
 //       route:
 //       - labels:
 //           version: v1
 //         weight: 100
 //
 message RouteRule {
-  // REQUIRED: Destination uniquely identifies the destination associated
+  // REQUIRED: Host uniquely identifies the destination associated
   // with this routing rule. This field is applicable for hostname-based
   // resolution for HTTP traffic as well as IP-based resolution for
   // TCP/UDP traffic.
@@ -87,7 +87,7 @@ message RouteRule {
   // *Note:* The route rule destination specification represents all version
   // of the service and therefore the IstioService's labels field MUST be empty.
   //
-  IstioService destination = 1;
+  IstioService host = 1;
 
   // RECOMMENDED. Precedence is used to disambiguate the order of
   // application of rules for the same destination service. A higher number
@@ -96,10 +96,16 @@ message RouteRule {
   // unspecified.
   int32 precedence = 2;
 
-  // Match condtions to be satisfied for the route rule to be
+  // DEPRECATED. Match condtions to be satisfied for the route rule to be
   // activated. If match is omitted, the route rule applies only to HTTP
   // traffic.
   MatchCondition match = 3;
+
+  // One or more match clauses to be used with OR semantics.
+  // i.e. match is true if one of the clauses match. A clause is said to
+  // match if all the conditions in the clause are true. Only one of match
+  // or multimatch can be specified.
+  repeated MatchCondition multimatch = 15;
 
   // REQUIRED (route|redirect). A routing rule can either redirect traffic or
   // forward traffic. The forwarding target can be one of several versions
@@ -130,7 +136,7 @@ message RouteRule {
   // Retry policy for HTTP requests.
   HTTPRetry http_req_retries = 9;
 
-  //Fault injection policy to apply on HTTP traffic
+  // DEPRECATED. Fault injection policy to apply on HTTP traffic
   HTTPFaultInjection http_fault = 10;
 
   //(-- L4 fault injection policy applies to Tcp/Udp (not HTTP) traffic --)
@@ -160,20 +166,24 @@ message IstioService {
   // The short name of the service such as "foo".
   string name = 1;
 
-  // Optional namespace of the service. Defaults to value of metadata namespace field.
+  // DEPRECATED. Optional namespace of the service. Defaults to value of metadata namespace field.
   string namespace = 2;
 
   // Domain suffix used to construct the service FQDN in implementations that support such specification.
   string domain = 3;
 
   // The service FQDN.
-  string service = 4;
+  string fqdn = 4;
 
   // Optional one or more labels that uniquely identify the service version.
-  //
-  // *Note:* When used for a RouteRule destination, labels MUST be empty.
-  //
   map<string, string> labels = 5;
+
+  // The port on which the service is listening for inbound connections.
+  int32 port = 6;
+
+  // IPv4 or IPv6 ip address of destination with optional subnet.
+  // E.g., a.b.c.d/xx form or just a.b.c.d.
+  repeated string address = 7;
 }
 
 // Match condition specifies a set of criterion to be met in order for the
@@ -189,7 +199,7 @@ message IstioService {
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       destination:
+//       host:
 //         name: ratings
 //       match:
 //         source:
@@ -254,7 +264,7 @@ message MatchRequest {
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       destination:
+//       host:
 //         name: reviews
 //       route:
 //       - labels:
@@ -305,7 +315,7 @@ message L4MatchAttributes {
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       destination:
+//       host:
 //         name: ratings
 //       match:
 //         request:
@@ -336,7 +346,7 @@ message HTTPRedirect {
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       destination:
+//       host:
 //         name: ratings
 //       match:
 //         request:
@@ -378,7 +388,7 @@ message StringMatch {
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       destination:
+//       host:
 //         name: ratings
 //       route:
 //       - labels:
@@ -413,7 +423,7 @@ message HTTPTimeout {
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       destination:
+//       host:
 //         name: ratings
 //       route:
 //       - labels:
@@ -455,7 +465,7 @@ message HTTPRetry {
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       destination:
+//       host:
 //         name: ratings
 //       route:
 //       - labels:
@@ -492,4 +502,35 @@ message CorsPolicy {
   // (not the preflight) using credentials. Translates to
   // Access-Control-Allow-Credentials header.
   google.protobuf.BoolValue allow_credentials = 6;
+}
+
+// Fault rules instruct Envoy to inject predictable faults on one more more
+// HTTP requests or TCP connections that match the specified conditions.
+// Fault injection can be used to test the failure recovery capabilities
+// of downstream services.
+message FaultRule {
+  // REQUIRED: Destination uniquely identifies the destination associated
+  // with this routing rule. This field is applicable for hostname-based
+  // resolution for HTTP traffic as well as IP-based resolution for
+  // TCP/UDP traffic.
+  IstioService destination = 1;
+
+  // RECOMMENDED. Precedence is used to disambiguate the order of
+  // application of rules for the same destination service. A higher number
+  // takes priority. If not specified, the value is assumed to be 0.  The
+  // order of application for rules with the same precedence is
+  // unspecified.
+  int32 precedence = 2;
+
+  // One or more match clauses to be used with OR semantics.
+  // i.e. match is true if one of the clauses match. A clause is said to
+  // match if all the conditions in the clause are true. Only one of match
+  // or multimatch can be specified.
+  repeated MatchCondition multimatch = 3;
+
+  // REQUIRED. Fault injection policy to apply on HTTP traffic
+  HTTPFaultInjection http_fault = 10;
+
+  //(-- L4 fault injection policy applies to Tcp/Udp (not HTTP) traffic --)
+  L4FaultInjection l4_fault = 11;
 }
