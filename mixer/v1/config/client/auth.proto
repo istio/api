@@ -94,7 +94,7 @@ message JWT {
   string issuer = 1;
 
   // The list of JWT
-  // [audiences](https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32#section-4.1.3).
+  // [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3).
   // that are allowed to access. A JWT containing any of these
   // audiences will be accepted.
   //
