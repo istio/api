@@ -41,7 +41,7 @@ package istio.proxy.v1.config;
 // *Source* - downstream client (browser or another service) calling the
 // Envoy proxy/sidecar (typically to reach another service).
 //
-// *Host/Destination* - The remote upstream service to which the Envoy proxy/sidecar is
+// *Destination* - The remote upstream service to which the Envoy proxy/sidecar is
 // talking to, on behalf of the source service. There can be one or more
 // service versions for a given service (see the discussion on versions above).
 // Envoy would choose the version based on various routing rules.
@@ -70,16 +70,17 @@ package istio.proxy.v1.config;
 //       name: my-rule
 //       namespace: default # optional (default is "default")
 //     spec:
-//       host:
+//       destination:
 //         name: reviews
-//         domain: my-namespace.svc.cluster.local # optional (default is metadata namespace field)
+//         namespace: my-namespace # optional (default is metadata namespace field)
 //       route:
 //       - labels:
 //           version: v1
 //         weight: 100
-//
+//       properties:
+//         timeout: some-timeout-setting
 message RouteRule {
-  // REQUIRED: Host uniquely identifies the destination associated
+  // REQUIRED: Destination uniquely identifies the destination associated
   // with this routing rule. This field is applicable for hostname-based
   // resolution for HTTP traffic as well as IP-based resolution for
   // TCP/UDP traffic.
@@ -87,7 +88,7 @@ message RouteRule {
   // *Note:* The route rule destination specification represents all version
   // of the service and therefore the IstioService's labels field MUST be empty.
   //
-  IstioService host = 1;
+  IstioService destination = 1;
 
   // RECOMMENDED. Precedence is used to disambiguate the order of
   // application of rules for the same destination service. A higher number
@@ -96,16 +97,10 @@ message RouteRule {
   // unspecified.
   int32 precedence = 2;
 
-  // DEPRECATED. Match condtions to be satisfied for the route rule to be
+  // Match condtions to be satisfied for the route rule to be
   // activated. If match is omitted, the route rule applies only to HTTP
   // traffic.
   MatchCondition match = 3;
-
-  // One or more match clauses to be used with OR semantics.
-  // i.e. match is true if one of the clauses match. A clause is said to
-  // match if all the conditions in the clause are true. Only one of match
-  // or multimatch can be specified.
-  repeated MatchCondition multimatch = 15;
 
   // REQUIRED (route|redirect). A routing rule can either redirect traffic or
   // forward traffic. The forwarding target can be one of several versions
@@ -119,7 +114,7 @@ message RouteRule {
   // redirect to a different URI or Authority.
   HTTPRedirect redirect = 5;
 
-  // Rewrite HTTP URIs and Authority headers. Rewrite cannot be used with
+  // DEPRECATED. Rewrite HTTP URIs and Authority headers. Rewrite cannot be used with
   // Redirect primitive. Rewrite will be performed before forwarding.
   HTTPRewrite rewrite = 6;
 
@@ -130,10 +125,10 @@ message RouteRule {
   // will be rejected.
   bool websocket_upgrade = 7;
 
-  // Timeout policy for HTTP requests.
+  // DEPRECATED. Timeout policy for HTTP requests.
   HTTPTimeout http_req_timeout = 8;
 
-  // Retry policy for HTTP requests.
+  // DEPRECATED. Retry policy for HTTP requests.
   HTTPRetry http_req_retries = 9;
 
   // DEPRECATED. Fault injection policy to apply on HTTP traffic
@@ -149,19 +144,31 @@ message RouteRule {
   // Statistics will be generated for the mirrored destination.
   IstioService mirror = 12;
 
-  // Cross-Origin Resource Sharing policy (CORS). Refer to
+  // DEPRECATED. Cross-Origin Resource Sharing policy (CORS). Refer to
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS for
   // further details about cross origin resource sharing.
   CorsPolicy cors_policy = 13;
 
-  // Additional HTTP headers to add before forwarding a request to the
+  // DEPRECATED. Additional HTTP headers to add before forwarding a request to the
   // destnation service.
   map<string, string> append_headers = 14;
+
+  // An array of key value pairs that specify the list of properties applicable to
+  // this route. Keys are well defined property names (e.g., rewrite, timeout, retry,
+  // fault, cors) and values are names of the property rule. If the property does not
+  // exist, it will be ignored. The valid property names are rewrite, timeout, retry,
+  // fault, cors.
+  map<string, string> properties = 15;
 }
 
 // IstioService identifies a service and optionally service version.
-// The FQDN of the service is composed from the name, namespace, and implementation-specific domain suffix
-// (e.g. on Kubernetes, "reviews" + "default" + "svc.cluster.local" -> "reviews.default.svc.cluster.local").
+// The FQDN of the service is composed from the name and implementation-specific domain suffix. When
+// used in the context of a route rule with meta data fields, the namespace associated with the metadata
+// will be automatically inherited as a domain suffix if its not overridden by the domain field in the
+// IstioService specification. Alternatively, a fully qualified domain name can be used to identify the
+// service. Either name+domain or fqdn should be used, but not both.
+// if the 
+// (e.g. on Kubernetes, "reviews" + "default.svc.cluster.local" -> "reviews.default.svc.cluster.local").
 message IstioService {
   // The short name of the service such as "foo".
   string name = 1;
@@ -170,16 +177,33 @@ message IstioService {
   string namespace = 2;
 
   // Domain suffix used to construct the service FQDN in implementations that support such specification.
+  // For example, when running on Kubernetes, the domain field could include the namespace of the service
+  // along with the kubernetes domain suffix: "myns.svc.cluster.local". When running with Consul as the service
+  // registry, the domain suffix could be "service.consul".
   string domain = 3;
 
-  // The service FQDN.
-  string fqdn = 4;
+  // DEPRECATED. The service FQDN.
+  string service = 4;
+
+  // A list of HTTP authorities or FQDNs that comprise the composite
+  // service.  This is applicable to both TCP and HTTP services. Wildcards
+  // are allowed in the FQDNs in the form of "*.foo.com" or
+  // "*-bar.foo.com". Note that the wildcard will not match the empty
+  // string. e.g. "*-bar.foo.com" will match “baz-bar.foo.com” but not
+  // "-bar.foo.com". Additionally, a special entry "*" is allowed which
+  // will match any host/authority header.
+  repeated string fqdn = 8;
 
   // Optional one or more labels that uniquely identify the service version.
   map<string, string> labels = 5;
 
-  // The port on which the service is listening for inbound connections.
-  int32 port = 6;
+  // The ports on which the service is listening for inbound connections.
+  // Comma separated list of names or port numbers. If names are used, the
+  // same name must be used when defining the service in the orchestration
+  // platform.  If ports are omitted, all HTTP ports associated with the
+  // service will be subjected to the associated route rules. Similar
+  // principle applies to TCP ports as well.
+  repeated string port = 6;
 
   // IPv4 or IPv6 ip address of destination with optional subnet.
   // E.g., a.b.c.d/xx form or just a.b.c.d.
@@ -199,7 +223,7 @@ message IstioService {
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       host:
+//       destination:
 //         name: ratings
 //       match:
 //         source:
@@ -216,7 +240,7 @@ message IstioService {
 // MatchCondition CANNOT be empty. At least one source or
 // request header must be specified.
 message MatchCondition {
-  // Identifies the service initiating a connection or a request.
+  // DEPRECATED. Identifies the service initiating a connection or a request.
   IstioService source = 1;
 
   // (-- Set of layer 4 match conditions based on the IP ranges --)
@@ -225,8 +249,30 @@ message MatchCondition {
   // (-- Set of layer 4 match conditions based on the IP ranges --)
   L4MatchAttributes udp = 3 ;
 
-  // Attributes of an HTTP request to match.
+  // DEPRECATED. Attributes of an HTTP request to match.
   MatchRequest request = 4 ;
+
+  // A single match clause. All conditions in a match clause must evaluate to true
+  // in order for the clause to evaluate to true. In other words, the match clause
+  // follows AND semantics.
+  message MatchClause {
+    // Identifies the service initiating a connection or a request.
+    IstioService source = 1;
+
+    // (-- Set of layer 4 match conditions based on the IP ranges --)
+    L4MatchAttributes tcp = 2 ;
+
+    // (-- Set of layer 4 match conditions based on the IP ranges --)
+    L4MatchAttributes udp = 3 ;
+
+    // Attributes of an HTTP request to match.
+    MatchRequest request = 4 ;
+
+  }
+
+  // One or more match clauses to be used with OR semantics.
+  // i.e. match is true if one of the clauses match.
+  repeated MatchClause clause = 5;
 }
 
 // MatchRequest specifies the attributes of an HTTP request to be used for matching a request.
@@ -264,7 +310,7 @@ message MatchRequest {
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       host:
+//       destination:
 //         name: reviews
 //       route:
 //       - labels:
@@ -315,7 +361,7 @@ message L4MatchAttributes {
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       host:
+//       destination:
 //         name: ratings
 //       match:
 //         request:
@@ -343,21 +389,28 @@ message HTTPRedirect {
 // ratings service before making the actual API call.
 //
 //     metadata:
-//       name: my-rule
-//       namespace: default
+//       name: my-rewrite-rule
 //     spec:
-//       host:
-//         name: ratings
-//       match:
-//         request:
-//           headers:
-//             uri:
-//               prefix: /ratings
 //       rewrite:
 //         uri: /v1/bookRatings
 //       route:
 //       - labels:
 //           version: v1
+//
+// This can then be applied via a route rule as follows:
+//
+//     metadata:
+//       name: my-rule
+//       namespace: default
+//     spec:
+//       destination:
+//         name: ratings
+//       match:
+//         request:
+//           headers:
+//             uri: /v1/getProductRatings
+//       properties:
+//         rewrite: my-rewrite-rule
 //
 message HTTPRewrite {
   // rewrite the Path (or the prefix) portion of the URI with this
@@ -382,20 +435,25 @@ message StringMatch {
 }
 
 // Describes HTTP request timeout. For example, the following rule sets a
-// 10 second timeout for calls to the ratings:v1 service
+// 10 second timeout for calls to the ratings service
+//
+//     metadata:
+//       name: global-timeout-setting
+//     spec:
+//       httpReqTimeout:
+//         simpleTimeout:
+//           timeout: 10s
+//
+// This can then be applied via a route rule as follows:
 //
 //     metadata:
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       host:
+//       destination:
 //         name: ratings
-//       route:
-//       - labels:
-//           version: v1
-//       httpReqTimeout:
-//         simpleTimeout:
-//           timeout: 10s
+//       properties:
+//         timeout: global-timeout-setting
 //
 message HTTPTimeout {
   message SimpleTimeoutPolicy {
@@ -417,21 +475,26 @@ message HTTPTimeout {
 
 // Describes the retry policy to use when a HTTP request fails. For
 // example, the following rule sets the maximum number of retries to 3 when
-// calling ratings:v1 service, with a 2s timeout per retry attempt.
+// calling ratings service, with a 2s timeout per retry attempt.
+//
+//     metadata:
+//       name: global-retry-setting
+//     spec:
+//       httpReqRetries:
+//         simpleRetry:
+//           attempts: 3
+//           perTryTimeout: 2s
+//
+// This can then be applied via a route rule as follows:
 //
 //     metadata:
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       host:
+//       destination:
 //         name: ratings
-//       route:
-//       - labels:
-//           version: v1
-//       httpReqRetries:
-//         simpleRetry:
-//           attempts: 3
-//           perTryTimeout: 2s
+//       properties:
+//         retry: global-retry-setting
 //
 message HTTPRetry {
   message SimpleRetryPolicy {
@@ -462,14 +525,8 @@ message HTTPRetry {
 // X-Foo-bar header and sets an expiry period of 1 day.
 //
 //     metadata:
-//       name: my-rule
-//       namespace: default
+//       name: global-cors-policy
 //     spec:
-//       host:
-//         name: ratings
-//       route:
-//       - labels:
-//           version: v1
 //       corsPolicy:
 //         allowOrigin:
 //         - example.com
@@ -480,6 +537,17 @@ message HTTPRetry {
 //         allowHeaders:
 //         - X-Foo-Bar
 //         maxAge: "1d"
+//
+// This can then be applied via a route rule as follows:
+//
+//     metadata:
+//       name: my-rule
+//       namespace: default
+//     spec:
+//       destination:
+//         name: ratings
+//       properties:
+//         cors: global-cors-policy
 //
 message CorsPolicy {
   // The list of origins that are allowed to perform CORS requests. The content will
@@ -502,35 +570,4 @@ message CorsPolicy {
   // (not the preflight) using credentials. Translates to
   // Access-Control-Allow-Credentials header.
   google.protobuf.BoolValue allow_credentials = 6;
-}
-
-// Fault rules instruct Envoy to inject predictable faults on one more more
-// HTTP requests or TCP connections that match the specified conditions.
-// Fault injection can be used to test the failure recovery capabilities
-// of downstream services.
-message FaultRule {
-  // REQUIRED: Destination uniquely identifies the destination associated
-  // with this routing rule. This field is applicable for hostname-based
-  // resolution for HTTP traffic as well as IP-based resolution for
-  // TCP/UDP traffic.
-  IstioService destination = 1;
-
-  // RECOMMENDED. Precedence is used to disambiguate the order of
-  // application of rules for the same destination service. A higher number
-  // takes priority. If not specified, the value is assumed to be 0.  The
-  // order of application for rules with the same precedence is
-  // unspecified.
-  int32 precedence = 2;
-
-  // One or more match clauses to be used with OR semantics.
-  // i.e. match is true if one of the clauses match. A clause is said to
-  // match if all the conditions in the clause are true. Only one of match
-  // or multimatch can be specified.
-  repeated MatchCondition multimatch = 3;
-
-  // REQUIRED. Fault injection policy to apply on HTTP traffic
-  HTTPFaultInjection http_fault = 10;
-
-  //(-- L4 fault injection policy applies to Tcp/Udp (not HTTP) traffic --)
-  L4FaultInjection l4_fault = 11;
 }
