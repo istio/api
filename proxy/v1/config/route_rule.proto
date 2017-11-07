@@ -66,6 +66,8 @@ package istio.proxy.v1.config;
 // For example, a simple rule to send 100% of incoming traffic for a
 // "reviews" service to version "v1" can be specified as follows:
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: my-rule
 //       namespace: default # optional (default is "default")
@@ -219,6 +221,8 @@ message IstioService {
 // service where the URL path starts with /ratings/v2/ and the request
 // contains a "cookie" with value "user=jason",
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: my-rule
 //       namespace: default
@@ -306,6 +310,8 @@ message MatchRequest {
 // instances with the "v2" tag and the remaining traffic (i.e., 75%) to
 // "v1".
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: my-rule
 //       namespace: default
@@ -357,6 +363,8 @@ message L4MatchAttributes {
 // requests for /v1/getProductRatings API on the ratings service to
 // /v1/bookRatings provided by the bookratings service.
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteProperties
 //     metadata:
 //       name: my-rule
 //       namespace: default
@@ -382,12 +390,61 @@ message HTTPRedirect {
   string authority = 2;
 }
  
+// Route properties contain configurations reusable across multiple route rules.
+// Commonly used settings can be collated in a route property. Specific elements
+// of the route property can be referenced by different route rules.
+//
+// For example, the following route property defines a retry and request
+// timeout setting.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteProperty
+//     metadata:
+//       name: common-props
+//     spec:
+//       httpReqTimeout:
+//         simpleTimeout:
+//           timeout: 10s
+//       httpReqRetries:
+//         simpleRetry:
+//           attempts: 3
+//           perTryTimeout: 2s
+//
+message RouteProperties {
+  // Rewrite HTTP URIs and Authority headers. Rewrite cannot be used with
+  // Redirect primitive. Rewrite will be performed before forwarding.
+  HTTPRewrite rewrite = 1;
+
+  // Timeout policy for HTTP requests.
+  HTTPTimeout http_req_timeout = 2;
+
+  // Retry policy for HTTP requests.
+  HTTPRetry http_req_retries = 3;
+
+  // Fault injection policy to apply on HTTP traffic
+  HTTPFaultInjection http_fault = 4;
+
+  //(-- L4 fault injection policy applies to Tcp/Udp (not HTTP) traffic --)
+  L4FaultInjection l4_fault = 5;
+
+  // Cross-Origin Resource Sharing policy (CORS). Refer to
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS for
+  // further details about cross origin resource sharing.
+  CorsPolicy cors_policy = 6;
+
+  // Additional HTTP headers to add before forwarding a request to the
+  // destnation service.
+  map<string, string> append_headers = 7;
+}
+
 // HTTPRewrite can be used to rewrite specific parts of a HTTP request
 // before forwarding the request to the destination. Rewrite primitive can
 // be used only with the DestinationWeights. The following example
 // demonstrates how to rewrite the URL prefix for api call (/ratings) to
 // ratings service before making the actual API call.
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteProperties
 //     metadata:
 //       name: my-rewrite-rule
 //     spec:
@@ -399,6 +456,8 @@ message HTTPRedirect {
 //
 // This can then be applied via a route rule as follows:
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: my-rule
 //       namespace: default
@@ -437,6 +496,8 @@ message StringMatch {
 // Describes HTTP request timeout. For example, the following rule sets a
 // 10 second timeout for calls to the ratings service
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteProperties
 //     metadata:
 //       name: global-timeout-setting
 //     spec:
@@ -446,6 +507,8 @@ message StringMatch {
 //
 // This can then be applied via a route rule as follows:
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: my-rule
 //       namespace: default
@@ -477,6 +540,8 @@ message HTTPTimeout {
 // example, the following rule sets the maximum number of retries to 3 when
 // calling ratings service, with a 2s timeout per retry attempt.
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteProperties
 //     metadata:
 //       name: global-retry-setting
 //     spec:
@@ -487,6 +552,8 @@ message HTTPTimeout {
 //
 // This can then be applied via a route rule as follows:
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: my-rule
 //       namespace: default
@@ -524,6 +591,8 @@ message HTTPRetry {
 // Access-Control-Allow-Credentials header to false. In addition, it only exposes
 // X-Foo-bar header and sets an expiry period of 1 day.
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteProperties
 //     metadata:
 //       name: global-cors-policy
 //     spec:
@@ -540,6 +609,8 @@ message HTTPRetry {
 //
 // This can then be applied via a route rule as follows:
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: my-rule
 //       namespace: default
