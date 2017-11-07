@@ -85,7 +85,7 @@ message APIKey {
 //
 message JWT {
   // Identifies the principal that issued the JWT. See
-  // https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32#section-4.1.1
+  // https://tools.ietf.org/html/rfc7519#section-4.1.1
   // Usually a URL or an email address.
   //
   // Example: https://securetoken.google.com
@@ -98,7 +98,7 @@ message JWT {
   // that are allowed to access. A JWT containing any of these
   // audiences will be accepted.
   //
-  // Any audience will be accepted if the audience list is empty.
+  // The service name will be accepted if audiences is empty.
   //
   // Example:
   //
