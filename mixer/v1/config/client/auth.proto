@@ -18,6 +18,7 @@ package istio.mixer.v1.config.client;
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
+import "google/protobuf/wrappers.proto";
 
 option (gogoproto.goproto_getters_all) = false;
 option (gogoproto.equal_all) = false;
@@ -119,17 +120,14 @@ message JWT {
   //
   // Example: https://www.googleapis.com/oauth2/v1/certs
   string jwks_uri = 3;
-
-  // Value to insert into `sec-istio-auth-userinfo` header (or
-  // attribute?)
-  enum UserInfoType {
-    // Forward the entire base64 encoded JWT in the HTTP request.
-    ALL = 0;
-
-    // Don't forward any part of the JWT in the HTTP request.
-    NONE = 1;
-  }
-  UserInfoType user_info_type = 4;
+  
+  // If true, forward the entire base64 encoded JWT in the HTTP request.
+  // If false, remove the JWT from the HTTP request and do not forward to the application.
+  // If omitted, inherit from a larger scope, e.g. method-level policy inherits behavior from service.
+  // TODO(ayj) - refine scope of policy for method, service, namespace, and global inheritance.
+  google.protobuf.BoolValue forward_jwt = 4;
+  
+  // TODO(ayj) - add support for https://cloud.google.com/endpoints/docs/openapi/authenticating-users#receiving_auth_results_in_your_api with forward_info boolean.
 
   // Duration after which the cached public key should be expired. The
   // system wide default is applied if no duration is explicitly
