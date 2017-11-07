@@ -18,20 +18,12 @@ import "google/protobuf/duration.proto";
 
 package istio.proxy.v1.config;
 
-// AuthenticationPolicy defines authentication policy. It can be set for
-// different scopes (mesh, service …), and the most narrow scope with
-// non-INHERIT value will be used.
-// Mesh policy cannot be INHERIT.
-enum AuthenticationPolicy {
+enum AuthPolicy {
   // Do not encrypt Envoy to Envoy traffic.
   NONE = 0;
 
   // Envoy to Envoy traffic is wrapped into mutual TLS connections.
   MUTUAL_TLS = 1;
-
-  // Use the policy defined by the parent scope. Should not be used for mesh
-  // policy.
-  INHERIT = 1000;
 }
 
 // ProxyConfig defines variables for individual Envoy instances.
@@ -84,24 +76,23 @@ message ProxyConfig {
 
   // Port on which Envoy should listen for administrative commands.
   int32 proxy_admin_port = 11;
+  
   // The availability zone where this Envoy instance is running. When running
   // Envoy as a sidecar in Kubernetes, this flag must be one of the availability
   // zones assigned to a node using failure-domain.beta.kubernetes.io/zone annotation.
   string availability_zone = 12;
 
   // Authentication policy defines the global switch to control authentication
-  // for Envoy-to-Envoy communication for istio components Mixer and Pilot.
-  AuthenticationPolicy control_plane_auth_policy = 13;
-  // File path of custom proxy configuration, currently used by proxies
-  // in front of Mixer and Pilot.
-  string custom_config_file = 14;
+  // for Envoy-to-Envoy communication for infra components Mixer and Pilot.
+  AuthPolicy infra_auth_policy = 13;
 
-  // Maximum length of name field in Envoy's metrics. The length of the name field
-  // is determined by the length of a name field in a service and the set of labels that
-  // comprise a particular version of the service. The default value is set to 189 characters.
-  // Envoy's internal metrics take up 67 characters, for a total of 256 character name per metric.
-  // Increase the value of this field if you find that the metrics from Envoys are truncated.
-  int32 stat_name_length = 15;
+  // Address of the mixer service (e.g. __istio-mixer:15004_).
+  // Used by the proxy in front of mixer as the port to listen to,
+  // The value must be the same as MeshConfig.mixer_address
+  string mixer_address = 14;
+
+  // Pilot subject alternate name used for mutual TLS
+  repeated string pilot_san = 15;
 }
 
 
@@ -155,12 +146,18 @@ message MeshConfig {
     // a secondary ingress controller (e.g., in addition to a
     // cloud-provided ingress controller).
     STRICT = 2;
+
+    // Istio ingress controller will not process any Kubernetes ingress resources.
+    // Instead it will only process Istio specific IngressRules. Use this mode if
+    // Istio ingress controller will be a deployed in non-kubernetes environments,
+    // or if you wish to use Envoy as a standalone load balancer managed by Istio.
+    CUSTOM = 3;
   }
 
   // Defines whether to use Istio ingress controller for annotated or all ingress resources.
   IngressControllerMode ingress_controller_mode = 9;
 
-  // TODO AuthPolicy needs to be removed and merged with AuthPolicy defined above
+  // TODO AuthPolicy needs to be removed and merged with AuthPolicy defined above  
   enum AuthPolicy {
     // Do not encrypt Envoy to Envoy traffic.
     NONE = 0;
