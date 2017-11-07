@@ -155,6 +155,12 @@ message MeshConfig {
     // a secondary ingress controller (e.g., in addition to a
     // cloud-provided ingress controller).
     STRICT = 2;
+
+    // Istio ingress controller will not process any Kubernetes ingress resources.
+    // Instead it will only process Istio specific IngressRules. Use this mode if
+    // Istio ingress controller will be a deployed in non-kubernetes environments,
+    // or if you wish to use Envoy as a standalone load balancer managed by Istio.
+    CUSTOM = 3;
   }
 
   // Defines whether to use Istio ingress controller for annotated or all ingress resources.
