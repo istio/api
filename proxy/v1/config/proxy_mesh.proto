@@ -104,7 +104,6 @@ message ProxyConfig {
   int32 stat_name_length = 15;
 }
 
-
 // MeshConfig defines mesh-wide variables shared by all Envoy instances in the
 // Istio service mesh.
 message MeshConfig {
@@ -171,7 +170,8 @@ message MeshConfig {
 
   // Authentication policy defines the global switch to control authentication
   // for Envoy-to-Envoy communication.
-  AuthPolicy auth_policy = 10;
+  // Use authentication_policy instead.
+  AuthPolicy auth_policy = 10 [deprecated=true];
 
   // Polling interval for RDS (MUST BE >=1ms)
   google.protobuf.Duration rds_refresh_delay = 11;
@@ -190,4 +190,16 @@ message MeshConfig {
   // and remain constant for the duration of the pod. The rest of the mesh config can be changed
   // at runtime and config gets distributed dynamically.
   ProxyConfig default_config = 14;
+
+  // List of names of services that should not have auth enable. Typically,
+  // this is a list of control services (e.g k8s API server) (for regular
+  // user services, use service annotation to overwrite the authentication
+  // policy). These services don't have envoy in front, so the configuration
+  // will affect the client side only (i.e outbound clusters)
+  // This field has no effect if the policy is already 'NONE' (auth disabled).
+  repeated string auth_blacklisted_destination_service = 15;
+
+  // Same as blacklisted_service, but applied for all services in the given
+  // namespace.
+  repeated string auth_blacklisted_destination_namespace = 16;
 }
