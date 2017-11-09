@@ -81,7 +81,6 @@ message K8SIngressRule {
 //           httpsRedirect: true # sends 302 redirect for http requests
 //       - port: 443
 //         protocol: HTTP
-//         alpnProtocols: http11, http2
 //         tls:
 //           mode: simple #enables HTTPS on this port
 //         authorities:
@@ -94,7 +93,7 @@ message K8SIngressRule {
 //           mode: mtls
 //         authorities:
 //           - redis.bookinfo.com
-//         backend:
+//         tcpBackend:
 //           name: myRedis #service name
 //           port: 1234
 //       certs:
@@ -195,7 +194,7 @@ message Gateway {
 //       servers:
 //       - port: 2379
 //         protocol: Redis
-//         backend:
+//         tcpBackend:
 //           name: redis
 //           port: 2379
 //
@@ -208,10 +207,6 @@ message Server {
   // be one of HTTP|HTTP2|GRPC|MONGO|REDIS|TCP.
   string protocol = 2;
 
-  // Optional. Comma separated list of ALPN protocols supported by this
-  // load balancer.
-  string alpn_protocols = 3;
-
   // REQUIRED: A list of authorities exposed by this load balancer. While
   // typically applicable to HTTP services, it can also be used for TCP
   // services using TLS with SNI.  Wildcards are allowed in the authority
@@ -223,14 +218,25 @@ message Server {
     // http connections, asking the clients to use HTTPS.
     bool https_redirect = 1;
 
+    // TLS modes enforced by Envoy
+    enum TLSmode {
+      // If set to "passthrough", Envoy will forward the connection to the
+      // upstream server as is.
+      PASSTHROUGH = 0;
+
+      // If set to "simple", Envoy will secure connections with
+      // standard TLS semantics (server certs only).
+      SIMPLE = 1;
+
+      // If set to "mutual", Envoy will validate client's identity using
+      // mTLS authentication.
+      MUTUAL = 2;
+    };
+
     // Optional: Indicates whether connections to this port should be
     // secured using TLS.  The value of this field determines how TLS is
-    // enforced. If set to "simple", Envoy will secure connections with
-    // standard TLS semantics (server certs only). If set to "mutual",
-    // Envoy will validate client's identity using mTLS authentication. If
-    // set to "passthrough", Envoy will forward the connection to the
-    // upstream server as is.
-    string mode = 2;
+    // enforced.  
+    TLSmode mode = 2;
   }
 
   // Set of TLS related options that govern the server's behavior. Use
@@ -239,21 +245,27 @@ message Server {
   TLSOptions tls = 2;
 
   // Forward TCP connections on the ingress port to a specific service
-  // within the mesh. ONLY ONE OF rules or backend is allowed.
-  Backend backend = 5;
+  // within the mesh. ONLY ONE OF rules or tcp_backend is allowed.
+  TCPBackend tcp_backend = 5;
 }
 
-// Backend describes a service with a port that is the recipient of TCP
-// connections arriving at the ingress load balancer. Backends are
+// TCPBackend describes a service with a port that is the recipient of TCP
+// connections arriving at the ingress load balancer. TCPBackends are
 // typically used in the context of TCP services such as Mongo/Redis/plain
 // TCP connections.
-message Backend {
-  // REQUIRED: Name of the service inside the mesh for which connections
-  // are being proxied
-  string name = 1;
+message TCPBackend {
+  oneof target {
+    // Name of the service for which connections are being proxied.
+    string hostname = 1;
+    // IP address of the service being proxied.
+    string address = 2;
+  }
 
-  // REQUIRED: Port number to which the connections should be forwarded to.
-  int32 port = 2;
+  // REQUIRED: Port number or name to which the connections should be
+  // forwarded to. The protocol used for this port will be automatically
+  // derived from the protocol used by the associated Server that received
+  // the connection from a client.
+  string port = 3;
 }
 
 // TLSConfig describes the server-side TLS certificate and CA cert (for
