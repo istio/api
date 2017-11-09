@@ -71,31 +71,39 @@ message K8SIngressRule {
 //       name: my-gateway
 //     spec:
 //       servers:
-//       - port: 80
-//         protocol: HTTP
+//       - port:
+//           port: 80
+//           name: http
+//           protocol: HTTP
 //         authorities:
 //           - uk.bookinfo.com
 //           - eu.bookinfo.com
 //           - * #default
 //         tls:
 //           httpsRedirect: true # sends 302 redirect for http requests
-//       - port: 443
-//         protocol: HTTP
+//       - port:
+//           port: 443
+//           name: https
+//           protocol: HTTPS
 //         tls:
 //           mode: simple #enables HTTPS on this port
 //         authorities:
 //           - uk.bookinfo.com
 //           - eu.bookinfo.com
 //           - *
-//       - port: 2379 #to expose internal service via external port 2379
-//         protocol: TCP
+//       - port:
+//           port: 2379 #to expose internal service via external port 2379
+//           protocol: REDIS
+//           name: redis
 //         tls:
 //           mode: mtls
 //         authorities:
 //           - redis.bookinfo.com
 //         tcpBackend:
 //           name: myRedis #service name
-//           port: 1234
+//           port:
+//             port: 1234
+//             name: internal-redis
 //       certs:
 //       - authorities:
 //           - *.bookinfo.com
@@ -184,34 +192,33 @@ message Gateway {
 //       name: my-ingress
 //     spec:
 //       servers:
-//       - port: 80
-//         protocol: HTTP #includes HTTP2|GRPC
+//       - port:
+//           port: 80
+//           protocol: HTTP2
 //
 // Another example
 //     metadata:
 //       name: my-tcp-ingress
 //     spec:
 //       servers:
-//       - port: 2379
-//         protocol: Redis
+//       - port:
+//           port: 2379
+//           protocol: redis
 //         tcpBackend:
 //           name: redis
-//           port: 2379
+//           port:
+//             port: 2379
 //
 message Server {
   // REQUIRED: The Port on which Envoy should listen for incoming
   // connections
-  int32 port = 1;
-
-  // REQUIRED: The protocol associated with this port. The protocol should
-  // be one of HTTP|HTTP2|GRPC|MONGO|REDIS|TCP.
-  string protocol = 2;
+  Port port = 1;
 
   // REQUIRED: A list of authorities exposed by this load balancer. While
   // typically applicable to HTTP services, it can also be used for TCP
   // services using TLS with SNI.  Wildcards are allowed in the authority
   // values. A special wildcard value of "*" stands for the default host.
-  repeated string authorities = 4;
+  repeated string authorities = 2;
 
   message TLSOptions {
     // If set to true, the load balancer will send a 302 redirect for all
@@ -242,11 +249,12 @@ message Server {
   // Set of TLS related options that govern the server's behavior. Use
   // these options to control if all http requests should be redirected to
   // https, and the TLS modes to use.
-  TLSOptions tls = 2;
+  TLSOptions tls = 3;
 
   // Forward TCP connections on the ingress port to a specific service
-  // within the mesh. ONLY ONE OF rules or tcp_backend is allowed.
-  TCPBackend tcp_backend = 5;
+  // within the mesh. TCP backend cannot be used for HTTP services. Use
+  // route rules to configure routing for HTTP services.
+  TCPBackend tcp_backend = 4;
 }
 
 // TCPBackend describes a service with a port that is the recipient of TCP
@@ -254,15 +262,15 @@ message Server {
 // typically used in the context of TCP services such as Mongo/Redis/plain
 // TCP connections.
 message TCPBackend {
-  // REQUIRED. Name or IP address of the service for which connections are
-  // being proxied.
-  string hostname = 1;
+  // REQUIRED. A FQDN or IP address of the service to which connections will
+  // be proxied to.
+  string fqdn = 1;
 
   // REQUIRED: Port number or name to which the connections should be
   // forwarded to. The protocol used for this port will be automatically
   // derived from the protocol used by the associated Server that received
   // the connection from a client.
-  string port = 2;
+  Port port = 2;
 }
 
 // TLSConfig describes the server-side TLS certificate and CA cert (for
@@ -276,8 +284,9 @@ message TCPBackend {
 //       namespace: mynamespace
 //     spec:
 //       servers:
-//       - port: 443
-//         protocol: HTTP
+//       - port:
+//           port: 443
+//           protocol: HTTP
 //         tls:
 //           mode: simple
 //       certs:
