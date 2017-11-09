@@ -191,11 +191,11 @@ message MeshConfig {
   // at runtime and config gets distributed dynamically.
   ProxyConfig default_config = 14;
 
-  // List of names of services that should not have auth enable. Typically,
-  // these are control services (e.g k8s API server) and doesn't have envoy in
-  // front. This field will affect the client side config only (i.e outbound
-  // clusters). It has no effect if the policy is already 'NONE' (auth disabled).
-  // Do NOT use this for services that have envoy (instead, please use service
-  // annotation to overwrite the authentication policy).
-  repeated string auth_blacklisted_destination_service = 15;
+  // List of remote services for which mTLS authentication should not be expected by Istio .
+  // Typically, these are control services (e.g kubernetes API server) that don't have Istio sidecar
+  // to transparently terminate mTLS authentication.
+  // It has no effect if the authentication policy is already 'NONE'.
+  // DO NOT use this setting for services that are managed by Istio (i.e. using Istio sidecar).
+  // Instead, use service-level annotations to overwrite the authentication policy.
+  repeated string mtls_excluded_services = 15;
 }
