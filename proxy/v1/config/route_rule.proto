@@ -66,8 +66,6 @@ package istio.proxy.v1.config;
 // For example, a simple rule to send 100% of incoming traffic for a
 // "reviews" service to version "v1" can be specified as follows:
 //
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
 //     metadata:
 //       name: my-rule
 //       namespace: default # optional (default is "default")
@@ -79,8 +77,7 @@ package istio.proxy.v1.config;
 //       - labels:
 //           version: v1
 //         weight: 100
-//       properties:
-//         timeout: some-timeout-setting
+//
 message RouteRule {
   // REQUIRED: Destination uniquely identifies the destination associated
   // with this routing rule. This field is applicable for hostname-based
@@ -116,7 +113,7 @@ message RouteRule {
   // redirect to a different URI or Authority.
   HTTPRedirect redirect = 5;
 
-  // DEPRECATED. Rewrite HTTP URIs and Authority headers. Rewrite cannot be used with
+  // Rewrite HTTP URIs and Authority headers. Rewrite cannot be used with
   // Redirect primitive. Rewrite will be performed before forwarding.
   HTTPRewrite rewrite = 6;
 
@@ -127,13 +124,13 @@ message RouteRule {
   // will be rejected.
   bool websocket_upgrade = 7;
 
-  // DEPRECATED. Timeout policy for HTTP requests.
+  // Timeout policy for HTTP requests.
   HTTPTimeout http_req_timeout = 8;
 
-  // DEPRECATED. Retry policy for HTTP requests.
+  // Retry policy for HTTP requests.
   HTTPRetry http_req_retries = 9;
 
-  // DEPRECATED. Fault injection policy to apply on HTTP traffic
+  //Fault injection policy to apply on HTTP traffic
   HTTPFaultInjection http_fault = 10;
 
   //(-- L4 fault injection policy applies to Tcp/Udp (not HTTP) traffic --)
@@ -146,41 +143,39 @@ message RouteRule {
   // Statistics will be generated for the mirrored destination.
   IstioService mirror = 12;
 
-  // DEPRECATED. Cross-Origin Resource Sharing policy (CORS). Refer to
+  // Cross-Origin Resource Sharing policy (CORS). Refer to
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS for
   // further details about cross origin resource sharing.
   CorsPolicy cors_policy = 13;
 
-  // DEPRECATED. Additional HTTP headers to add before forwarding a request to the
+  // Additional HTTP headers to add before forwarding a request to the
   // destnation service.
   map<string, string> append_headers = 14;
-
-  // An array of key value pairs that specify the list of properties applicable to
-  // this route. Keys are well defined property names (e.g., rewrite, timeout, retry,
-  // fault, cors) and values are names of the property rule. If the property does not
-  // exist, it will be ignored. The valid property names are rewrite, timeout, retry,
-  // fault, cors.
-  map<string, string> properties = 15;
 }
 
-// IstioService identifies a service and optionally service version.
-// The FQDN of the service is composed from the name and implementation-specific domain suffix. When
-// used in the context of a route rule with meta data fields, the namespace associated with the metadata
-// will be automatically inherited as a domain suffix if its not overridden by the domain field in the
-// IstioService specification. Alternatively, a fully qualified domain name can be used to identify the
-// service. Either name+domain or fqdn should be used, but not both.
-// if the 
-// (e.g. on Kubernetes, "reviews" + "default.svc.cluster.local" -> "reviews.default.svc.cluster.local").
+// IstioService identifies a service and optionally service version.  The
+// FQDN of the service is composed from the name and
+// implementation-specific domain suffix. When used in the context of a
+// route rule with meta data fields, the namespace associated with the
+// metadata will be automatically inherited as a domain suffix if its not
+// overridden by the domain field in the IstioService
+// specification. Alternatively, a fully qualified domain name can be used
+// to identify the service. Either name+domain or fqdn should be used, but
+// not both.  if the (e.g. on Kubernetes, "reviews" +
+// "default.svc.cluster.local" -> "reviews.default.svc.cluster.local").
 message IstioService {
   // The short name of the service such as "foo".
   string name = 1;
 
-  // DEPRECATED. Optional namespace of the service. Defaults to value of metadata namespace field.
+  // DEPRECATED. Optional namespace of the service. Defaults to value of
+  // metadata namespace field.
   string namespace = 2;
 
-  // Domain suffix used to construct the service FQDN in implementations that support such specification.
-  // For example, when running on Kubernetes, the domain field could include the namespace of the service
-  // along with the kubernetes domain suffix: "myns.svc.cluster.local". When running with Consul as the service
+  // Domain suffix used to construct the service FQDN in implementations
+  // that support such specification.  For example, when running on
+  // Kubernetes, the domain field could include the namespace of the
+  // service along with the kubernetes domain suffix:
+  // "myns.svc.cluster.local". When running with Consul as the service
   // registry, the domain suffix could be "service.consul".
   string domain = 3;
 
@@ -207,8 +202,8 @@ message IstioService {
   // principle applies to TCP ports as well.
   repeated string port = 6;
 
-  // IPv4 or IPv6 ip address of destination with optional subnet.
-  // E.g., a.b.c.d/xx form or just a.b.c.d.
+  // IPv4 or IPv6 ip address of destination with optional subnet.  E.g.,
+  // a.b.c.d/xx form or just a.b.c.d.
   repeated string address = 7;
 }
 
@@ -221,8 +216,6 @@ message IstioService {
 // service where the URL path starts with /ratings/v2/ and the request
 // contains a "cookie" with value "user=jason",
 //
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
 //     metadata:
 //       name: my-rule
 //       namespace: default
@@ -244,7 +237,7 @@ message IstioService {
 // MatchCondition CANNOT be empty. At least one source or
 // request header must be specified.
 message MatchCondition {
-  // DEPRECATED. Identifies the service initiating a connection or a request.
+  // Identifies the service initiating a connection or a request.
   IstioService source = 1;
 
   // (-- Set of layer 4 match conditions based on the IP ranges --)
@@ -253,30 +246,8 @@ message MatchCondition {
   // (-- Set of layer 4 match conditions based on the IP ranges --)
   L4MatchAttributes udp = 3 ;
 
-  // DEPRECATED. Attributes of an HTTP request to match.
+  // Attributes of an HTTP request to match.
   MatchRequest request = 4 ;
-
-  // A single match clause. All conditions in a match clause must evaluate to true
-  // in order for the clause to evaluate to true. In other words, the match clause
-  // follows AND semantics.
-  message MatchClause {
-    // Identifies the service initiating a connection or a request.
-    IstioService source = 1;
-
-    // (-- Set of layer 4 match conditions based on the IP ranges --)
-    L4MatchAttributes tcp = 2 ;
-
-    // (-- Set of layer 4 match conditions based on the IP ranges --)
-    L4MatchAttributes udp = 3 ;
-
-    // Attributes of an HTTP request to match.
-    MatchRequest request = 4 ;
-
-  }
-
-  // One or more match clauses to be used with OR semantics.
-  // i.e. match is true if one of the clauses match.
-  repeated MatchClause clause = 5;
 }
 
 // MatchRequest specifies the attributes of an HTTP request to be used for matching a request.
@@ -310,8 +281,6 @@ message MatchRequest {
 // instances with the "v2" tag and the remaining traffic (i.e., 75%) to
 // "v1".
 //
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
 //     metadata:
 //       name: my-rule
 //       namespace: default
@@ -363,8 +332,6 @@ message L4MatchAttributes {
 // requests for /v1/getProductRatings API on the ratings service to
 // /v1/bookRatings provided by the bookratings service.
 //
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteProperties
 //     metadata:
 //       name: my-rule
 //       namespace: default
@@ -390,74 +357,12 @@ message HTTPRedirect {
   string authority = 2;
 }
  
-// Route properties contain configurations reusable across multiple route rules.
-// Commonly used settings can be collated in a route property. Specific elements
-// of the route property can be referenced by different route rules.
-//
-// For example, the following route property defines a retry and request
-// timeout setting.
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteProperty
-//     metadata:
-//       name: common-props
-//     spec:
-//       httpReqTimeout:
-//         simpleTimeout:
-//           timeout: 10s
-//       httpReqRetries:
-//         simpleRetry:
-//           attempts: 3
-//           perTryTimeout: 2s
-//
-message RouteProperties {
-  // Rewrite HTTP URIs and Authority headers. Rewrite cannot be used with
-  // Redirect primitive. Rewrite will be performed before forwarding.
-  HTTPRewrite rewrite = 1;
-
-  // Timeout policy for HTTP requests.
-  HTTPTimeout http_req_timeout = 2;
-
-  // Retry policy for HTTP requests.
-  HTTPRetry http_req_retries = 3;
-
-  // Fault injection policy to apply on HTTP traffic
-  HTTPFaultInjection http_fault = 4;
-
-  //(-- L4 fault injection policy applies to Tcp/Udp (not HTTP) traffic --)
-  L4FaultInjection l4_fault = 5;
-
-  // Cross-Origin Resource Sharing policy (CORS). Refer to
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS for
-  // further details about cross origin resource sharing.
-  CorsPolicy cors_policy = 6;
-
-  // Additional HTTP headers to add before forwarding a request to the
-  // destnation service.
-  map<string, string> append_headers = 7;
-}
-
 // HTTPRewrite can be used to rewrite specific parts of a HTTP request
 // before forwarding the request to the destination. Rewrite primitive can
 // be used only with the DestinationWeights. The following example
 // demonstrates how to rewrite the URL prefix for api call (/ratings) to
 // ratings service before making the actual API call.
 //
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteProperties
-//     metadata:
-//       name: my-rewrite-rule
-//     spec:
-//       rewrite:
-//         uri: /v1/bookRatings
-//       route:
-//       - labels:
-//           version: v1
-//
-// This can then be applied via a route rule as follows:
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
 //     metadata:
 //       name: my-rule
 //       namespace: default
@@ -467,9 +372,13 @@ message RouteProperties {
 //       match:
 //         request:
 //           headers:
-//             uri: /v1/getProductRatings
-//       properties:
-//         rewrite: my-rewrite-rule
+//             uri:
+//               prefix: /ratings
+//       rewrite:
+//         uri: /v1/bookRatings
+//       route:
+//       - labels:
+//           version: v1
 //
 message HTTPRewrite {
   // rewrite the Path (or the prefix) portion of the URI with this
@@ -494,29 +403,20 @@ message StringMatch {
 }
 
 // Describes HTTP request timeout. For example, the following rule sets a
-// 10 second timeout for calls to the ratings service
+// 10 second timeout for calls to the ratings:v1 service
 //
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteProperties
-//     metadata:
-//       name: global-timeout-setting
-//     spec:
-//       httpReqTimeout:
-//         simpleTimeout:
-//           timeout: 10s
-//
-// This can then be applied via a route rule as follows:
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
 //     metadata:
 //       name: my-rule
 //       namespace: default
 //     spec:
 //       destination:
 //         name: ratings
-//       properties:
-//         timeout: global-timeout-setting
+//       route:
+//       - labels:
+//           version: v1
+//       httpReqTimeout:
+//         simpleTimeout:
+//           timeout: 10s
 //
 message HTTPTimeout {
   message SimpleTimeoutPolicy {
@@ -538,30 +438,21 @@ message HTTPTimeout {
 
 // Describes the retry policy to use when a HTTP request fails. For
 // example, the following rule sets the maximum number of retries to 3 when
-// calling ratings service, with a 2s timeout per retry attempt.
+// calling ratings:v1 service, with a 2s timeout per retry attempt.
 //
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteProperties
-//     metadata:
-//       name: global-retry-setting
-//     spec:
-//       httpReqRetries:
-//         simpleRetry:
-//           attempts: 3
-//           perTryTimeout: 2s
-//
-// This can then be applied via a route rule as follows:
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
 //     metadata:
 //       name: my-rule
 //       namespace: default
 //     spec:
 //       destination:
 //         name: ratings
-//       properties:
-//         retry: global-retry-setting
+//       route:
+//       - labels:
+//           version: v1
+//       httpReqRetries:
+//         simpleRetry:
+//           attempts: 3
+//           perTryTimeout: 2s
 //
 message HTTPRetry {
   message SimpleRetryPolicy {
@@ -591,11 +482,15 @@ message HTTPRetry {
 // Access-Control-Allow-Credentials header to false. In addition, it only exposes
 // X-Foo-bar header and sets an expiry period of 1 day.
 //
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteProperties
 //     metadata:
-//       name: global-cors-policy
+//       name: my-rule
+//       namespace: default
 //     spec:
+//       destination:
+//         name: ratings
+//       route:
+//       - labels:
+//           version: v1
 //       corsPolicy:
 //         allowOrigin:
 //         - example.com
@@ -606,19 +501,6 @@ message HTTPRetry {
 //         allowHeaders:
 //         - X-Foo-Bar
 //         maxAge: "1d"
-//
-// This can then be applied via a route rule as follows:
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: my-rule
-//       namespace: default
-//     spec:
-//       destination:
-//         name: ratings
-//       properties:
-//         cors: global-cors-policy
 //
 message CorsPolicy {
   // The list of origins that are allowed to perform CORS requests. The content will
