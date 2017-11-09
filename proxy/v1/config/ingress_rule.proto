@@ -56,22 +56,19 @@ message K8SIngressRule {
   }
 }
 
-// Ingress rules are rules applied to the load balancers operating at the
-// edge of the mesh receiving incoming HTTP/TCP connections. These rules
-// describe a set of ports that should be exposed outside the mesh, the type
-// of protocol to use, SNI configuration for the load balancer and a reference to
-// a set of routing rules that shold be applied on the load balancer.
-// Note that the final set of routing rules applicable at the load balancer are still
-// dependant on the source labels associated with a routing rule.
+// Gateway describes a load balancer operating at the
+// edge of the mesh receiving incoming HTTP/TCP connections. The specification
+// describes a set of ports that should be exposed outside the mesh, the type
+// of protocol to use, SNI configuration for the load balancer, etc.
 //
-// For example, the following ingress rule sets up the Envoy sidecar to act as a
+// For example, the following gateway spec sets up Envoy to act as a
 // load balancer exposing port 80 (http), 443 (https), and port 2379 (TCP).
 // While Istio will configure Envoy to listen on these ports, it is the responsibility
 // of the user to ensure that external traffic to these ports are allowed into the
 // mesh.
 //
 //     metadata:
-//       name: my-ingress
+//       name: my-gateway
 //     spec:
 //       servers:
 //       - port: 80
@@ -106,8 +103,8 @@ message K8SIngressRule {
 //         serverCert: server.crt
 //         clientCABundle: client.ca-bundle
 //
-// The following routing rule exposes uk.bookinfo.com, eu.bookinfo.com via the Ingress
-// load balancer and routes all calls to /reviews to the reviews service. Since a port
+// The following routing rule exposes uk.bookinfo.com, eu.bookinfo.com via the gateway
+// and routes all calls to /reviews to the reviews service. Since a port
 // list is missing, this rule will apply to all http ports of the reviews service.
 //
 //     metadata:
@@ -173,8 +170,8 @@ message K8SIngressRule {
 //       - destination:
 //           name: homepage
 //
-message IngressRule {
-  // REQUIRED: Details about the port on which the ingress proxy listens and applies rules
+message Gateway {
+  // REQUIRED: Details about the port on which the proxy listens and applies rules
   repeated Server servers = 1;
 
   // Optional names of certificates for the server and the CA bundle to be used to validate
@@ -203,20 +200,22 @@ message IngressRule {
 //           port: 2379
 //
 message Server {
-  // REQUIRED: The Port on which Envoy should listen for incoming connections
+  // REQUIRED: The Port on which Envoy should listen for incoming
+  // connections
   int32 port = 1;
 
-  // REQUIRED: The protocol associated with this port. The protocol should be one of
-  // HTTP|HTTP2|GRPC|MONGO|REDIS|TCP.
+  // REQUIRED: The protocol associated with this port. The protocol should
+  // be one of HTTP|HTTP2|GRPC|MONGO|REDIS|TCP.
   string protocol = 2;
 
-  // Optional. Comma separated list of ALPN protocols supported by this load balancer.
+  // Optional. Comma separated list of ALPN protocols supported by this
+  // load balancer.
   string alpn_protocols = 3;
 
-  // REQUIRED: A list of authorities exposed by this load balancer. While typically applicable
-  // to HTTP services, it can also be used for TCP services using TLS with SNI.
-  // Wildcards are allowed in the authority values. A special wildcard value of "*" stands
-  // for the default host.
+  // REQUIRED: A list of authorities exposed by this load balancer. While
+  // typically applicable to HTTP services, it can also be used for TCP
+  // services using TLS with SNI.  Wildcards are allowed in the authority
+  // values. A special wildcard value of "*" stands for the default host.
   repeated string authorities = 4;
 
   message TLSOptions {
@@ -224,39 +223,43 @@ message Server {
     // http connections, asking the clients to use HTTPS.
     bool https_redirect = 1;
 
-    // Optional: Indicates whether connections to this port should be secured using TLS.
-    // The value of this field determines how TLS is enforced. If set to "simple", Envoy will
-    // secure connections with standard TLS semantics (server certs only). If set to "mutual",
-    // Envoy will validate client's identity using mTLS authentication. If set to "passthrough",
-    // Envoy will forward the connection to the upstream server as is.
+    // Optional: Indicates whether connections to this port should be
+    // secured using TLS.  The value of this field determines how TLS is
+    // enforced. If set to "simple", Envoy will secure connections with
+    // standard TLS semantics (server certs only). If set to "mutual",
+    // Envoy will validate client's identity using mTLS authentication. If
+    // set to "passthrough", Envoy will forward the connection to the
+    // upstream server as is.
     string mode = 2;
   }
 
-  // Set of TLS related options that govern the server's behavior. Use these options to
-  // control if all http requests should be redirected to https, and the TLS modes to use.
+  // Set of TLS related options that govern the server's behavior. Use
+  // these options to control if all http requests should be redirected to
+  // https, and the TLS modes to use.
   TLSOptions tls = 2;
 
-  // Forward TCP connections on the ingress port to a specific service within
-  // the mesh. ONLY ONE OF rules or backend is allowed.
+  // Forward TCP connections on the ingress port to a specific service
+  // within the mesh. ONLY ONE OF rules or backend is allowed.
   Backend backend = 5;
 }
 
-// Backend describes a service with a port that is the recipient of TCP connections
-// arriving at the ingress load balancer. Backends are typically used in the context
-// of TCP services such as Mongo/Redis/plain TCP connections.
+// Backend describes a service with a port that is the recipient of TCP
+// connections arriving at the ingress load balancer. Backends are
+// typically used in the context of TCP services such as Mongo/Redis/plain
+// TCP connections.
 message Backend {
-  // REQUIRED: Name of the service inside the mesh for which connections are being
-  // proxied
+  // REQUIRED: Name of the service inside the mesh for which connections
+  // are being proxied
   string name = 1;
 
   // REQUIRED: Port number to which the connections should be forwarded to.
   int32 port = 2;
 }
 
-// TLSConfig describes the server-side TLS certificate and CA cert (for client authentication)
-// for a particular host exposed by the ingress load balancer. These hosts are not resolved
-// in any way. Its upto the end user to ensure that the DNS resolves these hosts to the
-// ingress load balancer
+// TLSConfig describes the server-side TLS certificate and CA cert (for
+// client authentication) for a particular host exposed by the ingress load
+// balancer. These hosts are not resolved in any way. Its upto the end user
+// to ensure that the DNS resolves these hosts to the ingress load balancer
 //
 // For example, the following is an example of TLS configuration for port 443
 //     metadata:
@@ -278,17 +281,20 @@ message Backend {
 //         serverCertificate: server.crt
 //
 message TLSConfig {
-  // REQUIRED: A set of hostnames associated with the server certificate. For wildcard hostname, use *
+  // REQUIRED: A set of hostnames associated with the server
+  // certificate. For wildcard hostname, use *
   repeated string authorities = 1;
 
-  // REQUIRED: The name of the file holding the server-side TLS certificate to use.
-  // It is the responsibility of the underlying platform to mount the certificate as a file
-  // under /etc/istio/ingress-certs with the same name as the specified in this field.
+  // REQUIRED: The name of the file holding the server-side TLS certificate
+  // to use.  It is the responsibility of the underlying platform to mount
+  // the certificate as a file under /etc/istio/ingress-certs with the same
+  // name as the specified in this field.
   string server_certificate = 2;
 
-  // To use mutual TLS for external clients, specify the name of the file holding the
-  // CA certificate to validate the client's certificate. It is the responsibility of the
-  // underlying platform to mount the certificate as a file under /etc/istio/ingress-certs with
-  // the same name as specified in this field.
+  // To use mutual TLS for external clients, specify the name of the file
+  // holding the CA certificate to validate the client's certificate. It is
+  // the responsibility of the underlying platform to mount the certificate
+  // as a file under /etc/istio/ingress-certs with the same name as
+  // specified in this field.
   string client_ca_bundle = 3;
 }
