@@ -192,14 +192,10 @@ message MeshConfig {
   ProxyConfig default_config = 14;
 
   // List of names of services that should not have auth enable. Typically,
-  // this is a list of control services (e.g k8s API server) (for regular
-  // user services, use service annotation to overwrite the authentication
-  // policy). These services don't have envoy in front, so the configuration
-  // will affect the client side only (i.e outbound clusters)
-  // This field has no effect if the policy is already 'NONE' (auth disabled).
+  // these are control services (e.g k8s API server) and doesn't have envoy in
+  // front. This field will affect the client side config only (i.e outbound
+  // clusters). It has no effect if the policy is already 'NONE' (auth disabled).
+  // Do NOT use this for services that have envoy (instead, please use service
+  // annotation to overwrite the authentication policy).
   repeated string auth_blacklisted_destination_service = 15;
-
-  // Same as blacklisted_service, but applied for all services in the given
-  // namespace.
-  repeated string auth_blacklisted_destination_namespace = 16;
 }
