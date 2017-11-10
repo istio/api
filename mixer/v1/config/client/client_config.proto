@@ -107,5 +107,6 @@ message TcpClientConfig {
   bool disable_report_calls = 4;
 
   // Quota specifications to generate quota requirements.
-  QuotaSpec quota_spec = 5;
+  // It applies on the new TCP connections.
+  QuotaSpec connection_quota_spec = 5;
 }
