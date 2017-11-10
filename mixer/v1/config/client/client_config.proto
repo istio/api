@@ -105,4 +105,7 @@ message TcpClientConfig {
 
   // If set to true, disables mixer check calls.
   bool disable_report_calls = 4;
+
+  // Quota specifications to generate quota requirements.
+  QuotaSpec quota_spec = 5;
 }
