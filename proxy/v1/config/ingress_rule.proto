@@ -18,8 +18,9 @@ import "proxy/v1/config/route_rule.proto";
 
 package istio.proxy.v1.config;
 
-// A proto representation of Kubernetes ingress resource. This API is for
-// internal use only.
+// INTERNAL USE ONLY. Map from K8S ingress into a partial Istio rule
+// which is then used to map into actual route rules. This is an incomplete
+// implementation. Bare minimal Kubernetes ingress specifications are supported.
 message K8SIngressRule {
   // REQUIRED: Port on which the ingress proxy listens and applies the rule.
   int32 port = 1;
