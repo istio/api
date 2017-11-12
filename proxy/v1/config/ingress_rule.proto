@@ -18,19 +18,9 @@ import "proxy/v1/config/route_rule.proto";
 
 package istio.proxy.v1.config;
 
-// Ingress rules are routing rules applied to the ingress proxy pool. The
-// ingress proxes serve as the receiving edge proxy for the entire mesh, but
-// can also be addressed from inside the mesh.  Each ingress rule defines a
-// destination service and port. Rules that do not resolve to a service or a
-// port in the mesh should be ignored.
-//
-// The routing rules for the destination service are applied at the ingress
-// proxy. That means the routing rule match conditions are composed and its
-// actions are enforced. The traffic splitting for the destination service is
-// also effective.
-//
-// WARNING: This API is experimental and under active development
-message IngressRule {
+// A proto representation of Kubernetes ingress resource. This API is for
+// internal use only.
+message K8SIngressRule {
   // REQUIRED: Port on which the ingress proxy listens and applies the rule.
   int32 port = 1;
 
