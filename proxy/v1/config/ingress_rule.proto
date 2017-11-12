@@ -81,40 +81,40 @@ message IngressRule {
 //     spec:
 //       servers:
 //       - port:
-//           port: 80
+//           number: 80
 //           name: http
 //           protocol: HTTP
-//         authorities:
+//         hosts:
 //           - uk.bookinfo.com
 //           - eu.bookinfo.com
 //           - * #default
 //         tls:
 //           httpsRedirect: true # sends 302 redirect for http requests
 //       - port:
-//           port: 443
+//           number: 443
 //           name: https
 //           protocol: HTTPS
 //         tls:
 //           mode: simple #enables HTTPS on this port
-//         authorities:
+//         hosts:
 //           - uk.bookinfo.com
 //           - eu.bookinfo.com
 //           - *
 //       - port:
-//           port: 2379 #to expose internal service via external port 2379
+//           number: 2379 #to expose internal service via external port 2379
 //           protocol: REDIS
 //           name: redis
 //         tls:
 //           mode: mtls
-//         authorities:
+//         hosts:
 //           - redis.bookinfo.com
 //         tcpBackend:
 //           name: myRedis #service name
 //           port:
-//             port: 1234
+//             number: 1234
 //             name: internal-redis
 //       certs:
-//       - authorities:
+//       - hosts:
 //           - *.bookinfo.com
 //         serverCert: server.crt
 //         clientCABundle: client.ca-bundle
@@ -145,7 +145,7 @@ message IngressRule {
 //           domain: qa.svc.cluster.local
 //         weight: 20
 //
-// By default, if there is no wildcard, requests for unknown authorities
+// By default, if there is no wildcard, requests for unknown hosts
 // will be responded with a 404. When some default behavior is desired, add
 // a default host (*) to the load balancer specification and specify its
 // behavior with an appropriate route rule. For example,
@@ -202,7 +202,7 @@ message Gateway {
 //     spec:
 //       servers:
 //       - port:
-//           port: 80
+//           number: 80
 //           protocol: HTTP2
 //
 // Another example
@@ -211,23 +211,23 @@ message Gateway {
 //     spec:
 //       servers:
 //       - port:
-//           port: 2379
+//           number: 2379
 //           protocol: redis
 //         tcpBackend:
 //           name: redis
 //           port:
-//             port: 2379
+//             number: 2379
 //
 message Server {
   // REQUIRED: The Port on which Envoy should listen for incoming
   // connections
   Port port = 1;
 
-  // REQUIRED: A list of authorities exposed by this load balancer. While
+  // REQUIRED: A list of hosts exposed by this load balancer. While
   // typically applicable to HTTP services, it can also be used for TCP
   // services using TLS with SNI.  Wildcards are allowed in the authority
   // values. A special wildcard value of "*" stands for the default host.
-  repeated string authorities = 2;
+  repeated string hosts = 2;
 
   message TLSOptions {
     // If set to true, the load balancer will send a 302 redirect for all
@@ -294,23 +294,23 @@ message TCPBackend {
 //     spec:
 //       servers:
 //       - port:
-//           port: 443
+//           number: 443
 //           protocol: HTTP
 //         tls:
 //           mode: simple
 //       certs:
-//       - authorities:
+//       - hosts:
 //           - foo.bar.com
 //         serverCertificatet: server.crt
 //         clientCABundle: client.ca-bundle
-//       - authorities:
+//       - hosts:
 //           - example.com
 //         serverCertificate: server.crt
 //
 message TLSConfig {
   // REQUIRED: A set of hostnames associated with the server
   // certificate. For wildcard hostname, use *
-  repeated string authorities = 1;
+  repeated string hosts = 1;
 
   // REQUIRED: The name of the file holding the server-side TLS certificate
   // to use.  It is the responsibility of the underlying platform to mount
