@@ -104,11 +104,6 @@ message ProxyConfig {
   // Increase the value of this field if you find that the metrics from Envoys are truncated.
   int32 stat_name_length = 15;
 
-  // Port on which Istio Ingress should listen for inbound http traffic.
-  int32 ingress_http_port = 16;
-
-  // Port on which Istio Ingress should listen for inbound https traffic.
-  int32 ingress_https_port = 17;
 }
 
 // MeshConfig defines mesh-wide variables shared by all Envoy instances in the
@@ -205,4 +200,10 @@ message MeshConfig {
   // DO NOT use this setting for services that are managed by Istio (i.e. using Istio sidecar).
   // Instead, use service-level annotations to overwrite the authentication policy.
   repeated string mtls_excluded_services = 15;
+
+  // Port on which Istio Ingress should listen for inbound http traffic.
+  int32 ingress_http_port = 16;
+
+  // Port on which Istio Ingress should listen for inbound https traffic.
+  int32 ingress_https_port = 17;
 }
