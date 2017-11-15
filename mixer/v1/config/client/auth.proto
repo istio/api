@@ -23,52 +23,6 @@ option (gogoproto.goproto_getters_all) = false;
 option (gogoproto.equal_all) = false;
 option (gogoproto.gostring_all) = false;
 
-// APIKey defines the explicit configuration for generating the
-// `api.key` attribute from HTTP requests.
-//
-// The following default policies are used to generate the `api.key`
-// attribute if no explicit APIKey policy is defined for a service.
-//
-//    `query: key, `query: api-key`, and then `header: x-api-key`
-//
-// See https://swagger.io/docs/specification/authentication/api-keys
-// for a general overview of API keys as defined by OpenAPI.
-message APIKey {
-  oneof key {
-    // API Key is sent as a query parameter. `query` represents the
-    // query string parameter name.
-    //
-    // For example, `query=api_key` should be used with the
-    // following request:
-    //
-    //     GET /something?api_key=abcdef12345
-    //
-    string query = 1;
-
-    // API key is send in a request header. `header` represents the
-    // header name.
-    //
-    // For example, `header=X-API-KEY` should be used with the
-    // following request:
-    //
-    //     GET /something HTTP/1.1
-    //     X-API-Key: abcdef12345
-    //
-    string header = 2;
-
-    // API key is sent in a
-    // [cookie](https://swagger.io/docs/specification/authentication/cookie-authentication),
-    //
-    // For example, `cookie=X-API-KEY` should be used for the
-    // following request:
-    //
-    //     GET /something HTTP/1.1
-    //     Cookie: X-API-KEY=abcdef12345
-    //
-    string cookie = 3;
-  }
-}
-
 // JSON Web Token (JWT) token format for authentication as defined by
 // https://tools.ietf.org/html/rfc7519. See [OAuth
 // 2.0](https://tools.ietf.org/html/rfc6749) and [OIDC
@@ -138,34 +92,43 @@ message JWT {
 }
 
 // Determines how to apply auth policies for individual requests.
-message AuthPolicySpec {
+message EndUserAuthPolicySpec {
   // If empty, apply auth policy to all requests.
   // If any of match is true, it is matched.
   repeated AttributeMatch match = 1;
 
-  message Policy {
+  message AndRule {
+    repeated Rule rules = 1;
+  }
+
+  message OrRule {
+    repeated Rule rules = 1;
+  }
+
+  message Rule {
     oneof policy {
-      APIKey api_key = 1;
-      JWT jwt = 2;
+      AndRule and_rule = 1;
+      OrRule or_rule = 2;
+      JWT jwt = 3;
     }
   }
-  // The list of auth policies to apply.
-  repeated Policy policies = 1;
+  // The list of end user auth rules to apply.
+  repeated Rule rules = 2;
 }
 
-// AuthPolicySpecBinding defines the binding between AuthPolicySpecs
+// EndUserAuthPolicySpecBinding defines the binding between EndUserAuthPolicySpecs
 // and one or more IstioService.
-message AuthPolicySpecBinding {
-  // REQUIRED. One or more services to map the listed AuthPolicySpecs
+message EndUserAuthPolicySpecBinding {
+  // REQUIRED. One or more services to map the listed EndUserAuthPolicySpecs
   // onto.
   repeated IstioService services = 1;
 
-  message AuthPolicySpecReference {
-    // REQUIRED. The short name of the AuthPolicySpec. This is the
+  message EndUserAuthPolicySpecReference {
+    // REQUIRED. The short name of the EndUserAuthPolicySpec. This is the
     // resource name defined by the metadata name field.
     string name = 1;
 
-    // Optional namespace of the AuthPolicySpec. Defaults to the value
+    // Optional namespace of the EndUserAuthPolicySpec. Defaults to the value
     // of the metadata namespace field.
     string namespace = 2;
   }
