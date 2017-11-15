@@ -25,7 +25,7 @@ load("@io_bazel_rules_go//proto:def.bzl", "proto_register_toolchains")
 
 
 def  mixer_api_dependencies():
-    protobuf_repositories()
+    protobuf_repositories(load_repo=True, bind=True)
     cc_gogoproto_repositories()
     go_x_tools_imports_repositories()
     googleapis_repositories()
@@ -59,6 +59,7 @@ def  mixer_api_dependencies():
 # It has Envoy with its protobuf repository
 # It has Mixer for integration tests with go repositiores.
 def  mixer_api_for_proxy_dependencies():
+    protobuf_repositories(load_repo=False, bind=True)
     cc_gogoproto_repositories()
     googleapis_repositories()
 

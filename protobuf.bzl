@@ -15,12 +15,13 @@
 ################################################################################
 #
 
-def protobuf_repositories(bind=True):
-    native.git_repository(
-        name = "com_google_protobuf",
-        commit = "593e917c176b5bc5aafa57bf9f6030d749d91cd5",  # v3.2.0
-        remote = "https://github.com/google/protobuf.git",
-    )
+def protobuf_repositories(load_repo=True, bind=True):
+    if load_repo:
+        native.git_repository(
+            name = "com_google_protobuf",
+            commit = "593e917c176b5bc5aafa57bf9f6030d749d91cd5",  # v3.2.0
+            remote = "https://github.com/google/protobuf.git",
+        )
 
     if bind:
         native.bind(

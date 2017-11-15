@@ -84,8 +84,6 @@ filegroup(
     ],
 )
 
-load("@com_google_protobuf//:protobuf.bzl", "cc_proto_library")
-
 exports_files(glob(["google/**"]))
 
 cc_proto_library(
