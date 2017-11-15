@@ -18,12 +18,20 @@ import "google/protobuf/duration.proto";
 
 package istio.proxy.v1.config;
 
+// AuthenticationPolicy defines authentication policy. It can be set for
+// different scopes (mesh, service …), and the most narrow scope with
+// non-INHERIT value will be used.
+// Mesh policy cannot be INHERIT.
 enum AuthenticationPolicy {
   // Do not encrypt Envoy to Envoy traffic.
   NONE = 0;
 
   // Envoy to Envoy traffic is wrapped into mutual TLS connections.
   MUTUAL_TLS = 1;
+
+  // Use the policy defined by the parent scope. Should not be used for mesh
+  // policy.
+  INHERIT = 1000;
 }
 
 // ProxyConfig defines variables for individual Envoy instances.
@@ -76,7 +84,6 @@ message ProxyConfig {
 
   // Port on which Envoy should listen for administrative commands.
   int32 proxy_admin_port = 11;
-  
   // The availability zone where this Envoy instance is running. When running
   // Envoy as a sidecar in Kubernetes, this flag must be one of the availability
   // zones assigned to a node using failure-domain.beta.kubernetes.io/zone annotation.
@@ -85,7 +92,6 @@ message ProxyConfig {
   // Authentication policy defines the global switch to control authentication
   // for Envoy-to-Envoy communication for istio components Mixer and Pilot.
   AuthenticationPolicy control_plane_auth_policy = 13;
-  
   // File path of custom proxy configuration, currently used by proxies
   // in front of Mixer and Pilot.
   string custom_config_file = 14;
@@ -97,7 +103,6 @@ message ProxyConfig {
   // Increase the value of this field if you find that the metrics from Envoys are truncated.
   int32 stat_name_length = 15;
 }
-
 
 // MeshConfig defines mesh-wide variables shared by all Envoy instances in the
 // Istio service mesh.
@@ -154,7 +159,7 @@ message MeshConfig {
   // Defines whether to use Istio ingress controller for annotated or all ingress resources.
   IngressControllerMode ingress_controller_mode = 9;
 
-  // TODO AuthPolicy needs to be removed and merged with AuthPolicy defined above  
+  // TODO AuthPolicy needs to be removed and merged with AuthPolicy defined above
   enum AuthPolicy {
     // Do not encrypt Envoy to Envoy traffic.
     NONE = 0;
@@ -165,7 +170,8 @@ message MeshConfig {
 
   // Authentication policy defines the global switch to control authentication
   // for Envoy-to-Envoy communication.
-  AuthPolicy auth_policy = 10;
+  // Use authentication_policy instead.
+  AuthPolicy auth_policy = 10 [deprecated=true];
 
   // Polling interval for RDS (MUST BE >=1ms)
   google.protobuf.Duration rds_refresh_delay = 11;
@@ -184,4 +190,12 @@ message MeshConfig {
   // and remain constant for the duration of the pod. The rest of the mesh config can be changed
   // at runtime and config gets distributed dynamically.
   ProxyConfig default_config = 14;
+
+  // List of remote services for which mTLS authentication should not be expected by Istio .
+  // Typically, these are control services (e.g kubernetes API server) that don't have Istio sidecar
+  // to transparently terminate mTLS authentication.
+  // It has no effect if the authentication policy is already 'NONE'.
+  // DO NOT use this setting for services that are managed by Istio (i.e. using Istio sidecar).
+  // Instead, use service-level annotations to overwrite the authentication policy.
+  repeated string mtls_excluded_services = 15;
 }

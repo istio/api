@@ -28,7 +28,7 @@
 *.out
 *.app
 
-# Proto files
-*.pb.go
-
 .idea/
+
+# Bazel
+/bazel-*
