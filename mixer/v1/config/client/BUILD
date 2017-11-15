@@ -48,8 +48,5 @@ cc_proto_library(
     visibility = ["//visibility:public"],
     deps = [
         "//mixer/v1:cc_proto",
-        "//external:cc_wkt_protos",
-        "//external:cc_gogoproto",
-        "//external:servicecontrol",
     ],
 )

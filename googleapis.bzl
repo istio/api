@@ -84,78 +84,21 @@ filegroup(
     ],
 )
 
-exports_files(glob(["google/**"]))
+load("@com_google_protobuf//:protobuf.bzl", "cc_proto_library")
 
 cc_proto_library(
-    name = "servicecontrol",
+    name = "rpc_status_proto",
     srcs = [
-        "google/api/servicecontrol/v1/check_error.proto",
-        "google/api/servicecontrol/v1/distribution.proto",
-        "google/api/servicecontrol/v1/log_entry.proto",
-        "google/api/servicecontrol/v1/metric_value.proto",
-        "google/api/servicecontrol/v1/operation.proto",
-        "google/api/servicecontrol/v1/service_controller.proto",
-        "google/logging/type/http_request.proto",
-        "google/logging/type/log_severity.proto",
-        "google/rpc/error_details.proto",
         "google/rpc/status.proto",
-        "google/type/money.proto",
     ],
-    include = ".",
     visibility = ["//visibility:public"],
-    deps = [
-        ":service_config",
-    ],
     protoc = "//external:protoc",
     default_runtime = "//external:protobuf",
-)
-
-cc_proto_library(
-    name = "service_config",
-    srcs = [
-        "google/api/annotations.proto",
-        "google/api/auth.proto",
-        "google/api/backend.proto",
-        "google/api/billing.proto",
-        "google/api/consumer.proto",
-        "google/api/context.proto",
-        "google/api/control.proto",
-        "google/api/documentation.proto",
-        "google/api/endpoint.proto",
-        "google/api/http.proto",
-        "google/api/label.proto",
-        "google/api/log.proto",
-        "google/api/logging.proto",
-        "google/api/metric.proto",
-        "google/api/monitored_resource.proto",
-        "google/api/monitoring.proto",
-        "google/api/service.proto",
-        "google/api/system_parameter.proto",
-        "google/api/usage.proto",
-    ],
-    include = ".",
-    visibility = ["//visibility:public"],
     deps = [
         "//external:cc_wkt_protos",
     ],
-    protoc = "//external:protoc",
-    default_runtime = "//external:protobuf",
 )
 
-cc_proto_library(
-    name = "cloud_trace",
-    srcs = [
-        "google/devtools/cloudtrace/v1/trace.proto",
-    ],
-    include = ".",
-    default_runtime = "//external:protobuf",
-    protoc = "//external:protoc",
-    visibility = ["//visibility:public"],
-    deps = [
-        ":service_config",
-        "//external:cc_wkt_protos",
-    ],
-)
 """
     native.new_git_repository(
         name = "com_github_googleapis_googleapis",
@@ -166,21 +109,11 @@ cc_proto_library(
 
     if bind:
         native.bind(
-            name = "servicecontrol",
-            actual = "@com_github_googleapis_googleapis//:servicecontrol",
+            name = "rpc_status_proto",
+            actual = "@com_github_googleapis_googleapis//:rpc_status_proto",
+        )
+        native.bind(
+            name = "rpc_status_proto_genproto",
+            actual = "@com_github_googleapis_googleapis//:rpc_status_proto_genproto",
         )
 
-        native.bind(
-            name = "servicecontrol_genproto",
-            actual = "@com_github_googleapis_googleapis//:servicecontrol_genproto",
-        )
-
-        native.bind(
-            name = "service_config",
-            actual = "@com_github_googleapis_googleapis//:service_config",
-        )
-
-        native.bind(
-            name = "cloud_trace",
-            actual = "@com_github_googleapis_googleapis//:cloud_trace",
-        )

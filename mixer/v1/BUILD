@@ -57,8 +57,8 @@ cc_proto_library(
     protoc = "//external:protoc",
     visibility = ["//visibility:public"],
     deps = [
-        "//external:cc_wkt_protos",
         "//external:cc_gogoproto",
-        "//external:servicecontrol",
+        "//external:cc_wkt_protos",
+        "//external:rpc_status_proto",
     ],
 )
