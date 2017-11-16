@@ -79,23 +79,31 @@ package istio.proxy.v1.config;
 //         weight: 100
 //
 message RouteRule {
-  // REQUIRED: Destination uniquely identifies the destination of traffic
-  // associated with this routing rule. This field is applicable for
-  // hostname-based as well as IP-based resolution.
-  //
-  // *Note:* The route rule destination specification represents all version
-  // of the service and therefore the Destination's labels field MUST be empty.
-  //
+  // The default network destination for traffic described by this
+  // routing rule.
   Destination destination = 1;
 
-  repeated HttpRoute http = 2;
+  Source source = 2;
 
-  repeated TcpRoute tcp = 3;
+  // OPTIONAL: The named gateways to bind this route rule to.
+  // If no names are specified the default value is the reserved name "mesh"
+  // which indicates that the rule should be applied to the internal mesh
+  // network. It is fine for a rule to be bound to multiple named gateways
+  // and "mesh" at the same time. It is also fine to refer to mesh resources
+  // in other namespaces as long as the gateway permits the binding per
+  // it's RBAC rules. This form implies that explicit binding is required for
+  // route rules that impact how traffic enters or exits the mesh.
+  repeated string gateways = 3;
 
-  repeated WebsocketRoute websocket = 4;
+  repeated HttpRoute http = 4;
 
-  repeated UdpRoute udp = 5;
+  repeated TcpRoute tcp = 5;
+
+  repeated UdpRoute udp = 6;
+
+  // TODO Add meta-protocol support here for custom codecs
 }
+
 
 // Destination models a network addressable service that can receive traffic.
 message Destination {
@@ -119,12 +127,13 @@ message Destination {
   // in these cases it is not required to explicitly select the port. Note that
   // selection priority is to first match by name and then match by number.
   string port = 3;
+}
 
-  // Optional one or more labels that uniquely identify the service version.
-  //
-  // *Note:* When used for a RouteRule destination, labels MUST be empty.
-  //
-  map<string, string> labels = 5;
+// Describes a label constraint on the workloads where traffic originates.
+message Source {
+  // Optional one or more labels that constrain the applicability of a rule
+  // to workloads with the given labels.
+  map<string, string> labels = 1;
 }
 
 message HttpRoute {
@@ -160,6 +169,8 @@ message HttpRoute {
   // The default is false. Envoy expects the first request to this route
   // to contain the WebSocket upgrade headers. Otherwise, the request
   // will be rejected.
+  // Note that Websocket allows secondary protocol negotiation which may then
+  // be subject to further routing rules based on the protocol selected.
   bool websocket_upgrade = 6;
 
   // Timeout policy for HTTP requests.
@@ -200,19 +211,6 @@ message TcpRoute {
   int32 precedence = 1;
 
   IPMatchAttributes match = 2 ;
-
-  repeated DestinationWeight route = 3;
-}
-
-message WebsocketRoute {
-  // RECOMMENDED. Precedence is used to disambiguate the order of
-  // application of rules for the same destination service. A higher number
-  // takes priority. If not specified, the value is assumed to be 0.  The
-  // order of application for rules with the same precedence is
-  // unspecified.
-  int32 precedence = 1;
-
-  // TODO WebsocketMatch match = 2 ;
 
   repeated DestinationWeight route = 3;
 }

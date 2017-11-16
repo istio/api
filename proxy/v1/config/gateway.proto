@@ -164,10 +164,15 @@ message Server {
   // connections
   Port port = 1;
 
-  // REQUIRED: A list of domains exposed by this gateway. While
+  // A list of domains exposed by this gateway. While
   // typically applicable to HTTP services, it can also be used for TCP
-  // services using TLS with SNI.  Standard DNS wildcard prefix syntax
+  // services using TLS with SNI. Standard DNS wildcard prefix syntax
   // is permitted.
+  //
+  // RouteRules that are bound to a gateway must having a matching domain
+  // in their default destination. Specifically one of the route rule
+  // destination domains is a strict suffix of a gateway domain or
+  // a gateway domain is a suffix of one of the route rule domains.
   repeated string domains = 2;
 
   message TLSOptions {
