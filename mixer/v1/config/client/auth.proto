@@ -18,7 +18,7 @@ package istio.mixer.v1.config.client;
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
-import "google/protobuf/wrappers.proto";
+import "mixer/v1/config/client/service.proto";
 
 option (gogoproto.goproto_getters_all) = false;
 option (gogoproto.equal_all) = false;
@@ -74,14 +74,10 @@ message JWT {
   //
   // Example: https://www.googleapis.com/oauth2/v1/certs
   string jwks_uri = 3;
-  
+
   // If true, forward the entire base64 encoded JWT in the HTTP request.
   // If false, remove the JWT from the HTTP request and do not forward to the application.
-  // If omitted, inherit from a larger scope, e.g. method-level policy inherits behavior from service.
-  // TODO(ayj) - refine scope of policy for method, service, namespace, and global inheritance.
-  google.protobuf.BoolValue forward_jwt = 4;
-  
-  // TODO(ayj) - add support for https://cloud.google.com/endpoints/docs/openapi/authenticating-users#receiving_auth_results_in_your_api with forward_info boolean.
+  bool forward_jwt = 4;
 
   // Duration after which the cached public key should be expired. The
   // system wide default is applied if no duration is explicitly
@@ -90,44 +86,48 @@ message JWT {
 }
 
 // Determines how to apply auth policies for individual requests.
-message EndUserAuthPolicySpec {
-  // If empty, apply auth policy to all requests.
-  // If any of match is true, it is matched.
-  repeated AttributeMatch match = 1;
-
-  message AndRule {
-    repeated Rule rules = 1;
-  }
-
-  message OrRule {
-    repeated Rule rules = 1;
-  }
-
-  message Rule {
-    oneof policy {
-      AndRule and_rule = 1;
-      OrRule or_rule = 2;
-      JWT jwt = 3;
-    }
-  }
-  // The list of end user auth rules to apply.
-  repeated Rule rules = 2;
+message EndUserAuthenticationPolicySpec {
+  // List of JWT rules to valide.
+  //
+  // If the request includes a JWT it must match one of the JWT listed
+  // here matched by the issuer. If validation is successfull the
+  // follow attributes are included in requests to the mixer:
+  //
+  //     request.auth.principal - The string of the issuer (`iss`) and
+  //     subject (`sub`) claims within a JWT concatenated with “/”
+  //     with a percent-encoded subject value
+  //
+  //     request.auth.audiences - This should reflect the audience
+  //     (`aud`) claim within matched JWT.
+  //
+  //     request.auth.presenter - The authorized presenter of the
+  //     credential. This value should reflect the optional Authorized
+  //     Presenter (`azp`) claim within a JWT
+  //
+  // If no match is found the request is rejected with HTTP status
+  // code 401.
+  //
+  // JWT validation is skipped if the user's traffic request does not
+  // include a JWT.
+  repeated JWT jwts = 2;
 }
 
-// EndUserAuthPolicySpecBinding defines the binding between EndUserAuthPolicySpecs
-// and one or more IstioService.
-message EndUserAuthPolicySpecBinding {
-  // REQUIRED. One or more services to map the listed EndUserAuthPolicySpecs
+// EndUserAuthenticationPolicySpecBinding defines the binding between
+// EndUserAuthenticationPolicySpecs and one or more IstioService.
+message EndUserAuthenticationPolicySpecBinding {
+  // REQUIRED. One or more services to map the listed EndUserAuthenticationPolicySpecs
   // onto.
   repeated IstioService services = 1;
 
-  message EndUserAuthPolicySpecReference {
-    // REQUIRED. The short name of the EndUserAuthPolicySpec. This is the
-    // resource name defined by the metadata name field.
+  message EndUserAuthenticationPolicySpecReference {
+    // REQUIRED. The short name of the
+    // EndUserAuthenticationPolicySpec. This is the resource name
+    // defined by the metadata name field.
     string name = 1;
 
-    // Optional namespace of the EndUserAuthPolicySpec. Defaults to the value
-    // of the metadata namespace field.
+    // Optional namespace of the
+    // EndUserAuthenticationPolicySpec. Defaults to the value of the
+    // metadata namespace field.
     string namespace = 2;
   }
 }
