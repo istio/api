@@ -201,9 +201,6 @@ message MeshConfig {
   // Instead, use service-level annotations to overwrite the authentication policy.
   repeated string mtls_excluded_services = 15;
 
-  // Port on which Istio Ingress should listen for inbound http traffic.
-  int32 ingress_http_port = 16;
-
-  // Port on which Istio Ingress should listen for inbound https traffic.
-  int32 ingress_https_port = 17;
+  // Advanced config: Port on which Istio envoy should listen for external http traffic into the mesh.
+  int32 external_http_port = 16;
 }
