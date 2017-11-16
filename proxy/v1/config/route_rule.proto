@@ -79,50 +79,88 @@ package istio.proxy.v1.config;
 //         weight: 100
 //
 message RouteRule {
-  // REQUIRED: Destination uniquely identifies the destination associated
-  // with this routing rule. This field is applicable for hostname-based
-  // resolution for HTTP traffic as well as IP-based resolution for
-  // TCP/UDP traffic.
+  // REQUIRED: Destination uniquely identifies the destination of traffic
+  // associated with this routing rule. This field is applicable for
+  // hostname-based as well as IP-based resolution.
   //
   // *Note:* The route rule destination specification represents all version
-  // of the service and therefore the IstioService's labels field MUST be empty.
+  // of the service and therefore the Destination's labels field MUST be empty.
   //
-  IstioService destination = 1;
+  Destination destination = 1;
 
+  repeated HttpRoute http = 2;
+
+  repeated TcpRoute tcp = 3;
+
+  repeated WebsocketRoute websocket = 4;
+
+  repeated UdpRoute udp = 5;
+}
+
+// Destination models a network addressable service that can receive traffic.
+message Destination {
+  // The addressable service name. May be partially or fully qualified.
+  // Partially qualified names are resolved in the context of the client.
+  //
+  // For example on Kubernetes a client in the "default" namespace referring to
+  // "reviews" would be resolved to the FQDN
+  // "reviews.default.svc.cluster.local". Similarly a client in the default
+  // namespace could add a namespace qualifier to the short name. For instance
+  // "reviews.sales" would resolve to the reviews service in the sales
+  // namespace, i.e. "reviews.sales.svc.cluster.local".
+  string name = 1;
+
+  // Alternate domain name matches for the addressable service. Supports
+  // standard DNS wildcard prefix match semantics.
+  repeated string domains = 2;
+
+  // Selects the port on the destination that is being addressed. Many services
+  // only expose a single port or label ports with the protocols they support,
+  // in these cases it is not required to explicitly select the port. Note that
+  // selection priority is to first match by name and then match by number.
+  string port = 3;
+
+  // Optional one or more labels that uniquely identify the service version.
+  //
+  // *Note:* When used for a RouteRule destination, labels MUST be empty.
+  //
+  map<string, string> labels = 5;
+}
+
+message HttpRoute {
   // RECOMMENDED. Precedence is used to disambiguate the order of
   // application of rules for the same destination service. A higher number
   // takes priority. If not specified, the value is assumed to be 0.  The
   // order of application for rules with the same precedence is
   // unspecified.
-  int32 precedence = 2;
+  int32 precedence = 1;
 
-  // Match condtions to be satisfied for the route rule to be
-  // activated. If match is omitted, the route rule applies only to HTTP
-  // traffic.
-  MatchCondition match = 3;
+  // Match conditions to be satisfied for the route rule to be
+  // activated.
+  HttpMatchRequest match = 2;
 
   // REQUIRED (route|redirect). A routing rule can either redirect traffic or
   // forward traffic. The forwarding target can be one of several versions
   // of a service (see glossary in beginning of document). Weights
   // associated with the service version determine the proportion of
   // traffic it receives.
-  repeated DestinationWeight route = 4;
+  repeated DestinationWeight route = 3;
 
   // REQUIRED (route|redirect). A routing rule can either redirect traffic or
   // forward traffic. The redirect primitive can be used to send a HTTP 302
   // redirect to a different URI or Authority.
-  HTTPRedirect redirect = 5;
+  HTTPRedirect redirect = 4;
 
   // Rewrite HTTP URIs and Authority headers. Rewrite cannot be used with
   // Redirect primitive. Rewrite will be performed before forwarding.
-  HTTPRewrite rewrite = 6;
+  HTTPRewrite rewrite = 5;
 
   // Indicates that a HTTP/1.1 client connection to this particular route
   // should be allowed (and expected) to upgrade to a WebSocket connection.
   // The default is false. Envoy expects the first request to this route
   // to contain the WebSocket upgrade headers. Otherwise, the request
   // will be rejected.
-  bool websocket_upgrade = 7;
+  bool websocket_upgrade = 6;
 
   // Timeout policy for HTTP requests.
   HTTPTimeout http_req_timeout = 8;
@@ -137,11 +175,11 @@ message RouteRule {
   L4FaultInjection l4_fault = 11;
 
   // Mirror HTTP traffic to a another destination in addition to forwarding
-  // the requests to the intended destination. Mirrored traffic is on best
+  // the requests to the intended destination. Mirrored traffic is on a best
   // effort basis where Envoy will not wait for the mirrored cluster to
   // respond before returning the response from the original destination.
   // Statistics will be generated for the mirrored destination.
-  IstioService mirror = 12;
+  Destination mirror = 12;
 
   // Cross-Origin Resource Sharing policy (CORS). Refer to
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS for
@@ -153,74 +191,47 @@ message RouteRule {
   map<string, string> append_headers = 14;
 }
 
-// IstioService identifies a service and optionally service version.
-// The FQDN of the service is composed from the name, namespace, and implementation-specific domain suffix
-// (e.g. on Kubernetes, "reviews" + "default" + "svc.cluster.local" -> "reviews.default.svc.cluster.local").
-message IstioService {
-  // The short name of the service such as "foo".
-  string name = 1;
+message TcpRoute {
+  // RECOMMENDED. Precedence is used to disambiguate the order of
+  // application of rules for the same destination service. A higher number
+  // takes priority. If not specified, the value is assumed to be 0.  The
+  // order of application for rules with the same precedence is
+  // unspecified.
+  int32 precedence = 1;
 
-  // Optional namespace of the service. Defaults to value of metadata namespace field.
-  string namespace = 2;
+  IPMatchAttributes match = 2 ;
 
-  // Domain suffix used to construct the service FQDN in implementations that support such specification.
-  string domain = 3;
-
-  // The service FQDN.
-  string service = 4;
-
-  // Optional one or more labels that uniquely identify the service version.
-  //
-  // *Note:* When used for a RouteRule destination, labels MUST be empty.
-  //
-  map<string, string> labels = 5;
+  repeated DestinationWeight route = 3;
 }
 
-// Match condition specifies a set of criterion to be met in order for the
-// route rule to be applied to the connection or HTTP request. The
-// condition provides distinct set of conditions for each protocol with the
-// intention that conditions apply only to the service ports that match the
-// protocol. For example, the following route rule restricts the rule to
-// match only requests originating from "reviews:v2", accessing ratings
-// service where the URL path starts with /ratings/v2/ and the request
-// contains a "cookie" with value "user=jason",
-//
-//     metadata:
-//       name: my-rule
-//       namespace: default
-//     spec:
-//       destination:
-//         name: ratings
-//       match:
-//         source:
-//           name: reviews
-//           labels:
-//             version: v2
-//         request:
-//           headers:
-//             cookie:
-//               regex: "^(.*?;)?(user=jason)(;.*)?"
-//             uri:
-//               prefix: "/ratings/v2/"
-//
-// MatchCondition CANNOT be empty. At least one source or
-// request header must be specified.
-message MatchCondition {
-  // Identifies the service initiating a connection or a request.
-  IstioService source = 1;
+message WebsocketRoute {
+  // RECOMMENDED. Precedence is used to disambiguate the order of
+  // application of rules for the same destination service. A higher number
+  // takes priority. If not specified, the value is assumed to be 0.  The
+  // order of application for rules with the same precedence is
+  // unspecified.
+  int32 precedence = 1;
 
-  // (-- Set of layer 4 match conditions based on the IP ranges --)
-  L4MatchAttributes tcp = 2 ;
+  // TODO WebsocketMatch match = 2 ;
 
-  // (-- Set of layer 4 match conditions based on the IP ranges --)
-  L4MatchAttributes udp = 3 ;
+  repeated DestinationWeight route = 3;
+}
 
-  // Attributes of an HTTP request to match.
-  MatchRequest request = 4 ;
+message UdpRoute {
+  // RECOMMENDED. Precedence is used to disambiguate the order of
+  // application of rules for the same destination service. A higher number
+  // takes priority. If not specified, the value is assumed to be 0.  The
+  // order of application for rules with the same precedence is
+  // unspecified.
+  int32 precedence = 1;
+
+  IPMatchAttributes match = 2 ;
+
+  repeated DestinationWeight route = 3;
 }
 
 // MatchRequest specifies the attributes of an HTTP request to be used for matching a request.
-message MatchRequest {
+message HttpMatchRequest {
   // Set of HTTP match conditions based on HTTP/1.1, HTTP/2, GRPC request
   // metadata, such as _uri_, _scheme_, _authority_.  The header keys must be
   // lowercase and use hyphen as the separator, e.g. _x-request-id_.
@@ -267,7 +278,7 @@ message MatchRequest {
 message DestinationWeight {
   // Sometimes required. Optional destination uniquely identifies the destination service. If not
   // specified, the value is inherited from the parent route rule.
-  IstioService destination = 1;
+  Destination destination = 1;
 
   // Sometimes required. Service version identifier for the destination service.
   // (-- N.B. The map is used instead of pstruct due to lack of serialization support
@@ -284,7 +295,7 @@ message DestinationWeight {
 
 // (-- L4 connection match attributes. Note that L4 connection matching
 // support is incomplete. --)
-message L4MatchAttributes {
+message IPMatchAttributes {
   // IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or
   // just a.b.c.d
   repeated string source_subnet = 1;

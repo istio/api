@@ -49,7 +49,7 @@ message EgressRule {
     int32 port = 1;
     // The protocol to communicate with the external services.
     // MUST BE one of HTTP|HTTPS|GRPC|HTTP2.
-    string protocol = 2;
+    repeated string protocol = 2;
   }
 
   // REQUIRED: Hostname or a wildcard domain name associated with the external service.
