@@ -86,22 +86,30 @@ message JWT {
 
   // Defines where to extract the JWT from an HTTP request.
   //
-  // The Authorization header using the Bearer schema will be used if
-  // no explicit location is specified, e.g. Authorization: Bearer
-  // <token>.
+  // If no explicit location is specified the following default
+  // locations are tried in order:
+  //
+  //     1) The Authorization header using the Bearer schema,
+  //        e.g. Authorization: Bearer <token>. (see
+  //        https://tools.ietf.org/html/rfc6750#section-2.1)
+  //
+  //     2) `access_token` query parameter (see
+  //     https://tools.ietf.org/html/rfc6750#section-2.3)
+  //
   message Location {
     oneof scheme {
       // JWT is sent in a request header. `header` represents the
       // header name.
       //
-      // For example, `header=x-goog-iap-jwt-assertion`
+      // For example, if `header=x-goog-iap-jwt-assertion`, the header
+      // format will be x-goog-iap-jwt-assertion: <JWT>.
       //
       string header = 1;
 
       // JWT is sent in a query parameter. `query` represents the
       // query parameter name.
       //
-      // For example, `query=access_token`.
+      // For example, `query=jwt_token`.
       string query = 2;
     }
   }
