@@ -112,22 +112,26 @@ message EndUserAuthenticationPolicySpec {
   repeated JWT jwts = 2;
 }
 
+message EndUserAuthenticationPolicySpecReference {
+  // REQUIRED. The short name of the
+  // EndUserAuthenticationPolicySpec. This is the resource name
+  // defined by the metadata name field.
+  string name = 1;
+
+  // Optional namespace of the
+  // EndUserAuthenticationPolicySpec. Defaults to the value of the
+  // metadata namespace field.
+  string namespace = 2;
+}
+
 // EndUserAuthenticationPolicySpecBinding defines the binding between
 // EndUserAuthenticationPolicySpecs and one or more IstioService.
 message EndUserAuthenticationPolicySpecBinding {
-  // REQUIRED. One or more services to map the listed EndUserAuthenticationPolicySpecs
-  // onto.
+  // REQUIRED. One or more services to map the listed
+  // EndUserAuthenticationPolicySpecs onto.
   repeated IstioService services = 1;
 
-  message EndUserAuthenticationPolicySpecReference {
-    // REQUIRED. The short name of the
-    // EndUserAuthenticationPolicySpec. This is the resource name
-    // defined by the metadata name field.
-    string name = 1;
-
-    // Optional namespace of the
-    // EndUserAuthenticationPolicySpec. Defaults to the value of the
-    // metadata namespace field.
-    string namespace = 2;
-  }
+  // REQUIRED. One or more EndUserAuthenticationPolicySpecReference
+  // that should be mapped to the specified service(s).
+  repeated EndUserAuthenticationPolicySpecReference policies = 2;
 }
