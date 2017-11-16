@@ -153,7 +153,7 @@ message APIKey {
     //
     string query = 1;
 
-    // API key is send in a request header. `header` represents the
+    // API key is sent in a request header. `header` represents the
     // header name.
     //
     // For example, `header=X-API-KEY` should be used with the

@@ -83,6 +83,29 @@ message JWT {
   // system wide default is applied if no duration is explicitly
   // specified.
   google.protobuf.Duration public_key_cache_duration = 5;
+
+  // Defines where to extract the JWT from an HTTP request.
+  //
+  // The Authorization header using the Bearer schema will be used if
+  // no explicit location is specified, e.g. Authorization: Bearer
+  // <token>.
+  message Location {
+    oneof scheme {
+      // JWT is sent in a request header. `header` represents the
+      // header name.
+      //
+      // For example, `header=x-goog-iap-jwt-assertion`
+      //
+      string header = 1;
+
+      // JWT is sent in a query parameter. `query` represents the
+      // query parameter name.
+      //
+      // For example, `query=access_token`.
+      string query = 2;
+    }
+  }
+  repeated Location locations = 6;
 }
 
 // Determines how to apply auth policies for individual requests.
