@@ -126,6 +126,10 @@ message Destination {
   // only expose a single port or label ports with the protocols they support,
   // in these cases it is not required to explicitly select the port. Note that
   // selection priority is to first match by name and then match by number.
+  //
+  // Names must comply with DNS label syntax (rfc1035) and therefore cannot
+  // collide with numbers. If there are multiple ports on a service with the
+  // same protocol the names should be of the form <protocol-name>-<DNS label>
   string port = 3;
 }
 
