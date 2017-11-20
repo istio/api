@@ -64,4 +64,3 @@ message IngressRule {
     string destination_port_name = 7;
   }
 }
-
