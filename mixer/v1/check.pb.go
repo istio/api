@@ -164,7 +164,6 @@ type ReferencedAttributes_AttributeMatch struct {
 	Name int32 `protobuf:"zigzag32,1,opt,name=name,proto3" json:"name,omitempty"`
 	// The kind of match against the attribute value.
 	Condition ReferencedAttributes_Condition `protobuf:"varint,2,opt,name=condition,proto3,enum=istio.mixer.v1.ReferencedAttributes_Condition" json:"condition,omitempty"`
-	//
 	// If a REGEX condition is provided for a STRING_MAP attribute,
 	// clients should use the regex value to match against map keys.
 	Regex string `protobuf:"bytes,3,opt,name=regex,proto3" json:"regex,omitempty"`
