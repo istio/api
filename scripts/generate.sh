@@ -27,3 +27,11 @@ for src in ${googleapis}; do
         install -m 0640 ${src} ${dst}
     fi
 done
+
+gogo=$(bazel info output_base)/external/com_github_gogo_protobuf
+gogofiles=$(find -L ${gogo} -name "*.go")
+for src in ${gogofiles}; do
+    dst=vendor/github.com/gogo/protobuf/${src##${gogo}/}
+    mkdir -p "$(dirname ${dst})"
+    install -m 0640 ${src} ${dst}
+done
