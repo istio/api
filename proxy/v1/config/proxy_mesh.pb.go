@@ -43,7 +43,7 @@ var AuthenticationPolicy_value = map[string]int32{
 func (x AuthenticationPolicy) String() string {
 	return proto.EnumName(AuthenticationPolicy_name, int32(x))
 }
-func (AuthenticationPolicy) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{0} }
+func (AuthenticationPolicy) EnumDescriptor() ([]byte, []int) { return fileDescriptor6, []int{0} }
 
 type MeshConfig_IngressControllerMode int32
 
@@ -79,7 +79,7 @@ func (x MeshConfig_IngressControllerMode) String() string {
 	return proto.EnumName(MeshConfig_IngressControllerMode_name, int32(x))
 }
 func (MeshConfig_IngressControllerMode) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor5, []int{1, 0}
+	return fileDescriptor6, []int{1, 0}
 }
 
 // TODO AuthPolicy needs to be removed and merged with AuthPolicy defined above
@@ -104,7 +104,7 @@ var MeshConfig_AuthPolicy_value = map[string]int32{
 func (x MeshConfig_AuthPolicy) String() string {
 	return proto.EnumName(MeshConfig_AuthPolicy_name, int32(x))
 }
-func (MeshConfig_AuthPolicy) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{1, 1} }
+func (MeshConfig_AuthPolicy) EnumDescriptor() ([]byte, []int) { return fileDescriptor6, []int{1, 1} }
 
 // ProxyConfig defines variables for individual Envoy instances.
 type ProxyConfig struct {
@@ -167,7 +167,7 @@ type ProxyConfig struct {
 func (m *ProxyConfig) Reset()                    { *m = ProxyConfig{} }
 func (m *ProxyConfig) String() string            { return proto.CompactTextString(m) }
 func (*ProxyConfig) ProtoMessage()               {}
-func (*ProxyConfig) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{0} }
+func (*ProxyConfig) Descriptor() ([]byte, []int) { return fileDescriptor6, []int{0} }
 
 func (m *ProxyConfig) GetConfigPath() string {
 	if m != nil {
@@ -331,7 +331,7 @@ type MeshConfig struct {
 func (m *MeshConfig) Reset()                    { *m = MeshConfig{} }
 func (m *MeshConfig) String() string            { return proto.CompactTextString(m) }
 func (*MeshConfig) ProtoMessage()               {}
-func (*MeshConfig) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{1} }
+func (*MeshConfig) Descriptor() ([]byte, []int) { return fileDescriptor6, []int{1} }
 
 func (m *MeshConfig) GetEgressProxyAddress() string {
 	if m != nil {
@@ -446,9 +446,9 @@ func init() {
 	proto.RegisterEnum("istio.proxy.v1.config.MeshConfig_AuthPolicy", MeshConfig_AuthPolicy_name, MeshConfig_AuthPolicy_value)
 }
 
-func init() { proto.RegisterFile("proxy/v1/config/proxy_mesh.proto", fileDescriptor5) }
+func init() { proto.RegisterFile("proxy/v1/config/proxy_mesh.proto", fileDescriptor6) }
 
-var fileDescriptor5 = []byte{
+var fileDescriptor6 = []byte{
 	// 912 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x55, 0x5d, 0x6f, 0x1a, 0x47,
 	0x14, 0x0d, 0xfe, 0xc2, 0xbe, 0x98, 0x05, 0x6f, 0x6d, 0x67, 0xd3, 0x87, 0x16, 0x39, 0x6a, 0x8a,

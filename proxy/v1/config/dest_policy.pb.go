@@ -7,6 +7,7 @@ Package istio_proxy_v1_config is a generated protocol buffer package.
 It is generated from these files:
 	proxy/v1/config/dest_policy.proto
 	proxy/v1/config/egress_rule.proto
+	proxy/v1/config/gateway.proto
 	proxy/v1/config/http_fault.proto
 	proxy/v1/config/ingress_rule.proto
 	proxy/v1/config/l4_fault.proto
@@ -18,6 +19,9 @@ It has these top-level messages:
 	LoadBalancing
 	CircuitBreaker
 	EgressRule
+	Gateway
+	Server
+	TLSConfig
 	HTTPFaultInjection
 	IngressRule
 	L4FaultInjection

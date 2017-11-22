@@ -33,7 +33,7 @@ type HTTPFaultInjection struct {
 func (m *HTTPFaultInjection) Reset()                    { *m = HTTPFaultInjection{} }
 func (m *HTTPFaultInjection) String() string            { return proto.CompactTextString(m) }
 func (*HTTPFaultInjection) ProtoMessage()               {}
-func (*HTTPFaultInjection) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0} }
+func (*HTTPFaultInjection) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0} }
 
 func (m *HTTPFaultInjection) GetDelay() *HTTPFaultInjection_Delay {
 	if m != nil {
@@ -86,7 +86,7 @@ type HTTPFaultInjection_Delay struct {
 func (m *HTTPFaultInjection_Delay) Reset()                    { *m = HTTPFaultInjection_Delay{} }
 func (m *HTTPFaultInjection_Delay) String() string            { return proto.CompactTextString(m) }
 func (*HTTPFaultInjection_Delay) ProtoMessage()               {}
-func (*HTTPFaultInjection_Delay) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0, 0} }
+func (*HTTPFaultInjection_Delay) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0, 0} }
 
 type isHTTPFaultInjection_Delay_HttpDelayType interface {
 	isHTTPFaultInjection_Delay_HttpDelayType()
@@ -248,7 +248,7 @@ type HTTPFaultInjection_Abort struct {
 func (m *HTTPFaultInjection_Abort) Reset()                    { *m = HTTPFaultInjection_Abort{} }
 func (m *HTTPFaultInjection_Abort) String() string            { return proto.CompactTextString(m) }
 func (*HTTPFaultInjection_Abort) ProtoMessage()               {}
-func (*HTTPFaultInjection_Abort) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0, 1} }
+func (*HTTPFaultInjection_Abort) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0, 1} }
 
 type isHTTPFaultInjection_Abort_ErrorType interface {
 	isHTTPFaultInjection_Abort_ErrorType()
@@ -396,9 +396,9 @@ func init() {
 	proto.RegisterType((*HTTPFaultInjection_Abort)(nil), "istio.proxy.v1.config.HTTPFaultInjection.Abort")
 }
 
-func init() { proto.RegisterFile("proxy/v1/config/http_fault.proto", fileDescriptor2) }
+func init() { proto.RegisterFile("proxy/v1/config/http_fault.proto", fileDescriptor3) }
 
-var fileDescriptor2 = []byte{
+var fileDescriptor3 = []byte{
 	// 362 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x91, 0xc1, 0x4e, 0xea, 0x40,
 	0x14, 0x86, 0x6f, 0xb9, 0xf4, 0xde, 0x70, 0x30, 0x51, 0x1a, 0x4d, 0x2a, 0x0b, 0x83, 0xae, 0x58,

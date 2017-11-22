@@ -55,7 +55,7 @@ type IngressRule struct {
 func (m *IngressRule) Reset()                    { *m = IngressRule{} }
 func (m *IngressRule) String() string            { return proto.CompactTextString(m) }
 func (*IngressRule) ProtoMessage()               {}
-func (*IngressRule) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0} }
+func (*IngressRule) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{0} }
 
 type isIngressRule_DestinationServicePort interface {
 	isIngressRule_DestinationServicePort()
@@ -196,9 +196,9 @@ func init() {
 	proto.RegisterType((*IngressRule)(nil), "istio.proxy.v1.config.IngressRule")
 }
 
-func init() { proto.RegisterFile("proxy/v1/config/ingress_rule.proto", fileDescriptor3) }
+func init() { proto.RegisterFile("proxy/v1/config/ingress_rule.proto", fileDescriptor4) }
 
-var fileDescriptor3 = []byte{
+var fileDescriptor4 = []byte{
 	// 283 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x90, 0xd1, 0x4a, 0xf3, 0x30,
 	0x1c, 0xc5, 0xd7, 0x7d, 0xdb, 0x3e, 0xf6, 0xdf, 0x85, 0x12, 0x19, 0x84, 0x81, 0x52, 0x26, 0xc2,

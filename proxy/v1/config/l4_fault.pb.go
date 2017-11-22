@@ -34,7 +34,7 @@ type L4FaultInjection struct {
 func (m *L4FaultInjection) Reset()                    { *m = L4FaultInjection{} }
 func (m *L4FaultInjection) String() string            { return proto.CompactTextString(m) }
 func (*L4FaultInjection) ProtoMessage()               {}
-func (*L4FaultInjection) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{0} }
+func (*L4FaultInjection) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{0} }
 
 func (m *L4FaultInjection) GetThrottle() *L4FaultInjection_Throttle {
 	if m != nil {
@@ -70,7 +70,7 @@ type L4FaultInjection_Throttle struct {
 func (m *L4FaultInjection_Throttle) Reset()                    { *m = L4FaultInjection_Throttle{} }
 func (m *L4FaultInjection_Throttle) String() string            { return proto.CompactTextString(m) }
 func (*L4FaultInjection_Throttle) ProtoMessage()               {}
-func (*L4FaultInjection_Throttle) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{0, 0} }
+func (*L4FaultInjection_Throttle) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{0, 0} }
 
 type isL4FaultInjection_Throttle_ThrottleAfter interface {
 	isL4FaultInjection_Throttle_ThrottleAfter()
@@ -217,7 +217,7 @@ type L4FaultInjection_Terminate struct {
 func (m *L4FaultInjection_Terminate) Reset()                    { *m = L4FaultInjection_Terminate{} }
 func (m *L4FaultInjection_Terminate) String() string            { return proto.CompactTextString(m) }
 func (*L4FaultInjection_Terminate) ProtoMessage()               {}
-func (*L4FaultInjection_Terminate) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{0, 1} }
+func (*L4FaultInjection_Terminate) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{0, 1} }
 
 func (m *L4FaultInjection_Terminate) GetPercent() float32 {
 	if m != nil {
@@ -239,9 +239,9 @@ func init() {
 	proto.RegisterType((*L4FaultInjection_Terminate)(nil), "istio.proxy.v1.config.L4FaultInjection.Terminate")
 }
 
-func init() { proto.RegisterFile("proxy/v1/config/l4_fault.proto", fileDescriptor4) }
+func init() { proto.RegisterFile("proxy/v1/config/l4_fault.proto", fileDescriptor5) }
 
-var fileDescriptor4 = []byte{
+var fileDescriptor5 = []byte{
 	// 362 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x91, 0xc1, 0x4e, 0xf2, 0x40,
 	0x14, 0x85, 0x69, 0xf9, 0xe1, 0x87, 0x6b, 0x62, 0x70, 0x04, 0x53, 0x59, 0x10, 0xe2, 0x8a, 0x85,
