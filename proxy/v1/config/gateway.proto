@@ -22,7 +22,7 @@ package istio.proxy.v1.config;
 // protocol to use, SNI configuration for the load balancer, etc.
 //
 // For example, the following gateway spec sets up Envoy to act as a load
-// balancer exposing port 80 (http), 443 (https), and port 2379 (TCP).
+// balancer exposing port 80 and 9080 (http), 443 (https), and port 2379 (TCP).
 // While Istio will configure Envoy to listen on these ports, it is the
 // responsibility of the user to ensure that external traffic to these
 // ports are allowed into the mesh.
@@ -65,10 +65,16 @@ package istio.proxy.v1.config;
 //         serverCert: server.crt
 //         clientCABundle: client.ca-bundle
 //
-// The following route rule forwards http requests for
-// uk.bookinfo.com/reviews, eu.bookinfo.com/reviews to the reviews service.
-// The same rule is also applicable inside the mesh for requests to the
-// reviews.prod service. This rule is applicable across ports 80, 443, 9080
+// The following route rule splits traffic for
+// https://uk.bookinfo.com/reviews, https://eu.bookinfo.com/reviews,
+// http://uk.bookinfo.com:9080/reviews, http://eu.bookinfo.com:9080/reviews
+// into two versions (prod and qa) of an internal reviews service on port
+// 9080. In addition, requests containing the cookie user: dev-123 will be
+// sent to special port 7777 in the qa version. The same rule is also
+// applicable inside the mesh for requests to the reviews.prod
+// service. This rule is applicable across ports 443, 9080. Note that
+// http://uk.bookinfo.com gets redirected to https://uk.bookinfo.com
+// (i.e. 80 redirects to 443).
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: RouteRule
@@ -83,16 +89,30 @@ package istio.proxy.v1.config;
 //       gateway:
 //         - my-gateway #apply at my-gateway as well as reviews.prod internally
 //       http:
-//         match:
-//           request:
-//             headers:
-//               uri:
-//                 prefix: /reviews/
-//         route:
-//         - weight: 80
-//         - destination:
-//             name: reviews.qa
-//           weight: 20
+//         - match:
+//             request:
+//               headers:
+//                 cookie:
+//                   user: dev-123
+//           route:
+//           - destination:
+//               port:
+//                 number: 7777
+//               name: reviews.qa
+//         - match:
+//             request:
+//               headers:
+//                 uri:
+//                   prefix: /reviews/
+//           route:
+//           - destination:
+//               port:
+//                 number: 9080 # port can be omitted if its the only port for reviews
+//               name: reviews.prod # can be omitted if its same as root destination.name
+//             weight: 80
+//           - destination:
+//               name: reviews.qa
+//             weight: 20
 //
 // The following routing rule forwards traffic arriving at (external)
 // port 2379 from 172.17.16.* subnet to internal redis server on port 5555.
@@ -117,7 +137,7 @@ package istio.proxy.v1.config;
 //             name: redis.prod
 //
 // By default, if there is no wildcard, HTTP requests for unknown domains
-// or requests that have no matching route rule will be responded with a
+// or requests that have no matching route rule will respond with a
 // 404. If a specific default behavior is desired at the ingress, add a
 // route rule without any destination (implies wildcard) with the desired
 // backend. For example, the following wildcard routing rule is applicable for
