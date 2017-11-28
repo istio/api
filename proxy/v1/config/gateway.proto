@@ -33,37 +33,32 @@ package istio.proxy.v1.config;
 //       name: my-gateway
 //     spec:
 //       servers:
-//         http:
-//           - port:
-//               number: 80
-//               name: http
-//             domains:
-//               - uk.bookinfo.com
-//               - eu.bookinfo.com
-//             tls:
-//               httpsRedirect: true # sends 302 redirect for http requests
-//           - port:
-//               number: 443
-//               name: https
-//             tls:
-//               mode: simple #enables HTTPS on this port
-//             domains:
-//               - uk.bookinfo.com
-//               - eu.bookinfo.com
-//           - port:
-//               number: 9080
-//               name: http-wildcard
-//             # no domains implies wildcard match
-//         tcp:
-//           - port:
-//               number: 2379 #to expose internal service via external port 2379
-//               name: redis
-//               protocol: REDIS
-//       certs:
-//       - domains:
-//           - *.bookinfo.com
-//         serverCert: server.crt
-//         clientCABundle: client.ca-bundle
+//         - port:
+//             number: 80
+//             name: http
+//           domains:
+//             - uk.bookinfo.com
+//             - eu.bookinfo.com
+//           tls:
+//             httpsRedirect: true # sends 302 redirect for http requests
+//         - port:
+//             number: 443
+//             name: https
+//           domains:
+//             - uk.bookinfo.com
+//             - eu.bookinfo.com
+//           tls:
+//             mode: simple #enables HTTPS on this port
+//             serverCert: server.crt
+//             clientCABundle: client.ca-bundle
+//         - port:
+//             number: 9080
+//             name: http-wildcard
+//           # no domains implies wildcard match
+//         - port:
+//             number: 2379 #to expose internal service via external port 2379
+//             name: redis
+//             protocol: REDIS
 //
 // The following route rule splits traffic for
 // https://uk.bookinfo.com/reviews, https://eu.bookinfo.com/reviews,
@@ -157,12 +152,8 @@ package istio.proxy.v1.config;
 //             name: homepage.prod
 //
 message Gateway {
-  // REQUIRED: Details about the port on which the proxy listens and applies rules
+  // REQUIRED: A list of server specifications.
   repeated Server servers = 1;
-
-  // Optional names of certificates for the server and the CA bundle to be used to validate
-  // the client's certificate (if mTLS is to be used).
-  repeated TLSConfig certs = 2;
 }
 
 // Server describes the properties of the proxy on a given load balancer port.
@@ -183,6 +174,18 @@ message Gateway {
 //       - port:
 //           number: 2379
 //           protocol: redis
+//
+// The following is an example of TLS configuration for port 443
+//     metadata:
+//       name: my-ingress
+//     spec:
+//       servers:
+//       - port:
+//           number: 443
+//           protocol: HTTP
+//         tls:
+//           mode: simple
+//           serverCertificatet: server.crt
 //
 message Server {
   // Port describes the properties of a specific port of a service.
@@ -237,54 +240,25 @@ message Server {
     // secured using TLS.  The value of this field determines how TLS is
     // enforced.  
     TLSmode mode = 2;
+
+    // REQUIRED if mode == SIMPLE/MUTUAL. The name of the file holding the
+    // server-side TLS certificate to use.  It is the responsibility of the
+    // underlying platform to mount the certificate as a file under
+    // /etc/istio/ingress-certs with the same name as the specified in this
+    // field.
+    string server_certificate = 3;
+
+    // REQUIRED if mode == MUTUAL. To use mutual TLS for external clients,
+    // specify the name of the file holding the CA certificate to validate
+    // the client's certificate. It is the responsibility of the underlying
+    // platform to mount the certificate as a file under
+    // /etc/istio/ingress-certs with the same name as specified in this
+    // field.
+    string client_ca_bundle = 4;
   }
 
   // Set of TLS related options that govern the server's behavior. Use
   // these options to control if all http requests should be redirected to
   // https, and the TLS modes to use.
   TLSOptions tls = 3;
-}
-
-// TLSConfig describes the server-side TLS certificate and CA cert (for
-// client authentication) for a particular domain exposed by the ingress load
-// balancer. These domains are not resolved in any way. Its upto the end user
-// to ensure that the DNS resolves these domains to the ingress load balancer
-//
-// For example, the following is an example of TLS configuration for port 443
-//     metadata:
-//       name: my-ingress
-//       namespace: mynamespace
-//     spec:
-//       servers:
-//       - port:
-//           number: 443
-//           protocol: HTTP
-//         tls:
-//           mode: simple
-//       certs:
-//       - domains:
-//           - foo.bar.com
-//         serverCertificatet: server.crt
-//         clientCABundle: client.ca-bundle
-//       - domains:
-//           - example.com
-//         serverCertificate: server.crt
-//
-message TLSConfig {
-  // REQUIRED: A set of hostnames associated with the server
-  // certificate. For wildcard hostname, use *
-  repeated string domains = 1;
-
-  // REQUIRED: The name of the file holding the server-side TLS certificate
-  // to use.  It is the responsibility of the underlying platform to mount
-  // the certificate as a file under /etc/istio/ingress-certs with the same
-  // name as the specified in this field.
-  string server_certificate = 2;
-
-  // To use mutual TLS for external clients, specify the name of the file
-  // holding the CA certificate to validate the client's certificate. It is
-  // the responsibility of the underlying platform to mount the certificate
-  // as a file under /etc/istio/ingress-certs with the same name as
-  // specified in this field.
-  string client_ca_bundle = 3;
 }
