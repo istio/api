@@ -105,96 +105,9 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //             name: redis
 //             protocol: REDIS
 //
-// The following route rule splits traffic for
-// https://uk.bookinfo.com/reviews, https://eu.bookinfo.com/reviews,
-// http://uk.bookinfo.com:9080/reviews, http://eu.bookinfo.com:9080/reviews
-// into two versions (prod and qa) of an internal reviews service on port
-// 9080. In addition, requests containing the cookie user: dev-123 will be
-// sent to special port 7777 in the qa version. The same rule is also
-// applicable inside the mesh for requests to the reviews.prod
-// service. This rule is applicable across ports 443, 9080. Note that
-// http://uk.bookinfo.com gets redirected to https://uk.bookinfo.com
-// (i.e. 80 redirects to 443).
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: bookinfo-rule
-//     spec:
-//       destination:
-//         name: reviews.prod
-//         domains:
-//           - uk.bookinfo.com
-//           - eu.bookinfo.com
-//       gateway:
-//         - my-gateway #apply at my-gateway as well as reviews.prod internally
-//       http:
-//         - match:
-//             request:
-//               headers:
-//                 cookie:
-//                   user: dev-123
-//           route:
-//           - destination:
-//               port:
-//                 number: 7777
-//               name: reviews.qa
-//         - match:
-//             request:
-//               headers:
-//                 uri:
-//                   prefix: /reviews/
-//           route:
-//           - destination:
-//               port:
-//                 number: 9080 # port can be omitted if its the only port for reviews
-//               name: reviews.prod # can be omitted if its same as root destination.name
-//             weight: 80
-//           - destination:
-//               name: reviews.qa
-//             weight: 20
-//
-// The following routing rule forwards traffic arriving at (external)
-// port 2379 from 172.17.16.* subnet to internal redis server on port 5555.
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: bookinfo-redis
-//     spec:
-//       destination:
-//         port:
-//           name: redis #only applies to ports named redis
-//       gateway:
-//         - my-gateway
-//       tcp:
-//         match:
-//           tcp:
-//             sourceSubnet:
-//               - "172.17.16.0/24"
-//         route:
-//         - destination:
-//             name: redis.prod
-//
-// By default, if there is no wildcard, HTTP requests for unknown domains
-// or requests that have no matching route rule will respond with a
-// 404. If a specific default behavior is desired at the ingress, add a
-// route rule without any destination (implies wildcard) with the desired
-// backend. For example, the following wildcard routing rule is applicable for
-// port 9080
-//
-//     metadata:
-//       name: default-ingress
-//     spec:
-//       destination:
-//         port:
-//           number: 9080
-//       gateway:
-//         - my-gateway #applies to
-//       http:
-//         route:
-//         - destination:
-//             name: homepage.prod
+// The gateway specification above describes the L4-L6 properties of a load
+// balancer.  Routing rules can be used to control the forwarding of
+// traffic arriving at a particular particular domain or gateway port.
 //
 type Gateway struct {
 	// REQUIRED: A list of server specifications.
