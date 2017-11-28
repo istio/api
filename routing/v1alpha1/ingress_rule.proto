@@ -14,7 +14,7 @@
 
 syntax = "proto3";
 
-import "routing/v1alpha1/config/route_rule.proto";
+import "routing/v1alpha1/route_rule.proto";
 
 package istio.routing.v1alpha1.config;
 
