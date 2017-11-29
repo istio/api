@@ -6,10 +6,27 @@ Package istio_routing_v1alpha2 is a generated protocol buffer package.
 
 It is generated from these files:
 	routing/v1alpha2/gateway.proto
+	routing/v1alpha2/route_rule.proto
 
 It has these top-level messages:
 	Gateway
 	Server
+	RouteRule
+	Host
+	Destination
+	Source
+	HttpRoute
+	TcpRoute
+	UdpRoute
+	HttpMatchRequest
+	DestinationWeight
+	L4MatchAttributes
+	HTTPRedirect
+	HTTPRewrite
+	StringMatch
+	HTTPRetry
+	CorsPolicy
+	HTTPFaultInjection
 */
 package istio_routing_v1alpha2
 
@@ -108,6 +125,89 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 // The gateway specification above describes the L4-L6 properties of a load
 // balancer.  Routing rules can be used to control the forwarding of
 // traffic arriving at a particular particular domain or gateway port.
+//
+// The following route rule splits traffic for
+// https://uk.bookinfo.com/reviews, https://eu.bookinfo.com/reviews,
+// http://uk.bookinfo.com:9080/reviews, http://eu.bookinfo.com:9080/reviews
+// into two versions (prod and qa) of an internal reviews service on port
+// 9080. In addition, requests containing the cookie user: dev-123 will be
+// sent to special port 7777 in the qa version. The same rule is also
+// applicable inside the mesh for requests to the reviews.prod
+// service. This rule is applicable across ports 443, 9080. Note that
+// http://uk.bookinfo.com gets redirected to https://uk.bookinfo.com
+// (i.e. 80 redirects to 443).
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: bookinfo-rule
+//     spec:
+//       host:
+//         name: reviews.prod
+//         domains:
+//           - uk.bookinfo.com
+//           - eu.bookinfo.com
+//       gateways:
+//         - my-gateway #apply at my-gateway as well as reviews.prod internally
+//       http:
+//         - match:
+//             headers:
+//               cookie:
+//                 user: dev-123
+//           route:
+//           - destination:
+//               port: 7777
+//               name: reviews.qa
+//         - match:
+//             uri:
+//               prefix: /reviews/
+//           route:
+//           - destination:
+//               port: 9080 # port can be omitted if its the only port for reviews
+//               name: reviews.prod # can be omitted if its same as root destination.name
+//             weight: 80
+//           - destination:
+//               name: reviews.qa
+//             weight: 20
+//
+// The following routing rule forwards traffic arriving at (external)
+// port 2379 from 172.17.16.* subnet to internal redis server on port 5555.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: bookinfo-redis
+//     spec:
+//       host:
+//         port: redis #only applies to ports named redis
+//       gateways:
+//         - my-gateway
+//       tcp:
+//         - match:
+//             sourceSubnets:
+//               - "172.17.16.0/24"
+//           route:
+//           - destination:
+//               name: redis.prod
+//
+// By default, if there is no wildcard, HTTP requests for unknown domains
+// or requests that have no matching route rule will respond with a
+// 404. If a specific default behavior is desired at the ingress, add a
+// route rule without any destination (implies wildcard) with the desired
+// backend. For example, the following wildcard routing rule is applicable for
+// port 9080
+//
+//     metadata:
+//       name: default-ingress
+//     spec:
+//       host:
+//         port: 9080
+//       gateways:
+//         - my-gateway #applies to
+//       http:
+//         - route:
+//           - destination:
+//               name: homepage.prod
 //
 type Gateway struct {
 	// REQUIRED: A list of server specifications.

@@ -1,0 +1,695 @@
+// Copyright 2017 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/wrappers.proto";
+
+package istio.routing.v1alpha2;
+
+// ### Glossary & concepts
+//
+// *Service* is a unit of an application with a unique name that other services
+// use to refer to the functionality being called. Service instances are
+// pods/VMs/containers that implement the service.
+//
+// *Deployment* - In a continuous deployment scenario, for a given service,
+// there can be multiple sets of instances running potentially different
+// variants of the application binary. These variants are not necessarily
+// different API versions. They could be iterative changes to the same service,
+// deployed in different environments (prod, staging, dev, etc.). Common
+// scenarios where this occurs include A/B testing, canary rollouts, etc. The
+// choice of a particular version can be decided based on various criterion
+// (headers, url, etc.) and/or by weights assigned to each version.  Each
+// service has a default version consisting of all its instances.
+//
+// *Source* - downstream client (browser or another service) calling the
+// Envoy proxy/sidecar (typically to reach another service).
+//
+// *Host* - The remote upstream service to which the Envoy proxy/sidecar is
+// talking to, on behalf of the source service. There can be one or more
+// service versions for a given service (see the discussion on versions above).
+// Envoy would choose the version based on various routing rules.
+//
+// *Access model* - Applications address only the destination service (Host)
+// without knowledge of individual service versions. The actual choice of
+// the version is determined by Envoy, enabling the application code to
+// decouple itself from the evolution of dependent services.
+//
+//
+//
+// Route rule provides a custom routing policy based on the source and
+// destination service versions and connection/request metadata.  The rule
+// must provide a set of conditions for each protocol (TCP, UDP, HTTP) that
+// the destination service exposes on its ports.
+//
+// The rule applies only to the ports on the destination service for which
+// it provides protocol-specific match condition, e.g. if the rule does not
+// specify TCP condition, the rule does not apply to TCP traffic towards
+// the destination service.
+//
+// For example, a simple rule to send 100% of incoming traffic for a
+// "reviews" service to version "v1" can be specified as follows:
+//
+//     metadata:
+//       name: my-rule
+//       namespace: default # optional (default is "default")
+//     spec:
+//       host:
+//         name: reviews
+//       http:
+//         route:
+//         - destination:
+//             labels:
+//               version: v1
+//           weight: 100
+//
+message RouteRule {
+  // REQUIRED. The default network destination for traffic described by
+  // this routing rule.
+  Host host = 1;
+
+  // Applies the route rule only to a specific set of workloads.
+  // The rule is matched if any one of the sources match.
+  repeated Source sources = 2;
+
+  // The named gateways to bind this route rule to.  If no names are
+  // specified the default value is the reserved name "mesh" which
+  // indicates that the rule should be applied to the internal mesh
+  // network. It is fine for a rule to be bound to multiple named gateways
+  // and "mesh" at the same time. It is also fine to refer to mesh
+  // resources in other namespaces as long as the gateway permits the
+  // binding per it's RBAC rules. This form implies that explicit binding
+  // is required for route rules that impact how traffic enters or exits
+  // the mesh.
+  repeated string gateways = 3;
+
+  repeated HttpRoute http = 4;
+
+  repeated TcpRoute tcp = 5;
+
+  repeated UdpRoute udp = 6;
+
+  // TODO Add meta-protocol support here for custom codecs
+}
+
+
+// Host models a network addressable service on which a particular routing
+// rule is being applied.
+message Host {
+  // The addressable service name. May be partially or fully qualified.
+  // Partially qualified names are resolved in the context of the client.
+  //
+  // For example on Kubernetes a client in the "default" namespace referring to
+  // "reviews" would be resolved to the FQDN
+  // "reviews.default.svc.cluster.local". Similarly a client in the default
+  // namespace could add a namespace qualifier to the short name. For instance
+  // "reviews.sales" would resolve to the reviews service in the sales
+  // namespace, i.e. "reviews.sales.svc.cluster.local".
+  string name = 1;
+
+  // Alternate domain name matches for the addressable service. Supports
+  // standard DNS wildcard prefix match semantics. See Envoy virtual host
+  // for match semantics.
+  repeated string domains = 2;
+}
+
+// Destination indicates the network addressable service or a workload name
+// to which the request/connection will be sent after processing a routing
+// rule.
+message Destination {
+  // A name for the service version. This is not a network addressible
+  // name. Interpretation is specific to the underlying platform. In
+  // Kubernetes, the name corresponds to the deployment name, while on
+  // Cloud Foundry, the name corresponds to the CF app name.
+  string deployment = 1;
+
+  // One or more labels that constrain the applicability of a rule
+  // to workloads with the given labels.
+  map<string, string> labels = 2;
+
+  // The addressable service name. May be partially or fully qualified.
+  // Partially qualified names are resolved in the context of the client.
+  //
+  // For example on Kubernetes a client in the "default" namespace referring to
+  // "reviews" would be resolved to the FQDN
+  // "reviews.default.svc.cluster.local". Similarly a client in the default
+  // namespace could add a namespace qualifier to the short name. For instance
+  // "reviews.sales" would resolve to the reviews service in the sales
+  // namespace, i.e. "reviews.sales.svc.cluster.local".
+  string name = 3;
+
+  // A fully qualified domain name for the addressable service.
+  string domain = 4;
+
+  // Specifies the IP address to which the request/connection should be
+  // routed to.
+  string ip = 5;
+
+  // Specifies the port on the destination. Many services only expose a
+  // single port or label ports with the protocols they support, in these
+  // cases it is not required to explicitly select the port. Note that
+  // selection priority is to first match by name and then match by number.
+  //
+  // Names must comply with DNS label syntax (rfc1035) and therefore cannot
+  // collide with numbers. If there are multiple ports on a service with the
+  // same protocol the names should be of the form <protocol-name>-<DNS label>
+  string port = 6;
+}
+
+// Describes a label constraint on the workloads where traffic originates.
+// For example, the following snippet restricts the rule to match only
+// requests originating from "reviews:v2",
+//
+//     metadata:
+//       name: my-rule
+//       namespace: default
+//     spec:
+//       host:
+//         name: ratings
+//       sources:
+//         - labels:
+//             version: v2
+//       http:
+//         ...
+message Source {
+  // A name for the workload. Interpretation is specific to the underlying
+  // platform. In Kubernetes, the name corresponds to the deployment name,
+  // while on Cloud Foundry, the name corresponds to the CF app name.
+  string deployment_name = 1;
+
+  // One or more labels that constrain the applicability of a rule
+  // to workloads with the given labels.
+  map<string, string> labels = 2;
+}
+
+// Describes match conditions and actions for routing HTTP traffic.
+message HttpRoute {
+  // Match conditions to be satisfied for the route rule to be
+  // activated. All conditions inside a single match block have AND semantics,
+  // while the list of match blocks have OR semantics. The rule is matched if
+  // any one of the match blocks succeed.
+  repeated HttpMatchRequest match = 1;
+
+  // A routing rule can either redirect traffic or forward traffic
+  // (default). The forwarding target can be one of several versions of a
+  // service (see glossary in beginning of document). Weights associated
+  // with the service version determine the proportion of traffic it
+  // receives.
+  repeated DestinationWeight route = 2;
+
+  // A routing rule can either redirect traffic or forward traffic. The
+  // redirect primitive can be used to send a HTTP 302 redirect to a
+  // different URI or Authority.
+  HTTPRedirect redirect = 3;
+
+  // Rewrite HTTP URIs and Authority headers. Rewrite cannot be used with
+  // Redirect primitive. Rewrite will be performed before forwarding.
+  HTTPRewrite rewrite = 4;
+
+  // Indicates that a HTTP/1.1 client connection to this particular route
+  // should be allowed (and expected) to upgrade to a WebSocket connection.
+  // The default is false. Envoy expects the first request to this route
+  // to contain the WebSocket upgrade headers. Otherwise, the request
+  // will be rejected.
+  // Note that Websocket allows secondary protocol negotiation which may then
+  // be subject to further routing rules based on the protocol selected.
+  bool websocket_upgrade = 5;
+
+  // Timeout for HTTP requests.
+  google.protobuf.Duration timeout = 6;
+
+  // Retry policy for HTTP requests.
+  HTTPRetry retries = 7;
+
+  //Fault injection policy to apply on HTTP traffic
+  HTTPFaultInjection fault = 8;
+
+  // Mirror HTTP traffic to a another destination in addition to forwarding
+  // the requests to the intended destination. Mirrored traffic is on a best
+  // effort basis where Envoy will not wait for the mirrored cluster to
+  // respond before returning the response from the original destination.
+  // Statistics will be generated for the mirrored destination.
+  Destination mirror = 9;
+
+  // Cross-Origin Resource Sharing policy (CORS). Refer to
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS for
+  // further details about cross origin resource sharing.
+  CorsPolicy cors_policy = 10;
+
+  // Additional HTTP headers to add before forwarding a request to the
+  // destnation service.
+  map<string, string> append_headers = 11;
+}
+
+// Describes match conditions and actions for routing TCP traffic.
+// The following routing rule forwards traffic arriving at
+// port 2379 named redis from 172.17.16.* subnet to another redis server on
+// port 5555.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: bookinfo-redis
+//     spec:
+//       host:
+//         port: redis #only applies to ports named redis
+//       tcp:
+//         - match:
+//             sourceSubnets:
+//               - "172.17.16.0/24"
+//           route:
+//           - destination:
+//               name: redis.prod
+//
+message TcpRoute {
+  // Match conditions to be satisfied for the route rule to be
+  // activated. All conditions inside a single match block have AND semantics,
+  // while the list of match blocks have OR semantics. The rule is matched if
+  // any one of the match blocks succeed.
+  repeated L4MatchAttributes match = 1;
+
+  repeated DestinationWeight route = 2;
+}
+
+// (-- Describes match conditions and actions for routing UDP traffic. --)
+message UdpRoute {
+  // Match conditions to be satisfied for the route rule to be
+  // activated. All conditions inside a single match block have AND semantics,
+  // while the list of match blocks have OR semantics. The rule is matched if
+  // any one of the match blocks succeed.
+  repeated L4MatchAttributes match = 1;
+
+  repeated DestinationWeight route = 2;
+}
+
+// HttpMatchRequest specifies a set of criterion to be met in order for the
+// route rule to be applied to the HTTP request. For example, the following
+// route rule restricts the rule to match only requests where the URL path
+// starts with /ratings/v2/ and the request contains a "cookie" with value
+// "user=jason",
+//
+//     metadata:
+//       name: my-rule
+//       namespace: default
+//     spec:
+//       host:
+//         name: ratings
+//       http:
+//         - match:
+//             - headers:
+//                 cookie:
+//                   regex: "^(.*?;)?(user=jason)(;.*)?"
+//               uri:
+//                 prefix: "/ratings/v2/"
+//
+// MatchCondition CANNOT be empty.
+message HttpMatchRequest {
+  // URI to match
+  // values are case-sensitive and formatted as follows:
+  //
+  // *exact: "value"* or just *"value"* for exact string match
+  //
+  // *prefix: "value"* for prefix-based match
+  //
+  // *regex: "value"* for ECMAscript style regex-based match
+  //
+  StringMatch uri = 1;
+
+  // URI Scheme
+  // values are case-sensitive and formatted as follows:
+  //
+  // *exact: "value"* or just *"value"* for exact string match
+  //
+  // *prefix: "value"* for prefix-based match
+  //
+  // *regex: "value"* for ECMAscript style regex-based match
+  //
+  StringMatch scheme = 2;
+
+  // HTTP Method
+  // values are case-sensitive and formatted as follows:
+  //
+  // *exact: "value"* or just *"value"* for exact string match
+  //
+  // *prefix: "value"* for prefix-based match
+  //
+  // *regex: "value"* for ECMAscript style regex-based match
+  //
+  StringMatch method = 3;
+
+  // HTTP Authority
+  // values are case-sensitive and formatted as follows:
+  //
+  // *exact: "value"* or just *"value"* for exact string match
+  //
+  // *prefix: "value"* for prefix-based match
+  //
+  // *regex: "value"* for ECMAscript style regex-based match
+  //
+  StringMatch authority = 4;
+  
+  // The header keys must be lowercase and use hyphen as the separator,
+  // e.g. _x-request-id_.
+  //
+  // Header values are case-sensitive and formatted as follows:
+  //
+  // *exact: "value"* or just *"value"* for exact string match
+  //
+  // *prefix: "value"* for prefix-based match
+  //
+  // *regex: "value"* for ECMAscript style regex-based match
+  //
+  // *Note:* The keys _uri_, _scheme_, _method_, and _authority_ will be ignored.
+  map<string, StringMatch> headers = 5;
+
+  // Specifies the ports on the host that is being addressed. Many services
+  // only expose a single port or label ports with the protocols they support,
+  // in these cases it is not required to explicitly select the port. Note that
+  // selection priority is to first match by name and then match by number.
+  //
+  // Names must comply with DNS label syntax (rfc1035) and therefore cannot
+  // collide with numbers. If there are multiple ports on a service with the
+  // same protocol the names should be of the form <protocol-name>-<DNS label>
+  repeated string destination_ports = 6;
+}
+
+// Each routing rule is associated with one or more service versions (see
+// glossary in beginning of document). Weights associated with the version
+// determine the proportion of traffic it receives. For example, the
+// following rule will route 25% of traffic for the "reviews" service to
+// instances with the "v2" tag and the remaining traffic (i.e., 75%) to
+// "v1".
+//
+//     metadata:
+//       name: my-rule
+//       namespace: default
+//     spec:
+//       host:
+//         name: reviews
+//       http:
+//         - route:
+//           - destination:
+//               labels:
+//                 version: v2
+//             weight: 25
+//           - destination:
+//               labels:
+//                 version: v1
+//             weight: 75
+//
+message DestinationWeight {
+  // REQUIRED. Sometimes required. Optional destination uniquely identifies
+  // the destination service. If not specified, the value is inherited from
+  // the parent route rule.
+  Destination destination = 1;
+
+  // REQUIRED. The proportion of traffic to be forwarded to the service
+  // version. (0-100). Sum of weights across destinations SHOULD BE ==
+  // 100. If there is only destination in a rule, the weight value is
+  // assumed to be 100. When using multiple weights, either destination or labels must be
+  // specified.
+  int32 weight = 2;
+}
+
+// L4 connection match attributes. Note that L4 connection matching support
+// is incomplete. 
+message L4MatchAttributes {
+  // IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or
+  // just a.b.c.d
+  repeated string source_subnets = 1;
+
+  // IPv4 or IPv6 ip address of destination with optional subnet.
+  // E.g., a.b.c.d/xx form or just a.b.c.d. This is only valid when the destination
+  // service has several IPs and the application explicitly specifies a particular IP.
+  repeated string destination_subnets = 2;
+
+  // Specifies the ports on the host that is being addressed. Many services
+  // only expose a single port or label ports with the protocols they support,
+  // in these cases it is not required to explicitly select the port. Note that
+  // selection priority is to first match by name and then match by number.
+  //
+  // Names must comply with DNS label syntax (rfc1035) and therefore cannot
+  // collide with numbers. If there are multiple ports on a service with the
+  // same protocol the names should be of the form <protocol-name>-<DNS label>
+  repeated string destination_ports = 3;
+}
+
+// HTTPRedirect can be used to send a 302 redirect response to the caller,
+// where the Authority/Host and the URI in the response can be swapped with
+// the specified values. For example, the following route rule redirects
+// requests for /v1/getProductRatings API on the ratings service to
+// /v1/bookRatings provided by the bookratings service.
+//
+//     metadata:
+//       name: my-rule
+//       namespace: default
+//     spec:
+//       host:
+//         name: ratings
+//       http:
+//         - match:
+//           - uri:
+//               exact: /v1/getProductRatings
+//           redirect:
+//             uri: /v1/bookRatings
+//             authority: bookratings.default.svc.cluster.local
+//
+message HTTPRedirect {
+  // On a redirect, overwrite the Path portion of the URL with this
+  // value. Note that the entire path will be replaced, irrespective of the
+  // request URI being matched as an exact path or prefix.
+  string uri = 1;
+   
+  // On a redirect, overwrite the Authority/Host portion of the URL with
+  // this value
+  string authority = 2;
+}
+ 
+// HTTPRewrite can be used to rewrite specific parts of a HTTP request
+// before forwarding the request to the destination. Rewrite primitive can
+// be used only with the DestinationWeights. The following example
+// demonstrates how to rewrite the URL prefix for api call (/ratings) to
+// ratings service before making the actual API call.
+//
+//     metadata:
+//       name: my-rule
+//       namespace: default
+//     spec:
+//       host:
+//         name: ratings
+//       http:
+//         - match:
+//           - uri:
+//               prefix: /ratings
+//           rewrite:
+//             uri: /v1/bookRatings
+//           route:
+//           - destination:
+//               labels:
+//                 version: v1
+//
+message HTTPRewrite {
+  // rewrite the Path (or the prefix) portion of the URI with this
+  // value. If the original URI was matched based on prefix, the value
+  // provided in this field will replace the corresponding matched prefix.
+  string uri = 1;
+
+  // rewrite the Authority/Host header with this value.
+  string authority = 2;
+}
+
+// Describes how to match a given string in HTTP headers. Match is case-sensitive.
+message StringMatch {
+  oneof match_type {
+    // exact string match
+    string exact = 1;
+    // prefix-based match
+    string prefix = 2;
+    // ECMAscript style regex-based match
+    string regex = 3;
+  }
+}
+
+// Describes the retry policy to use when a HTTP request fails. For
+// example, the following rule sets the maximum number of retries to 3 when
+// calling ratings:v1 service, with a 2s timeout per retry attempt.
+//
+//     metadata:
+//       name: my-rule
+//       namespace: default
+//     spec:
+//       host:
+//         name: ratings
+//       http:
+//         - route:
+//           - destination:
+//               labels:
+//                  version: v1
+//           retries:
+//             attempts: 3
+//             perTryTimeout: 2s
+//
+message HTTPRetry {
+  // REQUIRED. Number of retries for a given request. The interval
+  // between retries will be determined automatically (25ms+). Actual
+  // number of retries attempted depends on the httpReqTimeout.
+  int32 attempts = 1;
+  // Timeout per retry attempt for a given request. format: 1h/1m/1s/1ms. MUST BE >=1ms.
+  google.protobuf.Duration per_try_timeout = 2;
+}
+
+// Describes the Cross-Origin Resource Sharing (CORS) policy, for a given
+// service. Refer to
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
+// for further details about cross origin resource sharing. For example,
+// the following rule restricts cross origin requests to those originating
+// from example.com domain using HTTP POST/GET, and sets the
+// Access-Control-Allow-Credentials header to false. In addition, it only exposes
+// X-Foo-bar header and sets an expiry period of 1 day.
+//
+//     metadata:
+//       name: my-rule
+//       namespace: default
+//     spec:
+//       host:
+//         name: ratings
+//       http:
+//         - route:
+//           - destination:
+//               labels:
+//                 version: v1
+//           corsPolicy:
+//             allowOrigin:
+//             - example.com
+//             allowMethods:
+//             - POST
+//             - GET
+//             allowCredentials: false
+//             allowHeaders:
+//             - X-Foo-Bar
+//             maxAge: "1d"
+//
+message CorsPolicy {
+  // The list of origins that are allowed to perform CORS requests. The content will
+  // be serialized into the Access-Control-Allow-Origin header. Wildcard * will allow
+  // all origins.
+  repeated string allow_origin = 1;
+  // List of HTTP methods allowed to access the resource. The content will
+  // be serialized into the Access-Control-Allow-Methods header.
+  repeated string allow_methods = 2;
+  // List of HTTP headers that can be used when requesting the
+  // resource. Serialized to Access-Control-Allow-Methods header.
+  repeated string allow_headers = 3;
+  // A white list of HTTP headers that the browsers are allowed to
+  // access. Serialized into Access-Control-Expose-Headers header.
+  repeated string expose_headers = 4;
+  // Specifies how long the the results of a preflight request can be
+  // cached. Translates to the Access-Control-Max-Age header.
+  google.protobuf.Duration max_age = 5;
+  // Indicates whether the caller is allowed to send the actual request
+  // (not the preflight) using credentials. Translates to
+  // Access-Control-Allow-Credentials header.
+  google.protobuf.BoolValue allow_credentials = 6;
+}
+
+// HTTPFaultInjection can be used to specify one or more faults to inject
+// while forwarding http requests to the destination specified in the route
+// rule.  Fault specification is part of a route rule. Faults include
+// aborting the Http request from downstream service, and/or delaying
+// proxying of requests. A fault rule MUST HAVE delay or abort or both.
+//
+// *Note:* Delay and abort faults are independent of one another, even if
+// both are specified simultaneously.
+message HTTPFaultInjection {
+  // Delay requests before forwarding, emulating various failures such as
+  // network issues, overloaded upstream service, etc.
+  Delay delay = 1;
+
+  // Abort Http request attempts and return error codes back to downstream
+  // service, giving the impression that the upstream service is faulty.
+  Abort abort = 2;
+
+  // Delay specification is used to inject latency into the request
+  // forwarding path. The following example will introduce a 5 second delay
+  // in 10% of the requests to the "v1" version of the "reviews"
+  // service.
+  //
+  //     metadata:
+  //       name: my-rule
+  //     spec:
+  //       host:
+  //         name: reviews
+  //       http:
+  //         - route:
+  //           - destination:
+  //               labels:
+  //                 version: v1
+  //           fault:
+  //             delay:
+  //               percent: 10
+  //               fixedDelay: 5s
+  //
+  // The _fixedDelay_ field is used to indicate the amount of delay in
+  // seconds. An optional _percent_ field, a value between 0 and 100, can
+  // be used to only delay a certain percentage of requests. If left
+  // unspecified, all request will be delayed.
+  message Delay {
+    // percentage of requests on which the delay will be injected (0-100)
+    int32 percent = 1;
+    oneof http_delay_type {
+      // REQUIRED. Add a fixed delay before forwarding the request. Format: 1h/1m/1s/1ms. MUST be >=1ms.
+      google.protobuf.Duration fixed_delay = 2;
+      // (-- Add a delay (based on an exponential function) before forwarding
+      // the request. mean delay needed to derive the exponential delay
+      // values --)
+      google.protobuf.Duration exponential_delay = 3 ;
+    }
+  }
+
+  // Abort specification is used to prematurely abort a request with a
+  // pre-specified error code. The following example will return an HTTP
+  // 400 error code for 10% of the requests to the "ratings" service "v1".
+  //
+  //     metadata:
+  //       name: my-rule
+  //     spec:
+  //       host:
+  //         name: reviews
+  //       http:
+  //         - route:
+  //           - destination:
+  //               labels:
+  //                 version: v1
+  //           fault:
+  //             abort:
+  //               percent: 10
+  //               httpStatus: 400
+  //
+  // The _httpStatus_ field is used to indicate the HTTP status code to
+  // return to the caller. The optional _percent_ field, a value between 0
+  // and 100, is used to only abort a certain percentage of requests. If
+  // not specified, all requests are aborted.
+  message Abort {
+    // percentage of requests to be aborted with the error code provided (0-100).
+    int32 percent = 1;
+    oneof error_type {
+      string grpc_status = 2 ;
+      string http2_error = 3 ;
+      // REQUIRED. HTTP status code to use to abort the Http request.
+      int32 http_status = 4;
+    }
+  }
+}
