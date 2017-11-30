@@ -173,7 +173,7 @@ message Destination {
 
 // Describes a label constraint on the workloads where traffic originates.
 // For example, the following snippet restricts the rule to match only
-// requests originating from "reviews:v2",
+// requests originating from instances with label "version:v2".
 //
 //     metadata:
 //       name: my-rule
@@ -187,11 +187,14 @@ message Destination {
 //       http:
 //         ...
 message Source {
-  // Optional. Name of the calling service.
-  string deployment_name = 1;
+  // Optional. Name of the calling service. Used to identify the service
+  // instances belonging to the caller.
+  string name = 1;
 
-  // One or more labels that constrain the applicability of a rule
-  // to workloads with the given labels.
+  // One or more labels that constrain the applicability of a rule to
+  // workloads with the given labels. When labels are used alone, the rule
+  // will apply to all service instances (pods/VMs) that carry these
+  // labels, irrespective of the service they are associated with.
   map<string, string> labels = 2;
 }
 
