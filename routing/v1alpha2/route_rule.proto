@@ -77,11 +77,13 @@ package istio.routing.v1alpha2;
 //               prefix: "/api/v2"
 //           route:
 //           - destination:
+//               name: reviews
 //               labels:
 //                 version: v2
 //             weight: 100
 //         - route:
 //           - destination:
+//               name: reviews
 //               labels:
 //                 version: v1
 //             weight: 100
@@ -138,27 +140,21 @@ message RouteRule {
 // to which the request/connection will be sent after processing a routing
 // rule. 
 message Destination {
-  // One or more labels that constrain the applicability of a rule
-  // to workloads with the given labels.
-  map<string, string> labels = 1;
-
-  // The addressable service name. May be partially or fully qualified.
-  // Partially qualified names are resolved in the context of the
-  // client. Alternatively, it could also specify an IP address to which
-  // the connection should be forwarded to. Labels will be applied to
-  // select a subset of instances in the destination, to load balance
-  // requests to. If an IP address is used for the host, labels will be
-  // ignored. If the host is omitted, the host value from the route rule
-  // would be used to determine the final destination. TODO: doc conflict
-  // resolution
+  // REQUIRED: Service name from the service registry. If the name is not 
+  // found in the service registry, it will be resolved using DNS or treated
+  // as an IP address.
   //
   // For example on Kubernetes a client in the "default" namespace
   // referring to "reviews" would be resolved to the FQDN
   // "reviews.default.svc.cluster.local". Similarly a client in the default
   // namespace could add a namespace qualifier to the short name. For
   // instance "reviews.sales" would resolve to the reviews service in the
-  // sales namespace, i.e. "reviews.sales.svc.cluster.local".
-  string host = 2;
+  // sales namespace, i.e. "foobar.reviews.sales.svc.cluster.local".
+  string name = 1;
+
+  // Labels will be applied to select a subset of instances in the destination,
+  // to load balance requests to.
+  map<string, string> labels = 2;
 
   // Specifies the port on the destination. Many services only expose a
   // single port or label ports with the protocols they support, in these
@@ -168,7 +164,7 @@ message Destination {
   // Names must comply with DNS label syntax (rfc1035) and therefore cannot
   // collide with numbers. If there are multiple ports on a service with the
   // same protocol the names should be of the form <protocol-name>-<DNS label>
-  string port = 5;
+  string port = 3;
 }
 
 // Describes a label constraint on the workloads where traffic originates.
@@ -187,15 +183,9 @@ message Destination {
 //       http:
 //         ...
 message Source {
-  // Workload name. Interpretation subject to the underlying platform
-  // (e.g., app names in cloud foundry). ONLY ONE OF name or labels can
-  // be specified.
-  string name = 1;
-
   // One or more labels that constrain the applicability of a rule to
-  // workloads with the given labels. ONLY ONE OF name or labels can be
-  // used.
-  map<string, string> labels = 2;
+  // workloads with the given labels.
+  map<string, string> labels = 1;
 }
 
 // Describes match conditions and actions for routing HTTP traffic.
