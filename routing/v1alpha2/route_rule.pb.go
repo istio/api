@@ -239,13 +239,13 @@ func (m *Destination) GetPort() string {
 //       http:
 //         ...
 type Source struct {
-	// Optional. Name of the calling service. Used to identify the service
-	// instances belonging to the caller.
+	// Workload name. Interpretation subject to the underlying platform
+	// (e.g., app names in cloud foundry). ONLY ONE OF name or labels can
+	// be specified.
 	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
 	// One or more labels that constrain the applicability of a rule to
-	// workloads with the given labels. When labels are used alone, the rule
-	// will apply to all service instances (pods/VMs) that carry these
-	// labels, irrespective of the service they are associated with.
+	// workloads with the given labels. ONLY ONE OF name or labels can be
+	// used.
 	Labels map[string]string `protobuf:"bytes,2,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 }
 

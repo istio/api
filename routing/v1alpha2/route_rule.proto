@@ -187,14 +187,14 @@ message Destination {
 //       http:
 //         ...
 message Source {
-  // Optional. Name of the calling service. Used to identify the service
-  // instances belonging to the caller.
+  // Workload name. Interpretation subject to the underlying platform
+  // (e.g., app names in cloud foundry). ONLY ONE OF name or labels can
+  // be specified.
   string name = 1;
 
   // One or more labels that constrain the applicability of a rule to
-  // workloads with the given labels. When labels are used alone, the rule
-  // will apply to all service instances (pods/VMs) that carry these
-  // labels, irrespective of the service they are associated with.
+  // workloads with the given labels. ONLY ONE OF name or labels can be
+  // used.
   map<string, string> labels = 2;
 }
 
