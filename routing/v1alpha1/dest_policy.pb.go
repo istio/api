@@ -32,6 +32,7 @@ It has these top-level messages:
 	HTTPTimeout
 	HTTPRetry
 	CorsPolicy
+	Port
 */
 package istio_routing_v1alpha1
 
