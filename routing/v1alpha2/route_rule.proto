@@ -25,7 +25,7 @@ package istio.routing.v1alpha2;
 // use to refer to the functionality being called. Service instances are
 // pods/VMs/containers that implement the service.
 //
-// *Deployment* - In a continuous deployment scenario, for a given service,
+// *Service versions* - In a continuous deployment scenario, for a given service,
 // there can be multiple sets of instances running potentially different
 // variants of the application binary. These variants are not necessarily
 // different API versions. They could be iterative changes to the same service,
@@ -60,26 +60,54 @@ package istio.routing.v1alpha2;
 // specify TCP condition, the rule does not apply to TCP traffic towards
 // the destination service.
 //
-// For example, a simple rule to send 100% of incoming traffic for a
-// "reviews" service to version "v1" can be specified as follows:
+// For example, the following rule routes all traffic by default to pods of
+// reviews service with label "version: v1". In addition, HTTP requests
+// containing for /api/v2/ url prefix will be sent to pods
+// with label version: v2.
 //
 //     metadata:
 //       name: my-rule
 //       namespace: default # optional (default is "default")
 //     spec:
-//       host:
-//         name: reviews
+//       hosts:
+//         - reviews
 //       http:
-//         route:
-//         - destination:
-//             labels:
-//               version: v1
-//           weight: 100
+//         - match:
+//           - uri:
+//               prefix: "/api/v2"
+//           route:
+//           - destination:
+//               labels:
+//                 version: v2
+//             weight: 100
+//         - route:
+//           - destination:
+//               labels:
+//                 version: v1
+//             weight: 100
 //
+// Every service in the mesh can have utmost one route rule associated with
+// it.  A single route rule can be used to describe traffic properties for
+// multiple HTTP and TCP ports.
 message RouteRule {
-  // REQUIRED. The default network destination for traffic described by
-  // this routing rule.
-  Host host = 1;
+  // REQUIRED. The network destination for traffic described by this
+  // routing rule. Could be a DNS name with wildcard prefix or a CIDR
+  // prefix. Depending on the platform, plain service names can also be
+  // used instead of a FQDN (i.e. has no dots in the name). In such a
+  // scenario, the FQDN of the host would be derived based on the
+  // underlying platform.
+  //
+  // For example on Kubernetes a client in the "default" namespace
+  // referring to "reviews" would be resolved to the FQDN
+  // "reviews.default.svc.cluster.local". However, a different name such as
+  // "reviews.sales" would be treated as a FQDN during virtual host
+  // matching.  In Consul, a plain service name would be resolved to the
+  // FQDN "reviews.service.consul".
+  //
+  // Note that the hosts field applies to both HTTP and TCP services. In
+  // case of TCP services, the plain service name or a IP address with CIDR
+  // prefix can be used.
+  repeated string hosts = 1;
 
   // Applies the route rule only to a specific set of workloads.
   // The rule is matched if any one of the sources match.
@@ -96,67 +124,41 @@ message RouteRule {
   // the mesh.
   repeated string gateways = 3;
 
-  repeated HttpRoute http = 4;
+  // A list of routes for HTTP traffic
+  repeated HTTPRoute http = 4;
 
-  repeated TcpRoute tcp = 5;
-
-  repeated UdpRoute udp = 6;
+  // A lit of routes for TCP traffic.
+  repeated TCPRoute tcp = 5;
 
   // TODO Add meta-protocol support here for custom codecs
 }
 
 
-// Host models a network addressable service on which a particular routing
-// rule is being applied.
-message Host {
-  // The addressable service name. May be partially or fully qualified.
-  // Partially qualified names are resolved in the context of the client.
-  //
-  // For example on Kubernetes a client in the "default" namespace referring to
-  // "reviews" would be resolved to the FQDN
-  // "reviews.default.svc.cluster.local". Similarly a client in the default
-  // namespace could add a namespace qualifier to the short name. For instance
-  // "reviews.sales" would resolve to the reviews service in the sales
-  // namespace, i.e. "reviews.sales.svc.cluster.local".
-  string name = 1;
-
-  // Alternate domain name matches for the addressable service. Supports
-  // standard DNS wildcard prefix match semantics. See Envoy virtual host
-  // for match semantics.
-  repeated string domains = 2;
-}
-
 // Destination indicates the network addressable service or a workload name
 // to which the request/connection will be sent after processing a routing
-// rule.
+// rule. 
 message Destination {
-  // A name for the service version. This is not a network addressible
-  // name. Interpretation is specific to the underlying platform. In
-  // Kubernetes, the name corresponds to the deployment name, while on
-  // Cloud Foundry, the name corresponds to the CF app name.
-  string deployment = 1;
-
   // One or more labels that constrain the applicability of a rule
   // to workloads with the given labels.
-  map<string, string> labels = 2;
+  map<string, string> labels = 1;
 
   // The addressable service name. May be partially or fully qualified.
-  // Partially qualified names are resolved in the context of the client.
+  // Partially qualified names are resolved in the context of the
+  // client. Alternatively, it could also specify an IP address to which
+  // the connection should be forwarded to. Labels will be applied to
+  // select a subset of instances in the destination, to load balance
+  // requests to. If an IP address is used for the host, labels will be
+  // ignored. If the host is omitted, the host value from the route rule
+  // would be used to determine the final destination. TODO: doc conflict
+  // resolution
   //
-  // For example on Kubernetes a client in the "default" namespace referring to
-  // "reviews" would be resolved to the FQDN
+  // For example on Kubernetes a client in the "default" namespace
+  // referring to "reviews" would be resolved to the FQDN
   // "reviews.default.svc.cluster.local". Similarly a client in the default
-  // namespace could add a namespace qualifier to the short name. For instance
-  // "reviews.sales" would resolve to the reviews service in the sales
-  // namespace, i.e. "reviews.sales.svc.cluster.local".
-  string name = 3;
-
-  // A fully qualified domain name for the addressable service.
-  string domain = 4;
-
-  // Specifies the IP address to which the request/connection should be
-  // routed to.
-  string ip = 5;
+  // namespace could add a namespace qualifier to the short name. For
+  // instance "reviews.sales" would resolve to the reviews service in the
+  // sales namespace, i.e. "reviews.sales.svc.cluster.local".
+  string host = 2;
 
   // Specifies the port on the destination. Many services only expose a
   // single port or label ports with the protocols they support, in these
@@ -166,7 +168,7 @@ message Destination {
   // Names must comply with DNS label syntax (rfc1035) and therefore cannot
   // collide with numbers. If there are multiple ports on a service with the
   // same protocol the names should be of the form <protocol-name>-<DNS label>
-  string port = 6;
+  string port = 5;
 }
 
 // Describes a label constraint on the workloads where traffic originates.
@@ -177,17 +179,15 @@ message Destination {
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       host:
-//         name: ratings
+//       hosts:
+//         - ratings
 //       sources:
 //         - labels:
 //             version: v2
 //       http:
 //         ...
 message Source {
-  // A name for the workload. Interpretation is specific to the underlying
-  // platform. In Kubernetes, the name corresponds to the deployment name,
-  // while on Cloud Foundry, the name corresponds to the CF app name.
+  // Optional. Name of the calling service.
   string deployment_name = 1;
 
   // One or more labels that constrain the applicability of a rule
@@ -196,12 +196,12 @@ message Source {
 }
 
 // Describes match conditions and actions for routing HTTP traffic.
-message HttpRoute {
+message HTTPRoute {
   // Match conditions to be satisfied for the route rule to be
   // activated. All conditions inside a single match block have AND semantics,
   // while the list of match blocks have OR semantics. The rule is matched if
   // any one of the match blocks succeed.
-  repeated HttpMatchRequest match = 1;
+  repeated HTTPMatchRequest match = 1;
 
   // A routing rule can either redirect traffic or forward traffic
   // (default). The forwarding target can be one of several versions of a
@@ -264,28 +264,19 @@ message HttpRoute {
 //     metadata:
 //       name: bookinfo-redis
 //     spec:
-//       host:
-//         port: redis #only applies to ports named redis
+//       hosts:
+//         - myredissrv 
 //       tcp:
 //         - match:
 //             sourceSubnets:
 //               - "172.17.16.0/24"
+//             destinationPorts:
+//               - redis #only applies to ports named redis
 //           route:
 //           - destination:
 //               name: redis.prod
 //
-message TcpRoute {
-  // Match conditions to be satisfied for the route rule to be
-  // activated. All conditions inside a single match block have AND semantics,
-  // while the list of match blocks have OR semantics. The rule is matched if
-  // any one of the match blocks succeed.
-  repeated L4MatchAttributes match = 1;
-
-  repeated DestinationWeight route = 2;
-}
-
-// (-- Describes match conditions and actions for routing UDP traffic. --)
-message UdpRoute {
+message TCPRoute {
   // Match conditions to be satisfied for the route rule to be
   // activated. All conditions inside a single match block have AND semantics,
   // while the list of match blocks have OR semantics. The rule is matched if
@@ -305,8 +296,8 @@ message UdpRoute {
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       host:
-//         name: ratings
+//       hosts:
+//         - ratings
 //       http:
 //         - match:
 //             - headers:
@@ -316,7 +307,7 @@ message UdpRoute {
 //                 prefix: "/ratings/v2/"
 //
 // MatchCondition CANNOT be empty.
-message HttpMatchRequest {
+message HTTPMatchRequest {
   // URI to match
   // values are case-sensitive and formatted as follows:
   //
@@ -397,8 +388,8 @@ message HttpMatchRequest {
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       host:
-//         name: reviews
+//       hosts:
+//         - reviews
 //       http:
 //         - route:
 //           - destination:
@@ -457,8 +448,8 @@ message L4MatchAttributes {
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       host:
-//         name: ratings
+//       hosts:
+//         - ratings
 //       http:
 //         - match:
 //           - uri:
@@ -488,8 +479,8 @@ message HTTPRedirect {
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       host:
-//         name: ratings
+//       hosts:
+//         - ratings
 //       http:
 //         - match:
 //           - uri:
@@ -531,8 +522,8 @@ message StringMatch {
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       host:
-//         name: ratings
+//       hosts:
+//         - ratings
 //       http:
 //         - route:
 //           - destination:
@@ -564,8 +555,8 @@ message HTTPRetry {
 //       name: my-rule
 //       namespace: default
 //     spec:
-//       host:
-//         name: ratings
+//       hosts:
+//         - ratings
 //       http:
 //         - route:
 //           - destination:
@@ -630,8 +621,8 @@ message HTTPFaultInjection {
   //     metadata:
   //       name: my-rule
   //     spec:
-  //       host:
-  //         name: reviews
+  //       hosts:
+  //         - reviews
   //       http:
   //         - route:
   //           - destination:
@@ -666,8 +657,8 @@ message HTTPFaultInjection {
   //     metadata:
   //       name: my-rule
   //     spec:
-  //       host:
-  //         name: reviews
+  //       hosts:
+  //         - reviews
   //       http:
   //         - route:
   //           - destination:

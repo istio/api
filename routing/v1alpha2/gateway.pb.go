@@ -12,13 +12,11 @@ It has these top-level messages:
 	Gateway
 	Server
 	RouteRule
-	Host
 	Destination
 	Source
-	HttpRoute
-	TcpRoute
-	UdpRoute
-	HttpMatchRequest
+	HTTPRoute
+	TCPRoute
+	HTTPMatchRequest
 	DestinationWeight
 	L4MatchAttributes
 	HTTPRedirect
