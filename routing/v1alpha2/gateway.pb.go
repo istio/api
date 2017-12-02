@@ -13,7 +13,7 @@ It has these top-level messages:
 	Server
 	RouteRule
 	Destination
-	Source
+	Endpoint
 	HTTPRoute
 	TCPRoute
 	HTTPMatchRequest
@@ -25,6 +25,9 @@ It has these top-level messages:
 	HTTPRetry
 	CorsPolicy
 	HTTPFaultInjection
+	UpstreamSettings
+	ConnectionPoolSettings
+	OutlierDetection
 */
 package istio_routing_v1alpha2
 

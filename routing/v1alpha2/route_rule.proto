@@ -111,9 +111,9 @@ message RouteRule {
   // prefix can be used.
   repeated string hosts = 1;
 
-  // Applies the route rule only to a specific set of workloads.
-  // The rule is matched if any one of the sources match.
-  repeated Source sources = 2;
+  // Applies the route rule only to a specific set of endpoints.
+  // The rule is matched if any one of the endpoint labels match.
+  repeated Endpoint endpoints = 2;
 
   // The named gateways to bind this route rule to.  If no names are
   // specified the default value is the reserved name "mesh" which
@@ -130,9 +130,12 @@ message RouteRule {
   repeated HTTPRoute http = 4;
 
   // A lit of routes for TCP traffic.
-  repeated TCPRoute tcp = 5;
+  repeated TCPRoute tcp = 5;  
+  // (-- TODO Add meta-protocol support here for custom codecs --)
 
-  // TODO Add meta-protocol support here for custom codecs
+  // Settings controlling various aspects such as load balancing algorithm
+  // to use, connection pool sizes, etc.
+  UpstreamSettings upstream_settings = 6;
 }
 
 
@@ -167,7 +170,7 @@ message Destination {
   string port = 3;
 }
 
-// Describes a label constraint on the workloads where traffic originates.
+// Describes a label constraint on the Endpoints where traffic originates.
 // For example, the following snippet restricts the rule to match only
 // requests originating from instances with label "version:v2".
 //
@@ -177,14 +180,14 @@ message Destination {
 //     spec:
 //       hosts:
 //         - ratings
-//       sources:
+//       workloads:
 //         - labels:
 //             version: v2
 //       http:
 //         ...
-message Source {
+message Endpoint {
   // One or more labels that constrain the applicability of a rule to
-  // workloads with the given labels.
+  // endpoints with the given labels.
   map<string, string> labels = 1;
 }
 
@@ -298,6 +301,9 @@ message TCPRoute {
 //                   regex: "^(.*?;)?(user=jason)(;.*)?"
 //               uri:
 //                 prefix: "/ratings/v2/"
+//           route: 
+//           - destination:
+//               name: ratings
 //
 // MatchCondition CANNOT be empty.
 message HTTPMatchRequest {
@@ -386,10 +392,12 @@ message HTTPMatchRequest {
 //       http:
 //         - route:
 //           - destination:
+//               name: reviews
 //               labels:
 //                 version: v2
 //             weight: 25
 //           - destination:
+//               name: reviews
 //               labels:
 //                 version: v1
 //             weight: 75
@@ -450,6 +458,7 @@ message L4MatchAttributes {
 //           redirect:
 //             uri: /v1/bookRatings
 //             authority: bookratings.default.svc.cluster.local
+//           ...
 //
 message HTTPRedirect {
   // On a redirect, overwrite the Path portion of the URL with this
@@ -482,6 +491,7 @@ message HTTPRedirect {
 //             uri: /v1/bookRatings
 //           route:
 //           - destination:
+//               name: ratings
 //               labels:
 //                 version: v1
 //
@@ -520,6 +530,7 @@ message StringMatch {
 //       http:
 //         - route:
 //           - destination:
+//               name: ratings
 //               labels:
 //                  version: v1
 //           retries:
@@ -553,6 +564,7 @@ message HTTPRetry {
 //       http:
 //         - route:
 //           - destination:
+//               name: ratings
 //               labels:
 //                 version: v1
 //           corsPolicy:
@@ -619,6 +631,7 @@ message HTTPFaultInjection {
   //       http:
   //         - route:
   //           - destination:
+  //               name: reviews
   //               labels:
   //                 version: v1
   //           fault:
@@ -655,6 +668,7 @@ message HTTPFaultInjection {
   //       http:
   //         - route:
   //           - destination:
+  //               name: reviews
   //               labels:
   //                 version: v1
   //           fault:
@@ -677,3 +691,194 @@ message HTTPFaultInjection {
     }
   }
 }
+
+// UpstreamSettings defines client/caller-side policies that determine how
+// to handle traffic bound to a particular destination. The policy
+// specifies configuration for load balancing, connection pool size from
+// the sidecar, and outlier detection settings to detect and evict
+// unhealthy hosts from the load balancing pool. These settings are common
+// to all HTTP/TCP destinations defined in the route rule. In other words,
+// these settings apply to all connections/requests arriving at the sidecar
+// for the hosts specified in the routing rule. For example, a simple load
+// balancing policy for the ratings service would look as follows:
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: bookinfo
+//     spec:
+//       hosts:
+//         - myredissrv
+//         - mybookinfo.com
+//       http:
+//         - route:
+//           - destination:
+//               name: redis.prod
+//        upstreamSettings:
+//          lbPolicy: LEAST_CONN
+message UpstreamSettings {
+  // Load balancing policy to use when forwarding traffic. These policies
+  // directly correlate to [load balancer
+  // types](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing)
+  // supported by Envoy.
+  enum LBPolicy {
+
+    // Simple round robin policy.
+    ROUND_ROBIN = 0;
+
+    // The least request load balancer uses an O(1) algorithm which selects
+    // two random healthy hosts and picks the host which has fewer active
+    // requests.
+    LEAST_CONN = 1;
+
+    // The random load balancer selects a random healthy host. The random
+    // load balancer generally performs better than round robin if no health
+    // checking policy is configured.
+    RANDOM = 2;
+  }
+
+  // Upstream load balancing policy
+  LBPolicy lb_policy = 1;
+
+  // Settings controlling the volume of connections to an upstream service
+  ConnectionPoolSettings connection_pool = 2;
+
+  // Settings controlling eviction of unhealthy hosts from the load balancing pool
+  OutlierDetection outlier_detection = 3;
+}
+
+// Connection pool settings for an upstream host. The settings apply to
+// each individual host in the upstream service.  See Envoy's [circuit
+// breaker](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/circuit_breaking)
+// for more details. Connection pool settings can be applied at the TCP
+// level as well as at HTTP level.
+//
+// For example, the following rule sets a limit of 100 connections to redis
+// service called myredissrv with a connect timeout of 30ms
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: bookinfo-redis
+//     spec:
+//       hosts:
+//         - myredissrv
+//       tcp:
+//         - match:
+//             sourceSubnets:
+//               - "172.17.16.0/24"
+//             destinationPorts:
+//               - redis #only applies to ports named redis
+//           route:
+//           - destination:
+//               name: redis.prod
+//        upstreamSettings:
+//          connectionPool:
+//            tcp:
+//              maxConnections: 100
+//              connectTimeout: 30ms
+//
+// Note that the connection pool settings are applicable across all
+// upstreams defined by the route rule (both TCP and HTTP).
+message ConnectionPoolSettings {
+  // Settings common to both HTTP and TCP upstream connections
+  message TCPSettings {
+    // Maximum number of HTTP/TCP connections to a destination host.
+    int32 max_connections = 1;
+
+    // TCP connection timeout
+    google.protobuf.Duration connect_timeout = 2;
+  };
+
+  message HTTPSettings {
+    // Maximum number of pending HTTP requests to a destination. Default 1024
+    int32 max_pending_requests = 2;
+
+    // Maximum number of requests to a backend. Default 1024
+    int32 max_requests = 3;
+
+    // Minimum time the circuit will be closed. format: 1h/1m/1s/1ms. MUST
+    // BE >=1ms. Default is 30s.
+    google.protobuf.Duration sleep_window = 4;
+
+    // Number of 5XX errors before circuit is opened. Defaults to 5.
+    int32 http_consecutive_errors = 5;
+
+    // Time interval between ejection sweep analysis. format:
+    // 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
+    google.protobuf.Duration detection_interval = 6;
+
+    // Maximum number of requests per connection to a backend. Setting this
+    // parameter to 1 disables keep alive.
+    int32 max_requests_per_connection = 7;
+
+    // Maximum % of hosts in the load balancing pool for the destination
+    // service that can be ejected by the circuit breaker. Defaults to
+    // 10%.
+    int32 max_ejection_percent = 8;
+  };
+
+  // Settings common to both HTTP and TCP upstream connections
+  TCPSettings tcp = 1;
+  // HTTP connection pool settings
+  HTTPSettings http = 2;
+}
+
+// A Circuit breaker implementation that tracks the status of each
+// individual host in the upstream service.  While currently applicable to
+// only HTTP services, future versions will support opaque TCP services as
+// well. For HTTP services, hosts that continually return errors for API
+// calls are ejected from the pool for a pre-defined period of time. See
+// Envoy's [outlier
+// detection](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/outlier)
+// for more details.
+//
+// The following rule sets a connection pool size of 100 connections and
+// 1000 concurrent requests, with no more than 10 req/connection to
+// "reviews" service. In addition, it configures
+// upstream hosts to be scanned every 5 mins, such that any host that fails 7
+// consecutive times with 5XX error code will be ejected for 15 minutes.
+//
+//     metadata:
+//       name: reviews-cb-policy
+//       namespace: default
+//     spec:
+//       hosts:
+//         - reviews
+//       http:
+//         - route:
+//           - destination:
+//               name: reviews
+//               labels:
+//                 version: v1
+//       upstreamSettings:
+//         connectionPool:
+//           tcp:
+//             maxConnections: 100
+//           http:
+//             maxRequests: 1000
+//             maxRequestsPerConnection: 10
+//         outlierDetection:
+//           httpConsecutiveErrors: 7
+//           interval: 5m
+//           baseEjectionTime: 15m
+//
+message OutlierDetection {
+  // Number of 5XX errors before a host is ejected from the connection pool. Defaults to 5.
+  int32 http_consecutive_errors = 1;
+
+  // Time interval between ejection sweep analysis. format:
+  // 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
+  google.protobuf.Duration interval = 2;
+
+  // Minimum ejection duration. A host will remain ejected for a period
+  // equal to the product of minimum ejection duration and the number of
+  // times the host has been ejected. This technique allows the system to
+  // automatically increase the ejection period for unhealthy upstream
+  // servers. format: 1h/1m/1s/1ms. MUST BE >=1ms. Default is 30s.
+  google.protobuf.Duration base_ejection_time = 3;
+
+  // Maximum % of hosts in the load balancing pool for the upstream service
+  // that can be ejected. Defaults to 10%.
+  int32 max_ejection_percent = 4;
+};
