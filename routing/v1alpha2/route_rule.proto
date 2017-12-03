@@ -111,9 +111,9 @@ message RouteRule {
   // prefix can be used.
   repeated string hosts = 1;
 
-  // Applies the route rule only to a specific set of endpoints.
-  // The rule is matched if any one of the endpoint labels match.
-  repeated Endpoint endpoints = 2;
+  // Applies the route rule only to a specific set of workloads.  The rule
+  // is applied on a sidecar if any one of the labels match.
+  repeated Endpoint source = 2;
 
   // The named gateways to bind this route rule to.  If no names are
   // specified the default value is the reserved name "mesh" which
@@ -123,19 +123,38 @@ message RouteRule {
   // resources in other namespaces as long as the gateway permits the
   // binding per it's RBAC rules. This form implies that explicit binding
   // is required for route rules that impact how traffic enters or exits
-  // the mesh.
+  // the mesh. Note that gateways cannot be specified in rules with traffic
+  // passthrough option enabled.
   repeated string gateways = 3;
 
-  // A list of routes for HTTP traffic
-  repeated HTTPRoute http = 4;
+  // The traffic passthrough option can be used to let the traffic go to
+  // its original destination (i.e. no load balancing), while still being
+  // able to apply other HTTP/TCP level features such as rewrites,
+  // timeouts, retries, etc. This option is typically used when a routing
+  // rule is applied to external services defined via Egress Rules. For
+  // example, it is possible to define a HTTP egress rule for
+  // *.example.com, and a HTTP routing rule with *.example.com as the
+  // host. The routing rule could define properties such as a common
+  // timeout, while still forwarding the traffic to the IP address resolved
+  // by the DNS.
+  //
+  // NOTE 1: When traffic passthrough is true, http.route|redirect, and
+  // tcp.route will be ignored.
+  //
+  // NOTE 2: Rules with traffic passthrough cannot have gateways.
+  bool traffic_passthrough = 4;
+
+  // A list of routes for HTTP traffic.
+  repeated HTTPRoute http = 5;
 
   // A lit of routes for TCP traffic.
-  repeated TCPRoute tcp = 5;  
+  repeated TCPRoute tcp = 6;
+
   // (-- TODO Add meta-protocol support here for custom codecs --)
 
   // Settings controlling various aspects such as load balancing algorithm
   // to use, connection pool sizes, etc.
-  UpstreamSettings upstream_settings = 6;
+  UpstreamSettings upstream_settings = 7;
 }
 
 
@@ -152,7 +171,7 @@ message Destination {
   // "reviews.default.svc.cluster.local". Similarly a client in the default
   // namespace could add a namespace qualifier to the short name. For
   // instance "reviews.sales" would resolve to the reviews service in the
-  // sales namespace, i.e. "foobar.reviews.sales.svc.cluster.local".
+  // sales namespace, i.e. "reviews.sales.svc.cluster.local".
   string name = 1;
 
   // Labels will be applied to select a subset of instances in the destination,
@@ -166,7 +185,7 @@ message Destination {
   //
   // Names must comply with DNS label syntax (rfc1035) and therefore cannot
   // collide with numbers. If there are multiple ports on a service with the
-  // same protocol the names should be of the form <protocol-name>-<DNS label>
+  // same protocol the names should be of the form <protocol-name>-<DNS label>.
   string port = 3;
 }
 
@@ -180,7 +199,7 @@ message Destination {
 //     spec:
 //       hosts:
 //         - ratings
-//       workloads:
+//       source:
 //         - labels:
 //             version: v2
 //       http:
@@ -199,16 +218,18 @@ message HTTPRoute {
   // any one of the match blocks succeed.
   repeated HTTPMatchRequest match = 1;
 
-  // A routing rule can either redirect traffic or forward traffic
-  // (default). The forwarding target can be one of several versions of a
-  // service (see glossary in beginning of document). Weights associated
-  // with the service version determine the proportion of traffic it
-  // receives.
+  // A http rule can either redirect or forward (default) traffic.  If
+  // traffic passthrough option is specified in the route rule,
+  // route/redirect will be ignored.  The forwarding target can be one of
+  // several versions of a service (see glossary in beginning of
+  // document). Weights associated with the service version determine the
+  // proportion of traffic it receives.
   repeated DestinationWeight route = 2;
 
-  // A routing rule can either redirect traffic or forward traffic. The
-  // redirect primitive can be used to send a HTTP 302 redirect to a
-  // different URI or Authority.
+  // A http rule can either redirect or forward (default) traffic.  If
+  // traffic passthrough option is specified in the route rule,
+  // route/redirect will be ignored. The redirect primitive can be used to
+  // send a HTTP 302 redirect to a different URI or Authority.
   HTTPRedirect redirect = 3;
 
   // Rewrite HTTP URIs and Authority headers. Rewrite cannot be used with
@@ -217,11 +238,11 @@ message HTTPRoute {
 
   // Indicates that a HTTP/1.1 client connection to this particular route
   // should be allowed (and expected) to upgrade to a WebSocket connection.
-  // The default is false. Envoy expects the first request to this route
-  // to contain the WebSocket upgrade headers. Otherwise, the request
-  // will be rejected.
-  // Note that Websocket allows secondary protocol negotiation which may then
-  // be subject to further routing rules based on the protocol selected.
+  // The default is false. Envoy expects the first request to this route to
+  // contain the WebSocket upgrade headers. Otherwise, the request will be
+  // rejected.  Note that Websocket allows secondary protocol negotiation
+  // which may then be subject to further routing rules based on the
+  // protocol selected.
   bool websocket_upgrade = 5;
 
   // Timeout for HTTP requests.
@@ -230,7 +251,7 @@ message HTTPRoute {
   // Retry policy for HTTP requests.
   HTTPRetry retries = 7;
 
-  //Fault injection policy to apply on HTTP traffic
+  //Fault injection policy to apply on HTTP traffic.
   HTTPFaultInjection fault = 8;
 
   // Mirror HTTP traffic to a another destination in addition to forwarding
@@ -250,10 +271,9 @@ message HTTPRoute {
   map<string, string> append_headers = 11;
 }
 
-// Describes match conditions and actions for routing TCP traffic.
-// The following routing rule forwards traffic arriving at
-// port 2379 named redis from 172.17.16.* subnet to another redis server on
-// port 5555.
+// Describes match conditions and actions for routing TCP traffic.  The
+// following routing rule forwards traffic arriving at port 2379 named
+// redis from 172.17.16.* subnet to another redis server on port 5555.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: RouteRule
@@ -274,11 +294,15 @@ message HTTPRoute {
 //
 message TCPRoute {
   // Match conditions to be satisfied for the route rule to be
-  // activated. All conditions inside a single match block have AND semantics,
-  // while the list of match blocks have OR semantics. The rule is matched if
-  // any one of the match blocks succeed.
+  // activated. All conditions inside a single match block have AND
+  // semantics, while the list of match blocks have OR semantics.  The rule
+  // is matched if any one of the match blocks succeed.
   repeated L4MatchAttributes match = 1;
 
+  // The destination to which the connection should be forwarded to.
+  // Currently, only one destination is allowed for TCP services. When TCP
+  // weighted routing support is introduced in Envoy, multiple destinations
+  // with weights can be specified.
   repeated DestinationWeight route = 2;
 }
 
@@ -372,7 +396,7 @@ message HTTPMatchRequest {
   //
   // Names must comply with DNS label syntax (rfc1035) and therefore cannot
   // collide with numbers. If there are multiple ports on a service with the
-  // same protocol the names should be of the form <protocol-name>-<DNS label>
+  // same protocol the names should be of the form <protocol-name>-<DNS label>.
   repeated string destination_ports = 6;
 }
 
@@ -409,10 +433,10 @@ message DestinationWeight {
   Destination destination = 1;
 
   // REQUIRED. The proportion of traffic to be forwarded to the service
-  // version. (0-100). Sum of weights across destinations SHOULD BE ==
-  // 100. If there is only destination in a rule, the weight value is
-  // assumed to be 100. When using multiple weights, either destination or labels must be
-  // specified.
+  // version. (0-100). Sum of weights across destinations SHOULD BE == 100.
+  // If there is only destination in a rule, the weight value is
+  // assumed to be 100. When using multiple weights, either destination or
+  // labels must be specified.
   int32 weight = 2;
 }
 
@@ -423,9 +447,10 @@ message L4MatchAttributes {
   // just a.b.c.d
   repeated string source_subnets = 1;
 
-  // IPv4 or IPv6 ip address of destination with optional subnet.
-  // E.g., a.b.c.d/xx form or just a.b.c.d. This is only valid when the destination
-  // service has several IPs and the application explicitly specifies a particular IP.
+  // IPv4 or IPv6 ip address of destination with optional subnet.  E.g.,
+  // a.b.c.d/xx form or just a.b.c.d. This is only valid when the
+  // destination service has several IPs and the application explicitly
+  // specifies a particular IP.
   repeated string destination_subnets = 2;
 
   // Specifies the ports on the host that is being addressed. Many services
@@ -435,7 +460,7 @@ message L4MatchAttributes {
   //
   // Names must comply with DNS label syntax (rfc1035) and therefore cannot
   // collide with numbers. If there are multiple ports on a service with the
-  // same protocol the names should be of the form <protocol-name>-<DNS label>
+  // same protocol the names should be of the form <protocol-name>-<DNS label>.
   repeated string destination_ports = 3;
 }
 
@@ -467,7 +492,7 @@ message HTTPRedirect {
   string uri = 1;
    
   // On a redirect, overwrite the Authority/Host portion of the URL with
-  // this value
+  // this value.
   string authority = 2;
 }
  
@@ -505,13 +530,17 @@ message HTTPRewrite {
   string authority = 2;
 }
 
-// Describes how to match a given string in HTTP headers. Match is case-sensitive.
+// Describes how to match a given string in HTTP headers. Match is
+// case-sensitive.
 message StringMatch {
   oneof match_type {
+
     // exact string match
     string exact = 1;
+
     // prefix-based match
     string prefix = 2;
+
     // ECMAscript style regex-based match
     string regex = 3;
   }
@@ -542,6 +571,7 @@ message HTTPRetry {
   // between retries will be determined automatically (25ms+). Actual
   // number of retries attempted depends on the httpReqTimeout.
   int32 attempts = 1;
+
   // Timeout per retry attempt for a given request. format: 1h/1m/1s/1ms. MUST BE >=1ms.
   google.protobuf.Duration per_try_timeout = 2;
 }
@@ -552,8 +582,8 @@ message HTTPRetry {
 // for further details about cross origin resource sharing. For example,
 // the following rule restricts cross origin requests to those originating
 // from example.com domain using HTTP POST/GET, and sets the
-// Access-Control-Allow-Credentials header to false. In addition, it only exposes
-// X-Foo-bar header and sets an expiry period of 1 day.
+// Access-Control-Allow-Credentials header to false. In addition, it only
+// exposes X-Foo-bar header and sets an expiry period of 1 day.
 //
 //     metadata:
 //       name: my-rule
@@ -579,22 +609,27 @@ message HTTPRetry {
 //             maxAge: "1d"
 //
 message CorsPolicy {
-  // The list of origins that are allowed to perform CORS requests. The content will
-  // be serialized into the Access-Control-Allow-Origin header. Wildcard * will allow
-  // all origins.
+  // The list of origins that are allowed to perform CORS requests. The
+  // content will be serialized into the Access-Control-Allow-Origin
+  // header. Wildcard * will allow all origins.
   repeated string allow_origin = 1;
+
   // List of HTTP methods allowed to access the resource. The content will
   // be serialized into the Access-Control-Allow-Methods header.
   repeated string allow_methods = 2;
+
   // List of HTTP headers that can be used when requesting the
   // resource. Serialized to Access-Control-Allow-Methods header.
   repeated string allow_headers = 3;
+
   // A white list of HTTP headers that the browsers are allowed to
   // access. Serialized into Access-Control-Expose-Headers header.
   repeated string expose_headers = 4;
+
   // Specifies how long the the results of a preflight request can be
   // cached. Translates to the Access-Control-Max-Age header.
   google.protobuf.Duration max_age = 5;
+
   // Indicates whether the caller is allowed to send the actual request
   // (not the preflight) using credentials. Translates to
   // Access-Control-Allow-Credentials header.
@@ -610,6 +645,7 @@ message CorsPolicy {
 // *Note:* Delay and abort faults are independent of one another, even if
 // both are specified simultaneously.
 message HTTPFaultInjection {
+
   // Delay requests before forwarding, emulating various failures such as
   // network issues, overloaded upstream service, etc.
   Delay delay = 1;
@@ -644,11 +680,14 @@ message HTTPFaultInjection {
   // be used to only delay a certain percentage of requests. If left
   // unspecified, all request will be delayed.
   message Delay {
-    // percentage of requests on which the delay will be injected (0-100)
+    // Percentage of requests on which the delay will be injected (0-100).
     int32 percent = 1;
+
     oneof http_delay_type {
-      // REQUIRED. Add a fixed delay before forwarding the request. Format: 1h/1m/1s/1ms. MUST be >=1ms.
+      // REQUIRED. Add a fixed delay before forwarding the request. Format:
+      // 1h/1m/1s/1ms. MUST be >=1ms.
       google.protobuf.Duration fixed_delay = 2;
+
       // (-- Add a delay (based on an exponential function) before forwarding
       // the request. mean delay needed to derive the exponential delay
       // values --)
@@ -681,13 +720,18 @@ message HTTPFaultInjection {
   // and 100, is used to only abort a certain percentage of requests. If
   // not specified, all requests are aborted.
   message Abort {
-    // percentage of requests to be aborted with the error code provided (0-100).
+    // Percentage of requests to be aborted with the error code provided (0-100).
     int32 percent = 1;
+
     oneof error_type {
-      string grpc_status = 2 ;
-      string http2_error = 3 ;
       // REQUIRED. HTTP status code to use to abort the Http request.
-      int32 http_status = 4;
+      int32 http_status = 2;
+
+      // (-- NOT IMPLEMENTED --)
+      string grpc_status = 3;
+
+      // (-- NOT IMPLEMENTED --)
+      string http2_error = 4;
     }
   }
 }
@@ -723,18 +767,21 @@ message UpstreamSettings {
   // supported by Envoy.
   enum LBPolicy {
 
+    // Default load balancing policy is random load balancing.
+    DEFAULT = 0;
+
     // Simple round robin policy.
-    ROUND_ROBIN = 0;
+    ROUND_ROBIN = 1;
 
     // The least request load balancer uses an O(1) algorithm which selects
     // two random healthy hosts and picks the host which has fewer active
     // requests.
-    LEAST_CONN = 1;
+    LEAST_CONN = 2;
 
     // The random load balancer selects a random healthy host. The random
     // load balancer generally performs better than round robin if no health
     // checking policy is configured.
-    RANDOM = 2;
+    RANDOM = 3;
   }
 
   // Upstream load balancing policy
@@ -781,20 +828,20 @@ message UpstreamSettings {
 // Note that the connection pool settings are applicable across all
 // upstreams defined by the route rule (both TCP and HTTP).
 message ConnectionPoolSettings {
-  // Settings common to both HTTP and TCP upstream connections
+  // Settings common to both HTTP and TCP upstream connections.
   message TCPSettings {
     // Maximum number of HTTP/TCP connections to a destination host.
     int32 max_connections = 1;
 
-    // TCP connection timeout
+    // TCP connection timeout.
     google.protobuf.Duration connect_timeout = 2;
   };
 
   message HTTPSettings {
-    // Maximum number of pending HTTP requests to a destination. Default 1024
+    // Maximum number of pending HTTP requests to a destination. Default 1024.
     int32 max_pending_requests = 2;
 
-    // Maximum number of requests to a backend. Default 1024
+    // Maximum number of requests to a backend. Default 1024.
     int32 max_requests = 3;
 
     // Minimum time the circuit will be closed. format: 1h/1m/1s/1ms. MUST
@@ -818,9 +865,9 @@ message ConnectionPoolSettings {
     int32 max_ejection_percent = 8;
   };
 
-  // Settings common to both HTTP and TCP upstream connections
+  // Settings common to both HTTP and TCP upstream connections.
   TCPSettings tcp = 1;
-  // HTTP connection pool settings
+  // HTTP connection pool settings.
   HTTPSettings http = 2;
 }
 
