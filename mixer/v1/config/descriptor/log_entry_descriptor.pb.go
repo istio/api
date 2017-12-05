@@ -12,7 +12,7 @@
 		mixer/v1/config/descriptor/principal_descriptor.proto
 		mixer/v1/config/descriptor/quota_descriptor.proto
 		mixer/v1/config/descriptor/value_type.proto
-		mixer/v1/config/descriptor/standard_type.proto
+		mixer/v1/config/descriptor/standard_types.proto
 
 	It has these top-level messages:
 		LogEntryDescriptor
