@@ -7,6 +7,7 @@ DESCRIPTOR_FILE_GROUP = [
     "principal_descriptor.proto",
     "quota_descriptor.proto",
     "value_type.proto",
+    "standard_type.proto",
 ]
 
 gogoslick_proto_library(
