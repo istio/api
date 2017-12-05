@@ -12,6 +12,7 @@
 		mixer/v1/config/descriptor/principal_descriptor.proto
 		mixer/v1/config/descriptor/quota_descriptor.proto
 		mixer/v1/config/descriptor/value_type.proto
+		mixer/v1/config/descriptor/standard_type.proto
 
 	It has these top-level messages:
 		LogEntryDescriptor
@@ -19,6 +20,12 @@
 		MonitoredResourceDescriptor
 		PrincipalDescriptor
 		QuotaDescriptor
+		IPAddress
+		DNSName
+		EmailAddress
+		Uri
+		Duration
+		TimeStamp
 */
 package istio_mixer_v1_config_descriptor
 
