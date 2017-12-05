@@ -16,7 +16,7 @@ syntax = "proto3";
 
 // This proto describes the types that can be used inside Mixer templates. These message types are used to specify
 // field datatype to express the equivalent ValueType for the expressions the field can be mapped to.
-package istio.mixer.v1.config.descriptor;
+package istio.mixer.v1.template;
 
 // IPAddress is used inside templates for fields that are of ValueType "IP_ADDRESS"
 message IPAddress {}
