@@ -32,6 +32,8 @@ package istio.routing.v1alpha2;
 //     metadata:
 //       name: my-gateway
 //     spec:
+//       labels:
+//         env: istio-prod
 //       servers:
 //         - port:
 //             number: 80
@@ -152,8 +154,12 @@ package istio.routing.v1alpha2;
 //               name: homepage.prod
 //
 message Gateway {
+  // REQUIRED: One or more labels that constrain the applicability of this gateway to
+  // endpoints with the given labels.
+  map<string, string> labels = 1;
+
   // REQUIRED: A list of server specifications.
-  repeated Server servers = 1;
+  repeated Server servers = 2;
 }
 
 // Server describes the properties of the proxy on a given load balancer port.
@@ -161,6 +167,8 @@ message Gateway {
 //     metadata:
 //       name: my-ingress
 //     spec:
+//       labels:
+//         env: istio-ingress
 //       servers:
 //       - port:
 //           number: 80
@@ -179,6 +187,8 @@ message Gateway {
 //     metadata:
 //       name: my-ingress
 //     spec:
+//       labels:
+//         env: istio-ingress
 //       servers:
 //       - port:
 //           number: 443
