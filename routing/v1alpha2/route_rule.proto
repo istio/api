@@ -70,8 +70,9 @@ package istio.routing.v1alpha2;
 //       namespace: default # optional (default is "default")
 //     spec:
 //       hosts:
-//         - reviews
-//       http:
+//       - reviews
+//       rules:
+//       - http:
 //         - match:
 //           - uri:
 //               prefix: "/api/v2"
@@ -111,50 +112,58 @@ message RouteRule {
   // prefix can be used.
   repeated string hosts = 1;
 
-  // Applies the route rule only to a specific set of workloads.  The rule
-  // is applied on a sidecar if any one of the labels match.
-  repeated Endpoint source = 2;
+  // A Rule contains a single route rule that applies to traffic coming
+  // from a set of sources, gateways.
+  message Rule {
+    // Applies the route rule only to a specific set of workloads.  The rule
+    // is applied on a sidecar if any one of the labels match.
+    repeated Endpoint source = 2;
 
-  // The named gateways to bind this route rule to.  If no names are
-  // specified the default value is the reserved name "mesh" which
-  // indicates that the rule should be applied to the internal mesh
-  // network. It is fine for a rule to be bound to multiple named gateways
-  // and "mesh" at the same time. It is also fine to refer to mesh
-  // resources in other namespaces as long as the gateway permits the
-  // binding per it's RBAC rules. This form implies that explicit binding
-  // is required for route rules that impact how traffic enters or exits
-  // the mesh. Note that gateways cannot be specified in rules with traffic
-  // passthrough option enabled.
-  repeated string gateways = 3;
+    // The named gateways to bind this route rule to.  If no names are
+    // specified the default value is the reserved name "mesh" which
+    // indicates that the rule should be applied to the internal mesh
+    // network. It is fine for a rule to be bound to multiple named gateways
+    // and "mesh" at the same time. It is also fine to refer to mesh
+    // resources in other namespaces as long as the gateway permits the
+    // binding per it's RBAC rules. This form implies that explicit binding
+    // is required for route rules that impact how traffic enters or exits
+    // the mesh. Note that gateways cannot be specified in rules with traffic
+    // passthrough option enabled.
+    repeated string gateways = 3;
 
-  // The traffic passthrough option can be used to let the traffic go to
-  // its original destination (i.e. no load balancing), while still being
-  // able to apply other HTTP/TCP level features such as rewrites,
-  // timeouts, retries, etc. This option is typically used when a routing
-  // rule is applied to external services defined via Egress Rules. For
-  // example, it is possible to define a HTTP egress rule for
-  // *.example.com, and a HTTP routing rule with *.example.com as the
-  // host. The routing rule could define properties such as a common
-  // timeout, while still forwarding the traffic to the IP address resolved
-  // by the DNS.
-  //
-  // NOTE 1: When traffic passthrough is true, http.route|redirect, and
-  // tcp.route will be ignored.
-  //
-  // NOTE 2: Rules with traffic passthrough cannot have gateways.
-  bool traffic_passthrough = 4;
+    // The traffic passthrough option can be used to let the traffic go to
+    // its original destination (i.e. no load balancing), while still being
+    // able to apply other HTTP/TCP level features such as rewrites,
+    // timeouts, retries, etc. This option is typically used when a routing
+    // rule is applied to external services defined via Egress Rules. For
+    // example, it is possible to define a HTTP egress rule for
+    // *.example.com, and a HTTP routing rule with *.example.com as the
+    // host. The routing rule could define properties such as a common
+    // timeout, while still forwarding the traffic to the IP address resolved
+    // by the DNS.
+    //
+    // NOTE 1: When traffic passthrough is true, http.route|redirect, and
+    // tcp.route will be ignored.
+    //
+    // NOTE 2: Rules with traffic passthrough cannot have gateways.
+    bool traffic_passthrough = 4;
 
-  // A list of routes for HTTP traffic.
-  repeated HTTPRoute http = 5;
+    // A list of routes for HTTP traffic.
+    repeated HTTPRoute http = 5;
 
-  // A lit of routes for TCP traffic.
-  repeated TCPRoute tcp = 6;
+    // A lit of routes for TCP traffic.
+    repeated TCPRoute tcp = 6;
 
   // (-- TODO Add meta-protocol support here for custom codecs --)
+  };
+
+  // One or more route rules that apply to traffic bound to the services
+  // defined by the hosts above.
+  repeated Rule rules = 2;
 
   // Settings controlling various aspects such as load balancing algorithm
   // to use, connection pool sizes, etc.
-  UpstreamSettings upstream_settings = 7;
+  UpstreamSettings upstream_settings = 3;
 }
 
 
@@ -162,16 +171,26 @@ message RouteRule {
 // to which the request/connection will be sent after processing a routing
 // rule. 
 message Destination {
-  // REQUIRED: Service name from the service registry. If the name is not 
-  // found in the service registry, it will be resolved using DNS or treated
-  // as an IP address.
+  // REQUIRED: Service name from the service registry. The name can be a
+  // short name, a fully qualified domain name or an IP address. If short
+  // names are used, the FQDN of the service will be resolved in a platform
+  // specific manner.
   //
-  // For example on Kubernetes a client in the "default" namespace
-  // referring to "reviews" would be resolved to the FQDN
-  // "reviews.default.svc.cluster.local". Similarly a client in the default
-  // namespace could add a namespace qualifier to the short name. For
-  // instance "reviews.sales" would resolve to the reviews service in the
-  // sales namespace, i.e. "reviews.sales.svc.cluster.local".
+  // For example in Kubernetes, when a rule with a short name "reviews" in
+  // the destination is applied to a client in the "bookinfo" namespace,
+  // the final destination is resolved to
+  // reviews.bookinfo.svc.cluster.local. If the rule refers to the
+  // destination as "reviews.sales", the resolution process first looks for
+  // a "reviews" service in the "sales" namespace. In both cases, Envoy
+  // will route to the IP addresses of the pods constituting the
+  // service. However, if the lookup fails, "reviews.sales" is treated as
+  // an external service, such that Envoy will dynamically resolve the DNS
+  // of the service name and route the request to the IP addresses returned
+  // by the DNS.
+  //
+  // NOTE: The caller context based namespace resolution is going to
+  // increase implementation complexity, requiring multiple service
+  // registry lookups during config generation.
   string name = 1;
 
   // Labels will be applied to select a subset of instances in the destination,
@@ -198,11 +217,12 @@ message Destination {
 //       namespace: default
 //     spec:
 //       hosts:
-//         - ratings
-//       source:
+//       - ratings
+//       rules:
+//       - source:
 //         - labels:
 //             version: v2
-//       http:
+//         http:
 //         ...
 message Endpoint {
   // One or more labels that constrain the applicability of a rule to
@@ -281,13 +301,14 @@ message HTTPRoute {
 //       name: bookinfo-redis
 //     spec:
 //       hosts:
-//         - myredissrv 
-//       tcp:
+//       - myredissrv 
+//       rules:
+//       - tcp:
 //         - match:
 //             sourceSubnets:
-//               - "172.17.16.0/24"
+//             - "172.17.16.0/24"
 //             destinationPorts:
-//               - redis #only applies to ports named redis
+//             - redis #only applies to ports named redis
 //           route:
 //           - destination:
 //               name: redis.prod
@@ -317,12 +338,13 @@ message TCPRoute {
 //       namespace: default
 //     spec:
 //       hosts:
-//         - ratings
-//       http:
+//       - ratings
+//       rules:
+//       - http:
 //         - match:
-//             - headers:
-//                 cookie:
-//                   regex: "^(.*?;)?(user=jason)(;.*)?"
+//           - headers:
+//               cookie:
+//                 regex: "^(.*?;)?(user=jason)(;.*)?"
 //               uri:
 //                 prefix: "/ratings/v2/"
 //           route: 
@@ -413,7 +435,8 @@ message HTTPMatchRequest {
 //     spec:
 //       hosts:
 //         - reviews
-//       http:
+//       rules:
+//       - http:
 //         - route:
 //           - destination:
 //               name: reviews
@@ -476,14 +499,15 @@ message L4MatchAttributes {
 //     spec:
 //       hosts:
 //         - ratings
-//       http:
+//       rules:
+//       - http:
 //         - match:
 //           - uri:
 //               exact: /v1/getProductRatings
-//           redirect:
-//             uri: /v1/bookRatings
-//             authority: bookratings.default.svc.cluster.local
-//           ...
+//         redirect:
+//           uri: /v1/bookRatings
+//           authority: bookratings.default.svc.cluster.local
+//         ...
 //
 message HTTPRedirect {
   // On a redirect, overwrite the Path portion of the URL with this
@@ -507,8 +531,9 @@ message HTTPRedirect {
 //       namespace: default
 //     spec:
 //       hosts:
-//         - ratings
-//       http:
+//       - ratings
+//       rules:
+//       - http:
 //         - match:
 //           - uri:
 //               prefix: /ratings
@@ -556,15 +581,16 @@ message StringMatch {
 //     spec:
 //       hosts:
 //         - ratings
-//       http:
-//         - route:
-//           - destination:
-//               name: ratings
-//               labels:
+//       rules:
+//        - http:
+//          - route:
+//            - destination:
+//                name: ratings
+//                labels:
 //                  version: v1
-//           retries:
-//             attempts: 3
-//             perTryTimeout: 2s
+//            retries:
+//              attempts: 3
+//              perTryTimeout: 2s
 //
 message HTTPRetry {
   // REQUIRED. Number of retries for a given request. The interval
@@ -590,8 +616,9 @@ message HTTPRetry {
 //       namespace: default
 //     spec:
 //       hosts:
-//         - ratings
-//       http:
+//       - ratings
+//       rules:
+//       - http:
 //         - route:
 //           - destination:
 //               name: ratings
@@ -663,8 +690,9 @@ message HTTPFaultInjection {
   //       name: my-rule
   //     spec:
   //       hosts:
-  //         - reviews
-  //       http:
+  //       - reviews
+  //       rules:
+  //       - http:
   //         - route:
   //           - destination:
   //               name: reviews
@@ -703,8 +731,9 @@ message HTTPFaultInjection {
   //       name: my-rule
   //     spec:
   //       hosts:
-  //         - reviews
-  //       http:
+  //       - reviews
+  //       rules:
+  //       - http:
   //         - route:
   //           - destination:
   //               name: reviews
@@ -752,14 +781,15 @@ message HTTPFaultInjection {
 //       name: bookinfo
 //     spec:
 //       hosts:
-//         - myredissrv
-//         - mybookinfo.com
-//       http:
+//       - myredissrv
+//       - mybookinfo.com
+//       rules:
+//       - http:
 //         - route:
 //           - destination:
 //               name: redis.prod
-//        upstreamSettings:
-//          lbPolicy: LEAST_CONN
+//       upstreamSettings:
+//         lbPolicy: LEAST_CONN
 message UpstreamSettings {
   // Load balancing policy to use when forwarding traffic. These policies
   // directly correlate to [load balancer
@@ -810,20 +840,21 @@ message UpstreamSettings {
 //     spec:
 //       hosts:
 //         - myredissrv
-//       tcp:
+//       rules:
+//       - tcp:
 //         - match:
 //             sourceSubnets:
-//               - "172.17.16.0/24"
+//             - "172.17.16.0/24"
 //             destinationPorts:
-//               - redis #only applies to ports named redis
+//             - redis #only applies to ports named redis
 //           route:
 //           - destination:
 //               name: redis.prod
-//        upstreamSettings:
-//          connectionPool:
-//            tcp:
-//              maxConnections: 100
-//              connectTimeout: 30ms
+//       upstreamSettings:
+//         connectionPool:
+//           tcp:
+//             maxConnections: 100
+//             connectTimeout: 30ms
 //
 // Note that the connection pool settings are applicable across all
 // upstreams defined by the route rule (both TCP and HTTP).
@@ -891,8 +922,9 @@ message ConnectionPoolSettings {
 //       namespace: default
 //     spec:
 //       hosts:
-//         - reviews
-//       http:
+//       - reviews
+//       rules:
+//       - http:
 //         - route:
 //           - destination:
 //               name: reviews

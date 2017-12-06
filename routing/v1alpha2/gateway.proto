@@ -62,7 +62,7 @@ package istio.routing.v1alpha2;
 //
 // The gateway specification above describes the L4-L6 properties of a load
 // balancer.  Routing rules can be used to control the forwarding of
-// traffic arriving at a particular particular domain or gateway port.
+// traffic arriving at a particular domain or gateway port.
 //
 // The following route rule splits traffic for
 // https://uk.bookinfo.com/reviews, https://eu.bookinfo.com/reviews,
@@ -80,14 +80,14 @@ package istio.routing.v1alpha2;
 //     metadata:
 //       name: bookinfo-rule
 //     spec:
-//       host:
-//         name: reviews.prod
-//         domains:
-//           - uk.bookinfo.com
-//           - eu.bookinfo.com
-//       gateways:
+//       hosts:
+//         - reviews.prod
+//         - uk.bookinfo.com
+//         - eu.bookinfo.com
+//       rules:
+//       - gateways:
 //         - my-gateway #apply at my-gateway as well as reviews.prod internally
-//       http:
+//         http:
 //         - match:
 //             headers:
 //               cookie:
@@ -116,14 +116,17 @@ package istio.routing.v1alpha2;
 //     metadata:
 //       name: bookinfo-redis
 //     spec:
-//       host:
-//         port: redis #only applies to ports named redis
-//       gateways:
+//       hosts:
+//       - redissvr #name of redis service
+//       rules:
+//       - gateways:
 //         - my-gateway
-//       tcp:
+//         tcp:
 //         - match:
+//             destinationPorts:
+//             - 2379
 //             sourceSubnets:
-//               - "172.17.16.0/24"
+//             - "172.17.16.0/24"
 //           route:
 //           - destination:
 //               name: redis.prod
@@ -138,11 +141,12 @@ package istio.routing.v1alpha2;
 //     metadata:
 //       name: default-ingress
 //     spec:
-//       host:
-//         port: 9080
-//       gateways:
+//       hosts:
+//       - *
+//       rules:
+//       - gateways:
 //         - my-gateway #applies to 
-//       http:
+//         http:
 //         - route:
 //           - destination:
 //               name: homepage.prod
@@ -187,7 +191,7 @@ message Server {
   // Port describes the properties of a specific port of a service.
   message Port {
     // A valid non-negative integer port number.
-    int32 number = 1;
+    uint32 number = 1;
 
     // The protocol to communicate with the external services.
     // MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|REDIS|TCP.
@@ -227,8 +231,7 @@ message Server {
       // standard TLS semantics (server certs only).
       SIMPLE = 1;
 
-      // If set to "mutual", Envoy will validate client's identity using
-      // mTLS authentication.
+      // If set to "mutual", Envoy will use standard mTLS authentication.
       MUTUAL = 2;
     };
 
