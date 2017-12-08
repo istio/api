@@ -62,8 +62,8 @@ package istio.routing.v1alpha2;
 //
 // For example, the following rule routes all traffic by default to pods of
 // reviews service with label "version: v1". In addition, HTTP requests
-// containing for /api/v2/ url prefix will be sent to pods
-// with label version: v2.
+// containing for /wpcatalog/, /consumercatalog/ url prefixes will be
+// rewritten to /api/v2 and send to pods with label version: v2.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: RouteRule
@@ -76,14 +76,18 @@ package istio.routing.v1alpha2;
 //       - http:
 //         - match:
 //           - uri:
-//               prefix: "/api/v2"
+//               prefix: "/wpcatalog"
+//           - uri:
+//               prefix: "/consumercatalog"
+//           rewrite:
+//             uri: "/api/v2"
 //           route:
 //           - destination:
 //               name: reviews
 //               labels:
 //                 version: v2
 //             weight: 100
-//         - route:
+//         - route: # default route
 //           - destination:
 //               name: reviews
 //               labels:
@@ -187,22 +191,16 @@ message RouteRule {
   repeated string hosts = 1;
 
   // A Rule contains a single route rule that applies to traffic coming
-  // from a set of sources, gateways.
+  // from a set of sources, gateways. See RouteRule for usage example.
   message Rule {
     // Applies the route rule only to a specific set of workloads.  The rule
     // is applied on a sidecar if any one of the labels match.
     repeated Endpoint source = 2;
 
-    // The named gateways to bind this route rule to.  If no names are
-    // specified the default value is the reserved name "mesh" which
-    // indicates that the rule should be applied to the internal mesh
-    // network. It is fine for a rule to be bound to multiple named gateways
-    // and "mesh" at the same time. It is also fine to refer to mesh
-    // resources in other namespaces as long as the gateway permits the
-    // binding per it's RBAC rules. This form implies that explicit binding
-    // is required for route rules that impact how traffic enters or exits
-    // the mesh. Note that gateways cannot be specified in rules with traffic
-    // passthrough option enabled.
+    // The named gateways to bind this route rule to. A single route rule
+    // could be used for sources inside the mesh as well as one or more
+    // gateways.  Note that gateways cannot be specified in rules with
+    // traffic passthrough option enabled.
     repeated string gateways = 3;
 
     // The traffic passthrough option can be used to let the traffic go to
@@ -243,7 +241,7 @@ message RouteRule {
 
 // Destination indicates the network addressable service or a workload name
 // to which the request/connection will be sent after processing a routing
-// rule. 
+// rule. See RouteRule for usage examples.
 message Destination {
   // REQUIRED: Service name from the service registry. The name can be a
   // short name, a fully qualified domain name or an IP address. If short
@@ -261,10 +259,6 @@ message Destination {
   // an external service, such that Envoy will dynamically resolve the DNS
   // of the service name and route the request to the IP addresses returned
   // by the DNS.
-  //
-  // NOTE: The caller context based namespace resolution is going to
-  // increase implementation complexity, requiring multiple service
-  // registry lookups during config generation.
   string name = 1;
 
   // Labels will be applied to select a subset of instances in the destination,
@@ -305,12 +299,13 @@ message Endpoint {
   map<string, string> labels = 1;
 }
 
-// Describes match conditions and actions for routing HTTP traffic.
+// Describes match conditions and actions for routing HTTP/1.1, HTTP2, and
+// gRPC traffic. See RouteRule for usage examples.
 message HTTPRoute {
   // Match conditions to be satisfied for the route rule to be
-  // activated. All conditions inside a single match block have AND semantics,
-  // while the list of match blocks have OR semantics. The rule is matched if
-  // any one of the match blocks succeed.
+  // activated. All conditions inside a single match block have AND
+  // semantics, while the list of match blocks have OR semantics. The rule
+  // is matched if any one of the match blocks succeed.
   repeated HTTPMatchRequest match = 1;
 
   // A http rule can either redirect or forward (default) traffic.  If
@@ -380,10 +375,8 @@ message HTTPRoute {
 //       rules:
 //       - tcp:
 //         - match:
-//             sourceSubnets:
-//             - "172.17.16.0/24"
-//             destinationPorts:
-//             - redis #only applies to ports named redis
+//           - sourceSubnet: "172.17.16.0/24"
+//             destinationPort: redis #only applies to ports named redis
 //           route:
 //           - destination:
 //               name: redis.prod
@@ -545,15 +538,15 @@ message DestinationWeight {
 message L4MatchAttributes {
   // IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or
   // just a.b.c.d
-  repeated string source_subnets = 1;
+  string source_subnet = 1;
 
   // IPv4 or IPv6 ip address of destination with optional subnet.  E.g.,
   // a.b.c.d/xx form or just a.b.c.d. This is only valid when the
   // destination service has several IPs and the application explicitly
   // specifies a particular IP.
-  repeated string destination_subnets = 2;
+  string destination_subnet = 2;
 
-  // Specifies the ports on the host that is being addressed. Many services
+  // Specifies the port on the host that is being addressed. Many services
   // only expose a single port or label ports with the protocols they support,
   // in these cases it is not required to explicitly select the port. Note that
   // selection priority is to first match by name and then match by number.
@@ -561,7 +554,7 @@ message L4MatchAttributes {
   // Names must comply with DNS label syntax (rfc1035) and therefore cannot
   // collide with numbers. If there are multiple ports on a service with the
   // same protocol the names should be of the form <protocol-name>-<DNS label>.
-  repeated string destination_ports = 3;
+  string destination_port = 3;
 }
 
 // HTTPRedirect can be used to send a 302 redirect response to the caller,
@@ -928,10 +921,8 @@ message UpstreamSettings {
 //       rules:
 //       - tcp:
 //         - match:
-//             sourceSubnets:
-//             - "172.17.16.0/24"
-//             destinationPorts:
-//             - redis #only applies to ports named redis
+//           - sourceSubnet: "172.17.16.0/24"
+//             destinationPort: redis #only applies to ports named redis
 //           route:
 //           - destination:
 //               name: redis.prod
@@ -953,6 +944,7 @@ message ConnectionPoolSettings {
     google.protobuf.Duration connect_timeout = 2;
   };
 
+  // Settings applicable to HTTP connections.
   message HTTPSettings {
     // Maximum number of pending HTTP requests to a destination. Default 1024.
     int32 max_pending_requests = 2;
@@ -965,7 +957,7 @@ message ConnectionPoolSettings {
     google.protobuf.Duration sleep_window = 4;
 
     // Number of 5XX errors before circuit is opened. Defaults to 5.
-    int32 http_consecutive_errors = 5;
+    int32 consecutive_errors = 5;
 
     // Time interval between ejection sweep analysis. format:
     // 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
@@ -974,11 +966,6 @@ message ConnectionPoolSettings {
     // Maximum number of requests per connection to a backend. Setting this
     // parameter to 1 disables keep alive.
     int32 max_requests_per_connection = 7;
-
-    // Maximum % of hosts in the load balancing pool for the destination
-    // service that can be ejected by the circuit breaker. Defaults to
-    // 10%.
-    int32 max_ejection_percent = 8;
   };
 
   // Settings common to both HTTP and TCP upstream connections.
@@ -1024,26 +1011,33 @@ message ConnectionPoolSettings {
 //             maxRequests: 1000
 //             maxRequestsPerConnection: 10
 //         outlierDetection:
-//           httpConsecutiveErrors: 7
-//           interval: 5m
-//           baseEjectionTime: 15m
+//           http:
+//             consecutiveErrors: 7
+//             interval: 5m
+//             baseEjectionTime: 15m
 //
 message OutlierDetection {
-  // Number of 5XX errors before a host is ejected from the connection pool. Defaults to 5.
-  int32 http_consecutive_errors = 1;
+  // Outlier detection settings for HTTP connections.
+  message HTTPSettings {
+    // Number of 5XX errors before a host is ejected from the connection pool. Defaults to 5.
+    int32 consecutive_errors = 1;
 
-  // Time interval between ejection sweep analysis. format:
-  // 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
-  google.protobuf.Duration interval = 2;
+    // Time interval between ejection sweep analysis. format:
+    // 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
+    google.protobuf.Duration interval = 2;
 
-  // Minimum ejection duration. A host will remain ejected for a period
-  // equal to the product of minimum ejection duration and the number of
-  // times the host has been ejected. This technique allows the system to
-  // automatically increase the ejection period for unhealthy upstream
-  // servers. format: 1h/1m/1s/1ms. MUST BE >=1ms. Default is 30s.
-  google.protobuf.Duration base_ejection_time = 3;
+    // Minimum ejection duration. A host will remain ejected for a period
+    // equal to the product of minimum ejection duration and the number of
+    // times the host has been ejected. This technique allows the system to
+    // automatically increase the ejection period for unhealthy upstream
+    // servers. format: 1h/1m/1s/1ms. MUST BE >=1ms. Default is 30s.
+    google.protobuf.Duration base_ejection_time = 3;
 
-  // Maximum % of hosts in the load balancing pool for the upstream service
-  // that can be ejected. Defaults to 10%.
-  int32 max_ejection_percent = 4;
+    // Maximum % of hosts in the load balancing pool for the upstream service
+    // that can be ejected. Defaults to 10%.
+    int32 max_ejection_percent = 4;
+  };
+
+  // Settings for HTTP connections.
+  HTTPSettings http = 1;
 };

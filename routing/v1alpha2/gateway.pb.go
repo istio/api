@@ -153,7 +153,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //         - my-gateway #apply at my-gateway as well as reviews.prod internally
 //         http:
 //         - match:
-//             headers:
+//           - headers:
 //               cookie:
 //                 user: dev-123
 //           route:
@@ -187,20 +187,17 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //         - my-gateway
 //         tcp:
 //         - match:
-//             destinationPorts:
-//             - 2379
-//             sourceSubnets:
-//             - "172.17.16.0/24"
+//           - destinationPort: 2379
+//             sourceSubnet: "172.17.16.0/24"
 //           route:
 //           - destination:
 //               name: redis.prod
 //
 // By default, if there is no wildcard, HTTP requests for unknown domains
-// or requests that have no matching route rule will respond with a
-// 404. If a specific default behavior is desired at the ingress, add a
-// route rule without any destination (implies wildcard) with the desired
-// backend. For example, the following wildcard routing rule is applicable for
-// port 9080
+// or requests that have no matching route rule will respond with a 404. If
+// a specific default behavior is desired at the ingress, add a route rule
+// with a wildcard host and the desired backend. For example, the following
+// wildcard routing rule routes all traffic to homepage.prod by default.
 //
 //     metadata:
 //       name: default-ingress
@@ -209,7 +206,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //       - *
 //       rules:
 //       - gateways:
-//         - my-gateway #applies to
+//         - my-gateway
 //         http:
 //         - route:
 //           - destination:
