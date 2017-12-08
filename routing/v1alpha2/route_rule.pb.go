@@ -101,9 +101,10 @@ func (UpstreamSettings_LBPolicy) EnumDescriptor() ([]byte, []int) {
 // containing for /api/v2/ url prefix will be sent to pods
 // with label version: v2.
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: my-rule
-//       namespace: default # optional (default is "default")
 //     spec:
 //       hosts:
 //       - reviews
@@ -126,8 +127,81 @@ func (UpstreamSettings_LBPolicy) EnumDescriptor() ([]byte, []int) {
 //             weight: 100
 //
 // Every service in the mesh can have utmost one route rule associated with
-// it.  A single route rule can be used to describe traffic properties for
-// multiple HTTP and TCP ports.
+// the service name.  A single route rule can be used to describe traffic
+// properties for multiple HTTP and TCP ports.
+//
+// Inheritance model: To allow multiple services to use a common set of
+// settings (e.g., timeouts), route rules support inheritance. Route rules
+// have a single inheritance model, with child rules overriding the default
+// settings defined in the parent rule. The inheritance model based on the
+// service's FQDN, with the catch all domain "*" at the root, followed by
+// more specific sub domains such as *.com, and finally explicit service
+// names such as example.com at the leaf of the inheritance tree.
+//
+// For example, in a system with services foo1.com, foo2.com, and bar.org,
+//
+//     hosts: * #applicable to foo1.com, foo2.com, and bar.org
+//     |
+//     |- hosts: *.com #applicable to foo1.com and foo2.com
+//          |
+//          |- hosts: foo1.com
+//                    # inherits from * and *.com, and overrides settings
+//
+// _As described earlier, all rules derive from a single global wildcard
+// rule._ For example, the following global base rule defines a universal
+// timeout for HTTP requests.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: global-rule
+//     spec:
+//       hosts:
+//       - * #no other hosts are allowed here.
+//       rules:
+//       - http:
+//         - timeout: 1s
+//           ...
+//
+// Domain suffix based rules can be defined to apply the same setting to a
+// group of services under the suffix. For example, the following domain
+// suffix based rule enables websocket support for all services in the
+// "*.com" domain.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: com-rule
+//     spec:
+//       hosts:
+//       - *.com
+//       rules:
+//       - http:
+//         - websocketUpgrade: true
+//           ...
+//
+// Service specific rules can be used to override global or sub domain
+// properties. For example, the following rule for foo1.com overrides the
+// global http request timeout of 1s (and uses a shorter 500ms timeout), in
+// addition to defining URL rewrites.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: foo1-rule
+//     spec:
+//       hosts:
+//       - foo1.com
+//       rules:
+//       - http:
+//         - match:
+//           - uri:
+//               prefix: /ratings
+//           rewrite:
+//             uri: /v1/bookRatings
+//           timeout: 0.5s
+//           ...
+//
 type RouteRule struct {
 	// REQUIRED. The network destination for traffic described by this
 	// routing rule. Could be a DNS name with wildcard prefix or a CIDR
@@ -329,9 +403,10 @@ func (m *Destination) GetPort() string {
 // For example, the following snippet restricts the rule to match only
 // requests originating from instances with label "version:v2".
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: my-rule
-//       namespace: default
 //     spec:
 //       hosts:
 //       - ratings
@@ -552,9 +627,10 @@ func (m *TCPRoute) GetRoute() []*DestinationWeight {
 // starts with /ratings/v2/ and the request contains a "cookie" with value
 // "user=jason",
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: my-rule
-//       namespace: default
 //     spec:
 //       hosts:
 //       - ratings
@@ -690,9 +766,10 @@ func (m *HTTPMatchRequest) GetDestinationPorts() []string {
 // instances with the "v2" tag and the remaining traffic (i.e., 75%) to
 // "v1".
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: my-rule
-//       namespace: default
 //     spec:
 //       hosts:
 //         - reviews
@@ -796,9 +873,10 @@ func (m *L4MatchAttributes) GetDestinationPorts() []string {
 // requests for /v1/getProductRatings API on the ratings service to
 // /v1/bookRatings provided by the bookratings service.
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: my-rule
-//       namespace: default
 //     spec:
 //       hosts:
 //         - ratings
@@ -847,9 +925,10 @@ func (m *HTTPRedirect) GetAuthority() string {
 // demonstrates how to rewrite the URL prefix for api call (/ratings) to
 // ratings service before making the actual API call.
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: my-rule
-//       namespace: default
 //     spec:
 //       hosts:
 //       - ratings
@@ -1040,9 +1119,10 @@ func _StringMatch_OneofSizer(msg proto.Message) (n int) {
 // example, the following rule sets the maximum number of retries to 3 when
 // calling ratings:v1 service, with a 2s timeout per retry attempt.
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: my-rule
-//       namespace: default
 //     spec:
 //       hosts:
 //         - ratings
@@ -1094,9 +1174,10 @@ func (m *HTTPRetry) GetPerTryTimeout() *google_protobuf.Duration {
 // Access-Control-Allow-Credentials header to false. In addition, it only
 // exposes X-Foo-bar header and sets an expiry period of 1 day.
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: my-rule
-//       namespace: default
 //     spec:
 //       hosts:
 //       - ratings
@@ -1229,6 +1310,8 @@ func (m *HTTPFaultInjection) GetAbort() *HTTPFaultInjection_Abort {
 // in 10% of the requests to the "v1" version of the "reviews"
 // service.
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -1384,6 +1467,8 @@ func _HTTPFaultInjection_Delay_OneofSizer(msg proto.Message) (n int) {
 // pre-specified error code. The following example will return an HTTP
 // 400 error code for 10% of the requests to the "ratings" service "v1".
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -1795,9 +1880,10 @@ func (m *ConnectionPoolSettings_HTTPSettings) GetMaxEjectionPercent() int32 {
 // upstream hosts to be scanned every 5 mins, such that any host that fails 7
 // consecutive times with 5XX error code will be ejected for 15 minutes.
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: reviews-cb-policy
-//       namespace: default
 //     spec:
 //       hosts:
 //       - reviews
