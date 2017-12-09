@@ -12,6 +12,7 @@ go_proto_library(
     verbose = 0,
     deps = [
         "@com_github_golang_protobuf//ptypes/any:go_default_library",
+        "@com_github_golang_protobuf//ptypes/struct:go_default_library",
         "@com_github_golang_protobuf//ptypes/duration:go_default_library",
         "@com_github_golang_protobuf//ptypes/wrappers:go_default_library",
     ],

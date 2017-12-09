@@ -28,6 +28,7 @@ It has these top-level messages:
 	UpstreamSettings
 	ConnectionPoolSettings
 	OutlierDetection
+	EnvoyFilters
 */
 package istio_routing_v1alpha2
 
