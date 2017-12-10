@@ -5,25 +5,26 @@ gogoslick_proto_library(
     name = "go_default_library",
     importmap = {
         "gogoproto/gogo.proto": "github.com/gogo/protobuf/gogoproto",
-        "google/rpc/status.proto": "github.com/googleapis/googleapis/google/rpc",
+        "google/protobuf/any.proto": "github.com/gogo/protobuf/types",
         "google/protobuf/timestamp.proto": "github.com/gogo/protobuf/types",
         "google/protobuf/duration.proto": "github.com/gogo/protobuf/types",
     },
     imports = [
         "external/com_github_gogo_protobuf",
         "external/com_github_google_protobuf/src",
-        "external/com_github_googleapis_googleapis",
     ],
     inputs = [
         "@com_github_google_protobuf//:well_known_protos",
-        "@com_github_googleapis_googleapis//:status_proto",
         "@com_github_gogo_protobuf//gogoproto:go_default_library_protos",
     ],
     protos = [
         "attributes.proto",
         "check.proto",
+        "code.proto",
+        "error_details.proto",
         "report.proto",
         "service.proto",
+        "status.proto",
     ],
     verbose = 0,
     visibility = ["//visibility:public"],
@@ -32,7 +33,6 @@ gogoslick_proto_library(
         "@com_github_gogo_protobuf//gogoproto:go_default_library",
         "@com_github_gogo_protobuf//sortkeys:go_default_library",
         "@com_github_gogo_protobuf//types:go_default_library",
-        "@com_github_googleapis_googleapis//:google/rpc",
     ],
 )
 
@@ -59,6 +59,5 @@ cc_proto_library(
     deps = [
         "//external:cc_gogoproto",
         "//external:cc_wkt_protos",
-        "//external:rpc_status_proto",
     ],
 )

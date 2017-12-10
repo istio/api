@@ -8,8 +8,11 @@
 	It is generated from these files:
 		mixer/v1/attributes.proto
 		mixer/v1/check.proto
+		mixer/v1/code.proto
+		mixer/v1/error_details.proto
 		mixer/v1/report.proto
 		mixer/v1/service.proto
+		mixer/v1/status.proto
 
 	It has these top-level messages:
 		Attributes
@@ -18,8 +21,18 @@
 		CheckRequest
 		CheckResponse
 		ReferencedAttributes
+		RetryInfo
+		DebugInfo
+		QuotaFailure
+		PreconditionFailure
+		BadRequest
+		RequestInfo
+		ResourceInfo
+		Help
+		LocalizedMessage
 		ReportRequest
 		ReportResponse
+		Status
 */
 package istio_mixer_v1
 
