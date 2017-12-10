@@ -38,16 +38,16 @@ package istio.routing.v1alpha2;
 // service has a default version consisting of all its instances.
 //
 // *Source* - downstream client (browser or another service) calling the
-// Envoy proxy/sidecar (typically to reach another service).
+// sidecar (typically to reach another service).
 //
-// *Host* - The remote upstream service to which the Envoy proxy/sidecar is
+// *Host* - The remote upstream service to which the sidecar is
 // talking to, on behalf of the source service. There can be one or more
 // service versions for a given service (see the discussion on versions above).
-// Envoy would choose the version based on various routing rules.
+// The sidecar would choose the version based on various routing rules.
 //
 // *Access model* - Applications address only the destination service (Host)
 // without knowledge of individual service versions. The actual choice of
-// the version is determined by Envoy, enabling the application code to
+// the version is determined by the sidecar, enabling the application code to
 // decouple itself from the evolution of dependent services.
 //
 //
@@ -193,17 +193,11 @@ message RouteRule {
   repeated string hosts = 1;
 
   // A Rule contains a single route rule that applies to traffic coming
-  // from a set of sources, gateways. See RouteRule for usage example.
+  // from a set of sources. See RouteRule for usage example.
   message Rule {
     // Applies the route rule only to a specific set of workloads.  The rule
     // is applied on a sidecar if any one of the labels match.
-    repeated Endpoint source = 2;
-
-    // The named gateways to bind this route rule to. A single route rule
-    // could be used for sources inside the mesh as well as one or more
-    // gateways.  Note that gateways cannot be specified in rules with
-    // traffic passthrough option enabled.
-    repeated string gateways = 3;
+    repeated Endpoint source = 1;
 
     // The traffic passthrough option can be used to let the traffic go to
     // its original destination (i.e. no load balancing), while still being
@@ -220,13 +214,13 @@ message RouteRule {
     // tcp.route will be ignored.
     //
     // NOTE 2: Rules with traffic passthrough cannot have gateways.
-    bool traffic_passthrough = 4;
+    bool traffic_passthrough = 2;
 
     // A list of routes for HTTP traffic.
-    repeated HTTPRoute http = 5;
+    repeated HTTPRoute http = 3;
 
     // A lit of routes for TCP traffic.
-    repeated TCPRoute tcp = 6;
+    repeated TCPRoute tcp = 4;
 
   // (-- TODO Add meta-protocol support here for custom codecs --)
   };
@@ -262,10 +256,10 @@ message Destination {
   // the final destination is resolved to
   // reviews.bookinfo.svc.cluster.local. If the rule refers to the
   // destination as "reviews.sales", the resolution process first looks for
-  // a "reviews" service in the "sales" namespace. In both cases, Envoy
+  // a "reviews" service in the "sales" namespace. In both cases, the sidecar
   // will route to the IP addresses of the pods constituting the
   // service. However, if the lookup fails, "reviews.sales" is treated as
-  // an external service, such that Envoy will dynamically resolve the DNS
+  // an external service, such that the sidecar will dynamically resolve the DNS
   // of the service name and route the request to the IP addresses returned
   // by the DNS.
   string name = 1;
@@ -287,7 +281,8 @@ message Destination {
 
 // Describes a label constraint on the Endpoints where traffic originates.
 // For example, the following snippet restricts the rule to match only
-// requests originating from instances with label "version:v2".
+// requests originating from instances with label "version:v2" or from the
+// gateway named "my-ingress-gateway".
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: RouteRule
@@ -300,12 +295,21 @@ message Destination {
 //       - source:
 //         - labels:
 //             version: v2
+//         - gateway: my-ingress-gateway
 //         http:
 //         ...
 message Endpoint {
   // One or more labels that constrain the applicability of a rule to
-  // endpoints with the given labels.
+  // endpoints with the given labels. ONLY ONE OF labels or gateway can
+  // be specified.
   map<string, string> labels = 1;
+
+  // The name of a gateway where this rule should be applied. A single
+  // route rule could be used for sources inside the mesh as well as one or
+  // more gateways. Note that gateways cannot be specified in rules with
+  // traffic passthrough option enabled. ONLY ONE OF labels or gateway
+  // can be specified.
+  string gateway = 2;
 }
 
 // Describes match conditions and actions for routing HTTP/1.1, HTTP2, and
@@ -337,11 +341,11 @@ message HTTPRoute {
 
   // Indicates that a HTTP/1.1 client connection to this particular route
   // should be allowed (and expected) to upgrade to a WebSocket connection.
-  // The default is false. Envoy expects the first request to this route to
-  // contain the WebSocket upgrade headers. Otherwise, the request will be
-  // rejected.  Note that Websocket allows secondary protocol negotiation
-  // which may then be subject to further routing rules based on the
-  // protocol selected.
+  // The default is false. Istio's default sidecar implementation (Envoy)
+  // expects the first request to this route to contain the WebSocket
+  // upgrade headers. Otherwise, the request will be rejected.  Note that
+  // Websocket allows secondary protocol negotiation which may then be
+  // subject to further routing rules based on the protocol selected.
   bool websocket_upgrade = 5;
 
   // Timeout for HTTP requests.
@@ -355,7 +359,7 @@ message HTTPRoute {
 
   // Mirror HTTP traffic to a another destination in addition to forwarding
   // the requests to the intended destination. Mirrored traffic is on a best
-  // effort basis where Envoy will not wait for the mirrored cluster to
+  // effort basis where the sidecar/gateway will not wait for the mirrored cluster to
   // respond before returning the response from the original destination.
   // Statistics will be generated for the mirrored destination.
   Destination mirror = 9;

@@ -47,17 +47,17 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-// TLS modes enforced by Envoy
+// TLS modes enforced by the gateway
 type Server_TLSOptions_TLSmode int32
 
 const (
-	// If set to "passthrough", Envoy will forward the connection to the
+	// If set to "passthrough", the gateway will forward the connection to the
 	// upstream server as is.
 	Server_TLSOptions_PASSTHROUGH Server_TLSOptions_TLSmode = 0
-	// If set to "simple", Envoy will secure connections with
+	// If set to "simple", the gateway will secure connections with
 	// standard TLS semantics (server certs only).
 	Server_TLSOptions_SIMPLE Server_TLSOptions_TLSmode = 1
-	// If set to "mutual", Envoy will use standard mTLS authentication.
+	// If set to "mutual", the gateway will use standard mTLS authentication.
 	Server_TLSOptions_MUTUAL Server_TLSOptions_TLSmode = 2
 )
 
@@ -84,9 +84,9 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 // set of ports that should be exposed outside the mesh, the type of
 // protocol to use, SNI configuration for the load balancer, etc.
 //
-// For example, the following gateway spec sets up Envoy to act as a load
+// For example, the following gateway spec sets up a proxy to act as a load
 // balancer exposing port 80 and 9080 (http), 443 (https), and port 2379 (TCP).
-// While Istio will configure Envoy to listen on these ports, it is the
+// While Istio will configure the proxy to listen on these ports, it is the
 // responsibility of the user to ensure that external traffic to these
 // ports are allowed into the mesh.
 //
@@ -150,8 +150,8 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //         - uk.bookinfo.com
 //         - eu.bookinfo.com
 //       rules:
-//       - gateways:
-//         - my-gateway #apply at my-gateway as well as reviews.prod internally
+//       - source:
+//         - gateway: my-gateway
 //         http:
 //         - match:
 //           - headers:
@@ -167,7 +167,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //           route:
 //           - destination:
 //               port: 9080 # port can be omitted if its the only port for reviews
-//               name: reviews.prod # can be omitted if its same as root destination.name
+//               name: reviews.prod
 //             weight: 80
 //           - destination:
 //               name: reviews.qa
@@ -184,8 +184,8 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //       hosts:
 //       - redissvr #name of redis service
 //       rules:
-//       - gateways:
-//         - my-gateway
+//       - source:
+//         - gateway: my-gateway
 //         tcp:
 //         - match:
 //           - destinationPort: 2379
@@ -206,8 +206,8 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //       hosts:
 //       - *
 //       rules:
-//       - gateways:
-//         - my-gateway
+//       - source:
+//         - gateway: my-gateway
 //         http:
 //         - route:
 //           - destination:
@@ -276,7 +276,7 @@ func (m *Gateway) GetServers() []*Server {
 //           serverCertificatet: server.crt
 //
 type Server struct {
-	// REQUIRED: The Port on which Envoy should listen for incoming
+	// REQUIRED: The Port on which the proxy should listen for incoming
 	// connections
 	Port *Server_Port `protobuf:"bytes,1,opt,name=port" json:"port,omitempty"`
 	// A list of domains exposed by this gateway. While
