@@ -13,7 +13,6 @@ It has these top-level messages:
 	Server
 	RouteRule
 	Destination
-	Source
 	HTTPRoute
 	TCPRoute
 	HTTPMatchRequest
@@ -76,15 +75,15 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 }
 
 // Gateway describes a load balancer operating at the edge of the mesh
-// receiving incoming HTTP/TCP connections. The specification describes a
-// set of ports that should be exposed outside the mesh, the type of
-// protocol to use, SNI configuration for the load balancer, etc.
+// receiving incoming or outgoing HTTP/TCP connections. The specification
+// describes a set of ports that should be exposed, the type of protocol to
+// use, SNI configuration for the load balancer, etc.
 //
 // For example, the following gateway spec sets up a proxy to act as a load
-// balancer exposing port 80 and 9080 (http), 443 (https), and port 2379 (TCP).
-// While Istio will configure the proxy to listen on these ports, it is the
-// responsibility of the user to ensure that external traffic to these
-// ports are allowed into the mesh.
+// balancer exposing port 80 and 9080 (http), 443 (https), and port 2379
+// (TCP) for ingress.  While Istio will configure the proxy to listen on
+// these ports, it is the responsibility of the user to ensure that
+// external traffic to these ports are allowed into the mesh.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: Gateway
@@ -120,10 +119,10 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //           protocol: REDIS
 //
 // The gateway specification above describes the L4-L6 properties of a load
-// balancer.  Routing rules can be used to control the forwarding of
-// traffic arriving at a particular domain or gateway port.
+// balancer. Routing rules can then be bound to a gateway to control
+// the forwarding of traffic arriving at a particular domain or gateway port.
 //
-// The following route rule splits traffic for
+// The following sample route rule splits traffic for
 // https://uk.bookinfo.com/reviews, https://eu.bookinfo.com/reviews,
 // http://uk.bookinfo.com:9080/reviews, http://eu.bookinfo.com:9080/reviews
 // into two versions (prod and qa) of an internal reviews service on port
@@ -152,14 +151,14 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //               user: dev-123
 //         route:
 //         - destination:
-//             port: 7777
+//             portNumber: 7777
 //             name: reviews.qa
 //       - match:
 //           uri:
 //             prefix: /reviews/
 //         route:
 //         - destination:
-//             port: 9080 # port can be omitted if its the only port for reviews
+//             portNumber: 9080 # can be omitted if its the only port for reviews
 //             name: reviews.prod
 //           weight: 80
 //         - destination:
@@ -180,9 +179,8 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //       - my-gateway
 //       tcp:
 //       - match:
-//         - destinationPort: 2379
-//           source:
-//             subnet: "172.17.16.0/24"
+//         - destinationPortNumber: 2379
+//           sourceSubnet: "172.17.16.0/24"
 //         route:
 //         - destination:
 //             name: redis.prod
@@ -301,12 +299,12 @@ func (m *Server) GetTls() *Server_TLSOptions {
 
 // Port describes the properties of a specific port of a service.
 type Server_Port struct {
-	// A valid non-negative integer port number.
+	// REQUIRED: A valid non-negative integer port number.
 	Number uint32 `protobuf:"varint,1,opt,name=number" json:"number,omitempty"`
-	// The protocol to communicate with the external services.
+	// The protocol exposed on the port.
 	// MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|REDIS|TCP.
 	Protocol string `protobuf:"bytes,2,opt,name=protocol" json:"protocol,omitempty"`
-	// Name assigned to the port.
+	// Label assigned to the port.
 	Name string `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`
 }
 

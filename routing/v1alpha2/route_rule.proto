@@ -21,44 +21,43 @@ package istio.routing.v1alpha2;
 
 // ### Glossary & concepts
 //
-// *Service* is a unit of an application with a unique name that other services
-// use to refer to the functionality being called. Service instances are
-// pods/VMs/containers that implement the service.
+// *Service* a unit of application behavior bound to a unique name in a
+// service registry.  Services consist of multiple network *endpoints*
+// implemented by workload instances running on pods, containers, VMs etc.
 //
-// *Service versions* - In a continuous deployment scenario, for a given service,
-// there can be multiple sets of instances running potentially different
+// *Service versions* - In a continuous deployment scenario, for a given
+// service, there can be distinct subsets of instances running different
 // variants of the application binary. These variants are not necessarily
-// different API versions. They could be iterative changes to the same service,
-// deployed in different environments (prod, staging, dev, etc.). Common
-// scenarios where this occurs include A/B testing, canary rollouts, etc. The
-// choice of a particular version can be decided based on various criterion
-// (headers, url, etc.) and/or by weights assigned to each version.  Each
-// service has a default version consisting of all its instances.
+// different API versions. They could be iterative changes to the same
+// service, deployed in different environments (prod, staging, dev,
+// etc.). Common scenarios where this occurs include A/B testing, canary
+// rollouts, etc. The choice of a particular version can be decided based
+// on various criterion (headers, url, etc.) and/or by weights assigned to
+// each version.  Each service has a default version consisting of all its
+// instances.
 //
-// *Source* - downstream client (browser or another service) calling the
-// sidecar (typically to reach another service).
+// *Source* - A downstream client calling a service.
 //
-// *Host* - The remote upstream service to which the sidecar is
-// talking to, on behalf of the source service. There can be one or more
-// service versions for a given service (see the discussion on versions above).
-// The sidecar would choose the version based on various routing rules.
+// *Host* - The address used by a client when attempting to connect to a
+// *service.
 //
-// *Access model* - Applications address only the destination service (Host)
-// without knowledge of individual service versions. The actual choice of
-// the version is determined by the sidecar, enabling the application code to
-// decouple itself from the evolution of dependent services.
-//
+// *Access model* - Applications address only the destination service
+// (Host) without knowledge of individual service versions. The actual
+// choice of the version is determined by the sidecar, enabling the
+// application code to decouple itself from the evolution of dependent
+// services.
 //
 //
-// Route rule provides a custom routing policy based on the source and
-// destination service versions and connection/request metadata.  The rule
-// must provide a set of conditions for each protocol (TCP, UDP, HTTP) that
-// the destination service exposes on its ports.
+//
+// RouteRule provides a custom routing policy based on the destination
+// service and its versions, the source of the traffic as well as
+// connection and request metadata.  The rule must provide a set of
+// conditions for each protocol (TCP, UDP, HTTP) that the destination
+// service exposes on its ports.
 //
 // The rule applies only to the ports on the destination service for which
 // it provides protocol-specific match condition, e.g. if the rule does not
-// specify TCP condition, the rule does not apply to TCP traffic towards
-// the destination service.
+// specify a TCP condition, the rule does not apply to TCP traffic.
 //
 // For example, the following rule routes all traffic by default to pods of
 // reviews service with label "version: v1". In addition, HTTP requests
@@ -86,23 +85,23 @@ package istio.routing.v1alpha2;
 //             labels:
 //               version: v2
 //           weight: 100
-//       - route: # default route
+//       - route:
 //         - destination:
 //             name: reviews
 //             labels:
 //               version: v1
 //           weight: 100
 //
-// Every service in the mesh can have utmost one route rule associated with
-// the service name.  A single route rule can be used to describe traffic
-// properties for multiple HTTP and TCP ports.
+// A host name can be defined by only one RouteRule.  A single route rule
+// can be used to describe traffic properties for multiple HTTP and TCP
+// ports.
 message RouteRule {
-  // REQUIRED. The network destination for traffic described by this
-  // routing rule. Could be a DNS name with wildcard prefix or a CIDR
-  // prefix. Depending on the platform, plain service names can also be
-  // used instead of a FQDN (i.e. has no dots in the name). In such a
-  // scenario, the FQDN of the host would be derived based on the
-  // underlying platform.
+  // REQUIRED. The destination address for traffic captured by this routing
+  // rule.  Could be a DNS name with wildcard prefix or a CIDR
+  // prefix. Depending on the platform, short-names can also be used
+  // instead of a FQDN (i.e. has no dots in the name). In such a scenario,
+  // the FQDN of the host would be derived based on the underlying
+  // platform.
   //
   // For example on Kubernetes a client in the "default" namespace
   // referring to "reviews" would be resolved to the FQDN
@@ -112,27 +111,26 @@ message RouteRule {
   // FQDN "reviews.service.consul".
   //
   // Note that the hosts field applies to both HTTP and TCP services. In
-  // case of TCP services, the plain service name or a IP address with CIDR
-  // prefix can be used.
+  // case of TCP services, the plain service name or an IP address with
+  // CIDR prefix can be used.
   repeated string hosts = 1;
 
-  // The name of a gateway where this rule should be applied. A single
-  // route rule could be used for sources inside the mesh as well as one or
-  // more gateways. Note that gateways cannot be specified in rules with
-  // traffic passthrough option enabled.
+  // The names of gateways that should apply these routes. A single route
+  // rule could be used for sources inside the mesh as well as one or more
+  // gateways. Note that gateways cannot be specified in rules with traffic
+  // passthrough option enabled.
   repeated string gateways = 2;
 
   // A list of routes for HTTP traffic.
   repeated HTTPRoute http = 3;
 
-  // A lit of routes for TCP traffic.
+  // A list of routes for TCP traffic.
   repeated TCPRoute tcp = 4;
 }
 
-
-// Destination indicates the network addressable service or a workload name
-// to which the request/connection will be sent after processing a routing
-// rule. See RouteRule for usage examples.
+// Destination indicates the network addressable service to which the
+// request/connection will be sent after processing a routing rule. See
+// RouteRule for usage examples.
 message Destination {
   // REQUIRED: Service name from the service registry. The name can be a
   // short name, a fully qualified domain name or an IP address. If short
@@ -144,16 +142,16 @@ message Destination {
   // the final destination is resolved to
   // reviews.bookinfo.svc.cluster.local. If the rule refers to the
   // destination as "reviews.sales", the resolution process first looks for
-  // a "reviews" service in the "sales" namespace. In both cases, the sidecar
-  // will route to the IP addresses of the pods constituting the
+  // a "reviews" service in the "sales" namespace. In both cases, the
+  // sidecar will route to the IP addresses of the pods constituting the
   // service. However, if the lookup fails, "reviews.sales" is treated as
-  // an external service, such that the sidecar will dynamically resolve the DNS
-  // of the service name and route the request to the IP addresses returned
-  // by the DNS.
+  // an external service, such that the sidecar will dynamically resolve
+  // the DNS of the service name and route the request to the IP addresses
+  // returned by the DNS.
   string name = 1;
 
-  // Labels will be applied to select a subset of instances in the destination,
-  // to load balance requests to.
+  // Labels will be applied to select a subset of instances in the
+  // destination, to load balance requests to.
   map<string, string> labels = 2;
 
   // Specifies the port on the destination. Many services only expose a
@@ -162,54 +160,13 @@ message Destination {
   // selection priority is to first match by name and then match by number.
   //
   // Names must comply with DNS label syntax (rfc1035) and therefore cannot
-  // collide with numbers. If there are multiple ports on a service with the
-  // same protocol the names should be of the form <protocol-name>-<DNS label>.
-  string port = 3;
-}
-
-// Describes a label constraint on the pods/VMs where traffic originates.
-// For example, the following snippet restricts the rule to match only
-// requests originating from instances with label "version:v2".
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: my-rule
-//     spec:
-//       hosts:
-//       - ratings
-//       http:
-//       - match:
-//         - source:
-//             labels:
-//               version: v2
-//       ...
-message Source {
-  // Service name from the service registry. The name can be a
-  // short name, a fully qualified domain name or an IP address. If short
-  // names are used, the FQDN of the service will be resolved in a platform
-  // specific manner.
-  //
-  // For example in Kubernetes, when a rule with a short name "reviews" in
-  // the destination is applied to a client in the "bookinfo" namespace,
-  // the final destination is resolved to
-  // reviews.bookinfo.svc.cluster.local. If the rule refers to the
-  // destination as "reviews.sales", the resolution process first looks for
-  // a "reviews" service in the "sales" namespace. In both cases, the sidecar
-  // will route to the IP addresses of the pods constituting the
-  // service. However, if the lookup fails, "reviews.sales" is treated as
-  // an external service, such that the sidecar will dynamically resolve the DNS
-  // of the service name and route the request to the IP addresses returned
-  // by the DNS.
-  string name = 1;
-
-  // One or more labels that constrain the applicability of a rule to
-  // sources with the given labels.
-  map<string, string> labels = 2;
-
-  // IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or
-  // just a.b.c.d
-  string subnet = 3;
+  // collide with numbers. If there are multiple ports on a service with
+  // the same protocol the names should be of the form <protocol-name>-<DNS
+  // label>.
+  oneof port {
+    string port_name = 3;
+    uint32 port_number = 4;
+  };
 }
 
 // Describes match conditions and actions for routing HTTP/1.1, HTTP2, and
@@ -221,12 +178,10 @@ message HTTPRoute {
   // is matched if any one of the match blocks succeed.
   repeated HTTPMatchRequest match = 1;
 
-  // A http rule can either redirect or forward (default) traffic.  If
-  // traffic passthrough option is specified in the route rule,
-  // route/redirect will be ignored.  The forwarding target can be one of
-  // several versions of a service (see glossary in beginning of
-  // document). Weights associated with the service version determine the
-  // proportion of traffic it receives.
+  // A http rule can either redirect or forward (default) traffic.  The
+  // forwarding target can be one of several versions of a service (see
+  // glossary in beginning of document). Weights associated with the
+  // service version determine the proportion of traffic it receives.
   repeated DestinationWeight route = 2;
 
   // A http rule can either redirect or forward (default) traffic.  If
@@ -241,7 +196,7 @@ message HTTPRoute {
 
   // Indicates that a HTTP/1.1 client connection to this particular route
   // should be allowed (and expected) to upgrade to a WebSocket connection.
-  // The default is false. Istio's default sidecar implementation (Envoy)
+  // The default is false. Istio's reference sidecar implementation (Envoy)
   // expects the first request to this route to contain the WebSocket
   // upgrade headers. Otherwise, the request will be rejected.  Note that
   // Websocket allows secondary protocol negotiation which may then be
@@ -258,19 +213,20 @@ message HTTPRoute {
   HTTPFaultInjection fault = 8;
 
   // Mirror HTTP traffic to a another destination in addition to forwarding
-  // the requests to the intended destination. Mirrored traffic is on a best
-  // effort basis where the sidecar/gateway will not wait for the mirrored cluster to
-  // respond before returning the response from the original destination.
-  // Statistics will be generated for the mirrored destination.
+  // the requests to the intended destination. Mirrored traffic is on a
+  // best effort basis where the sidecar/gateway will not wait for the
+  // mirrored cluster to respond before returning the response from the
+  // original destination.  Statistics will be generated for the mirrored
+  // destination.
   Destination mirror = 9;
 
   // Cross-Origin Resource Sharing policy (CORS). Refer to
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS for
-  // further details about cross origin resource sharing.
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
+  // for further details about cross origin resource sharing.
   CorsPolicy cors_policy = 10;
 
   // Additional HTTP headers to add before forwarding a request to the
-  // destnation service.
+  // destination service.
   map<string, string> append_headers = 11;
 }
 
@@ -287,9 +243,8 @@ message HTTPRoute {
 //       - myredissrv 
 //       tcp:
 //       - match:
-//         - source:
-//             subnet: "172.17.16.0/24"
-//           destinationPort: redis #only applies to ports named redis
+//         - sourceSubnet: "172.17.16.0/24"
+//           destinationPortName: redis #only applies to ports named redis
 //         route:
 //         - destination:
 //             name: redis.prod
@@ -400,11 +355,14 @@ message HTTPMatchRequest {
   // Names must comply with DNS label syntax (rfc1035) and therefore cannot
   // collide with numbers. If there are multiple ports on a service with the
   // same protocol the names should be of the form <protocol-name>-<DNS label>.
-  string destination_port = 6;
+  oneof port {
+    string destination_port_name = 6;
+    uint32 destination_port_number = 7;
+  };
 
-  // Applies the route rule only to a specific source.  The rule
-  // is applied on a sidecar if all of the labels match.
-  Source source = 7;
+  // One or more labels that constrain the applicability of a rule to
+  // sources with the given labels.
+  map<string, string> source_labels = 8;
 }
 
 // Each routing rule is associated with one or more service versions (see
@@ -465,11 +423,18 @@ message L4MatchAttributes {
   // Names must comply with DNS label syntax (rfc1035) and therefore cannot
   // collide with numbers. If there are multiple ports on a service with the
   // same protocol the names should be of the form <protocol-name>-<DNS label>.
-  string destination_port = 2;
+  oneof port {
+    string destination_port_name = 2;
+    uint32 destination_port_number = 3;
+  };
 
-  // Applies the route rule only to a specific source.  The rule
-  // is applied on a sidecar if all of the labels match.
-  Source source = 3;
+  // IPv4 or IPv6 ip address of source with optional subnet. E.g., a.b.c.d/xx 
+  // form or just a.b.c.d
+  string source_subnet = 4;
+
+  // One or more labels that constrain the applicability of a rule to
+  // sources with the given labels.
+  map<string, string> source_labels = 5;
 }
 
 // HTTPRedirect can be used to send a 302 redirect response to the caller,
@@ -669,7 +634,7 @@ message HTTPFaultInjection {
   // Delay specification is used to inject latency into the request
   // forwarding path. The following example will introduce a 5 second delay
   // in 10% of the requests to the "v1" version of the "reviews"
-  // service.
+  // service from all pods with label env: prod
   //
   //     apiVersion: config.istio.io/v1alpha2
   //     kind: RouteRule
@@ -679,7 +644,10 @@ message HTTPFaultInjection {
   //       hosts:
   //       - reviews
   //       http:
-  //       - route:
+  //       - match:
+  //         - sourceLabels:
+  //             env: prod
+  //         route:
   //         - destination:
   //             name: reviews
   //             labels:
@@ -751,3 +719,4 @@ message HTTPFaultInjection {
     }
   }
 }
+
