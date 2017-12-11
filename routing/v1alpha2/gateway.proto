@@ -32,35 +32,33 @@ package istio.routing.v1alpha2;
 //     metadata:
 //       name: my-gateway
 //     spec:
-//       labels:
-//         env: istio-prod
 //       servers:
-//         - port:
-//             number: 80
-//             name: http
-//           domains:
-//             - uk.bookinfo.com
-//             - eu.bookinfo.com
-//           tls:
-//             httpsRedirect: true # sends 302 redirect for http requests
-//         - port:
-//             number: 443
-//             name: https
-//           domains:
-//             - uk.bookinfo.com
-//             - eu.bookinfo.com
-//           tls:
-//             mode: simple #enables HTTPS on this port
-//             serverCert: server.crt
-//             clientCABundle: client.ca-bundle
-//         - port:
-//             number: 9080
-//             name: http-wildcard
-//           # no domains implies wildcard match
-//         - port:
-//             number: 2379 #to expose internal service via external port 2379
-//             name: redis
-//             protocol: REDIS
+//       - port:
+//           number: 80
+//           name: http
+//         domains:
+//         - uk.bookinfo.com
+//         - eu.bookinfo.com
+//         tls:
+//           httpsRedirect: true # sends 302 redirect for http requests
+//       - port:
+//           number: 443
+//           name: https
+//         domains:
+//         - uk.bookinfo.com
+//         - eu.bookinfo.com
+//         tls:
+//           mode: simple #enables HTTPS on this port
+//           serverCert: server.crt
+//           clientCABundle: client.ca-bundle
+//       - port:
+//           number: 9080
+//           name: http-wildcard
+//         # no domains implies wildcard match
+//       - port:
+//           number: 2379 #to expose internal service via external port 2379
+//           name: redis
+//           protocol: REDIS
 //
 // The gateway specification above describes the L4-L6 properties of a load
 // balancer.  Routing rules can be used to control the forwarding of
@@ -83,32 +81,31 @@ package istio.routing.v1alpha2;
 //       name: bookinfo-rule
 //     spec:
 //       hosts:
-//         - reviews.prod
-//         - uk.bookinfo.com
-//         - eu.bookinfo.com
-//       rules:
-//       - source:
-//         - gateway: my-gateway
-//         http:
-//         - match:
-//           - headers:
-//               cookie:
-//                 user: dev-123
-//           route:
-//           - destination:
-//               port: 7777
-//               name: reviews.qa
-//         - match:
-//             uri:
-//               prefix: /reviews/
-//           route:
-//           - destination:
-//               port: 9080 # port can be omitted if its the only port for reviews
-//               name: reviews.prod
-//             weight: 80
-//           - destination:
-//               name: reviews.qa
-//             weight: 20
+//       - reviews.prod
+//       - uk.bookinfo.com
+//       - eu.bookinfo.com
+//       gateways:
+//       - my-gateway
+//       http:
+//       - match:
+//         - headers:
+//             cookie:
+//               user: dev-123
+//         route:
+//         - destination:
+//             port: 7777
+//             name: reviews.qa
+//       - match:
+//           uri:
+//             prefix: /reviews/
+//         route:
+//         - destination:
+//             port: 9080 # port can be omitted if its the only port for reviews
+//             name: reviews.prod
+//           weight: 80
+//         - destination:
+//             name: reviews.qa
+//           weight: 20
 //
 // The following routing rule forwards traffic arriving at (external)
 // port 2379 from 172.17.16.* subnet to internal redis server on port 5555.
@@ -120,16 +117,16 @@ package istio.routing.v1alpha2;
 //     spec:
 //       hosts:
 //       - redissvr #name of redis service
-//       rules:
-//       - source:
-//         - gateway: my-gateway
-//         tcp:
-//         - match:
-//           - destinationPort: 2379
-//             sourceSubnet: "172.17.16.0/24"
-//           route:
-//           - destination:
-//               name: redis.prod
+//       gateways:
+//       - my-gateway
+//       tcp:
+//       - match:
+//         - destinationPort: 2379
+//           source:
+//             subnet: "172.17.16.0/24"
+//         route:
+//         - destination:
+//             name: redis.prod
 //
 // By default, if there is no wildcard, HTTP requests for unknown domains
 // or requests that have no matching route rule will respond with a 404. If
@@ -142,21 +139,16 @@ package istio.routing.v1alpha2;
 //     spec:
 //       hosts:
 //       - *
-//       rules:
-//       - source:
-//         - gateway: my-gateway
-//         http:
-//         - route:
-//           - destination:
-//               name: homepage.prod
+//       gateways:
+//       - my-gateway
+//       http:
+//       - route:
+//         - destination:
+//             name: homepage.prod
 //
 message Gateway {
-  // REQUIRED: One or more labels that constrain the applicability of this gateway to
-  // endpoints with the given labels.
-  map<string, string> labels = 1;
-
   // REQUIRED: A list of server specifications.
-  repeated Server servers = 2;
+  repeated Server servers = 1;
 }
 
 // Server describes the properties of the proxy on a given load balancer port.
@@ -164,8 +156,6 @@ message Gateway {
 //     metadata:
 //       name: my-ingress
 //     spec:
-//       labels:
-//         env: istio-ingress
 //       servers:
 //       - port:
 //           number: 80
@@ -184,8 +174,6 @@ message Gateway {
 //     metadata:
 //       name: my-ingress
 //     spec:
-//       labels:
-//         env: istio-ingress
 //       servers:
 //       - port:
 //           number: 443

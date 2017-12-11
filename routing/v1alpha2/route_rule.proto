@@ -16,8 +16,6 @@ syntax = "proto3";
 
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
-import "google/protobuf/struct.proto";
-import "google/protobuf/any.proto";
 
 package istio.routing.v1alpha2;
 
@@ -74,104 +72,30 @@ package istio.routing.v1alpha2;
 //     spec:
 //       hosts:
 //       - reviews
-//       rules:
-//       - http:
-//         - match:
-//           - uri:
-//               prefix: "/wpcatalog"
-//           - uri:
-//               prefix: "/consumercatalog"
-//           rewrite:
-//             uri: "/api/v2"
-//           route:
-//           - destination:
-//               name: reviews
-//               labels:
-//                 version: v2
-//             weight: 100
-//         - route: # default route
-//           - destination:
-//               name: reviews
-//               labels:
-//                 version: v1
-//             weight: 100
+//       http:
+//       - match:
+//         - uri:
+//             prefix: "/wpcatalog"
+//         - uri:
+//             prefix: "/consumercatalog"
+//         rewrite:
+//           uri: "/api/v2"
+//         route:
+//         - destination:
+//             name: reviews
+//             labels:
+//               version: v2
+//           weight: 100
+//       - route: # default route
+//         - destination:
+//             name: reviews
+//             labels:
+//               version: v1
+//           weight: 100
 //
 // Every service in the mesh can have utmost one route rule associated with
 // the service name.  A single route rule can be used to describe traffic
 // properties for multiple HTTP and TCP ports.
-//
-// Inheritance model: To allow multiple services to use a common set of
-// settings (e.g., timeouts), route rules support inheritance. Route rules
-// have a single inheritance model, with child rules overriding the default
-// settings defined in the parent rule. The inheritance model based on the
-// service's FQDN, with the catch all domain "*" at the root, followed by
-// more specific sub domains such as *.com, and finally explicit service
-// names such as example.com at the leaf of the inheritance tree.
-//
-// For example, in a system with services foo1.com, foo2.com, and bar.org,
-//
-//     hosts: * #applicable to foo1.com, foo2.com, and bar.org
-//     |
-//     |- hosts: *.com #applicable to foo1.com and foo2.com
-//          |
-//          |- hosts: foo1.com
-//                    # inherits from * and *.com, and overrides settings
-//
-// _As described earlier, all rules derive from a single global wildcard
-// rule._ For example, the following global base rule defines a universal
-// timeout for HTTP requests.
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: global-rule
-//     spec:
-//       hosts:
-//       - * #no other hosts are allowed here.
-//       rules:
-//       - http:
-//         - timeout: 1s
-//           ...
-//
-// Domain suffix based rules can be defined to apply the same setting to a
-// group of services under the suffix. For example, the following domain
-// suffix based rule enables websocket support for all services in the
-// "*.com" domain.
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: com-rule
-//     spec:
-//       hosts:
-//       - *.com
-//       rules:
-//       - http:
-//         - websocketUpgrade: true
-//           ...
-//
-// Service specific rules can be used to override global or sub domain
-// properties. For example, the following rule for foo1.com overrides the
-// global http request timeout of 1s (and uses a shorter 500ms timeout), in
-// addition to defining URL rewrites.
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: foo1-rule
-//     spec:
-//       hosts:
-//       - foo1.com
-//       rules:
-//       - http:
-//         - match:
-//           - uri:
-//               prefix: /ratings
-//           rewrite:
-//             uri: /v1/bookRatings
-//           timeout: 0.5s
-//           ...
-//
 message RouteRule {
   // REQUIRED. The network destination for traffic described by this
   // routing rule. Could be a DNS name with wildcard prefix or a CIDR
@@ -192,53 +116,17 @@ message RouteRule {
   // prefix can be used.
   repeated string hosts = 1;
 
-  // A Rule contains a single route rule that applies to traffic coming
-  // from a set of sources. See RouteRule for usage example.
-  message Rule {
-    // Applies the route rule only to a specific set of workloads.  The rule
-    // is applied on a sidecar if any one of the labels match.
-    repeated Endpoint source = 1;
+  // The name of a gateway where this rule should be applied. A single
+  // route rule could be used for sources inside the mesh as well as one or
+  // more gateways. Note that gateways cannot be specified in rules with
+  // traffic passthrough option enabled.
+  repeated string gateways = 2;
 
-    // The traffic passthrough option can be used to let the traffic go to
-    // its original destination (i.e. no load balancing), while still being
-    // able to apply other HTTP/TCP level features such as rewrites,
-    // timeouts, retries, etc. This option is typically used when a routing
-    // rule is applied to external services defined via Egress Rules. For
-    // example, it is possible to define a HTTP egress rule for
-    // *.example.com, and a HTTP routing rule with *.example.com as the
-    // host. The routing rule could define properties such as a common
-    // timeout, while still forwarding the traffic to the IP address resolved
-    // by the DNS.
-    //
-    // NOTE 1: When traffic passthrough is true, http.route|redirect, and
-    // tcp.route will be ignored.
-    //
-    // NOTE 2: Rules with traffic passthrough cannot have gateways.
-    bool traffic_passthrough = 2;
+  // A list of routes for HTTP traffic.
+  repeated HTTPRoute http = 3;
 
-    // A list of routes for HTTP traffic.
-    repeated HTTPRoute http = 3;
-
-    // A lit of routes for TCP traffic.
-    repeated TCPRoute tcp = 4;
-
-  // (-- TODO Add meta-protocol support here for custom codecs --)
-  };
-
-  // One or more route rules that apply to traffic bound to the services
-  // defined by the hosts above.
-  repeated Rule rules = 2;
-
-  // Settings controlling various aspects such as load balancing algorithm
-  // to use, connection pool sizes, etc.
-  UpstreamSettings upstream_settings = 3;
-
-  // Extensions contain sidecar implementation specific configuration, that
-  // cannot be easily expressed through the routing rule feature
-  // set. Custom sidecar implementations could have enhancements such as
-  // caching, dynamic scripting, etc. The configuration for such features
-  // could be provided through the extensions mechanism.
-  google.protobuf.Any extensions = 4;
+  // A lit of routes for TCP traffic.
+  repeated TCPRoute tcp = 4;
 }
 
 
@@ -281,8 +169,7 @@ message Destination {
 
 // Describes a label constraint on the Endpoints where traffic originates.
 // For example, the following snippet restricts the rule to match only
-// requests originating from instances with label "version:v2" or from the
-// gateway named "my-ingress-gateway".
+// requests originating from instances with label "version:v2".
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: RouteRule
@@ -291,25 +178,38 @@ message Destination {
 //     spec:
 //       hosts:
 //       - ratings
-//       rules:
-//       - source:
-//         - labels:
-//             version: v2
-//         - gateway: my-ingress-gateway
-//         http:
-//         ...
-message Endpoint {
-  // One or more labels that constrain the applicability of a rule to
-  // endpoints with the given labels. ONLY ONE OF labels or gateway can
-  // be specified.
-  map<string, string> labels = 1;
+//       http:
+//       - match:
+//         - source:
+//             labels:
+//               version: v2
+//       ...
+message Source {
+  // Service name from the service registry. The name can be a
+  // short name, a fully qualified domain name or an IP address. If short
+  // names are used, the FQDN of the service will be resolved in a platform
+  // specific manner.
+  //
+  // For example in Kubernetes, when a rule with a short name "reviews" in
+  // the destination is applied to a client in the "bookinfo" namespace,
+  // the final destination is resolved to
+  // reviews.bookinfo.svc.cluster.local. If the rule refers to the
+  // destination as "reviews.sales", the resolution process first looks for
+  // a "reviews" service in the "sales" namespace. In both cases, the sidecar
+  // will route to the IP addresses of the pods constituting the
+  // service. However, if the lookup fails, "reviews.sales" is treated as
+  // an external service, such that the sidecar will dynamically resolve the DNS
+  // of the service name and route the request to the IP addresses returned
+  // by the DNS.
+  string name = 1;
 
-  // The name of a gateway where this rule should be applied. A single
-  // route rule could be used for sources inside the mesh as well as one or
-  // more gateways. Note that gateways cannot be specified in rules with
-  // traffic passthrough option enabled. ONLY ONE OF labels or gateway
-  // can be specified.
-  string gateway = 2;
+  // One or more labels that constrain the applicability of a rule to
+  // endpoints with the given labels.
+  map<string, string> labels = 2;
+
+  // IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or
+  // just a.b.c.d
+  string subnet = 3;
 }
 
 // Describes match conditions and actions for routing HTTP/1.1, HTTP2, and
@@ -385,14 +285,14 @@ message HTTPRoute {
 //     spec:
 //       hosts:
 //       - myredissrv 
-//       rules:
-//       - tcp:
-//         - match:
-//           - sourceSubnet: "172.17.16.0/24"
-//             destinationPort: redis #only applies to ports named redis
-//           route:
-//           - destination:
-//               name: redis.prod
+//       tcp:
+//       - match:
+//         - source:
+//             subnet: "172.17.16.0/24"
+//           destinationPort: redis #only applies to ports named redis
+//         route:
+//         - destination:
+//             name: redis.prod
 //
 message TCPRoute {
   // Match conditions to be satisfied for the route rule to be
@@ -421,17 +321,16 @@ message TCPRoute {
 //     spec:
 //       hosts:
 //       - ratings
-//       rules:
-//       - http:
-//         - match:
-//           - headers:
-//               cookie:
-//                 regex: "^(.*?;)?(user=jason)(;.*)?"
-//               uri:
-//                 prefix: "/ratings/v2/"
-//           route: 
-//           - destination:
-//               name: ratings
+//       http:
+//       - match:
+//         - headers:
+//             cookie:
+//               regex: "^(.*?;)?(user=jason)(;.*)?"
+//             uri:
+//               prefix: "/ratings/v2/"
+//         route: 
+//         - destination:
+//             name: ratings
 //
 // MatchCondition CANNOT be empty.
 message HTTPMatchRequest {
@@ -501,7 +400,11 @@ message HTTPMatchRequest {
   // Names must comply with DNS label syntax (rfc1035) and therefore cannot
   // collide with numbers. If there are multiple ports on a service with the
   // same protocol the names should be of the form <protocol-name>-<DNS label>.
-  repeated string destination_ports = 6;
+  string destination_port = 6;
+
+  // Applies the route rule only to a specific set of workloads.  The rule
+  // is applied on a sidecar if any one of the labels match.
+  Source source = 7;
 }
 
 // Each routing rule is associated with one or more service versions (see
@@ -517,20 +420,19 @@ message HTTPMatchRequest {
 //       name: my-rule
 //     spec:
 //       hosts:
-//         - reviews
-//       rules:
-//       - http:
-//         - route:
-//           - destination:
-//               name: reviews
-//               labels:
-//                 version: v2
-//             weight: 25
-//           - destination:
-//               name: reviews
-//               labels:
-//                 version: v1
-//             weight: 75
+//       - reviews
+//       http:
+//       - route:
+//         - destination:
+//             name: reviews
+//             labels:
+//               version: v2
+//           weight: 25
+//         - destination:
+//             name: reviews
+//             labels:
+//               version: v1
+//           weight: 75
 //
 message DestinationWeight {
   // REQUIRED. Sometimes required. Optional destination uniquely identifies
@@ -549,15 +451,11 @@ message DestinationWeight {
 // L4 connection match attributes. Note that L4 connection matching support
 // is incomplete. 
 message L4MatchAttributes {
-  // IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or
-  // just a.b.c.d
-  string source_subnet = 1;
-
   // IPv4 or IPv6 ip address of destination with optional subnet.  E.g.,
   // a.b.c.d/xx form or just a.b.c.d. This is only valid when the
   // destination service has several IPs and the application explicitly
   // specifies a particular IP.
-  string destination_subnet = 2;
+  string destination_subnet = 1;
 
   // Specifies the port on the host that is being addressed. Many services
   // only expose a single port or label ports with the protocols they support,
@@ -567,7 +465,11 @@ message L4MatchAttributes {
   // Names must comply with DNS label syntax (rfc1035) and therefore cannot
   // collide with numbers. If there are multiple ports on a service with the
   // same protocol the names should be of the form <protocol-name>-<DNS label>.
-  string destination_port = 3;
+  string destination_port = 2;
+
+  // Applies the route rule only to a specific set of workloads.  The rule
+  // is applied on a sidecar if any one of the labels match.
+  Source source = 3;
 }
 
 // HTTPRedirect can be used to send a 302 redirect response to the caller,
@@ -582,16 +484,15 @@ message L4MatchAttributes {
 //       name: my-rule
 //     spec:
 //       hosts:
-//         - ratings
-//       rules:
-//       - http:
-//         - match:
-//           - uri:
-//               exact: /v1/getProductRatings
-//         redirect:
-//           uri: /v1/bookRatings
-//           authority: bookratings.default.svc.cluster.local
-//         ...
+//       - ratings
+//       http:
+//       - match:
+//         - uri:
+//             exact: /v1/getProductRatings
+//       redirect:
+//         uri: /v1/bookRatings
+//         authority: bookratings.default.svc.cluster.local
+//       ...
 //
 message HTTPRedirect {
   // On a redirect, overwrite the Path portion of the URL with this
@@ -617,18 +518,17 @@ message HTTPRedirect {
 //     spec:
 //       hosts:
 //       - ratings
-//       rules:
-//       - http:
-//         - match:
-//           - uri:
-//               prefix: /ratings
-//           rewrite:
-//             uri: /v1/bookRatings
-//           route:
-//           - destination:
-//               name: ratings
-//               labels:
-//                 version: v1
+//       http:
+//       - match:
+//         - uri:
+//             prefix: /ratings
+//         rewrite:
+//           uri: /v1/bookRatings
+//         route:
+//         - destination:
+//             name: ratings
+//             labels:
+//               version: v1
 //
 message HTTPRewrite {
   // rewrite the Path (or the prefix) portion of the URI with this
@@ -666,17 +566,16 @@ message StringMatch {
 //       name: my-rule
 //     spec:
 //       hosts:
-//         - ratings
-//       rules:
-//        - http:
-//          - route:
-//            - destination:
-//                name: ratings
-//                labels:
-//                  version: v1
-//            retries:
-//              attempts: 3
-//              perTryTimeout: 2s
+//       - ratings
+//       http:
+//       - route:
+//         - destination:
+//             name: ratings
+//             labels:
+//               version: v1
+//         retries:
+//           attempts: 3
+//           perTryTimeout: 2s
 //
 message HTTPRetry {
   // REQUIRED. Number of retries for a given request. The interval
@@ -704,23 +603,22 @@ message HTTPRetry {
 //     spec:
 //       hosts:
 //       - ratings
-//       rules:
-//       - http:
-//         - route:
-//           - destination:
-//               name: ratings
-//               labels:
-//                 version: v1
-//           corsPolicy:
-//             allowOrigin:
-//             - example.com
-//             allowMethods:
-//             - POST
-//             - GET
-//             allowCredentials: false
-//             allowHeaders:
-//             - X-Foo-Bar
-//             maxAge: "1d"
+//       http:
+//       - route:
+//         - destination:
+//             name: ratings
+//             labels:
+//               version: v1
+//         corsPolicy:
+//           allowOrigin:
+//           - example.com
+//           allowMethods:
+//           - POST
+//           - GET
+//           allowCredentials: false
+//           allowHeaders:
+//           - X-Foo-Bar
+//           maxAge: "1d"
 //
 message CorsPolicy {
   // The list of origins that are allowed to perform CORS requests. The
@@ -780,17 +678,16 @@ message HTTPFaultInjection {
   //     spec:
   //       hosts:
   //       - reviews
-  //       rules:
-  //       - http:
-  //         - route:
-  //           - destination:
-  //               name: reviews
-  //               labels:
-  //                 version: v1
-  //           fault:
-  //             delay:
-  //               percent: 10
-  //               fixedDelay: 5s
+  //       http:
+  //       - route:
+  //         - destination:
+  //             name: reviews
+  //             labels:
+  //               version: v1
+  //         fault:
+  //           delay:
+  //             percent: 10
+  //             fixedDelay: 5s
   //
   // The _fixedDelay_ field is used to indicate the amount of delay in
   // seconds. An optional _percent_ field, a value between 0 and 100, can
@@ -823,17 +720,16 @@ message HTTPFaultInjection {
   //     spec:
   //       hosts:
   //       - reviews
-  //       rules:
-  //       - http:
-  //         - route:
-  //           - destination:
-  //               name: reviews
-  //               labels:
-  //                 version: v1
-  //           fault:
-  //             abort:
-  //               percent: 10
-  //               httpStatus: 400
+  //       http:
+  //       - route:
+  //         - destination:
+  //             name: reviews
+  //             labels:
+  //               version: v1
+  //         fault:
+  //           abort:
+  //             percent: 10
+  //             httpStatus: 400
   //
   // The _httpStatus_ field is used to indicate the HTTP status code to
   // return to the caller. The optional _percent_ field, a value between 0
@@ -855,283 +751,3 @@ message HTTPFaultInjection {
     }
   }
 }
-
-// UpstreamSettings defines client/caller-side policies that determine how
-// to handle traffic bound to a particular destination. The policy
-// specifies configuration for load balancing, connection pool size from
-// the sidecar, and outlier detection settings to detect and evict
-// unhealthy hosts from the load balancing pool. These settings are common
-// to all HTTP/TCP destinations defined in the route rule. In other words,
-// these settings apply to all connections/requests arriving at the sidecar
-// for the hosts specified in the routing rule. For example, a simple load
-// balancing policy for the ratings service would look as follows:
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: bookinfo
-//     spec:
-//       hosts:
-//       - myredissrv
-//       - mybookinfo.com
-//       rules:
-//       - http:
-//         - route:
-//           - destination:
-//               name: redis.prod
-//       upstreamSettings:
-//         lbPolicy: LEAST_CONN
-message UpstreamSettings {
-  // Load balancing policy to use when forwarding traffic. These policies
-  // directly correlate to [load balancer
-  // types](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing)
-  // supported by Envoy.
-  enum LBPolicy {
-
-    // Default load balancing policy is random load balancing.
-    DEFAULT = 0;
-
-    // Simple round robin policy.
-    ROUND_ROBIN = 1;
-
-    // The least request load balancer uses an O(1) algorithm which selects
-    // two random healthy hosts and picks the host which has fewer active
-    // requests.
-    LEAST_CONN = 2;
-
-    // The random load balancer selects a random healthy host. The random
-    // load balancer generally performs better than round robin if no health
-    // checking policy is configured.
-    RANDOM = 3;
-  }
-
-  // Upstream load balancing policy
-  LBPolicy lb_policy = 1;
-
-  // Settings controlling the volume of connections to an upstream service
-  ConnectionPoolSettings connection_pool = 2;
-
-  // Settings controlling eviction of unhealthy hosts from the load balancing pool
-  OutlierDetection outlier_detection = 3;
-}
-
-// Connection pool settings for an upstream host. The settings apply to
-// each individual host in the upstream service.  See Envoy's [circuit
-// breaker](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/circuit_breaking)
-// for more details. Connection pool settings can be applied at the TCP
-// level as well as at HTTP level.
-//
-// For example, the following rule sets a limit of 100 connections to redis
-// service called myredissrv with a connect timeout of 30ms
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: bookinfo-redis
-//     spec:
-//       hosts:
-//         - myredissrv
-//       rules:
-//       - tcp:
-//         - match:
-//           - sourceSubnet: "172.17.16.0/24"
-//             destinationPort: redis #only applies to ports named redis
-//           route:
-//           - destination:
-//               name: redis.prod
-//       upstreamSettings:
-//         connectionPool:
-//           tcp:
-//             maxConnections: 100
-//             connectTimeout: 30ms
-//
-// Note that the connection pool settings are applicable across all
-// upstreams defined by the route rule (both TCP and HTTP).
-message ConnectionPoolSettings {
-  // Settings common to both HTTP and TCP upstream connections.
-  message TCPSettings {
-    // Maximum number of HTTP/TCP connections to a destination host.
-    int32 max_connections = 1;
-
-    // TCP connection timeout.
-    google.protobuf.Duration connect_timeout = 2;
-  };
-
-  // Settings applicable to HTTP connections.
-  message HTTPSettings {
-    // Maximum number of pending HTTP requests to a destination. Default 1024.
-    int32 max_pending_requests = 2;
-
-    // Maximum number of requests to a backend. Default 1024.
-    int32 max_requests = 3;
-
-    // Minimum time the circuit will be closed. format: 1h/1m/1s/1ms. MUST
-    // BE >=1ms. Default is 30s.
-    google.protobuf.Duration sleep_window = 4;
-
-    // Number of 5XX errors before circuit is opened. Defaults to 5.
-    int32 consecutive_errors = 5;
-
-    // Time interval between ejection sweep analysis. format:
-    // 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
-    google.protobuf.Duration detection_interval = 6;
-
-    // Maximum number of requests per connection to a backend. Setting this
-    // parameter to 1 disables keep alive.
-    int32 max_requests_per_connection = 7;
-  };
-
-  // Settings common to both HTTP and TCP upstream connections.
-  TCPSettings tcp = 1;
-  // HTTP connection pool settings.
-  HTTPSettings http = 2;
-}
-
-// A Circuit breaker implementation that tracks the status of each
-// individual host in the upstream service.  While currently applicable to
-// only HTTP services, future versions will support opaque TCP services as
-// well. For HTTP services, hosts that continually return errors for API
-// calls are ejected from the pool for a pre-defined period of time. See
-// Envoy's [outlier
-// detection](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/outlier)
-// for more details.
-//
-// The following rule sets a connection pool size of 100 connections and
-// 1000 concurrent requests, with no more than 10 req/connection to
-// "reviews" service. In addition, it configures
-// upstream hosts to be scanned every 5 mins, such that any host that fails 7
-// consecutive times with 5XX error code will be ejected for 15 minutes.
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: reviews-cb-policy
-//     spec:
-//       hosts:
-//       - reviews
-//       rules:
-//       - http:
-//         - route:
-//           - destination:
-//               name: reviews
-//               labels:
-//                 version: v1
-//       upstreamSettings:
-//         connectionPool:
-//           tcp:
-//             maxConnections: 100
-//           http:
-//             maxRequests: 1000
-//             maxRequestsPerConnection: 10
-//         outlierDetection:
-//           http:
-//             consecutiveErrors: 7
-//             interval: 5m
-//             baseEjectionTime: 15m
-//
-message OutlierDetection {
-  // Outlier detection settings for HTTP connections.
-  message HTTPSettings {
-    // Number of 5XX errors before a host is ejected from the connection pool. Defaults to 5.
-    int32 consecutive_errors = 1;
-
-    // Time interval between ejection sweep analysis. format:
-    // 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
-    google.protobuf.Duration interval = 2;
-
-    // Minimum ejection duration. A host will remain ejected for a period
-    // equal to the product of minimum ejection duration and the number of
-    // times the host has been ejected. This technique allows the system to
-    // automatically increase the ejection period for unhealthy upstream
-    // servers. format: 1h/1m/1s/1ms. MUST BE >=1ms. Default is 30s.
-    google.protobuf.Duration base_ejection_time = 3;
-
-    // Maximum % of hosts in the load balancing pool for the upstream service
-    // that can be ejected. Defaults to 10%.
-    int32 max_ejection_percent = 4;
-  };
-
-  // Settings for HTTP connections.
-  HTTPSettings http = 1;
-};
-
-// Envoy-specific filters that can be used to enable customized processing
-// in addition to the features exposed by the routing rule. This feature
-// must be used with care, as incorrect configurations could potentially
-// destabilize the entire mesh. Common use cases for using the extensions
-// include use of Envoy's Lua filters, in addition to enabling any
-// proprietary filters developed inhouse (e.g, custom authorization filter
-// for HTTP).
-//
-// NOTE: Do not use this feature to enable Fault, Router (HTTP),
-// Mongo/Redis/Tcp proxy (TCP) filters.
-//
-// The following example enables Envoy's HTTP lua filter as part of the
-// routing rule.
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: my-lua-filter
-//     spec:
-//       hosts:
-//       - reviews
-//       rules:
-//       - http:
-//         - route:
-//           - destination:
-//               name: reviews
-//               labels:
-//                 version: v1
-//       extensions:
-//         - "@type": type.googleapis.com/istio.routing.v1alpha2.EnvoyFilters
-//         httpFilters:
-//         - name: envoy.lua
-//           config:
-//             inlineCode: "... lua code ... "
-//
-message EnvoyFilters {
-  // Envoy HTTP filters to be added to every HTTP connection manager
-  // instance generated by Istio.
-  message HTTPFilter {
-    // The name of the filter to instantiate. The name must match a supported
-    // filter _compiled into_ Envoy.  The following are the names of the
-    // filters currently built into Envoy. Refer to Envoy's documentation for
-    // the configuring these filtes.
-    //
-    // * envoy.buffer
-    // * envoy.http_dynamo_filter
-    // * envoy.grpc_http1_bridge
-    // * envoy.grpc_json_transcoder
-    // * envoy.grpc_web
-    // * envoy.lua
-    //
-    string name = 1;
-
-    // Filter specific configuration which depends on the filter being
-    // instantiated. See the supported filters for further documentation.
-    google.protobuf.Struct config = 2;
-  };
-  
-  // Envoy network filters to be added to every non-HTTP listener instance
-  // generated by Istio (i.e. TCP services).
-  message NetworkFilter {
-    // The name of the filter to instantiate. The name must match a supported
-    // filter. Except for Redis proxy, Istio automatically enables Network
-    // filters. Use this feature only to support custom built network
-    // filters.
-    string name = 1;
-
-    // Filter specific configuration which depends on the filter being
-    // instantiated. See the supported filters for further documentation.
-    google.protobuf.Struct config = 2;
-  };
-  
-  // Envoy HTTP filters to be added to every HTTP connection manager
-  // instance generated by Istio.
-  repeated HTTPFilter http_filters = 1;
-
-  // Envoy network filters to be added to every non-TCP listener instance
-  // generated by Istio.
-  repeated NetworkFilter network_filters = 2;
-};

@@ -8,54 +8,11 @@ import fmt "fmt"
 import math "math"
 import google_protobuf "github.com/golang/protobuf/ptypes/duration"
 import google_protobuf1 "github.com/golang/protobuf/ptypes/wrappers"
-import google_protobuf2 "github.com/golang/protobuf/ptypes/struct"
-import google_protobuf3 "github.com/golang/protobuf/ptypes/any"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-
-// Load balancing policy to use when forwarding traffic. These policies
-// directly correlate to [load balancer
-// types](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing)
-// supported by Envoy.
-type UpstreamSettings_LBPolicy int32
-
-const (
-	// Default load balancing policy is random load balancing.
-	UpstreamSettings_DEFAULT UpstreamSettings_LBPolicy = 0
-	// Simple round robin policy.
-	UpstreamSettings_ROUND_ROBIN UpstreamSettings_LBPolicy = 1
-	// The least request load balancer uses an O(1) algorithm which selects
-	// two random healthy hosts and picks the host which has fewer active
-	// requests.
-	UpstreamSettings_LEAST_CONN UpstreamSettings_LBPolicy = 2
-	// The random load balancer selects a random healthy host. The random
-	// load balancer generally performs better than round robin if no health
-	// checking policy is configured.
-	UpstreamSettings_RANDOM UpstreamSettings_LBPolicy = 3
-)
-
-var UpstreamSettings_LBPolicy_name = map[int32]string{
-	0: "DEFAULT",
-	1: "ROUND_ROBIN",
-	2: "LEAST_CONN",
-	3: "RANDOM",
-}
-var UpstreamSettings_LBPolicy_value = map[string]int32{
-	"DEFAULT":     0,
-	"ROUND_ROBIN": 1,
-	"LEAST_CONN":  2,
-	"RANDOM":      3,
-}
-
-func (x UpstreamSettings_LBPolicy) String() string {
-	return proto.EnumName(UpstreamSettings_LBPolicy_name, int32(x))
-}
-func (UpstreamSettings_LBPolicy) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor1, []int{14, 0}
-}
 
 // ### Glossary & concepts
 //
@@ -110,104 +67,30 @@ func (UpstreamSettings_LBPolicy) EnumDescriptor() ([]byte, []int) {
 //     spec:
 //       hosts:
 //       - reviews
-//       rules:
-//       - http:
-//         - match:
-//           - uri:
-//               prefix: "/wpcatalog"
-//           - uri:
-//               prefix: "/consumercatalog"
-//           rewrite:
-//             uri: "/api/v2"
-//           route:
-//           - destination:
-//               name: reviews
-//               labels:
-//                 version: v2
-//             weight: 100
-//         - route: # default route
-//           - destination:
-//               name: reviews
-//               labels:
-//                 version: v1
-//             weight: 100
+//       http:
+//       - match:
+//         - uri:
+//             prefix: "/wpcatalog"
+//         - uri:
+//             prefix: "/consumercatalog"
+//         rewrite:
+//           uri: "/api/v2"
+//         route:
+//         - destination:
+//             name: reviews
+//             labels:
+//               version: v2
+//           weight: 100
+//       - route: # default route
+//         - destination:
+//             name: reviews
+//             labels:
+//               version: v1
+//           weight: 100
 //
 // Every service in the mesh can have utmost one route rule associated with
 // the service name.  A single route rule can be used to describe traffic
 // properties for multiple HTTP and TCP ports.
-//
-// Inheritance model: To allow multiple services to use a common set of
-// settings (e.g., timeouts), route rules support inheritance. Route rules
-// have a single inheritance model, with child rules overriding the default
-// settings defined in the parent rule. The inheritance model based on the
-// service's FQDN, with the catch all domain "*" at the root, followed by
-// more specific sub domains such as *.com, and finally explicit service
-// names such as example.com at the leaf of the inheritance tree.
-//
-// For example, in a system with services foo1.com, foo2.com, and bar.org,
-//
-//     hosts: * #applicable to foo1.com, foo2.com, and bar.org
-//     |
-//     |- hosts: *.com #applicable to foo1.com and foo2.com
-//          |
-//          |- hosts: foo1.com
-//                    # inherits from * and *.com, and overrides settings
-//
-// _As described earlier, all rules derive from a single global wildcard
-// rule._ For example, the following global base rule defines a universal
-// timeout for HTTP requests.
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: global-rule
-//     spec:
-//       hosts:
-//       - * #no other hosts are allowed here.
-//       rules:
-//       - http:
-//         - timeout: 1s
-//           ...
-//
-// Domain suffix based rules can be defined to apply the same setting to a
-// group of services under the suffix. For example, the following domain
-// suffix based rule enables websocket support for all services in the
-// "*.com" domain.
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: com-rule
-//     spec:
-//       hosts:
-//       - *.com
-//       rules:
-//       - http:
-//         - websocketUpgrade: true
-//           ...
-//
-// Service specific rules can be used to override global or sub domain
-// properties. For example, the following rule for foo1.com overrides the
-// global http request timeout of 1s (and uses a shorter 500ms timeout), in
-// addition to defining URL rewrites.
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: foo1-rule
-//     spec:
-//       hosts:
-//       - foo1.com
-//       rules:
-//       - http:
-//         - match:
-//           - uri:
-//               prefix: /ratings
-//           rewrite:
-//             uri: /v1/bookRatings
-//           timeout: 0.5s
-//           ...
-//
 type RouteRule struct {
 	// REQUIRED. The network destination for traffic described by this
 	// routing rule. Could be a DNS name with wildcard prefix or a CIDR
@@ -227,18 +110,15 @@ type RouteRule struct {
 	// case of TCP services, the plain service name or a IP address with CIDR
 	// prefix can be used.
 	Hosts []string `protobuf:"bytes,1,rep,name=hosts" json:"hosts,omitempty"`
-	// One or more route rules that apply to traffic bound to the services
-	// defined by the hosts above.
-	Rules []*RouteRule_Rule `protobuf:"bytes,2,rep,name=rules" json:"rules,omitempty"`
-	// Settings controlling various aspects such as load balancing algorithm
-	// to use, connection pool sizes, etc.
-	UpstreamSettings *UpstreamSettings `protobuf:"bytes,3,opt,name=upstream_settings,json=upstreamSettings" json:"upstream_settings,omitempty"`
-	// Extensions contain sidecar implementation specific configuration, that
-	// cannot be easily expressed through the routing rule feature
-	// set. Custom sidecar implementations could have enhancements such as
-	// caching, dynamic scripting, etc. The configuration for such features
-	// could be provided through the extensions mechanism.
-	Extensions *google_protobuf3.Any `protobuf:"bytes,4,opt,name=extensions" json:"extensions,omitempty"`
+	// The name of a gateway where this rule should be applied. A single
+	// route rule could be used for sources inside the mesh as well as one or
+	// more gateways. Note that gateways cannot be specified in rules with
+	// traffic passthrough option enabled.
+	Gateways []string `protobuf:"bytes,2,rep,name=gateways" json:"gateways,omitempty"`
+	// A list of routes for HTTP traffic.
+	Http []*HTTPRoute `protobuf:"bytes,3,rep,name=http" json:"http,omitempty"`
+	// A lit of routes for TCP traffic.
+	Tcp []*TCPRoute `protobuf:"bytes,4,rep,name=tcp" json:"tcp,omitempty"`
 }
 
 func (m *RouteRule) Reset()                    { *m = RouteRule{} }
@@ -253,82 +133,21 @@ func (m *RouteRule) GetHosts() []string {
 	return nil
 }
 
-func (m *RouteRule) GetRules() []*RouteRule_Rule {
+func (m *RouteRule) GetGateways() []string {
 	if m != nil {
-		return m.Rules
+		return m.Gateways
 	}
 	return nil
 }
 
-func (m *RouteRule) GetUpstreamSettings() *UpstreamSettings {
-	if m != nil {
-		return m.UpstreamSettings
-	}
-	return nil
-}
-
-func (m *RouteRule) GetExtensions() *google_protobuf3.Any {
-	if m != nil {
-		return m.Extensions
-	}
-	return nil
-}
-
-// A Rule contains a single route rule that applies to traffic coming
-// from a set of sources. See RouteRule for usage example.
-type RouteRule_Rule struct {
-	// Applies the route rule only to a specific set of workloads.  The rule
-	// is applied on a sidecar if any one of the labels match.
-	Source []*Endpoint `protobuf:"bytes,1,rep,name=source" json:"source,omitempty"`
-	// The traffic passthrough option can be used to let the traffic go to
-	// its original destination (i.e. no load balancing), while still being
-	// able to apply other HTTP/TCP level features such as rewrites,
-	// timeouts, retries, etc. This option is typically used when a routing
-	// rule is applied to external services defined via Egress Rules. For
-	// example, it is possible to define a HTTP egress rule for
-	// *.example.com, and a HTTP routing rule with *.example.com as the
-	// host. The routing rule could define properties such as a common
-	// timeout, while still forwarding the traffic to the IP address resolved
-	// by the DNS.
-	//
-	// NOTE 1: When traffic passthrough is true, http.route|redirect, and
-	// tcp.route will be ignored.
-	//
-	// NOTE 2: Rules with traffic passthrough cannot have gateways.
-	TrafficPassthrough bool `protobuf:"varint,2,opt,name=traffic_passthrough,json=trafficPassthrough" json:"traffic_passthrough,omitempty"`
-	// A list of routes for HTTP traffic.
-	Http []*HTTPRoute `protobuf:"bytes,3,rep,name=http" json:"http,omitempty"`
-	// A lit of routes for TCP traffic.
-	Tcp []*TCPRoute `protobuf:"bytes,4,rep,name=tcp" json:"tcp,omitempty"`
-}
-
-func (m *RouteRule_Rule) Reset()                    { *m = RouteRule_Rule{} }
-func (m *RouteRule_Rule) String() string            { return proto.CompactTextString(m) }
-func (*RouteRule_Rule) ProtoMessage()               {}
-func (*RouteRule_Rule) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{0, 0} }
-
-func (m *RouteRule_Rule) GetSource() []*Endpoint {
-	if m != nil {
-		return m.Source
-	}
-	return nil
-}
-
-func (m *RouteRule_Rule) GetTrafficPassthrough() bool {
-	if m != nil {
-		return m.TrafficPassthrough
-	}
-	return false
-}
-
-func (m *RouteRule_Rule) GetHttp() []*HTTPRoute {
+func (m *RouteRule) GetHttp() []*HTTPRoute {
 	if m != nil {
 		return m.Http
 	}
 	return nil
 }
 
-func (m *RouteRule_Rule) GetTcp() []*TCPRoute {
+func (m *RouteRule) GetTcp() []*TCPRoute {
 	if m != nil {
 		return m.Tcp
 	}
@@ -398,8 +217,7 @@ func (m *Destination) GetPort() string {
 
 // Describes a label constraint on the Endpoints where traffic originates.
 // For example, the following snippet restricts the rule to match only
-// requests originating from instances with label "version:v2" or from the
-// gateway named "my-ingress-gateway".
+// requests originating from instances with label "version:v2".
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: RouteRule
@@ -408,41 +226,60 @@ func (m *Destination) GetPort() string {
 //     spec:
 //       hosts:
 //       - ratings
-//       rules:
-//       - source:
-//         - labels:
-//             version: v2
-//         - gateway: my-ingress-gateway
-//         http:
-//         ...
-type Endpoint struct {
+//       http:
+//       - match:
+//         - source:
+//             labels:
+//               version: v2
+//       ...
+type Source struct {
+	// Service name from the service registry. The name can be a
+	// short name, a fully qualified domain name or an IP address. If short
+	// names are used, the FQDN of the service will be resolved in a platform
+	// specific manner.
+	//
+	// For example in Kubernetes, when a rule with a short name "reviews" in
+	// the destination is applied to a client in the "bookinfo" namespace,
+	// the final destination is resolved to
+	// reviews.bookinfo.svc.cluster.local. If the rule refers to the
+	// destination as "reviews.sales", the resolution process first looks for
+	// a "reviews" service in the "sales" namespace. In both cases, the sidecar
+	// will route to the IP addresses of the pods constituting the
+	// service. However, if the lookup fails, "reviews.sales" is treated as
+	// an external service, such that the sidecar will dynamically resolve the DNS
+	// of the service name and route the request to the IP addresses returned
+	// by the DNS.
+	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
 	// One or more labels that constrain the applicability of a rule to
-	// endpoints with the given labels. ONLY ONE OF labels or gateway can
-	// be specified.
-	Labels map[string]string `protobuf:"bytes,1,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	// The name of a gateway where this rule should be applied. A single
-	// route rule could be used for sources inside the mesh as well as one or
-	// more gateways. Note that gateways cannot be specified in rules with
-	// traffic passthrough option enabled. ONLY ONE OF labels or gateway
-	// can be specified.
-	Gateway string `protobuf:"bytes,2,opt,name=gateway" json:"gateway,omitempty"`
+	// endpoints with the given labels.
+	Labels map[string]string `protobuf:"bytes,2,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	// IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or
+	// just a.b.c.d
+	Subnet string `protobuf:"bytes,3,opt,name=subnet" json:"subnet,omitempty"`
 }
 
-func (m *Endpoint) Reset()                    { *m = Endpoint{} }
-func (m *Endpoint) String() string            { return proto.CompactTextString(m) }
-func (*Endpoint) ProtoMessage()               {}
-func (*Endpoint) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{2} }
+func (m *Source) Reset()                    { *m = Source{} }
+func (m *Source) String() string            { return proto.CompactTextString(m) }
+func (*Source) ProtoMessage()               {}
+func (*Source) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{2} }
 
-func (m *Endpoint) GetLabels() map[string]string {
+func (m *Source) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *Source) GetLabels() map[string]string {
 	if m != nil {
 		return m.Labels
 	}
 	return nil
 }
 
-func (m *Endpoint) GetGateway() string {
+func (m *Source) GetSubnet() string {
 	if m != nil {
-		return m.Gateway
+		return m.Subnet
 	}
 	return ""
 }
@@ -592,14 +429,14 @@ func (m *HTTPRoute) GetAppendHeaders() map[string]string {
 //     spec:
 //       hosts:
 //       - myredissrv
-//       rules:
-//       - tcp:
-//         - match:
-//           - sourceSubnet: "172.17.16.0/24"
-//             destinationPort: redis #only applies to ports named redis
-//           route:
-//           - destination:
-//               name: redis.prod
+//       tcp:
+//       - match:
+//         - source:
+//             subnet: "172.17.16.0/24"
+//           destinationPort: redis #only applies to ports named redis
+//         route:
+//         - destination:
+//             name: redis.prod
 //
 type TCPRoute struct {
 	// Match conditions to be satisfied for the route rule to be
@@ -646,17 +483,16 @@ func (m *TCPRoute) GetRoute() []*DestinationWeight {
 //     spec:
 //       hosts:
 //       - ratings
-//       rules:
-//       - http:
-//         - match:
-//           - headers:
-//               cookie:
-//                 regex: "^(.*?;)?(user=jason)(;.*)?"
-//               uri:
-//                 prefix: "/ratings/v2/"
-//           route:
-//           - destination:
-//               name: ratings
+//       http:
+//       - match:
+//         - headers:
+//             cookie:
+//               regex: "^(.*?;)?(user=jason)(;.*)?"
+//             uri:
+//               prefix: "/ratings/v2/"
+//         route:
+//         - destination:
+//             name: ratings
 //
 // MatchCondition CANNOT be empty.
 type HTTPMatchRequest struct {
@@ -721,7 +557,10 @@ type HTTPMatchRequest struct {
 	// Names must comply with DNS label syntax (rfc1035) and therefore cannot
 	// collide with numbers. If there are multiple ports on a service with the
 	// same protocol the names should be of the form <protocol-name>-<DNS label>.
-	DestinationPorts []string `protobuf:"bytes,6,rep,name=destination_ports,json=destinationPorts" json:"destination_ports,omitempty"`
+	DestinationPort string `protobuf:"bytes,6,opt,name=destination_port,json=destinationPort" json:"destination_port,omitempty"`
+	// Applies the route rule only to a specific set of workloads.  The rule
+	// is applied on a sidecar if any one of the labels match.
+	Source *Source `protobuf:"bytes,7,opt,name=source" json:"source,omitempty"`
 }
 
 func (m *HTTPMatchRequest) Reset()                    { *m = HTTPMatchRequest{} }
@@ -764,9 +603,16 @@ func (m *HTTPMatchRequest) GetHeaders() map[string]*StringMatch {
 	return nil
 }
 
-func (m *HTTPMatchRequest) GetDestinationPorts() []string {
+func (m *HTTPMatchRequest) GetDestinationPort() string {
 	if m != nil {
-		return m.DestinationPorts
+		return m.DestinationPort
+	}
+	return ""
+}
+
+func (m *HTTPMatchRequest) GetSource() *Source {
+	if m != nil {
+		return m.Source
 	}
 	return nil
 }
@@ -784,20 +630,19 @@ func (m *HTTPMatchRequest) GetDestinationPorts() []string {
 //       name: my-rule
 //     spec:
 //       hosts:
-//         - reviews
-//       rules:
-//       - http:
-//         - route:
-//           - destination:
-//               name: reviews
-//               labels:
-//                 version: v2
-//             weight: 25
-//           - destination:
-//               name: reviews
-//               labels:
-//                 version: v1
-//             weight: 75
+//       - reviews
+//       http:
+//       - route:
+//         - destination:
+//             name: reviews
+//             labels:
+//               version: v2
+//           weight: 25
+//         - destination:
+//             name: reviews
+//             labels:
+//               version: v1
+//           weight: 75
 //
 type DestinationWeight struct {
 	// REQUIRED. Sometimes required. Optional destination uniquely identifies
@@ -834,14 +679,11 @@ func (m *DestinationWeight) GetWeight() int32 {
 // L4 connection match attributes. Note that L4 connection matching support
 // is incomplete.
 type L4MatchAttributes struct {
-	// IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or
-	// just a.b.c.d
-	SourceSubnet string `protobuf:"bytes,1,opt,name=source_subnet,json=sourceSubnet" json:"source_subnet,omitempty"`
 	// IPv4 or IPv6 ip address of destination with optional subnet.  E.g.,
 	// a.b.c.d/xx form or just a.b.c.d. This is only valid when the
 	// destination service has several IPs and the application explicitly
 	// specifies a particular IP.
-	DestinationSubnet string `protobuf:"bytes,2,opt,name=destination_subnet,json=destinationSubnet" json:"destination_subnet,omitempty"`
+	DestinationSubnet string `protobuf:"bytes,1,opt,name=destination_subnet,json=destinationSubnet" json:"destination_subnet,omitempty"`
 	// Specifies the port on the host that is being addressed. Many services
 	// only expose a single port or label ports with the protocols they support,
 	// in these cases it is not required to explicitly select the port. Note that
@@ -850,20 +692,16 @@ type L4MatchAttributes struct {
 	// Names must comply with DNS label syntax (rfc1035) and therefore cannot
 	// collide with numbers. If there are multiple ports on a service with the
 	// same protocol the names should be of the form <protocol-name>-<DNS label>.
-	DestinationPort string `protobuf:"bytes,3,opt,name=destination_port,json=destinationPort" json:"destination_port,omitempty"`
+	DestinationPort string `protobuf:"bytes,2,opt,name=destination_port,json=destinationPort" json:"destination_port,omitempty"`
+	// Applies the route rule only to a specific set of workloads.  The rule
+	// is applied on a sidecar if any one of the labels match.
+	Source *Source `protobuf:"bytes,3,opt,name=source" json:"source,omitempty"`
 }
 
 func (m *L4MatchAttributes) Reset()                    { *m = L4MatchAttributes{} }
 func (m *L4MatchAttributes) String() string            { return proto.CompactTextString(m) }
 func (*L4MatchAttributes) ProtoMessage()               {}
 func (*L4MatchAttributes) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{7} }
-
-func (m *L4MatchAttributes) GetSourceSubnet() string {
-	if m != nil {
-		return m.SourceSubnet
-	}
-	return ""
-}
 
 func (m *L4MatchAttributes) GetDestinationSubnet() string {
 	if m != nil {
@@ -879,6 +717,13 @@ func (m *L4MatchAttributes) GetDestinationPort() string {
 	return ""
 }
 
+func (m *L4MatchAttributes) GetSource() *Source {
+	if m != nil {
+		return m.Source
+	}
+	return nil
+}
+
 // HTTPRedirect can be used to send a 302 redirect response to the caller,
 // where the Authority/Host and the URI in the response can be swapped with
 // the specified values. For example, the following route rule redirects
@@ -891,16 +736,15 @@ func (m *L4MatchAttributes) GetDestinationPort() string {
 //       name: my-rule
 //     spec:
 //       hosts:
-//         - ratings
-//       rules:
-//       - http:
-//         - match:
-//           - uri:
-//               exact: /v1/getProductRatings
-//         redirect:
-//           uri: /v1/bookRatings
-//           authority: bookratings.default.svc.cluster.local
-//         ...
+//       - ratings
+//       http:
+//       - match:
+//         - uri:
+//             exact: /v1/getProductRatings
+//       redirect:
+//         uri: /v1/bookRatings
+//         authority: bookratings.default.svc.cluster.local
+//       ...
 //
 type HTTPRedirect struct {
 	// On a redirect, overwrite the Path portion of the URL with this
@@ -944,18 +788,17 @@ func (m *HTTPRedirect) GetAuthority() string {
 //     spec:
 //       hosts:
 //       - ratings
-//       rules:
-//       - http:
-//         - match:
-//           - uri:
-//               prefix: /ratings
-//           rewrite:
-//             uri: /v1/bookRatings
-//           route:
-//           - destination:
-//               name: ratings
-//               labels:
-//                 version: v1
+//       http:
+//       - match:
+//         - uri:
+//             prefix: /ratings
+//         rewrite:
+//           uri: /v1/bookRatings
+//         route:
+//         - destination:
+//             name: ratings
+//             labels:
+//               version: v1
 //
 type HTTPRewrite struct {
 	// rewrite the Path (or the prefix) portion of the URI with this
@@ -1137,17 +980,16 @@ func _StringMatch_OneofSizer(msg proto.Message) (n int) {
 //       name: my-rule
 //     spec:
 //       hosts:
-//         - ratings
-//       rules:
-//        - http:
-//          - route:
-//            - destination:
-//                name: ratings
-//                labels:
-//                  version: v1
-//            retries:
-//              attempts: 3
-//              perTryTimeout: 2s
+//       - ratings
+//       http:
+//       - route:
+//         - destination:
+//             name: ratings
+//             labels:
+//               version: v1
+//         retries:
+//           attempts: 3
+//           perTryTimeout: 2s
 //
 type HTTPRetry struct {
 	// REQUIRED. Number of retries for a given request. The interval
@@ -1193,23 +1035,22 @@ func (m *HTTPRetry) GetPerTryTimeout() *google_protobuf.Duration {
 //     spec:
 //       hosts:
 //       - ratings
-//       rules:
-//       - http:
-//         - route:
-//           - destination:
-//               name: ratings
-//               labels:
-//                 version: v1
-//           corsPolicy:
-//             allowOrigin:
-//             - example.com
-//             allowMethods:
-//             - POST
-//             - GET
-//             allowCredentials: false
-//             allowHeaders:
-//             - X-Foo-Bar
-//             maxAge: "1d"
+//       http:
+//       - route:
+//         - destination:
+//             name: ratings
+//             labels:
+//               version: v1
+//         corsPolicy:
+//           allowOrigin:
+//           - example.com
+//           allowMethods:
+//           - POST
+//           - GET
+//           allowCredentials: false
+//           allowHeaders:
+//           - X-Foo-Bar
+//           maxAge: "1d"
 //
 type CorsPolicy struct {
 	// The list of origins that are allowed to perform CORS requests. The
@@ -1329,17 +1170,16 @@ func (m *HTTPFaultInjection) GetAbort() *HTTPFaultInjection_Abort {
 //     spec:
 //       hosts:
 //       - reviews
-//       rules:
-//       - http:
-//         - route:
-//           - destination:
-//               name: reviews
-//               labels:
-//                 version: v1
-//           fault:
-//             delay:
-//               percent: 10
-//               fixedDelay: 5s
+//       http:
+//       - route:
+//         - destination:
+//             name: reviews
+//             labels:
+//               version: v1
+//         fault:
+//           delay:
+//             percent: 10
+//             fixedDelay: 5s
 //
 // The _fixedDelay_ field is used to indicate the amount of delay in
 // seconds. An optional _percent_ field, a value between 0 and 100, can
@@ -1486,17 +1326,16 @@ func _HTTPFaultInjection_Delay_OneofSizer(msg proto.Message) (n int) {
 //     spec:
 //       hosts:
 //       - reviews
-//       rules:
-//       - http:
-//         - route:
-//           - destination:
-//               name: reviews
-//               labels:
-//                 version: v1
-//           fault:
-//             abort:
-//               percent: 10
-//               httpStatus: 400
+//       http:
+//       - route:
+//         - destination:
+//             name: reviews
+//             labels:
+//               version: v1
+//         fault:
+//           abort:
+//             percent: 10
+//             httpStatus: 400
 //
 // The _httpStatus_ field is used to indicate the HTTP status code to
 // return to the caller. The optional _percent_ field, a value between 0
@@ -1650,473 +1489,10 @@ func _HTTPFaultInjection_Abort_OneofSizer(msg proto.Message) (n int) {
 	return n
 }
 
-// UpstreamSettings defines client/caller-side policies that determine how
-// to handle traffic bound to a particular destination. The policy
-// specifies configuration for load balancing, connection pool size from
-// the sidecar, and outlier detection settings to detect and evict
-// unhealthy hosts from the load balancing pool. These settings are common
-// to all HTTP/TCP destinations defined in the route rule. In other words,
-// these settings apply to all connections/requests arriving at the sidecar
-// for the hosts specified in the routing rule. For example, a simple load
-// balancing policy for the ratings service would look as follows:
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: bookinfo
-//     spec:
-//       hosts:
-//       - myredissrv
-//       - mybookinfo.com
-//       rules:
-//       - http:
-//         - route:
-//           - destination:
-//               name: redis.prod
-//       upstreamSettings:
-//         lbPolicy: LEAST_CONN
-type UpstreamSettings struct {
-	// Upstream load balancing policy
-	LbPolicy UpstreamSettings_LBPolicy `protobuf:"varint,1,opt,name=lb_policy,json=lbPolicy,enum=istio.routing.v1alpha2.UpstreamSettings_LBPolicy" json:"lb_policy,omitempty"`
-	// Settings controlling the volume of connections to an upstream service
-	ConnectionPool *ConnectionPoolSettings `protobuf:"bytes,2,opt,name=connection_pool,json=connectionPool" json:"connection_pool,omitempty"`
-	// Settings controlling eviction of unhealthy hosts from the load balancing pool
-	OutlierDetection *OutlierDetection `protobuf:"bytes,3,opt,name=outlier_detection,json=outlierDetection" json:"outlier_detection,omitempty"`
-}
-
-func (m *UpstreamSettings) Reset()                    { *m = UpstreamSettings{} }
-func (m *UpstreamSettings) String() string            { return proto.CompactTextString(m) }
-func (*UpstreamSettings) ProtoMessage()               {}
-func (*UpstreamSettings) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{14} }
-
-func (m *UpstreamSettings) GetLbPolicy() UpstreamSettings_LBPolicy {
-	if m != nil {
-		return m.LbPolicy
-	}
-	return UpstreamSettings_DEFAULT
-}
-
-func (m *UpstreamSettings) GetConnectionPool() *ConnectionPoolSettings {
-	if m != nil {
-		return m.ConnectionPool
-	}
-	return nil
-}
-
-func (m *UpstreamSettings) GetOutlierDetection() *OutlierDetection {
-	if m != nil {
-		return m.OutlierDetection
-	}
-	return nil
-}
-
-// Connection pool settings for an upstream host. The settings apply to
-// each individual host in the upstream service.  See Envoy's [circuit
-// breaker](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/circuit_breaking)
-// for more details. Connection pool settings can be applied at the TCP
-// level as well as at HTTP level.
-//
-// For example, the following rule sets a limit of 100 connections to redis
-// service called myredissrv with a connect timeout of 30ms
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: bookinfo-redis
-//     spec:
-//       hosts:
-//         - myredissrv
-//       rules:
-//       - tcp:
-//         - match:
-//           - sourceSubnet: "172.17.16.0/24"
-//             destinationPort: redis #only applies to ports named redis
-//           route:
-//           - destination:
-//               name: redis.prod
-//       upstreamSettings:
-//         connectionPool:
-//           tcp:
-//             maxConnections: 100
-//             connectTimeout: 30ms
-//
-// Note that the connection pool settings are applicable across all
-// upstreams defined by the route rule (both TCP and HTTP).
-type ConnectionPoolSettings struct {
-	// Settings common to both HTTP and TCP upstream connections.
-	Tcp *ConnectionPoolSettings_TCPSettings `protobuf:"bytes,1,opt,name=tcp" json:"tcp,omitempty"`
-	// HTTP connection pool settings.
-	Http *ConnectionPoolSettings_HTTPSettings `protobuf:"bytes,2,opt,name=http" json:"http,omitempty"`
-}
-
-func (m *ConnectionPoolSettings) Reset()                    { *m = ConnectionPoolSettings{} }
-func (m *ConnectionPoolSettings) String() string            { return proto.CompactTextString(m) }
-func (*ConnectionPoolSettings) ProtoMessage()               {}
-func (*ConnectionPoolSettings) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{15} }
-
-func (m *ConnectionPoolSettings) GetTcp() *ConnectionPoolSettings_TCPSettings {
-	if m != nil {
-		return m.Tcp
-	}
-	return nil
-}
-
-func (m *ConnectionPoolSettings) GetHttp() *ConnectionPoolSettings_HTTPSettings {
-	if m != nil {
-		return m.Http
-	}
-	return nil
-}
-
-// Settings common to both HTTP and TCP upstream connections.
-type ConnectionPoolSettings_TCPSettings struct {
-	// Maximum number of HTTP/TCP connections to a destination host.
-	MaxConnections int32 `protobuf:"varint,1,opt,name=max_connections,json=maxConnections" json:"max_connections,omitempty"`
-	// TCP connection timeout.
-	ConnectTimeout *google_protobuf.Duration `protobuf:"bytes,2,opt,name=connect_timeout,json=connectTimeout" json:"connect_timeout,omitempty"`
-}
-
-func (m *ConnectionPoolSettings_TCPSettings) Reset()         { *m = ConnectionPoolSettings_TCPSettings{} }
-func (m *ConnectionPoolSettings_TCPSettings) String() string { return proto.CompactTextString(m) }
-func (*ConnectionPoolSettings_TCPSettings) ProtoMessage()    {}
-func (*ConnectionPoolSettings_TCPSettings) Descriptor() ([]byte, []int) {
-	return fileDescriptor1, []int{15, 0}
-}
-
-func (m *ConnectionPoolSettings_TCPSettings) GetMaxConnections() int32 {
-	if m != nil {
-		return m.MaxConnections
-	}
-	return 0
-}
-
-func (m *ConnectionPoolSettings_TCPSettings) GetConnectTimeout() *google_protobuf.Duration {
-	if m != nil {
-		return m.ConnectTimeout
-	}
-	return nil
-}
-
-// Settings applicable to HTTP connections.
-type ConnectionPoolSettings_HTTPSettings struct {
-	// Maximum number of pending HTTP requests to a destination. Default 1024.
-	MaxPendingRequests int32 `protobuf:"varint,2,opt,name=max_pending_requests,json=maxPendingRequests" json:"max_pending_requests,omitempty"`
-	// Maximum number of requests to a backend. Default 1024.
-	MaxRequests int32 `protobuf:"varint,3,opt,name=max_requests,json=maxRequests" json:"max_requests,omitempty"`
-	// Minimum time the circuit will be closed. format: 1h/1m/1s/1ms. MUST
-	// BE >=1ms. Default is 30s.
-	SleepWindow *google_protobuf.Duration `protobuf:"bytes,4,opt,name=sleep_window,json=sleepWindow" json:"sleep_window,omitempty"`
-	// Number of 5XX errors before circuit is opened. Defaults to 5.
-	ConsecutiveErrors int32 `protobuf:"varint,5,opt,name=consecutive_errors,json=consecutiveErrors" json:"consecutive_errors,omitempty"`
-	// Time interval between ejection sweep analysis. format:
-	// 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
-	DetectionInterval *google_protobuf.Duration `protobuf:"bytes,6,opt,name=detection_interval,json=detectionInterval" json:"detection_interval,omitempty"`
-	// Maximum number of requests per connection to a backend. Setting this
-	// parameter to 1 disables keep alive.
-	MaxRequestsPerConnection int32 `protobuf:"varint,7,opt,name=max_requests_per_connection,json=maxRequestsPerConnection" json:"max_requests_per_connection,omitempty"`
-}
-
-func (m *ConnectionPoolSettings_HTTPSettings) Reset()         { *m = ConnectionPoolSettings_HTTPSettings{} }
-func (m *ConnectionPoolSettings_HTTPSettings) String() string { return proto.CompactTextString(m) }
-func (*ConnectionPoolSettings_HTTPSettings) ProtoMessage()    {}
-func (*ConnectionPoolSettings_HTTPSettings) Descriptor() ([]byte, []int) {
-	return fileDescriptor1, []int{15, 1}
-}
-
-func (m *ConnectionPoolSettings_HTTPSettings) GetMaxPendingRequests() int32 {
-	if m != nil {
-		return m.MaxPendingRequests
-	}
-	return 0
-}
-
-func (m *ConnectionPoolSettings_HTTPSettings) GetMaxRequests() int32 {
-	if m != nil {
-		return m.MaxRequests
-	}
-	return 0
-}
-
-func (m *ConnectionPoolSettings_HTTPSettings) GetSleepWindow() *google_protobuf.Duration {
-	if m != nil {
-		return m.SleepWindow
-	}
-	return nil
-}
-
-func (m *ConnectionPoolSettings_HTTPSettings) GetConsecutiveErrors() int32 {
-	if m != nil {
-		return m.ConsecutiveErrors
-	}
-	return 0
-}
-
-func (m *ConnectionPoolSettings_HTTPSettings) GetDetectionInterval() *google_protobuf.Duration {
-	if m != nil {
-		return m.DetectionInterval
-	}
-	return nil
-}
-
-func (m *ConnectionPoolSettings_HTTPSettings) GetMaxRequestsPerConnection() int32 {
-	if m != nil {
-		return m.MaxRequestsPerConnection
-	}
-	return 0
-}
-
-// A Circuit breaker implementation that tracks the status of each
-// individual host in the upstream service.  While currently applicable to
-// only HTTP services, future versions will support opaque TCP services as
-// well. For HTTP services, hosts that continually return errors for API
-// calls are ejected from the pool for a pre-defined period of time. See
-// Envoy's [outlier
-// detection](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/outlier)
-// for more details.
-//
-// The following rule sets a connection pool size of 100 connections and
-// 1000 concurrent requests, with no more than 10 req/connection to
-// "reviews" service. In addition, it configures
-// upstream hosts to be scanned every 5 mins, such that any host that fails 7
-// consecutive times with 5XX error code will be ejected for 15 minutes.
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: reviews-cb-policy
-//     spec:
-//       hosts:
-//       - reviews
-//       rules:
-//       - http:
-//         - route:
-//           - destination:
-//               name: reviews
-//               labels:
-//                 version: v1
-//       upstreamSettings:
-//         connectionPool:
-//           tcp:
-//             maxConnections: 100
-//           http:
-//             maxRequests: 1000
-//             maxRequestsPerConnection: 10
-//         outlierDetection:
-//           http:
-//             consecutiveErrors: 7
-//             interval: 5m
-//             baseEjectionTime: 15m
-//
-type OutlierDetection struct {
-	// Settings for HTTP connections.
-	Http *OutlierDetection_HTTPSettings `protobuf:"bytes,1,opt,name=http" json:"http,omitempty"`
-}
-
-func (m *OutlierDetection) Reset()                    { *m = OutlierDetection{} }
-func (m *OutlierDetection) String() string            { return proto.CompactTextString(m) }
-func (*OutlierDetection) ProtoMessage()               {}
-func (*OutlierDetection) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{16} }
-
-func (m *OutlierDetection) GetHttp() *OutlierDetection_HTTPSettings {
-	if m != nil {
-		return m.Http
-	}
-	return nil
-}
-
-// Outlier detection settings for HTTP connections.
-type OutlierDetection_HTTPSettings struct {
-	// Number of 5XX errors before a host is ejected from the connection pool. Defaults to 5.
-	ConsecutiveErrors int32 `protobuf:"varint,1,opt,name=consecutive_errors,json=consecutiveErrors" json:"consecutive_errors,omitempty"`
-	// Time interval between ejection sweep analysis. format:
-	// 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
-	Interval *google_protobuf.Duration `protobuf:"bytes,2,opt,name=interval" json:"interval,omitempty"`
-	// Minimum ejection duration. A host will remain ejected for a period
-	// equal to the product of minimum ejection duration and the number of
-	// times the host has been ejected. This technique allows the system to
-	// automatically increase the ejection period for unhealthy upstream
-	// servers. format: 1h/1m/1s/1ms. MUST BE >=1ms. Default is 30s.
-	BaseEjectionTime *google_protobuf.Duration `protobuf:"bytes,3,opt,name=base_ejection_time,json=baseEjectionTime" json:"base_ejection_time,omitempty"`
-	// Maximum % of hosts in the load balancing pool for the upstream service
-	// that can be ejected. Defaults to 10%.
-	MaxEjectionPercent int32 `protobuf:"varint,4,opt,name=max_ejection_percent,json=maxEjectionPercent" json:"max_ejection_percent,omitempty"`
-}
-
-func (m *OutlierDetection_HTTPSettings) Reset()         { *m = OutlierDetection_HTTPSettings{} }
-func (m *OutlierDetection_HTTPSettings) String() string { return proto.CompactTextString(m) }
-func (*OutlierDetection_HTTPSettings) ProtoMessage()    {}
-func (*OutlierDetection_HTTPSettings) Descriptor() ([]byte, []int) {
-	return fileDescriptor1, []int{16, 0}
-}
-
-func (m *OutlierDetection_HTTPSettings) GetConsecutiveErrors() int32 {
-	if m != nil {
-		return m.ConsecutiveErrors
-	}
-	return 0
-}
-
-func (m *OutlierDetection_HTTPSettings) GetInterval() *google_protobuf.Duration {
-	if m != nil {
-		return m.Interval
-	}
-	return nil
-}
-
-func (m *OutlierDetection_HTTPSettings) GetBaseEjectionTime() *google_protobuf.Duration {
-	if m != nil {
-		return m.BaseEjectionTime
-	}
-	return nil
-}
-
-func (m *OutlierDetection_HTTPSettings) GetMaxEjectionPercent() int32 {
-	if m != nil {
-		return m.MaxEjectionPercent
-	}
-	return 0
-}
-
-// Envoy-specific filters that can be used to enable customized processing
-// in addition to the features exposed by the routing rule. This feature
-// must be used with care, as incorrect configurations could potentially
-// destabilize the entire mesh. Common use cases for using the extensions
-// include use of Envoy's Lua filters, in addition to enabling any
-// proprietary filters developed inhouse (e.g, custom authorization filter
-// for HTTP).
-//
-// NOTE: Do not use this feature to enable Fault, Router (HTTP),
-// Mongo/Redis/Tcp proxy (TCP) filters.
-//
-// The following example enables Envoy's HTTP lua filter as part of the
-// routing rule.
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: my-lua-filter
-//     spec:
-//       hosts:
-//       - reviews
-//       rules:
-//       - http:
-//         - route:
-//           - destination:
-//               name: reviews
-//               labels:
-//                 version: v1
-//       extensions:
-//         - "@type": type.googleapis.com/istio.routing.v1alpha2.EnvoyFilters
-//         httpFilters:
-//         - name: envoy.lua
-//           config:
-//             inlineCode: "... lua code ... "
-//
-type EnvoyFilters struct {
-	// Envoy HTTP filters to be added to every HTTP connection manager
-	// instance generated by Istio.
-	HttpFilters []*EnvoyFilters_HTTPFilter `protobuf:"bytes,1,rep,name=http_filters,json=httpFilters" json:"http_filters,omitempty"`
-	// Envoy network filters to be added to every non-TCP listener instance
-	// generated by Istio.
-	NetworkFilters []*EnvoyFilters_NetworkFilter `protobuf:"bytes,2,rep,name=network_filters,json=networkFilters" json:"network_filters,omitempty"`
-}
-
-func (m *EnvoyFilters) Reset()                    { *m = EnvoyFilters{} }
-func (m *EnvoyFilters) String() string            { return proto.CompactTextString(m) }
-func (*EnvoyFilters) ProtoMessage()               {}
-func (*EnvoyFilters) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{17} }
-
-func (m *EnvoyFilters) GetHttpFilters() []*EnvoyFilters_HTTPFilter {
-	if m != nil {
-		return m.HttpFilters
-	}
-	return nil
-}
-
-func (m *EnvoyFilters) GetNetworkFilters() []*EnvoyFilters_NetworkFilter {
-	if m != nil {
-		return m.NetworkFilters
-	}
-	return nil
-}
-
-// Envoy HTTP filters to be added to every HTTP connection manager
-// instance generated by Istio.
-type EnvoyFilters_HTTPFilter struct {
-	// The name of the filter to instantiate. The name must match a supported
-	// filter _compiled into_ Envoy.  The following are the names of the
-	// filters currently built into Envoy. Refer to Envoy's documentation for
-	// the configuring these filtes.
-	//
-	// * envoy.buffer
-	// * envoy.http_dynamo_filter
-	// * envoy.grpc_http1_bridge
-	// * envoy.grpc_json_transcoder
-	// * envoy.grpc_web
-	// * envoy.lua
-	//
-	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
-	// Filter specific configuration which depends on the filter being
-	// instantiated. See the supported filters for further documentation.
-	Config *google_protobuf2.Struct `protobuf:"bytes,2,opt,name=config" json:"config,omitempty"`
-}
-
-func (m *EnvoyFilters_HTTPFilter) Reset()                    { *m = EnvoyFilters_HTTPFilter{} }
-func (m *EnvoyFilters_HTTPFilter) String() string            { return proto.CompactTextString(m) }
-func (*EnvoyFilters_HTTPFilter) ProtoMessage()               {}
-func (*EnvoyFilters_HTTPFilter) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{17, 0} }
-
-func (m *EnvoyFilters_HTTPFilter) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
-func (m *EnvoyFilters_HTTPFilter) GetConfig() *google_protobuf2.Struct {
-	if m != nil {
-		return m.Config
-	}
-	return nil
-}
-
-// Envoy network filters to be added to every non-HTTP listener instance
-// generated by Istio (i.e. TCP services).
-type EnvoyFilters_NetworkFilter struct {
-	// The name of the filter to instantiate. The name must match a supported
-	// filter. Except for Redis proxy, Istio automatically enables Network
-	// filters. Use this feature only to support custom built network
-	// filters.
-	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
-	// Filter specific configuration which depends on the filter being
-	// instantiated. See the supported filters for further documentation.
-	Config *google_protobuf2.Struct `protobuf:"bytes,2,opt,name=config" json:"config,omitempty"`
-}
-
-func (m *EnvoyFilters_NetworkFilter) Reset()                    { *m = EnvoyFilters_NetworkFilter{} }
-func (m *EnvoyFilters_NetworkFilter) String() string            { return proto.CompactTextString(m) }
-func (*EnvoyFilters_NetworkFilter) ProtoMessage()               {}
-func (*EnvoyFilters_NetworkFilter) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{17, 1} }
-
-func (m *EnvoyFilters_NetworkFilter) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
-func (m *EnvoyFilters_NetworkFilter) GetConfig() *google_protobuf2.Struct {
-	if m != nil {
-		return m.Config
-	}
-	return nil
-}
-
 func init() {
 	proto.RegisterType((*RouteRule)(nil), "istio.routing.v1alpha2.RouteRule")
-	proto.RegisterType((*RouteRule_Rule)(nil), "istio.routing.v1alpha2.RouteRule.Rule")
 	proto.RegisterType((*Destination)(nil), "istio.routing.v1alpha2.Destination")
-	proto.RegisterType((*Endpoint)(nil), "istio.routing.v1alpha2.Endpoint")
+	proto.RegisterType((*Source)(nil), "istio.routing.v1alpha2.Source")
 	proto.RegisterType((*HTTPRoute)(nil), "istio.routing.v1alpha2.HTTPRoute")
 	proto.RegisterType((*TCPRoute)(nil), "istio.routing.v1alpha2.TCPRoute")
 	proto.RegisterType((*HTTPMatchRequest)(nil), "istio.routing.v1alpha2.HTTPMatchRequest")
@@ -2130,139 +1506,88 @@ func init() {
 	proto.RegisterType((*HTTPFaultInjection)(nil), "istio.routing.v1alpha2.HTTPFaultInjection")
 	proto.RegisterType((*HTTPFaultInjection_Delay)(nil), "istio.routing.v1alpha2.HTTPFaultInjection.Delay")
 	proto.RegisterType((*HTTPFaultInjection_Abort)(nil), "istio.routing.v1alpha2.HTTPFaultInjection.Abort")
-	proto.RegisterType((*UpstreamSettings)(nil), "istio.routing.v1alpha2.UpstreamSettings")
-	proto.RegisterType((*ConnectionPoolSettings)(nil), "istio.routing.v1alpha2.ConnectionPoolSettings")
-	proto.RegisterType((*ConnectionPoolSettings_TCPSettings)(nil), "istio.routing.v1alpha2.ConnectionPoolSettings.TCPSettings")
-	proto.RegisterType((*ConnectionPoolSettings_HTTPSettings)(nil), "istio.routing.v1alpha2.ConnectionPoolSettings.HTTPSettings")
-	proto.RegisterType((*OutlierDetection)(nil), "istio.routing.v1alpha2.OutlierDetection")
-	proto.RegisterType((*OutlierDetection_HTTPSettings)(nil), "istio.routing.v1alpha2.OutlierDetection.HTTPSettings")
-	proto.RegisterType((*EnvoyFilters)(nil), "istio.routing.v1alpha2.EnvoyFilters")
-	proto.RegisterType((*EnvoyFilters_HTTPFilter)(nil), "istio.routing.v1alpha2.EnvoyFilters.HTTPFilter")
-	proto.RegisterType((*EnvoyFilters_NetworkFilter)(nil), "istio.routing.v1alpha2.EnvoyFilters.NetworkFilter")
-	proto.RegisterEnum("istio.routing.v1alpha2.UpstreamSettings_LBPolicy", UpstreamSettings_LBPolicy_name, UpstreamSettings_LBPolicy_value)
 }
 
 func init() { proto.RegisterFile("routing/v1alpha2/route_rule.proto", fileDescriptor1) }
 
 var fileDescriptor1 = []byte{
-	// 1899 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x58, 0xcb, 0x6e, 0x23, 0xc7,
-	0x15, 0x1d, 0x92, 0x22, 0x25, 0xde, 0xa6, 0x24, 0xb2, 0x32, 0x98, 0xb4, 0x19, 0x23, 0xd0, 0xd0,
-	0x79, 0xc8, 0x79, 0x50, 0x36, 0x3d, 0x02, 0x6c, 0xcf, 0x8c, 0x33, 0x94, 0xa8, 0xb1, 0x06, 0xd0,
-	0x48, 0x4a, 0x49, 0xca, 0x2c, 0xbc, 0x68, 0x34, 0x9b, 0x25, 0xb2, 0x3d, 0xcd, 0xae, 0x4e, 0x55,
-	0xb5, 0x48, 0xe6, 0x1b, 0x02, 0x18, 0xc8, 0x2a, 0x9b, 0x2c, 0xf3, 0x11, 0x01, 0xf2, 0x07, 0x59,
-	0x64, 0x9b, 0x00, 0xd9, 0x06, 0xc8, 0x2e, 0x7f, 0x10, 0x04, 0xf5, 0xe8, 0x66, 0x0f, 0x25, 0x3e,
-	0x04, 0x7b, 0x43, 0x74, 0xdd, 0x3a, 0xe7, 0x56, 0xd5, 0x7d, 0xd5, 0x2d, 0xc2, 0x63, 0x46, 0x63,
-	0xe1, 0x87, 0xfd, 0xbd, 0x9b, 0x8f, 0xdd, 0x20, 0x1a, 0xb8, 0xad, 0x3d, 0x29, 0x20, 0x0e, 0x8b,
-	0x03, 0xd2, 0x8c, 0x18, 0x15, 0x14, 0x3d, 0xf2, 0xb9, 0xf0, 0x69, 0xd3, 0x00, 0x9b, 0x09, 0xb0,
-	0xfe, 0xc3, 0x3e, 0xa5, 0xfd, 0x80, 0xec, 0x29, 0x54, 0x37, 0xbe, 0xde, 0xeb, 0xc5, 0xcc, 0x15,
-	0x3e, 0x0d, 0x35, 0xef, 0xf6, 0xfc, 0x88, 0xb9, 0x51, 0x44, 0x18, 0x37, 0xf3, 0xef, 0xcf, 0xce,
-	0x73, 0xc1, 0x62, 0x4f, 0x98, 0xd9, 0xf7, 0x66, 0x67, 0xdd, 0x70, 0xa2, 0xa7, 0x1a, 0x7f, 0x2b,
-	0x40, 0x19, 0xcb, 0x5d, 0xe2, 0x38, 0x20, 0xe8, 0x21, 0x14, 0x07, 0x94, 0x0b, 0x6e, 0xe7, 0x76,
-	0x0a, 0xbb, 0x65, 0xac, 0x07, 0xe8, 0x19, 0x14, 0xe5, 0x11, 0xb8, 0x9d, 0xdf, 0x29, 0xec, 0x5a,
-	0xad, 0x9f, 0x34, 0xef, 0x3e, 0x44, 0x33, 0xd5, 0xd3, 0x94, 0x3f, 0x58, 0x93, 0xd0, 0x15, 0xd4,
-	0xe2, 0x88, 0x0b, 0x46, 0xdc, 0xa1, 0xc3, 0x89, 0x90, 0x14, 0x6e, 0x17, 0x76, 0x72, 0xbb, 0x56,
-	0x6b, 0x77, 0x9e, 0xa6, 0x2b, 0x43, 0xb8, 0x30, 0x78, 0x5c, 0x8d, 0x67, 0x24, 0xe8, 0x09, 0x00,
-	0x19, 0x0b, 0x12, 0x72, 0x9f, 0x86, 0xdc, 0x5e, 0x53, 0xfa, 0x1e, 0x36, 0xf5, 0x41, 0x9b, 0xc9,
-	0x41, 0x9b, 0xed, 0x70, 0x82, 0x33, 0xb8, 0xfa, 0xbf, 0x72, 0xb0, 0xa6, 0x4e, 0xfa, 0x29, 0x94,
-	0x38, 0x8d, 0x99, 0x47, 0xd4, 0x51, 0xad, 0xd6, 0xce, 0xbc, 0xad, 0x1c, 0x85, 0xbd, 0x88, 0xfa,
-	0xa1, 0xc0, 0x06, 0x8f, 0xf6, 0xe0, 0x7b, 0x82, 0xb9, 0xd7, 0xd7, 0xbe, 0xe7, 0x44, 0x2e, 0xe7,
-	0x62, 0xc0, 0x68, 0xdc, 0x1f, 0xd8, 0xf9, 0x9d, 0xdc, 0xee, 0x06, 0x46, 0x66, 0xea, 0x7c, 0x3a,
-	0x83, 0xf6, 0x61, 0x6d, 0x20, 0x44, 0x64, 0x17, 0xd4, 0x42, 0x8f, 0xe7, 0x2d, 0x74, 0x7c, 0x79,
-	0x79, 0xae, 0x2d, 0xa8, 0xe0, 0xa8, 0x05, 0x05, 0xe1, 0x45, 0xf6, 0xda, 0xe2, 0xed, 0x5d, 0x1e,
-	0x1a, 0x92, 0x04, 0x37, 0xfe, 0x92, 0x03, 0xab, 0x43, 0xb8, 0xf0, 0x43, 0x15, 0x3c, 0x08, 0xc1,
-	0x5a, 0xe8, 0x0e, 0xe5, 0x19, 0x73, 0xbb, 0x65, 0xac, 0xbe, 0xd1, 0x97, 0x50, 0x0a, 0xdc, 0x2e,
-	0x09, 0x12, 0x77, 0xee, 0xcd, 0x53, 0x9d, 0x51, 0xd4, 0x3c, 0x51, 0x8c, 0xa3, 0x50, 0xb0, 0x09,
-	0x36, 0x74, 0xa9, 0x3c, 0xa2, 0x4c, 0x28, 0x5f, 0x96, 0xb1, 0xfa, 0xae, 0x7f, 0x06, 0x56, 0x06,
-	0x8a, 0xaa, 0x50, 0x78, 0x4b, 0x26, 0x66, 0x79, 0xf9, 0x29, 0x23, 0xec, 0xc6, 0x0d, 0x62, 0xa2,
-	0xec, 0x55, 0xc6, 0x7a, 0xf0, 0x79, 0xfe, 0xd3, 0x5c, 0xe3, 0xcf, 0x39, 0xd8, 0x48, 0x8c, 0x8d,
-	0x3a, 0xe9, 0x26, 0xb5, 0x7b, 0x7e, 0xb1, 0xcc, 0x3d, 0x77, 0xee, 0xd0, 0x86, 0xf5, 0xbe, 0x2b,
-	0xc8, 0xc8, 0x9d, 0x98, 0xe5, 0x92, 0xe1, 0xb7, 0xd9, 0xe7, 0x37, 0x25, 0x28, 0xa7, 0xbe, 0x42,
-	0x5f, 0x40, 0x71, 0xe8, 0x0a, 0x6f, 0x60, 0xf6, 0xb9, 0xbb, 0xc8, 0xbb, 0xaf, 0x25, 0x10, 0x93,
-	0xdf, 0xc6, 0x84, 0x0b, 0xac, 0x69, 0xe8, 0x57, 0x50, 0x54, 0x45, 0xc2, 0x38, 0xe3, 0xc3, 0x15,
-	0x9c, 0xf1, 0x86, 0xf8, 0xfd, 0x81, 0xc0, 0x9a, 0x87, 0x5e, 0xc0, 0x06, 0x23, 0x3d, 0x9f, 0x11,
-	0x4f, 0x98, 0xac, 0xfa, 0xd1, 0xc2, 0x08, 0x33, 0x58, 0x9c, 0xb2, 0xd0, 0x73, 0x58, 0x67, 0x64,
-	0xc4, 0x7c, 0x41, 0x4c, 0x1a, 0x7d, 0xb0, 0x58, 0x81, 0x82, 0xe2, 0x84, 0x83, 0x7e, 0x0e, 0xb5,
-	0x11, 0xe9, 0x72, 0xea, 0xbd, 0x25, 0xc2, 0x89, 0xa3, 0x3e, 0x73, 0x7b, 0xc4, 0x2e, 0xaa, 0x6c,
-	0xa8, 0xa6, 0x13, 0x57, 0x5a, 0x8e, 0x3e, 0x81, 0x75, 0xe1, 0x0f, 0x09, 0x8d, 0x85, 0x5d, 0x52,
-	0x6b, 0xbd, 0x77, 0x2b, 0x65, 0x3b, 0xa6, 0xf2, 0xe1, 0x04, 0x89, 0x9e, 0xca, 0x0d, 0x0a, 0xe6,
-	0x13, 0x6e, 0xaf, 0x2b, 0xd2, 0xe2, 0x1c, 0x22, 0x32, 0x04, 0x12, 0x06, 0x7a, 0x01, 0xc5, 0x6b,
-	0x37, 0x0e, 0x84, 0xbd, 0xa1, 0xa8, 0x3f, 0x5b, 0x44, 0x7d, 0x29, 0x81, 0xaf, 0xc2, 0xaf, 0x89,
-	0xa7, 0x36, 0xa0, 0x89, 0xe8, 0x29, 0x94, 0x86, 0x3e, 0x63, 0x94, 0xd9, 0xe5, 0xc5, 0xe6, 0xc9,
-	0xf8, 0x08, 0x1b, 0x0a, 0x3a, 0x04, 0xcb, 0xa3, 0x8c, 0x3b, 0x11, 0x0d, 0x7c, 0x6f, 0x62, 0x83,
-	0xd2, 0xd0, 0x98, 0xa7, 0xe1, 0x90, 0x32, 0x7e, 0xae, 0x90, 0x18, 0xbc, 0xf4, 0x1b, 0x7d, 0x05,
-	0x5b, 0xb2, 0xda, 0x87, 0x3d, 0x67, 0x40, 0xdc, 0x1e, 0x61, 0xdc, 0xb6, 0x54, 0xb4, 0x3c, 0x59,
-	0x5a, 0x4b, 0x9a, 0x6d, 0xc5, 0x3b, 0xd6, 0x34, 0x9d, 0x1d, 0x9b, 0x6e, 0x56, 0x56, 0x7f, 0x01,
-	0xe8, 0x36, 0xe8, 0x5e, 0x19, 0xf1, 0xfb, 0x1c, 0x6c, 0x24, 0x75, 0x48, 0x06, 0x74, 0x36, 0x21,
-	0xe6, 0x06, 0xf4, 0xc9, 0x13, 0x95, 0x0e, 0x6d, 0x21, 0x98, 0xdf, 0x8d, 0x05, 0xe1, 0xdf, 0x55,
-	0x46, 0x34, 0xfe, 0x5d, 0x80, 0xea, 0x6c, 0xba, 0xa1, 0x7d, 0x28, 0xc4, 0xcc, 0x57, 0xe7, 0x59,
-	0xe0, 0xc1, 0x0b, 0xc1, 0xfc, 0xb0, 0xaf, 0x89, 0x12, 0x2f, 0x7d, 0xcf, 0xbd, 0x01, 0x19, 0xea,
-	0x53, 0xaf, 0xc8, 0x34, 0x14, 0x15, 0x38, 0x44, 0x0c, 0x68, 0xcf, 0x24, 0xe6, 0x6a, 0x64, 0x4d,
-	0x41, 0x6d, 0x28, 0xbb, 0xb1, 0x18, 0x50, 0xe6, 0x8b, 0xc9, 0xb2, 0xbc, 0xcc, 0xf2, 0xa7, 0x2c,
-	0x74, 0x06, 0xeb, 0x49, 0xbc, 0x14, 0x95, 0x2d, 0xf7, 0x57, 0xad, 0x4e, 0xcd, 0x77, 0x02, 0x26,
-	0xd1, 0x22, 0x53, 0xbd, 0x37, 0xb5, 0xba, 0x23, 0x2b, 0x3e, 0xb7, 0x4b, 0xaa, 0x55, 0xa8, 0x66,
-	0x26, 0xce, 0xa5, 0xbc, 0xee, 0x40, 0x65, 0x49, 0x44, 0x7d, 0x96, 0x8d, 0xa8, 0x15, 0x8f, 0x97,
-	0x09, 0x3b, 0x06, 0xb5, 0x5b, 0x31, 0x80, 0x8e, 0xc0, 0xca, 0xec, 0x64, 0x99, 0xbf, 0xb3, 0x19,
-	0x9b, 0xe5, 0xa1, 0x47, 0x50, 0x1a, 0x29, 0x85, 0x6a, 0x6f, 0x45, 0x6c, 0x46, 0x8d, 0x3f, 0xe4,
-	0xa0, 0x76, 0x2b, 0x72, 0xd1, 0x07, 0xb0, 0xa9, 0x9b, 0x03, 0x87, 0xc7, 0xdd, 0x90, 0x08, 0x73,
-	0xc8, 0x8a, 0x16, 0x5e, 0x28, 0x19, 0xfa, 0x25, 0xa0, 0xac, 0xf1, 0x0c, 0x52, 0x27, 0x53, 0xd6,
-	0xac, 0x06, 0xfe, 0x21, 0x54, 0x67, 0x6d, 0x6d, 0x6e, 0xda, 0xed, 0x19, 0x53, 0x37, 0xbe, 0x80,
-	0x4a, 0xb6, 0xb4, 0x4b, 0x4b, 0x27, 0xb1, 0x5e, 0xd6, 0x61, 0xfc, 0x7e, 0x36, 0x98, 0xf4, 0x92,
-	0x53, 0x41, 0xe3, 0x39, 0x58, 0x99, 0xca, 0x7e, 0x6f, 0x3a, 0x01, 0x2b, 0xe3, 0x21, 0xf4, 0x08,
-	0x8a, 0x64, 0xec, 0x7a, 0xc6, 0x08, 0xc7, 0x0f, 0xb0, 0x1e, 0x22, 0x1b, 0x4a, 0x11, 0x23, 0xd7,
-	0xfe, 0x58, 0x6b, 0x38, 0x7e, 0x80, 0xcd, 0x58, 0x32, 0x18, 0xe9, 0x93, 0xb1, 0x3e, 0x9f, 0x64,
-	0xa8, 0xe1, 0x41, 0x05, 0x40, 0x95, 0x04, 0x47, 0x4c, 0x22, 0xd2, 0xf8, 0xda, 0x5c, 0xbb, 0xb2,
-	0xbc, 0xa3, 0x3a, 0x6c, 0xb8, 0x42, 0x90, 0x61, 0xa4, 0x7a, 0x55, 0xe9, 0xa1, 0x74, 0x8c, 0xda,
-	0xb0, 0x1d, 0x11, 0xe6, 0x08, 0x36, 0x71, 0x92, 0xbb, 0x26, 0xbf, 0xec, 0xae, 0xd9, 0x8c, 0x08,
-	0xbb, 0x64, 0x93, 0x4b, 0x8d, 0x6f, 0xfc, 0x29, 0x0f, 0x30, 0xad, 0xc5, 0xe8, 0x31, 0x54, 0xdc,
-	0x20, 0xa0, 0x23, 0x87, 0x32, 0xbf, 0xef, 0x87, 0xa6, 0x3b, 0xb6, 0x94, 0xec, 0x4c, 0x89, 0x64,
-	0x08, 0x68, 0x88, 0x4e, 0x5f, 0xdd, 0x5c, 0x95, 0xb1, 0xe6, 0xbd, 0xd6, 0xb2, 0x29, 0x28, 0x49,
-	0xcb, 0x42, 0x06, 0x64, 0x92, 0x05, 0xfd, 0x18, 0xb6, 0xc8, 0x38, 0xa2, 0x9c, 0xa4, 0xa8, 0x35,
-	0x85, 0xda, 0xd4, 0xd2, 0x04, 0xd6, 0x82, 0xf5, 0xa1, 0x3b, 0x76, 0xdc, 0xbe, 0xbe, 0x6c, 0x17,
-	0x9e, 0xae, 0x34, 0x74, 0xc7, 0xed, 0xbe, 0x6c, 0xfd, 0x6a, 0x7a, 0x7d, 0x8f, 0x91, 0x1e, 0x09,
-	0x85, 0xef, 0x06, 0xdc, 0xdc, 0xc3, 0xf5, 0x5b, 0xec, 0x03, 0x4a, 0x83, 0xdf, 0xc8, 0x64, 0xc3,
-	0x55, 0x45, 0x3a, 0x9c, 0x72, 0x1a, 0xff, 0x2b, 0x00, 0xba, 0x7d, 0x61, 0xa2, 0x97, 0x50, 0xec,
-	0x91, 0xc0, 0x9d, 0x98, 0xb4, 0xfb, 0x68, 0xf5, 0xbb, 0xb6, 0xd9, 0x91, 0x3c, 0xac, 0xe9, 0x52,
-	0x8f, 0xdb, 0x95, 0x01, 0x9f, 0xbf, 0xb7, 0x9e, 0xb6, 0xe4, 0x61, 0x4d, 0xaf, 0xff, 0x35, 0x07,
-	0x45, 0xa5, 0x58, 0x76, 0x82, 0x11, 0x61, 0x1e, 0x09, 0x85, 0x09, 0x97, 0x64, 0x88, 0x9e, 0x81,
-	0x75, 0xed, 0x8f, 0x49, 0xcf, 0xd1, 0x3b, 0x5f, 0x16, 0x29, 0xc7, 0x0f, 0x30, 0x28, 0xbc, 0xd6,
-	0x7b, 0x0c, 0x35, 0xe9, 0x96, 0x50, 0x1b, 0xc6, 0xe8, 0x28, 0x2c, 0xd7, 0x51, 0xcd, 0xb0, 0x94,
-	0xa6, 0x83, 0x1a, 0x6c, 0xcb, 0xb6, 0x5f, 0xab, 0x50, 0x11, 0x5f, 0xff, 0x63, 0x0e, 0x8a, 0xea,
-	0x3c, 0x0b, 0xb6, 0xff, 0x18, 0x2c, 0x45, 0xe3, 0xc2, 0x15, 0x31, 0xd7, 0xd5, 0x4a, 0xee, 0x51,
-	0x0a, 0x2f, 0x94, 0x4c, 0x42, 0xfa, 0x2c, 0xf2, 0x12, 0x48, 0x92, 0x64, 0x20, 0x85, 0x53, 0x88,
-	0x24, 0xb4, 0x1c, 0xa2, 0xfa, 0x9c, 0xb5, 0x04, 0xa2, 0x84, 0x47, 0x52, 0x26, 0x93, 0x51, 0x4d,
-	0xea, 0x64, 0xfc, 0x47, 0x1e, 0xaa, 0xb3, 0x8f, 0x34, 0x74, 0x0a, 0xe5, 0xa0, 0x9b, 0x74, 0x3a,
-	0x72, 0x9f, 0x5b, 0xad, 0x8f, 0x57, 0x7d, 0xe1, 0x35, 0x4f, 0x0e, 0x4c, 0xe3, 0xb3, 0x11, 0x74,
-	0x4d, 0xda, 0xbd, 0x81, 0x6d, 0x8f, 0x86, 0xa1, 0xf6, 0xac, 0x13, 0x51, 0x1a, 0x18, 0xf7, 0x34,
-	0xe7, 0xf7, 0x4f, 0x09, 0xfc, 0x9c, 0xd2, 0x20, 0x7d, 0x3d, 0x6e, 0x79, 0xef, 0xc8, 0xe5, 0x93,
-	0x94, 0xc6, 0x22, 0xf0, 0x09, 0x73, 0x7a, 0x44, 0xe8, 0x89, 0x65, 0x4f, 0xd2, 0x33, 0x4d, 0xe8,
-	0x24, 0x78, 0x5c, 0xa5, 0x33, 0x92, 0x46, 0x07, 0x36, 0x92, 0x53, 0x20, 0x0b, 0xd6, 0x3b, 0x47,
-	0x2f, 0xdb, 0x57, 0x27, 0x97, 0xd5, 0x07, 0x68, 0x1b, 0x2c, 0x7c, 0x76, 0x75, 0xda, 0x71, 0xf0,
-	0xd9, 0xc1, 0xab, 0xd3, 0x6a, 0x0e, 0x6d, 0x01, 0x9c, 0x1c, 0xb5, 0x2f, 0x2e, 0x9d, 0xc3, 0xb3,
-	0xd3, 0xd3, 0x6a, 0x1e, 0x01, 0x94, 0x70, 0xfb, 0xb4, 0x73, 0xf6, 0xba, 0x5a, 0x68, 0x7c, 0x53,
-	0x84, 0x47, 0x77, 0x9f, 0x03, 0x9d, 0xe8, 0x27, 0xa1, 0xce, 0xae, 0xcf, 0xef, 0x67, 0x04, 0xf9,
-	0x52, 0x4c, 0x0d, 0x22, 0xd5, 0xa0, 0x33, 0xf3, 0x2e, 0xd5, 0x36, 0x7d, 0x7a, 0x4f, 0x75, 0x32,
-	0xf7, 0x52, 0x7d, 0x4a, 0x51, 0xfd, 0x77, 0x60, 0x65, 0x16, 0x41, 0x3f, 0x85, 0x6d, 0x59, 0xa1,
-	0xa6, 0xb6, 0x4f, 0x4a, 0xf5, 0xd6, 0xd0, 0x1d, 0x4f, 0xb5, 0x72, 0x74, 0x90, 0xfa, 0x79, 0xf5,
-	0x82, 0x9d, 0xb8, 0xd4, 0x54, 0xec, 0xfa, 0x3f, 0xf3, 0xfa, 0x12, 0x4c, 0x57, 0xff, 0x08, 0x1e,
-	0xca, 0xd5, 0x65, 0x63, 0xeb, 0x87, 0x7d, 0x87, 0xe9, 0xc6, 0xc6, 0x64, 0x08, 0x46, 0x43, 0x77,
-	0x7c, 0xae, 0xa7, 0x4c, 0xcb, 0x23, 0x93, 0xa0, 0x22, 0x19, 0x29, 0xb2, 0xa0, 0x90, 0xd6, 0xd0,
-	0x1d, 0xa7, 0x90, 0x67, 0x50, 0xe1, 0x01, 0x21, 0x91, 0x33, 0xf2, 0xc3, 0x1e, 0x1d, 0x99, 0xbe,
-	0x6c, 0xc1, 0x36, 0x2d, 0x05, 0x7f, 0xa3, 0xd0, 0xb2, 0x03, 0xf0, 0x68, 0xc8, 0x89, 0x17, 0x0b,
-	0xff, 0x86, 0xe8, 0x5c, 0xe3, 0xaa, 0x7a, 0x17, 0x71, 0x2d, 0x33, 0xa3, 0x12, 0x8e, 0xa3, 0x63,
-	0xd9, 0x30, 0x98, 0xd8, 0x72, 0xfc, 0x50, 0x10, 0x76, 0xe3, 0x06, 0xcb, 0x9f, 0x4d, 0xb5, 0x94,
-	0xf4, 0xca, 0x70, 0xd0, 0x73, 0xf8, 0x41, 0xf6, 0x64, 0x8e, 0xbc, 0x1e, 0xa7, 0x6e, 0x51, 0x8f,
-	0xaa, 0x22, 0xb6, 0x33, 0x07, 0x3d, 0x27, 0x6c, 0xea, 0xa0, 0xc6, 0xdf, 0xf3, 0x50, 0x9d, 0x0d,
-	0x7f, 0xf4, 0xca, 0x44, 0x8f, 0x0e, 0xc6, 0xfd, 0x55, 0xd3, 0xe6, 0xae, 0xb8, 0xf9, 0x6f, 0x6e,
-	0xc6, 0x77, 0x77, 0x1b, 0x2a, 0x37, 0xcf, 0x50, 0xfb, 0xb0, 0x91, 0x9a, 0x67, 0x69, 0xe0, 0xa4,
-	0x50, 0xf4, 0x25, 0xa0, 0xae, 0xcb, 0x89, 0x43, 0xcc, 0xdd, 0xa1, 0x82, 0x6f, 0x69, 0xf1, 0xc6,
-	0x55, 0x49, 0x3a, 0x32, 0x1c, 0x19, 0x7e, 0x49, 0xa8, 0xa5, 0x7a, 0x92, 0x52, 0xbd, 0x96, 0x86,
-	0x5a, 0x02, 0x3f, 0xd7, 0x33, 0x8d, 0xff, 0xe4, 0xa1, 0x72, 0x14, 0xde, 0xd0, 0xc9, 0x4b, 0x3f,
-	0x10, 0xf2, 0x36, 0xc7, 0x50, 0x51, 0x65, 0xfc, 0x5a, 0x8f, 0xcd, 0xe3, 0x69, 0x6f, 0xfe, 0xbf,
-	0x1e, 0x53, 0xae, 0xbe, 0x05, 0xd5, 0x37, 0x56, 0x55, 0x3c, 0xd1, 0xf9, 0x15, 0x6c, 0x87, 0x44,
-	0x8c, 0x28, 0x7b, 0x9b, 0xaa, 0xd5, 0x4f, 0xaa, 0xd6, 0x4a, 0x6a, 0x4f, 0x35, 0xd7, 0x68, 0xde,
-	0x0a, 0xb3, 0x43, 0x5e, 0xff, 0x35, 0xc0, 0x74, 0xdd, 0x3b, 0xff, 0x67, 0xda, 0x83, 0x92, 0x47,
-	0xc3, 0x6b, 0xbf, 0x6f, 0x7c, 0xf2, 0xfd, 0x5b, 0x26, 0xbd, 0x50, 0xff, 0x51, 0x62, 0x03, 0xab,
-	0x5f, 0xc2, 0xe6, 0x3b, 0x6b, 0x7e, 0x27, 0x5a, 0xbb, 0x25, 0x35, 0xf1, 0xc9, 0xff, 0x03, 0x00,
-	0x00, 0xff, 0xff, 0xe6, 0xb6, 0x95, 0x08, 0x9d, 0x15, 0x00, 0x00,
+	// 1236 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x57, 0xdf, 0x6f, 0x1b, 0x45,
+	0x10, 0xae, 0xe3, 0x1f, 0x89, 0xe7, 0x92, 0x36, 0x5e, 0xa1, 0xea, 0xb0, 0x50, 0x95, 0xb8, 0x20,
+	0xa5, 0x45, 0x38, 0xe0, 0xb6, 0x88, 0x52, 0x5a, 0x9a, 0xa4, 0x2d, 0x41, 0x6a, 0xd5, 0xe8, 0x12,
+	0xe0, 0x81, 0x87, 0xd3, 0xfa, 0x3c, 0x39, 0x5f, 0x7b, 0xbe, 0x3d, 0xf6, 0xf6, 0x1a, 0xfb, 0x7f,
+	0x40, 0xe2, 0x15, 0x09, 0xf1, 0x88, 0xc4, 0x3b, 0x4f, 0x48, 0xfc, 0x6d, 0x08, 0xed, 0xec, 0x9e,
+	0x7d, 0x34, 0x89, 0x9d, 0x08, 0xde, 0x6e, 0x67, 0xbf, 0x6f, 0x76, 0x76, 0x76, 0xbe, 0x9d, 0x3d,
+	0xd8, 0x94, 0x22, 0x57, 0x51, 0x12, 0x6e, 0xbf, 0xf9, 0x84, 0xc7, 0xe9, 0x90, 0xf7, 0xb6, 0xb5,
+	0x01, 0x7d, 0x99, 0xc7, 0xd8, 0x4d, 0xa5, 0x50, 0x82, 0x5d, 0x8f, 0x32, 0x15, 0x89, 0xae, 0x05,
+	0x76, 0x0b, 0x60, 0xfb, 0x46, 0x28, 0x44, 0x18, 0xe3, 0x36, 0xa1, 0xfa, 0xf9, 0xf1, 0xf6, 0x20,
+	0x97, 0x5c, 0x45, 0x22, 0x31, 0xbc, 0xd3, 0xf3, 0x27, 0x92, 0xa7, 0x29, 0xca, 0xcc, 0xcc, 0x77,
+	0x7e, 0xaf, 0x40, 0xd3, 0xd3, 0x8b, 0x79, 0x79, 0x8c, 0xec, 0x1d, 0xa8, 0x0f, 0x45, 0xa6, 0x32,
+	0xb7, 0xb2, 0x51, 0xdd, 0x6a, 0x7a, 0x66, 0xc0, 0xda, 0xb0, 0x12, 0x72, 0x85, 0x27, 0x7c, 0x92,
+	0xb9, 0x4b, 0x34, 0x31, 0x1d, 0xb3, 0x7b, 0x50, 0x1b, 0x2a, 0x95, 0xba, 0xd5, 0x8d, 0xea, 0x96,
+	0xd3, 0xdb, 0xec, 0x9e, 0x1d, 0x66, 0x77, 0xff, 0xe8, 0xe8, 0xc0, 0x2c, 0x43, 0x70, 0xd6, 0x83,
+	0xaa, 0x0a, 0x52, 0xb7, 0x46, 0xac, 0x8d, 0xf3, 0x58, 0x47, 0x7b, 0x96, 0xa4, 0xc1, 0x9d, 0x3f,
+	0x2b, 0xe0, 0x3c, 0xc1, 0x4c, 0x45, 0x09, 0x6d, 0x90, 0x31, 0xa8, 0x25, 0x7c, 0x84, 0x6e, 0x65,
+	0xa3, 0xb2, 0xd5, 0xf4, 0xe8, 0x9b, 0x7d, 0x05, 0x8d, 0x98, 0xf7, 0x31, 0x36, 0x81, 0x3a, 0xbd,
+	0xed, 0xf3, 0x5c, 0x97, 0x1c, 0x75, 0x9f, 0x13, 0xe3, 0x69, 0xa2, 0xe4, 0xc4, 0xb3, 0x74, 0xed,
+	0x3c, 0x15, 0x52, 0xb9, 0x55, 0xe3, 0x5c, 0x7f, 0xb7, 0xef, 0x83, 0x53, 0x82, 0xb2, 0x75, 0xa8,
+	0xbe, 0xc6, 0x89, 0x5d, 0x5e, 0x7f, 0xea, 0xf4, 0xbd, 0xe1, 0x71, 0x8e, 0xee, 0x12, 0xd9, 0xcc,
+	0xe0, 0xf3, 0xa5, 0xcf, 0x2a, 0x9d, 0x3f, 0x2a, 0xd0, 0x38, 0x14, 0xb9, 0x0c, 0xf0, 0xcc, 0xb0,
+	0x77, 0xdf, 0x0a, 0xfb, 0xf6, 0x79, 0x61, 0x1b, 0x1f, 0x67, 0x46, 0x7c, 0x1d, 0x1a, 0x59, 0xde,
+	0x4f, 0xb0, 0x88, 0xd9, 0x8e, 0xfe, 0x4b, 0xd4, 0x3f, 0x35, 0xa0, 0x39, 0x3d, 0x39, 0xf6, 0x08,
+	0xea, 0x23, 0xae, 0x82, 0x21, 0x15, 0x87, 0xd3, 0xdb, 0x9a, 0x77, 0xd6, 0x2f, 0x34, 0xd0, 0xc3,
+	0x1f, 0x72, 0xcc, 0x94, 0x67, 0x68, 0xec, 0x4b, 0xa8, 0x53, 0x59, 0xdb, 0x3d, 0xde, 0xba, 0xc0,
+	0xd1, 0x7c, 0x87, 0x51, 0x38, 0x54, 0x9e, 0xe1, 0xb1, 0xc7, 0xb0, 0x22, 0x71, 0x10, 0x49, 0x0c,
+	0xcc, 0x1e, 0x9d, 0xde, 0xfb, 0x73, 0xeb, 0xcd, 0x62, 0xbd, 0x29, 0x8b, 0x3d, 0x84, 0x65, 0x89,
+	0x27, 0x32, 0x52, 0xe8, 0xd6, 0xc8, 0xc1, 0xcd, 0xf9, 0x0e, 0x08, 0xea, 0x15, 0x1c, 0xf6, 0x21,
+	0xb4, 0x4e, 0xb0, 0x9f, 0x89, 0xe0, 0x35, 0x2a, 0x3f, 0x4f, 0x43, 0xc9, 0x07, 0xe8, 0xd6, 0x37,
+	0x2a, 0x5b, 0x2b, 0xde, 0xfa, 0x74, 0xe2, 0x1b, 0x63, 0x67, 0x77, 0x60, 0x59, 0x45, 0x23, 0x14,
+	0xb9, 0x72, 0x1b, 0xb4, 0xd6, 0xbb, 0x5d, 0xa3, 0xc5, 0x6e, 0xa1, 0xc5, 0xee, 0x13, 0xab, 0x55,
+	0xaf, 0x40, 0xb2, 0x07, 0x3a, 0x40, 0x25, 0x23, 0xcc, 0xdc, 0x65, 0x22, 0xcd, 0x57, 0x14, 0xea,
+	0x02, 0x28, 0x18, 0xec, 0x31, 0xd4, 0x8f, 0x79, 0x1e, 0x2b, 0x77, 0x85, 0xa8, 0xb7, 0xe7, 0x51,
+	0x9f, 0x69, 0xe0, 0xd7, 0xc9, 0x2b, 0x0c, 0x28, 0x00, 0x43, 0x64, 0x0f, 0xa0, 0x31, 0x8a, 0xa4,
+	0x14, 0xd2, 0x6d, 0xce, 0x4f, 0x4f, 0xe9, 0x8c, 0x3c, 0x4b, 0x61, 0x7b, 0xe0, 0x04, 0x42, 0x66,
+	0x7e, 0x2a, 0xe2, 0x28, 0x98, 0xb8, 0x40, 0x1e, 0x3a, 0xe7, 0x79, 0xd8, 0x13, 0x32, 0x3b, 0x20,
+	0xa4, 0x07, 0xc1, 0xf4, 0x9b, 0x7d, 0x0f, 0x57, 0xf5, 0xfd, 0x94, 0x0c, 0xfc, 0x21, 0xf2, 0x01,
+	0xca, 0xcc, 0x75, 0xa8, 0x5a, 0xee, 0x2e, 0xbc, 0x59, 0xba, 0x3b, 0xc4, 0xdb, 0x37, 0x34, 0xa3,
+	0x8d, 0x35, 0x5e, 0xb6, 0xb5, 0x1f, 0x03, 0x3b, 0x0d, 0xba, 0x94, 0x22, 0x7e, 0xac, 0xc0, 0x4a,
+	0x71, 0x2b, 0xe9, 0x82, 0x2e, 0x0b, 0xe2, 0xdc, 0x82, 0x7e, 0x7e, 0x97, 0xe4, 0xb0, 0xa3, 0x94,
+	0x8c, 0xfa, 0xb9, 0xc2, 0xec, 0xff, 0x52, 0x44, 0xe7, 0x97, 0x1a, 0xac, 0xbf, 0x2d, 0x37, 0x76,
+	0x0f, 0xaa, 0xb9, 0x8c, 0x68, 0x3f, 0x73, 0x4e, 0xf0, 0x50, 0xc9, 0x28, 0x09, 0x0d, 0x51, 0xe3,
+	0xf5, 0xd9, 0x67, 0xc1, 0x10, 0x47, 0x66, 0xd7, 0x17, 0x64, 0x5a, 0x0a, 0x15, 0x0e, 0xaa, 0xa1,
+	0x18, 0x58, 0x61, 0x5e, 0x8c, 0x6c, 0x28, 0x6c, 0x07, 0x9a, 0x3c, 0x57, 0x43, 0x21, 0x23, 0x35,
+	0x59, 0xa4, 0xcb, 0x32, 0x7f, 0xc6, 0x62, 0x2f, 0x61, 0xb9, 0xa8, 0x97, 0x3a, 0xe5, 0xf2, 0xde,
+	0x45, 0x6f, 0xa7, 0xee, 0xbf, 0x0a, 0xa6, 0xf0, 0xc2, 0x6e, 0xc1, 0xfa, 0x60, 0x96, 0x75, 0x9f,
+	0x7a, 0x41, 0x83, 0xaa, 0xe1, 0x5a, 0xc9, 0x7e, 0x20, 0xa4, 0x62, 0x9f, 0x42, 0x23, 0xa3, 0x6b,
+	0xd9, 0x4a, 0xf6, 0xc6, 0xfc, 0xcb, 0xdb, 0xb3, 0xe8, 0xb6, 0x0f, 0xab, 0x0b, 0xea, 0xf0, 0x7e,
+	0xb9, 0x0e, 0x2f, 0x98, 0x94, 0x52, 0xb1, 0x4a, 0x68, 0x9d, 0xaa, 0x1c, 0xf6, 0x14, 0x9c, 0xd2,
+	0x06, 0x16, 0x55, 0x49, 0x59, 0xe7, 0x65, 0x9e, 0xee, 0x36, 0x27, 0xe4, 0x90, 0x62, 0xab, 0x7b,
+	0x76, 0xd4, 0xf9, 0xad, 0x02, 0xad, 0x53, 0xf5, 0xce, 0x3e, 0x02, 0x56, 0xce, 0xa6, 0xed, 0x53,
+	0x66, 0xa7, 0xad, 0xd2, 0xcc, 0x21, 0x4d, 0x9c, 0x99, 0xfc, 0xa5, 0x45, 0xc9, 0xaf, 0x5e, 0x26,
+	0xf9, 0x9d, 0x47, 0xb0, 0x5a, 0xee, 0x11, 0x3a, 0xf9, 0x85, 0x68, 0x9a, 0x46, 0x0f, 0xef, 0x95,
+	0xab, 0xd2, 0xac, 0x3e, 0x33, 0x74, 0x1e, 0x82, 0x53, 0x6a, 0x11, 0x97, 0xa6, 0x23, 0x38, 0xa5,
+	0x43, 0x63, 0xd7, 0xa1, 0x8e, 0x63, 0x1e, 0xd8, 0x94, 0xec, 0x5f, 0xf1, 0xcc, 0x90, 0xb9, 0xd0,
+	0x48, 0x25, 0x1e, 0x47, 0x63, 0xe3, 0x61, 0xff, 0x8a, 0x67, 0xc7, 0x9a, 0x21, 0x31, 0xc4, 0xb1,
+	0x69, 0xf6, 0x9a, 0x41, 0xc3, 0xdd, 0x55, 0x00, 0xba, 0x5b, 0x7c, 0x35, 0x49, 0xb1, 0xf3, 0xca,
+	0xf6, 0x6f, 0xdd, 0x27, 0xf4, 0x33, 0x8e, 0x2b, 0x85, 0xa3, 0x94, 0xde, 0x77, 0xfa, 0xd0, 0xa6,
+	0x63, 0xb6, 0x03, 0xd7, 0x52, 0x94, 0xbe, 0x92, 0x13, 0xbf, 0x68, 0x5a, 0x4b, 0x8b, 0x9a, 0xd6,
+	0x5a, 0x8a, 0xf2, 0x48, 0x4e, 0x8e, 0x0c, 0xbe, 0xf3, 0xeb, 0x12, 0xc0, 0xec, 0x52, 0x67, 0x9b,
+	0xb0, 0xca, 0xe3, 0x58, 0x9c, 0xf8, 0x42, 0x46, 0x61, 0x94, 0xd8, 0x17, 0xa5, 0x43, 0xb6, 0x97,
+	0x64, 0x62, 0x37, 0x61, 0xcd, 0x40, 0xcc, 0x3d, 0x50, 0x3c, 0x2e, 0x0d, 0xef, 0x85, 0xb1, 0xcd,
+	0x40, 0x85, 0xbe, 0xab, 0x25, 0x90, 0xd5, 0x0f, 0xfb, 0x00, 0xae, 0xe2, 0x38, 0x15, 0x19, 0x4e,
+	0x51, 0x35, 0x42, 0xad, 0x19, 0x6b, 0x01, 0xeb, 0xc1, 0xf2, 0x88, 0x8f, 0x7d, 0x1e, 0x9a, 0xae,
+	0x3d, 0x77, 0x77, 0x8d, 0x11, 0x1f, 0xef, 0x84, 0xfa, 0x45, 0xd9, 0x32, 0xeb, 0x07, 0x12, 0x07,
+	0x98, 0xa8, 0x88, 0xc7, 0x99, 0x6d, 0xe8, 0xed, 0x53, 0xec, 0x5d, 0x21, 0xe2, 0x6f, 0xb5, 0xfe,
+	0xbc, 0x75, 0x22, 0xed, 0xcd, 0x38, 0x9d, 0xbf, 0xab, 0xc0, 0x4e, 0x77, 0x5e, 0xf6, 0x0c, 0xea,
+	0x03, 0x8c, 0xf9, 0xc4, 0x2a, 0xf1, 0xe3, 0x8b, 0x37, 0xed, 0xee, 0x13, 0xcd, 0xf3, 0x0c, 0x5d,
+	0xfb, 0xe1, 0xfd, 0x42, 0x28, 0x97, 0xf3, 0xb3, 0xa3, 0x79, 0x9e, 0xa1, 0xb7, 0xff, 0xaa, 0x40,
+	0x9d, 0x1c, 0x33, 0x17, 0x96, 0x53, 0x94, 0x01, 0x26, 0xca, 0x96, 0x4b, 0x31, 0x64, 0x5f, 0x80,
+	0x73, 0x1c, 0x8d, 0x71, 0xe0, 0x9b, 0xc8, 0x17, 0x55, 0xca, 0xfe, 0x15, 0x0f, 0x08, 0x6f, 0xfc,
+	0xee, 0x43, 0x4b, 0x1f, 0x4b, 0x62, 0x12, 0x63, 0x7d, 0x54, 0x17, 0xfb, 0x58, 0x2f, 0xb1, 0xc8,
+	0xd3, 0x6e, 0x0b, 0xae, 0xe9, 0xbf, 0x09, 0xe3, 0x82, 0x2a, 0xbe, 0xfd, 0x73, 0x05, 0xea, 0xb4,
+	0x9f, 0x39, 0xe1, 0x6f, 0x82, 0x43, 0xb4, 0x4c, 0x71, 0x95, 0x67, 0xe6, 0x02, 0xd3, 0x31, 0x6a,
+	0xe3, 0x21, 0xd9, 0x34, 0x24, 0x94, 0x69, 0x50, 0x40, 0x0a, 0x91, 0x81, 0x36, 0xce, 0x20, 0x9a,
+	0xd0, 0xf3, 0x91, 0x1e, 0x4c, 0xb5, 0x02, 0x42, 0xc6, 0xa7, 0xda, 0xa6, 0xc5, 0x48, 0x93, 0x14,
+	0x5a, 0xbf, 0x41, 0x9b, 0xba, 0xf3, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x20, 0x10, 0xcc, 0x0b,
+	0xee, 0x0d, 0x00, 0x00,
 }
