@@ -179,7 +179,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //       - my-gateway
 //       tcp:
 //       - match:
-//         - destinationPort: 2379
+//         - incomingPort: 2379
 //           sourceSubnet: "172.17.16.0/24"
 //         route:
 //         - destination:

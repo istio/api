@@ -117,8 +117,11 @@ message RouteRule {
 
   // The names of gateways that should apply these routes. A single route
   // rule could be used for sources inside the mesh as well as one or more
-  // gateways. Note that gateways cannot be specified in rules with traffic
-  // passthrough option enabled.
+  // gateways. This selection condition imposed by this field is
+  // independant of the sourceLabels match condition in HTTP/TCP routes. It
+  // is possible to define a route rule that applies to both the gateway
+  // and a specific internal workload by specifying gateways as well as the
+  // source match condition in HTTP/TCP routes.
   repeated string gateways = 2;
 
   // A list of routes for HTTP traffic.
@@ -244,7 +247,7 @@ message HTTPRoute {
 //       tcp:
 //       - match:
 //         - sourceSubnet: "172.17.16.0/24"
-//           destinationPortName: redis #only applies to ports named redis
+//           incomingPortName: redis #only applies to ports named redis
 //         route:
 //         - destination:
 //             name: redis.prod
@@ -356,8 +359,8 @@ message HTTPMatchRequest {
   // collide with numbers. If there are multiple ports on a service with the
   // same protocol the names should be of the form <protocol-name>-<DNS label>.
   oneof port {
-    string destination_port_name = 6;
-    uint32 destination_port = 7;
+    string incoming_port_name = 6;
+    uint32 incoming_port = 7;
   };
 
   // One or more labels that constrain the applicability of a rule to
@@ -424,8 +427,8 @@ message L4MatchAttributes {
   // collide with numbers. If there are multiple ports on a service with the
   // same protocol the names should be of the form <protocol-name>-<DNS label>.
   oneof port {
-    string destination_port_name = 2;
-    uint32 destination_port = 3;
+    string incoming_port_name = 2;
+    uint32 incoming_port = 3;
   };
 
   // IPv4 or IPv6 ip address of source with optional subnet. E.g., a.b.c.d/xx 
