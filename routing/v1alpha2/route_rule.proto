@@ -163,9 +163,9 @@ message Destination {
   // collide with numbers. If there are multiple ports on a service with
   // the same protocol the names should be of the form <protocol-name>-<DNS
   // label>.
-  oneof port {
+  oneof destination_port {
     string port_name = 3;
-    uint32 port_number = 4;
+    uint32 port = 4;
   };
 }
 
@@ -357,7 +357,7 @@ message HTTPMatchRequest {
   // same protocol the names should be of the form <protocol-name>-<DNS label>.
   oneof port {
     string destination_port_name = 6;
-    uint32 destination_port_number = 7;
+    uint32 destination_port = 7;
   };
 
   // One or more labels that constrain the applicability of a rule to
@@ -425,7 +425,7 @@ message L4MatchAttributes {
   // same protocol the names should be of the form <protocol-name>-<DNS label>.
   oneof port {
     string destination_port_name = 2;
-    uint32 destination_port_number = 3;
+    uint32 destination_port = 3;
   };
 
   // IPv4 or IPv6 ip address of source with optional subnet. E.g., a.b.c.d/xx 
