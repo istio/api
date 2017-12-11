@@ -151,14 +151,14 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //               user: dev-123
 //         route:
 //         - destination:
-//             portNumber: 7777
+//             port: 7777
 //             name: reviews.qa
 //       - match:
 //           uri:
 //             prefix: /reviews/
 //         route:
 //         - destination:
-//             portNumber: 9080 # can be omitted if its the only port for reviews
+//             port: 9080 # can be omitted if its the only port for reviews
 //             name: reviews.prod
 //           weight: 80
 //         - destination:
@@ -179,7 +179,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //       - my-gateway
 //       tcp:
 //       - match:
-//         - destinationPortNumber: 2379
+//         - destinationPort: 2379
 //           sourceSubnet: "172.17.16.0/24"
 //         route:
 //         - destination:
