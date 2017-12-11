@@ -215,7 +215,7 @@ func (m *Destination) GetPort() string {
 	return ""
 }
 
-// Describes a label constraint on the Endpoints where traffic originates.
+// Describes a label constraint on the pods/VMs where traffic originates.
 // For example, the following snippet restricts the rule to match only
 // requests originating from instances with label "version:v2".
 //
@@ -251,7 +251,7 @@ type Source struct {
 	// by the DNS.
 	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
 	// One or more labels that constrain the applicability of a rule to
-	// endpoints with the given labels.
+	// sources with the given labels.
 	Labels map[string]string `protobuf:"bytes,2,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or
 	// just a.b.c.d
@@ -558,8 +558,8 @@ type HTTPMatchRequest struct {
 	// collide with numbers. If there are multiple ports on a service with the
 	// same protocol the names should be of the form <protocol-name>-<DNS label>.
 	DestinationPort string `protobuf:"bytes,6,opt,name=destination_port,json=destinationPort" json:"destination_port,omitempty"`
-	// Applies the route rule only to a specific set of workloads.  The rule
-	// is applied on a sidecar if any one of the labels match.
+	// Applies the route rule only to a specific source.  The rule
+	// is applied on a sidecar if all of the labels match.
 	Source *Source `protobuf:"bytes,7,opt,name=source" json:"source,omitempty"`
 }
 
@@ -693,8 +693,8 @@ type L4MatchAttributes struct {
 	// collide with numbers. If there are multiple ports on a service with the
 	// same protocol the names should be of the form <protocol-name>-<DNS label>.
 	DestinationPort string `protobuf:"bytes,2,opt,name=destination_port,json=destinationPort" json:"destination_port,omitempty"`
-	// Applies the route rule only to a specific set of workloads.  The rule
-	// is applied on a sidecar if any one of the labels match.
+	// Applies the route rule only to a specific source.  The rule
+	// is applied on a sidecar if all of the labels match.
 	Source *Source `protobuf:"bytes,3,opt,name=source" json:"source,omitempty"`
 }
 

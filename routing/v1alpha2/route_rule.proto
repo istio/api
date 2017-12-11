@@ -167,7 +167,7 @@ message Destination {
   string port = 3;
 }
 
-// Describes a label constraint on the Endpoints where traffic originates.
+// Describes a label constraint on the pods/VMs where traffic originates.
 // For example, the following snippet restricts the rule to match only
 // requests originating from instances with label "version:v2".
 //
@@ -204,7 +204,7 @@ message Source {
   string name = 1;
 
   // One or more labels that constrain the applicability of a rule to
-  // endpoints with the given labels.
+  // sources with the given labels.
   map<string, string> labels = 2;
 
   // IPv4 or IPv6 ip address with optional subnet. E.g., a.b.c.d/xx form or
@@ -402,8 +402,8 @@ message HTTPMatchRequest {
   // same protocol the names should be of the form <protocol-name>-<DNS label>.
   string destination_port = 6;
 
-  // Applies the route rule only to a specific set of workloads.  The rule
-  // is applied on a sidecar if any one of the labels match.
+  // Applies the route rule only to a specific source.  The rule
+  // is applied on a sidecar if all of the labels match.
   Source source = 7;
 }
 
@@ -467,8 +467,8 @@ message L4MatchAttributes {
   // same protocol the names should be of the form <protocol-name>-<DNS label>.
   string destination_port = 2;
 
-  // Applies the route rule only to a specific set of workloads.  The rule
-  // is applied on a sidecar if any one of the labels match.
+  // Applies the route rule only to a specific source.  The rule
+  // is applied on a sidecar if all of the labels match.
   Source source = 3;
 }
 
