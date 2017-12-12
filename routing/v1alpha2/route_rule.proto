@@ -166,10 +166,7 @@ message Destination {
   // collide with numbers. If there are multiple ports on a service with
   // the same protocol the names should be of the form <protocol-name>-<DNS
   // label>.
-  oneof destination_port {
-    string port_name = 3;
-    uint32 port = 4;
-  };
+  PortSelector port = 3;
 }
 
 // Describes match conditions and actions for routing HTTP/1.1, HTTP2, and
@@ -235,22 +232,23 @@ message HTTPRoute {
 
 // Describes match conditions and actions for routing TCP traffic.  The
 // following routing rule forwards traffic arriving at port 2379 named
-// redis from 172.17.16.* subnet to another redis server on port 5555.
+// Mongo from 172.17.16.* subnet to another Mongo server on port 5555.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: RouteRule
 //     metadata:
-//       name: bookinfo-redis
+//       name: bookinfo-Mongo
 //     spec:
 //       hosts:
-//       - myredissrv 
+//       - myMongosrv 
 //       tcp:
 //       - match:
-//         - sourceSubnet: "172.17.16.0/24"
-//           destinationPortName: redis #only applies to ports named redis
+//         - port:
+//             name: Mongo #only applies to ports named Mongo
+//           sourceSubnet: "172.17.16.0/24"
 //         route:
 //         - destination:
-//             name: redis.prod
+//             name: mongo.prod
 //
 message TCPRoute {
   // Match conditions to be satisfied for the route rule to be
@@ -358,14 +356,11 @@ message HTTPMatchRequest {
   // Names must comply with DNS label syntax (rfc1035) and therefore cannot
   // collide with numbers. If there are multiple ports on a service with the
   // same protocol the names should be of the form <protocol-name>-<DNS label>.
-  oneof port {
-    string destination_port_name = 6;
-    uint32 destination_port = 7;
-  };
+  PortSelector port = 6;
 
   // One or more labels that constrain the applicability of a rule to
   // sources with the given labels.
-  map<string, string> source_labels = 8;
+  map<string, string> source_labels = 7;
 }
 
 // Each routing rule is associated with one or more service versions (see
@@ -424,18 +419,15 @@ message L4MatchAttributes {
   // Names must comply with DNS label syntax (rfc1035) and therefore cannot
   // collide with numbers. If there are multiple ports on a service with the
   // same protocol the names should be of the form <protocol-name>-<DNS label>.
-  oneof port {
-    string destination_port_name = 2;
-    uint32 destination_port = 3;
-  };
+  PortSelector port = 2;
 
   // IPv4 or IPv6 ip address of source with optional subnet. E.g., a.b.c.d/xx 
   // form or just a.b.c.d
-  string source_subnet = 4;
+  string source_subnet = 3;
 
   // One or more labels that constrain the applicability of a rule to
   // sources with the given labels.
-  map<string, string> source_labels = 5;
+  map<string, string> source_labels = 4;
 }
 
 // HTTPRedirect can be used to send a 302 redirect response to the caller,
@@ -721,3 +713,13 @@ message HTTPFaultInjection {
   }
 }
 
+// PortSelector specifies the name or number of a port to be used for
+// matching or selection for final routing.
+message PortSelector {
+  oneof port {
+    // Valid port number
+    uint32 number = 1;
+    // Port name
+    string name = 2;
+  }
+}

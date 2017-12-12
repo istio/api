@@ -24,6 +24,7 @@ It has these top-level messages:
 	HTTPRetry
 	CorsPolicy
 	HTTPFaultInjection
+	PortSelector
 */
 package istio_routing_v1alpha2
 
@@ -115,8 +116,8 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //         # no domains implies wildcard match
 //       - port:
 //           number: 2379 #to expose internal service via external port 2379
-//           name: redis
-//           protocol: REDIS
+//           name: Mongo
+//           protocol: MONGO
 //
 // The gateway specification above describes the L4-L6 properties of a load
 // balancer. Routing rules can then be bound to a gateway to control
@@ -151,14 +152,16 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //               user: dev-123
 //         route:
 //         - destination:
-//             port: 7777
+//             port:
+//               number: 7777
 //             name: reviews.qa
 //       - match:
 //           uri:
 //             prefix: /reviews/
 //         route:
 //         - destination:
-//             port: 9080 # can be omitted if its the only port for reviews
+//             port:
+//               number: 9080 # can be omitted if its the only port for reviews
 //             name: reviews.prod
 //           weight: 80
 //         - destination:
@@ -166,24 +169,25 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //           weight: 20
 //
 // The following routing rule forwards traffic arriving at (external)
-// port 2379 from 172.17.16.* subnet to internal redis server on port 5555.
+// port 2379 from 172.17.16.* subnet to internal Mongo server on port 5555.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: RouteRule
 //     metadata:
-//       name: bookinfo-redis
+//       name: bookinfo-Mongo
 //     spec:
 //       hosts:
-//       - redissvr #name of redis service
+//       - Mongosvr #name of Mongo service
 //       gateways:
 //       - my-gateway
 //       tcp:
 //       - match:
-//         - destinationPort: 2379
+//         - port:
+//             number: 2379
 //           sourceSubnet: "172.17.16.0/24"
 //         route:
 //         - destination:
-//             name: redis.prod
+//             name: mongo.prod
 //
 // By default, if there is no wildcard, HTTP requests for unknown domains
 // or requests that have no matching route rule will respond with a 404. If
