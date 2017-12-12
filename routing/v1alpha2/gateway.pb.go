@@ -25,6 +25,9 @@ It has these top-level messages:
 	CorsPolicy
 	HTTPFaultInjection
 	PortSelector
+	UpstreamSettings
+	ConnectionPoolSettings
+	OutlierDetection
 */
 package istio_routing_v1alpha2
 
