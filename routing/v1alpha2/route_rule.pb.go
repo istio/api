@@ -1569,8 +1569,8 @@ func _PortSelector_OneofSizer(msg proto.Message) (n int) {
 // must be used with care, as incorrect configurations could potentially
 // destabilize the entire mesh. Common use cases for using the extensions
 // include use of Envoy's Lua filters, in addition to enabling any
-// proprietary filters developed inhouse (e.g, custom authorization filter
-// for HTTP).
+// proprietary filters developed inhouse (e.g, custom header manipulation
+// filter for HTTP).
 //
 // NOTE: Do not use this feature to enable Fault, Router (HTTP),
 // Mongo/Redis/Tcp proxy (TCP) filters.
