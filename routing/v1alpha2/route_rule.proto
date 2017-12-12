@@ -39,7 +39,7 @@ package istio.routing.v1alpha2;
 // *Source* - A downstream client calling a service.
 //
 // *Host* - The address used by a client when attempting to connect to a
-// *service.
+// service.
 //
 // *Access model* - Applications address only the destination service
 // (Host) without knowledge of individual service versions. The actual
@@ -117,7 +117,7 @@ message RouteRule {
 
   // The names of gateways that should apply these routes. A single route
   // rule could be used for sources inside the mesh as well as one or more
-  // gateways. This selection condition imposed by this field is
+  // gateways. The selection condition imposed by this field is
   // independant of the sourceLabels match condition in HTTP/TCP routes. It
   // is possible to define a route rule that applies to both the gateway
   // and a specific internal workload by specifying gateways as well as the
@@ -247,7 +247,7 @@ message HTTPRoute {
 //       tcp:
 //       - match:
 //         - sourceSubnet: "172.17.16.0/24"
-//           incomingPortName: redis #only applies to ports named redis
+//           destinationPortName: redis #only applies to ports named redis
 //         route:
 //         - destination:
 //             name: redis.prod
@@ -359,8 +359,8 @@ message HTTPMatchRequest {
   // collide with numbers. If there are multiple ports on a service with the
   // same protocol the names should be of the form <protocol-name>-<DNS label>.
   oneof port {
-    string incoming_port_name = 6;
-    uint32 incoming_port = 7;
+    string destination_port_name = 6;
+    uint32 destination_port = 7;
   };
 
   // One or more labels that constrain the applicability of a rule to
@@ -396,16 +396,14 @@ message HTTPMatchRequest {
 //           weight: 75
 //
 message DestinationWeight {
-  // REQUIRED. Sometimes required. Optional destination uniquely identifies
-  // the destination service. If not specified, the value is inherited from
-  // the parent route rule.
+  // REQUIRED. Destination uniquely identifies the instances of a service
+  // to which the request/connection should be forwarded to.
   Destination destination = 1;
 
   // REQUIRED. The proportion of traffic to be forwarded to the service
   // version. (0-100). Sum of weights across destinations SHOULD BE == 100.
-  // If there is only destination in a rule, the weight value is
-  // assumed to be 100. When using multiple weights, either destination or
-  // labels must be specified.
+  // If there is only destination in a rule, the weight value is assumed to
+  // be 100.
   int32 weight = 2;
 }
 
@@ -427,8 +425,8 @@ message L4MatchAttributes {
   // collide with numbers. If there are multiple ports on a service with the
   // same protocol the names should be of the form <protocol-name>-<DNS label>.
   oneof port {
-    string incoming_port_name = 2;
-    uint32 incoming_port = 3;
+    string destination_port_name = 2;
+    uint32 destination_port = 3;
   };
 
   // IPv4 or IPv6 ip address of source with optional subnet. E.g., a.b.c.d/xx 

@@ -179,7 +179,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //       - my-gateway
 //       tcp:
 //       - match:
-//         - incomingPort: 2379
+//         - destinationPort: 2379
 //           sourceSubnet: "172.17.16.0/24"
 //         route:
 //         - destination:
@@ -191,6 +191,8 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 // with a wildcard host and the desired backend. For example, the following
 // wildcard routing rule routes all traffic to homepage.prod by default.
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: default-ingress
 //     spec:
@@ -222,6 +224,9 @@ func (m *Gateway) GetServers() []*Server {
 
 // Server describes the properties of the proxy on a given load balancer port.
 // For example,
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: Gateway
 //     metadata:
 //       name: my-ingress
 //     spec:
@@ -231,15 +236,21 @@ func (m *Gateway) GetServers() []*Server {
 //           protocol: HTTP2
 //
 // Another example
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: Gateway
 //     metadata:
 //       name: my-tcp-ingress
 //     spec:
 //       servers:
 //       - port:
-//           number: 2379
-//           protocol: redis
+//           number: 27018
+//           protocol: MONGO
 //
 // The following is an example of TLS configuration for port 443
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: Gateway
 //     metadata:
 //       name: my-ingress
 //     spec:
@@ -302,7 +313,7 @@ type Server_Port struct {
 	// REQUIRED: A valid non-negative integer port number.
 	Number uint32 `protobuf:"varint,1,opt,name=number" json:"number,omitempty"`
 	// The protocol exposed on the port.
-	// MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|REDIS|TCP.
+	// MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP.
 	Protocol string `protobuf:"bytes,2,opt,name=protocol" json:"protocol,omitempty"`
 	// Label assigned to the port.
 	Name string `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`

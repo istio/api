@@ -121,7 +121,7 @@ package istio.routing.v1alpha2;
 //       - my-gateway
 //       tcp:
 //       - match:
-//         - incomingPort: 2379
+//         - destinationPort: 2379
 //           sourceSubnet: "172.17.16.0/24"
 //         route:
 //         - destination:
@@ -133,6 +133,8 @@ package istio.routing.v1alpha2;
 // with a wildcard host and the desired backend. For example, the following
 // wildcard routing rule routes all traffic to homepage.prod by default.
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
 //     metadata:
 //       name: default-ingress
 //     spec:
@@ -152,6 +154,9 @@ message Gateway {
 
 // Server describes the properties of the proxy on a given load balancer port.
 // For example,
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: Gateway
 //     metadata:
 //       name: my-ingress
 //     spec:
@@ -161,15 +166,21 @@ message Gateway {
 //           protocol: HTTP2
 //
 // Another example
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: Gateway
 //     metadata:
 //       name: my-tcp-ingress
 //     spec:
 //       servers:
 //       - port:
-//           number: 2379
-//           protocol: redis
+//           number: 27018
+//           protocol: MONGO
 //
 // The following is an example of TLS configuration for port 443
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: Gateway
 //     metadata:
 //       name: my-ingress
 //     spec:
@@ -188,7 +199,7 @@ message Server {
     uint32 number = 1;
 
     // The protocol exposed on the port.
-    // MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|REDIS|TCP.
+    // MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP.
     string protocol = 2;
 
     // Label assigned to the port.
