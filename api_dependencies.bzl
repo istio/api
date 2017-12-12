@@ -18,6 +18,7 @@
 load(":protobuf.bzl", "protobuf_repositories")
 load(":cc_gogo_protobuf.bzl", "cc_gogoproto_repositories")
 load(":x_tools_imports.bzl", "go_x_tools_imports_repositories")
+load(":googleapis.bzl", "googleapis_repositories")
 load("@io_bazel_rules_go//go:def.bzl",
      "go_rules_dependencies", "go_register_toolchains", "go_repository")
 load("@io_bazel_rules_go//proto:def.bzl", "proto_register_toolchains")
@@ -27,6 +28,7 @@ def  mixer_api_dependencies():
     protobuf_repositories(load_repo=True, bind=True)
     cc_gogoproto_repositories()
     go_x_tools_imports_repositories()
+    googleapis_repositories()
 
     go_rules_dependencies()
     go_register_toolchains()
@@ -59,6 +61,7 @@ def  mixer_api_dependencies():
 def  mixer_api_for_proxy_dependencies():
     protobuf_repositories(load_repo=False, bind=True)
     cc_gogoproto_repositories()
+    googleapis_repositories()
 
     go_rules_dependencies()
     go_register_toolchains()
