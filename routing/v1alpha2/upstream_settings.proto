@@ -1,0 +1,236 @@
+// Copyright 2017 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+syntax = "proto3";
+
+import "google/protobuf/duration.proto";
+import "routing/v1alpha2/route_rule.proto";
+
+package istio.routing.v1alpha2;
+
+// UpstreamSettings defines client/caller-side policies that determine how
+// to handle traffic bound to a particular destination. The settings
+// specify configuration for load balancing, connection pool size from
+// the sidecar, and outlier detection settings to detect and evict
+// unhealthy hosts from the load balancing pool. For example, a simple load
+// balancing policy for the ratings service would look as follows:
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: UpstreamSettings
+//     metadata:
+//       name: bookinfo-upstream
+//     spec:
+//       destination:
+//         name: myredissrv
+//       lbPolicy: LEAST_CONN
+//
+// UpstreamSettings can be inherited based on scope. By omitting the
+// destination in an upstream setting (equivalent to a wildcard), the
+// configuration can be applied to all clients in the mesh. The following
+// rule sets a 100ms connection timeout for client connections to any
+// service (HTTP/TCP) in the mesh.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: UpstreamSettings
+//     metadata:
+//       name: bookinfo-common-timeout
+//     spec:
+//       connectionPool:
+//         tcp:
+//           connectTimeout: 100ms
+//
+// UpstreamSettings can be applied at service granularity. The setting will
+// be applied to connections bound for any instance of the service,
+// irrespective of the version. For example, the following rule sets a
+// maximum of 100 requests to the reviews service:
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: UpstreamSettings
+//     metadata:
+//       name: bookinfo-reviews
+//     spec:
+//       destination:
+//         name: reviews
+//       connectionPool:
+//         http:
+//           maxRequests: 100
+//
+// Version specific UpstreamSettings inherit settings from rules defined
+// for the entire service, and can override individual settings as
+// desired. For example, the following rule overrides the default
+// maxRequests (100) for reviews for a specific version of the reviews service.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: UpstreamSettings
+//     metadata:
+//       name: bookinfo-reviews
+//     spec:
+//       destination:
+//         name: reviews
+//         labels:
+//           env: dev
+//           version: poc
+//       connectionPool:
+//         http:
+//           maxRequests: 50
+//
+message UpstreamSettings {
+  // The service associated with this configuration. If omitted, the
+  // settings will be applied at the client side to all services in the
+  // mesh. The upstream settings can be applied to all versions of a
+  // service by omitting the labels field in the destination.
+  Destination destination = 1;
+
+  // Load balancing algorithm to use when forwarding traffic. These
+  // settings directly correlate to [load balancer
+  // types](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing)
+  // supported by Envoy.
+  enum LBPolicy {
+
+    // Default load balancing algorithm is random load balancing.
+    DEFAULT = 0;
+
+    // Simple round robin policy.
+    ROUND_ROBIN = 1;
+
+    // The least request load balancer uses an O(1) algorithm which selects
+    // two random healthy hosts and picks the host which has fewer active
+    // requests.
+    LEAST_CONN = 2;
+
+    // The random load balancer selects a random healthy host. The random
+    // load balancer generally performs better than round robin if no health
+    // checking policy is configured.
+    RANDOM = 3;
+  }
+
+  // Upstream load balancing policy
+  LBPolicy lb_policy = 2;
+
+  // Settings controlling the volume of connections to an upstream service
+  ConnectionPoolSettings connection_pool = 3;
+
+  // Settings controlling eviction of unhealthy hosts from the load balancing pool
+  OutlierDetection outlier_detection = 4;
+}
+
+// Connection pool settings for an upstream host. The settings apply to
+// each individual host in the upstream service.  See Envoy's [circuit
+// breaker](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/circuit_breaking)
+// for more details. Connection pool settings can be applied at the TCP
+// level as well as at HTTP level.
+//
+// For example, the following rule sets a limit of 100 connections to redis
+// service called myredissrv with a connect timeout of 30ms
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: UpstreamSettings
+//     metadata:
+//       name: bookinfo-redis
+//     spec:
+//       destination:
+//         name: myredissrv
+//       connectionPool:
+//         tcp:
+//           maxConnections: 100
+//           connectTimeout: 30ms
+//
+message ConnectionPoolSettings {
+  // Settings common to both HTTP and TCP upstream connections.
+  message TCPSettings {
+    // Maximum number of HTTP/TCP connections to a destination host.
+    int32 max_connections = 1;
+
+    // TCP connection timeout.
+    google.protobuf.Duration connect_timeout = 2;
+  };
+
+  // Settings applicable to HTTP connections.
+  message HTTPSettings {
+    // Maximum number of pending HTTP requests to a destination. Default 1024.
+    int32 max_pending_requests = 1;
+
+    // Maximum number of requests to a backend. Default 1024.
+    int32 max_requests = 2;
+
+    // Maximum number of requests per connection to a backend. Setting this
+    // parameter to 1 disables keep alive.
+    int32 max_requests_per_connection = 3;
+  };
+
+  // Settings common to both HTTP and TCP upstream connections.
+  TCPSettings tcp = 1;
+  // HTTP connection pool settings.
+  HTTPSettings http = 2;
+}
+
+// A Circuit breaker implementation that tracks the status of each
+// individual host in the upstream service.  While currently applicable to
+// only HTTP services, future versions will support opaque TCP services as
+// well. For HTTP services, hosts that continually return errors for API
+// calls are ejected from the pool for a pre-defined period of time. See
+// Envoy's [outlier
+// detection](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/outlier)
+// for more details.
+//
+// The following rule sets a connection pool size of 100 connections and
+// 1000 concurrent requests, with no more than 10 req/connection to
+// "reviews" service. In addition, it configures upstream hosts to be
+// scanned every 5 mins, such that any host that fails 7 consecutive times
+// with 5XX error code will be ejected for 15 minutes.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: UpstreamSettings
+//     metadata:
+//       name: reviews-cb-policy
+//     spec:
+//       destination:
+//         name: reviews
+//       connectionPool:
+//         tcp:
+//           maxConnections: 100
+//         http:
+//           maxRequests: 1000
+//           maxRequestsPerConnection: 10
+//       outlierDetection:
+//         http:
+//           consecutiveErrors: 7
+//           interval: 5m
+//           baseEjectionTime: 15m
+//
+message OutlierDetection {
+  // Outlier detection settings for HTTP connections.
+  message HTTPSettings {
+    // Number of 5XX errors before a host is ejected from the connection
+    // pool. Defaults to 5.
+    int32 consecutive_errors = 1;
+
+    // Time interval between ejection sweep analysis. format:
+    // 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
+    google.protobuf.Duration interval = 2;
+
+    // Minimum ejection duration. A host will remain ejected for a period
+    // equal to the product of minimum ejection duration and the number of
+    // times the host has been ejected. This technique allows the system to
+    // automatically increase the ejection period for unhealthy upstream
+    // servers. format: 1h/1m/1s/1ms. MUST BE >=1ms. Default is 30s.
+    google.protobuf.Duration base_ejection_time = 3;
+
+    // Maximum % of hosts in the load balancing pool for the upstream
+    // service that can be ejected. Defaults to 10%.
+    int32 max_ejection_percent = 4;
+  };
+
+  // Settings for HTTP connections.
+  HTTPSettings http = 1;
+}
