@@ -51,7 +51,7 @@ const (
 	// users. Typical use case is that of exposing services via an ingress
 	// gateway.
 	Server_EDGE Server_Location = 0
-	// Edge and internal services are visible at both the mesh edge and
+	// Edge_internal services are visible at both the mesh edge and
 	// inside the mesh. Sidecars will route requests directly to the
 	// destination service without going to the gateway.
 	Server_EDGE_INTERNAL Server_Location = 1

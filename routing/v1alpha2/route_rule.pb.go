@@ -113,11 +113,13 @@ type RouteRule struct {
 	Hosts []string `protobuf:"bytes,1,rep,name=hosts" json:"hosts,omitempty"`
 	// The names of gateways that should apply these routes. A single route
 	// rule could be used for sources inside the mesh as well as one or more
-	// gateways. The selection condition imposed by this field is
-	// independant of the sourceLabels match condition in HTTP/TCP routes. It
-	// is possible to define a route rule that applies to both the gateway
-	// and a specific internal workload by specifying gateways as well as the
-	// source match condition in HTTP/TCP routes.
+	// gateways. The selection condition imposed by this field is independant
+	// of the sourceLabels match condition in HTTP/TCP routes. It is possible
+	// to define a route rule that applies to both the gateway and a specific
+	// internal workload by specifying gateways as well as the source match
+	// condition in HTTP/TCP routes. The services defined by the gateway will
+	// be exposed internally inside the mesh if and only if the Location
+	// field in the gateway specification is set to "edge_internal".
 	Gateways []string `protobuf:"bytes,2,rep,name=gateways" json:"gateways,omitempty"`
 	// A list of routes for HTTP traffic.
 	Http []*HTTPRoute `protobuf:"bytes,3,rep,name=http" json:"http,omitempty"`

@@ -309,7 +309,7 @@ message Server {
     // gateway.
     EDGE = 0;
     
-    // Edge and internal services are visible at both the mesh edge and
+    // Edge_internal services are visible at both the mesh edge and
     // inside the mesh. Sidecars will route requests directly to the
     // destination service without going to the gateway.
     EDGE_INTERNAL = 1;
