@@ -167,6 +167,9 @@ message Gateway {
 //       - port:
 //           number: 80
 //           protocol: HTTP2
+//         domains:
+//         - uk.bookinfo.com
+//         - eu.bookinfo.com
 //
 // Another example
 //
@@ -179,6 +182,9 @@ message Gateway {
 //       - port:
 //           number: 27018
 //           protocol: MONGO
+//         domains:
+//         - uk.bookinfo.com
+//         - eu.bookinfo.com
 //
 // The following is an example of TLS configuration for port 443
 //
@@ -191,10 +197,32 @@ message Gateway {
 //       - port:
 //           number: 443
 //           protocol: HTTP
+//         domains:
+//         - uk.bookinfo.com
+//         - eu.bookinfo.com
 //         tls:
 //           mode: simple
-//           serverCertificatet: server.crt
+//           serverCertificate: server.crt
 //
+// The following is an example of a gateway abstracting an external
+// service. The caller is expected to access the service using
+// http://maps.google.com:443
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: Gateway
+//     metadata:
+//       name: my-egress
+//     spec:
+//       servers:
+//       - port:
+//           number: 443
+//           protocol: HTTP
+//         domains:
+//         - maps.google.com
+//         tls:
+//           mode: originate
+//         location: external
+//           
 message Server {
   // Port describes the properties of a specific port of a service.
   message Port {
@@ -213,7 +241,7 @@ message Server {
   // connections
   Port port = 1;
 
-  // A list of domains exposed by this gateway. While
+  // REQUIRED. A list of domains exposed by this gateway. While
   // typically applicable to HTTP services, it can also be used for TCP
   // services using TLS with SNI. Standard DNS wildcard prefix syntax
   // is permitted.
@@ -241,6 +269,11 @@ message Server {
 
       // If set to "mutual", the gateway will use standard mTLS authentication.
       MUTUAL = 2;
+
+      // Applicable only to external services. If set to originate, the
+      // gateway implementation will initiate a HTTPS connection to the
+      // service.
+      ORIGINATE = 3;
     };
 
     // Optional: Indicates whether connections to this port should be
@@ -268,5 +301,25 @@ message Server {
   // these options to control if all http requests should be redirected to
   // https, and the TLS modes to use.
   TLSOptions tls = 3;
-}
 
+  // The location of this service with respect to the service mesh.
+  enum Location {
+    // Edge services are exposed outside the mesh, to external
+    // users. Typical use case is that of exposing services via an ingress
+    // gateway.
+    EDGE = 0;
+    
+    // Edge and internal services are visible at both the mesh edge and
+    // inside the mesh. Sidecars will route requests directly to the
+    // destination service without going to the gateway.
+    EDGE_INTERNAL = 1;
+
+    // External services are hosted services (e.g. Google Maps) that may be
+    // consumed by services in the mesh.
+    EXTERNAL = 2;
+  };
+
+  // Optional: Indicates the location of the server with respect to the
+  // other services in the mesh.
+  Location location = 4;
+}
