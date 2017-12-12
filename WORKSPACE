@@ -11,5 +11,3 @@ git_repository(
 
 load("//:api_dependencies.bzl", "mixer_api_dependencies")
 mixer_api_dependencies()
-
-

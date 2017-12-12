@@ -62,3 +62,16 @@ cc_proto_library(
         "//external:rpc_status_proto",
     ],
 )
+
+genrule(
+    name = "global_list",
+    srcs = [":global_dictionary.yaml"],
+    outs = ["list.gen.go"],
+    cmd = "$(location //scripts:generate_word_list) $(location :global_dictionary.yaml) | $(location @org_golang_x_tools_imports//:goimports) > $@",
+    message = "Generating word list",
+    tools = [
+        "//scripts:generate_word_list",
+        "@org_golang_x_tools_imports//:goimports",
+    ],
+    visibility = ["//visibility:private"],
+)

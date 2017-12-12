@@ -37,11 +37,11 @@ ROOT=$(dirname $WD)
 
 cd ${ROOT}
 
-./scripts/generate-protos.sh || die "Could not generate *.pb.go"
+./scripts/generate.sh || die "Could not generate files"
 
 if [[ -n $(git status --porcelain) ]]; then
     git status
-    die "Repo has unstaged changes. Re-run ./scripts/generate-protos.sh"
+    die "Repo has unstaged changes. Re-run ./scripts/generate.sh"
 fi
 
 exit 0
