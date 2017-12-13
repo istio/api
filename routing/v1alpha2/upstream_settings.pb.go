@@ -241,7 +241,7 @@ func (m *ConnectionPoolSettings_TCPSettings) GetConnectTimeout() *google_protobu
 	return nil
 }
 
-// Settings applicable to HTTP connections.
+// Settings applicable to HTTP1.1/HTTP2/GRPC connections.
 type ConnectionPoolSettings_HTTPSettings struct {
 	// Maximum number of pending HTTP requests to a destination. Default 1024.
 	MaxPendingRequests int32 `protobuf:"varint,1,opt,name=max_pending_requests,json=maxPendingRequests" json:"max_pending_requests,omitempty"`
@@ -315,7 +315,7 @@ func (m *ConnectionPoolSettings_HTTPSettings) GetMaxRequestsPerConnection() int3
 //           baseEjectionTime: 15m
 //
 type OutlierDetection struct {
-	// Settings for HTTP connections.
+	// Settings for HTTP1.1/HTTP2/GRPC connections.
 	Http *OutlierDetection_HTTPSettings `protobuf:"bytes,1,opt,name=http" json:"http,omitempty"`
 }
 
@@ -331,7 +331,7 @@ func (m *OutlierDetection) GetHttp() *OutlierDetection_HTTPSettings {
 	return nil
 }
 
-// Outlier detection settings for HTTP connections.
+// Outlier detection settings for HTTP1.1/HTTP2/GRPC connections.
 type OutlierDetection_HTTPSettings struct {
 	// Number of 5XX errors before a host is ejected from the connection
 	// pool. Defaults to 5.

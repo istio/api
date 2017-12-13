@@ -155,7 +155,7 @@ message ConnectionPoolSettings {
     google.protobuf.Duration connect_timeout = 2;
   };
 
-  // Settings applicable to HTTP connections.
+  // Settings applicable to HTTP1.1/HTTP2/GRPC connections.
   message HTTPSettings {
     // Maximum number of pending HTTP requests to a destination. Default 1024.
     int32 max_pending_requests = 1;
@@ -209,7 +209,7 @@ message ConnectionPoolSettings {
 //           baseEjectionTime: 15m
 //
 message OutlierDetection {
-  // Outlier detection settings for HTTP connections.
+  // Outlier detection settings for HTTP1.1/HTTP2/GRPC connections.
   message HTTPSettings {
     // Number of 5XX errors before a host is ejected from the connection
     // pool. Defaults to 5.
@@ -231,6 +231,6 @@ message OutlierDetection {
     int32 max_ejection_percent = 4;
   };
 
-  // Settings for HTTP connections.
+  // Settings for HTTP1.1/HTTP2/GRPC connections.
   HTTPSettings http = 1;
 }
