@@ -90,12 +90,16 @@ package istio.routing.v1alpha2;
 //         name: reviews
 //         labels:
 //           version: v1
-//         ..more settings like circuit breakers..
+//         ..more customization to settings like circuit breakers..
 //       - id: reviews-v2
 //         name: reviews
 //         labels:
 //           version: v2
-//         .. more settings like circuit breakers..
+//         .. more customization to settings like circuit breakers..
+//       upstreamSettings: # common to all destinations
+//         .. circuit breakers, connection pools, timeouts, retries, faults, etc.
+//         .. Destination specific settings can override these global settings..
+//
 // A host name can be defined by only one RouteRule.  A single route rule
 // can be used to describe traffic properties for multiple HTTP and TCP
 // ports.
