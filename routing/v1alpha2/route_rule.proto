@@ -80,18 +80,22 @@ package istio.routing.v1alpha2;
 //         rewrite:
 //           uri: "/api/v2"
 //         route:
-//         - destination:
-//             name: reviews
-//             labels:
-//               version: v2
+//         - destinationId: reviews-v2
 //           weight: 100
 //       - route:
-//         - destination:
-//             name: reviews
-//             labels:
-//               version: v1
+//         - destinationId: reviews-v1
 //           weight: 100
-//
+//       destinations:
+//       - id: reviews-v1
+//         name: reviews
+//         labels:
+//           version: v1
+//         ..more settings like circuit breakers..
+//       - id: reviews-v2
+//         name: reviews
+//         labels:
+//           version: v2
+//         .. more settings like circuit breakers..
 // A host name can be defined by only one RouteRule.  A single route rule
 // can be used to describe traffic properties for multiple HTTP and TCP
 // ports.
@@ -131,12 +135,25 @@ message RouteRule {
 
   // A list of routes for TCP traffic.
   repeated TCPRoute tcp = 4;
+
+  // Definitions of the destinations defined in the routes earlier. The
+  // destination definition indicates the service/subsets of a service to
+  // which requests/connections should be forwarded to, as well as
+  // properties such as circuit breakers, connection pool size, etc.
+  repeated Destination destinations = 5;
 }
 
 // Destination indicates the network addressable service to which the
 // request/connection will be sent after processing a routing rule. See
 // RouteRule for usage examples.
 message Destination {
+  // The ID associated with this destination configuration. One or more
+  // routes in a single rule can refer to this configuration by its
+  // ID. These IDs are not visible outside the scope of this routing
+  // rule. Two rules with same destination IDs may refer to entirely
+  // different destinations.
+  string id = 1;
+
   // REQUIRED: Service name from the service registry. The name can be a
   // short name, a fully qualified domain name or an IP address. If short
   // names are used, the FQDN of the service will be resolved in a platform
@@ -153,11 +170,11 @@ message Destination {
   // an external service, such that the sidecar will dynamically resolve
   // the DNS of the service name and route the request to the IP addresses
   // returned by the DNS.
-  string name = 1;
+  string name = 2;
 
   // Labels will be applied to select a subset of instances in the
   // destination, to load balance requests to.
-  map<string, string> labels = 2;
+  map<string, string> labels = 3;
 
   // Specifies the port on the destination. Many services only expose a
   // single port or label ports with the protocols they support, in these
@@ -168,7 +185,7 @@ message Destination {
   // collide with numbers. If there are multiple ports on a service with
   // the same protocol the names should be of the form <protocol-name>-<DNS
   // label>.
-  PortSelector port = 3;
+  PortSelector port = 4;
 }
 
 // Describes match conditions and actions for routing HTTP/1.1, HTTP2, and
@@ -393,9 +410,10 @@ message HTTPMatchRequest {
 //           weight: 75
 //
 message DestinationWeight {
-  // REQUIRED. Destination uniquely identifies the instances of a service
-  // to which the request/connection should be forwarded to.
-  Destination destination = 1;
+  // REQUIRED. The ID associated with the destination to which the
+  // requests/connections will be routed to. The list of destinations must
+  // be defined as part of the routing rule.
+  string destination_id = 1;
 
   // REQUIRED. The proportion of traffic to be forwarded to the service
   // version. (0-100). Sum of weights across destinations SHOULD BE == 100.
@@ -725,4 +743,3 @@ message PortSelector {
     string name = 2;
   }
 }
-

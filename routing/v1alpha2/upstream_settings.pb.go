@@ -52,23 +52,7 @@ func (x UpstreamSettings_LBPolicy) String() string {
 }
 func (UpstreamSettings_LBPolicy) EnumDescriptor() ([]byte, []int) { return fileDescriptor2, []int{0, 0} }
 
-// UpstreamSettings defines client/caller-side policies that determine how
-// to handle traffic bound to a particular destination. The settings
-// specify configuration for load balancing, connection pool size from
-// the sidecar, and outlier detection settings to detect and evict
-// unhealthy hosts from the load balancing pool. For example, a simple load
-// balancing policy for the ratings service would look as follows:
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: UpstreamSettings
-//     metadata:
-//       name: bookinfo-upstream
-//     spec:
-//       destination:
-//         name: myredissrv
-//       lbPolicy: LEAST_CONN
-//
-// UpstreamSettings can be inherited based on scope. By omitting the
+// By omitting the
 // destination in an upstream setting (equivalent to a wildcard), the
 // configuration can be applied to all clients in the mesh. The following
 // rule sets a 100ms connection timeout for client connections to any

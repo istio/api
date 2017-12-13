@@ -34,7 +34,85 @@ package istio.routing.v1alpha2;
 //         name: myredissrv
 //       lbPolicy: LEAST_CONN
 //
-// UpstreamSettings can be inherited based on scope. By omitting the
+// Inheritance model: To allow multiple services to use a common set of
+// settings, upstream settings support inheritance. Upstream settings
+// have a single inheritance model. The inheritance model based on the
+// service's FQDN, with the catch all domain "*" at the root, followed by
+// more specific sub domains such as *.com, and finally explicit service
+// names such as example.com at the leaf of the inheritance tree.
+//
+// For example, in a system with services foo1.com, foo2.com,
+// and bar.org,
+//
+//     name: * #applicable to foo1.com, foo2.com, and bar.org on all ports
+//     |
+//     |- name: *.com #applicable to foo1.com and foo2.com
+//          |
+//          |- name: foo1.com
+//          |   |     # inherits from *.com, and overrides settings
+//          |   |- name: foo1.com, labels: x=y
+//          |         # inherits from foo1.com and overrides settins
+//          |- name: foo2.com, port: 9080
+//                    # inherits from *, *.com, and overrides settings
+//                      only for port 9080
+
+// _As described earlier, all upstream settings derive from the upstream
+// setting for the global wildcard host (*) _ For example, the following
+// global base rule defines a universal connection pool size for HTTP requests.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: UpstreamSetting
+//     metadata:
+//       name: global-settings
+//     spec:
+//       destination:
+//         name: *
+//       rules:
+//       - http:
+//         - timeout: 1s
+//           ...
+//
+// Domain suffix based rules can be defined to apply the same setting to a
+// group of services under the suffix. For example, the following domain
+// suffix based rule enables websocket support for all services in the
+// "*.com" domain.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: com-rule
+//     spec:
+//       hosts:
+//       - *.com
+//       rules:
+//       - http:
+//         - websocketUpgrade: true
+//           ...
+//
+// Service specific rules can be used to override global or sub domain
+// properties. For example, the following rule for foo1.com overrides the
+// global http request timeout of 1s (and uses a shorter 500ms timeout), in
+// addition to defining URL rewrites.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: foo1-rule
+//     spec:
+//       hosts:
+//       - foo1.com
+//       rules:
+//       - http:
+//         - match:
+//           - uri:
+//               prefix: /ratings
+//           rewrite:
+//             uri: /v1/bookRatings
+//           timeout: 0.5s
+//           ...
+//
+
+// By omitting the
 // destination in an upstream setting (equivalent to a wildcard), the
 // configuration can be applied to all clients in the mesh. The following
 // rule sets a 100ms connection timeout for client connections to any
