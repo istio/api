@@ -253,9 +253,10 @@ message Server {
       // If set to "mutual", the gateway will use standard mTLS authentication.
       MUTUAL = 2;
 
-      // Applicable only to external services. If set to originate, the
-      // gateway implementation will initiate a HTTPS connection to the
-      // service.
+      // If set to originate, the gateway implementation will use TLS on
+      // the connection to the service. Applicable only to services whose
+      // Location is EXTERNAL to the mesh. TLS to services inside the mesh
+      // is controlled by global mTLS settings.
       ORIGINATE = 3;
     };
 
@@ -287,19 +288,12 @@ message Server {
 
   // The location of this service with respect to the service mesh.
   enum Location {
-    // Edge services are exposed outside the mesh, to external
-    // users. Typical use case is that of exposing services via an ingress
-    // gateway.
-    EDGE = 0;
+    // Services that are managed by Istio service mesh.
+    MESH = 0;
     
-    // Edge_internal services are visible at both the mesh edge and
-    // inside the mesh. Sidecars will route requests directly to the
-    // destination service without going to the gateway.
-    EDGE_INTERNAL = 1;
-
     // External services are hosted services (e.g. Google Maps) that may be
     // consumed by services in the mesh.
-    EXTERNAL = 2;
+    EXTERNAL = 1;
   };
 
   // Optional: Indicates the location of the server with respect to the
