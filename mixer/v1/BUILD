@@ -8,19 +8,19 @@ gogoslick_proto_library(
         "google/protobuf/any.proto": "github.com/gogo/protobuf/types",
         "google/protobuf/timestamp.proto": "github.com/gogo/protobuf/types",
         "google/protobuf/duration.proto": "github.com/gogo/protobuf/types",
-        "google/rpc/status.proto": "github.com/googleapis/googleapis/google/rpc",
-        "google/rpc/code.proto": "github.com/googleapis/googleapis/google/rpc",
-        "google/rpc/error_details.proto": "github.com/googleapis/googleapis/google/rpc",
+        "google/rpc/status.proto": "istio.io/gogo-genproto/googleapis/google/rpc",
+        "google/rpc/code.proto": "istio.io/gogo-genproto/googleapis/google/rpc",
+        "google/rpc/error_details.proto": "istio.io/gogo-genproto/googleapis/google/rpc",
     },
     imports = [
         "external/com_github_gogo_protobuf",
         "external/com_github_google_protobuf/src",
-        "vendor/github.com/googleapis/googleapis",
+        "external/com_github_googleapis_googleapis",
     ],
     inputs = [
-        "//vendor/github.com/googleapis/googleapis/google/rpc:rpc_status_protos",
         "@com_github_google_protobuf//:well_known_protos",
         "@com_github_gogo_protobuf//gogoproto:go_default_library_protos",
+        "@com_github_googleapis_googleapis//:status_proto",
     ],
     protos = [
         "attributes.proto",
@@ -32,10 +32,11 @@ gogoslick_proto_library(
     visibility = ["//visibility:public"],
     with_grpc = True,
     deps = [
-        "//vendor/github.com/googleapis/googleapis/google/rpc:go_default_library",
         "@com_github_gogo_protobuf//gogoproto:go_default_library",
         "@com_github_gogo_protobuf//sortkeys:go_default_library",
         "@com_github_gogo_protobuf//types:go_default_library",
+        "@com_github_googleapis_googleapis//:google/rpc", # needed for proto file import by protoc
+        "@io_istio_gogo_genproto//googleapis/google/rpc:go_default_library",
     ],
 )
 
