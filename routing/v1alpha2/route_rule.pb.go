@@ -59,7 +59,7 @@ var _ = math.Inf
 // containing for /wpcatalog/, /consumercatalog/ url prefixes will be
 // rewritten to /api/v2 and send to pods with label version: v2. The rule
 // will be applied at the gateway named bookinfo as well as all the
-// sidecars in the mesh (indicated by the reserved gateway name "sidecars").
+// sidecars in the mesh (indicated by the reserved gateway name "mesh").
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: RouteRule
@@ -70,7 +70,7 @@ var _ = math.Inf
 //       - reviews
 //       gateways: #if omitted, defaults to "sidecars"
 //       - bookinfo
-//       - sidecars
+//       - mesh
 //       http:
 //       - match:
 //         - uri:
@@ -120,12 +120,12 @@ type RouteRule struct {
 	// single route rule could be used for sidecars inside the mesh as well
 	// as one or more gateways. The selection condition imposed by this field
 	// can be overridden using source field in match condition in HTTP/TCP
-	// routes. The reserved word "sidecars" is used to imply all sidecars in
-	// the mesh. When this field is omitted, the default gateway ("sidecars")
+	// routes. The reserved word "mesh" is used to imply all sidecars in
+	// the mesh. When this field is omitted, the default gateway ("mesh")
 	// will be used, which would apply the rule to all sidecars in the
 	// mesh. If a list of gateway names are provided, the rule will apply
 	// only to the gateways. To apply a rule to both gateways and sidecars,
-	// specify "sidecars" as one of the gateway names.
+	// specify "mesh" as one of the gateway names.
 	Gateways []string `protobuf:"bytes,2,rep,name=gateways" json:"gateways,omitempty"`
 	// A list of routes for HTTP traffic.
 	Http []*HTTPRoute `protobuf:"bytes,3,rep,name=http" json:"http,omitempty"`
@@ -504,7 +504,7 @@ type HTTPMatchRequest struct {
 	// One or more labels that constrain the applicability of a rule to
 	// sidecars with the given labels. If the route rule has a list of
 	// gateways specified at the top, it should include the reserved gateway
-	// "sidecars" in order for this field to be applicable.
+	// "mesh" in order for this field to be applicable.
 	SourceLabels map[string]string `protobuf:"bytes,7,rep,name=source_labels,json=sourceLabels" json:"source_labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// Names of gateways where the rule should be applied to. Gateway names
 	// at top of the rule (if any) are overridden. The gateway match is
@@ -653,7 +653,7 @@ type L4MatchAttributes struct {
 	// One or more labels that constrain the applicability of a rule to
 	// sidecars with the given labels. If the route rule has a list of
 	// gateways specified at the top, it should include the reserved gateway
-	// "sidecars" in order for this field to be applicable.
+	// "mesh" in order for this field to be applicable.
 	SourceLabels map[string]string `protobuf:"bytes,4,rep,name=source_labels,json=sourceLabels" json:"source_labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// Names of gateways where the rule should be applied to. Gateway names
 	// at top of the rule (if any) are overridden. The gateway match is

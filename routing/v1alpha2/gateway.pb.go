@@ -145,7 +145,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //       - eu.bookinfo.com
 //       gateways:
 //       - my-gateway
-//       - sidecars #applies to sidecars in the mesh
+//       - mesh #applies to sidecars in the mesh
 //       http:
 //       - match:
 //         - headers:
@@ -172,7 +172,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 // The following routing rule forwards traffic arriving at (external) port
 // 2379 from 172.17.16.* subnet to internal Mongo server on port 5555. This
 // rule is not applicable internally in the mesh as the gateway list omits
-// the reserved name "sidecars".
+// the reserved name "mesh".
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: RouteRule
