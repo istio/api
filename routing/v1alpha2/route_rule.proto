@@ -25,16 +25,16 @@ package istio.routing.v1alpha2;
 // service registry.  Services consist of multiple network *endpoints*
 // implemented by workload instances running on pods, containers, VMs etc.
 //
-// *Service versions* - In a continuous deployment scenario, for a given
-// service, there can be distinct subsets of instances running different
-// variants of the application binary. These variants are not necessarily
-// different API versions. They could be iterative changes to the same
-// service, deployed in different environments (prod, staging, dev,
-// etc.). Common scenarios where this occurs include A/B testing, canary
-// rollouts, etc. The choice of a particular version can be decided based
-// on various criterion (headers, url, etc.) and/or by weights assigned to
-// each version.  Each service has a default version consisting of all its
-// instances.
+// *Service versions (subsets)* - In a continuous deployment scenario, for
+// a given service, there can be distinct subsets of instances running
+// different variants of the application binary. These variants are not
+// necessarily different API versions. They could be iterative changes to
+// the same service, deployed in different environments (prod, staging,
+// dev, etc.). Common scenarios where this occurs include A/B testing,
+// canary rollouts, etc. The choice of a particular version can be decided
+// based on various criterion (headers, url, etc.) and/or by weights
+// assigned to each version.  Each service has a default version consisting
+// of all its instances.
 //
 // *Source* - A downstream client calling a service.
 //
@@ -42,15 +42,15 @@ package istio.routing.v1alpha2;
 // service.
 //
 // *Access model* - Applications address only the destination service
-// (Host) without knowledge of individual service versions. The actual
-// choice of the version is determined by the sidecar, enabling the
+// (Host) without knowledge of individual service versions (subsets). The
+// actual choice of the version is determined by the sidecar, enabling the
 // application code to decouple itself from the evolution of dependent
 // services.
 //
 //
 //
 // RouteRule provides a custom routing policy based on the destination
-// service and its versions, the source of the traffic as well as
+// service and its subsets/versions, the source of the traffic as well as
 // connection and request metadata.  The rule must provide a set of
 // conditions for each protocol (TCP, UDP, HTTP) that the destination
 // service exposes on its ports.
@@ -80,25 +80,17 @@ package istio.routing.v1alpha2;
 //         rewrite:
 //           uri: "/api/v2"
 //         route:
-//         - destinationId: reviews-v2
+//         - destination:
+//             name: reviews
+//             labels:
+//               version: v2
 //           weight: 100
 //       - route:
-//         - destinationId: reviews-v1
+//         - destination:
+//             name: reviews
+//             labels:
+//               version: v1
 //           weight: 100
-//       destinations:
-//       - id: reviews-v1
-//         name: reviews
-//         labels:
-//           version: v1
-//         ..more customization to settings like circuit breakers..
-//       - id: reviews-v2
-//         name: reviews
-//         labels:
-//           version: v2
-//         .. more customization to settings like circuit breakers..
-//       upstreamSettings: # common to all destinations
-//         .. circuit breakers, connection pools, timeouts, retries, faults, etc.
-//         .. Destination specific settings can override these global settings..
 //
 // A host name can be defined by only one RouteRule.  A single route rule
 // can be used to describe traffic properties for multiple HTTP and TCP
@@ -139,26 +131,140 @@ message RouteRule {
 
   // A list of routes for TCP traffic.
   repeated TCPRoute tcp = 4;
-
-  // Definitions of the destinations defined in the routes earlier. The
-  // destination definition indicates the service/subsets of a service to
-  // which requests/connections should be forwarded to, as well as
-  // properties such as circuit breakers, connection pool size, etc.
-  repeated Destination destinations = 5;
 }
 
 // Destination indicates the network addressable service to which the
 // request/connection will be sent after processing a routing rule. See
-// RouteRule for usage examples.
+// RouteRule for usage examples. The destination.name can be a short name
+// or a fully qualified domain name from the service registry, a resolvable
+// DNS name, a service name from the service registry prefixed with a
+// subset name or an IP address. The order of inference is as follows:
+//
+// 1. If the name is a single word, a short name, a lookup in the service
+// registry is performed to obtain instances of the service. If the lookup
+// fails, the rule will be ignored.
+//
+// The following examples are based on the reviews service running on
+// kubernetes, within prod namespace. They are applicable in other
+// environments as well. If the name consists of multiple words separated
+// by a dot (e.g., v1.reviews.prod, or reviews.prod), one of the following
+// types of inference occurs.
+//
+// 2. Service registry and subset lookup. The first word will be
+// considered as the subset name, and the rest of the string is considered
+// as the name of the service in the service registry. If the service does
+// not exist in the service registry, the search proceeds to step 3. If a
+// DestinationRule with the service name exists, and contains the subset
+// matching the subset name in the route rule, the search terminates. If
+// the subset does not exist in the DestinationRule, the search fails and
+// the rule will be ignored. The pods/VMs identified by the subset will be
+// used as the load balancing pool for the destination traffic.  For
+// example, if destination.name is v1.reviews.prod, and a DestinationRule
+// is defined for the reviews.prod service with subsets v1, v2, the pods
+// identified by the v1 subset will be considered as the final destination
+// for the request/connection, if and only if reviews.prod exists in the
+// service registry.
+//
+// 3. Service registry lookup only. The entire name is looked up in the
+// service registry. If the lookup succeeds, the search terminates. The
+// requests will be routed to any instance of the service in the mesh. For
+// example, when looking up reviews.prod, step 2 (above) fails, but step 3
+// succeeds in a kubernetes environment, since there exists a service
+// called reviews in the prod namespace.
+//
+// 3. Runtime DNS lookup. If steps 2 and 3 fail, the name is considered as
+// a DNS name that is not in the service registry (e.g.,
+// wikipedia.org). The sidecar/gateway will resolve the DNS and load
+// balance requests appropriately. See Envoy's strict_dns for details.
+//
+// For example, the following rule routes all traffic by default to pods of
+// reviews service with label "version: v1" on a subset named v1, and some
+// to v2.reviews, in a kubernetes environment.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: my-rule
+//     spec:
+//       hosts:
+//       - reviews #namespace is same as the client/caller's namespace
+//       http:
+//       - match:
+//         - uri:
+//             prefix: "/wpcatalog"
+//         - uri:
+//             prefix: "/consumercatalog"
+//         rewrite:
+//           uri: "/api/v2"
+//         route:
+//         - destination:
+//             name: v2.reviews
+//       - route:
+//         - destination:
+//             name: v1.reviews
+//
+// And the associated DestinationRule
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: DestinationRule
+//     metadata:
+//       name: my-destination-rule
+//     spec:
+//       name: reviews
+//       subsets:
+//       - name: v1
+//         labels:
+//           version: v1
+//       - name: v2
+//         labels:
+//           version: v2
+//
+// The following rule sets a timeout of 5s for all calls to
+// productpage.prod service.  Notice that there are no subsets defined in
+// this rule. Istio will fetch all instances of productpage.prod service
+// from the service registry and populate the sidecar's load balancing
+// pool.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: my-productpage-rule
+//     spec:
+//       hosts:
+//       - productpage.prod # in kubernetes, this applies only to prod namespace
+//       http:
+//       - timeout: 5s
+//         route:
+//         - destination:
+//             name: productpage.prod
+//
+// The following rule sets a timeout of 5s for all calls to the external
+// service wikipedia.org, as there is no internal service of that name.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: my-wiki-rule
+//     spec:
+//       hosts:
+//       - wikipedia.org
+//       http:
+//       - timeout: 5s
+//         route:
+//         - destination:
+//             name: wikipedia.org
+//
 message Destination {
-  // REQUIRED: Service name from the service registry. The name can be a
-  // short name, a fully qualified domain name or an IP address. If short
-  // names are used, the FQDN of the service will be resolved in a platform
-  // specific manner.
+  // REQUIRED: The name can be a short name or a fully qualified domain
+  // name from the service registry, a resolvable DNS name, a service name
+  // from the service registry prefixed with a subset name or an IP
+  // address. The order of inference is as follows:
   //
-  // For example in Kubernetes, when a rule with a short name "reviews" in
-  // the destination is applied to a client in the "bookinfo" namespace,
-  // the final destination is resolved to
+
+  // If short names are used, the FQDN of the service will be resolved in a
+  // platform specific manner.  For example in Kubernetes, when a rule with
+  // a short name "reviews" in the destination is applied to a client in
+  // the "bookinfo" namespace, the final destination is resolved to
   // reviews.bookinfo.svc.cluster.local. If the rule refers to the
   // destination as "reviews.sales", the resolution process first looks for
   // a "reviews" service in the "sales" namespace. In both cases, the
@@ -167,11 +273,7 @@ message Destination {
   // an external service, such that the sidecar will dynamically resolve
   // the DNS of the service name and route the request to the IP addresses
   // returned by the DNS.
-  string name = 2;
-
-  // Labels will be applied to select a subset of instances in the
-  // destination, to load balance requests to.
-  map<string, string> labels = 3;
+  string name = 1;
 
   // Specifies the port on the destination. Many services only expose a
   // single port or label ports with the protocols they support, in these
@@ -182,7 +284,7 @@ message Destination {
   // collide with numbers. If there are multiple ports on a service with
   // the same protocol the names should be of the form <protocol-name>-<DNS
   // label>.
-  PortSelector port = 4;
+  PortSelector port = 3;
 }
 
 // Describes match conditions and actions for routing HTTP/1.1, HTTP2, and
@@ -396,21 +498,32 @@ message HTTPMatchRequest {
 //       http:
 //       - route:
 //         - destination:
-//             name: reviews
-//             labels:
-//               version: v2
+//             name: v2.reviews
 //           weight: 25
 //         - destination:
-//             name: reviews
-//             labels:
-//               version: v1
+//             name: v1.reviews
 //           weight: 75
 //
+// And the associated DestinationRule
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: DestinationRule
+//     metadata:
+//       name: my-destination-rule
+//     spec:
+//       name: reviews
+//       subsets:
+//       - name: v1
+//         labels:
+//           version: v1
+//       - name: v2
+//         labels:
+//           version: v2
+//
 message DestinationWeight {
-  // REQUIRED. The ID associated with the destination to which the
-  // requests/connections will be routed to. The list of destinations must
-  // be defined as part of the routing rule.
-  string destination_id = 1;
+  // REQUIRED. Destination uniquely identifies the instances of a service
+  // to which the request/connection should be forwarded to.
+  Destination destination = 1;
 
   // REQUIRED. The proportion of traffic to be forwarded to the service
   // version. (0-100). Sum of weights across destinations SHOULD BE == 100.
@@ -501,9 +614,7 @@ message HTTPRedirect {
 //           uri: /v1/bookRatings
 //         route:
 //         - destination:
-//             name: ratings
-//             labels:
-//               version: v1
+//             name: v1.ratings
 //
 message HTTPRewrite {
   // rewrite the Path (or the prefix) portion of the URI with this
@@ -545,9 +656,7 @@ message StringMatch {
 //       http:
 //       - route:
 //         - destination:
-//             name: ratings
-//             labels:
-//               version: v1
+//             name: v1.ratings
 //         retries:
 //           attempts: 3
 //           perTryTimeout: 2s
@@ -581,9 +690,7 @@ message HTTPRetry {
 //       http:
 //       - route:
 //         - destination:
-//             name: ratings
-//             labels:
-//               version: v1
+//             name: v1.ratings
 //         corsPolicy:
 //           allowOrigin:
 //           - example.com
@@ -659,9 +766,7 @@ message HTTPFaultInjection {
   //             env: prod
   //         route:
   //         - destination:
-  //             name: reviews
-  //             labels:
-  //               version: v1
+  //             name: v1.reviews
   //         fault:
   //           delay:
   //             percent: 10
@@ -701,9 +806,7 @@ message HTTPFaultInjection {
   //       http:
   //       - route:
   //         - destination:
-  //             name: reviews
-  //             labels:
-  //               version: v1
+  //             name: v1.reviews
   //         fault:
   //           abort:
   //             percent: 10

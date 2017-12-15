@@ -14,41 +14,22 @@
 syntax = "proto3";
 
 import "google/protobuf/duration.proto";
-import "routing/v1alpha2/route_rule.proto";
 
 package istio.routing.v1alpha2;
 
-// DestinationRule defines client/caller-side policies for services defined
-// in the service registry. These rules specify configuration for load
-// balancing, connection pool size from the sidecar, and outlier detection
-// settings to detect and evict unhealthy hosts from the load balancing
-// pool. For example, a simple load balancing policy for the ratings
-// service would look as follows:
+// DestinationRule defines client/caller-side policies for services. These
+// rules specify configuration for load balancing, connection pool size
+// from the sidecar, and outlier detection settings to detect and evict
+// unhealthy hosts from the load balancing pool. For example, a simple load
+// balancing policy for the ratings service would look as follows:
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: DestinationRule
 //     metadata:
 //       name: bookinfo-ratings
 //     spec:
-//       destination:
-//         name: ratings
+//       name: ratings
 //       trafficPolicy:
-//         lbPolicy: LEAST_CONN
-//
-// The rule above will be applicable across all ports of the service. It is
-// possible to restrict the rule to traffic bound for a specific port as
-// shown below:
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: DestinationRule
-//     metadata:
-//       name: bookinfo-ratings
-//     spec:
-//       destination:
-//         name: ratings
-//       trafficPolicy:
-//         port:
-//           name: http2
 //         lbPolicy: LEAST_CONN
 //
 // Version specific DestinationRule can be specified by defining a named
@@ -62,11 +43,8 @@ package istio.routing.v1alpha2;
 //     metadata:
 //       name: bookinfo-ratings
 //     spec:
-//       destination:
-//         name: ratings
+//       name: ratings
 //       trafficPolicy:
-//         port:
-//           name: http2
 //         lbPolicy: LEAST_CONN
 //       subsets:
 //       - name: testversion
@@ -78,14 +56,27 @@ package istio.routing.v1alpha2;
 // Note that policies specified for subsets will not take effect until
 // a route rule explicitly sends traffic to this subset.
 message DestinationRule {
-  // The service associated with this configuration. If omitted, the
-  // settings will be applied at the client side to all services in the
-  // mesh. The upstream settings can be applied to all versions of a
-  // service by omitting the labels field in the destination.
-  Destination destination = 1;
+  // The service associated with this configuration. The upstream settings
+  // can be applied to all versions of a service by omitting the labels
+  // field in the destination.
+  string name = 1;
 
-  // Load balancing algorithm to use when forwarding traffic. These
-  // settings directly correlate to [load balancer
+  // Traffic policies to apply (load balancing policy, connection pool
+  // sizes, outlier detection).
+  TrafficPolicy traffic_policy = 2;
+
+  // One or more named sets that represent individual versions of a service.
+  // Traffic policies can be overridden at subset level.
+  repeated Subset subsets = 3;
+}
+
+// Traffic policies to apply for a specific destination. See
+// DestinationRule for examples.
+message TrafficPolicy {
+
+  // Load balancing algorithm to use when
+  // forwarding traffic. These settings directly correlate to [load
+  // balancer
   // types](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing)
   // supported by Envoy.
   enum LBPolicy {
@@ -105,16 +96,31 @@ message DestinationRule {
     // load balancer generally performs better than round robin if no health
     // checking policy is configured.
     RANDOM = 3;
-  }
+  };
 
   // Upstream load balancing policy
-  LBPolicy lb_policy = 2;
+  LBPolicy lb_policy = 1;
 
   // Settings controlling the volume of connections to an upstream service
-  ConnectionPoolSettings connection_pool = 3;
+  ConnectionPoolSettings connection_pool = 2;
 
   // Settings controlling eviction of unhealthy hosts from the load balancing pool
-  OutlierDetection outlier_detection = 4;
+  OutlierDetection outlier_detection = 3;
+}
+
+// A subset of instances of a service. Typically indicates pods/VMs
+// implementing a particular binary version of a service.
+message Subset {
+  // REQUIRED. name of the subset. The service name, prefixed with the
+  // subset name can be used for traffic splitting in a route rule.
+  string name = 1;
+
+  // REQUIRED. One or more labels that uniquely identify a specific version of the
+  // service. See route rules for examples of usage.
+  map<string, string> source_labels = 2;
+
+  // Traffic policies that apply to this subset
+  TrafficPolicy traffic_policy = 3;
 }
 
 // Connection pool settings for an upstream host. The settings apply to
