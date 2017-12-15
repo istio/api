@@ -18,151 +18,66 @@ import "routing/v1alpha2/route_rule.proto";
 
 package istio.routing.v1alpha2;
 
-// UpstreamSettings defines client/caller-side policies that determine how
-// to handle traffic bound to a particular destination. The settings
-// specify configuration for load balancing, connection pool size from
-// the sidecar, and outlier detection settings to detect and evict
-// unhealthy hosts from the load balancing pool. For example, a simple load
-// balancing policy for the ratings service would look as follows:
+// DestinationRule defines client/caller-side policies for services defined
+// in the service registry. These rules specify configuration for load
+// balancing, connection pool size from the sidecar, and outlier detection
+// settings to detect and evict unhealthy hosts from the load balancing
+// pool. For example, a simple load balancing policy for the ratings
+// service would look as follows:
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: UpstreamSettings
+//     kind: DestinationRule
 //     metadata:
-//       name: bookinfo-upstream
+//       name: bookinfo-ratings
 //     spec:
 //       destination:
-//         name: myredissrv
-//       lbPolicy: LEAST_CONN
+//         name: ratings
+//       trafficPolicy:
+//         lbPolicy: LEAST_CONN
 //
-// Inheritance model: To allow multiple services to use a common set of
-// settings, upstream settings support inheritance. Upstream settings
-// have a single inheritance model. The inheritance model based on the
-// service's FQDN, with the catch all domain "*" at the root, followed by
-// more specific sub domains such as *.com, and finally explicit service
-// names such as example.com at the leaf of the inheritance tree.
-//
-// For example, in a system with services foo1.com, foo2.com,
-// and bar.org,
-//
-//     name: * #applicable to foo1.com, foo2.com, and bar.org on all ports
-//     |
-//     |- name: *.com #applicable to foo1.com and foo2.com
-//          |
-//          |- name: foo1.com
-//          |   |     # inherits from *.com, and overrides settings
-//          |   |- name: foo1.com, labels: x=y
-//          |         # inherits from foo1.com and overrides settins
-//          |- name: foo2.com, port: 9080
-//                    # inherits from *, *.com, and overrides settings
-//                      only for port 9080
-
-// _As described earlier, all upstream settings derive from the upstream
-// setting for the global wildcard host (*) _ For example, the following
-// global base rule defines a universal connection pool size for HTTP requests.
+// The rule above will be applicable across all ports of the service. It is
+// possible to restrict the rule to traffic bound for a specific port as
+// shown below:
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: UpstreamSetting
+//     kind: DestinationRule
 //     metadata:
-//       name: global-settings
+//       name: bookinfo-ratings
 //     spec:
 //       destination:
-//         name: *
-//       rules:
-//       - http:
-//         - timeout: 1s
-//           ...
+//         name: ratings
+//       trafficPolicy:
+//         port:
+//           name: http2
+//         lbPolicy: LEAST_CONN
 //
-// Domain suffix based rules can be defined to apply the same setting to a
-// group of services under the suffix. For example, the following domain
-// suffix based rule enables websocket support for all services in the
-// "*.com" domain.
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: com-rule
-//     spec:
-//       hosts:
-//       - *.com
-//       rules:
-//       - http:
-//         - websocketUpgrade: true
-//           ...
-//
-// Service specific rules can be used to override global or sub domain
-// properties. For example, the following rule for foo1.com overrides the
-// global http request timeout of 1s (and uses a shorter 500ms timeout), in
-// addition to defining URL rewrites.
+// Version specific DestinationRule can be specified by defining a named
+// subset and overriding the settings specified at the service level. The
+// following rule uses a round robin load balancing policy for all traffic
+// going to a subset named testversion that is composed of pods with labels
+// (version:v3).
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: DestinationRule
 //     metadata:
-//       name: foo1-rule
-//     spec:
-//       hosts:
-//       - foo1.com
-//       rules:
-//       - http:
-//         - match:
-//           - uri:
-//               prefix: /ratings
-//           rewrite:
-//             uri: /v1/bookRatings
-//           timeout: 0.5s
-//           ...
-//
-
-// By omitting the
-// destination in an upstream setting (equivalent to a wildcard), the
-// configuration can be applied to all clients in the mesh. The following
-// rule sets a 100ms connection timeout for client connections to any
-// service (HTTP/TCP) in the mesh.
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: UpstreamSettings
-//     metadata:
-//       name: bookinfo-common-timeout
-//     spec:
-//       connectionPool:
-//         tcp:
-//           connectTimeout: 100ms
-//
-// UpstreamSettings can be applied at service granularity. The setting will
-// be applied to connections bound for any instance of the service,
-// irrespective of the version. For example, the following rule sets a
-// maximum of 100 requests to the reviews service:
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: UpstreamSettings
-//     metadata:
-//       name: bookinfo-reviews
+//       name: bookinfo-ratings
 //     spec:
 //       destination:
-//         name: reviews
-//       connectionPool:
-//         http:
-//           maxRequests: 100
-//
-// Version specific UpstreamSettings inherit settings from rules defined
-// for the entire service, and can override individual settings as
-// desired. For example, the following rule overrides the default
-// maxRequests (100) for reviews for a specific version of the reviews service.
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: UpstreamSettings
-//     metadata:
-//       name: bookinfo-reviews
-//     spec:
-//       destination:
-//         name: reviews
+//         name: ratings
+//       trafficPolicy:
+//         port:
+//           name: http2
+//         lbPolicy: LEAST_CONN
+//       subsets:
+//       - name: testversion
 //         labels:
-//           env: dev
-//           version: poc
-//       connectionPool:
-//         http:
-//           maxRequests: 50
+//           version: v3
+//         trafficPolicy:
+//           lbPolicy: ROUND_ROBIN
 //
-message UpstreamSettings {
+// Note that policies specified for subsets will not take effect until
+// a route rule explicitly sends traffic to this subset.
+message DestinationRule {
   // The service associated with this configuration. If omitted, the
   // settings will be applied at the client side to all services in the
   // mesh. The upstream settings can be applied to all versions of a
@@ -212,7 +127,7 @@ message UpstreamSettings {
 // service called myredissrv with a connect timeout of 30ms
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: UpstreamSettings
+//     kind: DestinationRule
 //     metadata:
 //       name: bookinfo-redis
 //     spec:
@@ -268,7 +183,7 @@ message ConnectionPoolSettings {
 // with 5XX error code will be ejected for 15 minutes.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: UpstreamSettings
+//     kind: DestinationRule
 //     metadata:
 //       name: reviews-cb-policy
 //     spec:

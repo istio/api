@@ -151,13 +151,6 @@ message RouteRule {
 // request/connection will be sent after processing a routing rule. See
 // RouteRule for usage examples.
 message Destination {
-  // The ID associated with this destination configuration. One or more
-  // routes in a single rule can refer to this configuration by its
-  // ID. These IDs are not visible outside the scope of this routing
-  // rule. Two rules with same destination IDs may refer to entirely
-  // different destinations.
-  string id = 1;
-
   // REQUIRED: Service name from the service registry. The name can be a
   // short name, a fully qualified domain name or an IP address. If short
   // names are used, the FQDN of the service will be resolved in a platform
