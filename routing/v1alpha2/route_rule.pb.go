@@ -58,7 +58,7 @@ var _ = math.Inf
 // reviews service with label "version: v1". In addition, HTTP requests
 // containing for /wpcatalog/, /consumercatalog/ url prefixes will be
 // rewritten to /api/v2 and send to pods with label version: v2. The rule
-// will be applied at the gateway named bookinfo as well as all the
+// will be applied at the gateway named "bookinfo" as well as at all the
 // sidecars in the mesh (indicated by the reserved gateway name "mesh").
 //
 //     apiVersion: config.istio.io/v1alpha2
@@ -117,13 +117,13 @@ type RouteRule struct {
 	// CIDR prefix can be used.
 	Hosts []string `protobuf:"bytes,1,rep,name=hosts" json:"hosts,omitempty"`
 	// The names of gateways and sidecars that should apply these routes. A
-	// single route rule could be used for sidecars inside the mesh as well
-	// as one or more gateways. The selection condition imposed by this field
-	// can be overridden using source field in match condition in HTTP/TCP
-	// routes. The reserved word "mesh" is used to imply all sidecars in
+	// single route rule is used for sidecars inside the mesh as well
+	// as for one or more gateways. The selection condition imposed by this field
+	// can be overridden using the source field in the match conditions of HTTP/TCP
+	// routes. The reserved word "mesh" is used to imply all the sidecars in
 	// the mesh. When this field is omitted, the default gateway ("mesh")
 	// will be used, which would apply the rule to all sidecars in the
-	// mesh. If a list of gateway names are provided, the rule will apply
+	// mesh. If a list of gateway names is provided, the rule will apply
 	// only to the gateways. To apply a rule to both gateways and sidecars,
 	// specify "mesh" as one of the gateway names.
 	Gateways []string `protobuf:"bytes,2,rep,name=gateways" json:"gateways,omitempty"`
@@ -375,7 +375,7 @@ func (m *HTTPRoute) GetAppendHeaders() map[string]string {
 //       tcp:
 //       - match:
 //         - port:
-//             name: Mongo #only applies to ports named Mongo
+//             name: Mongo # only applies to ports named Mongo
 //           sourceSubnet: "172.17.16.0/24"
 //         route:
 //         - destination:
@@ -417,7 +417,7 @@ func (m *TCPRoute) GetRoute() []*DestinationWeight {
 // route rule to be applied to the HTTP request. For example, the following
 // route rule restricts the rule to match only requests where the URL path
 // starts with /ratings/v2/ and the request contains a "cookie" with value
-// "user=jason", coming either from pods
+// "user=jason".
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: RouteRule
@@ -502,12 +502,12 @@ type HTTPMatchRequest struct {
 	// same protocol the names should be of the form <protocol-name>-<DNS label>.
 	Port *PortSelector `protobuf:"bytes,6,opt,name=port" json:"port,omitempty"`
 	// One or more labels that constrain the applicability of a rule to
-	// sidecars with the given labels. If the route rule has a list of
+	// workloads with the given labels. If the route rule has a list of
 	// gateways specified at the top, it should include the reserved gateway
 	// "mesh" in order for this field to be applicable.
 	SourceLabels map[string]string `protobuf:"bytes,7,rep,name=source_labels,json=sourceLabels" json:"source_labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// Names of gateways where the rule should be applied to. Gateway names
-	// at top of the rule (if any) are overridden. The gateway match is
+	// at the top of the rule (if any) are overridden. The gateway match is
 	// independent of sourceLabels.
 	Gateways []string `protobuf:"bytes,8,rep,name=gateways" json:"gateways,omitempty"`
 }
@@ -651,12 +651,12 @@ type L4MatchAttributes struct {
 	// form or just a.b.c.d
 	SourceSubnet string `protobuf:"bytes,3,opt,name=source_subnet,json=sourceSubnet" json:"source_subnet,omitempty"`
 	// One or more labels that constrain the applicability of a rule to
-	// sidecars with the given labels. If the route rule has a list of
+	// workloads with the given labels. If the route rule has a list of
 	// gateways specified at the top, it should include the reserved gateway
 	// "mesh" in order for this field to be applicable.
 	SourceLabels map[string]string `protobuf:"bytes,4,rep,name=source_labels,json=sourceLabels" json:"source_labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// Names of gateways where the rule should be applied to. Gateway names
-	// at top of the rule (if any) are overridden. The gateway match is
+	// at the top of the rule (if any) are overridden. The gateway match is
 	// independent of sourceLabels.
 	Gateways []string `protobuf:"bytes,5,rep,name=gateways" json:"gateways,omitempty"`
 }

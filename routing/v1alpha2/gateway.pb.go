@@ -145,7 +145,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //       - eu.bookinfo.com
 //       gateways:
 //       - my-gateway
-//       - mesh #applies to sidecars in the mesh
+//       - mesh # applies to all the sidecars in the mesh
 //       http:
 //       - match:
 //         - headers:
@@ -170,7 +170,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //           weight: 20
 //
 // The following routing rule forwards traffic arriving at (external) port
-// 2379 from 172.17.16.* subnet to internal Mongo server on port 5555. This
+// 2379 from 172.17.16.0/24 subnet to internal Mongo server on port 5555. This
 // rule is not applicable internally in the mesh as the gateway list omits
 // the reserved name "mesh".
 //
