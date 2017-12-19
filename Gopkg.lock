@@ -17,29 +17,35 @@
   branch = "master"
   name = "golang.org/x/net"
   packages = ["context","http2","http2/hpack","idna","internal/timeseries","lex/httplex","trace"]
-  revision = "dc871a5d77e227f5bbf6545176ef3eeebf87e76e"
+  revision = "d866cfc389cec985d6fda2859936a575a55a3ab6"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/text"
   packages = ["collate","collate/build","internal/colltab","internal/gen","internal/tag","internal/triegen","internal/ucd","language","secure/bidirule","transform","unicode/bidi","unicode/cldr","unicode/norm","unicode/rangetable"]
-  revision = "3b24cac7bc3a458991ab409aa2a339ac9e0d60d6"
+  revision = "eb22672bea55af56d225d4e35405f4d2e9f062a0"
 
 [[projects]]
   branch = "master"
   name = "google.golang.org/genproto"
   packages = ["googleapis/rpc/status"]
-  revision = "73cb5d0be5af113b42057925bd6c93e3cd9f60fd"
+  revision = "a8101f21cf983e773d0c1133ebc5424792003214"
 
 [[projects]]
   name = "google.golang.org/grpc"
-  packages = [".","balancer","balancer/roundrobin","codes","connectivity","credentials","encoding","grpclb/grpc_lb_v1/messages","grpclog","internal","keepalive","metadata","naming","peer","resolver","resolver/dns","resolver/manual","resolver/passthrough","stats","status","tap","transport"]
-  revision = "be077907e29fdb945d351e4284eb5361e7f8924e"
-  version = "v1.8.1"
+  packages = [".","balancer","balancer/roundrobin","codes","connectivity","credentials","encoding","grpclb/grpc_lb_v1/messages","grpclog","internal","keepalive","metadata","naming","peer","resolver","resolver/dns","resolver/passthrough","stats","status","tap","transport"]
+  revision = "e687fa4e6424368ece6e4fe727cea2c806a0fcb4"
+  version = "v1.8.2"
+
+[[projects]]
+  branch = "master"
+  name = "istio.io/gogo-genproto"
+  packages = ["googleapis/google/rpc"]
+  revision = "09740ece0bc45a1cd0971a8b1f57c44b13ccd8dd"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "649c36bb02d48578a06a34bc83f740ef8ac1ce9389d93d8cce6e464baada888d"
+  inputs-digest = "6a1507d386a90b0d299e29b7fa965c34bc036229eff94d90c64ef7ad59caf15d"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -5,7 +5,6 @@ gogoslick_proto_library(
     name = "go_default_library",
     importmap = {
         "gogoproto/gogo.proto": "github.com/gogo/protobuf/gogoproto",
-        "google/protobuf/any.proto": "github.com/gogo/protobuf/types",
         "google/protobuf/timestamp.proto": "github.com/gogo/protobuf/types",
         "google/protobuf/duration.proto": "github.com/gogo/protobuf/types",
         "google/rpc/status.proto": "istio.io/gogo-genproto/googleapis/google/rpc",
@@ -36,7 +35,7 @@ gogoslick_proto_library(
         "@com_github_gogo_protobuf//sortkeys:go_default_library",
         "@com_github_gogo_protobuf//types:go_default_library",
         "@com_github_googleapis_googleapis//:google/rpc", # needed for proto file import by protoc
-        "@io_istio_gogo_genproto//googleapis/google/rpc:go_default_library",
+        "@io_istio_istio_gogo_genproto//googleapis/google/rpc:go_default_library",
     ],
 )
 
