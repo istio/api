@@ -30,36 +30,57 @@ GOGOSLICK_PLUGIN = $(GOGOSLICK_PLUGIN_PREFIX)$(MAPPING)$(PLUGIN_SUFFIX)
 
 # MIXER STUFF
 
-## MIXER-PROTO SPECIFIC MAPPINGS
-MIXER_MAPPING := $(MAPPING)Mmixer/v1/attributes.proto=istio.io/api/mixer/v1,Mmixer/v1/check.proto=istio.io/api/mixer/v1,Mmixer/v1/report.proto=istio.io/api/mixer/v1,Mmixer/v1/service.proto=istio.io/api/mixer/v1,
-MIXER_MAPPING := $(MIXER_MAPPING)Mmixer/v1/config/client/api_spec.proto=istio.io/api/mixer/v1/config/client,Mmixer/v1/config/client/auth.proto=istio.io/api/mixer/v1/config/client,Mmixer/v1/config/client/client_config.proto=istio.io/api/mixer/v1/config/client,Mmixer/v1/config/client/quota.proto=istio.io/api/mixer/v1/config/client,Mmixer/v1/config/client/service.proto=istio.io/api/mixer/v1/config/client,
-MIXER_MAPPING := $(MIXER_MAPPING)Mmixer/v1/config/descriptor/log_entry_descriptor.proto=istio.io/api/mixer/v1/config/descriptor,Mmixer/v1/config/descriptor/metric_descriptor.proto=istio.io/api/mixer/v1/config/descriptor,Mmixer/v1/config/descriptor/monitored_resource_descriptor.proto=istio.io/api/mixer/v1/config/descriptor,Mmixer/v1/config/descriptor/principal_descriptor.proto=istio.io/api/mixer/v1/config/descriptor,Mmixer/v1/config/descriptor/quota_descriptor.proto=istio.io/api/mixer/v1/config/descriptor,Mmixer/v1/config/descriptor/value_type.proto=istio.io/api/mixer/v1/config/descriptor,
-MIXER_MAPPING := $(MIXER_MAPPING)Mmixer/v1/template/extensions.proto=istio.io/api/mixer/v1/template,Mmixer/v1/template/standard_types.proto=istio.io/api/mixer/v1/template,
-MIXER_PLUGIN = $(GOGOSLICK_PLUGIN_PREFIX)$(MIXER_MAPPING)$(PLUGIN_SUFFIX)
-ALT_MIXER_PLUGIN = $(GOGO_PLUGIN_PREFIX)$(MIXER_MAPPING)$(PLUGIN_SUFFIX)
-
 ## MIXER PROTOS 
 MIXER_V1 = mixer/v1
-MIXER_V1_PROTOS = $(MIXER_V1)/attributes.proto $(MIXER_V1)/check.proto $(MIXER_V1)/report.proto $(MIXER_V1)/service.proto
+ATTR_PROTO = $(MIXER_V1)/attributes.proto
+CHECK_PROTO = $(MIXER_V1)/check.proto
+REPORT_PROTO = $(MIXER_V1)/report.proto
+SVC_PROTO = $(MIXER_V1)/service.proto
+MIXER_V1_PROTOS = $(ATTR_PROTO) $(CHECK_PROTO) $(REPORT_PROTO) $(SVC_PROTO)
 MIXER_V1_PB_GOS = $(MIXER_V1_PROTOS:.proto=.pb.go)
 
 MIXER_CONFIG = $(MIXER_V1)/config
 MIXER_CONFIG_CLIENT = $(MIXER_CONFIG)/client
-MIXER_CONFIG_CLIENT_PROTOS = $(MIXER_CONFIG_CLIENT)/api_spec.proto $(MIXER_CONFIG_CLIENT)/auth.proto \
-							$(MIXER_CONFIG_CLIENT)/client_config.proto $(MIXER_CONFIG_CLIENT)/quota.proto \
-							$(MIXER_CONFIG_CLIENT)/service.proto
+API_SPEC_PROTO = $(MIXER_CONFIG_CLIENT)/api_spec.proto
+AUTH_PROTO = $(MIXER_CONFIG_CLIENT)/auth.proto
+CLIENT_CONFIG_PROTO = $(MIXER_CONFIG_CLIENT)/client_config.proto
+QUOTA_PROTO = $(MIXER_CONFIG_CLIENT)/quota.proto
+CONFIG_SVC_PROTO = $(MIXER_CONFIG_CLIENT)/service.proto
+MIXER_CONFIG_CLIENT_PROTOS = $(API_SPEC_PROTO) $(AUTH_PROTO) $(CLIENT_CONFIG_PROTO) $(QUOTA_PROTO) $(CONFIG_SVC_PROTO)
 MIXER_CONFIG_CLIENT_PB_GOS = $(MIXER_CONFIG_CLIENT_PROTOS:.proto=.pb.go)
 
 MIXER_CONFIG_DESCRIPTOR = $(MIXER_CONFIG)/descriptor
-MIXER_CONFIG_DESCRIPTOR_PROTOS = $(MIXER_CONFIG_DESCRIPTOR)/log_entry_descriptor.proto $(MIXER_CONFIG_DESCRIPTOR)/metric_descriptor.proto \
-							$(MIXER_CONFIG_DESCRIPTOR)/monitored_resource_descriptor.proto $(MIXER_CONFIG_DESCRIPTOR)/principal_descriptor.proto \
-							$(MIXER_CONFIG_DESCRIPTOR)/quota_descriptor.proto $(MIXER_CONFIG_DESCRIPTOR)/value_type.proto
+LOG_ENTRY_PROTO = $(MIXER_CONFIG_DESCRIPTOR)/log_entry_descriptor.proto
+METRIC_PROTO = $(MIXER_CONFIG_DESCRIPTOR)/metric_descriptor.proto
+MR_PROTO = $(MIXER_CONFIG_DESCRIPTOR)/monitored_resource_descriptor.proto
+PRINCIPAL_PROTO = $(MIXER_CONFIG_DESCRIPTOR)/principal_descriptor.proto
+QUOTA_DESC_PROTO = $(MIXER_CONFIG_DESCRIPTOR)/quota_descriptor.proto
+VALUE_TYPE_PROTO = $(MIXER_CONFIG_DESCRIPTOR)/value_type.proto
+MIXER_CONFIG_DESCRIPTOR_PROTOS = $(LOG_ENTRY_PROTO) $(METRIC_PROTO) $(MR_PROTO) $(PRINCIPAL_PROTO) $(QUOTA_DESC_PROTO) $(VALUE_TYPE_PROTO)
 MIXER_CONFIG_DESCRIPTOR_PB_GOS = $(MIXER_CONFIG_DESCRIPTOR_PROTOS:.proto=.pb.go)
 
 MIXER_TEMPLATE = mixer/v1/template
-MIXER_TEMPLATE_PROTOS = $(MIXER_TEMPLATE)/extensions.proto $(MIXER_TEMPLATE)/standard_types.proto
+TEMPLATE_EXT_PROTO = $(MIXER_TEMPLATE)/extensions.proto
+STD_TYPES_PROTO = $(MIXER_TEMPLATE)/standard_types.proto
+MIXER_TEMPLATE_PROTOS = $(TEMPLATE_EXT_PROTO) $(STD_TYPES_PROTO)
 MIXER_TEMPLATE_PB_GOS = $(MIXER_TEMPLATE_PROTOS:.proto=.pb.go)
 
+## MIXER-PROTO SPECIFIC MAPPINGS
+MIXER_V1_PKG = istio.io/api/mixer/v1
+CLIENT_PKG = istio.io/api/mixer/v1/config/client
+DESCRIPTOR_PKG = istio.io/api/mixer/v1/config/descriptor
+TEMPLATE_PKG = istio.io/api/mixer/v1/template
+
+MIXER_MAPPING := $(MAPPING)M$(ATTR_PROTO)=$(MIXER_V1_PKG),M$(CHECK_PROTO)=$(MIXER_V1_PKG),M$(REPORT_PROTO)=$(MIXER_V1_PKG),M$(SVC_PROTO)=$(MIXER_V1_PKG),
+MIXER_MAPPING := $(MIXER_MAPPING)M$(API_SPEC_PROTO)=$(CLIENT_PKG),M$(AUTH_PROTO)=$(CLIENT_PKG),M$(CLIENT_CONFIG_PROTO)=$(CLIENT_PKG),M$(QUOTA_PROTO)=$(CLIENT_PKG),M$(CONFIG_SVC_PROTO)=$(CLIENT_PKG),
+MIXER_MAPPING := $(MIXER_MAPPING)M$(LOG_ENTRY_PROTO)=$(DESCRIPTOR_PKG),M$(METRIC_PROTO)=$(DESCRIPTOR_PKG),M$(MR_PROTO)=$(DESCRIPTOR_PKG),M$(PRINCIPAL_PROTO)=$(DESCRIPTOR_PKG),M$(QUOTA_DESC_PROTO)=$(DESCRIPTOR_PKG),M$(VALUE_TYPE_PROTO)=$(DESCRIPTOR_PKG),
+MIXER_MAPPING := $(MIXER_MAPPING)M$(TEMPLATE_EXT_PROTO)=$(TEMPLATE_PKG),M$(STD_TYPES_PROTO)=$(TEMPLATE_PKG),
+MIXER_PLUGIN = $(GOGOSLICK_PLUGIN_PREFIX)$(MIXER_MAPPING)$(PLUGIN_SUFFIX)
+ALT_MIXER_PLUGIN = $(GOGO_PLUGIN_PREFIX)$(MIXER_MAPPING)$(PLUGIN_SUFFIX)
+
+#####################
+# Generation Rule
+#####################
 generate: generate-mixer-go
 
 install-deps:
@@ -94,7 +115,7 @@ $(ERR_PROTO): protoc-tmp/$(RPC_PATH)
 	@curl -sS $(GOOGLEAPIS_URL)/google/rpc/error_details.proto -o $(ERR_PROTO)
 
 # TODO: expand to support the other protos in this repo
-generate-mixer-go: install-deps download-googleapis-protos generate-mixer-v1-go generate-mixer-v1-config-go	generate-mixer-v1-template-go
+generate-mixer-go: install-deps download-googleapis-protos generate-mixer-v1-go generate-mixer-v1-config-go generate-mixer-v1-template-go
 
 generate-mixer-v1-go: $(MIXER_V1_PB_GOS)
 
@@ -107,15 +128,15 @@ $(MIXER_V1_PB_GOS): $(MIXER_V1_PROTOS)
 	@$(PROTOC) $(PROTO_PATH) $(MIXER_PLUGIN) $^
 
 $(MIXER_CONFIG_CLIENT_PB_GOS) : $(MIXER_CONFIG_CLIENT_PROTOS)
-    ## Generate mixer/v1/config/client/*.pb.go
+	## Generate mixer/v1/config/client/*.pb.go
 	@$(PROTOC) $(PROTO_PATH) $(MIXER_PLUGIN) $^
 
 $(MIXER_CONFIG_DESCRIPTOR_PB_GOS) : $(MIXER_CONFIG_DESCRIPTOR_PROTOS)
-    ## Generate mixer/v1/config/descriptor/*.pb.go
+	## Generate mixer/v1/config/descriptor/*.pb.go
 	@$(PROTOC) $(PROTO_PATH) $(MIXER_PLUGIN) $^
 
 $(MIXER_TEMPLATE_PB_GOS) : $(MIXER_TEMPLATE_PROTOS)
-    ## Generate mixer/v1/template/*.pb.go
+	## Generate mixer/v1/template/*.pb.go
 	@$(PROTOC) $(PROTO_PATH) $(MIXER_PLUGIN) $^
 
 mixer/v1/config/fixed_cfg.pb.go : mixer/v1/config/cfg.proto
