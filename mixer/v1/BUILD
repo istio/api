@@ -1,5 +1,4 @@
 load("@com_google_protobuf//:protobuf.bzl", "cc_proto_library")
-
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 go_library(
@@ -17,6 +16,8 @@ go_library(
         "@com_github_gogo_protobuf//sortkeys:go_default_library",
         "@com_github_gogo_protobuf//types:go_default_library",
         "@io_istio_gogo_genproto//googleapis/google/rpc:go_default_library",
+        "@org_golang_google_grpc//:go_default_library",
+        "@org_golang_x_net//context:go_default_library",
     ],
 )
 
@@ -57,4 +58,3 @@ cc_proto_library(
         "//external:rpc_status_proto",
     ],
 )
-
