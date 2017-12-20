@@ -115,13 +115,17 @@ ALT_MIXER_PLUGIN := $(GOGO_PLUGIN_PREFIX)$(MIXER_MAPPING)$(PLUGIN_SUFFIX)
 #####################
 generate: generate-mixer-go
 
-install-deps:
+$(GOPATH)/bin/dep:
+	go get -u github.com/golang/dep/cmd/dep	
+
+$(GOPATH)/bin/protoc-gen-gogo:
+
+install-deps: $(GOPATH)/bin/dep
 	# Installing generation deps
-	dep ensure
-	go install github.com/gogo/protobuf/protoc-gen-gogo
-	go install github.com/gogo/protobuf/protoc-gen-gogoslick	
-	go install github.com/gogo/protobuf/gogoreplace
-	go install github.com/gogo/protobuf/protoc-min-version
+	$(GOPATH)/bin/dep ensure
+	go install ./vendor/github.com/gogo/protobuf/protoc-gen-gogo
+	go install ./vendor/github.com/gogo/protobuf/protoc-gen-gogoslick	
+	go install ./vendor/github.com/gogo/protobuf/protoc-min-version
 
 protoc.version:
 	@echo `protoc --version` > protoc.version
@@ -180,3 +184,4 @@ mixer/v1/config/fixed_cfg.pb.go : mixer/v1/config/cfg.proto
 # TODO: kill all generated files too ?
 clean:
 	rm -rf protoc-tmp
+	rm -rf vendor
