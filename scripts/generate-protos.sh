@@ -3,6 +3,8 @@
 set -o errexit
 set -o nounset
 
+make clean generate
+
 bazel build //...
 
 genfiles=$(bazel info bazel-genfiles)
