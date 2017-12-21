@@ -122,7 +122,7 @@ $(GOPATH)/bin/protoc-gen-gogo:
 
 install-deps: $(GOPATH)/bin/dep
 	# Installing generation deps
-	$(GOPATH)/bin/dep ensure
+	$(GOPATH)/bin/dep ensure -vendor-only
 	go install ./vendor/github.com/gogo/protobuf/protoc-gen-gogo
 	go install ./vendor/github.com/gogo/protobuf/protoc-gen-gogoslick	
 	go install ./vendor/github.com/gogo/protobuf/protoc-min-version
