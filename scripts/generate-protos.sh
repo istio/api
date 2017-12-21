@@ -17,4 +17,6 @@ for src in ${files}; do
     fi
 done
 
-rm mixer/v1/config/cfg.pb.go
+if [ -e mixer/v1/config/cfg.pb.go ]; then
+    rm mixer/v1/config/cfg.pb.go
+fi 
