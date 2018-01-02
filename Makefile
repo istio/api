@@ -129,6 +129,7 @@ install-deps: $(GOPATH)/bin/dep
 
 protoc.version:
 	@echo `protoc --version` > protoc.version
+	@echo "Generating protos with:" `protoc --version`
 
 protoc-tmp:
 	mkdir -p protoc-tmp
@@ -151,7 +152,7 @@ $(ERR_PROTO): protoc-tmp/$(RPC_PATH)
 	curl -sS $(GOOGLEAPIS_URL)/google/rpc/error_details.proto -o $(ERR_PROTO)
 
 # TODO: expand to support the other protos in this repo
-generate-mixer-go: install-deps download-googleapis-protos generate-mixer-v1-go generate-mixer-v1-config-go generate-mixer-v1-template-go
+generate-mixer-go: install-deps download-googleapis-protos protoc.version generate-mixer-v1-go generate-mixer-v1-config-go generate-mixer-v1-template-go
 
 generate-mixer-v1-go: $(MIXER_V1_PB_GOS)
 
@@ -183,5 +184,6 @@ mixer/v1/config/fixed_cfg.pb.go : mixer/v1/config/cfg.proto
 
 # TODO: kill all generated files too ?
 clean:
+	rm protoc.version
 	rm -rf protoc-tmp
 	rm -rf vendor
