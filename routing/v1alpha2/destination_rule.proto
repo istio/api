@@ -1,4 +1,4 @@
-// Copyright 2017 Istio Authors
+// Copyright 2018 Istio Authors
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -17,11 +17,12 @@ import "google/protobuf/duration.proto";
 
 package istio.routing.v1alpha2;
 
-// DestinationRule defines client/caller-side policies for services. These
-// rules specify configuration for load balancing, connection pool size
-// from the sidecar, and outlier detection settings to detect and evict
-// unhealthy hosts from the load balancing pool. For example, a simple load
-// balancing policy for the ratings service would look as follows:
+// DestinationRule defines policies that apply to traffic intended for a
+// service after routing has occurred. These rules specify configuration
+// for load balancing, connection pool size from the sidecar, and outlier
+// detection settings to detect and evict unhealthy hosts from the load
+// balancing pool. For example, a simple load balancing policy for the
+// ratings service would look as follows:
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: DestinationRule
@@ -56,24 +57,41 @@ package istio.routing.v1alpha2;
 // Note that policies specified for subsets will not take effect until
 // a route rule explicitly sends traffic to this subset.
 message DestinationRule {
-  // The service associated with this configuration. The upstream settings
-  // can be applied to all versions of a service by omitting the labels
-  // field in the destination.
+  // REQUIRED. The destination address for traffic captured by this routing
+  // rule.  Could be a DNS name with wildcard prefix or a CIDR
+  // prefix. Depending on the platform, short-names can also be used
+  // instead of a FQDN (i.e. has no dots in the name). In such a scenario,
+  // the FQDN of the host would be derived based on the underlying
+  // platform.
+  //
+  // For example on Kubernetes, when hosts contains a short name, Istio
+  // will interpret the short name based on the namespace of the client
+  // where rules are being applied. Thus, when a client in the "default"
+  // namespace applies a rule containing a name "reviews, Istio will setup
+  // routes to the "reviews.default.svc.cluster.local" service. However, if
+  // a different name such as "reviews.sales" is used, it would be treated
+  // as a FQDN during virtual host matching.  In Consul, a plain service
+  // name would be resolved to the FQDN "reviews.service.consul".
+  //
+  // Note that the name field applies to both HTTP and TCP services. In
+  // case of TCP services, the plain service name or an IP address with
+  // CIDR prefix can be used.
   string name = 1;
 
   // Traffic policies to apply (load balancing policy, connection pool
-  // sizes, outlier detection).
+  // sizes, outlier detection). Atleast one of trafficPolicy or subsets
+  // must be defined.
   TrafficPolicy traffic_policy = 2;
 
-  // One or more named sets that represent individual versions of a service.
-  // Traffic policies can be overridden at subset level.
+  // One or more named sets that represent individual versions of a
+  // service.  Traffic policies can be overridden at subset level. Atleast
+  // one of trafficPolicy or subsets must be defined.
   repeated Subset subsets = 3;
 }
 
 // Traffic policies to apply for a specific destination. See
 // DestinationRule for examples.
 message TrafficPolicy {
-
   // Load balancing algorithm to use when
   // forwarding traffic. These settings directly correlate to [load
   // balancer
@@ -81,21 +99,18 @@ message TrafficPolicy {
   // supported by Envoy.
   enum LBPolicy {
 
-    // Default load balancing algorithm is random load balancing.
-    DEFAULT = 0;
-
-    // Simple round robin policy.
-    ROUND_ROBIN = 1;
+    // Simple round robin policy. Default
+    ROUND_ROBIN = 0;
 
     // The least request load balancer uses an O(1) algorithm which selects
     // two random healthy hosts and picks the host which has fewer active
     // requests.
-    LEAST_CONN = 2;
+    LEAST_CONN = 1;
 
     // The random load balancer selects a random healthy host. The random
     // load balancer generally performs better than round robin if no health
     // checking policy is configured.
-    RANDOM = 3;
+    RANDOM = 2;
   };
 
   // Upstream load balancing policy
@@ -108,18 +123,44 @@ message TrafficPolicy {
   OutlierDetection outlier_detection = 3;
 }
 
-// A subset of instances of a service. Typically indicates pods/VMs
-// implementing a particular binary version of a service.
+// A subset of endpoints of a service. Subsets can be used for scenarios
+// like A/B testing, or routing to a specific version of a service. Version
+// specific DestinationRule can be specified by defining a named subset and
+// overriding the settings specified at the service level. The following
+// rule uses a round robin load balancing policy for all traffic going to a
+// subset named testversion that is composed of pods with labels
+// (version:v3).
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: DestinationRule
+//     metadata:
+//       name: bookinfo-ratings
+//     spec:
+//       name: ratings
+//       trafficPolicy:
+//         lbPolicy: LEAST_CONN
+//       subsets:
+//       - name: testversion
+//         labels:
+//           version: v3
+//         trafficPolicy:
+//           lbPolicy: ROUND_ROBIN
+//
+// Note that policies specified for subsets will not take effect until
+// a route rule explicitly sends traffic to this subset.
 message Subset {
-  // REQUIRED. name of the subset. The service name, prefixed with the
-  // subset name can be used for traffic splitting in a route rule.
+  // REQUIRED. name of the subset. The service name and the subset name can
+  // be used for traffic splitting in a route rule.
   string name = 1;
 
-  // REQUIRED. One or more labels that uniquely identify a specific version of the
-  // service. See route rules for examples of usage.
+  // REQUIRED. Labels apply a filter over the endpoints of a service in the
+  // service registry. See route rules for examples of usage.
   map<string, string> source_labels = 2;
 
-  // Traffic policies that apply to this subset
+  // Traffic policies that apply to this subset. Subsets inherit the
+  // traffic policies specified at the DestinationRule level. Settings
+  // specified at the subset level will override the corresponding settings
+  // specified at the DestinationRule level.
   TrafficPolicy traffic_policy = 3;
 }
 

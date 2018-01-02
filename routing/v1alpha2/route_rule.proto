@@ -1,4 +1,4 @@
-// Copyright 2017 Istio Authors
+// Copyright 2018 Istio Authors
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -62,9 +62,10 @@ package istio.routing.v1alpha2;
 // For example, the following rule routes all traffic by default to pods of
 // reviews service with label "version: v1". In addition, HTTP requests
 // containing for /wpcatalog/, /consumercatalog/ url prefixes will be
-// rewritten to /api/v2 and send to pods with label version: v2. The rule
-// will be applied at the gateway named "bookinfo" as well as at all the
-// sidecars in the mesh (indicated by the reserved gateway name "mesh").
+// rewritten to /newcatalog and send to pods with label "version: v2". The
+// rule will be applied at the gateway named "bookinfo" as well as at all
+// the sidecars in the mesh (indicated by the reserved gateway name
+// "mesh").
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: RouteRule
@@ -83,13 +84,15 @@ package istio.routing.v1alpha2;
 //         - uri:
 //             prefix: "/consumercatalog"
 //         rewrite:
-//           uri: "/api/v2"
+//           uri: "/newcatalog"
 //         route:
 //         - destination:
-//             name: v2.reviews
+//             name: reviews
+//             subset: v2
 //       - route:
 //         - destination:
-//             name: v1.reviews
+//             name: reviews
+//             subset: v1
 //
 // And the associated DestinationRule
 //
@@ -153,51 +156,37 @@ message RouteRule {
 
 // Destination indicates the network addressable service to which the
 // request/connection will be sent after processing a routing rule. See
-// RouteRule for usage examples. The destination.name can be a short name
-// or a fully qualified domain name from the service registry, a resolvable
-// DNS name, a service name from the service registry prefixed with a
-// subset name or an IP address. The order of inference is as follows:
-//
-// 1. If the name is a single word, a short name, a lookup in the service
-// registry is performed to obtain instances of the service. If the lookup
-// fails, the rule will be ignored.
+// RouteRule for usage examples. The destination.name should unambiguously
+// refer to a service in the service registry. It can be a short name or a
+// fully qualified domain name from the service registry, a resolvable DNS
+// name, an IP address or a service name from the service registry and a
+// subset name. The order of inference is as follows:
 //
 // The following examples are based on the reviews service running on
 // kubernetes, within prod namespace. They are applicable in other
 // environments as well. If the name consists of multiple words separated
-// by a dot (e.g., v1.reviews.prod, or reviews.prod), one of the following
+// by a dot (e.g., reviews.prod), one of the following
 // types of inference occurs.
 //
-// 2. Service registry and subset lookup. The first word will be
-// considered as the subset name, and the rest of the string is considered
-// as the name of the service in the service registry. If the service does
-// not exist in the service registry, the search proceeds to step 3. If a
-// DestinationRule with the service name exists, and contains the subset
-// matching the subset name in the route rule, the search terminates. If
-// the subset does not exist in the DestinationRule, the search fails and
-// the rule will be ignored. The pods/VMs identified by the subset will be
-// used as the load balancing pool for the destination traffic.  For
-// example, if destination.name is v1.reviews.prod, and a DestinationRule
-// is defined for the reviews.prod service with subsets v1, v2, the pods
-// identified by the v1 subset will be considered as the final destination
-// for the request/connection, if and only if reviews.prod exists in the
-// service registry.
+// 1. Service registry lookup. The entire name is looked up in the service
+// registry. If the lookup succeeds, the search terminates. The requests
+// will be routed to any instance of the service in the mesh. When the
+// service name consists of a single word, the FQDN will be constructed in
+// a platform specific manner. For example, in Kubernetes, the namespace
+// associated with the routing rule will be used to identify the service as
+// <servicename>.<rulenamespace>. However, if the service name contains
+// multiple words separated by a dot (e.g., reviews.prod), the name in its
+// entirety would be looked up in the service registry.
 //
-// 3. Service registry lookup only. The entire name is looked up in the
-// service registry. If the lookup succeeds, the search terminates. The
-// requests will be routed to any instance of the service in the mesh. For
-// example, when looking up reviews.prod, step 2 (above) fails, but step 3
-// succeeds in a kubernetes environment, since there exists a service
-// called reviews in the prod namespace.
-//
-// 3. Runtime DNS lookup. If steps 2 and 3 fail, the name is considered as
-// a DNS name that is not in the service registry (e.g.,
-// wikipedia.org). The sidecar/gateway will resolve the DNS and load
-// balance requests appropriately. See Envoy's strict_dns for details.
+// 2. Runtime DNS lookup by the proxy. If step 1 fails, and the name is not
+// an IP address, it will be considered as a DNS name that is not in the
+// service registry (e.g., wikipedia.org). The sidecar/gateway will resolve
+// the DNS and load balance requests appropriately. See Envoy's strict_dns
+// for details.
 //
 // For example, the following rule routes all traffic by default to pods of
 // reviews service with label "version: v1" on a subset named v1, and some
-// to v2.reviews, in a kubernetes environment.
+// to subset v2, in a kubernetes environment.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: RouteRule
@@ -213,13 +202,15 @@ message RouteRule {
 //         - uri:
 //             prefix: "/consumercatalog"
 //         rewrite:
-//           uri: "/api/v2"
+//           uri: "/newcatalog"
 //         route:
 //         - destination:
-//             name: v2.reviews
+//             name: reviews
+//             subset: v2
 //       - route:
 //         - destination:
-//             name: v1.reviews
+//             name: reviews
+//             subset: v1
 //
 // And the associated DestinationRule
 //
@@ -273,12 +264,11 @@ message RouteRule {
 //             name: wikipedia.org
 //
 message Destination {
-  // REQUIRED: The name can be a short name or a fully qualified domain
+  // REQUIRED. The name can be a short name or a fully qualified domain
   // name from the service registry, a resolvable DNS name, a service name
   // from the service registry prefixed with a subset name or an IP
   // address. The order of inference is as follows:
   //
-
   // If short names are used, the FQDN of the service will be resolved in a
   // platform specific manner.  For example in Kubernetes, when a rule with
   // a short name "reviews" in the destination is applied to a client in
@@ -292,6 +282,11 @@ message Destination {
   // the DNS of the service name and route the request to the IP addresses
   // returned by the DNS.
   string name = 1;
+
+  // The name of a subset within the service. Applicable only to services
+  // within the mesh. The subset must be defined in the corresponding
+  // DestinationRule.
+  string subset = 2;
 
   // Specifies the port on the destination. Many services only expose a
   // single port or label ports with the protocols they support, in these
@@ -523,10 +518,12 @@ message HTTPMatchRequest {
 //       http:
 //       - route:
 //         - destination:
-//             name: v2.reviews
+//             name: reviews
+//             subset: v2
 //           weight: 25
 //         - destination:
-//             name: v1.reviews
+//             name: reviews
+//             subset: v1
 //           weight: 75
 //
 // And the associated DestinationRule
@@ -646,7 +643,8 @@ message HTTPRedirect {
 //           uri: /v1/bookRatings
 //         route:
 //         - destination:
-//             name: v1.ratings
+//             name: ratings
+//             subset: v1
 //
 message HTTPRewrite {
   // rewrite the Path (or the prefix) portion of the URI with this
@@ -688,7 +686,8 @@ message StringMatch {
 //       http:
 //       - route:
 //         - destination:
-//             name: v1.ratings
+//             name: ratings
+//             subset: v1
 //         retries:
 //           attempts: 3
 //           perTryTimeout: 2s
@@ -722,7 +721,8 @@ message HTTPRetry {
 //       http:
 //       - route:
 //         - destination:
-//             name: v1.ratings
+//             name: ratings
+//             subset: v1
 //         corsPolicy:
 //           allowOrigin:
 //           - example.com
@@ -798,7 +798,8 @@ message HTTPFaultInjection {
   //             env: prod
   //         route:
   //         - destination:
-  //             name: v1.reviews
+  //             name: reviews
+  //             subset: v1
   //         fault:
   //           delay:
   //             percent: 10
@@ -834,11 +835,12 @@ message HTTPFaultInjection {
   //       name: my-rule
   //     spec:
   //       hosts:
-  //       - reviews
+  //       - ratings
   //       http:
   //       - route:
   //         - destination:
-  //             name: v1.reviews
+  //             name: ratings
+  //             subset: v1
   //         fault:
   //           abort:
   //             percent: 10
