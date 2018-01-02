@@ -126,7 +126,7 @@ func (TrafficPolicy_LBPolicy) EnumDescriptor() ([]byte, []int) { return fileDesc
 // Note that policies specified for subsets will not take effect until
 // a route rule explicitly sends traffic to this subset.
 type DestinationRule struct {
-	// REQUIRED. The destination address for traffic captured by this routing
+	// REQUIRED. The destination address for traffic captured by this
 	// rule.  Could be a DNS name with wildcard prefix or a CIDR
 	// prefix. Depending on the platform, short-names can also be used
 	// instead of a FQDN (i.e. has no dots in the name). In such a scenario,
@@ -136,7 +136,7 @@ type DestinationRule struct {
 	// For example on Kubernetes, when hosts contains a short name, Istio
 	// will interpret the short name based on the namespace of the client
 	// where rules are being applied. Thus, when a client in the "default"
-	// namespace applies a rule containing a name "reviews, Istio will setup
+	// namespace applies a rule containing a name "reviews", Istio will setup
 	// routes to the "reviews.default.svc.cluster.local" service. However, if
 	// a different name such as "reviews.sales" is used, it would be treated
 	// as a FQDN during virtual host matching.  In Consul, a plain service
@@ -147,12 +147,10 @@ type DestinationRule struct {
 	// CIDR prefix can be used.
 	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
 	// Traffic policies to apply (load balancing policy, connection pool
-	// sizes, outlier detection). Atleast one of trafficPolicy or subsets
-	// must be defined.
+	// sizes, outlier detection).
 	TrafficPolicy *TrafficPolicy `protobuf:"bytes,2,opt,name=traffic_policy,json=trafficPolicy" json:"traffic_policy,omitempty"`
 	// One or more named sets that represent individual versions of a
-	// service.  Traffic policies can be overridden at subset level. Atleast
-	// one of trafficPolicy or subsets must be defined.
+	// service. Traffic policies can be overridden at subset level.
 	Subsets []*Subset `protobuf:"bytes,3,rep,name=subsets" json:"subsets,omitempty"`
 }
 
@@ -220,11 +218,12 @@ func (m *TrafficPolicy) GetOutlierDetection() *OutlierDetection {
 }
 
 // A subset of endpoints of a service. Subsets can be used for scenarios
-// like A/B testing, or routing to a specific version of a service. Version
-// specific DestinationRule can be specified by defining a named subset and
-// overriding the settings specified at the service level. The following
-// rule uses a round robin load balancing policy for all traffic going to a
-// subset named testversion that is composed of pods with labels
+// like A/B testing, or routing to a specific version of a service. Refer
+// to Route Rules documentation for examples on using subsets in these
+// scenarios. In addition, traffic policies defined at the service-level
+// can be overridden at a subset-level. The following rule uses a round
+// robin load balancing policy for all traffic going to a subset named
+// testversion that is composed of endpoints (e.g., pods) with labels
 // (version:v3).
 //
 //     apiVersion: config.istio.io/v1alpha2
