@@ -164,12 +164,6 @@ message RouteRule {
 // name from the service registry and a subset name. The order of inference
 // is as follows:
 //
-// The following examples are based on the reviews service running on
-// kubernetes, within prod namespace. They are applicable in other
-// environments as well. If the name consists of multiple words separated
-// by a dot (e.g., reviews.prod), one of the following
-// types of inference occurs.
-//
 // 1. Service registry lookup. The entire name is looked up in the service
 // registry. If the lookup succeeds, the search terminates. The requests
 // will be routed to any instance of the service in the mesh. When the
@@ -268,7 +262,7 @@ message RouteRule {
 message Destination {
   // REQUIRED. The name can be a short name or a fully qualified domain
   // name from the service registry, a resolvable DNS name, or an IP
-  // address. The order of inference is as follows:
+  // address.
   //
   // If short names are used, the FQDN of the service will be resolved in a
   // platform specific manner.  For example in Kubernetes, when a rule with
