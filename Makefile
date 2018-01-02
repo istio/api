@@ -154,8 +154,7 @@ install-deps: $(GOPATH)/bin/dep
 	go install ./vendor/github.com/gogo/protobuf/protoc-min-version
 
 protoc.version:
-	@echo `protoc --version` > protoc.version
-	@echo "Generating protos with:" `protoc --version`
+    @echo "Using protoc version:" `protoc --version`
 
 protoc-tmp:
 	mkdir -p protoc-tmp
@@ -210,6 +209,5 @@ mixer/v1/config/fixed_cfg.pb.go : mixer/v1/config/cfg.proto | $(PROTOC_BIN)
 
 # TODO: kill all generated files too ?
 clean:
-	rm -f protoc.version
 	rm -rf protoc-tmp
 	rm -rf vendor
