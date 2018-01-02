@@ -130,9 +130,11 @@ message RouteRule {
   // as a FQDN during virtual host matching.  In Consul, a plain service
   // name would be resolved to the FQDN "reviews.service.consul".
   //
-  // Note that the hosts field applies to both HTTP and TCP services. In
-  // case of TCP services, the plain service name or an IP address with
-  // CIDR prefix can be used.
+  // Note that the hosts field applies to both HTTP and TCP
+  // services. Service inside the mesh, i.e. those found in the service
+  // registry, must always be referred to using their alphanumeric
+  // names. IP addresses or CIDR prefixes are allowed only for services
+  // defined via the Gateway.
   repeated string hosts = 1;
 
   // The names of gateways and sidecars that should apply these routes. A
@@ -155,12 +157,12 @@ message RouteRule {
 }
 
 // Destination indicates the network addressable service to which the
-// request/connection will be sent after processing a routing rule. See
-// RouteRule for usage examples. The destination.name should unambiguously
-// refer to a service in the service registry. It can be a short name or a
-// fully qualified domain name from the service registry, a resolvable DNS
-// name, an IP address or a service name from the service registry and a
-// subset name. The order of inference is as follows:
+// request/connection will be sent after processing a routing rule. The
+// destination.name should unambiguously refer to a service in the service
+// registry. It can be a short name or a fully qualified domain name from
+// the service registry, a resolvable DNS name, an IP address or a service
+// name from the service registry and a subset name. The order of inference
+// is as follows:
 //
 // The following examples are based on the reviews service running on
 // kubernetes, within prod namespace. They are applicable in other
@@ -265,8 +267,7 @@ message RouteRule {
 //
 message Destination {
   // REQUIRED. The name can be a short name or a fully qualified domain
-  // name from the service registry, a resolvable DNS name, a service name
-  // from the service registry prefixed with a subset name or an IP
+  // name from the service registry, a resolvable DNS name, or an IP
   // address. The order of inference is as follows:
   //
   // If short names are used, the FQDN of the service will be resolved in a

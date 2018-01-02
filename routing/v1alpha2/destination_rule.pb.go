@@ -105,8 +105,8 @@ func (TrafficPolicy_LBPolicy) EnumDescriptor() ([]byte, []int) { return fileDesc
 // Version specific DestinationRule can be specified by defining a named
 // subset and overriding the settings specified at the service level. The
 // following rule uses a round robin load balancing policy for all traffic
-// going to a subset named testversion that is composed of pods with labels
-// (version:v3).
+// going to a subset named testversion that is composed of endpoints (e.g.,
+// pods) with labels (version:v3).
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: DestinationRule
@@ -142,9 +142,11 @@ type DestinationRule struct {
 	// as a FQDN during virtual host matching.  In Consul, a plain service
 	// name would be resolved to the FQDN "reviews.service.consul".
 	//
-	// Note that the name field applies to both HTTP and TCP services. In
-	// case of TCP services, the plain service name or an IP address with
-	// CIDR prefix can be used.
+	// Note that the hosts field applies to both HTTP and TCP
+	// services. Service inside the mesh, i.e. those found in the service
+	// registry, must always be referred to using their alphanumeric
+	// names. IP addresses or CIDR prefixes are allowed only for services
+	// defined via the Gateway.
 	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
 	// Traffic policies to apply (load balancing policy, connection pool
 	// sizes, outlier detection).
