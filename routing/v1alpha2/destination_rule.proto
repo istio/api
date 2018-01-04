@@ -150,7 +150,8 @@ message Subset {
 }
 
 // Load balancing policies to apply for a specific destination. See Envoy's
-// [load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing.html)
+// load balancing
+// [documentation](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing.html)
 // for more details.
 //
 // For example, the following rule uses a round robin load balancing policy
@@ -183,7 +184,7 @@ message Subset {
 message LoadBalancerSettings {
   // Standard load balancing algorithms that require no tuning.
   enum SimpleLB {
-    // round robin policy. Default
+    // Round Robin policy. Default
     ROUND_ROBIN = 0;
 
     // The least request load balancer uses an O(1) algorithm which selects
