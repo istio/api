@@ -16,7 +16,6 @@ syntax = "proto3";
 
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
-import "google/protobuf/any.proto";
 
 package istio.routing.v1alpha2;
 
@@ -132,13 +131,6 @@ message RouteRule {
 
   // A list of routes for TCP traffic.
   repeated TCPRoute tcp = 4;
-
-  // Extensions contain sidecar implementation specific configuration, that
-  // cannot be easily expressed through the routing rule feature
-  // set. Custom sidecar implementations could have enhancements such as
-  // caching, dynamic scripting, etc. The configuration for such features
-  // could be provided through the extensions mechanism.
-  repeated google.protobuf.Any extensions = 5;
 }
 
 // Destination indicates the network addressable service to which the
