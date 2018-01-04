@@ -29,29 +29,48 @@ package istio.routing.v1alpha2;
 // NOTE: Do not use this feature to enable Fault, Router (HTTP),
 // Mongo/Redis/Tcp proxy (TCP) filters.
 //
-// The following example enables Envoy's HTTP lua filter as part of the
-// routing rule.
+// The following example enables Envoy's HTTP lua filter for calls to the
+// "reviews" service present _inside_ the service mesh (a service that is
+// not exposed to the outside world)
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: Gateway
 //     metadata:
-//       name: my-lua-filter
+//       name: my-gateway
 //     spec:
-//       hosts:
-//       - reviews
-//       rules:
-//       - http:
-//         - route:
-//           - destination:
-//               name: reviews
-//               labels:
-//                 version: v1
-//       extensions:
-//       - "@type": type.googleapis.com/istio.routing.v1alpha2.EnvoyFilters
-//         httpFilters:
-//         - name: envoy.lua
-//           config:
-//             inlineCode: "... lua code ... "
+//       servers:
+//       - port:
+//           number: 80 #must match the reviews service port
+//           name: http
+//         domains:
+//         - reviews.default.svc.cluster.local #must match the FQDN of the reviews service
+//         extensions:
+//         - "@type": type.googleapis.com/istio.routing.v1alpha2.EnvoyFilters
+//           httpFilters:
+//           - name: envoy.lua
+//             config:
+//               inlineCode: "... lua code ... "
+//
+// The following example enables Envoy's HTTP lua filter for calls to the
+// externally facing "uk.bookinfo.com" service:
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: Gateway
+//     metadata:
+//       name: my-gateway
+//     spec:
+//       servers:
+//       - port:
+//           number: 80
+//           name: http
+//         domains:
+//         - uk.bookinfo.com
+//         extensions:
+//         - "@type": type.googleapis.com/istio.routing.v1alpha2.EnvoyFilters
+//           httpFilters:
+//           - name: envoy.lua
+//             config:
+//               inlineCode: "... lua code ... "
 //
 message EnvoyFilters {
   // Envoy HTTP filters to be added to every HTTP connection manager
