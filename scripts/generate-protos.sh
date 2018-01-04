@@ -5,7 +5,7 @@ set -o nounset
 
 make clean generate
 
-#bazel build //...
+bazel build //...
 
 genfiles=$(bazel info bazel-genfiles)
 files=$(find -L ${genfiles} -name "*.pb.go")
