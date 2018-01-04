@@ -114,11 +114,23 @@ message LoadBalancing {
     // checking policy is configured.
     RANDOM = 2;
   }
+  message RingHash {
+    // REQUIRED.Minimum ring size (e.g. virtual nodes). A larger size will provide better
+    // request distribution since each host in the cluster will have more virtual
+    // nodes. If the number of hosts is greater than the ring size, each host
+    // will be allocated a single virtual node.
+    uint32 ring_size = 1;
+
+    // Use Envoy standard hash in the ring. If false, Envoy will use xxHash.
+    bool std_hash = 2;
+  }
   oneof lb_policy {
     // Load balancing policy name (as defined in SimpleLBPolicy below)
     SimpleLBPolicy name = 1;
+    // Load balancing policy for ring hash (as defined in RingHash below)
+    RingHash ring_hash = 2;
     //(-- Custom LB policy implementations --)
-    google.protobuf.Any custom = 2 ;
+    google.protobuf.Any custom = 3 ;
   }
 }
 
