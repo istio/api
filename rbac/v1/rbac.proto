@@ -17,7 +17,7 @@ syntax = "proto3";
 package istio.rbac.v1;
 
 // Istio RBAC (Role Based Access Control) defines ServiceRole and ServiceRoleBinding
-// objects. Both are provided as Kubernetes CRDs.
+// objects.
 //
 // A ServiceRole specification includes a list of rules (permissions). Each rule has
 // the following standard fields:
@@ -27,7 +27,30 @@ package istio.rbac.v1;
 // * paths: HTTP REST paths. It is ignored in gRPC case.
 //
 // In addition to the standard fields, operators can use custom fields in the "constraints"
-// section.
+// section. The name of a custom field must match one of the "properties" in the "action" part
+// of the "authorization" template (https://github.com/istio/istio/blob/master/mixer/template/authorization/template.proto).
+//
+// For example, suppose we define an instance of the "authorization" template, named "requestContext".
+//
+//     apiVersion: "config.istio.io/v1alpha2"
+//     kind: authorization
+//     metadata:
+//       name: requestcontext
+//       namespace: istio-system
+//     spec:
+//       subject:
+//         user: source.user | ""
+//         groups: source.user | ""
+//         properties:
+//           service: source.service | ""
+//           namespace: source.namespace | ""
+//       action:
+//         namespace: destination.namespace | ""
+//         service: destination.service | ""
+//         method: request.method | ""
+//         path: request.path | ""
+//         properties:
+//           version: request.headers["version"] | ""
 //
 // Below is an example of ServiceRole object "product-viewer", which has "read" ("GET" and "HEAD")
 // access to "products.svc.cluster.local" service at versions "v1" and "v2". "path" is not specified,
@@ -49,6 +72,10 @@ package istio.rbac.v1;
 // A ServiceRoleBinding specification includes two parts:
 // * "roleRef" refers to a ServiceRole object in the same namespace.
 // * A list of "subjects" that are assigned the roles.
+//
+// A subject is represented with a set of "properties". The name of a property must match one of
+// the fields ("user" or "groups" or one of the "properties") in the "subject" part of the "authorization"
+// template (https://github.com/istio/istio/blob/master/mixer/template/authorization/template.proto).
 //
 // Below is an example of ServiceRoleBinding object "test-binding-products", which binds two subjects
 // to ServiceRole "product-viewer":
@@ -72,6 +99,8 @@ package istio.rbac.v1;
 //         name: "products-viewer"
 
 // ServiceRole specification contains a list of access rules (permissions).
+// This represent the "Spec" part of the ServiceRole object. The name and namespace
+// of the ServiceRole is specified in "metadata" section of the ServiceRole object.
 message ServiceRole {
   // Required. The set of access rules (permissions) that the role has.
   repeated AccessRule rules = 1;
@@ -80,14 +109,24 @@ message ServiceRole {
 // AccessRule defines a permission to access a list of services.
 message AccessRule {
   // Required. A list of service names.
+  // Exact match, prefix match, and suffix match are supported for service names.
+  // For example, the service name "bookstore.mtv.cluster.local" matches
+  // "bookstore.mtv.cluster.local" (exact match), or "bookstore*" (prefix match),
+  // or "*.mtv.cluster.local" (suffix match).
   // If set to ["*"], it refers to all services in the namespace.
   repeated string services = 1;
 
   // Optional. A list of HTTP paths.
+  // Exact match, prefix match, and suffix match are supported for paths.
+  // For example, the path "/books/review" matches
+  // "/books/review" (exact match), or "/books/*" (prefix match),
+  // or "*/review" (suffix match).
   // If not specified, it applies to any path.
   repeated string paths = 2;
 
-  // Required. A list of HTTP methods or gRPC methods.
+  // Required. A list of HTTP methods (e.g., "GET", "POST") or gRPC methods.
+  // gRPC methods must be presented as fully-qualified name in the form of
+  // packageName.serviceName/methodName.
   // If set to ["*"], it applies to any method.
   repeated string methods = 3;
 
@@ -97,6 +136,10 @@ message AccessRule {
     string name = 1;
 
     // The list of valid values for the constraint.
+    // Exact match, prefix match, and suffix match are supported for constraint values.
+    // For example, the value "v1alpha2" matches
+    // "v1alpha2" (exact match), or "v1*" (prefix match),
+    // or "*alpha2" (suffix match).
     repeated string value = 2;
   }
 
@@ -106,6 +149,9 @@ message AccessRule {
 }
 
 // ServiceRoleBinding assigns a ServiceRole to a list of subjects.
+// This represent the "Spec" part of the ServiceRoleBinding object. The name and namespace
+// of the ServiceRoleBinding is specified in "metadata" section of the ServiceRoleBinding
+// object.
 message ServiceRoleBinding {
   // Required. List of subjects that are assigned the ServiceRole object.
   repeated Subject subjects = 1;

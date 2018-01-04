@@ -32,6 +32,8 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 // ServiceRole specification contains a list of access rules (permissions).
+// This represent the "Spec" part of the ServiceRole object. The name and namespace
+// of the ServiceRole is specified in "metadata" section of the ServiceRole object.
 type ServiceRole struct {
 	// Required. The set of access rules (permissions) that the role has.
 	Rules []*AccessRule `protobuf:"bytes,1,rep,name=rules" json:"rules,omitempty"`
@@ -52,12 +54,22 @@ func (m *ServiceRole) GetRules() []*AccessRule {
 // AccessRule defines a permission to access a list of services.
 type AccessRule struct {
 	// Required. A list of service names.
+	// Exact match, prefix match, and suffix match are supported for service names.
+	// For example, the service name "bookstore.mtv.cluster.local" matches
+	// "bookstore.mtv.cluster.local" (exact match), or "bookstore*" (prefix match),
+	// or "*.mtv.cluster.local" (suffix match).
 	// If set to ["*"], it refers to all services in the namespace.
 	Services []string `protobuf:"bytes,1,rep,name=services" json:"services,omitempty"`
 	// Optional. A list of HTTP paths.
+	// Exact match, prefix match, and suffix match are supported for paths.
+	// For example, the path "/books/review" matches
+	// "/books/review" (exact match), or "/books/*" (prefix match),
+	// or "*/review" (suffix match).
 	// If not specified, it applies to any path.
 	Paths []string `protobuf:"bytes,2,rep,name=paths" json:"paths,omitempty"`
-	// Required. A list of HTTP methods or gRPC methods.
+	// Required. A list of HTTP methods (e.g., "GET", "POST") or gRPC methods.
+	// gRPC methods must be presented as fully-qualified name in the form of
+	// packageName.serviceName/methodName.
 	// If set to ["*"], it applies to any method.
 	Methods []string `protobuf:"bytes,3,rep,name=methods" json:"methods,omitempty"`
 	// Optional. Extra constraints in the ServiceRole specification.
@@ -103,6 +115,10 @@ type AccessRule_Constraint struct {
 	// The name of the constraint.
 	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
 	// The list of valid values for the constraint.
+	// Exact match, prefix match, and suffix match are supported for constraint values.
+	// For example, the value "v1alpha2" matches
+	// "v1alpha2" (exact match), or "v1*" (prefix match),
+	// or "*alpha2" (suffix match).
 	Value []string `protobuf:"bytes,2,rep,name=value" json:"value,omitempty"`
 }
 
@@ -126,6 +142,9 @@ func (m *AccessRule_Constraint) GetValue() []string {
 }
 
 // ServiceRoleBinding assigns a ServiceRole to a list of subjects.
+// This represent the "Spec" part of the ServiceRoleBinding object. The name and namespace
+// of the ServiceRoleBinding is specified in "metadata" section of the ServiceRoleBinding
+// object.
 type ServiceRoleBinding struct {
 	// Required. List of subjects that are assigned the ServiceRole object.
 	Subjects []*Subject `protobuf:"bytes,1,rep,name=subjects" json:"subjects,omitempty"`
