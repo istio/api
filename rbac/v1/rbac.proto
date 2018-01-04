@@ -1,0 +1,139 @@
+// Copyright 2018 Istio Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package istio.rbac.v1;
+
+// Istio RBAC (Role Based Access Control) defines ServiceRole and ServiceRoleBinding
+// objects. Both are provided as Kubernetes CRDs.
+//
+// A ServiceRole specification includes a list of rules (permissions). Each rule has
+// the following standard fields:
+// * services: a list of services.
+// * methods: HTTP methods or gRPC methods. Note that gRPC methods should be
+//   presented in the form of "packageName.serviceName/methodName".
+// * paths: HTTP REST paths. It is ignored in gRPC case.
+//
+// In addition to the standard fields, operators can use custom fields in the "constraints"
+// section.
+//
+// Below is an example of ServiceRole object "product-viewer", which has "read" ("GET" and "HEAD")
+// access to "products.svc.cluster.local" service at versions "v1" and "v2". "path" is not specified,
+// so it applies to any path in the service.
+//
+//     apiVersion: "config.istio.io/v1alpha2"
+//     kind: servicerole
+//     metadata:
+//       name: products-viewer
+//       namespace: default
+//     spec:
+//       rules:
+//       - services: ["products.svc.cluster.local"]
+//         methods: ["GET", "HEAD"]
+//         constraints:
+//         - name: "version"
+//           value: ["v1", "v2"]
+//
+// A ServiceRoleBinding specification includes two parts:
+// * "roleRef" refers to a ServiceRole object in the same namespace.
+// * A list of "subjects" that are assigned the roles.
+//
+// Below is an example of ServiceRoleBinding object "test-binding-products", which binds two subjects
+// to ServiceRole "product-viewer":
+// * User "alice@yahoo.com"
+// * "reviews" service in "abc" namespace.
+//
+//     apiVersion: "config.istio.io/v1alpha2"
+//     kind: servicerolebinding
+//     metadata:
+//       name: test-binding-products
+//       namespace: default
+//     spec:
+//       subjects:
+//       - properties:
+//           user: "alice@yahoo.com"
+//       - properties:
+//           service: "reviews"
+//           namespace: "abc"
+//       roleRef:
+//         kind: ServiceRole
+//         name: "products-viewer"
+
+// ServiceRole specification contains a list of access rules (permissions).
+message ServiceRole {
+  // Required. The set of access rules (permissions) that the role has.
+  repeated AccessRule rules = 1;
+}
+
+// AccessRule defines a permission to access a list of services.
+message AccessRule {
+  // Required. A list of service names.
+  // If set to ["*"], it refers all services in the namespace.
+  repeated string services = 1;
+
+  // Optional. A list of HTTP paths.
+  // If not specified, it applies to any path.
+  repeated string paths = 2;
+
+  // Required. A list of HTTP methods or gRPC methods.
+  // If set to ["*"], it applies to any method.
+  repeated string methods = 3;
+
+  // Definition of a custom constraint.
+  message Constraint {
+    // The name of the constraint.
+    string name = 1;
+
+    // The list of valid values for the constraint.
+    repeated string value = 2;
+  }
+
+  // Optional. Extra constraints in the ServiceRole specification.
+  // The above ServiceRole examples shows an example of constraint "version".
+  repeated Constraint constraints = 4;
+}
+
+// ServiceRoleBinding assigns a ServiceRole to a list of subjects.
+message ServiceRoleBinding {
+  // Required. List of subjects that are assigned the ServiceRole object.
+  repeated Subject subjects = 1;
+
+  // Required. Reference to the ServiceRole object.
+  RoleRef roleRef = 2;
+}
+
+// Subject defines an identity or a group of identities.
+message Subject {
+  // Required. The set of properties that identify the subject.
+  // In the above ServiceRoleBinding example, the first subject has one property:
+  //     user: "alice@yahoo.com"
+  //
+  // The second subject has two properties:
+  //     service: "reviews"
+  //     namespace: "abc"
+  map<string, string> properties = 1;
+}
+
+// RoleRef refers to a ServiceRole object.
+message RoleRef {
+  // Required. The type of the role being referenced.
+  // Currently, "ServiceRole" is the only supported value for "kind".
+  string kind = 1;
+
+  // Required. The name of the ServiceRole object being referenced.
+  // The ServiceRole object must be in the same namespace as the ServiceRoleBinding
+  // object.
+  string name = 2;
+}
