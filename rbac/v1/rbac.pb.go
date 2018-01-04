@@ -52,7 +52,7 @@ func (m *ServiceRole) GetRules() []*AccessRule {
 // AccessRule defines a permission to access a list of services.
 type AccessRule struct {
 	// Required. A list of service names.
-	// If set to ["*"], it refers all services in the namespace.
+	// If set to ["*"], it refers to all services in the namespace.
 	Services []string `protobuf:"bytes,1,rep,name=services" json:"services,omitempty"`
 	// Optional. A list of HTTP paths.
 	// If not specified, it applies to any path.
