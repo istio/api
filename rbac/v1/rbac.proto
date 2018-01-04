@@ -80,7 +80,7 @@ message ServiceRole {
 // AccessRule defines a permission to access a list of services.
 message AccessRule {
   // Required. A list of service names.
-  // If set to ["*"], it refers all services in the namespace.
+  // If set to ["*"], it refers to all services in the namespace.
   repeated string services = 1;
 
   // Optional. A list of HTTP paths.
