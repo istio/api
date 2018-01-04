@@ -55,7 +55,7 @@ const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 type LoadBalancerSettings_SimpleLB int32
 
 const (
-	// round robin policy. Default
+	// Round Robin policy. Default
 	LoadBalancerSettings_ROUND_ROBIN LoadBalancerSettings_SimpleLB = 0
 	// The least request load balancer uses an O(1) algorithm which selects
 	// two random healthy hosts and picks the host which has fewer active
@@ -298,7 +298,8 @@ func (m *Subset) GetTrafficPolicy() *TrafficPolicy {
 }
 
 // Load balancing policies to apply for a specific destination. See Envoy's
-// [load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing.html)
+// load balancing
+// [documentation](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing.html)
 // for more details.
 //
 // For example, the following rule uses a round robin load balancing policy
