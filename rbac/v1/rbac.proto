@@ -140,7 +140,7 @@ message AccessRule {
     // For example, the value "v1alpha2" matches
     // "v1alpha2" (exact match), or "v1*" (prefix match),
     // or "*alpha2" (suffix match).
-    repeated string value = 2;
+    repeated string values = 2;
   }
 
   // Optional. Extra constraints in the ServiceRole specification.
