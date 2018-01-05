@@ -10,10 +10,21 @@ STATUS_PROTO := protoc-tmp/$(RPC_PATH)/status.proto
 CODE_PROTO := protoc-tmp/$(RPC_PATH)/code.proto
 ERR_PROTO := protoc-tmp/$(RPC_PATH)/error_details.proto
 
-PROTOC := protoc-min-version -version=3.5.0
+# TODO: pull from Gopkg.lock somehow
+GOGO_VERSION := v0.5
 
-GOGOSLICK_PLUGIN_PREFIX := --gogoslick_out=plugins=grpc,
-GOGO_PLUGIN_PREFIX := --gogo_out=plugins=grpc,
+GOGOPROTO_PATH := vendor/github.com/gogo/protobuf
+GOGO := protoc-gen-gogo
+GOGO_PATH := $(GOGOPROTO_PATH)/$(GOGO)
+GOGOSLICK := protoc-gen-gogoslick
+GOGOSLICK_PATH := $(GOGOPROTO_PATH)/$(GOGOSLICK)
+PROTOC_MIN_VERSION := protoc-min-version
+MIN_VERSION_PATH := $(GOGOPROTO_PATH)/$(PROTOC_MIN_VERSION)
+
+PROTOC := ./$(PROTOC_MIN_VERSION)-$(GOGO_VERSION) -version=3.5.0
+
+GOGOSLICK_PLUGIN_PREFIX := --plugin=$(GOGOSLICK)-$(GOGO_VERSION) --gogoslick_out=plugins=grpc,
+GOGO_PLUGIN_PREFIX := --plugin=$(GOGO)-$(GOGO_VERSION) --gogo_out=plugins=grpc,
 PLUGIN_SUFFIX = :.
 
 # BASIC STANDARD MAPPINGS
@@ -138,23 +149,40 @@ ifeq ($(UNAME), Linux)
 	rm -rf protoc3
 endif
 
+PROTOC_GEN_GOGO := $(GOGO)-$(GOGO_VERSION)
+PROTOC_GEN_GOGOSLICK := $(GOGOSLICK)-$(GOGO_VERSION)
+PROTOC_MIN_VERSION_VERSION := $(PROTOC_MIN_VERSION)-$(GOGO_VERSION)
+
 #####################
 # Generation Rule
 #####################
 generate: generate-mixer-go
 
 $(GOPATH)/bin/dep:
-	go get -u github.com/golang/dep/cmd/dep	
+	go get -u github.com/golang/dep/cmd/dep
 
-install-deps: $(GOPATH)/bin/dep
+$(PROTOC_GEN_GOGO) : vendor
+	@echo "Building protoc-gen-gogo..."
+	go build --pkgdir $(GOGO_PATH) -o $(PROTOC_GEN_GOGO) ./$(GOGOPROTO_PATH)/$(GOGO)
+
+$(PROTOC_GEN_GOGOSLICK) : vendor
+	@echo "Building protoc-gen-gogoslick..."
+	go build --pkgdir $(GOGOSLICK_PATH) -o $(PROTOC_GEN_GOGOSLICK) ./$(GOGOPROTO_PATH)/$(GOGOSLICK)
+
+$(PROTOC_MIN_VERSION_VERSION) : vendor
+	@echo "Building protoc-min-version..."
+	go build --pkgdir $(MIN_VERSION_PATH) -o $(PROTOC_MIN_VERSION_VERSION) ./$(GOGOPROTO_PATH)/$(PROTOC_MIN_VERSION)
+
+binaries : $(PROTOC_GEN_GOGO) $(PROTOC_GEN_GOGOSLICK) $(PROTOC_MIN_VERSION_VERSION)
+
+vendor: $(GOPATH)/bin/dep
 	# Installing generation deps
 	$(GOPATH)/bin/dep ensure -vendor-only
-	go install ./vendor/github.com/gogo/protobuf/protoc-gen-gogo
-	go install ./vendor/github.com/gogo/protobuf/protoc-gen-gogoslick
-	go install ./vendor/github.com/gogo/protobuf/protoc-min-version
+
+install-deps: vendor binaries
 
 protoc.version:
-    @echo "Using protoc version:" `protoc --version`
+	@echo "Using protoc version:" `protoc --version`
 
 protoc-tmp:
 	mkdir -p protoc-tmp
@@ -177,7 +205,7 @@ $(ERR_PROTO): protoc-tmp/$(RPC_PATH)
 	curl -sS $(GOOGLEAPIS_URL)/google/rpc/error_details.proto -o $(ERR_PROTO)
 
 # TODO: expand to support the other protos in this repo
-generate-mixer-go: install-deps download-googleapis-protos protoc.version generate-mixer-v1-go generate-mixer-v1-config-go generate-mixer-v1-template-go
+generate-mixer-go: install-deps download-googleapis-protos protoc.version $(PROTOC_GEN_GOGOSLICK) $(PROTOC_GEN_GOGO) generate-mixer-v1-go generate-mixer-v1-config-go generate-mixer-v1-template-go
 
 generate-mixer-v1-go: $(MIXER_V1_PB_GOS)
 
@@ -209,5 +237,7 @@ mixer/v1/config/fixed_cfg.pb.go : mixer/v1/config/cfg.proto | $(PROTOC_BIN)
 
 # TODO: kill all generated files too ?
 clean:
+	rm -rf protoc-gen-*
+	rm -rf protoc-min-version-*
 	rm -rf protoc-tmp
 	rm -rf vendor
