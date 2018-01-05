@@ -17,7 +17,7 @@ syntax = "proto3";
 package istio.rbac.v1;
 
 // Istio RBAC (Role Based Access Control) defines ServiceRole and ServiceRoleBinding
-// objects. The design doc of Istio RBAC is at https://docs.google.com/document/d/1dKXUEOxrj4TWZKrW7fx_A-nrOdVD4tYolpjgT8DYBTY/.
+// objects.
 //
 // A ServiceRole specification includes a list of rules (permissions). Each rule has
 // the following standard fields:
