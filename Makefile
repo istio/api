@@ -10,8 +10,7 @@ STATUS_PROTO := protoc-tmp/$(RPC_PATH)/status.proto
 CODE_PROTO := protoc-tmp/$(RPC_PATH)/code.proto
 ERR_PROTO := protoc-tmp/$(RPC_PATH)/error_details.proto
 
-# TODO: pull from Gopkg.lock somehow
-GOGO_VERSION := v0.5
+GOGO_VERSION := $(shell bin/getVersion.sh)
 
 GOGOPROTO_PATH := vendor/github.com/gogo/protobuf
 GOGO := protoc-gen-gogo
@@ -20,11 +19,14 @@ GOGOSLICK := protoc-gen-gogoslick
 GOGOSLICK_PATH := $(GOGOPROTO_PATH)/$(GOGOSLICK)
 PROTOC_MIN_VERSION := protoc-min-version
 MIN_VERSION_PATH := $(GOGOPROTO_PATH)/$(PROTOC_MIN_VERSION)
+PROTOC_GEN_GOGO := bin/$(GOGO)-$(GOGO_VERSION)
+PROTOC_GEN_GOGOSLICK := bin/$(GOGOSLICK)-$(GOGO_VERSION)
+PROTOC_MIN_VERSION_VERSION := bin/$(PROTOC_MIN_VERSION)-$(GOGO_VERSION)
 
-PROTOC := ./$(PROTOC_MIN_VERSION)-$(GOGO_VERSION) -version=3.5.0
+PROTOC := $(PROTOC_MIN_VERSION_VERSION) -version=3.5.0
 
-GOGOSLICK_PLUGIN_PREFIX := --plugin=./$(GOGOSLICK)-$(GOGO_VERSION) --gogoslick_out=plugins=grpc,
-GOGO_PLUGIN_PREFIX := --plugin=./$(GOGO)-$(GOGO_VERSION) --gogo_out=plugins=grpc,
+GOGOSLICK_PLUGIN_PREFIX := --plugin=bin/$(GOGOSLICK)-$(GOGO_VERSION) --gogoslick_out=plugins=grpc,
+GOGO_PLUGIN_PREFIX := --plugin=bin/$(GOGO)-$(GOGO_VERSION) --gogo_out=plugins=grpc,
 PLUGIN_SUFFIX = :.
 
 # BASIC STANDARD MAPPINGS
@@ -149,9 +151,6 @@ ifeq ($(UNAME), Linux)
 	rm -rf protoc3
 endif
 
-PROTOC_GEN_GOGO := $(GOGO)-$(GOGO_VERSION)
-PROTOC_GEN_GOGOSLICK := $(GOGOSLICK)-$(GOGO_VERSION)
-PROTOC_MIN_VERSION_VERSION := $(PROTOC_MIN_VERSION)-$(GOGO_VERSION)
 
 #####################
 # Generation Rule
