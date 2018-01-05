@@ -89,8 +89,7 @@ package istio.rbac.v1;
 //       namespace: default
 //     spec:
 //       subjects:
-//       - properties:
-//           user: "alice@yahoo.com"
+//       - user: alice@yahoo.com
 //       - properties:
 //           service: "reviews"
 //           namespace: "abc"
@@ -162,14 +161,17 @@ message ServiceRoleBinding {
 
 // Subject defines an identity or a group of identities.
 message Subject {
-  // Required. The set of properties that identify the subject.
-  // In the above ServiceRoleBinding example, the first subject has one property:
-  //     user: "alice@yahoo.com"
-  //
-  // The second subject has two properties:
+  // Optional. The user name/ID that the subject represents.
+  string user = 1;
+
+  // Optional. The group that the subject belongs to.
+  string group = 2;
+
+  // Optional. The set of properties that identify the subject.
+  // In the above ServiceRoleBinding example, the second subject has two properties:
   //     service: "reviews"
   //     namespace: "abc"
-  map<string, string> properties = 1;
+  map<string, string> properties = 3;
 }
 
 // RoleRef refers to a ServiceRole object.
