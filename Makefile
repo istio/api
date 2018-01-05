@@ -25,8 +25,8 @@ PROTOC_MIN_VERSION_VERSION := bin/$(PROTOC_MIN_VERSION)-$(GOGO_VERSION)
 
 PROTOC := $(PROTOC_MIN_VERSION_VERSION) -version=3.5.0
 
-GOGOSLICK_PLUGIN_PREFIX := --plugin=bin/$(GOGOSLICK)-$(GOGO_VERSION) --gogoslick_out=plugins=grpc,
-GOGO_PLUGIN_PREFIX := --plugin=bin/$(GOGO)-$(GOGO_VERSION) --gogo_out=plugins=grpc,
+GOGOSLICK_PLUGIN_PREFIX := --plugin=bin/$(GOGOSLICK)-$(GOGO_VERSION) --gogoslick-$(GOGO_VERSION)_out=plugins=grpc,
+GOGO_PLUGIN_PREFIX := --plugin=bin/$(GOGO)-$(GOGO_VERSION) --gogo-$(GOGO_VERSION)_out=plugins=grpc,
 PLUGIN_SUFFIX = :.
 
 # BASIC STANDARD MAPPINGS
