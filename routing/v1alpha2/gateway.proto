@@ -1,4 +1,4 @@
-// Copyright 2017 Istio Authors
+// Copyright 2018 Istio Authors
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -150,9 +150,6 @@ message Gateway {
 //       - port:
 //           number: 80
 //           protocol: HTTP2
-//         domains:
-//         - uk.bookinfo.com
-//         - eu.bookinfo.com
 //
 // Another example
 //
@@ -165,9 +162,6 @@ message Gateway {
 //       - port:
 //           number: 27018
 //           protocol: MONGO
-//         domains:
-//         - uk.bookinfo.com
-//         - eu.bookinfo.com
 //
 // The following is an example of TLS configuration for port 443
 //
@@ -180,32 +174,10 @@ message Gateway {
 //       - port:
 //           number: 443
 //           protocol: HTTP
-//         domains:
-//         - uk.bookinfo.com
-//         - eu.bookinfo.com
 //         tls:
 //           mode: simple
-//           serverCertificate: server.crt
+//           serverCertificatet: server.crt
 //
-// The following is an example of a gateway abstracting an external
-// service. The caller is expected to access the service using
-// http://maps.google.com:443
-//
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: Gateway
-//     metadata:
-//       name: my-egress
-//     spec:
-//       servers:
-//       - port:
-//           number: 443
-//           protocol: HTTP
-//         domains:
-//         - maps.google.com
-//         tls:
-//           mode: originate
-//         location: external
-//           
 message Server {
   // Port describes the properties of a specific port of a service.
   message Port {
@@ -224,7 +196,7 @@ message Server {
   // connections
   Port port = 1;
 
-  // REQUIRED. A list of domains exposed by this gateway. While
+  // A list of domains exposed by this gateway. While
   // typically applicable to HTTP services, it can also be used for TCP
   // services using TLS with SNI. Standard DNS wildcard prefix syntax
   // is permitted.
@@ -252,12 +224,6 @@ message Server {
 
       // If set to "mutual", the gateway will use standard mTLS authentication.
       MUTUAL = 2;
-
-      // If set to originate, the gateway implementation will use TLS on
-      // the connection to the service. Applicable only to services whose
-      // Location is EXTERNAL to the mesh. TLS to services inside the mesh
-      // is controlled by global mTLS settings.
-      ORIGINATE = 3;
     };
 
     // Optional: Indicates whether connections to this port should be
@@ -285,18 +251,5 @@ message Server {
   // these options to control if all http requests should be redirected to
   // https, and the TLS modes to use.
   TLSOptions tls = 3;
-
-  // The location of this service with respect to the service mesh.
-  enum Location {
-    // Services that are managed by Istio service mesh.
-    MESH = 0;
-    
-    // External services are hosted services (e.g. Google Maps) that may be
-    // consumed by services in the mesh.
-    EXTERNAL = 1;
-  };
-
-  // Optional: Indicates the location of the server with respect to the
-  // other services in the mesh.
-  Location location = 4;
 }
+

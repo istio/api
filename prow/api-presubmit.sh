@@ -31,6 +31,9 @@ die () {
     exit 1
 }
 
+mv ${GOPATH}/src/github.com/istio ${GOPATH}/src/istio.io/
+cd ${GOPATH}/src/istio.io/api
+
 WD=$(dirname $0)
 WD=$(cd $WD; pwd)
 ROOT=$(dirname $WD)
@@ -41,6 +44,7 @@ cd ${ROOT}
 
 if [[ -n $(git status --porcelain) ]]; then
     git status
+    git diff
     die "Repo has unstaged changes. Re-run ./scripts/generate-protos.sh"
 fi
 
