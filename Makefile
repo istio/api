@@ -236,7 +236,7 @@ mixer/v1/config/fixed_cfg.pb.go : mixer/v1/config/cfg.proto | $(PROTOC_BIN)
 
 # TODO: kill all generated files too ?
 clean:
-	rm -rf protoc-gen-*
-	rm -rf protoc-min-version-*
+	rm -rf bin/protoc-gen-*
+	rm -rf bin/protoc-min-version-*
 	rm -rf protoc-tmp
 	rm -rf vendor
