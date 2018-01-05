@@ -193,18 +193,12 @@ message Server {
   }
 
   // REQUIRED: The Port on which the proxy should listen for incoming
-  // connections
+  // connections.
   Port port = 1;
 
-  // A list of domains exposed by this gateway. While
-  // typically applicable to HTTP services, it can also be used for TCP
-  // services using TLS with SNI. Standard DNS wildcard prefix syntax
-  // is permitted.
-  //
-  // RouteRules that are bound to a gateway must having a matching domain
-  // in their default destination. Specifically one of the route rule
-  // destination domains is a strict suffix of a gateway domain or
-  // a gateway domain is a suffix of one of the route rule domains.
+  // A list of domains exposed by this server. While typically applicable
+  // to HTTP services, it can also be used for TCP services using TLS with
+  // SNI. Standard DNS wildcard prefix syntax is permitted.
   repeated string domains = 2;
 
   message TLSOptions {
@@ -212,18 +206,23 @@ message Server {
     // http connections, asking the clients to use HTTPS.
     bool https_redirect = 1;
 
-    // TLS modes enforced by the gateway
+    // TLS modes enforced by the server
     enum TLSmode {
-      // If set to "passthrough", the gateway will forward the connection to the
+      // If set to "passthrough", the proxy will forward the connection to the
       // upstream server as is.
       PASSTHROUGH = 0;
 
-      // If set to "simple", the gateway will secure connections with
+      // If set to "simple", the proxy will secure connections with
       // standard TLS semantics (server certs only).
       SIMPLE = 1;
 
-      // If set to "mutual", the gateway will use standard mTLS authentication.
+      // If set to "mutual", the proxy will use standard mTLS authentication.
       MUTUAL = 2;
+
+      // If set to originate, the proxy will use TLS on the outbound
+      // connection to the service. This mode is applicable only when the
+      // server is specified in the context of EgressRoutes.
+      ORIGINATE = 3;
     };
 
     // Optional: Indicates whether connections to this port should be
