@@ -24,7 +24,7 @@ package istio.rbac.v1;
 // * services: a list of services.
 // * methods: HTTP methods or gRPC methods. Note that gRPC methods should be
 //   presented in the form of "packageName.serviceName/methodName".
-// * paths: HTTP REST paths. It is ignored in gRPC case.
+// * paths: HTTP paths. It is ignored in gRPC case.
 //
 // In addition to the standard fields, operators can use custom fields in the "constraints"
 // section. The name of a custom field must match one of the "properties" in the "action" part
