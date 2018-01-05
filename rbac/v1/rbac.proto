@@ -17,7 +17,7 @@ syntax = "proto3";
 package istio.rbac.v1;
 
 // Istio RBAC (Role Based Access Control) defines ServiceRole and ServiceRoleBinding
-// objects.
+// objects. The design doc of Istio RBAC is at https://docs.google.com/document/d/1dKXUEOxrj4TWZKrW7fx_A-nrOdVD4tYolpjgT8DYBTY/.
 //
 // A ServiceRole specification includes a list of rules (permissions). Each rule has
 // the following standard fields:
@@ -28,7 +28,7 @@ package istio.rbac.v1;
 //
 // In addition to the standard fields, operators can use custom fields in the "constraints"
 // section. The name of a custom field must match one of the "properties" in the "action" part
-// of the "authorization" template (https://github.com/istio/istio/blob/master/mixer/template/authorization/template.proto).
+// of the "authorization" template (https://github.com/istio/istio/bl-ob/master/mixer/template/authorization/template.proto).
 //
 // For example, suppose we define an instance of the "authorization" template, named "requestcontext".
 //
@@ -174,7 +174,7 @@ message Subject {
   map<string, string> properties = 3;
 }
 
-// RoleRef refers to a ServiceRole object.
+// RoleRef refers to a role object.
 message RoleRef {
   // Required. The type of the role being referenced.
   // Currently, "ServiceRole" is the only supported value for "kind".

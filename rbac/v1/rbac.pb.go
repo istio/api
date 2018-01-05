@@ -210,7 +210,7 @@ func (m *Subject) GetProperties() map[string]string {
 	return nil
 }
 
-// RoleRef refers to a ServiceRole object.
+// RoleRef refers to a role object.
 type RoleRef struct {
 	// Required. The type of the role being referenced.
 	// Currently, "ServiceRole" is the only supported value for "kind".
