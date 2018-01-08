@@ -62,26 +62,29 @@ STD_GO_PLUGIN := $(STD_GO_PLUGIN_PREFIX)$(PLUGIN_SUFFIX)
 GOGOSLICK_PLUGIN := $(GOGOSLICK_PLUGIN_PREFIX)$(MAPPING)$(PLUGIN_SUFFIX)
 GOGO_PLUGIN := $(GOGO_PLUGIN_PREFIX)$(MAPPING)$(PLUGIN_SUFFIX)
 
-# BROKER STUFF
+#####################
+# Broker
+#####################
 
-## BROKER PROTOS
 BROKER_V1_CONFIG := broker/v1/config
 SERVICE_CLASS_PROTO := $(BROKER_V1_CONFIG)/service_class.proto
 SERVICE_PLAN_PROTO := $(BROKER_V1_CONFIG)/service_plan.proto
 BROKER_V1_PROTOS := $(SERVICE_CLASS_PROTO) $(SERVICE_PLAN_PROTO)
 BROKER_V1_PB_GOS := $(BROKER_V1_PROTOS:.proto=.pb.go)
 
-# MESH STUFF
+#####################
+# Mesh
+#####################
 
-## MESH PROTOS
 MESH_V1ALPHA1 := mesh/v1alpha1
 MESH_CONFIG_PROTO := $(MESH_V1ALPHA1)/config.proto
 MESH_PROTOS := $(MESH_CONFIG_PROTO)
 MESH_PB_GOS := $(MESH_PROTOS:.proto=.pb.go)
 
-# MIXER STUFF
+#####################
+# Mixer
+#####################
 
-## MIXER PROTOS 
 MIXER_V1 := mixer/v1
 ATTR_PROTO := $(MIXER_V1)/attributes.proto
 CHECK_PROTO := $(MIXER_V1)/check.proto
@@ -148,9 +151,10 @@ MIXER_MAPPING := $(MAPPING)$(subst $(space),$(empty),$(mixer_mapping_with_spaces
 MIXER_PLUGIN := $(GOGOSLICK_PLUGIN_PREFIX)$(MIXER_MAPPING)$(PLUGIN_SUFFIX)
 ALT_MIXER_PLUGIN := $(GOGO_PLUGIN_PREFIX)$(MIXER_MAPPING)$(PLUGIN_SUFFIX)
 
-# ROUTING STUFF
+#####################
+# Routing
+#####################
 
-## ROUTING PROTOS
 ROUTING_V1ALPHA1 := routing/v1alpha1
 ROUTING_V1ALPHA2 := routing/v1alpha2
 ROUTING_V1ALPHA1_DEST_POLICY_PROTO := $(ROUTING_V1ALPHA1)/dest_policy.proto
@@ -165,6 +169,15 @@ ROUTING_V1ALPHA2_GATEWAY_PROTO := $(ROUTING_V1ALPHA2)/gateway.proto
 ROUTING_V1ALPHA2_ROUTE_PROTO := $(ROUTING_V1ALPHA2)/route_rule.proto
 ROUTING_V1ALPHA2_PROTOS := $(ROUTING_V1ALPHA2_GATEWAY_PROTO) $(ROUTING_V1ALPHA2_ROUTE_PROTO)
 ROUTING_V1ALPHA2_PB_GOS := $(ROUTING_V1ALPHA2_PROTOS:.proto=.pb.go)
+
+#####################
+# RBAC
+#####################
+
+RBAC_V1 := rbac/v1
+RBAC_PROTO := $(RBAC_V1)/rbac.proto
+RBAC_V1_PROTOS := $(RBAC_PROTO)
+RBAC_V1_PB_GOS := $(RBAC_V1_PROTOS:.proto=.pb.go)
 
 #####################
 # Install protoc
@@ -198,7 +211,8 @@ endif
 #####################
 # Generation Rule
 #####################
-generate: generate-broker-go generate-mesh-go generate-mixer-go generate-routing-go
+
+generate: generate-broker-go generate-mesh-go generate-mixer-go generate-routing-go generate-rbac-go
 
 $(GOPATH)/bin/dep:
 	go get -u github.com/golang/dep/cmd/dep
@@ -317,6 +331,16 @@ $(ROUTING_V1ALPHA1_PB_GOS): $(ROUTING_V1ALPHA1_PROTOS) | $(PROTOC_BIN)
 
 $(ROUTING_V1ALPHA2_PB_GOS): $(ROUTING_V1ALPHA2_PROTOS) | $(PROTOC_BIN)
 	## Generate routing/v1alpha2/*.pb.go
+	$(PROTOC) $(PROTO_PATH) $(STD_GO_PLUGIN) $^
+
+#####################
+# rbac/...
+#####################
+
+generate-rbac-go: install-deps download-googleapis-protos protoc.version $(PROTOC_GEN_GO) $(RBAC_V1_PB_GOS)
+
+$(RBAC_V1_PB_GOS): $(RBAC_V1_PROTOS) | $(PROTOC_BIN)
+	## Generate rbac/v1/*.pb.go
 	$(PROTOC) $(PROTO_PATH) $(STD_GO_PLUGIN) $^
 
 # TODO: kill all generated files too ?
