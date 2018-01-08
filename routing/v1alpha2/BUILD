@@ -3,6 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "go_default_library",
     srcs = [
+        "destination_rule.pb.go",
         "gateway.pb.go",
         "route_rule.pb.go",
     ],
@@ -17,6 +18,7 @@ go_library(
 filegroup(
     name = "go_default_library_protos",
     srcs = [
+        "destination_rule.proto",
         "gateway.proto",
         "route_rule.proto",
     ],
