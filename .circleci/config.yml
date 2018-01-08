@@ -15,6 +15,8 @@ jobs:
       - run:
           command: |
             if [[ -n $(git status --porcelain) ]]; then
+              git status
+              git --no-pager diff
               echo "Repo has unstaged changes. Re-run ./scripts/generate-protos.sh"
               exit 1
             fi
