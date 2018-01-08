@@ -7,7 +7,7 @@ go_library(
         "service_plan.pb.go",
     ],
     visibility = ["//visibility:public"],
-    deps = ["@com_github_gogo_protobuf//proto:go_default_library"],
+    deps = ["@com_github_golang_protobuf//proto:go_default_library"],
 )
 
 filegroup(
