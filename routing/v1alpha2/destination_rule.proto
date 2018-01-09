@@ -255,10 +255,11 @@ message LoadBalancerSettings {
 //     spec:
 //       destination:
 //         name: myredissrv
-//       connectionPool:
-//         tcp:
-//           maxConnections: 100
-//           connectTimeout: 30ms
+//       trafficPolicy:
+//         connectionPool:
+//           tcp:
+//             maxConnections: 100
+//             connectTimeout: 30ms
 //
 message ConnectionPoolSettings {
   // Settings common to both HTTP and TCP upstream connections.
@@ -315,17 +316,18 @@ message ConnectionPoolSettings {
 //     spec:
 //       destination:
 //         name: reviews
-//       connectionPool:
-//         tcp:
-//           maxConnections: 100
-//         http:
-//           http2MaxRequests: 1000
-//           maxRequestsPerConnection: 10
-//       outlierDetection:
-//         http:
-//           consecutiveErrors: 7
-//           interval: 5m
-//           baseEjectionTime: 15m
+//       trafficPolicy:
+//         connectionPool:
+//           tcp:
+//             maxConnections: 100
+//           http:
+//             http2MaxRequests: 1000
+//             maxRequestsPerConnection: 10
+//         outlierDetection:
+//           http:
+//             consecutiveErrors: 7
+//             interval: 5m
+//             baseEjectionTime: 15m
 //
 message OutlierDetection {
   // Outlier detection settings for HTTP1.1/HTTP2/GRPC connections.
@@ -370,9 +372,9 @@ message OutlierDetection {
 //         name: mydbserver
 //       tls:
 //         mode: MUTUAL
-//         clientCertificate: myclient.cert
-//         privateKey: client_private_key.key
-//         serverCaBundle: certs.bundle
+//         clientCertificate: /etc/certs/myclientcert.pem
+//         privateKey: /etc/certs/client_private_key.pem
+//         caCertificates: /etc/certs/rootcacerts.pem
 //
 // The following rule configures a client to use TLS when talking to a foreign service whose domain matches *.foo.com.
 //
@@ -390,11 +392,11 @@ message TLSSettings {
   // TLS connection mode
   enum TLSmode {
     // If set to "disable", the proxy will use not setup a TLS connection to the
-    // upstream server. Default.
+    // upstream server.
     DISABLE = 0;
 
     // If set to "simple", the proxy will originate a TLS connection to the
-    // upstream server. Default.
+    // upstream server.
     SIMPLE = 1;
 
     // If set to "mutual", the proxy will originate a TLS connection and
@@ -403,24 +405,21 @@ message TLSSettings {
   };
 
   // REQUIRED: Indicates whether connections to this port should be secured
-  // using TLS.  The value of this field determines how TLS is enforced.
+  // using TLS. The value of this field determines how TLS is enforced.
   TLSmode mode = 1;
 
-  // REQUIRED if mode == SIMPLE/MUTUAL. The name of the file holding the
-  // client-side TLS certificate to use.  It is the responsibility of the
-  // underlying platform to mount the certificate as a file under
-  // /etc/istio/certs with the same name as the specified in this field.
+  // REQUIRED if mode == MUTUAL. The path to the file holding the
+  // client-side TLS certificate to use.
   string client_certificate = 2;
 
-  // REQUIRED if mode == SIMPLE/MUTUAL. The name of the file holding the
-  // client's private key.  It is the responsibility of the underlying
-  // platform to mount the certificate as a file under /etc/istio/certs
-  // with the same name as the specified in this field.
+  // REQUIRED if mode == MUTUAL. The path to the file holding the
+  // client's private key.
   string private_key = 3;
 
-  // A file containing certificate authority certificates to use in
-  // verifying a presented server certificate.
-  string server_ca_bundle = 4;
+  // OPTIONAL: The path to the file containing certificate authority
+  // certificates to use in verifying a presented server certificate. If
+  // omitted, the proxy will not verify the server's certificate.
+  string ca_certificates = 4;
 
   // A list of alternate names to verify the subject identity in the
   // certificate. If specified, the proxy will verify that the server
