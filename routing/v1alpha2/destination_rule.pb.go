@@ -6,7 +6,6 @@ Package istio_routing_v1alpha2 is a generated protocol buffer package.
 
 It is generated from these files:
 	routing/v1alpha2/destination_rule.proto
-	routing/v1alpha2/egress_routes.proto
 	routing/v1alpha2/gateway.proto
 	routing/v1alpha2/route_rule.proto
 
@@ -17,7 +16,6 @@ It has these top-level messages:
 	LoadBalancerSettings
 	ConnectionPoolSettings
 	OutlierDetection
-	EgressRoute
 	Gateway
 	Server
 	RouteRule

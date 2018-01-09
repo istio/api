@@ -151,7 +151,7 @@ type RouteRule struct {
 func (m *RouteRule) Reset()                    { *m = RouteRule{} }
 func (m *RouteRule) String() string            { return proto.CompactTextString(m) }
 func (*RouteRule) ProtoMessage()               {}
-func (*RouteRule) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0} }
+func (*RouteRule) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0} }
 
 func (m *RouteRule) GetHosts() []string {
 	if m != nil {
@@ -321,7 +321,7 @@ type Destination struct {
 func (m *Destination) Reset()                    { *m = Destination{} }
 func (m *Destination) String() string            { return proto.CompactTextString(m) }
 func (*Destination) ProtoMessage()               {}
-func (*Destination) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{1} }
+func (*Destination) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{1} }
 
 func (m *Destination) GetName() string {
 	if m != nil {
@@ -398,7 +398,7 @@ type HTTPRoute struct {
 func (m *HTTPRoute) Reset()                    { *m = HTTPRoute{} }
 func (m *HTTPRoute) String() string            { return proto.CompactTextString(m) }
 func (*HTTPRoute) ProtoMessage()               {}
-func (*HTTPRoute) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{2} }
+func (*HTTPRoute) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{2} }
 
 func (m *HTTPRoute) GetMatch() []*HTTPMatchRequest {
 	if m != nil {
@@ -513,7 +513,7 @@ type TCPRoute struct {
 func (m *TCPRoute) Reset()                    { *m = TCPRoute{} }
 func (m *TCPRoute) String() string            { return proto.CompactTextString(m) }
 func (*TCPRoute) ProtoMessage()               {}
-func (*TCPRoute) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{3} }
+func (*TCPRoute) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{3} }
 
 func (m *TCPRoute) GetMatch() []*L4MatchAttributes {
 	if m != nil {
@@ -631,7 +631,7 @@ type HTTPMatchRequest struct {
 func (m *HTTPMatchRequest) Reset()                    { *m = HTTPMatchRequest{} }
 func (m *HTTPMatchRequest) String() string            { return proto.CompactTextString(m) }
 func (*HTTPMatchRequest) ProtoMessage()               {}
-func (*HTTPMatchRequest) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{4} }
+func (*HTTPMatchRequest) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{4} }
 
 func (m *HTTPMatchRequest) GetUri() *StringMatch {
 	if m != nil {
@@ -744,7 +744,7 @@ type DestinationWeight struct {
 func (m *DestinationWeight) Reset()                    { *m = DestinationWeight{} }
 func (m *DestinationWeight) String() string            { return proto.CompactTextString(m) }
 func (*DestinationWeight) ProtoMessage()               {}
-func (*DestinationWeight) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{5} }
+func (*DestinationWeight) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{5} }
 
 func (m *DestinationWeight) GetDestination() *Destination {
 	if m != nil {
@@ -794,7 +794,7 @@ type L4MatchAttributes struct {
 func (m *L4MatchAttributes) Reset()                    { *m = L4MatchAttributes{} }
 func (m *L4MatchAttributes) String() string            { return proto.CompactTextString(m) }
 func (*L4MatchAttributes) ProtoMessage()               {}
-func (*L4MatchAttributes) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{6} }
+func (*L4MatchAttributes) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{6} }
 
 func (m *L4MatchAttributes) GetDestinationSubnet() string {
 	if m != nil {
@@ -866,7 +866,7 @@ type HTTPRedirect struct {
 func (m *HTTPRedirect) Reset()                    { *m = HTTPRedirect{} }
 func (m *HTTPRedirect) String() string            { return proto.CompactTextString(m) }
 func (*HTTPRedirect) ProtoMessage()               {}
-func (*HTTPRedirect) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{7} }
+func (*HTTPRedirect) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{7} }
 
 func (m *HTTPRedirect) GetUri() string {
 	if m != nil {
@@ -918,7 +918,7 @@ type HTTPRewrite struct {
 func (m *HTTPRewrite) Reset()                    { *m = HTTPRewrite{} }
 func (m *HTTPRewrite) String() string            { return proto.CompactTextString(m) }
 func (*HTTPRewrite) ProtoMessage()               {}
-func (*HTTPRewrite) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{8} }
+func (*HTTPRewrite) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{8} }
 
 func (m *HTTPRewrite) GetUri() string {
 	if m != nil {
@@ -947,7 +947,7 @@ type StringMatch struct {
 func (m *StringMatch) Reset()                    { *m = StringMatch{} }
 func (m *StringMatch) String() string            { return proto.CompactTextString(m) }
 func (*StringMatch) ProtoMessage()               {}
-func (*StringMatch) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{9} }
+func (*StringMatch) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{9} }
 
 type isStringMatch_MatchType interface {
 	isStringMatch_MatchType()
@@ -1108,7 +1108,7 @@ type HTTPRetry struct {
 func (m *HTTPRetry) Reset()                    { *m = HTTPRetry{} }
 func (m *HTTPRetry) String() string            { return proto.CompactTextString(m) }
 func (*HTTPRetry) ProtoMessage()               {}
-func (*HTTPRetry) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{10} }
+func (*HTTPRetry) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{10} }
 
 func (m *HTTPRetry) GetAttempts() int32 {
 	if m != nil {
@@ -1182,7 +1182,7 @@ type CorsPolicy struct {
 func (m *CorsPolicy) Reset()                    { *m = CorsPolicy{} }
 func (m *CorsPolicy) String() string            { return proto.CompactTextString(m) }
 func (*CorsPolicy) ProtoMessage()               {}
-func (*CorsPolicy) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{11} }
+func (*CorsPolicy) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{11} }
 
 func (m *CorsPolicy) GetAllowOrigin() []string {
 	if m != nil {
@@ -1246,7 +1246,7 @@ type HTTPFaultInjection struct {
 func (m *HTTPFaultInjection) Reset()                    { *m = HTTPFaultInjection{} }
 func (m *HTTPFaultInjection) String() string            { return proto.CompactTextString(m) }
 func (*HTTPFaultInjection) ProtoMessage()               {}
-func (*HTTPFaultInjection) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{12} }
+func (*HTTPFaultInjection) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{12} }
 
 func (m *HTTPFaultInjection) GetDelay() *HTTPFaultInjection_Delay {
 	if m != nil {
@@ -1303,7 +1303,7 @@ type HTTPFaultInjection_Delay struct {
 func (m *HTTPFaultInjection_Delay) Reset()                    { *m = HTTPFaultInjection_Delay{} }
 func (m *HTTPFaultInjection_Delay) String() string            { return proto.CompactTextString(m) }
 func (*HTTPFaultInjection_Delay) ProtoMessage()               {}
-func (*HTTPFaultInjection_Delay) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{12, 0} }
+func (*HTTPFaultInjection_Delay) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{12, 0} }
 
 type isHTTPFaultInjection_Delay_HttpDelayType interface {
 	isHTTPFaultInjection_Delay_HttpDelayType()
@@ -1459,7 +1459,7 @@ type HTTPFaultInjection_Abort struct {
 func (m *HTTPFaultInjection_Abort) Reset()                    { *m = HTTPFaultInjection_Abort{} }
 func (m *HTTPFaultInjection_Abort) String() string            { return proto.CompactTextString(m) }
 func (*HTTPFaultInjection_Abort) ProtoMessage()               {}
-func (*HTTPFaultInjection_Abort) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{12, 1} }
+func (*HTTPFaultInjection_Abort) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{12, 1} }
 
 type isHTTPFaultInjection_Abort_ErrorType interface {
 	isHTTPFaultInjection_Abort_ErrorType()
@@ -1606,7 +1606,7 @@ type PortSelector struct {
 func (m *PortSelector) Reset()                    { *m = PortSelector{} }
 func (m *PortSelector) String() string            { return proto.CompactTextString(m) }
 func (*PortSelector) ProtoMessage()               {}
-func (*PortSelector) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{13} }
+func (*PortSelector) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{13} }
 
 type isPortSelector_Port interface {
 	isPortSelector_Port()
@@ -1727,9 +1727,9 @@ func init() {
 	proto.RegisterType((*PortSelector)(nil), "istio.routing.v1alpha2.PortSelector")
 }
 
-func init() { proto.RegisterFile("routing/v1alpha2/route_rule.proto", fileDescriptor3) }
+func init() { proto.RegisterFile("routing/v1alpha2/route_rule.proto", fileDescriptor2) }
 
-var fileDescriptor3 = []byte{
+var fileDescriptor2 = []byte{
 	// 1274 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x57, 0x5f, 0x6f, 0x1b, 0x45,
 	0x10, 0xaf, 0xff, 0x26, 0x9e, 0x4b, 0xda, 0x78, 0x55, 0x55, 0x87, 0x85, 0x50, 0xe2, 0x82, 0x14,
