@@ -135,7 +135,7 @@ message CircuitBreaker {
   // A simple circuit breaker can be set based on a number of criteria such as
   // connection and request limits. For example, the following destination
   // policy sets a limit of 100 connections to "reviews" service version
-  // "v1" backends. 
+  // "v1" backends.
   //
   //     metadata:
   //       name: reviews-cb-policy
@@ -171,7 +171,7 @@ message CircuitBreaker {
   //           httpConsecutiveErrors: 7
   //           sleepWindow: 15m
   //           httpDetectionInterval: 5m
-  //           
+  //
   message SimpleCircuitBreakerPolicy {
     // Maximum number of connections to a backend.
     int32 max_connections = 1;
@@ -182,7 +182,7 @@ message CircuitBreaker {
     // Maximum number of requests to a backend. Default 1024
     int32 http_max_requests = 3;
 
-    // Minimum time the circuit will be closed. format: 1h/1m/1s/1ms. MUST
+    // Minimum time the circuit will be open. format: 1h/1m/1s/1ms. MUST
     // BE >=1ms. Default is 30s.
     google.protobuf.Duration sleep_window = 4;
 
