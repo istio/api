@@ -31,7 +31,8 @@ package istio.routing.v1alpha2;
 //     spec:
 //       name: ratings
 //       trafficPolicy:
-//         lbPolicy: LEAST_CONN
+//         loadBalancer:
+//           simple: LEAST_CONN
 //
 // Version specific DestinationRule can be specified by defining a named
 // subset and overriding the settings specified at the service level. The
@@ -46,13 +47,15 @@ package istio.routing.v1alpha2;
 //     spec:
 //       name: ratings
 //       trafficPolicy:
-//         lbPolicy: LEAST_CONN
+//         loadBalancer:
+//           simple: LEAST_CONN
 //       subsets:
 //       - name: testversion
 //         labels:
 //           version: v3
 //         trafficPolicy:
-//           lbPolicy: ROUND_ROBIN
+//           loadBalancer:
+//             simple: ROUND_ROBIN
 //
 // Note that policies specified for subsets will not take effect until
 // a route rule explicitly sends traffic to this subset.
@@ -92,29 +95,8 @@ message DestinationRule {
 // Traffic policies to apply for a specific destination. See
 // DestinationRule for examples.
 message TrafficPolicy {
-  // Load balancing algorithm to use when
-  // forwarding traffic. These settings directly correlate to [load
-  // balancer
-  // types](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing)
-  // supported by Envoy.
-  enum LBPolicy {
-
-    // Simple round robin policy. Default
-    ROUND_ROBIN = 0;
-
-    // The least request load balancer uses an O(1) algorithm which selects
-    // two random healthy hosts and picks the host which has fewer active
-    // requests.
-    LEAST_CONN = 1;
-
-    // The random load balancer selects a random healthy host. The random
-    // load balancer generally performs better than round robin if no health
-    // checking policy is configured.
-    RANDOM = 2;
-  };
-
-  // Upstream load balancing policy
-  LBPolicy lb_policy = 1;
+  // Settings controlling the load balancer algorithms.
+  LoadBalancerSettings load_balancer = 1;
 
   // Settings controlling the volume of connections to an upstream service
   ConnectionPoolSettings connection_pool = 2;
@@ -139,13 +121,15 @@ message TrafficPolicy {
 //     spec:
 //       name: ratings
 //       trafficPolicy:
-//         lbPolicy: LEAST_CONN
+//         loadBalancer:
+//           simple: LEAST_CONN
 //       subsets:
 //       - name: testversion
 //         labels:
 //           version: v3
 //         trafficPolicy:
-//           lbPolicy: ROUND_ROBIN
+//           loadBalancer:
+//             simple: ROUND_ROBIN
 //
 // Note that policies specified for subsets will not take effect until
 // a route rule explicitly sends traffic to this subset.
@@ -156,13 +140,100 @@ message Subset {
 
   // REQUIRED. Labels apply a filter over the endpoints of a service in the
   // service registry. See route rules for examples of usage.
-  map<string, string> source_labels = 2;
+  map<string, string> labels = 2;
 
   // Traffic policies that apply to this subset. Subsets inherit the
   // traffic policies specified at the DestinationRule level. Settings
   // specified at the subset level will override the corresponding settings
   // specified at the DestinationRule level.
   TrafficPolicy traffic_policy = 3;
+}
+
+// Load balancing policies to apply for a specific destination. See Envoy's
+// load balancing
+// [documentation](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing.html)
+// for more details.
+//
+// For example, the following rule uses a round robin load balancing policy
+// for all traffic going to the ratings service.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: DestinationRule
+//     metadata:
+//       name: bookinfo-ratings
+//     spec:
+//       name: ratings
+//       trafficPolicy:
+//         loadBalancer:
+//           simple: ROUND_ROBIN
+//
+// The following example uses the consistent hashing based load balancer
+// for the same ratings service using the Cookie header as the hash key.
+// 
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: DestinationRule
+//     metadata:
+//       name: bookinfo-ratings
+//     spec:
+//       name: ratings
+//       trafficPolicy:
+//         loadBalancer:
+//           consistentHash:
+//             http_header: Cookie
+//
+message LoadBalancerSettings {
+  // Standard load balancing algorithms that require no tuning.
+  enum SimpleLB {
+    // Round Robin policy. Default
+    ROUND_ROBIN = 0;
+
+    // The least request load balancer uses an O(1) algorithm which selects
+    // two random healthy hosts and picks the host which has fewer active
+    // requests.
+    LEAST_CONN = 1;
+
+    // The random load balancer selects a random healthy host. The random
+    // load balancer generally performs better than round robin if no health
+    // checking policy is configured.
+    RANDOM = 2;
+
+    // This option will forward the connection to the original IP address
+    // requested by the caller without doing any form of load
+    // balancing. This option must be used with care. It is meant for
+    // advanced use cases. Refer to Original Destination load balancer in
+    // Envoy for further details.
+    PASSTHROUGH = 3;
+  };
+
+  // Consistent hashing (ketama hash) based load balancer for even load
+  // distribution/redistribution when the connection pool changes. This
+  // load balancing policy is applicable only for HTTP-based
+  // connections. A user specified HTTP header is used as the key with
+  // [xxHash](www.xxhash.com) hashing.
+  message ConsistentHashLB {
+    // REQUIRED. The name of the HTTP request header that will be used to
+    // obtain the hash key. If the request header is not present, the load
+    // balancer will use a random number as the hash, effectively making
+    // the load balancing policy random.
+    string http_header = 1;
+
+    // The minimum number of virtual nodes to use for the hash
+    // ring. Defaults to 1024. Larger ring sizes result in more granular
+    // load distributions. If the number of hosts in the load balancing
+    // pool is larger than the ring size, each host will be assigned a
+    // single virtual node.
+    uint32 minimum_ring_size = 2;
+  };
+
+  // (-- TODO: Enable Subset load balancing after moving to v2 API Also
+  // look into enabling Priotity based load balancing for spilling over
+  // from one priority pool to another. --)
+
+  // Upstream load balancing policy.
+  oneof lb_policy {
+    SimpleLB simple = 1;
+    ConsistentHashLB consistent_hash = 2;
+  }
 }
 
 // Connection pool settings for an upstream host. The settings apply to
@@ -189,7 +260,7 @@ message Subset {
 message ConnectionPoolSettings {
   // Settings common to both HTTP and TCP upstream connections.
   message TCPSettings {
-    // Maximum number of HTTP/TCP connections to a destination host.
+    // Maximum number of HTTP1 /TCP connections to a destination host.
     int32 max_connections = 1;
 
     // TCP connection timeout.
@@ -199,14 +270,18 @@ message ConnectionPoolSettings {
   // Settings applicable to HTTP1.1/HTTP2/GRPC connections.
   message HTTPSettings {
     // Maximum number of pending HTTP requests to a destination. Default 1024.
-    int32 max_pending_requests = 1;
+    int32 http1_max_pending_requests = 1;
 
     // Maximum number of requests to a backend. Default 1024.
-    int32 max_requests = 2;
+    int32 http2_max_requests = 2;
 
     // Maximum number of requests per connection to a backend. Setting this
     // parameter to 1 disables keep alive.
     int32 max_requests_per_connection = 3;
+
+    // Maximum number of retries that can be outstanding to all hosts in a
+    // cluster at a given time. Defaults to 3.
+    int32 max_retries = 4;
   };
 
   // Settings common to both HTTP and TCP upstream connections.
@@ -225,7 +300,7 @@ message ConnectionPoolSettings {
 // for more details.
 //
 // The following rule sets a connection pool size of 100 connections and
-// 1000 concurrent requests, with no more than 10 req/connection to
+// 1000 concurrent HTTP2 requests, with no more than 10 req/connection to
 // "reviews" service. In addition, it configures upstream hosts to be
 // scanned every 5 mins, such that any host that fails 7 consecutive times
 // with 5XX error code will be ejected for 15 minutes.
@@ -241,7 +316,7 @@ message ConnectionPoolSettings {
 //         tcp:
 //           maxConnections: 100
 //         http:
-//           maxRequests: 1000
+//           http2MaxRequests: 1000
 //           maxRequestsPerConnection: 10
 //       outlierDetection:
 //         http:

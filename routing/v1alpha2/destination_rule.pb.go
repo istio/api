@@ -14,6 +14,7 @@ It has these top-level messages:
 	DestinationRule
 	TrafficPolicy
 	Subset
+	LoadBalancerSettings
 	ConnectionPoolSettings
 	OutlierDetection
 	EgressRoute
@@ -52,41 +53,47 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-// Load balancing algorithm to use when
-// forwarding traffic. These settings directly correlate to [load
-// balancer
-// types](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing)
-// supported by Envoy.
-type TrafficPolicy_LBPolicy int32
+// Standard load balancing algorithms that require no tuning.
+type LoadBalancerSettings_SimpleLB int32
 
 const (
-	// Simple round robin policy. Default
-	TrafficPolicy_ROUND_ROBIN TrafficPolicy_LBPolicy = 0
+	// Round Robin policy. Default
+	LoadBalancerSettings_ROUND_ROBIN LoadBalancerSettings_SimpleLB = 0
 	// The least request load balancer uses an O(1) algorithm which selects
 	// two random healthy hosts and picks the host which has fewer active
 	// requests.
-	TrafficPolicy_LEAST_CONN TrafficPolicy_LBPolicy = 1
+	LoadBalancerSettings_LEAST_CONN LoadBalancerSettings_SimpleLB = 1
 	// The random load balancer selects a random healthy host. The random
 	// load balancer generally performs better than round robin if no health
 	// checking policy is configured.
-	TrafficPolicy_RANDOM TrafficPolicy_LBPolicy = 2
+	LoadBalancerSettings_RANDOM LoadBalancerSettings_SimpleLB = 2
+	// This option will forward the connection to the original IP address
+	// requested by the caller without doing any form of load
+	// balancing. This option must be used with care. It is meant for
+	// advanced use cases. Refer to Original Destination load balancer in
+	// Envoy for further details.
+	LoadBalancerSettings_PASSTHROUGH LoadBalancerSettings_SimpleLB = 3
 )
 
-var TrafficPolicy_LBPolicy_name = map[int32]string{
+var LoadBalancerSettings_SimpleLB_name = map[int32]string{
 	0: "ROUND_ROBIN",
 	1: "LEAST_CONN",
 	2: "RANDOM",
+	3: "PASSTHROUGH",
 }
-var TrafficPolicy_LBPolicy_value = map[string]int32{
+var LoadBalancerSettings_SimpleLB_value = map[string]int32{
 	"ROUND_ROBIN": 0,
 	"LEAST_CONN":  1,
 	"RANDOM":      2,
+	"PASSTHROUGH": 3,
 }
 
-func (x TrafficPolicy_LBPolicy) String() string {
-	return proto.EnumName(TrafficPolicy_LBPolicy_name, int32(x))
+func (x LoadBalancerSettings_SimpleLB) String() string {
+	return proto.EnumName(LoadBalancerSettings_SimpleLB_name, int32(x))
 }
-func (TrafficPolicy_LBPolicy) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{1, 0} }
+func (LoadBalancerSettings_SimpleLB) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor0, []int{3, 0}
+}
 
 // DestinationRule defines policies that apply to traffic intended for a
 // service after routing has occurred. These rules specify configuration
@@ -102,7 +109,8 @@ func (TrafficPolicy_LBPolicy) EnumDescriptor() ([]byte, []int) { return fileDesc
 //     spec:
 //       name: ratings
 //       trafficPolicy:
-//         lbPolicy: LEAST_CONN
+//         loadBalancer:
+//           simple: LEAST_CONN
 //
 // Version specific DestinationRule can be specified by defining a named
 // subset and overriding the settings specified at the service level. The
@@ -117,13 +125,15 @@ func (TrafficPolicy_LBPolicy) EnumDescriptor() ([]byte, []int) { return fileDesc
 //     spec:
 //       name: ratings
 //       trafficPolicy:
-//         lbPolicy: LEAST_CONN
+//         loadBalancer:
+//           simple: LEAST_CONN
 //       subsets:
 //       - name: testversion
 //         labels:
 //           version: v3
 //         trafficPolicy:
-//           lbPolicy: ROUND_ROBIN
+//           loadBalancer:
+//             simple: ROUND_ROBIN
 //
 // Note that policies specified for subsets will not take effect until
 // a route rule explicitly sends traffic to this subset.
@@ -187,8 +197,8 @@ func (m *DestinationRule) GetSubsets() []*Subset {
 // Traffic policies to apply for a specific destination. See
 // DestinationRule for examples.
 type TrafficPolicy struct {
-	// Upstream load balancing policy
-	LbPolicy TrafficPolicy_LBPolicy `protobuf:"varint,1,opt,name=lb_policy,json=lbPolicy,enum=istio.routing.v1alpha2.TrafficPolicy_LBPolicy" json:"lb_policy,omitempty"`
+	// Settings controlling the load balancer algorithms.
+	LoadBalancer *LoadBalancerSettings `protobuf:"bytes,1,opt,name=load_balancer,json=loadBalancer" json:"load_balancer,omitempty"`
 	// Settings controlling the volume of connections to an upstream service
 	ConnectionPool *ConnectionPoolSettings `protobuf:"bytes,2,opt,name=connection_pool,json=connectionPool" json:"connection_pool,omitempty"`
 	// Settings controlling eviction of unhealthy hosts from the load balancing pool
@@ -200,11 +210,11 @@ func (m *TrafficPolicy) String() string            { return proto.CompactTextStr
 func (*TrafficPolicy) ProtoMessage()               {}
 func (*TrafficPolicy) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
 
-func (m *TrafficPolicy) GetLbPolicy() TrafficPolicy_LBPolicy {
+func (m *TrafficPolicy) GetLoadBalancer() *LoadBalancerSettings {
 	if m != nil {
-		return m.LbPolicy
+		return m.LoadBalancer
 	}
-	return TrafficPolicy_ROUND_ROBIN
+	return nil
 }
 
 func (m *TrafficPolicy) GetConnectionPool() *ConnectionPoolSettings {
@@ -237,13 +247,15 @@ func (m *TrafficPolicy) GetOutlierDetection() *OutlierDetection {
 //     spec:
 //       name: ratings
 //       trafficPolicy:
-//         lbPolicy: LEAST_CONN
+//         loadBalancer:
+//           simple: LEAST_CONN
 //       subsets:
 //       - name: testversion
 //         labels:
 //           version: v3
 //         trafficPolicy:
-//           lbPolicy: ROUND_ROBIN
+//           loadBalancer:
+//             simple: ROUND_ROBIN
 //
 // Note that policies specified for subsets will not take effect until
 // a route rule explicitly sends traffic to this subset.
@@ -253,7 +265,7 @@ type Subset struct {
 	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
 	// REQUIRED. Labels apply a filter over the endpoints of a service in the
 	// service registry. See route rules for examples of usage.
-	SourceLabels map[string]string `protobuf:"bytes,2,rep,name=source_labels,json=sourceLabels" json:"source_labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Labels map[string]string `protobuf:"bytes,2,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// Traffic policies that apply to this subset. Subsets inherit the
 	// traffic policies specified at the DestinationRule level. Settings
 	// specified at the subset level will override the corresponding settings
@@ -273,9 +285,9 @@ func (m *Subset) GetName() string {
 	return ""
 }
 
-func (m *Subset) GetSourceLabels() map[string]string {
+func (m *Subset) GetLabels() map[string]string {
 	if m != nil {
-		return m.SourceLabels
+		return m.Labels
 	}
 	return nil
 }
@@ -285,6 +297,196 @@ func (m *Subset) GetTrafficPolicy() *TrafficPolicy {
 		return m.TrafficPolicy
 	}
 	return nil
+}
+
+// Load balancing policies to apply for a specific destination. See Envoy's
+// load balancing
+// [documentation](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing.html)
+// for more details.
+//
+// For example, the following rule uses a round robin load balancing policy
+// for all traffic going to the ratings service.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: DestinationRule
+//     metadata:
+//       name: bookinfo-ratings
+//     spec:
+//       name: ratings
+//       trafficPolicy:
+//         loadBalancer:
+//           simple: ROUND_ROBIN
+//
+// The following example uses the consistent hashing based load balancer
+// for the same ratings service using the Cookie header as the hash key.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: DestinationRule
+//     metadata:
+//       name: bookinfo-ratings
+//     spec:
+//       name: ratings
+//       trafficPolicy:
+//         loadBalancer:
+//           consistentHash:
+//             http_header: Cookie
+//
+type LoadBalancerSettings struct {
+	// Upstream load balancing policy.
+	//
+	// Types that are valid to be assigned to LbPolicy:
+	//	*LoadBalancerSettings_Simple
+	//	*LoadBalancerSettings_ConsistentHash
+	LbPolicy isLoadBalancerSettings_LbPolicy `protobuf_oneof:"lb_policy"`
+}
+
+func (m *LoadBalancerSettings) Reset()                    { *m = LoadBalancerSettings{} }
+func (m *LoadBalancerSettings) String() string            { return proto.CompactTextString(m) }
+func (*LoadBalancerSettings) ProtoMessage()               {}
+func (*LoadBalancerSettings) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
+
+type isLoadBalancerSettings_LbPolicy interface {
+	isLoadBalancerSettings_LbPolicy()
+}
+
+type LoadBalancerSettings_Simple struct {
+	Simple LoadBalancerSettings_SimpleLB `protobuf:"varint,1,opt,name=simple,enum=istio.routing.v1alpha2.LoadBalancerSettings_SimpleLB,oneof"`
+}
+type LoadBalancerSettings_ConsistentHash struct {
+	ConsistentHash *LoadBalancerSettings_ConsistentHashLB `protobuf:"bytes,2,opt,name=consistent_hash,json=consistentHash,oneof"`
+}
+
+func (*LoadBalancerSettings_Simple) isLoadBalancerSettings_LbPolicy()         {}
+func (*LoadBalancerSettings_ConsistentHash) isLoadBalancerSettings_LbPolicy() {}
+
+func (m *LoadBalancerSettings) GetLbPolicy() isLoadBalancerSettings_LbPolicy {
+	if m != nil {
+		return m.LbPolicy
+	}
+	return nil
+}
+
+func (m *LoadBalancerSettings) GetSimple() LoadBalancerSettings_SimpleLB {
+	if x, ok := m.GetLbPolicy().(*LoadBalancerSettings_Simple); ok {
+		return x.Simple
+	}
+	return LoadBalancerSettings_ROUND_ROBIN
+}
+
+func (m *LoadBalancerSettings) GetConsistentHash() *LoadBalancerSettings_ConsistentHashLB {
+	if x, ok := m.GetLbPolicy().(*LoadBalancerSettings_ConsistentHash); ok {
+		return x.ConsistentHash
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*LoadBalancerSettings) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _LoadBalancerSettings_OneofMarshaler, _LoadBalancerSettings_OneofUnmarshaler, _LoadBalancerSettings_OneofSizer, []interface{}{
+		(*LoadBalancerSettings_Simple)(nil),
+		(*LoadBalancerSettings_ConsistentHash)(nil),
+	}
+}
+
+func _LoadBalancerSettings_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*LoadBalancerSettings)
+	// lb_policy
+	switch x := m.LbPolicy.(type) {
+	case *LoadBalancerSettings_Simple:
+		b.EncodeVarint(1<<3 | proto.WireVarint)
+		b.EncodeVarint(uint64(x.Simple))
+	case *LoadBalancerSettings_ConsistentHash:
+		b.EncodeVarint(2<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.ConsistentHash); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("LoadBalancerSettings.LbPolicy has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _LoadBalancerSettings_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*LoadBalancerSettings)
+	switch tag {
+	case 1: // lb_policy.simple
+		if wire != proto.WireVarint {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeVarint()
+		m.LbPolicy = &LoadBalancerSettings_Simple{LoadBalancerSettings_SimpleLB(x)}
+		return true, err
+	case 2: // lb_policy.consistent_hash
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(LoadBalancerSettings_ConsistentHashLB)
+		err := b.DecodeMessage(msg)
+		m.LbPolicy = &LoadBalancerSettings_ConsistentHash{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _LoadBalancerSettings_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*LoadBalancerSettings)
+	// lb_policy
+	switch x := m.LbPolicy.(type) {
+	case *LoadBalancerSettings_Simple:
+		n += proto.SizeVarint(1<<3 | proto.WireVarint)
+		n += proto.SizeVarint(uint64(x.Simple))
+	case *LoadBalancerSettings_ConsistentHash:
+		s := proto.Size(x.ConsistentHash)
+		n += proto.SizeVarint(2<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+// Consistent hashing (ketama hash) based load balancer for even load
+// distribution/redistribution when the connection pool changes. This
+// load balancing policy is applicable only for HTTP-based
+// connections. A user specified HTTP header is used as the key with
+// [xxHash](www.xxhash.com) hashing.
+type LoadBalancerSettings_ConsistentHashLB struct {
+	// REQUIRED. The name of the HTTP request header that will be used to
+	// obtain the hash key. If the request header is not present, the load
+	// balancer will use a random number as the hash, effectively making
+	// the load balancing policy random.
+	HttpHeader string `protobuf:"bytes,1,opt,name=http_header,json=httpHeader" json:"http_header,omitempty"`
+	// The minimum number of virtual nodes to use for the hash
+	// ring. Defaults to 1024. Larger ring sizes result in more granular
+	// load distributions. If the number of hosts in the load balancing
+	// pool is larger than the ring size, each host will be assigned a
+	// single virtual node.
+	MinimumRingSize uint32 `protobuf:"varint,2,opt,name=minimum_ring_size,json=minimumRingSize" json:"minimum_ring_size,omitempty"`
+}
+
+func (m *LoadBalancerSettings_ConsistentHashLB) Reset()         { *m = LoadBalancerSettings_ConsistentHashLB{} }
+func (m *LoadBalancerSettings_ConsistentHashLB) String() string { return proto.CompactTextString(m) }
+func (*LoadBalancerSettings_ConsistentHashLB) ProtoMessage()    {}
+func (*LoadBalancerSettings_ConsistentHashLB) Descriptor() ([]byte, []int) {
+	return fileDescriptor0, []int{3, 0}
+}
+
+func (m *LoadBalancerSettings_ConsistentHashLB) GetHttpHeader() string {
+	if m != nil {
+		return m.HttpHeader
+	}
+	return ""
+}
+
+func (m *LoadBalancerSettings_ConsistentHashLB) GetMinimumRingSize() uint32 {
+	if m != nil {
+		return m.MinimumRingSize
+	}
+	return 0
 }
 
 // Connection pool settings for an upstream host. The settings apply to
@@ -318,7 +520,7 @@ type ConnectionPoolSettings struct {
 func (m *ConnectionPoolSettings) Reset()                    { *m = ConnectionPoolSettings{} }
 func (m *ConnectionPoolSettings) String() string            { return proto.CompactTextString(m) }
 func (*ConnectionPoolSettings) ProtoMessage()               {}
-func (*ConnectionPoolSettings) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
+func (*ConnectionPoolSettings) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
 
 func (m *ConnectionPoolSettings) GetTcp() *ConnectionPoolSettings_TCPSettings {
 	if m != nil {
@@ -336,7 +538,7 @@ func (m *ConnectionPoolSettings) GetHttp() *ConnectionPoolSettings_HTTPSettings 
 
 // Settings common to both HTTP and TCP upstream connections.
 type ConnectionPoolSettings_TCPSettings struct {
-	// Maximum number of HTTP/TCP connections to a destination host.
+	// Maximum number of HTTP1 /TCP connections to a destination host.
 	MaxConnections int32 `protobuf:"varint,1,opt,name=max_connections,json=maxConnections" json:"max_connections,omitempty"`
 	// TCP connection timeout.
 	ConnectTimeout *google_protobuf.Duration `protobuf:"bytes,2,opt,name=connect_timeout,json=connectTimeout" json:"connect_timeout,omitempty"`
@@ -346,7 +548,7 @@ func (m *ConnectionPoolSettings_TCPSettings) Reset()         { *m = ConnectionPo
 func (m *ConnectionPoolSettings_TCPSettings) String() string { return proto.CompactTextString(m) }
 func (*ConnectionPoolSettings_TCPSettings) ProtoMessage()    {}
 func (*ConnectionPoolSettings_TCPSettings) Descriptor() ([]byte, []int) {
-	return fileDescriptor0, []int{3, 0}
+	return fileDescriptor0, []int{4, 0}
 }
 
 func (m *ConnectionPoolSettings_TCPSettings) GetMaxConnections() int32 {
@@ -366,31 +568,34 @@ func (m *ConnectionPoolSettings_TCPSettings) GetConnectTimeout() *google_protobu
 // Settings applicable to HTTP1.1/HTTP2/GRPC connections.
 type ConnectionPoolSettings_HTTPSettings struct {
 	// Maximum number of pending HTTP requests to a destination. Default 1024.
-	MaxPendingRequests int32 `protobuf:"varint,1,opt,name=max_pending_requests,json=maxPendingRequests" json:"max_pending_requests,omitempty"`
+	Http1MaxPendingRequests int32 `protobuf:"varint,1,opt,name=http1_max_pending_requests,json=http1MaxPendingRequests" json:"http1_max_pending_requests,omitempty"`
 	// Maximum number of requests to a backend. Default 1024.
-	MaxRequests int32 `protobuf:"varint,2,opt,name=max_requests,json=maxRequests" json:"max_requests,omitempty"`
+	Http2MaxRequests int32 `protobuf:"varint,2,opt,name=http2_max_requests,json=http2MaxRequests" json:"http2_max_requests,omitempty"`
 	// Maximum number of requests per connection to a backend. Setting this
 	// parameter to 1 disables keep alive.
 	MaxRequestsPerConnection int32 `protobuf:"varint,3,opt,name=max_requests_per_connection,json=maxRequestsPerConnection" json:"max_requests_per_connection,omitempty"`
+	// Maximum number of retries that can be outstanding to all hosts in a
+	// cluster at a given time. Defaults to 3.
+	MaxRetries int32 `protobuf:"varint,4,opt,name=max_retries,json=maxRetries" json:"max_retries,omitempty"`
 }
 
 func (m *ConnectionPoolSettings_HTTPSettings) Reset()         { *m = ConnectionPoolSettings_HTTPSettings{} }
 func (m *ConnectionPoolSettings_HTTPSettings) String() string { return proto.CompactTextString(m) }
 func (*ConnectionPoolSettings_HTTPSettings) ProtoMessage()    {}
 func (*ConnectionPoolSettings_HTTPSettings) Descriptor() ([]byte, []int) {
-	return fileDescriptor0, []int{3, 1}
+	return fileDescriptor0, []int{4, 1}
 }
 
-func (m *ConnectionPoolSettings_HTTPSettings) GetMaxPendingRequests() int32 {
+func (m *ConnectionPoolSettings_HTTPSettings) GetHttp1MaxPendingRequests() int32 {
 	if m != nil {
-		return m.MaxPendingRequests
+		return m.Http1MaxPendingRequests
 	}
 	return 0
 }
 
-func (m *ConnectionPoolSettings_HTTPSettings) GetMaxRequests() int32 {
+func (m *ConnectionPoolSettings_HTTPSettings) GetHttp2MaxRequests() int32 {
 	if m != nil {
-		return m.MaxRequests
+		return m.Http2MaxRequests
 	}
 	return 0
 }
@@ -398,6 +603,13 @@ func (m *ConnectionPoolSettings_HTTPSettings) GetMaxRequests() int32 {
 func (m *ConnectionPoolSettings_HTTPSettings) GetMaxRequestsPerConnection() int32 {
 	if m != nil {
 		return m.MaxRequestsPerConnection
+	}
+	return 0
+}
+
+func (m *ConnectionPoolSettings_HTTPSettings) GetMaxRetries() int32 {
+	if m != nil {
+		return m.MaxRetries
 	}
 	return 0
 }
@@ -412,7 +624,7 @@ func (m *ConnectionPoolSettings_HTTPSettings) GetMaxRequestsPerConnection() int3
 // for more details.
 //
 // The following rule sets a connection pool size of 100 connections and
-// 1000 concurrent requests, with no more than 10 req/connection to
+// 1000 concurrent HTTP2 requests, with no more than 10 req/connection to
 // "reviews" service. In addition, it configures upstream hosts to be
 // scanned every 5 mins, such that any host that fails 7 consecutive times
 // with 5XX error code will be ejected for 15 minutes.
@@ -428,7 +640,7 @@ func (m *ConnectionPoolSettings_HTTPSettings) GetMaxRequestsPerConnection() int3
 //         tcp:
 //           maxConnections: 100
 //         http:
-//           maxRequests: 1000
+//           http2MaxRequests: 1000
 //           maxRequestsPerConnection: 10
 //       outlierDetection:
 //         http:
@@ -444,7 +656,7 @@ type OutlierDetection struct {
 func (m *OutlierDetection) Reset()                    { *m = OutlierDetection{} }
 func (m *OutlierDetection) String() string            { return proto.CompactTextString(m) }
 func (*OutlierDetection) ProtoMessage()               {}
-func (*OutlierDetection) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
+func (*OutlierDetection) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{5} }
 
 func (m *OutlierDetection) GetHttp() *OutlierDetection_HTTPSettings {
 	if m != nil {
@@ -476,7 +688,7 @@ func (m *OutlierDetection_HTTPSettings) Reset()         { *m = OutlierDetection_
 func (m *OutlierDetection_HTTPSettings) String() string { return proto.CompactTextString(m) }
 func (*OutlierDetection_HTTPSettings) ProtoMessage()    {}
 func (*OutlierDetection_HTTPSettings) Descriptor() ([]byte, []int) {
-	return fileDescriptor0, []int{4, 0}
+	return fileDescriptor0, []int{5, 0}
 }
 
 func (m *OutlierDetection_HTTPSettings) GetConsecutiveErrors() int32 {
@@ -511,61 +723,73 @@ func init() {
 	proto.RegisterType((*DestinationRule)(nil), "istio.routing.v1alpha2.DestinationRule")
 	proto.RegisterType((*TrafficPolicy)(nil), "istio.routing.v1alpha2.TrafficPolicy")
 	proto.RegisterType((*Subset)(nil), "istio.routing.v1alpha2.Subset")
+	proto.RegisterType((*LoadBalancerSettings)(nil), "istio.routing.v1alpha2.LoadBalancerSettings")
+	proto.RegisterType((*LoadBalancerSettings_ConsistentHashLB)(nil), "istio.routing.v1alpha2.LoadBalancerSettings.ConsistentHashLB")
 	proto.RegisterType((*ConnectionPoolSettings)(nil), "istio.routing.v1alpha2.ConnectionPoolSettings")
 	proto.RegisterType((*ConnectionPoolSettings_TCPSettings)(nil), "istio.routing.v1alpha2.ConnectionPoolSettings.TCPSettings")
 	proto.RegisterType((*ConnectionPoolSettings_HTTPSettings)(nil), "istio.routing.v1alpha2.ConnectionPoolSettings.HTTPSettings")
 	proto.RegisterType((*OutlierDetection)(nil), "istio.routing.v1alpha2.OutlierDetection")
 	proto.RegisterType((*OutlierDetection_HTTPSettings)(nil), "istio.routing.v1alpha2.OutlierDetection.HTTPSettings")
-	proto.RegisterEnum("istio.routing.v1alpha2.TrafficPolicy_LBPolicy", TrafficPolicy_LBPolicy_name, TrafficPolicy_LBPolicy_value)
+	proto.RegisterEnum("istio.routing.v1alpha2.LoadBalancerSettings_SimpleLB", LoadBalancerSettings_SimpleLB_name, LoadBalancerSettings_SimpleLB_value)
 }
 
 func init() { proto.RegisterFile("routing/v1alpha2/destination_rule.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
-	// 710 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x4d, 0x4f, 0xdb, 0x4a,
-	0x14, 0x7d, 0x71, 0x80, 0x07, 0x37, 0x90, 0x84, 0x11, 0x42, 0x79, 0x79, 0x12, 0xe2, 0x45, 0x7a,
-	0x22, 0x9b, 0x3a, 0x34, 0x15, 0x2a, 0xa2, 0xaa, 0x2a, 0x20, 0x51, 0x8b, 0x9a, 0x26, 0x91, 0x13,
-	0xd4, 0xa5, 0x65, 0x3b, 0x97, 0xe0, 0x76, 0xe2, 0x71, 0x67, 0xc6, 0x51, 0xe8, 0xb2, 0x3f, 0xa5,
-	0xfb, 0xfe, 0x8c, 0xae, 0xbb, 0xed, 0xbf, 0xe8, 0x5f, 0xa8, 0x3c, 0xfe, 0x88, 0xa1, 0x81, 0x42,
-	0x77, 0xf6, 0xdc, 0x73, 0xce, 0xdc, 0x3b, 0xe7, 0xcc, 0xc0, 0x1e, 0x67, 0x81, 0x74, 0xbd, 0x71,
-	0x63, 0xfa, 0xd8, 0xa2, 0xfe, 0xa5, 0xd5, 0x6c, 0x8c, 0x50, 0x48, 0xd7, 0xb3, 0xa4, 0xcb, 0x3c,
-	0x93, 0x07, 0x14, 0x75, 0x9f, 0x33, 0xc9, 0xc8, 0xb6, 0x2b, 0xa4, 0xcb, 0xf4, 0x18, 0xae, 0x27,
-	0xf0, 0xea, 0xce, 0x98, 0xb1, 0x31, 0xc5, 0x86, 0x42, 0xd9, 0xc1, 0x45, 0x63, 0x14, 0x70, 0x45,
-	0x8e, 0x78, 0xb5, 0x2f, 0x39, 0x28, 0xb5, 0xe6, 0x92, 0x46, 0x40, 0x91, 0x10, 0x58, 0xf2, 0xac,
-	0x09, 0x56, 0x72, 0xbb, 0xb9, 0xfa, 0x9a, 0xa1, 0xbe, 0x49, 0x07, 0x8a, 0x92, 0x5b, 0x17, 0x17,
-	0xae, 0x63, 0xfa, 0x8c, 0xba, 0xce, 0x55, 0x45, 0xdb, 0xcd, 0xd5, 0x0b, 0xcd, 0xff, 0xf5, 0xc5,
-	0x1b, 0xeb, 0xc3, 0x08, 0xdd, 0x57, 0x60, 0x63, 0x43, 0x66, 0x7f, 0xc9, 0x21, 0xfc, 0x2d, 0x02,
-	0x5b, 0xa0, 0x14, 0x95, 0xfc, 0x6e, 0xbe, 0x5e, 0x68, 0xee, 0xdc, 0x26, 0x33, 0x50, 0x30, 0x23,
-	0x81, 0xd7, 0xbe, 0x6a, 0xb0, 0x71, 0x4d, 0x9a, 0xbc, 0x86, 0x35, 0x6a, 0x27, 0x4d, 0x85, 0x2d,
-	0x17, 0x9b, 0xfa, 0xbd, 0x9a, 0xd2, 0x3b, 0x27, 0x71, 0x77, 0xab, 0xd4, 0x8e, 0xc5, 0xde, 0x42,
-	0xc9, 0x61, 0x9e, 0x87, 0x8e, 0x3a, 0x5f, 0x9f, 0x31, 0x1a, 0xcf, 0x79, 0xab, 0xe4, 0x69, 0x0a,
-	0xef, 0x33, 0x46, 0x07, 0x28, 0xc3, 0xb2, 0x30, 0x8a, 0xce, 0xb5, 0x75, 0x72, 0x0e, 0x9b, 0x2c,
-	0x90, 0xd4, 0x45, 0x6e, 0x8e, 0x50, 0x46, 0x85, 0x4a, 0x5e, 0x49, 0xd7, 0x6f, 0x93, 0xee, 0x45,
-	0x84, 0x56, 0x82, 0x37, 0xca, 0xec, 0xc6, 0x4a, 0xed, 0x29, 0xac, 0x26, 0x53, 0x90, 0x12, 0x14,
-	0x8c, 0xde, 0x79, 0xb7, 0x65, 0x1a, 0xbd, 0x93, 0xb3, 0x6e, 0xf9, 0x2f, 0x52, 0x04, 0xe8, 0xb4,
-	0x8f, 0x07, 0x43, 0xf3, 0xb4, 0xd7, 0xed, 0x96, 0x73, 0x04, 0x60, 0xc5, 0x38, 0xee, 0xb6, 0x7a,
-	0x6f, 0xca, 0x5a, 0xed, 0x93, 0x06, 0x2b, 0xd1, 0xd9, 0x2e, 0xb4, 0xfb, 0x1c, 0x36, 0x04, 0x0b,
-	0xb8, 0x83, 0x26, 0xb5, 0x6c, 0xa4, 0xa2, 0xa2, 0x29, 0x9b, 0xf6, 0xef, 0xb6, 0x49, 0x1f, 0x28,
-	0x4e, 0x47, 0x51, 0xda, 0x9e, 0xe4, 0x57, 0xc6, 0xba, 0xc8, 0x2c, 0x2d, 0x48, 0x51, 0xfe, 0xcf,
-	0x53, 0x54, 0x7d, 0x01, 0x9b, 0xbf, 0x6c, 0x48, 0xca, 0x90, 0x7f, 0x8f, 0x57, 0xf1, 0x30, 0xe1,
-	0x27, 0xd9, 0x82, 0xe5, 0xa9, 0x45, 0x03, 0x54, 0x4e, 0xae, 0x19, 0xd1, 0xcf, 0x91, 0x76, 0x98,
-	0xab, 0x7d, 0xcf, 0xc3, 0xf6, 0x62, 0xff, 0x48, 0x07, 0xf2, 0xd2, 0xf1, 0x95, 0x4c, 0xa1, 0x79,
-	0xf4, 0x30, 0xf3, 0xf5, 0xe1, 0x69, 0x3f, 0x0d, 0x42, 0x28, 0x43, 0x7a, 0xb0, 0x74, 0x29, 0xa5,
-	0x1f, 0x67, 0xe9, 0xd9, 0x03, 0xe5, 0x5e, 0x0d, 0x87, 0x73, 0x3d, 0x25, 0x54, 0xfd, 0x08, 0x85,
-	0xcc, 0x26, 0x64, 0x0f, 0x4a, 0x13, 0x6b, 0x66, 0xce, 0x33, 0x27, 0x54, 0xe7, 0xcb, 0x46, 0x71,
-	0x62, 0xcd, 0xe6, 0xaa, 0x82, 0x9c, 0xa4, 0xf9, 0x36, 0xa5, 0x3b, 0x41, 0x16, 0xc8, 0xb8, 0xa7,
-	0x7f, 0xf4, 0xe8, 0xa1, 0xd0, 0x93, 0x87, 0x42, 0x6f, 0xc5, 0x0f, 0x45, 0x1a, 0xe5, 0x61, 0x44,
-	0xa8, 0x7e, 0xce, 0xc1, 0x7a, 0xb6, 0x25, 0xb2, 0x0f, 0x5b, 0xe1, 0xee, 0x3e, 0x7a, 0x23, 0xd7,
-	0x1b, 0x9b, 0x1c, 0x3f, 0x04, 0x28, 0x64, 0xd2, 0x02, 0x99, 0x58, 0xb3, 0x7e, 0x54, 0x32, 0xe2,
-	0x0a, 0xf9, 0x0f, 0xd6, 0x43, 0x46, 0x8a, 0xd4, 0x14, 0xb2, 0x30, 0xb1, 0x66, 0x29, 0xe4, 0x39,
-	0xfc, 0x9b, 0x85, 0x98, 0x3e, 0xf2, 0xcc, 0x7c, 0x2a, 0x37, 0xcb, 0x46, 0x25, 0xc3, 0xe8, 0x23,
-	0x9f, 0x4f, 0x5a, 0xfb, 0xa6, 0x41, 0xf9, 0xe6, 0xfd, 0x21, 0x67, 0xb1, 0x0d, 0x91, 0xab, 0x07,
-	0xf7, 0xbd, 0x77, 0x8b, 0x0c, 0xf8, 0x71, 0xf3, 0x10, 0x1e, 0x01, 0x71, 0x98, 0x27, 0xd0, 0x09,
-	0xa4, 0x3b, 0x45, 0x13, 0x39, 0x67, 0x3c, 0x39, 0x82, 0xcd, 0x4c, 0xa5, 0xad, 0x0a, 0xe4, 0x00,
-	0x56, 0x5d, 0x4f, 0x22, 0x9f, 0x5a, 0xf4, 0xf7, 0x0e, 0xa4, 0x50, 0xf2, 0x12, 0x88, 0x6d, 0x09,
-	0x34, 0xf1, 0x5d, 0xfc, 0x44, 0x85, 0x2e, 0xc6, 0x97, 0xe8, 0x0e, 0x81, 0x72, 0x48, 0x6a, 0xc7,
-	0x9c, 0xd0, 0xc7, 0xc4, 0xb3, 0x54, 0xc7, 0x47, 0xee, 0xa0, 0x27, 0x2b, 0x4b, 0xa9, 0x67, 0x09,
-	0xbc, 0x1f, 0x55, 0xec, 0x15, 0x25, 0xfb, 0xe4, 0x67, 0x00, 0x00, 0x00, 0xff, 0xff, 0x2e, 0x81,
-	0x23, 0x8a, 0x93, 0x06, 0x00, 0x00,
+	// 868 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x55, 0xdd, 0x6e, 0x1a, 0x47,
+	0x14, 0x0e, 0x60, 0xd3, 0xf8, 0x10, 0xc3, 0x7a, 0x64, 0xa5, 0x94, 0x4a, 0xa9, 0x85, 0x54, 0xc5,
+	0x8a, 0xd2, 0x75, 0x43, 0x65, 0x29, 0x4d, 0x94, 0x0b, 0x63, 0xac, 0x10, 0x09, 0x03, 0x1d, 0xb0,
+	0x7a, 0x39, 0x1a, 0x96, 0x31, 0x4c, 0x3b, 0xbb, 0xb3, 0x9d, 0x99, 0xb5, 0xb0, 0xdf, 0xa0, 0x57,
+	0x95, 0xfa, 0x1e, 0x7d, 0x96, 0x5e, 0xf7, 0x11, 0x7a, 0xd5, 0x57, 0xa8, 0x76, 0x76, 0x58, 0xb0,
+	0x85, 0xd3, 0x3a, 0x77, 0xec, 0x39, 0xdf, 0xf7, 0xcd, 0xf9, 0x07, 0x9e, 0x2b, 0x99, 0x18, 0x1e,
+	0xcd, 0x8e, 0xae, 0x5e, 0x51, 0x11, 0xcf, 0x69, 0xeb, 0x68, 0xca, 0xb4, 0xe1, 0x11, 0x35, 0x5c,
+	0x46, 0x44, 0x25, 0x82, 0xf9, 0xb1, 0x92, 0x46, 0xa2, 0xa7, 0x5c, 0x1b, 0x2e, 0x7d, 0x07, 0xf7,
+	0x97, 0xf0, 0xc6, 0xb3, 0x99, 0x94, 0x33, 0xc1, 0x8e, 0x2c, 0x6a, 0x92, 0x5c, 0x1e, 0x4d, 0x13,
+	0x65, 0xc9, 0x19, 0xaf, 0xf9, 0x47, 0x01, 0x6a, 0x9d, 0x95, 0x24, 0x4e, 0x04, 0x43, 0x08, 0xb6,
+	0x22, 0x1a, 0xb2, 0x7a, 0xe1, 0xa0, 0x70, 0xb8, 0x83, 0xed, 0x6f, 0xd4, 0x83, 0xaa, 0x51, 0xf4,
+	0xf2, 0x92, 0x07, 0x24, 0x96, 0x82, 0x07, 0xd7, 0xf5, 0xe2, 0x41, 0xe1, 0xb0, 0xd2, 0xfa, 0xda,
+	0xdf, 0xfc, 0xb0, 0x3f, 0xce, 0xd0, 0x43, 0x0b, 0xc6, 0xbb, 0x66, 0xfd, 0x13, 0xbd, 0x86, 0xcf,
+	0x74, 0x32, 0xd1, 0xcc, 0xe8, 0x7a, 0xe9, 0xa0, 0x74, 0x58, 0x69, 0x3d, 0xbb, 0x4f, 0x66, 0x64,
+	0x61, 0x78, 0x09, 0x6f, 0xfe, 0x5e, 0x84, 0xdd, 0x5b, 0xd2, 0xe8, 0x07, 0xd8, 0x15, 0x92, 0x4e,
+	0xc9, 0x84, 0x0a, 0x1a, 0x05, 0x4c, 0xd9, 0xb0, 0x2b, 0xad, 0x97, 0xf7, 0x29, 0xf6, 0x24, 0x9d,
+	0xb6, 0x1d, 0x76, 0xc4, 0x4c, 0xea, 0xd4, 0xf8, 0x89, 0x58, 0xb3, 0xa2, 0x1f, 0xa1, 0x16, 0xc8,
+	0x28, 0x62, 0x81, 0xad, 0x72, 0x2c, 0xa5, 0x70, 0xd9, 0xfa, 0xf7, 0x89, 0x9e, 0xe6, 0xf0, 0xa1,
+	0x94, 0x22, 0x97, 0xad, 0x06, 0xb7, 0xec, 0xe8, 0x02, 0xf6, 0x64, 0x62, 0x04, 0x67, 0x8a, 0x4c,
+	0x99, 0xc9, 0x1c, 0xf5, 0x92, 0x95, 0x3e, 0xbc, 0x4f, 0x7a, 0x90, 0x11, 0x3a, 0x4b, 0x3c, 0xf6,
+	0xe4, 0x1d, 0x4b, 0xf3, 0xef, 0x02, 0x94, 0xb3, 0x42, 0x6d, 0xec, 0x5d, 0x1b, 0xca, 0x82, 0x4e,
+	0x98, 0xd0, 0xf5, 0xa2, 0x2d, 0xf6, 0x8b, 0x8f, 0x17, 0xdb, 0xef, 0x59, 0xf0, 0x59, 0x64, 0xd4,
+	0x35, 0x76, 0xcc, 0x0d, 0xfd, 0x2f, 0x7d, 0x7a, 0xff, 0x1b, 0xdf, 0x43, 0x65, 0xed, 0x11, 0xe4,
+	0x41, 0xe9, 0x67, 0x76, 0xed, 0x62, 0x4e, 0x7f, 0xa2, 0x7d, 0xd8, 0xbe, 0xa2, 0x22, 0x61, 0xb6,
+	0xee, 0x3b, 0x38, 0xfb, 0x78, 0x53, 0x7c, 0x5d, 0x68, 0xfe, 0x5a, 0x82, 0xfd, 0x4d, 0x2d, 0x44,
+	0x03, 0x28, 0x6b, 0x1e, 0xc6, 0x22, 0xcb, 0xbd, 0xda, 0x3a, 0x7e, 0xc8, 0x00, 0xf8, 0x23, 0x4b,
+	0xed, 0xb5, 0xbb, 0x8f, 0xb0, 0x93, 0x41, 0x73, 0x3b, 0x05, 0x9a, 0x6b, 0xc3, 0x22, 0x43, 0xe6,
+	0x54, 0xcf, 0xdd, 0x14, 0xbc, 0x7b, 0x90, 0xf2, 0x69, 0xae, 0xd1, 0xa5, 0x7a, 0x6e, 0x5f, 0xa8,
+	0x06, 0xb7, 0x6c, 0x0d, 0x02, 0xde, 0x5d, 0x14, 0xfa, 0x0a, 0x2a, 0x73, 0x63, 0x62, 0x32, 0x67,
+	0x74, 0xea, 0x86, 0x7a, 0x07, 0x43, 0x6a, 0xea, 0x5a, 0x0b, 0x7a, 0x01, 0x7b, 0x21, 0x8f, 0x78,
+	0x98, 0x84, 0x44, 0xf1, 0x68, 0x46, 0x34, 0xbf, 0xc9, 0xca, 0xb5, 0x8b, 0x6b, 0xce, 0x81, 0x79,
+	0x34, 0x1b, 0xf1, 0x1b, 0xd6, 0xec, 0xc2, 0xe3, 0x65, 0x82, 0xa8, 0x06, 0x15, 0x3c, 0xb8, 0xe8,
+	0x77, 0x08, 0x1e, 0xb4, 0x3f, 0xf4, 0xbd, 0x47, 0xa8, 0x0a, 0xd0, 0x3b, 0x3b, 0x19, 0x8d, 0xc9,
+	0xe9, 0xa0, 0xdf, 0xf7, 0x0a, 0x08, 0xa0, 0x8c, 0x4f, 0xfa, 0x9d, 0xc1, 0xb9, 0x57, 0x4c, 0xc1,
+	0xc3, 0x93, 0xd1, 0x68, 0xdc, 0xc5, 0x83, 0x8b, 0xf7, 0x5d, 0xaf, 0xd4, 0xae, 0xc0, 0x8e, 0x98,
+	0xb8, 0x11, 0x68, 0xfe, 0xb6, 0x05, 0x4f, 0x37, 0x4f, 0x3e, 0xea, 0x41, 0xc9, 0x04, 0xb1, 0xdb,
+	0xc5, 0x37, 0x0f, 0x5b, 0x1b, 0x7f, 0x7c, 0x3a, 0xcc, 0x57, 0x28, 0x95, 0x41, 0x03, 0xd8, 0x4a,
+	0x33, 0x77, 0xf5, 0x7f, 0xfb, 0x40, 0xb9, 0xee, 0x78, 0xbc, 0xd2, 0xb3, 0x42, 0x8d, 0x1b, 0xa8,
+	0xac, 0x3d, 0x82, 0x9e, 0x43, 0x2d, 0xa4, 0x0b, 0xb2, 0xda, 0x56, 0x6d, 0x23, 0xdf, 0xc6, 0xd5,
+	0x90, 0x2e, 0x56, 0xaa, 0x1a, 0xb5, 0xf3, 0xcb, 0x40, 0x0c, 0x0f, 0x99, 0x4c, 0x8c, 0x8b, 0xe9,
+	0x0b, 0x3f, 0x3b, 0xb4, 0xfe, 0xf2, 0xd0, 0xfa, 0x1d, 0x77, 0x68, 0xf3, 0x23, 0x30, 0xce, 0x08,
+	0x8d, 0xbf, 0x0a, 0xf0, 0x64, 0x3d, 0x24, 0xf4, 0x16, 0x1a, 0x69, 0x50, 0xaf, 0x48, 0x1a, 0x43,
+	0xcc, 0xa2, 0x69, 0xda, 0x4e, 0xc5, 0x7e, 0x49, 0x98, 0x36, 0xcb, 0x40, 0x3e, 0xb7, 0x88, 0x73,
+	0xba, 0x18, 0x66, 0x7e, 0xec, 0xdc, 0xe8, 0x25, 0xa0, 0xd4, 0xd5, 0xb2, 0xe4, 0x9c, 0x54, 0xb4,
+	0x24, 0xcf, 0x7a, 0xce, 0xe9, 0x22, 0x47, 0xbf, 0x83, 0x2f, 0xd7, 0x71, 0x24, 0x66, 0x6a, 0x2d,
+	0x6b, 0xbb, 0xd3, 0xdb, 0xb8, 0x1e, 0xae, 0x18, 0x43, 0xa6, 0x56, 0xf9, 0xa7, 0x43, 0x99, 0xd1,
+	0x8d, 0xe2, 0x4c, 0xd7, 0xb7, 0x2c, 0x1c, 0x2c, 0xdc, 0x5a, 0x9a, 0x7f, 0x16, 0xc1, 0xbb, 0x7b,
+	0xb0, 0xd0, 0x07, 0xd7, 0xbd, 0x6c, 0x18, 0x8e, 0xff, 0xef, 0xa1, 0xdb, 0xd4, 0xb7, 0x7f, 0xee,
+	0xd6, 0xee, 0x1b, 0x40, 0xe9, 0x32, 0xb1, 0x20, 0x31, 0xfc, 0x8a, 0x11, 0xa6, 0x94, 0x54, 0xcb,
+	0x9a, 0xed, 0xad, 0x79, 0xce, 0xac, 0x03, 0x1d, 0xc3, 0x63, 0x1e, 0x19, 0xa6, 0xae, 0xa8, 0xf8,
+	0xef, 0xc6, 0xe5, 0x50, 0xf4, 0x1e, 0xd0, 0x84, 0x6a, 0x46, 0xd8, 0x4f, 0xee, 0x3f, 0x21, 0x6d,
+	0xbe, 0xbb, 0x80, 0x1f, 0x11, 0xf0, 0x52, 0xd2, 0x99, 0xe3, 0xa4, 0xed, 0x47, 0xdf, 0xc2, 0x7e,
+	0x5a, 0xc0, 0x5c, 0x27, 0x66, 0x2a, 0x60, 0x91, 0x71, 0x95, 0x44, 0x21, 0x5d, 0x2c, 0xe1, 0xc3,
+	0xcc, 0x33, 0x29, 0x5b, 0xd9, 0xef, 0xfe, 0x0d, 0x00, 0x00, 0xff, 0xff, 0x71, 0xf1, 0x2c, 0x04,
+	0x0a, 0x08, 0x00, 0x00,
 }
