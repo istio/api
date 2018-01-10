@@ -14,6 +14,8 @@
 
 syntax = "proto3";
 
+import "google/protobuf/any.proto";
+
 package istio.routing.v1alpha2;
 
 // Gateway describes a load balancer operating at the edge of the mesh
@@ -251,5 +253,17 @@ message Server {
   // these options to control if all http requests should be redirected to
   // https, and the TLS modes to use.
   TLSOptions tls = 3;
-}
 
+  // Extensions contain proxy implementation specific configuration, that
+  // cannot be easily expressed through expressed using proxy-independent
+  // routing rule or mixer policy configuration. Custom proxy
+  // implementations could have enhancements such as caching, dynamic
+  // scripting, proprietary protocol support, etc. The configuration for
+  // such features could be provided through the extensions mechanism.
+  //
+  // To extend the proxy configuration for a sidecar, the port and the
+  // domains used in the Gateway configuration must match the port and IP
+  // on which the sidecar is listening for connections. See Envoy filters
+  // configuration for usage examples.
+  repeated google.protobuf.Any proxy_extensions = 4;
+}
