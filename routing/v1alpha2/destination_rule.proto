@@ -399,8 +399,9 @@ message TLSSettings {
     // upstream server.
     SIMPLE = 1;
 
-    // If set to "mutual", the proxy will originate a TLS connection and
-    // secure it using standard mTLS authentication.
+    // If set to "mutual", the proxy will secure connections to the
+    // upstream using mutual TLS by presenting client certificates for
+    // authentication.
     MUTUAL = 2;
   };
 
@@ -408,11 +409,11 @@ message TLSSettings {
   // using TLS. The value of this field determines how TLS is enforced.
   TLSmode mode = 1;
 
-  // REQUIRED if mode == MUTUAL. The path to the file holding the
+  // REQUIRED if mode is "mutual". The path to the file holding the
   // client-side TLS certificate to use.
   string client_certificate = 2;
 
-  // REQUIRED if mode == MUTUAL. The path to the file holding the
+  // REQUIRED if mode is "mutual". The path to the file holding the
   // client's private key.
   string private_key = 3;
 

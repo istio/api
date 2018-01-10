@@ -104,8 +104,9 @@ const (
 	// If set to "simple", the proxy will originate a TLS connection to the
 	// upstream server.
 	TLSSettings_SIMPLE TLSSettings_TLSmode = 1
-	// If set to "mutual", the proxy will originate a TLS connection and
-	// secure it using standard mTLS authentication.
+	// If set to "mutual", the proxy will secure connections to the
+	// upstream using mutual TLS by presenting client certificates for
+	// authentication.
 	TLSSettings_MUTUAL TLSSettings_TLSmode = 2
 )
 
@@ -796,10 +797,10 @@ type TLSSettings struct {
 	// REQUIRED: Indicates whether connections to this port should be secured
 	// using TLS. The value of this field determines how TLS is enforced.
 	Mode TLSSettings_TLSmode `protobuf:"varint,1,opt,name=mode,enum=istio.routing.v1alpha2.TLSSettings_TLSmode" json:"mode,omitempty"`
-	// REQUIRED if mode == MUTUAL. The path to the file holding the
+	// REQUIRED if mode is "mutual". The path to the file holding the
 	// client-side TLS certificate to use.
 	ClientCertificate string `protobuf:"bytes,2,opt,name=client_certificate,json=clientCertificate" json:"client_certificate,omitempty"`
-	// REQUIRED if mode == MUTUAL. The path to the file holding the
+	// REQUIRED if mode is "mutual". The path to the file holding the
 	// client's private key.
 	PrivateKey string `protobuf:"bytes,3,opt,name=private_key,json=privateKey" json:"private_key,omitempty"`
 	// OPTIONAL: The path to the file containing certificate authority

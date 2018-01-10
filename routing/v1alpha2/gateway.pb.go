@@ -12,19 +12,20 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-// TLS modes enforced by the gateway
+// TLS modes enforced by the proxy
 type Server_TLSOptions_TLSmode int32
 
 const (
-	// If set to "passthrough", the gateway will forward the connection
+	// If set to "passthrough", the proxy will forward the connection
 	// to the upstream server selected based on the SNI string presented
 	// by the client.
 	Server_TLSOptions_PASSTHROUGH Server_TLSOptions_TLSmode = 0
-	// If set to "simple", the gateway will secure connections with
+	// If set to "simple", the proxy will secure connections with
 	// standard TLS semantics.
 	Server_TLSOptions_SIMPLE Server_TLSOptions_TLSmode = 1
-	// If set to "mutual", the gateway will secure connection with the
-	// client using mTLS authentication.
+	// If set to "mutual", the proxy will secure connections to the
+	// upstream using mutual TLS by presenting client certificates for
+	// authentication.
 	Server_TLSOptions_MUTUAL Server_TLSOptions_TLSmode = 2
 )
 
@@ -312,13 +313,13 @@ type Server_TLSOptions struct {
 	// secured using TLS. The value of this field determines how TLS is
 	// enforced.
 	Mode Server_TLSOptions_TLSmode `protobuf:"varint,2,opt,name=mode,enum=istio.routing.v1alpha2.Server_TLSOptions_TLSmode" json:"mode,omitempty"`
-	// REQUIRED if mode == SIMPLE/MUTUAL. The path to the file holding the
-	// server-side TLS certificate to use.
+	// REQUIRED if mode is "simple" or "mutual". The path to the file
+	// holding the server-side TLS certificate to use.
 	ServerCertificate string `protobuf:"bytes,3,opt,name=server_certificate,json=serverCertificate" json:"server_certificate,omitempty"`
-	// REQUIRED if mode == SIMPLE/MUTUAL. The path to the file holding the
-	// server's private key.
+	// REQUIRED if mode is "simple" or "mutual". The path to the file
+	// holding the server's private key.
 	PrivateKey string `protobuf:"bytes,4,opt,name=private_key,json=privateKey" json:"private_key,omitempty"`
-	// REQUIRED if mode == MUTUAL. The path to a file containing
+	// REQUIRED if mode is "mutual". The path to a file containing
 	// certificate authority certificates to use in verifying a presented
 	// client side certificate.
 	CaCertificates string `protobuf:"bytes,5,opt,name=ca_certificates,json=caCertificates" json:"ca_certificates,omitempty"`
