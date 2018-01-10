@@ -14,7 +14,7 @@
 
 syntax = "proto3";
 
-package istio.rbac.v1;
+package istio.rbac.v1alpha1;
 
 // Istio RBAC (Role Based Access Control) defines ServiceRole and ServiceRoleBinding
 // objects.
@@ -32,7 +32,7 @@ package istio.rbac.v1;
 //
 // For example, suppose we define an instance of the "authorization" template, named "requestcontext".
 //
-//     apiVersion: "config.istio.io/v1alpha2"
+//     apiVersion: "config.istio.io/v1alpha1"
 //     kind: authorization
 //     metadata:
 //       name: requestcontext
@@ -56,7 +56,7 @@ package istio.rbac.v1;
 // access to "products.svc.cluster.local" service at versions "v1" and "v2". "path" is not specified,
 // so it applies to any path in the service.
 //
-//     apiVersion: "config.istio.io/v1alpha2"
+//     apiVersion: "config.istio.io/v1alpha1"
 //     kind: servicerole
 //     metadata:
 //       name: products-viewer
@@ -82,7 +82,7 @@ package istio.rbac.v1;
 // * User "alice@yahoo.com"
 // * "reviews" service in "abc" namespace.
 //
-//     apiVersion: "config.istio.io/v1alpha2"
+//     apiVersion: "config.istio.io/v1alpha1"
 //     kind: servicerolebinding
 //     metadata:
 //       name: test-binding-products
