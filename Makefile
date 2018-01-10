@@ -266,7 +266,7 @@ generate-mixer-go: install-deps download-googleapis-protos protoc.version $(PROT
 
 generate-mixer-v1-go: $(MIXER_V1_PB_GOS)
 
-generate-mixer-v1-config-go: $(MIXER_CONFIG_CLIENT_PB_GOS) $(MIXER_CONFIG_DESCRIPTOR_PB_GOS)
+generate-mixer-v1-config-go: $(MIXER_CONFIG_CLIENT_PB_GOS) $(MIXER_CONFIG_DESCRIPTOR_PB_GOS) mixer/v1/config/fixed_cfg.pb.go
 
 generate-mixer-v1-template-go: $(MIXER_TEMPLATE_PB_GOS)
 

@@ -16,11 +16,6 @@ syntax = "proto3";
 
 import "google/protobuf/struct.proto";
 
-import "mixer/v1/config/descriptor/log_entry_descriptor.proto";
-import "mixer/v1/config/descriptor/metric_descriptor.proto";
-import "mixer/v1/config/descriptor/monitored_resource_descriptor.proto";
-import "mixer/v1/config/descriptor/principal_descriptor.proto";
-import "mixer/v1/config/descriptor/quota_descriptor.proto";
 import "mixer/v1/config/descriptor/value_type.proto";
 
 
