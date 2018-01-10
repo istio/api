@@ -64,8 +64,7 @@ package istio.routing.v1alpha2;
 // containing for /wpcatalog/, /consumercatalog/ url prefixes will be
 // rewritten to /newcatalog and send to pods with label "version: v2". The
 // rule will be applied at the gateway named "bookinfo" as well as at all
-// the sidecars in the mesh (indicated by the reserved gateway name
-// "mesh").
+// the sidecars in the mesh (indicated by the reserved word "mesh").
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: RouteRule
@@ -74,7 +73,7 @@ package istio.routing.v1alpha2;
 //     spec:
 //       hosts:
 //       - reviews
-//       gateways: # if omitted, defaults to "mesh"
+//       exposure: # if omitted, defaults to "mesh"
 //       - bookinfo
 //       - mesh
 //       http:
@@ -142,12 +141,12 @@ message RouteRule {
   // as for one or more gateways. The selection condition imposed by this field
   // can be overridden using the source field in the match conditions of HTTP/TCP
   // routes. The reserved word "mesh" is used to imply all the sidecars in
-  // the mesh. When this field is omitted, the default gateway ("mesh")
+  // the mesh. When this field is omitted, the default exposure ("mesh")
   // will be used, which would apply the rule to all sidecars in the
   // mesh. If a list of gateway names is provided, the rule will apply
   // only to the gateways. To apply a rule to both gateways and sidecars,
-  // specify "mesh" as one of the gateway names.
-  repeated string gateways = 2;
+  // specify "mesh" as one of the exposure values.
+  repeated string exposure = 2;
 
   // A list of routes for HTTP traffic.
   repeated HTTPRoute http = 3;
@@ -486,7 +485,7 @@ message HTTPMatchRequest {
 
   // One or more labels that constrain the applicability of a rule to
   // workloads with the given labels. If the route rule has a list of
-  // gateways specified at the top, it should include the reserved gateway
+  // gateways specified at the top, it should include the reserved word
   // "mesh" in order for this field to be applicable.
   map<string, string> source_labels = 7;
 
@@ -574,7 +573,7 @@ message L4MatchAttributes {
 
   // One or more labels that constrain the applicability of a rule to
   // workloads with the given labels. If the route rule has a list of
-  // gateways specified at the top, it should include the reserved gateway
+  // gateways specified at the top, it should include the reserved word
   // "mesh" in order for this field to be applicable.
   map<string, string> source_labels = 4;
 

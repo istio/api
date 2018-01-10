@@ -84,7 +84,7 @@ package istio.routing.v1alpha2;
 //       - reviews.prod
 //       - uk.bookinfo.com
 //       - eu.bookinfo.com
-//       gateways:
+//       exposure:
 //       - my-gateway
 //       - mesh # applies to all the sidecars in the mesh
 //       http:
@@ -122,7 +122,7 @@ package istio.routing.v1alpha2;
 //     spec:
 //       hosts:
 //       - Mongosvr #name of Mongo service
-//       gateways:
+//       exposure:
 //       - my-gateway
 //       tcp:
 //       - match:

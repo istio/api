@@ -115,7 +115,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //       - reviews.prod
 //       - uk.bookinfo.com
 //       - eu.bookinfo.com
-//       gateways:
+//       exposure:
 //       - my-gateway
 //       - mesh # applies to all the sidecars in the mesh
 //       http:
@@ -153,7 +153,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //     spec:
 //       hosts:
 //       - Mongosvr #name of Mongo service
-//       gateways:
+//       exposure:
 //       - my-gateway
 //       tcp:
 //       - match:
