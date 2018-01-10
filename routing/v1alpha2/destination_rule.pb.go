@@ -781,7 +781,8 @@ func (m *OutlierDetection_HTTPSettings) GetMaxEjectionPercent() int32 {
 //         privateKey: /etc/certs/client_private_key.pem
 //         caCertificates: /etc/certs/rootcacerts.pem
 //
-// The following rule configures a client to use TLS when talking to a foreign service whose domain matches *.foo.com.
+// The following rule configures a client to use TLS when talking to a
+// foreign service whose domain matches *.foo.com.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: DestinationRule
