@@ -14,8 +14,6 @@
 
 syntax = "proto3";
 
-import "routing/v1alpha2/gateway.proto";
-
 package istio.routing.v1alpha2;
 
 // Foreign services describe the properties of services outside Istio. It
