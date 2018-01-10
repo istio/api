@@ -73,9 +73,10 @@ package istio.routing.v1alpha2;
 //     spec:
 //       hosts:
 //       - reviews
-//       exposure: # if omitted, defaults to "mesh"
-//       - bookinfo
-//       - mesh
+//       exposure:
+//         sidecarVisible: True
+//         gateways:
+//         - bookinfo
 //       http:
 //       - match:
 //         - uri:
@@ -136,17 +137,23 @@ message RouteRule {
   // defined via the Gateway.
   repeated string hosts = 1;
 
-  // The names of gateways and sidecars that should apply these routes. A
-  // single route rule is used for sidecars inside the mesh as well
-  // as for one or more gateways. The selection condition imposed by this field
-  // can be overridden using the source field in the match conditions of HTTP/TCP
-  // routes. The reserved word "mesh" is used to imply all the sidecars in
-  // the mesh. When this field is omitted, the default exposure ("mesh")
-  // will be used, which would apply the rule to all sidecars in the
-  // mesh. If a list of gateway names is provided, the rule will apply
-  // only to the gateways. To apply a rule to both gateways and sidecars,
-  // specify "mesh" as one of the exposure values.
-  repeated string exposure = 2;
+  // Exposure controls the locations in the mesh where the rule should be
+  // applied.
+  message Exposure {
+    // Determines if the hosts mentioned in the rule should be visible to
+    // sidecars in the mesh. Defaults to true.
+    google.protobuf.BoolValue sidecar_visible = 1;
+
+    // The names of gateways where this rule should be exposed.
+    repeated string gateways = 2;
+  }
+  
+  // A single route rule is used for sidecars inside the mesh as well as
+  // for one or more gateways. The selection condition imposed by this
+  // field can be overridden using the source field in the match conditions
+  // of HTTP/TCP routes. When this field is omitted, the default exposure
+  // will be used, which would apply the rule to all sidecars in the mesh.
+  Exposure exposure = 2;
 
   // A list of routes for HTTP traffic.
   repeated HTTPRoute http = 3;
