@@ -20,6 +20,7 @@ It has these top-level messages:
 	TLSSettings
 	Gateway
 	Server
+	Port
 	RouteRule
 	Destination
 	HTTPRoute
