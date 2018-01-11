@@ -117,14 +117,14 @@ message ForeignServices {
 //         - number: 80
 //           protocol: HTTP2
 //           name: http2
-//         resolution: none
+//         discovery: none
 //       - hosts:
 //         - 192.192.33.33/16
 //         ports:
 //         - number: 27018
 //           protocol: MONGO
 //           name: mongo
-//         resolution: none
+//         discovery: none
 //
 message Service {
   // REQUIRED. The hosts associated with the external service. Could be a
@@ -158,17 +158,26 @@ message Service {
   };
 
   // Service discovery mode for the hosts.
-  Discovery resolution = 3;
+  Discovery discovery = 3;
 
   // Endpoint defines a network address (IP:port or hostname:port)
-  // associated with the foreign service.
+  // associated with the foreign service. Needed only for "static"
+  // discovery mode.
   message Endpoint {
     // REQUIRED: Address associated with the network endpoint ( IP or fully
     // qualified domain name without wildcards).
     string address = 1;
 
-    // The port on which the endpoint is listening for network connections.
-    Port port = 2;
+    // The ports on which the endpoint is listening for network
+    // connections. Endpoint ports are needed only if they differ from the
+    // service ports defined above. Endpoint ports must have the same name
+    // as the associated service port, but can have different values. For
+    // example, the service could refer to port named https with value 443,
+    // while the endpoints could refer to "https" with value 8443. The
+    // application is expected to access the service using
+    // http://<name>:443. The sidecar will automatically reroute the calls
+    // to the appropriate endpoint port.
+    repeated Port ports = 2;
 
     // One or more labels associated with the endpoint.
     map<string, string> labels = 3;
