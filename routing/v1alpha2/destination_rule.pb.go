@@ -8,6 +8,7 @@ It is generated from these files:
 	routing/v1alpha2/destination_rule.proto
 	routing/v1alpha2/gateway.proto
 	routing/v1alpha2/route_rule.proto
+	routing/v1alpha2/foreign_services.proto
 
 It has these top-level messages:
 	DestinationRule
@@ -19,6 +20,7 @@ It has these top-level messages:
 	TLSSettings
 	Gateway
 	Server
+	Port
 	RouteRule
 	Destination
 	HTTPRoute
@@ -33,6 +35,8 @@ It has these top-level messages:
 	CorsPolicy
 	HTTPFaultInjection
 	PortSelector
+	ForeignServices
+	Service
 */
 package istio_routing_v1alpha2
 
@@ -781,8 +785,7 @@ func (m *OutlierDetection_HTTPSettings) GetMaxEjectionPercent() int32 {
 //         privateKey: /etc/certs/client_private_key.pem
 //         caCertificates: /etc/certs/rootcacerts.pem
 //
-// The following rule configures a client to use TLS when talking to a
-// foreign service whose domain matches *.foo.com.
+// The following rule configures a client to use TLS when talking to a foreign service whose domain matches *.foo.com.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: DestinationRule

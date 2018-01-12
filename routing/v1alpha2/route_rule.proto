@@ -64,7 +64,7 @@ package istio.routing.v1alpha2;
 // containing for /wpcatalog/, /consumercatalog/ url prefixes will be
 // rewritten to /newcatalog and send to pods with label "version: v2". The
 // rule will be applied at the gateway named "bookinfo" as well as at all
-// the sidecars in the mesh (indicated by the reserved word "mesh").
+// the sidecars in the mesh.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: RouteRule
@@ -74,7 +74,7 @@ package istio.routing.v1alpha2;
 //       hosts:
 //       - reviews
 //       exposure:
-//         sidecarVisible: True
+//         sidecars: True
 //         gateways:
 //         - bookinfo
 //       http:
@@ -142,12 +142,12 @@ message RouteRule {
   message Exposure {
     // Determines if the hosts mentioned in the rule should be visible to
     // sidecars in the mesh. Defaults to true.
-    google.protobuf.BoolValue sidecar_visible = 1;
+    google.protobuf.BoolValue sidecars = 1;
 
     // The names of gateways where this rule should be exposed.
     repeated string gateways = 2;
   }
-  
+
   // A single route rule is used for sidecars inside the mesh as well as
   // for one or more gateways. The selection condition imposed by this
   // field can be overridden using the source field in the match conditions
@@ -491,9 +491,8 @@ message HTTPMatchRequest {
   PortSelector port = 6;
 
   // One or more labels that constrain the applicability of a rule to
-  // workloads with the given labels. If the route rule has a list of
-  // gateways specified at the top, it should include the reserved word
-  // "mesh" in order for this field to be applicable.
+  // workloads with the given labels. The route rule should be visible to
+  // sidecars in order for this field to be applicable.
   map<string, string> source_labels = 7;
 
   // Names of gateways where the rule should be applied to. Gateway names
@@ -579,9 +578,8 @@ message L4MatchAttributes {
   string source_subnet = 3;
 
   // One or more labels that constrain the applicability of a rule to
-  // workloads with the given labels. If the route rule has a list of
-  // gateways specified at the top, it should include the reserved word
-  // "mesh" in order for this field to be applicable.
+  // workloads with the given labels. The route rule should be visible to
+  // sidecars in order for this field to be applicable.
   map<string, string> source_labels = 4;
 
   // Names of gateways where the rule should be applied to. Gateway names
