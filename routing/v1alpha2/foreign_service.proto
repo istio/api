@@ -14,70 +14,42 @@
 
 syntax = "proto3";
 
-import "routing/v1alpha2/gateway.proto";
-
 package istio.routing.v1alpha2;
 
 // Foreign service describes the endpoints, ports and protocols of a
 // white-listed set of mesh-external domains and IP blocks that services in
 // the mesh are allowed to access.
 //
-// NOTE: If a foreign service has the same name as a service in the
-// service registry, the foreign service's declaration will be given
-// precedence.
-//
 // For example, the following foreign service configuration describes the
-// set of services at https://example.com. Eventhough the services behind
-// example.com have to be accessed via HTTPS, in order for the application
-// to obtain metrics from Istio, a plain text port (HTTP over port 80) is
-// declared in addition to a secure port (HTTPS over 443). Connections
-// arriving at port 443 on the sidecar will be treated as opaque TCP
-// connections and will be forwarded as is to the destination, with limited
-// visibility into the application flow. Connections arriving on port 80 on
-// the sidecar will be able to take advantage of Istio's advanced routing
-// and policy enforcement features. To transparently re-route http
-// connections to the destination's https port, a routing rule is needed as
-// shown below.
+// set of services at https://example.com to be accessed internally over
+// plaintext http (i.e. http://example.com), with the sidecar originating
+// TLS.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: ForeignService
 //     metadata:
-//       name: foreign-svc
+//       name: foreign-svc-example
 //     spec:
 //       hosts:
 //       - example.com
 //       ports:
-//       - number: 443
-//         name: example-https
-//         protocol: https #treated as opaque TCP
-//       - number: 80
-//         name: http
-//         protocol: example-http
-//       discovery: none
-// 
-// And the associated route rule to upgrade from http to https
+//       - inPort: 80
+//         outPort: 443
+//         name: example-http
+//         protocol: http
+//         tlsUpgrade: true
+//       discovery: dns
 //
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
-//     metadata:
-//       name: my-foreign-rule
-//     spec:
-//       hosts:
-//       - example.com
-//       http:
-//       - match:
-//         - port:
-//             name: http
-//         route:
-//         - destination:
-//             name: example.com
-//             port:
-//               name: https
+// Eventhough the services behind example.com have to be accessed via
+// HTTPS, in order for the application to obtain metrics from Istio, a
+// plain text port (HTTP over port 80) is used in the rule
+// above. Connections arriving on port 80 on the sidecar will be able to
+// take advantage of Istio's advanced routing and policy enforcement
+// features, while still being routed to the destination over HTTPS.
 //
-// IF the application wishes the sidecar to load balance across several
-// hosts backing the foreign service, the discovery mode must be set to one
-// of "static" or "dns". The following specification specifies a static set
-// of backend nodes for a mongodb cluster behind a set of virtual IPs.
+// The following specification specifies a static set of backend nodes for
+// a MongoDB cluster behind a set of virtual IPs, and secures connections
+// to the MongoDB cluster using TLS.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: ForeignService
@@ -87,73 +59,142 @@ package istio.routing.v1alpha2;
 //       hosts:
 //       - 192.192.192.192/24
 //       ports:
-//       - number: 27018
+//       - inPort: 27018 # outPort is same as inPort
 //         name: mongodb
 //         protocol: mongo
+//         tlsUpgrade: true
 //       discovery: static
 //       endpoints:
 //       - address: 2.2.2.2
-//         ports:
-//         - number: 2222
-//           name: mongo-host1
-//           protocol: mongo
 //       - address: 3.3.3.3
-//         ports:
-//         - number: 3333
-//           name: mongo-host2
-//           protocol: mongo
 //
-// The following example demonstrates the use of DNS to dynamically load
-// the endpoints for a given foreign service:
+// Destination rules can be used to customize the default TLS
+// configuration. For example, the following destination rule configures
+// the sidecar to use mutual TLS authentication when connecting to the
+// external MongoDB service.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: ForeignService
+//     kind: DestinationRule
 //     metadata:
-//       name: foreign-svc-dns-example
+//       name: mtls-mongocluster
 //     spec:
-//       hosts:
-//       - foo.bar.com
-//       ports:
-//       - number: 80
-//         name: http
-//         protocol: http
-//       discovery: dns
+//       destination:
+//         name: 192.192.192.192/24
+//       tls:
+//         mode: mutual
+//         clientCertificate: /etc/certs/myclientcert.pem
+//         privateKey: /etc/certs/client_private_key.pem
+//         caCertificates: /etc/certs/rootcacerts.pem
 //
-// The application can use HTTP_PROXY settings or IP tables based
-// redirection to transparently reroute calls for foo.bar.com to the
-// sidecar. The sidecar will resolve the DNS name (foo.bar.com) and load
-// balance the requests across one of the endpoints.
-//
-// When using wildcarded hosts, neither static nor dns discovery mode can
-// be used as shown below:
+// The following example demonstrates the use of wildcards in the hosts. If
+// the connection has to be routed to the IP address requested by the
+// application (i.e. application resolves DNS and attempts to connect to a
+// specific IP), the discovery mode must be set to "none".
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: ForeignService
 //     metadata:
-//       name: foreign-svc-dns-example
+//       name: foreign-svc-wildcard-example
 //     spec:
 //       hosts:
 //       - *.bar.com
 //       ports:
-//       - number: 80
+//       - inPort: 80
 //         name: http
 //         protocol: http
 //       discovery: none
 //
+// For HTTP based services, tt is possible to create a virtual service
+// backed by multiple DNS addressible endpoints. In such a scenario, the
+// application can use the HTTP_PROXY environment variable to transparently
+// reroute API calls for the virtual service to a chosen backend. For
+// example, the following configuration creates a non-existent service
+// called foo.bar.com backed by three domains: us.foo.bar.com,
+// uk.foo.bar.com, and in.foo.bar.com
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: ForeignService
+//     metadata:
+//       name: foreign-svc-dns
+//     spec:
+//       hosts:
+//       - foo.bar.com
+//       ports:
+//       - inPort: 80
+//         name: http
+//         protocol: http
+//         outPort: 443
+//         tlsUpgrade: true
+//       discovery: dns
+//       endpoints:
+//       - address: us.foo.bar.com
+//       - address: uk.foo.bar.com
+//       - address: in.foo.bar.com
+//
+// With HTTP_PROXY=http://localhost:80, calls from the application to
+// http://foo.bar.com will be upgraded to HTTPS and load balanced across
+// the three domains specified above. In other words, a call to
+// http://foo.bar.com/baz would be translated to
+// https://uk.foo.bar.com/baz.
+// 
+// NOTE: In the scenario above, the value of the HTTP Authority/host header
+// associated with the outbound HTTP requests will be based on the
+// endpoint's DNS name, i.e. ":authority: uk.foo.bar.com". Refer to Envoy's
+// auto_host_rewrite for further details. The automatic rewrite can be
+// overridden using a host rewrite route rule.
+//
 message ForeignService {
   // REQUIRED. The hosts associated with the external service. Could be a
   // DNS name with wildcard prefix or a CIDR prefix. Note that the hosts
-  // field applies to all protocols. Note that DNS names in hosts will be
-  // ignored if the application accesses the service over non-HTTP
-  // protocols such as mongo/opaque TCP/even HTTPS. In such scenarios, the
-  // port on which the external service is being accessed must not be
-  // shared by any other service in the mesh. In other words, the sidecar
-  // will behave as a simple TCP proxy, forwarding incoming traffic on a
-  // specified port to the specified destination endpoint IP/host.
+  // field applies to all protocols. DNS names in hosts will be ignored if
+  // the application accesses the service over non-HTTP protocols such as
+  // mongo/opaque TCP/even HTTPS. In such scenarios, the port on which the
+  // external service is being accessed must not be shared by any other
+  // service in the mesh. In other words, the sidecar will behave as a
+  // simple TCP proxy, forwarding incoming traffic on a specified port to
+  // the specified destination endpoint IP/host.
   repeated string hosts = 1;
 
+  // PortMap describes the properties of a specific port of the external
+  // service, the port by which the service will be accessed inside the
+  // mesh and TLS upgrade options if any.
+  message PortMap {
+    // REQUIRED: A valid non-negative integer port number on which
+    // connections to the external service would be received.
+    uint32 in_port = 1;
+
+    // If specified, connections arriving on inPort will be rerouted to the
+    // port specified in outPort. If outPort is omitted, it will inherit
+    // the value of inPort. outPort is useful in situations where the
+    // external service will be accessed inside the mesh over one port
+    // (e.g., http on port 80), while the final call to the external
+    // service must be made over a different port (e.g., https over port
+    // 443).
+    //
+    // NOTE: outPort cannot be specified when the discovery mode is set to
+    // "none".
+    uint32 out_port = 2;
+
+    // The protocol exposed on the internal port. MUST BE one of
+    // HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP. When protocol is set to HTTPS, the
+    // traffic will be treated as opaque TCP traffic, and TCP level
+    // constraints will apply.
+    string protocol = 3;
+
+    // Name assigned to the port.
+    string name = 4;
+
+    // Whether the sidecar should initiate a TLS connection for outbound
+    // connections (outPort). This field is applicable only when the
+    // protocol is _not_ HTTPS. If this field is set to true, the sidecar
+    // will initiate a standard TLS connection without validating the
+    // server's certificates. To customize the TLS settings, use
+    // DestinationRules.
+    bool tls_upgrade = 5;
+  }
+
   // REQUIRED: The Ports associated with the external services.
-  repeated Port ports = 2;
+  repeated PortMap ports = 2;
 
   // Different ways of discovering the IP addresses associated with the
   // service.
@@ -166,44 +207,36 @@ message ForeignService {
     // connection to the IP address to which the connection was bound.
     NONE = 0;
 
-    // If set to "static", the proxy will use specified endpoints (See
-    // below) as the backing nodes associated with the foreign service.
+    // If set to "static", the proxy will use the IP addresses specified in
+    // endpoints (See below) as the backing nodes associated with the
+    // foreign service.
     STATIC = 1;
 
-    // If set to "dns", the proxy will attempt to resolve the DNS
-    // address during request processing. Use this mode if the set of
-    // resolved addresses change dynamically. The "dns" mode is applicable
-    // only when the hosts use exact DNS names without any wildcards.
+    // If set to "dns", the proxy will attempt to resolve the DNS address
+    // during request processing. If no endpoints are specified, the proxy
+    // will resolve the DNS address specified in the hosts field, if
+    // wildcards are not used. If endpoints are specified, the DNS
+    // addresses specified in the endpoints will be resolved to determine
+    // the destination IP address.
     DNS = 2;
   };
 
-  // Service discovery mode for the hosts.
+  // Service discovery mode for the hosts. If not set, Istio will attempt
+  // to infer the discovery mode based on the value of hosts and endpoints.
   Discovery discovery = 3;
 
-  // Endpoint defines a network address (IP:port or hostname:port)
-  // associated with the foreign service. Needed only for "static"
-  // discovery mode.
+  // Endpoint defines a network address (IP or hostname) associated with
+  // the foreign service.
   message Endpoint {
-    // REQUIRED: Address associated with the network endpoint ( IP or fully
-    // qualified domain name without wildcards).
+    // REQUIRED: Address associated with the network endpoint without the
+    // port ( IP or fully qualified domain name without wildcards).
     string address = 1;
 
-    // The ports on which the endpoint is listening for network
-    // connections. Endpoint ports are needed only if they differ from the
-    // service ports defined above. Every port associated with the service
-    // must have a corresponding port in the Endpoint with same name, with
-    // same or different values. For example, the service could refer to
-    // port named https with value 443, while the endpoints could refer to
-    // "https" with value 8443. The application is expected to access the
-    // service using http://<name>:443. The sidecar will automatically
-    // reroute the calls to the appropriate endpoint port (8443).
-    repeated Port ports = 2;
-
     // One or more labels associated with the endpoint.
-    map<string, string> labels = 3;
+    map<string, string> labels = 2;
   };
 
-  // One or more endpoints associated with the service. Endpoints are valid
-  // only when the discovery mode is set to "static".
+  // One or more endpoints associated with the service. Endpoints must be
+  // accessible over the set of outPorts defined at the service level.
   repeated Endpoint endpoints = 4;
 }
