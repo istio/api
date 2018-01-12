@@ -356,6 +356,10 @@ message HTTPRoute {
   // Additional HTTP headers to add before forwarding a request to the
   // destination service.
   map<string, string> append_headers = 11;
+
+  // HashPolicy specifies the route's hashing policy if the upstream cluster
+  // is using a hashing load balancer.
+  HashPolicy hash_policy = 12;
 }
 
 // Describes match conditions and actions for routing TCP traffic.  The
@@ -368,7 +372,7 @@ message HTTPRoute {
 //       name: bookinfo-Mongo
 //     spec:
 //       hosts:
-//       - myMongosrv 
+//       - myMongosrv
 //       tcp:
 //       - match:
 //         - port:
@@ -412,7 +416,7 @@ message TCPRoute {
 //               regex: "^(.*?;)?(user=jason)(;.*)?"
 //             uri:
 //               prefix: "/ratings/v2/"
-//         route: 
+//         route:
 //         - destination:
 //             name: ratings
 //
@@ -461,7 +465,7 @@ message HTTPMatchRequest {
   // *regex: "value"* for ECMAscript style regex-based match
   //
   StringMatch authority = 4;
-  
+
   // The header keys must be lowercase and use hyphen as the separator,
   // e.g. _x-request-id_.
   //
@@ -552,7 +556,7 @@ message DestinationWeight {
 }
 
 // L4 connection match attributes. Note that L4 connection matching support
-// is incomplete. 
+// is incomplete.
 message L4MatchAttributes {
   // IPv4 or IPv6 ip address of destination with optional subnet.  E.g.,
   // a.b.c.d/xx form or just a.b.c.d. This is only valid when the
@@ -570,7 +574,7 @@ message L4MatchAttributes {
   // same protocol the names should be of the form <protocol-name>-<DNS label>.
   PortSelector port = 2;
 
-  // IPv4 or IPv6 ip address of source with optional subnet. E.g., a.b.c.d/xx 
+  // IPv4 or IPv6 ip address of source with optional subnet. E.g., a.b.c.d/xx
   // form or just a.b.c.d
   string source_subnet = 3;
 
@@ -613,12 +617,12 @@ message HTTPRedirect {
   // value. Note that the entire path will be replaced, irrespective of the
   // request URI being matched as an exact path or prefix.
   string uri = 1;
-   
+
   // On a redirect, overwrite the Authority/Host portion of the URL with
   // this value.
   string authority = 2;
 }
- 
+
 // HTTPRewrite can be used to rewrite specific parts of a HTTP request
 // before forwarding the request to the destination. Rewrite primitive can
 // be used only with the DestinationWeights. The following example
@@ -820,6 +824,15 @@ message HTTPFaultInjection {
       // values --)
       google.protobuf.Duration exponential_delay = 3 ;
     }
+  }
+
+  // HashPolicy is used to specify the hashing policy configuration if the
+  // upstream cluster is using a hash load balancer
+  message HashPolicy {
+    // REQUIRED. The name of the request header that will be used to obtain the
+    // hash key. If the header is not present, the load balancer will use a
+    // random number as the hash, rendering load balancing policy random.
+    string header_name = 1;
   }
 
   // Abort specification is used to prematurely abort a request with a
