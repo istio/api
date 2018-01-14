@@ -6,24 +6,26 @@ package istio_routing_v1alpha2
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
-import google_protobuf2 "github.com/golang/protobuf/ptypes/any"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-// TLS modes enforced by the gateway
+// TLS modes enforced by the proxy
 type Server_TLSOptions_TLSmode int32
 
 const (
-	// If set to "passthrough", the gateway will forward the connection to the
-	// upstream server as is.
+	// If set to "passthrough", the proxy will forward the connection
+	// to the upstream server selected based on the SNI string presented
+	// by the client.
 	Server_TLSOptions_PASSTHROUGH Server_TLSOptions_TLSmode = 0
-	// If set to "simple", the gateway will secure connections with
-	// standard TLS semantics (server certs only).
+	// If set to "simple", the proxy will secure connections with
+	// standard TLS semantics.
 	Server_TLSOptions_SIMPLE Server_TLSOptions_TLSmode = 1
-	// If set to "mutual", the gateway will use standard mTLS authentication.
+	// If set to "mutual", the proxy will secure connections to the
+	// upstream using mutual TLS by presenting client certificates for
+	// authentication.
 	Server_TLSOptions_MUTUAL Server_TLSOptions_TLSmode = 2
 )
 
@@ -42,7 +44,7 @@ func (x Server_TLSOptions_TLSmode) String() string {
 	return proto.EnumName(Server_TLSOptions_TLSmode_name, int32(x))
 }
 func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor2, []int{1, 1, 0}
+	return fileDescriptor1, []int{1, 0, 0}
 }
 
 // Gateway describes a load balancer operating at the edge of the mesh
@@ -65,7 +67,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //       - port:
 //           number: 80
 //           name: http
-//         domains:
+//         hosts:
 //         - uk.bookinfo.com
 //         - eu.bookinfo.com
 //         tls:
@@ -73,17 +75,17 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //       - port:
 //           number: 443
 //           name: https
-//         domains:
+//         hosts:
 //         - uk.bookinfo.com
 //         - eu.bookinfo.com
 //         tls:
 //           mode: simple #enables HTTPS on this port
-//           serverCert: server.crt
-//           clientCABundle: client.ca-bundle
+//           serverCert: /etc/certs/servercert.pem
+//           privateKey: /etc/certs/privatekey.pem
 //       - port:
 //           number: 9080
 //           name: http-wildcard
-//         # no domains implies wildcard match
+//         # no hosts implies wildcard match
 //       - port:
 //           number: 2379 #to expose internal service via external port 2379
 //           name: Mongo
@@ -91,7 +93,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //
 // The gateway specification above describes the L4-L6 properties of a load
 // balancer. Routing rules can then be bound to a gateway to control
-// the forwarding of traffic arriving at a particular domain or gateway port.
+// the forwarding of traffic arriving at a particular host or gateway port.
 //
 // The following sample route rule splits traffic for
 // https://uk.bookinfo.com/reviews, https://eu.bookinfo.com/reviews,
@@ -170,7 +172,7 @@ type Gateway struct {
 func (m *Gateway) Reset()                    { *m = Gateway{} }
 func (m *Gateway) String() string            { return proto.CompactTextString(m) }
 func (*Gateway) ProtoMessage()               {}
-func (*Gateway) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0} }
+func (*Gateway) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{0} }
 
 func (m *Gateway) GetServers() []*Server {
 	if m != nil {
@@ -217,55 +219,44 @@ func (m *Gateway) GetServers() []*Server {
 //           protocol: HTTP
 //         tls:
 //           mode: simple
-//           serverCertificatet: server.crt
+//           serverCertificate: /etc/certs/server.pem
+//           privateKey: /etc/certs/privatekey.pem
 //
 type Server struct {
 	// REQUIRED: The Port on which the proxy should listen for incoming
 	// connections
-	Port *Server_Port `protobuf:"bytes,1,opt,name=port" json:"port,omitempty"`
-	// A list of domains exposed by this gateway. While
+	Port *Port `protobuf:"bytes,1,opt,name=port" json:"port,omitempty"`
+	// A list of hosts exposed by this gateway. While
 	// typically applicable to HTTP services, it can also be used for TCP
 	// services using TLS with SNI. Standard DNS wildcard prefix syntax
 	// is permitted.
 	//
-	// RouteRules that are bound to a gateway must having a matching domain
+	// RouteRules that are bound to a gateway must having a matching host
 	// in their default destination. Specifically one of the route rule
-	// destination domains is a strict suffix of a gateway domain or
-	// a gateway domain is a suffix of one of the route rule domains.
-	Domains []string `protobuf:"bytes,2,rep,name=domains" json:"domains,omitempty"`
+	// destination hosts is a strict suffix of a gateway host or
+	// a gateway host is a suffix of one of the route rule hosts.
+	Hosts []string `protobuf:"bytes,2,rep,name=hosts" json:"hosts,omitempty"`
 	// Set of TLS related options that govern the server's behavior. Use
 	// these options to control if all http requests should be redirected to
 	// https, and the TLS modes to use.
 	Tls *Server_TLSOptions `protobuf:"bytes,3,opt,name=tls" json:"tls,omitempty"`
-	// Extensions contain proxy implementation specific configuration, that
-	// cannot be easily expressed through expressed using proxy-independent
-	// routing rule or mixer policy configuration. Custom proxy
-	// implementations could have enhancements such as caching, dynamic
-	// scripting, proprietary protocol support, etc. The configuration for
-	// such features could be provided through the extensions mechanism.
-	//
-	// To extend the proxy configuration for a sidecar, the port and the
-	// domains used in the Gateway configuration must match the port and IP
-	// on which the sidecar is listening for connections. See Envoy filters
-	// configuration for usage examples.
-	ProxyExtensions []*google_protobuf2.Any `protobuf:"bytes,4,rep,name=proxy_extensions,json=proxyExtensions" json:"proxy_extensions,omitempty"`
 }
 
 func (m *Server) Reset()                    { *m = Server{} }
 func (m *Server) String() string            { return proto.CompactTextString(m) }
 func (*Server) ProtoMessage()               {}
-func (*Server) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{1} }
+func (*Server) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{1} }
 
-func (m *Server) GetPort() *Server_Port {
+func (m *Server) GetPort() *Port {
 	if m != nil {
 		return m.Port
 	}
 	return nil
 }
 
-func (m *Server) GetDomains() []string {
+func (m *Server) GetHosts() []string {
 	if m != nil {
-		return m.Domains
+		return m.Hosts
 	}
 	return nil
 }
@@ -277,77 +268,33 @@ func (m *Server) GetTls() *Server_TLSOptions {
 	return nil
 }
 
-func (m *Server) GetProxyExtensions() []*google_protobuf2.Any {
-	if m != nil {
-		return m.ProxyExtensions
-	}
-	return nil
-}
-
-// Port describes the properties of a specific port of a service.
-type Server_Port struct {
-	// REQUIRED: A valid non-negative integer port number.
-	Number uint32 `protobuf:"varint,1,opt,name=number" json:"number,omitempty"`
-	// The protocol exposed on the port.
-	// MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP.
-	Protocol string `protobuf:"bytes,2,opt,name=protocol" json:"protocol,omitempty"`
-	// Label assigned to the port.
-	Name string `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`
-}
-
-func (m *Server_Port) Reset()                    { *m = Server_Port{} }
-func (m *Server_Port) String() string            { return proto.CompactTextString(m) }
-func (*Server_Port) ProtoMessage()               {}
-func (*Server_Port) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{1, 0} }
-
-func (m *Server_Port) GetNumber() uint32 {
-	if m != nil {
-		return m.Number
-	}
-	return 0
-}
-
-func (m *Server_Port) GetProtocol() string {
-	if m != nil {
-		return m.Protocol
-	}
-	return ""
-}
-
-func (m *Server_Port) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
 type Server_TLSOptions struct {
 	// If set to true, the load balancer will send a 302 redirect for all
 	// http connections, asking the clients to use HTTPS.
 	HttpsRedirect bool `protobuf:"varint,1,opt,name=https_redirect,json=httpsRedirect" json:"https_redirect,omitempty"`
 	// Optional: Indicates whether connections to this port should be
-	// secured using TLS.  The value of this field determines how TLS is
+	// secured using TLS. The value of this field determines how TLS is
 	// enforced.
 	Mode Server_TLSOptions_TLSmode `protobuf:"varint,2,opt,name=mode,enum=istio.routing.v1alpha2.Server_TLSOptions_TLSmode" json:"mode,omitempty"`
-	// REQUIRED if mode == SIMPLE/MUTUAL. The name of the file holding the
-	// server-side TLS certificate to use.  It is the responsibility of the
-	// underlying platform to mount the certificate as a file under
-	// /etc/istio/ingress-certs with the same name as the specified in this
-	// field.
+	// REQUIRED if mode is "simple" or "mutual". The path to the file
+	// holding the server-side TLS certificate to use.
 	ServerCertificate string `protobuf:"bytes,3,opt,name=server_certificate,json=serverCertificate" json:"server_certificate,omitempty"`
-	// REQUIRED if mode == MUTUAL. To use mutual TLS for external clients,
-	// specify the name of the file holding the CA certificate to validate
-	// the client's certificate. It is the responsibility of the underlying
-	// platform to mount the certificate as a file under
-	// /etc/istio/ingress-certs with the same name as specified in this
-	// field.
-	ClientCaBundle string `protobuf:"bytes,4,opt,name=client_ca_bundle,json=clientCaBundle" json:"client_ca_bundle,omitempty"`
+	// REQUIRED if mode is "simple" or "mutual". The path to the file
+	// holding the server's private key.
+	PrivateKey string `protobuf:"bytes,4,opt,name=private_key,json=privateKey" json:"private_key,omitempty"`
+	// REQUIRED if mode is "mutual". The path to a file containing
+	// certificate authority certificates to use in verifying a presented
+	// client side certificate.
+	CaCertificates string `protobuf:"bytes,5,opt,name=ca_certificates,json=caCertificates" json:"ca_certificates,omitempty"`
+	// A list of alternate names to verify the subject identity in the
+	// certificate presented by the client.
+	SubjectAltNames []string `protobuf:"bytes,6,rep,name=subject_alt_names,json=subjectAltNames" json:"subject_alt_names,omitempty"`
 }
 
 func (m *Server_TLSOptions) Reset()                    { *m = Server_TLSOptions{} }
 func (m *Server_TLSOptions) String() string            { return proto.CompactTextString(m) }
 func (*Server_TLSOptions) ProtoMessage()               {}
-func (*Server_TLSOptions) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{1, 1} }
+func (*Server_TLSOptions) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{1, 0} }
 
 func (m *Server_TLSOptions) GetHttpsRedirect() bool {
 	if m != nil {
@@ -370,9 +317,60 @@ func (m *Server_TLSOptions) GetServerCertificate() string {
 	return ""
 }
 
-func (m *Server_TLSOptions) GetClientCaBundle() string {
+func (m *Server_TLSOptions) GetPrivateKey() string {
 	if m != nil {
-		return m.ClientCaBundle
+		return m.PrivateKey
+	}
+	return ""
+}
+
+func (m *Server_TLSOptions) GetCaCertificates() string {
+	if m != nil {
+		return m.CaCertificates
+	}
+	return ""
+}
+
+func (m *Server_TLSOptions) GetSubjectAltNames() []string {
+	if m != nil {
+		return m.SubjectAltNames
+	}
+	return nil
+}
+
+// Port describes the properties of a specific port of a service.
+type Port struct {
+	// REQUIRED: A valid non-negative integer port number.
+	Number uint32 `protobuf:"varint,1,opt,name=number" json:"number,omitempty"`
+	// The protocol exposed on the port.
+	// MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP.
+	Protocol string `protobuf:"bytes,2,opt,name=protocol" json:"protocol,omitempty"`
+	// Label assigned to the port.
+	Name string `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`
+}
+
+func (m *Port) Reset()                    { *m = Port{} }
+func (m *Port) String() string            { return proto.CompactTextString(m) }
+func (*Port) ProtoMessage()               {}
+func (*Port) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{2} }
+
+func (m *Port) GetNumber() uint32 {
+	if m != nil {
+		return m.Number
+	}
+	return 0
+}
+
+func (m *Port) GetProtocol() string {
+	if m != nil {
+		return m.Protocol
+	}
+	return ""
+}
+
+func (m *Port) GetName() string {
+	if m != nil {
+		return m.Name
 	}
 	return ""
 }
@@ -380,40 +378,40 @@ func (m *Server_TLSOptions) GetClientCaBundle() string {
 func init() {
 	proto.RegisterType((*Gateway)(nil), "istio.routing.v1alpha2.Gateway")
 	proto.RegisterType((*Server)(nil), "istio.routing.v1alpha2.Server")
-	proto.RegisterType((*Server_Port)(nil), "istio.routing.v1alpha2.Server.Port")
 	proto.RegisterType((*Server_TLSOptions)(nil), "istio.routing.v1alpha2.Server.TLSOptions")
+	proto.RegisterType((*Port)(nil), "istio.routing.v1alpha2.Port")
 	proto.RegisterEnum("istio.routing.v1alpha2.Server_TLSOptions_TLSmode", Server_TLSOptions_TLSmode_name, Server_TLSOptions_TLSmode_value)
 }
 
-func init() { proto.RegisterFile("routing/v1alpha2/gateway.proto", fileDescriptor2) }
+func init() { proto.RegisterFile("routing/v1alpha2/gateway.proto", fileDescriptor1) }
 
-var fileDescriptor2 = []byte{
-	// 432 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x51, 0xc1, 0x6a, 0xdb, 0x40,
-	0x10, 0xad, 0x6c, 0x61, 0xc7, 0x63, 0xe2, 0xa8, 0x43, 0x09, 0xaa, 0x0f, 0xc1, 0xb8, 0x14, 0xd4,
-	0x43, 0xd7, 0x44, 0x3d, 0xb4, 0xd0, 0x43, 0x71, 0x8d, 0x49, 0x0a, 0x4e, 0x63, 0x56, 0xf6, 0x59,
-	0xac, 0xe5, 0x8d, 0xb3, 0x20, 0xef, 0x8a, 0xdd, 0x75, 0x1a, 0x7f, 0x41, 0x3f, 0xa8, 0x3f, 0x58,
-	0xb4, 0x92, 0x92, 0x4b, 0x69, 0x7b, 0x9b, 0x79, 0xf3, 0xde, 0xdb, 0x99, 0xb7, 0x70, 0xa1, 0xd5,
-	0xc1, 0x0a, 0xb9, 0x9b, 0x3c, 0x5c, 0xb2, 0xbc, 0xb8, 0x67, 0xf1, 0x64, 0xc7, 0x2c, 0xff, 0xc1,
-	0x8e, 0xa4, 0xd0, 0xca, 0x2a, 0x3c, 0x17, 0xc6, 0x0a, 0x45, 0x6a, 0x16, 0x69, 0x58, 0xc3, 0xd7,
-	0x3b, 0xa5, 0x76, 0x39, 0x9f, 0x38, 0xd6, 0xe6, 0x70, 0x37, 0x61, 0xb2, 0x96, 0x8c, 0x67, 0xd0,
-	0xbd, 0xaa, 0x3c, 0xf0, 0x13, 0x74, 0x0d, 0xd7, 0x0f, 0x5c, 0x9b, 0xd0, 0x1b, 0xb5, 0xa3, 0x7e,
-	0x7c, 0x41, 0xfe, 0xec, 0x47, 0x12, 0x47, 0xa3, 0x0d, 0x7d, 0xfc, 0xcb, 0x87, 0x4e, 0x85, 0xe1,
-	0x47, 0xf0, 0x0b, 0xa5, 0x6d, 0xe8, 0x8d, 0xbc, 0xa8, 0x1f, 0xbf, 0xf9, 0xbb, 0x03, 0x59, 0x2a,
-	0x6d, 0xa9, 0x13, 0x60, 0x08, 0xdd, 0xad, 0xda, 0x33, 0x21, 0x4d, 0xd8, 0x1a, 0xb5, 0xa3, 0x1e,
-	0x6d, 0x5a, 0xfc, 0x0c, 0x6d, 0x9b, 0x9b, 0xb0, 0xed, 0x1c, 0xdf, 0xfd, 0xc3, 0x71, 0xb5, 0x48,
-	0x6e, 0x0b, 0x2b, 0x94, 0x34, 0xb4, 0x54, 0xe1, 0x17, 0x08, 0x0a, 0xad, 0x1e, 0x8f, 0x29, 0x7f,
-	0xb4, 0x5c, 0x9a, 0x72, 0x10, 0xfa, 0xee, 0xba, 0x57, 0xa4, 0x4a, 0x85, 0x34, 0xa9, 0x90, 0xa9,
-	0x3c, 0xd2, 0x33, 0xc7, 0x9e, 0x3f, 0x91, 0x87, 0xdf, 0xc1, 0x2f, 0xb7, 0xc4, 0x73, 0xe8, 0xc8,
-	0xc3, 0x7e, 0xc3, 0xb5, 0x3b, 0xed, 0x94, 0xd6, 0x1d, 0x0e, 0xe1, 0xc4, 0x19, 0x64, 0x2a, 0x0f,
-	0x5b, 0x23, 0x2f, 0xea, 0xd1, 0xa7, 0x1e, 0x11, 0x7c, 0xc9, 0xf6, 0xdc, 0xad, 0xde, 0xa3, 0xae,
-	0x1e, 0xfe, 0x6c, 0x01, 0x3c, 0x2f, 0x89, 0x6f, 0x61, 0x70, 0x6f, 0x6d, 0x61, 0x52, 0xcd, 0xb7,
-	0x42, 0xf3, 0xac, 0x4a, 0xee, 0x84, 0x9e, 0x3a, 0x94, 0xd6, 0x20, 0xce, 0xc1, 0xdf, 0xab, 0x2d,
-	0x77, 0x2f, 0x0c, 0xe2, 0xcb, 0xff, 0x0e, 0xa1, 0x2c, 0x4b, 0x21, 0x75, 0x72, 0x7c, 0x0f, 0x58,
-	0xfd, 0x59, 0x9a, 0x71, 0x6d, 0xc5, 0x9d, 0xc8, 0x98, 0x6d, 0xd6, 0x7b, 0x59, 0x4d, 0x66, 0xcf,
-	0x03, 0x8c, 0x20, 0xc8, 0x72, 0xc1, 0xa5, 0x4d, 0x33, 0x96, 0x6e, 0x0e, 0x72, 0x9b, 0xf3, 0xd0,
-	0x77, 0xe4, 0x41, 0x85, 0xcf, 0xd8, 0x57, 0x87, 0x8e, 0x63, 0xe8, 0xd6, 0x2f, 0xe1, 0x19, 0xf4,
-	0x97, 0xd3, 0x24, 0x59, 0x5d, 0xd3, 0xdb, 0xf5, 0xd5, 0x75, 0xf0, 0x02, 0x01, 0x3a, 0xc9, 0xb7,
-	0x9b, 0xe5, 0x62, 0x1e, 0x78, 0x65, 0x7d, 0xb3, 0x5e, 0xad, 0xa7, 0x8b, 0xa0, 0xb5, 0xe9, 0xb8,
-	0x9c, 0x3e, 0xfc, 0x0e, 0x00, 0x00, 0xff, 0xff, 0x73, 0x93, 0xb4, 0x0d, 0xd6, 0x02, 0x00, 0x00,
+var fileDescriptor1 = []byte{
+	// 421 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x92, 0xc1, 0x6e, 0xd3, 0x40,
+	0x10, 0x86, 0x71, 0xec, 0x3a, 0xcd, 0x44, 0x4d, 0xd2, 0x11, 0xaa, 0x56, 0x15, 0x2a, 0x51, 0x24,
+	0x44, 0x40, 0xc2, 0xa5, 0xe6, 0x82, 0xc4, 0x29, 0xaa, 0xaa, 0x16, 0x91, 0xb6, 0xd1, 0x3a, 0x39,
+	0x5b, 0x1b, 0x77, 0x69, 0x16, 0x9c, 0xac, 0xb5, 0x3b, 0x09, 0xca, 0x73, 0xf2, 0x08, 0xbc, 0x08,
+	0xf2, 0xda, 0xa5, 0x39, 0x00, 0xea, 0x6d, 0xe6, 0x9f, 0x6f, 0xc6, 0xbf, 0x7f, 0x1b, 0x4e, 0x8c,
+	0x5e, 0x93, 0x5a, 0xdd, 0x9f, 0x6e, 0xce, 0x44, 0x5e, 0x2c, 0x44, 0x7c, 0x7a, 0x2f, 0x48, 0xfe,
+	0x10, 0xdb, 0xa8, 0x30, 0x9a, 0x34, 0x1e, 0x29, 0x4b, 0x4a, 0x47, 0x35, 0x15, 0x3d, 0x50, 0x83,
+	0x73, 0x68, 0x5e, 0x56, 0x20, 0x7e, 0x84, 0xa6, 0x95, 0x66, 0x23, 0x8d, 0x65, 0x5e, 0xdf, 0x1f,
+	0xb6, 0xe3, 0x93, 0xe8, 0xef, 0x4b, 0x51, 0xe2, 0x30, 0xfe, 0x80, 0x0f, 0x7e, 0xf9, 0x10, 0x56,
+	0x1a, 0xbe, 0x87, 0xa0, 0xd0, 0x86, 0x98, 0xd7, 0xf7, 0x86, 0xed, 0xf8, 0xc5, 0xbf, 0x2e, 0x4c,
+	0xb4, 0x21, 0xee, 0x48, 0x7c, 0x0e, 0x7b, 0x0b, 0x6d, 0xc9, 0xb2, 0x46, 0xdf, 0x1f, 0xb6, 0x78,
+	0xd5, 0xe0, 0x27, 0xf0, 0x29, 0xb7, 0xcc, 0x77, 0x67, 0xde, 0xfc, 0xdf, 0x48, 0x34, 0x1d, 0x27,
+	0xb7, 0x05, 0x29, 0xbd, 0xb2, 0xbc, 0xdc, 0x3a, 0xfe, 0xd9, 0x00, 0x78, 0xd4, 0xf0, 0x15, 0x74,
+	0x16, 0x44, 0x85, 0x4d, 0x8d, 0xbc, 0x53, 0x46, 0x66, 0x95, 0xbb, 0x7d, 0x7e, 0xe0, 0x54, 0x5e,
+	0x8b, 0x78, 0x01, 0xc1, 0x52, 0xdf, 0x49, 0xd6, 0xe8, 0x7b, 0xc3, 0x4e, 0x7c, 0xf6, 0xe4, 0x67,
+	0x96, 0x65, 0xb9, 0xc8, 0xdd, 0x3a, 0xbe, 0x03, 0xac, 0x72, 0x49, 0x33, 0x69, 0x48, 0x7d, 0x55,
+	0x99, 0x20, 0xe9, 0x5e, 0xa4, 0xc5, 0x0f, 0xab, 0xc9, 0xf9, 0xe3, 0x00, 0x5f, 0x42, 0xbb, 0x30,
+	0x6a, 0x23, 0x48, 0xa6, 0xdf, 0xe5, 0x96, 0x05, 0x8e, 0x83, 0x5a, 0xfa, 0x22, 0xb7, 0xf8, 0x1a,
+	0xba, 0x99, 0xd8, 0xbd, 0x65, 0xd9, 0x9e, 0x83, 0x3a, 0x99, 0xd8, 0x39, 0x64, 0xf1, 0x2d, 0x1c,
+	0xda, 0xf5, 0xfc, 0x9b, 0xcc, 0x28, 0x15, 0x39, 0xa5, 0x2b, 0xb1, 0x94, 0x96, 0x85, 0x2e, 0xd4,
+	0x6e, 0x3d, 0x18, 0xe5, 0x74, 0x53, 0xca, 0x83, 0x18, 0x9a, 0xb5, 0x6b, 0xec, 0x42, 0x7b, 0x32,
+	0x4a, 0x92, 0xe9, 0x15, 0xbf, 0x9d, 0x5d, 0x5e, 0xf5, 0x9e, 0x21, 0x40, 0x98, 0x7c, 0xbe, 0x9e,
+	0x8c, 0x2f, 0x7a, 0x5e, 0x59, 0x5f, 0xcf, 0xa6, 0xb3, 0xd1, 0xb8, 0xd7, 0x18, 0xdc, 0x40, 0x50,
+	0x7e, 0x36, 0x3c, 0x82, 0x70, 0xb5, 0x5e, 0xce, 0xa5, 0x71, 0x31, 0x1e, 0xf0, 0xba, 0xc3, 0x63,
+	0xd8, 0x77, 0xff, 0x5a, 0xa6, 0x73, 0x97, 0x61, 0x8b, 0xff, 0xe9, 0x11, 0x21, 0x28, 0xfd, 0xd4,
+	0x31, 0xb8, 0x7a, 0x1e, 0xba, 0xe9, 0x87, 0xdf, 0x01, 0x00, 0x00, 0xff, 0xff, 0x29, 0x94, 0x82,
+	0x90, 0xbb, 0x02, 0x00, 0x00,
 }

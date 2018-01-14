@@ -1,4 +1,4 @@
-// Copyright 2018 Istio Authors
+// Copyright 2017 Istio Authors
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -13,8 +13,6 @@
 //   limitations under the License.
 
 syntax = "proto3";
-
-import "google/protobuf/any.proto";
 
 package istio.routing.v1alpha2;
 
@@ -38,7 +36,7 @@ package istio.routing.v1alpha2;
 //       - port:
 //           number: 80
 //           name: http
-//         domains:
+//         hosts:
 //         - uk.bookinfo.com
 //         - eu.bookinfo.com
 //         tls:
@@ -46,17 +44,17 @@ package istio.routing.v1alpha2;
 //       - port:
 //           number: 443
 //           name: https
-//         domains:
+//         hosts:
 //         - uk.bookinfo.com
 //         - eu.bookinfo.com
 //         tls:
 //           mode: simple #enables HTTPS on this port
-//           serverCert: server.crt
-//           clientCABundle: client.ca-bundle
+//           serverCert: /etc/certs/servercert.pem
+//           privateKey: /etc/certs/privatekey.pem
 //       - port:
 //           number: 9080
 //           name: http-wildcard
-//         # no domains implies wildcard match
+//         # no hosts implies wildcard match
 //       - port:
 //           number: 2379 #to expose internal service via external port 2379
 //           name: Mongo
@@ -64,7 +62,7 @@ package istio.routing.v1alpha2;
 //
 // The gateway specification above describes the L4-L6 properties of a load
 // balancer. Routing rules can then be bound to a gateway to control 
-// the forwarding of traffic arriving at a particular domain or gateway port.
+// the forwarding of traffic arriving at a particular host or gateway port.
 //
 // The following sample route rule splits traffic for
 // https://uk.bookinfo.com/reviews, https://eu.bookinfo.com/reviews,
@@ -178,92 +176,85 @@ message Gateway {
 //           protocol: HTTP
 //         tls:
 //           mode: simple
-//           serverCertificatet: server.crt
+//           serverCertificate: /etc/certs/server.pem
+//           privateKey: /etc/certs/privatekey.pem
 //
 message Server {
-  // Port describes the properties of a specific port of a service.
-  message Port {
-    // REQUIRED: A valid non-negative integer port number.
-    uint32 number = 1;
-
-    // The protocol exposed on the port.
-    // MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP.
-    string protocol = 2;
-
-    // Label assigned to the port.
-    string name = 3;
-  }
-
   // REQUIRED: The Port on which the proxy should listen for incoming
   // connections
   Port port = 1;
 
-  // A list of domains exposed by this gateway. While
+  // A list of hosts exposed by this gateway. While
   // typically applicable to HTTP services, it can also be used for TCP
   // services using TLS with SNI. Standard DNS wildcard prefix syntax
   // is permitted.
   //
-  // RouteRules that are bound to a gateway must having a matching domain
+  // RouteRules that are bound to a gateway must having a matching host
   // in their default destination. Specifically one of the route rule
-  // destination domains is a strict suffix of a gateway domain or
-  // a gateway domain is a suffix of one of the route rule domains.
-  repeated string domains = 2;
+  // destination hosts is a strict suffix of a gateway host or
+  // a gateway host is a suffix of one of the route rule hosts.
+  repeated string hosts = 2;
 
   message TLSOptions {
     // If set to true, the load balancer will send a 302 redirect for all
     // http connections, asking the clients to use HTTPS.
     bool https_redirect = 1;
 
-    // TLS modes enforced by the gateway
+    // TLS modes enforced by the proxy
     enum TLSmode {
-      // If set to "passthrough", the gateway will forward the connection to the
-      // upstream server as is.
+      // If set to "passthrough", the proxy will forward the connection
+      // to the upstream server selected based on the SNI string presented
+      // by the client.
       PASSTHROUGH = 0;
 
-      // If set to "simple", the gateway will secure connections with
-      // standard TLS semantics (server certs only).
+      // If set to "simple", the proxy will secure connections with
+      // standard TLS semantics.
       SIMPLE = 1;
 
-      // If set to "mutual", the gateway will use standard mTLS authentication.
+      // If set to "mutual", the proxy will secure connections to the
+      // upstream using mutual TLS by presenting client certificates for
+      // authentication.
       MUTUAL = 2;
     };
 
     // Optional: Indicates whether connections to this port should be
-    // secured using TLS.  The value of this field determines how TLS is
+    // secured using TLS. The value of this field determines how TLS is
     // enforced.  
     TLSmode mode = 2;
 
-    // REQUIRED if mode == SIMPLE/MUTUAL. The name of the file holding the
-    // server-side TLS certificate to use.  It is the responsibility of the
-    // underlying platform to mount the certificate as a file under
-    // /etc/istio/ingress-certs with the same name as the specified in this
-    // field.
+    // REQUIRED if mode is "simple" or "mutual". The path to the file
+    // holding the server-side TLS certificate to use.
     string server_certificate = 3;
 
-    // REQUIRED if mode == MUTUAL. To use mutual TLS for external clients,
-    // specify the name of the file holding the CA certificate to validate
-    // the client's certificate. It is the responsibility of the underlying
-    // platform to mount the certificate as a file under
-    // /etc/istio/ingress-certs with the same name as specified in this
-    // field.
-    string client_ca_bundle = 4;
+    // REQUIRED if mode is "simple" or "mutual". The path to the file
+    // holding the server's private key.
+    string private_key = 4;
+
+    // REQUIRED if mode is "mutual". The path to a file containing
+    // certificate authority certificates to use in verifying a presented
+    // client side certificate.
+    string ca_certificates = 5;
+
+    // A list of alternate names to verify the subject identity in the
+    // certificate presented by the client.
+    repeated string subject_alt_names = 6;
   }
 
   // Set of TLS related options that govern the server's behavior. Use
   // these options to control if all http requests should be redirected to
   // https, and the TLS modes to use.
   TLSOptions tls = 3;
+}
 
-  // Extensions contain proxy implementation specific configuration, that
-  // cannot be easily expressed through expressed using proxy-independent
-  // routing rule or mixer policy configuration. Custom proxy
-  // implementations could have enhancements such as caching, dynamic
-  // scripting, proprietary protocol support, etc. The configuration for
-  // such features could be provided through the extensions mechanism.
-  //
-  // To extend the proxy configuration for a sidecar, the port and the
-  // domains used in the Gateway configuration must match the port and IP
-  // on which the sidecar is listening for connections. See Envoy filters
-  // configuration for usage examples.
-  repeated google.protobuf.Any proxy_extensions = 4;
+// Port describes the properties of a specific port of a service.
+message Port {
+  // REQUIRED: A valid non-negative integer port number.
+  uint32 number = 1;
+
+  // The protocol exposed on the port.
+  // MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP.
+  string protocol = 2;
+
+  // Label assigned to the port.
+  string name = 3;
 }
