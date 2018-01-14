@@ -362,7 +362,7 @@ func (m *Subset) GetTrafficPolicy() *TrafficPolicy {
 //           simple: ROUND_ROBIN
 //
 // The following example uses the consistent hashing based load balancer
-// for the same ratings service using the Cookie header as the hash key.
+// for the same ratings service using a ring of size 10.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: DestinationRule
@@ -373,7 +373,7 @@ func (m *Subset) GetTrafficPolicy() *TrafficPolicy {
 //       trafficPolicy:
 //         loadBalancer:
 //           consistentHash:
-//             http_header: Cookie
+//             minimum_ring_size: 10
 //
 type LoadBalancerSettings struct {
 	// Upstream load balancing policy.
