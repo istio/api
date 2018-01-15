@@ -362,7 +362,9 @@ func (m *Subset) GetTrafficPolicy() *TrafficPolicy {
 //           simple: ROUND_ROBIN
 //
 // The following example uses the consistent hashing based load balancer
-// for the same ratings service using a ring of size 10.
+// for the same ratings service using a ring of size 10. As the complete
+// ring hash configuration involves setting a header to hash, there is
+// also a sample with a route rule.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: DestinationRule
@@ -375,6 +377,21 @@ func (m *Subset) GetTrafficPolicy() *TrafficPolicy {
 //           consistentHash:
 //             minimum_ring_size: 10
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: my-rule
+//     spec:
+//       hosts:
+//       - ratings
+//       http:
+//       - destination:
+//           name: ratings
+//         trafficPolicy:
+//           headerName: some_header_in_the_request
+//
+// If the headerName is not set, hash is a random number, rendering the
+// load balancer as a RANDOM policy.
 type LoadBalancerSettings struct {
 	// Upstream load balancing policy.
 	//

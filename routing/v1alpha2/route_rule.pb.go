@@ -1606,6 +1606,34 @@ func _HTTPFaultInjection_Abort_OneofSizer(msg proto.Message) (n int) {
 
 // HashPolicy is used to specify the hashing policy configuration if the
 // upstream cluster is using a hash load balancer
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: my-rule
+//     spec:
+//       hosts:
+//       - ratings
+//       http:
+//       - destination:
+//           name: ratings
+//         trafficPolicy:
+//           headerName: some_header_in_the_request
+//
+// Which requires a special load balancing setting in the destination rule.
+// If the header is set but the destination load balancing is not a ring
+// hash, then this has no effect. See DestinationRule for more info.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: DestinationRule
+//     metadata:
+//       name: bookinfo-ratings
+//     spec:
+//       name: ratings
+//       trafficPolicy:
+//         loadBalancer:
+//           consistentHash:
+//             minimum_ring_size: 10
 type HashPolicy struct {
 	// REQUIRED. The name of the request header that will be used to obtain the
 	// hash key. If the header is not present, the load balancer will use a
