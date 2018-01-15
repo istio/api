@@ -6,6 +6,7 @@ package istio_routing_v1alpha2
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
+import google_protobuf2 "github.com/golang/protobuf/ptypes/any"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -16,9 +17,13 @@ type UnsafeEnvoyConfig_Operation int32
 
 const (
 	UnsafeEnvoyConfig_INVALID_OP UnsafeEnvoyConfig_Operation = 0
-	UnsafeEnvoyConfig_ADD        UnsafeEnvoyConfig_Operation = 1
-	UnsafeEnvoyConfig_REPLACE    UnsafeEnvoyConfig_Operation = 2
-	UnsafeEnvoyConfig_UPDATE     UnsafeEnvoyConfig_Operation = 3
+	// Add a listener or cluster.
+	UnsafeEnvoyConfig_ADD UnsafeEnvoyConfig_Operation = 1
+	// Replace an existing listener or cluster.
+	UnsafeEnvoyConfig_REPLACE UnsafeEnvoyConfig_Operation = 2
+	// Update an existing listener or cluster. Any missing fields in the
+	// configuration will be replaced with information computed by Istio.
+	UnsafeEnvoyConfig_UPDATE UnsafeEnvoyConfig_Operation = 3
 )
 
 var UnsafeEnvoyConfig_Operation_name = map[int32]string{
@@ -41,35 +46,65 @@ func (UnsafeEnvoyConfig_Operation) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor4, []int{0, 0}
 }
 
-type UnsafeEnvoyConfig_Direction int32
-
-const (
-	UnsafeEnvoyConfig_INVALID_DIR UnsafeEnvoyConfig_Direction = 0
-	UnsafeEnvoyConfig_OUTBOUND    UnsafeEnvoyConfig_Direction = 1
-	UnsafeEnvoyConfig_INBOUND     UnsafeEnvoyConfig_Direction = 2
-)
-
-var UnsafeEnvoyConfig_Direction_name = map[int32]string{
-	0: "INVALID_DIR",
-	1: "OUTBOUND",
-	2: "INBOUND",
-}
-var UnsafeEnvoyConfig_Direction_value = map[string]int32{
-	"INVALID_DIR": 0,
-	"OUTBOUND":    1,
-	"INBOUND":     2,
-}
-
-func (x UnsafeEnvoyConfig_Direction) String() string {
-	return proto.EnumName(UnsafeEnvoyConfig_Direction_name, int32(x))
-}
-func (UnsafeEnvoyConfig_Direction) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor4, []int{0, 1}
-}
-
+// Envoy-specific filters that can be used to enable customized processing
+// in addition to the features exposed by the routing rule. This feature
+// must be used with care, as incorrect configurations could potentially
+// destabilize the entire mesh. This configuration is designed for an
+// advanced audience with good familiarity with Envoy configuration, and
+// Istio Pilot's internals. Common use cases for using the extensions
+// include use of Envoy's Lua filters, in addition to enabling any
+// proprietary filters developed inhouse (e.g, protocol decoders,
+// geo-location filters, etc.).
+//
+// NOTE: Do not use this feature to enable Fault, Router (HTTP),
+// Mongo/Tcp proxy (TCP) filters.
+//
+// The following example adds a Lua script that calls out to an external
+// service, for all inbound calls to the reviews HTTP service on port 8080.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: UnsafeEnvoyConfig
+//     metadata:
+//       name: my-lua-script
+//     spec:
+//       config:
+//       - labels:
+//           name: reviews # selects the pods where this config will be applied
+//         operation: update # update existing listener
+//         name: http_0.0.0.0:8080
+//         config:
+//           "@type": type.googleapis.com/envoy.api.v2.Listener
+//           filterChains:
+//           - filters:
+//             - name: envoy.lua
+//               config:
+//                 inline_code: |
+//                   function envoy_on_request(request_handle)
+//                     -- Make an HTTP call to an upstream host with the following headers, body, and timeout.
+//                     local headers, body = request_handle:httpCall(
+//                     "lua_cluster",
+//                     {
+//                      [":method"] = "POST",
+//                      [":path"] = "/",
+//                      [":authority"] = "lua_cluster"
+//                     },
+//                     "hello world", 5000)
+//                   end
+//       - labels:
+//           name: reviews # selects the pods where this config will be applied
+//         operation: add # add the lua_cluster to existing list of clusters
+//         name: lua_cluster
+//         config:
+//           "@type": type.googleapis.com/envoy.api.v2.Cluster
+//           type: static
+//           hosts:
+//           - socketAddress:
+//               protocol: tcp
+//               address: 1.1.1.1
+//               portValue: 5555
+//
 type UnsafeEnvoyConfig struct {
-	Listeners []*UnsafeEnvoyConfig_Listener `protobuf:"bytes,1,rep,name=listeners" json:"listeners,omitempty"`
-	Clusters  []*UnsafeEnvoyConfig_Cluster  `protobuf:"bytes,2,rep,name=clusters" json:"clusters,omitempty"`
+	Config []*UnsafeEnvoyConfig_EnvoyConfig `protobuf:"bytes,1,rep,name=config" json:"config,omitempty"`
 }
 
 func (m *UnsafeEnvoyConfig) Reset()                    { *m = UnsafeEnvoyConfig{} }
@@ -77,170 +112,102 @@ func (m *UnsafeEnvoyConfig) String() string            { return proto.CompactTex
 func (*UnsafeEnvoyConfig) ProtoMessage()               {}
 func (*UnsafeEnvoyConfig) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{0} }
 
-func (m *UnsafeEnvoyConfig) GetListeners() []*UnsafeEnvoyConfig_Listener {
+func (m *UnsafeEnvoyConfig) GetConfig() []*UnsafeEnvoyConfig_EnvoyConfig {
 	if m != nil {
-		return m.Listeners
+		return m.Config
 	}
 	return nil
 }
 
-func (m *UnsafeEnvoyConfig) GetClusters() []*UnsafeEnvoyConfig_Cluster {
-	if m != nil {
-		return m.Clusters
-	}
-	return nil
+// Listener/cluster related configuration.
+type UnsafeEnvoyConfig_EnvoyConfig struct {
+	// REQUIRED. Add/Replace/Update operation
+	Operation UnsafeEnvoyConfig_Operation `protobuf:"varint,1,opt,name=operation,enum=istio.routing.v1alpha2.UnsafeEnvoyConfig_Operation" json:"operation,omitempty"`
+	// REQUIRED. Unique name associated with the listener. Istio generated
+	// listeners are named using the format
+	// (http|tcp)_(ip)_(port). Wildcards can be used when selecting
+	// listeners. For example, to select all listeners on port 8080, use
+	// *_0.0.0.0_8080.
+	//
+	// Istio generated clusters are named using the format
+	// out.(serviceName)|(portName/portNumber)|subsetName for outbound
+	// clusters (client side) and in.(portName/portNumber) for inbound
+	// clusters (server side). Wildcards can be used when selecting
+	// clusters. For example, to select all clusters for
+	// foo.default.svc.cluster.local service, use
+	// *.foo.default.svc.cluster.local|*|*
+	Name string `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
+	// Restrict the changes to a subset of pods/VMs in the mesh
+	Labels map[string]string `protobuf:"bytes,3,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	// REQUIRED. Envoy listener/cluster configuration. Refer to
+	// https://github.com/envoyproxy/data-plane-api/ for details.
+	Config *google_protobuf2.Any `protobuf:"bytes,4,opt,name=config" json:"config,omitempty"`
 }
 
-type UnsafeEnvoyConfig_Listener struct {
-	EndpointLabels map[string]string           `protobuf:"bytes,1,rep,name=endpoint_labels,json=endpointLabels" json:"endpoint_labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	Operation      UnsafeEnvoyConfig_Operation `protobuf:"varint,2,opt,name=operation,enum=istio.routing.v1alpha2.UnsafeEnvoyConfig_Operation" json:"operation,omitempty"`
-	Direction      UnsafeEnvoyConfig_Direction `protobuf:"varint,3,opt,name=direction,enum=istio.routing.v1alpha2.UnsafeEnvoyConfig_Direction" json:"direction,omitempty"`
-	Port           uint32                      `protobuf:"varint,4,opt,name=port" json:"port,omitempty"`
-	Config         string                      `protobuf:"bytes,5,opt,name=config" json:"config,omitempty"`
+func (m *UnsafeEnvoyConfig_EnvoyConfig) Reset()         { *m = UnsafeEnvoyConfig_EnvoyConfig{} }
+func (m *UnsafeEnvoyConfig_EnvoyConfig) String() string { return proto.CompactTextString(m) }
+func (*UnsafeEnvoyConfig_EnvoyConfig) ProtoMessage()    {}
+func (*UnsafeEnvoyConfig_EnvoyConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor4, []int{0, 0}
 }
 
-func (m *UnsafeEnvoyConfig_Listener) Reset()                    { *m = UnsafeEnvoyConfig_Listener{} }
-func (m *UnsafeEnvoyConfig_Listener) String() string            { return proto.CompactTextString(m) }
-func (*UnsafeEnvoyConfig_Listener) ProtoMessage()               {}
-func (*UnsafeEnvoyConfig_Listener) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{0, 0} }
-
-func (m *UnsafeEnvoyConfig_Listener) GetEndpointLabels() map[string]string {
-	if m != nil {
-		return m.EndpointLabels
-	}
-	return nil
-}
-
-func (m *UnsafeEnvoyConfig_Listener) GetOperation() UnsafeEnvoyConfig_Operation {
+func (m *UnsafeEnvoyConfig_EnvoyConfig) GetOperation() UnsafeEnvoyConfig_Operation {
 	if m != nil {
 		return m.Operation
 	}
 	return UnsafeEnvoyConfig_INVALID_OP
 }
 
-func (m *UnsafeEnvoyConfig_Listener) GetDirection() UnsafeEnvoyConfig_Direction {
+func (m *UnsafeEnvoyConfig_EnvoyConfig) GetName() string {
 	if m != nil {
-		return m.Direction
-	}
-	return UnsafeEnvoyConfig_INVALID_DIR
-}
-
-func (m *UnsafeEnvoyConfig_Listener) GetPort() uint32 {
-	if m != nil {
-		return m.Port
-	}
-	return 0
-}
-
-func (m *UnsafeEnvoyConfig_Listener) GetConfig() string {
-	if m != nil {
-		return m.Config
+		return m.Name
 	}
 	return ""
 }
 
-type UnsafeEnvoyConfig_Cluster struct {
-	EndpointLabels map[string]string           `protobuf:"bytes,1,rep,name=endpoint_labels,json=endpointLabels" json:"endpoint_labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	Operation      UnsafeEnvoyConfig_Operation `protobuf:"varint,2,opt,name=operation,enum=istio.routing.v1alpha2.UnsafeEnvoyConfig_Operation" json:"operation,omitempty"`
-	Direction      UnsafeEnvoyConfig_Direction `protobuf:"varint,3,opt,name=direction,enum=istio.routing.v1alpha2.UnsafeEnvoyConfig_Direction" json:"direction,omitempty"`
-	Fqdn           string                      `protobuf:"bytes,4,opt,name=fqdn" json:"fqdn,omitempty"`
-	Port           uint32                      `protobuf:"varint,5,opt,name=port" json:"port,omitempty"`
-	Subset         string                      `protobuf:"bytes,6,opt,name=subset" json:"subset,omitempty"`
-	Config         string                      `protobuf:"bytes,7,opt,name=config" json:"config,omitempty"`
-}
-
-func (m *UnsafeEnvoyConfig_Cluster) Reset()                    { *m = UnsafeEnvoyConfig_Cluster{} }
-func (m *UnsafeEnvoyConfig_Cluster) String() string            { return proto.CompactTextString(m) }
-func (*UnsafeEnvoyConfig_Cluster) ProtoMessage()               {}
-func (*UnsafeEnvoyConfig_Cluster) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{0, 1} }
-
-func (m *UnsafeEnvoyConfig_Cluster) GetEndpointLabels() map[string]string {
+func (m *UnsafeEnvoyConfig_EnvoyConfig) GetLabels() map[string]string {
 	if m != nil {
-		return m.EndpointLabels
+		return m.Labels
 	}
 	return nil
 }
 
-func (m *UnsafeEnvoyConfig_Cluster) GetOperation() UnsafeEnvoyConfig_Operation {
-	if m != nil {
-		return m.Operation
-	}
-	return UnsafeEnvoyConfig_INVALID_OP
-}
-
-func (m *UnsafeEnvoyConfig_Cluster) GetDirection() UnsafeEnvoyConfig_Direction {
-	if m != nil {
-		return m.Direction
-	}
-	return UnsafeEnvoyConfig_INVALID_DIR
-}
-
-func (m *UnsafeEnvoyConfig_Cluster) GetFqdn() string {
-	if m != nil {
-		return m.Fqdn
-	}
-	return ""
-}
-
-func (m *UnsafeEnvoyConfig_Cluster) GetPort() uint32 {
-	if m != nil {
-		return m.Port
-	}
-	return 0
-}
-
-func (m *UnsafeEnvoyConfig_Cluster) GetSubset() string {
-	if m != nil {
-		return m.Subset
-	}
-	return ""
-}
-
-func (m *UnsafeEnvoyConfig_Cluster) GetConfig() string {
+func (m *UnsafeEnvoyConfig_EnvoyConfig) GetConfig() *google_protobuf2.Any {
 	if m != nil {
 		return m.Config
 	}
-	return ""
+	return nil
 }
 
 func init() {
 	proto.RegisterType((*UnsafeEnvoyConfig)(nil), "istio.routing.v1alpha2.UnsafeEnvoyConfig")
-	proto.RegisterType((*UnsafeEnvoyConfig_Listener)(nil), "istio.routing.v1alpha2.UnsafeEnvoyConfig.Listener")
-	proto.RegisterType((*UnsafeEnvoyConfig_Cluster)(nil), "istio.routing.v1alpha2.UnsafeEnvoyConfig.Cluster")
+	proto.RegisterType((*UnsafeEnvoyConfig_EnvoyConfig)(nil), "istio.routing.v1alpha2.UnsafeEnvoyConfig.EnvoyConfig")
 	proto.RegisterEnum("istio.routing.v1alpha2.UnsafeEnvoyConfig_Operation", UnsafeEnvoyConfig_Operation_name, UnsafeEnvoyConfig_Operation_value)
-	proto.RegisterEnum("istio.routing.v1alpha2.UnsafeEnvoyConfig_Direction", UnsafeEnvoyConfig_Direction_name, UnsafeEnvoyConfig_Direction_value)
 }
 
 func init() { proto.RegisterFile("routing/v1alpha2/unsafe_envoy_config.proto", fileDescriptor4) }
 
 var fileDescriptor4 = []byte{
-	// 447 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x94, 0xcd, 0x6a, 0xdb, 0x40,
-	0x10, 0xc7, 0x23, 0x29, 0xfe, 0xd0, 0xb8, 0x75, 0xd4, 0x69, 0x09, 0xc2, 0x27, 0xe3, 0x93, 0xe9,
-	0x41, 0x21, 0xce, 0xa1, 0xa5, 0xd0, 0x83, 0x6a, 0xa9, 0x60, 0x70, 0x6d, 0x77, 0x89, 0x7a, 0x15,
-	0xb2, 0xbd, 0x4e, 0x97, 0x8a, 0x5d, 0x55, 0x5a, 0x19, 0xfc, 0x16, 0x7d, 0x9e, 0x3e, 0x5b, 0x0f,
-	0x45, 0xab, 0x0f, 0x37, 0x34, 0x85, 0x18, 0x7a, 0xca, 0x6d, 0x46, 0xe8, 0xf7, 0xdb, 0x19, 0xfd,
-	0xc5, 0xc2, 0xeb, 0x54, 0xe4, 0x92, 0xf1, 0xbb, 0xab, 0xfd, 0x75, 0x14, 0x27, 0x5f, 0xa3, 0xc9,
-	0x55, 0xce, 0xb3, 0x68, 0x47, 0x43, 0xca, 0xf7, 0xe2, 0x10, 0x6e, 0x04, 0xdf, 0xb1, 0x3b, 0x27,
-	0x49, 0x85, 0x14, 0x78, 0xc9, 0x32, 0xc9, 0x84, 0x53, 0x11, 0x4e, 0x4d, 0x8c, 0x7e, 0x75, 0xe1,
-	0x45, 0xa0, 0x28, 0xbf, 0x80, 0xa6, 0x8a, 0xc1, 0x15, 0x98, 0x31, 0xcb, 0x24, 0xe5, 0x34, 0xcd,
-	0x6c, 0x6d, 0x68, 0x8c, 0x7b, 0x93, 0x89, 0xf3, 0xb0, 0xc1, 0xf9, 0x8b, 0x76, 0xe6, 0x15, 0x4a,
-	0x8e, 0x12, 0xfc, 0x04, 0xdd, 0x4d, 0x9c, 0x67, 0xb2, 0x10, 0xea, 0x4a, 0x78, 0xfd, 0x78, 0xe1,
-	0xb4, 0x24, 0x49, 0xa3, 0x18, 0xfc, 0x30, 0xa0, 0x5b, 0x1f, 0x83, 0x02, 0x2e, 0x28, 0xdf, 0x26,
-	0x82, 0x71, 0x19, 0xc6, 0xd1, 0x9a, 0xc6, 0xf5, 0xcc, 0x1f, 0x4f, 0x9f, 0xd9, 0xf1, 0x2b, 0xd3,
-	0x5c, 0x89, 0x7c, 0x2e, 0xd3, 0x03, 0xe9, 0xd3, 0x7b, 0x0f, 0xf1, 0x33, 0x98, 0x22, 0xa1, 0x69,
-	0x24, 0x99, 0xe0, 0xb6, 0x3e, 0xd4, 0xc6, 0xfd, 0xc9, 0xcd, 0xe3, 0x8f, 0x5a, 0xd6, 0x28, 0x39,
-	0x5a, 0x0a, 0xe5, 0x96, 0xa5, 0x74, 0xa3, 0x94, 0xc6, 0xa9, 0x4a, 0xaf, 0x46, 0xc9, 0xd1, 0x82,
-	0x08, 0xe7, 0x89, 0x48, 0xa5, 0x7d, 0x3e, 0xd4, 0xc6, 0xcf, 0x89, 0xaa, 0xf1, 0x12, 0xda, 0xe5,
-	0x6f, 0x61, 0xb7, 0x86, 0xda, 0xd8, 0x24, 0x55, 0x37, 0x70, 0xe1, 0xe5, 0x03, 0x8b, 0xa3, 0x05,
-	0xc6, 0x37, 0x7a, 0xb0, 0x35, 0xf5, 0x6e, 0x51, 0xe2, 0x2b, 0x68, 0xed, 0xa3, 0x38, 0xa7, 0x6a,
-	0x6d, 0x93, 0x94, 0xcd, 0x3b, 0xfd, 0xad, 0x36, 0xf8, 0x69, 0x40, 0xa7, 0x0a, 0x0a, 0xf9, 0xbf,
-	0x12, 0xf1, 0x4f, 0x0e, 0xfd, 0x69, 0x05, 0xb2, 0xfb, 0xbe, 0xe5, 0x2a, 0x10, 0x93, 0xa8, 0xba,
-	0x09, 0xa9, 0x75, 0x3f, 0xa4, 0x2c, 0x5f, 0x67, 0x54, 0xda, 0xed, 0x32, 0xa4, 0xb2, 0xfb, 0x23,
-	0xbc, 0xce, 0x7f, 0x0e, 0x6f, 0xf4, 0x1e, 0xcc, 0xe6, 0x2b, 0x60, 0x1f, 0x60, 0xb6, 0xf8, 0xe2,
-	0xce, 0x67, 0x5e, 0xb8, 0x5c, 0x59, 0x67, 0xd8, 0x01, 0xc3, 0xf5, 0x3c, 0x4b, 0xc3, 0x1e, 0x74,
-	0x88, 0xbf, 0x9a, 0xbb, 0x53, 0xdf, 0xd2, 0x11, 0xa0, 0x1d, 0xac, 0x3c, 0xf7, 0xd6, 0xb7, 0x8c,
-	0xd1, 0x1b, 0x30, 0x9b, 0x8d, 0xf1, 0x02, 0x7a, 0x35, 0xee, 0xcd, 0x88, 0x75, 0x86, 0xcf, 0xa0,
-	0xbb, 0x0c, 0x6e, 0x3f, 0x2c, 0x83, 0x45, 0x25, 0x99, 0x2d, 0xca, 0x46, 0x5f, 0xb7, 0xd5, 0xed,
-	0x74, 0xf3, 0x3b, 0x00, 0x00, 0xff, 0xff, 0xb1, 0x45, 0xd6, 0x4e, 0xcb, 0x04, 0x00, 0x00,
+	// 334 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0xd0, 0xc1, 0x4a, 0xeb, 0x40,
+	0x14, 0x06, 0xe0, 0x3b, 0x49, 0x6f, 0x4a, 0x4e, 0xa0, 0xc4, 0xa1, 0x48, 0xec, 0x2a, 0x74, 0x15,
+	0x44, 0x26, 0x98, 0x22, 0xa8, 0xe0, 0x22, 0x34, 0x59, 0x14, 0xaa, 0xad, 0x83, 0x15, 0x5c, 0x95,
+	0xa9, 0x4c, 0x63, 0x30, 0xce, 0x94, 0x34, 0x29, 0xe4, 0xcd, 0x7c, 0x18, 0x1f, 0x46, 0x3a, 0x69,
+	0x6a, 0x41, 0x17, 0xe2, 0xee, 0x04, 0xf2, 0x7f, 0x73, 0xfe, 0x03, 0xa7, 0xb9, 0x2c, 0x8b, 0x54,
+	0x24, 0xfe, 0xe6, 0x9c, 0x65, 0xab, 0x17, 0x16, 0xf8, 0xa5, 0x58, 0xb3, 0x25, 0x9f, 0x73, 0xb1,
+	0x91, 0xd5, 0xfc, 0x59, 0x8a, 0x65, 0x9a, 0x90, 0x55, 0x2e, 0x0b, 0x89, 0x8f, 0xd3, 0x75, 0x91,
+	0x4a, 0xb2, 0x4b, 0x90, 0x26, 0xd1, 0x3b, 0x49, 0xa4, 0x4c, 0x32, 0xee, 0xab, 0xbf, 0x16, 0xe5,
+	0xd2, 0x67, 0xa2, 0xaa, 0x23, 0xfd, 0x0f, 0x1d, 0x8e, 0x66, 0x0a, 0x8c, 0xb7, 0xde, 0x50, 0x71,
+	0xf8, 0x16, 0x8c, 0x1a, 0x76, 0x90, 0xab, 0x7b, 0x56, 0x70, 0x41, 0x7e, 0x96, 0xc9, 0xb7, 0x28,
+	0x39, 0x98, 0xe9, 0x0e, 0xe9, 0xbd, 0x6b, 0x60, 0x1d, 0xf2, 0xf7, 0x60, 0xca, 0x15, 0xcf, 0x59,
+	0x91, 0x4a, 0xe1, 0x20, 0x17, 0x79, 0x9d, 0x60, 0xf0, 0xfb, 0x17, 0x26, 0x4d, 0x94, 0x7e, 0x29,
+	0x18, 0x43, 0x4b, 0xb0, 0x37, 0xee, 0x68, 0x2e, 0xf2, 0x4c, 0xaa, 0x66, 0xfc, 0x04, 0x46, 0xc6,
+	0x16, 0x3c, 0x5b, 0x3b, 0xba, 0x6a, 0x11, 0xfe, 0xa9, 0x05, 0x19, 0x2b, 0x23, 0x16, 0x45, 0x5e,
+	0xd1, 0x1d, 0x88, 0xcf, 0xf6, 0x07, 0x6a, 0xb9, 0xc8, 0xb3, 0x82, 0x2e, 0xa9, 0x4f, 0x4c, 0x9a,
+	0x13, 0x93, 0x50, 0x54, 0xfb, 0xfe, 0x57, 0x60, 0x1d, 0x20, 0xd8, 0x06, 0xfd, 0x95, 0x57, 0xaa,
+	0xb8, 0x49, 0xb7, 0x23, 0xee, 0xc2, 0xff, 0x0d, 0xcb, 0xca, 0x66, 0xfd, 0xfa, 0xe3, 0x5a, 0xbb,
+	0x44, 0xfd, 0x1b, 0x30, 0xf7, 0x7d, 0x71, 0x07, 0x60, 0x74, 0xf7, 0x18, 0x8e, 0x47, 0xd1, 0x7c,
+	0x32, 0xb5, 0xff, 0xe1, 0x36, 0xe8, 0x61, 0x14, 0xd9, 0x08, 0x5b, 0xd0, 0xa6, 0xf1, 0x74, 0x1c,
+	0x0e, 0x63, 0x5b, 0xc3, 0x00, 0xc6, 0x6c, 0x1a, 0x85, 0x0f, 0xb1, 0xad, 0x2f, 0x0c, 0xb5, 0xcf,
+	0xe0, 0x33, 0x00, 0x00, 0xff, 0xff, 0xc4, 0xce, 0x1e, 0x6e, 0x46, 0x02, 0x00, 0x00,
 }

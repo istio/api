@@ -14,41 +14,106 @@
 
 syntax = "proto3";
 
+import "google/protobuf/any.proto";
+
 package istio.routing.v1alpha2;
 
+// Envoy-specific filters that can be used to enable customized processing
+// in addition to the features exposed by the routing rule. This feature
+// must be used with care, as incorrect configurations could potentially
+// destabilize the entire mesh. This configuration is designed for an
+// advanced audience with good familiarity with Envoy configuration, and
+// Istio Pilot's internals. Common use cases for using the extensions
+// include use of Envoy's Lua filters, in addition to enabling any
+// proprietary filters developed inhouse (e.g, protocol decoders,
+// geo-location filters, etc.).
+//
+// NOTE: Do not use this feature to enable Fault, Router (HTTP),
+// Mongo/Tcp proxy (TCP) filters.
+//
+// The following example adds a Lua script that calls out to an external
+// service, for all inbound calls to the reviews HTTP service on port 8080.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: UnsafeEnvoyConfig
+//     metadata:
+//       name: my-lua-script
+//     spec:
+//       config:
+//       - labels:
+//           name: reviews # selects the pods where this config will be applied
+//         operation: update # update existing listener
+//         name: http_0.0.0.0:8080
+//         config:
+//           "@type": type.googleapis.com/envoy.api.v2.Listener
+//           filterChains:
+//           - filters:
+//             - name: envoy.lua
+//               config:
+//                 inline_code: |
+//                   function envoy_on_request(request_handle)
+//                     -- Make an HTTP call to an upstream host with the following headers, body, and timeout.
+//                     local headers, body = request_handle:httpCall(
+//                     "lua_cluster",
+//                     {
+//                      [":method"] = "POST",
+//                      [":path"] = "/",
+//                      [":authority"] = "lua_cluster"
+//                     },
+//                     "hello world", 5000)
+//                   end
+//       - labels:
+//           name: reviews # selects the pods where this config will be applied
+//         operation: add # add the lua_cluster to existing list of clusters
+//         name: lua_cluster
+//         config:
+//           "@type": type.googleapis.com/envoy.api.v2.Cluster
+//           type: static
+//           hosts:
+//           - socketAddress:
+//               protocol: tcp
+//               address: 1.1.1.1
+//               portValue: 5555
+//
 message UnsafeEnvoyConfig {
   enum Operation {
     INVALID_OP = 0;
+    // Add a listener or cluster.
     ADD = 1;
+    // Replace an existing listener or cluster.
     REPLACE = 2;
+    // Update an existing listener or cluster. Any missing fields in the
+    // configuration will be replaced with information computed by Istio.
     UPDATE = 3;
   }
 
-  enum Direction {
-    INVALID_DIR = 0;
-    OUTBOUND = 1;
-    INBOUND = 2;
+  // Listener/cluster related configuration.
+  message EnvoyConfig {
+    // REQUIRED. Add/Replace/Update operation
+    Operation operation = 1;
+
+    // REQUIRED. Unique name associated with the listener. Istio generated
+    // listeners are named using the format
+    // (http|tcp)_(ip)_(port). Wildcards can be used when selecting
+    // listeners. For example, to select all listeners on port 8080, use
+    // *_0.0.0.0_8080.
+    //
+    // Istio generated clusters are named using the format
+    // out.(serviceName)|(portName/portNumber)|subsetName for outbound
+    // clusters (client side) and in.(portName/portNumber) for inbound
+    // clusters (server side). Wildcards can be used when selecting
+    // clusters. For example, to select all clusters for
+    // foo.default.svc.cluster.local service, use
+    // *.foo.default.svc.cluster.local|*|*
+    string name = 2;
+
+    // Restrict the changes to a subset of pods/VMs in the mesh
+    map <string, string> labels = 3;
+
+    // REQUIRED. Envoy listener/cluster configuration. Refer to
+    // https://github.com/envoyproxy/data-plane-api/ for details.
+    google.protobuf.Any config = 4;
   }
 
-  message Listener {
-    map <string, string> endpoint_labels = 1;
-    Operation operation = 2;
-    Direction direction = 3;
-    uint32 port = 4;
-    string config = 5;
-  }
-
-  message Cluster {
-    map <string, string> endpoint_labels = 1;
-    Operation operation = 2;
-    Direction direction = 3;
-    string fqdn = 4;
-    uint32 port = 5;
-    string subset = 6;
-    string config = 7;
-  }
-
-  repeated Listener listeners = 1;
-  repeated Cluster clusters = 2;
-  
+  repeated EnvoyConfig config = 1;
 }
