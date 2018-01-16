@@ -39,8 +39,8 @@ package istio.rbac.v1alpha1;
 //       namespace: istio-system
 //     spec:
 //       subject:
-//         user: source.user | ""
-//         groups: source.user | ""
+//         user: request.auth.principal | ""
+//         groups: request.auth.principal | ""
 //         properties:
 //           service: source.service | ""
 //           namespace: source.namespace | ""
@@ -57,7 +57,7 @@ package istio.rbac.v1alpha1;
 // so it applies to any path in the service.
 //
 //     apiVersion: "config.istio.io/v1alpha1"
-//     kind: servicerole
+//     kind: ServiceRole
 //     metadata:
 //       name: products-viewer
 //       namespace: default
@@ -66,7 +66,7 @@ package istio.rbac.v1alpha1;
 //       - services: ["products.svc.cluster.local"]
 //         methods: ["GET", "HEAD"]
 //         constraints:
-//         - name: "version"
+//         - key: "version"
 //           value: ["v1", "v2"]
 //
 // A ServiceRoleBinding specification includes two parts:
@@ -83,7 +83,7 @@ package istio.rbac.v1alpha1;
 // * "reviews" service in "abc" namespace.
 //
 //     apiVersion: "config.istio.io/v1alpha1"
-//     kind: servicerolebinding
+//     kind: ServiceRoleBinding
 //     metadata:
 //       name: test-binding-products
 //       namespace: default
@@ -131,10 +131,10 @@ message AccessRule {
 
   // Definition of a custom constraint.
   message Constraint {
-    // The name of the constraint.
-    string name = 1;
+    // Key of the constraint.
+    string key = 1;
 
-    // The list of valid values for the constraint.
+    // List of valid values for the constraint.
     // Exact match, prefix match, and suffix match are supported for constraint values.
     // For example, the value "v1alpha2" matches
     // "v1alpha2" (exact match), or "v1*" (prefix match),
@@ -148,7 +148,7 @@ message AccessRule {
 }
 
 // ServiceRoleBinding assigns a ServiceRole to a list of subjects.
-// This represent the "Spec" part of the ServiceRoleBinding object. The name and namespace
+// This represents the "Spec" part of the ServiceRoleBinding object. The name and namespace
 // of the ServiceRoleBinding is specified in "metadata" section of the ServiceRoleBinding
 // object.
 message ServiceRoleBinding {
