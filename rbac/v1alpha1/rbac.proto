@@ -129,7 +129,9 @@ message AccessRule {
   // If set to ["*"], it applies to any method.
   repeated string methods = 3;
 
-  // Definition of a custom constraint.
+  // Definition of a custom constraint. The key of a custom constraint must match
+  // one of the "properties" in the "action" part of the "authorization" template
+  // (https://github.com/istio/istio/bl-ob/master/mixer/template/authorization/template.proto).
   message Constraint {
     // Key of the constraint.
     string key = 1;
@@ -159,7 +161,10 @@ message ServiceRoleBinding {
   RoleRef roleRef = 2;
 }
 
-// Subject defines an identity or a group of identities.
+// Subject defines an identity or a group of identities. The identity is either a user or
+// a group or identified by a set of "properties". The name of the "properties" must match
+// the "properties" in the "subject" part of the "authorization" template
+// (https://github.com/istio/istio/blob/master/mixer/template/authorization/template.proto).
 message Subject {
   // Optional. The user name/ID that the subject represents.
   string user = 1;

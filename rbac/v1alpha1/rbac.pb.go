@@ -110,7 +110,9 @@ func (m *AccessRule) GetConstraints() []*AccessRule_Constraint {
 	return nil
 }
 
-// Definition of a custom constraint.
+// Definition of a custom constraint. The key of a custom constraint must match
+// one of the "properties" in the "action" part of the "authorization" template
+// (https://github.com/istio/istio/bl-ob/master/mixer/template/authorization/template.proto).
 type AccessRule_Constraint struct {
 	// Key of the constraint.
 	Key string `protobuf:"bytes,1,opt,name=key" json:"key,omitempty"`
@@ -171,7 +173,10 @@ func (m *ServiceRoleBinding) GetRoleRef() *RoleRef {
 	return nil
 }
 
-// Subject defines an identity or a group of identities.
+// Subject defines an identity or a group of identities. The identity is either a user or
+// a group or identified by a set of "properties". The name of the "properties" must match
+// the "properties" in the "subject" part of the "authorization" template
+// (https://github.com/istio/istio/blob/master/mixer/template/authorization/template.proto).
 type Subject struct {
 	// Optional. The user name/ID that the subject represents.
 	User string `protobuf:"bytes,1,opt,name=user" json:"user,omitempty"`
