@@ -110,8 +110,8 @@ package istio.routing.v1alpha2;
 // application can use the HTTP_PROXY environment variable to transparently
 // reroute API calls for the virtual service to a chosen backend. For
 // example, the following configuration creates a non-existent service
-// called foo.bar.com backed by three domains: us.foo.bar.com,
-// uk.foo.bar.com, and in.foo.bar.com
+// called foo.bar.com backed by three domains: us.foo.bar.com:8443,
+// uk.foo.bar.com:9443, and in.foo.bar.com:7443
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: ForeignService
@@ -122,13 +122,19 @@ package istio.routing.v1alpha2;
 //       - foo.bar.com
 //       ports:
 //       - number: 443
-//         name: http
+//         name: https
 //         protocol: http
 //       discovery: dns
 //       endpoints:
 //       - address: us.foo.bar.com
+//         ports:
+//         - https: 8443
 //       - address: uk.foo.bar.com
+//         ports:
+//         - https: 9443
 //       - address: in.foo.bar.com
+//         ports:
+//         - https: 7443
 //
 // and a destination rule to initiate TLS connections to the external service.
 //
@@ -205,8 +211,13 @@ message ForeignService {
     // port ( IP or fully qualified domain name without wildcards).
     string address = 1;
 
+    // Set of ports associated with the endpoint. The ports must be
+    // associated with a port name that was declared as part of the
+    // service.
+    map<string, uint32> ports = 2;
+    
     // One or more labels associated with the endpoint.
-    map<string, string> labels = 2;
+    map<string, string> labels = 3;
   };
 
   // One or more endpoints associated with the service. Endpoints must be
