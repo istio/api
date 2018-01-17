@@ -91,7 +91,7 @@ package istio.routing.v1alpha2;
 //         trafficPolicy:
 //           loadBalancer:
 //             simple: LEAST_CONN
-//       - port: 7777
+//       - port: http-monitoring #can use names or numbers
 //         trafficPolicy:
 //           loadBalancer:
 //             simple: ROUND_ROBIN
