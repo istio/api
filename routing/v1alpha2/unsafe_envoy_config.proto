@@ -92,11 +92,11 @@ message UnsafeEnvoyConfig {
     // REQUIRED. Add/Replace/Update operation
     Operation operation = 1;
 
-    // REQUIRED. Unique name associated with the listener. Istio generated
-    // listeners are named using the format
+    // REQUIRED. Unique name associated with the listener or cluster. Istio
+    // generated listeners are named using the format
     // (http|tcp)_(ip)_(port). Wildcards can be used when selecting
     // listeners. For example, to select all listeners on port 8080, use
-    // *_0.0.0.0_8080.
+    // *_*_8080.
     //
     // Istio generated clusters are named using the format
     // out.(serviceName)|(portName/portNumber)|subsetName for outbound
