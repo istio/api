@@ -14,6 +14,8 @@
 
 syntax = "proto3";
 
+import "routing/v1alpha2/gateway.proto";
+
 package istio.routing.v1alpha2;
 
 // Foreign service describes the endpoints, ports and protocols of a
@@ -22,7 +24,7 @@ package istio.routing.v1alpha2;
 //
 // For example, the following foreign service configuration describes the
 // set of services at https://example.com to be accessed internally over
-// plaintext http (i.e. http://example.com), with the sidecar originating
+// plaintext http (i.e. http://example.com:443), with the sidecar originating
 // TLS.
 //
 //     apiVersion: config.istio.io/v1alpha2
@@ -33,23 +35,26 @@ package istio.routing.v1alpha2;
 //       hosts:
 //       - example.com
 //       ports:
-//       - inPort: 80
-//         outPort: 443
+//       - number: 443
 //         name: example-http
-//         protocol: http
-//         tlsUpgrade: true
+//         protocol: http # not HTTPS.
 //       discovery: dns
 //
-// Eventhough the services behind example.com have to be accessed via
-// HTTPS, in order for the application to obtain metrics from Istio, a
-// plain text port (HTTP over port 80) is used in the rule
-// above. Connections arriving on port 80 on the sidecar will be able to
-// take advantage of Istio's advanced routing and policy enforcement
-// features, while still being routed to the destination over HTTPS.
+// and a destination rule to initiate TLS connections to the external service.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: DestinationRule
+//     metadata:
+//       name: tls-example
+//     spec:
+//       destination:
+//         name: example.com
+//       tls:
+//         mode: simple # initiates HTTPS when talking to example.com
 //
 // The following specification specifies a static set of backend nodes for
-// a MongoDB cluster behind a set of virtual IPs, and secures connections
-// to the MongoDB cluster using TLS.
+// a MongoDB cluster behind a set of virtual IPs, and sets up a destination
+// rule to initiate mTLS connections upstream.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: ForeignService
@@ -59,19 +64,15 @@ package istio.routing.v1alpha2;
 //       hosts:
 //       - 192.192.192.192/24
 //       ports:
-//       - inPort: 27018 # outPort is same as inPort
+//       - number: 27018
 //         name: mongodb
 //         protocol: mongo
-//         tlsUpgrade: true
 //       discovery: static
 //       endpoints:
 //       - address: 2.2.2.2
 //       - address: 3.3.3.3
 //
-// Destination rules can be used to customize the default TLS
-// configuration. For example, the following destination rule configures
-// the sidecar to use mutual TLS authentication when connecting to the
-// external MongoDB service.
+// and the associated destination rule
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: DestinationRule
@@ -99,12 +100,12 @@ package istio.routing.v1alpha2;
 //       hosts:
 //       - *.bar.com
 //       ports:
-//       - inPort: 80
+//       - number: 80
 //         name: http
 //         protocol: http
 //       discovery: none
 //
-// For HTTP based services, tt is possible to create a virtual service
+// For HTTP based services, it is possible to create a virtual service
 // backed by multiple DNS addressible endpoints. In such a scenario, the
 // application can use the HTTP_PROXY environment variable to transparently
 // reroute API calls for the virtual service to a chosen backend. For
@@ -120,18 +121,28 @@ package istio.routing.v1alpha2;
 //       hosts:
 //       - foo.bar.com
 //       ports:
-//       - inPort: 80
+//       - number: 443
 //         name: http
 //         protocol: http
-//         outPort: 443
-//         tlsUpgrade: true
 //       discovery: dns
 //       endpoints:
 //       - address: us.foo.bar.com
 //       - address: uk.foo.bar.com
 //       - address: in.foo.bar.com
 //
-// With HTTP_PROXY=http://localhost:80, calls from the application to
+// and a destination rule to initiate TLS connections to the external service.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: DestinationRule
+//     metadata:
+//       name: tls-foobar
+//     spec:
+//       destination:
+//         name: foo.bar.com
+//       tls:
+//         mode: simple # initiates HTTPS
+//
+// With HTTP_PROXY=http://localhost:443, calls from the application to
 // http://foo.bar.com will be upgraded to HTTPS and load balanced across
 // the three domains specified above. In other words, a call to
 // http://foo.bar.com/baz would be translated to
@@ -155,46 +166,8 @@ message ForeignService {
   // the specified destination endpoint IP/host.
   repeated string hosts = 1;
 
-  // PortMap describes the properties of a specific port of the external
-  // service, the port by which the service will be accessed inside the
-  // mesh and TLS upgrade options if any.
-  message PortMap {
-    // REQUIRED: A valid non-negative integer port number on which
-    // connections to the external service would be received.
-    uint32 in_port = 1;
-
-    // If specified, connections arriving on inPort will be rerouted to the
-    // port specified in outPort. If outPort is omitted, it will inherit
-    // the value of inPort. outPort is useful in situations where the
-    // external service will be accessed inside the mesh over one port
-    // (e.g., http on port 80), while the final call to the external
-    // service must be made over a different port (e.g., https over port
-    // 443).
-    //
-    // NOTE: outPort cannot be specified when the discovery mode is set to
-    // "none".
-    uint32 out_port = 2;
-
-    // The protocol exposed on the internal port. MUST BE one of
-    // HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP. When protocol is set to HTTPS, the
-    // traffic will be treated as opaque TCP traffic, and TCP level
-    // constraints will apply.
-    string protocol = 3;
-
-    // Name assigned to the port.
-    string name = 4;
-
-    // Whether the sidecar should initiate a TLS connection for outbound
-    // connections (outPort). This field is applicable only when the
-    // protocol is _not_ HTTPS. If this field is set to true, the sidecar
-    // will initiate a standard TLS connection without validating the
-    // server's certificates. To customize the TLS settings, use
-    // DestinationRules.
-    bool tls_upgrade = 5;
-  }
-
-  // REQUIRED: The Ports associated with the external services.
-  repeated PortMap ports = 2;
+  // REQUIRED. The ports associated with the external service.
+  repeated Port ports = 2;
 
   // Different ways of discovering the IP addresses associated with the
   // service.

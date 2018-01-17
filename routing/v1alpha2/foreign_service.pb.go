@@ -59,7 +59,7 @@ func (ForeignService_Discovery) EnumDescriptor() ([]byte, []int) { return fileDe
 //
 // For example, the following foreign service configuration describes the
 // set of services at https://example.com to be accessed internally over
-// plaintext http (i.e. http://example.com), with the sidecar originating
+// plaintext http (i.e. http://example.com:443), with the sidecar originating
 // TLS.
 //
 //     apiVersion: config.istio.io/v1alpha2
@@ -70,23 +70,26 @@ func (ForeignService_Discovery) EnumDescriptor() ([]byte, []int) { return fileDe
 //       hosts:
 //       - example.com
 //       ports:
-//       - inPort: 80
-//         outPort: 443
+//       - number: 443
 //         name: example-http
-//         protocol: http
-//         tlsUpgrade: true
+//         protocol: http # not HTTPS.
 //       discovery: dns
 //
-// Eventhough the services behind example.com have to be accessed via
-// HTTPS, in order for the application to obtain metrics from Istio, a
-// plain text port (HTTP over port 80) is used in the rule
-// above. Connections arriving on port 80 on the sidecar will be able to
-// take advantage of Istio's advanced routing and policy enforcement
-// features, while still being routed to the destination over HTTPS.
+// and a destination rule to initiate TLS connections to the external service.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: DestinationRule
+//     metadata:
+//       name: tls-example
+//     spec:
+//       destination:
+//         name: example.com
+//       tls:
+//         mode: simple # initiates HTTPS when talking to example.com
 //
 // The following specification specifies a static set of backend nodes for
-// a MongoDB cluster behind a set of virtual IPs, and secures connections
-// to the MongoDB cluster using TLS.
+// a MongoDB cluster behind a set of virtual IPs, and sets up a destination
+// rule to initiate mTLS connections upstream.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: ForeignService
@@ -96,19 +99,15 @@ func (ForeignService_Discovery) EnumDescriptor() ([]byte, []int) { return fileDe
 //       hosts:
 //       - 192.192.192.192/24
 //       ports:
-//       - inPort: 27018 # outPort is same as inPort
+//       - number: 27018
 //         name: mongodb
 //         protocol: mongo
-//         tlsUpgrade: true
 //       discovery: static
 //       endpoints:
 //       - address: 2.2.2.2
 //       - address: 3.3.3.3
 //
-// Destination rules can be used to customize the default TLS
-// configuration. For example, the following destination rule configures
-// the sidecar to use mutual TLS authentication when connecting to the
-// external MongoDB service.
+// and the associated destination rule
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: DestinationRule
@@ -136,12 +135,12 @@ func (ForeignService_Discovery) EnumDescriptor() ([]byte, []int) { return fileDe
 //       hosts:
 //       - *.bar.com
 //       ports:
-//       - inPort: 80
+//       - number: 80
 //         name: http
 //         protocol: http
 //       discovery: none
 //
-// For HTTP based services, tt is possible to create a virtual service
+// For HTTP based services, it is possible to create a virtual service
 // backed by multiple DNS addressible endpoints. In such a scenario, the
 // application can use the HTTP_PROXY environment variable to transparently
 // reroute API calls for the virtual service to a chosen backend. For
@@ -157,18 +156,28 @@ func (ForeignService_Discovery) EnumDescriptor() ([]byte, []int) { return fileDe
 //       hosts:
 //       - foo.bar.com
 //       ports:
-//       - inPort: 80
+//       - number: 443
 //         name: http
 //         protocol: http
-//         outPort: 443
-//         tlsUpgrade: true
 //       discovery: dns
 //       endpoints:
 //       - address: us.foo.bar.com
 //       - address: uk.foo.bar.com
 //       - address: in.foo.bar.com
 //
-// With HTTP_PROXY=http://localhost:80, calls from the application to
+// and a destination rule to initiate TLS connections to the external service.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: DestinationRule
+//     metadata:
+//       name: tls-foobar
+//     spec:
+//       destination:
+//         name: foo.bar.com
+//       tls:
+//         mode: simple # initiates HTTPS
+//
+// With HTTP_PROXY=http://localhost:443, calls from the application to
 // http://foo.bar.com will be upgraded to HTTPS and load balanced across
 // the three domains specified above. In other words, a call to
 // http://foo.bar.com/baz would be translated to
@@ -191,8 +200,8 @@ type ForeignService struct {
 	// simple TCP proxy, forwarding incoming traffic on a specified port to
 	// the specified destination endpoint IP/host.
 	Hosts []string `protobuf:"bytes,1,rep,name=hosts" json:"hosts,omitempty"`
-	// REQUIRED: The Ports associated with the external services.
-	Ports []*ForeignService_PortMap `protobuf:"bytes,2,rep,name=ports" json:"ports,omitempty"`
+	// REQUIRED. The ports associated with the external service.
+	Ports []*Port `protobuf:"bytes,2,rep,name=ports" json:"ports,omitempty"`
 	// Service discovery mode for the hosts. If not set, Istio will attempt
 	// to infer the discovery mode based on the value of hosts and endpoints.
 	Discovery ForeignService_Discovery `protobuf:"varint,3,opt,name=discovery,enum=istio.routing.v1alpha2.ForeignService_Discovery" json:"discovery,omitempty"`
@@ -213,7 +222,7 @@ func (m *ForeignService) GetHosts() []string {
 	return nil
 }
 
-func (m *ForeignService) GetPorts() []*ForeignService_PortMap {
+func (m *ForeignService) GetPorts() []*Port {
 	if m != nil {
 		return m.Ports
 	}
@@ -234,80 +243,6 @@ func (m *ForeignService) GetEndpoints() []*ForeignService_Endpoint {
 	return nil
 }
 
-// PortMap describes the properties of a specific port of the external
-// service, the port by which the service will be accessed inside the
-// mesh and TLS upgrade options if any.
-type ForeignService_PortMap struct {
-	// REQUIRED: A valid non-negative integer port number on which
-	// connections to the external service would be received.
-	InPort uint32 `protobuf:"varint,1,opt,name=in_port,json=inPort" json:"in_port,omitempty"`
-	// If specified, connections arriving on inPort will be rerouted to the
-	// port specified in outPort. If outPort is omitted, it will inherit
-	// the value of inPort. outPort is useful in situations where the
-	// external service will be accessed inside the mesh over one port
-	// (e.g., http on port 80), while the final call to the external
-	// service must be made over a different port (e.g., https over port
-	// 443).
-	//
-	// NOTE: outPort cannot be specified when the discovery mode is set to
-	// "none".
-	OutPort uint32 `protobuf:"varint,2,opt,name=out_port,json=outPort" json:"out_port,omitempty"`
-	// The protocol exposed on the internal port. MUST BE one of
-	// HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP. When protocol is set to HTTPS, the
-	// traffic will be treated as opaque TCP traffic, and TCP level
-	// constraints will apply.
-	Protocol string `protobuf:"bytes,3,opt,name=protocol" json:"protocol,omitempty"`
-	// Name assigned to the port.
-	Name string `protobuf:"bytes,4,opt,name=name" json:"name,omitempty"`
-	// Whether the sidecar should initiate a TLS connection for outbound
-	// connections (outPort). This field is applicable only when the
-	// protocol is _not_ HTTPS. If this field is set to true, the sidecar
-	// will initiate a standard TLS connection without validating the
-	// server's certificates. To customize the TLS settings, use
-	// DestinationRules.
-	TlsUpgrade bool `protobuf:"varint,5,opt,name=tls_upgrade,json=tlsUpgrade" json:"tls_upgrade,omitempty"`
-}
-
-func (m *ForeignService_PortMap) Reset()                    { *m = ForeignService_PortMap{} }
-func (m *ForeignService_PortMap) String() string            { return proto.CompactTextString(m) }
-func (*ForeignService_PortMap) ProtoMessage()               {}
-func (*ForeignService_PortMap) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0, 0} }
-
-func (m *ForeignService_PortMap) GetInPort() uint32 {
-	if m != nil {
-		return m.InPort
-	}
-	return 0
-}
-
-func (m *ForeignService_PortMap) GetOutPort() uint32 {
-	if m != nil {
-		return m.OutPort
-	}
-	return 0
-}
-
-func (m *ForeignService_PortMap) GetProtocol() string {
-	if m != nil {
-		return m.Protocol
-	}
-	return ""
-}
-
-func (m *ForeignService_PortMap) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
-func (m *ForeignService_PortMap) GetTlsUpgrade() bool {
-	if m != nil {
-		return m.TlsUpgrade
-	}
-	return false
-}
-
 // Endpoint defines a network address (IP or hostname) associated with
 // the foreign service.
 type ForeignService_Endpoint struct {
@@ -321,7 +256,7 @@ type ForeignService_Endpoint struct {
 func (m *ForeignService_Endpoint) Reset()                    { *m = ForeignService_Endpoint{} }
 func (m *ForeignService_Endpoint) String() string            { return proto.CompactTextString(m) }
 func (*ForeignService_Endpoint) ProtoMessage()               {}
-func (*ForeignService_Endpoint) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0, 1} }
+func (*ForeignService_Endpoint) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0, 0} }
 
 func (m *ForeignService_Endpoint) GetAddress() string {
 	if m != nil {
@@ -339,7 +274,6 @@ func (m *ForeignService_Endpoint) GetLabels() map[string]string {
 
 func init() {
 	proto.RegisterType((*ForeignService)(nil), "istio.routing.v1alpha2.ForeignService")
-	proto.RegisterType((*ForeignService_PortMap)(nil), "istio.routing.v1alpha2.ForeignService.PortMap")
 	proto.RegisterType((*ForeignService_Endpoint)(nil), "istio.routing.v1alpha2.ForeignService.Endpoint")
 	proto.RegisterEnum("istio.routing.v1alpha2.ForeignService_Discovery", ForeignService_Discovery_name, ForeignService_Discovery_value)
 }
@@ -347,31 +281,26 @@ func init() {
 func init() { proto.RegisterFile("routing/v1alpha2/foreign_service.proto", fileDescriptor3) }
 
 var fileDescriptor3 = []byte{
-	// 401 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x52, 0x4d, 0x8f, 0xd3, 0x30,
-	0x14, 0xc4, 0x4d, 0xda, 0x24, 0xaf, 0x62, 0x55, 0x3d, 0x21, 0x30, 0xbd, 0x10, 0xed, 0x01, 0x45,
-	0x1c, 0x5c, 0x28, 0x17, 0x3e, 0x4e, 0x88, 0x16, 0x09, 0x89, 0x2d, 0xc8, 0x5d, 0xce, 0x95, 0xb7,
-	0x31, 0x5d, 0x8b, 0x60, 0x47, 0xb6, 0x53, 0xa9, 0x7f, 0x82, 0x5f, 0xc3, 0xff, 0x03, 0xd5, 0x49,
-	0x76, 0x41, 0xe2, 0xd0, 0xbd, 0x79, 0xde, 0x78, 0x26, 0x93, 0x79, 0x86, 0xa7, 0xd6, 0x34, 0x5e,
-	0xe9, 0xdd, 0x6c, 0xff, 0x42, 0x54, 0xf5, 0xb5, 0x98, 0xcf, 0xbe, 0x19, 0x2b, 0xd5, 0x4e, 0x6f,
-	0x9c, 0xb4, 0x7b, 0xb5, 0x95, 0xac, 0xb6, 0xc6, 0x1b, 0x7c, 0xa8, 0x9c, 0x57, 0x86, 0x75, 0xb7,
-	0x59, 0x7f, 0xfb, 0xfc, 0x77, 0x0c, 0x67, 0x1f, 0x5a, 0xc5, 0xba, 0x15, 0xe0, 0x03, 0x18, 0x5e,
-	0x1b, 0xe7, 0x1d, 0x25, 0x79, 0x54, 0x64, 0xbc, 0x05, 0xb8, 0x80, 0x61, 0x6d, 0xac, 0x77, 0x74,
-	0x90, 0x47, 0xc5, 0x78, 0xce, 0xd8, 0xff, 0x0d, 0xd9, 0xbf, 0x66, 0xec, 0x8b, 0xb1, 0xfe, 0x42,
-	0xd4, 0xbc, 0x15, 0xe3, 0x0a, 0xb2, 0x52, 0xb9, 0xad, 0xd9, 0x4b, 0x7b, 0xa0, 0x51, 0x4e, 0x8a,
-	0xb3, 0xf9, 0xf3, 0x13, 0x9d, 0x16, 0xbd, 0x8e, 0xdf, 0x5a, 0xe0, 0x05, 0x64, 0x52, 0x97, 0xb5,
-	0x51, 0xda, 0x3b, 0x1a, 0x87, 0x64, 0xb3, 0x13, 0xfd, 0x96, 0x9d, 0x8e, 0xdf, 0x3a, 0x4c, 0x7f,
-	0x12, 0x48, 0xba, 0xc4, 0xf8, 0x08, 0x12, 0xa5, 0x37, 0xc7, 0xd8, 0x94, 0xe4, 0xa4, 0xb8, 0xcf,
-	0x47, 0x4a, 0x1f, 0x39, 0x7c, 0x0c, 0xa9, 0x69, 0x7c, 0xcb, 0x0c, 0x02, 0x93, 0x98, 0xc6, 0x07,
-	0x6a, 0x0a, 0x69, 0xa8, 0x7b, 0x6b, 0xaa, 0xf0, 0x77, 0x19, 0xbf, 0xc1, 0x88, 0x10, 0x6b, 0xf1,
-	0x43, 0xd2, 0x38, 0xcc, 0xc3, 0x19, 0x9f, 0xc0, 0xd8, 0x57, 0x6e, 0xd3, 0xd4, 0x3b, 0x2b, 0x4a,
-	0x49, 0x87, 0x39, 0x29, 0x52, 0x0e, 0xbe, 0x72, 0x5f, 0xdb, 0xc9, 0xf4, 0x17, 0x81, 0xb4, 0x0f,
-	0x8a, 0x14, 0x12, 0x51, 0x96, 0x56, 0x3a, 0x17, 0x12, 0x65, 0xbc, 0x87, 0xb8, 0x86, 0x51, 0x25,
-	0xae, 0x64, 0xd5, 0x6f, 0xe7, 0xed, 0x1d, 0x3b, 0x60, 0x9f, 0x82, 0x7a, 0xa9, 0xbd, 0x3d, 0xf0,
-	0xce, 0x6a, 0xfa, 0x1a, 0xc6, 0x7f, 0x8d, 0x71, 0x02, 0xd1, 0x77, 0x79, 0xe8, 0xbe, 0x7c, 0x3c,
-	0x1e, 0x1f, 0xca, 0x5e, 0x54, 0x8d, 0x0c, 0x2d, 0x64, 0xbc, 0x05, 0x6f, 0x06, 0xaf, 0xc8, 0xf9,
-	0x33, 0xc8, 0x6e, 0xd6, 0x85, 0x29, 0xc4, 0xab, 0xcf, 0xab, 0xe5, 0xe4, 0x1e, 0x02, 0x8c, 0xd6,
-	0x97, 0xef, 0x2e, 0x3f, 0xbe, 0x9f, 0x10, 0x4c, 0x20, 0x5a, 0xac, 0xd6, 0x93, 0xc1, 0xd5, 0x28,
-	0x34, 0xf4, 0xf2, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x4b, 0xb4, 0xab, 0xc2, 0xca, 0x02, 0x00,
-	0x00,
+	// 327 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x91, 0x4d, 0x4b, 0xf3, 0x40,
+	0x10, 0x80, 0xdf, 0x24, 0xfd, 0xca, 0x14, 0x4a, 0x58, 0x5e, 0x24, 0x14, 0x91, 0xd2, 0x83, 0x04,
+	0x0f, 0x5b, 0x8d, 0x17, 0x3f, 0x4e, 0x62, 0x2b, 0x08, 0x1a, 0x25, 0xe9, 0x5d, 0xb6, 0xcd, 0xda,
+	0x2e, 0x86, 0x6c, 0xd8, 0xdd, 0x46, 0xf2, 0xbf, 0xfc, 0x39, 0xfe, 0x18, 0x49, 0x36, 0xb1, 0x8a,
+	0x0a, 0x7a, 0xdb, 0x19, 0xe6, 0x79, 0x66, 0x66, 0x07, 0xf6, 0x05, 0xdf, 0x28, 0x96, 0xae, 0x26,
+	0xf9, 0x11, 0x49, 0xb2, 0x35, 0xf1, 0x27, 0x8f, 0x5c, 0x50, 0xb6, 0x4a, 0x1f, 0x24, 0x15, 0x39,
+	0x5b, 0x52, 0x9c, 0x09, 0xae, 0x38, 0xda, 0x61, 0x52, 0x31, 0x8e, 0xeb, 0x6a, 0xdc, 0x54, 0x0f,
+	0xf7, 0xbe, 0xf0, 0x2b, 0xa2, 0xe8, 0x33, 0x29, 0x34, 0x37, 0x7e, 0xb5, 0x60, 0x70, 0xa5, 0x8d,
+	0x91, 0x16, 0xa2, 0xff, 0xd0, 0x5e, 0x73, 0xa9, 0xa4, 0x6b, 0x8c, 0x2c, 0xcf, 0x0e, 0x75, 0x80,
+	0x7c, 0x68, 0x67, 0x5c, 0x28, 0xe9, 0x9a, 0x23, 0xcb, 0xeb, 0xfb, 0xbb, 0xf8, 0xfb, 0x86, 0xf8,
+	0x9e, 0x0b, 0x15, 0xea, 0x52, 0x14, 0x80, 0x1d, 0x33, 0xb9, 0xe4, 0x39, 0x15, 0x85, 0x6b, 0x8d,
+	0x0c, 0x6f, 0xe0, 0x1f, 0xfe, 0xc4, 0x7d, 0x1e, 0x02, 0x4f, 0x1b, 0x2e, 0xdc, 0x2a, 0xd0, 0x2d,
+	0xd8, 0x34, 0x8d, 0x33, 0xce, 0x52, 0x25, 0xdd, 0x56, 0x35, 0xc7, 0xe4, 0x97, 0xbe, 0x59, 0xcd,
+	0x85, 0x5b, 0xc3, 0xf0, 0xc5, 0x80, 0x5e, 0x93, 0x47, 0x2e, 0x74, 0x49, 0x1c, 0x0b, 0x2a, 0xcb,
+	0xbd, 0x0d, 0xcf, 0x0e, 0x9b, 0x10, 0x45, 0xd0, 0x49, 0xc8, 0x82, 0x26, 0xcd, 0xea, 0xe7, 0x7f,
+	0x6c, 0x89, 0x6f, 0x2a, 0x7a, 0x96, 0x2a, 0x51, 0x84, 0xb5, 0x6a, 0x78, 0x0a, 0xfd, 0x0f, 0x69,
+	0xe4, 0x80, 0xf5, 0x44, 0x8b, 0xba, 0x73, 0xf9, 0x2c, 0xaf, 0x90, 0x93, 0x64, 0x43, 0x5d, 0xb3,
+	0xca, 0xe9, 0xe0, 0xcc, 0x3c, 0x31, 0xc6, 0x07, 0x60, 0xbf, 0xff, 0x0e, 0xea, 0x41, 0x2b, 0xb8,
+	0x0b, 0x66, 0xce, 0x3f, 0x04, 0xd0, 0x89, 0xe6, 0x17, 0xf3, 0xeb, 0x4b, 0xc7, 0x40, 0x5d, 0xb0,
+	0xa6, 0x41, 0xe4, 0x98, 0x8b, 0x4e, 0x75, 0xe5, 0xe3, 0xb7, 0x00, 0x00, 0x00, 0xff, 0xff, 0xca,
+	0x28, 0x7c, 0xa0, 0x47, 0x02, 0x00, 0x00,
 }
