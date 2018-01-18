@@ -133,7 +133,7 @@ generate: generate-broker-go generate-mesh-go generate-mixer-go generate-routing
 # broker/...
 #####################
 
-broker_v1_protos := $(shell find broker/v1/config -type f -name '*.proto')
+broker_v1_protos := $(shell find broker/v1/config -type f -name '*.proto' | sort)
 broker_v1_pb_gos := $(broker_v1_protos:.proto=.pb.go)
 
 generate-broker-go: $(broker_v1_pb_gos)
@@ -149,7 +149,7 @@ clean-broker-generated:
 # mesh/...
 #####################
 
-mesh_protos := $(shell find mesh/v1alpha1 -type f -name '*.proto')
+mesh_protos := $(shell find mesh/v1alpha1 -type f -name '*.proto' | sort)
 mesh_pb_gos := $(mesh_protos:.proto=.pb.go)
 
 generate-mesh-go: $(mesh_pb_gos)
@@ -165,16 +165,16 @@ clean-mesh-generated:
 # mixer/...
 #####################
 
-mixer_v1_protos :=  $(shell find mixer/v1 -maxdepth 1 -type f -name '*.proto')
+mixer_v1_protos :=  $(shell find mixer/v1 -maxdepth 1 -type f -name '*.proto' | sort)
 mixer_v1_pb_gos := $(mixer_v1_protos:.proto=.pb.go)
 
-mixer_config_client_protos := $(shell find mixer/v1/config/client -maxdepth 1 -type f -name '*.proto')
+mixer_config_client_protos := $(shell find mixer/v1/config/client -maxdepth 1 -type f -name '*.proto' | sort)
 mixer_config_client_pb_gos := $(mixer_config_client_protos:.proto=.pb.go)
 
-mixer_config_descriptor_protos := $(shell find mixer/v1/config/descriptor -maxdepth 1 -type f -name '*.proto')
+mixer_config_descriptor_protos := $(shell find mixer/v1/config/descriptor -maxdepth 1 -type f -name '*.proto' | sort)
 mixer_config_descriptor_pb_gos := $(mixer_config_descriptor_protos:.proto=.pb.go)
 
-mixer_template_protos := $(shell find mixer/v1/template -maxdepth 1 -type f -name '*.proto')
+mixer_template_protos := $(shell find mixer/v1/template -maxdepth 1 -type f -name '*.proto' | sort)
 mixer_template_pb_gos := $(mixer_template_protos:.proto=.pb.go)
 
 generate-mixer-go: $(mixer_v1_pb_gos) mixer/v1/config/fixed_cfg.pb.go $(mixer_config_client_pb_gos) $(mixer_config_descriptor_pb_gos) $(mixer_template_pb_gos)
@@ -208,10 +208,10 @@ clean-mixer-generated:
 # routing/...
 #####################
 
-routing_v1alpha1_protos := $(shell find routing/v1alpha1 -type f -name '*.proto')
+routing_v1alpha1_protos := $(shell find routing/v1alpha1 -type f -name '*.proto' | sort)
 routing_v1alpha1_pb_gos := $(routing_v1alpha1_protos:.proto=.pb.go)
 
-routing_v1alpha2_protos := $(shell find routing/v1alpha2 -type f -name '*.proto')
+routing_v1alpha2_protos := $(shell find routing/v1alpha2 -type f -name '*.proto' | sort)
 routing_v1alpha2_pb_gos := $(routing_v1alpha2_protos:.proto=.pb.go)
 
 generate-routing-go: $(routing_v1alpha1_pb_gos) $(routing_v1alpha2_pb_gos)
@@ -231,7 +231,7 @@ clean-routing-generated:
 # rbac/...
 #####################
 
-rbac_v1alpha1_protos := $(shell find rbac/v1alpha1 -type f -name '*.proto')
+rbac_v1alpha1_protos := $(shell find rbac/v1alpha1 -type f -name '*.proto' | sort)
 rbac_v1alpha1_pb_gos := $(rbac_v1alpha1_protos:.proto=.pb.go)
 
 generate-rbac-go: $(protoc_gen_go) $(rbac_v1alpha1_pb_gos)

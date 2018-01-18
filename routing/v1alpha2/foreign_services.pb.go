@@ -48,7 +48,7 @@ var Service_Discovery_value = map[string]int32{
 func (x Service_Discovery) String() string {
 	return proto.EnumName(Service_Discovery_name, int32(x))
 }
-func (Service_Discovery) EnumDescriptor() ([]byte, []int) { return fileDescriptor2, []int{1, 0} }
+func (Service_Discovery) EnumDescriptor() ([]byte, []int) { return fileDescriptor1, []int{1, 0} }
 
 // Service registry entries describe describe the endpoints, ports and
 // protocols of a white-listed set of mesh-external domains and IP blocks
@@ -137,7 +137,7 @@ type ForeignServices struct {
 func (m *ForeignServices) Reset()                    { *m = ForeignServices{} }
 func (m *ForeignServices) String() string            { return proto.CompactTextString(m) }
 func (*ForeignServices) ProtoMessage()               {}
-func (*ForeignServices) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0} }
+func (*ForeignServices) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{0} }
 
 func (m *ForeignServices) GetServices() []*Service {
 	if m != nil {
@@ -187,7 +187,7 @@ type Service struct {
 func (m *Service) Reset()                    { *m = Service{} }
 func (m *Service) String() string            { return proto.CompactTextString(m) }
 func (*Service) ProtoMessage()               {}
-func (*Service) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{1} }
+func (*Service) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{1} }
 
 func (m *Service) GetHosts() []string {
 	if m != nil {
@@ -232,7 +232,7 @@ type Service_Endpoint struct {
 func (m *Service_Endpoint) Reset()                    { *m = Service_Endpoint{} }
 func (m *Service_Endpoint) String() string            { return proto.CompactTextString(m) }
 func (*Service_Endpoint) ProtoMessage()               {}
-func (*Service_Endpoint) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{1, 0} }
+func (*Service_Endpoint) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{1, 0} }
 
 func (m *Service_Endpoint) GetAddress() string {
 	if m != nil {
@@ -262,9 +262,9 @@ func init() {
 	proto.RegisterEnum("istio.routing.v1alpha2.Service_Discovery", Service_Discovery_name, Service_Discovery_value)
 }
 
-func init() { proto.RegisterFile("routing/v1alpha2/foreign_services.proto", fileDescriptor2) }
+func init() { proto.RegisterFile("routing/v1alpha2/foreign_services.proto", fileDescriptor1) }
 
-var fileDescriptor2 = []byte{
+var fileDescriptor1 = []byte{
 	// 380 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x92, 0x4b, 0x6b, 0xdb, 0x40,
 	0x10, 0xc7, 0x2b, 0xc9, 0x2f, 0x8d, 0xa1, 0x15, 0x4b, 0x29, 0xc2, 0xb4, 0xb5, 0xf1, 0xa5, 0x6a,

@@ -44,7 +44,7 @@ func (x Server_TLSOptions_TLSmode) String() string {
 	return proto.EnumName(Server_TLSOptions_TLSmode_name, int32(x))
 }
 func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor3, []int{1, 0, 0}
+	return fileDescriptor2, []int{1, 0, 0}
 }
 
 // Gateway describes a load balancer operating at the edge of the mesh
@@ -172,7 +172,7 @@ type Gateway struct {
 func (m *Gateway) Reset()                    { *m = Gateway{} }
 func (m *Gateway) String() string            { return proto.CompactTextString(m) }
 func (*Gateway) ProtoMessage()               {}
-func (*Gateway) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0} }
+func (*Gateway) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0} }
 
 func (m *Gateway) GetServers() []*Server {
 	if m != nil {
@@ -245,7 +245,7 @@ type Server struct {
 func (m *Server) Reset()                    { *m = Server{} }
 func (m *Server) String() string            { return proto.CompactTextString(m) }
 func (*Server) ProtoMessage()               {}
-func (*Server) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{1} }
+func (*Server) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{1} }
 
 func (m *Server) GetPort() *Port {
 	if m != nil {
@@ -294,7 +294,7 @@ type Server_TLSOptions struct {
 func (m *Server_TLSOptions) Reset()                    { *m = Server_TLSOptions{} }
 func (m *Server_TLSOptions) String() string            { return proto.CompactTextString(m) }
 func (*Server_TLSOptions) ProtoMessage()               {}
-func (*Server_TLSOptions) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{1, 0} }
+func (*Server_TLSOptions) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{1, 0} }
 
 func (m *Server_TLSOptions) GetHttpsRedirect() bool {
 	if m != nil {
@@ -352,7 +352,7 @@ type Port struct {
 func (m *Port) Reset()                    { *m = Port{} }
 func (m *Port) String() string            { return proto.CompactTextString(m) }
 func (*Port) ProtoMessage()               {}
-func (*Port) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{2} }
+func (*Port) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{2} }
 
 func (m *Port) GetNumber() uint32 {
 	if m != nil {
@@ -383,9 +383,9 @@ func init() {
 	proto.RegisterEnum("istio.routing.v1alpha2.Server_TLSOptions_TLSmode", Server_TLSOptions_TLSmode_name, Server_TLSOptions_TLSmode_value)
 }
 
-func init() { proto.RegisterFile("routing/v1alpha2/gateway.proto", fileDescriptor3) }
+func init() { proto.RegisterFile("routing/v1alpha2/gateway.proto", fileDescriptor2) }
 
-var fileDescriptor3 = []byte{
+var fileDescriptor2 = []byte{
 	// 436 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x52, 0xc1, 0x6e, 0xd3, 0x40,
 	0x10, 0xc5, 0xb1, 0xeb, 0x34, 0x13, 0x35, 0x49, 0x47, 0xa8, 0xb2, 0x2a, 0x68, 0xa3, 0x48, 0x88,

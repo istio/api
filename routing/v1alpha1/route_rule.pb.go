@@ -6,8 +6,8 @@ package v1alpha1
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
-import google_protobuf1 "github.com/golang/protobuf/ptypes/any"
-import google_protobuf "github.com/golang/protobuf/ptypes/duration"
+import google_protobuf "github.com/golang/protobuf/ptypes/any"
+import google_protobuf1 "github.com/golang/protobuf/ptypes/duration"
 import google_protobuf2 "github.com/golang/protobuf/ptypes/wrappers"
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -136,7 +136,7 @@ type RouteRule struct {
 func (m *RouteRule) Reset()                    { *m = RouteRule{} }
 func (m *RouteRule) String() string            { return proto.CompactTextString(m) }
 func (*RouteRule) ProtoMessage()               {}
-func (*RouteRule) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{0} }
+func (*RouteRule) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{0} }
 
 func (m *RouteRule) GetDestination() *IstioService {
 	if m != nil {
@@ -258,7 +258,7 @@ type IstioService struct {
 func (m *IstioService) Reset()                    { *m = IstioService{} }
 func (m *IstioService) String() string            { return proto.CompactTextString(m) }
 func (*IstioService) ProtoMessage()               {}
-func (*IstioService) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{1} }
+func (*IstioService) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{1} }
 
 func (m *IstioService) GetName() string {
 	if m != nil {
@@ -338,7 +338,7 @@ type MatchCondition struct {
 func (m *MatchCondition) Reset()                    { *m = MatchCondition{} }
 func (m *MatchCondition) String() string            { return proto.CompactTextString(m) }
 func (*MatchCondition) ProtoMessage()               {}
-func (*MatchCondition) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{2} }
+func (*MatchCondition) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{2} }
 
 func (m *MatchCondition) GetSource() *IstioService {
 	if m != nil {
@@ -395,7 +395,7 @@ type MatchRequest struct {
 func (m *MatchRequest) Reset()                    { *m = MatchRequest{} }
 func (m *MatchRequest) String() string            { return proto.CompactTextString(m) }
 func (*MatchRequest) ProtoMessage()               {}
-func (*MatchRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{3} }
+func (*MatchRequest) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{3} }
 
 func (m *MatchRequest) GetHeaders() map[string]*StringMatch {
 	if m != nil {
@@ -444,7 +444,7 @@ type DestinationWeight struct {
 func (m *DestinationWeight) Reset()                    { *m = DestinationWeight{} }
 func (m *DestinationWeight) String() string            { return proto.CompactTextString(m) }
 func (*DestinationWeight) ProtoMessage()               {}
-func (*DestinationWeight) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{4} }
+func (*DestinationWeight) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{4} }
 
 func (m *DestinationWeight) GetDestination() *IstioService {
 	if m != nil {
@@ -482,7 +482,7 @@ type L4MatchAttributes struct {
 func (m *L4MatchAttributes) Reset()                    { *m = L4MatchAttributes{} }
 func (m *L4MatchAttributes) String() string            { return proto.CompactTextString(m) }
 func (*L4MatchAttributes) ProtoMessage()               {}
-func (*L4MatchAttributes) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{5} }
+func (*L4MatchAttributes) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{5} }
 
 func (m *L4MatchAttributes) GetSourceSubnet() []string {
 	if m != nil {
@@ -531,7 +531,7 @@ type HTTPRedirect struct {
 func (m *HTTPRedirect) Reset()                    { *m = HTTPRedirect{} }
 func (m *HTTPRedirect) String() string            { return proto.CompactTextString(m) }
 func (*HTTPRedirect) ProtoMessage()               {}
-func (*HTTPRedirect) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{6} }
+func (*HTTPRedirect) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{6} }
 
 func (m *HTTPRedirect) GetUri() string {
 	if m != nil {
@@ -582,7 +582,7 @@ type HTTPRewrite struct {
 func (m *HTTPRewrite) Reset()                    { *m = HTTPRewrite{} }
 func (m *HTTPRewrite) String() string            { return proto.CompactTextString(m) }
 func (*HTTPRewrite) ProtoMessage()               {}
-func (*HTTPRewrite) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{7} }
+func (*HTTPRewrite) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{7} }
 
 func (m *HTTPRewrite) GetUri() string {
 	if m != nil {
@@ -610,7 +610,7 @@ type StringMatch struct {
 func (m *StringMatch) Reset()                    { *m = StringMatch{} }
 func (m *StringMatch) String() string            { return proto.CompactTextString(m) }
 func (*StringMatch) ProtoMessage()               {}
-func (*StringMatch) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{8} }
+func (*StringMatch) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{8} }
 
 type isStringMatch_MatchType interface {
 	isStringMatch_MatchType()
@@ -765,7 +765,7 @@ type HTTPTimeout struct {
 func (m *HTTPTimeout) Reset()                    { *m = HTTPTimeout{} }
 func (m *HTTPTimeout) String() string            { return proto.CompactTextString(m) }
 func (*HTTPTimeout) ProtoMessage()               {}
-func (*HTTPTimeout) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{9} }
+func (*HTTPTimeout) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{9} }
 
 type isHTTPTimeout_TimeoutPolicy interface {
 	isHTTPTimeout_TimeoutPolicy()
@@ -775,7 +775,7 @@ type HTTPTimeout_SimpleTimeout struct {
 	SimpleTimeout *HTTPTimeout_SimpleTimeoutPolicy `protobuf:"bytes,1,opt,name=simple_timeout,json=simpleTimeout,oneof"`
 }
 type HTTPTimeout_Custom struct {
-	Custom *google_protobuf1.Any `protobuf:"bytes,2,opt,name=custom,oneof"`
+	Custom *google_protobuf.Any `protobuf:"bytes,2,opt,name=custom,oneof"`
 }
 
 func (*HTTPTimeout_SimpleTimeout) isHTTPTimeout_TimeoutPolicy() {}
@@ -795,7 +795,7 @@ func (m *HTTPTimeout) GetSimpleTimeout() *HTTPTimeout_SimpleTimeoutPolicy {
 	return nil
 }
 
-func (m *HTTPTimeout) GetCustom() *google_protobuf1.Any {
+func (m *HTTPTimeout) GetCustom() *google_protobuf.Any {
 	if x, ok := m.GetTimeoutPolicy().(*HTTPTimeout_Custom); ok {
 		return x.Custom
 	}
@@ -846,7 +846,7 @@ func _HTTPTimeout_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Bu
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(google_protobuf1.Any)
+		msg := new(google_protobuf.Any)
 		err := b.DecodeMessage(msg)
 		m.TimeoutPolicy = &HTTPTimeout_Custom{msg}
 		return true, err
@@ -881,7 +881,7 @@ type HTTPTimeout_SimpleTimeoutPolicy struct {
 	// 15s. format: 1h/1m/1s/1ms. MUST BE >=1ms. It is possible to control
 	// timeout per request by supplying the timeout value via
 	// x-envoy-upstream-rq-timeout-ms HTTP header.
-	Timeout *google_protobuf.Duration `protobuf:"bytes,1,opt,name=timeout" json:"timeout,omitempty"`
+	Timeout *google_protobuf1.Duration `protobuf:"bytes,1,opt,name=timeout" json:"timeout,omitempty"`
 	// (-- Downstream service could specify timeout via Http header to
 	// Envoy, if Envoy supports such a feature. --)
 	OverrideHeaderName string `protobuf:"bytes,2,opt,name=override_header_name,json=overrideHeaderName" json:"override_header_name,omitempty"`
@@ -891,10 +891,10 @@ func (m *HTTPTimeout_SimpleTimeoutPolicy) Reset()         { *m = HTTPTimeout_Sim
 func (m *HTTPTimeout_SimpleTimeoutPolicy) String() string { return proto.CompactTextString(m) }
 func (*HTTPTimeout_SimpleTimeoutPolicy) ProtoMessage()    {}
 func (*HTTPTimeout_SimpleTimeoutPolicy) Descriptor() ([]byte, []int) {
-	return fileDescriptor1, []int{9, 0}
+	return fileDescriptor5, []int{9, 0}
 }
 
-func (m *HTTPTimeout_SimpleTimeoutPolicy) GetTimeout() *google_protobuf.Duration {
+func (m *HTTPTimeout_SimpleTimeoutPolicy) GetTimeout() *google_protobuf1.Duration {
 	if m != nil {
 		return m.Timeout
 	}
@@ -936,7 +936,7 @@ type HTTPRetry struct {
 func (m *HTTPRetry) Reset()                    { *m = HTTPRetry{} }
 func (m *HTTPRetry) String() string            { return proto.CompactTextString(m) }
 func (*HTTPRetry) ProtoMessage()               {}
-func (*HTTPRetry) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{10} }
+func (*HTTPRetry) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{10} }
 
 type isHTTPRetry_RetryPolicy interface {
 	isHTTPRetry_RetryPolicy()
@@ -946,7 +946,7 @@ type HTTPRetry_SimpleRetry struct {
 	SimpleRetry *HTTPRetry_SimpleRetryPolicy `protobuf:"bytes,1,opt,name=simple_retry,json=simpleRetry,oneof"`
 }
 type HTTPRetry_Custom struct {
-	Custom *google_protobuf1.Any `protobuf:"bytes,2,opt,name=custom,oneof"`
+	Custom *google_protobuf.Any `protobuf:"bytes,2,opt,name=custom,oneof"`
 }
 
 func (*HTTPRetry_SimpleRetry) isHTTPRetry_RetryPolicy() {}
@@ -966,7 +966,7 @@ func (m *HTTPRetry) GetSimpleRetry() *HTTPRetry_SimpleRetryPolicy {
 	return nil
 }
 
-func (m *HTTPRetry) GetCustom() *google_protobuf1.Any {
+func (m *HTTPRetry) GetCustom() *google_protobuf.Any {
 	if x, ok := m.GetRetryPolicy().(*HTTPRetry_Custom); ok {
 		return x.Custom
 	}
@@ -1017,7 +1017,7 @@ func _HTTPRetry_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buff
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(google_protobuf1.Any)
+		msg := new(google_protobuf.Any)
 		err := b.DecodeMessage(msg)
 		m.RetryPolicy = &HTTPRetry_Custom{msg}
 		return true, err
@@ -1053,7 +1053,7 @@ type HTTPRetry_SimpleRetryPolicy struct {
 	// number of retries attempted depends on the httpReqTimeout.
 	Attempts int32 `protobuf:"varint,1,opt,name=attempts" json:"attempts,omitempty"`
 	// Timeout per retry attempt for a given request. format: 1h/1m/1s/1ms. MUST BE >=1ms.
-	PerTryTimeout *google_protobuf.Duration `protobuf:"bytes,2,opt,name=per_try_timeout,json=perTryTimeout" json:"per_try_timeout,omitempty"`
+	PerTryTimeout *google_protobuf1.Duration `protobuf:"bytes,2,opt,name=per_try_timeout,json=perTryTimeout" json:"per_try_timeout,omitempty"`
 	// (-- Downstream Service could specify retry attempts via Http header to
 	// Envoy, if Envoy supports such a feature. --)
 	OverrideHeaderName string `protobuf:"bytes,3,opt,name=override_header_name,json=overrideHeaderName" json:"override_header_name,omitempty"`
@@ -1062,7 +1062,7 @@ type HTTPRetry_SimpleRetryPolicy struct {
 func (m *HTTPRetry_SimpleRetryPolicy) Reset()                    { *m = HTTPRetry_SimpleRetryPolicy{} }
 func (m *HTTPRetry_SimpleRetryPolicy) String() string            { return proto.CompactTextString(m) }
 func (*HTTPRetry_SimpleRetryPolicy) ProtoMessage()               {}
-func (*HTTPRetry_SimpleRetryPolicy) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{10, 0} }
+func (*HTTPRetry_SimpleRetryPolicy) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{10, 0} }
 
 func (m *HTTPRetry_SimpleRetryPolicy) GetAttempts() int32 {
 	if m != nil {
@@ -1071,7 +1071,7 @@ func (m *HTTPRetry_SimpleRetryPolicy) GetAttempts() int32 {
 	return 0
 }
 
-func (m *HTTPRetry_SimpleRetryPolicy) GetPerTryTimeout() *google_protobuf.Duration {
+func (m *HTTPRetry_SimpleRetryPolicy) GetPerTryTimeout() *google_protobuf1.Duration {
 	if m != nil {
 		return m.PerTryTimeout
 	}
@@ -1130,7 +1130,7 @@ type CorsPolicy struct {
 	ExposeHeaders []string `protobuf:"bytes,4,rep,name=expose_headers,json=exposeHeaders" json:"expose_headers,omitempty"`
 	// Specifies how long the the results of a preflight request can be
 	// cached. Translates to the Access-Control-Max-Age header.
-	MaxAge *google_protobuf.Duration `protobuf:"bytes,5,opt,name=max_age,json=maxAge" json:"max_age,omitempty"`
+	MaxAge *google_protobuf1.Duration `protobuf:"bytes,5,opt,name=max_age,json=maxAge" json:"max_age,omitempty"`
 	// Indicates whether the caller is allowed to send the actual request
 	// (not the preflight) using credentials. Translates to
 	// Access-Control-Allow-Credentials header.
@@ -1140,7 +1140,7 @@ type CorsPolicy struct {
 func (m *CorsPolicy) Reset()                    { *m = CorsPolicy{} }
 func (m *CorsPolicy) String() string            { return proto.CompactTextString(m) }
 func (*CorsPolicy) ProtoMessage()               {}
-func (*CorsPolicy) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{11} }
+func (*CorsPolicy) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{11} }
 
 func (m *CorsPolicy) GetAllowOrigin() []string {
 	if m != nil {
@@ -1170,7 +1170,7 @@ func (m *CorsPolicy) GetExposeHeaders() []string {
 	return nil
 }
 
-func (m *CorsPolicy) GetMaxAge() *google_protobuf.Duration {
+func (m *CorsPolicy) GetMaxAge() *google_protobuf1.Duration {
 	if m != nil {
 		return m.MaxAge
 	}
@@ -1201,9 +1201,9 @@ func init() {
 	proto.RegisterType((*CorsPolicy)(nil), "istio.routing.v1alpha1.CorsPolicy")
 }
 
-func init() { proto.RegisterFile("routing/v1alpha1/route_rule.proto", fileDescriptor1) }
+func init() { proto.RegisterFile("routing/v1alpha1/route_rule.proto", fileDescriptor5) }
 
-var fileDescriptor1 = []byte{
+var fileDescriptor5 = []byte{
 	// 1250 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x57, 0xdd, 0x72, 0xdb, 0x44,
 	0x14, 0xae, 0x9d, 0xd8, 0x8e, 0x8f, 0x1d, 0x93, 0x2c, 0x9d, 0x8e, 0xea, 0x81, 0x36, 0x75, 0x81,

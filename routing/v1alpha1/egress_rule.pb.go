@@ -59,7 +59,7 @@ type EgressRule struct {
 func (m *EgressRule) Reset()                    { *m = EgressRule{} }
 func (m *EgressRule) String() string            { return proto.CompactTextString(m) }
 func (*EgressRule) ProtoMessage()               {}
-func (*EgressRule) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{0} }
+func (*EgressRule) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{0} }
 
 func (m *EgressRule) GetDestination() *IstioService {
 	if m != nil {
@@ -94,7 +94,7 @@ type EgressRule_Port struct {
 func (m *EgressRule_Port) Reset()                    { *m = EgressRule_Port{} }
 func (m *EgressRule_Port) String() string            { return proto.CompactTextString(m) }
 func (*EgressRule_Port) ProtoMessage()               {}
-func (*EgressRule_Port) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{0, 0} }
+func (*EgressRule_Port) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{0, 0} }
 
 func (m *EgressRule_Port) GetPort() int32 {
 	if m != nil {
@@ -115,9 +115,9 @@ func init() {
 	proto.RegisterType((*EgressRule_Port)(nil), "istio.routing.v1alpha1.EgressRule.Port")
 }
 
-func init() { proto.RegisterFile("routing/v1alpha1/egress_rule.proto", fileDescriptor5) }
+func init() { proto.RegisterFile("routing/v1alpha1/egress_rule.proto", fileDescriptor1) }
 
-var fileDescriptor5 = []byte{
+var fileDescriptor1 = []byte{
 	// 248 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x90, 0xcd, 0x4b, 0x03, 0x31,
 	0x14, 0xc4, 0x49, 0x3f, 0xa4, 0xbe, 0x05, 0x91, 0x1c, 0x64, 0x59, 0x10, 0xd7, 0x22, 0x98, 0x53,

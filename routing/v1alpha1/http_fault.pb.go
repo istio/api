@@ -6,7 +6,7 @@ package v1alpha1
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
-import google_protobuf "github.com/golang/protobuf/ptypes/duration"
+import google_protobuf1 "github.com/golang/protobuf/ptypes/duration"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -93,10 +93,10 @@ type isHTTPFaultInjection_Delay_HttpDelayType interface {
 }
 
 type HTTPFaultInjection_Delay_FixedDelay struct {
-	FixedDelay *google_protobuf.Duration `protobuf:"bytes,2,opt,name=fixed_delay,json=fixedDelay,oneof"`
+	FixedDelay *google_protobuf1.Duration `protobuf:"bytes,2,opt,name=fixed_delay,json=fixedDelay,oneof"`
 }
 type HTTPFaultInjection_Delay_ExponentialDelay struct {
-	ExponentialDelay *google_protobuf.Duration `protobuf:"bytes,3,opt,name=exponential_delay,json=exponentialDelay,oneof"`
+	ExponentialDelay *google_protobuf1.Duration `protobuf:"bytes,3,opt,name=exponential_delay,json=exponentialDelay,oneof"`
 }
 
 func (*HTTPFaultInjection_Delay_FixedDelay) isHTTPFaultInjection_Delay_HttpDelayType()       {}
@@ -116,14 +116,14 @@ func (m *HTTPFaultInjection_Delay) GetPercent() float32 {
 	return 0
 }
 
-func (m *HTTPFaultInjection_Delay) GetFixedDelay() *google_protobuf.Duration {
+func (m *HTTPFaultInjection_Delay) GetFixedDelay() *google_protobuf1.Duration {
 	if x, ok := m.GetHttpDelayType().(*HTTPFaultInjection_Delay_FixedDelay); ok {
 		return x.FixedDelay
 	}
 	return nil
 }
 
-func (m *HTTPFaultInjection_Delay) GetExponentialDelay() *google_protobuf.Duration {
+func (m *HTTPFaultInjection_Delay) GetExponentialDelay() *google_protobuf1.Duration {
 	if x, ok := m.GetHttpDelayType().(*HTTPFaultInjection_Delay_ExponentialDelay); ok {
 		return x.ExponentialDelay
 	}
@@ -173,7 +173,7 @@ func _HTTPFaultInjection_Delay_OneofUnmarshaler(msg proto.Message, tag, wire int
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(google_protobuf.Duration)
+		msg := new(google_protobuf1.Duration)
 		err := b.DecodeMessage(msg)
 		m.HttpDelayType = &HTTPFaultInjection_Delay_FixedDelay{msg}
 		return true, err
@@ -181,7 +181,7 @@ func _HTTPFaultInjection_Delay_OneofUnmarshaler(msg proto.Message, tag, wire int
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(google_protobuf.Duration)
+		msg := new(google_protobuf1.Duration)
 		err := b.DecodeMessage(msg)
 		m.HttpDelayType = &HTTPFaultInjection_Delay_ExponentialDelay{msg}
 		return true, err
