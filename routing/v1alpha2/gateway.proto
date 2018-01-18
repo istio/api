@@ -35,7 +35,7 @@ option go_package = "istio.io/api/routing/v1alpha2";
 //     metadata:
 //       name: my-gateway
 //     spec:
-//       workloadLabels:
+//       selectors:
 //       - podRole: gatweway-pod
 //       servers:
 //       - port:
@@ -144,7 +144,7 @@ message Gateway {
 
   // REQUIRED: One or more labels that indicate a specific set of pods/VMs
   // on which this gateway configuration should be applied.
-  map<string, string> workloadLabels = 2;
+  map<string, string> selectors = 2;
 }
 
 // Server describes the properties of the proxy on a given load balancer port.
@@ -155,7 +155,7 @@ message Gateway {
 //     metadata:
 //       name: my-ingress
 //     spec:
-//       workloadLabels:
+//       selectors:
 //       - podRole: ingress-gateway
 //       servers:
 //       - port:
@@ -169,7 +169,7 @@ message Gateway {
 //     metadata:
 //       name: my-tcp-ingress
 //     spec:
-//       workloadLabels:
+//       selectors:
 //       - podRole: tcp-ingress-pod
 //       servers:
 //       - port:
@@ -183,7 +183,7 @@ message Gateway {
 //     metadata:
 //       name: my-ingress
 //     spec:
-//       workloadLabels:
+//       selectors:
 //       - podRole: ingress-tls
 //       servers:
 //       - port:
