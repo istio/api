@@ -51,6 +51,9 @@ importmaps := \
 mapping_with_spaces := $(foreach map,$(importmaps),M$(map),)
 gogo_mapping := $(subst $(space),$(empty),$(mapping_with_spaces))
 
+gogo_plugin := $(gogo_plugin_prefix)$(gogo_mapping)$(out_path)
+gogoslick_plugin := $(gogoslick_plugin_prefix)$(gogo_mapping)$(out_path)
+
 ########################
 # protoc
 ########################
