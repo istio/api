@@ -39,12 +39,12 @@ package istio.routing.v1alpha2;
 //     metadata:
 //       name: my-lua-script
 //     spec:
-//       config:
+//       configs:
 //       - labels:
 //           name: reviews # selects the pods where this config will be applied
 //         operation: update # update existing listener
 //         name: http_0.0.0.0:8080
-//         config:
+//         envoyConfig:
 //           "@type": type.googleapis.com/envoy.api.v2.Listener
 //           filterChains:
 //           - filters:
@@ -66,7 +66,7 @@ package istio.routing.v1alpha2;
 //           name: reviews # selects the pods where this config will be applied
 //         operation: add # add the lua_cluster to existing list of clusters
 //         name: lua_cluster
-//         config:
+//         envoyConfig:
 //           "@type": type.googleapis.com/envoy.api.v2.Cluster
 //           type: static
 //           hosts:
@@ -112,8 +112,8 @@ message UnsafeEnvoyConfig {
 
     // REQUIRED. Envoy listener/cluster configuration. Refer to
     // https://github.com/envoyproxy/data-plane-api/ for details.
-    google.protobuf.Any config = 4;
+    google.protobuf.Any envoy_config = 4;
   }
 
-  repeated EnvoyConfig config = 1;
+  repeated EnvoyConfig configs = 1;
 }
