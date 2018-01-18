@@ -20,19 +20,19 @@ package istio.routing.v1alpha2;
 
 option go_package = "istio.io/api/routing/v1alpha2";
 
-// Foreign service describes the endpoints, ports and protocols of a
+// External service describes the endpoints, ports and protocols of a
 // white-listed set of mesh-external domains and IP blocks that services in
 // the mesh are allowed to access.
 //
-// For example, the following foreign service configuration describes the
+// For example, the following external service configuration describes the
 // set of services at https://example.com to be accessed internally over
 // plaintext http (i.e. http://example.com:443), with the sidecar originating
 // TLS.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: ForeignService
+//     kind: ExternalService
 //     metadata:
-//       name: foreign-svc-example
+//       name: external-svc-example
 //     spec:
 //       hosts:
 //       - example.com
@@ -59,9 +59,9 @@ option go_package = "istio.io/api/routing/v1alpha2";
 // rule to initiate mTLS connections upstream.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: ForeignService
+//     kind: ExternalService
 //     metadata:
-//       name: foreign-svc-mongocluster
+//       name: external-svc-mongocluster
 //     spec:
 //       hosts:
 //       - 192.192.192.192/24
@@ -95,9 +95,9 @@ option go_package = "istio.io/api/routing/v1alpha2";
 // specific IP), the discovery mode must be set to "none".
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: ForeignService
+//     kind: ExternalService
 //     metadata:
-//       name: foreign-svc-wildcard-example
+//       name: external-svc-wildcard-example
 //     spec:
 //       hosts:
 //       - *.bar.com
@@ -116,9 +116,9 @@ option go_package = "istio.io/api/routing/v1alpha2";
 // uk.foo.bar.com:9443, and in.foo.bar.com:7443
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: ForeignService
+//     kind: ExternalService
 //     metadata:
-//       name: foreign-svc-dns
+//       name: external-svc-dns
 //     spec:
 //       hosts:
 //       - foo.bar.com
@@ -162,7 +162,7 @@ option go_package = "istio.io/api/routing/v1alpha2";
 // auto_host_rewrite for further details. The automatic rewrite can be
 // overridden using a host rewrite route rule.
 //
-message ForeignService {
+message ExternalService {
   // REQUIRED. The hosts associated with the external service. Could be a
   // DNS name with wildcard prefix or a CIDR prefix. Note that the hosts
   // field applies to all protocols. DNS names in hosts will be ignored if
@@ -190,7 +190,7 @@ message ForeignService {
 
     // If set to "static", the proxy will use the IP addresses specified in
     // endpoints (See below) as the backing nodes associated with the
-    // foreign service.
+    // external service.
     STATIC = 1;
 
     // If set to "dns", the proxy will attempt to resolve the DNS address
@@ -207,7 +207,7 @@ message ForeignService {
   Discovery discovery = 3;
 
   // Endpoint defines a network address (IP or hostname) associated with
-  // the foreign service.
+  // the external service.
   message Endpoint {
     // REQUIRED: Address associated with the network endpoint without the
     // port ( IP or fully qualified domain name without wildcards).
