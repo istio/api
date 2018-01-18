@@ -18,6 +18,8 @@ import "google/protobuf/any.proto";
 
 package istio.routing.v1alpha2;
 
+option go_package = "istio.io/api/routing/v1alpha2";
+
 // Envoy-specific filters that can be used to enable customized processing
 // in addition to the features exposed by the routing rule. This feature
 // must be used with care, as incorrect configurations could potentially
