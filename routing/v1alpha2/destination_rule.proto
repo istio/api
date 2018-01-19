@@ -378,7 +378,7 @@ message OutlierDetection {
 //         privateKey: /etc/certs/client_private_key.pem
 //         caCertificates: /etc/certs/rootcacerts.pem
 //
-// The following rule configures a client to use TLS when talking to a foreign service whose domain matches *.foo.com.
+// The following rule configures a client to use TLS when talking to an external service whose domain matches *.foo.com.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: DestinationRule
@@ -393,19 +393,29 @@ message OutlierDetection {
 message TLSSettings {
   // TLS connection mode
   enum TLSmode {
-    // If set to "disable", the proxy will use not setup a TLS connection to the
-    // upstream server.
-    DISABLE = 0;
+    // Placeholder
+    TLSMODE_INVALID = 0;
 
+    // If set to "istio", the proxy will set up mutual TLS authentication
+    // using Istio CA issued certificates. This is the default when Istio
+    // mTLS authentication is enabled mesh-wide.
+    ISTIO = 1;
+    
     // If set to "simple", the proxy will originate a TLS connection to the
-    // upstream server.
-    SIMPLE = 1;
+    // upstream server. This is the default mode for external services with
+    // missing port specification.
+    SIMPLE = 2;
 
     // If set to "mutual", the proxy will secure connections to the
     // upstream using mutual TLS by presenting client certificates for
-    // authentication.
-    MUTUAL = 2;
-  };
+    // authentication. The certificates should be specified using the
+    // configuration fields (clientCertificate, privateKey).
+    MUTUAL = 3;
+
+    // If set to "disable", the proxy will use not setup a TLS connection
+    // to the upstream server.
+    DISABLE = 4;
+};
 
   // REQUIRED: Indicates whether connections to this port should be secured
   // using TLS. The value of this field determines how TLS is enforced.

@@ -58,8 +58,8 @@ func (ExternalService_Discovery) EnumDescriptor() ([]byte, []int) { return fileD
 // the mesh are allowed to access.
 //
 // For example, the following external service configuration describes the
-// set of services at https://example.com to be accessed internally over
-// plaintext http (i.e. http://example.com:443), with the sidecar originating
+// set of services at https://example.com:9443 to be accessed internally over
+// plaintext http (i.e. http://example.com:9443), with the sidecar originating
 // TLS.
 //
 //     apiVersion: config.istio.io/v1alpha2
@@ -70,7 +70,7 @@ func (ExternalService_Discovery) EnumDescriptor() ([]byte, []int) { return fileD
 //       hosts:
 //       - example.com
 //       ports:
-//       - number: 443
+//       - number: 9443
 //         name: example-http
 //         protocol: http # not HTTPS.
 //       discovery: dns
@@ -86,6 +86,33 @@ func (ExternalService_Discovery) EnumDescriptor() ([]byte, []int) { return fileD
 //         name: example.com
 //       tls:
 //         mode: simple # initiates HTTPS when talking to example.com
+//
+// To reduce the configuration burden for the common case where most
+// external services are accessed over port 443, there is an implicit
+// internal mapping from port 80 to port 443. Such that an external service
+// declared without any port is assumed to be accessed internally over port
+// 80. Accesses from the sidecar to the external service will use HTTPS
+// over port 443. For example, the following rule allows access to several
+// external services:
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: ExternalService
+//     metadata:
+//       name: external-svc-common
+//     spec:
+//       hosts:
+//       - foo.com
+//       - bar.com
+//       - baz.com
+//       - scooby.com
+//       discovery: dns
+//
+// The application is expected to access these services over port 80 using
+// plain text http (i.e. http://foo.com, http://scooby.com, etc.). The
+// sidecar would originate TLS connections to the external service over
+// port 443 (i.e. https://foo.com, https://bar.com). Note that currently,
+// this special case functionality is available only for non-wildcard
+// domains.
 //
 // The following specification specifies a static set of backend nodes for
 // a MongoDB cluster behind a set of virtual IPs, and sets up a destination
@@ -206,7 +233,11 @@ type ExternalService struct {
 	// simple TCP proxy, forwarding incoming traffic on a specified port to
 	// the specified destination endpoint IP/host.
 	Hosts []string `protobuf:"bytes,1,rep,name=hosts" json:"hosts,omitempty"`
-	// REQUIRED. The ports associated with the external service.
+	// The ports associated with the external service. If omitted, service
+	// will be assumed to be available over port 443 using HTTPS protocol,
+	// such that any access over plaintext HTTP on port 80 to the hosts above
+	// would be automatically forwarded by the sidecar to the external
+	// destination on port 443 over HTTPS.
 	Ports []*Port `protobuf:"bytes,2,rep,name=ports" json:"ports,omitempty"`
 	// Service discovery mode for the hosts. If not set, Istio will attempt
 	// to infer the discovery mode based on the value of hosts and endpoints.
