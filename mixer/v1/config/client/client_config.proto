@@ -70,6 +70,10 @@ message TransportConfig {
   }
   // Specifies the policy when failed to connect to Mixer server.
   NetworkFailPolicy network_fail_policy = 4;
+
+  // Specifies interval in milliseconds at which stats maintained by proxy for
+  // check, quota and report calls get updated.
+  int32 stats_update_interval_ms = 5;
 }
 
 // Defines the client config for HTTP.
