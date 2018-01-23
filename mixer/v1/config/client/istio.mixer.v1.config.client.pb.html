@@ -13631,8 +13631,9 @@ It applies on the new TCP connections.</p>
 <td><code>statsUpdateIntervalMs</code></td>
 <td><code>int32</code></td>
 <td>
-<p>Specifies interval in milliseconds at which stats maintained by proxy for
-check, quota and report calls get updated.</p>
+<p>Specify fresh interval in milliseconds to write mixer client statistics to
+Envoy share memory. If not specified, or 0 protobuf default value, the
+interval is 10 seconds</p>
 
 </td>
 </tr>
