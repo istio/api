@@ -45,7 +45,8 @@ option go_package = "istio.io/api/routing/v1alpha2";
 //       - labels:
 //           name: reviews # selects the pods where this config will be applied
 //         operation: update # update existing listener
-//         name: http_0.0.0.0:8080
+//         listenerDirection: inbound
+//         name: http_*_8080
 //         envoyConfig:
 //           "@type": type.googleapis.com/envoy.api.v2.Listener
 //           filterChains:
@@ -89,10 +90,23 @@ message UnsafeEnvoyConfig {
     UPDATE = 3;
   }
 
+  enum Direction {
+    INVALID_DIR = 0;
+    // Apply changes to inbound listener that handles requests entering a pod/VM.
+    INBOUND = 1;
+    // Apply changes to outbound listener that handles requests leaving a pod/VM.
+    OUTBOUND = 2;
+    // Apply changes to all types of listeners on this port.
+    BOTH = 3;
+  }
+
   // Listener/cluster related configuration.
   message EnvoyConfig {
     // REQUIRED. Add/Replace/Update operation
     Operation operation = 1;
+
+    // REQUIRED when updating listeners. Choose the specific listener (inbound/outbound) for a port.
+    Direction listener_direction = 2;
 
     // REQUIRED. Unique name associated with the listener or cluster. Istio
     // generated listeners are named using the format
@@ -107,14 +121,14 @@ message UnsafeEnvoyConfig {
     // clusters. For example, to select all clusters for
     // foo.default.svc.cluster.local service, use
     // *.foo.default.svc.cluster.local|*|*
-    string name = 2;
+    string name = 3;
 
     // Restrict the changes to a subset of pods/VMs in the mesh
-    map <string, string> labels = 3;
+    map <string, string> labels = 4;
 
     // REQUIRED. Envoy listener/cluster configuration. Refer to
     // https://github.com/envoyproxy/data-plane-api/ for details.
-    google.protobuf.Any envoy_config = 4;
+    google.protobuf.Any envoy_config = 5;
   }
 
   repeated EnvoyConfig configs = 1;
