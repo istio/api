@@ -9,6 +9,7 @@ It is generated from these files:
 	routing/v1alpha2/external_service.proto
 	routing/v1alpha2/gateway.proto
 	routing/v1alpha2/route_rule.proto
+	routing/v1alpha2/unsafe_envoy_config.proto
 
 It has these top-level messages:
 	DestinationRule
@@ -36,6 +37,7 @@ It has these top-level messages:
 	CorsPolicy
 	HTTPFaultInjection
 	PortSelector
+	UnsafeEnvoyConfig
 */
 package v1alpha2
 

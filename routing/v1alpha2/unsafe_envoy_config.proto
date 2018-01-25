@@ -1,0 +1,135 @@
+// Copyright 2018 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
+package istio.routing.v1alpha2;
+
+option go_package = "istio.io/api/routing/v1alpha2";
+
+// Envoy-specific filters that can be used to enable customized processing
+// in addition to the features exposed by the routing rule. This feature
+// must be used with care, as incorrect configurations could potentially
+// destabilize the entire mesh. This configuration is designed for an
+// advanced audience with good familiarity with Envoy configuration, and
+// Istio Pilot's internals. Common use cases for using the extensions
+// include use of Envoy's Lua filters, in addition to enabling any
+// proprietary filters developed inhouse (e.g, protocol decoders,
+// geo-location filters, etc.).
+//
+// NOTE: Do not use this feature to enable Fault, Router (HTTP),
+// Mongo/Tcp proxy (TCP) filters.
+//
+// The following example adds a Lua script that calls out to an external
+// service, for all inbound calls to the reviews HTTP service on port 8080.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: UnsafeEnvoyConfig
+//     metadata:
+//       name: my-lua-script
+//     spec:
+//       configs:
+//       - labels:
+//           name: reviews # selects the pods where this config will be applied
+//         operation: update # update existing listener
+//         listenerDirection: inbound
+//         name: http_*_8080
+//         envoyConfig:
+//           "@type": type.googleapis.com/envoy.api.v2.Listener
+//           filterChains:
+//           - filters:
+//             - name: envoy.lua
+//               config:
+//                 inline_code: |
+//                   function envoy_on_request(request_handle)
+//                     -- Make an HTTP call to an upstream host with the following headers, body, and timeout.
+//                     local headers, body = request_handle:httpCall(
+//                     "lua_cluster",
+//                     {
+//                      [":method"] = "POST",
+//                      [":path"] = "/",
+//                      [":authority"] = "lua_cluster"
+//                     },
+//                     "hello world", 5000)
+//                   end
+//       - labels:
+//           name: reviews # selects the pods where this config will be applied
+//         operation: add # add the lua_cluster to existing list of clusters
+//         name: lua_cluster
+//         envoyConfig:
+//           "@type": type.googleapis.com/envoy.api.v2.Cluster
+//           type: static
+//           hosts:
+//           - socketAddress:
+//               protocol: tcp
+//               address: 1.1.1.1
+//               portValue: 5555
+//
+message UnsafeEnvoyConfig {
+  enum Operation {
+    INVALID_OP = 0;
+    // Add a listener or cluster.
+    ADD = 1;
+    // Replace an existing listener or cluster.
+    REPLACE = 2;
+    // Update an existing listener or cluster. Any missing fields in the
+    // configuration will be replaced with information computed by Istio.
+    UPDATE = 3;
+  }
+
+  enum Direction {
+    INVALID_DIR = 0;
+    // Apply changes to inbound listener that handles requests entering a pod/VM.
+    INBOUND = 1;
+    // Apply changes to outbound listener that handles requests leaving a pod/VM.
+    OUTBOUND = 2;
+    // Apply changes to all types of listeners on this port.
+    BOTH = 3;
+  }
+
+  // Listener/cluster related configuration.
+  message EnvoyConfig {
+    // REQUIRED. Add/Replace/Update operation
+    Operation operation = 1;
+
+    // REQUIRED when updating listeners. Choose the specific listener (inbound/outbound) for a port.
+    Direction listener_direction = 2;
+
+    // REQUIRED. Unique name associated with the listener or cluster. Istio
+    // generated listeners are named using the format
+    // (http|tcp)_(ip)_(port). Wildcards can be used when selecting
+    // listeners. For example, to select all listeners on port 8080, use
+    // *_*_8080.
+    //
+    // Istio generated clusters are named using the format
+    // out.(serviceName)|(portName/portNumber)|subsetName for outbound
+    // clusters (client side) and in.(portName/portNumber) for inbound
+    // clusters (server side). Wildcards can be used when selecting
+    // clusters. For example, to select all clusters for
+    // foo.default.svc.cluster.local service, use
+    // *.foo.default.svc.cluster.local|*|*
+    string name = 3;
+
+    // Restrict the changes to a subset of pods/VMs in the mesh
+    map <string, string> labels = 4;
+
+    // REQUIRED. Envoy listener/cluster configuration. Refer to
+    // https://github.com/envoyproxy/data-plane-api/ for details.
+    google.protobuf.Any envoy_config = 5;
+  }
+
+  repeated EnvoyConfig configs = 1;
+}
