@@ -1,7 +1,7 @@
 # Istio API Style Guide
 
 This page defines the design guidelines for Istio APIs. They apply to
-all proto files in the Istio project. Developers who develop their APIs
+all proto files in the Istio project. Developers who create their APIs
 using Istio may find these guidelines useful as well.
 
 Since Istio APIs are based on _proto3_ and _gRPC_, we will use
@@ -10,7 +10,7 @@ the baseline. Because Envoy APIs also uses the same baseline, the
 commonality across Envoy, Istio, proto3 and gRPC will greatly help
 developer experience in the long term.
 
-In addition to the Google's guide, the following conventions should be
+In addition to Google's guide, the following conventions should be
 followed for Istio APIs.
 
 ## Versioning
