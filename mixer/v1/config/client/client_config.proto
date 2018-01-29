@@ -125,7 +125,8 @@ message TcpClientConfig {
   // It applies on the new TCP connections.
   QuotaSpec connection_quota_spec = 5;
 
-  // Specify report interval in milliseconds to send report for TCP filter.
-  // If not specified, or 0 protobuf default value, the interval is 10 seconds.
+  // Specify report interval in milliseconds to send periodical reports for
+  // long TCP connections. If not specified, or 0 protobuf default value,
+  // the interval is 10 seconds.
   int32 report_interval_ms = 6;
 }

@@ -124,8 +124,9 @@ type TcpClientConfig struct {
 	// Quota specifications to generate quota requirements.
 	// It applies on the new TCP connections.
 	ConnectionQuotaSpec *QuotaSpec `protobuf:"bytes,5,opt,name=connection_quota_spec,json=connectionQuotaSpec" json:"connection_quota_spec,omitempty"`
-	// Specify report interval in milliseconds to send report for TCP filter.
-	// If not specified, or 0 protobuf default value, the interval is 10 seconds.
+	// Specify report interval in milliseconds to send periodical reports for
+	// long TCP connections. If not specified, or 0 protobuf default value,
+	// the interval is 10 seconds.
 	ReportIntervalMs int32 `protobuf:"varint,6,opt,name=report_interval_ms,json=reportIntervalMs,proto3" json:"report_interval_ms,omitempty"`
 }
 
