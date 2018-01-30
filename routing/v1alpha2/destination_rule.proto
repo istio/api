@@ -62,7 +62,7 @@ option go_package = "istio.io/api/routing/v1alpha2";
 // Note that policies specified for subsets will not take effect until
 // a route rule explicitly sends traffic to this subset.
 message DestinationRule {
-  // REQUIRED. The destination address for traffic captured by this 
+  // REQUIRED. The destination address for traffic captured by this
   // rule.  Could be a DNS name with wildcard prefix or a CIDR
   // prefix. Depending on the platform, short-names can also be used
   // instead of a FQDN (i.e. has no dots in the name). In such a scenario,
@@ -173,8 +173,10 @@ message Subset {
 //           simple: ROUND_ROBIN
 //
 // The following example uses the consistent hashing based load balancer
-// for the same ratings service using the Cookie header as the hash key.
-// 
+// for the same ratings service using a ring of size 10. As the complete
+// ring hash configuration involves setting a header to hash, there is
+// also a sample with a route rule.
+//
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: DestinationRule
 //     metadata:
@@ -184,8 +186,23 @@ message Subset {
 //       trafficPolicy:
 //         loadBalancer:
 //           consistentHash:
-//             http_header: Cookie
+//             minimum_ring_size: 10
 //
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: my-rule
+//     spec:
+//       hosts:
+//       - ratings
+//       http:
+//       - destination:
+//           name: ratings
+//         trafficPolicy:
+//           headerName: some_header_in_the_request
+//
+// If the headerName is not set, hash is a random number, rendering the
+// load balancer as a RANDOM policy.
 message LoadBalancerSettings {
   // Standard load balancing algorithms that require no tuning.
   enum SimpleLB {
@@ -214,20 +231,14 @@ message LoadBalancerSettings {
   // distribution/redistribution when the connection pool changes. This
   // load balancing policy is applicable only for HTTP-based
   // connections. A user specified HTTP header is used as the key with
-  // [xxHash](www.xxhash.com) hashing.
+  // [xxHash](www.xxhash.com) hashing. This is configured at route level.
   message ConsistentHashLB {
-    // REQUIRED. The name of the HTTP request header that will be used to
-    // obtain the hash key. If the request header is not present, the load
-    // balancer will use a random number as the hash, effectively making
-    // the load balancing policy random.
-    string http_header = 1;
-
     // The minimum number of virtual nodes to use for the hash
     // ring. Defaults to 1024. Larger ring sizes result in more granular
     // load distributions. If the number of hosts in the load balancing
     // pool is larger than the ring size, each host will be assigned a
     // single virtual node.
-    uint32 minimum_ring_size = 2;
+    uint32 minimum_ring_size = 1;
   };
 
   // (-- TODO: Enable Subset load balancing after moving to v2 API Also
