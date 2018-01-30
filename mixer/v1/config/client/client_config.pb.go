@@ -77,8 +77,7 @@ type TransportConfig struct {
 	// Specifies the policy when failed to connect to Mixer server.
 	NetworkFailPolicy TransportConfig_NetworkFailPolicy `protobuf:"varint,4,opt,name=network_fail_policy,json=networkFailPolicy,proto3,enum=istio.mixer.v1.config.client.TransportConfig_NetworkFailPolicy" json:"network_fail_policy,omitempty"`
 	// Specify refresh interval to write mixer client statistics to Envoy share
-	// memory. If not specified, or 0 protobuf default value, the interval is 10
-	// seconds.
+	// memory. If not specified, the interval is 10 seconds.
 	StatsUpdateInterval *google_protobuf1.Duration `protobuf:"bytes,5,opt,name=stats_update_interval,json=statsUpdateInterval" json:"stats_update_interval,omitempty"`
 }
 
@@ -126,8 +125,7 @@ type TcpClientConfig struct {
 	// It applies on the new TCP connections.
 	ConnectionQuotaSpec *QuotaSpec `protobuf:"bytes,5,opt,name=connection_quota_spec,json=connectionQuotaSpec" json:"connection_quota_spec,omitempty"`
 	// Specify report interval to send periodical reports for long TCP
-	// connections. If not specified, or 0 protobuf default value, the interval
-	// is 10 seconds.
+	// connections. If not specified, the interval is 10 seconds.
 	ReportInterval *google_protobuf1.Duration `protobuf:"bytes,6,opt,name=report_interval,json=reportInterval" json:"report_interval,omitempty"`
 }
 
