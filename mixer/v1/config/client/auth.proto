@@ -16,9 +16,10 @@ syntax = "proto3";
 
 package istio.mixer.v1.config.client;
 
-option go_package="istio.io/api/mixer/v1/config/client";
+option go_package = "istio.io/api/mixer/v1/config/client";
 
 import "gogoproto/gogo.proto";
+// import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 import "mixer/v1/config/client/service.proto";
 
@@ -66,7 +67,8 @@ message JWT {
   repeated string audiences = 2;
 
   // URL of the provider's public key set to validate signature of the
-  // JWT. See [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
+  // JWT. See [OpenID
+  // Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
   //
   // Optional if the key set document can either (a) be retrieved from
   // [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)
@@ -77,7 +79,8 @@ message JWT {
   string jwks_uri = 3;
 
   // If true, forward the entire base64 encoded JWT in the HTTP request.
-  // If false, remove the JWT from the HTTP request and do not forward to the application.
+  // If false, remove the JWT from the HTTP request and do not forward to the
+  // application.
   bool forward_jwt = 4;
 
   // Duration after which the cached public key should be expired. The
@@ -119,9 +122,15 @@ message JWT {
   // This field is specific for Envoy proxy implementation.
   // It is the cluster name in the Envoy config for the jwks_uri.
   string jwks_uri_envoy_cluster = 7;
+
+  // This field is specific for Envoy proxy implementation.
+  // Defines the header location to (re)store the authentiated claims. If not
+  // set, a default value will be used (as of speaking, sec-istio-auth-userinfo)
+  string output_header_location = 8;
 }
 
 // Determines how to apply auth policies for individual requests.
+// WIP: to be replaced by CredentialSpec / AuthenticationPolicy.
 message EndUserAuthenticationPolicySpec {
   // List of JWT rules to valide.
   //
@@ -148,6 +157,7 @@ message EndUserAuthenticationPolicySpec {
   repeated JWT jwts = 2;
 }
 
+// WIP: to be replaced by AuthenticationPolicy.
 message EndUserAuthenticationPolicySpecReference {
   // REQUIRED. The short name of the
   // EndUserAuthenticationPolicySpec. This is the resource name
@@ -162,6 +172,7 @@ message EndUserAuthenticationPolicySpecReference {
 
 // EndUserAuthenticationPolicySpecBinding defines the binding between
 // EndUserAuthenticationPolicySpecs and one or more IstioService.
+// WIP: to be replaced by AuthenticationPolicy.
 message EndUserAuthenticationPolicySpecBinding {
   // REQUIRED. One or more services to map the listed
   // EndUserAuthenticationPolicySpecs onto.
@@ -169,5 +180,63 @@ message EndUserAuthenticationPolicySpecBinding {
 
   // REQUIRED. One or more EndUserAuthenticationPolicySpecReference
   // that should be mapped to the specified service(s).
+  // WIP: to be replaced by AuthenticationPolicy.
   repeated EndUserAuthenticationPolicySpecReference policies = 2;
+}
+
+// Placer holder for mTLS authentication params.
+message MutualTLS {
+  // This field is specific for Envoy proxy implementation.
+  // Defines the header location to store the authentiated claims. If blank, a
+  // implementation-specific default value will be used.
+  string output_header_location = 1;
+}
+
+// CredentialSpec defines a credential (and associated params needed to verify it).
+// The spec can be sumitted to the (Istio) system on its own, and then binded to
+// authentication policy later.
+// Currently, a policy can only refer to a credential spec in the same namespace.
+// This restriction is to make sure the spec and policy are managed by the same
+// group of authorized people.
+message CredentialSpec {
+  oneof params {
+    bool none = 1;
+    MutualTLS mtls = 2;
+    JWT jwt = 3;
+  }
+}
+
+// IstioWorkload identifies workload, desgined specifically for authentication policy target.
+// Different from IstioService, this one:
+// - doesn't contain namespace/domain. All of these are extracted from metadata
+// to construct FQDN service name
+// - port is part of the identifiers.
+message IstioWorkload {
+  // The short name of the service such as "foo".
+  string name = 1;
+
+  // Optional. Leave blank to refer to worload on every port that the service provides.
+  repeated uint32 port = 2;
+}
+
+// AuthenticationPolicy binds credentials to workload(s).
+// Authentication policy is composed of 2-part authentication:
+// - peer: verify caller service credentials.
+// - end_user: verify end-user credentials.
+// For each part, if it's not empty, at least one of those listed credential
+// must be provided and  (successfully) verified for the authentication to pass.
+message AuthenticationPolicy {
+  // If empty, the policy will be applied on all services in the same namespace as the policy.
+  repeated IstioWorkload target = 1;
+
+  // List of credential name that should be checked by peer authentication. They
+  // will be validated in sequence, until the first one satisfied (if none found,
+  // the whole authentication should fail).
+  // The validated credential will be used to extract peer identity (i.e the
+  // source.user attribute in the request to mixer).
+  repeated string peer = 2;
+
+
+  // Similar to above, but for end_user authentication.
+  repeated string end_user = 3;
 }

@@ -21,6 +21,10 @@
 		EndUserAuthenticationPolicySpec
 		EndUserAuthenticationPolicySpecReference
 		EndUserAuthenticationPolicySpecBinding
+		MutualTLS
+		CredentialSpec
+		IstioWorkload
+		AuthenticationPolicyBinding
 		ServiceConfig
 		TransportConfig
 		HttpClientConfig

@@ -57,7 +57,8 @@ type JWT struct {
 	//
 	Audiences []string `protobuf:"bytes,2,rep,name=audiences" json:"audiences,omitempty"`
 	// URL of the provider's public key set to validate signature of the
-	// JWT. See [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
+	// JWT. See [OpenID
+	// Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
 	// Optional if the key set document can either (a) be retrieved from
 	// [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)
@@ -67,7 +68,8 @@ type JWT struct {
 	// Example: https://www.googleapis.com/oauth2/v1/certs
 	JwksUri string `protobuf:"bytes,3,opt,name=jwks_uri,json=jwksUri,proto3" json:"jwks_uri,omitempty"`
 	// If true, forward the entire base64 encoded JWT in the HTTP request.
-	// If false, remove the JWT from the HTTP request and do not forward to the application.
+	// If false, remove the JWT from the HTTP request and do not forward to the
+	// application.
 	ForwardJwt bool `protobuf:"varint,4,opt,name=forward_jwt,json=forwardJwt,proto3" json:"forward_jwt,omitempty"`
 	// Duration after which the cached public key should be expired. The
 	// system wide default is applied if no duration is explicitly
@@ -77,6 +79,10 @@ type JWT struct {
 	// This field is specific for Envoy proxy implementation.
 	// It is the cluster name in the Envoy config for the jwks_uri.
 	JwksUriEnvoyCluster string `protobuf:"bytes,7,opt,name=jwks_uri_envoy_cluster,json=jwksUriEnvoyCluster,proto3" json:"jwks_uri_envoy_cluster,omitempty"`
+	// This field is specific for Envoy proxy implementation.
+	// Defines the header location to (re)store the authentiated claims. If not
+	// set, a default value will be used (as of speaking, sec-istio-auth-userinfo)
+	OutputHeaderLocation string `protobuf:"bytes,8,opt,name=output_header_location,json=outputHeaderLocation,proto3" json:"output_header_location,omitempty"`
 }
 
 func (m *JWT) Reset()                    { *m = JWT{} }
@@ -280,12 +286,219 @@ func (*EndUserAuthenticationPolicySpecBinding) Descriptor() ([]byte, []int) {
 	return fileDescriptorAuth, []int{3}
 }
 
+// Placer holder for mTLS authentication params.
+type MutualTLS struct {
+}
+
+func (m *MutualTLS) Reset()                    { *m = MutualTLS{} }
+func (*MutualTLS) ProtoMessage()               {}
+func (*MutualTLS) Descriptor() ([]byte, []int) { return fileDescriptorAuth, []int{4} }
+
+// CredentialSpec defines a credential (and associated params needed to verify it).
+// The spec can be sumitted to the (Istio) system on its own, and then binded to
+// authentication policy later.
+// Currently, a policy can only refer to a credential spec in the same namespace.
+// This restriction is to make sure the spec and policy are managed by the same
+// group of authorized people.
+type CredentialSpec struct {
+	// Types that are valid to be assigned to Params:
+	//	*CredentialSpec_None
+	//	*CredentialSpec_Mtls
+	//	*CredentialSpec_Jwt
+	Params isCredentialSpec_Params `protobuf_oneof:"params"`
+}
+
+func (m *CredentialSpec) Reset()                    { *m = CredentialSpec{} }
+func (*CredentialSpec) ProtoMessage()               {}
+func (*CredentialSpec) Descriptor() ([]byte, []int) { return fileDescriptorAuth, []int{5} }
+
+type isCredentialSpec_Params interface {
+	isCredentialSpec_Params()
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CredentialSpec_None struct {
+	None bool `protobuf:"varint,1,opt,name=none,proto3,oneof"`
+}
+type CredentialSpec_Mtls struct {
+	Mtls *MutualTLS `protobuf:"bytes,2,opt,name=mtls,oneof"`
+}
+type CredentialSpec_Jwt struct {
+	Jwt *JWT `protobuf:"bytes,3,opt,name=jwt,oneof"`
+}
+
+func (*CredentialSpec_None) isCredentialSpec_Params() {}
+func (*CredentialSpec_Mtls) isCredentialSpec_Params() {}
+func (*CredentialSpec_Jwt) isCredentialSpec_Params()  {}
+
+func (m *CredentialSpec) GetParams() isCredentialSpec_Params {
+	if m != nil {
+		return m.Params
+	}
+	return nil
+}
+
+func (m *CredentialSpec) GetNone() bool {
+	if x, ok := m.GetParams().(*CredentialSpec_None); ok {
+		return x.None
+	}
+	return false
+}
+
+func (m *CredentialSpec) GetMtls() *MutualTLS {
+	if x, ok := m.GetParams().(*CredentialSpec_Mtls); ok {
+		return x.Mtls
+	}
+	return nil
+}
+
+func (m *CredentialSpec) GetJwt() *JWT {
+	if x, ok := m.GetParams().(*CredentialSpec_Jwt); ok {
+		return x.Jwt
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*CredentialSpec) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _CredentialSpec_OneofMarshaler, _CredentialSpec_OneofUnmarshaler, _CredentialSpec_OneofSizer, []interface{}{
+		(*CredentialSpec_None)(nil),
+		(*CredentialSpec_Mtls)(nil),
+		(*CredentialSpec_Jwt)(nil),
+	}
+}
+
+func _CredentialSpec_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*CredentialSpec)
+	// params
+	switch x := m.Params.(type) {
+	case *CredentialSpec_None:
+		t := uint64(0)
+		if x.None {
+			t = 1
+		}
+		_ = b.EncodeVarint(1<<3 | proto.WireVarint)
+		_ = b.EncodeVarint(t)
+	case *CredentialSpec_Mtls:
+		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Mtls); err != nil {
+			return err
+		}
+	case *CredentialSpec_Jwt:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Jwt); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("CredentialSpec.Params has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _CredentialSpec_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*CredentialSpec)
+	switch tag {
+	case 1: // params.none
+		if wire != proto.WireVarint {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeVarint()
+		m.Params = &CredentialSpec_None{x != 0}
+		return true, err
+	case 2: // params.mtls
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(MutualTLS)
+		err := b.DecodeMessage(msg)
+		m.Params = &CredentialSpec_Mtls{msg}
+		return true, err
+	case 3: // params.jwt
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(JWT)
+		err := b.DecodeMessage(msg)
+		m.Params = &CredentialSpec_Jwt{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _CredentialSpec_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*CredentialSpec)
+	// params
+	switch x := m.Params.(type) {
+	case *CredentialSpec_None:
+		n += proto.SizeVarint(1<<3 | proto.WireVarint)
+		n += 1
+	case *CredentialSpec_Mtls:
+		s := proto.Size(x.Mtls)
+		n += proto.SizeVarint(2<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *CredentialSpec_Jwt:
+		s := proto.Size(x.Jwt)
+		n += proto.SizeVarint(3<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+// IstioWorkload identifies workload, desgined specifically for authentication policy target.
+// Different from IstioService, this one:
+// - doesn't contain namespace/domain. All of these are extracted from metadata
+// to construct FQDN service name
+// - port is part of the identifiers.
+type IstioWorkload struct {
+	// The short name of the service such as "foo".
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Optional. Leave blank to refer to worload on every port that the service provides.
+	Port []uint32 `protobuf:"varint,2,rep,packed,name=port" json:"port,omitempty"`
+}
+
+func (m *IstioWorkload) Reset()                    { *m = IstioWorkload{} }
+func (*IstioWorkload) ProtoMessage()               {}
+func (*IstioWorkload) Descriptor() ([]byte, []int) { return fileDescriptorAuth, []int{6} }
+
+// AuthenticationPolicyBinding binds credentials to workload(s).
+// Authentication policy is composed of 2-part authentication:
+// - peer: verify caller service credentials.
+// - end_user: verify end-user credentials.
+// For each part, if it's not empty, at least one of those listed credential
+// must be provided and  (successfully) verified for the authentication to pass.
+type AuthenticationPolicyBinding struct {
+	// If empty, the policy will be applied on all services in the same namespace as the policy.
+	Target []*IstioWorkload `protobuf:"bytes,1,rep,name=target" json:"target,omitempty"`
+	// List of credential name that should be binded to peer authentication. They
+	// will be checked in sequence, until the first one satisfies (if none found,
+	// the whole authentication should fail)
+	Peer []string `protobuf:"bytes,2,rep,name=peer" json:"peer,omitempty"`
+	// Similar to above, but for end_user authentication.
+	EndUser []string `protobuf:"bytes,3,rep,name=end_user,json=endUser" json:"end_user,omitempty"`
+}
+
+func (m *AuthenticationPolicyBinding) Reset()                    { *m = AuthenticationPolicyBinding{} }
+func (*AuthenticationPolicyBinding) ProtoMessage()               {}
+func (*AuthenticationPolicyBinding) Descriptor() ([]byte, []int) { return fileDescriptorAuth, []int{7} }
+
 func init() {
 	proto.RegisterType((*JWT)(nil), "istio.mixer.v1.config.client.JWT")
 	proto.RegisterType((*JWT_Location)(nil), "istio.mixer.v1.config.client.JWT.Location")
 	proto.RegisterType((*EndUserAuthenticationPolicySpec)(nil), "istio.mixer.v1.config.client.EndUserAuthenticationPolicySpec")
 	proto.RegisterType((*EndUserAuthenticationPolicySpecReference)(nil), "istio.mixer.v1.config.client.EndUserAuthenticationPolicySpecReference")
 	proto.RegisterType((*EndUserAuthenticationPolicySpecBinding)(nil), "istio.mixer.v1.config.client.EndUserAuthenticationPolicySpecBinding")
+	proto.RegisterType((*MutualTLS)(nil), "istio.mixer.v1.config.client.MutualTLS")
+	proto.RegisterType((*CredentialSpec)(nil), "istio.mixer.v1.config.client.CredentialSpec")
+	proto.RegisterType((*IstioWorkload)(nil), "istio.mixer.v1.config.client.IstioWorkload")
+	proto.RegisterType((*AuthenticationPolicyBinding)(nil), "istio.mixer.v1.config.client.AuthenticationPolicyBinding")
 }
 func (m *JWT) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
@@ -366,6 +579,12 @@ func (m *JWT) MarshalTo(dAtA []byte) (int, error) {
 		i++
 		i = encodeVarintAuth(dAtA, i, uint64(len(m.JwksUriEnvoyCluster)))
 		i += copy(dAtA[i:], m.JwksUriEnvoyCluster)
+	}
+	if len(m.OutputHeaderLocation) > 0 {
+		dAtA[i] = 0x42
+		i++
+		i = encodeVarintAuth(dAtA, i, uint64(len(m.OutputHeaderLocation)))
+		i += copy(dAtA[i:], m.OutputHeaderLocation)
 	}
 	return i, nil
 }
@@ -513,6 +732,190 @@ func (m *EndUserAuthenticationPolicySpecBinding) MarshalTo(dAtA []byte) (int, er
 	return i, nil
 }
 
+func (m *MutualTLS) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MutualTLS) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	return i, nil
+}
+
+func (m *CredentialSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CredentialSpec) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Params != nil {
+		nn3, err := m.Params.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn3
+	}
+	return i, nil
+}
+
+func (m *CredentialSpec_None) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x8
+	i++
+	if m.None {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i++
+	return i, nil
+}
+func (m *CredentialSpec_Mtls) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Mtls != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintAuth(dAtA, i, uint64(m.Mtls.Size()))
+		n4, err := m.Mtls.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n4
+	}
+	return i, nil
+}
+func (m *CredentialSpec_Jwt) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Jwt != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintAuth(dAtA, i, uint64(m.Jwt.Size()))
+		n5, err := m.Jwt.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n5
+	}
+	return i, nil
+}
+func (m *IstioWorkload) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IstioWorkload) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintAuth(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
+	}
+	if len(m.Port) > 0 {
+		dAtA7 := make([]byte, len(m.Port)*10)
+		var j6 int
+		for _, num := range m.Port {
+			for num >= 1<<7 {
+				dAtA7[j6] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j6++
+			}
+			dAtA7[j6] = uint8(num)
+			j6++
+		}
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintAuth(dAtA, i, uint64(j6))
+		i += copy(dAtA[i:], dAtA7[:j6])
+	}
+	return i, nil
+}
+
+func (m *AuthenticationPolicyBinding) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AuthenticationPolicyBinding) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Target) > 0 {
+		for _, msg := range m.Target {
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintAuth(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.Peer) > 0 {
+		for _, s := range m.Peer {
+			dAtA[i] = 0x12
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	if len(m.EndUser) > 0 {
+		for _, s := range m.EndUser {
+			dAtA[i] = 0x1a
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	return i, nil
+}
+
 func encodeVarintAuth(dAtA []byte, offset int, v uint64) int {
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
@@ -553,6 +956,10 @@ func (m *JWT) Size() (n int) {
 		}
 	}
 	l = len(m.JwksUriEnvoyCluster)
+	if l > 0 {
+		n += 1 + l + sovAuth(uint64(l))
+	}
+	l = len(m.OutputHeaderLocation)
 	if l > 0 {
 		n += 1 + l + sovAuth(uint64(l))
 	}
@@ -626,6 +1033,86 @@ func (m *EndUserAuthenticationPolicySpecBinding) Size() (n int) {
 	return n
 }
 
+func (m *MutualTLS) Size() (n int) {
+	var l int
+	_ = l
+	return n
+}
+
+func (m *CredentialSpec) Size() (n int) {
+	var l int
+	_ = l
+	if m.Params != nil {
+		n += m.Params.Size()
+	}
+	return n
+}
+
+func (m *CredentialSpec_None) Size() (n int) {
+	var l int
+	_ = l
+	n += 2
+	return n
+}
+func (m *CredentialSpec_Mtls) Size() (n int) {
+	var l int
+	_ = l
+	if m.Mtls != nil {
+		l = m.Mtls.Size()
+		n += 1 + l + sovAuth(uint64(l))
+	}
+	return n
+}
+func (m *CredentialSpec_Jwt) Size() (n int) {
+	var l int
+	_ = l
+	if m.Jwt != nil {
+		l = m.Jwt.Size()
+		n += 1 + l + sovAuth(uint64(l))
+	}
+	return n
+}
+func (m *IstioWorkload) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovAuth(uint64(l))
+	}
+	if len(m.Port) > 0 {
+		l = 0
+		for _, e := range m.Port {
+			l += sovAuth(uint64(e))
+		}
+		n += 1 + sovAuth(uint64(l)) + l
+	}
+	return n
+}
+
+func (m *AuthenticationPolicyBinding) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.Target) > 0 {
+		for _, e := range m.Target {
+			l = e.Size()
+			n += 1 + l + sovAuth(uint64(l))
+		}
+	}
+	if len(m.Peer) > 0 {
+		for _, s := range m.Peer {
+			l = len(s)
+			n += 1 + l + sovAuth(uint64(l))
+		}
+	}
+	if len(m.EndUser) > 0 {
+		for _, s := range m.EndUser {
+			l = len(s)
+			n += 1 + l + sovAuth(uint64(l))
+		}
+	}
+	return n
+}
+
 func sovAuth(x uint64) (n int) {
 	for {
 		n++
@@ -651,6 +1138,7 @@ func (this *JWT) String() string {
 		`PublicKeyCacheDuration:` + strings.Replace(fmt.Sprintf("%v", this.PublicKeyCacheDuration), "Duration", "google_protobuf1.Duration", 1) + `,`,
 		`Locations:` + strings.Replace(fmt.Sprintf("%v", this.Locations), "JWT_Location", "JWT_Location", 1) + `,`,
 		`JwksUriEnvoyCluster:` + fmt.Sprintf("%v", this.JwksUriEnvoyCluster) + `,`,
+		`OutputHeaderLocation:` + fmt.Sprintf("%v", this.OutputHeaderLocation) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -713,6 +1201,78 @@ func (this *EndUserAuthenticationPolicySpecBinding) String() string {
 	s := strings.Join([]string{`&EndUserAuthenticationPolicySpecBinding{`,
 		`Services:` + strings.Replace(fmt.Sprintf("%v", this.Services), "IstioService", "IstioService", 1) + `,`,
 		`Policies:` + strings.Replace(fmt.Sprintf("%v", this.Policies), "EndUserAuthenticationPolicySpecReference", "EndUserAuthenticationPolicySpecReference", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MutualTLS) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MutualTLS{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CredentialSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CredentialSpec{`,
+		`Params:` + fmt.Sprintf("%v", this.Params) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CredentialSpec_None) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CredentialSpec_None{`,
+		`None:` + fmt.Sprintf("%v", this.None) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CredentialSpec_Mtls) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CredentialSpec_Mtls{`,
+		`Mtls:` + strings.Replace(fmt.Sprintf("%v", this.Mtls), "MutualTLS", "MutualTLS", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CredentialSpec_Jwt) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CredentialSpec_Jwt{`,
+		`Jwt:` + strings.Replace(fmt.Sprintf("%v", this.Jwt), "JWT", "JWT", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IstioWorkload) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&IstioWorkload{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AuthenticationPolicyBinding) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AuthenticationPolicyBinding{`,
+		`Target:` + strings.Replace(fmt.Sprintf("%v", this.Target), "IstioWorkload", "IstioWorkload", 1) + `,`,
+		`Peer:` + fmt.Sprintf("%v", this.Peer) + `,`,
+		`EndUser:` + fmt.Sprintf("%v", this.EndUser) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -953,6 +1513,35 @@ func (m *JWT) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.JwksUriEnvoyCluster = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OutputHeaderLocation", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuth
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuth
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.OutputHeaderLocation = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1384,6 +1973,471 @@ func (m *EndUserAuthenticationPolicySpecBinding) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *MutualTLS) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowAuth
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MutualTLS: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MutualTLS: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipAuth(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthAuth
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CredentialSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowAuth
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CredentialSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CredentialSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field None", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuth
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Params = &CredentialSpec_None{b}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Mtls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuth
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAuth
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &MutualTLS{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Params = &CredentialSpec_Mtls{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Jwt", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuth
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAuth
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &JWT{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Params = &CredentialSpec_Jwt{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipAuth(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthAuth
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *IstioWorkload) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowAuth
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IstioWorkload: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IstioWorkload: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuth
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuth
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType == 0 {
+				var v uint32
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowAuth
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= (uint32(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.Port = append(m.Port, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowAuth
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= (int(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthAuth
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				for iNdEx < postIndex {
+					var v uint32
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowAuth
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= (uint32(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.Port = append(m.Port, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipAuth(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthAuth
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AuthenticationPolicyBinding) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowAuth
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AuthenticationPolicyBinding: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AuthenticationPolicyBinding: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Target", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuth
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAuth
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Target = append(m.Target, &IstioWorkload{})
+			if err := m.Target[len(m.Target)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Peer", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuth
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuth
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Peer = append(m.Peer, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EndUser", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuth
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuth
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EndUser = append(m.EndUser, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipAuth(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthAuth
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func skipAuth(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
@@ -1492,41 +2546,52 @@ var (
 func init() { proto.RegisterFile("mixer/v1/config/client/auth.proto", fileDescriptorAuth) }
 
 var fileDescriptorAuth = []byte{
-	// 568 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x53, 0x4d, 0x6e, 0xd3, 0x40,
-	0x14, 0xb6, 0x9b, 0x36, 0x75, 0x26, 0xbb, 0x01, 0x45, 0x6e, 0x55, 0x4d, 0xd3, 0x80, 0x90, 0xc5,
-	0xc2, 0x56, 0x5b, 0x71, 0x00, 0x5a, 0x5a, 0x95, 0xc2, 0x02, 0xb9, 0xad, 0x8a, 0x10, 0x92, 0xe5,
-	0x8c, 0x5f, 0x9c, 0x49, 0x1d, 0x8f, 0x99, 0xb1, 0x13, 0xb2, 0xe3, 0x08, 0x2c, 0x38, 0x04, 0x47,
-	0xe9, 0xb2, 0x0b, 0x16, 0x2c, 0x89, 0xd9, 0xb0, 0xec, 0x11, 0x90, 0x3d, 0x76, 0xb3, 0x81, 0xa6,
-	0xab, 0xbc, 0x9f, 0xef, 0xfb, 0x32, 0xdf, 0x7b, 0xcf, 0x68, 0x67, 0xcc, 0x3e, 0x83, 0x70, 0x26,
-	0xbb, 0x0e, 0xe5, 0xf1, 0x80, 0x85, 0x0e, 0x8d, 0x18, 0xc4, 0xa9, 0xe3, 0x67, 0xe9, 0xd0, 0x4e,
-	0x04, 0x4f, 0x39, 0xde, 0x62, 0x32, 0x65, 0xdc, 0x2e, 0x81, 0xf6, 0x64, 0xd7, 0x56, 0x40, 0x5b,
-	0x01, 0x37, 0x1f, 0x87, 0x3c, 0xe4, 0x25, 0xd0, 0x29, 0x22, 0xc5, 0xd9, 0x24, 0x21, 0xe7, 0x61,
-	0x04, 0x4e, 0x99, 0xf5, 0xb3, 0x81, 0x13, 0x64, 0xc2, 0x4f, 0x19, 0x8f, 0xab, 0xfe, 0xd3, 0xff,
-	0xfc, 0xad, 0x04, 0x31, 0x61, 0x14, 0x14, 0xaa, 0xf7, 0xad, 0x81, 0x1a, 0xa7, 0x97, 0xe7, 0xb8,
-	0x83, 0x9a, 0x4c, 0xca, 0x0c, 0x84, 0xa9, 0x77, 0x75, 0xab, 0xe5, 0x56, 0x19, 0xde, 0x42, 0x2d,
-	0x3f, 0x0b, 0x18, 0xc4, 0x14, 0xa4, 0xb9, 0xd2, 0x6d, 0x58, 0x2d, 0x77, 0x51, 0xc0, 0x1b, 0xc8,
-	0x18, 0x4d, 0xaf, 0xa4, 0x97, 0x09, 0x66, 0x36, 0x4a, 0xde, 0x7a, 0x91, 0x5f, 0x08, 0x86, 0xb7,
-	0x51, 0x7b, 0xc0, 0xc5, 0xd4, 0x17, 0x81, 0x37, 0x9a, 0xa6, 0xe6, 0x6a, 0x57, 0xb7, 0x0c, 0x17,
-	0x55, 0xa5, 0xd3, 0x69, 0x8a, 0xcf, 0xd1, 0x46, 0x92, 0xf5, 0x23, 0x46, 0xbd, 0x2b, 0x98, 0x79,
-	0xd4, 0xa7, 0x43, 0xf0, 0x6a, 0x0b, 0xe6, 0x5a, 0x57, 0xb7, 0xda, 0x7b, 0x1b, 0xb6, 0xf2, 0x68,
-	0xd7, 0x1e, 0xed, 0x57, 0x15, 0xc0, 0xed, 0x28, 0xee, 0x1b, 0x98, 0x1d, 0x16, 0xcc, 0xba, 0x8e,
-	0x4f, 0x50, 0x2b, 0xe2, 0xb4, 0x8c, 0xa5, 0xd9, 0xec, 0x36, 0xac, 0xf6, 0xde, 0x73, 0xfb, 0xbe,
-	0xe9, 0xda, 0xa7, 0x97, 0xe7, 0xf6, 0xdb, 0x8a, 0xe2, 0x2e, 0xc8, 0x78, 0x1f, 0x75, 0x6a, 0x6f,
-	0x1e, 0xc4, 0x13, 0x3e, 0xf3, 0x68, 0x94, 0xc9, 0x14, 0x84, 0xb9, 0x5e, 0x3a, 0x7d, 0x54, 0x39,
-	0x3d, 0x2a, 0x7a, 0x87, 0xaa, 0xb5, 0x79, 0x8c, 0x8c, 0x5a, 0x0b, 0x9b, 0xa8, 0x39, 0x04, 0x3f,
-	0xa8, 0x47, 0x7a, 0xa2, 0xb9, 0x55, 0x8e, 0x3b, 0x68, 0xed, 0x53, 0x06, 0x62, 0x66, 0xae, 0x54,
-	0x0d, 0x95, 0x1e, 0x18, 0xa8, 0x29, 0xe9, 0x10, 0xc6, 0xd0, 0x7b, 0x8f, 0xb6, 0x8f, 0xe2, 0xe0,
-	0x42, 0x82, 0x78, 0x99, 0xa5, 0x43, 0x88, 0x53, 0xa6, 0x44, 0xdf, 0xf1, 0x88, 0xd1, 0xd9, 0x59,
-	0x02, 0x14, 0xbf, 0x40, 0xab, 0xa3, 0x69, 0xaa, 0x96, 0xd2, 0xde, 0xdb, 0x59, 0x6a, 0xd2, 0x2d,
-	0xe1, 0xbd, 0x8f, 0xc8, 0x5a, 0xa2, 0xec, 0xc2, 0x00, 0x44, 0xb1, 0x5f, 0x8c, 0xd1, 0x6a, 0xec,
-	0x8f, 0xa1, 0x3a, 0x89, 0x32, 0x2e, 0x0e, 0xa2, 0xf8, 0x95, 0x89, 0x4f, 0x41, 0xbd, 0xdf, 0x5d,
-	0x14, 0x7a, 0x3f, 0x74, 0xf4, 0x6c, 0x89, 0xfc, 0x01, 0x8b, 0x03, 0x16, 0x87, 0xf8, 0x18, 0x19,
-	0xd5, 0x29, 0x4a, 0x53, 0x7f, 0xc8, 0xa2, 0x5e, 0x17, 0xcd, 0x33, 0x45, 0x71, 0xef, 0xb8, 0xb8,
-	0x8f, 0x8c, 0xa4, 0x10, 0x67, 0x50, 0xcf, 0xe2, 0xf8, 0x7e, 0x9d, 0x87, 0xda, 0x77, 0xef, 0x74,
-	0x0f, 0x2e, 0xae, 0xe7, 0x44, 0xbb, 0x99, 0x13, 0xed, 0xe7, 0x9c, 0x68, 0xb7, 0x73, 0xa2, 0x7d,
-	0xc9, 0x89, 0xfe, 0x3d, 0x27, 0xda, 0x75, 0x4e, 0xf4, 0x9b, 0x9c, 0xe8, 0xbf, 0x72, 0xa2, 0xff,
-	0xc9, 0x89, 0x76, 0x9b, 0x13, 0xfd, 0xeb, 0x6f, 0xa2, 0x7d, 0x78, 0xa2, 0x9e, 0xc0, 0xb8, 0xe3,
-	0x27, 0xcc, 0xf9, 0xf7, 0xa7, 0xd8, 0x6f, 0x96, 0x77, 0xbd, 0xff, 0x37, 0x00, 0x00, 0xff, 0xff,
-	0x5d, 0x2b, 0x9e, 0x58, 0x22, 0x04, 0x00, 0x00,
+	// 745 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x54, 0xcd, 0x6e, 0xc3, 0x44,
+	0x10, 0xb6, 0xeb, 0x34, 0x75, 0x36, 0x2a, 0x87, 0xa5, 0x8a, 0xdc, 0x52, 0xb9, 0xa9, 0x41, 0x10,
+	0x81, 0x64, 0xab, 0x29, 0x15, 0x27, 0x0e, 0x34, 0xb4, 0x0a, 0xa5, 0x48, 0xc8, 0x4d, 0x55, 0x84,
+	0x90, 0x2c, 0xc7, 0x9e, 0x24, 0xdb, 0x3a, 0x5e, 0xb3, 0x5e, 0x27, 0xe4, 0xc6, 0x23, 0xc0, 0x4b,
+	0x20, 0x1e, 0xa5, 0xe2, 0xd4, 0x03, 0x07, 0x8e, 0x24, 0x5c, 0x38, 0xf6, 0x11, 0xd0, 0xee, 0xda,
+	0xed, 0xa5, 0x34, 0x3d, 0x79, 0xfe, 0xbe, 0xd9, 0x9d, 0xef, 0x1b, 0x2f, 0x3a, 0x9c, 0x92, 0x9f,
+	0x80, 0x79, 0xb3, 0x23, 0x2f, 0xa2, 0xe9, 0x88, 0x8c, 0xbd, 0x28, 0x21, 0x90, 0x72, 0x2f, 0x2c,
+	0xf8, 0xc4, 0xcd, 0x18, 0xe5, 0x14, 0xef, 0x93, 0x9c, 0x13, 0xea, 0xca, 0x42, 0x77, 0x76, 0xe4,
+	0xaa, 0x42, 0x57, 0x15, 0xee, 0xed, 0x8c, 0xe9, 0x98, 0xca, 0x42, 0x4f, 0x58, 0x0a, 0xb3, 0x67,
+	0x8f, 0x29, 0x1d, 0x27, 0xe0, 0x49, 0x6f, 0x58, 0x8c, 0xbc, 0xb8, 0x60, 0x21, 0x27, 0x34, 0x2d,
+	0xf3, 0x1f, 0xfc, 0xcf, 0xb1, 0x39, 0xb0, 0x19, 0x89, 0x40, 0x55, 0x39, 0x7f, 0x18, 0xc8, 0xb8,
+	0xb8, 0x19, 0xe0, 0x16, 0xaa, 0x93, 0x3c, 0x2f, 0x80, 0x59, 0x7a, 0x5b, 0xef, 0x34, 0xfc, 0xd2,
+	0xc3, 0xfb, 0xa8, 0x11, 0x16, 0x31, 0x81, 0x34, 0x82, 0xdc, 0xda, 0x68, 0x1b, 0x9d, 0x86, 0xff,
+	0x1c, 0xc0, 0xbb, 0xc8, 0xbc, 0x9d, 0xdf, 0xe5, 0x41, 0xc1, 0x88, 0x65, 0x48, 0xdc, 0x96, 0xf0,
+	0xaf, 0x19, 0xc1, 0x07, 0xa8, 0x39, 0xa2, 0x6c, 0x1e, 0xb2, 0x38, 0xb8, 0x9d, 0x73, 0xab, 0xd6,
+	0xd6, 0x3b, 0xa6, 0x8f, 0xca, 0xd0, 0xc5, 0x9c, 0xe3, 0x01, 0xda, 0xcd, 0x8a, 0x61, 0x42, 0xa2,
+	0xe0, 0x0e, 0x16, 0x41, 0x14, 0x46, 0x13, 0x08, 0xaa, 0x11, 0xac, 0xcd, 0xb6, 0xde, 0x69, 0x76,
+	0x77, 0x5d, 0x35, 0xa3, 0x5b, 0xcd, 0xe8, 0x7e, 0x59, 0x16, 0xf8, 0x2d, 0x85, 0xfd, 0x1a, 0x16,
+	0x3d, 0x81, 0xac, 0xe2, 0xb8, 0x8f, 0x1a, 0x09, 0x8d, 0xa4, 0x9d, 0x5b, 0xf5, 0xb6, 0xd1, 0x69,
+	0x76, 0x3f, 0x76, 0x5f, 0x63, 0xd7, 0xbd, 0xb8, 0x19, 0xb8, 0x97, 0x25, 0xc4, 0x7f, 0x06, 0xe3,
+	0x63, 0xd4, 0xaa, 0x66, 0x0b, 0x20, 0x9d, 0xd1, 0x45, 0x10, 0x25, 0x45, 0xce, 0x81, 0x59, 0x5b,
+	0x72, 0xd2, 0x77, 0xcb, 0x49, 0xcf, 0x44, 0xae, 0xa7, 0x52, 0xf8, 0x53, 0xd4, 0xa2, 0x05, 0xcf,
+	0x0a, 0x1e, 0x4c, 0x20, 0x8c, 0x81, 0x05, 0x55, 0x3f, 0xcb, 0x94, 0xa0, 0x1d, 0x95, 0xed, 0xcb,
+	0x64, 0x75, 0xea, 0xde, 0x39, 0x32, 0x2b, 0x1b, 0x5b, 0xa8, 0xae, 0xa0, 0x4a, 0x88, 0xbe, 0xe6,
+	0x97, 0x3e, 0x6e, 0xa1, 0xcd, 0x1f, 0x0b, 0x60, 0x0b, 0x6b, 0xa3, 0x4c, 0x28, 0xf7, 0xd4, 0x44,
+	0xf5, 0x3c, 0x9a, 0xc0, 0x14, 0x9c, 0xef, 0xd0, 0xc1, 0x59, 0x1a, 0x5f, 0xe7, 0xc0, 0xbe, 0x28,
+	0xf8, 0x04, 0x52, 0x4e, 0x54, 0xd3, 0x6f, 0x69, 0x42, 0xa2, 0xc5, 0x55, 0x06, 0x11, 0x3e, 0x41,
+	0xb5, 0xdb, 0x39, 0x57, 0x52, 0x36, 0xbb, 0x87, 0x6b, 0xa9, 0xf1, 0x65, 0xb9, 0xf3, 0x03, 0xea,
+	0xac, 0xe9, 0xec, 0xc3, 0x08, 0x98, 0xd8, 0x0a, 0x8c, 0x51, 0x2d, 0x0d, 0xa7, 0x50, 0x2e, 0x92,
+	0xb4, 0xc5, 0x1a, 0x89, 0x6f, 0x9e, 0x85, 0x11, 0xa8, 0xfb, 0xfb, 0xcf, 0x01, 0xe7, 0x4f, 0x1d,
+	0x7d, 0xb8, 0xa6, 0xfd, 0x29, 0x49, 0x63, 0x92, 0x8e, 0xf1, 0x39, 0x32, 0xcb, 0x05, 0xce, 0x2d,
+	0xfd, 0x2d, 0xf2, 0x7e, 0x25, 0x92, 0x57, 0x0a, 0xe2, 0x3f, 0x61, 0xf1, 0x10, 0x99, 0x99, 0x68,
+	0x4e, 0xa0, 0xe2, 0xe2, 0xfc, 0xf5, 0x3e, 0x6f, 0x1d, 0xdf, 0x7f, 0xea, 0xeb, 0x34, 0x51, 0xe3,
+	0x9b, 0x82, 0x17, 0x61, 0x32, 0xb8, 0xbc, 0x72, 0x7e, 0xd3, 0xd1, 0x3b, 0x3d, 0x06, 0xb1, 0x00,
+	0x87, 0x89, 0xd4, 0x62, 0x07, 0xd5, 0x52, 0x9a, 0x2a, 0xa2, 0xcc, 0xbe, 0xe6, 0x4b, 0x0f, 0x7f,
+	0x8e, 0x6a, 0x53, 0x9e, 0xe4, 0x92, 0xa5, 0x66, 0xf7, 0xa3, 0xd7, 0x6f, 0xf5, 0xd4, 0x5f, 0xc0,
+	0x05, 0x0c, 0x9f, 0x20, 0x43, 0xfc, 0x6f, 0x86, 0x44, 0xaf, 0xd7, 0xb7, 0xaf, 0xf9, 0xa2, 0x5e,
+	0x2c, 0x51, 0x16, 0xb2, 0x70, 0x9a, 0x3b, 0x9f, 0xa1, 0x6d, 0xc9, 0xd9, 0x0d, 0x65, 0x77, 0x09,
+	0x0d, 0xe3, 0x17, 0xf5, 0xc4, 0xa8, 0x96, 0x51, 0xc6, 0x25, 0x75, 0xdb, 0xbe, 0xb4, 0x9d, 0x5f,
+	0x75, 0xf4, 0xde, 0x4b, 0xf4, 0x54, 0xd2, 0xf5, 0x50, 0x9d, 0x87, 0x6c, 0x0c, 0xbc, 0x14, 0xee,
+	0x93, 0x37, 0x08, 0x57, 0x5d, 0xc2, 0x2f, 0xa1, 0xf2, 0x60, 0x00, 0x56, 0x3e, 0x45, 0xd2, 0x16,
+	0xaf, 0x10, 0xa4, 0x71, 0x50, 0xe4, 0xc0, 0x2c, 0x43, 0xc6, 0xb7, 0x40, 0xa9, 0x75, 0x7a, 0x7d,
+	0xbf, 0xb4, 0xb5, 0x87, 0xa5, 0xad, 0xfd, 0xb5, 0xb4, 0xb5, 0xc7, 0xa5, 0xad, 0xfd, 0xbc, 0xb2,
+	0xf5, 0xdf, 0x57, 0xb6, 0x76, 0xbf, 0xb2, 0xf5, 0x87, 0x95, 0xad, 0xff, 0xbd, 0xb2, 0xf5, 0x7f,
+	0x57, 0xb6, 0xf6, 0xb8, 0xb2, 0xf5, 0x5f, 0xfe, 0xb1, 0xb5, 0xef, 0xdf, 0x57, 0x97, 0x22, 0xd4,
+	0x0b, 0x33, 0xe2, 0xbd, 0xfc, 0x86, 0x0e, 0xeb, 0xf2, 0x41, 0x3a, 0xfe, 0x2f, 0x00, 0x00, 0xff,
+	0xff, 0x82, 0x6f, 0x32, 0xe2, 0xdb, 0x05, 0x00, 0x00,
 }

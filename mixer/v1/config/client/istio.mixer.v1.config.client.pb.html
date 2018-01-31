@@ -70,22 +70,18 @@ Cookie: X-API-KEY=abcdef12345
 
 </td>
 </tr>
-</tbody>
 </table>
 </section>
-<h2 id="AttributeMatch">AttributeMatch</h2>
+<h3 id="AttributeMatch">AttributeMatch</h3>
 <section>
 <p>Specifies a match clause to match Istio attributes</p>
 
 <table class="message-fields">
-<thead>
 <tr>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
 </tr>
-</thead>
-<tbody>
 <tr id="AttributeMatch.clause">
 <td><code>clause</code></td>
 <td><code>map&lt;string, <a href="#StringMatch">StringMatch</a>&gt;</code></td>
@@ -103,22 +99,18 @@ Each map element specifies one condition to match.</p>
 
 </td>
 </tr>
-</tbody>
 </table>
 </section>
-<h2 id="EndUserAuthenticationPolicySpec">EndUserAuthenticationPolicySpec</h2>
+<h3 id="EndUserAuthenticationPolicySpec">EndUserAuthenticationPolicySpec</h3>
 <section>
 <p>Determines how to apply auth policies for individual requests.</p>
 
 <table class="message-fields">
-<thead>
 <tr>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
 </tr>
-</thead>
-<tbody>
 <tr id="EndUserAuthenticationPolicySpec.jwts">
 <td><code>jwts</code></td>
 <td><code><a href="#JWT">JWT[]</a></code></td>
@@ -149,23 +141,19 @@ include a JWT.</p>
 
 </td>
 </tr>
-</tbody>
 </table>
 </section>
-<h2 id="EndUserAuthenticationPolicySpecBinding">EndUserAuthenticationPolicySpecBinding</h2>
+<h3 id="EndUserAuthenticationPolicySpecBinding">EndUserAuthenticationPolicySpecBinding</h3>
 <section>
 <p>EndUserAuthenticationPolicySpecBinding defines the binding between
 EndUserAuthenticationPolicySpecs and one or more IstioService.</p>
 
 <table class="message-fields">
-<thead>
 <tr>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
 </tr>
-</thead>
-<tbody>
 <tr id="EndUserAuthenticationPolicySpecBinding.services">
 <td><code>services</code></td>
 <td><code><a href="#IstioService">IstioService[]</a></code></td>
@@ -184,20 +172,16 @@ that should be mapped to the specified service(s).</p>
 
 </td>
 </tr>
-</tbody>
 </table>
 </section>
-<h2 id="EndUserAuthenticationPolicySpecReference">EndUserAuthenticationPolicySpecReference</h2>
+<h3 id="EndUserAuthenticationPolicySpecReference">EndUserAuthenticationPolicySpecReference</h3>
 <section>
 <table class="message-fields">
-<thead>
 <tr>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
 </tr>
-</thead>
-<tbody>
 <tr id="EndUserAuthenticationPolicySpecReference.name">
 <td><code>name</code></td>
 <td><code>string</code></td>
@@ -218,10 +202,9 @@ metadata namespace field.</p>
 
 </td>
 </tr>
-</tbody>
 </table>
 </section>
-<h2 id="HTTPAPISpec">HTTPAPISpec</h2>
+<h3 id="HTTPAPISpec">HTTPAPISpec</h3>
 <section>
 <p>HTTPAPISpec defines the canonical configuration for generating
 API-related attributes from HTTP requests based on the method and
@@ -268,17 +251,14 @@ spec:
 </code></pre>
 
 <table class="message-fields">
-<thead>
 <tr>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
 </tr>
-</thead>
-<tbody>
 <tr id="HTTPAPISpec.attributes">
 <td><code>attributes</code></td>
-<td><code><a href="#istio.mixer.v1.Attributes">istio.mixer.v1.Attributes</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/api/istio.mixer.v1.html#Attributes">istio.mixer.v1.Attributes</a></code></td>
 <td>
 <p>List of attributes that are generated when <em>any</em> of the HTTP
 patterns match. This list typically includes the &ldquo;api.service&rdquo;
@@ -360,10 +340,9 @@ conditions defined in the HTTPAPISpecs should not overlap.</p>
 
 </td>
 </tr>
-</tbody>
 </table>
 </section>
-<h2 id="HTTPAPISpecPattern">HTTPAPISpecPattern</h2>
+<h3 id="HTTPAPISpecPattern">HTTPAPISpecPattern</h3>
 <section>
 <p>HTTPAPISpecPattern defines a single pattern to match against
 incoming HTTP requests. The per-pattern list of attributes is
@@ -798,13 +777,12 @@ query parameter name.</p>
 </tbody>
 </table>
 </section>
-<h2 id="QuotaRule">QuotaRule</h2>
+<h3 id="QuotaRule">QuotaRule</h3>
 <section>
 <p>Specifies a rule with list of matches and list of quotas.
 If any clause matched, the list of quotas will be used.</p>
 
 <table class="message-fields">
-<thead>
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -862,7 +840,6 @@ If any of match is true, it is matched.</p>
 IstioService.</p>
 
 <table class="message-fields">
-<thead>
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -954,7 +931,7 @@ metadata namespace field.</p>
 </tr>
 <tr id="ServiceConfig.mixer_attributes">
 <td><code>mixerAttributes</code></td>
-<td><code><a href="#istio.mixer.v1.Attributes">istio.mixer.v1.Attributes</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/api/istio.mixer.v1.html#Attributes">istio.mixer.v1.Attributes</a></code></td>
 <td>
 <p>Send these attributes to Mixer in both Check and Report. This
 typically includes the &ldquo;destination.service&rdquo; attribute.</p>
