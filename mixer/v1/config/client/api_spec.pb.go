@@ -22,7 +22,7 @@
 		EndUserAuthenticationPolicySpecReference
 		EndUserAuthenticationPolicySpecBinding
 		MutualTLS
-		CredentialSpec
+		AuthenticationMechanism
 		IstioWorkload
 		AuthenticationPolicy
 		ServiceConfig
