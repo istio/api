@@ -24,7 +24,7 @@
 		MutualTLS
 		CredentialSpec
 		IstioWorkload
-		AuthenticationPolicyBinding
+		AuthenticationPolicy
 		ServiceConfig
 		TransportConfig
 		HttpClientConfig
