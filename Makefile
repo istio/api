@@ -153,7 +153,7 @@ broker_v1_pb_doc := $(broker_v1_path)/istio.broker.dev.pb.html
 generate-broker-go: $(broker_v1_pb_gos) $(broker_v1_pb_doc)
 
 $(broker_v1_pb_gos) $(broker_v1_pb_doc): $(broker_v1_protos) | depend $(protoc_gen_go) $(protoc_bin)
-	## Generate broker/v1/config/*.pb.go + $(broker_v1_pb_doc)
+	## Generate broker/dev/*.pb.go + $(broker_v1_pb_doc)
 	$(protoc) $(proto_path) $(protoc_gen_go_plugin) $(protoc_gen_docs_plugin)$(broker_v1_path) $^
 
 clean-broker-generated:

@@ -32,6 +32,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
+// $hide_from_docs
 // ServiceClass defines a service that are exposed to Istio service consumers.
 // The service is linked into one or more ServicePlan.
 type ServiceClass struct {
@@ -60,6 +61,7 @@ func (m *ServiceClass) GetEntry() *CatalogEntry {
 	return nil
 }
 
+// $hide_from_docs
 // Deployment defines how the service instances are deployed.
 type Deployment struct {
 	// For truely multi-tenant service, the deployed service instance name.
@@ -78,6 +80,7 @@ func (m *Deployment) GetInstance() string {
 	return ""
 }
 
+// $hide_from_docs
 // CatalogEntry defines listing information for this service within the exposed
 // catalog.  The message is a subset of OSBI service fields defined in
 // https://github.com/openservicebrokerapi

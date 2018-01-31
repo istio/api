@@ -12,6 +12,7 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+// $hide_from_docs
 // ServicePlan defines the type of services available to Istio service
 // consumers.  One or more services are included in a plan. The plan is flexible
 // and subject to change along with business requirements.
@@ -43,6 +44,7 @@ func (m *ServicePlan) GetServices() []string {
 	return nil
 }
 
+// $hide_from_docs
 // CatalogPlan defines listing information for this service plan within the
 // exposed catalog.  The message is a subset of OSBI plan fields defined in
 // https://github.com/openservicebrokerapi
