@@ -19,7 +19,6 @@ package istio.mixer.v1.config.client;
 option go_package = "istio.io/api/mixer/v1/config/client";
 
 import "gogoproto/gogo.proto";
-// import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 import "mixer/v1/config/client/service.proto";
 
@@ -177,12 +176,4 @@ message EndUserAuthenticationPolicySpecBinding {
   // that should be mapped to the specified service(s).
   // WIP: to be replaced by AuthenticationPolicy.
   repeated EndUserAuthenticationPolicySpecReference policies = 2;
-}
-
-// Placer holder for mTLS authentication params.
-message MutualTLS {
-  // This field is specific for Envoy proxy implementation.
-  // Defines the header location to store the authentiated claims. If blank, a
-  // implementation-specific default value will be used.
-  string output_header_location = 1;
 }

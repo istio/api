@@ -21,7 +21,6 @@
 		EndUserAuthenticationPolicySpec
 		EndUserAuthenticationPolicySpecReference
 		EndUserAuthenticationPolicySpecBinding
-		MutualTLS
 		ServiceConfig
 		TransportConfig
 		HttpClientConfig
