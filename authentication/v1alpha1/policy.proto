@@ -40,7 +40,7 @@ message MutualTLS {
 //     jwks_uri: https://example.com/.well-known/jwks.json
 //
 message JWT {
-  // Identifies the principal that issued the JWT. See
+  // Identifies the issuer that issued the JWT. See
   // https://tools.ietf.org/html/rfc7519#section-4.1.1
   // Usually a URL or an email address.
   //
@@ -77,7 +77,7 @@ message JWT {
   // Example: https://www.googleapis.com/oauth2/v1/certs
   string jwks_uri = 3;
 
-  // Defines where to extract the JWT from an HTTP request.
+  // Two fields below define where to extract the JWT from an HTTP request.
   //
   // If no explicit location is specified the following default
   // locations are tried in order:
@@ -88,25 +88,19 @@ message JWT {
   //
   //     2) `access_token` query parameter (see
   //     https://tools.ietf.org/html/rfc6750#section-2.3)
-  //
-  message Location {
-    oneof scheme {
-      // JWT is sent in a request header. `header` represents the
-      // header name.
-      //
-      // For example, if `header=x-goog-iap-jwt-assertion`, the header
-      // format will be x-goog-iap-jwt-assertion: <JWT>.
-      //
-      string header = 1;
 
-      // JWT is sent in a query parameter. `query` represents the
-      // query parameter name.
-      //
-      // For example, `query=jwt_token`.
-      string query = 2;
-    }
-  }
-  repeated Location locations = 6;
+  // JWT is sent in a request header. `header` represents the
+  // header name.
+  //
+  // For example, if `header=x-goog-iap-jwt-assertion`, the header
+  // format will be x-goog-iap-jwt-assertion: <JWT>.
+  repeated string jwt_headers = 6;
+
+  // JWT is sent in a query parameter. `query` represents the
+  // query parameter name.
+  //
+  // For example, `query=jwt_token`.
+  repeated string jwt_params = 7;
 }
 
 // AuthenticaitonMechanism defines one particular type of authentication (i.e

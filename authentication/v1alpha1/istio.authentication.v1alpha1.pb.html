@@ -146,7 +146,7 @@ jwks_uri: https://example.com/.well-known/jwks.json
 <td><code>issuer</code></td>
 <td><code>string</code></td>
 <td>
-<p>Identifies the principal that issued the JWT. See
+<p>Identifies the issuer that issued the JWT. See
 https://tools.ietf.org/html/rfc7519#section-4.1.1
 Usually a URL or an email address.</p>
 
@@ -193,38 +193,9 @@ Google service account).</p>
 
 </td>
 </tr>
-<tr id="JWT.locations">
-<td><code>locations</code></td>
-<td><code><a href="#JWT.Location">JWT.Location[]</a></code></td>
-<td>
-</td>
-</tr>
-</table>
-</section>
-<h2 id="JWT.Location">JWT.Location</h2>
-<section>
-<p>Defines where to extract the JWT from an HTTP request.</p>
-
-<p>If no explicit location is specified the following default
-locations are tried in order:</p>
-
-<pre><code>1) The Authorization header using the Bearer schema,
-   e.g. Authorization: Bearer &lt;token&gt;. (see
-   https://tools.ietf.org/html/rfc6750#section-2.1)
-
-2) `access_token` query parameter (see
-https://tools.ietf.org/html/rfc6750#section-2.3)
-</code></pre>
-
-<table>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-<tr id="JWT.Location.header" class="oneof oneof-start">
-<td><code>header</code></td>
-<td><code>string (oneof)</code></td>
+<tr id="JWT.jwt_headers">
+<td><code>jwtHeaders</code></td>
+<td><code>string[]</code></td>
 <td>
 <p>JWT is sent in a request header. <code>header</code> represents the
 header name.</p>
@@ -234,9 +205,9 @@ format will be x-goog-iap-jwt-assertion: <JWT>.</p>
 
 </td>
 </tr>
-<tr id="JWT.Location.query" class="oneof">
-<td><code>query</code></td>
-<td><code>string (oneof)</code></td>
+<tr id="JWT.jwt_params">
+<td><code>jwtParams</code></td>
+<td><code>string[]</code></td>
 <td>
 <p>JWT is sent in a query parameter. <code>query</code> represents the
 query parameter name.</p>
