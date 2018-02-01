@@ -38,7 +38,8 @@ naming convention:
 ## Versioning
 
 When defining Kubernetes Custom Resource Definition (CRD) using
-proto3, the proto versioning should match the Kubernetes versioning,
+proto3, the proto versioning must match the Kubernetes versioning,
+and the proto message type must match the CRD kind name.
 see the following example.
 
 The Kubernetes CRD:
