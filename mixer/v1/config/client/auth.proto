@@ -16,7 +16,7 @@ syntax = "proto3";
 
 package istio.mixer.v1.config.client;
 
-option go_package = "istio.io/api/mixer/v1/config/client";
+option go_package="istio.io/api/mixer/v1/config/client";
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
@@ -66,8 +66,7 @@ message JWT {
   repeated string audiences = 2;
 
   // URL of the provider's public key set to validate signature of the
-  // JWT. See [OpenID
-  // Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
+  // JWT. See [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
   //
   // Optional if the key set document can either (a) be retrieved from
   // [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)
@@ -78,8 +77,7 @@ message JWT {
   string jwks_uri = 3;
 
   // If true, forward the entire base64 encoded JWT in the HTTP request.
-  // If false, remove the JWT from the HTTP request and do not forward to the
-  // application.
+  // If false, remove the JWT from the HTTP request and do not forward to the application.
   bool forward_jwt = 4;
 
   // Duration after which the cached public key should be expired. The
@@ -124,7 +122,6 @@ message JWT {
 }
 
 // Determines how to apply auth policies for individual requests.
-// WIP: to be replaced by AuthenticationPolicy.
 message EndUserAuthenticationPolicySpec {
   // List of JWT rules to valide.
   //
@@ -151,7 +148,6 @@ message EndUserAuthenticationPolicySpec {
   repeated JWT jwts = 2;
 }
 
-// WIP: to be replaced by AuthenticationPolicy.
 message EndUserAuthenticationPolicySpecReference {
   // REQUIRED. The short name of the
   // EndUserAuthenticationPolicySpec. This is the resource name
@@ -166,7 +162,6 @@ message EndUserAuthenticationPolicySpecReference {
 
 // EndUserAuthenticationPolicySpecBinding defines the binding between
 // EndUserAuthenticationPolicySpecs and one or more IstioService.
-// WIP: to be replaced by AuthenticationPolicy.
 message EndUserAuthenticationPolicySpecBinding {
   // REQUIRED. One or more services to map the listed
   // EndUserAuthenticationPolicySpecs onto.
@@ -174,6 +169,5 @@ message EndUserAuthenticationPolicySpecBinding {
 
   // REQUIRED. One or more EndUserAuthenticationPolicySpecReference
   // that should be mapped to the specified service(s).
-  // WIP: to be replaced by AuthenticationPolicy.
   repeated EndUserAuthenticationPolicySpecReference policies = 2;
 }

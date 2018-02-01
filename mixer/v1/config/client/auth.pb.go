@@ -57,8 +57,7 @@ type JWT struct {
 	//
 	Audiences []string `protobuf:"bytes,2,rep,name=audiences" json:"audiences,omitempty"`
 	// URL of the provider's public key set to validate signature of the
-	// JWT. See [OpenID
-	// Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
+	// JWT. See [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 	//
 	// Optional if the key set document can either (a) be retrieved from
 	// [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)
@@ -68,8 +67,7 @@ type JWT struct {
 	// Example: https://www.googleapis.com/oauth2/v1/certs
 	JwksUri string `protobuf:"bytes,3,opt,name=jwks_uri,json=jwksUri,proto3" json:"jwks_uri,omitempty"`
 	// If true, forward the entire base64 encoded JWT in the HTTP request.
-	// If false, remove the JWT from the HTTP request and do not forward to the
-	// application.
+	// If false, remove the JWT from the HTTP request and do not forward to the application.
 	ForwardJwt bool `protobuf:"varint,4,opt,name=forward_jwt,json=forwardJwt,proto3" json:"forward_jwt,omitempty"`
 	// Duration after which the cached public key should be expired. The
 	// system wide default is applied if no duration is explicitly
@@ -212,7 +210,6 @@ func _JWT_Location_OneofSizer(msg proto.Message) (n int) {
 }
 
 // Determines how to apply auth policies for individual requests.
-// WIP: to be replaced by AuthenticationPolicy.
 type EndUserAuthenticationPolicySpec struct {
 	// List of JWT rules to valide.
 	//
@@ -245,7 +242,6 @@ func (*EndUserAuthenticationPolicySpec) Descriptor() ([]byte, []int) {
 	return fileDescriptorAuth, []int{1}
 }
 
-// WIP: to be replaced by AuthenticationPolicy.
 type EndUserAuthenticationPolicySpecReference struct {
 	// REQUIRED. The short name of the
 	// EndUserAuthenticationPolicySpec. This is the resource name
@@ -267,14 +263,12 @@ func (*EndUserAuthenticationPolicySpecReference) Descriptor() ([]byte, []int) {
 
 // EndUserAuthenticationPolicySpecBinding defines the binding between
 // EndUserAuthenticationPolicySpecs and one or more IstioService.
-// WIP: to be replaced by AuthenticationPolicy.
 type EndUserAuthenticationPolicySpecBinding struct {
 	// REQUIRED. One or more services to map the listed
 	// EndUserAuthenticationPolicySpecs onto.
 	Services []*IstioService `protobuf:"bytes,1,rep,name=services" json:"services,omitempty"`
 	// REQUIRED. One or more EndUserAuthenticationPolicySpecReference
 	// that should be mapped to the specified service(s).
-	// WIP: to be replaced by AuthenticationPolicy.
 	Policies []*EndUserAuthenticationPolicySpecReference `protobuf:"bytes,2,rep,name=policies" json:"policies,omitempty"`
 }
 
