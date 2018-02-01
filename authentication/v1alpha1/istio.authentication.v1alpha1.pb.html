@@ -22,13 +22,13 @@ the type of the &ldquo;params&rdquo; field.</p>
 </tr>
 <tr id="AuthenticationMechanism.mtls" class="oneof">
 <td><code>mtls</code></td>
-<td><code><a href="#MutualTLS">MutualTLS (oneof)</a></code></td>
+<td><code><a href="#MutualTls">MutualTls (oneof)</a></code></td>
 <td>
 </td>
 </tr>
 <tr id="AuthenticationMechanism.jwt" class="oneof">
 <td><code>jwt</code></td>
-<td><code><a href="#JWT">JWT (oneof)</a></code></td>
+<td><code><a href="#Jwt">Jwt (oneof)</a></code></td>
 <td>
 </td>
 </tr>
@@ -119,7 +119,7 @@ request.auth.principal/audiences/presenter if authentication succeed.</p>
 </tr>
 </table>
 </section>
-<h2 id="JWT">JWT</h2>
+<h2 id="Jwt">Jwt</h2>
 <section>
 <p>JSON Web Token (JWT) token format for authentication as defined by
 https://tools.ietf.org/html/rfc7519. See <a href="https://tools.ietf.org/html/rfc6749">OAuth
@@ -142,7 +142,7 @@ jwks_uri: https://example.com/.well-known/jwks.json
 <th>Type</th>
 <th>Description</th>
 </tr>
-<tr id="JWT.issuer">
+<tr id="Jwt.issuer">
 <td><code>issuer</code></td>
 <td><code>string</code></td>
 <td>
@@ -155,7 +155,7 @@ Example: 1234567-compute@developer.gserviceaccount.com</p>
 
 </td>
 </tr>
-<tr id="JWT.audiences">
+<tr id="Jwt.audiences">
 <td><code>audiences</code></td>
 <td><code>string[]</code></td>
 <td>
@@ -175,7 +175,7 @@ audiences will be accepted.</p>
 
 </td>
 </tr>
-<tr id="JWT.jwks_uri">
+<tr id="Jwt.jwks_uri">
 <td><code>jwksUri</code></td>
 <td><code>string</code></td>
 <td>
@@ -193,7 +193,7 @@ Google service account).</p>
 
 </td>
 </tr>
-<tr id="JWT.jwt_headers">
+<tr id="Jwt.jwt_headers">
 <td><code>jwtHeaders</code></td>
 <td><code>string[]</code></td>
 <td>
@@ -205,7 +205,7 @@ format will be x-goog-iap-jwt-assertion: <JWT>.</p>
 
 </td>
 </tr>
-<tr id="JWT.jwt_params">
+<tr id="Jwt.jwt_params">
 <td><code>jwtParams</code></td>
 <td><code>string[]</code></td>
 <td>
@@ -218,7 +218,7 @@ query parameter name.</p>
 </tr>
 </table>
 </section>
-<h2 id="MutualTLS">MutualTLS</h2>
+<h2 id="MutualTls">MutualTls</h2>
 <section>
 <p>Place holder for mTLS authentication params.</p>
 

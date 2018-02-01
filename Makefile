@@ -299,7 +299,7 @@ clean-rbac-generated:
 authn_v1alpha1_path := authentication/v1alpha1
 authn_v1alpha1_protos := $(shell find $(authn_v1alpha1_path) -type f -name '*.proto' | sort)
 authn_v1alpha1_pb_gos := $(authn_v1alpha1_protos:.proto=.pb.go)
-authn_v1alpha1_pb_doc := $(authn_v1alpha1_path)/istio.rbac.v1alpha1.pb.html
+authn_v1alpha1_pb_doc := $(authn_v1alpha1_path)/istio.authentication.v1alpha1.pb.html
 
 generate-authn-go: $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc)
 
