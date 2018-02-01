@@ -2,37 +2,6 @@
 title: istio.authentication.v1alpha1
 layout: protoc-gen-docs
 ---
-<h2 id="Destination">Destination</h2>
-<section>
-<table>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-<tr id="Destination.name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>REQUIRED. The name can be a short name or a fully qualified domain
-name from the service registry, a resolvable DNS name, or an IP
-address.
-If short names are used, the FQDN of the service will be resolved in a
-platform specific manner.</p>
-
-</td>
-</tr>
-<tr id="Destination.ports">
-<td><code>ports</code></td>
-<td><code>uint32[]</code></td>
-<td>
-<p>Optional. List of ports that service are exposed on. Leave blank to applied
-to all ports.</p>
-
-</td>
-</tr>
-</table>
-</section>
 <h2 id="JWT">JWT</h2>
 <section>
 <p>JSON Web Token (JWT) token format for authentication as defined by
@@ -229,8 +198,8 @@ metadata:
 spec:
   match:
   - name: productpage
-    ports:
-    - 9000
+    port:
+      number: 9000
   peer:
   - mtls:
   end_user:
@@ -251,7 +220,7 @@ spec:
 </tr>
 <tr id="Policy.match">
 <td><code>match</code></td>
-<td><code><a href="#Destination">Destination[]</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/istio.routing.v1alpha2.html#Destination">istio.routing.v1alpha2.Destination[]</a></code></td>
 <td>
 <p>List of destinations (workloads) that the policy should be applied on.
 If empty, policy will be used on all destinations in the same namespace.</p>
