@@ -122,11 +122,6 @@ message JWT {
   // This field is specific for Envoy proxy implementation.
   // It is the cluster name in the Envoy config for the jwks_uri.
   string jwks_uri_envoy_cluster = 7;
-
-  // This field is specific for Envoy proxy implementation.
-  // Defines the header location to (re)store the authentiated claims. If not
-  // set, a default value will be used (as of speaking, sec-istio-auth-userinfo)
-  string output_header_location = 8;
 }
 
 // Determines how to apply auth policies for individual requests.
@@ -190,49 +185,4 @@ message MutualTLS {
   // Defines the header location to store the authentiated claims. If blank, a
   // implementation-specific default value will be used.
   string output_header_location = 1;
-}
-
-// AuthenticationMechanism defines one particular type of authentication (i.e
-// mutual TLS, JWT etc). The type can be progammatically determine by checking
-// the type of the "params" field.
-message AuthenticationMechanism {
-  oneof params {
-    bool none = 1;
-    MutualTLS mtls = 2;
-    JWT jwt = 3;
-  }
-}
-
-// IstioWorkload identifies workload, desgined specifically for authentication policy target.
-// Different from IstioService, this one:
-// - doesn't contain namespace/domain. All of these are extracted from metadata
-// to construct FQDN service name
-// - port is part of the identifiers.
-message IstioWorkload {
-  // The short name of the service such as "foo".
-  string name = 1;
-
-  // Optional. Leave blank to refer to worload on every port that the service provides.
-  repeated uint32 port = 2;
-}
-
-// AuthenticationPolicy binds credentials to workload(s).
-// Authentication policy is composed of 2-part authentication:
-// - peer: verify caller service credentials.
-// - end_user: verify end-user credentials.
-// For each part, if it's not empty, at least one of those listed credential
-// must be provided and  (successfully) verified for the authentication to pass.
-message AuthenticationPolicy {
-  // If empty, the policy will be applied on all services in the same namespace as the policy.
-  repeated IstioWorkload target = 1;
-
-  // List of credential that should be checked by peer authentication. They
-  // will be validated in sequence, until the first one satisfied (if none found,
-  // the whole authentication should fail).
-  // The validated credential will be used to extract peer identity (i.e the
-  // source.user attribute in the request to mixer).
-  repeated AuthenticationMechanism peer = 2;
-
-  // Similar to above, but for end_user authentication.
-  repeated AuthenticationMechanism end_user = 3;
 }

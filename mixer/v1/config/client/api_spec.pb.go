@@ -22,9 +22,6 @@
 		EndUserAuthenticationPolicySpecReference
 		EndUserAuthenticationPolicySpecBinding
 		MutualTLS
-		AuthenticationMechanism
-		IstioWorkload
-		AuthenticationPolicy
 		ServiceConfig
 		TransportConfig
 		HttpClientConfig

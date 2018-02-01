@@ -79,10 +79,6 @@ type JWT struct {
 	// This field is specific for Envoy proxy implementation.
 	// It is the cluster name in the Envoy config for the jwks_uri.
 	JwksUriEnvoyCluster string `protobuf:"bytes,7,opt,name=jwks_uri_envoy_cluster,json=jwksUriEnvoyCluster,proto3" json:"jwks_uri_envoy_cluster,omitempty"`
-	// This field is specific for Envoy proxy implementation.
-	// Defines the header location to (re)store the authentiated claims. If not
-	// set, a default value will be used (as of speaking, sec-istio-auth-userinfo)
-	OutputHeaderLocation string `protobuf:"bytes,8,opt,name=output_header_location,json=outputHeaderLocation,proto3" json:"output_header_location,omitempty"`
 }
 
 func (m *JWT) Reset()                    { *m = JWT{} }
@@ -302,200 +298,6 @@ func (m *MutualTLS) Reset()                    { *m = MutualTLS{} }
 func (*MutualTLS) ProtoMessage()               {}
 func (*MutualTLS) Descriptor() ([]byte, []int) { return fileDescriptorAuth, []int{4} }
 
-// AuthenticationMechanism defines one particular type of authentication (i.e
-// mutual TLS, JWT etc). The type can be progammatically determine by checking
-// the type of the "params" field.
-type AuthenticationMechanism struct {
-	// Types that are valid to be assigned to Params:
-	//	*AuthenticationMechanism_None
-	//	*AuthenticationMechanism_Mtls
-	//	*AuthenticationMechanism_Jwt
-	Params isAuthenticationMechanism_Params `protobuf_oneof:"params"`
-}
-
-func (m *AuthenticationMechanism) Reset()                    { *m = AuthenticationMechanism{} }
-func (*AuthenticationMechanism) ProtoMessage()               {}
-func (*AuthenticationMechanism) Descriptor() ([]byte, []int) { return fileDescriptorAuth, []int{5} }
-
-type isAuthenticationMechanism_Params interface {
-	isAuthenticationMechanism_Params()
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type AuthenticationMechanism_None struct {
-	None bool `protobuf:"varint,1,opt,name=none,proto3,oneof"`
-}
-type AuthenticationMechanism_Mtls struct {
-	Mtls *MutualTLS `protobuf:"bytes,2,opt,name=mtls,oneof"`
-}
-type AuthenticationMechanism_Jwt struct {
-	Jwt *JWT `protobuf:"bytes,3,opt,name=jwt,oneof"`
-}
-
-func (*AuthenticationMechanism_None) isAuthenticationMechanism_Params() {}
-func (*AuthenticationMechanism_Mtls) isAuthenticationMechanism_Params() {}
-func (*AuthenticationMechanism_Jwt) isAuthenticationMechanism_Params()  {}
-
-func (m *AuthenticationMechanism) GetParams() isAuthenticationMechanism_Params {
-	if m != nil {
-		return m.Params
-	}
-	return nil
-}
-
-func (m *AuthenticationMechanism) GetNone() bool {
-	if x, ok := m.GetParams().(*AuthenticationMechanism_None); ok {
-		return x.None
-	}
-	return false
-}
-
-func (m *AuthenticationMechanism) GetMtls() *MutualTLS {
-	if x, ok := m.GetParams().(*AuthenticationMechanism_Mtls); ok {
-		return x.Mtls
-	}
-	return nil
-}
-
-func (m *AuthenticationMechanism) GetJwt() *JWT {
-	if x, ok := m.GetParams().(*AuthenticationMechanism_Jwt); ok {
-		return x.Jwt
-	}
-	return nil
-}
-
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*AuthenticationMechanism) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _AuthenticationMechanism_OneofMarshaler, _AuthenticationMechanism_OneofUnmarshaler, _AuthenticationMechanism_OneofSizer, []interface{}{
-		(*AuthenticationMechanism_None)(nil),
-		(*AuthenticationMechanism_Mtls)(nil),
-		(*AuthenticationMechanism_Jwt)(nil),
-	}
-}
-
-func _AuthenticationMechanism_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*AuthenticationMechanism)
-	// params
-	switch x := m.Params.(type) {
-	case *AuthenticationMechanism_None:
-		t := uint64(0)
-		if x.None {
-			t = 1
-		}
-		_ = b.EncodeVarint(1<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *AuthenticationMechanism_Mtls:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Mtls); err != nil {
-			return err
-		}
-	case *AuthenticationMechanism_Jwt:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Jwt); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("AuthenticationMechanism.Params has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _AuthenticationMechanism_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*AuthenticationMechanism)
-	switch tag {
-	case 1: // params.none
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Params = &AuthenticationMechanism_None{x != 0}
-		return true, err
-	case 2: // params.mtls
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(MutualTLS)
-		err := b.DecodeMessage(msg)
-		m.Params = &AuthenticationMechanism_Mtls{msg}
-		return true, err
-	case 3: // params.jwt
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(JWT)
-		err := b.DecodeMessage(msg)
-		m.Params = &AuthenticationMechanism_Jwt{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _AuthenticationMechanism_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*AuthenticationMechanism)
-	// params
-	switch x := m.Params.(type) {
-	case *AuthenticationMechanism_None:
-		n += proto.SizeVarint(1<<3 | proto.WireVarint)
-		n += 1
-	case *AuthenticationMechanism_Mtls:
-		s := proto.Size(x.Mtls)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *AuthenticationMechanism_Jwt:
-		s := proto.Size(x.Jwt)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
-// IstioWorkload identifies workload, desgined specifically for authentication policy target.
-// Different from IstioService, this one:
-// - doesn't contain namespace/domain. All of these are extracted from metadata
-// to construct FQDN service name
-// - port is part of the identifiers.
-type IstioWorkload struct {
-	// The short name of the service such as "foo".
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// Optional. Leave blank to refer to worload on every port that the service provides.
-	Port []uint32 `protobuf:"varint,2,rep,packed,name=port" json:"port,omitempty"`
-}
-
-func (m *IstioWorkload) Reset()                    { *m = IstioWorkload{} }
-func (*IstioWorkload) ProtoMessage()               {}
-func (*IstioWorkload) Descriptor() ([]byte, []int) { return fileDescriptorAuth, []int{6} }
-
-// AuthenticationPolicy binds credentials to workload(s).
-// Authentication policy is composed of 2-part authentication:
-// - peer: verify caller service credentials.
-// - end_user: verify end-user credentials.
-// For each part, if it's not empty, at least one of those listed credential
-// must be provided and  (successfully) verified for the authentication to pass.
-type AuthenticationPolicy struct {
-	// If empty, the policy will be applied on all services in the same namespace as the policy.
-	Target []*IstioWorkload `protobuf:"bytes,1,rep,name=target" json:"target,omitempty"`
-	// List of credential that should be checked by peer authentication. They
-	// will be validated in sequence, until the first one satisfied (if none found,
-	// the whole authentication should fail).
-	// The validated credential will be used to extract peer identity (i.e the
-	// source.user attribute in the request to mixer).
-	Peer []*AuthenticationMechanism `protobuf:"bytes,2,rep,name=peer" json:"peer,omitempty"`
-	// Similar to above, but for end_user authentication.
-	EndUser []*AuthenticationMechanism `protobuf:"bytes,3,rep,name=end_user,json=endUser" json:"end_user,omitempty"`
-}
-
-func (m *AuthenticationPolicy) Reset()                    { *m = AuthenticationPolicy{} }
-func (*AuthenticationPolicy) ProtoMessage()               {}
-func (*AuthenticationPolicy) Descriptor() ([]byte, []int) { return fileDescriptorAuth, []int{7} }
-
 func init() {
 	proto.RegisterType((*JWT)(nil), "istio.mixer.v1.config.client.JWT")
 	proto.RegisterType((*JWT_Location)(nil), "istio.mixer.v1.config.client.JWT.Location")
@@ -503,9 +305,6 @@ func init() {
 	proto.RegisterType((*EndUserAuthenticationPolicySpecReference)(nil), "istio.mixer.v1.config.client.EndUserAuthenticationPolicySpecReference")
 	proto.RegisterType((*EndUserAuthenticationPolicySpecBinding)(nil), "istio.mixer.v1.config.client.EndUserAuthenticationPolicySpecBinding")
 	proto.RegisterType((*MutualTLS)(nil), "istio.mixer.v1.config.client.MutualTLS")
-	proto.RegisterType((*AuthenticationMechanism)(nil), "istio.mixer.v1.config.client.AuthenticationMechanism")
-	proto.RegisterType((*IstioWorkload)(nil), "istio.mixer.v1.config.client.IstioWorkload")
-	proto.RegisterType((*AuthenticationPolicy)(nil), "istio.mixer.v1.config.client.AuthenticationPolicy")
 }
 func (m *JWT) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
@@ -586,12 +385,6 @@ func (m *JWT) MarshalTo(dAtA []byte) (int, error) {
 		i++
 		i = encodeVarintAuth(dAtA, i, uint64(len(m.JwksUriEnvoyCluster)))
 		i += copy(dAtA[i:], m.JwksUriEnvoyCluster)
-	}
-	if len(m.OutputHeaderLocation) > 0 {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintAuth(dAtA, i, uint64(len(m.OutputHeaderLocation)))
-		i += copy(dAtA[i:], m.OutputHeaderLocation)
 	}
 	return i, nil
 }
@@ -763,166 +556,6 @@ func (m *MutualTLS) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *AuthenticationMechanism) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AuthenticationMechanism) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.Params != nil {
-		nn3, err := m.Params.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn3
-	}
-	return i, nil
-}
-
-func (m *AuthenticationMechanism_None) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x8
-	i++
-	if m.None {
-		dAtA[i] = 1
-	} else {
-		dAtA[i] = 0
-	}
-	i++
-	return i, nil
-}
-func (m *AuthenticationMechanism_Mtls) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.Mtls != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintAuth(dAtA, i, uint64(m.Mtls.Size()))
-		n4, err := m.Mtls.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n4
-	}
-	return i, nil
-}
-func (m *AuthenticationMechanism_Jwt) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.Jwt != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintAuth(dAtA, i, uint64(m.Jwt.Size()))
-		n5, err := m.Jwt.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n5
-	}
-	return i, nil
-}
-func (m *IstioWorkload) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *IstioWorkload) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.Name) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintAuth(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
-	}
-	if len(m.Port) > 0 {
-		dAtA7 := make([]byte, len(m.Port)*10)
-		var j6 int
-		for _, num := range m.Port {
-			for num >= 1<<7 {
-				dAtA7[j6] = uint8(uint64(num)&0x7f | 0x80)
-				num >>= 7
-				j6++
-			}
-			dAtA7[j6] = uint8(num)
-			j6++
-		}
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintAuth(dAtA, i, uint64(j6))
-		i += copy(dAtA[i:], dAtA7[:j6])
-	}
-	return i, nil
-}
-
-func (m *AuthenticationPolicy) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AuthenticationPolicy) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.Target) > 0 {
-		for _, msg := range m.Target {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintAuth(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.Peer) > 0 {
-		for _, msg := range m.Peer {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintAuth(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.EndUser) > 0 {
-		for _, msg := range m.EndUser {
-			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintAuth(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	return i, nil
-}
-
 func encodeVarintAuth(dAtA []byte, offset int, v uint64) int {
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
@@ -963,10 +596,6 @@ func (m *JWT) Size() (n int) {
 		}
 	}
 	l = len(m.JwksUriEnvoyCluster)
-	if l > 0 {
-		n += 1 + l + sovAuth(uint64(l))
-	}
-	l = len(m.OutputHeaderLocation)
 	if l > 0 {
 		n += 1 + l + sovAuth(uint64(l))
 	}
@@ -1050,80 +679,6 @@ func (m *MutualTLS) Size() (n int) {
 	return n
 }
 
-func (m *AuthenticationMechanism) Size() (n int) {
-	var l int
-	_ = l
-	if m.Params != nil {
-		n += m.Params.Size()
-	}
-	return n
-}
-
-func (m *AuthenticationMechanism_None) Size() (n int) {
-	var l int
-	_ = l
-	n += 2
-	return n
-}
-func (m *AuthenticationMechanism_Mtls) Size() (n int) {
-	var l int
-	_ = l
-	if m.Mtls != nil {
-		l = m.Mtls.Size()
-		n += 1 + l + sovAuth(uint64(l))
-	}
-	return n
-}
-func (m *AuthenticationMechanism_Jwt) Size() (n int) {
-	var l int
-	_ = l
-	if m.Jwt != nil {
-		l = m.Jwt.Size()
-		n += 1 + l + sovAuth(uint64(l))
-	}
-	return n
-}
-func (m *IstioWorkload) Size() (n int) {
-	var l int
-	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovAuth(uint64(l))
-	}
-	if len(m.Port) > 0 {
-		l = 0
-		for _, e := range m.Port {
-			l += sovAuth(uint64(e))
-		}
-		n += 1 + sovAuth(uint64(l)) + l
-	}
-	return n
-}
-
-func (m *AuthenticationPolicy) Size() (n int) {
-	var l int
-	_ = l
-	if len(m.Target) > 0 {
-		for _, e := range m.Target {
-			l = e.Size()
-			n += 1 + l + sovAuth(uint64(l))
-		}
-	}
-	if len(m.Peer) > 0 {
-		for _, e := range m.Peer {
-			l = e.Size()
-			n += 1 + l + sovAuth(uint64(l))
-		}
-	}
-	if len(m.EndUser) > 0 {
-		for _, e := range m.EndUser {
-			l = e.Size()
-			n += 1 + l + sovAuth(uint64(l))
-		}
-	}
-	return n
-}
-
 func sovAuth(x uint64) (n int) {
 	for {
 		n++
@@ -1149,7 +704,6 @@ func (this *JWT) String() string {
 		`PublicKeyCacheDuration:` + strings.Replace(fmt.Sprintf("%v", this.PublicKeyCacheDuration), "Duration", "google_protobuf1.Duration", 1) + `,`,
 		`Locations:` + strings.Replace(fmt.Sprintf("%v", this.Locations), "JWT_Location", "JWT_Location", 1) + `,`,
 		`JwksUriEnvoyCluster:` + fmt.Sprintf("%v", this.JwksUriEnvoyCluster) + `,`,
-		`OutputHeaderLocation:` + fmt.Sprintf("%v", this.OutputHeaderLocation) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1222,69 +776,6 @@ func (this *MutualTLS) String() string {
 	}
 	s := strings.Join([]string{`&MutualTLS{`,
 		`OutputHeaderLocation:` + fmt.Sprintf("%v", this.OutputHeaderLocation) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AuthenticationMechanism) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AuthenticationMechanism{`,
-		`Params:` + fmt.Sprintf("%v", this.Params) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AuthenticationMechanism_None) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AuthenticationMechanism_None{`,
-		`None:` + fmt.Sprintf("%v", this.None) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AuthenticationMechanism_Mtls) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AuthenticationMechanism_Mtls{`,
-		`Mtls:` + strings.Replace(fmt.Sprintf("%v", this.Mtls), "MutualTLS", "MutualTLS", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AuthenticationMechanism_Jwt) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AuthenticationMechanism_Jwt{`,
-		`Jwt:` + strings.Replace(fmt.Sprintf("%v", this.Jwt), "JWT", "JWT", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *IstioWorkload) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&IstioWorkload{`,
-		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AuthenticationPolicy) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AuthenticationPolicy{`,
-		`Target:` + strings.Replace(fmt.Sprintf("%v", this.Target), "IstioWorkload", "IstioWorkload", 1) + `,`,
-		`Peer:` + strings.Replace(fmt.Sprintf("%v", this.Peer), "AuthenticationMechanism", "AuthenticationMechanism", 1) + `,`,
-		`EndUser:` + strings.Replace(fmt.Sprintf("%v", this.EndUser), "AuthenticationMechanism", "AuthenticationMechanism", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1525,35 +1016,6 @@ func (m *JWT) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.JwksUriEnvoyCluster = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OutputHeaderLocation", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.OutputHeaderLocation = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2064,425 +1526,6 @@ func (m *MutualTLS) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AuthenticationMechanism) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowAuth
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AuthenticationMechanism: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AuthenticationMechanism: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field None", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			b := bool(v != 0)
-			m.Params = &AuthenticationMechanism_None{b}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Mtls", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &MutualTLS{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Params = &AuthenticationMechanism_Mtls{v}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Jwt", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &JWT{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Params = &AuthenticationMechanism_Jwt{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipAuth(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthAuth
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *IstioWorkload) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowAuth
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: IstioWorkload: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: IstioWorkload: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType == 0 {
-				var v uint32
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowAuth
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= (uint32(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				m.Port = append(m.Port, v)
-			} else if wireType == 2 {
-				var packedLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowAuth
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					packedLen |= (int(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if packedLen < 0 {
-					return ErrInvalidLengthAuth
-				}
-				postIndex := iNdEx + packedLen
-				if postIndex > l {
-					return io.ErrUnexpectedEOF
-				}
-				for iNdEx < postIndex {
-					var v uint32
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowAuth
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= (uint32(b) & 0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					m.Port = append(m.Port, v)
-				}
-			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipAuth(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthAuth
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AuthenticationPolicy) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowAuth
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AuthenticationPolicy: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AuthenticationPolicy: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Target", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Target = append(m.Target, &IstioWorkload{})
-			if err := m.Target[len(m.Target)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Peer", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Peer = append(m.Peer, &AuthenticationMechanism{})
-			if err := m.Peer[len(m.Peer)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndUser", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuth
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAuth
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.EndUser = append(m.EndUser, &AuthenticationMechanism{})
-			if err := m.EndUser[len(m.EndUser)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipAuth(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthAuth
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
 func skipAuth(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
@@ -2591,54 +1634,43 @@ var (
 func init() { proto.RegisterFile("mixer/v1/config/client/auth.proto", fileDescriptorAuth) }
 
 var fileDescriptorAuth = []byte{
-	// 770 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x54, 0x41, 0x6f, 0xe3, 0x44,
-	0x14, 0xb6, 0x37, 0xd9, 0xd4, 0x79, 0xd1, 0x5e, 0x86, 0x2a, 0xb8, 0xd5, 0xca, 0x9b, 0x35, 0x08,
-	0x22, 0x90, 0x6c, 0x6d, 0x97, 0x8a, 0x13, 0x87, 0x6d, 0xd9, 0x2a, 0x5b, 0x76, 0xa5, 0xd5, 0xb4,
-	0x55, 0x11, 0x42, 0xb2, 0x5c, 0xfb, 0x35, 0x99, 0xd6, 0xf1, 0x98, 0x99, 0x71, 0x43, 0x6e, 0xfc,
-	0x04, 0x7e, 0x06, 0x37, 0xfe, 0xc6, 0x8a, 0xd3, 0x1e, 0x38, 0x70, 0xa4, 0xe1, 0xc2, 0xb1, 0x47,
-	0x8e, 0xc8, 0x33, 0x76, 0x2b, 0xa4, 0x36, 0xa9, 0xc4, 0x29, 0xf3, 0xe6, 0xbd, 0xef, 0x7b, 0x7e,
-	0xdf, 0xfb, 0x32, 0xf0, 0x74, 0xca, 0x7e, 0x44, 0x11, 0x5e, 0x3c, 0x0b, 0x13, 0x9e, 0x9f, 0xb2,
-	0x71, 0x98, 0x64, 0x0c, 0x73, 0x15, 0xc6, 0xa5, 0x9a, 0x04, 0x85, 0xe0, 0x8a, 0x93, 0xc7, 0x4c,
-	0x2a, 0xc6, 0x03, 0x5d, 0x18, 0x5c, 0x3c, 0x0b, 0x4c, 0x61, 0x60, 0x0a, 0x37, 0xd7, 0xc7, 0x7c,
-	0xcc, 0x75, 0x61, 0x58, 0x9d, 0x0c, 0x66, 0xd3, 0x1b, 0x73, 0x3e, 0xce, 0x30, 0xd4, 0xd1, 0x49,
-	0x79, 0x1a, 0xa6, 0xa5, 0x88, 0x15, 0xe3, 0x79, 0x9d, 0xff, 0xf8, 0x8e, 0xb6, 0x12, 0xc5, 0x05,
-	0x4b, 0xd0, 0x54, 0xf9, 0xbf, 0xb5, 0xa0, 0xb5, 0x7f, 0x7c, 0x48, 0xfa, 0xd0, 0x61, 0x52, 0x96,
-	0x28, 0x5c, 0x7b, 0x60, 0x0f, 0xbb, 0xb4, 0x8e, 0xc8, 0x63, 0xe8, 0xc6, 0x65, 0xca, 0x30, 0x4f,
-	0x50, 0xba, 0x0f, 0x06, 0xad, 0x61, 0x97, 0xde, 0x5c, 0x90, 0x0d, 0x70, 0xce, 0x66, 0xe7, 0x32,
-	0x2a, 0x05, 0x73, 0x5b, 0x1a, 0xb7, 0x56, 0xc5, 0x47, 0x82, 0x91, 0x27, 0xd0, 0x3b, 0xe5, 0x62,
-	0x16, 0x8b, 0x34, 0x3a, 0x9b, 0x29, 0xb7, 0x3d, 0xb0, 0x87, 0x0e, 0x85, 0xfa, 0x6a, 0x7f, 0xa6,
-	0xc8, 0x21, 0x6c, 0x14, 0xe5, 0x49, 0xc6, 0x92, 0xe8, 0x1c, 0xe7, 0x51, 0x12, 0x27, 0x13, 0x8c,
-	0x9a, 0x11, 0xdc, 0x87, 0x03, 0x7b, 0xd8, 0xdb, 0xda, 0x08, 0xcc, 0x8c, 0x41, 0x33, 0x63, 0xf0,
-	0x75, 0x5d, 0x40, 0xfb, 0x06, 0xfb, 0x0d, 0xce, 0x77, 0x2b, 0x64, 0x73, 0x4f, 0x46, 0xd0, 0xcd,
-	0x78, 0xa2, 0xcf, 0xd2, 0xed, 0x0c, 0x5a, 0xc3, 0xde, 0xd6, 0x67, 0xc1, 0x32, 0x75, 0x83, 0xfd,
-	0xe3, 0xc3, 0xe0, 0x75, 0x0d, 0xa1, 0x37, 0x60, 0xf2, 0x1c, 0xfa, 0xcd, 0x6c, 0x11, 0xe6, 0x17,
-	0x7c, 0x1e, 0x25, 0x59, 0x29, 0x15, 0x0a, 0x77, 0x4d, 0x4f, 0xfa, 0x41, 0x3d, 0xe9, 0xcb, 0x2a,
-	0xb7, 0x6b, 0x52, 0xe4, 0x0b, 0xe8, 0xf3, 0x52, 0x15, 0xa5, 0x8a, 0x26, 0x18, 0xa7, 0x28, 0xa2,
-	0x86, 0xcf, 0x75, 0x34, 0x68, 0xdd, 0x64, 0x47, 0x3a, 0xd9, 0x74, 0xdd, 0xdc, 0x03, 0xa7, 0x39,
-	0x13, 0x17, 0x3a, 0x06, 0x6a, 0x16, 0x31, 0xb2, 0x68, 0x1d, 0x93, 0x3e, 0x3c, 0xfc, 0xa1, 0x44,
-	0x31, 0x77, 0x1f, 0xd4, 0x09, 0x13, 0xee, 0x38, 0xd0, 0x91, 0xc9, 0x04, 0xa7, 0xe8, 0x7f, 0x0b,
-	0x4f, 0x5e, 0xe6, 0xe9, 0x91, 0x44, 0xf1, 0xa2, 0x54, 0x13, 0xcc, 0x15, 0x33, 0xa4, 0x6f, 0x79,
-	0xc6, 0x92, 0xf9, 0x41, 0x81, 0x09, 0xd9, 0x86, 0xf6, 0xd9, 0x4c, 0x99, 0x55, 0xf6, 0xb6, 0x9e,
-	0xae, 0x94, 0x86, 0xea, 0x72, 0xff, 0x7b, 0x18, 0xae, 0x60, 0xa6, 0x78, 0x8a, 0xa2, 0x72, 0x05,
-	0x21, 0xd0, 0xce, 0xe3, 0x29, 0xd6, 0x46, 0xd2, 0xe7, 0xca, 0x46, 0xd5, 0xaf, 0x2c, 0xe2, 0x04,
-	0xcd, 0xf7, 0xd3, 0x9b, 0x0b, 0xff, 0x77, 0x1b, 0x3e, 0x59, 0x41, 0xbf, 0xc3, 0xf2, 0x94, 0xe5,
-	0x63, 0xb2, 0x07, 0x4e, 0x6d, 0x60, 0xe9, 0xda, 0xf7, 0x59, 0xef, 0xab, 0x2a, 0x79, 0x60, 0x20,
-	0xf4, 0x1a, 0x4b, 0x4e, 0xc0, 0x29, 0x2a, 0x72, 0x86, 0x8d, 0x16, 0x7b, 0xcb, 0x79, 0xee, 0x3b,
-	0x3e, 0xbd, 0xe6, 0xf5, 0x5f, 0x40, 0xf7, 0x4d, 0xa9, 0xca, 0x38, 0x3b, 0x7c, 0x7d, 0xb0, 0xc4,
-	0x19, 0xf6, 0xdd, 0xce, 0xf0, 0x7f, 0xb5, 0xe1, 0xc3, 0xff, 0xb6, 0x7c, 0x83, 0xc9, 0x24, 0xce,
-	0x99, 0x9c, 0x92, 0x75, 0x68, 0xe7, 0x3c, 0x37, 0x3a, 0x3b, 0x23, 0x8b, 0xea, 0x88, 0x7c, 0x05,
-	0xed, 0xa9, 0xca, 0xa4, 0x16, 0xb9, 0xb7, 0xf5, 0xe9, 0xf2, 0xa1, 0xae, 0x3f, 0xaf, 0x82, 0x57,
-	0x30, 0xb2, 0x0d, 0xad, 0xea, 0xef, 0xda, 0xd2, 0xe8, 0xd5, 0xf6, 0x18, 0x59, 0xb4, 0xaa, 0xaf,
-	0x3c, 0x58, 0xc4, 0x22, 0x9e, 0x4a, 0xff, 0x4b, 0x78, 0xa4, 0x25, 0x3f, 0xe6, 0xe2, 0x3c, 0xe3,
-	0x71, 0x7a, 0xab, 0x1d, 0x08, 0xb4, 0x0b, 0x2e, 0x94, 0x56, 0xfe, 0x11, 0xd5, 0x67, 0xff, 0x1f,
-	0x1b, 0xd6, 0x6f, 0x53, 0x97, 0xec, 0x42, 0x47, 0xc5, 0x62, 0x8c, 0xaa, 0x5e, 0xf8, 0xe7, 0xf7,
-	0x58, 0x78, 0xd3, 0x9d, 0xd6, 0x50, 0xf2, 0x0a, 0xda, 0x05, 0xa2, 0xa8, 0x77, 0xbd, 0xbd, 0x9c,
-	0xe2, 0x0e, 0xc5, 0xa9, 0xa6, 0x20, 0x6f, 0xc1, 0xc1, 0x3c, 0x8d, 0x4a, 0x89, 0xc2, 0x6d, 0xfd,
-	0x1f, 0xba, 0x35, 0x34, 0x9e, 0xda, 0x39, 0x7a, 0x77, 0xe9, 0x59, 0xef, 0x2f, 0x3d, 0xeb, 0x8f,
-	0x4b, 0xcf, 0xba, 0xba, 0xf4, 0xac, 0x9f, 0x16, 0x9e, 0xfd, 0xcb, 0xc2, 0xb3, 0xde, 0x2d, 0x3c,
-	0xfb, 0xfd, 0xc2, 0xb3, 0xff, 0x5c, 0x78, 0xf6, 0xdf, 0x0b, 0xcf, 0xba, 0x5a, 0x78, 0xf6, 0xcf,
-	0x7f, 0x79, 0xd6, 0x77, 0x1f, 0x99, 0x86, 0x8c, 0x87, 0x71, 0xc1, 0xc2, 0xdb, 0x5f, 0xfa, 0x93,
-	0x8e, 0x7e, 0x36, 0x9f, 0xff, 0x1b, 0x00, 0x00, 0xff, 0xff, 0xf0, 0x34, 0x18, 0x41, 0x81, 0x06,
-	0x00, 0x00,
+	// 603 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x53, 0xcb, 0x4e, 0xdb, 0x4c,
+	0x14, 0xb6, 0x09, 0x84, 0x64, 0xb2, 0x9b, 0x1f, 0x45, 0x06, 0xa1, 0x21, 0xe4, 0xaf, 0xaa, 0xa8,
+	0x0b, 0x5b, 0x40, 0xfb, 0x00, 0x40, 0x41, 0x94, 0x52, 0xa9, 0x32, 0x41, 0x54, 0x55, 0x25, 0xcb,
+	0x99, 0x9c, 0x24, 0x03, 0xc6, 0xe3, 0xce, 0x25, 0x69, 0x76, 0x7d, 0x84, 0x2e, 0xfa, 0x10, 0x7d,
+	0x14, 0x96, 0x2c, 0xba, 0xe8, 0xb2, 0x71, 0x37, 0x5d, 0xf2, 0x08, 0x95, 0x3d, 0x36, 0x6c, 0x5a,
+	0xc2, 0x2a, 0x73, 0xe6, 0xbb, 0xc4, 0xdf, 0x39, 0x67, 0xd0, 0xe6, 0x15, 0xfb, 0x04, 0xc2, 0x1b,
+	0x6f, 0x79, 0x94, 0xc7, 0x03, 0x36, 0xf4, 0x68, 0xc4, 0x20, 0x56, 0x5e, 0xa8, 0xd5, 0xc8, 0x4d,
+	0x04, 0x57, 0x1c, 0xaf, 0x33, 0xa9, 0x18, 0x77, 0x73, 0xa2, 0x3b, 0xde, 0x72, 0x0d, 0xd1, 0x35,
+	0xc4, 0xb5, 0x95, 0x21, 0x1f, 0xf2, 0x9c, 0xe8, 0x65, 0x27, 0xa3, 0x59, 0x23, 0x43, 0xce, 0x87,
+	0x11, 0x78, 0x79, 0xd5, 0xd3, 0x03, 0xaf, 0xaf, 0x45, 0xa8, 0x18, 0x8f, 0x0b, 0xfc, 0xc9, 0x3f,
+	0xfe, 0x56, 0x82, 0x18, 0x33, 0x0a, 0x86, 0xd5, 0xfe, 0x5a, 0x41, 0x95, 0xe3, 0xf3, 0x2e, 0x6e,
+	0xa2, 0x2a, 0x93, 0x52, 0x83, 0x70, 0xec, 0x96, 0xdd, 0xa9, 0xfb, 0x45, 0x85, 0xd7, 0x51, 0x3d,
+	0xd4, 0x7d, 0x06, 0x31, 0x05, 0xe9, 0x2c, 0xb4, 0x2a, 0x9d, 0xba, 0x7f, 0x7f, 0x81, 0x57, 0x51,
+	0xed, 0x62, 0x72, 0x29, 0x03, 0x2d, 0x98, 0x53, 0xc9, 0x75, 0xcb, 0x59, 0x7d, 0x26, 0x18, 0xde,
+	0x40, 0x8d, 0x01, 0x17, 0x93, 0x50, 0xf4, 0x83, 0x8b, 0x89, 0x72, 0x16, 0x5b, 0x76, 0xa7, 0xe6,
+	0xa3, 0xe2, 0xea, 0x78, 0xa2, 0x70, 0x17, 0xad, 0x26, 0xba, 0x17, 0x31, 0x1a, 0x5c, 0xc2, 0x34,
+	0xa0, 0x21, 0x1d, 0x41, 0x50, 0x46, 0x70, 0x96, 0x5a, 0x76, 0xa7, 0xb1, 0xbd, 0xea, 0x9a, 0x8c,
+	0x6e, 0x99, 0xd1, 0x7d, 0x59, 0x10, 0xfc, 0xa6, 0xd1, 0xbe, 0x86, 0xe9, 0x7e, 0xa6, 0x2c, 0xef,
+	0xf1, 0x11, 0xaa, 0x47, 0x9c, 0xe6, 0x67, 0xe9, 0x54, 0x5b, 0x95, 0x4e, 0x63, 0xfb, 0x99, 0xfb,
+	0x50, 0x77, 0xdd, 0xe3, 0xf3, 0xae, 0x7b, 0x52, 0x48, 0xfc, 0x7b, 0x31, 0xde, 0x41, 0xcd, 0x32,
+	0x5b, 0x00, 0xf1, 0x98, 0x4f, 0x03, 0x1a, 0x69, 0xa9, 0x40, 0x38, 0xcb, 0x79, 0xd2, 0xff, 0x8a,
+	0xa4, 0x07, 0x19, 0xb6, 0x6f, 0xa0, 0xb5, 0x43, 0x54, 0x2b, 0xbd, 0xb0, 0x83, 0xaa, 0x23, 0x08,
+	0xfb, 0x65, 0x4b, 0x8f, 0x2c, 0xbf, 0xa8, 0x71, 0x13, 0x2d, 0x7d, 0xd4, 0x20, 0xa6, 0xce, 0x42,
+	0x01, 0x98, 0x72, 0xaf, 0x86, 0xaa, 0x92, 0x8e, 0xe0, 0x0a, 0xda, 0xef, 0xd0, 0xc6, 0x41, 0xdc,
+	0x3f, 0x93, 0x20, 0x76, 0xb5, 0x1a, 0x41, 0xac, 0x98, 0x31, 0x7d, 0xcb, 0x23, 0x46, 0xa7, 0xa7,
+	0x09, 0x50, 0xfc, 0x02, 0x2d, 0x5e, 0x4c, 0x94, 0x19, 0x4a, 0x63, 0x7b, 0x73, 0x6e, 0x48, 0x3f,
+	0xa7, 0xb7, 0x3f, 0xa0, 0xce, 0x1c, 0x67, 0x1f, 0x06, 0x20, 0xb2, 0xf9, 0x62, 0x8c, 0x16, 0xe3,
+	0xf0, 0x0a, 0x8a, 0x95, 0xc8, 0xcf, 0xd9, 0x42, 0x64, 0xbf, 0x32, 0x09, 0x29, 0x98, 0xef, 0xf7,
+	0xef, 0x2f, 0xda, 0xdf, 0x6d, 0xf4, 0x74, 0x8e, 0xfd, 0x1e, 0x8b, 0xfb, 0x2c, 0x1e, 0xe2, 0x43,
+	0x54, 0x2b, 0x56, 0x51, 0x3a, 0xf6, 0x63, 0x06, 0xf5, 0x2a, 0x03, 0x4f, 0x8d, 0xc4, 0xbf, 0xd3,
+	0xe2, 0x1e, 0xaa, 0x25, 0x99, 0x39, 0x83, 0xb2, 0x17, 0x87, 0x0f, 0xfb, 0x3c, 0x36, 0xbe, 0x7f,
+	0xe7, 0xdb, 0xde, 0x45, 0xf5, 0x37, 0x5a, 0xe9, 0x30, 0xea, 0x9e, 0x9c, 0xe2, 0xe7, 0xa8, 0xc9,
+	0xb5, 0x4a, 0xb4, 0x0a, 0xcc, 0x38, 0x83, 0x72, 0x67, 0x8a, 0x3e, 0xad, 0x18, 0xf4, 0x28, 0x07,
+	0xcb, 0x6d, 0xd8, 0x3b, 0xbb, 0x9e, 0x11, 0xeb, 0x66, 0x46, 0xac, 0x1f, 0x33, 0x62, 0xdd, 0xce,
+	0x88, 0xf5, 0x39, 0x25, 0xf6, 0xb7, 0x94, 0x58, 0xd7, 0x29, 0xb1, 0x6f, 0x52, 0x62, 0xff, 0x4c,
+	0x89, 0xfd, 0x3b, 0x25, 0xd6, 0x6d, 0x4a, 0xec, 0x2f, 0xbf, 0x88, 0xf5, 0xfe, 0x7f, 0x93, 0x82,
+	0x71, 0x2f, 0x4c, 0x98, 0xf7, 0xf7, 0xd7, 0xdc, 0xab, 0xe6, 0x4f, 0x63, 0xe7, 0x4f, 0x00, 0x00,
+	0x00, 0xff, 0xff, 0x75, 0xc4, 0x0c, 0x21, 0x65, 0x04, 0x00, 0x00,
 }

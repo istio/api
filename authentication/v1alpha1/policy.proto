@@ -1,0 +1,77 @@
+// Copyright 2017 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+package istio.authentication.v1alpha1;
+
+option go_package = "istio.io/api/authentication/v1alpha1";
+
+import "gogoproto/gogo.proto";
+import "mixer/v1/config/client/auth.proto";
+import "routing/v1alpha2/route_rule.proto";
+
+option (gogoproto.goproto_getters_all) = false;
+option (gogoproto.equal_all) = false;
+option (gogoproto.gostring_all) = false;
+
+// Placer holder for mTLS authentication params.
+message MutualTLS {}
+
+// AuthenticationMechanism defines one particular type of authentication (i.e
+// mutual TLS, JWT etc). The type can be progammatically determine by checking
+// the type of the "params" field.
+message Mechanism {
+  oneof params {
+    bool none = 1;
+    MutualTLS mtls = 2;
+    istio.mixer.v1.config.client.JWT jwt = 3;
+  }
+}
+
+message Destination {
+  // REQUIRED. The name can be a short name or a fully qualified domain
+  // name from the service registry, a resolvable DNS name, or an IP
+  // address.
+  // If short names are used, the FQDN of the service will be resolved in a
+  // platform specific manner.
+  string name = 1;
+
+  // Optional. List of ports that service are exposed on. Leave blank to applied
+  // to all ports.
+  repeated uint32 ports = 3;
+}
+
+// AuthenticationPolicy binds credentials to workload(s).
+// Authentication policy is composed of 2-part authentication:
+// - peer: verify caller service credentials.
+// - end_user: verify end-user credentials.
+// For each part, if it's not empty, at least one of those listed credential
+// must be provided and  (successfully) verified for the authentication to pass.
+message Policy {
+  // List of destinations (workloads) that the policy should be applied on.
+  // If empty, policy will be used on all destinations in the same namespace.
+  repeated Destination match = 1;
+
+  // List of credential that should be checked by peer authentication. They
+  // will be validated in sequence, until the first one satisfied. If none of
+  // the specified mechanism valid, the whole authentication should fail.
+  // On the other hand, the first valid credential will be used to extract
+  // peer identity (i.e the source.user attribute in the request to mixer).
+  repeated Mechanism peers = 2;
+
+  // Similar to above, but for end_user authentication, which will extract
+  // request.auth.principal/audiences/presenter if authentication succeed.
+  repeated Mechanism end_users = 3;
+}
