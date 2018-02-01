@@ -18,10 +18,13 @@ package istio.authentication.v1alpha1;
 
 option go_package = "istio.io/api/authentication/v1alpha1";
 
-import "google/protobuf/empty.proto";
 import "routing/v1alpha2/route_rule.proto";
 
-// Placer holder for mTLS authentication params.
+// Place holder for None authentication params
+message None {
+}
+
+// Place holder for mTLS authentication params.
 message MutualTLS {
 }
 
@@ -108,7 +111,7 @@ message JWT {
 // the type of the "params" field.
 message AuthenticationMechanism {
   oneof params {
-    google.protobuf.Empty none = 1;
+    None none = 1;
     MutualTLS mtls = 2;
     JWT jwt = 3;
   }
