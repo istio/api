@@ -18,13 +18,8 @@ package istio.authentication.v1alpha1;
 
 option go_package = "istio.io/api/authentication/v1alpha1";
 
-import "gogoproto/gogo.proto";
 import "google/protobuf/empty.proto";
 import "routing/v1alpha2/route_rule.proto";
-
-option (gogoproto.goproto_getters_all) = false;
-option (gogoproto.equal_all) = false;
-option (gogoproto.gostring_all) = false;
 
 // Placer holder for mTLS authentication params.
 message MutualTLS {
