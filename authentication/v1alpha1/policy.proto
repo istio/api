@@ -27,7 +27,8 @@ option (gogoproto.equal_all) = false;
 option (gogoproto.gostring_all) = false;
 
 // Placer holder for mTLS authentication params.
-message MutualTLS {}
+message MutualTLS {
+}
 
 // JSON Web Token (JWT) token format for authentication as defined by
 // https://tools.ietf.org/html/rfc7519. See [OAuth
@@ -69,12 +70,14 @@ message JWT {
   repeated string audiences = 2;
 
   // URL of the provider's public key set to validate signature of the
-  // JWT. See [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
+  // JWT. See [OpenID
+  // Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
   //
   // Optional if the key set document can either (a) be retrieved from
-  // [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)
-  // of the issuer or (b) inferred from the email domain of the issuer
-  // (e.g. a Google service account).
+  // [OpenID
+  // Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html) of
+  // the issuer or (b) inferred from the email domain of the issuer (e.g. a
+  // Google service account).
   //
   // Example: https://www.googleapis.com/oauth2/v1/certs
   string jwks_uri = 3;
@@ -111,10 +114,10 @@ message JWT {
   repeated Location locations = 6;
 }
 
-// AuthenticationMechanism defines one particular type of authentication (i.e
+// AuthenticaitonMechanism defines one particular type of authentication (i.e
 // mutual TLS, JWT etc). The type can be progammatically determine by checking
 // the type of the "params" field.
-message Mechanism {
+message AuthenticationMechanism {
   oneof params {
     google.protobuf.Empty none = 1;
     MutualTLS mtls = 2;
@@ -132,20 +135,20 @@ message Mechanism {
 // Examples:
 // Policy to enable mTLS for all services in namespace frod
 //
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     apiVersion: config.istio.io/v1alpha1
+//     kind: AuthenticationPolicy
 //     metadata:
 //       name: mTLS-enable
 //       namespace: frod
 //     spec:
 //       match:
-//       peer:
+//       peers:
 //       - mtls: {}
 //
 // Policy to enable mTLS, and use JWT for productpage:9000
 //
-//     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     apiVersion: config.istio.io/v1alpha1
+//     kind: AuthenticationPolicy
 //     metadata:
 //       name: mTLS-enable
 //       namespace: frod
@@ -154,17 +157,17 @@ message Mechanism {
 //       - name: productpage
 //         port:
 //           number: 9000
-//       peer:
+//       peers:
 //       - mtls:
-//       end_user:
+//       endUsers:
 //       - jwt:
 //           issuer: "https://securetoken.google.com"
 //           audiences:
 //           - "productpage"
-//           jwks_uri: "https://www.googleapis.com/oauth2/v1/certs"
+//           jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
 //           locations:
 //           - header: x-goog-iap-jwt-assertion
-message Policy {
+message AuthenticationPolicy {
   // List of destinations (workloads) that the policy should be applied on.
   // If empty, policy will be used on all destinations in the same namespace.
   repeated istio.routing.v1alpha2.Destination match = 1;
@@ -174,9 +177,9 @@ message Policy {
   // the specified mechanism valid, the whole authentication should fail.
   // On the other hand, the first valid credential will be used to extract
   // peer identity (i.e the source.user attribute in the request to mixer).
-  repeated Mechanism peers = 2;
+  repeated AuthenticationMechanism peers = 2;
 
   // Similar to above, but for end_user authentication, which will extract
   // request.auth.principal/audiences/presenter if authentication succeed.
-  repeated Mechanism end_users = 3;
+  repeated AuthenticationMechanism end_users = 3;
 }

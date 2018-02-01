@@ -2,6 +2,123 @@
 title: istio.authentication.v1alpha1
 layout: protoc-gen-docs
 ---
+<h2 id="AuthenticationMechanism">AuthenticationMechanism</h2>
+<section>
+<p>AuthenticaitonMechanism defines one particular type of authentication (i.e
+mutual TLS, JWT etc). The type can be progammatically determine by checking
+the type of the &ldquo;params&rdquo; field.</p>
+
+<table>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr id="AuthenticationMechanism.none" class="oneof oneof-start">
+<td><code>none</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#empty">google.protobuf.Empty (oneof)</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="AuthenticationMechanism.mtls" class="oneof">
+<td><code>mtls</code></td>
+<td><code><a href="#MutualTLS">MutualTLS (oneof)</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="AuthenticationMechanism.jwt" class="oneof">
+<td><code>jwt</code></td>
+<td><code><a href="#JWT">JWT (oneof)</a></code></td>
+<td>
+</td>
+</tr>
+</table>
+</section>
+<h2 id="AuthenticationPolicy">AuthenticationPolicy</h2>
+<section>
+<p>AuthenticationPolicy binds credentials to workload(s).
+Authentication policy is composed of 2-part authentication:
+- peer: verify caller service credentials.
+- end_user: verify end-user credentials.
+For each part, if it&rsquo;s not empty, at least one of those listed credential
+must be provided and  (successfully) verified for the authentication to pass.</p>
+
+<p>Examples:
+Policy to enable mTLS for all services in namespace frod</p>
+
+<pre><code>apiVersion: config.istio.io/v1alpha1
+kind: AuthenticationPolicy
+metadata:
+  name: mTLS-enable
+  namespace: frod
+spec:
+  match:
+  peers:
+  - mtls: {}
+</code></pre>
+
+<p>Policy to enable mTLS, and use JWT for productpage:9000</p>
+
+<pre><code>apiVersion: config.istio.io/v1alpha1
+kind: AuthenticationPolicy
+metadata:
+  name: mTLS-enable
+  namespace: frod
+spec:
+  match:
+  - name: productpage
+    port:
+      number: 9000
+  peers:
+  - mtls:
+  endUsers:
+  - jwt:
+      issuer: &quot;https://securetoken.google.com&quot;
+      audiences:
+      - &quot;productpage&quot;
+      jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
+      locations:
+      - header: x-goog-iap-jwt-assertion
+</code></pre>
+
+<table>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr id="AuthenticationPolicy.match">
+<td><code>match</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/istio.routing.v1alpha2.html#Destination">istio.routing.v1alpha2.Destination[]</a></code></td>
+<td>
+<p>List of destinations (workloads) that the policy should be applied on.
+If empty, policy will be used on all destinations in the same namespace.</p>
+
+</td>
+</tr>
+<tr id="AuthenticationPolicy.peers">
+<td><code>peers</code></td>
+<td><code><a href="#AuthenticationMechanism">AuthenticationMechanism[]</a></code></td>
+<td>
+<p>List of credential that should be checked by peer authentication. They
+will be validated in sequence, until the first one satisfied. If none of
+the specified mechanism valid, the whole authentication should fail.
+On the other hand, the first valid credential will be used to extract
+peer identity (i.e the source.user attribute in the request to mixer).</p>
+
+</td>
+</tr>
+<tr id="AuthenticationPolicy.end_users">
+<td><code>endUsers</code></td>
+<td><code><a href="#AuthenticationMechanism">AuthenticationMechanism[]</a></code></td>
+<td>
+<p>Similar to above, but for end_user authentication, which will extract
+request.auth.principal/audiences/presenter if authentication succeed.</p>
+
+</td>
+</tr>
+</table>
+</section>
 <h2 id="JWT">JWT</h2>
 <section>
 <p>JSON Web Token (JWT) token format for authentication as defined by
@@ -63,12 +180,14 @@ audiences will be accepted.</p>
 <td><code>string</code></td>
 <td>
 <p>URL of the provider&rsquo;s public key set to validate signature of the
-JWT. See <a href="https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata">OpenID Discovery</a>.</p>
+JWT. See <a href="https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata">OpenID
+Discovery</a>.</p>
 
 <p>Optional if the key set document can either (a) be retrieved from
-<a href="https://openid.net/specs/openid-connect-discovery-1_0.html">OpenID Discovery</a>
-of the issuer or (b) inferred from the email domain of the issuer
-(e.g. a Google service account).</p>
+<a href="https://openid.net/specs/openid-connect-discovery-1_0.html">OpenID
+Discovery</a> of
+the issuer or (b) inferred from the email domain of the issuer (e.g. a
+Google service account).</p>
 
 <p>Example: https://www.googleapis.com/oauth2/v1/certs</p>
 
@@ -128,125 +247,8 @@ query parameter name.</p>
 </tr>
 </table>
 </section>
-<h2 id="Mechanism">Mechanism</h2>
-<section>
-<p>AuthenticationMechanism defines one particular type of authentication (i.e
-mutual TLS, JWT etc). The type can be progammatically determine by checking
-the type of the &ldquo;params&rdquo; field.</p>
-
-<table>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-<tr id="Mechanism.none" class="oneof oneof-start">
-<td><code>none</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#empty">google.protobuf.Empty (oneof)</a></code></td>
-<td>
-</td>
-</tr>
-<tr id="Mechanism.mtls" class="oneof">
-<td><code>mtls</code></td>
-<td><code><a href="#MutualTLS">MutualTLS (oneof)</a></code></td>
-<td>
-</td>
-</tr>
-<tr id="Mechanism.jwt" class="oneof">
-<td><code>jwt</code></td>
-<td><code><a href="#JWT">JWT (oneof)</a></code></td>
-<td>
-</td>
-</tr>
-</table>
-</section>
 <h2 id="MutualTLS">MutualTLS</h2>
 <section>
 <p>Placer holder for mTLS authentication params.</p>
 
-</section>
-<h2 id="Policy">Policy</h2>
-<section>
-<p>AuthenticationPolicy binds credentials to workload(s).
-Authentication policy is composed of 2-part authentication:
-- peer: verify caller service credentials.
-- end_user: verify end-user credentials.
-For each part, if it&rsquo;s not empty, at least one of those listed credential
-must be provided and  (successfully) verified for the authentication to pass.</p>
-
-<p>Examples:
-Policy to enable mTLS for all services in namespace frod</p>
-
-<pre><code>apiVersion: config.istio.io/v1alpha2
-kind: RouteRule
-metadata:
-  name: mTLS-enable
-  namespace: frod
-spec:
-  match:
-  peer:
-  - mtls: {}
-</code></pre>
-
-<p>Policy to enable mTLS, and use JWT for productpage:9000</p>
-
-<pre><code>apiVersion: config.istio.io/v1alpha2
-kind: RouteRule
-metadata:
-  name: mTLS-enable
-  namespace: frod
-spec:
-  match:
-  - name: productpage
-    port:
-      number: 9000
-  peer:
-  - mtls:
-  end_user:
-  - jwt:
-      issuer: &quot;https://securetoken.google.com&quot;
-      audiences:
-      - &quot;productpage&quot;
-      jwks_uri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
-      locations:
-      - header: x-goog-iap-jwt-assertion
-</code></pre>
-
-<table>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-<tr id="Policy.match">
-<td><code>match</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/istio.routing.v1alpha2.html#Destination">istio.routing.v1alpha2.Destination[]</a></code></td>
-<td>
-<p>List of destinations (workloads) that the policy should be applied on.
-If empty, policy will be used on all destinations in the same namespace.</p>
-
-</td>
-</tr>
-<tr id="Policy.peers">
-<td><code>peers</code></td>
-<td><code><a href="#Mechanism">Mechanism[]</a></code></td>
-<td>
-<p>List of credential that should be checked by peer authentication. They
-will be validated in sequence, until the first one satisfied. If none of
-the specified mechanism valid, the whole authentication should fail.
-On the other hand, the first valid credential will be used to extract
-peer identity (i.e the source.user attribute in the request to mixer).</p>
-
-</td>
-</tr>
-<tr id="Policy.end_users">
-<td><code>endUsers</code></td>
-<td><code><a href="#Mechanism">Mechanism[]</a></code></td>
-<td>
-<p>Similar to above, but for end_user authentication, which will extract
-request.auth.principal/audiences/presenter if authentication succeed.</p>
-
-</td>
-</tr>
-</table>
 </section>
