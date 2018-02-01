@@ -79,6 +79,44 @@ Authentication policy is composed of 2-part authentication:
 For each part, if it&rsquo;s not empty, at least one of those listed credential
 must be provided and  (successfully) verified for the authentication to pass.</p>
 
+<p>Examples:
+Policy to enable mTLS for all services in namespace frod</p>
+
+<pre><code>apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: mTLS-enable
+  namespace: frod
+spec:
+  match:
+  peer:
+  - mtls: {}
+</code></pre>
+
+<p>Policy to enable mTLS, and use JWT for productpage:9000</p>
+
+<pre><code>apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: mTLS-enable
+  namespace: frod
+spec:
+  match:
+  - name: productpage
+    ports:
+    - 9000
+  peer:
+  - mtls:
+  end_user:
+  - jwt:
+      issuer: &quot;https://securetoken.google.com&quot;
+      audiences:
+      - &quot;productpage&quot;
+      jwks_uri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
+      locations:
+      - header: x-goog-iap-jwt-assertion
+</code></pre>
+
 <table>
 <tr>
 <th>Field</th>
@@ -178,8 +216,7 @@ audiences will be accepted.</p>
 <td><code>string</code></td>
 <td>
 <p>URL of the provider&rsquo;s public key set to validate signature of the
-JWT. See <a href="https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata">OpenID
-Discovery</a>.</p>
+JWT. See <a href="https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata">OpenID Discovery</a>.</p>
 
 <p>Optional if the key set document can either (a) be retrieved from
 <a href="https://openid.net/specs/openid-connect-discovery-1_0.html">OpenID Discovery</a>
@@ -195,8 +232,7 @@ of the issuer or (b) inferred from the email domain of the issuer
 <td><code>bool</code></td>
 <td>
 <p>If true, forward the entire base64 encoded JWT in the HTTP request.
-If false, remove the JWT from the HTTP request and do not forward to the
-application.</p>
+If false, remove the JWT from the HTTP request and do not forward to the application.</p>
 
 </td>
 </tr>

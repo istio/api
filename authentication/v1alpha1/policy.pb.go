@@ -231,6 +231,42 @@ func (m *Destination) GetPorts() []uint32 {
 // - end_user: verify end-user credentials.
 // For each part, if it's not empty, at least one of those listed credential
 // must be provided and  (successfully) verified for the authentication to pass.
+//
+// Examples:
+// Policy to enable mTLS for all services in namespace frod
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: mTLS-enable
+//       namespace: frod
+//     spec:
+//       match:
+//       peer:
+//       - mtls: {}
+//
+// Policy to enable mTLS, and use JWT for productpage:9000
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: RouteRule
+//     metadata:
+//       name: mTLS-enable
+//       namespace: frod
+//     spec:
+//       match:
+//       - name: productpage
+//         ports:
+//         - 9000
+//       peer:
+//       - mtls:
+//       end_user:
+//       - jwt:
+//           issuer: "https://securetoken.google.com"
+//           audiences:
+//           - "productpage"
+//           jwks_uri: "https://www.googleapis.com/oauth2/v1/certs"
+//           locations:
+//           - header: x-goog-iap-jwt-assertion
 type Policy struct {
 	// List of destinations (workloads) that the policy should be applied on.
 	// If empty, policy will be used on all destinations in the same namespace.
