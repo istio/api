@@ -19,8 +19,7 @@ package istio.authentication.v1alpha1;
 option go_package = "istio.io/api/authentication/v1alpha1";
 
 import "gogoproto/gogo.proto";
-import "mixer/v1/config/client/auth.proto";
-import "routing/v1alpha2/route_rule.proto";
+import "google/protobuf/empty.proto";
 
 option (gogoproto.goproto_getters_all) = false;
 option (gogoproto.equal_all) = false;
@@ -29,14 +28,96 @@ option (gogoproto.gostring_all) = false;
 // Placer holder for mTLS authentication params.
 message MutualTLS {}
 
+// JSON Web Token (JWT) token format for authentication as defined by
+// https://tools.ietf.org/html/rfc7519. See [OAuth
+// 2.0](https://tools.ietf.org/html/rfc6749) and [OIDC
+// 1.0](http://openid.net/connect) for how this is used in the whole
+// authentication flow.
+//
+// Example,
+//
+//     issuer: https://example.com
+//     audiences:
+//     - bookstore_android.apps.googleusercontent.com
+//       bookstore_web.apps.googleusercontent.com
+//     jwks_uri: https://example.com/.well-known/jwks.json
+//
+message JWT {
+  // Identifies the principal that issued the JWT. See
+  // https://tools.ietf.org/html/rfc7519#section-4.1.1
+  // Usually a URL or an email address.
+  //
+  // Example: https://securetoken.google.com
+  // Example: 1234567-compute@developer.gserviceaccount.com
+  //
+  string issuer = 1;
+
+  // The list of JWT
+  // [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3).
+  // that are allowed to access. A JWT containing any of these
+  // audiences will be accepted.
+  //
+  // The service name will be accepted if audiences is empty.
+  //
+  // Example:
+  //
+  //     audiences:
+  //     - bookstore_android.apps.googleusercontent.com
+  //       bookstore_web.apps.googleusercontent.com
+  //
+  repeated string audiences = 2;
+
+  // URL of the provider's public key set to validate signature of the
+  // JWT. See [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
+  //
+  // Optional if the key set document can either (a) be retrieved from
+  // [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)
+  // of the issuer or (b) inferred from the email domain of the issuer
+  // (e.g. a Google service account).
+  //
+  // Example: https://www.googleapis.com/oauth2/v1/certs
+  string jwks_uri = 3;
+
+  // Defines where to extract the JWT from an HTTP request.
+  //
+  // If no explicit location is specified the following default
+  // locations are tried in order:
+  //
+  //     1) The Authorization header using the Bearer schema,
+  //        e.g. Authorization: Bearer <token>. (see
+  //        https://tools.ietf.org/html/rfc6750#section-2.1)
+  //
+  //     2) `access_token` query parameter (see
+  //     https://tools.ietf.org/html/rfc6750#section-2.3)
+  //
+  message Location {
+    oneof scheme {
+      // JWT is sent in a request header. `header` represents the
+      // header name.
+      //
+      // For example, if `header=x-goog-iap-jwt-assertion`, the header
+      // format will be x-goog-iap-jwt-assertion: <JWT>.
+      //
+      string header = 1;
+
+      // JWT is sent in a query parameter. `query` represents the
+      // query parameter name.
+      //
+      // For example, `query=jwt_token`.
+      string query = 2;
+    }
+  }
+  repeated Location locations = 6;
+}
+
 // AuthenticationMechanism defines one particular type of authentication (i.e
 // mutual TLS, JWT etc). The type can be progammatically determine by checking
 // the type of the "params" field.
 message Mechanism {
   oneof params {
-    bool none = 1;
+    google.protobuf.Empty none = 1;
     MutualTLS mtls = 2;
-    istio.mixer.v1.config.client.JWT jwt = 3;
+    JWT jwt = 3;
   }
 }
 

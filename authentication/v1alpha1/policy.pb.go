@@ -9,6 +9,7 @@ It is generated from these files:
 
 It has these top-level messages:
 	MutualTLS
+	JWT
 	Mechanism
 	Destination
 	Policy
@@ -19,8 +20,7 @@ import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
 import _ "gogoproto"
-import istio_mixer_v1_config_client1 "istio.io/api/mixer/v1/config/client"
-import _ "istio.io/api/routing/v1alpha2"
+import google_protobuf1 "github.com/golang/protobuf/ptypes/empty"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -42,6 +42,212 @@ func (m *MutualTLS) String() string            { return proto.CompactTextString(
 func (*MutualTLS) ProtoMessage()               {}
 func (*MutualTLS) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
 
+// JSON Web Token (JWT) token format for authentication as defined by
+// https://tools.ietf.org/html/rfc7519. See [OAuth
+// 2.0](https://tools.ietf.org/html/rfc6749) and [OIDC
+// 1.0](http://openid.net/connect) for how this is used in the whole
+// authentication flow.
+//
+// Example,
+//
+//     issuer: https://example.com
+//     audiences:
+//     - bookstore_android.apps.googleusercontent.com
+//       bookstore_web.apps.googleusercontent.com
+//     jwks_uri: https://example.com/.well-known/jwks.json
+//
+type JWT struct {
+	// Identifies the principal that issued the JWT. See
+	// https://tools.ietf.org/html/rfc7519#section-4.1.1
+	// Usually a URL or an email address.
+	//
+	// Example: https://securetoken.google.com
+	// Example: 1234567-compute@developer.gserviceaccount.com
+	//
+	Issuer string `protobuf:"bytes,1,opt,name=issuer" json:"issuer,omitempty"`
+	// The list of JWT
+	// [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3).
+	// that are allowed to access. A JWT containing any of these
+	// audiences will be accepted.
+	//
+	// The service name will be accepted if audiences is empty.
+	//
+	// Example:
+	//
+	//     audiences:
+	//     - bookstore_android.apps.googleusercontent.com
+	//       bookstore_web.apps.googleusercontent.com
+	//
+	Audiences []string `protobuf:"bytes,2,rep,name=audiences" json:"audiences,omitempty"`
+	// URL of the provider's public key set to validate signature of the
+	// JWT. See [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
+	//
+	// Optional if the key set document can either (a) be retrieved from
+	// [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)
+	// of the issuer or (b) inferred from the email domain of the issuer
+	// (e.g. a Google service account).
+	//
+	// Example: https://www.googleapis.com/oauth2/v1/certs
+	JwksUri   string          `protobuf:"bytes,3,opt,name=jwks_uri,json=jwksUri" json:"jwks_uri,omitempty"`
+	Locations []*JWT_Location `protobuf:"bytes,6,rep,name=locations" json:"locations,omitempty"`
+}
+
+func (m *JWT) Reset()                    { *m = JWT{} }
+func (m *JWT) String() string            { return proto.CompactTextString(m) }
+func (*JWT) ProtoMessage()               {}
+func (*JWT) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
+
+func (m *JWT) GetIssuer() string {
+	if m != nil {
+		return m.Issuer
+	}
+	return ""
+}
+
+func (m *JWT) GetAudiences() []string {
+	if m != nil {
+		return m.Audiences
+	}
+	return nil
+}
+
+func (m *JWT) GetJwksUri() string {
+	if m != nil {
+		return m.JwksUri
+	}
+	return ""
+}
+
+func (m *JWT) GetLocations() []*JWT_Location {
+	if m != nil {
+		return m.Locations
+	}
+	return nil
+}
+
+// Defines where to extract the JWT from an HTTP request.
+//
+// If no explicit location is specified the following default
+// locations are tried in order:
+//
+//     1) The Authorization header using the Bearer schema,
+//        e.g. Authorization: Bearer <token>. (see
+//        https://tools.ietf.org/html/rfc6750#section-2.1)
+//
+//     2) `access_token` query parameter (see
+//     https://tools.ietf.org/html/rfc6750#section-2.3)
+//
+type JWT_Location struct {
+	// Types that are valid to be assigned to Scheme:
+	//	*JWT_Location_Header
+	//	*JWT_Location_Query
+	Scheme isJWT_Location_Scheme `protobuf_oneof:"scheme"`
+}
+
+func (m *JWT_Location) Reset()                    { *m = JWT_Location{} }
+func (m *JWT_Location) String() string            { return proto.CompactTextString(m) }
+func (*JWT_Location) ProtoMessage()               {}
+func (*JWT_Location) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1, 0} }
+
+type isJWT_Location_Scheme interface{ isJWT_Location_Scheme() }
+
+type JWT_Location_Header struct {
+	Header string `protobuf:"bytes,1,opt,name=header,oneof"`
+}
+type JWT_Location_Query struct {
+	Query string `protobuf:"bytes,2,opt,name=query,oneof"`
+}
+
+func (*JWT_Location_Header) isJWT_Location_Scheme() {}
+func (*JWT_Location_Query) isJWT_Location_Scheme()  {}
+
+func (m *JWT_Location) GetScheme() isJWT_Location_Scheme {
+	if m != nil {
+		return m.Scheme
+	}
+	return nil
+}
+
+func (m *JWT_Location) GetHeader() string {
+	if x, ok := m.GetScheme().(*JWT_Location_Header); ok {
+		return x.Header
+	}
+	return ""
+}
+
+func (m *JWT_Location) GetQuery() string {
+	if x, ok := m.GetScheme().(*JWT_Location_Query); ok {
+		return x.Query
+	}
+	return ""
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*JWT_Location) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _JWT_Location_OneofMarshaler, _JWT_Location_OneofUnmarshaler, _JWT_Location_OneofSizer, []interface{}{
+		(*JWT_Location_Header)(nil),
+		(*JWT_Location_Query)(nil),
+	}
+}
+
+func _JWT_Location_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*JWT_Location)
+	// scheme
+	switch x := m.Scheme.(type) {
+	case *JWT_Location_Header:
+		b.EncodeVarint(1<<3 | proto.WireBytes)
+		b.EncodeStringBytes(x.Header)
+	case *JWT_Location_Query:
+		b.EncodeVarint(2<<3 | proto.WireBytes)
+		b.EncodeStringBytes(x.Query)
+	case nil:
+	default:
+		return fmt.Errorf("JWT_Location.Scheme has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _JWT_Location_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*JWT_Location)
+	switch tag {
+	case 1: // scheme.header
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.Scheme = &JWT_Location_Header{x}
+		return true, err
+	case 2: // scheme.query
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.Scheme = &JWT_Location_Query{x}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _JWT_Location_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*JWT_Location)
+	// scheme
+	switch x := m.Scheme.(type) {
+	case *JWT_Location_Header:
+		n += proto.SizeVarint(1<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(len(x.Header)))
+		n += len(x.Header)
+	case *JWT_Location_Query:
+		n += proto.SizeVarint(2<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(len(x.Query)))
+		n += len(x.Query)
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
 // AuthenticationMechanism defines one particular type of authentication (i.e
 // mutual TLS, JWT etc). The type can be progammatically determine by checking
 // the type of the "params" field.
@@ -56,18 +262,18 @@ type Mechanism struct {
 func (m *Mechanism) Reset()                    { *m = Mechanism{} }
 func (m *Mechanism) String() string            { return proto.CompactTextString(m) }
 func (*Mechanism) ProtoMessage()               {}
-func (*Mechanism) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
+func (*Mechanism) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
 
 type isMechanism_Params interface{ isMechanism_Params() }
 
 type Mechanism_None struct {
-	None bool `protobuf:"varint,1,opt,name=none,oneof"`
+	None *google_protobuf1.Empty `protobuf:"bytes,1,opt,name=none,oneof"`
 }
 type Mechanism_Mtls struct {
 	Mtls *MutualTLS `protobuf:"bytes,2,opt,name=mtls,oneof"`
 }
 type Mechanism_Jwt struct {
-	Jwt *istio_mixer_v1_config_client1.JWT `protobuf:"bytes,3,opt,name=jwt,oneof"`
+	Jwt *JWT `protobuf:"bytes,3,opt,name=jwt,oneof"`
 }
 
 func (*Mechanism_None) isMechanism_Params() {}
@@ -81,11 +287,11 @@ func (m *Mechanism) GetParams() isMechanism_Params {
 	return nil
 }
 
-func (m *Mechanism) GetNone() bool {
+func (m *Mechanism) GetNone() *google_protobuf1.Empty {
 	if x, ok := m.GetParams().(*Mechanism_None); ok {
 		return x.None
 	}
-	return false
+	return nil
 }
 
 func (m *Mechanism) GetMtls() *MutualTLS {
@@ -95,7 +301,7 @@ func (m *Mechanism) GetMtls() *MutualTLS {
 	return nil
 }
 
-func (m *Mechanism) GetJwt() *istio_mixer_v1_config_client1.JWT {
+func (m *Mechanism) GetJwt() *JWT {
 	if x, ok := m.GetParams().(*Mechanism_Jwt); ok {
 		return x.Jwt
 	}
@@ -116,12 +322,10 @@ func _Mechanism_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	// params
 	switch x := m.Params.(type) {
 	case *Mechanism_None:
-		t := uint64(0)
-		if x.None {
-			t = 1
+		b.EncodeVarint(1<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.None); err != nil {
+			return err
 		}
-		b.EncodeVarint(1<<3 | proto.WireVarint)
-		b.EncodeVarint(t)
 	case *Mechanism_Mtls:
 		b.EncodeVarint(2<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.Mtls); err != nil {
@@ -143,11 +347,12 @@ func _Mechanism_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buff
 	m := msg.(*Mechanism)
 	switch tag {
 	case 1: // params.none
-		if wire != proto.WireVarint {
+		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		x, err := b.DecodeVarint()
-		m.Params = &Mechanism_None{x != 0}
+		msg := new(google_protobuf1.Empty)
+		err := b.DecodeMessage(msg)
+		m.Params = &Mechanism_None{msg}
 		return true, err
 	case 2: // params.mtls
 		if wire != proto.WireBytes {
@@ -161,7 +366,7 @@ func _Mechanism_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buff
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(istio_mixer_v1_config_client1.JWT)
+		msg := new(JWT)
 		err := b.DecodeMessage(msg)
 		m.Params = &Mechanism_Jwt{msg}
 		return true, err
@@ -175,8 +380,10 @@ func _Mechanism_OneofSizer(msg proto.Message) (n int) {
 	// params
 	switch x := m.Params.(type) {
 	case *Mechanism_None:
-		n += proto.SizeVarint(1<<3 | proto.WireVarint)
-		n += 1
+		s := proto.Size(x.None)
+		n += proto.SizeVarint(1<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
 	case *Mechanism_Mtls:
 		s := proto.Size(x.Mtls)
 		n += proto.SizeVarint(2<<3 | proto.WireBytes)
@@ -209,7 +416,7 @@ type Destination struct {
 func (m *Destination) Reset()                    { *m = Destination{} }
 func (m *Destination) String() string            { return proto.CompactTextString(m) }
 func (*Destination) ProtoMessage()               {}
-func (*Destination) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
+func (*Destination) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
 
 func (m *Destination) GetName() string {
 	if m != nil {
@@ -285,7 +492,7 @@ type Policy struct {
 func (m *Policy) Reset()                    { *m = Policy{} }
 func (m *Policy) String() string            { return proto.CompactTextString(m) }
 func (*Policy) ProtoMessage()               {}
-func (*Policy) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
+func (*Policy) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
 
 func (m *Policy) GetMatch() []*Destination {
 	if m != nil {
@@ -310,6 +517,8 @@ func (m *Policy) GetEndUsers() []*Mechanism {
 
 func init() {
 	proto.RegisterType((*MutualTLS)(nil), "istio.authentication.v1alpha1.MutualTLS")
+	proto.RegisterType((*JWT)(nil), "istio.authentication.v1alpha1.JWT")
+	proto.RegisterType((*JWT_Location)(nil), "istio.authentication.v1alpha1.JWT.Location")
 	proto.RegisterType((*Mechanism)(nil), "istio.authentication.v1alpha1.Mechanism")
 	proto.RegisterType((*Destination)(nil), "istio.authentication.v1alpha1.Destination")
 	proto.RegisterType((*Policy)(nil), "istio.authentication.v1alpha1.Policy")
@@ -318,30 +527,36 @@ func init() {
 func init() { proto.RegisterFile("authentication/v1alpha1/policy.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
-	// 392 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0x4f, 0x8a, 0xdb, 0x30,
-	0x18, 0xc5, 0xed, 0x3a, 0x09, 0xb1, 0x4c, 0x37, 0x22, 0x0b, 0x13, 0x68, 0x70, 0x4c, 0x16, 0xa6,
-	0x0b, 0x09, 0xbb, 0x94, 0xee, 0x42, 0x09, 0x2d, 0x84, 0xd2, 0x40, 0x71, 0x53, 0x0a, 0xdd, 0x04,
-	0xd5, 0x51, 0x6d, 0x15, 0x5b, 0x32, 0xb6, 0x9c, 0x76, 0xae, 0x33, 0xab, 0x39, 0xca, 0x6c, 0xe7,
-	0x08, 0x99, 0x13, 0xcc, 0x11, 0x06, 0x49, 0xe3, 0x61, 0x66, 0x31, 0xff, 0x76, 0x92, 0x79, 0xbf,
-	0xf7, 0x7d, 0xef, 0x59, 0x60, 0x41, 0x3a, 0x59, 0x50, 0x2e, 0x59, 0x46, 0x24, 0x13, 0x1c, 0x1f,
-	0x62, 0x52, 0xd6, 0x05, 0x89, 0x71, 0x2d, 0x4a, 0x96, 0x9d, 0xa0, 0xba, 0x11, 0x52, 0xc0, 0x37,
-	0xac, 0x95, 0x4c, 0xa0, 0xfb, 0x5a, 0xd4, 0x6b, 0xa7, 0x93, 0x5c, 0xe4, 0x42, 0x2b, 0xb1, 0x3a,
-	0x19, 0x68, 0x3a, 0xaf, 0xd8, 0x7f, 0xda, 0xe0, 0x43, 0x8c, 0x33, 0xc1, 0xff, 0xb0, 0x1c, 0x67,
-	0x25, 0xa3, 0x5c, 0x62, 0xe5, 0xd2, 0x4b, 0x1a, 0xd1, 0x49, 0xc6, 0xf3, 0x7e, 0x6c, 0x82, 0xd5,
-	0x07, 0xba, 0x6b, 0xba, 0x92, 0x1a, 0x49, 0xe8, 0x01, 0x77, 0xd3, 0xc9, 0x8e, 0x94, 0xdb, 0xaf,
-	0xdf, 0xc3, 0x53, 0x1b, 0xb8, 0x1b, 0x9a, 0x15, 0x84, 0xb3, 0xb6, 0x82, 0x13, 0x30, 0xe0, 0x82,
-	0x53, 0xdf, 0x0e, 0xec, 0x68, 0xbc, 0xb6, 0x52, 0x7d, 0x83, 0x4b, 0x30, 0xa8, 0x64, 0xd9, 0xfa,
-	0xaf, 0x02, 0x3b, 0xf2, 0x92, 0x08, 0x3d, 0xba, 0x3a, 0xba, 0xf5, 0x56, 0xbc, 0xe2, 0xe0, 0x7b,
-	0xe0, 0xfc, 0xfd, 0x27, 0x7d, 0x47, 0xe3, 0xf3, 0x1b, 0x5c, 0x47, 0x41, 0x87, 0x18, 0x99, 0x28,
-	0xc8, 0x44, 0x41, 0x5f, 0x7e, 0x6e, 0xd7, 0x56, 0xaa, 0xf4, 0xab, 0x31, 0x18, 0xd5, 0xa4, 0x21,
-	0x55, 0x1b, 0x7e, 0x00, 0xde, 0x27, 0xda, 0x4a, 0xc6, 0xf5, 0x28, 0x08, 0xc1, 0x80, 0x93, 0xca,
-	0x6c, 0xe9, 0xa6, 0xfa, 0x0c, 0x27, 0x60, 0x58, 0x8b, 0x46, 0xb6, 0xbe, 0x13, 0x38, 0xd1, 0xeb,
-	0xd4, 0x5c, 0xc2, 0x0b, 0x1b, 0x8c, 0xbe, 0xe9, 0xda, 0xe1, 0x47, 0x30, 0xac, 0x88, 0xcc, 0x0a,
-	0xdf, 0x0e, 0x9c, 0xc8, 0x4b, 0xde, 0x3e, 0x91, 0xe2, 0xce, 0xbc, 0xd4, 0x80, 0x70, 0x09, 0x86,
-	0x35, 0xa5, 0x8d, 0xea, 0xc1, 0x79, 0x4e, 0x0f, 0x7d, 0xab, 0xa9, 0xc1, 0xe0, 0x67, 0xe0, 0x52,
-	0xbe, 0xdf, 0x75, 0xad, 0xf2, 0x70, 0x5e, 0xe8, 0x31, 0xa6, 0x7c, 0xff, 0x43, 0x91, 0xab, 0xe4,
-	0xfc, 0x38, 0xb3, 0xae, 0x8e, 0x33, 0xeb, 0xec, 0x72, 0x66, 0xfd, 0x5a, 0x18, 0x03, 0x26, 0x30,
-	0xa9, 0x19, 0x7e, 0xe0, 0xe9, 0xfd, 0x1e, 0xe9, 0x3f, 0xff, 0xee, 0x3a, 0x00, 0x00, 0xff, 0xff,
-	0x0a, 0x19, 0x4c, 0x39, 0x9c, 0x02, 0x00, 0x00,
+	// 481 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x93, 0x41, 0x6e, 0xd4, 0x30,
+	0x14, 0x86, 0x93, 0x66, 0x26, 0x4c, 0x5e, 0xc4, 0xc6, 0xaa, 0x46, 0x61, 0x80, 0xd1, 0x28, 0xea,
+	0x62, 0x04, 0x28, 0x51, 0x83, 0x04, 0xbb, 0x0a, 0x55, 0x14, 0x0d, 0x55, 0x2b, 0xa1, 0x30, 0x55,
+	0x25, 0x36, 0x95, 0x9b, 0x79, 0x4c, 0x5c, 0x12, 0x3b, 0xc4, 0x0e, 0x55, 0x6f, 0xc4, 0x1d, 0xb8,
+	0x00, 0x5b, 0x8e, 0x50, 0x76, 0xec, 0x38, 0x02, 0x8a, 0x9d, 0x50, 0x58, 0xc0, 0xc0, 0xce, 0xbf,
+	0xf3, 0xbe, 0x3f, 0xcf, 0xff, 0xb3, 0x61, 0x87, 0x36, 0x2a, 0x47, 0xae, 0x58, 0x46, 0x15, 0x13,
+	0x3c, 0xfe, 0xb0, 0x4b, 0x8b, 0x2a, 0xa7, 0xbb, 0x71, 0x25, 0x0a, 0x96, 0x5d, 0x45, 0x55, 0x2d,
+	0x94, 0x20, 0xf7, 0x99, 0x54, 0x4c, 0x44, 0xbf, 0xd7, 0x46, 0x7d, 0xed, 0x64, 0x7b, 0x2d, 0xd6,
+	0x42, 0x57, 0xc6, 0xed, 0xca, 0x40, 0x93, 0xbb, 0x6b, 0x21, 0xd6, 0x05, 0xc6, 0x5a, 0x9d, 0x37,
+	0x6f, 0x63, 0x2c, 0x2b, 0xd5, 0x39, 0x86, 0x3e, 0x78, 0xc7, 0x8d, 0x6a, 0x68, 0xb1, 0x3c, 0x7a,
+	0x1d, 0x7e, 0xb3, 0xc1, 0x39, 0x3c, 0x5d, 0x92, 0x31, 0xb8, 0x4c, 0xca, 0x06, 0xeb, 0xc0, 0x9e,
+	0xd9, 0x73, 0x2f, 0xed, 0x14, 0xb9, 0x07, 0x1e, 0x6d, 0x56, 0x0c, 0x79, 0x86, 0x32, 0xd8, 0x9a,
+	0x39, 0x73, 0x2f, 0xbd, 0xd9, 0x20, 0x77, 0x60, 0x74, 0x71, 0xf9, 0x4e, 0x9e, 0x35, 0x35, 0x0b,
+	0x1c, 0xcd, 0xdd, 0x6a, 0xf5, 0x49, 0xcd, 0xc8, 0x4b, 0xf0, 0x0a, 0x61, 0xba, 0x95, 0x81, 0x3b,
+	0x73, 0xe6, 0x7e, 0xf2, 0x30, 0xfa, 0xeb, 0x59, 0xa2, 0xc3, 0xd3, 0x65, 0x74, 0xd4, 0x31, 0xe9,
+	0x0d, 0x3d, 0x79, 0x01, 0xa3, 0x7e, 0x9b, 0x04, 0xe0, 0xe6, 0x48, 0x57, 0x7d, 0x9f, 0x0b, 0x2b,
+	0xed, 0x34, 0x19, 0xc3, 0xf0, 0x7d, 0x83, 0xf5, 0x55, 0xb0, 0xd5, 0x7d, 0x30, 0x72, 0x7f, 0x04,
+	0xae, 0xcc, 0x72, 0x2c, 0x31, 0xfc, 0x64, 0x83, 0x77, 0x8c, 0x59, 0x4e, 0x39, 0x93, 0x25, 0x79,
+	0x04, 0x03, 0x2e, 0x38, 0x6a, 0x1f, 0x3f, 0x19, 0x47, 0x26, 0xb2, 0xa8, 0x8f, 0x2c, 0x3a, 0x68,
+	0x23, 0x5b, 0x58, 0xa9, 0xae, 0x22, 0x7b, 0x30, 0x28, 0x55, 0x21, 0xb5, 0xb9, 0x9f, 0xcc, 0x37,
+	0x9c, 0xe4, 0x67, 0xbe, 0x2d, 0xdf, 0x72, 0xe4, 0x09, 0x38, 0x17, 0x97, 0x4a, 0x87, 0xe4, 0x27,
+	0xe1, 0xe6, 0x20, 0x16, 0x56, 0xda, 0x02, 0x6d, 0xf7, 0x15, 0xad, 0x69, 0x29, 0xc3, 0xa7, 0xe0,
+	0x3f, 0x47, 0xa9, 0x18, 0x37, 0x41, 0x10, 0x18, 0x70, 0x5a, 0x62, 0x37, 0x2e, 0xbd, 0x26, 0xdb,
+	0x30, 0xac, 0x44, 0xad, 0x64, 0xe0, 0xcc, 0x9c, 0xf9, 0xed, 0xd4, 0x88, 0xf0, 0x8b, 0x0d, 0xee,
+	0x2b, 0x7d, 0xa5, 0xc8, 0x33, 0x18, 0x96, 0x54, 0x65, 0x79, 0x60, 0xeb, 0x81, 0x3c, 0xd8, 0xd0,
+	0xc7, 0x2f, 0xff, 0x4b, 0x0d, 0x48, 0xf6, 0x60, 0x58, 0x21, 0xd6, 0xe6, 0x2e, 0xfc, 0x43, 0x10,
+	0x7d, 0xdc, 0xa9, 0xc1, 0xc8, 0x01, 0x78, 0xc8, 0x57, 0x67, 0x8d, 0x6c, 0x3d, 0x9c, 0xff, 0xf4,
+	0x18, 0x21, 0x5f, 0x9d, 0xb4, 0xe4, 0x7e, 0xf2, 0xf9, 0x7a, 0x6a, 0x7d, 0xbf, 0x9e, 0x5a, 0x1f,
+	0xbf, 0x4e, 0xad, 0x37, 0x3b, 0xc6, 0x80, 0x89, 0x98, 0x56, 0x2c, 0xfe, 0xc3, 0xb3, 0x3a, 0x77,
+	0xf5, 0x68, 0x1f, 0xff, 0x08, 0x00, 0x00, 0xff, 0xff, 0x68, 0x42, 0x10, 0xfb, 0x78, 0x03, 0x00,
+	0x00,
 }
