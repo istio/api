@@ -152,9 +152,10 @@ func (m *Jwt) GetJwtParams() []string {
 	return nil
 }
 
-// AuthenticaitonMechanism defines one particular type of authentication (i.e
-// mutual TLS, JWT etc). The type can be progammatically determine by checking
-// the type of the "params" field.
+// AuthenticaitonMechanism defines one particular type of authentication, e.g
+// mutual TLS, JWT etc, (no authentication is one type by itsefl).
+// The type can be progammatically determine by checking the type of the
+// "params" field.
 type AuthenticationMechanism struct {
 	// Types that are valid to be assigned to Params:
 	//	*AuthenticationMechanism_None

@@ -14,6 +14,9 @@
 
 syntax = "proto3";
 
+// $title: Authentication Policy
+// $overview: Authentication policy for Istio services.
+
 package istio.authentication.v1alpha1;
 
 option go_package = "istio.io/api/authentication/v1alpha1";
@@ -106,9 +109,10 @@ message Jwt {
   repeated string jwt_params = 7;
 }
 
-// AuthenticaitonMechanism defines one particular type of authentication (i.e
-// mutual TLS, JWT etc). The type can be progammatically determine by checking
-// the type of the "params" field.
+// AuthenticaitonMechanism defines one particular type of authentication, e.g
+// mutual TLS, JWT etc, (no authentication is one type by itsefl).
+// The type can be progammatically determine by checking the type of the
+// "params" field.
 message AuthenticationMechanism {
   oneof params {
     None none = 1;
