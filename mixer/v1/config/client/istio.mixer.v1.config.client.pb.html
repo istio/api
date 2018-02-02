@@ -7,6 +7,9 @@ layout: protoc-gen-docs
 <h2 id="Enumerations">Enumerations</h2>
 <h3 id="TransportConfig.NetworkFailPolicy">TransportConfig.NetworkFailPolicy</h3>
 <section>
+<p>NetworkFailPolicy defines behavior when network connection
+failure occurs.</p>
+
 <table class="enum-values">
 <tr>
 <th>Name</th>
@@ -196,6 +199,9 @@ that should be mapped to the specified service(s).</p>
 </section>
 <h3 id="EndUserAuthenticationPolicySpecReference">EndUserAuthenticationPolicySpecReference</h3>
 <section>
+<p>EndUserAuthenticationPolicySpecReference defines a reference to an
+an EndUserAuthenticationPolicySpec.</p>
+
 <table class="message-fields">
 <tr>
 <th>Field</th>
@@ -678,6 +684,8 @@ specified.</p>
 <td><code>locations</code></td>
 <td><code><a href="#JWT.Location">JWT.Location[]</a></code></td>
 <td>
+<p>Zero or more locations to search for JWT in an HTTP request.</p>
+
 </td>
 </tr>
 <tr id="JWT.jwks_uri_envoy_cluster">
@@ -848,6 +856,8 @@ conditions defined in the QuotaSpecs should not overlap.</p>
 </section>
 <h3 id="QuotaSpecBinding.QuotaSpecReference">QuotaSpecBinding.QuotaSpecReference</h3>
 <section>
+<p>QuotaSpecReference defines a reference to a QuotaSpec.</p>
+
 <table class="message-fields">
 <tr>
 <th>Field</th>
