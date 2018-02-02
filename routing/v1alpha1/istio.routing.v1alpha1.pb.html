@@ -40,7 +40,7 @@ decouple itself from the evolution of dependent services.</p>
 <section>
 <p>Load balancing algorithms supported by Envoy.</p>
 
-<table>
+<table class="enum-values">
 <tr>
 <th>Name</th>
 <th>Description</th>
@@ -85,7 +85,7 @@ See Envoy&rsquo;s
 and <a href="https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/outlier">outlier detection</a>
 for more details.</p>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -151,7 +151,7 @@ spec:
       httpDetectionInterval: 5m
 </code></pre>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -269,7 +269,7 @@ spec:
     maxAge: &quot;1d&quot;
 </code></pre>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -383,7 +383,7 @@ tagged instances are explicitly routed to. In other words, for every
 destination policy defined, at least one route rule must refer to the
 service version indicated in the destination policy.</p>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -457,7 +457,7 @@ spec:
     weight: 75
 </code></pre>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -539,7 +539,7 @@ spec:
       protocol: tcp
 </code></pre>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -592,7 +592,7 @@ These dedicated egress nodes could then be more closely monitored for security v
 <section>
 <p>Port describes the properties of a specific TCP port of an external service.</p>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -628,7 +628,7 @@ proxying of requests. A fault rule MUST HAVE delay or abort or both.</p>
 <p><em>Note:</em> Delay and abort faults are independent of one another, even if
 both are specified simultaneously.</p>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -679,7 +679,7 @@ return to the caller. The optional <em>percent</em> field, a value between 0
 and 100, is used to only abort a certain percentage of requests. If
 not specified, all requests are aborted.</p>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -750,7 +750,7 @@ seconds. An optional <em>percent</em> field, a value between 0 and 100, can
 be used to only delay a certain percentage of requests. If left
 unspecified, all request will be delayed.</p>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -816,7 +816,7 @@ spec:
     authority: bookratings.default.svc.cluster.local
 </code></pre>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -864,7 +864,7 @@ spec:
       perTryTimeout: 2s
 </code></pre>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -888,7 +888,7 @@ spec:
 </section>
 <h3 id="HTTPRetry.SimpleRetryPolicy">HTTPRetry.SimpleRetryPolicy</h3>
 <section>
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -949,7 +949,7 @@ spec:
       version: v1
 </code></pre>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -994,7 +994,7 @@ spec:
       timeout: 10s
 </code></pre>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -1018,7 +1018,7 @@ spec:
 </section>
 <h3 id="HTTPTimeout.SimpleTimeoutPolicy">HTTPTimeout.SimpleTimeoutPolicy</h3>
 <section>
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -1061,7 +1061,7 @@ also effective.</p>
 
 <p>WARNING: This API is experimental and under active development</p>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -1139,7 +1139,7 @@ of the service and therefore the IstioService&rsquo;s labels field MUST be empty
 The FQDN of the service is composed from the name, namespace, and implementation-specific domain suffix
 (e.g. on Kubernetes, &ldquo;reviews&rdquo; + &ldquo;default&rdquo; + &ldquo;svc.cluster.local&rdquo; -&gt; &ldquo;reviews.default.svc.cluster.local&rdquo;).</p>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -1200,7 +1200,7 @@ end). Bandwidth throttling for failure testing should not be confused
 with the rate limiting policy enforcement provided by the Mixer
 component. L4 fault injection is not supported at the moment. &ndash;)</p>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -1231,7 +1231,7 @@ We first throttle (if set) and then terminate the connection.</p>
 <p>Abruptly reset (terminate) the Tcp connection after it has been
 established, emulating remote server crash or link failure.</p>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -1260,7 +1260,7 @@ express time interval related configs.</p>
 <section>
 <p>Bandwidth throttling for Tcp and Udp connections</p>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -1326,7 +1326,7 @@ will be throttled for its lifetime.</p>
 <p>(&ndash; L4 connection match attributes. Note that L4 connection matching
 support is incomplete. &ndash;)</p>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -1370,7 +1370,7 @@ spec:
     name: RANDOM
 </code></pre>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -1427,7 +1427,7 @@ spec:
 <p>MatchCondition CANNOT be empty. At least one source or
 request header must be specified.</p>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -1471,7 +1471,7 @@ request header must be specified.</p>
 <section>
 <p>MatchRequest specifies the attributes of an HTTP request to be used for matching a request.</p>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -1533,7 +1533,7 @@ spec:
     weight: 100
 </code></pre>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
@@ -1687,7 +1687,7 @@ destnation service.</p>
 <section>
 <p>Describes how to match a given string in HTTP headers. Match is case-sensitive.</p>
 
-<table>
+<table class="message-fields">
 <tr>
 <th>Field</th>
 <th>Type</th>
