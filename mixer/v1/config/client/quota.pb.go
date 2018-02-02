@@ -232,7 +232,8 @@ func (m *QuotaSpecBinding) Reset()                    { *m = QuotaSpecBinding{} 
 func (*QuotaSpecBinding) ProtoMessage()               {}
 func (*QuotaSpecBinding) Descriptor() ([]byte, []int) { return fileDescriptorQuota, []int{5} }
 
-// QuotaSpecReference defines a reference to a QuotaSpec.
+// QuotaSpecReference uniquely identifies the QuotaSpec used in the
+// Binding.
 type QuotaSpecBinding_QuotaSpecReference struct {
 	// REQUIRED. The short name of the QuotaSpec. This is the resource
 	// name defined by the metadata name field.

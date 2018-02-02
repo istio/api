@@ -243,8 +243,8 @@ func (*EndUserAuthenticationPolicySpec) Descriptor() ([]byte, []int) {
 	return fileDescriptorAuth, []int{1}
 }
 
-// EndUserAuthenticationPolicySpecReference defines a reference to an
-// an EndUserAuthenticationPolicySpec.
+// EndUserAuthenticationPolicySpecReference identifies a
+// EndUserAuthenticationPolicySpec that is bound to a set of services.
 type EndUserAuthenticationPolicySpecReference struct {
 	// REQUIRED. The short name of the
 	// EndUserAuthenticationPolicySpec. This is the resource name
