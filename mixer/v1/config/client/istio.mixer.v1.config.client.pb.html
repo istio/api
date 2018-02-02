@@ -161,6 +161,46 @@ include a JWT.</p>
 
 </td>
 </tr>
+<tr id="EndUserAuthenticationPolicySpec.no_jwt_patterns">
+<td><code>noJwtPatterns</code></td>
+<td><code><a href="#EndUserAuthenticationPolicySpec.Pattern">EndUserAuthenticationPolicySpec.Pattern[]</a></code></td>
+<td>
+<p>If a request doesn&rsquo;t have JWT, it will be rejected.
+But some requests are OK without JWT, such as OPTIONS for CORS,
+or some paths for health checking.
+If a request matches any of no<em>jwt</em>patterns, it is OK without JWT.</p>
+
+</td>
+</tr>
+</table>
+</section>
+<h3 id="EndUserAuthenticationPolicySpec.Pattern">EndUserAuthenticationPolicySpec.Pattern</h3>
+<section>
+<p>This message defines a pattern to match a request.
+A pattern is matched only if both http<em>method and path</em>prefix are matched.</p>
+
+<table>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr id="EndUserAuthenticationPolicySpec.Pattern.http_method">
+<td><code>httpMethod</code></td>
+<td><code>string</code></td>
+<td>
+<p>Define a HTTP method.</p>
+
+</td>
+</tr>
+<tr id="EndUserAuthenticationPolicySpec.Pattern.path_prefix">
+<td><code>pathPrefix</code></td>
+<td><code>string</code></td>
+<td>
+<p>Defines a path prefix to match</p>
+
+</td>
+</tr>
 </table>
 </section>
 <h3 id="EndUserAuthenticationPolicySpecBinding">EndUserAuthenticationPolicySpecBinding</h3>
