@@ -166,7 +166,7 @@ message AuthenticationMechanism {
 message AuthenticationPolicy {
   // List of destinations (workloads) that the policy should be applied on.
   // If empty, policy will be used on all destinations in the same namespace.
-  repeated istio.routing.v1alpha2.Destination match = 1;
+  repeated istio.routing.v1alpha2.Destination destinations = 1;
 
   // List of credential that should be checked by peer authentication. They
   // will be validated in sequence, until the first one satisfied. If none of
