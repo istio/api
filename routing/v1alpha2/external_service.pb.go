@@ -51,7 +51,7 @@ var ExternalService_Discovery_value = map[string]int32{
 func (x ExternalService_Discovery) String() string {
 	return proto.EnumName(ExternalService_Discovery_name, int32(x))
 }
-func (ExternalService_Discovery) EnumDescriptor() ([]byte, []int) { return fileDescriptor1, []int{0, 0} }
+func (ExternalService_Discovery) EnumDescriptor() ([]byte, []int) { return fileDescriptor2, []int{0, 0} }
 
 // External service describes the endpoints, ports and protocols of a
 // white-listed set of mesh-external domains and IP blocks that services in
@@ -219,7 +219,7 @@ type ExternalService struct {
 func (m *ExternalService) Reset()                    { *m = ExternalService{} }
 func (m *ExternalService) String() string            { return proto.CompactTextString(m) }
 func (*ExternalService) ProtoMessage()               {}
-func (*ExternalService) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{0} }
+func (*ExternalService) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0} }
 
 func (m *ExternalService) GetHosts() []string {
 	if m != nil {
@@ -266,7 +266,7 @@ type ExternalService_Endpoint struct {
 func (m *ExternalService_Endpoint) Reset()                    { *m = ExternalService_Endpoint{} }
 func (m *ExternalService_Endpoint) String() string            { return proto.CompactTextString(m) }
 func (*ExternalService_Endpoint) ProtoMessage()               {}
-func (*ExternalService_Endpoint) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{0, 0} }
+func (*ExternalService_Endpoint) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0, 0} }
 
 func (m *ExternalService_Endpoint) GetAddress() string {
 	if m != nil {
@@ -295,9 +295,9 @@ func init() {
 	proto.RegisterEnum("istio.routing.v1alpha2.ExternalService_Discovery", ExternalService_Discovery_name, ExternalService_Discovery_value)
 }
 
-func init() { proto.RegisterFile("routing/v1alpha2/external_service.proto", fileDescriptor1) }
+func init() { proto.RegisterFile("routing/v1alpha2/external_service.proto", fileDescriptor2) }
 
-var fileDescriptor1 = []byte{
+var fileDescriptor2 = []byte{
 	// 374 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0x4b, 0x6f, 0x9b, 0x40,
 	0x10, 0xc7, 0x0b, 0xf8, 0xc5, 0x58, 0x6d, 0xd1, 0xaa, 0xaa, 0x10, 0xea, 0x03, 0xf9, 0x52, 0xd4,
