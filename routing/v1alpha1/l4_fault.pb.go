@@ -34,7 +34,7 @@ type L4FaultInjection struct {
 func (m *L4FaultInjection) Reset()                    { *m = L4FaultInjection{} }
 func (m *L4FaultInjection) String() string            { return proto.CompactTextString(m) }
 func (*L4FaultInjection) ProtoMessage()               {}
-func (*L4FaultInjection) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{0} }
+func (*L4FaultInjection) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{0} }
 
 func (m *L4FaultInjection) GetThrottle() *L4FaultInjection_Throttle {
 	if m != nil {
@@ -70,7 +70,7 @@ type L4FaultInjection_Throttle struct {
 func (m *L4FaultInjection_Throttle) Reset()                    { *m = L4FaultInjection_Throttle{} }
 func (m *L4FaultInjection_Throttle) String() string            { return proto.CompactTextString(m) }
 func (*L4FaultInjection_Throttle) ProtoMessage()               {}
-func (*L4FaultInjection_Throttle) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{0, 0} }
+func (*L4FaultInjection_Throttle) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{0, 0} }
 
 type isL4FaultInjection_Throttle_ThrottleAfter interface {
 	isL4FaultInjection_Throttle_ThrottleAfter()
@@ -217,7 +217,7 @@ type L4FaultInjection_Terminate struct {
 func (m *L4FaultInjection_Terminate) Reset()                    { *m = L4FaultInjection_Terminate{} }
 func (m *L4FaultInjection_Terminate) String() string            { return proto.CompactTextString(m) }
 func (*L4FaultInjection_Terminate) ProtoMessage()               {}
-func (*L4FaultInjection_Terminate) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{0, 1} }
+func (*L4FaultInjection_Terminate) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{0, 1} }
 
 func (m *L4FaultInjection_Terminate) GetPercent() float32 {
 	if m != nil {
@@ -239,9 +239,9 @@ func init() {
 	proto.RegisterType((*L4FaultInjection_Terminate)(nil), "istio.routing.v1alpha1.L4FaultInjection.Terminate")
 }
 
-func init() { proto.RegisterFile("routing/v1alpha1/l4_fault.proto", fileDescriptor4) }
+func init() { proto.RegisterFile("routing/v1alpha1/l4_fault.proto", fileDescriptor5) }
 
-var fileDescriptor4 = []byte{
+var fileDescriptor5 = []byte{
 	// 375 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x92, 0xd1, 0x4e, 0xc2, 0x30,
 	0x18, 0x85, 0xd9, 0x10, 0x84, 0x9a, 0x18, 0xac, 0x48, 0x26, 0x89, 0x42, 0xbc, 0xe2, 0xc2, 0x74,

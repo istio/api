@@ -1,0 +1,48 @@
+// Copyright 2017 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+// $title: Route Rules Alpha 2
+// $overview: Configuration affecting traffic routing
+
+// Configuration affecting traffic routing. Here are a few terms useful to define
+// in the context of routing rules.
+//
+// *Service* a unit of application behavior bound to a unique name in a
+// service registry.  Services consist of multiple network *endpoints*
+// implemented by workload instances running on pods, containers, VMs etc.
+//
+// *Service versions (subsets)* - In a continuous deployment scenario, for
+// a given service, there can be distinct subsets of instances running
+// different variants of the application binary. These variants are not
+// necessarily different API versions. They could be iterative changes to
+// the same service, deployed in different environments (prod, staging,
+// dev, etc.). Common scenarios where this occurs include A/B testing,
+// canary rollouts, etc. The choice of a particular version can be decided
+// based on various criterion (headers, url, etc.) and/or by weights
+// assigned to each version.  Each service has a default version consisting
+// of all its instances.
+//
+// *Source* - A downstream client calling a service.
+//
+// *Host* - The address used by a client when attempting to connect to a
+// service.
+//
+// *Access model* - Applications address only the destination service
+// (Host) without knowledge of individual service versions (subsets). The
+// actual choice of the version is determined by the sidecar, enabling the
+// application code to decouple itself from the evolution of dependent
+// services.
+package istio.routing.v1alpha2;

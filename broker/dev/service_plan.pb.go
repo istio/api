@@ -28,7 +28,7 @@ type ServicePlan struct {
 func (m *ServicePlan) Reset()                    { *m = ServicePlan{} }
 func (m *ServicePlan) String() string            { return proto.CompactTextString(m) }
 func (*ServicePlan) ProtoMessage()               {}
-func (*ServicePlan) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{0} }
+func (*ServicePlan) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0} }
 
 func (m *ServicePlan) GetPlan() *CatalogPlan {
 	if m != nil {
@@ -60,7 +60,7 @@ type CatalogPlan struct {
 func (m *CatalogPlan) Reset()                    { *m = CatalogPlan{} }
 func (m *CatalogPlan) String() string            { return proto.CompactTextString(m) }
 func (*CatalogPlan) ProtoMessage()               {}
-func (*CatalogPlan) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{1} }
+func (*CatalogPlan) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{1} }
 
 func (m *CatalogPlan) GetName() string {
 	if m != nil {
@@ -88,9 +88,9 @@ func init() {
 	proto.RegisterType((*CatalogPlan)(nil), "istio.broker.dev.CatalogPlan")
 }
 
-func init() { proto.RegisterFile("broker/dev/service_plan.proto", fileDescriptor1) }
+func init() { proto.RegisterFile("broker/dev/service_plan.proto", fileDescriptor2) }
 
-var fileDescriptor1 = []byte{
+var fileDescriptor2 = []byte{
 	// 199 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x5c, 0x8f, 0xc1, 0x4a, 0xc4, 0x30,
 	0x10, 0x86, 0x69, 0x5a, 0xc4, 0x4e, 0x40, 0x24, 0x17, 0xa3, 0x50, 0x28, 0x3d, 0xf5, 0x94, 0xa0,
