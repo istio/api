@@ -1,11 +1,12 @@
 ---
-title: istio.authentication.v1alpha1
+title: Authentication Policy
+overview: Authentication policy for Istio services.
 layout: protoc-gen-docs
-number_of_entries: 5
+number_of_entries: 6
 ---
 {% raw %}
-<p>$title: Authentication Policy
-$overview: Authentication policy for Istio services.</p>
+<p>This package defines user-facing authentication policy as well as configs that
+the sidecar proxy uses to perform authentication.</p>
 
 <h2 id="Jwt">Jwt</h2>
 <section>
@@ -17,11 +18,11 @@ authentication flow.</p>
 
 <p>Example,</p>
 
-<pre><code>issuer: https://example.com
-audiences:
-- bookstore_android.apps.googleusercontent.com
-  bookstore_web.apps.googleusercontent.com
-jwks_uri: https://example.com/.well-known/jwks.json
+<pre><code class="language-yaml">    issuer: https://example.com
+    audiences:
+    - bookstore_android.apps.googleusercontent.com
+      bookstore_web.apps.googleusercontent.com
+    jwks_uri: https://example.com/.well-known/jwks.json
 </code></pre>
 
 <table class="message-fields">
@@ -38,7 +39,7 @@ jwks_uri: https://example.com/.well-known/jwks.json
 <td><code>string</code></td>
 <td>
 <p>Identifies the issuer that issued the JWT. See
-https://tools.ietf.org/html/rfc7519#section-4.1.1
+<a href="https://tools.ietf.org/html/rfc7519#section-4.1.1">issuer</a>
 Usually a URL or an email address.</p>
 
 <p>Example: https://securetoken.google.com
@@ -59,9 +60,9 @@ audiences will be accepted.</p>
 
 <p>Example:</p>
 
-<pre><code>audiences:
-- bookstore_android.apps.googleusercontent.com
-  bookstore_web.apps.googleusercontent.com
+<pre><code class="language-yaml">    audiences:
+    - bookstore_android.apps.googleusercontent.com
+      bookstore_web.apps.googleusercontent.com
 </code></pre>
 
 </td>
@@ -110,14 +111,57 @@ query parameter name.</p>
 </tbody>
 </table>
 </section>
+<h2 id="Mechanism">Mechanism</h2>
+<section>
+<p>Mechanism defines one particular type of authentication, e.g
+mutual TLS, JWT etc, (no authentication is one type by itsefl).
+The type can be progammatically determine by checking the type of the
+&ldquo;params&rdquo; field.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Mechanism.none" class="oneof oneof-start">
+<td><code>none</code></td>
+<td><code><a href="#None">None (oneof)</a></code></td>
+<td>
+<p>Set if authentication is not required.</p>
+
+</td>
+</tr>
+<tr id="Mechanism.mtls" class="oneof">
+<td><code>mtls</code></td>
+<td><code><a href="#MutualTls">MutualTls (oneof)</a></code></td>
+<td>
+<p>Set if mTLS is used.</p>
+
+</td>
+</tr>
+<tr id="Mechanism.jwt" class="oneof">
+<td><code>jwt</code></td>
+<td><code><a href="#Jwt">Jwt (oneof)</a></code></td>
+<td>
+<p>Set if JWT is used.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="MutualTls">MutualTls</h2>
 <section>
-<p>Place holder for mTLS authentication params.</p>
+<p>Placeholder for mTLS authentication params.</p>
 
 </section>
 <h2 id="None">None</h2>
 <section>
-<p>Place holder for None authentication params</p>
+<p>Placeholder for None authentication params</p>
 
 </section>
 <h2 id="Policy">Policy</h2>
@@ -132,39 +176,39 @@ must be provided and  (successfully) verified for the authentication to pass.</p
 <p>Examples:
 Policy to enable mTLS for all services in namespace frod</p>
 
-<pre><code>apiVersion: authentication.istio.io/v1alpha1
-kind: Policy
-metadata:
-  name: mTLS-enable
-  namespace: frod
-spec:
-  match:
-  peers:
-  - mtls: {}
+<pre><code class="language-yaml">    apiVersion: authentication.istio.io/v1alpha1
+    kind: Policy
+    metadata:
+      name: mTLS-enable
+      namespace: frod
+    spec:
+      match:
+      peers:
+      - mtls: {}
 </code></pre>
 
 <p>Policy to enable mTLS, and use JWT for productpage:9000</p>
 
-<pre><code>apiVersion: authentication.istio.io/v1alpha1
-kind: Policy
-metadata:
-  name: mTLS-enable
-  namespace: frod
-spec:
-  match:
-  - name: productpage
-    port:
-      number: 9000
-  peers:
-  - mtls:
-  endUsers:
-  - jwt:
-      issuer: &quot;https://securetoken.google.com&quot;
-      audiences:
-      - &quot;productpage&quot;
-      jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
-      locations:
-      - header: x-goog-iap-jwt-assertion
+<pre><code class="language-yaml">    apiVersion: authentication.istio.io/v1alpha1
+    kind: Policy
+    metadata:
+      name: mTLS-enable
+      namespace: frod
+    spec:
+      match:
+      - name: productpage
+        port:
+          number: 9000
+      peers:
+      - mtls:
+      endUsers:
+      - jwt:
+          issuer: &quot;https://securetoken.google.com&quot;
+          audiences:
+          - &quot;productpage&quot;
+          jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
+          locations:
+          - header: x-goog-iap-jwt-assertion
 </code></pre>
 
 <table class="message-fields">
@@ -193,7 +237,7 @@ If empty, policy will be used on all destinations in the same namespace.</p>
 will be validated in sequence, until the first one satisfied. If none of
 the specified mechanism valid, the whole authentication should fail.
 On the other hand, the first valid credential will be used to extract
-peer identity (i.e the source.user attribute in the request to mixer).</p>
+peer identity (i.e the source.user attribute in the request to Mixer).</p>
 
 </td>
 </tr>

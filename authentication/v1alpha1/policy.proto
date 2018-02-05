@@ -18,15 +18,18 @@ import "routing/v1alpha2/route_rule.proto";
 
 // $title: Authentication Policy
 // $overview: Authentication policy for Istio services.
+
+// This package defines user-facing authentication policy as well as configs that
+// the sidecar proxy uses to perform authentication.
 package istio.authentication.v1alpha1;
 
 option go_package = "istio.io/api/authentication/v1alpha1";
 
-// Place holder for None authentication params
+// Placeholder for None authentication params
 message None {
 }
 
-// Place holder for mTLS authentication params.
+// Placeholder for mTLS authentication params.
 message MutualTls {
 }
 
@@ -38,15 +41,16 @@ message MutualTls {
 //
 // Example,
 //
+// ```yaml
 //     issuer: https://example.com
 //     audiences:
 //     - bookstore_android.apps.googleusercontent.com
 //       bookstore_web.apps.googleusercontent.com
 //     jwks_uri: https://example.com/.well-known/jwks.json
-//
+// ```
 message Jwt {
   // Identifies the issuer that issued the JWT. See
-  // https://tools.ietf.org/html/rfc7519#section-4.1.1
+  // [issuer](https://tools.ietf.org/html/rfc7519#section-4.1.1)
   // Usually a URL or an email address.
   //
   // Example: https://securetoken.google.com
@@ -63,10 +67,11 @@ message Jwt {
   //
   // Example:
   //
+  // ```yaml
   //     audiences:
   //     - bookstore_android.apps.googleusercontent.com
   //       bookstore_web.apps.googleusercontent.com
-  //
+  // ```
   repeated string audiences = 2;
 
   // URL of the provider's public key set to validate signature of the
@@ -89,10 +94,10 @@ message Jwt {
   //
   //     1) The Authorization header using the Bearer schema,
   //        e.g. Authorization: Bearer <token>. (see
-  //        https://tools.ietf.org/html/rfc6750#section-2.1)
+  //        [Authorization Request Header Field](https://tools.ietf.org/html/rfc6750#section-2.1))
   //
   //     2) `access_token` query parameter (see
-  //     https://tools.ietf.org/html/rfc6750#section-2.3)
+  //     [URI Query Parameter](https://tools.ietf.org/html/rfc6750#section-2.3))
 
   // JWT is sent in a request header. `header` represents the
   // header name.
@@ -108,7 +113,6 @@ message Jwt {
   repeated string jwt_params = 7;
 }
 
-// $hide_from_docs
 // Mechanism defines one particular type of authentication, e.g
 // mutual TLS, JWT etc, (no authentication is one type by itsefl).
 // The type can be progammatically determine by checking the type of the
@@ -136,6 +140,7 @@ message Mechanism {
 // Examples:
 // Policy to enable mTLS for all services in namespace frod
 //
+// ```yaml
 //     apiVersion: authentication.istio.io/v1alpha1
 //     kind: Policy
 //     metadata:
@@ -145,9 +150,10 @@ message Mechanism {
 //       match:
 //       peers:
 //       - mtls: {}
-//
+// ```
 // Policy to enable mTLS, and use JWT for productpage:9000
 //
+// ```yaml
 //     apiVersion: authentication.istio.io/v1alpha1
 //     kind: Policy
 //     metadata:
@@ -168,6 +174,7 @@ message Mechanism {
 //           jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
 //           locations:
 //           - header: x-goog-iap-jwt-assertion
+// ```
 message Policy {
   // List of destinations (workloads) that the policy should be applied on.
   // If empty, policy will be used on all destinations in the same namespace.
@@ -177,7 +184,7 @@ message Policy {
   // will be validated in sequence, until the first one satisfied. If none of
   // the specified mechanism valid, the whole authentication should fail.
   // On the other hand, the first valid credential will be used to extract
-  // peer identity (i.e the source.user attribute in the request to mixer).
+  // peer identity (i.e the source.user attribute in the request to Mixer).
   repeated Mechanism peers = 2;
 
   // Similar to above, but for end_user authentication, which will extract
