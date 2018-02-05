@@ -66,7 +66,7 @@ func (*MutualTls) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1
 //     audiences:
 //     - bookstore_android.apps.googleusercontent.com
 //       bookstore_web.apps.googleusercontent.com
-//     jwks_uri: https://example.com/.well-known/jwks.json
+//     jwksUri: https://example.com/.well-known/jwks.json
 // ```
 type Jwt struct {
 	// Identifies the issuer that issued the JWT. See
@@ -75,7 +75,6 @@ type Jwt struct {
 	//
 	// Example: https://securetoken.google.com
 	// Example: 1234567-compute@developer.gserviceaccount.com
-	//
 	Issuer string `protobuf:"bytes,1,opt,name=issuer" json:"issuer,omitempty"`
 	// The list of JWT
 	// [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3).

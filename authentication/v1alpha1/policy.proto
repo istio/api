@@ -46,7 +46,7 @@ message MutualTls {
 //     audiences:
 //     - bookstore_android.apps.googleusercontent.com
 //       bookstore_web.apps.googleusercontent.com
-//     jwks_uri: https://example.com/.well-known/jwks.json
+//     jwksUri: https://example.com/.well-known/jwks.json
 // ```
 message Jwt {
   // Identifies the issuer that issued the JWT. See
@@ -55,7 +55,6 @@ message Jwt {
   //
   // Example: https://securetoken.google.com
   // Example: 1234567-compute@developer.gserviceaccount.com
-  //
   string issuer = 1;
 
   // The list of JWT
