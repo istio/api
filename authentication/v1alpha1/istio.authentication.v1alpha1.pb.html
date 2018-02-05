@@ -1,126 +1,12 @@
 ---
-title: Authentication Policy
-overview: Authentication policy for Istio services.
+title: istio.authentication.v1alpha1
 layout: protoc-gen-docs
+number_of_entries: 5
 ---
-<h2 id="AuthenticationMechanism">AuthenticationMechanism</h2>
-<section>
-<p>AuthenticaitonMechanism defines one particular type of authentication, e.g
-mutual TLS, JWT etc, (no authentication is one type by itsefl).
-The type can be progammatically determine by checking the type of the
-&ldquo;params&rdquo; field.</p>
+{% raw %}
+<p>$title: Authentication Policy
+$overview: Authentication policy for Istio services.</p>
 
-<table class="message-fields">
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-<tr id="AuthenticationMechanism.none" class="oneof oneof-start">
-<td><code>none</code></td>
-<td><code><a href="#None">None (oneof)</a></code></td>
-<td>
-</td>
-</tr>
-<tr id="AuthenticationMechanism.mtls" class="oneof">
-<td><code>mtls</code></td>
-<td><code><a href="#MutualTls">MutualTls (oneof)</a></code></td>
-<td>
-</td>
-</tr>
-<tr id="AuthenticationMechanism.jwt" class="oneof">
-<td><code>jwt</code></td>
-<td><code><a href="#Jwt">Jwt (oneof)</a></code></td>
-<td>
-</td>
-</tr>
-</table>
-</section>
-<h2 id="AuthenticationPolicy">AuthenticationPolicy</h2>
-<section>
-<p>AuthenticationPolicy binds credentials to workload(s).
-Authentication policy is composed of 2-part authentication:
-- peer: verify caller service credentials.
-- end_user: verify end-user credentials.
-For each part, if it&rsquo;s not empty, at least one of those listed credential
-must be provided and  (successfully) verified for the authentication to pass.</p>
-
-<p>Examples:
-Policy to enable mTLS for all services in namespace frod</p>
-
-<pre><code>apiVersion: config.istio.io/v1alpha1
-kind: AuthenticationPolicy
-metadata:
-  name: mTLS-enable
-  namespace: frod
-spec:
-  match:
-  peers:
-  - mtls: {}
-</code></pre>
-
-<p>Policy to enable mTLS, and use JWT for productpage:9000</p>
-
-<pre><code>apiVersion: config.istio.io/v1alpha1
-kind: AuthenticationPolicy
-metadata:
-  name: mTLS-enable
-  namespace: frod
-spec:
-  match:
-  - name: productpage
-    port:
-      number: 9000
-  peers:
-  - mtls:
-  endUsers:
-  - jwt:
-      issuer: &quot;https://securetoken.google.com&quot;
-      audiences:
-      - &quot;productpage&quot;
-      jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
-      locations:
-      - header: x-goog-iap-jwt-assertion
-</code></pre>
-
-<table class="message-fields">
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-<tr id="AuthenticationPolicy.destinations">
-<td><code>destinations</code></td>
-<td><code><a href="#istio.routing.v1alpha2.Destination">istio.routing.v1alpha2.Destination[]</a></code></td>
-<td>
-<p>List of destinations (workloads) that the policy should be applied on.
-If empty, policy will be used on all destinations in the same namespace.</p>
-
-</td>
-</tr>
-<tr id="AuthenticationPolicy.peers">
-<td><code>peers</code></td>
-<td><code><a href="#AuthenticationMechanism">AuthenticationMechanism[]</a></code></td>
-<td>
-<p>List of credential that should be checked by peer authentication. They
-will be validated in sequence, until the first one satisfied. If none of
-the specified mechanism valid, the whole authentication should fail.
-On the other hand, the first valid credential will be used to extract
-peer identity (i.e the source.user attribute in the request to mixer).</p>
-
-</td>
-</tr>
-<tr id="AuthenticationPolicy.end_users">
-<td><code>endUsers</code></td>
-<td><code><a href="#AuthenticationMechanism">AuthenticationMechanism[]</a></code></td>
-<td>
-<p>Similar to above, but for end_user authentication, which will extract
-request.auth.principal/audiences/presenter if authentication succeed.</p>
-
-</td>
-</tr>
-</table>
-</section>
 <h2 id="Jwt">Jwt</h2>
 <section>
 <p>JSON Web Token (JWT) token format for authentication as defined by
@@ -139,11 +25,14 @@ jwks_uri: https://example.com/.well-known/jwks.json
 </code></pre>
 
 <table class="message-fields">
+<thead>
 <tr>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
 </tr>
+</thead>
+<tbody>
 <tr id="Jwt.issuer">
 <td><code>issuer</code></td>
 <td><code>string</code></td>
@@ -218,6 +107,7 @@ query parameter name.</p>
 
 </td>
 </tr>
+</tbody>
 </table>
 </section>
 <h2 id="MutualTls">MutualTls</h2>
@@ -229,6 +119,95 @@ query parameter name.</p>
 <section>
 <p>Place holder for None authentication params</p>
 
+</section>
+<h2 id="Policy">Policy</h2>
+<section>
+<p>Policy binds credentials to workload(s).
+Authentication policy is composed of 2-part authentication:
+- peer: verify caller service credentials.
+- end_user: verify end-user credentials.
+For each part, if it&rsquo;s not empty, at least one of those listed credential
+must be provided and  (successfully) verified for the authentication to pass.</p>
+
+<p>Examples:
+Policy to enable mTLS for all services in namespace frod</p>
+
+<pre><code>apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: mTLS-enable
+  namespace: frod
+spec:
+  match:
+  peers:
+  - mtls: {}
+</code></pre>
+
+<p>Policy to enable mTLS, and use JWT for productpage:9000</p>
+
+<pre><code>apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: mTLS-enable
+  namespace: frod
+spec:
+  match:
+  - name: productpage
+    port:
+      number: 9000
+  peers:
+  - mtls:
+  endUsers:
+  - jwt:
+      issuer: &quot;https://securetoken.google.com&quot;
+      audiences:
+      - &quot;productpage&quot;
+      jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
+      locations:
+      - header: x-goog-iap-jwt-assertion
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Policy.destinations">
+<td><code>destinations</code></td>
+<td><code><a href="#istio.routing.v1alpha2.Destination">istio.routing.v1alpha2.Destination[]</a></code></td>
+<td>
+<p>List of destinations (workloads) that the policy should be applied on.
+If empty, policy will be used on all destinations in the same namespace.</p>
+
+</td>
+</tr>
+<tr id="Policy.peers">
+<td><code>peers</code></td>
+<td><code><a href="#Mechanism">Mechanism[]</a></code></td>
+<td>
+<p>List of credential that should be checked by peer authentication. They
+will be validated in sequence, until the first one satisfied. If none of
+the specified mechanism valid, the whole authentication should fail.
+On the other hand, the first valid credential will be used to extract
+peer identity (i.e the source.user attribute in the request to mixer).</p>
+
+</td>
+</tr>
+<tr id="Policy.end_users">
+<td><code>endUsers</code></td>
+<td><code><a href="#Mechanism">Mechanism[]</a></code></td>
+<td>
+<p>Similar to above, but for end_user authentication, which will extract
+request.auth.principal/audiences/presenter if authentication succeed.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
 </section>
 <h2 id="istio.routing.v1alpha2.Destination">istio.routing.v1alpha2.Destination</h2>
 <section>
@@ -342,11 +321,14 @@ spec:
 </code></pre>
 
 <table class="message-fields">
+<thead>
 <tr>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
 </tr>
+</thead>
+<tbody>
 <tr id="istio.routing.v1alpha2.Destination.name">
 <td><code>name</code></td>
 <td><code>string</code></td>
@@ -396,5 +378,7 @@ label>.</p>
 
 </td>
 </tr>
+</tbody>
 </table>
 </section>
+{% endraw %}
