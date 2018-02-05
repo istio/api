@@ -80,13 +80,22 @@ type TransportConfig struct {
 	// memory. If not specified, the interval is 10 seconds.
 	StatsUpdateInterval *google_protobuf1.Duration `protobuf:"bytes,5,opt,name=stats_update_interval,json=statsUpdateInterval" json:"stats_update_interval,omitempty"`
 	// Name of the cluster that will forward check calls to a pool of mixer
-	// servers. Defaults to "mixer_server".
+	// servers. Defaults to "mixer_server". By using different names for
+	// checkCluster and reportCluster, it is possible to have one set of
+	// mixer servers handle check calls, while another set of mixer servers
+	// handle report calls.
+	//
+	// NOTE: Any value other than the default "mixer_server" will require the
+	// Istio Grafana dashboards to be reconfigured to use the new name.
 	CheckCluster string `protobuf:"bytes,6,opt,name=check_cluster,json=checkCluster,proto3" json:"check_cluster,omitempty"`
 	// Name of the cluster that will forward report calls to a pool of mixer
 	// servers. Defaults to "mixer_server". By using different names for
 	// checkCluster and reportCluster, it is possible to have one set of
 	// mixer servers handle check calls, while another set of mixer servers
 	// handle report calls.
+	//
+	// NOTE: Any value other than the default "mixer_server" will require the
+	// Istio Grafana dashboards to be reconfigured to use the new name.
 	ReportCluster string `protobuf:"bytes,7,opt,name=report_cluster,json=reportCluster,proto3" json:"report_cluster,omitempty"`
 }
 
