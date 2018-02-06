@@ -14,8 +14,6 @@
 
 syntax = "proto3";
 
-// This proto describes the types that can be used inside Mixer templates. These message types are used to specify
-// field datatype to express the equivalent ValueType for the expressions the field can be mapped to.
 package istio.mixer.adapter.model.v1beta;
 
 option go_package="istio.io/api/mixer/adapter/model/v1beta";
