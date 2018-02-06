@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package istio.mixer.adapter.model.v1beta;
+import "google/protobuf/descriptor.proto";
+
+// Specifies the variety of the the Template.
+enum TemplateVariety {
+    // TEMPLATE_VARIETY_CHECK makes the template applicable for Mixer's check calls.
+    TEMPLATE_VARIETY_CHECK = 0;
+    // TEMPLATE_VARIETY_CHECK makes the template applicable for Mixer's report calls.
+    TEMPLATE_VARIETY_REPORT = 1;
+    // TEMPLATE_VARIETY_QUOTA makes the template applicable for Mixer's quota calls.
+    TEMPLATE_VARIETY_QUOTA = 2;
+    // TEMPLATE_VARIETY_ATTRIBUTE_GENERATOR makes the template applicable for Mixer's quota calls.
+    TEMPLATE_VARIETY_ATTRIBUTE_GENERATOR = 3;
+}
+
+// File option for the TemplateVariety.
+extend google.protobuf.FileOptions {
+    TemplateVariety template_variety = 72295727;
+}
