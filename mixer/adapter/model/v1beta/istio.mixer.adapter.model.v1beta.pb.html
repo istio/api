@@ -1,11 +1,13 @@
 ---
-title: istio.mixer.adapter.model.v1beta
+title: Mixer Adapter Model
+overview: Definitions used when creating Mixer templates
+location: https://istio.io/docs/reference/config/mixer/istio.mixer.adapter.model.v1beta.html
 layout: protoc-gen-docs
 number_of_entries: 9
 ---
 {% raw %}
-<p>This proto describes the types that can be used inside Mixer templates. These message types are used to specify
-field datatype to express the equivalent ValueType for the expressions the field can be mapped to.</p>
+<p>This package defines the types that are used when creating Mixer templates. <code>ValueType</code> defined in this pacakge
+is also used by adapters to know the underlying datatype of the instance fields.</p>
 
 <h2 id="DNSName">DNSName</h2>
 <section>
@@ -30,7 +32,7 @@ DO NOT USE !! Under Development</p>
 </section>
 <h2 id="TemplateVariety">TemplateVariety</h2>
 <section>
-<p>Specifies the variety of the the Template.</p>
+<p>The available varieties of templates, controlling the semantics of what an adapter does with each instance.</p>
 
 <table class="enum-values">
 <thead>
@@ -43,28 +45,28 @@ DO NOT USE !! Under Development</p>
 <tr id="TemplateVariety.TEMPLATE_VARIETY_CHECK">
 <td><code>TEMPLATE_VARIETY_CHECK</code></td>
 <td>
-<p>TEMPLATE<em>VARIETY</em>CHECK makes the template applicable for Mixer&rsquo;s check calls.</p>
+<p>Makes the template applicable for Mixer&rsquo;s check calls.</p>
 
 </td>
 </tr>
 <tr id="TemplateVariety.TEMPLATE_VARIETY_REPORT">
 <td><code>TEMPLATE_VARIETY_REPORT</code></td>
 <td>
-<p>TEMPLATE<em>VARIETY</em>CHECK makes the template applicable for Mixer&rsquo;s report calls.</p>
+<p>Makes the template applicable for Mixer&rsquo;s report calls.</p>
 
 </td>
 </tr>
 <tr id="TemplateVariety.TEMPLATE_VARIETY_QUOTA">
 <td><code>TEMPLATE_VARIETY_QUOTA</code></td>
 <td>
-<p>TEMPLATE<em>VARIETY</em>QUOTA makes the template applicable for Mixer&rsquo;s quota calls.</p>
+<p>Makes the template applicable for Mixer&rsquo;s quota calls.</p>
 
 </td>
 </tr>
 <tr id="TemplateVariety.TEMPLATE_VARIETY_ATTRIBUTE_GENERATOR">
 <td><code>TEMPLATE_VARIETY_ATTRIBUTE_GENERATOR</code></td>
 <td>
-<p>TEMPLATE<em>VARIETY</em>ATTRIBUTE_GENERATOR makes the template applicable for Mixer&rsquo;s quota calls.</p>
+<p>Makes the template applicable for Mixer&rsquo;s quota calls.</p>
 
 </td>
 </tr>

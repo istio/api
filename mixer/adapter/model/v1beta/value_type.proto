@@ -16,6 +16,8 @@ syntax = "proto3";
 
 package istio.mixer.adapter.model.v1beta;
 
+option go_package="istio.io/api/mixer/adapter/model/v1beta";
+
 // ValueType describes the types that values in the Istio system can take. These
 // are used to describe the type of Attributes at run time, describe the type of
 // the result of evaluating an expression, and to describe the runtime type of
