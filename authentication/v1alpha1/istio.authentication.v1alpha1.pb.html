@@ -18,11 +18,11 @@ authentication flow.</p>
 
 <p>Example,</p>
 
-<pre><code class="language-yaml">    issuer: https://example.com
-    audiences:
-    - bookstore_android.apps.googleusercontent.com
-      bookstore_web.apps.googleusercontent.com
-    jwksUri: https://example.com/.well-known/jwks.json
+<pre><code class="language-yaml">issuer: https://example.com
+audiences:
+- bookstore_android.apps.googleusercontent.com
+  bookstore_web.apps.googleusercontent.com
+jwksUri: https://example.com/.well-known/jwks.json
 </code></pre>
 
 <table class="message-fields">
@@ -60,9 +60,9 @@ audiences will be accepted.</p>
 
 <p>Example:</p>
 
-<pre><code class="language-yaml">    audiences:
-    - bookstore_android.apps.googleusercontent.com
-      bookstore_web.apps.googleusercontent.com
+<pre><code class="language-yaml">audiences:
+- bookstore_android.apps.googleusercontent.com
+  bookstore_web.apps.googleusercontent.com
 </code></pre>
 
 </td>
@@ -176,39 +176,39 @@ must be provided and  (successfully) verified for the authentication to pass.</p
 <p>Examples:
 Policy to enable mTLS for all services in namespace frod</p>
 
-<pre><code class="language-yaml">    apiVersion: authentication.istio.io/v1alpha1
-    kind: Policy
-    metadata:
-      name: mTLS-enable
-      namespace: frod
-    spec:
-      match:
-      peers:
-      - mtls: {}
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: mTLS-enable
+  namespace: frod
+spec:
+  match:
+  peers:
+  - mtls: {}
 </code></pre>
 
 <p>Policy to enable mTLS, and use JWT for productpage:9000</p>
 
-<pre><code class="language-yaml">    apiVersion: authentication.istio.io/v1alpha1
-    kind: Policy
-    metadata:
-      name: mTLS-enable
-      namespace: frod
-    spec:
-      match:
-      - name: productpage
-        port:
-          number: 9000
-      peers:
-      - mtls:
-      endUsers:
-      - jwt:
-          issuer: &quot;https://securetoken.google.com&quot;
-          audiences:
-          - &quot;productpage&quot;
-          jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
-          locations:
-          - header: x-goog-iap-jwt-assertion
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: mTLS-enable
+  namespace: frod
+spec:
+  match:
+  - name: productpage
+    port:
+      number: 9000
+  peers:
+  - mtls:
+  endUsers:
+  - jwt:
+      issuer: &quot;https://securetoken.google.com&quot;
+      audiences:
+      - &quot;productpage&quot;
+      jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
+      locations:
+      - header: x-goog-iap-jwt-assertion
 </code></pre>
 
 <table class="message-fields">

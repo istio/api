@@ -62,11 +62,11 @@ func (*MutualTls) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1
 // Example,
 //
 // ```yaml
-//     issuer: https://example.com
-//     audiences:
-//     - bookstore_android.apps.googleusercontent.com
-//       bookstore_web.apps.googleusercontent.com
-//     jwksUri: https://example.com/.well-known/jwks.json
+// issuer: https://example.com
+// audiences:
+// - bookstore_android.apps.googleusercontent.com
+//   bookstore_web.apps.googleusercontent.com
+// jwksUri: https://example.com/.well-known/jwks.json
 // ```
 type Jwt struct {
 	// Identifies the issuer that issued the JWT. See
@@ -86,9 +86,9 @@ type Jwt struct {
 	// Example:
 	//
 	// ```yaml
-	//     audiences:
-	//     - bookstore_android.apps.googleusercontent.com
-	//       bookstore_web.apps.googleusercontent.com
+	// audiences:
+	// - bookstore_android.apps.googleusercontent.com
+	//   bookstore_web.apps.googleusercontent.com
 	// ```
 	Audiences []string `protobuf:"bytes,2,rep,name=audiences" json:"audiences,omitempty"`
 	// URL of the provider's public key set to validate signature of the
@@ -321,39 +321,39 @@ func _Mechanism_OneofSizer(msg proto.Message) (n int) {
 // Policy to enable mTLS for all services in namespace frod
 //
 // ```yaml
-//     apiVersion: authentication.istio.io/v1alpha1
-//     kind: Policy
-//     metadata:
-//       name: mTLS-enable
-//       namespace: frod
-//     spec:
-//       match:
-//       peers:
-//       - mtls: {}
+// apiVersion: authentication.istio.io/v1alpha1
+// kind: Policy
+// metadata:
+//   name: mTLS-enable
+//   namespace: frod
+// spec:
+//   match:
+//   peers:
+//   - mtls: {}
 // ```
 // Policy to enable mTLS, and use JWT for productpage:9000
 //
 // ```yaml
-//     apiVersion: authentication.istio.io/v1alpha1
-//     kind: Policy
-//     metadata:
-//       name: mTLS-enable
-//       namespace: frod
-//     spec:
-//       match:
-//       - name: productpage
-//         port:
-//           number: 9000
-//       peers:
-//       - mtls:
-//       endUsers:
-//       - jwt:
-//           issuer: "https://securetoken.google.com"
-//           audiences:
-//           - "productpage"
-//           jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
-//           locations:
-//           - header: x-goog-iap-jwt-assertion
+// apiVersion: authentication.istio.io/v1alpha1
+// kind: Policy
+// metadata:
+//   name: mTLS-enable
+//   namespace: frod
+// spec:
+//   match:
+//   - name: productpage
+//     port:
+//       number: 9000
+//   peers:
+//   - mtls:
+//   endUsers:
+//   - jwt:
+//       issuer: "https://securetoken.google.com"
+//       audiences:
+//       - "productpage"
+//       jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
+//       locations:
+//       - header: x-goog-iap-jwt-assertion
 // ```
 type Policy struct {
 	// List of destinations (workloads) that the policy should be applied on.
