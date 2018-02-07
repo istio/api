@@ -133,7 +133,7 @@ message MeshConfig {
   // mixerCheckServer and mixerReportServer, it is possible to have one set
   // of mixer servers handle policy check calls, while another set of mixer
   // servers handle telemetry calls.
-  string telemetry_server = 2;
+  string mixer_report_server = 2;
 
   // Disable policy checks by the mixer service. Default
   // is false, i.e. mixer policy check is enabled by default.
