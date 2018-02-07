@@ -70,11 +70,8 @@ policyCheckServer and telemetryServer, it is possible to have one set
 of mixer servers handle policy check calls, while another set of mixer
 servers handle telemetry calls.</p>
 
-<p>NOTE: The out-of-box istio configuration assumes the same server for
-both policy checks and telemetry (e.g., <em>istio-mixer:15004</em>). If
-policyCheckServer and telemetryServer have different values, the
-default Istio Grafana Dashboards will have to be reconfigured
-appropriately.</p>
+<p>NOTE: Omitting policyCheckServer while specifying telemetryServer is
+equivalent to setting disablePolicyChecks to true.</p>
 
 </td>
 </tr>
@@ -89,20 +86,13 @@ policyCheckServer and telemetryServer, it is possible to have one set
 of mixer servers handle policy check calls, while another set of mixer
 servers handle telemetry calls.</p>
 
-<p>NOTE: The out-of-box istio configuration assumes the same server for
-both policy checks and telemetry (e.g., <em>istio-mixer:15004</em>). If
-policyCheckServer and telemetryServer have different values, the
-default Istio Grafana Dashboards will have to be reconfigured
-appropriately.</p>
-
 </td>
 </tr>
 <tr id="MeshConfig.disable_policy_checks">
 <td><code>disablePolicyChecks</code></td>
 <td><code>bool</code></td>
 <td>
-<p>Disable policy checks by the mixer service. Metrics will still be
-reported to the mixer for HTTP requests and TCP connections. Default
+<p>Disable policy checks by the mixer service. Default
 is false, i.e. mixer policy check is enabled by default.</p>
 
 </td>

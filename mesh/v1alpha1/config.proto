@@ -123,11 +123,8 @@ message MeshConfig {
   // of mixer servers handle policy check calls, while another set of mixer
   // servers handle telemetry calls.
   //
-  // NOTE: The out-of-box istio configuration assumes the same server for
-  // both policy checks and telemetry (e.g., _istio-mixer:15004_). If
-  // policyCheckServer and telemetryServer have different values, the
-  // default Istio Grafana Dashboards will have to be reconfigured
-  // appropriately.
+  // NOTE: Omitting policyCheckServer while specifying telemetryServer is
+  // equivalent to setting disablePolicyChecks to true.
   string policy_check_server = 1;
 
   // Address of the server that will be used by the proxies as an Istio
@@ -136,16 +133,9 @@ message MeshConfig {
   // policyCheckServer and telemetryServer, it is possible to have one set
   // of mixer servers handle policy check calls, while another set of mixer
   // servers handle telemetry calls.
-  //
-  // NOTE: The out-of-box istio configuration assumes the same server for
-  // both policy checks and telemetry (e.g., _istio-mixer:15004_). If
-  // policyCheckServer and telemetryServer have different values, the
-  // default Istio Grafana Dashboards will have to be reconfigured
-  // appropriately.
   string telemetry_server = 2;
 
-  // Disable policy checks by the mixer service. Metrics will still be
-  // reported to the mixer for HTTP requests and TCP connections. Default
+  // Disable policy checks by the mixer service. Default
   // is false, i.e. mixer policy check is enabled by default.
   bool disable_policy_checks = 3;
 

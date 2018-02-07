@@ -308,11 +308,8 @@ type MeshConfig struct {
 	// of mixer servers handle policy check calls, while another set of mixer
 	// servers handle telemetry calls.
 	//
-	// NOTE: The out-of-box istio configuration assumes the same server for
-	// both policy checks and telemetry (e.g., _istio-mixer:15004_). If
-	// policyCheckServer and telemetryServer have different values, the
-	// default Istio Grafana Dashboards will have to be reconfigured
-	// appropriately.
+	// NOTE: Omitting policyCheckServer while specifying telemetryServer is
+	// equivalent to setting disablePolicyChecks to true.
 	PolicyCheckServer string `protobuf:"bytes,1,opt,name=policy_check_server,json=policyCheckServer" json:"policy_check_server,omitempty"`
 	// Address of the server that will be used by the proxies as an Istio
 	// telemetry sink (access logs, API/connection metrics)
@@ -320,15 +317,8 @@ type MeshConfig struct {
 	// policyCheckServer and telemetryServer, it is possible to have one set
 	// of mixer servers handle policy check calls, while another set of mixer
 	// servers handle telemetry calls.
-	//
-	// NOTE: The out-of-box istio configuration assumes the same server for
-	// both policy checks and telemetry (e.g., _istio-mixer:15004_). If
-	// policyCheckServer and telemetryServer have different values, the
-	// default Istio Grafana Dashboards will have to be reconfigured
-	// appropriately.
 	TelemetryServer string `protobuf:"bytes,2,opt,name=telemetry_server,json=telemetryServer" json:"telemetry_server,omitempty"`
-	// Disable policy checks by the mixer service. Metrics will still be
-	// reported to the mixer for HTTP requests and TCP connections. Default
+	// Disable policy checks by the mixer service. Default
 	// is false, i.e. mixer policy check is enabled by default.
 	DisablePolicyChecks bool `protobuf:"varint,3,opt,name=disable_policy_checks,json=disablePolicyChecks" json:"disable_policy_checks,omitempty"`
 	// Port on which Envoy should listen for incoming connections from
