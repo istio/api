@@ -1,0 +1,115 @@
+// Copyright 2018 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+// $title: Tracing V1 Alpha 1
+// $overview: Configuration affecting Istio service tracing
+
+// Provides configuration parameters for Istio tracing.
+package istio.tracing.v1alpha1;
+
+option go_package="istio.io/api/tracing/v1alpha1";
+
+// TracingConfiguration controls Istio-wide trace collection configuration
+// parameters. It includes the configuration for the tracing backends as well
+// as the rates at which distributed tracing data should be generated.
+//
+// Example configuration:
+// ```yaml
+// apiVersion: tracing.istio.io/v1alpha1
+// kind: TracingConfiguration
+// metadata:
+//   name: meshwide
+// spec:
+//   traceCollector:
+//     zipkinCollector:
+//       address: zipkin:9411
+// ```
+//
+// WARNING: This is not currently supported by Istio.
+message TracingConfiguration {
+
+    // Provides configuration for a tracing backend
+    TraceCollector trace_collector = 1;
+
+    // $hide_from_docs
+    //
+    // Controls the rate of trace generation.
+    //
+    // NOTE: This will only be effective when support for Envoy V2 APIs is added
+    // to Istio Pilot.
+    TraceSampling trace_sampling = 2;
+}
+
+// TraceCollector holds the configuration for a specific tracing backend.
+message TraceCollector {
+    oneof collector {
+        // Configuration information for a Zipkin trace collector.
+        ZipkinCollector zipkin_collector = 1;
+    }
+}
+
+// Configuration for a Zipkin collector.
+message ZipkinCollector {
+
+    // Required. Address of the Zipkin service (e.g. _zipkin:9411_).
+    string address = 1;
+
+    // Optional. API endpoint of the Zipkin service.
+    //
+    // Default: "/api/v1/spans"
+    string endpoint = 2;
+}
+
+// Identifies a percentage.
+message Percent {
+    // Valid range: `[0.0, 100.0]`
+    double value = 1;
+}
+
+// $hide_from_docs
+//
+// Controls the rate at which Istio will generate trace spans for requests
+// within a mesh. Sampling can be controlled in one of two ways: client-directed
+// and random sampling. Client-directed sampling refers to sampling based on
+// values of HTTP headers set by requesting clients. Random sampling refers to
+// the process of selecting a request for tracing based on a randomly generated
+// request ID. It is also possible to set an upper limit on the rate of all
+// trace sampling, via control of the overall sampling rate.
+message TraceSampling {
+
+    // Target percentage of requests that will be force traced if the
+    // x-client-trace-id header is set by the client of a request.
+    //
+    // Default: 0.0%
+    Percent client_sampling = 1;
+
+    // Target percentage of requests managed that will be randomly selected for
+    // trace generation, if not requested by the client.
+    //
+    // Default: 0.0%
+    Percent random_sampling = 2;
+
+    // Target percentage of requests that will be traced after all other
+    // sampling checks have been applied (client-directed, random sampling).
+    // This field functions as an upper limit on the total configured sampling
+    // rate. For instance, setting `client_sampling` to 100% and `overall_sampling`
+    // to 1% will result in only 1% of client requests with the appropriate
+    // headers to be force traced.
+    //
+    // Default: 0.0%
+    Percent overall_sampling = 3;
+}
+

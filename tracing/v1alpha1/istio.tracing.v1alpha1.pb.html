@@ -1,0 +1,113 @@
+---
+title: Tracing V1 Alpha 1
+overview: Configuration affecting Istio service tracing
+layout: protoc-gen-docs
+---
+<p>Provides configuration parameters for Istio tracing.</p>
+
+<h2 id="Percent">Percent</h2>
+<section>
+<p>Identifies a percentage.</p>
+
+<table>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr id="Percent.value">
+<td><code>value</code></td>
+<td><code>double</code></td>
+<td>
+<p>Valid range: <code>[0.0, 100.0]</code></p>
+
+</td>
+</tr>
+</table>
+</section>
+<h2 id="TraceCollector">TraceCollector</h2>
+<section>
+<p>TraceCollector holds the configuration for a specific tracing backend.</p>
+
+<table>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr id="TraceCollector.zipkin_collector" class="oneof oneof-start">
+<td><code>zipkinCollector</code></td>
+<td><code><a href="#ZipkinCollector">ZipkinCollector (oneof)</a></code></td>
+<td>
+<p>Configuration information for a Zipkin trace collector.</p>
+
+</td>
+</tr>
+</table>
+</section>
+<h2 id="TracingConfiguration">TracingConfiguration</h2>
+<section>
+<p>TracingConfiguration controls Istio-wide trace collection configuration
+parameters. It includes the configuration for the tracing backends as well
+as the rates at which distributed tracing data should be generated.</p>
+
+<p>Example configuration:</p>
+
+<pre><code class="language-yaml">apiVersion: tracing.istio.io/v1alpha1
+kind: TracingConfiguration
+metadata:
+  name: meshwide
+spec:
+  traceCollector:
+    zipkinCollector:
+      address: zipkin:9411
+</code></pre>
+
+<p>WARNING: This is not currently supported by Istio.</p>
+
+<table>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr id="TracingConfiguration.trace_collector">
+<td><code>traceCollector</code></td>
+<td><code><a href="#TraceCollector">TraceCollector</a></code></td>
+<td>
+<p>Provides configuration for a tracing backend</p>
+
+</td>
+</tr>
+</table>
+</section>
+<h2 id="ZipkinCollector">ZipkinCollector</h2>
+<section>
+<p>Configuration for a Zipkin collector.</p>
+
+<table>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr id="ZipkinCollector.address">
+<td><code>address</code></td>
+<td><code>string</code></td>
+<td>
+<p>Required. Address of the Zipkin service (e.g. <em>zipkin:9411</em>).</p>
+
+</td>
+</tr>
+<tr id="ZipkinCollector.endpoint">
+<td><code>endpoint</code></td>
+<td><code>string</code></td>
+<td>
+<p>Optional. API endpoint of the Zipkin service.</p>
+
+<p>Default: &ldquo;/api/v1/spans&rdquo;</p>
+
+</td>
+</tr>
+</table>
+</section>

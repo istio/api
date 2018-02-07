@@ -145,7 +145,7 @@ depend: vendor binaries
 # Generation Rules
 #####################
 
-generate: generate-broker-go generate-mesh-go generate-mixer-go generate-routing-go generate-rbac-go generate-authn-go
+generate: generate-broker-go generate-mesh-go generate-mixer-go generate-routing-go generate-rbac-go generate-authn-go generate-tracing
 
 #####################
 # broker/...
@@ -321,6 +321,25 @@ clean-authn-generated:
 	rm -f $(authn_v1alpha1_pb_gos)
 	rm -f $(authn_v1alpha1_pb_doc)
 
+
+#####################
+# tracing/...
+#####################
+
+tracing_v1alpha1_path := tracing/v1alpha1
+tracing_v1alpha1_protos := $(shell find $(tracing_v1alpha1_path) -type f -name '*.proto' | sort)
+tracing_v1alpha1_pb_gos := $(tracing_v1alpha1_protos:.proto=.pb.go)
+tracing_v1alpha1_pb_doc := $(tracing_v1alpha1_path)/istio.tracing.v1alpha1.pb.html
+
+generate-tracing: $(tracing_v1alpha1_pb_gos) $(tracing_v1alpha1_pb_doc)
+
+$(tracing_v1alpha1_pb_gos) $(tracing_v1alpha1_pb_doc): $(tracing_v1alpha1_protos) | depend $(protoc_gen_go) $(protoc_bin)
+	## Generate tracing/v1alpha1/*.pb.go
+	@$(protoc) $(proto_path) $(protoc_gen_go_plugin) $(protoc_gen_docs_plugin)$(tracing_v1alpha1_path) $^
+
+clean-tracing-generated:
+	rm -f $(tracing_v1alpha1_pb_gos)
+	rm -f $(tracing_v1alpha1_pb_doc)
 
 #####################
 # Cleanup
