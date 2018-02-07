@@ -119,18 +119,18 @@ message ProxyConfig {
 message MeshConfig {
   // Address of the server that will be used by the proxies for policy
   // check calls (e.g. _istio-mixer:15004_). By using different names for
-  // policyCheckServer and telemetryServer, it is possible to have one set
+  // mixerCheckServer and mixerReportServer, it is possible to have one set
   // of mixer servers handle policy check calls, while another set of mixer
   // servers handle telemetry calls.
   //
-  // NOTE: Omitting policyCheckServer while specifying telemetryServer is
+  // NOTE: Omitting mixerCheckServer while specifying mixerReportServer is
   // equivalent to setting disablePolicyChecks to true.
-  string policy_check_server = 1;
+  string mixer_check_server = 1;
 
   // Address of the server that will be used by the proxies as an Istio
   // telemetry sink (access logs, API/connection metrics)
   // (e.g. _istio-mixer:15004_). By using different names for
-  // policyCheckServer and telemetryServer, it is possible to have one set
+  // mixerCheckServer and mixerReportServer, it is possible to have one set
   // of mixer servers handle policy check calls, while another set of mixer
   // servers handle telemetry calls.
   string telemetry_server = 2;

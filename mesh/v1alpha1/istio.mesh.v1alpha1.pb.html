@@ -60,17 +60,17 @@ Istio service mesh.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig.policy_check_server">
-<td><code>policyCheckServer</code></td>
+<tr id="MeshConfig.mixer_check_server">
+<td><code>mixerCheckServer</code></td>
 <td><code>string</code></td>
 <td>
 <p>Address of the server that will be used by the proxies for policy
 check calls (e.g. <em>istio-mixer:15004</em>). By using different names for
-policyCheckServer and telemetryServer, it is possible to have one set
+mixerCheckServer and mixerReportServer, it is possible to have one set
 of mixer servers handle policy check calls, while another set of mixer
 servers handle telemetry calls.</p>
 
-<p>NOTE: Omitting policyCheckServer while specifying telemetryServer is
+<p>NOTE: Omitting mixerCheckServer while specifying mixerReportServer is
 equivalent to setting disablePolicyChecks to true.</p>
 
 </td>
@@ -82,7 +82,7 @@ equivalent to setting disablePolicyChecks to true.</p>
 <p>Address of the server that will be used by the proxies as an Istio
 telemetry sink (access logs, API/connection metrics)
 (e.g. <em>istio-mixer:15004</em>). By using different names for
-policyCheckServer and telemetryServer, it is possible to have one set
+mixerCheckServer and mixerReportServer, it is possible to have one set
 of mixer servers handle policy check calls, while another set of mixer
 servers handle telemetry calls.</p>
 
