@@ -60,20 +60,40 @@ Istio service mesh.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig.egress_proxy_address">
-<td><code>egressProxyAddress</code></td>
+<tr id="MeshConfig.policy_check_server">
+<td><code>policyCheckServer</code></td>
 <td><code>string</code></td>
 <td>
-<p>Address of the egress Envoy service (e.g. <em>istio-egress:80</em>).</p>
+<p>Address of the server that will be used by the proxies for policy
+check calls (e.g. <em>istio-mixer:15004</em>). By using different names for
+policyCheckServer and telemetryServer, it is possible to have one set
+of mixer servers handle policy check calls, while another set of mixer
+servers handle telemetry calls.</p>
+
+<p>NOTE: The out-of-box istio configuration assumes the same server for
+both policy checks and telemetry (e.g., <em>istio-mixer:15004</em>). If
+policyCheckServer and telemetryServer have different values, the
+default Istio Grafana Dashboards will have to be reconfigured
+appropriately.</p>
 
 </td>
 </tr>
-<tr id="MeshConfig.mixer_address">
-<td><code>mixerAddress</code></td>
+<tr id="MeshConfig.telemetry_server">
+<td><code>telemetryServer</code></td>
 <td><code>string</code></td>
 <td>
-<p>Address of the mixer service (e.g. <em>istio-mixer:15004</em>).
-Empty value disables Mixer checks and telemetry.</p>
+<p>Address of the server that will be used by the proxies as an Istio
+telemetry sink (access logs, API/connection metrics)
+(e.g. <em>istio-mixer:15004</em>). By using different names for
+policyCheckServer and telemetryServer, it is possible to have one set
+of mixer servers handle policy check calls, while another set of mixer
+servers handle telemetry calls.</p>
+
+<p>NOTE: The out-of-box istio configuration assumes the same server for
+both policy checks and telemetry (e.g., <em>istio-mixer:15004</em>). If
+policyCheckServer and telemetryServer have different values, the
+default Istio Grafana Dashboards will have to be reconfigured
+appropriately.</p>
 
 </td>
 </tr>

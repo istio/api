@@ -117,12 +117,32 @@ message ProxyConfig {
 // MeshConfig defines mesh-wide variables shared by all Envoy instances in the
 // Istio service mesh.
 message MeshConfig {
-  // Address of the egress Envoy service (e.g. _istio-egress:80_).
-  string egress_proxy_address = 1;
+  // Address of the server that will be used by the proxies for policy
+  // check calls (e.g. _istio-mixer:15004_). By using different names for
+  // policyCheckServer and telemetryServer, it is possible to have one set
+  // of mixer servers handle policy check calls, while another set of mixer
+  // servers handle telemetry calls.
+  //
+  // NOTE: The out-of-box istio configuration assumes the same server for
+  // both policy checks and telemetry (e.g., _istio-mixer:15004_). If
+  // policyCheckServer and telemetryServer have different values, the
+  // default Istio Grafana Dashboards will have to be reconfigured
+  // appropriately.
+  string policy_check_server = 1;
 
-  // Address of the mixer service (e.g. _istio-mixer:15004_).
-  // Empty value disables Mixer checks and telemetry.
-  string mixer_address = 2;
+  // Address of the server that will be used by the proxies as an Istio
+  // telemetry sink (access logs, API/connection metrics)
+  // (e.g. _istio-mixer:15004_). By using different names for
+  // policyCheckServer and telemetryServer, it is possible to have one set
+  // of mixer servers handle policy check calls, while another set of mixer
+  // servers handle telemetry calls.
+  //
+  // NOTE: The out-of-box istio configuration assumes the same server for
+  // both policy checks and telemetry (e.g., _istio-mixer:15004_). If
+  // policyCheckServer and telemetryServer have different values, the
+  // default Istio Grafana Dashboards will have to be reconfigured
+  // appropriately.
+  string telemetry_server = 2;
 
   // Disable policy checks by the mixer service. Metrics will still be
   // reported to the mixer for HTTP requests and TCP connections. Default
