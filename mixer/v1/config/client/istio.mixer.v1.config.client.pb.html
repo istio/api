@@ -770,6 +770,35 @@ query parameter name.</p>
 </tbody>
 </table>
 </section>
+<h2 id="NetworkFailPolicy">NetworkFailPolicy</h2>
+<section>
+<p>Describes the policy when failed to connect to Mixer server.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="NetworkFailPolicy.FAIL_OPEN">
+<td><code>FAIL_OPEN</code></td>
+<td>
+<p>If network connection fails, request is passed to the backend.</p>
+
+</td>
+</tr>
+<tr id="NetworkFailPolicy.FAIL_CLOSE">
+<td><code>FAIL_CLOSE</code></td>
+<td>
+<p>If network connection fails, request is rejected.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="Quota">Quota</h2>
 <section>
 <p>Specifies a quota to use with quota name and amount.</p>
@@ -992,6 +1021,16 @@ typically includes the &ldquo;destination.service&rdquo; attribute.</p>
 
 </td>
 </tr>
+<tr id="ServiceConfig.network_fail_policy">
+<td><code>networkFailPolicy</code></td>
+<td><code><a href="#NetworkFailPolicy">NetworkFailPolicy</a></code></td>
+<td>
+<p>Specifies the policy when failed to connect to Mixer server.
+This is the service-level policy. It overrides mesh-level policy (defined
+in TransportConfig#network<em>fail</em>policy).</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1144,9 +1183,10 @@ should not be less than 1 second, otherwise it will be reset to 1 second.</p>
 </tr>
 <tr id="TransportConfig.network_fail_policy">
 <td><code>networkFailPolicy</code></td>
-<td><code><a href="#TransportConfig.NetworkFailPolicy">TransportConfig.NetworkFailPolicy</a></code></td>
+<td><code><a href="#NetworkFailPolicy">NetworkFailPolicy</a></code></td>
 <td>
-<p>Specifies the policy when failed to connect to Mixer server.</p>
+<p>Specifies the policy when failed to connect to Mixer server.
+This is the mesh level policy.</p>
 
 </td>
 </tr>
@@ -1186,36 +1226,6 @@ handle report calls.</p>
 
 <p>NOTE: Any value other than the default &ldquo;mixer_server&rdquo; will require the
 Istio Grafana dashboards to be reconfigured to use the new name.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="TransportConfig.NetworkFailPolicy">TransportConfig.NetworkFailPolicy</h2>
-<section>
-<p>NetworkFailPolicy defines behavior when network connection
-failure occurs.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="TransportConfig.NetworkFailPolicy.FAIL_OPEN">
-<td><code>FAIL_OPEN</code></td>
-<td>
-<p>If network fails, request is passed to the backend.</p>
-
-</td>
-</tr>
-<tr id="TransportConfig.NetworkFailPolicy.FAIL_CLOSE">
-<td><code>FAIL_CLOSE</code></td>
-<td>
-<p>If network fails, request is rejected.</p>
 
 </td>
 </tr>
