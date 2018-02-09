@@ -70,7 +70,7 @@ message ServiceConfig {
   // End user authentication policy.
   EndUserAuthenticationPolicySpec end_user_authn_spec = 6;
 
-  // Specifies the policy when failed to connect to Mixer server..
+  // Specifies the policy when failed to connect to Mixer server.
   // This is the service-level policy. It overrides mesh-level policy (defined
   // in TransportConfig#network_fail_policy).
   NetworkFailPolicy network_fail_policy = 7;

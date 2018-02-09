@@ -71,7 +71,7 @@ type ServiceConfig struct {
 	QuotaSpec []*QuotaSpec `protobuf:"bytes,5,rep,name=quota_spec,json=quotaSpec" json:"quota_spec,omitempty"`
 	// End user authentication policy.
 	EndUserAuthnSpec *EndUserAuthenticationPolicySpec `protobuf:"bytes,6,opt,name=end_user_authn_spec,json=endUserAuthnSpec" json:"end_user_authn_spec,omitempty"`
-	// Specifies the policy when failed to connect to Mixer server..
+	// Specifies the policy when failed to connect to Mixer server.
 	// This is the service-level policy. It overrides mesh-level policy (defined
 	// in TransportConfig#network_fail_policy).
 	NetworkFailPolicy *NetworkFailPolicy `protobuf:"bytes,7,opt,name=network_fail_policy,json=networkFailPolicy" json:"network_fail_policy,omitempty"`
