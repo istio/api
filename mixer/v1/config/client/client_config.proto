@@ -88,7 +88,7 @@ message TransportConfig {
   bool disable_report_batch = 3;
 
   // Specifies the policy when failed to connect to Mixer server.
-  // This is the mesh level policy.
+  // This is the mesh level policy. The default value for policy is FAIL_OPEN.
   NetworkFailPolicy network_fail_policy = 4;
 
   // Specify refresh interval to write mixer client statistics to Envoy share

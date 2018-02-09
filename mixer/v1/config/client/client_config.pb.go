@@ -90,7 +90,7 @@ type TransportConfig struct {
 	// The flag to disable report batch.
 	DisableReportBatch bool `protobuf:"varint,3,opt,name=disable_report_batch,json=disableReportBatch,proto3" json:"disable_report_batch,omitempty"`
 	// Specifies the policy when failed to connect to Mixer server.
-	// This is the mesh level policy.
+	// This is the mesh level policy. The default value for policy is FAIL_OPEN.
 	NetworkFailPolicy *NetworkFailPolicy `protobuf:"bytes,4,opt,name=network_fail_policy,json=networkFailPolicy" json:"network_fail_policy,omitempty"`
 	// Specify refresh interval to write mixer client statistics to Envoy share
 	// memory. If not specified, the interval is 10 seconds.
