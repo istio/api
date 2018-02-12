@@ -84,7 +84,7 @@ message ProxyConfig {
   // MUST BE greater than _drain_duration_ parameter.
   google.protobuf.Duration parent_shutdown_duration = 5;
 
-  // Deprecated, use server_address instread.
+  // Deprecated, use server_address instead.
   string discovery_address = 6;
 
   // Polling interval for service discovery (used by EDS, CDS, LDS, but not RDS). (MUST BE >=1ms)
@@ -130,10 +130,10 @@ message ProxyConfig {
 // MeshConfig defines mesh-wide variables shared by all Envoy instances in the
 // Istio service mesh.
 message MeshConfig {
-  // Deprecated, use mixer_check instread.
+  // Deprecated, use mixer_check instead.
   string mixer_check_server = 1;
 
-  // Deprecated, use mixer_report instread.
+  // Deprecated, use mixer_report instead.
   string mixer_report_server = 2;
 
   // Disable policy checks by the mixer service. Default

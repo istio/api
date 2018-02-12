@@ -179,7 +179,7 @@ type ProxyConfig struct {
 	// parent process during a hot restart. MUST be >=1s (e.g., _1s/1m/1h_).
 	// MUST BE greater than _drain_duration_ parameter.
 	ParentShutdownDuration *google_protobuf.Duration `protobuf:"bytes,5,opt,name=parent_shutdown_duration,json=parentShutdownDuration" json:"parent_shutdown_duration,omitempty"`
-	// Deprecated, use server_address instread.
+	// Deprecated, use server_address instead.
 	DiscoveryAddress string `protobuf:"bytes,6,opt,name=discovery_address,json=discoveryAddress" json:"discovery_address,omitempty"`
 	// Polling interval for service discovery (used by EDS, CDS, LDS, but not RDS). (MUST BE >=1ms)
 	DiscoveryRefreshDelay *google_protobuf.Duration `protobuf:"bytes,7,opt,name=discovery_refresh_delay,json=discoveryRefreshDelay" json:"discovery_refresh_delay,omitempty"`
@@ -340,9 +340,9 @@ func (m *ProxyConfig) GetPilot() *ServerAddress {
 // MeshConfig defines mesh-wide variables shared by all Envoy instances in the
 // Istio service mesh.
 type MeshConfig struct {
-	// Deprecated, use mixer_check instread.
+	// Deprecated, use mixer_check instead.
 	MixerCheckServer string `protobuf:"bytes,1,opt,name=mixer_check_server,json=mixerCheckServer" json:"mixer_check_server,omitempty"`
-	// Deprecated, use mixer_report instread.
+	// Deprecated, use mixer_report instead.
 	MixerReportServer string `protobuf:"bytes,2,opt,name=mixer_report_server,json=mixerReportServer" json:"mixer_report_server,omitempty"`
 	// Disable policy checks by the mixer service. Default
 	// is false, i.e. mixer policy check is enabled by default.
