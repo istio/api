@@ -123,7 +123,8 @@ func (x MeshConfig_AuthPolicy) String() string {
 }
 func (MeshConfig_AuthPolicy) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{2, 1} }
 
-// ServerAddress defines the address of servers like mixer, pilot, etc.
+// ServerAddress specifies the address of Istio components like mixer, pilot, etc.
+// At least one of the field needs to be specified.
 type ServerAddress struct {
 	// The address for mTLS server, e.g., (_istio-pilot:15003_)
 	MutualTls string `protobuf:"bytes,1,opt,name=mutual_tls,json=mutualTls" json:"mutual_tls,omitempty"`

@@ -41,7 +41,8 @@ enum AuthenticationPolicy {
   INHERIT = 1000;
 }
 
-// ServerAddress defines the address of servers like mixer, pilot, etc.
+// ServerAddress specifies the address of Istio components like mixer, pilot, etc.
+// At least one of the field needs to be specified.
 message ServerAddress {
   // The address for mTLS server, e.g., (_istio-pilot:15003_)
   string mutual_tls = 1;
