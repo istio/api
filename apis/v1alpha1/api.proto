@@ -1,4 +1,4 @@
-// Copyright 2017 Istio Authors
+// Copyright 2018 Istio Authors
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -22,176 +22,80 @@ option (gogoproto.goproto_getters_all) = false;
 option (gogoproto.equal_all) = false;
 option (gogoproto.gostring_all) = false;
 
-// OpenAPI v2 specification
-// https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md
-message OpenApiv2 {
-  oneof data {
-    // utf-8 encoding of OpenAPI v2 document written in YAML or JSON.
-    string yaml = 1;
-  }
+// SchemeSource defines the source for an API schema.
+message SchemaSource {
+  // External URL reference to source API schema. The reference is
+  // expected to be immutable and valid for the lifetime of the
+  // SchemeSource and encompassing API specification. Changing the
+  // referenced spec after the reference is submitted is undefined
+  // behavior.
+  string external = 1;
+
+  // String inlined in the configuration. Binary data should be base64
+  // encoded.
+  string inline_string = 2;
 }
 
-// OpenAPI v3 specification
-// https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md
+// [OpenAPI v2](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md)
+message OpenApiv2 {
+  SchemaSource schema_source = 1;
+}
+
+// [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md)
 message OpenApiv3 {
-  oneof data {
-    // utf-8 encoding of OpenAPI v3 document written in YAML or JSON.
-    string yaml = 1;
-  }
+  SchemaSource schema_source = 1;
 }
 
 // A protobuf descriptor set for a gRPC service.
 message Grpc {
-  oneof data {
-    // Binary content of the proto descriptor set for the gRPC service.
-    bytes binary = 1;
-  }
+  SchemaSource schema_source = 1;
+
+  // Select the set of services in the descriptor set that this grpc
+  // definition references. A descriptor set may include multiple
+  // service definitions, due to dependencies, but only a subset of
+  // them are served by the specified backend.
+  repeated string selected_services = 2;
 }
 
 // API configuration for describing the API surface of a (sub)set of
 // services. These API descriptions are used to generate API related
-// attibutes. Security definitions, extensions, etc. are preserved but
-// not used by Istio.
-//
-// For example,
-// https://github.com/googleapis/gnostic/blob/master/examples/v2.0/yaml/petstore-simple.yaml
-// would be encoded with the following:
+// attibutes and enable other API management features,
+// e.g. transcoding (when applicable), unify discovery of API services
+// within the mesh. Security definitions, extensions, etc. are
+// preserved but not used by Istio.
 //
 //   apiVersion: apis.istio.io/v1alpha1
-//     kind: HTTPAPI
+//     kind: HttpApi
 //     metadata:
 //       name: petstore
 //     spec:
-//       openapiv2: |
-//         swagger: "2.0"
-//         info:
-//           version: "1.0.0"
-//           title: "Swagger Petstore"
-//           description: "A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification"
-//           termsOfService: "http://swagger.io/terms/"
-//           contact:
-//             name: "Swagger API Team"
-//           license:
-//             name: "MIT"
-//         host: "petstore.swagger.io"
-//         basePath: "/api"
-//         schemes:
-//           - "http"
-//         consumes:
-//           - "application/json"
-//         produces:
-//           - "application/json"
-//         paths:
-//           /pets:
-//             get:
-//               description: "Returns all pets from the system that the user has access to"
-//               operationId: "findPets"
-//               produces:
-//                 - "application/json"
-//                 - "application/xml"
-//                 - "text/xml"
-//                 - "text/html"
-//               parameters:
-//                 -
-//                   name: "tags"
-//                   in: "query"
-//                   description: "tags to filter by"
-//                   required: false
-//                   type: "array"
-//                   items:
-//                     type: "string"
-//                   collectionFormat: "csv"
-//                   ... etc ...
+//       openapiv2:
+//         sourceSchema:
+//           external: https://github.com/googleapis/gnostic/blob/master/examples/v2.0/yaml/petstore-simple.yaml
 //
-// This file could be created from the command line with istioctl, e.g.
-//
-//     istioctl create httpapi petstore --type=openapiv2 --from-file=petstore-simple.yaml
-//
-message HTTPAPI {
+message HttpApi {
   oneof type {
-    HTTPGeneric http_generic = 1;
-    OpenAPIv2 openapiv2 = 2;
-    OpenAPIv3 openapiv3 = 3;
+    HttpGeneric generic = 1;
+    OpenApiv2 openapiv2 = 2;
+    OpenApiv3 openapiv3 = 3;
     Grpc grpc = 4;
   }
 
-  // TODO - how do bind this API to a set of services?
-  //
-  // option (1) - define api-to-service binding inline with
-  // `destination` below. Nice and self-contained, but may require
-  // duplicate API instances if services are composed of multiple
-  // smaller services, e.g. every service has a "healthcheck" API.
-  //
-  // option (2) - use external binding resource,
-  // e.g. HTTIAPISpecBinding. Useful for reuseing and composing API
-  // definitions across sets of services.
-  //
-  repeated istio.routing.v1alpha2.Destination destinations = 5;
+  // List of destination services that this API is bound to.
+  repeated Destination destinations = 5;
 
-  // TODO - OpenAPI/gRPC types may be normalized to generic HTTP. This
-  // could be hidden from the user. Alternatively, it might be useful
-  // to reflect this back into the user-facing configuration resource
-  // to aid in debugability.
-  HTTPGeneric normalized_http = 6;
+  // OpenApi and gRPC may be normalized to generic HTTP for API
+  // attribute generation. This could be hidden from the
+  // user. Alternatively, it might be useful to reflect this back into
+  // the user-facing configuration resource to aid in debugability.
+  HttpGeneric normalized_http = 6;
 }
 
-
-/////////////////////////////////////////////////////////////////
+// TODO - This is conceptually similar to the routing API's notion of
+// named subsets.  Should we reuse those types, or duplicate the types
+// customized for our purposes?
 //
-// NOTE: The HTTPAPIReference and HTTPAPIBinding beow would be used for
-// external binding API to a set of services. They aren't needed if
-// the inline destination binding option is selected.
-//
-////////////////////////////////////////////////////////////////
-
-
-
-// HTTPAPIReference defines a reference to an API. This is typically used
-// for establishing bindings between an API and an IstioService. For
-// example, the following defines an HTTPAPIReference for service `foo` in
-// namespace `bar`.
-//
-//     - name: foo
-//       namespace: bar
-//
-message HTTPAPIReference {
-  // REQUIRED. The short name of the API. This is the resource name
-  // defined by the metadata name field.
-  string name = 1;
-
-  // Optional namespace of the API. Defaults to the encompassing
-  // HTTPAPIBinding's metadata namespace field.
-  string namespace = 2;
-}
-
-// HTTPAPIBinding defines the binding between APIs and one or more
-// IstioService. For example, the following establishes a binding
-// between the API `petstore` and service `foo` in namespace `bar`.
-//
-//     apiVersion: apis.istio.io/v1alpha2
-//     kind: HTTPAPIBinding
-//     metadata:
-//       name: my-binding
-//       namespace: default
-//     spec:
-//       services:
-//       - name: foo
-//         namespace: bar
-//       api_specs:
-//       - name: petstore
-//         namespace: default
-//
-message HTTPAPIBinding {
-  // List of destinations (workloads) that the policy should be applied on.
-  // If empty, policy will be used on all destinations in the same namespace.
-  repeated istio.routing.v1alpha2.Destination destinations = 1;
-
-  // TODO - how to bind a set of services to an API spec? Option (1)
-  // shown below uses an array of references. Alternatively, this
-  // could use a labels and labelSelectors.
-
-  // REQUIRED. One or more API references that should be mapped to
-  // the specified service(s). The aggregate collection of match
-  // conditions defined in the APIs should not overlap.
-  repeated HTTPAPIReference apis = 2;
+// This needs to allow for binding an API to a service (i.e. host),
+// named subsets using labels, and/or edge proxy (gateway/ingress).
+message Destination {
 }
