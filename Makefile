@@ -341,7 +341,6 @@ clean-apis-generated:
 	rm -f $(apis_v1alpha1_pb_gos)
 	rm -f $(apis_v1alpha1_pb_doc)
 
-
 #####################
 # Cleanup
 #####################
