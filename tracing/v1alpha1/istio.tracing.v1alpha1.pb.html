@@ -5,7 +5,51 @@ layout: protoc-gen-docs
 ---
 <p>Provides configuration parameters for Istio tracing.</p>
 
-<h2 id="Percent">Percent</h2>
+<h2 id="Enumerations">Enumerations</h2>
+<h3 id="TraceSampling.Mode">TraceSampling.Mode</h3>
+<section>
+<p>Controls the mode of sampling.</p>
+
+<table>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+<tr id="TraceSampling.Mode.NONE">
+<td><code>NONE</code></td>
+<td>
+<p>Do NOT generate trace spans.</p>
+
+</td>
+</tr>
+<tr id="TraceSampling.Mode.MINIMAL">
+<td><code>MINIMAL</code></td>
+<td>
+<p>Use the pre-configured minimal trace span generation settings.
+This will generate trace spans for 1% of all requests (and 100% for
+client-directed forced traces).</p>
+
+</td>
+</tr>
+<tr id="TraceSampling.Mode.CUSTOM">
+<td><code>CUSTOM</code></td>
+<td>
+<p>Use a custom sampling configuration.</p>
+
+</td>
+</tr>
+<tr id="TraceSampling.Mode.ALL">
+<td><code>ALL</code></td>
+<td>
+<p>Generate trace spans for 100% of requests, client-requested or
+otherwise.</p>
+
+</td>
+</tr>
+</table>
+</section>
+<h2 id="Messages">Messages</h2>
+<h3 id="Percent">Percent</h3>
 <section>
 <p>Identifies a percentage.</p>
 
@@ -25,7 +69,7 @@ layout: protoc-gen-docs
 </tr>
 </table>
 </section>
-<h2 id="TraceCollector">TraceCollector</h2>
+<h3 id="TraceCollector">TraceCollector</h3>
 <section>
 <p>TraceCollector holds the configuration for a specific tracing backend.</p>
 
@@ -45,9 +89,9 @@ layout: protoc-gen-docs
 </tr>
 </table>
 </section>
-<h2 id="TracingConfiguration">TracingConfiguration</h2>
+<h3 id="TracingRule">TracingRule</h3>
 <section>
-<p>TracingConfiguration controls Istio-wide trace collection configuration
+<p>TracingRule controls Istio mesh trace collection configuration
 parameters. It includes the configuration for the tracing backends as well
 as the rates at which distributed tracing data should be generated.</p>
 
@@ -71,7 +115,20 @@ spec:
 <th>Type</th>
 <th>Description</th>
 </tr>
-<tr id="TracingConfiguration.trace_collector">
+<tr id="TracingRule.service_name">
+<td><code>serviceName</code></td>
+<td><code>string</code></td>
+<td>
+<p>Provides a way to tailor the configuration for a specific service.
+If not specifed, this applies to all services in the namespace of the
+configured resource. When the namespace is <code>istio-system</code>, the settings
+will be applied to the entire mesh.</p>
+
+<p>Example: ratings</p>
+
+</td>
+</tr>
+<tr id="TracingRule.trace_collector">
 <td><code>traceCollector</code></td>
 <td><code><a href="#TraceCollector">TraceCollector</a></code></td>
 <td>
@@ -81,7 +138,7 @@ spec:
 </tr>
 </table>
 </section>
-<h2 id="ZipkinCollector">ZipkinCollector</h2>
+<h3 id="ZipkinCollector">ZipkinCollector</h3>
 <section>
 <p>Configuration for a Zipkin collector.</p>
 
@@ -91,16 +148,16 @@ spec:
 <th>Type</th>
 <th>Description</th>
 </tr>
-<tr id="ZipkinCollector.address">
-<td><code>address</code></td>
+<tr id="ZipkinCollector.host">
+<td><code>host</code></td>
 <td><code>string</code></td>
 <td>
 <p>Required. Address of the Zipkin service (e.g. <em>zipkin:9411</em>).</p>
 
 </td>
 </tr>
-<tr id="ZipkinCollector.endpoint">
-<td><code>endpoint</code></td>
+<tr id="ZipkinCollector.api_endpoint">
+<td><code>apiEndpoint</code></td>
 <td><code>string</code></td>
 <td>
 <p>Optional. API endpoint of the Zipkin service.</p>

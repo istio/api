@@ -22,7 +22,7 @@ package istio.tracing.v1alpha1;
 
 option go_package="istio.io/api/tracing/v1alpha1";
 
-// TracingConfiguration controls Istio-wide trace collection configuration
+// TracingRule controls Istio mesh trace collection configuration
 // parameters. It includes the configuration for the tracing backends as well
 // as the rates at which distributed tracing data should be generated.
 //
@@ -39,10 +39,18 @@ option go_package="istio.io/api/tracing/v1alpha1";
 // ```
 //
 // WARNING: This is not currently supported by Istio.
-message TracingConfiguration {
+message TracingRule {
+
+    // Provides a way to tailor the configuration for a specific service.
+    // If not specifed, this applies to all services in the namespace of the
+    // configured resource. When the namespace is `istio-system`, the settings
+    // will be applied to the entire mesh.
+    //
+    // Example: ratings
+    string service_name = 1;
 
     // Provides configuration for a tracing backend
-    TraceCollector trace_collector = 1;
+    TraceCollector trace_collector = 3;
 
     // $hide_from_docs
     //
@@ -50,7 +58,7 @@ message TracingConfiguration {
     //
     // NOTE: This will only be effective when support for Envoy V2 APIs is added
     // to Istio Pilot.
-    TraceSampling trace_sampling = 2;
+    TraceSampling trace_sampling = 4;
 }
 
 // TraceCollector holds the configuration for a specific tracing backend.
@@ -58,6 +66,11 @@ message TraceCollector {
     oneof collector {
         // Configuration information for a Zipkin trace collector.
         ZipkinCollector zipkin_collector = 1;
+
+        // $hide_from_docs
+        //
+        // Configuration information for a LightStep trace collector.
+        LightStepCollector lightstep_collector = 2;
     }
 }
 
@@ -65,12 +78,26 @@ message TraceCollector {
 message ZipkinCollector {
 
     // Required. Address of the Zipkin service (e.g. _zipkin:9411_).
-    string address = 1;
+    string host = 1;
 
     // Optional. API endpoint of the Zipkin service.
     //
     // Default: "/api/v1/spans"
-    string endpoint = 2;
+    string api_endpoint = 2;
+}
+
+// $hide_from_docs
+//
+// Configuration for a LightStep collector.
+message LightStepCollector {
+
+    // Required. Address of the LightStep service (e.g. _collector-grpc.lightstep.com:443_).
+    string host = 1;
+
+    // Required. File containing the access token for the LightStep API.
+    //
+    // Default: "/app/access_token"
+    string access_token_file = 2;
 }
 
 // Identifies a percentage.
@@ -82,34 +109,46 @@ message Percent {
 // $hide_from_docs
 //
 // Controls the rate at which Istio will generate trace spans for requests
-// within a mesh. Sampling can be controlled in one of two ways: client-directed
-// and random sampling. Client-directed sampling refers to sampling based on
-// values of HTTP headers set by requesting clients. Random sampling refers to
-// the process of selecting a request for tracing based on a randomly generated
-// request ID. It is also possible to set an upper limit on the rate of all
-// trace sampling, via control of the overall sampling rate.
+// within a mesh.
 message TraceSampling {
 
-    // Target percentage of requests that will be force traced if the
-    // x-client-trace-id header is set by the client of a request.
+    // Controls the mode of sampling.
+    enum Mode {
+        // Do NOT generate trace spans.
+        NONE = 0;
+
+        // Use the pre-configured minimal trace span generation settings.
+        // This will generate trace spans for 1% of all requests (and 100% for
+        // client-directed forced traces).
+        MINIMAL = 1;
+
+        // Use a custom sampling configuration.
+        CUSTOM = 2;
+
+        // Generate trace spans for 100% of requests, client-requested or
+        // otherwise.
+        ALL = 3;
+    }
+
+    // Required. Trace generation mode.
+    //
+    // Default: NONE
+    Mode mode = 1;
+
+    // Target percentage of requests that will be force traced if requested
+    // by a client.
+    //
+    // Optional. Only valid when mode is set to CUSTOM.
     //
     // Default: 0.0%
-    Percent client_sampling = 1;
+    Percent client_sampling = 2;
 
     // Target percentage of requests managed that will be randomly selected for
     // trace generation, if not requested by the client.
     //
-    // Default: 0.0%
-    Percent random_sampling = 2;
-
-    // Target percentage of requests that will be traced after all other
-    // sampling checks have been applied (client-directed, random sampling).
-    // This field functions as an upper limit on the total configured sampling
-    // rate. For instance, setting `client_sampling` to 100% and `overall_sampling`
-    // to 1% will result in only 1% of client requests with the appropriate
-    // headers to be force traced.
+    // Optional. Only valid when mode is set to CUSTOM.
     //
     // Default: 0.0%
-    Percent overall_sampling = 3;
+    Percent random_sampling = 3;
 }
 
