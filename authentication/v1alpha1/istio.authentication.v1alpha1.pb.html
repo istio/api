@@ -2,11 +2,93 @@
 title: Authentication Policy
 overview: Authentication policy for Istio services.
 layout: protoc-gen-docs
-number_of_entries: 6
+number_of_entries: 8
 ---
-<p>This package defines user-facing authentication policy as well as configs that
-the sidecar proxy uses to perform authentication.</p>
+{% raw %}
+<p>This package defines user-facing authentication policy as well as configs
+that the sidecar proxy uses to perform authentication.</p>
 
+<h2 id="CredentialRule">CredentialRule</h2>
+<section>
+<p>CredentialRule defines which identity (e.g from peer or end-user
+authentication) will be used as request principal. The rule can be activated
+conditionally, based on matching condition (currently use only peer identity)</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="CredentialRule.end_users">
+<td><code>endUsers</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>If not empty, is the list of end user mechanism names (the mechanism itself
+defined in different part of the policy) that can be used to set principal.
+At run time, they will be checked in order and only the first valid one is
+used. If none is valid, request will be rejected.
+Leave the list empty to use peer identity for principal.</p>
+
+</td>
+</tr>
+<tr id="CredentialRule.matching_peers">
+<td><code>matchingPeers</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Condition to activate the rule. If not empty, the rule will be activated
+if request come from one of these peers (identity).
+Leave blank to activate the rule unconditionally.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="EndUserMechanism">EndUserMechanism</h2>
+<section>
+<p>Similar to PeerMechanism, EndUserMechanism defines one particular type of
+authentication that can be used for end user authentication.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="EndUserMechanism.name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Name that can be used to refer to this mechanism.</p>
+
+</td>
+</tr>
+<tr id="EndUserMechanism.none" class="oneof oneof-start">
+<td><code>none</code></td>
+<td><code><a href="#None">None (oneof)</a></code></td>
+<td>
+<p>Set if authentication is not required.</p>
+
+</td>
+</tr>
+<tr id="EndUserMechanism.jwt" class="oneof">
+<td><code>jwt</code></td>
+<td><code><a href="#Jwt">Jwt (oneof)</a></code></td>
+<td>
+<p>Set if JWT is used.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="Jwt">Jwt</h2>
 <section>
 <p>JSON Web Token (JWT) token format for authentication as defined by
@@ -110,10 +192,21 @@ query parameter name.</p>
 </tbody>
 </table>
 </section>
-<h2 id="Mechanism">Mechanism</h2>
+<h2 id="MutualTls">MutualTls</h2>
 <section>
-<p>Mechanism defines one particular type of authentication, e.g
-mutual TLS, JWT etc, (no authentication is one type by itsefl).
+<p>Placeholder for mTLS authentication params.</p>
+
+</section>
+<h2 id="None">None</h2>
+<section>
+<p>Placeholder for None authentication params</p>
+
+</section>
+<h2 id="PeerMechanism">PeerMechanism</h2>
+<section>
+<p>PeerMechanism defines one particular type of authentication, e.g
+mutual TLS, JWT etc, (no authentication is one type by itsefl) that can
+be used for peer authentication.
 The type can be progammatically determine by checking the type of the
 &ldquo;params&rdquo; field.</p>
 
@@ -126,7 +219,7 @@ The type can be progammatically determine by checking the type of the
 </tr>
 </thead>
 <tbody>
-<tr id="Mechanism.none" class="oneof oneof-start">
+<tr id="PeerMechanism.none" class="oneof oneof-start">
 <td><code>none</code></td>
 <td><code><a href="#None">None (oneof)</a></code></td>
 <td>
@@ -134,7 +227,7 @@ The type can be progammatically determine by checking the type of the
 
 </td>
 </tr>
-<tr id="Mechanism.mtls" class="oneof">
+<tr id="PeerMechanism.mtls" class="oneof">
 <td><code>mtls</code></td>
 <td><code><a href="#MutualTls">MutualTls (oneof)</a></code></td>
 <td>
@@ -142,7 +235,7 @@ The type can be progammatically determine by checking the type of the
 
 </td>
 </tr>
-<tr id="Mechanism.jwt" class="oneof">
+<tr id="PeerMechanism.jwt" class="oneof">
 <td><code>jwt</code></td>
 <td><code><a href="#Jwt">Jwt (oneof)</a></code></td>
 <td>
@@ -152,16 +245,6 @@ The type can be progammatically determine by checking the type of the
 </tr>
 </tbody>
 </table>
-</section>
-<h2 id="MutualTls">MutualTls</h2>
-<section>
-<p>Placeholder for mTLS authentication params.</p>
-
-</section>
-<h2 id="None">None</h2>
-<section>
-<p>Placeholder for None authentication params</p>
-
 </section>
 <h2 id="Policy">Policy</h2>
 <section>
@@ -183,7 +266,7 @@ metadata:
 spec:
   destinations:
   peers:
-  - mtls: &lbrace;}
+  - mtls: null
 </code></pre>
 
 <p>Policy to enable mTLS, and use JWT for productpage:9000</p>
@@ -199,15 +282,19 @@ spec:
     port:
       number: 9000
   peers:
-  - mtls:
+  - mtls: null
   endUsers:
-  - jwt:
+  - name: google_jwt
+    jwt:
       issuer: &quot;https://securetoken.google.com&quot;
       audiences:
       - &quot;productpage&quot;
       jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
       locations:
       - header: x-goog-iap-jwt-assertion
+  credentialRules:
+  - endUser:
+    - google_jwt
 </code></pre>
 
 <table class="message-fields">
@@ -230,7 +317,7 @@ If empty, policy will be used on all destinations in the same namespace.</p>
 </tr>
 <tr id="Policy.peers">
 <td><code>peers</code></td>
-<td><code><a href="#Mechanism">Mechanism[]</a></code></td>
+<td><code><a href="#PeerMechanism">PeerMechanism[]</a></code></td>
 <td>
 <p>List of credential that should be checked by peer authentication. They
 will be validated in sequence, until the first one satisfied. If none of
@@ -242,10 +329,21 @@ peer identity (i.e the source.user attribute in the request to Mixer).</p>
 </tr>
 <tr id="Policy.end_users">
 <td><code>endUsers</code></td>
-<td><code><a href="#Mechanism">Mechanism[]</a></code></td>
+<td><code><a href="#EndUserMechanism">EndUserMechanism[]</a></code></td>
 <td>
-<p>Similar to above, but for end_user authentication, which will extract
-request.auth.principal/audiences/presenter if authentication succeed.</p>
+<p>List of supported end-user authentication. Which one(s) are used for a specific
+request is decided at runtime, based on credential_rules bellow.</p>
+
+</td>
+</tr>
+<tr id="Policy.credential_rules">
+<td><code>credentialRules</code></td>
+<td><code><a href="#CredentialRule">CredentialRule[]</a></code></td>
+<td>
+<p>Rules to define how request pricipal will be set. Each rule can have
+conditions that determine if the rule should be applied or not at runtime.
+The rules will be examined in order, and only the first one got activated
+will be used.</p>
 
 </td>
 </tr>
@@ -424,3 +522,4 @@ label>.</p>
 </tbody>
 </table>
 </section>
+{% endraw %}

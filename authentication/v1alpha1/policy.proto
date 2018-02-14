@@ -19,8 +19,8 @@ import "networking/v1alpha3/virtual_service.proto";
 // $title: Authentication Policy
 // $overview: Authentication policy for Istio services.
 
-// This package defines user-facing authentication policy as well as configs that
-// the sidecar proxy uses to perform authentication.
+// This package defines user-facing authentication policy as well as configs
+// that the sidecar proxy uses to perform authentication.
 package istio.authentication.v1alpha1;
 
 option go_package = "istio.io/api/authentication/v1alpha1";
@@ -93,7 +93,8 @@ message Jwt {
   //
   //     1) The Authorization header using the Bearer schema,
   //        e.g. Authorization: Bearer <token>. (see
-  //        [Authorization Request Header Field](https://tools.ietf.org/html/rfc6750#section-2.1))
+  //        [Authorization Request Header
+  //        Field](https://tools.ietf.org/html/rfc6750#section-2.1))
   //
   //     2) `access_token` query parameter (see
   //     [URI Query Parameter](https://tools.ietf.org/html/rfc6750#section-2.3))
@@ -112,11 +113,12 @@ message Jwt {
   repeated string jwt_params = 7;
 }
 
-// Mechanism defines one particular type of authentication, e.g
-// mutual TLS, JWT etc, (no authentication is one type by itsefl).
+// PeerMechanism defines one particular type of authentication, e.g
+// mutual TLS, JWT etc, (no authentication is one type by itsefl) that can
+// be used for peer authentication.
 // The type can be progammatically determine by checking the type of the
 // "params" field.
-message Mechanism {
+message PeerMechanism {
   oneof params {
     // Set if authentication is not required.
     None none = 1;
@@ -127,6 +129,38 @@ message Mechanism {
     // Set if JWT is used.
     Jwt jwt = 3;
   }
+}
+
+// Similar to PeerMechanism, EndUserMechanism defines one particular type of
+// authentication that can be used for end user authentication.
+message EndUserMechanism {
+  // Name that can be used to refer to this mechanism.
+  string name = 1;
+
+  oneof params {
+    // Set if authentication is not required.
+    None none = 2;
+
+    // Set if JWT is used.
+    Jwt jwt = 3;
+  }
+}
+
+// CredentialRule defines which identity (e.g from peer or end-user
+// authentication) will be used as request principal. The rule can be activated
+// conditionally, based on matching condition (currently use only peer identity)
+message CredentialRule {
+  // If not empty, is the list of end user mechanism names (the mechanism itself
+  // defined in different part of the policy) that can be used to set principal.
+  // At run time, they will be checked in order and only the first valid one is
+  // used. If none is valid, request will be rejected.
+  // Leave the list empty to use peer identity for principal.
+  repeated string end_users = 1;
+
+  // Condition to activate the rule. If not empty, the rule will be activated
+  // if request come from one of these peers (identity).
+  // Leave blank to activate the rule unconditionally.
+  repeated string matching_peers = 2;
 }
 
 // Policy binds credentials to workload(s).
@@ -148,7 +182,7 @@ message Mechanism {
 // spec:
 //   destinations:
 //   peers:
-//   - mtls: {}
+//   - mtls: null
 // ```
 // Policy to enable mTLS, and use JWT for productpage:9000
 //
@@ -164,15 +198,19 @@ message Mechanism {
 //     port:
 //       number: 9000
 //   peers:
-//   - mtls:
+//   - mtls: null
 //   endUsers:
-//   - jwt:
+//   - name: google_jwt
+//     jwt:
 //       issuer: "https://securetoken.google.com"
 //       audiences:
 //       - "productpage"
 //       jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
 //       locations:
 //       - header: x-goog-iap-jwt-assertion
+//   credentialRules:
+//   - endUser:
+//     - google_jwt
 // ```
 message Policy {
   // List of destinations (workloads) that the policy should be applied on.
@@ -184,9 +222,15 @@ message Policy {
   // the specified mechanism valid, the whole authentication should fail.
   // On the other hand, the first valid credential will be used to extract
   // peer identity (i.e the source.user attribute in the request to Mixer).
-  repeated Mechanism peers = 2;
+  repeated PeerMechanism peers = 2;
 
-  // Similar to above, but for end_user authentication, which will extract
-  // request.auth.principal/audiences/presenter if authentication succeed.
-  repeated Mechanism end_users = 3;
+  // List of supported end-user authentication. Which one(s) are used for a specific
+  // request is decided at runtime, based on credential_rules bellow.
+  repeated EndUserMechanism end_users = 3;
+
+  // Rules to define how request pricipal will be set. Each rule can have
+  // conditions that determine if the rule should be applied or not at runtime.
+  // The rules will be examined in order, and only the first one got activated
+  // will be used.
+  repeated CredentialRule credential_rules = 4;
 }
