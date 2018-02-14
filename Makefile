@@ -145,7 +145,7 @@ depend: vendor binaries
 # Generation Rules
 #####################
 
-generate: generate-broker-go generate-mesh-go generate-mixer-go generate-routing-go generate-rbac-go generate-authn-go
+generate: generate-broker-go generate-mesh-go generate-mixer-go generate-routing-go generate-rbac-go generate-authn-go generate-apis-go
 
 #####################
 # broker/...
@@ -350,4 +350,4 @@ clean:
 	rm -rf genbin
 	rm -rf vendor
 
-clean-generated: clean-broker-generated clean-mesh-generated clean-mixer-generated clean-routing-generated clean-rbac-generated clean-authn-generated
+clean-generated: clean-broker-generated clean-mesh-generated clean-mixer-generated clean-routing-generated clean-rbac-generated clean-authn-generated clean-apis-generated
