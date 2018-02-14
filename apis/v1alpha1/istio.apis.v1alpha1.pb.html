@@ -1,0 +1,571 @@
+---
+title: istio.apis.v1alpha1
+layout: protoc-gen-docs
+number_of_entries: 11
+---
+<p>$title: APIs
+$overview: Configuration for describing the API surface of services and edge load balancers (e.g. ingress).
+$location: https://istio.io/docs/reference/config/istio.apis.v1alpha1.html</p>
+
+<h2 id="Destination">Destination</h2>
+<section>
+<p>The intent of this message is to define a destination service
+(name) that can be qualified by subset (labels) and port(s). This
+is uses the same concepts defined by routing&rsquo;s Destination,
+DestinationRule, and Subset messages. I could have used those types
+directly but they included things TrafficPolicy which isn&rsquo;t
+appropriate here. It also seemed unintuitive to require creating
+DestinationRules to apply an API spec.</p>
+
+<p>TODO - other policy (e.g. auth, quota) may want to use simlar
+concepts. Should we introduce a common type for such a purpose and,
+if so, where should it live?</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Destination.host">
+<td><code>host</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED. The destination address for traffic captured by this routing
+rule. Could be a DNS name with wildcard prefix or a CIDR
+prefix. Depending on the platform, short-names can also be used
+instead of a FQDN (i.e. has no dots in the name). In such a scenario,
+the FQDN of the host would be derived based on the underlying
+platform.</p>
+
+</td>
+</tr>
+<tr id="Destination.labels">
+<td><code>labels</code></td>
+<td><code>map&lt;string,string&gt;</code></td>
+<td>
+<p>Labels defines a subset of endpoints of a service. Subsets can be
+used for scenarios like A/B testing, or routing to a specific
+version of a service.</p>
+
+</td>
+</tr>
+<tr id="Destination.port">
+<td><code>port</code></td>
+<td><code><a href="#PortSelector">PortSelector</a></code></td>
+<td>
+<p>Specifies the port on the destination. Many services only expose a
+single port or label ports with the protocols they support, in these
+cases it is not required to explicitly select the port. Note that
+selection priority is to first match by name and then match by number.</p>
+
+<p>Names must comply with DNS label syntax (rfc1035) and therefore cannot
+collide with numbers. If there are multiple ports on a service with
+the same protocol the names should be of the form <protocol-name>-<DNS
+label>.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Grpc">Grpc</h2>
+<section>
+<p>A protobuf descriptor set for a gRPC service.</p>
+
+<p>Protocol buffers do not contain descriptions of their own types and
+services. However, the contents of a .proto file itself can be
+represented using protocol buffers (see
+<a href="https://github.com/google/protobuf/blob/master/src/google/protobuf/descriptor.proto">google/protobuf/descriptor.proto</a>). protoc
+can output a FileDescriptorSet – which represents a set of .proto
+files – using the &ndash;descriptor<em>set</em>out option.</p>
+
+<p>For example, the following generates the descriptor set from
+bookstore.proto:</p>
+
+<pre><code>protoc -I. --include_imports --include_source_info \
+    --descriptor_set_out=proto.pb test/proto/bookstore.proto
+</code></pre>
+
+<p>proto2 and proto3 syntax are supported.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Grpc.source">
+<td><code>source</code></td>
+<td><code><a href="#SchemaSource">SchemaSource</a></code></td>
+<td>
+<p>Source of the gRPC specification for the API. The inline
+representation of the protobuf descriptor set should be base64
+encoded.</p>
+
+</td>
+</tr>
+<tr id="Grpc.selected_services">
+<td><code>selectedServices</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Select the set of services in the descriptor set that this grpc
+definition references. A descriptor set may include multiple
+service definitions, due to dependencies, but only a subset of
+them are served by the specified backend.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HttpApi">HttpApi</h2>
+<section>
+<p>API configuration for describing the API surface of a service,
+subset of services, or edge proxies. These API descriptions are
+used to generate API related attibutes and enable other API
+management features, e.g. transcoding (when applicable), unify
+discovery of API services within the mesh. Security definitions,
+extensions, etc. are preserved but not used by Istio.</p>
+
+<p>apiVersion: apis.istio.io/v1alpha1
+    kind: HttpApi
+    metadata:
+      name: petstore
+    spec:
+      type: OpenApiv2
+      schema:
+        source:
+          external: https://github.com/googleapis/gnostic/blob/master/examples/v2.0/yaml/petstore-simple.yaml
+      destinations:
+      - host: petstore.foo.svc
+        labels:
+          version: v1
+        port:
+          80</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HttpApi.type">
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>
+<p>The type of API schema that is stored in <code>schema</code>. Valid types
+are &ldquo;OpenApiv2&rdquo;, &ldquo;OpenApiv3&rdquo;, &ldquo;Grpc&rdquo;, and &ldquo;HttpGeneric&rdquo;.</p>
+
+</td>
+</tr>
+<tr id="HttpApi.schema">
+<td><code>schema</code></td>
+<td><code><a href="#google.protobuf.Struct">google.protobuf.Struct</a></code></td>
+<td>
+<p>Schema for the API. Valid schema types OpenApiv2, OpenApiv3,
+Grpc, and HttpGeneric in the <code>apis.istio.io/v1alpha1</code> apiversion.</p>
+
+</td>
+</tr>
+<tr id="HttpApi.destinations">
+<td><code>destinations</code></td>
+<td><code><a href="#Destination">Destination[]</a></code></td>
+<td>
+<p>List of destination services that this API is bound
+to. Destinations may be omitted if one or more gateways is
+specified.</p>
+
+</td>
+</tr>
+<tr id="HttpApi.gateways">
+<td><code>gateways</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>The names of gateways that should apply these API specifications
+as defined by routing.istio.io/v1alpha2/Gateway. Gateways may be
+omitted if one or more destination services is specified.</p>
+
+</td>
+</tr>
+<tr id="HttpApi.normalized">
+<td><code>normalized</code></td>
+<td><code><a href="#HttpGeneric">HttpGeneric</a></code></td>
+<td>
+<p>openapi v2/v3 and grpc are normalized to the generic form.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HttpGeneric">HttpGeneric</h2>
+<section>
+<p>HttpAPISpec defines the canonical configuration for generating
+API-related attributes from Http requests based on the method and
+uri templated path matches. It is sufficient for defining the API
+surface of a service for the purposes of API attribute
+generation. It is not intended to represent auth, quota,
+documentation, or other information commonly found in other API
+specifications, e.g. OpenAPI.</p>
+
+<p>Existing standards that define operations (or methods) in terms of
+Http methods and paths can be normalized to this format for use in
+Istio. For example, a simple petstore API described by OpenAPIv2
+<a href="https://github.com/googleapis/gnostic/blob/master/examples/v2.0/yaml/petstore-simple.yaml">here</a>
+can be represented with the following HttpAPISpec.</p>
+
+<pre><code>apiVersion: apis.istio.io/v1alpha1
+kind: HttpAPI
+metadata:
+  name: petstore
+  namespace: default
+spec:
+  generic:
+    attributes:
+      api.service: petstore.swagger.io
+      api.version: 1.0.0
+    patterns:
+    - attributes:
+        api.operation: findPets
+      httpMethod: GET
+      uriTemplate: /api/pets
+    - attributes:
+        api.operation: addPet
+      httpMethod: POST
+      uriTemplate: /api/pets
+    - attributes:
+        api.operation: findPetById
+      httpMethod: GET
+      uriTemplate: /api/pets/&lbrace;id}
+    - attributes:
+        api.operation: deletePet
+      httpMethod: DELETE
+      uriTemplate: /api/pets/&lbrace;id}
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HttpGeneric.attributes">
+<td><code>attributes</code></td>
+<td><code><a href="#istio.mixer.v1.Attributes">istio.mixer.v1.Attributes</a></code></td>
+<td>
+<p>List of attributes that are generated when <em>any</em> of the Http
+patterns match. This list typically includes the &ldquo;api.service&rdquo;
+and &ldquo;api.version&rdquo; attributes.</p>
+
+</td>
+</tr>
+<tr id="HttpGeneric.patterns">
+<td><code>patterns</code></td>
+<td><code><a href="#HttpGenericPattern">HttpGenericPattern[]</a></code></td>
+<td>
+<p>List of Http patterns to match.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HttpGenericPattern">HttpGenericPattern</h2>
+<section>
+<p>HttpGenericPattern defines a single pattern to match against
+incoming Http requests. The per-pattern list of attributes is
+generated if both the http<em>method and uri</em>template match. In
+addition, the top-level list of attributes in the HttpAPISpec is also
+generated.</p>
+
+<pre><code>pattern:
+- attributes
+    api.operation: doFooBar
+  httpMethod: GET
+  uriTemplate: /foo/bar
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HttpGenericPattern.attributes">
+<td><code>attributes</code></td>
+<td><code><a href="#istio.mixer.v1.Attributes">istio.mixer.v1.Attributes</a></code></td>
+<td>
+<p>List of attributes that are generated if the Http request matches
+the specified http<em>method and uri</em>template. This typically
+includes the &ldquo;api.operation&rdquo; attribute.</p>
+
+</td>
+</tr>
+<tr id="HttpGenericPattern.http_method">
+<td><code>httpMethod</code></td>
+<td><code>string</code></td>
+<td>
+<p>Http request method to match against as defined by
+<a href="https://tools.ietf.org/html/rfc7231#page-21">rfc7231</a>. For
+example: GET, HEAD, POST, PUT, DELETE.</p>
+
+</td>
+</tr>
+<tr id="HttpGenericPattern.uri_template" class="oneof oneof-start">
+<td><code>uriTemplate</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>URI template to match against as defined by
+<a href="https://tools.ietf.org/html/rfc6570">rfc6570</a>. For example, the
+following are valid URI templates:</p>
+
+<pre><code>/pets
+/pets/&lbrace;id}
+/dictionary/&lbrace;term:1}/&lbrace;term}
+/search&lbrace;?q*,lang}
+</code></pre>
+
+</td>
+</tr>
+<tr id="HttpGenericPattern.regex" class="oneof">
+<td><code>regex</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>EXPERIMENTAL:</p>
+
+<p>ecmascript style regex-based match as defined by
+<a href="http://en.cppreference.com/w/cpp/regex/ecmascript">EDCA-262</a>. For
+example,</p>
+
+<pre><code>&quot;^/pets/(.*?)?&quot;
+</code></pre>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="OpenApiv2">OpenApiv2</h2>
+<section>
+<p><a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md">OpenAPI v2</a></p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="OpenApiv2.source">
+<td><code>source</code></td>
+<td><code><a href="#SchemaSource">SchemaSource</a></code></td>
+<td>
+<p>Source of the OpenAPI v2 specification for the API. The inline
+string representation should be UTF-8 encoded.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="OpenApiv3">OpenApiv3</h2>
+<section>
+<p><a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md">OpenAPI v3</a></p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="OpenApiv3.source">
+<td><code>source</code></td>
+<td><code><a href="#SchemaSource">SchemaSource</a></code></td>
+<td>
+<p>Source of the OpenAPI v3 specification for the API. The inline
+string representation should be UTF-8 encoded.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="PortSelector">PortSelector</h2>
+<section>
+<p>PortSelector specifies the name or number of a port to be used for
+matching or selection for final routing.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PortSelector.number" class="oneof oneof-start">
+<td><code>number</code></td>
+<td><code>uint32 (oneof)</code></td>
+<td>
+<p>Valid port number</p>
+
+</td>
+</tr>
+<tr id="PortSelector.name" class="oneof">
+<td><code>name</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>Port name</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="SchemaSource">SchemaSource</h2>
+<section>
+<p>SchemeSource defines the source for an API schema.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="SchemaSource.external">
+<td><code>external</code></td>
+<td><code>string</code></td>
+<td>
+<p>External URL reference to the source API schema. The reference is
+expected to be immutable and valid for the lifetime of the
+SchemeSource and encompassing API specification. Changing the
+referenced spec after the reference is submitted is undefined
+behavior.</p>
+
+</td>
+</tr>
+<tr id="SchemaSource.inline_string">
+<td><code>inlineString</code></td>
+<td><code>string</code></td>
+<td>
+<p>String inlined in the configuration. Binary data should be base64
+encoded.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="google.protobuf.Struct">google.protobuf.Struct</h2>
+<section>
+<p><code>Struct</code> represents a structured data value, consisting of fields
+which map to dynamically typed values. In some languages, <code>Struct</code>
+might be supported by a native representation. For example, in
+scripting languages like JS a struct is represented as an
+object. The details of that representation are described together
+with the proto support for the language.</p>
+
+<p>The JSON representation for <code>Struct</code> is JSON object.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="google.protobuf.Struct.fields">
+<td><code>fields</code></td>
+<td><code>map&lt;string,<a href="#google.protobuf.Value">google.protobuf.Value</a>&gt;</code></td>
+<td>
+<p>Unordered map of dynamically typed values.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="istio.mixer.v1.Attributes">istio.mixer.v1.Attributes</h2>
+<section>
+<p>Attributes represents a set of typed name/value pairs. Many of Mixer&rsquo;s
+API either consume and/or return attributes.</p>
+
+<p>Istio uses attributes to control the runtime behavior of services running in the service mesh.
+Attributes are named and typed pieces of metadata describing ingress and egress traffic and the
+environment this traffic occurs in. An Istio attribute carries a specific piece
+of information such as the error code of an API request, the latency of an API request, or the
+original IP address of a TCP connection. For example:</p>
+
+<pre><code>request.path: xyz/abc
+request.size: 234
+request.time: 12:34:56.789 04/17/2017
+source.ip: 192.168.0.1
+target.service: example
+</code></pre>
+
+<p>A given Istio deployment has a fixed vocabulary of attributes that it understands.
+The specific vocabulary is determined by the set of attribute producers being used
+in the deployment. The primary attribute producer in Istio is Envoy, although
+specialized Mixer adapters and services can also generate attributes.</p>
+
+<p>The common baseline set of attributes available in most Istio deployments is defined
+<a href="https://istio.io/docs/reference/config/mixer/attribute-vocabulary.html">here</a>.</p>
+
+<p>Attributes are strongly typed. The supported attribute types are defined by
+<a href="https://github.com/istio/api/blob/master/mixer/v1/config/descriptor/value_type.proto">ValueType</a>.
+Each type of value is encoded into one of the so-called transport types present
+in this message.</p>
+
+<p>Defines a map of attributes in uncompressed format.
+Following places may use this message:
+1) Configure Istio/Proxy with static per-proxy attributes, such as source.uid.
+2) Service IDL definition to extract api attributes for active requests.
+3) Forward attributes from client proxy to server proxy for HTTP requests.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="istio.mixer.v1.Attributes.attributes">
+<td><code>attributes</code></td>
+<td><code>map&lt;string,<a href="#istio.mixer.v1.Attributes.AttributeValue">istio.mixer.v1.Attributes.AttributeValue</a>&gt;</code></td>
+<td>
+<p>A map of attribute name to its value.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>

@@ -145,7 +145,7 @@ depend: vendor binaries
 # Generation Rules
 #####################
 
-generate: generate-broker-go generate-mesh-go generate-mixer-go generate-routing-go generate-rbac-go generate-authn-go
+generate: generate-broker-go generate-mesh-go generate-mixer-go generate-routing-go generate-rbac-go generate-authn-go generate-apis-go
 
 #####################
 # broker/...
@@ -323,6 +323,25 @@ clean-authn-generated:
 
 
 #####################
+# apis/...
+#####################
+
+apis_v1alpha1_path := apis/v1alpha1
+apis_v1alpha1_protos := $(shell find $(apis_v1alpha1_path) -type f -name '*.proto' | sort)
+apis_v1alpha1_pb_gos := $(apis_v1alpha1_protos:.proto=.pb.go)
+apis_v1alpha1_pb_doc := $(apis_v1alpha1_path)/istio.apis.v1alpha1.pb.html
+
+generate-apis-go: $(apis_v1alpha1_pb_gos) $(apis_v1alpha1_pb_doc)
+
+$(apis_v1alpha1_pb_gos) $(apis_v1alpha1_pb_doc): $(apis_v1alpha1_protos) | depend $(protoc_gen_gogoslick) $(protoc_bin)
+	## Generate apis/v1alpha1/*.pb.go + $(apis_v1alpha1_pb_doc)
+	@$(protoc) $(proto_path) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(apis_v1alpha1_path) $^
+
+clean-apis-generated:
+	rm -f $(apis_v1alpha1_pb_gos)
+	rm -f $(apis_v1alpha1_pb_doc)
+
+#####################
 # Cleanup
 #####################
 
@@ -330,4 +349,4 @@ clean:
 	rm -rf genbin
 	rm -rf vendor
 
-clean-generated: clean-broker-generated clean-mesh-generated clean-mixer-generated clean-routing-generated clean-rbac-generated clean-authn-generated
+clean-generated: clean-broker-generated clean-mesh-generated clean-mixer-generated clean-routing-generated clean-rbac-generated clean-authn-generated clean-apis-generated

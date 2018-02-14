@@ -1,0 +1,189 @@
+// Copyright 2018 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "google/protobuf/struct.proto";
+import "gogoproto/gogo.proto";
+import "apis/v1alpha1/http_generic.proto";
+
+// $title: APIs
+// $overview: Configuration for describing the API surface of services and edge load balancers (e.g. ingress).
+// $location: https://istio.io/docs/reference/config/istio.apis.v1alpha1.html
+package istio.apis.v1alpha1;
+
+option go_package="istio.io/api/apis/v1alpha1";
+
+option (gogoproto.goproto_getters_all) = false;
+option (gogoproto.equal_all) = false;
+option (gogoproto.gostring_all) = false;
+
+// SchemeSource defines the source for an API schema.
+message SchemaSource {
+  // External URL reference to the source API schema. The reference is
+  // expected to be immutable and valid for the lifetime of the
+  // SchemeSource and encompassing API specification. Changing the
+  // referenced spec after the reference is submitted is undefined
+  // behavior.
+  string external = 1;
+
+  // String inlined in the configuration. Binary data should be base64
+  // encoded.
+  string inline_string = 2;
+}
+
+// [OpenAPI v2](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md)
+message OpenApiv2 {
+  // Source of the OpenAPI v2 specification for the API. The inline
+  // string representation should be UTF-8 encoded.
+  SchemaSource source = 1;
+}
+
+// [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md)
+message OpenApiv3 {
+  // Source of the OpenAPI v3 specification for the API. The inline
+  // string representation should be UTF-8 encoded.
+  SchemaSource source = 1;
+}
+
+// A protobuf descriptor set for a gRPC service.
+//
+// Protocol buffers do not contain descriptions of their own types and
+// services. However, the contents of a .proto file itself can be
+// represented using protocol buffers (see
+// [google/protobuf/descriptor.proto](https://github.com/google/protobuf/blob/master/src/google/protobuf/descriptor.proto)). protoc
+// can output a FileDescriptorSet – which represents a set of .proto
+// files – using the --descriptor_set_out option.
+//
+// For example, the following generates the descriptor set from
+// bookstore.proto:
+//
+//     protoc -I. --include_imports --include_source_info \
+//         --descriptor_set_out=proto.pb test/proto/bookstore.proto
+//
+// proto2 and proto3 syntax are supported.
+message Grpc {
+  // Source of the gRPC specification for the API. The inline
+  // representation of the protobuf descriptor set should be base64
+  // encoded.
+  SchemaSource source = 1;
+
+  // Select the set of services in the descriptor set that this grpc
+  // definition references. A descriptor set may include multiple
+  // service definitions, due to dependencies, but only a subset of
+  // them are served by the specified backend.
+  repeated string selected_services = 2;
+
+  // TODO - I believe we would want to insert gRPC-to-JSON
+  // transcoding_after_ policy checks, in which case API policy can be
+  // written against attributes generated directly from the grpc
+  // service. If transcoding occurs earlier, before attribute
+  // generation, then we would need to create method/path-to-operation
+  // mappings using the protobuf http annotations.
+}
+
+// API configuration for describing the API surface of a service,
+// subset of services, or edge proxies. These API descriptions are
+// used to generate API related attibutes and enable other API
+// management features, e.g. transcoding (when applicable), unify
+// discovery of API services within the mesh. Security definitions,
+// extensions, etc. are preserved but not used by Istio.
+//
+//   apiVersion: apis.istio.io/v1alpha1
+//     kind: HttpApi
+//     metadata:
+//       name: petstore
+//     spec:
+//       type: OpenApiv2
+//       schema:
+//         source:
+//           external: https://github.com/googleapis/gnostic/blob/master/examples/v2.0/yaml/petstore-simple.yaml
+//       destinations:
+//       - host: petstore.foo.svc
+//         labels:
+//           version: v1
+//         port:
+//           80
+//
+message HttpApi {
+  // The type of API schema that is stored in `schema`. Valid types
+  // are "OpenApiv2", "OpenApiv3", "Grpc", and "HttpGeneric".
+  string type = 1;
+
+  // Schema for the API. Valid schema types OpenApiv2, OpenApiv3,
+  // Grpc, and HttpGeneric in the `apis.istio.io/v1alpha1` apiversion.
+  google.protobuf.Struct schema = 2;
+
+  // List of destination services that this API is bound
+  // to. Destinations may be omitted if one or more gateways is
+  // specified.
+  repeated Destination destinations = 4;
+
+  // The names of gateways that should apply these API specifications
+  // as defined by routing.istio.io/v1alpha2/Gateway. Gateways may be
+  // omitted if one or more destination services is specified.
+  repeated string gateways = 5;
+
+  // openapi v2/v3 and grpc are normalized to the generic form.
+  HttpGeneric normalized = 6;
+}
+
+// The intent of this message is to define a destination service
+// (name) that can be qualified by subset (labels) and port(s). This
+// is uses the same concepts defined by routing's Destination,
+// DestinationRule, and Subset messages. I could have used those types
+// directly but they included things TrafficPolicy which isn't
+// appropriate here. It also seemed unintuitive to require creating
+// DestinationRules to apply an API spec.
+//
+// TODO - other policy (e.g. auth, quota) may want to use simlar
+// concepts. Should we introduce a common type for such a purpose and,
+// if so, where should it live?
+//
+message Destination {
+  // REQUIRED. The destination address for traffic captured by this routing
+  // rule. Could be a DNS name with wildcard prefix or a CIDR
+  // prefix. Depending on the platform, short-names can also be used
+  // instead of a FQDN (i.e. has no dots in the name). In such a scenario,
+  // the FQDN of the host would be derived based on the underlying
+  // platform.
+  string host = 1;
+
+  // Labels defines a subset of endpoints of a service. Subsets can be
+  // used for scenarios like A/B testing, or routing to a specific
+  // version of a service.
+  map<string, string> labels = 2;
+
+  // Specifies the port on the destination. Many services only expose a
+  // single port or label ports with the protocols they support, in these
+  // cases it is not required to explicitly select the port. Note that
+  // selection priority is to first match by name and then match by number.
+  //
+  // Names must comply with DNS label syntax (rfc1035) and therefore cannot
+  // collide with numbers. If there are multiple ports on a service with
+  // the same protocol the names should be of the form <protocol-name>-<DNS
+  // label>.
+  PortSelector port = 3;
+}
+
+// PortSelector specifies the name or number of a port to be used for
+// matching or selection for final routing.
+message PortSelector {
+  oneof port {
+    // Valid port number
+    uint32 number = 1;
+    // Port name
+    string name = 2;
+  }
+}
