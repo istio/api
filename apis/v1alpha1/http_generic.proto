@@ -19,20 +19,18 @@ package istio.apis.v1alpha1;
 option go_package="istio.io/api/apis/v1alpha1";
 
 import "gogoproto/gogo.proto";
-
-// TODO - promote to a common type?
-import "mixer/v1/attributes.proto";
+import "mixer/v1/attributes.proto"; // TODO - promote to a common type?
 
 // TODO - promote to a common type, or create a new type against the
 // same concept?
-import "routing/v1alpha2/route_rule.proto";
+// import "routing/v1alpha2/route_rule.proto";
 
 option (gogoproto.goproto_getters_all) = false;
 option (gogoproto.equal_all) = false;
 option (gogoproto.gostring_all) = false;
 
-// HTTPAPISpec defines the canonical configuration for generating
-// API-related attributes from HTTP requests based on the method and
+// HttpAPISpec defines the canonical configuration for generating
+// API-related attributes from Http requests based on the method and
 // uri templated path matches. It is sufficient for defining the API
 // surface of a service for the purposes of API attribute
 // generation. It is not intended to represent auth, quota,
@@ -40,13 +38,13 @@ option (gogoproto.gostring_all) = false;
 // specifications, e.g. OpenAPI.
 //
 // Existing standards that define operations (or methods) in terms of
-// HTTP methods and paths can be normalized to this format for use in
+// Http methods and paths can be normalized to this format for use in
 // Istio. For example, a simple petstore API described by OpenAPIv2
 // [here](https://github.com/googleapis/gnostic/blob/master/examples/v2.0/yaml/petstore-simple.yaml)
-// can be represented with the following HTTPAPISpec.
+// can be represented with the following HttpAPISpec.
 //
 //     apiVersion: apis.istio.io/v1alpha1
-//     kind: HTTPAPI
+//     kind: HttpAPI
 //     metadata:
 //       name: petstore
 //       namespace: default
@@ -73,20 +71,20 @@ option (gogoproto.gostring_all) = false;
 //           httpMethod: DELETE
 //           uriTemplate: /api/pets/{id}
 //
-message HTTPGeneric {
-  // List of attributes that are generated when *any* of the HTTP
+message HttpGeneric {
+  // List of attributes that are generated when *any* of the Http
   // patterns match. This list typically includes the "api.service"
   // and "api.version" attributes.
-  Attributes attributes = 1;
+  mixer.v1.Attributes attributes = 1;
 
-  // List of HTTP patterns to match.
-  repeated HTTPGenericPattern patterns = 2;
+  // List of Http patterns to match.
+  repeated HttpGenericPattern patterns = 2;
 }
 
-// HTTPGenericPattern defines a single pattern to match against
-// incoming HTTP requests. The per-pattern list of attributes is
+// HttpGenericPattern defines a single pattern to match against
+// incoming Http requests. The per-pattern list of attributes is
 // generated if both the http_method and uri_template match. In
-// addition, the top-level list of attributes in the HTTPAPISpec is also
+// addition, the top-level list of attributes in the HttpAPISpec is also
 // generated.
 //
 //     pattern:
@@ -95,13 +93,13 @@ message HTTPGeneric {
 //       httpMethod: GET
 //       uriTemplate: /foo/bar
 //
-message HTTPGenericPattern {
-  // List of attributes that are generated if the HTTP request matches
+message HttpGenericPattern {
+  // List of attributes that are generated if the Http request matches
   // the specified http_method and uri_template. This typically
   // includes the "api.operation" attribute.
-  Attributes attributes = 1;
+  mixer.v1.Attributes attributes = 1;
 
-  // HTTP request method to match against as defined by
+  // Http request method to match against as defined by
   // [rfc7231](https://tools.ietf.org/html/rfc7231#page-21). For
   // example: GET, HEAD, POST, PUT, DELETE.
   string http_method = 2;
