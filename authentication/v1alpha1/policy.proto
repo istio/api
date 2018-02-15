@@ -166,21 +166,21 @@ message CredentialRule {
   repeated string matching_sources = 3;
 }
 
-// Policy binds credentials to workload(s).
+// Policy defines what authentication methods can be accepted on workload(s), and
+// if authenticated, which method/certificate will set the request principal
+// (i.e request.auth.principal attribute).
+//
 // Authentication policy is composed of 2-part authentication:
-// - source: verify caller service credentials.
-// - origin: verify the origin credentials. This could be (human) end-user,
-// service account, device etc.
+// - source: verify caller service credentials. This part will set source.user
+// (source identity).
+// - origin: verify the origin credentials. This part will set request.auth.use
+// (origin identity), as well as other attributes like request.auth.presenter,
+// request.auth.audiences and raw claims. Note that the identity could be
+// end-user, service account, device etc.
 //
-// Source authentication, if specified, will be check in the order that they
-// are listed, until one success. If all of the are invalid, request is not
-// authenticated (i.e reject with 401).
-//
-// Origin authentication come after source authentication, based on credential
-// rules. Each rule specifies which origin authentication method(s) should be
-// used, and condition when the rule apply (currently, based on source id).
-// Only the first rule matches the condition will be activated. If no rule
-// matches, orgin authentication will be skipped.
+// request.auth.principal will be assigned follow the credential rules. The
+// rule also dictates which origin authentication method(s) should run, based
+// on source identity.
 //
 // Examples:
 // Policy to enable mTLS for all services in namespace frod
