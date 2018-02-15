@@ -23,66 +23,36 @@ conditionally, based on matching condition (currently use only peer identity)</p
 </tr>
 </thead>
 <tbody>
-<tr id="CredentialRule.end_users">
-<td><code>endUsers</code></td>
-<td><code>string[]</code></td>
+<tr id="CredentialRule.use_source">
+<td><code>useSource</code></td>
+<td><code>bool</code></td>
 <td>
-<p>If not empty, is the list of end user mechanism names (the mechanism itself
-defined in different part of the policy) that can be used to set principal.
-At run time, they will be checked in order and only the first valid one is
-used. If none is valid, request will be rejected.
-Leave the list empty to use peer identity for principal.</p>
+<p>Set to true to use source identity as principal. No orgin authentication
+will be run in that case.</p>
 
 </td>
 </tr>
-<tr id="CredentialRule.matching_peers">
-<td><code>matchingPeers</code></td>
+<tr id="CredentialRule.use_origin">
+<td><code>useOrigin</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>If not empty, is the list of names of origin authentication methods (these
+methods themselves are defined in the other part of the policy) that will
+be used if this rule is activated.
+At run time, each method will be evaluated in order, until the first valid.
+request.auth.principal will be set to the identity extracted from that
+valid certificate. If all methods are invalid, authentication should fail.
+This list should be empty if use_source is true.</p>
+
+</td>
+</tr>
+<tr id="CredentialRule.matching_sources">
+<td><code>matchingSources</code></td>
 <td><code>string[]</code></td>
 <td>
 <p>Condition to activate the rule. If not empty, the rule will be activated
-if request come from one of these peers (identity).
+if request come from one of these sources (identity).
 Leave blank to activate the rule unconditionally.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="EndUserMechanism">EndUserMechanism</h2>
-<section>
-<p>Similar to PeerMechanism, EndUserMechanism defines one particular type of
-authentication that can be used for end user authentication.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="EndUserMechanism.name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>Name that can be used to refer to this mechanism.</p>
-
-</td>
-</tr>
-<tr id="EndUserMechanism.none" class="oneof oneof-start">
-<td><code>none</code></td>
-<td><code><a href="#None">None (oneof)</a></code></td>
-<td>
-<p>Set if authentication is not required.</p>
-
-</td>
-</tr>
-<tr id="EndUserMechanism.jwt" class="oneof">
-<td><code>jwt</code></td>
-<td><code><a href="#Jwt">Jwt (oneof)</a></code></td>
-<td>
-<p>Set if JWT is used.</p>
 
 </td>
 </tr>
@@ -199,16 +169,14 @@ query parameter name.</p>
 </section>
 <h2 id="None">None</h2>
 <section>
-<p>Placeholder for None authentication params</p>
+<p>Placeholder for None authentication params.</p>
 
 </section>
-<h2 id="PeerMechanism">PeerMechanism</h2>
+<h2 id="OriginAuthenticationMethod">OriginAuthenticationMethod</h2>
 <section>
-<p>PeerMechanism defines one particular type of authentication, e.g
-mutual TLS, JWT etc, (no authentication is one type by itsefl) that can
-be used for peer authentication.
-The type can be progammatically determine by checking the type of the
-&ldquo;params&rdquo; field.</p>
+<p>OriginAuthenticationMethod defines authentication method/params for origin
+authentication. It should have unique name for referring later in credential
+rules. Currently, only JWT is supported.</p>
 
 <table class="message-fields">
 <thead>
@@ -219,27 +187,19 @@ The type can be progammatically determine by checking the type of the
 </tr>
 </thead>
 <tbody>
-<tr id="PeerMechanism.none" class="oneof oneof-start">
-<td><code>none</code></td>
-<td><code><a href="#None">None (oneof)</a></code></td>
+<tr id="OriginAuthenticationMethod.name">
+<td><code>name</code></td>
+<td><code>string</code></td>
 <td>
-<p>Set if authentication is not required.</p>
+<p>Name that can be used to refer to this mechanism.</p>
 
 </td>
 </tr>
-<tr id="PeerMechanism.mtls" class="oneof">
-<td><code>mtls</code></td>
-<td><code><a href="#MutualTls">MutualTls (oneof)</a></code></td>
-<td>
-<p>Set if mTLS is used.</p>
-
-</td>
-</tr>
-<tr id="PeerMechanism.jwt" class="oneof">
+<tr id="OriginAuthenticationMethod.jwt">
 <td><code>jwt</code></td>
-<td><code><a href="#Jwt">Jwt (oneof)</a></code></td>
+<td><code><a href="#Jwt">Jwt</a></code></td>
 <td>
-<p>Set if JWT is used.</p>
+<p>Jwt params for the method.</p>
 
 </td>
 </tr>
@@ -250,10 +210,19 @@ The type can be progammatically determine by checking the type of the
 <section>
 <p>Policy binds credentials to workload(s).
 Authentication policy is composed of 2-part authentication:
-- peer: verify caller service credentials.
-- end_user: verify end-user credentials.
-For each part, if it&rsquo;s not empty, at least one of those listed credential
-must be provided and  (successfully) verified for the authentication to pass.</p>
+- source: verify caller service credentials.
+- origin: verify the origin credentials. This could be (human) end-user,
+service account, device etc.</p>
+
+<p>Source authentication, if specified, will be check in the order that they
+are listed, until one success. If all of the are invalid, request is not
+authenticated (i.e reject with 401).</p>
+
+<p>Origin authentication come after source authentication, based on credential
+rules. Each rule specifies which origin authentication method(s) should be
+used, and condition when the rule apply (currently, based on source id).
+Only the first rule matches the condition will be activated. If no rule
+matches, orgin authentication will be skipped.</p>
 
 <p>Examples:
 Policy to enable mTLS for all services in namespace frod</p>
@@ -265,11 +234,11 @@ metadata:
   namespace: frod
 spec:
   destinations:
-  peers:
+  sources:
   - mtls: null
 </code></pre>
 
-<p>Policy to enable mTLS, and use JWT for productpage:9000</p>
+<p>Policy to enable mTLS, and use JWT for productpage:9000.</p>
 
 <pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
 kind: Policy
@@ -281,9 +250,9 @@ spec:
   - name: productpage
     port:
       number: 9000
-  peers:
+  sources:
   - mtls: null
-  endUsers:
+  origins:
   - name: google_jwt
     jwt:
       issuer: &quot;https://securetoken.google.com&quot;
@@ -293,8 +262,93 @@ spec:
       locations:
       - header: x-goog-iap-jwt-assertion
   credentialRules:
-  - endUser:
+  - useOrigins:
     - google_jwt
+</code></pre>
+
+<p>Policy to enable mTLS, and use JWT for productpage:9000 only when caller is
+frontend.serviceaccount.</p>
+
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: mTLS-enable
+  namespace: frod
+spec:
+  destinations:
+  - name: productpage
+    port:
+      number: 9000
+  sources:
+  - mtls: null
+  origins:
+  - name: google_jwt
+    jwt:
+      issuer: &quot;https://securetoken.google.com&quot;
+      audiences:
+      - &quot;productpage&quot;
+      jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
+      locations:
+      - header: x-goog-iap-jwt-assertion
+  credentialRules:
+  - useOrigins:
+    - google_jwt
+    matchingSources:
+    - frontend.serviceaccount
+</code></pre>
+
+<p>Note that a credential rule that uncondtional-use-source (identity)  is
+implicitly check if no rule match, so the above credentialRules is the same
+as this:</p>
+
+<pre><code>credentialRules:
+- useOrigins:
+  - google_jwt
+  matchingSources:
+  - productpage.serviceaccount
+- useSource: true
+</code></pre>
+
+<p>Policy that enable mTLS, requires google JWT if caller is
+frontend.serviceaccount, no JWT (i.e source authentication only) if caller
+is admin, and istio JWT in all other cases.</p>
+
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: mTLS-enable
+  namespace: frod
+spec:
+  destinations:
+  - name: productpage
+    port:
+      number: 9000
+  sources:
+  - mtls: null
+  origins:
+  - name: google_jwt
+    jwt:
+      issuer: &quot;https://securetoken.google.com&quot;
+      audiences:
+      - &quot;productpage&quot;
+      jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
+      locations:
+      - header: x-goog-iap-jwt-assertion
+  - name: istio_jwt
+    jwt:
+      issuer: &quot;https://securetoken.istio.io&quot;
+      locations:
+      - header: x-istio-jwt-assertion
+  credentialRules:
+  - useOrigins:
+    - google_jwt
+    matchingSources:
+    - productpage.serviceaccount
+  - useSource: true
+    matchingSource:
+    - admin
+  - useOrigins:
+    - istio_jwt 
 </code></pre>
 
 <table class="message-fields">
@@ -315,21 +369,24 @@ If empty, policy will be used on all destinations in the same namespace.</p>
 
 </td>
 </tr>
-<tr id="Policy.peers">
-<td><code>peers</code></td>
-<td><code><a href="#PeerMechanism">PeerMechanism[]</a></code></td>
+<tr id="Policy.sources">
+<td><code>sources</code></td>
+<td><code><a href="#SourceAuthenticationMethod">SourceAuthenticationMethod[]</a></code></td>
 <td>
-<p>List of credential that should be checked by peer authentication. They
-will be validated in sequence, until the first one satisfied. If none of
-the specified mechanism valid, the whole authentication should fail.
-On the other hand, the first valid credential will be used to extract
-peer identity (i.e the source.user attribute in the request to Mixer).</p>
+<p>List of authentication methods that can be use for source authentication.
+They will be evaluated in order, until the first one satisfied; source
+identity is then extracted from the associated certificate. On the other
+hand, if none of these methods pass, request should be rejected with
+authentication faile error (401).
+Leave the list empty if no source authentication required, or have single
+entry of method &lsquo;None&rsquo;. The source.user attribute will not be set in that
+case.</p>
 
 </td>
 </tr>
-<tr id="Policy.end_users">
-<td><code>endUsers</code></td>
-<td><code><a href="#EndUserMechanism">EndUserMechanism[]</a></code></td>
+<tr id="Policy.origins">
+<td><code>origins</code></td>
+<td><code><a href="#OriginAuthenticationMethod">OriginAuthenticationMethod[]</a></code></td>
 <td>
 <p>List of supported end-user authentication. Which one(s) are used for a specific
 request is decided at runtime, based on credential_rules bellow.</p>
@@ -341,9 +398,57 @@ request is decided at runtime, based on credential_rules bellow.</p>
 <td><code><a href="#CredentialRule">CredentialRule[]</a></code></td>
 <td>
 <p>Rules to define how request pricipal will be set. Each rule can have
-conditions that determine if the rule should be applied or not at runtime.
-The rules will be examined in order, and only the first one got activated
-will be used.</p>
+conditions that determine if the rule should be applied or not. The rule
+will be checked for matching conditions at runtime, in order, and stop at
+the first match. If there are no rule matching condtion, source identity
+will be used as principal (in the other words, the credential rule with
+use_source = true with no matching condition is implicitly added the end
+of the list.)</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="SourceAuthenticationMethod">SourceAuthenticationMethod</h2>
+<section>
+<p>SourceAuthenticationMethod defines one particular type of authentication, e.g
+mutual TLS, JWT etc, (no authentication is one type by itsefl) that can
+be used for peer authentication.
+The type can be progammatically determine by checking the type of the
+&ldquo;params&rdquo; field.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="SourceAuthenticationMethod.none" class="oneof oneof-start">
+<td><code>none</code></td>
+<td><code><a href="#None">None (oneof)</a></code></td>
+<td>
+<p>Set if authentication is not required. This is typically used to indicate
+other methods are optional.</p>
+
+</td>
+</tr>
+<tr id="SourceAuthenticationMethod.mtls" class="oneof">
+<td><code>mtls</code></td>
+<td><code><a href="#MutualTls">MutualTls (oneof)</a></code></td>
+<td>
+<p>Set if mTLS is used.</p>
+
+</td>
+</tr>
+<tr id="SourceAuthenticationMethod.jwt" class="oneof">
+<td><code>jwt</code></td>
+<td><code><a href="#Jwt">Jwt (oneof)</a></code></td>
+<td>
+<p>Set if JWT is used.</p>
 
 </td>
 </tr>

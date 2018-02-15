@@ -14,8 +14,8 @@ It has these top-level messages:
 	None
 	MutualTls
 	Jwt
-	PeerMechanism
-	EndUserMechanism
+	SourceAuthenticationMethod
+	OriginAuthenticationMethod
 	CredentialRule
 	Policy
 */
@@ -37,7 +37,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-// Placeholder for None authentication params
+// Placeholder for None authentication params.
 type None struct {
 }
 
@@ -158,109 +158,113 @@ func (m *Jwt) GetJwtParams() []string {
 	return nil
 }
 
-// PeerMechanism defines one particular type of authentication, e.g
+// SourceAuthenticationMethod defines one particular type of authentication, e.g
 // mutual TLS, JWT etc, (no authentication is one type by itsefl) that can
 // be used for peer authentication.
 // The type can be progammatically determine by checking the type of the
 // "params" field.
-type PeerMechanism struct {
+type SourceAuthenticationMethod struct {
 	// Types that are valid to be assigned to Params:
-	//	*PeerMechanism_None
-	//	*PeerMechanism_Mtls
-	//	*PeerMechanism_Jwt
-	Params isPeerMechanism_Params `protobuf_oneof:"params"`
+	//	*SourceAuthenticationMethod_None
+	//	*SourceAuthenticationMethod_Mtls
+	//	*SourceAuthenticationMethod_Jwt
+	Params isSourceAuthenticationMethod_Params `protobuf_oneof:"params"`
 }
 
-func (m *PeerMechanism) Reset()                    { *m = PeerMechanism{} }
-func (m *PeerMechanism) String() string            { return proto.CompactTextString(m) }
-func (*PeerMechanism) ProtoMessage()               {}
-func (*PeerMechanism) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
+func (m *SourceAuthenticationMethod) Reset()                    { *m = SourceAuthenticationMethod{} }
+func (m *SourceAuthenticationMethod) String() string            { return proto.CompactTextString(m) }
+func (*SourceAuthenticationMethod) ProtoMessage()               {}
+func (*SourceAuthenticationMethod) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 type isMechanism_Params interface{ isMechanism_Params() }
 =======
 type isPeerMechanism_Params interface{ isPeerMechanism_Params() }
 >>>>>>> Update authentiation API.
+=======
+type isSourceAuthenticationMethod_Params interface{ isSourceAuthenticationMethod_Params() }
+>>>>>>> Change message and field names. Add more examples.
 
-type PeerMechanism_None struct {
+type SourceAuthenticationMethod_None struct {
 	None *None `protobuf:"bytes,1,opt,name=none,oneof"`
 }
-type PeerMechanism_Mtls struct {
+type SourceAuthenticationMethod_Mtls struct {
 	Mtls *MutualTls `protobuf:"bytes,2,opt,name=mtls,oneof"`
 }
-type PeerMechanism_Jwt struct {
+type SourceAuthenticationMethod_Jwt struct {
 	Jwt *Jwt `protobuf:"bytes,3,opt,name=jwt,oneof"`
 }
 
-func (*PeerMechanism_None) isPeerMechanism_Params() {}
-func (*PeerMechanism_Mtls) isPeerMechanism_Params() {}
-func (*PeerMechanism_Jwt) isPeerMechanism_Params()  {}
+func (*SourceAuthenticationMethod_None) isSourceAuthenticationMethod_Params() {}
+func (*SourceAuthenticationMethod_Mtls) isSourceAuthenticationMethod_Params() {}
+func (*SourceAuthenticationMethod_Jwt) isSourceAuthenticationMethod_Params()  {}
 
-func (m *PeerMechanism) GetParams() isPeerMechanism_Params {
+func (m *SourceAuthenticationMethod) GetParams() isSourceAuthenticationMethod_Params {
 	if m != nil {
 		return m.Params
 	}
 	return nil
 }
 
-func (m *PeerMechanism) GetNone() *None {
-	if x, ok := m.GetParams().(*PeerMechanism_None); ok {
+func (m *SourceAuthenticationMethod) GetNone() *None {
+	if x, ok := m.GetParams().(*SourceAuthenticationMethod_None); ok {
 		return x.None
 	}
 	return nil
 }
 
-func (m *PeerMechanism) GetMtls() *MutualTls {
-	if x, ok := m.GetParams().(*PeerMechanism_Mtls); ok {
+func (m *SourceAuthenticationMethod) GetMtls() *MutualTls {
+	if x, ok := m.GetParams().(*SourceAuthenticationMethod_Mtls); ok {
 		return x.Mtls
 	}
 	return nil
 }
 
-func (m *PeerMechanism) GetJwt() *Jwt {
-	if x, ok := m.GetParams().(*PeerMechanism_Jwt); ok {
+func (m *SourceAuthenticationMethod) GetJwt() *Jwt {
+	if x, ok := m.GetParams().(*SourceAuthenticationMethod_Jwt); ok {
 		return x.Jwt
 	}
 	return nil
 }
 
 // XXX_OneofFuncs is for the internal use of the proto package.
-func (*PeerMechanism) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _PeerMechanism_OneofMarshaler, _PeerMechanism_OneofUnmarshaler, _PeerMechanism_OneofSizer, []interface{}{
-		(*PeerMechanism_None)(nil),
-		(*PeerMechanism_Mtls)(nil),
-		(*PeerMechanism_Jwt)(nil),
+func (*SourceAuthenticationMethod) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _SourceAuthenticationMethod_OneofMarshaler, _SourceAuthenticationMethod_OneofUnmarshaler, _SourceAuthenticationMethod_OneofSizer, []interface{}{
+		(*SourceAuthenticationMethod_None)(nil),
+		(*SourceAuthenticationMethod_Mtls)(nil),
+		(*SourceAuthenticationMethod_Jwt)(nil),
 	}
 }
 
-func _PeerMechanism_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*PeerMechanism)
+func _SourceAuthenticationMethod_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*SourceAuthenticationMethod)
 	// params
 	switch x := m.Params.(type) {
-	case *PeerMechanism_None:
+	case *SourceAuthenticationMethod_None:
 		b.EncodeVarint(1<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.None); err != nil {
 			return err
 		}
-	case *PeerMechanism_Mtls:
+	case *SourceAuthenticationMethod_Mtls:
 		b.EncodeVarint(2<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.Mtls); err != nil {
 			return err
 		}
-	case *PeerMechanism_Jwt:
+	case *SourceAuthenticationMethod_Jwt:
 		b.EncodeVarint(3<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.Jwt); err != nil {
 			return err
 		}
 	case nil:
 	default:
-		return fmt.Errorf("PeerMechanism.Params has unexpected type %T", x)
+		return fmt.Errorf("SourceAuthenticationMethod.Params has unexpected type %T", x)
 	}
 	return nil
 }
 
-func _PeerMechanism_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*PeerMechanism)
+func _SourceAuthenticationMethod_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*SourceAuthenticationMethod)
 	switch tag {
 	case 1: // params.none
 		if wire != proto.WireBytes {
@@ -268,7 +272,7 @@ func _PeerMechanism_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.
 		}
 		msg := new(None)
 		err := b.DecodeMessage(msg)
-		m.Params = &PeerMechanism_None{msg}
+		m.Params = &SourceAuthenticationMethod_None{msg}
 		return true, err
 	case 2: // params.mtls
 		if wire != proto.WireBytes {
@@ -276,7 +280,7 @@ func _PeerMechanism_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.
 		}
 		msg := new(MutualTls)
 		err := b.DecodeMessage(msg)
-		m.Params = &PeerMechanism_Mtls{msg}
+		m.Params = &SourceAuthenticationMethod_Mtls{msg}
 		return true, err
 	case 3: // params.jwt
 		if wire != proto.WireBytes {
@@ -284,28 +288,28 @@ func _PeerMechanism_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.
 		}
 		msg := new(Jwt)
 		err := b.DecodeMessage(msg)
-		m.Params = &PeerMechanism_Jwt{msg}
+		m.Params = &SourceAuthenticationMethod_Jwt{msg}
 		return true, err
 	default:
 		return false, nil
 	}
 }
 
-func _PeerMechanism_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*PeerMechanism)
+func _SourceAuthenticationMethod_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*SourceAuthenticationMethod)
 	// params
 	switch x := m.Params.(type) {
-	case *PeerMechanism_None:
+	case *SourceAuthenticationMethod_None:
 		s := proto.Size(x.None)
 		n += proto.SizeVarint(1<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(s))
 		n += s
-	case *PeerMechanism_Mtls:
+	case *SourceAuthenticationMethod_Mtls:
 		s := proto.Size(x.Mtls)
 		n += proto.SizeVarint(2<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(s))
 		n += s
-	case *PeerMechanism_Jwt:
+	case *SourceAuthenticationMethod_Jwt:
 		s := proto.Size(x.Jwt)
 		n += proto.SizeVarint(3<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(s))
@@ -317,150 +321,54 @@ func _PeerMechanism_OneofSizer(msg proto.Message) (n int) {
 	return n
 }
 
-// Similar to PeerMechanism, EndUserMechanism defines one particular type of
-// authentication that can be used for end user authentication.
-type EndUserMechanism struct {
+// OriginAuthenticationMethod defines authentication method/params for origin
+// authentication. It should have unique name for referring later in credential
+// rules. Currently, only JWT is supported.
+type OriginAuthenticationMethod struct {
 	// Name that can be used to refer to this mechanism.
 	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
-	// Types that are valid to be assigned to Params:
-	//	*EndUserMechanism_None
-	//	*EndUserMechanism_Jwt
-	Params isEndUserMechanism_Params `protobuf_oneof:"params"`
+	// Jwt params for the method.
+	Jwt *Jwt `protobuf:"bytes,2,opt,name=jwt" json:"jwt,omitempty"`
 }
 
-func (m *EndUserMechanism) Reset()                    { *m = EndUserMechanism{} }
-func (m *EndUserMechanism) String() string            { return proto.CompactTextString(m) }
-func (*EndUserMechanism) ProtoMessage()               {}
-func (*EndUserMechanism) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
+func (m *OriginAuthenticationMethod) Reset()                    { *m = OriginAuthenticationMethod{} }
+func (m *OriginAuthenticationMethod) String() string            { return proto.CompactTextString(m) }
+func (*OriginAuthenticationMethod) ProtoMessage()               {}
+func (*OriginAuthenticationMethod) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
 
-type isEndUserMechanism_Params interface{ isEndUserMechanism_Params() }
-
-type EndUserMechanism_None struct {
-	None *None `protobuf:"bytes,2,opt,name=none,oneof"`
-}
-type EndUserMechanism_Jwt struct {
-	Jwt *Jwt `protobuf:"bytes,3,opt,name=jwt,oneof"`
-}
-
-func (*EndUserMechanism_None) isEndUserMechanism_Params() {}
-func (*EndUserMechanism_Jwt) isEndUserMechanism_Params()  {}
-
-func (m *EndUserMechanism) GetParams() isEndUserMechanism_Params {
-	if m != nil {
-		return m.Params
-	}
-	return nil
-}
-
-func (m *EndUserMechanism) GetName() string {
+func (m *OriginAuthenticationMethod) GetName() string {
 	if m != nil {
 		return m.Name
 	}
 	return ""
 }
 
-func (m *EndUserMechanism) GetNone() *None {
-	if x, ok := m.GetParams().(*EndUserMechanism_None); ok {
-		return x.None
+func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
+	if m != nil {
+		return m.Jwt
 	}
 	return nil
-}
-
-func (m *EndUserMechanism) GetJwt() *Jwt {
-	if x, ok := m.GetParams().(*EndUserMechanism_Jwt); ok {
-		return x.Jwt
-	}
-	return nil
-}
-
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*EndUserMechanism) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _EndUserMechanism_OneofMarshaler, _EndUserMechanism_OneofUnmarshaler, _EndUserMechanism_OneofSizer, []interface{}{
-		(*EndUserMechanism_None)(nil),
-		(*EndUserMechanism_Jwt)(nil),
-	}
-}
-
-func _EndUserMechanism_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*EndUserMechanism)
-	// params
-	switch x := m.Params.(type) {
-	case *EndUserMechanism_None:
-		b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.None); err != nil {
-			return err
-		}
-	case *EndUserMechanism_Jwt:
-		b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Jwt); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("EndUserMechanism.Params has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _EndUserMechanism_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*EndUserMechanism)
-	switch tag {
-	case 2: // params.none
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(None)
-		err := b.DecodeMessage(msg)
-		m.Params = &EndUserMechanism_None{msg}
-		return true, err
-	case 3: // params.jwt
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(Jwt)
-		err := b.DecodeMessage(msg)
-		m.Params = &EndUserMechanism_Jwt{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _EndUserMechanism_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*EndUserMechanism)
-	// params
-	switch x := m.Params.(type) {
-	case *EndUserMechanism_None:
-		s := proto.Size(x.None)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *EndUserMechanism_Jwt:
-		s := proto.Size(x.Jwt)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // CredentialRule defines which identity (e.g from peer or end-user
 // authentication) will be used as request principal. The rule can be activated
 // conditionally, based on matching condition (currently use only peer identity)
 type CredentialRule struct {
-	// If not empty, is the list of end user mechanism names (the mechanism itself
-	// defined in different part of the policy) that can be used to set principal.
-	// At run time, they will be checked in order and only the first valid one is
-	// used. If none is valid, request will be rejected.
-	// Leave the list empty to use peer identity for principal.
-	EndUsers []string `protobuf:"bytes,1,rep,name=end_users,json=endUsers" json:"end_users,omitempty"`
+	// Set to true to use source identity as principal. No orgin authentication
+	// will be run in that case.
+	UseSource bool `protobuf:"varint,1,opt,name=use_source,json=useSource" json:"use_source,omitempty"`
+	// If not empty, is the list of names of origin authentication methods (these
+	// methods themselves are defined in the other part of the policy) that will
+	// be used if this rule is activated.
+	// At run time, each method will be evaluated in order, until the first valid.
+	// request.auth.principal will be set to the identity extracted from that
+	// valid certificate. If all methods are invalid, authentication should fail.
+	// This list should be empty if use_source is true.
+	UseOrigin []string `protobuf:"bytes,2,rep,name=use_origin,json=useOrigin" json:"use_origin,omitempty"`
 	// Condition to activate the rule. If not empty, the rule will be activated
-	// if request come from one of these peers (identity).
+	// if request come from one of these sources (identity).
 	// Leave blank to activate the rule unconditionally.
-	MatchingPeers []string `protobuf:"bytes,2,rep,name=matching_peers,json=matchingPeers" json:"matching_peers,omitempty"`
+	MatchingSources []string `protobuf:"bytes,3,rep,name=matching_sources,json=matchingSources" json:"matching_sources,omitempty"`
 }
 
 func (m *CredentialRule) Reset()                    { *m = CredentialRule{} }
@@ -468,26 +376,42 @@ func (m *CredentialRule) String() string            { return proto.CompactTextSt
 func (*CredentialRule) ProtoMessage()               {}
 func (*CredentialRule) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{5} }
 
-func (m *CredentialRule) GetEndUsers() []string {
+func (m *CredentialRule) GetUseSource() bool {
 	if m != nil {
-		return m.EndUsers
+		return m.UseSource
+	}
+	return false
+}
+
+func (m *CredentialRule) GetUseOrigin() []string {
+	if m != nil {
+		return m.UseOrigin
 	}
 	return nil
 }
 
-func (m *CredentialRule) GetMatchingPeers() []string {
+func (m *CredentialRule) GetMatchingSources() []string {
 	if m != nil {
-		return m.MatchingPeers
+		return m.MatchingSources
 	}
 	return nil
 }
 
 // Policy binds credentials to workload(s).
 // Authentication policy is composed of 2-part authentication:
-// - peer: verify caller service credentials.
-// - end_user: verify end-user credentials.
-// For each part, if it's not empty, at least one of those listed credential
-// must be provided and  (successfully) verified for the authentication to pass.
+// - source: verify caller service credentials.
+// - origin: verify the origin credentials. This could be (human) end-user,
+// service account, device etc.
+//
+// Source authentication, if specified, will be check in the order that they
+// are listed, until one success. If all of the are invalid, request is not
+// authenticated (i.e reject with 401).
+//
+// Origin authentication come after source authentication, based on credential
+// rules. Each rule specifies which origin authentication method(s) should be
+// used, and condition when the rule apply (currently, based on source id).
+// Only the first rule matches the condition will be activated. If no rule
+// matches, orgin authentication will be skipped.
 //
 // Examples:
 // Policy to enable mTLS for all services in namespace frod
@@ -500,10 +424,10 @@ func (m *CredentialRule) GetMatchingPeers() []string {
 //   namespace: frod
 // spec:
 //   destinations:
-//   peers:
+//   sources:
 //   - mtls: null
 // ```
-// Policy to enable mTLS, and use JWT for productpage:9000
+// Policy to enable mTLS, and use JWT for productpage:9000.
 //
 // ```yaml
 // apiVersion: authentication.istio.io/v1alpha1
@@ -516,9 +440,9 @@ func (m *CredentialRule) GetMatchingPeers() []string {
 //   - name: productpage
 //     port:
 //       number: 9000
-//   peers:
+//   sources:
 //   - mtls: null
-//   endUsers:
+//   origins:
 //   - name: google_jwt
 //     jwt:
 //       issuer: "https://securetoken.google.com"
@@ -528,12 +452,101 @@ func (m *CredentialRule) GetMatchingPeers() []string {
 //       locations:
 //       - header: x-goog-iap-jwt-assertion
 //   credentialRules:
-//   - endUser:
+//   - useOrigins:
 //     - google_jwt
+// ```
+//
+// Policy to enable mTLS, and use JWT for productpage:9000 only when caller is
+// frontend.serviceaccount.
+//
+// ```yaml
+// apiVersion: authentication.istio.io/v1alpha1
+// kind: Policy
+// metadata:
+//   name: mTLS-enable
+//   namespace: frod
+// spec:
+//   destinations:
+//   - name: productpage
+//     port:
+//       number: 9000
+//   sources:
+//   - mtls: null
+//   origins:
+//   - name: google_jwt
+//     jwt:
+//       issuer: "https://securetoken.google.com"
+//       audiences:
+//       - "productpage"
+//       jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
+//       locations:
+//       - header: x-goog-iap-jwt-assertion
+//   credentialRules:
+//   - useOrigins:
+//     - google_jwt
+//     matchingSources:
+//     - frontend.serviceaccount
+// ```
+//
+// Note that a credential rule that uncondtional-use-source (identity)  is
+// implicitly check if no rule match, so the above credentialRules is the same
+// as this:
+//
+// ```
+// credentialRules:
+// - useOrigins:
+//   - google_jwt
+//   matchingSources:
+//   - productpage.serviceaccount
+// - useSource: true
+// ```
+//
+// Policy that enable mTLS, requires google JWT if caller is
+// frontend.serviceaccount, no JWT (i.e source authentication only) if caller
+// is admin, and istio JWT in all other cases.
+//
+// ```yaml
+// apiVersion: authentication.istio.io/v1alpha1
+// kind: Policy
+// metadata:
+//   name: mTLS-enable
+//   namespace: frod
+// spec:
+//   destinations:
+//   - name: productpage
+//     port:
+//       number: 9000
+//   sources:
+//   - mtls: null
+//   origins:
+//   - name: google_jwt
+//     jwt:
+//       issuer: "https://securetoken.google.com"
+//       audiences:
+//       - "productpage"
+//       jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
+//       locations:
+//       - header: x-goog-iap-jwt-assertion
+//   - name: istio_jwt
+//     jwt:
+//       issuer: "https://securetoken.istio.io"
+//       locations:
+//       - header: x-istio-jwt-assertion
+//   credentialRules:
+//   - useOrigins:
+//     - google_jwt
+//     matchingSources:
+//     - productpage.serviceaccount
+//   - useSource: true
+//     matchingSource:
+//     - admin
+//   - useOrigins:
+//     - istio_jwt
 // ```
 type Policy struct {
 	// List of destinations (workloads) that the policy should be applied on.
 	// If empty, policy will be used on all destinations in the same namespace.
+<<<<<<< HEAD
 	Destinations []*istio_networking_v1alpha3.Destination `protobuf:"bytes,1,rep,name=destinations" json:"destinations,omitempty"`
 	// List of credential that should be checked by peer authentication. They
 	// will be validated in sequence, until the first one satisfied. If none of
@@ -541,13 +554,28 @@ type Policy struct {
 	// On the other hand, the first valid credential will be used to extract
 	// peer identity (i.e the source.user attribute in the request to Mixer).
 	Peers []*PeerMechanism `protobuf:"bytes,2,rep,name=peers" json:"peers,omitempty"`
+=======
+	Destinations []*istio_routing_v1alpha2.Destination `protobuf:"bytes,1,rep,name=destinations" json:"destinations,omitempty"`
+	// List of authentication methods that can be use for source authentication.
+	// They will be evaluated in order, until the first one satisfied; source
+	// identity is then extracted from the associated certificate. On the other
+	// hand, if none of these methods pass, request should be rejected with
+	// authentication faile error (401).
+	// Leave the list empty if no source authentication required, or have single
+	// entry of method 'None'. The source.user attribute will not be set in that
+	// case.
+	Sources []*SourceAuthenticationMethod `protobuf:"bytes,2,rep,name=sources" json:"sources,omitempty"`
+>>>>>>> Change message and field names. Add more examples.
 	// List of supported end-user authentication. Which one(s) are used for a specific
 	// request is decided at runtime, based on credential_rules bellow.
-	EndUsers []*EndUserMechanism `protobuf:"bytes,3,rep,name=end_users,json=endUsers" json:"end_users,omitempty"`
+	Origins []*OriginAuthenticationMethod `protobuf:"bytes,3,rep,name=origins" json:"origins,omitempty"`
 	// Rules to define how request pricipal will be set. Each rule can have
-	// conditions that determine if the rule should be applied or not at runtime.
-	// The rules will be examined in order, and only the first one got activated
-	// will be used.
+	// conditions that determine if the rule should be applied or not. The rule
+	// will be checked for matching conditions at runtime, in order, and stop at
+	// the first match. If there are no rule matching condtion, source identity
+	// will be used as principal (in the other words, the credential rule with
+	// use_source = true with no matching condition is implicitly added the end
+	// of the list.)
 	CredentialRules []*CredentialRule `protobuf:"bytes,4,rep,name=credential_rules,json=credentialRules" json:"credential_rules,omitempty"`
 }
 
@@ -563,16 +591,16 @@ func (m *Policy) GetDestinations() []*istio_networking_v1alpha3.Destination {
 	return nil
 }
 
-func (m *Policy) GetPeers() []*PeerMechanism {
+func (m *Policy) GetSources() []*SourceAuthenticationMethod {
 	if m != nil {
-		return m.Peers
+		return m.Sources
 	}
 	return nil
 }
 
-func (m *Policy) GetEndUsers() []*EndUserMechanism {
+func (m *Policy) GetOrigins() []*OriginAuthenticationMethod {
 	if m != nil {
-		return m.EndUsers
+		return m.Origins
 	}
 	return nil
 }
@@ -588,8 +616,8 @@ func init() {
 	proto.RegisterType((*None)(nil), "istio.authentication.v1alpha1.None")
 	proto.RegisterType((*MutualTls)(nil), "istio.authentication.v1alpha1.MutualTls")
 	proto.RegisterType((*Jwt)(nil), "istio.authentication.v1alpha1.Jwt")
-	proto.RegisterType((*PeerMechanism)(nil), "istio.authentication.v1alpha1.PeerMechanism")
-	proto.RegisterType((*EndUserMechanism)(nil), "istio.authentication.v1alpha1.EndUserMechanism")
+	proto.RegisterType((*SourceAuthenticationMethod)(nil), "istio.authentication.v1alpha1.SourceAuthenticationMethod")
+	proto.RegisterType((*OriginAuthenticationMethod)(nil), "istio.authentication.v1alpha1.OriginAuthenticationMethod")
 	proto.RegisterType((*CredentialRule)(nil), "istio.authentication.v1alpha1.CredentialRule")
 	proto.RegisterType((*Policy)(nil), "istio.authentication.v1alpha1.Policy")
 }
@@ -597,6 +625,7 @@ func init() {
 func init() { proto.RegisterFile("authentication/v1alpha1/policy.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
+<<<<<<< HEAD
 <<<<<<< HEAD
 	// 411 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0xc1, 0x6a, 0xdb, 0x40,
@@ -660,4 +689,40 @@ var fileDescriptor0 = []byte{
 	0x21, 0xad, 0x58, 0xf8, 0x9b, 0xef, 0xc5, 0x47, 0xd7, 0xbe, 0xf3, 0xa7, 0x3f, 0x03, 0x00, 0x00,
 	0xff, 0xff, 0x8e, 0xff, 0x77, 0xe1, 0x51, 0x04, 0x00, 0x00,
 >>>>>>> Update authentiation API.
+=======
+	// 517 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x54, 0xdf, 0x6b, 0x13, 0x41,
+	0x10, 0x6e, 0x72, 0xe1, 0x92, 0x4c, 0xc4, 0x96, 0x7d, 0x90, 0x33, 0x58, 0x8c, 0x67, 0x91, 0xf8,
+	0xe0, 0x85, 0x46, 0x11, 0xfa, 0x22, 0x58, 0x05, 0x43, 0xa1, 0x5a, 0xb6, 0x0a, 0xe2, 0x4b, 0x58,
+	0x2f, 0x6b, 0x6e, 0xcf, 0xcb, 0xee, 0xb1, 0x3f, 0x3c, 0xfa, 0x8f, 0xf8, 0x9f, 0xf9, 0xe0, 0x7f,
+	0x23, 0xbb, 0x9b, 0x6b, 0x3d, 0x30, 0x5e, 0xdf, 0x32, 0x93, 0xf9, 0xbe, 0x99, 0xef, 0x9b, 0xd9,
+	0x83, 0x23, 0x62, 0x74, 0x46, 0xb9, 0x66, 0x29, 0xd1, 0x4c, 0xf0, 0xd9, 0x8f, 0x63, 0x52, 0x94,
+	0x19, 0x39, 0x9e, 0x95, 0xa2, 0x60, 0xe9, 0x55, 0x52, 0x4a, 0xa1, 0x05, 0x3a, 0x64, 0x4a, 0x33,
+	0x91, 0x34, 0x6b, 0x93, 0xba, 0x76, 0xfc, 0x48, 0x0a, 0xa3, 0x19, 0x5f, 0xd7, 0xe8, 0xf9, 0xcc,
+	0x26, 0xe8, 0x52, 0x9a, 0x82, 0x7a, 0x86, 0x38, 0x84, 0xde, 0x7b, 0xc1, 0x69, 0x3c, 0x82, 0xe1,
+	0xb9, 0xd1, 0x86, 0x14, 0x1f, 0x0b, 0x15, 0xff, 0xec, 0x40, 0x70, 0x56, 0x69, 0x74, 0x0f, 0x42,
+	0xa6, 0x94, 0xa1, 0x32, 0xea, 0x4c, 0x3a, 0xd3, 0x21, 0xde, 0x46, 0xe8, 0x01, 0x0c, 0x89, 0x59,
+	0x31, 0xca, 0x53, 0xaa, 0xa2, 0xee, 0x24, 0x98, 0x0e, 0xf1, 0x4d, 0x02, 0xdd, 0x87, 0x41, 0x5e,
+	0x7d, 0x57, 0x4b, 0x23, 0x59, 0x14, 0x38, 0x5c, 0xdf, 0xc6, 0x9f, 0x24, 0x43, 0x0f, 0x61, 0x94,
+	0x57, 0x7a, 0x99, 0x51, 0xb2, 0xa2, 0x52, 0x45, 0xa1, 0x83, 0x42, 0x5e, 0xe9, 0x85, 0xcf, 0xa0,
+	0x43, 0xb0, 0xd1, 0xb2, 0x24, 0x92, 0x6c, 0x54, 0xd4, 0xf7, 0xd4, 0x79, 0xa5, 0x2f, 0x5c, 0x22,
+	0xfe, 0xdd, 0x81, 0xf1, 0xa5, 0x30, 0x32, 0xa5, 0xaf, 0x1b, 0x92, 0xcf, 0xa9, 0xce, 0xc4, 0x0a,
+	0x9d, 0x40, 0x8f, 0x0b, 0x4e, 0xdd, 0xb4, 0xa3, 0xf9, 0xe3, 0xe4, 0xbf, 0xee, 0x24, 0x56, 0xf7,
+	0x62, 0x0f, 0x3b, 0x08, 0x7a, 0x05, 0xbd, 0x8d, 0x2e, 0xac, 0x1a, 0x0b, 0x9d, 0xb6, 0x40, 0xaf,
+	0xad, 0xb2, 0x78, 0x8b, 0x43, 0x2f, 0x21, 0xc8, 0x2b, 0xed, 0xf4, 0x8e, 0xe6, 0x71, 0x0b, 0xfc,
+	0xac, 0xd2, 0x8b, 0x3d, 0x6c, 0x01, 0xa7, 0x03, 0x08, 0xbd, 0xd8, 0xf8, 0x1b, 0x8c, 0x3f, 0x48,
+	0xb6, 0x66, 0xfc, 0x9f, 0xd2, 0x10, 0xf4, 0x38, 0xd9, 0xd0, 0xed, 0x22, 0xdc, 0x6f, 0xf4, 0xc2,
+	0xf7, 0xec, 0xde, 0xb6, 0xa7, 0xeb, 0x18, 0x5f, 0xc1, 0xdd, 0x37, 0x92, 0xae, 0x6c, 0x0d, 0x29,
+	0xb0, 0x29, 0xa8, 0x35, 0xdd, 0x28, 0xba, 0x54, 0xce, 0x58, 0xd7, 0x61, 0x80, 0x87, 0x46, 0x51,
+	0xef, 0x74, 0xfd, 0xb7, 0x70, 0xc3, 0xd5, 0xeb, 0x36, 0x8a, 0xfa, 0x69, 0xd1, 0x53, 0x38, 0xd8,
+	0x10, 0x9d, 0x66, 0x8c, 0xaf, 0xb7, 0x14, 0x2a, 0x0a, 0x5c, 0xd1, 0x7e, 0x9d, 0xf7, 0x44, 0x2a,
+	0xfe, 0xd5, 0x85, 0xf0, 0xc2, 0xdd, 0x2f, 0x7a, 0x07, 0x77, 0x56, 0x54, 0x69, 0xc6, 0xdd, 0x98,
+	0x2a, 0xea, 0x4c, 0x82, 0xbf, 0x56, 0xb6, 0xbd, 0xdb, 0x7a, 0xfa, 0x79, 0xf2, 0xf6, 0xa6, 0x16,
+	0x37, 0x80, 0xe8, 0x12, 0xfa, 0x75, 0xd7, 0xae, 0xe3, 0x38, 0x69, 0x31, 0x62, 0xf7, 0xfd, 0xe0,
+	0x9a, 0xc9, 0x92, 0x7a, 0xb9, 0x5e, 0x4a, 0x3b, 0xe9, 0xee, 0xcd, 0xe1, 0x9a, 0x09, 0x7d, 0x86,
+	0x83, 0xf4, 0xda, 0x78, 0xf7, 0x06, 0x55, 0xd4, 0x73, 0xec, 0xcf, 0x5a, 0xd8, 0x9b, 0xfb, 0xc2,
+	0xfb, 0x69, 0x23, 0x56, 0xa7, 0x4f, 0xbe, 0x1c, 0x79, 0x02, 0x26, 0x66, 0xa4, 0x64, 0xb3, 0x1d,
+	0xdf, 0x8e, 0xaf, 0xa1, 0x7b, 0xf3, 0xcf, 0xff, 0x04, 0x00, 0x00, 0xff, 0xff, 0x24, 0x7f, 0xc0,
+	0x2a, 0x5d, 0x04, 0x00, 0x00,
+>>>>>>> Change message and field names. Add more examples.
 }
