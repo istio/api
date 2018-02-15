@@ -193,7 +193,7 @@ func (ExternalService_Discovery) EnumDescriptor() ([]byte, []int) { return fileD
 // associated with the outbound HTTP requests will be based on the
 // endpoint's DNS name, i.e. ":authority: uk.foo.bar.com". Refer to Envoy's
 // auto_host_rewrite for further details. The automatic rewrite can be
-// overridden using a host rewrite route rule.
+// overridden using a host rewrite traffic rule.
 //
 type ExternalService struct {
 	// REQUIRED. The hosts associated with the external service. Could be a

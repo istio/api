@@ -8,7 +8,7 @@ It is generated from these files:
 	routing/v1alpha2/destination_rule.proto
 	routing/v1alpha2/external_service.proto
 	routing/v1alpha2/gateway.proto
-	routing/v1alpha2/route_rule.proto
+	routing/v1alpha2/traffic_rule.proto
 
 It has these top-level messages:
 	DestinationRule
@@ -22,7 +22,7 @@ It has these top-level messages:
 	Gateway
 	Server
 	Port
-	RouteRule
+	TrafficRule
 	Destination
 	HTTPRoute
 	TCPRoute
@@ -170,7 +170,7 @@ func (TLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) { return fileDescrip
 //             simple: ROUND_ROBIN
 //
 // Note that policies specified for subsets will not take effect until
-// a route rule explicitly sends traffic to this subset.
+// a traffic rule explicitly sends traffic to this subset.
 type DestinationRule struct {
 	// REQUIRED. The destination address for traffic captured by this
 	// rule.  Could be a DNS name with wildcard prefix or a CIDR
@@ -276,7 +276,7 @@ func (m *TrafficPolicy) GetTls() *TLSSettings {
 
 // A subset of endpoints of a service. Subsets can be used for scenarios
 // like A/B testing, or routing to a specific version of a service. Refer
-// to Route Rules documentation for examples on using subsets in these
+// to TrafficRule documentation for examples on using subsets in these
 // scenarios. In addition, traffic policies defined at the service-level
 // can be overridden at a subset-level. The following rule uses a round
 // robin load balancing policy for all traffic going to a subset named
@@ -301,13 +301,13 @@ func (m *TrafficPolicy) GetTls() *TLSSettings {
 //             simple: ROUND_ROBIN
 //
 // Note that policies specified for subsets will not take effect until
-// a route rule explicitly sends traffic to this subset.
+// a traffic rule explicitly sends traffic to this subset.
 type Subset struct {
 	// REQUIRED. name of the subset. The service name and the subset name can
-	// be used for traffic splitting in a route rule.
+	// be used for traffic splitting in a traffic rule.
 	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
 	// REQUIRED. Labels apply a filter over the endpoints of a service in the
-	// service registry. See route rules for examples of usage.
+	// service registry. See traffic rules for examples of usage.
 	Labels map[string]string `protobuf:"bytes,2,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// Traffic policies that apply to this subset. Subsets inherit the
 	// traffic policies specified at the DestinationRule level. Settings

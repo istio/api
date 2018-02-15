@@ -17,7 +17,7 @@ syntax = "proto3";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 
-// $title: Route Rules Alpha 2
+// $title: Traffic Rules Alpha 2
 // $overview: Configuration affecting traffic routing
 
 // Configuration affecting traffic routing. Here are a few terms useful to define
@@ -52,7 +52,7 @@ package istio.routing.v1alpha2;
 
 option go_package = "istio.io/api/routing/v1alpha2";
 
-// RouteRule provides a custom routing policy based on the destination
+// TrafficRule provides a custom routing policy based on the destination
 // service and its subsets/versions, the source of the traffic as well as
 // connection and request metadata.  The rule must provide a set of
 // conditions for each protocol (TCP, UDP, HTTP) that the destination
@@ -71,7 +71,7 @@ option go_package = "istio.io/api/routing/v1alpha2";
 // "mesh").
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: TrafficRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -113,10 +113,10 @@ option go_package = "istio.io/api/routing/v1alpha2";
 //         labels:
 //           version: v2
 //
-// A host name can be defined by only one RouteRule.  A single route rule
+// A host name can be defined by only one TrafficRule.  A single traffic rule
 // can be used to describe traffic properties for multiple HTTP and TCP
 // ports.
-message RouteRule {
+message TrafficRule {
   // REQUIRED. The destination address for traffic captured by this routing
   // rule.  Could be a DNS name with wildcard prefix or a CIDR
   // prefix. Depending on the platform, short-names can also be used
@@ -141,7 +141,7 @@ message RouteRule {
   repeated string hosts = 1;
 
   // The names of gateways and sidecars that should apply these routes. A
-  // single route rule is used for sidecars inside the mesh as well
+  // single traffic rule is used for sidecars inside the mesh as well
   // as for one or more gateways. The selection condition imposed by this field
   // can be overridden using the source field in the match conditions of HTTP/TCP
   // routes. The reserved word "mesh" is used to imply all the sidecars in
@@ -188,7 +188,7 @@ message RouteRule {
 // to subset v2, in a kubernetes environment.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: TrafficRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -234,7 +234,7 @@ message RouteRule {
 // pool.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: TrafficRule
 //     metadata:
 //       name: my-productpage-rule
 //     spec:
@@ -250,7 +250,7 @@ message RouteRule {
 // service wikipedia.org, as there is no internal service of that name.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: TrafficRule
 //     metadata:
 //       name: my-wiki-rule
 //     spec:
@@ -299,9 +299,9 @@ message Destination {
 }
 
 // Describes match conditions and actions for routing HTTP/1.1, HTTP2, and
-// gRPC traffic. See RouteRule for usage examples.
+// gRPC traffic. See TrafficRule for usage examples.
 message HTTPRoute {
-  // Match conditions to be satisfied for the route rule to be
+  // Match conditions to be satisfied for the traffic rule to be
   // activated. All conditions inside a single match block have AND
   // semantics, while the list of match blocks have OR semantics. The rule
   // is matched if any one of the match blocks succeed.
@@ -314,7 +314,7 @@ message HTTPRoute {
   repeated DestinationWeight route = 2;
 
   // A http rule can either redirect or forward (default) traffic.  If
-  // traffic passthrough option is specified in the route rule,
+  // traffic passthrough option is specified in the traffic rule,
   // route/redirect will be ignored. The redirect primitive can be used to
   // send a HTTP 302 redirect to a different URI or Authority.
   HTTPRedirect redirect = 3;
@@ -364,7 +364,7 @@ message HTTPRoute {
 // Mongo from 172.17.16.* subnet to another Mongo server on port 5555.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: TrafficRule
 //     metadata:
 //       name: bookinfo-Mongo
 //     spec:
@@ -380,7 +380,7 @@ message HTTPRoute {
 //             name: mongo.prod
 //
 message TCPRoute {
-  // Match conditions to be satisfied for the route rule to be
+  // Match conditions to be satisfied for the traffic rule to be
   // activated. All conditions inside a single match block have AND
   // semantics, while the list of match blocks have OR semantics.  The rule
   // is matched if any one of the match blocks succeed.
@@ -394,13 +394,13 @@ message TCPRoute {
 }
 
 // HttpMatchRequest specifies a set of criterion to be met in order for the
-// route rule to be applied to the HTTP request. For example, the following
-// route rule restricts the rule to match only requests where the URL path
+// traffic rule to be applied to the HTTP request. For example, the following
+// traffic rule restricts the rule to match only requests where the URL path
 // starts with /ratings/v2/ and the request contains a "cookie" with value
 // "user=jason".
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: TrafficRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -488,7 +488,7 @@ message HTTPMatchRequest {
   PortSelector port = 6;
 
   // One or more labels that constrain the applicability of a rule to
-  // workloads with the given labels. If the route rule has a list of
+  // workloads with the given labels. If the traffic rule has a list of
   // gateways specified at the top, it should include the reserved gateway
   // "mesh" in order for this field to be applicable.
   map<string, string> source_labels = 7;
@@ -507,7 +507,7 @@ message HTTPMatchRequest {
 // "v1".
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: TrafficRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -576,7 +576,7 @@ message L4MatchAttributes {
   string source_subnet = 3;
 
   // One or more labels that constrain the applicability of a rule to
-  // workloads with the given labels. If the route rule has a list of
+  // workloads with the given labels. If the traffic rule has a list of
   // gateways specified at the top, it should include the reserved gateway
   // "mesh" in order for this field to be applicable.
   map<string, string> source_labels = 4;
@@ -589,12 +589,12 @@ message L4MatchAttributes {
 
 // HTTPRedirect can be used to send a 302 redirect response to the caller,
 // where the Authority/Host and the URI in the response can be swapped with
-// the specified values. For example, the following route rule redirects
+// the specified values. For example, the following traffic rule redirects
 // requests for /v1/getProductRatings API on the ratings service to
 // /v1/bookRatings provided by the bookratings service.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: TrafficRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -627,7 +627,7 @@ message HTTPRedirect {
 // ratings service before making the actual API call.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: TrafficRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -675,7 +675,7 @@ message StringMatch {
 // calling ratings:v1 service, with a 2s timeout per retry attempt.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: TrafficRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -710,7 +710,7 @@ message HTTPRetry {
 // exposes X-Foo-bar header and sets an expiry period of 1 day.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: TrafficRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -761,8 +761,8 @@ message CorsPolicy {
 }
 
 // HTTPFaultInjection can be used to specify one or more faults to inject
-// while forwarding http requests to the destination specified in the route
-// rule.  Fault specification is part of a route rule. Faults include
+// while forwarding http requests to the destination specified in the traffic
+// rule.  Fault specification is part of a traffic rule. Faults include
 // aborting the Http request from downstream service, and/or delaying
 // proxying of requests. A fault rule MUST HAVE delay or abort or both.
 //
@@ -784,7 +784,7 @@ message HTTPFaultInjection {
   // service from all pods with label env: prod
   //
   //     apiVersion: config.istio.io/v1alpha2
-  //     kind: RouteRule
+  //     kind: TrafficRule
   //     metadata:
   //       name: my-rule
   //     spec:
@@ -828,7 +828,7 @@ message HTTPFaultInjection {
   // 400 error code for 10% of the requests to the "ratings" service "v1".
   //
   //     apiVersion: config.istio.io/v1alpha2
-  //     kind: RouteRule
+  //     kind: TrafficRule
   //     metadata:
   //       name: my-rule
   //     spec:

@@ -98,7 +98,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 // balancer. Routing rules can then be bound to a gateway to control
 // the forwarding of traffic arriving at a particular host or gateway port.
 //
-// The following sample route rule splits traffic for
+// The following sample traffic rule splits traffic for
 // https://uk.bookinfo.com/reviews, https://eu.bookinfo.com/reviews,
 // http://uk.bookinfo.com:9080/reviews, http://eu.bookinfo.com:9080/reviews
 // into two versions (prod and qa) of an internal reviews service on port
@@ -110,7 +110,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 // (i.e. 80 redirects to 443).
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: TrafficRule
 //     metadata:
 //       name: bookinfo-rule
 //     spec:
@@ -150,7 +150,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 // the reserved name "mesh".
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: TrafficRule
 //     metadata:
 //       name: bookinfo-Mongo
 //     spec:
@@ -252,10 +252,10 @@ type Server struct {
 	// services using TLS with SNI. Standard DNS wildcard prefix syntax
 	// is permitted.
 	//
-	// RouteRules that are bound to a gateway must having a matching host
-	// in their default destination. Specifically one of the route rule
+	// TrafficRules that are bound to a gateway must having a matching host
+	// in their default destination. Specifically one of the traffic rule
 	// destination hosts is a strict suffix of a gateway host or
-	// a gateway host is a suffix of one of the route rule hosts.
+	// a gateway host is a suffix of one of the traffic rule hosts.
 	Hosts []string `protobuf:"bytes,2,rep,name=hosts" json:"hosts,omitempty"`
 	// Set of TLS related options that govern the server's behavior. Use
 	// these options to control if all http requests should be redirected to

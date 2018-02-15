@@ -63,7 +63,7 @@ option go_package = "istio.io/api/routing/v1alpha2";
 //             simple: ROUND_ROBIN
 //
 // Note that policies specified for subsets will not take effect until
-// a route rule explicitly sends traffic to this subset.
+// a traffic rule explicitly sends traffic to this subset.
 message DestinationRule {
   // REQUIRED. The destination address for traffic captured by this 
   // rule.  Could be a DNS name with wildcard prefix or a CIDR
@@ -115,7 +115,7 @@ message TrafficPolicy {
 
 // A subset of endpoints of a service. Subsets can be used for scenarios
 // like A/B testing, or routing to a specific version of a service. Refer
-// to Route Rules documentation for examples on using subsets in these
+// to TrafficRule documentation for examples on using subsets in these
 // scenarios. In addition, traffic policies defined at the service-level
 // can be overridden at a subset-level. The following rule uses a round
 // robin load balancing policy for all traffic going to a subset named
@@ -140,14 +140,14 @@ message TrafficPolicy {
 //             simple: ROUND_ROBIN
 //
 // Note that policies specified for subsets will not take effect until
-// a route rule explicitly sends traffic to this subset.
+// a traffic rule explicitly sends traffic to this subset.
 message Subset {
   // REQUIRED. name of the subset. The service name and the subset name can
-  // be used for traffic splitting in a route rule.
+  // be used for traffic splitting in a traffic rule.
   string name = 1;
 
   // REQUIRED. Labels apply a filter over the endpoints of a service in the
-  // service registry. See route rules for examples of usage.
+  // service registry. See traffic rules for examples of usage.
   map<string, string> labels = 2;
 
   // Traffic policies that apply to this subset. Subsets inherit the
