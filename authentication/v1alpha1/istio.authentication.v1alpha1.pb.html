@@ -32,8 +32,8 @@ will be run in that case.</p>
 
 </td>
 </tr>
-<tr id="CredentialRule.use_origin">
-<td><code>useOrigin</code></td>
+<tr id="CredentialRule.use_origins">
+<td><code>useOrigins</code></td>
 <td><code>string[]</code></td>
 <td>
 <p>If not empty, is the list of names of origin authentication methods (these
@@ -348,7 +348,7 @@ spec:
     matchingSource:
     - admin
   - useOrigins:
-    - istio_jwt 
+    - istio_jwt
 </code></pre>
 
 <table class="message-fields">

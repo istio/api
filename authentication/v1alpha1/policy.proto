@@ -158,7 +158,7 @@ message CredentialRule {
   // request.auth.principal will be set to the identity extracted from that
   // valid certificate. If all methods are invalid, authentication should fail.
   // This list should be empty if use_source is true.
-  repeated string use_origin = 2;
+  repeated string use_origins = 2;
 
   // Condition to activate the rule. If not empty, the rule will be activated
   // if request come from one of these sources (identity).
@@ -310,7 +310,7 @@ message CredentialRule {
 //     matchingSource:
 //     - admin
 //   - useOrigins:
-//     - istio_jwt 
+//     - istio_jwt
 // ```
 message Policy {
   // List of destinations (workloads) that the policy should be applied on.
