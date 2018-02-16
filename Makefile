@@ -209,15 +209,15 @@ mixer_template_protos := $(shell find $(mixer_template_path) -maxdepth 1 -type f
 mixer_template_pb_gos := $(mixer_template_protos:.proto=.pb.go)
 mixer_template_pb_doc := $(mixer_template_path)/istio.mixer.v1.template.pb.html
 
-mixer_adapter_model_v1beta_path := mixer/adapter/model/v1beta
+mixer_adapter_model_v1beta_path := mixer/adapter/model/v1beta1
 mixer_adapter_model_v1beta_protos := $(shell find $(mixer_adapter_model_v1beta_path) -maxdepth 1 -type f -name '*.proto' | sort)
 mixer_adapter_model_v1beta_pb_gos := $(mixer_adapter_model_v1beta_protos:.proto=.pb.go)
-mixer_adapter_model_v1beta_pb_doc := $(mixer_adapter_model_v1beta_path)/istio.mixer.adapter.model.v1beta.pb.html
+mixer_adapter_model_v1beta_pb_doc := $(mixer_adapter_model_v1beta_path)/istio.mixer.adapter.model.v1beta1.pb.html
 
-policy_v1beta_path := policy/v1beta
+policy_v1beta_path := policy/v1beta1
 policy_v1beta_protos := $(shell find $(policy_v1beta_path) -maxdepth 1 -type f -name '*.proto' | sort)
 policy_v1beta_pb_gos := $(policy_v1beta_protos:.proto=.pb.go)
-policy_v1beta_pb_doc := $(policy_v1beta_path)/istio.policy.v1beta.pb.html
+policy_v1beta_pb_doc := $(policy_v1beta_path)/istio.policy.v1beta1.pb.html
 
 generate-mixer-go: \
 	$(mixer_v1_pb_gos) $(mixer_v1_pb_doc) \
@@ -245,11 +245,11 @@ $(mixer_template_pb_gos) $(mixer_template_pb_doc) : $(mixer_template_protos) | d
 	@$(protoc) $(proto_path) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_template_path) $^
 
 $(mixer_adapter_model_v1beta_pb_gos) $(mixer_adapter_model_v1beta_pb_doc) : $(mixer_adapter_model_v1beta_protos) | depend $(protoc_gen_gogoslick) $(protoc_bin)
-	## Generate mixer/adapter/model/v1beta/*.pb.go + $(mixer_adapter_model_v1beta_pb_doc)
+	## Generate mixer/adapter/model/v1beta1/*.pb.go + $(mixer_adapter_model_v1beta_pb_doc)
 	@$(protoc) $(proto_path) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_adapter_model_v1beta_path) $^
 
 $(policy_v1beta_pb_gos) $(policy_v1beta_pb_doc) : $(policy_v1beta_protos) | depend $(protoc_gen_gogoslick) $(protoc_bin)
-	## Generate policy/v1beta/*.pb.go + $(policy_v1beta_pb_doc)
+	## Generate policy/v1beta1/*.pb.go + $(policy_v1beta_pb_doc)
 	@$(protoc) $(proto_path) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(policy_v1beta_path) $^
 
 mixer/v1/config/fixed_cfg.pb.go mixer/v1/config/istio.mixer.v1.config.pb.html: mixer/v1/config/cfg.proto | depend $(protoc_gen_gogo) $(protoc_bin)

@@ -15,17 +15,17 @@
 syntax = "proto3";
 
 import "google/protobuf/struct.proto";
-import "policy/v1beta/value_type.proto";
+import "policy/v1beta1/value_type.proto";
 
 // $title: Policy and Telemetry Rules
 // $overview: Describes the rules used to configure Mixer's policy and telemetry features.
-// $location: https://istio.io/docs/reference/policy/istio.policy.v1beta.html
+// $location: https://istio.io/docs/reference/policy/istio.policy.v1beta1.html
 // $front_matter: redirect_from: /docs/reference/policy/policy-and-telemetry-rules.html
 
 // Describes the rules used to configure Mixer's policy and telemetry features.
-package istio.policy.v1beta;
+package istio.policy.v1beta1;
 
-option go_package="istio.io/api/policy/v1beta";
+option go_package="istio.io/api/policy/v1beta1";
 
 // AttributeManifest describes a set of Attributes produced by some component
 // of an Istio deployment.
@@ -61,7 +61,7 @@ message AttributeManifest {
   //
   // Each Istio attribute must conform to an `AttributeInfo` in an
   // `AttributeManifest` in the current Istio deployment at runtime. An
-  // [`AttributeInfo`][istio.policy.v1beta] is used to define an attribute's
+  // [`AttributeInfo`][istio.policy.v1beta1] is used to define an attribute's
   // metadata: the type of its value and a detailed description that explains
   // the semantics of the attribute type. Each attribute's name is globally unique;
   // in other words an attribute name can only appear once across all manifests.
@@ -83,7 +83,7 @@ message AttributeManifest {
     string description = 1;
 
     // Required. The type of data carried by this attribute.
-    istio.policy.v1beta.ValueType value_type = 2;
+    istio.policy.v1beta1.ValueType value_type = 2;
   }
   // The set of attributes this Istio component will be responsible for producing at runtime.
   // We map from attribute name to the attribute's specification. The name of an attribute,
@@ -132,7 +132,7 @@ message Rule {
   repeated Action actions = 2;
 }
 
-// Action describes which [Handler][istio.policy.v1beta.Handler] to invoke and what data to pass to it for processing.
+// Action describes which [Handler][istio.policy.v1beta1.Handler] to invoke and what data to pass to it for processing.
 //
 // The following example instructs Mixer to invoke 'prometheus-handler' handler and pass it the object
 // constructed using the instance 'RequestCountByService'
@@ -144,11 +144,11 @@ message Rule {
 // ```
 message Action {
   // Required. Fully qualified name of the handler to invoke.
-  // Must match the `name` of a [Handler][istio.policy.v1beta.Handler.name].
+  // Must match the `name` of a [Handler][istio.policy.v1beta1.Handler.name].
   string handler = 2;
 
   // Required. Each value must match the fully qualified name of the
-  // [Instance][istio.policy.v1beta.Instance.name]s.
+  // [Instance][istio.policy.v1beta1.Instance.name]s.
   // Referenced instances are evaluated by resolving the attributes/literals for all the fields.
   // The constructed objects are then passed to the `handler` referenced within this action.
   repeated string instances = 3;
@@ -162,7 +162,7 @@ message Action {
 //
 // The following example instructs Mixer to construct an instance associated with template
 // 'istio.mixer.adapter.metric.Metric'. It provides a mapping from the template's fields to expressions.
-// Instances produced with this instance can be referenced by [Actions][istio.policy.v1beta.Action] using name
+// Instances produced with this instance can be referenced by [Actions][istio.policy.v1beta1.Action] using name
 // 'RequestCountByService'.
 //
 // ```yaml
@@ -177,7 +177,7 @@ message Action {
 message Instance {
   // Required. The name of this instance
   //
-  // Must be unique amongst other Instances in scope. Used by [Action][istio.policy.v1beta.Action] to refer
+  // Must be unique amongst other Instances in scope. Used by [Action][istio.policy.v1beta1.Action] to refer
   // to an instance produced by this instance.
   string name = 1;
 
@@ -202,7 +202,7 @@ message Instance {
 // params:
 // ```
 message Handler {
-  // Required. Must be unique in the entire mixer configuration. Used by [Actions][istio.policy.v1beta.Action.handler]
+  // Required. Must be unique in the entire mixer configuration. Used by [Actions][istio.policy.v1beta1.Action.handler]
   // to refer to this handler.
   string name = 1;
   // Required. The name of a specific adapter implementation. An adapter's

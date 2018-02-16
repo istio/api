@@ -14,9 +14,9 @@
 
 syntax = "proto3";
 
-package istio.mixer.adapter.model.v1beta;
+package istio.mixer.adapter.model.v1beta1;
 
-option go_package="istio.io/api/mixer/adapter/model/v1beta";
+option go_package="istio.io/api/mixer/adapter/model/v1beta1";
 
 // Value is used inside templates for fields that have dynamic types. The actual datatype
 // of the field depends on the datatype of the expression used in the operator configuration.
