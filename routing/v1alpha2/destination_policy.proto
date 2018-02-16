@@ -19,87 +19,49 @@ package istio.routing.v1alpha2;
 
 option go_package = "istio.io/api/routing/v1alpha2";
 
-// $title: Destination Rules
-// $overview: Configuration affecting client connectivity to a service
-
-// DestinationRule defines policies that apply to traffic intended for a
-// service after routing has occurred. These rules specify configuration
+// DestinationPolicy defines policies that apply to traffic intended for a
+// service after routing has occurred. These policies specify configuration
 // for load balancing, connection pool size from the sidecar, and outlier
 // detection settings to detect and evict unhealthy hosts from the load
 // balancing pool. For example, a simple load balancing policy for the
 // ratings service would look as follows:
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: DestinationRule
+//     kind: TrafficPolicy
 //     metadata:
 //       name: bookinfo-ratings
 //     spec:
 //       name: ratings
-//       trafficPolicy:
+//       destinationPolicy:
 //         loadBalancer:
 //           simple: LEAST_CONN
 //
-// Version specific DestinationRule can be specified by defining a named
+// Version specific DestinationPolicy can be specified by defining a named
 // subset and overriding the settings specified at the service level. The
 // following rule uses a round robin load balancing policy for all traffic
 // going to a subset named testversion that is composed of endpoints (e.g.,
 // pods) with labels (version:v3).
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: DestinationRule
+//     kind: TrafficPolicy
 //     metadata:
 //       name: bookinfo-ratings
 //     spec:
 //       name: ratings
-//       trafficPolicy:
+//       destinationPolicy:
 //         loadBalancer:
 //           simple: LEAST_CONN
 //       subsets:
 //       - name: testversion
 //         labels:
 //           version: v3
-//         trafficPolicy:
+//         destinationPolicy:
 //           loadBalancer:
 //             simple: ROUND_ROBIN
 //
 // Note that policies specified for subsets will not take effect until
-// a traffic rule explicitly sends traffic to this subset.
-message DestinationRule {
-  // REQUIRED. The destination address for traffic captured by this 
-  // rule.  Could be a DNS name with wildcard prefix or a CIDR
-  // prefix. Depending on the platform, short-names can also be used
-  // instead of a FQDN (i.e. has no dots in the name). In such a scenario,
-  // the FQDN of the host would be derived based on the underlying
-  // platform.
-  //
-  // For example on Kubernetes, when hosts contains a short name, Istio
-  // will interpret the short name based on the namespace of the client
-  // where rules are being applied. Thus, when a client in the "default"
-  // namespace applies a rule containing a name "reviews", Istio will setup
-  // routes to the "reviews.default.svc.cluster.local" service. However, if
-  // a different name such as "reviews.sales" is used, it would be treated
-  // as a FQDN during virtual host matching.  In Consul, a plain service
-  // name would be resolved to the FQDN "reviews.service.consul".
-  //
-  // Note that the hosts field applies to both HTTP and TCP
-  // services. Service inside the mesh, i.e. those found in the service
-  // registry, must always be referred to using their alphanumeric
-  // names. IP addresses or CIDR prefixes are allowed only for services
-  // defined via the Gateway.
-  string name = 1;
-
-  // Traffic policies to apply (load balancing policy, connection pool
-  // sizes, outlier detection).
-  TrafficPolicy traffic_policy = 2;
-
-  // One or more named sets that represent individual versions of a
-  // service. Traffic policies can be overridden at subset level.
-  repeated Subset subsets = 3;
-}
-
-// Traffic policies to apply for a specific destination. See
-// DestinationRule for examples.
-message TrafficPolicy {
+// the traffic policy explicitly routes traffic to this subset.
+message DestinationPolicy {
   // Settings controlling the load balancer algorithms.
   LoadBalancerSettings load_balancer = 1;
 
@@ -115,46 +77,46 @@ message TrafficPolicy {
 
 // A subset of endpoints of a service. Subsets can be used for scenarios
 // like A/B testing, or routing to a specific version of a service. Refer
-// to TrafficRule documentation for examples on using subsets in these
-// scenarios. In addition, traffic policies defined at the service-level
+// to TrafficPolicy documentation for examples on using subsets in these
+// scenarios. In addition, destination policies defined at the service-level
 // can be overridden at a subset-level. The following rule uses a round
 // robin load balancing policy for all traffic going to a subset named
 // testversion that is composed of endpoints (e.g., pods) with labels
 // (version:v3).
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: DestinationRule
+//     kind: TrafficPolicy
 //     metadata:
 //       name: bookinfo-ratings
 //     spec:
 //       name: ratings
-//       trafficPolicy:
+//       destinationPolicy:
 //         loadBalancer:
 //           simple: LEAST_CONN
 //       subsets:
 //       - name: testversion
 //         labels:
 //           version: v3
-//         trafficPolicy:
+//         destinationPolicy:
 //           loadBalancer:
 //             simple: ROUND_ROBIN
 //
 // Note that policies specified for subsets will not take effect until
-// a traffic rule explicitly sends traffic to this subset.
+// a traffic policy explicitly routes traffic to this subset.
 message Subset {
   // REQUIRED. name of the subset. The service name and the subset name can
-  // be used for traffic splitting in a traffic rule.
+  // be used for traffic splitting in a traffic policy.
   string name = 1;
 
   // REQUIRED. Labels apply a filter over the endpoints of a service in the
-  // service registry. See traffic rules for examples of usage.
+  // service registry. See traffic policies for examples of usage.
   map<string, string> labels = 2;
 
-  // Traffic policies that apply to this subset. Subsets inherit the
-  // traffic policies specified at the DestinationRule level. Settings
+  // Destination policies that apply to this subset. Subsets inherit the
+  // destination policies specified at the TrafficPolicy level. Settings
   // specified at the subset level will override the corresponding settings
-  // specified at the DestinationRule level.
-  TrafficPolicy traffic_policy = 3;
+  // specified at the TrafficPolicy level.
+  DestinationPolicy destination_policy = 3;
 }
 
 // Load balancing policies to apply for a specific destination. See Envoy's
@@ -166,12 +128,12 @@ message Subset {
 // for all traffic going to the ratings service.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: DestinationRule
+//     kind: TrafficPolicy
 //     metadata:
 //       name: bookinfo-ratings
 //     spec:
 //       name: ratings
-//       trafficPolicy:
+//       destinationPolicy:
 //         loadBalancer:
 //           simple: ROUND_ROBIN
 //
@@ -179,12 +141,12 @@ message Subset {
 // for the same ratings service using the Cookie header as the hash key.
 // 
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: DestinationRule
+//     kind: TrafficPolicy
 //     metadata:
 //       name: bookinfo-ratings
 //     spec:
 //       name: ratings
-//       trafficPolicy:
+//       destinationPolicy:
 //         loadBalancer:
 //           consistentHash:
 //             http_header: Cookie
@@ -254,13 +216,13 @@ message LoadBalancerSettings {
 // service called myredissrv with a connect timeout of 30ms
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: DestinationRule
+//     kind: TrafficPolicy
 //     metadata:
 //       name: bookinfo-redis
 //     spec:
 //       destination:
 //         name: myredissrv
-//       trafficPolicy:
+//       destinationPolicy:
 //         connectionPool:
 //           tcp:
 //             maxConnections: 100
@@ -315,13 +277,13 @@ message ConnectionPoolSettings {
 // with 5XX error code will be ejected for 15 minutes.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: DestinationRule
+//     kind: TrafficPolicy
 //     metadata:
 //       name: reviews-cb-policy
 //     spec:
 //       destination:
 //         name: reviews
-//       trafficPolicy:
+//       destinationPolicy:
 //         connectionPool:
 //           tcp:
 //             maxConnections: 100
@@ -369,7 +331,7 @@ message OutlierDetection {
 // for connections to upstream database cluster.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: DestinationRule
+//     kind: TrafficPolicy
 //     metadata:
 //       name: db-mtls
 //     spec:
@@ -384,7 +346,7 @@ message OutlierDetection {
 // The following rule configures a client to use TLS when talking to a foreign service whose domain matches *.foo.com.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: DestinationRule
+//     kind: TrafficPolicy
 //     metadata:
 //       name: tls-foo
 //     spec:
