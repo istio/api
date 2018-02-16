@@ -615,22 +615,23 @@ spec:
   discovery: dns
 </code></pre>
 
-<p>and a destination rule to initiate TLS connections to the external service.</p>
+<p>and a traffic policy to initiate TLS connections to the external service.</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: DestinationRule
+kind: TrafficPolicy
 metadata:
   name: tls-example
 spec:
-  destination:
-    name: example.com
-  tls:
-    mode: simple # initiates HTTPS when talking to example.com
+  hosts:
+  - example.com
+  destinationPolicy:
+    tls:
+      mode: simple # initiates HTTPS when talking to example.com
 </code></pre>
 
 <p>The following specification specifies a static set of backend nodes for
-a MongoDB cluster behind a set of virtual IPs, and sets up a destination
-rule to initiate mTLS connections upstream.</p>
+a MongoDB cluster behind a set of virtual IPs, and sets up a traffic
+policy to initiate mTLS connections upstream.</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
 kind: ExternalService
@@ -649,20 +650,21 @@ spec:
   - address: 3.3.3.3
 </code></pre>
 
-<p>and the associated destination rule</p>
+<p>and the associated traffic policy</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: DestinationRule
+kind: TrafficPolicy
 metadata:
   name: mtls-mongocluster
 spec:
-  destination:
-    name: 192.192.192.192/24
-  tls:
-    mode: mutual
-    clientCertificate: /etc/certs/myclientcert.pem
-    privateKey: /etc/certs/client_private_key.pem
-    caCertificates: /etc/certs/rootcacerts.pem
+  hosts:
+  - 192.192.192.192/24
+  destinationPolicy:
+    tls:
+      mode: mutual
+      clientCertificate: /etc/certs/myclientcert.pem
+      privateKey: /etc/certs/client_private_key.pem
+      caCertificates: /etc/certs/rootcacerts.pem
 </code></pre>
 
 <p>The following example demonstrates the use of wildcards in the hosts. If
@@ -716,17 +718,18 @@ spec:
     - https: 7443
 </code></pre>
 
-<p>and a destination rule to initiate TLS connections to the external service.</p>
+<p>and a traffic policy to initiate TLS connections to the external service.</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: DestinationRule
+kind: TrafficPolicy
 metadata:
   name: tls-foobar
 spec:
-  destination:
-    name: foo.bar.com
-  tls:
-    mode: simple # initiates HTTPS
+  hosts:
+  - foo.bar.com
+  destinationPolicy:
+    tls:
+      mode: simple # initiates HTTPS
 </code></pre>
 
 <p>With HTTP_PROXY=http://localhost:443, calls from the application to
@@ -739,7 +742,7 @@ https://uk.foo.bar.com/baz.</p>
 associated with the outbound HTTP requests will be based on the
 endpoint&rsquo;s DNS name, i.e. &ldquo;:authority: uk.foo.bar.com&rdquo;. Refer to Envoy&rsquo;s
 auto<em>host</em>rewrite for further details. The automatic rewrite can be
-overridden using a host rewrite traffic rule.</p>
+overridden using a host rewrite traffic policy.</p>
 
 <table class="message-fields">
 <thead>
@@ -939,24 +942,24 @@ spec:
 </code></pre>
 
 <p>The gateway specification above describes the L4-L6 properties of a load
-balancer. Routing rules can then be bound to a gateway to control
+balancer. Traffic policies can then be bound to a gateway to control
 the forwarding of traffic arriving at a particular host or gateway port.</p>
 
-<p>The following sample traffic rule splits traffic for
+<p>The following sample traffic policy splits traffic for
 https://uk.bookinfo.com/reviews, https://eu.bookinfo.com/reviews,
 http://uk.bookinfo.com:9080/reviews, http://eu.bookinfo.com:9080/reviews
 into two versions (prod and qa) of an internal reviews service on port
 9080. In addition, requests containing the cookie user: dev-123 will be
-sent to special port 7777 in the qa version. The same rule is also
+sent to special port 7777 in the qa version. The same policy is also
 applicable inside the mesh for requests to the reviews.prod
-service. This rule is applicable across ports 443, 9080. Note that
+service. This policy is applicable across ports 443, 9080. Note that
 http://uk.bookinfo.com gets redirected to https://uk.bookinfo.com
 (i.e. 80 redirects to 443).</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: TrafficRule
+kind: TrafficPolicy
 metadata:
-  name: bookinfo-rule
+  name: bookinfo-policy
 spec:
   hosts:
   - reviews.prod
@@ -989,13 +992,13 @@ spec:
       weight: 20
 </code></pre>
 
-<p>The following routing rule forwards traffic arriving at (external) port
+<p>The following traffic policy forwards traffic arriving at (external) port
 2379 from 172.17.16.0/24 subnet to internal Mongo server on port 5555. This
-rule is not applicable internally in the mesh as the gateway list omits
+policy is not applicable internally in the mesh as the gateway list omits
 the reserved name &ldquo;mesh&rdquo;.</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: TrafficRule
+kind: TrafficPolicy
 metadata:
   name: bookinfo-Mongo
 spec:
@@ -2174,10 +2177,10 @@ typically applicable to HTTP services, it can also be used for TCP
 services using TLS with SNI. Standard DNS wildcard prefix syntax
 is permitted.</p>
 
-<p>TrafficRules that are bound to a gateway must having a matching host
-in their default destination. Specifically one of the traffic rule
+<p>Traffic policies that are bound to a gateway must having a matching host
+in their default destination. Specifically one of the traffic policy
 destination hosts is a strict suffix of a gateway host or
-a gateway host is a suffix of one of the traffic rule hosts.</p>
+a gateway host is a suffix of one of the traffic policy hosts.</p>
 
 </td>
 </tr>
