@@ -41,6 +41,24 @@ conventions:
 
 ## Versioning
 
+### API Versioning
+
+Isiot APIs should use a simple versioning strategy based on
+major versions and releases, such as `v1alpha`, `v2beta`, or
+`v3`. Within each release, there should not be any breaking
+change to released features, such as changing the type of
+a field type, renaming a field, or changing a field number.
+
+Deprecating a feature in an API release is allowed by following
+the deprecation process. Stable release should have at least
+one year deprecation window, and non-stable release should have
+at least 3-month deprecation window. The reason to allow
+deprecation of individual features is that it is significantly
+cheaper and simpler for everyone involved. In practice, it
+works out much better than deprecating an entire API version.
+
+### CRD Versioning
+
 When defining Kubernetes Custom Resource Definition (CRD) using
 `proto3`, follow these guidelines:
 
