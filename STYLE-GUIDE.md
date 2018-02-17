@@ -52,12 +52,11 @@ Breaking changes are allowed between different releases,
 such as `v1alpha1` and `v1alpha2`.
 
 Deprecating a feature in an API release is allowed by following
-the deprecation process. Stable release should have at least
-one year deprecation window, and non-stable release should have
-at least 3-month deprecation window. The reason to allow
-deprecation of individual features is that it is significantly
-cheaper and simpler for everyone involved. In practice, it
-works out much better than deprecating an entire API version.
+the applicable deprecation process. The reason to allow
+deprecation of individual features in a release is that it is
+significantly cheaper and simpler for everyone involved. In
+practice, it works out much better than deprecating an entire
+API version.
 
 ### CRD Versioning
 
