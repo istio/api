@@ -48,6 +48,8 @@ major versions and releases, such as `v1alpha`, `v2beta`, or
 `v3`. Within each release, there should not be any breaking
 change to released features, such as changing the type of
 a field type, renaming a field, or changing a field number.
+Breaking changes are allowed between different releases,
+such as `v1alpha1` and `v1alpha2`.
 
 Deprecating a feature in an API release is allowed by following
 the deprecation process. Stable release should have at least
