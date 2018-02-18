@@ -39,7 +39,7 @@ option go_package = "istio.io/api/routing/v1alpha2";
 //         loadBalancer:
 //           simple: LEAST_CONN
 //
-// Version specific DestinationRule can be specified by defining a named
+// Version specific destination rule can be specified by defining a named
 // subset and overriding the settings specified at the service level. The
 // following rule uses a round robin load balancing policy for all traffic
 // going to a subset named testversion that is composed of endpoints (e.g.,
@@ -62,8 +62,92 @@ option go_package = "istio.io/api/routing/v1alpha2";
 //           loadBalancer:
 //             simple: ROUND_ROBIN
 //
-// Note that policies specified for subsets will not take effect until
+// Note that rules specified for subsets will not take effect until
 // a route rule explicitly sends traffic to this subset.
+//
+// Destination rules can also be restricted to either HTTP or TCP as
+// shown below:
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: DestinationRule
+//     metadata:
+//       name: bookinfo-ratings
+//     spec:
+//       name: ratings
+//       http: # applies to all ports using HTTP1/HTTP2/gRPC
+//         trafficPolicy:
+//           loadBalancer:
+//             simple: LEAST_CONN
+//       tcp: # applies to all ports using TCP including HTTPS
+//         trafficPolicy:
+//           loadBalancer:
+//             simple: ROUND_ROBIN
+//
+// Further customization can be done for a specific port
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: DestinationRule
+//     metadata:
+//       name: bookinfo-ratings
+//     spec:
+//       name: ratings
+//       http:
+//       - port: 8080
+//         trafficPolicy:
+//           loadBalancer:
+//             simple: LEAST_CONN
+//       - port: http-monitoring #can use names or numbers
+//         trafficPolicy:
+//           loadBalancer:
+//             simple: ROUND_ROBIN
+//
+// DNS prefixes with wildcards can be used to define rules for a group of
+// services. For example, the following destination rule defines the round
+// robin load balancing policy for all services under *.dev.bookinfo.com
+// domain, using HTTP-based protocols, and sets a maximum of 100 pending
+// requests per connection.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: DestinationRule
+//     metadata:
+//       name: dev-settings
+//     spec:
+//       name: *.dev.bookinfo.com
+//       http:
+//         trafficPolicy:
+//           loadBalancer:
+//             simple: ROUND_ROBIN
+//           connectionPool:
+//             http:
+//               http1MaxPendingRequests: 100
+//
+// Services can override the global setting by using an exact name or a
+// more specific prefix match. For example, the following rule overrides
+// the default load balancing policy defined above, for the
+// ratings.dev.bookinfo.com service.
+//
+//     apiVersion: config.istio.io/v1alpha2
+//     kind: DestinationRule
+//     metadata:
+//       name: ratings-dev-settings
+//     spec:
+//       name: ratings.dev.bookinfo.com
+//       http:
+//         trafficPolicy:
+//           loadBalancer:
+//             simple: LEAST_CONN
+//           # no connection pool settings. Use default value of 1024 pending req.
+//
+// Destination rules do not support inheritance. When attempting to locate
+// a destination rule for an upstream service, Istio would search for a
+// rule using the most specific name first, followed by less specific rules
+// using wildcard prefixes. In the example above, when attempting to
+// configure load balancing settings for traffic bound to ratings service,
+// Istio would look for a rule under ratings.dev.bookinfo.com, followed by
+// *.dev.bookinfo.com, *.bookinfo.com, *.com, and finally *. All settings
+// found under the chosen rule will be applied. Any omitted setting (e.g.,
+// http1MaxPendingRequests) will assume the default value.
+//
 message DestinationRule {
   // REQUIRED. The destination address for traffic captured by this 
   // rule.  Could be a DNS name with wildcard prefix or a CIDR
