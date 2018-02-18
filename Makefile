@@ -266,6 +266,7 @@ policy/v1beta1/fixed_cfg.pb.go: policy/v1beta1/cfg.proto | depend $(protoc_gen_g
 	@sed -e 's/*google_protobuf.Struct/interface{}/g' \
 	     -e 's/ValueType_VALUE_TYPE_UNSPECIFIED/VALUE_TYPE_UNSPECIFIED/g' policy/v1beta1/cfg.pb.go \
 	     | grep -v "google_protobuf" >policy/v1beta1/fixed_cfg.pb.go
+	@rm policy/v1beta1/cfg.pb.go
 
 clean-mixer-generated:
 	rm -f $(mixer_v1_pb_gos) $(mixer_config_client_pb_gos) $(mixer_config_descriptor_pb_gos) $(mixer_template_pb_gos) $(mixer_adapter_model_v1beta1_pb_gos) $(policy_v1beta1_pb_gos) policy/v1beta1/fixed_cfg.pb.go mixer/v1/config/fixed_cfg.pb.go

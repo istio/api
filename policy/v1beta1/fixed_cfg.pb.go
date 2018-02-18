@@ -55,7 +55,7 @@ type AttributeManifest struct {
 	// Attribute names must be unique within a single Istio deployment. The set of canonical
 	// attributes are described at https://istio.io/docs/reference/attribute-vocabulary.html.
 	// Attributes not in that list should be named with a component-specific suffix such as
-	// request.count-my.component
+	// request.count-my.component.
 	Attributes map[string]*AttributeManifest_AttributeInfo `protobuf:"bytes,3,rep,name=attributes" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value"`
 }
 
