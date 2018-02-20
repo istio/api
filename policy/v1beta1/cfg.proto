@@ -135,7 +135,7 @@ message Rule {
 // Action describes which [Handler][istio.policy.v1beta1.Handler] to invoke and what data to pass to it for processing.
 //
 // The following example instructs Mixer to invoke 'prometheus-handler' handler and pass it the object
-// constructed using the instance 'RequestCountByService'
+// constructed using the instance 'RequestCountByService'.
 //
 // ```yaml
 //   handler: prometheus-handler
