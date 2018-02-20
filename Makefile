@@ -260,7 +260,7 @@ mixer/v1/config/fixed_cfg.pb.go mixer/v1/config/istio.mixer.v1.config.pb.html: m
 	     | grep -v "google_protobuf" >mixer/v1/config/fixed_cfg.pb.go
 	@rm mixer/v1/config/cfg.pb.go
 
-policy/v1beta1/fixed_cfg.pb.go: $(policy_v1beta1_protos) | depend $(protoc_gen_gogo) $(protoc_bin)
+policy/v1beta1/fixed_cfg.pb.go: policy/v1beta1/cfg.proto | depend $(protoc_gen_gogo) $(protoc_bin)
 	# Generate policy/v1beta1/fixed_cfg.pb.go (requires alternate plugin and sed scripting due to issues with google.protobuf.Struct)
 	@$(protoc) $(proto_path) $(gogo_plugin) $^
 	@sed -e 's/*google_protobuf.Struct/interface{}/g' \
