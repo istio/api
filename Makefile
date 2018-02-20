@@ -253,10 +253,12 @@ $(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc) : $(policy_v1beta1_protos) | d
 	@$(protoc) $(proto_path) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(policy_v1beta1_path) $^
 	## Generate policy/v1beta1/fixed_cfg.pb.go (requires alternate plugin and sed scripting due to issues with google.protobuf.Struct
 	@$(protoc) $(proto_path) $(gogo_plugin) policy/v1beta1/cfg.proto
-	@sed -e 's/*google_protobuf.Struct/interface{}/g' \
-	     -e 's/ValueType_VALUE_TYPE_UNSPECIFIED/VALUE_TYPE_UNSPECIFIED/g' policy/v1beta1/cfg.pb.go \
-	     | grep -v "google_protobuf" >policy/v1beta1/fixed_cfg.pb.go
-	@rm policy/v1beta1/cfg.pb.go
+	@if [ -f "policy/v1beta1/cfg.pb.go" ]; then\
+	    sed -e 's/*google_protobuf.Struct/interface{}/g' \
+	        -e 's/ValueType_VALUE_TYPE_UNSPECIFIED/VALUE_TYPE_UNSPECIFIED/g' policy/v1beta1/cfg.pb.go \
+	        | grep -v "google_protobuf" >policy/v1beta1/fixed_cfg.pb.go;\
+	    rm policy/v1beta1/cfg.pb.go;\
+	fi
 
 mixer/v1/config/fixed_cfg.pb.go mixer/v1/config/istio.mixer.v1.config.pb.html: mixer/v1/config/cfg.proto | depend $(protoc_gen_gogo) $(protoc_bin)
 	# Generate mixer/v1/config/fixed_cfg.pb.go (requires alternate plugin and sed scripting due to issues with google.protobuf.Struct)
