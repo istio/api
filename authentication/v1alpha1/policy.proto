@@ -147,18 +147,26 @@ message OriginAuthenticationMethod {
 // authentication) will be used as request principal. The rule can be activated
 // conditionally, based on matching condition (currently use only peer identity)
 message CredentialRule {
-  // Set to true to use source identity as principal. No orgin authentication
-  // will be run in that case.
-  bool use_source = 1;
+  // Associates authentication with request principal.
+  enum Binding {
+    // Principal will be set to the identity from source authentication.
+    USE_SOURCE = 0;
 
-  // If not empty, is the list of names of origin authentication methods (these
-  // methods themselves are defined in the other part of the policy) that will
-  // be used if this rule is activated.
+    // Principal will be set to the identity from origin authentication.
+    USE_ORIGIN = 1;
+  }
+  // Defines which authentication (source vs origin) will be binded to
+  // request principal.
+  Binding binding = 1;
+
+  // If binding is USE_ORIGIN, this list refers the the origin authentication
+  // methods should be considered for the rule (leave the field emtpy to
+  // include all origin authentication  methods defined in the policy).
   // At run time, each method will be evaluated in order, until the first valid.
   // request.auth.principal will be set to the identity extracted from that
   // valid certificate. If all methods are invalid, authentication should fail.
-  // This list should be empty if use_source is true.
-  repeated string use_origins = 2;
+  // This field should not be set if binding is USE_SOURCE.
+  repeated string selected_origin_methods = 2;
 
   // Condition to activate the rule. If not empty, the rule will be activated
   // if request come from one of these sources (identity).

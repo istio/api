@@ -2,7 +2,7 @@
 title: Authentication Policy
 overview: Authentication policy for Istio services.
 layout: protoc-gen-docs
-number_of_entries: 8
+number_of_entries: 9
 ---
 {% raw %}
 <p>This package defines user-facing authentication policy as well as configs
@@ -23,26 +23,26 @@ conditionally, based on matching condition (currently use only peer identity)</p
 </tr>
 </thead>
 <tbody>
-<tr id="CredentialRule.use_source">
-<td><code>useSource</code></td>
-<td><code>bool</code></td>
+<tr id="CredentialRule.binding">
+<td><code>binding</code></td>
+<td><code><a href="#CredentialRule.Binding">CredentialRule.Binding</a></code></td>
 <td>
-<p>Set to true to use source identity as principal. No orgin authentication
-will be run in that case.</p>
+<p>Defines which authentication (source vs origin) will be binded to
+request principal.</p>
 
 </td>
 </tr>
-<tr id="CredentialRule.use_origins">
-<td><code>useOrigins</code></td>
+<tr id="CredentialRule.selected_origin_methods">
+<td><code>selectedOriginMethods</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>If not empty, is the list of names of origin authentication methods (these
-methods themselves are defined in the other part of the policy) that will
-be used if this rule is activated.
+<p>If binding is USE<em>ORIGIN, this list refers the the origin authentication
+methods should be considered for the rule (leave the field emtpy to
+include all origin authentication  methods defined in the policy).
 At run time, each method will be evaluated in order, until the first valid.
 request.auth.principal will be set to the identity extracted from that
 valid certificate. If all methods are invalid, authentication should fail.
-This list should be empty if use_source is true.</p>
+This field should not be set if binding is USE</em>SOURCE.</p>
 
 </td>
 </tr>
@@ -53,6 +53,35 @@ This list should be empty if use_source is true.</p>
 <p>Condition to activate the rule. If not empty, the rule will be activated
 if request come from one of these sources (identity).
 Leave blank to activate the rule unconditionally.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="CredentialRule.Binding">CredentialRule.Binding</h2>
+<section>
+<p>Associates authentication with request principal.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="CredentialRule.Binding.USE_SOURCE">
+<td><code>USE_SOURCE</code></td>
+<td>
+<p>Principal will be set to the identity from source authentication.</p>
+
+</td>
+</tr>
+<tr id="CredentialRule.Binding.USE_ORIGIN">
+<td><code>USE_ORIGIN</code></td>
+<td>
+<p>Principal will be set to the identity from origin authentication.</p>
 
 </td>
 </tr>
