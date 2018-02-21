@@ -229,8 +229,7 @@ message CredentialRule {
 //       locations:
 //       - header: x-goog-iap-jwt-assertion
 //   credentialRules:
-//   - useOrigins:
-//     - google_jwt
+//   - binding: USE_ORIGIN
 // ```
 //
 // Policy to enable mTLS, and use JWT for productpage:9000 only when caller is
@@ -259,8 +258,7 @@ message CredentialRule {
 //       locations:
 //       - header: x-goog-iap-jwt-assertion
 //   credentialRules:
-//   - useOrigins:
-//     - google_jwt
+//   - binding: USE_ORIGIN
 //     matchingSources:
 //     - frontend.serviceaccount
 // ```
@@ -271,11 +269,12 @@ message CredentialRule {
 //
 // ```
 // credentialRules:
-// - useOrigins:
+// - binding: USE_ORIGIN
+//   selectedOriginMethods:
 //   - google_jwt
 //   matchingSources:
 //   - productpage.serviceaccount
-// - useSource: true
+// - binding: USE_SOURCE
 // ```
 //
 // Policy that enable mTLS, requires google JWT if caller is
@@ -310,14 +309,16 @@ message CredentialRule {
 //       locations:
 //       - header: x-istio-jwt-assertion
 //   credentialRules:
-//   - useOrigins:
+//   - binding: USE_ORIGIN
+//     selectedOriginMethods:
 //     - google_jwt
 //     matchingSources:
 //     - productpage.serviceaccount
-//   - useSource: true
+//   - binding: USE_SOURCE
 //     matchingSource:
 //     - admin
-//   - useOrigins:
+//   - binding: USE_ORIGIN
+//     selectedOriginMethods:
 //     - istio_jwt
 // ```
 message Policy {

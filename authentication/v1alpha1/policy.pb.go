@@ -476,8 +476,7 @@ func (m *CredentialRule) GetMatchingSources() []string {
 //       locations:
 //       - header: x-goog-iap-jwt-assertion
 //   credentialRules:
-//   - useOrigins:
-//     - google_jwt
+//   - binding: USE_ORIGIN
 // ```
 //
 // Policy to enable mTLS, and use JWT for productpage:9000 only when caller is
@@ -506,8 +505,7 @@ func (m *CredentialRule) GetMatchingSources() []string {
 //       locations:
 //       - header: x-goog-iap-jwt-assertion
 //   credentialRules:
-//   - useOrigins:
-//     - google_jwt
+//   - binding: USE_ORIGIN
 //     matchingSources:
 //     - frontend.serviceaccount
 // ```
@@ -518,11 +516,12 @@ func (m *CredentialRule) GetMatchingSources() []string {
 //
 // ```
 // credentialRules:
-// - useOrigins:
+// - binding: USE_ORIGIN
+//   selectedOriginMethods:
 //   - google_jwt
 //   matchingSources:
 //   - productpage.serviceaccount
-// - useSource: true
+// - binding: USE_SOURCE
 // ```
 //
 // Policy that enable mTLS, requires google JWT if caller is
@@ -557,14 +556,16 @@ func (m *CredentialRule) GetMatchingSources() []string {
 //       locations:
 //       - header: x-istio-jwt-assertion
 //   credentialRules:
-//   - useOrigins:
+//   - binding: USE_ORIGIN
+//     selectedOriginMethods:
 //     - google_jwt
 //     matchingSources:
 //     - productpage.serviceaccount
-//   - useSource: true
+//   - binding: USE_SOURCE
 //     matchingSource:
 //     - admin
-//   - useOrigins:
+//   - binding: USE_ORIGIN
+//     selectedOriginMethods:
 //     - istio_jwt
 // ```
 type Policy struct {

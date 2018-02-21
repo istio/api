@@ -291,8 +291,7 @@ spec:
       locations:
       - header: x-goog-iap-jwt-assertion
   credentialRules:
-  - useOrigins:
-    - google_jwt
+  - binding: USE_ORIGIN
 </code></pre>
 
 <p>Policy to enable mTLS, and use JWT for productpage:9000 only when caller is
@@ -320,8 +319,7 @@ spec:
       locations:
       - header: x-goog-iap-jwt-assertion
   credentialRules:
-  - useOrigins:
-    - google_jwt
+  - binding: USE_ORIGIN
     matchingSources:
     - frontend.serviceaccount
 </code></pre>
@@ -331,11 +329,12 @@ implicitly check if no rule match, so the above credentialRules is the same
 as this:</p>
 
 <pre><code>credentialRules:
-- useOrigins:
+- binding: USE_ORIGIN
+  selectedOriginMethods:
   - google_jwt
   matchingSources:
   - productpage.serviceaccount
-- useSource: true
+- binding: USE_SOURCE
 </code></pre>
 
 <p>Policy that enable mTLS, requires google JWT if caller is
@@ -369,14 +368,16 @@ spec:
       locations:
       - header: x-istio-jwt-assertion
   credentialRules:
-  - useOrigins:
+  - binding: USE_ORIGIN
+    selectedOriginMethods:
     - google_jwt
     matchingSources:
     - productpage.serviceaccount
-  - useSource: true
+  - binding: USE_SOURCE
     matchingSource:
     - admin
-  - useOrigins:
+  - binding: USE_ORIGIN
+    selectedOriginMethods:
     - istio_jwt
 </code></pre>
 
