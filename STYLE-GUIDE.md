@@ -51,17 +51,24 @@ When defining Kubernetes Custom Resource Definition (CRD) using
 
 * The proto message type must match the CRD `kind` name.
 
+## Scoping
+
+Istio config supports global cluster and namespaced in similar way to Kubernetes resources. 
+`Cluster` a reserved word for Istio config Kind. Kind with a `Cluster` prefix, such as `ClusterPolicy` indicates a global scoped `Policy`. `ClusterPolicy` and `Policy` can map to the same proto message `Policy`, or one can chose to have a separate proto message for `ClusterPolicy`. 
+
+`ClusterPolicy` and `Policy` must be defined in the same `apiGroup`. The only difference is the scope. 
+
 #### Example
 
 The Kubernetes CRD:
 
 ```yaml
-apiVersion: config.istio.io/v1alpha1
-kind: Authorization
+apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
 ```
 
 The proto message definition:
 ```proto
-package istio.config.v1alpha1;
-message Authorization {...}
+package istio.authentication.v1alpha1;
+message Policy {...}
 ```
