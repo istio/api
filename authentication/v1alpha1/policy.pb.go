@@ -428,7 +428,7 @@ func (m *CredentialRule) GetMatchingSources() []string {
 // Authentication policy is composed of 2-part authentication:
 // - source: verify caller service credentials. This part will set source.user
 // (source identity).
-// - origin: verify the origin credentials. This part will set request.auth.use
+// - origin: verify the origin credentials. This part will set request.auth.user
 // (origin identity), as well as other attributes like request.auth.presenter,
 // request.auth.audiences and raw claims. Note that the identity could be
 // end-user, service account, device etc.
