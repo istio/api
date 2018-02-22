@@ -183,7 +183,7 @@ func (m *Jwt) GetJwtParams() []string {
 }
 
 // SourceAuthenticationMethod defines one particular type of authentication, e.g
-// mutual TLS, JWT etc, (no authentication is one type by itsefl) that can
+// mutual TLS, JWT etc, (no authentication is one type by itself) that can
 // be used for peer authentication.
 // The type can be progammatically determine by checking the type of the
 // "params" field.
@@ -346,8 +346,9 @@ func _SourceAuthenticationMethod_OneofSizer(msg proto.Message) (n int) {
 }
 
 // OriginAuthenticationMethod defines authentication method/params for origin
-// authentication. It should have unique name for referring later in credential
-// rules. Currently, only JWT is supported.
+// authentication. Origin could be end-user, device, delegate service etc. Method
+// should have unique name so they can be referred later in credential rules.
+// Currently, only JWT is supported for origin authentication.
 type OriginAuthenticationMethod struct {
 	// Name that can be used to refer to this mechanism.
 	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
@@ -444,7 +445,7 @@ func (m *CredentialRule) GetMatchingSources() []string {
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
-//   name: mTLS-enable
+//   name: mTLS_enable
 //   namespace: frod
 // spec:
 //   destinations:
@@ -457,7 +458,7 @@ func (m *CredentialRule) GetMatchingSources() []string {
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
-//   name: mTLS-enable
+//   name: mTLS_enable
 //   namespace: frod
 // spec:
 //   destinations:
@@ -486,7 +487,7 @@ func (m *CredentialRule) GetMatchingSources() []string {
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
-//   name: mTLS-enable
+//   name: mTLS_enable
 //   namespace: frod
 // spec:
 //   destinations:
@@ -532,7 +533,7 @@ func (m *CredentialRule) GetMatchingSources() []string {
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
-//   name: mTLS-enable
+//   name: mTLS_enable
 //   namespace: frod
 // spec:
 //   destinations:

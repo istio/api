@@ -114,7 +114,7 @@ message Jwt {
 }
 
 // SourceAuthenticationMethod defines one particular type of authentication, e.g
-// mutual TLS, JWT etc, (no authentication is one type by itsefl) that can
+// mutual TLS, JWT etc, (no authentication is one type by itself) that can
 // be used for peer authentication.
 // The type can be progammatically determine by checking the type of the
 // "params" field.
@@ -133,8 +133,9 @@ message SourceAuthenticationMethod {
 }
 
 // OriginAuthenticationMethod defines authentication method/params for origin
-// authentication. It should have unique name for referring later in credential
-// rules. Currently, only JWT is supported.
+// authentication. Origin could be end-user, device, delegate service etc. Method
+// should have unique name so they can be referred later in credential rules.
+// Currently, only JWT is supported for origin authentication.
 message OriginAuthenticationMethod {
   // Name that can be used to refer to this mechanism.
   string name = 1;
@@ -197,7 +198,7 @@ message CredentialRule {
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
-//   name: mTLS-enable
+//   name: mTLS_enable
 //   namespace: frod
 // spec:
 //   destinations:
@@ -210,7 +211,7 @@ message CredentialRule {
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
-//   name: mTLS-enable
+//   name: mTLS_enable
 //   namespace: frod
 // spec:
 //   destinations:
@@ -239,7 +240,7 @@ message CredentialRule {
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
-//   name: mTLS-enable
+//   name: mTLS_enable
 //   namespace: frod
 // spec:
 //   destinations:
@@ -285,7 +286,7 @@ message CredentialRule {
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
-//   name: mTLS-enable
+//   name: mTLS_enable
 //   namespace: frod
 // spec:
 //   destinations:
