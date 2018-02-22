@@ -772,7 +772,7 @@ query parameter name.</p>
 </section>
 <h2 id="NetworkFailPolicy">NetworkFailPolicy</h2>
 <section>
-<p>Specifies the policy when failed to connect to Mixer server.</p>
+<p>Specifies the behavior when the client is unable to connect to Mixer.</p>
 
 <table class="message-fields">
 <thead>
@@ -787,7 +787,7 @@ query parameter name.</p>
 <td><code>policy</code></td>
 <td><code><a href="#NetworkFailPolicy.FailPolicy">NetworkFailPolicy.FailPolicy</a></code></td>
 <td>
-<p>Specifies the policy when failed to connect to Mixer server.</p>
+<p>Specifies the behavior when the client is unable to connect to Mixer.</p>
 
 </td>
 </tr>
@@ -809,7 +809,7 @@ query parameter name.</p>
 <tr id="NetworkFailPolicy.FailPolicy.FAIL_OPEN">
 <td><code>FAIL_OPEN</code></td>
 <td>
-<p>If network connection fails, request is passed to the backend.</p>
+<p>If network connection fails, request is allowed and delivered to the service.</p>
 
 </td>
 </tr>
@@ -1049,9 +1049,9 @@ typically includes the &ldquo;destination.service&rdquo; attribute.</p>
 <td><code>networkFailPolicy</code></td>
 <td><code><a href="#NetworkFailPolicy">NetworkFailPolicy</a></code></td>
 <td>
-<p>Specifies the policy when failed to connect to Mixer server.
-This is the service-level policy. It overrides mesh-level policy (defined
-in TransportConfig#network<em>fail</em>policy).</p>
+<p>Specifies the behavior when the client is unable to connect to Mixer.
+This is the service-level policy. It overrides
+<a href="#TransportConfig.network_fail_policy">mesh-level policy</a>.</p>
 
 </td>
 </tr>
@@ -1209,7 +1209,7 @@ should not be less than 1 second, otherwise it will be reset to 1 second.</p>
 <td><code>networkFailPolicy</code></td>
 <td><code><a href="#NetworkFailPolicy">NetworkFailPolicy</a></code></td>
 <td>
-<p>Specifies the policy when failed to connect to Mixer server.
+<p>Specifies the behavior when the client is unable to connect to Mixer.
 This is the mesh level policy. The default value for policy is FAIL_OPEN.</p>
 
 </td>

@@ -27,7 +27,7 @@ var _ = math.Inf
 type NetworkFailPolicy_FailPolicy int32
 
 const (
-	// If network connection fails, request is passed to the backend.
+	// If network connection fails, request is allowed and delivered to the service.
 	FAIL_OPEN NetworkFailPolicy_FailPolicy = 0
 	// If network connection fails, request is rejected.
 	FAIL_CLOSE NetworkFailPolicy_FailPolicy = 1
@@ -46,9 +46,9 @@ func (NetworkFailPolicy_FailPolicy) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptorClientConfig, []int{0, 0}
 }
 
-// Specifies the policy when failed to connect to Mixer server.
+// Specifies the behavior when the client is unable to connect to Mixer.
 type NetworkFailPolicy struct {
-	// Specifies the policy when failed to connect to Mixer server.
+	// Specifies the behavior when the client is unable to connect to Mixer.
 	Policy NetworkFailPolicy_FailPolicy `protobuf:"varint,1,opt,name=policy,proto3,enum=istio.mixer.v1.config.client.NetworkFailPolicy_FailPolicy" json:"policy,omitempty"`
 }
 
@@ -71,9 +71,9 @@ type ServiceConfig struct {
 	QuotaSpec []*QuotaSpec `protobuf:"bytes,5,rep,name=quota_spec,json=quotaSpec" json:"quota_spec,omitempty"`
 	// End user authentication policy.
 	EndUserAuthnSpec *EndUserAuthenticationPolicySpec `protobuf:"bytes,6,opt,name=end_user_authn_spec,json=endUserAuthnSpec" json:"end_user_authn_spec,omitempty"`
-	// Specifies the policy when failed to connect to Mixer server.
-	// This is the service-level policy. It overrides mesh-level policy (defined
-	// in TransportConfig#network_fail_policy).
+	// Specifies the behavior when the client is unable to connect to Mixer.
+	// This is the service-level policy. It overrides
+	// [mesh-level policy][istio.mixer.v1.config.client.TransportConfig.network_fail_policy].
 	NetworkFailPolicy *NetworkFailPolicy `protobuf:"bytes,7,opt,name=network_fail_policy,json=networkFailPolicy" json:"network_fail_policy,omitempty"`
 }
 
@@ -89,7 +89,7 @@ type TransportConfig struct {
 	DisableQuotaCache bool `protobuf:"varint,2,opt,name=disable_quota_cache,json=disableQuotaCache,proto3" json:"disable_quota_cache,omitempty"`
 	// The flag to disable report batch.
 	DisableReportBatch bool `protobuf:"varint,3,opt,name=disable_report_batch,json=disableReportBatch,proto3" json:"disable_report_batch,omitempty"`
-	// Specifies the policy when failed to connect to Mixer server.
+	// Specifies the behavior when the client is unable to connect to Mixer.
 	// This is the mesh level policy. The default value for policy is FAIL_OPEN.
 	NetworkFailPolicy *NetworkFailPolicy `protobuf:"bytes,4,opt,name=network_fail_policy,json=networkFailPolicy" json:"network_fail_policy,omitempty"`
 	// Specify refresh interval to write mixer client statistics to Envoy share
