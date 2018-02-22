@@ -327,26 +327,26 @@ message Policy {
   // If empty, policy will be used on all destinations in the same namespace.
   repeated istio.networking.v1alpha3.Destination destinations = 1;
 
-  // List of authentication methods that can be use for source authentication.
+  // List of authentication methods that can be used for source authentication.
   // They will be evaluated in order, until the first one satisfied; source
   // identity is then extracted from the associated certificate. On the other
   // hand, if none of these methods pass, request should be rejected with
-  // authentication faile error (401).
-  // Leave the list empty if no source authentication required, or have single
+  // authentication failed error (401).
+  // Leave the list empty if no source authentication is required, or have single
   // entry of method 'None'. The source.user attribute will not be set in that
   // case.
   repeated SourceAuthenticationMethod sources = 2;
 
-  // List of supported end-user authentication. Which one(s) are used for a specific
-  // request is decided at runtime, based on credential_rules bellow.
+  // List of supported origin authentication methods. Which one(s) are used for
+  // a specific request is decided at runtime, based on credential_rules below.
   repeated OriginAuthenticationMethod origins = 3;
 
-  // Rules to define how request pricipal will be set. Each rule can have
+  // Rules to define how request principal will be set. Each rule can have
   // conditions that determine if the rule should be applied or not. The rule
   // will be checked for matching conditions at runtime, in order, and stop at
   // the first match. If there are no rule matching condtion, source identity
-  // will be used as principal (in the other words, the credential rule with
-  // use_source = true with no matching condition is implicitly added the end
+  // will be used as principal (in other words, the credential rule with
+  // use_source = true with no matching condition is implicitly added to the end
   // of the list.)
   repeated CredentialRule credential_rules = 4;
 }

@@ -582,25 +582,30 @@ type Policy struct {
 	Peers []*PeerMechanism `protobuf:"bytes,2,rep,name=peers" json:"peers,omitempty"`
 =======
 	Destinations []*istio_routing_v1alpha2.Destination `protobuf:"bytes,1,rep,name=destinations" json:"destinations,omitempty"`
-	// List of authentication methods that can be use for source authentication.
+	// List of authentication methods that can be used for source authentication.
 	// They will be evaluated in order, until the first one satisfied; source
 	// identity is then extracted from the associated certificate. On the other
 	// hand, if none of these methods pass, request should be rejected with
-	// authentication faile error (401).
-	// Leave the list empty if no source authentication required, or have single
+	// authentication failed error (401).
+	// Leave the list empty if no source authentication is required, or have single
 	// entry of method 'None'. The source.user attribute will not be set in that
 	// case.
 	Sources []*SourceAuthenticationMethod `protobuf:"bytes,2,rep,name=sources" json:"sources,omitempty"`
+<<<<<<< HEAD
 >>>>>>> Change message and field names. Add more examples.
 	// List of supported end-user authentication. Which one(s) are used for a specific
 	// request is decided at runtime, based on credential_rules bellow.
+=======
+	// List of supported origin authentication methods. Which one(s) are used for
+	// a specific request is decided at runtime, based on credential_rules below.
+>>>>>>> Fix typos.
 	Origins []*OriginAuthenticationMethod `protobuf:"bytes,3,rep,name=origins" json:"origins,omitempty"`
-	// Rules to define how request pricipal will be set. Each rule can have
+	// Rules to define how request principal will be set. Each rule can have
 	// conditions that determine if the rule should be applied or not. The rule
 	// will be checked for matching conditions at runtime, in order, and stop at
 	// the first match. If there are no rule matching condtion, source identity
-	// will be used as principal (in the other words, the credential rule with
-	// use_source = true with no matching condition is implicitly added the end
+	// will be used as principal (in other words, the credential rule with
+	// use_source = true with no matching condition is implicitly added to the end
 	// of the list.)
 	CredentialRules []*CredentialRule `protobuf:"bytes,4,rep,name=credential_rules,json=credentialRules" json:"credential_rules,omitempty"`
 }

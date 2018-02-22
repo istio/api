@@ -404,12 +404,12 @@ If empty, policy will be used on all destinations in the same namespace.</p>
 <td><code>sources</code></td>
 <td><code><a href="#SourceAuthenticationMethod">SourceAuthenticationMethod[]</a></code></td>
 <td>
-<p>List of authentication methods that can be use for source authentication.
+<p>List of authentication methods that can be used for source authentication.
 They will be evaluated in order, until the first one satisfied; source
 identity is then extracted from the associated certificate. On the other
 hand, if none of these methods pass, request should be rejected with
-authentication faile error (401).
-Leave the list empty if no source authentication required, or have single
+authentication failed error (401).
+Leave the list empty if no source authentication is required, or have single
 entry of method &lsquo;None&rsquo;. The source.user attribute will not be set in that
 case.</p>
 
@@ -419,8 +419,8 @@ case.</p>
 <td><code>origins</code></td>
 <td><code><a href="#OriginAuthenticationMethod">OriginAuthenticationMethod[]</a></code></td>
 <td>
-<p>List of supported end-user authentication. Which one(s) are used for a specific
-request is decided at runtime, based on credential_rules bellow.</p>
+<p>List of supported origin authentication methods. Which one(s) are used for
+a specific request is decided at runtime, based on credential_rules below.</p>
 
 </td>
 </tr>
@@ -428,12 +428,12 @@ request is decided at runtime, based on credential_rules bellow.</p>
 <td><code>credentialRules</code></td>
 <td><code><a href="#CredentialRule">CredentialRule[]</a></code></td>
 <td>
-<p>Rules to define how request pricipal will be set. Each rule can have
+<p>Rules to define how request principal will be set. Each rule can have
 conditions that determine if the rule should be applied or not. The rule
 will be checked for matching conditions at runtime, in order, and stop at
 the first match. If there are no rule matching condtion, source identity
-will be used as principal (in the other words, the credential rule with
-use_source = true with no matching condition is implicitly added the end
+will be used as principal (in other words, the credential rule with
+use_source = true with no matching condition is implicitly added to the end
 of the list.)</p>
 
 </td>
