@@ -75,21 +75,22 @@ func (ExternalService_Discovery) EnumDescriptor() ([]byte, []int) { return fileD
 //         protocol: http # not HTTPS.
 //       discovery: dns
 //
-// and a destination rule to initiate TLS connections to the external service.
+// and a traffic policy to initiate TLS connections to the external service.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: DestinationRule
+//     kind: TrafficPolicy
 //     metadata:
 //       name: tls-example
 //     spec:
-//       destination:
-//         name: example.com
-//       tls:
-//         mode: simple # initiates HTTPS when talking to example.com
+//       hosts:
+//       - example.com
+//       destinationPolicy:
+//         tls:
+//           mode: simple # initiates HTTPS when talking to example.com
 //
 // The following specification specifies a static set of backend nodes for
-// a MongoDB cluster behind a set of virtual IPs, and sets up a destination
-// rule to initiate mTLS connections upstream.
+// a MongoDB cluster behind a set of virtual IPs, and sets up a traffic
+// policy to initiate mTLS connections upstream.
 //
 //     apiVersion: config.istio.io/v1alpha2
 //     kind: ExternalService
@@ -107,20 +108,21 @@ func (ExternalService_Discovery) EnumDescriptor() ([]byte, []int) { return fileD
 //       - address: 2.2.2.2
 //       - address: 3.3.3.3
 //
-// and the associated destination rule
+// and the associated traffic policy
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: DestinationRule
+//     kind: TrafficPolicy
 //     metadata:
 //       name: mtls-mongocluster
 //     spec:
-//       destination:
-//         name: 192.192.192.192/24
-//       tls:
-//         mode: mutual
-//         clientCertificate: /etc/certs/myclientcert.pem
-//         privateKey: /etc/certs/client_private_key.pem
-//         caCertificates: /etc/certs/rootcacerts.pem
+//       hosts:
+//       - 192.192.192.192/24
+//       destinationPolicy:
+//         tls:
+//           mode: mutual
+//           clientCertificate: /etc/certs/myclientcert.pem
+//           privateKey: /etc/certs/client_private_key.pem
+//           caCertificates: /etc/certs/rootcacerts.pem
 //
 // The following example demonstrates the use of wildcards in the hosts. If
 // the connection has to be routed to the IP address requested by the
@@ -171,17 +173,18 @@ func (ExternalService_Discovery) EnumDescriptor() ([]byte, []int) { return fileD
 //         ports:
 //         - https: 7443
 //
-// and a destination rule to initiate TLS connections to the external service.
+// and a traffic policy to initiate TLS connections to the external service.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: DestinationRule
+//     kind: TrafficPolicy
 //     metadata:
 //       name: tls-foobar
 //     spec:
-//       destination:
-//         name: foo.bar.com
-//       tls:
-//         mode: simple # initiates HTTPS
+//       hosts:
+//       - foo.bar.com
+//       destinationPolicy:
+//         tls:
+//           mode: simple # initiates HTTPS
 //
 // With HTTP_PROXY=http://localhost:443, calls from the application to
 // http://foo.bar.com will be upgraded to HTTPS and load balanced across
@@ -193,7 +196,7 @@ func (ExternalService_Discovery) EnumDescriptor() ([]byte, []int) { return fileD
 // associated with the outbound HTTP requests will be based on the
 // endpoint's DNS name, i.e. ":authority: uk.foo.bar.com". Refer to Envoy's
 // auto_host_rewrite for further details. The automatic rewrite can be
-// overridden using a host rewrite route rule.
+// overridden using a host rewrite traffic policy.
 //
 type ExternalService struct {
 	// REQUIRED. The hosts associated with the external service. Could be a
