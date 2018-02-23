@@ -268,6 +268,19 @@ spec:
   - mtls: null
 </code></pre>
 
+<p>Policy to disable mTLS for &ldquo;productpage&rdquo; service</p>
+
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: mTLS_disable
+  namespace: frod
+spec:
+  destinations:
+  - name: productpage
+  sources:
+</code></pre>
+
 <p>Policy to enable mTLS, and use JWT for productpage:9000.</p>
 
 <pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
@@ -325,7 +338,7 @@ spec:
     - frontend.serviceaccount
 </code></pre>
 
-<p>Note that a credential rule that uncondtional-use-source (identity)  is
+<p>Note that a credential rule that unconditional-use-source (identity)  is
 implicitly check if no rule match, so the above credentialRules is the same
 as this:</p>
 

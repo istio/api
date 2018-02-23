@@ -452,6 +452,19 @@ func (m *CredentialRule) GetMatchingSources() []string {
 //   sources:
 //   - mtls: null
 // ```
+// Policy to disable mTLS for "productpage" service
+//
+// ```yaml
+// apiVersion: authentication.istio.io/v1alpha1
+// kind: Policy
+// metadata:
+//   name: mTLS_disable
+//   namespace: frod
+// spec:
+//   destinations:
+//   - name: productpage
+//   sources:
+// ```
 // Policy to enable mTLS, and use JWT for productpage:9000.
 //
 // ```yaml
@@ -511,7 +524,7 @@ func (m *CredentialRule) GetMatchingSources() []string {
 //     - frontend.serviceaccount
 // ```
 //
-// Note that a credential rule that uncondtional-use-source (identity)  is
+// Note that a credential rule that unconditional-use-source (identity)  is
 // implicitly check if no rule match, so the above credentialRules is the same
 // as this:
 //
