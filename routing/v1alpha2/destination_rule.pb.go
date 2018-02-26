@@ -8,7 +8,7 @@ It is generated from these files:
 	routing/v1alpha2/destination_rule.proto
 	routing/v1alpha2/external_service.proto
 	routing/v1alpha2/gateway.proto
-	routing/v1alpha2/route_rule.proto
+	routing/v1alpha2/virtual_service.proto
 
 It has these top-level messages:
 	DestinationRule
@@ -22,7 +22,7 @@ It has these top-level messages:
 	Gateway
 	Server
 	Port
-	RouteRule
+	VirtualService
 	Destination
 	HTTPRoute
 	TCPRoute
@@ -146,7 +146,7 @@ func (TLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) { return fileDescrip
 //         loadBalancer:
 //           simple: LEAST_CONN
 //
-// Version specific DestinationRule can be specified by defining a named
+// Version specific policies can be specified by defining a named
 // subset and overriding the settings specified at the service level. The
 // following rule uses a round robin load balancing policy for all traffic
 // going to a subset named testversion that is composed of endpoints (e.g.,
@@ -276,7 +276,7 @@ func (m *TrafficPolicy) GetTls() *TLSSettings {
 
 // A subset of endpoints of a service. Subsets can be used for scenarios
 // like A/B testing, or routing to a specific version of a service. Refer
-// to Route Rules documentation for examples on using subsets in these
+// to VirtualSerive documentation for examples of using subsets in these
 // scenarios. In addition, traffic policies defined at the service-level
 // can be overridden at a subset-level. The following rule uses a round
 // robin load balancing policy for all traffic going to a subset named

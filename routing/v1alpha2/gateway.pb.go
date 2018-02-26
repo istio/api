@@ -95,10 +95,10 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //           protocol: MONGO
 //
 // The gateway specification above describes the L4-L6 properties of a load
-// balancer. Routing rules can then be bound to a gateway to control
+// balancer. A VirtualService can then be bound to a gateway to control
 // the forwarding of traffic arriving at a particular host or gateway port.
 //
-// The following sample route rule splits traffic for
+// For example, the following VirtualService splits traffic for
 // https://uk.bookinfo.com/reviews, https://eu.bookinfo.com/reviews,
 // http://uk.bookinfo.com:9080/reviews, http://eu.bookinfo.com:9080/reviews
 // into two versions (prod and qa) of an internal reviews service on port
@@ -110,7 +110,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 // (i.e. 80 redirects to 443).
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: VirtualService
 //     metadata:
 //       name: bookinfo-rule
 //     spec:
@@ -144,13 +144,13 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //             name: reviews.qa
 //           weight: 20
 //
-// The following routing rule forwards traffic arriving at (external) port
+// The following VirtualService forwards traffic arriving at (external) port
 // 2379 from 172.17.16.0/24 subnet to internal Mongo server on port 5555. This
 // rule is not applicable internally in the mesh as the gateway list omits
 // the reserved name "mesh".
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: VirtualService
 //     metadata:
 //       name: bookinfo-Mongo
 //     spec:
@@ -252,10 +252,10 @@ type Server struct {
 	// services using TLS with SNI. Standard DNS wildcard prefix syntax
 	// is permitted.
 	//
-	// RouteRules that are bound to a gateway must having a matching host
-	// in their default destination. Specifically one of the route rule
+	// A VirtualService that is bound to a gateway must having a matching host
+	// in its default destination. Specifically one of the virtual service
 	// destination hosts is a strict suffix of a gateway host or
-	// a gateway host is a suffix of one of the route rule hosts.
+	// a gateway host is a suffix of one of the virtual service hosts.
 	Hosts []string `protobuf:"bytes,2,rep,name=hosts" json:"hosts,omitempty"`
 	// Set of TLS related options that govern the server's behavior. Use
 	// these options to control if all http requests should be redirected to
