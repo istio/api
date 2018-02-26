@@ -71,7 +71,7 @@ option go_package = "istio.io/api/routing/v1alpha2";
 // "mesh").
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -188,7 +188,7 @@ message RouteRule {
 // to subset v2, in a kubernetes environment.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -234,7 +234,7 @@ message RouteRule {
 // pool.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-productpage-rule
 //     spec:
@@ -250,7 +250,7 @@ message RouteRule {
 // service wikipedia.org, as there is no internal service of that name.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-wiki-rule
 //     spec:
@@ -364,7 +364,7 @@ message HTTPRoute {
 // Mongo from 172.17.16.* subnet to another Mongo server on port 5555.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: bookinfo-Mongo
 //     spec:
@@ -400,7 +400,7 @@ message TCPRoute {
 // "user=jason".
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -507,7 +507,7 @@ message HTTPMatchRequest {
 // "v1".
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -594,7 +594,7 @@ message L4MatchAttributes {
 // /v1/bookRatings provided by the bookratings service.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -627,7 +627,7 @@ message HTTPRedirect {
 // ratings service before making the actual API call.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -675,7 +675,7 @@ message StringMatch {
 // calling ratings:v1 service, with a 2s timeout per retry attempt.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -710,7 +710,7 @@ message HTTPRetry {
 // exposes X-Foo-bar header and sets an expiry period of 1 day.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -784,7 +784,7 @@ message HTTPFaultInjection {
   // service from all pods with label env: prod
   //
   //     apiVersion: config.istio.io/v1alpha2
-  //     kind: RouteRule
+  //     kind: V1alpha2RouteRule
   //     metadata:
   //       name: my-rule
   //     spec:
@@ -828,7 +828,7 @@ message HTTPFaultInjection {
   // 400 error code for 10% of the requests to the "ratings" service "v1".
   //
   //     apiVersion: config.istio.io/v1alpha2
-  //     kind: RouteRule
+  //     kind: V1alpha2RouteRule
   //     metadata:
   //       name: my-rule
   //     spec:

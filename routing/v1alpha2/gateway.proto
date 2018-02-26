@@ -84,7 +84,7 @@ option go_package = "istio.io/api/routing/v1alpha2";
 // (i.e. 80 redirects to 443).
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: bookinfo-rule
 //     spec:
@@ -124,7 +124,7 @@ option go_package = "istio.io/api/routing/v1alpha2";
 // the reserved name "mesh".
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: bookinfo-Mongo
 //     spec:
