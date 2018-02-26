@@ -60,9 +60,6 @@ message ProxyConfig {
   // Path to the proxy binary
   string binary_path = 2;
 
-  // Path to the proxy template file
-  string proxy_template_path = 3;
-
   // Service cluster defines the name for the service_cluster that is
   // shared by all Envoy instances. This setting corresponds to
   // _--service-cluster_ flag in Envoy.  In a typical Envoy deployment, the
@@ -76,64 +73,67 @@ message ProxyConfig {
   // receives API calls from Envoy, it uses the value of the _service-node_
   // flag to compute routes that are relative to the service instances
   // located at that IP address.
-  string service_cluster = 4;
+  string service_cluster = 3;
 
   // The time in seconds that Envoy will drain connections during a hot
   // restart. MUST be >=1s (e.g., _1s/1m/1h_)
-  google.protobuf.Duration drain_duration = 5;
+  google.protobuf.Duration drain_duration = 4;
 
   // The time in seconds that Envoy will wait before shutting down the
   // parent process during a hot restart. MUST be >=1s (e.g., _1s/1m/1h_).
   // MUST BE greater than _drain_duration_ parameter.
-  google.protobuf.Duration parent_shutdown_duration = 6;
+  google.protobuf.Duration parent_shutdown_duration = 5;
 
   // Deprecated, use server_address instead.
-  string discovery_address = 7;
+  string discovery_address = 6;
 
   // Polling interval for service discovery (used by EDS, CDS, LDS, but not RDS). (MUST BE >=1ms)
-  google.protobuf.Duration discovery_refresh_delay = 8;
+  google.protobuf.Duration discovery_refresh_delay = 7;
 
   // Address of the Zipkin service (e.g. _zipkin:9411_).
-  string zipkin_address = 9;
+  string zipkin_address = 8;
 
   // Connection timeout used by Envoy for supporting services. (MUST BE >=1ms)
-  google.protobuf.Duration connect_timeout = 10;
+  google.protobuf.Duration connect_timeout = 9;
 
   // IP Address and Port of a statsd UDP listener (e.g. _10.75.241.127:9125_).
-  string statsd_udp_address = 11;
+  string statsd_udp_address = 10;
 
   // Port on which Envoy should listen for administrative commands.
-  int32 proxy_admin_port = 12;
+  int32 proxy_admin_port = 11;
   // The availability zone where this Envoy instance is running. When running
   // Envoy as a sidecar in Kubernetes, this flag must be one of the availability
   // zones assigned to a node using failure-domain.beta.kubernetes.io/zone annotation.
-  string availability_zone = 13;
+  string availability_zone = 12;
 
   // Authentication policy defines the global switch to control authentication
   // for Envoy-to-Envoy communication for istio components Mixer and Pilot.
-  AuthenticationPolicy control_plane_auth_policy = 14;
+  AuthenticationPolicy control_plane_auth_policy = 13;
   // File path of custom proxy configuration, currently used by proxies
   // in front of Mixer and Pilot.
-  string custom_config_file = 15;
+  string custom_config_file = 14;
 
   // Maximum length of name field in Envoy's metrics. The length of the name field
   // is determined by the length of a name field in a service and the set of labels that
   // comprise a particular version of the service. The default value is set to 189 characters.
   // Envoy's internal metrics take up 67 characters, for a total of 256 character name per metric.
   // Increase the value of this field if you find that the metrics from Envoys are truncated.
-  int32 stat_name_length = 16;
+  int32 stat_name_length = 15;
 
   // The number of worker threads to run. Default value is number of cores on the machine.
-  int32 concurrency = 17;
+  int32 concurrency = 16;
 
   // Deprecated, use discovery_mtls_address/discovery_plain_address instead.
-  ServerAddress pilot = 18;
+  ServerAddress pilot = 17;
 
   // Address of the discovery service exposing xDS with mTLS connection.
-  string discovery_mtls_address = 19;
+  string discovery_mtls_address = 18;
 
   // Address of the discovery service exposing xDS with plain text connection.
-  string discovery_plain_address = 20;
+  string discovery_plain_address = 19;
+
+  // Path to the proxy template file
+  string proxy_template_path = 20;
 }
 
 // MeshConfig defines mesh-wide variables shared by all Envoy instances in the
