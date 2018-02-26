@@ -21,7 +21,7 @@ import "google/protobuf/wrappers.proto";
 // $overview: Configuration affecting traffic routing
 
 // Configuration affecting traffic routing. Here are a few terms useful to define
-// in the context of traffuc routing.
+// in the context of traffic routing.
 //
 // *Service* a unit of application behavior bound to a unique name in a
 // service registry. Services consist of multiple network *endpoints*
@@ -58,7 +58,7 @@ option go_package = "istio.io/api/routing/v1alpha2";
 // and request metadata.
 //
 // For each protocol (TCP, UDP, HTTP) that the destination service exposes on its ports,
-// a VirtualService includes an ordered list of rules, with optional match conditions,
+// a VirtualService includes an ordered list of route rules, with optional match conditions,
 // that apply to network traffic on the corresponding ports. The first rule matching
 // an incoming request is used.
 //
@@ -116,7 +116,7 @@ option go_package = "istio.io/api/routing/v1alpha2";
 //           version: v2
 //
 // A host name can be defined by only one VirtualService. A single
-// VirtualSerivce can be used to describe traffic properties for multiple
+// VirtualService can be used to describe traffic properties for multiple
 // HTTP and TCP ports.
 message VirtualService {
   // REQUIRED. The destination address for traffic captured by this virtual
@@ -303,20 +303,20 @@ message Destination {
 // Describes match conditions and actions for routing HTTP/1.1, HTTP2, and
 // gRPC traffic. See VirtualService for usage examples.
 message HTTPRoute {
-  // Match conditions to be satisfied for the route rule to be
+  // Match conditions to be satisfied for the rule to be
   // activated. All conditions inside a single match block have AND
   // semantics, while the list of match blocks have OR semantics. The rule
   // is matched if any one of the match blocks succeed.
   repeated HTTPMatchRequest match = 1;
 
-  // A http rule can either redirect or forward (default) traffic.  The
+  // A http rule can either redirect or forward (default) traffic. The
   // forwarding target can be one of several versions of a service (see
   // glossary in beginning of document). Weights associated with the
   // service version determine the proportion of traffic it receives.
   repeated DestinationWeight route = 2;
 
-  // A http rule can either redirect or forward (default) traffic.  If
-  // traffic passthrough option is specified in the route rule,
+  // A http rule can either redirect or forward (default) traffic. If
+  // traffic passthrough option is specified in the rule,
   // route/redirect will be ignored. The redirect primitive can be used to
   // send a HTTP 302 redirect to a different URI or Authority.
   HTTPRedirect redirect = 3;
@@ -382,7 +382,7 @@ message HTTPRoute {
 //             name: mongo.prod
 //
 message TCPRoute {
-  // Match conditions to be satisfied for the route rule to be
+  // Match conditions to be satisfied for the rule to be
   // activated. All conditions inside a single match block have AND
   // semantics, while the list of match blocks have OR semantics.  The rule
   // is matched if any one of the match blocks succeed.
@@ -396,8 +396,8 @@ message TCPRoute {
 }
 
 // HttpMatchRequest specifies a set of criterion to be met in order for the
-// route rule to be applied to the HTTP request. For example, the following
-// route rule restricts the rule to match only requests where the URL path
+// rule to be applied to the HTTP request. For example, the following
+// restricts the rule to match only requests where the URL path
 // starts with /ratings/v2/ and the request contains a "cookie" with value
 // "user=jason".
 //
@@ -591,7 +591,7 @@ message L4MatchAttributes {
 
 // HTTPRedirect can be used to send a 302 redirect response to the caller,
 // where the Authority/Host and the URI in the response can be swapped with
-// the specified values. For example, the following route rule redirects
+// the specified values. For example, the following rule redirects
 // requests for /v1/getProductRatings API on the ratings service to
 // /v1/bookRatings provided by the bookratings service.
 //
@@ -763,8 +763,8 @@ message CorsPolicy {
 }
 
 // HTTPFaultInjection can be used to specify one or more faults to inject
-// while forwarding http requests to the destination specified in a route
-// rule. Fault specification is part of a route rule. Faults include
+// while forwarding http requests to the destination specified in a route.
+// Fault specification is part of a VirtualService rule. Faults include
 // aborting the Http request from downstream service, and/or delaying
 // proxying of requests. A fault rule MUST HAVE delay or abort or both.
 //

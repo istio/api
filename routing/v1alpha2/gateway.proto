@@ -84,7 +84,7 @@ option go_package = "istio.io/api/routing/v1alpha2";
 // (i.e. 80 redirects to 443).
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: VirtualSerive
+//     kind: VirtualService
 //     metadata:
 //       name: bookinfo-rule
 //     spec:
@@ -124,7 +124,7 @@ option go_package = "istio.io/api/routing/v1alpha2";
 // the reserved name "mesh".
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: VirtualSerive
+//     kind: VirtualService
 //     metadata:
 //       name: bookinfo-Mongo
 //     spec:
@@ -209,7 +209,7 @@ message Server {
   // services using TLS with SNI. Standard DNS wildcard prefix syntax
   // is permitted.
   //
-  // A VirtualSerive that is bound to a gateway must having a matching host
+  // A VirtualService that is bound to a gateway must having a matching host
   // in its default destination. Specifically one of the virtual service
   // destination hosts is a strict suffix of a gateway host or
   // a gateway host is a suffix of one of the virtual service hosts.
