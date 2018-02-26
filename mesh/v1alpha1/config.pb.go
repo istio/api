@@ -158,6 +158,8 @@ type ProxyConfig struct {
 	ConfigPath string `protobuf:"bytes,1,opt,name=config_path,json=configPath" json:"config_path,omitempty"`
 	// Path to the proxy binary
 	BinaryPath string `protobuf:"bytes,2,opt,name=binary_path,json=binaryPath" json:"binary_path,omitempty"`
+	// Path to template that is used to generate proxy config
+	ProxyTemplatePath string `protobuf:"bytes,3,opt,name=proxy_template_path,json=proxyTemplatePath" json:"proxy_template_path,omitempty"`
 	// Service cluster defines the name for the service_cluster that is
 	// shared by all Envoy instances. This setting corresponds to
 	// _--service-cluster_ flag in Envoy.  In a typical Envoy deployment, the
@@ -234,6 +236,13 @@ func (m *ProxyConfig) GetBinaryPath() string {
 		return m.BinaryPath
 	}
 	return ""
+}
+
+func (m *ProxyConfig) GetProxyTemplatePath() string {
+        if m != nil {
+                return m.proxyTemplatePath
+        }
+        return ""
 }
 
 func (m *ProxyConfig) GetServiceCluster() string {
