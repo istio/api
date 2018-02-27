@@ -158,8 +158,6 @@ type ProxyConfig struct {
 	ConfigPath string `protobuf:"bytes,1,opt,name=config_path,json=configPath" json:"config_path,omitempty"`
 	// Path to the proxy binary
 	BinaryPath string `protobuf:"bytes,2,opt,name=binary_path,json=binaryPath" json:"binary_path,omitempty"`
-	// Path to template that is used to generate proxy config
-	ProxyTemplatePath string `protobuf:"bytes,3,opt,name=proxy_template_path,json=proxyTemplatePath" json:"proxy_template_path,omitempty"`
 	// Service cluster defines the name for the service_cluster that is
 	// shared by all Envoy instances. This setting corresponds to
 	// _--service-cluster_ flag in Envoy.  In a typical Envoy deployment, the
@@ -217,6 +215,8 @@ type ProxyConfig struct {
 	DiscoveryMtlsAddress string `protobuf:"bytes,18,opt,name=discovery_mtls_address,json=discoveryMtlsAddress" json:"discovery_mtls_address,omitempty"`
 	// Address of the discovery service exposing xDS with plain text connection.
 	DiscoveryPlainAddress string `protobuf:"bytes,19,opt,name=discovery_plain_address,json=discoveryPlainAddress" json:"discovery_plain_address,omitempty"`
+	// Path to template that is used to generate proxy config
+        ProxyBootstrapTemplatePath string `protobuf:"bytes,20,opt,name=proxy_bootstrap_template_path,json=proxyBootstrapTemplatePath" json:"proxy_bootstrap_template_path,omitempty"`
 }
 
 func (m *ProxyConfig) Reset()                    { *m = ProxyConfig{} }

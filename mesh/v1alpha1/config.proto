@@ -132,8 +132,8 @@ message ProxyConfig {
   // Address of the discovery service exposing xDS with plain text connection.
   string discovery_plain_address = 19;
 
-  // Path to the proxy template file
-  string proxy_template_path = 20;
+  // Path to the proxy bootstrap template file
+  string proxy_bootstrap_template_path = 20;
 }
 
 // MeshConfig defines mesh-wide variables shared by all Envoy instances in the
