@@ -14,9 +14,9 @@
 
 syntax = "proto3";
 
-package istio.routing.v1alpha2;
+package istio.networking.v1alpha3;
 
-option go_package = "istio.io/api/routing/v1alpha2";
+option go_package = "istio.io/api/networking/v1alpha3";
 
 // $title: Istio Gateway
 // $overview: Configuration of a generic load balancer
@@ -83,7 +83,7 @@ option go_package = "istio.io/api/routing/v1alpha2";
 // http://uk.bookinfo.com gets redirected to https://uk.bookinfo.com
 // (i.e. 80 redirects to 443).
 //
-//     apiVersion: config.istio.io/v1alpha2
+//     apiVersion: networking.istio.io/v1alpha3
 //     kind: VirtualService
 //     metadata:
 //       name: bookinfo-rule
@@ -123,7 +123,7 @@ option go_package = "istio.io/api/routing/v1alpha2";
 // rule is not applicable internally in the mesh as the gateway list omits
 // the reserved name "mesh".
 //
-//     apiVersion: config.istio.io/v1alpha2
+//     apiVersion: networking.istio.io/v1alpha3
 //     kind: VirtualService
 //     metadata:
 //       name: bookinfo-Mongo
@@ -155,7 +155,7 @@ message Gateway {
 // Server describes the properties of the proxy on a given load balancer port.
 // For example,
 //
-//     apiVersion: config.istio.io/v1alpha2
+//     apiVersion: networking.istio.io/v1alpha3
 //     kind: Gateway
 //     metadata:
 //       name: my-ingress
@@ -169,7 +169,7 @@ message Gateway {
 //
 // Another example
 //
-//     apiVersion: config.istio.io/v1alpha2
+//     apiVersion: networking.istio.io/v1alpha3
 //     kind: Gateway
 //     metadata:
 //       name: my-tcp-ingress
@@ -183,7 +183,7 @@ message Gateway {
 //
 // The following is an example of TLS configuration for port 443
 //
-//     apiVersion: config.istio.io/v1alpha2
+//     apiVersion: networking.istio.io/v1alpha3
 //     kind: Gateway
 //     metadata:
 //       name: my-tls-ingress

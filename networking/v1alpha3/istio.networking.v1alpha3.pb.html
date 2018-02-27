@@ -1,38 +1,9 @@
 ---
-title: Virtual Service Alpha 2
+title: Virtual Service Alpha 3
 overview: Configuration affecting traffic routing
 layout: protoc-gen-docs
 number_of_entries: 37
 ---
-<p>Configuration affecting traffic routing. Here are a few terms useful to define
-in the context of traffic routing.</p>
-
-<p><em>Service</em> a unit of application behavior bound to a unique name in a
-service registry. Services consist of multiple network <em>endpoints</em>
-implemented by workload instances running on pods, containers, VMs etc.</p>
-
-<p><em>Service versions (subsets)</em> - In a continuous deployment scenario, for
-a given service, there can be distinct subsets of instances running
-different variants of the application binary. These variants are not
-necessarily different API versions. They could be iterative changes to
-the same service, deployed in different environments (prod, staging,
-dev, etc.). Common scenarios where this occurs include A/B testing,
-canary rollouts, etc. The choice of a particular version can be decided
-based on various criterion (headers, url, etc.) and/or by weights
-assigned to each version. Each service has a default version consisting
-of all its instances.</p>
-
-<p><em>Source</em> - A downstream client calling a service.</p>
-
-<p><em>Host</em> - The address used by a client when attempting to connect to a
-service.</p>
-
-<p><em>Access model</em> - Applications address only the destination service
-(Host) without knowledge of individual service versions (subsets). The
-actual choice of the version is determined by the proxy/sidecar, enabling the
-application code to decouple itself from the evolution of dependent
-services.</p>
-
 <h2 id="ConnectionPoolSettings">ConnectionPoolSettings</h2>
 <section>
 <p>Connection pool settings for an upstream host. The settings apply to
@@ -44,7 +15,7 @@ level as well as at HTTP level.</p>
 <p>For example, the following rule sets a limit of 100 connections to redis
 service called myredissrv with a connect timeout of 30ms</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: bookinfo-redis
@@ -179,7 +150,7 @@ from example.com domain using HTTP POST/GET, and sets the
 Access-Control-Allow-Credentials header to false. In addition, it only
 exposes X-Foo-bar header and sets an expiry period of 1 day.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: ratings-route
@@ -303,7 +274,7 @@ for details.</p></li>
 reviews service with label &ldquo;version: v1&rdquo; (i.e., subset v1), and some
 to subset v2, in a kubernetes environment.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: reviews-route
@@ -330,7 +301,7 @@ spec:
 
 <p>And the associated DestinationRule</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: reviews-destination
@@ -351,7 +322,7 @@ this rule. Istio will fetch all instances of productpage.prod service
 from the service registry and populate the sidecar&rsquo;s load balancing
 pool.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: my-productpage-rule
@@ -368,7 +339,7 @@ spec:
 <p>The following sets a timeout of 5s for all calls to the external
 service wikipedia.org, as there is no internal service of that name.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: my-wiki-rule
@@ -452,7 +423,7 @@ detection settings to detect and evict unhealthy hosts from the load
 balancing pool. For example, a simple load balancing policy for the
 ratings service would look as follows:</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: bookinfo-ratings
@@ -469,7 +440,7 @@ following rule uses a round robin load balancing policy for all traffic
 going to a subset named testversion that is composed of endpoints (e.g.,
 pods) with labels (version:v3).</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: bookinfo-ratings
@@ -557,7 +528,7 @@ following rule will route 25% of traffic for the &ldquo;reviews&rdquo; service t
 instances with the &ldquo;v2&rdquo; tag and the remaining traffic (i.e., 75%) to
 &ldquo;v1&rdquo;.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: reviews-route
@@ -578,7 +549,7 @@ spec:
 
 <p>And the associated DestinationRule</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: reviews-destination
@@ -636,7 +607,7 @@ set of services at https://example.com to be accessed internally over
 plaintext http (i.e. http://example.com:443), with the sidecar originating
 TLS.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: ExternalService
 metadata:
   name: external-svc-example
@@ -652,7 +623,7 @@ spec:
 
 <p>and a destination rule to initiate TLS connections to the external service.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: tls-example
@@ -667,7 +638,7 @@ spec:
 a MongoDB cluster behind a set of virtual IPs, and sets up a destination
 rule to initiate mTLS connections upstream.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: ExternalService
 metadata:
   name: external-svc-mongocluster
@@ -686,7 +657,7 @@ spec:
 
 <p>and the associated destination rule</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: mtls-mongocluster
@@ -705,7 +676,7 @@ the connection has to be routed to the IP address requested by the
 application (i.e. application resolves DNS and attempts to connect to a
 specific IP), the discovery mode must be set to &ldquo;none&rdquo;.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: ExternalService
 metadata:
   name: external-svc-wildcard-example
@@ -727,7 +698,7 @@ example, the following configuration creates a non-existent service
 called foo.bar.com backed by three domains: us.foo.bar.com:8443,
 uk.foo.bar.com:9443, and in.foo.bar.com:7443</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: ExternalService
 metadata:
   name: external-svc-dns
@@ -753,7 +724,7 @@ spec:
 
 <p>and a destination rule to initiate TLS connections to the external service.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: tls-foobar
@@ -988,7 +959,7 @@ service. This rule is applicable across ports 443, 9080. Note that
 http://uk.bookinfo.com gets redirected to https://uk.bookinfo.com
 (i.e. 80 redirects to 443).</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: bookinfo-rule
@@ -1029,7 +1000,7 @@ spec:
 rule is not applicable internally in the mesh as the gateway list omits
 the reserved name &ldquo;mesh&rdquo;.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: bookinfo-Mongo
@@ -1126,7 +1097,7 @@ service, giving the impression that the upstream service is faulty.</p>
 pre-specified error code. The following example will return an HTTP
 400 error code for 10% of the requests to the &ldquo;ratings&rdquo; service &ldquo;v1&rdquo;.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: ratings-route
@@ -1200,7 +1171,7 @@ forwarding path. The following example will introduce a 5 second delay
 in 10% of the requests to the &ldquo;v1&rdquo; version of the &ldquo;reviews&rdquo;
 service from all pods with label env: prod</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: reviews-route
@@ -1273,7 +1244,7 @@ restricts the rule to match only requests where the URL path
 starts with /ratings/v2/ and the request contains a &ldquo;cookie&rdquo; with value
 &ldquo;user=jason&rdquo;.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: ratings-route
@@ -1429,7 +1400,7 @@ the specified values. For example, the following rule redirects
 requests for /v1/getProductRatings API on the ratings service to
 /v1/bookRatings provided by the bookratings service.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: ratings-route
@@ -1483,7 +1454,7 @@ this value.</p>
 example, the following rule sets the maximum number of retries to 3 when
 calling ratings:v1 service, with a 2s timeout per retry attempt.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: ratings-route
@@ -1538,7 +1509,7 @@ be used only with the DestinationWeights. The following example
 demonstrates how to rewrite the URL prefix for api call (/ratings) to
 ratings service before making the actual API call.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: ratings-route
@@ -1799,7 +1770,7 @@ for more details.</p>
 <p>For example, the following rule uses a round robin load balancing policy
 for all traffic going to the ratings service.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: bookinfo-ratings
@@ -1813,7 +1784,7 @@ spec:
 <p>The following example uses the consistent hashing based load balancer
 for the same ratings service using the Cookie header as the hash key.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: bookinfo-ratings
@@ -1960,7 +1931,7 @@ for more details.</p>
 scanned every 5 mins, such that any host that fails 7 consecutive times
 with 5XX error code will be ejected for 15 minutes.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: reviews-cb-policy
@@ -2135,7 +2106,7 @@ matching or selection for final routing.</p>
 <p>Server describes the properties of the proxy on a given load balancer port.
 For example,</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: my-ingress
@@ -2150,7 +2121,7 @@ spec:
 
 <p>Another example</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: my-tcp-ingress
@@ -2165,7 +2136,7 @@ spec:
 
 <p>The following is an example of TLS configuration for port 443</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: my-tls-ingress
@@ -2392,7 +2363,7 @@ robin load balancing policy for all traffic going to a subset named
 testversion that is composed of endpoints (e.g., pods) with labels
 (version:v3).</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: bookinfo-ratings
@@ -2460,7 +2431,7 @@ specified at the DestinationRule level.</p>
 following routing rule forwards traffic arriving at port 2379 named
 Mongo from 172.17.16.* subnet to another Mongo server on port 5555.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: bookinfo-Mongo
@@ -2520,7 +2491,7 @@ for more details. These settings are common to both HTTP and TCP upstreams.</p>
 <p>For example, the following rule configures a client to use mutual TLS
 for connections to upstream database cluster.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: db-mtls
@@ -2536,7 +2507,7 @@ spec:
 
 <p>The following rule configures a client to use TLS when talking to a foreign service whose domain matches *.foo.com.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: tls-foo
@@ -2721,7 +2692,7 @@ rules will be applied at the gateway named &ldquo;bookinfo&rdquo; as well as at 
 the sidecars in the mesh (indicated by the reserved gateway name
 &ldquo;mesh&rdquo;).</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: reviews-route
@@ -2753,7 +2724,7 @@ spec:
 to a named service subset which must be declared in a corresponding
 DestinationRule.</p>
 
-<pre><code>apiVersion: config.istio.io/v1alpha2
+<pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: reviews-destination
