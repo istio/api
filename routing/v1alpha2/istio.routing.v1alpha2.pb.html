@@ -180,7 +180,7 @@ Access-Control-Allow-Credentials header to false. In addition, it only
 exposes X-Foo-bar header and sets an expiry period of 1 day.</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: RouteRule
+kind: V1alpha2RouteRule
 metadata:
   name: my-rule
 spec:
@@ -304,7 +304,7 @@ reviews service with label &ldquo;version: v1&rdquo; on a subset named v1, and s
 to subset v2, in a kubernetes environment.</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: RouteRule
+kind: V1alpha2RouteRule
 metadata:
   name: my-rule
 spec:
@@ -352,7 +352,7 @@ from the service registry and populate the sidecar&rsquo;s load balancing
 pool.</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: RouteRule
+kind: V1alpha2RouteRule
 metadata:
   name: my-productpage-rule
 spec:
@@ -369,7 +369,7 @@ spec:
 service wikipedia.org, as there is no internal service of that name.</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: RouteRule
+kind: V1alpha2RouteRule
 metadata:
   name: my-wiki-rule
 spec:
@@ -558,7 +558,7 @@ instances with the &ldquo;v2&rdquo; tag and the remaining traffic (i.e., 75%) to
 &ldquo;v1&rdquo;.</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: RouteRule
+kind: V1alpha2RouteRule
 metadata:
   name: my-rule
 spec:
@@ -989,7 +989,7 @@ http://uk.bookinfo.com gets redirected to https://uk.bookinfo.com
 (i.e. 80 redirects to 443).</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: RouteRule
+kind: V1alpha2RouteRule
 metadata:
   name: bookinfo-rule
 spec:
@@ -1030,7 +1030,7 @@ rule is not applicable internally in the mesh as the gateway list omits
 the reserved name &ldquo;mesh&rdquo;.</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: RouteRule
+kind: V1alpha2RouteRule
 metadata:
   name: bookinfo-Mongo
 spec:
@@ -1127,7 +1127,7 @@ pre-specified error code. The following example will return an HTTP
 400 error code for 10% of the requests to the &ldquo;ratings&rdquo; service &ldquo;v1&rdquo;.</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: RouteRule
+kind: V1alpha2RouteRule
 metadata:
   name: my-rule
 spec:
@@ -1201,7 +1201,7 @@ in 10% of the requests to the &ldquo;v1&rdquo; version of the &ldquo;reviews&rdq
 service from all pods with label env: prod</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: RouteRule
+kind: V1alpha2RouteRule
 metadata:
   name: my-rule
 spec:
@@ -1274,7 +1274,7 @@ starts with /ratings/v2/ and the request contains a &ldquo;cookie&rdquo; with va
 &ldquo;user=jason&rdquo;.</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: RouteRule
+kind: V1alpha2RouteRule
 metadata:
   name: my-rule
 spec:
@@ -1430,7 +1430,7 @@ requests for /v1/getProductRatings API on the ratings service to
 /v1/bookRatings provided by the bookratings service.</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: RouteRule
+kind: V1alpha2RouteRule
 metadata:
   name: my-rule
 spec:
@@ -1484,7 +1484,7 @@ example, the following rule sets the maximum number of retries to 3 when
 calling ratings:v1 service, with a 2s timeout per retry attempt.</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: RouteRule
+kind: V1alpha2RouteRule
 metadata:
   name: my-rule
 spec:
@@ -1539,7 +1539,7 @@ demonstrates how to rewrite the URL prefix for api call (/ratings) to
 ratings service before making the actual API call.</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: RouteRule
+kind: V1alpha2RouteRule
 metadata:
   name: my-rule
 spec:
@@ -2151,7 +2151,7 @@ the sidecars in the mesh (indicated by the reserved gateway name
 &ldquo;mesh&rdquo;).</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: RouteRule
+kind: V1alpha2RouteRule
 metadata:
   name: my-rule
 spec:
@@ -2603,7 +2603,7 @@ following routing rule forwards traffic arriving at port 2379 named
 Mongo from 172.17.16.* subnet to another Mongo server on port 5555.</p>
 
 <pre><code>apiVersion: config.istio.io/v1alpha2
-kind: RouteRule
+kind: V1alpha2RouteRule
 metadata:
   name: bookinfo-Mongo
 spec:

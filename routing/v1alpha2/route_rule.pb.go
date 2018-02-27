@@ -33,7 +33,7 @@ var _ = math.Inf
 // "mesh").
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -180,7 +180,7 @@ func (m *RouteRule) GetTcp() []*TCPRoute {
 // to subset v2, in a kubernetes environment.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -226,7 +226,7 @@ func (m *RouteRule) GetTcp() []*TCPRoute {
 // pool.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-productpage-rule
 //     spec:
@@ -242,7 +242,7 @@ func (m *RouteRule) GetTcp() []*TCPRoute {
 // service wikipedia.org, as there is no internal service of that name.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-wiki-rule
 //     spec:
@@ -452,7 +452,7 @@ func (m *HTTPRoute) GetAppendHeaders() map[string]string {
 // Mongo from 172.17.16.* subnet to another Mongo server on port 5555.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: bookinfo-Mongo
 //     spec:
@@ -506,7 +506,7 @@ func (m *TCPRoute) GetRoute() []*DestinationWeight {
 // "user=jason".
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -667,7 +667,7 @@ func (m *HTTPMatchRequest) GetGateways() []string {
 // "v1".
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -808,7 +808,7 @@ func (m *L4MatchAttributes) GetGateways() []string {
 // /v1/bookRatings provided by the bookratings service.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -859,7 +859,7 @@ func (m *HTTPRedirect) GetAuthority() string {
 // ratings service before making the actual API call.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -1051,7 +1051,7 @@ func _StringMatch_OneofSizer(msg proto.Message) (n int) {
 // calling ratings:v1 service, with a 2s timeout per retry attempt.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -1104,7 +1104,7 @@ func (m *HTTPRetry) GetPerTryTimeout() *google_protobuf.Duration {
 // exposes X-Foo-bar header and sets an expiry period of 1 day.
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -1238,7 +1238,7 @@ func (m *HTTPFaultInjection) GetAbort() *HTTPFaultInjection_Abort {
 // service from all pods with label env: prod
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:
@@ -1396,7 +1396,7 @@ func _HTTPFaultInjection_Delay_OneofSizer(msg proto.Message) (n int) {
 // 400 error code for 10% of the requests to the "ratings" service "v1".
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: my-rule
 //     spec:

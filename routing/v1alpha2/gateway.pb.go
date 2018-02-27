@@ -110,7 +110,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 // (i.e. 80 redirects to 443).
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: bookinfo-rule
 //     spec:
@@ -150,7 +150,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 // the reserved name "mesh".
 //
 //     apiVersion: config.istio.io/v1alpha2
-//     kind: RouteRule
+//     kind: V1alpha2RouteRule
 //     metadata:
 //       name: bookinfo-Mongo
 //     spec:
