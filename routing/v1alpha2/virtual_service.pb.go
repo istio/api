@@ -14,15 +14,13 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-// VirtualService provides the traffic routing policy for a destination service.
-// It provides a set of rules that can route traffic to the service based on
-// the service's subsets/versions, the source of the traffic as well as connection
-// and request metadata.
+// A VirtualService defines a set of traffic routing rules to apply when a host is
+// addressed. Each routing rule defines matching criteria for traffic of a specific
+// protocol. If the traffic is matched, then it is sent to a named destination service
+// (or subset/version of it) defined in the registry.
 //
-// For each protocol (TCP, UDP, HTTP) that the destination service exposes on its ports,
-// a VirtualService includes an ordered list of route rules, with optional match conditions,
-// that apply to network traffic on the corresponding ports. The first rule matching
-// an incoming request is used.
+// The source of traffic can also be matched in a routing rule. This allows routing
+// to be customized for specific client contexts.
 //
 // The following example routes all HTTP traffic by default to
 // pods of the reviews service with label "version: v1". In addition,
@@ -114,9 +112,11 @@ type VirtualService struct {
 	// only to the gateways. To apply the rules to both gateways and sidecars,
 	// specify "mesh" as one of the gateway names.
 	Gateways []string `protobuf:"bytes,2,rep,name=gateways" json:"gateways,omitempty"`
-	// A list of routes for HTTP traffic.
+	// An ordered list of route rules for HTTP traffic.
+	// The first rule matching an incoming request is used.
 	Http []*HTTPRoute `protobuf:"bytes,3,rep,name=http" json:"http,omitempty"`
-	// A list of routes for TCP traffic.
+	// An ordered list of route rules for TCP traffic.
+	// The first rule matching an incoming request is used.
 	Tcp []*TCPRoute `protobuf:"bytes,4,rep,name=tcp" json:"tcp,omitempty"`
 }
 

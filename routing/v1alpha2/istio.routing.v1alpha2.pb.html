@@ -2210,9 +2210,9 @@ services using TLS with SNI. Standard DNS wildcard prefix syntax
 is permitted.</p>
 
 <p>A VirtualService that is bound to a gateway must having a matching host
-in its default destination. Specifically one of the virtual service
+in its default destination. Specifically one of the VirtualService
 destination hosts is a strict suffix of a gateway host or
-a gateway host is a suffix of one of the virtual service hosts.</p>
+a gateway host is a suffix of one of the VirtualService hosts.</p>
 
 </td>
 </tr>
@@ -2385,7 +2385,7 @@ case-sensitive.</p>
 <section>
 <p>A subset of endpoints of a service. Subsets can be used for scenarios
 like A/B testing, or routing to a specific version of a service. Refer
-to VirtualSerive documentation for examples of using subsets in these
+to VirtualService documentation for examples of using subsets in these
 scenarios. In addition, traffic policies defined at the service-level
 can be overridden at a subset-level. The following rule uses a round
 robin load balancing policy for all traffic going to a subset named
@@ -2705,15 +2705,13 @@ DestinationRule for examples.</p>
 </section>
 <h2 id="VirtualService">VirtualService</h2>
 <section>
-<p>VirtualService provides the traffic routing policy for a destination service.
-It provides a set of rules that can route traffic to the service based on
-the service&rsquo;s subsets/versions, the source of the traffic as well as connection
-and request metadata.</p>
+<p>A VirtualService defines a set of traffic routing rules to apply when a host is
+addressed. Each routing rule defines matching criteria for traffic of a specific
+protocol. If the traffic is matched, then it is sent to a named destination service
+(or subset/version of it) defined in the registry.</p>
 
-<p>For each protocol (TCP, UDP, HTTP) that the destination service exposes on its ports,
-a VirtualService includes an ordered list of route rules, with optional match conditions,
-that apply to network traffic on the corresponding ports. The first rule matching
-an incoming request is used.</p>
+<p>The source of traffic can also be matched in a routing rule. This allows routing
+to be customized for specific client contexts.</p>
 
 <p>The following example routes all HTTP traffic by default to
 pods of the reviews service with label &ldquo;version: v1&rdquo;. In addition,
@@ -2832,7 +2830,8 @@ specify &ldquo;mesh&rdquo; as one of the gateway names.</p>
 <td><code>http</code></td>
 <td><code><a href="#HTTPRoute">HTTPRoute[]</a></code></td>
 <td>
-<p>A list of routes for HTTP traffic.</p>
+<p>An ordered list of route rules for HTTP traffic.
+The first rule matching an incoming request is used.</p>
 
 </td>
 </tr>
@@ -2840,7 +2839,8 @@ specify &ldquo;mesh&rdquo; as one of the gateway names.</p>
 <td><code>tcp</code></td>
 <td><code><a href="#TCPRoute">TCPRoute[]</a></code></td>
 <td>
-<p>A list of routes for TCP traffic.</p>
+<p>An ordered list of route rules for TCP traffic.
+The first rule matching an incoming request is used.</p>
 
 </td>
 </tr>
