@@ -43,7 +43,7 @@ conventions:
 
 ### API Versioning
 
-Isiot APIs should use a simple versioning strategy based on
+Istio APIs should use a simple versioning strategy based on
 major versions and releases, such as `v1alpha`, `v2beta`, or
 `v3`. Within each release, there should not be any breaking
 change to released features, such as changing the type of
