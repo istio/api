@@ -6,8 +6,6 @@ all: generate
 
 std_go_version := $(shell bin/get_protoc_gen_version.sh golang)
 gogo_version := $(shell bin/get_protoc_gen_version.sh gogo)
-#TODO: fix properly
-gofmt_version := 1.10
 docs_version := master
 
 ########################
@@ -72,13 +70,6 @@ protoc_gen_docs_plugin := --plugin=$(protoc_gen_docs) --docs-$(docs_version)_out
 ########################
 
 protoc := $(protoc_min_version) -version=3.5.0
-
-########################
-# gofmt (pinned)
-########################
-
-gofmt_path := vendor/github.com/golang/go/src/cmd
-gofmt_bin := genbin/gofmt-$(gofmt_version)
 
 #####################
 # install protoc
@@ -146,11 +137,7 @@ $(protoc_min_version) : vendor
 	@echo "Building protoc-min-version..."
 	go build --pkgdir $(protoc_gen_gogo_path)/protoc-min-version -o $(protoc_min_version) ./$(protoc_gen_gogo_path)/protoc-min-version
 
-$(gofmt_bin) : vendor
-	@echo "Building pinned version of gofmt..."
-	go build --pkgdir $(gofmt_path)/gofmt -o $(gofmt_bin) ./$(gofmt_path)/gofmt
-
-binaries : $(protoc_gen_go) $(protoc_gen_gogo) $(protoc_gen_gogoslick) $(protoc_gen_docs) $(protoc_min_version) $(gofmt)
+binaries : $(protoc_gen_go) $(protoc_gen_gogo) $(protoc_gen_gogoslick) $(protoc_gen_docs) $(protoc_min_version)
 
 depend: vendor binaries
 
@@ -158,10 +145,7 @@ depend: vendor binaries
 # Generation Rules
 #####################
 
-generate: generate-broker-go generate-mesh-go generate-mixer-go generate-routing-go generate-rbac-go generate-authn-go fmt
-
-fmt: $(gofmt_bin)
-	$(gofmt_bin) -w -l $(broker_v1_path) $(mesh_path) $(mixer_v1_path) $(routing_v1alpha1_path) $(rbac_v1alpha1_path) $(authn_v1alpha1_path)
+generate: generate-broker-go generate-mesh-go generate-mixer-go generate-routing-go generate-rbac-go generate-authn-go
 
 #####################
 # broker/...
@@ -270,19 +254,19 @@ $(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc) : $(policy_v1beta1_protos) | d
 	## Generate policy/v1beta1/fixed_cfg.pb.go (requires alternate plugin and sed scripting due to issues with google.protobuf.Struct
 	@$(protoc) $(proto_path) $(gogo_plugin) policy/v1beta1/cfg.proto
 	@if [ -f "policy/v1beta1/cfg.pb.go" ]; then\
-		sed -e 's/*google_protobuf.Struct/interface{}/g' \
-			-e 's/ValueType_VALUE_TYPE_UNSPECIFIED/VALUE_TYPE_UNSPECIFIED/g' \
-			-e 's/istio_policy_v1beta1\.//g' policy/v1beta1/cfg.pb.go \
-			| grep -v "google_protobuf" | grep -v "import istio_policy_v1beta1" >policy/v1beta1/fixed_cfg.pb.go;\
-		rm policy/v1beta1/cfg.pb.go;\
+	    sed -e 's/*google_protobuf.Struct/interface{}/g' \
+	        -e 's/ValueType_VALUE_TYPE_UNSPECIFIED/VALUE_TYPE_UNSPECIFIED/g' \
+	        -e 's/istio_policy_v1beta1\.//g' policy/v1beta1/cfg.pb.go \
+	        | grep -v "google_protobuf" | grep -v "import istio_policy_v1beta1" >policy/v1beta1/fixed_cfg.pb.go;\
+	    rm policy/v1beta1/cfg.pb.go;\
 	fi
 
 mixer/v1/config/fixed_cfg.pb.go mixer/v1/config/istio.mixer.v1.config.pb.html: mixer/v1/config/cfg.proto | depend $(protoc_gen_gogo) $(protoc_bin)
 	# Generate mixer/v1/config/fixed_cfg.pb.go (requires alternate plugin and sed scripting due to issues with google.protobuf.Struct)
 	@$(protoc) $(proto_path) $(gogo_plugin) $(protoc_gen_docs_plugin)mixer/v1/config $^
 	@sed -e 's/*google_protobuf.Struct/interface{}/g' \
-		 -e 's/ValueType_VALUE_TYPE_UNSPECIFIED/VALUE_TYPE_UNSPECIFIED/g' mixer/v1/config/cfg.pb.go \
-		 | grep -v "google_protobuf" >mixer/v1/config/fixed_cfg.pb.go
+	     -e 's/ValueType_VALUE_TYPE_UNSPECIFIED/VALUE_TYPE_UNSPECIFIED/g' mixer/v1/config/cfg.pb.go \
+	     | grep -v "google_protobuf" >mixer/v1/config/fixed_cfg.pb.go
 	@rm mixer/v1/config/cfg.pb.go
 
 clean-mixer-generated:
