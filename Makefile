@@ -97,6 +97,7 @@ ifeq ($(UNAME), Linux)
 	sudo mv protoc3/include/* /usr/local/include/
 	rm -f protoc-3.5.0-linux-x86_64.zip
 	rm -rf protoc3
+	ls -r
 endif
 
 # BUGBUG: we override the use of protoc_min_version here, since using
