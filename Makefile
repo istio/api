@@ -97,7 +97,7 @@ ifeq ($(UNAME), Linux)
 	sudo mv protoc3/include/* /usr/local/include/
 	rm -f protoc-3.5.0-linux-x86_64.zip
 	rm -rf protoc3
-	ls -r
+	ls -R
 endif
 
 # BUGBUG: we override the use of protoc_min_version here, since using
@@ -161,6 +161,8 @@ generate-broker-go: $(broker_v1_pb_gos) $(broker_v1_pb_doc)
 
 $(broker_v1_pb_gos) $(broker_v1_pb_doc): $(broker_v1_protos) | depend $(protoc_gen_go) $(protoc_bin)
 	## Generate broker/dev/*.pb.go + $(broker_v1_pb_doc)
+	ls -R
+	ls -l vendor/github.com/gogo
 	@$(protoc) $(proto_path) $(protoc_gen_go_plugin) $(protoc_gen_docs_plugin)$(broker_v1_path) $^
 
 clean-broker-generated:
