@@ -14,7 +14,6 @@ jobs:
       - run:
           command: |
             ./scripts/generate-protos.sh || die "could not generate *.pb.go"
-            ls -r
             if [[ -n $(git status --porcelain) ]]; then
               git status
               git --no-pager diff
