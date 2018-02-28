@@ -238,13 +238,6 @@ func (m *ProxyConfig) GetBinaryPath() string {
 	return ""
 }
 
-func (m *ProxyConfig) GetProxyBootstrapTemplatePath() string {
-        if m != nil {
-                return m.ProxyBootstrapTemplatePath
-        }
-        return ""
-}
-
 func (m *ProxyConfig) GetServiceCluster() string {
 	if m != nil {
 		return m.ServiceCluster
