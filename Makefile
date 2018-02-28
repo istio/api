@@ -12,7 +12,7 @@ docs_version := master
 # protoc args
 ########################
 
-proto_path := --proto_path=. --proto_path=vendor/github.com/gogo/protobuf --proto_path=vendor/istio.io/gogo-genproto/googleapis
+proto_path := --proto_path=. --proto_path=./vendor/github.com/gogo/protobuf --proto_path=./vendor/istio.io/gogo-genproto/googleapis
 out_path = :$(GOPATH)/src
 
 ########################
