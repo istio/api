@@ -11,6 +11,7 @@ required = [
   "github.com/gogo/protobuf/protoc-min-version",
   "istio.io/gogo-genproto/googleapis/google/rpc",
   "github.com/istio/tools/protoc-gen-docs",
+  "github.com/golang/go/src/cmd/gofmt",
 ]
 
 [[constraint]]
@@ -36,3 +37,7 @@ required = [
 [[constraint]]
   branch = "master"
   name = "github.com/istio/tools"
+
+[[constraint]]
+  name = "github.com/golang/go"
+  version = "go1.10"
