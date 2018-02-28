@@ -113,12 +113,12 @@ message Jwt {
   repeated string jwt_params = 7;
 }
 
-// SourceAuthenticationMethod defines one particular type of authentication, e.g
+// PeerAuthenticationMethod defines one particular type of authentication, e.g
 // mutual TLS, JWT etc, (no authentication is one type by itself) that can
 // be used for peer authentication.
 // The type can be progammatically determine by checking the type of the
 // "params" field.
-message SourceAuthenticationMethod {
+message PeerAuthenticationMethod {
   oneof params {
     // Set if authentication is not required. This is typically used to indicate
     // other methods are optional.
@@ -133,9 +133,9 @@ message SourceAuthenticationMethod {
 }
 
 // OriginAuthenticationMethod defines authentication method/params for origin
-// authentication. Origin could be end-user, device, delegate service etc. Method
-// should have unique name so they can be referred later in credential rules.
-// Currently, only JWT is supported for origin authentication.
+// authentication. Origin could be end-user, device, delegate service etc.
+// Method should have unique name so they can be referred later in credential
+// rules. Currently, only JWT is supported for origin authentication.
 message OriginAuthenticationMethod {
   // Name that can be used to refer to this mechanism.
   string name = 1;
@@ -150,13 +150,13 @@ message OriginAuthenticationMethod {
 message CredentialRule {
   // Associates authentication with request principal.
   enum Binding {
-    // Principal will be set to the identity from source authentication.
-    USE_SOURCE = 0;
+    // Principal will be set to the identity from peer authentication.
+    USE_PEER = 0;
 
     // Principal will be set to the identity from origin authentication.
     USE_ORIGIN = 1;
   }
-  // Defines which authentication (source vs origin) will be binded to
+  // Defines which authentication (peer vs origin) will be binded to
   // request principal.
   Binding binding = 1;
 
@@ -166,22 +166,22 @@ message CredentialRule {
   // At run time, each method will be evaluated in order, until the first valid.
   // request.auth.principal will be set to the identity extracted from that
   // valid certificate. If all methods are invalid, authentication should fail.
-  // This field should not be set if binding is USE_SOURCE.
+  // This field should not be set if binding is USE_PEER.
   repeated string selected_origin_methods = 2;
 
   // Condition to activate the rule. If not empty, the rule will be activated
-  // if request come from one of these sources (identity).
+  // if request come from one of these peers (identity).
   // Leave blank to activate the rule unconditionally.
-  repeated string matching_sources = 3;
+  repeated string matching_peers = 3;
 }
 
-// Policy defines what authentication methods can be accepted on workload(s), and
-// if authenticated, which method/certificate will set the request principal
+// Policy defines what authentication methods can be accepted on workload(s),
+// and if authenticated, which method/certificate will set the request principal
 // (i.e request.auth.principal attribute).
 //
 // Authentication policy is composed of 2-part authentication:
-// - source: verify caller service credentials. This part will set source.user
-// (source identity).
+// - peer: verify caller service credentials. This part will set source.user
+// (peer identity).
 // - origin: verify the origin credentials. This part will set request.auth.user
 // (origin identity), as well as other attributes like request.auth.presenter,
 // request.auth.audiences and raw claims. Note that the identity could be
@@ -189,7 +189,7 @@ message CredentialRule {
 //
 // request.auth.principal will be assigned follow the credential rules. The
 // rule also dictates which origin authentication method(s) should run, based
-// on source identity.
+// on peer identity.
 //
 // Examples:
 // Policy to enable mTLS for all services in namespace frod
@@ -202,7 +202,7 @@ message CredentialRule {
 //   namespace: frod
 // spec:
 //   destinations:
-//   sources:
+//   peers:
 //   - mtls: null
 // ```
 // Policy to disable mTLS for "productpage" service
@@ -216,7 +216,7 @@ message CredentialRule {
 // spec:
 //   destinations:
 //   - name: productpage
-//   sources:
+//   peers:
 // ```
 // Policy to enable mTLS, and use JWT for productpage:9000.
 //
@@ -231,7 +231,7 @@ message CredentialRule {
 //   - name: productpage
 //     port:
 //       number: 9000
-//   sources:
+//   peers:
 //   - mtls: null
 //   origins:
 //   - name: google_jwt
@@ -260,7 +260,7 @@ message CredentialRule {
 //   - name: productpage
 //     port:
 //       number: 9000
-//   sources:
+//   peers:
 //   - mtls: null
 //   origins:
 //   - name: google_jwt
@@ -277,7 +277,7 @@ message CredentialRule {
 //     - frontend.serviceaccount
 // ```
 //
-// Note that a credential rule that unconditional-use-source (identity)  is
+// Note that a credential rule that unconditional-use-peer (identity)  is
 // implicitly check if no rule match, so the above credentialRules is the same
 // as this:
 //
@@ -288,11 +288,11 @@ message CredentialRule {
 //   - google_jwt
 //   matchingSources:
 //   - productpage.serviceaccount
-// - binding: USE_SOURCE
+// - binding: USE_PEER
 // ```
 //
 // Policy that enable mTLS, requires google JWT if caller is
-// frontend.serviceaccount, no JWT (i.e source authentication only) if caller
+// frontend.serviceaccount, no JWT (i.e peer authentication only) if caller
 // is admin, and istio JWT in all other cases.
 //
 // ```yaml
@@ -306,7 +306,7 @@ message CredentialRule {
 //   - name: productpage
 //     port:
 //       number: 9000
-//   sources:
+//   peers:
 //   - mtls: null
 //   origins:
 //   - name: google_jwt
@@ -328,7 +328,7 @@ message CredentialRule {
 //     - google_jwt
 //     matchingSources:
 //     - productpage.serviceaccount
-//   - binding: USE_SOURCE
+//   - binding: USE_PEER
 //     matchingSource:
 //     - admin
 //   - binding: USE_ORIGIN
@@ -340,15 +340,15 @@ message Policy {
   // If empty, policy will be used on all destinations in the same namespace.
   repeated istio.networking.v1alpha3.Destination destinations = 1;
 
-  // List of authentication methods that can be used for source authentication.
-  // They will be evaluated in order, until the first one satisfied; source
+  // List of authentication methods that can be used for peer authentication.
+  // They will be evaluated in order, until the first one satisfied; peer
   // identity is then extracted from the associated certificate. On the other
   // hand, if none of these methods pass, request should be rejected with
   // authentication failed error (401).
-  // Leave the list empty if no source authentication is required, or have single
+  // Leave the list empty if no peer authentication is required, or have single
   // entry of method 'None'. The source.user attribute will not be set in that
   // case.
-  repeated SourceAuthenticationMethod sources = 2;
+  repeated PeerAuthenticationMethod peers = 2;
 
   // List of supported origin authentication methods. Which one(s) are used for
   // a specific request is decided at runtime, based on credential_rules below.
@@ -357,9 +357,9 @@ message Policy {
   // Rules to define how request principal will be set. Each rule can have
   // conditions that determine if the rule should be applied or not. The rule
   // will be checked for matching conditions at runtime, in order, and stop at
-  // the first match. If there are no rule matching condtion, source identity
+  // the first match. If there are no rule matching condtion, peer identity
   // will be used as principal (in other words, the credential rule with
-  // use_source = true with no matching condition is implicitly added to the end
+  // use_peer = true with no matching condition is implicitly added to the end
   // of the list.)
   repeated CredentialRule credential_rules = 4;
 }

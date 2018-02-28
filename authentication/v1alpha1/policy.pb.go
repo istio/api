@@ -14,7 +14,7 @@ It has these top-level messages:
 	None
 	MutualTls
 	Jwt
-	SourceAuthenticationMethod
+	PeerAuthenticationMethod
 	OriginAuthenticationMethod
 	CredentialRule
 	Policy
@@ -41,18 +41,18 @@ const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 type CredentialRule_Binding int32
 
 const (
-	// Principal will be set to the identity from source authentication.
-	CredentialRule_USE_SOURCE CredentialRule_Binding = 0
+	// Principal will be set to the identity from peer authentication.
+	CredentialRule_USE_PEER CredentialRule_Binding = 0
 	// Principal will be set to the identity from origin authentication.
 	CredentialRule_USE_ORIGIN CredentialRule_Binding = 1
 )
 
 var CredentialRule_Binding_name = map[int32]string{
-	0: "USE_SOURCE",
+	0: "USE_PEER",
 	1: "USE_ORIGIN",
 }
 var CredentialRule_Binding_value = map[string]int32{
-	"USE_SOURCE": 0,
+	"USE_PEER":   0,
 	"USE_ORIGIN": 1,
 }
 
@@ -182,24 +182,25 @@ func (m *Jwt) GetJwtParams() []string {
 	return nil
 }
 
-// SourceAuthenticationMethod defines one particular type of authentication, e.g
+// PeerAuthenticationMethod defines one particular type of authentication, e.g
 // mutual TLS, JWT etc, (no authentication is one type by itself) that can
 // be used for peer authentication.
 // The type can be progammatically determine by checking the type of the
 // "params" field.
-type SourceAuthenticationMethod struct {
+type PeerAuthenticationMethod struct {
 	// Types that are valid to be assigned to Params:
-	//	*SourceAuthenticationMethod_None
-	//	*SourceAuthenticationMethod_Mtls
-	//	*SourceAuthenticationMethod_Jwt
-	Params isSourceAuthenticationMethod_Params `protobuf_oneof:"params"`
+	//	*PeerAuthenticationMethod_None
+	//	*PeerAuthenticationMethod_Mtls
+	//	*PeerAuthenticationMethod_Jwt
+	Params isPeerAuthenticationMethod_Params `protobuf_oneof:"params"`
 }
 
-func (m *SourceAuthenticationMethod) Reset()                    { *m = SourceAuthenticationMethod{} }
-func (m *SourceAuthenticationMethod) String() string            { return proto.CompactTextString(m) }
-func (*SourceAuthenticationMethod) ProtoMessage()               {}
-func (*SourceAuthenticationMethod) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
+func (m *PeerAuthenticationMethod) Reset()                    { *m = PeerAuthenticationMethod{} }
+func (m *PeerAuthenticationMethod) String() string            { return proto.CompactTextString(m) }
+func (*PeerAuthenticationMethod) ProtoMessage()               {}
+func (*PeerAuthenticationMethod) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 type isMechanism_Params interface{ isMechanism_Params() }
@@ -209,86 +210,89 @@ type isPeerMechanism_Params interface{ isPeerMechanism_Params() }
 =======
 type isSourceAuthenticationMethod_Params interface{ isSourceAuthenticationMethod_Params() }
 >>>>>>> Change message and field names. Add more examples.
+=======
+type isPeerAuthenticationMethod_Params interface{ isPeerAuthenticationMethod_Params() }
+>>>>>>> Change source to peer for it sounds less confusing with origin in authentication context
 
-type SourceAuthenticationMethod_None struct {
+type PeerAuthenticationMethod_None struct {
 	None *None `protobuf:"bytes,1,opt,name=none,oneof"`
 }
-type SourceAuthenticationMethod_Mtls struct {
+type PeerAuthenticationMethod_Mtls struct {
 	Mtls *MutualTls `protobuf:"bytes,2,opt,name=mtls,oneof"`
 }
-type SourceAuthenticationMethod_Jwt struct {
+type PeerAuthenticationMethod_Jwt struct {
 	Jwt *Jwt `protobuf:"bytes,3,opt,name=jwt,oneof"`
 }
 
-func (*SourceAuthenticationMethod_None) isSourceAuthenticationMethod_Params() {}
-func (*SourceAuthenticationMethod_Mtls) isSourceAuthenticationMethod_Params() {}
-func (*SourceAuthenticationMethod_Jwt) isSourceAuthenticationMethod_Params()  {}
+func (*PeerAuthenticationMethod_None) isPeerAuthenticationMethod_Params() {}
+func (*PeerAuthenticationMethod_Mtls) isPeerAuthenticationMethod_Params() {}
+func (*PeerAuthenticationMethod_Jwt) isPeerAuthenticationMethod_Params()  {}
 
-func (m *SourceAuthenticationMethod) GetParams() isSourceAuthenticationMethod_Params {
+func (m *PeerAuthenticationMethod) GetParams() isPeerAuthenticationMethod_Params {
 	if m != nil {
 		return m.Params
 	}
 	return nil
 }
 
-func (m *SourceAuthenticationMethod) GetNone() *None {
-	if x, ok := m.GetParams().(*SourceAuthenticationMethod_None); ok {
+func (m *PeerAuthenticationMethod) GetNone() *None {
+	if x, ok := m.GetParams().(*PeerAuthenticationMethod_None); ok {
 		return x.None
 	}
 	return nil
 }
 
-func (m *SourceAuthenticationMethod) GetMtls() *MutualTls {
-	if x, ok := m.GetParams().(*SourceAuthenticationMethod_Mtls); ok {
+func (m *PeerAuthenticationMethod) GetMtls() *MutualTls {
+	if x, ok := m.GetParams().(*PeerAuthenticationMethod_Mtls); ok {
 		return x.Mtls
 	}
 	return nil
 }
 
-func (m *SourceAuthenticationMethod) GetJwt() *Jwt {
-	if x, ok := m.GetParams().(*SourceAuthenticationMethod_Jwt); ok {
+func (m *PeerAuthenticationMethod) GetJwt() *Jwt {
+	if x, ok := m.GetParams().(*PeerAuthenticationMethod_Jwt); ok {
 		return x.Jwt
 	}
 	return nil
 }
 
 // XXX_OneofFuncs is for the internal use of the proto package.
-func (*SourceAuthenticationMethod) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _SourceAuthenticationMethod_OneofMarshaler, _SourceAuthenticationMethod_OneofUnmarshaler, _SourceAuthenticationMethod_OneofSizer, []interface{}{
-		(*SourceAuthenticationMethod_None)(nil),
-		(*SourceAuthenticationMethod_Mtls)(nil),
-		(*SourceAuthenticationMethod_Jwt)(nil),
+func (*PeerAuthenticationMethod) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _PeerAuthenticationMethod_OneofMarshaler, _PeerAuthenticationMethod_OneofUnmarshaler, _PeerAuthenticationMethod_OneofSizer, []interface{}{
+		(*PeerAuthenticationMethod_None)(nil),
+		(*PeerAuthenticationMethod_Mtls)(nil),
+		(*PeerAuthenticationMethod_Jwt)(nil),
 	}
 }
 
-func _SourceAuthenticationMethod_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*SourceAuthenticationMethod)
+func _PeerAuthenticationMethod_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*PeerAuthenticationMethod)
 	// params
 	switch x := m.Params.(type) {
-	case *SourceAuthenticationMethod_None:
+	case *PeerAuthenticationMethod_None:
 		b.EncodeVarint(1<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.None); err != nil {
 			return err
 		}
-	case *SourceAuthenticationMethod_Mtls:
+	case *PeerAuthenticationMethod_Mtls:
 		b.EncodeVarint(2<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.Mtls); err != nil {
 			return err
 		}
-	case *SourceAuthenticationMethod_Jwt:
+	case *PeerAuthenticationMethod_Jwt:
 		b.EncodeVarint(3<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.Jwt); err != nil {
 			return err
 		}
 	case nil:
 	default:
-		return fmt.Errorf("SourceAuthenticationMethod.Params has unexpected type %T", x)
+		return fmt.Errorf("PeerAuthenticationMethod.Params has unexpected type %T", x)
 	}
 	return nil
 }
 
-func _SourceAuthenticationMethod_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*SourceAuthenticationMethod)
+func _PeerAuthenticationMethod_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*PeerAuthenticationMethod)
 	switch tag {
 	case 1: // params.none
 		if wire != proto.WireBytes {
@@ -296,7 +300,7 @@ func _SourceAuthenticationMethod_OneofUnmarshaler(msg proto.Message, tag, wire i
 		}
 		msg := new(None)
 		err := b.DecodeMessage(msg)
-		m.Params = &SourceAuthenticationMethod_None{msg}
+		m.Params = &PeerAuthenticationMethod_None{msg}
 		return true, err
 	case 2: // params.mtls
 		if wire != proto.WireBytes {
@@ -304,7 +308,7 @@ func _SourceAuthenticationMethod_OneofUnmarshaler(msg proto.Message, tag, wire i
 		}
 		msg := new(MutualTls)
 		err := b.DecodeMessage(msg)
-		m.Params = &SourceAuthenticationMethod_Mtls{msg}
+		m.Params = &PeerAuthenticationMethod_Mtls{msg}
 		return true, err
 	case 3: // params.jwt
 		if wire != proto.WireBytes {
@@ -312,28 +316,28 @@ func _SourceAuthenticationMethod_OneofUnmarshaler(msg proto.Message, tag, wire i
 		}
 		msg := new(Jwt)
 		err := b.DecodeMessage(msg)
-		m.Params = &SourceAuthenticationMethod_Jwt{msg}
+		m.Params = &PeerAuthenticationMethod_Jwt{msg}
 		return true, err
 	default:
 		return false, nil
 	}
 }
 
-func _SourceAuthenticationMethod_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*SourceAuthenticationMethod)
+func _PeerAuthenticationMethod_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*PeerAuthenticationMethod)
 	// params
 	switch x := m.Params.(type) {
-	case *SourceAuthenticationMethod_None:
+	case *PeerAuthenticationMethod_None:
 		s := proto.Size(x.None)
 		n += proto.SizeVarint(1<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(s))
 		n += s
-	case *SourceAuthenticationMethod_Mtls:
+	case *PeerAuthenticationMethod_Mtls:
 		s := proto.Size(x.Mtls)
 		n += proto.SizeVarint(2<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(s))
 		n += s
-	case *SourceAuthenticationMethod_Jwt:
+	case *PeerAuthenticationMethod_Jwt:
 		s := proto.Size(x.Jwt)
 		n += proto.SizeVarint(3<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(s))
@@ -346,9 +350,9 @@ func _SourceAuthenticationMethod_OneofSizer(msg proto.Message) (n int) {
 }
 
 // OriginAuthenticationMethod defines authentication method/params for origin
-// authentication. Origin could be end-user, device, delegate service etc. Method
-// should have unique name so they can be referred later in credential rules.
-// Currently, only JWT is supported for origin authentication.
+// authentication. Origin could be end-user, device, delegate service etc.
+// Method should have unique name so they can be referred later in credential
+// rules. Currently, only JWT is supported for origin authentication.
 type OriginAuthenticationMethod struct {
 	// Name that can be used to refer to this mechanism.
 	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
@@ -379,7 +383,7 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 // authentication) will be used as request principal. The rule can be activated
 // conditionally, based on matching condition (currently use only peer identity)
 type CredentialRule struct {
-	// Defines which authentication (source vs origin) will be binded to
+	// Defines which authentication (peer vs origin) will be binded to
 	// request principal.
 	Binding CredentialRule_Binding `protobuf:"varint,1,opt,name=binding,enum=istio.authentication.v1alpha1.CredentialRule_Binding" json:"binding,omitempty"`
 	// If binding is USE_ORIGIN, this list refers the the origin authentication
@@ -388,12 +392,12 @@ type CredentialRule struct {
 	// At run time, each method will be evaluated in order, until the first valid.
 	// request.auth.principal will be set to the identity extracted from that
 	// valid certificate. If all methods are invalid, authentication should fail.
-	// This field should not be set if binding is USE_SOURCE.
+	// This field should not be set if binding is USE_PEER.
 	SelectedOriginMethods []string `protobuf:"bytes,2,rep,name=selected_origin_methods,json=selectedOriginMethods" json:"selected_origin_methods,omitempty"`
 	// Condition to activate the rule. If not empty, the rule will be activated
-	// if request come from one of these sources (identity).
+	// if request come from one of these peers (identity).
 	// Leave blank to activate the rule unconditionally.
-	MatchingSources []string `protobuf:"bytes,3,rep,name=matching_sources,json=matchingSources" json:"matching_sources,omitempty"`
+	MatchingPeers []string `protobuf:"bytes,3,rep,name=matching_peers,json=matchingPeers" json:"matching_peers,omitempty"`
 }
 
 func (m *CredentialRule) Reset()                    { *m = CredentialRule{} }
@@ -405,7 +409,7 @@ func (m *CredentialRule) GetBinding() CredentialRule_Binding {
 	if m != nil {
 		return m.Binding
 	}
-	return CredentialRule_USE_SOURCE
+	return CredentialRule_USE_PEER
 }
 
 func (m *CredentialRule) GetSelectedOriginMethods() []string {
@@ -415,20 +419,20 @@ func (m *CredentialRule) GetSelectedOriginMethods() []string {
 	return nil
 }
 
-func (m *CredentialRule) GetMatchingSources() []string {
+func (m *CredentialRule) GetMatchingPeers() []string {
 	if m != nil {
-		return m.MatchingSources
+		return m.MatchingPeers
 	}
 	return nil
 }
 
-// Policy defines what authentication methods can be accepted on workload(s), and
-// if authenticated, which method/certificate will set the request principal
+// Policy defines what authentication methods can be accepted on workload(s),
+// and if authenticated, which method/certificate will set the request principal
 // (i.e request.auth.principal attribute).
 //
 // Authentication policy is composed of 2-part authentication:
-// - source: verify caller service credentials. This part will set source.user
-// (source identity).
+// - peer: verify caller service credentials. This part will set source.user
+// (peer identity).
 // - origin: verify the origin credentials. This part will set request.auth.user
 // (origin identity), as well as other attributes like request.auth.presenter,
 // request.auth.audiences and raw claims. Note that the identity could be
@@ -436,7 +440,7 @@ func (m *CredentialRule) GetMatchingSources() []string {
 //
 // request.auth.principal will be assigned follow the credential rules. The
 // rule also dictates which origin authentication method(s) should run, based
-// on source identity.
+// on peer identity.
 //
 // Examples:
 // Policy to enable mTLS for all services in namespace frod
@@ -449,7 +453,7 @@ func (m *CredentialRule) GetMatchingSources() []string {
 //   namespace: frod
 // spec:
 //   destinations:
-//   sources:
+//   peers:
 //   - mtls: null
 // ```
 // Policy to disable mTLS for "productpage" service
@@ -463,7 +467,7 @@ func (m *CredentialRule) GetMatchingSources() []string {
 // spec:
 //   destinations:
 //   - name: productpage
-//   sources:
+//   peers:
 // ```
 // Policy to enable mTLS, and use JWT for productpage:9000.
 //
@@ -478,7 +482,7 @@ func (m *CredentialRule) GetMatchingSources() []string {
 //   - name: productpage
 //     port:
 //       number: 9000
-//   sources:
+//   peers:
 //   - mtls: null
 //   origins:
 //   - name: google_jwt
@@ -507,7 +511,7 @@ func (m *CredentialRule) GetMatchingSources() []string {
 //   - name: productpage
 //     port:
 //       number: 9000
-//   sources:
+//   peers:
 //   - mtls: null
 //   origins:
 //   - name: google_jwt
@@ -524,7 +528,7 @@ func (m *CredentialRule) GetMatchingSources() []string {
 //     - frontend.serviceaccount
 // ```
 //
-// Note that a credential rule that unconditional-use-source (identity)  is
+// Note that a credential rule that unconditional-use-peer (identity)  is
 // implicitly check if no rule match, so the above credentialRules is the same
 // as this:
 //
@@ -535,11 +539,11 @@ func (m *CredentialRule) GetMatchingSources() []string {
 //   - google_jwt
 //   matchingSources:
 //   - productpage.serviceaccount
-// - binding: USE_SOURCE
+// - binding: USE_PEER
 // ```
 //
 // Policy that enable mTLS, requires google JWT if caller is
-// frontend.serviceaccount, no JWT (i.e source authentication only) if caller
+// frontend.serviceaccount, no JWT (i.e peer authentication only) if caller
 // is admin, and istio JWT in all other cases.
 //
 // ```yaml
@@ -553,7 +557,7 @@ func (m *CredentialRule) GetMatchingSources() []string {
 //   - name: productpage
 //     port:
 //       number: 9000
-//   sources:
+//   peers:
 //   - mtls: null
 //   origins:
 //   - name: google_jwt
@@ -575,7 +579,7 @@ func (m *CredentialRule) GetMatchingSources() []string {
 //     - google_jwt
 //     matchingSources:
 //     - productpage.serviceaccount
-//   - binding: USE_SOURCE
+//   - binding: USE_PEER
 //     matchingSource:
 //     - admin
 //   - binding: USE_ORIGIN
@@ -595,20 +599,24 @@ type Policy struct {
 	Peers []*PeerMechanism `protobuf:"bytes,2,rep,name=peers" json:"peers,omitempty"`
 =======
 	Destinations []*istio_routing_v1alpha2.Destination `protobuf:"bytes,1,rep,name=destinations" json:"destinations,omitempty"`
-	// List of authentication methods that can be used for source authentication.
-	// They will be evaluated in order, until the first one satisfied; source
+	// List of authentication methods that can be used for peer authentication.
+	// They will be evaluated in order, until the first one satisfied; peer
 	// identity is then extracted from the associated certificate. On the other
 	// hand, if none of these methods pass, request should be rejected with
 	// authentication failed error (401).
-	// Leave the list empty if no source authentication is required, or have single
+	// Leave the list empty if no peer authentication is required, or have single
 	// entry of method 'None'. The source.user attribute will not be set in that
 	// case.
+<<<<<<< HEAD
 	Sources []*SourceAuthenticationMethod `protobuf:"bytes,2,rep,name=sources" json:"sources,omitempty"`
 <<<<<<< HEAD
 >>>>>>> Change message and field names. Add more examples.
 	// List of supported end-user authentication. Which one(s) are used for a specific
 	// request is decided at runtime, based on credential_rules bellow.
 =======
+=======
+	Peers []*PeerAuthenticationMethod `protobuf:"bytes,2,rep,name=peers" json:"peers,omitempty"`
+>>>>>>> Change source to peer for it sounds less confusing with origin in authentication context
 	// List of supported origin authentication methods. Which one(s) are used for
 	// a specific request is decided at runtime, based on credential_rules below.
 >>>>>>> Fix typos.
@@ -616,9 +624,9 @@ type Policy struct {
 	// Rules to define how request principal will be set. Each rule can have
 	// conditions that determine if the rule should be applied or not. The rule
 	// will be checked for matching conditions at runtime, in order, and stop at
-	// the first match. If there are no rule matching condtion, source identity
+	// the first match. If there are no rule matching condtion, peer identity
 	// will be used as principal (in other words, the credential rule with
-	// use_source = true with no matching condition is implicitly added to the end
+	// use_peer = true with no matching condition is implicitly added to the end
 	// of the list.)
 	CredentialRules []*CredentialRule `protobuf:"bytes,4,rep,name=credential_rules,json=credentialRules" json:"credential_rules,omitempty"`
 }
@@ -635,9 +643,9 @@ func (m *Policy) GetDestinations() []*istio_networking_v1alpha3.Destination {
 	return nil
 }
 
-func (m *Policy) GetSources() []*SourceAuthenticationMethod {
+func (m *Policy) GetPeers() []*PeerAuthenticationMethod {
 	if m != nil {
-		return m.Sources
+		return m.Peers
 	}
 	return nil
 }
@@ -660,7 +668,7 @@ func init() {
 	proto.RegisterType((*None)(nil), "istio.authentication.v1alpha1.None")
 	proto.RegisterType((*MutualTls)(nil), "istio.authentication.v1alpha1.MutualTls")
 	proto.RegisterType((*Jwt)(nil), "istio.authentication.v1alpha1.Jwt")
-	proto.RegisterType((*SourceAuthenticationMethod)(nil), "istio.authentication.v1alpha1.SourceAuthenticationMethod")
+	proto.RegisterType((*PeerAuthenticationMethod)(nil), "istio.authentication.v1alpha1.PeerAuthenticationMethod")
 	proto.RegisterType((*OriginAuthenticationMethod)(nil), "istio.authentication.v1alpha1.OriginAuthenticationMethod")
 	proto.RegisterType((*CredentialRule)(nil), "istio.authentication.v1alpha1.CredentialRule")
 	proto.RegisterType((*Policy)(nil), "istio.authentication.v1alpha1.Policy")
@@ -670,6 +678,7 @@ func init() {
 func init() { proto.RegisterFile("authentication/v1alpha1/policy.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -847,4 +856,43 @@ var fileDescriptor0 = []byte{
 	0x08, 0x30, 0xd1, 0x25, 0x0b, 0xd6, 0x5d, 0xf3, 0x64, 0xdd, 0x78, 0xfa, 0xa9, 0x79, 0xf9, 0x2b,
 	0x00, 0x00, 0xff, 0xff, 0x2a, 0x4c, 0xd0, 0x18, 0xd4, 0x04, 0x00, 0x00,
 >>>>>>> Change credential rules to use enum to define principal binding.
+=======
+	// 576 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x94, 0x51, 0x6f, 0xd3, 0x30,
+	0x10, 0xc7, 0x97, 0xa6, 0xa4, 0xeb, 0x75, 0x94, 0xc9, 0x12, 0x10, 0x26, 0x26, 0x46, 0x18, 0xd0,
+	0x17, 0x52, 0x2d, 0xc0, 0xd0, 0x5e, 0x90, 0x28, 0x54, 0xeb, 0x26, 0x75, 0xad, 0x3c, 0x26, 0x21,
+	0x5e, 0x22, 0x2f, 0x31, 0xad, 0x4b, 0xea, 0x44, 0xb1, 0x43, 0xc4, 0x17, 0xe1, 0x6b, 0xf1, 0xc8,
+	0x67, 0xe0, 0x5b, 0x20, 0xdb, 0xcd, 0x46, 0x25, 0x4a, 0xe1, 0xad, 0x77, 0xbd, 0xff, 0xdf, 0xf9,
+	0xdd, 0x9d, 0x0d, 0xfb, 0xa4, 0x90, 0x53, 0xca, 0x25, 0x8b, 0x88, 0x64, 0x29, 0xef, 0x7e, 0x39,
+	0x20, 0x49, 0x36, 0x25, 0x07, 0xdd, 0x2c, 0x4d, 0x58, 0xf4, 0xd5, 0xcf, 0xf2, 0x54, 0xa6, 0x68,
+	0x97, 0x09, 0xc9, 0x52, 0x7f, 0xb9, 0xd6, 0xaf, 0x6a, 0x77, 0x1e, 0xe6, 0x69, 0x21, 0x19, 0x9f,
+	0x54, 0xea, 0xa0, 0xab, 0x12, 0x34, 0xcc, 0x8b, 0x84, 0x1a, 0x07, 0xcf, 0x81, 0xfa, 0x59, 0xca,
+	0xa9, 0xd7, 0x82, 0xe6, 0xb0, 0x90, 0x05, 0x49, 0xde, 0x27, 0xc2, 0xfb, 0x66, 0x81, 0x7d, 0x5a,
+	0x4a, 0x74, 0x07, 0x1c, 0x26, 0x44, 0x41, 0x73, 0xd7, 0xda, 0xb3, 0x3a, 0x4d, 0xbc, 0x88, 0xd0,
+	0x7d, 0x68, 0x92, 0x22, 0x66, 0x94, 0x47, 0x54, 0xb8, 0xb5, 0x3d, 0xbb, 0xd3, 0xc4, 0xd7, 0x09,
+	0x74, 0x0f, 0x36, 0x67, 0xe5, 0x67, 0x11, 0x16, 0x39, 0x73, 0x6d, 0xad, 0x6b, 0xa8, 0xf8, 0x22,
+	0x67, 0xe8, 0x01, 0xb4, 0x66, 0xa5, 0x0c, 0xa7, 0x94, 0xc4, 0x34, 0x17, 0xae, 0xa3, 0xa5, 0x30,
+	0x2b, 0xe5, 0xc0, 0x64, 0xd0, 0x2e, 0xa8, 0x28, 0xcc, 0x48, 0x4e, 0xe6, 0xc2, 0x6d, 0x18, 0xeb,
+	0x59, 0x29, 0xc7, 0x3a, 0xe1, 0xfd, 0xb0, 0xc0, 0x1d, 0x53, 0x9a, 0xbf, 0x59, 0x02, 0x1e, 0x52,
+	0x39, 0x4d, 0x63, 0x74, 0x04, 0x75, 0x9e, 0x72, 0xaa, 0xbf, 0xb5, 0x15, 0x3c, 0xf2, 0xff, 0xda,
+	0x1b, 0x5f, 0x51, 0x0f, 0x36, 0xb0, 0x96, 0xa0, 0xd7, 0x50, 0x9f, 0xcb, 0x44, 0xb1, 0x28, 0x69,
+	0x67, 0x8d, 0xf4, 0xaa, 0x51, 0x4a, 0xaf, 0x74, 0xe8, 0x10, 0xec, 0x59, 0x29, 0x35, 0x6d, 0x2b,
+	0xf0, 0xd6, 0xc8, 0x4f, 0x4b, 0x39, 0xd8, 0xc0, 0x4a, 0xd0, 0xdb, 0x04, 0xc7, 0xa0, 0x7a, 0x9f,
+	0x60, 0x67, 0x94, 0xb3, 0x09, 0xe3, 0x7f, 0x44, 0x43, 0x50, 0xe7, 0x64, 0x4e, 0x17, 0x63, 0xd0,
+	0xbf, 0xd1, 0x0b, 0x73, 0x66, 0xed, 0x5f, 0xcf, 0xd4, 0x27, 0x7a, 0x3f, 0x2d, 0x68, 0xbf, 0xcd,
+	0x69, 0xac, 0x8a, 0x48, 0x82, 0x8b, 0x84, 0xa2, 0x11, 0x34, 0x2e, 0x19, 0x8f, 0x19, 0x9f, 0x68,
+	0xff, 0x76, 0xf0, 0x72, 0x8d, 0xd9, 0xb2, 0xde, 0xef, 0x19, 0x31, 0xae, 0x5c, 0xd0, 0x21, 0xdc,
+	0x15, 0x34, 0xa1, 0x91, 0xa4, 0x71, 0x98, 0x6a, 0xa8, 0x70, 0xae, 0x39, 0xaa, 0x65, 0xb9, 0x5d,
+	0xfd, 0x6d, 0x90, 0x0d, 0xa4, 0x40, 0x8f, 0xa1, 0x3d, 0x27, 0x32, 0x9a, 0x32, 0x3e, 0x09, 0x33,
+	0xaa, 0x16, 0xc4, 0xd6, 0xe5, 0x37, 0xab, 0xac, 0x1a, 0xbd, 0xf0, 0x9e, 0x42, 0x63, 0x71, 0x24,
+	0xda, 0x82, 0xcd, 0x8b, 0xf3, 0x7e, 0x38, 0xee, 0xf7, 0xf1, 0xf6, 0x06, 0x6a, 0x03, 0xa8, 0x68,
+	0x84, 0x4f, 0x8e, 0x4f, 0xce, 0xb6, 0x2d, 0xef, 0x7b, 0x0d, 0x9c, 0xb1, 0xbe, 0x2e, 0xe8, 0x18,
+	0xb6, 0x62, 0x2a, 0x24, 0xe3, 0x1a, 0x45, 0xb8, 0xd6, 0x9e, 0xfd, 0xdb, 0x8e, 0x2c, 0xae, 0x49,
+	0x45, 0x18, 0xf8, 0xef, 0xae, 0x6b, 0xf1, 0x92, 0x10, 0x0d, 0xe1, 0x86, 0xf9, 0xb4, 0x9a, 0x76,
+	0x78, 0xb5, 0xa6, 0x55, 0xab, 0x96, 0x15, 0x1b, 0x17, 0x74, 0x0e, 0x0d, 0xd3, 0x21, 0xc3, 0xda,
+	0x0a, 0x8e, 0xd6, 0x18, 0xae, 0x5e, 0x12, 0x5c, 0x39, 0xa1, 0x0f, 0xb0, 0x1d, 0x5d, 0x8d, 0x48,
+	0x5f, 0x76, 0xe1, 0xd6, 0xb5, 0xfb, 0xb3, 0xff, 0x9a, 0x2c, 0xbe, 0x15, 0x2d, 0xc5, 0xa2, 0xf7,
+	0xe4, 0xe3, 0xbe, 0x31, 0x60, 0x69, 0x97, 0x64, 0xac, 0xbb, 0xe2, 0x91, 0xba, 0x74, 0xf4, 0xe3,
+	0xf2, 0xfc, 0x57, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0xc5, 0x0b, 0xfd, 0xc6, 0x04, 0x00, 0x00,
+>>>>>>> Change source to peer for it sounds less confusing with origin in authentication context
 }

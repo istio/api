@@ -27,7 +27,7 @@ conditionally, based on matching condition (currently use only peer identity)</p
 <td><code>binding</code></td>
 <td><code><a href="#CredentialRule.Binding">CredentialRule.Binding</a></code></td>
 <td>
-<p>Defines which authentication (source vs origin) will be binded to
+<p>Defines which authentication (peer vs origin) will be binded to
 request principal.</p>
 
 </td>
@@ -42,16 +42,16 @@ include all origin authentication  methods defined in the policy).
 At run time, each method will be evaluated in order, until the first valid.
 request.auth.principal will be set to the identity extracted from that
 valid certificate. If all methods are invalid, authentication should fail.
-This field should not be set if binding is USE</em>SOURCE.</p>
+This field should not be set if binding is USE</em>PEER.</p>
 
 </td>
 </tr>
-<tr id="CredentialRule.matching_sources">
-<td><code>matchingSources</code></td>
+<tr id="CredentialRule.matching_peers">
+<td><code>matchingPeers</code></td>
 <td><code>string[]</code></td>
 <td>
 <p>Condition to activate the rule. If not empty, the rule will be activated
-if request come from one of these sources (identity).
+if request come from one of these peers (identity).
 Leave blank to activate the rule unconditionally.</p>
 
 </td>
@@ -71,10 +71,10 @@ Leave blank to activate the rule unconditionally.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="CredentialRule.Binding.USE_SOURCE">
-<td><code>USE_SOURCE</code></td>
+<tr id="CredentialRule.Binding.USE_PEER">
+<td><code>USE_PEER</code></td>
 <td>
-<p>Principal will be set to the identity from source authentication.</p>
+<p>Principal will be set to the identity from peer authentication.</p>
 
 </td>
 </tr>
@@ -204,9 +204,9 @@ query parameter name.</p>
 <h2 id="OriginAuthenticationMethod">OriginAuthenticationMethod</h2>
 <section>
 <p>OriginAuthenticationMethod defines authentication method/params for origin
-authentication. Origin could be end-user, device, delegate service etc. Method
-should have unique name so they can be referred later in credential rules.
-Currently, only JWT is supported for origin authentication.</p>
+authentication. Origin could be end-user, device, delegate service etc.
+Method should have unique name so they can be referred later in credential
+rules. Currently, only JWT is supported for origin authentication.</p>
 
 <table class="message-fields">
 <thead>
@@ -236,15 +236,60 @@ Currently, only JWT is supported for origin authentication.</p>
 </tbody>
 </table>
 </section>
+<h2 id="PeerAuthenticationMethod">PeerAuthenticationMethod</h2>
+<section>
+<p>PeerAuthenticationMethod defines one particular type of authentication, e.g
+mutual TLS, JWT etc, (no authentication is one type by itself) that can
+be used for peer authentication.
+The type can be progammatically determine by checking the type of the
+&ldquo;params&rdquo; field.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PeerAuthenticationMethod.none" class="oneof oneof-start">
+<td><code>none</code></td>
+<td><code><a href="#None">None (oneof)</a></code></td>
+<td>
+<p>Set if authentication is not required. This is typically used to indicate
+other methods are optional.</p>
+
+</td>
+</tr>
+<tr id="PeerAuthenticationMethod.mtls" class="oneof">
+<td><code>mtls</code></td>
+<td><code><a href="#MutualTls">MutualTls (oneof)</a></code></td>
+<td>
+<p>Set if mTLS is used.</p>
+
+</td>
+</tr>
+<tr id="PeerAuthenticationMethod.jwt" class="oneof">
+<td><code>jwt</code></td>
+<td><code><a href="#Jwt">Jwt (oneof)</a></code></td>
+<td>
+<p>Set if JWT is used.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="Policy">Policy</h2>
 <section>
-<p>Policy defines what authentication methods can be accepted on workload(s), and
-if authenticated, which method/certificate will set the request principal
+<p>Policy defines what authentication methods can be accepted on workload(s),
+and if authenticated, which method/certificate will set the request principal
 (i.e request.auth.principal attribute).</p>
 
 <p>Authentication policy is composed of 2-part authentication:
-- source: verify caller service credentials. This part will set source.user
-(source identity).
+- peer: verify caller service credentials. This part will set source.user
+(peer identity).
 - origin: verify the origin credentials. This part will set request.auth.user
 (origin identity), as well as other attributes like request.auth.presenter,
 request.auth.audiences and raw claims. Note that the identity could be
@@ -252,7 +297,7 @@ end-user, service account, device etc.</p>
 
 <p>request.auth.principal will be assigned follow the credential rules. The
 rule also dictates which origin authentication method(s) should run, based
-on source identity.</p>
+on peer identity.</p>
 
 <p>Examples:
 Policy to enable mTLS for all services in namespace frod</p>
@@ -264,7 +309,7 @@ metadata:
   namespace: frod
 spec:
   destinations:
-  sources:
+  peers:
   - mtls: null
 </code></pre>
 
@@ -278,7 +323,7 @@ metadata:
 spec:
   destinations:
   - name: productpage
-  sources:
+  peers:
 </code></pre>
 
 <p>Policy to enable mTLS, and use JWT for productpage:9000.</p>
@@ -293,7 +338,7 @@ spec:
   - name: productpage
     port:
       number: 9000
-  sources:
+  peers:
   - mtls: null
   origins:
   - name: google_jwt
@@ -321,7 +366,7 @@ spec:
   - name: productpage
     port:
       number: 9000
-  sources:
+  peers:
   - mtls: null
   origins:
   - name: google_jwt
@@ -338,7 +383,7 @@ spec:
     - frontend.serviceaccount
 </code></pre>
 
-<p>Note that a credential rule that unconditional-use-source (identity)  is
+<p>Note that a credential rule that unconditional-use-peer (identity)  is
 implicitly check if no rule match, so the above credentialRules is the same
 as this:</p>
 
@@ -348,11 +393,11 @@ as this:</p>
   - google_jwt
   matchingSources:
   - productpage.serviceaccount
-- binding: USE_SOURCE
+- binding: USE_PEER
 </code></pre>
 
 <p>Policy that enable mTLS, requires google JWT if caller is
-frontend.serviceaccount, no JWT (i.e source authentication only) if caller
+frontend.serviceaccount, no JWT (i.e peer authentication only) if caller
 is admin, and istio JWT in all other cases.</p>
 
 <pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
@@ -365,7 +410,7 @@ spec:
   - name: productpage
     port:
       number: 9000
-  sources:
+  peers:
   - mtls: null
   origins:
   - name: google_jwt
@@ -387,7 +432,7 @@ spec:
     - google_jwt
     matchingSources:
     - productpage.serviceaccount
-  - binding: USE_SOURCE
+  - binding: USE_PEER
     matchingSource:
     - admin
   - binding: USE_ORIGIN
@@ -413,16 +458,16 @@ If empty, policy will be used on all destinations in the same namespace.</p>
 
 </td>
 </tr>
-<tr id="Policy.sources">
-<td><code>sources</code></td>
-<td><code><a href="#SourceAuthenticationMethod">SourceAuthenticationMethod[]</a></code></td>
+<tr id="Policy.peers">
+<td><code>peers</code></td>
+<td><code><a href="#PeerAuthenticationMethod">PeerAuthenticationMethod[]</a></code></td>
 <td>
-<p>List of authentication methods that can be used for source authentication.
-They will be evaluated in order, until the first one satisfied; source
+<p>List of authentication methods that can be used for peer authentication.
+They will be evaluated in order, until the first one satisfied; peer
 identity is then extracted from the associated certificate. On the other
 hand, if none of these methods pass, request should be rejected with
 authentication failed error (401).
-Leave the list empty if no source authentication is required, or have single
+Leave the list empty if no peer authentication is required, or have single
 entry of method &lsquo;None&rsquo;. The source.user attribute will not be set in that
 case.</p>
 
@@ -444,9 +489,9 @@ a specific request is decided at runtime, based on credential_rules below.</p>
 <p>Rules to define how request principal will be set. Each rule can have
 conditions that determine if the rule should be applied or not. The rule
 will be checked for matching conditions at runtime, in order, and stop at
-the first match. If there are no rule matching condtion, source identity
+the first match. If there are no rule matching condtion, peer identity
 will be used as principal (in other words, the credential rule with
-use_source = true with no matching condition is implicitly added to the end
+use_peer = true with no matching condition is implicitly added to the end
 of the list.)</p>
 
 </td>
@@ -454,6 +499,7 @@ of the list.)</p>
 </tbody>
 </table>
 </section>
+<<<<<<< HEAD
 <h2 id="SourceAuthenticationMethod">SourceAuthenticationMethod</h2>
 <section>
 <p>SourceAuthenticationMethod defines one particular type of authentication, e.g
@@ -500,6 +546,9 @@ other methods are optional.</p>
 </table>
 </section>
 <h2 id="istio.networking.v1alpha3.Destination">istio.networking.v1alpha3.Destination</h2>
+=======
+<h2 id="istio.routing.v1alpha2.Destination">istio.routing.v1alpha2.Destination</h2>
+>>>>>>> Change source to peer for it sounds less confusing with origin in authentication context
 <section>
 <p>Destination indicates the network addressable service to which the
 request/connection will be sent after processing a routing rule. The
