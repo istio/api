@@ -200,9 +200,7 @@ func (m *PeerAuthenticationMethod) String() string            { return proto.Com
 func (*PeerAuthenticationMethod) ProtoMessage()               {}
 func (*PeerAuthenticationMethod) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
 
-type isPeerAuthenticationMethod_Params interface {
-	isPeerAuthenticationMethod_Params()
-}
+type isPeerAuthenticationMethod_Params interface{ isPeerAuthenticationMethod_Params() }
 
 type PeerAuthenticationMethod_None struct {
 	None *None `protobuf:"bytes,1,opt,name=none,oneof"`
