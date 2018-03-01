@@ -31,13 +31,12 @@ request principal.</p>
 
 </td>
 </tr>
-<tr id="CredentialRule.selected_origin_methods">
-<td><code>selectedOriginMethods</code></td>
-<td><code>string[]</code></td>
+<tr id="CredentialRule.origins">
+<td><code>origins</code></td>
+<td><code><a href="#OriginAuthenticationMethod">OriginAuthenticationMethod[]</a></code></td>
 <td>
-<p>This list refers the origin authentication methods that should be
-considered for the rule (use special entry &ldquo;*&rdquo; to  include all origin
-authentication methods defined in the policy).
+<p>This list of origin authentication methods that should be
+considered for the rule.
 At run time, each method will be evaluated in order, until the first valid
 (if none success, request should be rejected).
 If binding is USE_ORIGIN, request.auth.principal attribute will be set to
@@ -50,7 +49,7 @@ the identity extracted from that valid certificate.</p>
 <td><code>string[]</code></td>
 <td>
 <p>Condition to activate the rule. If not empty, the rule will be activated
-if request come from one of these peers (identity).
+if the request comes from one of these peers (identity).
 Leave blank to activate the rule unconditionally.</p>
 
 </td>
@@ -216,14 +215,6 @@ rules. Currently, only JWT is supported for origin authentication.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="OriginAuthenticationMethod.name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>Name that can be used to refer to this mechanism.</p>
-
-</td>
-</tr>
 <tr id="OriginAuthenticationMethod.jwt">
 <td><code>jwt</code></td>
 <td><code><a href="#Jwt">Jwt</a></code></td>
@@ -339,17 +330,16 @@ spec:
       number: 9000
   peers:
   - mtls: null
-  origins:
-  - name: google_jwt
-    jwt:
-      issuer: &quot;https://securetoken.google.com&quot;
-      audiences:
-      - &quot;productpage&quot;
-      jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
-      locations:
-      - header: x-goog-iap-jwt-assertion
   credentialRules:
   - binding: USE_ORIGIN
+    origins:
+      jwt:
+        issuer: &quot;https://securetoken.google.com&quot;
+        audiences:
+        - &quot;productpage&quot;
+        jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
+        locations:
+        - header: x-goog-iap-jwt-assertion
 </code></pre>
 
 <p>Policy to enable mTLS, and use JWT for productpage:9000 only when caller is
@@ -367,21 +357,18 @@ spec:
       number: 9000
   peers:
   - mtls: null
-  origins:
-  - name: google_jwt
-    jwt:
-      issuer: &quot;https://securetoken.google.com&quot;
-      audiences:
-      - &quot;productpage&quot;
-      jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
-      locations:
-      - header: x-goog-iap-jwt-assertion
   credentialRules:
   - binding: USE_ORIGIN
     matchingSources:
     - frontend.serviceaccount
-    selected_origin_methods:
-    - &quot;*&quot;
+    origins:
+    - jwt:
+        issuer: &quot;https://securetoken.google.com&quot;
+        audiences:
+        - &quot;productpage&quot;
+        jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
+        locations:
+        - header: x-goog-iap-jwt-assertion
 </code></pre>
 
 <p>Note that a credential rule that unconditional-use-peer (identity)  is
@@ -394,8 +381,9 @@ as this:</p>
   - google_jwt
   matchingSources:
   - productpage.serviceaccount
-    selected_origin_methods:
-    - &quot;*&quot;
+  origins:
+  - jwt:
+    ...
 - binding: USE_PEER
 </code></pre>
 
@@ -417,30 +405,28 @@ spec:
   - mtls: null
   origins:
   - name: google_jwt
-    jwt:
-      issuer: &quot;https://securetoken.google.com&quot;
-      audiences:
-      - &quot;productpage&quot;
-      jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
-      locations:
-      - header: x-goog-iap-jwt-assertion
   - name: istio_jwt
-    jwt:
-      issuer: &quot;https://securetoken.istio.io&quot;
-      locations:
-      - header: x-istio-jwt-assertion
   credentialRules:
   - binding: USE_ORIGIN
-    selectedOriginMethods:
-    - google_jwt
+    orgins:
+    - jwt:
+        issuer: &quot;https://securetoken.google.com&quot;
+        audiences:
+        - &quot;productpage&quot;
+        jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
+        locations:
+        - header: x-goog-iap-jwt-assertion
     matchingSources:
     - productpage.serviceaccount
   - binding: USE_PEER
     matchingSource:
     - admin
   - binding: USE_ORIGIN
-    selectedOriginMethods:
-    - istio_jwt
+    origins:
+    - jwt:
+        issuer: &quot;https://securetoken.istio.io&quot;
+        locations:
+        - header: x-istio-jwt-assertion
 </code></pre>
 
 <table class="message-fields">
@@ -473,15 +459,6 @@ authentication failed error (401).
 Leave the list empty if no peer authentication is required, or have single
 entry of method &lsquo;None&rsquo;. The source.user attribute will not be set in that
 case.</p>
-
-</td>
-</tr>
-<tr id="Policy.origins">
-<td><code>origins</code></td>
-<td><code><a href="#OriginAuthenticationMethod">OriginAuthenticationMethod[]</a></code></td>
-<td>
-<p>List of supported origin authentication methods. Which one(s) are used for
-a specific request is decided at runtime, based on credential_rules below.</p>
 
 </td>
 </tr>
