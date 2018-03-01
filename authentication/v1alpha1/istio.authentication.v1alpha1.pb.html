@@ -36,13 +36,13 @@ request principal.</p>
 <td><code>selectedOriginMethods</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>If binding is USE<em>ORIGIN, this list refers the the origin authentication
-methods should be considered for the rule (leave the field emtpy to
-include all origin authentication  methods defined in the policy).
-At run time, each method will be evaluated in order, until the first valid.
-request.auth.principal will be set to the identity extracted from that
-valid certificate. If all methods are invalid, authentication should fail.
-This field should not be set if binding is USE</em>PEER.</p>
+<p>This list refers the origin authentication methods that should be
+considered for the rule (use special entry &ldquo;*&rdquo; to  include all origin
+authentication methods defined in the policy).
+At run time, each method will be evaluated in order, until the first valid
+(if none success, request should be rejected).
+If binding is USE_ORIGIN, request.auth.principal attribute will be set to
+the identity extracted from that valid certificate.</p>
 
 </td>
 </tr>
@@ -381,6 +381,8 @@ spec:
   - binding: USE_ORIGIN
     matchingSources:
     - frontend.serviceaccount
+    selected_origin_methods:
+    - &quot;*&quot;
 </code></pre>
 
 <p>Note that a credential rule that unconditional-use-peer (identity)  is
@@ -393,6 +395,8 @@ as this:</p>
   - google_jwt
   matchingSources:
   - productpage.serviceaccount
+    selected_origin_methods:
+    - &quot;*&quot;
 - binding: USE_PEER
 </code></pre>
 
@@ -491,7 +495,7 @@ conditions that determine if the rule should be applied or not. The rule
 will be checked for matching conditions at runtime, in order, and stop at
 the first match. If there are no rule matching condtion, peer identity
 will be used as principal (in other words, the credential rule with
-use_peer = true with no matching condition is implicitly added to the end
+USE_PEER with no matching condition is implicitly added to the end
 of the list.)</p>
 
 </td>
@@ -499,6 +503,7 @@ of the list.)</p>
 </tbody>
 </table>
 </section>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <h2 id="SourceAuthenticationMethod">SourceAuthenticationMethod</h2>
 <section>
@@ -549,6 +554,9 @@ other methods are optional.</p>
 =======
 <h2 id="istio.routing.v1alpha2.Destination">istio.routing.v1alpha2.Destination</h2>
 >>>>>>> Change source to peer for it sounds less confusing with origin in authentication context
+=======
+<h2 id="istio.networking.v1alpha3.Destination">istio.networking.v1alpha3.Destination</h2>
+>>>>>>> Update documentation. Update Destination proto to new location.
 <section>
 <p>Destination indicates the network addressable service to which the
 request/connection will be sent after processing a routing rule. The
