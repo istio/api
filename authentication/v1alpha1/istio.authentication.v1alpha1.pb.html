@@ -503,60 +503,7 @@ of the list.)</p>
 </tbody>
 </table>
 </section>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<h2 id="SourceAuthenticationMethod">SourceAuthenticationMethod</h2>
-<section>
-<p>SourceAuthenticationMethod defines one particular type of authentication, e.g
-mutual TLS, JWT etc, (no authentication is one type by itself) that can
-be used for peer authentication.
-The type can be progammatically determine by checking the type of the
-&ldquo;params&rdquo; field.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="SourceAuthenticationMethod.none" class="oneof oneof-start">
-<td><code>none</code></td>
-<td><code><a href="#None">None (oneof)</a></code></td>
-<td>
-<p>Set if authentication is not required. This is typically used to indicate
-other methods are optional.</p>
-
-</td>
-</tr>
-<tr id="SourceAuthenticationMethod.mtls" class="oneof">
-<td><code>mtls</code></td>
-<td><code><a href="#MutualTls">MutualTls (oneof)</a></code></td>
-<td>
-<p>Set if mTLS is used.</p>
-
-</td>
-</tr>
-<tr id="SourceAuthenticationMethod.jwt" class="oneof">
-<td><code>jwt</code></td>
-<td><code><a href="#Jwt">Jwt (oneof)</a></code></td>
-<td>
-<p>Set if JWT is used.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="istio.networking.v1alpha3.Destination">istio.networking.v1alpha3.Destination</h2>
-=======
-<h2 id="istio.routing.v1alpha2.Destination">istio.routing.v1alpha2.Destination</h2>
->>>>>>> Change source to peer for it sounds less confusing with origin in authentication context
-=======
-<h2 id="istio.networking.v1alpha3.Destination">istio.networking.v1alpha3.Destination</h2>
->>>>>>> Update documentation. Update Destination proto to new location.
 <section>
 <p>Destination indicates the network addressable service to which the
 request/connection will be sent after processing a routing rule. The
