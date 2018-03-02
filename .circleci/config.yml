@@ -11,7 +11,6 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - setup_remote_docker
       - run:
           command: |
             ./scripts/generate-protos.sh || die "could not generate *.pb.go"
