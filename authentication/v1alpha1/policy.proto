@@ -103,13 +103,13 @@ message Jwt {
   //
   // For example, if `header=x-goog-iap-jwt-assertion`, the header
   // format will be x-goog-iap-jwt-assertion: <JWT>.
-  repeated string jwt_headers = 6;
+  repeated string jwt_headers = 4;
 
   // JWT is sent in a query parameter. `query` represents the
   // query parameter name.
   //
   // For example, `query=jwt_token`.
-  repeated string jwt_params = 7;
+  repeated string jwt_params = 5;
 }
 
 // PeerAuthenticationMethod defines one particular type of authentication, e.g
