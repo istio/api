@@ -4,7 +4,7 @@ all: generate
 # protoc args
 ########################
 
-gen_img := gcr.io/istio-testing/protoc:2018-03-02
+gen_img := gcr.io/istio-testing/protoc:2018-03-03
 
 out_path := .
 pwd := $(shell pwd)
