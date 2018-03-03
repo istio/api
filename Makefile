@@ -1,17 +1,24 @@
 all: generate
 
 ########################
-# protoc args
+# docker_gen
 ########################
 
+# Use a different generation mechanism when running from the
+# image itself
+ifdef CIRCLECI
+repo_dir = .
+docker_gen = /usr/bin/protoc -I/protobuf -I$(repo_dir)
+else
 gen_img := gcr.io/istio-testing/protoc:2018-03-03
-
-out_path := .
 pwd := $(shell pwd)
 mount_dir := /src
 repo_dir := istio.io/api
 repo_mount := $(mount_dir)/istio.io/api
-proto_path := -I$(repo_dir)
+docker_gen := docker run --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(gen_img) -I$(repo_dir)
+endif
+
+out_path := .
 
 ########################
 # protoc_gen_go
@@ -53,16 +60,6 @@ gogoslick_plugin := $(gogoslick_plugin_prefix)$(gogo_mapping):$(out_path)
 ########################
 
 protoc_gen_docs_plugin := --docs_out=warnings=true,mode=jekyll_html:$(repo_dir)/
-
-########################
-# docker generate
-########################
-
-ifdef CIRCLECI
-docker_gen = /usr/bin/protoc -I/protobuf -I.
-else
-docker_gen := docker run --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(gen_img) $(proto_path)
-endif
 
 #####################
 # Generation Rules
