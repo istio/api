@@ -1,8 +1,8 @@
 version: 2
 defaults: &defaults
-  working_directory: /go/src/istio.io/api
+  working_directory: /src/istio.io/api
   docker:
-    - image: istio/ci:go1.10-k8s1.9-helm2.7.2-minikube0.25
+    - image: gcr.io/istio-testing/protoc:2018-03-02
   environment:
     GOPATH: /go
 
@@ -11,7 +11,6 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - setup_remote_docker
       - run:
           command: |
             ./scripts/generate-protos.sh || die "could not generate *.pb.go"

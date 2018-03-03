@@ -58,7 +58,11 @@ protoc_gen_docs_plugin := --docs_out=warnings=true,mode=jekyll_html:$(repo_dir)/
 # docker generate
 ########################
 
+ifdef CIRCLECI
+docker_gen = /usr/bin/protoc -I/protobuf -I.
+else
 docker_gen := docker run --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(gen_img) $(proto_path)
+endif
 
 #####################
 # Generation Rules
