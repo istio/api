@@ -9,6 +9,7 @@ all: generate
 ifdef CIRCLECI
 repo_dir = .
 docker_gen = /usr/bin/protoc -I/protobuf -I$(repo_dir)
+out_path = $(OUT_PATH)
 else
 gen_img := gcr.io/istio-testing/protoc:2018-03-03
 pwd := $(shell pwd)
@@ -16,9 +17,9 @@ mount_dir := /src
 repo_dir := istio.io/api
 repo_mount := $(mount_dir)/istio.io/api
 docker_gen := docker run --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(gen_img) -I$(repo_dir)
+out_path = .
 endif
 
-out_path := .
 
 ########################
 # protoc_gen_go

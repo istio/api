@@ -5,6 +5,7 @@ defaults: &defaults
     - image: gcr.io/istio-testing/protoc:2018-03-03
   environment:
     GOPATH: /go
+    OUT_PATH: /src
 
 jobs:
   build:
