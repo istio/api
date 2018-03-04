@@ -45,7 +45,7 @@ RUN upx --lzma \
         /out/usr/bin/protoc-gen-*
 
 FROM alpine:3.7
-RUN apk add --no-cache libstdc++ make bash
+RUN apk add --update --no-cache libstdc++ make bash git openssh
 COPY --from=packer /out/ /
 
 RUN apk add --no-cache curl && \
