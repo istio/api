@@ -20,8 +20,7 @@ kind: DestinationRule
 metadata:
   name: bookinfo-redis
 spec:
-  destination:
-    name: myredissrv
+  name: myredissrv
   trafficPolicy:
     connectionPool:
       tcp:
@@ -628,10 +627,10 @@ kind: DestinationRule
 metadata:
   name: tls-example
 spec:
-  destination:
-    name: example.com
-  tls:
-    mode: simple # initiates HTTPS when talking to example.com
+  name: example.com
+  trafficPolicy:
+    tls:
+      mode: SIMPLE # initiates HTTPS when talking to example.com
 </code></pre>
 
 <p>The following specification specifies a static set of backend nodes for
@@ -662,13 +661,13 @@ kind: DestinationRule
 metadata:
   name: mtls-mongocluster
 spec:
-  destination:
-    name: 192.192.192.192/24
-  tls:
-    mode: mutual
-    clientCertificate: /etc/certs/myclientcert.pem
-    privateKey: /etc/certs/client_private_key.pem
-    caCertificates: /etc/certs/rootcacerts.pem
+  name: 192.192.192.192/24
+  trafficPolicy:
+    tls:
+      mode: MUTUAL
+      clientCertificate: /etc/certs/myclientcert.pem
+      privateKey: /etc/certs/client_private_key.pem
+      caCertificates: /etc/certs/rootcacerts.pem
 </code></pre>
 
 <p>The following example demonstrates the use of wildcards in the hosts. If
@@ -729,10 +728,10 @@ kind: DestinationRule
 metadata:
   name: tls-foobar
 spec:
-  destination:
-    name: foo.bar.com
-  tls:
-    mode: simple # initiates HTTPS
+  name: foo.bar.com
+  trafficPolicy:
+    tls:
+      mode: SIMPLE # initiates HTTPS
 </code></pre>
 
 <p>With HTTP_PROXY=http://localhost:443, calls from the application to
@@ -1936,8 +1935,7 @@ kind: DestinationRule
 metadata:
   name: reviews-cb-policy
 spec:
-  destination:
-    name: reviews
+  name: reviews
   trafficPolicy:
     connectionPool:
       tcp:
@@ -2496,13 +2494,13 @@ kind: DestinationRule
 metadata:
   name: db-mtls
 spec:
-  destination:
-    name: mydbserver
-  tls:
-    mode: MUTUAL
-    clientCertificate: /etc/certs/myclientcert.pem
-    privateKey: /etc/certs/client_private_key.pem
-    caCertificates: /etc/certs/rootcacerts.pem
+  name: mydbserver
+  trafficPolicy:
+    tls:
+      mode: MUTUAL
+      clientCertificate: /etc/certs/myclientcert.pem
+      privateKey: /etc/certs/client_private_key.pem
+      caCertificates: /etc/certs/rootcacerts.pem
 </code></pre>
 
 <p>The following rule configures a client to use TLS when talking to a foreign service whose domain matches *.foo.com.</p>
@@ -2512,10 +2510,10 @@ kind: DestinationRule
 metadata:
   name: tls-foo
 spec:
-  destination:
-    name: *.foo.com
-  tls:
-    mode: SIMPLE
+  name: *.foo.com
+  trafficPolicy:
+    tls:
+      mode: SIMPLE
 </code></pre>
 
 <table class="message-fields">
