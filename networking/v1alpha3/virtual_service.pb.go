@@ -87,7 +87,7 @@ type VirtualService struct {
 	// platform.
 	//
 	// For example on Kubernetes, when hosts contains a short name, Istio will
-	// interpret the short name based on the namespace of the rule.  Thus, when a
+	// interpret the short name based on the namespace of the rule. Thus, when a
 	// client namespace applies a rule in the "default" namespace containing a name
 	// "reviews, Istio will setup routes to the "reviews.default.svc.cluster.local"
 	// service. However, if a different name such as "reviews.sales.svc.cluster.local"
@@ -222,7 +222,7 @@ func (m *VirtualService) GetTcp() []*TCPRoute {
 //           version: v2
 //
 // The following VirtualService sets a timeout of 5s for all calls to
-// productpage.prod service.  Notice that there are no subsets defined in
+// productpage.prod service. Notice that there are no subsets defined in
 // this rule. Istio will fetch all instances of productpage.prod service
 // from the service registry and populate the sidecar's load balancing
 // pool.
@@ -262,15 +262,14 @@ type Destination struct {
 	// address.
 	//
 	// If short names are used, the FQDN of the service will be resolved in a
-	// platform specific manner.  For example in Kubernetes, when a route with a
+	// platform specific manner. For example in Kubernetes, when a route with a
 	// short name "reviews" in the destination in namespace "bookinfo" is applied
 	// to a client in , the final destination is resolved to
 	// reviews.bookinfo.svc.cluster.local. The sidecar will route to the IP
 	// addresses of the pods constituting the service. However, if the lookup
 	// fails, "reviews" is treated as an external service, such that the sidecar
 	// will dynamically resolve the DNS of the service name and route the request
-	// to the IP addresses
-	// returned by the DNS.
+	// to the IP addresses returned by the DNS.
 	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
 	// The name of a subset within the service. Applicable only to services
 	// within the mesh. The subset must be defined in a corresponding
@@ -339,7 +338,7 @@ type HTTPRoute struct {
 	// should be allowed (and expected) to upgrade to a WebSocket connection.
 	// The default is false. Istio's reference sidecar implementation (Envoy)
 	// expects the first request to this route to contain the WebSocket
-	// upgrade headers. Otherwise, the request will be rejected.  Note that
+	// upgrade headers. Otherwise, the request will be rejected. Note that
 	// Websocket allows secondary protocol negotiation which may then be
 	// subject to further routing rules based on the protocol selected.
 	WebsocketUpgrade bool `protobuf:"varint,5,opt,name=websocket_upgrade,json=websocketUpgrade" json:"websocket_upgrade,omitempty"`
@@ -448,7 +447,7 @@ func (m *HTTPRoute) GetAppendHeaders() map[string]string {
 	return nil
 }
 
-// Describes match conditions and actions for routing TCP traffic.  The
+// Describes match conditions and actions for routing TCP traffic. The
 // following routing rule forwards traffic arriving at port 2379 named
 // Mongo from 172.17.16.* subnet to another Mongo server on port 5555.
 //
@@ -471,7 +470,7 @@ func (m *HTTPRoute) GetAppendHeaders() map[string]string {
 type TCPRoute struct {
 	// Match conditions to be satisfied for the rule to be
 	// activated. All conditions inside a single match block have AND
-	// semantics, while the list of match blocks have OR semantics.  The rule
+	// semantics, while the list of match blocks have OR semantics. The rule
 	// is matched if any one of the match blocks succeed.
 	Match []*L4MatchAttributes `protobuf:"bytes,1,rep,name=match" json:"match,omitempty"`
 	// The destination to which the connection should be forwarded to.
