@@ -86,14 +86,14 @@ type VirtualService struct {
 	// the FQDN of the host would be derived based on the underlying
 	// platform.
 	//
-	// For example on Kubernetes, when hosts contains a short name, Istio
-	// will interpret the short name based on the namespace of the client
-	// where rules are being applied. Thus, when a client in the "default"
-	// namespace applies a rule containing a name "reviews, Istio will setup
-	// routes to the "reviews.default.svc.cluster.local" service. However, if
-	// a different name such as "reviews.sales" is used, it would be treated
-	// as a FQDN during virtual host matching. In Consul, a plain service
-	// name would be resolved to the FQDN "reviews.service.consul".
+	// For example on Kubernetes, when hosts contains a short name, Istio will
+	// interpret the short name based on the namespace of the rule.  Thus, when a
+	// client namespace applies a rule in the "default" namespace containing a name
+	// "reviews, Istio will setup routes to the "reviews.default.svc.cluster.local"
+	// service. However, if a different name such as "reviews.sales.svc.cluster.local"
+	// is used, it would be treated as a FQDN during virtual host matching.
+	// In Consul, a plain service name would be resolved to the FQDN
+	// "reviews.service.consul".
 	//
 	// Note that the hosts field applies to both HTTP and TCP
 	// services. Service inside the mesh, i.e., those found in the service
@@ -262,16 +262,14 @@ type Destination struct {
 	// address.
 	//
 	// If short names are used, the FQDN of the service will be resolved in a
-	// platform specific manner.  For example in Kubernetes, when a route with
-	// a short name "reviews" in the destination is applied to a client in
-	// the "bookinfo" namespace, the final destination is resolved to
-	// reviews.bookinfo.svc.cluster.local. If the route refers to the
-	// destination as "reviews.sales", the resolution process first looks for
-	// a "reviews" service in the "sales" namespace. In both cases, the
-	// sidecar will route to the IP addresses of the pods constituting the
-	// service. However, if the lookup fails, "reviews.sales" is treated as
-	// an external service, such that the sidecar will dynamically resolve
-	// the DNS of the service name and route the request to the IP addresses
+	// platform specific manner.  For example in Kubernetes, when a route with a
+	// short name "reviews" in the destination in namespace "bookinfo" is applied
+	// to a client in , the final destination is resolved to
+	// reviews.bookinfo.svc.cluster.local. The sidecar will route to the IP
+	// addresses of the pods constituting the service. However, if the lookup
+	// fails, "reviews" is treated as an external service, such that the sidecar
+	// will dynamically resolve the DNS of the service name and route the request
+	// to the IP addresses
 	// returned by the DNS.
 	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
 	// The name of a subset within the service. Applicable only to services
@@ -349,6 +347,7 @@ type HTTPRoute struct {
 	Timeout *google_protobuf.Duration `protobuf:"bytes,6,opt,name=timeout" json:"timeout,omitempty"`
 	// Retry policy for HTTP requests.
 	Retries *HTTPRetry `protobuf:"bytes,7,opt,name=retries" json:"retries,omitempty"`
+	// $hide_from_docs
 	// Fault injection policy to apply on HTTP traffic.
 	Fault *HTTPFaultInjection `protobuf:"bytes,8,opt,name=fault" json:"fault,omitempty"`
 	// Mirror HTTP traffic to a another destination in addition to forwarding
@@ -1198,6 +1197,7 @@ func (m *CorsPolicy) GetAllowCredentials() *google_protobuf1.BoolValue {
 	return nil
 }
 
+// $hide_from_docs
 // HTTPFaultInjection can be used to specify one or more faults to inject
 // while forwarding http requests to the destination specified in a route.
 // Fault specification is part of a VirtualService rule. Faults include
