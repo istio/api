@@ -608,16 +608,14 @@ name from the service registry, a resolvable DNS name, or an IP
 address.</p>
 
 <p>If short names are used, the FQDN of the service will be resolved in a
-platform specific manner.  For example in Kubernetes, when a route with
-a short name &ldquo;reviews&rdquo; in the destination is applied to a client in
-the &ldquo;bookinfo&rdquo; namespace, the final destination is resolved to
-reviews.bookinfo.svc.cluster.local. If the route refers to the
-destination as &ldquo;reviews.sales&rdquo;, the resolution process first looks for
-a &ldquo;reviews&rdquo; service in the &ldquo;sales&rdquo; namespace. In both cases, the
-sidecar will route to the IP addresses of the pods constituting the
-service. However, if the lookup fails, &ldquo;reviews.sales&rdquo; is treated as
-an external service, such that the sidecar will dynamically resolve
-the DNS of the service name and route the request to the IP addresses
+platform specific manner.  For example in Kubernetes, when a route with a
+short name &ldquo;reviews&rdquo; in the destination in namespace &ldquo;bookinfo&rdquo; is applied
+to a client in , the final destination is resolved to
+reviews.bookinfo.svc.cluster.local. The sidecar will route to the IP
+addresses of the pods constituting the service. However, if the lookup
+fails, &ldquo;reviews&rdquo; is treated as an external service, such that the sidecar
+will dynamically resolve the DNS of the service name and route the request
+to the IP addresses
 returned by the DNS.</p>
 
 </td>
