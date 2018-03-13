@@ -346,7 +346,6 @@ type HTTPRoute struct {
 	Timeout *google_protobuf.Duration `protobuf:"bytes,6,opt,name=timeout" json:"timeout,omitempty"`
 	// Retry policy for HTTP requests.
 	Retries *HTTPRetry `protobuf:"bytes,7,opt,name=retries" json:"retries,omitempty"`
-	// $hide_from_docs
 	// Fault injection policy to apply on HTTP traffic.
 	Fault *HTTPFaultInjection `protobuf:"bytes,8,opt,name=fault" json:"fault,omitempty"`
 	// Mirror HTTP traffic to a another destination in addition to forwarding

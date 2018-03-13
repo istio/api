@@ -338,7 +338,6 @@ message HTTPRoute {
   // Retry policy for HTTP requests.
   HTTPRetry retries = 7;
 
-  // $hide_from_docs
   //Fault injection policy to apply on HTTP traffic.
   HTTPFaultInjection fault = 8;
 
