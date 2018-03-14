@@ -28,19 +28,19 @@ option cc_generic_services = true;
 import "google/protobuf/any.proto";
 import "google/rpc/status.proto";
 
-// `AdapterService` is implemented by backends that wants to provide telemetry and policy functionality to Mixer as an
+// `InfrastructureBackend` is implemented by backends that wants to provide telemetry and policy functionality to Mixer as an
 // out of process adapter.
 //
-// `AdapterService` allows Mixer and the backends to have a session based model. In a session based model, Mixer passes
+// `InfrastructureBackend` allows Mixer and the backends to have a session based model. In a session based model, Mixer passes
 // the relevant configuration state to the backend only once and estabilshes a session using a session identifier.
 // All future communications between Mixer and the backend uses the session identifier which refers to the previously
 // passed in configuration data.
 //
-// For a given `AdapterService`, Mixer calls the `Validate` function, followed by `CreateSession`. The `session_id`
+// For a given `InfrastructureBackend`, Mixer calls the `Validate` function, followed by `CreateSession`. The `session_id`
 // returned from `CreateSession` is used to make subsequent request-time Handle calls and the eventual `CloseSession` function.
 // Mixer assumes that, given the `session_id`, the backend can retrieve the necessary context to serve the
 // Handle calls that contains the request-time payload (template-specific instance protobuf).
-service AdapterService {
+service InfrastructureBackend {
     // Validates the handler configuration along with the template-specific instances that would be routed to that
     // handler. The `CreateSession` for a specific handler configuration is invoked only if its associated `Validate`
     // call has returned success.
