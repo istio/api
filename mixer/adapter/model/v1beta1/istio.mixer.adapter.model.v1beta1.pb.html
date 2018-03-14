@@ -32,6 +32,26 @@ call has returned success.</p>
 
 <pre id="InfrastructureBackend.CreateSession"><code class="language-proto">rpc CreateSession(CreateSessionRequest) returns (CreateSessionResponse)
 </code></pre>
+<p>Creates a session for a given handler configuration and the template-specific instances that would be routed to
+that handler. For every handler configuration, Mixer creates a separate session by invoking <code>CreateSession</code>
+on the backend.</p>
+
+<p><code>CreateSessionRequest</code> contains the adapter specific handler configuration and the inferred type information about
+the instances the handler would receive during request processing.</p>
+
+<p><code>CreateSession</code> must return a <code>session_id</code> which Mixer uses to invoke template-specific Handle functions during
+request processing. The <code>session_id</code> provides the Handle functions a way to retrieve the necessary configuration
+associated with the session. Upon Mixer configuration change, Mixer will re-invoke <code>CreateSession</code> for all
+handler configurations whose existing sessions are invalidated or didn&rsquo;t existed.</p>
+
+<p>Backend is allowed to return the same session id if given the same configuration block.
+This would happen when multiple instances of Mixer in a deployment all create sessions with the same configuration.
+Note that given individial instances of Mixer can call <code>CloseSession</code>, reusing <code>session_id</code> by the backend
+assumes that the backend is doing reference counting.</p>
+
+<p>If the backend couldn&rsquo;t create a session for a specific handler configuration and
+returns non S_OK status, Mixer will not make request-time Handle calls associated with that handler configuration.</p>
+
 <pre id="InfrastructureBackend.CloseSession"><code class="language-proto">rpc CloseSession(CloseSessionRequest) returns (CloseSessionResponse)
 </code></pre>
 <p>Closes the session associated with the <code>session_id</code>. Mixer closes a session when its associated handler
