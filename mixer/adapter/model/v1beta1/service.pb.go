@@ -444,22 +444,9 @@ type AdapterServiceClient interface {
 	// handler. The `CreateSession` for a specific handler configuration is invoked only if its associated `Validate`
 	// call has returned success.
 	Validate(ctx context.Context, in *ValidateRequest, opts ...grpc.CallOption) (*ValidateResponse, error)
-	// Creates a session for a given handler configuration and the template-specific instances that would be routed to
-	// that handler. For every handler configuration, Mixer creates a separate session by invoking `CreateSession`
-	// on the backend.
-	//
-	// `CreateSessionRequest` contains the adapter specific handler configuration and the inferred type information about
-	// the instances the handler would receive during request processing.
-	//
-	// `CreateSession` must return a `session_id` which Mixer uses to invoke template-specific Handle functions during
-	// request processing. If the backend couldn't create a session for a specific handler configuration and
-	// returns non S_OK status, Mixer will not make request-time Handle calls associated with that handler configuration.
-	// The `session_id` provides the Handle functions a way to retrive the necessary configuration associated with the session.
-	// Upon Mixer configuration change, Mixer will re-invoke `CreateSession` for all handler configurations whose existing
-	// sessions are invalidated or didn't existed.
 	CreateSession(ctx context.Context, in *CreateSessionRequest, opts ...grpc.CallOption) (*CreateSessionResponse, error)
 	// Closes the session associated with the `session_id`. Mixer closes a session when its associated handler
-	// configuration or the instance configuration changes. Backend is suppose to cleanup all the resources associated
+	// configuration or the instance configuration changes. Backend is supposed to cleanup all the resources associated
 	// with the session_id referenced by CloseSessionRequest.
 	CloseSession(ctx context.Context, in *CloseSessionRequest, opts ...grpc.CallOption) (*CloseSessionResponse, error)
 }
@@ -506,22 +493,9 @@ type AdapterServiceServer interface {
 	// handler. The `CreateSession` for a specific handler configuration is invoked only if its associated `Validate`
 	// call has returned success.
 	Validate(context.Context, *ValidateRequest) (*ValidateResponse, error)
-	// Creates a session for a given handler configuration and the template-specific instances that would be routed to
-	// that handler. For every handler configuration, Mixer creates a separate session by invoking `CreateSession`
-	// on the backend.
-	//
-	// `CreateSessionRequest` contains the adapter specific handler configuration and the inferred type information about
-	// the instances the handler would receive during request processing.
-	//
-	// `CreateSession` must return a `session_id` which Mixer uses to invoke template-specific Handle functions during
-	// request processing. If the backend couldn't create a session for a specific handler configuration and
-	// returns non S_OK status, Mixer will not make request-time Handle calls associated with that handler configuration.
-	// The `session_id` provides the Handle functions a way to retrive the necessary configuration associated with the session.
-	// Upon Mixer configuration change, Mixer will re-invoke `CreateSession` for all handler configurations whose existing
-	// sessions are invalidated or didn't existed.
 	CreateSession(context.Context, *CreateSessionRequest) (*CreateSessionResponse, error)
 	// Closes the session associated with the `session_id`. Mixer closes a session when its associated handler
-	// configuration or the instance configuration changes. Backend is suppose to cleanup all the resources associated
+	// configuration or the instance configuration changes. Backend is supposed to cleanup all the resources associated
 	// with the session_id referenced by CloseSessionRequest.
 	CloseSession(context.Context, *CloseSessionRequest) (*CloseSessionResponse, error)
 }
