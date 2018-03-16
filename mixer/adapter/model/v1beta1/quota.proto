@@ -20,7 +20,6 @@ option go_package="istio.io/api/mixer/adapter/model/v1beta1";
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
-import "google/rpc/status.proto";
 
 option (gogoproto.goproto_getters_all) = false;
 option (gogoproto.equal_all) = false;

@@ -9,6 +9,7 @@
 		mixer/adapter/model/v1beta1/extensions.proto
 		mixer/adapter/model/v1beta1/infrastructure_backend.proto
 		mixer/adapter/model/v1beta1/quota.proto
+		mixer/adapter/model/v1beta1/report.proto
 		mixer/adapter/model/v1beta1/type.proto
 
 	It has these top-level messages:
@@ -21,6 +22,7 @@
 		CloseSessionResponse
 		QuotaRequest
 		QuotaResult
+		ReportRequest
 		Value
 		IPAddress
 		Duration
