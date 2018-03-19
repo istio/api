@@ -46,7 +46,7 @@ syntax = "proto3";
 // application code to decouple itself from the evolution of dependent
 // services.
 package istio.networking.v1alpha3;
-option go_package = "v1alpha3";
+option go_package = "istio.networking.v1alpha3";
 
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";

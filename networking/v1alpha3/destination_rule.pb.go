@@ -2,7 +2,7 @@
 // source: networking/v1alpha3/destination_rule.proto
 
 /*
-	Package v1alpha3 is a generated protocol buffer package.
+	Package istio_networking_v1alpha3 is a generated protocol buffer package.
 
 	It is generated from these files:
 		networking/v1alpha3/destination_rule.proto
@@ -37,7 +37,7 @@
 		HTTPFaultInjection
 		PortSelector
 */
-package v1alpha3
+package istio_networking_v1alpha3
 
 import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
