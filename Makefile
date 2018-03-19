@@ -211,15 +211,15 @@ routing_v1alpha3_protos := $(shell find networking/v1alpha3 -type f -name '*.pro
 routing_v1alpha3_pb_gos := $(routing_v1alpha3_protos:.proto=.pb.go)
 routing_v1alpha3_pb_doc := $(routing_v1alpha3_path)/istio.routing.v1alpha3.pb.html
 
-generate-routing-go: $(routing_v1alpha1_pb_gos) $(routing_v1alpha1_pb_doc) $(routing_v1alpha3_pb_gos) $(routing_v1alpha3_pb_doc)
+generate-routing-go: $(routing_v1alpha1_pb_gos) $(routing_v1alpha1_pb_doc) networking-apis
 
 $(routing_v1alpha1_pb_gos) $(routing_v1alpha1_pb_doc): $(routing_v1alpha1_protos)
 	## Generate routing/v1alpha1/*.pb.go +
 	@$(docker_gen) $(protoc_gen_go_plugin) $(protoc_gen_docs_plugin)$(routing_v1alpha1_path) $^
 
-$(routing_v1alpha3_pb_gos) $(routing_v1alpha3_pb_doc): $(routing_v1alpha3_protos)
+networking-apis: $(routing_v1alpha3_protos)
 	## Generate networking/v1alpha3/*.pb.go
-	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(routing_v1alpha3_path) $^
+	$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(routing_v1alpha3_path) $^
 
 clean-routing:
 	rm -f $(routing_v1alpha1_pb_gos) $(routing_v1alpha3_pb_gos)

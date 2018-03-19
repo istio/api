@@ -16,7 +16,7 @@ syntax = "proto3";
 
 package istio.networking.v1alpha3;
 
-option go_package = "istio.io/api/networking/v1alpha3";
+import "gogoproto/gogo.proto";
 
 // $title: Istio Gateway
 // $overview: Configuration of a generic load balancer
@@ -143,7 +143,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //
 message Gateway {
   // REQUIRED: A list of server specifications.
-  repeated Server servers = 1;
+  repeated Server servers = 1 [(gogoproto.nullable) = false];
 
   // One or more labels that indicate a specific set of pods/VMs
   // on which this gateway configuration should be applied.
@@ -202,7 +202,7 @@ message Gateway {
 message Server {
   // REQUIRED: The Port on which the proxy should listen for incoming
   // connections
-  Port port = 1;
+  Port port = 1 [(gogoproto.nullable) = false];
 
   // A list of hosts exposed by this gateway. While
   // typically applicable to HTTP services, it can also be used for TCP
@@ -215,6 +215,7 @@ message Server {
   // a gateway host is a suffix of one of the VirtualService hosts.
   repeated string hosts = 2;
 
+  // TLS options
   message TLSOptions {
     // If set to true, the load balancer will send a 302 redirect for all
     // http connections, asking the clients to use HTTPS.
