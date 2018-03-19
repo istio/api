@@ -1,0 +1,213 @@
+---
+title: Internal API for authentication implementation on Envoy.
+layout: protoc-gen-docs
+number_of_entries: 1
+---
+<h2 id="istio.authentication.v1alpha1.Policy">istio.authentication.v1alpha1.Policy</h2>
+<section>
+<p>Policy defines what authentication methods can be accepted on workload(s),
+and if authenticated, which method/certificate will set the request principal
+(i.e request.auth.principal attribute).</p>
+
+<p>Authentication policy is composed of 2-part authentication:
+- peer: verify caller service credentials. This part will set source.user
+(peer identity).
+- origin: verify the origin credentials. This part will set request.auth.user
+(origin identity), as well as other attributes like request.auth.presenter,
+request.auth.audiences and raw claims. Note that the identity could be
+end-user, service account, device etc.</p>
+
+<p>request.auth.principal will be assigned follow the credential rules. The
+rule also dictates which origin authentication method(s) should run, based
+on peer identity.</p>
+
+<p>Examples:
+Policy to enable mTLS for all services in namespace frod</p>
+
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: mTLS_enable
+  namespace: frod
+spec:
+  destinations:
+  peers:
+  - mtls: null
+</code></pre>
+
+<p>Policy to disable mTLS for &ldquo;productpage&rdquo; service</p>
+
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: mTLS_disable
+  namespace: frod
+spec:
+  destinations:
+  - name: productpage
+  peers:
+</code></pre>
+
+<p>Policy to enable mTLS, and use JWT for productpage:9000.</p>
+
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: mTLS_enable
+  namespace: frod
+spec:
+  destinations:
+  - name: productpage
+    port:
+      number: 9000
+  peers:
+  - mtls: null
+  credentialRules:
+  - binding: USE_ORIGIN
+    origins:
+      jwt:
+        issuer: &quot;https://securetoken.google.com&quot;
+        audiences:
+        - &quot;productpage&quot;
+        jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
+        locations:
+        - header: x-goog-iap-jwt-assertion
+</code></pre>
+
+<p>Policy to enable mTLS, and use JWT for productpage:9000 only when caller is
+frontend.serviceaccount.</p>
+
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: mTLS_enable
+  namespace: frod
+spec:
+  destinations:
+  - name: productpage
+    port:
+      number: 9000
+  peers:
+  - mtls: null
+  credentialRules:
+  - binding: USE_ORIGIN
+    matchingSources:
+    - frontend.serviceaccount
+    origins:
+    - jwt:
+        issuer: &quot;https://securetoken.google.com&quot;
+        audiences:
+        - &quot;productpage&quot;
+        jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
+        locations:
+        - header: x-goog-iap-jwt-assertion
+</code></pre>
+
+<p>Note that a credential rule that unconditional-use-peer (identity)  is
+implicitly check if no rule match, so the above credentialRules is the same
+as this:</p>
+
+<pre><code>credentialRules:
+- binding: USE_ORIGIN
+  selectedOriginMethods:
+  - google_jwt
+  matchingSources:
+  - productpage.serviceaccount
+  origins:
+  - jwt:
+    ...
+- binding: USE_PEER
+</code></pre>
+
+<p>Policy that enable mTLS, requires google JWT if caller is
+frontend.serviceaccount, no JWT (i.e peer authentication only) if caller
+is admin, and istio JWT in all other cases.</p>
+
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: mTLS_enable
+  namespace: frod
+spec:
+  destinations:
+  - name: productpage
+    port:
+      number: 9000
+  peers:
+  - mtls: null
+  origins:
+  - name: google_jwt
+  - name: istio_jwt
+  credentialRules:
+  - binding: USE_ORIGIN
+    orgins:
+    - jwt:
+        issuer: &quot;https://securetoken.google.com&quot;
+        audiences:
+        - &quot;productpage&quot;
+        jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
+        locations:
+        - header: x-goog-iap-jwt-assertion
+    matchingSources:
+    - productpage.serviceaccount
+  - binding: USE_PEER
+    matchingSource:
+    - admin
+  - binding: USE_ORIGIN
+    origins:
+    - jwt:
+        issuer: &quot;https://securetoken.istio.io&quot;
+        locations:
+        - header: x-istio-jwt-assertion
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="istio.authentication.v1alpha1.Policy.destinations">
+<td><code>destinations</code></td>
+<td><code><a href="#istio.networking.v1alpha3.Destination">istio.networking.v1alpha3.Destination[]</a></code></td>
+<td>
+<p>List of destinations (workloads) that the policy should be applied on.
+If empty, policy will be used on all destinations in the same namespace.</p>
+
+</td>
+</tr>
+<tr id="istio.authentication.v1alpha1.Policy.peers">
+<td><code>peers</code></td>
+<td><code><a href="#istio.authentication.v1alpha1.PeerAuthenticationMethod">istio.authentication.v1alpha1.PeerAuthenticationMethod[]</a></code></td>
+<td>
+<p>List of authentication methods that can be used for peer authentication.
+They will be evaluated in order, until the first one satisfied; peer
+identity is then extracted from the associated certificate. On the other
+hand, if none of these methods pass, request should be rejected with
+authentication failed error (401).
+Leave the list empty if no peer authentication is required, or have single
+entry of method &lsquo;None&rsquo;. The source.user attribute will not be set in that
+case.</p>
+
+</td>
+</tr>
+<tr id="istio.authentication.v1alpha1.Policy.credential_rules">
+<td><code>credentialRules</code></td>
+<td><code><a href="#istio.authentication.v1alpha1.CredentialRule">istio.authentication.v1alpha1.CredentialRule[]</a></code></td>
+<td>
+<p>Rules to define how request principal will be set. Each rule can have
+conditions that determine if the rule should be applied or not. The rule
+will be checked for matching conditions at runtime, in order, and stop at
+the first match. If there are no rule matching condtion, peer identity
+will be used as principal (in other words, the credential rule with
+USE_PEER with no matching condition is implicitly added to the end
+of the list.)</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
