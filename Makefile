@@ -17,7 +17,7 @@ mount_dir := /src
 repo_dir := istio.io/api
 repo_mount := $(mount_dir)/istio.io/api
 docker_gen := docker run --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(gen_img) -I$(repo_dir)
-out_path = .
+out_path = $(repo_dir)
 endif
 
 
