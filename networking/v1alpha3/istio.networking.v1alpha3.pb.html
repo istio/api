@@ -4,6 +4,35 @@ overview: Configuration affecting traffic routing
 layout: protoc-gen-docs
 number_of_entries: 36
 ---
+<p>Configuration affecting traffic routing. Here are a few terms useful to define
+in the context of traffic routing.</p>
+
+<p><em>Service</em> a unit of application behavior bound to a unique name in a
+service registry. Services consist of multiple network <em>endpoints</em>
+implemented by workload instances running on pods, containers, VMs etc.</p>
+
+<p><em>Service versions (subsets)</em> - In a continuous deployment scenario, for
+a given service, there can be distinct subsets of instances running
+different variants of the application binary. These variants are not
+necessarily different API versions. They could be iterative changes to
+the same service, deployed in different environments (prod, staging,
+dev, etc.). Common scenarios where this occurs include A/B testing,
+canary rollouts, etc. The choice of a particular version can be decided
+based on various criterion (headers, url, etc.) and/or by weights
+assigned to each version. Each service has a default version consisting
+of all its instances.</p>
+
+<p><em>Source</em> - A downstream client calling a service.</p>
+
+<p><em>Host</em> - The address used by a client when attempting to connect to a
+service.</p>
+
+<p><em>Access model</em> - Applications address only the destination service
+(Host) without knowledge of individual service versions (subsets). The
+actual choice of the version is determined by the proxy/sidecar, enabling the
+application code to decouple itself from the evolution of dependent
+services.</p>
+
 <h2 id="ConnectionPoolSettings">ConnectionPoolSettings</h2>
 <section>
 <p>Connection pool settings for an upstream host. The settings apply to
@@ -1756,12 +1785,16 @@ spec:
 <td><code>simple</code></td>
 <td><code><a href="#LoadBalancerSettings.SimpleLB">LoadBalancerSettings.SimpleLB (oneof)</a></code></td>
 <td>
+<p>Simple policy</p>
+
 </td>
 </tr>
 <tr id="LoadBalancerSettings.consistent_hash" class="oneof">
 <td><code>consistentHash</code></td>
 <td><code><a href="#LoadBalancerSettings.ConsistentHashLB">LoadBalancerSettings.ConsistentHashLB (oneof)</a></code></td>
 <td>
+<p>Consistent hash policy</p>
+
 </td>
 </tr>
 </tbody>
@@ -2148,6 +2181,8 @@ https, and the TLS modes to use.</p>
 </section>
 <h2 id="Server.TLSOptions">Server.TLSOptions</h2>
 <section>
+<p>TLS options</p>
+
 <table class="message-fields">
 <thead>
 <tr>

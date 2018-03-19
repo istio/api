@@ -15,9 +15,9 @@ syntax = "proto3";
 
 import "google/protobuf/duration.proto";
 
-package istio.networking.v1alpha3;
+import "gogoproto/gogo.proto";
 
-option go_package = "istio.io/api/networking/v1alpha3";
+package istio.networking.v1alpha3;
 
 // $title: Destination Rules
 // $overview: Configuration affecting client connectivity to a service
@@ -94,7 +94,7 @@ message DestinationRule {
 
   // One or more named sets that represent individual versions of a
   // service. Traffic policies can be overridden at subset level.
-  repeated Subset subsets = 3;
+  repeated Subset subsets = 3 [(gogoproto.nullable) = false];
 }
 
 // Traffic policies to apply for a specific destination. See
@@ -192,6 +192,8 @@ message Subset {
 message LoadBalancerSettings {
   // Standard load balancing algorithms that require no tuning.
   enum SimpleLB {
+    option (gogoproto.goproto_enum_prefix) = false;
+
     // Round Robin policy. Default
     ROUND_ROBIN = 0;
 
@@ -239,7 +241,9 @@ message LoadBalancerSettings {
 
   // Upstream load balancing policy.
   oneof lb_policy {
+    // Simple policy
     SimpleLB simple = 1;
+    // Consistent hash policy
     ConsistentHashLB consistent_hash = 2;
   }
 }
@@ -272,7 +276,7 @@ message ConnectionPoolSettings {
     int32 max_connections = 1;
 
     // TCP connection timeout.
-    google.protobuf.Duration connect_timeout = 2;
+    google.protobuf.Duration connect_timeout = 2 [(gogoproto.stdduration) = true];
   };
 
   // Settings applicable to HTTP1.1/HTTP2/GRPC connections.

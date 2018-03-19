@@ -16,9 +16,9 @@ syntax = "proto3";
 
 import "networking/v1alpha3/gateway.proto";
 
-package istio.networking.v1alpha3;
+import "gogoproto/gogo.proto";
 
-option go_package = "istio.io/api/networking/v1alpha3";
+package istio.networking.v1alpha3;
 
 // $title: Istio External Services
 // $overview: Defining external service dependencies of the mesh
@@ -178,7 +178,7 @@ message ExternalService {
   repeated string hosts = 1;
 
   // REQUIRED. The ports associated with the external service.
-  repeated Port ports = 2;
+  repeated Port ports = 2 [(gogoproto.nullable) = false];
 
   // Different ways of discovering the IP addresses associated with the
   // service.
@@ -220,12 +220,12 @@ message ExternalService {
     // associated with a port name that was declared as part of the
     // service.
     map<string, uint32> ports = 2;
-    
+
     // One or more labels associated with the endpoint.
     map<string, string> labels = 3;
   };
 
   // One or more endpoints associated with the service. Endpoints must be
   // accessible over the set of outPorts defined at the service level.
-  repeated Endpoint endpoints = 4;
+  repeated Endpoint endpoints = 4 [(gogoproto.nullable) = false];
 }

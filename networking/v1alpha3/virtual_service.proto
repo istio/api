@@ -14,9 +14,6 @@
 
 syntax = "proto3";
 
-import "google/protobuf/duration.proto";
-import "google/protobuf/wrappers.proto";
-
 // $title: Virtual Service Alpha 3
 // $overview: Configuration affecting traffic routing
 
@@ -48,10 +45,13 @@ import "google/protobuf/wrappers.proto";
 // actual choice of the version is determined by the proxy/sidecar, enabling the
 // application code to decouple itself from the evolution of dependent
 // services.
-
 package istio.networking.v1alpha3;
+option go_package = "istio.networking.v1alpha3";
 
-option go_package = "istio.io/api/networking/v1alpha3";
+import "google/protobuf/duration.proto";
+import "google/protobuf/wrappers.proto";
+
+import "gogoproto/gogo.proto";
 
 // A VirtualService defines a set of traffic routing rules to apply when a host is
 // addressed. Each routing rule defines matching criteria for traffic of a specific
@@ -155,11 +155,11 @@ message VirtualService {
 
   // An ordered list of route rules for HTTP traffic.
   // The first rule matching an incoming request is used.
-  repeated HTTPRoute http = 3;
+  repeated HTTPRoute http = 3 [(gogoproto.nullable) = false];
 
   // An ordered list of route rules for TCP traffic.
   // The first rule matching an incoming request is used.
-  repeated TCPRoute tcp = 4;
+  repeated TCPRoute tcp = 4 [(gogoproto.nullable) = false];
 }
 
 // Destination indicates the network addressable service to which the
@@ -305,13 +305,13 @@ message HTTPRoute {
   // activated. All conditions inside a single match block have AND
   // semantics, while the list of match blocks have OR semantics. The rule
   // is matched if any one of the match blocks succeed.
-  repeated HTTPMatchRequest match = 1;
+  repeated HTTPMatchRequest match = 1 [(gogoproto.nullable) = false];
 
   // A http rule can either redirect or forward (default) traffic. The
   // forwarding target can be one of several versions of a service (see
   // glossary in beginning of document). Weights associated with the
   // service version determine the proportion of traffic it receives.
-  repeated DestinationWeight route = 2;
+  repeated DestinationWeight route = 2 [(gogoproto.nullable) = false];
 
   // A http rule can either redirect or forward (default) traffic. If
   // traffic passthrough option is specified in the rule,
@@ -333,7 +333,7 @@ message HTTPRoute {
   bool websocket_upgrade = 5;
 
   // Timeout for HTTP requests.
-  google.protobuf.Duration timeout = 6;
+  google.protobuf.Duration timeout = 6 [(gogoproto.stdduration) = true];
 
   // Retry policy for HTTP requests.
   HTTPRetry retries = 7;
@@ -385,13 +385,13 @@ message TCPRoute {
   // activated. All conditions inside a single match block have AND
   // semantics, while the list of match blocks have OR semantics. The rule
   // is matched if any one of the match blocks succeed.
-  repeated L4MatchAttributes match = 1;
+  repeated L4MatchAttributes match = 1 [(gogoproto.nullable) = false];
 
   // The destination to which the connection should be forwarded to.
   // Currently, only one destination is allowed for TCP services. When TCP
   // weighted routing support is introduced in Envoy, multiple destinations
   // with weights can be specified.
-  repeated DestinationWeight route = 2;
+  repeated DestinationWeight route = 2 [(gogoproto.nullable) = false];
 }
 
 // HttpMatchRequest specifies a set of criterion to be met in order for the
@@ -544,7 +544,7 @@ message HTTPMatchRequest {
 message DestinationWeight {
   // REQUIRED. Destination uniquely identifies the instances of a service
   // to which the request/connection should be forwarded to.
-  Destination destination = 1;
+  Destination destination = 1 [(gogoproto.nullable) = false];
 
   // REQUIRED. The proportion of traffic to be forwarded to the service
   // version. (0-100). Sum of weights across destinations SHOULD BE == 100.
@@ -698,7 +698,7 @@ message HTTPRetry {
   int32 attempts = 1;
 
   // Timeout per retry attempt for a given request. format: 1h/1m/1s/1ms. MUST BE >=1ms.
-  google.protobuf.Duration per_try_timeout = 2;
+  google.protobuf.Duration per_try_timeout = 2 [(gogoproto.stdduration) = true];
 }
 
 // Describes the Cross-Origin Resource Sharing (CORS) policy, for a given
@@ -753,7 +753,7 @@ message CorsPolicy {
 
   // Specifies how long the the results of a preflight request can be
   // cached. Translates to the Access-Control-Max-Age header.
-  google.protobuf.Duration max_age = 5;
+  google.protobuf.Duration max_age = 5 [(gogoproto.stdduration) = true];
 
   // Indicates whether the caller is allowed to send the actual request
   // (not the preflight) using credentials. Translates to
