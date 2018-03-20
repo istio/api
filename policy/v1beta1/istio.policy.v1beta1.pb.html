@@ -4,13 +4,13 @@ overview: Describes the rules used to configure Mixer's policy and telemetry fea
 location: https://istio.io/docs/reference/policy/istio.policy.v1beta1.html
 layout: protoc-gen-docs
 redirect_from: /docs/reference/policy/policy-and-telemetry-rules.html
-number_of_entries: 5
+number_of_entries: 8
 ---
 <p>Describes the rules used to configure Mixer&rsquo;s policy and telemetry features.</p>
 
 <h2 id="Action">Action</h2>
 <section>
-<p>Action describes which <em>Handler</em> to invoke and what data to pass to it for processing.</p>
+<p>Action describes which <a href="#Handler">Handler</a> to invoke and what data to pass to it for processing.</p>
 
 <p>The following example instructs Mixer to invoke &lsquo;prometheus-handler&rsquo; handler and pass it the object
 constructed using the instance &lsquo;RequestCountByService&rsquo;.</p>
@@ -34,7 +34,7 @@ constructed using the instance &lsquo;RequestCountByService&rsquo;.</p>
 <td><code>string</code></td>
 <td>
 <p>Required. Fully qualified name of the handler to invoke.
-Must match the <code>name</code> of a <em>Handler</em>.</p>
+Must match the <code>name</code> of a <a href="#Handler.name">Handler</a>.</p>
 
 </td>
 </tr>
@@ -43,7 +43,7 @@ Must match the <code>name</code> of a <em>Handler</em>.</p>
 <td><code>string[]</code></td>
 <td>
 <p>Required. Each value must match the fully qualified name of the
-<em>Instance</em>s.
+<a href="#Instance.name">Instance</a>s.
 Referenced instances are evaluated by resolving the attributes/literals for all the fields.
 The constructed objects are then passed to the <code>handler</code> referenced within this action.</p>
 
@@ -174,6 +174,121 @@ encoding scheme will be decided later.</p>
 <td><code><a href="#ValueType">ValueType</a></code></td>
 <td>
 <p>Required. The type of data carried by this attribute.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Handler">Handler</h2>
+<section>
+<p>Handler allows the operator to configure a specific adapter implementation.
+Each adapter implementation defines its own <code>params</code> proto.</p>
+
+<p>In the following example we define a <code>metrics</code> handler using the Mixer&rsquo;s prepackaged
+prometheus adapter. This handler doesn&rsquo;t require any parameters.</p>
+
+<pre><code class="language-yaml">name: prometheus-handler
+adapter: prometheus
+params:
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Handler.name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Required. Must be unique in the entire mixer configuration. Used by <a href="#Action.handler">Actions</a>
+to refer to this handler.</p>
+
+</td>
+</tr>
+<tr id="Handler.adapter">
+<td><code>adapter</code></td>
+<td><code>string</code></td>
+<td>
+<p>Required. The name of a specific adapter implementation. An adapter&rsquo;s
+implementation name is typically a constant in its code.</p>
+
+</td>
+</tr>
+<tr id="Handler.params">
+<td><code>params</code></td>
+<td><code><a href="#google.protobuf.Struct">google.protobuf.Struct</a></code></td>
+<td>
+<p>Optional. Depends on adapter implementation. Struct representation of a
+proto defined by the adapter implementation; this varies depending on the value of field <code>adapter</code>.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Instance">Instance</h2>
+<section>
+<p>An Instance tells Mixer how to create instances for particular template.</p>
+
+<p>Instance is defined by the operator. Instance is defined relative to a known
+template. Their purpose is to tell Mixer how to use attributes or literals to produce
+instances of the specified template at runtime.</p>
+
+<p>The following example instructs Mixer to construct an instance associated with template
+&lsquo;istio.mixer.adapter.metric.Metric&rsquo;. It provides a mapping from the template&rsquo;s fields to expressions.
+Instances produced with this instance can be referenced by <a href="#Action">Actions</a> using name
+&lsquo;RequestCountByService&rsquo;</p>
+
+<pre><code class="language-yaml">- name: RequestCountByService
+  template: istio.mixer.adapter.metric.Metric
+  params:
+    value: 1
+    dimensions:
+      source: source.service
+      destination_ip: destination.ip
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Instance.name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Required. The name of this instance</p>
+
+<p>Must be unique amongst other Instances in scope. Used by <a href="#Action">Action</a> to refer
+to an instance produced by this instance.</p>
+
+</td>
+</tr>
+<tr id="Instance.template">
+<td><code>template</code></td>
+<td><code>string</code></td>
+<td>
+<p>Required. The name of the template this instance creates instances for.
+The value must match the name of the available template in scope.</p>
+
+</td>
+</tr>
+<tr id="Instance.params">
+<td><code>params</code></td>
+<td><code><a href="#google.protobuf.Struct">google.protobuf.Struct</a></code></td>
+<td>
+<p>Required. Depends on referenced template. Struct representation of a
+proto defined by the template; this varies depending on the value of field <code>template</code>.</p>
 
 </td>
 </tr>
@@ -331,6 +446,37 @@ fields of other descriptors.</p>
 <td><code>STRING_MAP</code></td>
 <td>
 <p>A map string -&gt; string, typically used by headers.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="google.protobuf.Struct">google.protobuf.Struct</h2>
+<section>
+<p><code>Struct</code> represents a structured data value, consisting of fields
+which map to dynamically typed values. In some languages, <code>Struct</code>
+might be supported by a native representation. For example, in
+scripting languages like JS a struct is represented as an
+object. The details of that representation are described together
+with the proto support for the language.</p>
+
+<p>The JSON representation for <code>Struct</code> is JSON object.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="google.protobuf.Struct.fields">
+<td><code>fields</code></td>
+<td><code>map&lt;string,&nbsp;<a href="#google.protobuf.Value">google.protobuf.Value</a>&gt;</code></td>
+<td>
+<p>Unordered map of dynamically typed values.</p>
 
 </td>
 </tr>

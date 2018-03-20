@@ -153,3 +153,62 @@ message Action {
   // The constructed objects are then passed to the `handler` referenced within this action.
   repeated string instances = 3;
 }
+
+// An Instance tells Mixer how to create instances for particular template.
+//
+// Instance is defined by the operator. Instance is defined relative to a known
+// template. Their purpose is to tell Mixer how to use attributes or literals to produce
+// instances of the specified template at runtime.
+//
+// The following example instructs Mixer to construct an instance associated with template
+// 'istio.mixer.adapter.metric.Metric'. It provides a mapping from the template's fields to expressions.
+// Instances produced with this instance can be referenced by [Actions][istio.policy.v1beta1.Action] using name
+// 'RequestCountByService'
+//
+// ```yaml
+// - name: RequestCountByService
+//   template: istio.mixer.adapter.metric.Metric
+//   params:
+//     value: 1
+//     dimensions:
+//       source: source.service
+//       destination_ip: destination.ip
+// ```
+message Instance {
+  // Required. The name of this instance
+  //
+  // Must be unique amongst other Instances in scope. Used by [Action][istio.policy.v1beta1.Action] to refer
+  // to an instance produced by this instance.
+  string name = 1;
+
+  // Required. The name of the template this instance creates instances for.
+  // The value must match the name of the available template in scope.
+  string template = 2;
+
+  // Required. Depends on referenced template. Struct representation of a
+  // proto defined by the template; this varies depending on the value of field `template`.
+  google.protobuf.Struct params = 3;
+}
+
+// Handler allows the operator to configure a specific adapter implementation.
+// Each adapter implementation defines its own `params` proto.
+//
+// In the following example we define a `metrics` handler using the Mixer's prepackaged
+// prometheus adapter. This handler doesn't require any parameters.
+//
+// ```yaml
+// name: prometheus-handler
+// adapter: prometheus
+// params:
+// ```
+message Handler {
+  // Required. Must be unique in the entire mixer configuration. Used by [Actions][istio.policy.v1beta1.Action.handler]
+  // to refer to this handler.
+  string name = 1;
+  // Required. The name of a specific adapter implementation. An adapter's
+  // implementation name is typically a constant in its code.
+  string adapter = 2;
+  // Optional. Depends on adapter implementation. Struct representation of a
+  // proto defined by the adapter implementation; this varies depending on the value of field `adapter`.
+  google.protobuf.Struct params = 3;
+}
