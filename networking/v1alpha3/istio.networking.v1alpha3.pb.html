@@ -678,7 +678,7 @@ metadata:
   name: external-svc-wildcard-example
 spec:
   hosts:
-  - *.bar.com
+  - &quot;*.bar.com&quot;
   ports:
   - number: 80
     name: http
@@ -2458,7 +2458,7 @@ kind: DestinationRule
 metadata:
   name: tls-foo
 spec:
-  name: *.foo.com
+  name: &quot;*.foo.com&quot;
   trafficPolicy:
     tls:
       mode: SIMPLE

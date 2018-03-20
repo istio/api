@@ -137,7 +137,7 @@ func (ExternalService_Discovery) EnumDescriptor() ([]byte, []int) {
 //       name: external-svc-wildcard-example
 //     spec:
 //       hosts:
-//       - *.bar.com
+//       - "*.bar.com"
 //       ports:
 //       - number: 80
 //         name: http
