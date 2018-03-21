@@ -14,19 +14,19 @@
 
 syntax = "proto3";
 
-import "authentication/v1alpha1/policy.proto";
+import "authentication/v1alpha2/policy.proto";
 
 // $title: Internal API for authentication implementation on Envoy.
 
-package istio.envoy.authentication.v1alpha1;
+package istio.envoy.authentication.v1alpha2;
 
-option go_package = "istio.io/api/envoy/authentication/v1alpha1";
+option go_package = "istio.io/api/envoy/authentication/v1alpha2";
 
 // FilterConfig is the config for Istio-specific filter that is used to enforce
 // authentication policy on Envoy.
 message FilterConfig {
   // Policy is the original copy of the policy.
-  istio.authentication.v1alpha1.Policy policy = 1;
+  istio.authentication.v1alpha2.Policy policy = 1;
 
   // Map from JwksURI to cluster name. These clusters are added by pilot.
   map<string, string> jwks_cluster_names = 2;
