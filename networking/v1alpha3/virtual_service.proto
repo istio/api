@@ -419,7 +419,7 @@ message TCPRoute {
 //         - destination:
 //             name: ratings
 //
-// MatchCondition CANNOT be empty.
+// HTTPMatchRequest CANNOT be empty.
 message HTTPMatchRequest {
   // URI to match
   // values are case-sensitive and formatted as follows:
