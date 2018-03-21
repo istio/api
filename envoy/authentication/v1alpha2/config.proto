@@ -28,6 +28,8 @@ message FilterConfig {
   // Policy is the original copy of the policy.
   istio.authentication.v1alpha2.Policy policy = 1;
 
-  // Map from JwksURI to cluster name. These clusters are added by pilot.
-  map<string, string> jwks_cluster_names = 2;
+  // Map from issuer to location of the payload that is emitted by Jwt filter.
+  // This information is added by pilot when construct and add Jwt and
+  // authN filters.
+  map<string, string> jwt_output_payload_locations = 2;
 }
