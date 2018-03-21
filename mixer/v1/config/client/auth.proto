@@ -14,8 +14,11 @@
 
 // This policy API is still under development, and may be replaced by
 // [authentication
-// policy](https://github.com/istio/api/tree/master/authentication/v1alpha1) in
+// policy](https://github.com/istio/api/tree/master/authentication/v1alpha2) in
 // the near future.
+// Tracking issue: https://github.com/istio/istio/issues/4337
+// Pre-release note: https://goo.gl/43usPn
+
 syntax = "proto3";
 
 package istio.mixer.v1.config.client;
