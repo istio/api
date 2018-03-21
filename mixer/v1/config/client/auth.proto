@@ -12,7 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-// This policy API is still under development, and may be replaced by
+// This policy API is no longer supported, and soon be replaced by
 // [authentication
 // policy](https://github.com/istio/api/tree/master/authentication/v1alpha2) in
 // the near future.
