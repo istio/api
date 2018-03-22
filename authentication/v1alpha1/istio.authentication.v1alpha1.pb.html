@@ -214,7 +214,7 @@ or origin) should be used as principal. By default, it uses peer.</p>
 
 <p>Policy to enable mTLS for all services in namespace frod</p>
 
-<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha2
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
 kind: Policy
 metadata:
   name: mTLS_enable
@@ -226,7 +226,7 @@ spec:
 
 <p>Policy to disable mTLS for &ldquo;productpage&rdquo; service</p>
 
-<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha2
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
 kind: Policy
 metadata:
   name: mTLS_disable
@@ -239,7 +239,7 @@ spec:
 <p>Policy to require mTLS for peer authentication, and JWT for origin authenticationn
 for productpage:9000. Principal is set from origin identity.</p>
 
-<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha2
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
 kind: Policy
 metadata:
   name: mTLS_enable
@@ -269,7 +269,7 @@ Note: this example can be used for use cases when we want to allow request from
 certain peers, given it comes with an approperiate authorization poicy to check
 and reject request accoridingly.</p>
 
-<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha2
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
 kind: Policy
 metadata:
   name: mTLS_enable

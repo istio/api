@@ -135,7 +135,7 @@ message PeerAuthenticationMethod {
 // Currently, only JWT is supported for origin authentication.
 message OriginAuthenticationMethod {
   // Jwt params for the method.
-  Jwt jwt = 2;
+  Jwt jwt = 1;
 }
 
 // Associates authentication with request principal.
@@ -167,7 +167,7 @@ enum PrincipalBinding {
 // Policy to enable mTLS for all services in namespace frod
 //
 // ```yaml
-// apiVersion: authentication.istio.io/v1alpha2
+// apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
 //   name: mTLS_enable
@@ -179,7 +179,7 @@ enum PrincipalBinding {
 // Policy to disable mTLS for "productpage" service
 //
 // ```yaml
-// apiVersion: authentication.istio.io/v1alpha2
+// apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
 //   name: mTLS_disable
@@ -192,7 +192,7 @@ enum PrincipalBinding {
 // for productpage:9000. Principal is set from origin identity.
 //
 // ```yaml
-// apiVersion: authentication.istio.io/v1alpha2
+// apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
 //   name: mTLS_enable
@@ -223,7 +223,7 @@ enum PrincipalBinding {
 // and reject request accoridingly.
 //
 // ```yaml
-// apiVersion: authentication.istio.io/v1alpha2
+// apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
 //   name: mTLS_enable
