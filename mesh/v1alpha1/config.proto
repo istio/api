@@ -221,4 +221,9 @@ message MeshConfig {
   // DEPRECATED. Mixer address. This option will be removed soon. Please
   // use mixer_check and mixer_report.
   string mixer_address = 16;
+
+  // Flag to control pass through of traffic to unknown destinations.
+  // If set to true sidecar proxies will be configured to route traffic to unknown
+  // destinations to the original destination. Default is false.
+  bool enable_fallback_passthrough_filter = 17;
 }
