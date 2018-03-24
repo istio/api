@@ -66,7 +66,7 @@ const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 //         - user: “alice@yahoo.com”
 //         roleRef:
 //           kind: ServiceRole
-//           name: “service-admin”
+//           name: “product-viewer”
 //    },
 //  ]
 type LocalRBAC struct {
@@ -88,7 +88,7 @@ func (m *LocalRBAC) GetServicePolicies() []*ServicePolicy {
 
 // ServicePolicy specifies a service and the Istio RBAC policies that apply to the service.
 type ServicePolicy struct {
-	// The name of the service.
+	// The fully qualified name of the service.
 	Service string `protobuf:"bytes,1,opt,name=service" json:"service,omitempty"`
 	// The Istio RBAC policies that apply to the service.
 	Policies []*Policy `protobuf:"bytes,2,rep,name=policies" json:"policies,omitempty"`

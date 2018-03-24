@@ -51,7 +51,7 @@ option go_package="istio.io/api/rbac/v1alpha1";
 //         - user: “alice@yahoo.com”
 //         roleRef:
 //           kind: ServiceRole
-//           name: “service-admin”
+//           name: “product-viewer”
 //    },
 //  ]
 message LocalRBAC {
@@ -61,7 +61,7 @@ message LocalRBAC {
 
 // ServicePolicy specifies a service and the Istio RBAC policies that apply to the service.
 message ServicePolicy {
-  // The name of the service.
+  // The fully qualified name of the service.
   string service = 1;
 
   // The Istio RBAC policies that apply to the service.
