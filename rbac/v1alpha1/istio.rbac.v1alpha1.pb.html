@@ -1,9 +1,9 @@
 ---
 title: RBAC
-overview: Configuration affecting resource-based access control
+overview: Configuration for Role Based Access Control
 location: https://istio.io/docs/reference/config/istio.rbac.v1alpha1.html
 layout: protoc-gen-docs
-number_of_entries: 6
+number_of_entries: 9
 ---
 <p>Istio RBAC (Role Based Access Control) defines ServiceRole and ServiceRoleBinding
 objects.</p>
@@ -28,8 +28,8 @@ metadata:
   namespace: istio-system
 spec:
   subject:
-    user: request.auth.principal | &quot;&quot;
-    groups: request.auth.principal | &quot;&quot;
+    user: source.user | &quot;&quot;
+    groups: &quot;&quot;
     properties:
       service: source.service | &quot;&quot;
       namespace: source.namespace | &quot;&quot;
@@ -189,6 +189,103 @@ or &ldquo;</em>alpha2&rdquo; (suffix match).</p>
 </tbody>
 </table>
 </section>
+<h2 id="LocalRBAC">LocalRBAC</h2>
+<section>
+<p>LocalRBAC specifies Istio RBAC policies that apply to the local RBAC engine
+that typically runs on a proxy. There can be multiple services running behind
+a proxy.</p>
+
+<p>Here is an example of local RBAC policy, which contains policies for a single service.
+[
+  &lbrace;
+    service: products.default.svc.cluster.local
+    policies:
+    - role: service-admin
+      spec:
+        rules:
+        - services: [“<em>”]
+          methods: [“</em>”]
+      bindings:
+      - subjects:
+        - user: “cluster.local/ns/default/sa/admin”
+        roleRef:
+          kind: ServiceRole
+          name: “service-admin”
+    - role: product-viewer
+      spec:
+        rules:
+        - services: [“products.default.svc.cluster.local”]
+          paths: [“/products/<em>”, “</em>/reviews”]
+          methods: [“GET”, “HEAD”]
+      bindings:
+      - subjects:
+        - user: “alice@yahoo.com”
+        roleRef:
+          kind: ServiceRole
+          name: “service-admin”
+   },
+ ]</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LocalRBAC.service_policies">
+<td><code>servicePolicies</code></td>
+<td><code><a href="#ServicePolicy">ServicePolicy[]</a></code></td>
+<td>
+<p>A list of ServicePolicy. One per service.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Policy">Policy</h2>
+<section>
+<p>Policy specifies a ServiceRole and the associated ServiceRoleBindings.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Policy.role">
+<td><code>role</code></td>
+<td><code>string</code></td>
+<td>
+<p>The name of the ServiceRole.</p>
+
+</td>
+</tr>
+<tr id="Policy.spec">
+<td><code>spec</code></td>
+<td><code><a href="#ServiceRole">ServiceRole</a></code></td>
+<td>
+<p>The ServiceRole specification.</p>
+
+</td>
+</tr>
+<tr id="Policy.bindings">
+<td><code>bindings</code></td>
+<td><code><a href="#ServiceRoleBinding">ServiceRoleBinding[]</a></code></td>
+<td>
+<p>The ServiceRoleBindings that are associated with the given ServiceRole.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="RoleRef">RoleRef</h2>
 <section>
 <p>RoleRef refers to a role object.</p>
@@ -218,6 +315,38 @@ Currently, &ldquo;ServiceRole&rdquo; is the only supported value for &ldquo;kind
 <p>Required. The name of the ServiceRole object being referenced.
 The ServiceRole object must be in the same namespace as the ServiceRoleBinding
 object.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ServicePolicy">ServicePolicy</h2>
+<section>
+<p>ServicePolicy specifies a service and the Istio RBAC policies that apply to the service.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ServicePolicy.service">
+<td><code>service</code></td>
+<td><code>string</code></td>
+<td>
+<p>The name of the service.</p>
+
+</td>
+</tr>
+<tr id="ServicePolicy.policies">
+<td><code>policies</code></td>
+<td><code><a href="#Policy">Policy[]</a></code></td>
+<td>
+<p>The Istio RBAC policies that apply to the service.</p>
 
 </td>
 </tr>
