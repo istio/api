@@ -1,0 +1,82 @@
+// Copyright 2018 Istio Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+import "rbac/v1alpha1/rbac.proto";
+
+package istio.rbac.v1alpha1;
+
+option go_package="istio.io/api/rbac/v1alpha1";
+
+// LocalRBAC specifies Istio RBAC policies that apply to the local RBAC engine
+// that typically runs on a proxy. There can be multiple services running behind
+// a proxy.
+//
+// Here is an example of local RBAC policy, which contains policies for a single service.
+// [
+//   {
+//     service: products.default.svc.cluster.local
+//     policies:
+//     - role: service-admin
+//       spec:
+//         rules:
+//         - services: [“*”]
+//           methods: [“*”]
+//       bindings:
+//       - subjects:
+//         - user: “cluster.local/ns/default/sa/admin”
+//         roleRef:
+//           kind: ServiceRole
+//           name: “service-admin”
+//     - role: product-viewer
+//       spec:
+//         rules:
+//         - services: [“products.default.svc.cluster.local”]
+//           paths: [“/products/*”, “*/reviews”]
+//           methods: [“GET”, “HEAD”]
+//       bindings:
+//       - subjects:
+//         - user: “alice@yahoo.com”
+//         roleRef:
+//           kind: ServiceRole
+//           name: “product-viewer”
+//    },
+//  ]
+message LocalRBAC {
+  // A list of ServicePolicy. One per service.
+  repeated ServicePolicy service_policies = 1;
+}
+
+// ServicePolicy specifies a service and the Istio RBAC policies that apply to the service.
+message ServicePolicy {
+  // The fully qualified name of the service.
+  string service = 1;
+
+  // The Istio RBAC policies that apply to the service.
+  repeated Policy policies = 2;
+}
+
+// Policy specifies a ServiceRole and the associated ServiceRoleBindings.
+message Policy {
+  // The name of the ServiceRole.
+  string role = 1;
+
+  // The ServiceRole specification.
+  ServiceRole spec = 2;
+
+  // The ServiceRoleBindings that are associated with the given ServiceRole.
+  repeated ServiceRoleBinding bindings = 3;
+}
+
