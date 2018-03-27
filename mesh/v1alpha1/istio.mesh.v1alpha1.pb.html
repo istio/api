@@ -4,7 +4,7 @@ overview: Configuration affecting the service mesh as a whole
 location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 redirect_from: /docs/reference/config/service-mesh.html
-number_of_entries: 7
+number_of_entries: 9
 ---
 <h2 id="AuthenticationPolicy">AuthenticationPolicy</h2>
 <section>
@@ -227,6 +227,14 @@ instead of using allow</em>any.</p>
 
 </td>
 </tr>
+<tr id="MeshConfig.rbac_config">
+<td><code>rbacConfig</code></td>
+<td><code><a href="#MeshConfig.IstioRBACConfig">MeshConfig.IstioRBACConfig</a></code></td>
+<td>
+<p>Istio RBAC config defines the global switch to control the Istio RBAC behavior.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -295,6 +303,89 @@ annotations match the value specified in the ingress_class parameter
 described earlier. Use this mode if Istio ingress controller will be
 a secondary ingress controller (e.g., in addition to a
 cloud-provided ingress controller).</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig.IstioRBACConfig">MeshConfig.IstioRBACConfig</h2>
+<section>
+<p>Istio RBAC config defines the global switch to control the Istio RBAC behavior.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig.IstioRBACConfig.mode">
+<td><code>mode</code></td>
+<td><code><a href="#MeshConfig.IstioRBACConfig.IstioRBACMode">MeshConfig.IstioRBACConfig.IstioRBACMode</a></code></td>
+<td>
+<p>Istio RBAC configuration.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig.IstioRBACConfig.exception_services">
+<td><code>exceptionServices</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>The list of services that are excluded from the mesh global Istio RBAC setting.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig.IstioRBACConfig.exception_namespaces">
+<td><code>exceptionNamespaces</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>The list of namespaces that are excluded from the mesh global Istio RBAC setting.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig.IstioRBACConfig.IstioRBACMode">MeshConfig.IstioRBACConfig.IstioRBACMode</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig.IstioRBACConfig.IstioRBACMode.OFF">
+<td><code>OFF</code></td>
+<td>
+<p>Disable Istio RBAC for the mesh.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig.IstioRBACConfig.IstioRBACMode.ON">
+<td><code>ON</code></td>
+<td>
+<p>Enable Istio RBAC for the mesh.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig.IstioRBACConfig.IstioRBACMode.OFF_WITH_EXCEPTION">
+<td><code>OFF_WITH_EXCEPTION</code></td>
+<td>
+<p>Disable Istio RBAC for the mesh, except the services/namespaces listed
+in exception<em>services and exception</em>namespaces (whitelist).</p>
+
+</td>
+</tr>
+<tr id="MeshConfig.IstioRBACConfig.IstioRBACMode.ON_WITH_EXCEPTION">
+<td><code>ON_WITH_EXCEPTION</code></td>
+<td>
+<p>Enable Istio RBAC for the mesh, except the services/namespaces listed
+in exception<em>services and exception</em>namespaces (blacklist).</p>
 
 </td>
 </tr>

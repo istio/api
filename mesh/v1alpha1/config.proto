@@ -243,4 +243,35 @@ message MeshConfig {
   // Users are strongly encouraged to use ExternalServices to explicitly declare any external dependencies,
   // instead of using allow_any.
   OutboundTrafficPolicy outbound_traffic_policy = 17;
+
+  // Istio RBAC config defines the global switch to control the Istio RBAC behavior.
+  message IstioRBACConfig {
+    enum IstioRBACMode {
+      // Disable Istio RBAC for the mesh.
+      OFF = 0;
+
+      // Enable Istio RBAC for the mesh.
+      ON = 1;
+
+      // Disable Istio RBAC for the mesh, except the services/namespaces listed
+      // in exception_services and exception_namespaces (whitelist).
+      OFF_WITH_EXCEPTION = 2;
+
+      // Enable Istio RBAC for the mesh, except the services/namespaces listed
+      // in exception_services and exception_namespaces (blacklist).
+      ON_WITH_EXCEPTION = 3;
+    }
+
+    // Istio RBAC configuration.
+    IstioRBACMode mode = 1;
+
+    // The list of services that are excluded from the mesh global Istio RBAC setting.
+    repeated string exception_services = 2;
+
+    // The list of namespaces that are excluded from the mesh global Istio RBAC setting.
+    repeated string exception_namespaces = 3;
+  }
+
+  // Istio RBAC config defines the global switch to control the Istio RBAC behavior.
+  IstioRBACConfig rbac_config = 18;
 }
