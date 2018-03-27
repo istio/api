@@ -224,15 +224,18 @@ message MeshConfig {
 
   message OutboundTrafficPolicy {
     enum Mode {
-      // outbound traffic to services defined in the service registry or pre-defined external services will be allowed
+      // outbound traffic will be restricted to services defined in the service registry as well as those defined
+      // through ExternalServices
       REGISTRY_ONLY = 0;
       // outbound traffic to unknown destinations will be allowed
       ALLOW_ANY = 1;
+      // not implemented. outbound traffic will be restricted to destinations defined in VirtualServices only
+      VIRTUAL_SERVICE_ONLY = 2;
     }
 
     Mode mode = 1;
   }
-  
+
   // Set the default behavior of the sidecar for handling outbound traffic from the application.
   // While the default mode should work out of the box, if your application uses one or more external services that
   // are not known apriori, setting the policy to ALLOW_ANY will cause the sidecars to route traffic to the any

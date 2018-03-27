@@ -334,7 +334,8 @@ cloud-provided ingress controller).</p>
 <tr id="MeshConfig.OutboundTrafficPolicy.Mode.REGISTRY_ONLY">
 <td><code>REGISTRY_ONLY</code></td>
 <td>
-<p>outbound traffic to services defined in the service registry or pre-defined external services will be allowed</p>
+<p>outbound traffic will be restricted to services defined in the service registry as well as those defined
+through ExternalServices</p>
 
 </td>
 </tr>
@@ -342,6 +343,13 @@ cloud-provided ingress controller).</p>
 <td><code>ALLOW_ANY</code></td>
 <td>
 <p>outbound traffic to unknown destinations will be allowed</p>
+
+</td>
+</tr>
+<tr id="MeshConfig.OutboundTrafficPolicy.Mode.VIRTUAL_SERVICE_ONLY">
+<td><code>VIRTUAL_SERVICE_ONLY</code></td>
+<td>
+<p>not implemented. outbound traffic will be restricted to destinations defined in VirtualServices only</p>
 
 </td>
 </tr>
