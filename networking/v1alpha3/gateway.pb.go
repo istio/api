@@ -71,6 +71,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //       servers:
 //       - port:
 //           number: 80
+//           name: http
 //           protocol: HTTP
 //         hosts:
 //         - uk.bookinfo.com
@@ -79,6 +80,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //           httpsRedirect: true # sends 302 redirect for http requests
 //       - port:
 //           number: 443
+//           name: https
 //           protocol: HTTPS
 //         hosts:
 //         - uk.bookinfo.com
@@ -212,6 +214,7 @@ func (m *Gateway) GetSelector() map[string]string {
 //       servers:
 //       - port:
 //           number: 80
+//           name: http2
 //           protocol: HTTP2
 //
 // Another example
@@ -226,6 +229,7 @@ func (m *Gateway) GetSelector() map[string]string {
 //       servers:
 //       - port:
 //           number: 27018
+//           name: mongo
 //           protocol: MONGO
 //
 // The following is an example of TLS configuration for port 443
@@ -240,6 +244,7 @@ func (m *Gateway) GetSelector() map[string]string {
 //       servers:
 //       - port:
 //           number: 443
+//           name: https
 //           protocol: HTTPS
 //         tls:
 //           mode: SIMPLE
