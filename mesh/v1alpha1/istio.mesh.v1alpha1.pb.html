@@ -4,7 +4,7 @@ overview: Configuration affecting the service mesh as a whole
 location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 redirect_from: /docs/reference/config/service-mesh.html
-number_of_entries: 6
+number_of_entries: 7
 ---
 <h2 id="AuthenticationPolicy">AuthenticationPolicy</h2>
 <section>
@@ -64,7 +64,14 @@ Istio service mesh.</p>
 <td><code>mixerCheckServer</code></td>
 <td><code>string</code></td>
 <td>
-<p>Deprecated, use mixer_check instead.</p>
+<p>Address of the server that will be used by the proxies for policy
+check calls. By using different names for mixerCheckServer and
+mixerReportServer, it is possible to have one set of mixer servers handle
+policy check calls while another set of mixer servers handle telemetry
+calls.</p>
+
+<p>NOTE: Omitting mixerCheckServer while specifying mixerReportServer is
+equivalent to setting disablePolicyChecks to true.</p>
 
 </td>
 </tr>
@@ -72,7 +79,8 @@ Istio service mesh.</p>
 <td><code>mixerReportServer</code></td>
 <td><code>string</code></td>
 <td>
-<p>Deprecated, use mixer_report instead.</p>
+<p>Address of the server that will be used by the proxies for policy report
+calls.</p>
 
 </td>
 </tr>
@@ -206,26 +214,16 @@ use mixer<em>check and mixer</em>report.</p>
 
 </td>
 </tr>
-<tr id="MeshConfig.mixer_check">
-<td><code>mixerCheck</code></td>
-<td><code><a href="#ServerAddress">ServerAddress</a></code></td>
+<tr id="MeshConfig.outbound_traffic_policy">
+<td><code>outboundTrafficPolicy</code></td>
+<td><code><a href="#MeshConfig.OutboundTrafficPolicy">MeshConfig.OutboundTrafficPolicy</a></code></td>
 <td>
-<p>Address of the server that will be used by the proxies for policy
-check calls. By using different names for mixerCheck and mixerReport, it
-is possible to have one set of mixer servers handle policy check calls,
-while another set of mixer servers handle telemetry calls.</p>
-
-<p>NOTE: Omitting mixerCheck while specifying mixerReport is
-equivalent to setting disablePolicyChecks to true.</p>
-
-</td>
-</tr>
-<tr id="MeshConfig.mixer_report">
-<td><code>mixerReport</code></td>
-<td><code><a href="#ServerAddress">ServerAddress</a></code></td>
-<td>
-<p>Address of the server that will be used by the proxies for policy report
-calls.</p>
+<p>Set the default behavior of the sidecar for handling outbound traffic from the application.
+While the default mode should work out of the box, if your application uses one or more external services that
+are not known apriori, setting the policy to ALLOW<em>ANY will cause the sidecars to route traffic to the any
+requested destination.
+Users are strongly encouraged to use ExternalServices to explicitly declare any external dependencies,
+instead of using allow</em>any.</p>
 
 </td>
 </tr>
@@ -297,6 +295,61 @@ annotations match the value specified in the ingress_class parameter
 described earlier. Use this mode if Istio ingress controller will be
 a secondary ingress controller (e.g., in addition to a
 cloud-provided ingress controller).</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig.OutboundTrafficPolicy">MeshConfig.OutboundTrafficPolicy</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig.OutboundTrafficPolicy.mode">
+<td><code>mode</code></td>
+<td><code><a href="#MeshConfig.OutboundTrafficPolicy.Mode">MeshConfig.OutboundTrafficPolicy.Mode</a></code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig.OutboundTrafficPolicy.Mode">MeshConfig.OutboundTrafficPolicy.Mode</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig.OutboundTrafficPolicy.Mode.REGISTRY_ONLY">
+<td><code>REGISTRY_ONLY</code></td>
+<td>
+<p>outbound traffic will be restricted to services defined in the service registry as well as those defined
+through ExternalServices</p>
+
+</td>
+</tr>
+<tr id="MeshConfig.OutboundTrafficPolicy.Mode.ALLOW_ANY">
+<td><code>ALLOW_ANY</code></td>
+<td>
+<p>outbound traffic to unknown destinations will be allowed</p>
+
+</td>
+</tr>
+<tr id="MeshConfig.OutboundTrafficPolicy.Mode.VIRTUAL_SERVICE_ONLY">
+<td><code>VIRTUAL_SERVICE_ONLY</code></td>
+<td>
+<p>not implemented. outbound traffic will be restricted to destinations defined in VirtualServices only</p>
 
 </td>
 </tr>
@@ -376,7 +429,7 @@ MUST BE greater than <em>drain</em>duration_ parameter.</p>
 <td><code>discoveryAddress</code></td>
 <td><code>string</code></td>
 <td>
-<p>Deprecated, use server_address instead.</p>
+<p>Address of the discovery service exposing xDS with mTLS connection.</p>
 
 </td>
 </tr>
@@ -468,68 +521,11 @@ Increase the value of this field if you find that the metrics from Envoys are tr
 
 </td>
 </tr>
-<tr id="ProxyConfig.pilot">
-<td><code>pilot</code></td>
-<td><code><a href="#ServerAddress">ServerAddress</a></code></td>
-<td>
-<p>Deprecated, use discovery<em>mtls</em>address/discovery<em>plain</em>address instead.</p>
-
-</td>
-</tr>
-<tr id="ProxyConfig.discovery_mtls_address">
-<td><code>discoveryMtlsAddress</code></td>
-<td><code>string</code></td>
-<td>
-<p>Address of the discovery service exposing xDS with mTLS connection.</p>
-
-</td>
-</tr>
-<tr id="ProxyConfig.discovery_plain_address">
-<td><code>discoveryPlainAddress</code></td>
-<td><code>string</code></td>
-<td>
-<p>Address of the discovery service exposing xDS with plain text connection.</p>
-
-</td>
-</tr>
 <tr id="ProxyConfig.proxy_bootstrap_template_path">
 <td><code>proxyBootstrapTemplatePath</code></td>
 <td><code>string</code></td>
 <td>
 <p>Path to the proxy bootstrap template file</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="ServerAddress">ServerAddress</h2>
-<section>
-<p>ServerAddress specifies the address of Istio components like mixer, pilot, etc.
-At least one of the field needs to be specified.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="ServerAddress.mutual_tls">
-<td><code>mutualTls</code></td>
-<td><code>string</code></td>
-<td>
-<p>The address for mTLS server, e.g., (<em>istio-pilot:15003</em>)</p>
-
-</td>
-</tr>
-<tr id="ServerAddress.plain_text">
-<td><code>plainText</code></td>
-<td><code>string</code></td>
-<td>
-<p>The address for plain text server, e.g., (<em>istio-pilot:15005</em>)</p>
 
 </td>
 </tr>

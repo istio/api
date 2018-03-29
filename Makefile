@@ -33,6 +33,7 @@ protoc_gen_go_plugin := $(protoc_gen_go_prefix):$(out_path)
 ########################
 
 gogo_plugin_prefix := --gogo_out=plugins=grpc,
+gogofast_plugin_prefix := --gogofast_out=plugins=grpc,
 gogoslick_plugin_prefix := --gogoslick_out=plugins=grpc,
 
 comma := ,
@@ -45,15 +46,17 @@ importmaps := \
 	google/protobuf/descriptor.proto=github.com/gogo/protobuf/protoc-gen-gogo/descriptor \
 	google/protobuf/duration.proto=github.com/gogo/protobuf/types \
 	google/protobuf/timestamp.proto=github.com/gogo/protobuf/types \
-	google/rpc/status.proto=istio.io/gogo-genproto/googleapis/google/rpc \
-	google/rpc/code.proto=istio.io/gogo-genproto/googleapis/google/rpc \
-	google/rpc/error_details.proto=istio.io/gogo-genproto/googleapis/google/rpc \
+	google/protobuf/wrappers.proto=github.com/gogo/protobuf/types \
+	google/rpc/status.proto=github.com/gogo/googleapis/google/rpc \
+	google/rpc/code.proto=github.com/gogo/googleapis/google/rpc \
+	google/rpc/error_details.proto=github.com/gogo/googleapis/google/rpc \
 
 # generate mapping directive with M<proto>:<go pkg>, format for each proto file
 mapping_with_spaces := $(foreach map,$(importmaps),M$(map),)
 gogo_mapping := $(subst $(space),$(empty),$(mapping_with_spaces))
 
 gogo_plugin := $(gogo_plugin_prefix)$(gogo_mapping):$(out_path)
+gogofast_plugin := $(gogofast_plugin_prefix)$(gogo_mapping):$(out_path)
 gogoslick_plugin := $(gogoslick_plugin_prefix)$(gogo_mapping):$(out_path)
 
 ########################
@@ -66,7 +69,7 @@ protoc_gen_docs_plugin := --docs_out=warnings=true,mode=jekyll_html:$(repo_dir)/
 # Generation Rules
 #####################
 
-generate: generate-broker-go generate-mesh-go generate-mixer-go generate-routing-go generate-rbac-go generate-authn-go
+generate: generate-broker-go generate-mesh-go generate-mixer-go generate-routing-go generate-rbac-go generate-authn-go generate-envoy-go
 
 #####################
 # broker/...
@@ -120,16 +123,6 @@ mixer_config_client_protos := $(shell find $(mixer_config_client_path) -maxdepth
 mixer_config_client_pb_gos := $(mixer_config_client_protos:.proto=.pb.go)
 mixer_config_client_pb_doc := $(mixer_config_client_path)/istio.mixer.v1.config.client.pb.html
 
-mixer_config_descriptor_path := mixer/v1/config/descriptor
-mixer_config_descriptor_protos := $(shell find $(mixer_config_descriptor_path) -maxdepth 1 -type f -name '*.proto' | sort)
-mixer_config_descriptor_pb_gos := $(mixer_config_descriptor_protos:.proto=.pb.go)
-mixer_config_descriptor_pb_doc := $(mixer_config_descriptor_path)/istio.mixer.v1.config.descriptor.pb.html
-
-mixer_template_path := mixer/v1/template
-mixer_template_protos := $(shell find $(mixer_template_path) -maxdepth 1 -type f -name '*.proto' | sort)
-mixer_template_pb_gos := $(mixer_template_protos:.proto=.pb.go)
-mixer_template_pb_doc := $(mixer_template_path)/istio.mixer.v1.template.pb.html
-
 mixer_adapter_model_v1beta1_path := mixer/adapter/model/v1beta1
 mixer_adapter_model_v1beta1_protos := $(shell find $(mixer_adapter_model_v1beta1_path) -maxdepth 1 -type f -name '*.proto' | sort)
 mixer_adapter_model_v1beta1_pb_gos := $(mixer_adapter_model_v1beta1_protos:.proto=.pb.go)
@@ -143,11 +136,8 @@ policy_v1beta1_pb_doc := $(policy_v1beta1_path)/istio.policy.v1beta1.pb.html
 generate-mixer-go: \
 	$(mixer_v1_pb_gos) $(mixer_v1_pb_doc) \
 	$(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc) \
-	$(mixer_config_descriptor_pb_gos) $(mixer_config_descriptor_pb_doc) \
-	$(mixer_template_pb_gos) $(mixer_template_pb_doc) \
 	$(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_doc) \
-	$(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc) \
-	mixer/v1/config/fixed_cfg.pb.go mixer/v1/config/istio.mixer.v1.config.pb.html
+	$(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc)
 
 $(mixer_v1_pb_gos) $(mixer_v1_pb_doc): $(mixer_v1_protos)
 	## Generate mixer/v1/*.pb.go + $(mixer_v1_pb_doc)
@@ -156,14 +146,6 @@ $(mixer_v1_pb_gos) $(mixer_v1_pb_doc): $(mixer_v1_protos)
 $(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc): $(mixer_config_client_protos)
 	## Generate mixer/v1/config/client/*.pb.go + $(mixer_config_client_pb_doc)
 	@$(docker_gen) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_config_client_path) $^
-
-$(mixer_config_descriptor_pb_gos) $(mixer_config_descriptor_pb_doc): $(mixer_config_descriptor_protos)
-	## Generate mixer/v1/config/descriptor/*.pb.go + $(mixer_config_descriptor_pb_doc)
-	@$(docker_gen) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_config_descriptor_path) $^
-
-$(mixer_template_pb_gos) $(mixer_template_pb_doc) : $(mixer_template_protos)
-	## Generate mixer/v1/template/*.pb.go + $(mixer_template_pb_doc)
-	@$(docker_gen) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_template_path) $^
 
 $(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_doc) : $(mixer_adapter_model_v1beta1_protos)
 	## Generate mixer/adapter/model/v1beta1/*.pb.go + $(mixer_adapter_model_v1beta1_pb_doc)
@@ -182,17 +164,9 @@ $(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc) : $(policy_v1beta1_protos)
 		rm -f policy/v1beta1/cfg.pb.go;\
 	fi
 
-mixer/v1/config/fixed_cfg.pb.go mixer/v1/config/istio.mixer.v1.config.pb.html: mixer/v1/config/cfg.proto
-	# Generate mixer/v1/config/fixed_cfg.pb.go (requires alternate plugin and sed scripting due to issues with google.protobuf.Struct)
-	@$(docker_gen) $(gogo_plugin) $(protoc_gen_docs_plugin)mixer/v1/config $^
-	@sed -e 's/*google_protobuf.Struct/interface{}/g' \
-		 -e 's/ValueType_VALUE_TYPE_UNSPECIFIED/VALUE_TYPE_UNSPECIFIED/g' mixer/v1/config/cfg.pb.go \
-		 | grep -v "google_protobuf" >mixer/v1/config/fixed_cfg.pb.go
-	@rm -f mixer/v1/config/cfg.pb.go
-
 clean-mixer:
-	rm -f $(mixer_v1_pb_gos) $(mixer_config_client_pb_gos) $(mixer_config_descriptor_pb_gos) $(mixer_template_pb_gos) $(mixer_adapter_model_v1beta1_pb_gos) $(policy_v1beta1_pb_gos) policy/v1beta1/fixed_cfg.pb.go mixer/v1/config/fixed_cfg.pb.go
-	rm -f $(mixer_v1_pb_doc) $(mixer_config_client_pb_doc) $(mixer_config_descriptor_pb_doc) $(mixer_template_pb_doc) $(mixer_adapter_model_v1beta1_pb_doc) $(policy_v1beta1_pb_doc) mixer/v1/config/istio.mixer.v1.config.pb.html
+	rm -f $(mixer_v1_pb_gos) $(mixer_config_client_pb_gos) $(mixer_adapter_model_v1beta1_pb_gos) $(policy_v1beta1_pb_gos) policy/v1beta1/fixed_cfg.pb.go
+	rm -f $(mixer_v1_pb_doc) $(mixer_config_client_pb_doc) $(mixer_adapter_model_v1beta1_pb_doc) $(policy_v1beta1_pb_doc)
 
 #####################
 # routing/...
@@ -216,7 +190,7 @@ $(routing_v1alpha1_pb_gos) $(routing_v1alpha1_pb_doc): $(routing_v1alpha1_protos
 
 $(routing_v1alpha3_pb_gos) $(routing_v1alpha3_pb_doc): $(routing_v1alpha3_protos)
 	## Generate networking/v1alpha3/*.pb.go
-	@$(docker_gen) $(protoc_gen_go_plugin) $(protoc_gen_docs_plugin)$(routing_v1alpha3_path) $^
+	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(routing_v1alpha3_path) $^
 
 clean-routing:
 	rm -f $(routing_v1alpha1_pb_gos) $(routing_v1alpha3_pb_gos)
@@ -255,15 +229,32 @@ generate-authn-go: $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc)
 
 $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc): $(authn_v1alpha1_protos)
 	## Generate authentication/v1alpha1/*.pb.go
-	@$(docker_gen) $(protoc_gen_go_plugin) $(protoc_gen_docs_plugin)$(authn_v1alpha1_path) $^
+	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(authn_v1alpha1_path) $^
 
 clean-authn:
 	rm -f $(authn_v1alpha1_pb_gos)
 	rm -f $(authn_v1alpha1_pb_doc)
 
+#####################
+# envoy/...
+#####################
+
+envoy_path := envoy
+envoy_protos := $(shell find $(envoy_path) -type f -name '*.proto' | sort)
+envoy_pb_gos := $(envoy_protos:.proto=.pb.go)
+
+generate-envoy-go: $(envoy_pb_gos) $(envoy_pb_doc)
+
+# Envoy APIs is internal APIs, documents is not required.
+$(envoy_pb_gos): $(envoy_protos)
+  ## Generate envoy/*/*.pb.go
+	@$(docker_gen) $(gogofast_plugin) $^
+
+clean-envoy:
+	rm -f $(envoy_pb_gos)
 
 #####################
 # Cleanup
 #####################
 
-clean: clean-broker clean-mesh clean-mixer clean-routing clean-rbac clean-authn
+clean: clean-broker clean-mesh clean-mixer clean-routing clean-rbac clean-authn clean-envoy
