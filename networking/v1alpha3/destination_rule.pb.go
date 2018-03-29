@@ -183,7 +183,7 @@ type DestinationRule struct {
 	// the FQDN of the host would be derived based on the underlying
 	// platform.
 	//
-	// For example on Kubernetes, when hosts contains a short name, Istio will
+	// For example on Kubernetes, when host contains a short name, Istio will
 	// interpret the short name based on the namespace of the rule.  Thus, when a
 	// client applies a rule in the "default" namespace, containing a name
 	// "reviews", Istio will setup routes to the
@@ -192,7 +192,7 @@ type DestinationRule struct {
 	// virtual host matching.  In Consul, a plain service name would be resolved to
 	// the FQDN "reviews.service.consul".
 	//
-	// Note that the hosts field applies to both HTTP and TCP
+	// Note that the host field applies to both HTTP and TCP
 	// services. Service inside the mesh, i.e. those found in the service
 	// registry, must always be referred to using their alphanumeric
 	// names. IP addresses or CIDR prefixes are allowed only for services

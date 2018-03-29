@@ -507,7 +507,7 @@ instead of a FQDN (i.e. has no dots in the name). In such a scenario,
 the FQDN of the host would be derived based on the underlying
 platform.</p>
 
-<p>For example on Kubernetes, when hosts contains a short name, Istio will
+<p>For example on Kubernetes, when host contains a short name, Istio will
 interpret the short name based on the namespace of the rule.  Thus, when a
 client applies a rule in the &ldquo;default&rdquo; namespace, containing a name
 &ldquo;reviews&rdquo;, Istio will setup routes to the
@@ -516,7 +516,7 @@ such as &ldquo;reviews.sales&rdquo; is used, it would be treated as a FQDN durin
 virtual host matching.  In Consul, a plain service name would be resolved to
 the FQDN &ldquo;reviews.service.consul&rdquo;.</p>
 
-<p>Note that the hosts field applies to both HTTP and TCP
+<p>Note that the host field applies to both HTTP and TCP
 services. Service inside the mesh, i.e. those found in the service
 registry, must always be referred to using their alphanumeric
 names. IP addresses or CIDR prefixes are allowed only for services
