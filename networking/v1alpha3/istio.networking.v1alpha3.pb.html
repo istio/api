@@ -1,9 +1,39 @@
 ---
-title: Virtual Service Alpha 3
+title: Route Rules Alpha 3
 overview: Configuration affecting traffic routing
+location: https://istio.io/docs/reference/config/istio.networking.v1alpha3.html
 layout: protoc-gen-docs
-number_of_entries: 36
+number_of_entries: 37
 ---
+<p>Configuration affecting traffic routing. Here are a few terms useful to define
+in the context of traffic routing.</p>
+
+<p><em>Service</em> a unit of application behavior bound to a unique name in a
+service registry. Services consist of multiple network <em>endpoints</em>
+implemented by workload instances running on pods, containers, VMs etc.</p>
+
+<p><em>Service versions (subsets)</em> - In a continuous deployment scenario, for
+a given service, there can be distinct subsets of instances running
+different variants of the application binary. These variants are not
+necessarily different API versions. They could be iterative changes to
+the same service, deployed in different environments (prod, staging,
+dev, etc.). Common scenarios where this occurs include A/B testing,
+canary rollouts, etc. The choice of a particular version can be decided
+based on various criterion (headers, url, etc.) and/or by weights
+assigned to each version. Each service has a default version consisting
+of all its instances.</p>
+
+<p><em>Source</em> - A downstream client calling a service.</p>
+
+<p><em>Host</em> - The address used by a client when attempting to connect to a
+service.</p>
+
+<p><em>Access model</em> - Applications address only the destination service
+(Host) without knowledge of individual service versions (subsets). The
+actual choice of the version is determined by the proxy/sidecar, enabling the
+application code to decouple itself from the evolution of dependent
+services.</p>
+
 <h2 id="ConnectionPoolSettings">ConnectionPoolSettings</h2>
 <section>
 <p>Connection pool settings for an upstream host. The settings apply to
@@ -20,7 +50,7 @@ kind: DestinationRule
 metadata:
   name: bookinfo-redis
 spec:
-  name: myredissrv
+  host: myredissrv
   trafficPolicy:
     connectionPool:
       tcp:
@@ -159,7 +189,7 @@ spec:
   http:
   - route:
     - destination:
-        name: ratings
+        host: ratings
         subset: v1
     corsPolicy:
       allowOrigin:
@@ -290,11 +320,11 @@ spec:
       uri: &quot;/newcatalog&quot;
     route:
     - destination:
-        name: reviews
+        host: reviews
         subset: v2
   - route:
     - destination:
-        name: reviews
+        host: reviews
         subset: v1
 </code></pre>
 
@@ -305,7 +335,7 @@ kind: DestinationRule
 metadata:
   name: reviews-destination
 spec:
-  name: reviews
+  host: reviews
   subsets:
   - name: v1
     labels:
@@ -332,7 +362,7 @@ spec:
   - timeout: 5s
     route:
     - destination:
-        name: productpage.prod
+        host: productpage.prod
 </code></pre>
 
 <p>The following sets a timeout of 5s for all calls to the external
@@ -349,7 +379,7 @@ spec:
   - timeout: 5s
     route:
     - destination:
-        name: wikipedia.org
+        host: wikipedia.org
 </code></pre>
 
 <table class="message-fields">
@@ -361,11 +391,11 @@ spec:
 </tr>
 </thead>
 <tbody>
-<tr id="Destination.name">
-<td><code>name</code></td>
+<tr id="Destination.host">
+<td><code>host</code></td>
 <td><code>string</code></td>
 <td>
-<p>REQUIRED. The name can be a short name or a fully qualified domain
+<p>REQUIRED. The host can be a short name or a fully qualified domain
 name from the service registry, a resolvable DNS name, or an IP
 address.</p>
 
@@ -424,7 +454,7 @@ kind: DestinationRule
 metadata:
   name: bookinfo-ratings
 spec:
-  name: ratings
+  host: ratings
   trafficPolicy:
     loadBalancer:
       simple: LEAST_CONN
@@ -441,7 +471,7 @@ kind: DestinationRule
 metadata:
   name: bookinfo-ratings
 spec:
-  name: ratings
+  host: ratings
   trafficPolicy:
     loadBalancer:
       simple: LEAST_CONN
@@ -466,8 +496,8 @@ a route rule explicitly sends traffic to this subset.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="DestinationRule.name">
-<td><code>name</code></td>
+<tr id="DestinationRule.host">
+<td><code>host</code></td>
 <td><code>string</code></td>
 <td>
 <p>REQUIRED. The destination address for traffic captured by this
@@ -477,7 +507,7 @@ instead of a FQDN (i.e. has no dots in the name). In such a scenario,
 the FQDN of the host would be derived based on the underlying
 platform.</p>
 
-<p>For example on Kubernetes, when hosts contains a short name, Istio will
+<p>For example on Kubernetes, when host contains a short name, Istio will
 interpret the short name based on the namespace of the rule.  Thus, when a
 client applies a rule in the &ldquo;default&rdquo; namespace, containing a name
 &ldquo;reviews&rdquo;, Istio will setup routes to the
@@ -486,7 +516,7 @@ such as &ldquo;reviews.sales&rdquo; is used, it would be treated as a FQDN durin
 virtual host matching.  In Consul, a plain service name would be resolved to
 the FQDN &ldquo;reviews.service.consul&rdquo;.</p>
 
-<p>Note that the hosts field applies to both HTTP and TCP
+<p>Note that the host field applies to both HTTP and TCP
 services. Service inside the mesh, i.e. those found in the service
 registry, must always be referred to using their alphanumeric
 names. IP addresses or CIDR prefixes are allowed only for services
@@ -534,11 +564,11 @@ spec:
   http:
   - route:
     - destination:
-        name: reviews
+        host: reviews
         subset: v2
       weight: 25
     - destination:
-        name: reviews
+        host: reviews
         subset: v1
       weight: 75
 </code></pre>
@@ -550,7 +580,7 @@ kind: DestinationRule
 metadata:
   name: reviews-destination
 spec:
-  name: reviews
+  host: reviews
   subsets:
   - name: v1
     labels:
@@ -613,7 +643,7 @@ spec:
   ports:
   - number: 443
     name: example-http
-    protocol: http # not HTTPS.
+    protocol: HTTP # not HTTPS.
   discovery: DNS
 </code></pre>
 
@@ -644,7 +674,7 @@ spec:
   ports:
   - number: 27018
     name: mongodb
-    protocol: mongo
+    protocol: MONGO
   discovery: STATIC
   endpoints:
   - address: 2.2.2.2
@@ -678,11 +708,11 @@ metadata:
   name: external-svc-wildcard-example
 spec:
   hosts:
-  - *.bar.com
+  - &quot;*.bar.com&quot;
   ports:
   - number: 80
     name: http
-    protocol: http
+    protocol: HTTP
   discovery: NONE
 </code></pre>
 
@@ -704,18 +734,18 @@ spec:
   ports:
   - number: 443
     name: https
-    protocol: http
+    protocol: HTTP
   discovery: DNS
   endpoints:
   - address: us.foo.bar.com
     ports:
-    - https: 8443
+      https: 8443
   - address: uk.foo.bar.com
     ports:
-    - https: 9443
+      https: 9443
   - address: in.foo.bar.com
     ports:
-    - https: 7443
+      https: 7443
 </code></pre>
 
 <p>and a destination rule to initiate TLS connections to the external service.</p>
@@ -813,7 +843,7 @@ service.</p>
 <tr id="ExternalService.Discovery.NONE">
 <td><code>NONE</code></td>
 <td>
-<p>If set to &ldquo;none&rdquo;, the proxy will assume that incoming connections
+<p>If set to &ldquo;NONE&rdquo;, the proxy will assume that incoming connections
 have already been resolved (to a specific destination IP
 address). Such connections are typically routed via the proxy using
 mechanisms such as IP table REDIRECT/ eBPF. After performing any
@@ -825,7 +855,7 @@ connection to the IP address to which the connection was bound.</p>
 <tr id="ExternalService.Discovery.STATIC">
 <td><code>STATIC</code></td>
 <td>
-<p>If set to &ldquo;static&rdquo;, the proxy will use the IP addresses specified in
+<p>If set to &ldquo;STATIC&rdquo;, the proxy will use the IP addresses specified in
 endpoints (See below) as the backing nodes associated with the
 external service.</p>
 
@@ -834,7 +864,7 @@ external service.</p>
 <tr id="ExternalService.Discovery.DNS">
 <td><code>DNS</code></td>
 <td>
-<p>If set to &ldquo;dns&rdquo;, the proxy will attempt to resolve the DNS address
+<p>If set to &ldquo;DNS&rdquo;, the proxy will attempt to resolve the DNS address
 during request processing. If no endpoints are specified, the proxy
 will resolve the DNS address specified in the hosts field, if
 wildcards are not used. If endpoints are specified, the DNS
@@ -915,6 +945,7 @@ spec:
   - port:
       number: 80
       name: http
+      protocol: HTTP
     hosts:
     - uk.bookinfo.com
     - eu.bookinfo.com
@@ -923,20 +954,22 @@ spec:
   - port:
       number: 443
       name: https
+      protocol: HTTPS
     hosts:
     - uk.bookinfo.com
     - eu.bookinfo.com
     tls:
-      mode: simple #enables HTTPS on this port
+      mode: SIMPLE #enables HTTPS on this port
       serverCertificate: /etc/certs/servercert.pem
       privateKey: /etc/certs/privatekey.pem
   - port:
       number: 9080
       name: http-wildcard
+      protocol: HTTP
     # no hosts implies wildcard match
   - port:
       number: 2379 #to expose internal service via external port 2379
-      name: Mongo
+      name: mongo
       protocol: MONGO
 </code></pre>
 
@@ -1002,7 +1035,7 @@ metadata:
   name: bookinfo-Mongo
 spec:
   hosts:
-  - Mongosvr #name of Mongo service
+  - mongosvr #name of Mongo service
   gateways:
   - my-gateway
   tcp:
@@ -1046,6 +1079,47 @@ the default istio-ingress controller.</p>
 </tbody>
 </table>
 </section>
+<h2 id="HTTPFaultInjection">HTTPFaultInjection</h2>
+<section>
+<p>HTTPFaultInjection can be used to specify one or more faults to inject
+while forwarding http requests to the destination specified in a route.
+Fault specification is part of a VirtualService rule. Faults include
+aborting the Http request from downstream service, and/or delaying
+proxying of requests. A fault rule MUST HAVE delay or abort or both.</p>
+
+<p><em>Note:</em> Delay and abort faults are independent of one another, even if
+both are specified simultaneously.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HTTPFaultInjection.delay">
+<td><code>delay</code></td>
+<td><code><a href="#HTTPFaultInjection.Delay">HTTPFaultInjection.Delay</a></code></td>
+<td>
+<p>Delay requests before forwarding, emulating various failures such as
+network issues, overloaded upstream service, etc.</p>
+
+</td>
+</tr>
+<tr id="HTTPFaultInjection.abort">
+<td><code>abort</code></td>
+<td><code><a href="#HTTPFaultInjection.Abort">HTTPFaultInjection.Abort</a></code></td>
+<td>
+<p>Abort Http request attempts and return error codes back to downstream
+service, giving the impression that the upstream service is faulty.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="HTTPFaultInjection.Abort">HTTPFaultInjection.Abort</h2>
 <section>
 <p>Abort specification is used to prematurely abort a request with a
@@ -1062,7 +1136,7 @@ spec:
   http:
   - route:
     - destination:
-        name: ratings
+        host: ratings
         subset: v1
     fault:
       abort:
@@ -1139,7 +1213,7 @@ spec:
         env: prod
     route:
     - destination:
-        name: reviews
+        host: reviews
         subset: v1
     fault:
       delay:
@@ -1215,10 +1289,10 @@ spec:
           prefix: &quot;/ratings/v2/&quot;
     route: 
     - destination:
-        name: ratings
+        host: ratings
 </code></pre>
 
-<p>MatchCondition CANNOT be empty.</p>
+<p>HTTPMatchRequest CANNOT be empty.</p>
 
 <table class="message-fields">
 <thead>
@@ -1419,7 +1493,7 @@ spec:
   http:
   - route:
     - destination:
-        name: ratings
+        host: ratings
         subset: v1
     retries:
       attempts: 3
@@ -1479,7 +1553,7 @@ spec:
       uri: /v1/bookRatings
     route:
     - destination:
-        name: ratings
+        host: ratings
         subset: v1
 </code></pre>
 
@@ -1596,6 +1670,14 @@ subject to further routing rules based on the protocol selected.</p>
 <td><code><a href="#HTTPRetry">HTTPRetry</a></code></td>
 <td>
 <p>Retry policy for HTTP requests.</p>
+
+</td>
+</tr>
+<tr id="HTTPRoute.fault">
+<td><code>fault</code></td>
+<td><code><a href="#HTTPFaultInjection">HTTPFaultInjection</a></code></td>
+<td>
+<p>Fault injection policy to apply on HTTP traffic.</p>
 
 </td>
 </tr>
@@ -1722,7 +1804,7 @@ kind: DestinationRule
 metadata:
   name: bookinfo-ratings
 spec:
-  name: ratings
+  host: ratings
   trafficPolicy:
     loadBalancer:
       simple: ROUND_ROBIN
@@ -1736,7 +1818,7 @@ kind: DestinationRule
 metadata:
   name: bookinfo-ratings
 spec:
-  name: ratings
+  host: ratings
   trafficPolicy:
     loadBalancer:
       consistentHash:
@@ -1883,7 +1965,7 @@ kind: DestinationRule
 metadata:
   name: reviews-cb-policy
 spec:
-  name: reviews
+  host: reviews
   trafficPolicy:
     connectionPool:
       tcp:
@@ -1998,7 +2080,7 @@ service that can be ejected. Defaults to 10%.</p>
 <td><code>protocol</code></td>
 <td><code>string</code></td>
 <td>
-<p>The protocol exposed on the port.
+<p>REQUIRED: The protocol exposed on the port.
 MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP.</p>
 
 </td>
@@ -2062,6 +2144,7 @@ spec:
   servers:
   - port:
       number: 80
+      name: http2
       protocol: HTTP2
 </code></pre>
 
@@ -2077,6 +2160,7 @@ spec:
   servers:
   - port:
       number: 27018
+      name: mongo
       protocol: MONGO
 </code></pre>
 
@@ -2092,9 +2176,10 @@ spec:
   servers:
   - port:
       number: 443
-      protocol: HTTP
+      name: https
+      protocol: HTTPS
     tls:
-      mode: simple
+      mode: SIMPLE
       serverCertificate: /etc/certs/server.pem
       privateKey: /etc/certs/privatekey.pem
 </code></pre>
@@ -2180,7 +2265,7 @@ enforced.</p>
 <td><code>serverCertificate</code></td>
 <td><code>string</code></td>
 <td>
-<p>REQUIRED if mode is &ldquo;simple&rdquo; or &ldquo;mutual&rdquo;. The path to the file
+<p>REQUIRED if mode is &ldquo;SIMPLE&rdquo; or &ldquo;MUTUAL&rdquo;. The path to the file
 holding the server-side TLS certificate to use.</p>
 
 </td>
@@ -2189,7 +2274,7 @@ holding the server-side TLS certificate to use.</p>
 <td><code>privateKey</code></td>
 <td><code>string</code></td>
 <td>
-<p>REQUIRED if mode is &ldquo;simple&rdquo; or &ldquo;mutual&rdquo;. The path to the file
+<p>REQUIRED if mode is &ldquo;SIMPLE&rdquo; or &ldquo;MUTUAL&rdquo;. The path to the file
 holding the server&rsquo;s private key.</p>
 
 </td>
@@ -2198,7 +2283,7 @@ holding the server&rsquo;s private key.</p>
 <td><code>caCertificates</code></td>
 <td><code>string</code></td>
 <td>
-<p>REQUIRED if mode is &ldquo;mutual&rdquo;. The path to a file containing
+<p>REQUIRED if mode is &ldquo;MUTUAL&rdquo;. The path to a file containing
 certificate authority certificates to use in verifying a presented
 client side certificate.</p>
 
@@ -2231,7 +2316,7 @@ certificate presented by the client.</p>
 <tr id="Server.TLSOptions.TLSmode.PASSTHROUGH">
 <td><code>PASSTHROUGH</code></td>
 <td>
-<p>If set to &ldquo;passthrough&rdquo;, the proxy will forward the connection
+<p>If set to &ldquo;PASSTHROUGH&rdquo;, the proxy will forward the connection
 to the upstream server selected based on the SNI string presented
 by the client.</p>
 
@@ -2240,7 +2325,7 @@ by the client.</p>
 <tr id="Server.TLSOptions.TLSmode.SIMPLE">
 <td><code>SIMPLE</code></td>
 <td>
-<p>If set to &ldquo;simple&rdquo;, the proxy will secure connections with
+<p>If set to &ldquo;SIMPLE&rdquo;, the proxy will secure connections with
 standard TLS semantics.</p>
 
 </td>
@@ -2248,7 +2333,7 @@ standard TLS semantics.</p>
 <tr id="Server.TLSOptions.TLSmode.MUTUAL">
 <td><code>MUTUAL</code></td>
 <td>
-<p>If set to &ldquo;mutual&rdquo;, the proxy will secure connections to the
+<p>If set to &ldquo;MUTUAL&rdquo;, the proxy will secure connections to the
 upstream using mutual TLS by presenting client certificates for
 authentication.</p>
 
@@ -2314,7 +2399,7 @@ kind: DestinationRule
 metadata:
   name: bookinfo-ratings
 spec:
-  name: ratings
+  host: ratings
   trafficPolicy:
     loadBalancer:
       simple: LEAST_CONN
@@ -2391,7 +2476,7 @@ spec:
       sourceSubnet: &quot;172.17.16.0/24&quot;
     route:
     - destination:
-        name: mongo.prod
+        host: mongo.prod
 </code></pre>
 
 <table class="message-fields">
@@ -2442,7 +2527,7 @@ kind: DestinationRule
 metadata:
   name: db-mtls
 spec:
-  name: mydbserver
+  host: mydbserver
   trafficPolicy:
     tls:
       mode: MUTUAL
@@ -2458,7 +2543,7 @@ kind: DestinationRule
 metadata:
   name: tls-foo
 spec:
-  name: *.foo.com
+  host: &quot;*.foo.com&quot;
   trafficPolicy:
     tls:
       mode: SIMPLE
@@ -2658,11 +2743,11 @@ spec:
       uri: &quot;/newcatalog&quot;
     route:
     - destination:
-        name: reviews
+        host: reviews
         subset: v2
   - route:
     - destination:
-        name: reviews
+        host: reviews
         subset: v1
 </code></pre>
 
@@ -2675,7 +2760,7 @@ kind: DestinationRule
 metadata:
   name: reviews-destination
 spec:
-  name: reviews
+  host: reviews
   subsets:
   - name: v1
     labels:
