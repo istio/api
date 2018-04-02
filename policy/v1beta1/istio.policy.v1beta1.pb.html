@@ -209,11 +209,11 @@ Connection is part of the handler custom resource and is specified alongside ada
 <p>Handler allows the operator to configure a specific adapter implementation.
 Each adapter implementation defines its own <code>params</code> proto.</p>
 
-<p>In the following example we define a <code>metrics</code> handler for <code>prometheus</code> adapter.
-The example is in the form of kubernetes resource:
+<p>In the following example we define a <code>metrics</code> handler for the <code>prometheus</code> adapter.
+The example is in the form of a kubernetes resource:
 * The <code>metadata.name</code> is the name of the handler
 * The <code>kind</code> refers to the adapter name
-* The <code>spec</code> block represents adapter specific configuration as well as the connection information</p>
+* The <code>spec</code> block represents adapter-specific configuration as well as the connection information</p>
 
 <pre><code class="language-yaml">### Sample-1: No connection specified (for compiled in adapters)
 ### Note: if connection information is not specified, the adapter configuration is directly inside
@@ -295,7 +295,7 @@ proto defined by the adapter implementation; this varies depending on the value 
 </tr>
 <tr id="Handler.connection">
 <td><code>connection</code></td>
-<td><code><a href="#google.protobuf.Struct">google.protobuf.Struct</a></code></td>
+<td><code><a href="#Connection">Connection</a></code></td>
 <td>
 <p>Optional. Information on how to connect to the out-of-process adapter.
 This is used if the adapter is not compiled into Mixer binary and is running as a separate process.</p>

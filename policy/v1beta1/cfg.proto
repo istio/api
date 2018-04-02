@@ -192,11 +192,11 @@ message Instance {
 // Handler allows the operator to configure a specific adapter implementation.
 // Each adapter implementation defines its own `params` proto.
 //
-// In the following example we define a `metrics` handler for `prometheus` adapter.
-// The example is in the form of kubernetes resource:
+// In the following example we define a `metrics` handler for the `prometheus` adapter.
+// The example is in the form of a kubernetes resource:
 // * The `metadata.name` is the name of the handler
 // * The `kind` refers to the adapter name
-// * The `spec` block represents adapter specific configuration as well as the connection information
+// * The `spec` block represents adapter-specific configuration as well as the connection information
 //
 // ```yaml
 // # Sample-1: No connection specified (for compiled in adapters)
@@ -252,7 +252,7 @@ message Handler {
   google.protobuf.Struct params = 3;
   // Optional. Information on how to connect to the out-of-process adapter.
   // This is used if the adapter is not compiled into Mixer binary and is running as a separate process.
-  google.protobuf.Struct connection = 4;
+  Connection connection = 4;
 }
 
 // Connection allows the operator to specify the endpoint for out-of-process infrastructure backend.
