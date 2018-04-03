@@ -148,6 +148,18 @@ include a JWT.</p>
 
 </td>
 </tr>
+<tr id="EndUserAuthenticationPolicySpec.allow_missing_or_failed">
+<td><code>allowMissingOrFailed</code></td>
+<td><code>bool</code></td>
+<td>
+<p>From
+https://github.com/envoyproxy/data-plane-api/blob/11c750628bcaeeeca3f72f89fe5c99921aa727b1/envoy/config/filter/http/jwt_authn/v2alpha/config.proto
+If true, the request is allowed if JWT is missing or JWT verification
+fails. Default is false, a request without JWT or failed JWT verification
+is not allowed.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
