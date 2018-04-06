@@ -244,34 +244,43 @@ message MeshConfig {
   // instead of using allow_any.
   OutboundTrafficPolicy outbound_traffic_policy = 17;
 
-  // Istio RBAC config defines the global switch to control the Istio RBAC behavior.
-  message IstioRBACConfig {
-    enum IstioRBACMode {
-      // Disable Istio RBAC for the mesh.
+  // RbacConfig defines the global config to control Istio RBAC behavior.
+  message RbacConfig {
+    enum Mode {
+      // Disable Istio RBAC completely, any other config in RbacConfig will be ignored and Istio RBAC policies
+      // will not be enforced.
       OFF = 0;
-
-      // Enable Istio RBAC for the mesh.
+      // Enable Istio RBAC for all services and namespaces.
       ON = 1;
-
-      // Disable Istio RBAC for the mesh, except the services/namespaces listed
-      // in exception_services and exception_namespaces (whitelist).
-      OFF_WITH_EXCEPTION = 2;
-
-      // Enable Istio RBAC for the mesh, except the services/namespaces listed
-      // in exception_services and exception_namespaces (blacklist).
-      ON_WITH_EXCEPTION = 3;
+      // Enable Istio RBAC only for services and namespaces specified in the inclusion field. Any other
+      // services and namespaces not in the inclusion field will not be enforced by Istio RBAC policies.
+      ON_WITH_INCLUSION = 2;
+      // Enable Istio RBAC for all services and namespaces except those specified in the exclusion field. Any other
+      // services and namespaces not in the exclusion field will be enforced by Istio RBAC policies.
+      ON_WITH_EXCLUSION = 3;
     }
 
-    // Istio RBAC configuration.
-    IstioRBACMode mode = 1;
+    // Istil RBAC mode.
+    Mode mode = 1;
 
-    // The list of services that are excluded from the mesh global Istio RBAC setting.
-    repeated string exception_services = 2;
+    // Target defines a list of services or namespaces.
+    message Target {
+      // A list of services.
+      repeated string services = 1;
 
-    // The list of namespaces that are excluded from the mesh global Istio RBAC setting.
-    repeated string exception_namespaces = 3;
+      // A list of namespaces.
+      repeated string namespaces = 2;
+    }
+
+    // A list of services or namespaces that should be enforced by Istio RBAC policies. Note: This field have
+    // effect only when the mode is set to ON_WITH_INCLUSION and will be ignored in any other cases.
+    Target inclusion = 2;
+
+    // A list of services or namespaces that should not be enforced by Istio RBAC policies. Note: This field have
+    // effect only when the mode is set to ON_WITH_EXCLUSION and will be ignored in any other cases.
+    Target exclusion = 3;
   }
 
-  // Istio RBAC config defines the global switch to control the Istio RBAC behavior.
-  IstioRBACConfig rbac_config = 18;
+  // The global config to control Istio RBAC behavior.
+  RbacConfig rbac_config = 18;
 }
