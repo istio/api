@@ -425,24 +425,14 @@ DestinationRule.</p>
 <td><code>port</code></td>
 <td><code><a href="#PortSelector">PortSelector</a></code></td>
 <td>
-<p>Specifies the port on the destination. Many services only expose a
-single port or label ports with the protocols they support, in these
-cases it is not required to explicitly select the port. Note that
+<p>Specifies the port on the host that is being addressed. Many services
+only expose a single port or label ports with the protocols they support,
+in these cases it is not required to explicitly select the port. Note that
 selection priority is to first match by name and then match by number.</p>
 
 <p>Names must comply with DNS label syntax (rfc1035) and therefore cannot
-collide with numbers. If there are multiple ports on a service with
-the same protocol the names should be of the form <protocol-name>-<DNS
-label>.</p>
-
-</td>
-</tr>
-<tr id="Destination.name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>DEPRECATED: Use <code>host</code> instead. Adding <code>name</code> back to prevent backward incompatibility with existing code inside
-istio.io/istio.</p>
+collide with numbers. If there are multiple ports on a service with the
+same protocol the names should be of the form <protocol-name>-<DNS label>.</p>
 
 </td>
 </tr>
@@ -548,15 +538,6 @@ sizes, outlier detection).</p>
 <td>
 <p>One or more named sets that represent individual versions of a
 service. Traffic policies can be overridden at subset level.</p>
-
-</td>
-</tr>
-<tr id="DestinationRule.name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>DEPRECATED: Use <code>host</code> instead. Adding <code>name</code> back to prevent backward incompatibility with existing code inside
-istio.io/istio.</p>
 
 </td>
 </tr>
@@ -1402,16 +1383,11 @@ e.g. <em>x-request-id</em>.</p>
 </tr>
 <tr id="HTTPMatchRequest.port">
 <td><code>port</code></td>
-<td><code><a href="#PortSelector">PortSelector</a></code></td>
+<td><code>uint32</code></td>
 <td>
 <p>Specifies the ports on the host that is being addressed. Many services
 only expose a single port or label ports with the protocols they support,
-in these cases it is not required to explicitly select the port. Note that
-selection priority is to first match by name and then match by number.</p>
-
-<p>Names must comply with DNS label syntax (rfc1035) and therefore cannot
-collide with numbers. If there are multiple ports on a service with the
-same protocol the names should be of the form <protocol-name>-<DNS label>.</p>
+in these cases it is not required to explicitly select the port.</p>
 
 </td>
 </tr>
@@ -1761,16 +1737,11 @@ specifies a particular IP.</p>
 </tr>
 <tr id="L4MatchAttributes.port">
 <td><code>port</code></td>
-<td><code><a href="#PortSelector">PortSelector</a></code></td>
+<td><code>uint32</code></td>
 <td>
 <p>Specifies the port on the host that is being addressed. Many services
 only expose a single port or label ports with the protocols they support,
-in these cases it is not required to explicitly select the port. Note that
-selection priority is to first match by name and then match by number.</p>
-
-<p>Names must comply with DNS label syntax (rfc1035) and therefore cannot
-collide with numbers. If there are multiple ports on a service with the
-same protocol the names should be of the form <protocol-name>-<DNS label>.</p>
+in these cases it is not required to explicitly select the port.</p>
 
 </td>
 </tr>
@@ -2477,8 +2448,8 @@ specified at the DestinationRule level.</p>
 <h2 id="TCPRoute">TCPRoute</h2>
 <section>
 <p>Describes match conditions and actions for routing TCP traffic. The
-following routing rule forwards traffic arriving at port 2379 named
-Mongo from 172.17.16.* subnet to another Mongo server on port 5555.</p>
+following routing rule forwards traffic arriving at port 27017
+from 172.17.16.* subnet to another Mongo server on port 5555.</p>
 
 <pre><code>apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -2489,12 +2460,13 @@ spec:
   - myMongosrv 
   tcp:
   - match:
-    - port:
-        name: Mongo # only applies to ports named Mongo
+    - port: 27017
       sourceSubnet: &quot;172.17.16.0/24&quot;
     route:
     - destination:
         host: mongo.prod
+        port:
+          number: 5555
 </code></pre>
 
 <table class="message-fields">
