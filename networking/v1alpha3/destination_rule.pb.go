@@ -35,6 +35,7 @@
 		HTTPRetry
 		CorsPolicy
 		HTTPFaultInjection
+		PortSelector
 */
 package v1alpha3
 

@@ -3,7 +3,7 @@ title: Route Rules Alpha 3
 overview: Configuration affecting traffic routing
 location: https://istio.io/docs/reference/config/istio.networking.v1alpha3.html
 layout: protoc-gen-docs
-number_of_entries: 36
+number_of_entries: 37
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -438,11 +438,17 @@ DestinationRule.</p>
 </tr>
 <tr id="Destination.port">
 <td><code>port</code></td>
-<td><code>uint32</code></td>
+<td><code><a href="#PortSelector">PortSelector</a></code></td>
 <td>
 <p>Specifies the port on the host that is being addressed. Many services
 only expose a single port or label ports with the protocols they support,
-in these cases it is not required to explicitly select the port.</p>
+in these cases it is not required to explicitly select the port. Note that
+selection priority is to first match by name and then match by number.</p>
+
+<p>Names must comply with DNS label syntax (rfc1035) and therefore cannot
+collide with numbers. If there are multiple ports on a service with
+the same protocol the names should be of the form <protocol-name>-<DNS
+label>.</p>
 
 </td>
 </tr>
@@ -2105,6 +2111,39 @@ MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TCPTLS.</p>
 <td><code>string</code></td>
 <td>
 <p>Label assigned to the port.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="PortSelector">PortSelector</h2>
+<section>
+<p>PortSelector specifies the name or number of a port to be used for
+matching or selection for final routing.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PortSelector.number" class="oneof oneof-start">
+<td><code>number</code></td>
+<td><code>uint32 (oneof)</code></td>
+<td>
+<p>Valid port number</p>
+
+</td>
+</tr>
+<tr id="PortSelector.name" class="oneof">
+<td><code>name</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>Port name</p>
 
 </td>
 </tr>
