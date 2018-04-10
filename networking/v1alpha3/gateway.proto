@@ -78,7 +78,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // into two versions (prod and qa) of an internal reviews service on port
 // 9080. In addition, requests containing the cookie user: dev-123 will be
 // sent to special port 7777 in the qa version. The same rule is also
-// applicable inside the mesh for requests to the reviews.prod
+// applicable inside the mesh for requests to the reviews.prod.svc.cluster.local
 // service. This rule is applicable across ports 443, 9080. Note that
 // http://uk.bookinfo.com gets redirected to https://uk.bookinfo.com
 // (i.e. 80 redirects to 443).
@@ -89,7 +89,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //       name: bookinfo-rule
 //     spec:
 //       hosts:
-//       - reviews.prod
+//       - reviews.prod.svc.cluster.local
 //       - uk.bookinfo.com
 //       - eu.bookinfo.com
 //       gateways:
@@ -104,7 +104,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //         - destination:
 //             port:
 //               number: 7777
-//             name: reviews.qa
+//             name: reviews.qa.svc.cluster.local
 //       - match:
 //           uri:
 //             prefix: /reviews/
@@ -112,14 +112,14 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //         - destination:
 //             port:
 //               number: 9080 # can be omitted if its the only port for reviews
-//             name: reviews.prod
+//             name: reviews.prod.svc.cluster.local
 //           weight: 80
 //         - destination:
-//             name: reviews.qa
+//             name: reviews.qa.svc.cluster.local
 //           weight: 20
 //
 // The following VirtualService forwards traffic arriving at (external) port
-// 2379 from 172.17.16.0/24 subnet to internal Mongo server on port 5555. This
+// 27017 from 172.17.16.0/24 subnet to internal Mongo server on port 5555. This
 // rule is not applicable internally in the mesh as the gateway list omits
 // the reserved name "mesh".
 //
@@ -129,17 +129,17 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //       name: bookinfo-Mongo
 //     spec:
 //       hosts:
-//       - mongosvr #name of Mongo service
+//       - mongosvr.prod.svc.cluster.local #name of internal Mongo service
 //       gateways:
 //       - my-gateway
 //       tcp:
 //       - match:
 //         - port:
-//             number: 2379
+//             number: 27017
 //           sourceSubnet: "172.17.16.0/24"
 //         route:
 //         - destination:
-//             name: mongo.prod
+//             name: mongo.prod.svc.cluster.local
 //
 message Gateway {
   // REQUIRED: A list of server specifications.
@@ -161,7 +161,7 @@ message Gateway {
 //       name: my-ingress
 //     spec:
 //       selector:
-//         app: my-ingress-controller
+//         app: my-ingress-gateway
 //       servers:
 //       - port:
 //           number: 80
@@ -176,7 +176,7 @@ message Gateway {
 //       name: my-tcp-ingress
 //     spec:
 //       selector:
-//         app: my-tcp-ingress-controller
+//         app: my-tcp-ingress-gateway
 //       servers:
 //       - port:
 //           number: 27018
@@ -191,7 +191,7 @@ message Gateway {
 //       name: my-tls-ingress
 //     spec:
 //       selector:
-//         app: my-tls-ingress-controller
+//         app: my-tls-ingress-gateway
 //       servers:
 //       - port:
 //           number: 443
@@ -275,7 +275,7 @@ message Port {
   uint32 number = 1;
 
   // REQUIRED: The protocol exposed on the port.
-  // MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP.
+  // MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TCPTLS.
   string protocol = 2;
 
   // Label assigned to the port.

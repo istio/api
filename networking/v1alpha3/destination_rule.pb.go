@@ -35,7 +35,6 @@
 		HTTPRetry
 		CorsPolicy
 		HTTPFaultInjection
-		PortSelector
 */
 package v1alpha3
 
@@ -145,7 +144,7 @@ func (TLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
 //     metadata:
 //       name: bookinfo-ratings
 //     spec:
-//       host: ratings
+//       host: ratings.prod.svc.cluster.local
 //       trafficPolicy:
 //         loadBalancer:
 //           simple: LEAST_CONN
@@ -161,7 +160,7 @@ func (TLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
 //     metadata:
 //       name: bookinfo-ratings
 //     spec:
-//       host: ratings
+//       host: ratings.prod.svc.cluster.local
 //       trafficPolicy:
 //         loadBalancer:
 //           simple: LEAST_CONN
@@ -176,27 +175,22 @@ func (TLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
 // Note that policies specified for subsets will not take effect until
 // a route rule explicitly sends traffic to this subset.
 type DestinationRule struct {
-	// REQUIRED. The destination address for traffic captured by this
-	// rule.  Could be a DNS name with wildcard prefix or a CIDR
-	// prefix. Depending on the platform, short-names can also be used
-	// instead of a FQDN (i.e. has no dots in the name). In such a scenario,
-	// the FQDN of the host would be derived based on the underlying
-	// platform.
+	// REQUIRED. The name of the service from the service registry to which
+	// traffic is being sent to. The host can be a short name or a fully
+	// qualified domain name of a service from the service registry. Rules
+	// defined for services that do not exist in the service registry will be
+	// ignored.
 	//
-	// For example on Kubernetes, when host contains a short name, Istio will
-	// interpret the short name based on the namespace of the rule.  Thus, when a
-	// client applies a rule in the "default" namespace, containing a name
-	// "reviews", Istio will setup routes to the
-	// "reviews.default.svc.cluster.local" service. However, if a different name
-	// such as "reviews.sales" is used, it would be treated as a FQDN during
-	// virtual host matching.  In Consul, a plain service name would be resolved to
-	// the FQDN "reviews.service.consul".
+	// *Note for Kubernetes users*: When short names are used (i.e. single
+	// word), Istio will interpret the short name based on the namespace of the
+	// rule, not the service. A rule in the "default" namespace containing a
+	// name "reviews will be interpreted as
+	// "reviews.default.svc.cluster.local", irrespective of the actual
+	// namespace associated with the reviews service. To avoid potential
+	// misconfigurations, it is recommended to always use fully qualified
+	// domain names over short names.
 	//
-	// Note that the host field applies to both HTTP and TCP
-	// services. Service inside the mesh, i.e. those found in the service
-	// registry, must always be referred to using their alphanumeric
-	// names. IP addresses or CIDR prefixes are allowed only for services
-	// defined via the Gateway.
+	// Note that the host field applies to both HTTP and TCP services.
 	Host string `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
 	// Traffic policies to apply (load balancing policy, connection pool
 	// sizes, outlier detection).
@@ -292,7 +286,7 @@ func (m *TrafficPolicy) GetTls() *TLSSettings {
 //     metadata:
 //       name: bookinfo-ratings
 //     spec:
-//       host: ratings
+//       host: ratings.prod.svc.cluster.local
 //       trafficPolicy:
 //         loadBalancer:
 //           simple: LEAST_CONN
@@ -359,7 +353,7 @@ func (m *Subset) GetTrafficPolicy() *TrafficPolicy {
 //     metadata:
 //       name: bookinfo-ratings
 //     spec:
-//       host: ratings
+//       host: ratings.prod.svc.cluster.local
 //       trafficPolicy:
 //         loadBalancer:
 //           simple: ROUND_ROBIN
@@ -372,7 +366,7 @@ func (m *Subset) GetTrafficPolicy() *TrafficPolicy {
 //     metadata:
 //       name: bookinfo-ratings
 //     spec:
-//       host: ratings
+//       host: ratings.prod.svc.cluster.local
 //       trafficPolicy:
 //         loadBalancer:
 //           consistentHash:
@@ -554,7 +548,7 @@ func (m *LoadBalancerSettings_ConsistentHashLB) GetMinimumRingSize() uint32 {
 //     metadata:
 //       name: bookinfo-redis
 //     spec:
-//       host: myredissrv
+//       host: myredissrv.prod.svc.cluster.local
 //       trafficPolicy:
 //         connectionPool:
 //           tcp:
@@ -687,7 +681,7 @@ func (m *ConnectionPoolSettings_HTTPSettings) GetMaxRetries() int32 {
 //     metadata:
 //       name: reviews-cb-policy
 //     spec:
-//       host: reviews
+//       host: reviews.prod.svc.cluster.local
 //       trafficPolicy:
 //         connectionPool:
 //           tcp:
@@ -784,7 +778,7 @@ func (m *OutlierDetection_HTTPSettings) GetMaxEjectionPercent() int32 {
 //     metadata:
 //       name: db-mtls
 //     spec:
-//       host: mydbserver
+//       host: mydbserver.prod.svc.cluster.local
 //       trafficPolicy:
 //         tls:
 //           mode: MUTUAL

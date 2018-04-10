@@ -61,13 +61,10 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // The source of traffic can also be matched in a routing rule. This allows routing
 // to be customized for specific client contexts.
 //
-// The following example routes all HTTP traffic by default to
+// The following example on Kubernetes, routes all HTTP traffic by default to
 // pods of the reviews service with label "version: v1". In addition,
 // HTTP requests containing /wpcatalog/, /consumercatalog/ url prefixes will
-// be rewritten to /newcatalog and sent to pods with label "version: v2". The
-// rules will be applied at the gateway named "bookinfo" as well as at all
-// the sidecars in the mesh (indicated by the reserved gateway name
-// "mesh").
+// be rewritten to /newcatalog and sent to pods with label "version: v2".
 //
 //     apiVersion: networking.istio.io/v1alpha3
 //     kind: VirtualService
@@ -75,10 +72,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //       name: reviews-route
 //     spec:
 //       hosts:
-//       - reviews
-//       gateways: # if omitted, defaults to "mesh"
-//       - bookinfo
-//       - mesh
+//       - reviews.prod.svc.cluster.local
 //       http:
 //       - match:
 //         - uri:
@@ -89,11 +83,11 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //           uri: "/newcatalog"
 //         route:
 //         - destination:
-//             host: reviews
+//             host: reviews.prod.svc.cluster.local
 //             subset: v2
 //       - route:
 //         - destination:
-//             host: reviews
+//             host: reviews.prod.svc.cluster.local
 //             subset: v1
 //
 // A subset/version of a route destination is identified with a reference
@@ -105,7 +99,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //     metadata:
 //       name: reviews-destination
 //     spec:
-//       host: reviews
+//       host: reviews.prod.svc.cluster.local
 //       subsets:
 //       - name: v1
 //         labels:
@@ -119,25 +113,25 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // HTTP and TCP ports.
 message VirtualService {
   // REQUIRED. The destination address for traffic captured by this virtual
-  // service. Could be a DNS name with wildcard prefix or a CIDR
-  // prefix. Depending on the platform, short-names can also be used
+  // service. Could be a DNS name with wildcard prefix or an IP address.
+  // Depending on the platform, short-names can also be used
   // instead of a FQDN (i.e. has no dots in the name). In such a scenario,
   // the FQDN of the host would be derived based on the underlying
   // platform.
   //
-  // For example on Kubernetes, when hosts contains a short name, Istio will
-  // interpret the short name based on the namespace of the rule. Thus, when a
-  // client namespace applies a rule in the "default" namespace containing a name
-  // "reviews, Istio will setup routes to the "reviews.default.svc.cluster.local"
-  // service. However, if a different name such as "reviews.sales.svc.cluster.local"
-  // is used, it would be treated as a FQDN during virtual host matching.
-  // In Consul, a plain service name would be resolved to the FQDN
-  // "reviews.service.consul".
+  // *Note for Kubernetes users*: When short names are used (i.e. single
+  // word), Istio will interpret the short name based on the namespace of
+  // the rule, not the service. A rule in the "default" namespace
+  // containing a name "reviews will be interpreted as
+  // "reviews.default.svc.cluster.local", irrespective of the actual
+  // namespace associated with the reviews service. To avoid potential
+  // misconfigurations, it is recommended to always use fully qualified
+  // domain names over short names.
   //
   // Note that the hosts field applies to both HTTP and TCP
   // services. Service inside the mesh, i.e., those found in the service
   // registry, must always be referred to using their alphanumeric
-  // names. IP addresses or CIDR prefixes are allowed only for services
+  // names. IP addresses are allowed only for services
   // defined via the Gateway.
   repeated string hosts = 1;
 
@@ -164,39 +158,33 @@ message VirtualService {
 
 // Destination indicates the network addressable service to which the
 // request/connection will be sent after processing a routing rule. The
-// destination.name should unambiguously refer to a service in the service
+// destination.host should unambiguously refer to a service in the service
 // registry. It can be a short name or a fully qualified domain name from
-// the service registry, a resolvable DNS name, an IP address or a service
-// name from the service registry and a subset name. The order of inference
-// is as follows:
+// the service registry and a subset name. CIDR prefixes can be used only
+// if there is a corresponding ExternalService declaration that uses the
+// same CIDR prefix in the ExternalService.hosts.
 //
-// 1. Service registry lookup. The entire name is looked up in the service
-// registry. If the lookup succeeds, the search terminates. The requests
-// will be routed to any instance of the service in the mesh. When the
-// service name consists of a single word, the FQDN will be constructed in
-// a platform specific manner. For example, in Kubernetes, the namespace
-// associated with the routing rule will be used to identify the service as
-// <servicename>.<rulenamespace>. However, if the service name contains
-// multiple words separated by a dot (e.g., reviews.prod), the name in its
-// entirety would be looked up in the service registry.
+// *Note for Kubernetes users*: When short names are used (i.e. single
+// word), Istio will interpret the short name based on the namespace of the
+// rule, not the service. A rule in the "default" namespace containing a
+// name "reviews will be interpreted as
+// "reviews.default.svc.cluster.local", irrespective of the actual
+// namespace associated with the reviews service. To avoid potential
+// misconfigurations, it is recommended to always use fully qualified
+// domain names over short names.
 //
-// 2. Runtime DNS lookup by the proxy. If step 1 fails, and the name is not
-// an IP address, it will be considered as a DNS name that is not in the
-// service registry (e.g., wikipedia.org). The sidecar/gateway will resolve
-// the DNS and load balance requests appropriately. See Envoy's strict_dns
-// for details.
-//
-// The following example routes all traffic by default to pods of the
-// reviews service with label "version: v1" (i.e., subset v1), and some
-// to subset v2, in a kubernetes environment.
+// The following Kubernetes example routes all traffic by default to pods
+// of the reviews service with label "version: v1" (i.e., subset v1), and
+// some to subset v2, in a kubernetes environment.
 //
 //     apiVersion: networking.istio.io/v1alpha3
 //     kind: VirtualService
 //     metadata:
 //       name: reviews-route
+//       namespace: foo
 //     spec:
 //       hosts:
-//       - reviews # namespace is same as the client/caller's namespace
+//       - reviews # interpreted as reviews.foo.svc.cluster.local
 //       http:
 //       - match:
 //         - uri:
@@ -207,11 +195,11 @@ message VirtualService {
 //           uri: "/newcatalog"
 //         route:
 //         - destination:
-//             host: reviews
+//             host: reviews # interpreted as reviews.foo.svc.cluster.local
 //             subset: v2
 //       - route:
 //         - destination:
-//             host: reviews
+//             host: reviews # interpreted as reviews.foo.svc.cluster.local
 //             subset: v1
 //
 // And the associated DestinationRule
@@ -220,8 +208,9 @@ message VirtualService {
 //     kind: DestinationRule
 //     metadata:
 //       name: reviews-destination
+//       namespace: foo
 //     spec:
-//       host: reviews
+//       host: reviews # interpreted as reviews.foo.svc.cluster.local
 //       subsets:
 //       - name: v1
 //         labels:
@@ -231,26 +220,46 @@ message VirtualService {
 //           version: v2
 //
 // The following VirtualService sets a timeout of 5s for all calls to
-// productpage.prod service. Notice that there are no subsets defined in
-// this rule. Istio will fetch all instances of productpage.prod service
-// from the service registry and populate the sidecar's load balancing
-// pool.
+// productpage.prod.svc.cluster.local service in Kubernetes. Notice that
+// there are no subsets defined in this rule. Istio will fetch all
+// instances of productpage.com service from the service registry and
+// populate the sidecar's load balancing pool.  Also, notice that this rule
+// is set in istio-system namespace, while using the FQDN of the
+// productpage service. Hence, the rule's namespace does not have an
+// impact.
 //
 //     apiVersion: networking.istio.io/v1alpha3
 //     kind: VirtualService
 //     metadata:
 //       name: my-productpage-rule
+//       namespace: istio-system
 //     spec:
 //       hosts:
-//       - productpage.prod # in kubernetes, this applies only to prod namespace
+//       - productpage.prod.svc.cluster.local # ignores rule namespace
 //       http:
 //       - timeout: 5s
 //         route:
 //         - destination:
-//             host: productpage.prod
+//             host: productpage.prod.svc.cluster.local
 //
-// The following sets a timeout of 5s for all calls to the external
-// service wikipedia.org, as there is no internal service of that name.
+// To control routing for traffic bound to services outside the mesh, external
+// services must first be added to Istio's internal service registry using the
+// ExternalService rule. VirtualServices can then be defined to control traffic
+// bound to these external services. For example, the following rules define an
+// ExternalService for wikipedia.org and set a timeout of 5s for http requests.
+//
+//     apiVersion: networking.istio.io/v1alpha3
+//     kind: ExternalService
+//     metadata:
+//       name: external-svc-wikipedia
+//     spec:
+//       hosts:
+//       - wikipedia.org
+//       ports:
+//       - number: 80
+//         name: example-http
+//         protocol: HTTP
+//       discovery: DNS
 //
 //     apiVersion: networking.istio.io/v1alpha3
 //     kind: VirtualService
@@ -267,18 +276,20 @@ message VirtualService {
 //
 message Destination {
   // REQUIRED. The host can be a short name or a fully qualified domain
-  // name from the service registry, a resolvable DNS name, or an IP
-  // address.
+  // name of a service or a CIDR prefix from the service registry. CIDR
+  // prefixes can be used only if there is a corresponding ExternalService
+  // declaration that uses the same CIDR prefix in the
+  // ExternalService.hosts. Traffic forwarded to destinations that are not
+  // part of the service registry will be dropped.
   //
-  // If short names are used, the FQDN of the service will be resolved in a
-  // platform specific manner. For example in Kubernetes, when a route with a
-  // short name "reviews" in the destination in namespace "bookinfo" is applied,
-  // the final destination is resolved to reviews.bookinfo.svc.cluster.local. The
-  // sidecar will route to the IP
-  // addresses of the pods constituting the service. However, if the lookup
-  // fails, "reviews" is treated as an external service, such that the sidecar
-  // will dynamically resolve the DNS of the service name and route the request
-  // to the IP addresses returned by the DNS.
+  // *Note for Kubernetes users*: When short names are used (i.e. single
+  // word), Istio will interpret the short name based on the namespace of the
+  // rule, not the service. A rule in the "default" namespace containing a
+  // name "reviews will be interpreted as
+  // "reviews.default.svc.cluster.local", irrespective of the actual
+  // namespace associated with the reviews service. To avoid potential
+  // misconfigurations, it is recommended to always use fully qualified
+  // domain names over short names.
   string host = 1;
 
   // The name of a subset within the service. Applicable only to services
@@ -288,13 +299,8 @@ message Destination {
 
   // Specifies the port on the host that is being addressed. Many services
   // only expose a single port or label ports with the protocols they support,
-  // in these cases it is not required to explicitly select the port. Note that
-  // selection priority is to first match by name and then match by number.
-  //
-  // Names must comply with DNS label syntax (rfc1035) and therefore cannot
-  // collide with numbers. If there are multiple ports on a service with the
-  // same protocol the names should be of the form <protocol-name>-<DNS label>.
-  PortSelector port = 3;
+  // in these cases it is not required to explicitly select the port.
+  uint32 port = 3;
 }
 
 // Describes match conditions and actions for routing HTTP/1.1, HTTP2, and
@@ -359,8 +365,9 @@ message HTTPRoute {
 }
 
 // Describes match conditions and actions for routing TCP traffic. The
-// following routing rule forwards traffic arriving at port 27017
-// from 172.17.16.* subnet to another Mongo server on port 5555.
+// following routing rule forwards traffic arriving at port 27017 for
+// mongo.prod.svc.cluster.local from 172.17.16.* subnet to another Mongo
+// server on port 5555.
 //
 //     apiVersion: networking.istio.io/v1alpha3
 //     kind: VirtualService
@@ -368,14 +375,14 @@ message HTTPRoute {
 //       name: bookinfo-Mongo
 //     spec:
 //       hosts:
-//       - myMongosrv 
+//       - mongo.prod.svc.cluster.local
 //       tcp:
 //       - match:
 //         - port: 27017
 //           sourceSubnet: "172.17.16.0/24"
 //         route:
 //         - destination:
-//             host: mongo.prod
+//             host: mongo.backup.svc.cluster.local
 //             port:
 //               number: 5555
 message TCPRoute {
@@ -404,7 +411,7 @@ message TCPRoute {
 //       name: ratings-route
 //     spec:
 //       hosts:
-//       - ratings
+//       - ratings.prod.svc.cluster.local
 //       http:
 //       - match:
 //         - headers:
@@ -414,7 +421,7 @@ message TCPRoute {
 //               prefix: "/ratings/v2/"
 //         route: 
 //         - destination:
-//             host: ratings
+//             host: ratings.prod.svc.cluster.local
 //
 // HTTPMatchRequest CANNOT be empty.
 message HTTPMatchRequest {
@@ -506,15 +513,15 @@ message HTTPMatchRequest {
 //       name: reviews-route
 //     spec:
 //       hosts:
-//       - reviews
+//       - reviews.prod.svc.cluster.local
 //       http:
 //       - route:
 //         - destination:
-//             host: reviews
+//             host: reviews.prod.svc.cluster.local
 //             subset: v2
 //           weight: 25
 //         - destination:
-//             host: reviews
+//             host: reviews.prod.svc.cluster.local
 //             subset: v1
 //           weight: 75
 //
@@ -525,7 +532,7 @@ message HTTPMatchRequest {
 //     metadata:
 //       name: reviews-destination
 //     spec:
-//       host: reviews
+//       host: reviews.prod.svc.cluster.local
 //       subsets:
 //       - name: v1
 //         labels:
@@ -533,6 +540,26 @@ message HTTPMatchRequest {
 //       - name: v2
 //         labels:
 //           version: v2
+//
+// Traffic can also be split across two entirely different services without
+// having to define new subsets. For example, the following rule forwards 25% of
+// traffic to reviews.com to dev.reviews.com
+//
+//     apiVersion: networking.istio.io/v1alpha3
+//     kind: VirtualService
+//     metadata:
+//       name: reviews-route-two-domains
+//     spec:
+//       hosts:
+//       - reviews.com
+//       http:
+//       - route:
+//         - destination:
+//             host: dev.reviews.com
+//           weight: 25
+//         - destination:
+//             host: reviews.com
+//           weight: 75
 //
 message DestinationWeight {
   // REQUIRED. Destination uniquely identifies the instances of a service
@@ -588,14 +615,14 @@ message L4MatchAttributes {
 //       name: ratings-route
 //     spec:
 //       hosts:
-//       - ratings
+//       - ratings.prod.svc.cluster.local
 //       http:
 //       - match:
 //         - uri:
 //             exact: /v1/getProductRatings
 //       redirect:
 //         uri: /v1/bookRatings
-//         authority: bookratings.default.svc.cluster.local
+//         authority: newratings.default.svc.cluster.local
 //       ...
 //
 message HTTPRedirect {
@@ -621,7 +648,7 @@ message HTTPRedirect {
 //       name: ratings-route
 //     spec:
 //       hosts:
-//       - ratings
+//       - ratings.prod.svc.cluster.local
 //       http:
 //       - match:
 //         - uri:
@@ -630,7 +657,7 @@ message HTTPRedirect {
 //           uri: /v1/bookRatings
 //         route:
 //         - destination:
-//             host: ratings
+//             host: ratings.prod.svc.cluster.local
 //             subset: v1
 //
 message HTTPRewrite {
@@ -669,11 +696,11 @@ message StringMatch {
 //       name: ratings-route
 //     spec:
 //       hosts:
-//       - ratings
+//       - ratings.prod.svc.cluster.local
 //       http:
 //       - route:
 //         - destination:
-//             host: ratings
+//             host: ratings.prod.svc.cluster.local
 //             subset: v1
 //         retries:
 //           attempts: 3
@@ -704,11 +731,11 @@ message HTTPRetry {
 //       name: ratings-route
 //     spec:
 //       hosts:
-//       - ratings
+//       - ratings.prod.svc.cluster.local
 //       http:
 //       - route:
 //         - destination:
-//             host: ratings
+//             host: ratings.prod.svc.cluster.local
 //             subset: v1
 //         corsPolicy:
 //           allowOrigin:
@@ -777,14 +804,14 @@ message HTTPFaultInjection {
   //       name: reviews-route
   //     spec:
   //       hosts:
-  //       - reviews
+  //       - reviews.prod.svc.cluster.local
   //       http:
   //       - match:
   //         - sourceLabels:
   //             env: prod
   //         route:
   //         - destination:
-  //             host: reviews
+  //             host: reviews.prod.svc.cluster.local
   //             subset: v1
   //         fault:
   //           delay:
@@ -821,11 +848,11 @@ message HTTPFaultInjection {
   //       name: ratings-route
   //     spec:
   //       hosts:
-  //       - ratings
+  //       - ratings.prod.svc.cluster.local
   //       http:
   //       - route:
   //         - destination:
-  //             host: ratings
+  //             host: ratings.prod.svc.cluster.local
   //             subset: v1
   //         fault:
   //           abort:
@@ -850,16 +877,5 @@ message HTTPFaultInjection {
       // (-- NOT IMPLEMENTED --)
       string http2_error = 4;
     }
-  }
-}
-
-// PortSelector specifies the name or number of a port to be used for
-// matching or selection for final routing.
-message PortSelector {
-  oneof port {
-    // Valid port number
-    uint32 number = 1;
-    // Port name
-    string name = 2;
   }
 }

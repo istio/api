@@ -109,7 +109,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 // into two versions (prod and qa) of an internal reviews service on port
 // 9080. In addition, requests containing the cookie user: dev-123 will be
 // sent to special port 7777 in the qa version. The same rule is also
-// applicable inside the mesh for requests to the reviews.prod
+// applicable inside the mesh for requests to the reviews.prod.svc.cluster.local
 // service. This rule is applicable across ports 443, 9080. Note that
 // http://uk.bookinfo.com gets redirected to https://uk.bookinfo.com
 // (i.e. 80 redirects to 443).
@@ -120,7 +120,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //       name: bookinfo-rule
 //     spec:
 //       hosts:
-//       - reviews.prod
+//       - reviews.prod.svc.cluster.local
 //       - uk.bookinfo.com
 //       - eu.bookinfo.com
 //       gateways:
@@ -135,7 +135,7 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //         - destination:
 //             port:
 //               number: 7777
-//             name: reviews.qa
+//             name: reviews.qa.svc.cluster.local
 //       - match:
 //           uri:
 //             prefix: /reviews/
@@ -143,14 +143,14 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //         - destination:
 //             port:
 //               number: 9080 # can be omitted if its the only port for reviews
-//             name: reviews.prod
+//             name: reviews.prod.svc.cluster.local
 //           weight: 80
 //         - destination:
-//             name: reviews.qa
+//             name: reviews.qa.svc.cluster.local
 //           weight: 20
 //
 // The following VirtualService forwards traffic arriving at (external) port
-// 2379 from 172.17.16.0/24 subnet to internal Mongo server on port 5555. This
+// 27017 from 172.17.16.0/24 subnet to internal Mongo server on port 5555. This
 // rule is not applicable internally in the mesh as the gateway list omits
 // the reserved name "mesh".
 //
@@ -160,17 +160,17 @@ func (Server_TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
 //       name: bookinfo-Mongo
 //     spec:
 //       hosts:
-//       - mongosvr #name of Mongo service
+//       - mongosvr.prod.svc.cluster.local #name of internal Mongo service
 //       gateways:
 //       - my-gateway
 //       tcp:
 //       - match:
 //         - port:
-//             number: 2379
+//             number: 27017
 //           sourceSubnet: "172.17.16.0/24"
 //         route:
 //         - destination:
-//             name: mongo.prod
+//             name: mongo.prod.svc.cluster.local
 //
 type Gateway struct {
 	// REQUIRED: A list of server specifications.
@@ -210,7 +210,7 @@ func (m *Gateway) GetSelector() map[string]string {
 //       name: my-ingress
 //     spec:
 //       selector:
-//         app: my-ingress-controller
+//         app: my-ingress-gateway
 //       servers:
 //       - port:
 //           number: 80
@@ -225,7 +225,7 @@ func (m *Gateway) GetSelector() map[string]string {
 //       name: my-tcp-ingress
 //     spec:
 //       selector:
-//         app: my-tcp-ingress-controller
+//         app: my-tcp-ingress-gateway
 //       servers:
 //       - port:
 //           number: 27018
@@ -240,7 +240,7 @@ func (m *Gateway) GetSelector() map[string]string {
 //       name: my-tls-ingress
 //     spec:
 //       selector:
-//         app: my-tls-ingress-controller
+//         app: my-tls-ingress-gateway
 //       servers:
 //       - port:
 //           number: 443
@@ -372,7 +372,7 @@ type Port struct {
 	// REQUIRED: A valid non-negative integer port number.
 	Number uint32 `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
 	// REQUIRED: The protocol exposed on the port.
-	// MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP.
+	// MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TCPTLS.
 	Protocol string `protobuf:"bytes,2,opt,name=protocol,proto3" json:"protocol,omitempty"`
 	// Label assigned to the port.
 	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
