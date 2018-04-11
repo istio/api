@@ -16,7 +16,10 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-// A VirtualService defines a set of traffic routing rules to apply when a host is
+//
+// # Overview
+//
+// A `VirtualService` defines a set of traffic routing rules to apply when a host is
 // addressed. Each routing rule defines matching criteria for traffic of a specific
 // protocol. If the traffic is matched, then it is sent to a named destination service
 // (or subset/version of it) defined in the registry.
@@ -55,7 +58,7 @@ var _ = math.Inf
 //
 // A subset/version of a route destination is identified with a reference
 // to a named service subset which must be declared in a corresponding
-// DestinationRule.
+// `DestinationRule`.
 //
 //     apiVersion: networking.istio.io/v1alpha3
 //     kind: DestinationRule
@@ -71,42 +74,41 @@ var _ = math.Inf
 //         labels:
 //           version: v2
 //
-// A host name can be defined by only one VirtualService. A single
-// VirtualService can be used to describe traffic properties for multiple
-// HTTP and TCP ports.
 type VirtualService struct {
-	// REQUIRED. The destination address for traffic captured by this virtual
-	// service. Could be a DNS name with wildcard prefix or an IP address.
-	// Depending on the platform, short-names can also be used
-	// instead of a FQDN (i.e. has no dots in the name). In such a scenario,
-	// the FQDN of the host would be derived based on the underlying
-	// platform.
+	// REQUIRED. The destination hosts to which traffic is being sent. Could
+	// be a DNS name with wildcard prefix or an IP address.  Depending on the
+	// platform, short-names can also be used instead of a FQDN (i.e. has no
+	// dots in the name). In such a scenario, the FQDN of the host would be
+	// derived based on the underlying platform.
 	//
-	// *Note for Kubernetes users*: When short names are used (i.e. single
-	// word), Istio will interpret the short name based on the namespace of
-	// the rule, not the service. A rule in the "default" namespace
-	// containing a name "reviews will be interpreted as
-	// "reviews.default.svc.cluster.local", irrespective of the actual
-	// namespace associated with the reviews service. To avoid potential
-	// misconfigurations, it is recommended to always use fully qualified
-	// domain names over short names.
+	// **A host name can be defined by only one VirtualService**. A single
+	// VirtualService can be used to describe traffic properties for multiple
+	// HTTP and TCP ports.
 	//
-	// Note that the hosts field applies to both HTTP and TCP
-	// services. Service inside the mesh, i.e., those found in the service
-	// registry, must always be referred to using their alphanumeric
-	// names. IP addresses are allowed only for services
-	// defined via the Gateway.
+	// *Note for Kubernetes users*: When short names are used (e.g. "reviews"
+	// instead of "reviews.default.svc.cluster.local"), Istio will interpret
+	// the short name based on the namespace of the rule, not the service. A
+	// rule in the "default" namespace containing a host "reviews will be
+	// interpreted as "reviews.default.svc.cluster.local", irrespective of
+	// the actual namespace associated with the reviews service. _To avoid
+	// potential misconfigurations, it is recommended to always use fully
+	// qualified domain names over short names._
+	//
+	// The hosts field applies to both HTTP and TCP services. Service inside
+	// the mesh, i.e., those found in the service registry, must always be
+	// referred to using their alphanumeric names. IP addresses are allowed
+	// only for services defined via the Gateway.
 	Hosts []string `protobuf:"bytes,1,rep,name=hosts" json:"hosts,omitempty"`
 	// The names of gateways and sidecars that should apply these routes. A
 	// single VirtualService is used for sidecars inside the mesh as well
 	// as for one or more gateways. The selection condition imposed by this field
 	// can be overridden using the source field in the match conditions of HTTP/TCP
-	// routes. The reserved word "mesh" is used to imply all the sidecars in
-	// the mesh. When this field is omitted, the default gateway ("mesh")
+	// routes. The reserved word `mesh` is used to imply all the sidecars in
+	// the mesh. When this field is omitted, the default gateway (`mesh`)
 	// will be used, which would apply the rule to all sidecars in the
 	// mesh. If a list of gateway names is provided, the rules will apply
 	// only to the gateways. To apply the rules to both gateways and sidecars,
-	// specify "mesh" as one of the gateway names.
+	// specify `mesh` as one of the gateway names.
 	Gateways []string `protobuf:"bytes,2,rep,name=gateways" json:"gateways,omitempty"`
 	// An ordered list of route rules for HTTP traffic.
 	// The first rule matching an incoming request is used.
@@ -152,19 +154,19 @@ func (m *VirtualService) GetTcp() []*TCPRoute {
 // Destination indicates the network addressable service to which the
 // request/connection will be sent after processing a routing rule. The
 // destination.host should unambiguously refer to a service in the service
-// registry. It can be a short name or a fully qualified domain name from
-// the service registry and a subset name. CIDR prefixes can be used only
-// if there is a corresponding ExternalService declaration that uses the
-// same CIDR prefix in the ExternalService.hosts.
+// registry. Istio's service registry is composed of all the services found
+// in the platform's service registry (e.g., Kubernetes services, Consul
+// services), as well as hosts declared through the
+// [ExternalService](#ExternalService) resource.
 //
-// *Note for Kubernetes users*: When short names are used (i.e. single
-// word), Istio will interpret the short name based on the namespace of the
-// rule, not the service. A rule in the "default" namespace containing a
-// name "reviews will be interpreted as
-// "reviews.default.svc.cluster.local", irrespective of the actual
-// namespace associated with the reviews service. To avoid potential
+// *Note for Kubernetes users*: When short names are used (e.g. "reviews"
+// instead of "reviews.default.svc.cluster.local"), Istio will interpret
+// the short name based on the namespace of the rule, not the service. A
+// rule in the "default" namespace containing a host "reviews will be
+// interpreted as "reviews.default.svc.cluster.local", irrespective of the
+// actual namespace associated with the reviews service. _To avoid potential
 // misconfigurations, it is recommended to always use fully qualified
-// domain names over short names.
+// domain names over short names._
 //
 // The following Kubernetes example routes all traffic by default to pods
 // of the reviews service with label "version: v1" (i.e., subset v1), and
@@ -215,11 +217,12 @@ func (m *VirtualService) GetTcp() []*TCPRoute {
 // The following VirtualService sets a timeout of 5s for all calls to
 // productpage.prod.svc.cluster.local service in Kubernetes. Notice that
 // there are no subsets defined in this rule. Istio will fetch all
-// instances of productpage.com service from the service registry and
-// populate the sidecar's load balancing pool.  Also, notice that this rule
-// is set in istio-system namespace, while using the FQDN of the
-// productpage service. Hence, the rule's namespace does not have an
-// impact.
+// instances of productpage.prod.svc.cluster.local service from the service
+// registry and populate the sidecar's load balancing pool. Also, notice
+// that this rule is set in the istio-system namespace but uses the fully
+// qualified domain name of the productpage service,
+// productpage.prod.svc.cluster.local. Therefore the rule's namespace does
+// not have an impact in resolving the name of the productpage service.
 //
 //     apiVersion: networking.istio.io/v1alpha3
 //     kind: VirtualService
@@ -268,21 +271,20 @@ func (m *VirtualService) GetTcp() []*TCPRoute {
 //             host: wikipedia.org
 //
 type Destination struct {
-	// REQUIRED. The host can be a short name or a fully qualified domain
-	// name of a service or a CIDR prefix from the service registry. CIDR
-	// prefixes can be used only if there is a corresponding ExternalService
-	// declaration that uses the same CIDR prefix in the
-	// ExternalService.hosts. Traffic forwarded to destinations that are not
-	// part of the service registry will be dropped.
+	// REQUIRED. The name of a service from the service registry. Service
+	// names are looked up from the platform's service registry (e.g.,
+	// Kubernetes services, Consul services, etc.) and from the hosts
+	// declared by [ExternalServices](#ExternalService). Traffic forwarded to
+	// destinations that are not found in either of the two, will be dropped.
 	//
-	// *Note for Kubernetes users*: When short names are used (i.e. single
-	// word), Istio will interpret the short name based on the namespace of the
-	// rule, not the service. A rule in the "default" namespace containing a
-	// name "reviews will be interpreted as
-	// "reviews.default.svc.cluster.local", irrespective of the actual
-	// namespace associated with the reviews service. To avoid potential
-	// misconfigurations, it is recommended to always use fully qualified
-	// domain names over short names.
+	// *Note for Kubernetes users*: When short names are used (e.g. "reviews"
+	// instead of "reviews.default.svc.cluster.local"), Istio will interpret
+	// the short name based on the namespace of the rule, not the service. A
+	// rule in the "default" namespace containing a host "reviews will be
+	// interpreted as "reviews.default.svc.cluster.local", irrespective of
+	// the actual namespace associated with the reviews service. _To avoid
+	// potential misconfigurations, it is recommended to always use fully
+	// qualified domain names over short names._
 	Host string `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
 	// The name of a subset within the service. Applicable only to services
 	// within the mesh. The subset must be defined in a corresponding
@@ -515,8 +517,8 @@ func (m *TCPRoute) GetRoute() []*DestinationWeight {
 // HttpMatchRequest specifies a set of criterion to be met in order for the
 // rule to be applied to the HTTP request. For example, the following
 // restricts the rule to match only requests where the URL path
-// starts with /ratings/v2/ and the request contains a "cookie" with value
-// "user=jason".
+// starts with /ratings/v2/ and the request contains a `cookie` with value
+// `user=jason`.
 //
 //     apiVersion: networking.istio.io/v1alpha3
 //     kind: VirtualService
@@ -541,41 +543,41 @@ type HTTPMatchRequest struct {
 	// URI to match
 	// values are case-sensitive and formatted as follows:
 	//
-	// *exact: "value"* or just *"value"* for exact string match
+	// - `exact: "value"` for exact string match
 	//
-	// *prefix: "value"* for prefix-based match
+	// - `prefix: "value"` for prefix-based match
 	//
-	// *regex: "value"* for ECMAscript style regex-based match
+	// - `regex: "value"` for ECMAscript style regex-based match
 	//
 	Uri *StringMatch `protobuf:"bytes,1,opt,name=uri" json:"uri,omitempty"`
 	// URI Scheme
 	// values are case-sensitive and formatted as follows:
 	//
-	// *exact: "value"* or just *"value"* for exact string match
+	// - `exact: "value"` for exact string match
 	//
-	// *prefix: "value"* for prefix-based match
+	// - `prefix: "value"` for prefix-based match
 	//
-	// *regex: "value"* for ECMAscript style regex-based match
+	// - `regex: "value"` for ECMAscript style regex-based match
 	//
 	Scheme *StringMatch `protobuf:"bytes,2,opt,name=scheme" json:"scheme,omitempty"`
 	// HTTP Method
 	// values are case-sensitive and formatted as follows:
 	//
-	// *exact: "value"* or just *"value"* for exact string match
+	// - `exact: "value"` for exact string match
 	//
-	// *prefix: "value"* for prefix-based match
+	// - `prefix: "value"` for prefix-based match
 	//
-	// *regex: "value"* for ECMAscript style regex-based match
+	// - `regex: "value"` for ECMAscript style regex-based match
 	//
 	Method *StringMatch `protobuf:"bytes,3,opt,name=method" json:"method,omitempty"`
 	// HTTP Authority
 	// values are case-sensitive and formatted as follows:
 	//
-	// *exact: "value"* or just *"value"* for exact string match
+	// - `exact: "value"` for exact string match
 	//
-	// *prefix: "value"* for prefix-based match
+	// - `prefix: "value"` for prefix-based match
 	//
-	// *regex: "value"* for ECMAscript style regex-based match
+	// - `regex: "value"` for ECMAscript style regex-based match
 	//
 	Authority *StringMatch `protobuf:"bytes,4,opt,name=authority" json:"authority,omitempty"`
 	// The header keys must be lowercase and use hyphen as the separator,
@@ -583,13 +585,13 @@ type HTTPMatchRequest struct {
 	//
 	// Header values are case-sensitive and formatted as follows:
 	//
-	// *exact: "value"* or just *"value"* for exact string match
+	// - `exact: "value"` for exact string match
 	//
-	// *prefix: "value"* for prefix-based match
+	// - `prefix: "value"` for prefix-based match
 	//
-	// *regex: "value"* for ECMAscript style regex-based match
+	// - `regex: "value"` for ECMAscript style regex-based match
 	//
-	// *Note:* The keys _uri_, _scheme_, _method_, and _authority_ will be ignored.
+	// **Note:** The keys `uri`, `scheme`, `method`, and `authority` will be ignored.
 	Headers map[string]*StringMatch `protobuf:"bytes,5,rep,name=headers" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value"`
 	// Specifies the ports on the host that is being addressed. Many services
 	// only expose a single port or label ports with the protocols they support,
@@ -598,7 +600,7 @@ type HTTPMatchRequest struct {
 	// One or more labels that constrain the applicability of a rule to
 	// workloads with the given labels. If the VirtualService has a list of
 	// gateways specified at the top, it should include the reserved gateway
-	// "mesh" in order for this field to be applicable.
+	// `mesh` in order for this field to be applicable.
 	SourceLabels map[string]string `protobuf:"bytes,7,rep,name=source_labels,json=sourceLabels" json:"source_labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Names of gateways where the rule should be applied to. Gateway names
 	// at the top of the VirtualService (if any) are overridden. The gateway match is
@@ -776,7 +778,7 @@ type L4MatchAttributes struct {
 	// One or more labels that constrain the applicability of a rule to
 	// workloads with the given labels. If the VirtualService has a list of
 	// gateways specified at the top, it should include the reserved gateway
-	// "mesh" in order for this field to be applicable.
+	// `mesh` in order for this field to be applicable.
 	SourceLabels map[string]string `protobuf:"bytes,4,rep,name=source_labels,json=sourceLabels" json:"source_labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Names of gateways where the rule should be applied to. Gateway names
 	// at the top of the VirtualService (if any) are overridden. The gateway match is

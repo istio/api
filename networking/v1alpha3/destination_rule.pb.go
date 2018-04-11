@@ -103,15 +103,12 @@ func (LoadBalancerSettings_SimpleLB) EnumDescriptor() ([]byte, []int) {
 type TLSSettings_TLSmode int32
 
 const (
-	// If set to "disable", the proxy will use not setup a TLS connection to the
-	// upstream server.
+	// Do not setup a TLS connection to the upstream endpoint.
 	TLSSettings_DISABLE TLSSettings_TLSmode = 0
-	// If set to "simple", the proxy will originate a TLS connection to the
-	// upstream server.
+	// Originate a TLS connection to the upstream endpoint.
 	TLSSettings_SIMPLE TLSSettings_TLSmode = 1
-	// If set to "mutual", the proxy will secure connections to the
-	// upstream using mutual TLS by presenting client certificates for
-	// authentication.
+	// Secure connections to the upstream using mutual TLS by presenting
+	// client certificates for authentication.
 	TLSSettings_MUTUAL TLSSettings_TLSmode = 2
 )
 
@@ -133,7 +130,10 @@ func (TLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptorDestinationRule, []int{6, 0}
 }
 
-// DestinationRule defines policies that apply to traffic intended for a
+//
+// # Overview
+//
+// `DestinationRule` defines policies that apply to traffic intended for a
 // service after routing has occurred. These rules specify configuration
 // for load balancing, connection pool size from the sidecar, and outlier
 // detection settings to detect and evict unhealthy hosts from the load
@@ -151,7 +151,7 @@ func (TLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
 //           simple: LEAST_CONN
 //
 // Version specific policies can be specified by defining a named
-// subset and overriding the settings specified at the service level. The
+// `subset` and overriding the settings specified at the service level. The
 // following rule uses a round robin load balancing policy for all traffic
 // going to a subset named testversion that is composed of endpoints (e.g.,
 // pods) with labels (version:v3).
@@ -173,23 +173,23 @@ func (TLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
 //           loadBalancer:
 //             simple: ROUND_ROBIN
 //
-// Note that policies specified for subsets will not take effect until
+// **Note:** Policies specified for subsets will not take effect until
 // a route rule explicitly sends traffic to this subset.
 type DestinationRule struct {
-	// REQUIRED. The name of the service from the service registry to which
-	// traffic is being sent to. The host can be a short name or a fully
-	// qualified domain name of a service from the service registry. Rules
-	// defined for services that do not exist in the service registry will be
-	// ignored.
+	// REQUIRED. The name of a service from the service registry. Service
+	// names are looked up from the platform's service registry (e.g.,
+	// Kubernetes services, Consul services, etc.) and from the hosts
+	// declared by [ExternalServices](#ExternalService). Rules defined for
+	// services that do not exist in the service registry will be ignored.
 	//
-	// *Note for Kubernetes users*: When short names are used (i.e. single
-	// word), Istio will interpret the short name based on the namespace of the
-	// rule, not the service. A rule in the "default" namespace containing a
-	// name "reviews will be interpreted as
-	// "reviews.default.svc.cluster.local", irrespective of the actual
-	// namespace associated with the reviews service. To avoid potential
-	// misconfigurations, it is recommended to always use fully qualified
-	// domain names over short names.
+	// *Note for Kubernetes users*: When short names are used (e.g. "reviews"
+	// instead of "reviews.default.svc.cluster.local"), Istio will interpret
+	// the short name based on the namespace of the rule, not the service. A
+	// rule in the "default" namespace containing a host "reviews will be
+	// interpreted as "reviews.default.svc.cluster.local", irrespective of
+	// the actual namespace associated with the reviews service. _To avoid
+	// potential misconfigurations, it is recommended to always use fully
+	// qualified domain names over short names._
 	//
 	// Note that the host field applies to both HTTP and TCP services.
 	Host string `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
@@ -275,12 +275,12 @@ func (m *TrafficPolicy) GetTls() *TLSSettings {
 
 // A subset of endpoints of a service. Subsets can be used for scenarios
 // like A/B testing, or routing to a specific version of a service. Refer
-// to VirtualService documentation for examples of using subsets in these
-// scenarios. In addition, traffic policies defined at the service-level
-// can be overridden at a subset-level. The following rule uses a round
-// robin load balancing policy for all traffic going to a subset named
-// testversion that is composed of endpoints (e.g., pods) with labels
-// (version:v3).
+// to [VirtualService](#VirtualService) documentation for examples of using
+// subsets in these scenarios. In addition, traffic policies defined at the
+// service-level can be overridden at a subset-level. The following rule
+// uses a round robin load balancing policy for all traffic going to a
+// subset named testversion that is composed of endpoints (e.g., pods) with
+// labels (version:v3).
 //
 //     apiVersion: networking.istio.io/v1alpha3
 //     kind: DestinationRule
@@ -299,10 +299,10 @@ func (m *TrafficPolicy) GetTls() *TLSSettings {
 //           loadBalancer:
 //             simple: ROUND_ROBIN
 //
-// Note that policies specified for subsets will not take effect until
+// **Note:** Policies specified for subsets will not take effect until
 // a route rule explicitly sends traffic to this subset.
 type Subset struct {
-	// REQUIRED. name of the subset. The service name and the subset name can
+	// REQUIRED. Name of the subset. The service name and the subset name can
 	// be used for traffic splitting in a route rule.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// REQUIRED. Labels apply a filter over the endpoints of a service in the
@@ -787,7 +787,8 @@ func (m *OutlierDetection_HTTPSettings) GetMaxEjectionPercent() int32 {
 //           privateKey: /etc/certs/client_private_key.pem
 //           caCertificates: /etc/certs/rootcacerts.pem
 //
-// The following rule configures a client to use TLS when talking to a foreign service whose domain matches *.foo.com.
+// The following rule configures a client to use TLS when talking to a
+// foreign service whose domain matches *.foo.com.
 //
 //     apiVersion: networking.istio.io/v1alpha3
 //     kind: DestinationRule
@@ -803,10 +804,10 @@ type TLSSettings struct {
 	// REQUIRED: Indicates whether connections to this port should be secured
 	// using TLS. The value of this field determines how TLS is enforced.
 	Mode TLSSettings_TLSmode `protobuf:"varint,1,opt,name=mode,proto3,enum=istio.networking.v1alpha3.TLSSettings_TLSmode" json:"mode,omitempty"`
-	// REQUIRED if mode is "mutual". The path to the file holding the
+	// REQUIRED if mode is `MUTUAL`. The path to the file holding the
 	// client-side TLS certificate to use.
 	ClientCertificate string `protobuf:"bytes,2,opt,name=client_certificate,json=clientCertificate,proto3" json:"client_certificate,omitempty"`
-	// REQUIRED if mode is "mutual". The path to the file holding the
+	// REQUIRED if mode is `MUTUAL`. The path to the file holding the
 	// client's private key.
 	PrivateKey string `protobuf:"bytes,3,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
 	// OPTIONAL: The path to the file containing certificate authority
