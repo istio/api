@@ -1,0 +1,79 @@
+// Copyright 2018 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+syntax = "proto3";
+
+import "google/protobuf/duration.proto";
+
+package istio.networking.v1alpha3;
+
+option go_package = "istio.io/api/networking/v1alpha3";
+
+//
+// # Overview
+//
+// `ServerRule` defines policies that apply to traffic arriving at a given
+// server (workload). These rules specify configuration for connection pool
+// size, TLS settings, custom protocol decoders or scripts to be activated
+// for certain classes of requests/connections, etc. For example, the
+// following ServerRule specifies the maximum number of connections allowed
+// to a given redis instance identifiable using the labels foo:bar. In
+// addition, it specifies the authentication policy to use for this
+// workload (redisPolicy), and a server side proxy script that authorizes
+// the API call with an upstream service (internal-auth-service.com). [Note
+// that any external dependencies of these scripts must be declared via
+// ExternalServices].
+//
+//     apiVersion: networking.istio.io/v1alpha3
+//     kind: ServerRule
+//     metadata:
+//       name: redis-tls
+//     spec:
+//       workloadSelector:
+//         labels: # or use IP or hostname if available
+//           foo: bar
+//       trafficPolicy:
+//         connectionPool:
+//           tcp:
+//             maxConnections: 100
+//             connectTimeout: 30ms
+//       authenticationPolicy: redisPolicy #name of the authentication policy to use
+//       virtualServices: #custom configurations for one or more virtual service traffic entering the workload
+//       - hosts:
+//         - foo.com
+//         - bar.com
+//         http:
+//           websocketUpgrade:
+//           - prefix: /oldWebsocket
+//           - prefix: /newFoo
+//           traceDecorators:
+//           - prefix: /scooby
+//             decoratorName: scoobydoobydoo
+//           proxyScript:
+//             lua: |
+//               function envoy_on_request(request_handle)
+//                 -- Make an HTTP call to an upstream host with the following headers, body, and timeout.
+//                 local headers, body = request_handle:httpCall(
+//                                         "outbound||http|internal-auth-server.com",
+//                                         {
+//                                           [":method"] = "POST",
+//                                           [":path"] = "/authorizeMeNow",
+//                                           [":authority"] = "internal-auth-server.com"
+//                                         },
+//                                         "username=scoobydoo", 5000)
+//
+//                 -- Add information from the HTTP call into the headers that are about to be sent to the next
+//                 -- filter in the filter chain.
+//                 request_handle:headers():add("upstream_foo", headers["foo"])
+//                 request_handle:headers():add("upstream_body_size", #body)
+//               end
