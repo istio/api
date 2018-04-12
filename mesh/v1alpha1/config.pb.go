@@ -417,6 +417,10 @@ func (m *ProxyConfig) GetInterceptionMode() ProxyConfig_InboundInterceptionMode 
 
 // MeshConfig defines mesh-wide variables shared by all Envoy instances in the
 // Istio service mesh.
+//
+// NOTE: This configuration type is going to be deprecated in the near future and
+// replaced by several configuration types for each aspect of the mesh. The existing
+// fields are kept for backwards-compatibility, but no new fields should be added.
 type MeshConfig struct {
 	// Address of the server that will be used by the proxies for policy
 	// check calls. By using different names for mixerCheckServer and
