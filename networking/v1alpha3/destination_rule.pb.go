@@ -6,7 +6,6 @@
 
 	It is generated from these files:
 		networking/v1alpha3/destination_rule.proto
-		networking/v1alpha3/envoy_filters.proto
 		networking/v1alpha3/external_service.proto
 		networking/v1alpha3/gateway.proto
 		networking/v1alpha3/virtual_service.proto
@@ -19,7 +18,6 @@
 		ConnectionPoolSettings
 		OutlierDetection
 		TLSSettings
-		EnvoyFilters
 		ExternalService
 		Gateway
 		Server
