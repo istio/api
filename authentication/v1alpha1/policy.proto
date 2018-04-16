@@ -36,7 +36,7 @@ message ClientSettings {
   Mode mode = 1;
 
   // TLS specific parameters.
-  message TLS {
+  message TlsParams {
     // The path to the file holding the client-side TLS certificate to use. If empty, client
     // certificate is not sent (i.e connection is regular TLS)
     string client_certificate = 1;
@@ -60,11 +60,12 @@ message ClientSettings {
   }
 
   // TLS configuration. Should be set only when connection mode is TLS.
-  TLS tls = 2;
+  TlsParams tls = 2;
 }
 
 // mTLS authentication params.
 message MutualTls {
+  // Defines how client certificate validation is enforced on server side.
   enum Mode {
     // Client cert must be presented, connection is in TLS.
     STRICT = 0;

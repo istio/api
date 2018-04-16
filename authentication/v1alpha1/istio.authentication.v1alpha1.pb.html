@@ -2,7 +2,7 @@
 title: Authentication Policy
 overview: Authentication policy for Istio services.
 layout: protoc-gen-docs
-number_of_entries: 11
+number_of_entries: 12
 ---
 <p>This package defines user-facing authentication policy.</p>
 
@@ -23,16 +23,15 @@ number_of_entries: 11
 <td><code>mode</code></td>
 <td><code><a href="#ClientSettings.Mode">ClientSettings.Mode</a></code></td>
 <td>
-<p>REQUIRED: Indicates whether connections to this port should be secured
-using TLS. The value of this field determines how TLS is enforced.</p>
+<p>REQUIRED: Indicates what type of connection client should use.</p>
 
 </td>
 </tr>
 <tr id="ClientSettings.tls">
 <td><code>tls</code></td>
-<td><code><a href="#ClientSettings.TLSParams">ClientSettings.TLSParams</a></code></td>
+<td><code><a href="#ClientSettings.TlsParams">ClientSettings.TlsParams</a></code></td>
 <td>
-<p>If unset, Istio will use default value that best fit the mode.</p>
+<p>TLS configuration. Should be set only when connection mode is TLS.</p>
 
 </td>
 </tr>
@@ -41,7 +40,7 @@ using TLS. The value of this field determines how TLS is enforced.</p>
 </section>
 <h2 id="ClientSettings.Mode">ClientSettings.Mode</h2>
 <section>
-<p>Encrytion mode</p>
+<p>Connection mode.</p>
 
 <table class="enum-values">
 <thead>
@@ -54,23 +53,23 @@ using TLS. The value of this field determines how TLS is enforced.</p>
 <tr id="ClientSettings.Mode.NONE">
 <td><code>NONE</code></td>
 <td>
-<p>Plaintext</p>
+<p>Clients will originate an unencrypted connection to target services.</p>
 
 </td>
 </tr>
 <tr id="ClientSettings.Mode.TLS">
 <td><code>TLS</code></td>
 <td>
-<p>TLS</p>
+<p>Clients will originate an TLS connection to target services.</p>
 
 </td>
 </tr>
 </tbody>
 </table>
 </section>
-<h2 id="ClientSettings.TLSParams">ClientSettings.TLSParams</h2>
+<h2 id="ClientSettings.TlsParams">ClientSettings.TlsParams</h2>
 <section>
-<p>Params for TLS on client side.</p>
+<p>TLS specific parameters.</p>
 
 <table class="message-fields">
 <thead>
@@ -81,35 +80,35 @@ using TLS. The value of this field determines how TLS is enforced.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="ClientSettings.TLSParams.client_certificate">
+<tr id="ClientSettings.TlsParams.client_certificate">
 <td><code>clientCertificate</code></td>
 <td><code>string</code></td>
 <td>
-<p>REQUIRED if mode is &ldquo;mutual&rdquo;. The path to the file holding the
-client-side TLS certificate to use.</p>
+<p>The path to the file holding the client-side TLS certificate to use. If empty, client
+certificate is not sent (i.e connection is regular TLS)</p>
 
 </td>
 </tr>
-<tr id="ClientSettings.TLSParams.private_key">
+<tr id="ClientSettings.TlsParams.private_key">
 <td><code>privateKey</code></td>
 <td><code>string</code></td>
 <td>
-<p>REQUIRED if mode is &ldquo;mutual&rdquo;. The path to the file holding the
-client&rsquo;s private key.</p>
+<p>The path to the file holding the client&rsquo;s private key. Required if client_certificate
+is provided.</p>
 
 </td>
 </tr>
-<tr id="ClientSettings.TLSParams.ca_certificates">
+<tr id="ClientSettings.TlsParams.ca_certificates">
 <td><code>caCertificates</code></td>
 <td><code>string</code></td>
 <td>
-<p>OPTIONAL: The path to the file containing certificate authority
+<p>The path to the file containing certificate authority
 certificates to use in verifying a presented server certificate. If
 omitted, the proxy will not verify the server&rsquo;s certificate.</p>
 
 </td>
 </tr>
-<tr id="ClientSettings.TLSParams.subject_alt_names">
+<tr id="ClientSettings.TlsParams.subject_alt_names">
 <td><code>subjectAltNames</code></td>
 <td><code>string[]</code></td>
 <td>
@@ -119,7 +118,7 @@ certificate&rsquo;s subject alt name matches one of the specified values.</p>
 
 </td>
 </tr>
-<tr id="ClientSettings.TLSParams.sni">
+<tr id="ClientSettings.TlsParams.sni">
 <td><code>sni</code></td>
 <td><code>string</code></td>
 <td>
@@ -246,6 +245,14 @@ query parameter name.</p>
 </tr>
 </thead>
 <tbody>
+<tr id="MutualTls.mode">
+<td><code>mode</code></td>
+<td><code><a href="#MutualTls.Mode">MutualTls.Mode</a></code></td>
+<td>
+<p>Defines the mode of mTLS authentication.</p>
+
+</td>
+</tr>
 <tr id="MutualTls.allow_tls">
 <td><code>allowTls</code></td>
 <td><code>bool</code></td>
@@ -254,7 +261,39 @@ query parameter name.</p>
 certificate). If request carries client certificate, identity will be
 extracted and used (set to peer identity). Otherwise, peer identity will
 be left unset.
-When the flag is false (default), request must have client certificate.</p>
+When the flag is false (default), request must have client certificate.
+DEPRECATED. Set mode to TLS<em>PERMISSIVE to have the same effect as allow</em>tls = true.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MutualTls.Mode">MutualTls.Mode</h2>
+<section>
+<p>Defines how client certificate validation is enforced on server side.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MutualTls.Mode.STRICT">
+<td><code>STRICT</code></td>
+<td>
+<p>Client cert must be presented, connection is in TLS.</p>
+
+</td>
+</tr>
+<tr id="MutualTls.Mode.TLS_PERMISSIVE">
+<td><code>TLS_PERMISSIVE</code></td>
+<td>
+<p>Connection must be in TLS, but client cert can be omitted.
+Request will not be fully authenticate if client cert is missing, but
+still be accepted.</p>
 
 </td>
 </tr>
@@ -414,6 +453,24 @@ spec:
   principalBinding: USE_ORIGIN
 </code></pre>
 
+<p>Policy to config client in Istio mesh to communicate with external service in TLS (operators is
+responsible to install CA certificate, and define ExternalService). This also assumes global namespace
+is <code>istio-system</code>.</p>
+
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name:
+  namespace: istio-system
+spec:
+  target:
+  - name: www.googleapis.com
+  customerSettings:
+    mode: TLS
+    tls:
+      caCertificates: /etc/certs/googl-cacerts.pem
+</code></pre>
+
 <table class="message-fields">
 <thead>
 <tr>
@@ -436,7 +493,25 @@ If empty, policy will be used on all destinations in the same namespace.</p>
 <td><code>clientSettings</code></td>
 <td><code><a href="#ClientSettings">ClientSettings</a></code></td>
 <td>
-<p>Client settings. Leave nil for Istio to decide.</p>
+<p>Client settings. If not set, Istio will use pre-defined values that are most suitable
+to the (peer) authentication method. In particular:
+- If mutual-TLS is used, default settings will be:</p>
+
+<pre><code class="language-yaml">clientSettings:
+  mode: TLS
+  tls:
+    clientCertificate: “/etc/certs/cert-chain.pem”
+    privateKey: “/etc/certs/key.pem”
+    caCertificate: “/etc/certs/root-cert.pm”
+</code></pre>
+
+<ul>
+<li>And if mutual-TLS is not use:
+<code>yaml
+clientSettings:
+mode: UNENCRYPTED
+</code></li>
+</ul>
 
 </td>
 </tr>
