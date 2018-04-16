@@ -27,7 +27,7 @@ message ClientSettings {
   // Connection mode.
   enum Mode {
     // Clients will originate an unencrypted connection to target services.
-    NONE = 0;
+    UNENCRYPTED = 0;
     // Clients will originate an TLS connection to target services.
     TLS = 1;
   };

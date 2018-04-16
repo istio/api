@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='authentication/v1alpha1/policy.proto',
   package='istio.authentication.v1alpha1',
   syntax='proto3',
-  serialized_pb=_b('\n$authentication/v1alpha1/policy.proto\x12\x1distio.authentication.v1alpha1\"\x1e\n\tMutualTls\x12\x11\n\tallow_tls\x18\x01 \x01(\x08\"c\n\x03Jwt\x12\x0e\n\x06issuer\x18\x01 \x01(\t\x12\x11\n\taudiences\x18\x02 \x03(\t\x12\x10\n\x08jwks_uri\x18\x03 \x01(\t\x12\x13\n\x0bjwt_headers\x18\x06 \x03(\t\x12\x12\n\njwt_params\x18\x07 \x03(\t\"\x91\x01\n\x18PeerAuthenticationMethod\x12\x38\n\x04mtls\x18\x01 \x01(\x0b\x32(.istio.authentication.v1alpha1.MutualTlsH\x00\x12\x31\n\x03jwt\x18\x02 \x01(\x0b\x32\".istio.authentication.v1alpha1.JwtH\x00\x42\x08\n\x06params\"M\n\x1aOriginAuthenticationMethod\x12/\n\x03jwt\x18\x01 \x01(\x0b\x32\".istio.authentication.v1alpha1.Jwt\"\xde\x02\n\x06Policy\x12>\n\x07targets\x18\x01 \x03(\x0b\x32-.istio.authentication.v1alpha1.TargetSelector\x12\x46\n\x05peers\x18\x02 \x03(\x0b\x32\x37.istio.authentication.v1alpha1.PeerAuthenticationMethod\x12\x18\n\x10peer_is_optional\x18\x03 \x01(\x08\x12J\n\x07origins\x18\x04 \x03(\x0b\x32\x39.istio.authentication.v1alpha1.OriginAuthenticationMethod\x12\x1a\n\x12origin_is_optional\x18\x05 \x01(\x08\x12J\n\x11principal_binding\x18\x06 \x01(\x0e\x32/.istio.authentication.v1alpha1.PrincipalBinding\"j\n\x0eTargetSelector\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06subset\x18\x02 \x01(\t\x12:\n\x05ports\x18\x03 \x03(\x0b\x32+.istio.authentication.v1alpha1.PortSelector\"8\n\x0cPortSelector\x12\x10\n\x06number\x18\x01 \x01(\rH\x00\x12\x0e\n\x04name\x18\x02 \x01(\tH\x00\x42\x06\n\x04port*0\n\x10PrincipalBinding\x12\x0c\n\x08USE_PEER\x10\x00\x12\x0e\n\nUSE_ORIGIN\x10\x01\x42&Z$istio.io/api/authentication/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n$authentication/v1alpha1/policy.proto\x12\x1distio.authentication.v1alpha1\"\xb9\x02\n\x0e\x43lientSettings\x12@\n\x04mode\x18\x01 \x01(\x0e\x32\x32.istio.authentication.v1alpha1.ClientSettings.Mode\x12\x44\n\x03tls\x18\x02 \x01(\x0b\x32\x37.istio.authentication.v1alpha1.ClientSettings.TlsParams\x1a}\n\tTlsParams\x12\x1a\n\x12\x63lient_certificate\x18\x01 \x01(\t\x12\x13\n\x0bprivate_key\x18\x02 \x01(\t\x12\x17\n\x0f\x63\x61_certificates\x18\x03 \x01(\t\x12\x19\n\x11subject_alt_names\x18\x04 \x03(\t\x12\x0b\n\x03sni\x18\x05 \x01(\t\" \n\x04Mode\x12\x0f\n\x0bUNENCRYPTED\x10\x00\x12\x07\n\x03TLS\x10\x01\"\x93\x01\n\tMutualTls\x12;\n\x04mode\x18\x01 \x01(\x0e\x32-.istio.authentication.v1alpha1.MutualTls.Mode\x12\x11\n\tallow_tls\x18\x02 \x01(\x08\"6\n\x04Mode\x12\n\n\x06STRICT\x10\x00\x12\x12\n\x0eTLS_PERMISSIVE\x10\x01\x12\x0e\n\nPERMISSIVE\x10\x02\"c\n\x03Jwt\x12\x0e\n\x06issuer\x18\x01 \x01(\t\x12\x11\n\taudiences\x18\x02 \x03(\t\x12\x10\n\x08jwks_uri\x18\x03 \x01(\t\x12\x13\n\x0bjwt_headers\x18\x06 \x03(\t\x12\x12\n\njwt_params\x18\x07 \x03(\t\"\x91\x01\n\x18PeerAuthenticationMethod\x12\x38\n\x04mtls\x18\x01 \x01(\x0b\x32(.istio.authentication.v1alpha1.MutualTlsH\x00\x12\x31\n\x03jwt\x18\x02 \x01(\x0b\x32\".istio.authentication.v1alpha1.JwtH\x00\x42\x08\n\x06params\"M\n\x1aOriginAuthenticationMethod\x12/\n\x03jwt\x18\x01 \x01(\x0b\x32\".istio.authentication.v1alpha1.Jwt\"\xa6\x03\n\x06Policy\x12>\n\x07targets\x18\x01 \x03(\x0b\x32-.istio.authentication.v1alpha1.TargetSelector\x12\x46\n\x0f\x63lient_settings\x18\x02 \x01(\x0b\x32-.istio.authentication.v1alpha1.ClientSettings\x12\x46\n\x05peers\x18\x03 \x03(\x0b\x32\x37.istio.authentication.v1alpha1.PeerAuthenticationMethod\x12\x18\n\x10peer_is_optional\x18\x04 \x01(\x08\x12J\n\x07origins\x18\x05 \x03(\x0b\x32\x39.istio.authentication.v1alpha1.OriginAuthenticationMethod\x12\x1a\n\x12origin_is_optional\x18\x06 \x01(\x08\x12J\n\x11principal_binding\x18\x07 \x01(\x0e\x32/.istio.authentication.v1alpha1.PrincipalBinding\"j\n\x0eTargetSelector\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06subset\x18\x02 \x01(\t\x12:\n\x05ports\x18\x03 \x03(\x0b\x32+.istio.authentication.v1alpha1.PortSelector\"8\n\x0cPortSelector\x12\x10\n\x06number\x18\x01 \x01(\rH\x00\x12\x0e\n\x04name\x18\x02 \x01(\tH\x00\x42\x06\n\x04port*0\n\x10PrincipalBinding\x12\x0c\n\x08USE_PEER\x10\x00\x12\x0e\n\nUSE_ORIGIN\x10\x01\x42&Z$istio.io/api/authentication/v1alpha1b\x06proto3')
 )
 
 _PRINCIPALBINDING = _descriptor.EnumDescriptor(
@@ -40,8 +40,8 @@ _PRINCIPALBINDING = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=950,
-  serialized_end=998,
+  serialized_start=1456,
+  serialized_end=1504,
 )
 _sym_db.RegisterEnumDescriptor(_PRINCIPALBINDING)
 
@@ -50,18 +50,94 @@ USE_PEER = 0
 USE_ORIGIN = 1
 
 
+_CLIENTSETTINGS_MODE = _descriptor.EnumDescriptor(
+  name='Mode',
+  full_name='istio.authentication.v1alpha1.ClientSettings.Mode',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='UNENCRYPTED', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='TLS', index=1, number=1,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=353,
+  serialized_end=385,
+)
+_sym_db.RegisterEnumDescriptor(_CLIENTSETTINGS_MODE)
 
-_MUTUALTLS = _descriptor.Descriptor(
-  name='MutualTls',
-  full_name='istio.authentication.v1alpha1.MutualTls',
+_MUTUALTLS_MODE = _descriptor.EnumDescriptor(
+  name='Mode',
+  full_name='istio.authentication.v1alpha1.MutualTls.Mode',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='STRICT', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='TLS_PERMISSIVE', index=1, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='PERMISSIVE', index=2, number=2,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=481,
+  serialized_end=535,
+)
+_sym_db.RegisterEnumDescriptor(_MUTUALTLS_MODE)
+
+
+_CLIENTSETTINGS_TLSPARAMS = _descriptor.Descriptor(
+  name='TlsParams',
+  full_name='istio.authentication.v1alpha1.ClientSettings.TlsParams',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='allow_tls', full_name='istio.authentication.v1alpha1.MutualTls.allow_tls', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='client_certificate', full_name='istio.authentication.v1alpha1.ClientSettings.TlsParams.client_certificate', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='private_key', full_name='istio.authentication.v1alpha1.ClientSettings.TlsParams.private_key', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='ca_certificates', full_name='istio.authentication.v1alpha1.ClientSettings.TlsParams.ca_certificates', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='subject_alt_names', full_name='istio.authentication.v1alpha1.ClientSettings.TlsParams.subject_alt_names', index=3,
+      number=4, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='sni', full_name='istio.authentication.v1alpha1.ClientSettings.TlsParams.sni', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
@@ -77,8 +153,85 @@ _MUTUALTLS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=71,
-  serialized_end=101,
+  serialized_start=226,
+  serialized_end=351,
+)
+
+_CLIENTSETTINGS = _descriptor.Descriptor(
+  name='ClientSettings',
+  full_name='istio.authentication.v1alpha1.ClientSettings',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='mode', full_name='istio.authentication.v1alpha1.ClientSettings.mode', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='tls', full_name='istio.authentication.v1alpha1.ClientSettings.tls', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_CLIENTSETTINGS_TLSPARAMS, ],
+  enum_types=[
+    _CLIENTSETTINGS_MODE,
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=72,
+  serialized_end=385,
+)
+
+
+_MUTUALTLS = _descriptor.Descriptor(
+  name='MutualTls',
+  full_name='istio.authentication.v1alpha1.MutualTls',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='mode', full_name='istio.authentication.v1alpha1.MutualTls.mode', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='allow_tls', full_name='istio.authentication.v1alpha1.MutualTls.allow_tls', index=1,
+      number=2, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _MUTUALTLS_MODE,
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=388,
+  serialized_end=535,
 )
 
 
@@ -136,8 +289,8 @@ _JWT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=103,
-  serialized_end=202,
+  serialized_start=537,
+  serialized_end=636,
 )
 
 
@@ -177,8 +330,8 @@ _PEERAUTHENTICATIONMETHOD = _descriptor.Descriptor(
       name='params', full_name='istio.authentication.v1alpha1.PeerAuthenticationMethod.params',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=205,
-  serialized_end=350,
+  serialized_start=639,
+  serialized_end=784,
 )
 
 
@@ -208,8 +361,8 @@ _ORIGINAUTHENTICATIONMETHOD = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=352,
-  serialized_end=429,
+  serialized_start=786,
+  serialized_end=863,
 )
 
 
@@ -228,36 +381,43 @@ _POLICY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='peers', full_name='istio.authentication.v1alpha1.Policy.peers', index=1,
-      number=2, type=11, cpp_type=10, label=3,
+      name='client_settings', full_name='istio.authentication.v1alpha1.Policy.client_settings', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='peers', full_name='istio.authentication.v1alpha1.Policy.peers', index=2,
+      number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='peer_is_optional', full_name='istio.authentication.v1alpha1.Policy.peer_is_optional', index=2,
-      number=3, type=8, cpp_type=7, label=1,
+      name='peer_is_optional', full_name='istio.authentication.v1alpha1.Policy.peer_is_optional', index=3,
+      number=4, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='origins', full_name='istio.authentication.v1alpha1.Policy.origins', index=3,
-      number=4, type=11, cpp_type=10, label=3,
+      name='origins', full_name='istio.authentication.v1alpha1.Policy.origins', index=4,
+      number=5, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='origin_is_optional', full_name='istio.authentication.v1alpha1.Policy.origin_is_optional', index=4,
-      number=5, type=8, cpp_type=7, label=1,
+      name='origin_is_optional', full_name='istio.authentication.v1alpha1.Policy.origin_is_optional', index=5,
+      number=6, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='principal_binding', full_name='istio.authentication.v1alpha1.Policy.principal_binding', index=5,
-      number=6, type=14, cpp_type=8, label=1,
+      name='principal_binding', full_name='istio.authentication.v1alpha1.Policy.principal_binding', index=6,
+      number=7, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -274,8 +434,8 @@ _POLICY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=432,
-  serialized_end=782,
+  serialized_start=866,
+  serialized_end=1288,
 )
 
 
@@ -319,8 +479,8 @@ _TARGETSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=784,
-  serialized_end=890,
+  serialized_start=1290,
+  serialized_end=1396,
 )
 
 
@@ -360,10 +520,16 @@ _PORTSELECTOR = _descriptor.Descriptor(
       name='port', full_name='istio.authentication.v1alpha1.PortSelector.port',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=892,
-  serialized_end=948,
+  serialized_start=1398,
+  serialized_end=1454,
 )
 
+_CLIENTSETTINGS_TLSPARAMS.containing_type = _CLIENTSETTINGS
+_CLIENTSETTINGS.fields_by_name['mode'].enum_type = _CLIENTSETTINGS_MODE
+_CLIENTSETTINGS.fields_by_name['tls'].message_type = _CLIENTSETTINGS_TLSPARAMS
+_CLIENTSETTINGS_MODE.containing_type = _CLIENTSETTINGS
+_MUTUALTLS.fields_by_name['mode'].enum_type = _MUTUALTLS_MODE
+_MUTUALTLS_MODE.containing_type = _MUTUALTLS
 _PEERAUTHENTICATIONMETHOD.fields_by_name['mtls'].message_type = _MUTUALTLS
 _PEERAUTHENTICATIONMETHOD.fields_by_name['jwt'].message_type = _JWT
 _PEERAUTHENTICATIONMETHOD.oneofs_by_name['params'].fields.append(
@@ -374,6 +540,7 @@ _PEERAUTHENTICATIONMETHOD.oneofs_by_name['params'].fields.append(
 _PEERAUTHENTICATIONMETHOD.fields_by_name['jwt'].containing_oneof = _PEERAUTHENTICATIONMETHOD.oneofs_by_name['params']
 _ORIGINAUTHENTICATIONMETHOD.fields_by_name['jwt'].message_type = _JWT
 _POLICY.fields_by_name['targets'].message_type = _TARGETSELECTOR
+_POLICY.fields_by_name['client_settings'].message_type = _CLIENTSETTINGS
 _POLICY.fields_by_name['peers'].message_type = _PEERAUTHENTICATIONMETHOD
 _POLICY.fields_by_name['origins'].message_type = _ORIGINAUTHENTICATIONMETHOD
 _POLICY.fields_by_name['principal_binding'].enum_type = _PRINCIPALBINDING
@@ -384,6 +551,7 @@ _PORTSELECTOR.fields_by_name['number'].containing_oneof = _PORTSELECTOR.oneofs_b
 _PORTSELECTOR.oneofs_by_name['port'].fields.append(
   _PORTSELECTOR.fields_by_name['name'])
 _PORTSELECTOR.fields_by_name['name'].containing_oneof = _PORTSELECTOR.oneofs_by_name['port']
+DESCRIPTOR.message_types_by_name['ClientSettings'] = _CLIENTSETTINGS
 DESCRIPTOR.message_types_by_name['MutualTls'] = _MUTUALTLS
 DESCRIPTOR.message_types_by_name['Jwt'] = _JWT
 DESCRIPTOR.message_types_by_name['PeerAuthenticationMethod'] = _PEERAUTHENTICATIONMETHOD
@@ -393,6 +561,21 @@ DESCRIPTOR.message_types_by_name['TargetSelector'] = _TARGETSELECTOR
 DESCRIPTOR.message_types_by_name['PortSelector'] = _PORTSELECTOR
 DESCRIPTOR.enum_types_by_name['PrincipalBinding'] = _PRINCIPALBINDING
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
+
+ClientSettings = _reflection.GeneratedProtocolMessageType('ClientSettings', (_message.Message,), dict(
+
+  TlsParams = _reflection.GeneratedProtocolMessageType('TlsParams', (_message.Message,), dict(
+    DESCRIPTOR = _CLIENTSETTINGS_TLSPARAMS,
+    __module__ = 'authentication.v1alpha1.policy_pb2'
+    # @@protoc_insertion_point(class_scope:istio.authentication.v1alpha1.ClientSettings.TlsParams)
+    ))
+  ,
+  DESCRIPTOR = _CLIENTSETTINGS,
+  __module__ = 'authentication.v1alpha1.policy_pb2'
+  # @@protoc_insertion_point(class_scope:istio.authentication.v1alpha1.ClientSettings)
+  ))
+_sym_db.RegisterMessage(ClientSettings)
+_sym_db.RegisterMessage(ClientSettings.TlsParams)
 
 MutualTls = _reflection.GeneratedProtocolMessageType('MutualTls', (_message.Message,), dict(
   DESCRIPTOR = _MUTUALTLS,
