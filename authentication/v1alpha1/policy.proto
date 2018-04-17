@@ -72,18 +72,23 @@ message Jwt {
   // ```
   repeated string audiences = 2;
 
-  // URL of the provider's public key set to validate signature of the
-  // JWT. See [OpenID
-  // Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
-  //
-  // Optional if the key set document can either (a) be retrieved from
-  // [OpenID
-  // Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html) of
-  // the issuer or (b) inferred from the email domain of the issuer (e.g. a
-  // Google service account).
-  //
-  // Example: https://www.googleapis.com/oauth2/v1/certs
-  string jwks_uri = 3;
+  oneof jwks {
+    // URL of the provider's public key set to validate signature of the
+    // JWT. See [OpenID
+    // Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
+    //
+    // Optional if the key set document can either (a) be retrieved from
+    // [OpenID
+    // Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html) of
+    // the issuer or (b) inferred from the email domain of the issuer (e.g. a
+    // Google service account).
+    //
+    // Example: https://www.googleapis.com/oauth2/v1/certs
+    string jwks_uri = 3;
+
+    // Public key set is defined in the inline string.
+    string jwks_inline = 4;
+  }
 
   // Two fields below define where to extract the JWT from an HTTP request.
   //
