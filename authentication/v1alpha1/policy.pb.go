@@ -97,9 +97,9 @@ const (
 	// still be accepted.
 	MutualTls_TLS_PERMISSIVE MutualTls_Mode = 1
 	// $hide_from_docs
-	// Connection can be either plaintext or TLS, and client cert can be omitted. In this mode, all
-	// requests are accepted. It should be used for traffic migration, and/or with proper authorization
-	// policy.
+	// Connection can be either plaintext or TLS, and client cert can be
+	// omitted. In this mode, all requests are accepted. It should be used for
+	// traffic migration, and/or with proper authorization policy.
 	MutualTls_PERMISSIVE MutualTls_Mode = 2
 )
 
@@ -148,11 +148,11 @@ func (m *ClientSettings) GetTls() *ClientSettings_TlsParams {
 
 // TLS specific parameters.
 type ClientSettings_TlsParams struct {
-	// The path to the file holding the client-side TLS certificate to use. If empty, client
-	// certificate is not sent (i.e connection is regular TLS)
+	// The path to the file holding the client-side TLS certificate to use. If
+	// empty, client certificate is not sent (i.e connection is regular TLS)
 	ClientCertificate string `protobuf:"bytes,1,opt,name=client_certificate,json=clientCertificate,proto3" json:"client_certificate,omitempty"`
-	// The path to the file holding the client's private key. Required if client_certificate
-	// is provided.
+	// The path to the file holding the client's private key. Required if
+	// client_certificate is provided.
 	PrivateKey string `protobuf:"bytes,2,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
 	// The path to the file containing certificate authority
 	// certificates to use in verifying a presented server certificate. If
@@ -208,6 +208,7 @@ func (m *ClientSettings_TlsParams) GetSni() string {
 	return ""
 }
 
+// $hide_from_docs
 // mTLS authentication params.
 type MutualTls struct {
 	// Defines the mode of mTLS authentication.
@@ -217,7 +218,6 @@ type MutualTls struct {
 	// extracted and used (set to peer identity). Otherwise, peer identity will
 	// be left unset.
 	// When the flag is false (default), request must have client certificate.
-	// DEPRECATED. Set mode to TLS_PERMISSIVE to have the same effect as allow_tls = true.
 	AllowTls bool `protobuf:"varint,2,opt,name=allow_tls,json=allowTls,proto3" json:"allow_tls,omitempty"`
 }
 
@@ -590,9 +590,9 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 //   principalBinding: USE_ORIGIN
 // ```
 //
-// Policy to config client in Istio mesh to communicate with external service in TLS (operators is
-// responsible to install CA certificate, and define ExternalService). This also assumes global namespace
-// is `istio-system`.
+// Policy to config client in Istio mesh to communicate with external service in
+// TLS (operators is responsible to install CA certificate, and define
+// ExternalService). This also assumes global namespace is `istio-system`.
 // ```yaml
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
@@ -611,8 +611,8 @@ type Policy struct {
 	// List rules to select destinations that the policy should be applied on.
 	// If empty, policy will be used on all destinations in the same namespace.
 	Targets []*TargetSelector `protobuf:"bytes,1,rep,name=targets" json:"targets,omitempty"`
-	// Client settings. If not set, Istio will use pre-defined values that are most suitable
-	// to the (peer) authentication method. In particular:
+	// Client settings. If not set, Istio will use pre-defined values that are
+	// most suitable to the (peer) authentication method. In particular:
 	// - If mutual-TLS is used, default settings will be:
 	// ```yaml
 	// clientSettings:

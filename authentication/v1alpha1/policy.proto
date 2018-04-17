@@ -37,12 +37,12 @@ message ClientSettings {
 
   // TLS specific parameters.
   message TlsParams {
-    // The path to the file holding the client-side TLS certificate to use. If empty, client
-    // certificate is not sent (i.e connection is regular TLS)
+    // The path to the file holding the client-side TLS certificate to use. If
+    // empty, client certificate is not sent (i.e connection is regular TLS)
     string client_certificate = 1;
 
-    // The path to the file holding the client's private key. Required if client_certificate
-    // is provided.
+    // The path to the file holding the client's private key. Required if
+    // client_certificate is provided.
     string private_key = 2;
 
     // The path to the file containing certificate authority
@@ -63,6 +63,7 @@ message ClientSettings {
   TlsParams tls = 2;
 }
 
+// $hide_from_docs
 // mTLS authentication params.
 message MutualTls {
   // Defines how client certificate validation is enforced on server side.
@@ -76,9 +77,9 @@ message MutualTls {
     TLS_PERMISSIVE = 1;
 
     // $hide_from_docs
-    // Connection can be either plaintext or TLS, and client cert can be omitted. In this mode, all
-    // requests are accepted. It should be used for traffic migration, and/or with proper authorization
-    // policy.
+    // Connection can be either plaintext or TLS, and client cert can be
+    // omitted. In this mode, all requests are accepted. It should be used for
+    // traffic migration, and/or with proper authorization policy.
     PERMISSIVE = 2;
   };
   // Defines the mode of mTLS authentication.
@@ -89,7 +90,6 @@ message MutualTls {
   // extracted and used (set to peer identity). Otherwise, peer identity will
   // be left unset.
   // When the flag is false (default), request must have client certificate.
-  // DEPRECATED. Set mode to TLS_PERMISSIVE to have the same effect as allow_tls = true.
   bool allow_tls = 2;
 }
 
@@ -305,9 +305,9 @@ enum PrincipalBinding {
 //   principalBinding: USE_ORIGIN
 // ```
 //
-// Policy to config client in Istio mesh to communicate with external service in TLS (operators is
-// responsible to install CA certificate, and define ExternalService). This also assumes global namespace
-// is `istio-system`.
+// Policy to config client in Istio mesh to communicate with external service in
+// TLS (operators is responsible to install CA certificate, and define
+// ExternalService). This also assumes global namespace is `istio-system`.
 // ```yaml
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
@@ -327,8 +327,8 @@ message Policy {
   // If empty, policy will be used on all destinations in the same namespace.
   repeated TargetSelector targets = 1;
 
-  // Client settings. If not set, Istio will use pre-defined values that are most suitable
-  // to the (peer) authentication method. In particular:
+  // Client settings. If not set, Istio will use pre-defined values that are
+  // most suitable to the (peer) authentication method. In particular:
   // - If mutual-TLS is used, default settings will be:
   // ```yaml
   // clientSettings:
