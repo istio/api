@@ -230,6 +230,8 @@ satisfied and details describe why.</p>
 <td><code>value</code></td>
 <td><code>string</code></td>
 <td>
+<p>DNSName encoded as string.</p>
+
 </td>
 </tr>
 </tbody>
@@ -252,6 +254,8 @@ satisfied and details describe why.</p>
 <td><code>value</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
 <td>
+<p>Duration encoded as google.protobuf.Duration.</p>
+
 </td>
 </tr>
 </tbody>
@@ -275,6 +279,8 @@ DO NOT USE !! Under Development</p>
 <td><code>value</code></td>
 <td><code>string</code></td>
 <td>
+<p>EmailAddress encoded as string.</p>
+
 </td>
 </tr>
 </tbody>
@@ -556,6 +562,8 @@ If <code>QuotaParams.best_effort</code> is false, this will be either 0 or &gt;=
 <td><code>value</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#timestamp">google.protobuf.Timestamp</a></code></td>
 <td>
+<p>TimeStamp encoded as google.protobuf.Timestamp.</p>
+
 </td>
 </tr>
 </tbody>
@@ -579,6 +587,8 @@ DO NOT USE ! Under Development</p>
 <td><code>value</code></td>
 <td><code>string</code></td>
 <td>
+<p>Uri encoded as string.</p>
+
 </td>
 </tr>
 </tbody>
@@ -658,7 +668,7 @@ of the field depends on the datatype of the expression used in the operator conf
 <td><code>stringValue</code></td>
 <td><code>string (oneof)</code></td>
 <td>
-<p>Used for values of type STRING, DNS<em>NAME, EMAIL</em>ADDRESS, and URI</p>
+<p>Used for values of type STRING</p>
 
 </td>
 </tr>
@@ -714,7 +724,7 @@ of the field depends on the datatype of the expression used in the operator conf
 <td><code>emailAddressValue</code></td>
 <td><code><a href="#EmailAddress">EmailAddress (oneof)</a></code></td>
 <td>
-<p>Used for EmailAddress</p>
+<p>Used for values of type EmailAddress</p>
 
 </td>
 </tr>
@@ -722,7 +732,7 @@ of the field depends on the datatype of the expression used in the operator conf
 <td><code>dnsNameValue</code></td>
 <td><code><a href="#DNSName">DNSName (oneof)</a></code></td>
 <td>
-<p>Used for DNSName</p>
+<p>Used for values of type DNSName</p>
 
 </td>
 </tr>
@@ -730,7 +740,7 @@ of the field depends on the datatype of the expression used in the operator conf
 <td><code>uriValue</code></td>
 <td><code><a href="#Uri">Uri (oneof)</a></code></td>
 <td>
-<p>Used for Uri</p>
+<p>Used for values of type Uri</p>
 
 </td>
 </tr>

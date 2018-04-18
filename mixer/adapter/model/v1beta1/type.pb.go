@@ -400,6 +400,7 @@ func (m *IPAddress) GetValue() []byte {
 
 // Duration is used inside templates for fields that are of ValueType "DURATION"
 type Duration struct {
+	// Duration encoded as google.protobuf.Duration.
 	Value *google_protobuf1.Duration `protobuf:"bytes,1,opt,name=value" json:"value,omitempty"`
 }
 
@@ -416,6 +417,7 @@ func (m *Duration) GetValue() *google_protobuf1.Duration {
 
 // TimeStamp is used inside templates for fields that are of ValueType "TIMESTAMP"
 type TimeStamp struct {
+	// TimeStamp encoded as google.protobuf.Timestamp.
 	Value *google_protobuf3.Timestamp `protobuf:"bytes,1,opt,name=value" json:"value,omitempty"`
 }
 
@@ -432,6 +434,7 @@ func (m *TimeStamp) GetValue() *google_protobuf3.Timestamp {
 
 // DNSName is used inside templates for fields that are of ValueType "DNS_NAME"
 type DNSName struct {
+	// DNSName encoded as string.
 	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
 }
 
@@ -449,6 +452,7 @@ func (m *DNSName) GetValue() string {
 // EmailAddress is used inside templates for fields that are of ValueType "EMAIL_ADDRESS"
 // DO NOT USE !! Under Development
 type EmailAddress struct {
+	// EmailAddress encoded as string.
 	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
 }
 
@@ -466,6 +470,7 @@ func (m *EmailAddress) GetValue() string {
 // Uri is used inside templates for fields that are of ValueType "URI"
 // DO NOT USE ! Under Development
 type Uri struct {
+	// Uri encoded as string.
 	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
 }
 
