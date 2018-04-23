@@ -22,14 +22,75 @@ package istio.authentication.v1alpha1;
 
 option go_package = "istio.io/api/authentication/v1alpha1";
 
+// Privacy settings
+message ClientSettings {
+  // Connection mode.
+  enum Mode {
+    // Clients will originate an unencrypted connection to target services.
+    UNENCRYPTED = 0;
+    // Clients will originate an TLS connection to target services.
+    TLS = 1;
+  };
+
+  // REQUIRED: Indicates what type of connection client should use.
+  Mode mode = 1;
+
+  // TLS specific parameters.
+  message TlsParams {
+    // The path to the file holding the client-side TLS certificate to use. If
+    // empty, client certificate is not sent (i.e connection is regular TLS)
+    string client_certificate = 1;
+
+    // The path to the file holding the client's private key. Required if
+    // client_certificate is provided.
+    string private_key = 2;
+
+    // The path to the file containing certificate authority
+    // certificates to use in verifying a presented server certificate. If
+    // omitted, the proxy will not verify the server's certificate.
+    string ca_certificates = 3;
+
+    // A list of alternate names to verify the subject identity in the
+    // certificate. If specified, the proxy will verify that the server
+    // certificate's subject alt name matches one of the specified values.
+    repeated string subject_alt_names = 4;
+
+    // SNI string to present to the server during TLS handshake.
+    string sni = 5;
+  }
+
+  // TLS configuration. Should be set only when connection mode is TLS.
+  TlsParams tls = 2;
+}
+
+// $hide_from_docs
 // mTLS authentication params.
 message MutualTls {
+  // Defines how client certificate validation is enforced on server side.
+  enum Mode {
+    // Client cert must be presented, connection is in TLS.
+    STRICT = 0;
+
+    // Connection must be in TLS, but client cert can be omitted.
+    // Request will not be fully authenticate if client cert is missing, but
+    // still be accepted.
+    TLS_PERMISSIVE = 1;
+
+    // $hide_from_docs
+    // Connection can be either plaintext or TLS, and client cert can be
+    // omitted. In this mode, all requests are accepted. It should be used for
+    // traffic migration, and/or with proper authorization policy.
+    PERMISSIVE = 2;
+  };
+  // Defines the mode of mTLS authentication.
+  Mode mode = 1;
+
   // Set this flag to true to allow regular TLS (i.e without client x509
   // certificate). If request carries client certificate, identity will be
   // extracted and used (set to peer identity). Otherwise, peer identity will
   // be left unset.
   // When the flag is false (default), request must have client certificate.
-  bool allow_tls = 1;
+  bool allow_tls = 2;
 }
 
 // JSON Web Token (JWT) token format for authentication as defined by
@@ -186,8 +247,8 @@ enum PrincipalBinding {
 //   targets:
 //   - name: productpage
 // ```
-// Policy to require mTLS for peer authentication, and JWT for origin authenticationn
-// for productpage:9000. Principal is set from origin identity.
+// Policy to require mTLS for peer authentication, and JWT for origin
+// authenticationn for productpage:9000. Principal is set from origin identity.
 //
 // ```yaml
 // apiVersion: authentication.istio.io/v1alpha1
@@ -213,12 +274,11 @@ enum PrincipalBinding {
 //   principaBinding: USE_ORIGIN
 // ```
 //
-// Policy to require mTLS for peer authentication, and JWT for origin authenticationn
-// for productpage:9000, but allow origin authentication failed. Principal is set
-// from origin identity.
-// Note: this example can be used for use cases when we want to allow request from
-// certain peers, given it comes with an approperiate authorization poicy to check
-// and reject request accoridingly.
+// Policy to require mTLS for peer authentication, and JWT for origin
+// authenticationn for productpage:9000, but allow origin authentication failed.
+// Principal is set from origin identity. Note: this example can be used for use
+// cases when we want to allow request from certain peers, given it comes with
+// an approperiate authorization poicy to check and reject request accoridingly.
 //
 // ```yaml
 // apiVersion: authentication.istio.io/v1alpha1
@@ -244,10 +304,46 @@ enum PrincipalBinding {
 //   originIsOptional: true
 //   principalBinding: USE_ORIGIN
 // ```
+//
+// Policy to config client in Istio mesh to communicate with external service in
+// TLS (operators is responsible to install CA certificate, and define
+// ExternalService). This also assumes global namespace is `istio-system`.
+// ```yaml
+// apiVersion: authentication.istio.io/v1alpha1
+// kind: Policy
+// metadata:
+//   name:
+//   namespace: istio-system
+// spec:
+//   target:
+//   - name: www.googleapis.com
+//   customerSettings:
+//     mode: TLS
+//     tls:
+//       caCertificates: /etc/certs/googl-cacerts.pem
+// ```
 message Policy {
   // List rules to select destinations that the policy should be applied on.
   // If empty, policy will be used on all destinations in the same namespace.
   repeated TargetSelector targets = 1;
+
+  // Client settings. If not set, Istio will use pre-defined values that are
+  // most suitable to the (peer) authentication method. In particular:
+  // - If mutual-TLS is used, default settings will be:
+  // ```yaml
+  // clientSettings:
+  //   mode: TLS
+  //   tls:
+  //     clientCertificate: “/etc/certs/cert-chain.pem”
+  //     privateKey: “/etc/certs/key.pem”
+  //     caCertificate: “/etc/certs/root-cert.pm”
+  // ```
+  // - And if mutual-TLS is not use:
+  // ```yaml
+  // clientSettings:
+  //   mode: UNENCRYPTED
+  // ```
+  ClientSettings client_settings = 2;
 
   // List of authentication methods that can be used for peer authentication.
   // They will be evaluated in order; the first validate one will be used to
@@ -255,30 +351,30 @@ message Policy {
   // these methods pass, and peer_is_optional flag is false (see below),
   // request will be rejected with authentication failed error (401).
   // Leave the list empty if peer authentication is not required
-  repeated PeerAuthenticationMethod peers = 2;
+  repeated PeerAuthenticationMethod peers = 3;
 
-  // Set this flag to true to accept request (for peer authentication perspective),
-  // even when none of the peer authentication methods defined above satisfied.
-  // Typically, this is used to delay the rejection decision to next layer (e.g
-  // authorization).
-  // This flag is ignored if no authentication defined for peer (peers field is empty).
-  bool peer_is_optional = 3;
+  // Set this flag to true to accept request (for peer authentication
+  // perspective), even when none of the peer authentication methods defined
+  // above satisfied. Typically, this is used to delay the rejection decision to
+  // next layer (e.g authorization). This flag is ignored if no authentication
+  // defined for peer (peers field is empty).
+  bool peer_is_optional = 4;
 
   // List of authentication methods that can be used for origin authentication.
   // Similar to peers, these will be evaluated in order; the first validate one
   // will be used to set origin identity and attributes (i.e request.auth.user,
-  // request.auth.issuer etc). If none of these methods pass, and origin_is_optional
-  // is false (see below), request will be rejected with authentication failed
-  // error (401).
-  // Leave the list empty if origin authentication is not required.
-  repeated OriginAuthenticationMethod origins = 4;
+  // request.auth.issuer etc). If none of these methods pass, and
+  // origin_is_optional is false (see below), request will be rejected with
+  // authentication failed error (401). Leave the list empty if origin
+  // authentication is not required.
+  repeated OriginAuthenticationMethod origins = 5;
 
-  // Set this flag to true to accept request (for origin authentication perspective),
-  // even when none of the origin authentication methods defined above satisfied.
-  // Typically, this is used to delay the rejection decision to next layer (e.g
-  // authorization).
-  // This flag is ignored if no authentication defined for origin (origins field is empty).
-  bool origin_is_optional = 5;
+  // Set this flag to true to accept request (for origin authentication
+  // perspective), even when none of the origin authentication methods defined
+  // above satisfied. Typically, this is used to delay the rejection decision to
+  // next layer (e.g authorization). This flag is ignored if no authentication
+  // defined for origin (origins field is empty).
+  bool origin_is_optional = 6;
 
   // Define whether peer or origin identity should be use for principal. Default
   // value is USE_PEER.
@@ -286,7 +382,7 @@ message Policy {
   // authentication is not defined, or failed, principal will be left unset.
   // In other words, binding rule does not affect the decision to accept or
   // reject request.
-  PrincipalBinding principal_binding = 6;
+  PrincipalBinding principal_binding = 7;
 }
 
 // TargetSelector defines a matching rule to a service/destination.
@@ -302,7 +398,7 @@ message TargetSelector {
 
   // Specifies the ports on the destination. Leave empty to match all ports
   // that are exposed.
-  repeated PortSelector ports =3;
+  repeated PortSelector ports = 3;
 }
 
 // PortSelector specifies the name or number of a port to be used for

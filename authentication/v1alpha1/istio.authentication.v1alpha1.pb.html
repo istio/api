@@ -2,10 +2,133 @@
 title: Authentication Policy
 overview: Authentication policy for Istio services.
 layout: protoc-gen-docs
-number_of_entries: 8
+number_of_entries: 11
 ---
 <p>This package defines user-facing authentication policy.</p>
 
+<h2 id="ClientSettings">ClientSettings</h2>
+<section>
+<p>Privacy settings</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ClientSettings.mode">
+<td><code>mode</code></td>
+<td><code><a href="#ClientSettings.Mode">ClientSettings.Mode</a></code></td>
+<td>
+<p>REQUIRED: Indicates what type of connection client should use.</p>
+
+</td>
+</tr>
+<tr id="ClientSettings.tls">
+<td><code>tls</code></td>
+<td><code><a href="#ClientSettings.TlsParams">ClientSettings.TlsParams</a></code></td>
+<td>
+<p>TLS configuration. Should be set only when connection mode is TLS.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ClientSettings.Mode">ClientSettings.Mode</h2>
+<section>
+<p>Connection mode.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ClientSettings.Mode.UNENCRYPTED">
+<td><code>UNENCRYPTED</code></td>
+<td>
+<p>Clients will originate an unencrypted connection to target services.</p>
+
+</td>
+</tr>
+<tr id="ClientSettings.Mode.TLS">
+<td><code>TLS</code></td>
+<td>
+<p>Clients will originate an TLS connection to target services.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ClientSettings.TlsParams">ClientSettings.TlsParams</h2>
+<section>
+<p>TLS specific parameters.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ClientSettings.TlsParams.client_certificate">
+<td><code>clientCertificate</code></td>
+<td><code>string</code></td>
+<td>
+<p>The path to the file holding the client-side TLS certificate to use. If
+empty, client certificate is not sent (i.e connection is regular TLS)</p>
+
+</td>
+</tr>
+<tr id="ClientSettings.TlsParams.private_key">
+<td><code>privateKey</code></td>
+<td><code>string</code></td>
+<td>
+<p>The path to the file holding the client&rsquo;s private key. Required if
+client_certificate is provided.</p>
+
+</td>
+</tr>
+<tr id="ClientSettings.TlsParams.ca_certificates">
+<td><code>caCertificates</code></td>
+<td><code>string</code></td>
+<td>
+<p>The path to the file containing certificate authority
+certificates to use in verifying a presented server certificate. If
+omitted, the proxy will not verify the server&rsquo;s certificate.</p>
+
+</td>
+</tr>
+<tr id="ClientSettings.TlsParams.subject_alt_names">
+<td><code>subjectAltNames</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>A list of alternate names to verify the subject identity in the
+certificate. If specified, the proxy will verify that the server
+certificate&rsquo;s subject alt name matches one of the specified values.</p>
+
+</td>
+</tr>
+<tr id="ClientSettings.TlsParams.sni">
+<td><code>sni</code></td>
+<td><code>string</code></td>
+<td>
+<p>SNI string to present to the server during TLS handshake.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="Jwt">Jwt</h2>
 <section>
 <p>JSON Web Token (JWT) token format for authentication as defined by
@@ -109,28 +232,31 @@ query parameter name.</p>
 </tbody>
 </table>
 </section>
-<h2 id="MutualTls">MutualTls</h2>
+<h2 id="MutualTls.Mode">MutualTls.Mode</h2>
 <section>
-<p>mTLS authentication params.</p>
+<p>Defines how client certificate validation is enforced on server side.</p>
 
-<table class="message-fields">
+<table class="enum-values">
 <thead>
 <tr>
-<th>Field</th>
-<th>Type</th>
+<th>Name</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
-<tr id="MutualTls.allow_tls">
-<td><code>allowTls</code></td>
-<td><code>bool</code></td>
+<tr id="MutualTls.Mode.STRICT">
+<td><code>STRICT</code></td>
 <td>
-<p>Set this flag to true to allow regular TLS (i.e without client x509
-certificate). If request carries client certificate, identity will be
-extracted and used (set to peer identity). Otherwise, peer identity will
-be left unset.
-When the flag is false (default), request must have client certificate.</p>
+<p>Client cert must be presented, connection is in TLS.</p>
+
+</td>
+</tr>
+<tr id="MutualTls.Mode.TLS_PERMISSIVE">
+<td><code>TLS_PERMISSIVE</code></td>
+<td>
+<p>Connection must be in TLS, but client cert can be omitted.
+Request will not be fully authenticate if client cert is missing, but
+still be accepted.</p>
 
 </td>
 </tr>
@@ -234,8 +360,8 @@ spec:
   - name: productpage
 </code></pre>
 
-<p>Policy to require mTLS for peer authentication, and JWT for origin authenticationn
-for productpage:9000. Principal is set from origin identity.</p>
+<p>Policy to require mTLS for peer authentication, and JWT for origin
+authenticationn for productpage:9000. Principal is set from origin identity.</p>
 
 <pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
 kind: Policy
@@ -260,12 +386,11 @@ spec:
   principaBinding: USE_ORIGIN
 </code></pre>
 
-<p>Policy to require mTLS for peer authentication, and JWT for origin authenticationn
-for productpage:9000, but allow origin authentication failed. Principal is set
-from origin identity.
-Note: this example can be used for use cases when we want to allow request from
-certain peers, given it comes with an approperiate authorization poicy to check
-and reject request accoridingly.</p>
+<p>Policy to require mTLS for peer authentication, and JWT for origin
+authenticationn for productpage:9000, but allow origin authentication failed.
+Principal is set from origin identity. Note: this example can be used for use
+cases when we want to allow request from certain peers, given it comes with
+an approperiate authorization poicy to check and reject request accoridingly.</p>
 
 <pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
 kind: Policy
@@ -291,6 +416,24 @@ spec:
   principalBinding: USE_ORIGIN
 </code></pre>
 
+<p>Policy to config client in Istio mesh to communicate with external service in
+TLS (operators is responsible to install CA certificate, and define
+ExternalService). This also assumes global namespace is <code>istio-system</code>.</p>
+
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name:
+  namespace: istio-system
+spec:
+  target:
+  - name: www.googleapis.com
+  customerSettings:
+    mode: TLS
+    tls:
+      caCertificates: /etc/certs/googl-cacerts.pem
+</code></pre>
+
 <table class="message-fields">
 <thead>
 <tr>
@@ -306,6 +449,32 @@ spec:
 <td>
 <p>List rules to select destinations that the policy should be applied on.
 If empty, policy will be used on all destinations in the same namespace.</p>
+
+</td>
+</tr>
+<tr id="Policy.client_settings">
+<td><code>clientSettings</code></td>
+<td><code><a href="#ClientSettings">ClientSettings</a></code></td>
+<td>
+<p>Client settings. If not set, Istio will use pre-defined values that are
+most suitable to the (peer) authentication method. In particular:
+- If mutual-TLS is used, default settings will be:</p>
+
+<pre><code class="language-yaml">clientSettings:
+  mode: TLS
+  tls:
+    clientCertificate: “/etc/certs/cert-chain.pem”
+    privateKey: “/etc/certs/key.pem”
+    caCertificate: “/etc/certs/root-cert.pm”
+</code></pre>
+
+<ul>
+<li>And if mutual-TLS is not use:
+<code>yaml
+clientSettings:
+mode: UNENCRYPTED
+</code></li>
+</ul>
 
 </td>
 </tr>
@@ -326,11 +495,11 @@ Leave the list empty if peer authentication is not required</p>
 <td><code>peerIsOptional</code></td>
 <td><code>bool</code></td>
 <td>
-<p>Set this flag to true to accept request (for peer authentication perspective),
-even when none of the peer authentication methods defined above satisfied.
-Typically, this is used to delay the rejection decision to next layer (e.g
-authorization).
-This flag is ignored if no authentication defined for peer (peers field is empty).</p>
+<p>Set this flag to true to accept request (for peer authentication
+perspective), even when none of the peer authentication methods defined
+above satisfied. Typically, this is used to delay the rejection decision to
+next layer (e.g authorization). This flag is ignored if no authentication
+defined for peer (peers field is empty).</p>
 
 </td>
 </tr>
@@ -341,10 +510,10 @@ This flag is ignored if no authentication defined for peer (peers field is empty
 <p>List of authentication methods that can be used for origin authentication.
 Similar to peers, these will be evaluated in order; the first validate one
 will be used to set origin identity and attributes (i.e request.auth.user,
-request.auth.issuer etc). If none of these methods pass, and origin<em>is</em>optional
-is false (see below), request will be rejected with authentication failed
-error (401).
-Leave the list empty if origin authentication is not required.</p>
+request.auth.issuer etc). If none of these methods pass, and
+origin<em>is</em>optional is false (see below), request will be rejected with
+authentication failed error (401). Leave the list empty if origin
+authentication is not required.</p>
 
 </td>
 </tr>
@@ -352,11 +521,11 @@ Leave the list empty if origin authentication is not required.</p>
 <td><code>originIsOptional</code></td>
 <td><code>bool</code></td>
 <td>
-<p>Set this flag to true to accept request (for origin authentication perspective),
-even when none of the origin authentication methods defined above satisfied.
-Typically, this is used to delay the rejection decision to next layer (e.g
-authorization).
-This flag is ignored if no authentication defined for origin (origins field is empty).</p>
+<p>Set this flag to true to accept request (for origin authentication
+perspective), even when none of the origin authentication methods defined
+above satisfied. Typically, this is used to delay the rejection decision to
+next layer (e.g authorization). This flag is ignored if no authentication
+defined for origin (origins field is empty).</p>
 
 </td>
 </tr>

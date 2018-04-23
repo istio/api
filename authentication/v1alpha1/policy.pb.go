@@ -10,6 +10,7 @@
 		authentication/v1alpha1/policy.proto
 
 	It has these top-level messages:
+		ClientSettings
 		MutualTls
 		Jwt
 		PeerAuthenticationMethod
@@ -61,20 +62,176 @@ func (x PrincipalBinding) String() string {
 }
 func (PrincipalBinding) EnumDescriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{0} }
 
+// Connection mode.
+type ClientSettings_Mode int32
+
+const (
+	// Clients will originate an unencrypted connection to target services.
+	ClientSettings_UNENCRYPTED ClientSettings_Mode = 0
+	// Clients will originate an TLS connection to target services.
+	ClientSettings_TLS ClientSettings_Mode = 1
+)
+
+var ClientSettings_Mode_name = map[int32]string{
+	0: "UNENCRYPTED",
+	1: "TLS",
+}
+var ClientSettings_Mode_value = map[string]int32{
+	"UNENCRYPTED": 0,
+	"TLS":         1,
+}
+
+func (x ClientSettings_Mode) String() string {
+	return proto.EnumName(ClientSettings_Mode_name, int32(x))
+}
+func (ClientSettings_Mode) EnumDescriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{0, 0} }
+
+// Defines how client certificate validation is enforced on server side.
+type MutualTls_Mode int32
+
+const (
+	// Client cert must be presented, connection is in TLS.
+	MutualTls_STRICT MutualTls_Mode = 0
+	// Connection must be in TLS, but client cert can be omitted.
+	// Request will not be fully authenticate if client cert is missing, but
+	// still be accepted.
+	MutualTls_TLS_PERMISSIVE MutualTls_Mode = 1
+	// $hide_from_docs
+	// Connection can be either plaintext or TLS, and client cert can be
+	// omitted. In this mode, all requests are accepted. It should be used for
+	// traffic migration, and/or with proper authorization policy.
+	MutualTls_PERMISSIVE MutualTls_Mode = 2
+)
+
+var MutualTls_Mode_name = map[int32]string{
+	0: "STRICT",
+	1: "TLS_PERMISSIVE",
+	2: "PERMISSIVE",
+}
+var MutualTls_Mode_value = map[string]int32{
+	"STRICT":         0,
+	"TLS_PERMISSIVE": 1,
+	"PERMISSIVE":     2,
+}
+
+func (x MutualTls_Mode) String() string {
+	return proto.EnumName(MutualTls_Mode_name, int32(x))
+}
+func (MutualTls_Mode) EnumDescriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{1, 0} }
+
+// Privacy settings
+type ClientSettings struct {
+	// REQUIRED: Indicates what type of connection client should use.
+	Mode ClientSettings_Mode `protobuf:"varint,1,opt,name=mode,proto3,enum=istio.authentication.v1alpha1.ClientSettings_Mode" json:"mode,omitempty"`
+	// TLS configuration. Should be set only when connection mode is TLS.
+	Tls *ClientSettings_TlsParams `protobuf:"bytes,2,opt,name=tls" json:"tls,omitempty"`
+}
+
+func (m *ClientSettings) Reset()                    { *m = ClientSettings{} }
+func (m *ClientSettings) String() string            { return proto.CompactTextString(m) }
+func (*ClientSettings) ProtoMessage()               {}
+func (*ClientSettings) Descriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{0} }
+
+func (m *ClientSettings) GetMode() ClientSettings_Mode {
+	if m != nil {
+		return m.Mode
+	}
+	return ClientSettings_UNENCRYPTED
+}
+
+func (m *ClientSettings) GetTls() *ClientSettings_TlsParams {
+	if m != nil {
+		return m.Tls
+	}
+	return nil
+}
+
+// TLS specific parameters.
+type ClientSettings_TlsParams struct {
+	// The path to the file holding the client-side TLS certificate to use. If
+	// empty, client certificate is not sent (i.e connection is regular TLS)
+	ClientCertificate string `protobuf:"bytes,1,opt,name=client_certificate,json=clientCertificate,proto3" json:"client_certificate,omitempty"`
+	// The path to the file holding the client's private key. Required if
+	// client_certificate is provided.
+	PrivateKey string `protobuf:"bytes,2,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
+	// The path to the file containing certificate authority
+	// certificates to use in verifying a presented server certificate. If
+	// omitted, the proxy will not verify the server's certificate.
+	CaCertificates string `protobuf:"bytes,3,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
+	// A list of alternate names to verify the subject identity in the
+	// certificate. If specified, the proxy will verify that the server
+	// certificate's subject alt name matches one of the specified values.
+	SubjectAltNames []string `protobuf:"bytes,4,rep,name=subject_alt_names,json=subjectAltNames" json:"subject_alt_names,omitempty"`
+	// SNI string to present to the server during TLS handshake.
+	Sni string `protobuf:"bytes,5,opt,name=sni,proto3" json:"sni,omitempty"`
+}
+
+func (m *ClientSettings_TlsParams) Reset()         { *m = ClientSettings_TlsParams{} }
+func (m *ClientSettings_TlsParams) String() string { return proto.CompactTextString(m) }
+func (*ClientSettings_TlsParams) ProtoMessage()    {}
+func (*ClientSettings_TlsParams) Descriptor() ([]byte, []int) {
+	return fileDescriptorPolicy, []int{0, 0}
+}
+
+func (m *ClientSettings_TlsParams) GetClientCertificate() string {
+	if m != nil {
+		return m.ClientCertificate
+	}
+	return ""
+}
+
+func (m *ClientSettings_TlsParams) GetPrivateKey() string {
+	if m != nil {
+		return m.PrivateKey
+	}
+	return ""
+}
+
+func (m *ClientSettings_TlsParams) GetCaCertificates() string {
+	if m != nil {
+		return m.CaCertificates
+	}
+	return ""
+}
+
+func (m *ClientSettings_TlsParams) GetSubjectAltNames() []string {
+	if m != nil {
+		return m.SubjectAltNames
+	}
+	return nil
+}
+
+func (m *ClientSettings_TlsParams) GetSni() string {
+	if m != nil {
+		return m.Sni
+	}
+	return ""
+}
+
+// $hide_from_docs
 // mTLS authentication params.
 type MutualTls struct {
+	// Defines the mode of mTLS authentication.
+	Mode MutualTls_Mode `protobuf:"varint,1,opt,name=mode,proto3,enum=istio.authentication.v1alpha1.MutualTls_Mode" json:"mode,omitempty"`
 	// Set this flag to true to allow regular TLS (i.e without client x509
 	// certificate). If request carries client certificate, identity will be
 	// extracted and used (set to peer identity). Otherwise, peer identity will
 	// be left unset.
 	// When the flag is false (default), request must have client certificate.
-	AllowTls bool `protobuf:"varint,1,opt,name=allow_tls,json=allowTls,proto3" json:"allow_tls,omitempty"`
+	AllowTls bool `protobuf:"varint,2,opt,name=allow_tls,json=allowTls,proto3" json:"allow_tls,omitempty"`
 }
 
 func (m *MutualTls) Reset()                    { *m = MutualTls{} }
 func (m *MutualTls) String() string            { return proto.CompactTextString(m) }
 func (*MutualTls) ProtoMessage()               {}
-func (*MutualTls) Descriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{0} }
+func (*MutualTls) Descriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{1} }
+
+func (m *MutualTls) GetMode() MutualTls_Mode {
+	if m != nil {
+		return m.Mode
+	}
+	return MutualTls_STRICT
+}
 
 func (m *MutualTls) GetAllowTls() bool {
 	if m != nil {
@@ -149,7 +306,7 @@ type Jwt struct {
 func (m *Jwt) Reset()                    { *m = Jwt{} }
 func (m *Jwt) String() string            { return proto.CompactTextString(m) }
 func (*Jwt) ProtoMessage()               {}
-func (*Jwt) Descriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{1} }
+func (*Jwt) Descriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{2} }
 
 func (m *Jwt) GetIssuer() string {
 	if m != nil {
@@ -201,7 +358,7 @@ type PeerAuthenticationMethod struct {
 func (m *PeerAuthenticationMethod) Reset()                    { *m = PeerAuthenticationMethod{} }
 func (m *PeerAuthenticationMethod) String() string            { return proto.CompactTextString(m) }
 func (*PeerAuthenticationMethod) ProtoMessage()               {}
-func (*PeerAuthenticationMethod) Descriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{2} }
+func (*PeerAuthenticationMethod) Descriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{3} }
 
 type isPeerAuthenticationMethod_Params interface {
 	isPeerAuthenticationMethod_Params()
@@ -325,7 +482,7 @@ type OriginAuthenticationMethod struct {
 func (m *OriginAuthenticationMethod) Reset()                    { *m = OriginAuthenticationMethod{} }
 func (m *OriginAuthenticationMethod) String() string            { return proto.CompactTextString(m) }
 func (*OriginAuthenticationMethod) ProtoMessage()               {}
-func (*OriginAuthenticationMethod) Descriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{3} }
+func (*OriginAuthenticationMethod) Descriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{4} }
 
 func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 	if m != nil {
@@ -375,8 +532,8 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 //   targets:
 //   - name: productpage
 // ```
-// Policy to require mTLS for peer authentication, and JWT for origin authenticationn
-// for productpage:9000. Principal is set from origin identity.
+// Policy to require mTLS for peer authentication, and JWT for origin
+// authenticationn for productpage:9000. Principal is set from origin identity.
 //
 // ```yaml
 // apiVersion: authentication.istio.io/v1alpha1
@@ -402,12 +559,11 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 //   principaBinding: USE_ORIGIN
 // ```
 //
-// Policy to require mTLS for peer authentication, and JWT for origin authenticationn
-// for productpage:9000, but allow origin authentication failed. Principal is set
-// from origin identity.
-// Note: this example can be used for use cases when we want to allow request from
-// certain peers, given it comes with an approperiate authorization poicy to check
-// and reject request accoridingly.
+// Policy to require mTLS for peer authentication, and JWT for origin
+// authenticationn for productpage:9000, but allow origin authentication failed.
+// Principal is set from origin identity. Note: this example can be used for use
+// cases when we want to allow request from certain peers, given it comes with
+// an approperiate authorization poicy to check and reject request accoridingly.
 //
 // ```yaml
 // apiVersion: authentication.istio.io/v1alpha1
@@ -433,54 +589,96 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 //   originIsOptional: true
 //   principalBinding: USE_ORIGIN
 // ```
+//
+// Policy to config client in Istio mesh to communicate with external service in
+// TLS (operators is responsible to install CA certificate, and define
+// ExternalService). This also assumes global namespace is `istio-system`.
+// ```yaml
+// apiVersion: authentication.istio.io/v1alpha1
+// kind: Policy
+// metadata:
+//   name:
+//   namespace: istio-system
+// spec:
+//   target:
+//   - name: www.googleapis.com
+//   customerSettings:
+//     mode: TLS
+//     tls:
+//       caCertificates: /etc/certs/googl-cacerts.pem
+// ```
 type Policy struct {
 	// List rules to select destinations that the policy should be applied on.
 	// If empty, policy will be used on all destinations in the same namespace.
 	Targets []*TargetSelector `protobuf:"bytes,1,rep,name=targets" json:"targets,omitempty"`
+	// Client settings. If not set, Istio will use pre-defined values that are
+	// most suitable to the (peer) authentication method. In particular:
+	// - If mutual-TLS is used, default settings will be:
+	// ```yaml
+	// clientSettings:
+	//   mode: TLS
+	//   tls:
+	//     clientCertificate: “/etc/certs/cert-chain.pem”
+	//     privateKey: “/etc/certs/key.pem”
+	//     caCertificate: “/etc/certs/root-cert.pm”
+	// ```
+	// - And if mutual-TLS is not use:
+	// ```yaml
+	// clientSettings:
+	//   mode: UNENCRYPTED
+	// ```
+	ClientSettings *ClientSettings `protobuf:"bytes,2,opt,name=client_settings,json=clientSettings" json:"client_settings,omitempty"`
 	// List of authentication methods that can be used for peer authentication.
 	// They will be evaluated in order; the first validate one will be used to
 	// set peer identity (source.user) and other peer attributes. If none of
 	// these methods pass, and peer_is_optional flag is false (see below),
 	// request will be rejected with authentication failed error (401).
 	// Leave the list empty if peer authentication is not required
-	Peers []*PeerAuthenticationMethod `protobuf:"bytes,2,rep,name=peers" json:"peers,omitempty"`
-	// Set this flag to true to accept request (for peer authentication perspective),
-	// even when none of the peer authentication methods defined above satisfied.
-	// Typically, this is used to delay the rejection decision to next layer (e.g
-	// authorization).
-	// This flag is ignored if no authentication defined for peer (peers field is empty).
-	PeerIsOptional bool `protobuf:"varint,3,opt,name=peer_is_optional,json=peerIsOptional,proto3" json:"peer_is_optional,omitempty"`
+	Peers []*PeerAuthenticationMethod `protobuf:"bytes,3,rep,name=peers" json:"peers,omitempty"`
+	// Set this flag to true to accept request (for peer authentication
+	// perspective), even when none of the peer authentication methods defined
+	// above satisfied. Typically, this is used to delay the rejection decision to
+	// next layer (e.g authorization). This flag is ignored if no authentication
+	// defined for peer (peers field is empty).
+	PeerIsOptional bool `protobuf:"varint,4,opt,name=peer_is_optional,json=peerIsOptional,proto3" json:"peer_is_optional,omitempty"`
 	// List of authentication methods that can be used for origin authentication.
 	// Similar to peers, these will be evaluated in order; the first validate one
 	// will be used to set origin identity and attributes (i.e request.auth.user,
-	// request.auth.issuer etc). If none of these methods pass, and origin_is_optional
-	// is false (see below), request will be rejected with authentication failed
-	// error (401).
-	// Leave the list empty if origin authentication is not required.
-	Origins []*OriginAuthenticationMethod `protobuf:"bytes,4,rep,name=origins" json:"origins,omitempty"`
-	// Set this flag to true to accept request (for origin authentication perspective),
-	// even when none of the origin authentication methods defined above satisfied.
-	// Typically, this is used to delay the rejection decision to next layer (e.g
-	// authorization).
-	// This flag is ignored if no authentication defined for origin (origins field is empty).
-	OriginIsOptional bool `protobuf:"varint,5,opt,name=origin_is_optional,json=originIsOptional,proto3" json:"origin_is_optional,omitempty"`
+	// request.auth.issuer etc). If none of these methods pass, and
+	// origin_is_optional is false (see below), request will be rejected with
+	// authentication failed error (401). Leave the list empty if origin
+	// authentication is not required.
+	Origins []*OriginAuthenticationMethod `protobuf:"bytes,5,rep,name=origins" json:"origins,omitempty"`
+	// Set this flag to true to accept request (for origin authentication
+	// perspective), even when none of the origin authentication methods defined
+	// above satisfied. Typically, this is used to delay the rejection decision to
+	// next layer (e.g authorization). This flag is ignored if no authentication
+	// defined for origin (origins field is empty).
+	OriginIsOptional bool `protobuf:"varint,6,opt,name=origin_is_optional,json=originIsOptional,proto3" json:"origin_is_optional,omitempty"`
 	// Define whether peer or origin identity should be use for principal. Default
 	// value is USE_PEER.
 	// If peer (or orgin) identity is not available, either because of peer/origin
 	// authentication is not defined, or failed, principal will be left unset.
 	// In other words, binding rule does not affect the decision to accept or
 	// reject request.
-	PrincipalBinding PrincipalBinding `protobuf:"varint,6,opt,name=principal_binding,json=principalBinding,proto3,enum=istio.authentication.v1alpha1.PrincipalBinding" json:"principal_binding,omitempty"`
+	PrincipalBinding PrincipalBinding `protobuf:"varint,7,opt,name=principal_binding,json=principalBinding,proto3,enum=istio.authentication.v1alpha1.PrincipalBinding" json:"principal_binding,omitempty"`
 }
 
 func (m *Policy) Reset()                    { *m = Policy{} }
 func (m *Policy) String() string            { return proto.CompactTextString(m) }
 func (*Policy) ProtoMessage()               {}
-func (*Policy) Descriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{4} }
+func (*Policy) Descriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{5} }
 
 func (m *Policy) GetTargets() []*TargetSelector {
 	if m != nil {
 		return m.Targets
+	}
+	return nil
+}
+
+func (m *Policy) GetClientSettings() *ClientSettings {
+	if m != nil {
+		return m.ClientSettings
 	}
 	return nil
 }
@@ -537,7 +735,7 @@ type TargetSelector struct {
 func (m *TargetSelector) Reset()                    { *m = TargetSelector{} }
 func (m *TargetSelector) String() string            { return proto.CompactTextString(m) }
 func (*TargetSelector) ProtoMessage()               {}
-func (*TargetSelector) Descriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{5} }
+func (*TargetSelector) Descriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{6} }
 
 func (m *TargetSelector) GetName() string {
 	if m != nil {
@@ -573,7 +771,7 @@ type PortSelector struct {
 func (m *PortSelector) Reset()                    { *m = PortSelector{} }
 func (m *PortSelector) String() string            { return proto.CompactTextString(m) }
 func (*PortSelector) ProtoMessage()               {}
-func (*PortSelector) Descriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{6} }
+func (*PortSelector) Descriptor() ([]byte, []int) { return fileDescriptorPolicy, []int{7} }
 
 type isPortSelector_Port interface {
 	isPortSelector_Port()
@@ -678,6 +876,8 @@ func _PortSelector_OneofSizer(msg proto.Message) (n int) {
 }
 
 func init() {
+	proto.RegisterType((*ClientSettings)(nil), "istio.authentication.v1alpha1.ClientSettings")
+	proto.RegisterType((*ClientSettings_TlsParams)(nil), "istio.authentication.v1alpha1.ClientSettings.TlsParams")
 	proto.RegisterType((*MutualTls)(nil), "istio.authentication.v1alpha1.MutualTls")
 	proto.RegisterType((*Jwt)(nil), "istio.authentication.v1alpha1.Jwt")
 	proto.RegisterType((*PeerAuthenticationMethod)(nil), "istio.authentication.v1alpha1.PeerAuthenticationMethod")
@@ -686,7 +886,99 @@ func init() {
 	proto.RegisterType((*TargetSelector)(nil), "istio.authentication.v1alpha1.TargetSelector")
 	proto.RegisterType((*PortSelector)(nil), "istio.authentication.v1alpha1.PortSelector")
 	proto.RegisterEnum("istio.authentication.v1alpha1.PrincipalBinding", PrincipalBinding_name, PrincipalBinding_value)
+	proto.RegisterEnum("istio.authentication.v1alpha1.ClientSettings_Mode", ClientSettings_Mode_name, ClientSettings_Mode_value)
+	proto.RegisterEnum("istio.authentication.v1alpha1.MutualTls_Mode", MutualTls_Mode_name, MutualTls_Mode_value)
 }
+func (m *ClientSettings) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ClientSettings) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Mode != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(m.Mode))
+	}
+	if m.Tls != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(m.Tls.Size()))
+		n1, err := m.Tls.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n1
+	}
+	return i, nil
+}
+
+func (m *ClientSettings_TlsParams) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ClientSettings_TlsParams) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.ClientCertificate) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(len(m.ClientCertificate)))
+		i += copy(dAtA[i:], m.ClientCertificate)
+	}
+	if len(m.PrivateKey) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(len(m.PrivateKey)))
+		i += copy(dAtA[i:], m.PrivateKey)
+	}
+	if len(m.CaCertificates) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(len(m.CaCertificates)))
+		i += copy(dAtA[i:], m.CaCertificates)
+	}
+	if len(m.SubjectAltNames) > 0 {
+		for _, s := range m.SubjectAltNames {
+			dAtA[i] = 0x22
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	if len(m.Sni) > 0 {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(len(m.Sni)))
+		i += copy(dAtA[i:], m.Sni)
+	}
+	return i, nil
+}
+
 func (m *MutualTls) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -702,8 +994,13 @@ func (m *MutualTls) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.AllowTls {
+	if m.Mode != 0 {
 		dAtA[i] = 0x8
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(m.Mode))
+	}
+	if m.AllowTls {
+		dAtA[i] = 0x10
 		i++
 		if m.AllowTls {
 			dAtA[i] = 1
@@ -806,11 +1103,11 @@ func (m *PeerAuthenticationMethod) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.Params != nil {
-		nn1, err := m.Params.MarshalTo(dAtA[i:])
+		nn2, err := m.Params.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn1
+		i += nn2
 	}
 	return i, nil
 }
@@ -821,11 +1118,11 @@ func (m *PeerAuthenticationMethod_Mtls) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintPolicy(dAtA, i, uint64(m.Mtls.Size()))
-		n2, err := m.Mtls.MarshalTo(dAtA[i:])
+		n3, err := m.Mtls.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n2
+		i += n3
 	}
 	return i, nil
 }
@@ -835,11 +1132,11 @@ func (m *PeerAuthenticationMethod_Jwt) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintPolicy(dAtA, i, uint64(m.Jwt.Size()))
-		n3, err := m.Jwt.MarshalTo(dAtA[i:])
+		n4, err := m.Jwt.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
+		i += n4
 	}
 	return i, nil
 }
@@ -862,11 +1159,11 @@ func (m *OriginAuthenticationMethod) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintPolicy(dAtA, i, uint64(m.Jwt.Size()))
-		n4, err := m.Jwt.MarshalTo(dAtA[i:])
+		n5, err := m.Jwt.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n4
+		i += n5
 	}
 	return i, nil
 }
@@ -898,9 +1195,19 @@ func (m *Policy) MarshalTo(dAtA []byte) (int, error) {
 			i += n
 		}
 	}
+	if m.ClientSettings != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(m.ClientSettings.Size()))
+		n6, err := m.ClientSettings.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n6
+	}
 	if len(m.Peers) > 0 {
 		for _, msg := range m.Peers {
-			dAtA[i] = 0x12
+			dAtA[i] = 0x1a
 			i++
 			i = encodeVarintPolicy(dAtA, i, uint64(msg.Size()))
 			n, err := msg.MarshalTo(dAtA[i:])
@@ -911,7 +1218,7 @@ func (m *Policy) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.PeerIsOptional {
-		dAtA[i] = 0x18
+		dAtA[i] = 0x20
 		i++
 		if m.PeerIsOptional {
 			dAtA[i] = 1
@@ -922,7 +1229,7 @@ func (m *Policy) MarshalTo(dAtA []byte) (int, error) {
 	}
 	if len(m.Origins) > 0 {
 		for _, msg := range m.Origins {
-			dAtA[i] = 0x22
+			dAtA[i] = 0x2a
 			i++
 			i = encodeVarintPolicy(dAtA, i, uint64(msg.Size()))
 			n, err := msg.MarshalTo(dAtA[i:])
@@ -933,7 +1240,7 @@ func (m *Policy) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.OriginIsOptional {
-		dAtA[i] = 0x28
+		dAtA[i] = 0x30
 		i++
 		if m.OriginIsOptional {
 			dAtA[i] = 1
@@ -943,7 +1250,7 @@ func (m *Policy) MarshalTo(dAtA []byte) (int, error) {
 		i++
 	}
 	if m.PrincipalBinding != 0 {
-		dAtA[i] = 0x30
+		dAtA[i] = 0x38
 		i++
 		i = encodeVarintPolicy(dAtA, i, uint64(m.PrincipalBinding))
 	}
@@ -1008,11 +1315,11 @@ func (m *PortSelector) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.Port != nil {
-		nn5, err := m.Port.MarshalTo(dAtA[i:])
+		nn7, err := m.Port.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn5
+		i += nn7
 	}
 	return i, nil
 }
@@ -1041,9 +1348,53 @@ func encodeVarintPolicy(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return offset + 1
 }
+func (m *ClientSettings) Size() (n int) {
+	var l int
+	_ = l
+	if m.Mode != 0 {
+		n += 1 + sovPolicy(uint64(m.Mode))
+	}
+	if m.Tls != nil {
+		l = m.Tls.Size()
+		n += 1 + l + sovPolicy(uint64(l))
+	}
+	return n
+}
+
+func (m *ClientSettings_TlsParams) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.ClientCertificate)
+	if l > 0 {
+		n += 1 + l + sovPolicy(uint64(l))
+	}
+	l = len(m.PrivateKey)
+	if l > 0 {
+		n += 1 + l + sovPolicy(uint64(l))
+	}
+	l = len(m.CaCertificates)
+	if l > 0 {
+		n += 1 + l + sovPolicy(uint64(l))
+	}
+	if len(m.SubjectAltNames) > 0 {
+		for _, s := range m.SubjectAltNames {
+			l = len(s)
+			n += 1 + l + sovPolicy(uint64(l))
+		}
+	}
+	l = len(m.Sni)
+	if l > 0 {
+		n += 1 + l + sovPolicy(uint64(l))
+	}
+	return n
+}
+
 func (m *MutualTls) Size() (n int) {
 	var l int
 	_ = l
+	if m.Mode != 0 {
+		n += 1 + sovPolicy(uint64(m.Mode))
+	}
 	if m.AllowTls {
 		n += 2
 	}
@@ -1128,6 +1479,10 @@ func (m *Policy) Size() (n int) {
 			n += 1 + l + sovPolicy(uint64(l))
 		}
 	}
+	if m.ClientSettings != nil {
+		l = m.ClientSettings.Size()
+		n += 1 + l + sovPolicy(uint64(l))
+	}
 	if len(m.Peers) > 0 {
 		for _, e := range m.Peers {
 			l = e.Size()
@@ -1208,6 +1563,303 @@ func sovPolicy(x uint64) (n int) {
 func sozPolicy(x uint64) (n int) {
 	return sovPolicy(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
+func (m *ClientSettings) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPolicy
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ClientSettings: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ClientSettings: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Mode", wireType)
+			}
+			m.Mode = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Mode |= (ClientSettings_Mode(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Tls == nil {
+				m.Tls = &ClientSettings_TlsParams{}
+			}
+			if err := m.Tls.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPolicy(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ClientSettings_TlsParams) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPolicy
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TlsParams: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TlsParams: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientCertificate", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ClientCertificate = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrivateKey", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PrivateKey = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CaCertificates", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CaCertificates = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubjectAltNames", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SubjectAltNames = append(m.SubjectAltNames, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sni", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sni = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPolicy(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *MutualTls) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -1238,6 +1890,25 @@ func (m *MutualTls) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Mode", wireType)
+			}
+			m.Mode = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Mode |= (MutualTls_Mode(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field AllowTls", wireType)
 			}
@@ -1732,6 +2403,39 @@ func (m *Policy) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientSettings", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ClientSettings == nil {
+				m.ClientSettings = &ClientSettings{}
+			}
+			if err := m.ClientSettings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Peers", wireType)
 			}
 			var msglen int
@@ -1761,7 +2465,7 @@ func (m *Policy) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PeerIsOptional", wireType)
 			}
@@ -1781,7 +2485,7 @@ func (m *Policy) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.PeerIsOptional = bool(v != 0)
-		case 4:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Origins", wireType)
 			}
@@ -1812,7 +2516,7 @@ func (m *Policy) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 5:
+		case 6:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field OriginIsOptional", wireType)
 			}
@@ -1832,7 +2536,7 @@ func (m *Policy) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.OriginIsOptional = bool(v != 0)
-		case 6:
+		case 7:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PrincipalBinding", wireType)
 			}
@@ -2218,43 +2922,59 @@ var (
 func init() { proto.RegisterFile("authentication/v1alpha1/policy.proto", fileDescriptorPolicy) }
 
 var fileDescriptorPolicy = []byte{
-	// 603 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x54, 0xcd, 0x6e, 0xd3, 0x4c,
-	0x14, 0x8d, 0xeb, 0xd4, 0xb1, 0x6f, 0xfb, 0x45, 0xfe, 0x46, 0x08, 0x99, 0x9f, 0x96, 0xca, 0xea,
-	0xc2, 0xe2, 0x27, 0xa1, 0x01, 0x81, 0xd8, 0x20, 0x35, 0x52, 0x69, 0x5a, 0xa9, 0x34, 0x9a, 0xb6,
-	0x1b, 0x84, 0x64, 0x4d, 0x92, 0x51, 0x33, 0xc1, 0xf1, 0x58, 0x33, 0x63, 0x2c, 0x56, 0xbc, 0x05,
-	0x2b, 0xde, 0x80, 0x17, 0x61, 0xc9, 0x23, 0xa0, 0x3e, 0x09, 0x9a, 0xb1, 0x43, 0x9b, 0x8a, 0x62,
-	0x76, 0x73, 0x8f, 0xe7, 0x1c, 0x9f, 0x7b, 0xae, 0xaf, 0x61, 0x9b, 0xe4, 0x6a, 0x4a, 0x53, 0xc5,
-	0xc6, 0x44, 0x31, 0x9e, 0x76, 0x3f, 0xee, 0x90, 0x24, 0x9b, 0x92, 0x9d, 0x6e, 0xc6, 0x13, 0x36,
-	0xfe, 0xd4, 0xc9, 0x04, 0x57, 0x1c, 0x6d, 0x30, 0xa9, 0x18, 0xef, 0x2c, 0xdf, 0xed, 0x2c, 0xee,
-	0x86, 0x11, 0x78, 0x47, 0xb9, 0xca, 0x49, 0x72, 0x9a, 0x48, 0x74, 0x0f, 0x3c, 0x92, 0x24, 0xbc,
-	0x88, 0x55, 0x22, 0x03, 0x6b, 0xcb, 0x8a, 0x5c, 0xec, 0x1a, 0xe0, 0x34, 0x91, 0xe1, 0x17, 0x0b,
-	0xec, 0xc3, 0x42, 0xa1, 0xdb, 0xe0, 0x30, 0x29, 0x73, 0x2a, 0xcc, 0x0d, 0x0f, 0x57, 0x15, 0xba,
-	0x0f, 0x1e, 0xc9, 0x27, 0x8c, 0xa6, 0x63, 0x2a, 0x83, 0x95, 0x2d, 0x3b, 0xf2, 0xf0, 0x25, 0x80,
-	0xee, 0x80, 0x3b, 0x2b, 0x3e, 0xc8, 0x38, 0x17, 0x2c, 0xb0, 0x0d, 0xaf, 0xa5, 0xeb, 0x33, 0xc1,
-	0xd0, 0x03, 0x58, 0x9b, 0x15, 0x2a, 0x9e, 0x52, 0x32, 0xa1, 0x42, 0x06, 0x8e, 0xa1, 0xc2, 0xac,
-	0x50, 0x83, 0x12, 0x41, 0x1b, 0xa0, 0xab, 0x38, 0x23, 0x82, 0xcc, 0x65, 0xd0, 0x2a, 0xa5, 0x67,
-	0x85, 0x1a, 0x1a, 0x20, 0xfc, 0x6a, 0x41, 0x30, 0xa4, 0x54, 0xec, 0x2e, 0xb5, 0x78, 0x44, 0xd5,
-	0x94, 0x4f, 0xd0, 0x6b, 0x68, 0xce, 0x17, 0xdd, 0xac, 0xf5, 0xa2, 0xce, 0x5f, 0xd3, 0xe8, 0xfc,
-	0x8e, 0x62, 0xd0, 0xc0, 0x86, 0x87, 0x5e, 0x80, 0x3d, 0x2b, 0x54, 0xb0, 0x62, 0xe8, 0x61, 0x0d,
-	0xfd, 0xb0, 0x50, 0x83, 0x06, 0xd6, 0x84, 0xbe, 0x0b, 0x4e, 0xe9, 0x37, 0xc4, 0x70, 0xf7, 0x58,
-	0xb0, 0x73, 0x96, 0xfe, 0xd1, 0xdf, 0xf3, 0x52, 0xdf, 0xfa, 0x57, 0x7d, 0xa3, 0x1e, 0x7e, 0xb3,
-	0xc1, 0x19, 0x9a, 0x29, 0xa3, 0x7d, 0x68, 0x29, 0x22, 0xce, 0xa9, 0xd2, 0x3d, 0xda, 0xd1, 0x5a,
-	0xef, 0x49, 0x8d, 0xc8, 0xa9, 0xb9, 0x7d, 0x42, 0x13, 0x3a, 0x56, 0x5c, 0xe0, 0x05, 0x1b, 0x1d,
-	0xc1, 0x6a, 0x46, 0xf5, 0x00, 0x56, 0x8c, 0xcc, 0xcb, 0x1a, 0x99, 0x9b, 0x12, 0xc7, 0xa5, 0x0a,
-	0x8a, 0xc0, 0xd7, 0x87, 0x98, 0xc9, 0x98, 0x67, 0xfa, 0x31, 0x49, 0xcc, 0xe0, 0x5d, 0xdc, 0xd6,
-	0xf8, 0x81, 0x3c, 0xae, 0x50, 0x74, 0x02, 0x2d, 0x6e, 0x02, 0x92, 0x41, 0xd3, 0xbc, 0xfa, 0x55,
-	0xcd, 0xab, 0x6f, 0x8e, 0x13, 0x2f, 0x94, 0xd0, 0x63, 0x40, 0xe5, 0x71, 0xc9, 0xc0, 0xaa, 0x31,
-	0xe0, 0x97, 0x4f, 0xae, 0x58, 0x78, 0x0f, 0xff, 0x67, 0x82, 0xa5, 0x63, 0x96, 0x91, 0x24, 0x1e,
-	0xb1, 0x74, 0xc2, 0xd2, 0xf3, 0xc0, 0xd9, 0xb2, 0xa2, 0x76, 0xaf, 0x5b, 0x97, 0xc3, 0x82, 0xd7,
-	0x2f, 0x69, 0xd8, 0xcf, 0xae, 0x21, 0xe1, 0x67, 0x68, 0x2f, 0x87, 0x8e, 0x10, 0x34, 0x53, 0x32,
-	0xa7, 0xd5, 0x06, 0x99, 0xb3, 0xde, 0x2b, 0x99, 0x8f, 0x24, 0x2d, 0x3f, 0x36, 0x0f, 0x57, 0x15,
-	0xda, 0x85, 0xd5, 0x8c, 0x0b, 0x25, 0x03, 0xdb, 0x84, 0xf3, 0xa8, 0xce, 0x0f, 0x17, 0x97, 0xc3,
-	0x2d, 0x99, 0xe1, 0x1b, 0x58, 0xbf, 0x0a, 0xa3, 0x00, 0x9c, 0x34, 0x9f, 0x8f, 0xaa, 0x15, 0xfe,
-	0x6f, 0xd0, 0xc0, 0x55, 0x8d, 0x6e, 0x55, 0xc6, 0x8c, 0x05, 0xbd, 0x04, 0xba, 0xea, 0x3b, 0xd0,
-	0xd4, 0x42, 0x0f, 0x9f, 0x82, 0x7f, 0xbd, 0x5d, 0xb4, 0x0e, 0xee, 0xd9, 0xc9, 0x5e, 0x3c, 0xdc,
-	0xdb, 0xc3, 0x7e, 0x03, 0xb5, 0x01, 0x74, 0x75, 0x8c, 0x0f, 0xf6, 0x0f, 0xde, 0xfa, 0x56, 0xbf,
-	0xf7, 0xfd, 0x62, 0xd3, 0xfa, 0x71, 0xb1, 0x69, 0xfd, 0xbc, 0xd8, 0xb4, 0xde, 0x6d, 0x97, 0xd6,
-	0x19, 0xef, 0x92, 0x8c, 0x75, 0x6f, 0xf8, 0x7d, 0x8d, 0x1c, 0xf3, 0xe3, 0x7a, 0xf6, 0x2b, 0x00,
-	0x00, 0xff, 0xff, 0x29, 0x19, 0x40, 0x05, 0xe0, 0x04, 0x00, 0x00,
+	// 849 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x55, 0x4f, 0x6f, 0x1b, 0x45,
+	0x14, 0xf7, 0x76, 0x9d, 0xb5, 0xfd, 0x52, 0x9c, 0xcd, 0x13, 0x42, 0x4b, 0xa1, 0x21, 0x5a, 0x55,
+	0xc2, 0x2a, 0xc4, 0xa6, 0x01, 0x15, 0x71, 0x41, 0x4a, 0x82, 0xdb, 0xb8, 0xd4, 0x89, 0x35, 0xbb,
+	0xa9, 0x04, 0x42, 0x5a, 0x8d, 0xd7, 0x43, 0x32, 0xee, 0x7a, 0x77, 0xb5, 0x33, 0x5b, 0x2b, 0x27,
+	0x0e, 0xdc, 0xf8, 0x00, 0x9c, 0xb8, 0xf1, 0x4d, 0x38, 0x71, 0xe4, 0x23, 0xa0, 0x7c, 0x12, 0x34,
+	0xb3, 0xe3, 0xc6, 0xae, 0x48, 0xdd, 0xdc, 0xe6, 0xbd, 0x79, 0xbf, 0xdf, 0xfe, 0xe6, 0xfd, 0x5b,
+	0x78, 0x40, 0x4b, 0x79, 0xc1, 0x52, 0xc9, 0x63, 0x2a, 0x79, 0x96, 0xf6, 0x5e, 0x3d, 0xa2, 0x49,
+	0x7e, 0x41, 0x1f, 0xf5, 0xf2, 0x2c, 0xe1, 0xf1, 0x65, 0x37, 0x2f, 0x32, 0x99, 0xe1, 0x7d, 0x2e,
+	0x24, 0xcf, 0xba, 0xab, 0xb1, 0xdd, 0x45, 0xac, 0xff, 0x9b, 0x0d, 0xed, 0xa3, 0x84, 0xb3, 0x54,
+	0x06, 0x4c, 0x4a, 0x9e, 0x9e, 0x0b, 0x7c, 0x02, 0xf5, 0x59, 0x36, 0x61, 0x9e, 0xb5, 0x6b, 0x75,
+	0xda, 0xfb, 0xfb, 0xdd, 0xb7, 0x12, 0x74, 0x57, 0xc1, 0xdd, 0x61, 0x36, 0x61, 0x44, 0xe3, 0x71,
+	0x00, 0xb6, 0x4c, 0x84, 0x77, 0x67, 0xd7, 0xea, 0x6c, 0xee, 0x7f, 0x7d, 0x3b, 0x9a, 0x30, 0x11,
+	0x23, 0x5a, 0xd0, 0x99, 0x20, 0x8a, 0xe3, 0xde, 0x5f, 0x16, 0xb4, 0x5e, 0xbb, 0x70, 0x0f, 0x30,
+	0xd6, 0xe1, 0x51, 0xcc, 0x0a, 0xc9, 0x7f, 0x56, 0x64, 0x95, 0xdc, 0x16, 0xd9, 0xae, 0x6e, 0x8e,
+	0xae, 0x2f, 0xf0, 0x13, 0xd8, 0xcc, 0x0b, 0xfe, 0x8a, 0x4a, 0x16, 0xbd, 0x64, 0x97, 0x5a, 0x4f,
+	0x8b, 0x80, 0x71, 0x7d, 0xcf, 0x2e, 0xf1, 0x53, 0xd8, 0x8a, 0xe9, 0x32, 0x97, 0xf0, 0x6c, 0x1d,
+	0xd4, 0x8e, 0xe9, 0x12, 0x91, 0xc0, 0x87, 0xb0, 0x2d, 0xca, 0xf1, 0x94, 0xc5, 0x32, 0xa2, 0x89,
+	0x8c, 0x52, 0x3a, 0x63, 0xc2, 0xab, 0xef, 0xda, 0x9d, 0x16, 0xd9, 0x32, 0x17, 0x07, 0x89, 0x3c,
+	0x51, 0x6e, 0x74, 0xc1, 0x16, 0x29, 0xf7, 0x36, 0x34, 0x91, 0x3a, 0xfa, 0xbb, 0x50, 0x57, 0xd9,
+	0xc1, 0x2d, 0xd8, 0x3c, 0x3b, 0xe9, 0x9f, 0x1c, 0x91, 0x1f, 0x46, 0x61, 0xff, 0x3b, 0xb7, 0x86,
+	0x0d, 0xb0, 0xc3, 0xe7, 0x81, 0x6b, 0xf9, 0x7f, 0x5a, 0xd0, 0x1a, 0x96, 0xb2, 0xa4, 0x49, 0x98,
+	0x08, 0x3c, 0x58, 0xa9, 0xc3, 0xde, 0x9a, 0x04, 0xbe, 0xc6, 0x2d, 0x97, 0xe0, 0x23, 0x68, 0xd1,
+	0x24, 0xc9, 0xe6, 0xd1, 0xa2, 0x10, 0x4d, 0xd2, 0xd4, 0x8e, 0x30, 0x11, 0xfe, 0x63, 0xa3, 0x07,
+	0xc0, 0x09, 0x42, 0x32, 0x38, 0x0a, 0xdd, 0x1a, 0x22, 0xb4, 0xc3, 0xe7, 0x41, 0x34, 0xea, 0x93,
+	0xe1, 0x20, 0x08, 0x06, 0x2f, 0xfa, 0xae, 0x85, 0x6d, 0x80, 0x25, 0xfb, 0x8e, 0xff, 0xbb, 0x05,
+	0xf6, 0xb3, 0xb9, 0xc4, 0x0f, 0xc0, 0xe1, 0x42, 0x94, 0xac, 0x30, 0xa9, 0x37, 0x16, 0x7e, 0x0c,
+	0x2d, 0x5a, 0x4e, 0x38, 0x4b, 0x63, 0xa6, 0x3e, 0xaa, 0xb2, 0x73, 0xed, 0xc0, 0x0f, 0xa1, 0x39,
+	0x9d, 0xbf, 0x14, 0x51, 0x59, 0x70, 0x93, 0xe5, 0x86, 0xb2, 0xcf, 0x0a, 0xae, 0x0a, 0x35, 0x9d,
+	0xcb, 0xe8, 0x82, 0xd1, 0x09, 0x2b, 0x84, 0xe7, 0x68, 0x28, 0x4c, 0xe7, 0xf2, 0xb8, 0xf2, 0xe0,
+	0x7d, 0x50, 0x56, 0x94, 0xeb, 0x36, 0xf0, 0x1a, 0x15, 0xf5, 0x74, 0x2e, 0xab, 0xbe, 0xf0, 0xff,
+	0xb0, 0xc0, 0x1b, 0x31, 0x56, 0x1c, 0xac, 0xa4, 0x68, 0xc8, 0xe4, 0x45, 0x36, 0xc1, 0x6f, 0xa1,
+	0x3e, 0x53, 0x59, 0xb0, 0x74, 0x3b, 0x76, 0xde, 0x35, 0x9b, 0xc7, 0x35, 0xa2, 0x71, 0xf8, 0x18,
+	0xec, 0xe9, 0x5c, 0x9a, 0x6e, 0xf6, 0xd7, 0xc0, 0x9f, 0xcd, 0xe5, 0x71, 0x8d, 0x28, 0xc0, 0x61,
+	0x13, 0x9c, 0x4a, 0xaf, 0x4f, 0xe0, 0xde, 0x69, 0xc1, 0xcf, 0x79, 0xfa, 0xbf, 0xfa, 0xbe, 0xaa,
+	0xf8, 0xad, 0x77, 0xe5, 0xd7, 0xec, 0xfe, 0xaf, 0x75, 0x70, 0x46, 0x7a, 0xdc, 0xf1, 0x29, 0x34,
+	0x24, 0x2d, 0xce, 0x99, 0x54, 0x6f, 0xb4, 0x3b, 0x9b, 0x6b, 0x3b, 0x26, 0xd4, 0xd1, 0x01, 0x4b,
+	0x58, 0x2c, 0xb3, 0x82, 0x2c, 0xd0, 0xf8, 0x02, 0xb6, 0xcc, 0x78, 0x09, 0x33, 0x8e, 0xe6, 0xd5,
+	0x7b, 0xb7, 0x9a, 0x61, 0xd2, 0x8e, 0x57, 0xf7, 0xca, 0x10, 0x36, 0x72, 0xa6, 0x0a, 0x6b, 0x6b,
+	0x79, 0xeb, 0x36, 0xc2, 0x4d, 0x95, 0x24, 0x15, 0x0b, 0x76, 0xc0, 0x55, 0x87, 0x88, 0x8b, 0x28,
+	0xcb, 0xd5, 0x35, 0x4d, 0xbc, 0xba, 0x6e, 0xf1, 0xb6, 0xf2, 0x0f, 0xc4, 0xa9, 0xf1, 0x62, 0x00,
+	0x8d, 0x4c, 0x27, 0x5e, 0x78, 0x1b, 0xfa, 0xd3, 0xdf, 0xac, 0xf9, 0xf4, 0xcd, 0x65, 0x22, 0x0b,
+	0x26, 0xfc, 0x1c, 0xb0, 0x3a, 0xae, 0x08, 0x70, 0xb4, 0x00, 0xb7, 0xba, 0x59, 0x92, 0xf0, 0x13,
+	0x6c, 0xe7, 0x05, 0x4f, 0x63, 0x9e, 0xd3, 0x24, 0x1a, 0xf3, 0x74, 0xc2, 0xd3, 0x73, 0xaf, 0xa1,
+	0x07, 0xbb, 0xb7, 0x2e, 0x0f, 0x0b, 0xdc, 0x61, 0x05, 0x23, 0x6e, 0xfe, 0x86, 0xc7, 0xff, 0x05,
+	0xda, 0xab, 0xc5, 0x44, 0x84, 0xba, 0xda, 0x4e, 0x66, 0x32, 0xf5, 0x59, 0xcd, 0xab, 0x28, 0xc7,
+	0x82, 0x49, 0xb3, 0x02, 0x8d, 0x85, 0x07, 0xb0, 0x91, 0x67, 0x85, 0x5c, 0xd4, 0xe5, 0xb3, 0x75,
+	0x7a, 0xb2, 0xe2, 0xba, 0x69, 0x2a, 0xa4, 0xff, 0x04, 0xee, 0x2e, 0xbb, 0xd1, 0x03, 0x27, 0x2d,
+	0x67, 0x63, 0xb3, 0x1a, 0xde, 0x3b, 0xae, 0x11, 0x63, 0xe3, 0xfb, 0x46, 0x98, 0x96, 0xa0, 0x86,
+	0x4b, 0x59, 0x87, 0x0e, 0xd4, 0x15, 0xd1, 0xc3, 0x2f, 0xc0, 0x7d, 0xf3, 0xb9, 0x78, 0x17, 0x9a,
+	0x67, 0x41, 0x3f, 0x1a, 0xf5, 0xfb, 0xc4, 0xad, 0xa9, 0x65, 0xa4, 0xac, 0x53, 0x32, 0x78, 0x3a,
+	0x38, 0x71, 0xad, 0xc3, 0xfd, 0xbf, 0xaf, 0x76, 0xac, 0x7f, 0xae, 0x76, 0xac, 0x7f, 0xaf, 0x76,
+	0xac, 0x1f, 0x1f, 0x54, 0xd2, 0x79, 0xd6, 0xa3, 0x39, 0xef, 0xdd, 0xf0, 0x7f, 0x1c, 0x3b, 0xfa,
+	0xcf, 0xf8, 0xe5, 0x7f, 0x01, 0x00, 0x00, 0xff, 0xff, 0xda, 0xff, 0xdf, 0xc3, 0x41, 0x07, 0x00,
+	0x00,
 }
