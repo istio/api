@@ -194,8 +194,11 @@ or &ldquo;</em>alpha2&rdquo; (suffix match).</p>
 <section>
 <p>RbacConfig defines the global config to control Istio RBAC behavior.
 This CRD is a singleton where only one CR should be created globally in the mesh and the
-namespace should be the same to other Istio components, which usually is istio-system.
-Below is an example of RbacConfig object &ldquo;istio-rbac-config&rdquo; which enables Istio RBAC for all
+namespace should be the same to other Istio components, which usually is istio-system. Note: This
+is enforced in both istioctl and server side, new CR will be rejected if found any existing one,
+the user should either delete the existing one or change the existing one directly.</p>
+
+<p>Below is an example of RbacConfig object &ldquo;istio-rbac-config&rdquo; which enables Istio RBAC for all
 services in the default namespace.</p>
 
 <pre><code>apiVersion: &quot;config.istio.io/v1alpha1&quot;
