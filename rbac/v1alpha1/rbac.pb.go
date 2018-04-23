@@ -363,6 +363,21 @@ func (m *RoleRef) GetName() string {
 }
 
 // RbacConfig defines the global config to control Istio RBAC behavior.
+// This CRD is a singleton where only one CR should be created globally in the mesh and the
+// namespace should be the same to other Istio components, which usually is istio-system.
+// Below is an example of RbacConfig object "istio-rbac-config" which enables Istio RBAC for all
+// services in the default namespace.
+//
+//     apiVersion: "config.istio.io/v1alpha1"
+//     kind: RbacConfig
+//     metadata:
+//       name: istio-rbac-config
+//       namespace: istio-system
+//     spec:
+//       mode: ON_WITH_INCLUSION
+//       inclusion:
+//         namespaces: [ "default" ]
+//
 type RbacConfig struct {
 	// Istio RBAC mode.
 	Mode RbacConfig_Mode `protobuf:"varint,1,opt,name=mode,enum=istio.rbac.v1alpha1.RbacConfig_Mode" json:"mode,omitempty"`
