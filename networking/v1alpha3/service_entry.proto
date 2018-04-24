@@ -23,17 +23,19 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //
 // # Overview
 //
-// `ExternalService` describes the endpoints, ports and protocols of a
-// white-listed set of mesh-external domains and IP blocks that services in
-// the mesh are allowed to access.
+// `ServiceEntry` describes the endpoints, ports and protocols of a
+// white-listed set of domains and IP blocks that services in the mesh are
+// allowed to access. These services could be external to the mesh (e.g.,
+// web APIs) or mesh-internal services that are not part of the platform's
+// service registry.
 //
-// For example, the following ExternalService configuration describes the
+// For example, the following ServiceEntry configuration describes the
 // set of services at https://example.com to be accessed internally over
 // plaintext http (i.e. http://example.com:443), with the sidecar originating
 // TLS.
 //
 //     apiVersion: networking.istio.io/v1alpha3
-//     kind: ExternalService
+//     kind: ServiceEntry
 //     metadata:
 //       name: external-svc-example
 //     spec:
@@ -62,7 +64,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // DestinationRule to initiate mTLS connections upstream.
 //
 //     apiVersion: networking.istio.io/v1alpha3
-//     kind: ExternalService
+//     kind: ServiceEntry
 //     metadata:
 //       name: external-svc-mongocluster
 //     spec:
@@ -98,7 +100,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // specific IP), the discovery mode must be set to `NONE`.
 //
 //     apiVersion: networking.istio.io/v1alpha3
-//     kind: ExternalService
+//     kind: ServiceEntry
 //     metadata:
 //       name: external-svc-wildcard-example
 //     spec:
@@ -119,7 +121,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // uk.foo.bar.com:9443, and in.foo.bar.com:7443
 //
 //     apiVersion: networking.istio.io/v1alpha3
-//     kind: ExternalService
+//     kind: ServiceEntry
 //     metadata:
 //       name: external-svc-dns
 //     spec:
@@ -141,7 +143,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //         ports:
 //           https: 7443
 //
-// and a DestinationRule to initiate TLS connections to the ExternalService.
+// and a DestinationRule to initiate TLS connections to the ServiceEntry.
 //
 //     apiVersion: networking.istio.io/v1alpha3
 //     kind: DestinationRule
@@ -158,23 +160,34 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // the three domains specified above. In other words, a call to
 // http://foo.bar.com/baz would be translated to
 // https://uk.foo.bar.com/baz.
-message ExternalService {
-  // REQUIRED. The hosts associated with the ExternalService. Could be a
-  // DNS name with wildcard prefix or a CIDR prefix. Note that the hosts
-  // field applies to all protocols. DNS names in hosts will be ignored if
-  // the application accesses the service over non-HTTP protocols such as
-  // mongo/opaque TCP/even HTTPS. In such scenarios, the port on which the
-  // external service is being accessed must not be shared by any other
-  // service in the mesh. In other words, the sidecar will behave as a
-  // simple TCP proxy, forwarding incoming traffic on a specified port to
-  // the specified destination endpoint IP/host.
+message ServiceEntry {
+  // REQUIRED. The hosts associated with the ServiceEntry. Could be a DNS
+  // name with wildcard prefix (external services only) or a CIDR
+  // prefix. Note that the hosts field applies to all protocols. DNS names
+  // in hosts will be ignored if the application accesses the service over
+  // non-HTTP protocols such as mongo/opaque TCP/even HTTPS. In such
+  // scenarios, the port on which the service is being accessed must not be
+  // shared by any other service in the mesh. In other words, the sidecar
+  // will behave as a simple TCP proxy, forwarding incoming traffic on a
+  // specified port to the specified destination endpoint IP/host.
   repeated string hosts = 1;
 
   // REQUIRED. The ports associated with the external service.
   repeated Port ports = 2;
 
+  // If true, indicates that this service is external to the mesh. When
+  // communicating with services outside the mesh, Istio's mTLS
+  // authentication is disabled when communicating with services outside
+  // the mesh. Policy enforcements are performed on the client-side as
+  // opposed to server-side.
+  bool mesh_external = 3;
+
   // Different ways of discovering the IP addresses associated with the
-  // service.
+  // service by the Proxy. Note that the application will still have to use
+  // DNS to resolve the service to an IP so that the outbound traffic can
+  // be captured by the Proxy. Alternatively, the application could
+  // directly communicate with the proxy (e.g., by setting HTTP_PROXY) to
+  // talk to these services.
   enum Discovery {
     // Assume that incoming connections have already been resolved (to a
     // specific destination IP address). Such connections are typically
@@ -185,7 +198,7 @@ message ExternalService {
     NONE = 0;
 
     // Use the IP addresses specified in endpoints (See below) as the
-    // backing nodes associated with the ExternalService.
+    // backing nodes associated with the ServiceEntry.
     STATIC = 1;
 
     // Attempt to resolve the DNS address during request processing. If no
@@ -198,10 +211,10 @@ message ExternalService {
 
   // Service discovery mode for the hosts. If not set, Istio will attempt
   // to infer the discovery mode based on the value of hosts and endpoints.
-  Discovery discovery = 3;
+  Discovery discovery = 4;
 
   // Endpoint defines a network address (IP or hostname) associated with
-  // the external service.
+  // the mesh service.
   message Endpoint {
     // REQUIRED: Address associated with the network endpoint without the
     // port ( IP or fully qualified domain name without wildcards).
@@ -217,5 +230,5 @@ message ExternalService {
   };
 
   // One or more endpoints associated with the service.
-  repeated Endpoint endpoints = 4;
+  repeated Endpoint endpoints = 5;
 }
