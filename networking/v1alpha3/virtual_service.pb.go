@@ -251,7 +251,7 @@ func (m *VirtualService) GetTcp() []*TCPRoute {
 //     spec:
 //       hosts:
 //       - wikipedia.org
-//       meshExternal: true
+//       location: MESH_EXTERNAL
 //       ports:
 //       - number: 80
 //         name: example-http

@@ -3,7 +3,7 @@ title: Route Rules v1alpha3
 overview: Configuration affecting traffic routing
 location: https://istio.io/docs/reference/config/istio.networking.v1alpha3.html
 layout: protoc-gen-docs
-number_of_entries: 38
+number_of_entries: 39
 ---
 <h3 id="terms-and-definitions">Terms and Definitions</h3>
 
@@ -375,7 +375,7 @@ metadata:
 spec:
   hosts:
   - wikipedia.org
-  meshExternal: true
+  location: MESH_EXTERNAL
   ports:
   - number: 80
     name: example-http
@@ -2113,9 +2113,10 @@ client certificates for authentication.</p>
  APIs) or mesh-internal services that are not part of the platform&rsquo;s
  service registry (e.g., a set of VMs talking to services in Kubernetes).</p>
 
-<p>The following specification specifies a static set of backend nodes for
- a MongoDB cluster behind a set of virtual IPs, and sets up a
- DestinationRule to initiate mTLS connections upstream.</p>
+<p>The following configuration adds a set of MongoDB instances running on
+ unmanaged VMs to Istio&rsquo;s registry, so that these services can be treated
+ as any other service in the mesh. The associated DestinationRule is used
+ to initiate mTLS connections to the database instances.</p>
 
 <pre><code> apiVersion: networking.istio.io/v1alpha3
  kind: ServiceEntry
@@ -2125,11 +2126,12 @@ client certificates for authentication.</p>
    hosts:
    - mymongodb.somedomain # not used
    addresses:
-   - 192.192.192.192/24
+   - 192.192.192.192/24 # VIPs
    ports:
    - number: 27018
      name: mongodb
      protocol: MONGO
+   location: MESH_INTERNAL
    resolution: STATIC
    endpoints:
    - address: 2.2.2.2
@@ -2164,7 +2166,7 @@ client certificates for authentication.</p>
  spec:
    hosts:
    - &quot;*.bar.com&quot;
-   meshExternal: true
+   location: MESH_EXTERNAL
    ports:
    - number: 80
      name: http
@@ -2187,7 +2189,7 @@ client certificates for authentication.</p>
  spec:
    hosts:
    - foo.bar.com
-   meshExternal: true
+   location: MESH_EXTERNAL
    ports:
    - number: 443
      name: https
@@ -2274,15 +2276,12 @@ the specified destination endpoint IP/host.</p>
 
 </td>
 </tr>
-<tr id="ServiceEntry.mesh_external">
-<td><code>meshExternal</code></td>
-<td><code>bool</code></td>
+<tr id="ServiceEntry.location">
+<td><code>location</code></td>
+<td><code><a href="#ServiceEntry.Location">ServiceEntry.Location</a></code></td>
 <td>
-<p>Set this field to true to indicate that this service is external to
-the mesh. When communicating with services outside the mesh, Istio&rsquo;s
-mTLS authentication is disabled when communicating with services
-outside the mesh. Policy enforcements are performed on the client-side
-as opposed to server-side.</p>
+<p>Specify whether the service should be considered external to the mesh
+or part of the mesh.</p>
 
 </td>
 </tr>
@@ -2345,6 +2344,44 @@ service.</p>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
 <p>One or more labels associated with the endpoint.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ServiceEntry.Location">ServiceEntry.Location</h2>
+<section>
+<p>Location specifies whether the service is part of Istio mesh or
+outside the mesh.  Location determines the behavior of several
+features, such as service-to-service mTLS authentication, policy
+enforcement, etc. When communicating with services outside the mesh,
+Istio&rsquo;s mTLS authentication is disabled, and policy enforcements are
+performed on the client-side as opposed to server-side.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ServiceEntry.Location.MESH_EXTERNAL">
+<td><code>MESH_EXTERNAL</code></td>
+<td>
+<p>Signifies that the service is external to the mesh. Typically used
+to indicate external services consumed through APIs.</p>
+
+</td>
+</tr>
+<tr id="ServiceEntry.Location.MESH_INTERNAL">
+<td><code>MESH_INTERNAL</code></td>
+<td>
+<p>Signifies that the service is part of the mesh. Typically used to
+indicate services added explicitly as part of expanding the service
+mesh to include unmanaged infrastructure (e.g., VMs added to a
+Kubernetes based service mesh).</p>
 
 </td>
 </tr>

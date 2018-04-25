@@ -31,9 +31,10 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // APIs) or mesh-internal services that are not part of the platform's
 // service registry (e.g., a set of VMs talking to services in Kubernetes).
 //
-// The following specification specifies a static set of backend nodes for
-// a MongoDB cluster behind a set of virtual IPs, and sets up a
-// DestinationRule to initiate mTLS connections upstream.
+// The following configuration adds a set of MongoDB instances running on
+// unmanaged VMs to Istio's registry, so that these services can be treated
+// as any other service in the mesh. The associated DestinationRule is used
+// to initiate mTLS connections to the database instances.
 //
 //     apiVersion: networking.istio.io/v1alpha3
 //     kind: ServiceEntry
@@ -43,11 +44,12 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //       hosts:
 //       - mymongodb.somedomain # not used
 //       addresses:
-//       - 192.192.192.192/24
+//       - 192.192.192.192/24 # VIPs
 //       ports:
 //       - number: 27018
 //         name: mongodb
 //         protocol: MONGO
+//       location: MESH_INTERNAL
 //       resolution: STATIC
 //       endpoints:
 //       - address: 2.2.2.2
@@ -80,7 +82,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //     spec:
 //       hosts:
 //       - "*.bar.com"
-//       meshExternal: true
+//       location: MESH_EXTERNAL
 //       ports:
 //       - number: 80
 //         name: http
@@ -102,7 +104,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //     spec:
 //       hosts:
 //       - foo.bar.com
-//       meshExternal: true
+//       location: MESH_EXTERNAL
 //       ports:
 //       - number: 443
 //         name: https
@@ -163,12 +165,27 @@ message ServiceEntry {
   // REQUIRED. The ports associated with the external service.
   repeated Port ports = 3;
 
-  // Set this field to true to indicate that this service is external to
-  // the mesh. When communicating with services outside the mesh, Istio's
-  // mTLS authentication is disabled when communicating with services
-  // outside the mesh. Policy enforcements are performed on the client-side
-  // as opposed to server-side.
-  bool mesh_external = 4;
+  // Location specifies whether the service is part of Istio mesh or
+  // outside the mesh.  Location determines the behavior of several
+  // features, such as service-to-service mTLS authentication, policy
+  // enforcement, etc. When communicating with services outside the mesh,
+  // Istio's mTLS authentication is disabled, and policy enforcements are
+  // performed on the client-side as opposed to server-side.
+  enum Location {
+    // Signifies that the service is external to the mesh. Typically used
+    // to indicate external services consumed through APIs.
+    MESH_EXTERNAL = 0;
+
+    // Signifies that the service is part of the mesh. Typically used to
+    // indicate services added explicitly as part of expanding the service
+    // mesh to include unmanaged infrastructure (e.g., VMs added to a
+    // Kubernetes based service mesh).
+    MESH_INTERNAL = 1;
+  };
+
+  // Specify whether the service should be considered external to the mesh
+  // or part of the mesh.
+  Location location = 4;
 
   // Resolution determines how the proxy will resolve the IP addresses of
   // the network endpoints associated with the service, so that it can
