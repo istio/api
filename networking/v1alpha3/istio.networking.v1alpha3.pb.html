@@ -277,8 +277,8 @@ request/connection will be sent after processing a routing rule. The
 destination.host should unambiguously refer to a service in the service
 registry. Istio&rsquo;s service registry is composed of all the services found
 in the platform&rsquo;s service registry (e.g., Kubernetes services, Consul
-services), as well as hosts declared through the
-<a href="#ExternalService">ExternalService</a> resource.</p>
+services), as well as services declared through the
+<a href="#ServiceEntry">ServiceEntry</a> resource.</p>
 
 <p><em>Note for Kubernetes users</em>: When short names are used (e.g. &ldquo;reviews&rdquo;
 instead of &ldquo;reviews.default.svc.cluster.local&rdquo;), Istio will interpret
@@ -364,22 +364,23 @@ spec:
 
 <p>To control routing for traffic bound to services outside the mesh, external
 services must first be added to Istio&rsquo;s internal service registry using the
-ExternalService rule. VirtualServices can then be defined to control traffic
-bound to these external services. For example, the following rules define an
-ExternalService for wikipedia.org and set a timeout of 5s for http requests.</p>
+ServiceEntry resource. VirtualServices can then be defined to control traffic
+bound to these external services. For example, the following rules define a
+Service for wikipedia.org and set a timeout of 5s for http requests.</p>
 
 <pre><code>apiVersion: networking.istio.io/v1alpha3
-kind: ExternalService
+kind: ServiceEntry
 metadata:
   name: external-svc-wikipedia
 spec:
   hosts:
   - wikipedia.org
+  meshExternal: true
   ports:
   - number: 80
     name: example-http
     protocol: HTTP
-  discovery: DNS
+  resolution: DNS
 
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -411,7 +412,7 @@ spec:
 <p>REQUIRED. The name of a service from the service registry. Service
 names are looked up from the platform&rsquo;s service registry (e.g.,
 Kubernetes services, Consul services, etc.) and from the hosts
-declared by <a href="#ExternalService">ExternalServices</a>. Traffic forwarded to
+declared by <a href="#ServiceEntry">ServiceEntry</a>. Traffic forwarded to
 destinations that are not found in either of the two, will be dropped.</p>
 
 <p><em>Note for Kubernetes users</em>: When short names are used (e.g. &ldquo;reviews&rdquo;
@@ -2122,12 +2123,14 @@ client certificates for authentication.</p>
    name: external-svc-mongocluster
  spec:
    hosts:
+   - mymongodb.somedomain # not used
+   addresses:
    - 192.192.192.192/24
    ports:
    - number: 27018
      name: mongodb
      protocol: MONGO
-   discovery: STATIC
+   resolution: STATIC
    endpoints:
    - address: 2.2.2.2
    - address: 3.3.3.3
@@ -2140,7 +2143,7 @@ client certificates for authentication.</p>
  metadata:
    name: mtls-mongocluster
  spec:
-   name: 192.192.192.192/24
+   name: mymongodb.somedomain
    trafficPolicy:
      tls:
        mode: MUTUAL
@@ -2149,10 +2152,10 @@ client certificates for authentication.</p>
        caCertificates: /etc/certs/rootcacerts.pem
 </code></pre>
 
-<p>The following example demonstrates the use of wildcards in the hosts. If
- the connection has to be routed to the IP address requested by the
- application (i.e. application resolves DNS and attempts to connect to a
- specific IP), the discovery mode must be set to <code>NONE</code>.</p>
+<p>The following example demonstrates the use of wildcards in the hosts for
+ external services. If the connection has to be routed to the IP address
+ requested by the application (i.e. application resolves DNS and attempts
+ to connect to a specific IP), the discovery mode must be set to <code>NONE</code>.</p>
 
 <pre><code> apiVersion: networking.istio.io/v1alpha3
  kind: ServiceEntry
@@ -2161,19 +2164,20 @@ client certificates for authentication.</p>
  spec:
    hosts:
    - &quot;*.bar.com&quot;
+   meshExternal: true
    ports:
    - number: 80
      name: http
      protocol: HTTP
-   discovery: NONE
+   resolution: NONE
 </code></pre>
 
 <p>For HTTP based services, it is possible to create a VirtualService
  backed by multiple DNS addressible endpoints. In such a scenario, the
  application can use the HTTP_PROXY environment variable to transparently
  reroute API calls for the VirtualService to a chosen backend. For
- example, the following configuration creates a non-existent service
- called foo.bar.com backed by three domains: us.foo.bar.com:8443,
+ example, the following configuration creates a non-existent external
+ service called foo.bar.com backed by three domains: us.foo.bar.com:8443,
  uk.foo.bar.com:9443, and in.foo.bar.com:7443</p>
 
 <pre><code> apiVersion: networking.istio.io/v1alpha3
@@ -2183,11 +2187,12 @@ client certificates for authentication.</p>
  spec:
    hosts:
    - foo.bar.com
+   meshExternal: true
    ports:
    - number: 443
      name: https
      protocol: HTTP
-   discovery: DNS
+   resolution: DNS
    endpoints:
    - address: us.foo.bar.com
      ports:
@@ -2273,11 +2278,11 @@ the specified destination endpoint IP/host.</p>
 <td><code>meshExternal</code></td>
 <td><code>bool</code></td>
 <td>
-<p>If true, indicates that this service is external to the mesh. When
-communicating with services outside the mesh, Istio&rsquo;s mTLS
-authentication is disabled when communicating with services outside
-the mesh. Policy enforcements are performed on the client-side as
-opposed to server-side.</p>
+<p>Set this field to true to indicate that this service is external to
+the mesh. When communicating with services outside the mesh, Istio&rsquo;s
+mTLS authentication is disabled when communicating with services
+outside the mesh. Policy enforcements are performed on the client-side
+as opposed to server-side.</p>
 
 </td>
 </tr>
@@ -2366,8 +2371,8 @@ talk to these services.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="ServiceEntry.Resolution.PASSTHROUGH">
-<td><code>PASSTHROUGH</code></td>
+<tr id="ServiceEntry.Resolution.NONE">
+<td><code>NONE</code></td>
 <td>
 <p>Assume that incoming connections have already been resolved (to a
 specific destination IP address). Such connections are typically
@@ -2378,8 +2383,8 @@ connection was bound.</p>
 
 </td>
 </tr>
-<tr id="ServiceEntry.Resolution.ENDPOINTS">
-<td><code>ENDPOINTS</code></td>
+<tr id="ServiceEntry.Resolution.STATIC">
+<td><code>STATIC</code></td>
 <td>
 <p>Use the IP addresses specified in endpoints (see below) as the
 backing nodes associated with the service.</p>
