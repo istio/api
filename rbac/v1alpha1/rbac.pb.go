@@ -363,10 +363,10 @@ func (m *RoleRef) GetName() string {
 }
 
 // RbacConfig defines the global config to control Istio RBAC behavior.
-// This CRD is a singleton where only one CR should be created globally in the mesh and the
-// namespace should be the same to other Istio components, which usually is istio-system. Note: This
-// is enforced in both istioctl and server side, new CR will be rejected if found any existing one,
-// the user should either delete the existing one or change the existing one directly.
+// This Custom Resource Definition is a singleton where only one Custom Resource should be created globally in
+// the mesh and the namespace should be the same to other Istio components, which usually is istio-system.
+// Note: This is enforced in both istioctl and server side, new Custom Resource will be rejected if found any
+// existing one, the user should either delete the existing one or change the existing one directly.
 //
 // Below is an example of RbacConfig object "istio-rbac-config" which enables Istio RBAC for all
 // services in the default namespace.
