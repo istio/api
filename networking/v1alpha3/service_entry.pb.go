@@ -98,9 +98,6 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptorServiceEntry, []int{0, 1}
 }
 
-//
-// # Overview
-//
 // `ServiceEntry` enables adding additional entries into Istio's internal
 // service registry, so that auto-discovered services in the mesh can
 // access/route to these manually specified services. A service entry
