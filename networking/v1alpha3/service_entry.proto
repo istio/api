@@ -23,7 +23,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //
 // # Overview
 //
-// `ServiceRegistryEntry` enables adding additional entries into Istio's internal
+// `ServiceEntry` enables adding additional entries into Istio's internal
 // service registry, so that auto-discovered services in the mesh can
 // access/route to these manually specified services. A service entry
 // describes the properties of a service (DNS name, VIPs ,ports, protocols,
@@ -37,7 +37,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // to initiate mTLS connections to the database instances.
 //
 //     apiVersion: networking.istio.io/v1alpha3
-//     kind: ServiceRegistryEntry
+//     kind: ServiceEntry
 //     metadata:
 //       name: external-svc-mongocluster
 //     spec:
@@ -76,7 +76,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // to connect to a specific IP), the discovery mode must be set to `NONE`.
 //
 //     apiVersion: networking.istio.io/v1alpha3
-//     kind: ServiceRegistryEntry
+//     kind: ServiceEntry
 //     metadata:
 //       name: external-svc-wildcard-example
 //     spec:
@@ -98,7 +98,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // uk.foo.bar.com:9443, and in.foo.bar.com:7443
 //
 //     apiVersion: networking.istio.io/v1alpha3
-//     kind: ServiceRegistryEntry
+//     kind: ServiceEntry
 //     metadata:
 //       name: external-svc-dns
 //     spec:
@@ -121,7 +121,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //         ports:
 //           https: 7443
 //
-// and a DestinationRule to initiate TLS connections to the service.
+// and a DestinationRule to initiate TLS connections to the ServiceEntry.
 //
 //     apiVersion: networking.istio.io/v1alpha3
 //     kind: DestinationRule
@@ -138,8 +138,8 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // the three domains specified above. In other words, a call to
 // http://foo.bar.com/baz would be translated to
 // https://uk.foo.bar.com/baz.
-message ServiceRegistryEntry {
-  // REQUIRED. The hosts associated with the ServiceRegistryEntry. Could be a DNS
+message ServiceEntry {
+  // REQUIRED. The hosts associated with the ServiceEntry. Could be a DNS
   // name with wildcard prefix (external services only). DNS names in hosts
   // will be ignored if the application accesses the service over non-HTTP
   // protocols such as mongo/opaque TCP/even HTTPS. In such scenarios, the
