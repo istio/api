@@ -14,13 +14,16 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-// Different ways of discovering the IP addresses associated with the
-// service by the Proxy. Note that the application will still have to use
-// DNS to resolve the service to an IP so that the outbound traffic can
-// be captured by the Proxy. Alternatively, the application could
+// Resolution determines how the proxy will resolve the IP addresses of
+// the network endpoints associated with the service, so that it can
+// route to one of them. The resolution mode specified here has no impact
+// on how the application resolves the IP address associated with the
+// service. The application may still have to use DNS to resolve the
+// service to an IP so that the outbound traffic can be captured by the
+// Proxy. Alternatively, for HTTP services, the application could
 // directly communicate with the proxy (e.g., by setting HTTP_PROXY) to
 // talk to these services.
-type ServiceEntry_Discovery int32
+type ServiceEntry_Resolution int32
 
 const (
 	// Assume that incoming connections have already been resolved (to a
@@ -29,74 +32,47 @@ const (
 	// eBPF. After performing any routing related transformations, the
 	// proxy will forward the connection to the IP address to which the
 	// connection was bound.
-	ServiceEntry_NONE ServiceEntry_Discovery = 0
-	// Use the IP addresses specified in endpoints (See below) as the
-	// backing nodes associated with the ServiceEntry.
-	ServiceEntry_STATIC ServiceEntry_Discovery = 1
-	// Attempt to resolve the DNS address during request processing. If no
-	// endpoints are specified, the proxy will resolve the DNS address
-	// specified in the hosts field, if wildcards are not used. If
-	// endpoints are specified, the DNS addresses specified in the
-	// endpoints will be resolved to determine the destination IP address.
-	ServiceEntry_DNS ServiceEntry_Discovery = 2
+	ServiceEntry_PASSTHROUGH ServiceEntry_Resolution = 0
+	// Use the IP addresses specified in endpoints (see below) as the
+	// backing nodes associated with the service.
+	ServiceEntry_ENDPOINTS ServiceEntry_Resolution = 1
+	// Attempt to resolve the IP address by querying the ambient DNS,
+	// during request processing. If no endpoints are specified, the proxy
+	// will resolve the DNS address specified in the hosts field, if
+	// wildcards are not used. If endpoints are specified, the DNS
+	// addresses specified in the endpoints will be resolved to determine
+	// the destination IP address.
+	ServiceEntry_DNS ServiceEntry_Resolution = 2
 )
 
-var ServiceEntry_Discovery_name = map[int32]string{
-	0: "NONE",
-	1: "STATIC",
+var ServiceEntry_Resolution_name = map[int32]string{
+	0: "PASSTHROUGH",
+	1: "ENDPOINTS",
 	2: "DNS",
 }
-var ServiceEntry_Discovery_value = map[string]int32{
-	"NONE":   0,
-	"STATIC": 1,
-	"DNS":    2,
+var ServiceEntry_Resolution_value = map[string]int32{
+	"PASSTHROUGH": 0,
+	"ENDPOINTS":   1,
+	"DNS":         2,
 }
 
-func (x ServiceEntry_Discovery) String() string {
-	return proto.EnumName(ServiceEntry_Discovery_name, int32(x))
+func (x ServiceEntry_Resolution) String() string {
+	return proto.EnumName(ServiceEntry_Resolution_name, int32(x))
 }
-func (ServiceEntry_Discovery) EnumDescriptor() ([]byte, []int) {
+func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptorServiceEntry, []int{0, 0}
 }
 
 //
 // # Overview
 //
-// `ServiceEntry` describes the endpoints, ports and protocols of a
-// white-listed set of domains and IP blocks that services in the mesh are
-// allowed to access. These services could be external to the mesh (e.g.,
-// web APIs) or mesh-internal services that are not part of the platform's
-// service registry.
-//
-// For example, the following ServiceEntry configuration describes the
-// set of services at https://example.com to be accessed internally over
-// plaintext http (i.e. http://example.com:443), with the sidecar originating
-// TLS.
-//
-//     apiVersion: networking.istio.io/v1alpha3
-//     kind: ServiceEntry
-//     metadata:
-//       name: external-svc-example
-//     spec:
-//       hosts:
-//       - example.com
-//       ports:
-//       - number: 443
-//         name: example-http
-//         protocol: HTTP # not HTTPS.
-//       discovery: DNS
-//
-// and a DestinationRule to initiate TLS connections to the external service.
-//
-//     apiVersion: networking.istio.io/v1alpha3
-//     kind: DestinationRule
-//     metadata:
-//       name: tls-example
-//     spec:
-//       name: example.com
-//       trafficPolicy:
-//         tls:
-//           mode: SIMPLE # initiates HTTPS when talking to example.com
+// `ServiceEntry` enables adding additional entries into Istio's internal
+// service registry, so that auto-discovered services in the mesh can
+// access/route to these manually specified services. A service entry
+// describes the properties of a service (DNS name, VIPs ,ports, protocols,
+// endpoints). These services could be external to the mesh (e.g., web
+// APIs) or mesh-internal services that are not part of the platform's
+// service registry (e.g., a set of VMs talking to services in Kubernetes).
 //
 // The following specification specifies a static set of backend nodes for
 // a MongoDB cluster behind a set of virtual IPs, and sets up a
@@ -201,28 +177,39 @@ func (ServiceEntry_Discovery) EnumDescriptor() ([]byte, []int) {
 // https://uk.foo.bar.com/baz.
 type ServiceEntry struct {
 	// REQUIRED. The hosts associated with the ServiceEntry. Could be a DNS
-	// name with wildcard prefix (external services only) or a CIDR
-	// prefix. Note that the hosts field applies to all protocols. DNS names
-	// in hosts will be ignored if the application accesses the service over
-	// non-HTTP protocols such as mongo/opaque TCP/even HTTPS. In such
-	// scenarios, the port on which the service is being accessed must not be
-	// shared by any other service in the mesh. In other words, the sidecar
-	// will behave as a simple TCP proxy, forwarding incoming traffic on a
-	// specified port to the specified destination endpoint IP/host.
+	// name with wildcard prefix (external services only). DNS names in hosts
+	// will be ignored if the application accesses the service over non-HTTP
+	// protocols such as mongo/opaque TCP/even HTTPS. In such scenarios, the
+	// IP addresses specified in the Addresses field or the port will be used
+	// to uniquely identify the destination.
 	Hosts []string `protobuf:"bytes,1,rep,name=hosts" json:"hosts,omitempty"`
+	// The virtual IP addresses associated with the service. Could be CIDR
+	// prefix.  For HTTP services, the addresses field will be ignored and
+	// the destination will be identified based on the HTTP Host/Authority
+	// header. For non-HTTP protocols such as mongo/opaque TCP/even HTTPS,
+	// the hosts will be ignored. If one or more IP addresses are specified,
+	// the incoming traffic will be idenfified as belonging to this service
+	// if the destination IP matches the IP/CIDRs specified in the addresses
+	// field. If the Addresses field is empty, traffic will be identified
+	// solely based on the destination port. In such scenarios, the port on
+	// which the service is being accessed must not be shared by any other
+	// service in the mesh. In other words, the sidecar will behave as a
+	// simple TCP proxy, forwarding incoming traffic on a specified port to
+	// the specified destination endpoint IP/host.
+	Addresses []string `protobuf:"bytes,2,rep,name=addresses" json:"addresses,omitempty"`
 	// REQUIRED. The ports associated with the external service.
-	Ports []*Port `protobuf:"bytes,2,rep,name=ports" json:"ports,omitempty"`
+	Ports []*Port `protobuf:"bytes,3,rep,name=ports" json:"ports,omitempty"`
 	// If true, indicates that this service is external to the mesh. When
 	// communicating with services outside the mesh, Istio's mTLS
 	// authentication is disabled when communicating with services outside
 	// the mesh. Policy enforcements are performed on the client-side as
 	// opposed to server-side.
-	MeshExternal bool `protobuf:"varint,3,opt,name=mesh_external,json=meshExternal,proto3" json:"mesh_external,omitempty"`
+	MeshExternal bool `protobuf:"varint,4,opt,name=mesh_external,json=meshExternal,proto3" json:"mesh_external,omitempty"`
 	// Service discovery mode for the hosts. If not set, Istio will attempt
 	// to infer the discovery mode based on the value of hosts and endpoints.
-	Discovery ServiceEntry_Discovery `protobuf:"varint,4,opt,name=discovery,proto3,enum=istio.networking.v1alpha3.ServiceEntry_Discovery" json:"discovery,omitempty"`
+	Resolution ServiceEntry_Resolution `protobuf:"varint,5,opt,name=resolution,proto3,enum=istio.networking.v1alpha3.ServiceEntry_Resolution" json:"resolution,omitempty"`
 	// One or more endpoints associated with the service.
-	Endpoints []*ServiceEntry_Endpoint `protobuf:"bytes,5,rep,name=endpoints" json:"endpoints,omitempty"`
+	Endpoints []*ServiceEntry_Endpoint `protobuf:"bytes,6,rep,name=endpoints" json:"endpoints,omitempty"`
 }
 
 func (m *ServiceEntry) Reset()                    { *m = ServiceEntry{} }
@@ -233,6 +220,13 @@ func (*ServiceEntry) Descriptor() ([]byte, []int) { return fileDescriptorService
 func (m *ServiceEntry) GetHosts() []string {
 	if m != nil {
 		return m.Hosts
+	}
+	return nil
+}
+
+func (m *ServiceEntry) GetAddresses() []string {
+	if m != nil {
+		return m.Addresses
 	}
 	return nil
 }
@@ -251,11 +245,11 @@ func (m *ServiceEntry) GetMeshExternal() bool {
 	return false
 }
 
-func (m *ServiceEntry) GetDiscovery() ServiceEntry_Discovery {
+func (m *ServiceEntry) GetResolution() ServiceEntry_Resolution {
 	if m != nil {
-		return m.Discovery
+		return m.Resolution
 	}
-	return ServiceEntry_NONE
+	return ServiceEntry_PASSTHROUGH
 }
 
 func (m *ServiceEntry) GetEndpoints() []*ServiceEntry_Endpoint {
@@ -269,7 +263,8 @@ func (m *ServiceEntry) GetEndpoints() []*ServiceEntry_Endpoint {
 // the mesh service.
 type ServiceEntry_Endpoint struct {
 	// REQUIRED: Address associated with the network endpoint without the
-	// port ( IP or fully qualified domain name without wildcards).
+	// port ( IP or fully qualified domain name without wildcards). Domain
+	// names can be used if and only if the resolution is set to DNS.
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	// Set of ports associated with the endpoint. The ports must be
 	// associated with a port name that was declared as part of the
@@ -310,7 +305,7 @@ func (m *ServiceEntry_Endpoint) GetLabels() map[string]string {
 func init() {
 	proto.RegisterType((*ServiceEntry)(nil), "istio.networking.v1alpha3.ServiceEntry")
 	proto.RegisterType((*ServiceEntry_Endpoint)(nil), "istio.networking.v1alpha3.ServiceEntry.Endpoint")
-	proto.RegisterEnum("istio.networking.v1alpha3.ServiceEntry_Discovery", ServiceEntry_Discovery_name, ServiceEntry_Discovery_value)
+	proto.RegisterEnum("istio.networking.v1alpha3.ServiceEntry_Resolution", ServiceEntry_Resolution_name, ServiceEntry_Resolution_value)
 }
 func (m *ServiceEntry) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
@@ -342,9 +337,24 @@ func (m *ServiceEntry) MarshalTo(dAtA []byte) (int, error) {
 			i += copy(dAtA[i:], s)
 		}
 	}
+	if len(m.Addresses) > 0 {
+		for _, s := range m.Addresses {
+			dAtA[i] = 0x12
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
 	if len(m.Ports) > 0 {
 		for _, msg := range m.Ports {
-			dAtA[i] = 0x12
+			dAtA[i] = 0x1a
 			i++
 			i = encodeVarintServiceEntry(dAtA, i, uint64(msg.Size()))
 			n, err := msg.MarshalTo(dAtA[i:])
@@ -355,7 +365,7 @@ func (m *ServiceEntry) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.MeshExternal {
-		dAtA[i] = 0x18
+		dAtA[i] = 0x20
 		i++
 		if m.MeshExternal {
 			dAtA[i] = 1
@@ -364,14 +374,14 @@ func (m *ServiceEntry) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i++
 	}
-	if m.Discovery != 0 {
-		dAtA[i] = 0x20
+	if m.Resolution != 0 {
+		dAtA[i] = 0x28
 		i++
-		i = encodeVarintServiceEntry(dAtA, i, uint64(m.Discovery))
+		i = encodeVarintServiceEntry(dAtA, i, uint64(m.Resolution))
 	}
 	if len(m.Endpoints) > 0 {
 		for _, msg := range m.Endpoints {
-			dAtA[i] = 0x2a
+			dAtA[i] = 0x32
 			i++
 			i = encodeVarintServiceEntry(dAtA, i, uint64(msg.Size()))
 			n, err := msg.MarshalTo(dAtA[i:])
@@ -459,6 +469,12 @@ func (m *ServiceEntry) Size() (n int) {
 			n += 1 + l + sovServiceEntry(uint64(l))
 		}
 	}
+	if len(m.Addresses) > 0 {
+		for _, s := range m.Addresses {
+			l = len(s)
+			n += 1 + l + sovServiceEntry(uint64(l))
+		}
+	}
 	if len(m.Ports) > 0 {
 		for _, e := range m.Ports {
 			l = e.Size()
@@ -468,8 +484,8 @@ func (m *ServiceEntry) Size() (n int) {
 	if m.MeshExternal {
 		n += 2
 	}
-	if m.Discovery != 0 {
-		n += 1 + sovServiceEntry(uint64(m.Discovery))
+	if m.Resolution != 0 {
+		n += 1 + sovServiceEntry(uint64(m.Resolution))
 	}
 	if len(m.Endpoints) > 0 {
 		for _, e := range m.Endpoints {
@@ -579,6 +595,35 @@ func (m *ServiceEntry) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Addresses", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowServiceEntry
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthServiceEntry
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Addresses = append(m.Addresses, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Ports", wireType)
 			}
 			var msglen int
@@ -608,7 +653,7 @@ func (m *ServiceEntry) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field MeshExternal", wireType)
 			}
@@ -628,11 +673,11 @@ func (m *ServiceEntry) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.MeshExternal = bool(v != 0)
-		case 4:
+		case 5:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Discovery", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Resolution", wireType)
 			}
-			m.Discovery = 0
+			m.Resolution = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowServiceEntry
@@ -642,12 +687,12 @@ func (m *ServiceEntry) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Discovery |= (ServiceEntry_Discovery(b) & 0x7F) << shift
+				m.Resolution |= (ServiceEntry_Resolution(b) & 0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-		case 5:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Endpoints", wireType)
 			}
@@ -1111,31 +1156,33 @@ var (
 func init() { proto.RegisterFile("networking/v1alpha3/service_entry.proto", fileDescriptorServiceEntry) }
 
 var fileDescriptorServiceEntry = []byte{
-	// 412 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0xcb, 0x6e, 0xd3, 0x40,
-	0x14, 0x86, 0x19, 0xbb, 0x4e, 0xe3, 0xd3, 0x16, 0x59, 0x23, 0x16, 0x83, 0x17, 0xc1, 0x94, 0x05,
-	0x16, 0x0b, 0x9b, 0xb6, 0x42, 0x2a, 0x97, 0x0d, 0x50, 0x2f, 0x90, 0x90, 0x0b, 0x4e, 0x56, 0x6c,
-	0xaa, 0x49, 0x3c, 0x4a, 0x46, 0x31, 0x1e, 0x6b, 0x66, 0x70, 0xc8, 0x6b, 0xf0, 0x48, 0xac, 0x58,
-	0xf2, 0x08, 0x28, 0x4f, 0x82, 0x7c, 0xc3, 0x41, 0x0a, 0x97, 0xec, 0x7c, 0x7e, 0x9d, 0xff, 0x3b,
-	0x73, 0x7e, 0x1f, 0x78, 0x98, 0x33, 0xbd, 0x12, 0x72, 0xc9, 0xf3, 0x79, 0x58, 0x9e, 0xd1, 0xac,
-	0x58, 0xd0, 0x8b, 0x50, 0x31, 0x59, 0xf2, 0x19, 0xbb, 0x61, 0xb9, 0x96, 0xeb, 0xa0, 0x90, 0x42,
-	0x0b, 0x7c, 0x97, 0x2b, 0xcd, 0x45, 0xd0, 0xb7, 0x07, 0x5d, 0xbb, 0x7b, 0x7f, 0x17, 0x63, 0x4e,
-	0x35, 0x5b, 0xd1, 0xd6, 0x7d, 0xfa, 0xc5, 0x82, 0xe3, 0x71, 0x43, 0x8d, 0x2a, 0x28, 0xbe, 0x03,
-	0xd6, 0x42, 0x28, 0xad, 0x08, 0xf2, 0x4c, 0xdf, 0x4e, 0x9a, 0x02, 0x3f, 0x01, 0xab, 0x10, 0x52,
-	0x2b, 0x62, 0x78, 0xa6, 0x7f, 0x74, 0x7e, 0x2f, 0xf8, 0xe3, 0xd0, 0xe0, 0x9d, 0x90, 0x3a, 0x69,
-	0xba, 0xf1, 0x03, 0x38, 0xf9, 0xc8, 0xd4, 0xe2, 0x86, 0x7d, 0xd6, 0x4c, 0xe6, 0x34, 0x23, 0xa6,
-	0x87, 0xfc, 0x61, 0x72, 0x5c, 0x89, 0x51, 0xab, 0xe1, 0x6b, 0xb0, 0x53, 0xae, 0x66, 0xa2, 0x64,
-	0x72, 0x4d, 0x0e, 0x3c, 0xe4, 0xdf, 0x3e, 0x3f, 0xfb, 0x0b, 0x7f, 0xfb, 0xb5, 0xc1, 0x55, 0x67,
-	0x4c, 0x7a, 0x06, 0x8e, 0xc1, 0x66, 0x79, 0x5a, 0x08, 0x9e, 0x6b, 0x45, 0xac, 0xfa, 0xc1, 0x8f,
-	0xff, 0x17, 0x18, 0xb5, 0xc6, 0xa4, 0x47, 0xb8, 0x5f, 0x0d, 0x18, 0x76, 0x3a, 0x26, 0x70, 0x48,
-	0xd3, 0x54, 0x32, 0x55, 0x25, 0x84, 0x7c, 0x3b, 0xe9, 0x4a, 0xfc, 0xfe, 0xf7, 0x8c, 0x9e, 0xef,
-	0x3b, 0xb2, 0x4e, 0x4e, 0xd5, 0x5a, 0x97, 0xdf, 0x04, 0x06, 0x19, 0x9d, 0xb2, 0x4c, 0x11, 0xb3,
-	0x66, 0xbe, 0xd8, 0x9b, 0xf9, 0xb6, 0xb6, 0x37, 0xd0, 0x96, 0xe5, 0x5e, 0x02, 0xf4, 0xa3, 0xb0,
-	0x03, 0xe6, 0x92, 0xad, 0xdb, 0x65, 0xaa, 0xcf, 0xea, 0x04, 0x4a, 0x9a, 0x7d, 0x62, 0xc4, 0xf0,
-	0x90, 0x7f, 0x92, 0x34, 0xc5, 0x33, 0xe3, 0x12, 0xb9, 0x4f, 0xe1, 0x68, 0x0b, 0xf8, 0x2f, 0xab,
-	0xbd, 0x65, 0x3d, 0x7d, 0x04, 0xf6, 0xaf, 0x9f, 0x85, 0x87, 0x70, 0x10, 0x5f, 0xc7, 0x91, 0x73,
-	0x0b, 0x03, 0x0c, 0xc6, 0x93, 0x97, 0x93, 0x37, 0xaf, 0x1d, 0x84, 0x0f, 0xc1, 0xbc, 0x8a, 0xc7,
-	0x8e, 0xf1, 0x2a, 0xf8, 0xb6, 0x19, 0xa1, 0xef, 0x9b, 0x11, 0xfa, 0xb1, 0x19, 0xa1, 0x0f, 0x5e,
-	0xb3, 0x33, 0x17, 0x21, 0x2d, 0x78, 0xb8, 0xe3, 0xa4, 0xa7, 0x83, 0xfa, 0x96, 0x2f, 0x7e, 0x06,
-	0x00, 0x00, 0xff, 0xff, 0x38, 0xc9, 0x39, 0x05, 0x34, 0x03, 0x00, 0x00,
+	// 433 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0xcf, 0x6e, 0xd3, 0x40,
+	0x10, 0xc6, 0x59, 0x9b, 0xa4, 0xf5, 0xa4, 0x01, 0x6b, 0xc5, 0x61, 0xb1, 0x50, 0x30, 0xe5, 0x80,
+	0x4f, 0x36, 0xa4, 0xaa, 0x54, 0xfe, 0x5c, 0x40, 0xb5, 0x28, 0x12, 0x72, 0xc3, 0x3a, 0x5c, 0xb8,
+	0x54, 0x5b, 0xb2, 0x6a, 0x56, 0x35, 0x5e, 0x6b, 0x77, 0x9b, 0xd2, 0x97, 0xe3, 0xc0, 0x89, 0x23,
+	0x8f, 0x80, 0xf2, 0x24, 0xc8, 0xff, 0xb0, 0x0f, 0x05, 0x9a, 0x5b, 0xe6, 0xcb, 0x7c, 0xbf, 0xd9,
+	0xf9, 0x3c, 0xf0, 0x24, 0xe7, 0xe6, 0x52, 0xaa, 0x73, 0x91, 0x9f, 0x45, 0xab, 0x67, 0x2c, 0x2b,
+	0x96, 0x6c, 0x2f, 0xd2, 0x5c, 0xad, 0xc4, 0x67, 0x7e, 0xc2, 0x73, 0xa3, 0xae, 0xc2, 0x42, 0x49,
+	0x23, 0xf1, 0x7d, 0xa1, 0x8d, 0x90, 0x61, 0xd7, 0x1e, 0xb6, 0xed, 0xde, 0xa3, 0xeb, 0x18, 0x67,
+	0xcc, 0xf0, 0x4b, 0xd6, 0xb8, 0x77, 0xbf, 0x0d, 0x60, 0x27, 0xad, 0xa9, 0x71, 0x09, 0xc5, 0xf7,
+	0x60, 0xb0, 0x94, 0xda, 0x68, 0x82, 0x7c, 0x3b, 0x70, 0x68, 0x5d, 0xe0, 0x07, 0xe0, 0xb0, 0xc5,
+	0x42, 0x71, 0xad, 0xb9, 0x26, 0x56, 0xf5, 0x4f, 0x27, 0xe0, 0x7d, 0x18, 0x14, 0x52, 0x19, 0x4d,
+	0x6c, 0xdf, 0x0e, 0x46, 0xd3, 0x87, 0xe1, 0x5f, 0x9f, 0x14, 0xce, 0xa4, 0x32, 0xb4, 0xee, 0xc6,
+	0x8f, 0x61, 0xfc, 0x85, 0xeb, 0xe5, 0x09, 0xff, 0x6a, 0xb8, 0xca, 0x59, 0x46, 0x6e, 0xfb, 0x28,
+	0xd8, 0xa6, 0x3b, 0xa5, 0x18, 0x37, 0x1a, 0xa6, 0x00, 0x8a, 0x6b, 0x99, 0x5d, 0x18, 0x21, 0x73,
+	0x32, 0xf0, 0x51, 0x70, 0x67, 0x3a, 0xfd, 0xc7, 0x80, 0xfe, 0x32, 0x21, 0xfd, 0xe3, 0xa4, 0x3d,
+	0x0a, 0x4e, 0xc0, 0xe1, 0xf9, 0xa2, 0x90, 0x22, 0x37, 0x9a, 0x0c, 0xab, 0x37, 0x3f, 0xbd, 0x29,
+	0x32, 0x6e, 0x8c, 0xb4, 0x43, 0x78, 0xdf, 0x2d, 0xd8, 0x6e, 0x75, 0x4c, 0x60, 0xab, 0x49, 0x86,
+	0x20, 0x1f, 0x05, 0x0e, 0x6d, 0x4b, 0xfc, 0xa1, 0x8d, 0xc9, 0xaa, 0x46, 0xbe, 0xdc, 0x74, 0x64,
+	0x15, 0x9e, 0xae, 0xb4, 0x36, 0xc2, 0x39, 0x0c, 0x33, 0x76, 0xca, 0xb3, 0x36, 0xfa, 0x57, 0x1b,
+	0x33, 0xdf, 0x57, 0xf6, 0x1a, 0xda, 0xb0, 0xbc, 0x03, 0x80, 0x6e, 0x14, 0x76, 0xc1, 0x3e, 0xe7,
+	0x57, 0xcd, 0x32, 0xe5, 0xcf, 0xf2, 0x46, 0x56, 0x2c, 0xbb, 0xe0, 0xc4, 0xf2, 0x51, 0x30, 0xa6,
+	0x75, 0xf1, 0xc2, 0x3a, 0x40, 0xde, 0x73, 0x18, 0xf5, 0x80, 0xff, 0xb3, 0x3a, 0x3d, 0xeb, 0xee,
+	0x3e, 0x40, 0xf7, 0xb9, 0xf0, 0x5d, 0x18, 0xcd, 0x5e, 0xa7, 0xe9, 0xfc, 0x88, 0x1e, 0x7f, 0x7c,
+	0x7b, 0xe4, 0xde, 0xc2, 0x63, 0x70, 0xe2, 0xe4, 0x70, 0x76, 0xfc, 0x2e, 0x99, 0xa7, 0x2e, 0xc2,
+	0x5b, 0x60, 0x1f, 0x26, 0xa9, 0x6b, 0xbd, 0x09, 0x7f, 0xac, 0x27, 0xe8, 0xe7, 0x7a, 0x82, 0x7e,
+	0xad, 0x27, 0xe8, 0x93, 0x5f, 0xaf, 0x2f, 0x64, 0xc4, 0x0a, 0x11, 0x5d, 0x73, 0xfe, 0xa7, 0xc3,
+	0xea, 0xee, 0xf7, 0x7e, 0x07, 0x00, 0x00, 0xff, 0xff, 0x89, 0xa9, 0x1c, 0x9a, 0x60, 0x03, 0x00,
+	0x00,
 }

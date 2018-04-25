@@ -23,41 +23,13 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //
 // # Overview
 //
-// `ServiceEntry` describes the endpoints, ports and protocols of a
-// white-listed set of domains and IP blocks that services in the mesh are
-// allowed to access. These services could be external to the mesh (e.g.,
-// web APIs) or mesh-internal services that are not part of the platform's
-// service registry.
-//
-// For example, the following ServiceEntry configuration describes the
-// set of services at https://example.com to be accessed internally over
-// plaintext http (i.e. http://example.com:443), with the sidecar originating
-// TLS.
-//
-//     apiVersion: networking.istio.io/v1alpha3
-//     kind: ServiceEntry
-//     metadata:
-//       name: external-svc-example
-//     spec:
-//       hosts:
-//       - example.com
-//       ports:
-//       - number: 443
-//         name: example-http
-//         protocol: HTTP # not HTTPS.
-//       discovery: DNS
-//
-// and a DestinationRule to initiate TLS connections to the external service.
-//
-//     apiVersion: networking.istio.io/v1alpha3
-//     kind: DestinationRule
-//     metadata:
-//       name: tls-example
-//     spec:
-//       name: example.com
-//       trafficPolicy:
-//         tls:
-//           mode: SIMPLE # initiates HTTPS when talking to example.com
+// `ServiceEntry` enables adding additional entries into Istio's internal
+// service registry, so that auto-discovered services in the mesh can
+// access/route to these manually specified services. A service entry
+// describes the properties of a service (DNS name, VIPs ,ports, protocols,
+// endpoints). These services could be external to the mesh (e.g., web
+// APIs) or mesh-internal services that are not part of the platform's
+// service registry (e.g., a set of VMs talking to services in Kubernetes).
 //
 // The following specification specifies a static set of backend nodes for
 // a MongoDB cluster behind a set of virtual IPs, and sets up a
@@ -162,62 +134,79 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // https://uk.foo.bar.com/baz.
 message ServiceEntry {
   // REQUIRED. The hosts associated with the ServiceEntry. Could be a DNS
-  // name with wildcard prefix (external services only) or a CIDR
-  // prefix. Note that the hosts field applies to all protocols. DNS names
-  // in hosts will be ignored if the application accesses the service over
-  // non-HTTP protocols such as mongo/opaque TCP/even HTTPS. In such
-  // scenarios, the port on which the service is being accessed must not be
-  // shared by any other service in the mesh. In other words, the sidecar
-  // will behave as a simple TCP proxy, forwarding incoming traffic on a
-  // specified port to the specified destination endpoint IP/host.
+  // name with wildcard prefix (external services only). DNS names in hosts
+  // will be ignored if the application accesses the service over non-HTTP
+  // protocols such as mongo/opaque TCP/even HTTPS. In such scenarios, the
+  // IP addresses specified in the Addresses field or the port will be used
+  // to uniquely identify the destination.
   repeated string hosts = 1;
 
+  // The virtual IP addresses associated with the service. Could be CIDR
+  // prefix.  For HTTP services, the addresses field will be ignored and
+  // the destination will be identified based on the HTTP Host/Authority
+  // header. For non-HTTP protocols such as mongo/opaque TCP/even HTTPS,
+  // the hosts will be ignored. If one or more IP addresses are specified,
+  // the incoming traffic will be idenfified as belonging to this service
+  // if the destination IP matches the IP/CIDRs specified in the addresses
+  // field. If the Addresses field is empty, traffic will be identified
+  // solely based on the destination port. In such scenarios, the port on
+  // which the service is being accessed must not be shared by any other
+  // service in the mesh. In other words, the sidecar will behave as a
+  // simple TCP proxy, forwarding incoming traffic on a specified port to
+  // the specified destination endpoint IP/host.
+  repeated string addresses = 2;
+
   // REQUIRED. The ports associated with the external service.
-  repeated Port ports = 2;
+  repeated Port ports = 3;
 
   // If true, indicates that this service is external to the mesh. When
   // communicating with services outside the mesh, Istio's mTLS
   // authentication is disabled when communicating with services outside
   // the mesh. Policy enforcements are performed on the client-side as
   // opposed to server-side.
-  bool mesh_external = 3;
+  bool mesh_external = 4;
 
-  // Different ways of discovering the IP addresses associated with the
-  // service by the Proxy. Note that the application will still have to use
-  // DNS to resolve the service to an IP so that the outbound traffic can
-  // be captured by the Proxy. Alternatively, the application could
+  // Resolution determines how the proxy will resolve the IP addresses of
+  // the network endpoints associated with the service, so that it can
+  // route to one of them. The resolution mode specified here has no impact
+  // on how the application resolves the IP address associated with the
+  // service. The application may still have to use DNS to resolve the
+  // service to an IP so that the outbound traffic can be captured by the
+  // Proxy. Alternatively, for HTTP services, the application could
   // directly communicate with the proxy (e.g., by setting HTTP_PROXY) to
   // talk to these services.
-  enum Discovery {
+  enum Resolution {
     // Assume that incoming connections have already been resolved (to a
     // specific destination IP address). Such connections are typically
     // routed via the proxy using mechanisms such as IP table REDIRECT/
     // eBPF. After performing any routing related transformations, the
     // proxy will forward the connection to the IP address to which the
     // connection was bound.
-    NONE = 0;
+    PASSTHROUGH = 0;
 
-    // Use the IP addresses specified in endpoints (See below) as the
-    // backing nodes associated with the ServiceEntry.
-    STATIC = 1;
+    // Use the IP addresses specified in endpoints (see below) as the
+    // backing nodes associated with the service.
+    ENDPOINTS = 1;
 
-    // Attempt to resolve the DNS address during request processing. If no
-    // endpoints are specified, the proxy will resolve the DNS address
-    // specified in the hosts field, if wildcards are not used. If
-    // endpoints are specified, the DNS addresses specified in the
-    // endpoints will be resolved to determine the destination IP address.
+    // Attempt to resolve the IP address by querying the ambient DNS,
+    // during request processing. If no endpoints are specified, the proxy
+    // will resolve the DNS address specified in the hosts field, if
+    // wildcards are not used. If endpoints are specified, the DNS
+    // addresses specified in the endpoints will be resolved to determine
+    // the destination IP address.
     DNS = 2;
   };
 
   // Service discovery mode for the hosts. If not set, Istio will attempt
   // to infer the discovery mode based on the value of hosts and endpoints.
-  Discovery discovery = 4;
+  Resolution resolution = 5;
 
   // Endpoint defines a network address (IP or hostname) associated with
   // the mesh service.
   message Endpoint {
     // REQUIRED: Address associated with the network endpoint without the
-    // port ( IP or fully qualified domain name without wildcards).
+    // port ( IP or fully qualified domain name without wildcards). Domain
+    // names can be used if and only if the resolution is set to DNS.
     string address = 1;
 
     // Set of ports associated with the endpoint. The ports must be
@@ -230,5 +219,5 @@ message ServiceEntry {
   };
 
   // One or more endpoints associated with the service.
-  repeated Endpoint endpoints = 5;
+  repeated Endpoint endpoints = 6;
 }
