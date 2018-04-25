@@ -65,12 +65,10 @@
 - request.referer
 - request.scheme
 - request.size
-- request.total_size
 - request.time
 - request.useragent
 - response.headers
 - response.size
-- response.total_size
 - response.time
 - response.duration
 - response.code
@@ -187,7 +185,6 @@
 - connection.sent.bytes
 - connection.sent.bytes_total
 - connection.duration
-- connection.event
 
 # context attributes
 - context.protocol
@@ -240,6 +237,11 @@
 # check.error_code and error_message
 - check.error_code
 - check.error_message
+
+- request.total_size
+- response.total_size
+# TCP connection event attribute.
+- connection.event
 
 # whether mixer check and quota calls hit cache.
 - check.cache_hit
