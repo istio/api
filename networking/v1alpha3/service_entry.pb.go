@@ -33,8 +33,8 @@ const (
 	// proxy will forward the connection to the IP address to which the
 	// connection was bound.
 	ServiceEntry_NONE ServiceEntry_Resolution = 0
-	// Use the IP addresses specified in endpoints (see below) as the
-	// backing nodes associated with the service.
+	// Use the static IP addresses specified in endpoints (see below) as the
+	// backing instances associated with the service.
 	ServiceEntry_STATIC ServiceEntry_Resolution = 1
 	// Attempt to resolve the IP address by querying the ambient DNS,
 	// during request processing. If no endpoints are specified, the proxy

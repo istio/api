@@ -188,8 +188,8 @@ message ServiceEntry {
     // connection was bound.
     NONE = 0;
 
-    // Use the IP addresses specified in endpoints (see below) as the
-    // backing nodes associated with the service.
+    // Use the static IP addresses specified in endpoints (see below) as the
+    // backing instances associated with the service.
     STATIC = 1;
 
     // Attempt to resolve the IP address by querying the ambient DNS,
