@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='mixer/adapter/model/v1beta1/template.proto',
   package='istio.mixer.adapter.model.v1beta1',
   syntax='proto3',
-  serialized_pb=_b('\n*mixer/adapter/model/v1beta1/template.proto\x12!istio.mixer.adapter.model.v1beta1\"\x1e\n\x08Template\x12\x12\n\ndescriptor\x18\x04 \x01(\tB*Z(istio.io/api/mixer/adapter/model/v1beta1b\x06proto3')
+  serialized_pb=_b('\n*mixer/adapter/model/v1beta1/template.proto\x12!istio.mixer.adapter.model.v1beta1\"\x1e\n\x08Template\x12\x12\n\ndescriptor\x18\x01 \x01(\tB*Z(istio.io/api/mixer/adapter/model/v1beta1b\x06proto3')
 )
 
 
@@ -34,7 +34,7 @@ _TEMPLATE = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='descriptor', full_name='istio.mixer.adapter.model.v1beta1.Template.descriptor', index=0,
-      number=4, type=9, cpp_type=9, label=1,
+      number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
