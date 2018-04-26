@@ -44,7 +44,9 @@
 - source.uid
 - source.namespace
 - source.labels
+# source.user is to be deprecated, please refer to the attribute source.principal
 - source.user
+- source.principal
 
 # target.* attributes have been renamed to destination.*
 # They cannot be removed from this append only dictionary.
@@ -230,6 +232,7 @@
 - request.auth.principal
 - request.auth.audiences
 - request.auth.presenter
+- request.auth.claims  
 
 # api key
 - request.api_key
