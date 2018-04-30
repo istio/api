@@ -4,7 +4,7 @@ overview: API definitions to interact with Mixer
 location: https://istio.io/docs/reference/api/istio.mixer.v1.html
 layout: protoc-gen-docs
 redirect_from: /docs/reference/api/mixer/mixer.html
-number_of_entries: 17
+number_of_entries: 19
 ---
 <p>This package defines the Mixer API that the sidecar proxy uses to perform
 precondition checks, manage quotas, and report telemetry.</p>
@@ -383,6 +383,15 @@ along with matching conditions.</p>
 
 </td>
 </tr>
+<tr id="CheckResponse.PreconditionResult.action">
+<td><code>action</code></td>
+<td><code><a href="#RouteAction">RouteAction</a></code></td>
+<td>
+<p>An optional routing action, used to override the default route action
+when all pre-conditions are satisfied.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -516,6 +525,60 @@ configuration.</p>
 <td><code>map&lt;int32,&nbsp;<a href="#StringMap">StringMap</a>&gt;</code></td>
 <td>
 <p>Holds attributes of type STRING_MAP</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="HeaderOperation">HeaderOperation</h3>
+<section>
+<p>Operation on HTTP headers that allows replacing, appending, or removing a
+header. The default operation is replacing a header. Header keys are
+normalized to lower-case with dashes, e.g. &ldquo;x-request-id&rdquo;. Special headers
+&ldquo;uri&rdquo;, &ldquo;scheme&rdquo;, &ldquo;method&rdquo;, and &ldquo;authority&rdquo; are supported, and should be used
+to effect the general request metadata.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HeaderOperation.key">
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>
+<p>Header name.</p>
+
+</td>
+</tr>
+<tr id="HeaderOperation.value">
+<td><code>value</code></td>
+<td><code>string</code></td>
+<td>
+<p>Header value.</p>
+
+</td>
+</tr>
+<tr id="HeaderOperation.remove">
+<td><code>remove</code></td>
+<td><code>bool</code></td>
+<td>
+<p>If true, the header is removed.
+This operation is not applicagble to the special headers, such as &ldquo;scheme&rdquo;.</p>
+
+</td>
+</tr>
+<tr id="HeaderOperation.append">
+<td><code>append</code></td>
+<td><code>bool</code></td>
+<td>
+<p>If true and remove is not set, the value is appended instead of replacing it.
+This operation is not applicable to the special headers, such as &ldquo;scheme&rdquo;.</p>
 
 </td>
 </tr>
@@ -723,6 +786,65 @@ To detect global dictionary out of sync between client and server.</p>
 <section>
 <p>Used to carry responses to telemetry reports</p>
 
+</section>
+<h3 id="RouteAction">RouteAction</h3>
+<section>
+<p>Expresses the actions to be performed by the proxies in response
+to a successful pre-condition check for an HTTP request.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RouteAction.request_headers">
+<td><code>requestHeaders</code></td>
+<td><code><a href="#HeaderOperation">HeaderOperation[]</a></code></td>
+<td>
+<p>Operations on the request headers.</p>
+
+</td>
+</tr>
+<tr id="RouteAction.response_headers">
+<td><code>responseHeaders</code></td>
+<td><code><a href="#HeaderOperation">HeaderOperation[]</a></code></td>
+<td>
+<p>Operations on the response headers.</p>
+
+</td>
+</tr>
+<tr id="RouteAction.response_code">
+<td><code>responseCode</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>If set, enables a direct response without proxying the request to the routing
+destination.</p>
+
+</td>
+</tr>
+<tr id="RouteAction.response_body">
+<td><code>responseBody</code></td>
+<td><code>string</code></td>
+<td>
+<p>Supplies the response body for the direct response.
+If this setting is omitted, no body is included in the generated response.</p>
+
+</td>
+</tr>
+<tr id="RouteAction.destination_service">
+<td><code>destinationService</code></td>
+<td><code>string</code></td>
+<td>
+<p>If set, overrides the routing destination to the specified destination service FQDN.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
 </section>
 <h3 id="StringMap">StringMap</h3>
 <section>
