@@ -361,19 +361,6 @@ all preconditions were satisfied and details describe why.</p>
 
 </td>
 </tr>
-<tr id="CheckResponse.PreconditionResult.attributes">
-<td><code>attributes</code></td>
-<td><code><a href="#CompressedAttributes">CompressedAttributes</a></code></td>
-<td>
-<p>The attributes returned by Mixer.</p>
-
-<p>The exact set of attributes returned is determined by the set of
-adapters Mixer is configured with. These attributes are used to
-ferry new attributes that Mixer derived based on the input set of
-attributes and its configuration.</p>
-
-</td>
-</tr>
 <tr id="CheckResponse.PreconditionResult.referenced_attributes">
 <td><code>referencedAttributes</code></td>
 <td><code><a href="#ReferencedAttributes">ReferencedAttributes</a></code></td>
@@ -383,11 +370,11 @@ along with matching conditions.</p>
 
 </td>
 </tr>
-<tr id="CheckResponse.PreconditionResult.action">
-<td><code>action</code></td>
-<td><code><a href="#RouteAction">RouteAction</a></code></td>
+<tr id="CheckResponse.PreconditionResult.directive">
+<td><code>directive</code></td>
+<td><code><a href="#Directive">Directive</a></code></td>
 <td>
-<p>An optional routing action, used to override the default route action
+<p>An optional directive, used to override the default route action
 when all pre-conditions are satisfied.</p>
 
 </td>
@@ -525,6 +512,65 @@ configuration.</p>
 <td><code>map&lt;int32,&nbsp;<a href="#StringMap">StringMap</a>&gt;</code></td>
 <td>
 <p>Holds attributes of type STRING_MAP</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="Directive">Directive</h3>
+<section>
+<p>Expresses the actions to be performed by the proxies in response
+to a successful pre-condition check for an HTTP request.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Directive.request_headers">
+<td><code>requestHeaders</code></td>
+<td><code><a href="#HeaderOperation">HeaderOperation[]</a></code></td>
+<td>
+<p>Operations on the request headers.</p>
+
+</td>
+</tr>
+<tr id="Directive.response_headers">
+<td><code>responseHeaders</code></td>
+<td><code><a href="#HeaderOperation">HeaderOperation[]</a></code></td>
+<td>
+<p>Operations on the response headers.</p>
+
+</td>
+</tr>
+<tr id="Directive.response_code">
+<td><code>responseCode</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>If set, enables a direct response without proxying the request to the routing
+destination.</p>
+
+</td>
+</tr>
+<tr id="Directive.response_body">
+<td><code>responseBody</code></td>
+<td><code>string</code></td>
+<td>
+<p>Supplies the response body for the direct response.
+If this setting is omitted, no body is included in the generated response.</p>
+
+</td>
+</tr>
+<tr id="Directive.destination_service">
+<td><code>destinationService</code></td>
+<td><code>string</code></td>
+<td>
+<p>If set, overrides the routing destination to the specified destination service FQDN.</p>
 
 </td>
 </tr>
@@ -786,65 +832,6 @@ To detect global dictionary out of sync between client and server.</p>
 <section>
 <p>Used to carry responses to telemetry reports</p>
 
-</section>
-<h3 id="RouteAction">RouteAction</h3>
-<section>
-<p>Expresses the actions to be performed by the proxies in response
-to a successful pre-condition check for an HTTP request.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="RouteAction.request_headers">
-<td><code>requestHeaders</code></td>
-<td><code><a href="#HeaderOperation">HeaderOperation[]</a></code></td>
-<td>
-<p>Operations on the request headers.</p>
-
-</td>
-</tr>
-<tr id="RouteAction.response_headers">
-<td><code>responseHeaders</code></td>
-<td><code><a href="#HeaderOperation">HeaderOperation[]</a></code></td>
-<td>
-<p>Operations on the response headers.</p>
-
-</td>
-</tr>
-<tr id="RouteAction.response_code">
-<td><code>responseCode</code></td>
-<td><code>uint32</code></td>
-<td>
-<p>If set, enables a direct response without proxying the request to the routing
-destination.</p>
-
-</td>
-</tr>
-<tr id="RouteAction.response_body">
-<td><code>responseBody</code></td>
-<td><code>string</code></td>
-<td>
-<p>Supplies the response body for the direct response.
-If this setting is omitted, no body is included in the generated response.</p>
-
-</td>
-</tr>
-<tr id="RouteAction.destination_service">
-<td><code>destinationService</code></td>
-<td><code>string</code></td>
-<td>
-<p>If set, overrides the routing destination to the specified destination service FQDN.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
 </section>
 <h3 id="StringMap">StringMap</h3>
 <section>

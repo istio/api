@@ -1,4 +1,4 @@
-// Copyright 2018 Istio Authors
+// Copyright 2016 Istio Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -72,21 +72,15 @@ message CheckResponse {
     // The number of uses for which this result can be considered valid.
     int32 valid_use_count = 3;
 
-    // The attributes returned by Mixer.
-    //
-    // The exact set of attributes returned is determined by the set of
-    // adapters Mixer is configured with. These attributes are used to
-    // ferry new attributes that Mixer derived based on the input set of
-    // attributes and its configuration.
-    CompressedAttributes attributes = 4 [(gogoproto.nullable) = false];
+    reserved 4;
 
     // The total set of attributes that were used in producing the result
     // along with matching conditions.
     ReferencedAttributes referenced_attributes = 5 [(gogoproto.nullable) = false];
 
-    // An optional routing action, used to override the default route action
+    // An optional directive, used to override the default route action
     // when all pre-conditions are satisfied.
-    RouteAction action = 6;
+    Directive directive = 6;
   }
 
   // Expresses the result of a quota allocation.
@@ -178,7 +172,7 @@ message HeaderOperation {
 
 // Expresses the actions to be performed by the proxies in response
 // to a successful pre-condition check for an HTTP request.
-message RouteAction {
+message Directive {
   // Operations on the request headers.
   repeated HeaderOperation request_headers = 1 [(gogoproto.nullable) = false];
 
