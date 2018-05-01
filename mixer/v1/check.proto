@@ -80,7 +80,7 @@ message CheckResponse {
 
     // An optional directive, used to override the default route action
     // when all pre-conditions are satisfied.
-    Directive directive = 6;
+    RouteDirective directive = 6;
   }
 
   // Expresses the result of a quota allocation.
@@ -150,29 +150,28 @@ message ReferencedAttributes {
 }
 
 // Operation on HTTP headers that allows replacing, appending, or removing a
-// header. The default operation is replacing a header. Header keys are
-// normalized to lower-case with dashes, e.g. "x-request-id". Special headers
-// "uri", "scheme", "method", and "authority" are supported, and should be used
-// to effect the general request metadata.
+// header. Header keys are normalized to lower-case with dashes, e.g.
+// "x-request-id". Special headers "uri", "scheme", "method", and "authority"
+// are supported, and should be used to effect the general request metadata.
 message HeaderOperation {
+  // Operation type.
+  enum Operation {
+    REPLACE = 0;  // replaces the header
+    REMOVE = 1; // removes the header (value is ignored); not applicable to special headers
+    APPEND = 2; // append the value to the header, or add if not present
+  }
   // Header name.
   string key = 1;
 
   // Header value.
   string value = 2;
 
-  // If true, the header is removed.
-  // This operation is not applicagble to the special headers, such as "scheme".
-  bool remove = 3;
-
-  // If true and remove is not set, the value is appended instead of replacing it.
-  // This operation is not applicable to the special headers, such as "scheme".
-  bool append = 4;
+  // TODO: optimize for the query parameter operations
 }
 
 // Expresses the actions to be performed by the proxies in response
 // to a successful pre-condition check for an HTTP request.
-message Directive {
+message RouteDirective {
   // Operations on the request headers.
   repeated HeaderOperation request_headers = 1 [(gogoproto.nullable) = false];
 

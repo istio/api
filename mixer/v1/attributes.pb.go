@@ -18,7 +18,7 @@
 		CheckResponse
 		ReferencedAttributes
 		HeaderOperation
-		Directive
+		RouteDirective
 		ReportRequest
 		ReportResponse
 */
