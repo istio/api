@@ -3,7 +3,7 @@ title: Route Rules v1alpha3
 overview: Configuration affecting traffic routing
 location: https://istio.io/docs/reference/config/istio.networking.v1alpha3.html
 layout: protoc-gen-docs
-number_of_entries: 39
+number_of_entries: 40
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -2169,6 +2169,28 @@ spec:
   resolution: NONE
 </code></pre>
 
+<p>The following example demonstrates a service that is available via a
+Unix Domain Socket on the host of the client. The resolution must be
+set to STATIC to use UNIX family endpoints.</p>
+
+<pre><code>apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: unix-domain-socket-example
+spec:
+  hosts:
+  - &quot;example.unix.local&quot;
+  location: MESH_EXTERNAL
+  ports:
+  - number: 80
+    name: http
+    protocol: HTTP
+  resolution: STATIC
+  endpoints:
+  - address: /var/run/example/socket
+    family: UNIX
+</code></pre>
+
 <p>For HTTP based services, it is possible to create a VirtualService
 backed by multiple DNS addressable endpoints. In such a scenario, the
 application can use the HTTP_PROXY environment variable to transparently
@@ -2267,7 +2289,8 @@ the specified destination endpoint IP/host.</p>
 <td><code>ports</code></td>
 <td><code><a href="#Port">Port[]</a></code></td>
 <td>
-<p>REQUIRED. The ports associated with the external service.</p>
+<p>REQUIRED. The ports associated with the external service. If the
+Endpoints are <code>UNIX</code> family, there must be exactly one port.</p>
 
 </td>
 </tr>
@@ -2319,8 +2342,10 @@ the mesh service.</p>
 <td><code>string</code></td>
 <td>
 <p>REQUIRED: Address associated with the network endpoint without the
-port ( IP or fully qualified domain name without wildcards). Domain
-names can be used if and only if the resolution is set to DNS.</p>
+port.  If family is <code>IP</code> the value may be an IP address or domain
+name.  Domain names can be used if and only if the resolution is set
+to DNS, and must be fully-qualified without wildcards.  If family is
+<code>UNIX</code>, the value must be the full absolute path to the domain socket.</p>
 
 </td>
 </tr>
@@ -2330,7 +2355,7 @@ names can be used if and only if the resolution is set to DNS.</p>
 <td>
 <p>Set of ports associated with the endpoint. The ports must be
 associated with a port name that was declared as part of the
-service.</p>
+service.  Do not use for <code>UNIX</code> endpoints.</p>
 
 </td>
 </tr>
@@ -2339,6 +2364,41 @@ service.</p>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
 <p>One or more labels associated with the endpoint.</p>
+
+</td>
+</tr>
+<tr id="ServiceEntry.Endpoint.family">
+<td><code>family</code></td>
+<td><code><a href="#ServiceEntry.Endpoint.AddressFamily">ServiceEntry.Endpoint.AddressFamily</a></code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ServiceEntry.Endpoint.AddressFamily">ServiceEntry.Endpoint.AddressFamily</h2>
+<section>
+<p>AddressFamily identifies the kind of address the endpoint represents.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ServiceEntry.Endpoint.AddressFamily.IP">
+<td><code>IP</code></td>
+<td>
+<p>The address is an IP address or domain name.</p>
+
+</td>
+</tr>
+<tr id="ServiceEntry.Endpoint.AddressFamily.UNIX">
+<td><code>UNIX</code></td>
+<td>
+<p>The address is a Unix Domain Socket.</p>
 
 </td>
 </tr>
@@ -2431,7 +2491,8 @@ during request processing. If no endpoints are specified, the proxy
 will resolve the DNS address specified in the hosts field, if
 wildcards are not used. If endpoints are specified, the DNS
 addresses specified in the endpoints will be resolved to determine
-the destination IP address.</p>
+the destination IP address. DNS resolution cannot be used with <code>UNIX</code>
+family endpoints.</p>
 
 </td>
 </tr>
