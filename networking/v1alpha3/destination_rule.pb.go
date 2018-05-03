@@ -110,9 +110,11 @@ const (
 	// Secure connections to the upstream using mutual TLS by presenting
 	// client certificates for authentication.
 	TLSSettings_MUTUAL TLSSettings_TLSmode = 2
-	// Originate a mutual TLS connection by presenting Istio provided
-	// key certs. All other fields in TLSSettings should be empty if using
-	// this mode.
+	// Secure connections to the upstream using mutual TLS by presenting
+	// client certificates for authentication.
+	// Compared to Mutual mode, this mode uses certificates generated
+	// automatically by Istio for mTLS authentication. When this mode is
+	// used, all other fields in `TLSSettings` should be empty.
 	TLSSettings_ISTIO_MUTUAL TLSSettings_TLSmode = 3
 )
 
