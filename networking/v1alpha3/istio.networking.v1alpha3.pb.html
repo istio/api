@@ -3,7 +3,7 @@ title: Route Rules v1alpha3
 overview: Configuration affecting traffic routing
 location: https://istio.io/docs/reference/config/istio.networking.v1alpha3.html
 layout: protoc-gen-docs
-number_of_entries: 39
+number_of_entries: 40
 ---
 <h3 id="terms-and-definitions">Terms and Definitions</h3>
 
@@ -33,6 +33,40 @@ actual choice of the version is determined by the proxy/sidecar, enabling the
 application code to decouple itself from the evolution of dependent
 services.</p>
 
+<h2 id="Address">Address</h2>
+<section>
+<p>Address defines a destination for network or local socket traffic.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Address.ip" class="oneof oneof-start">
+<td><code>ip</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>An address on an IP network, either as a resolved IP address, IP
+prefix (CIDR) or DNS name.</p>
+
+</td>
+</tr>
+<tr id="Address.unix" class="oneof">
+<td><code>unix</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>A Unix Domain Socket, expressed as the full absolute path to the
+socket.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="ConnectionPoolSettings">ConnectionPoolSettings</h2>
 <section>
 <p>Connection pool settings for an upstream host. The settings apply to
@@ -2133,7 +2167,7 @@ spec:
   hosts:
   - mymongodb.somedomain # not used
   addresses:
-  - 192.192.192.192/24 # VIPs
+  - &lbrace;ip: 192.192.192.192/24} # VIPs
   ports:
   - number: 27018
     name: mongodb
@@ -2141,8 +2175,8 @@ spec:
   location: MESH_INTERNAL
   resolution: STATIC
   endpoints:
-  - address: 2.2.2.2
-  - address: 3.3.3.3
+  - address: &lbrace;ip: 2.2.2.2}
+  - address: &lbrace;ip: 3.3.3.3}
 </code></pre>
 
 <p>and the associated DestinationRule</p>
@@ -2152,7 +2186,7 @@ kind: DestinationRule
 metadata:
   name: mtls-mongocluster
 spec:
-  name: mymongodb.somedomain
+  host: mymongodb.somedomain
   trafficPolicy:
     tls:
       mode: MUTUAL
@@ -2181,6 +2215,27 @@ spec:
   resolution: NONE
 </code></pre>
 
+<p>The following example demonstrates a service that is available via a
+Unix Domain Socket on the host of the client. The resolution must be
+set to STATIC to use unix address endpoints.</p>
+
+<pre><code>apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: unix-domain-socket-example
+spec:
+  hosts:
+  - &quot;example.unix.local&quot;
+  location: MESH_EXTERNAL
+  ports:
+  - number: 80
+    name: http
+    protocol: HTTP
+  resolution: STATIC
+  endpoints:
+  - address: &lbrace;unix: /var/run/example/socket}
+</code></pre>
+
 <p>For HTTP based services, it is possible to create a VirtualService
 backed by multiple DNS addressible endpoints. In such a scenario, the
 application can use the HTTP_PROXY environment variable to transparently
@@ -2203,13 +2258,13 @@ spec:
     protocol: HTTP
   resolution: DNS
   endpoints:
-  - address: us.foo.bar.com
+  - address: &lbrace;ip: us.foo.bar.com}
     ports:
       https: 8443
-  - address: uk.foo.bar.com
+  - address: &lbrace;ip: uk.foo.bar.com}
     ports:
       https: 9443
-  - address: in.foo.bar.com
+  - address: &lbrace;ip: in.foo.bar.com}
     ports:
       https: 7443
 </code></pre>
@@ -2257,7 +2312,7 @@ to uniquely identify the destination.</p>
 </tr>
 <tr id="ServiceEntry.addresses">
 <td><code>addresses</code></td>
-<td><code>string[]</code></td>
+<td><code><a href="#Address">Address[]</a></code></td>
 <td>
 <p>The virtual IP addresses associated with the service. Could be CIDR
 prefix.  For HTTP services, the addresses field will be ignored and
@@ -2271,7 +2326,8 @@ solely based on the destination port. In such scenarios, the port on
 which the service is being accessed must not be shared by any other
 service in the mesh. In other words, the sidecar will behave as a
 simple TCP proxy, forwarding incoming traffic on a specified port to
-the specified destination endpoint IP/host.</p>
+the specified destination endpoint IP/host. Unix addresses are not
+supported in this field.</p>
 
 </td>
 </tr>
@@ -2279,7 +2335,8 @@ the specified destination endpoint IP/host.</p>
 <td><code>ports</code></td>
 <td><code><a href="#Port">Port[]</a></code></td>
 <td>
-<p>REQUIRED. The ports associated with the external service.</p>
+<p>REQUIRED. The ports associated with the external service. If the
+Endpoints are <code>unix</code> addresses, there must be exactly one port.</p>
 
 </td>
 </tr>
@@ -2328,11 +2385,11 @@ the mesh service.</p>
 <tbody>
 <tr id="ServiceEntry.Endpoint.address">
 <td><code>address</code></td>
-<td><code>string</code></td>
+<td><code><a href="#Address">Address</a></code></td>
 <td>
 <p>REQUIRED: Address associated with the network endpoint without the
-port ( IP or fully qualified domain name without wildcards). Domain
-names can be used if and only if the resolution is set to DNS.</p>
+port.  Domain names can be used if and only if the resolution is set
+to DNS, and must be fully-qualified without wildcards.</p>
 
 </td>
 </tr>
@@ -2342,7 +2399,7 @@ names can be used if and only if the resolution is set to DNS.</p>
 <td>
 <p>Set of ports associated with the endpoint. The ports must be
 associated with a port name that was declared as part of the
-service.</p>
+service.  Do not use for <code>unix</code> addresses.</p>
 
 </td>
 </tr>
@@ -2443,7 +2500,8 @@ during request processing. If no endpoints are specified, the proxy
 will resolve the DNS address specified in the hosts field, if
 wildcards are not used. If endpoints are specified, the DNS
 addresses specified in the endpoints will be resolved to determine
-the destination IP address.</p>
+the destination IP address. DNS resolution cannot be used with <code>unix</code>
+address endpoints.</p>
 
 </td>
 </tr>

@@ -22,6 +22,7 @@
 		Server
 		Port
 		ServiceEntry
+		Address
 		VirtualService
 		Destination
 		HTTPRoute
