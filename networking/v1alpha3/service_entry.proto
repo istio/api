@@ -92,6 +92,27 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //   resolution: NONE
 // ```
 //
+// The following example demonstrates a service that is available via a
+// Unix Domain Socket on the host of the client. The resolution must be
+// set to STATIC to use UNIX family endpoints.
+//
+//     apiVersion: networking.istio.io/v1alpha3
+//     kind: ServiceEntry
+//     metadata:
+//       name: unix-domain-socket-example
+//     spec:
+//       hosts:
+//       - "example.unix.local"
+//       location: MESH_EXTERNAL
+//       ports:
+//       - number: 80
+//         name: http
+//         protocol: HTTP
+//       resolution: STATIC
+//       endpoints:
+//       - address: /var/run/example/socket
+//         family: UNIX
+//
 // For HTTP based services, it is possible to create a VirtualService
 // backed by multiple DNS addressable endpoints. In such a scenario, the
 // application can use the HTTP_PROXY environment variable to transparently
@@ -169,7 +190,8 @@ message ServiceEntry {
   // the specified destination endpoint IP/host.
   repeated string addresses = 2;
 
-  // REQUIRED. The ports associated with the external service.
+  // REQUIRED. The ports associated with the external service. If the
+  // Endpoints are `UNIX` family, there must be exactly one port.
   repeated Port ports = 3;
 
   // Location specifies whether the service is part of Istio mesh or
@@ -221,7 +243,8 @@ message ServiceEntry {
     // will resolve the DNS address specified in the hosts field, if
     // wildcards are not used. If endpoints are specified, the DNS
     // addresses specified in the endpoints will be resolved to determine
-    // the destination IP address.
+    // the destination IP address. DNS resolution cannot be used with `UNIX`
+    // family endpoints.
     DNS = 2;
   };
 
@@ -233,17 +256,30 @@ message ServiceEntry {
   // the mesh service.
   message Endpoint {
     // REQUIRED: Address associated with the network endpoint without the
-    // port ( IP or fully qualified domain name without wildcards). Domain
-    // names can be used if and only if the resolution is set to DNS.
+    // port.  If family is `IP` the value may be an IP address or domain
+    // name.  Domain names can be used if and only if the resolution is set
+    // to DNS, and must be fully-qualified without wildcards.  If family is
+    // `UNIX`, the value must be the full absolute path to the domain socket.
     string address = 1;
 
     // Set of ports associated with the endpoint. The ports must be
     // associated with a port name that was declared as part of the
-    // service.
+    // service.  Do not use for `UNIX` endpoints.
     map<string, uint32> ports = 2;
     
     // One or more labels associated with the endpoint.
     map<string, string> labels = 3;
+
+    // AddressFamily identifies the kind of address the endpoint represents.
+    enum AddressFamily {
+      // The address is an IP address or domain name.
+      IP = 0;
+
+      // The address is a Unix Domain Socket.
+      UNIX = 1;
+    }
+
+    AddressFamily family = 4;
   };
 
   // One or more endpoints associated with the service.
