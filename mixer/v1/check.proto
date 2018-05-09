@@ -78,8 +78,8 @@ message CheckResponse {
     // along with matching conditions.
     ReferencedAttributes referenced_attributes = 5 [(gogoproto.nullable) = false];
 
-    // An optional directive, used to override the default route action
-    // when all pre-conditions are satisfied.
+    // An optional directive, used to manipulate the traffic metadata
+    // whenever all pre-conditions are satisfied.
     RouteDirective directive = 6;
   }
 
@@ -149,43 +149,45 @@ message ReferencedAttributes {
   repeated AttributeMatch attribute_matches = 2 [(gogoproto.nullable) = false];
 }
 
-// Operation on HTTP headers that allows replacing, appending, or removing a
-// header. Header keys are normalized to lower-case with dashes, e.g.
-// "x-request-id". Special headers "uri", "scheme", "method", and "authority"
-// are supported, and should be used to effect the general request metadata.
+// Operation on HTTP headers to replace, append, or remove a header. Header
+// names are normalized to lower-case with dashes, e.g.  "x-request-id".
+// Special headers "uri", "scheme", "method", and "authority" are permitted,
+// and should be used to effect the general request metadata.
 message HeaderOperation {
   // Operation type.
   enum Operation {
-    REPLACE = 0;  // replaces the header
-    REMOVE = 1; // removes the header (value is ignored); not applicable to special headers
-    APPEND = 2; // append the value to the header, or add if not present
+    REPLACE = 0;  // replaces the header with the given name
+    REMOVE = 1;   // removes the header with the given name (the value is ignored)
+    APPEND = 2;   // appends the value to the header value, or sets it if not present
   }
   // Header name.
-  string key = 1;
+  string name = 1;
 
   // Header value.
   string value = 2;
 
-  // TODO: optimize for the query parameter operations
+  // Header operation.
+  Operation operation = 3;
 }
 
-// Expresses the actions to be performed by the proxies in response
-// to a successful pre-condition check for an HTTP request.
+// Expresses the routing manipulation actions to be performed on behalf of
+// Mixer in response to a successful pre-condition check.
 message RouteDirective {
   // Operations on the request headers.
-  repeated HeaderOperation request_headers = 1 [(gogoproto.nullable) = false];
+  repeated HeaderOperation update_request_headers = 1 [(gogoproto.nullable) = false];
 
   // Operations on the response headers.
-  repeated HeaderOperation response_headers = 2 [(gogoproto.nullable) = false];
+  repeated HeaderOperation update_response_headers = 2 [(gogoproto.nullable) = false];
 
   // If set, enables a direct response without proxying the request to the routing
-  // destination.
-  uint32 response_code = 3;
+  // destination. Required to be a value in the 2xx or 3xx range.
+  uint32 direct_response_code = 3;
 
   // Supplies the response body for the direct response.
   // If this setting is omitted, no body is included in the generated response.
-  string response_body = 4;
+  string direct_response_body = 4;
 
-  // If set, overrides the routing destination to the specified destination service FQDN.
-  string destination_service = 5;
+  // If set, overrides the routing destination to the specified destination service fully
+  // qualified name.
+  string override_destination_service = 5;
 }
