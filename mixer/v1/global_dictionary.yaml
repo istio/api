@@ -212,14 +212,17 @@
 
 - destination.ip
 - destination.port
-- destination.service # deprecated, please refer to destination.service.host
+# destination.service is deprecated, please refer to destination.service.host
+- destination.service
 - destination.name
 - destination.uid
 - destination.namespace
 - destination.labels
-- destination.user # deprecated, please refer to destination.principal
+# destination.user is deprecated, please refer to destination.principal
+- destination.user 
 
-- source.service # deprecated. please do not use moving forward.
+# source.service is deprecated. please do not use moving forward.
+- source.service 
 
 # api attributes
 - api.service
@@ -273,3 +276,5 @@
 - destination.service.labels
 - destination.service.metadata
 - destination.service.host
+- destination.container.name
+- destination.container.image
