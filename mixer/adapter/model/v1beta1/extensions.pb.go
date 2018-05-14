@@ -20,16 +20,16 @@ type TemplateVariety int32
 
 const (
 	// Makes the template applicable for Mixer's check calls. Instances of such template are created during
-	// report calls in Mixer and passed tothe handlers based on the rule configurations.
+	// report calls in Mixer and passed to the handlers based on the rule configurations.
 	TEMPLATE_VARIETY_CHECK TemplateVariety = 0
 	// Makes the template applicable for Mixer's report calls. Instances of such template are created during
-	// check calls in Mixer and passed tothe handlers based on the rule configurations.
+	// check calls in Mixer and passed to the handlers based on the rule configurations.
 	TEMPLATE_VARIETY_REPORT TemplateVariety = 1
 	// Makes the template applicable for Mixer's quota calls. Instances of such template are created during
-	// quota check calls in Mixer and passed tothe handlers based on the rule configurations.
+	// quota check calls in Mixer and passed to the handlers based on the rule configurations.
 	TEMPLATE_VARIETY_QUOTA TemplateVariety = 2
 	// Makes the template applicable for Mixer's attribute generation phase. Instances of such template are created during
-	// attribute pre-processing generation phase and passed tothe handlers based on the rule configurations.
+	// pre-processing attribute generation phase and passed to the handlers based on the rule configurations.
 	TEMPLATE_VARIETY_ATTRIBUTE_GENERATOR TemplateVariety = 3
 )
 
