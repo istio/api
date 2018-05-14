@@ -250,3 +250,6 @@
 
 - source.principal
 - request.auth.claims  
+
+# whether request is sent over mTLS connection.
+- connection.mtls
