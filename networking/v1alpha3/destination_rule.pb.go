@@ -36,6 +36,7 @@
 		CorsPolicy
 		HTTPFaultInjection
 		PortSelector
+		Script
 */
 package v1alpha3
 

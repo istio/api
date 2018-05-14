@@ -3,7 +3,7 @@ title: Route Rules v1alpha3
 description: Configuration affecting traffic routing
 location: https://istio.io/docs/reference/config/istio.networking.v1alpha3.html
 layout: protoc-gen-docs
-number_of_entries: 39
+number_of_entries: 40
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -1477,6 +1477,14 @@ destination service.</p>
 
 </td>
 </tr>
+<tr id="HTTPRoute.scripts">
+<td><code>scripts</code></td>
+<td><code><a href="#Script">Script[]</a></code></td>
+<td>
+<p>An ordered list of scripts associated with the HTTPRoute.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1883,6 +1891,68 @@ matching or selection for final routing.</p>
 <td><code>string (oneof)</code></td>
 <td>
 <p>Port name</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Script">Script</h2>
+<section>
+<p>Script specifies a script to insert at the given context.
+The context can be VirtualService, HTTPRoute, or TCPRoute.
+The exact script API is proxy implementation dependant.
+For example:
+Envoy defines <code>envoy_on_request</code> and <code>envoy_on_response</code> functions.
+Nginx uses the <code>ngx</code> top level lua object. ex: ngx.socket.connect along with
+specific directives like <code>access_by_lua</code> and <code>body_filter_by_lua</code></p>
+
+<p>Control plane ensures that the script is dispatched only in the context.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Script.type">
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>
+<p>type is the type of script
+examples: lua, cel, &hellip;
+default: lua</p>
+
+</td>
+</tr>
+<tr id="Script.proxy">
+<td><code>proxy</code></td>
+<td><code>string</code></td>
+<td>
+<p>proxy is the type of proxy that can excute this script.
+examples: envoy, nginx
+default: envoy</p>
+
+</td>
+</tr>
+<tr id="Script.phase">
+<td><code>phase</code></td>
+<td><code>string</code></td>
+<td>
+<p>phase is the phase of proxy processing.
+This is proxy dependant. Envoy has a request and a response phase.
+nginx has by_lua variations of <code>rewrite</code>, <code>access</code>, <code>header_filter</code> and other phases.</p>
+
+</td>
+</tr>
+<tr id="Script.contents">
+<td><code>contents</code></td>
+<td><code>string</code></td>
+<td>
+<p>contents of the script. Required.</p>
 
 </td>
 </tr>
@@ -2618,6 +2688,14 @@ with weights can be specified.</p>
 
 </td>
 </tr>
+<tr id="TCPRoute.scripts">
+<td><code>scripts</code></td>
+<td><code><a href="#Script">Script[]</a></code></td>
+<td>
+<p>An ordered list of scripts associated with the TCPRoute.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -3045,6 +3123,14 @@ The first rule matching an incoming request is used.</p>
 <td>
 <p>An ordered list of route rules for TCP traffic.
 The first rule matching an incoming request is used.</p>
+
+</td>
+</tr>
+<tr id="VirtualService.scripts">
+<td><code>scripts</code></td>
+<td><code><a href="#Script">Script[]</a></code></td>
+<td>
+<p>An ordered list of scripts associated with the VirtualService.</p>
 
 </td>
 </tr>
