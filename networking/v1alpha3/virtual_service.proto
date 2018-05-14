@@ -158,6 +158,9 @@ message VirtualService {
   // An ordered list of route rules for TCP traffic.
   // The first rule matching an incoming request is used.
   repeated TCPRoute tcp = 4;
+
+  // An ordered list of scripts associated with the VirtualService.
+  repeated Script scripts = 5;
 }
 
 // Destination indicates the network addressable service to which the
@@ -380,6 +383,9 @@ message HTTPRoute {
   // Additional HTTP headers to add before forwarding a request to the
   // destination service.
   map<string, string> append_headers = 11;
+
+  // An ordered list of scripts associated with the HTTPRoute.
+  repeated Script scripts = 12;
 }
 
 // Describes match conditions and actions for routing TCP traffic. The
@@ -417,6 +423,9 @@ message TCPRoute {
   // weighted routing support is introduced in Envoy, multiple destinations
   // with weights can be specified.
   repeated DestinationWeight route = 2;
+  
+  // An ordered list of scripts associated with the TCPRoute.
+  repeated Script scripts = 3;
 }
 
 // HttpMatchRequest specifies a set of criterion to be met in order for the
@@ -927,4 +936,33 @@ message PortSelector {
     // Port name
     string name = 2;
   }
+}
+
+// Script specifies a script to insert at the given context.
+// The context can be VirtualService, HTTPRoute, or TCPRoute.
+// The exact script API is proxy implementation dependant.
+// For example:
+// Envoy defines `envoy_on_request` and `envoy_on_response` functions.
+// Nginx uses the `ngx` top level lua object. ex: ngx.socket.connect along with
+// specific directives like `access_by_lua` and `body_filter_by_lua`
+//
+// Control plane ensures that the script is dispatched only in the context.
+message Script {
+  // type is the type of script
+  // examples: lua, cel, ...
+  // default: lua
+  string type = 1;
+
+  // proxy is the type of proxy that can excute this script.
+  // examples: envoy, nginx
+  // default: envoy
+  string proxy = 2;
+
+  // phase is the phase of proxy processing.
+  // This is proxy dependant. Envoy has a request and a response phase.
+  // nginx has by_lua variations of `rewrite`, `access`, `header_filter` and other phases.
+  string phase = 3;
+
+  // contents of the script. Required.
+  string contents = 4;
 }
