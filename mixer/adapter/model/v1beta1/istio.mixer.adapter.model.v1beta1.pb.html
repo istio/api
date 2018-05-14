@@ -542,28 +542,32 @@ If <code>QuotaParams.best_effort</code> is false, this will be either 0 or &gt;=
 <tr id="TemplateVariety.TEMPLATE_VARIETY_CHECK">
 <td><code>TEMPLATE_VARIETY_CHECK</code></td>
 <td>
-<p>Makes the template applicable for Mixer&rsquo;s check calls.</p>
+<p>Makes the template applicable for Mixer&rsquo;s check calls. Instances of such template are created during
+report calls in Mixer and passed tothe handlers based on the rule configurations.</p>
 
 </td>
 </tr>
 <tr id="TemplateVariety.TEMPLATE_VARIETY_REPORT">
 <td><code>TEMPLATE_VARIETY_REPORT</code></td>
 <td>
-<p>Makes the template applicable for Mixer&rsquo;s report calls.</p>
+<p>Makes the template applicable for Mixer&rsquo;s report calls. Instances of such template are created during
+check calls in Mixer and passed tothe handlers based on the rule configurations.</p>
 
 </td>
 </tr>
 <tr id="TemplateVariety.TEMPLATE_VARIETY_QUOTA">
 <td><code>TEMPLATE_VARIETY_QUOTA</code></td>
 <td>
-<p>Makes the template applicable for Mixer&rsquo;s quota calls.</p>
+<p>Makes the template applicable for Mixer&rsquo;s quota calls. Instances of such template are created during
+quota check calls in Mixer and passed tothe handlers based on the rule configurations.</p>
 
 </td>
 </tr>
 <tr id="TemplateVariety.TEMPLATE_VARIETY_ATTRIBUTE_GENERATOR">
 <td><code>TEMPLATE_VARIETY_ATTRIBUTE_GENERATOR</code></td>
 <td>
-<p>Makes the template applicable for Mixer&rsquo;s quota calls.</p>
+<p>Makes the template applicable for Mixer&rsquo;s attribute generation phase. Instances of such template are created during
+attribute pre-processing generation phase and passed tothe handlers based on the rule configurations.</p>
 
 </td>
 </tr>
