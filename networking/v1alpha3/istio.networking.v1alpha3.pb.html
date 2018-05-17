@@ -3,7 +3,7 @@ title: Route Rules v1alpha3
 description: Configuration affecting traffic routing
 location: https://istio.io/docs/reference/config/istio.networking.v1alpha3.html
 layout: protoc-gen-docs
-number_of_entries: 39
+number_of_entries: 48
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -677,6 +677,361 @@ be 100.</p>
 </tbody>
 </table>
 </section>
+<h2 id="FilterAugment">FilterAugment</h2>
+<section>
+<p># Overview</p>
+
+<p>A <code>FilterAugment</code> describes a filter to insert into the processing chain for
+ mesh traffic. It includes a <code>match</code> that selects which listeners to insert
+ the filter into, an <code>order</code> that specifies where in the filter chain to
+ insert it, and the filter configuration itself.</p>
+
+<p>A given listener may match multiple <code>FilterAugment</code> objects, in which case
+ each filter is inserted, including perhaps inserting the same kind of filter
+ multiple times, with different or identical configuration. If multiple
+ filters use the same <code>Order</code>, the actual resultant ordering will be undefined
+ and may not be stable over the life of the listener. Users are strongly
+ encouraged to use <code>BEFORE</code> and <code>AFTER</code> order directives in cases where
+ filter ordering is desired.</p>
+
+<p>The following example configures a Lua filter that authorizes an inbound
+ request by calling an external service.</p>
+
+<pre><code> apiVersion: networking.istio.io/v1alpha3
+ kind: FilterAugment
+ metadata:
+   name: reviews-route
+ spec:
+   matches:
+   - hosts: [reviews.prod.svc.cluster.local]
+     directions: [INBOUND]
+   order:
+     position: BEFORE
+     relativeTo: router
+   httpFilter:
+     name: envoy.lua
+     config: |
+      function envoy_on_request(request_handle)
+        -- Make an HTTP call to an upstream host with the following headers, body, and timeout.
+        local headers, body = request_handle:httpCall(
+                               &quot;outbound||https|internal-auth-server.com&quot;,
+                               &lbrace;
+                                 [&quot;:method&quot;] = &quot;POST&quot;,
+                                 [&quot;:path&quot;] = &quot;/authorizeMeNow&quot;,
+                                 [&quot;:authority&quot;] = &quot;internal-auth-server.com&quot;
+                                },
+                               &quot;username=scoobydoo&quot;, 5000)
+         -- Add information from the HTTP call into the headers that are about to be sent to the next
+         -- filter in the filter chain.
+         request_handle:headers():add(&quot;upstream_foo&quot;, headers[&quot;foo&quot;])
+         request_handle:headers():add(&quot;upstream_body_size&quot;, #body)
+      end
+</code></pre>
+
+<p>and the associated ServiceEntry configuration to add
+ internal-auth-server.com to the service registry:</p>
+
+<pre><code> apiVersion: networking.istio.io/v1alpha3
+ kind: ServiceEntry
+ metadata:
+   name: external-svc
+ spec:
+   hosts:
+   - internal-auth-server.com
+   ports:
+   - number: 443
+     name: http
+     protocol: HTTP # not HTTPS.
+   discovery: DNS
+</code></pre>
+
+<p>and a DestinationRule to initiate TLS connections to the external service.</p>
+
+<pre><code> apiVersion: networking.istio.io/v1alpha3
+ kind: DestinationRule
+ metadata:
+   name: tls-example
+ spec:
+   name: internal-auth-server.com
+   trafficPolicy:
+     tls:
+       mode: SIMPLE # initiates HTTPS when talking to internal-auth-server.com
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="FilterAugment.matches">
+<td><code>matches</code></td>
+<td><code><a href="#FilterAugment.Match">FilterAugment.Match[]</a></code></td>
+<td>
+<p>Match criteria for the filter to be inserted. When more than one Match is
+included, a listener may match any for the filter to be inserted.</p>
+
+</td>
+</tr>
+<tr id="FilterAugment.order">
+<td><code>order</code></td>
+<td><code><a href="#FilterAugment.Order">FilterAugment.Order</a></code></td>
+<td>
+<p>Where in the filter chain to insert the filter. If omitted the filter
+will be first in the resulting chain.</p>
+
+</td>
+</tr>
+<tr id="FilterAugment.http_filter" class="oneof oneof-start">
+<td><code>httpFilter</code></td>
+<td><code><a href="#HTTPFilter">HTTPFilter (oneof)</a></code></td>
+<td>
+<p>Insert an HTTP filter</p>
+
+</td>
+</tr>
+<tr id="FilterAugment.network_filter" class="oneof">
+<td><code>networkFilter</code></td>
+<td><code><a href="#NetworkFilter">NetworkFilter (oneof)</a></code></td>
+<td>
+<p>Insert a Network (e.g. TCP) filter</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="FilterAugment.Match">FilterAugment.Match</h2>
+<section>
+<p>Match describes conditions which a listener must meet in order for the
+filter to be inserted.  Within a single Match message, if more than one
+field is included, they all must match the listener. If a field is
+repeated, the listener can match any of the listed values. For example,
+a match</p>
+
+<pre><code>match:
+- gateways: [my-gateway, mesh]
+  listenerTypes: [TCP]
+</code></pre>
+
+<p>will TCP listeners on the gateway &ldquo;my-gateway&rdquo;, and also TCP listeners on
+sidecars in the service mesh.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="FilterAugment.Match.hosts">
+<td><code>hosts</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>The destination hosts to which traffic is being sent. Could be a DNS
+name with wildcard prefix or an IP address.  Depending on the
+platform, short-names can also be used instead of a FQDN (i.e. has no
+dots in the name). In such a scenario, the FQDN of the host would be
+derived based on the underlying platform. If omitted it will match
+any destination.</p>
+
+<p><em>Note for Kubernetes users</em>: When short names are used (e.g. &ldquo;reviews&rdquo;
+instead of &ldquo;reviews.default.svc.cluster.local&rdquo;), Istio will interpret
+the short name based on the namespace of the rule, not the service. A
+rule in the &ldquo;default&rdquo; namespace containing a host &ldquo;reviews will be
+interpreted as &ldquo;reviews.default.svc.cluster.local&rdquo;, irrespective of
+the actual namespace associated with the reviews service. <em>To avoid
+potential misconfigurations, it is recommended to always use fully
+qualified domain names over short names.</em></p>
+
+<p>The hosts field applies to both HTTP and TCP services. Service inside
+the mesh, i.e., those found in the service registry, must always be
+referred to using their alphanumeric names. IP addresses are allowed
+only for services defined via the Gateway.</p>
+
+</td>
+</tr>
+<tr id="FilterAugment.Match.gateways">
+<td><code>gateways</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>The names of gateways and sidecars to match. The reserved word <code>mesh</code>
+is used to imply all the sidecars in the mesh. When this field is
+omitted, it will match all gateways and sidecars. If a list of
+gateway names is provided, the rules will apply only to the gateways.
+To apply the configuration to both gateways and sidecars, specify
+<code>mesh</code> as one of the gateway names.</p>
+
+</td>
+</tr>
+<tr id="FilterAugment.Match.listener_types">
+<td><code>listenerTypes</code></td>
+<td><code><a href="#FilterAugment.Match.ListenerType">FilterAugment.Match.ListenerType[]</a></code></td>
+<td>
+<p>The types of listener to match.</p>
+
+</td>
+</tr>
+<tr id="FilterAugment.Match.directions">
+<td><code>directions</code></td>
+<td><code><a href="#FilterAugment.Match.Direction">FilterAugment.Match.Direction[]</a></code></td>
+<td>
+<p>The listener directions to match. Only applies to sidecar proxies.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="FilterAugment.Match.Direction">FilterAugment.Match.Direction</h2>
+<section>
+<p>The Direction is which way traffic flows through the listener. This
+only applies to sidecar proxies.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="FilterAugment.Match.Direction.INBOUND">
+<td><code>INBOUND</code></td>
+<td>
+<p>The upstream service instance is local, and the downstream client
+is remote.</p>
+
+</td>
+</tr>
+<tr id="FilterAugment.Match.Direction.OUTBOUND">
+<td><code>OUTBOUND</code></td>
+<td>
+<p>The upstream service instance is remote, and the downstream
+client is local.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="FilterAugment.Match.ListenerType">FilterAugment.Match.ListenerType</h2>
+<section>
+<p>ListenerType describes the type of listener to insert the filter
+into.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="FilterAugment.Match.ListenerType.HTTP">
+<td><code>HTTP</code></td>
+<td>
+<p>The listener is an HTTP listener.  Note that HTTP filters can
+only be inserted into HTTP listeners.</p>
+
+</td>
+</tr>
+<tr id="FilterAugment.Match.ListenerType.TCP">
+<td><code>TCP</code></td>
+<td>
+<p>The listener is a TCP listener. Network filters can be inserted
+into either HTTP or TCP listeners.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="FilterAugment.Order">FilterAugment.Order</h2>
+<section>
+<p>Order describes where in the filter chain to insert the filter.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="FilterAugment.Order.position">
+<td><code>position</code></td>
+<td><code><a href="#FilterAugment.Order.Position">FilterAugment.Order.Position</a></code></td>
+<td>
+<p>Position of this filter relative to another or the entire chain.</p>
+
+</td>
+</tr>
+<tr id="FilterAugment.Order.relative_to">
+<td><code>relativeTo</code></td>
+<td><code>string</code></td>
+<td>
+<p>Name of the filter the postion is relative to, for <code>BEFORE</code> and
+<code>AFTER</code> positions.  Ignored for <code>FIRST</code> or <code>LAST</code>.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="FilterAugment.Order.Position">FilterAugment.Order.Position</h2>
+<section>
+<p>The position of the filter relative to another or the entire chain.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="FilterAugment.Order.Position.FIRST">
+<td><code>FIRST</code></td>
+<td>
+<p>The filter should be first in the resulting chain.</p>
+
+</td>
+</tr>
+<tr id="FilterAugment.Order.Position.LAST">
+<td><code>LAST</code></td>
+<td>
+<p>The filter should be last in the resulting chain.</p>
+
+</td>
+</tr>
+<tr id="FilterAugment.Order.Position.BEFORE">
+<td><code>BEFORE</code></td>
+<td>
+<p>The filter should be immediately before the filter named in the
+<code>relative_to</code> field. If the relative filter is not present, the
+inserted filter will be last.</p>
+
+</td>
+</tr>
+<tr id="FilterAugment.Order.Position.AFTER">
+<td><code>AFTER</code></td>
+<td>
+<p>The filter should be immediately after the filter named in the
+<code>relative_to</code> field. If the relative filter is not present, the
+inserted filter will be last.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="Gateway">Gateway</h2>
 <section>
 <p><code>Gateway</code> describes a load balancer operating at the edge of the mesh
@@ -1021,6 +1376,40 @@ unspecified, all request will be delayed.</p>
 <p>(&ndash; Add a delay (based on an exponential function) before forwarding
 the request. mean delay needed to derive the exponential delay
 values &ndash;)</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HTTPFilter">HTTPFilter</h2>
+<section>
+<p>An HTTPFilter operates on HTTP requests and responses.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HTTPFilter.name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>The name of the filter to instantiate. The name must match a supported
+filter.</p>
+
+</td>
+</tr>
+<tr id="HTTPFilter.config">
+<td><code>config</code></td>
+<td><code><a href="#google.protobuf.Struct">google.protobuf.Struct</a></code></td>
+<td>
+<p>Filter specific configuration which depends on the filter being
+instantiated. See the supported filters for further documentation.</p>
 
 </td>
 </tr>
@@ -1699,6 +2088,41 @@ requested by the caller without doing any form of load
 balancing. This option must be used with care. It is meant for
 advanced use cases. Refer to Original Destination load balancer in
 Envoy for further details.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="NetworkFilter">NetworkFilter</h2>
+<section>
+<p>A NetworkFilter operates the the network layer and operates on connections
+and byte streams.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="NetworkFilter.name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>The name of the filter to instantiate. The name must match a supported
+filter.</p>
+
+</td>
+</tr>
+<tr id="NetworkFilter.config">
+<td><code>config</code></td>
+<td><code><a href="#google.protobuf.Struct">google.protobuf.Struct</a></code></td>
+<td>
+<p>Filter specific configuration which depends on the filter being
+instantiated. See the supported filters for further documentation.</p>
 
 </td>
 </tr>
@@ -3048,6 +3472,37 @@ The first rule matching an incoming request is used.</p>
 <td>
 <p>An ordered list of route rules for TCP traffic.
 The first rule matching an incoming request is used.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="google.protobuf.Struct">google.protobuf.Struct</h2>
+<section>
+<p><code>Struct</code> represents a structured data value, consisting of fields
+which map to dynamically typed values. In some languages, <code>Struct</code>
+might be supported by a native representation. For example, in
+scripting languages like JS a struct is represented as an
+object. The details of that representation are described together
+with the proto support for the language.</p>
+
+<p>The JSON representation for <code>Struct</code> is JSON object.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="google.protobuf.Struct.fields">
+<td><code>fields</code></td>
+<td><code>map&lt;string,&nbsp;<a href="#google.protobuf.Value">google.protobuf.Value</a>&gt;</code></td>
+<td>
+<p>Unordered map of dynamically typed values.</p>
 
 </td>
 </tr>

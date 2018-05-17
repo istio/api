@@ -1,0 +1,249 @@
+// Copyright 2018 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "google/protobuf/struct.proto";
+
+package istio.networking.v1alpha3;
+
+option go_package = "istio.io/api/networking/v1alpha3";
+
+//
+// # Overview
+//
+// A `FilterAugment` describes a filter to insert into the processing chain for
+// mesh traffic. It includes a `match` that selects which listeners to insert
+// the filter into, an `order` that specifies where in the filter chain to
+// insert it, and the filter configuration itself.
+//
+// A given listener may match multiple `FilterAugment` objects, in which case
+// each filter is inserted, including perhaps inserting the same kind of filter
+// multiple times, with different or identical configuration. If multiple
+// filters use the same `Order`, the actual resultant ordering will be undefined
+// and may not be stable over the life of the listener. Users are strongly
+// encouraged to use `BEFORE` and `AFTER` order directives in cases where
+// filter ordering is desired.
+//
+// The following example configures a Lua filter that authorizes an inbound
+// request by calling an external service.
+//
+//     apiVersion: networking.istio.io/v1alpha3
+//     kind: FilterAugment
+//     metadata:
+//       name: reviews-route
+//     spec:
+//       matches:
+//       - hosts: [reviews.prod.svc.cluster.local]
+//         directions: [INBOUND]
+//       order:
+//         position: BEFORE
+//         relativeTo: router
+//       httpFilter:
+//         name: envoy.lua
+//         config: |
+//          function envoy_on_request(request_handle)
+//            -- Make an HTTP call to an upstream host with the following headers, body, and timeout.
+//            local headers, body = request_handle:httpCall(
+//                                   "outbound||https|internal-auth-server.com",
+//                                   {
+//                                     [":method"] = "POST",
+//                                     [":path"] = "/authorizeMeNow",
+//                                     [":authority"] = "internal-auth-server.com"
+//                                    },
+//                                   "username=scoobydoo", 5000)
+//             -- Add information from the HTTP call into the headers that are about to be sent to the next
+//             -- filter in the filter chain.
+//             request_handle:headers():add("upstream_foo", headers["foo"])
+//             request_handle:headers():add("upstream_body_size", #body)
+//          end
+//
+// and the associated ServiceEntry configuration to add
+// internal-auth-server.com to the service registry:
+//
+//     apiVersion: networking.istio.io/v1alpha3
+//     kind: ServiceEntry
+//     metadata:
+//       name: external-svc
+//     spec:
+//       hosts:
+//       - internal-auth-server.com
+//       ports:
+//       - number: 443
+//         name: http
+//         protocol: HTTP # not HTTPS.
+//       discovery: DNS
+//
+// and a DestinationRule to initiate TLS connections to the external service.
+//
+//     apiVersion: networking.istio.io/v1alpha3
+//     kind: DestinationRule
+//     metadata:
+//       name: tls-example
+//     spec:
+//       name: internal-auth-server.com
+//       trafficPolicy:
+//         tls:
+//           mode: SIMPLE # initiates HTTPS when talking to internal-auth-server.com
+//
+//
+message FilterAugment {
+
+    // Match describes conditions which a listener must meet in order for the
+    // filter to be inserted.  Within a single Match message, if more than one
+    // field is included, they all must match the listener. If a field is
+    // repeated, the listener can match any of the listed values. For example,
+    // a match
+    //
+    //     match:
+    //     - gateways: [my-gateway, mesh]
+    //       listenerTypes: [TCP]
+    //
+    // will TCP listeners on the gateway "my-gateway", and also TCP listeners on
+    // sidecars in the service mesh.
+    message Match {
+        // The destination hosts to which traffic is being sent. Could be a DNS
+        // name with wildcard prefix or an IP address.  Depending on the
+        // platform, short-names can also be used instead of a FQDN (i.e. has no
+        // dots in the name). In such a scenario, the FQDN of the host would be
+        // derived based on the underlying platform. If omitted it will match
+        // any destination.
+        //
+        // *Note for Kubernetes users*: When short names are used (e.g. "reviews"
+        // instead of "reviews.default.svc.cluster.local"), Istio will interpret
+        // the short name based on the namespace of the rule, not the service. A
+        // rule in the "default" namespace containing a host "reviews will be
+        // interpreted as "reviews.default.svc.cluster.local", irrespective of
+        // the actual namespace associated with the reviews service. _To avoid
+        // potential misconfigurations, it is recommended to always use fully
+        // qualified domain names over short names._
+        //
+        // The hosts field applies to both HTTP and TCP services. Service inside
+        // the mesh, i.e., those found in the service registry, must always be
+        // referred to using their alphanumeric names. IP addresses are allowed
+        // only for services defined via the Gateway.
+        repeated string hosts = 1;
+
+        // The names of gateways and sidecars to match. The reserved word `mesh`
+        // is used to imply all the sidecars in the mesh. When this field is
+        // omitted, it will match all gateways and sidecars. If a list of
+        // gateway names is provided, the rules will apply only to the gateways.
+        // To apply the configuration to both gateways and sidecars, specify
+        // `mesh` as one of the gateway names.
+        repeated string gateways = 2;
+
+        // ListenerType describes the type of listener to insert the filter
+        // into.
+        enum ListenerType {
+            // The listener is an HTTP listener.  Note that HTTP filters can
+            // only be inserted into HTTP listeners.
+            HTTP = 0;
+
+            // The listener is a TCP listener. Network filters can be inserted
+            // into either HTTP or TCP listeners.
+            TCP = 1;
+        }
+
+        // The types of listener to match.
+        repeated ListenerType listener_types = 3;
+
+        // The Direction is which way traffic flows through the listener. This
+        // only applies to sidecar proxies.
+        enum Direction {
+            // The upstream service instance is local, and the downstream client
+            // is remote.
+            INBOUND = 0;
+
+            // The upstream service instance is remote, and the downstream
+            // client is local.
+            OUTBOUND = 1;
+        }
+
+        // The listener directions to match. Only applies to sidecar proxies.
+        repeated Direction directions = 4;
+    }
+
+    // Match criteria for the filter to be inserted. When more than one Match is
+    // included, a listener may match any for the filter to be inserted.
+    repeated Match matches = 1;
+
+    // Order describes where in the filter chain to insert the filter.
+    message Order {
+
+        // The position of the filter relative to another or the entire chain.
+        enum Position {
+            // The filter should be first in the resulting chain.
+            FIRST = 0;
+
+            // The filter should be last in the resulting chain.
+            LAST = 1;
+
+            // The filter should be immediately before the filter named in the
+            // `relative_to` field. If the relative filter is not present, the
+            // inserted filter will be last.
+            BEFORE = 2;
+
+            // The filter should be immediately after the filter named in the
+            // `relative_to` field. If the relative filter is not present, the
+            // inserted filter will be last.
+            AFTER = 3;
+        }
+
+        // Position of this filter relative to another or the entire chain.
+        Position position = 1;
+
+        // Name of the filter the postion is relative to, for `BEFORE` and
+        // `AFTER` positions.  Ignored for `FIRST` or `LAST`.
+        string relative_to = 2;
+    }
+
+    // Where in the filter chain to insert the filter. If omitted the filter
+    // will be first in the resulting chain.
+    Order order = 2;
+
+    oneof filter {
+        // Insert an HTTP filter
+        HTTPFilter http_filter = 3;
+
+        // Insert a Network (e.g. TCP) filter
+        NetworkFilter network_filter = 4;
+    }
+}
+
+// Note that while at present HTTPFilter and NetworkFilter are identical
+// messages, we keep them separate so that in future we have flexibility to add
+// to one without the other.
+
+// An HTTPFilter operates on HTTP requests and responses.
+message HTTPFilter {
+    // The name of the filter to instantiate. The name must match a supported
+    // filter.
+    string name = 1;
+
+    // Filter specific configuration which depends on the filter being
+    // instantiated. See the supported filters for further documentation.
+    google.protobuf.Struct config = 2;
+}
+
+// A NetworkFilter operates the the network layer and operates on connections
+// and byte streams.
+message NetworkFilter {
+    // The name of the filter to instantiate. The name must match a supported
+    // filter.
+    string name = 1;
+
+    // Filter specific configuration which depends on the filter being
+    // instantiated. See the supported filters for further documentation.
+    google.protobuf.Struct config = 2;
+}
