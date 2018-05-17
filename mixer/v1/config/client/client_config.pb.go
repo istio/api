@@ -65,6 +65,8 @@ type ServiceConfig struct {
 	DisableReportCalls bool `protobuf:"varint,2,opt,name=disable_report_calls,json=disableReportCalls,proto3" json:"disable_report_calls,omitempty"`
 	// Send these attributes to Mixer in both Check and Report. This
 	// typically includes the "destination.service" attribute.
+	// In case of a per-route override, these attributes take precedence
+	// over the attributes supplied in the client configuration.
 	MixerAttributes *istio_mixer_v1.Attributes `protobuf:"bytes,3,opt,name=mixer_attributes,json=mixerAttributes" json:"mixer_attributes,omitempty"`
 	// HTTP API specifications to generate API attributes.
 	HttpApiSpec []*HTTPAPISpec `protobuf:"bytes,4,rep,name=http_api_spec,json=httpApiSpec" json:"http_api_spec,omitempty"`
@@ -77,6 +79,8 @@ type ServiceConfig struct {
 	NetworkFailPolicy *NetworkFailPolicy `protobuf:"bytes,7,opt,name=network_fail_policy,json=networkFailPolicy" json:"network_fail_policy,omitempty"`
 	// Default attributes to forward to upstream. This typically
 	// includes the "source.ip" and "source.uid" attributes.
+	// In case of a per-route override, these attributes take precedence
+	// over the attributes supplied in the client configuration.
 	ForwardAttributes *istio_mixer_v1.Attributes `protobuf:"bytes,8,opt,name=forward_attributes,json=forwardAttributes" json:"forward_attributes,omitempty"`
 }
 
