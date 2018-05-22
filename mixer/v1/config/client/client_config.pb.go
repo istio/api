@@ -129,7 +129,8 @@ type TransportConfig struct {
 	// Istio Grafana dashboards to be reconfigured to use the new name.
 	ReportCluster string `protobuf:"bytes,7,opt,name=report_cluster,json=reportCluster,proto3" json:"report_cluster,omitempty"`
 	// Default attributes to forward to mixer upstream. This typically
-	// includes the "source.ip" and "source.uid" attributes.
+	// includes the "source.ip" and "source.uid" attributes. These
+	// attributes are consumed by the proxy in front of mixer.
 	AttributesForMixerProxy *istio_mixer_v1.Attributes `protobuf:"bytes,8,opt,name=attributes_for_mixer_proxy,json=attributesForMixerProxy" json:"attributes_for_mixer_proxy,omitempty"`
 }
 

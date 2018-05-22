@@ -131,7 +131,8 @@ message TransportConfig {
   string report_cluster = 7;
 
   // Default attributes to forward to mixer upstream. This typically
-  // includes the "source.ip" and "source.uid" attributes.
+  // includes the "source.ip" and "source.uid" attributes. These
+  // attributes are consumed by the proxy in front of mixer.
   Attributes attributes_for_mixer_proxy = 8;
 }
 
