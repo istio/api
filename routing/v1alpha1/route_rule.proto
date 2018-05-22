@@ -26,7 +26,7 @@ import "routing/v1alpha1/l4_fault.proto";
 // $front_matter: redirect_from: /docs/reference/config/traffic-rules/routing-rules.html
 
 // **Note: This version of the traffic management API has been deprecated and will
-// not be supported from Istio 0.9 onwards.**
+// not be supported after Istio 0.8.**
 //
 // Configuration affecting traffic routing. Here are a few terms useful to define
 // in the context of routing rules.
