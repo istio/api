@@ -129,6 +129,10 @@ message TransportConfig {
   // NOTE: Any value other than the default "mixer_server" will require the
   // Istio Grafana dashboards to be reconfigured to use the new name.
   string report_cluster = 7;
+
+  // Default attributes to forward to mixer upstream. This typically
+  // includes the "source.ip" and "source.uid" attributes.
+  Attributes control_forward_attributes = 8;
 }
 
 // Defines the client config for HTTP.
