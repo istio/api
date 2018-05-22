@@ -256,25 +256,21 @@
 - request.auth.raw_claims
 
 - source.metadata
+- source.owner
 - source.services
 - source.workload.uid
 - source.workload.name
 - source.workload.namespace
-- source.workload.labels
-- source.workload.metadata
 
 - destination.metadata
+- destination.owner
 - destination.principal
 - destination.workload.uid
 - destination.workload.name
 - destination.workload.namespace
-- destination.workload.labels
-- destination.workload.metadata
 - destination.service.uid
 - destination.service.name
 - destination.service.namespace
-- destination.service.labels
-- destination.service.metadata
 - destination.service.host
 - destination.container.name
 - destination.container.image
