@@ -132,7 +132,7 @@ message TransportConfig {
 
   // Default attributes to forward to mixer upstream. This typically
   // includes the "source.ip" and "source.uid" attributes.
-  Attributes control_forward_attributes = 8;
+  Attributes attributes_for_mixer_proxy = 8;
 }
 
 // Defines the client config for HTTP.
