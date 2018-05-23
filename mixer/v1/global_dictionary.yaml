@@ -277,5 +277,5 @@
 - destination.container.name
 - destination.container.image
 
-- context.reporter.proxy
+- context.reporter.local
 - context.reporter.uid
