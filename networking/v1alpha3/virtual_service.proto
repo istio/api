@@ -382,6 +382,7 @@ message HTTPRoute {
   map<string, string> append_headers = 11;
   // Additional HTTP headers to remove before forwarding a request to the
   // destination service.
+  // $hide_from_docs
   map<string, string> remove_headers = 12;
 }
 
