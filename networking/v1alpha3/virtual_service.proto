@@ -380,6 +380,9 @@ message HTTPRoute {
   // Additional HTTP headers to add before forwarding a request to the
   // destination service.
   map<string, string> append_headers = 11;
+  // Additional HTTP headers to remove before forwarding a request to the
+  // destination service.
+  map<string, string> remove_headers = 12;
 }
 
 // Describes match conditions and actions for routing TCP traffic. The
