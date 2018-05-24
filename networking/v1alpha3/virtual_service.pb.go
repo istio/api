@@ -387,7 +387,7 @@ type HTTPRoute struct {
 	// Additional HTTP headers to add before forwarding a request to the
 	// destination service.
 	AppendHeaders map[string]string `protobuf:"bytes,11,rep,name=append_headers,json=appendHeaders" json:"append_headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// Additional HTTP headers to remove before forwarding a request to the
+	// Additional HTTP headers to remove before forwarding a response to the
 	// destination service.
 	// $hide_from_docs
 	RemoveHeaders map[string]string `protobuf:"bytes,12,rep,name=remove_headers,json=removeHeaders" json:"remove_headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
