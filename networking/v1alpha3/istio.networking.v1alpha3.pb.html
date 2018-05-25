@@ -3,7 +3,7 @@ title: Route Rules v1alpha3
 description: Configuration affecting traffic routing
 location: https://istio.io/docs/reference/config/istio.networking.v1alpha3.html
 layout: protoc-gen-docs
-number_of_entries: 48
+number_of_entries: 51
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -677,86 +677,9 @@ be 100.</p>
 </tbody>
 </table>
 </section>
-<h2 id="FilterAugment">FilterAugment</h2>
+<h2 id="FilterOrder">FilterOrder</h2>
 <section>
-<p># Overview</p>
-
-<p>A <code>FilterAugment</code> describes a filter to insert into the processing chain for
- mesh traffic. It includes a <code>match</code> that selects which listeners to insert
- the filter into, an <code>order</code> that specifies where in the filter chain to
- insert it, and the filter configuration itself.</p>
-
-<p>A given listener may match multiple <code>FilterAugment</code> objects, in which case
- each filter is inserted, including perhaps inserting the same kind of filter
- multiple times, with different or identical configuration. If multiple
- filters use the same <code>Order</code>, the actual resultant ordering will be undefined
- and may not be stable over the life of the listener. Users are strongly
- encouraged to use <code>BEFORE</code> and <code>AFTER</code> order directives in cases where
- filter ordering is desired.</p>
-
-<p>The following example configures a Lua filter that authorizes an inbound
- request by calling an external service.</p>
-
-<pre><code> apiVersion: networking.istio.io/v1alpha3
- kind: FilterAugment
- metadata:
-   name: reviews-route
- spec:
-   matches:
-   - hosts: [reviews.prod.svc.cluster.local]
-     directions: [INBOUND]
-   order:
-     position: BEFORE
-     relativeTo: router
-   httpFilter:
-     name: envoy.lua
-     config: |
-      function envoy_on_request(request_handle)
-        -- Make an HTTP call to an upstream host with the following headers, body, and timeout.
-        local headers, body = request_handle:httpCall(
-                               &quot;outbound||https|internal-auth-server.com&quot;,
-                               &lbrace;
-                                 [&quot;:method&quot;] = &quot;POST&quot;,
-                                 [&quot;:path&quot;] = &quot;/authorizeMeNow&quot;,
-                                 [&quot;:authority&quot;] = &quot;internal-auth-server.com&quot;
-                                },
-                               &quot;username=scoobydoo&quot;, 5000)
-         -- Add information from the HTTP call into the headers that are about to be sent to the next
-         -- filter in the filter chain.
-         request_handle:headers():add(&quot;upstream_foo&quot;, headers[&quot;foo&quot;])
-         request_handle:headers():add(&quot;upstream_body_size&quot;, #body)
-      end
-</code></pre>
-
-<p>and the associated ServiceEntry configuration to add
- internal-auth-server.com to the service registry:</p>
-
-<pre><code> apiVersion: networking.istio.io/v1alpha3
- kind: ServiceEntry
- metadata:
-   name: external-svc
- spec:
-   hosts:
-   - internal-auth-server.com
-   ports:
-   - number: 443
-     name: http
-     protocol: HTTP # not HTTPS.
-   discovery: DNS
-</code></pre>
-
-<p>and a DestinationRule to initiate TLS connections to the external service.</p>
-
-<pre><code> apiVersion: networking.istio.io/v1alpha3
- kind: DestinationRule
- metadata:
-   name: tls-example
- spec:
-   name: internal-auth-server.com
-   trafficPolicy:
-     tls:
-       mode: SIMPLE # initiates HTTPS when talking to internal-auth-server.com
-</code></pre>
+<p>FilterOrder describes where in the filter chain to insert the filter.</p>
 
 <table class="message-fields">
 <thead>
@@ -767,213 +690,15 @@ be 100.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="FilterAugment.matches">
-<td><code>matches</code></td>
-<td><code><a href="#FilterAugment.Match">FilterAugment.Match[]</a></code></td>
-<td>
-<p>Match criteria for the filter to be inserted. When more than one Match is
-included, a listener may match any for the filter to be inserted.</p>
-
-</td>
-</tr>
-<tr id="FilterAugment.order">
-<td><code>order</code></td>
-<td><code><a href="#FilterAugment.Order">FilterAugment.Order</a></code></td>
-<td>
-<p>Where in the filter chain to insert the filter. If omitted the filter
-will be first in the resulting chain.</p>
-
-</td>
-</tr>
-<tr id="FilterAugment.http_filter" class="oneof oneof-start">
-<td><code>httpFilter</code></td>
-<td><code><a href="#HTTPFilter">HTTPFilter (oneof)</a></code></td>
-<td>
-<p>Insert an HTTP filter</p>
-
-</td>
-</tr>
-<tr id="FilterAugment.network_filter" class="oneof">
-<td><code>networkFilter</code></td>
-<td><code><a href="#NetworkFilter">NetworkFilter (oneof)</a></code></td>
-<td>
-<p>Insert a Network (e.g. TCP) filter</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="FilterAugment.Match">FilterAugment.Match</h2>
-<section>
-<p>Match describes conditions which a listener must meet in order for the
-filter to be inserted.  Within a single Match message, if more than one
-field is included, they all must match the listener. If a field is
-repeated, the listener can match any of the listed values. For example,
-a match</p>
-
-<pre><code>match:
-- gateways: [my-gateway, mesh]
-  listenerTypes: [TCP]
-</code></pre>
-
-<p>will TCP listeners on the gateway &ldquo;my-gateway&rdquo;, and also TCP listeners on
-sidecars in the service mesh.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="FilterAugment.Match.hosts">
-<td><code>hosts</code></td>
-<td><code>string[]</code></td>
-<td>
-<p>The destination hosts to which traffic is being sent. Could be a DNS
-name with wildcard prefix or an IP address.  Depending on the
-platform, short-names can also be used instead of a FQDN (i.e. has no
-dots in the name). In such a scenario, the FQDN of the host would be
-derived based on the underlying platform. If omitted it will match
-any destination.</p>
-
-<p><em>Note for Kubernetes users</em>: When short names are used (e.g. &ldquo;reviews&rdquo;
-instead of &ldquo;reviews.default.svc.cluster.local&rdquo;), Istio will interpret
-the short name based on the namespace of the rule, not the service. A
-rule in the &ldquo;default&rdquo; namespace containing a host &ldquo;reviews will be
-interpreted as &ldquo;reviews.default.svc.cluster.local&rdquo;, irrespective of
-the actual namespace associated with the reviews service. <em>To avoid
-potential misconfigurations, it is recommended to always use fully
-qualified domain names over short names.</em></p>
-
-<p>The hosts field applies to both HTTP and TCP services. Service inside
-the mesh, i.e., those found in the service registry, must always be
-referred to using their alphanumeric names. IP addresses are allowed
-only for services defined via the Gateway.</p>
-
-</td>
-</tr>
-<tr id="FilterAugment.Match.gateways">
-<td><code>gateways</code></td>
-<td><code>string[]</code></td>
-<td>
-<p>The names of gateways and sidecars to match. The reserved word <code>mesh</code>
-is used to imply all the sidecars in the mesh. When this field is
-omitted, it will match all gateways and sidecars. If a list of
-gateway names is provided, the rules will apply only to the gateways.
-To apply the configuration to both gateways and sidecars, specify
-<code>mesh</code> as one of the gateway names.</p>
-
-</td>
-</tr>
-<tr id="FilterAugment.Match.listener_types">
-<td><code>listenerTypes</code></td>
-<td><code><a href="#FilterAugment.Match.ListenerType">FilterAugment.Match.ListenerType[]</a></code></td>
-<td>
-<p>The types of listener to match.</p>
-
-</td>
-</tr>
-<tr id="FilterAugment.Match.directions">
-<td><code>directions</code></td>
-<td><code><a href="#FilterAugment.Match.Direction">FilterAugment.Match.Direction[]</a></code></td>
-<td>
-<p>The listener directions to match. Only applies to sidecar proxies.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="FilterAugment.Match.Direction">FilterAugment.Match.Direction</h2>
-<section>
-<p>The Direction is which way traffic flows through the listener. This
-only applies to sidecar proxies.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="FilterAugment.Match.Direction.INBOUND">
-<td><code>INBOUND</code></td>
-<td>
-<p>The upstream service instance is local, and the downstream client
-is remote.</p>
-
-</td>
-</tr>
-<tr id="FilterAugment.Match.Direction.OUTBOUND">
-<td><code>OUTBOUND</code></td>
-<td>
-<p>The upstream service instance is remote, and the downstream
-client is local.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="FilterAugment.Match.ListenerType">FilterAugment.Match.ListenerType</h2>
-<section>
-<p>ListenerType describes the type of listener to insert the filter
-into.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="FilterAugment.Match.ListenerType.HTTP">
-<td><code>HTTP</code></td>
-<td>
-<p>The listener is an HTTP listener.  Note that HTTP filters can
-only be inserted into HTTP listeners.</p>
-
-</td>
-</tr>
-<tr id="FilterAugment.Match.ListenerType.TCP">
-<td><code>TCP</code></td>
-<td>
-<p>The listener is a TCP listener. Network filters can be inserted
-into either HTTP or TCP listeners.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="FilterAugment.Order">FilterAugment.Order</h2>
-<section>
-<p>Order describes where in the filter chain to insert the filter.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="FilterAugment.Order.position">
+<tr id="FilterOrder.position">
 <td><code>position</code></td>
-<td><code><a href="#FilterAugment.Order.Position">FilterAugment.Order.Position</a></code></td>
+<td><code><a href="#FilterOrder.Position">FilterOrder.Position</a></code></td>
 <td>
 <p>Position of this filter relative to another or the entire chain.</p>
 
 </td>
 </tr>
-<tr id="FilterAugment.Order.relative_to">
+<tr id="FilterOrder.relative_to">
 <td><code>relativeTo</code></td>
 <td><code>string</code></td>
 <td>
@@ -985,7 +710,7 @@ into either HTTP or TCP listeners.</p>
 </tbody>
 </table>
 </section>
-<h2 id="FilterAugment.Order.Position">FilterAugment.Order.Position</h2>
+<h2 id="FilterOrder.Position">FilterOrder.Position</h2>
 <section>
 <p>The position of the filter relative to another or the entire chain.</p>
 
@@ -997,21 +722,21 @@ into either HTTP or TCP listeners.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="FilterAugment.Order.Position.FIRST">
+<tr id="FilterOrder.Position.FIRST">
 <td><code>FIRST</code></td>
 <td>
 <p>The filter should be first in the resulting chain.</p>
 
 </td>
 </tr>
-<tr id="FilterAugment.Order.Position.LAST">
+<tr id="FilterOrder.Position.LAST">
 <td><code>LAST</code></td>
 <td>
 <p>The filter should be last in the resulting chain.</p>
 
 </td>
 </tr>
-<tr id="FilterAugment.Order.Position.BEFORE">
+<tr id="FilterOrder.Position.BEFORE">
 <td><code>BEFORE</code></td>
 <td>
 <p>The filter should be immediately before the filter named in the
@@ -1020,7 +745,7 @@ inserted filter will be last.</p>
 
 </td>
 </tr>
-<tr id="FilterAugment.Order.Position.AFTER">
+<tr id="FilterOrder.Position.AFTER">
 <td><code>AFTER</code></td>
 <td>
 <p>The filter should be immediately after the filter named in the
@@ -1379,7 +1104,7 @@ values &ndash;)</p>
 </tbody>
 </table>
 </section>
-<h2 id="HTTPFilter">HTTPFilter</h2>
+<h2 id="HTTPFilterConfig">HTTPFilterConfig</h2>
 <section>
 <p>An HTTPFilter operates on HTTP requests and responses.</p>
 
@@ -1392,7 +1117,7 @@ values &ndash;)</p>
 </tr>
 </thead>
 <tbody>
-<tr id="HTTPFilter.name">
+<tr id="HTTPFilterConfig.name">
 <td><code>name</code></td>
 <td><code>string</code></td>
 <td>
@@ -1401,7 +1126,7 @@ filter.</p>
 
 </td>
 </tr>
-<tr id="HTTPFilter.config">
+<tr id="HTTPFilterConfig.config">
 <td><code>config</code></td>
 <td><code><a href="#google.protobuf.Struct">google.protobuf.Struct</a></code></td>
 <td>
@@ -2091,7 +1816,7 @@ Envoy for further details.</p>
 </tbody>
 </table>
 </section>
-<h2 id="NetworkFilter">NetworkFilter</h2>
+<h2 id="NetworkFilterConfig">NetworkFilterConfig</h2>
 <section>
 <p>A NetworkFilter operates the the network layer and operates on connections
 and byte streams.</p>
@@ -2105,7 +1830,7 @@ and byte streams.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="NetworkFilter.name">
+<tr id="NetworkFilterConfig.name">
 <td><code>name</code></td>
 <td><code>string</code></td>
 <td>
@@ -2114,7 +1839,7 @@ filter.</p>
 
 </td>
 </tr>
-<tr id="NetworkFilter.config">
+<tr id="NetworkFilterConfig.config">
 <td><code>config</code></td>
 <td><code><a href="#google.protobuf.Struct">google.protobuf.Struct</a></code></td>
 <td>
@@ -2419,6 +2144,44 @@ newexample.com will not match.</p>
 these options to control if all http requests should be redirected to
 https, and the TLS modes to use.</p>
 
+</td>
+</tr>
+<tr id="Server.http_filters">
+<td><code>httpFilters</code></td>
+<td><code><a href="#Server.ExtraFilters">Server.ExtraFilters</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="Server.network_filters">
+<td><code>networkFilters</code></td>
+<td><code><a href="#Server.ExtraFilters">Server.ExtraFilters</a></code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Server.ExtraFilters">Server.ExtraFilters</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Server.ExtraFilters.order">
+<td><code>order</code></td>
+<td><code><a href="#FilterOrder">FilterOrder</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="Server.ExtraFilters.names">
+<td><code>names</code></td>
+<td><code>string[]</code></td>
+<td>
 </td>
 </tr>
 </tbody>
@@ -2866,6 +2629,390 @@ will resolve the DNS address specified in the hosts field, if
 wildcards are not used. If endpoints are specified, the DNS
 addresses specified in the endpoints will be resolved to determine
 the destination IP address.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="SidecarFilterBinding">SidecarFilterBinding</h2>
+<section>
+<p># Overview</p>
+
+<p>A <code>HTTPFilterConfig</code> and <code>NetworkFilterConfig</code> describe filters to insert
+ into the processing chain for mesh traffic.  Each consists of the filter&rsquo;s
+ name (in Envoy) and the configuration blob.</p>
+
+<p>Pilot creates listeners with different identifiers depending on whether
+ it is for a Gateway or Sidecar, and whether the listener is inbound or
+ outbound. The listeners created are summarized below.</p>
+
+<p>Direction   | Gateway    | Sidecar
+ &mdash;&mdash;&mdash;&mdash;|&mdash;&mdash;&mdash;&mdash;|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;
+ Inbound     | None       | per local service &amp; port
+ Outbound    | per Server | per HTTP port, per TCP service &amp; port</p>
+
+<p>Filters are inserted into the processing chain in different ways for gateway
+ and sidecar proxy listeners.</p>
+
+<p>To insert a filter into a <code>Gateway</code> listener, add the <code>HTTPFilterConfig</code> or
+ <code>NetworkFilterConfig</code> to the <code>Server</code>. For example, to add the filter defined
+ by the <code>HTTPFilterConfig</code> &ldquo;my-filter&rdquo; as the first filter, you can write the
+ following.</p>
+
+<pre><code class="language-yaml"> apiVersion: networking.istio.io/v1alpha3
+ kind: Gateway
+ metadata:
+   name: my-ingress
+ spec:
+   selector:
+     app: my-ingress-gateway
+   servers:
+   - port:
+       number: 80
+       name: http2
+       protocol: HTTP2
+     hosts:
+     - &quot;*&quot;
+     httpFilters:
+       order:
+         position: FIRST
+       names: [&quot;my-filter&quot;]
+</code></pre>
+
+<p>To insert a filter into a sidecar listener, use a <code>SidecarFilterBinding</code>
+ to select which sidecars and which listeners in the mesh to apply the filter.
+ It includes a <code>match</code> that selects which listeners to insert
+ the filter into, an <code>order</code> that specifies where in the filter chain to
+ insert it.</p>
+
+<p>A given listener may match multiple <code>SidecarFilterBinding</code> objects, in which
+ case each filter is inserted, including perhaps inserting the same kind of
+ filter multiple times, with different or identical configuration. If multiple
+ bindings use the same <code>Order</code>, the actual resultant ordering will be
+ undefined and may not be stable over the life of the listener. Users are
+ strongly encouraged to use <code>BEFORE</code> and <code>AFTER</code> order directives in cases
+ where filter ordering is desired.</p>
+
+<p>The following example configures a Lua filter that authorizes an inbound
+ request by calling an external service.</p>
+
+<pre><code> apiVersion: networking.istio.io/v1alpha3
+ kind: HTTPFilterConfig
+ metadata:
+   name: reviews-auth
+   namespace: istio-system
+ spec:
+     name: envoy.lua
+     config: |
+      function envoy_on_request(request_handle)
+        -- Make an HTTP call to an upstream host with the following headers, body, and timeout.
+        local headers, body = request_handle:httpCall(
+                               &quot;outbound||https|internal-auth-server.com&quot;,
+                               &lbrace;
+                                 [&quot;:method&quot;] = &quot;POST&quot;,
+                                 [&quot;:path&quot;] = &quot;/authorizeMeNow&quot;,
+                                 [&quot;:authority&quot;] = &quot;internal-auth-server.com&quot;
+                                },
+                               &quot;username=scoobydoo&quot;, 5000)
+         -- Add information from the HTTP call into the headers that are about to be sent to the next
+         -- filter in the filter chain.
+         request_handle:headers():add(&quot;upstream_foo&quot;, headers[&quot;foo&quot;])
+         request_handle:headers():add(&quot;upstream_body_size&quot;, #body)
+      end
+</code></pre>
+
+<p>To insert this Lua filter into the reviews service, use the following.</p>
+
+<pre><code> apiVersion: networking.istio.io/v1alpha3
+ kind: SidecarFilterBinding
+ metadata:
+   name: reviews-auth
+   namespace: istio-system
+ spec:
+   matches:
+   - inbound:
+       servicePorts:
+         - host: reviews.prod.svc.cluster.local
+           portName: http
+   order:
+     position: BEFORE
+     relativeTo: router
+   httpFilter: &quot;reviews-auth&quot;
+</code></pre>
+
+<p>and the associated ServiceEntry configuration to add
+ internal-auth-server.com to the service registry:</p>
+
+<pre><code> apiVersion: networking.istio.io/v1alpha3
+ kind: ServiceEntry
+ metadata:
+   name: external-svc
+ spec:
+   hosts:
+   - internal-auth-server.com
+   ports:
+   - number: 443
+     name: http
+     protocol: HTTP # not HTTPS.
+   discovery: DNS
+</code></pre>
+
+<p>and a DestinationRule to initiate TLS connections to the external service.</p>
+
+<pre><code> apiVersion: networking.istio.io/v1alpha3
+ kind: DestinationRule
+ metadata:
+   name: tls-example
+ spec:
+   name: internal-auth-server.com
+   trafficPolicy:
+     tls:
+       mode: SIMPLE # initiates HTTPS when talking to internal-auth-server.com
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="SidecarFilterBinding.matches">
+<td><code>matches</code></td>
+<td><code><a href="#SidecarFilterBinding.Match">SidecarFilterBinding.Match[]</a></code></td>
+<td>
+<p>Match criteria for the filter to be inserted. When more than one Match is
+included, a listener may match any for the filter to be inserted.</p>
+
+</td>
+</tr>
+<tr id="SidecarFilterBinding.order">
+<td><code>order</code></td>
+<td><code><a href="#FilterOrder">FilterOrder</a></code></td>
+<td>
+<p>Where in the filter chain to insert the filter. If omitted the filter
+will be first in the resulting chain.</p>
+
+</td>
+</tr>
+<tr id="SidecarFilterBinding.http_filter" class="oneof oneof-start">
+<td><code>httpFilter</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>Name of the HTTPFilterConfig to insert.</p>
+
+</td>
+</tr>
+<tr id="SidecarFilterBinding.network_filter" class="oneof">
+<td><code>networkFilter</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>Name of the TCPFilterConfig to insert.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="SidecarFilterBinding.Match">SidecarFilterBinding.Match</h2>
+<section>
+<p>Match describes conditions which a sidecar listener must meet in order
+for the filter to be inserted.  Within a single Match message, if more
+than one field is included, they all must match the listener.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="SidecarFilterBinding.Match.inbound" class="oneof oneof-start">
+<td><code>inbound</code></td>
+<td><code><a href="#SidecarFilterBinding.Match.InboundMatch">SidecarFilterBinding.Match.InboundMatch (oneof)</a></code></td>
+<td>
+<p>Match inbound listeners.</p>
+
+</td>
+</tr>
+<tr id="SidecarFilterBinding.Match.outbound" class="oneof">
+<td><code>outbound</code></td>
+<td><code><a href="#SidecarFilterBinding.Match.OutboundMatch">SidecarFilterBinding.Match.OutboundMatch (oneof)</a></code></td>
+<td>
+<p>Match outbound listeners.</p>
+
+</td>
+</tr>
+<tr id="SidecarFilterBinding.Match.service_instance_selector">
+<td><code>serviceInstanceSelector</code></td>
+<td><code>string</code></td>
+<td>
+<p>Restricts the match to service instances which match the given
+label selector. If unset, service instances are not restricted by
+labels.</p>
+
+</td>
+</tr>
+<tr id="SidecarFilterBinding.Match.listener_types">
+<td><code>listenerTypes</code></td>
+<td><code><a href="#SidecarFilterBinding.Match.ListenerType">SidecarFilterBinding.Match.ListenerType[]</a></code></td>
+<td>
+<p>The types of listener to match.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="SidecarFilterBinding.Match.InboundMatch">SidecarFilterBinding.Match.InboundMatch</h2>
+<section>
+<p>Match inbound listeners.  In sidecars, there is one listener per
+local service port.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="SidecarFilterBinding.Match.InboundMatch.service_ports">
+<td><code>servicePorts</code></td>
+<td><code><a href="#SidecarFilterBinding.Match.ServicePort">SidecarFilterBinding.Match.ServicePort[]</a></code></td>
+<td>
+<p>List of service ports to match listeners for. If more than one
+entry is listed, any may match the listener for the filter to be
+added.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="SidecarFilterBinding.Match.ListenerType">SidecarFilterBinding.Match.ListenerType</h2>
+<section>
+<p>ListenerType describes the type of listener to insert the filter
+into.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="SidecarFilterBinding.Match.ListenerType.HTTP">
+<td><code>HTTP</code></td>
+<td>
+<p>The listener is an HTTP listener.  Note that HTTP filters can
+only be inserted into HTTP listeners. Network filters may also be
+inserted into HTTP listeners.</p>
+
+</td>
+</tr>
+<tr id="SidecarFilterBinding.Match.ListenerType.TCP">
+<td><code>TCP</code></td>
+<td>
+<p>The listener is a TCP listener. Network filters can be inserted
+into TCP listeners. HTTP filters may not be inserted into TCP
+listeners.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="SidecarFilterBinding.Match.OutboundMatch">SidecarFilterBinding.Match.OutboundMatch</h2>
+<section>
+<p>Match outbound listeners. In sidecars, there is one listener per
+numeric port serving HTTP traffic in the mesh, and also one listener
+per service IP and port serving TCP traffic in the mesh. The match
+set is the union of both lists in this message.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="SidecarFilterBinding.Match.OutboundMatch.http_ports">
+<td><code>httpPorts</code></td>
+<td><code>uint32[]</code></td>
+<td>
+<p>List of numeric HTTP ports to match listeners for. If more than
+one entry is listed, any may match the listener for the filter
+to be added. If omitted all listeners are considered to match.</p>
+
+</td>
+</tr>
+<tr id="SidecarFilterBinding.Match.OutboundMatch.tcp_service_ports">
+<td><code>tcpServicePorts</code></td>
+<td><code><a href="#SidecarFilterBinding.Match.ServicePort">SidecarFilterBinding.Match.ServicePort[]</a></code></td>
+<td>
+<p>List of TCP service ports to match listeners for. If more than
+one entry is listed, any may match the listener for the filter to
+be added. If this list is non-empty, the filter MUST be a network
+filter. HTTP listeners will never match entries in this list. If
+omitted, and the filter is a network filter, all TCP listeners
+will match.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="SidecarFilterBinding.Match.ServicePort">SidecarFilterBinding.Match.ServicePort</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="SidecarFilterBinding.Match.ServicePort.host">
+<td><code>host</code></td>
+<td><code>string</code></td>
+<td>
+<p>The destination hosts to which traffic is being sent. Depending on the
+platform, short-names can also be used instead of a FQDN (i.e. has no
+dots in the name). In such a scenario, the FQDN of the host would be
+derived based on the underlying platform. If omitted it will match
+any destination.</p>
+
+<p><em>Note for Kubernetes users</em>: When short names are used (e.g. &ldquo;reviews&rdquo;
+instead of &ldquo;reviews.default.svc.cluster.local&rdquo;), Istio will interpret
+the short name based on the namespace of the rule, not the service. A
+rule in the &ldquo;default&rdquo; namespace containing a host &ldquo;reviews will be
+interpreted as &ldquo;reviews.default.svc.cluster.local&rdquo;, irrespective of
+the actual namespace associated with the reviews service. _To avoid
+potential misconfigurations, it is recommended to always use fully
+qualified domain names over short names.</p>
+
+<p>HTTP service hosts must always be identified by name. TCP service
+hosts may be identified by (possibly virtual) IP address, if that
+is how they are identified in the Istio service registry.</p>
+
+</td>
+</tr>
+<tr id="SidecarFilterBinding.Match.ServicePort.port_name">
+<td><code>portName</code></td>
+<td><code>string</code></td>
+<td>
+<p>The name of the port on the service.</p>
 
 </td>
 </tr>

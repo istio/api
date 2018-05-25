@@ -1,0 +1,324 @@
+// Copyright 2018 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "google/protobuf/struct.proto";
+
+package istio.networking.v1alpha3;
+
+option go_package = "istio.io/api/networking/v1alpha3";
+
+//
+// # Overview
+//
+// A `HTTPFilterConfig` and `NetworkFilterConfig` describe filters to insert
+// into the processing chain for mesh traffic.  Each consists of the filter's
+// name (in Envoy) and the configuration blob.
+//
+// Pilot creates listeners with different identifiers depending on whether
+// it is for a Gateway or Sidecar, and whether the listener is inbound or
+// outbound. The listeners created are summarized below.
+//
+// Direction   | Gateway    | Sidecar
+// ------------|------------|--------------------------------------
+// Inbound     | None       | per local service & port
+// Outbound    | per Server | per HTTP port, per TCP service & port
+//
+// Filters are inserted into the processing chain in different ways for gateway
+// and sidecar proxy listeners.
+//
+// To insert a filter into a `Gateway` listener, add the `HTTPFilterConfig` or
+// `NetworkFilterConfig` to the `Server`. For example, to add the filter defined
+// by the `HTTPFilterConfig` "my-filter" as the first filter, you can write the
+// following.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: Gateway
+// metadata:
+//   name: my-ingress
+// spec:
+//   selector:
+//     app: my-ingress-gateway
+//   servers:
+//   - port:
+//       number: 80
+//       name: http2
+//       protocol: HTTP2
+//     hosts:
+//     - "*"
+//     httpFilters:
+//       order:
+//         position: FIRST
+//       names: ["my-filter"]
+// ```
+//
+// To insert a filter into a sidecar listener, use a `SidecarFilterBinding`
+// to select which sidecars and which listeners in the mesh to apply the filter.
+// It includes a `match` that selects which listeners to insert
+// the filter into, an `order` that specifies where in the filter chain to
+// insert it.
+//
+// A given listener may match multiple `SidecarFilterBinding` objects, in which
+// case each filter is inserted, including perhaps inserting the same kind of
+// filter multiple times, with different or identical configuration. If multiple
+// bindings use the same `Order`, the actual resultant ordering will be
+// undefined and may not be stable over the life of the listener. Users are
+// strongly encouraged to use `BEFORE` and `AFTER` order directives in cases
+// where filter ordering is desired.
+//
+// The following example configures a Lua filter that authorizes an inbound
+// request by calling an external service.
+//
+//     apiVersion: networking.istio.io/v1alpha3
+//     kind: HTTPFilterConfig
+//     metadata:
+//       name: reviews-auth
+//       namespace: istio-system
+//     spec:
+//         name: envoy.lua
+//         config: |
+//          function envoy_on_request(request_handle)
+//            -- Make an HTTP call to an upstream host with the following headers, body, and timeout.
+//            local headers, body = request_handle:httpCall(
+//                                   "outbound||https|internal-auth-server.com",
+//                                   {
+//                                     [":method"] = "POST",
+//                                     [":path"] = "/authorizeMeNow",
+//                                     [":authority"] = "internal-auth-server.com"
+//                                    },
+//                                   "username=scoobydoo", 5000)
+//             -- Add information from the HTTP call into the headers that are about to be sent to the next
+//             -- filter in the filter chain.
+//             request_handle:headers():add("upstream_foo", headers["foo"])
+//             request_handle:headers():add("upstream_body_size", #body)
+//          end
+//
+//
+// To insert this Lua filter into the reviews service, use the following.
+//
+//     apiVersion: networking.istio.io/v1alpha3
+//     kind: SidecarFilterBinding
+//     metadata:
+//       name: reviews-auth
+//       namespace: istio-system
+//     spec:
+//       matches:
+//       - inbound:
+//           servicePorts:
+//             - host: reviews.prod.svc.cluster.local
+//               portName: http
+//       order:
+//         position: BEFORE
+//         relativeTo: router
+//       httpFilter: "reviews-auth"
+//
+// and the associated ServiceEntry configuration to add
+// internal-auth-server.com to the service registry:
+//
+//     apiVersion: networking.istio.io/v1alpha3
+//     kind: ServiceEntry
+//     metadata:
+//       name: external-svc
+//     spec:
+//       hosts:
+//       - internal-auth-server.com
+//       ports:
+//       - number: 443
+//         name: http
+//         protocol: HTTP # not HTTPS.
+//       discovery: DNS
+//
+// and a DestinationRule to initiate TLS connections to the external service.
+//
+//     apiVersion: networking.istio.io/v1alpha3
+//     kind: DestinationRule
+//     metadata:
+//       name: tls-example
+//     spec:
+//       name: internal-auth-server.com
+//       trafficPolicy:
+//         tls:
+//           mode: SIMPLE # initiates HTTPS when talking to internal-auth-server.com
+//
+//
+message SidecarFilterBinding {
+
+    // Match describes conditions which a sidecar listener must meet in order
+    // for the filter to be inserted.  Within a single Match message, if more
+    // than one field is included, they all must match the listener.
+    message Match {
+        message ServicePort {
+            // The destination hosts to which traffic is being sent. Depending on the
+            // platform, short-names can also be used instead of a FQDN (i.e. has no
+            // dots in the name). In such a scenario, the FQDN of the host would be
+            // derived based on the underlying platform. If omitted it will match
+            // any destination.
+            //
+            // *Note for Kubernetes users*: When short names are used (e.g. "reviews"
+            // instead of "reviews.default.svc.cluster.local"), Istio will interpret
+            // the short name based on the namespace of the rule, not the service. A
+            // rule in the "default" namespace containing a host "reviews will be
+            // interpreted as "reviews.default.svc.cluster.local", irrespective of
+            // the actual namespace associated with the reviews service. _To avoid
+            // potential misconfigurations, it is recommended to always use fully
+            // qualified domain names over short names.
+            //
+            // HTTP service hosts must always be identified by name. TCP service
+            // hosts may be identified by (possibly virtual) IP address, if that
+            // is how they are identified in the Istio service registry.
+            string host = 1;
+
+            // The name of the port on the service.
+            string port_name = 2;
+        }
+
+        // Match inbound listeners.  In sidecars, there is one listener per
+        // local service port.
+        message InboundMatch {
+            // List of service ports to match listeners for. If more than one
+            // entry is listed, any may match the listener for the filter to be
+            // added.
+            repeated ServicePort service_ports = 1;
+
+        }
+
+        // Match outbound listeners. In sidecars, there is one listener per
+        // numeric port serving HTTP traffic in the mesh, and also one listener
+        // per service IP and port serving TCP traffic in the mesh. The match
+        // set is the union of both lists in this message.
+        message OutboundMatch {
+            // List of numeric HTTP ports to match listeners for. If more than
+            // one entry is listed, any may match the listener for the filter
+            // to be added. If omitted all listeners are considered to match.
+            repeated uint32 http_ports = 1;
+
+            // List of TCP service ports to match listeners for. If more than
+            // one entry is listed, any may match the listener for the filter to
+            // be added. If this list is non-empty, the filter MUST be a network
+            // filter. HTTP listeners will never match entries in this list. If
+            // omitted, and the filter is a network filter, all TCP listeners
+            // will match.
+            repeated ServicePort tcp_service_ports = 2;
+        }
+
+        // Match either inbound listeners, or outbound listeners.
+        oneof direction_match {
+            // Match inbound listeners.
+            InboundMatch inbound = 1;
+
+            // Match outbound listeners.
+            OutboundMatch outbound = 2;
+        }
+
+        // Restricts the match to service instances which match the given
+        // label selector. If unset, service instances are not restricted by
+        // labels.
+        string service_instance_selector = 3;
+
+
+        // ListenerType describes the type of listener to insert the filter
+        // into.
+        enum ListenerType {
+            // The listener is an HTTP listener.  Note that HTTP filters can
+            // only be inserted into HTTP listeners. Network filters may also be
+            // inserted into HTTP listeners.
+            HTTP = 0;
+
+            // The listener is a TCP listener. Network filters can be inserted
+            // into TCP listeners. HTTP filters may not be inserted into TCP
+            // listeners.
+            TCP = 1;
+        }
+
+        // The types of listener to match.
+        repeated ListenerType listener_types = 4;
+    }
+
+    // Match criteria for the filter to be inserted. When more than one Match is
+    // included, a listener may match any for the filter to be inserted.
+    repeated Match matches = 1;
+
+    // Where in the filter chain to insert the filter. If omitted the filter
+    // will be first in the resulting chain.
+    FilterOrder order = 2;
+
+    // Name of the filter to insert.  Must be in the same namespace as this
+    // SidecarFilterBinding.
+    oneof filter {
+        // Name of the HTTPFilterConfig to insert.
+        string http_filter = 3;
+
+        // Name of the TCPFilterConfig to insert.
+        string network_filter = 4;
+    }
+}
+
+// FilterOrder describes where in the filter chain to insert the filter.
+message FilterOrder {
+
+    // The position of the filter relative to another or the entire chain.
+    enum Position {
+        // The filter should be first in the resulting chain.
+        FIRST = 0;
+
+        // The filter should be last in the resulting chain.
+        LAST = 1;
+
+        // The filter should be immediately before the filter named in the
+        // `relative_to` field. If the relative filter is not present, the
+        // inserted filter will be last.
+        BEFORE = 2;
+
+        // The filter should be immediately after the filter named in the
+        // `relative_to` field. If the relative filter is not present, the
+        // inserted filter will be last.
+        AFTER = 3;
+    }
+
+    // Position of this filter relative to another or the entire chain.
+    Position position = 1;
+
+    // Name of the filter the postion is relative to, for `BEFORE` and
+    // `AFTER` positions.  Ignored for `FIRST` or `LAST`.
+    string relative_to = 2;
+}
+
+// Note that while at present HTTPFilter and NetworkFilter are identical
+// messages, we keep them separate so that in future we have flexibility to add
+// to one without the other.
+
+// An HTTPFilter operates on HTTP requests and responses.
+message HTTPFilterConfig {
+    // The name of the filter to instantiate. The name must match a supported
+    // filter.
+    string name = 1;
+
+    // Filter specific configuration which depends on the filter being
+    // instantiated. See the supported filters for further documentation.
+    google.protobuf.Struct config = 2;
+}
+
+// A NetworkFilter operates the the network layer and operates on connections
+// and byte streams.
+message NetworkFilterConfig {
+    // The name of the filter to instantiate. The name must match a supported
+    // filter.
+    string name = 1;
+
+    // Filter specific configuration which depends on the filter being
+    // instantiated. See the supported filters for further documentation.
+    google.protobuf.Struct config = 2;
+}

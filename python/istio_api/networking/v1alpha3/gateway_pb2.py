@@ -13,14 +13,16 @@ from google.protobuf import descriptor_pb2
 _sym_db = _symbol_database.Default()
 
 
+from networking.v1alpha3 import filter_pb2 as networking_dot_v1alpha3_dot_filter__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='networking/v1alpha3/gateway.proto',
   package='istio.networking.v1alpha3',
   syntax='proto3',
-  serialized_pb=_b('\n!networking/v1alpha3/gateway.proto\x12\x19istio.networking.v1alpha3\"\xb2\x01\n\x07Gateway\x12\x32\n\x07servers\x18\x01 \x03(\x0b\x32!.istio.networking.v1alpha3.Server\x12\x42\n\x08selector\x18\x02 \x03(\x0b\x32\x30.istio.networking.v1alpha3.Gateway.SelectorEntry\x1a/\n\rSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x85\x03\n\x06Server\x12-\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.Port\x12\r\n\x05hosts\x18\x02 \x03(\t\x12\x39\n\x03tls\x18\x03 \x01(\x0b\x32,.istio.networking.v1alpha3.Server.TLSOptions\x1a\x81\x02\n\nTLSOptions\x12\x16\n\x0ehttps_redirect\x18\x01 \x01(\x08\x12\x42\n\x04mode\x18\x02 \x01(\x0e\x32\x34.istio.networking.v1alpha3.Server.TLSOptions.TLSmode\x12\x1a\n\x12server_certificate\x18\x03 \x01(\t\x12\x13\n\x0bprivate_key\x18\x04 \x01(\t\x12\x17\n\x0f\x63\x61_certificates\x18\x05 \x01(\t\x12\x19\n\x11subject_alt_names\x18\x06 \x03(\t\"2\n\x07TLSmode\x12\x0f\n\x0bPASSTHROUGH\x10\x00\x12\n\n\x06SIMPLE\x10\x01\x12\n\n\x06MUTUAL\x10\x02\"6\n\x04Port\x12\x0e\n\x06number\x18\x01 \x01(\r\x12\x10\n\x08protocol\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\tB\"Z istio.io/api/networking/v1alpha3b\x06proto3')
-)
+  serialized_pb=_b('\n!networking/v1alpha3/gateway.proto\x12\x19istio.networking.v1alpha3\x1a networking/v1alpha3/filter.proto\"\xb2\x01\n\x07Gateway\x12\x32\n\x07servers\x18\x01 \x03(\x0b\x32!.istio.networking.v1alpha3.Server\x12\x42\n\x08selector\x18\x02 \x03(\x0b\x32\x30.istio.networking.v1alpha3.Gateway.SelectorEntry\x1a/\n\rSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xea\x04\n\x06Server\x12-\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.Port\x12\r\n\x05hosts\x18\x02 \x03(\t\x12\x39\n\x03tls\x18\x03 \x01(\x0b\x32,.istio.networking.v1alpha3.Server.TLSOptions\x12\x44\n\x0chttp_filters\x18\x04 \x01(\x0b\x32..istio.networking.v1alpha3.Server.ExtraFilters\x12G\n\x0fnetwork_filters\x18\x05 \x01(\x0b\x32..istio.networking.v1alpha3.Server.ExtraFilters\x1a\x81\x02\n\nTLSOptions\x12\x16\n\x0ehttps_redirect\x18\x01 \x01(\x08\x12\x42\n\x04mode\x18\x02 \x01(\x0e\x32\x34.istio.networking.v1alpha3.Server.TLSOptions.TLSmode\x12\x1a\n\x12server_certificate\x18\x03 \x01(\t\x12\x13\n\x0bprivate_key\x18\x04 \x01(\t\x12\x17\n\x0f\x63\x61_certificates\x18\x05 \x01(\t\x12\x19\n\x11subject_alt_names\x18\x06 \x03(\t\"2\n\x07TLSmode\x12\x0f\n\x0bPASSTHROUGH\x10\x00\x12\n\n\x06SIMPLE\x10\x01\x12\n\n\x06MUTUAL\x10\x02\x1aT\n\x0c\x45xtraFilters\x12\x35\n\x05order\x18\x01 \x01(\x0b\x32&.istio.networking.v1alpha3.FilterOrder\x12\r\n\x05names\x18\x02 \x03(\t\"6\n\x04Port\x12\x0e\n\x06number\x18\x01 \x01(\r\x12\x10\n\x08protocol\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\tB\"Z istio.io/api/networking/v1alpha3b\x06proto3')
+  ,
+  dependencies=[networking_dot_v1alpha3_dot_filter__pb2.DESCRIPTOR,])
 
 
 
@@ -45,8 +47,8 @@ _SERVER_TLSOPTIONS_TLSMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=585,
-  serialized_end=635,
+  serialized_start=762,
+  serialized_end=812,
 )
 _sym_db.RegisterEnumDescriptor(_SERVER_TLSOPTIONS_TLSMODE)
 
@@ -84,8 +86,8 @@ _GATEWAY_SELECTORENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=196,
-  serialized_end=243,
+  serialized_start=230,
+  serialized_end=277,
 )
 
 _GATEWAY = _descriptor.Descriptor(
@@ -121,8 +123,8 @@ _GATEWAY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=65,
-  serialized_end=243,
+  serialized_start=99,
+  serialized_end=277,
 )
 
 
@@ -188,8 +190,45 @@ _SERVER_TLSOPTIONS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=378,
-  serialized_end=635,
+  serialized_start=555,
+  serialized_end=812,
+)
+
+_SERVER_EXTRAFILTERS = _descriptor.Descriptor(
+  name='ExtraFilters',
+  full_name='istio.networking.v1alpha3.Server.ExtraFilters',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='order', full_name='istio.networking.v1alpha3.Server.ExtraFilters.order', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='names', full_name='istio.networking.v1alpha3.Server.ExtraFilters.names', index=1,
+      number=2, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=814,
+  serialized_end=898,
 )
 
 _SERVER = _descriptor.Descriptor(
@@ -220,10 +259,24 @@ _SERVER = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='http_filters', full_name='istio.networking.v1alpha3.Server.http_filters', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='network_filters', full_name='istio.networking.v1alpha3.Server.network_filters', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
-  nested_types=[_SERVER_TLSOPTIONS, ],
+  nested_types=[_SERVER_TLSOPTIONS, _SERVER_EXTRAFILTERS, ],
   enum_types=[
   ],
   options=None,
@@ -232,8 +285,8 @@ _SERVER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=246,
-  serialized_end=635,
+  serialized_start=280,
+  serialized_end=898,
 )
 
 
@@ -277,8 +330,8 @@ _PORT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=637,
-  serialized_end=691,
+  serialized_start=900,
+  serialized_end=954,
 )
 
 _GATEWAY_SELECTORENTRY.containing_type = _GATEWAY
@@ -287,8 +340,12 @@ _GATEWAY.fields_by_name['selector'].message_type = _GATEWAY_SELECTORENTRY
 _SERVER_TLSOPTIONS.fields_by_name['mode'].enum_type = _SERVER_TLSOPTIONS_TLSMODE
 _SERVER_TLSOPTIONS.containing_type = _SERVER
 _SERVER_TLSOPTIONS_TLSMODE.containing_type = _SERVER_TLSOPTIONS
+_SERVER_EXTRAFILTERS.fields_by_name['order'].message_type = networking_dot_v1alpha3_dot_filter__pb2._FILTERORDER
+_SERVER_EXTRAFILTERS.containing_type = _SERVER
 _SERVER.fields_by_name['port'].message_type = _PORT
 _SERVER.fields_by_name['tls'].message_type = _SERVER_TLSOPTIONS
+_SERVER.fields_by_name['http_filters'].message_type = _SERVER_EXTRAFILTERS
+_SERVER.fields_by_name['network_filters'].message_type = _SERVER_EXTRAFILTERS
 DESCRIPTOR.message_types_by_name['Gateway'] = _GATEWAY
 DESCRIPTOR.message_types_by_name['Server'] = _SERVER
 DESCRIPTOR.message_types_by_name['Port'] = _PORT
@@ -317,12 +374,20 @@ Server = _reflection.GeneratedProtocolMessageType('Server', (_message.Message,),
     # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.Server.TLSOptions)
     ))
   ,
+
+  ExtraFilters = _reflection.GeneratedProtocolMessageType('ExtraFilters', (_message.Message,), dict(
+    DESCRIPTOR = _SERVER_EXTRAFILTERS,
+    __module__ = 'networking.v1alpha3.gateway_pb2'
+    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.Server.ExtraFilters)
+    ))
+  ,
   DESCRIPTOR = _SERVER,
   __module__ = 'networking.v1alpha3.gateway_pb2'
   # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.Server)
   ))
 _sym_db.RegisterMessage(Server)
 _sym_db.RegisterMessage(Server.TLSOptions)
+_sym_db.RegisterMessage(Server.ExtraFilters)
 
 Port = _reflection.GeneratedProtocolMessageType('Port', (_message.Message,), dict(
   DESCRIPTOR = _PORT,

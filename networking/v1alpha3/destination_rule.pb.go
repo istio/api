@@ -6,7 +6,7 @@
 
 	It is generated from these files:
 		networking/v1alpha3/destination_rule.proto
-		networking/v1alpha3/filter_augment.proto
+		networking/v1alpha3/filter.proto
 		networking/v1alpha3/gateway.proto
 		networking/v1alpha3/service_entry.proto
 		networking/v1alpha3/virtual_service.proto
@@ -19,9 +19,10 @@
 		ConnectionPoolSettings
 		OutlierDetection
 		TLSSettings
-		FilterAugment
-		HTTPFilter
-		NetworkFilter
+		SidecarFilterBinding
+		FilterOrder
+		HTTPFilterConfig
+		NetworkFilterConfig
 		Gateway
 		Server
 		Port
