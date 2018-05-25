@@ -186,8 +186,4 @@ message RouteDirective {
   // Supplies the response body for the direct response.
   // If this setting is omitted, no body is included in the generated response.
   string direct_response_body = 4;
-
-  // If set, overrides the routing destination to the specified destination service fully
-  // qualified name.
-  string override_destination_service = 5;
 }
