@@ -78,9 +78,9 @@ message CheckResponse {
     // along with matching conditions.
     ReferencedAttributes referenced_attributes = 5 [(gogoproto.nullable) = false];
 
-    // An optional directive, used to manipulate the traffic metadata
+    // An optional routing directive, used to manipulate the traffic metadata
     // whenever all pre-conditions are satisfied.
-    RouteDirective directive = 6;
+    RouteDirective route_directive = 6;
   }
 
   // Expresses the result of a quota allocation.
