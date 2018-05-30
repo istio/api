@@ -138,7 +138,7 @@ type CheckResponse_PreconditionResult struct {
 	// along with matching conditions.
 	ReferencedAttributes ReferencedAttributes `protobuf:"bytes,5,opt,name=referenced_attributes,json=referencedAttributes" json:"referenced_attributes"`
 	// An optional routing directive, used to manipulate the traffic metadata
-	// whenever all pre-conditions are satisfied.
+	// whenever all preconditions are satisfied.
 	RouteDirective *RouteDirective `protobuf:"bytes,6,opt,name=route_directive,json=routeDirective" json:"route_directive,omitempty"`
 }
 
@@ -212,7 +212,7 @@ func (*ReferencedAttributes_AttributeMatch) Descriptor() ([]byte, []int) {
 // Operation on HTTP headers to replace, append, or remove a header. Header
 // names are normalized to lower-case with dashes, e.g.  "x-request-id".
 // Special headers "uri", "scheme", "method", and "authority" are permitted,
-// and should be used to effect the general request metadata.
+// and should be used to affect the general request metadata.
 type HeaderOperation struct {
 	// Header name.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
@@ -227,7 +227,7 @@ func (*HeaderOperation) ProtoMessage()               {}
 func (*HeaderOperation) Descriptor() ([]byte, []int) { return fileDescriptorCheck, []int{3} }
 
 // Expresses the routing manipulation actions to be performed on behalf of
-// Mixer in response to a successful pre-condition check.
+// Mixer in response to a successful precondition check.
 type RouteDirective struct {
 	// Operations on the request headers.
 	UpdateRequestHeaders []HeaderOperation `protobuf:"bytes,1,rep,name=update_request_headers,json=updateRequestHeaders" json:"update_request_headers"`
