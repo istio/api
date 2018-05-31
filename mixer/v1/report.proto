@@ -56,6 +56,12 @@ message ReportRequest {
   // The number of words in the global dictionary.
   // To detect global dictionary out of sync between client and server.
   uint32 global_word_count = 3;
+
+  // Service_name is the canonical name of the destination service.
+  // It must be unique for a particular mesh.
+  // Service_name determines the configuration resources that are inspected during the request.
+  // If the caller can unambiguously determine the destination service, service_name must be specified.
+  string service_name = 4;
 }
 
 // Used to carry responses to telemetry reports
