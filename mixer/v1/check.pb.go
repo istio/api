@@ -211,8 +211,8 @@ func (*ReferencedAttributes_AttributeMatch) Descriptor() ([]byte, []int) {
 
 // Operation on HTTP headers to replace, append, or remove a header. Header
 // names are normalized to lower-case with dashes, e.g.  "x-request-id".
-// Special headers "uri", "scheme", "method", and "authority" are permitted,
-// and should be used to affect the general request metadata.
+// Pseudo-headers ":path", ":authority", and ":method" are supported to modify
+// the request headers.
 type HeaderOperation struct {
 	// Header name.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`

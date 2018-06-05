@@ -520,8 +520,8 @@ configuration.</p>
 <section>
 <p>Operation on HTTP headers to replace, append, or remove a header. Header
 names are normalized to lower-case with dashes, e.g.  &ldquo;x-request-id&rdquo;.
-Special headers &ldquo;uri&rdquo;, &ldquo;scheme&rdquo;, &ldquo;method&rdquo;, and &ldquo;authority&rdquo; are permitted,
-and should be used to affect the general request metadata.</p>
+Pseudo-headers &ldquo;:path&rdquo;, &ldquo;:authority&rdquo;, and &ldquo;:method&rdquo; are supported to modify
+the request headers.</p>
 
 <table class="message-fields">
 <thead>
