@@ -182,8 +182,10 @@
 # connection attributes
 - connection.id
 - connection.received.bytes
+# connection.received.bytes_total is deprecated; please use connection.received.total_bytes
 - connection.received.bytes_total
 - connection.sent.bytes
+# connection.sent.bytes_total is deprecated; please use connection.sent.total_bytes
 - connection.sent.bytes_total
 - connection.duration
 
@@ -279,3 +281,6 @@
 
 - context.reporter.local
 - context.reporter.uid
+
+- connection.received.total_bytes
+- connection.sent.total_bytes
