@@ -482,6 +482,7 @@ func (m *HTTPRoute) GetAppendHeaders() map[string]string {
 //             host: mongo.backup.svc.cluster.local
 //             port:
 //               number: 5555
+//
 type TCPRoute struct {
 	// Match conditions to be satisfied for the rule to be
 	// activated. All conditions inside a single match block have AND
