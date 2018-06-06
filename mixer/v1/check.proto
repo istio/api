@@ -62,6 +62,8 @@ message CheckResponse {
 
   // Expresses the result of a precondition check.
   message PreconditionResult {
+    reserved 4;
+
     // A status code of OK indicates all preconditions were satisfied. Any other code indicates not
     // all preconditions were satisfied and details describe why.
     google.rpc.Status status = 1 [(gogoproto.nullable) = false];
@@ -71,8 +73,6 @@ message CheckResponse {
 
     // The number of uses for which this result can be considered valid.
     int32 valid_use_count = 3;
-
-    reserved 4;
 
     // The total set of attributes that were used in producing the result
     // along with matching conditions.
@@ -174,10 +174,10 @@ message HeaderOperation {
 // Mixer in response to a successful precondition check.
 message RouteDirective {
   // Operations on the request headers.
-  repeated HeaderOperation update_request_headers = 1 [(gogoproto.nullable) = false];
+  repeated HeaderOperation request_header_operations = 1 [(gogoproto.nullable) = false];
 
   // Operations on the response headers.
-  repeated HeaderOperation update_response_headers = 2 [(gogoproto.nullable) = false];
+  repeated HeaderOperation response_header_operations = 2 [(gogoproto.nullable) = false];
 
   // If set, enables a direct response without proxying the request to the routing
   // destination. Required to be a value in the 2xx or 3xx range.
