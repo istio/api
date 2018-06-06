@@ -4,7 +4,7 @@ description: Configuration for Role Based Access Control
 location: https://istio.io/docs/reference/config/istio.rbac.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 9
+number_of_entries: 10
 ---
 <p>Istio RBAC (Role Based Access Control) defines ServiceRole and ServiceRoleBinding
 objects.</p>
@@ -186,6 +186,34 @@ For example, the value &ldquo;v1alpha2&rdquo; matches
 &ldquo;v1alpha2&rdquo; (exact match), or &ldquo;v1<em>&rdquo; (prefix match),
 or &ldquo;</em>alpha2&rdquo; (suffix match).</p>
 
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="EnforcementMode">EnforcementMode</h2>
+<section>
+<p>RBAC config enforcement mode, used to verify new ServiceRole/ServiceBinding configs
+work as expected before rolling to prod. RBAC engine only logs results from
+ServiceRole/ServiceBinding configs in dark launch mode, and discards the result
+before return to the user.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="EnforcementMode.ENFORCEMENT_ENFORCED">
+<td><code>ENFORCEMENT_ENFORCED</code></td>
+<td>
+</td>
+</tr>
+<tr id="EnforcementMode.ENFORCEMENT_DARKLAUNCH">
+<td><code>ENFORCEMENT_DARKLAUNCH</code></td>
+<td>
 </td>
 </tr>
 </tbody>
@@ -385,6 +413,16 @@ of the ServiceRole is specified in &ldquo;metadata&rdquo; section of the Service
 
 </td>
 </tr>
+<tr id="ServiceRole.mode">
+<td><code>mode</code></td>
+<td><code><a href="#EnforcementMode">EnforcementMode</a></code></td>
+<td>
+<p>Indicates enforcement mode of the ServiceRole config, by default mode is ENFORCED.
+If ServiceRole is in DARKLAUNCH mode, all ServiceRoleBindings that
+refers to it will be in DARKLAUNCH mode.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -417,6 +455,14 @@ object.</p>
 <td><code><a href="#RoleRef">RoleRef</a></code></td>
 <td>
 <p>Required. Reference to the ServiceRole object.</p>
+
+</td>
+</tr>
+<tr id="ServiceRoleBinding.mode">
+<td><code>mode</code></td>
+<td><code><a href="#EnforcementMode">EnforcementMode</a></code></td>
+<td>
+<p>Indicates enforcement mode of the ServiceRoleBinding config, by default mode is ENFORCED.</p>
 
 </td>
 </tr>

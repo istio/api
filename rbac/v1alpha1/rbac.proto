@@ -108,12 +108,26 @@ package istio.rbac.v1alpha1;
 
 option go_package="istio.io/api/rbac/v1alpha1";
 
+// RBAC config enforcement mode, used to verify new ServiceRole/ServiceBinding configs
+// work as expected before rolling to prod. RBAC engine only logs results from
+// ServiceRole/ServiceBinding configs in dark launch mode, and discards the result
+// before return to the user.
+enum EnforcementMode {
+  ENFORCEMENT_ENFORCED = 0;
+  ENFORCEMENT_DARKLAUNCH = 1;
+ }
+ 
 // ServiceRole specification contains a list of access rules (permissions).
 // This represent the "Spec" part of the ServiceRole object. The name and namespace
 // of the ServiceRole is specified in "metadata" section of the ServiceRole object.
 message ServiceRole {
   // Required. The set of access rules (permissions) that the role has.
   repeated AccessRule rules = 1;
+
+  // Indicates enforcement mode of the ServiceRole config, by default mode is ENFORCED.
+  // If ServiceRole is in DARKLAUNCH mode, all ServiceRoleBindings that
+  // refers to it will be in DARKLAUNCH mode.
+  EnforcementMode mode = 2;
 }
 
 // AccessRule defines a permission to access a list of services.
@@ -171,6 +185,9 @@ message ServiceRoleBinding {
 
   // Required. Reference to the ServiceRole object.
   RoleRef roleRef = 2;
+
+  // Indicates enforcement mode of the ServiceRoleBinding config, by default mode is ENFORCED.
+  EnforcementMode mode = 3;
 }
 
 // Subject defines an identity or a group of identities. The identity is either a user or
