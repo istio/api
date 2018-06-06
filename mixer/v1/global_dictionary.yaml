@@ -182,9 +182,9 @@
 # connection attributes
 - connection.id
 - connection.received.bytes
-- connection.received.bytes_total
+- connection.received.total_bytes
 - connection.sent.bytes
-- connection.sent.bytes_total
+- connection.sent.total_bytes
 - connection.duration
 
 # context attributes
