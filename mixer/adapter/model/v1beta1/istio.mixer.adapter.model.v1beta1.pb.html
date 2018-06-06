@@ -1,9 +1,10 @@
 ---
 title: Mixer Adapter Model
-overview: Definitions used to create adapters and templates
+description: Definitions used to create adapters and templates
 location: https://istio.io/docs/reference/api/mixer/istio.mixer.adapter.model.v1beta1.html
 layout: protoc-gen-docs
-number_of_entries: 23
+generator: protoc-gen-docs
+number_of_entries: 17
 ---
 <p>This package defines the service and types used by adapter code to serve requests from Mixer.
 This package also defines the types that are used to create Mixer templates.</p>
@@ -213,27 +214,6 @@ satisfied and details describe why.</p>
 </tbody>
 </table>
 </section>
-<h3 id="DNSName">DNSName</h3>
-<section>
-<p>DNSName is used inside templates for fields that are of ValueType &ldquo;DNS_NAME&rdquo;</p>
-
-</section>
-<h3 id="Duration">Duration</h3>
-<section>
-<p>Duration is used inside templates for fields that are of ValueType &ldquo;DURATION&rdquo;</p>
-
-</section>
-<h3 id="EmailAddress">EmailAddress</h3>
-<section>
-<p>EmailAddress is used inside templates for fields that are of ValueType &ldquo;EMAIL_ADDRESS&rdquo;
-DO NOT USE !! Under Development</p>
-
-</section>
-<h3 id="IPAddress">IPAddress</h3>
-<section>
-<p>IPAddress is used inside templates for fields that are of ValueType &ldquo;IP_ADDRESS&rdquo;</p>
-
-</section>
 <h3 id="Info">Info</h3>
 <section>
 <p>Info describes an adapter or a backend that wants to provide telemetry and policy functionality to Mixer as an
@@ -273,7 +253,7 @@ example: mycompany-denier</p>
 <td><code>templates</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Base64 encoded proto descriptor of all the templates the adapter wants to serve.</p>
+<p>Names of the templates the adapter supports.</p>
 
 </td>
 </tr>
@@ -426,6 +406,30 @@ If <code>QuotaParams.best_effort</code> is false, this will be either 0 or &gt;=
 <p>Expresses the result of a report call.</p>
 
 </section>
+<h3 id="Template">Template</h3>
+<section>
+<p>Template provides the details of a mixer template.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Template.descriptor">
+<td><code>descriptor</code></td>
+<td><code>string</code></td>
+<td>
+<p>Base64 encoded proto descriptor of the template.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h3 id="TemplateVariety">TemplateVariety</h3>
 <section>
 <p>The available varieties of templates, controlling the semantics of what an adapter does with each instance.</p>
@@ -441,44 +445,37 @@ If <code>QuotaParams.best_effort</code> is false, this will be either 0 or &gt;=
 <tr id="TemplateVariety.TEMPLATE_VARIETY_CHECK">
 <td><code>TEMPLATE_VARIETY_CHECK</code></td>
 <td>
-<p>Makes the template applicable for Mixer&rsquo;s check calls.</p>
+<p>Makes the template applicable for Mixer&rsquo;s check calls. Instances of such template are created during
+report calls in Mixer and passed to the handlers based on the rule configurations.</p>
 
 </td>
 </tr>
 <tr id="TemplateVariety.TEMPLATE_VARIETY_REPORT">
 <td><code>TEMPLATE_VARIETY_REPORT</code></td>
 <td>
-<p>Makes the template applicable for Mixer&rsquo;s report calls.</p>
+<p>Makes the template applicable for Mixer&rsquo;s report calls. Instances of such template are created during
+check calls in Mixer and passed to the handlers based on the rule configurations.</p>
 
 </td>
 </tr>
 <tr id="TemplateVariety.TEMPLATE_VARIETY_QUOTA">
 <td><code>TEMPLATE_VARIETY_QUOTA</code></td>
 <td>
-<p>Makes the template applicable for Mixer&rsquo;s quota calls.</p>
+<p>Makes the template applicable for Mixer&rsquo;s quota calls. Instances of such template are created during
+quota check calls in Mixer and passed to the handlers based on the rule configurations.</p>
 
 </td>
 </tr>
 <tr id="TemplateVariety.TEMPLATE_VARIETY_ATTRIBUTE_GENERATOR">
 <td><code>TEMPLATE_VARIETY_ATTRIBUTE_GENERATOR</code></td>
 <td>
-<p>Makes the template applicable for Mixer&rsquo;s quota calls.</p>
+<p>Makes the template applicable for Mixer&rsquo;s attribute generation phase. Instances of such template are created during
+pre-processing attribute generation phase and passed to the handlers based on the rule configurations.</p>
 
 </td>
 </tr>
 </tbody>
 </table>
-</section>
-<h3 id="TimeStamp">TimeStamp</h3>
-<section>
-<p>TimeStamp is used inside templates for fields that are of ValueType &ldquo;TIMESTAMP&rdquo;</p>
-
-</section>
-<h3 id="Uri">Uri</h3>
-<section>
-<p>Uri is used inside templates for fields that are of ValueType &ldquo;URI&rdquo;
-DO NOT USE ! Under Development</p>
-
 </section>
 <h3 id="ValidateRequest">ValidateRequest</h3>
 <section>
@@ -535,12 +532,6 @@ DO NOT USE ! Under Development</p>
 </tr>
 </tbody>
 </table>
-</section>
-<h3 id="Value">Value</h3>
-<section>
-<p>Value is used inside templates for fields that have dynamic types. The actual datatype
-of the field depends on the datatype of the expression used in the operator configuration.</p>
-
 </section>
 <h3 id="google.rpc.Status">google.rpc.Status</h3>
 <section>
