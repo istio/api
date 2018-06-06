@@ -113,8 +113,8 @@ option go_package="istio.io/api/rbac/v1alpha1";
 // ServiceRole/ServiceBinding configs in dark launch mode, and discards the result
 // before return to the user.
 enum EnforcementMode {
-  ENFORCEMENT_ENFORCED = 0;
-  ENFORCEMENT_DARKLAUNCH = 1;
+  ENFORCED = 0;
+  PERMISSIVE = 1;
  }
  
 // ServiceRole specification contains a list of access rules (permissions).
@@ -124,9 +124,11 @@ message ServiceRole {
   // Required. The set of access rules (permissions) that the role has.
   repeated AccessRule rules = 1;
 
-  // Indicates enforcement mode of the ServiceRole config, by default mode is ENFORCED.
-  // If ServiceRole is in DARKLAUNCH mode, all ServiceRoleBindings that
-  // refers to it will be in DARKLAUNCH mode.
+  // Indicates enforcement mode of the ServiceRole config, ENFORCED by default.
+  // If ServiceRole is in PERMISSIVE mode, all ServiceRoleBindings that
+  // refers to it will be treated as PERMISSIVE mode.
+  // If ServiceRole is in ENFORCED mode, ServiceRoleBindings that
+  // refers to it will decide its own enforcement mode.
   EnforcementMode mode = 2;
 }
 
@@ -186,7 +188,11 @@ message ServiceRoleBinding {
   // Required. Reference to the ServiceRole object.
   RoleRef roleRef = 2;
 
-  // Indicates enforcement mode of the ServiceRoleBinding config, by default mode is ENFORCED.
+  // Indicates enforcement mode of the ServiceRoleBinding config, ENFORCED by default.
+  // If RoleRef it refers to is PERMISSIVE mode, the ServiceRoleBinding 
+  // will be treated as PERMISSIVE mode.
+  // If RoleRef it refers to is ENFORCED mode, the ServiceRoleBinding 
+  // will decides its own enforcement mode from this mode field.
   EnforcementMode mode = 3;
 }
 

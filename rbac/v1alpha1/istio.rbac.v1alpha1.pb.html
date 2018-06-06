@@ -206,13 +206,13 @@ before return to the user.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="EnforcementMode.ENFORCEMENT_ENFORCED">
-<td><code>ENFORCEMENT_ENFORCED</code></td>
+<tr id="EnforcementMode.ENFORCED">
+<td><code>ENFORCED</code></td>
 <td>
 </td>
 </tr>
-<tr id="EnforcementMode.ENFORCEMENT_DARKLAUNCH">
-<td><code>ENFORCEMENT_DARKLAUNCH</code></td>
+<tr id="EnforcementMode.PERMISSIVE">
+<td><code>PERMISSIVE</code></td>
 <td>
 </td>
 </tr>
@@ -417,9 +417,11 @@ of the ServiceRole is specified in &ldquo;metadata&rdquo; section of the Service
 <td><code>mode</code></td>
 <td><code><a href="#EnforcementMode">EnforcementMode</a></code></td>
 <td>
-<p>Indicates enforcement mode of the ServiceRole config, by default mode is ENFORCED.
-If ServiceRole is in DARKLAUNCH mode, all ServiceRoleBindings that
-refers to it will be in DARKLAUNCH mode.</p>
+<p>Indicates enforcement mode of the ServiceRole config, ENFORCED by default.
+If ServiceRole is in PERMISSIVE mode, all ServiceRoleBindings that
+refers to it will be treated as PERMISSIVE mode.
+If ServiceRole is in ENFORCED mode, ServiceRoleBindings that
+refers to it will decide its own enforcement mode.</p>
 
 </td>
 </tr>
@@ -462,7 +464,11 @@ object.</p>
 <td><code>mode</code></td>
 <td><code><a href="#EnforcementMode">EnforcementMode</a></code></td>
 <td>
-<p>Indicates enforcement mode of the ServiceRoleBinding config, by default mode is ENFORCED.</p>
+<p>Indicates enforcement mode of the ServiceRoleBinding config, ENFORCED by default.
+If RoleRef it refers to is PERMISSIVE mode, the ServiceRoleBinding
+will be treated as PERMISSIVE mode.
+If RoleRef it refers to is ENFORCED mode, the ServiceRoleBinding
+will decides its own enforcement mode from this mode field.</p>
 
 </td>
 </tr>
