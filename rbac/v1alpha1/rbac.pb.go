@@ -107,14 +107,19 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
+// $hide_from_docs
 // RBAC config enforcement mode, used to verify new ServiceRole/ServiceBinding configs
 // work as expected before rolling to prod. RBAC engine only logs results from
-// ServiceRole/ServiceBinding configs in dark launch mode, and discards the result
-// before return to the user.
+// ServiceRole/ServiceBinding configs that are in permissive mode, and discards result
+// before returning to the user.
 type EnforcementMode int32
 
 const (
-	EnforcementMode_ENFORCED   EnforcementMode = 0
+	// Policy in ENFORCED mode has impact on user experience.
+	// Policy is in ENFORCED mode by default.
+	EnforcementMode_ENFORCED EnforcementMode = 0
+	// Policy in PERMISSIVE doesn't impact on user experience.
+	// RBAC engine run policies in PERMISSIVE and logs decision.
 	EnforcementMode_PERMISSIVE EnforcementMode = 1
 )
 
@@ -131,7 +136,7 @@ func (x EnforcementMode) String() string {
 	return proto.EnumName(EnforcementMode_name, int32(x))
 }
 func (EnforcementMode) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_rbac_8032f4017112db9f, []int{0}
+	return fileDescriptor_rbac_548281fbebd0f44c, []int{0}
 }
 
 type RbacConfig_Mode int32
@@ -167,7 +172,7 @@ func (x RbacConfig_Mode) String() string {
 	return proto.EnumName(RbacConfig_Mode_name, int32(x))
 }
 func (RbacConfig_Mode) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_rbac_8032f4017112db9f, []int{5, 0}
+	return fileDescriptor_rbac_548281fbebd0f44c, []int{5, 0}
 }
 
 // ServiceRole specification contains a list of access rules (permissions).
@@ -176,11 +181,12 @@ func (RbacConfig_Mode) EnumDescriptor() ([]byte, []int) {
 type ServiceRole struct {
 	// Required. The set of access rules (permissions) that the role has.
 	Rules []*AccessRule `protobuf:"bytes,1,rep,name=rules" json:"rules,omitempty"`
-	// Indicates enforcement mode of the ServiceRole config, ENFORCED by default.
+	// $hide_from_docs
+	// Indicates enforcement mode of the ServiceRole config.
 	// If ServiceRole is in PERMISSIVE mode, all ServiceRoleBindings that
 	// refers to it will be treated as PERMISSIVE mode.
 	// If ServiceRole is in ENFORCED mode, ServiceRoleBindings that
-	// refers to it will decide its own enforcement mode.
+	// refers to it will decide their own enforcement modes.
 	Mode                 EnforcementMode `protobuf:"varint,2,opt,name=mode,enum=istio.rbac.v1alpha1.EnforcementMode" json:"mode,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_unrecognized     []byte          `json:"-"`
@@ -191,7 +197,7 @@ func (m *ServiceRole) Reset()         { *m = ServiceRole{} }
 func (m *ServiceRole) String() string { return proto.CompactTextString(m) }
 func (*ServiceRole) ProtoMessage()    {}
 func (*ServiceRole) Descriptor() ([]byte, []int) {
-	return fileDescriptor_rbac_8032f4017112db9f, []int{0}
+	return fileDescriptor_rbac_548281fbebd0f44c, []int{0}
 }
 func (m *ServiceRole) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ServiceRole.Unmarshal(m, b)
@@ -259,7 +265,7 @@ func (m *AccessRule) Reset()         { *m = AccessRule{} }
 func (m *AccessRule) String() string { return proto.CompactTextString(m) }
 func (*AccessRule) ProtoMessage()    {}
 func (*AccessRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_rbac_8032f4017112db9f, []int{1}
+	return fileDescriptor_rbac_548281fbebd0f44c, []int{1}
 }
 func (m *AccessRule) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AccessRule.Unmarshal(m, b)
@@ -328,7 +334,7 @@ func (m *AccessRule_Constraint) Reset()         { *m = AccessRule_Constraint{} }
 func (m *AccessRule_Constraint) String() string { return proto.CompactTextString(m) }
 func (*AccessRule_Constraint) ProtoMessage()    {}
 func (*AccessRule_Constraint) Descriptor() ([]byte, []int) {
-	return fileDescriptor_rbac_8032f4017112db9f, []int{1, 0}
+	return fileDescriptor_rbac_548281fbebd0f44c, []int{1, 0}
 }
 func (m *AccessRule_Constraint) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AccessRule_Constraint.Unmarshal(m, b)
@@ -371,11 +377,12 @@ type ServiceRoleBinding struct {
 	Subjects []*Subject `protobuf:"bytes,1,rep,name=subjects" json:"subjects,omitempty"`
 	// Required. Reference to the ServiceRole object.
 	RoleRef *RoleRef `protobuf:"bytes,2,opt,name=roleRef" json:"roleRef,omitempty"`
-	// Indicates enforcement mode of the ServiceRoleBinding config, ENFORCED by default.
-	// If RoleRef it refers to is PERMISSIVE mode, the ServiceRoleBinding
-	// will be treated as PERMISSIVE mode.
-	// If RoleRef it refers to is ENFORCED mode, the ServiceRoleBinding
-	// will decides its own enforcement mode from this mode field.
+	// $hide_from_docs
+	// Indicates enforcement mode of the ServiceRoleBinding config.
+	// If RoleRef it refers to is in PERMISSIVE mode, the ServiceRoleBinding
+	// will be treated as PERMISSIVE mode regardless this mode field.
+	// If RoleRef it refers to is in ENFORCED mode, the ServiceRoleBinding
+	// will decide its own enforcement mode from this mode field.
 	Mode                 EnforcementMode `protobuf:"varint,3,opt,name=mode,enum=istio.rbac.v1alpha1.EnforcementMode" json:"mode,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_unrecognized     []byte          `json:"-"`
@@ -386,7 +393,7 @@ func (m *ServiceRoleBinding) Reset()         { *m = ServiceRoleBinding{} }
 func (m *ServiceRoleBinding) String() string { return proto.CompactTextString(m) }
 func (*ServiceRoleBinding) ProtoMessage()    {}
 func (*ServiceRoleBinding) Descriptor() ([]byte, []int) {
-	return fileDescriptor_rbac_8032f4017112db9f, []int{2}
+	return fileDescriptor_rbac_548281fbebd0f44c, []int{2}
 }
 func (m *ServiceRoleBinding) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ServiceRoleBinding.Unmarshal(m, b)
@@ -450,7 +457,7 @@ func (m *Subject) Reset()         { *m = Subject{} }
 func (m *Subject) String() string { return proto.CompactTextString(m) }
 func (*Subject) ProtoMessage()    {}
 func (*Subject) Descriptor() ([]byte, []int) {
-	return fileDescriptor_rbac_8032f4017112db9f, []int{3}
+	return fileDescriptor_rbac_548281fbebd0f44c, []int{3}
 }
 func (m *Subject) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Subject.Unmarshal(m, b)
@@ -509,7 +516,7 @@ func (m *RoleRef) Reset()         { *m = RoleRef{} }
 func (m *RoleRef) String() string { return proto.CompactTextString(m) }
 func (*RoleRef) ProtoMessage()    {}
 func (*RoleRef) Descriptor() ([]byte, []int) {
-	return fileDescriptor_rbac_8032f4017112db9f, []int{4}
+	return fileDescriptor_rbac_548281fbebd0f44c, []int{4}
 }
 func (m *RoleRef) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RoleRef.Unmarshal(m, b)
@@ -581,7 +588,7 @@ func (m *RbacConfig) Reset()         { *m = RbacConfig{} }
 func (m *RbacConfig) String() string { return proto.CompactTextString(m) }
 func (*RbacConfig) ProtoMessage()    {}
 func (*RbacConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_rbac_8032f4017112db9f, []int{5}
+	return fileDescriptor_rbac_548281fbebd0f44c, []int{5}
 }
 func (m *RbacConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RbacConfig.Unmarshal(m, b)
@@ -637,7 +644,7 @@ func (m *RbacConfig_Target) Reset()         { *m = RbacConfig_Target{} }
 func (m *RbacConfig_Target) String() string { return proto.CompactTextString(m) }
 func (*RbacConfig_Target) ProtoMessage()    {}
 func (*RbacConfig_Target) Descriptor() ([]byte, []int) {
-	return fileDescriptor_rbac_8032f4017112db9f, []int{5, 0}
+	return fileDescriptor_rbac_548281fbebd0f44c, []int{5, 0}
 }
 func (m *RbacConfig_Target) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RbacConfig_Target.Unmarshal(m, b)
@@ -685,9 +692,9 @@ func init() {
 	proto.RegisterEnum("istio.rbac.v1alpha1.RbacConfig_Mode", RbacConfig_Mode_name, RbacConfig_Mode_value)
 }
 
-func init() { proto.RegisterFile("rbac/v1alpha1/rbac.proto", fileDescriptor_rbac_8032f4017112db9f) }
+func init() { proto.RegisterFile("rbac/v1alpha1/rbac.proto", fileDescriptor_rbac_548281fbebd0f44c) }
 
-var fileDescriptor_rbac_8032f4017112db9f = []byte{
+var fileDescriptor_rbac_548281fbebd0f44c = []byte{
 	// 587 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0x5f, 0x6b, 0xda, 0x5e,
 	0x18, 0x6e, 0x12, 0xab, 0xf5, 0xf5, 0x47, 0x9b, 0xdf, 0x59, 0x37, 0x82, 0x94, 0xad, 0x84, 0x31,
