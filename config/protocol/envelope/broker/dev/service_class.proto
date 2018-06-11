@@ -1,0 +1,18 @@
+// =================================================================================================
+// WARNING! This file is auto-generated. Do not hand-edit.
+// =================================================================================================
+
+syntax = "proto3";
+
+import "broker/dev/service_class.proto";
+import "config/protocol/envelope/metadata.proto";
+
+package istio.config.protocol.envelope.broker.dev;
+
+option go_package = "istio.io/api/config/protocol/envelope/broker/dev";
+
+message ServiceClass {
+    istio.config.protocol.envelope.Metadata Metadata = 1;
+
+    istio.broker.dev.ServiceClass Contents = 2;
+}

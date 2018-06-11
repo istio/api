@@ -1,0 +1,18 @@
+// =================================================================================================
+// WARNING! This file is auto-generated. Do not hand-edit.
+// =================================================================================================
+
+syntax = "proto3";
+
+import "authentication/v1alpha1/policy.proto";
+import "config/protocol/envelope/metadata.proto";
+
+package istio.config.protocol.envelope.authentication.v1alpha1;
+
+option go_package = "istio.io/api/config/protocol/envelope/authentication/v1alpha1";
+
+message MutualTls {
+    istio.config.protocol.envelope.Metadata Metadata = 1;
+
+    istio.authentication.v1alpha1.MutualTls Contents = 2;
+}

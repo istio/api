@@ -1,0 +1,18 @@
+// =================================================================================================
+// WARNING! This file is auto-generated. Do not hand-edit.
+// =================================================================================================
+
+syntax = "proto3";
+
+import "rbac/v1alpha1/rbac.proto";
+import "config/protocol/envelope/metadata.proto";
+
+package istio.config.protocol.envelope.rbac.v1alpha1;
+
+option go_package = "istio.io/api/config/protocol/envelope/rbac/v1alpha1";
+
+message ServiceRole {
+    istio.config.protocol.envelope.Metadata Metadata = 1;
+
+    istio.rbac.v1alpha1.ServiceRole Contents = 2;
+}

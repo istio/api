@@ -1,0 +1,18 @@
+// =================================================================================================
+// WARNING! This file is auto-generated. Do not hand-edit.
+// =================================================================================================
+
+syntax = "proto3";
+
+import "mixer/v1/config/client/api_spec.proto";
+import "config/protocol/envelope/metadata.proto";
+
+package istio.config.protocol.envelope.mixer.v1.config.client;
+
+option go_package = "istio.io/api/config/protocol/envelope/mixer/v1/config/client";
+
+message HTTPAPISpec {
+    istio.config.protocol.envelope.Metadata Metadata = 1;
+
+    istio.mixer.v1.config.client.HTTPAPISpec Contents = 2;
+}
