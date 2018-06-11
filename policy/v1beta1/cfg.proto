@@ -184,10 +184,10 @@ message Instance {
   // templates, use the `template` field instead.
   //
   // The value must match the name of the available template Mixer is built with.
-  string template_compiled = 67794676;
+  string compiled_template = 67794676;
 
   // Required. The name of the template this instance creates instances for. For referencing compiled-in
-  // templates, use the `template_compiled` field instead.
+  // templates, use the `compiled_template` field instead.
   //
   // The value must match the name of the available template in scope.
   string template = 2;
@@ -258,10 +258,10 @@ message Handler {
   //
   // The value must match the name of the available adapter Mixer is built with. An adapter's name is typically a
   // constant in its code.
-  string adapter_compiled = 67794676;
+  string compiled_adapter = 67794676;
 
   // Required. The name of a specific adapter implementation. For referencing compiled-in
-  // adapters, use the `adapter_compiled` field instead.
+  // adapters, use the `compiled_adapter` field instead.
   //
   // An adapter's implementation name is typically a constant in its code.
   string adapter = 2;
