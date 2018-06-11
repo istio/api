@@ -765,7 +765,7 @@ spec:
     - destination:
         port:
           number: 7777
-        host: reviews.qa.svc.cluster.local
+        name: reviews.qa.svc.cluster.local
   - match:
       uri:
         prefix: /reviews/
@@ -773,10 +773,10 @@ spec:
     - destination:
         port:
           number: 9080 # can be omitted if its the only port for reviews
-        host: reviews.prod.svc.cluster.local
+        name: reviews.prod.svc.cluster.local
       weight: 80
     - destination:
-        host: reviews.qa.svc.cluster.local
+        name: reviews.qa.svc.cluster.local
       weight: 20
 </code></pre>
 
@@ -801,7 +801,7 @@ spec:
       sourceSubnet: &quot;172.17.16.0/24&quot;
     route:
     - destination:
-        host: mongo.prod.svc.cluster.local
+        name: mongo.prod.svc.cluster.local
 </code></pre>
 
 <table class="message-fields">
