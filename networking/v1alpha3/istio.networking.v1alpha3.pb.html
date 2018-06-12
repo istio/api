@@ -715,7 +715,7 @@ spec:
 </tr>
 </thead>
 <tbody>
-<tr id="EnvoyFilters.selector">
+<tr id="EnvoyFilters-selector">
 <td><code>selector</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
@@ -728,9 +728,9 @@ the mesh.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilters.filters">
+<tr id="EnvoyFilters-filters">
 <td><code>filters</code></td>
-<td><code><a href="#EnvoyFilters.Filter">EnvoyFilters.Filter[]</a></code></td>
+<td><code><a href="#EnvoyFilters-Filter">EnvoyFilters.Filter[]</a></code></td>
 <td>
 <p>REQUIRED: Envoy network filters/http filters to be added to matching
 listeners.  When adding network filters to http connections, care
@@ -742,7 +742,7 @@ envoy.http<em>connection</em>manager.</p>
 </tbody>
 </table>
 </section>
-<h2 id="EnvoyFilters.Filter">EnvoyFilters.Filter</h2>
+<h2 id="EnvoyFilters-Filter">EnvoyFilters.Filter</h2>
 <section>
 <p>Envoy filters to be added to a network or http filter chain.</p>
 
@@ -755,32 +755,32 @@ envoy.http<em>connection</em>manager.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="EnvoyFilters.Filter.listener_match">
+<tr id="EnvoyFilters-Filter-listener_match">
 <td><code>listenerMatch</code></td>
-<td><code><a href="#EnvoyFilters.ListenerMatch">EnvoyFilters.ListenerMatch</a></code></td>
+<td><code><a href="#EnvoyFilters-ListenerMatch">EnvoyFilters.ListenerMatch</a></code></td>
 <td>
 <p>Filter will be added to the listner only if the match conditions are true.
 If not specified, the filters will be applied to all listeners.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilters.Filter.insert_position">
+<tr id="EnvoyFilters-Filter-insert_position">
 <td><code>insertPosition</code></td>
-<td><code><a href="#EnvoyFilters.InsertPosition">EnvoyFilters.InsertPosition</a></code></td>
+<td><code><a href="#EnvoyFilters-InsertPosition">EnvoyFilters.InsertPosition</a></code></td>
 <td>
 <p>Insert position in the filter chain. Defaults to FIRST</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilters.Filter.filter_type">
+<tr id="EnvoyFilters-Filter-filter_type">
 <td><code>filterType</code></td>
-<td><code><a href="#EnvoyFilters.Filter.FilterType">EnvoyFilters.Filter.FilterType</a></code></td>
+<td><code><a href="#EnvoyFilters-Filter-FilterType">EnvoyFilters.Filter.FilterType</a></code></td>
 <td>
 <p>REQUIRED: The type of filter to instantiate.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilters.Filter.filter_name">
+<tr id="EnvoyFilters-Filter-filter_name">
 <td><code>filterName</code></td>
 <td><code>string</code></td>
 <td>
@@ -789,7 +789,7 @@ filter <em>compiled into</em> Envoy.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilters.Filter.filter_config">
+<tr id="EnvoyFilters-Filter-filter_config">
 <td><code>filterConfig</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">google.protobuf.Struct</a></code></td>
 <td>
@@ -801,7 +801,7 @@ instantiated.</p>
 </tbody>
 </table>
 </section>
-<h2 id="EnvoyFilters.Filter.FilterType">EnvoyFilters.Filter.FilterType</h2>
+<h2 id="EnvoyFilters-Filter-FilterType">EnvoyFilters.Filter.FilterType</h2>
 <section>
 <table class="enum-values">
 <thead>
@@ -811,21 +811,21 @@ instantiated.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="EnvoyFilters.Filter.FilterType.INVALID">
+<tr id="EnvoyFilters-Filter-FilterType-INVALID">
 <td><code>INVALID</code></td>
 <td>
 <p>placeholder</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilters.Filter.FilterType.HTTP">
+<tr id="EnvoyFilters-Filter-FilterType-HTTP">
 <td><code>HTTP</code></td>
 <td>
 <p>Http filter</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilters.Filter.FilterType.NETWORK">
+<tr id="EnvoyFilters-Filter-FilterType-NETWORK">
 <td><code>NETWORK</code></td>
 <td>
 <p>Network filter</p>
@@ -835,7 +835,7 @@ instantiated.</p>
 </tbody>
 </table>
 </section>
-<h2 id="EnvoyFilters.InsertPosition">EnvoyFilters.InsertPosition</h2>
+<h2 id="EnvoyFilters-InsertPosition">EnvoyFilters.InsertPosition</h2>
 <section>
 <p>Indicates the relative index in the filter chain where the filter should be inserted.</p>
 
@@ -848,15 +848,15 @@ instantiated.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="EnvoyFilters.InsertPosition.index">
+<tr id="EnvoyFilters-InsertPosition-index">
 <td><code>index</code></td>
-<td><code><a href="#EnvoyFilters.InsertPosition.Index">EnvoyFilters.InsertPosition.Index</a></code></td>
+<td><code><a href="#EnvoyFilters-InsertPosition-Index">EnvoyFilters.InsertPosition.Index</a></code></td>
 <td>
 <p>Position of this filter in the filter chain.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilters.InsertPosition.relative_to">
+<tr id="EnvoyFilters-InsertPosition-relative_to">
 <td><code>relativeTo</code></td>
 <td><code>string</code></td>
 <td>
@@ -868,7 +868,7 @@ filter relative to which this filter should be inserted.</p>
 </tbody>
 </table>
 </section>
-<h2 id="EnvoyFilters.InsertPosition.Index">EnvoyFilters.InsertPosition.Index</h2>
+<h2 id="EnvoyFilters-InsertPosition-Index">EnvoyFilters.InsertPosition.Index</h2>
 <section>
 <p>Index/position in the filter chain.</p>
 
@@ -880,28 +880,28 @@ filter relative to which this filter should be inserted.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="EnvoyFilters.InsertPosition.Index.FIRST">
+<tr id="EnvoyFilters-InsertPosition-Index-FIRST">
 <td><code>FIRST</code></td>
 <td>
 <p>Insert first</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilters.InsertPosition.Index.LAST">
+<tr id="EnvoyFilters-InsertPosition-Index-LAST">
 <td><code>LAST</code></td>
 <td>
 <p>Insert last</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilters.InsertPosition.Index.BEFORE">
+<tr id="EnvoyFilters-InsertPosition-Index-BEFORE">
 <td><code>BEFORE</code></td>
 <td>
 <p>Insert before the named filter.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilters.InsertPosition.Index.AFTER">
+<tr id="EnvoyFilters-InsertPosition-Index-AFTER">
 <td><code>AFTER</code></td>
 <td>
 <p>Insert after the named filter.</p>
@@ -911,7 +911,7 @@ filter relative to which this filter should be inserted.</p>
 </tbody>
 </table>
 </section>
-<h2 id="EnvoyFilters.ListenerMatch">EnvoyFilters.ListenerMatch</h2>
+<h2 id="EnvoyFilters-ListenerMatch">EnvoyFilters.ListenerMatch</h2>
 <section>
 <p>Select a listener to add the filter to based on the match conditions.
 All conditions specified in the ListenerMatch must be met for the filter
@@ -926,7 +926,7 @@ to be applied to a listener.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="EnvoyFilters.ListenerMatch.port">
+<tr id="EnvoyFilters-ListenerMatch-port">
 <td><code>port</code></td>
 <td><code>uint32</code></td>
 <td>
@@ -934,16 +934,16 @@ to be applied to a listener.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilters.ListenerMatch.listener_type">
+<tr id="EnvoyFilters-ListenerMatch-listener_type">
 <td><code>listenerType</code></td>
-<td><code><a href="#EnvoyFilters.ListenerMatch.ListenerType">EnvoyFilters.ListenerMatch.ListenerType</a></code></td>
+<td><code><a href="#EnvoyFilters-ListenerMatch-ListenerType">EnvoyFilters.ListenerMatch.ListenerType</a></code></td>
 <td>
 <p>Inbound vs outbound sidecar listener or gateway listener. If not specified,
 matches all listeners.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilters.ListenerMatch.listener_protocol">
+<tr id="EnvoyFilters-ListenerMatch-listener_protocol">
 <td><code>listenerProtocol</code></td>
 <td><code>string</code></td>
 <td>
@@ -955,7 +955,7 @@ passthrough using SNI). Acceptable values are TCP/HTTP/MONGO.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilters.ListenerMatch.address">
+<tr id="EnvoyFilters-ListenerMatch-address">
 <td><code>address</code></td>
 <td><code>string[]</code></td>
 <td>
@@ -967,7 +967,7 @@ specified, should match atleast one address in the list.</p>
 </tbody>
 </table>
 </section>
-<h2 id="EnvoyFilters.ListenerMatch.ListenerType">EnvoyFilters.ListenerMatch.ListenerType</h2>
+<h2 id="EnvoyFilters-ListenerMatch-ListenerType">EnvoyFilters.ListenerMatch.ListenerType</h2>
 <section>
 <table class="enum-values">
 <thead>
@@ -977,28 +977,28 @@ specified, should match atleast one address in the list.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="EnvoyFilters.ListenerMatch.ListenerType.ANY">
+<tr id="EnvoyFilters-ListenerMatch-ListenerType-ANY">
 <td><code>ANY</code></td>
 <td>
 <p>All listeners</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilters.ListenerMatch.ListenerType.SIDECAR_INBOUND">
+<tr id="EnvoyFilters-ListenerMatch-ListenerType-SIDECAR_INBOUND">
 <td><code>SIDECAR_INBOUND</code></td>
 <td>
 <p>Inbound listener in sidecar</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilters.ListenerMatch.ListenerType.SIDECAR_OUTBOUND">
+<tr id="EnvoyFilters-ListenerMatch-ListenerType-SIDECAR_OUTBOUND">
 <td><code>SIDECAR_OUTBOUND</code></td>
 <td>
 <p>Outbound listener in sidecar</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilters.ListenerMatch.ListenerType.GATEWAY">
+<tr id="EnvoyFilters-ListenerMatch-ListenerType-GATEWAY">
 <td><code>GATEWAY</code></td>
 <td>
 <p>Gateway listener</p>
