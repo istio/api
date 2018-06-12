@@ -23,12 +23,12 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-// Resource is an envelope message that encapsulates the contents of a resource, and the associated
-// metadata.
+// Envelope message for transferring configuration resources via Mesh Configuration Protocol. It contains
+// both the configuration resource, as well as the associated metadata.
 type Resource struct {
-	// Metadata of the resource.
+	// Metadata about the config resource.
 	Metadata *Metadata `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
-	// The actual contents of the resource.
+	// The contents of the config resource.
 	Contents             *any.Any `protobuf:"bytes,2,opt,name=contents,proto3" json:"contents,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -39,7 +39,7 @@ func (m *Resource) Reset()         { *m = Resource{} }
 func (m *Resource) String() string { return proto.CompactTextString(m) }
 func (*Resource) ProtoMessage()    {}
 func (*Resource) Descriptor() ([]byte, []int) {
-	return fileDescriptor_resource_90932dea635e41d3, []int{0}
+	return fileDescriptor_resource_bcc16cbe2b0cfb9d, []int{0}
 }
 func (m *Resource) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Resource.Unmarshal(m, b)
@@ -78,10 +78,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("config/mcp/v1alpha1/resource.proto", fileDescriptor_resource_90932dea635e41d3)
+	proto.RegisterFile("config/mcp/v1alpha1/resource.proto", fileDescriptor_resource_bcc16cbe2b0cfb9d)
 }
 
-var fileDescriptor_resource_90932dea635e41d3 = []byte{
+var fileDescriptor_resource_bcc16cbe2b0cfb9d = []byte{
 	// 189 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0xce, 0x31, 0x0f, 0x82, 0x30,
 	0x10, 0x05, 0xe0, 0xe0, 0x60, 0x48, 0xdd, 0x88, 0x03, 0x30, 0x11, 0x5c, 0x9c, 0xae, 0xa2, 0x3f,

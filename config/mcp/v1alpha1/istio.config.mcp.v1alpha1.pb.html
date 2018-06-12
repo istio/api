@@ -8,7 +8,7 @@ number_of_entries: 2
 
 <h2 id="Metadata">Metadata</h2>
 <section>
-<p>Metadata is the metadata information that all resources within the Mesh Configuration Protocol must have.</p>
+<p>Metadata information that all resources within the Mesh Configuration Protocol must have.</p>
 
 <table class="message-fields">
 <thead>
@@ -34,8 +34,8 @@ message.</p>
 </section>
 <h2 id="Resource">Resource</h2>
 <section>
-<p>Resource is an envelope message that encapsulates the contents of a resource, and the associated
-metadata.</p>
+<p>Envelope message for transferring configuration resources via Mesh Configuration Protocol. It contains
+both the configuration resource, as well as the associated metadata.</p>
 
 <table class="message-fields">
 <thead>
@@ -50,7 +50,7 @@ metadata.</p>
 <td><code>metadata</code></td>
 <td><code><a href="#Metadata">Metadata</a></code></td>
 <td>
-<p>Metadata of the resource.</p>
+<p>Metadata about the config resource.</p>
 
 </td>
 </tr>
@@ -58,7 +58,7 @@ metadata.</p>
 <td><code>contents</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#any">google.protobuf.Any</a></code></td>
 <td>
-<p>The actual contents of the resource.</p>
+<p>The contents of the config resource.</p>
 
 </td>
 </tr>
