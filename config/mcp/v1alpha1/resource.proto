@@ -22,13 +22,13 @@ import "config/mcp/v1alpha1/metadata.proto";
 
 option go_package="istio.io/api/config/mcp/v1alpha1";
 
-// Resource is an envelope message that encapsulates the contents of a resource, and the associated
-// metadata.
+// Envelope message for transferring configuration resources via Mesh Configuration Protocol. It contains
+// both the configuration resource, as well as the associated metadata.
 message Resource {
 
-    // Metadata of the resource.
+    // Metadata about the config resource.
     istio.config.mcp.v1alpha1.Metadata metadata = 1;
 
-    // The actual contents of the resource.
+    // The contents of the config resource.
     google.protobuf.Any contents = 2;
 }

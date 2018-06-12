@@ -18,10 +18,10 @@ package istio.config.mcp.v1alpha1;
 
 option go_package="istio.io/api/config/mcp/v1alpha1";
 
-// Metadata is the metadata information that all resources within the Mesh Configuration Protocol must have.
+// Metadata information that all resources within the Mesh Configuration Protocol must have.
 message Metadata {
 
-	// The name of the resource. It is unique within the context of a resource type and the origin server of
+    // The name of the resource. It is unique within the context of a resource type and the origin server of
     // the resource. The resource type is identified by the TypeUrl of the contents field of the Resource
     // message.
 	string name = 1;
