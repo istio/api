@@ -89,7 +89,7 @@ message EnvoyFilters {
     // specified, applies to listeners on all protocols. Use the protocol
     // selection to select all HTTP listeners (includes HTTP2/gRPC/HTTPS
     // where Envoy terminates TLS) or all TCP listeners (includes HTTPS
-    // passthrough using SNI).
+    // passthrough using SNI). Acceptable values are TCP/HTTP/MONGO.
     string listener_protocol = 3;
     
     // One or more IP addresses to which the listener is bound. If

@@ -189,7 +189,7 @@ type EnvoyFilters_ListenerMatch struct {
 	// specified, applies to listeners on all protocols. Use the protocol
 	// selection to select all HTTP listeners (includes HTTP2/gRPC/HTTPS
 	// where Envoy terminates TLS) or all TCP listeners (includes HTTPS
-	// passthrough using SNI).
+	// passthrough using SNI). Acceptable values are TCP/HTTP/MONGO.
 	ListenerProtocol string `protobuf:"bytes,3,opt,name=listener_protocol,json=listenerProtocol,proto3" json:"listener_protocol,omitempty"`
 	// One or more IP addresses to which the listener is bound. If
 	// specified, should match atleast one address in the list.
