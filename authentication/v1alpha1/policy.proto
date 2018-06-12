@@ -300,6 +300,10 @@ message Policy {
   // In other words, binding rule does not affect the decision to accept or
   // reject request.
   PrincipalBinding principal_binding = 6;
+
+  // Short description of the policy. This field is not used by authentication engine, but for
+  // (human) operators to keep extra note about the policy.
+  string description = 7;
 }
 
 // TargetSelector defines a matching rule to a service/destination.
