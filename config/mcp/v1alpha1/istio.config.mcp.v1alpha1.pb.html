@@ -34,8 +34,8 @@ message.</p>
 </section>
 <h2 id="Resource">Resource</h2>
 <section>
-<p>Envelope message for transferring configuration resources via Mesh Configuration Protocol. It contains
-both the configuration resource, as well as the associated metadata.</p>
+<p>A configuration resource as transferred via the Mesh Configuration Protocol.
+Each resource is made up of common metadata, and a type-specific payload.</p>
 
 <table class="message-fields">
 <thead>
@@ -50,7 +50,7 @@ both the configuration resource, as well as the associated metadata.</p>
 <td><code>metadata</code></td>
 <td><code><a href="#Metadata">Metadata</a></code></td>
 <td>
-<p>Metadata about the config resource.</p>
+<p>Common metadata describing this resource.</p>
 
 </td>
 </tr>
@@ -58,7 +58,7 @@ both the configuration resource, as well as the associated metadata.</p>
 <td><code>contents</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#any">google.protobuf.Any</a></code></td>
 <td>
-<p>The contents of the config resource.</p>
+<p>The type-specific payload for this resource.</p>
 
 </td>
 </tr>

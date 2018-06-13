@@ -23,12 +23,12 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-// Envelope message for transferring configuration resources via Mesh Configuration Protocol. It contains
-// both the configuration resource, as well as the associated metadata.
+// A configuration resource as transferred via the Mesh Configuration Protocol.
+// Each resource is made up of common metadata, and a type-specific payload.
 type Resource struct {
-	// Metadata about the config resource.
+	// Common metadata describing this resource.
 	Metadata *Metadata `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
-	// The contents of the config resource.
+	// The type-specific payload for this resource.
 	Contents             *any.Any `protobuf:"bytes,2,opt,name=contents,proto3" json:"contents,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -39,7 +39,7 @@ func (m *Resource) Reset()         { *m = Resource{} }
 func (m *Resource) String() string { return proto.CompactTextString(m) }
 func (*Resource) ProtoMessage()    {}
 func (*Resource) Descriptor() ([]byte, []int) {
-	return fileDescriptor_resource_bcc16cbe2b0cfb9d, []int{0}
+	return fileDescriptor_resource_c0d2a2ee6309a484, []int{0}
 }
 func (m *Resource) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Resource.Unmarshal(m, b)
@@ -78,10 +78,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("config/mcp/v1alpha1/resource.proto", fileDescriptor_resource_bcc16cbe2b0cfb9d)
+	proto.RegisterFile("config/mcp/v1alpha1/resource.proto", fileDescriptor_resource_c0d2a2ee6309a484)
 }
 
-var fileDescriptor_resource_bcc16cbe2b0cfb9d = []byte{
+var fileDescriptor_resource_c0d2a2ee6309a484 = []byte{
 	// 189 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0xce, 0x31, 0x0f, 0x82, 0x30,
 	0x10, 0x05, 0xe0, 0xe0, 0x60, 0x48, 0xdd, 0x88, 0x03, 0x30, 0x11, 0x5c, 0x9c, 0xae, 0xa2, 0x3f,
