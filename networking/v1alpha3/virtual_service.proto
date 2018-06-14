@@ -382,7 +382,7 @@ message HTTPRoute {
 
 // Describes match conditions and actions for routing TCP traffic. The
 // following routing rule forwards TLS traffic arriving at port 27017,
-// with SNI equal mongo.prod.svc.cluster.local ,from 172.17.16.* subnet,
+// with SNI equal mongo.prod.svc.cluster.local, from 172.17.16.* subnet,
 // to another Mongo server on port 5555.
 //
 // ```yaml
