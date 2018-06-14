@@ -85,12 +85,21 @@ message EnvoyFilters {
     // matches all listeners.
     ListenerType listener_type = 2;
 
+    enum ListenerProtocol {
+      // All protocols
+      ALL = 0;
+      // HTTP or HTTPS (with termination) / HTTP2/gRPC
+      HTTP = 1;
+      // Any non-HTTP listener
+      TCP = 2;
+    };
+
     // Selects a class of listeners for the same protocol. If not
     // specified, applies to listeners on all protocols. Use the protocol
     // selection to select all HTTP listeners (includes HTTP2/gRPC/HTTPS
     // where Envoy terminates TLS) or all TCP listeners (includes HTTPS
-    // passthrough using SNI). Acceptable values are TCP/HTTP/MONGO.
-    string listener_protocol = 3;
+    // passthrough using SNI).
+    ListenerProtocol listener_protocol = 3;
     
     // One or more IP addresses to which the listener is bound. If
     // specified, should match atleast one address in the list.
