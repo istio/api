@@ -135,7 +135,7 @@ func (EnvoyFilters_Filter_FilterType) EnumDescriptor() ([]byte, []int) {
 //       filters:
 //       - listenerMatch:
 //           port: 18080
-//           listenerType: INBOUND #will match with the listener for the podIP:8080
+//           listenerType: SIDECAR_INBOUND #will match with the listener for the podIP:18080
 //         filterName: envoy.lua
 //         filterType: HTTP
 //         filterConfig:
