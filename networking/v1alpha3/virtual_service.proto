@@ -394,10 +394,10 @@ message HTTPRoute {
 //   hosts:
 //   - mongo.prod.svc.cluster.local
 //   tcp:
-//   - match_sni: true
-//     match:
+//   - match:
 //     - port: 27017
 //       sourceSubnet: "172.17.16.0/24"
+//       tls_sni: true
 //     route:
 //     - destination:
 //         host: mongo.backup.svc.cluster.local
@@ -405,21 +405,17 @@ message HTTPRoute {
 //           number: 5555
 // ```
 message TCPRoute {
-  // Match the SNI of the TLS connection with the hosts value of the VirtualService.
-  // The semantics of match_sni and match variable is AND.
-  bool match_sni = 1;
-
   // Match conditions to be satisfied for the rule to be
   // activated. All conditions inside a single match block have AND
   // semantics, while the list of match blocks have OR semantics. The rule
   // is matched if any one of the match blocks succeed.
-  repeated L4MatchAttributes match = 2;
+  repeated L4MatchAttributes match = 1;
 
   // The destination to which the connection should be forwarded to.
   // Currently, only one destination is allowed for TCP services. When TCP
   // weighted routing support is introduced in Envoy, multiple destinations
   // with weights can be specified.
-  repeated DestinationWeight route = 3;
+  repeated DestinationWeight route = 2;
 }
 
 // HttpMatchRequest specifies a set of criterion to be met in order for the
@@ -631,6 +627,10 @@ message L4MatchAttributes {
   // at the top of the VirtualService (if any) are overridden. The gateway match is
   // independent of sourceLabels.
   repeated string gateways = 5;
+
+  // Match the SNI of the TLS connection with the hosts value of the VirtualService.
+  // The semantics of match_sni and match variable is AND.
+  bool tls_sni = 6;
 }
 
 // HTTPRedirect can be used to send a 302 redirect response to the caller,
