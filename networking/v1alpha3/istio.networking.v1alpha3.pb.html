@@ -2556,9 +2556,9 @@ specified at the DestinationRule level.</p>
 <h2 id="TCPRoute">TCPRoute</h2>
 <section>
 <p>Describes match conditions and actions for routing TCP traffic. The
-following routing rule forwards traffic arriving at port 27017 for
-mongo.prod.svc.cluster.local from 172.17.16.* subnet to another Mongo
-server on port 5555.</p>
+following routing rule forwards TLS traffic arriving at port 27017,
+with SNI equal mongo.prod.svc.cluster.local ,from 172.17.16.* subnet,
+to another Mongo server on port 5555.</p>
 
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -2568,7 +2568,8 @@ spec:
   hosts:
   - mongo.prod.svc.cluster.local
   tcp:
-  - match:
+  - match_sni: true
+    match:
     - port: 27017
       sourceSubnet: &quot;172.17.16.0/24&quot;
     route:
@@ -2587,6 +2588,15 @@ spec:
 </tr>
 </thead>
 <tbody>
+<tr id="TCPRoute-match_sni">
+<td><code>matchSni</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Match the SNI of the TLS connection with the hosts value of the VirtualService.
+The semantics of match_sni and match variable is AND.</p>
+
+</td>
+</tr>
 <tr id="TCPRoute-match">
 <td><code>match</code></td>
 <td><code><a href="#L4MatchAttributes">L4MatchAttributes[]</a></code></td>

@@ -374,16 +374,16 @@ message HTTPRoute {
   // Additional HTTP headers to add before forwarding a request to the
   // destination service.
   map<string, string> append_headers = 11;
-  
+
   // Http headers to remove before returning the response to the caller
   // $hide_from_docs
   map<string, string> remove_response_headers = 12;
 }
 
 // Describes match conditions and actions for routing TCP traffic. The
-// following routing rule forwards traffic arriving at port 27017 for
-// mongo.prod.svc.cluster.local from 172.17.16.* subnet to another Mongo
-// server on port 5555.
+// following routing rule forwards TLS traffic arriving at port 27017,
+// with SNI equal mongo.prod.svc.cluster.local ,from 172.17.16.* subnet,
+// to another Mongo server on port 5555.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -394,7 +394,8 @@ message HTTPRoute {
 //   hosts:
 //   - mongo.prod.svc.cluster.local
 //   tcp:
-//   - match:
+//   - match_sni: true
+//     match:
 //     - port: 27017
 //       sourceSubnet: "172.17.16.0/24"
 //     route:
@@ -404,17 +405,21 @@ message HTTPRoute {
 //           number: 5555
 // ```
 message TCPRoute {
+  // Match the SNI of the TLS connection with the hosts value of the VirtualService.
+  // The semantics of match_sni and match variable is AND.
+  bool match_sni = 1;
+
   // Match conditions to be satisfied for the rule to be
   // activated. All conditions inside a single match block have AND
   // semantics, while the list of match blocks have OR semantics. The rule
   // is matched if any one of the match blocks succeed.
-  repeated L4MatchAttributes match = 1;
+  repeated L4MatchAttributes match = 2;
 
   // The destination to which the connection should be forwarded to.
   // Currently, only one destination is allowed for TCP services. When TCP
   // weighted routing support is introduced in Envoy, multiple destinations
   // with weights can be specified.
-  repeated DestinationWeight route = 2;
+  repeated DestinationWeight route = 3;
 }
 
 // HttpMatchRequest specifies a set of criterion to be met in order for the
@@ -488,7 +493,7 @@ message HTTPMatchRequest {
   // - `regex: "value"` for ECMAscript style regex-based match
   //
   StringMatch authority = 4;
-  
+
   // The header keys must be lowercase and use hyphen as the separator,
   // e.g. _x-request-id_.
   //
@@ -612,7 +617,7 @@ message L4MatchAttributes {
   // in these cases it is not required to explicitly select the port.
   uint32 port = 2;
 
-  // IPv4 or IPv6 ip address of source with optional subnet. E.g., a.b.c.d/xx 
+  // IPv4 or IPv6 ip address of source with optional subnet. E.g., a.b.c.d/xx
   // form or just a.b.c.d
   string source_subnet = 3;
 
@@ -656,12 +661,12 @@ message HTTPRedirect {
   // value. Note that the entire path will be replaced, irrespective of the
   // request URI being matched as an exact path or prefix.
   string uri = 1;
-   
+
   // On a redirect, overwrite the Authority/Host portion of the URL with
   // this value.
   string authority = 2;
 }
- 
+
 // HTTPRewrite can be used to rewrite specific parts of a HTTP request
 // before forwarding the request to the destination. Rewrite primitive can
 // be used only with the DestinationWeights. The following example
