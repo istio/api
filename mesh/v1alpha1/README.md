@@ -59,6 +59,7 @@ tracing configuration).
 | default_config | [ProxyConfig](#istio.mesh.v1alpha1.ProxyConfig) |  | Default proxy config used by the proxy injection mechanism operating in the mesh (e.g. Kubernetes admission controller) In case of Kubernetes, the proxy config is applied once during the injection process, and remain constant for the duration of the pod. The rest of the mesh config can be changed at runtime and config gets distributed dynamically. |
 | mixer_address | [string](#string) |  | DEPRECATED. Mixer address. This option will be removed soon. Please use mixer_check and mixer_report. |
 | outbound_traffic_policy | [MeshConfig.OutboundTrafficPolicy](#istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy) |  | Set the default behavior of the sidecar for handling outbound traffic from the application. While the default mode should work out of the box, if your application uses one or more external services that are not known apriori, setting the policy to ALLOW_ANY will cause the sidecars to route traffic to the any requested destination. Users are strongly encouraged to use ServiceEntries to explicitly declare any external dependencies, instead of using allow_any. |
+| enable_client_side_policy_check | [bool](#bool) |  | Enables clide side policy checks. |
 
 
 
