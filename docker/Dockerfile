@@ -35,6 +35,7 @@ RUN go get -u -v -ldflags '-w -s' \
         github.com/gogo/protobuf/protoc-gen-gogofaster \
         github.com/gogo/protobuf/protoc-gen-gogoslick \
         github.com/istio/tools/protoc-gen-docs \
+        github.com/douglas-reid/protoc-gen-doc/cmd/protoc-gen-doc \
         && install -c ${GOPATH}/bin/protoc-gen* ${OUTDIR}/usr/bin/
 
 FROM znly/upx as packer
