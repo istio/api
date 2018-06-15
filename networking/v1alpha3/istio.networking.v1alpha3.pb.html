@@ -1517,6 +1517,15 @@ independent of sourceLabels.</p>
 
 </td>
 </tr>
+<tr id="L4MatchAttributes-tls_sni">
+<td><code>tlsSni</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Match the SNI of the TLS connection with the hosts value of the VirtualService.
+The semantics of match_sni and match variable is AND.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -2568,10 +2577,10 @@ spec:
   hosts:
   - mongo.prod.svc.cluster.local
   tcp:
-  - match_sni: true
-    match:
+  - match:
     - port: 27017
       sourceSubnet: &quot;172.17.16.0/24&quot;
+      tls_sni: true
     route:
     - destination:
         host: mongo.backup.svc.cluster.local
@@ -2588,15 +2597,6 @@ spec:
 </tr>
 </thead>
 <tbody>
-<tr id="TCPRoute-match_sni">
-<td><code>matchSni</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Match the SNI of the TLS connection with the hosts value of the VirtualService.
-The semantics of match_sni and match variable is AND.</p>
-
-</td>
-</tr>
 <tr id="TCPRoute-match">
 <td><code>match</code></td>
 <td><code><a href="#L4MatchAttributes">L4MatchAttributes[]</a></code></td>
