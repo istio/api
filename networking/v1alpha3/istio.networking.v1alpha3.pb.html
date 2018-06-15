@@ -693,11 +693,12 @@ kind: EnvoyFilter
 metadata:
   name: reviews-lua
 spec:
-  selector:
+  workloadLabels:
     app: reviews
   filters:
   - listenerMatch:
-      port: 18080
+      port:
+        number: 18080
       listenerType: SIDECAR_INBOUND #will match with the listener for the podIP:18080
     filterName: envoy.lua
     filterType: HTTP
@@ -715,8 +716,8 @@ spec:
 </tr>
 </thead>
 <tbody>
-<tr id="EnvoyFilters-selector">
-<td><code>selector</code></td>
+<tr id="EnvoyFilters-workload_labels">
+<td><code>workloadLabels</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
 <p>One or more labels that indicate a specific set of pods/VMs whose
@@ -928,9 +929,12 @@ to be applied to a listener.</p>
 <tbody>
 <tr id="EnvoyFilters-ListenerMatch-port">
 <td><code>port</code></td>
-<td><code>uint32</code></td>
+<td><code><a href="#Port">Port</a></code></td>
 <td>
-<p>Port associated with the listener. If not specified, matches all listeners.</p>
+<p>Port associated with the listener. If not specified, matches all listeners.
+If only port number is provided, listeners matching the port will be selected.
+Similar match semantics apply for port names as well. Port protocol is currently
+ignored.</p>
 
 </td>
 </tr>
@@ -1135,7 +1139,7 @@ spec:
     - destination:
         port:
           number: 7777
-        name: reviews.qa.svc.cluster.local
+        host: reviews.qa.svc.cluster.local
   - match:
       uri:
         prefix: /reviews/
@@ -1143,10 +1147,10 @@ spec:
     - destination:
         port:
           number: 9080 # can be omitted if its the only port for reviews
-        name: reviews.prod.svc.cluster.local
+        host: reviews.prod.svc.cluster.local
       weight: 80
     - destination:
-        name: reviews.qa.svc.cluster.local
+        host: reviews.qa.svc.cluster.local
       weight: 20
 </code></pre>
 
@@ -1171,7 +1175,7 @@ spec:
       sourceSubnet: &quot;172.17.16.0/24&quot;
     route:
     - destination:
-        name: mongo.prod.svc.cluster.local
+        host: mongo.prod.svc.cluster.local
 </code></pre>
 
 <table class="message-fields">

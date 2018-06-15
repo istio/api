@@ -14,15 +14,16 @@ _sym_db = _symbol_database.Default()
 
 
 from google.protobuf import struct_pb2 as google_dot_protobuf_dot_struct__pb2
+from networking.v1alpha3 import gateway_pb2 as networking_dot_v1alpha3_dot_gateway__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='networking/v1alpha3/envoy_filter.proto',
   package='istio.networking.v1alpha3',
   syntax='proto3',
-  serialized_pb=_b('\n&networking/v1alpha3/envoy_filter.proto\x12\x19istio.networking.v1alpha3\x1a\x1cgoogle/protobuf/struct.proto\"\xd5\x08\n\x0c\x45nvoyFilters\x12G\n\x08selector\x18\x01 \x03(\x0b\x32\x35.istio.networking.v1alpha3.EnvoyFilters.SelectorEntry\x12?\n\x07\x66ilters\x18\x02 \x03(\x0b\x32..istio.networking.v1alpha3.EnvoyFilters.Filter\x1a/\n\rSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\xed\x02\n\rListenerMatch\x12\x0c\n\x04port\x18\x01 \x01(\r\x12Y\n\rlistener_type\x18\x02 \x01(\x0e\x32\x42.istio.networking.v1alpha3.EnvoyFilters.ListenerMatch.ListenerType\x12\x61\n\x11listener_protocol\x18\x03 \x01(\x0e\x32\x46.istio.networking.v1alpha3.EnvoyFilters.ListenerMatch.ListenerProtocol\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x03(\t\"O\n\x0cListenerType\x12\x07\n\x03\x41NY\x10\x00\x12\x13\n\x0fSIDECAR_INBOUND\x10\x01\x12\x14\n\x10SIDECAR_OUTBOUND\x10\x02\x12\x0b\n\x07GATEWAY\x10\x03\".\n\x10ListenerProtocol\x12\x07\n\x03\x41LL\x10\x00\x12\x08\n\x04HTTP\x10\x01\x12\x07\n\x03TCP\x10\x02\x1a\xa7\x01\n\x0eInsertPosition\x12K\n\x05index\x18\x01 \x01(\x0e\x32<.istio.networking.v1alpha3.EnvoyFilters.InsertPosition.Index\x12\x13\n\x0brelative_to\x18\x02 \x01(\t\"3\n\x05Index\x12\t\n\x05\x46IRST\x10\x00\x12\x08\n\x04LAST\x10\x01\x12\n\n\x06\x42\x45\x46ORE\x10\x02\x12\t\n\x05\x41\x46TER\x10\x03\x1a\xef\x02\n\x06\x46ilter\x12M\n\x0elistener_match\x18\x01 \x01(\x0b\x32\x35.istio.networking.v1alpha3.EnvoyFilters.ListenerMatch\x12O\n\x0finsert_position\x18\x02 \x01(\x0b\x32\x36.istio.networking.v1alpha3.EnvoyFilters.InsertPosition\x12N\n\x0b\x66ilter_type\x18\x03 \x01(\x0e\x32\x39.istio.networking.v1alpha3.EnvoyFilters.Filter.FilterType\x12\x13\n\x0b\x66ilter_name\x18\x04 \x01(\t\x12.\n\rfilter_config\x18\x05 \x01(\x0b\x32\x17.google.protobuf.Struct\"0\n\nFilterType\x12\x0b\n\x07INVALID\x10\x00\x12\x08\n\x04HTTP\x10\x01\x12\x0b\n\x07NETWORK\x10\x02\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
+  serialized_pb=_b('\n&networking/v1alpha3/envoy_filter.proto\x12\x19istio.networking.v1alpha3\x1a\x1cgoogle/protobuf/struct.proto\x1a!networking/v1alpha3/gateway.proto\"\x89\t\n\x0c\x45nvoyFilters\x12T\n\x0fworkload_labels\x18\x01 \x03(\x0b\x32;.istio.networking.v1alpha3.EnvoyFilters.WorkloadLabelsEntry\x12?\n\x07\x66ilters\x18\x02 \x03(\x0b\x32..istio.networking.v1alpha3.EnvoyFilters.Filter\x1a\x35\n\x13WorkloadLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x8e\x03\n\rListenerMatch\x12-\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.Port\x12Y\n\rlistener_type\x18\x02 \x01(\x0e\x32\x42.istio.networking.v1alpha3.EnvoyFilters.ListenerMatch.ListenerType\x12\x61\n\x11listener_protocol\x18\x03 \x01(\x0e\x32\x46.istio.networking.v1alpha3.EnvoyFilters.ListenerMatch.ListenerProtocol\x12\x0f\n\x07\x61\x64\x64ress\x18\x04 \x03(\t\"O\n\x0cListenerType\x12\x07\n\x03\x41NY\x10\x00\x12\x13\n\x0fSIDECAR_INBOUND\x10\x01\x12\x14\n\x10SIDECAR_OUTBOUND\x10\x02\x12\x0b\n\x07GATEWAY\x10\x03\".\n\x10ListenerProtocol\x12\x07\n\x03\x41LL\x10\x00\x12\x08\n\x04HTTP\x10\x01\x12\x07\n\x03TCP\x10\x02\x1a\xa7\x01\n\x0eInsertPosition\x12K\n\x05index\x18\x01 \x01(\x0e\x32<.istio.networking.v1alpha3.EnvoyFilters.InsertPosition.Index\x12\x13\n\x0brelative_to\x18\x02 \x01(\t\"3\n\x05Index\x12\t\n\x05\x46IRST\x10\x00\x12\x08\n\x04LAST\x10\x01\x12\n\n\x06\x42\x45\x46ORE\x10\x02\x12\t\n\x05\x41\x46TER\x10\x03\x1a\xef\x02\n\x06\x46ilter\x12M\n\x0elistener_match\x18\x01 \x01(\x0b\x32\x35.istio.networking.v1alpha3.EnvoyFilters.ListenerMatch\x12O\n\x0finsert_position\x18\x02 \x01(\x0b\x32\x36.istio.networking.v1alpha3.EnvoyFilters.InsertPosition\x12N\n\x0b\x66ilter_type\x18\x03 \x01(\x0e\x32\x39.istio.networking.v1alpha3.EnvoyFilters.Filter.FilterType\x12\x13\n\x0b\x66ilter_name\x18\x04 \x01(\t\x12.\n\rfilter_config\x18\x05 \x01(\x0b\x32\x17.google.protobuf.Struct\"0\n\nFilterType\x12\x0b\n\x07INVALID\x10\x00\x12\x08\n\x04HTTP\x10\x01\x12\x0b\n\x07NETWORK\x10\x02\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
   ,
-  dependencies=[google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_gateway__pb2.DESCRIPTOR,])
 
 
 
@@ -51,8 +52,8 @@ _ENVOYFILTERS_LISTENERMATCH_LISTENERTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=542,
-  serialized_end=621,
+  serialized_start=629,
+  serialized_end=708,
 )
 _sym_db.RegisterEnumDescriptor(_ENVOYFILTERS_LISTENERMATCH_LISTENERTYPE)
 
@@ -77,8 +78,8 @@ _ENVOYFILTERS_LISTENERMATCH_LISTENERPROTOCOL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=623,
-  serialized_end=669,
+  serialized_start=710,
+  serialized_end=756,
 )
 _sym_db.RegisterEnumDescriptor(_ENVOYFILTERS_LISTENERMATCH_LISTENERPROTOCOL)
 
@@ -107,8 +108,8 @@ _ENVOYFILTERS_INSERTPOSITION_INDEX = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=788,
-  serialized_end=839,
+  serialized_start=875,
+  serialized_end=926,
 )
 _sym_db.RegisterEnumDescriptor(_ENVOYFILTERS_INSERTPOSITION_INDEX)
 
@@ -133,28 +134,28 @@ _ENVOYFILTERS_FILTER_FILTERTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1161,
-  serialized_end=1209,
+  serialized_start=1248,
+  serialized_end=1296,
 )
 _sym_db.RegisterEnumDescriptor(_ENVOYFILTERS_FILTER_FILTERTYPE)
 
 
-_ENVOYFILTERS_SELECTORENTRY = _descriptor.Descriptor(
-  name='SelectorEntry',
-  full_name='istio.networking.v1alpha3.EnvoyFilters.SelectorEntry',
+_ENVOYFILTERS_WORKLOADLABELSENTRY = _descriptor.Descriptor(
+  name='WorkloadLabelsEntry',
+  full_name='istio.networking.v1alpha3.EnvoyFilters.WorkloadLabelsEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='istio.networking.v1alpha3.EnvoyFilters.SelectorEntry.key', index=0,
+      name='key', full_name='istio.networking.v1alpha3.EnvoyFilters.WorkloadLabelsEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value', full_name='istio.networking.v1alpha3.EnvoyFilters.SelectorEntry.value', index=1,
+      name='value', full_name='istio.networking.v1alpha3.EnvoyFilters.WorkloadLabelsEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -172,8 +173,8 @@ _ENVOYFILTERS_SELECTORENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=254,
-  serialized_end=301,
+  serialized_start=302,
+  serialized_end=355,
 )
 
 _ENVOYFILTERS_LISTENERMATCH = _descriptor.Descriptor(
@@ -185,8 +186,8 @@ _ENVOYFILTERS_LISTENERMATCH = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='port', full_name='istio.networking.v1alpha3.EnvoyFilters.ListenerMatch.port', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
@@ -225,8 +226,8 @@ _ENVOYFILTERS_LISTENERMATCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=304,
-  serialized_end=669,
+  serialized_start=358,
+  serialized_end=756,
 )
 
 _ENVOYFILTERS_INSERTPOSITION = _descriptor.Descriptor(
@@ -263,8 +264,8 @@ _ENVOYFILTERS_INSERTPOSITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=672,
-  serialized_end=839,
+  serialized_start=759,
+  serialized_end=926,
 )
 
 _ENVOYFILTERS_FILTER = _descriptor.Descriptor(
@@ -322,8 +323,8 @@ _ENVOYFILTERS_FILTER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=842,
-  serialized_end=1209,
+  serialized_start=929,
+  serialized_end=1296,
 )
 
 _ENVOYFILTERS = _descriptor.Descriptor(
@@ -334,7 +335,7 @@ _ENVOYFILTERS = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='selector', full_name='istio.networking.v1alpha3.EnvoyFilters.selector', index=0,
+      name='workload_labels', full_name='istio.networking.v1alpha3.EnvoyFilters.workload_labels', index=0,
       number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -350,7 +351,7 @@ _ENVOYFILTERS = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_ENVOYFILTERS_SELECTORENTRY, _ENVOYFILTERS_LISTENERMATCH, _ENVOYFILTERS_INSERTPOSITION, _ENVOYFILTERS_FILTER, ],
+  nested_types=[_ENVOYFILTERS_WORKLOADLABELSENTRY, _ENVOYFILTERS_LISTENERMATCH, _ENVOYFILTERS_INSERTPOSITION, _ENVOYFILTERS_FILTER, ],
   enum_types=[
   ],
   options=None,
@@ -359,11 +360,12 @@ _ENVOYFILTERS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=100,
-  serialized_end=1209,
+  serialized_start=135,
+  serialized_end=1296,
 )
 
-_ENVOYFILTERS_SELECTORENTRY.containing_type = _ENVOYFILTERS
+_ENVOYFILTERS_WORKLOADLABELSENTRY.containing_type = _ENVOYFILTERS
+_ENVOYFILTERS_LISTENERMATCH.fields_by_name['port'].message_type = networking_dot_v1alpha3_dot_gateway__pb2._PORT
 _ENVOYFILTERS_LISTENERMATCH.fields_by_name['listener_type'].enum_type = _ENVOYFILTERS_LISTENERMATCH_LISTENERTYPE
 _ENVOYFILTERS_LISTENERMATCH.fields_by_name['listener_protocol'].enum_type = _ENVOYFILTERS_LISTENERMATCH_LISTENERPROTOCOL
 _ENVOYFILTERS_LISTENERMATCH.containing_type = _ENVOYFILTERS
@@ -378,17 +380,17 @@ _ENVOYFILTERS_FILTER.fields_by_name['filter_type'].enum_type = _ENVOYFILTERS_FIL
 _ENVOYFILTERS_FILTER.fields_by_name['filter_config'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
 _ENVOYFILTERS_FILTER.containing_type = _ENVOYFILTERS
 _ENVOYFILTERS_FILTER_FILTERTYPE.containing_type = _ENVOYFILTERS_FILTER
-_ENVOYFILTERS.fields_by_name['selector'].message_type = _ENVOYFILTERS_SELECTORENTRY
+_ENVOYFILTERS.fields_by_name['workload_labels'].message_type = _ENVOYFILTERS_WORKLOADLABELSENTRY
 _ENVOYFILTERS.fields_by_name['filters'].message_type = _ENVOYFILTERS_FILTER
 DESCRIPTOR.message_types_by_name['EnvoyFilters'] = _ENVOYFILTERS
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 EnvoyFilters = _reflection.GeneratedProtocolMessageType('EnvoyFilters', (_message.Message,), dict(
 
-  SelectorEntry = _reflection.GeneratedProtocolMessageType('SelectorEntry', (_message.Message,), dict(
-    DESCRIPTOR = _ENVOYFILTERS_SELECTORENTRY,
+  WorkloadLabelsEntry = _reflection.GeneratedProtocolMessageType('WorkloadLabelsEntry', (_message.Message,), dict(
+    DESCRIPTOR = _ENVOYFILTERS_WORKLOADLABELSENTRY,
     __module__ = 'networking.v1alpha3.envoy_filter_pb2'
-    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilters.SelectorEntry)
+    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilters.WorkloadLabelsEntry)
     ))
   ,
 
@@ -417,7 +419,7 @@ EnvoyFilters = _reflection.GeneratedProtocolMessageType('EnvoyFilters', (_messag
   # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilters)
   ))
 _sym_db.RegisterMessage(EnvoyFilters)
-_sym_db.RegisterMessage(EnvoyFilters.SelectorEntry)
+_sym_db.RegisterMessage(EnvoyFilters.WorkloadLabelsEntry)
 _sym_db.RegisterMessage(EnvoyFilters.ListenerMatch)
 _sym_db.RegisterMessage(EnvoyFilters.InsertPosition)
 _sym_db.RegisterMessage(EnvoyFilters.Filter)
@@ -425,6 +427,6 @@ _sym_db.RegisterMessage(EnvoyFilters.Filter)
 
 DESCRIPTOR.has_options = True
 DESCRIPTOR._options = _descriptor._ParseOptions(descriptor_pb2.FileOptions(), _b('Z istio.io/api/networking/v1alpha3'))
-_ENVOYFILTERS_SELECTORENTRY.has_options = True
-_ENVOYFILTERS_SELECTORENTRY._options = _descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001'))
+_ENVOYFILTERS_WORKLOADLABELSENTRY.has_options = True
+_ENVOYFILTERS_WORKLOADLABELSENTRY._options = _descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001'))
 # @@protoc_insertion_point(module_scope)

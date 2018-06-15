@@ -15,6 +15,7 @@
 syntax = "proto3";
 
 import "google/protobuf/struct.proto";
+import "networking/v1alpha3/gateway.proto";
 
 package istio.networking.v1alpha3;
 
@@ -39,11 +40,12 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //     metadata:
 //       name: reviews-lua
 //     spec:
-//       selector:
+//       workloadLabels:
 //         app: reviews
 //       filters:
 //       - listenerMatch:
-//           port: 18080
+//           port:
+//             number: 18080
 //           listenerType: SIDECAR_INBOUND #will match with the listener for the podIP:18080
 //         filterName: envoy.lua
 //         filterType: HTTP
@@ -58,14 +60,17 @@ message EnvoyFilters {
   // example, the scope includes pods running in all reachable
   // namespaces. Omitting the selector applies the filter to all proxies in
   // the mesh.
-  map<string, string> selector = 1;
+  map<string, string> workload_labels = 1;
 
   // Select a listener to add the filter to based on the match conditions.
   // All conditions specified in the ListenerMatch must be met for the filter
   // to be applied to a listener.
   message ListenerMatch {
     // Port associated with the listener. If not specified, matches all listeners.
-    uint32 port = 1;
+    // If only port number is provided, listeners matching the port will be selected.
+    // Similar match semantics apply for port names as well. Port protocol is currently
+    // ignored.
+    Port port = 1;
 
     enum ListenerType {
       // All listeners
