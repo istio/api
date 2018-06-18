@@ -791,7 +791,7 @@ message CorsPolicy {
   repeated string allow_methods = 2;
 
   // List of HTTP headers that can be used when requesting the
-  // resource. Serialized to Access-Control-Allow-Methods header.
+  // resource. Serialized to Access-Control-Allow-Headers header.
   repeated string allow_headers = 3;
 
   // A white list of HTTP headers that the browsers are allowed to
