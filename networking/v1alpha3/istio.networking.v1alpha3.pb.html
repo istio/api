@@ -1077,7 +1077,7 @@ spec:
     - uk.bookinfo.com
     - eu.bookinfo.com
     tls:
-      httpsRedirect: true # sends 302 redirect for http requests
+      httpsRedirect: true # sends 301 redirect for http requests
   - port:
       number: 443
       name: https
@@ -1390,8 +1390,8 @@ spec:
     - headers:
         cookie:
           regex: &quot;^(.*?;)?(user=jason)(;.*)?&quot;
-        uri:
-          prefix: &quot;/ratings/v2/&quot;
+      uri:
+        prefix: &quot;/ratings/v2/&quot;
     route:
     - destination:
         host: ratings.prod.svc.cluster.local
@@ -1533,7 +1533,7 @@ independent of sourceLabels.</p>
 </section>
 <h2 id="HTTPRedirect">HTTPRedirect</h2>
 <section>
-<p>HTTPRedirect can be used to send a 302 redirect response to the caller,
+<p>HTTPRedirect can be used to send a 301 redirect response to the caller,
 where the Authority/Host and the URI in the response can be swapped with
 the specified values. For example, the following rule redirects
 requests for /v1/getProductRatings API on the ratings service to
@@ -1740,7 +1740,7 @@ service version determine the proportion of traffic it receives.</p>
 <p>A http rule can either redirect or forward (default) traffic. If
 traffic passthrough option is specified in the rule,
 route/redirect will be ignored. The redirect primitive can be used to
-send a HTTP 302 redirect to a different URI or Authority.</p>
+send a HTTP 301 redirect to a different URI or Authority.</p>
 
 </td>
 </tr>
@@ -2354,7 +2354,7 @@ https, and the TLS modes to use.</p>
 <td><code>httpsRedirect</code></td>
 <td><code>bool</code></td>
 <td>
-<p>If set to true, the load balancer will send a 302 redirect for all
+<p>If set to true, the load balancer will send a 301 redirect for all
 http connections, asking the clients to use HTTPS.</p>
 
 </td>
