@@ -93,7 +93,34 @@ generate: \
 	generate-authn-go \
 	generate-authn-python \
 	generate-envoy-go \
-	generate-envoy-python
+	generate-envoy-python \
+    generate-config-protocol
+
+#####################
+# config/protocol/...
+#####################
+
+# All core config protos
+config_protocol_source_protos := $(shell find . -type f -name '*.proto' -not -path "*./config/*" | sort)
+
+config_protocol_core_protos := config/protocol/envelope/metadata.proto
+config_protocol_core_pb_gos := config/protocol/envelope/metadata.pb.go
+
+# All envelope protos that should be generated
+config_protocol_envelope_protos := $(addprefix config/protocol/envelope/, $(subst ./,,$(config_protocol_source_protos)))
+
+config_protocol_envelope_pb_gos := $(config_protocol_envelope_protos:.proto=.pb.go)
+
+generate-config-protocol: $(config_protocol_envelope_protos) $(config_protocol_core_pb_gos) $(config_protocol_envelope_pb_gos)
+
+$(config_protocol_envelope_protos): $(config_protocol_source_protos) scripts/_gen_envelope.sh
+	@$(foreach pr,$(config_protocol_source_protos),scripts/_gen_envelope.sh $(pr) config/protocol/envelope;)
+
+$(config_protocol_envelope_pb_gos): $(config_protocol_envelope_protos)
+	@$(docker_gen) $(protoc_gen_go_plugin)  $(basename $(basename $@)).proto
+
+$(config_protocol_core_pb_gos): $(config_protocol_core_protos)
+	@$(docker_gen) $(protoc_gen_go_plugin)  $(basename $(basename $@)).proto
 
 #####################
 # broker/...

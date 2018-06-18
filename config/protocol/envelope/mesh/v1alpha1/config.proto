@@ -1,0 +1,18 @@
+// =================================================================================================
+// WARNING! This file is auto-generated. Do not hand-edit.
+// =================================================================================================
+
+syntax = "proto3";
+
+import "mesh/v1alpha1/config.proto";
+import "config/protocol/envelope/metadata.proto";
+
+package istio.config.protocol.envelope.mesh.v1alpha1;
+
+option go_package = "istio.io/api/config/protocol/envelope/mesh/v1alpha1";
+
+message ProxyConfig {
+    istio.config.protocol.envelope.Metadata Metadata = 1;
+
+    istio.mesh.v1alpha1.ProxyConfig Contents = 2;
+}

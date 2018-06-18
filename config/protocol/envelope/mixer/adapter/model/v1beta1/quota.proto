@@ -1,0 +1,18 @@
+// =================================================================================================
+// WARNING! This file is auto-generated. Do not hand-edit.
+// =================================================================================================
+
+syntax = "proto3";
+
+import "mixer/adapter/model/v1beta1/quota.proto";
+import "config/protocol/envelope/metadata.proto";
+
+package istio.config.protocol.envelope.mixer.adapter.model.v1beta1;
+
+option go_package = "istio.io/api/config/protocol/envelope/mixer/adapter/model/v1beta1";
+
+message QuotaRequest {
+    istio.config.protocol.envelope.Metadata Metadata = 1;
+
+    istio.mixer.adapter.model.v1beta1.QuotaRequest Contents = 2;
+}

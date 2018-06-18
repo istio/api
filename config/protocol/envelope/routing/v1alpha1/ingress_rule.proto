@@ -1,0 +1,18 @@
+// =================================================================================================
+// WARNING! This file is auto-generated. Do not hand-edit.
+// =================================================================================================
+
+syntax = "proto3";
+
+import "routing/v1alpha1/ingress_rule.proto";
+import "config/protocol/envelope/metadata.proto";
+
+package istio.config.protocol.envelope.routing.v1alpha1;
+
+option go_package = "istio.io/api/config/protocol/envelope/routing/v1alpha1";
+
+message IngressRule {
+    istio.config.protocol.envelope.Metadata Metadata = 1;
+
+    istio.routing.v1alpha1.IngressRule Contents = 2;
+}
