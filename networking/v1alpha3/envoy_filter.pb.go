@@ -145,10 +145,14 @@ func (EnvoyFilter_Filter_FilterType) EnumDescriptor() ([]byte, []int) {
 // subsystem (Pilot). This feature must be used with care, as incorrect
 // configurations could potentially destabilize the entire mesh.
 //
-// NOTE: Since this is break glass configuration, there will not be any
+// NOTE 1: Since this is break glass configuration, there will not be any
 // backward compatibility across different Istio releases. In other words,
 // this configuration is subject to change based on internal implementation
 // of Istio networking subsystem.
+//
+// NOTE 2: There can be only one EnvoyFilter bound to a specific workload.
+// The behavior is undefined if multiple EnvoyFilter configurations are
+// specified for the same workload.
 //
 // The following example for Kubernetes enables Envoy's Lua filter for all
 // inbound calls arriving at port 18080 of the reviews service pod with
@@ -178,6 +182,9 @@ type EnvoyFilter struct {
 	// example, the scope includes pods running in all reachable
 	// namespaces. Omitting the selector applies the filter to all proxies in
 	// the mesh.
+	// NOTE: There can be only one EnvoyFilter bound to a specific workload.
+	// The behavior is undefined if multiple EnvoyFilter configurations are
+	// specified for the same workload.
 	WorkloadLabels map[string]string `protobuf:"bytes,1,rep,name=workload_labels,json=workloadLabels" json:"workload_labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// REQUIRED: Envoy network filters/http filters to be added to matching
 	// listeners.  When adding network filters to http connections, care
