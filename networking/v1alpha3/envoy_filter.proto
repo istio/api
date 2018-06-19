@@ -51,7 +51,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //           inlineCode: |
 //             ... lua code ...
 //
-message EnvoyFilters {
+message EnvoyFilter {
   // One or more labels that indicate a specific set of pods/VMs whose
   // proxies should be configured to use these additional filters.  The
   // scope of label search is platform dependent. On Kubernetes, for
