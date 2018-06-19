@@ -3026,13 +3026,22 @@ in these cases it is not required to explicitly select the port.</p>
 
 </td>
 </tr>
-<tr id="TLSMatchAttributes-sni">
-<td><code>sni</code></td>
-<td><code>string</code></td>
+<tr id="TLSMatchAttributes-sni_hosts">
+<td><code>sniHosts</code></td>
+<td><code>string[]</code></td>
 <td>
 <p>SNI (server name indicator) to match on. Wildcard prefixes can be used
 in the SNI value. E.g., *.com will match foo.example.com as well as
 example.com.</p>
+
+</td>
+</tr>
+<tr id="TLSMatchAttributes-alpn_protocols">
+<td><code>alpnProtocols</code></td>
+<td><code>string</code></td>
+<td>
+<p>ALPN protocols to match on. Multiple ALPN protocols can be specified
+as a comma separated list.</p>
 
 </td>
 </tr>
@@ -3062,10 +3071,11 @@ independent of sourceLabels.</p>
 </section>
 <h2 id="TLSRoute">TLSRoute</h2>
 <section>
-<p>Describes match conditions and actions for routing TCP+TLS or HTTPS traffic. The
-following routing rule forwards traffic arriving at port 443 for
-reviews.prod.svc.cluster.local service with SNI value bookinfo.com to
-monolith.prod.svc.cluster.local service, and traffic with SNI value &ldquo;reviews&rdquo; to
+<p>Describes match conditions and actions for routing unterminated TLS
+traffic (TLS/HTTPS) The following routing rule forwards unterminated TLS
+traffic arriving at port 443 with SNI value *.bookinfo.com to
+monolith.prod.svc.cluster.local service, and traffic with SNI value
+&ldquo;reviews.default.svc.cluster.local&rdquo; with &ldquo;istio&rdquo; as the ALPN protocol to
 the reviews.prod.svc.cluster.local service.</p>
 
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
@@ -3074,11 +3084,13 @@ metadata:
   name: bookinfo-sni
 spec:
   hosts:
+  - *.bookinfo.com
   - reviews.prod.svc.cluster.local
   tls:
   - match:
     - port: 443
-      sni: bookinfo.com
+      sniHosts:
+      - *.bookinfo.com
     route:
     - destination:
         host: monolith.prod.svc.cluster.local
@@ -3086,7 +3098,9 @@ spec:
           number: 443
   - match:
     - port: 443
-      sni: reviews
+      sniHosts:
+      - reviews.prod.svc.cluster.local
+      alpnProtocols: istio
     route:
     - destination:
         host: reviews.prod.svc.cluster.local
@@ -3525,15 +3539,15 @@ only for services defined via the Gateway.</p>
 <td><code>string[]</code></td>
 <td>
 <p>The names of gateways and sidecars that should apply these routes. A
-single VirtualService is used for sidecars inside the mesh as well
-as for one or more gateways. The selection condition imposed by this field
-can be overridden using the source field in the match conditions of HTTP/TCP
-routes. The reserved word <code>mesh</code> is used to imply all the sidecars in
-the mesh. When this field is omitted, the default gateway (<code>mesh</code>)
-will be used, which would apply the rule to all sidecars in the
-mesh. If a list of gateway names is provided, the rules will apply
-only to the gateways. To apply the rules to both gateways and sidecars,
-specify <code>mesh</code> as one of the gateway names.</p>
+single VirtualService is used for sidecars inside the mesh as well as
+for one or more gateways. The selection condition imposed by this
+field can be overridden using the source field in the match conditions
+of HTTP/TCP routes. The reserved word <code>mesh</code> is used to imply all the
+sidecars in the mesh. When this field is omitted, the default gateway
+(<code>mesh</code>) will be used, which would apply the rule to all sidecars in
+the mesh. If a list of gateway names is provided, the rules will apply
+only to the gateways. To apply the rules to both gateways and
+sidecars, specify <code>mesh</code> as one of the gateway names.</p>
 
 </td>
 </tr>
@@ -3543,9 +3557,9 @@ specify <code>mesh</code> as one of the gateway names.</p>
 <td>
 <p>An ordered list of route rules for HTTP traffic. HTTP routes will be
 applied to platform service ports named http-<em>/http2-</em>/grpc-*, gateway
-ports with protocol HTTP/HTTP2/GRPC/HTTPS and service entry ports
-using HTTP/HTTP2/GRPC protocols.  The first rule matching an incoming
-request is used.</p>
+ports with protocol HTTP/HTTP2/GRPC/ TLS-terminated-HTTPS and service
+entry ports using HTTP/HTTP2/GRPC protocols.  The first rule matching
+an incoming request is used.</p>
 
 </td>
 </tr>
@@ -3553,14 +3567,15 @@ request is used.</p>
 <td><code>tls</code></td>
 <td><code><a href="#TLSRoute">TLSRoute[]</a></code></td>
 <td>
-<p>An ordered list of route rules for TCP+TLS or HTTPS traffic. Routing
-is typically performed using the SNI value presented by the
-ClientHello message. TLS routes will be applied to platform service
-ports named https-<em>, tcptls-</em>, gateway ports with HTTPS/TCP<em>TLS using
-&ldquo;passthrough&rdquo; TLS mode, and service entry ports using HTTPS/TCP</em>TLS
-protocols.  The first rule matching an incoming request is used.
-NOTE: Traffic https-* or tcptls-* ports without associated virtual
-service will be treated as opaque TCP traffic.</p>
+<p>An ordered list of route rule for non-terminated TLS &amp; HTTPS
+traffic. Routing is typically performed using the SNI value presented
+by the ClientHello message. TLS routes will be applied to platform
+service ports named https-<em>, tls-</em>, unterminated gateway ports using
+HTTPS/TLS protocols (i.e. with &ldquo;passthrough&rdquo; TLS mode) and service
+entry ports using HTTPS/TLS protocols.  The first rule matching an
+incoming request is used.  NOTE: Traffic https-* or tls-* ports
+without associated virtual service will be treated as opaque TCP
+traffic.</p>
 
 </td>
 </tr>
