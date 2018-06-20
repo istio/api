@@ -113,7 +113,7 @@ type VirtualService struct {
 	// sidecars, specify `mesh` as one of the gateway names.
 	Gateways []string `protobuf:"bytes,2,rep,name=gateways" json:"gateways,omitempty"`
 	// An ordered list of route rules for HTTP traffic. HTTP routes will be
-	// applied to platform service ports named http-*/http2-*/grpc-*, gateway
+	// applied to platform service ports named 'http-*'/'http2-*'/'grpc-*', gateway
 	// ports with protocol HTTP/HTTP2/GRPC/ TLS-terminated-HTTPS and service
 	// entry ports using HTTP/HTTP2/GRPC protocols.  The first rule matching
 	// an incoming request is used.
@@ -121,10 +121,10 @@ type VirtualService struct {
 	// An ordered list of route rule for non-terminated TLS & HTTPS
 	// traffic. Routing is typically performed using the SNI value presented
 	// by the ClientHello message. TLS routes will be applied to platform
-	// service ports named https-*, tls-*, unterminated gateway ports using
+	// service ports named 'https-*', 'tls-*', unterminated gateway ports using
 	// HTTPS/TLS protocols (i.e. with "passthrough" TLS mode) and service
 	// entry ports using HTTPS/TLS protocols.  The first rule matching an
-	// incoming request is used.  NOTE: Traffic https-* or tls-* ports
+	// incoming request is used.  NOTE: Traffic 'https-*' or 'tls-*' ports
 	// without associated virtual service will be treated as opaque TCP
 	// traffic.
 	Tls []*TLSRoute `protobuf:"bytes,4,rep,name=tls" json:"tls,omitempty"`
@@ -508,7 +508,7 @@ func (m *HTTPRoute) GetRemoveResponseHeaders() map[string]string {
 //   name: bookinfo-sni
 // spec:
 //   hosts:
-//   - *.bookinfo.com
+//   - "*.bookinfo.com"
 //   tls:
 //   - match:
 //     - port: 443
