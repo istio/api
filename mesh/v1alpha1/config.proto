@@ -268,7 +268,10 @@ message MeshConfig {
   // Enables clide side policy checks.
   bool enable_client_side_policy_check = 19;
 
-  // Flag to control whether to use secret discovery service(SDS) to distribute key/cert.
-  // Use secret-mount files if set to false. 
-  bool enable_sds = 20;
+  // Unix Domain Socket through which envoy communicates with NodeAgent SDS to get key/cert for mTLS.
+  // Use secret-mount files instead of SDS if set to empty. 
+  string sds_uds_mtls = 20;
+
+  // Polling interval for SDS (MUST BE >=1ms)
+  google.protobuf.Duration sds_refresh_delay = 21;
 }
