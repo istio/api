@@ -397,10 +397,8 @@ message HTTPRoute {
 
 // Describes match conditions and actions for routing unterminated TLS
 // traffic (TLS/HTTPS) The following routing rule forwards unterminated TLS
-// traffic arriving at port 443 with SNI value *.bookinfo.com to
-// monolith.prod.svc.cluster.local service, and traffic with SNI value
-// "reviews.default.svc.cluster.local" with "istio" as the ALPN protocol to
-// the reviews.prod.svc.cluster.local service.
+// traffic arriving at port 443 of gateway called "mygateway" to internal
+// services in the mesh based on the SNI value.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -410,27 +408,21 @@ message HTTPRoute {
 // spec:
 //   hosts:
 //   - *.bookinfo.com
-//   - reviews.prod.svc.cluster.local
 //   tls:
 //   - match:
 //     - port: 443
 //       sniHosts:
-//       - *.bookinfo.com
+//       - login.bookinfo.com
 //     route:
 //     - destination:
-//         host: monolith.prod.svc.cluster.local
-//         port:
-//           number: 443
+//         host: login.prod.svc.cluster.local
 //   - match:
 //     - port: 443
 //       sniHosts:
-//       - reviews.prod.svc.cluster.local
-//       alpnProtocols: istio
+//       - reviews.bookinfo.com
 //     route:
 //     - destination:
 //         host: reviews.prod.svc.cluster.local
-//         port:
-//           number: 443
 // ```
 message TLSRoute {
   // Match conditions to be satisfied for the rule to be activated. All
@@ -688,8 +680,8 @@ message L4MatchAttributes {
   map<string, string> source_labels = 4;
 
   // Names of gateways where the rule should be applied to. Gateway names
-  // at the top of the VirtualService (if any) are overridden. The gateway match is
-  // independent of sourceLabels.
+  // at the top of the VirtualService (if any) are overridden. The gateway
+  // match is independent of sourceLabels.
   repeated string gateways = 5;
 }
 
@@ -702,8 +694,9 @@ message TLSMatchAttributes {
   string destination_subnet = 1;
 
   // Specifies the port on the host that is being addressed. Many services
-  // only expose a single port or label ports with the protocols they support,
-  // in these cases it is not required to explicitly select the port.
+  // only expose a single port or label ports with the protocols they
+  // support, in these cases it is not required to explicitly select the
+  // port.
   uint32 port = 2;
 
   // SNI (server name indicator) to match on. Wildcard prefixes can be used
@@ -711,20 +704,16 @@ message TLSMatchAttributes {
   // example.com.
   repeated string sni_hosts = 3;
 
-  // ALPN protocols to match on. Multiple ALPN protocols can be specified
-  // as a comma separated list.
-  string alpn_protocols = 4;
-
   // One or more labels that constrain the applicability of a rule to
   // workloads with the given labels. If the VirtualService has a list of
   // gateways specified at the top, it should include the reserved gateway
   // `mesh` in order for this field to be applicable.
-  map<string, string> source_labels = 5;
+  map<string, string> source_labels = 4;
 
   // Names of gateways where the rule should be applied to. Gateway names
-  // at the top of the VirtualService (if any) are overridden. The gateway match is
-  // independent of sourceLabels.
-  repeated string gateways = 6;
+  // at the top of the VirtualService (if any) are overridden. The gateway
+  // match is independent of sourceLabels.
+  repeated string gateways = 5;
 }
 
 // HTTPRedirect can be used to send a 301 redirect response to the caller,

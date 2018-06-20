@@ -1894,8 +1894,8 @@ gateways specified at the top, it should include the reserved gateway
 <td><code>string[]</code></td>
 <td>
 <p>Names of gateways where the rule should be applied to. Gateway names
-at the top of the VirtualService (if any) are overridden. The gateway match is
-independent of sourceLabels.</p>
+at the top of the VirtualService (if any) are overridden. The gateway
+match is independent of sourceLabels.</p>
 
 </td>
 </tr>
@@ -3021,8 +3021,9 @@ specifies a particular IP.</p>
 <td><code>uint32</code></td>
 <td>
 <p>Specifies the port on the host that is being addressed. Many services
-only expose a single port or label ports with the protocols they support,
-in these cases it is not required to explicitly select the port.</p>
+only expose a single port or label ports with the protocols they
+support, in these cases it is not required to explicitly select the
+port.</p>
 
 </td>
 </tr>
@@ -3033,15 +3034,6 @@ in these cases it is not required to explicitly select the port.</p>
 <p>SNI (server name indicator) to match on. Wildcard prefixes can be used
 in the SNI value. E.g., *.com will match foo.example.com as well as
 example.com.</p>
-
-</td>
-</tr>
-<tr id="TLSMatchAttributes-alpn_protocols">
-<td><code>alpnProtocols</code></td>
-<td><code>string</code></td>
-<td>
-<p>ALPN protocols to match on. Multiple ALPN protocols can be specified
-as a comma separated list.</p>
 
 </td>
 </tr>
@@ -3061,8 +3053,8 @@ gateways specified at the top, it should include the reserved gateway
 <td><code>string[]</code></td>
 <td>
 <p>Names of gateways where the rule should be applied to. Gateway names
-at the top of the VirtualService (if any) are overridden. The gateway match is
-independent of sourceLabels.</p>
+at the top of the VirtualService (if any) are overridden. The gateway
+match is independent of sourceLabels.</p>
 
 </td>
 </tr>
@@ -3073,10 +3065,8 @@ independent of sourceLabels.</p>
 <section>
 <p>Describes match conditions and actions for routing unterminated TLS
 traffic (TLS/HTTPS) The following routing rule forwards unterminated TLS
-traffic arriving at port 443 with SNI value *.bookinfo.com to
-monolith.prod.svc.cluster.local service, and traffic with SNI value
-&ldquo;reviews.default.svc.cluster.local&rdquo; with &ldquo;istio&rdquo; as the ALPN protocol to
-the reviews.prod.svc.cluster.local service.</p>
+traffic arriving at port 443 of gateway called &ldquo;mygateway&rdquo; to internal
+services in the mesh based on the SNI value.</p>
 
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -3085,27 +3075,21 @@ metadata:
 spec:
   hosts:
   - *.bookinfo.com
-  - reviews.prod.svc.cluster.local
   tls:
   - match:
     - port: 443
       sniHosts:
-      - *.bookinfo.com
+      - login.bookinfo.com
     route:
     - destination:
-        host: monolith.prod.svc.cluster.local
-        port:
-          number: 443
+        host: login.prod.svc.cluster.local
   - match:
     - port: 443
       sniHosts:
-      - reviews.prod.svc.cluster.local
-      alpnProtocols: istio
+      - reviews.bookinfo.com
     route:
     - destination:
         host: reviews.prod.svc.cluster.local
-        port:
-          number: 443
 </code></pre>
 
 <table class="message-fields">
