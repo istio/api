@@ -105,12 +105,12 @@ type VirtualService struct {
 	// single VirtualService is used for sidecars inside the mesh as well as
 	// for one or more gateways. The selection condition imposed by this
 	// field can be overridden using the source field in the match conditions
-	// of HTTP/TCP routes. The reserved word `mesh` is used to imply all the
-	// sidecars in the mesh. When this field is omitted, the default gateway
-	// (`mesh`) will be used, which would apply the rule to all sidecars in
-	// the mesh. If a list of gateway names is provided, the rules will apply
-	// only to the gateways. To apply the rules to both gateways and
-	// sidecars, specify `mesh` as one of the gateway names.
+	// of protocol-specific routes. The reserved word `mesh` is used to imply
+	// all the sidecars in the mesh. When this field is omitted, the default
+	// gateway (`mesh`) will be used, which would apply the rule to all
+	// sidecars in the mesh. If a list of gateway names is provided, the
+	// rules will apply only to the gateways. To apply the rules to both
+	// gateways and sidecars, specify `mesh` as one of the gateway names.
 	Gateways []string `protobuf:"bytes,2,rep,name=gateways" json:"gateways,omitempty"`
 	// An ordered list of route rules for HTTP traffic. HTTP routes will be
 	// applied to platform service ports named 'http-*'/'http2-*'/'grpc-*', gateway
