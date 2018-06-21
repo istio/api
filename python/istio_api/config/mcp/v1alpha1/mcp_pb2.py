@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='config/mcp/v1alpha1/mcp.proto',
   package='istio.config.mcp.v1alpha1',
   syntax='proto3',
-  serialized_pb=_b('\n\x1d\x63onfig/mcp/v1alpha1/mcp.proto\x12\x19istio.config.mcp.v1alpha1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x17google/rpc/status.proto\x1a\x14gogoproto/gogo.proto\x1a\"config/mcp/v1alpha1/envelope.proto\"V\n\x06\x43lient\x12\n\n\x02id\x18\x01 \x01(\t\x12)\n\x08metadata\x18\x02 \x01(\x0b\x32\x17.google.protobuf.Struct\x12\x15\n\rbuild_version\x18\x03 \x01(\t\"\xb6\x01\n\x11MeshConfigRequest\x12\x14\n\x0cversion_info\x18\x01 \x01(\t\x12\x31\n\x06\x63lient\x18\x02 \x01(\x0b\x32!.istio.config.mcp.v1alpha1.Client\x12\x10\n\x08type_url\x18\x04 \x01(\t\x12\x16\n\x0eresponse_nonce\x18\x05 \x01(\t\x12(\n\x0c\x65rror_detail\x18\x06 \x01(\x0b\x32\x12.google.rpc.StatusJ\x04\x08\x03\x10\x04\"\x89\x01\n\x12MeshConfigResponse\x12\x14\n\x0cversion_info\x18\x01 \x01(\t\x12<\n\tenvelopes\x18\x02 \x03(\x0b\x32#.istio.config.mcp.v1alpha1.EnvelopeB\x04\xc8\xde\x1f\x00\x12\x10\n\x08type_url\x18\x03 \x01(\t\x12\r\n\x05nonce\x18\x04 \x01(\t2\x9d\x01\n\x1b\x41ggregatedMeshConfigService\x12~\n\x19StreamAggregatedResources\x12,.istio.config.mcp.v1alpha1.MeshConfigRequest\x1a-.istio.config.mcp.v1alpha1.MeshConfigResponse\"\x00(\x01\x30\x01\x42&Z istio.io/api/config/mcp/v1alpha1\xa8\xe2\x1e\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x1d\x63onfig/mcp/v1alpha1/mcp.proto\x12\x19istio.config.mcp.v1alpha1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x17google/rpc/status.proto\x1a\x14gogoproto/gogo.proto\x1a\"config/mcp/v1alpha1/envelope.proto\"?\n\x06\x43lient\x12\n\n\x02id\x18\x01 \x01(\t\x12)\n\x08metadata\x18\x02 \x01(\x0b\x32\x17.google.protobuf.Struct\"\xb0\x01\n\x11MeshConfigRequest\x12\x14\n\x0cversion_info\x18\x01 \x01(\t\x12\x31\n\x06\x63lient\x18\x02 \x01(\x0b\x32!.istio.config.mcp.v1alpha1.Client\x12\x10\n\x08type_url\x18\x03 \x01(\t\x12\x16\n\x0eresponse_nonce\x18\x04 \x01(\t\x12(\n\x0c\x65rror_detail\x18\x05 \x01(\x0b\x32\x12.google.rpc.Status\"\x89\x01\n\x12MeshConfigResponse\x12\x14\n\x0cversion_info\x18\x01 \x01(\t\x12<\n\tenvelopes\x18\x02 \x03(\x0b\x32#.istio.config.mcp.v1alpha1.EnvelopeB\x04\xc8\xde\x1f\x00\x12\x10\n\x08type_url\x18\x03 \x01(\t\x12\r\n\x05nonce\x18\x04 \x01(\t2\x9d\x01\n\x1b\x41ggregatedMeshConfigService\x12~\n\x19StreamAggregatedResources\x12,.istio.config.mcp.v1alpha1.MeshConfigRequest\x1a-.istio.config.mcp.v1alpha1.MeshConfigResponse\"\x00(\x01\x30\x01\x42&Z istio.io/api/config/mcp/v1alpha1\xa8\xe2\x1e\x01\x62\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,google_dot_rpc_dot_status__pb2.DESCRIPTOR,gogoproto_dot_gogo__pb2.DESCRIPTOR,config_dot_mcp_dot_v1alpha1_dot_envelope__pb2.DESCRIPTOR,])
 
@@ -51,13 +51,6 @@ _CLIENT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='build_version', full_name='istio.config.mcp.v1alpha1.Client.build_version', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -71,7 +64,7 @@ _CLIENT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=173,
-  serialized_end=259,
+  serialized_end=236,
 )
 
 
@@ -98,21 +91,21 @@ _MESHCONFIGREQUEST = _descriptor.Descriptor(
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='type_url', full_name='istio.config.mcp.v1alpha1.MeshConfigRequest.type_url', index=2,
-      number=4, type=9, cpp_type=9, label=1,
+      number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='response_nonce', full_name='istio.config.mcp.v1alpha1.MeshConfigRequest.response_nonce', index=3,
-      number=5, type=9, cpp_type=9, label=1,
+      number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='error_detail', full_name='istio.config.mcp.v1alpha1.MeshConfigRequest.error_detail', index=4,
-      number=6, type=11, cpp_type=10, label=1,
+      number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -129,8 +122,8 @@ _MESHCONFIGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=262,
-  serialized_end=444,
+  serialized_start=239,
+  serialized_end=415,
 )
 
 
@@ -181,8 +174,8 @@ _MESHCONFIGRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=447,
-  serialized_end=584,
+  serialized_start=418,
+  serialized_end=555,
 )
 
 _CLIENT.fields_by_name['metadata'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
@@ -227,8 +220,8 @@ _AGGREGATEDMESHCONFIGSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   options=None,
-  serialized_start=587,
-  serialized_end=744,
+  serialized_start=558,
+  serialized_end=715,
   methods=[
   _descriptor.MethodDescriptor(
     name='StreamAggregatedResources',

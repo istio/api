@@ -33,14 +33,8 @@ message Client {
   // An opaque identifier for the MCP client.
   string id = 1;
 
-  // Opaque metadata extending the client identifier. The client will
-  // pass this directly to the management server.
+  // Opaque metadata extending the client identifier.
   google.protobuf.Struct metadata = 2;
-
-  // This is motivated by informing a management server during canary
-  // which version of the client is being tested in a heterogeneous
-  // fleet. This will be set by the client in management server RPCs.
-  string build_version = 3;
 }
 
 // A MeshConfigRequest requests a set of versioned resources of the
@@ -59,23 +53,15 @@ message MeshConfigRequest {
   // The client making the request.
   Client client = 2;
 
-  // $hide_from_docs
-  // List of resources to subscribe to. If this is empty, all
-  // resources for the API are returned. Reserved for future use to
-  // support incremental and on-demand (see
-  // https://github.com/envoyproxy/envoy/issues/3229)
-  // repeated string resource_names = 3;
-  reserved 3;
-
   // Type of the resource that is being requested, e.g.
   // "type.googleapis.com/istio.io.networking.v1alpha3.VirtualService".
-  string type_url = 4;
+  string type_url = 3;
 
   // The nonce corresponding to MeshConfigResponse being
   // ACK/NACKed. See above discussion on version_info and the
   // MeshConfigResponse nonce comment. This may be empty if no nonce is
   // available, e.g. at startup.
-  string response_nonce = 5;
+  string response_nonce = 4;
 
   // This is populated when the previous MeshConfigResponse failed to
   // update configuration. The *message* field in *error_details*
@@ -83,7 +69,7 @@ message MeshConfigRequest {
   // is only intended for consumption during manual debugging, the
   // string provided is not guaranteed to be stable across client
   // versions.
-  google.rpc.Status error_detail = 6;
+  google.rpc.Status error_detail = 5;
 }
 
 // A MeshConfigResponse delivers a set of versioned resources of the
