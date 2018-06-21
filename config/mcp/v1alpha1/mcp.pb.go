@@ -311,9 +311,8 @@ const _ = grpc.SupportPackageIsVersion4
 type AggregatedMeshConfigServiceClient interface {
 	// StreamAggregatedResources provides the ability to carefully
 	// sequence updates across multiple resource types. A single stream
-	// is used with multiple independent
-	// MeshConfigRequest/MeshConfigResponses sequences multiplexed via
-	// the type URL.
+	// is used with multiple independent MeshConfigRequest /
+	// MeshConfigResponses sequences multiplexed via the type URL.
 	StreamAggregatedResources(ctx context.Context, opts ...grpc.CallOption) (AggregatedMeshConfigService_StreamAggregatedResourcesClient, error)
 }
 
@@ -361,9 +360,8 @@ func (x *aggregatedMeshConfigServiceStreamAggregatedResourcesClient) Recv() (*Me
 type AggregatedMeshConfigServiceServer interface {
 	// StreamAggregatedResources provides the ability to carefully
 	// sequence updates across multiple resource types. A single stream
-	// is used with multiple independent
-	// MeshConfigRequest/MeshConfigResponses sequences multiplexed via
-	// the type URL.
+	// is used with multiple independent MeshConfigRequest /
+	// MeshConfigResponses sequences multiplexed via the type URL.
 	StreamAggregatedResources(AggregatedMeshConfigService_StreamAggregatedResourcesServer) error
 }
 
