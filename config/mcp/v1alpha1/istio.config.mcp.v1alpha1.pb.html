@@ -26,7 +26,9 @@ MeshConfigResponses sequences multiplexed via the type URL.</p>
 <section>
 <p>Identifies a specific MCP client instance. The client identifier is
 presented to the management server, which may use this identifier
-to distinguish per client configuration for serving.</p>
+to distinguish per client configuration for serving. This
+information is not authoriative. Authoritative identity should come
+from the underlying transport layer (e.g. rpc credentials).</p>
 
 <table class="message-fields">
 <thead>

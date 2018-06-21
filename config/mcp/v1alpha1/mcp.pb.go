@@ -22,7 +22,9 @@ var _ = math.Inf
 
 // Identifies a specific MCP client instance. The client identifier is
 // presented to the management server, which may use this identifier
-// to distinguish per client configuration for serving.
+// to distinguish per client configuration for serving. This
+// information is not authoriative. Authoritative identity should come
+// from the underlying transport layer (e.g. rpc credentials).
 type Client struct {
 	// An opaque identifier for the MCP client.
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
