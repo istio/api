@@ -72,6 +72,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //       protocol: MONGO
 //     hosts:
 //     - "*"
+//     type: INGRESS
 // ```
 // The Gateway specification above describes the L4-L6 properties of a load
 // balancer. A `VirtualService` can then be bound to a gateway to control
@@ -180,6 +181,7 @@ message Gateway {
 //       protocol: HTTP2
 //     hosts:
 //     - "*"
+//     type: INGRESS
 // ```
 //
 // Another example
@@ -199,6 +201,7 @@ message Gateway {
 //       protocol: MONGO
 //     hosts:
 //     - "*"
+//     type: INGRESS
 // ```
 //
 // The following is an example of TLS configuration for port 443
@@ -222,6 +225,7 @@ message Gateway {
 //       mode: SIMPLE
 //       serverCertificate: /etc/certs/server.pem
 //       privateKey: /etc/certs/privatekey.pem
+//     type: INGRESS
 // ```
 message Server {
   // REQUIRED: The Port on which the proxy should listen for incoming
@@ -290,6 +294,17 @@ message Server {
   // these options to control if all http requests should be redirected to
   // https, and the TLS modes to use.
   TLSOptions tls = 3;
+
+  // The type of the server. Currently, ingress or egress.
+  enum ServerType {
+       // The server is a front-end proxy for the mesh
+       INGRESS = 0;
+
+       // The server is a back-end proxy for the mesh
+       EGRESS = 1;
+  }
+
+  ServerType type = 4;
 }
 
 // Port describes the properties of a specific port of a service.

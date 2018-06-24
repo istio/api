@@ -4,7 +4,7 @@ description: Configuration affecting traffic routing
 location: https://istio.io/docs/reference/config/istio.networking.v1alpha3.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 48
+number_of_entries: 49
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -1118,6 +1118,7 @@ spec:
       protocol: MONGO
     hosts:
     - &quot;*&quot;
+    type: INGRESS
 </code></pre>
 
 <p>The Gateway specification above describes the L4-L6 properties of a load
@@ -2254,6 +2255,7 @@ spec:
       protocol: HTTP2
     hosts:
     - &quot;*&quot;
+    type: INGRESS
 </code></pre>
 
 <p>Another example</p>
@@ -2272,6 +2274,7 @@ spec:
       protocol: MONGO
     hosts:
     - &quot;*&quot;
+    type: INGRESS
 </code></pre>
 
 <p>The following is an example of TLS configuration for port 443</p>
@@ -2294,6 +2297,7 @@ spec:
       mode: SIMPLE
       serverCertificate: /etc/certs/server.pem
       privateKey: /etc/certs/privatekey.pem
+    type: INGRESS
 </code></pre>
 
 <table class="message-fields">
@@ -2342,6 +2346,41 @@ newexample.com will not match.</p>
 <p>Set of TLS related options that govern the server&rsquo;s behavior. Use
 these options to control if all http requests should be redirected to
 https, and the TLS modes to use.</p>
+
+</td>
+</tr>
+<tr id="Server-type">
+<td><code>type</code></td>
+<td><code><a href="#Server-ServerType">Server.ServerType</a></code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Server-ServerType">Server.ServerType</h2>
+<section>
+<p>The type of the server. Currently, ingress or egress.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Server-ServerType-INGRESS">
+<td><code>INGRESS</code></td>
+<td>
+<p>The server is a front-end proxy for the mesh</p>
+
+</td>
+</tr>
+<tr id="Server-ServerType-EGRESS">
+<td><code>EGRESS</code></td>
+<td>
+<p>The server is a back-end proxy for the mesh</p>
 
 </td>
 </tr>
