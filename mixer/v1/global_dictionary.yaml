@@ -68,6 +68,8 @@
 - request.size
 - request.time
 - request.useragent
+- request.queries
+- request.url_path
 - response.headers
 - response.size
 - response.time
