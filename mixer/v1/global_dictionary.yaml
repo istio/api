@@ -186,6 +186,7 @@
 - connection.sent.bytes
 - connection.sent.bytes_total
 - connection.duration
+- connection.requested_server_name
 
 # context attributes
 - context.protocol
