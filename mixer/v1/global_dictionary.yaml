@@ -186,7 +186,6 @@
 - connection.sent.bytes
 - connection.sent.bytes_total
 - connection.duration
-- connection.requested_server_name
 
 # context attributes
 - context.protocol
@@ -287,3 +286,6 @@
 
 - context.reporter.type
 - context.reporter.kind
+
+# SNI, for TLS connections
+- connection.requested_server_name
