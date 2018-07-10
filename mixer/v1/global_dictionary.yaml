@@ -183,10 +183,10 @@
 - connection.id
 - connection.received.bytes
 - connection.received.bytes_total
-- connection.received.requested_server_name
 - connection.sent.bytes
 - connection.sent.bytes_total
 - connection.duration
+- connection.requested_server_name
 
 # context attributes
 - context.protocol
