@@ -14,6 +14,7 @@
 
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
 import "networking/v1alpha3/gateway.proto";
 
 package istio.networking.v1alpha3;
@@ -392,4 +393,7 @@ message ServiceEntry {
 
   // One or more endpoints associated with the service.
   repeated Endpoint endpoints = 6;
+
+  // The time that this service entry was created, if available.
+  google.protobuf.Timestamp creation_timestamp = 7;
 }
