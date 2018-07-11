@@ -26,7 +26,7 @@ var _ = math.Inf
 //
 // The following example on Kubernetes, routes all HTTP traffic by default to
 // pods of the reviews service with label "version: v1". In addition,
-// HTTP requests containing /wpcatalog/, /consumercatalog/ url prefixes will
+// HTTP requests containing the /wpcatalog/ url prefix will
 // be rewritten to /newcatalog and sent to pods with label "version: v2".
 //
 //
@@ -42,8 +42,6 @@ var _ = math.Inf
 //   - match:
 //     - uri:
 //         prefix: "/wpcatalog"
-//     - uri:
-//         prefix: "/consumercatalog"
 //     rewrite:
 //       uri: "/newcatalog"
 //     route:
