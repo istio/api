@@ -36,6 +36,15 @@ RUN go get -u -v -ldflags '-w -s' \
         github.com/gogo/protobuf/protoc-gen-gogoslick \
         github.com/istio/tools/protoc-gen-docs \
         && install -c ${GOPATH}/bin/protoc-gen* ${OUTDIR}/usr/bin/
+RUN go get -u -v -ldflags '-w -s' \
+        github.com/gogo/protobuf/proto \
+        && install -c ${GOPATH}/bin/proto ${OUTDIR}/usr/bin/
+RUN go get -u -v -ldflags '-w -s' \
+        github.com/gogo/protobuf/jsonpb \
+        && install -c ${GOPATH}/bin/jsonpb ${OUTDIR}/usr/bin/
+RUN go get -u -v -ldflags '-w -s' \
+        github.com/gogo/protobuf/gogoproto \
+        && install -c ${GOPATH}/bin/gogoproto ${OUTDIR}/usr/bin/
 
 FROM znly/upx as packer
 COPY --from=protoc_builder /out/ /out/
