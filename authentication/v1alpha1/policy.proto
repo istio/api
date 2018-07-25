@@ -23,6 +23,25 @@ package istio.authentication.v1alpha1;
 
 option go_package = "istio.io/api/authentication/v1alpha1";
 
+// Describes how to match a given string in HTTP headers. Match is case-sensitive.
+message StringMatch {
+  oneof match_type {
+    // exact string match.
+    string exact = 1;
+
+    // prefix-based match.
+    string prefix = 2;
+
+    // suffix-based match.
+    string suffix = 3;
+
+    // ECMAscript style regex-based match as defined by [EDCA-262](
+    // http://en.cppreference.com/w/cpp/regex/ecmascript).
+    // Example: "^/pets/(.*?)?"
+    string regex = 4;
+  }
+}
+
 // TLS authentication params.
 message MutualTls {
   // Defines the acceptable connection TLS mode.
@@ -124,6 +143,12 @@ message Jwt {
   //
   // For example, `query=jwt_token`.
   repeated string jwt_params = 7;
+
+  // URL paths that should be excluded from the JWT validation. If the request path is matched,
+  // the JWT validation will be skipped and the request will proceed regardless.
+  // This is useful to keep a couple of URLs public for external health checks.
+  // Example: "/health_check", "/status/cpu_usage".
+  repeated StringMatch excluded_paths = 8;
 }
 
 // PeerAuthenticationMethod defines one particular type of authentication, e.g

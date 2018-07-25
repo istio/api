@@ -4,7 +4,7 @@ description: Authentication policy for Istio services.
 location: https://istio.io/docs/reference/config/istio.authentication.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 9
+number_of_entries: 10
 ---
 <p>This package defines user-facing authentication policy.</p>
 
@@ -105,6 +105,17 @@ format will be x-goog-iap-jwt-assertion: <JWT>.</p>
 query parameter name.</p>
 
 <p>For example, <code>query=jwt_token</code>.</p>
+
+</td>
+</tr>
+<tr id="Jwt-excluded_paths">
+<td><code>excludedPaths</code></td>
+<td><code><a href="#StringMatch">StringMatch[]</a></code></td>
+<td>
+<p>URL paths that should be excluded from the JWT validation. If the request path is matched,
+the JWT validation will be skipped and the request will proceed regardless.
+This is useful to keep a couple of URLs public for external health checks.
+Example: &ldquo;/health<em>check&rdquo;, &ldquo;/status/cpu</em>usage&rdquo;.</p>
 
 </td>
 </tr>
@@ -473,6 +484,55 @@ networking API to avoid dependency.</p>
 <td><code>USE_ORIGIN</code></td>
 <td>
 <p>Principal will be set to the identity from origin authentication.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="StringMatch">StringMatch</h2>
+<section>
+<p>Describes how to match a given string in HTTP headers. Match is case-sensitive.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="StringMatch-exact" class="oneof oneof-start">
+<td><code>exact</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>exact string match.</p>
+
+</td>
+</tr>
+<tr id="StringMatch-prefix" class="oneof">
+<td><code>prefix</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>prefix-based match.</p>
+
+</td>
+</tr>
+<tr id="StringMatch-suffix" class="oneof">
+<td><code>suffix</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>suffix-based match.</p>
+
+</td>
+</tr>
+<tr id="StringMatch-regex" class="oneof">
+<td><code>regex</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>ECMAscript style regex-based match as defined by <a href="http://en.cppreference.com/w/cpp/regex/ecmascript">EDCA-262</a>.
+Example: &ldquo;^/pets/(.*?)?&rdquo;</p>
 
 </td>
 </tr>
