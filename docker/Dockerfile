@@ -36,6 +36,7 @@ RUN go get -u -v -ldflags '-w -s' \
         github.com/gogo/protobuf/protoc-gen-gogoslick \
         github.com/istio/tools/protoc-gen-docs \
         && install -c ${GOPATH}/bin/protoc-gen* ${OUTDIR}/usr/bin/
+RUN go get -u -v github.com/gogo/protobuf/jsonpb
 
 FROM znly/upx as packer
 COPY --from=protoc_builder /out/ /out/
