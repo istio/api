@@ -346,17 +346,20 @@ message ServiceEntry {
   // directly communicate with the proxy (e.g., by setting HTTP_PROXY) to
   // talk to these services.
   enum Resolution {
+    // Placeholder enum value to indicate an undefined resolution
+    INVALID = 0;
+
     // Assume that incoming connections have already been resolved (to a
     // specific destination IP address). Such connections are typically
     // routed via the proxy using mechanisms such as IP table REDIRECT/
     // eBPF. After performing any routing related transformations, the
     // proxy will forward the connection to the IP address to which the
     // connection was bound.
-    NONE = 0;
+    NONE = 1;
 
     // Use the static IP addresses specified in endpoints (see below) as the
     // backing instances associated with the service.
-    STATIC = 1;
+    STATIC = 2;
 
     // Attempt to resolve the IP address by querying the ambient DNS,
     // during request processing. If no endpoints are specified, the proxy
@@ -365,11 +368,12 @@ message ServiceEntry {
     // addresses specified in the endpoints will be resolved to determine
     // the destination IP address.  DNS resolution cannot be used with unix
     // domain socket endpoints.
-    DNS = 2;
+    DNS = 3;
   };
 
-  // Service discovery mode for the hosts. If not set, Istio will attempt
-  // to infer the discovery mode based on the value of hosts and endpoints.
+  // REQUIRED. Service discovery mode for the hosts. If not set, Istio will
+  // attempt to infer the discovery mode based on the value of hosts and
+  // endpoints.
   Resolution resolution = 5;
 
   // Endpoint defines a network address (IP or hostname) associated with
