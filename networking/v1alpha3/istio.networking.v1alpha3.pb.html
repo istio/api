@@ -2817,8 +2817,9 @@ or part of the mesh.</p>
 <td><code>resolution</code></td>
 <td><code><a href="#ServiceEntry-Resolution">ServiceEntry.Resolution</a></code></td>
 <td>
-<p>Service discovery mode for the hosts. If not set, Istio will attempt
-to infer the discovery mode based on the value of hosts and endpoints.</p>
+<p>REQUIRED. Service discovery mode for the hosts. If not set, Istio will
+attempt to infer the discovery mode based on the value of hosts and
+endpoints.</p>
 
 </td>
 </tr>
@@ -2937,6 +2938,13 @@ talk to these services.</p>
 </tr>
 </thead>
 <tbody>
+<tr id="ServiceEntry-Resolution-INVALID">
+<td><code>INVALID</code></td>
+<td>
+<p>Placeholder enum value to indicate an undefined resolution</p>
+
+</td>
+</tr>
 <tr id="ServiceEntry-Resolution-NONE">
 <td><code>NONE</code></td>
 <td>
