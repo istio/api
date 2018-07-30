@@ -2805,12 +2805,10 @@ or part of the mesh.</p>
 <td><code>resolution</code></td>
 <td><code><a href="#ServiceEntry-Resolution">ServiceEntry.Resolution</a></code></td>
 <td>
-<p>REQUIRED: Service discovery mode for the hosts. If not set, Istio will
-attempt to infer the discovery mode based on the value of hosts and
-endpoints. Care must be taken when setting the resolution mode to NONE
-for a TCP port without accompanying IP addresses. In such cases,
-traffic to any IP on the said port will be allowed
-(i.e. 0.0.0.0:<port>).</p>
+<p>REQUIRED: Service discovery mode for the hosts. Care must be taken
+when setting the resolution mode to NONE for a TCP port without
+accompanying IP addresses. In such cases, traffic to any IP on the
+said port will be allowed (i.e. 0.0.0.0:<port>).</p>
 
 </td>
 </tr>
