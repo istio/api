@@ -17,14 +17,16 @@ syntax = "proto3";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 
-// $title: Traffic Routing
-// $description: Configuration affecting traffic routing
-// $location: https://istio.io/docs/reference/config/istio.networking.v1alpha3.html
-// $aliases:
-// $  - /docs/reference/config/istio.routing.v1alpha1/
+// $title: Virtual Service
+// $description: Virtual Service configuration
+// $location: https://istio.io/docs/reference/config/networking/istio.networking.v1alpha3.virtualservice.html
+package istio.networking.v1alpha3;
 
-// Configuration affecting traffic routing. Here are a few terms useful to define
-// in the context of traffic routing.
+option go_package = "istio.io/api/networking/v1alpha3";
+
+// A `VirtualService` defines a set of traffic routing rules to apply when
+// a host is addressed. Here are a few terms useful to define in the
+// context of traffic routing.
 //
 // `Service` a unit of application behavior bound to a unique name in a
 // service registry. Services consist of multiple network *endpoints*
@@ -48,20 +50,17 @@ import "google/protobuf/wrappers.proto";
 //
 // `Access model` - Applications address only the destination service
 // (Host) without knowledge of individual service versions (subsets). The
-// actual choice of the version is determined by the proxy/sidecar, enabling the
-// application code to decouple itself from the evolution of dependent
-// services.
-package istio.networking.v1alpha3;
-
-option go_package = "istio.io/api/networking/v1alpha3";
-
-// A `VirtualService` defines a set of traffic routing rules to apply when a host is
-// addressed. Each routing rule defines matching criteria for traffic of a specific
-// protocol. If the traffic is matched, then it is sent to a named destination service
-// (or subset/version of it) defined in the registry.
+// actual choice of the version is determined by the proxy/sidecar,
+// enabling the application code to decouple itself from the evolution of
+// dependent services.
 //
-// The source of traffic can also be matched in a routing rule. This allows routing
-// to be customized for specific client contexts.
+// Each routing rule in the `VirtualService` defines matching criteria for
+// traffic of a specific protocol. If the traffic is matched, then it is
+// sent to a named destination service (or subset/version of it) defined in
+// the registry.
+//
+// The source of traffic can also be matched in a routing rule. This allows
+// routing to be customized for specific client contexts.
 //
 // The following example on Kubernetes, routes all HTTP traffic by default to
 // pods of the reviews service with label "version: v1". In addition,

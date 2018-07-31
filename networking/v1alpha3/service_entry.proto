@@ -16,6 +16,9 @@ syntax = "proto3";
 
 import "networking/v1alpha3/gateway.proto";
 
+// $title: Service Entry
+// $description: Service Entry configuration
+// $location: https://istio.io/docs/reference/config/networking/istio.networking.v1alpha3.serviceentry.html
 package istio.networking.v1alpha3;
 
 option go_package = "istio.io/api/networking/v1alpha3";

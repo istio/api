@@ -272,12 +272,12 @@ type Server struct {
 	// REQUIRED: The Port on which the proxy should listen for incoming
 	// connections
 	Port *Port `protobuf:"bytes,1,opt,name=port" json:"port,omitempty"`
-	// REQUIRED. A list of hosts exposed by this gateway. At least one
-	// host is required. While typically applicable to
-	// HTTP services, it can also be used for TCP services using TLS with
-	// SNI. May contain a wildcard prefix for the bottom-level component of
-	// a domain name. For example `*.foo.com` matches `bar.foo.com`
-	// and `*.com` matches `bar.foo.com`, `example.com`, and so on.
+	// REQUIRED. A list of hosts exposed by this gateway. At least one host
+	// is required. While typically applicable to HTTP services, it can also
+	// be used for TCP services using TLS with SNI. Hostnames must be in FQDN
+	// format. May contain a wildcard prefix for the bottom-level component
+	// of a domain name. For example `*.foo.com` matches `bar.foo.com` and
+	// `*.com` matches `bar.foo.com`, `example.com`, and so on.
 	//
 	// **Note**: A `VirtualService` that is bound to a gateway must have one
 	// or more hosts that match the hosts specified in a server. The match
