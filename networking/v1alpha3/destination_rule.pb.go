@@ -4,6 +4,10 @@
 /*
 	Package v1alpha3 is a generated protocol buffer package.
 
+	$title: Destination Rule
+	$description: Destination Rule configuration
+	$location: https://istio.io/docs/reference/config/networking/istio.networking.v1alpha3.destinationrule.html
+
 	It is generated from these files:
 		networking/v1alpha3/destination_rule.proto
 		networking/v1alpha3/envoy_filter.proto

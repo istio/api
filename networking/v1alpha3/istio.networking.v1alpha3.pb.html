@@ -1,41 +1,12 @@
 ---
-title: Traffic Routing
-description: Configuration affecting traffic routing
-location: https://istio.io/docs/reference/config/istio.networking.v1alpha3.html
+title: istio.networking.v1alpha3
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-aliases:
-  - /docs/reference/config/istio.routing.v1alpha1/
 number_of_entries: 49
 ---
-<p>Configuration affecting traffic routing. Here are a few terms useful to define
-in the context of traffic routing.</p>
-
-<p><code>Service</code> a unit of application behavior bound to a unique name in a
-service registry. Services consist of multiple network <em>endpoints</em>
-implemented by workload instances running on pods, containers, VMs etc.</p>
-
-<p><code>Service versions (a.k.a. subsets)</code> - In a continuous deployment
-scenario, for a given service, there can be distinct subsets of
-instances running different variants of the application binary. These
-variants are not necessarily different API versions. They could be
-iterative changes to the same service, deployed in different
-environments (prod, staging, dev, etc.). Common scenarios where this
-occurs include A/B testing, canary rollouts, etc. The choice of a
-particular version can be decided based on various criterion (headers,
-url, etc.) and/or by weights assigned to each version. Each service has
-a default version consisting of all its instances.</p>
-
-<p><code>Source</code> - A downstream client calling a service.</p>
-
-<p><code>Host</code> - The address used by a client when attempting to connect to a
-service.</p>
-
-<p><code>Access model</code> - Applications address only the destination service
-(Host) without knowledge of individual service versions (subsets). The
-actual choice of the version is determined by the proxy/sidecar, enabling the
-application code to decouple itself from the evolution of dependent
-services.</p>
+<p>$title: Virtual Service
+$description: Virtual Service configuration
+$location: https://istio.io/docs/reference/config/networking/istio.networking.v1alpha3.virtualservice.html</p>
 
 <h2 id="ConnectionPoolSettings">ConnectionPoolSettings</h2>
 <section>
@@ -2345,12 +2316,12 @@ connections</p>
 <td><code>hosts</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>REQUIRED. A list of hosts exposed by this gateway. At least one
-host is required. While typically applicable to
-HTTP services, it can also be used for TCP services using TLS with
-SNI. May contain a wildcard prefix for the bottom-level component of
-a domain name. For example <code>*.foo.com</code> matches <code>bar.foo.com</code>
-and <code>*.com</code> matches <code>bar.foo.com</code>, <code>example.com</code>, and so on.</p>
+<p>REQUIRED. A list of hosts exposed by this gateway. At least one host
+is required. While typically applicable to HTTP services, it can also
+be used for TCP services using TLS with SNI. Hostnames must be in FQDN
+format. May contain a wildcard prefix for the bottom-level component
+of a domain name. For example <code>*.foo.com</code> matches <code>bar.foo.com</code> and
+<code>*.com</code> matches <code>bar.foo.com</code>, <code>example.com</code>, and so on.</p>
 
 <p><strong>Note</strong>: A <code>VirtualService</code> that is bound to a gateway must have one
 or more hosts that match the hosts specified in a server. The match
@@ -3564,13 +3535,43 @@ label>.</p>
 </section>
 <h2 id="VirtualService">VirtualService</h2>
 <section>
-<p>A <code>VirtualService</code> defines a set of traffic routing rules to apply when a host is
-addressed. Each routing rule defines matching criteria for traffic of a specific
-protocol. If the traffic is matched, then it is sent to a named destination service
-(or subset/version of it) defined in the registry.</p>
+<p>A <code>VirtualService</code> defines a set of traffic routing rules to apply when
+a host is addressed. Here are a few terms useful to define in the
+context of traffic routing.</p>
 
-<p>The source of traffic can also be matched in a routing rule. This allows routing
-to be customized for specific client contexts.</p>
+<p><code>Service</code> a unit of application behavior bound to a unique name in a
+service registry. Services consist of multiple network <em>endpoints</em>
+implemented by workload instances running on pods, containers, VMs etc.</p>
+
+<p><code>Service versions (a.k.a. subsets)</code> - In a continuous deployment
+scenario, for a given service, there can be distinct subsets of
+instances running different variants of the application binary. These
+variants are not necessarily different API versions. They could be
+iterative changes to the same service, deployed in different
+environments (prod, staging, dev, etc.). Common scenarios where this
+occurs include A/B testing, canary rollouts, etc. The choice of a
+particular version can be decided based on various criterion (headers,
+url, etc.) and/or by weights assigned to each version. Each service has
+a default version consisting of all its instances.</p>
+
+<p><code>Source</code> - A downstream client calling a service.</p>
+
+<p><code>Host</code> - The address used by a client when attempting to connect to a
+service.</p>
+
+<p><code>Access model</code> - Applications address only the destination service
+(Host) without knowledge of individual service versions (subsets). The
+actual choice of the version is determined by the proxy/sidecar,
+enabling the application code to decouple itself from the evolution of
+dependent services.</p>
+
+<p>Each routing rule in the <code>VirtualService</code> defines matching criteria for
+traffic of a specific protocol. If the traffic is matched, then it is
+sent to a named destination service (or subset/version of it) defined in
+the registry.</p>
+
+<p>The source of traffic can also be matched in a routing rule. This allows
+routing to be customized for specific client contexts.</p>
 
 <p>The following example on Kubernetes, routes all HTTP traffic by default to
 pods of the reviews service with label &ldquo;version: v1&rdquo;. In addition,
