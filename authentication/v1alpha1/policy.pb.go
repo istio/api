@@ -179,6 +179,7 @@ type Jwt struct {
 	//
 	// For example, `query=jwt_token`.
 	JwtParams []string `protobuf:"bytes,7,rep,name=jwt_params,json=jwtParams" json:"jwt_params,omitempty"`
+	// $hide_from_docs
 	// URL paths that should be excluded from the JWT validation. If the request path is matched,
 	// the JWT validation will be skipped and the request will proceed regardless.
 	// This is useful to keep a couple of URLs public for external health checks.
@@ -422,7 +423,7 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 //   targets:
 //   - name: productpage
 // ```
-// Policy to require mTLS for peer authentication, and JWT for origin authenticationn
+// Policy to require mTLS for peer authentication, and JWT for origin authentication
 // for productpage:9000. Principal is set from origin identity.
 //
 // ```yaml
@@ -446,38 +447,6 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 //       jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
 //       jwt_headers:
 //       - "x-goog-iap-jwt-assertion"
-//   principaBinding: USE_ORIGIN
-// ```
-//
-// Policy to require mTLS for peer authentication, and JWT for origin authenticationn
-// for productpage:9000, but allow origin authentication failed. Principal is set
-// from origin identity.
-// Note: this example can be used for use cases when we want to allow request from
-// certain peers, given it comes with an approperiate authorization poicy to check
-// and reject request accoridingly.
-//
-// ```yaml
-// apiVersion: authentication.istio.io/v1alpha1
-// kind: Policy
-// metadata:
-//   name: mTLS_enable
-//   namespace: frod
-// spec:
-//   target:
-//   - name: productpage
-//     ports:
-//     - number: 9000
-//   peers:
-//   - mtls:
-//   origins:
-//   - jwt:
-//       issuer: "https://securetoken.google.com"
-//       audiences:
-//       - "productpage"
-//       jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
-//       jwt_headers:
-//       - "x-goog-iap-jwt-assertion"
-//   originIsOptional: true
 //   principalBinding: USE_ORIGIN
 // ```
 type Policy struct {
@@ -487,10 +456,11 @@ type Policy struct {
 	// List of authentication methods that can be used for peer authentication.
 	// They will be evaluated in order; the first validate one will be used to
 	// set peer identity (source.user) and other peer attributes. If none of
-	// these methods pass, and peer_is_optional flag is false (see below),
-	// request will be rejected with authentication failed error (401).
+	// these methods pass, request will be rejected with authentication failed error (401).
 	// Leave the list empty if peer authentication is not required
 	Peers []*PeerAuthenticationMethod `protobuf:"bytes,2,rep,name=peers" json:"peers,omitempty"`
+	// $hide_from_docs
+	// WILL BE DEPRECATED
 	// Set this flag to true to accept request (for peer authentication perspective),
 	// even when none of the peer authentication methods defined above satisfied.
 	// Typically, this is used to delay the rejection decision to next layer (e.g
@@ -500,11 +470,12 @@ type Policy struct {
 	// List of authentication methods that can be used for origin authentication.
 	// Similar to peers, these will be evaluated in order; the first validate one
 	// will be used to set origin identity and attributes (i.e request.auth.user,
-	// request.auth.issuer etc). If none of these methods pass, and origin_is_optional
-	// is false (see below), request will be rejected with authentication failed
-	// error (401).
+	// request.auth.issuer etc). If none of these methods pass, request will be
+	// rejected with authentication failed error (401).
 	// Leave the list empty if origin authentication is not required.
 	Origins []*OriginAuthenticationMethod `protobuf:"bytes,4,rep,name=origins" json:"origins,omitempty"`
+	// $hide_from_docs
+	// WILL BE DEPRECATED
 	// Set this flag to true to accept request (for origin authentication perspective),
 	// even when none of the origin authentication methods defined above satisfied.
 	// Typically, this is used to delay the rejection decision to next layer (e.g
@@ -513,7 +484,7 @@ type Policy struct {
 	OriginIsOptional bool `protobuf:"varint,5,opt,name=origin_is_optional,json=originIsOptional,proto3" json:"origin_is_optional,omitempty"`
 	// Define whether peer or origin identity should be use for principal. Default
 	// value is USE_PEER.
-	// If peer (or orgin) identity is not available, either because of peer/origin
+	// If peer (or origin) identity is not available, either because of peer/origin
 	// authentication is not defined, or failed, principal will be left unset.
 	// In other words, binding rule does not affect the decision to accept or
 	// reject request.
@@ -597,7 +568,7 @@ func (m *TargetSelector) GetPorts() []*PortSelector {
 }
 
 // PortSelector specifies the name or number of a port to be used for
-// matching targets for authenticationn policy. This is copied from
+// matching targets for authentication policy. This is copied from
 // networking API to avoid dependency.
 type PortSelector struct {
 	// Types that are valid to be assigned to Port:
