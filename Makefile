@@ -20,14 +20,6 @@ docker_gen := docker run --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(gen_img)
 out_path = .
 endif
 
-
-########################
-# protoc_gen_go
-########################
-
-protoc_gen_go_prefix := --go_out=plugins=grpc,
-protoc_gen_go_plugin := $(protoc_gen_go_prefix):$(out_path)
-
 ########################
 # protoc_gen_gogo*
 ########################
@@ -135,7 +127,7 @@ generate-mesh-go: $(mesh_pb_gos) $(mesh_pb_doc)
 
 $(mesh_pb_gos) $(mesh_pb_doc): $(mesh_protos)
 	## Generate mesh/v1alpha1/*.pb.go + $(mesh_pb_doc)
-	@$(docker_gen) $(protoc_gen_go_plugin) $(protoc_gen_docs_plugin)$(mesh_path) $^
+	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(mesh_path) $^
 
 generate-mesh-python: $(mesh_pb_pythons)
 
@@ -274,7 +266,7 @@ generate-rbac-go: $(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc)
 
 $(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc): $(rbac_v1alpha1_protos)
 	## Generate rbac/v1alpha1/*.pb.go
-	@$(docker_gen) $(protoc_gen_go_plugin) $(protoc_gen_docs_plugin)$(rbac_v1alpha1_path) $^
+	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(rbac_v1alpha1_path) $^
 
 generate-rbac-python: $(rbac_v1alpha1_protos)
 
@@ -353,7 +345,7 @@ generate-common-go: $(common_v1alpha1_pb_gos) $(common_v1alpha1_pb_doc)
 
 $(common_v1alpha1_pb_gos) $(common_v1alpha1_pb_doc): $(common_v1alpha1_protos)
 	## Generate common/v1alpha1/*.pb.go
-	@$(docker_gen) $(protoc_gen_go_plugin) $(protoc_gen_docs_plugin)$(common_v1alpha1_path) $^
+	$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(common_v1alpha1_path) $^
 
 generate-common-python: $(common_v1alpha1_pb_pythons)
 
