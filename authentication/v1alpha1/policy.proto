@@ -254,7 +254,7 @@ message Policy {
   // Typically, this is used to delay the rejection decision to next layer (e.g
   // authorization).
   // This flag is ignored if no authentication defined for peer (peers field is empty).
-  bool peer_is_optional = 3;
+  bool peer_is_optional = 3 [deprecated = true];
 
   // List of authentication methods that can be used for origin authentication.
   // Similar to peers, these will be evaluated in order; the first validate one
@@ -271,7 +271,7 @@ message Policy {
   // Typically, this is used to delay the rejection decision to next layer (e.g
   // authorization).
   // This flag is ignored if no authentication defined for origin (origins field is empty).
-  bool origin_is_optional = 5;
+  bool origin_is_optional = 5 [deprecated = true];
 
   // Define whether peer or origin identity should be use for principal. Default
   // value is USE_PEER.
