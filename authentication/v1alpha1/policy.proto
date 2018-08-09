@@ -54,7 +54,9 @@ message MutualTls {
 // 1.0](http://openid.net/connect) for how this is used in the whole
 // authentication flow.
 //
-// Example,
+// For example:
+//
+// A JWT for any requests:
 //
 // ```yaml
 // issuer: https://example.com
@@ -62,6 +64,44 @@ message MutualTls {
 // - bookstore_android.apps.googleusercontent.com
 //   bookstore_web.apps.googleusercontent.com
 // jwksUri: https://example.com/.well-known/jwks.json
+// ```
+//
+// A JWT for all requests except request at path `/health_check` and path with
+// prefix `/status/`. This is useful to expose some paths for public access but
+// keep others JWT validated.
+//
+// ```yaml
+// issuer: https://example.com
+// jwks_uri: https://example.com/.well-known/jwks.json
+// conditions:
+// - excluded_paths:
+//   - exact: /health_check
+//   - prefix: /status/
+// ```
+//
+// A JWT only for requests at path `/admin`. This is useful to only require JWT
+// validation on a specific set of paths but keep others public accessible.
+//
+// ```yaml
+// issuer: https://example.com
+// jwks_uri: https://example.com/.well-known/jwks.json
+// conditions:
+// - included_paths:
+//   - prefix: /admin
+// ```
+//
+// A JWT only for requests at path of prefix `/status/` but except the path of
+// `/status/version`. This means for any request path with prefix `/status/` except
+// `/status/version` will require a valid JWT to proceed.
+//
+// ```yaml
+// issuer: https://example.com
+// jwks_uri: https://example.com/.well-known/jwks.json
+// conditions:
+// - excluded_paths:
+//   - exact: /status/version
+//   included_paths:
+//   - prefix: /status/
 // ```
 message Jwt {
   // Identifies the issuer that issued the JWT. See
@@ -127,10 +167,28 @@ message Jwt {
   // For example, `query=jwt_token`.
   repeated string jwt_params = 7;
 
-  // URL paths that should be excluded from the JWT validation. If the request path is
-  // matched, the JWT validation will be skipped and the request will proceed regardless.
-  // This is useful to keep a couple of URLs public for external health checks.
-  repeated istio.common.v1alpha1.StringMatch excluded_paths = 8;
+  // List of conditions to decide if this JWT should be used to validate the
+  // request. The JWT validation happens if any one of the conditions matched.
+  // If the list is non-empty and none of the conditions matched, authentication
+  // will skip the JWT validation.
+  // Leave this empty to always trigger the JWT validation.
+  repeated Condition conditions = 9;
+
+  reserved 4, 5, 8;
+}
+
+// Condition to match against a request. The condition is matched if and only if
+// both excluded_paths and included_paths are satisfied.
+message Condition {
+  // List of paths to be excluded from the request. The excluded_paths is satisfied
+  // if either the excluded_paths is empty or the request path is *NOT* matched
+  // to any of the excluded_paths.
+  repeated istio.common.v1alpha1.StringMatch excluded_paths = 1;
+
+  // List of paths that the request must include. The included_paths is satisfied
+  // if either the included_paths is empty or the request path is matched to any
+  // of the included_paths.
+  repeated istio.common.v1alpha1.StringMatch included_paths = 2;
 }
 
 // PeerAuthenticationMethod defines one particular type of authentication, e.g
@@ -231,8 +289,9 @@ enum PrincipalBinding {
 //       jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
 //       jwt_headers:
 //       - "x-goog-iap-jwt-assertion"
-//       excluded_paths:
-//       - exact: /health_check
+//       conditions:
+//       - excluded_paths:
+//         - exact: /health_check
 //   principalBinding: USE_ORIGIN
 // ```
 //
@@ -291,8 +350,11 @@ message Policy {
   // List of authentication methods that can be used for origin authentication.
   // Similar to peers, these will be evaluated in order; the first validate one
   // will be used to set origin identity and attributes (i.e request.auth.user,
-  // request.auth.issuer etc). If none of these methods pass, request will be
-  // rejected with authentication failed error (401).
+  // request.auth.issuer etc). JWT is used only when its condition matched. If
+  // none of them are matched, request will be accepted as if there is no JWT defined.
+  // If none of these methods pass, and origin_is_optional
+  // is false (see below), request will be rejected with authentication failed
+  // error (401).
   // Leave the list empty if origin authentication is not required.
   repeated OriginAuthenticationMethod origins = 4;
 

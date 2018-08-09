@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='common/v1alpha1/string.proto',
   package='istio.common.v1alpha1',
   syntax='proto3',
-  serialized_pb=_b('\n\x1c\x63ommon/v1alpha1/string.proto\x12\x15istio.common.v1alpha1\"w\n\x0bStringMatch\x12\x0f\n\x05\x65xact\x18\x01 \x01(\tH\x00\x12\x10\n\x06prefix\x18\x02 \x01(\tH\x00\x12\x10\n\x06suffix\x18\x03 \x01(\tH\x00\x12\x0f\n\x05regex\x18\x04 \x01(\tH\x00\x12\x14\n\x0cinvert_match\x18\x05 \x01(\x08\x42\x0c\n\nmatch_typeB\x1eZ\x1cistio.io/api/common/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x1c\x63ommon/v1alpha1/string.proto\x12\x15istio.common.v1alpha1\"a\n\x0bStringMatch\x12\x0f\n\x05\x65xact\x18\x01 \x01(\tH\x00\x12\x10\n\x06prefix\x18\x02 \x01(\tH\x00\x12\x10\n\x06suffix\x18\x03 \x01(\tH\x00\x12\x0f\n\x05regex\x18\x04 \x01(\tH\x00\x42\x0c\n\nmatch_typeB\x1eZ\x1cistio.io/api/common/v1alpha1b\x06proto3')
 )
 
 
@@ -60,13 +60,6 @@ _STRINGMATCH = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='invert_match', full_name='istio.common.v1alpha1.StringMatch.invert_match', index=4,
-      number=5, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -83,7 +76,7 @@ _STRINGMATCH = _descriptor.Descriptor(
       index=0, containing_type=None, fields=[]),
   ],
   serialized_start=55,
-  serialized_end=174,
+  serialized_end=152,
 )
 
 _STRINGMATCH.oneofs_by_name['match_type'].fields.append(

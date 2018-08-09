@@ -4,10 +4,47 @@ description: Authentication policy for Istio services.
 location: https://istio.io/docs/reference/config/istio.authentication.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 9
+number_of_entries: 10
 ---
 <p>This package defines user-facing authentication policy.</p>
 
+<h2 id="Condition">Condition</h2>
+<section>
+<p>Condition to match against a request. The condition is matched if and only if
+both excluded<em>paths and included</em>paths are satisfied.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Condition-excluded_paths">
+<td><code>excludedPaths</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/istio.string.v1alpha1.html#StringMatch">istio.common.v1alpha1.StringMatch[]</a></code></td>
+<td>
+<p>List of paths to be excluded from the request. The excluded<em>paths is satisfied
+if either the excluded</em>paths is empty or the request path is <em>NOT</em> matched
+to any of the excluded_paths.</p>
+
+</td>
+</tr>
+<tr id="Condition-included_paths">
+<td><code>includedPaths</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/istio.string.v1alpha1.html#StringMatch">istio.common.v1alpha1.StringMatch[]</a></code></td>
+<td>
+<p>List of paths that the request must include. The included<em>paths is satisfied
+if either the included</em>paths is empty or the request path is matched to any
+of the included_paths.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="Jwt">Jwt</h2>
 <section>
 <p>JSON Web Token (JWT) token format for authentication as defined by
@@ -16,13 +53,50 @@ https://tools.ietf.org/html/rfc7519. See <a href="https://tools.ietf.org/html/rf
 1.0</a> for how this is used in the whole
 authentication flow.</p>
 
-<p>Example,</p>
+<p>For example:</p>
+
+<p>A JWT for any requests:</p>
 
 <pre><code class="language-yaml">issuer: https://example.com
 audiences:
 - bookstore_android.apps.googleusercontent.com
   bookstore_web.apps.googleusercontent.com
 jwksUri: https://example.com/.well-known/jwks.json
+</code></pre>
+
+<p>A JWT for all requests except request at path <code>/health_check</code> and path with
+prefix <code>/status/</code>. This is useful to expose some paths for public access but
+keep others JWT validated.</p>
+
+<pre><code class="language-yaml">issuer: https://example.com
+jwks_uri: https://example.com/.well-known/jwks.json
+conditions:
+- excluded_paths:
+  - exact: /health_check
+  - prefix: /status/
+</code></pre>
+
+<p>A JWT only for requests at path <code>/admin</code>. This is useful to only require JWT
+validation on a specific set of paths but keep others public accessible.</p>
+
+<pre><code class="language-yaml">issuer: https://example.com
+jwks_uri: https://example.com/.well-known/jwks.json
+conditions:
+- included_paths:
+  - prefix: /admin
+</code></pre>
+
+<p>A JWT only for requests at path of prefix <code>/status/</code> but except the path of
+<code>/status/version</code>. This means for any request path with prefix <code>/status/</code> except
+<code>/status/version</code> will require a valid JWT to proceed.</p>
+
+<pre><code class="language-yaml">issuer: https://example.com
+jwks_uri: https://example.com/.well-known/jwks.json
+conditions:
+- excluded_paths:
+  - exact: /status/version
+  included_paths:
+  - prefix: /status/
 </code></pre>
 
 <table class="message-fields">
@@ -108,13 +182,15 @@ query parameter name.</p>
 
 </td>
 </tr>
-<tr id="Jwt-excluded_paths">
-<td><code>excludedPaths</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/istio.string.v1alpha1.html#StringMatch">istio.common.v1alpha1.StringMatch[]</a></code></td>
+<tr id="Jwt-conditions">
+<td><code>conditions</code></td>
+<td><code><a href="#Condition">Condition[]</a></code></td>
 <td>
-<p>URL paths that should be excluded from the JWT validation. If the request path is
-matched, the JWT validation will be skipped and the request will proceed regardless.
-This is useful to keep a couple of URLs public for external health checks.</p>
+<p>List of conditions to decide if this JWT should be used to validate the
+request. The JWT validation happens if any one of the conditions matched.
+If the list is non-empty and none of the conditions matched, authentication
+will skip the JWT validation.
+Leave this empty to always trigger the JWT validation.</p>
 
 </td>
 </tr>
@@ -307,8 +383,9 @@ spec:
       jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
       jwt_headers:
       - &quot;x-goog-iap-jwt-assertion&quot;
-      excluded_paths:
-      - exact: /health_check
+      conditions:
+      - excluded_paths:
+        - exact: /health_check
   principalBinding: USE_ORIGIN
 </code></pre>
 
@@ -380,8 +457,11 @@ Leave the list empty if peer authentication is not required</p>
 <p>List of authentication methods that can be used for origin authentication.
 Similar to peers, these will be evaluated in order; the first validate one
 will be used to set origin identity and attributes (i.e request.auth.user,
-request.auth.issuer etc). If none of these methods pass, request will be
-rejected with authentication failed error (401).
+request.auth.issuer etc). JWT is used only when its condition matched. If
+none of them are matched, request will be accepted as if there is no JWT defined.
+If none of these methods pass, and origin<em>is</em>optional
+is false (see below), request will be rejected with authentication failed
+error (401).
 Leave the list empty if origin authentication is not required.</p>
 
 </td>

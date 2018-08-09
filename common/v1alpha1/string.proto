@@ -40,7 +40,4 @@ message StringMatch {
     // Example: "^/pets/(.*?)?"
     string regex = 4;
   }
-
-  // If true, the match result will be inverted. Defaults to false.
-  bool invert_match = 5;
 }
