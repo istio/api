@@ -127,11 +127,9 @@ message Jwt {
   // For example, `query=jwt_token`.
   repeated string jwt_params = 7;
 
-  // $hide_from_docs
-  // URL paths that should be excluded from the JWT validation. If the request path is matched,
-  // the JWT validation will be skipped and the request will proceed regardless.
+  // URL paths that should be excluded from the JWT validation. If the request path is
+  // matched, the JWT validation will be skipped and the request will proceed regardless.
   // This is useful to keep a couple of URLs public for external health checks.
-  // Example: "/health_check", "/status/cpu_usage".
   repeated istio.common.v1alpha1.StringMatch excluded_paths = 8;
 }
 
@@ -210,7 +208,7 @@ enum PrincipalBinding {
 //   - name: productpage
 // ```
 // Policy to require mTLS for peer authentication, and JWT for origin authentication
-// for productpage:9000. Principal is set from origin identity.
+// for productpage:9000 except the path '/health_check' . Principal is set from origin identity.
 //
 // ```yaml
 // apiVersion: authentication.istio.io/v1alpha1
@@ -233,6 +231,40 @@ enum PrincipalBinding {
 //       jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
 //       jwt_headers:
 //       - "x-goog-iap-jwt-assertion"
+//       excluded_paths:
+//       - exact: /health_check
+//   principalBinding: USE_ORIGIN
+// ```
+//
+// Policy to require mTLS for peer authentication, and JWT for origin authentication
+// for productpage:9000, but allow origin authentication failed. Principal is set
+// from origin identity.
+// Note: this example can be used for use cases when we want to allow request from
+// certain peers, given it comes with an appropriate authorization policy to check
+// and reject request accordingly.
+//
+// ```yaml
+// apiVersion: authentication.istio.io/v1alpha1
+// kind: Policy
+// metadata:
+//   name: mTLS_enable
+//   namespace: frod
+// spec:
+//   target:
+//   - name: productpage
+//     ports:
+//     - number: 9000
+//   peers:
+//   - mtls:
+//   origins:
+//   - jwt:
+//       issuer: "https://securetoken.google.com"
+//       audiences:
+//       - "productpage"
+//       jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
+//       jwt_headers:
+//       - "x-goog-iap-jwt-assertion"
+//   originIsOptional: true
 //   principalBinding: USE_ORIGIN
 // ```
 message Policy {

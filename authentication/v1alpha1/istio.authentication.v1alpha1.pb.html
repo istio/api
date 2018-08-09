@@ -108,6 +108,16 @@ query parameter name.</p>
 
 </td>
 </tr>
+<tr id="Jwt-excluded_paths">
+<td><code>excludedPaths</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/istio.string.v1alpha1.html#StringMatch">istio.common.v1alpha1.StringMatch[]</a></code></td>
+<td>
+<p>URL paths that should be excluded from the JWT validation. If the request path is
+matched, the JWT validation will be skipped and the request will proceed regardless.
+This is useful to keep a couple of URLs public for external health checks.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -275,7 +285,7 @@ spec:
 </code></pre>
 
 <p>Policy to require mTLS for peer authentication, and JWT for origin authentication
-for productpage:9000. Principal is set from origin identity.</p>
+for productpage:9000 except the path &lsquo;/health_check&rsquo; . Principal is set from origin identity.</p>
 
 <pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
 kind: Policy
@@ -297,6 +307,39 @@ spec:
       jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
       jwt_headers:
       - &quot;x-goog-iap-jwt-assertion&quot;
+      excluded_paths:
+      - exact: /health_check
+  principalBinding: USE_ORIGIN
+</code></pre>
+
+<p>Policy to require mTLS for peer authentication, and JWT for origin authentication
+for productpage:9000, but allow origin authentication failed. Principal is set
+from origin identity.
+Note: this example can be used for use cases when we want to allow request from
+certain peers, given it comes with an appropriate authorization policy to check
+and reject request accordingly.</p>
+
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: mTLS_enable
+  namespace: frod
+spec:
+  target:
+  - name: productpage
+    ports:
+    - number: 9000
+  peers:
+  - mtls:
+  origins:
+  - jwt:
+      issuer: &quot;https://securetoken.google.com&quot;
+      audiences:
+      - &quot;productpage&quot;
+      jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
+      jwt_headers:
+      - &quot;x-goog-iap-jwt-assertion&quot;
+  originIsOptional: true
   principalBinding: USE_ORIGIN
 </code></pre>
 

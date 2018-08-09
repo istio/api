@@ -179,11 +179,9 @@ type Jwt struct {
 	//
 	// For example, `query=jwt_token`.
 	JwtParams []string `protobuf:"bytes,7,rep,name=jwt_params,json=jwtParams" json:"jwt_params,omitempty"`
-	// $hide_from_docs
-	// URL paths that should be excluded from the JWT validation. If the request path is matched,
-	// the JWT validation will be skipped and the request will proceed regardless.
+	// URL paths that should be excluded from the JWT validation. If the request path is
+	// matched, the JWT validation will be skipped and the request will proceed regardless.
 	// This is useful to keep a couple of URLs public for external health checks.
-	// Example: "/health_check", "/status/cpu_usage".
 	ExcludedPaths []*istio_common_v1alpha1.StringMatch `protobuf:"bytes,8,rep,name=excluded_paths,json=excludedPaths" json:"excluded_paths,omitempty"`
 }
 
@@ -424,7 +422,7 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 //   - name: productpage
 // ```
 // Policy to require mTLS for peer authentication, and JWT for origin authentication
-// for productpage:9000. Principal is set from origin identity.
+// for productpage:9000 except the path '/health_check' . Principal is set from origin identity.
 //
 // ```yaml
 // apiVersion: authentication.istio.io/v1alpha1
@@ -447,6 +445,40 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 //       jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
 //       jwt_headers:
 //       - "x-goog-iap-jwt-assertion"
+//       excluded_paths:
+//       - exact: /health_check
+//   principalBinding: USE_ORIGIN
+// ```
+//
+// Policy to require mTLS for peer authentication, and JWT for origin authentication
+// for productpage:9000, but allow origin authentication failed. Principal is set
+// from origin identity.
+// Note: this example can be used for use cases when we want to allow request from
+// certain peers, given it comes with an appropriate authorization policy to check
+// and reject request accordingly.
+//
+// ```yaml
+// apiVersion: authentication.istio.io/v1alpha1
+// kind: Policy
+// metadata:
+//   name: mTLS_enable
+//   namespace: frod
+// spec:
+//   target:
+//   - name: productpage
+//     ports:
+//     - number: 9000
+//   peers:
+//   - mtls:
+//   origins:
+//   - jwt:
+//       issuer: "https://securetoken.google.com"
+//       audiences:
+//       - "productpage"
+//       jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
+//       jwt_headers:
+//       - "x-goog-iap-jwt-assertion"
+//   originIsOptional: true
 //   principalBinding: USE_ORIGIN
 // ```
 type Policy struct {
