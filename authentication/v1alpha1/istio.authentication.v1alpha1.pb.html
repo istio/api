@@ -108,17 +108,6 @@ query parameter name.</p>
 
 </td>
 </tr>
-<tr id="Jwt-excluded_paths">
-<td><code>excludedPaths</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/istio.string.v1alpha1.html#StringMatch">istio.common.v1alpha1.StringMatch[]</a></code></td>
-<td>
-<p>URL paths that should be excluded from the JWT validation. If the request path is matched,
-the JWT validation will be skipped and the request will proceed regardless.
-This is useful to keep a couple of URLs public for external health checks.
-Example: &ldquo;/health<em>check&rdquo;, &ldquo;/status/cpu</em>usage&rdquo;.</p>
-
-</td>
-</tr>
 </tbody>
 </table>
 </section>
@@ -285,7 +274,7 @@ spec:
   - name: productpage
 </code></pre>
 
-<p>Policy to require mTLS for peer authentication, and JWT for origin authenticationn
+<p>Policy to require mTLS for peer authentication, and JWT for origin authentication
 for productpage:9000. Principal is set from origin identity.</p>
 
 <pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
@@ -308,37 +297,6 @@ spec:
       jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
       jwt_headers:
       - &quot;x-goog-iap-jwt-assertion&quot;
-  principaBinding: USE_ORIGIN
-</code></pre>
-
-<p>Policy to require mTLS for peer authentication, and JWT for origin authenticationn
-for productpage:9000, but allow origin authentication failed. Principal is set
-from origin identity.
-Note: this example can be used for use cases when we want to allow request from
-certain peers, given it comes with an approperiate authorization poicy to check
-and reject request accoridingly.</p>
-
-<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
-kind: Policy
-metadata:
-  name: mTLS_enable
-  namespace: frod
-spec:
-  target:
-  - name: productpage
-    ports:
-    - number: 9000
-  peers:
-  - mtls:
-  origins:
-  - jwt:
-      issuer: &quot;https://securetoken.google.com&quot;
-      audiences:
-      - &quot;productpage&quot;
-      jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
-      jwt_headers:
-      - &quot;x-goog-iap-jwt-assertion&quot;
-  originIsOptional: true
   principalBinding: USE_ORIGIN
 </code></pre>
 
@@ -367,21 +325,8 @@ If empty, policy will be used on all destinations in the same namespace.</p>
 <p>List of authentication methods that can be used for peer authentication.
 They will be evaluated in order; the first validate one will be used to
 set peer identity (source.user) and other peer attributes. If none of
-these methods pass, and peer<em>is</em>optional flag is false (see below),
-request will be rejected with authentication failed error (401).
+these methods pass, request will be rejected with authentication failed error (401).
 Leave the list empty if peer authentication is not required</p>
-
-</td>
-</tr>
-<tr id="Policy-peer_is_optional">
-<td><code>peerIsOptional</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Set this flag to true to accept request (for peer authentication perspective),
-even when none of the peer authentication methods defined above satisfied.
-Typically, this is used to delay the rejection decision to next layer (e.g
-authorization).
-This flag is ignored if no authentication defined for peer (peers field is empty).</p>
 
 </td>
 </tr>
@@ -392,22 +337,9 @@ This flag is ignored if no authentication defined for peer (peers field is empty
 <p>List of authentication methods that can be used for origin authentication.
 Similar to peers, these will be evaluated in order; the first validate one
 will be used to set origin identity and attributes (i.e request.auth.user,
-request.auth.issuer etc). If none of these methods pass, and origin<em>is</em>optional
-is false (see below), request will be rejected with authentication failed
-error (401).
+request.auth.issuer etc). If none of these methods pass, request will be
+rejected with authentication failed error (401).
 Leave the list empty if origin authentication is not required.</p>
-
-</td>
-</tr>
-<tr id="Policy-origin_is_optional">
-<td><code>originIsOptional</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Set this flag to true to accept request (for origin authentication perspective),
-even when none of the origin authentication methods defined above satisfied.
-Typically, this is used to delay the rejection decision to next layer (e.g
-authorization).
-This flag is ignored if no authentication defined for origin (origins field is empty).</p>
 
 </td>
 </tr>
@@ -417,7 +349,7 @@ This flag is ignored if no authentication defined for origin (origins field is e
 <td>
 <p>Define whether peer or origin identity should be use for principal. Default
 value is USE_PEER.
-If peer (or orgin) identity is not available, either because of peer/origin
+If peer (or origin) identity is not available, either because of peer/origin
 authentication is not defined, or failed, principal will be left unset.
 In other words, binding rule does not affect the decision to accept or
 reject request.</p>
@@ -430,7 +362,7 @@ reject request.</p>
 <h2 id="PortSelector">PortSelector</h2>
 <section>
 <p>PortSelector specifies the name or number of a port to be used for
-matching targets for authenticationn policy. This is copied from
+matching targets for authentication policy. This is copied from
 networking API to avoid dependency.</p>
 
 <table class="message-fields">
