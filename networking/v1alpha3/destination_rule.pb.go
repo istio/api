@@ -40,6 +40,7 @@
 		CorsPolicy
 		HTTPFaultInjection
 		PortSelector
+		FractionalPercent
 */
 package v1alpha3
 
