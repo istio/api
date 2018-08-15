@@ -235,6 +235,10 @@
 - request.auth.audiences
 - request.auth.presenter
 
+# rbac attributes
+- rbac.permissive.response_code
+- rbac.permissive.effective_policy_id
+
 # api key
 - request.api_key
 
