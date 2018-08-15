@@ -8,43 +8,6 @@ number_of_entries: 10
 ---
 <p>This package defines user-facing authentication policy.</p>
 
-<h2 id="Condition">Condition</h2>
-<section>
-<p>Condition to match against a request. The condition is matched if and only if
-both excluded<em>paths and included</em>paths are satisfied.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Condition-excluded_paths">
-<td><code>excludedPaths</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/istio.string.v1alpha1.html#StringMatch">istio.common.v1alpha1.StringMatch[]</a></code></td>
-<td>
-<p>List of paths to be excluded from the request. The excluded<em>paths is satisfied
-if either the excluded</em>paths is empty or the request path is <em>NOT</em> matched
-to any of the excluded_paths.</p>
-
-</td>
-</tr>
-<tr id="Condition-included_paths">
-<td><code>includedPaths</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/istio.string.v1alpha1.html#StringMatch">istio.common.v1alpha1.StringMatch[]</a></code></td>
-<td>
-<p>List of paths that the request must include. The included<em>paths is satisfied
-if either the included</em>paths is empty or the request path is matched to any
-of the included_paths.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="Jwt">Jwt</h2>
 <section>
 <p>JSON Web Token (JWT) token format for authentication as defined by
@@ -70,7 +33,7 @@ keep others JWT validated.</p>
 
 <pre><code class="language-yaml">issuer: https://example.com
 jwks_uri: https://example.com/.well-known/jwks.json
-conditions:
+trigger_rules:
 - excluded_paths:
   - exact: /health_check
   - prefix: /status/
@@ -81,7 +44,7 @@ validation on a specific set of paths but keep others public accessible.</p>
 
 <pre><code class="language-yaml">issuer: https://example.com
 jwks_uri: https://example.com/.well-known/jwks.json
-conditions:
+trigger_rules:
 - included_paths:
   - prefix: /admin
 </code></pre>
@@ -92,7 +55,7 @@ conditions:
 
 <pre><code class="language-yaml">issuer: https://example.com
 jwks_uri: https://example.com/.well-known/jwks.json
-conditions:
+trigger_rules:
 - excluded_paths:
   - exact: /status/version
   included_paths:
@@ -182,15 +145,51 @@ query parameter name.</p>
 
 </td>
 </tr>
-<tr id="Jwt-conditions">
-<td><code>conditions</code></td>
-<td><code><a href="#Condition">Condition[]</a></code></td>
+<tr id="Jwt-trigger_rules">
+<td><code>triggerRules</code></td>
+<td><code><a href="#Jwt-TriggerRule">Jwt.TriggerRule[]</a></code></td>
 <td>
-<p>List of conditions to decide if this JWT should be used to validate the
-request. The JWT validation happens if any one of the conditions matched.
-If the list is non-empty and none of the conditions matched, authentication
-will skip the JWT validation.
+<p>List of trigger rules to decide if this JWT should be used to validate the
+request. The JWT validation happens if any one of the rules matched.
+If the list is not empty and none of the rules matched, authentication will
+skip the JWT validation.
 Leave this empty to always trigger the JWT validation.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Jwt-TriggerRule">Jwt.TriggerRule</h2>
+<section>
+<p>Trigger rule to match against a request. The trigger rule is satisfied if
+and only if both rules, excluded<em>paths and include</em>paths are satisfied.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Jwt-TriggerRule-excluded_paths">
+<td><code>excludedPaths</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/istio.string.v1alpha1.html#StringMatch">istio.common.v1alpha1.StringMatch[]</a></code></td>
+<td>
+<p>List of paths to be excluded from the request. The rule is satisfied if
+request path does not match to any of the path in this list.</p>
+
+</td>
+</tr>
+<tr id="Jwt-TriggerRule-included_paths">
+<td><code>includedPaths</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/istio.string.v1alpha1.html#StringMatch">istio.common.v1alpha1.StringMatch[]</a></code></td>
+<td>
+<p>List of paths that the request must include. If the list is not empty, the
+rule is satisfied if request path matches at least one of the path in the list.
+If the list is empty, the rule is ignored, in other words the rule is always satisfied.</p>
 
 </td>
 </tr>
@@ -383,40 +382,9 @@ spec:
       jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
       jwt_headers:
       - &quot;x-goog-iap-jwt-assertion&quot;
-      conditions:
+      trigger_rules:
       - excluded_paths:
         - exact: /health_check
-  principalBinding: USE_ORIGIN
-</code></pre>
-
-<p>Policy to require mTLS for peer authentication, and JWT for origin authentication
-for productpage:9000, but allow origin authentication failed. Principal is set
-from origin identity.
-Note: this example can be used for use cases when we want to allow request from
-certain peers, given it comes with an appropriate authorization policy to check
-and reject request accordingly.</p>
-
-<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
-kind: Policy
-metadata:
-  name: mTLS_enable
-  namespace: frod
-spec:
-  target:
-  - name: productpage
-    ports:
-    - number: 9000
-  peers:
-  - mtls:
-  origins:
-  - jwt:
-      issuer: &quot;https://securetoken.google.com&quot;
-      audiences:
-      - &quot;productpage&quot;
-      jwksUri: &quot;https://www.googleapis.com/oauth2/v1/certs&quot;
-      jwt_headers:
-      - &quot;x-goog-iap-jwt-assertion&quot;
-  originIsOptional: true
   principalBinding: USE_ORIGIN
 </code></pre>
 
@@ -457,11 +425,10 @@ Leave the list empty if peer authentication is not required</p>
 <p>List of authentication methods that can be used for origin authentication.
 Similar to peers, these will be evaluated in order; the first validate one
 will be used to set origin identity and attributes (i.e request.auth.user,
-request.auth.issuer etc). JWT is used only when its condition matched. If
-none of them are matched, request will be accepted as if there is no JWT defined.
-If none of these methods pass, and origin<em>is</em>optional
-is false (see below), request will be rejected with authentication failed
-error (401).
+request.auth.issuer etc). If none of these methods pass, request will be
+rejected with authentication failed error (401).
+A method may be skipped, depends on its trigger rule. If all of these methods
+are skipped, origin authentication will be ignored, as if it is not defined.
 Leave the list empty if origin authentication is not required.</p>
 
 </td>

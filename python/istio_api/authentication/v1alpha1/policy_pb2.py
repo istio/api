@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='authentication/v1alpha1/policy.proto',
   package='istio.authentication.v1alpha1',
   syntax='proto3',
-  serialized_pb=_b('\n$authentication/v1alpha1/policy.proto\x12\x1distio.authentication.v1alpha1\x1a\x1c\x63ommon/v1alpha1/string.proto\"\x7f\n\tMutualTls\x12\x11\n\tallow_tls\x18\x01 \x01(\x08\x12;\n\x04mode\x18\x02 \x01(\x0e\x32-.istio.authentication.v1alpha1.MutualTls.Mode\"\"\n\x04Mode\x12\n\n\x06STRICT\x10\x00\x12\x0e\n\nPERMISSIVE\x10\x01\"\xb3\x01\n\x03Jwt\x12\x0e\n\x06issuer\x18\x01 \x01(\t\x12\x11\n\taudiences\x18\x02 \x03(\t\x12\x10\n\x08jwks_uri\x18\x03 \x01(\t\x12\x13\n\x0bjwt_headers\x18\x06 \x03(\t\x12\x12\n\njwt_params\x18\x07 \x03(\t\x12<\n\nconditions\x18\t \x03(\x0b\x32(.istio.authentication.v1alpha1.ConditionJ\x04\x08\x04\x10\x05J\x04\x08\x05\x10\x06J\x04\x08\x08\x10\t\"\x83\x01\n\tCondition\x12:\n\x0e\x65xcluded_paths\x18\x01 \x03(\x0b\x32\".istio.common.v1alpha1.StringMatch\x12:\n\x0eincluded_paths\x18\x02 \x03(\x0b\x32\".istio.common.v1alpha1.StringMatch\"\x91\x01\n\x18PeerAuthenticationMethod\x12\x38\n\x04mtls\x18\x01 \x01(\x0b\x32(.istio.authentication.v1alpha1.MutualTlsH\x00\x12\x31\n\x03jwt\x18\x02 \x01(\x0b\x32\".istio.authentication.v1alpha1.JwtH\x00\x42\x08\n\x06params\"M\n\x1aOriginAuthenticationMethod\x12/\n\x03jwt\x18\x01 \x01(\x0b\x32\".istio.authentication.v1alpha1.Jwt\"\xe6\x02\n\x06Policy\x12>\n\x07targets\x18\x01 \x03(\x0b\x32-.istio.authentication.v1alpha1.TargetSelector\x12\x46\n\x05peers\x18\x02 \x03(\x0b\x32\x37.istio.authentication.v1alpha1.PeerAuthenticationMethod\x12\x1c\n\x10peer_is_optional\x18\x03 \x01(\x08\x42\x02\x18\x01\x12J\n\x07origins\x18\x04 \x03(\x0b\x32\x39.istio.authentication.v1alpha1.OriginAuthenticationMethod\x12\x1e\n\x12origin_is_optional\x18\x05 \x01(\x08\x42\x02\x18\x01\x12J\n\x11principal_binding\x18\x06 \x01(\x0e\x32/.istio.authentication.v1alpha1.PrincipalBinding\"Z\n\x0eTargetSelector\x12\x0c\n\x04name\x18\x01 \x01(\t\x12:\n\x05ports\x18\x02 \x03(\x0b\x32+.istio.authentication.v1alpha1.PortSelector\"8\n\x0cPortSelector\x12\x10\n\x06number\x18\x01 \x01(\rH\x00\x12\x0e\n\x04name\x18\x02 \x01(\tH\x00\x42\x06\n\x04port*0\n\x10PrincipalBinding\x12\x0c\n\x08USE_PEER\x10\x00\x12\x0e\n\nUSE_ORIGIN\x10\x01\x42&Z$istio.io/api/authentication/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n$authentication/v1alpha1/policy.proto\x12\x1distio.authentication.v1alpha1\x1a\x1c\x63ommon/v1alpha1/string.proto\"\x7f\n\tMutualTls\x12\x11\n\tallow_tls\x18\x01 \x01(\x08\x12;\n\x04mode\x18\x02 \x01(\x0e\x32-.istio.authentication.v1alpha1.MutualTls.Mode\"\"\n\x04Mode\x12\n\n\x06STRICT\x10\x00\x12\x0e\n\nPERMISSIVE\x10\x01\"\xb2\x02\n\x03Jwt\x12\x0e\n\x06issuer\x18\x01 \x01(\t\x12\x11\n\taudiences\x18\x02 \x03(\t\x12\x10\n\x08jwks_uri\x18\x03 \x01(\t\x12\x13\n\x0bjwt_headers\x18\x06 \x03(\t\x12\x12\n\njwt_params\x18\x07 \x03(\t\x12\x45\n\rtrigger_rules\x18\t \x03(\x0b\x32..istio.authentication.v1alpha1.Jwt.TriggerRule\x1a\x85\x01\n\x0bTriggerRule\x12:\n\x0e\x65xcluded_paths\x18\x01 \x03(\x0b\x32\".istio.common.v1alpha1.StringMatch\x12:\n\x0eincluded_paths\x18\x02 \x03(\x0b\x32\".istio.common.v1alpha1.StringMatch\"\x91\x01\n\x18PeerAuthenticationMethod\x12\x38\n\x04mtls\x18\x01 \x01(\x0b\x32(.istio.authentication.v1alpha1.MutualTlsH\x00\x12\x31\n\x03jwt\x18\x02 \x01(\x0b\x32\".istio.authentication.v1alpha1.JwtH\x00\x42\x08\n\x06params\"M\n\x1aOriginAuthenticationMethod\x12/\n\x03jwt\x18\x01 \x01(\x0b\x32\".istio.authentication.v1alpha1.Jwt\"\xe6\x02\n\x06Policy\x12>\n\x07targets\x18\x01 \x03(\x0b\x32-.istio.authentication.v1alpha1.TargetSelector\x12\x46\n\x05peers\x18\x02 \x03(\x0b\x32\x37.istio.authentication.v1alpha1.PeerAuthenticationMethod\x12\x1c\n\x10peer_is_optional\x18\x03 \x01(\x08\x42\x02\x18\x01\x12J\n\x07origins\x18\x04 \x03(\x0b\x32\x39.istio.authentication.v1alpha1.OriginAuthenticationMethod\x12\x1e\n\x12origin_is_optional\x18\x05 \x01(\x08\x42\x02\x18\x01\x12J\n\x11principal_binding\x18\x06 \x01(\x0e\x32/.istio.authentication.v1alpha1.PrincipalBinding\"Z\n\x0eTargetSelector\x12\x0c\n\x04name\x18\x01 \x01(\t\x12:\n\x05ports\x18\x02 \x03(\x0b\x32+.istio.authentication.v1alpha1.PortSelector\"8\n\x0cPortSelector\x12\x10\n\x06number\x18\x01 \x01(\rH\x00\x12\x0e\n\x04name\x18\x02 \x01(\tH\x00\x42\x06\n\x04port*0\n\x10PrincipalBinding\x12\x0c\n\x08USE_PEER\x10\x00\x12\x0e\n\nUSE_ORIGIN\x10\x01\x42&Z$istio.io/api/authentication/v1alpha1b\x06proto3')
   ,
   dependencies=[common_dot_v1alpha1_dot_string__pb2.DESCRIPTOR,])
 
@@ -42,8 +42,8 @@ _PRINCIPALBINDING = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1284,
-  serialized_end=1332,
+  serialized_start=1277,
+  serialized_end=1325,
 )
 _sym_db.RegisterEnumDescriptor(_PRINCIPALBINDING)
 
@@ -114,6 +114,43 @@ _MUTUALTLS = _descriptor.Descriptor(
 )
 
 
+_JWT_TRIGGERRULE = _descriptor.Descriptor(
+  name='TriggerRule',
+  full_name='istio.authentication.v1alpha1.Jwt.TriggerRule',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='excluded_paths', full_name='istio.authentication.v1alpha1.Jwt.TriggerRule.excluded_paths', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='included_paths', full_name='istio.authentication.v1alpha1.Jwt.TriggerRule.included_paths', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=404,
+  serialized_end=537,
+)
+
 _JWT = _descriptor.Descriptor(
   name='Jwt',
   full_name='istio.authentication.v1alpha1.Jwt',
@@ -157,7 +194,7 @@ _JWT = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='conditions', full_name='istio.authentication.v1alpha1.Jwt.conditions', index=5,
+      name='trigger_rules', full_name='istio.authentication.v1alpha1.Jwt.trigger_rules', index=5,
       number=9, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -166,7 +203,7 @@ _JWT = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[],
+  nested_types=[_JWT_TRIGGERRULE, ],
   enum_types=[
   ],
   options=None,
@@ -176,45 +213,7 @@ _JWT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=231,
-  serialized_end=410,
-)
-
-
-_CONDITION = _descriptor.Descriptor(
-  name='Condition',
-  full_name='istio.authentication.v1alpha1.Condition',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='excluded_paths', full_name='istio.authentication.v1alpha1.Condition.excluded_paths', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='included_paths', full_name='istio.authentication.v1alpha1.Condition.included_paths', index=1,
-      number=2, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=413,
-  serialized_end=544,
+  serialized_end=537,
 )
 
 
@@ -254,8 +253,8 @@ _PEERAUTHENTICATIONMETHOD = _descriptor.Descriptor(
       name='params', full_name='istio.authentication.v1alpha1.PeerAuthenticationMethod.params',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=547,
-  serialized_end=692,
+  serialized_start=540,
+  serialized_end=685,
 )
 
 
@@ -285,8 +284,8 @@ _ORIGINAUTHENTICATIONMETHOD = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=694,
-  serialized_end=771,
+  serialized_start=687,
+  serialized_end=764,
 )
 
 
@@ -351,8 +350,8 @@ _POLICY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=774,
-  serialized_end=1132,
+  serialized_start=767,
+  serialized_end=1125,
 )
 
 
@@ -389,8 +388,8 @@ _TARGETSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1134,
-  serialized_end=1224,
+  serialized_start=1127,
+  serialized_end=1217,
 )
 
 
@@ -430,15 +429,16 @@ _PORTSELECTOR = _descriptor.Descriptor(
       name='port', full_name='istio.authentication.v1alpha1.PortSelector.port',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=1226,
-  serialized_end=1282,
+  serialized_start=1219,
+  serialized_end=1275,
 )
 
 _MUTUALTLS.fields_by_name['mode'].enum_type = _MUTUALTLS_MODE
 _MUTUALTLS_MODE.containing_type = _MUTUALTLS
-_JWT.fields_by_name['conditions'].message_type = _CONDITION
-_CONDITION.fields_by_name['excluded_paths'].message_type = common_dot_v1alpha1_dot_string__pb2._STRINGMATCH
-_CONDITION.fields_by_name['included_paths'].message_type = common_dot_v1alpha1_dot_string__pb2._STRINGMATCH
+_JWT_TRIGGERRULE.fields_by_name['excluded_paths'].message_type = common_dot_v1alpha1_dot_string__pb2._STRINGMATCH
+_JWT_TRIGGERRULE.fields_by_name['included_paths'].message_type = common_dot_v1alpha1_dot_string__pb2._STRINGMATCH
+_JWT_TRIGGERRULE.containing_type = _JWT
+_JWT.fields_by_name['trigger_rules'].message_type = _JWT_TRIGGERRULE
 _PEERAUTHENTICATIONMETHOD.fields_by_name['mtls'].message_type = _MUTUALTLS
 _PEERAUTHENTICATIONMETHOD.fields_by_name['jwt'].message_type = _JWT
 _PEERAUTHENTICATIONMETHOD.oneofs_by_name['params'].fields.append(
@@ -461,7 +461,6 @@ _PORTSELECTOR.oneofs_by_name['port'].fields.append(
 _PORTSELECTOR.fields_by_name['name'].containing_oneof = _PORTSELECTOR.oneofs_by_name['port']
 DESCRIPTOR.message_types_by_name['MutualTls'] = _MUTUALTLS
 DESCRIPTOR.message_types_by_name['Jwt'] = _JWT
-DESCRIPTOR.message_types_by_name['Condition'] = _CONDITION
 DESCRIPTOR.message_types_by_name['PeerAuthenticationMethod'] = _PEERAUTHENTICATIONMETHOD
 DESCRIPTOR.message_types_by_name['OriginAuthenticationMethod'] = _ORIGINAUTHENTICATIONMETHOD
 DESCRIPTOR.message_types_by_name['Policy'] = _POLICY
@@ -478,18 +477,19 @@ MutualTls = _reflection.GeneratedProtocolMessageType('MutualTls', (_message.Mess
 _sym_db.RegisterMessage(MutualTls)
 
 Jwt = _reflection.GeneratedProtocolMessageType('Jwt', (_message.Message,), dict(
+
+  TriggerRule = _reflection.GeneratedProtocolMessageType('TriggerRule', (_message.Message,), dict(
+    DESCRIPTOR = _JWT_TRIGGERRULE,
+    __module__ = 'authentication.v1alpha1.policy_pb2'
+    # @@protoc_insertion_point(class_scope:istio.authentication.v1alpha1.Jwt.TriggerRule)
+    ))
+  ,
   DESCRIPTOR = _JWT,
   __module__ = 'authentication.v1alpha1.policy_pb2'
   # @@protoc_insertion_point(class_scope:istio.authentication.v1alpha1.Jwt)
   ))
 _sym_db.RegisterMessage(Jwt)
-
-Condition = _reflection.GeneratedProtocolMessageType('Condition', (_message.Message,), dict(
-  DESCRIPTOR = _CONDITION,
-  __module__ = 'authentication.v1alpha1.policy_pb2'
-  # @@protoc_insertion_point(class_scope:istio.authentication.v1alpha1.Condition)
-  ))
-_sym_db.RegisterMessage(Condition)
+_sym_db.RegisterMessage(Jwt.TriggerRule)
 
 PeerAuthenticationMethod = _reflection.GeneratedProtocolMessageType('PeerAuthenticationMethod', (_message.Message,), dict(
   DESCRIPTOR = _PEERAUTHENTICATIONMETHOD,

@@ -73,7 +73,7 @@ message MutualTls {
 // ```yaml
 // issuer: https://example.com
 // jwks_uri: https://example.com/.well-known/jwks.json
-// conditions:
+// trigger_rules:
 // - excluded_paths:
 //   - exact: /health_check
 //   - prefix: /status/
@@ -85,7 +85,7 @@ message MutualTls {
 // ```yaml
 // issuer: https://example.com
 // jwks_uri: https://example.com/.well-known/jwks.json
-// conditions:
+// trigger_rules:
 // - included_paths:
 //   - prefix: /admin
 // ```
@@ -97,7 +97,7 @@ message MutualTls {
 // ```yaml
 // issuer: https://example.com
 // jwks_uri: https://example.com/.well-known/jwks.json
-// conditions:
+// trigger_rules:
 // - excluded_paths:
 //   - exact: /status/version
 //   included_paths:
@@ -167,28 +167,25 @@ message Jwt {
   // For example, `query=jwt_token`.
   repeated string jwt_params = 7;
 
-  // List of conditions to decide if this JWT should be used to validate the
-  // request. The JWT validation happens if any one of the conditions matched.
-  // If the list is non-empty and none of the conditions matched, authentication
-  // will skip the JWT validation.
+  // Trigger rule to match against a request. The trigger rule is satisfied if
+  // and only if both rules, excluded_paths and include_paths are satisfied.
+  message TriggerRule {
+    // List of paths to be excluded from the request. The rule is satisfied if
+    // request path does not match to any of the path in this list.
+    repeated istio.common.v1alpha1.StringMatch excluded_paths = 1;
+
+    // List of paths that the request must include. If the list is not empty, the
+    // rule is satisfied if request path matches at least one of the path in the list.
+    // If the list is empty, the rule is ignored, in other words the rule is always satisfied.
+    repeated istio.common.v1alpha1.StringMatch included_paths = 2;
+  }
+
+  // List of trigger rules to decide if this JWT should be used to validate the
+  // request. The JWT validation happens if any one of the rules matched.
+  // If the list is not empty and none of the rules matched, authentication will
+  // skip the JWT validation.
   // Leave this empty to always trigger the JWT validation.
-  repeated Condition conditions = 9;
-
-  reserved 4, 5, 8;
-}
-
-// Condition to match against a request. The condition is matched if and only if
-// both excluded_paths and included_paths are satisfied.
-message Condition {
-  // List of paths to be excluded from the request. The excluded_paths is satisfied
-  // if either the excluded_paths is empty or the request path is *NOT* matched
-  // to any of the excluded_paths.
-  repeated istio.common.v1alpha1.StringMatch excluded_paths = 1;
-
-  // List of paths that the request must include. The included_paths is satisfied
-  // if either the included_paths is empty or the request path is matched to any
-  // of the included_paths.
-  repeated istio.common.v1alpha1.StringMatch included_paths = 2;
+  repeated TriggerRule trigger_rules = 9;
 }
 
 // PeerAuthenticationMethod defines one particular type of authentication, e.g
@@ -289,41 +286,9 @@ enum PrincipalBinding {
 //       jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
 //       jwt_headers:
 //       - "x-goog-iap-jwt-assertion"
-//       conditions:
+//       trigger_rules:
 //       - excluded_paths:
 //         - exact: /health_check
-//   principalBinding: USE_ORIGIN
-// ```
-//
-// Policy to require mTLS for peer authentication, and JWT for origin authentication
-// for productpage:9000, but allow origin authentication failed. Principal is set
-// from origin identity.
-// Note: this example can be used for use cases when we want to allow request from
-// certain peers, given it comes with an appropriate authorization policy to check
-// and reject request accordingly.
-//
-// ```yaml
-// apiVersion: authentication.istio.io/v1alpha1
-// kind: Policy
-// metadata:
-//   name: mTLS_enable
-//   namespace: frod
-// spec:
-//   target:
-//   - name: productpage
-//     ports:
-//     - number: 9000
-//   peers:
-//   - mtls:
-//   origins:
-//   - jwt:
-//       issuer: "https://securetoken.google.com"
-//       audiences:
-//       - "productpage"
-//       jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
-//       jwt_headers:
-//       - "x-goog-iap-jwt-assertion"
-//   originIsOptional: true
 //   principalBinding: USE_ORIGIN
 // ```
 message Policy {
@@ -350,11 +315,10 @@ message Policy {
   // List of authentication methods that can be used for origin authentication.
   // Similar to peers, these will be evaluated in order; the first validate one
   // will be used to set origin identity and attributes (i.e request.auth.user,
-  // request.auth.issuer etc). JWT is used only when its condition matched. If
-  // none of them are matched, request will be accepted as if there is no JWT defined.
-  // If none of these methods pass, and origin_is_optional
-  // is false (see below), request will be rejected with authentication failed
-  // error (401).
+  // request.auth.issuer etc). If none of these methods pass, request will be
+  // rejected with authentication failed error (401).
+  // A method may be skipped, depends on its trigger rule. If all of these methods
+  // are skipped, origin authentication will be ignored, as if it is not defined.
   // Leave the list empty if origin authentication is not required.
   repeated OriginAuthenticationMethod origins = 4;
 
