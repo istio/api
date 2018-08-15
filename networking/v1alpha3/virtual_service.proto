@@ -938,9 +938,7 @@ message HTTPFaultInjection {
   //         subset: v1
   //     fault:
   //       delay:
-  //         percentage:
-  //           numerator: 10
-  //           denominator: HUNDRED
+  //         percentage: 0.000001
   //         fixedDelay: 5s
   // ```
   //
@@ -949,7 +947,7 @@ message HTTPFaultInjection {
   // percentage of requests. If left unspecified, all request will be delayed.
   message Delay {
     // Percentage of requests on which the delay will be injected (0-100).
-    // Use of integer `percent` value is deprecated. Use fractional `percentage`
+    // Use of integer `percent` value is deprecated. Use the double `percentage`
     // field instead.
     int32 percent = 1 [deprecated=true];
 
@@ -963,7 +961,7 @@ message HTTPFaultInjection {
     }
 
     // Percentage of requests on which the delay will be injected.
-    FractionalPercent percentage = 4;
+    double percentage = 5;
   }
 
   // Abort specification is used to prematurely abort a request with a
@@ -985,9 +983,7 @@ message HTTPFaultInjection {
   //         subset: v1
   //     fault:
   //       abort:
-  //         percentage:
-  //           numerator: 10
-  //           denominator: HUNDRED
+  //         percentage: 0.000001
   //         httpStatus: 400
   // ```
   //
@@ -997,7 +993,7 @@ message HTTPFaultInjection {
   // aborted.
   message Abort {
     // Percentage of requests to be aborted with the error code provided (0-100).
-    // Use of integer `percent` value is deprecated. Use fractional `percentage`
+    // Use of integer `percent` value is deprecated. Use the double `percentage`
     // field instead.
     int32 percent = 1 [deprecated=true];
 
@@ -1013,7 +1009,7 @@ message HTTPFaultInjection {
     }
 
     // Percentage of requests to be aborted with the error code provided.
-    FractionalPercent percentage = 5;
+    double percentage = 5;
   }
 }
 
@@ -1026,15 +1022,4 @@ message PortSelector {
     // $hide_from_docs
     string name = 2;
   }
-}
-
-// FractionalPercent specifies a fractional value in terms of its numerator and
-// its denominator.
-message FractionalPercent {
-  // REQUIRED: A valid non-negative integer numerator.
-  uint32 numerator = 1;
-
-  // REQUIRED: The denominator.
-  // MUST BE one of HUNDRED|TEN_THOUSAND|MILLION.
-  string denominator = 2;
 }
