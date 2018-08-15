@@ -54,7 +54,9 @@ message MutualTls {
 // 1.0](http://openid.net/connect) for how this is used in the whole
 // authentication flow.
 //
-// Example,
+// For example:
+//
+// A JWT for any requests:
 //
 // ```yaml
 // issuer: https://example.com
@@ -62,6 +64,44 @@ message MutualTls {
 // - bookstore_android.apps.googleusercontent.com
 //   bookstore_web.apps.googleusercontent.com
 // jwksUri: https://example.com/.well-known/jwks.json
+// ```
+//
+// A JWT for all requests except request at path `/health_check` and path with
+// prefix `/status/`. This is useful to expose some paths for public access but
+// keep others JWT validated.
+//
+// ```yaml
+// issuer: https://example.com
+// jwks_uri: https://example.com/.well-known/jwks.json
+// trigger_rules:
+// - excluded_paths:
+//   - exact: /health_check
+//   - prefix: /status/
+// ```
+//
+// A JWT only for requests at path `/admin`. This is useful to only require JWT
+// validation on a specific set of paths but keep others public accessible.
+//
+// ```yaml
+// issuer: https://example.com
+// jwks_uri: https://example.com/.well-known/jwks.json
+// trigger_rules:
+// - included_paths:
+//   - prefix: /admin
+// ```
+//
+// A JWT only for requests at path of prefix `/status/` but except the path of
+// `/status/version`. This means for any request path with prefix `/status/` except
+// `/status/version` will require a valid JWT to proceed.
+//
+// ```yaml
+// issuer: https://example.com
+// jwks_uri: https://example.com/.well-known/jwks.json
+// trigger_rules:
+// - excluded_paths:
+//   - exact: /status/version
+//   included_paths:
+//   - prefix: /status/
 // ```
 message Jwt {
   // Identifies the issuer that issued the JWT. See
@@ -127,12 +167,25 @@ message Jwt {
   // For example, `query=jwt_token`.
   repeated string jwt_params = 7;
 
-  // $hide_from_docs
-  // URL paths that should be excluded from the JWT validation. If the request path is matched,
-  // the JWT validation will be skipped and the request will proceed regardless.
-  // This is useful to keep a couple of URLs public for external health checks.
-  // Example: "/health_check", "/status/cpu_usage".
-  repeated istio.common.v1alpha1.StringMatch excluded_paths = 8;
+  // Trigger rule to match against a request. The trigger rule is satisfied if
+  // and only if both rules, excluded_paths and include_paths are satisfied.
+  message TriggerRule {
+    // List of paths to be excluded from the request. The rule is satisfied if
+    // request path does not match to any of the path in this list.
+    repeated istio.common.v1alpha1.StringMatch excluded_paths = 1;
+
+    // List of paths that the request must include. If the list is not empty, the
+    // rule is satisfied if request path matches at least one of the path in the list.
+    // If the list is empty, the rule is ignored, in other words the rule is always satisfied.
+    repeated istio.common.v1alpha1.StringMatch included_paths = 2;
+  }
+
+  // List of trigger rules to decide if this JWT should be used to validate the
+  // request. The JWT validation happens if any one of the rules matched.
+  // If the list is not empty and none of the rules matched, authentication will
+  // skip the JWT validation.
+  // Leave this empty to always trigger the JWT validation.
+  repeated TriggerRule trigger_rules = 9;
 }
 
 // PeerAuthenticationMethod defines one particular type of authentication, e.g
@@ -210,7 +263,7 @@ enum PrincipalBinding {
 //   - name: productpage
 // ```
 // Policy to require mTLS for peer authentication, and JWT for origin authentication
-// for productpage:9000. Principal is set from origin identity.
+// for productpage:9000 except the path '/health_check' . Principal is set from origin identity.
 //
 // ```yaml
 // apiVersion: authentication.istio.io/v1alpha1
@@ -233,6 +286,9 @@ enum PrincipalBinding {
 //       jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
 //       jwt_headers:
 //       - "x-goog-iap-jwt-assertion"
+//       trigger_rules:
+//       - excluded_paths:
+//         - exact: /health_check
 //   principalBinding: USE_ORIGIN
 // ```
 message Policy {
@@ -261,6 +317,8 @@ message Policy {
   // will be used to set origin identity and attributes (i.e request.auth.user,
   // request.auth.issuer etc). If none of these methods pass, request will be
   // rejected with authentication failed error (401).
+  // A method may be skipped, depends on its trigger rule. If all of these methods
+  // are skipped, origin authentication will be ignored, as if it is not defined.
   // Leave the list empty if origin authentication is not required.
   repeated OriginAuthenticationMethod origins = 4;
 
