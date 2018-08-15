@@ -1449,7 +1449,7 @@ func (m *HTTPFaultInjection) GetAbort() *HTTPFaultInjection_Abort {
 
 // Delay specification is used to inject latency into the request
 // forwarding path. The following example will introduce a 5 second delay
-// in 10% of the requests to the "v1" version of the "reviews"
+// in 1 out of every 1000 requests to the "v1" version of the "reviews"
 // service from all pods with label env: prod
 //
 // ```yaml
@@ -1470,7 +1470,7 @@ func (m *HTTPFaultInjection) GetAbort() *HTTPFaultInjection_Abort {
 //         subset: v1
 //     fault:
 //       delay:
-//         percentage: 0.000001
+//         percentage: 0.001
 //         fixedDelay: 5s
 // ```
 //
@@ -1623,8 +1623,8 @@ func _HTTPFaultInjection_Delay_OneofSizer(msg proto.Message) (n int) {
 }
 
 // Abort specification is used to prematurely abort a request with a
-// pre-specified error code. The following example will return an HTTP
-// 400 error code for 10% of the requests to the "ratings" service "v1".
+// pre-specified error code. The following example will return an HTTP 400
+// error code for 1 out of every 1000 requests to the "ratings" service "v1".
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -1641,7 +1641,7 @@ func _HTTPFaultInjection_Delay_OneofSizer(msg proto.Message) (n int) {
 //         subset: v1
 //     fault:
 //       abort:
-//         percentage: 0.000001
+//         percentage: 0.001
 //         httpStatus: 400
 // ```
 //

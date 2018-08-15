@@ -1274,8 +1274,8 @@ service, giving the impression that the upstream service is faulty.</p>
 <h2 id="HTTPFaultInjection-Abort">HTTPFaultInjection.Abort</h2>
 <section>
 <p>Abort specification is used to prematurely abort a request with a
-pre-specified error code. The following example will return an HTTP
-400 error code for 10% of the requests to the &ldquo;ratings&rdquo; service &ldquo;v1&rdquo;.</p>
+pre-specified error code. The following example will return an HTTP 400
+error code for 1 out of every 1000 requests to the &ldquo;ratings&rdquo; service &ldquo;v1&rdquo;.</p>
 
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -1291,7 +1291,7 @@ spec:
         subset: v1
     fault:
       abort:
-        percentage: 0.000001
+        percentage: 0.001
         httpStatus: 400
 </code></pre>
 
@@ -1342,7 +1342,7 @@ field instead.</p>
 <section>
 <p>Delay specification is used to inject latency into the request
 forwarding path. The following example will introduce a 5 second delay
-in 10% of the requests to the &ldquo;v1&rdquo; version of the &ldquo;reviews&rdquo;
+in 1 out of every 1000 requests to the &ldquo;v1&rdquo; version of the &ldquo;reviews&rdquo;
 service from all pods with label env: prod</p>
 
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
@@ -1362,7 +1362,7 @@ spec:
         subset: v1
     fault:
       delay:
-        percentage: 0.000001
+        percentage: 0.001
         fixedDelay: 5s
 </code></pre>
 
