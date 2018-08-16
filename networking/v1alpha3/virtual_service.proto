@@ -14,6 +14,7 @@
 
 syntax = "proto3";
 
+import "envoy/types/percent.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 
@@ -938,7 +939,8 @@ message HTTPFaultInjection {
   //         subset: v1
   //     fault:
   //       delay:
-  //         percentage: 0.001
+  //         percentage:
+  //           value: 0.001
   //         fixedDelay: 5s
   // ```
   //
@@ -961,7 +963,7 @@ message HTTPFaultInjection {
     }
 
     // Percentage of requests on which the delay will be injected.
-    double percentage = 5;
+    istio.envoy.types.Percent percentage = 5;
   }
 
   // Abort specification is used to prematurely abort a request with a
@@ -983,7 +985,8 @@ message HTTPFaultInjection {
   //         subset: v1
   //     fault:
   //       abort:
-  //         percentage: 0.001
+  //         percentage:
+  //           value: 0.001
   //         httpStatus: 400
   // ```
   //
@@ -1009,7 +1012,7 @@ message HTTPFaultInjection {
     }
 
     // Percentage of requests to be aborted with the error code provided.
-    double percentage = 5;
+    istio.envoy.types.Percent percentage = 5;
   }
 }
 

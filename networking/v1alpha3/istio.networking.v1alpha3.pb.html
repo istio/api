@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 aliases:
   - /docs/reference/config/istio.routing.v1alpha1/
-number_of_entries: 49
+number_of_entries: 50
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -1291,7 +1291,8 @@ spec:
         subset: v1
     fault:
       abort:
-        percentage: 0.001
+        percentage:
+          value: 0.001
         httpStatus: 400
 </code></pre>
 
@@ -1329,7 +1330,7 @@ field instead.</p>
 </tr>
 <tr id="HTTPFaultInjection-Abort-percentage">
 <td><code>percentage</code></td>
-<td><code>double</code></td>
+<td><code><a href="#istio-envoy-types-Percent">istio.envoy.types.Percent</a></code></td>
 <td>
 <p>Percentage of requests to be aborted with the error code provided.</p>
 
@@ -1362,7 +1363,8 @@ spec:
         subset: v1
     fault:
       delay:
-        percentage: 0.001
+        percentage:
+          value: 0.001
         fixedDelay: 5s
 </code></pre>
 
@@ -1400,7 +1402,7 @@ field instead.</p>
 </tr>
 <tr id="HTTPFaultInjection-Delay-percentage">
 <td><code>percentage</code></td>
-<td><code>double</code></td>
+<td><code><a href="#istio-envoy-types-Percent">istio.envoy.types.Percent</a></code></td>
 <td>
 <p>Percentage of requests on which the delay will be injected.</p>
 
@@ -3732,6 +3734,29 @@ traffic.</p>
 be applied to any port that is not a HTTP or TLS port. The first rule
 matching an incoming request is used.</p>
 
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="istio-envoy-types-Percent">istio.envoy.types.Percent</h2>
+<section>
+<p>Copied from @envoy/api/envoy/type/percent.proto
+Identifies a percentage, in the range [0.0, 100.0].</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="istio-envoy-types-Percent-value">
+<td><code>value</code></td>
+<td><code>double</code></td>
+<td>
 </td>
 </tr>
 </tbody>
