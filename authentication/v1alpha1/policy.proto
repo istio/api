@@ -14,8 +14,6 @@
 
 syntax = "proto3";
 
-import "common/v1alpha1/string.proto";
-
 // $title: Authentication Policy
 // $description: Authentication policy for Istio services.
 // $location: https://istio.io/docs/reference/config/istio.authentication.v1alpha1.html
@@ -24,6 +22,25 @@ import "common/v1alpha1/string.proto";
 package istio.authentication.v1alpha1;
 
 option go_package = "istio.io/api/authentication/v1alpha1";
+
+// Describes how to match a given string. Match is case-sensitive.
+message StringMatch {
+  oneof match_type {
+    // exact string match.
+    string exact = 1;
+
+    // prefix-based match.
+    string prefix = 2;
+
+    // suffix-based match.
+    string suffix = 3;
+
+    // ECMAscript style regex-based match as defined by [EDCA-262](
+    // http://en.cppreference.com/w/cpp/regex/ecmascript).
+    // Example: "^/pets/(.*?)?"
+    string regex = 4;
+  }
+}
 
 // TLS authentication params.
 message MutualTls {
@@ -172,12 +189,12 @@ message Jwt {
   message TriggerRule {
     // List of paths to be excluded from the request. The rule is satisfied if
     // request path does not match to any of the path in this list.
-    repeated istio.common.v1alpha1.StringMatch excluded_paths = 1;
+    repeated StringMatch excluded_paths = 1;
 
     // List of paths that the request must include. If the list is not empty, the
     // rule is satisfied if request path matches at least one of the path in the list.
     // If the list is empty, the rule is ignored, in other words the rule is always satisfied.
-    repeated istio.common.v1alpha1.StringMatch included_paths = 2;
+    repeated StringMatch included_paths = 2;
   }
 
   // List of trigger rules to decide if this JWT should be used to validate the
