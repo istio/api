@@ -310,26 +310,39 @@ clean-authn:
 #####################
 
 envoy_path := envoy
-envoy_protos := $(shell find $(envoy_path) -type f -name '*.proto' | sort)
-envoy_pb_gos := $(envoy_protos:.proto=.pb.go)
-envoy_pb_pythons := $(envoy_protos:.proto=_pb2.py)
+envoy_types_protos := $(shell find $(envoy_path) -type f -path '*/types/*' -name '*.proto' | sort)
+envoy_types_pb_gos := $(envoy_types_protos:.proto=.pb.go)
+envoy_types_pb_pythons := $(envoy_types_protos:.proto=_pb2.py)
+envoy_v2alpha1_protos := $(shell find $(envoy_path) -type f -path '*/v2alpha1/*' -name '*.proto' | sort)
+envoy_v2alpha1_pb_gos := $(envoy_v2alpha1_protos:.proto=.pb.go)
+envoy_v2alpha1_pb_pythons := $(envoy_v2alpha1_protos:.proto=_pb2.py)
 
-generate-envoy-go: $(envoy_pb_gos) $(envoy_pb_doc)
+generate-envoy-go: $(envoy_types_pb_gos) $(envoy_v2alpha1_pb_gos) $(envoy_pb_doc)
 
-# Envoy APIs is internal APIs, documents is not required.
-$(envoy_pb_gos): $(envoy_protos)
-	## Generate envoy/*/*.pb.go
+# Envoy types are internal types, documents is not required.
+$(envoy_types_pb_gos): $(envoy_types_protos)
+	## Generate envoy/*/types/*.pb.go
 	@$(docker_gen) $(gogofast_plugin) $^
 
-generate-envoy-python: $(envoy_pb_pythons)
+# Envoy APIs is internal APIs, documents is not required.
+$(envoy_v2alpha1_pb_gos): $(envoy_v2alpha1_protos)
+	## Generate envoy/*/v2alpha1/*.pb.go
+	@$(docker_gen) $(gogofast_plugin) $^
+
+generate-envoy-python: $(envoy_types_pb_pythons) $(envoy_v2alpha1_pb_pythons)
+
+# Envoy types are internal types, documents is not required.
+$(envoy_types_pb_pythons): $(envoy_types_protos)
+	## Generate envoy/*/types/*_pb2.py
+	@$(docker_gen) $(protoc_gen_python_plugin) $^
 
 # Envoy APIs is internal APIs, documents is not required.
-$(envoy_pb_pythons): $(envoy_protos)
-	## Generate envoy/*/*_pb2.py
+$(envoy_v2alpha1_pb_pythons): $(envoy_v2alpha1_protos)
+	## Generate envoy/*/v2alpha1/*_pb2.py
 	@$(docker_gen) $(protoc_gen_python_plugin) $^
 
 clean-envoy:
-	rm -f $(envoy_pb_gos)
+	rm -f $(envoy_types_pb_gos) $(envoy_v2alpha1_pb_gos)
 
 #####################
 # common/...
