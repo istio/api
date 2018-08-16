@@ -305,7 +305,7 @@ type Action struct {
 	// Referenced instances are evaluated by resolving the attributes/literals for all the fields.
 	// The constructed objects are then passed to the `handler` referenced within this action.
 	Instances []string `protobuf:"bytes,3,rep,name=instances" json:"instances,omitempty"`
-	// Optional. A handle to refer to the results of the action application.
+	// Optional. A handle to refer to the results of the action.
 	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
 }
 

@@ -175,7 +175,7 @@ message Action {
   // The constructed objects are then passed to the `handler` referenced within this action.
   repeated string instances = 3;
 
-  // Optional. A handle to refer to the results of the action application.
+  // Optional. A handle to refer to the results of the action.
   string name = 4;
 }
 
