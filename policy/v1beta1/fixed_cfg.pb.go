@@ -254,7 +254,7 @@ type Rule_HeaderOperationTemplate struct {
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// Optional. Header value.
 	Value string `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
-	// Optional. Header operation type.
+	// Optional. Header operation type. Default operation is to replace the value of the header by name.
 	Operation Rule_HeaderOperationTemplate_Operation `protobuf:"varint,3,opt,name=operation,proto3,enum=istio.policy.v1beta1.Rule_HeaderOperationTemplate_Operation" json:"operation,omitempty"`
 }
 
