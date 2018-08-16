@@ -611,11 +611,11 @@ rule actions.</p>
 
 </td>
 </tr>
-<tr id="Rule-HeaderOperationTemplate-value">
-<td><code>value</code></td>
-<td><code>string</code></td>
+<tr id="Rule-HeaderOperationTemplate-values">
+<td><code>values</code></td>
+<td><code>string[]</code></td>
 <td>
-<p>Optional. Header value.</p>
+<p>Optional. Header values to replace or append.</p>
 
 </td>
 </tr>
@@ -659,7 +659,7 @@ rule actions.</p>
 <tr id="Rule-HeaderOperationTemplate-Operation-APPEND">
 <td><code>APPEND</code></td>
 <td>
-<p>appends the value to the header value, or sets it if not present</p>
+<p>appends the values to the existing values (preserving existing values)</p>
 
 </td>
 </tr>

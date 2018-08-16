@@ -131,14 +131,14 @@ message Rule {
     // Required. Header name.
     string name = 1;
 
-    // Optional. Header value.
-    string value = 2;
+    // Optional. Header values to replace or append.
+    repeated string values = 2;
 
     // Header operation type.
     enum Operation {
       REPLACE = 0;  // replaces the header with the given name
       REMOVE = 1;   // removes the header with the given name (the value is ignored)
-      APPEND = 2;   // appends the value to the header value, or sets it if not present
+      APPEND = 2;   // appends the values to the existing values (preserving existing values)
     }
 
     // Optional. Header operation type. Default operation is to replace the value of the header by name.
