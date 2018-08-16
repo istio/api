@@ -141,7 +141,7 @@ message Rule {
       APPEND = 2;   // appends the value to the header value, or sets it if not present
     }
 
-    // Optional. Header operation type.
+    // Optional. Header operation type. Default operation is to replace the value of the header by name.
     Operation operation = 3;
   }
 
