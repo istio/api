@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 aliases:
   - /docs/reference/config/istio.routing.v1alpha1/
-number_of_entries: 49
+number_of_entries: 50
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -1291,7 +1291,8 @@ spec:
         subset: v1
     fault:
       abort:
-        percentage: 0.001
+        percentage:
+          value: 0.001
         httpStatus: 400
 </code></pre>
 
@@ -1329,7 +1330,7 @@ field instead.</p>
 </tr>
 <tr id="HTTPFaultInjection-Abort-percentage">
 <td><code>percentage</code></td>
-<td><code>double</code></td>
+<td><code><a href="#Percent">Percent</a></code></td>
 <td>
 <p>Percentage of requests to be aborted with the error code provided.</p>
 
@@ -1362,7 +1363,8 @@ spec:
         subset: v1
     fault:
       delay:
-        percentage: 0.001
+        percentage:
+          value: 0.001
         fixedDelay: 5s
 </code></pre>
 
@@ -1400,7 +1402,7 @@ field instead.</p>
 </tr>
 <tr id="HTTPFaultInjection-Delay-percentage">
 <td><code>percentage</code></td>
-<td><code>double</code></td>
+<td><code><a href="#Percent">Percent</a></code></td>
 <td>
 <p>Percentage of requests on which the delay will be injected.</p>
 
@@ -2209,6 +2211,28 @@ servers. format: 1h/1m/1s/1ms. MUST BE &gt;=1ms. Default is 30s.</p>
 <p>Maximum % of hosts in the load balancing pool for the upstream
 service that can be ejected. Defaults to 10%.</p>
 
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Percent">Percent</h2>
+<section>
+<p>Percent specifies a percentage in the range of [0.0, 100.0].</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Percent-value">
+<td><code>value</code></td>
+<td><code>double</code></td>
+<td>
 </td>
 </tr>
 </tbody>

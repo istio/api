@@ -938,7 +938,8 @@ message HTTPFaultInjection {
   //         subset: v1
   //     fault:
   //       delay:
-  //         percentage: 0.001
+  //         percentage:
+  //           value: 0.001
   //         fixedDelay: 5s
   // ```
   //
@@ -961,7 +962,7 @@ message HTTPFaultInjection {
     }
 
     // Percentage of requests on which the delay will be injected.
-    double percentage = 5;
+    Percent percentage = 5;
   }
 
   // Abort specification is used to prematurely abort a request with a
@@ -983,7 +984,8 @@ message HTTPFaultInjection {
   //         subset: v1
   //     fault:
   //       abort:
-  //         percentage: 0.001
+  //         percentage:
+  //           value: 0.001
   //         httpStatus: 400
   // ```
   //
@@ -1009,7 +1011,7 @@ message HTTPFaultInjection {
     }
 
     // Percentage of requests to be aborted with the error code provided.
-    double percentage = 5;
+    Percent percentage = 5;
   }
 }
 
@@ -1022,4 +1024,9 @@ message PortSelector {
     // $hide_from_docs
     string name = 2;
   }
+}
+
+// Percent specifies a percentage in the range of [0.0, 100.0].
+message Percent {
+  double value = 1;
 }
