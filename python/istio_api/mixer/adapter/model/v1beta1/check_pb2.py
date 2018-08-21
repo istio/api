@@ -16,15 +16,16 @@ _sym_db = _symbol_database.Default()
 from gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
 from google.protobuf import duration_pb2 as google_dot_protobuf_dot_duration__pb2
 from google.rpc import status_pb2 as google_dot_rpc_dot_status__pb2
+from mixer.v1 import attributes_pb2 as mixer_dot_v1_dot_attributes__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='mixer/adapter/model/v1beta1/check.proto',
   package='istio.mixer.adapter.model.v1beta1',
   syntax='proto3',
-  serialized_pb=_b('\n\'mixer/adapter/model/v1beta1/check.proto\x12!istio.mixer.adapter.model.v1beta1\x1a\x14gogoproto/gogo.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x17google/rpc/status.proto\"\x8d\x01\n\x0b\x43heckResult\x12(\n\x06status\x18\x01 \x01(\x0b\x32\x12.google.rpc.StatusB\x04\xc8\xde\x1f\x00\x12;\n\x0evalid_duration\x18\x02 \x01(\x0b\x32\x19.google.protobuf.DurationB\x08\xc8\xde\x1f\x00\x98\xdf\x1f\x01\x12\x17\n\x0fvalid_use_count\x18\x03 \x01(\x05\x42\x36Z(istio.io/api/mixer/adapter/model/v1beta1\xc8\xe1\x1e\x00\xa8\xe2\x1e\x00\xf0\xe1\x1e\x00\x62\x06proto3')
+  serialized_pb=_b('\n\'mixer/adapter/model/v1beta1/check.proto\x12!istio.mixer.adapter.model.v1beta1\x1a\x14gogoproto/gogo.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x17google/rpc/status.proto\x1a\x19mixer/v1/attributes.proto\"\xc4\x01\n\x0b\x43heckResult\x12(\n\x06status\x18\x01 \x01(\x0b\x32\x12.google.rpc.StatusB\x04\xc8\xde\x1f\x00\x12;\n\x0evalid_duration\x18\x02 \x01(\x0b\x32\x19.google.protobuf.DurationB\x08\xc8\xde\x1f\x00\x98\xdf\x1f\x01\x12\x17\n\x0fvalid_use_count\x18\x03 \x01(\x05\x12\x35\n\x11output_attributes\x18\x04 \x01(\x0b\x32\x1a.istio.mixer.v1.AttributesB6Z(istio.io/api/mixer/adapter/model/v1beta1\xc8\xe1\x1e\x00\xa8\xe2\x1e\x00\xf0\xe1\x1e\x00\x62\x06proto3')
   ,
-  dependencies=[gogoproto_dot_gogo__pb2.DESCRIPTOR,google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_rpc_dot_status__pb2.DESCRIPTOR,])
+  dependencies=[gogoproto_dot_gogo__pb2.DESCRIPTOR,google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_rpc_dot_status__pb2.DESCRIPTOR,mixer_dot_v1_dot_attributes__pb2.DESCRIPTOR,])
 
 
 
@@ -57,6 +58,13 @@ _CHECKRESULT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='output_attributes', full_name='istio.mixer.adapter.model.v1beta1.CheckResult.output_attributes', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -69,12 +77,13 @@ _CHECKRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=158,
-  serialized_end=299,
+  serialized_start=185,
+  serialized_end=381,
 )
 
 _CHECKRESULT.fields_by_name['status'].message_type = google_dot_rpc_dot_status__pb2._STATUS
 _CHECKRESULT.fields_by_name['valid_duration'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
+_CHECKRESULT.fields_by_name['output_attributes'].message_type = mixer_dot_v1_dot_attributes__pb2._ATTRIBUTES
 DESCRIPTOR.message_types_by_name['CheckResult'] = _CHECKRESULT
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 

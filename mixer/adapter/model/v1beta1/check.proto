@@ -22,6 +22,8 @@ import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 import "google/rpc/status.proto";
 
+import "mixer/v1/attributes.proto";
+
 option (gogoproto.goproto_getters_all) = false;
 option (gogoproto.equal_all) = false;
 option (gogoproto.gostring_all) = false;
@@ -35,4 +37,6 @@ message CheckResult {
   google.protobuf.Duration valid_duration = 2 [(gogoproto.nullable) = false, (gogoproto.stdduration) = true];
   // The number of uses for which this result can be considered valid.
   int32 valid_use_count = 3;
+  // Output attributes
+  istio.mixer.v1.Attributes output_attributes = 4;
 }
