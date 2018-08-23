@@ -33,4 +33,8 @@ message Envelope {
 
     // The resource itself.
     google.protobuf.Any resource = 2;
+
+    // The resource level version. It allows MCP to track the state of
+    // individual resources.
+    string version = 3;
 }
