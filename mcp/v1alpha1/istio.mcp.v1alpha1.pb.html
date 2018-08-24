@@ -111,10 +111,11 @@ individual resources.</p>
 <p>IncrementalMeshConfigRequest are be sent in 2 situations:</p>
 
 <ol>
-<li>Initial message in a MCP bidirectional gRPC stream.</li>
-<li>As a ACK or NACK response to a previous IncrementalMeshConfigResponse.
+<li><p>Initial message in a MCP bidirectional gRPC stream.</p></li>
+
+<li><p>As a ACK or NACK response to a previous IncrementalMeshConfigResponse.
  In this case the response<em>nonce is set to the nonce value in the Response.
- ACK or NACK is determined by the absence or presence of error</em>detail.</li>
+ ACK or NACK is determined by the absence or presence of error</em>detail.</p></li>
 </ol>
 
 <table class="message-fields">
@@ -147,10 +148,11 @@ individual resources.</p>
 <td><code>initialResourceVersions</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>This map must be populated when the IncrementalMeshConfigRequest is the
-first in a stream. The keys are the resources names of the MCP resources
-known to the MCP client. The values in the map are the associated resource
-level version info.</p>
+<p>When the IncrementalMeshConfigRequest is the first in a stream,
+the initial<em>resource</em>versions must be populated. Otherwise,
+initial<em>resource</em>versions must be omitted. The keys are the
+resources names of the MCP resources known to the MCP client. The
+values in the map are the associated resource level version info.</p>
 
 </td>
 </tr>
@@ -184,14 +186,14 @@ provides the client internal exception related to the failure.</p>
 snapshot of the tracked resources. Instead they are a diff to the
 state of a MCP client. Per resource versions allow servers and
 clients to track state at the resource granularity. An MCP
-Incremental session is always in the context of a gRPC
+incremental session is always in the context of a gRPC
 bidirectional stream. This allows the MCP server to keep track of
 the state of MCP clients connected to it.</p>
 
 <p>In Incremental MCP the nonce field is required and used to pair
-IncrementalMeshConfigResponse to an IncrementalMeshConfigRequest ACK or NACK.
-Optionally, a response message level system<em>version</em>info is present for
-debugging purposes only.</p>
+IncrementalMeshConfigResponse to an IncrementalMeshConfigRequest
+ACK or NACK.  Optionally, a response message level
+system<em>version</em>info is present for debugging purposes only.</p>
 
 <table class="message-fields">
 <thead>
@@ -224,8 +226,9 @@ IncrementalMeshConfigRequest.</p>
 <td><code>removedResources</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Resources names of resources that have be deleted and to be removed from the MCP Client.
-Removed resources for missing resources can be ignored.</p>
+<p>Resources names of resources that have be deleted and to be
+removed from the MCP Client.  Removed resources for missing
+resources can be ignored.</p>
 
 </td>
 </tr>
@@ -233,8 +236,9 @@ Removed resources for missing resources can be ignored.</p>
 <td><code>nonce</code></td>
 <td><code>string</code></td>
 <td>
-<p>The nonce provides a way for IncrementalMeshConfigRequests to uniquely
-reference a IncrementalMeshConfigResponse. The nonce is required.</p>
+<p>The nonce provides a way for IncrementalMeshConfigRequests to
+uniquely reference an IncrementalMeshConfigResponse. The nonce is
+required.</p>
 
 </td>
 </tr>

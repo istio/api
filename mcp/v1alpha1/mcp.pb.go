@@ -181,6 +181,7 @@ func (m *MeshConfigResponse) GetNonce() string {
 // IncrementalMeshConfigRequest are be sent in 2 situations:
 //
 //   1. Initial message in a MCP bidirectional gRPC stream.
+//
 //   2. As a ACK or NACK response to a previous IncrementalMeshConfigResponse.
 //      In this case the response_nonce is set to the nonce value in the Response.
 //      ACK or NACK is determined by the absence or presence of error_detail.
@@ -190,10 +191,11 @@ type IncrementalMeshConfigRequest struct {
 	// Type of the resource that is being requested, e.g.
 	// "type.googleapis.com/istio.io.networking.v1alpha3.VirtualService".
 	TypeUrl string `protobuf:"bytes,2,opt,name=type_url,json=typeUrl,proto3" json:"type_url,omitempty"`
-	// This map must be populated when the IncrementalMeshConfigRequest is the
-	// first in a stream. The keys are the resources names of the MCP resources
-	// known to the MCP client. The values in the map are the associated resource
-	// level version info.
+	// When the IncrementalMeshConfigRequest is the first in a stream,
+	// the initial_resource_versions must be populated. Otherwise,
+	// initial_resource_versions must be omitted. The keys are the
+	// resources names of the MCP resources known to the MCP client. The
+	// values in the map are the associated resource level version info.
 	InitialResourceVersions map[string]string `protobuf:"bytes,3,rep,name=initial_resource_versions,json=initialResourceVersions" json:"initial_resource_versions,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// When the IncrementalMeshConfigRequest is a ACK or NACK message in response
 	// to a previous IncrementalMeshConfigResponse, the response_nonce must be the
@@ -250,14 +252,14 @@ func (m *IncrementalMeshConfigRequest) GetErrorDetail() *google_rpc.Status {
 // snapshot of the tracked resources. Instead they are a diff to the
 // state of a MCP client. Per resource versions allow servers and
 // clients to track state at the resource granularity. An MCP
-// Incremental session is always in the context of a gRPC
+// incremental session is always in the context of a gRPC
 // bidirectional stream. This allows the MCP server to keep track of
 // the state of MCP clients connected to it.
 //
 // In Incremental MCP the nonce field is required and used to pair
-// IncrementalMeshConfigResponse to an IncrementalMeshConfigRequest ACK or NACK.
-// Optionally, a response message level system_version_info is present for
-// debugging purposes only.
+// IncrementalMeshConfigResponse to an IncrementalMeshConfigRequest
+// ACK or NACK.  Optionally, a response message level
+// system_version_info is present for debugging purposes only.
 type IncrementalMeshConfigResponse struct {
 	// The version of the response data (used for debugging).
 	SystemVersionInfo string `protobuf:"bytes,1,opt,name=system_version_info,json=systemVersionInfo,proto3" json:"system_version_info,omitempty"`
@@ -265,11 +267,13 @@ type IncrementalMeshConfigResponse struct {
 	// message. These are typed resources that match the type url in the
 	// IncrementalMeshConfigRequest.
 	Envelopes []Envelope `protobuf:"bytes,2,rep,name=envelopes" json:"envelopes"`
-	// Resources names of resources that have be deleted and to be removed from the MCP Client.
-	// Removed resources for missing resources can be ignored.
+	// Resources names of resources that have be deleted and to be
+	// removed from the MCP Client.  Removed resources for missing
+	// resources can be ignored.
 	RemovedResources []string `protobuf:"bytes,3,rep,name=removed_resources,json=removedResources" json:"removed_resources,omitempty"`
-	// The nonce provides a way for IncrementalMeshConfigRequests to uniquely
-	// reference a IncrementalMeshConfigResponse. The nonce is required.
+	// The nonce provides a way for IncrementalMeshConfigRequests to
+	// uniquely reference an IncrementalMeshConfigResponse. The nonce is
+	// required.
 	Nonce string `protobuf:"bytes,4,opt,name=nonce,proto3" json:"nonce,omitempty"`
 }
 

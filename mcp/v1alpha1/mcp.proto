@@ -101,6 +101,7 @@ message MeshConfigResponse {
 // IncrementalMeshConfigRequest are be sent in 2 situations:
 //
 //   1. Initial message in a MCP bidirectional gRPC stream.
+//
 //   2. As a ACK or NACK response to a previous IncrementalMeshConfigResponse.
 //      In this case the response_nonce is set to the nonce value in the Response.
 //      ACK or NACK is determined by the absence or presence of error_detail.
@@ -112,10 +113,12 @@ message IncrementalMeshConfigRequest {
   // "type.googleapis.com/istio.io.networking.v1alpha3.VirtualService".
   string type_url = 2;
 
-  // This map must be populated when the IncrementalMeshConfigRequest is the
-  // first in a stream. The keys are the resources names of the MCP resources
-  // known to the MCP client. The values in the map are the associated resource
-  // level version info.
+
+  // When the IncrementalMeshConfigRequest is the first in a stream,
+  // the initial_resource_versions must be populated. Otherwise,
+  // initial_resource_versions must be omitted. The keys are the
+  // resources names of the MCP resources known to the MCP client. The
+  // values in the map are the associated resource level version info.
   map<string, string> initial_resource_versions = 3;
 
   // When the IncrementalMeshConfigRequest is a ACK or NACK message in response
@@ -134,14 +137,14 @@ message IncrementalMeshConfigRequest {
 // snapshot of the tracked resources. Instead they are a diff to the
 // state of a MCP client. Per resource versions allow servers and
 // clients to track state at the resource granularity. An MCP
-// Incremental session is always in the context of a gRPC
+// incremental session is always in the context of a gRPC
 // bidirectional stream. This allows the MCP server to keep track of
 // the state of MCP clients connected to it.
 //
 // In Incremental MCP the nonce field is required and used to pair
-// IncrementalMeshConfigResponse to an IncrementalMeshConfigRequest ACK or NACK.
-// Optionally, a response message level system_version_info is present for
-// debugging purposes only.
+// IncrementalMeshConfigResponse to an IncrementalMeshConfigRequest
+// ACK or NACK.  Optionally, a response message level
+// system_version_info is present for debugging purposes only.
 message IncrementalMeshConfigResponse {
   // The version of the response data (used for debugging).
   string system_version_info = 1;
@@ -151,12 +154,14 @@ message IncrementalMeshConfigResponse {
   // IncrementalMeshConfigRequest.
   repeated Envelope envelopes = 2 [(gogoproto.nullable) = false];
 
-  // Resources names of resources that have be deleted and to be removed from the MCP Client.
-  // Removed resources for missing resources can be ignored.
+  // Resources names of resources that have be deleted and to be
+  // removed from the MCP Client.  Removed resources for missing
+  // resources can be ignored.
   repeated string removed_resources = 3;
 
-  // The nonce provides a way for IncrementalMeshConfigRequests to uniquely
-  // reference a IncrementalMeshConfigResponse. The nonce is required.
+  // The nonce provides a way for IncrementalMeshConfigRequests to
+  // uniquely reference an IncrementalMeshConfigResponse. The nonce is
+  // required.
   string nonce = 4;
 }
 
