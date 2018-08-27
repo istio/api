@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='mcp/v1alpha1/envelope.proto',
   package='istio.mcp.v1alpha1',
   syntax='proto3',
-  serialized_pb=_b('\n\x1bmcp/v1alpha1/envelope.proto\x12\x12istio.mcp.v1alpha1\x1a\x19google/protobuf/any.proto\x1a\x14gogoproto/gogo.proto\x1a\x1bmcp/v1alpha1/metadata.proto\"s\n\x08\x45nvelope\x12.\n\x08metadata\x18\x01 \x01(\x0b\x32\x1c.istio.mcp.v1alpha1.Metadata\x12&\n\x08resource\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any\x12\x0f\n\x07version\x18\x03 \x01(\tB\x1fZ\x19istio.io/api/mcp/v1alpha1\xa8\xe2\x1e\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x1bmcp/v1alpha1/envelope.proto\x12\x12istio.mcp.v1alpha1\x1a\x19google/protobuf/any.proto\x1a\x14gogoproto/gogo.proto\x1a\x1bmcp/v1alpha1/metadata.proto\"b\n\x08\x45nvelope\x12.\n\x08metadata\x18\x01 \x01(\x0b\x32\x1c.istio.mcp.v1alpha1.Metadata\x12&\n\x08resource\x18\x02 \x01(\x0b\x32\x14.google.protobuf.AnyB\x1fZ\x19istio.io/api/mcp/v1alpha1\xa8\xe2\x1e\x01\x62\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,gogoproto_dot_gogo__pb2.DESCRIPTOR,mcp_dot_v1alpha1_dot_metadata__pb2.DESCRIPTOR,])
 
@@ -50,13 +50,6 @@ _ENVELOPE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='version', full_name='istio.mcp.v1alpha1.Envelope.version', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -70,7 +63,7 @@ _ENVELOPE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=129,
-  serialized_end=244,
+  serialized_end=227,
 )
 
 _ENVELOPE.fields_by_name['metadata'].message_type = mcp_dot_v1alpha1_dot_metadata__pb2._METADATA

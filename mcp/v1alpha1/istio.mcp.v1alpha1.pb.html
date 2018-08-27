@@ -94,15 +94,6 @@ Each envelope is made up of common metadata, and a type-specific resource payloa
 
 </td>
 </tr>
-<tr id="Envelope-version">
-<td><code>version</code></td>
-<td><code>string</code></td>
-<td>
-<p>The resource level version. It allows MCP to track the state of
-individual resources.</p>
-
-</td>
-</tr>
 </tbody>
 </table>
 </section>
@@ -406,6 +397,15 @@ Envelope message.</p>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#timestamp">google.protobuf.Timestamp</a></code></td>
 <td>
 <p>The creation timestamp of the resource.</p>
+
+</td>
+</tr>
+<tr id="Metadata-version">
+<td><code>version</code></td>
+<td><code>string</code></td>
+<td>
+<p>The resource level version. It allows MCP to track the state of
+individual resources.</p>
 
 </td>
 </tr>
