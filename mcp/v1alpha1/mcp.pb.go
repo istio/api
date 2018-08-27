@@ -6,7 +6,7 @@ package v1alpha1
 import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
 import math "math"
-import google_protobuf2 "github.com/gogo/protobuf/types"
+import google_protobuf3 "github.com/gogo/protobuf/types"
 import google_rpc "github.com/gogo/googleapis/google/rpc"
 import _ "github.com/gogo/protobuf/gogoproto"
 
@@ -29,7 +29,7 @@ type Client struct {
 	// An opaque identifier for the MCP client.
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	// Opaque metadata extending the client identifier.
-	Metadata *google_protobuf2.Struct `protobuf:"bytes,2,opt,name=metadata" json:"metadata,omitempty"`
+	Metadata *google_protobuf3.Struct `protobuf:"bytes,2,opt,name=metadata" json:"metadata,omitempty"`
 }
 
 func (m *Client) Reset()                    { *m = Client{} }
@@ -44,7 +44,7 @@ func (m *Client) GetId() string {
 	return ""
 }
 
-func (m *Client) GetMetadata() *google_protobuf2.Struct {
+func (m *Client) GetMetadata() *google_protobuf3.Struct {
 	if m != nil {
 		return m.Metadata
 	}
@@ -1489,8 +1489,10 @@ func (m *MeshConfigResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Envelopes = append(m.Envelopes, Envelope{})
-			if err := m.Envelopes[len(m.Envelopes)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if m.Metadata == nil {
+				m.Metadata = &google_protobuf3.Struct{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
