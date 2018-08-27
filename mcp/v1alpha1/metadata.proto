@@ -32,4 +32,8 @@ message Metadata {
 
   // The creation timestamp of the resource.
   google.protobuf.Timestamp create_time = 2;
+
+  // The resource level version. It allows MCP to track the state of
+  // individual resources.
+  string version = 3;
 }
