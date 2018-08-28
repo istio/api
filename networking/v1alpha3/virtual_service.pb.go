@@ -402,7 +402,6 @@ type HTTPRoute struct {
 	// destination service.
 	AppendHeaders map[string]string `protobuf:"bytes,11,rep,name=append_headers,json=appendHeaders" json:"append_headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Http headers to remove before returning the response to the caller
-	// $hide_from_docs
 	RemoveResponseHeaders []string `protobuf:"bytes,12,rep,name=remove_response_headers,json=removeResponseHeaders" json:"remove_response_headers,omitempty"`
 }
 
