@@ -415,6 +415,7 @@ type RbacConfig struct {
 	// It's used to verify new RbacConfig work as expected before rolling to production.
 	// When setting as PERMISSIVE, RBAC isn't enforced and has no impact on users.
 	// RBAC engine run RbacConfig in PERMISSIVE mode and logs stats.
+	// Invalid to set RbacConfig in PERMISSIVE and ServiceRoleBinding in ENFORCED mode.
 	EnforcementMode EnforcementMode `protobuf:"varint,4,opt,name=enforcement_mode,json=enforcementMode,proto3,enum=istio.rbac.v1alpha1.EnforcementMode" json:"enforcement_mode,omitempty"`
 }
 

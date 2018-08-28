@@ -253,5 +253,6 @@ message RbacConfig {
   // It's used to verify new RbacConfig work as expected before rolling to production. 
   // When setting as PERMISSIVE, RBAC isn't enforced and has no impact on users.
   // RBAC engine run RbacConfig in PERMISSIVE mode and logs stats.
+  // Invalid to set RbacConfig in PERMISSIVE and ServiceRoleBinding in ENFORCED mode.
   EnforcementMode enforcement_mode = 4;
 }
