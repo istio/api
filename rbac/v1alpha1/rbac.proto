@@ -247,4 +247,8 @@ message RbacConfig {
   // A list of services or namespaces that should not be enforced by Istio RBAC policies. Note: This field have
   // effect only when mode is ON_WITH_EXCLUSION and will be ignored for any other modes.
   Target exclusion = 3;
+
+  // $hide_from_docs
+  // Indicates enforcement mode of the RbacConfig.
+  EnforcementMode enforcement_mode = 4;
 }
