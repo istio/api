@@ -411,7 +411,10 @@ type RbacConfig struct {
 	// effect only when mode is ON_WITH_EXCLUSION and will be ignored for any other modes.
 	Exclusion *RbacConfig_Target `protobuf:"bytes,3,opt,name=exclusion" json:"exclusion,omitempty"`
 	// $hide_from_docs
-	// Indicates enforcement mode of the RbacConfig.
+	// Indicates enforcement mode of the RbacConfig, in ENFORCED mode by default.
+	// It's used to verify new RbacConfig work as expected before rolling to production.
+	// When setting as PERMISSIVE, RBAC isn't enforced and has no impact on users.
+	// RBAC engine run RbacConfig in PERMISSIVE mode and logs stats.
 	EnforcementMode EnforcementMode `protobuf:"varint,4,opt,name=enforcement_mode,json=enforcementMode,proto3,enum=istio.rbac.v1alpha1.EnforcementMode" json:"enforcement_mode,omitempty"`
 }
 

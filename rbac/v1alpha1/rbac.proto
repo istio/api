@@ -249,6 +249,9 @@ message RbacConfig {
   Target exclusion = 3;
 
   // $hide_from_docs
-  // Indicates enforcement mode of the RbacConfig.
+  // Indicates enforcement mode of the RbacConfig, in ENFORCED mode by default.
+  // It's used to verify new RbacConfig work as expected before rolling to production. 
+  // When setting as PERMISSIVE, RBAC isn't enforced and has no impact on users.
+  // RBAC engine run RbacConfig in PERMISSIVE mode and logs stats.
   EnforcementMode enforcement_mode = 4;
 }
