@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 aliases:
   - /docs/reference/config/istio.routing.v1alpha1/
-number_of_entries: 50
+number_of_entries: 54
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -2119,6 +2119,276 @@ requested by the caller without doing any form of load
 balancing. This option must be used with care. It is meant for
 advanced use cases. Refer to Original Destination load balancer in
 Envoy for further details.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshEndpoint">MeshEndpoint</h2>
+<section>
+<p>Endpoint defines a network address (IP or hostname) associated with
+a mesh service.</p>
+
+<p>Example that uses the IP address</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: MeshEndpoint
+metadata:
+  name: 10.10.1.1
+spec:
+    endpoint:
+      address: 10.10.1.1
+      ports:
+        https: 8080
+    labels:
+      app: reviews
+      version: v1
+</code></pre>
+
+<p>Another example that uses the hostname</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: MeshEndpoints
+metadata:
+  name: us.foo.bar.com
+spec:
+  endpoint:
+    address: us.foo.bar.com
+    ports:
+      https: 8080
+  labels:
+    app: reviews
+    version: v1
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshEndpoint-mesh_service">
+<td><code>meshService</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+</tr>
+<tr id="MeshEndpoint-labels">
+<td><code>labels</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>One or more labels associated with the endpoint.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshService">MeshService</h2>
+<section>
+<p><code>MeshService</code> models discovered services in the mesh. A MeshService
+describes the properties of a service (DNS name, VIPs , ports, protocols),
+but does not include the list of endpoints, which is modeled in mesh_endpoint.proto.
+These services could be external to the mesh (e.g., web
+APIs) or could be mesh-internal services that are part of one of the platform&rsquo;s
+service registry .</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: MeshService
+metadata:
+  name: istio-pilot.svc.default.cluster.local
+spec:
+  hosts:
+  - istio-pilot.svc.default.cluster.local
+  addresses:
+  - 10.11.1.1/24 # VIPs
+  ports:
+  - name: grpc-xds
+    number: 15010
+    protocol: TCP
+  - name: http-monitoring
+    number: 9093
+    protocol: TCP
+  location: MESH_INTERNAL
+  resolution: STATIC
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshService-hosts">
+<td><code>hosts</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>REQUIRED. The hosts associated with the MeshService. Could be a DNS
+name with wildcard prefix (external services only). DNS names in hosts
+will be ignored if the application accesses the service over non-HTTP
+protocols such as mongo/opaque TCP/even HTTPS. In such scenarios, the
+IP addresses specified in the Addresses field or the port will be used
+to uniquely identify the destination.</p>
+
+</td>
+</tr>
+<tr id="MeshService-addresses">
+<td><code>addresses</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>The virtual IP addresses associated with the service. Could be CIDR
+prefix.  For HTTP services, the addresses field will be ignored and
+the destination will be identified based on the HTTP Host/Authority
+header. For non-HTTP protocols such as mongo/opaque TCP/even HTTPS,
+the hosts will be ignored. If one or more IP addresses are specified,
+the incoming traffic will be identified as belonging to this service
+if the destination IP matches the IP/CIDRs specified in the addresses
+field. If the Addresses field is empty, traffic will be identified
+solely based on the destination port. In such scenarios, the port on
+which the service is being accessed must not be shared by any other
+service in the mesh. In other words, the sidecar will behave as a
+simple TCP proxy, forwarding incoming traffic on a specified port to
+the specified destination endpoint IP/host. Unix domain socket
+addresses are not supported in this field.</p>
+
+</td>
+</tr>
+<tr id="MeshService-ports">
+<td><code>ports</code></td>
+<td><code><a href="#Port">Port[]</a></code></td>
+<td>
+<p>REQUIRED. The ports associated with the external service. If the
+Endpoints are unix domain socket addresses, there must be exactly one
+port.</p>
+
+</td>
+</tr>
+<tr id="MeshService-location">
+<td><code>location</code></td>
+<td><code><a href="#MeshService-Location">MeshService.Location</a></code></td>
+<td>
+<p>Specify whether the service should be considered external to the mesh
+or part of the mesh.</p>
+
+</td>
+</tr>
+<tr id="MeshService-resolution">
+<td><code>resolution</code></td>
+<td><code><a href="#MeshService-Resolution">MeshService.Resolution</a></code></td>
+<td>
+<p>REQUIRED: Service discovery mode for the hosts. Care must be taken
+when setting the resolution mode to NONE for a TCP port without
+accompanying IP addresses. In such cases, traffic to any IP on
+said port will be allowed (i.e. 0.0.0.0:<port>).</p>
+
+</td>
+</tr>
+<tr id="MeshService-labels">
+<td><code>labels</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>One or more labels associated with the service</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshService-Location">MeshService.Location</h2>
+<section>
+<p>Location specifies whether the service is part of Istio mesh or
+outside the mesh.  Location determines the behavior of several
+features, such as service-to-service mTLS authentication, policy
+enforcement, etc. When communicating with services outside the mesh,
+Istio&rsquo;s mTLS authentication is disabled, and policy enforcement is
+performed on the client-side as opposed to server-side.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshService-Location-MESH_EXTERNAL">
+<td><code>MESH_EXTERNAL</code></td>
+<td>
+<p>Signifies that the service is external to the mesh. Typically used
+to indicate external services consumed through APIs.</p>
+
+</td>
+</tr>
+<tr id="MeshService-Location-MESH_INTERNAL">
+<td><code>MESH_INTERNAL</code></td>
+<td>
+<p>Signifies that the service is part of the mesh. Typically used to
+indicate services added explicitly as part of expanding the service
+mesh to include unmanaged infrastructure (e.g., VMs added to a
+Kubernetes based service mesh).</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshService-Resolution">MeshService.Resolution</h2>
+<section>
+<p>Resolution determines how the proxy will resolve the IP addresses of
+the network endpoints associated with the service, so that it can
+route to one of them. The resolution mode specified here has no impact
+on how the application resolves the IP address associated with the
+service. The application may still have to use DNS to resolve the
+service to an IP so that the outbound traffic can be captured by the
+Proxy. Alternatively, for HTTP services, the application could
+directly communicate with the proxy (e.g., by setting HTTP_PROXY) to
+talk to these services.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshService-Resolution-NONE">
+<td><code>NONE</code></td>
+<td>
+<p>Assume that incoming connections have already been resolved (to a
+specific destination IP address). Such connections are typically
+routed via the proxy using mechanisms such as IP table REDIRECT/
+eBPF. After performing any routing related transformations, the
+proxy will forward the connection to the IP address to which the
+connection was bound.</p>
+
+</td>
+</tr>
+<tr id="MeshService-Resolution-STATIC">
+<td><code>STATIC</code></td>
+<td>
+<p>Use the static IP addresses specified in endpoints (see below) as the
+backing instances associated with the service.</p>
+
+</td>
+</tr>
+<tr id="MeshService-Resolution-DNS">
+<td><code>DNS</code></td>
+<td>
+<p>Attempt to resolve the IP address by querying the ambient DNS,
+during request processing. If no endpoints are specified, the proxy
+will resolve the DNS address specified in the hosts field, if
+wildcards are not used. If endpoints are specified, the DNS
+addresses specified in the endpoints will be resolved to determine
+the destination IP address.  DNS resolution cannot be used with unix
+domain socket endpoints.</p>
 
 </td>
 </tr>

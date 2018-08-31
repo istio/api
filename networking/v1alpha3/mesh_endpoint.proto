@@ -1,0 +1,68 @@
+// Copyright 2018 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+//import "envoy/api/v2/endpoint/endpoint.proto";
+
+package istio.networking.v1alpha3;
+
+option go_package = "istio.io/api/networking/v1alpha3";
+
+// Endpoint defines a network address (IP or hostname) associated with
+// a mesh service.
+//
+// Example that uses the IP address
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: MeshEndpoint
+// metadata:
+//   name: 10.10.1.1
+// spec:
+//     endpoint:
+//       address: 10.10.1.1
+//       ports:
+//         https: 8080
+//     labels:
+//       app: reviews
+//       version: v1
+// ```
+//
+// Another example that uses the hostname
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: MeshEndpoints
+// metadata:
+//   name: us.foo.bar.com
+// spec:
+//   endpoint:
+//     address: us.foo.bar.com
+//     ports:
+//       https: 8080
+//   labels:
+//     app: reviews
+//     version: v1
+// ```
+//
+message MeshEndpoint {
+    string mesh_service = 1;
+
+    // This is Envoy's endpoint whose definition is here :
+    // https://github.com/envoyproxy/envoy/blob/master/api/envoy/api/v2/endpoint/endpoint.proto
+    // and copied in istio/api/envoy/api/v2/endpoint/endpoint.proto
+    //Endpoint endpoint = 2;
+
+    // One or more labels associated with the endpoint.
+    map<string, string> labels = 3;
+};
