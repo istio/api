@@ -694,8 +694,8 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 //   principalBinding: USE_ORIGIN
 // ```
 type Policy struct {
-	// List rules to select destinations that the policy should be applied on.
-	// If empty, policy will be used on all destinations in the same namespace.
+	// List rules to select workloads that the policy should be applied on.
+	// If empty, policy will be used on all workloads in the same namespace.
 	Targets []*TargetSelector `protobuf:"bytes,1,rep,name=targets" json:"targets,omitempty"`
 	// List of authentication methods that can be used for peer authentication.
 	// They will be evaluated in order; the first validate one will be used to
@@ -784,13 +784,27 @@ func (m *Policy) GetPrincipalBinding() PrincipalBinding {
 	return PrincipalBinding_USE_PEER
 }
 
-// TargetSelector defines a matching rule to a service/destination.
+// TargetSelector defines a matching rule to an workload. Workload in Istio is identified by the
+// name and port of the service it is associated with.
 type TargetSelector struct {
 	// REQUIRED. The name must be a short name from the service registry. The
 	// fully qualified domain name will be resolved in a platform specific manner.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// Specifies the ports on the destination. Leave empty to match all ports
-	// that are exposed.
+	// Specifies the ports. Note that this is the port(s) exposed by the service, not workload ports.
+	// For example, if a service is defined as below, then `8000` should be used, not `9000`.
+	// ```
+	// kind: Service
+	// metadata:
+	//   ...
+	// spec:
+	//   ports:
+	//   - name: http
+	//     port: 8000
+	//     targetPort: 9000
+	//   selector:
+	//     app: backend
+	// ```
+	// Leave empty to match all ports that are exposed.
 	Ports []*PortSelector `protobuf:"bytes,2,rep,name=ports" json:"ports,omitempty"`
 }
 
