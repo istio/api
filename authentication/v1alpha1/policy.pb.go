@@ -784,8 +784,8 @@ func (m *Policy) GetPrincipalBinding() PrincipalBinding {
 	return PrincipalBinding_USE_PEER
 }
 
-// TargetSelector defines a matching rule to an workload. Workload in Istio is identified by the
-// name and port of the service it is associated with.
+// TargetSelector defines a matching rule to an workload. A workload is selected if it associated
+// with the service name and service port(s) specified in the selector rule.
 type TargetSelector struct {
 	// REQUIRED. The name must be a short name from the service registry. The
 	// fully qualified domain name will be resolved in a platform specific manner.
