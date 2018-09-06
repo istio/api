@@ -320,14 +320,12 @@ message Policy {
   // Leave the list empty if peer authentication is not required
   repeated PeerAuthenticationMethod peers = 2;
 
-  // $hide_from_docs
-  // WILL BE DEPRECATED
   // Set this flag to true to accept request (for peer authentication perspective),
   // even when none of the peer authentication methods defined above satisfied.
   // Typically, this is used to delay the rejection decision to next layer (e.g
   // authorization).
   // This flag is ignored if no authentication defined for peer (peers field is empty).
-  bool peer_is_optional = 3 [deprecated = true];
+  bool peer_is_optional = 3;
 
   // List of authentication methods that can be used for origin authentication.
   // Similar to peers, these will be evaluated in order; the first validate one
@@ -339,14 +337,12 @@ message Policy {
   // Leave the list empty if origin authentication is not required.
   repeated OriginAuthenticationMethod origins = 4;
 
-  // $hide_from_docs
-  // WILL BE DEPRECATED
   // Set this flag to true to accept request (for origin authentication perspective),
   // even when none of the origin authentication methods defined above satisfied.
   // Typically, this is used to delay the rejection decision to next layer (e.g
   // authorization).
   // This flag is ignored if no authentication defined for origin (origins field is empty).
-  bool origin_is_optional = 5 [deprecated = true];
+  bool origin_is_optional = 5;
 
   // Define whether peer or origin identity should be use for principal. Default
   // value is USE_PEER.
