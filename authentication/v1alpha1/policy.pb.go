@@ -784,8 +784,8 @@ func (m *Policy) GetPrincipalBinding() PrincipalBinding {
 	return PrincipalBinding_USE_PEER
 }
 
-// TargetSelector defines a matching rule to an workload. A workload is selected if it associated
-// with the service name and service port(s) specified in the selector rule.
+// TargetSelector defines a matching rule to a workload. A workload is selected
+// if it is associated with the service name and service port(s) specified in the selector rule.
 type TargetSelector struct {
 	// REQUIRED. The name must be a short name from the service registry. The
 	// fully qualified domain name will be resolved in a platform specific manner.
