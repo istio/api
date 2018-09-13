@@ -424,9 +424,9 @@ func (m *TrafficPolicy_PortTrafficPolicy) GetTls() *TLSSettings {
 // a route rule explicitly sends traffic to this subset.
 //
 // One or more labels are typically required to identify the subset destination,
-// however, when the corresponding DestintaionRule represents a host that
+// however, when the corresponding DestinationRule represents a host that
 // supports multiple SNI hosts (e.g., an egress gateway), a subset without labels
-// may be meaningful. In this case a trafficPolicy with [TLSSettings](#TLSSettings)
+// may be meaningful. In this case a traffic policy with [TLSSettings](#TLSSettings)
 // can be used to identify a specific SNI host corresponding to the named subset.
 type Subset struct {
 	// REQUIRED. Name of the subset. The service name and the subset name can
