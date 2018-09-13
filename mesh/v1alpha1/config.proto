@@ -237,9 +237,7 @@ message MeshConfig {
 
   reserved 15;
 
-  // DEPRECATED. Mixer address. This option will be removed soon. Please
-  // use mixer_check and mixer_report.
-  string mixer_address = 16;
+  reserved 16;
 
   message OutboundTrafficPolicy {
     enum Mode {
