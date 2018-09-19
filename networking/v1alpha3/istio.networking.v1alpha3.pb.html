@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 aliases:
   - /docs/reference/config/istio.routing.v1alpha1/
-number_of_entries: 50
+number_of_entries: 51
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -2516,6 +2516,74 @@ client side certificate.</p>
 <td>
 <p>A list of alternate names to verify the subject identity in the
 certificate presented by the client.</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-tls_minimum_protocol_version">
+<td><code>tlsMinimumProtocolVersion</code></td>
+<td><code><a href="#Server-TLSOptions-TLSVersion">Server.TLSOptions.TLSVersion</a></code></td>
+<td>
+<p>Optional: The minimum TLS version that will be supported on this
+server.</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-tls_maximum_protocol_version">
+<td><code>tlsMaximumProtocolVersion</code></td>
+<td><code><a href="#Server-TLSOptions-TLSVersion">Server.TLSOptions.TLSVersion</a></code></td>
+<td>
+<p>Optional: The maximum TLS version that will be supported on this
+server.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Server-TLSOptions-TLSVersion">Server.TLSOptions.TLSVersion</h2>
+<section>
+<p>TLS protocol verion to be supported in this server</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Server-TLSOptions-TLSVersion-TLS_AUTO">
+<td><code>TLS_AUTO</code></td>
+<td>
+<p>(DEFAULT) ⁣Envoy will choose the optimal TLS version.</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-TLSVersion-TLSv1_0">
+<td><code>TLSv1_0</code></td>
+<td>
+<p>TLS 1.0 and higher</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-TLSVersion-TLSv1_1">
+<td><code>TLSv1_1</code></td>
+<td>
+<p>TLS 1.1 and higher</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-TLSVersion-TLSv1_2">
+<td><code>TLSv1_2</code></td>
+<td>
+<p>TLS 1.2 and higher</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-TLSVersion-TLSv1_3">
+<td><code>TLSv1_3</code></td>
+<td>
+<p>TLS 1.3</p>
 
 </td>
 </tr>
