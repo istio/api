@@ -269,9 +269,8 @@ message MeshConfig {
   // Unix Domain Socket through which envoy communicates with NodeAgent SDS to get key/cert for mTLS.
   // Use secret-mount files instead of SDS if set to empty.
   string sds_uds_path = 20;
-
-  // Polling interval for SDS (MUST BE >=1ms)
-  google.protobuf.Duration sds_refresh_delay = 21;
+  
+  reserved 21;
 
   // Address of the galley service exposing the Mesh Control Protocol (MCP).
   string galley_address = 22;
