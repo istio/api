@@ -42,6 +42,18 @@ enum AuthenticationPolicy {
   INHERIT = 1000;
 }
 
+// LightstepCollector defines configuration for a LightStep Satellite pool.
+message LightstepCollector {
+  // Address of the LightStep Satellite pool.
+  string address = 1;
+
+  // The LightStep access token.
+  string access_token = 2;
+
+  // True if a secure connection should be used when communicating with the pool.
+  bool secure = 3;
+}
+
 // ProxyConfig defines variables for individual Envoy instances.
 message ProxyConfig {
   // Path to the generated configuration file directory.
@@ -133,6 +145,9 @@ message ProxyConfig {
 
   // The mode used to redirect inbound traffic to Envoy.
   InboundInterceptionMode interception_mode = 18;
+
+  // Configuration for a LightStep tracing backend (optional).
+  LightstepCollector lightstep_collector = 19;
 }
 
 // MeshConfig defines mesh-wide variables shared by all Envoy instances in the

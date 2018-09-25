@@ -4,7 +4,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 aliases:
   - /docs/reference/config/service-mesh.html
-number_of_entries: 8
+number_of_entries: 9
 ---
 <h2 id="AuthenticationPolicy">AuthenticationPolicy</h2>
 <section>
@@ -40,6 +40,46 @@ Mesh policy cannot be INHERIT.</p>
 <td>
 <p>Use the policy defined by the parent scope. Should not be used for mesh
 policy.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="LightstepCollector">LightstepCollector</h2>
+<section>
+<p>LightstepCollector defines configuration for a LightStep Satellite pool.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LightstepCollector-address">
+<td><code>address</code></td>
+<td><code>string</code></td>
+<td>
+<p>Address of the LightStep Satellite pool.</p>
+
+</td>
+</tr>
+<tr id="LightstepCollector-access_token">
+<td><code>accessToken</code></td>
+<td><code>string</code></td>
+<td>
+<p>The LightStep access token.</p>
+
+</td>
+</tr>
+<tr id="LightstepCollector-secure">
+<td><code>secure</code></td>
+<td><code>bool</code></td>
+<td>
+<p>True if a secure connection should be used when communicating with the pool.</p>
 
 </td>
 </tr>
@@ -544,6 +584,14 @@ Increase the value of this field if you find that the metrics from Envoys are tr
 <td><code><a href="#ProxyConfig-InboundInterceptionMode">ProxyConfig.InboundInterceptionMode</a></code></td>
 <td>
 <p>The mode used to redirect inbound traffic to Envoy.</p>
+
+</td>
+</tr>
+<tr id="ProxyConfig-lightstep_collector">
+<td><code>lightstepCollector</code></td>
+<td><code><a href="#LightstepCollector">LightstepCollector</a></code></td>
+<td>
+<p>Configuration for a LightStep tracing backend (optional).</p>
 
 </td>
 </tr>
