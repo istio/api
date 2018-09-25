@@ -197,7 +197,7 @@ type LightstepCollector struct {
 	AccessToken string `protobuf:"bytes,2,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
 	// True if a secure connection should be used when communicating with the pool.
 	Secure bool `protobuf:"varint,3,opt,name=secure,proto3" json:"secure,omitempty"`
-	// Path to the trusted cacert.
+	// Path to the trusted cacert used to authenticate the pool.
 	CacertPath string `protobuf:"bytes,4,opt,name=cacert_path,json=cacertPath,proto3" json:"cacert_path,omitempty"`
 }
 

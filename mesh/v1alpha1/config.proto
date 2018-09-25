@@ -53,7 +53,7 @@ message LightstepCollector {
   // True if a secure connection should be used when communicating with the pool.
   bool secure = 3;
 
-  // Path to the trusted cacert.
+  // Path to the trusted cacert used to authenticate the pool.
   string cacert_path = 4;
 }
 
