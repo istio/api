@@ -146,7 +146,8 @@ message ProxyConfig {
   // The mode used to redirect inbound traffic to Envoy.
   InboundInterceptionMode interception_mode = 18;
 
-  // Configuration for a LightStep tracing backend (optional).
+  // Configuration for a LightStep tracing backend (optional). If set, it will
+  // take precedence over [zipkinAddress][istio.mesh.v1alpha1.ProxyConfig.zipkin_address].
   LightstepCollector lightstep_collector = 19;
 }
 

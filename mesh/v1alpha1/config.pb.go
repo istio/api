@@ -287,7 +287,8 @@ type ProxyConfig struct {
 	ProxyBootstrapTemplatePath string `protobuf:"bytes,17,opt,name=proxy_bootstrap_template_path,json=proxyBootstrapTemplatePath,proto3" json:"proxy_bootstrap_template_path,omitempty"`
 	// The mode used to redirect inbound traffic to Envoy.
 	InterceptionMode ProxyConfig_InboundInterceptionMode `protobuf:"varint,18,opt,name=interception_mode,json=interceptionMode,proto3,enum=istio.mesh.v1alpha1.ProxyConfig_InboundInterceptionMode" json:"interception_mode,omitempty"`
-	// Configuration for a LightStep tracing backend (optional).
+	// Configuration for a LightStep tracing backend (optional). If set, it will
+	// take precedence over [zipkinAddress][istio.mesh.v1alpha1.ProxyConfig.zipkin_address].
 	LightstepCollector *LightstepCollector `protobuf:"bytes,19,opt,name=lightstep_collector,json=lightstepCollector" json:"lightstep_collector,omitempty"`
 }
 

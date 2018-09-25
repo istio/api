@@ -591,7 +591,8 @@ Increase the value of this field if you find that the metrics from Envoys are tr
 <td><code>lightstepCollector</code></td>
 <td><code><a href="#LightstepCollector">LightstepCollector</a></code></td>
 <td>
-<p>Configuration for a LightStep tracing backend (optional).</p>
+<p>Configuration for a LightStep tracing backend (optional). If set, it will
+take precedence over <a href="#ProxyConfig-zipkin_address">zipkinAddress</a>.</p>
 
 </td>
 </tr>
