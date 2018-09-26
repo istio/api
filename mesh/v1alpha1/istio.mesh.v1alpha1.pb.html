@@ -161,14 +161,6 @@ Use authentication_policy instead.</p>
 
 </td>
 </tr>
-<tr id="MeshConfig-rds_refresh_delay">
-<td><code>rdsRefreshDelay</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
-<td>
-<p>Polling interval for RDS (MUST BE &gt;=1ms)</p>
-
-</td>
-</tr>
 <tr id="MeshConfig-enable_tracing">
 <td><code>enableTracing</code></td>
 <td><code>bool</code></td>
@@ -443,14 +435,6 @@ MUST BE greater than <em>drain</em>duration_ parameter.</p>
 
 </td>
 </tr>
-<tr id="ProxyConfig-discovery_refresh_delay">
-<td><code>discoveryRefreshDelay</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
-<td>
-<p>Polling interval for service discovery (used by EDS, CDS, LDS, but not RDS). (MUST BE &gt;=1ms)</p>
-
-</td>
-</tr>
 <tr id="ProxyConfig-zipkin_address">
 <td><code>zipkinAddress</code></td>
 <td><code>string</code></td>
@@ -480,16 +464,6 @@ MUST BE greater than <em>drain</em>duration_ parameter.</p>
 <td><code>int32</code></td>
 <td>
 <p>Port on which Envoy should listen for administrative commands.</p>
-
-</td>
-</tr>
-<tr id="ProxyConfig-availability_zone">
-<td><code>availabilityZone</code></td>
-<td><code>string</code></td>
-<td>
-<p>The availability zone where this Envoy instance is running. When running
-Envoy as a sidecar in Kubernetes, this flag must be one of the availability
-zones assigned to a node using failure-domain.beta.kubernetes.io/zone annotation.</p>
 
 </td>
 </tr>
