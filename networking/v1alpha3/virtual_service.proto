@@ -396,7 +396,7 @@ message HTTPRoute {
   // caller.
   map<string, string> append_response_headers = 13;
 
-  // HTTP headers to remove before forwarding forwarding a request to the
+  // HTTP headers to remove before forwarding a request to the
   // destination service.
   repeated string remove_request_headers = 14;
 
@@ -672,7 +672,7 @@ message HTTPRouteDestination {
   // caller.
   map<string, string> append_response_headers = 4;
 
-  // HTTP headers to remove before forwarding forwarding a request to the
+  // HTTP headers to remove before forwarding a request to the
   // destination service.
   repeated string remove_request_headers = 5;
 
