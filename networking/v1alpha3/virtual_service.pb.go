@@ -562,9 +562,6 @@ type TLSRoute struct {
 	// is matched if any one of the match blocks succeed.
 	Match []*TLSMatchAttributes `protobuf:"bytes,1,rep,name=match" json:"match,omitempty"`
 	// The destination to which the connection should be forwarded to.
-	// Currently, only one destination is allowed for TLS services. When TCP
-	// weighted routing support is introduced in Envoy, multiple destinations
-	// with weights can be specified.
 	Route []*RouteDestination `protobuf:"bytes,2,rep,name=route" json:"route,omitempty"`
 }
 
@@ -615,9 +612,6 @@ type TCPRoute struct {
 	// is matched if any one of the match blocks succeed.
 	Match []*L4MatchAttributes `protobuf:"bytes,1,rep,name=match" json:"match,omitempty"`
 	// The destination to which the connection should be forwarded to.
-	// Currently, only one destination is allowed for TCP services. When TCP
-	// weighted routing support is introduced in Envoy, multiple destinations
-	// with weights can be specified.
 	Route []*RouteDestination `protobuf:"bytes,2,rep,name=route" json:"route,omitempty"`
 }
 

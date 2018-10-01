@@ -444,9 +444,6 @@ message TLSRoute {
   repeated TLSMatchAttributes match = 1;
 
   // The destination to which the connection should be forwarded to.
-  // Currently, only one destination is allowed for TLS services. When TCP
-  // weighted routing support is introduced in Envoy, multiple destinations
-  // with weights can be specified.
   repeated RouteDestination route = 2;
 }
 
@@ -479,9 +476,6 @@ message TCPRoute {
   repeated L4MatchAttributes match = 1;
 
   // The destination to which the connection should be forwarded to.
-  // Currently, only one destination is allowed for TCP services. When TCP
-  // weighted routing support is introduced in Envoy, multiple destinations
-  // with weights can be specified.
   repeated RouteDestination route = 2;
 }
 
