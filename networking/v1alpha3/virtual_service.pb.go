@@ -406,7 +406,7 @@ type HTTPRoute struct {
 	// Additional HTTP headers to add before returning a response to the
 	// caller.
 	AppendResponseHeaders map[string]string `protobuf:"bytes,13,rep,name=append_response_headers,json=appendResponseHeaders" json:"append_response_headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// HTTP headers to remove before forwarding forwarding a request to the
+	// HTTP headers to remove before forwarding a request to the
 	// destination service.
 	RemoveRequestHeaders []string `protobuf:"bytes,14,rep,name=remove_request_headers,json=removeRequestHeaders" json:"remove_request_headers,omitempty"`
 	// Additional HTTP headers to add before forwarding a request to the
@@ -877,7 +877,7 @@ type HTTPRouteDestination struct {
 	// Additional HTTP headers to add before returning a response to the
 	// caller.
 	AppendResponseHeaders map[string]string `protobuf:"bytes,4,rep,name=append_response_headers,json=appendResponseHeaders" json:"append_response_headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// HTTP headers to remove before forwarding forwarding a request to the
+	// HTTP headers to remove before forwarding a request to the
 	// destination service.
 	RemoveRequestHeaders []string `protobuf:"bytes,5,rep,name=remove_request_headers,json=removeRequestHeaders" json:"remove_request_headers,omitempty"`
 	// Additional HTTP headers to add before forwarding a request to the
