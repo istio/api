@@ -3,6 +3,7 @@
 
 import sys
 _b=sys.version_info[0]<3 and (lambda x:x) or (lambda x:x.encode('latin1'))
+from google.protobuf.internal import enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
@@ -19,14 +20,12 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='audit/v1alpha1/audit.proto',
   package='istio.audit.v1alpha1',
   syntax='proto3',
-  serialized_pb=_b('\n\x1a\x61udit/v1alpha1/audit.proto\x12\x14istio.audit.v1alpha1\"}\n\x0e\x41uditDirective\x12\x39\n\x05level\x18\x01 \x01(\x0e\x32*.istio.audit.v1alpha1.AuditDirective.Level\"0\n\x05Level\x12\x08\n\x04NONE\x10\x00\x12\x0c\n\x08METADATA\x10\x01\x12\x0f\n\x0b\x41PP_DEFINED\x10\x02\x42\x1dZ\x1bistio.io/api/audit/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x1a\x61udit/v1alpha1/audit.proto\x12\x14istio.audit.v1alpha1\"A\n\x0e\x41uditDirective\x12/\n\x05level\x18\x01 \x01(\x0e\x32 .istio.audit.v1alpha1.AuditLevel*5\n\nAuditLevel\x12\x08\n\x04NONE\x10\x00\x12\x0c\n\x08METADATA\x10\x01\x12\x0f\n\x0b\x41PP_DEFINED\x10\x02\x42\x1dZ\x1bistio.io/api/audit/v1alpha1b\x06proto3')
 )
 
-
-
-_AUDITDIRECTIVE_LEVEL = _descriptor.EnumDescriptor(
-  name='Level',
-  full_name='istio.audit.v1alpha1.AuditDirective.Level',
+_AUDITLEVEL = _descriptor.EnumDescriptor(
+  name='AuditLevel',
+  full_name='istio.audit.v1alpha1.AuditLevel',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -45,10 +44,16 @@ _AUDITDIRECTIVE_LEVEL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=129,
-  serialized_end=177,
+  serialized_start=119,
+  serialized_end=172,
 )
-_sym_db.RegisterEnumDescriptor(_AUDITDIRECTIVE_LEVEL)
+_sym_db.RegisterEnumDescriptor(_AUDITLEVEL)
+
+AuditLevel = enum_type_wrapper.EnumTypeWrapper(_AUDITLEVEL)
+NONE = 0
+METADATA = 1
+APP_DEFINED = 2
+
 
 
 _AUDITDIRECTIVE = _descriptor.Descriptor(
@@ -70,7 +75,6 @@ _AUDITDIRECTIVE = _descriptor.Descriptor(
   ],
   nested_types=[],
   enum_types=[
-    _AUDITDIRECTIVE_LEVEL,
   ],
   options=None,
   is_extendable=False,
@@ -79,12 +83,12 @@ _AUDITDIRECTIVE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=52,
-  serialized_end=177,
+  serialized_end=117,
 )
 
-_AUDITDIRECTIVE.fields_by_name['level'].enum_type = _AUDITDIRECTIVE_LEVEL
-_AUDITDIRECTIVE_LEVEL.containing_type = _AUDITDIRECTIVE
+_AUDITDIRECTIVE.fields_by_name['level'].enum_type = _AUDITLEVEL
 DESCRIPTOR.message_types_by_name['AuditDirective'] = _AUDITDIRECTIVE
+DESCRIPTOR.enum_types_by_name['AuditLevel'] = _AUDITLEVEL
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 AuditDirective = _reflection.GeneratedProtocolMessageType('AuditDirective', (_message.Message,), dict(

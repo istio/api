@@ -19,19 +19,21 @@ package istio.audit.v1alpha1;
 option go_package = "istio.io/api/audit/v1alpha1";
 
 // $hide_from_docs
+// Defines the audit log content.
+enum AuditLevel {
+  // No log is generated.
+  NONE = 0;
+
+  // Log request metadata (timestamp, caller identity, request path, method, etc) only.
+  METADATA = 1;
+
+  // Log request metadata and annotated content from request or response.
+  APP_DEFINED = 2;
+}
+
+// $hide_from_docs
 // Expresses the audit actions to be performed after a check call.
 message AuditDirective {
-  enum Level {
-    // No log is generated.
-    NONE = 0;
-
-    // Log request metadata (timestamp, caller identity, request path, method, etc) only.
-    METADATA = 1;
-
-    // Log request metadata and annotated content from request or response.
-    APP_DEFINED = 2;
-  }
-
   // Defines the audit log content.
-  Level level = 1;
+  AuditLevel level = 1;
 }
