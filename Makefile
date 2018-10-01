@@ -70,6 +70,8 @@ protoc_gen_docs_plugin := --docs_out=warnings=true,mode=html_fragment_with_front
 #####################
 
 generate: \
+	generate-audit-go \
+	generate-audit-python \
 	generate-mcp-go \
 	generate-mcp-python \
 	generate-mesh-go \
@@ -84,6 +86,30 @@ generate: \
 	generate-authn-python \
 	generate-envoy-go \
 	generate-envoy-python
+
+#####################
+# audit/...
+#####################
+
+audit_v1alpha1_path := audit/v1alpha1
+audit_v1alpha1_protos := $(shell find $(audit_v1alpha1_path) -type f -name '*.proto' | sort)
+audit_v1alpha1_pb_gos := $(audit_v1alpha1_protos:.proto=.pb.go)
+audit_v1alpha1_pb_pythons := $(audit_v1alpha1_protos:.proto=_pb2.py)
+audit_v1alpha1_pb_doc := $(audit_v1alpha1_path)/istio.audit.v1alpha1.pb.html
+
+generate-audit-go: $(audit_v1alpha1_pb_gos) $(audit_v1alpha1_pb_doc)
+$(audit_v1alpha1_pb_gos) $(audit_v1alpha1_pb_doc): $(audit_v1alpha1_protos)
+	## Generate audit/v1alpha1/*.pb.go
+	$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(audit_v1alpha1_path) $^
+
+generate-audit-python: $(audit_v1alpha1_pb_pythons)
+$(audit_v1alpha1_pb_pythons): $(audit_v1alpha1_protos)
+	## Generate python/istio_api/audit/v1alpha1/*_pb2.py
+	@$(docker_gen) $(protoc_gen_python_plugin) $^
+
+clean-audit:
+	rm -f $(audit_v1alpha1_pb_gos)
+	rm -f $(audit_v1alpha1_pb_doc)
 
 #####################
 # mcp/...
@@ -325,7 +351,8 @@ clean-envoy:
 clean-python:
 	rm -rf python/istio_api/*
 
-clean: 	clean-mcp \
+clean: 	clean-audit \
+	clean-mcp \
 	clean-mesh \
 	clean-mixer \
 	clean-routing \

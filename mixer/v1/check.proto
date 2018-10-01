@@ -21,6 +21,7 @@ option go_package = "istio.io/api/mixer/v1";
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 import "google/rpc/status.proto";
+import "audit/v1alpha1/audit.proto";
 import "mixer/v1/attributes.proto";
 
 option (gogoproto.goproto_getters_all) = false;
@@ -82,6 +83,9 @@ message CheckResponse {
     // An optional routing directive, used to manipulate the traffic metadata
     // whenever all preconditions are satisfied.
     RouteDirective route_directive = 6;
+
+    // An optional audit directive, used to decide audit actions.
+    audit.v1alpha1.AuditDirective audit_directive = 7;
   }
 
   // Expresses the result of a quota allocation.
