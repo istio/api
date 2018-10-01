@@ -28,7 +28,7 @@ message AuditDirective {
     // Log request metadata (timestamp, caller identity, request path, method, etc) only.
     METADATA = 1;
 
-    // Audit content is provided by the backend application.
+    // Log request metadata and annotated content from request or response.
     APP_DEFINED = 2;
   }
 

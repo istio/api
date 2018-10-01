@@ -38,7 +38,7 @@ const (
 	AuditDirective_NONE AuditDirective_Level = 0
 	// Log request metadata (timestamp, caller identity, request path, method, etc) only.
 	AuditDirective_METADATA AuditDirective_Level = 1
-	// Audit content is provided by the backend application.
+	// Log request metadata and annotated content from request or response.
 	AuditDirective_APP_DEFINED AuditDirective_Level = 2
 )
 
