@@ -3044,6 +3044,17 @@ said port will be allowed (i.e. 0.0.0.0:<port>).</p>
 
 </td>
 </tr>
+<tr id="ServiceEntry-spiffee_identities">
+<td><code>spiffeeIdentities</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>One or more spiffe IDs associated with the endpoints of this
+service. The spiffee IDs will be used to verify the identity of the
+endpoints when the destination rule for the service uses ISTIO_MUTUAL
+as the TLS mode.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -3087,6 +3098,18 @@ service. Do not use for unix:// addresses.</p>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
 <p>One or more labels associated with the endpoint.</p>
+
+</td>
+</tr>
+<tr id="ServiceEntry-Endpoint-network_name">
+<td><code>networkName</code></td>
+<td><code>string</code></td>
+<td>
+<p>Network names allow to group endpoints resident in the same
+failure domain/administrative boundry/rfc1918 network (e.g., a
+kubernetes cluster, availability zone, etc.). The network name
+can be used for a variety of purposes, one of which is zone-aware
+routing.</p>
 
 </td>
 </tr>
@@ -3599,8 +3622,7 @@ Should be empty if mode is <code>ISTIO_MUTUAL</code>.</p>
 <td>
 <p>A list of alternate names to verify the subject identity in the
 certificate. If specified, the proxy will verify that the server
-certificate&rsquo;s subject alt name matches one of the specified values.
-Should be empty if mode is <code>ISTIO_MUTUAL</code>.</p>
+certificate&rsquo;s subject alt name matches one of the specified values.</p>
 
 </td>
 </tr>
@@ -3608,8 +3630,7 @@ Should be empty if mode is <code>ISTIO_MUTUAL</code>.</p>
 <td><code>sni</code></td>
 <td><code>string</code></td>
 <td>
-<p>SNI string to present to the server during TLS handshake.
-Should be empty if mode is <code>ISTIO_MUTUAL</code>.</p>
+<p>SNI string to present to the server during TLS handshake.</p>
 
 </td>
 </tr>

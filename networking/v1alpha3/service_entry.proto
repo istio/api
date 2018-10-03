@@ -390,6 +390,13 @@ message ServiceEntry {
 
     // One or more labels associated with the endpoint.
     map<string, string> labels = 3;
+
+    // Network names allow to group endpoints resident in the same
+    // failure domain/administrative boundry/rfc1918 network (e.g., a
+    // kubernetes cluster, availability zone, etc.). The network name
+    // can be used for a variety of purposes, one of which is zone-aware
+    // routing.
+    string network_name = 4;
   };
 
   // One or more endpoints associated with the service.
