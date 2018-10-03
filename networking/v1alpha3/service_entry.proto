@@ -394,4 +394,10 @@ message ServiceEntry {
 
   // One or more endpoints associated with the service.
   repeated Endpoint endpoints = 6;
+
+  // One or more spiffe IDs associated with the endpoints of this
+  // service. The spiffee IDs will be used to verify the identity of the
+  // endpoints when the destination rule for the service uses ISTIO_MUTUAL
+  // as the TLS mode.
+  repeated string spiffee_identities = 7;
 }
