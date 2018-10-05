@@ -611,11 +611,11 @@ https://github.com/envoyproxy/data-plane-api/blob/master/envoy/config/filter/acc
 </tr>
 </thead>
 <tbody>
-<tr id="RandomSampling-attribute">
-<td><code>attribute</code></td>
+<tr id="RandomSampling-attribute_expression">
+<td><code>attributeExpression</code></td>
 <td><code>string</code></td>
 <td>
-<p>Optional. Specify an attribute to use to extract numerator for <code>percent_sampled</code> field.
+<p>Specifies an attribute expression to use to override the numerator in the <code>percent_sampled</code> field.
 If this value is set, but no value is found OR if that value is not a numeric value, then
 the derived sampling rate will be 0 (meaning no <code>Action</code>s are executed for a <code>Rule</code>).</p>
 
@@ -625,7 +625,7 @@ the derived sampling rate will be 0 (meaning no <code>Action</code>s are execute
 <td><code>percentSampled</code></td>
 <td><code><a href="#FractionalPercent">FractionalPercent</a></code></td>
 <td>
-<p>Required. The sampling rate, expressed as a percentage. Defaults to 0% with a denominator
+<p>The default sampling rate, expressed as a percentage. Defaults to 0% with a denominator
 of 100.</p>
 
 </td>
@@ -634,7 +634,7 @@ of 100.</p>
 <td><code>useIndependentRandomness</code></td>
 <td><code>bool</code></td>
 <td>
-<p>Optional. By default sampling will be based on the value of the request header <code>x-request-id</code>.
+<p>By default sampling will be based on the value of the request header <code>x-request-id</code>.
 This behavior will cause consistent sampling across <code>Rule</code>s and for the full trace of a
 request through a mesh (across hosts). If that value is not present and/or
 <code>use_independent_randomness</code> is set to true, the sampling will be done based on the value of
