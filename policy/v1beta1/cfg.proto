@@ -14,7 +14,9 @@
 
 syntax = "proto3";
 
+import "gogoproto/gogo.proto";
 import "google/protobuf/struct.proto";
+import "google/protobuf/duration.proto";
 import "policy/v1beta1/value_type.proto";
 
 package istio.policy.v1beta1;
@@ -152,6 +154,13 @@ message Rule {
   // Optional. Templatized operations on the response headers using attributes produced by the
   // rule actions.
   repeated HeaderOperationTemplate response_header_operations = 4;
+
+  // Optional. Provides the ability to add a sampling configuration for Mixer rules. This sampling
+  // will limit the scenarios in which the `actions` of the rule are executed. The sampling will
+  // only take place after a `match` predicate has evaluated to true.
+  //
+  // Default behavior is no sampling (the `actions` are executed for all requests).
+  SamplingConfig sampling_config = 5;
 }
 
 // Action describes which [Handler][istio.policy.v1beta1.Handler] to invoke and what data to pass to it for processing.
@@ -308,4 +317,35 @@ message Connection {
   string address = 2;
 
   // TODO: Add auth related fields.
+}
+
+// SamplingConfig is a wrapper around differing sampling strategies for Rule actions.
+message SamplingConfig {
+  oneof strategy {
+    RandomSampling random_sampling = 1;
+    RateLimitSampling rate_limit_sampling = 2;
+  }
+}
+
+// RandomSampling will filter based on the comparison of a randomly-generated value
+// against the threshold provided. When available, the `request.headers[x-request-id]`
+// attribute will be used as the source of the value. Otherwise, a PRNG will be used.
+//
+// Example: To restrict the execution of Rule actions to only 12.5% of requests, the
+// `sampling_rate` would be set `12.5`.
+message RandomSampling {
+  // Valid range: `[0.0, 100.0]`
+  double percent_allowed = 1;
+}
+
+// RateLimitSampling provides the ability to limit the number of Rule action executions that
+// occur over a period of time.
+message RateLimitSampling {
+  // Window in which to enforce the sampling rate.
+  google.protobuf.Duration sampling_duration = 1 [(gogoproto.nullable)=false,(gogoproto.stdduration) = true];
+  // Number of entries to allow during the `sampling_duration` before sampling is enforced.
+  int64 max_unsampled_entries = 2;
+  // The rate at which to sample entries once the unsampled limit has been reached. Sampling will be enforced
+  // as 1 per every `sampling_rate` entries allowed.
+  int64 sampling_rate = 3;
 }

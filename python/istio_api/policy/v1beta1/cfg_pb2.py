@@ -13,7 +13,9 @@ from google.protobuf import descriptor_pb2
 _sym_db = _symbol_database.Default()
 
 
+from gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
 from google.protobuf import struct_pb2 as google_dot_protobuf_dot_struct__pb2
+from google.protobuf import duration_pb2 as google_dot_protobuf_dot_duration__pb2
 from policy.v1beta1 import value_type_pb2 as policy_dot_v1beta1_dot_value__type__pb2
 
 
@@ -21,9 +23,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='policy/v1beta1/cfg.proto',
   package='istio.policy.v1beta1',
   syntax='proto3',
-  serialized_pb=_b('\n\x18policy/v1beta1/cfg.proto\x12\x14istio.policy.v1beta1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fpolicy/v1beta1/value_type.proto\"\xc5\x02\n\x11\x41ttributeManifest\x12\x10\n\x08revision\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12K\n\nattributes\x18\x03 \x03(\x0b\x32\x37.istio.policy.v1beta1.AttributeManifest.AttributesEntry\x1aY\n\rAttributeInfo\x12\x13\n\x0b\x64\x65scription\x18\x01 \x01(\t\x12\x33\n\nvalue_type\x18\x02 \x01(\x0e\x32\x1f.istio.policy.v1beta1.ValueType\x1ah\n\x0f\x41ttributesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x44\n\x05value\x18\x02 \x01(\x0b\x32\x35.istio.policy.v1beta1.AttributeManifest.AttributeInfo:\x02\x38\x01\"\xb0\x03\n\x04Rule\x12\r\n\x05match\x18\x01 \x01(\t\x12-\n\x07\x61\x63tions\x18\x02 \x03(\x0b\x32\x1c.istio.policy.v1beta1.Action\x12U\n\x19request_header_operations\x18\x03 \x03(\x0b\x32\x32.istio.policy.v1beta1.Rule.HeaderOperationTemplate\x12V\n\x1aresponse_header_operations\x18\x04 \x03(\x0b\x32\x32.istio.policy.v1beta1.Rule.HeaderOperationTemplate\x1a\xba\x01\n\x17HeaderOperationTemplate\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06values\x18\x02 \x03(\t\x12O\n\toperation\x18\x03 \x01(\x0e\x32<.istio.policy.v1beta1.Rule.HeaderOperationTemplate.Operation\"0\n\tOperation\x12\x0b\n\x07REPLACE\x10\x00\x12\n\n\x06REMOVE\x10\x01\x12\n\n\x06\x41PPEND\x10\x02\":\n\x06\x41\x63tion\x12\x0f\n\x07handler\x18\x02 \x01(\t\x12\x11\n\tinstances\x18\x03 \x03(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\"q\n\x08Instance\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x1c\n\x11\x63ompiled_template\x18\xf4\xed\xa9  \x01(\t\x12\x10\n\x08template\x18\x02 \x01(\t\x12\'\n\x06params\x18\x03 \x01(\x0b\x32\x17.google.protobuf.Struct\"\xa4\x01\n\x07Handler\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x1b\n\x10\x63ompiled_adapter\x18\xf4\xed\xa9  \x01(\t\x12\x0f\n\x07\x61\x64\x61pter\x18\x02 \x01(\t\x12\'\n\x06params\x18\x03 \x01(\x0b\x32\x17.google.protobuf.Struct\x12\x34\n\nconnection\x18\x04 \x01(\x0b\x32 .istio.policy.v1beta1.Connection\"\x1d\n\nConnection\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\tB\x1dZ\x1bistio.io/api/policy/v1beta1b\x06proto3')
+  serialized_pb=_b('\n\x18policy/v1beta1/cfg.proto\x12\x14istio.policy.v1beta1\x1a\x14gogoproto/gogo.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fpolicy/v1beta1/value_type.proto\"\xc5\x02\n\x11\x41ttributeManifest\x12\x10\n\x08revision\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12K\n\nattributes\x18\x03 \x03(\x0b\x32\x37.istio.policy.v1beta1.AttributeManifest.AttributesEntry\x1aY\n\rAttributeInfo\x12\x13\n\x0b\x64\x65scription\x18\x01 \x01(\t\x12\x33\n\nvalue_type\x18\x02 \x01(\x0e\x32\x1f.istio.policy.v1beta1.ValueType\x1ah\n\x0f\x41ttributesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x44\n\x05value\x18\x02 \x01(\x0b\x32\x35.istio.policy.v1beta1.AttributeManifest.AttributeInfo:\x02\x38\x01\"\xef\x03\n\x04Rule\x12\r\n\x05match\x18\x01 \x01(\t\x12-\n\x07\x61\x63tions\x18\x02 \x03(\x0b\x32\x1c.istio.policy.v1beta1.Action\x12U\n\x19request_header_operations\x18\x03 \x03(\x0b\x32\x32.istio.policy.v1beta1.Rule.HeaderOperationTemplate\x12V\n\x1aresponse_header_operations\x18\x04 \x03(\x0b\x32\x32.istio.policy.v1beta1.Rule.HeaderOperationTemplate\x12=\n\x0fsampling_config\x18\x05 \x01(\x0b\x32$.istio.policy.v1beta1.SamplingConfig\x1a\xba\x01\n\x17HeaderOperationTemplate\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06values\x18\x02 \x03(\t\x12O\n\toperation\x18\x03 \x01(\x0e\x32<.istio.policy.v1beta1.Rule.HeaderOperationTemplate.Operation\"0\n\tOperation\x12\x0b\n\x07REPLACE\x10\x00\x12\n\n\x06REMOVE\x10\x01\x12\n\n\x06\x41PPEND\x10\x02\":\n\x06\x41\x63tion\x12\x0f\n\x07handler\x18\x02 \x01(\t\x12\x11\n\tinstances\x18\x03 \x03(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\"q\n\x08Instance\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x1c\n\x11\x63ompiled_template\x18\xf4\xed\xa9  \x01(\t\x12\x10\n\x08template\x18\x02 \x01(\t\x12\'\n\x06params\x18\x03 \x01(\x0b\x32\x17.google.protobuf.Struct\"\xa4\x01\n\x07Handler\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x1b\n\x10\x63ompiled_adapter\x18\xf4\xed\xa9  \x01(\t\x12\x0f\n\x07\x61\x64\x61pter\x18\x02 \x01(\t\x12\'\n\x06params\x18\x03 \x01(\x0b\x32\x17.google.protobuf.Struct\x12\x34\n\nconnection\x18\x04 \x01(\x0b\x32 .istio.policy.v1beta1.Connection\"\x1d\n\nConnection\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\"\xa5\x01\n\x0eSamplingConfig\x12?\n\x0frandom_sampling\x18\x01 \x01(\x0b\x32$.istio.policy.v1beta1.RandomSamplingH\x00\x12\x46\n\x13rate_limit_sampling\x18\x02 \x01(\x0b\x32\'.istio.policy.v1beta1.RateLimitSamplingH\x00\x42\n\n\x08strategy\")\n\x0eRandomSampling\x12\x17\n\x0fpercent_allowed\x18\x01 \x01(\x01\"\x89\x01\n\x11RateLimitSampling\x12>\n\x11sampling_duration\x18\x01 \x01(\x0b\x32\x19.google.protobuf.DurationB\x08\xc8\xde\x1f\x00\x98\xdf\x1f\x01\x12\x1d\n\x15max_unsampled_entries\x18\x02 \x01(\x03\x12\x15\n\rsampling_rate\x18\x03 \x01(\x03\x42\x1dZ\x1bistio.io/api/policy/v1beta1b\x06proto3')
   ,
-  dependencies=[google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,policy_dot_v1beta1_dot_value__type__pb2.DESCRIPTOR,])
+  dependencies=[gogoproto_dot_gogo__pb2.DESCRIPTOR,google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,policy_dot_v1beta1_dot_value__type__pb2.DESCRIPTOR,])
 
 
 
@@ -48,8 +50,8 @@ _RULE_HEADEROPERATIONTEMPLATE_OPERATION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=826,
-  serialized_end=874,
+  serialized_start=943,
+  serialized_end=991,
 )
 _sym_db.RegisterEnumDescriptor(_RULE_HEADEROPERATIONTEMPLATE_OPERATION)
 
@@ -87,8 +89,8 @@ _ATTRIBUTEMANIFEST_ATTRIBUTEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=244,
-  serialized_end=333,
+  serialized_start=298,
+  serialized_end=387,
 )
 
 _ATTRIBUTEMANIFEST_ATTRIBUTESENTRY = _descriptor.Descriptor(
@@ -124,8 +126,8 @@ _ATTRIBUTEMANIFEST_ATTRIBUTESENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=335,
-  serialized_end=439,
+  serialized_start=389,
+  serialized_end=493,
 )
 
 _ATTRIBUTEMANIFEST = _descriptor.Descriptor(
@@ -168,8 +170,8 @@ _ATTRIBUTEMANIFEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=114,
-  serialized_end=439,
+  serialized_start=168,
+  serialized_end=493,
 )
 
 
@@ -214,8 +216,8 @@ _RULE_HEADEROPERATIONTEMPLATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=688,
-  serialized_end=874,
+  serialized_start=805,
+  serialized_end=991,
 )
 
 _RULE = _descriptor.Descriptor(
@@ -253,6 +255,13 @@ _RULE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='sampling_config', full_name='istio.policy.v1beta1.Rule.sampling_config', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -265,8 +274,8 @@ _RULE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=442,
-  serialized_end=874,
+  serialized_start=496,
+  serialized_end=991,
 )
 
 
@@ -310,8 +319,8 @@ _ACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=876,
-  serialized_end=934,
+  serialized_start=993,
+  serialized_end=1051,
 )
 
 
@@ -362,8 +371,8 @@ _INSTANCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=936,
-  serialized_end=1049,
+  serialized_start=1053,
+  serialized_end=1166,
 )
 
 
@@ -421,8 +430,8 @@ _HANDLER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1052,
-  serialized_end=1216,
+  serialized_start=1169,
+  serialized_end=1333,
 )
 
 
@@ -452,8 +461,125 @@ _CONNECTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1218,
-  serialized_end=1247,
+  serialized_start=1335,
+  serialized_end=1364,
+)
+
+
+_SAMPLINGCONFIG = _descriptor.Descriptor(
+  name='SamplingConfig',
+  full_name='istio.policy.v1beta1.SamplingConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='random_sampling', full_name='istio.policy.v1beta1.SamplingConfig.random_sampling', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='rate_limit_sampling', full_name='istio.policy.v1beta1.SamplingConfig.rate_limit_sampling', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='strategy', full_name='istio.policy.v1beta1.SamplingConfig.strategy',
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=1367,
+  serialized_end=1532,
+)
+
+
+_RANDOMSAMPLING = _descriptor.Descriptor(
+  name='RandomSampling',
+  full_name='istio.policy.v1beta1.RandomSampling',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='percent_allowed', full_name='istio.policy.v1beta1.RandomSampling.percent_allowed', index=0,
+      number=1, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1534,
+  serialized_end=1575,
+)
+
+
+_RATELIMITSAMPLING = _descriptor.Descriptor(
+  name='RateLimitSampling',
+  full_name='istio.policy.v1beta1.RateLimitSampling',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='sampling_duration', full_name='istio.policy.v1beta1.RateLimitSampling.sampling_duration', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=_descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\310\336\037\000\230\337\037\001')), file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='max_unsampled_entries', full_name='istio.policy.v1beta1.RateLimitSampling.max_unsampled_entries', index=1,
+      number=2, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='sampling_rate', full_name='istio.policy.v1beta1.RateLimitSampling.sampling_rate', index=2,
+      number=3, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1578,
+  serialized_end=1715,
 )
 
 _ATTRIBUTEMANIFEST_ATTRIBUTEINFO.fields_by_name['value_type'].enum_type = policy_dot_v1beta1_dot_value__type__pb2._VALUETYPE
@@ -467,15 +593,28 @@ _RULE_HEADEROPERATIONTEMPLATE_OPERATION.containing_type = _RULE_HEADEROPERATIONT
 _RULE.fields_by_name['actions'].message_type = _ACTION
 _RULE.fields_by_name['request_header_operations'].message_type = _RULE_HEADEROPERATIONTEMPLATE
 _RULE.fields_by_name['response_header_operations'].message_type = _RULE_HEADEROPERATIONTEMPLATE
+_RULE.fields_by_name['sampling_config'].message_type = _SAMPLINGCONFIG
 _INSTANCE.fields_by_name['params'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
 _HANDLER.fields_by_name['params'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
 _HANDLER.fields_by_name['connection'].message_type = _CONNECTION
+_SAMPLINGCONFIG.fields_by_name['random_sampling'].message_type = _RANDOMSAMPLING
+_SAMPLINGCONFIG.fields_by_name['rate_limit_sampling'].message_type = _RATELIMITSAMPLING
+_SAMPLINGCONFIG.oneofs_by_name['strategy'].fields.append(
+  _SAMPLINGCONFIG.fields_by_name['random_sampling'])
+_SAMPLINGCONFIG.fields_by_name['random_sampling'].containing_oneof = _SAMPLINGCONFIG.oneofs_by_name['strategy']
+_SAMPLINGCONFIG.oneofs_by_name['strategy'].fields.append(
+  _SAMPLINGCONFIG.fields_by_name['rate_limit_sampling'])
+_SAMPLINGCONFIG.fields_by_name['rate_limit_sampling'].containing_oneof = _SAMPLINGCONFIG.oneofs_by_name['strategy']
+_RATELIMITSAMPLING.fields_by_name['sampling_duration'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
 DESCRIPTOR.message_types_by_name['AttributeManifest'] = _ATTRIBUTEMANIFEST
 DESCRIPTOR.message_types_by_name['Rule'] = _RULE
 DESCRIPTOR.message_types_by_name['Action'] = _ACTION
 DESCRIPTOR.message_types_by_name['Instance'] = _INSTANCE
 DESCRIPTOR.message_types_by_name['Handler'] = _HANDLER
 DESCRIPTOR.message_types_by_name['Connection'] = _CONNECTION
+DESCRIPTOR.message_types_by_name['SamplingConfig'] = _SAMPLINGCONFIG
+DESCRIPTOR.message_types_by_name['RandomSampling'] = _RANDOMSAMPLING
+DESCRIPTOR.message_types_by_name['RateLimitSampling'] = _RATELIMITSAMPLING
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 AttributeManifest = _reflection.GeneratedProtocolMessageType('AttributeManifest', (_message.Message,), dict(
@@ -544,9 +683,32 @@ Connection = _reflection.GeneratedProtocolMessageType('Connection', (_message.Me
   ))
 _sym_db.RegisterMessage(Connection)
 
+SamplingConfig = _reflection.GeneratedProtocolMessageType('SamplingConfig', (_message.Message,), dict(
+  DESCRIPTOR = _SAMPLINGCONFIG,
+  __module__ = 'policy.v1beta1.cfg_pb2'
+  # @@protoc_insertion_point(class_scope:istio.policy.v1beta1.SamplingConfig)
+  ))
+_sym_db.RegisterMessage(SamplingConfig)
+
+RandomSampling = _reflection.GeneratedProtocolMessageType('RandomSampling', (_message.Message,), dict(
+  DESCRIPTOR = _RANDOMSAMPLING,
+  __module__ = 'policy.v1beta1.cfg_pb2'
+  # @@protoc_insertion_point(class_scope:istio.policy.v1beta1.RandomSampling)
+  ))
+_sym_db.RegisterMessage(RandomSampling)
+
+RateLimitSampling = _reflection.GeneratedProtocolMessageType('RateLimitSampling', (_message.Message,), dict(
+  DESCRIPTOR = _RATELIMITSAMPLING,
+  __module__ = 'policy.v1beta1.cfg_pb2'
+  # @@protoc_insertion_point(class_scope:istio.policy.v1beta1.RateLimitSampling)
+  ))
+_sym_db.RegisterMessage(RateLimitSampling)
+
 
 DESCRIPTOR.has_options = True
 DESCRIPTOR._options = _descriptor._ParseOptions(descriptor_pb2.FileOptions(), _b('Z\033istio.io/api/policy/v1beta1'))
 _ATTRIBUTEMANIFEST_ATTRIBUTESENTRY.has_options = True
 _ATTRIBUTEMANIFEST_ATTRIBUTESENTRY._options = _descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001'))
+_RATELIMITSAMPLING.fields_by_name['sampling_duration'].has_options = True
+_RATELIMITSAMPLING.fields_by_name['sampling_duration']._options = _descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\310\336\037\000\230\337\037\001'))
 # @@protoc_insertion_point(module_scope)

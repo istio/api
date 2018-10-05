@@ -4,7 +4,7 @@ description: Describes the rules used to configure Mixer's policy and telemetry 
 location: https://istio.io/docs/reference/config/policy-and-telemetry/istio.policy.v1beta1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 17
+number_of_entries: 20
 ---
 <p>Describes the rules used to configure Mixer&rsquo;s policy and telemetry features.</p>
 
@@ -517,6 +517,77 @@ proto defined by the template; this varies depending on the value of field <code
 </tbody>
 </table>
 </section>
+<h2 id="RandomSampling">RandomSampling</h2>
+<section>
+<p>RandomSampling will filter based on the comparison of a randomly-generated value
+against the threshold provided. When available, the <code>request.headers[x-request-id]</code>
+attribute will be used as the source of the value. Otherwise, a PRNG will be used.</p>
+
+<p>Example: To restrict the execution of Rule actions to only 12.5% of requests, the
+<code>sampling_rate</code> would be set <code>12.5</code>.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RandomSampling-percent_allowed">
+<td><code>percentAllowed</code></td>
+<td><code>double</code></td>
+<td>
+<p>Valid range: <code>[0.0, 100.0]</code></p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RateLimitSampling">RateLimitSampling</h2>
+<section>
+<p>RateLimitSampling provides the ability to limit the number of Rule action executions that
+occur over a period of time.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RateLimitSampling-sampling_duration">
+<td><code>samplingDuration</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td>
+<p>Window in which to enforce the sampling rate.</p>
+
+</td>
+</tr>
+<tr id="RateLimitSampling-max_unsampled_entries">
+<td><code>maxUnsampledEntries</code></td>
+<td><code>int64</code></td>
+<td>
+<p>Number of entries to allow during the <code>sampling_duration</code> before sampling is enforced.</p>
+
+</td>
+</tr>
+<tr id="RateLimitSampling-sampling_rate">
+<td><code>samplingRate</code></td>
+<td><code>int64</code></td>
+<td>
+<p>The rate at which to sample entries once the unsampled limit has been reached. Sampling will be enforced
+as 1 per every <code>sampling_rate</code> entries allowed.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="Rule">Rule</h2>
 <section>
 <p>A Rule is a selector and a set of intentions to be executed when the
@@ -584,6 +655,18 @@ rule actions.</p>
 <td>
 <p>Optional. Templatized operations on the response headers using attributes produced by the
 rule actions.</p>
+
+</td>
+</tr>
+<tr id="Rule-sampling_config">
+<td><code>samplingConfig</code></td>
+<td><code><a href="#SamplingConfig">SamplingConfig</a></code></td>
+<td>
+<p>Optional. Provides the ability to add a sampling configuration for Mixer rules. This sampling
+will limit the scenarios in which the <code>actions</code> of the rule are executed. The sampling will
+only take place after a <code>match</code> predicate has evaluated to true.</p>
+
+<p>Default behavior is no sampling (the <code>actions</code> are executed for all requests).</p>
 
 </td>
 </tr>
@@ -661,6 +744,34 @@ rule actions.</p>
 <td>
 <p>appends the values to the existing values (preserving existing values)</p>
 
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="SamplingConfig">SamplingConfig</h2>
+<section>
+<p>SamplingConfig is a wrapper around differing sampling strategies for Rule actions.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="SamplingConfig-random_sampling" class="oneof oneof-start">
+<td><code>randomSampling</code></td>
+<td><code><a href="#RandomSampling">RandomSampling (oneof)</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="SamplingConfig-rate_limit_sampling" class="oneof">
+<td><code>rateLimitSampling</code></td>
+<td><code><a href="#RateLimitSampling">RateLimitSampling (oneof)</a></code></td>
+<td>
 </td>
 </tr>
 </tbody>
