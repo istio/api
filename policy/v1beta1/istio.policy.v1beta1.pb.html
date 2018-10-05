@@ -4,7 +4,7 @@ description: Describes the rules used to configure Mixer's policy and telemetry 
 location: https://istio.io/docs/reference/config/policy-and-telemetry/istio.policy.v1beta1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 20
+number_of_entries: 22
 ---
 <p>Describes the rules used to configure Mixer&rsquo;s policy and telemetry features.</p>
 
@@ -298,6 +298,79 @@ type EmailAddress</p>
 </tbody>
 </table>
 </section>
+<h2 id="FractionalPercent">FractionalPercent</h2>
+<section>
+<p>A fractional percentage is used in cases in which for performance reasons performing floating
+point to integer conversions during randomness calculations is undesirable. The message includes
+both a numerator and denominator that together determine the final fractional value.</p>
+
+<ul>
+<li><strong>Example</strong>: <sup>1</sup>&frasl;<sub>100</sub> = 1%.</li>
+<li><strong>Example</strong>: <sup>3</sup>&frasl;<sub>10000</sub> = 0.03%.</li>
+</ul>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="FractionalPercent-numerator">
+<td><code>numerator</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Specifies the numerator. Defaults to 0.</p>
+
+</td>
+</tr>
+<tr id="FractionalPercent-denominator">
+<td><code>denominator</code></td>
+<td><code><a href="#FractionalPercent-DenominatorType">FractionalPercent.DenominatorType</a></code></td>
+<td>
+<p>Specifies the denominator. If the denominator specified is less than the numerator, the final
+fractional percentage is capped at 1 (100%).</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="FractionalPercent-DenominatorType">FractionalPercent.DenominatorType</h2>
+<section>
+<p>Fraction percentages support several fixed denominator values.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="FractionalPercent-DenominatorType-HUNDRED">
+<td><code>HUNDRED</code></td>
+<td>
+<p>100.</p>
+
+<p><strong>Example</strong>: <sup>1</sup>&frasl;<sub>100</sub> = 1%.</p>
+
+</td>
+</tr>
+<tr id="FractionalPercent-DenominatorType-TEN_THOUSAND">
+<td><code>TEN_THOUSAND</code></td>
+<td>
+<p>10,000.</p>
+
+<p><strong>Example</strong>: <sup>1</sup>&frasl;<sub>10000</sub> = 0.01%.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="Handler">Handler</h2>
 <section>
 <p>Handler allows the operator to configure a specific adapter implementation.
@@ -520,11 +593,14 @@ proto defined by the template; this varies depending on the value of field <code
 <h2 id="RandomSampling">RandomSampling</h2>
 <section>
 <p>RandomSampling will filter based on the comparison of a randomly-generated value
-against the threshold provided. When available, the <code>request.headers[x-request-id]</code>
-attribute will be used as the source of the value. Otherwise, a PRNG will be used.</p>
+against the threshold provided.</p>
 
 <p>Example: To restrict the execution of Rule actions to only 12.5% of requests, the
 <code>sampling_rate</code> would be set <code>12.5</code>.</p>
+
+<p>This sampling configuration is meant to closely match the access log RuntimeFilter configuration
+supported by Envoy:
+https://github.com/envoyproxy/data-plane-api/blob/master/envoy/config/filter/accesslog/v2/accesslog.proto#L113</p>
 
 <table class="message-fields">
 <thead>
@@ -535,11 +611,35 @@ attribute will be used as the source of the value. Otherwise, a PRNG will be use
 </tr>
 </thead>
 <tbody>
-<tr id="RandomSampling-percent_allowed">
-<td><code>percentAllowed</code></td>
-<td><code>double</code></td>
+<tr id="RandomSampling-attribute">
+<td><code>attribute</code></td>
+<td><code>string</code></td>
 <td>
-<p>Valid range: <code>[0.0, 100.0]</code></p>
+<p>Optional. Specify an attribute to use to extract numerator for <code>percent_sampled</code> field.
+If this value is set, but no value is found OR if that value is not a numeric value, then
+the derived sampling rate will be 0 (meaning no <code>Action</code>s are executed for a <code>Rule</code>).</p>
+
+</td>
+</tr>
+<tr id="RandomSampling-percent_sampled">
+<td><code>percentSampled</code></td>
+<td><code><a href="#FractionalPercent">FractionalPercent</a></code></td>
+<td>
+<p>Required. The sampling rate, expressed as a percentage. Defaults to 0% with a denominator
+of 100.</p>
+
+</td>
+</tr>
+<tr id="RandomSampling-use_independent_randomness">
+<td><code>useIndependentRandomness</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Optional. By default sampling will be based on the value of the request header <code>x-request-id</code>.
+This behavior will cause consistent sampling across <code>Rule</code>s and for the full trace of a
+request through a mesh (across hosts). If that value is not present and/or
+<code>use_independent_randomness</code> is set to true, the sampling will be done based on the value of
+attribue specified in <code>attribute</code>. If that attribute does not exist, the system will behave as
+if the sampling rate was 0 (meaning no <code>Action</code>s are executed for a <code>Rule</code>).</p>
 
 </td>
 </tr>
@@ -658,9 +758,9 @@ rule actions.</p>
 
 </td>
 </tr>
-<tr id="Rule-sampling_config">
-<td><code>samplingConfig</code></td>
-<td><code><a href="#SamplingConfig">SamplingConfig</a></code></td>
+<tr id="Rule-sampling">
+<td><code>sampling</code></td>
+<td><code><a href="#Sampling">Sampling</a></code></td>
 <td>
 <p>Optional. Provides the ability to add a sampling configuration for Mixer rules. This sampling
 will limit the scenarios in which the <code>actions</code> of the rule are executed. The sampling will
@@ -749,9 +849,11 @@ only take place after a <code>match</code> predicate has evaluated to true.</p>
 </tbody>
 </table>
 </section>
-<h2 id="SamplingConfig">SamplingConfig</h2>
+<h2 id="Sampling">Sampling</h2>
 <section>
-<p>SamplingConfig is a wrapper around differing sampling strategies for Rule actions.</p>
+<p>Sampling provides configuration of sampling strategies for Rule actions.
+Multiple sampling strategies are supported. When multiple strategies are configured,
+a request must be selected by all configured sampling strategies.</p>
 
 <table class="message-fields">
 <thead>
@@ -762,16 +864,21 @@ only take place after a <code>match</code> predicate has evaluated to true.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="SamplingConfig-random_sampling" class="oneof oneof-start">
+<tr id="Sampling-random_sampling">
 <td><code>randomSampling</code></td>
-<td><code><a href="#RandomSampling">RandomSampling (oneof)</a></code></td>
+<td><code><a href="#RandomSampling">RandomSampling</a></code></td>
 <td>
+<p>Optional. Provides filtering of actions based on random selection per request.</p>
+
 </td>
 </tr>
-<tr id="SamplingConfig-rate_limit_sampling" class="oneof">
+<tr id="Sampling-rate_limit_sampling">
 <td><code>rateLimitSampling</code></td>
-<td><code><a href="#RateLimitSampling">RateLimitSampling (oneof)</a></code></td>
+<td><code><a href="#RateLimitSampling">RateLimitSampling</a></code></td>
 <td>
+<p>Optional. Provides filtering of actions based on number of requests observed within
+a configured time window.</p>
+
 </td>
 </tr>
 </tbody>

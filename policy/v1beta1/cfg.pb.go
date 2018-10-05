@@ -16,9 +16,10 @@
 		Instance
 		Handler
 		Connection
-		SamplingConfig
+		Sampling
 		RandomSampling
 		RateLimitSampling
+		FractionalPercent
 		Value
 		IPAddress
 		Duration
@@ -44,7 +45,6 @@ import strings "strings"
 import reflect "reflect"
 import sortkeys "github.com/gogo/protobuf/sortkeys"
 
-import binary "encoding/binary"
 import types "github.com/gogo/protobuf/types"
 
 import io "io"
@@ -83,6 +83,33 @@ var Rule_HeaderOperationTemplate_Operation_value = map[string]int32{
 
 func (Rule_HeaderOperationTemplate_Operation) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptorCfg, []int{1, 0, 0}
+}
+
+// Fraction percentages support several fixed denominator values.
+type FractionalPercent_DenominatorType int32
+
+const (
+	// 100.
+	//
+	// **Example**: 1/100 = 1%.
+	HUNDRED FractionalPercent_DenominatorType = 0
+	// 10,000.
+	//
+	// **Example**: 1/10000 = 0.01%.
+	TEN_THOUSAND FractionalPercent_DenominatorType = 1
+)
+
+var FractionalPercent_DenominatorType_name = map[int32]string{
+	0: "HUNDRED",
+	1: "TEN_THOUSAND",
+}
+var FractionalPercent_DenominatorType_value = map[string]int32{
+	"HUNDRED":      0,
+	"TEN_THOUSAND": 1,
+}
+
+func (FractionalPercent_DenominatorType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptorCfg, []int{9, 0}
 }
 
 // AttributeManifest describes a set of Attributes produced by some component
@@ -242,7 +269,7 @@ type Rule struct {
 	// only take place after a `match` predicate has evaluated to true.
 	//
 	// Default behavior is no sampling (the `actions` are executed for all requests).
-	SamplingConfig *SamplingConfig `protobuf:"bytes,5,opt,name=sampling_config,json=samplingConfig" json:"sampling_config,omitempty"`
+	Sampling *Sampling `protobuf:"bytes,5,opt,name=sampling" json:"sampling,omitempty"`
 }
 
 func (m *Rule) Reset()                    { *m = Rule{} }
@@ -277,9 +304,9 @@ func (m *Rule) GetResponseHeaderOperations() []*Rule_HeaderOperationTemplate {
 	return nil
 }
 
-func (m *Rule) GetSamplingConfig() *SamplingConfig {
+func (m *Rule) GetSampling() *Sampling {
 	if m != nil {
-		return m.SamplingConfig
+		return m.Sampling
 	}
 	return nil
 }
@@ -573,150 +600,84 @@ func (m *Connection) GetAddress() string {
 	return ""
 }
 
-// SamplingConfig is a wrapper around differing sampling strategies for Rule actions.
-type SamplingConfig struct {
-	// Types that are valid to be assigned to Strategy:
-	//	*SamplingConfig_RandomSampling
-	//	*SamplingConfig_RateLimitSampling
-	Strategy isSamplingConfig_Strategy `protobuf_oneof:"strategy"`
+// Sampling provides configuration of sampling strategies for Rule actions.
+// Multiple sampling strategies are supported. When multiple strategies are configured,
+// a request must be selected by all configured sampling strategies.
+type Sampling struct {
+	// Optional. Provides filtering of actions based on random selection per request.
+	RandomSampling *RandomSampling `protobuf:"bytes,1,opt,name=random_sampling,json=randomSampling" json:"random_sampling,omitempty"`
+	// Optional. Provides filtering of actions based on number of requests observed within
+	// a configured time window.
+	RateLimitSampling *RateLimitSampling `protobuf:"bytes,2,opt,name=rate_limit_sampling,json=rateLimitSampling" json:"rate_limit_sampling,omitempty"`
 }
 
-func (m *SamplingConfig) Reset()                    { *m = SamplingConfig{} }
-func (*SamplingConfig) ProtoMessage()               {}
-func (*SamplingConfig) Descriptor() ([]byte, []int) { return fileDescriptorCfg, []int{6} }
+func (m *Sampling) Reset()                    { *m = Sampling{} }
+func (*Sampling) ProtoMessage()               {}
+func (*Sampling) Descriptor() ([]byte, []int) { return fileDescriptorCfg, []int{6} }
 
-type isSamplingConfig_Strategy interface {
-	isSamplingConfig_Strategy()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type SamplingConfig_RandomSampling struct {
-	RandomSampling *RandomSampling `protobuf:"bytes,1,opt,name=random_sampling,json=randomSampling,oneof"`
-}
-type SamplingConfig_RateLimitSampling struct {
-	RateLimitSampling *RateLimitSampling `protobuf:"bytes,2,opt,name=rate_limit_sampling,json=rateLimitSampling,oneof"`
-}
-
-func (*SamplingConfig_RandomSampling) isSamplingConfig_Strategy()    {}
-func (*SamplingConfig_RateLimitSampling) isSamplingConfig_Strategy() {}
-
-func (m *SamplingConfig) GetStrategy() isSamplingConfig_Strategy {
+func (m *Sampling) GetRandomSampling() *RandomSampling {
 	if m != nil {
-		return m.Strategy
+		return m.RandomSampling
 	}
 	return nil
 }
 
-func (m *SamplingConfig) GetRandomSampling() *RandomSampling {
-	if x, ok := m.GetStrategy().(*SamplingConfig_RandomSampling); ok {
-		return x.RandomSampling
+func (m *Sampling) GetRateLimitSampling() *RateLimitSampling {
+	if m != nil {
+		return m.RateLimitSampling
 	}
 	return nil
-}
-
-func (m *SamplingConfig) GetRateLimitSampling() *RateLimitSampling {
-	if x, ok := m.GetStrategy().(*SamplingConfig_RateLimitSampling); ok {
-		return x.RateLimitSampling
-	}
-	return nil
-}
-
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*SamplingConfig) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _SamplingConfig_OneofMarshaler, _SamplingConfig_OneofUnmarshaler, _SamplingConfig_OneofSizer, []interface{}{
-		(*SamplingConfig_RandomSampling)(nil),
-		(*SamplingConfig_RateLimitSampling)(nil),
-	}
-}
-
-func _SamplingConfig_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*SamplingConfig)
-	// strategy
-	switch x := m.Strategy.(type) {
-	case *SamplingConfig_RandomSampling:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RandomSampling); err != nil {
-			return err
-		}
-	case *SamplingConfig_RateLimitSampling:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RateLimitSampling); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("SamplingConfig.Strategy has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _SamplingConfig_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*SamplingConfig)
-	switch tag {
-	case 1: // strategy.random_sampling
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(RandomSampling)
-		err := b.DecodeMessage(msg)
-		m.Strategy = &SamplingConfig_RandomSampling{msg}
-		return true, err
-	case 2: // strategy.rate_limit_sampling
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(RateLimitSampling)
-		err := b.DecodeMessage(msg)
-		m.Strategy = &SamplingConfig_RateLimitSampling{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _SamplingConfig_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*SamplingConfig)
-	// strategy
-	switch x := m.Strategy.(type) {
-	case *SamplingConfig_RandomSampling:
-		s := proto.Size(x.RandomSampling)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *SamplingConfig_RateLimitSampling:
-		s := proto.Size(x.RateLimitSampling)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // RandomSampling will filter based on the comparison of a randomly-generated value
-// against the threshold provided. When available, the `request.headers[x-request-id]`
-// attribute will be used as the source of the value. Otherwise, a PRNG will be used.
+// against the threshold provided.
 //
 // Example: To restrict the execution of Rule actions to only 12.5% of requests, the
 // `sampling_rate` would be set `12.5`.
+//
+// This sampling configuration is meant to closely match the access log RuntimeFilter configuration
+// supported by Envoy:
+// https://github.com/envoyproxy/data-plane-api/blob/master/envoy/config/filter/accesslog/v2/accesslog.proto#L113
 type RandomSampling struct {
-	// Valid range: `[0.0, 100.0]`
-	PercentAllowed float64 `protobuf:"fixed64,1,opt,name=percent_allowed,json=percentAllowed,proto3" json:"percent_allowed,omitempty"`
+	// Optional. Specify an attribute to use to extract numerator for `percent_sampled` field.
+	// If this value is set, but no value is found OR if that value is not a numeric value, then
+	// the derived sampling rate will be 0 (meaning no `Action`s are executed for a `Rule`).
+	Attribute string `protobuf:"bytes,1,opt,name=attribute,proto3" json:"attribute,omitempty"`
+	// Required. The sampling rate, expressed as a percentage. Defaults to 0% with a denominator
+	// of 100.
+	PercentSampled *FractionalPercent `protobuf:"bytes,2,opt,name=percent_sampled,json=percentSampled" json:"percent_sampled,omitempty"`
+	// Optional. By default sampling will be based on the value of the request header `x-request-id`.
+	// This behavior will cause consistent sampling across `Rule`s and for the full trace of a
+	// request through a mesh (across hosts). If that value is not present and/or
+	// `use_independent_randomness` is set to true, the sampling will be done based on the value of
+	// attribue specified in `attribute`. If that attribute does not exist, the system will behave as
+	// if the sampling rate was 0 (meaning no `Action`s are executed for a `Rule`).
+	UseIndependentRandomness bool `protobuf:"varint,3,opt,name=use_independent_randomness,json=useIndependentRandomness,proto3" json:"use_independent_randomness,omitempty"`
 }
 
 func (m *RandomSampling) Reset()                    { *m = RandomSampling{} }
 func (*RandomSampling) ProtoMessage()               {}
 func (*RandomSampling) Descriptor() ([]byte, []int) { return fileDescriptorCfg, []int{7} }
 
-func (m *RandomSampling) GetPercentAllowed() float64 {
+func (m *RandomSampling) GetAttribute() string {
 	if m != nil {
-		return m.PercentAllowed
+		return m.Attribute
 	}
-	return 0
+	return ""
+}
+
+func (m *RandomSampling) GetPercentSampled() *FractionalPercent {
+	if m != nil {
+		return m.PercentSampled
+	}
+	return nil
+}
+
+func (m *RandomSampling) GetUseIndependentRandomness() bool {
+	if m != nil {
+		return m.UseIndependentRandomness
+	}
+	return false
 }
 
 // RateLimitSampling provides the ability to limit the number of Rule action executions that
@@ -756,6 +717,38 @@ func (m *RateLimitSampling) GetSamplingRate() int64 {
 	return 0
 }
 
+// A fractional percentage is used in cases in which for performance reasons performing floating
+// point to integer conversions during randomness calculations is undesirable. The message includes
+// both a numerator and denominator that together determine the final fractional value.
+//
+// * **Example**: 1/100 = 1%.
+// * **Example**: 3/10000 = 0.03%.
+type FractionalPercent struct {
+	// Specifies the numerator. Defaults to 0.
+	Numerator uint32 `protobuf:"varint,1,opt,name=numerator,proto3" json:"numerator,omitempty"`
+	// Specifies the denominator. If the denominator specified is less than the numerator, the final
+	// fractional percentage is capped at 1 (100%).
+	Denominator FractionalPercent_DenominatorType `protobuf:"varint,2,opt,name=denominator,proto3,enum=istio.policy.v1beta1.FractionalPercent_DenominatorType" json:"denominator,omitempty"`
+}
+
+func (m *FractionalPercent) Reset()                    { *m = FractionalPercent{} }
+func (*FractionalPercent) ProtoMessage()               {}
+func (*FractionalPercent) Descriptor() ([]byte, []int) { return fileDescriptorCfg, []int{9} }
+
+func (m *FractionalPercent) GetNumerator() uint32 {
+	if m != nil {
+		return m.Numerator
+	}
+	return 0
+}
+
+func (m *FractionalPercent) GetDenominator() FractionalPercent_DenominatorType {
+	if m != nil {
+		return m.Denominator
+	}
+	return HUNDRED
+}
+
 func init() {
 	proto.RegisterType((*AttributeManifest)(nil), "istio.policy.v1beta1.AttributeManifest")
 	proto.RegisterType((*AttributeManifest_AttributeInfo)(nil), "istio.policy.v1beta1.AttributeManifest.AttributeInfo")
@@ -765,13 +758,22 @@ func init() {
 	proto.RegisterType((*Instance)(nil), "istio.policy.v1beta1.Instance")
 	proto.RegisterType((*Handler)(nil), "istio.policy.v1beta1.Handler")
 	proto.RegisterType((*Connection)(nil), "istio.policy.v1beta1.Connection")
-	proto.RegisterType((*SamplingConfig)(nil), "istio.policy.v1beta1.SamplingConfig")
+	proto.RegisterType((*Sampling)(nil), "istio.policy.v1beta1.Sampling")
 	proto.RegisterType((*RandomSampling)(nil), "istio.policy.v1beta1.RandomSampling")
 	proto.RegisterType((*RateLimitSampling)(nil), "istio.policy.v1beta1.RateLimitSampling")
+	proto.RegisterType((*FractionalPercent)(nil), "istio.policy.v1beta1.FractionalPercent")
 	proto.RegisterEnum("istio.policy.v1beta1.Rule_HeaderOperationTemplate_Operation", Rule_HeaderOperationTemplate_Operation_name, Rule_HeaderOperationTemplate_Operation_value)
+	proto.RegisterEnum("istio.policy.v1beta1.FractionalPercent_DenominatorType", FractionalPercent_DenominatorType_name, FractionalPercent_DenominatorType_value)
 }
 func (x Rule_HeaderOperationTemplate_Operation) String() string {
 	s, ok := Rule_HeaderOperationTemplate_Operation_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x FractionalPercent_DenominatorType) String() string {
+	s, ok := FractionalPercent_DenominatorType_name[int32(x)]
 	if ok {
 		return s
 	}
@@ -885,7 +887,7 @@ func (this *Rule) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if !this.SamplingConfig.Equal(that1.SamplingConfig) {
+	if !this.Sampling.Equal(that1.Sampling) {
 		return false
 	}
 	return true
@@ -1053,44 +1055,14 @@ func (this *Connection) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *SamplingConfig) Equal(that interface{}) bool {
+func (this *Sampling) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*SamplingConfig)
+	that1, ok := that.(*Sampling)
 	if !ok {
-		that2, ok := that.(SamplingConfig)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.Strategy == nil {
-		if this.Strategy != nil {
-			return false
-		}
-	} else if this.Strategy == nil {
-		return false
-	} else if !this.Strategy.Equal(that1.Strategy) {
-		return false
-	}
-	return true
-}
-func (this *SamplingConfig_RandomSampling) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SamplingConfig_RandomSampling)
-	if !ok {
-		that2, ok := that.(SamplingConfig_RandomSampling)
+		that2, ok := that.(Sampling)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1103,27 +1075,6 @@ func (this *SamplingConfig_RandomSampling) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.RandomSampling.Equal(that1.RandomSampling) {
-		return false
-	}
-	return true
-}
-func (this *SamplingConfig_RateLimitSampling) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SamplingConfig_RateLimitSampling)
-	if !ok {
-		that2, ok := that.(SamplingConfig_RateLimitSampling)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
 		return false
 	}
 	if !this.RateLimitSampling.Equal(that1.RateLimitSampling) {
@@ -1150,7 +1101,13 @@ func (this *RandomSampling) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.PercentAllowed != that1.PercentAllowed {
+	if this.Attribute != that1.Attribute {
+		return false
+	}
+	if !this.PercentSampled.Equal(that1.PercentSampled) {
+		return false
+	}
+	if this.UseIndependentRandomness != that1.UseIndependentRandomness {
 		return false
 	}
 	return true
@@ -1181,6 +1138,33 @@ func (this *RateLimitSampling) Equal(that interface{}) bool {
 		return false
 	}
 	if this.SamplingRate != that1.SamplingRate {
+		return false
+	}
+	return true
+}
+func (this *FractionalPercent) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*FractionalPercent)
+	if !ok {
+		that2, ok := that.(FractionalPercent)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Numerator != that1.Numerator {
+		return false
+	}
+	if this.Denominator != that1.Denominator {
 		return false
 	}
 	return true
@@ -1236,8 +1220,8 @@ func (this *Rule) GoString() string {
 	if this.ResponseHeaderOperations != nil {
 		s = append(s, "ResponseHeaderOperations: "+fmt.Sprintf("%#v", this.ResponseHeaderOperations)+",\n")
 	}
-	if this.SamplingConfig != nil {
-		s = append(s, "SamplingConfig: "+fmt.Sprintf("%#v", this.SamplingConfig)+",\n")
+	if this.Sampling != nil {
+		s = append(s, "Sampling: "+fmt.Sprintf("%#v", this.Sampling)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1309,41 +1293,32 @@ func (this *Connection) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *SamplingConfig) GoString() string {
+func (this *Sampling) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 6)
-	s = append(s, "&v1beta1.SamplingConfig{")
-	if this.Strategy != nil {
-		s = append(s, "Strategy: "+fmt.Sprintf("%#v", this.Strategy)+",\n")
+	s = append(s, "&v1beta1.Sampling{")
+	if this.RandomSampling != nil {
+		s = append(s, "RandomSampling: "+fmt.Sprintf("%#v", this.RandomSampling)+",\n")
+	}
+	if this.RateLimitSampling != nil {
+		s = append(s, "RateLimitSampling: "+fmt.Sprintf("%#v", this.RateLimitSampling)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
-}
-func (this *SamplingConfig_RandomSampling) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&v1beta1.SamplingConfig_RandomSampling{` +
-		`RandomSampling:` + fmt.Sprintf("%#v", this.RandomSampling) + `}`}, ", ")
-	return s
-}
-func (this *SamplingConfig_RateLimitSampling) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&v1beta1.SamplingConfig_RateLimitSampling{` +
-		`RateLimitSampling:` + fmt.Sprintf("%#v", this.RateLimitSampling) + `}`}, ", ")
-	return s
 }
 func (this *RandomSampling) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 7)
 	s = append(s, "&v1beta1.RandomSampling{")
-	s = append(s, "PercentAllowed: "+fmt.Sprintf("%#v", this.PercentAllowed)+",\n")
+	s = append(s, "Attribute: "+fmt.Sprintf("%#v", this.Attribute)+",\n")
+	if this.PercentSampled != nil {
+		s = append(s, "PercentSampled: "+fmt.Sprintf("%#v", this.PercentSampled)+",\n")
+	}
+	s = append(s, "UseIndependentRandomness: "+fmt.Sprintf("%#v", this.UseIndependentRandomness)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1356,6 +1331,17 @@ func (this *RateLimitSampling) GoString() string {
 	s = append(s, "SamplingDuration: "+fmt.Sprintf("%#v", this.SamplingDuration)+",\n")
 	s = append(s, "MaxUnsampledEntries: "+fmt.Sprintf("%#v", this.MaxUnsampledEntries)+",\n")
 	s = append(s, "SamplingRate: "+fmt.Sprintf("%#v", this.SamplingRate)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *FractionalPercent) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&v1beta1.FractionalPercent{")
+	s = append(s, "Numerator: "+fmt.Sprintf("%#v", this.Numerator)+",\n")
+	s = append(s, "Denominator: "+fmt.Sprintf("%#v", this.Denominator)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1511,11 +1497,11 @@ func (m *Rule) MarshalTo(dAtA []byte) (int, error) {
 			i += n
 		}
 	}
-	if m.SamplingConfig != nil {
+	if m.Sampling != nil {
 		dAtA[i] = 0x2a
 		i++
-		i = encodeVarintCfg(dAtA, i, uint64(m.SamplingConfig.Size()))
-		n2, err := m.SamplingConfig.MarshalTo(dAtA[i:])
+		i = encodeVarintCfg(dAtA, i, uint64(m.Sampling.Size()))
+		n2, err := m.Sampling.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1755,7 +1741,7 @@ func (m *Connection) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *SamplingConfig) Marshal() (dAtA []byte, err error) {
+func (m *Sampling) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1765,28 +1751,26 @@ func (m *SamplingConfig) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SamplingConfig) MarshalTo(dAtA []byte) (int, error) {
+func (m *Sampling) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.Strategy != nil {
-		nn6, err := m.Strategy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn6
-	}
-	return i, nil
-}
-
-func (m *SamplingConfig_RandomSampling) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
 	if m.RandomSampling != nil {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintCfg(dAtA, i, uint64(m.RandomSampling.Size()))
-		n7, err := m.RandomSampling.MarshalTo(dAtA[i:])
+		n6, err := m.RandomSampling.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n6
+	}
+	if m.RateLimitSampling != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintCfg(dAtA, i, uint64(m.RateLimitSampling.Size()))
+		n7, err := m.RateLimitSampling.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1794,20 +1778,7 @@ func (m *SamplingConfig_RandomSampling) MarshalTo(dAtA []byte) (int, error) {
 	}
 	return i, nil
 }
-func (m *SamplingConfig_RateLimitSampling) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.RateLimitSampling != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintCfg(dAtA, i, uint64(m.RateLimitSampling.Size()))
-		n8, err := m.RateLimitSampling.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n8
-	}
-	return i, nil
-}
+
 func (m *RandomSampling) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1823,11 +1794,31 @@ func (m *RandomSampling) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.PercentAllowed != 0 {
-		dAtA[i] = 0x9
+	if len(m.Attribute) > 0 {
+		dAtA[i] = 0xa
 		i++
-		binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.PercentAllowed))))
-		i += 8
+		i = encodeVarintCfg(dAtA, i, uint64(len(m.Attribute)))
+		i += copy(dAtA[i:], m.Attribute)
+	}
+	if m.PercentSampled != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintCfg(dAtA, i, uint64(m.PercentSampled.Size()))
+		n8, err := m.PercentSampled.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n8
+	}
+	if m.UseIndependentRandomness {
+		dAtA[i] = 0x18
+		i++
+		if m.UseIndependentRandomness {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
 	}
 	return i, nil
 }
@@ -1864,6 +1855,34 @@ func (m *RateLimitSampling) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x18
 		i++
 		i = encodeVarintCfg(dAtA, i, uint64(m.SamplingRate))
+	}
+	return i, nil
+}
+
+func (m *FractionalPercent) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *FractionalPercent) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Numerator != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintCfg(dAtA, i, uint64(m.Numerator))
+	}
+	if m.Denominator != 0 {
+		dAtA[i] = 0x10
+		i++
+		i = encodeVarintCfg(dAtA, i, uint64(m.Denominator))
 	}
 	return i, nil
 }
@@ -1942,8 +1961,8 @@ func (m *Rule) Size() (n int) {
 			n += 1 + l + sovCfg(uint64(l))
 		}
 	}
-	if m.SamplingConfig != nil {
-		l = m.SamplingConfig.Size()
+	if m.Sampling != nil {
+		l = m.Sampling.Size()
 		n += 1 + l + sovCfg(uint64(l))
 	}
 	return n
@@ -2046,38 +2065,33 @@ func (m *Connection) Size() (n int) {
 	return n
 }
 
-func (m *SamplingConfig) Size() (n int) {
-	var l int
-	_ = l
-	if m.Strategy != nil {
-		n += m.Strategy.Size()
-	}
-	return n
-}
-
-func (m *SamplingConfig_RandomSampling) Size() (n int) {
+func (m *Sampling) Size() (n int) {
 	var l int
 	_ = l
 	if m.RandomSampling != nil {
 		l = m.RandomSampling.Size()
 		n += 1 + l + sovCfg(uint64(l))
 	}
-	return n
-}
-func (m *SamplingConfig_RateLimitSampling) Size() (n int) {
-	var l int
-	_ = l
 	if m.RateLimitSampling != nil {
 		l = m.RateLimitSampling.Size()
 		n += 1 + l + sovCfg(uint64(l))
 	}
 	return n
 }
+
 func (m *RandomSampling) Size() (n int) {
 	var l int
 	_ = l
-	if m.PercentAllowed != 0 {
-		n += 9
+	l = len(m.Attribute)
+	if l > 0 {
+		n += 1 + l + sovCfg(uint64(l))
+	}
+	if m.PercentSampled != nil {
+		l = m.PercentSampled.Size()
+		n += 1 + l + sovCfg(uint64(l))
+	}
+	if m.UseIndependentRandomness {
+		n += 2
 	}
 	return n
 }
@@ -2092,6 +2106,18 @@ func (m *RateLimitSampling) Size() (n int) {
 	}
 	if m.SamplingRate != 0 {
 		n += 1 + sovCfg(uint64(m.SamplingRate))
+	}
+	return n
+}
+
+func (m *FractionalPercent) Size() (n int) {
+	var l int
+	_ = l
+	if m.Numerator != 0 {
+		n += 1 + sovCfg(uint64(m.Numerator))
+	}
+	if m.Denominator != 0 {
+		n += 1 + sovCfg(uint64(m.Denominator))
 	}
 	return n
 }
@@ -2151,7 +2177,7 @@ func (this *Rule) String() string {
 		`Actions:` + strings.Replace(fmt.Sprintf("%v", this.Actions), "Action", "Action", 1) + `,`,
 		`RequestHeaderOperations:` + strings.Replace(fmt.Sprintf("%v", this.RequestHeaderOperations), "Rule_HeaderOperationTemplate", "Rule_HeaderOperationTemplate", 1) + `,`,
 		`ResponseHeaderOperations:` + strings.Replace(fmt.Sprintf("%v", this.ResponseHeaderOperations), "Rule_HeaderOperationTemplate", "Rule_HeaderOperationTemplate", 1) + `,`,
-		`SamplingConfig:` + strings.Replace(fmt.Sprintf("%v", this.SamplingConfig), "SamplingConfig", "SamplingConfig", 1) + `,`,
+		`Sampling:` + strings.Replace(fmt.Sprintf("%v", this.Sampling), "Sampling", "Sampling", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2217,31 +2243,12 @@ func (this *Connection) String() string {
 	}, "")
 	return s
 }
-func (this *SamplingConfig) String() string {
+func (this *Sampling) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&SamplingConfig{`,
-		`Strategy:` + fmt.Sprintf("%v", this.Strategy) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SamplingConfig_RandomSampling) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SamplingConfig_RandomSampling{`,
+	s := strings.Join([]string{`&Sampling{`,
 		`RandomSampling:` + strings.Replace(fmt.Sprintf("%v", this.RandomSampling), "RandomSampling", "RandomSampling", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SamplingConfig_RateLimitSampling) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SamplingConfig_RateLimitSampling{`,
 		`RateLimitSampling:` + strings.Replace(fmt.Sprintf("%v", this.RateLimitSampling), "RateLimitSampling", "RateLimitSampling", 1) + `,`,
 		`}`,
 	}, "")
@@ -2252,7 +2259,9 @@ func (this *RandomSampling) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&RandomSampling{`,
-		`PercentAllowed:` + fmt.Sprintf("%v", this.PercentAllowed) + `,`,
+		`Attribute:` + fmt.Sprintf("%v", this.Attribute) + `,`,
+		`PercentSampled:` + strings.Replace(fmt.Sprintf("%v", this.PercentSampled), "FractionalPercent", "FractionalPercent", 1) + `,`,
+		`UseIndependentRandomness:` + fmt.Sprintf("%v", this.UseIndependentRandomness) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2265,6 +2274,17 @@ func (this *RateLimitSampling) String() string {
 		`SamplingDuration:` + strings.Replace(strings.Replace(this.SamplingDuration.String(), "Duration", "google_protobuf2.Duration", 1), `&`, ``, 1) + `,`,
 		`MaxUnsampledEntries:` + fmt.Sprintf("%v", this.MaxUnsampledEntries) + `,`,
 		`SamplingRate:` + fmt.Sprintf("%v", this.SamplingRate) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *FractionalPercent) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&FractionalPercent{`,
+		`Numerator:` + fmt.Sprintf("%v", this.Numerator) + `,`,
+		`Denominator:` + fmt.Sprintf("%v", this.Denominator) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2759,7 +2779,7 @@ func (m *Rule) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SamplingConfig", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Sampling", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2783,10 +2803,10 @@ func (m *Rule) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.SamplingConfig == nil {
-				m.SamplingConfig = &SamplingConfig{}
+			if m.Sampling == nil {
+				m.Sampling = &Sampling{}
 			}
-			if err := m.SamplingConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Sampling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3527,7 +3547,7 @@ func (m *Connection) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *SamplingConfig) Unmarshal(dAtA []byte) error {
+func (m *Sampling) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3550,10 +3570,10 @@ func (m *SamplingConfig) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: SamplingConfig: wiretype end group for non-group")
+			return fmt.Errorf("proto: Sampling: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SamplingConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: Sampling: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3582,11 +3602,12 @@ func (m *SamplingConfig) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &RandomSampling{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if m.RandomSampling == nil {
+				m.RandomSampling = &RandomSampling{}
+			}
+			if err := m.RandomSampling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.Strategy = &SamplingConfig_RandomSampling{v}
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
@@ -3614,11 +3635,12 @@ func (m *SamplingConfig) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &RateLimitSampling{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if m.RateLimitSampling == nil {
+				m.RateLimitSampling = &RateLimitSampling{}
+			}
+			if err := m.RateLimitSampling.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.Strategy = &SamplingConfig_RateLimitSampling{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -3671,16 +3693,87 @@ func (m *RandomSampling) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 1 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PercentAllowed", wireType)
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Attribute", wireType)
 			}
-			var v uint64
-			if (iNdEx + 8) > l {
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCfg
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCfg
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v = uint64(binary.LittleEndian.Uint64(dAtA[iNdEx:]))
-			iNdEx += 8
-			m.PercentAllowed = float64(math.Float64frombits(v))
+			m.Attribute = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PercentSampled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCfg
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCfg
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.PercentSampled == nil {
+				m.PercentSampled = &FractionalPercent{}
+			}
+			if err := m.PercentSampled.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UseIndependentRandomness", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCfg
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.UseIndependentRandomness = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipCfg(dAtA[iNdEx:])
@@ -3820,6 +3913,94 @@ func (m *RateLimitSampling) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *FractionalPercent) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCfg
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: FractionalPercent: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: FractionalPercent: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Numerator", wireType)
+			}
+			m.Numerator = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCfg
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Numerator |= (uint32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Denominator", wireType)
+			}
+			m.Denominator = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCfg
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Denominator |= (FractionalPercent_DenominatorType(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCfg(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthCfg
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func skipCfg(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
@@ -3928,65 +4109,71 @@ var (
 func init() { proto.RegisterFile("policy/v1beta1/cfg.proto", fileDescriptorCfg) }
 
 var fileDescriptorCfg = []byte{
-	// 954 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x55, 0x4b, 0x6f, 0x23, 0x45,
-	0x10, 0xf6, 0xc4, 0x8e, 0x1f, 0x65, 0xd6, 0x8f, 0xde, 0x40, 0x66, 0x4d, 0x34, 0xb1, 0x06, 0xc4,
-	0xee, 0x01, 0x8d, 0x59, 0x23, 0x9e, 0x42, 0x08, 0x27, 0x6b, 0x29, 0x11, 0x1b, 0x12, 0xf5, 0x86,
-	0x45, 0xec, 0x65, 0xd4, 0x99, 0x69, 0x3b, 0x23, 0xe6, 0xb5, 0x33, 0xed, 0xb0, 0xbe, 0x71, 0xe1,
-	0xce, 0x11, 0x89, 0x3f, 0x00, 0x7f, 0x82, 0x73, 0x8e, 0x2b, 0x71, 0x59, 0x09, 0x09, 0x88, 0xb9,
-	0x70, 0x41, 0xca, 0x81, 0x1f, 0x80, 0xa6, 0xa7, 0x7b, 0xc6, 0x76, 0x9c, 0x43, 0xf6, 0xd6, 0x55,
-	0xf5, 0xf5, 0x57, 0xf5, 0x55, 0xd5, 0xf4, 0x80, 0x1a, 0x06, 0xae, 0x63, 0x4d, 0x7b, 0x67, 0xf7,
-	0x4f, 0x28, 0x23, 0xf7, 0x7b, 0xd6, 0x68, 0x6c, 0x84, 0x51, 0xc0, 0x02, 0xb4, 0xe1, 0xc4, 0xcc,
-	0x09, 0x8c, 0x34, 0x6e, 0x88, 0x78, 0x67, 0x63, 0x1c, 0x8c, 0x03, 0x0e, 0xe8, 0x25, 0xa7, 0x14,
-	0xdb, 0xd9, 0x1a, 0x07, 0xc1, 0xd8, 0xa5, 0x3d, 0x6e, 0x9d, 0x4c, 0x46, 0xbd, 0x98, 0x45, 0x13,
-	0x8b, 0x89, 0xa8, 0xb6, 0x1c, 0xb5, 0x27, 0x11, 0x61, 0x4e, 0xe0, 0x8b, 0xf8, 0xf6, 0x52, 0x0d,
-	0x67, 0xc4, 0x9d, 0x50, 0x93, 0x4d, 0x43, 0x9a, 0x02, 0xf4, 0xef, 0x8b, 0xd0, 0x1e, 0x30, 0x16,
-	0x39, 0x27, 0x13, 0x46, 0x0f, 0x88, 0xef, 0x8c, 0x68, 0xcc, 0x50, 0x07, 0xaa, 0x11, 0x3d, 0x73,
-	0x62, 0x27, 0xf0, 0x55, 0xa5, 0xab, 0xdc, 0xab, 0xe1, 0xcc, 0x46, 0x08, 0x4a, 0x3e, 0xf1, 0xa8,
-	0xba, 0xc6, 0xfd, 0xfc, 0x8c, 0xbe, 0x02, 0x20, 0x92, 0x24, 0x56, 0x8b, 0xdd, 0xe2, 0xbd, 0x7a,
-	0xff, 0x03, 0x63, 0x95, 0x4a, 0xe3, 0x4a, 0xb2, 0xdc, 0x13, 0x0f, 0x7d, 0x16, 0x4d, 0xf1, 0x1c,
-	0x55, 0xe7, 0x29, 0xdc, 0xca, 0xc2, 0xfb, 0xfe, 0x28, 0x40, 0x5d, 0xa8, 0xdb, 0x34, 0xb6, 0x22,
-	0x27, 0x64, 0x79, 0x71, 0xf3, 0x2e, 0xf4, 0x29, 0x40, 0xae, 0x92, 0x57, 0xd9, 0xe8, 0x6f, 0xaf,
-	0xae, 0xe5, 0x71, 0x82, 0x3b, 0x9e, 0x86, 0x14, 0xd7, 0xce, 0xe4, 0xb1, 0xc3, 0xa0, 0xb9, 0x54,
-	0x11, 0x6a, 0x41, 0xf1, 0x1b, 0x3a, 0x15, 0xc9, 0x92, 0x23, 0xfa, 0x1c, 0xd6, 0xf9, 0x0d, 0xce,
-	0x5f, 0xef, 0xbf, 0x77, 0x63, 0xad, 0x89, 0x18, 0x9c, 0x72, 0x7c, 0xbc, 0xf6, 0xa1, 0xa2, 0xff,
-	0x5e, 0x82, 0x12, 0x9e, 0xb8, 0x14, 0x6d, 0xc0, 0xba, 0x47, 0x98, 0x75, 0x2a, 0xb2, 0xa5, 0x06,
-	0x7a, 0x1f, 0x2a, 0xc4, 0x4a, 0xe4, 0xc5, 0xea, 0x1a, 0xef, 0xee, 0xd6, 0x35, 0x19, 0x39, 0x08,
-	0x4b, 0x30, 0xf2, 0xe1, 0x4e, 0x44, 0x9f, 0x4e, 0x68, 0xcc, 0xcc, 0x53, 0x4a, 0x6c, 0x1a, 0x99,
-	0x41, 0x48, 0xd3, 0x0d, 0x91, 0x73, 0xea, 0xaf, 0x66, 0x4a, 0x8a, 0x31, 0xf6, 0xf8, 0x9d, 0x43,
-	0x79, 0xe5, 0x98, 0x7a, 0xa1, 0x4b, 0x18, 0xc5, 0x9b, 0x82, 0x74, 0x29, 0x1e, 0xa3, 0x10, 0x3a,
-	0x11, 0x8d, 0xc3, 0xc0, 0x8f, 0xe9, 0x8a, 0x84, 0xa5, 0x97, 0x4e, 0xa8, 0x4a, 0xd6, 0x2b, 0x19,
-	0x0f, 0xa0, 0x19, 0x13, 0x2f, 0x74, 0x1d, 0x7f, 0x6c, 0x5a, 0x81, 0x3f, 0x72, 0xc6, 0xea, 0x3a,
-	0x9f, 0xc9, 0x9b, 0xab, 0xd3, 0x3c, 0x12, 0xe0, 0x5d, 0x8e, 0xc5, 0x8d, 0x78, 0xc1, 0xee, 0xfc,
-	0xa6, 0xc0, 0xe6, 0x35, 0x45, 0x64, 0x9b, 0xaf, 0xcc, 0x6d, 0xfe, 0x6b, 0x50, 0xe6, 0x43, 0x4c,
-	0xe7, 0x52, 0xc3, 0xc2, 0x42, 0x4f, 0xa0, 0x96, 0x09, 0x57, 0x8b, 0x7c, 0x09, 0x3f, 0xb9, 0xb9,
-	0x6e, 0x23, 0xf3, 0xe0, 0x9c, 0x4e, 0x7f, 0x07, 0x6a, 0x99, 0x1f, 0xd5, 0xa1, 0x82, 0x87, 0x47,
-	0x0f, 0x07, 0xbb, 0xc3, 0x56, 0x01, 0x01, 0x94, 0xf1, 0xf0, 0xe0, 0xf0, 0xf1, 0xb0, 0xa5, 0x24,
-	0xe7, 0xc1, 0xd1, 0xd1, 0xf0, 0x8b, 0x07, 0xad, 0x35, 0xfd, 0x18, 0xca, 0xe9, 0x66, 0x20, 0x15,
-	0x2a, 0xa7, 0xc4, 0xb7, 0x5d, 0x1a, 0x89, 0x0f, 0x58, 0x9a, 0x68, 0x0b, 0x6a, 0x8e, 0x1f, 0x33,
-	0xe2, 0x5b, 0xe2, 0x13, 0xae, 0xe1, 0xdc, 0x91, 0x69, 0x2f, 0xe5, 0xda, 0xf5, 0x9f, 0x14, 0xa8,
-	0xee, 0x0b, 0xc4, 0xca, 0xe6, 0x74, 0xa0, 0xca, 0x84, 0x12, 0x91, 0x2d, 0xb3, 0x51, 0x0f, 0xca,
-	0x21, 0x89, 0x88, 0x17, 0xf3, 0xee, 0xd4, 0xfb, 0x9b, 0x46, 0xfa, 0x94, 0x19, 0xf2, 0x29, 0x33,
-	0x1e, 0xf1, 0x87, 0x0e, 0x0b, 0x18, 0x32, 0xa0, 0x6d, 0x05, 0x5e, 0xe8, 0xb8, 0xd4, 0x36, 0x33,
-	0xd6, 0xff, 0xfe, 0xfd, 0xa5, 0xcb, 0x89, 0x5b, 0x32, 0x26, 0x5b, 0xa7, 0xbf, 0x50, 0xa0, 0xb2,
-	0x27, 0xb4, 0xad, 0x2a, 0x4e, 0x85, 0x0a, 0xb1, 0x49, 0xc8, 0xf2, 0x4e, 0x08, 0xf3, 0xe6, 0xa5,
-	0x7d, 0x06, 0x60, 0x05, 0xbe, 0x4f, 0x79, 0x8b, 0x79, 0x8b, 0xea, 0xfd, 0xee, 0xea, 0x69, 0xef,
-	0x66, 0x38, 0x3c, 0x77, 0x07, 0xbd, 0x0d, 0x99, 0x00, 0x53, 0x56, 0x95, 0x69, 0x6b, 0xca, 0xd0,
-	0x20, 0x8d, 0xe8, 0x6f, 0x01, 0xe4, 0x3c, 0xa9, 0x10, 0x3b, 0xa2, 0x71, 0x9c, 0x0b, 0xe1, 0xa6,
-	0x7e, 0xae, 0x40, 0x63, 0x71, 0xdf, 0xd1, 0x21, 0x34, 0x23, 0xe2, 0xdb, 0x81, 0x67, 0xca, 0xc5,
-	0xe7, 0x4d, 0xb9, 0xf6, 0x73, 0xc1, 0x1c, 0x2c, 0x49, 0xf6, 0x0a, 0xb8, 0x11, 0x2d, 0x78, 0xd0,
-	0xd7, 0x70, 0x3b, 0x22, 0x8c, 0x9a, 0xae, 0xe3, 0x39, 0x2c, 0x27, 0x4d, 0xdf, 0xc5, 0xbb, 0xd7,
-	0x91, 0x32, 0xfa, 0x30, 0xc1, 0xcf, 0xf1, 0xb6, 0xa3, 0x65, 0xe7, 0x0e, 0x40, 0x35, 0x66, 0x89,
-	0x7b, 0x3c, 0xd5, 0x3f, 0x82, 0xc6, 0x62, 0x29, 0xe8, 0x2e, 0x34, 0x43, 0x1a, 0x59, 0xd4, 0x67,
-	0x26, 0x71, 0xdd, 0xe0, 0x5b, 0x6a, 0x73, 0x25, 0x0a, 0x6e, 0x08, 0xf7, 0x20, 0xf5, 0xea, 0xbf,
-	0x2a, 0xd0, 0xbe, 0x92, 0x11, 0x1d, 0x41, 0x3b, 0x7b, 0x37, 0xe4, 0x4f, 0x53, 0xb4, 0xe2, 0xce,
-	0x95, 0x79, 0x3f, 0x10, 0x80, 0x9d, 0xea, 0xf9, 0x1f, 0xdb, 0x85, 0x1f, 0xff, 0xdc, 0x56, 0x70,
-	0x4b, 0xde, 0x96, 0x31, 0xd4, 0x87, 0x57, 0x3d, 0xf2, 0xcc, 0x9c, 0xf8, 0x3c, 0x42, 0x6d, 0x93,
-	0xfa, 0x2c, 0x72, 0x68, 0x3a, 0x95, 0x22, 0xbe, 0xed, 0x91, 0x67, 0x5f, 0xca, 0xd8, 0x30, 0x0d,
-	0xa1, 0x37, 0xe0, 0x56, 0x56, 0x45, 0xa2, 0x94, 0x6f, 0x5c, 0x11, 0xbf, 0x22, 0x9d, 0x49, 0xdd,
-	0x3b, 0xfb, 0xcf, 0x2f, 0xb4, 0xc2, 0x8b, 0x0b, 0xad, 0x70, 0x79, 0xa1, 0x29, 0xdf, 0xcd, 0x34,
-	0xe5, 0xe7, 0x99, 0xa6, 0x9c, 0xcf, 0x34, 0xe5, 0xf9, 0x4c, 0x53, 0xfe, 0x9a, 0x69, 0xca, 0x3f,
-	0x33, 0xad, 0x70, 0x39, 0xd3, 0x94, 0x1f, 0xfe, 0xd6, 0x0a, 0x4f, 0x5e, 0x4f, 0x5b, 0xee, 0x04,
-	0x3d, 0x12, 0x3a, 0xbd, 0xc5, 0xff, 0xff, 0x49, 0x99, 0x4b, 0x7a, 0xf7, 0xff, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0x91, 0x5a, 0xfc, 0xb0, 0x9c, 0x08, 0x00, 0x00,
+	// 1053 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x56, 0x4f, 0x6f, 0x1b, 0x45,
+	0x14, 0xf7, 0xc6, 0xf9, 0x63, 0x3f, 0x37, 0x89, 0x33, 0x0d, 0x64, 0x6b, 0xa2, 0x4d, 0x64, 0x10,
+	0xf4, 0x80, 0xd6, 0xad, 0x11, 0x14, 0x55, 0x15, 0x22, 0xad, 0x8d, 0x12, 0xd1, 0x24, 0xd6, 0x24,
+	0x69, 0x45, 0x2f, 0xab, 0x89, 0x77, 0xe2, 0xac, 0xd8, 0x9d, 0xdd, 0xce, 0xce, 0x46, 0xcd, 0x8d,
+	0x0b, 0x77, 0x8e, 0x48, 0x7c, 0x01, 0xb8, 0xf2, 0x01, 0x38, 0xe7, 0x58, 0x89, 0x4b, 0x4f, 0x40,
+	0xcc, 0x85, 0x0b, 0x52, 0x0f, 0x7c, 0x00, 0xb4, 0x33, 0xb3, 0xbb, 0x89, 0xed, 0x20, 0xd2, 0xdb,
+	0xbc, 0x7f, 0xbf, 0xf7, 0x7e, 0xef, 0xbd, 0x9d, 0x59, 0x30, 0xa3, 0xd0, 0xf7, 0xfa, 0xa7, 0xad,
+	0x93, 0xbb, 0x87, 0x54, 0x90, 0xbb, 0xad, 0xfe, 0xd1, 0xc0, 0x8e, 0x78, 0x28, 0x42, 0xb4, 0xec,
+	0xc5, 0xc2, 0x0b, 0x6d, 0x65, 0xb7, 0xb5, 0xbd, 0xb1, 0x3c, 0x08, 0x07, 0xa1, 0x74, 0x68, 0xa5,
+	0x27, 0xe5, 0xdb, 0x58, 0x1d, 0x84, 0xe1, 0xc0, 0xa7, 0x2d, 0x29, 0x1d, 0x26, 0x47, 0xad, 0x58,
+	0xf0, 0xa4, 0x2f, 0xb4, 0xd5, 0x1a, 0xb5, 0xba, 0x09, 0x27, 0xc2, 0x0b, 0x99, 0xb6, 0xaf, 0x8d,
+	0xd4, 0x70, 0x42, 0xfc, 0x84, 0x3a, 0xe2, 0x34, 0xa2, 0xca, 0xa1, 0xf9, 0x6d, 0x19, 0x96, 0x36,
+	0x84, 0xe0, 0xde, 0x61, 0x22, 0xe8, 0x36, 0x61, 0xde, 0x11, 0x8d, 0x05, 0x6a, 0x40, 0x85, 0xd3,
+	0x13, 0x2f, 0xf6, 0x42, 0x66, 0x1a, 0xeb, 0xc6, 0xed, 0x2a, 0xce, 0x65, 0x84, 0x60, 0x9a, 0x91,
+	0x80, 0x9a, 0x53, 0x52, 0x2f, 0xcf, 0xe8, 0x29, 0x00, 0xc9, 0x40, 0x62, 0xb3, 0xbc, 0x5e, 0xbe,
+	0x5d, 0x6b, 0xdf, 0xb3, 0x27, 0xb1, 0xb4, 0xc7, 0x92, 0x15, 0x9a, 0xb8, 0xcb, 0x04, 0x3f, 0xc5,
+	0x17, 0xa0, 0x1a, 0xcf, 0x61, 0x3e, 0x37, 0x6f, 0xb1, 0xa3, 0x10, 0xad, 0x43, 0xcd, 0xa5, 0x71,
+	0x9f, 0x7b, 0x91, 0x28, 0x8a, 0xbb, 0xa8, 0x42, 0x9f, 0x01, 0x14, 0x2c, 0x65, 0x95, 0x0b, 0xed,
+	0xb5, 0xc9, 0xb5, 0x3c, 0x49, 0xfd, 0xf6, 0x4f, 0x23, 0x8a, 0xab, 0x27, 0xd9, 0xb1, 0x21, 0x60,
+	0x71, 0xa4, 0x22, 0x54, 0x87, 0xf2, 0xd7, 0xf4, 0x54, 0x27, 0x4b, 0x8f, 0xe8, 0x4b, 0x98, 0x91,
+	0x11, 0x12, 0xbf, 0xd6, 0xfe, 0xf8, 0xda, 0x5c, 0x53, 0x32, 0x58, 0x61, 0xdc, 0x9f, 0xfa, 0xd4,
+	0x68, 0x9e, 0x4d, 0xc3, 0x34, 0x4e, 0x7c, 0x8a, 0x96, 0x61, 0x26, 0x20, 0xa2, 0x7f, 0xac, 0xb3,
+	0x29, 0x01, 0x7d, 0x02, 0x73, 0xa4, 0x9f, 0xd2, 0x8b, 0xcd, 0x29, 0xd9, 0xdd, 0xd5, 0x2b, 0x32,
+	0x4a, 0x27, 0x9c, 0x39, 0x23, 0x06, 0xb7, 0x38, 0x7d, 0x9e, 0xd0, 0x58, 0x38, 0xc7, 0x94, 0xb8,
+	0x94, 0x3b, 0x61, 0x44, 0xd5, 0x86, 0x64, 0x73, 0x6a, 0x4f, 0x46, 0x4a, 0x8b, 0xb1, 0x37, 0x65,
+	0xcc, 0x6e, 0x16, 0xb2, 0x4f, 0x83, 0xc8, 0x27, 0x82, 0xe2, 0x15, 0x0d, 0x3a, 0x62, 0x8f, 0x51,
+	0x04, 0x0d, 0x4e, 0xe3, 0x28, 0x64, 0x31, 0x9d, 0x90, 0x70, 0xfa, 0x8d, 0x13, 0x9a, 0x19, 0xea,
+	0x58, 0xc6, 0xfb, 0x50, 0x89, 0x49, 0x10, 0xf9, 0x1e, 0x1b, 0x98, 0x33, 0x72, 0x18, 0xd6, 0x64,
+	0xfc, 0x3d, 0xed, 0x85, 0x73, 0xff, 0xc6, 0xaf, 0x06, 0xac, 0x5c, 0x91, 0x31, 0x5f, 0x73, 0xe3,
+	0xc2, 0x9a, 0xbf, 0x0d, 0xb3, 0x72, 0x62, 0x6a, 0x08, 0x55, 0xac, 0x25, 0xf4, 0x0c, 0xaa, 0x39,
+	0x4b, 0xb3, 0x2c, 0x37, 0xee, 0xc1, 0xf5, 0x49, 0xda, 0xb9, 0x06, 0x17, 0x70, 0xcd, 0x3b, 0x50,
+	0xcd, 0xf5, 0xa8, 0x06, 0x73, 0xb8, 0xdb, 0x7b, 0xbc, 0xf1, 0xa8, 0x5b, 0x2f, 0x21, 0x80, 0x59,
+	0xdc, 0xdd, 0xde, 0x7d, 0xd2, 0xad, 0x1b, 0xe9, 0x79, 0xa3, 0xd7, 0xeb, 0xee, 0x74, 0xea, 0x53,
+	0xcd, 0x7d, 0x98, 0x55, 0x6b, 0x80, 0x4c, 0x98, 0x3b, 0x26, 0xcc, 0xf5, 0x29, 0xd7, 0x5f, 0x6b,
+	0x26, 0xa2, 0x55, 0xa8, 0x7a, 0x2c, 0x16, 0x84, 0xf5, 0xf5, 0xf7, 0x5a, 0xc5, 0x85, 0x22, 0xe7,
+	0x3e, 0x5d, 0x70, 0x6f, 0xfe, 0x60, 0x40, 0x65, 0x4b, 0x7b, 0x4c, 0x6c, 0x4e, 0x03, 0x2a, 0x42,
+	0x33, 0xd1, 0xd9, 0x72, 0x19, 0xb5, 0x60, 0x36, 0x22, 0x9c, 0x04, 0xb1, 0xec, 0x4e, 0xad, 0xbd,
+	0x62, 0xab, 0x7b, 0xcb, 0xce, 0xee, 0x2d, 0x7b, 0x4f, 0xde, 0x6a, 0x58, 0xbb, 0x21, 0x1b, 0x96,
+	0xfa, 0x61, 0x10, 0x79, 0x3e, 0x75, 0x9d, 0x1c, 0xf5, 0x9f, 0xbf, 0x7f, 0x5a, 0x97, 0xc0, 0xf5,
+	0xcc, 0x96, 0xb5, 0xae, 0xf9, 0xca, 0x80, 0xb9, 0x4d, 0xcd, 0x6d, 0x52, 0x71, 0x26, 0xcc, 0x11,
+	0x97, 0x44, 0xa2, 0xe8, 0x84, 0x16, 0xaf, 0x5f, 0xda, 0xe7, 0x00, 0xfd, 0x90, 0x31, 0x2a, 0x5b,
+	0x2c, 0x5b, 0x54, 0x6b, 0xaf, 0x4f, 0x9e, 0xf6, 0xa3, 0xdc, 0x0f, 0x5f, 0x88, 0x41, 0x1f, 0x42,
+	0x4e, 0xc0, 0xc9, 0xaa, 0xca, 0xb9, 0x2d, 0x66, 0xa6, 0x0d, 0x65, 0x69, 0xbe, 0x0f, 0x50, 0xe0,
+	0x28, 0x22, 0x2e, 0xa7, 0x71, 0x5c, 0x10, 0x91, 0x62, 0xf3, 0x67, 0x03, 0x2a, 0xd9, 0x8e, 0xa3,
+	0x6d, 0x58, 0xe4, 0x84, 0xb9, 0x61, 0xe0, 0xe4, 0x1f, 0x87, 0x21, 0x2b, 0x7d, 0xef, 0x8a, 0xbd,
+	0x94, 0xce, 0xf9, 0x27, 0xb2, 0xc0, 0x2f, 0xc9, 0xe8, 0x29, 0xdc, 0xe4, 0x44, 0x50, 0xc7, 0xf7,
+	0x02, 0x4f, 0x14, 0x90, 0xea, 0xf2, 0xfb, 0xe0, 0x2a, 0x48, 0x41, 0x1f, 0xa7, 0xfe, 0x39, 0xea,
+	0x12, 0x1f, 0x55, 0x35, 0x7f, 0x31, 0x60, 0xe1, 0x72, 0xee, 0x74, 0x35, 0xf3, 0x07, 0x40, 0xcf,
+	0xb0, 0x50, 0xa0, 0x1e, 0x2c, 0x46, 0x94, 0xf7, 0x29, 0xd3, 0x65, 0x50, 0xf7, 0xbf, 0xab, 0xf8,
+	0x82, 0xab, 0xab, 0x90, 0xf8, 0x3d, 0x15, 0x86, 0x17, 0x74, 0xfc, 0x9e, 0x0a, 0x47, 0x0f, 0xa0,
+	0x91, 0xc4, 0xd4, 0xf1, 0x98, 0x4b, 0x23, 0xca, 0xdc, 0x14, 0x59, 0xb1, 0x67, 0x69, 0x93, 0xd3,
+	0xa5, 0xa8, 0x60, 0x33, 0x89, 0xe9, 0x56, 0xe1, 0x80, 0x73, 0x7b, 0x4a, 0x60, 0x69, 0x8c, 0x29,
+	0xea, 0xc1, 0x52, 0xd6, 0x24, 0x27, 0x7b, 0x91, 0xf5, 0x00, 0x6e, 0x8d, 0xed, 0x57, 0x47, 0x3b,
+	0x3c, 0xac, 0x9c, 0xfd, 0xb6, 0x56, 0xfa, 0xfe, 0xf7, 0x35, 0x03, 0xd7, 0xb3, 0xe8, 0xcc, 0x86,
+	0xda, 0xf0, 0x56, 0x40, 0x5e, 0x38, 0x09, 0xd3, 0xac, 0x1d, 0xca, 0x04, 0xf7, 0xa8, 0xda, 0x82,
+	0x32, 0xbe, 0x19, 0x90, 0x17, 0x07, 0x99, 0xad, 0xab, 0x4c, 0xe8, 0x5d, 0x98, 0xcf, 0xab, 0x48,
+	0x5b, 0x2f, 0xc9, 0x94, 0xf1, 0x8d, 0x4c, 0x99, 0xd6, 0x2d, 0x09, 0x8c, 0x35, 0x29, 0x1d, 0x02,
+	0x4b, 0x82, 0xf4, 0xda, 0x09, 0xb9, 0x2c, 0x7c, 0x1e, 0x17, 0x0a, 0xf4, 0x55, 0xfa, 0x08, 0xb3,
+	0x30, 0xf0, 0x98, 0xb4, 0xab, 0x37, 0xf6, 0xde, 0xff, 0x1c, 0x80, 0xdd, 0x29, 0x42, 0xe5, 0xdb,
+	0x7b, 0x11, 0xab, 0x79, 0x07, 0x16, 0x47, 0xec, 0xe9, 0xa5, 0xb7, 0x79, 0xb0, 0xd3, 0xc1, 0xdd,
+	0x4e, 0xbd, 0x84, 0xea, 0x70, 0x63, 0xbf, 0xbb, 0xe3, 0xec, 0x6f, 0xee, 0x1e, 0xec, 0x6d, 0xec,
+	0x74, 0xea, 0xc6, 0xc3, 0xad, 0x97, 0xe7, 0x56, 0xe9, 0xd5, 0xb9, 0x55, 0x7a, 0x7d, 0x6e, 0x19,
+	0xdf, 0x0c, 0x2d, 0xe3, 0xc7, 0xa1, 0x65, 0x9c, 0x0d, 0x2d, 0xe3, 0xe5, 0xd0, 0x32, 0xfe, 0x18,
+	0x5a, 0xc6, 0x5f, 0x43, 0xab, 0xf4, 0x7a, 0x68, 0x19, 0xdf, 0xfd, 0x69, 0x95, 0x9e, 0xbd, 0xa3,
+	0x8a, 0xf4, 0xc2, 0x16, 0x89, 0xbc, 0xd6, 0xe5, 0xbf, 0xa3, 0xc3, 0x59, 0x39, 0x93, 0x8f, 0xfe,
+	0x0d, 0x00, 0x00, 0xff, 0xff, 0x49, 0x78, 0xa5, 0xc0, 0xba, 0x09, 0x00, 0x00,
 }
