@@ -4,7 +4,7 @@ description: Authentication policy for Istio services.
 location: https://istio.io/docs/reference/config/istio.authentication.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 11
+number_of_entries: 12
 ---
 <p>This package defines user-facing authentication policy.</p>
 
@@ -406,6 +406,17 @@ If empty, policy will be used on all workloads in the same namespace.</p>
 
 </td>
 </tr>
+<tr id="Policy-selectors">
+<td><code>selectors</code></td>
+<td><code><a href="#WorkloadSelector">WorkloadSelector[]</a></code></td>
+<td>
+<p>List rules to select workloads that the policy should be applied on.
+Different from TargetSelector, WorkloadSelector is based on the labels
+and ports.
+If empty, policy will be used on all workloads in the same namespace.</p>
+
+</td>
+</tr>
 <tr id="Policy-peers">
 <td><code>peers</code></td>
 <td><code><a href="#PeerAuthenticationMethod">PeerAuthenticationMethod[]</a></code></td>
@@ -628,6 +639,39 @@ spec:
 </code></pre>
 
 <p>Leave empty to match all ports that are exposed.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="WorkloadSelector">WorkloadSelector</h2>
+<section>
+<p>WorkloadSelector specifies the labels and ports to be used for
+selecting targets for authentication policy.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="WorkloadSelector-labels">
+<td><code>labels</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>Labels used for selecting workloads</p>
+
+</td>
+</tr>
+<tr id="WorkloadSelector-ports">
+<td><code>ports</code></td>
+<td><code>uint32[]</code></td>
+<td>
+<p>Ports used for selecting workloads</p>
 
 </td>
 </tr>

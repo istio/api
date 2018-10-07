@@ -313,6 +313,12 @@ message Policy {
   // If empty, policy will be used on all workloads in the same namespace.
   repeated TargetSelector targets = 1;
 
+  // List rules to select workloads that the policy should be applied on.
+  // Different from TargetSelector, WorkloadSelector is based on the labels
+  // and ports.
+  // If empty, policy will be used on all workloads in the same namespace.
+  repeated WorkloadSelector selectors = 10;
+
   // List of authentication methods that can be used for peer authentication.
   // They will be evaluated in order; the first validate one will be used to
   // set peer identity (source.user) and other peer attributes. If none of
@@ -388,4 +394,13 @@ message PortSelector {
     // Port name
     string name = 2;
   }
+}
+
+// WorkloadSelector specifies the labels and ports to be used for
+// selecting targets for authentication policy.
+message WorkloadSelector {
+  // Labels used for selecting workloads
+  map<string, string> labels = 1;
+  // Ports used for selecting workloads
+  repeated uint32 ports = 2;
 }
