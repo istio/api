@@ -405,8 +405,10 @@ message PortSelector {
 //   ports: [1234]
 // }
 message WorkloadSelector {
-  // Labels used for selecting workloads
-  map<string, string> labels = 1;
-  // Ports used for selecting workloads
+  // One or more label matching conditions to select subset of pods/VM on which this authentication
+  // policy should be applied. When there are multiple label requirements, all must be satisfied.
+  map<string, string> match_labels = 1;
+  // Limit the policy's scope to workloads only on these ports. Leave empty to apply to all ports
+  // (provided by the selected pods/VM)
   repeated uint32 ports = 2;
 }

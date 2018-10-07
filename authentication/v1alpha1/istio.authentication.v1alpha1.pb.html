@@ -665,11 +665,12 @@ WorkloadSelector &lbrace;
 </tr>
 </thead>
 <tbody>
-<tr id="WorkloadSelector-labels">
-<td><code>labels</code></td>
+<tr id="WorkloadSelector-match_labels">
+<td><code>matchLabels</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>Labels used for selecting workloads</p>
+<p>One or more label matching conditions to select subset of pods/VM on which this authentication
+policy should be applied. When there are multiple label requirements, all must be satisfied.</p>
 
 </td>
 </tr>
@@ -677,7 +678,8 @@ WorkloadSelector &lbrace;
 <td><code>ports</code></td>
 <td><code>uint32[]</code></td>
 <td>
-<p>Ports used for selecting workloads</p>
+<p>Limit the policy&rsquo;s scope to workloads only on these ports. Leave empty to apply to all ports
+(provided by the selected pods/VM)</p>
 
 </td>
 </tr>
