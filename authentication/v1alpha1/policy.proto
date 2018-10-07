@@ -398,6 +398,12 @@ message PortSelector {
 
 // WorkloadSelector specifies the labels and ports to be used for
 // selecting workloads for authentication policy.
+// The following is an example of using WorkloadSelector, which selects
+// the workload that has the label {"env": "testing} and is on the port 1234.
+// WorkloadSelector {
+//   labels: {"env", "testing"}
+//   ports: [1234]
+// }
 message WorkloadSelector {
   // Labels used for selecting workloads
   map<string, string> labels = 1;

@@ -648,7 +648,13 @@ spec:
 <h2 id="WorkloadSelector">WorkloadSelector</h2>
 <section>
 <p>WorkloadSelector specifies the labels and ports to be used for
-selecting targets for authentication policy.</p>
+selecting workloads for authentication policy.
+The following is an example of using WorkloadSelector, which selects
+the workload that has the label &lbrace;&ldquo;env&rdquo;: &ldquo;testing} and is on the port 1234.
+WorkloadSelector &lbrace;
+  labels: &lbrace;&ldquo;env&rdquo;, &ldquo;testing&rdquo;}
+  ports: [1234]
+}</p>
 
 <table class="message-fields">
 <thead>

@@ -954,7 +954,13 @@ func _PortSelector_OneofSizer(msg proto.Message) (n int) {
 }
 
 // WorkloadSelector specifies the labels and ports to be used for
-// selecting targets for authentication policy.
+// selecting workloads for authentication policy.
+// The following is an example of using WorkloadSelector, which selects
+// the workload that has the label {"env": "testing} and is on the port 1234.
+// WorkloadSelector {
+//   labels: {"env", "testing"}
+//   ports: [1234]
+// }
 type WorkloadSelector struct {
 	// Labels used for selecting workloads
 	Labels map[string]string `protobuf:"bytes,1,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
