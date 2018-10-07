@@ -397,7 +397,7 @@ message PortSelector {
 }
 
 // WorkloadSelector specifies the labels and ports to be used for
-// selecting targets for authentication policy.
+// selecting workloads for authentication policy.
 message WorkloadSelector {
   // Labels used for selecting workloads
   map<string, string> labels = 1;
