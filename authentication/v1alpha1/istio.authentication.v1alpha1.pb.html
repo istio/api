@@ -4,7 +4,7 @@ description: Authentication policy for Istio services.
 location: https://istio.io/docs/reference/config/istio.authentication.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 12
+number_of_entries: 11
 ---
 <p>This package defines user-facing authentication policy.</p>
 
@@ -406,17 +406,6 @@ If empty, policy will be used on all workloads in the same namespace.</p>
 
 </td>
 </tr>
-<tr id="Policy-selectors">
-<td><code>selectors</code></td>
-<td><code><a href="#WorkloadSelector">WorkloadSelector[]</a></code></td>
-<td>
-<p>List rules to select workloads that the policy should be applied on.
-Different from TargetSelector, WorkloadSelector is based on the labels
-and ports.
-If empty, policy will be used on all workloads in the same namespace.</p>
-
-</td>
-</tr>
 <tr id="Policy-peers">
 <td><code>peers</code></td>
 <td><code><a href="#PeerAuthenticationMethod">PeerAuthenticationMethod[]</a></code></td>
@@ -599,7 +588,9 @@ Example: &ldquo;^/pets/(.*?)?&rdquo;</p>
 <h2 id="TargetSelector">TargetSelector</h2>
 <section>
 <p>TargetSelector defines a matching rule to a workload. A workload is selected
-if it is associated with the service name and service port(s) specified in the selector rule.</p>
+if it is associated with the service name and service port(s) specified in the selector rule.
+If match_labels are specified, the policy will only be applied to the workloads
+for which all label requirements are satisfied.</p>
 
 <table class="message-fields">
 <thead>
@@ -642,53 +633,17 @@ spec:
 
 </td>
 </tr>
-</tbody>
-</table>
-</section>
-<h2 id="WorkloadSelector">WorkloadSelector</h2>
-<section>
-<p>WorkloadSelector specifies the labels and ports to be used for
-selecting workloads for authentication policy.
-The following is an example of using WorkloadSelector, which selects
-the workload that has the label &lbrace;&ldquo;env&rdquo;: &ldquo;testing&rdquo;} and is on the port 1234.</p>
-
-<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
-kind: Policy
-metadata:
-  name: example
-  namespace: ns
-spec:
-  selectors:
-  - match_labels:
-      env: 'testing'
-    ports:
-    - 1234
-</code></pre>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="WorkloadSelector-match_labels">
+<tr id="TargetSelector-match_labels">
 <td><code>matchLabels</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
 <p>One or more label matching conditions to select subset of pods/VM on which this authentication
-policy should be applied. When there are multiple label requirements, all must be satisfied.</p>
+policy should be applied. When there are multiple label requirements, all must be satisfied.
+For example, the following match_labels matches the workloads that have the label &lbrace;&ldquo;env&rdquo;: &ldquo;testing&rdquo;}.</p>
 
-</td>
-</tr>
-<tr id="WorkloadSelector-ports">
-<td><code>ports</code></td>
-<td><code>uint32[]</code></td>
-<td>
-<p>Limit the policy&rsquo;s scope to workloads only on these ports. Leave empty to apply to all ports
-(provided by the selected pods/VM)</p>
+<pre><code class="language-yaml">  match_labels:
+    env: 'testing'
+</code></pre>
 
 </td>
 </tr>
