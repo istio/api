@@ -956,11 +956,20 @@ func _PortSelector_OneofSizer(msg proto.Message) (n int) {
 // WorkloadSelector specifies the labels and ports to be used for
 // selecting workloads for authentication policy.
 // The following is an example of using WorkloadSelector, which selects
-// the workload that has the label {"env": "testing} and is on the port 1234.
-// WorkloadSelector {
-//   labels: {"env", "testing"}
-//   ports: [1234]
-// }
+// the workload that has the label {"env": "testing"} and is on the port 1234.
+// ```yaml
+// apiVersion: authentication.istio.io/v1alpha1
+// kind: Policy
+// metadata:
+//   name: example
+//   namespace: ns
+// spec:
+//   selectors:
+//   - match_labels:
+//       env: 'testing'
+//     ports:
+//     - 1234
+// ```
 type WorkloadSelector struct {
 	// One or more label matching conditions to select subset of pods/VM on which this authentication
 	// policy should be applied. When there are multiple label requirements, all must be satisfied.

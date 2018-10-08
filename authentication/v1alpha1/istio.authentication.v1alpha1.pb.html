@@ -650,11 +650,20 @@ spec:
 <p>WorkloadSelector specifies the labels and ports to be used for
 selecting workloads for authentication policy.
 The following is an example of using WorkloadSelector, which selects
-the workload that has the label &lbrace;&ldquo;env&rdquo;: &ldquo;testing} and is on the port 1234.
-WorkloadSelector &lbrace;
-  labels: &lbrace;&ldquo;env&rdquo;, &ldquo;testing&rdquo;}
-  ports: [1234]
-}</p>
+the workload that has the label &lbrace;&ldquo;env&rdquo;: &ldquo;testing&rdquo;} and is on the port 1234.</p>
+
+<pre><code class="language-yaml">apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: example
+  namespace: ns
+spec:
+  selectors:
+  - match_labels:
+      env: 'testing'
+    ports:
+    - 1234
+</code></pre>
 
 <table class="message-fields">
 <thead>
