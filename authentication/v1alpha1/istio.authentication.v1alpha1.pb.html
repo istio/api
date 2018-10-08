@@ -639,6 +639,7 @@ spec:
 <td>
 <p>One or more label matching conditions to select subset of pods/VM on which this authentication
 policy should be applied. When there are multiple label requirements, all must be satisfied.
+It only matches workloads in the same namespace as the policy.
 For example, the following match_labels matches the workloads that have the label &lbrace;&ldquo;env&rdquo;: &ldquo;testing&rdquo;}.</p>
 
 <pre><code class="language-yaml">  match_labels:

@@ -806,6 +806,7 @@ type TargetSelector struct {
 	Ports []*PortSelector `protobuf:"bytes,2,rep,name=ports" json:"ports,omitempty"`
 	// One or more label matching conditions to select subset of pods/VM on which this authentication
 	// policy should be applied. When there are multiple label requirements, all must be satisfied.
+	// It only matches workloads in the same namespace as the policy.
 	// For example, the following match_labels matches the workloads that have the label {"env": "testing"}.
 	// ```yaml
 	//   match_labels:
