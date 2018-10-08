@@ -4,7 +4,7 @@ description: Describes the rules used to configure Mixer's policy and telemetry 
 location: https://istio.io/docs/reference/config/policy-and-telemetry/istio.policy.v1beta1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 22
+number_of_entries: 18
 ---
 <p>Describes the rules used to configure Mixer&rsquo;s policy and telemetry features.</p>
 
@@ -298,46 +298,6 @@ type EmailAddress</p>
 </tbody>
 </table>
 </section>
-<h2 id="FractionalPercent">FractionalPercent</h2>
-<section>
-<p>A fractional percentage is used in cases in which for performance reasons performing floating
-point to integer conversions during randomness calculations is undesirable. The message includes
-both a numerator and denominator that together determine the final fractional value.</p>
-
-<ul>
-<li><strong>Example</strong>: <sup>1</sup>&frasl;<sub>100</sub> = 1%.</li>
-<li><strong>Example</strong>: <sup>3</sup>&frasl;<sub>10000</sub> = 0.03%.</li>
-</ul>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="FractionalPercent-numerator">
-<td><code>numerator</code></td>
-<td><code>uint32</code></td>
-<td>
-<p>Specifies the numerator. Defaults to 0.</p>
-
-</td>
-</tr>
-<tr id="FractionalPercent-denominator">
-<td><code>denominator</code></td>
-<td><code><a href="#FractionalPercent-DenominatorType">FractionalPercent.DenominatorType</a></code></td>
-<td>
-<p>Specifies the denominator. If the denominator specified is less than the numerator, the final
-fractional percentage is capped at 1 (100%).</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="FractionalPercent-DenominatorType">FractionalPercent.DenominatorType</h2>
 <section>
 <p>Fraction percentages support several fixed denominator values.</p>
@@ -590,104 +550,6 @@ proto defined by the template; this varies depending on the value of field <code
 </tbody>
 </table>
 </section>
-<h2 id="RandomSampling">RandomSampling</h2>
-<section>
-<p>RandomSampling will filter based on the comparison of a randomly-generated value
-against the threshold provided.</p>
-
-<p>Example: To restrict the execution of Rule actions to only 12.5% of requests, the
-<code>sampling_rate</code> would be set <code>12.5</code>.</p>
-
-<p>This sampling configuration is meant to closely match the access log RuntimeFilter configuration
-supported by Envoy:
-https://github.com/envoyproxy/data-plane-api/blob/master/envoy/config/filter/accesslog/v2/accesslog.proto#L113</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="RandomSampling-attribute_expression">
-<td><code>attributeExpression</code></td>
-<td><code>string</code></td>
-<td>
-<p>Specifies an attribute expression to use to override the numerator in the <code>percent_sampled</code> field.
-If this value is set, but no value is found OR if that value is not a numeric value, then
-the derived sampling rate will be 0 (meaning no <code>Action</code>s are executed for a <code>Rule</code>).</p>
-
-</td>
-</tr>
-<tr id="RandomSampling-percent_sampled">
-<td><code>percentSampled</code></td>
-<td><code><a href="#FractionalPercent">FractionalPercent</a></code></td>
-<td>
-<p>The default sampling rate, expressed as a percentage. Defaults to 0% with a denominator
-of 100.</p>
-
-</td>
-</tr>
-<tr id="RandomSampling-use_independent_randomness">
-<td><code>useIndependentRandomness</code></td>
-<td><code>bool</code></td>
-<td>
-<p>By default sampling will be based on the value of the request header <code>x-request-id</code>.
-This behavior will cause consistent sampling across <code>Rule</code>s and for the full trace of a
-request through a mesh (across hosts). If that value is not present and/or
-<code>use_independent_randomness</code> is set to true, the sampling will be done based on the value of
-attribue specified in <code>attribute</code>. If that attribute does not exist, the system will behave as
-if the sampling rate was 0 (meaning no <code>Action</code>s are executed for a <code>Rule</code>).</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="RateLimitSampling">RateLimitSampling</h2>
-<section>
-<p>RateLimitSampling provides the ability to limit the number of Rule action executions that
-occur over a period of time.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="RateLimitSampling-sampling_duration">
-<td><code>samplingDuration</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
-<td>
-<p>Window in which to enforce the sampling rate.</p>
-
-</td>
-</tr>
-<tr id="RateLimitSampling-max_unsampled_entries">
-<td><code>maxUnsampledEntries</code></td>
-<td><code>int64</code></td>
-<td>
-<p>Number of entries to allow during the <code>sampling_duration</code> before sampling is enforced.</p>
-
-</td>
-</tr>
-<tr id="RateLimitSampling-sampling_rate">
-<td><code>samplingRate</code></td>
-<td><code>int64</code></td>
-<td>
-<p>The rate at which to sample entries once the unsampled limit has been reached. Sampling will be enforced
-as 1 per every <code>sampling_rate</code> entries allowed.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="Rule">Rule</h2>
 <section>
 <p>A Rule is a selector and a set of intentions to be executed when the
@@ -755,18 +617,6 @@ rule actions.</p>
 <td>
 <p>Optional. Templatized operations on the response headers using attributes produced by the
 rule actions.</p>
-
-</td>
-</tr>
-<tr id="Rule-sampling">
-<td><code>sampling</code></td>
-<td><code><a href="#Sampling">Sampling</a></code></td>
-<td>
-<p>Optional. Provides the ability to add a sampling configuration for Mixer rules. This sampling
-will limit the scenarios in which the <code>actions</code> of the rule are executed. The sampling will
-only take place after a <code>match</code> predicate has evaluated to true.</p>
-
-<p>Default behavior is no sampling (the <code>actions</code> are executed for all requests).</p>
 
 </td>
 </tr>
@@ -843,41 +693,6 @@ only take place after a <code>match</code> predicate has evaluated to true.</p>
 <td><code>APPEND</code></td>
 <td>
 <p>appends the values to the existing values (preserving existing values)</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="Sampling">Sampling</h2>
-<section>
-<p>Sampling provides configuration of sampling strategies for Rule actions.
-Multiple sampling strategies are supported. When multiple strategies are configured,
-a request must be selected by all configured sampling strategies.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Sampling-random_sampling">
-<td><code>randomSampling</code></td>
-<td><code><a href="#RandomSampling">RandomSampling</a></code></td>
-<td>
-<p>Optional. Provides filtering of actions based on random selection per request.</p>
-
-</td>
-</tr>
-<tr id="Sampling-rate_limit_sampling">
-<td><code>rateLimitSampling</code></td>
-<td><code><a href="#RateLimitSampling">RateLimitSampling</a></code></td>
-<td>
-<p>Optional. Provides filtering of actions based on number of requests observed within
-a configured time window.</p>
 
 </td>
 </tr>
