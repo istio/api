@@ -653,8 +653,8 @@ type RandomSampling struct {
 	// This behavior will cause consistent sampling across `Rule`s and for the full trace of a
 	// request through a mesh (across hosts). If that value is not present and/or
 	// `use_independent_randomness` is set to true, the sampling will be done based on the value of
-	// attribue specified in `attribute`. If that attribute does not exist, the system will behave as
-	// if the sampling rate was 0 (meaning no `Action`s are executed for a `Rule`).
+	// attribute specified in `attribute_epxression`. If that attribute does not exist, the system
+	// will behave as if the sampling rate was 0 (meaning no `Action`s are executed for a `Rule`).
 	UseIndependentRandomness bool `protobuf:"varint,3,opt,name=use_independent_randomness,json=useIndependentRandomness,proto3" json:"use_independent_randomness,omitempty"`
 }
 
