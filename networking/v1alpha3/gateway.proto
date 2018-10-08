@@ -260,6 +260,12 @@ message Server {
       // Secure connections to the upstream using mutual TLS by presenting
       // client certificates for authentication.
       MUTUAL = 2;
+
+      // Forward the connection to the upstream envoy cluster specified by
+      // the SNI value presented by the client (typically a sidecar Envoy)
+      // from another kubernetes cluster. Client/server certificates
+      // specified in the configuration will be ignored.
+      MULTICLUSTER = 3;
     };
 
     // Optional: Indicates whether connections to this port should be

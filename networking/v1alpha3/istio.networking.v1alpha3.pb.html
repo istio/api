@@ -2703,6 +2703,16 @@ client certificates for authentication.</p>
 
 </td>
 </tr>
+<tr id="Server-TLSOptions-TLSmode-MULTICLUSTER">
+<td><code>MULTICLUSTER</code></td>
+<td>
+<p>Forward the connection to the upstream envoy cluster specified by
+the SNI value presented by the client (typically a sidecar Envoy)
+from another kubernetes cluster. Client/server certificates
+specified in the configuration will be ignored.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
