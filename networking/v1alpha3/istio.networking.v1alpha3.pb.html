@@ -2703,13 +2703,23 @@ client certificates for authentication.</p>
 
 </td>
 </tr>
-<tr id="Server-TLSOptions-TLSmode-MULTICLUSTER">
-<td><code>MULTICLUSTER</code></td>
+<tr id="Server-TLSOptions-TLSmode-ISTIO_REGISTRY_PASSTHROUGH">
+<td><code>ISTIO_REGISTRY_PASSTHROUGH</code></td>
 <td>
-<p>Forward the connection to the upstream envoy cluster specified by
-the SNI value presented by the client (typically a sidecar Envoy)
-from another kubernetes cluster. Client/server certificates
-specified in the configuration will be ignored.</p>
+<p>Similar to the passthrough mode, except servers with this TLS mode
+do not require an associated VirtualService to map from the SNI
+value to service in the registry. The destination details such as
+the service/subset/port are encoded in the SNI value. The proxy
+will forward to the upstream (Envoy) cluster (a group of
+endpoints) specified by the SNI value. This server is typically
+used to provide connectivity between services in disparate L3
+networks that otherwise do not have direct connectivity between
+their respective endpoints.</p>
+
+<p>NOTE: A gateway workload with a server using this TLS mode cannot
+have any other server applied to it. Use of this mode assumes that
+both the source and the destination are using Istio mTLS to secure
+traffic.</p>
 
 </td>
 </tr>
