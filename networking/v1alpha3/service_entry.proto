@@ -374,6 +374,17 @@ message ServiceEntry {
   // said port will be allowed (i.e. 0.0.0.0:<port>).
   Resolution resolution = 5;
 
+  // FailureDomain describes the location of the endpoint in a
+  // hierarchy of failure domains (country > region > zone).
+  message FailureDomain {
+    // The country where the endpoint is present.
+    string country = 1;
+    // The region in the country (or the data center).
+    string region = 2;
+    // The availability zone within the region.
+    string zone = 3;
+  };
+
   // Endpoint defines a network address (IP or hostname) associated with
   // the mesh service.
   message Endpoint {
@@ -391,20 +402,29 @@ message ServiceEntry {
     // One or more labels associated with the endpoint.
     map<string, string> labels = 3;
 
-    // Network names allow to group endpoints resident in the same
-    // failure domain/administrative boundry/rfc1918 network (e.g., a
-    // kubernetes cluster, availability zone, etc.). The network name
-    // can be used for a variety of purposes, one of which is zone-aware
-    // routing.
+    // Network names allow to group endpoints resident in the same L3
+    // domain/network. All endpoints in the same network are assumed to be
+    // directly reachable from one another. When endpoints in different
+    // networks cannot reach each other directly, an Istio Gateway can be
+    // used to establish connectivity (usually using the
+    // ISTIO_REGISTRY_PASSTHROUGH mode in a Gateway Server).
     string network_name = 4;
+
+    // The failure domain associated with the endpoint.  All endpoints
+    // within the same failure domain and the same network should be
+    // directly routable. Endpoints in same failure domain across different
+    // networks need to be routable via the Gateway attached to each
+    // network.
+    FailureDomain failure_domain = 5;
   };
 
   // One or more endpoints associated with the service.
   repeated Endpoint endpoints = 6;
 
-  // One or more spiffe IDs associated with the endpoints of this
-  // service. The spiffee IDs will be used to verify the identity of the
-  // endpoints when the destination rule for the service uses ISTIO_MUTUAL
-  // as the TLS mode.
-  repeated string spiffee_identities = 7;
+  // One or more identities associated with the endpoints of this
+  // service. These identities will be used to validate the endpoint
+  // identity when clients connect to this service using Istio mTLS.  To
+  // enable Istio mTLS, use destination rule and specify TLS mode as
+  // ISTIO_MUTUAL.
+  repeated string subject_alternate_names = 7;
 }

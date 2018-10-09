@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 aliases:
   - /docs/reference/config/istio.routing.v1alpha1/
-number_of_entries: 52
+number_of_entries: 53
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -3044,14 +3044,15 @@ said port will be allowed (i.e. 0.0.0.0:<port>).</p>
 
 </td>
 </tr>
-<tr id="ServiceEntry-spiffee_identities">
-<td><code>spiffeeIdentities</code></td>
+<tr id="ServiceEntry-subject_alternate_names">
+<td><code>subjectAlternateNames</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>One or more spiffe IDs associated with the endpoints of this
-service. The spiffee IDs will be used to verify the identity of the
-endpoints when the destination rule for the service uses ISTIO_MUTUAL
-as the TLS mode.</p>
+<p>One or more identities associated with the endpoints of this
+service. These identities will be used to validate the endpoint
+identity when clients connect to this service using Istio mTLS.  To
+enable Istio mTLS, use destination rule and specify TLS mode as
+ISTIO_MUTUAL.</p>
 
 </td>
 </tr>
@@ -3105,11 +3106,65 @@ service. Do not use for unix:// addresses.</p>
 <td><code>networkName</code></td>
 <td><code>string</code></td>
 <td>
-<p>Network names allow to group endpoints resident in the same
-failure domain/administrative boundry/rfc1918 network (e.g., a
-kubernetes cluster, availability zone, etc.). The network name
-can be used for a variety of purposes, one of which is zone-aware
-routing.</p>
+<p>Network names allow to group endpoints resident in the same L3
+domain/network. All endpoints in the same network are assumed to be
+directly reachable from one another. When endpoints in different
+networks cannot reach each other directly, an Istio Gateway can be
+used to establish connectivity (usually using the
+ISTIO<em>REGISTRY</em>PASSTHROUGH mode in a Gateway Server).</p>
+
+</td>
+</tr>
+<tr id="ServiceEntry-Endpoint-failure_domain">
+<td><code>failureDomain</code></td>
+<td><code><a href="#ServiceEntry-FailureDomain">ServiceEntry.FailureDomain</a></code></td>
+<td>
+<p>The failure domain associated with the endpoint.  All endpoints
+within the same failure domain and the same network should be
+directly routable. Endpoints in same failure domain across different
+networks need to be routable via the Gateway attached to each
+network.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ServiceEntry-FailureDomain">ServiceEntry.FailureDomain</h2>
+<section>
+<p>FailureDomain describes the location of the endpoint in a
+hierarchy of failure domains (country &gt; region &gt; zone).</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ServiceEntry-FailureDomain-country">
+<td><code>country</code></td>
+<td><code>string</code></td>
+<td>
+<p>The country where the endpoint is present.</p>
+
+</td>
+</tr>
+<tr id="ServiceEntry-FailureDomain-region">
+<td><code>region</code></td>
+<td><code>string</code></td>
+<td>
+<p>The region in the country (or the data center).</p>
+
+</td>
+</tr>
+<tr id="ServiceEntry-FailureDomain-zone">
+<td><code>zone</code></td>
+<td><code>string</code></td>
+<td>
+<p>The availability zone within the region.</p>
 
 </td>
 </tr>
@@ -3622,7 +3677,10 @@ Should be empty if mode is <code>ISTIO_MUTUAL</code>.</p>
 <td>
 <p>A list of alternate names to verify the subject identity in the
 certificate. If specified, the proxy will verify that the server
-certificate&rsquo;s subject alt name matches one of the specified values.</p>
+certificate&rsquo;s subject alt name matches one of the specified values.
+When the TLS mode is set to ISTIO_MUTUAL and subject alternate names
+are specified, Istio will use the specified values instead of the
+inferred values from the workloads, to validate the workload identity.</p>
 
 </td>
 </tr>
