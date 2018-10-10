@@ -30,10 +30,3 @@ enum AuditLevel {
   // Log request metadata and annotated content from request or response.
   APP_DEFINED = 2;
 }
-
-// $hide_from_docs
-// Expresses the audit actions to be performed after a check call.
-message AuditDirective {
-  // Defines the audit log content.
-  AuditLevel level = 1;
-}

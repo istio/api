@@ -10,15 +10,12 @@ It is generated from these files:
 	audit/v1alpha1/audit.proto
 
 It has these top-level messages:
-	AuditDirective
 */
 package v1alpha1
 
 import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
 import math "math"
-
-import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -60,271 +57,22 @@ func (x AuditLevel) String() string {
 }
 func (AuditLevel) EnumDescriptor() ([]byte, []int) { return fileDescriptorAudit, []int{0} }
 
-// $hide_from_docs
-// Expresses the audit actions to be performed after a check call.
-type AuditDirective struct {
-	// Defines the audit log content.
-	Level AuditLevel `protobuf:"varint,1,opt,name=level,proto3,enum=istio.audit.v1alpha1.AuditLevel" json:"level,omitempty"`
-}
-
-func (m *AuditDirective) Reset()                    { *m = AuditDirective{} }
-func (m *AuditDirective) String() string            { return proto.CompactTextString(m) }
-func (*AuditDirective) ProtoMessage()               {}
-func (*AuditDirective) Descriptor() ([]byte, []int) { return fileDescriptorAudit, []int{0} }
-
-func (m *AuditDirective) GetLevel() AuditLevel {
-	if m != nil {
-		return m.Level
-	}
-	return AuditLevel_NONE
-}
-
 func init() {
-	proto.RegisterType((*AuditDirective)(nil), "istio.audit.v1alpha1.AuditDirective")
 	proto.RegisterEnum("istio.audit.v1alpha1.AuditLevel", AuditLevel_name, AuditLevel_value)
 }
-func (m *AuditDirective) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AuditDirective) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.Level != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintAudit(dAtA, i, uint64(m.Level))
-	}
-	return i, nil
-}
-
-func encodeVarintAudit(dAtA []byte, offset int, v uint64) int {
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return offset + 1
-}
-func (m *AuditDirective) Size() (n int) {
-	var l int
-	_ = l
-	if m.Level != 0 {
-		n += 1 + sovAudit(uint64(m.Level))
-	}
-	return n
-}
-
-func sovAudit(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
-}
-func sozAudit(x uint64) (n int) {
-	return sovAudit(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *AuditDirective) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowAudit
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AuditDirective: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AuditDirective: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Level", wireType)
-			}
-			m.Level = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAudit
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Level |= (AuditLevel(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipAudit(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthAudit
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipAudit(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowAudit
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowAudit
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-			return iNdEx, nil
-		case 1:
-			iNdEx += 8
-			return iNdEx, nil
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowAudit
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			iNdEx += length
-			if length < 0 {
-				return 0, ErrInvalidLengthAudit
-			}
-			return iNdEx, nil
-		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowAudit
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipAudit(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-			}
-			return iNdEx, nil
-		case 4:
-			return iNdEx, nil
-		case 5:
-			iNdEx += 4
-			return iNdEx, nil
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-	}
-	panic("unreachable")
-}
-
-var (
-	ErrInvalidLengthAudit = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowAudit   = fmt.Errorf("proto: integer overflow")
-)
 
 func init() { proto.RegisterFile("audit/v1alpha1/audit.proto", fileDescriptorAudit) }
 
 var fileDescriptorAudit = []byte{
-	// 186 bytes of a gzipped FileDescriptorProto
+	// 147 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x4a, 0x2c, 0x4d, 0xc9,
 	0x2c, 0xd1, 0x2f, 0x33, 0x4c, 0xcc, 0x29, 0xc8, 0x48, 0x34, 0xd4, 0x07, 0x73, 0xf5, 0x0a, 0x8a,
-	0xf2, 0x4b, 0xf2, 0x85, 0x44, 0x32, 0x8b, 0x4b, 0x32, 0xf3, 0xf5, 0x20, 0x42, 0x30, 0x15, 0x4a,
-	0x1e, 0x5c, 0x7c, 0x8e, 0x20, 0x11, 0x97, 0xcc, 0xa2, 0xd4, 0xe4, 0x92, 0xcc, 0xb2, 0x54, 0x21,
-	0x33, 0x2e, 0xd6, 0x9c, 0xd4, 0xb2, 0xd4, 0x1c, 0x09, 0x46, 0x05, 0x46, 0x0d, 0x3e, 0x23, 0x05,
-	0x3d, 0x6c, 0xfa, 0xf4, 0xc0, 0x9a, 0x7c, 0x40, 0xea, 0x82, 0x20, 0xca, 0xb5, 0x4c, 0xb9, 0xb8,
-	0x10, 0x82, 0x42, 0x1c, 0x5c, 0x2c, 0x7e, 0xfe, 0x7e, 0xae, 0x02, 0x0c, 0x42, 0x3c, 0x5c, 0x1c,
-	0xbe, 0xae, 0x21, 0x8e, 0x2e, 0x8e, 0x21, 0x8e, 0x02, 0x8c, 0x42, 0xfc, 0x5c, 0xdc, 0x8e, 0x01,
-	0x01, 0xf1, 0x2e, 0xae, 0x6e, 0x9e, 0x7e, 0xae, 0x2e, 0x02, 0x4c, 0x4e, 0x9a, 0x27, 0x1e, 0xc9,
-	0x31, 0x5e, 0x78, 0x24, 0xc7, 0xf8, 0xe0, 0x91, 0x1c, 0x63, 0x94, 0x34, 0xc4, 0xb2, 0xcc, 0x7c,
-	0xfd, 0xc4, 0x82, 0x4c, 0x7d, 0x54, 0xdf, 0x24, 0xb1, 0x81, 0x3d, 0x62, 0x0c, 0x08, 0x00, 0x00,
-	0xff, 0xff, 0x04, 0xf3, 0x95, 0x30, 0xe6, 0x00, 0x00, 0x00,
+	0xf2, 0x4b, 0xf2, 0x85, 0x44, 0x32, 0x8b, 0x4b, 0x32, 0xf3, 0xf5, 0x20, 0x42, 0x30, 0x15, 0x5a,
+	0xa6, 0x5c, 0x5c, 0x8e, 0x20, 0x11, 0x9f, 0xd4, 0xb2, 0xd4, 0x1c, 0x21, 0x0e, 0x2e, 0x16, 0x3f,
+	0x7f, 0x3f, 0x57, 0x01, 0x06, 0x21, 0x1e, 0x2e, 0x0e, 0x5f, 0xd7, 0x10, 0x47, 0x17, 0xc7, 0x10,
+	0x47, 0x01, 0x46, 0x21, 0x7e, 0x2e, 0x6e, 0xc7, 0x80, 0x80, 0x78, 0x17, 0x57, 0x37, 0x4f, 0x3f,
+	0x57, 0x17, 0x01, 0x26, 0x27, 0xcd, 0x13, 0x8f, 0xe4, 0x18, 0x2f, 0x3c, 0x92, 0x63, 0x7c, 0xf0,
+	0x48, 0x8e, 0x31, 0x4a, 0x1a, 0x62, 0x74, 0x66, 0xbe, 0x7e, 0x62, 0x41, 0xa6, 0x3e, 0xaa, 0x1b,
+	0x92, 0xd8, 0xc0, 0xd6, 0x1b, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0x62, 0x85, 0xda, 0x74, 0x9c,
+	0x00, 0x00, 0x00,
 }

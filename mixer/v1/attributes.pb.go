@@ -19,6 +19,7 @@
 		ReferencedAttributes
 		HeaderOperation
 		RouteDirective
+		AuditDirective
 		ReportRequest
 		ReportResponse
 */

@@ -84,8 +84,9 @@ message CheckResponse {
     // whenever all preconditions are satisfied.
     RouteDirective route_directive = 6;
 
+    // $hide_from_docs
     // An optional audit directive, used to decide audit actions.
-    audit.v1alpha1.AuditDirective audit_directive = 7;
+    AuditDirective audit_directive = 7;
   }
 
   // Expresses the result of a quota allocation.
@@ -191,4 +192,11 @@ message RouteDirective {
   // Supplies the response body for the direct response.
   // If this setting is omitted, no body is included in the generated response.
   string direct_response_body = 4;
+}
+
+// $hide_from_docs
+// Expresses the audit actions to be performed after a check call.
+message AuditDirective {
+  // Defines the audit log content.
+  audit.v1alpha1.AuditLevel level = 1;
 }
