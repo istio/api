@@ -807,10 +807,12 @@ type TargetSelector struct {
 	// One or more label matching conditions to select subset of pods/VM on which this authentication
 	// policy should be applied. When there are multiple label requirements, all must be satisfied.
 	// It only matches workloads in the same namespace as the policy.
-	// For example, the following selector matches the workloads that have the label {"env": "testing"}.
+	// For example, the following selector matches the workloads that have the labels
+	// {"app": "productpage", "version": "v1"}.
 	// ```yaml
 	//   selector:
-	//     env: 'testing'
+	//     app: 'productpage'
+	//     version: 'v1'
 	// ```
 	Selector map[string]string `protobuf:"bytes,3,rep,name=selector" json:"selector,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
