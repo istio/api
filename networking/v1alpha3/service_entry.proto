@@ -91,7 +91,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //   ports:
 //   - number: 443
 //     name: https
-//     protocol: HTTPS
+//     protocol: TLS
 //   resolution: DNS
 // ```
 //
@@ -294,7 +294,7 @@ message ServiceEntry {
   repeated string hosts = 1;
 
   // The virtual IP addresses associated with the service. Could be CIDR
-  // prefix.  For HTTP services, the addresses field will be ignored and
+  // prefix. For HTTP services, the addresses field will be ignored and
   // the destination will be identified based on the HTTP Host/Authority
   // header. For non-HTTP protocols such as mongo/opaque TCP/even HTTPS,
   // the hosts will be ignored. If one or more IP addresses are specified,
@@ -374,17 +374,6 @@ message ServiceEntry {
   // said port will be allowed (i.e. 0.0.0.0:<port>).
   Resolution resolution = 5;
 
-  // FailureDomain describes the location of the endpoint in a
-  // hierarchy of failure domains (country > region > zone).
-  message FailureDomain {
-    // The country where the endpoint is present.
-    string country = 1;
-    // The region in the country (or the data center).
-    string region = 2;
-    // The availability zone within the region.
-    string zone = 3;
-  };
-
   // Endpoint defines a network address (IP or hostname) associated with
   // the mesh service.
   message Endpoint {
@@ -402,20 +391,32 @@ message ServiceEntry {
     // One or more labels associated with the endpoint.
     map<string, string> labels = 3;
 
-    // Network names allow to group endpoints resident in the same L3
+    // Network ID enables Istio to group endpoints resident in the same L3
     // domain/network. All endpoints in the same network are assumed to be
     // directly reachable from one another. When endpoints in different
     // networks cannot reach each other directly, an Istio Gateway can be
     // used to establish connectivity (usually using the
     // ISTIO_REGISTRY_PASSTHROUGH mode in a Gateway Server).
-    string network_name = 4;
+    string network_id = 4;
 
-    // The failure domain associated with the endpoint.  All endpoints
-    // within the same failure domain and the same network should be
-    // directly routable. Endpoints in same failure domain across different
-    // networks need to be routable via the Gateway attached to each
-    // network.
-    FailureDomain failure_domain = 5;
+    // The locality ID associated with the endpoint. A locality corresponds
+    // to a failure domain (e.g., country/region/zone). Arbitrary failure
+    // domain hierarchies can be represented by separating each
+    // encapsulating failure domain by /. For example, the locality of an
+    // an endpoint in US, in US-East-1 region, within availability zone
+    // az-1, in data center rack r11 can be represented as
+    // us/us-east-1/az-1/r11. Istio will configure the sidecar to route to
+    // endpoints within the same locality as the sidecar. If none of the
+    // endpoints in the locality are available, endpoints parent locality
+    // (but within the same network ID) will be chosen. For example, if
+    // there are two endpoints in same network (networkID "n1"), say e1
+    // with locality us/us-east-1/az-1/r11 and e2 with locality
+    // us/us-east-1/az-2/r12, a sidecar from us/us-east-1/az-1/r11 locality
+    // will prefer e1 from the same locality over e2 from a different
+    // locality. Endpoint e2 could be the IP associated with a gateway
+    // (that bridges networks n1 and n2), or the IP associated with a
+    // standard service endpoint.
+    string locality_id = 5;
   };
 
   // One or more endpoints associated with the service.

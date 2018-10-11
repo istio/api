@@ -250,8 +250,9 @@ message Server {
 
     // TLS modes enforced by the proxy
     enum TLSmode {
-      // Forward the connection to the upstream server selected based on
-      // the SNI string presented by the client.
+      // The SNI string presented by the client will be used as the match
+      // criterion in a VirtualService TLS route to determine the
+      // destination service from the service registry.
       PASSTHROUGH = 0;
 
       // Secure connections with standard TLS semantics.

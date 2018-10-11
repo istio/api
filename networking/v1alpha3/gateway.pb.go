@@ -18,8 +18,9 @@ var _ = math.Inf
 type Server_TLSOptions_TLSmode int32
 
 const (
-	// Forward the connection to the upstream server selected based on
-	// the SNI string presented by the client.
+	// The SNI string presented by the client will be used as the match
+	// criterion in a VirtualService TLS route to determine the
+	// destination service from the service registry.
 	Server_TLSOptions_PASSTHROUGH Server_TLSOptions_TLSmode = 0
 	// Secure connections with standard TLS semantics.
 	Server_TLSOptions_SIMPLE Server_TLSOptions_TLSmode = 1

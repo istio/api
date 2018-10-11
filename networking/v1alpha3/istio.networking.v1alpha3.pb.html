@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 aliases:
   - /docs/reference/config/istio.routing.v1alpha1/
-number_of_entries: 53
+number_of_entries: 52
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -2684,8 +2684,9 @@ Otherwise default to the default cipher list supported by Envoy.</p>
 <tr id="Server-TLSOptions-TLSmode-PASSTHROUGH">
 <td><code>PASSTHROUGH</code></td>
 <td>
-<p>Forward the connection to the upstream server selected based on
-the SNI string presented by the client.</p>
+<p>The SNI string presented by the client will be used as the match
+criterion in a VirtualService TLS route to determine the
+destination service from the service registry.</p>
 
 </td>
 </tr>
@@ -2777,7 +2778,7 @@ spec:
   ports:
   - number: 443
     name: https
-    protocol: HTTPS
+    protocol: TLS
   resolution: DNS
 </code></pre>
 
@@ -2990,7 +2991,7 @@ to uniquely identify the destination.</p>
 <td><code>string[]</code></td>
 <td>
 <p>The virtual IP addresses associated with the service. Could be CIDR
-prefix.  For HTTP services, the addresses field will be ignored and
+prefix. For HTTP services, the addresses field will be ignored and
 the destination will be identified based on the HTTP Host/Authority
 header. For non-HTTP protocols such as mongo/opaque TCP/even HTTPS,
 the hosts will be ignored. If one or more IP addresses are specified,
@@ -3102,11 +3103,11 @@ service. Do not use for unix:// addresses.</p>
 
 </td>
 </tr>
-<tr id="ServiceEntry-Endpoint-network_name">
-<td><code>networkName</code></td>
+<tr id="ServiceEntry-Endpoint-network_id">
+<td><code>networkId</code></td>
 <td><code>string</code></td>
 <td>
-<p>Network names allow to group endpoints resident in the same L3
+<p>Network ID enables Istio to group endpoints resident in the same L3
 domain/network. All endpoints in the same network are assumed to be
 directly reachable from one another. When endpoints in different
 networks cannot reach each other directly, an Istio Gateway can be
@@ -3115,56 +3116,27 @@ ISTIO<em>REGISTRY</em>PASSTHROUGH mode in a Gateway Server).</p>
 
 </td>
 </tr>
-<tr id="ServiceEntry-Endpoint-failure_domain">
-<td><code>failureDomain</code></td>
-<td><code><a href="#ServiceEntry-FailureDomain">ServiceEntry.FailureDomain</a></code></td>
-<td>
-<p>The failure domain associated with the endpoint.  All endpoints
-within the same failure domain and the same network should be
-directly routable. Endpoints in same failure domain across different
-networks need to be routable via the Gateway attached to each
-network.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="ServiceEntry-FailureDomain">ServiceEntry.FailureDomain</h2>
-<section>
-<p>FailureDomain describes the location of the endpoint in a
-hierarchy of failure domains (country &gt; region &gt; zone).</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="ServiceEntry-FailureDomain-country">
-<td><code>country</code></td>
+<tr id="ServiceEntry-Endpoint-locality_id">
+<td><code>localityId</code></td>
 <td><code>string</code></td>
 <td>
-<p>The country where the endpoint is present.</p>
-
-</td>
-</tr>
-<tr id="ServiceEntry-FailureDomain-region">
-<td><code>region</code></td>
-<td><code>string</code></td>
-<td>
-<p>The region in the country (or the data center).</p>
-
-</td>
-</tr>
-<tr id="ServiceEntry-FailureDomain-zone">
-<td><code>zone</code></td>
-<td><code>string</code></td>
-<td>
-<p>The availability zone within the region.</p>
+<p>The locality ID associated with the endpoint. A locality corresponds
+to a failure domain (e.g., country/region/zone). Arbitrary failure
+domain hierarchies can be represented by separating each
+encapsulating failure domain by /. For example, the locality of an
+an endpoint in US, in US-East-1 region, within availability zone
+az-1, in data center rack r11 can be represented as
+us/us-east-1/az-1/r11. Istio will configure the sidecar to route to
+endpoints within the same locality as the sidecar. If none of the
+endpoints in the locality are available, endpoints parent locality
+(but within the same network ID) will be chosen. For example, if
+there are two endpoints in same network (networkID &ldquo;n1&rdquo;), say e1
+with locality us/us-east-1/az-1/r11 and e2 with locality
+us/us-east-1/az-2/r12, a sidecar from us/us-east-1/az-1/r11 locality
+will prefer e1 from the same locality over e2 from a different
+locality. Endpoint e2 could be the IP associated with a gateway
+(that bridges networks n1 and n2), or the IP associated with a
+standard service endpoint.</p>
 
 </td>
 </tr>
