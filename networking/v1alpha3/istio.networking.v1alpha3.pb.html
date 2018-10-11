@@ -2705,6 +2705,22 @@ client certificates for authentication.</p>
 
 </td>
 </tr>
+<tr id="Server-TLSOptions-TLSmode-ISTIO_REGISTRY_PASSTHROUGH">
+<td><code>ISTIO_REGISTRY_PASSTHROUGH</code></td>
+<td>
+<p>Similar to the passthrough mode, except servers with this TLS mode
+do not require an associated VirtualService to map from the SNI
+value to service in the registry. The destination details such as
+the service/subset/port are encoded in the SNI value. The proxy
+will forward to the upstream (Envoy) cluster (a group of
+endpoints) specified by the SNI value. This server is typically
+used to provide connectivity between services in disparate L3
+networks that otherwise do not have direct connectivity between
+their respective endpoints. Use of this mode assumes that both the
+source and the destination are using Istio mTLS to secure traffic.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
