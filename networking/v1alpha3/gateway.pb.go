@@ -104,7 +104,7 @@ func (Server_TLSOptions_TLSProtocol) EnumDescriptor() ([]byte, []int) {
 //   name: my-gateway
 // spec:
 //   selector:
-//     app: my-gatweway-controller
+//     app: my-gateway-controller
 //   servers:
 //   - port:
 //       number: 80
