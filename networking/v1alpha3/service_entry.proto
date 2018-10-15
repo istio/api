@@ -427,5 +427,5 @@ message ServiceEntry {
   // identity when clients connect to this service using Istio mTLS.  To
   // enable Istio mTLS, use destination rule and specify TLS mode as
   // ISTIO_MUTUAL.
-  repeated string subject_alternate_names = 7;
+  repeated string subject_alt_names = 7;
 }
