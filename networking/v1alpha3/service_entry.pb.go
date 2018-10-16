@@ -479,7 +479,7 @@ type ServiceEntry_Endpoint struct {
 	// directly reachable from one another. When endpoints in different
 	// networks cannot reach each other directly, an Istio Gateway can be
 	// used to establish connectivity (usually using the
-	// ISTIO_REGISTRY_PASSTHROUGH mode in a Gateway Server). This is
+	// AUTO_PASSTHROUGH mode in a Gateway Server). This is
 	// an advanced configuration used typically for spanning an Istio mesh
 	// over multiple clusters.
 	Network string `protobuf:"bytes,4,opt,name=network,proto3" json:"network,omitempty"`

@@ -2704,8 +2704,8 @@ client certificates for authentication.</p>
 
 </td>
 </tr>
-<tr id="Server-TLSOptions-TLSmode-ISTIO_REGISTRY_PASSTHROUGH">
-<td><code>ISTIO_REGISTRY_PASSTHROUGH</code></td>
+<tr id="Server-TLSOptions-TLSmode-AUTO_PASSTHROUGH">
+<td><code>AUTO_PASSTHROUGH</code></td>
 <td>
 <p>Similar to the passthrough mode, except servers with this TLS mode
 do not require an associated VirtualService to map from the SNI
@@ -3125,7 +3125,7 @@ domain/network. All endpoints in the same network are assumed to be
 directly reachable from one another. When endpoints in different
 networks cannot reach each other directly, an Istio Gateway can be
 used to establish connectivity (usually using the
-ISTIO<em>REGISTRY</em>PASSTHROUGH mode in a Gateway Server). This is
+AUTO_PASSTHROUGH mode in a Gateway Server). This is
 an advanced configuration used typically for spanning an Istio mesh
 over multiple clusters.</p>
 
