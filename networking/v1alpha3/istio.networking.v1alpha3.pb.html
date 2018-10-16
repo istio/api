@@ -3066,9 +3066,15 @@ said port will be allowed (i.e. 0.0.0.0:<port>).</p>
 <td>
 <p>One or more identities associated with the endpoints of this
 service. These identities will be used to validate the endpoint
-identity when clients connect to this service using Istio mTLS.  To
+identity when clients connect to this service using Istio mTLS. To
 enable Istio mTLS, use destination rule and specify TLS mode as
-ISTIO_MUTUAL.</p>
+ISTIO<em>MUTUAL. Subject alternate names specified in the destination
+rule will override the subject alternate name specified in the service
+entry. A service entry level subject alternate name allows for
+configuring a global destination rule for *.cluster.local with TLS
+mode set to ISTIO</em>MUTUAL, without needing to create a separate
+destination rule for each internal service specified through service
+entry.</p>
 
 </td>
 </tr>
@@ -3118,24 +3124,26 @@ service. Do not use for unix:// addresses.</p>
 
 </td>
 </tr>
-<tr id="ServiceEntry-Endpoint-network_id">
-<td><code>networkId</code></td>
+<tr id="ServiceEntry-Endpoint-network">
+<td><code>network</code></td>
 <td><code>string</code></td>
 <td>
-<p>Network ID enables Istio to group endpoints resident in the same L3
+<p>Network enables Istio to group endpoints resident in the same L3
 domain/network. All endpoints in the same network are assumed to be
 directly reachable from one another. When endpoints in different
 networks cannot reach each other directly, an Istio Gateway can be
 used to establish connectivity (usually using the
-ISTIO<em>REGISTRY</em>PASSTHROUGH mode in a Gateway Server).</p>
+ISTIO<em>REGISTRY</em>PASSTHROUGH mode in a Gateway Server). This is
+an advanced configuration used typically for spanning an Istio mesh
+over multiple clusters.</p>
 
 </td>
 </tr>
-<tr id="ServiceEntry-Endpoint-locality_id">
-<td><code>localityId</code></td>
+<tr id="ServiceEntry-Endpoint-locality">
+<td><code>locality</code></td>
 <td><code>string</code></td>
 <td>
-<p>The locality ID associated with the endpoint. A locality corresponds
+<p>The locality associated with the endpoint. A locality corresponds
 to a failure domain (e.g., country/region/zone). Arbitrary failure
 domain hierarchies can be represented by separating each
 encapsulating failure domain by /. For example, the locality of an

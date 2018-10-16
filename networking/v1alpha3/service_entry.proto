@@ -391,15 +391,17 @@ message ServiceEntry {
     // One or more labels associated with the endpoint.
     map<string, string> labels = 3;
 
-    // Network ID enables Istio to group endpoints resident in the same L3
+    // Network enables Istio to group endpoints resident in the same L3
     // domain/network. All endpoints in the same network are assumed to be
     // directly reachable from one another. When endpoints in different
     // networks cannot reach each other directly, an Istio Gateway can be
     // used to establish connectivity (usually using the
-    // ISTIO_REGISTRY_PASSTHROUGH mode in a Gateway Server).
-    string network_id = 4;
+    // ISTIO_REGISTRY_PASSTHROUGH mode in a Gateway Server). This is
+    // an advanced configuration used typically for spanning an Istio mesh
+    // over multiple clusters.
+    string network = 4;
 
-    // The locality ID associated with the endpoint. A locality corresponds
+    // The locality associated with the endpoint. A locality corresponds
     // to a failure domain (e.g., country/region/zone). Arbitrary failure
     // domain hierarchies can be represented by separating each
     // encapsulating failure domain by /. For example, the locality of an
@@ -416,7 +418,7 @@ message ServiceEntry {
     // locality. Endpoint e2 could be the IP associated with a gateway
     // (that bridges networks n1 and n2), or the IP associated with a
     // standard service endpoint.
-    string locality_id = 5;
+    string locality = 5;
   };
 
   // One or more endpoints associated with the service.
@@ -424,8 +426,14 @@ message ServiceEntry {
 
   // One or more identities associated with the endpoints of this
   // service. These identities will be used to validate the endpoint
-  // identity when clients connect to this service using Istio mTLS.  To
+  // identity when clients connect to this service using Istio mTLS. To
   // enable Istio mTLS, use destination rule and specify TLS mode as
-  // ISTIO_MUTUAL.
+  // ISTIO_MUTUAL. Subject alternate names specified in the destination
+  // rule will override the subject alternate name specified in the service
+  // entry. A service entry level subject alternate name allows for
+  // configuring a global destination rule for *.cluster.local with TLS
+  // mode set to ISTIO_MUTUAL, without needing to create a separate
+  // destination rule for each internal service specified through service
+  // entry.
   repeated string subject_alt_names = 7;
 }
