@@ -437,7 +437,17 @@ type Instance struct {
 	// proto defined by the template; this varies depending on the value of field `template`.
 	Params *google_protobuf1.Struct `protobuf:"bytes,3,opt,name=params" json:"params,omitempty"`
 	// Optional. Defines attribute bindings to map the output of attribute-producing adapters back into
-	// the attribute space as part of pre-processing.
+	// the attribute space. The variable `$out` refers to the instance of the output template produced
+	// by the adapter.
+	// The following example derives `source.namespace` from `source.uid` in the context of Kubernetes:
+	// ```yaml
+	// params:
+	//   # Pass the required attribute data to the adapter
+	//   source_uid: source.uid | ""
+	// attribute_bindings:
+	//   # Fill the new attributes from the adapter produced output
+	//   source.namespace: $out.source_namespace
+	// ```
 	AttributeBindings map[string]string `protobuf:"bytes,4,rep,name=attribute_bindings,json=attributeBindings" json:"attribute_bindings,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 

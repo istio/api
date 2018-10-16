@@ -552,7 +552,17 @@ proto defined by the template; this varies depending on the value of field <code
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
 <p>Optional. Defines attribute bindings to map the output of attribute-producing adapters back into
-the attribute space as part of pre-processing.</p>
+the attribute space. The variable <code>$out</code> refers to the instance of the output template produced
+by the adapter.
+The following example derives <code>source.namespace</code> from <code>source.uid</code> in the context of Kubernetes:</p>
+
+<pre><code class="language-yaml">params:
+  # Pass the required attribute data to the adapter
+  source_uid: source.uid | &quot;&quot;
+attribute_bindings:
+  # Fill the new attributes from the adapter produced output
+  source.namespace: $out.source_namespace
+</code></pre>
 
 </td>
 </tr>
