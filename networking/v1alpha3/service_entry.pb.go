@@ -402,15 +402,7 @@ type ServiceEntry struct {
 	Endpoints []*ServiceEntry_Endpoint `protobuf:"bytes,6,rep,name=endpoints" json:"endpoints,omitempty"`
 	// One or more identities associated with the endpoints of this
 	// service. These identities will be used to validate the endpoint
-	// identity when clients connect to this service using Istio mTLS. To
-	// enable Istio mTLS, use destination rule and specify TLS mode as
-	// ISTIO_MUTUAL. Subject alternate names specified in the destination
-	// rule will override the subject alternate name specified in the service
-	// entry. A service entry level subject alternate name allows for
-	// configuring a global destination rule for *.cluster.local with TLS
-	// mode set to ISTIO_MUTUAL, without needing to create a separate
-	// destination rule for each internal service specified through service
-	// entry.
+	// identity when clients connect to this service using Istio mTLS.
 	SubjectAltNames []string `protobuf:"bytes,7,rep,name=subject_alt_names,json=subjectAltNames" json:"subject_alt_names,omitempty"`
 }
 

@@ -3066,15 +3066,7 @@ said port will be allowed (i.e. 0.0.0.0:<port>).</p>
 <td>
 <p>One or more identities associated with the endpoints of this
 service. These identities will be used to validate the endpoint
-identity when clients connect to this service using Istio mTLS. To
-enable Istio mTLS, use destination rule and specify TLS mode as
-ISTIO<em>MUTUAL. Subject alternate names specified in the destination
-rule will override the subject alternate name specified in the service
-entry. A service entry level subject alternate name allows for
-configuring a global destination rule for *.cluster.local with TLS
-mode set to ISTIO</em>MUTUAL, without needing to create a separate
-destination rule for each internal service specified through service
-entry.</p>
+identity when clients connect to this service using Istio mTLS.</p>
 
 </td>
 </tr>
@@ -3666,16 +3658,11 @@ Should be empty if mode is <code>ISTIO_MUTUAL</code>.</p>
 
 </td>
 </tr>
-<tr id="TLSSettings-subject_alt_names">
+<tr id="TLSSettings-subject_alt_names" class="deprecated ">
 <td><code>subjectAltNames</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>A list of alternate names to verify the subject identity in the
-certificate. If specified, the proxy will verify that the server
-certificate&rsquo;s subject alt name matches one of the specified values.
-When the TLS mode is set to ISTIO_MUTUAL and subject alternate names
-are specified, Istio will use the specified values instead of the
-inferred values from the workloads, to validate the workload identity.</p>
+<p>Deprecated. Use the Service entry to specify subject alt names.</p>
 
 </td>
 </tr>
