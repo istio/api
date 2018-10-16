@@ -423,9 +423,4 @@ message ServiceEntry {
 
   // One or more endpoints associated with the service.
   repeated Endpoint endpoints = 6;
-
-  // One or more identities associated with the endpoints of this
-  // service. These identities will be used to validate the endpoint
-  // identity when clients connect to this service using Istio mTLS.
-  repeated string subject_alt_names = 7;
 }

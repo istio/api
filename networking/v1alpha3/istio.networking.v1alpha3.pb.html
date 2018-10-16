@@ -3060,16 +3060,6 @@ said port will be allowed (i.e. 0.0.0.0:<port>).</p>
 
 </td>
 </tr>
-<tr id="ServiceEntry-subject_alt_names">
-<td><code>subjectAltNames</code></td>
-<td><code>string[]</code></td>
-<td>
-<p>One or more identities associated with the endpoints of this
-service. These identities will be used to validate the endpoint
-identity when clients connect to this service using Istio mTLS.</p>
-
-</td>
-</tr>
 </tbody>
 </table>
 </section>
@@ -3658,11 +3648,13 @@ Should be empty if mode is <code>ISTIO_MUTUAL</code>.</p>
 
 </td>
 </tr>
-<tr id="TLSSettings-subject_alt_names" class="deprecated ">
+<tr id="TLSSettings-subject_alt_names">
 <td><code>subjectAltNames</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Deprecated. Use the Service entry to specify subject alt names.</p>
+<p>A list of alternate names to verify the subject identity in the
+certificate. If specified, the proxy will verify that the server
+certificate&rsquo;s subject alt name matches one of the specified values.</p>
 
 </td>
 </tr>

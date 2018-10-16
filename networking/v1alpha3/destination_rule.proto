@@ -536,8 +536,10 @@ message TLSSettings {
   // Should be empty if mode is `ISTIO_MUTUAL`.
   string ca_certificates = 4;
 
-  // Deprecated. Use the Service entry to specify subject alt names.
-  repeated string subject_alt_names = 5 [deprecated=true];
+  // A list of alternate names to verify the subject identity in the
+  // certificate. If specified, the proxy will verify that the server
+  // certificate's subject alt name matches one of the specified values.
+  repeated string subject_alt_names = 5;
 
   // SNI string to present to the server during TLS handshake.
   string sni = 6;
