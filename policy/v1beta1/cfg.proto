@@ -233,7 +233,7 @@ message Instance {
   google.protobuf.Struct params = 3;
 
   // Optional. Defines attribute bindings to map the output of attribute-producing adapters back into
-  // the attribute space. The variable `$out` refers to the instance of the output template produced
+  // the attribute space. The variable `output` refers to the output template instance produced
   // by the adapter.
   // The following example derives `source.namespace` from `source.uid` in the context of Kubernetes:
   // ```yaml
@@ -242,7 +242,7 @@ message Instance {
   //   source_uid: source.uid | ""
   // attribute_bindings:
   //   # Fill the new attributes from the adapter produced output
-  //   source.namespace: $out.source_namespace
+  //   source.namespace: output.source_namespace
   // ```
   map<string, string> attribute_bindings = 4;
 }
