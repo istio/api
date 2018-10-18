@@ -130,6 +130,6 @@ message MeshConfig {
   // Address of the galley service exposing the Mesh Control Protocol (MCP).
   string galley_address = 22;
 
-  // If set to true, token volume mount enabled. https://kubernetes.io/docs/concepts/storage/volumes/#projected
-  bool enable_token_volume_mount = 23;
+  // If set to true, identity is generated using k8s sa jwt token.
+  bool enable_sds_token = 23;
 }
