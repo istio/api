@@ -1,0 +1,66 @@
+// Copyright 2018 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "networking/v1alpha3/destination_rule.proto";
+
+package istio.networking.v1alpha3;
+
+option go_package = "istio.io/api/networking/v1alpha3";
+
+// `Mesh` describes various global properties of a single Istio mesh. A
+// single mesh can be composed of one or more registries. The endpoints
+// managed by the registries can be in one or more L3 networks creating
+// islands of visibility across the mesh.
+message Mesh {
+  // REQUIRED: A list of registry specifications.
+  repeated Registry registries = 1;
+
+  // REQUIRED: A list of networks where the endpoints in the mesh are present.
+  repeated Network networks = 2;
+}
+
+// Provides information about the service registry - type, tls settings, etc.
+message Registry {
+  string name = 1;
+  enum RegistryType {
+    KUBERNETES = 0;
+    CLOUD_FOUNDRY = 1;
+    CONSUL = 2;
+    GALLEY = 3;
+  }
+  RegistryType registry_type = 2;
+  // ip or host
+  string address = 3;
+  // port where the remote server is providing registry data
+  uint32 port = 4;
+  // TLS settings (certs, sans, sni, etc.) required to talk to the remote server.
+  // User is responsible for mounting these certs into Pilot (e.g. using Kubernetes secrets/files).
+  TLSSettings tls_settings = 5;
+}
+
+// Provides information about the endpoints in this network.  At this point
+// in time, an endpoint can be in only one network.  When Pilot ingests
+// service registry information from various registries, it maps the
+// endpoints to the networks defined here based on the CIDR range that
+// matches the endpoint IP.
+message Network {
+  string name = 1;
+  // e.g., 192.158.10.0/24
+  string endpoint_cidr = 2;
+  // A DNS name or IP address associated with the gateway that mediates access from remote networks.
+  // The address must be reachable from sidecars in other networks.
+  repeated string gateways = 3;
+}
