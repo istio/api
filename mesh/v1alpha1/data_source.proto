@@ -1,0 +1,67 @@
+// Copyright 2018 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "networking/v1alpha3/destination_rule.proto";
+
+package istio.mesh.v1alpha1;
+
+option go_package = "istio.io/api/mesh/v1alpha1";
+
+// Credentials provide the requisite information for Istio Pilot/Galley to
+// interface with a remote data source (registry/config).
+message Credentials {
+  oneof creds {
+    // When interfacing with a Kubernetes data source, the
+    // kubernetes_secret specifies the name of the secret that contains the
+    // kubeconfig file associated with the remote kubernetes cluster.
+    string kubernetes_secret = 1;
+    
+    // When interfacing with a remote data source that supports Istio Mesh
+    // Configuration Protocol (MCP), use tls_settings to specify the tls
+    // mode to use and the certificate information required to establish a
+    // TLS or mutual TLS connection to the MCP server.
+    istio.networking.v1alpha3.TLSSettings tls_settings = 2;
+  }
+}
+
+// DataSource describes information about a remote service registry or a
+// configuration store inside a mesh. A single control plane instance can
+// interact with one or more data sources.
+message DataSource {
+  // A unique name assigned to this data source.
+  string name = 1;
+
+  // The type of the data source determines the protocol used to interact with
+  // it and obtain information.
+  enum SourceType {
+    // Kubernetes
+    KUBERNETES = 0;
+
+    // From a remote MCP server (Galley, CloudFoundry's MCP server, etc.)
+    ISTIO_MCP = 1;
+  }
+
+  SourceType type = 2;
+
+  // URI where this data source can be reached.
+  // Can be tcp://, https://, unix://, etc.
+  // Note: URI will be ignored if kubernetes_secret is specified
+  // as the kubeconfig file in the secret provides the URI.
+  string uri = 3;
+
+  // Credentials to access the remote data source
+  Credentials credentials = 4;
+}
