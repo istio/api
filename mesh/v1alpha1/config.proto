@@ -16,6 +16,7 @@ syntax = "proto3";
 
 import "google/protobuf/duration.proto";
 import "mesh/v1alpha1/proxy.proto";
+import "networking/v1alpha3/destination_rule.proto";
 
 // $title: Service Mesh
 // $description: Configuration affecting the service mesh as a whole.
@@ -140,6 +141,7 @@ message MeshConfig {
   reserved 21;
 
   // Address of the galley service exposing the Mesh Control Protocol (MCP).
+  // TODO: remove me. Use configStores instead.
   string galley_address = 22;
 
   // $hide_from_docs
@@ -149,6 +151,44 @@ message MeshConfig {
   // will be used to generate key/cert eventually. This isn't supported for non-k8s case.
   bool enable_sds_token_mount = 23;
 
+  // Information about remote services that service Istio configuration artifacts.
+  repeated DataSource configStores = 25;
+
   // $hide_from_docs
-  // Next available field number: 25
+  // Next available field number: 26
+}
+
+// DataSource describes information about a configuration store inside a
+// mesh. A single control plane instance can interact with one or more data
+// sources.
+message DataSource {
+  // A unique name assigned to this data source.
+  string name = 1;
+
+  // The type of the data source determines the protocol used to interact
+  // with it and obtain information.
+  enum SourceType {
+    // Kubernetes
+    KUBERNETES = 0;
+
+    // From a remote MCP server (Galley, CloudFoundry's MCP server, etc.)
+    ISTIO_MCP = 1;
+
+    // From a local file system
+    FILES = 2;
+  }
+
+  SourceType type = 2;
+
+  // URI where this data source can be reached.  Can be tcp://, https://,
+  // unix://, file:/// etc.  Note: URI will be ignored if kubernetes_secret
+  // is specified as the kubeconfig file in the secret provides the URI.
+  // If the datasource is a file, uri should contain the absolute path to
+  // the directory where the configuration is available.
+  string uri = 3;
+
+  // Credentials to access the remote data source. If the MCP server uses
+  // Istio MTLS and shares the root CA with Pilot, specify the TLS mode as
+  // ISTIO_MUTUAL.
+  istio.networking.v1alpha3.TLSSettings tls_settings = 4;
 }
