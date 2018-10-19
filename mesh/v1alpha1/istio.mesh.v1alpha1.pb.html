@@ -4,7 +4,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 aliases:
   - /docs/reference/config/service-mesh.html
-number_of_entries: 10
+number_of_entries: 11
 ---
 <h2 id="AuthenticationPolicy">AuthenticationPolicy</h2>
 <section>
@@ -285,13 +285,13 @@ registry.</p>
 
 </td>
 </tr>
-<tr id="Network-registries">
-<td><code>registries</code></td>
-<td><code>string[]</code></td>
+<tr id="Network-endpoints">
+<td><code>endpoints</code></td>
+<td><code><a href="#Network-NetworkEndpoints">Network.NetworkEndpoints[]</a></code></td>
 <td>
-<p>One or more service registries that are in this network. Endpoints
-from these registries will be directly reachable to one another.
-The names of the registries should correspond to the data sources.</p>
+<p>The list of endpoints in the network (obtained through the constituent
+service registries or from CIDR ranges). All endpoints in the network
+are directly accessible to one another.</p>
 
 </td>
 </tr>
@@ -354,6 +354,39 @@ istio-ingressgateway.istio-system.svc.cluster.local.</p>
 <td><code>string</code></td>
 <td>
 <p>The locality associated with an explicitly specified gateway (i.e. ip)</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Network-NetworkEndpoints">Network.NetworkEndpoints</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Network-NetworkEndpoints-from_cidr" class="oneof oneof-start">
+<td><code>fromCidr</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>A CIDR range for the set of endpoints in this network</p>
+
+</td>
+</tr>
+<tr id="Network-NetworkEndpoints-from_registry" class="oneof">
+<td><code>fromRegistry</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>Add all endpoints from the specified registry into this network.
+The names of the registries should correspond to the secret name
+that was used to configure the registry (kubernetes multicluster) or
+supplied by MCP server.</p>
 
 </td>
 </tr>

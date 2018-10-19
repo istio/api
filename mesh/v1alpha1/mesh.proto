@@ -27,10 +27,23 @@ message Network {
   // A unique name assigned to the network.
   string name = 1;
 
-  // One or more service registries that are in this network. Endpoints
-  // from these registries will be directly reachable to one another.
-  // The names of the registries should correspond to the data sources.
-  repeated string registries = 2;
+  message NetworkEndpoints {
+    oneof ne {
+    // A CIDR range for the set of endpoints in this network
+    string from_cidr = 1;
+
+    // Add all endpoints from the specified registry into this network.
+    // The names of the registries should correspond to the secret name
+    // that was used to configure the registry (kubernetes multicluster) or
+    // supplied by MCP server.
+    string from_registry = 2;
+    }
+  }
+
+  // The list of endpoints in the network (obtained through the constituent
+  // service registries or from CIDR ranges). All endpoints in the network
+  // are directly accessible to one another.
+  repeated NetworkEndpoints endpoints = 2;
 
   // The gateway associated with this network. Traffic from remote networks
   // will arrive at the specified gateway:port. All incoming traffic must
