@@ -6,11 +6,12 @@
 
 	It is generated from these files:
 		mesh/v1alpha1/config.proto
-		mesh/v1alpha1/data_source.proto
+		mesh/v1alpha1/mesh.proto
 		mesh/v1alpha1/proxy.proto
 
 	It has these top-level messages:
 		MeshConfig
+		Mesh
 		Network
 		Credentials
 		DataSource
@@ -127,73 +128,35 @@ type MeshConfig struct {
 	// at runtime and config gets distributed dynamically.
 	DefaultConfig *ProxyConfig `protobuf:"bytes,14,opt,name=default_config,json=defaultConfig" json:"default_config,omitempty"`
 	// Enables clide side policy checks.
+	// TODO: Please clean all the *_policy* up and put them under a single mixer message.
 	EnableClientSidePolicyCheck bool `protobuf:"varint,19,opt,name=enable_client_side_policy_check,json=enableClientSidePolicyCheck,proto3" json:"enable_client_side_policy_check,omitempty"`
-	// Unix Domain Socket through which envoy communicates with NodeAgent SDS to get key/cert for mTLS.
-	// Use secret-mount files instead of SDS if set to empty.
+	// TODO: Please clean this up and put this under a single SDS message
+	// Unix Domain Socket through which envoy communicates with NodeAgent SDS
+	// to get key/cert for mTLS.  Use secret-mount files instead of SDS if
+	// set to empty.
 	SdsUdsPath string `protobuf:"bytes,20,opt,name=sds_uds_path,json=sdsUdsPath,proto3" json:"sds_uds_path,omitempty"`
-	// Address of the galley service exposing the Mesh Control Protocol (MCP).
-	// TODO: remove
-	GalleyAddress string `protobuf:"bytes,22,opt,name=galley_address,json=galleyAddress,proto3" json:"galley_address,omitempty"`
-	// Multiple service registries can be configured for a single control
-	// plane.  For example, lets say there are three kubernetes clusters in
-	// two networks with no direct endpoint connectivity across the
-	// networks. Clusters us-east-c1 and us-east-c2 are in US-east region and
-	// cluster us-west-c1 is in US-west region. Assume that all clusters in
-	// US-east region are in the same network, i.e. endpoints in us-east-c1
-	// have direct L3 connectivity to endpoints in us-east-c2
-	// cluster. Assuming that Pilot running on any of these clusters has
-	// access to the mater nodes of each cluster (to talk to the API
-	// servers), the following configuration describes a mesh spanning all
-	// the clusters and using cluster-local istio-ingressgateway to route
-	// traffic to endpoints within the cluster.
-	//
-	// serviceRegistries:
-	// - name: us-east-c1
-	//   type: KUBERNETES
-	//   credentials:
-	//     kubernetesSecret: us-east-c1-secret
-	// - name: us-east-c2
-	//   type: KUBERNETES
-	//   credentials:
-	//     kubernetesSecret: us-east-c2-secret
-	// - name: us-west-c1
-	//   type: KUBERNETES
-	//   credentials:
-	//     kubernetesSecret: us-west-c1-secret
-	// configStores: #all configuration from us-east-c1
-	// - name: us-east-c1
-	//   type: KUBERNETES
-	//   credentials:
-	//     kubernetesSecret: us-east-c1-secret
-	// networks:
-	// - name: us-east # some arbitrary name to group endpoints
-	//   registries:
-	//   - us-east-c1
-	//   - us-east-c2
-	//   gateways:
-	//   - registryServiceName: istio-ingressgateway.istio-system.svc.cluster.local
-	//     port: 15443
-	// - name: us-west
-	//   registries:
-	//   - us-west-c1
-	//   gateways:
-	//   - registryServiceName: istio-ingressgateway.istio-system.svc.cluster.local
-	//     port: 15443
-	//
-	// service_registries describe the registries from which Istio should
-	// construct the composite service registry for the service mesh. If
-	// omitted, Pilot will try to connect to the ambient service registry
-	// (when running on kubernetes).
-	ServiceRegistries []*DataSource `protobuf:"bytes,23,rep,name=service_registries,json=serviceRegistries" json:"service_registries,omitempty"`
-	// One or more configuration stores that contain Istio configuration data
-	// such as networking rules, auth/RBAC policies, etc.  If omitted, Pilot
-	// will try to connect to the ambient service registry (when running on
-	// kubernetes).
-	ConfigStores []*DataSource `protobuf:"bytes,24,rep,name=config_stores,json=configStores" json:"config_stores,omitempty"`
-	// One or more L3 networks where the endpoints from various service
-	// registries are present. This is used to determine routing across
-	// endpoints in different L3 networks.
-	Networks []*Network `protobuf:"bytes,25,rep,name=networks" json:"networks,omitempty"`
+	// $hide_from_docs
+	// This flag is used by secret discovery service(SDS).  If set to
+	// true(prerequisite:
+	// https://kubernetes.io/docs/concepts/storage/volumes/#projected), Istio
+	// will inject volumes mount for k8s service account JWT, so that K8s API
+	// server mounts k8s service account JWT to envoy container, which will
+	// be used to generate key/cert eventually. This isn't supported for
+	// non-k8s case.
+	EnableSdsTokenMount bool `protobuf:"varint,23,opt,name=enable_sds_token_mount,json=enableSdsTokenMount,proto3" json:"enable_sds_token_mount,omitempty"`
+	// Mesh describes the set of service registries, configuration sources
+	// the networks where endpoints are resident, etc. Information gathered
+	// from these sources will be used to compute the mesh topology and set
+	// up L4/L7 connectivity between endpoints in the mesh. If not specified,
+	// Istio will attempt to infer the set of endpoints in the mesh from the
+	// ambient service registry. For example, when running inside a
+	// Kubernetes cluster, Pilot will automatically try to connect to the
+	// local kubernetes API server to obtain service registry and
+	// configuration data. To use the same Istio control plane across
+	// multiple kubernetes clusters, use the mesh field to specify how to
+	// access other kubernetes API servers, as well as information about
+	// network connectivity between clusters.
+	Mesh *Mesh `protobuf:"bytes,24,opt,name=mesh" json:"mesh,omitempty"`
 }
 
 func (m *MeshConfig) Reset()                    { *m = MeshConfig{} }
@@ -299,219 +262,22 @@ func (m *MeshConfig) GetSdsUdsPath() string {
 	return ""
 }
 
-func (m *MeshConfig) GetGalleyAddress() string {
+func (m *MeshConfig) GetEnableSdsTokenMount() bool {
 	if m != nil {
-		return m.GalleyAddress
+		return m.EnableSdsTokenMount
 	}
-	return ""
+	return false
 }
 
-func (m *MeshConfig) GetServiceRegistries() []*DataSource {
+func (m *MeshConfig) GetMesh() *Mesh {
 	if m != nil {
-		return m.ServiceRegistries
+		return m.Mesh
 	}
 	return nil
-}
-
-func (m *MeshConfig) GetConfigStores() []*DataSource {
-	if m != nil {
-		return m.ConfigStores
-	}
-	return nil
-}
-
-func (m *MeshConfig) GetNetworks() []*Network {
-	if m != nil {
-		return m.Networks
-	}
-	return nil
-}
-
-// Network provides information about the endpoints in a routable L3
-// network. A single routable L3 network can have one or more service
-// registries. When Pilot ingests service registry information from various
-// registries, it maps the endpoints to the networks defined here based on
-// the CIDR range that matches the endpoint IP. Note that the network has no
-// relation to the locality of the endpoint. The endpoint locality will be
-// obtained from the service registry.
-type Network struct {
-	// A unique name assigned to the network.
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// One or more service registries that are in this network. Endpoints
-	// from these registries will be directly reachable to one another.
-	// The names of the registries should correspond to the data sources.
-	Registries []string                       `protobuf:"bytes,2,rep,name=registries" json:"registries,omitempty"`
-	Gateways   []*Network_IstioNetworkGateway `protobuf:"bytes,3,rep,name=gateways" json:"gateways,omitempty"`
-}
-
-func (m *Network) Reset()                    { *m = Network{} }
-func (m *Network) String() string            { return proto.CompactTextString(m) }
-func (*Network) ProtoMessage()               {}
-func (*Network) Descriptor() ([]byte, []int) { return fileDescriptorConfig, []int{1} }
-
-func (m *Network) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
-func (m *Network) GetRegistries() []string {
-	if m != nil {
-		return m.Registries
-	}
-	return nil
-}
-
-func (m *Network) GetGateways() []*Network_IstioNetworkGateway {
-	if m != nil {
-		return m.Gateways
-	}
-	return nil
-}
-
-// The gateway associated with this network. Traffic from remote networks
-// will arrive at the specified gateway:port. All incoming traffic must
-// use mTLS.
-type Network_IstioNetworkGateway struct {
-	// Types that are valid to be assigned to Gw:
-	//	*Network_IstioNetworkGateway_RegistryServiceName
-	//	*Network_IstioNetworkGateway_Ip
-	Gw isNetwork_IstioNetworkGateway_Gw `protobuf_oneof:"gw"`
-	// The port associated with the gateway.
-	Port uint32 `protobuf:"varint,3,opt,name=port,proto3" json:"port,omitempty"`
-	// The locality associated with an explicitly specified gateway (i.e. ip)
-	Locality string `protobuf:"bytes,4,opt,name=locality,proto3" json:"locality,omitempty"`
-}
-
-func (m *Network_IstioNetworkGateway) Reset()         { *m = Network_IstioNetworkGateway{} }
-func (m *Network_IstioNetworkGateway) String() string { return proto.CompactTextString(m) }
-func (*Network_IstioNetworkGateway) ProtoMessage()    {}
-func (*Network_IstioNetworkGateway) Descriptor() ([]byte, []int) {
-	return fileDescriptorConfig, []int{1, 0}
-}
-
-type isNetwork_IstioNetworkGateway_Gw interface {
-	isNetwork_IstioNetworkGateway_Gw()
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type Network_IstioNetworkGateway_RegistryServiceName struct {
-	RegistryServiceName string `protobuf:"bytes,1,opt,name=registry_service_name,json=registryServiceName,proto3,oneof"`
-}
-type Network_IstioNetworkGateway_Ip struct {
-	Ip string `protobuf:"bytes,2,opt,name=ip,proto3,oneof"`
-}
-
-func (*Network_IstioNetworkGateway_RegistryServiceName) isNetwork_IstioNetworkGateway_Gw() {}
-func (*Network_IstioNetworkGateway_Ip) isNetwork_IstioNetworkGateway_Gw()                  {}
-
-func (m *Network_IstioNetworkGateway) GetGw() isNetwork_IstioNetworkGateway_Gw {
-	if m != nil {
-		return m.Gw
-	}
-	return nil
-}
-
-func (m *Network_IstioNetworkGateway) GetRegistryServiceName() string {
-	if x, ok := m.GetGw().(*Network_IstioNetworkGateway_RegistryServiceName); ok {
-		return x.RegistryServiceName
-	}
-	return ""
-}
-
-func (m *Network_IstioNetworkGateway) GetIp() string {
-	if x, ok := m.GetGw().(*Network_IstioNetworkGateway_Ip); ok {
-		return x.Ip
-	}
-	return ""
-}
-
-func (m *Network_IstioNetworkGateway) GetPort() uint32 {
-	if m != nil {
-		return m.Port
-	}
-	return 0
-}
-
-func (m *Network_IstioNetworkGateway) GetLocality() string {
-	if m != nil {
-		return m.Locality
-	}
-	return ""
-}
-
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*Network_IstioNetworkGateway) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _Network_IstioNetworkGateway_OneofMarshaler, _Network_IstioNetworkGateway_OneofUnmarshaler, _Network_IstioNetworkGateway_OneofSizer, []interface{}{
-		(*Network_IstioNetworkGateway_RegistryServiceName)(nil),
-		(*Network_IstioNetworkGateway_Ip)(nil),
-	}
-}
-
-func _Network_IstioNetworkGateway_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*Network_IstioNetworkGateway)
-	// gw
-	switch x := m.Gw.(type) {
-	case *Network_IstioNetworkGateway_RegistryServiceName:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.RegistryServiceName)
-	case *Network_IstioNetworkGateway_Ip:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Ip)
-	case nil:
-	default:
-		return fmt.Errorf("Network_IstioNetworkGateway.Gw has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _Network_IstioNetworkGateway_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*Network_IstioNetworkGateway)
-	switch tag {
-	case 1: // gw.registry_service_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Gw = &Network_IstioNetworkGateway_RegistryServiceName{x}
-		return true, err
-	case 2: // gw.ip
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Gw = &Network_IstioNetworkGateway_Ip{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _Network_IstioNetworkGateway_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*Network_IstioNetworkGateway)
-	// gw
-	switch x := m.Gw.(type) {
-	case *Network_IstioNetworkGateway_RegistryServiceName:
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.RegistryServiceName)))
-		n += len(x.RegistryServiceName)
-	case *Network_IstioNetworkGateway_Ip:
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.Ip)))
-		n += len(x.Ip)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 func init() {
 	proto.RegisterType((*MeshConfig)(nil), "istio.mesh.v1alpha1.MeshConfig")
-	proto.RegisterType((*Network)(nil), "istio.mesh.v1alpha1.Network")
-	proto.RegisterType((*Network_IstioNetworkGateway)(nil), "istio.mesh.v1alpha1.Network.IstioNetworkGateway")
 	proto.RegisterEnum("istio.mesh.v1alpha1.MeshConfig_IngressControllerMode", MeshConfig_IngressControllerMode_name, MeshConfig_IngressControllerMode_value)
 }
 func (m *MeshConfig) Marshal() (dAtA []byte, err error) {
@@ -634,162 +400,33 @@ func (m *MeshConfig) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintConfig(dAtA, i, uint64(len(m.SdsUdsPath)))
 		i += copy(dAtA[i:], m.SdsUdsPath)
 	}
-	if len(m.GalleyAddress) > 0 {
-		dAtA[i] = 0xb2
+	if m.EnableSdsTokenMount {
+		dAtA[i] = 0xb8
 		i++
 		dAtA[i] = 0x1
 		i++
-		i = encodeVarintConfig(dAtA, i, uint64(len(m.GalleyAddress)))
-		i += copy(dAtA[i:], m.GalleyAddress)
-	}
-	if len(m.ServiceRegistries) > 0 {
-		for _, msg := range m.ServiceRegistries {
-			dAtA[i] = 0xba
-			i++
-			dAtA[i] = 0x1
-			i++
-			i = encodeVarintConfig(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
+		if m.EnableSdsTokenMount {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
 		}
-	}
-	if len(m.ConfigStores) > 0 {
-		for _, msg := range m.ConfigStores {
-			dAtA[i] = 0xc2
-			i++
-			dAtA[i] = 0x1
-			i++
-			i = encodeVarintConfig(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.Networks) > 0 {
-		for _, msg := range m.Networks {
-			dAtA[i] = 0xca
-			i++
-			dAtA[i] = 0x1
-			i++
-			i = encodeVarintConfig(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	return i, nil
-}
-
-func (m *Network) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Network) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.Name) > 0 {
-		dAtA[i] = 0xa
 		i++
-		i = encodeVarintConfig(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
 	}
-	if len(m.Registries) > 0 {
-		for _, s := range m.Registries {
-			dAtA[i] = 0x12
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
-		}
-	}
-	if len(m.Gateways) > 0 {
-		for _, msg := range m.Gateways {
-			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintConfig(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	return i, nil
-}
-
-func (m *Network_IstioNetworkGateway) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Network_IstioNetworkGateway) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.Gw != nil {
-		nn3, err := m.Gw.MarshalTo(dAtA[i:])
+	if m.Mesh != nil {
+		dAtA[i] = 0xc2
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintConfig(dAtA, i, uint64(m.Mesh.Size()))
+		n3, err := m.Mesh.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn3
-	}
-	if m.Port != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintConfig(dAtA, i, uint64(m.Port))
-	}
-	if len(m.Locality) > 0 {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintConfig(dAtA, i, uint64(len(m.Locality)))
-		i += copy(dAtA[i:], m.Locality)
+		i += n3
 	}
 	return i, nil
 }
 
-func (m *Network_IstioNetworkGateway_RegistryServiceName) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa
-	i++
-	i = encodeVarintConfig(dAtA, i, uint64(len(m.RegistryServiceName)))
-	i += copy(dAtA[i:], m.RegistryServiceName)
-	return i, nil
-}
-func (m *Network_IstioNetworkGateway_Ip) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x12
-	i++
-	i = encodeVarintConfig(dAtA, i, uint64(len(m.Ip)))
-	i += copy(dAtA[i:], m.Ip)
-	return i, nil
-}
 func encodeVarintConfig(dAtA []byte, offset int, v uint64) int {
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
@@ -852,81 +489,13 @@ func (m *MeshConfig) Size() (n int) {
 	if l > 0 {
 		n += 2 + l + sovConfig(uint64(l))
 	}
-	l = len(m.GalleyAddress)
-	if l > 0 {
+	if m.EnableSdsTokenMount {
+		n += 3
+	}
+	if m.Mesh != nil {
+		l = m.Mesh.Size()
 		n += 2 + l + sovConfig(uint64(l))
 	}
-	if len(m.ServiceRegistries) > 0 {
-		for _, e := range m.ServiceRegistries {
-			l = e.Size()
-			n += 2 + l + sovConfig(uint64(l))
-		}
-	}
-	if len(m.ConfigStores) > 0 {
-		for _, e := range m.ConfigStores {
-			l = e.Size()
-			n += 2 + l + sovConfig(uint64(l))
-		}
-	}
-	if len(m.Networks) > 0 {
-		for _, e := range m.Networks {
-			l = e.Size()
-			n += 2 + l + sovConfig(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *Network) Size() (n int) {
-	var l int
-	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovConfig(uint64(l))
-	}
-	if len(m.Registries) > 0 {
-		for _, s := range m.Registries {
-			l = len(s)
-			n += 1 + l + sovConfig(uint64(l))
-		}
-	}
-	if len(m.Gateways) > 0 {
-		for _, e := range m.Gateways {
-			l = e.Size()
-			n += 1 + l + sovConfig(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *Network_IstioNetworkGateway) Size() (n int) {
-	var l int
-	_ = l
-	if m.Gw != nil {
-		n += m.Gw.Size()
-	}
-	if m.Port != 0 {
-		n += 1 + sovConfig(uint64(m.Port))
-	}
-	l = len(m.Locality)
-	if l > 0 {
-		n += 1 + l + sovConfig(uint64(l))
-	}
-	return n
-}
-
-func (m *Network_IstioNetworkGateway_RegistryServiceName) Size() (n int) {
-	var l int
-	_ = l
-	l = len(m.RegistryServiceName)
-	n += 1 + l + sovConfig(uint64(l))
-	return n
-}
-func (m *Network_IstioNetworkGateway_Ip) Size() (n int) {
-	var l int
-	_ = l
-	l = len(m.Ip)
-	n += 1 + l + sovConfig(uint64(l))
 	return n
 }
 
@@ -1329,40 +898,11 @@ func (m *MeshConfig) Unmarshal(dAtA []byte) error {
 			}
 			m.SdsUdsPath = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 22:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GalleyAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthConfig
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.GalleyAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 23:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServiceRegistries", wireType)
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableSdsTokenMount", wireType)
 			}
-			var msglen int
+			var v int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowConfig
@@ -1372,26 +912,15 @@ func (m *MeshConfig) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				v |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
-				return ErrInvalidLengthConfig
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ServiceRegistries = append(m.ServiceRegistries, &DataSource{})
-			if err := m.ServiceRegistries[len(m.ServiceRegistries)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
+			m.EnableSdsTokenMount = bool(v != 0)
 		case 24:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ConfigStores", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Mesh", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1415,336 +944,12 @@ func (m *MeshConfig) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ConfigStores = append(m.ConfigStores, &DataSource{})
-			if err := m.ConfigStores[len(m.ConfigStores)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if m.Mesh == nil {
+				m.Mesh = &Mesh{}
+			}
+			if err := m.Mesh.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			iNdEx = postIndex
-		case 25:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Networks", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthConfig
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Networks = append(m.Networks, &Network{})
-			if err := m.Networks[len(m.Networks)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipConfig(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthConfig
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Network) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowConfig
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Network: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Network: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthConfig
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Registries", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthConfig
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Registries = append(m.Registries, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Gateways", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthConfig
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Gateways = append(m.Gateways, &Network_IstioNetworkGateway{})
-			if err := m.Gateways[len(m.Gateways)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipConfig(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthConfig
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Network_IstioNetworkGateway) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowConfig
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: IstioNetworkGateway: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: IstioNetworkGateway: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RegistryServiceName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthConfig
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Gw = &Network_IstioNetworkGateway_RegistryServiceName{string(dAtA[iNdEx:postIndex])}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Ip", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthConfig
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Gw = &Network_IstioNetworkGateway_Ip{string(dAtA[iNdEx:postIndex])}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
-			}
-			m.Port = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Port |= (uint32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Locality", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthConfig
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Locality = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1875,58 +1080,47 @@ var (
 func init() { proto.RegisterFile("mesh/v1alpha1/config.proto", fileDescriptorConfig) }
 
 var fileDescriptorConfig = []byte{
-	// 847 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x54, 0xdd, 0x6e, 0xe3, 0x44,
-	0x14, 0xae, 0x53, 0x6f, 0xeb, 0x9e, 0xfc, 0xd4, 0x99, 0x90, 0x5d, 0x37, 0xa0, 0xd4, 0x2a, 0x02,
-	0x22, 0x84, 0x1c, 0xb6, 0x80, 0x04, 0x97, 0xdb, 0x84, 0x6e, 0x1b, 0x75, 0x4b, 0xe5, 0x64, 0x6f,
-	0xb8, 0x19, 0x4d, 0xed, 0xa9, 0x33, 0x5a, 0xc7, 0x63, 0xcd, 0x4c, 0xb6, 0x9b, 0xe7, 0xe0, 0x09,
-	0x78, 0x1b, 0xee, 0xe0, 0x11, 0x50, 0x9f, 0x04, 0x79, 0x66, 0x92, 0x6e, 0xa5, 0x08, 0xed, 0x9d,
-	0xfd, 0x7d, 0xdf, 0xf9, 0x3f, 0x73, 0xa0, 0xb7, 0xa0, 0x72, 0x3e, 0x7c, 0xff, 0x92, 0xe4, 0xe5,
-	0x9c, 0xbc, 0x1c, 0x26, 0xbc, 0xb8, 0x63, 0x59, 0x54, 0x0a, 0xae, 0x38, 0xea, 0x30, 0xa9, 0x18,
-	0x8f, 0x2a, 0x45, 0xb4, 0x56, 0xf4, 0xfa, 0x19, 0xe7, 0x59, 0x4e, 0x87, 0x5a, 0x72, 0xbb, 0xbc,
-	0x1b, 0xa6, 0x4b, 0x41, 0x14, 0xe3, 0x85, 0x31, 0xea, 0x1d, 0x3d, 0x75, 0x58, 0x0a, 0xfe, 0x61,
-	0x65, 0xa9, 0xe3, 0xa7, 0x54, 0x4a, 0x14, 0xc1, 0x92, 0x2f, 0x45, 0x42, 0x8d, 0xe0, 0xe4, 0x6f,
-	0x0f, 0xe0, 0x0d, 0x95, 0xf3, 0x91, 0xce, 0x02, 0x7d, 0x07, 0x68, 0xc1, 0x3e, 0x50, 0x81, 0x93,
-	0x39, 0x4d, 0xde, 0x61, 0x49, 0xc5, 0x7b, 0x2a, 0x02, 0x27, 0x74, 0x06, 0x07, 0xb1, 0xaf, 0x99,
-	0x51, 0x45, 0x4c, 0x35, 0x8e, 0x22, 0xe8, 0x18, 0xb5, 0xa0, 0x25, 0x17, 0x6a, 0x2d, 0xaf, 0x69,
-	0x79, 0x5b, 0x53, 0xb1, 0x66, 0xac, 0xfe, 0x14, 0xba, 0x29, 0x93, 0xe4, 0x36, 0xa7, 0xb8, 0xe4,
-	0x39, 0x4b, 0x56, 0x26, 0x8c, 0x0c, 0x76, 0x43, 0x67, 0xe0, 0xc5, 0x1d, 0x4b, 0xde, 0x68, 0x4e,
-	0x07, 0x92, 0xe8, 0x5b, 0x68, 0xeb, 0x82, 0x70, 0xce, 0xa4, 0xa2, 0x05, 0xae, 0xdc, 0x05, 0x6e,
-	0xe8, 0x0c, 0x9e, 0xc5, 0x87, 0x9a, 0xb8, 0xd2, 0xf8, 0x0d, 0x17, 0x0a, 0x7d, 0x0d, 0x06, 0xc2,
-	0x73, 0xa5, 0x4a, 0xa3, 0x7c, 0xa6, 0x95, 0x4d, 0x0d, 0x5f, 0x28, 0x55, 0x6a, 0xdd, 0x19, 0x1c,
-	0x26, 0xbc, 0x28, 0x68, 0xa2, 0xb0, 0x62, 0x0b, 0xca, 0x97, 0x2a, 0xd8, 0x0b, 0x9d, 0x41, 0xfd,
-	0xf4, 0x28, 0x32, 0xad, 0x8e, 0xd6, 0xad, 0x8e, 0xc6, 0xb6, 0xd5, 0x71, 0xcb, 0x5a, 0xcc, 0x8c,
-	0x01, 0xfa, 0x12, 0x9a, 0xac, 0xc8, 0x04, 0x95, 0x12, 0x27, 0x39, 0x91, 0x32, 0xd8, 0xd7, 0x55,
-	0x37, 0x2c, 0x38, 0xaa, 0x30, 0xf4, 0x0d, 0x1c, 0xae, 0x45, 0x55, 0x6f, 0x58, 0x42, 0x03, 0x4f,
-	0xcb, 0x5a, 0x16, 0x9e, 0x1a, 0x14, 0x2d, 0xe0, 0xc5, 0xc6, 0x1b, 0x2f, 0x94, 0xe0, 0x79, 0x4e,
-	0x05, 0x5e, 0xf0, 0x94, 0x06, 0x07, 0xa1, 0x33, 0x68, 0x9d, 0xfe, 0x14, 0x6d, 0xd9, 0x8c, 0xe8,
-	0x71, 0x72, 0xd1, 0xa5, 0x8d, 0xbb, 0xb1, 0x7e, 0xc3, 0x53, 0x1a, 0x77, 0xd9, 0x36, 0x18, 0x7d,
-	0x05, 0x2d, 0x5a, 0xe8, 0x39, 0x28, 0x41, 0x12, 0x56, 0x64, 0x41, 0x43, 0x4f, 0xa0, 0x69, 0xd0,
-	0x99, 0x01, 0xab, 0x7e, 0x92, 0x24, 0xa9, 0x92, 0xca, 0x79, 0x86, 0xef, 0x58, 0x4e, 0x83, 0xa6,
-	0x4e, 0xbf, 0x69, 0xe0, 0x2b, 0x9e, 0x9d, 0xb3, 0x9c, 0xa2, 0xd7, 0xd0, 0x4a, 0xe9, 0x1d, 0x59,
-	0xe6, 0x0a, 0x9b, 0x6d, 0x0e, 0x5a, 0xba, 0x9d, 0xe1, 0xd6, 0xa4, 0x6f, 0xaa, 0x59, 0x98, 0xac,
-	0xe3, 0xa6, 0xb5, 0xb3, 0xeb, 0x37, 0x86, 0x63, 0x9b, 0x57, 0x92, 0x33, 0x5a, 0x28, 0x2c, 0x59,
-	0xfa, 0x74, 0x57, 0x82, 0x8e, 0x4e, 0xf4, 0x73, 0x23, 0x1b, 0x69, 0xd5, 0x94, 0xa5, 0x1f, 0xef,
-	0x0c, 0x0a, 0xa1, 0x21, 0x53, 0x89, 0x97, 0xa9, 0xc4, 0x25, 0x51, 0xf3, 0xe0, 0x33, 0x9d, 0x33,
-	0xc8, 0x54, 0xbe, 0x4d, 0xe5, 0x0d, 0x51, 0xf3, 0xaa, 0xfe, 0x8c, 0xe4, 0x39, 0x5d, 0x61, 0x92,
-	0xa6, 0x55, 0x7f, 0x82, 0xe7, 0xa6, 0x2e, 0x83, 0xbe, 0x32, 0x20, 0xba, 0x06, 0x64, 0xc7, 0x86,
-	0x05, 0xcd, 0x98, 0x54, 0x82, 0x51, 0x19, 0xbc, 0x08, 0x77, 0x07, 0xf5, 0xd3, 0xe3, 0xad, 0xb5,
-	0x8d, 0x89, 0x22, 0x53, 0xfd, 0xbe, 0xe2, 0xb6, 0x35, 0x8d, 0x37, 0x96, 0x68, 0x0c, 0x4d, 0xd3,
-	0x1f, 0x2c, 0x15, 0x17, 0x54, 0x06, 0xc1, 0xa7, 0xb9, 0x6a, 0x18, 0xab, 0xa9, 0x36, 0x42, 0x3f,
-	0x83, 0x57, 0x50, 0x75, 0xcf, 0xc5, 0x3b, 0x19, 0x1c, 0x69, 0x07, 0x5f, 0x6c, 0x75, 0x70, 0x6d,
-	0x44, 0xf1, 0x46, 0x7d, 0xf2, 0x0b, 0x74, 0xb7, 0xae, 0x09, 0xda, 0x87, 0xdd, 0xdf, 0xce, 0xcf,
-	0xfd, 0x1d, 0x54, 0x87, 0xfd, 0xf1, 0xaf, 0xe7, 0xaf, 0xde, 0x5e, 0xcd, 0x7c, 0x07, 0x01, 0xec,
-	0x4d, 0x67, 0xf1, 0xe5, 0x68, 0xe6, 0xd7, 0x26, 0xae, 0x07, 0x7e, 0x7d, 0xe2, 0x7a, 0x75, 0xbf,
-	0x31, 0x71, 0xbd, 0x43, 0xdf, 0x9f, 0xb8, 0x9e, 0xef, 0xb7, 0x27, 0xae, 0xd7, 0xf6, 0xd1, 0xc4,
-	0xf5, 0x90, 0xdf, 0x99, 0xb8, 0x5e, 0xd7, 0x7f, 0x7e, 0xf2, 0x67, 0x0d, 0xf6, 0x6d, 0x68, 0x84,
-	0xc0, 0x2d, 0xc8, 0x82, 0xda, 0x03, 0xa2, 0xbf, 0x51, 0x1f, 0xe0, 0xa3, 0x66, 0xd6, 0xc2, 0xdd,
-	0x6a, 0x36, 0x8f, 0x08, 0xba, 0x02, 0x2f, 0x23, 0x8a, 0xde, 0x93, 0x55, 0x75, 0x17, 0xaa, 0xf2,
-	0xbe, 0xff, 0xbf, 0xf2, 0xa2, 0xcb, 0x8a, 0xb3, 0x3f, 0xaf, 0x8d, 0x61, 0xbc, 0xf1, 0xd0, 0xfb,
-	0xc3, 0x81, 0xce, 0x16, 0x05, 0xfa, 0x11, 0xba, 0x36, 0xe6, 0x6a, 0xfd, 0x34, 0xf1, 0x63, 0xaa,
-	0x17, 0x3b, 0x71, 0x67, 0x4d, 0xdb, 0x27, 0x7a, 0x5d, 0xe5, 0xee, 0x43, 0x8d, 0x95, 0xe6, 0xbe,
-	0x5d, 0xec, 0xc4, 0x35, 0x56, 0x56, 0x15, 0xea, 0x3b, 0x53, 0x5d, 0xb0, 0x66, 0xac, 0xbf, 0x51,
-	0x0f, 0xbc, 0x9c, 0x27, 0x24, 0x67, 0x6a, 0xa5, 0x2f, 0xd5, 0x41, 0xbc, 0xf9, 0x3f, 0x73, 0xa1,
-	0x96, 0xdd, 0x9f, 0x0d, 0xfe, 0x7a, 0xe8, 0x3b, 0xff, 0x3c, 0xf4, 0x9d, 0x7f, 0x1f, 0xfa, 0xce,
-	0xef, 0x3d, 0x53, 0x1e, 0xe3, 0x43, 0x52, 0xb2, 0xe1, 0x93, 0x8b, 0x7d, 0xbb, 0xa7, 0x2f, 0xd1,
-	0x0f, 0xff, 0x05, 0x00, 0x00, 0xff, 0xff, 0xc5, 0xa2, 0xae, 0xfd, 0x35, 0x06, 0x00, 0x00,
+	// 663 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x93, 0x4f, 0x6f, 0xd3, 0x4c,
+	0x10, 0xc6, 0x5f, 0xb7, 0x6e, 0xe3, 0x6e, 0xfe, 0x6d, 0x36, 0x6f, 0xda, 0x6d, 0x90, 0x42, 0x54,
+	0x04, 0x44, 0x08, 0x1c, 0xb5, 0x15, 0x07, 0x8e, 0x34, 0x25, 0x50, 0xab, 0x15, 0x91, 0x93, 0x5e,
+	0xb8, 0xac, 0x5c, 0x7b, 0x93, 0xac, 0xea, 0x78, 0x2d, 0xef, 0xa6, 0x6a, 0xbf, 0x1e, 0x27, 0x8e,
+	0x7c, 0x04, 0xd4, 0x4f, 0x82, 0x3c, 0xeb, 0x14, 0x22, 0x85, 0xeb, 0xf3, 0xfc, 0x66, 0x67, 0x3c,
+	0xf3, 0x18, 0xb5, 0x17, 0x5c, 0xcd, 0xfb, 0x77, 0xc7, 0x41, 0x9c, 0xce, 0x83, 0xe3, 0x7e, 0x28,
+	0x93, 0xa9, 0x98, 0xb9, 0x69, 0x26, 0xb5, 0x24, 0x4d, 0xa1, 0xb4, 0x90, 0x6e, 0x4e, 0xb8, 0x2b,
+	0xa2, 0xdd, 0x99, 0x49, 0x39, 0x8b, 0x79, 0x1f, 0x90, 0x9b, 0xe5, 0xb4, 0x1f, 0x2d, 0xb3, 0x40,
+	0x0b, 0x99, 0x98, 0xa2, 0xf6, 0xe1, 0xfa, 0x83, 0x69, 0x26, 0xef, 0x1f, 0x0a, 0x8b, 0xae, 0x5b,
+	0xf0, 0x2e, 0x38, 0x47, 0xdf, 0x4b, 0x08, 0x5d, 0x71, 0x35, 0x1f, 0x40, 0x7b, 0xf2, 0x16, 0x91,
+	0x85, 0xb8, 0xe7, 0x19, 0x0b, 0xe7, 0x3c, 0xbc, 0x65, 0x8a, 0x67, 0x77, 0x3c, 0xa3, 0x56, 0xd7,
+	0xea, 0xed, 0xf9, 0x18, 0x9c, 0x41, 0x6e, 0x8c, 0x41, 0x27, 0x2e, 0x6a, 0x1a, 0x3a, 0xe3, 0xa9,
+	0xcc, 0xf4, 0x0a, 0xdf, 0x02, 0xbc, 0x01, 0x96, 0x0f, 0x4e, 0xc1, 0x9f, 0xa0, 0x56, 0x24, 0x54,
+	0x70, 0x13, 0x73, 0x96, 0xca, 0x58, 0x84, 0x0f, 0xa6, 0x8d, 0xa2, 0xdb, 0x5d, 0xab, 0xe7, 0xf8,
+	0xcd, 0xc2, 0x1c, 0x81, 0x07, 0x8d, 0x14, 0x79, 0x83, 0x1a, 0xf0, 0x25, 0x2c, 0x16, 0x4a, 0xf3,
+	0x84, 0xe5, 0xcf, 0x51, 0xbb, 0x6b, 0xf5, 0x76, 0xfc, 0x3a, 0x18, 0x97, 0xa0, 0x8f, 0x64, 0xa6,
+	0xc9, 0x2b, 0x64, 0x24, 0x36, 0xd7, 0x3a, 0x35, 0xe4, 0x0e, 0x90, 0x55, 0x90, 0xbf, 0x68, 0x9d,
+	0x02, 0x77, 0x86, 0xea, 0xa1, 0x4c, 0x12, 0x1e, 0x6a, 0xa6, 0xc5, 0x82, 0xcb, 0xa5, 0xa6, 0xbb,
+	0x5d, 0xab, 0x57, 0x3e, 0x39, 0x74, 0xcd, 0x8e, 0xdd, 0xd5, 0x8e, 0xdd, 0xf3, 0x62, 0xc7, 0x7e,
+	0xad, 0xa8, 0x98, 0x98, 0x02, 0xf2, 0x02, 0x55, 0x45, 0x32, 0xcb, 0xb8, 0x52, 0x2c, 0x8c, 0x03,
+	0xa5, 0x68, 0x09, 0xbe, 0xba, 0x52, 0x88, 0x83, 0x5c, 0x23, 0xaf, 0x51, 0x7d, 0x05, 0xe5, 0xbb,
+	0x11, 0x21, 0xa7, 0x0e, 0x60, 0xb5, 0x42, 0x1e, 0x1b, 0x95, 0x2c, 0xd0, 0xc1, 0xd3, 0x6b, 0x32,
+	0xd1, 0x99, 0x8c, 0x63, 0x9e, 0xb1, 0x85, 0x8c, 0x38, 0xdd, 0xeb, 0x5a, 0xbd, 0xda, 0xc9, 0x7b,
+	0x77, 0x43, 0x24, 0xdc, 0x3f, 0x97, 0x73, 0x2f, 0x8a, 0xbe, 0x4f, 0xd5, 0x57, 0x32, 0xe2, 0x7e,
+	0x4b, 0x6c, 0x92, 0xc9, 0x4b, 0x54, 0xe3, 0x09, 0xdc, 0x41, 0x67, 0x41, 0x28, 0x92, 0x19, 0xad,
+	0xc0, 0x05, 0xaa, 0x46, 0x9d, 0x18, 0x31, 0xdf, 0x67, 0x10, 0x86, 0xf9, 0x50, 0xb1, 0x9c, 0xb1,
+	0xa9, 0x88, 0x39, 0xad, 0xc2, 0xf8, 0x55, 0x23, 0x5f, 0xca, 0xd9, 0x50, 0xc4, 0x9c, 0x7c, 0x46,
+	0xb5, 0x88, 0x4f, 0x83, 0x65, 0xac, 0x99, 0x89, 0x31, 0xad, 0xc1, 0x3a, 0xbb, 0x1b, 0x87, 0x1e,
+	0xe5, 0xb7, 0x30, 0x53, 0xfb, 0xd5, 0xa2, 0xae, 0x88, 0xdf, 0x39, 0x7a, 0x5e, 0xcc, 0x15, 0xc6,
+	0x82, 0x27, 0x9a, 0x29, 0x11, 0xad, 0x67, 0x85, 0x36, 0x61, 0xd0, 0x67, 0x06, 0x1b, 0x00, 0x35,
+	0x16, 0xd1, 0xdf, 0x99, 0x21, 0x5d, 0x54, 0x51, 0x91, 0x62, 0xcb, 0x48, 0xb1, 0x34, 0xd0, 0x73,
+	0xfa, 0x3f, 0xcc, 0x8c, 0x54, 0xa4, 0xae, 0x23, 0x35, 0x0a, 0xf4, 0x9c, 0x9c, 0xa2, 0xfd, 0xa2,
+	0x4f, 0x0e, 0x6a, 0x79, 0xcb, 0x13, 0xb6, 0x90, 0xcb, 0x44, 0xd3, 0x03, 0x93, 0x44, 0xe3, 0x8e,
+	0x23, 0x35, 0xc9, 0xbd, 0xab, 0xdc, 0x22, 0xef, 0x90, 0x9d, 0x7f, 0x08, 0xa5, 0x45, 0x54, 0xfe,
+	0x75, 0x10, 0x1f, 0xb0, 0xa3, 0x0f, 0xa8, 0xb5, 0xf1, 0x26, 0xa4, 0x84, 0xb6, 0xbf, 0x0e, 0x87,
+	0xf8, 0x3f, 0x52, 0x46, 0xa5, 0xf3, 0x4f, 0xc3, 0x8f, 0xd7, 0x97, 0x13, 0x6c, 0x11, 0x84, 0x76,
+	0xc7, 0x13, 0xff, 0x62, 0x30, 0xc1, 0x5b, 0x9e, 0xed, 0x20, 0x5c, 0xf6, 0x6c, 0xa7, 0x8c, 0x2b,
+	0x9e, 0xed, 0xd4, 0x31, 0xf6, 0x6c, 0x07, 0xe3, 0x86, 0x67, 0x3b, 0x0d, 0x4c, 0x3c, 0xdb, 0x21,
+	0xb8, 0xe9, 0xd9, 0x4e, 0x0b, 0xef, 0x7b, 0xb6, 0xb3, 0x8f, 0x0f, 0xce, 0x7a, 0x3f, 0x1e, 0x3b,
+	0xd6, 0xcf, 0xc7, 0x8e, 0xf5, 0xeb, 0xb1, 0x63, 0x7d, 0x6b, 0x9b, 0xc1, 0x84, 0xec, 0x07, 0xa9,
+	0xe8, 0xaf, 0xfd, 0xf9, 0x37, 0xbb, 0x10, 0xec, 0xd3, 0xdf, 0x01, 0x00, 0x00, 0xff, 0xff, 0x0e,
+	0x26, 0x3d, 0xe5, 0x7d, 0x04, 0x00, 0x00,
 }

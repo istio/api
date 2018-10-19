@@ -15,16 +15,16 @@ _sym_db = _symbol_database.Default()
 
 from google.protobuf import duration_pb2 as google_dot_protobuf_dot_duration__pb2
 from mesh.v1alpha1 import proxy_pb2 as mesh_dot_v1alpha1_dot_proxy__pb2
-from mesh.v1alpha1 import data_source_pb2 as mesh_dot_v1alpha1_dot_data__source__pb2
+from mesh.v1alpha1 import mesh_pb2 as mesh_dot_v1alpha1_dot_mesh__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='mesh/v1alpha1/config.proto',
   package='istio.mesh.v1alpha1',
   syntax='proto3',
-  serialized_pb=_b('\n\x1amesh/v1alpha1/config.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x19mesh/v1alpha1/proxy.proto\x1a\x1fmesh/v1alpha1/data_source.proto\"\xa0\x06\n\nMeshConfig\x12\x1a\n\x12mixer_check_server\x18\x01 \x01(\t\x12\x1b\n\x13mixer_report_server\x18\x02 \x01(\t\x12\x1d\n\x15\x64isable_policy_checks\x18\x03 \x01(\x08\x12\x19\n\x11proxy_listen_port\x18\x04 \x01(\x05\x12\x17\n\x0fproxy_http_port\x18\x05 \x01(\x05\x12\x32\n\x0f\x63onnect_timeout\x18\x06 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x15\n\ringress_class\x18\x07 \x01(\t\x12\x17\n\x0fingress_service\x18\x08 \x01(\t\x12V\n\x17ingress_controller_mode\x18\t \x01(\x0e\x32\x35.istio.mesh.v1alpha1.MeshConfig.IngressControllerMode\x12\x16\n\x0e\x65nable_tracing\x18\x0c \x01(\x08\x12\x17\n\x0f\x61\x63\x63\x65ss_log_file\x18\r \x01(\t\x12\x38\n\x0e\x64\x65\x66\x61ult_config\x18\x0e \x01(\x0b\x32 .istio.mesh.v1alpha1.ProxyConfig\x12\'\n\x1f\x65nable_client_side_policy_check\x18\x13 \x01(\x08\x12\x14\n\x0csds_uds_path\x18\x14 \x01(\t\x12\x16\n\x0egalley_address\x18\x16 \x01(\t\x12;\n\x12service_registries\x18\x17 \x03(\x0b\x32\x1f.istio.mesh.v1alpha1.DataSource\x12\x36\n\rconfig_stores\x18\x18 \x03(\x0b\x32\x1f.istio.mesh.v1alpha1.DataSource\x12.\n\x08networks\x18\x19 \x03(\x0b\x32\x1c.istio.mesh.v1alpha1.Network\"9\n\x15IngressControllerMode\x12\x07\n\x03OFF\x10\x00\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x01\x12\n\n\x06STRICT\x10\x02J\x04\x08\n\x10\x0bJ\x04\x08\x0b\x10\x0cJ\x04\x08\x0f\x10\x10J\x04\x08\x10\x10\x11J\x04\x08\x11\x10\x12J\x04\x08\x12\x10\x13J\x04\x08\x15\x10\x16\"\xdb\x01\n\x07Network\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x12\n\nregistries\x18\x02 \x03(\t\x12\x42\n\x08gateways\x18\x03 \x03(\x0b\x32\x30.istio.mesh.v1alpha1.Network.IstioNetworkGateway\x1aj\n\x13IstioNetworkGateway\x12\x1f\n\x15registry_service_name\x18\x01 \x01(\tH\x00\x12\x0c\n\x02ip\x18\x02 \x01(\tH\x00\x12\x0c\n\x04port\x18\x03 \x01(\r\x12\x10\n\x08locality\x18\x04 \x01(\tB\x04\n\x02gwB\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x1amesh/v1alpha1/config.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x19mesh/v1alpha1/proxy.proto\x1a\x18mesh/v1alpha1/mesh.proto\"\xb2\x05\n\nMeshConfig\x12\x1a\n\x12mixer_check_server\x18\x01 \x01(\t\x12\x1b\n\x13mixer_report_server\x18\x02 \x01(\t\x12\x1d\n\x15\x64isable_policy_checks\x18\x03 \x01(\x08\x12\x19\n\x11proxy_listen_port\x18\x04 \x01(\x05\x12\x17\n\x0fproxy_http_port\x18\x05 \x01(\x05\x12\x32\n\x0f\x63onnect_timeout\x18\x06 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x15\n\ringress_class\x18\x07 \x01(\t\x12\x17\n\x0fingress_service\x18\x08 \x01(\t\x12V\n\x17ingress_controller_mode\x18\t \x01(\x0e\x32\x35.istio.mesh.v1alpha1.MeshConfig.IngressControllerMode\x12\x16\n\x0e\x65nable_tracing\x18\x0c \x01(\x08\x12\x17\n\x0f\x61\x63\x63\x65ss_log_file\x18\r \x01(\t\x12\x38\n\x0e\x64\x65\x66\x61ult_config\x18\x0e \x01(\x0b\x32 .istio.mesh.v1alpha1.ProxyConfig\x12\'\n\x1f\x65nable_client_side_policy_check\x18\x13 \x01(\x08\x12\x14\n\x0csds_uds_path\x18\x14 \x01(\t\x12\x1e\n\x16\x65nable_sds_token_mount\x18\x17 \x01(\x08\x12\'\n\x04mesh\x18\x18 \x01(\x0b\x32\x19.istio.mesh.v1alpha1.Mesh\"9\n\x15IngressControllerMode\x12\x07\n\x03OFF\x10\x00\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x01\x12\n\n\x06STRICT\x10\x02J\x04\x08\n\x10\x0bJ\x04\x08\x0b\x10\x0cJ\x04\x08\x0f\x10\x10J\x04\x08\x10\x10\x11J\x04\x08\x11\x10\x12J\x04\x08\x12\x10\x13J\x04\x08\x15\x10\x16J\x04\x08\x16\x10\x17\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
   ,
-  dependencies=[google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,mesh_dot_v1alpha1_dot_proxy__pb2.DESCRIPTOR,mesh_dot_v1alpha1_dot_data__source__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,mesh_dot_v1alpha1_dot_proxy__pb2.DESCRIPTOR,mesh_dot_v1alpha1_dot_mesh__pb2.DESCRIPTOR,])
 
 
 
@@ -49,8 +49,8 @@ _MESHCONFIG_INGRESSCONTROLLERMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=845,
-  serialized_end=902,
+  serialized_start=722,
+  serialized_end=779,
 )
 _sym_db.RegisterEnumDescriptor(_MESHCONFIG_INGRESSCONTROLLERMODE)
 
@@ -161,30 +161,16 @@ _MESHCONFIG = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='galley_address', full_name='istio.mesh.v1alpha1.MeshConfig.galley_address', index=14,
-      number=22, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      name='enable_sds_token_mount', full_name='istio.mesh.v1alpha1.MeshConfig.enable_sds_token_mount', index=14,
+      number=23, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='service_registries', full_name='istio.mesh.v1alpha1.MeshConfig.service_registries', index=15,
-      number=23, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='config_stores', full_name='istio.mesh.v1alpha1.MeshConfig.config_stores', index=16,
-      number=24, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='networks', full_name='istio.mesh.v1alpha1.MeshConfig.networks', index=17,
-      number=25, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
+      name='mesh', full_name='istio.mesh.v1alpha1.MeshConfig.mesh', index=15,
+      number=24, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
@@ -201,126 +187,16 @@ _MESHCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=144,
-  serialized_end=944,
-)
-
-
-_NETWORK_ISTIONETWORKGATEWAY = _descriptor.Descriptor(
-  name='IstioNetworkGateway',
-  full_name='istio.mesh.v1alpha1.Network.IstioNetworkGateway',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='registry_service_name', full_name='istio.mesh.v1alpha1.Network.IstioNetworkGateway.registry_service_name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='ip', full_name='istio.mesh.v1alpha1.Network.IstioNetworkGateway.ip', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='port', full_name='istio.mesh.v1alpha1.Network.IstioNetworkGateway.port', index=2,
-      number=3, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='locality', full_name='istio.mesh.v1alpha1.Network.IstioNetworkGateway.locality', index=3,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-    _descriptor.OneofDescriptor(
-      name='gw', full_name='istio.mesh.v1alpha1.Network.IstioNetworkGateway.gw',
-      index=0, containing_type=None, fields=[]),
-  ],
-  serialized_start=1060,
-  serialized_end=1166,
-)
-
-_NETWORK = _descriptor.Descriptor(
-  name='Network',
-  full_name='istio.mesh.v1alpha1.Network',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='name', full_name='istio.mesh.v1alpha1.Network.name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='registries', full_name='istio.mesh.v1alpha1.Network.registries', index=1,
-      number=2, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='gateways', full_name='istio.mesh.v1alpha1.Network.gateways', index=2,
-      number=3, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_NETWORK_ISTIONETWORKGATEWAY, ],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=947,
-  serialized_end=1166,
+  serialized_start=137,
+  serialized_end=827,
 )
 
 _MESHCONFIG.fields_by_name['connect_timeout'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
 _MESHCONFIG.fields_by_name['ingress_controller_mode'].enum_type = _MESHCONFIG_INGRESSCONTROLLERMODE
 _MESHCONFIG.fields_by_name['default_config'].message_type = mesh_dot_v1alpha1_dot_proxy__pb2._PROXYCONFIG
-_MESHCONFIG.fields_by_name['service_registries'].message_type = mesh_dot_v1alpha1_dot_data__source__pb2._DATASOURCE
-_MESHCONFIG.fields_by_name['config_stores'].message_type = mesh_dot_v1alpha1_dot_data__source__pb2._DATASOURCE
-_MESHCONFIG.fields_by_name['networks'].message_type = _NETWORK
+_MESHCONFIG.fields_by_name['mesh'].message_type = mesh_dot_v1alpha1_dot_mesh__pb2._MESH
 _MESHCONFIG_INGRESSCONTROLLERMODE.containing_type = _MESHCONFIG
-_NETWORK_ISTIONETWORKGATEWAY.containing_type = _NETWORK
-_NETWORK_ISTIONETWORKGATEWAY.oneofs_by_name['gw'].fields.append(
-  _NETWORK_ISTIONETWORKGATEWAY.fields_by_name['registry_service_name'])
-_NETWORK_ISTIONETWORKGATEWAY.fields_by_name['registry_service_name'].containing_oneof = _NETWORK_ISTIONETWORKGATEWAY.oneofs_by_name['gw']
-_NETWORK_ISTIONETWORKGATEWAY.oneofs_by_name['gw'].fields.append(
-  _NETWORK_ISTIONETWORKGATEWAY.fields_by_name['ip'])
-_NETWORK_ISTIONETWORKGATEWAY.fields_by_name['ip'].containing_oneof = _NETWORK_ISTIONETWORKGATEWAY.oneofs_by_name['gw']
-_NETWORK.fields_by_name['gateways'].message_type = _NETWORK_ISTIONETWORKGATEWAY
 DESCRIPTOR.message_types_by_name['MeshConfig'] = _MESHCONFIG
-DESCRIPTOR.message_types_by_name['Network'] = _NETWORK
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 MeshConfig = _reflection.GeneratedProtocolMessageType('MeshConfig', (_message.Message,), dict(
@@ -329,21 +205,6 @@ MeshConfig = _reflection.GeneratedProtocolMessageType('MeshConfig', (_message.Me
   # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.MeshConfig)
   ))
 _sym_db.RegisterMessage(MeshConfig)
-
-Network = _reflection.GeneratedProtocolMessageType('Network', (_message.Message,), dict(
-
-  IstioNetworkGateway = _reflection.GeneratedProtocolMessageType('IstioNetworkGateway', (_message.Message,), dict(
-    DESCRIPTOR = _NETWORK_ISTIONETWORKGATEWAY,
-    __module__ = 'mesh.v1alpha1.config_pb2'
-    # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.Network.IstioNetworkGateway)
-    ))
-  ,
-  DESCRIPTOR = _NETWORK,
-  __module__ = 'mesh.v1alpha1.config_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.Network)
-  ))
-_sym_db.RegisterMessage(Network)
-_sym_db.RegisterMessage(Network.IstioNetworkGateway)
 
 
 DESCRIPTOR.has_options = True

@@ -4,7 +4,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 aliases:
   - /docs/reference/config/service-mesh.html
-number_of_entries: 13
+number_of_entries: 14
 ---
 <h2 id="AuthenticationPolicy">AuthenticationPolicy</h2>
 <section>
@@ -75,9 +75,9 @@ kubeconfig file associated with the remote kubernetes cluster.</p>
 <td><code><a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html#TLSSettings">istio.networking.v1alpha3.TLSSettings (oneof)</a></code></td>
 <td>
 <p>When interfacing with a remote data source that supports Istio Mesh
-Configuration Protocol (MCP), use tls_settings to specify the tls
-mode to use and the certificate information required to establish a
-TLS or mutual TLS connection to the MCP server.</p>
+Configuration Protocol (MCP), use tls<em>settings to specify the tls
+mode to use. If the MCP server uses Istio MTLS and shares
+the root CA with Pilot, specify the TLS mode as ISTIO</em>MUTUAL.</p>
 
 </td>
 </tr>
@@ -159,6 +159,106 @@ it and obtain information.</p>
 <td><code>ISTIO_MCP</code></td>
 <td>
 <p>From a remote MCP server (Galley, CloudFoundry&rsquo;s MCP server, etc.)</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Mesh">Mesh</h2>
+<section>
+<p>Mesh describes the set of service registries, configuration sources
+the networks where endpoints are resident, etc. Information gathered
+from these sources will be used to compute the mesh topology and set
+up L4/L7 connectivity between endpoints in the mesh. A single mesh can
+have one or more control planes, service registries, and networks.</p>
+
+<p>Multiple service registries can be configured for a single control
+plane.  For example, lets say there are three kubernetes clusters in
+two networks with no direct endpoint connectivity across the
+networks. Clusters us-east-c1 and us-east-c2 are in US-east region and
+cluster us-west-c1 is in US-west region. Assume that all clusters in
+US-east region are in the same network, i.e. endpoints in us-east-c1
+have direct L3 connectivity to endpoints in us-east-c2
+cluster. Assuming that Pilot running on any of these clusters has
+access to the mater nodes of each cluster (to talk to the API
+servers), the following configuration describes a mesh spanning all
+the clusters and using cluster-local istio-ingressgateway to route
+traffic to endpoints within the cluster.</p>
+
+<p>serviceRegistries:
+- name: us-east-c1
+  type: KUBERNETES
+  credentials:
+    kubernetesSecret: us-east-c1-kubeconfig
+- name: us-east-c2
+  type: KUBERNETES
+  credentials:
+    kubernetesSecret: us-east-c2-kubeconfig
+- name: us-west-c1
+  type: KUBERNETES
+  credentials:
+    kubernetesSecret: us-west-c1-kubeconfig
+configStores: #all configuration from local galley service
+- name: us-east-c1
+  type: ISTIO<em>MCP
+  uri: https://istio-galley.istio-system.svc.cluster.local:9999
+  credentials:
+    tlsSettings:
+      mode: ISTIO</em>MUTUAL #use istio mtls to communicate with Galley
+networks:
+- name: us-east # some arbitrary name to group endpoints
+  registries:
+  - us-east-c1
+  - us-east-c2
+  gateways:
+  - registryServiceName: istio-ingressgateway.istio-system.svc.cluster.local
+    port: 15443
+- name: us-west
+  registries:
+  - us-west-c1
+  gateways:
+  - registryServiceName: istio-ingressgateway.istio-system.svc.cluster.local
+    port: 15443</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Mesh-service_registries">
+<td><code>serviceRegistries</code></td>
+<td><code><a href="#DataSource">DataSource[]</a></code></td>
+<td>
+<p>service_registries describe the registries from which Istio should
+construct the composite service registry for the service mesh. Note that
+Istio will always source information from the ambient service registry
+in addition to the registries specified here.</p>
+
+</td>
+</tr>
+<tr id="Mesh-config_stores">
+<td><code>configStores</code></td>
+<td><code><a href="#DataSource">DataSource[]</a></code></td>
+<td>
+<p>One or more configuration stores that contain Istio configuration data
+such as networking rules, auth/RBAC policies, etc.  If omitted, Pilot
+will try to connect to the ambient service registry (when running on
+kubernetes).</p>
+
+</td>
+</tr>
+<tr id="Mesh-networks">
+<td><code>networks</code></td>
+<td><code><a href="#Network">Network[]</a></code></td>
+<td>
+<p>One or more L3 networks where the endpoints from various service
+registries are present. This is used to determine routing across
+endpoints in different L3 networks.</p>
 
 </td>
 </tr>
@@ -304,7 +404,8 @@ at runtime and config gets distributed dynamically.</p>
 <td><code>enableClientSidePolicyCheck</code></td>
 <td><code>bool</code></td>
 <td>
-<p>Enables clide side policy checks.</p>
+<p>Enables clide side policy checks.
+TODO: Please clean all the <em>_policy</em> up and put them under a single mixer message.</p>
 
 </td>
 </tr>
@@ -312,95 +413,29 @@ at runtime and config gets distributed dynamically.</p>
 <td><code>sdsUdsPath</code></td>
 <td><code>string</code></td>
 <td>
-<p>Unix Domain Socket through which envoy communicates with NodeAgent SDS to get key/cert for mTLS.
-Use secret-mount files instead of SDS if set to empty.</p>
+<p>TODO: Please clean this up and put this under a single SDS message
+Unix Domain Socket through which envoy communicates with NodeAgent SDS
+to get key/cert for mTLS.  Use secret-mount files instead of SDS if
+set to empty.</p>
 
 </td>
 </tr>
-<tr id="MeshConfig-galley_address">
-<td><code>galleyAddress</code></td>
-<td><code>string</code></td>
+<tr id="MeshConfig-mesh">
+<td><code>mesh</code></td>
+<td><code><a href="#Mesh">Mesh</a></code></td>
 <td>
-<p>Address of the galley service exposing the Mesh Control Protocol (MCP).
-TODO: remove</p>
-
-</td>
-</tr>
-<tr id="MeshConfig-service_registries">
-<td><code>serviceRegistries</code></td>
-<td><code><a href="#DataSource">DataSource[]</a></code></td>
-<td>
-<p>Multiple service registries can be configured for a single control
-plane.  For example, lets say there are three kubernetes clusters in
-two networks with no direct endpoint connectivity across the
-networks. Clusters us-east-c1 and us-east-c2 are in US-east region and
-cluster us-west-c1 is in US-west region. Assume that all clusters in
-US-east region are in the same network, i.e. endpoints in us-east-c1
-have direct L3 connectivity to endpoints in us-east-c2
-cluster. Assuming that Pilot running on any of these clusters has
-access to the mater nodes of each cluster (to talk to the API
-servers), the following configuration describes a mesh spanning all
-the clusters and using cluster-local istio-ingressgateway to route
-traffic to endpoints within the cluster.</p>
-
-<p>serviceRegistries:
-- name: us-east-c1
-  type: KUBERNETES
-  credentials:
-    kubernetesSecret: us-east-c1-secret
-- name: us-east-c2
-  type: KUBERNETES
-  credentials:
-    kubernetesSecret: us-east-c2-secret
-- name: us-west-c1
-  type: KUBERNETES
-  credentials:
-    kubernetesSecret: us-west-c1-secret
-configStores: #all configuration from us-east-c1
-- name: us-east-c1
-  type: KUBERNETES
-  credentials:
-    kubernetesSecret: us-east-c1-secret
-networks:
-- name: us-east # some arbitrary name to group endpoints
-  registries:
-  - us-east-c1
-  - us-east-c2
-  gateways:
-  - registryServiceName: istio-ingressgateway.istio-system.svc.cluster.local
-    port: 15443
-- name: us-west
-  registries:
-  - us-west-c1
-  gateways:
-  - registryServiceName: istio-ingressgateway.istio-system.svc.cluster.local
-    port: 15443</p>
-
-<p>service_registries describe the registries from which Istio should
-construct the composite service registry for the service mesh. If
-omitted, Pilot will try to connect to the ambient service registry
-(when running on kubernetes).</p>
-
-</td>
-</tr>
-<tr id="MeshConfig-config_stores">
-<td><code>configStores</code></td>
-<td><code><a href="#DataSource">DataSource[]</a></code></td>
-<td>
-<p>One or more configuration stores that contain Istio configuration data
-such as networking rules, auth/RBAC policies, etc.  If omitted, Pilot
-will try to connect to the ambient service registry (when running on
-kubernetes).</p>
-
-</td>
-</tr>
-<tr id="MeshConfig-networks">
-<td><code>networks</code></td>
-<td><code><a href="#Network">Network[]</a></code></td>
-<td>
-<p>One or more L3 networks where the endpoints from various service
-registries are present. This is used to determine routing across
-endpoints in different L3 networks.</p>
+<p>Mesh describes the set of service registries, configuration sources
+the networks where endpoints are resident, etc. Information gathered
+from these sources will be used to compute the mesh topology and set
+up L4/L7 connectivity between endpoints in the mesh. If not specified,
+Istio will attempt to infer the set of endpoints in the mesh from the
+ambient service registry. For example, when running inside a
+Kubernetes cluster, Pilot will automatically try to connect to the
+local kubernetes API server to obtain service registry and
+configuration data. To use the same Istio control plane across
+multiple kubernetes clusters, use the mesh field to specify how to
+access other kubernetes API servers, as well as information about
+network connectivity between clusters.</p>
 
 </td>
 </tr>
@@ -524,11 +559,11 @@ istio-ingressgateway.istio-system.svc.cluster.local.</p>
 
 </td>
 </tr>
-<tr id="Network-IstioNetworkGateway-ip" class="oneof">
-<td><code>ip</code></td>
+<tr id="Network-IstioNetworkGateway-address" class="oneof">
+<td><code>address</code></td>
 <td><code>string (oneof)</code></td>
 <td>
-<p>IP associated with the gateway.</p>
+<p>IP address or externally resolvable DNS address associated with the gateway.</p>
 
 </td>
 </tr>
