@@ -95,7 +95,15 @@ message MeshConfig {
   // Defines whether to use Istio ingress controller for annotated or all ingress resources.
   IngressControllerMode ingress_controller_mode = 9;
 
-  reserved 10;
+  // $hide_from_docs
+  enum AuthPolicy {
+    NONE = 0;
+    MUTUAL_TLS = 1;
+  }
+
+  // $hide_from_docs
+  AuthPolicy auth_policy = 10 [deprecated=true];
+
   reserved 11;
 
   // Flag to control generation of trace spans and request IDs.
