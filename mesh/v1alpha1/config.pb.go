@@ -116,6 +116,9 @@ type MeshConfig struct {
 	// File address for the proxy access log (e.g. /dev/stdout).
 	// Empty value disables access logging.
 	AccessLogFile string `protobuf:"bytes,13,opt,name=access_log_file,json=accessLogFile,proto3" json:"access_log_file,omitempty"`
+	// Format for the proxy access log (text or json).
+	// Default value is text.
+	AccessLogFormat string `protobuf:"bytes,24,opt,name=access_log_format,json=accessLogFormat,proto3" json:"access_log_format,omitempty"`
 	// Default proxy config used by the proxy injection mechanism operating in the mesh
 	// (e.g. Kubernetes admission controller)
 	// In case of Kubernetes, the proxy config is applied once during the injection process,
@@ -135,9 +138,6 @@ type MeshConfig struct {
 	// for k8s service account JWT, so that K8s API server mounts k8s service account JWT to envoy container, which
 	// will be used to generate key/cert eventually. This isn't supported for non-k8s case.
 	EnableSdsTokenMount bool `protobuf:"varint,23,opt,name=enable_sds_token_mount,json=enableSdsTokenMount,proto3" json:"enable_sds_token_mount,omitempty"`
-	// Format for the proxy access log (text or json).
-	// Default value is text.
-	AccessLogFormat string `protobuf:"bytes,24,opt,name=access_log_format,json=accessLogFormat,proto3" json:"access_log_format,omitempty"`
 }
 
 func (m *MeshConfig) Reset()                    { *m = MeshConfig{} }
@@ -222,6 +222,13 @@ func (m *MeshConfig) GetAccessLogFile() string {
 	return ""
 }
 
+func (m *MeshConfig) GetAccessLogFormat() string {
+	if m != nil {
+		return m.AccessLogFormat
+	}
+	return ""
+}
+
 func (m *MeshConfig) GetDefaultConfig() *ProxyConfig {
 	if m != nil {
 		return m.DefaultConfig
@@ -255,13 +262,6 @@ func (m *MeshConfig) GetEnableSdsTokenMount() bool {
 		return m.EnableSdsTokenMount
 	}
 	return false
-}
-
-func (m *MeshConfig) GetAccessLogFormat() string {
-	if m != nil {
-		return m.AccessLogFormat
-	}
-	return ""
 }
 
 func init() {
