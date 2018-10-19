@@ -16,7 +16,6 @@ syntax = "proto3";
 
 import "google/protobuf/duration.proto";
 import "mesh/v1alpha1/proxy.proto";
-import "mesh/v1alpha1/mesh.proto";
 
 // $title: Service Mesh
 // $description: Configuration affecting the service mesh as a whole.
@@ -132,42 +131,24 @@ message MeshConfig {
   reserved 18;
 
   // Enables clide side policy checks.
-  // TODO: Please clean all the *_policy* up and put them under a single mixer message.
   bool enable_client_side_policy_check = 19;
 
-  // TODO: Please clean this up and put this under a single SDS message
-  // Unix Domain Socket through which envoy communicates with NodeAgent SDS
-  // to get key/cert for mTLS.  Use secret-mount files instead of SDS if
-  // set to empty.
+  // Unix Domain Socket through which envoy communicates with NodeAgent SDS to get key/cert for mTLS.
+  // Use secret-mount files instead of SDS if set to empty.
   string sds_uds_path = 20;
-
-  // $hide_from_docs
-  // This flag is used by secret discovery service(SDS).  If set to
-  // true(prerequisite:
-  // https://kubernetes.io/docs/concepts/storage/volumes/#projected), Istio
-  // will inject volumes mount for k8s service account JWT, so that K8s API
-  // server mounts k8s service account JWT to envoy container, which will
-  // be used to generate key/cert eventually. This isn't supported for
-  // non-k8s case.
-  bool enable_sds_token_mount = 23;
   
   reserved 21;
-  reserved 22;
 
-  // Mesh describes the set of service registries, configuration sources
-  // the networks where endpoints are resident, etc. Information gathered
-  // from these sources will be used to compute the mesh topology and set
-  // up L4/L7 connectivity between endpoints in the mesh. If not specified,
-  // Istio will attempt to infer the set of endpoints in the mesh from the
-  // ambient service registry. For example, when running inside a
-  // Kubernetes cluster, Pilot will automatically try to connect to the
-  // local kubernetes API server to obtain service registry and
-  // configuration data. To use the same Istio control plane across
-  // multiple kubernetes clusters, use the mesh field to specify how to
-  // access other kubernetes API servers, as well as information about
-  // network connectivity between clusters.
-  Mesh mesh = 25;
+  // Address of the galley service exposing the Mesh Control Protocol (MCP).
+  string galley_address = 22;
 
   // $hide_from_docs
-  // Next available field number: 26
+  // This flag is used by secret discovery service(SDS). 
+  // If set to true(prerequisite: https://kubernetes.io/docs/concepts/storage/volumes/#projected), Istio will inject volumes mount 
+  // for k8s service account JWT, so that K8s API server mounts k8s service account JWT to envoy container, which 
+  // will be used to generate key/cert eventually. This isn't supported for non-k8s case.
+  bool enable_sds_token_mount = 23;
+
+  // $hide_from_docs
+  // Next available field number: 25
 }

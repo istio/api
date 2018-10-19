@@ -13,85 +13,16 @@ from google.protobuf import descriptor_pb2
 _sym_db = _symbol_database.Default()
 
 
-from networking.v1alpha3 import destination_rule_pb2 as networking_dot_v1alpha3_dot_destination__rule__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='mesh/v1alpha1/mesh.proto',
   package='istio.mesh.v1alpha1',
   syntax='proto3',
-  serialized_pb=_b('\n\x18mesh/v1alpha1/mesh.proto\x12\x13istio.mesh.v1alpha1\x1a*networking/v1alpha3/destination_rule.proto\"\xab\x01\n\x04Mesh\x12;\n\x12service_registries\x18\x01 \x03(\x0b\x32\x1f.istio.mesh.v1alpha1.DataSource\x12\x36\n\rconfig_stores\x18\x02 \x03(\x0b\x32\x1f.istio.mesh.v1alpha1.DataSource\x12.\n\x08networks\x18\x03 \x03(\x0b\x32\x1c.istio.mesh.v1alpha1.Network\"\xe0\x01\n\x07Network\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x12\n\nregistries\x18\x02 \x03(\t\x12\x42\n\x08gateways\x18\x03 \x03(\x0b\x32\x30.istio.mesh.v1alpha1.Network.IstioNetworkGateway\x1ao\n\x13IstioNetworkGateway\x12\x1f\n\x15registry_service_name\x18\x01 \x01(\tH\x00\x12\x11\n\x07\x61\x64\x64ress\x18\x02 \x01(\tH\x00\x12\x0c\n\x04port\x18\x03 \x01(\r\x12\x10\n\x08locality\x18\x04 \x01(\tB\x04\n\x02gw\"x\n\x0b\x43redentials\x12 \n\x16kubernetes_secret_name\x18\x01 \x01(\tH\x00\x12>\n\x0ctls_settings\x18\x02 \x01(\x0b\x32&.istio.networking.v1alpha3.TLSSettingsH\x00\x42\x07\n\x05\x63reds\"\xc5\x01\n\nDataSource\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x38\n\x04type\x18\x02 \x01(\x0e\x32*.istio.mesh.v1alpha1.DataSource.SourceType\x12\x0b\n\x03uri\x18\x03 \x01(\t\x12\x35\n\x0b\x63redentials\x18\x04 \x01(\x0b\x32 .istio.mesh.v1alpha1.Credentials\"+\n\nSourceType\x12\x0e\n\nKUBERNETES\x10\x00\x12\r\n\tISTIO_MCP\x10\x01\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
-  ,
-  dependencies=[networking_dot_v1alpha3_dot_destination__rule__pb2.DESCRIPTOR,])
-
-
-
-_DATASOURCE_SOURCETYPE = _descriptor.EnumDescriptor(
-  name='SourceType',
-  full_name='istio.mesh.v1alpha1.DataSource.SourceType',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='KUBERNETES', index=0, number=0,
-      options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='ISTIO_MCP', index=1, number=1,
-      options=None,
-      type=None),
-  ],
-  containing_type=None,
-  options=None,
-  serialized_start=771,
-  serialized_end=814,
+  serialized_pb=_b('\n\x18mesh/v1alpha1/mesh.proto\x12\x13istio.mesh.v1alpha1\"\xe0\x01\n\x07Network\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x12\n\nregistries\x18\x02 \x03(\t\x12\x42\n\x08gateways\x18\x03 \x03(\x0b\x32\x30.istio.mesh.v1alpha1.Network.IstioNetworkGateway\x1ao\n\x13IstioNetworkGateway\x12\x1f\n\x15registry_service_name\x18\x01 \x01(\tH\x00\x12\x11\n\x07\x61\x64\x64ress\x18\x02 \x01(\tH\x00\x12\x0c\n\x04port\x18\x03 \x01(\r\x12\x10\n\x08locality\x18\x04 \x01(\tB\x04\n\x02gwB\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
 )
-_sym_db.RegisterEnumDescriptor(_DATASOURCE_SOURCETYPE)
 
 
-_MESH = _descriptor.Descriptor(
-  name='Mesh',
-  full_name='istio.mesh.v1alpha1.Mesh',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='service_registries', full_name='istio.mesh.v1alpha1.Mesh.service_registries', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='config_stores', full_name='istio.mesh.v1alpha1.Mesh.config_stores', index=1,
-      number=2, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='networks', full_name='istio.mesh.v1alpha1.Mesh.networks', index=2,
-      number=3, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=94,
-  serialized_end=265,
-)
 
 
 _NETWORK_ISTIONETWORKGATEWAY = _descriptor.Descriptor(
@@ -144,8 +75,8 @@ _NETWORK_ISTIONETWORKGATEWAY = _descriptor.Descriptor(
       name='gw', full_name='istio.mesh.v1alpha1.Network.IstioNetworkGateway.gw',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=381,
-  serialized_end=492,
+  serialized_start=163,
+  serialized_end=274,
 )
 
 _NETWORK = _descriptor.Descriptor(
@@ -188,107 +119,10 @@ _NETWORK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=268,
-  serialized_end=492,
+  serialized_start=50,
+  serialized_end=274,
 )
 
-
-_CREDENTIALS = _descriptor.Descriptor(
-  name='Credentials',
-  full_name='istio.mesh.v1alpha1.Credentials',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='kubernetes_secret_name', full_name='istio.mesh.v1alpha1.Credentials.kubernetes_secret_name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='tls_settings', full_name='istio.mesh.v1alpha1.Credentials.tls_settings', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-    _descriptor.OneofDescriptor(
-      name='creds', full_name='istio.mesh.v1alpha1.Credentials.creds',
-      index=0, containing_type=None, fields=[]),
-  ],
-  serialized_start=494,
-  serialized_end=614,
-)
-
-
-_DATASOURCE = _descriptor.Descriptor(
-  name='DataSource',
-  full_name='istio.mesh.v1alpha1.DataSource',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='name', full_name='istio.mesh.v1alpha1.DataSource.name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='type', full_name='istio.mesh.v1alpha1.DataSource.type', index=1,
-      number=2, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='uri', full_name='istio.mesh.v1alpha1.DataSource.uri', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='credentials', full_name='istio.mesh.v1alpha1.DataSource.credentials', index=3,
-      number=4, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-    _DATASOURCE_SOURCETYPE,
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=617,
-  serialized_end=814,
-)
-
-_MESH.fields_by_name['service_registries'].message_type = _DATASOURCE
-_MESH.fields_by_name['config_stores'].message_type = _DATASOURCE
-_MESH.fields_by_name['networks'].message_type = _NETWORK
 _NETWORK_ISTIONETWORKGATEWAY.containing_type = _NETWORK
 _NETWORK_ISTIONETWORKGATEWAY.oneofs_by_name['gw'].fields.append(
   _NETWORK_ISTIONETWORKGATEWAY.fields_by_name['registry_service_name'])
@@ -297,28 +131,8 @@ _NETWORK_ISTIONETWORKGATEWAY.oneofs_by_name['gw'].fields.append(
   _NETWORK_ISTIONETWORKGATEWAY.fields_by_name['address'])
 _NETWORK_ISTIONETWORKGATEWAY.fields_by_name['address'].containing_oneof = _NETWORK_ISTIONETWORKGATEWAY.oneofs_by_name['gw']
 _NETWORK.fields_by_name['gateways'].message_type = _NETWORK_ISTIONETWORKGATEWAY
-_CREDENTIALS.fields_by_name['tls_settings'].message_type = networking_dot_v1alpha3_dot_destination__rule__pb2._TLSSETTINGS
-_CREDENTIALS.oneofs_by_name['creds'].fields.append(
-  _CREDENTIALS.fields_by_name['kubernetes_secret_name'])
-_CREDENTIALS.fields_by_name['kubernetes_secret_name'].containing_oneof = _CREDENTIALS.oneofs_by_name['creds']
-_CREDENTIALS.oneofs_by_name['creds'].fields.append(
-  _CREDENTIALS.fields_by_name['tls_settings'])
-_CREDENTIALS.fields_by_name['tls_settings'].containing_oneof = _CREDENTIALS.oneofs_by_name['creds']
-_DATASOURCE.fields_by_name['type'].enum_type = _DATASOURCE_SOURCETYPE
-_DATASOURCE.fields_by_name['credentials'].message_type = _CREDENTIALS
-_DATASOURCE_SOURCETYPE.containing_type = _DATASOURCE
-DESCRIPTOR.message_types_by_name['Mesh'] = _MESH
 DESCRIPTOR.message_types_by_name['Network'] = _NETWORK
-DESCRIPTOR.message_types_by_name['Credentials'] = _CREDENTIALS
-DESCRIPTOR.message_types_by_name['DataSource'] = _DATASOURCE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
-
-Mesh = _reflection.GeneratedProtocolMessageType('Mesh', (_message.Message,), dict(
-  DESCRIPTOR = _MESH,
-  __module__ = 'mesh.v1alpha1.mesh_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.Mesh)
-  ))
-_sym_db.RegisterMessage(Mesh)
 
 Network = _reflection.GeneratedProtocolMessageType('Network', (_message.Message,), dict(
 
@@ -334,20 +148,6 @@ Network = _reflection.GeneratedProtocolMessageType('Network', (_message.Message,
   ))
 _sym_db.RegisterMessage(Network)
 _sym_db.RegisterMessage(Network.IstioNetworkGateway)
-
-Credentials = _reflection.GeneratedProtocolMessageType('Credentials', (_message.Message,), dict(
-  DESCRIPTOR = _CREDENTIALS,
-  __module__ = 'mesh.v1alpha1.mesh_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.Credentials)
-  ))
-_sym_db.RegisterMessage(Credentials)
-
-DataSource = _reflection.GeneratedProtocolMessageType('DataSource', (_message.Message,), dict(
-  DESCRIPTOR = _DATASOURCE,
-  __module__ = 'mesh.v1alpha1.mesh_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.DataSource)
-  ))
-_sym_db.RegisterMessage(DataSource)
 
 
 DESCRIPTOR.has_options = True
