@@ -131,8 +131,9 @@ type MeshConfig struct {
 	GalleyAddress string `protobuf:"bytes,22,opt,name=galley_address,json=galleyAddress,proto3" json:"galley_address,omitempty"`
 	// $hide_from_docs
 	// This flag is used by secret discovery service(SDS).
-	// If set to true(prerequisite: https://kubernetes.io/docs/concepts/storage/volumes/#projected), K8s API server
-	// mounts k8s service account JWT to envoy container, which will be used to generate key/cert eventually.
+	// If set to true(prerequisite: https://kubernetes.io/docs/concepts/storage/volumes/#projected), Istio will inject volumes mount
+	// for k8s service account JWT, so that K8s API server mounts k8s service account JWT to envoy container, which
+	// will be used to generate key/cert eventually. This isn't supported for non-k8s case.
 	EnableSdsTokenMount bool `protobuf:"varint,23,opt,name=enable_sds_token_mount,json=enableSdsTokenMount,proto3" json:"enable_sds_token_mount,omitempty"`
 }
 
