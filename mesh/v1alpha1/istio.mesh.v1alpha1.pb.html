@@ -60,8 +60,8 @@ interface with a remote data source (registry/config).</p>
 </tr>
 </thead>
 <tbody>
-<tr id="Credentials-kubernetes_secret" class="oneof oneof-start">
-<td><code>kubernetesSecret</code></td>
+<tr id="Credentials-kubernetes_secret_name" class="oneof oneof-start">
+<td><code>kubernetesSecretName</code></td>
 <td><code>string (oneof)</code></td>
 <td>
 <p>When interfacing with a Kubernetes data source, the
@@ -190,15 +190,15 @@ traffic to endpoints within the cluster.</p>
 - name: us-east-c1
   type: KUBERNETES
   credentials:
-    kubernetesSecret: us-east-c1-kubeconfig
+    kubernetesSecretName: us-east-c1-kubeconfig
 - name: us-east-c2
   type: KUBERNETES
   credentials:
-    kubernetesSecret: us-east-c2-kubeconfig
+    kubernetesSecretName: us-east-c2-kubeconfig
 - name: us-west-c1
   type: KUBERNETES
   credentials:
-    kubernetesSecret: us-west-c1-kubeconfig
+    kubernetesSecretName: us-west-c1-kubeconfig
 configStores: #all configuration from local galley service
 - name: us-east-c1
   type: ISTIO<em>MCP

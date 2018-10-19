@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='mesh/v1alpha1/mesh.proto',
   package='istio.mesh.v1alpha1',
   syntax='proto3',
-  serialized_pb=_b('\n\x18mesh/v1alpha1/mesh.proto\x12\x13istio.mesh.v1alpha1\x1a*networking/v1alpha3/destination_rule.proto\"\xab\x01\n\x04Mesh\x12;\n\x12service_registries\x18\x01 \x03(\x0b\x32\x1f.istio.mesh.v1alpha1.DataSource\x12\x36\n\rconfig_stores\x18\x02 \x03(\x0b\x32\x1f.istio.mesh.v1alpha1.DataSource\x12.\n\x08networks\x18\x03 \x03(\x0b\x32\x1c.istio.mesh.v1alpha1.Network\"\xe0\x01\n\x07Network\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x12\n\nregistries\x18\x02 \x03(\t\x12\x42\n\x08gateways\x18\x03 \x03(\x0b\x32\x30.istio.mesh.v1alpha1.Network.IstioNetworkGateway\x1ao\n\x13IstioNetworkGateway\x12\x1f\n\x15registry_service_name\x18\x01 \x01(\tH\x00\x12\x11\n\x07\x61\x64\x64ress\x18\x02 \x01(\tH\x00\x12\x0c\n\x04port\x18\x03 \x01(\r\x12\x10\n\x08locality\x18\x04 \x01(\tB\x04\n\x02gw\"s\n\x0b\x43redentials\x12\x1b\n\x11kubernetes_secret\x18\x01 \x01(\tH\x00\x12>\n\x0ctls_settings\x18\x02 \x01(\x0b\x32&.istio.networking.v1alpha3.TLSSettingsH\x00\x42\x07\n\x05\x63reds\"\xc5\x01\n\nDataSource\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x38\n\x04type\x18\x02 \x01(\x0e\x32*.istio.mesh.v1alpha1.DataSource.SourceType\x12\x0b\n\x03uri\x18\x03 \x01(\t\x12\x35\n\x0b\x63redentials\x18\x04 \x01(\x0b\x32 .istio.mesh.v1alpha1.Credentials\"+\n\nSourceType\x12\x0e\n\nKUBERNETES\x10\x00\x12\r\n\tISTIO_MCP\x10\x01\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x18mesh/v1alpha1/mesh.proto\x12\x13istio.mesh.v1alpha1\x1a*networking/v1alpha3/destination_rule.proto\"\xab\x01\n\x04Mesh\x12;\n\x12service_registries\x18\x01 \x03(\x0b\x32\x1f.istio.mesh.v1alpha1.DataSource\x12\x36\n\rconfig_stores\x18\x02 \x03(\x0b\x32\x1f.istio.mesh.v1alpha1.DataSource\x12.\n\x08networks\x18\x03 \x03(\x0b\x32\x1c.istio.mesh.v1alpha1.Network\"\xe0\x01\n\x07Network\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x12\n\nregistries\x18\x02 \x03(\t\x12\x42\n\x08gateways\x18\x03 \x03(\x0b\x32\x30.istio.mesh.v1alpha1.Network.IstioNetworkGateway\x1ao\n\x13IstioNetworkGateway\x12\x1f\n\x15registry_service_name\x18\x01 \x01(\tH\x00\x12\x11\n\x07\x61\x64\x64ress\x18\x02 \x01(\tH\x00\x12\x0c\n\x04port\x18\x03 \x01(\r\x12\x10\n\x08locality\x18\x04 \x01(\tB\x04\n\x02gw\"x\n\x0b\x43redentials\x12 \n\x16kubernetes_secret_name\x18\x01 \x01(\tH\x00\x12>\n\x0ctls_settings\x18\x02 \x01(\x0b\x32&.istio.networking.v1alpha3.TLSSettingsH\x00\x42\x07\n\x05\x63reds\"\xc5\x01\n\nDataSource\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x38\n\x04type\x18\x02 \x01(\x0e\x32*.istio.mesh.v1alpha1.DataSource.SourceType\x12\x0b\n\x03uri\x18\x03 \x01(\t\x12\x35\n\x0b\x63redentials\x18\x04 \x01(\x0b\x32 .istio.mesh.v1alpha1.Credentials\"+\n\nSourceType\x12\x0e\n\nKUBERNETES\x10\x00\x12\r\n\tISTIO_MCP\x10\x01\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
   ,
   dependencies=[networking_dot_v1alpha3_dot_destination__rule__pb2.DESCRIPTOR,])
 
@@ -43,8 +43,8 @@ _DATASOURCE_SOURCETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=766,
-  serialized_end=809,
+  serialized_start=771,
+  serialized_end=814,
 )
 _sym_db.RegisterEnumDescriptor(_DATASOURCE_SOURCETYPE)
 
@@ -201,7 +201,7 @@ _CREDENTIALS = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='kubernetes_secret', full_name='istio.mesh.v1alpha1.Credentials.kubernetes_secret', index=0,
+      name='kubernetes_secret_name', full_name='istio.mesh.v1alpha1.Credentials.kubernetes_secret_name', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -230,7 +230,7 @@ _CREDENTIALS = _descriptor.Descriptor(
       index=0, containing_type=None, fields=[]),
   ],
   serialized_start=494,
-  serialized_end=609,
+  serialized_end=614,
 )
 
 
@@ -282,8 +282,8 @@ _DATASOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=612,
-  serialized_end=809,
+  serialized_start=617,
+  serialized_end=814,
 )
 
 _MESH.fields_by_name['service_registries'].message_type = _DATASOURCE
@@ -299,8 +299,8 @@ _NETWORK_ISTIONETWORKGATEWAY.fields_by_name['address'].containing_oneof = _NETWO
 _NETWORK.fields_by_name['gateways'].message_type = _NETWORK_ISTIONETWORKGATEWAY
 _CREDENTIALS.fields_by_name['tls_settings'].message_type = networking_dot_v1alpha3_dot_destination__rule__pb2._TLSSETTINGS
 _CREDENTIALS.oneofs_by_name['creds'].fields.append(
-  _CREDENTIALS.fields_by_name['kubernetes_secret'])
-_CREDENTIALS.fields_by_name['kubernetes_secret'].containing_oneof = _CREDENTIALS.oneofs_by_name['creds']
+  _CREDENTIALS.fields_by_name['kubernetes_secret_name'])
+_CREDENTIALS.fields_by_name['kubernetes_secret_name'].containing_oneof = _CREDENTIALS.oneofs_by_name['creds']
 _CREDENTIALS.oneofs_by_name['creds'].fields.append(
   _CREDENTIALS.fields_by_name['tls_settings'])
 _CREDENTIALS.fields_by_name['tls_settings'].containing_oneof = _CREDENTIALS.oneofs_by_name['creds']

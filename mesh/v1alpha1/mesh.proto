@@ -43,15 +43,15 @@ option go_package="istio.io/api/mesh/v1alpha1";
 // - name: us-east-c1
 //   type: KUBERNETES
 //   credentials:
-//     kubernetesSecret: us-east-c1-kubeconfig
+//     kubernetesSecretName: us-east-c1-kubeconfig
 // - name: us-east-c2
 //   type: KUBERNETES
 //   credentials:
-//     kubernetesSecret: us-east-c2-kubeconfig
+//     kubernetesSecretName: us-east-c2-kubeconfig
 // - name: us-west-c1
 //   type: KUBERNETES
 //   credentials:
-//     kubernetesSecret: us-west-c1-kubeconfig
+//     kubernetesSecretName: us-west-c1-kubeconfig
 // configStores: #all configuration from local galley service
 // - name: us-east-c1
 //   type: ISTIO_MCP
@@ -144,7 +144,7 @@ message Credentials {
     // When interfacing with a Kubernetes data source, the
     // kubernetes_secret specifies the name of the secret that contains the
     // kubeconfig file associated with the remote kubernetes cluster.
-    string kubernetes_secret = 1;
+    string kubernetes_secret_name = 1;
     
     // When interfacing with a remote data source that supports Istio Mesh
     // Configuration Protocol (MCP), use tls_settings to specify the tls
