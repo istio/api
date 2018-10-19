@@ -181,10 +181,9 @@ message DataSource {
   SourceType type = 2;
 
   // URI where this data source can be reached.  Can be tcp://, https://,
-  // unix://, file:/// etc.  Note: URI will be ignored if kubernetes_secret
-  // is specified as the kubeconfig file in the secret provides the URI.
-  // If the datasource is a file, uri should contain the absolute path to
-  // the directory where the configuration is available.
+  // unix://, file:/// etc.  Note: URI will be ignored if source is of type
+  // kubernetes.  If the datasource is a file, uri should contain the
+  // absolute path to the directory where the configuration is available.
   string uri = 3;
 
   // Credentials to access the remote data source. If the MCP server uses

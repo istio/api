@@ -348,10 +348,9 @@ type DataSource struct {
 	Name string                `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Type DataSource_SourceType `protobuf:"varint,2,opt,name=type,proto3,enum=istio.mesh.v1alpha1.DataSource_SourceType" json:"type,omitempty"`
 	// URI where this data source can be reached.  Can be tcp://, https://,
-	// unix://, file:/// etc.  Note: URI will be ignored if kubernetes_secret
-	// is specified as the kubeconfig file in the secret provides the URI.
-	// If the datasource is a file, uri should contain the absolute path to
-	// the directory where the configuration is available.
+	// unix://, file:/// etc.  Note: URI will be ignored if source is of type
+	// kubernetes.  If the datasource is a file, uri should contain the
+	// absolute path to the directory where the configuration is available.
 	Uri string `protobuf:"bytes,3,opt,name=uri,proto3" json:"uri,omitempty"`
 	// Credentials to access the remote data source. If the MCP server uses
 	// Istio MTLS and shares the root CA with Pilot, specify the TLS mode as
