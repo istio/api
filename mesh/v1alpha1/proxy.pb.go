@@ -298,7 +298,6 @@ type ProxyConfig struct {
 	ParentShutdownDuration *google_protobuf.Duration `protobuf:"bytes,5,opt,name=parent_shutdown_duration,json=parentShutdownDuration" json:"parent_shutdown_duration,omitempty"`
 	// Address of the discovery service exposing xDS with mTLS connection.
 	DiscoveryAddress string `protobuf:"bytes,6,opt,name=discovery_address,json=discoveryAddress,proto3" json:"discovery_address,omitempty"`
-	// $hide_from_docs
 	// DEPRECATED. UNUSED.
 	// Polling interval for service discovery (used by EDS, CDS, LDS, but not RDS). (MUST BE >=1ms)
 	DiscoveryRefreshDelay *google_protobuf.Duration `protobuf:"bytes,7,opt,name=discovery_refresh_delay,json=discoveryRefreshDelay" json:"discovery_refresh_delay,omitempty"`
@@ -311,7 +310,6 @@ type ProxyConfig struct {
 	StatsdUdpAddress string `protobuf:"bytes,10,opt,name=statsd_udp_address,json=statsdUdpAddress,proto3" json:"statsd_udp_address,omitempty"`
 	// Port on which Envoy should listen for administrative commands.
 	ProxyAdminPort int32 `protobuf:"varint,11,opt,name=proxy_admin_port,json=proxyAdminPort,proto3" json:"proxy_admin_port,omitempty"`
-	// $hide_from_docs
 	// DEPRECATED. UNUSED.
 	// The availability zone where this Envoy instance is running. When running
 	// Envoy as a sidecar in Kubernetes, this flag must be one of the availability

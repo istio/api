@@ -106,7 +106,6 @@ message ProxyConfig {
   // Address of the discovery service exposing xDS with mTLS connection.
   string discovery_address = 6;
 
-  // $hide_from_docs
   // DEPRECATED. UNUSED.
   // Polling interval for service discovery (used by EDS, CDS, LDS, but not RDS). (MUST BE >=1ms)
   google.protobuf.Duration discovery_refresh_delay = 7 [deprecated=true];
@@ -124,7 +123,6 @@ message ProxyConfig {
   // Port on which Envoy should listen for administrative commands.
   int32 proxy_admin_port = 11;
 
-  // $hide_from_docs
   // DEPRECATED. UNUSED.
   // The availability zone where this Envoy instance is running. When running
   // Envoy as a sidecar in Kubernetes, this flag must be one of the availability

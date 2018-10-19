@@ -104,7 +104,6 @@ message MeshConfig {
   // $hide_from_docs
   AuthPolicy auth_policy = 10 [deprecated=true];
 
-  // $hide_from_docs
   // DEPRECATED. UNUSED. Polling interval for RDS (MUST BE >=1ms)
   google.protobuf.Duration rds_refresh_delay = 11 [deprecated=true];
 
@@ -116,10 +115,9 @@ message MeshConfig {
   // Empty value disables access logging.
   string access_log_file = 13;
 
-  // DEPRECATED.
   // Format for the proxy access log (text or json).
   // Default value is text.
-  string access_log_format = 24 [deprecated=true];
+  string access_log_format = 24;
 
   // Default proxy config used by the proxy injection mechanism operating in the mesh
   // (e.g. Kubernetes admission controller)
@@ -130,36 +128,27 @@ message MeshConfig {
 
   reserved 15;
 
-  // $hide_from_docs
   // DEPRECATED. UNUSED. Mixer address. This option will be removed soon. Please
   // use mixer_check and mixer_report.
   string mixer_address = 16 [deprecated=true];
 
-
-  // $hide_from_docs
   // DEPRECATED. UNUSED.
   message OutboundTrafficPolicy {
-    // $hide_from_docs
     // DEPRECATED. UNUSED.
     enum Mode {
-      // $hide_from_docs
       // outbound traffic will be restricted to services defined in the service registry as well as those defined
       // through ServiceEntries
       REGISTRY_ONLY = 0 [deprecated=true];
-      // $hide_from_docs
       // outbound traffic to unknown destinations will be allowed
       ALLOW_ANY = 1 [deprecated=true];
-      // $hide_from_docs
       // not implemented. outbound traffic will be restricted to destinations defined in VirtualServices only
       VIRTUAL_SERVICE_ONLY = 2 [deprecated=true];
     }
 
-    // $hide_from_docs
     // DEPRECATED. UNUSED.
     Mode mode = 1 [deprecated=true];
   }
 
-  // $hide_from_docs
   // DEPRECATED. UNUSED.
   // Set the default behavior of the sidecar for handling outbound traffic from the application.
   // While the default mode should work out of the box, if your application uses one or more external services that
@@ -178,7 +167,6 @@ message MeshConfig {
   // Use secret-mount files instead of SDS if set to empty.
   string sds_uds_path = 20;
 
-  // $hide_from_docs
   // DEPRECATED. UNUSED.
   // Polling interval for SDS (MUST BE >=1ms)
   google.protobuf.Duration sds_refresh_delay = 21 [deprecated=true];
