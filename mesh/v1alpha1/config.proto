@@ -114,6 +114,10 @@ message MeshConfig {
   // File address for the proxy access log (e.g. /dev/stdout).
   // Empty value disables access logging.
   string access_log_file = 13;
+  
+  // Format for the proxy access log (text or json).
+  // Default value is text.
+  string access_log_format = 24;
 
   // Default proxy config used by the proxy injection mechanism operating in the mesh
   // (e.g. Kubernetes admission controller)
@@ -162,5 +166,8 @@ message MeshConfig {
   // multiple kubernetes clusters, use the mesh field to specify how to
   // access other kubernetes API servers, as well as information about
   // network connectivity between clusters.
-  Mesh mesh = 24;
+  Mesh mesh = 25;
+
+  // $hide_from_docs
+  // Next available field number: 26
 }
