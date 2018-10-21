@@ -12,6 +12,7 @@
 	It has these top-level messages:
 		MeshConfig
 		Network
+		MeshNetworks
 		Tracing
 		ProxyConfig
 */
