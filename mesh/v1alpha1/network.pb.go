@@ -55,6 +55,26 @@ func (m *Network) GetGateways() []*Network_IstioNetworkGateway {
 	return nil
 }
 
+// NetworkEndpoints describes how the network associated with an endpoint
+// should be inferred. An endpoint will be assigned to a network based on
+// the following rules:
+//
+// 1. Implicitly: If the registry explicitly provides information about
+// the network to which the endpoint belongs to. In some cases, its
+// possible to indicate the network associated with the endpoint by
+// adding ISTIO_META_NETWORK environment variable to the sidecar.
+//
+// 2. Explicitly:
+//
+//    a. By matching the registry name with one of the "from_registries"
+//    in the mesh config. A "from_registry" can only be assinged to a
+//    single network.
+//
+//    b. By matching the IP against one of the CIDR ranges in a mesh
+//    config network. The CIDR ranges must not overlap and be assigned to
+//    a single network.
+//
+// (2) will override (1) if both are present.
 type Network_NetworkEndpoints struct {
 	// Types that are valid to be assigned to Ne:
 	//	*Network_NetworkEndpoints_FromCidr

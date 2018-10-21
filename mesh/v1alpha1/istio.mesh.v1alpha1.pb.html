@@ -362,6 +362,29 @@ istio-ingressgateway.istio-system.svc.cluster.local.</p>
 </section>
 <h2 id="Network-NetworkEndpoints">Network.NetworkEndpoints</h2>
 <section>
+<p>NetworkEndpoints describes how the network associated with an endpoint
+should be inferred. An endpoint will be assigned to a network based on
+the following rules:</p>
+
+<ol>
+<li><p>Implicitly: If the registry explicitly provides information about
+the network to which the endpoint belongs to. In some cases, its
+possible to indicate the network associated with the endpoint by
+adding ISTIO<em>META</em>NETWORK environment variable to the sidecar.</p></li>
+
+<li><p>Explicitly:</p></li>
+</ol>
+
+<p>a. By matching the registry name with one of the &ldquo;from<em>registries&rdquo;
+   in the mesh config. A &ldquo;from</em>registry&rdquo; can only be assinged to a
+   single network.</p>
+
+<p>b. By matching the IP against one of the CIDR ranges in a mesh
+   config network. The CIDR ranges must not overlap and be assigned to
+   a single network.</p>
+
+<p>(2) will override (1) if both are present.</p>
+
 <table class="message-fields">
 <thead>
 <tr>
@@ -375,7 +398,8 @@ istio-ingressgateway.istio-system.svc.cluster.local.</p>
 <td><code>fromCidr</code></td>
 <td><code>string (oneof)</code></td>
 <td>
-<p>A CIDR range for the set of endpoints in this network</p>
+<p>A CIDR range for the set of endpoints in this network. The CIDR
+ranges for endpoints from different networks must not overlap.</p>
 
 </td>
 </tr>
