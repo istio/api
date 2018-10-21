@@ -24,9 +24,6 @@ option go_package="istio.io/api/mesh/v1alpha1";
 // endpoint. The endpoint locality will be obtained from the service
 // registry.
 message Network {
-  // A unique name assigned to the network.
-  string name = 1;
-
   // NetworkEndpoints describes how the network associated with an endpoint
   // should be inferred. An endpoint will be assigned to a network based on
   // the following rules:
@@ -61,9 +58,9 @@ message Network {
     }
   }
 
-  // The list of endpoints in the network (obtained through the constituent
-  // service registries or from CIDR ranges). All endpoints in the network
-  // are directly accessible to one another.
+  // REQUIRED: The list of endpoints in the network (obtained through the
+  // constituent service registries or from CIDR ranges). All endpoints in
+  // the network are directly accessible to one another.
   repeated NetworkEndpoints endpoints = 2;
 
   // The gateway associated with this network. Traffic from remote networks
@@ -84,12 +81,33 @@ message Network {
       string address = 2;
     }
 
-    // The port associated with the gateway.
+    // REQUIRED: The port associated with the gateway.
     uint32 port = 3;
 
     // The locality associated with an explicitly specified gateway (i.e. ip)
     string locality = 4;
   }
 
+  // REQUIRED: Set of gateways associated with the network.
   repeated IstioNetworkGateway gateways = 3;
+}
+
+// MeshNetworks (config map) provides information about the set of networks
+// inside a mesh and how to route to endpoints in each network. For example
+//
+// MeshNetworks(file/config map):
+// networks:
+// - network1:
+//   - endpoints:
+//     - fromRegistry: registry1 #must match secret name in kubernetes
+//     - fromCidr: 192.168.100.0/22 #a VM network for example
+//     gateways:
+//     - registryServiceName: istio-ingressgateway.istio-system.svc.cluster.local
+//       port: 15443
+//       locality: us-east-1a
+message MeshNetworks {
+  // REQUIRED: The set of networks inside this mesh. Each network should
+  // have a unique name and information about how to infer the endpoints in
+  // the network as well as the gateways associated with the network.
+  map<string, Network> networks = 1;
 }
