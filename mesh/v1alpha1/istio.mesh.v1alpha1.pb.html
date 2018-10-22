@@ -66,7 +66,8 @@ sources.</p>
 <td><code>string</code></td>
 <td>
 <p>Address of the server implementing the Istio Mesh Configuration
-protocol (MCP). Can be IP address or a fully qualified DNS name.</p>
+protocol (MCP). Can be IP address or a fully qualified DNS name.
+Use file:/// to specify a file-based backend with absolute path to the directory.</p>
 
 </td>
 </tr>
@@ -241,14 +242,6 @@ at runtime and config gets distributed dynamically.</p>
 <td>
 <p>Unix Domain Socket through which envoy communicates with NodeAgent SDS to get key/cert for mTLS.
 Use secret-mount files instead of SDS if set to empty.</p>
-
-</td>
-</tr>
-<tr id="MeshConfig-galley_address" class="deprecated ">
-<td><code>galleyAddress</code></td>
-<td><code>string</code></td>
-<td>
-<p>Address of the galley service exposing the Mesh Control Protocol (MCP).</p>
 
 </td>
 </tr>
