@@ -660,6 +660,11 @@
                 "type": "bool"
               },
               {
+                "id": 25,
+                "name": "policy_check_fail_open",
+                "type": "bool"
+              },
+              {
                 "id": 4,
                 "name": "proxy_listen_port",
                 "type": "int32"
