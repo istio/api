@@ -35,4 +35,7 @@ if [ $BRANCH_NAME != '(no branch)' ]; then
 
   echo "Updating proto.lock"
   make proto-commit
+
+  echo "Checking lint"
+  make lint
 fi
