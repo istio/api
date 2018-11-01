@@ -159,14 +159,11 @@ message ServiceRoleBinding {
   repeated Subject subjects = 1;
 
   // Required. Reference to the ServiceRole object.
-  RoleRef role_ref = 4;
+  RoleRef role_ref = 2;
 
   // $hide_from_docs
   // Indicates enforcement mode of the ServiceRoleBinding.
   EnforcementMode mode = 3;
-
-  reserved 2;
-  reserved "roleRef";
 }
 
 // Subject defines an identity. The identity is either a user or identified by a set of `properties`.
