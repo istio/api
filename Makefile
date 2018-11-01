@@ -11,9 +11,11 @@ repo_dir = .
 docker_gen = /usr/bin/protoc -I/protobuf -I$(repo_dir)
 out_path = $(OUT_PATH)
 docker_lock = protolock
+docker_tool = prototool
 else
 gen_img := gcr.io/istio-testing/protoc:2018-06-12
 lock_img := gcr.io/istio-testing/protolock:2018-10-23
+all_img := gcr.io/istio-testing/api-build-tools:2018-10-31
 pwd := $(shell pwd)
 mount_dir := /src
 repo_dir := istio.io/api
@@ -21,6 +23,7 @@ repo_mount := $(mount_dir)/istio.io/api
 docker_gen := docker run --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(gen_img) -I$(repo_dir)
 out_path = .
 docker_lock = docker run --rm -v $(pwd):$(repo_mount) -w $(repo_mount) $(lock_img)
+docker_tool = docker run --rm -v $(pwd):$(repo_mount) -w $(repo_mount) $(all_img) prototool
 endif
 
 ########################
@@ -344,8 +347,16 @@ clean-envoy:
 #####################
 # Protolock
 #####################
+
 proto-commit:
 	@$(docker_lock) commit
+
+#####################
+# Lint
+#####################
+
+lint:
+	@$(docker_tool) lint --protoc-bin-path=/usr/bin/protoc --protoc-wkt-path=/protobuf
 
 #####################
 # Cleanup

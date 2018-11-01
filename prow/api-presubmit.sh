@@ -42,6 +42,7 @@ cd ${ROOT}
 
 ./scripts/generate-protos.sh || die "Could not generate *.pb.go"
 make proto-commit || die "Could not commit new proto.lock"
+make lint || die "Lint errors"
 
 if [[ -n $(git status --porcelain) ]]; then
     git status
