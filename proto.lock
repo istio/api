@@ -4291,8 +4291,8 @@
                 "is_repeated": true
               },
               {
-                "id": 2,
-                "name": "roleRef",
+                "id": 4,
+                "name": "role_ref",
                 "type": "RoleRef"
               },
               {
@@ -4300,6 +4300,12 @@
                 "name": "mode",
                 "type": "EnforcementMode"
               }
+            ],
+            "reserved_ids": [
+              2
+            ],
+            "reserved_names": [
+              "roleRef"
             ]
           },
           {
