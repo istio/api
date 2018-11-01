@@ -7,9 +7,6 @@ protoc:
 lint:
   # Linter files to ignore.
   ignores:
-    - id: MESSAGE_FIELD_NAMES_LOWER_SNAKE_CASE
-      files:
-        - rbac/v1alpha1/rbac.proto
     - id: REQUEST_RESPONSE_TYPES_IN_SAME_FILE
       files:
         - mixer/v1/service.proto
