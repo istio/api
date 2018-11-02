@@ -396,6 +396,28 @@
       }
     },
     {
+      "protopath": "envoy:/:config:/:filter:/:network:/:tcp_cluster_rewrite:/:v2alpha1:/:config.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "TcpClusterRewrite",
+            "fields": [
+              {
+                "id": 1,
+                "name": "cluster_pattern",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "cluster_replacement",
+                "type": "string"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
       "protopath": "mcp:/:v1alpha1:/:envelope.proto",
       "def": {
         "messages": [
