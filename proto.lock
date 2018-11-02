@@ -1525,266 +1525,6 @@
       }
     },
     {
-      "protopath": "mixer:/:v1:/:check.proto",
-      "def": {
-        "enums": [
-          {
-            "name": "ReferencedAttributes.Condition",
-            "enum_fields": [
-              {
-                "name": "CONDITION_UNSPECIFIED",
-                "integer": 0
-              },
-              {
-                "name": "ABSENCE",
-                "integer": 1
-              },
-              {
-                "name": "EXACT",
-                "integer": 2
-              },
-              {
-                "name": "REGEX",
-                "integer": 3
-              }
-            ]
-          },
-          {
-            "name": "HeaderOperation.Operation",
-            "enum_fields": [
-              {
-                "name": "REPLACE",
-                "integer": 0
-              },
-              {
-                "name": "REMOVE",
-                "integer": 1
-              },
-              {
-                "name": "APPEND",
-                "integer": 2
-              }
-            ]
-          }
-        ],
-        "messages": [
-          {
-            "name": "CheckRequest",
-            "fields": [
-              {
-                "id": 1,
-                "name": "attributes",
-                "type": "CompressedAttributes"
-              },
-              {
-                "id": 2,
-                "name": "global_word_count",
-                "type": "uint32"
-              },
-              {
-                "id": 3,
-                "name": "deduplication_id",
-                "type": "string"
-              }
-            ],
-            "maps": [
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 4,
-                  "name": "quotas",
-                  "type": "QuotaParams"
-                }
-              }
-            ],
-            "messages": [
-              {
-                "name": "QuotaParams",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "amount",
-                    "type": "int64"
-                  },
-                  {
-                    "id": 2,
-                    "name": "best_effort",
-                    "type": "bool"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "name": "CheckResponse",
-            "fields": [
-              {
-                "id": 2,
-                "name": "precondition",
-                "type": "PreconditionResult"
-              }
-            ],
-            "maps": [
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 3,
-                  "name": "quotas",
-                  "type": "QuotaResult"
-                }
-              }
-            ],
-            "messages": [
-              {
-                "name": "PreconditionResult",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "status",
-                    "type": "google.rpc.Status"
-                  },
-                  {
-                    "id": 2,
-                    "name": "valid_duration",
-                    "type": "google.protobuf.Duration"
-                  },
-                  {
-                    "id": 3,
-                    "name": "valid_use_count",
-                    "type": "int32"
-                  },
-                  {
-                    "id": 5,
-                    "name": "referenced_attributes",
-                    "type": "ReferencedAttributes"
-                  },
-                  {
-                    "id": 6,
-                    "name": "route_directive",
-                    "type": "RouteDirective"
-                  }
-                ],
-                "reserved_ids": [
-                  4
-                ]
-              },
-              {
-                "name": "QuotaResult",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "valid_duration",
-                    "type": "google.protobuf.Duration"
-                  },
-                  {
-                    "id": 2,
-                    "name": "granted_amount",
-                    "type": "int64"
-                  },
-                  {
-                    "id": 5,
-                    "name": "referenced_attributes",
-                    "type": "ReferencedAttributes"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "name": "ReferencedAttributes",
-            "fields": [
-              {
-                "id": 1,
-                "name": "words",
-                "type": "string",
-                "is_repeated": true
-              },
-              {
-                "id": 2,
-                "name": "attribute_matches",
-                "type": "AttributeMatch",
-                "is_repeated": true
-              }
-            ],
-            "messages": [
-              {
-                "name": "AttributeMatch",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "name",
-                    "type": "sint32"
-                  },
-                  {
-                    "id": 2,
-                    "name": "condition",
-                    "type": "Condition"
-                  },
-                  {
-                    "id": 3,
-                    "name": "regex",
-                    "type": "string"
-                  },
-                  {
-                    "id": 4,
-                    "name": "map_key",
-                    "type": "sint32"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "name": "HeaderOperation",
-            "fields": [
-              {
-                "id": 1,
-                "name": "name",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "value",
-                "type": "string"
-              },
-              {
-                "id": 3,
-                "name": "operation",
-                "type": "Operation"
-              }
-            ]
-          },
-          {
-            "name": "RouteDirective",
-            "fields": [
-              {
-                "id": 1,
-                "name": "request_header_operations",
-                "type": "HeaderOperation",
-                "is_repeated": true
-              },
-              {
-                "id": 2,
-                "name": "response_header_operations",
-                "type": "HeaderOperation",
-                "is_repeated": true
-              },
-              {
-                "id": 3,
-                "name": "direct_response_code",
-                "type": "uint32"
-              },
-              {
-                "id": 4,
-                "name": "direct_response_body",
-                "type": "string"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
       "protopath": "mixer:/:v1:/:config:/:client:/:api_spec.proto",
       "def": {
         "messages": [
@@ -2239,9 +1979,262 @@
       }
     },
     {
-      "protopath": "mixer:/:v1:/:report.proto",
+      "protopath": "mixer:/:v1:/:mixer.proto",
       "def": {
+        "enums": [
+          {
+            "name": "ReferencedAttributes.Condition",
+            "enum_fields": [
+              {
+                "name": "CONDITION_UNSPECIFIED",
+                "integer": 0
+              },
+              {
+                "name": "ABSENCE",
+                "integer": 1
+              },
+              {
+                "name": "EXACT",
+                "integer": 2
+              },
+              {
+                "name": "REGEX",
+                "integer": 3
+              }
+            ]
+          },
+          {
+            "name": "HeaderOperation.Operation",
+            "enum_fields": [
+              {
+                "name": "REPLACE",
+                "integer": 0
+              },
+              {
+                "name": "REMOVE",
+                "integer": 1
+              },
+              {
+                "name": "APPEND",
+                "integer": 2
+              }
+            ]
+          }
+        ],
         "messages": [
+          {
+            "name": "CheckRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "attributes",
+                "type": "CompressedAttributes"
+              },
+              {
+                "id": 2,
+                "name": "global_word_count",
+                "type": "uint32"
+              },
+              {
+                "id": 3,
+                "name": "deduplication_id",
+                "type": "string"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 4,
+                  "name": "quotas",
+                  "type": "QuotaParams"
+                }
+              }
+            ],
+            "messages": [
+              {
+                "name": "QuotaParams",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "amount",
+                    "type": "int64"
+                  },
+                  {
+                    "id": 2,
+                    "name": "best_effort",
+                    "type": "bool"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "CheckResponse",
+            "fields": [
+              {
+                "id": 2,
+                "name": "precondition",
+                "type": "PreconditionResult"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 3,
+                  "name": "quotas",
+                  "type": "QuotaResult"
+                }
+              }
+            ],
+            "messages": [
+              {
+                "name": "PreconditionResult",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "status",
+                    "type": "google.rpc.Status"
+                  },
+                  {
+                    "id": 2,
+                    "name": "valid_duration",
+                    "type": "google.protobuf.Duration"
+                  },
+                  {
+                    "id": 3,
+                    "name": "valid_use_count",
+                    "type": "int32"
+                  },
+                  {
+                    "id": 5,
+                    "name": "referenced_attributes",
+                    "type": "ReferencedAttributes"
+                  },
+                  {
+                    "id": 6,
+                    "name": "route_directive",
+                    "type": "RouteDirective"
+                  }
+                ],
+                "reserved_ids": [
+                  4
+                ]
+              },
+              {
+                "name": "QuotaResult",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "valid_duration",
+                    "type": "google.protobuf.Duration"
+                  },
+                  {
+                    "id": 2,
+                    "name": "granted_amount",
+                    "type": "int64"
+                  },
+                  {
+                    "id": 5,
+                    "name": "referenced_attributes",
+                    "type": "ReferencedAttributes"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "ReferencedAttributes",
+            "fields": [
+              {
+                "id": 1,
+                "name": "words",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "attribute_matches",
+                "type": "AttributeMatch",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "AttributeMatch",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "sint32"
+                  },
+                  {
+                    "id": 2,
+                    "name": "condition",
+                    "type": "Condition"
+                  },
+                  {
+                    "id": 3,
+                    "name": "regex",
+                    "type": "string"
+                  },
+                  {
+                    "id": 4,
+                    "name": "map_key",
+                    "type": "sint32"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "HeaderOperation",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "operation",
+                "type": "Operation"
+              }
+            ]
+          },
+          {
+            "name": "RouteDirective",
+            "fields": [
+              {
+                "id": 1,
+                "name": "request_header_operations",
+                "type": "HeaderOperation",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "response_header_operations",
+                "type": "HeaderOperation",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "direct_response_code",
+                "type": "uint32"
+              },
+              {
+                "id": 4,
+                "name": "direct_response_body",
+                "type": "string"
+              }
+            ]
+          },
           {
             "name": "ReportRequest",
             "fields": [
@@ -2267,12 +2260,7 @@
           {
             "name": "ReportResponse"
           }
-        ]
-      }
-    },
-    {
-      "protopath": "mixer:/:v1:/:service.proto",
-      "def": {
+        ],
         "services": [
           {
             "name": "Mixer",
