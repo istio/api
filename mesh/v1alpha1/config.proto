@@ -192,7 +192,7 @@ message MeshConfig {
 message ConfigSource {
   // Address of the server implementing the Istio Mesh Configuration
   // protocol (MCP). Can be IP address or a fully qualified DNS name.
-  // Use file:/// to specify a file-based backend with absolute path to the directory.
+  // Use fs:/// to specify a file-based backend with absolute path to the directory.
   string address = 1;
 
   // Use the tls_settings to specify the tls mode to use. If the MCP server

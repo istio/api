@@ -410,7 +410,7 @@ func (m *MeshConfig_OutboundTrafficPolicy) GetMode() MeshConfig_OutboundTrafficP
 type ConfigSource struct {
 	// Address of the server implementing the Istio Mesh Configuration
 	// protocol (MCP). Can be IP address or a fully qualified DNS name.
-	// Use file:/// to specify a file-based backend with absolute path to the directory.
+	// Use fs:/// to specify a file-based backend with absolute path to the directory.
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	// Use the tls_settings to specify the tls mode to use. If the MCP server
 	// uses Istio MTLS and shares the root CA with Pilot, specify the TLS
