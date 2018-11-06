@@ -6,9 +6,15 @@ RUN apk update && \
         -o /usr/bin/prototool && \
         chmod +x /usr/bin/prototool
 
+FROM gcr.io/istio-testing/protoc-gen-validate:2018-11-06 as protoc-gen-validate
+
 FROM gcr.io/istio-testing/protolock:2018-10-23 as protolock
 
 FROM gcr.io/istio-testing/protoc:2018-06-12
+
+COPY --from=protoc-gen-validate \
+        /usr/bin/protoc-gen-validate \
+        /usr/bin/
 
 COPY --from=protolock \
         /usr/bin/protolock \

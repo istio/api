@@ -15,15 +15,15 @@ docker_tool = prototool
 else
 gen_img := gcr.io/istio-testing/protoc:2018-06-12
 lock_img := gcr.io/istio-testing/protolock:2018-10-23
-all_img := gcr.io/istio-testing/api-build-tools:2018-10-31
+all_img := gcr.io/istio-testing/api-build-tools:2018-11-06
 pwd := $(shell pwd)
 mount_dir := /src
 repo_dir := istio.io/api
 repo_mount := $(mount_dir)/istio.io/api
-docker_gen := docker run --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(gen_img) -I$(repo_dir)
+docker_gen := docker run --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(all_img) /usr/bin/protoc -I/protobuf -I$(repo_dir)
 out_path = .
 docker_lock = docker run --rm -v $(pwd):$(repo_mount) -w $(repo_mount) $(lock_img)
-docker_tool = docker run --rm -v $(pwd):$(repo_mount) -w $(repo_mount) $(all_img) prototool
+docker_tool = docker run --rm -v $(pwd):$(repo_mount) -w $(repo_mount) $(all_img) /usr/bin/prototool
 endif
 
 ########################
@@ -33,13 +33,6 @@ endif
 gogo_plugin_prefix := --gogo_out=plugins=grpc,
 gogofast_plugin_prefix := --gogofast_out=plugins=grpc,
 gogoslick_plugin_prefix := --gogoslick_out=plugins=grpc,
-
-########################
-# protoc_gen_python
-########################
-
-protoc_gen_python_prefix := --python_out=,
-protoc_gen_python_plugin := $(protoc_gen_python_prefix):$(repo_dir)/python/istio_api
 
 comma := ,
 empty:=
@@ -64,6 +57,19 @@ gogo_mapping := $(subst $(space),$(empty),$(mapping_with_spaces))
 gogo_plugin := $(gogo_plugin_prefix)$(gogo_mapping):$(out_path)
 gogofast_plugin := $(gogofast_plugin_prefix)$(gogo_mapping):$(out_path)
 gogoslick_plugin := $(gogoslick_plugin_prefix)$(gogo_mapping):$(out_path)
+
+########################
+# protoc_gen_python
+########################
+
+protoc_gen_python_prefix := --python_out=,
+protoc_gen_python_plugin := $(protoc_gen_python_prefix):$(repo_dir)/python/istio_api
+
+########################
+# protoc_gen_validate
+########################
+
+protoc_gen_validate_plugin := --validate_out=lang=go:$(out_path)
 
 ########################
 # protoc_gen_docs
@@ -106,7 +112,7 @@ generate-mcp-go: $(config_mcp_pb_gos) $(config_mcp_pb_doc)
 $(config_mcp_pb_gos) $(config_mcp_pb_doc): $(config_mcp_protos)
 	## Generate mcp/v1alpha1/*.pb.go + $(config_mcp_pb_doc)
 	@$(docker_lock) status
-	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(config_mcp_path) $^
+	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_validate_plugin) $(protoc_gen_docs_plugin)$(config_mcp_path) $^
 
 generate-mcp-python: $(config_mcp_pb_pythons)
 
@@ -134,7 +140,7 @@ generate-mesh-go: $(mesh_pb_gos) $(mesh_pb_doc)
 $(mesh_pb_gos) $(mesh_pb_doc): $(mesh_protos)
 	## Generate mesh/v1alpha1/*.pb.go + $(mesh_pb_doc)
 	@$(docker_lock) status
-	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(mesh_path) $^
+	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_validate_plugin) $(protoc_gen_docs_plugin)$(mesh_path) $^
 
 generate-mesh-python: $(mesh_pb_pythons)
 
@@ -184,22 +190,22 @@ generate-mixer-go: \
 $(mixer_v1_pb_gos) $(mixer_v1_pb_doc): $(mixer_v1_protos)
 	## Generate mixer/v1/*.pb.go + $(mixer_v1_pb_doc)
 	@$(docker_lock) status
-	@$(docker_gen) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_v1_path) $^
+	@$(docker_gen) $(gogoslick_plugin) $(protoc_gen_validate_plugin) $(protoc_gen_docs_plugin)$(mixer_v1_path) $^
 
 $(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc): $(mixer_config_client_protos)
 	## Generate mixer/v1/config/client/*.pb.go + $(mixer_config_client_pb_doc)
 	@$(docker_lock) status
-	@$(docker_gen) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_config_client_path) $^
+	@$(docker_gen) $(gogoslick_plugin) $(protoc_gen_validate_plugin) $(protoc_gen_docs_plugin)$(mixer_config_client_path) $^
 
 $(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_doc) : $(mixer_adapter_model_v1beta1_protos)
 	## Generate mixer/adapter/model/v1beta1/*.pb.go + $(mixer_adapter_model_v1beta1_pb_doc)
 	@$(docker_lock) status
-	@$(docker_gen) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_adapter_model_v1beta1_path) $^
+	@$(docker_gen) $(gogoslick_plugin) $(protoc_gen_validate_plugin) $(protoc_gen_docs_plugin)$(mixer_adapter_model_v1beta1_path) $^
 
 $(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc) : $(policy_v1beta1_protos)
 	## Generate policy/v1beta1/*.pb.go + $(policy_v1beta1_pb_doc)
 	@$(docker_lock) status
-	@$(docker_gen) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(policy_v1beta1_path) $^
+	@$(docker_gen) $(gogoslick_plugin) $(protoc_gen_validate_plugin) $(protoc_gen_docs_plugin)$(policy_v1beta1_path) $^
 
 generate-mixer-python: \
 	$(mixer_v1_pb_pythons) \
@@ -246,7 +252,7 @@ generate-routing-go: $(routing_v1alpha3_pb_gos) $(routing_v1alpha3_pb_doc)
 $(routing_v1alpha3_pb_gos) $(routing_v1alpha3_pb_doc): $(routing_v1alpha3_protos)
 	## Generate networking/v1alpha3/*.pb.go
 	@$(docker_lock) status
-	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(routing_v1alpha3_path) $^
+	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_validate_plugin) $(protoc_gen_docs_plugin)$(routing_v1alpha3_path) $^
 
 generate-routing-python: $(routing_v1alpha3_pb_pythons)
 
@@ -274,7 +280,7 @@ generate-rbac-go: $(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc)
 $(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc): $(rbac_v1alpha1_protos)
 	## Generate rbac/v1alpha1/*.pb.go
 	@$(docker_lock) status
-	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(rbac_v1alpha1_path) $^
+	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_validate_plugin) $(protoc_gen_docs_plugin)$(rbac_v1alpha1_path) $^
 
 generate-rbac-python: $(rbac_v1alpha1_protos)
 
@@ -303,7 +309,7 @@ generate-authn-go: $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc)
 $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc): $(authn_v1alpha1_protos)
 	## Generate authentication/v1alpha1/*.pb.go
 	@$(docker_lock) status
-	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(authn_v1alpha1_path) $^
+	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_validate_plugin) $(protoc_gen_docs_plugin)$(authn_v1alpha1_path) $^
 
 generate-authn-python: $(authn_v1alpha1_pb_pythons)
 
@@ -331,7 +337,7 @@ generate-envoy-go: $(envoy_pb_gos) $(envoy_pb_doc)
 $(envoy_pb_gos): $(envoy_protos)
 	## Generate envoy/*/*.pb.go
 	@$(docker_lock) status
-	@$(docker_gen) $(gogofast_plugin) $^
+	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_validate_plugin) $^
 
 generate-envoy-python: $(envoy_pb_pythons)
 
