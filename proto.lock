@@ -761,6 +761,11 @@
                 "id": 23,
                 "name": "enable_sds_token_mount",
                 "type": "bool"
+              },
+              {
+                "id": 26,
+                "name": "trust_domain",
+                "type": "string"
               }
             ],
             "reserved_ids": [
