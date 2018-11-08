@@ -2658,6 +2658,11 @@
                 "id": 4,
                 "name": "max_ejection_percent",
                 "type": "int32"
+              },
+              {
+                "id": 5,
+                "name": "min_health_percent",
+                "type": "int32"
               }
             ]
           },
