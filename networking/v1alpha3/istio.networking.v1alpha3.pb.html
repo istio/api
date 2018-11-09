@@ -256,7 +256,7 @@ access. Serialized into Access-Control-Expose-Headers header.</p>
 <td><code>maxAge</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
 <td>
-<p>Specifies how long the the results of a preflight request can be
+<p>Specifies how long the results of a preflight request can be
 cached. Translates to the Access-Control-Max-Age header.</p>
 
 </td>
@@ -3154,7 +3154,7 @@ over multiple clusters.</p>
 to a failure domain (e.g., country/region/zone). Arbitrary failure
 domain hierarchies can be represented by separating each
 encapsulating failure domain by /. For example, the locality of an
-an endpoint in US, in US-East-1 region, within availability zone
+endpoint in US, in US-East-1 region, within availability zone
 az-1, in data center rack r11 can be represented as
 us/us-east-1/az-1/r11. Istio will configure the sidecar to route to
 endpoints within the same locality as the sidecar. If none of the
