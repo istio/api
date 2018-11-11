@@ -929,7 +929,7 @@ message CorsPolicy {
   // access. Serialized into Access-Control-Expose-Headers header.
   repeated string expose_headers = 4;
 
-  // Specifies how long the the results of a preflight request can be
+  // Specifies how long the results of a preflight request can be
   // cached. Translates to the Access-Control-Max-Age header.
   google.protobuf.Duration max_age = 5;
 
