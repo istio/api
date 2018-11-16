@@ -11,6 +11,7 @@ repo_dir = .
 docker_gen = /usr/bin/protoc -I/protobuf -I$(repo_dir)
 out_path = $(OUT_PATH)
 docker_lock = protolock
+docker_lock_release = ./scripts/release-locks.sh
 docker_tool = prototool
 else
 gen_img := gcr.io/istio-testing/protoc:2019-02-25
@@ -24,6 +25,7 @@ uid := $(shell id -u)
 docker_gen := docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(mount_dir) $(gen_img) -I$(repo_dir)
 out_path = .
 docker_lock = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(repo_mount) $(lock_img)
+docker_lock_release = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(repo_mount) --entrypoint=/bin/ash $(lock_img) $(repo_mount)/scripts/release-locks.sh
 docker_tool = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(repo_mount) $(all_img) prototool
 endif
 
@@ -358,6 +360,9 @@ proto-commit-force:
 
 proto-status:
 	@$(docker_lock) status
+
+release-lock-status:
+	@$(docker_lock_release)
 
 #####################
 # Lint

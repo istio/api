@@ -17,6 +17,7 @@ jobs:
             ./scripts/generate-protos.sh || die "could not generate *.pb.go"
             make proto-commit || die "could not regenerate proto.lock"
             make lint || die "Lint errors"
+            make release-lock-status || die "Proto changes affect compatibility with older release."
             if [[ -n $(git status --porcelain) ]]; then
               git status
               git --no-pager diff
