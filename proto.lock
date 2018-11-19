@@ -759,6 +759,11 @@
                 "type": "string"
               },
               {
+                "id": 27,
+                "name": "access_log_encoding",
+                "type": "string"
+              },
+              {
                 "id": 14,
                 "name": "default_config",
                 "type": "ProxyConfig"
