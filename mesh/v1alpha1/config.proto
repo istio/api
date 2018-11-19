@@ -121,13 +121,9 @@ message MeshConfig {
   // Empty value disables access logging.
   string access_log_file = 13;
   
-  // Format for the proxy access log 
-  // Empty value results in proxy's default access log format 
-  string access_log_format = 24;
-
-  // Encoding for the proxy access log (text or json).
+  // Format for the proxy access log (text or json).
   // Default value is text.
-  string access_log_encoding = 27;
+  string access_log_format = 24;
 
   // Default proxy config used by the proxy injection mechanism operating in the mesh
   // (e.g. Kubernetes admission controller)
@@ -192,7 +188,7 @@ message MeshConfig {
   string trust_domain = 26;
 
   // $hide_from_docs
-  // Next available field number: 28
+  // Next available field number: 27
 }
 
 // ConfigSource describes information about a configuration store inside a
