@@ -351,15 +351,30 @@ message LoadBalancerSettings {
 //       tcp:
 //         maxConnections: 100
 //         connectTimeout: 30ms
+//         keepalive:
+//           time: 7200s
+//           interval: 75s
 // ```
 message ConnectionPoolSettings {
   // Settings common to both HTTP and TCP upstream connections.
   message TCPSettings {
+    // TCP keepalive.
+    message TcpKeepalive {
+      // TCP keepalive time.
+      google.protobuf.Duration time = 1;
+
+      // TCP keepalive interval.
+      google.protobuf.Duration interval = 2;
+    };
+
     // Maximum number of HTTP1 /TCP connections to a destination host.
     int32 max_connections = 1;
 
     // TCP connection timeout.
     google.protobuf.Duration connect_timeout = 2;
+
+    // TCP keepalive.
+    TcpKeepalive keepalive = 3;
   };
 
   // Settings applicable to HTTP1.1/HTTP2/GRPC connections.

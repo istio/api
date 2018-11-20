@@ -2606,6 +2606,28 @@
                     "id": 2,
                     "name": "connect_timeout",
                     "type": "google.protobuf.Duration"
+                  },
+                  {
+                    "id": 3,
+                    "name": "keepalive",
+                    "type": "TcpKeepalive"
+                  }
+                ],
+                "messages": [
+                  {
+                    "name": "TcpKeepalive",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "time",
+                        "type": "google.protobuf.Duration"
+                      },
+                      {
+                        "id": 2,
+                        "name": "interval",
+                        "type": "google.protobuf.Duration"
+                      }
+                    ]
                   }
                 ]
               },
