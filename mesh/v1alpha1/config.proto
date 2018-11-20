@@ -196,8 +196,36 @@ message MeshConfig {
   // Fallback to old identity format(without trust domain) if not set.
   string trust_domain = 26;
 
+  // Network scope settings for the mesh. Network scope controls the reachability of
+  // sidecars to other services in the mesh.
+  message NetworkScope {
+    enum Mode {
+      // Invalid mode
+      INVALID = 0;
+
+      // Configure routes to services in all namespaces.
+      ALL_NAMESPACES = 1;
+
+      // Configure routes to services in the same namespace as the sidecar
+      // in addition to namespaces specified in sharedNamespaces.
+      CURRENT_NAMESPACE = 2;
+    }
+
+    // REQUIRED: The default scope associated with every sidecar in the mesh.
+    Mode default_scope = 1;
+
+    // Specifies one or more namespaces that should be accessible to all sidecars
+    // in the mesh (such as istio-system).
+    repeated string shared_namespaces = 2;
+  }
+
+  // The default network scope associated with every sidecar in the mesh.
+  // Pilot will program the routes in the sidecars accordingly. If omitted,
+  // sidecars will be able to reach every service in the mesh.
+  NetworkScope network_scope = 28;
+
   // $hide_from_docs
-  // Next available field number: 28
+  // Next available field number: 29
 }
 
 // ConfigSource describes information about a configuration store inside a
