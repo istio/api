@@ -195,6 +195,16 @@ cluster at a given time. Defaults to 3.</p>
 </tr>
 </thead>
 <tbody>
+<tr id="ConnectionPoolSettings-TCPSettings-TcpKeepalive-probes">
+<td><code>probes</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Maximum number of keepalive probes to send without response before
+deciding the connection is dead. Default is to use the OS level configuration
+(unless overridden, Linux defaults to 9.)</p>
+
+</td>
+</tr>
 <tr id="ConnectionPoolSettings-TCPSettings-TcpKeepalive-time">
 <td><code>time</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>

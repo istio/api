@@ -2642,11 +2642,16 @@
                     "fields": [
                       {
                         "id": 1,
+                        "name": "probes",
+                        "type": "uint32"
+                      },
+                      {
+                        "id": 2,
                         "name": "time",
                         "type": "google.protobuf.Duration"
                       },
                       {
-                        "id": 2,
+                        "id": 3,
                         "name": "interval",
                         "type": "google.protobuf.Duration"
                       }
