@@ -365,12 +365,12 @@ message ConnectionPoolSettings {
       // (unless overridden, Linux defaults to 9.)
       uint32 probes = 1;
 
-      // The number of seconds a connection needs to be idle before keep-alive
+      // The time duration a connection needs to be idle before keep-alive
       // probes start being sent. Default is to use the OS level configuration
       // (unless overridden, Linux defaults to 7200s (ie 2 hours.)
       google.protobuf.Duration time = 2;
 
-      // The number of seconds between keep-alive probes.
+      // The time duration between keep-alive probes.
       // Default is to use the OS level configuration
       // (unless overridden, Linux defaults to 75s.)
       google.protobuf.Duration interval = 3;

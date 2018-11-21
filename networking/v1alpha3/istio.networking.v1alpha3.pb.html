@@ -209,7 +209,7 @@ deciding the connection is dead. Default is to use the OS level configuration
 <td><code>time</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
 <td>
-<p>The number of seconds a connection needs to be idle before keep-alive
+<p>The time duration a connection needs to be idle before keep-alive
 probes start being sent. Default is to use the OS level configuration
 (unless overridden, Linux defaults to 7200s (ie 2 hours.)</p>
 
@@ -219,7 +219,7 @@ probes start being sent. Default is to use the OS level configuration
 <td><code>interval</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
 <td>
-<p>The number of seconds between keep-alive probes.
+<p>The time duration between keep-alive probes.
 Default is to use the OS level configuration
 (unless overridden, Linux defaults to 75s.)</p>
 

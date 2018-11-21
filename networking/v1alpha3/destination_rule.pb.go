@@ -945,11 +945,11 @@ type ConnectionPoolSettings_TCPSettings_TcpKeepalive struct {
 	// deciding the connection is dead. Default is to use the OS level configuration
 	// (unless overridden, Linux defaults to 9.)
 	Probes uint32 `protobuf:"varint,1,opt,name=probes,proto3" json:"probes,omitempty"`
-	// The number of seconds a connection needs to be idle before keep-alive
+	// The time duration a connection needs to be idle before keep-alive
 	// probes start being sent. Default is to use the OS level configuration
 	// (unless overridden, Linux defaults to 7200s (ie 2 hours.)
 	Time *google_protobuf.Duration `protobuf:"bytes,2,opt,name=time" json:"time,omitempty"`
-	// The number of seconds between keep-alive probes.
+	// The time duration between keep-alive probes.
 	// Default is to use the OS level configuration
 	// (unless overridden, Linux defaults to 75s.)
 	Interval *google_protobuf.Duration `protobuf:"bytes,3,opt,name=interval" json:"interval,omitempty"`
