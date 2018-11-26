@@ -1564,7 +1564,7 @@ type CorsPolicy struct {
 	// A white list of HTTP headers that the browsers are allowed to
 	// access. Serialized into Access-Control-Expose-Headers header.
 	ExposeHeaders []string `protobuf:"bytes,4,rep,name=expose_headers,json=exposeHeaders" json:"expose_headers,omitempty"`
-	// Specifies how long the the results of a preflight request can be
+	// Specifies how long the results of a preflight request can be
 	// cached. Translates to the Access-Control-Max-Age header.
 	MaxAge *google_protobuf.Duration `protobuf:"bytes,5,opt,name=max_age,json=maxAge" json:"max_age,omitempty"`
 	// Indicates whether the caller is allowed to send the actual request
