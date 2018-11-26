@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 aliases:
   - /docs/reference/config/istio.routing.v1alpha1/
-number_of_entries: 53
+number_of_entries: 55
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -1819,43 +1819,52 @@ for further details about cross origin resource sharing.</p>
 <td><code>appendHeaders</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>Use of <code>append_headers</code> is deprecated. Use the <code>append_request_headers</code>
+<p>Use of <code>append_headers</code> is deprecated. Use the <code>headers</code>
 field instead.</p>
 
 </td>
 </tr>
-<tr id="HTTPRoute-remove_response_headers">
+<tr id="HTTPRoute-remove_response_headers" class="deprecated ">
 <td><code>removeResponseHeaders</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>HTTP headers to remove before returning a response to the caller.</p>
+<p>Use of <code>remove_response_header</code> is deprecated. Use the <code>headers</code>
+field instead.</p>
 
 </td>
 </tr>
-<tr id="HTTPRoute-append_response_headers">
+<tr id="HTTPRoute-append_response_headers" class="deprecated ">
 <td><code>appendResponseHeaders</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>Additional HTTP headers to add before returning a response to the
-caller.</p>
+<p>Use of <code>append_response_headers</code> is deprecated. Use the <code>headers</code>
+field instead.</p>
 
 </td>
 </tr>
-<tr id="HTTPRoute-remove_request_headers">
+<tr id="HTTPRoute-remove_request_headers" class="deprecated ">
 <td><code>removeRequestHeaders</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>HTTP headers to remove before forwarding a request to the
-destination service.</p>
+<p>Use of <code>remove_request_headers</code> is deprecated. Use the <code>headers</code>
+field instead.</p>
 
 </td>
 </tr>
-<tr id="HTTPRoute-append_request_headers">
+<tr id="HTTPRoute-append_request_headers" class="deprecated ">
 <td><code>appendRequestHeaders</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>Additional HTTP headers to add before forwarding a request to the
-destination service.</p>
+<p>Use of <code>append_request_headers</code> is deprecated. Use the <code>headers</code>
+field instead.</p>
+
+</td>
+</tr>
+<tr id="HTTPRoute-headers">
+<td><code>headers</code></td>
+<td><code><a href="#Headers">Headers</a></code></td>
+<td>
+<p>Header manipulation rules</p>
 
 </td>
 </tr>
@@ -1957,38 +1966,122 @@ be 100.</p>
 
 </td>
 </tr>
-<tr id="HTTPRouteDestination-remove_response_headers">
+<tr id="HTTPRouteDestination-remove_response_headers" class="deprecated ">
 <td><code>removeResponseHeaders</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>HTTP headers to remove before returning a response to the caller.</p>
+<p>Use of <code>remove_response_header</code> is deprecated. Use the <code>headers</code>
+field instead.</p>
 
 </td>
 </tr>
-<tr id="HTTPRouteDestination-append_response_headers">
+<tr id="HTTPRouteDestination-append_response_headers" class="deprecated ">
 <td><code>appendResponseHeaders</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>Additional HTTP headers to add before returning a response to the
-caller.</p>
+<p>Use of <code>append_response_headers</code> is deprecated. Use the <code>headers</code>
+field instead.</p>
 
 </td>
 </tr>
-<tr id="HTTPRouteDestination-remove_request_headers">
+<tr id="HTTPRouteDestination-remove_request_headers" class="deprecated ">
 <td><code>removeRequestHeaders</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>HTTP headers to remove before forwarding a request to the
-destination service.</p>
+<p>Use of <code>remove_request_headers</code> is deprecated. Use the <code>headers</code>
+field instead.</p>
 
 </td>
 </tr>
-<tr id="HTTPRouteDestination-append_request_headers">
+<tr id="HTTPRouteDestination-append_request_headers" class="deprecated ">
 <td><code>appendRequestHeaders</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>Additional HTTP headers to add before forwarding a request to the
-destination service.</p>
+<p>Use of <code>append_request_headers</code> is deprecated. Use the <code>headers</code>
+field instead.</p>
+
+</td>
+</tr>
+<tr id="HTTPRouteDestination-headers">
+<td><code>headers</code></td>
+<td><code><a href="#Headers">Headers</a></code></td>
+<td>
+<p>Header manipulation rules</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Headers">Headers</h2>
+<section>
+<p>Header manipulation rules</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Headers-request">
+<td><code>request</code></td>
+<td><code><a href="#Headers-HeaderOperations">Headers.HeaderOperations</a></code></td>
+<td>
+<p>Header manipulation rules to apply before forwarding a request
+to the destination service</p>
+
+</td>
+</tr>
+<tr id="Headers-response">
+<td><code>response</code></td>
+<td><code><a href="#Headers-HeaderOperations">Headers.HeaderOperations</a></code></td>
+<td>
+<p>Header manipulation rules to apply before returning a response
+to the caller</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Headers-HeaderOperations">Headers.HeaderOperations</h2>
+<section>
+<p>HeaderOperations Describes the header manipulations to apply</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Headers-HeaderOperations-set">
+<td><code>set</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>Overwrite the headers specified by key with the given values</p>
+
+</td>
+</tr>
+<tr id="Headers-HeaderOperations-add">
+<td><code>add</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>Apppend the given values to the the headers specified by keys
+(will create a comma seperated list of values)</p>
+
+</td>
+</tr>
+<tr id="Headers-HeaderOperations-remove">
+<td><code>remove</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Remove a the specified headers</p>
 
 </td>
 </tr>

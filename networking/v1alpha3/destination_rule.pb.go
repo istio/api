@@ -27,6 +27,7 @@
 		VirtualService
 		Destination
 		HTTPRoute
+		Headers
 		TLSRoute
 		TCPRoute
 		HTTPMatchRequest

@@ -3358,6 +3358,11 @@
                 "name": "remove_request_headers",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 16,
+                "name": "headers",
+                "type": "Headers"
               }
             ],
             "maps": [
@@ -3384,6 +3389,52 @@
                   "name": "append_request_headers",
                   "type": "string"
                 }
+              }
+            ]
+          },
+          {
+            "name": "Headers",
+            "fields": [
+              {
+                "id": 1,
+                "name": "request",
+                "type": "HeaderOperations"
+              },
+              {
+                "id": 2,
+                "name": "response",
+                "type": "HeaderOperations"
+              }
+            ],
+            "messages": [
+              {
+                "name": "HeaderOperations",
+                "fields": [
+                  {
+                    "id": 3,
+                    "name": "remove",
+                    "type": "string",
+                    "is_repeated": true
+                  }
+                ],
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 1,
+                      "name": "set",
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 2,
+                      "name": "add",
+                      "type": "string"
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -3499,6 +3550,11 @@
                 "name": "remove_request_headers",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "headers",
+                "type": "Headers"
               }
             ],
             "maps": [
