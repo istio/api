@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 aliases:
   - /docs/reference/config/istio.routing.v1alpha1/
-number_of_entries: 55
+number_of_entries: 58
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -325,6 +325,49 @@ cached. Translates to the Access-Control-Max-Age header.</p>
 <p>Indicates whether the caller is allowed to send the actual request
 (not the preflight) using credentials. Translates to
 Access-Control-Allow-Credentials header.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Dependency">Dependency</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Dependency-source_workload_labels">
+<td><code>sourceWorkloadLabels</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>One or more labels that indicate a specific set of pods/VMs on which
+this dependency configuration should be applied.  The scope of label
+search is platform dependent.  On Kubernetes, for example, the scope
+includes pods running in the namespace in which the NetworkScope
+resource is present.  If the sourceWorkloadLabels are omitted, the
+imports specified will be applicable to all workloads in the current
+configuration namespace.</p>
+
+</td>
+</tr>
+<tr id="Dependency-imports">
+<td><code>imports</code></td>
+<td><code><a href="#Import">Import[]</a></code></td>
+<td>
+<p>REQUIRED: Import describes the set of namespaces whose exported
+services will be accessed by the workloads selected by the
+sourceWorkloadLabels. The sidecars attached to the workloads will be
+configured with information required to reach other services in the
+same namespace and the imported services. In addition to the
+explicitly specified namespaces, namespaces specified in the global
+mesh config (through NetworkScope.sharedNamespaces) will also be
+imported.</p>
 
 </td>
 </tr>
@@ -2088,6 +2131,58 @@ to the caller</p>
 </tbody>
 </table>
 </section>
+<h2 id="Import">Import</h2>
+<section>
+<p>Import describes the set of namespaces whose exported services
+(real/virtual) will be accessed by workloads in a given namespace. The
+sidecars attached to the workloads will be configured with information
+required to reach the imported services only. The gateways in the
+current namespace will only honor imported VirtualServices instead of
+every VirtualService that binds itself to the gateway.</p>
+
+<p>Importing a service from a namespace will automatically import the
+exported configuration artifacts associated with the service, such as
+VirtualService, DestinationRule, etc. The service in a namespace can be
+a service in the service registry (e.g., a kubernetes or cloud foundry
+service) or a service specified via ServiceEntry configuration.</p>
+
+<p>NOTE: Only exported services and configuration artifacts from a
+namespace can be imported. Private services/configuration will not be
+imported. See the scope setting associated with VirtualService,
+DestinationRule, ServiceEntry, etc.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Import-namespace">
+<td><code>namespace</code></td>
+<td><code>string</code></td>
+<td>
+<p>The configuration namespace whose services need to be imported.
+Specify * to import all namespaces. The import can be scoped further
+by specifying individual hosts.</p>
+
+</td>
+</tr>
+<tr id="Import-host">
+<td><code>host</code></td>
+<td><code>string</code></td>
+<td>
+<p>A FQDN or wildcard prefixed DNS name of the host to import from the
+specified namespace. The hostnames include names of services from the
+service registry as well as those specified in a VirtualService.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="L4MatchAttributes">L4MatchAttributes</h2>
 <section>
 <p>L4 connection match attributes. Note that L4 connection matching support
@@ -2352,6 +2447,111 @@ requested by the caller without doing any form of load
 balancing. This option must be used with care. It is meant for
 advanced use cases. Refer to Original Destination load balancer in
 Envoy for further details.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="NetworkScope">NetworkScope</h2>
+<section>
+<p><code>NetworkScope</code> describes the set of services that a workload depends on
+for its operation. In other words, it describes the properties of egress
+traffic from a given workload. By default, the service mesh established
+by Istio will have a full mesh connectivity - i.e. every workload will
+have proxy configuration required to reach every other workload in the
+mesh. However most connectivity graphs are sparse in practice. The
+NetworkScope provides a way to prune the connectivity graph
+(i.e. dependencies) associated with each workload.</p>
+
+<p>Services and configuration in a mesh are organized into one or more
+namespaces (e.g., a Kubernetes namespace or a CF org/space).  Workloads
+in a namespace will be able to reach other workloads in the same
+namespace. To declare dependencies on workloads in other namespaces, a
+NetworkScope resource has to be specified in the current
+namespace. <em><em>Each namespace can have only one NetworkScope
+resource</em></em>. The behavior of the system is undefined if more than one
+NetworkScope resource exists in a given namespace. The set of
+dependencies specified in a NetworkScope resource will be used to
+compute the [outbound] connectivity graph for every workload in the
+namespace.</p>
+
+<p>NOTE: If workloads in the mesh depend only on other workloads in the
+same namespace, use the mesh global setting to specify the default
+network scope as CURRENT<em>NAMESPACE. To facilitate incremental pruning of
+the connectivity graph, the default network scope for the mesh is set to
+ALL</em>NAMESPACES. In otherwords, every workload will be able to reach
+every other workload. Specifying a NetworkScope resource in a namespace
+will automatically prune the configuration for the workloads in that
+namespace.</p>
+
+<p>The following examples illustrate a few specific use cases of NetworkScope.</p>
+
+<p>The example below delcares a NetworkScope resource in the prod-us1
+namespace. The workload with the <code>version: newlandingpage</code> label will be
+able to reach all services declared in the egress namespace as well as
+the landing.qa.foo.com service in the qa namespace. All other workloads
+in the prod-us1 namespace will be able to reach the services in the
+egress namespace only.</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: NetworkScope
+metadata:
+  name: default
+  namespace: prod-us1
+spec:
+  dependencies:
+  - sourceWorkloadLabels:
+      version: newlandingpage
+    imports:
+    - namespace: qa
+      host: landing.qa.foo.com
+    - namespace: egress
+  - imports:
+    - namespace: egress
+</code></pre>
+
+<p>In a mesh where the default network scope is set to CURRENT_NAMESPACE
+only, if one or more workloads need to be able to reach every other
+service in the mesh (e.g., metrics collection server), the following
+NetworkScope resource can be used to specify such a dependency:</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: NetworkScope
+metadata:
+  name: default
+  namespace: metrics-collection
+spec:
+  dependencies:
+  - sourceWorkloadLabels:
+       app: metricsScraper
+    imports:
+    - namespace: '*'
+</code></pre>
+
+<p>The configuration above will allow workloads in the metrics-collection
+namespace with the labels <code>app: metricsScraper</code> to access service in any
+namespace while other workloads in the same namespace will be configured
+for namespace local access as per the global default network scope
+(CURRENT_NAMESPACE).</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="NetworkScope-dependencies">
+<td><code>dependencies</code></td>
+<td><code><a href="#Dependency">Dependency[]</a></code></td>
+<td>
+<p>REQUIRED. The set of services that workloads in this namespace are
+expected to talk to, in addition to other workloads in the same
+namespace. Dependencies describe the properties of egress traffic from
+a given workload.</p>
 
 </td>
 </tr>

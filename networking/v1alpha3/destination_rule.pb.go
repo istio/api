@@ -8,6 +8,7 @@
 		networking/v1alpha3/destination_rule.proto
 		networking/v1alpha3/envoy_filter.proto
 		networking/v1alpha3/gateway.proto
+		networking/v1alpha3/network_Scope.proto
 		networking/v1alpha3/service_entry.proto
 		networking/v1alpha3/virtual_service.proto
 
@@ -23,6 +24,9 @@
 		Gateway
 		Server
 		Port
+		NetworkScope
+		Dependency
+		Import
 		ServiceEntry
 		VirtualService
 		Destination
