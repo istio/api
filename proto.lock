@@ -690,6 +690,23 @@
                 "integer": 2
               }
             ]
+          },
+          {
+            "name": "NetworkScope.Mode",
+            "enum_fields": [
+              {
+                "name": "INVALID",
+                "integer": 0
+              },
+              {
+                "name": "ALL_NAMESPACES",
+                "integer": 1
+              },
+              {
+                "name": "CURRENT_NAMESPACE",
+                "integer": 2
+              }
+            ]
           }
         ],
         "messages": [
@@ -826,6 +843,11 @@
                 "id": 26,
                 "name": "trust_domain",
                 "type": "string"
+              },
+              {
+                "id": 29,
+                "name": "network_scope",
+                "type": "NetworkScope"
               }
             ],
             "reserved_ids": [
@@ -840,6 +862,22 @@
                     "id": 1,
                     "name": "mode",
                     "type": "Mode"
+                  }
+                ]
+              },
+              {
+                "name": "NetworkScope",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "default_scope",
+                    "type": "Mode"
+                  },
+                  {
+                    "id": 2,
+                    "name": "shared_namespaces",
+                    "type": "string",
+                    "is_repeated": true
                   }
                 ]
               }
