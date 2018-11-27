@@ -311,7 +311,9 @@ Fallback to old identity format(without trust domain) if not set.</p>
 <td>
 <p>The default network scope associated with every sidecar in the mesh.
 Pilot will program the routes in the sidecars accordingly. If omitted,
-sidecars will be able to reach every service in the mesh.</p>
+sidecars will be able to reach every service in the mesh. The default
+scope can be overriden by supplying a NetworkScope resource per
+namespace.</p>
 
 </td>
 </tr>
@@ -409,8 +411,15 @@ sidecars to other services in the mesh.</p>
 <td><code>sharedNamespaces</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Specifies one or more namespaces that should be accessible to all sidecars
-in the mesh (such as istio-system).</p>
+<p>Specifies one or more namespaces that should be accessible to all
+sidecars in the mesh (such as istio-system). This field has no
+effect when the default scope is set to ALL<em>NAMESPACES and a sidecar
+has no explicit NetworkScope resource attached to it. However when
+the sidecar has a NetworkScope resource attached to it (and the
+default scope is set to ALL</em>NAMESPACES or CURRENT_NAMESPACE),
+sidecar&rsquo;s network scope will include services/config objects
+specified in the NetworkScope object as well as services/config
+objects specified in the sharedNamespaces.</p>
 
 </td>
 </tr>

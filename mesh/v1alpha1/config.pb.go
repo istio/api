@@ -282,7 +282,9 @@ type MeshConfig struct {
 	TrustDomain string `protobuf:"bytes,26,opt,name=trust_domain,json=trustDomain,proto3" json:"trust_domain,omitempty"`
 	// The default network scope associated with every sidecar in the mesh.
 	// Pilot will program the routes in the sidecars accordingly. If omitted,
-	// sidecars will be able to reach every service in the mesh.
+	// sidecars will be able to reach every service in the mesh. The default
+	// scope can be overriden by supplying a NetworkScope resource per
+	// namespace.
 	NetworkScope *MeshConfig_NetworkScope `protobuf:"bytes,29,opt,name=network_scope,json=networkScope" json:"network_scope,omitempty"`
 }
 
@@ -503,8 +505,15 @@ func (m *MeshConfig_OutboundTrafficPolicy) GetMode() MeshConfig_OutboundTrafficP
 type MeshConfig_NetworkScope struct {
 	// REQUIRED: The default scope associated with every sidecar in the mesh.
 	DefaultScope MeshConfig_NetworkScope_Mode `protobuf:"varint,1,opt,name=default_scope,json=defaultScope,proto3,enum=istio.mesh.v1alpha1.MeshConfig_NetworkScope_Mode" json:"default_scope,omitempty"`
-	// Specifies one or more namespaces that should be accessible to all sidecars
-	// in the mesh (such as istio-system).
+	// Specifies one or more namespaces that should be accessible to all
+	// sidecars in the mesh (such as istio-system). This field has no
+	// effect when the default scope is set to ALL_NAMESPACES and a sidecar
+	// has no explicit NetworkScope resource attached to it. However when
+	// the sidecar has a NetworkScope resource attached to it (and the
+	// default scope is set to ALL_NAMESPACES or CURRENT_NAMESPACE),
+	// sidecar's network scope will include services/config objects
+	// specified in the NetworkScope object as well as services/config
+	// objects specified in the sharedNamespaces.
 	SharedNamespaces []string `protobuf:"bytes,2,rep,name=shared_namespaces,json=sharedNamespaces" json:"shared_namespaces,omitempty"`
 }
 
