@@ -102,6 +102,59 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // (CURRENT_NAMESPACE).
 //
 message NetworkScope {
+
+  // Import describes the set of namespaces whose exported services
+  // (real/virtual) will be accessed by workloads in a given namespace. The
+  // sidecars attached to the workloads will be configured with information
+  // required to reach the imported services only. The gateways in the
+  // current namespace will only honor imported VirtualServices instead of
+  // every VirtualService that binds itself to the gateway.
+  //
+  // Importing a service from a namespace will automatically import the
+  // exported configuration artifacts associated with the service, such as
+  // VirtualService, DestinationRule, etc. The service in a namespace can be
+  // a service in the service registry (e.g., a kubernetes or cloud foundry
+  // service) or a service specified via ServiceEntry configuration.
+  //
+  // NOTE: Only exported services and configuration artifacts from a
+  // namespace can be imported. Private services/configuration will not be
+  // imported. See the scope setting associated with VirtualService,
+  // DestinationRule, ServiceEntry, etc.
+  message Import {
+    // The configuration namespace whose services need to be imported.
+    // Specify * to import all namespaces. The import can be scoped further
+    // by specifying individual hosts.
+    string namespace = 1;
+
+    // A FQDN or wildcard prefixed DNS name of the host to import from the
+    // specified namespace. The hostnames include names of services from the
+    // service registry as well as those specified in a VirtualService.
+    string host = 2;
+  };
+
+  // Dependency describes a workload and the set of service dependencies
+  // for the workload.
+  message Dependency {
+    // One or more labels that indicate a specific set of pods/VMs on which
+    // this dependency configuration should be applied.  The scope of label
+    // search is platform dependent.  On Kubernetes, for example, the scope
+    // includes pods running in the namespace in which the NetworkScope
+    // resource is present.  If the sourceWorkloadLabels are omitted, the
+    // imports specified will be applicable to all workloads in the current
+    // configuration namespace.
+    map<string, string> source_workload_labels = 1;
+
+    // REQUIRED: Import describes the set of namespaces whose exported
+    // services will be accessed by the workloads selected by the
+    // sourceWorkloadLabels. The sidecars attached to the workloads will be
+    // configured with information required to reach other services in the
+    // same namespace and the imported services. In addition to the
+    // explicitly specified namespaces, namespaces specified in the global
+    // mesh config (through NetworkScope.sharedNamespaces) will also be
+    // imported.
+    repeated Import imports = 2;
+  };
+
   // REQUIRED. The set of services that workloads in this namespace are
   // expected to talk to, in addition to other workloads in the same
   // namespace. Dependencies describe the properties of egress traffic from
@@ -109,52 +162,12 @@ message NetworkScope {
   repeated Dependency dependencies = 1;
 }
 
-message Dependency {
-  // One or more labels that indicate a specific set of pods/VMs on which
-  // this dependency configuration should be applied.  The scope of label
-  // search is platform dependent.  On Kubernetes, for example, the scope
-  // includes pods running in the namespace in which the NetworkScope
-  // resource is present.  If the sourceWorkloadLabels are omitted, the
-  // imports specified will be applicable to all workloads in the current
-  // configuration namespace.
-  map<string, string> source_workload_labels = 1;
-
-  // REQUIRED: Import describes the set of namespaces whose exported
-  // services will be accessed by the workloads selected by the
-  // sourceWorkloadLabels. The sidecars attached to the workloads will be
-  // configured with information required to reach other services in the
-  // same namespace and the imported services. In addition to the
-  // explicitly specified namespaces, namespaces specified in the global
-  // mesh config (through NetworkScope.sharedNamespaces) will also be
-  // imported.
-  repeated Import imports = 2;
-}
-
-// Import describes the set of namespaces whose exported services
-// (real/virtual) will be accessed by workloads in a given namespace. The
-// sidecars attached to the workloads will be configured with information
-// required to reach the imported services only. The gateways in the
-// current namespace will only honor imported VirtualServices instead of
-// every VirtualService that binds itself to the gateway.
-//
-// Importing a service from a namespace will automatically import the
-// exported configuration artifacts associated with the service, such as
-// VirtualService, DestinationRule, etc. The service in a namespace can be
-// a service in the service registry (e.g., a kubernetes or cloud foundry
-// service) or a service specified via ServiceEntry configuration.
-//
-// NOTE: Only exported services and configuration artifacts from a
-// namespace can be imported. Private services/configuration will not be
-// imported. See the scope setting associated with VirtualService,
-// DestinationRule, ServiceEntry, etc.
-message Import {
-  // The configuration namespace whose services need to be imported.
-  // Specify * to import all namespaces. The import can be scoped further
-  // by specifying individual hosts.
-  string namespace = 1;
-
-  // A FQDN or wildcard prefixed DNS name of the host to import from the
-  // specified namespace. The hostnames include names of services from the
-  // service registry as well as those specified in a VirtualService.
-  string host = 2;
+// ConfigScope defines the visibility of an Istio configuration artifact in
+// a namespace when the namespace is imported.  By default all
+// configuration artifacts are public. Configurations with private scope
+// will not be imported when the namespace containing the configuration is
+// imported in a NetworkScope.
+enum ConfigScope {
+  PUBLIC = 0;
+  PRIVATE = 1;
 }

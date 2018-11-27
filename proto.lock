@@ -3113,6 +3113,21 @@
     {
       "protopath": "networking:/:v1alpha3:/:network_scope.proto",
       "def": {
+        "enums": [
+          {
+            "name": "ConfigScope",
+            "enum_fields": [
+              {
+                "name": "PUBLIC",
+                "integer": 0
+              },
+              {
+                "name": "PRIVATE",
+                "integer": 1
+              }
+            ]
+          }
+        ],
         "messages": [
           {
             "name": "NetworkScope",
@@ -3123,41 +3138,43 @@
                 "type": "Dependency",
                 "is_repeated": true
               }
-            ]
-          },
-          {
-            "name": "Dependency",
-            "fields": [
-              {
-                "id": 2,
-                "name": "imports",
-                "type": "Import",
-                "is_repeated": true
-              }
             ],
-            "maps": [
+            "messages": [
               {
-                "key_type": "string",
-                "field": {
-                  "id": 1,
-                  "name": "source_workload_labels",
-                  "type": "string"
-                }
-              }
-            ]
-          },
-          {
-            "name": "Import",
-            "fields": [
-              {
-                "id": 1,
-                "name": "namespace",
-                "type": "string"
+                "name": "Import",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "namespace",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "host",
+                    "type": "string"
+                  }
+                ]
               },
               {
-                "id": 2,
-                "name": "host",
-                "type": "string"
+                "name": "Dependency",
+                "fields": [
+                  {
+                    "id": 2,
+                    "name": "imports",
+                    "type": "Import",
+                    "is_repeated": true
+                  }
+                ],
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 1,
+                      "name": "source_workload_labels",
+                      "type": "string"
+                    }
+                  }
+                ]
               }
             ]
           }
@@ -3236,6 +3253,11 @@
                 "name": "endpoints",
                 "type": "Endpoint",
                 "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "scope",
+                "type": "ConfigScope"
               }
             ],
             "messages": [
@@ -3323,6 +3345,11 @@
                 "name": "tcp",
                 "type": "TCPRoute",
                 "is_repeated": true
+              },
+              {
+                "id": 6,
+                "name": "scope",
+                "type": "ConfigScope"
               }
             ]
           },
