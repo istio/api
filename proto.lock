@@ -749,6 +749,11 @@
                 "type": "google.protobuf.Duration"
               },
               {
+                "id": 28,
+                "name": "tcp_keepalive",
+                "type": "istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive"
+              },
+              {
                 "id": 7,
                 "name": "ingress_class",
                 "type": "string"
@@ -840,7 +845,7 @@
                 "type": "string"
               },
               {
-                "id": 28,
+                "id": 29,
                 "name": "network_scope",
                 "type": "NetworkScope"
               }
@@ -2662,6 +2667,33 @@
                     "id": 2,
                     "name": "connect_timeout",
                     "type": "google.protobuf.Duration"
+                  },
+                  {
+                    "id": 3,
+                    "name": "tcp_keepalive",
+                    "type": "TcpKeepalive"
+                  }
+                ],
+                "messages": [
+                  {
+                    "name": "TcpKeepalive",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "probes",
+                        "type": "uint32"
+                      },
+                      {
+                        "id": 2,
+                        "name": "time",
+                        "type": "google.protobuf.Duration"
+                      },
+                      {
+                        "id": 3,
+                        "name": "interval",
+                        "type": "google.protobuf.Duration"
+                      }
+                    ]
                   }
                 ]
               },
@@ -3364,6 +3396,11 @@
                 "name": "remove_request_headers",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 16,
+                "name": "headers",
+                "type": "Headers"
               }
             ],
             "maps": [
@@ -3390,6 +3427,52 @@
                   "name": "append_request_headers",
                   "type": "string"
                 }
+              }
+            ]
+          },
+          {
+            "name": "Headers",
+            "fields": [
+              {
+                "id": 1,
+                "name": "request",
+                "type": "HeaderOperations"
+              },
+              {
+                "id": 2,
+                "name": "response",
+                "type": "HeaderOperations"
+              }
+            ],
+            "messages": [
+              {
+                "name": "HeaderOperations",
+                "fields": [
+                  {
+                    "id": 3,
+                    "name": "remove",
+                    "type": "string",
+                    "is_repeated": true
+                  }
+                ],
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 1,
+                      "name": "set",
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 2,
+                      "name": "add",
+                      "type": "string"
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -3505,6 +3588,11 @@
                 "name": "remove_request_headers",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "headers",
+                "type": "Headers"
               }
             ],
             "maps": [

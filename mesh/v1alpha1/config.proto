@@ -71,6 +71,9 @@ message MeshConfig {
   // Connection timeout used by Envoy. (MUST BE >=1ms)
   google.protobuf.Duration connect_timeout = 6;
 
+  // If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+  istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive tcp_keepalive = 28;
+
   // Class of ingress resources to be processed by Istio ingress
   // controller.  This corresponds to the value of
   // "kubernetes.io/ingress.class" annotation.
@@ -222,10 +225,10 @@ message MeshConfig {
   // The default network scope associated with every sidecar in the mesh.
   // Pilot will program the routes in the sidecars accordingly. If omitted,
   // sidecars will be able to reach every service in the mesh.
-  NetworkScope network_scope = 28;
+  NetworkScope network_scope = 29;
 
   // $hide_from_docs
-  // Next available field number: 29
+  // Next available field number: 30
 }
 
 // ConfigSource describes information about a configuration store inside a
