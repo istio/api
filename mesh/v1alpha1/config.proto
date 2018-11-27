@@ -199,9 +199,9 @@ message MeshConfig {
   // Fallback to old identity format(without trust domain) if not set.
   string trust_domain = 26;
 
-  // Network scope settings for the mesh. Network scope controls the reachability of
+  // Default network scope settings for the mesh. Network scope controls the reachability of
   // sidecars to other services in the mesh.
-  message NetworkScope {
+  message DefaultNetworkScope {
     enum Mode {
       // Invalid mode
       INVALID = 0;
@@ -234,7 +234,7 @@ message MeshConfig {
   // sidecars will be able to reach every service in the mesh. The default
   // scope can be overriden by supplying a NetworkScope resource per
   // namespace.
-  NetworkScope network_scope = 29;
+  DefaultNetworkScope default_network_scope = 29;
 
   // $hide_from_docs
   // Next available field number: 30

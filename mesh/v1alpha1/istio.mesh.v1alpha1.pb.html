@@ -305,9 +305,9 @@ Fallback to old identity format(without trust domain) if not set.</p>
 
 </td>
 </tr>
-<tr id="MeshConfig-network_scope">
-<td><code>networkScope</code></td>
-<td><code><a href="#MeshConfig-NetworkScope">MeshConfig.NetworkScope</a></code></td>
+<tr id="MeshConfig-default_network_scope">
+<td><code>defaultNetworkScope</code></td>
+<td><code><a href="#MeshConfig-DefaultNetworkScope">MeshConfig.DefaultNetworkScope</a></code></td>
 <td>
 <p>The default network scope associated with every sidecar in the mesh.
 Pilot will program the routes in the sidecars accordingly. If omitted,
@@ -338,6 +338,82 @@ namespace.</p>
 <tr id="MeshConfig-AccessLogEncoding-JSON">
 <td><code>JSON</code></td>
 <td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-DefaultNetworkScope">MeshConfig.DefaultNetworkScope</h2>
+<section>
+<p>Default network scope settings for the mesh. Network scope controls the reachability of
+sidecars to other services in the mesh.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-DefaultNetworkScope-default_scope">
+<td><code>defaultScope</code></td>
+<td><code><a href="#MeshConfig-DefaultNetworkScope-Mode">MeshConfig.DefaultNetworkScope.Mode</a></code></td>
+<td>
+<p>REQUIRED: The default scope associated with every sidecar in the mesh.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-DefaultNetworkScope-shared_namespaces">
+<td><code>sharedNamespaces</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Specifies one or more namespaces that should be accessible to all
+sidecars in the mesh (such as istio-system). This field has no
+effect when the default scope is set to ALL<em>NAMESPACES and a sidecar
+has no explicit NetworkScope resource attached to it. However when
+the sidecar has a NetworkScope resource attached to it (and the
+default scope is set to ALL</em>NAMESPACES or CURRENT_NAMESPACE),
+sidecar&rsquo;s network scope will include services/config objects
+specified in the NetworkScope object as well as services/config
+objects specified in the sharedNamespaces.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-DefaultNetworkScope-Mode">MeshConfig.DefaultNetworkScope.Mode</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-DefaultNetworkScope-Mode-INVALID">
+<td><code>INVALID</code></td>
+<td>
+<p>Invalid mode</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-DefaultNetworkScope-Mode-ALL_NAMESPACES">
+<td><code>ALL_NAMESPACES</code></td>
+<td>
+<p>Configure routes to services in all namespaces.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-DefaultNetworkScope-Mode-CURRENT_NAMESPACE">
+<td><code>CURRENT_NAMESPACE</code></td>
+<td>
+<p>Configure routes to services in the same namespace as the sidecar
+in addition to namespaces specified in sharedNamespaces.</p>
+
 </td>
 </tr>
 </tbody>
@@ -379,82 +455,6 @@ annotations match the value specified in the ingress_class parameter
 described earlier. Use this mode if Istio ingress controller will be
 a secondary ingress controller (e.g., in addition to a
 cloud-provided ingress controller).</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="MeshConfig-NetworkScope">MeshConfig.NetworkScope</h2>
-<section>
-<p>Network scope settings for the mesh. Network scope controls the reachability of
-sidecars to other services in the mesh.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="MeshConfig-NetworkScope-default_scope">
-<td><code>defaultScope</code></td>
-<td><code><a href="#MeshConfig-NetworkScope-Mode">MeshConfig.NetworkScope.Mode</a></code></td>
-<td>
-<p>REQUIRED: The default scope associated with every sidecar in the mesh.</p>
-
-</td>
-</tr>
-<tr id="MeshConfig-NetworkScope-shared_namespaces">
-<td><code>sharedNamespaces</code></td>
-<td><code>string[]</code></td>
-<td>
-<p>Specifies one or more namespaces that should be accessible to all
-sidecars in the mesh (such as istio-system). This field has no
-effect when the default scope is set to ALL<em>NAMESPACES and a sidecar
-has no explicit NetworkScope resource attached to it. However when
-the sidecar has a NetworkScope resource attached to it (and the
-default scope is set to ALL</em>NAMESPACES or CURRENT_NAMESPACE),
-sidecar&rsquo;s network scope will include services/config objects
-specified in the NetworkScope object as well as services/config
-objects specified in the sharedNamespaces.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="MeshConfig-NetworkScope-Mode">MeshConfig.NetworkScope.Mode</h2>
-<section>
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="MeshConfig-NetworkScope-Mode-INVALID">
-<td><code>INVALID</code></td>
-<td>
-<p>Invalid mode</p>
-
-</td>
-</tr>
-<tr id="MeshConfig-NetworkScope-Mode-ALL_NAMESPACES">
-<td><code>ALL_NAMESPACES</code></td>
-<td>
-<p>Configure routes to services in all namespaces.</p>
-
-</td>
-</tr>
-<tr id="MeshConfig-NetworkScope-Mode-CURRENT_NAMESPACE">
-<td><code>CURRENT_NAMESPACE</code></td>
-<td>
-<p>Configure routes to services in the same namespace as the sidecar
-in addition to namespaces specified in sharedNamespaces.</p>
 
 </td>
 </tr>

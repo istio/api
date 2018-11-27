@@ -692,7 +692,7 @@
             ]
           },
           {
-            "name": "NetworkScope.Mode",
+            "name": "DefaultNetworkScope.Mode",
             "enum_fields": [
               {
                 "name": "INVALID",
@@ -846,8 +846,8 @@
               },
               {
                 "id": 29,
-                "name": "network_scope",
-                "type": "NetworkScope"
+                "name": "default_network_scope",
+                "type": "DefaultNetworkScope"
               }
             ],
             "reserved_ids": [
@@ -866,7 +866,7 @@
                 ]
               },
               {
-                "name": "NetworkScope",
+                "name": "DefaultNetworkScope",
                 "fields": [
                   {
                     "id": 1,
