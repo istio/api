@@ -3111,6 +3111,60 @@
       }
     },
     {
+      "protopath": "networking:/:v1alpha3:/:network_scope.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "NetworkScope",
+            "fields": [
+              {
+                "id": 1,
+                "name": "dependencies",
+                "type": "Dependency",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "Dependency",
+            "fields": [
+              {
+                "id": 2,
+                "name": "imports",
+                "type": "Import",
+                "is_repeated": true
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 1,
+                  "name": "source_workload_labels",
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Import",
+            "fields": [
+              {
+                "id": 1,
+                "name": "namespace",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "host",
+                "type": "string"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
       "protopath": "networking:/:v1alpha3:/:service_entry.proto",
       "def": {
         "enums": [
