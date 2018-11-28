@@ -699,7 +699,7 @@
                 "integer": 0
               },
               {
-                "name": "CURRENT_NAMESPACE",
+                "name": "SAME_NAMESPACE",
                 "integer": 1
               }
             ]
@@ -2481,6 +2481,11 @@
                 "name": "subsets",
                 "type": "Subset",
                 "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "config_scope",
+                "type": "ConfigScope"
               }
             ]
           },
@@ -3198,6 +3203,16 @@
                     "type": "Import",
                     "is_repeated": true
                   }
+                ],
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 1,
+                      "name": "source_workload_labels",
+                      "type": "string"
+                    }
+                  }
                 ]
               }
             ]
@@ -3280,7 +3295,7 @@
               },
               {
                 "id": 7,
-                "name": "scope",
+                "name": "config_scope",
                 "type": "ConfigScope"
               }
             ],
@@ -3372,7 +3387,7 @@
               },
               {
                 "id": 6,
-                "name": "scope",
+                "name": "config_scope",
                 "type": "ConfigScope"
               }
             ]

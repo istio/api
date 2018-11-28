@@ -434,5 +434,5 @@ message ServiceEntry {
   // where the service entry was added. The default scope is public,
   // i.e. the service added by the service entry will be visible to
   // workloads in the entire mesh.
-  ConfigScope scope = 7;
+  ConfigScope config_scope = 7;
 }

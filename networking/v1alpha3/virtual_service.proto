@@ -178,11 +178,11 @@ message VirtualService {
   // matching an incoming request is used.
   repeated TCPRoute tcp = 4;
 
-  // The visibility setting associated with this virtual service. Set to
+  // The visibility setting associated with this VirtualService. Set to
   // PRIVATE if this virtual service should not be exported, i.e. restrict
   // the applicability of this virtual service to only workloads in the same
   // namespace as the virtual service.
-  ConfigScope scope = 6;
+  ConfigScope config_scope = 6;
 }
 
 // Destination indicates the network addressable service to which the

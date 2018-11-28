@@ -211,7 +211,7 @@ message MeshConfig {
       // Only configure routes to services that are in the same namespace
       // as the workload as well as services in namespaces specified in
       // importNamespaces.
-      CURRENT_NAMESPACE = 1;
+      SAME_NAMESPACE = 1;
     }
 
     // REQUIRED: The default import setting for every workload in the mesh.

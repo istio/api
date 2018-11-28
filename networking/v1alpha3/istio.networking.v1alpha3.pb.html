@@ -56,11 +56,16 @@ imported in a NetworkScope.</p>
 <tr id="ConfigScope-PUBLIC">
 <td><code>PUBLIC</code></td>
 <td>
+<p>Config with this scope are visible to all workloads in the mesh</p>
+
 </td>
 </tr>
 <tr id="ConfigScope-PRIVATE">
 <td><code>PRIVATE</code></td>
 <td>
+<p>Configs with this scope are visible to only workloads in the same
+namespace as the configuration resource.</p>
+
 </td>
 </tr>
 </tbody>
@@ -656,6 +661,17 @@ sizes, outlier detection).</p>
 <td>
 <p>One or more named sets that represent individual versions of a
 service. Traffic policies can be overridden at subset level.</p>
+
+</td>
+</tr>
+<tr id="DestinationRule-config_scope">
+<td><code>configScope</code></td>
+<td><code><a href="#ConfigScope">ConfigScope</a></code></td>
+<td>
+<p>The visibility setting associated with this DestinationRule. Set to
+PRIVATE if this destination rule should not be exported, i.e. restrict
+the applicability of this destination rule to only workloads in the same
+namespace as the destination rule.</p>
 
 </td>
 </tr>
@@ -2416,7 +2432,7 @@ of dependencies specified in a NetworkScope resource will be used to
 compute the sidecar configuration for every workload in the namespace.</p>
 
 <p>NOTE 1: If workloads in the mesh depend only on other workloads in the
-same namespace, set defaultNetworkScope.importMode to CURRENT_NAMESPACE
+same namespace, set defaultNetworkScope.importMode to SAME_NAMESPACE
 in the mesh global config map (in values.yaml).</p>
 
 <p>NOTE 2: To facilitate incremental pruning of the the sidecar
@@ -2443,7 +2459,7 @@ spec:
     - namespace: prod-apis
 </code></pre>
 
-<p>In a mesh where the default network scope is set to CURRENT_NAMESPACE
+<p>In a mesh where the default network scope is set to SAME_NAMESPACE
 only, if one or more workloads need to be able to reach every other
 service in the mesh (e.g., metrics collection server), the following
 NetworkScope resource can be used to specify such a dependency:</p>
@@ -2462,7 +2478,7 @@ spec:
 <p>The configuration above will allow workloads in the metrics-collection
 namespace to access service in any namespace while workloads in other
 namespaces will be configured for namespace local access as per the
-global default network scope (CURRENT_NAMESPACE).</p>
+global default network scope (SAME_NAMESPACE).</p>
 
 <table class="message-fields">
 <thead>
@@ -3449,8 +3465,8 @@ said port will be allowed (i.e. 0.0.0.0:<port>).</p>
 
 </td>
 </tr>
-<tr id="ServiceEntry-scope">
-<td><code>scope</code></td>
+<tr id="ServiceEntry-config_scope">
+<td><code>configScope</code></td>
 <td><code><a href="#ConfigScope">ConfigScope</a></code></td>
 <td>
 <p>The visibility setting associated with this service entry. Set to
@@ -4403,11 +4419,11 @@ matching an incoming request is used.</p>
 
 </td>
 </tr>
-<tr id="VirtualService-scope">
-<td><code>scope</code></td>
+<tr id="VirtualService-config_scope">
+<td><code>configScope</code></td>
 <td><code><a href="#ConfigScope">ConfigScope</a></code></td>
 <td>
-<p>The visibility setting associated with this virtual service. Set to
+<p>The visibility setting associated with this VirtualService. Set to
 PRIVATE if this virtual service should not be exported, i.e. restrict
 the applicability of this virtual service to only workloads in the same
 namespace as the virtual service.</p>
