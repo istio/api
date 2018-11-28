@@ -40,14 +40,16 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // of dependencies specified in a NetworkScope resource will be used to
 // compute the sidecar configuration for every workload in the namespace.
 //
-// NOTE: If workloads in the mesh depend only on other workloads in the
-// same namespace, use the mesh global setting (in values.yaml) to specify
-// the default network scope as CURRENT_NAMESPACE. To facilitate
-// incremental pruning of the the sidecar configuration, the default
-// network scope for the mesh is set to ALL_NAMESPACES. In other words,
-// every workload will be able to reach every other workload. Specifying a
-// NetworkScope resource in a namespace will automatically prune the
-// configuration for the workloads in that namespace.
+// NOTE 1: If workloads in the mesh depend only on other workloads in the
+// same namespace, set defaultNetworkScope.importMode to CURRENT_NAMESPACE
+// in the mesh global config map (in values.yaml).
+//
+// NOTE 2: To facilitate incremental pruning of the the sidecar
+// configuration, the default import mode for the mesh is set to
+// ALL_NAMESPACES. In other words, every workload will be able to reach
+// every other workload. Adding a NetworkScope resource in a namespace will
+// automatically prune the configuration for the workloads in that
+// namespace.
 //
 // The following examples illustrate a few specific use cases of NetworkScope.
 //
@@ -128,7 +130,7 @@ message NetworkScope {
     // configured with information required to reach other services in the
     // same namespace and the imported services. In addition to the
     // explicitly specified namespaces, namespaces specified in the global
-    // mesh config (through NetworkScope.sharedNamespaces) will also be
+    // mesh config (through defaultNetworkScope.importNamespaces) will also be
     // imported.
     repeated Import imports = 2;
   };

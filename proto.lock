@@ -695,16 +695,12 @@
             "name": "DefaultNetworkScope.Mode",
             "enum_fields": [
               {
-                "name": "INVALID",
+                "name": "ALL_NAMESPACES",
                 "integer": 0
               },
               {
-                "name": "ALL_NAMESPACES",
-                "integer": 1
-              },
-              {
                 "name": "CURRENT_NAMESPACE",
-                "integer": 2
+                "integer": 1
               }
             ]
           }
@@ -870,12 +866,12 @@
                 "fields": [
                   {
                     "id": 1,
-                    "name": "default_scope",
+                    "name": "import_mode",
                     "type": "Mode"
                   },
                   {
                     "id": 2,
-                    "name": "shared_namespaces",
+                    "name": "import_namespaces",
                     "type": "string",
                     "is_repeated": true
                   }
@@ -3201,16 +3197,6 @@
                     "name": "imports",
                     "type": "Import",
                     "is_repeated": true
-                  }
-                ],
-                "maps": [
-                  {
-                    "key_type": "string",
-                    "field": {
-                      "id": 1,
-                      "name": "source_workload_labels",
-                      "type": "string"
-                    }
                   }
                 ]
               }

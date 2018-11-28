@@ -309,11 +309,11 @@ Fallback to old identity format(without trust domain) if not set.</p>
 <td><code>defaultNetworkScope</code></td>
 <td><code><a href="#MeshConfig-DefaultNetworkScope">MeshConfig.DefaultNetworkScope</a></code></td>
 <td>
-<p>The default network scope associated with every sidecar in the mesh.
-Pilot will program the routes in the sidecars accordingly. If omitted,
-sidecars will be able to reach every service in the mesh. The default
-scope can be overriden by supplying a NetworkScope resource per
-namespace.</p>
+<p>The default network scope associated with every workload in the mesh.
+Pilot will program the routes in the sidecars and gateways
+accordingly. If omitted, sidecars will be configured to reach every
+service in the mesh. The default scope can be overriden by supplying a
+NetworkScope resource per namespace.</p>
 
 </td>
 </tr>
@@ -345,8 +345,9 @@ namespace.</p>
 </section>
 <h2 id="MeshConfig-DefaultNetworkScope">MeshConfig.DefaultNetworkScope</h2>
 <section>
-<p>Default network scope settings for the mesh. Network scope controls the reachability of
-sidecars to other services in the mesh.</p>
+<p>Default network scope settings for each workload in the mesh. Network
+scope controls the reachability of workloads to other services in the
+mesh.</p>
 
 <table class="message-fields">
 <thead>
@@ -357,27 +358,23 @@ sidecars to other services in the mesh.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-DefaultNetworkScope-default_scope">
-<td><code>defaultScope</code></td>
+<tr id="MeshConfig-DefaultNetworkScope-import_mode">
+<td><code>importMode</code></td>
 <td><code><a href="#MeshConfig-DefaultNetworkScope-Mode">MeshConfig.DefaultNetworkScope.Mode</a></code></td>
 <td>
-<p>REQUIRED: The default scope associated with every sidecar in the mesh.</p>
+<p>REQUIRED: The default import setting for every workload in the mesh.</p>
 
 </td>
 </tr>
-<tr id="MeshConfig-DefaultNetworkScope-shared_namespaces">
-<td><code>sharedNamespaces</code></td>
+<tr id="MeshConfig-DefaultNetworkScope-import_namespaces">
+<td><code>importNamespaces</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Specifies one or more namespaces that should be accessible to all
-sidecars in the mesh (such as istio-system). This field has no
-effect when the default scope is set to ALL<em>NAMESPACES and a sidecar
-has no explicit NetworkScope resource attached to it. However when
-the sidecar has a NetworkScope resource attached to it (and the
-default scope is set to ALL</em>NAMESPACES or CURRENT_NAMESPACE),
-sidecar&rsquo;s network scope will include services/config objects
-specified in the NetworkScope object as well as services/config
-objects specified in the sharedNamespaces.</p>
+<p>Specifies one or more namespaces that should be imported by default
+in all user defined NetworkScope resources in addition to the
+namespaces explicitly specified by the end user. Use this setting to
+automatically import services/resources from namespaces such as
+istio-system that all workloads in the mesh depend upon.</p>
 
 </td>
 </tr>
@@ -394,25 +391,20 @@ objects specified in the sharedNamespaces.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-DefaultNetworkScope-Mode-INVALID">
-<td><code>INVALID</code></td>
-<td>
-<p>Invalid mode</p>
-
-</td>
-</tr>
 <tr id="MeshConfig-DefaultNetworkScope-Mode-ALL_NAMESPACES">
 <td><code>ALL_NAMESPACES</code></td>
 <td>
-<p>Configure routes to services in all namespaces.</p>
+<p>Configure routes to services in all namespaces, i.e. import
+services from all namespaces.</p>
 
 </td>
 </tr>
 <tr id="MeshConfig-DefaultNetworkScope-Mode-CURRENT_NAMESPACE">
 <td><code>CURRENT_NAMESPACE</code></td>
 <td>
-<p>Configure routes to services in the same namespace as the sidecar
-in addition to namespaces specified in sharedNamespaces.</p>
+<p>Only configure routes to services that are in the same namespace
+as the workload as well as services in namespaces specified in
+importNamespaces.</p>
 
 </td>
 </tr>

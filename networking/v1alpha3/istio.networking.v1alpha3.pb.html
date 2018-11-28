@@ -2394,43 +2394,43 @@ Envoy for further details.</p>
 <h2 id="NetworkScope">NetworkScope</h2>
 <section>
 <p><code>NetworkScope</code> describes the set of services that a workload depends on
-for its operation. In other words, it describes the properties of egress
-traffic from a given workload. By default, the service mesh established
-by Istio will have a full mesh connectivity - i.e. every workload will
-have proxy configuration required to reach every other workload in the
-mesh. However most connectivity graphs are sparse in practice. The
-NetworkScope provides a way to prune the connectivity graph
-(i.e. dependencies) associated with each workload.</p>
+for its operation. In other words, it describes the properties of
+outgoing traffic from a given workload. By default, the service mesh
+established by Istio will have a full mesh connectivity - i.e. every
+workload will have proxy configuration required to reach every other
+workload in the mesh. However most connectivity graphs are sparse in
+practice. The NetworkScope provides a way to declare the service
+dependencies associated with each workload such that the amount of
+configuration sent to the sidecars can be scoped to the requisite
+dependencies.</p>
 
 <p>Services and configuration in a mesh are organized into one or more
 namespaces (e.g., a Kubernetes namespace or a CF org/space).  Workloads
-in a namespace will be able to reach other workloads in the same
-namespace. To declare dependencies on workloads in other namespaces, a
-NetworkScope resource has to be specified in the current
-namespace. <em><em>Each namespace can have only one NetworkScope
-resource</em></em>. The behavior of the system is undefined if more than one
-NetworkScope resource exists in a given namespace. The set of
-dependencies specified in a NetworkScope resource will be used to
-compute the [outbound] connectivity graph for every workload in the
-namespace.</p>
+in a namespace have an implicit dependency on other workloads in the
+same namespace. In addition, to declare dependencies on workloads in
+other namespaces, a NetworkScope resource has to be specified in the
+current namespace. <em><em>Each namespace MUST have only one NetworkScope
+resource named &ldquo;default&rdquo;</em></em>. The behavior of the system is undefined if
+more than one NetworkScope resource exists in a given namespace. The set
+of dependencies specified in a NetworkScope resource will be used to
+compute the sidecar configuration for every workload in the namespace.</p>
 
-<p>NOTE: If workloads in the mesh depend only on other workloads in the
-same namespace, use the mesh global setting to specify the default
-network scope as CURRENT<em>NAMESPACE. To facilitate incremental pruning of
-the connectivity graph, the default network scope for the mesh is set to
-ALL</em>NAMESPACES. In otherwords, every workload will be able to reach
-every other workload. Specifying a NetworkScope resource in a namespace
-will automatically prune the configuration for the workloads in that
+<p>NOTE 1: If workloads in the mesh depend only on other workloads in the
+same namespace, set defaultNetworkScope.importMode to CURRENT_NAMESPACE
+in the mesh global config map (in values.yaml).</p>
+
+<p>NOTE 2: To facilitate incremental pruning of the the sidecar
+configuration, the default import mode for the mesh is set to
+ALL_NAMESPACES. In other words, every workload will be able to reach
+every other workload. Adding a NetworkScope resource in a namespace will
+automatically prune the configuration for the workloads in that
 namespace.</p>
 
 <p>The following examples illustrate a few specific use cases of NetworkScope.</p>
 
 <p>The example below delcares a NetworkScope resource in the prod-us1
-namespace. The workload with the <code>version: newlandingpage</code> label will be
-able to reach all services declared in the egress namespace as well as
-the landing.qa.foo.com service in the qa namespace. All other workloads
-in the prod-us1 namespace will be able to reach the services in the
-egress namespace only.</p>
+namespace that specifies that workloads in the namespace will be able to
+reach the services in the prod-apis namespace only.</p>
 
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
 kind: NetworkScope
@@ -2439,14 +2439,8 @@ metadata:
   namespace: prod-us1
 spec:
   dependencies:
-  - sourceWorkloadLabels:
-      version: newlandingpage
-    imports:
-    - namespace: qa
-      host: landing.qa.foo.com
-    - namespace: egress
   - imports:
-    - namespace: egress
+    - namespace: prod-apis
 </code></pre>
 
 <p>In a mesh where the default network scope is set to CURRENT_NAMESPACE
@@ -2461,17 +2455,14 @@ metadata:
   namespace: metrics-collection
 spec:
   dependencies:
-  - sourceWorkloadLabels:
-       app: metricsScraper
-    imports:
+  - imports:
     - namespace: '*'
 </code></pre>
 
 <p>The configuration above will allow workloads in the metrics-collection
-namespace with the labels <code>app: metricsScraper</code> to access service in any
-namespace while other workloads in the same namespace will be configured
-for namespace local access as per the global default network scope
-(CURRENT_NAMESPACE).</p>
+namespace to access service in any namespace while workloads in other
+namespaces will be configured for namespace local access as per the
+global default network scope (CURRENT_NAMESPACE).</p>
 
 <table class="message-fields">
 <thead>
@@ -2488,7 +2479,7 @@ for namespace local access as per the global default network scope
 <td>
 <p>REQUIRED. The set of services that workloads in this namespace are
 expected to talk to, in addition to other workloads in the same
-namespace. Dependencies describe the properties of egress traffic from
+namespace. Dependencies describe the properties of outbound traffic from
 a given workload.</p>
 
 </td>
@@ -2510,20 +2501,6 @@ for the workload.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="NetworkScope-Dependency-source_workload_labels">
-<td><code>sourceWorkloadLabels</code></td>
-<td><code>map&lt;string,&nbsp;string&gt;</code></td>
-<td>
-<p>One or more labels that indicate a specific set of pods/VMs on which
-this dependency configuration should be applied.  The scope of label
-search is platform dependent.  On Kubernetes, for example, the scope
-includes pods running in the namespace in which the NetworkScope
-resource is present.  If the sourceWorkloadLabels are omitted, the
-imports specified will be applicable to all workloads in the current
-configuration namespace.</p>
-
-</td>
-</tr>
 <tr id="NetworkScope-Dependency-imports">
 <td><code>imports</code></td>
 <td><code><a href="#NetworkScope-Import">NetworkScope.Import[]</a></code></td>
@@ -2534,7 +2511,7 @@ sourceWorkloadLabels. The sidecars attached to the workloads will be
 configured with information required to reach other services in the
 same namespace and the imported services. In addition to the
 explicitly specified namespaces, namespaces specified in the global
-mesh config (through NetworkScope.sharedNamespaces) will also be
+mesh config (through defaultNetworkScope.importNamespaces) will also be
 imported.</p>
 
 </td>
