@@ -17,6 +17,8 @@ syntax = "proto3";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 
+import "networking/v1alpha3/network_scope.proto";
+
 // $title: Traffic Routing
 // $description: Configuration affecting traffic routing.
 // $location: https://istio.io/docs/reference/config/istio.networking.v1alpha3.html
@@ -175,6 +177,12 @@ message VirtualService {
   // be applied to any port that is not a HTTP or TLS port. The first rule
   // matching an incoming request is used.
   repeated TCPRoute tcp = 4;
+
+  // The visibility setting associated with this VirtualService. Set to
+  // PRIVATE if this virtual service should not be exported, i.e. restrict
+  // the applicability of this virtual service to only workloads in the same
+  // namespace as the virtual service.
+  ConfigScope config_scope = 6;
 }
 
 // Destination indicates the network addressable service to which the
