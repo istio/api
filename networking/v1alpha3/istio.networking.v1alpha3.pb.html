@@ -2285,7 +2285,8 @@ is shipped to &ldquo;region1/zone1/</em>&rdquo; ratings service endpoints, and t
 <td>
 <p>Explicitly assign loadbalancing weight across different zones and geographical locations.
 Refer to <a href="https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing.html?highlight=load_balancing_weight#locality-weighted-load-balancing">Locality weighted load balancing</a>
-If empty, the locality weight is set according to the endpoints number within it.</p>
+If empty, the locality weight is set according to the endpoints number within it.
+If duplicated settings are present, then the first one will take effect.</p>
 
 </td>
 </tr>
@@ -2393,6 +2394,10 @@ be generated.</p>
 </section>
 <h2 id="LoadBalancerSettings-LocalityWeightSetting">LoadBalancerSettings.LocalityWeightSetting</h2>
 <section>
+<p>Originating -&gt; upstream cluster locality weight set, support wildcard matching &lsquo;<em>&rsquo;
+&lsquo;</em>&rsquo; matches all localities
+&lsquo;region1/*&rsquo; matches all zones in region1</p>
+
 <table class="message-fields">
 <thead>
 <tr>

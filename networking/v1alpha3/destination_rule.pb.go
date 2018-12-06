@@ -558,6 +558,7 @@ type LoadBalancerSettings struct {
 	// Explicitly assign loadbalancing weight across different zones and geographical locations.
 	// Refer to [Locality weighted load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing.html?highlight=load_balancing_weight#locality-weighted-load-balancing)
 	// If empty, the locality weight is set according to the endpoints number within it.
+	// If duplicated settings are present, then the first one will take effect.
 	LocalityWeightSettings []*LoadBalancerSettings_LocalityWeightSetting `protobuf:"bytes,3,rep,name=locality_weight_settings,json=localityWeightSettings" json:"locality_weight_settings,omitempty"`
 }
 
@@ -900,6 +901,9 @@ func (m *LoadBalancerSettings_ConsistentHashLB_HTTPCookie) GetTtl() *time.Durati
 	return nil
 }
 
+// Originating -> upstream cluster locality weight set, support wildcard matching '*'
+// '*' matches all localities
+// 'region1/*' matches all zones in region1
 type LoadBalancerSettings_LocalityWeightSetting struct {
 	// Originating locality, '/' separated, e.g. 'region/zone/sub_zone'.
 	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
