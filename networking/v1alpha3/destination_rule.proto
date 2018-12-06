@@ -326,6 +326,16 @@ message LoadBalancerSettings {
     uint64 minimum_ring_size = 4;
   };
 
+  message LocalityWeightSetting{
+    // Originating locality, '/' separated, e.g. 'region/zone/sub_zone'.
+    string from = 1;
+
+    // Upstream locality to loadbalancing weight map. The sum of all weights should be == 100.
+    // Should assign loadbalancing weight for all localities, otherwise the traffic are not routed
+    // following the percentage of weight.
+    map<string, uint32> to = 2;
+  };
+
   // (-- TODO: Enable Subset load balancing after moving to v2 API Also
   // look into enabling Priotity based load balancing for spilling over
   // from one priority pool to another. --)
@@ -335,6 +345,9 @@ message LoadBalancerSettings {
     SimpleLB simple = 1;
     ConsistentHashLB consistent_hash = 2;
   }
+  // Explicitly assign loadbalancing weight across different zones and geographical locations.
+  // Refer to [Locality weighted load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing.html?highlight=load_balancing_weight#locality-weighted-load-balancing)
+  repeated LocalityWeightSetting locality_weight_settings = 3;
 }
 
 // Connection pool settings for an upstream host. The settings apply to
