@@ -352,6 +352,9 @@ message LoadBalancerSettings {
     uint64 minimum_ring_size = 4;
   };
 
+  // Originating -> upstream cluster locality weight set, support wildcard matching '*'
+  // '*' matches all localities
+  // 'region1/*' matches all zones in region1
   message LocalityWeightSetting{
     // Originating locality, '/' separated, e.g. 'region/zone/sub_zone'.
     string from = 1;
@@ -375,6 +378,7 @@ message LoadBalancerSettings {
   // Explicitly assign loadbalancing weight across different zones and geographical locations.
   // Refer to [Locality weighted load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing.html?highlight=load_balancing_weight#locality-weighted-load-balancing)
   // If empty, the locality weight is set according to the endpoints number within it.
+  // If duplicated settings are present, then the first one will take effect.
   repeated LocalityWeightSetting locality_weight_settings = 3;
 }
 
