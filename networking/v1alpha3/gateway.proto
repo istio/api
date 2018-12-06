@@ -328,6 +328,14 @@ message Server {
     // Optional: If specified, only support the specified cipher list.
     // Otherwise default to the default cipher list supported by Envoy.
     repeated string cipher_suites = 9;
+
+    // Optional: Indicates whether the source of TLS key and certificate is from
+    // K8s secret.
+    string source = 10;
+
+    // REQUIRED if source is `KUBE_SECRET`. Specifies the secret name that stores
+    // the key and cert, in the same namespace the ingress gateway runs.
+    string name = 11;
   }
 
   // Set of TLS related options that govern the server's behavior. Use
