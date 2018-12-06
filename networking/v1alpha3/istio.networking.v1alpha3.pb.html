@@ -2840,6 +2840,24 @@ Otherwise default to the default cipher list supported by Envoy.</p>
 
 </td>
 </tr>
+<tr id="Server-TLSOptions-source">
+<td><code>source</code></td>
+<td><code>string</code></td>
+<td>
+<p>Optional: Indicates whether the source of TLS key and certificate is from
+K8s secret.</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED if source is <code>KUBE_SECRET</code>. Specifies the secret name that stores
+the key and cert, in the same namespace the ingress gateway runs.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>

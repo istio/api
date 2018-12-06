@@ -3121,6 +3121,16 @@
                     "name": "cipher_suites",
                     "type": "string",
                     "is_repeated": true
+                  },
+                  {
+                    "id": 10,
+                    "name": "source",
+                    "type": "string"
+                  },
+                  {
+                    "id": 11,
+                    "name": "name",
+                    "type": "string"
                   }
                 ]
               }
