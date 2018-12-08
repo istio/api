@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 aliases:
   - /docs/reference/config/istio.routing.v1alpha1/
-number_of_entries: 59
+number_of_entries: 60
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -2840,21 +2840,43 @@ Otherwise default to the default cipher list supported by Envoy.</p>
 
 </td>
 </tr>
-<tr id="Server-TLSOptions-source">
-<td><code>source</code></td>
-<td><code>string</code></td>
+<tr id="Server-TLSOptions-credential_store">
+<td><code>credentialStore</code></td>
+<td><code><a href="#Server-TLSOptions-TLSCredStore">Server.TLSOptions.TLSCredStore</a></code></td>
 <td>
-<p>Optional: Indicates whether the source of TLS key and certificate is from
-K8s secret.</p>
+<p>If credential<em>store is specified, server</em>certificate, private<em>key and
+ca</em>certificates will be obtained via an API call to the credential store.</p>
 
 </td>
 </tr>
-<tr id="Server-TLSOptions-name">
-<td><code>name</code></td>
+</tbody>
+</table>
+</section>
+<h2 id="Server-TLSOptions-TLSCredStore">Server.TLSOptions.TLSCredStore</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Server-TLSOptions-TLSCredStore-address">
+<td><code>address</code></td>
 <td><code>string</code></td>
 <td>
-<p>REQUIRED if source is <code>KUBE_SECRET</code>. Specifies the secret name that stores
-the key and cert, in the same namespace the ingress gateway runs.</p>
+<p>Optional: Specifies address of the credentialStore which provisions credentials.
+Default value is &ldquo;/var/run/sds/gateway<em>uds</em>path&rdquo;.</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-TLSCredStore-credential_name">
+<td><code>credentialName</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED name of credential to be queried by gateway.</p>
 
 </td>
 </tr>

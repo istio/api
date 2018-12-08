@@ -329,13 +329,17 @@ message Server {
     // Otherwise default to the default cipher list supported by Envoy.
     repeated string cipher_suites = 9;
 
-    // Optional: Indicates whether the source of TLS key and certificate is from
-    // K8s secret.
-    string source = 10;
+    message TLSCredStore {
+      // Optional: Specifies address of the credentialStore which provisions credentials.
+      // Default value is "/var/run/sds/gateway_uds_path".
+      string address = 1;
 
-    // REQUIRED if source is `KUBE_SECRET`. Specifies the secret name that stores
-    // the key and cert, in the same namespace the ingress gateway runs.
-    string name = 11;
+      // REQUIRED name of credential to be queried by gateway.
+      string credential_name = 2;
+    }
+    // If credential_store is specified, server_certificate, private_key and
+    // ca_certificates will be obtained via an API call to the credential store.
+    TLSCredStore credential_store = 10;
   }
 
   // Set of TLS related options that govern the server's behavior. Use

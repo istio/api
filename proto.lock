@@ -3124,13 +3124,25 @@
                   },
                   {
                     "id": 10,
-                    "name": "source",
-                    "type": "string"
-                  },
+                    "name": "credential_store",
+                    "type": "TLSCredStore"
+                  }
+                ],
+                "messages": [
                   {
-                    "id": 11,
-                    "name": "name",
-                    "type": "string"
+                    "name": "TLSCredStore",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "address",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "credential_name",
+                        "type": "string"
+                      }
+                    ]
                   }
                 ]
               }
