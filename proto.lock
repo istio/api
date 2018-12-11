@@ -836,6 +836,11 @@
                 "type": "bool"
               },
               {
+                "id": 30,
+                "name": "enable_sds_k8s_sa_jwt",
+                "type": "bool"
+              },
+              {
                 "id": 26,
                 "name": "trust_domain",
                 "type": "string"
