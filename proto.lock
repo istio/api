@@ -837,7 +837,7 @@
               },
               {
                 "id": 30,
-                "name": "enable_sds_k8s_sa_jwt",
+                "name": "sds_use_k8s_sa_jwt",
                 "type": "bool"
               },
               {
