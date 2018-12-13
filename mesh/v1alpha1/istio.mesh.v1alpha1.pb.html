@@ -295,6 +295,15 @@ can be configured for a single control plane.</p>
 
 </td>
 </tr>
+<tr id="MeshConfig-enable_ingress_gateway_agent">
+<td><code>enableIngressGatewayAgent</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Deploy ingress gateway agent, which runs in the same pod as ingress gateway proxy and provisions credentials to ingress
+gateway proxy via SDS. The ingress gateway agent watches kubernetes secrets in namespace istio-ingress.</p>
+
+</td>
+</tr>
 <tr id="MeshConfig-trust_domain">
 <td><code>trustDomain</code></td>
 <td><code>string</code></td>

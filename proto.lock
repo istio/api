@@ -841,6 +841,11 @@
                 "type": "bool"
               },
               {
+                "id": 31,
+                "name": "enable_ingress_gateway_agent",
+                "type": "bool"
+              },
+              {
                 "id": 26,
                 "name": "trust_domain",
                 "type": "string"
