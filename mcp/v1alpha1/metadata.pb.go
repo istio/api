@@ -7,7 +7,8 @@ import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
 import math "math"
 import _ "github.com/gogo/protobuf/gogoproto"
-import google_protobuf2 "github.com/gogo/protobuf/types"
+import google_protobuf3 "github.com/gogo/protobuf/types"
+import google_protobuf "github.com/gogo/protobuf/types"
 
 import io "io"
 
@@ -18,16 +19,34 @@ var _ = math.Inf
 
 // Metadata information that all resources within the Mesh Configuration Protocol must have.
 type Metadata struct {
-	// The name of the resource. It is unique within the context of a
-	// resource type and the origin server of the resource. The resource
-	// type is identified by the TypeUrl of the resource field of the
-	// Envelope message.
+	// Fully qualified name of the resource. Unique in context of a collection.
+	//
+	// The FQ name consists of path segments which includes the resources
+	// location in a resource hierarchy. On k8s, this hierarchy is
+	// two-levels: cluster and namespace, e.g.
+	//
+	//   namespaced     => <k8s-namespace>/<k8s-name>
+	//   cluster-scoped =>                /<k8s-name>  # alt: reserved namespace (e.g. :cluster, :global)
+	//
+	// Deeper hierarchy could also be represented, e.g.
+	//
+	//        <org>/<team>/<name>
+	//
+	// “/” should be used as the standard delimiter. The rightmost segment is
+	// the most specific identifier (e.g. leaf). Segments moving towards the left
+	// represent higher positions in the resource hierarchy.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// The creation timestamp of the resource.
-	CreateTime *google_protobuf2.Timestamp `protobuf:"bytes,2,opt,name=create_time,json=createTime" json:"create_time,omitempty"`
-	// The resource level version. It allows MCP to track the state of
-	// individual resources.
+	CreateTime *google_protobuf3.Timestamp `protobuf:"bytes,2,opt,name=create_time,json=createTime" json:"create_time,omitempty"`
+	// Resource version. This is used to determine when resources change across
+	// resource updates. It should be treated as opaque by consumers/sinks.
 	Version string `protobuf:"bytes,3,opt,name=version,proto3" json:"version,omitempty"`
+	// Map of string keys and values that can be used to organize and categorize
+	// resources within a collection.
+	Labels map[string]string `protobuf:"bytes,4,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// Structured data that can be used by source and sink to communicate arbitrary
+	// metadata about this resource.
+	Annotations *google_protobuf.Struct `protobuf:"bytes,5,opt,name=annotations" json:"annotations,omitempty"`
 }
 
 func (m *Metadata) Reset()                    { *m = Metadata{} }
@@ -42,7 +61,7 @@ func (m *Metadata) GetName() string {
 	return ""
 }
 
-func (m *Metadata) GetCreateTime() *google_protobuf2.Timestamp {
+func (m *Metadata) GetCreateTime() *google_protobuf3.Timestamp {
 	if m != nil {
 		return m.CreateTime
 	}
@@ -54,6 +73,20 @@ func (m *Metadata) GetVersion() string {
 		return m.Version
 	}
 	return ""
+}
+
+func (m *Metadata) GetLabels() map[string]string {
+	if m != nil {
+		return m.Labels
+	}
+	return nil
+}
+
+func (m *Metadata) GetAnnotations() *google_protobuf.Struct {
+	if m != nil {
+		return m.Annotations
+	}
+	return nil
 }
 
 func init() {
@@ -85,6 +118,17 @@ func (this *Metadata) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Version != that1.Version {
+		return false
+	}
+	if len(this.Labels) != len(that1.Labels) {
+		return false
+	}
+	for i := range this.Labels {
+		if this.Labels[i] != that1.Labels[i] {
+			return false
+		}
+	}
+	if !this.Annotations.Equal(that1.Annotations) {
 		return false
 	}
 	return true
@@ -126,6 +170,33 @@ func (m *Metadata) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintMetadata(dAtA, i, uint64(len(m.Version)))
 		i += copy(dAtA[i:], m.Version)
 	}
+	if len(m.Labels) > 0 {
+		for k, _ := range m.Labels {
+			dAtA[i] = 0x22
+			i++
+			v := m.Labels[k]
+			mapSize := 1 + len(k) + sovMetadata(uint64(len(k))) + 1 + len(v) + sovMetadata(uint64(len(v)))
+			i = encodeVarintMetadata(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintMetadata(dAtA, i, uint64(len(k)))
+			i += copy(dAtA[i:], k)
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintMetadata(dAtA, i, uint64(len(v)))
+			i += copy(dAtA[i:], v)
+		}
+	}
+	if m.Annotations != nil {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintMetadata(dAtA, i, uint64(m.Annotations.Size()))
+		n2, err := m.Annotations.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
+	}
 	return i, nil
 }
 
@@ -151,6 +222,18 @@ func (m *Metadata) Size() (n int) {
 	}
 	l = len(m.Version)
 	if l > 0 {
+		n += 1 + l + sovMetadata(uint64(l))
+	}
+	if len(m.Labels) > 0 {
+		for k, v := range m.Labels {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovMetadata(uint64(len(k))) + 1 + len(v) + sovMetadata(uint64(len(v)))
+			n += mapEntrySize + 1 + sovMetadata(uint64(mapEntrySize))
+		}
+	}
+	if m.Annotations != nil {
+		l = m.Annotations.Size()
 		n += 1 + l + sovMetadata(uint64(l))
 	}
 	return n
@@ -254,7 +337,7 @@ func (m *Metadata) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.CreateTime == nil {
-				m.CreateTime = &google_protobuf2.Timestamp{}
+				m.CreateTime = &google_protobuf3.Timestamp{}
 			}
 			if err := m.CreateTime.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -288,6 +371,157 @@ func (m *Metadata) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Version = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Labels", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMetadata
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthMetadata
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Labels == nil {
+				m.Labels = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowMetadata
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowMetadata
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthMetadata
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowMetadata
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthMetadata
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipMetadata(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthMetadata
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Labels[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Annotations", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMetadata
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthMetadata
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Annotations == nil {
+				m.Annotations = &google_protobuf.Struct{}
+			}
+			if err := m.Annotations.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -418,19 +652,26 @@ var (
 func init() { proto.RegisterFile("mcp/v1alpha1/metadata.proto", fileDescriptorMetadata) }
 
 var fileDescriptorMetadata = []byte{
-	// 220 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x4c, 0x8f, 0xbf, 0x4e, 0xc5, 0x20,
-	0x18, 0xc5, 0x83, 0x1a, 0xff, 0x70, 0x37, 0xe2, 0x80, 0x35, 0xc1, 0x1b, 0xa7, 0x26, 0x26, 0x90,
-	0xea, 0xe8, 0xe6, 0xee, 0xd2, 0x38, 0xb9, 0x98, 0xaf, 0x15, 0x91, 0xa4, 0xf4, 0x23, 0x2d, 0xed,
-	0x33, 0xf9, 0x28, 0x8e, 0x3e, 0x82, 0xe1, 0x49, 0x4c, 0x41, 0x92, 0xbb, 0x9d, 0x03, 0x3f, 0x7e,
-	0xe4, 0xd0, 0x6b, 0xd7, 0x7b, 0xb5, 0x36, 0x30, 0xf8, 0x4f, 0x68, 0x94, 0xd3, 0x01, 0xde, 0x21,
-	0x80, 0xf4, 0x13, 0x06, 0x64, 0xcc, 0xce, 0xc1, 0xa2, 0x74, 0xbd, 0x97, 0x05, 0xa9, 0x2e, 0x0d,
-	0x1a, 0x4c, 0xd7, 0x6a, 0x4b, 0x99, 0xac, 0x6e, 0x0c, 0xa2, 0x19, 0xb4, 0x4a, 0xad, 0x5b, 0x3e,
-	0x54, 0xb0, 0x4e, 0xcf, 0x01, 0x9c, 0xcf, 0xc0, 0xed, 0x42, 0xcf, 0x9f, 0xff, 0xe5, 0x8c, 0xd1,
-	0x93, 0x11, 0x9c, 0xe6, 0x64, 0x4f, 0xea, 0x8b, 0x36, 0x65, 0xf6, 0x48, 0x77, 0xfd, 0xa4, 0x21,
-	0xe8, 0xb7, 0xed, 0x25, 0x3f, 0xda, 0x93, 0x7a, 0x77, 0x5f, 0xc9, 0xac, 0x95, 0x45, 0x2b, 0x5f,
-	0x8a, 0xb6, 0xa5, 0x19, 0xdf, 0x0e, 0x18, 0xa7, 0x67, 0xab, 0x9e, 0x66, 0x8b, 0x23, 0x3f, 0x4e,
-	0xce, 0x52, 0x9f, 0xee, 0xbe, 0xa2, 0x20, 0xdf, 0x51, 0x90, 0x9f, 0x28, 0xc8, 0x6f, 0x14, 0xe4,
-	0xf5, 0x2a, 0x6f, 0xb2, 0xa8, 0xc0, 0x5b, 0x75, 0xb8, 0xbe, 0x3b, 0x4d, 0xdf, 0x3c, 0xfc, 0x05,
-	0x00, 0x00, 0xff, 0xff, 0x35, 0xb5, 0xd4, 0xb9, 0x14, 0x01, 0x00, 0x00,
+	// 321 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x91, 0xcd, 0x4a, 0xc3, 0x40,
+	0x14, 0x85, 0x99, 0xfe, 0x69, 0x27, 0x1b, 0x19, 0x0a, 0xc6, 0x28, 0xb1, 0xb8, 0x0a, 0x08, 0x33,
+	0xb4, 0x6e, 0xac, 0x6e, 0x44, 0x70, 0xa7, 0x9b, 0xe8, 0xca, 0x8d, 0xdc, 0xc6, 0x31, 0x0e, 0x26,
+	0x99, 0x90, 0xb9, 0x2d, 0xf4, 0x8d, 0xdc, 0xf8, 0x1e, 0x2e, 0x7d, 0x04, 0xc9, 0x93, 0x48, 0x66,
+	0x12, 0x28, 0x76, 0x77, 0x4f, 0xee, 0x97, 0x73, 0xcf, 0x61, 0xe8, 0x71, 0x9e, 0x94, 0x62, 0x3d,
+	0x83, 0xac, 0x7c, 0x87, 0x99, 0xc8, 0x25, 0xc2, 0x2b, 0x20, 0xf0, 0xb2, 0xd2, 0xa8, 0x19, 0x53,
+	0x06, 0x95, 0xe6, 0x79, 0x52, 0xf2, 0x0e, 0x09, 0x26, 0xa9, 0x4e, 0xb5, 0x5d, 0x8b, 0x66, 0x72,
+	0x64, 0x70, 0x9a, 0x6a, 0x9d, 0x66, 0x52, 0x58, 0xb5, 0x5c, 0xbd, 0x09, 0x54, 0xb9, 0x34, 0x08,
+	0x79, 0xd9, 0x02, 0x27, 0xff, 0x01, 0x83, 0xd5, 0x2a, 0x41, 0xb7, 0x3d, 0xfb, 0xea, 0xd1, 0xfd,
+	0x87, 0xf6, 0x36, 0x63, 0x74, 0x50, 0x40, 0x2e, 0x7d, 0x32, 0x25, 0xd1, 0x38, 0xb6, 0x33, 0xbb,
+	0xa6, 0x5e, 0x52, 0x49, 0x40, 0xf9, 0xd2, 0x18, 0xfb, 0xbd, 0x29, 0x89, 0xbc, 0x79, 0xc0, 0x9d,
+	0x29, 0xef, 0x4c, 0xf9, 0x53, 0x77, 0x35, 0xa6, 0x0e, 0x6f, 0x3e, 0x30, 0x9f, 0xee, 0xad, 0x65,
+	0x65, 0x94, 0x2e, 0xfc, 0xbe, 0xf5, 0xec, 0x24, 0xbb, 0xa1, 0xa3, 0x0c, 0x96, 0x32, 0x33, 0xfe,
+	0x60, 0xda, 0x8f, 0xbc, 0x79, 0xc4, 0x77, 0x1b, 0xf3, 0x2e, 0x18, 0xbf, 0xb7, 0xe8, 0x5d, 0x81,
+	0xd5, 0x26, 0x6e, 0xff, 0x63, 0x0b, 0xea, 0x41, 0x51, 0x68, 0x04, 0x54, 0xba, 0x30, 0xfe, 0xd0,
+	0x06, 0x3b, 0xdc, 0x09, 0xf6, 0x68, 0xdb, 0xc6, 0xdb, 0x6c, 0xb0, 0xa0, 0xde, 0x96, 0x23, 0x3b,
+	0xa0, 0xfd, 0x0f, 0xb9, 0x69, 0x5b, 0x37, 0x23, 0x9b, 0xd0, 0xe1, 0x1a, 0xb2, 0x95, 0xab, 0x3b,
+	0x8e, 0x9d, 0xb8, 0xea, 0x5d, 0x92, 0xdb, 0xf3, 0xcf, 0x3a, 0x24, 0xdf, 0x75, 0x48, 0x7e, 0xea,
+	0x90, 0xfc, 0xd6, 0x21, 0x79, 0x3e, 0x72, 0xc1, 0x95, 0x16, 0x50, 0x2a, 0xb1, 0xfd, 0xa8, 0xcb,
+	0x91, 0x4d, 0x71, 0xf1, 0x17, 0x00, 0x00, 0xff, 0xff, 0xd8, 0x0d, 0xfb, 0x92, 0xeb, 0x01, 0x00,
+	0x00,
 }

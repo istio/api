@@ -18,22 +18,43 @@ package istio.mcp.v1alpha1;
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
 
 option go_package="istio.io/api/mcp/v1alpha1";
 option (gogoproto.equal_all) = true;
 
 // Metadata information that all resources within the Mesh Configuration Protocol must have.
 message Metadata {
-  // The name of the resource. It is unique within the context of a
-  // resource type and the origin server of the resource. The resource
-  // type is identified by the TypeUrl of the resource field of the
-  // Envelope message.
+  // Fully qualified name of the resource. Unique in context of a collection.
+  //
+  // The FQ name consists of path segments which includes the resources
+  // location in a resource hierarchy. On k8s, this hierarchy is
+  // two-levels: cluster and namespace, e.g.
+  //
+  //   namespaced     => <k8s-namespace>/<k8s-name>
+  //   cluster-scoped =>                /<k8s-name>  # alt: reserved namespace (e.g. :cluster, :global)
+  //
+  // Deeper hierarchy could also be represented, e.g.
+  //
+  //        <org>/<team>/<name>
+  //
+  // “/” should be used as the standard delimiter. The rightmost segment is
+  // the most specific identifier (e.g. leaf). Segments moving towards the left
+  // represent higher positions in the resource hierarchy.
   string name = 1;
 
   // The creation timestamp of the resource.
   google.protobuf.Timestamp create_time = 2;
 
-  // The resource level version. It allows MCP to track the state of
-  // individual resources.
+  // Resource version. This is used to determine when resources change across
+  // resource updates. It should be treated as opaque by consumers/sinks.
   string version = 3;
+
+  // Map of string keys and values that can be used to organize and categorize
+  // resources within a collection.
+  map<string,string> labels = 4;
+
+  // Structured data that can be used by source and sink to communicate arbitrary
+  // metadata about this resource.
+  google.protobuf.Struct annotations = 5;
 }
