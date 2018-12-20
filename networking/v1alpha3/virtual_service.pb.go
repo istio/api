@@ -579,8 +579,8 @@ func (m *Headers) GetResponse() *Headers_HeaderOperations {
 type Headers_HeaderOperations struct {
 	// Overwrite the headers specified by key with the given values
 	Set map[string]string `protobuf:"bytes,1,rep,name=set" json:"set,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// Apppend the given values to the the headers specified by keys
-	// (will create a comma seperated list of values)
+	// Append the given values to the headers specified by keys
+	// (will create a comma separated list of values)
 	Add map[string]string `protobuf:"bytes,2,rep,name=add" json:"add,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Remove a the specified headers
 	Remove []string `protobuf:"bytes,3,rep,name=remove" json:"remove,omitempty"`
