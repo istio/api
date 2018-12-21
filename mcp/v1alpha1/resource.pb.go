@@ -16,12 +16,12 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-// Resource for a resource as transferred via the Mesh Configuration Protocol. Each
+// Resource as transferred via the Mesh Configuration Protocol. Each
 // resource is made up of common metadata, and a type-specific resource payload.
 type Resource struct {
 	// Common metadata describing the resource.
 	Metadata *Metadata `protobuf:"bytes,1,opt,name=metadata" json:"metadata,omitempty"`
-	// The resource itself.
+	// The primary payload for the resource.
 	Body *google_protobuf1.Any `protobuf:"bytes,2,opt,name=body" json:"body,omitempty"`
 }
 
