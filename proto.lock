@@ -555,21 +555,6 @@
             ]
           },
           {
-            "name": "Node",
-            "fields": [
-              {
-                "id": 1,
-                "name": "id",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "metadata",
-                "type": "google.protobuf.Struct"
-              }
-            ]
-          },
-          {
             "name": "RequestResources",
             "fields": [
               {
