@@ -149,7 +149,7 @@ message IncrementalMeshConfigResponse {
   // The version of the response data (used for debugging).
   string system_version_info = 1;
 
-  // The response resources wrapped in the common MCP *Envelope*
+  // The response resources wrapped in the common MCP *Resource*
   // message. These are typed resources that match the type url in the
   // IncrementalMeshConfigRequest.
   repeated Resource resources = 2 [(gogoproto.nullable) = false];

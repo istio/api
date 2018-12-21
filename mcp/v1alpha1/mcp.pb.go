@@ -289,7 +289,7 @@ func (m *IncrementalMeshConfigRequest) GetErrorDetail() *google_rpc.Status {
 type IncrementalMeshConfigResponse struct {
 	// The version of the response data (used for debugging).
 	SystemVersionInfo string `protobuf:"bytes,1,opt,name=system_version_info,json=systemVersionInfo,proto3" json:"system_version_info,omitempty"`
-	// The response resources wrapped in the common MCP *Envelope*
+	// The response resources wrapped in the common MCP *Resource*
 	// message. These are typed resources that match the type url in the
 	// IncrementalMeshConfigRequest.
 	Resources []Resource `protobuf:"bytes,2,rep,name=resources" json:"resources"`
