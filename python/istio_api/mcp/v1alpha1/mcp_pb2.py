@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='mcp/v1alpha1/mcp.proto',
   package='istio.mcp.v1alpha1',
   syntax='proto3',
-  serialized_pb=_b('\n\x16mcp/v1alpha1/mcp.proto\x12\x12istio.mcp.v1alpha1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x17google/rpc/status.proto\x1a\x14gogoproto/gogo.proto\x1a\x1bmcp/v1alpha1/resource.proto\"=\n\x04Node\x12\n\n\x02id\x18\x01 \x01(\t\x12)\n\x08metadata\x18\x02 \x01(\x0b\x32\x17.google.protobuf.Struct\"\xa5\x01\n\x11MeshConfigRequest\x12\x14\n\x0cversion_info\x18\x01 \x01(\t\x12&\n\x04node\x18\x02 \x01(\x0b\x32\x18.istio.mcp.v1alpha1.Node\x12\x10\n\x08type_url\x18\x03 \x01(\t\x12\x16\n\x0eresponse_nonce\x18\x04 \x01(\t\x12(\n\x0c\x65rror_detail\x18\x05 \x01(\x0b\x32\x12.google.rpc.Status\"\x82\x01\n\x12MeshConfigResponse\x12\x14\n\x0cversion_info\x18\x01 \x01(\t\x12\x35\n\tresources\x18\x02 \x03(\x0b\x32\x1c.istio.mcp.v1alpha1.ResourceB\x04\xc8\xde\x1f\x00\x12\x10\n\x08type_url\x18\x03 \x01(\t\x12\r\n\x05nonce\x18\x04 \x01(\t\"\xcc\x02\n\x1cIncrementalMeshConfigRequest\x12&\n\x04node\x18\x01 \x01(\x0b\x32\x18.istio.mcp.v1alpha1.Node\x12\x10\n\x08type_url\x18\x02 \x01(\t\x12p\n\x19initial_resource_versions\x18\x03 \x03(\x0b\x32M.istio.mcp.v1alpha1.IncrementalMeshConfigRequest.InitialResourceVersionsEntry\x12\x16\n\x0eresponse_nonce\x18\x04 \x01(\t\x12(\n\x0c\x65rror_detail\x18\x05 \x01(\x0b\x32\x12.google.rpc.Status\x1a>\n\x1cInitialResourceVersionsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x9d\x01\n\x1dIncrementalMeshConfigResponse\x12\x1b\n\x13system_version_info\x18\x01 \x01(\t\x12\x35\n\tresources\x18\x02 \x03(\x0b\x32\x1c.istio.mcp.v1alpha1.ResourceB\x04\xc8\xde\x1f\x00\x12\x19\n\x11removed_resources\x18\x03 \x03(\t\x12\r\n\x05nonce\x18\x04 \x01(\t\"\xb6\x02\n\x10RequestResources\x12&\n\x04node\x18\x01 \x01(\x0b\x32\x18.istio.mcp.v1alpha1.Node\x12\x12\n\ncollection\x18\x02 \x01(\t\x12\x64\n\x19initial_resource_versions\x18\x03 \x03(\x0b\x32\x41.istio.mcp.v1alpha1.RequestResources.InitialResourceVersionsEntry\x12\x16\n\x0eresponse_nonce\x18\x04 \x01(\t\x12(\n\x0c\x65rror_detail\x18\x05 \x01(\x0b\x32\x12.google.rpc.Status\x1a>\n\x1cInitialResourceVersionsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x80\x01\n\tResources\x12\x12\n\ncollection\x18\x01 \x01(\t\x12\x35\n\tresources\x18\x02 \x03(\x0b\x32\x1c.istio.mcp.v1alpha1.ResourceB\x04\xc8\xde\x1f\x00\x12\x19\n\x11removed_resources\x18\x03 \x03(\t\x12\r\n\x05nonce\x18\x04 \x01(\t2\x9d\x02\n\x1b\x41ggregatedMeshConfigService\x12p\n\x19StreamAggregatedResources\x12%.istio.mcp.v1alpha1.MeshConfigRequest\x1a&.istio.mcp.v1alpha1.MeshConfigResponse\"\x00(\x01\x30\x01\x12\x8b\x01\n\x1eIncrementalAggregatedResources\x12\x30.istio.mcp.v1alpha1.IncrementalMeshConfigRequest\x1a\x31.istio.mcp.v1alpha1.IncrementalMeshConfigResponse\"\x00(\x01\x30\x01\x32v\n\x0eResourceSource\x12\x64\n\x17\x45stablishResourceStream\x12$.istio.mcp.v1alpha1.RequestResources\x1a\x1d.istio.mcp.v1alpha1.Resources\"\x00(\x01\x30\x01\x32t\n\x0cResourceSink\x12\x64\n\x17\x45stablishResourceStream\x12\x1d.istio.mcp.v1alpha1.Resources\x1a$.istio.mcp.v1alpha1.RequestResources\"\x00(\x01\x30\x01\x42\x1fZ\x19istio.io/api/mcp/v1alpha1\xa8\xe2\x1e\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x16mcp/v1alpha1/mcp.proto\x12\x12istio.mcp.v1alpha1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x17google/rpc/status.proto\x1a\x14gogoproto/gogo.proto\x1a\x1bmcp/v1alpha1/resource.proto\"=\n\x04Node\x12\n\n\x02id\x18\x01 \x01(\t\x12)\n\x08metadata\x18\x02 \x01(\x0b\x32\x17.google.protobuf.Struct\"\xa5\x01\n\x11MeshConfigRequest\x12\x14\n\x0cversion_info\x18\x01 \x01(\t\x12&\n\x04node\x18\x02 \x01(\x0b\x32\x18.istio.mcp.v1alpha1.Node\x12\x10\n\x08type_url\x18\x03 \x01(\t\x12\x16\n\x0eresponse_nonce\x18\x04 \x01(\t\x12(\n\x0c\x65rror_detail\x18\x05 \x01(\x0b\x32\x12.google.rpc.Status\"\x82\x01\n\x12MeshConfigResponse\x12\x14\n\x0cversion_info\x18\x01 \x01(\t\x12\x35\n\tresources\x18\x02 \x03(\x0b\x32\x1c.istio.mcp.v1alpha1.ResourceB\x04\xc8\xde\x1f\x00\x12\x10\n\x08type_url\x18\x03 \x01(\t\x12\r\n\x05nonce\x18\x04 \x01(\t\"\xcc\x02\n\x1cIncrementalMeshConfigRequest\x12&\n\x04node\x18\x01 \x01(\x0b\x32\x18.istio.mcp.v1alpha1.Node\x12\x10\n\x08type_url\x18\x02 \x01(\t\x12p\n\x19initial_resource_versions\x18\x03 \x03(\x0b\x32M.istio.mcp.v1alpha1.IncrementalMeshConfigRequest.InitialResourceVersionsEntry\x12\x16\n\x0eresponse_nonce\x18\x04 \x01(\t\x12(\n\x0c\x65rror_detail\x18\x05 \x01(\x0b\x32\x12.google.rpc.Status\x1a>\n\x1cInitialResourceVersionsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x9d\x01\n\x1dIncrementalMeshConfigResponse\x12\x1b\n\x13system_version_info\x18\x01 \x01(\t\x12\x35\n\tresources\x18\x02 \x03(\x0b\x32\x1c.istio.mcp.v1alpha1.ResourceB\x04\xc8\xde\x1f\x00\x12\x19\n\x11removed_resources\x18\x03 \x03(\t\x12\r\n\x05nonce\x18\x04 \x01(\t\"\xb6\x02\n\x10RequestResources\x12&\n\x04node\x18\x01 \x01(\x0b\x32\x18.istio.mcp.v1alpha1.Node\x12\x12\n\ncollection\x18\x02 \x01(\t\x12\x64\n\x19initial_resource_versions\x18\x03 \x03(\x0b\x32\x41.istio.mcp.v1alpha1.RequestResources.InitialResourceVersionsEntry\x12\x16\n\x0eresponse_nonce\x18\x04 \x01(\t\x12(\n\x0c\x65rror_detail\x18\x05 \x01(\x0b\x32\x12.google.rpc.Status\x1a>\n\x1cInitialResourceVersionsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x9d\x01\n\tResources\x12\x1b\n\x13system_version_info\x18\x01 \x01(\t\x12\x12\n\ncollection\x18\x02 \x01(\t\x12\x35\n\tresources\x18\x03 \x03(\x0b\x32\x1c.istio.mcp.v1alpha1.ResourceB\x04\xc8\xde\x1f\x00\x12\x19\n\x11removed_resources\x18\x04 \x03(\t\x12\r\n\x05nonce\x18\x05 \x01(\t2\x9d\x02\n\x1b\x41ggregatedMeshConfigService\x12p\n\x19StreamAggregatedResources\x12%.istio.mcp.v1alpha1.MeshConfigRequest\x1a&.istio.mcp.v1alpha1.MeshConfigResponse\"\x00(\x01\x30\x01\x12\x8b\x01\n\x1eIncrementalAggregatedResources\x12\x30.istio.mcp.v1alpha1.IncrementalMeshConfigRequest\x1a\x31.istio.mcp.v1alpha1.IncrementalMeshConfigResponse\"\x00(\x01\x30\x01\x32v\n\x0eResourceSource\x12\x64\n\x17\x45stablishResourceStream\x12$.istio.mcp.v1alpha1.RequestResources\x1a\x1d.istio.mcp.v1alpha1.Resources\"\x00(\x01\x30\x01\x32t\n\x0cResourceSink\x12\x64\n\x17\x45stablishResourceStream\x12\x1d.istio.mcp.v1alpha1.Resources\x1a$.istio.mcp.v1alpha1.RequestResources\"\x00(\x01\x30\x01\x42\x1fZ\x19istio.io/api/mcp/v1alpha1\xa8\xe2\x1e\x01\x62\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,google_dot_rpc_dot_status__pb2.DESCRIPTOR,gogoproto_dot_gogo__pb2.DESCRIPTOR,mcp_dot_v1alpha1_dot_resource__pb2.DESCRIPTOR,])
 
@@ -431,29 +431,36 @@ _RESOURCES = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='collection', full_name='istio.mcp.v1alpha1.Resources.collection', index=0,
+      name='system_version_info', full_name='istio.mcp.v1alpha1.Resources.system_version_info', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='resources', full_name='istio.mcp.v1alpha1.Resources.resources', index=1,
-      number=2, type=11, cpp_type=10, label=3,
+      name='collection', full_name='istio.mcp.v1alpha1.Resources.collection', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='resources', full_name='istio.mcp.v1alpha1.Resources.resources', index=2,
+      number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=_descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\310\336\037\000')), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='removed_resources', full_name='istio.mcp.v1alpha1.Resources.removed_resources', index=2,
-      number=3, type=9, cpp_type=9, label=3,
+      name='removed_resources', full_name='istio.mcp.v1alpha1.Resources.removed_resources', index=3,
+      number=4, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='nonce', full_name='istio.mcp.v1alpha1.Resources.nonce', index=3,
-      number=4, type=9, cpp_type=9, label=1,
+      name='nonce', full_name='istio.mcp.v1alpha1.Resources.nonce', index=4,
+      number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -471,7 +478,7 @@ _RESOURCES = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=1325,
-  serialized_end=1453,
+  serialized_end=1482,
 )
 
 _NODE.fields_by_name['metadata'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
@@ -582,8 +589,8 @@ _AGGREGATEDMESHCONFIGSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   options=None,
-  serialized_start=1456,
-  serialized_end=1741,
+  serialized_start=1485,
+  serialized_end=1770,
   methods=[
   _descriptor.MethodDescriptor(
     name='StreamAggregatedResources',
@@ -615,8 +622,8 @@ _RESOURCESOURCE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=1,
   options=None,
-  serialized_start=1743,
-  serialized_end=1861,
+  serialized_start=1772,
+  serialized_end=1890,
   methods=[
   _descriptor.MethodDescriptor(
     name='EstablishResourceStream',
@@ -639,8 +646,8 @@ _RESOURCESINK = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=2,
   options=None,
-  serialized_start=1863,
-  serialized_end=1979,
+  serialized_start=1892,
+  serialized_end=2008,
   methods=[
   _descriptor.MethodDescriptor(
     name='EstablishResourceStream',

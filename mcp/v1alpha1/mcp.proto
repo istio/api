@@ -238,25 +238,28 @@ message RequestResources {
 // In Incremental MCP the nonce field is required and used to pair
 // Resources to an RequestResources ACK or NACK.
 message Resources {
+  // The version of the response data (used for debugging).
+  string system_version_info = 1;
+
   // Type of resource collection that is being requested, e.g.
   //
   // istio/networking/v1alpha3/VirtualService
   // k8s/<apiVersion>/<kind>
-  string collection = 1;
+  string collection = 2;
 
   // The response resources wrapped in the common MCP *Resource* message.
   // These are typed resources that match the type url in the
   // RequestResources message.
-  repeated Resource resources = 2 [(gogoproto.nullable) = false];
+  repeated Resource resources = 3 [(gogoproto.nullable) = false];
 
   // Names of resources that have been deleted and to be
   // removed from the MCP sink node. Removed resources for missing
   // resources can be ignored.
-  repeated string removed_resources = 3;
+  repeated string removed_resources = 4;
 
   // Required. The nonce provides a way for RequestChange to uniquely
   // reference a RequestResources.
-  string nonce = 4;
+  string nonce = 5;
 }
 
 // ResourceSource and ResourceSink services are semantically

@@ -594,23 +594,28 @@
             "fields": [
               {
                 "id": 1,
-                "name": "collection",
+                "name": "system_version_info",
                 "type": "string"
               },
               {
                 "id": 2,
+                "name": "collection",
+                "type": "string"
+              },
+              {
+                "id": 3,
                 "name": "resources",
                 "type": "Resource",
                 "is_repeated": true
               },
               {
-                "id": 3,
+                "id": 4,
                 "name": "removed_resources",
                 "type": "string",
                 "is_repeated": true
               },
               {
-                "id": 4,
+                "id": 5,
                 "name": "nonce",
                 "type": "string"
               }
