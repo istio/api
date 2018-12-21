@@ -2,7 +2,7 @@
 title: istio.mcp.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 14
+number_of_entries: 13
 ---
 <p>This package defines the common, core types used by the Mesh Configuration Protocol.</p>
 
@@ -52,42 +52,6 @@ and receives Resources messages from the source.</p>
 
 </section>
 <h2 id="Types">Types</h2>
-<h3 id="Client">Client</h3>
-<section>
-<p>Identifies a specific MCP client instance. The client identifier is
-presented to the management server, which may use this identifier
-to distinguish per client configuration for serving. This
-information is not authoriative. Authoritative identity should come
-from the underlying transport layer (e.g. rpc credentials).</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Client-id">
-<td><code>id</code></td>
-<td><code>string</code></td>
-<td>
-<p>An opaque identifier for the MCP client.</p>
-
-</td>
-</tr>
-<tr id="Client-metadata">
-<td><code>metadata</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">google.protobuf.Struct</a></code></td>
-<td>
-<p>Opaque metadata extending the client identifier.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h3 id="IncrementalMeshConfigRequest">IncrementalMeshConfigRequest</h3>
 <section>
 <p>IncrementalMeshConfigRequest are be sent in 2 situations:</p>
@@ -109,9 +73,9 @@ from the underlying transport layer (e.g. rpc credentials).</p>
 </tr>
 </thead>
 <tbody>
-<tr id="IncrementalMeshConfigRequest-client">
-<td><code>client</code></td>
-<td><code><a href="#Client">Client</a></code></td>
+<tr id="IncrementalMeshConfigRequest-node">
+<td><code>node</code></td>
+<td><code><a href="#Node">Node</a></code></td>
 <td>
 <p>The client making the request.</p>
 
@@ -256,11 +220,11 @@ below) has an independent version associated with it.</p>
 
 </td>
 </tr>
-<tr id="MeshConfigRequest-client">
-<td><code>client</code></td>
-<td><code><a href="#Client">Client</a></code></td>
+<tr id="MeshConfigRequest-node">
+<td><code>node</code></td>
+<td><code><a href="#Node">Node</a></code></td>
 <td>
-<p>The client making the request.</p>
+<p>The node making the request.</p>
 
 </td>
 </tr>

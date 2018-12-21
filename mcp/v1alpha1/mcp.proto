@@ -24,16 +24,16 @@ import "mcp/v1alpha1/resource.proto";
 option go_package="istio.io/api/mcp/v1alpha1";
 option (gogoproto.equal_all) = true;
 
-// Identifies a specific MCP client instance. The client identifier is
-// presented to the management server, which may use this identifier
-// to distinguish per client configuration for serving. This
-// information is not authoriative. Authoritative identity should come
+// Identifies a specific MCP sink node instance. The node identifier is
+// presented to the resource source, which may use this identifier
+// to distinguish per sink configuration for serving. This
+// information is not authoritative. Authoritative identity should come
 // from the underlying transport layer (e.g. rpc credentials).
-message Client {
+message Node {
   // An opaque identifier for the MCP client.
   string id = 1;
 
-  // Opaque metadata extending the client identifier.
+  // Opaque metadata extending the node identifier.
   google.protobuf.Struct metadata = 2;
 }
 
@@ -50,8 +50,8 @@ message MeshConfigRequest {
   // below) has an independent version associated with it.
   string version_info = 1;
 
-  // The client making the request.
-  Client client = 2;
+  // The node making the request.
+  Node node = 2;
 
   // Type of the resource that is being requested, e.g.
   // "type.googleapis.com/istio.io.networking.v1alpha3.VirtualService".
@@ -107,7 +107,7 @@ message MeshConfigResponse {
 //      ACK or NACK is determined by the absence or presence of error_detail.
 message IncrementalMeshConfigRequest {
   // The client making the request.
-  Client client = 1;
+  Node node = 1;
 
   // Type of the resource that is being requested, e.g.
   // "type.googleapis.com/istio.io.networking.v1alpha3.VirtualService".
@@ -192,19 +192,6 @@ service AggregatedMeshConfigService {
 // the proto package version because MCP has not shipped yet.
 //
 ///////////////////////////////////////////////////////////////////////////
-
-// Identifies a specific MCP sink node instance. The node identifier is
-// presented to the resource source, which may use this identifier
-// to distinguish per sink configuration for serving. This
-// information is not authoritative. Authoritative identity should come
-// from the underlying transport layer (e.g. rpc credentials).
-message Node {
-  // An opaque identifier for the MCP client.
-  string id = 1;
-
-  // Opaque metadata extending the node identifier.
-  google.protobuf.Struct metadata = 2;
-}
 
 // A RequestResource can be sent in two situations:
 //

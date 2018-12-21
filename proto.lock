@@ -422,7 +422,7 @@
       "def": {
         "messages": [
           {
-            "name": "Client",
+            "name": "Node",
             "fields": [
               {
                 "id": 1,
@@ -446,8 +446,8 @@
               },
               {
                 "id": 2,
-                "name": "client",
-                "type": "Client"
+                "name": "node",
+                "type": "Node"
               },
               {
                 "id": 3,
@@ -497,8 +497,8 @@
             "fields": [
               {
                 "id": 1,
-                "name": "client",
-                "type": "Client"
+                "name": "node",
+                "type": "Node"
               },
               {
                 "id": 2,
