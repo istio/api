@@ -418,28 +418,6 @@
       }
     },
     {
-      "protopath": "mcp:/:v1alpha1:/:resource.proto",
-      "def": {
-        "messages": [
-          {
-            "name": "Resource",
-            "fields": [
-              {
-                "id": 1,
-                "name": "metadata",
-                "type": "istio.mcp.v1alpha1.Metadata"
-              },
-              {
-                "id": 2,
-                "name": "body",
-                "type": "google.protobuf.Any"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
       "protopath": "mcp:/:v1alpha1:/:mcp.proto",
       "def": {
         "messages": [
@@ -737,6 +715,28 @@
                   "name": "labels",
                   "type": "string"
                 }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "mcp:/:v1alpha1:/:resource.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "Resource",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "istio.mcp.v1alpha1.Metadata"
+              },
+              {
+                "id": 2,
+                "name": "body",
+                "type": "google.protobuf.Any"
               }
             ]
           }
