@@ -14,14 +14,16 @@ from google.protobuf import descriptor_pb2
 _sym_db = _symbol_database.Default()
 
 
+from networking.v1alpha3 import gateway_pb2 as networking_dot_v1alpha3_dot_gateway__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='networking/v1alpha3/sidecar.proto',
   package='istio.networking.v1alpha3',
   syntax='proto3',
-  serialized_pb=_b('\n!networking/v1alpha3/sidecar.proto\x12\x19istio.networking.v1alpha3\"\x92\x03\n\x11ServiceDependency\x12M\n\x0c\x64\x65pendencies\x18\x01 \x03(\x0b\x32\x37.istio.networking.v1alpha3.ServiceDependency.Dependency\x1a)\n\x06Import\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x0c\n\x04host\x18\x02 \x01(\t\x1a\x82\x02\n\nDependency\x12q\n\x16source_workload_labels\x18\x01 \x03(\x0b\x32Q.istio.networking.v1alpha3.ServiceDependency.Dependency.SourceWorkloadLabelsEntry\x12\x44\n\x07imports\x18\x02 \x03(\x0b\x32\x33.istio.networking.v1alpha3.ServiceDependency.Import\x1a;\n\x19SourceWorkloadLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01*&\n\x0b\x43onfigScope\x12\n\n\x06PUBLIC\x10\x00\x12\x0b\n\x07PRIVATE\x10\x01\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
-)
+  serialized_pb=_b('\n!networking/v1alpha3/sidecar.proto\x12\x19istio.networking.v1alpha3\x1a!networking/v1alpha3/gateway.proto\"\xc6\x01\n\x07Sidecar\x12\x46\n\x11workload_selector\x18\x01 \x01(\x0b\x32+.istio.networking.v1alpha3.WorkloadSelector\x12\x39\n\x07ingress\x18\x02 \x03(\x0b\x32(.istio.networking.v1alpha3.IstioListener\x12\x38\n\x06\x65gress\x18\x03 \x03(\x0b\x32(.istio.networking.v1alpha3.IstioListener\"\x84\x01\n\rIstioListener\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x14\n\x0c\x62ind_address\x18\x02 \x01(\t\x12\x14\n\x0c\x62ind_to_port\x18\x03 \x01(\x08\x12\x10\n\x08protocol\x18\x04 \x01(\t\x12\r\n\x05hosts\x18\x05 \x03(\t\x12\x18\n\x10\x64\x65\x66\x61ult_endpoint\x18\x06 \x01(\t*&\n\x0b\x43onfigScope\x12\n\n\x06PUBLIC\x10\x00\x12\x0b\n\x07PRIVATE\x10\x01\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
+  ,
+  dependencies=[networking_dot_v1alpha3_dot_gateway__pb2.DESCRIPTOR,])
 
 _CONFIGSCOPE = _descriptor.EnumDescriptor(
   name='ConfigScope',
@@ -40,8 +42,8 @@ _CONFIGSCOPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=469,
-  serialized_end=507,
+  serialized_start=435,
+  serialized_end=473,
 )
 _sym_db.RegisterEnumDescriptor(_CONFIGSCOPE)
 
@@ -51,127 +53,30 @@ PRIVATE = 1
 
 
 
-_SERVICEDEPENDENCY_IMPORT = _descriptor.Descriptor(
-  name='Import',
-  full_name='istio.networking.v1alpha3.ServiceDependency.Import',
+_SIDECAR = _descriptor.Descriptor(
+  name='Sidecar',
+  full_name='istio.networking.v1alpha3.Sidecar',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='namespace', full_name='istio.networking.v1alpha3.ServiceDependency.Import.namespace', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      name='workload_selector', full_name='istio.networking.v1alpha3.Sidecar.workload_selector', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='host', full_name='istio.networking.v1alpha3.ServiceDependency.Import.host', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=165,
-  serialized_end=206,
-)
-
-_SERVICEDEPENDENCY_DEPENDENCY_SOURCEWORKLOADLABELSENTRY = _descriptor.Descriptor(
-  name='SourceWorkloadLabelsEntry',
-  full_name='istio.networking.v1alpha3.ServiceDependency.Dependency.SourceWorkloadLabelsEntry',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='istio.networking.v1alpha3.ServiceDependency.Dependency.SourceWorkloadLabelsEntry.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='istio.networking.v1alpha3.ServiceDependency.Dependency.SourceWorkloadLabelsEntry.value', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=_descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001')),
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=408,
-  serialized_end=467,
-)
-
-_SERVICEDEPENDENCY_DEPENDENCY = _descriptor.Descriptor(
-  name='Dependency',
-  full_name='istio.networking.v1alpha3.ServiceDependency.Dependency',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='source_workload_labels', full_name='istio.networking.v1alpha3.ServiceDependency.Dependency.source_workload_labels', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='imports', full_name='istio.networking.v1alpha3.ServiceDependency.Dependency.imports', index=1,
+      name='ingress', full_name='istio.networking.v1alpha3.Sidecar.ingress', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_SERVICEDEPENDENCY_DEPENDENCY_SOURCEWORKLOADLABELSENTRY, ],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=209,
-  serialized_end=467,
-)
-
-_SERVICEDEPENDENCY = _descriptor.Descriptor(
-  name='ServiceDependency',
-  full_name='istio.networking.v1alpha3.ServiceDependency',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
     _descriptor.FieldDescriptor(
-      name='dependencies', full_name='istio.networking.v1alpha3.ServiceDependency.dependencies', index=0,
-      number=1, type=11, cpp_type=10, label=3,
+      name='egress', full_name='istio.networking.v1alpha3.Sidecar.egress', index=2,
+      number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -179,7 +84,7 @@ _SERVICEDEPENDENCY = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_SERVICEDEPENDENCY_IMPORT, _SERVICEDEPENDENCY_DEPENDENCY, ],
+  nested_types=[],
   enum_types=[
   ],
   options=None,
@@ -188,54 +93,99 @@ _SERVICEDEPENDENCY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=65,
-  serialized_end=467,
+  serialized_start=100,
+  serialized_end=298,
 )
 
-_SERVICEDEPENDENCY_IMPORT.containing_type = _SERVICEDEPENDENCY
-_SERVICEDEPENDENCY_DEPENDENCY_SOURCEWORKLOADLABELSENTRY.containing_type = _SERVICEDEPENDENCY_DEPENDENCY
-_SERVICEDEPENDENCY_DEPENDENCY.fields_by_name['source_workload_labels'].message_type = _SERVICEDEPENDENCY_DEPENDENCY_SOURCEWORKLOADLABELSENTRY
-_SERVICEDEPENDENCY_DEPENDENCY.fields_by_name['imports'].message_type = _SERVICEDEPENDENCY_IMPORT
-_SERVICEDEPENDENCY_DEPENDENCY.containing_type = _SERVICEDEPENDENCY
-_SERVICEDEPENDENCY.fields_by_name['dependencies'].message_type = _SERVICEDEPENDENCY_DEPENDENCY
-DESCRIPTOR.message_types_by_name['ServiceDependency'] = _SERVICEDEPENDENCY
+
+_ISTIOLISTENER = _descriptor.Descriptor(
+  name='IstioListener',
+  full_name='istio.networking.v1alpha3.IstioListener',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.networking.v1alpha3.IstioListener.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='bind_address', full_name='istio.networking.v1alpha3.IstioListener.bind_address', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='bind_to_port', full_name='istio.networking.v1alpha3.IstioListener.bind_to_port', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='protocol', full_name='istio.networking.v1alpha3.IstioListener.protocol', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='hosts', full_name='istio.networking.v1alpha3.IstioListener.hosts', index=4,
+      number=5, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='default_endpoint', full_name='istio.networking.v1alpha3.IstioListener.default_endpoint', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=301,
+  serialized_end=433,
+)
+
+_SIDECAR.fields_by_name['workload_selector'].message_type = networking_dot_v1alpha3_dot_gateway__pb2._WORKLOADSELECTOR
+_SIDECAR.fields_by_name['ingress'].message_type = _ISTIOLISTENER
+_SIDECAR.fields_by_name['egress'].message_type = _ISTIOLISTENER
+DESCRIPTOR.message_types_by_name['Sidecar'] = _SIDECAR
+DESCRIPTOR.message_types_by_name['IstioListener'] = _ISTIOLISTENER
 DESCRIPTOR.enum_types_by_name['ConfigScope'] = _CONFIGSCOPE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-ServiceDependency = _reflection.GeneratedProtocolMessageType('ServiceDependency', (_message.Message,), dict(
-
-  Import = _reflection.GeneratedProtocolMessageType('Import', (_message.Message,), dict(
-    DESCRIPTOR = _SERVICEDEPENDENCY_IMPORT,
-    __module__ = 'networking.v1alpha3.sidecar_pb2'
-    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.ServiceDependency.Import)
-    ))
-  ,
-
-  Dependency = _reflection.GeneratedProtocolMessageType('Dependency', (_message.Message,), dict(
-
-    SourceWorkloadLabelsEntry = _reflection.GeneratedProtocolMessageType('SourceWorkloadLabelsEntry', (_message.Message,), dict(
-      DESCRIPTOR = _SERVICEDEPENDENCY_DEPENDENCY_SOURCEWORKLOADLABELSENTRY,
-      __module__ = 'networking.v1alpha3.sidecar_pb2'
-      # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.ServiceDependency.Dependency.SourceWorkloadLabelsEntry)
-      ))
-    ,
-    DESCRIPTOR = _SERVICEDEPENDENCY_DEPENDENCY,
-    __module__ = 'networking.v1alpha3.sidecar_pb2'
-    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.ServiceDependency.Dependency)
-    ))
-  ,
-  DESCRIPTOR = _SERVICEDEPENDENCY,
+Sidecar = _reflection.GeneratedProtocolMessageType('Sidecar', (_message.Message,), dict(
+  DESCRIPTOR = _SIDECAR,
   __module__ = 'networking.v1alpha3.sidecar_pb2'
-  # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.ServiceDependency)
+  # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.Sidecar)
   ))
-_sym_db.RegisterMessage(ServiceDependency)
-_sym_db.RegisterMessage(ServiceDependency.Import)
-_sym_db.RegisterMessage(ServiceDependency.Dependency)
-_sym_db.RegisterMessage(ServiceDependency.Dependency.SourceWorkloadLabelsEntry)
+_sym_db.RegisterMessage(Sidecar)
+
+IstioListener = _reflection.GeneratedProtocolMessageType('IstioListener', (_message.Message,), dict(
+  DESCRIPTOR = _ISTIOLISTENER,
+  __module__ = 'networking.v1alpha3.sidecar_pb2'
+  # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.IstioListener)
+  ))
+_sym_db.RegisterMessage(IstioListener)
 
 
 DESCRIPTOR.has_options = True
 DESCRIPTOR._options = _descriptor._ParseOptions(descriptor_pb2.FileOptions(), _b('Z istio.io/api/networking/v1alpha3'))
-_SERVICEDEPENDENCY_DEPENDENCY_SOURCEWORKLOADLABELSENTRY.has_options = True
-_SERVICEDEPENDENCY_DEPENDENCY_SOURCEWORKLOADLABELSENTRY._options = _descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001'))
 # @@protoc_insertion_point(module_scope)

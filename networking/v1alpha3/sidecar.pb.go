@@ -18,7 +18,7 @@ var _ = math.Inf
 // a namespace when the namespace is imported.  By default all
 // configuration artifacts are public. Configurations with private scope
 // will not be imported when the namespace containing the configuration is
-// imported in a ServiceDependency.
+// imported in a Sidecar.
 type ConfigScope int32
 
 const (
@@ -43,200 +43,223 @@ func (x ConfigScope) String() string {
 }
 func (ConfigScope) EnumDescriptor() ([]byte, []int) { return fileDescriptorSidecar, []int{0} }
 
-// `ServiceDependency` describes the set of services that a workload depends on
-// for its operation. In other words, it describes the properties of
-// outgoing traffic from a given workload. By default, the service mesh
-// established by Istio will have a full mesh connectivity - i.e. every
-// workload will have proxy configuration required to reach every other
-// workload in the mesh. However most connectivity graphs are sparse in
-// practice. The ServiceDependency provides a way to declare the service
-// dependencies associated with each workload such that the amount of
-// configuration sent to the sidecars can be scoped to the requisite
-// dependencies.
+// `Sidecar` describes the describes the configuration of the sidecar proxy
+// that mediates inbound and outbound communication to the workload it is
+// attached to. By default, Istio will program all sidecar proxies in the
+// mesh with the necessary configuration required to reach every workload
+// in the mesh, as well as accept traffic on all the ports associated with
+// the workload. The Sidecar resource provides a way to fine tune the set
+// of ports, protocols that the proxy will accept when forwarding traffic
+// to and from the workload. In addition, it is possible to restrict the
+// set of services that the proxy can reach when forwarding outbound
+// traffic from the workload.
 //
 // Services and configuration in a mesh are organized into one or more
-// namespaces (e.g., a Kubernetes namespace or a CF org/space).  Workloads
-// in a namespace have an implicit dependency on other workloads in the
-// same namespace. In addition, to declare dependencies on workloads in
-// other namespaces, a ServiceDependency resource has to be specified in the
-// current namespace. *_Each namespace MUST have only one ServiceDependency
-// resource named "default"_*. The behavior of the system is undefined if
-// more than one ServiceDependency resource exists in a given namespace. The set
-// of dependencies specified in a ServiceDependency resource will be used to
-// compute the sidecar configuration for every workload in the namespace.
+// namespaces (e.g., a Kubernetes namespace or a CF org/space). A Sidecar
+// resource in a namespace will apply to all workloads in the namespace.
+// *_Currently, each namespace should have only one Sidecar resource named
+// "default"_*. The behavior of the system is undefined if more than one
+// Sidecar resource exists in a given namespace.
 //
-// NOTE 1: If workloads in the mesh depend only on other workloads in the
-// same namespace, set defaultServiceDependency.importMode to SAME_NAMESPACE
-// in the mesh global config map (in values.yaml).
-//
-// NOTE 2: To facilitate incremental pruning of the the sidecar
-// configuration, the default import mode for the mesh is set to
-// ALL_NAMESPACES. In other words, every workload will be able to reach
-// every other workload. Adding a ServiceDependency resource in a namespace will
-// automatically prune the configuration for the workloads in that
-// namespace.
-//
-// The following examples illustrate a few specific use cases of ServiceDependency.
-//
-// The example below delcares a ServiceDependency resource in the prod-us1
-// namespace that specifies that workloads in the namespace will be able to
-// reach the services in the prod-apis namespace only.
+// The example below delcares a Sidecar resource in the prod-us1 namespace
+// that configures the sidecar to proxy egress traffic for services in the
+// prod-us1 and prod-apis namespaces, and the policy and telemetry service
+// (if enabled) in the istio-system namespace.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
-// kind: ServiceDependency
+// kind: Sidecar
 // metadata:
 //   name: default
 //   namespace: prod-us1
 // spec:
-//   dependencies:
-//   - imports:
-//     - namespace: prod-apis
+//   egress:
+//   - hosts:
+//     - "prod-us1/*"
+//     - "prod-apis/*"
+//     - "istio-system/*"
 // ```
 //
-// In a mesh where the default service dependency is set to SAME_NAMESPACE
-// only, if one or more workloads need to be able to reach every other
-// service in the mesh (e.g., metrics collection server), the following
-// ServiceDependency resource can be used to specify such a dependency:
+// The example below delcares a Sidecar resource in the prod-us1 namespace
+// that accepts inbound HTTP traffic on port 10.10.10.10:9080 and forwards
+// it to the attached workload listening on a unix domain socket. In the
+// egress direction, in addition to the istio-system namespace, the sidecar
+// proxies only HTTP traffic bound for port 9080 for services in the
+// prod-us1 namespace.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
-// kind: ServiceDependency
+// kind: Sidecar
 // metadata:
 //   name: default
-//   namespace: metrics-collection
+//   namespace: prod-us1
 // spec:
-//   dependencies:
-//   - imports:
-//     - namespace: '*'
+//   ingress:
+//   - bind: tcp://10.10.10.10:9080
+//     protocol: HTTP
+//     defaultEndpoint: unix:///var/run/someuds.sock
+//   egress:
+//   - hosts:
+//     - "istio-system/*"
+//   - bind: tcp://0.0.0.0:9080
+//     protocol: HTTP
+//     hosts:
+//     - "prod-us1/*"
 // ```
 //
-// The configuration above will allow workloads in the metrics-collection
-// namespace to access service in any namespace while workloads in other
-// namespaces will be configured for namespace local access as per the
-// global default service dependency (SAME_NAMESPACE).
-//
-type ServiceDependency struct {
-	// REQUIRED. The set of services that workloads in this namespace are
-	// expected to talk to, in addition to other workloads in the same
-	// namespace. Dependencies describe the properties of outbound traffic from
-	// a given workload.
-	Dependencies []*ServiceDependency_Dependency `protobuf:"bytes,1,rep,name=dependencies" json:"dependencies,omitempty"`
+type Sidecar struct {
+	// Criteria used to select the specific set of pods/VMs on which this
+	// sidecar configuration should be applied. If omitted, the sidecar
+	// configuration will be applied to all workloads in the current config
+	// namespace.
+	WorkloadSelector *WorkloadSelector `protobuf:"bytes,1,opt,name=workload_selector,json=workloadSelector" json:"workload_selector,omitempty"`
+	// Ingress specifies the configuration of the sidecar for processing
+	// inbound traffic to the attached workload. If omitted, Istio will
+	// autoconfigure the sidecar based on the information about the workload
+	// obtained from the service registry (e.g., exposed ports, services,
+	// etc.).
+	Ingress []*IstioListener `protobuf:"bytes,2,rep,name=ingress" json:"ingress,omitempty"`
+	// Egress specifies the configuration of the sidecar for processing
+	// outbound traffic from the attached workload to other services in the
+	// mesh. If omitted, Istio will autoconfigure the sidecar to be able to
+	// reach every service in the mesh.  etc.).
+	Egress []*IstioListener `protobuf:"bytes,3,rep,name=egress" json:"egress,omitempty"`
 }
 
-func (m *ServiceDependency) Reset()                    { *m = ServiceDependency{} }
-func (m *ServiceDependency) String() string            { return proto.CompactTextString(m) }
-func (*ServiceDependency) ProtoMessage()               {}
-func (*ServiceDependency) Descriptor() ([]byte, []int) { return fileDescriptorSidecar, []int{0} }
+func (m *Sidecar) Reset()                    { *m = Sidecar{} }
+func (m *Sidecar) String() string            { return proto.CompactTextString(m) }
+func (*Sidecar) ProtoMessage()               {}
+func (*Sidecar) Descriptor() ([]byte, []int) { return fileDescriptorSidecar, []int{0} }
 
-func (m *ServiceDependency) GetDependencies() []*ServiceDependency_Dependency {
+func (m *Sidecar) GetWorkloadSelector() *WorkloadSelector {
 	if m != nil {
-		return m.Dependencies
+		return m.WorkloadSelector
 	}
 	return nil
 }
 
-// Import describes the set of namespaces whose exported services
-// (real/virtual) will be accessed by workloads in a given namespace. The
-// sidecars attached to the workloads will be configured with information
-// required to reach the imported services only. The gateways in the
-// current namespace will only honor imported VirtualServices instead of
-// every VirtualService that binds itself to the gateway.
-//
-// Importing a service from a namespace will automatically import the
-// exported configuration artifacts associated with the service, such as
-// VirtualService, DestinationRule, etc. The service in a namespace can be
-// a service in the service registry (e.g., a kubernetes or cloud foundry
-// service) or a service specified via ServiceEntry configuration.
-//
-// NOTE: Only exported services and configuration artifacts from a
-// namespace can be imported. Private services/configuration will not be
-// imported. See the scope setting associated with VirtualService,
-// DestinationRule, ServiceEntry, etc.
-type ServiceDependency_Import struct {
-	// The configuration namespace whose services need to be imported.
-	// Specify * to import all namespaces. The import can be scoped further
-	// by specifying individual hosts.
-	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	// A FQDN or wildcard prefixed DNS name of the host to import from the
-	// specified namespace. The hostnames include names of services from the
-	// service registry as well as those specified in a VirtualService.
-	Host string `protobuf:"bytes,2,opt,name=host,proto3" json:"host,omitempty"`
-}
-
-func (m *ServiceDependency_Import) Reset()         { *m = ServiceDependency_Import{} }
-func (m *ServiceDependency_Import) String() string { return proto.CompactTextString(m) }
-func (*ServiceDependency_Import) ProtoMessage()    {}
-func (*ServiceDependency_Import) Descriptor() ([]byte, []int) {
-	return fileDescriptorSidecar, []int{0, 0}
-}
-
-func (m *ServiceDependency_Import) GetNamespace() string {
+func (m *Sidecar) GetIngress() []*IstioListener {
 	if m != nil {
-		return m.Namespace
+		return m.Ingress
+	}
+	return nil
+}
+
+func (m *Sidecar) GetEgress() []*IstioListener {
+	if m != nil {
+		return m.Egress
+	}
+	return nil
+}
+
+// IstioListener specifies the properties of a single listener on the
+// sidecar proxy attached to a workload.
+type IstioListener struct {
+	// An arbitrary name associated with the listener used for emitting metrics.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// The ip:port or the unix domain socket to which the listener should be
+	// bound to. Format: tcp://x.x.x.x:yyyy or unix:///path/to/uds or
+	// unix://@foobar (Linux abstract namespace).  To bind to any IP with
+	// specific port, use tcp://0.0.0.0:<port>
+	BindAddress string `protobuf:"bytes,2,opt,name=bind_address,json=bindAddress,proto3" json:"bind_address,omitempty"`
+	// When the bind address is an IP:port, the bindToPort option dictates
+	// whether or not the sidecar should bind its listener socket to the
+	// specified port. Set bindToPort to false (default) if application
+	// traffic entering/leaving a pod/VM is captured automatically through
+	// iptables redirection and forwarded to the sidecar on a specific port
+	// (see proxyListenPort in the global MeshConfig). When not using
+	// iptables for traffic capture, set bindToPort to true to force the
+	// sidecar to bind to the specified port. Note that the binding might
+	// fail if the application workload is already bound to the same port.
+	BindToPort bool `protobuf:"varint,3,opt,name=bind_to_port,json=bindToPort,proto3" json:"bind_to_port,omitempty"`
+	// The protocol associated with this listener.
+	// MUST BE one of HTTP|TCP|TLS|MONGO.
+	// TLS implies the connection will be routed based on the SNI header.
+	// HTTP implies HTTP 1.1/HTTP 2/gRPC
+	Protocol string `protobuf:"bytes,4,opt,name=protocol,proto3" json:"protocol,omitempty"`
+	// One or more hosts (HTTP or SNI) exposed by the listener in
+	// namespace/dnsName format.  _*Hosts will be ignored for ingress
+	// servers*_. For egress servers, the hosts field results in importing
+	// one or more publicly scoped services and VirtualServices from remote
+	// namespaces. The service in a namespace can be a service in the service
+	// registry (e.g., a kubernetes or cloud foundry service) or a service
+	// specified via ServiceEntry configuration. In addition, any publicly
+	// scoped DestinationRule associated with the imported services will also
+	// be imported.
+	//
+	// Set the namespace to * to import a particular service from any
+	// available namespace (e.g., "*/foo.example.com"). Set the dnsName field
+	// to * to import all services from the specified namespace (e.g.,
+	// "prod/*"). Wildcard DNS names can be used to import a specific set of
+	// services from the specified namespace (e.g., "prod/*.example.com").
+	//
+	// NOTE: Only exported services and configuration artifacts from a
+	// namespace can be imported. Private services/configuration will not be
+	// imported. Refer to the scope setting associated with VirtualService,
+	// DestinationRule, ServiceEntry, etc. for details.
+	Hosts []string `protobuf:"bytes,5,rep,name=hosts" json:"hosts,omitempty"`
+	// The IP endpoint or unix domain socket to which traffic should be
+	// forwarded to by default. In the context of an ingress server, this
+	// configuration can be used to redirect traffic arriving at the bind
+	// point on the sidecar to a port or unix domain socket where the
+	// application workload is listening for connections. Format should be
+	// tcp://127.0.0.1:PORT or unix:///path/to/socket
+	DefaultEndpoint string `protobuf:"bytes,6,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
+}
+
+func (m *IstioListener) Reset()                    { *m = IstioListener{} }
+func (m *IstioListener) String() string            { return proto.CompactTextString(m) }
+func (*IstioListener) ProtoMessage()               {}
+func (*IstioListener) Descriptor() ([]byte, []int) { return fileDescriptorSidecar, []int{1} }
+
+func (m *IstioListener) GetName() string {
+	if m != nil {
+		return m.Name
 	}
 	return ""
 }
 
-func (m *ServiceDependency_Import) GetHost() string {
+func (m *IstioListener) GetBindAddress() string {
 	if m != nil {
-		return m.Host
+		return m.BindAddress
 	}
 	return ""
 }
 
-// Dependency describes a workload and the set of service dependencies
-// for the workload.
-type ServiceDependency_Dependency struct {
-	// [#not-implemented-hide:]
-	// One or more labels that indicate a specific set of pods/VMs on which
-	// this dependency configuration should be applied.  The scope of label
-	// search is platform dependent.  On Kubernetes, for example, the scope
-	// includes pods running in the namespace in which the ServiceDependency
-	// resource is present.  If the sourceWorkloadLabels are omitted, the
-	// imports specified will be applicable to all workloads in the current
-	// configuration namespace.
-	// NOTE: source_workload_labels are currently not supported.
-	SourceWorkloadLabels map[string]string `protobuf:"bytes,1,rep,name=source_workload_labels,json=sourceWorkloadLabels" json:"source_workload_labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// REQUIRED: Import describes the set of namespaces whose exported
-	// services will be accessed by the workloads selected by the
-	// sourceWorkloadLabels. The sidecars attached to the workloads will be
-	// configured with information required to reach other services in the
-	// same namespace and the imported services. In addition to the
-	// explicitly specified namespaces, namespaces specified in the global
-	// mesh config (through defaultServiceDependency.importNamespaces) will also be
-	// imported.
-	Imports []*ServiceDependency_Import `protobuf:"bytes,2,rep,name=imports" json:"imports,omitempty"`
-}
-
-func (m *ServiceDependency_Dependency) Reset()         { *m = ServiceDependency_Dependency{} }
-func (m *ServiceDependency_Dependency) String() string { return proto.CompactTextString(m) }
-func (*ServiceDependency_Dependency) ProtoMessage()    {}
-func (*ServiceDependency_Dependency) Descriptor() ([]byte, []int) {
-	return fileDescriptorSidecar, []int{0, 1}
-}
-
-func (m *ServiceDependency_Dependency) GetSourceWorkloadLabels() map[string]string {
+func (m *IstioListener) GetBindToPort() bool {
 	if m != nil {
-		return m.SourceWorkloadLabels
+		return m.BindToPort
+	}
+	return false
+}
+
+func (m *IstioListener) GetProtocol() string {
+	if m != nil {
+		return m.Protocol
+	}
+	return ""
+}
+
+func (m *IstioListener) GetHosts() []string {
+	if m != nil {
+		return m.Hosts
 	}
 	return nil
 }
 
-func (m *ServiceDependency_Dependency) GetImports() []*ServiceDependency_Import {
+func (m *IstioListener) GetDefaultEndpoint() string {
 	if m != nil {
-		return m.Imports
+		return m.DefaultEndpoint
 	}
-	return nil
+	return ""
 }
 
 func init() {
-	proto.RegisterType((*ServiceDependency)(nil), "istio.networking.v1alpha3.ServiceDependency")
-	proto.RegisterType((*ServiceDependency_Import)(nil), "istio.networking.v1alpha3.ServiceDependency.Import")
-	proto.RegisterType((*ServiceDependency_Dependency)(nil), "istio.networking.v1alpha3.ServiceDependency.Dependency")
+	proto.RegisterType((*Sidecar)(nil), "istio.networking.v1alpha3.Sidecar")
+	proto.RegisterType((*IstioListener)(nil), "istio.networking.v1alpha3.IstioListener")
 	proto.RegisterEnum("istio.networking.v1alpha3.ConfigScope", ConfigScope_name, ConfigScope_value)
 }
-func (m *ServiceDependency) Marshal() (dAtA []byte, err error) {
+func (m *Sidecar) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -246,90 +269,23 @@ func (m *ServiceDependency) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *ServiceDependency) MarshalTo(dAtA []byte) (int, error) {
+func (m *Sidecar) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if len(m.Dependencies) > 0 {
-		for _, msg := range m.Dependencies {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintSidecar(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	return i, nil
-}
-
-func (m *ServiceDependency_Import) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ServiceDependency_Import) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.Namespace) > 0 {
+	if m.WorkloadSelector != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintSidecar(dAtA, i, uint64(len(m.Namespace)))
-		i += copy(dAtA[i:], m.Namespace)
-	}
-	if len(m.Host) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintSidecar(dAtA, i, uint64(len(m.Host)))
-		i += copy(dAtA[i:], m.Host)
-	}
-	return i, nil
-}
-
-func (m *ServiceDependency_Dependency) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ServiceDependency_Dependency) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.SourceWorkloadLabels) > 0 {
-		for k, _ := range m.SourceWorkloadLabels {
-			dAtA[i] = 0xa
-			i++
-			v := m.SourceWorkloadLabels[k]
-			mapSize := 1 + len(k) + sovSidecar(uint64(len(k))) + 1 + len(v) + sovSidecar(uint64(len(v)))
-			i = encodeVarintSidecar(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintSidecar(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintSidecar(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
+		i = encodeVarintSidecar(dAtA, i, uint64(m.WorkloadSelector.Size()))
+		n1, err := m.WorkloadSelector.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
+		i += n1
 	}
-	if len(m.Imports) > 0 {
-		for _, msg := range m.Imports {
+	if len(m.Ingress) > 0 {
+		for _, msg := range m.Ingress {
 			dAtA[i] = 0x12
 			i++
 			i = encodeVarintSidecar(dAtA, i, uint64(msg.Size()))
@@ -339,6 +295,85 @@ func (m *ServiceDependency_Dependency) MarshalTo(dAtA []byte) (int, error) {
 			}
 			i += n
 		}
+	}
+	if len(m.Egress) > 0 {
+		for _, msg := range m.Egress {
+			dAtA[i] = 0x1a
+			i++
+			i = encodeVarintSidecar(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
+func (m *IstioListener) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IstioListener) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintSidecar(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
+	}
+	if len(m.BindAddress) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintSidecar(dAtA, i, uint64(len(m.BindAddress)))
+		i += copy(dAtA[i:], m.BindAddress)
+	}
+	if m.BindToPort {
+		dAtA[i] = 0x18
+		i++
+		if m.BindToPort {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	if len(m.Protocol) > 0 {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintSidecar(dAtA, i, uint64(len(m.Protocol)))
+		i += copy(dAtA[i:], m.Protocol)
+	}
+	if len(m.Hosts) > 0 {
+		for _, s := range m.Hosts {
+			dAtA[i] = 0x2a
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	if len(m.DefaultEndpoint) > 0 {
+		dAtA[i] = 0x32
+		i++
+		i = encodeVarintSidecar(dAtA, i, uint64(len(m.DefaultEndpoint)))
+		i += copy(dAtA[i:], m.DefaultEndpoint)
 	}
 	return i, nil
 }
@@ -352,11 +387,21 @@ func encodeVarintSidecar(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return offset + 1
 }
-func (m *ServiceDependency) Size() (n int) {
+func (m *Sidecar) Size() (n int) {
 	var l int
 	_ = l
-	if len(m.Dependencies) > 0 {
-		for _, e := range m.Dependencies {
+	if m.WorkloadSelector != nil {
+		l = m.WorkloadSelector.Size()
+		n += 1 + l + sovSidecar(uint64(l))
+	}
+	if len(m.Ingress) > 0 {
+		for _, e := range m.Ingress {
+			l = e.Size()
+			n += 1 + l + sovSidecar(uint64(l))
+		}
+	}
+	if len(m.Egress) > 0 {
+		for _, e := range m.Egress {
 			l = e.Size()
 			n += 1 + l + sovSidecar(uint64(l))
 		}
@@ -364,36 +409,33 @@ func (m *ServiceDependency) Size() (n int) {
 	return n
 }
 
-func (m *ServiceDependency_Import) Size() (n int) {
+func (m *IstioListener) Size() (n int) {
 	var l int
 	_ = l
-	l = len(m.Namespace)
+	l = len(m.Name)
 	if l > 0 {
 		n += 1 + l + sovSidecar(uint64(l))
 	}
-	l = len(m.Host)
+	l = len(m.BindAddress)
 	if l > 0 {
 		n += 1 + l + sovSidecar(uint64(l))
 	}
-	return n
-}
-
-func (m *ServiceDependency_Dependency) Size() (n int) {
-	var l int
-	_ = l
-	if len(m.SourceWorkloadLabels) > 0 {
-		for k, v := range m.SourceWorkloadLabels {
-			_ = k
-			_ = v
-			mapEntrySize := 1 + len(k) + sovSidecar(uint64(len(k))) + 1 + len(v) + sovSidecar(uint64(len(v)))
-			n += mapEntrySize + 1 + sovSidecar(uint64(mapEntrySize))
-		}
+	if m.BindToPort {
+		n += 2
 	}
-	if len(m.Imports) > 0 {
-		for _, e := range m.Imports {
-			l = e.Size()
+	l = len(m.Protocol)
+	if l > 0 {
+		n += 1 + l + sovSidecar(uint64(l))
+	}
+	if len(m.Hosts) > 0 {
+		for _, s := range m.Hosts {
+			l = len(s)
 			n += 1 + l + sovSidecar(uint64(l))
 		}
+	}
+	l = len(m.DefaultEndpoint)
+	if l > 0 {
+		n += 1 + l + sovSidecar(uint64(l))
 	}
 	return n
 }
@@ -411,7 +453,7 @@ func sovSidecar(x uint64) (n int) {
 func sozSidecar(x uint64) (n int) {
 	return sovSidecar(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *ServiceDependency) Unmarshal(dAtA []byte) error {
+func (m *Sidecar) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -434,15 +476,15 @@ func (m *ServiceDependency) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: ServiceDependency: wiretype end group for non-group")
+			return fmt.Errorf("proto: Sidecar: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ServiceDependency: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: Sidecar: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Dependencies", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field WorkloadSelector", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -466,8 +508,72 @@ func (m *ServiceDependency) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Dependencies = append(m.Dependencies, &ServiceDependency_Dependency{})
-			if err := m.Dependencies[len(m.Dependencies)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if m.WorkloadSelector == nil {
+				m.WorkloadSelector = &WorkloadSelector{}
+			}
+			if err := m.WorkloadSelector.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ingress", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSidecar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSidecar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Ingress = append(m.Ingress, &IstioListener{})
+			if err := m.Ingress[len(m.Ingress)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Egress", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSidecar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSidecar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Egress = append(m.Egress, &IstioListener{})
+			if err := m.Egress[len(m.Egress)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -492,7 +598,7 @@ func (m *ServiceDependency) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *ServiceDependency_Import) Unmarshal(dAtA []byte) error {
+func (m *IstioListener) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -515,15 +621,15 @@ func (m *ServiceDependency_Import) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: Import: wiretype end group for non-group")
+			return fmt.Errorf("proto: IstioListener: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Import: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: IstioListener: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -548,11 +654,11 @@ func (m *ServiceDependency_Import) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Namespace = string(dAtA[iNdEx:postIndex])
+			m.Name = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Host", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field BindAddress", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -577,63 +683,13 @@ func (m *ServiceDependency_Import) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Host = string(dAtA[iNdEx:postIndex])
+			m.BindAddress = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipSidecar(dAtA[iNdEx:])
-			if err != nil {
-				return err
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BindToPort", wireType)
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthSidecar
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ServiceDependency_Dependency) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowSidecar
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Dependency: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Dependency: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SourceWorkloadLabels", wireType)
-			}
-			var msglen int
+			var v int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowSidecar
@@ -643,115 +699,17 @@ func (m *ServiceDependency_Dependency) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				v |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
-				return ErrInvalidLengthSidecar
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.SourceWorkloadLabels == nil {
-				m.SourceWorkloadLabels = make(map[string]string)
-			}
-			var mapkey string
-			var mapvalue string
-			for iNdEx < postIndex {
-				entryPreIndex := iNdEx
-				var wire uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowSidecar
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				fieldNum := int32(wire >> 3)
-				if fieldNum == 1 {
-					var stringLenmapkey uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowSidecar
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapkey := int(stringLenmapkey)
-					if intStringLenmapkey < 0 {
-						return ErrInvalidLengthSidecar
-					}
-					postStringIndexmapkey := iNdEx + intStringLenmapkey
-					if postStringIndexmapkey > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
-					iNdEx = postStringIndexmapkey
-				} else if fieldNum == 2 {
-					var stringLenmapvalue uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowSidecar
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapvalue := int(stringLenmapvalue)
-					if intStringLenmapvalue < 0 {
-						return ErrInvalidLengthSidecar
-					}
-					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
-					if postStringIndexmapvalue > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
-					iNdEx = postStringIndexmapvalue
-				} else {
-					iNdEx = entryPreIndex
-					skippy, err := skipSidecar(dAtA[iNdEx:])
-					if err != nil {
-						return err
-					}
-					if skippy < 0 {
-						return ErrInvalidLengthSidecar
-					}
-					if (iNdEx + skippy) > postIndex {
-						return io.ErrUnexpectedEOF
-					}
-					iNdEx += skippy
-				}
-			}
-			m.SourceWorkloadLabels[mapkey] = mapvalue
-			iNdEx = postIndex
-		case 2:
+			m.BindToPort = bool(v != 0)
+		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Imports", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Protocol", wireType)
 			}
-			var msglen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowSidecar
@@ -761,22 +719,78 @@ func (m *ServiceDependency_Dependency) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
+				stringLen |= (uint64(b) & 0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthSidecar
 			}
-			postIndex := iNdEx + msglen
+			postIndex := iNdEx + intStringLen
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Imports = append(m.Imports, &ServiceDependency_Import{})
-			if err := m.Imports[len(m.Imports)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
+			m.Protocol = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Hosts", wireType)
 			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSidecar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthSidecar
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Hosts = append(m.Hosts, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultEndpoint", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSidecar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthSidecar
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DefaultEndpoint = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -907,28 +921,29 @@ var (
 func init() { proto.RegisterFile("networking/v1alpha3/sidecar.proto", fileDescriptorSidecar) }
 
 var fileDescriptorSidecar = []byte{
-	// 356 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x92, 0xdf, 0x4a, 0x32, 0x41,
-	0x14, 0xc0, 0xbf, 0x59, 0xbf, 0x4f, 0xf1, 0xf8, 0x5d, 0xd8, 0x20, 0xb1, 0x4a, 0x88, 0x75, 0x11,
-	0xd2, 0xc5, 0x2c, 0xe5, 0x45, 0xe1, 0x5d, 0x9a, 0x84, 0x60, 0x60, 0x6b, 0x7f, 0xa0, 0x2e, 0x64,
-	0xdc, 0x3d, 0xe9, 0xe0, 0xba, 0xb3, 0xec, 0xac, 0x86, 0x4f, 0xd0, 0xdb, 0xf4, 0x1c, 0x5d, 0xf6,
-	0x02, 0x41, 0xf8, 0x24, 0xe1, 0xe8, 0x62, 0x91, 0x5e, 0xd4, 0xdd, 0x39, 0x73, 0x0e, 0xbf, 0xf3,
-	0x9b, 0xc3, 0x81, 0x5d, 0x1f, 0xa3, 0x47, 0x19, 0x0e, 0x85, 0xdf, 0xb7, 0x26, 0x87, 0xdc, 0x0b,
-	0x06, 0xbc, 0x62, 0x29, 0xe1, 0xa2, 0xc3, 0x43, 0x16, 0x84, 0x32, 0x92, 0x34, 0x2f, 0x54, 0x24,
-	0x24, 0x5b, 0x35, 0xb2, 0xb8, 0x71, 0xef, 0x2d, 0x01, 0x5b, 0x1d, 0x0c, 0x27, 0xc2, 0xc1, 0x33,
-	0x0c, 0xd0, 0x77, 0xd1, 0x77, 0xa6, 0xf4, 0x1e, 0xfe, 0xbb, 0x71, 0x26, 0x50, 0x99, 0xa4, 0x94,
-	0x28, 0x67, 0x8e, 0x8e, 0xd9, 0x46, 0x0e, 0xfb, 0xc6, 0x60, 0xab, 0xd0, 0xfe, 0x02, 0x2b, 0x54,
-	0x21, 0xd9, 0x1c, 0x05, 0x32, 0x8c, 0xe8, 0x0e, 0xa4, 0x7d, 0x3e, 0x42, 0x15, 0x70, 0x07, 0x4d,
-	0x52, 0x22, 0xe5, 0xb4, 0xbd, 0x7a, 0xa0, 0x14, 0xfe, 0x0e, 0xa4, 0x8a, 0x4c, 0x43, 0x17, 0x74,
-	0x5c, 0x78, 0x36, 0x00, 0x3e, 0x79, 0x3e, 0x11, 0xd8, 0x56, 0x72, 0x1c, 0x3a, 0xd8, 0x9d, 0x1b,
-	0x79, 0x92, 0xbb, 0x5d, 0x8f, 0xf7, 0xd0, 0x8b, 0x95, 0x2f, 0x7f, 0xa9, 0xcc, 0x3a, 0x9a, 0x7a,
-	0xbb, 0x84, 0xb6, 0x34, 0xb3, 0xe1, 0x47, 0xe1, 0xd4, 0xce, 0xa9, 0x35, 0x25, 0x7a, 0x01, 0x29,
-	0xa1, 0x3f, 0xa5, 0x4c, 0x43, 0x4f, 0xae, 0xfc, 0x68, 0xf2, 0x62, 0x21, 0x76, 0xcc, 0x28, 0x9c,
-	0x43, 0x7e, 0xa3, 0x01, 0xcd, 0x42, 0x62, 0x88, 0xd3, 0xe5, 0xc2, 0xe6, 0x21, 0xcd, 0xc1, 0xbf,
-	0x09, 0xf7, 0xc6, 0xb8, 0xdc, 0xd5, 0x22, 0xa9, 0x1a, 0x27, 0xe4, 0x60, 0x1f, 0x32, 0x75, 0xe9,
-	0x3f, 0x88, 0x7e, 0xc7, 0x91, 0x01, 0x52, 0x80, 0x64, 0xfb, 0xba, 0xd6, 0x6a, 0xd6, 0xb3, 0x7f,
-	0x68, 0x06, 0x52, 0x6d, 0xbb, 0x79, 0x73, 0x7a, 0xd5, 0xc8, 0x92, 0x1a, 0x7b, 0x99, 0x15, 0xc9,
-	0xeb, 0xac, 0x48, 0xde, 0x67, 0x45, 0x72, 0x57, 0x5a, 0xb8, 0x0b, 0x69, 0xf1, 0x40, 0x58, 0x6b,
-	0x0e, 0xac, 0x97, 0xd4, 0x97, 0x55, 0xf9, 0x08, 0x00, 0x00, 0xff, 0xff, 0x8b, 0x5e, 0x39, 0xb5,
-	0x7e, 0x02, 0x00, 0x00,
+	// 375 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0xcd, 0xee, 0xd2, 0x40,
+	0x14, 0xc5, 0x1d, 0xfb, 0xa7, 0xc0, 0xad, 0xc6, 0x3a, 0x71, 0x51, 0x59, 0x90, 0xc2, 0xc2, 0x54,
+	0x4d, 0xda, 0x08, 0x2f, 0x20, 0x10, 0x16, 0x24, 0x2c, 0x48, 0xc1, 0x8f, 0xb8, 0x69, 0x86, 0x76,
+	0x28, 0x13, 0xeb, 0xdc, 0x66, 0x66, 0x94, 0xf8, 0x80, 0x26, 0x2e, 0x7d, 0x04, 0xc3, 0xce, 0xb7,
+	0x30, 0xfd, 0x40, 0xa3, 0x41, 0x93, 0xff, 0x6e, 0xee, 0xb9, 0xe7, 0x77, 0xe6, 0xce, 0xcd, 0xc0,
+	0x48, 0x72, 0x73, 0x42, 0xf5, 0x5e, 0xc8, 0x3c, 0xfa, 0xf4, 0x82, 0x15, 0xe5, 0x91, 0x4d, 0x23,
+	0x2d, 0x32, 0x9e, 0x32, 0x15, 0x96, 0x0a, 0x0d, 0xd2, 0xc7, 0x42, 0x1b, 0x81, 0xe1, 0x6f, 0x63,
+	0x78, 0x31, 0x0e, 0xae, 0xd2, 0x39, 0x33, 0xfc, 0xc4, 0x3e, 0x37, 0xf4, 0xf8, 0x07, 0x81, 0xee,
+	0xb6, 0xc9, 0xa3, 0x6f, 0xe1, 0x61, 0xe5, 0x2e, 0x90, 0x65, 0x89, 0xe6, 0x05, 0x4f, 0x0d, 0x2a,
+	0x8f, 0xf8, 0x24, 0x70, 0x26, 0xcf, 0xc3, 0x7f, 0xde, 0x12, 0xbe, 0x69, 0x99, 0x6d, 0x8b, 0xc4,
+	0xee, 0xe9, 0x2f, 0x85, 0xce, 0xa1, 0x2b, 0x64, 0xae, 0xb8, 0xd6, 0xde, 0x5d, 0xdf, 0x0a, 0x9c,
+	0x49, 0xf0, 0x9f, 0xbc, 0x55, 0xd5, 0x59, 0x0b, 0x6d, 0xb8, 0xe4, 0x2a, 0xbe, 0x80, 0xf4, 0x25,
+	0xd8, 0xbc, 0x89, 0xb0, 0x6e, 0x19, 0xd1, 0x72, 0xe3, 0x2f, 0x04, 0xee, 0xff, 0xd1, 0xa1, 0x14,
+	0x6e, 0x24, 0xfb, 0xc0, 0xeb, 0x47, 0xf6, 0xe3, 0xfa, 0x4c, 0x47, 0x70, 0x6f, 0x2f, 0x64, 0x96,
+	0xb0, 0x2c, 0x6b, 0x07, 0xae, 0x7a, 0x4e, 0xa5, 0xcd, 0x1a, 0x89, 0xfa, 0xad, 0xc5, 0x60, 0x52,
+	0xa2, 0x32, 0x9e, 0xe5, 0x93, 0xa0, 0x17, 0x43, 0xa5, 0xed, 0x70, 0x83, 0xca, 0xd0, 0x01, 0xf4,
+	0xea, 0xfd, 0xa6, 0x58, 0x78, 0x37, 0x75, 0xc0, 0xaf, 0x9a, 0x3e, 0x82, 0xce, 0x11, 0xb5, 0xd1,
+	0x5e, 0xc7, 0xb7, 0x82, 0x7e, 0xdc, 0x14, 0xf4, 0x29, 0xb8, 0x19, 0x3f, 0xb0, 0x8f, 0x85, 0x49,
+	0xb8, 0xcc, 0x4a, 0x14, 0xd2, 0x78, 0x76, 0x4d, 0x3e, 0x68, 0xf5, 0x65, 0x2b, 0x3f, 0x7b, 0x02,
+	0xce, 0x02, 0xe5, 0x41, 0xe4, 0xdb, 0x14, 0x4b, 0x4e, 0x01, 0xec, 0xcd, 0xab, 0xf9, 0x7a, 0xb5,
+	0x70, 0xef, 0x50, 0x07, 0xba, 0x9b, 0x78, 0xf5, 0x7a, 0xb6, 0x5b, 0xba, 0x64, 0x1e, 0x7e, 0x3d,
+	0x0f, 0xc9, 0xb7, 0xf3, 0x90, 0x7c, 0x3f, 0x0f, 0xc9, 0x3b, 0xbf, 0x59, 0x97, 0xc0, 0x88, 0x95,
+	0x22, 0xba, 0xf2, 0x33, 0xf6, 0x76, 0x3d, 0xe2, 0xf4, 0x67, 0x00, 0x00, 0x00, 0xff, 0xff, 0xe4,
+	0xba, 0xfd, 0xef, 0x75, 0x02, 0x00, 0x00,
 }

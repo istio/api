@@ -3010,6 +3010,11 @@
                 "name": "servers",
                 "type": "Server",
                 "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "workload_selector",
+                "type": "WorkloadSelector"
               }
             ],
             "maps": [
@@ -3115,6 +3120,26 @@
                 "id": 3,
                 "name": "name",
                 "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "WorkloadSelector",
+            "fields": [
+              {
+                "id": 2,
+                "name": "ip",
+                "type": "string"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 1,
+                  "name": "labels",
+                  "type": "string"
+                }
               }
             ]
           }
@@ -3269,51 +3294,60 @@
         ],
         "messages": [
           {
-            "name": "ServiceDependency",
+            "name": "Sidecar",
             "fields": [
               {
                 "id": 1,
-                "name": "dependencies",
-                "type": "Dependency",
-                "is_repeated": true
-              }
-            ],
-            "messages": [
-              {
-                "name": "Import",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "namespace",
-                    "type": "string"
-                  },
-                  {
-                    "id": 2,
-                    "name": "host",
-                    "type": "string"
-                  }
-                ]
+                "name": "workload_selector",
+                "type": "WorkloadSelector"
               },
               {
-                "name": "Dependency",
-                "fields": [
-                  {
-                    "id": 2,
-                    "name": "imports",
-                    "type": "Import",
-                    "is_repeated": true
-                  }
-                ],
-                "maps": [
-                  {
-                    "key_type": "string",
-                    "field": {
-                      "id": 1,
-                      "name": "source_workload_labels",
-                      "type": "string"
-                    }
-                  }
-                ]
+                "id": 2,
+                "name": "ingress",
+                "type": "IstioListener",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "egress",
+                "type": "IstioListener",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "IstioListener",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "bind_address",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "bind_to_port",
+                "type": "bool"
+              },
+              {
+                "id": 4,
+                "name": "protocol",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "hosts",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 6,
+                "name": "default_endpoint",
+                "type": "string"
               }
             ]
           }
