@@ -3032,9 +3032,19 @@
             "name": "Server",
             "fields": [
               {
+                "id": 6,
+                "name": "name",
+                "type": "string"
+              },
+              {
                 "id": 1,
                 "name": "port",
                 "type": "Port"
+              },
+              {
+                "id": 5,
+                "name": "bind_address",
+                "type": "string"
               },
               {
                 "id": 2,
@@ -3046,6 +3056,11 @@
                 "id": 3,
                 "name": "tls",
                 "type": "TLSOptions"
+              },
+              {
+                "id": 4,
+                "name": "default_endpoint",
+                "type": "string"
               }
             ],
             "messages": [

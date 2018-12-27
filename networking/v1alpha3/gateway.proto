@@ -236,9 +236,15 @@ message Gateway {
 //       privateKey: /etc/certs/privatekey.pem
 // ```
 message Server {
+  // An arbitrary name associated with this server. Used for emitting metrics.
+  string name = 6;
+
   // REQUIRED: The Port on which the proxy should listen for incoming
   // connections
   Port port = 1;
+
+  // The IP address to which the listener should be bound to.
+  string bind_address = 5;
 
   // REQUIRED. A list of hosts exposed by this gateway. At least one
   // host is required. While typically applicable to
@@ -343,6 +349,14 @@ message Server {
   // these options to control if all http requests should be redirected to
   // https, and the TLS modes to use.
   TLSOptions tls = 3;
+
+  // The IP endpoint or unix domain socket to which traffic should be
+  // forwarded to by default. In the context of an ingress server, this
+  // configuration can be used to redirect traffic arriving at the bind
+  // point on the sidecar to a port or unix domain socket where the
+  // application workload is listening for connections. Format should be
+  // tcp://127.0.0.1:PORT or unix:///path/to/socket
+  string default_endpoint = 4;
 }
 
 // Port describes the properties of a specific port of a service.
