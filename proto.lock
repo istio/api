@@ -2560,6 +2560,12 @@
                 "id": 2,
                 "name": "consistent_hash",
                 "type": "ConsistentHashLB"
+              },
+              {
+                "id": 3,
+                "name": "locality_weight_settings",
+                "type": "LocalityWeightSetting",
+                "is_repeated": true
               }
             ],
             "messages": [
@@ -2607,6 +2613,26 @@
                         "type": "google.protobuf.Duration"
                       }
                     ]
+                  }
+                ]
+              },
+              {
+                "name": "LocalityWeightSetting",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "from",
+                    "type": "string"
+                  }
+                ],
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 2,
+                      "name": "to",
+                      "type": "uint32"
+                    }
                   }
                 ]
               }
