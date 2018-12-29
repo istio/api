@@ -33,10 +33,11 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //
 // Services and configuration in a mesh are organized into one or more
 // namespaces (e.g., a Kubernetes namespace or a CF org/space). A Sidecar
-// resource in a namespace will apply to all workloads in the namespace.
-// *_Currently, each namespace should have only one Sidecar resource named
-// "default"_*. The behavior of the system is undefined if more than one
-// Sidecar resource exists in a given namespace.
+// resource in a namespace will apply to all workloads in the namespace in
+// the absence of a workload selector.  *_Currently, each namespace should
+// have only one Sidecar resource without any workload selector_*. The
+// behavior of the system is undefined if more than one Sidecar resource
+// exists in a given namespace.
 //
 // The example below delcares a Sidecar resource in the prod-us1 namespace
 // that configures the sidecar to proxy egress traffic for services in the
@@ -58,7 +59,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // ```
 //
 // The example below delcares a Sidecar resource in the prod-us1 namespace
-// that accepts inbound HTTP traffic on port 10.10.10.10:9080 and forwards
+// that accepts inbound HTTP traffic on port 9080 and forwards
 // it to the attached workload listening on a unix domain socket. In the
 // egress direction, in addition to the istio-system namespace, the sidecar
 // proxies only HTTP traffic bound for port 9080 for services in the
@@ -72,19 +73,24 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //   namespace: prod-us1
 // spec:
 //   ingress:
-//   - bind: tcp://10.10.10.10:9080
-//     protocol: HTTP
+//   - port:
+//       number: 9080
+//       protocol: HTTP
+//       name: somename
 //     defaultEndpoint: unix:///var/run/someuds.sock
 //   egress:
 //   - hosts:
 //     - "istio-system/*"
-//   - bind: tcp://0.0.0.0:9080
-//     protocol: HTTP
+//   - port:
+//       number: 9080
+//       protocol: HTTP
+//       name: egresshttp
 //     hosts:
 //     - "prod-us1/*"
 // ```
 //
 message Sidecar {
+  // $hide_from_docs
   // Criteria used to select the specific set of pods/VMs on which this
   // sidecar configuration should be applied. If omitted, the sidecar
   // configuration will be applied to all workloads in the current config
@@ -108,15 +114,30 @@ message Sidecar {
 // IstioListener specifies the properties of a single listener on the
 // sidecar proxy attached to a workload.
 message IstioListener {
-  // An arbitrary name associated with the listener used for emitting metrics.
+  // An optional arbitrary name associated with the listener used for
+  // emitting metrics.
   string name = 1;
 
-  // The ip:port or the unix domain socket to which the listener should be
-  // bound to. Format: tcp://x.x.x.x:yyyy or unix:///path/to/uds or
-  // unix://@foobar (Linux abstract namespace).  To bind to any IP with
-  // specific port, use tcp://0.0.0.0:<port>
-  string bind_address = 2;
+  // REQUIRED for ingress. The port associated with the listener. If using
+  // unix domain socket, use 0 as the port number, with a valid
+  // protocol. In the egress path, the port if specified, will be used as
+  // the default destination port associated with the imported hosts. If
+  // the port is omitted, Istio will infer the listener ports based on the
+  // imported hosts. Note that when multiple egress listeners are
+  // specified, where one or more listeners have specific ports while
+  // others have no port, the hosts exposed on a listener port will be
+  // based on the listener with the most specific port.
+  Port port = 2;
 
+  // The ip or the unix domain socket to which the listener should be bound
+  // to. Port MUST be specified if bindAddress is not empty. Format:
+  // x.x.x.x or unix:///path/to/uds or unix://@foobar (Linux abstract
+  // namespace). If omitted, Istio will autoconfigure the defaults based on
+  // imported services and the workload to which this configuration is
+  // applied to.
+  string bind_address = 3;
+
+  // $hide_from_docs
   // When the bind address is an IP:port, the bindToPort option dictates
   // whether or not the sidecar should bind its listener socket to the
   // specified port. Set bindToPort to false (default) if application
@@ -126,15 +147,14 @@ message IstioListener {
   // iptables for traffic capture, set bindToPort to true to force the
   // sidecar to bind to the specified port. Note that the binding might
   // fail if the application workload is already bound to the same port.
-  bool bind_to_port = 3;
+  bool bind_to_port = 4;
 
-  // The protocol associated with this listener.
-  // MUST BE one of HTTP|TCP|TLS|MONGO.
-  // TLS implies the connection will be routed based on the SNI header.
-  // HTTP implies HTTP 1.1/HTTP 2/gRPC
-  string protocol = 4;
+  // Specifies the protocol associated with this listener.  Recognized
+  // values are HTTP|TCP|MONGO|MYSQL. Any other value will be treated as
+  // equivalent to TCP.
+  string protocol = 5;
 
-  // One or more hosts (HTTP or SNI) exposed by the listener in
+  // One or more services/virtualServices exposed by the listener in
   // namespace/dnsName format.  _*Hosts will be ignored for ingress
   // servers*_. For egress servers, the hosts field results in importing
   // one or more publicly scoped services and VirtualServices from remote
@@ -154,15 +174,15 @@ message IstioListener {
   // namespace can be imported. Private services/configuration will not be
   // imported. Refer to the scope setting associated with VirtualService,
   // DestinationRule, ServiceEntry, etc. for details.
-  repeated string hosts = 5;
+  repeated string hosts = 6;
 
   // The IP endpoint or unix domain socket to which traffic should be
   // forwarded to by default. In the context of an ingress server, this
   // configuration can be used to redirect traffic arriving at the bind
   // point on the sidecar to a port or unix domain socket where the
   // application workload is listening for connections. Format should be
-  // tcp://127.0.0.1:PORT or unix:///path/to/socket
-  string default_endpoint = 6;
+  // 127.0.0.1:PORT or unix:///path/to/socket
+  string default_endpoint = 7;
 }
 
 // ConfigScope defines the visibility of an Istio configuration artifact in

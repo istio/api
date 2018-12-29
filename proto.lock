@@ -823,7 +823,7 @@
                 "type": "bool"
               },
               {
-                "id": 30,
+                "id": 29,
                 "name": "sds_use_k8s_sa_jwt",
                 "type": "bool"
               },
@@ -835,8 +835,7 @@
             ],
             "reserved_ids": [
               15,
-              18,
-              29
+              18
             ],
             "messages": [
               {
@@ -3140,13 +3139,6 @@
           },
           {
             "name": "WorkloadSelector",
-            "fields": [
-              {
-                "id": 2,
-                "name": "ip",
-                "type": "string"
-              }
-            ],
             "maps": [
               {
                 "key_type": "string",
@@ -3340,27 +3332,32 @@
               },
               {
                 "id": 2,
+                "name": "port",
+                "type": "Port"
+              },
+              {
+                "id": 3,
                 "name": "bind_address",
                 "type": "string"
               },
               {
-                "id": 3,
+                "id": 4,
                 "name": "bind_to_port",
                 "type": "bool"
               },
               {
-                "id": 4,
+                "id": 5,
                 "name": "protocol",
                 "type": "string"
               },
               {
-                "id": 5,
+                "id": 6,
                 "name": "hosts",
                 "type": "string",
                 "is_repeated": true
               },
               {
-                "id": 6,
+                "id": 7,
                 "name": "default_endpoint",
                 "type": "string"
               }

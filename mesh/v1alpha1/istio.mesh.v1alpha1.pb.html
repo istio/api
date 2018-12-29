@@ -4,7 +4,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 aliases:
   - /docs/reference/config/service-mesh.html
-number_of_entries: 16
+number_of_entries: 15
 ---
 <h2 id="AuthenticationPolicy">AuthenticationPolicy</h2>
 <section>
@@ -373,26 +373,6 @@ cloud-provided ingress controller).</p>
 </tbody>
 </table>
 </section>
-<h2 id="MeshConfig-OutboundTrafficPolicy">MeshConfig.OutboundTrafficPolicy</h2>
-<section>
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="MeshConfig-OutboundTrafficPolicy-mode" class="deprecated ">
-<td><code>mode</code></td>
-<td><code><a href="#MeshConfig-OutboundTrafficPolicy-Mode">MeshConfig.OutboundTrafficPolicy.Mode</a></code></td>
-<td>
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="MeshConfig-OutboundTrafficPolicy-Mode">MeshConfig.OutboundTrafficPolicy.Mode</h2>
 <section>
 <table class="enum-values">
@@ -421,7 +401,7 @@ through ServiceEntries</p>
 <tr id="MeshConfig-OutboundTrafficPolicy-Mode-VIRTUAL_SERVICE_ONLY" class="deprecated ">
 <td><code>VIRTUAL_SERVICE_ONLY</code></td>
 <td>
-<p>not implemented. outbound traffic will be restricted to destinations defined in VirtualServices only</p>
+<p>outbound traffic will be restricted to destinations defined in VirtualServices only</p>
 
 </td>
 </tr>

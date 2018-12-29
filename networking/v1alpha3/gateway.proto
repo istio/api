@@ -355,7 +355,7 @@ message Server {
   // configuration can be used to redirect traffic arriving at the bind
   // point on the sidecar to a port or unix domain socket where the
   // application workload is listening for connections. Format should be
-  // tcp://127.0.0.1:PORT or unix:///path/to/socket
+  // 127.0.0.1:PORT or unix:///path/to/socket
   string default_endpoint = 4;
 }
 
@@ -385,10 +385,7 @@ message WorkloadSelector {
   // workload is present.
   map<string, string> labels = 1;
 
-  // The IP address of the workload (as seen by Pilot) on which this
-  // gateway/sidecar configuration should be applied.
-  string ip = 2;
-
+  // $hide_from_docs
   // [#not-implemented-hide:]
   // other forms of identification such as X509 fields, tenant IDs, JWT,
   // etc. will be added in future.

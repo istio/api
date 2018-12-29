@@ -2166,7 +2166,24 @@ sidecar proxy attached to a workload.</p>
 <td><code>name</code></td>
 <td><code>string</code></td>
 <td>
-<p>An arbitrary name associated with the listener used for emitting metrics.</p>
+<p>An optional arbitrary name associated with the listener used for
+emitting metrics.</p>
+
+</td>
+</tr>
+<tr id="IstioListener-port">
+<td><code>port</code></td>
+<td><code><a href="#Port">Port</a></code></td>
+<td>
+<p>REQUIRED for ingress. The port associated with the listener. If using
+unix domain socket, use 0 as the port number, with a valid
+protocol. In the egress path, the port if specified, will be used as
+the default destination port associated with the imported hosts. If
+the port is omitted, Istio will infer the listener ports based on the
+imported hosts. Note that when multiple egress listeners are
+specified, where one or more listeners have specific ports while
+others have no port, the hosts exposed on a listener port will be
+based on the listener with the most specific port.</p>
 
 </td>
 </tr>
@@ -2174,26 +2191,12 @@ sidecar proxy attached to a workload.</p>
 <td><code>bindAddress</code></td>
 <td><code>string</code></td>
 <td>
-<p>The ip:port or the unix domain socket to which the listener should be
-bound to. Format: tcp://x.x.x.x:yyyy or unix:///path/to/uds or
-unix://@foobar (Linux abstract namespace).  To bind to any IP with
-specific port, use tcp://0.0.0.0:<port></p>
-
-</td>
-</tr>
-<tr id="IstioListener-bind_to_port">
-<td><code>bindToPort</code></td>
-<td><code>bool</code></td>
-<td>
-<p>When the bind address is an IP:port, the bindToPort option dictates
-whether or not the sidecar should bind its listener socket to the
-specified port. Set bindToPort to false (default) if application
-traffic entering/leaving a pod/VM is captured automatically through
-iptables redirection and forwarded to the sidecar on a specific port
-(see proxyListenPort in the global MeshConfig). When not using
-iptables for traffic capture, set bindToPort to true to force the
-sidecar to bind to the specified port. Note that the binding might
-fail if the application workload is already bound to the same port.</p>
+<p>The ip or the unix domain socket to which the listener should be bound
+to. Port MUST be specified if bindAddress is not empty. Format:
+x.x.x.x or unix:///path/to/uds or unix://@foobar (Linux abstract
+namespace). If omitted, Istio will autoconfigure the defaults based on
+imported services and the workload to which this configuration is
+applied to.</p>
 
 </td>
 </tr>
@@ -2201,10 +2204,9 @@ fail if the application workload is already bound to the same port.</p>
 <td><code>protocol</code></td>
 <td><code>string</code></td>
 <td>
-<p>The protocol associated with this listener.
-MUST BE one of HTTP|TCP|TLS|MONGO.
-TLS implies the connection will be routed based on the SNI header.
-HTTP implies HTTP 1.1/HTTP 2/gRPC</p>
+<p>Specifies the protocol associated with this listener.  Recognized
+values are HTTP|TCP|MONGO|MYSQL. Any other value will be treated as
+equivalent to TCP.</p>
 
 </td>
 </tr>
@@ -2212,7 +2214,7 @@ HTTP implies HTTP 1.1/HTTP 2/gRPC</p>
 <td><code>hosts</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>One or more hosts (HTTP or SNI) exposed by the listener in
+<p>One or more services/virtualServices exposed by the listener in
 namespace/dnsName format.  <em><em>Hosts will be ignored for ingress
 servers</em></em>. For egress servers, the hosts field results in importing
 one or more publicly scoped services and VirtualServices from remote
@@ -2244,7 +2246,7 @@ forwarded to by default. In the context of an ingress server, this
 configuration can be used to redirect traffic arriving at the bind
 point on the sidecar to a port or unix domain socket where the
 application workload is listening for connections. Format should be
-tcp://127.0.0.1:PORT or unix:///path/to/socket</p>
+127.0.0.1:PORT or unix:///path/to/socket</p>
 
 </td>
 </tr>
@@ -2887,7 +2889,7 @@ forwarded to by default. In the context of an ingress server, this
 configuration can be used to redirect traffic arriving at the bind
 point on the sidecar to a port or unix domain socket where the
 application workload is listening for connections. Format should be
-tcp://127.0.0.1:PORT or unix:///path/to/socket</p>
+127.0.0.1:PORT or unix:///path/to/socket</p>
 
 </td>
 </tr>
@@ -3649,10 +3651,11 @@ traffic from the workload.</p>
 
 <p>Services and configuration in a mesh are organized into one or more
 namespaces (e.g., a Kubernetes namespace or a CF org/space). A Sidecar
-resource in a namespace will apply to all workloads in the namespace.
-<em><em>Currently, each namespace should have only one Sidecar resource named
-&ldquo;default&rdquo;</em></em>. The behavior of the system is undefined if more than one
-Sidecar resource exists in a given namespace.</p>
+resource in a namespace will apply to all workloads in the namespace in
+the absence of a workload selector.  <em><em>Currently, each namespace should
+have only one Sidecar resource without any workload selector</em></em>. The
+behavior of the system is undefined if more than one Sidecar resource
+exists in a given namespace.</p>
 
 <p>The example below delcares a Sidecar resource in the prod-us1 namespace
 that configures the sidecar to proxy egress traffic for services in the
@@ -3673,7 +3676,7 @@ spec:
 </code></pre>
 
 <p>The example below delcares a Sidecar resource in the prod-us1 namespace
-that accepts inbound HTTP traffic on port 10.10.10.10:9080 and forwards
+that accepts inbound HTTP traffic on port 9080 and forwards
 it to the attached workload listening on a unix domain socket. In the
 egress direction, in addition to the istio-system namespace, the sidecar
 proxies only HTTP traffic bound for port 9080 for services in the
@@ -3686,14 +3689,18 @@ metadata:
   namespace: prod-us1
 spec:
   ingress:
-  - bind: tcp://10.10.10.10:9080
-    protocol: HTTP
+  - port:
+      number: 9080
+      protocol: HTTP
+      name: somename
     defaultEndpoint: unix:///var/run/someuds.sock
   egress:
   - hosts:
     - &quot;istio-system/*&quot;
-  - bind: tcp://0.0.0.0:9080
-    protocol: HTTP
+  - port:
+      number: 9080
+      protocol: HTTP
+      name: egresshttp
     hosts:
     - &quot;prod-us1/*&quot;
 </code></pre>
@@ -3707,17 +3714,6 @@ spec:
 </tr>
 </thead>
 <tbody>
-<tr id="Sidecar-workload_selector">
-<td><code>workloadSelector</code></td>
-<td><code><a href="#WorkloadSelector">WorkloadSelector</a></code></td>
-<td>
-<p>Criteria used to select the specific set of pods/VMs on which this
-sidecar configuration should be applied. If omitted, the sidecar
-configuration will be applied to all workloads in the current config
-namespace.</p>
-
-</td>
-</tr>
 <tr id="Sidecar-ingress">
 <td><code>ingress</code></td>
 <td><code><a href="#IstioListener">IstioListener[]</a></code></td>
@@ -4533,15 +4529,6 @@ workload to be selected.</p>
 this gateway/sidecar configuration should be applied. The scope of
 label search is restricted to the configuration namespace in which the
 workload is present.</p>
-
-</td>
-</tr>
-<tr id="WorkloadSelector-ip">
-<td><code>ip</code></td>
-<td><code>string</code></td>
-<td>
-<p>The IP address of the workload (as seen by Pilot) on which this
-gateway/sidecar configuration should be applied.</p>
 
 </td>
 </tr>

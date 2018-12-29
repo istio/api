@@ -56,10 +56,11 @@ func (ConfigScope) EnumDescriptor() ([]byte, []int) { return fileDescriptorSidec
 //
 // Services and configuration in a mesh are organized into one or more
 // namespaces (e.g., a Kubernetes namespace or a CF org/space). A Sidecar
-// resource in a namespace will apply to all workloads in the namespace.
-// *_Currently, each namespace should have only one Sidecar resource named
-// "default"_*. The behavior of the system is undefined if more than one
-// Sidecar resource exists in a given namespace.
+// resource in a namespace will apply to all workloads in the namespace in
+// the absence of a workload selector.  *_Currently, each namespace should
+// have only one Sidecar resource without any workload selector_*. The
+// behavior of the system is undefined if more than one Sidecar resource
+// exists in a given namespace.
 //
 // The example below delcares a Sidecar resource in the prod-us1 namespace
 // that configures the sidecar to proxy egress traffic for services in the
@@ -81,7 +82,7 @@ func (ConfigScope) EnumDescriptor() ([]byte, []int) { return fileDescriptorSidec
 // ```
 //
 // The example below delcares a Sidecar resource in the prod-us1 namespace
-// that accepts inbound HTTP traffic on port 10.10.10.10:9080 and forwards
+// that accepts inbound HTTP traffic on port 9080 and forwards
 // it to the attached workload listening on a unix domain socket. In the
 // egress direction, in addition to the istio-system namespace, the sidecar
 // proxies only HTTP traffic bound for port 9080 for services in the
@@ -95,19 +96,24 @@ func (ConfigScope) EnumDescriptor() ([]byte, []int) { return fileDescriptorSidec
 //   namespace: prod-us1
 // spec:
 //   ingress:
-//   - bind: tcp://10.10.10.10:9080
-//     protocol: HTTP
+//   - port:
+//       number: 9080
+//       protocol: HTTP
+//       name: somename
 //     defaultEndpoint: unix:///var/run/someuds.sock
 //   egress:
 //   - hosts:
 //     - "istio-system/*"
-//   - bind: tcp://0.0.0.0:9080
-//     protocol: HTTP
+//   - port:
+//       number: 9080
+//       protocol: HTTP
+//       name: egresshttp
 //     hosts:
 //     - "prod-us1/*"
 // ```
 //
 type Sidecar struct {
+	// $hide_from_docs
 	// Criteria used to select the specific set of pods/VMs on which this
 	// sidecar configuration should be applied. If omitted, the sidecar
 	// configuration will be applied to all workloads in the current config
@@ -155,13 +161,27 @@ func (m *Sidecar) GetEgress() []*IstioListener {
 // IstioListener specifies the properties of a single listener on the
 // sidecar proxy attached to a workload.
 type IstioListener struct {
-	// An arbitrary name associated with the listener used for emitting metrics.
+	// An optional arbitrary name associated with the listener used for
+	// emitting metrics.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// The ip:port or the unix domain socket to which the listener should be
-	// bound to. Format: tcp://x.x.x.x:yyyy or unix:///path/to/uds or
-	// unix://@foobar (Linux abstract namespace).  To bind to any IP with
-	// specific port, use tcp://0.0.0.0:<port>
-	BindAddress string `protobuf:"bytes,2,opt,name=bind_address,json=bindAddress,proto3" json:"bind_address,omitempty"`
+	// REQUIRED for ingress. The port associated with the listener. If using
+	// unix domain socket, use 0 as the port number, with a valid
+	// protocol. In the egress path, the port if specified, will be used as
+	// the default destination port associated with the imported hosts. If
+	// the port is omitted, Istio will infer the listener ports based on the
+	// imported hosts. Note that when multiple egress listeners are
+	// specified, where one or more listeners have specific ports while
+	// others have no port, the hosts exposed on a listener port will be
+	// based on the listener with the most specific port.
+	Port *Port `protobuf:"bytes,2,opt,name=port" json:"port,omitempty"`
+	// The ip or the unix domain socket to which the listener should be bound
+	// to. Port MUST be specified if bindAddress is not empty. Format:
+	// x.x.x.x or unix:///path/to/uds or unix://@foobar (Linux abstract
+	// namespace). If omitted, Istio will autoconfigure the defaults based on
+	// imported services and the workload to which this configuration is
+	// applied to.
+	BindAddress string `protobuf:"bytes,3,opt,name=bind_address,json=bindAddress,proto3" json:"bind_address,omitempty"`
+	// $hide_from_docs
 	// When the bind address is an IP:port, the bindToPort option dictates
 	// whether or not the sidecar should bind its listener socket to the
 	// specified port. Set bindToPort to false (default) if application
@@ -171,13 +191,12 @@ type IstioListener struct {
 	// iptables for traffic capture, set bindToPort to true to force the
 	// sidecar to bind to the specified port. Note that the binding might
 	// fail if the application workload is already bound to the same port.
-	BindToPort bool `protobuf:"varint,3,opt,name=bind_to_port,json=bindToPort,proto3" json:"bind_to_port,omitempty"`
-	// The protocol associated with this listener.
-	// MUST BE one of HTTP|TCP|TLS|MONGO.
-	// TLS implies the connection will be routed based on the SNI header.
-	// HTTP implies HTTP 1.1/HTTP 2/gRPC
-	Protocol string `protobuf:"bytes,4,opt,name=protocol,proto3" json:"protocol,omitempty"`
-	// One or more hosts (HTTP or SNI) exposed by the listener in
+	BindToPort bool `protobuf:"varint,4,opt,name=bind_to_port,json=bindToPort,proto3" json:"bind_to_port,omitempty"`
+	// Specifies the protocol associated with this listener.  Recognized
+	// values are HTTP|TCP|MONGO|MYSQL. Any other value will be treated as
+	// equivalent to TCP.
+	Protocol string `protobuf:"bytes,5,opt,name=protocol,proto3" json:"protocol,omitempty"`
+	// One or more services/virtualServices exposed by the listener in
 	// namespace/dnsName format.  _*Hosts will be ignored for ingress
 	// servers*_. For egress servers, the hosts field results in importing
 	// one or more publicly scoped services and VirtualServices from remote
@@ -197,14 +216,14 @@ type IstioListener struct {
 	// namespace can be imported. Private services/configuration will not be
 	// imported. Refer to the scope setting associated with VirtualService,
 	// DestinationRule, ServiceEntry, etc. for details.
-	Hosts []string `protobuf:"bytes,5,rep,name=hosts" json:"hosts,omitempty"`
+	Hosts []string `protobuf:"bytes,6,rep,name=hosts" json:"hosts,omitempty"`
 	// The IP endpoint or unix domain socket to which traffic should be
 	// forwarded to by default. In the context of an ingress server, this
 	// configuration can be used to redirect traffic arriving at the bind
 	// point on the sidecar to a port or unix domain socket where the
 	// application workload is listening for connections. Format should be
-	// tcp://127.0.0.1:PORT or unix:///path/to/socket
-	DefaultEndpoint string `protobuf:"bytes,6,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
+	// 127.0.0.1:PORT or unix:///path/to/socket
+	DefaultEndpoint string `protobuf:"bytes,7,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
 }
 
 func (m *IstioListener) Reset()                    { *m = IstioListener{} }
@@ -217,6 +236,13 @@ func (m *IstioListener) GetName() string {
 		return m.Name
 	}
 	return ""
+}
+
+func (m *IstioListener) GetPort() *Port {
+	if m != nil {
+		return m.Port
+	}
+	return nil
 }
 
 func (m *IstioListener) GetBindAddress() string {
@@ -332,14 +358,24 @@ func (m *IstioListener) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintSidecar(dAtA, i, uint64(len(m.Name)))
 		i += copy(dAtA[i:], m.Name)
 	}
-	if len(m.BindAddress) > 0 {
+	if m.Port != nil {
 		dAtA[i] = 0x12
+		i++
+		i = encodeVarintSidecar(dAtA, i, uint64(m.Port.Size()))
+		n2, err := m.Port.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
+	}
+	if len(m.BindAddress) > 0 {
+		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintSidecar(dAtA, i, uint64(len(m.BindAddress)))
 		i += copy(dAtA[i:], m.BindAddress)
 	}
 	if m.BindToPort {
-		dAtA[i] = 0x18
+		dAtA[i] = 0x20
 		i++
 		if m.BindToPort {
 			dAtA[i] = 1
@@ -349,14 +385,14 @@ func (m *IstioListener) MarshalTo(dAtA []byte) (int, error) {
 		i++
 	}
 	if len(m.Protocol) > 0 {
-		dAtA[i] = 0x22
+		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintSidecar(dAtA, i, uint64(len(m.Protocol)))
 		i += copy(dAtA[i:], m.Protocol)
 	}
 	if len(m.Hosts) > 0 {
 		for _, s := range m.Hosts {
-			dAtA[i] = 0x2a
+			dAtA[i] = 0x32
 			i++
 			l = len(s)
 			for l >= 1<<7 {
@@ -370,7 +406,7 @@ func (m *IstioListener) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if len(m.DefaultEndpoint) > 0 {
-		dAtA[i] = 0x32
+		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintSidecar(dAtA, i, uint64(len(m.DefaultEndpoint)))
 		i += copy(dAtA[i:], m.DefaultEndpoint)
@@ -414,6 +450,10 @@ func (m *IstioListener) Size() (n int) {
 	_ = l
 	l = len(m.Name)
 	if l > 0 {
+		n += 1 + l + sovSidecar(uint64(l))
+	}
+	if m.Port != nil {
+		l = m.Port.Size()
 		n += 1 + l + sovSidecar(uint64(l))
 	}
 	l = len(m.BindAddress)
@@ -658,6 +698,39 @@ func (m *IstioListener) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSidecar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSidecar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Port == nil {
+				m.Port = &Port{}
+			}
+			if err := m.Port.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BindAddress", wireType)
 			}
 			var stringLen uint64
@@ -685,7 +758,7 @@ func (m *IstioListener) Unmarshal(dAtA []byte) error {
 			}
 			m.BindAddress = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BindToPort", wireType)
 			}
@@ -705,7 +778,7 @@ func (m *IstioListener) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.BindToPort = bool(v != 0)
-		case 4:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Protocol", wireType)
 			}
@@ -734,7 +807,7 @@ func (m *IstioListener) Unmarshal(dAtA []byte) error {
 			}
 			m.Protocol = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 5:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Hosts", wireType)
 			}
@@ -763,7 +836,7 @@ func (m *IstioListener) Unmarshal(dAtA []byte) error {
 			}
 			m.Hosts = append(m.Hosts, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
-		case 6:
+		case 7:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field DefaultEndpoint", wireType)
 			}
@@ -921,29 +994,30 @@ var (
 func init() { proto.RegisterFile("networking/v1alpha3/sidecar.proto", fileDescriptorSidecar) }
 
 var fileDescriptorSidecar = []byte{
-	// 375 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0xcd, 0xee, 0xd2, 0x40,
-	0x14, 0xc5, 0x1d, 0xfb, 0xa7, 0xc0, 0xad, 0xc6, 0x3a, 0x71, 0x51, 0x59, 0x90, 0xc2, 0xc2, 0x54,
-	0x4d, 0xda, 0x08, 0x2f, 0x20, 0x10, 0x16, 0x24, 0x2c, 0x48, 0xc1, 0x8f, 0xb8, 0x69, 0x86, 0x76,
-	0x28, 0x13, 0xeb, 0xdc, 0x66, 0x66, 0x94, 0xf8, 0x80, 0x26, 0x2e, 0x7d, 0x04, 0xc3, 0xce, 0xb7,
-	0x30, 0xfd, 0x40, 0xa3, 0x41, 0x93, 0xff, 0x6e, 0xee, 0xb9, 0xe7, 0x77, 0xe6, 0xce, 0xcd, 0xc0,
-	0x48, 0x72, 0x73, 0x42, 0xf5, 0x5e, 0xc8, 0x3c, 0xfa, 0xf4, 0x82, 0x15, 0xe5, 0x91, 0x4d, 0x23,
-	0x2d, 0x32, 0x9e, 0x32, 0x15, 0x96, 0x0a, 0x0d, 0xd2, 0xc7, 0x42, 0x1b, 0x81, 0xe1, 0x6f, 0x63,
-	0x78, 0x31, 0x0e, 0xae, 0xd2, 0x39, 0x33, 0xfc, 0xc4, 0x3e, 0x37, 0xf4, 0xf8, 0x07, 0x81, 0xee,
-	0xb6, 0xc9, 0xa3, 0x6f, 0xe1, 0x61, 0xe5, 0x2e, 0x90, 0x65, 0x89, 0xe6, 0x05, 0x4f, 0x0d, 0x2a,
-	0x8f, 0xf8, 0x24, 0x70, 0x26, 0xcf, 0xc3, 0x7f, 0xde, 0x12, 0xbe, 0x69, 0x99, 0x6d, 0x8b, 0xc4,
-	0xee, 0xe9, 0x2f, 0x85, 0xce, 0xa1, 0x2b, 0x64, 0xae, 0xb8, 0xd6, 0xde, 0x5d, 0xdf, 0x0a, 0x9c,
-	0x49, 0xf0, 0x9f, 0xbc, 0x55, 0xd5, 0x59, 0x0b, 0x6d, 0xb8, 0xe4, 0x2a, 0xbe, 0x80, 0xf4, 0x25,
-	0xd8, 0xbc, 0x89, 0xb0, 0x6e, 0x19, 0xd1, 0x72, 0xe3, 0x2f, 0x04, 0xee, 0xff, 0xd1, 0xa1, 0x14,
-	0x6e, 0x24, 0xfb, 0xc0, 0xeb, 0x47, 0xf6, 0xe3, 0xfa, 0x4c, 0x47, 0x70, 0x6f, 0x2f, 0x64, 0x96,
-	0xb0, 0x2c, 0x6b, 0x07, 0xae, 0x7a, 0x4e, 0xa5, 0xcd, 0x1a, 0x89, 0xfa, 0xad, 0xc5, 0x60, 0x52,
-	0xa2, 0x32, 0x9e, 0xe5, 0x93, 0xa0, 0x17, 0x43, 0xa5, 0xed, 0x70, 0x83, 0xca, 0xd0, 0x01, 0xf4,
-	0xea, 0xfd, 0xa6, 0x58, 0x78, 0x37, 0x75, 0xc0, 0xaf, 0x9a, 0x3e, 0x82, 0xce, 0x11, 0xb5, 0xd1,
-	0x5e, 0xc7, 0xb7, 0x82, 0x7e, 0xdc, 0x14, 0xf4, 0x29, 0xb8, 0x19, 0x3f, 0xb0, 0x8f, 0x85, 0x49,
-	0xb8, 0xcc, 0x4a, 0x14, 0xd2, 0x78, 0x76, 0x4d, 0x3e, 0x68, 0xf5, 0x65, 0x2b, 0x3f, 0x7b, 0x02,
-	0xce, 0x02, 0xe5, 0x41, 0xe4, 0xdb, 0x14, 0x4b, 0x4e, 0x01, 0xec, 0xcd, 0xab, 0xf9, 0x7a, 0xb5,
-	0x70, 0xef, 0x50, 0x07, 0xba, 0x9b, 0x78, 0xf5, 0x7a, 0xb6, 0x5b, 0xba, 0x64, 0x1e, 0x7e, 0x3d,
-	0x0f, 0xc9, 0xb7, 0xf3, 0x90, 0x7c, 0x3f, 0x0f, 0xc9, 0x3b, 0xbf, 0x59, 0x97, 0xc0, 0x88, 0x95,
-	0x22, 0xba, 0xf2, 0x33, 0xf6, 0x76, 0x3d, 0xe2, 0xf4, 0x67, 0x00, 0x00, 0x00, 0xff, 0xff, 0xe4,
-	0xba, 0xfd, 0xef, 0x75, 0x02, 0x00, 0x00,
+	// 392 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0xcf, 0x8e, 0xd3, 0x30,
+	0x10, 0xc6, 0xf1, 0xb6, 0x9b, 0xec, 0x4e, 0x40, 0x04, 0x8b, 0x43, 0xd8, 0x43, 0xc9, 0xee, 0x01,
+	0x05, 0x90, 0x12, 0xb1, 0x7d, 0x01, 0xda, 0xaa, 0x87, 0x4a, 0x3d, 0x54, 0x69, 0xf9, 0x23, 0x2e,
+	0x91, 0x9b, 0xb8, 0xa9, 0x45, 0xf0, 0x44, 0xb6, 0xa1, 0xe2, 0x0d, 0x39, 0xf2, 0x08, 0xa8, 0x37,
+	0x5e, 0x81, 0x13, 0x8a, 0x93, 0x82, 0x40, 0xa5, 0x12, 0xb7, 0xcc, 0x37, 0xdf, 0xf7, 0x9b, 0x19,
+	0xc5, 0x70, 0x2d, 0xb9, 0xd9, 0xa1, 0x7a, 0x2f, 0x64, 0x99, 0x7c, 0x7a, 0xc1, 0xaa, 0x7a, 0xcb,
+	0x86, 0x89, 0x16, 0x05, 0xcf, 0x99, 0x8a, 0x6b, 0x85, 0x06, 0xe9, 0x23, 0xa1, 0x8d, 0xc0, 0xf8,
+	0xb7, 0x31, 0x3e, 0x18, 0xaf, 0x8e, 0xa6, 0x4b, 0x66, 0xf8, 0x8e, 0x7d, 0x6e, 0xd3, 0x37, 0xdf,
+	0x09, 0xb8, 0xcb, 0x96, 0x47, 0xdf, 0xc2, 0x83, 0xc6, 0x5d, 0x21, 0x2b, 0x32, 0xcd, 0x2b, 0x9e,
+	0x1b, 0x54, 0x01, 0x09, 0x49, 0xe4, 0xdd, 0x3e, 0x8f, 0xff, 0x39, 0x25, 0x7e, 0xd3, 0x65, 0x96,
+	0x5d, 0x24, 0xf5, 0x77, 0x7f, 0x29, 0x74, 0x0c, 0xae, 0x90, 0xa5, 0xe2, 0x5a, 0x07, 0x67, 0x61,
+	0x2f, 0xf2, 0x6e, 0xa3, 0x13, 0xbc, 0x59, 0xd3, 0x99, 0x0b, 0x6d, 0xb8, 0xe4, 0x2a, 0x3d, 0x04,
+	0xe9, 0x4b, 0x70, 0x78, 0x8b, 0xe8, 0xfd, 0x27, 0xa2, 0xcb, 0xdd, 0xfc, 0x20, 0x70, 0xef, 0x8f,
+	0x0e, 0xa5, 0xd0, 0x97, 0xec, 0x03, 0xb7, 0x47, 0x5e, 0xa6, 0xf6, 0x9b, 0x0e, 0xa1, 0x5f, 0xa3,
+	0x32, 0xc1, 0x99, 0x3d, 0xfc, 0xf1, 0x89, 0x29, 0x0b, 0x54, 0x26, 0xb5, 0x66, 0x7a, 0x0d, 0x77,
+	0xd7, 0x42, 0x16, 0x19, 0x2b, 0x8a, 0x6e, 0xc5, 0x06, 0xe8, 0x35, 0xda, 0xa8, 0x95, 0x68, 0xd8,
+	0x59, 0x0c, 0x66, 0x96, 0xdf, 0x0f, 0x49, 0x74, 0x91, 0x42, 0xa3, 0xad, 0xb0, 0x41, 0xd1, 0x2b,
+	0xb8, 0xb0, 0x3f, 0x25, 0xc7, 0x2a, 0x38, 0xb7, 0x80, 0x5f, 0x35, 0x7d, 0x08, 0xe7, 0x5b, 0xd4,
+	0x46, 0x07, 0x4e, 0xd8, 0x8b, 0x2e, 0xd3, 0xb6, 0xa0, 0x4f, 0xc1, 0x2f, 0xf8, 0x86, 0x7d, 0xac,
+	0x4c, 0xc6, 0x65, 0x51, 0xa3, 0x90, 0x26, 0x70, 0x6d, 0xf2, 0x7e, 0xa7, 0x4f, 0x3b, 0xf9, 0xd9,
+	0x13, 0xf0, 0x26, 0x28, 0x37, 0xa2, 0x5c, 0xe6, 0x58, 0x73, 0x0a, 0xe0, 0x2c, 0x5e, 0x8d, 0xe7,
+	0xb3, 0x89, 0x7f, 0x87, 0x7a, 0xe0, 0x2e, 0xd2, 0xd9, 0xeb, 0xd1, 0x6a, 0xea, 0x93, 0x71, 0xfc,
+	0x65, 0x3f, 0x20, 0x5f, 0xf7, 0x03, 0xf2, 0x6d, 0x3f, 0x20, 0xef, 0xc2, 0xf6, 0x7a, 0x81, 0x09,
+	0xab, 0x45, 0x72, 0xe4, 0x39, 0xad, 0x1d, 0xbb, 0xe2, 0xf0, 0x67, 0x00, 0x00, 0x00, 0xff, 0xff,
+	0x49, 0xd2, 0x98, 0x14, 0xaa, 0x02, 0x00, 0x00,
 }
