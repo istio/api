@@ -281,7 +281,7 @@ type MeshConfig struct {
 	// The default service dependency setting associated with every workload
 	// in the mesh.  Pilot will program the routes in the sidecars and
 	// gateways accordingly. If omitted, sidecars will be configured to reach
-	// every service in the mesh. The default scope can be overriden by
+	// every service in the mesh. The default scope can be overridden by
 	// supplying a ServiceDependency resource per namespace.
 	DefaultServiceDependency *MeshConfig_DefaultServiceDependency `protobuf:"bytes,29,opt,name=default_service_dependency,json=defaultServiceDependency" json:"default_service_dependency,omitempty"`
 }
