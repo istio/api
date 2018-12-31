@@ -483,7 +483,7 @@ cloud-provided ingress controller).</p>
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-OutboundTrafficPolicy-Mode-REGISTRY_ONLY" class="deprecated ">
+<tr id="MeshConfig-OutboundTrafficPolicy-Mode-REGISTRY_ONLY">
 <td><code>REGISTRY_ONLY</code></td>
 <td>
 <p>outbound traffic will be restricted to services defined in the service registry as well as those defined
@@ -491,10 +491,10 @@ through ServiceEntries</p>
 
 </td>
 </tr>
-<tr id="MeshConfig-OutboundTrafficPolicy-Mode-ALLOW_ANY" class="deprecated ">
+<tr id="MeshConfig-OutboundTrafficPolicy-Mode-ALLOW_ANY">
 <td><code>ALLOW_ANY</code></td>
 <td>
-<p>outbound traffic to unknown destinations will be allowed</p>
+<p>outbound traffic to unknown destinations will be allowed, in case there are no services or ServiceEntries for the destination port</p>
 
 </td>
 </tr>
