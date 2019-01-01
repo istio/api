@@ -159,7 +159,7 @@ message MeshConfig {
       // not implemented. outbound traffic will be restricted to destinations defined in VirtualServices only
       VIRTUAL_SERVICE_ONLY = 2 [deprecated=true];
     }
-    Mode mode = 1 [deprecated=true];
+    Mode mode = 1;
   }
 
   // Set the default behavior of the sidecar for handling outbound traffic from the application.
@@ -168,7 +168,7 @@ message MeshConfig {
   // requested destination.
   // Users are strongly encouraged to use ServiceEntries to explicitly declare any external dependencies,
   // instead of using allow_any.
-  OutboundTrafficPolicy outbound_traffic_policy = 17 [deprecated=true];
+  OutboundTrafficPolicy outbound_traffic_policy = 17;
 
   reserved 18;
 
