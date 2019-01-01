@@ -684,11 +684,13 @@
               {
                 "name": "ALLOW_ANY",
                 "integer": 1
-              },
-              {
-                "name": "VIRTUAL_SERVICE_ONLY",
-                "integer": 2
               }
+            ],
+            "reserved_ids": [
+              2
+            ],
+            "reserved_names": [
+              "VIRTUAL_SERVICE_ONLY"
             ]
           }
         ],
