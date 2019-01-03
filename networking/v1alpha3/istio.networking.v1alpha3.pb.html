@@ -4498,9 +4498,12 @@ namespace as the virtual service.</p>
 <h2 id="WorkloadSelector">WorkloadSelector</h2>
 <section>
 <p>WorkloadSelector specifies the criteria used to determine if the Gateway
-or Sidecar resource can be applied to a given workload. If multiple
-conditions are specified, all conditions need to match in order for the
-workload to be selected.</p>
+or Sidecar resource can be applied to a proxy. The matching criteria
+includes the metadata associated with a proxy, workload info such as
+labels attached to the pod/VM, or any other info that the proxy provides
+to Istio during the initial handshake. If multiple conditions are
+specified, all conditions need to match in order for the workload to be
+selected. Currently, only label based selection mechanism is supported.</p>
 
 <table class="message-fields">
 <thead>
