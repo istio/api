@@ -690,11 +690,6 @@
                 "id": 3,
                 "name": "version",
                 "type": "string"
-              },
-              {
-                "id": 5,
-                "name": "annotations",
-                "type": "google.protobuf.Struct"
               }
             ],
             "maps": [
@@ -703,6 +698,14 @@
                 "field": {
                   "id": 4,
                   "name": "labels",
+                  "type": "string"
+                }
+              },
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 5,
+                  "name": "annotations",
                   "type": "string"
                 }
               }

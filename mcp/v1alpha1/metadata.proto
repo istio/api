@@ -32,15 +32,16 @@ message Metadata {
   // two-levels: cluster and namespace, e.g.
   //
   //   namespaced     => <k8s-namespace>/<k8s-name>
-  //   cluster-scoped =>                /<k8s-name>  # alt: reserved namespace (e.g. :cluster, :global)
+  //   cluster-scoped =>                /<k8s-name>
   //
   // Deeper hierarchy could also be represented, e.g.
   //
   //        <org>/<team>/<name>
   //
-  // “/” should be used as the standard delimiter. The rightmost segment is
+  // “/” are used as the standard delimiter. The rightmost segment is
   // the most specific identifier (e.g. leaf). Segments moving towards the left
-  // represent higher positions in the resource hierarchy.
+  // represent higher positions in the resource hierarchy, similar to reverse
+  // DNS notation.
   string name = 1;
 
   // The creation timestamp of the resource.
@@ -54,7 +55,7 @@ message Metadata {
   // resources within a collection.
   map<string,string> labels = 4;
 
-  // Structured data that can be used by source and sink to communicate arbitrary
-  // metadata about this resource.
-  google.protobuf.Struct annotations = 5;
+  // Map of string keys and values that can be used by source and sink to communicate
+  // arbitrary metadata about this resource.
+  map<string,string> annotations = 5;
 }

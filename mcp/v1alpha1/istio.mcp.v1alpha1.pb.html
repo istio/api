@@ -347,16 +347,17 @@ location in a resource hierarchy. On k8s, this hierarchy is
 two-levels: cluster and namespace, e.g.</p>
 
 <p>namespaced     =&gt; <k8s-namespace>/<k8s-name>
-  cluster-scoped =&gt;                /<k8s-name>  # alt: reserved namespace (e.g. :cluster, :global)</p>
+  cluster-scoped =&gt;                /<k8s-name></p>
 
 <p>Deeper hierarchy could also be represented, e.g.</p>
 
 <pre><code>   &lt;org&gt;/&lt;team&gt;/&lt;name&gt;
 </code></pre>
 
-<p>“/” should be used as the standard delimiter. The rightmost segment is
+<p>“/” are used as the standard delimiter. The rightmost segment is
 the most specific identifier (e.g. leaf). Segments moving towards the left
-represent higher positions in the resource hierarchy.</p>
+represent higher positions in the resource hierarchy, similar to reverse
+DNS notation.</p>
 
 </td>
 </tr>
@@ -388,10 +389,10 @@ resources within a collection.</p>
 </tr>
 <tr id="Metadata-annotations">
 <td><code>annotations</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">google.protobuf.Struct</a></code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>Structured data that can be used by source and sink to communicate arbitrary
-metadata about this resource.</p>
+<p>Map of string keys and values that can be used by source and sink to communicate
+arbitrary metadata about this resource.</p>
 
 </td>
 </tr>
@@ -419,7 +420,7 @@ from the underlying transport layer (e.g. rpc credentials).</p>
 <td><code>id</code></td>
 <td><code>string</code></td>
 <td>
-<p>An opaque identifier for the MCP client.</p>
+<p>An opaque identifier for the MCP node.</p>
 
 </td>
 </tr>
@@ -439,10 +440,16 @@ from the underlying transport layer (e.g. rpc credentials).</p>
 <p>A RequestResource can be sent in two situations:</p>
 
 <p>Initial message in an MCP bidirectional change stream
-As an ACK or NACK response to a previous Resources. In
+as an ACK or NACK response to a previous Resources. In
 this case the response<em>nonce is set to the nonce value
 in the Resources. ACK/NACK is determined by the presence
 of error</em>detail.</p>
+
+<ul>
+<li>ACK  (nonce!=&ldquo;&rdquo;,error_details==nil)</li>
+<li>NACK (nonce!=&ldquo;&rdquo;,error_details!=nil)</li>
+<li>New/Update request (nonce==&ldquo;&rdquo;,error_details ignored)</li>
+</ul>
 
 <table class="message-fields">
 <thead>
@@ -498,7 +505,7 @@ be omitted.</p>
 <td><code><a href="#google-rpc-Status">google.rpc.Status</a></code></td>
 <td>
 <p>This is populated when the previously received resources could not be applied
-The <em>message</em> field in <em>error_details</em> provides the source internal exception
+The <em>message</em> field in <em>error_details</em> provides the source internal error
 related to the failure.</p>
 
 </td>

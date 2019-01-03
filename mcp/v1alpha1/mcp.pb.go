@@ -51,7 +51,7 @@ const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 // information is not authoritative. Authoritative identity should come
 // from the underlying transport layer (e.g. rpc credentials).
 type Node struct {
-	// An opaque identifier for the MCP client.
+	// An opaque identifier for the MCP node.
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	// Opaque metadata extending the node identifier.
 	Metadata *google_protobuf.Struct `protobuf:"bytes,2,opt,name=metadata" json:"metadata,omitempty"`
@@ -338,10 +338,15 @@ func (m *IncrementalMeshConfigResponse) GetNonce() string {
 // A RequestResource can be sent in two situations:
 //
 // Initial message in an MCP bidirectional change stream
-// As an ACK or NACK response to a previous Resources. In
+// as an ACK or NACK response to a previous Resources. In
 // this case the response_nonce is set to the nonce value
 // in the Resources. ACK/NACK is determined by the presence
 // of error_detail.
+//
+// * ACK  (nonce!="",error_details==nil)
+// * NACK (nonce!="",error_details!=nil)
+// * New/Update request (nonce=="",error_details ignored)
+//
 type RequestResources struct {
 	// An opaque identifier and generic set of labels to identify the MCP sink node.
 	Node *Node `protobuf:"bytes,1,opt,name=node" json:"node,omitempty"`
@@ -360,7 +365,7 @@ type RequestResources struct {
 	// be omitted.
 	ResponseNonce string `protobuf:"bytes,4,opt,name=response_nonce,json=responseNonce,proto3" json:"response_nonce,omitempty"`
 	// This is populated when the previously received resources could not be applied
-	// The *message* field in *error_details* provides the source internal exception
+	// The *message* field in *error_details* provides the source internal error
 	// related to the failure.
 	ErrorDetail *google_rpc.Status `protobuf:"bytes,5,opt,name=error_detail,json=errorDetail" json:"error_detail,omitempty"`
 }
