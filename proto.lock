@@ -730,6 +730,11 @@
                 "type": "bool"
               },
               {
+                "id": 31,
+                "name": "report_session_affinity",
+                "type": "bool"
+              },
+              {
                 "id": 4,
                 "name": "proxy_listen_port",
                 "type": "int32"
