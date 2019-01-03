@@ -73,11 +73,11 @@ and receives Resources messages from the source.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="IncrementalMeshConfigRequest-node">
-<td><code>node</code></td>
-<td><code><a href="#Node">Node</a></code></td>
+<tr id="IncrementalMeshConfigRequest-sink_node">
+<td><code>sinkNode</code></td>
+<td><code><a href="#SinkNode">SinkNode</a></code></td>
 <td>
-<p>The client making the request.</p>
+<p>The sink node making the request.</p>
 
 </td>
 </tr>
@@ -220,11 +220,11 @@ below) has an independent version associated with it.</p>
 
 </td>
 </tr>
-<tr id="MeshConfigRequest-node">
-<td><code>node</code></td>
-<td><code><a href="#Node">Node</a></code></td>
+<tr id="MeshConfigRequest-sink_node">
+<td><code>sinkNode</code></td>
+<td><code><a href="#SinkNode">SinkNode</a></code></td>
 <td>
-<p>The node making the request.</p>
+<p>The sink node making the request.</p>
 
 </td>
 </tr>
@@ -399,42 +399,6 @@ arbitrary metadata about this resource.</p>
 </tbody>
 </table>
 </section>
-<h3 id="Node">Node</h3>
-<section>
-<p>Identifies a specific MCP sink node instance. The node identifier is
-presented to the resource source, which may use this identifier
-to distinguish per sink configuration for serving. This
-information is not authoritative. Authoritative identity should come
-from the underlying transport layer (e.g. rpc credentials).</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Node-id">
-<td><code>id</code></td>
-<td><code>string</code></td>
-<td>
-<p>An opaque identifier for the MCP node.</p>
-
-</td>
-</tr>
-<tr id="Node-metadata">
-<td><code>metadata</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">google.protobuf.Struct</a></code></td>
-<td>
-<p>Opaque metadata extending the node identifier.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h3 id="RequestResources">RequestResources</h3>
 <section>
 <p>A RequestResource can be sent in two situations:</p>
@@ -460,11 +424,11 @@ of error</em>detail.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="RequestResources-node">
-<td><code>node</code></td>
-<td><code><a href="#Node">Node</a></code></td>
+<tr id="RequestResources-sink_node">
+<td><code>sinkNode</code></td>
+<td><code><a href="#SinkNode">SinkNode</a></code></td>
 <td>
-<p>An opaque identifier and generic set of labels to identify the MCP sink node.</p>
+<p>The sink node making the request.</p>
 
 </td>
 </tr>
@@ -613,6 +577,42 @@ resources can be ignored.</p>
 <td>
 <p>Required. The nonce provides a way for RequestChange to uniquely
 reference a RequestResources.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="SinkNode">SinkNode</h3>
+<section>
+<p>Identifies a specific MCP sink node instance. The node identifier is
+presented to the resource source, which may use this identifier
+to distinguish per sink configuration for serving. This
+information is not authoritative. Authoritative identity should come
+from the underlying transport layer (e.g. rpc credentials).</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="SinkNode-id">
+<td><code>id</code></td>
+<td><code>string</code></td>
+<td>
+<p>An opaque identifier for the MCP node.</p>
+
+</td>
+</tr>
+<tr id="SinkNode-metadata">
+<td><code>metadata</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">google.protobuf.Struct</a></code></td>
+<td>
+<p>Opaque metadata extending the node identifier.</p>
 
 </td>
 </tr>

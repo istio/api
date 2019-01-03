@@ -29,7 +29,7 @@ option (gogoproto.equal_all) = true;
 // to distinguish per sink configuration for serving. This
 // information is not authoritative. Authoritative identity should come
 // from the underlying transport layer (e.g. rpc credentials).
-message Node {
+message SinkNode {
   // An opaque identifier for the MCP node.
   string id = 1;
 
@@ -50,8 +50,8 @@ message MeshConfigRequest {
   // below) has an independent version associated with it.
   string version_info = 1;
 
-  // The node making the request.
-  Node node = 2;
+  // The sink node making the request.
+  SinkNode sink_node = 2;
 
   // Type of the resource that is being requested, e.g.
   // "type.googleapis.com/istio.io.networking.v1alpha3.VirtualService".
@@ -106,8 +106,8 @@ message MeshConfigResponse {
 //      In this case the response_nonce is set to the nonce value in the Response.
 //      ACK or NACK is determined by the absence or presence of error_detail.
 message IncrementalMeshConfigRequest {
-  // The client making the request.
-  Node node = 1;
+  // The sink node making the request.
+  SinkNode sink_node = 1;
 
   // Type of the resource that is being requested, e.g.
   // "type.googleapis.com/istio.io.networking.v1alpha3.VirtualService".
@@ -198,8 +198,8 @@ service AggregatedMeshConfigService {
 // * New/Update request (nonce=="",error_details ignored)
 //
 message RequestResources {
-  // An opaque identifier and generic set of labels to identify the MCP sink node.
-  Node node = 1;
+  // The sink node making the request.
+  SinkNode sink_node = 1;
 
   // Type of resource collection that is being requested, e.g.
   //

@@ -422,7 +422,7 @@
       "def": {
         "messages": [
           {
-            "name": "Node",
+            "name": "SinkNode",
             "fields": [
               {
                 "id": 1,
@@ -446,8 +446,8 @@
               },
               {
                 "id": 2,
-                "name": "node",
-                "type": "Node"
+                "name": "sink_node",
+                "type": "SinkNode"
               },
               {
                 "id": 3,
@@ -497,8 +497,8 @@
             "fields": [
               {
                 "id": 1,
-                "name": "node",
-                "type": "Node"
+                "name": "sink_node",
+                "type": "SinkNode"
               },
               {
                 "id": 2,
@@ -559,8 +559,8 @@
             "fields": [
               {
                 "id": 1,
-                "name": "node",
-                "type": "Node"
+                "name": "sink_node",
+                "type": "SinkNode"
               },
               {
                 "id": 2,
