@@ -731,7 +731,7 @@
               },
               {
                 "id": 31,
-                "name": "report_session_affinity",
+                "name": "sidecar_to_telemetry_session_affinity",
                 "type": "bool"
               },
               {

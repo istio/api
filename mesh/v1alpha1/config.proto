@@ -63,7 +63,7 @@ message MeshConfig {
 
   // Enable session affinity for envoy mixer reports so that calls from a proxy will
   // always target the same mixer instance.
-  bool report_session_affinity = 31;
+  bool sidecar_to_telemetry_session_affinity = 31;
 
   // Port on which Envoy should listen for incoming connections from
   // other services.
