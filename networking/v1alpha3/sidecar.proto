@@ -181,9 +181,9 @@ enum ConfigScope {
 // selected. Currently, only label based selection mechanism is supported.
 message WorkloadSelector {
   // One or more labels that indicate a specific set of pods/VMs on which
-  // this gateway/sidecar configuration should be applied. The scope of
-  // label search is restricted to the configuration namespace in which the
-  // workload is present.
+  // this sidecar configuration should be applied. The scope of label
+  // search is restricted to the configuration namespace in which the the
+  // resource is present.
   map<string, string> labels = 1;
 
   // $hide_from_docs

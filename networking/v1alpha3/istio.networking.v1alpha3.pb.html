@@ -1091,9 +1091,8 @@ metadata:
   name: my-gateway
   namespace: some-config-namespace
 spec:
-  workloadSelector:
-    labels:
-      app: my-gateway-controller
+  selector:
+    app: my-gateway-controller
   servers:
   - port:
       number: 80
@@ -1224,25 +1223,15 @@ spec:
 
 </td>
 </tr>
-<tr id="Gateway-selector" class="deprecated ">
+<tr id="Gateway-selector">
 <td><code>selector</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
 <p>One or more labels that indicate a specific set of pods/VMs on which
-this gateway configuration should be applied.  The scope of label
-search is platform dependent.  On Kubernetes, for example, the scope
-includes pods running in all reachable namespaces. Precisely one of
-selector or workloadSelector MUST be specified.</p>
-
-</td>
-</tr>
-<tr id="Gateway-workload_selector">
-<td><code>workloadSelector</code></td>
-<td><code><a href="#WorkloadSelector">WorkloadSelector</a></code></td>
-<td>
-<p>Criteria used to select the specific set of pods/VMs on which this
-gateway configuration should be applied. Precisely one of selector
-or workloadSelector must be specified.</p>
+this gateway configuration should be applied. The scope of label
+search is restricted to the configuration namespace in which the the
+resource is present. In other words, the Gateway resource must reside
+in the same namespace as the gateway workload.</p>
 
 </td>
 </tr>
@@ -2793,9 +2782,8 @@ kind: Gateway
 metadata:
   name: my-ingress
 spec:
-  workloadSelector:
-    labels:
-      app: my-ingress-gateway
+  selector:
+    app: my-ingress-gateway
   servers:
   - port:
       number: 80
@@ -2812,9 +2800,8 @@ kind: Gateway
 metadata:
   name: my-tcp-ingress
 spec:
-  workloadSelector:
-    labels:
-      app: my-tcp-ingress-gateway
+  selector:
+    app: my-tcp-ingress-gateway
   servers:
   - port:
       number: 27018
@@ -2831,9 +2818,8 @@ kind: Gateway
 metadata:
   name: my-tls-ingress
 spec:
-  workloadSelector:
-    labels:
-      app: my-tls-ingress-gateway
+  selector:
+    app: my-tls-ingress-gateway
   servers:
   - port:
       number: 443
@@ -2873,11 +2859,11 @@ connections</p>
 
 </td>
 </tr>
-<tr id="Server-bind_address">
-<td><code>bindAddress</code></td>
+<tr id="Server-bind">
+<td><code>bind</code></td>
 <td><code>string</code></td>
 <td>
-<p>The IP address to which the listener should be bound to.</p>
+<p>The IP address to which the listener should be bound.</p>
 
 </td>
 </tr>
@@ -3683,14 +3669,21 @@ traffic from the workload.</p>
 
 <p>Services and configuration in a mesh are organized into one or more
 namespaces (e.g., a Kubernetes namespace or a CF org/space). A Sidecar
-resource in a namespace will apply to all workloads in the namespace in
-the absence of a workload selector.  <em><em>Currently, each namespace should
-have only one Sidecar resource without any workload selector</em></em>. The
-behavior of the system is undefined if more than one Sidecar resource
-exists in a given namespace.</p>
+resource in a namespace will apply to all workloads selected using the
+workloadSelector. In the absence of a workloadSelector, it will apply to
+all workloads in the namespace. When determining the Sidecar resource to
+be applied to a workload, preference will be given to the resource with
+a workloadSelector that selects this workload, over a Sidecar resource
+without any workloadSelector.</p>
+
+<p>NOTE: <em><em>Each namespace can have only one Sidecar resource without any
+workload selector</em></em>. The behavior of the system is undefined if more
+than one selector-less Sidecar resources exist in a given namespace. The
+behavior of the system is undefined if two or more Sidecar resources
+with a workload selector select the same workload.</p>
 
 <p>The example below delcares a Sidecar resource in the prod-us1 namespace
-that configures the sidecar to proxy egress traffic for services in the
+that configures the sidecar to allow egress traffic to services in the
 prod-us1 and prod-apis namespaces, and the policy and telemetry service
 (if enabled) in the istio-system namespace.</p>
 
@@ -3723,7 +3716,7 @@ spec:
 <p>Egress specifies the configuration of the sidecar for processing
 outbound traffic from the attached workload to other services in the
 mesh. If omitted, Istio will autoconfigure the sidecar to be able to
-reach every service in the mesh.  etc.).</p>
+reach every service in the mesh that is visible to this namespace.</p>
 
 </td>
 </tr>
@@ -4519,9 +4512,9 @@ selected. Currently, only label based selection mechanism is supported.</p>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
 <p>One or more labels that indicate a specific set of pods/VMs on which
-this gateway/sidecar configuration should be applied. The scope of
-label search is restricted to the configuration namespace in which the
-workload is present.</p>
+this sidecar configuration should be applied. The scope of label
+search is restricted to the configuration namespace in which the the
+resource is present.</p>
 
 </td>
 </tr>

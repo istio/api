@@ -719,6 +719,11 @@
                 "type": "bool"
               },
               {
+                "id": 30,
+                "name": "report_session_affinity",
+                "type": "bool"
+              },
+              {
                 "id": 4,
                 "name": "proxy_listen_port",
                 "type": "int32"
@@ -2879,11 +2884,6 @@
             "name": "EnvoyFilter",
             "fields": [
               {
-                "id": 3,
-                "name": "workload_selector",
-                "type": "WorkloadSelector"
-              },
-              {
                 "id": 2,
                 "name": "filters",
                 "type": "Filter",
@@ -3042,11 +3042,6 @@
                 "name": "servers",
                 "type": "Server",
                 "is_repeated": true
-              },
-              {
-                "id": 3,
-                "name": "workload_selector",
-                "type": "WorkloadSelector"
               }
             ],
             "maps": [
@@ -3075,7 +3070,7 @@
               },
               {
                 "id": 5,
-                "name": "bind_address",
+                "name": "bind",
                 "type": "string"
               },
               {
@@ -3167,19 +3162,6 @@
                 "id": 3,
                 "name": "name",
                 "type": "string"
-              }
-            ]
-          },
-          {
-            "name": "WorkloadSelector",
-            "maps": [
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 1,
-                  "name": "labels",
-                  "type": "string"
-                }
               }
             ]
           }
@@ -3370,7 +3352,7 @@
               },
               {
                 "id": 3,
-                "name": "bind_address",
+                "name": "bind",
                 "type": "string"
               },
               {
@@ -3388,6 +3370,19 @@
                 "id": 6,
                 "name": "default_endpoint",
                 "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "WorkloadSelector",
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 1,
+                  "name": "labels",
+                  "type": "string"
+                }
               }
             ]
           }

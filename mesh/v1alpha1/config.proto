@@ -61,6 +61,10 @@ message MeshConfig {
   // to connect to Mixer.
   bool policy_check_fail_open = 25;
 
+  // Enable session affinity for envoy mixer reports so that calls from a proxy will
+  // always target the same mixer instance.
+  bool report_session_affinity = 30;
+
   // Port on which Envoy should listen for incoming connections from
   // other services.
   int32 proxy_listen_port = 4;
@@ -214,7 +218,7 @@ message MeshConfig {
   string trust_domain = 26;
 
   // $hide_from_docs
-  // Next available field number: 30
+  // Next available field number: 31
 }
 
 // ConfigSource describes information about a configuration store inside a

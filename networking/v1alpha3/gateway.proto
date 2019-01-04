@@ -158,16 +158,11 @@ message Gateway {
   repeated Server servers = 1;
 
   // One or more labels that indicate a specific set of pods/VMs on which
-  // this gateway configuration should be applied.  The scope of label
-  // search is platform dependent.  On Kubernetes, for example, the scope
-  // includes pods running in all reachable namespaces. Precisely one of
-  // selector or workloadSelector MUST be specified.
-  map<string, string> selector = 2 [deprecated=true];
-
-  // Criteria used to select the specific set of pods/VMs on which this
-  // gateway configuration should be applied. Precisely one of selector
-  // or workloadSelector must be specified.
-  WorkloadSelector workload_selector = 3;
+  // this gateway configuration should be applied. The scope of label
+  // search is restricted to the configuration namespace in which the the
+  // resource is present. In other words, the Gateway resource must reside
+  // in the same namespace as the gateway workload.
+  map<string, string> selector = 2;
 }
 
 // `Server` describes the properties of the proxy on a given load balancer

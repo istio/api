@@ -56,14 +56,21 @@ func (ConfigScope) EnumDescriptor() ([]byte, []int) { return fileDescriptorSidec
 //
 // Services and configuration in a mesh are organized into one or more
 // namespaces (e.g., a Kubernetes namespace or a CF org/space). A Sidecar
-// resource in a namespace will apply to all workloads in the namespace in
-// the absence of a workload selector.  *_Currently, each namespace should
-// have only one Sidecar resource without any workload selector_*. The
-// behavior of the system is undefined if more than one Sidecar resource
-// exists in a given namespace.
+// resource in a namespace will apply to all workloads selected using the
+// workloadSelector. In the absence of a workloadSelector, it will apply to
+// all workloads in the namespace. When determining the Sidecar resource to
+// be applied to a workload, preference will be given to the resource with
+// a workloadSelector that selects this workload, over a Sidecar resource
+// without any workloadSelector.
+//
+// NOTE: *_Each namespace can have only one Sidecar resource without any
+// workload selector_*. The behavior of the system is undefined if more
+// than one selector-less Sidecar resources exist in a given namespace. The
+// behavior of the system is undefined if two or more Sidecar resources
+// with a workload selector select the same workload.
 //
 // The example below delcares a Sidecar resource in the prod-us1 namespace
-// that configures the sidecar to proxy egress traffic for services in the
+// that configures the sidecar to allow egress traffic to services in the
 // prod-us1 and prod-apis namespaces, and the policy and telemetry service
 // (if enabled) in the istio-system namespace.
 //
@@ -92,13 +99,13 @@ type Sidecar struct {
 	// Ingress specifies the configuration of the sidecar for processing
 	// inbound traffic to the attached workload. If omitted, Istio will
 	// autoconfigure the sidecar based on the information about the workload
-	// obtained from the service registry (e.g., exposed ports, services,
+	// obtained from the orchestration platform (e.g., exposed ports, services,
 	// etc.).
 	Ingress []*IstioListener `protobuf:"bytes,2,rep,name=ingress" json:"ingress,omitempty"`
 	// Egress specifies the configuration of the sidecar for processing
 	// outbound traffic from the attached workload to other services in the
 	// mesh. If omitted, Istio will autoconfigure the sidecar to be able to
-	// reach every service in the mesh.  etc.).
+	// reach every service in the mesh that is visible to this namespace.
 	Egress []*IstioListener `protobuf:"bytes,3,rep,name=egress" json:"egress,omitempty"`
 }
 
@@ -147,14 +154,14 @@ type IstioListener struct {
 	Port *Port `protobuf:"bytes,2,opt,name=port" json:"port,omitempty"`
 	// $hide_from_docs
 	// The ip or the unix domain socket to which the listener should be bound
-	// to. Port MUST be specified if bindAddress is not empty. Format:
+	// to. Port MUST be specified if bind is not empty. Format:
 	// x.x.x.x or unix:///path/to/uds or unix://@foobar (Linux abstract
 	// namespace). If omitted, Istio will autoconfigure the defaults based on
 	// imported services and the workload to which this configuration is
 	// applied to.
-	BindAddress string `protobuf:"bytes,3,opt,name=bind_address,json=bindAddress,proto3" json:"bind_address,omitempty"`
+	Bind string `protobuf:"bytes,3,opt,name=bind,proto3" json:"bind,omitempty"`
 	// $hide_from_docs
-	// When the bind address is an IP:port, the bindToPort option dictates
+	// When the bind address is an IP, the bindToPort option dictates
 	// whether or not the sidecar should bind its listener socket to the
 	// specified port. Set bindToPort to false (default) if application
 	// traffic entering/leaving a pod/VM is captured automatically through
@@ -212,9 +219,9 @@ func (m *IstioListener) GetPort() *Port {
 	return nil
 }
 
-func (m *IstioListener) GetBindAddress() string {
+func (m *IstioListener) GetBind() string {
 	if m != nil {
-		return m.BindAddress
+		return m.Bind
 	}
 	return ""
 }
@@ -240,9 +247,37 @@ func (m *IstioListener) GetDefaultEndpoint() string {
 	return ""
 }
 
+// WorkloadSelector specifies the criteria used to determine if the Gateway
+// or Sidecar resource can be applied to a proxy. The matching criteria
+// includes the metadata associated with a proxy, workload info such as
+// labels attached to the pod/VM, or any other info that the proxy provides
+// to Istio during the initial handshake. If multiple conditions are
+// specified, all conditions need to match in order for the workload to be
+// selected. Currently, only label based selection mechanism is supported.
+type WorkloadSelector struct {
+	// One or more labels that indicate a specific set of pods/VMs on which
+	// this sidecar configuration should be applied. The scope of label
+	// search is restricted to the configuration namespace in which the the
+	// resource is present.
+	Labels map[string]string `protobuf:"bytes,1,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (m *WorkloadSelector) Reset()                    { *m = WorkloadSelector{} }
+func (m *WorkloadSelector) String() string            { return proto.CompactTextString(m) }
+func (*WorkloadSelector) ProtoMessage()               {}
+func (*WorkloadSelector) Descriptor() ([]byte, []int) { return fileDescriptorSidecar, []int{2} }
+
+func (m *WorkloadSelector) GetLabels() map[string]string {
+	if m != nil {
+		return m.Labels
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*Sidecar)(nil), "istio.networking.v1alpha3.Sidecar")
 	proto.RegisterType((*IstioListener)(nil), "istio.networking.v1alpha3.IstioListener")
+	proto.RegisterType((*WorkloadSelector)(nil), "istio.networking.v1alpha3.WorkloadSelector")
 	proto.RegisterEnum("istio.networking.v1alpha3.ConfigScope", ConfigScope_name, ConfigScope_value)
 }
 func (m *Sidecar) Marshal() (dAtA []byte, err error) {
@@ -328,11 +363,11 @@ func (m *IstioListener) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n2
 	}
-	if len(m.BindAddress) > 0 {
+	if len(m.Bind) > 0 {
 		dAtA[i] = 0x1a
 		i++
-		i = encodeVarintSidecar(dAtA, i, uint64(len(m.BindAddress)))
-		i += copy(dAtA[i:], m.BindAddress)
+		i = encodeVarintSidecar(dAtA, i, uint64(len(m.Bind)))
+		i += copy(dAtA[i:], m.Bind)
 	}
 	if m.BindToPort {
 		dAtA[i] = 0x20
@@ -364,6 +399,41 @@ func (m *IstioListener) MarshalTo(dAtA []byte) (int, error) {
 		i++
 		i = encodeVarintSidecar(dAtA, i, uint64(len(m.DefaultEndpoint)))
 		i += copy(dAtA[i:], m.DefaultEndpoint)
+	}
+	return i, nil
+}
+
+func (m *WorkloadSelector) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *WorkloadSelector) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Labels) > 0 {
+		for k, _ := range m.Labels {
+			dAtA[i] = 0xa
+			i++
+			v := m.Labels[k]
+			mapSize := 1 + len(k) + sovSidecar(uint64(len(k))) + 1 + len(v) + sovSidecar(uint64(len(v)))
+			i = encodeVarintSidecar(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintSidecar(dAtA, i, uint64(len(k)))
+			i += copy(dAtA[i:], k)
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintSidecar(dAtA, i, uint64(len(v)))
+			i += copy(dAtA[i:], v)
+		}
 	}
 	return i, nil
 }
@@ -410,7 +480,7 @@ func (m *IstioListener) Size() (n int) {
 		l = m.Port.Size()
 		n += 1 + l + sovSidecar(uint64(l))
 	}
-	l = len(m.BindAddress)
+	l = len(m.Bind)
 	if l > 0 {
 		n += 1 + l + sovSidecar(uint64(l))
 	}
@@ -426,6 +496,20 @@ func (m *IstioListener) Size() (n int) {
 	l = len(m.DefaultEndpoint)
 	if l > 0 {
 		n += 1 + l + sovSidecar(uint64(l))
+	}
+	return n
+}
+
+func (m *WorkloadSelector) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.Labels) > 0 {
+		for k, v := range m.Labels {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovSidecar(uint64(len(k))) + 1 + len(v) + sovSidecar(uint64(len(v)))
+			n += mapEntrySize + 1 + sovSidecar(uint64(mapEntrySize))
+		}
 	}
 	return n
 }
@@ -681,7 +765,7 @@ func (m *IstioListener) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BindAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Bind", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -706,7 +790,7 @@ func (m *IstioListener) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.BindAddress = string(dAtA[iNdEx:postIndex])
+			m.Bind = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 4:
 			if wireType != 0 {
@@ -785,6 +869,174 @@ func (m *IstioListener) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.DefaultEndpoint = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipSidecar(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthSidecar
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *WorkloadSelector) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowSidecar
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: WorkloadSelector: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: WorkloadSelector: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Labels", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSidecar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSidecar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Labels == nil {
+				m.Labels = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowSidecar
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowSidecar
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthSidecar
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowSidecar
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthSidecar
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipSidecar(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthSidecar
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Labels[mapkey] = mapvalue
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -915,29 +1167,33 @@ var (
 func init() { proto.RegisterFile("networking/v1alpha3/sidecar.proto", fileDescriptorSidecar) }
 
 var fileDescriptorSidecar = []byte{
-	// 379 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0xcd, 0x6e, 0xda, 0x40,
-	0x14, 0x85, 0x3b, 0xfc, 0x98, 0x72, 0xdd, 0xaa, 0xee, 0xa8, 0x0b, 0xb7, 0x0b, 0x6a, 0x58, 0x54,
-	0x6e, 0x2b, 0xd9, 0x0a, 0xbc, 0x40, 0x00, 0xb1, 0x40, 0x62, 0x81, 0x0c, 0xf9, 0x51, 0x36, 0xd6,
-	0x80, 0x07, 0x33, 0x8a, 0x33, 0x63, 0xcd, 0x4c, 0x82, 0xf2, 0x86, 0x59, 0xe6, 0x09, 0xa2, 0x88,
-	0x5d, 0xde, 0x22, 0xf2, 0x0f, 0x8a, 0x12, 0x11, 0xa4, 0xec, 0xec, 0x73, 0xcf, 0xf9, 0xee, 0x1c,
-	0xe9, 0x42, 0x9b, 0x53, 0xbd, 0x11, 0xf2, 0x92, 0xf1, 0xd8, 0xbf, 0x39, 0x22, 0x49, 0xba, 0x26,
-	0x3d, 0x5f, 0xb1, 0x88, 0x2e, 0x89, 0xf4, 0x52, 0x29, 0xb4, 0xc0, 0x3f, 0x99, 0xd2, 0x4c, 0x78,
-	0x2f, 0x46, 0x6f, 0x67, 0xfc, 0xb5, 0x37, 0x1d, 0x13, 0x4d, 0x37, 0xe4, 0xb6, 0x48, 0x77, 0x9e,
-	0x10, 0x34, 0x66, 0x05, 0x0f, 0x9f, 0xc3, 0xf7, 0xcc, 0x9d, 0x08, 0x12, 0x85, 0x8a, 0x26, 0x74,
-	0xa9, 0x85, 0xb4, 0x91, 0x83, 0x5c, 0xb3, 0xfb, 0xdf, 0x7b, 0x77, 0x8b, 0x77, 0x56, 0x66, 0x66,
-	0x65, 0x24, 0xb0, 0x36, 0x6f, 0x14, 0x3c, 0x80, 0x06, 0xe3, 0xb1, 0xa4, 0x4a, 0xd9, 0x15, 0xa7,
-	0xea, 0x9a, 0x5d, 0xf7, 0x00, 0x6f, 0x9c, 0x4d, 0x26, 0x4c, 0x69, 0xca, 0xa9, 0x0c, 0x76, 0x41,
-	0x7c, 0x0c, 0x06, 0x2d, 0x10, 0xd5, 0x0f, 0x22, 0xca, 0x5c, 0xe7, 0x01, 0xc1, 0xd7, 0x57, 0x13,
-	0x8c, 0xa1, 0xc6, 0xc9, 0x15, 0xcd, 0x4b, 0x36, 0x83, 0xfc, 0x1b, 0xf7, 0xa0, 0x96, 0x0a, 0xa9,
-	0xed, 0x4a, 0x5e, 0xfc, 0xf7, 0x81, 0x2d, 0x53, 0x21, 0x75, 0x90, 0x9b, 0x71, 0x1b, 0xbe, 0x2c,
-	0x18, 0x8f, 0x42, 0x12, 0x45, 0xe5, 0x13, 0x33, 0xa0, 0x99, 0x69, 0xfd, 0x42, 0xc2, 0x4e, 0x69,
-	0xd1, 0x22, 0xcc, 0xf9, 0x35, 0x07, 0xb9, 0x9f, 0x03, 0xc8, 0xb4, 0xb9, 0xc8, 0x50, 0xf8, 0x07,
-	0xd4, 0xd7, 0x42, 0x69, 0x65, 0xd7, 0x9d, 0xaa, 0xdb, 0x0c, 0x8a, 0x1f, 0xfc, 0x17, 0xac, 0x88,
-	0xae, 0xc8, 0x75, 0xa2, 0x43, 0xca, 0xa3, 0x54, 0x30, 0xae, 0x6d, 0x23, 0xc7, 0x7f, 0x2b, 0xf5,
-	0x51, 0x29, 0xff, 0xfb, 0x03, 0xe6, 0x50, 0xf0, 0x15, 0x8b, 0x67, 0x4b, 0x91, 0x52, 0x0c, 0x60,
-	0x4c, 0x4f, 0x06, 0x93, 0xf1, 0xd0, 0xfa, 0x84, 0x4d, 0x68, 0x4c, 0x83, 0xf1, 0x69, 0x7f, 0x3e,
-	0xb2, 0xd0, 0xc0, 0xbb, 0xdb, 0xb6, 0xd0, 0xfd, 0xb6, 0x85, 0x1e, 0xb7, 0x2d, 0x74, 0xe1, 0x14,
-	0x0d, 0x99, 0xf0, 0x49, 0xca, 0xfc, 0x3d, 0x27, 0xb3, 0x30, 0xf2, 0x5b, 0xe9, 0x3d, 0x07, 0x00,
-	0x00, 0xff, 0xff, 0x29, 0x6f, 0x5f, 0x4e, 0x8e, 0x02, 0x00, 0x00,
+	// 438 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0x4f, 0x6f, 0xd3, 0x30,
+	0x18, 0xc6, 0x71, 0xd3, 0xa5, 0xf4, 0x0d, 0x88, 0x60, 0x71, 0x08, 0x3b, 0x94, 0xd0, 0x03, 0x0a,
+	0x20, 0x25, 0x62, 0x3d, 0xf0, 0xe7, 0x04, 0x9d, 0x7a, 0xa8, 0x54, 0x89, 0xca, 0x1d, 0x7f, 0xc4,
+	0x25, 0x72, 0x1b, 0x2f, 0xb3, 0x16, 0xec, 0xc8, 0xf6, 0x56, 0xf5, 0xcb, 0xf0, 0x79, 0xb8, 0xc1,
+	0x47, 0x40, 0xbd, 0xf1, 0x2d, 0x90, 0x9d, 0x4c, 0xc0, 0xb4, 0x4d, 0xea, 0x29, 0xaf, 0x1f, 0xbf,
+	0xcf, 0xcf, 0x79, 0x1f, 0x1b, 0x1e, 0x0b, 0x66, 0xd6, 0x52, 0x9d, 0x72, 0x51, 0x66, 0xe7, 0x2f,
+	0x68, 0x55, 0x9f, 0xd0, 0x51, 0xa6, 0x79, 0xc1, 0x56, 0x54, 0xa5, 0xb5, 0x92, 0x46, 0xe2, 0x87,
+	0x5c, 0x1b, 0x2e, 0xd3, 0xbf, 0x8d, 0xe9, 0x45, 0xe3, 0xfe, 0x95, 0xee, 0x92, 0x1a, 0xb6, 0xa6,
+	0x9b, 0xc6, 0x3d, 0xfc, 0x8d, 0xa0, 0xb7, 0x68, 0x78, 0xf8, 0x33, 0xdc, 0xb7, 0xdd, 0x95, 0xa4,
+	0x45, 0xae, 0x59, 0xc5, 0x56, 0x46, 0xaa, 0x08, 0xc5, 0x28, 0x09, 0x0e, 0x9e, 0xa7, 0xd7, 0x9e,
+	0x92, 0x7e, 0x6a, 0x3d, 0x8b, 0xd6, 0x42, 0xc2, 0xf5, 0x25, 0x05, 0x8f, 0xa1, 0xc7, 0x45, 0xa9,
+	0x98, 0xd6, 0x51, 0x27, 0xf6, 0x92, 0xe0, 0x20, 0xb9, 0x81, 0x37, 0xb5, 0x3b, 0x33, 0xae, 0x0d,
+	0x13, 0x4c, 0x91, 0x0b, 0x23, 0x7e, 0x0b, 0x3e, 0x6b, 0x10, 0xde, 0x8e, 0x88, 0xd6, 0x37, 0xfc,
+	0x81, 0xe0, 0xee, 0x7f, 0x3b, 0x18, 0x43, 0x57, 0xd0, 0xaf, 0xcc, 0x0d, 0xd9, 0x27, 0xae, 0xc6,
+	0x23, 0xe8, 0xd6, 0x52, 0x99, 0xa8, 0xe3, 0x06, 0x7f, 0x74, 0xc3, 0x29, 0x73, 0xa9, 0x0c, 0x71,
+	0xcd, 0x16, 0xb4, 0xe4, 0xa2, 0x88, 0xbc, 0x06, 0x64, 0x6b, 0x1c, 0xc3, 0x1d, 0xfb, 0xcd, 0x8d,
+	0xcc, 0x1d, 0xb0, 0x1b, 0xa3, 0xe4, 0x36, 0x01, 0xab, 0x1d, 0x49, 0xeb, 0xc5, 0x0f, 0x60, 0xef,
+	0x44, 0x6a, 0xa3, 0xa3, 0xbd, 0xd8, 0x4b, 0xfa, 0xa4, 0x59, 0xe0, 0xa7, 0x10, 0x16, 0xec, 0x98,
+	0x9e, 0x55, 0x26, 0x67, 0xa2, 0xa8, 0x25, 0x17, 0x26, 0xf2, 0x1d, 0xf7, 0x5e, 0xab, 0x4f, 0x5a,
+	0x79, 0xf8, 0x0d, 0x41, 0x78, 0x39, 0x7e, 0xfc, 0x1e, 0xfc, 0x8a, 0x2e, 0x59, 0xa5, 0x23, 0xe4,
+	0x82, 0x7a, 0xb9, 0xc3, 0xdd, 0xa5, 0x33, 0xe7, 0x9c, 0x08, 0xa3, 0x36, 0xa4, 0xc5, 0xec, 0xbf,
+	0x86, 0xe0, 0x1f, 0x19, 0x87, 0xe0, 0x9d, 0xb2, 0x4d, 0x9b, 0x99, 0x2d, 0xed, 0x1c, 0xe7, 0xb4,
+	0x3a, 0x63, 0x2e, 0xb3, 0x3e, 0x69, 0x16, 0x6f, 0x3a, 0xaf, 0xd0, 0xb3, 0x27, 0x10, 0x1c, 0x4a,
+	0x71, 0xcc, 0xcb, 0xc5, 0x4a, 0xd6, 0x0c, 0x03, 0xf8, 0xf3, 0x0f, 0xe3, 0xd9, 0xf4, 0x30, 0xbc,
+	0x85, 0x03, 0xe8, 0xcd, 0xc9, 0xf4, 0xe3, 0xbb, 0xa3, 0x49, 0x88, 0xc6, 0xe9, 0xf7, 0xed, 0x00,
+	0xfd, 0xdc, 0x0e, 0xd0, 0xaf, 0xed, 0x00, 0x7d, 0x89, 0x9b, 0x1f, 0xe6, 0x32, 0xa3, 0x35, 0xcf,
+	0xae, 0x78, 0xc4, 0x4b, 0xdf, 0xbd, 0xde, 0xd1, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xe3, 0x37,
+	0x9e, 0xaa, 0x20, 0x03, 0x00, 0x00,
 }
