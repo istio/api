@@ -720,7 +720,7 @@
               },
               {
                 "id": 30,
-                "name": "report_session_affinity",
+                "name": "sidecar_to_telemetry_session_affinity",
                 "type": "bool"
               },
               {
@@ -3059,17 +3059,12 @@
             "name": "Server",
             "fields": [
               {
-                "id": 6,
-                "name": "name",
-                "type": "string"
-              },
-              {
                 "id": 1,
                 "name": "port",
                 "type": "Port"
               },
               {
-                "id": 5,
+                "id": 4,
                 "name": "bind",
                 "type": "string"
               },
@@ -3085,7 +3080,7 @@
                 "type": "TLSOptions"
               },
               {
-                "id": 4,
+                "id": 5,
                 "name": "default_endpoint",
                 "type": "string"
               }

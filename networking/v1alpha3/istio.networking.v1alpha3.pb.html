@@ -1227,11 +1227,11 @@ spec:
 <td><code>selector</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>One or more labels that indicate a specific set of pods/VMs on which
-this gateway configuration should be applied. The scope of label
-search is restricted to the configuration namespace in which the the
-resource is present. In other words, the Gateway resource must reside
-in the same namespace as the gateway workload.</p>
+<p>REQUIRED: One or more labels that indicate a specific set of pods/VMs
+on which this gateway configuration should be applied. The scope of
+label search is restricted to the configuration namespace in which the
+the resource is present. In other words, the Gateway resource must
+reside in the same namespace as the gateway workload.</p>
 
 </td>
 </tr>
@@ -2842,14 +2842,6 @@ spec:
 </tr>
 </thead>
 <tbody>
-<tr id="Server-name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>An arbitrary name associated with this server. Used for emitting metrics.</p>
-
-</td>
-</tr>
 <tr id="Server-port">
 <td><code>port</code></td>
 <td><code><a href="#Port">Port</a></code></td>
