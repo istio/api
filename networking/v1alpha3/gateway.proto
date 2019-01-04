@@ -157,11 +157,11 @@ message Gateway {
   // REQUIRED: A list of server specifications.
   repeated Server servers = 1;
 
-  // One or more labels that indicate a specific set of pods/VMs on which
-  // this gateway configuration should be applied. The scope of label
-  // search is restricted to the configuration namespace in which the the
-  // resource is present. In other words, the Gateway resource must reside
-  // in the same namespace as the gateway workload.
+  // REQUIRED: One or more labels that indicate a specific set of pods/VMs
+  // on which this gateway configuration should be applied. The scope of
+  // label search is restricted to the configuration namespace in which the
+  // the resource is present. In other words, the Gateway resource must
+  // reside in the same namespace as the gateway workload.
   map<string, string> selector = 2;
 }
 
@@ -227,15 +227,12 @@ message Gateway {
 //       privateKey: /etc/certs/privatekey.pem
 // ```
 message Server {
-  // An arbitrary name associated with this server. Used for emitting metrics.
-  string name = 6;
-
   // REQUIRED: The Port on which the proxy should listen for incoming
   // connections
   Port port = 1;
 
   // The IP address to which the listener should be bound.
-  string bind = 5;
+  string bind = 4;
 
   // REQUIRED. A list of hosts exposed by this gateway. At least one
   // host is required. While typically applicable to
@@ -347,7 +344,7 @@ message Server {
   // point on the sidecar to a port or unix domain socket where the
   // application workload is listening for connections. Format should be
   // 127.0.0.1:PORT or unix:///path/to/socket
-  string default_endpoint = 4;
+  string default_endpoint = 5;
 }
 
 // Port describes the properties of a specific port of a service.
