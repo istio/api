@@ -38,9 +38,8 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //   name: my-gateway
 //   namespace: some-config-namespace
 // spec:
-//   workloadSelector:
-//     labels:
-//       app: my-gateway-controller
+//   selector:
+//     app: my-gateway-controller
 //   servers:
 //   - port:
 //       number: 80
@@ -180,9 +179,8 @@ message Gateway {
 // metadata:
 //   name: my-ingress
 // spec:
-//   workloadSelector:
-//     labels:
-//       app: my-ingress-gateway
+//   selector:
+//     app: my-ingress-gateway
 //   servers:
 //   - port:
 //       number: 80
@@ -200,9 +198,8 @@ message Gateway {
 // metadata:
 //   name: my-tcp-ingress
 // spec:
-//   workloadSelector:
-//     labels:
-//       app: my-tcp-ingress-gateway
+//   selector:
+//     app: my-tcp-ingress-gateway
 //   servers:
 //   - port:
 //       number: 27018
@@ -220,9 +217,8 @@ message Gateway {
 // metadata:
 //   name: my-tls-ingress
 // spec:
-//   workloadSelector:
-//     labels:
-//       app: my-tls-ingress-gateway
+//   selector:
+//     app: my-tls-ingress-gateway
 //   servers:
 //   - port:
 //       number: 443
@@ -243,8 +239,8 @@ message Server {
   // connections
   Port port = 1;
 
-  // The IP address to which the listener should be bound to.
-  string bind_address = 5;
+  // The IP address to which the listener should be bound.
+  string bind = 5;
 
   // REQUIRED. A list of hosts exposed by this gateway. At least one
   // host is required. While typically applicable to
@@ -372,24 +368,4 @@ message Port {
 
   // Label assigned to the port.
   string name = 3;
-}
-
-// WorkloadSelector specifies the criteria used to determine if the Gateway
-// or Sidecar resource can be applied to a proxy. The matching criteria
-// includes the metadata associated with a proxy, workload info such as
-// labels attached to the pod/VM, or any other info that the proxy provides
-// to Istio during the initial handshake. If multiple conditions are
-// specified, all conditions need to match in order for the workload to be
-// selected. Currently, only label based selection mechanism is supported.
-message WorkloadSelector {
-  // One or more labels that indicate a specific set of pods/VMs on which
-  // this gateway/sidecar configuration should be applied. The scope of
-  // label search is restricted to the configuration namespace in which the
-  // workload is present.
-  map<string, string> labels = 1;
-
-  // $hide_from_docs
-  // other forms of identification supplied by the proxy
-  // when connecting to Pilot, such as X509 fields, tenant IDs, JWT,
-  // etc. This has nothing to do with the request level authN etc.
 }

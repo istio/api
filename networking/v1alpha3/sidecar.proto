@@ -33,14 +33,21 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //
 // Services and configuration in a mesh are organized into one or more
 // namespaces (e.g., a Kubernetes namespace or a CF org/space). A Sidecar
-// resource in a namespace will apply to all workloads in the namespace in
-// the absence of a workload selector.  *_Currently, each namespace should
-// have only one Sidecar resource without any workload selector_*. The
-// behavior of the system is undefined if more than one Sidecar resource
-// exists in a given namespace.
+// resource in a namespace will apply to all workloads selected using the
+// workloadSelector. In the absence of a workloadSelector, it will apply to
+// all workloads in the namespace. When determining the Sidecar resource to
+// be applied to a workload, preference will be given to the resource with
+// a workloadSelector that selects this workload, over a Sidecar resource
+// without any workloadSelector. 
+//
+// NOTE: *_Each namespace can have only one Sidecar resource without any
+// workload selector_*. The behavior of the system is undefined if more
+// than one selector-less Sidecar resources exist in a given namespace. The
+// behavior of the system is undefined if two or more Sidecar resources
+// with a workload selector select the same workload.
 //
 // The example below delcares a Sidecar resource in the prod-us1 namespace
-// that configures the sidecar to proxy egress traffic for services in the
+// that configures the sidecar to allow egress traffic to services in the
 // prod-us1 and prod-apis namespaces, and the policy and telemetry service
 // (if enabled) in the istio-system namespace.
 //
@@ -70,14 +77,14 @@ message Sidecar {
   // Ingress specifies the configuration of the sidecar for processing
   // inbound traffic to the attached workload. If omitted, Istio will
   // autoconfigure the sidecar based on the information about the workload
-  // obtained from the service registry (e.g., exposed ports, services,
+  // obtained from the orchestration platform (e.g., exposed ports, services,
   // etc.).
   repeated IstioListener ingress = 2;
 
   // Egress specifies the configuration of the sidecar for processing
   // outbound traffic from the attached workload to other services in the
   // mesh. If omitted, Istio will autoconfigure the sidecar to be able to
-  // reach every service in the mesh.  etc.).
+  // reach every service in the mesh that is visible to this namespace.
   repeated IstioListener egress = 3;
 }
 
@@ -102,15 +109,15 @@ message IstioListener {
 
   // $hide_from_docs
   // The ip or the unix domain socket to which the listener should be bound
-  // to. Port MUST be specified if bindAddress is not empty. Format:
+  // to. Port MUST be specified if bind is not empty. Format:
   // x.x.x.x or unix:///path/to/uds or unix://@foobar (Linux abstract
   // namespace). If omitted, Istio will autoconfigure the defaults based on
   // imported services and the workload to which this configuration is
   // applied to.
-  string bind_address = 3;
+  string bind = 3;
 
   // $hide_from_docs
-  // When the bind address is an IP:port, the bindToPort option dictates
+  // When the bind address is an IP, the bindToPort option dictates
   // whether or not the sidecar should bind its listener socket to the
   // specified port. Set bindToPort to false (default) if application
   // traffic entering/leaving a pod/VM is captured automatically through
@@ -163,6 +170,26 @@ enum ConfigScope {
   // Configs with this scope are visible to only workloads in the same
   // namespace as the configuration resource.
   PRIVATE = 1;
+}
+
+// WorkloadSelector specifies the criteria used to determine if the Gateway
+// or Sidecar resource can be applied to a proxy. The matching criteria
+// includes the metadata associated with a proxy, workload info such as
+// labels attached to the pod/VM, or any other info that the proxy provides
+// to Istio during the initial handshake. If multiple conditions are
+// specified, all conditions need to match in order for the workload to be
+// selected. Currently, only label based selection mechanism is supported.
+message WorkloadSelector {
+  // One or more labels that indicate a specific set of pods/VMs on which
+  // this gateway/sidecar configuration should be applied. The scope of
+  // label search is restricted to the configuration namespace in which the
+  // workload is present.
+  map<string, string> labels = 1;
+
+  // $hide_from_docs
+  // other forms of identification supplied by the proxy
+  // when connecting to Pilot, such as X509 fields, tenant IDs, JWT,
+  // etc. This has nothing to do with the request level authN etc.
 }
 
 // $hide_from_docs
