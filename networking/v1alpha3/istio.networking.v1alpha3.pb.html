@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 aliases:
   - /docs/reference/config/istio.routing.v1alpha1/
-number_of_entries: 60
+number_of_entries: 61
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -2160,6 +2160,15 @@ emitting metrics.</p>
 
 </td>
 </tr>
+<tr id="IstioListener-capture_mode">
+<td><code>captureMode</code></td>
+<td><code><a href="#IstioListener-CaptureMode">IstioListener.CaptureMode</a></code></td>
+<td>
+<p>When the bind address is an IP, the captureMode option dictates
+how traffic to the listener is expected to be captured (or not).</p>
+
+</td>
+</tr>
 <tr id="IstioListener-hosts">
 <td><code>hosts</code></td>
 <td><code>string[]</code></td>
@@ -2196,6 +2205,47 @@ configuration can be used to redirect traffic arriving at the bind
 point on the sidecar to a port or unix domain socket where the
 application workload is listening for connections. Format should be
 127.0.0.1:PORT or unix:///path/to/socket</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="IstioListener-CaptureMode">IstioListener.CaptureMode</h2>
+<section>
+<p>CaptureMode describes how traffic to a listener is expected to be
+captured. Applicable only when the listener is bound to an IP.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="IstioListener-CaptureMode-DEFAULT">
+<td><code>DEFAULT</code></td>
+<td>
+<p>The default capture mode defined by the environment</p>
+
+</td>
+</tr>
+<tr id="IstioListener-CaptureMode-IPTABLES">
+<td><code>IPTABLES</code></td>
+<td>
+<p>Capture traffic using IPtables redirection</p>
+
+</td>
+</tr>
+<tr id="IstioListener-CaptureMode-NONE">
+<td><code>NONE</code></td>
+<td>
+<p>No traffic capture. When used in egress listener, the application is
+expected to explicitly communicate with the listener port/unix
+domain socket. When used in ingress listener, care needs to be taken
+to ensure that the listener port is not in use by other processes on
+the host.</p>
 
 </td>
 </tr>

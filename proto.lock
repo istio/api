@@ -3296,6 +3296,23 @@
       "def": {
         "enums": [
           {
+            "name": "IstioListener.CaptureMode",
+            "enum_fields": [
+              {
+                "name": "DEFAULT",
+                "integer": 0
+              },
+              {
+                "name": "IPTABLES",
+                "integer": 1
+              },
+              {
+                "name": "NONE",
+                "integer": 2
+              }
+            ]
+          },
+          {
             "name": "ConfigScope",
             "enum_fields": [
               {
@@ -3352,8 +3369,8 @@
               },
               {
                 "id": 4,
-                "name": "bind_to_port",
-                "type": "bool"
+                "name": "capture_mode",
+                "type": "CaptureMode"
               },
               {
                 "id": 5,

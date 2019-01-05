@@ -116,17 +116,26 @@ message IstioListener {
   // applied to.
   string bind = 3;
 
-  // $hide_from_docs
-  // When the bind address is an IP, the bindToPort option dictates
-  // whether or not the sidecar should bind its listener socket to the
-  // specified port. Set bindToPort to false (default) if application
-  // traffic entering/leaving a pod/VM is captured automatically through
-  // iptables redirection and forwarded to the sidecar on a specific port
-  // (see proxyListenPort in the global MeshConfig). When not using
-  // iptables for traffic capture, set bindToPort to true to force the
-  // sidecar to bind to the specified port. Note that the binding might
-  // fail if the application workload is already bound to the same port.
-  bool bind_to_port = 4;
+  // CaptureMode describes how traffic to a listener is expected to be
+  // captured. Applicable only when the listener is bound to an IP.
+  enum CaptureMode {
+    // The default capture mode defined by the environment
+    DEFAULT = 0;
+
+    // Capture traffic using IPtables redirection
+    IPTABLES = 1;
+
+    // No traffic capture. When used in egress listener, the application is
+    // expected to explicitly communicate with the listener port/unix
+    // domain socket. When used in ingress listener, care needs to be taken
+    // to ensure that the listener port is not in use by other processes on
+    // the host.
+    NONE = 2;
+  }
+
+  // When the bind address is an IP, the captureMode option dictates
+  // how traffic to the listener is expected to be captured (or not).
+  CaptureMode capture_mode = 4;
 
   // One or more services/virtualServices exposed by the listener in
   // namespace/dnsName format.  _*Hosts will be ignored for ingress
