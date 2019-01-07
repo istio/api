@@ -26,7 +26,8 @@
 		Port
 		ServiceEntry
 		Sidecar
-		IstioListener
+		IstioIngressListener
+		IstioEgressListener
 		WorkloadSelector
 		VirtualService
 		Destination

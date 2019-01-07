@@ -228,10 +228,14 @@ message Gateway {
 // ```
 message Server {
   // REQUIRED: The Port on which the proxy should listen for incoming
-  // connections
+  // connections. If using unix domain socket, use 0 as the port number,
+  // with a valid protocol and port name, along with the bind parameter.
   Port port = 1;
 
-  // The IP address to which the listener should be bound.
+  // $hide_from_docs
+  // The ip or the unix domain socket to which the listener should be bound
+  // to. Format: x.x.x.x or unix:///path/to/uds or unix://@foobar (Linux
+  // abstract namespace).
   string bind = 4;
 
   // REQUIRED. A list of hosts exposed by this gateway. At least one
@@ -338,12 +342,9 @@ message Server {
   // https, and the TLS modes to use.
   TLSOptions tls = 3;
 
-  // The IP endpoint or unix domain socket to which traffic should be
-  // forwarded to by default. In the context of an ingress server, this
-  // configuration can be used to redirect traffic arriving at the bind
-  // point on the sidecar to a port or unix domain socket where the
-  // application workload is listening for connections. Format should be
-  // 127.0.0.1:PORT or unix:///path/to/socket
+  // The loopback IP endpoint or unix domain socket to which traffic should
+  // be forwarded to by default. Format should be 127.0.0.1:PORT or
+  // unix:///path/to/socket or unix://@foobar (Linux abstract namespace).
   string default_endpoint = 5;
 }
 

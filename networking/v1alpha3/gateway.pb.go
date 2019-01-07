@@ -326,9 +326,13 @@ func (m *Gateway) GetSelector() map[string]string {
 // ```
 type Server struct {
 	// REQUIRED: The Port on which the proxy should listen for incoming
-	// connections
+	// connections. If using unix domain socket, use 0 as the port number,
+	// with a valid protocol and port name, along with the bind parameter.
 	Port *Port `protobuf:"bytes,1,opt,name=port" json:"port,omitempty"`
-	// The IP address to which the listener should be bound.
+	// $hide_from_docs
+	// The ip or the unix domain socket to which the listener should be bound
+	// to. Format: x.x.x.x or unix:///path/to/uds or unix://@foobar (Linux
+	// abstract namespace).
 	Bind string `protobuf:"bytes,4,opt,name=bind,proto3" json:"bind,omitempty"`
 	// REQUIRED. A list of hosts exposed by this gateway. At least one
 	// host is required. While typically applicable to
@@ -349,12 +353,9 @@ type Server struct {
 	// these options to control if all http requests should be redirected to
 	// https, and the TLS modes to use.
 	Tls *Server_TLSOptions `protobuf:"bytes,3,opt,name=tls" json:"tls,omitempty"`
-	// The IP endpoint or unix domain socket to which traffic should be
-	// forwarded to by default. In the context of an ingress server, this
-	// configuration can be used to redirect traffic arriving at the bind
-	// point on the sidecar to a port or unix domain socket where the
-	// application workload is listening for connections. Format should be
-	// 127.0.0.1:PORT or unix:///path/to/socket
+	// The loopback IP endpoint or unix domain socket to which traffic should
+	// be forwarded to by default. Format should be 127.0.0.1:PORT or
+	// unix:///path/to/socket or unix://@foobar (Linux abstract namespace).
 	DefaultEndpoint string `protobuf:"bytes,5,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
 }
 

@@ -3296,7 +3296,20 @@
       "def": {
         "enums": [
           {
-            "name": "IstioListener.CaptureMode",
+            "name": "ConfigScope",
+            "enum_fields": [
+              {
+                "name": "PUBLIC",
+                "integer": 0
+              },
+              {
+                "name": "PRIVATE",
+                "integer": 1
+              }
+            ]
+          },
+          {
+            "name": "CaptureMode",
             "enum_fields": [
               {
                 "name": "DEFAULT",
@@ -3309,19 +3322,6 @@
               {
                 "name": "NONE",
                 "integer": 2
-              }
-            ]
-          },
-          {
-            "name": "ConfigScope",
-            "enum_fields": [
-              {
-                "name": "PUBLIC",
-                "integer": 0
-              },
-              {
-                "name": "PRIVATE",
-                "integer": 1
               }
             ]
           }
@@ -3338,50 +3338,65 @@
               {
                 "id": 2,
                 "name": "ingress",
-                "type": "IstioListener",
+                "type": "IstioIngressListener",
                 "is_repeated": true
               },
               {
                 "id": 3,
                 "name": "egress",
-                "type": "IstioListener",
+                "type": "IstioEgressListener",
                 "is_repeated": true
               }
             ]
           },
           {
-            "name": "IstioListener",
+            "name": "IstioIngressListener",
             "fields": [
               {
                 "id": 1,
-                "name": "name",
-                "type": "string"
-              },
-              {
-                "id": 2,
                 "name": "port",
                 "type": "Port"
               },
               {
-                "id": 3,
+                "id": 2,
                 "name": "bind",
                 "type": "string"
               },
               {
-                "id": 4,
+                "id": 3,
                 "name": "capture_mode",
                 "type": "CaptureMode"
               },
               {
-                "id": 5,
+                "id": 4,
+                "name": "default_endpoint",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "IstioEgressListener",
+            "fields": [
+              {
+                "id": 1,
+                "name": "port",
+                "type": "Port"
+              },
+              {
+                "id": 2,
+                "name": "bind",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "capture_mode",
+                "type": "CaptureMode"
+              },
+              {
+                "id": 4,
                 "name": "hosts",
                 "type": "string",
                 "is_repeated": true
-              },
-              {
-                "id": 6,
-                "name": "default_endpoint",
-                "type": "string"
               }
             ]
           },

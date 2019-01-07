@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 aliases:
   - /docs/reference/config/istio.routing.v1alpha1/
-number_of_entries: 61
+number_of_entries: 60
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -2137,10 +2137,10 @@ to the caller</p>
 </tbody>
 </table>
 </section>
-<h2 id="IstioListener">IstioListener</h2>
+<h2 id="IstioEgressListener">IstioEgressListener</h2>
 <section>
-<p>IstioListener specifies the properties of a single listener on the
-sidecar proxy attached to a workload.</p>
+<p>IstioEgressListener specifies the properties of an outbound traffic
+listener on the sidecar proxy attached to a workload.</p>
 
 <table class="message-fields">
 <thead>
@@ -2151,37 +2151,27 @@ sidecar proxy attached to a workload.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="IstioListener-name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>An optional arbitrary name associated with the listener used for
-emitting metrics.</p>
-
-</td>
-</tr>
-<tr id="IstioListener-capture_mode">
+<tr id="IstioEgressListener-capture_mode">
 <td><code>captureMode</code></td>
-<td><code><a href="#IstioListener-CaptureMode">IstioListener.CaptureMode</a></code></td>
+<td><code><a href="#CaptureMode">CaptureMode</a></code></td>
 <td>
 <p>When the bind address is an IP, the captureMode option dictates
 how traffic to the listener is expected to be captured (or not).</p>
 
 </td>
 </tr>
-<tr id="IstioListener-hosts">
+<tr id="IstioEgressListener-hosts">
 <td><code>hosts</code></td>
 <td><code>string[]</code></td>
 <td>
 <p>One or more services/virtualServices exposed by the listener in
-namespace/dnsName format.  <em><em>Hosts will be ignored for ingress
-servers</em></em>. For egress servers, the hosts field results in importing
-one or more publicly scoped services and VirtualServices from remote
-namespaces. The service in a namespace can be a service in the service
-registry (e.g., a kubernetes or cloud foundry service) or a service
-specified via ServiceEntry configuration. In addition, any publicly
-scoped DestinationRule associated with the imported services will also
-be imported.</p>
+namespace/dnsName format.  Publicly scoped services and
+VirtualServices from remote namespaces corresponding to the specified
+hosts will be imported. The service in a namespace can be a service in
+the service registry (e.g., a kubernetes or cloud foundry service) or
+a service specified via ServiceEntry configuration. In addition, any
+publicly scoped DestinationRule associated with the imported services
+will also be imported.</p>
 
 <p>Set the namespace to * to import a particular service from any
 available namespace (e.g., &ldquo;*/foo.example.com&rdquo;). Set the dnsName field
@@ -2192,60 +2182,6 @@ to * to import all services from the specified namespace (e.g.,
 namespace can be imported. Private services/configuration will not be
 imported. Refer to the scope setting associated with VirtualService,
 DestinationRule, ServiceEntry, etc. for details.</p>
-
-</td>
-</tr>
-<tr id="IstioListener-default_endpoint">
-<td><code>defaultEndpoint</code></td>
-<td><code>string</code></td>
-<td>
-<p>The IP endpoint or unix domain socket to which traffic should be
-forwarded to by default. In the context of an ingress server, this
-configuration can be used to redirect traffic arriving at the bind
-point on the sidecar to a port or unix domain socket where the
-application workload is listening for connections. Format should be
-127.0.0.1:PORT or unix:///path/to/socket</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="IstioListener-CaptureMode">IstioListener.CaptureMode</h2>
-<section>
-<p>CaptureMode describes how traffic to a listener is expected to be
-captured. Applicable only when the listener is bound to an IP.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="IstioListener-CaptureMode-DEFAULT">
-<td><code>DEFAULT</code></td>
-<td>
-<p>The default capture mode defined by the environment</p>
-
-</td>
-</tr>
-<tr id="IstioListener-CaptureMode-IPTABLES">
-<td><code>IPTABLES</code></td>
-<td>
-<p>Capture traffic using IPtables redirection</p>
-
-</td>
-</tr>
-<tr id="IstioListener-CaptureMode-NONE">
-<td><code>NONE</code></td>
-<td>
-<p>No traffic capture. When used in egress listener, the application is
-expected to explicitly communicate with the listener port/unix
-domain socket. When used in ingress listener, care needs to be taken
-to ensure that the listener port is not in use by other processes on
-the host.</p>
 
 </td>
 </tr>
@@ -2897,15 +2833,8 @@ spec:
 <td><code><a href="#Port">Port</a></code></td>
 <td>
 <p>REQUIRED: The Port on which the proxy should listen for incoming
-connections</p>
-
-</td>
-</tr>
-<tr id="Server-bind">
-<td><code>bind</code></td>
-<td><code>string</code></td>
-<td>
-<p>The IP address to which the listener should be bound.</p>
+connections. If using unix domain socket, use 0 as the port number,
+with a valid protocol and port name, along with the bind parameter.</p>
 
 </td>
 </tr>
@@ -2944,12 +2873,9 @@ https, and the TLS modes to use.</p>
 <td><code>defaultEndpoint</code></td>
 <td><code>string</code></td>
 <td>
-<p>The IP endpoint or unix domain socket to which traffic should be
-forwarded to by default. In the context of an ingress server, this
-configuration can be used to redirect traffic arriving at the bind
-point on the sidecar to a port or unix domain socket where the
-application workload is listening for connections. Format should be
-127.0.0.1:PORT or unix:///path/to/socket</p>
+<p>The loopback IP endpoint or unix domain socket to which traffic should
+be forwarded to by default. Format should be 127.0.0.1:PORT or
+unix:///path/to/socket or unix://@foobar (Linux abstract namespace).</p>
 
 </td>
 </tr>
@@ -3698,24 +3624,25 @@ domain socket endpoints.</p>
 </section>
 <h2 id="Sidecar">Sidecar</h2>
 <section>
-<p><code>Sidecar</code> describes the describes the configuration of the sidecar proxy
-that mediates inbound and outbound communication to the workload it is
-attached to. By default, Istio will program all sidecar proxies in the
-mesh with the necessary configuration required to reach every workload
-in the mesh, as well as accept traffic on all the ports associated with
-the workload. The Sidecar resource provides a way to fine tune the set
-of ports, protocols that the proxy will accept when forwarding traffic
-to and from the workload. In addition, it is possible to restrict the
-set of services that the proxy can reach when forwarding outbound
-traffic from the workload.</p>
+<p><code>Sidecar</code> describes the configuration of the sidecar proxy that mediates
+inbound and outbound communication to the workload it is attached to. By
+default, Istio will program all sidecar proxies in the mesh with the
+necessary configuration required to reach every workload in the mesh, as
+well as accept traffic on all the ports associated with the
+workload. The Sidecar resource provides a way to fine tune the set of
+ports, protocols that the proxy will accept when forwarding traffic to
+and from the workload. In addition, it is possible to restrict the set
+of services that the proxy can reach when forwarding outbound traffic
+from the workload.</p>
 
 <p>Services and configuration in a mesh are organized into one or more
 namespaces (e.g., a Kubernetes namespace or a CF org/space). A Sidecar
-resource in a namespace will apply to all workloads selected using the
-workloadSelector. In the absence of a workloadSelector, it will apply to
-all workloads in the namespace. When determining the Sidecar resource to
-be applied to a workload, preference will be given to the resource with
-a workloadSelector that selects this workload, over a Sidecar resource
+resource in a namespace will apply to one or more workloads in the same
+namespace, selected using the workloadSelector. In the absence of a
+workloadSelector, it will apply to all workloads in the same
+namespace. When determining the Sidecar resource to be applied to a
+workload, preference will be given to the resource with a
+workloadSelector that selects this workload, over a Sidecar resource
 without any workloadSelector.</p>
 
 <p>NOTE: <em><em>Each namespace can have only one Sidecar resource without any
@@ -3725,9 +3652,8 @@ behavior of the system is undefined if two or more Sidecar resources
 with a workload selector select the same workload.</p>
 
 <p>The example below delcares a Sidecar resource in the prod-us1 namespace
-that configures the sidecar to allow egress traffic to services in the
-prod-us1 and prod-apis namespaces, and the policy and telemetry service
-(if enabled) in the istio-system namespace.</p>
+that configures the sidecar to allow egress traffic to public services
+in the prod-us1, prod-apis, and the istio-system namespaces.</p>
 
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
 kind: Sidecar
@@ -3753,7 +3679,7 @@ spec:
 <tbody>
 <tr id="Sidecar-egress">
 <td><code>egress</code></td>
-<td><code><a href="#IstioListener">IstioListener[]</a></code></td>
+<td><code><a href="#IstioEgressListener">IstioEgressListener[]</a></code></td>
 <td>
 <p>Egress specifies the configuration of the sidecar for processing
 outbound traffic from the attached workload to other services in the
