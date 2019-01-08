@@ -18,6 +18,7 @@ package istio.mcp.v1alpha1;
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
 
 option go_package="istio.io/api/mcp/v1alpha1";
 option (gogoproto.equal_all) = true;
@@ -26,17 +27,36 @@ option (gogoproto.equal_all) = true;
 message Metadata {
   // Fully qualified name of the resource. Unique in context of a collection.
   //
-  // The FQ name consists of path segments which includes the resources
-  // location in a resource hierarchy. This hierarchy is currently
-  // two-levels: global and namespace, e.g.
+  // The fully qualified name consists of a directory and basename. The directory identifies
+  // the resources location in a resource hierarchy. The basename identifies the specific
+  // resource name within the context of that directory.
   //
-  //   namespaced    => <namespace>/<name>
-  //   global-scoped =>     $global/<name>
+  // The directory and basename are composed of one or more segments. Segments must be
+  // valid [DNS labels](https://tools.ietf.org/html/rfc1123). “/” is the delimiter between
+  // segments
   //
-  // Namespace is a [DNS compatible label](https://tools.ietf.org/html/rfc1123)
+  // The rightmost segment is the basename. All segments to the
+  // left of the basename form the directory. Segments moving towards the left
+  // represent higher positions in the resource hierarchy, similar to reverse
+  // DNS notation. e.g.
   //
-  // Namespaces that begin with "$" are reserved for special cases, e.g. globally
-  // scoped resources.
+  //    /<org>/<team>/<subteam>/<resource basename>
+  //
+  // An empty directory indicates a resource that is located at the root of the
+  // hierarchy, e.g.
+  //
+  //    /<globally scoped resource>
+  //
+  // On Kubernetes the resource hierarchy is two-levels: namespaces and
+  // cluster-scoped (i.e. global).
+  //
+  // Namespace resources fully qualified name is of the form:
+  //
+  //    "/<k8s namespace>/<k8s resource name>"
+  //
+  // Cluster scoped resources are located at the root of the hierarchy and are of the form:
+  //
+  //    "/<k8s resource name>"
   string name = 1;
 
   // The creation timestamp of the resource.
