@@ -16,7 +16,6 @@ syntax = "proto3";
 
 package istio.mcp.v1alpha1;
 
-import "google/protobuf/struct.proto";
 import "google/rpc/status.proto";
 import "gogoproto/gogo.proto";
 import "mcp/v1alpha1/resource.proto";
@@ -33,8 +32,8 @@ message SinkNode {
   // An opaque identifier for the MCP node.
   string id = 1;
 
-  // Opaque metadata extending the node identifier.
-  google.protobuf.Struct metadata = 2;
+  // Opaque annotations extending the node identifier.
+  map<string,string> annotations = 2;
 }
 
 // A MeshConfigRequest requests a set of versioned resources of the

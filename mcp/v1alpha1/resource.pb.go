@@ -6,7 +6,7 @@ package v1alpha1
 import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
 import math "math"
-import google_protobuf1 "github.com/gogo/protobuf/types"
+import google_protobuf "github.com/gogo/protobuf/types"
 import _ "github.com/gogo/protobuf/gogoproto"
 
 import io "io"
@@ -22,7 +22,7 @@ type Resource struct {
 	// Common metadata describing the resource.
 	Metadata *Metadata `protobuf:"bytes,1,opt,name=metadata" json:"metadata,omitempty"`
 	// The primary payload for the resource.
-	Body *google_protobuf1.Any `protobuf:"bytes,2,opt,name=body" json:"body,omitempty"`
+	Body *google_protobuf.Any `protobuf:"bytes,2,opt,name=body" json:"body,omitempty"`
 }
 
 func (m *Resource) Reset()                    { *m = Resource{} }
@@ -37,7 +37,7 @@ func (m *Resource) GetMetadata() *Metadata {
 	return nil
 }
 
-func (m *Resource) GetBody() *google_protobuf1.Any {
+func (m *Resource) GetBody() *google_protobuf.Any {
 	if m != nil {
 		return m.Body
 	}
@@ -237,7 +237,7 @@ func (m *Resource) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Body == nil {
-				m.Body = &google_protobuf1.Any{}
+				m.Body = &google_protobuf.Any{}
 			}
 			if err := m.Body.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err

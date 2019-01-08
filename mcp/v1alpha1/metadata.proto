@@ -18,7 +18,6 @@ package istio.mcp.v1alpha1;
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/struct.proto";
 
 option go_package="istio.io/api/mcp/v1alpha1";
 option (gogoproto.equal_all) = true;
@@ -28,20 +27,16 @@ message Metadata {
   // Fully qualified name of the resource. Unique in context of a collection.
   //
   // The FQ name consists of path segments which includes the resources
-  // location in a resource hierarchy. On k8s, this hierarchy is
-  // two-levels: cluster and namespace, e.g.
+  // location in a resource hierarchy. This hierarchy is currently
+  // two-levels: global and namespace, e.g.
   //
-  //   namespaced     => <k8s-namespace>/<k8s-name>
-  //   cluster-scoped =>                /<k8s-name>
+  //   namespaced    => <namespace>/<name>
+  //   global-scoped =>     $global/<name>
   //
-  // Deeper hierarchy could also be represented, e.g.
+  // Namespace is a [DNS compatible label](https://tools.ietf.org/html/rfc1123)
   //
-  //        <org>/<team>/<name>
-  //
-  // “/” are used as the standard delimiter. The rightmost segment is
-  // the most specific identifier (e.g. leaf). Segments moving towards the left
-  // represent higher positions in the resource hierarchy, similar to reverse
-  // DNS notation.
+  // Namespaces that begin with "$" are reserved for special cases, e.g. globally
+  // scoped resources.
   string name = 1;
 
   // The creation timestamp of the resource.

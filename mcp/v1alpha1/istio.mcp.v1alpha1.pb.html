@@ -343,21 +343,16 @@ MeshConfigRequest bearing the nonce.</p>
 <p>Fully qualified name of the resource. Unique in context of a collection.</p>
 
 <p>The FQ name consists of path segments which includes the resources
-location in a resource hierarchy. On k8s, this hierarchy is
-two-levels: cluster and namespace, e.g.</p>
+location in a resource hierarchy. This hierarchy is currently
+two-levels: global and namespace, e.g.</p>
 
-<p>namespaced     =&gt; <k8s-namespace>/<k8s-name>
-  cluster-scoped =&gt;                /<k8s-name></p>
+<p>namespaced    =&gt; <namespace>/<name>
+  global-scoped =&gt;     $global/<name></p>
 
-<p>Deeper hierarchy could also be represented, e.g.</p>
+<p>Namespace is a <a href="https://tools.ietf.org/html/rfc1123">DNS compatible label</a></p>
 
-<pre><code>   &lt;org&gt;/&lt;team&gt;/&lt;name&gt;
-</code></pre>
-
-<p>“/” are used as the standard delimiter. The rightmost segment is
-the most specific identifier (e.g. leaf). Segments moving towards the left
-represent higher positions in the resource hierarchy, similar to reverse
-DNS notation.</p>
+<p>Namespaces that begin with &ldquo;$&rdquo; are reserved for special cases, e.g. globally
+scoped resources.</p>
 
 </td>
 </tr>
@@ -608,11 +603,11 @@ from the underlying transport layer (e.g. rpc credentials).</p>
 
 </td>
 </tr>
-<tr id="SinkNode-metadata">
-<td><code>metadata</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">google.protobuf.Struct</a></code></td>
+<tr id="SinkNode-annotations">
+<td><code>annotations</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>Opaque metadata extending the node identifier.</p>
+<p>Opaque annotations extending the node identifier.</p>
 
 </td>
 </tr>
