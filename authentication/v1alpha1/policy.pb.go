@@ -787,7 +787,9 @@ type TargetSelector struct {
 	// fully qualified domain name will be resolved in a platform specific manner.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// $hide_from_docs
-	// Select workload by labels. This is a prefer way than using service name.
+	// $not-implemented-hide
+	// Select workload by labels.
+	// Once implemented, this is a prefer way over using service name.
 	// Either name or labels can be used, but not both.
 	Labels map[string]string `protobuf:"bytes,3,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Specifies the ports. Note that this is the port(s) exposed by the service, not workload ports.

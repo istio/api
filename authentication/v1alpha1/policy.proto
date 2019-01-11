@@ -361,7 +361,9 @@ message TargetSelector {
   string name = 1;
 
   // $hide_from_docs
-  // Select workload by labels. This is a prefer way than using service name.
+  // $not-implemented-hide
+  // Select workload by labels.
+  // Once implemented, this is a prefer way over using service name.
   // Either name or labels can be used, but not both.
   map<string, string> labels = 3;
 
