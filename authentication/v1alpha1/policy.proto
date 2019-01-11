@@ -360,6 +360,11 @@ message TargetSelector {
   // fully qualified domain name will be resolved in a platform specific manner.
   string name = 1;
 
+  // $hide_from_docs
+  // Select workload by labels. This is a prefer way than using service name.
+  // Either name or labels can be used, but not both.
+  map<string, string> labels = 3;
+
   // Specifies the ports. Note that this is the port(s) exposed by the service, not workload ports.
   // For example, if a service is defined as below, then `8000` should be used, not `9000`.
   // ```
