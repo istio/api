@@ -160,6 +160,9 @@ message Rule {
 
       // Append values to the existing header values.
       APPEND = 2;
+
+      // Replace a header by name whether or not the value is empty.
+      REPLACE_ALWAYS = 3;
     }
 
     // Optional. Header operation type. Default operation is to replace the value of the header by name.

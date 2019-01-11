@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='policy/v1beta1/cfg.proto',
   package='istio.policy.v1beta1',
   syntax='proto3',
-  serialized_pb=_b('\n\x18policy/v1beta1/cfg.proto\x12\x14istio.policy.v1beta1\x1a\x14gogoproto/gogo.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fpolicy/v1beta1/value_type.proto\"\xc5\x02\n\x11\x41ttributeManifest\x12\x10\n\x08revision\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12K\n\nattributes\x18\x03 \x03(\x0b\x32\x37.istio.policy.v1beta1.AttributeManifest.AttributesEntry\x1aY\n\rAttributeInfo\x12\x13\n\x0b\x64\x65scription\x18\x01 \x01(\t\x12\x33\n\nvalue_type\x18\x02 \x01(\x0e\x32\x1f.istio.policy.v1beta1.ValueType\x1ah\n\x0f\x41ttributesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x44\n\x05value\x18\x02 \x01(\x0b\x32\x35.istio.policy.v1beta1.AttributeManifest.AttributeInfo:\x02\x38\x01\"\xe2\x03\n\x04Rule\x12\r\n\x05match\x18\x01 \x01(\t\x12-\n\x07\x61\x63tions\x18\x02 \x03(\x0b\x32\x1c.istio.policy.v1beta1.Action\x12U\n\x19request_header_operations\x18\x03 \x03(\x0b\x32\x32.istio.policy.v1beta1.Rule.HeaderOperationTemplate\x12V\n\x1aresponse_header_operations\x18\x04 \x03(\x0b\x32\x32.istio.policy.v1beta1.Rule.HeaderOperationTemplate\x12\x30\n\x08sampling\x18\x05 \x01(\x0b\x32\x1e.istio.policy.v1beta1.Sampling\x1a\xba\x01\n\x17HeaderOperationTemplate\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06values\x18\x02 \x03(\t\x12O\n\toperation\x18\x03 \x01(\x0e\x32<.istio.policy.v1beta1.Rule.HeaderOperationTemplate.Operation\"0\n\tOperation\x12\x0b\n\x07REPLACE\x10\x00\x12\n\n\x06REMOVE\x10\x01\x12\n\n\x06\x41PPEND\x10\x02\":\n\x06\x41\x63tion\x12\x0f\n\x07handler\x18\x02 \x01(\t\x12\x11\n\tinstances\x18\x03 \x03(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\"\xfe\x01\n\x08Instance\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x1c\n\x11\x63ompiled_template\x18\xf4\xed\xa9  \x01(\t\x12\x10\n\x08template\x18\x02 \x01(\t\x12\'\n\x06params\x18\x03 \x01(\x0b\x32\x17.google.protobuf.Struct\x12Q\n\x12\x61ttribute_bindings\x18\x04 \x03(\x0b\x32\x35.istio.policy.v1beta1.Instance.AttributeBindingsEntry\x1a\x38\n\x16\x41ttributeBindingsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xa4\x01\n\x07Handler\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x1b\n\x10\x63ompiled_adapter\x18\xf4\xed\xa9  \x01(\t\x12\x0f\n\x07\x61\x64\x61pter\x18\x02 \x01(\t\x12\'\n\x06params\x18\x03 \x01(\x0b\x32\x17.google.protobuf.Struct\x12\x34\n\nconnection\x18\x04 \x01(\x0b\x32 .istio.policy.v1beta1.Connection\"\x8d\x01\n\nConnection\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\x12\x30\n\x07timeout\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationB\x04\x98\xdf\x1f\x01\x12<\n\x0e\x61uthentication\x18\x04 \x01(\x0b\x32$.istio.policy.v1beta1.Authentication\"}\n\x08Sampling\x12\x34\n\x06random\x18\x01 \x01(\x0b\x32$.istio.policy.v1beta1.RandomSampling\x12;\n\nrate_limit\x18\x02 \x01(\x0b\x32\'.istio.policy.v1beta1.RateLimitSampling\"\x94\x01\n\x0eRandomSampling\x12\x1c\n\x14\x61ttribute_expression\x18\x01 \x01(\t\x12@\n\x0fpercent_sampled\x18\x02 \x01(\x0b\x32\'.istio.policy.v1beta1.FractionalPercent\x12\"\n\x1ause_independent_randomness\x18\x03 \x01(\x08\"\x89\x01\n\x11RateLimitSampling\x12>\n\x11sampling_duration\x18\x01 \x01(\x0b\x32\x19.google.protobuf.DurationB\x08\xc8\xde\x1f\x00\x98\xdf\x1f\x01\x12\x1d\n\x15max_unsampled_entries\x18\x02 \x01(\x03\x12\x15\n\rsampling_rate\x18\x03 \x01(\x03\"\xa6\x01\n\x11\x46ractionalPercent\x12\x11\n\tnumerator\x18\x01 \x01(\r\x12L\n\x0b\x64\x65nominator\x18\x02 \x01(\x0e\x32\x37.istio.policy.v1beta1.FractionalPercent.DenominatorType\"0\n\x0f\x44\x65nominatorType\x12\x0b\n\x07HUNDRED\x10\x00\x12\x10\n\x0cTEN_THOUSAND\x10\x01\"w\n\x0e\x41uthentication\x12(\n\x03tls\x18\x01 \x01(\x0b\x32\x19.istio.policy.v1beta1.TlsH\x00\x12.\n\x06mutual\x18\x02 \x01(\x0b\x32\x1c.istio.policy.v1beta1.MutualH\x00\x42\x0b\n\tauth_type\"\xfb\x01\n\x03Tls\x12\x17\n\x0f\x63\x61_certificates\x18\x01 \x01(\t\x12\x14\n\ntoken_path\x18\x02 \x01(\tH\x00\x12,\n\x05oauth\x18\x03 \x01(\x0b\x32\x1b.istio.policy.v1beta1.OAuthH\x00\x12;\n\x0b\x61uth_header\x18\x04 \x01(\x0e\x32$.istio.policy.v1beta1.Tls.AuthHeaderH\x01\x12\x17\n\rcustom_header\x18\x05 \x01(\tH\x01\"#\n\nAuthHeader\x12\t\n\x05PLAIN\x10\x00\x12\n\n\x06\x42\x45\x41RER\x10\x01\x42\x0e\n\x0ctoken_sourceB\x0c\n\ntoken_type\"\xd5\x01\n\x05OAuth\x12\x11\n\tclient_id\x18\x01 \x01(\t\x12\x15\n\rclient_secret\x18\x02 \x01(\t\x12\x11\n\ttoken_url\x18\x03 \x01(\t\x12\x0e\n\x06scopes\x18\x04 \x03(\t\x12H\n\x0f\x65ndpoint_params\x18\x05 \x03(\x0b\x32/.istio.policy.v1beta1.OAuth.EndpointParamsEntry\x1a\x35\n\x13\x45ndpointParamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"R\n\x06Mutual\x12\x13\n\x0bprivate_key\x18\x01 \x01(\t\x12\x1a\n\x12\x63lient_certificate\x18\x02 \x01(\t\x12\x17\n\x0f\x63\x61_certificates\x18\x03 \x01(\tB\x1dZ\x1bistio.io/api/policy/v1beta1b\x06proto3')
+  serialized_pb=_b('\n\x18policy/v1beta1/cfg.proto\x12\x14istio.policy.v1beta1\x1a\x14gogoproto/gogo.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fpolicy/v1beta1/value_type.proto\"\xc5\x02\n\x11\x41ttributeManifest\x12\x10\n\x08revision\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12K\n\nattributes\x18\x03 \x03(\x0b\x32\x37.istio.policy.v1beta1.AttributeManifest.AttributesEntry\x1aY\n\rAttributeInfo\x12\x13\n\x0b\x64\x65scription\x18\x01 \x01(\t\x12\x33\n\nvalue_type\x18\x02 \x01(\x0e\x32\x1f.istio.policy.v1beta1.ValueType\x1ah\n\x0f\x41ttributesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x44\n\x05value\x18\x02 \x01(\x0b\x32\x35.istio.policy.v1beta1.AttributeManifest.AttributeInfo:\x02\x38\x01\"\xf6\x03\n\x04Rule\x12\r\n\x05match\x18\x01 \x01(\t\x12-\n\x07\x61\x63tions\x18\x02 \x03(\x0b\x32\x1c.istio.policy.v1beta1.Action\x12U\n\x19request_header_operations\x18\x03 \x03(\x0b\x32\x32.istio.policy.v1beta1.Rule.HeaderOperationTemplate\x12V\n\x1aresponse_header_operations\x18\x04 \x03(\x0b\x32\x32.istio.policy.v1beta1.Rule.HeaderOperationTemplate\x12\x30\n\x08sampling\x18\x05 \x01(\x0b\x32\x1e.istio.policy.v1beta1.Sampling\x1a\xce\x01\n\x17HeaderOperationTemplate\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06values\x18\x02 \x03(\t\x12O\n\toperation\x18\x03 \x01(\x0e\x32<.istio.policy.v1beta1.Rule.HeaderOperationTemplate.Operation\"D\n\tOperation\x12\x0b\n\x07REPLACE\x10\x00\x12\n\n\x06REMOVE\x10\x01\x12\n\n\x06\x41PPEND\x10\x02\x12\x12\n\x0eREPLACE_ALWAYS\x10\x03\":\n\x06\x41\x63tion\x12\x0f\n\x07handler\x18\x02 \x01(\t\x12\x11\n\tinstances\x18\x03 \x03(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\"\xfe\x01\n\x08Instance\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x1c\n\x11\x63ompiled_template\x18\xf4\xed\xa9  \x01(\t\x12\x10\n\x08template\x18\x02 \x01(\t\x12\'\n\x06params\x18\x03 \x01(\x0b\x32\x17.google.protobuf.Struct\x12Q\n\x12\x61ttribute_bindings\x18\x04 \x03(\x0b\x32\x35.istio.policy.v1beta1.Instance.AttributeBindingsEntry\x1a\x38\n\x16\x41ttributeBindingsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xa4\x01\n\x07Handler\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x1b\n\x10\x63ompiled_adapter\x18\xf4\xed\xa9  \x01(\t\x12\x0f\n\x07\x61\x64\x61pter\x18\x02 \x01(\t\x12\'\n\x06params\x18\x03 \x01(\x0b\x32\x17.google.protobuf.Struct\x12\x34\n\nconnection\x18\x04 \x01(\x0b\x32 .istio.policy.v1beta1.Connection\"\x8d\x01\n\nConnection\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\x12\x30\n\x07timeout\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationB\x04\x98\xdf\x1f\x01\x12<\n\x0e\x61uthentication\x18\x04 \x01(\x0b\x32$.istio.policy.v1beta1.Authentication\"}\n\x08Sampling\x12\x34\n\x06random\x18\x01 \x01(\x0b\x32$.istio.policy.v1beta1.RandomSampling\x12;\n\nrate_limit\x18\x02 \x01(\x0b\x32\'.istio.policy.v1beta1.RateLimitSampling\"\x94\x01\n\x0eRandomSampling\x12\x1c\n\x14\x61ttribute_expression\x18\x01 \x01(\t\x12@\n\x0fpercent_sampled\x18\x02 \x01(\x0b\x32\'.istio.policy.v1beta1.FractionalPercent\x12\"\n\x1ause_independent_randomness\x18\x03 \x01(\x08\"\x89\x01\n\x11RateLimitSampling\x12>\n\x11sampling_duration\x18\x01 \x01(\x0b\x32\x19.google.protobuf.DurationB\x08\xc8\xde\x1f\x00\x98\xdf\x1f\x01\x12\x1d\n\x15max_unsampled_entries\x18\x02 \x01(\x03\x12\x15\n\rsampling_rate\x18\x03 \x01(\x03\"\xa6\x01\n\x11\x46ractionalPercent\x12\x11\n\tnumerator\x18\x01 \x01(\r\x12L\n\x0b\x64\x65nominator\x18\x02 \x01(\x0e\x32\x37.istio.policy.v1beta1.FractionalPercent.DenominatorType\"0\n\x0f\x44\x65nominatorType\x12\x0b\n\x07HUNDRED\x10\x00\x12\x10\n\x0cTEN_THOUSAND\x10\x01\"w\n\x0e\x41uthentication\x12(\n\x03tls\x18\x01 \x01(\x0b\x32\x19.istio.policy.v1beta1.TlsH\x00\x12.\n\x06mutual\x18\x02 \x01(\x0b\x32\x1c.istio.policy.v1beta1.MutualH\x00\x42\x0b\n\tauth_type\"\xfb\x01\n\x03Tls\x12\x17\n\x0f\x63\x61_certificates\x18\x01 \x01(\t\x12\x14\n\ntoken_path\x18\x02 \x01(\tH\x00\x12,\n\x05oauth\x18\x03 \x01(\x0b\x32\x1b.istio.policy.v1beta1.OAuthH\x00\x12;\n\x0b\x61uth_header\x18\x04 \x01(\x0e\x32$.istio.policy.v1beta1.Tls.AuthHeaderH\x01\x12\x17\n\rcustom_header\x18\x05 \x01(\tH\x01\"#\n\nAuthHeader\x12\t\n\x05PLAIN\x10\x00\x12\n\n\x06\x42\x45\x41RER\x10\x01\x42\x0e\n\x0ctoken_sourceB\x0c\n\ntoken_type\"\xd5\x01\n\x05OAuth\x12\x11\n\tclient_id\x18\x01 \x01(\t\x12\x15\n\rclient_secret\x18\x02 \x01(\t\x12\x11\n\ttoken_url\x18\x03 \x01(\t\x12\x0e\n\x06scopes\x18\x04 \x03(\t\x12H\n\x0f\x65ndpoint_params\x18\x05 \x03(\x0b\x32/.istio.policy.v1beta1.OAuth.EndpointParamsEntry\x1a\x35\n\x13\x45ndpointParamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"R\n\x06Mutual\x12\x13\n\x0bprivate_key\x18\x01 \x01(\t\x12\x1a\n\x12\x63lient_certificate\x18\x02 \x01(\t\x12\x17\n\x0f\x63\x61_certificates\x18\x03 \x01(\tB\x1dZ\x1bistio.io/api/policy/v1beta1b\x06proto3')
   ,
   dependencies=[gogoproto_dot_gogo__pb2.DESCRIPTOR,google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,policy_dot_v1beta1_dot_value__type__pb2.DESCRIPTOR,])
 
@@ -47,11 +47,15 @@ _RULE_HEADEROPERATIONTEMPLATE_OPERATION = _descriptor.EnumDescriptor(
       name='APPEND', index=2, number=2,
       options=None,
       type=None),
+    _descriptor.EnumValueDescriptor(
+      name='REPLACE_ALWAYS', index=3, number=3,
+      options=None,
+      type=None),
   ],
   containing_type=None,
   options=None,
   serialized_start=930,
-  serialized_end=978,
+  serialized_end=998,
 )
 _sym_db.RegisterEnumDescriptor(_RULE_HEADEROPERATIONTEMPLATE_OPERATION)
 
@@ -72,8 +76,8 @@ _FRACTIONALPERCENT_DENOMINATORTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2145,
-  serialized_end=2193,
+  serialized_start=2165,
+  serialized_end=2213,
 )
 _sym_db.RegisterEnumDescriptor(_FRACTIONALPERCENT_DENOMINATORTYPE)
 
@@ -94,8 +98,8 @@ _TLS_AUTHHEADER = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2503,
-  serialized_end=2538,
+  serialized_start=2523,
+  serialized_end=2558,
 )
 _sym_db.RegisterEnumDescriptor(_TLS_AUTHHEADER)
 
@@ -261,7 +265,7 @@ _RULE_HEADEROPERATIONTEMPLATE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=792,
-  serialized_end=978,
+  serialized_end=998,
 )
 
 _RULE = _descriptor.Descriptor(
@@ -319,7 +323,7 @@ _RULE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=496,
-  serialized_end=978,
+  serialized_end=998,
 )
 
 
@@ -363,8 +367,8 @@ _ACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=980,
-  serialized_end=1038,
+  serialized_start=1000,
+  serialized_end=1058,
 )
 
 
@@ -401,8 +405,8 @@ _INSTANCE_ATTRIBUTEBINDINGSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1239,
-  serialized_end=1295,
+  serialized_start=1259,
+  serialized_end=1315,
 )
 
 _INSTANCE = _descriptor.Descriptor(
@@ -459,8 +463,8 @@ _INSTANCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1041,
-  serialized_end=1295,
+  serialized_start=1061,
+  serialized_end=1315,
 )
 
 
@@ -518,8 +522,8 @@ _HANDLER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1298,
-  serialized_end=1462,
+  serialized_start=1318,
+  serialized_end=1482,
 )
 
 
@@ -563,8 +567,8 @@ _CONNECTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1465,
-  serialized_end=1606,
+  serialized_start=1485,
+  serialized_end=1626,
 )
 
 
@@ -601,8 +605,8 @@ _SAMPLING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1608,
-  serialized_end=1733,
+  serialized_start=1628,
+  serialized_end=1753,
 )
 
 
@@ -646,8 +650,8 @@ _RANDOMSAMPLING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1736,
-  serialized_end=1884,
+  serialized_start=1756,
+  serialized_end=1904,
 )
 
 
@@ -691,8 +695,8 @@ _RATELIMITSAMPLING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1887,
-  serialized_end=2024,
+  serialized_start=1907,
+  serialized_end=2044,
 )
 
 
@@ -730,8 +734,8 @@ _FRACTIONALPERCENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2027,
-  serialized_end=2193,
+  serialized_start=2047,
+  serialized_end=2213,
 )
 
 
@@ -771,8 +775,8 @@ _AUTHENTICATION = _descriptor.Descriptor(
       name='auth_type', full_name='istio.policy.v1beta1.Authentication.auth_type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=2195,
-  serialized_end=2314,
+  serialized_start=2215,
+  serialized_end=2334,
 )
 
 
@@ -837,8 +841,8 @@ _TLS = _descriptor.Descriptor(
       name='token_type', full_name='istio.policy.v1beta1.Tls.token_type',
       index=1, containing_type=None, fields=[]),
   ],
-  serialized_start=2317,
-  serialized_end=2568,
+  serialized_start=2337,
+  serialized_end=2588,
 )
 
 
@@ -875,8 +879,8 @@ _OAUTH_ENDPOINTPARAMSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2731,
-  serialized_end=2784,
+  serialized_start=2751,
+  serialized_end=2804,
 )
 
 _OAUTH = _descriptor.Descriptor(
@@ -933,8 +937,8 @@ _OAUTH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2571,
-  serialized_end=2784,
+  serialized_start=2591,
+  serialized_end=2804,
 )
 
 
@@ -978,8 +982,8 @@ _MUTUAL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2786,
-  serialized_end=2868,
+  serialized_start=2806,
+  serialized_end=2888,
 )
 
 _ATTRIBUTEMANIFEST_ATTRIBUTEINFO.fields_by_name['value_type'].enum_type = policy_dot_v1beta1_dot_value__type__pb2._VALUETYPE
