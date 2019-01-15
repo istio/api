@@ -1,0 +1,47 @@
+// Copyright 2019 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+// $title: Common
+// $description: Common protos for Istio API.
+// $location: https://istio.io/docs/reference/config/istio.common.v1alpha1.html
+
+// This package defines common protos.
+package istio.common.v1alpha1;
+
+option go_package = "istio.io/api/common/v1alpha1";
+
+// WorkloadSelector specifies the criteria used to determine if the Gateway
+// or Sidecar resource can be applied to a proxy. The matching criteria
+// includes the metadata associated with a proxy, workload info such as
+// labels attached to the pod/VM, or any other info that the proxy provides
+// to Istio during the initial handshake. If multiple conditions are
+// specified, all conditions need to match in order for the workload to be
+// selected. Currently, only label based selection mechanism is supported.
+message WorkloadSelector {
+  // One or more labels that indicate a specific set of pods/VMs on which
+  // this sidecar configuration should be applied. The scope of label
+  // search is restricted to the configuration namespace in which the the
+  // resource is present.
+  map<string, string> labels = 1;
+
+  // $hide_from_docs
+  // other forms of identification supplied by the proxy
+  // when connecting to Pilot, such as X509 fields, tenant IDs, JWT,
+  // etc. This has nothing to do with the request level authN etc.
+  // Note: This WorkloadSelector is used by multiple Istio API (e.g. sidecar,
+  // authentication and rbac), before adding any new fields here, please confirm
+  // it's compatible with all existing usages.
+}

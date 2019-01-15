@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 aliases:
   - /docs/reference/config/istio.routing.v1alpha1/
-number_of_entries: 60
+number_of_entries: 59
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -4450,39 +4450,6 @@ matching an incoming request is used.</p>
 PRIVATE if this virtual service should not be exported, i.e. restrict
 the applicability of this virtual service to only workloads in the same
 namespace as the virtual service.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="WorkloadSelector">WorkloadSelector</h2>
-<section>
-<p>WorkloadSelector specifies the criteria used to determine if the Gateway
-or Sidecar resource can be applied to a proxy. The matching criteria
-includes the metadata associated with a proxy, workload info such as
-labels attached to the pod/VM, or any other info that the proxy provides
-to Istio during the initial handshake. If multiple conditions are
-specified, all conditions need to match in order for the workload to be
-selected. Currently, only label based selection mechanism is supported.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="WorkloadSelector-labels">
-<td><code>labels</code></td>
-<td><code>map&lt;string,&nbsp;string&gt;</code></td>
-<td>
-<p>One or more labels that indicate a specific set of pods/VMs on which
-this sidecar configuration should be applied. The scope of label
-search is restricted to the configuration namespace in which the the
-resource is present.</p>
 
 </td>
 </tr>

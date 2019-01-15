@@ -89,7 +89,9 @@ generate: \
 	generate-authn-go \
 	generate-authn-python \
 	generate-envoy-go \
-	generate-envoy-python
+	generate-envoy-python \
+	generate-common-go \
+	generate-common-python
 
 #####################
 # mcp/...
@@ -345,6 +347,32 @@ clean-envoy:
 	rm -f $(envoy_pb_gos)
 
 #####################
+# common/...
+#####################
+
+common_v1alpha1_path := common/v1alpha1
+common_v1alpha1_protos := $(shell find $(common_v1alpha1_path) -type f -name '*.proto' | sort)
+common_v1alpha1_pb_gos := $(common_v1alpha1_protos:.proto=.pb.go)
+common_v1alpha1_pb_pythons := $(common_v1alpha1_protos:.proto=_pb2.py)
+common_v1alpha1_pb_doc := $(common_v1alpha1_path)/istio.common.v1alpha1.pb.html
+
+generate-common-go: $(common_v1alpha1_pb_gos) $(common_v1alpha1_pb_doc)
+
+$(common_v1alpha1_pb_gos) $(common_v1alpha1_pb_doc): $(common_v1alpha1_protos)
+	## Generate common/v1alpha1/*.pb.go
+	$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(common_v1alpha1_path) $^
+
+generate-common-python: $(common_v1alpha1_pb_pythons)
+
+$(common_v1alpha1_pb_pythons): $(common_v1alpha1_protos)
+	## Generate python/istio_api/common/v1alpha1/*_pb2.py
+	@$(docker_gen) $(protoc_gen_python_plugin) $^
+
+clean-common:
+	rm -f $(common_v1alpha1_pb_gos)
+	rm -f $(common_v1alpha1_pb_doc)
+
+#####################
 # Protolock
 #####################
 
@@ -375,4 +403,5 @@ clean: 	clean-mcp \
 	clean-rbac \
 	clean-authn \
 	clean-envoy \
-	clean-python
+	clean-python \
+	clean-common

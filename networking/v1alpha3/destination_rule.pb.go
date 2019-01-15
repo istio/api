@@ -28,7 +28,6 @@
 		Sidecar
 		IstioIngressListener
 		IstioEgressListener
-		WorkloadSelector
 		VirtualService
 		Destination
 		HTTPRoute
