@@ -1,0 +1,109 @@
+# Gopkg.toml example
+#
+# Refer to https://golang.github.io/dep/docs/Gopkg.toml.html
+# for detailed Gopkg.toml documentation.
+#
+# required = ["github.com/user/thing/cmd/thing"]
+# ignored = ["github.com/user/project/pkgX", "bitbucket.org/user/project/pkgA/pkgY"]
+#
+# [[constraint]]
+#   name = "github.com/user/project"
+#   version = "1.0.0"
+#
+# [[constraint]]
+#   name = "github.com/user/project2"
+#   branch = "dev"
+#   source = "github.com/myfork/project2"
+#
+# [[override]]
+#   name = "github.com/x/y"
+#   version = "2.4.0"
+#
+# [prune]
+#   non-go = false
+#   go-tests = true
+#   unused-packages = true
+
+required = [
+  # tool requirements
+  "github.com/gogo/protobuf/protoc-gen-gofast",
+  "github.com/gogo/protobuf/protoc-gen-gogo",
+  "github.com/gogo/protobuf/protoc-gen-gogofast",
+  "github.com/gogo/protobuf/protoc-gen-gogofaster",
+  "github.com/gogo/protobuf/protoc-gen-gogoslick",
+  "github.com/golang/protobuf/protoc-gen-go",
+  "istio.io/tools/cmd/kubetype-gen",
+  "k8s.io/code-generator/cmd/defaulter-gen",
+  "k8s.io/code-generator/cmd/deepcopy-gen",
+  "k8s.io/code-generator/cmd/client-gen",
+  "k8s.io/code-generator/cmd/lister-gen",
+  "k8s.io/code-generator/cmd/informer-gen",
+]
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/gogo/googleapis"
+
+[[override]]
+  name = "github.com/gogo/protobuf"
+  # aligns with 2018-06-12 protoc image build
+  revision = "1ef32a8b9fc3f8ec940126907cedb5998f6318e4"
+
+[[constraint]]
+  name = "github.com/golang/protobuf"
+  # aligns with 2018-06-12 protoc image build
+  revision = "05f48f4eaf0e05663b562bab533cdd472238ce29"
+
+[[constraint]]
+  branch = "release-branch.go1.10"
+  name = "golang.org/x/net"
+
+[[constraint]]
+  name = "google.golang.org/grpc"
+  version = "^1.13.0"
+
+[[constraint]]
+  branch = "release-1.11"
+  name = "k8s.io/apimachinery"
+
+[[constraint]]
+  branch = "release-8.0"
+  name = "k8s.io/client-go"
+
+[[override]]
+  branch = "release-1.11"
+  name = "k8s.io/code-generator"
+
+[[override]]
+  name = "k8s.io/gengo"
+  # line up with k8s.io/code-generator@release-1.11
+  revision = "01a732e01d00cb9a81bb0ca050d3e6d2b947927b"
+
+[prune]
+  go-tests = true
+  unused-packages = true
+  non-go = true
+  [[prune.project]]
+    name = "istio.io/tools"
+    non-go = false
+    unused-packages = false
+  [[prune.project]]
+    name = "k8s.io/apimachinery"
+    non-go = false
+    unused-packages = false
+  [[prune.project]]
+    name = "k8s.io/code-generator"
+    non-go = false
+    unused-packages = false
+  [[prune.project]]
+    name = "k8s.io/gengo"
+    non-go = false
+    unused-packages = false
+  [[prune.project]]
+    name = "github.com/gogo/googleapis"
+    non-go = false
+    unused-packages = false
+  [[prune.project]]
+    name = "github.com/gogo/protobuf"
+    non-go = false
+    unused-packages = false
