@@ -581,6 +581,11 @@
                 "id": 5,
                 "name": "error_detail",
                 "type": "google.rpc.Status"
+              },
+              {
+                "id": 6,
+                "name": "incremental",
+                "type": "bool"
               }
             ],
             "maps": [
@@ -623,6 +628,11 @@
                 "id": 5,
                 "name": "nonce",
                 "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "incremental",
+                "type": "bool"
               }
             ]
           }
