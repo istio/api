@@ -4630,6 +4630,263 @@
       }
     },
     {
+      "protopath": "policy:/:v1beta1:/:http_response.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "HttpStatusCode",
+            "enum_fields": [
+              {
+                "name": "Empty",
+                "integer": 0
+              },
+              {
+                "name": "Continue",
+                "integer": 100
+              },
+              {
+                "name": "OK",
+                "integer": 200
+              },
+              {
+                "name": "Created",
+                "integer": 201
+              },
+              {
+                "name": "Accepted",
+                "integer": 202
+              },
+              {
+                "name": "NonAuthoritativeInformation",
+                "integer": 203
+              },
+              {
+                "name": "NoContent",
+                "integer": 204
+              },
+              {
+                "name": "ResetContent",
+                "integer": 205
+              },
+              {
+                "name": "PartialContent",
+                "integer": 206
+              },
+              {
+                "name": "MultiStatus",
+                "integer": 207
+              },
+              {
+                "name": "AlreadyReported",
+                "integer": 208
+              },
+              {
+                "name": "IMUsed",
+                "integer": 226
+              },
+              {
+                "name": "MultipleChoices",
+                "integer": 300
+              },
+              {
+                "name": "MovedPermanently",
+                "integer": 301
+              },
+              {
+                "name": "Found",
+                "integer": 302
+              },
+              {
+                "name": "SeeOther",
+                "integer": 303
+              },
+              {
+                "name": "NotModified",
+                "integer": 304
+              },
+              {
+                "name": "UseProxy",
+                "integer": 305
+              },
+              {
+                "name": "TemporaryRedirect",
+                "integer": 307
+              },
+              {
+                "name": "PermanentRedirect",
+                "integer": 308
+              },
+              {
+                "name": "BadRequest",
+                "integer": 400
+              },
+              {
+                "name": "Unauthorized",
+                "integer": 401
+              },
+              {
+                "name": "PaymentRequired",
+                "integer": 402
+              },
+              {
+                "name": "Forbidden",
+                "integer": 403
+              },
+              {
+                "name": "NotFound",
+                "integer": 404
+              },
+              {
+                "name": "MethodNotAllowed",
+                "integer": 405
+              },
+              {
+                "name": "NotAcceptable",
+                "integer": 406
+              },
+              {
+                "name": "ProxyAuthenticationRequired",
+                "integer": 407
+              },
+              {
+                "name": "RequestTimeout",
+                "integer": 408
+              },
+              {
+                "name": "Conflict",
+                "integer": 409
+              },
+              {
+                "name": "Gone",
+                "integer": 410
+              },
+              {
+                "name": "LengthRequired",
+                "integer": 411
+              },
+              {
+                "name": "PreconditionFailed",
+                "integer": 412
+              },
+              {
+                "name": "PayloadTooLarge",
+                "integer": 413
+              },
+              {
+                "name": "URITooLong",
+                "integer": 414
+              },
+              {
+                "name": "UnsupportedMediaType",
+                "integer": 415
+              },
+              {
+                "name": "RangeNotSatisfiable",
+                "integer": 416
+              },
+              {
+                "name": "ExpectationFailed",
+                "integer": 417
+              },
+              {
+                "name": "MisdirectedRequest",
+                "integer": 421
+              },
+              {
+                "name": "UnprocessableEntity",
+                "integer": 422
+              },
+              {
+                "name": "Locked",
+                "integer": 423
+              },
+              {
+                "name": "FailedDependency",
+                "integer": 424
+              },
+              {
+                "name": "UpgradeRequired",
+                "integer": 426
+              },
+              {
+                "name": "PreconditionRequired",
+                "integer": 428
+              },
+              {
+                "name": "TooManyRequests",
+                "integer": 429
+              },
+              {
+                "name": "RequestHeaderFieldsTooLarge",
+                "integer": 431
+              },
+              {
+                "name": "InternalServerError",
+                "integer": 500
+              },
+              {
+                "name": "NotImplemented",
+                "integer": 501
+              },
+              {
+                "name": "BadGateway",
+                "integer": 502
+              },
+              {
+                "name": "ServiceUnavailable",
+                "integer": 503
+              },
+              {
+                "name": "GatewayTimeout",
+                "integer": 504
+              },
+              {
+                "name": "HTTPVersionNotSupported",
+                "integer": 505
+              },
+              {
+                "name": "VariantAlsoNegotiates",
+                "integer": 506
+              },
+              {
+                "name": "InsufficientStorage",
+                "integer": 507
+              },
+              {
+                "name": "LoopDetected",
+                "integer": 508
+              },
+              {
+                "name": "NotExtended",
+                "integer": 510
+              },
+              {
+                "name": "NetworkAuthenticationRequired",
+                "integer": 511
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "name": "DirectHttpResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "code",
+                "type": "HttpStatusCode"
+              },
+              {
+                "id": 2,
+                "name": "body",
+                "type": "string"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
       "protopath": "policy:/:v1beta1:/:type.proto",
       "def": {
         "messages": [
@@ -4805,6 +5062,319 @@
               {
                 "name": "STRING_MAP",
                 "integer": 11
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "protoc-tmp:/:google:/:rpc:/:code.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "Code",
+            "enum_fields": [
+              {
+                "name": "OK",
+                "integer": 0
+              },
+              {
+                "name": "CANCELLED",
+                "integer": 1
+              },
+              {
+                "name": "UNKNOWN",
+                "integer": 2
+              },
+              {
+                "name": "INVALID_ARGUMENT",
+                "integer": 3
+              },
+              {
+                "name": "DEADLINE_EXCEEDED",
+                "integer": 4
+              },
+              {
+                "name": "NOT_FOUND",
+                "integer": 5
+              },
+              {
+                "name": "ALREADY_EXISTS",
+                "integer": 6
+              },
+              {
+                "name": "PERMISSION_DENIED",
+                "integer": 7
+              },
+              {
+                "name": "UNAUTHENTICATED",
+                "integer": 16
+              },
+              {
+                "name": "RESOURCE_EXHAUSTED",
+                "integer": 8
+              },
+              {
+                "name": "FAILED_PRECONDITION",
+                "integer": 9
+              },
+              {
+                "name": "ABORTED",
+                "integer": 10
+              },
+              {
+                "name": "OUT_OF_RANGE",
+                "integer": 11
+              },
+              {
+                "name": "UNIMPLEMENTED",
+                "integer": 12
+              },
+              {
+                "name": "INTERNAL",
+                "integer": 13
+              },
+              {
+                "name": "UNAVAILABLE",
+                "integer": 14
+              },
+              {
+                "name": "DATA_LOSS",
+                "integer": 15
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "protoc-tmp:/:google:/:rpc:/:error_details.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "RetryInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "retry_delay",
+                "type": "google.protobuf.Duration"
+              }
+            ]
+          },
+          {
+            "name": "DebugInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "stack_entries",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "detail",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "QuotaFailure",
+            "fields": [
+              {
+                "id": 1,
+                "name": "violations",
+                "type": "Violation",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "Violation",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "subject",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "description",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "PreconditionFailure",
+            "fields": [
+              {
+                "id": 1,
+                "name": "violations",
+                "type": "Violation",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "Violation",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "type",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "subject",
+                    "type": "string"
+                  },
+                  {
+                    "id": 3,
+                    "name": "description",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "BadRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "field_violations",
+                "type": "FieldViolation",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "FieldViolation",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "field",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "description",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "RequestInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "request_id",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "serving_data",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "ResourceInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "resource_type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "resource_name",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "owner",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "description",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "Help",
+            "fields": [
+              {
+                "id": 1,
+                "name": "links",
+                "type": "Link",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "Link",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "description",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "url",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "LocalizedMessage",
+            "fields": [
+              {
+                "id": 1,
+                "name": "locale",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "message",
+                "type": "string"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "protoc-tmp:/:google:/:rpc:/:status.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "Status",
+            "fields": [
+              {
+                "id": 1,
+                "name": "code",
+                "type": "int32"
+              },
+              {
+                "id": 2,
+                "name": "message",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "details",
+                "type": "google.protobuf.Any",
+                "is_repeated": true
               }
             ]
           }
