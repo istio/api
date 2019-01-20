@@ -2682,12 +2682,6 @@
                 "name": "consistent_hash",
                 "type": "ConsistentHashLB"
               },
-              {
-                "id": 3,
-                "name": "locality_weight_settings",
-                "type": "LocalityWeightSetting",
-                "is_repeated": true
-              }
             ],
             "messages": [
               {
