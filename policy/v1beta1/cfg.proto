@@ -167,11 +167,11 @@ message Rule {
   }
 
   // Optional. Templatized operations on the request headers using values produced by the
-  // rule actions.
+  // rule actions. Require the check action result to be OK.
   repeated HeaderOperationTemplate request_header_operations = 3;
 
   // Optional. Templatized operations on the response headers using values produced by the
-  // rule actions.
+  // rule actions. Require the check action result to be OK.
   repeated HeaderOperationTemplate response_header_operations = 4;
 
   // $hide_from_docs

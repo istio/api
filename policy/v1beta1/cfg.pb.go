@@ -291,10 +291,10 @@ type Rule struct {
 	// Optional. The actions that will be executed when match evaluates to `true`.
 	Actions []*Action `protobuf:"bytes,2,rep,name=actions" json:"actions,omitempty"`
 	// Optional. Templatized operations on the request headers using values produced by the
-	// rule actions.
+	// rule actions. Require the check action result to be OK.
 	RequestHeaderOperations []*Rule_HeaderOperationTemplate `protobuf:"bytes,3,rep,name=request_header_operations,json=requestHeaderOperations" json:"request_header_operations,omitempty"`
 	// Optional. Templatized operations on the response headers using values produced by the
-	// rule actions.
+	// rule actions. Require the check action result to be OK.
 	ResponseHeaderOperations []*Rule_HeaderOperationTemplate `protobuf:"bytes,4,rep,name=response_header_operations,json=responseHeaderOperations" json:"response_header_operations,omitempty"`
 	// $hide_from_docs
 	// Optional. Provides the ability to add a sampling configuration for Mixer rules. This sampling
