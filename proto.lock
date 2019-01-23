@@ -4914,6 +4914,16 @@
                 "name": "body",
                 "type": "string"
               }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 3,
+                  "name": "headers",
+                  "type": "string"
+                }
+              }
             ]
           }
         ]

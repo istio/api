@@ -323,6 +323,14 @@ to an RPC error.</p>
 
 </td>
 </tr>
+<tr id="DirectHttpResponse-headers">
+<td><code>headers</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>Optional HTTP response headers.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1117,7 +1125,7 @@ name starts with &ldquo;ratings&rdquo;</li>
 <td><code><a href="#Rule-HeaderOperationTemplate">Rule.HeaderOperationTemplate[]</a></code></td>
 <td>
 <p>Optional. Templatized operations on the request headers using values produced by the
-rule actions.</p>
+rule actions. Require the check action result to be OK.</p>
 
 </td>
 </tr>
@@ -1126,7 +1134,7 @@ rule actions.</p>
 <td><code><a href="#Rule-HeaderOperationTemplate">Rule.HeaderOperationTemplate[]</a></code></td>
 <td>
 <p>Optional. Templatized operations on the response headers using values produced by the
-rule actions.</p>
+rule actions. Require the check action result to be OK.</p>
 
 </td>
 </tr>
