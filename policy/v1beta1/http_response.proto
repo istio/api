@@ -26,6 +26,9 @@ message DirectHttpResponse {
 
   // HTTP response body.
   string body = 2;
+
+  // Optional HTTP response headers.
+  map<string, string> headers = 3;
 }
 
 // HTTP response codes.
