@@ -335,6 +335,11 @@ message Server {
     // Optional: If specified, only support the specified cipher list.
     // Otherwise default to the default cipher list supported by Envoy.
     repeated string cipher_suites = 9;
+
+    // Optional: Name of credential to be queried by gateway via secret discovery
+    // service(SDS). If specified, gateway obtains credentials via SDS API calls
+    // to gateway agent.
+    string sds_name = 10;
   }
 
   // Set of TLS related options that govern the server's behavior. Use
