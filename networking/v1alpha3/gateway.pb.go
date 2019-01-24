@@ -430,7 +430,7 @@ type Server_TLSOptions struct {
 	// Optional: If specified, the gateway controllers (with SDS enabled)
 	// use the specified name as the SDS secret config name to call the SDS
 	// server, to retrieve the key and certificates. Otherwise, the gateway
-	// controllers (with SDS enabled) uses the first value in the hosts as
+	// controllers (with SDS enabled) use the first value in the hosts as
 	// the SDS secret config name to call the SDS server.
 	SdsName string `protobuf:"bytes,10,opt,name=sds_name,json=sdsName,proto3" json:"sds_name,omitempty"`
 }
