@@ -427,9 +427,11 @@ type Server_TLSOptions struct {
 	// Optional: If specified, only support the specified cipher list.
 	// Otherwise default to the default cipher list supported by Envoy.
 	CipherSuites []string `protobuf:"bytes,9,rep,name=cipher_suites,json=cipherSuites" json:"cipher_suites,omitempty"`
-	// Optional: Name of credential to be queried by gateway via secret discovery
-	// service(SDS). If specified, gateway obtains credentials via SDS API calls
-	// to gateway agent.
+	// Optional: If specified, the gateway controllers (with SDS enabled)
+	// use the specified name as the SDS secret config name to call the SDS
+	// server, to retrieve the key and certificates. Otherwise, the gateway
+	// controllers (with SDS enabled) uses the first value in the hosts as
+	// the SDS secret config name to call the SDS server.
 	SdsName string `protobuf:"bytes,10,opt,name=sds_name,json=sdsName,proto3" json:"sds_name,omitempty"`
 }
 
