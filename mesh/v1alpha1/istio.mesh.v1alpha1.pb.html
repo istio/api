@@ -99,8 +99,8 @@ and &ldquo;us-west/zone2/</em>&rdquo;. This example specifies that when traffic 
 service originates from workloads in &ldquo;us-west/zone1/<em>&rdquo;, 80% of the traffic
 will be sent to endpoints in &ldquo;us-west/zone1/</em>&rdquo;, i.e the same zone, and the
 remaining 20% will go to endpoints in &ldquo;us-west/zone2/<em>&rdquo;. This setup is
-intended to favor routing traffic to endpoint in the same locality. A similar
-setting is specified for traffic originating in &ldquo;us-west/zone2/</em>&rdquo;.</p>
+intended to favor routing traffic to endpoints in the same locality.
+A similar setting is specified for traffic originating in &ldquo;us-west/zone2/</em>&rdquo;.</p>
 
 <pre><code class="language-yaml">  distribute:
     - from: us-west/zone1/*

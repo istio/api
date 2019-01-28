@@ -263,7 +263,7 @@ type MeshConfig struct {
 	// Fallback to old identity format(without trust domain) if not set.
 	TrustDomain string `protobuf:"bytes,26,opt,name=trust_domain,json=trustDomain,proto3" json:"trust_domain,omitempty"`
 	// $hide_from_docs
-	// The default value for the ServiceEntry.exportTo field and services
+	// The default value for the ServiceEntry.export_to field and services
 	// imported through container registry integrations, e.g. this applies to
 	// Kubernetes Service resources. The value is a list of namespace names and
 	// reserved namespace aliases. The allowed namespace aliases are:
@@ -289,14 +289,14 @@ type MeshConfig struct {
 	// Sidecar, and Gateway.
 	DefaultServiceExportTo []string `protobuf:"bytes,31,rep,name=default_service_export_to,json=defaultServiceExportTo" json:"default_service_export_to,omitempty"`
 	// $hide_from_docs
-	// The default value for the VirtualService.exportTo field. Has the same
+	// The default value for the VirtualService.export_to field. Has the same
 	// syntax as 'default_service_export_to'.
 	//
 	// If not set the system will use "*" as the default value which implies that
 	// virtual services are exported to all namespaces
 	DefaultVirtualServiceExportTo []string `protobuf:"bytes,32,rep,name=default_virtual_service_export_to,json=defaultVirtualServiceExportTo" json:"default_virtual_service_export_to,omitempty"`
 	// $hide_from_docs
-	// The default value for the DestinationRule.exportTo field. Has the same
+	// The default value for the DestinationRule.export_to field. Has the same
 	// syntax as 'default_service_export_to'.
 	//
 	// If not set the system will use "*" as the default value which implies that
@@ -304,9 +304,10 @@ type MeshConfig struct {
 	DefaultDestinationRuleExportTo []string `protobuf:"bytes,33,rep,name=default_destination_rule_export_to,json=defaultDestinationRuleExportTo" json:"default_destination_rule_export_to,omitempty"`
 	// $hide_from_docs
 	// The namespace to treat as the administrative root namespace for
-	// istio configuration. When processing a namespace Istio will treat
-	// declarations in the root namespace as if they belonged to each leaf
-	// namespace.
+	// istio configuration. When processing a leaf namespace Istio will search for
+	// declarations in that namespace first and if none are found it will
+	// search in the root namespace. Any matching declaration found in the root
+	// namespace is processed as if it were declared in the leaf namespace.
 	//
 	// The precise semantics of this processing are documented on each resource
 	// type.
@@ -621,8 +622,8 @@ func (m *ConfigSource) GetTlsSettings() *istio_networking_v1alpha31.TLSSettings 
 // service originates from workloads in "us-west/zone1/*", 80% of the traffic
 // will be sent to endpoints in "us-west/zone1/*", i.e the same zone, and the
 // remaining 20% will go to endpoints in "us-west/zone2/*". This setup is
-// intended to favor routing traffic to endpoint in the same locality. A similar
-// setting is specified for traffic originating in "us-west/zone2/*".
+// intended to favor routing traffic to endpoints in the same locality.
+// A similar setting is specified for traffic originating in "us-west/zone2/*".
 //
 // ```yaml
 //   distribute:

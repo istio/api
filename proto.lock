@@ -2678,7 +2678,7 @@
               },
               {
                 "id": 4,
-                "name": "exportTo",
+                "name": "export_to",
                 "type": "string",
                 "is_repeated": true
               }

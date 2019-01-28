@@ -134,7 +134,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //
 // The following example demonstrates the use of a dedicated egress gateway
 // through which all external service traffic is forwarded.
-// The 'exportTo' field allows for control over the visibility of a service
+// The 'export_to' field allows for control over the visibility of a service
 // declaration to other namespaces in the mesh. By default a service is exported
 // to all namespaces. The following example restricts the visibility to the
 // current namespace, represented by ".", so that it cannot be used by other
@@ -149,7 +149,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // spec:
 //   hosts:
 //   - httpbin.com
-//   exportTo:
+//   export_to:
 //   - .
 //   location: MESH_EXTERNAL
 //   ports:
@@ -195,7 +195,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // spec:
 //   hosts:
 //   - httpbin.com
-//   exportTo:
+//   export_to:
 //   - *
 //   gateways:
 //   - mesh
@@ -443,6 +443,7 @@ message ServiceEntry {
   // One or more endpoints associated with the service.
   repeated Endpoint endpoints = 6;
 
+  // $hide_from_docs
   // A list of namespaces to which this service is exported. Exporting a service
   // allows it to used by sidecars, gateways and virtual services defined in
   // other namespaces. This feature provides a mechanism for service owners
@@ -457,7 +458,7 @@ message ServiceEntry {
   // defines an export to all namespaces.
   //
   // For a Kubernetes Service the equivalent effect can be achieved by setting
-  // the annotation "networking.istio.io/exportTo" to a comma-separated list
+  // the annotation "networking.istio.io/export_to" to a comma-separated list
   // of namespace names.
   repeated string export_to = 7;
 }

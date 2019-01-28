@@ -118,11 +118,11 @@ message DestinationRule {
   // service. Traffic policies can be overridden at subset level.
   repeated Subset subsets = 3;
 
+  // $hide_from_docs
   // The resolution of a DestinationRule to apply to a service occurs in the
-  // context of a hierarchy of namespaces. This rule control whether those
+  // context of a hierarchy of namespaces. This rule controls whether those
   // namespaces are allowed to select this rule.
-  //
-  repeated string exportTo = 4;
+  repeated string export_to = 4;
 }
 
 // Traffic policies to apply for a specific destination, across all
