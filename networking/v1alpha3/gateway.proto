@@ -332,7 +332,7 @@ message Server {
     string private_key = 4 [deprecated=true];
 
     message CredentialStore {
-      oneof credentialStore {
+      oneof credential_store {
         CredentialStoreFileBackend files = 1;
         CredentialStoreRemoteBackend remote = 2;
       }
