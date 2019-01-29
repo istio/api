@@ -1355,6 +1355,11 @@
                 "id": 19,
                 "name": "tracing",
                 "type": "Tracing"
+              },
+              {
+                "id": 20,
+                "name": "termination_grace_period_duration",
+                "type": "google.protobuf.Duration"
               }
             ]
           }
