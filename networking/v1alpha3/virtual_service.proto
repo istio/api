@@ -116,6 +116,12 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //       version: v2
 // ```
 //
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message VirtualService {
   // REQUIRED. The destination hosts to which traffic is being sent. Could
   // be a DNS name with wildcard prefix or an IP address.  Depending on the

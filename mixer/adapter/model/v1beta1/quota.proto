@@ -18,7 +18,7 @@ package istio.mixer.adapter.model.v1beta1;
 
 option go_package="istio.io/api/mixer/adapter/model/v1beta1";
 
-import "gogoproto/gogo.proto";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 
 option (gogoproto.goproto_getters_all) = false;

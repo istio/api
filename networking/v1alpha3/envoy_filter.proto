@@ -57,6 +57,13 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //       inlineCode: |
 //         ... lua code ...
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message EnvoyFilter {
   // One or more labels that indicate a specific set of pods/VMs whose
   // proxies should be configured to use these additional filters.  The

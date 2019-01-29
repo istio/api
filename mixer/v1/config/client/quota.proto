@@ -18,7 +18,7 @@ package istio.mixer.v1.config.client;
 
 option go_package="istio.io/api/mixer/v1/config/client";
 
-import "gogoproto/gogo.proto";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "mixer/v1/config/client/service.proto";
 
 option (gogoproto.goproto_getters_all) = false;
@@ -66,6 +66,13 @@ option (gogoproto.gostring_all) = false;
 // ```
 
 // Determines the quotas used for individual requests.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message QuotaSpec {
   // A list of Quota rules.
   repeated QuotaRule rules = 1;
@@ -121,6 +128,13 @@ message Quota {
 
 // QuotaSpecBinding defines the binding between QuotaSpecs and one or more
 // IstioService.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message QuotaSpecBinding {
   // REQUIRED. One or more services to map the listed QuotaSpec onto.
   repeated IstioService services = 1;

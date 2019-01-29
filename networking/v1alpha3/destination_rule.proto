@@ -16,7 +16,7 @@ syntax = "proto3";
 import "google/protobuf/duration.proto";
 import "networking/v1alpha3/virtual_service.proto";
 import "networking/v1alpha3/sidecar.proto";
-import "gogoproto/gogo.proto";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 
 package istio.networking.v1alpha3;
 
@@ -92,6 +92,13 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //       loadBalancer:
 //         simple: ROUND_ROBIN
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message DestinationRule {
   // REQUIRED. The name of a service from the service registry. Service
   // names are looked up from the platform's service registry (e.g.,

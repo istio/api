@@ -18,7 +18,7 @@ package istio.mixer.v1.config.client;
 
 option go_package="istio.io/api/mixer/v1/config/client";
 
-import "gogoproto/gogo.proto";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 
 import "mixer/v1/attributes.proto";
 import "mixer/v1/config/client/service.proto";
@@ -82,6 +82,13 @@ option (gogoproto.gostring_all) = false;
 //   api_keys:
 //   - query: api-key
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message HTTPAPISpec {
   // List of attributes that are generated when *any* of the HTTP
   // patterns match. This list typically includes the "api.service"
@@ -229,6 +236,13 @@ message HTTPAPISpecReference {
 //   - name: petstore
 //     namespace: default
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message HTTPAPISpecBinding {
   // REQUIRED. One or more services to map the listed HTTPAPISpec onto.
   repeated IstioService services = 1;

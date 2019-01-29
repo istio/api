@@ -18,7 +18,7 @@ syntax = "proto3";
 package istio.mcp.v1alpha1;
 
 import "google/protobuf/any.proto";
-import "gogoproto/gogo.proto";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "mcp/v1alpha1/metadata.proto";
 
 option go_package="istio.io/api/mcp/v1alpha1";
