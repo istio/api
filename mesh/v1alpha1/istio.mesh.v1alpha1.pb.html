@@ -964,6 +964,18 @@ Increase the value of this field if you find that the metrics from Envoys are tr
 
 </td>
 </tr>
+<tr id="ProxyConfig-termination_grace_period_duration">
+<td><code>terminationGracePeriodDuration</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td>
+<p>The time in seconds that Istio will allow Envoy to complete requests before terminating it.
+This currently supports all HTTP based protocols (HTTP, HTTP2, GRPC, etc.) but not HTTPS.
+On receiving SIGTERM or SIGINT Istio instructs Envoy to respond with 503 to any new inbound requests
+It will continue to allow new outbound and any already open connections. Once the duration is reached,
+Istio kills the Envoy process. MUST be &gt;=1s (e.g., <em>1s/1m/1h</em>)</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>

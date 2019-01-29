@@ -164,4 +164,11 @@ message ProxyConfig {
 
   // Tracing configuration to be used by the proxy.
   Tracing tracing = 19;
+
+  // The time in seconds that Istio will allow Envoy to complete requests before terminating it.
+  // This currently supports all HTTP based protocols (HTTP, HTTP2, GRPC, etc.) but not HTTPS.
+  // On receiving SIGTERM or SIGINT Istio instructs Envoy to respond with 503 to any new inbound requests
+  // It will continue to allow new outbound and any already open connections. Once the duration is reached, 
+  // Istio kills the Envoy process. MUST be >=1s (e.g., _1s/1m/1h_)
+  google.protobuf.Duration termination_grace_period_duration = 20;
 }
