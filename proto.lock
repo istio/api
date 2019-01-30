@@ -3301,6 +3301,11 @@
                     "type": "string"
                   },
                   {
+                    "id": 10,
+                    "name": "credential_store",
+                    "type": "CredentialStore"
+                  },
+                  {
                     "id": 5,
                     "name": "ca_certificates",
                     "type": "string"
@@ -3326,11 +3331,53 @@
                     "name": "cipher_suites",
                     "type": "string",
                     "is_repeated": true
+                  }
+                ],
+                "messages": [
+                  {
+                    "name": "CredentialStoreFileBackend",
+                    "fields": [
+                      {
+                        "id": 3,
+                        "name": "server_certificate",
+                        "type": "string"
+                      },
+                      {
+                        "id": 4,
+                        "name": "private_key",
+                        "type": "string"
+                      }
+                    ]
                   },
                   {
-                    "id": 10,
-                    "name": "sds_name",
-                    "type": "string"
+                    "name": "CredentialStoreRemoteBackend",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "resource_name",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "server_address",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "CredentialStore",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "files",
+                        "type": "CredentialStoreFileBackend"
+                      },
+                      {
+                        "id": 2,
+                        "name": "remote",
+                        "type": "CredentialStoreRemoteBackend"
+                      }
+                    ]
                   }
                 ]
               }
