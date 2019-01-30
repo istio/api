@@ -280,9 +280,11 @@ message MeshConfig {
   // Locality based load balancing distribution or failover settings.
   LocalityLoadBalancerSetting locality_lb_setting = 35;
 
+  // Settings controlling eviction of unhealthy hosts from the load balancing pool.
+  istio.networking.v1alpha3.OutlierDetection outlier_detection = 36;
 
   // $hide_from_docs
-  // Next available field number: 36
+  // Next available field number: 37
 }
 
 // ConfigSource describes information about a configuration store inside a
