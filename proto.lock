@@ -5289,6 +5289,12 @@
                 "name": "constraints",
                 "type": "Constraint",
                 "is_repeated": true
+              },
+              {
+                "id": 11,
+                "name": "filters",
+                "type": "Filter",
+                "is_repeated": true
               }
             ],
             "messages": [
@@ -5302,6 +5308,27 @@
                   },
                   {
                     "id": 2,
+                    "name": "values",
+                    "type": "string",
+                    "is_repeated": true
+                  }
+                ]
+              },
+              {
+                "name": "Filter",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "key",
+                    "type": "string"
+                  },
+                  {
+                    "id": 3,
                     "name": "values",
                     "type": "string",
                     "is_repeated": true

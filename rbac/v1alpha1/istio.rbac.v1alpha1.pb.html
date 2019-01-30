@@ -4,7 +4,7 @@ description: Configuration for Role Based Access Control.
 location: https://istio.io/docs/reference/config/authorization/istio.rbac.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 9
+number_of_entries: 10
 ---
 <p>Istio RBAC (Role Based Access Control) defines ServiceRole and ServiceRoleBinding
 objects.</p>
@@ -17,6 +17,7 @@ the following standard fields:</p>
 <li>methods: HTTP methods. In the case of gRPC, this field is ignored because the value is always &ldquo;POST&rdquo;.</li>
 <li>paths: HTTP paths or gRPC methods. Note that gRPC methods should be
 presented in the form of &ldquo;/packageName.serviceName/methodName&rdquo; and are case sensitive.</li>
+<li>filters: a list of filters.</li>
 </ul>
 
 <p>In addition to the standard fields, operators can also use custom keys in the <code>constraints</code> field,
@@ -131,6 +132,14 @@ If not specified, it matches to any methods.</p>
 
 </td>
 </tr>
+<tr id="AccessRule-filters">
+<td><code>filters</code></td>
+<td><code><a href="#AccessRule-Filter">AccessRule.Filter[]</a></code></td>
+<td>
+<p>Optional. A list of filters to match against.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -163,6 +172,46 @@ If not specified, it matches to any methods.</p>
 Exact match, prefix match, and suffix match are supported.
 For example, the value &ldquo;v1alpha2&rdquo; matches &ldquo;v1alpha2&rdquo; (exact match),
 or &ldquo;v1<em>&rdquo; (prefix match), or &ldquo;</em>alpha2&rdquo; (suffix match).</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AccessRule-Filter">AccessRule.Filter</h2>
+<section>
+<p>Definition of a filter rule.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AccessRule-Filter-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>The name of the filter.</p>
+
+</td>
+</tr>
+<tr id="AccessRule-Filter-key">
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>
+<p>The key to retrieve dynamic metadata emitted by the filter.</p>
+
+</td>
+</tr>
+<tr id="AccessRule-Filter-values">
+<td><code>values</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>List of values to match against. Exact, prefix, and suffix match are supported.</p>
 
 </td>
 </tr>
