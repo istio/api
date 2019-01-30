@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 aliases:
   - /docs/reference/config/istio.routing.v1alpha1/
-number_of_entries: 63
+number_of_entries: 60
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -2928,30 +2928,21 @@ enforced.</p>
 
 </td>
 </tr>
-<tr id="Server-TLSOptions-server_certificate" class="deprecated ">
+<tr id="Server-TLSOptions-server_certificate">
 <td><code>serverCertificate</code></td>
 <td><code>string</code></td>
 <td>
 <p>REQUIRED if mode is <code>SIMPLE</code> or <code>MUTUAL</code>. The path to the file
-holding the server-side TLS certificate to use.
-Deprecated. Use</p>
+holding the server-side TLS certificate to use.</p>
 
 </td>
 </tr>
-<tr id="Server-TLSOptions-private_key" class="deprecated ">
+<tr id="Server-TLSOptions-private_key">
 <td><code>privateKey</code></td>
 <td><code>string</code></td>
 <td>
 <p>REQUIRED if mode is <code>SIMPLE</code> or <code>MUTUAL</code>. The path to the file
 holding the server&rsquo;s private key.</p>
-
-</td>
-</tr>
-<tr id="Server-TLSOptions-credential_store">
-<td><code>credentialStore</code></td>
-<td><code><a href="#Server-TLSOptions-CredentialStore">Server.TLSOptions.CredentialStore</a></code></td>
-<td>
-<p>REQUIRED if the mode is <code>SIMPLE</code> or <code>MUTUAL</code>.</p>
 
 </td>
 </tr>
@@ -2999,106 +2990,15 @@ Otherwise default to the default cipher list supported by Envoy.</p>
 
 </td>
 </tr>
-</tbody>
-</table>
-</section>
-<h2 id="Server-TLSOptions-CredentialStore">Server.TLSOptions.CredentialStore</h2>
-<section>
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Server-TLSOptions-CredentialStore-files" class="oneof oneof-start">
-<td><code>files</code></td>
-<td><code><a href="#Server-TLSOptions-CredentialStoreFileBackend">Server.TLSOptions.CredentialStoreFileBackend (oneof)</a></code></td>
-<td>
-</td>
-</tr>
-<tr id="Server-TLSOptions-CredentialStore-remote" class="oneof">
-<td><code>remote</code></td>
-<td><code><a href="#Server-TLSOptions-CredentialStoreRemoteBackend">Server.TLSOptions.CredentialStoreRemoteBackend (oneof)</a></code></td>
-<td>
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="Server-TLSOptions-CredentialStoreFileBackend">Server.TLSOptions.CredentialStoreFileBackend</h2>
-<section>
-<p>The file backend specifies the file system paths where the
-server&rsquo;s public and private keys can be obtained.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Server-TLSOptions-CredentialStoreFileBackend-server_certificate">
-<td><code>serverCertificate</code></td>
+<tr id="Server-TLSOptions-sds_name">
+<td><code>sdsName</code></td>
 <td><code>string</code></td>
 <td>
-<p>REQUIRED if mode is <code>SIMPLE</code> or <code>MUTUAL</code>. The path to the file
-holding the server-side TLS certificate to use.</p>
-
-</td>
-</tr>
-<tr id="Server-TLSOptions-CredentialStoreFileBackend-private_key">
-<td><code>privateKey</code></td>
-<td><code>string</code></td>
-<td>
-<p>REQUIRED if mode is <code>SIMPLE</code> or <code>MUTUAL</code>. The path to the file
-holding the server&rsquo;s private key.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="Server-TLSOptions-CredentialStoreRemoteBackend">Server.TLSOptions.CredentialStoreRemoteBackend</h2>
-<section>
-<p>The remote backend provides information about the remote secret
-management server that contains the server&rsquo;s public and private keys.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Server-TLSOptions-CredentialStoreRemoteBackend-resource_name">
-<td><code>resourceName</code></td>
-<td><code>string</code></td>
-<td>
-<p>REQUIRED the name of the resource that the credential server can
-use to identify the certificates associated with the gateway
-server. In kubernetes, this should correspond to the name of the
-secret that contains the server-side TLS certificate and the
-server&rsquo;s private key. Note that the secret should contain both the
-public and private keys associated with the server port.</p>
-
-<p>It is possible to use the same resourceName across several servers
-on different ports, if these servers share the same credentials.</p>
-
-</td>
-</tr>
-<tr id="Server-TLSOptions-CredentialStoreRemoteBackend-server_address">
-<td><code>serverAddress</code></td>
-<td><code>string</code></td>
-<td>
-<p>The address where the credential store server can be reached.
-If omitted, will default to unix:/var/run/gateway/sds</p>
+<p>Optional: If specified, the gateway controllers (with SDS enabled)
+use the specified name as the SDS secret config name to call the SDS
+server, to retrieve the key and certificates. Otherwise, the gateway
+controllers (with SDS enabled) use the first value in the hosts as
+the SDS secret config name to call the SDS server.</p>
 
 </td>
 </tr>
