@@ -296,11 +296,11 @@ message Server {
     message CredentialStoreFileBackend {
       // REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
       // holding the server-side TLS certificate to use.
-      string server_certificate = 3;
+      string server_certificate = 1;
 
       // REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
       // holding the server's private key.
-      string private_key = 4;
+      string private_key = 2;
     };
 
     // The remote backend provides information about the remote secret

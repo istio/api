@@ -3338,12 +3338,12 @@
                     "name": "CredentialStoreFileBackend",
                     "fields": [
                       {
-                        "id": 3,
+                        "id": 1,
                         "name": "server_certificate",
                         "type": "string"
                       },
                       {
-                        "id": 4,
+                        "id": 2,
                         "name": "private_key",
                         "type": "string"
                       }
