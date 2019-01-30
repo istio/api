@@ -1000,6 +1000,11 @@
                 "id": 35,
                 "name": "locality_lb_setting",
                 "type": "LocalityLoadBalancerSetting"
+              },
+              {
+                "id": 36,
+                "name": "outlier_detection",
+                "type": "istio.networking.v1alpha3.OutlierDetection"
               }
             ],
             "reserved_ids": [
