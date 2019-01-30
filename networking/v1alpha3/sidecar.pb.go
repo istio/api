@@ -153,6 +153,12 @@ func (CaptureMode) EnumDescriptor() ([]byte, []int) { return fileDescriptorSidec
 //     - "prod-us1/*"
 // ```
 //
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type Sidecar struct {
 	// Criteria used to select the specific set of pods/VMs on which this
 	// sidecar configuration should be applied. If omitted, the sidecar

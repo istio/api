@@ -363,6 +363,12 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 // specified above. In other words, a call to `http://foo.bar.com/baz` would
 // be translated to `http://uk.foo.bar.com/baz`.
 //
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type ServiceEntry struct {
 	// REQUIRED. The hosts associated with the ServiceEntry. Could be a DNS
 	// name with wildcard prefix (external services only). DNS names in hosts

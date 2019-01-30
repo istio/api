@@ -191,6 +191,16 @@ spec:
     namespaces: [ &quot;default&quot; ]
 </code></pre>
 
+<p><!-- go code generation tags
++kubetype-gen
++kubetype-gen:groupVersion=rbac.istio.io/v1alpha1
++kubetype-gen:kubeType=RbacConfig
++kubetype-gen:kubeType=ClusterRbacConfig
++kubetype-gen:ClusterRbacConfig:tag=genclient:nonNamespaced
++genclient
++k8s:deepcopy-gen=true
+--></p>
+
 <table class="message-fields">
 <thead>
 <tr>
@@ -343,6 +353,13 @@ The ServiceRole object must be in the same namespace as the ServiceRoleBinding o
 <section>
 <p>ServiceRole specification contains a list of access rules (permissions).</p>
 
+<p><!-- go code generation tags
++kubetype-gen
++kubetype-gen:groupVersion=rbac.istio.io/v1alpha1
++genclient
++k8s:deepcopy-gen=true
+--></p>
+
 <table class="message-fields">
 <thead>
 <tr>
@@ -366,6 +383,13 @@ The ServiceRole object must be in the same namespace as the ServiceRoleBinding o
 <h2 id="ServiceRoleBinding">ServiceRoleBinding</h2>
 <section>
 <p>ServiceRoleBinding assigns a ServiceRole to a list of subjects.</p>
+
+<p><!-- go code generation tags
++kubetype-gen
++kubetype-gen:groupVersion=rbac.istio.io/v1alpha1
++genclient
++k8s:deepcopy-gen=true
+--></p>
 
 <table class="message-fields">
 <thead>

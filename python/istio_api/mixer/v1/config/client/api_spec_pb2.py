@@ -13,7 +13,7 @@ from google.protobuf import descriptor_pb2
 _sym_db = _symbol_database.Default()
 
 
-from gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
+from github.com.gogo.protobuf.gogoproto import gogo_pb2 as github_dot_com_dot_gogo_dot_protobuf_dot_gogoproto_dot_gogo__pb2
 from mixer.v1 import attributes_pb2 as mixer_dot_v1_dot_attributes__pb2
 from mixer.v1.config.client import service_pb2 as mixer_dot_v1_dot_config_dot_client_dot_service__pb2
 
@@ -22,9 +22,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='mixer/v1/config/client/api_spec.proto',
   package='istio.mixer.v1.config.client',
   syntax='proto3',
-  serialized_pb=_b('\n%mixer/v1/config/client/api_spec.proto\x12\x1cistio.mixer.v1.config.client\x1a\x14gogoproto/gogo.proto\x1a\x19mixer/v1/attributes.proto\x1a$mixer/v1/config/client/service.proto\"\xb9\x01\n\x0bHTTPAPISpec\x12.\n\nattributes\x18\x01 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\x12\x42\n\x08patterns\x18\x02 \x03(\x0b\x32\x30.istio.mixer.v1.config.client.HTTPAPISpecPattern\x12\x36\n\x08\x61pi_keys\x18\x03 \x03(\x0b\x32$.istio.mixer.v1.config.client.APIKey\"\x8d\x01\n\x12HTTPAPISpecPattern\x12.\n\nattributes\x18\x01 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\x12\x13\n\x0bhttp_method\x18\x02 \x01(\t\x12\x16\n\x0curi_template\x18\x03 \x01(\tH\x00\x12\x0f\n\x05regex\x18\x04 \x01(\tH\x00\x42\t\n\x07pattern\"D\n\x06\x41PIKey\x12\x0f\n\x05query\x18\x01 \x01(\tH\x00\x12\x10\n\x06header\x18\x02 \x01(\tH\x00\x12\x10\n\x06\x63ookie\x18\x03 \x01(\tH\x00\x42\x05\n\x03key\"7\n\x14HTTPAPISpecReference\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tnamespace\x18\x02 \x01(\t\"\x99\x01\n\x12HTTPAPISpecBinding\x12<\n\x08services\x18\x01 \x03(\x0b\x32*.istio.mixer.v1.config.client.IstioService\x12\x45\n\tapi_specs\x18\x02 \x03(\x0b\x32\x32.istio.mixer.v1.config.client.HTTPAPISpecReferenceB1Z#istio.io/api/mixer/v1/config/client\xc8\xe1\x1e\x00\xa8\xe2\x1e\x00\xf0\xe1\x1e\x00\x62\x06proto3')
+  serialized_pb=_b('\n%mixer/v1/config/client/api_spec.proto\x12\x1cistio.mixer.v1.config.client\x1a-github.com/gogo/protobuf/gogoproto/gogo.proto\x1a\x19mixer/v1/attributes.proto\x1a$mixer/v1/config/client/service.proto\"\xb9\x01\n\x0bHTTPAPISpec\x12.\n\nattributes\x18\x01 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\x12\x42\n\x08patterns\x18\x02 \x03(\x0b\x32\x30.istio.mixer.v1.config.client.HTTPAPISpecPattern\x12\x36\n\x08\x61pi_keys\x18\x03 \x03(\x0b\x32$.istio.mixer.v1.config.client.APIKey\"\x8d\x01\n\x12HTTPAPISpecPattern\x12.\n\nattributes\x18\x01 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\x12\x13\n\x0bhttp_method\x18\x02 \x01(\t\x12\x16\n\x0curi_template\x18\x03 \x01(\tH\x00\x12\x0f\n\x05regex\x18\x04 \x01(\tH\x00\x42\t\n\x07pattern\"D\n\x06\x41PIKey\x12\x0f\n\x05query\x18\x01 \x01(\tH\x00\x12\x10\n\x06header\x18\x02 \x01(\tH\x00\x12\x10\n\x06\x63ookie\x18\x03 \x01(\tH\x00\x42\x05\n\x03key\"7\n\x14HTTPAPISpecReference\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tnamespace\x18\x02 \x01(\t\"\x99\x01\n\x12HTTPAPISpecBinding\x12<\n\x08services\x18\x01 \x03(\x0b\x32*.istio.mixer.v1.config.client.IstioService\x12\x45\n\tapi_specs\x18\x02 \x03(\x0b\x32\x32.istio.mixer.v1.config.client.HTTPAPISpecReferenceB1Z#istio.io/api/mixer/v1/config/client\xc8\xe1\x1e\x00\xa8\xe2\x1e\x00\xf0\xe1\x1e\x00\x62\x06proto3')
   ,
-  dependencies=[gogoproto_dot_gogo__pb2.DESCRIPTOR,mixer_dot_v1_dot_attributes__pb2.DESCRIPTOR,mixer_dot_v1_dot_config_dot_client_dot_service__pb2.DESCRIPTOR,])
+  dependencies=[github_dot_com_dot_gogo_dot_protobuf_dot_gogoproto_dot_gogo__pb2.DESCRIPTOR,mixer_dot_v1_dot_attributes__pb2.DESCRIPTOR,mixer_dot_v1_dot_config_dot_client_dot_service__pb2.DESCRIPTOR,])
 
 
 
@@ -69,8 +69,8 @@ _HTTPAPISPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=159,
-  serialized_end=344,
+  serialized_start=184,
+  serialized_end=369,
 )
 
 
@@ -124,8 +124,8 @@ _HTTPAPISPECPATTERN = _descriptor.Descriptor(
       name='pattern', full_name='istio.mixer.v1.config.client.HTTPAPISpecPattern.pattern',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=347,
-  serialized_end=488,
+  serialized_start=372,
+  serialized_end=513,
 )
 
 
@@ -172,8 +172,8 @@ _APIKEY = _descriptor.Descriptor(
       name='key', full_name='istio.mixer.v1.config.client.APIKey.key',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=490,
-  serialized_end=558,
+  serialized_start=515,
+  serialized_end=583,
 )
 
 
@@ -210,8 +210,8 @@ _HTTPAPISPECREFERENCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=560,
-  serialized_end=615,
+  serialized_start=585,
+  serialized_end=640,
 )
 
 
@@ -248,8 +248,8 @@ _HTTPAPISPECBINDING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=618,
-  serialized_end=771,
+  serialized_start=643,
+  serialized_end=796,
 )
 
 _HTTPAPISPEC.fields_by_name['attributes'].message_type = mixer_dot_v1_dot_attributes__pb2._ATTRIBUTES

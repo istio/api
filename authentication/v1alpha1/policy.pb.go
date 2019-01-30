@@ -693,6 +693,16 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 //         - exact: /health_check
 //   principalBinding: USE_ORIGIN
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=authentication.istio.io/v1alpha1
+// +kubetype-gen:kubeType=Policy
+// +kubetype-gen:kubeType=MeshPolicy
+// +kubetype-gen:MeshPolicy:tag=genclient:nonNamespaced
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type Policy struct {
 	// List rules to select workloads that the policy should be applied on.
 	// If empty, policy will be used on all workloads in the same namespace.

@@ -177,6 +177,13 @@ func (EnvoyFilter_Filter_FilterType) EnumDescriptor() ([]byte, []int) {
 //       inlineCode: |
 //         ... lua code ...
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type EnvoyFilter struct {
 	// One or more labels that indicate a specific set of pods/VMs whose
 	// proxies should be configured to use these additional filters.  The
