@@ -3319,13 +3319,13 @@
                     "type": "string"
                   },
                   {
-                    "id": 10,
-                    "name": "credential_name",
+                    "id": 5,
+                    "name": "ca_certificates",
                     "type": "string"
                   },
                   {
-                    "id": 5,
-                    "name": "ca_certificates",
+                    "id": 10,
+                    "name": "credential_name",
                     "type": "string"
                   },
                   {
