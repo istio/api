@@ -3324,6 +3324,11 @@
                     "type": "string"
                   },
                   {
+                    "id": 10,
+                    "name": "credential_name",
+                    "type": "string"
+                  },
+                  {
                     "id": 6,
                     "name": "subject_alt_names",
                     "type": "string",
