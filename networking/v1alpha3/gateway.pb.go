@@ -413,21 +413,21 @@ type Server_TLSOptions struct {
 	// REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
 	// holding the server's private key.
 	PrivateKey string `protobuf:"bytes,4,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
-	// The credentialName stands for a unique identifier that can be used
-	// to identify the serverCertificate and the privateKey (not the
-	// CaCertificates) associated with this server. Gateway workloads
-	// capable of fetching credentials from a remote credential store will
-	// be configured to retrive the server certificate and the private key
-	// using this name, instead of using the file system paths specified
-	// above. The semantics of the name are platform dependent. In
-	// Kubernetes, the default Istio supplied credentail server expects the
-	// credentialName to match the name of the Kubernetes secret that holds the
-	// server certificate and the private key.
-	CredentialName string `protobuf:"bytes,10,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
 	// REQUIRED if mode is `MUTUAL`. The path to a file containing
 	// certificate authority certificates to use in verifying a presented
 	// client side certificate.
 	CaCertificates string `protobuf:"bytes,5,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
+	// The credentialName stands for a unique identifier that can be used
+	// to identify the serverCertificate, the privateKey and the
+	// CaCertificates associated with this server. Gateway workloads
+	// capable of fetching credentials from a remote credential store will
+	// be configured to retrive the credentials using this name, instead of
+	// using the file system paths specified above. The semantics of the
+	// name are platform dependent. In Kubernetes, the default Istio
+	// supplied credentail server expects the credentialName to match the
+	// name of the Kubernetes secret that holds the server certificate, the
+	// private key, and the CA certificate (if using mutual TLS).
+	CredentialName string `protobuf:"bytes,10,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
 	// A list of alternate names to verify the subject identity in the
 	// certificate presented by the client.
 	SubjectAltNames []string `protobuf:"bytes,6,rep,name=subject_alt_names,json=subjectAltNames" json:"subject_alt_names,omitempty"`
@@ -473,16 +473,16 @@ func (m *Server_TLSOptions) GetPrivateKey() string {
 	return ""
 }
 
-func (m *Server_TLSOptions) GetCredentialName() string {
+func (m *Server_TLSOptions) GetCaCertificates() string {
 	if m != nil {
-		return m.CredentialName
+		return m.CaCertificates
 	}
 	return ""
 }
 
-func (m *Server_TLSOptions) GetCaCertificates() string {
+func (m *Server_TLSOptions) GetCredentialName() string {
 	if m != nil {
-		return m.CaCertificates
+		return m.CredentialName
 	}
 	return ""
 }
