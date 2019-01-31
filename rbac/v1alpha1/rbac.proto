@@ -28,7 +28,7 @@ syntax = "proto3";
 //   * methods: HTTP methods. In the case of gRPC, this field is ignored because the value is always "POST".
 //   * paths: HTTP paths or gRPC methods. Note that gRPC methods should be
 //     presented in the form of "/packageName.serviceName/methodName" and are case sensitive.
-//   * filters: a list of filters.
+//   * metadata: rules to match over dynamic metadata emitted by filters.
 //
 // In addition to the standard fields, operators can also use custom keys in the `constraints` field,
 // the supported keys are listed in the "constraints and properties" page.
@@ -197,20 +197,20 @@ message AccessRule {
   // Optional. Extra constraints in the ServiceRole specification.
   repeated Constraint constraints = 4;
 
-  // Definition of a filter rule.
-  message Filter {
-    // The name of the filter.
-    string name = 1;
+  // Definition of a metadata rule.
+  message Metadata {
+    // The name of the filter to retrieve dynamic metadata from.
+    string filter = 1;
 
-    // The key to retrieve dynamic metadata emitted by the filter.
+    // The dynamic metadata key to retrieve the value.
     string key = 2;
 
     // The value to match against. Exact, prefix, and suffix match are supported.
     string value = 3;
   }
 
-  // Optional. A list of filters to match against.
-  repeated Filter filters = 11;
+  // Optional. Rules to match over dynamic metadata emitted by filters.
+  repeated Metadata metadata = 11;
 
   // $hide_from_docs
   // Next available field number: 12

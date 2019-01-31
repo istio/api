@@ -17,7 +17,7 @@ the following standard fields:</p>
 <li>methods: HTTP methods. In the case of gRPC, this field is ignored because the value is always &ldquo;POST&rdquo;.</li>
 <li>paths: HTTP paths or gRPC methods. Note that gRPC methods should be
 presented in the form of &ldquo;/packageName.serviceName/methodName&rdquo; and are case sensitive.</li>
-<li>filters: a list of filters.</li>
+<li>metadata: rules to match over dynamic metadata emitted by filters.</li>
 </ul>
 
 <p>In addition to the standard fields, operators can also use custom keys in the <code>constraints</code> field,
@@ -132,11 +132,11 @@ If not specified, it matches to any methods.</p>
 
 </td>
 </tr>
-<tr id="AccessRule-filters">
-<td><code>filters</code></td>
-<td><code><a href="#AccessRule-Filter">AccessRule.Filter[]</a></code></td>
+<tr id="AccessRule-metadata">
+<td><code>metadata</code></td>
+<td><code><a href="#AccessRule-Metadata">AccessRule.Metadata[]</a></code></td>
 <td>
-<p>Optional. A list of filters to match against.</p>
+<p>Optional. Rules to match over dynamic metadata emitted by filters.</p>
 
 </td>
 </tr>
@@ -178,9 +178,9 @@ or &ldquo;v1<em>&rdquo; (prefix match), or &ldquo;</em>alpha2&rdquo; (suffix mat
 </tbody>
 </table>
 </section>
-<h2 id="AccessRule-Filter">AccessRule.Filter</h2>
+<h2 id="AccessRule-Metadata">AccessRule.Metadata</h2>
 <section>
-<p>Definition of a filter rule.</p>
+<p>Definition of a metadata rule.</p>
 
 <table class="message-fields">
 <thead>
@@ -191,23 +191,23 @@ or &ldquo;v1<em>&rdquo; (prefix match), or &ldquo;</em>alpha2&rdquo; (suffix mat
 </tr>
 </thead>
 <tbody>
-<tr id="AccessRule-Filter-name">
-<td><code>name</code></td>
+<tr id="AccessRule-Metadata-filter">
+<td><code>filter</code></td>
 <td><code>string</code></td>
 <td>
-<p>The name of the filter.</p>
+<p>The name of the filter to retrieve dynamic metadata from.</p>
 
 </td>
 </tr>
-<tr id="AccessRule-Filter-key">
+<tr id="AccessRule-Metadata-key">
 <td><code>key</code></td>
 <td><code>string</code></td>
 <td>
-<p>The key to retrieve dynamic metadata emitted by the filter.</p>
+<p>The dynamic metadata key to retrieve the value.</p>
 
 </td>
 </tr>
-<tr id="AccessRule-Filter-value">
+<tr id="AccessRule-Metadata-value">
 <td><code>value</code></td>
 <td><code>string</code></td>
 <td>

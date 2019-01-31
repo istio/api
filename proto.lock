@@ -5292,8 +5292,8 @@
               },
               {
                 "id": 11,
-                "name": "filters",
-                "type": "Filter",
+                "name": "metadata",
+                "type": "Metadata",
                 "is_repeated": true
               }
             ],
@@ -5315,11 +5315,11 @@
                 ]
               },
               {
-                "name": "Filter",
+                "name": "Metadata",
                 "fields": [
                   {
                     "id": 1,
-                    "name": "name",
+                    "name": "filter",
                     "type": "string"
                   },
                   {
