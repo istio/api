@@ -205,8 +205,8 @@ message AccessRule {
     // The key to retrieve dynamic metadata emitted by the filter.
     string key = 2;
 
-    // List of values to match against. Exact, prefix, and suffix match are supported.
-    repeated string values = 3;
+    // The value to match against. Exact, prefix, and suffix match are supported.
+    string value = 3;
   }
 
   // Optional. A list of filters to match against.

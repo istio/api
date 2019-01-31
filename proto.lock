@@ -5329,9 +5329,8 @@
                   },
                   {
                     "id": 3,
-                    "name": "values",
-                    "type": "string",
-                    "is_repeated": true
+                    "name": "value",
+                    "type": "string"
                   }
                 ]
               }
