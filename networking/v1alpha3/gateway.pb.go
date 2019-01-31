@@ -421,8 +421,7 @@ type Server_TLSOptions struct {
 	// using this name, instead of using the file system paths specified
 	// above. The semantics of the name are platform dependent. In
 	// Kubernetes, the default Istio supplied credentail server expects the
-	// credentialName to be of the form secretName.namespace, where the
-	// secretName is the name of the Kubernetes secret that holds the
+	// credentialName to match the name of the Kubernetes secret that holds the
 	// server certificate and the private key.
 	CredentialName string `protobuf:"bytes,10,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
 	// REQUIRED if mode is `MUTUAL`. The path to a file containing
