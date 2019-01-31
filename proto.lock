@@ -3320,8 +3320,8 @@
                   },
                   {
                     "id": 10,
-                    "name": "credential_store",
-                    "type": "CredentialStore"
+                    "name": "credential_name",
+                    "type": "string"
                   },
                   {
                     "id": 5,
@@ -3349,53 +3349,6 @@
                     "name": "cipher_suites",
                     "type": "string",
                     "is_repeated": true
-                  }
-                ],
-                "messages": [
-                  {
-                    "name": "CredentialStoreFileBackend",
-                    "fields": [
-                      {
-                        "id": 1,
-                        "name": "server_certificate",
-                        "type": "string"
-                      },
-                      {
-                        "id": 2,
-                        "name": "private_key",
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "CredentialStoreRemoteBackend",
-                    "fields": [
-                      {
-                        "id": 1,
-                        "name": "resource_name",
-                        "type": "string"
-                      },
-                      {
-                        "id": 2,
-                        "name": "server_address",
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "CredentialStore",
-                    "fields": [
-                      {
-                        "id": 1,
-                        "name": "files",
-                        "type": "CredentialStoreFileBackend"
-                      },
-                      {
-                        "id": 2,
-                        "name": "remote",
-                        "type": "CredentialStoreRemoteBackend"
-                      }
-                    ]
                   }
                 ]
               }

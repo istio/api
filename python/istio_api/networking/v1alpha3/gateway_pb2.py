@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='networking/v1alpha3/gateway.proto',
   package='istio.networking.v1alpha3',
   syntax='proto3',
-  serialized_pb=_b('\n!networking/v1alpha3/gateway.proto\x12\x19istio.networking.v1alpha3\"\xb2\x01\n\x07Gateway\x12\x32\n\x07servers\x18\x01 \x03(\x0b\x32!.istio.networking.v1alpha3.Server\x12\x42\n\x08selector\x18\x02 \x03(\x0b\x32\x30.istio.networking.v1alpha3.Gateway.SelectorEntry\x1a/\n\rSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xb8\t\n\x06Server\x12-\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.Port\x12\x0c\n\x04\x62ind\x18\x04 \x01(\t\x12\r\n\x05hosts\x18\x02 \x03(\t\x12\x39\n\x03tls\x18\x03 \x01(\x0b\x32,.istio.networking.v1alpha3.Server.TLSOptions\x12\x18\n\x10\x64\x65\x66\x61ult_endpoint\x18\x05 \x01(\t\x1a\x8c\x08\n\nTLSOptions\x12\x16\n\x0ehttps_redirect\x18\x01 \x01(\x08\x12\x42\n\x04mode\x18\x02 \x01(\x0e\x32\x34.istio.networking.v1alpha3.Server.TLSOptions.TLSmode\x12\x1e\n\x12server_certificate\x18\x03 \x01(\tB\x02\x18\x01\x12\x17\n\x0bprivate_key\x18\x04 \x01(\tB\x02\x18\x01\x12V\n\x10\x63redential_store\x18\n \x01(\x0b\x32<.istio.networking.v1alpha3.Server.TLSOptions.CredentialStore\x12\x17\n\x0f\x63\x61_certificates\x18\x05 \x01(\t\x12\x19\n\x11subject_alt_names\x18\x06 \x03(\t\x12V\n\x14min_protocol_version\x18\x07 \x01(\x0e\x32\x38.istio.networking.v1alpha3.Server.TLSOptions.TLSProtocol\x12V\n\x14max_protocol_version\x18\x08 \x01(\x0e\x32\x38.istio.networking.v1alpha3.Server.TLSOptions.TLSProtocol\x12\x15\n\rcipher_suites\x18\t \x03(\t\x1aM\n\x1a\x43redentialStoreFileBackend\x12\x1a\n\x12server_certificate\x18\x01 \x01(\t\x12\x13\n\x0bprivate_key\x18\x02 \x01(\t\x1aM\n\x1c\x43redentialStoreRemoteBackend\x12\x15\n\rresource_name\x18\x01 \x01(\t\x12\x16\n\x0eserver_address\x18\x02 \x01(\t\x1a\xdc\x01\n\x0f\x43redentialStore\x12X\n\x05\x66iles\x18\x01 \x01(\x0b\x32G.istio.networking.v1alpha3.Server.TLSOptions.CredentialStoreFileBackendH\x00\x12[\n\x06remote\x18\x02 \x01(\x0b\x32I.istio.networking.v1alpha3.Server.TLSOptions.CredentialStoreRemoteBackendH\x00\x42\x12\n\x10\x63redential_store\"H\n\x07TLSmode\x12\x0f\n\x0bPASSTHROUGH\x10\x00\x12\n\n\x06SIMPLE\x10\x01\x12\n\n\x06MUTUAL\x10\x02\x12\x14\n\x10\x41UTO_PASSTHROUGH\x10\x03\"O\n\x0bTLSProtocol\x12\x0c\n\x08TLS_AUTO\x10\x00\x12\x0b\n\x07TLSV1_0\x10\x01\x12\x0b\n\x07TLSV1_1\x10\x02\x12\x0b\n\x07TLSV1_2\x10\x03\x12\x0b\n\x07TLSV1_3\x10\x04\"6\n\x04Port\x12\x0e\n\x06number\x18\x01 \x01(\r\x12\x10\n\x08protocol\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\tB\"Z istio.io/api/networking/v1alpha3b\x06proto3')
+  serialized_pb=_b('\n!networking/v1alpha3/gateway.proto\x12\x19istio.networking.v1alpha3\"\xb2\x01\n\x07Gateway\x12\x32\n\x07servers\x18\x01 \x03(\x0b\x32!.istio.networking.v1alpha3.Server\x12\x42\n\x08selector\x18\x02 \x03(\x0b\x32\x30.istio.networking.v1alpha3.Gateway.SelectorEntry\x1a/\n\rSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xf4\x05\n\x06Server\x12-\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.Port\x12\x0c\n\x04\x62ind\x18\x04 \x01(\t\x12\r\n\x05hosts\x18\x02 \x03(\t\x12\x39\n\x03tls\x18\x03 \x01(\x0b\x32,.istio.networking.v1alpha3.Server.TLSOptions\x12\x18\n\x10\x64\x65\x66\x61ult_endpoint\x18\x05 \x01(\t\x1a\xc8\x04\n\nTLSOptions\x12\x16\n\x0ehttps_redirect\x18\x01 \x01(\x08\x12\x42\n\x04mode\x18\x02 \x01(\x0e\x32\x34.istio.networking.v1alpha3.Server.TLSOptions.TLSmode\x12\x1a\n\x12server_certificate\x18\x03 \x01(\t\x12\x13\n\x0bprivate_key\x18\x04 \x01(\t\x12\x17\n\x0f\x63redential_name\x18\n \x01(\t\x12\x17\n\x0f\x63\x61_certificates\x18\x05 \x01(\t\x12\x19\n\x11subject_alt_names\x18\x06 \x03(\t\x12V\n\x14min_protocol_version\x18\x07 \x01(\x0e\x32\x38.istio.networking.v1alpha3.Server.TLSOptions.TLSProtocol\x12V\n\x14max_protocol_version\x18\x08 \x01(\x0e\x32\x38.istio.networking.v1alpha3.Server.TLSOptions.TLSProtocol\x12\x15\n\rcipher_suites\x18\t \x03(\t\"H\n\x07TLSmode\x12\x0f\n\x0bPASSTHROUGH\x10\x00\x12\n\n\x06SIMPLE\x10\x01\x12\n\n\x06MUTUAL\x10\x02\x12\x14\n\x10\x41UTO_PASSTHROUGH\x10\x03\"O\n\x0bTLSProtocol\x12\x0c\n\x08TLS_AUTO\x10\x00\x12\x0b\n\x07TLSV1_0\x10\x01\x12\x0b\n\x07TLSV1_1\x10\x02\x12\x0b\n\x07TLSV1_2\x10\x03\x12\x0b\n\x07TLSV1_3\x10\x04\"6\n\x04Port\x12\x0e\n\x06number\x18\x01 \x01(\r\x12\x10\n\x08protocol\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\tB\"Z istio.io/api/networking/v1alpha3b\x06proto3')
 )
 
 
@@ -49,8 +49,8 @@ _SERVER_TLSOPTIONS_TLSMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1301,
-  serialized_end=1373,
+  serialized_start=849,
+  serialized_end=921,
 )
 _sym_db.RegisterEnumDescriptor(_SERVER_TLSOPTIONS_TLSMODE)
 
@@ -83,8 +83,8 @@ _SERVER_TLSOPTIONS_TLSPROTOCOL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1375,
-  serialized_end=1454,
+  serialized_start=923,
+  serialized_end=1002,
 )
 _sym_db.RegisterEnumDescriptor(_SERVER_TLSOPTIONS_TLSPROTOCOL)
 
@@ -164,120 +164,6 @@ _GATEWAY = _descriptor.Descriptor(
 )
 
 
-_SERVER_TLSOPTIONS_CREDENTIALSTOREFILEBACKEND = _descriptor.Descriptor(
-  name='CredentialStoreFileBackend',
-  full_name='istio.networking.v1alpha3.Server.TLSOptions.CredentialStoreFileBackend',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='server_certificate', full_name='istio.networking.v1alpha3.Server.TLSOptions.CredentialStoreFileBackend.server_certificate', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='private_key', full_name='istio.networking.v1alpha3.Server.TLSOptions.CredentialStoreFileBackend.private_key', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=920,
-  serialized_end=997,
-)
-
-_SERVER_TLSOPTIONS_CREDENTIALSTOREREMOTEBACKEND = _descriptor.Descriptor(
-  name='CredentialStoreRemoteBackend',
-  full_name='istio.networking.v1alpha3.Server.TLSOptions.CredentialStoreRemoteBackend',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='resource_name', full_name='istio.networking.v1alpha3.Server.TLSOptions.CredentialStoreRemoteBackend.resource_name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='server_address', full_name='istio.networking.v1alpha3.Server.TLSOptions.CredentialStoreRemoteBackend.server_address', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=999,
-  serialized_end=1076,
-)
-
-_SERVER_TLSOPTIONS_CREDENTIALSTORE = _descriptor.Descriptor(
-  name='CredentialStore',
-  full_name='istio.networking.v1alpha3.Server.TLSOptions.CredentialStore',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='files', full_name='istio.networking.v1alpha3.Server.TLSOptions.CredentialStore.files', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='remote', full_name='istio.networking.v1alpha3.Server.TLSOptions.CredentialStore.remote', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-    _descriptor.OneofDescriptor(
-      name='credential_store', full_name='istio.networking.v1alpha3.Server.TLSOptions.CredentialStore.credential_store',
-      index=0, containing_type=None, fields=[]),
-  ],
-  serialized_start=1079,
-  serialized_end=1299,
-)
-
 _SERVER_TLSOPTIONS = _descriptor.Descriptor(
   name='TLSOptions',
   full_name='istio.networking.v1alpha3.Server.TLSOptions',
@@ -305,18 +191,18 @@ _SERVER_TLSOPTIONS = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=_descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\030\001')), file=DESCRIPTOR),
+      options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='private_key', full_name='istio.networking.v1alpha3.Server.TLSOptions.private_key', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=_descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\030\001')), file=DESCRIPTOR),
+      options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='credential_store', full_name='istio.networking.v1alpha3.Server.TLSOptions.credential_store', index=4,
-      number=10, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='credential_name', full_name='istio.networking.v1alpha3.Server.TLSOptions.credential_name', index=4,
+      number=10, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
@@ -358,7 +244,7 @@ _SERVER_TLSOPTIONS = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_SERVER_TLSOPTIONS_CREDENTIALSTOREFILEBACKEND, _SERVER_TLSOPTIONS_CREDENTIALSTOREREMOTEBACKEND, _SERVER_TLSOPTIONS_CREDENTIALSTORE, ],
+  nested_types=[],
   enum_types=[
     _SERVER_TLSOPTIONS_TLSMODE,
     _SERVER_TLSOPTIONS_TLSPROTOCOL,
@@ -370,7 +256,7 @@ _SERVER_TLSOPTIONS = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=418,
-  serialized_end=1454,
+  serialized_end=1002,
 )
 
 _SERVER = _descriptor.Descriptor(
@@ -428,7 +314,7 @@ _SERVER = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=246,
-  serialized_end=1454,
+  serialized_end=1002,
 )
 
 
@@ -472,26 +358,14 @@ _PORT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1456,
-  serialized_end=1510,
+  serialized_start=1004,
+  serialized_end=1058,
 )
 
 _GATEWAY_SELECTORENTRY.containing_type = _GATEWAY
 _GATEWAY.fields_by_name['servers'].message_type = _SERVER
 _GATEWAY.fields_by_name['selector'].message_type = _GATEWAY_SELECTORENTRY
-_SERVER_TLSOPTIONS_CREDENTIALSTOREFILEBACKEND.containing_type = _SERVER_TLSOPTIONS
-_SERVER_TLSOPTIONS_CREDENTIALSTOREREMOTEBACKEND.containing_type = _SERVER_TLSOPTIONS
-_SERVER_TLSOPTIONS_CREDENTIALSTORE.fields_by_name['files'].message_type = _SERVER_TLSOPTIONS_CREDENTIALSTOREFILEBACKEND
-_SERVER_TLSOPTIONS_CREDENTIALSTORE.fields_by_name['remote'].message_type = _SERVER_TLSOPTIONS_CREDENTIALSTOREREMOTEBACKEND
-_SERVER_TLSOPTIONS_CREDENTIALSTORE.containing_type = _SERVER_TLSOPTIONS
-_SERVER_TLSOPTIONS_CREDENTIALSTORE.oneofs_by_name['credential_store'].fields.append(
-  _SERVER_TLSOPTIONS_CREDENTIALSTORE.fields_by_name['files'])
-_SERVER_TLSOPTIONS_CREDENTIALSTORE.fields_by_name['files'].containing_oneof = _SERVER_TLSOPTIONS_CREDENTIALSTORE.oneofs_by_name['credential_store']
-_SERVER_TLSOPTIONS_CREDENTIALSTORE.oneofs_by_name['credential_store'].fields.append(
-  _SERVER_TLSOPTIONS_CREDENTIALSTORE.fields_by_name['remote'])
-_SERVER_TLSOPTIONS_CREDENTIALSTORE.fields_by_name['remote'].containing_oneof = _SERVER_TLSOPTIONS_CREDENTIALSTORE.oneofs_by_name['credential_store']
 _SERVER_TLSOPTIONS.fields_by_name['mode'].enum_type = _SERVER_TLSOPTIONS_TLSMODE
-_SERVER_TLSOPTIONS.fields_by_name['credential_store'].message_type = _SERVER_TLSOPTIONS_CREDENTIALSTORE
 _SERVER_TLSOPTIONS.fields_by_name['min_protocol_version'].enum_type = _SERVER_TLSOPTIONS_TLSPROTOCOL
 _SERVER_TLSOPTIONS.fields_by_name['max_protocol_version'].enum_type = _SERVER_TLSOPTIONS_TLSPROTOCOL
 _SERVER_TLSOPTIONS.containing_type = _SERVER
@@ -522,27 +396,6 @@ _sym_db.RegisterMessage(Gateway.SelectorEntry)
 Server = _reflection.GeneratedProtocolMessageType('Server', (_message.Message,), dict(
 
   TLSOptions = _reflection.GeneratedProtocolMessageType('TLSOptions', (_message.Message,), dict(
-
-    CredentialStoreFileBackend = _reflection.GeneratedProtocolMessageType('CredentialStoreFileBackend', (_message.Message,), dict(
-      DESCRIPTOR = _SERVER_TLSOPTIONS_CREDENTIALSTOREFILEBACKEND,
-      __module__ = 'networking.v1alpha3.gateway_pb2'
-      # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.Server.TLSOptions.CredentialStoreFileBackend)
-      ))
-    ,
-
-    CredentialStoreRemoteBackend = _reflection.GeneratedProtocolMessageType('CredentialStoreRemoteBackend', (_message.Message,), dict(
-      DESCRIPTOR = _SERVER_TLSOPTIONS_CREDENTIALSTOREREMOTEBACKEND,
-      __module__ = 'networking.v1alpha3.gateway_pb2'
-      # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.Server.TLSOptions.CredentialStoreRemoteBackend)
-      ))
-    ,
-
-    CredentialStore = _reflection.GeneratedProtocolMessageType('CredentialStore', (_message.Message,), dict(
-      DESCRIPTOR = _SERVER_TLSOPTIONS_CREDENTIALSTORE,
-      __module__ = 'networking.v1alpha3.gateway_pb2'
-      # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.Server.TLSOptions.CredentialStore)
-      ))
-    ,
     DESCRIPTOR = _SERVER_TLSOPTIONS,
     __module__ = 'networking.v1alpha3.gateway_pb2'
     # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.Server.TLSOptions)
@@ -554,9 +407,6 @@ Server = _reflection.GeneratedProtocolMessageType('Server', (_message.Message,),
   ))
 _sym_db.RegisterMessage(Server)
 _sym_db.RegisterMessage(Server.TLSOptions)
-_sym_db.RegisterMessage(Server.TLSOptions.CredentialStoreFileBackend)
-_sym_db.RegisterMessage(Server.TLSOptions.CredentialStoreRemoteBackend)
-_sym_db.RegisterMessage(Server.TLSOptions.CredentialStore)
 
 Port = _reflection.GeneratedProtocolMessageType('Port', (_message.Message,), dict(
   DESCRIPTOR = _PORT,
@@ -570,8 +420,4 @@ DESCRIPTOR.has_options = True
 DESCRIPTOR._options = _descriptor._ParseOptions(descriptor_pb2.FileOptions(), _b('Z istio.io/api/networking/v1alpha3'))
 _GATEWAY_SELECTORENTRY.has_options = True
 _GATEWAY_SELECTORENTRY._options = _descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001'))
-_SERVER_TLSOPTIONS.fields_by_name['server_certificate'].has_options = True
-_SERVER_TLSOPTIONS.fields_by_name['server_certificate']._options = _descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\030\001'))
-_SERVER_TLSOPTIONS.fields_by_name['private_key'].has_options = True
-_SERVER_TLSOPTIONS.fields_by_name['private_key']._options = _descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\030\001'))
 # @@protoc_insertion_point(module_scope)

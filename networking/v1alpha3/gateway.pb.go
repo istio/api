@@ -409,13 +409,22 @@ type Server_TLSOptions struct {
 	Mode Server_TLSOptions_TLSmode `protobuf:"varint,2,opt,name=mode,proto3,enum=istio.networking.v1alpha3.Server_TLSOptions_TLSmode" json:"mode,omitempty"`
 	// REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
 	// holding the server-side TLS certificate to use.
-	// Deprecated. Use
 	ServerCertificate string `protobuf:"bytes,3,opt,name=server_certificate,json=serverCertificate,proto3" json:"server_certificate,omitempty"`
 	// REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
 	// holding the server's private key.
 	PrivateKey string `protobuf:"bytes,4,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
-	// REQUIRED if the mode is `SIMPLE` or `MUTUAL`.
-	CredentialStore *Server_TLSOptions_CredentialStore `protobuf:"bytes,10,opt,name=credential_store,json=credentialStore" json:"credential_store,omitempty"`
+	// The credentialName stands for a unique identifier that can be used
+	// to identify the serverCertificate and the privateKey (not the
+	// CaCertificates) associated with this server. Gateway workloads
+	// capable of fetching credentials from a remote credential store will
+	// be configured to retrive the server certificate and the private key
+	// using this name, instead of using the file system paths specified
+	// above. The semantics of the name are platform dependent. In
+	// Kubernetes, the default Istio supplied credentail server expects the
+	// credentialName to be of the form secretName.namespace, where the
+	// secretName is the name of the Kubernetes secret that holds the
+	// server certificate and the private key.
+	CredentialName string `protobuf:"bytes,10,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
 	// REQUIRED if mode is `MUTUAL`. The path to a file containing
 	// certificate authority certificates to use in verifying a presented
 	// client side certificate.
@@ -465,11 +474,11 @@ func (m *Server_TLSOptions) GetPrivateKey() string {
 	return ""
 }
 
-func (m *Server_TLSOptions) GetCredentialStore() *Server_TLSOptions_CredentialStore {
+func (m *Server_TLSOptions) GetCredentialName() string {
 	if m != nil {
-		return m.CredentialStore
+		return m.CredentialName
 	}
-	return nil
+	return ""
 }
 
 func (m *Server_TLSOptions) GetCaCertificates() string {
@@ -505,212 +514,6 @@ func (m *Server_TLSOptions) GetCipherSuites() []string {
 		return m.CipherSuites
 	}
 	return nil
-}
-
-// The file backend specifies the file system paths where the
-// server's public and private keys can be obtained.
-type Server_TLSOptions_CredentialStoreFileBackend struct {
-	// REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
-	// holding the server-side TLS certificate to use.
-	ServerCertificate string `protobuf:"bytes,1,opt,name=server_certificate,json=serverCertificate,proto3" json:"server_certificate,omitempty"`
-	// REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
-	// holding the server's private key.
-	PrivateKey string `protobuf:"bytes,2,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
-}
-
-func (m *Server_TLSOptions_CredentialStoreFileBackend) Reset() {
-	*m = Server_TLSOptions_CredentialStoreFileBackend{}
-}
-func (m *Server_TLSOptions_CredentialStoreFileBackend) String() string {
-	return proto.CompactTextString(m)
-}
-func (*Server_TLSOptions_CredentialStoreFileBackend) ProtoMessage() {}
-func (*Server_TLSOptions_CredentialStoreFileBackend) Descriptor() ([]byte, []int) {
-	return fileDescriptorGateway, []int{1, 0, 0}
-}
-
-func (m *Server_TLSOptions_CredentialStoreFileBackend) GetServerCertificate() string {
-	if m != nil {
-		return m.ServerCertificate
-	}
-	return ""
-}
-
-func (m *Server_TLSOptions_CredentialStoreFileBackend) GetPrivateKey() string {
-	if m != nil {
-		return m.PrivateKey
-	}
-	return ""
-}
-
-// The remote backend provides information about the remote secret
-// management server that contains the server's public and private keys.
-type Server_TLSOptions_CredentialStoreRemoteBackend struct {
-	// REQUIRED the name of the resource that the credential server can
-	// use to identify the certificates associated with the gateway
-	// server. In kubernetes, this should correspond to the name of the
-	// secret that contains the server-side TLS certificate and the
-	// server's private key. Note that the secret should contain both the
-	// public and private keys associated with the server port.
-	//
-	// It is possible to use the same resourceName across several servers
-	// on different ports, if these servers share the same credentials.
-	ResourceName string `protobuf:"bytes,1,opt,name=resource_name,json=resourceName,proto3" json:"resource_name,omitempty"`
-	// The address where the credential store server can be reached.
-	// If omitted, will default to unix:/var/run/gateway/sds
-	ServerAddress string `protobuf:"bytes,2,opt,name=server_address,json=serverAddress,proto3" json:"server_address,omitempty"`
-}
-
-func (m *Server_TLSOptions_CredentialStoreRemoteBackend) Reset() {
-	*m = Server_TLSOptions_CredentialStoreRemoteBackend{}
-}
-func (m *Server_TLSOptions_CredentialStoreRemoteBackend) String() string {
-	return proto.CompactTextString(m)
-}
-func (*Server_TLSOptions_CredentialStoreRemoteBackend) ProtoMessage() {}
-func (*Server_TLSOptions_CredentialStoreRemoteBackend) Descriptor() ([]byte, []int) {
-	return fileDescriptorGateway, []int{1, 0, 1}
-}
-
-func (m *Server_TLSOptions_CredentialStoreRemoteBackend) GetResourceName() string {
-	if m != nil {
-		return m.ResourceName
-	}
-	return ""
-}
-
-func (m *Server_TLSOptions_CredentialStoreRemoteBackend) GetServerAddress() string {
-	if m != nil {
-		return m.ServerAddress
-	}
-	return ""
-}
-
-type Server_TLSOptions_CredentialStore struct {
-	// Types that are valid to be assigned to CredentialStore:
-	//	*Server_TLSOptions_CredentialStore_Files
-	//	*Server_TLSOptions_CredentialStore_Remote
-	CredentialStore isServer_TLSOptions_CredentialStore_CredentialStore `protobuf_oneof:"credential_store"`
-}
-
-func (m *Server_TLSOptions_CredentialStore) Reset()         { *m = Server_TLSOptions_CredentialStore{} }
-func (m *Server_TLSOptions_CredentialStore) String() string { return proto.CompactTextString(m) }
-func (*Server_TLSOptions_CredentialStore) ProtoMessage()    {}
-func (*Server_TLSOptions_CredentialStore) Descriptor() ([]byte, []int) {
-	return fileDescriptorGateway, []int{1, 0, 2}
-}
-
-type isServer_TLSOptions_CredentialStore_CredentialStore interface {
-	isServer_TLSOptions_CredentialStore_CredentialStore()
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type Server_TLSOptions_CredentialStore_Files struct {
-	Files *Server_TLSOptions_CredentialStoreFileBackend `protobuf:"bytes,1,opt,name=files,oneof"`
-}
-type Server_TLSOptions_CredentialStore_Remote struct {
-	Remote *Server_TLSOptions_CredentialStoreRemoteBackend `protobuf:"bytes,2,opt,name=remote,oneof"`
-}
-
-func (*Server_TLSOptions_CredentialStore_Files) isServer_TLSOptions_CredentialStore_CredentialStore() {
-}
-func (*Server_TLSOptions_CredentialStore_Remote) isServer_TLSOptions_CredentialStore_CredentialStore() {
-}
-
-func (m *Server_TLSOptions_CredentialStore) GetCredentialStore() isServer_TLSOptions_CredentialStore_CredentialStore {
-	if m != nil {
-		return m.CredentialStore
-	}
-	return nil
-}
-
-func (m *Server_TLSOptions_CredentialStore) GetFiles() *Server_TLSOptions_CredentialStoreFileBackend {
-	if x, ok := m.GetCredentialStore().(*Server_TLSOptions_CredentialStore_Files); ok {
-		return x.Files
-	}
-	return nil
-}
-
-func (m *Server_TLSOptions_CredentialStore) GetRemote() *Server_TLSOptions_CredentialStoreRemoteBackend {
-	if x, ok := m.GetCredentialStore().(*Server_TLSOptions_CredentialStore_Remote); ok {
-		return x.Remote
-	}
-	return nil
-}
-
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*Server_TLSOptions_CredentialStore) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _Server_TLSOptions_CredentialStore_OneofMarshaler, _Server_TLSOptions_CredentialStore_OneofUnmarshaler, _Server_TLSOptions_CredentialStore_OneofSizer, []interface{}{
-		(*Server_TLSOptions_CredentialStore_Files)(nil),
-		(*Server_TLSOptions_CredentialStore_Remote)(nil),
-	}
-}
-
-func _Server_TLSOptions_CredentialStore_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*Server_TLSOptions_CredentialStore)
-	// credential_store
-	switch x := m.CredentialStore.(type) {
-	case *Server_TLSOptions_CredentialStore_Files:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Files); err != nil {
-			return err
-		}
-	case *Server_TLSOptions_CredentialStore_Remote:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Remote); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("Server_TLSOptions_CredentialStore.CredentialStore has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _Server_TLSOptions_CredentialStore_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*Server_TLSOptions_CredentialStore)
-	switch tag {
-	case 1: // credential_store.files
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(Server_TLSOptions_CredentialStoreFileBackend)
-		err := b.DecodeMessage(msg)
-		m.CredentialStore = &Server_TLSOptions_CredentialStore_Files{msg}
-		return true, err
-	case 2: // credential_store.remote
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(Server_TLSOptions_CredentialStoreRemoteBackend)
-		err := b.DecodeMessage(msg)
-		m.CredentialStore = &Server_TLSOptions_CredentialStore_Remote{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _Server_TLSOptions_CredentialStore_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*Server_TLSOptions_CredentialStore)
-	// credential_store
-	switch x := m.CredentialStore.(type) {
-	case *Server_TLSOptions_CredentialStore_Files:
-		s := proto.Size(x.Files)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Server_TLSOptions_CredentialStore_Remote:
-		s := proto.Size(x.Remote)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Port describes the properties of a specific port of a service.
@@ -756,9 +559,6 @@ func init() {
 	proto.RegisterType((*Gateway)(nil), "istio.networking.v1alpha3.Gateway")
 	proto.RegisterType((*Server)(nil), "istio.networking.v1alpha3.Server")
 	proto.RegisterType((*Server_TLSOptions)(nil), "istio.networking.v1alpha3.Server.TLSOptions")
-	proto.RegisterType((*Server_TLSOptions_CredentialStoreFileBackend)(nil), "istio.networking.v1alpha3.Server.TLSOptions.CredentialStoreFileBackend")
-	proto.RegisterType((*Server_TLSOptions_CredentialStoreRemoteBackend)(nil), "istio.networking.v1alpha3.Server.TLSOptions.CredentialStoreRemoteBackend")
-	proto.RegisterType((*Server_TLSOptions_CredentialStore)(nil), "istio.networking.v1alpha3.Server.TLSOptions.CredentialStore")
 	proto.RegisterType((*Port)(nil), "istio.networking.v1alpha3.Port")
 	proto.RegisterEnum("istio.networking.v1alpha3.Server_TLSOptions_TLSmode", Server_TLSOptions_TLSmode_name, Server_TLSOptions_TLSmode_value)
 	proto.RegisterEnum("istio.networking.v1alpha3.Server_TLSOptions_TLSProtocol", Server_TLSOptions_TLSProtocol_name, Server_TLSOptions_TLSProtocol_value)
@@ -963,132 +763,15 @@ func (m *Server_TLSOptions) MarshalTo(dAtA []byte) (int, error) {
 			i += copy(dAtA[i:], s)
 		}
 	}
-	if m.CredentialStore != nil {
+	if len(m.CredentialName) > 0 {
 		dAtA[i] = 0x52
 		i++
-		i = encodeVarintGateway(dAtA, i, uint64(m.CredentialStore.Size()))
-		n3, err := m.CredentialStore.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n3
+		i = encodeVarintGateway(dAtA, i, uint64(len(m.CredentialName)))
+		i += copy(dAtA[i:], m.CredentialName)
 	}
 	return i, nil
 }
 
-func (m *Server_TLSOptions_CredentialStoreFileBackend) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Server_TLSOptions_CredentialStoreFileBackend) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.ServerCertificate) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintGateway(dAtA, i, uint64(len(m.ServerCertificate)))
-		i += copy(dAtA[i:], m.ServerCertificate)
-	}
-	if len(m.PrivateKey) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintGateway(dAtA, i, uint64(len(m.PrivateKey)))
-		i += copy(dAtA[i:], m.PrivateKey)
-	}
-	return i, nil
-}
-
-func (m *Server_TLSOptions_CredentialStoreRemoteBackend) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Server_TLSOptions_CredentialStoreRemoteBackend) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.ResourceName) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintGateway(dAtA, i, uint64(len(m.ResourceName)))
-		i += copy(dAtA[i:], m.ResourceName)
-	}
-	if len(m.ServerAddress) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintGateway(dAtA, i, uint64(len(m.ServerAddress)))
-		i += copy(dAtA[i:], m.ServerAddress)
-	}
-	return i, nil
-}
-
-func (m *Server_TLSOptions_CredentialStore) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Server_TLSOptions_CredentialStore) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.CredentialStore != nil {
-		nn4, err := m.CredentialStore.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn4
-	}
-	return i, nil
-}
-
-func (m *Server_TLSOptions_CredentialStore_Files) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.Files != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintGateway(dAtA, i, uint64(m.Files.Size()))
-		n5, err := m.Files.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n5
-	}
-	return i, nil
-}
-func (m *Server_TLSOptions_CredentialStore_Remote) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.Remote != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintGateway(dAtA, i, uint64(m.Remote.Size()))
-		n6, err := m.Remote.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n6
-	}
-	return i, nil
-}
 func (m *Port) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1220,68 +903,13 @@ func (m *Server_TLSOptions) Size() (n int) {
 			n += 1 + l + sovGateway(uint64(l))
 		}
 	}
-	if m.CredentialStore != nil {
-		l = m.CredentialStore.Size()
-		n += 1 + l + sovGateway(uint64(l))
-	}
-	return n
-}
-
-func (m *Server_TLSOptions_CredentialStoreFileBackend) Size() (n int) {
-	var l int
-	_ = l
-	l = len(m.ServerCertificate)
-	if l > 0 {
-		n += 1 + l + sovGateway(uint64(l))
-	}
-	l = len(m.PrivateKey)
+	l = len(m.CredentialName)
 	if l > 0 {
 		n += 1 + l + sovGateway(uint64(l))
 	}
 	return n
 }
 
-func (m *Server_TLSOptions_CredentialStoreRemoteBackend) Size() (n int) {
-	var l int
-	_ = l
-	l = len(m.ResourceName)
-	if l > 0 {
-		n += 1 + l + sovGateway(uint64(l))
-	}
-	l = len(m.ServerAddress)
-	if l > 0 {
-		n += 1 + l + sovGateway(uint64(l))
-	}
-	return n
-}
-
-func (m *Server_TLSOptions_CredentialStore) Size() (n int) {
-	var l int
-	_ = l
-	if m.CredentialStore != nil {
-		n += m.CredentialStore.Size()
-	}
-	return n
-}
-
-func (m *Server_TLSOptions_CredentialStore_Files) Size() (n int) {
-	var l int
-	_ = l
-	if m.Files != nil {
-		l = m.Files.Size()
-		n += 1 + l + sovGateway(uint64(l))
-	}
-	return n
-}
-func (m *Server_TLSOptions_CredentialStore_Remote) Size() (n int) {
-	var l int
-	_ = l
-	if m.Remote != nil {
-		l = m.Remote.Size()
-		n += 1 + l + sovGateway(uint64(l))
-	}
-	return n
-}
 func (m *Port) Size() (n int) {
 	var l int
 	_ = l
@@ -1967,90 +1595,7 @@ func (m *Server_TLSOptions) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 10:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CredentialStore", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGateway
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGateway
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.CredentialStore == nil {
-				m.CredentialStore = &Server_TLSOptions_CredentialStore{}
-			}
-			if err := m.CredentialStore.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGateway(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthGateway
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Server_TLSOptions_CredentialStoreFileBackend) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGateway
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CredentialStoreFileBackend: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CredentialStoreFileBackend: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServerCertificate", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field CredentialName", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -2075,258 +1620,7 @@ func (m *Server_TLSOptions_CredentialStoreFileBackend) Unmarshal(dAtA []byte) er
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ServerCertificate = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PrivateKey", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGateway
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthGateway
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PrivateKey = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGateway(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthGateway
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Server_TLSOptions_CredentialStoreRemoteBackend) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGateway
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CredentialStoreRemoteBackend: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CredentialStoreRemoteBackend: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ResourceName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGateway
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthGateway
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ResourceName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServerAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGateway
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthGateway
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ServerAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGateway(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthGateway
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Server_TLSOptions_CredentialStore) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGateway
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CredentialStore: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CredentialStore: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Files", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGateway
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGateway
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &Server_TLSOptions_CredentialStoreFileBackend{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.CredentialStore = &Server_TLSOptions_CredentialStore_Files{v}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Remote", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGateway
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGateway
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &Server_TLSOptions_CredentialStoreRemoteBackend{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.CredentialStore = &Server_TLSOptions_CredentialStore_Remote{v}
+			m.CredentialName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2584,57 +1878,48 @@ var (
 func init() { proto.RegisterFile("networking/v1alpha3/gateway.proto", fileDescriptorGateway) }
 
 var fileDescriptorGateway = []byte{
-	// 823 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x55, 0x5d, 0x4f, 0x1b, 0x47,
-	0x14, 0x65, 0x6d, 0x63, 0xec, 0x6b, 0x8c, 0x37, 0x23, 0x54, 0x6d, 0xad, 0x8a, 0x10, 0xa3, 0xaa,
-	0x69, 0xd5, 0x2e, 0xc1, 0xf4, 0x21, 0x6a, 0xaa, 0x4a, 0x26, 0xa2, 0x38, 0xaa, 0x13, 0xd0, 0xac,
-	0xc9, 0x43, 0x5f, 0x56, 0xc3, 0xee, 0x00, 0x03, 0xeb, 0x9d, 0xd5, 0xcc, 0x98, 0x84, 0x7f, 0x98,
-	0xc7, 0xf6, 0x1f, 0x54, 0xbc, 0xf6, 0xb1, 0x7f, 0xa0, 0x9a, 0x0f, 0x7f, 0xe0, 0x50, 0x2a, 0xc4,
-	0xdb, 0xdc, 0x33, 0xf7, 0x9e, 0x7b, 0xf7, 0xcc, 0x99, 0x59, 0x78, 0x96, 0x53, 0xf5, 0x81, 0x8b,
-	0x4b, 0x96, 0x9f, 0x6d, 0x5f, 0xed, 0x90, 0xac, 0x38, 0x27, 0xbb, 0xdb, 0x67, 0x44, 0xd1, 0x0f,
-	0xe4, 0x3a, 0x2c, 0x04, 0x57, 0x1c, 0x7d, 0xc9, 0xa4, 0x62, 0x3c, 0x9c, 0x25, 0x86, 0x93, 0xc4,
-	0xce, 0x9f, 0x1e, 0xac, 0x1c, 0xd8, 0x64, 0xf4, 0x0a, 0x56, 0x24, 0x15, 0x57, 0x54, 0xc8, 0xc0,
-	0xdb, 0x2c, 0x3f, 0x6f, 0x74, 0x9f, 0x85, 0xff, 0x59, 0x18, 0x46, 0x26, 0x13, 0x4f, 0x2a, 0xd0,
-	0x00, 0x6a, 0x92, 0x66, 0x34, 0x51, 0x5c, 0x04, 0x25, 0x53, 0xfd, 0xe2, 0x9e, 0x6a, 0xd7, 0x32,
-	0x8c, 0x5c, 0xc9, 0x7e, 0xae, 0xc4, 0x35, 0x9e, 0x32, 0xb4, 0x5f, 0x41, 0xf3, 0xd6, 0x16, 0xf2,
-	0xa1, 0x7c, 0x49, 0xaf, 0x03, 0x6f, 0xd3, 0x7b, 0x5e, 0xc7, 0x7a, 0x89, 0xd6, 0x61, 0xf9, 0x8a,
-	0x64, 0x63, 0x1a, 0x94, 0x0c, 0x66, 0x83, 0x9f, 0x4a, 0x2f, 0xbd, 0xce, 0xa7, 0x06, 0x54, 0xed,
-	0x78, 0x68, 0x17, 0x2a, 0x05, 0x17, 0xca, 0xd4, 0x35, 0xba, 0x4f, 0xef, 0x99, 0xe8, 0x88, 0x0b,
-	0x85, 0x4d, 0xb2, 0x66, 0x3e, 0xe7, 0x52, 0x49, 0xf3, 0x1d, 0x75, 0x6c, 0x03, 0xf4, 0x0b, 0x94,
-	0x55, 0x26, 0x83, 0xb2, 0x61, 0xfa, 0xfe, 0x7f, 0x95, 0x09, 0x87, 0x83, 0xe8, 0xb0, 0x50, 0x8c,
-	0xe7, 0x12, 0xeb, 0x42, 0x84, 0xa0, 0x72, 0xc2, 0xf2, 0x34, 0xa8, 0x98, 0x71, 0xcd, 0x1a, 0x7d,
-	0x0b, 0x7e, 0x4a, 0x4f, 0xc9, 0x38, 0x53, 0x31, 0xcd, 0xd3, 0x82, 0xb3, 0x5c, 0x05, 0xcb, 0x66,
-	0xbf, 0xe5, 0xf0, 0x7d, 0x07, 0xb7, 0xff, 0xa9, 0x03, 0xcc, 0x28, 0xd1, 0xd7, 0xb0, 0x76, 0xae,
-	0x54, 0x21, 0x63, 0x41, 0x53, 0x26, 0x68, 0x62, 0x3f, 0xb1, 0x86, 0x9b, 0x06, 0xc5, 0x0e, 0x44,
-	0x7d, 0xa8, 0x8c, 0x78, 0x6a, 0x35, 0x5a, 0xeb, 0xfe, 0xf8, 0x90, 0xa9, 0xf5, 0x52, 0xd7, 0x62,
-	0xc3, 0x80, 0x76, 0x00, 0xd9, 0xa3, 0x8e, 0x13, 0x2a, 0x14, 0x3b, 0x65, 0x09, 0x51, 0xd4, 0xa8,
-	0x51, 0xdf, 0x2b, 0x05, 0x1e, 0x7e, 0x62, 0x77, 0x5f, 0xcf, 0x36, 0xd1, 0x16, 0x34, 0x0a, 0xc1,
-	0xae, 0x88, 0xa2, 0xb1, 0x3e, 0xbb, 0xca, 0x34, 0x17, 0x1c, 0xfc, 0x1b, 0xbd, 0x46, 0xdf, 0x40,
-	0x2b, 0x21, 0xf3, 0x9c, 0xd2, 0x29, 0xb0, 0x96, 0x90, 0x39, 0x32, 0x89, 0xbe, 0x83, 0x27, 0x72,
-	0x7c, 0x72, 0x41, 0x13, 0x15, 0x93, 0x4c, 0xc5, 0x39, 0x19, 0x51, 0x19, 0x54, 0xcd, 0x09, 0xb5,
-	0xdc, 0x46, 0x2f, 0x53, 0xef, 0x34, 0x8c, 0x2e, 0x60, 0x7d, 0xc4, 0xf2, 0xd8, 0xb8, 0x3f, 0xe1,
-	0x59, 0xac, 0x1d, 0xca, 0x78, 0x1e, 0xac, 0x18, 0x19, 0x5e, 0x3e, 0x54, 0x86, 0x23, 0xc7, 0x83,
-	0xd1, 0x88, 0xe5, 0x93, 0xe0, 0xbd, 0xe5, 0x34, 0xbd, 0xc8, 0xc7, 0xcf, 0x7b, 0xd5, 0x1e, 0xdd,
-	0x8b, 0x7c, 0x5c, 0xec, 0xb5, 0x05, 0xcd, 0x84, 0x15, 0xe7, 0x54, 0xc4, 0x72, 0xcc, 0xb4, 0x54,
-	0x75, 0xf3, 0xfd, 0xab, 0x16, 0x8c, 0x0c, 0x86, 0xce, 0xc0, 0x4f, 0x04, 0x4d, 0x69, 0xae, 0x18,
-	0xc9, 0x62, 0xa9, 0xb8, 0xa0, 0x01, 0x18, 0xd7, 0xfe, 0xfc, 0xa0, 0x61, 0x5e, 0x4f, 0x49, 0x22,
-	0xcd, 0x81, 0x5b, 0xc9, 0x6d, 0xa0, 0x9d, 0x41, 0x7b, 0x21, 0xe7, 0x57, 0x96, 0xd1, 0x3d, 0x92,
-	0x5c, 0xd2, 0x3c, 0x45, 0x3f, 0xdc, 0x69, 0x18, 0x7b, 0x81, 0xef, 0x30, 0xcb, 0xd3, 0xdb, 0x66,
-	0xb1, 0x97, 0x7a, 0xce, 0x28, 0xed, 0x0b, 0xf8, 0x6a, 0x71, 0x22, 0x3a, 0xe2, 0x6a, 0xda, 0x6f,
-	0x0b, 0x9a, 0x82, 0x4a, 0x3e, 0x16, 0x09, 0x35, 0xe6, 0x70, 0xad, 0x56, 0x27, 0xa0, 0x76, 0x86,
-	0xbe, 0x36, 0x6e, 0x28, 0x92, 0xa6, 0x82, 0x4a, 0xe9, 0x1a, 0x35, 0x2d, 0xda, 0xb3, 0x60, 0xfb,
-	0x6f, 0x0f, 0x5a, 0x0b, 0xcd, 0x50, 0x0c, 0xcb, 0xa7, 0x2c, 0xa3, 0xd2, 0xbd, 0x25, 0x07, 0x8f,
-	0xd1, 0x72, 0x4e, 0xa7, 0xfe, 0x12, 0xb6, 0xbc, 0x28, 0x81, 0xaa, 0x30, 0x5f, 0x64, 0x66, 0x6a,
-	0x74, 0xdf, 0x3c, 0xea, 0xb4, 0xe6, 0xb5, 0xe9, 0x2f, 0x61, 0x47, 0xbd, 0x87, 0x3e, 0x37, 0x47,
-	0xa7, 0x0f, 0x2b, 0xee, 0xae, 0xa3, 0x16, 0x34, 0x8e, 0x7a, 0x51, 0x34, 0xec, 0xe3, 0xc3, 0xe3,
-	0x83, 0xbe, 0xbf, 0x84, 0x00, 0xaa, 0xd1, 0x9b, 0xb7, 0x47, 0x83, 0x7d, 0xdf, 0xd3, 0xeb, 0xb7,
-	0xc7, 0xc3, 0xe3, 0xde, 0xc0, 0x2f, 0xa1, 0x75, 0xf0, 0x7b, 0xc7, 0xc3, 0xc3, 0x78, 0x3e, 0xbb,
-	0xdc, 0x39, 0x84, 0xc6, 0x9c, 0x85, 0xd1, 0x2a, 0xd4, 0x86, 0x83, 0x28, 0xd6, 0x89, 0xfe, 0x12,
-	0x6a, 0x98, 0x36, 0xef, 0x77, 0xe2, 0x17, 0xbe, 0x37, 0x0b, 0x76, 0xfc, 0xd2, 0x2c, 0xe8, 0xfa,
-	0xe5, 0x59, 0xb0, 0xeb, 0x57, 0x3a, 0xef, 0xa0, 0xa2, 0x1f, 0x66, 0xf4, 0x05, 0x54, 0xf3, 0xf1,
-	0xe8, 0x84, 0x0a, 0xa3, 0x7e, 0x13, 0xbb, 0x08, 0xb5, 0xa1, 0x36, 0xb9, 0x78, 0xee, 0x24, 0xa7,
-	0xb1, 0x7e, 0x70, 0x8d, 0x0f, 0xca, 0xf6, 0xc1, 0xd5, 0xeb, 0xbd, 0xf0, 0xd3, 0xcd, 0x86, 0xf7,
-	0xc7, 0xcd, 0x86, 0xf7, 0xd7, 0xcd, 0x86, 0xf7, 0xfb, 0xa6, 0x15, 0x98, 0xf1, 0x6d, 0x52, 0xb0,
-	0xed, 0x3b, 0xfe, 0xa3, 0x27, 0x55, 0xc3, 0xb6, 0xfb, 0x6f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x2a,
-	0x72, 0x94, 0xd5, 0x65, 0x07, 0x00, 0x00,
+	// 674 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x54, 0xdb, 0x4e, 0xdb, 0x4c,
+	0x10, 0xc6, 0x49, 0xc8, 0x61, 0x42, 0x88, 0x59, 0xa1, 0x5f, 0xfe, 0xb9, 0xe0, 0x90, 0xaa, 0x2a,
+	0xad, 0x5a, 0x07, 0x92, 0x5e, 0xa0, 0x22, 0x55, 0x4a, 0x2b, 0x44, 0xaa, 0x06, 0x12, 0xd9, 0x09,
+	0x17, 0xbd, 0xb1, 0x36, 0xce, 0x42, 0x16, 0x1c, 0xaf, 0xb5, 0xbb, 0x09, 0xe4, 0xcd, 0xfa, 0x08,
+	0xbd, 0x6c, 0xdf, 0xa0, 0xa2, 0x2f, 0x52, 0xed, 0xda, 0x21, 0xe9, 0x89, 0x0a, 0xf5, 0x6e, 0xe6,
+	0x9b, 0x99, 0x6f, 0x66, 0xbe, 0x59, 0x1b, 0x76, 0x42, 0x22, 0xaf, 0x19, 0xbf, 0xa2, 0xe1, 0x45,
+	0x75, 0xb2, 0x8f, 0x83, 0x68, 0x88, 0xeb, 0xd5, 0x0b, 0x2c, 0xc9, 0x35, 0x9e, 0xda, 0x11, 0x67,
+	0x92, 0xa1, 0xff, 0xa9, 0x90, 0x94, 0xd9, 0xf3, 0x44, 0x7b, 0x96, 0x58, 0xf9, 0x62, 0x40, 0xee,
+	0x38, 0x4e, 0x46, 0x87, 0x90, 0x13, 0x84, 0x4f, 0x08, 0x17, 0x96, 0xb1, 0x9d, 0xde, 0x2d, 0xd6,
+	0x76, 0xec, 0x3f, 0x16, 0xda, 0xae, 0xce, 0x74, 0x66, 0x15, 0xa8, 0x05, 0x79, 0x41, 0x02, 0xe2,
+	0x4b, 0xc6, 0xad, 0x94, 0xae, 0xde, 0xbb, 0xa7, 0x3a, 0x69, 0x69, 0xbb, 0x49, 0xc9, 0x51, 0x28,
+	0xf9, 0xd4, 0xb9, 0x63, 0xd8, 0x38, 0x84, 0xd2, 0x0f, 0x21, 0x64, 0x42, 0xfa, 0x8a, 0x4c, 0x2d,
+	0x63, 0xdb, 0xd8, 0x2d, 0x38, 0xca, 0x44, 0xeb, 0xb0, 0x3c, 0xc1, 0xc1, 0x98, 0x58, 0x29, 0x8d,
+	0xc5, 0xce, 0xab, 0xd4, 0x81, 0x51, 0xf9, 0x98, 0x83, 0x6c, 0x3c, 0x1e, 0xaa, 0x43, 0x26, 0x62,
+	0x5c, 0xea, 0xba, 0x62, 0x6d, 0xeb, 0x9e, 0x89, 0x3a, 0x8c, 0x4b, 0x47, 0x27, 0x2b, 0xe6, 0x21,
+	0x13, 0x52, 0xe8, 0x3d, 0x0a, 0x4e, 0xec, 0xa0, 0xd7, 0x90, 0x96, 0x81, 0xb0, 0xd2, 0x9a, 0xe9,
+	0xf9, 0x5f, 0x95, 0xb1, 0xbb, 0x2d, 0xb7, 0x1d, 0x49, 0xca, 0x42, 0xe1, 0xa8, 0x42, 0x84, 0x20,
+	0xd3, 0xa7, 0xe1, 0xc0, 0xca, 0xe8, 0x71, 0xb5, 0x8d, 0x9e, 0x82, 0x39, 0x20, 0xe7, 0x78, 0x1c,
+	0x48, 0x8f, 0x84, 0x83, 0x88, 0xd1, 0x50, 0x5a, 0xcb, 0x3a, 0x5e, 0x4e, 0xf0, 0xa3, 0x04, 0xde,
+	0xf8, 0xb6, 0x0c, 0x30, 0xa7, 0x44, 0x8f, 0x61, 0x75, 0x28, 0x65, 0x24, 0x3c, 0x4e, 0x06, 0x94,
+	0x13, 0x3f, 0x5e, 0x31, 0xef, 0x94, 0x34, 0xea, 0x24, 0x20, 0x6a, 0x42, 0x66, 0xc4, 0x06, 0xb1,
+	0x46, 0xab, 0xb5, 0x97, 0x0f, 0x99, 0x5a, 0x99, 0xaa, 0xd6, 0xd1, 0x0c, 0xe8, 0x05, 0xa0, 0xf8,
+	0xd4, 0x9e, 0x4f, 0xb8, 0xa4, 0xe7, 0xd4, 0xc7, 0x92, 0x68, 0x35, 0x0a, 0xce, 0x5a, 0x1c, 0x79,
+	0x3b, 0x0f, 0xa0, 0x2d, 0x28, 0x46, 0x9c, 0x4e, 0xb0, 0x24, 0x9e, 0xba, 0x5b, 0xbc, 0x34, 0x24,
+	0xd0, 0x7b, 0x32, 0x45, 0x4f, 0xa0, 0xec, 0xe3, 0x45, 0x2e, 0x91, 0x6c, 0xbe, 0xea, 0xe3, 0x05,
+	0x22, 0x81, 0x9e, 0xc1, 0x9a, 0x18, 0xf7, 0x2f, 0x89, 0x2f, 0x3d, 0x1c, 0x48, 0x2f, 0xc4, 0x23,
+	0x22, 0xac, 0xac, 0xbe, 0x4c, 0x39, 0x09, 0x34, 0x02, 0x79, 0xaa, 0x60, 0x74, 0x09, 0xeb, 0x23,
+	0x1a, 0x7a, 0xfa, 0xd5, 0xfb, 0x2c, 0xf0, 0xd4, 0xcb, 0xa4, 0x2c, 0xb4, 0x72, 0x7a, 0xfd, 0x83,
+	0x87, 0xae, 0xdf, 0x49, 0x78, 0x1c, 0x34, 0xa2, 0xe1, 0xcc, 0x39, 0x8b, 0x39, 0x75, 0x2f, 0x7c,
+	0xf3, 0x6b, 0xaf, 0xfc, 0x3f, 0xf7, 0xc2, 0x37, 0x3f, 0xf7, 0x7a, 0x04, 0x25, 0x9f, 0x46, 0x43,
+	0xc2, 0x3d, 0x31, 0xa6, 0x4a, 0xaa, 0x82, 0xde, 0x7f, 0x25, 0x06, 0x5d, 0x8d, 0x69, 0x45, 0x39,
+	0x19, 0x90, 0x50, 0x52, 0x1c, 0x68, 0x9d, 0x2c, 0x48, 0x14, 0xbd, 0x83, 0x95, 0x4c, 0x95, 0x26,
+	0xe4, 0x92, 0xdb, 0xa2, 0x32, 0x14, 0x3b, 0x0d, 0xd7, 0xed, 0x36, 0x9d, 0x76, 0xef, 0xb8, 0x69,
+	0x2e, 0x21, 0x80, 0xac, 0xfb, 0xee, 0xa4, 0xd3, 0x3a, 0x32, 0x0d, 0x65, 0x9f, 0xf4, 0xba, 0xbd,
+	0x46, 0xcb, 0x4c, 0xa1, 0x75, 0x30, 0x1b, 0xbd, 0x6e, 0xdb, 0x5b, 0xcc, 0x4e, 0x57, 0xda, 0x50,
+	0x5c, 0x18, 0x1d, 0xad, 0x40, 0xbe, 0xdb, 0x72, 0x3d, 0x95, 0x68, 0x2e, 0xa1, 0xa2, 0x6e, 0x73,
+	0xb6, 0xef, 0xed, 0x99, 0xc6, 0xdc, 0xd9, 0x37, 0x53, 0x73, 0xa7, 0x66, 0xa6, 0xe7, 0x4e, 0xdd,
+	0xcc, 0x54, 0x4e, 0x21, 0xa3, 0x3e, 0x44, 0xf4, 0x1f, 0x64, 0xc3, 0xf1, 0xa8, 0x4f, 0xb8, 0x7e,
+	0xd6, 0x25, 0x27, 0xf1, 0xd0, 0x06, 0xe4, 0x67, 0x82, 0x27, 0xdf, 0xfd, 0x9d, 0xaf, 0x3e, 0x30,
+	0xbd, 0x74, 0xfc, 0x26, 0xb5, 0xfd, 0xc6, 0xfe, 0x74, 0xbb, 0x69, 0x7c, 0xbe, 0xdd, 0x34, 0xbe,
+	0xde, 0x6e, 0x1a, 0x1f, 0xb6, 0xe3, 0x9b, 0x50, 0x56, 0xc5, 0x11, 0xad, 0xfe, 0xe6, 0xbf, 0xd9,
+	0xcf, 0x6a, 0xb6, 0xfa, 0xf7, 0x00, 0x00, 0x00, 0xff, 0xff, 0xaa, 0xbd, 0x84, 0xff, 0x55, 0x05,
+	0x00, 0x00,
 }
