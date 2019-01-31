@@ -261,7 +261,7 @@ enum PrincipalBinding {
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
-//   name: mTLS_enable
+//   name: mtls-enable
 //   namespace: frod
 // spec:
 //   peers:
@@ -273,7 +273,7 @@ enum PrincipalBinding {
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
-//   name: mTLS_disable
+//   name: mtls-disable
 //   namespace: frod
 // spec:
 //   targets:
@@ -286,7 +286,7 @@ enum PrincipalBinding {
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
-//   name: mTLS_enable
+//   name: mtls-enable
 //   namespace: frod
 // spec:
 //   targets:

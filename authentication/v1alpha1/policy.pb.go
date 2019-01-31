@@ -646,7 +646,7 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
-//   name: mTLS_enable
+//   name: mtls-enable
 //   namespace: frod
 // spec:
 //   peers:
@@ -658,7 +658,7 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
-//   name: mTLS_disable
+//   name: mtls-disable
 //   namespace: frod
 // spec:
 //   targets:
@@ -671,7 +671,7 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
-//   name: mTLS_enable
+//   name: mtls-enable
 //   namespace: frod
 // spec:
 //   targets:
