@@ -461,4 +461,8 @@ message ServiceEntry {
   // the annotation "networking.istio.io/export_to" to a comma-separated list
   // of namespace names.
   repeated string export_to = 7;
+
+  // The reunion of service accounts associated with workloads
+  // backing this service
+  repeated string service_accounts = 8;
 }
