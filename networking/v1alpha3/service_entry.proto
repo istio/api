@@ -435,4 +435,8 @@ message ServiceEntry {
   // i.e. the service added by the service entry will be visible to
   // workloads in the entire mesh.
   ConfigScope config_scope = 7;
+
+  // The reunion of service accounts associated with workloads
+  // backing this service
+  repeated string service_accounts = 8;
 }
