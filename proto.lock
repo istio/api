@@ -3455,6 +3455,12 @@
                 "name": "export_to",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 8,
+                "name": "service_accounts",
+                "type": "string",
+                "is_repeated": true
               }
             ],
             "messages": [
