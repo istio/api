@@ -489,7 +489,6 @@ message ServiceEntry {
   // of namespace names.
   repeated string export_to = 7;
 
-  // $hide_from_docs
   // The list of subject alternate names allowed for workloads that
   // implement this service. This information is used to enforce
   // secure-naming <https://istio.io/docs/concepts/security/#secure-naming>.

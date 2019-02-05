@@ -460,7 +460,6 @@ type ServiceEntry struct {
 	// the annotation "networking.istio.io/export_to" to a comma-separated list
 	// of namespace names.
 	ExportTo []string `protobuf:"bytes,7,rep,name=export_to,json=exportTo" json:"export_to,omitempty"`
-	// $hide_from_docs
 	// The list of subject alternate names allowed for workloads that
 	// implement this service. This information is used to enforce
 	// secure-naming <https://istio.io/docs/concepts/security/#secure-naming>.
