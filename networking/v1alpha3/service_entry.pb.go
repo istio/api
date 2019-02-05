@@ -378,6 +378,33 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 // specified above. In other words, a call to `http://foo.bar.com/baz` would
 // be translated to `http://uk.foo.bar.com/baz`.
 //
+// The following example illustrates the usage of a ServiceEntry
+// containing a subject alternate name
+// whose format conforms to the SPIFEE standard
+// <https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md>:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: httpbin
+//   namespace : httpbin-ns
+// spec:
+//   hosts:
+//   - httpbin.com
+//   location: MESH_INTERNAL
+//   ports:
+//   - number: 80
+//     name: http
+//     protocol: HTTP
+//   resolution: STATIC
+//   endpoints:
+//   - address: 2.2.2.2
+//   - address: 3.3.3.3
+//   subjectAltNames:
+//   - "spiffe://cluster.local/ns/httpbin-ns/sa/httpbin-service-account"
+// ```
+//
 type ServiceEntry struct {
 	// REQUIRED. The hosts associated with the ServiceEntry. Could be a DNS
 	// name with wildcard prefix (external services only). DNS names in hosts
@@ -439,32 +466,6 @@ type ServiceEntry struct {
 	// secure-naming <https://istio.io/docs/concepts/security/#secure-naming>.
 	// If specified, the proxy will verify that the server
 	// certificate's subject alternate name matches one of the specified values.
-	//
-	// The following example illustrates the usage of a subject alternate name
-	// whose format conforms to the SPIFEE standard
-	// <https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md>:
-	//
-	// ```yaml
-	// apiVersion: networking.istio.io/v1alpha3
-	// kind: ServiceEntry
-	// metadata:
-	//   name: httpbin
-	//   namespace : httpbin-ns
-	// spec:
-	//   hosts:
-	//   - httpbin.com
-	//   location: MESH_INTERNAL
-	//   ports:
-	//   - number: 80
-	//     name: http
-	//     protocol: HTTP
-	//   resolution: STATIC
-	//   endpoints:
-	//   - address: 2.2.2.2
-	//   - address: 3.3.3.3
-	//   subjectAltNames:
-	//   - "spiffe://cluster.local/ns/httpbin-ns/sa/httpbin-service-account"
-	// ```
 	SubjectAltNames []string `protobuf:"bytes,8,rep,name=subject_alt_names,json=subjectAltNames" json:"subject_alt_names,omitempty"`
 }
 
