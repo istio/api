@@ -3458,7 +3458,7 @@
               },
               {
                 "id": 8,
-                "name": "service_accounts",
+                "name": "subject_alt_names",
                 "type": "string",
                 "is_repeated": true
               }

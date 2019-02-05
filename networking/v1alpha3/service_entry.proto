@@ -463,11 +463,13 @@ message ServiceEntry {
   repeated string export_to = 7;
 
   // $hide_from_docs
-  // The set of service accounts identities allowed for workloads that
+  // The list of subject alternate names allowed for workloads that
   // implement this service. This information is used to enforce
   // secure-naming <https://istio.io/docs/concepts/security/#secure-naming>.
-
-  // The following example illustrates the usage of a service account
+  // If specified, the proxy will verify that the server
+  // certificate's subject alternate name matches one of the specified values.
+  //
+  // The following example illustrates the usage of a subject alternate name
   // whose format conforms to the SPIFEE standard
   // <https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md>:
   //
@@ -489,8 +491,8 @@ message ServiceEntry {
   //   endpoints:
   //   - address: 2.2.2.2
   //   - address: 3.3.3.3
-  //   serviceAccounts:
+  //   subjectAltNames:
   //   - "spiffe://cluster.local/ns/httpbin-ns/sa/httpbin-service-account"
   // ```
-  repeated string service_accounts = 8;
+  repeated string subject_alt_names = 8;
 }
