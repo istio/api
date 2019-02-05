@@ -433,8 +433,31 @@ type ServiceEntry struct {
 	// the annotation "networking.istio.io/export_to" to a comma-separated list
 	// of namespace names.
 	ExportTo []string `protobuf:"bytes,7,rep,name=export_to,json=exportTo" json:"export_to,omitempty"`
-	// The reunion of service accounts associated with workloads
-	// backing this service
+	// The following example illustrates the usage of a service account
+	// whose format conforms to the SPIFEE standard
+	// <https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md>:
+	//
+	// ```yaml
+	// apiVersion: networking.istio.io/v1alpha3
+	// kind: ServiceEntry
+	// metadata:
+	//   name: httpbin
+	//   namespace : httpbin-ns
+	// spec:
+	//   hosts:
+	//   - httpbin.com
+	//   location: MESH_INTERNAL
+	//   ports:
+	//   - number: 80
+	//     name: http
+	//     protocol: HTTP
+	//   resolution: STATIC
+	//   endpoints:
+	//   - address: 2.2.2.2
+	//   - address: 3.3.3.3
+	//   serviceAccounts:
+	//   - "spiffe://cluster.local/ns/httpbin-ns/sa/httpbin-service-account"
+	// ```
 	ServiceAccounts []string `protobuf:"bytes,8,rep,name=service_accounts,json=serviceAccounts" json:"service_accounts,omitempty"`
 }
 
