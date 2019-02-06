@@ -324,3 +324,5 @@
 - networking.virtual_service.uid
 - networking.virtual_service.name
 - networking.virtual_service.namespace
+
+- istio-system
