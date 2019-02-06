@@ -1,0 +1,37 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: meshexpansion-ilb-vs-pilot
+  namespace: somenamespace
+  labels:
+    app: template "pilot.name"
+    chart: "pilot.chart"
+    heritage: someservice
+    release: somename
+spec:
+  hosts:
+  - istio-pilot.somenamespace.svc.cluster.local
+  gateways:
+  - meshexpansion-ilb-gateway
+  tcp:
+  - match:
+    - port: 15011
+    route:
+    - destination:
+        host: istio-pilot.somenamespace.svc.cluster.local
+        port:
+          number: 15011
+  - match:
+    - port: 15010
+    route:
+    - destination:
+        host: istio-pilot.somenamespace.svc.cluster.local
+        port:
+          number: 15010
+  - match:
+    - port: 5353
+    route:
+    - destination:
+        host: kube-dns.kube-system.svc.cluster.local
+        port:
+          number: 53
