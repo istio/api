@@ -4642,6 +4642,11 @@
                 "id": 5,
                 "name": "custom_header",
                 "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "server_name",
+                "type": "string"
               }
             ]
           },
@@ -4697,6 +4702,11 @@
               {
                 "id": 3,
                 "name": "ca_certificates",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "server_name",
                 "type": "string"
               }
             ]
