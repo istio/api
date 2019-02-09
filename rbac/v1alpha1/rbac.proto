@@ -236,7 +236,7 @@ message Subject {
 
   // $hide_from_docs
   // Optional. A list of subject names. This is matched to the
-  // `source.principal` attribute. If one of subject names is "*", it matches any subject.
+  // `source.principal` attribute. If one of subject names is "*", it matches to a subject with any name.
   // Prefix and suffix matches are supported.
   repeated string names = 4;
 

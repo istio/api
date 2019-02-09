@@ -446,7 +446,7 @@ type Subject struct {
 	User string `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
 	// $hide_from_docs
 	// Optional. A list of subject names. This is matched to the
-	// `source.principal` attribute. If one of subject names is "*", it matches any subject.
+	// `source.principal` attribute. If one of subject names is "*", it matches to a subject with any name.
 	// Prefix and suffix matches are supported.
 	Names []string `protobuf:"bytes,4,rep,name=names" json:"names,omitempty"`
 	// $hide_from_docs
