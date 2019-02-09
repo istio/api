@@ -5347,13 +5347,13 @@
               },
               {
                 "id": 4,
-                "name": "principals",
+                "name": "names",
                 "type": "string",
                 "is_repeated": true
               },
               {
                 "id": 5,
-                "name": "not_principals",
+                "name": "not_names",
                 "type": "string",
                 "is_repeated": true
               },
