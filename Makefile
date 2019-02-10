@@ -1,3 +1,4 @@
+-include Makefile.local
 all: generate
 
 ########################
@@ -20,11 +21,19 @@ ifdef CIRCLECI
 docker_run =
 out_path = $(OUT_PATH)
 else
-all_img := gcr.io/istio-testing/api-build-tools:2019-02-04
+ifdef LOCAL_BUILD
+docker_run =
+out_path = ../..
+protoc = protoc -I. -I./vendor -I./vendor/github.com/gogo/googleapis -I./vendor/github.com/gogo/protobuf/protobuf -I../..
+protolock = echo
+install_gogo_protoc_gen = install-gogo-protoc-gen
+else
+all_img := gcr.io/istio-testing/api-build-tools:2019-02-09
 pwd := $(shell pwd)
 repo_mount := /src/istio.io/api
 docker_run ?= docker run --rm -v $(pwd):$(repo_mount) -w $(repo_mount) $(all_img)
 out_path = /src
+endif
 endif
 
 ########################
@@ -72,11 +81,17 @@ gogoslick_plugin := $(gogoslick_plugin_prefix)$(gogo_mapping):$(out_path)
 
 protoc_gen_docs_plugin := --docs_out=warnings=true,mode=html_fragment_with_front_matter:./
 
+########################
+# protoc_gen_jsonshim
+########################
+
+protoc_gen_jsonshim_plugin := --jsonshim_out=$(gogo_mapping):$(out_path)
+
 #####################
 # Generation Rules
 #####################
 
-generate: \
+generate: $(install_gogo_protoc_gen) \
 	generate-mcp-go \
 	generate-mcp-python \
 	generate-mesh-go \
@@ -107,7 +122,7 @@ generate-mcp-go: $(config_mcp_pb_gos) $(config_mcp_pb_doc)
 $(config_mcp_pb_gos) $(config_mcp_pb_doc): $(config_mcp_protos)
 	## Generate mcp/v1alpha1/*.pb.go + $(config_mcp_pb_doc)
 	@$(docker_run) $(protolock) status
-	@$(docker_run) $(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(config_mcp_path) $^
+	@$(docker_run) $(protoc) $(gogofast_plugin) $(protoc_gen_jsonshim_plugin) $(protoc_gen_docs_plugin)$(config_mcp_path) $^
 
 generate-mcp-python: $(config_mcp_pb_pythons)
 
@@ -119,6 +134,7 @@ $(config_mcp_pb_pythons): $(config_mcp_protos)
 clean-mcp:
 	rm -f $(config_mcp_pb_gos)
 	rm -f $(config_mcp_pb_doc)
+	find $(config_mcp_path) -name "*_json_generated.go" -delete
 
 #####################
 # mesh/...
@@ -135,7 +151,7 @@ generate-mesh-go: $(mesh_pb_gos) $(mesh_pb_doc)
 $(mesh_pb_gos) $(mesh_pb_doc): $(mesh_protos)
 	## Generate mesh/v1alpha1/*.pb.go + $(mesh_pb_doc)
 	@$(docker_run) $(protolock) status
-	@$(docker_run) $(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(mesh_path) $^
+	@$(docker_run) $(protoc) $(gogofast_plugin) $(protoc_gen_jsonshim_plugin) $(protoc_gen_docs_plugin)$(mesh_path) $^
 
 generate-mesh-python: $(mesh_pb_pythons)
 
@@ -147,6 +163,7 @@ $(mesh_pb_pythons): $(mesh_protos)
 clean-mesh:
 	rm -f $(mesh_pb_gos)
 	rm -f $(mesh_pb_doc)
+	find $(mesh_path) -name "*_json_generated.go" -delete
 
 #####################
 # mixer/...
@@ -185,22 +202,22 @@ generate-mixer-go: \
 $(mixer_v1_pb_gos) $(mixer_v1_pb_doc): $(mixer_v1_protos)
 	## Generate mixer/v1/*.pb.go + $(mixer_v1_pb_doc)
 	@$(docker_run) $(protolock) status
-	@$(docker_run) $(protoc) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_v1_path) $^
+	@$(docker_run) $(protoc) $(gogoslick_plugin) $(protoc_gen_jsonshim_plugin) $(protoc_gen_docs_plugin)$(mixer_v1_path) $^
 
 $(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc): $(mixer_config_client_protos)
 	## Generate mixer/v1/config/client/*.pb.go + $(mixer_config_client_pb_doc)
 	@$(docker_run) $(protolock) status
-	@$(docker_run) $(protoc) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_config_client_path) $^
+	@$(docker_run) $(protoc) $(gogoslick_plugin) $(protoc_gen_jsonshim_plugin) $(protoc_gen_docs_plugin)$(mixer_config_client_path) $^
 
 $(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_doc) : $(mixer_adapter_model_v1beta1_protos)
 	## Generate mixer/adapter/model/v1beta1/*.pb.go + $(mixer_adapter_model_v1beta1_pb_doc)
 	@$(docker_run) $(protolock) status
-	@$(docker_run) $(protoc) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_adapter_model_v1beta1_path) $^
+	@$(docker_run) $(protoc) $(gogoslick_plugin) $(protoc_gen_jsonshim_plugin) $(protoc_gen_docs_plugin)$(mixer_adapter_model_v1beta1_path) $^
 
 $(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc) : $(policy_v1beta1_protos)
 	## Generate policy/v1beta1/*.pb.go + $(policy_v1beta1_pb_doc)
 	@$(docker_run) $(protolock) status
-	@$(docker_run) $(protoc) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(policy_v1beta1_path) $^
+	@$(docker_run) $(protoc) $(gogoslick_plugin) $(protoc_gen_jsonshim_plugin) $(protoc_gen_docs_plugin)$(policy_v1beta1_path) $^
 
 generate-mixer-python: \
 	$(mixer_v1_pb_pythons) \
@@ -231,6 +248,7 @@ $(policy_v1beta1_pb_pythons): $(policy_v1beta1_protos)
 clean-mixer:
 	rm -f $(mixer_v1_pb_gos) $(mixer_config_client_pb_gos) $(mixer_adapter_model_v1beta1_pb_gos) $(policy_v1beta1_pb_gos) policy/v1beta1/fixed_cfg.pb.go
 	rm -f $(mixer_v1_pb_doc) $(mixer_config_client_pb_doc) $(mixer_adapter_model_v1beta1_pb_doc) $(policy_v1beta1_pb_doc)
+	find $(mixer_v1_path) $(mixer_config_client_path) $(mixer_adapter_model_v1beta1_path) $(policy_v1beta1_path) -name "*_json_generated.go" -delete
 
 #####################
 # routing/...
@@ -247,7 +265,7 @@ generate-routing-go: $(routing_v1alpha3_pb_gos) $(routing_v1alpha3_pb_doc)
 $(routing_v1alpha3_pb_gos) $(routing_v1alpha3_pb_doc): $(routing_v1alpha3_protos)
 	## Generate networking/v1alpha3/*.pb.go
 	@$(docker_run) $(protolock) status
-	@$(docker_run) $(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(routing_v1alpha3_path) $^
+	@$(docker_run) $(protoc) $(gogofast_plugin) $(protoc_gen_jsonshim_plugin) $(protoc_gen_docs_plugin)$(routing_v1alpha3_path) $^
 
 generate-routing-python: $(routing_v1alpha3_pb_pythons)
 
@@ -259,6 +277,7 @@ $(routing_v1alpha3_pb_pythons): $(routing_v1alpha3_protos)
 clean-routing:
 	rm -f $(routing_v1alpha3_pb_gos)
 	rm -f $(routing_v1alpha3_pb_doc)
+	find $(routing_v1alpha3_path) -name "*_json_generated.go" -delete
 
 #####################
 # rbac/...
@@ -275,7 +294,7 @@ generate-rbac-go: $(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc)
 $(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc): $(rbac_v1alpha1_protos)
 	## Generate rbac/v1alpha1/*.pb.go
 	@$(docker_run) $(protolock) status
-	@$(docker_run) $(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(rbac_v1alpha1_path) $^
+	@$(docker_run) $(protoc) $(gogofast_plugin) $(protoc_gen_jsonshim_plugin) $(protoc_gen_docs_plugin)$(rbac_v1alpha1_path) $^
 
 generate-rbac-python: $(rbac_v1alpha1_protos)
 
@@ -287,6 +306,7 @@ $(rbac_v1alpha1_pb_pythons): $(rbac_v1alpha1_protos)
 clean-rbac:
 	rm -f $(rbac_v1alpha1_pb_gos)
 	rm -f $(rbac_v1alpha1_pb_doc)
+	find $(rbac_v1alpha1_path) -name "*_json_generated.go" -delete
 
 
 #####################
@@ -304,7 +324,7 @@ generate-authn-go: $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc)
 $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc): $(authn_v1alpha1_protos)
 	## Generate authentication/v1alpha1/*.pb.go
 	@$(docker_run) $(protolock) status
-	@$(docker_run) $(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(authn_v1alpha1_path) $^
+	@$(docker_run) $(protoc) $(gogofast_plugin) $(protoc_gen_jsonshim_plugin) $(protoc_gen_docs_plugin)$(authn_v1alpha1_path) $^
 
 generate-authn-python: $(authn_v1alpha1_pb_pythons)
 
@@ -316,6 +336,7 @@ $(authn_v1alpha1_pb_pythons): $(authn_v1alpha1_protos)
 clean-authn:
 	rm -f $(authn_v1alpha1_pb_gos)
 	rm -f $(authn_v1alpha1_pb_doc)
+	find $(authn_v1alpha1_path) -name "*_json_generated.go" -delete
 
 #####################
 # envoy/...
@@ -344,6 +365,7 @@ $(envoy_pb_pythons): $(envoy_protos)
 
 clean-envoy:
 	rm -f $(envoy_pb_gos)
+	find $(envoy_path) -name "*_json_generated.go" -delete
 
 #####################
 # Kube APIs
@@ -442,6 +464,7 @@ install-gogo-protoc-gen:
 	# build go-to-protobuf generator
 	@(cd vendor/github.com/golang/protobuf && go install ./protoc-gen-go)
 	@(cd vendor/github.com/gogo/protobuf && go install ./{protoc-gen-gofast,protoc-gen-gogo,protoc-gen-gogofast,protoc-gen-gogofaster,protoc-gen-gogoslick})
+	@(cd vendor/istio.io/tools/protoc-gen-docs && go install .)
 
 clean-kube-apis:
 	# delete generated kube api files

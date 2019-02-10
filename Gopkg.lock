@@ -182,6 +182,14 @@
   version = "v2.0.1"
 
 [[projects]]
+  digest = "1:debf1a119378d059b68925f1796851b6855bfc2f55419a50d634ecce3eabd8e8"
+  name = "github.com/shurcooL/sanitized_anchor_name"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "7bfe4c7ecddb3666a94b053b422cdd8f5aaa3615"
+  version = "v1.0.0"
+
+[[projects]]
   digest = "1:9d8420bbf131d1618bde6530af37c3799340d3762cc47210c1d9532a4c3a2779"
   name = "github.com/spf13/pflag"
   packages = ["."]
@@ -323,6 +331,14 @@
   version = "v0.9.1"
 
 [[projects]]
+  digest = "1:926cba3a3c1cddfcfad996917e5d72fb4726536dbdc7264fa936e8c99890e558"
+  name = "gopkg.in/russross/blackfriday.v2"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "d3b5b032dc8e8927d31a5071b56e14c89f045135"
+  version = "v2.0.1"
+
+[[projects]]
   digest = "1:18108594151654e9e696b27b181b953f9a90b16bf14d253dd1b397b025a1487f"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
@@ -331,17 +347,22 @@
   version = "v2.2.2"
 
 [[projects]]
-  branch = "master"
-  digest = "1:d828cfeb0b7aca924652f224e764df22186cd8a4c7eb29ab7fbf0d6cdb459512"
+  branch = "protoc-gen-jsonshim"
+  digest = "1:8b9ecb6d5d2fac722bdd2c4f5ac2f07c8cbd1ebb76b62123f80c788f1e088503"
   name = "istio.io/tools"
   packages = [
     "cmd/kubetype-gen",
     "cmd/kubetype-gen/generators",
     "cmd/kubetype-gen/metadata",
     "cmd/kubetype-gen/scanner",
+    "cmd/protoc-gen-jsonshim",
+    "cmd/protoc-gen-jsonshim/jsonshim",
+    "pkg/protocgen",
+    "protoc-gen-docs",
   ]
   pruneopts = "T"
-  revision = "3e3c77a54ed98281f514db97215d0077c587c1cc"
+  revision = "016f78c93dba7ca6eb93ffc50e0f507a0bd85752"
+  source = "github.com/rcernich/istio-tools"
 
 [[projects]]
   branch = "release-1.11"
@@ -534,12 +555,15 @@
     "golang.org/x/net/context",
     "google.golang.org/grpc",
     "istio.io/tools/cmd/kubetype-gen",
+    "istio.io/tools/cmd/protoc-gen-jsonshim",
+    "istio.io/tools/protoc-gen-docs",
     "k8s.io/apimachinery/pkg/api/errors",
     "k8s.io/apimachinery/pkg/apis/meta/v1",
     "k8s.io/apimachinery/pkg/labels",
     "k8s.io/apimachinery/pkg/runtime",
     "k8s.io/apimachinery/pkg/runtime/schema",
     "k8s.io/apimachinery/pkg/runtime/serializer",
+    "k8s.io/apimachinery/pkg/runtime/serializer/json",
     "k8s.io/apimachinery/pkg/types",
     "k8s.io/apimachinery/pkg/watch",
     "k8s.io/client-go/discovery",

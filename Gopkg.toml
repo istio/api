@@ -33,6 +33,8 @@ required = [
   "github.com/gogo/protobuf/protoc-gen-gogoslick",
   "github.com/golang/protobuf/protoc-gen-go",
   "istio.io/tools/cmd/kubetype-gen",
+  "istio.io/tools/cmd/protoc-gen-jsonshim",
+  "istio.io/tools/protoc-gen-docs",
   "k8s.io/code-generator/cmd/defaulter-gen",
   "k8s.io/code-generator/cmd/deepcopy-gen",
   "k8s.io/code-generator/cmd/client-gen",
@@ -46,11 +48,13 @@ required = [
 
 [[override]]
   name = "github.com/gogo/protobuf"
+  #version = "v1.2.0"
   # aligns with 2018-06-12 protoc image build
   revision = "1ef32a8b9fc3f8ec940126907cedb5998f6318e4"
 
-[[constraint]]
+[[override]]
   name = "github.com/golang/protobuf"
+  #version = "v1.2.0"
   # aligns with 2018-06-12 protoc image build
   revision = "05f48f4eaf0e05663b562bab533cdd472238ce29"
 
@@ -78,6 +82,11 @@ required = [
   name = "k8s.io/gengo"
   # line up with k8s.io/code-generator@release-1.11
   revision = "01a732e01d00cb9a81bb0ca050d3e6d2b947927b"
+
+[[override]]
+  branch = "protoc-gen-jsonshim"
+  name = "istio.io/tools"
+  source = "github.com/rcernich/istio-tools"
 
 [prune]
   go-tests = true

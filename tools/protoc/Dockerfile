@@ -27,40 +27,23 @@ RUN apk update
 RUN apk add --no-cache go>1.10
 ENV GOPATH=/go \
     PATH=/go/bin/:$PATH
-RUN go get -u -v -ldflags '-w -s' golang.org/x/tools/cmd/goimports \
-    && go get -u -v -d \
-        github.com/golang/protobuf/protoc-gen-go \
-        github.com/gogo/protobuf/protoc-gen-gofast \
-        github.com/gogo/protobuf/protoc-gen-gogo \
-        github.com/gogo/protobuf/protoc-gen-gogofast \
-        github.com/gogo/protobuf/protoc-gen-gogofaster \
-        github.com/gogo/protobuf/protoc-gen-gogoslick \
-        istio.io/tools/protoc-gen-docs \
-        istio.io/tools/cmd/kubetype-gen \
-        k8s.io/code-generator/cmd/client-gen \
-        k8s.io/code-generator/cmd/deepcopy-gen \
-        k8s.io/code-generator/cmd/defaulter-gen \
-        k8s.io/code-generator/cmd/go-to-protobuf \
-        k8s.io/code-generator/cmd/informer-gen \
-        k8s.io/code-generator/cmd/lister-gen \
-    && (cd $GOPATH/src/github.com/golang/protobuf && git checkout -q 05f48f4eaf0e05663b562bab533cdd472238ce29) \
-    && (cd $GOPATH/src/github.com/gogo/protobuf && git checkout -q 1ef32a8b9fc3f8ec940126907cedb5998f6318e4) \
-    && (cd $GOPATH/src/k8s.io/code-generator && git checkout release-1.11) \
-    && go install -v -ldflags '-w -s' \
-        github.com/golang/protobuf/protoc-gen-go \
-        github.com/gogo/protobuf/protoc-gen-gofast \
-        github.com/gogo/protobuf/protoc-gen-gogo \
-        github.com/gogo/protobuf/protoc-gen-gogofast \
-        github.com/gogo/protobuf/protoc-gen-gogofaster \
-        github.com/gogo/protobuf/protoc-gen-gogoslick \
-        istio.io/tools/protoc-gen-docs \
-        istio.io/tools/cmd/kubetype-gen \
-        k8s.io/code-generator/cmd/client-gen \
-        k8s.io/code-generator/cmd/deepcopy-gen \
-        k8s.io/code-generator/cmd/defaulter-gen \
-        k8s.io/code-generator/cmd/go-to-protobuf \
-        k8s.io/code-generator/cmd/informer-gen \
-        k8s.io/code-generator/cmd/lister-gen \
+RUN go get -u -v -ldflags '-w -s' golang.org/x/tools/cmd/goimports
+RUN cd /go/src/istio.io/api/vendor && go install -v -ldflags '-w -s' \
+        ./github.com/golang/protobuf/protoc-gen-go \
+        ./github.com/gogo/protobuf/protoc-gen-gofast \
+        ./github.com/gogo/protobuf/protoc-gen-gogo \
+        ./github.com/gogo/protobuf/protoc-gen-gogofast \
+        ./github.com/gogo/protobuf/protoc-gen-gogofaster \
+        ./github.com/gogo/protobuf/protoc-gen-gogoslick \
+        ./istio.io/tools/protoc-gen-docs \
+        ./istio.io/tools/cmd/kubetype-gen \
+        ./istio.io/tools/cmd/protoc-gen-jsonshim \
+        ./k8s.io/code-generator/cmd/client-gen \
+        ./k8s.io/code-generator/cmd/deepcopy-gen \
+        ./k8s.io/code-generator/cmd/defaulter-gen \
+        ./k8s.io/code-generator/cmd/go-to-protobuf \
+        ./k8s.io/code-generator/cmd/informer-gen \
+        ./k8s.io/code-generator/cmd/lister-gen \
         && install -c ${GOPATH}/bin/protoc-gen* ${GOPATH}/bin/*-gen ${GOPATH}/bin/goimports ${GOPATH}/bin/go-to-protobuf $(which gofmt) ${OUTDIR}/usr/bin/
 
 FROM znly/upx as packer
