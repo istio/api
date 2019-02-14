@@ -74,7 +74,10 @@ message MeshConfig {
 
   // Connection timeout used by Envoy. (MUST BE >=1ms)
   google.protobuf.Duration connect_timeout = 6;
-
+  
+  // Idle timeout used by Envoy
+  google.protobuf.Duration idle_timeout = 32;
+  
   // If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
   istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive tcp_keepalive = 28;
 
@@ -221,7 +224,7 @@ message MeshConfig {
   string trust_domain = 26;
 
   // $hide_from_docs
-  // Next available field number: 32
+  // Next available field number: 33
 }
 
 // ConfigSource describes information about a configuration store inside a
