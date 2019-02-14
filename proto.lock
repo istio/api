@@ -873,6 +873,11 @@
                 "type": "google.protobuf.Duration"
               },
               {
+                "id": 32,
+                "name": "idle_timeout",
+                "type": "google.protobuf.Duration"
+              },
+              {
                 "id": 28,
                 "name": "tcp_keepalive",
                 "type": "istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive"
