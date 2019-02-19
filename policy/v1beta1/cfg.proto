@@ -531,8 +531,9 @@ message Mutual {
   // include Istio CA certificates and system certificates in cert pool.
   string ca_certificates = 3;
 
-  // Used to config mixer TLS client to verify the hostname on the returned
-  // certificates. It is also included in the client's handshake to support
-  // virtual hosting.
+  // Used to config mixer MTLS client, which will be included in the mixer's handshake
+  // with out of process adapter to support virtual hosting. Note server name will not
+  // be used to verify hostname on returned adapter certs, since mixer does customized
+  // verification of whitelisted SubjectAltName for MTLS.
   string server_name = 4;
 }
