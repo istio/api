@@ -364,9 +364,7 @@ message HTTPRoute {
   // Redirect primitive. Rewrite will be performed before forwarding.
   HTTPRewrite rewrite = 4;
 
-  // Deprecated. Websocket upgrades are done automatically starting from Istio 1.0.
-  // $hide_from_docs
-  bool websocket_upgrade = 5;
+  reserved 5;
 
   // Timeout for HTTP requests.
   google.protobuf.Duration timeout = 6;

@@ -3693,11 +3693,6 @@
                 "type": "HTTPRewrite"
               },
               {
-                "id": 5,
-                "name": "websocket_upgrade",
-                "type": "bool"
-              },
-              {
                 "id": 6,
                 "name": "timeout",
                 "type": "google.protobuf.Duration"
@@ -3739,6 +3734,9 @@
                 "name": "headers",
                 "type": "Headers"
               }
+            ],
+            "reserved_ids": [
+              5
             ],
             "maps": [
               {
