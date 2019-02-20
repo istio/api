@@ -307,6 +307,8 @@ type ProxyConfig struct {
 	ConnectTimeout *google_protobuf.Duration `protobuf:"bytes,9,opt,name=connect_timeout,json=connectTimeout" json:"connect_timeout,omitempty"`
 	// IP Address and Port of a statsd UDP listener (e.g. _10.75.241.127:9125_).
 	StatsdUdpAddress string `protobuf:"bytes,10,opt,name=statsd_udp_address,json=statsdUdpAddress,proto3" json:"statsd_udp_address,omitempty"`
+	// Address of the Envoy Metrics Service implementation (e.g. metrics-service:15000).
+	MetricsServiceAddress string `protobuf:"bytes,20,opt,name=metrics_service_address,json=metricsServiceAddress,proto3" json:"metrics_service_address,omitempty"`
 	// Port on which Envoy should listen for administrative commands.
 	ProxyAdminPort int32 `protobuf:"varint,11,opt,name=proxy_admin_port,json=proxyAdminPort,proto3" json:"proxy_admin_port,omitempty"`
 	// $hide_from_docs
@@ -331,8 +333,6 @@ type ProxyConfig struct {
 	InterceptionMode ProxyConfig_InboundInterceptionMode `protobuf:"varint,18,opt,name=interception_mode,json=interceptionMode,proto3,enum=istio.mesh.v1alpha1.ProxyConfig_InboundInterceptionMode" json:"interception_mode,omitempty"`
 	// Tracing configuration to be used by the proxy.
 	Tracing *Tracing `protobuf:"bytes,19,opt,name=tracing" json:"tracing,omitempty"`
-	// Address of the Envoy Metrics Service implementation (e.g. metrics-service:15000).
-	MetricsServiceAddress string `protobuf:"bytes,20,opt,name=metrics_service_address,json=metricsServiceAddress,proto3" json:"metrics_service_address,omitempty"`
 }
 
 func (m *ProxyConfig) Reset()                    { *m = ProxyConfig{} }
@@ -410,6 +410,13 @@ func (m *ProxyConfig) GetStatsdUdpAddress() string {
 	return ""
 }
 
+func (m *ProxyConfig) GetMetricsServiceAddress() string {
+	if m != nil {
+		return m.MetricsServiceAddress
+	}
+	return ""
+}
+
 func (m *ProxyConfig) GetProxyAdminPort() int32 {
 	if m != nil {
 		return m.ProxyAdminPort
@@ -471,13 +478,6 @@ func (m *ProxyConfig) GetTracing() *Tracing {
 		return m.Tracing
 	}
 	return nil
-}
-
-func (m *ProxyConfig) GetMetricsServiceAddress() string {
-	if m != nil {
-		return m.MetricsServiceAddress
-	}
-	return ""
 }
 
 func init() {

@@ -1312,6 +1312,11 @@
                 "type": "string"
               },
               {
+                "id": 20,
+                "name": "metrics_service_address",
+                "type": "string"
+              },
+              {
                 "id": 11,
                 "name": "proxy_admin_port",
                 "type": "int32"
@@ -1355,11 +1360,6 @@
                 "id": 19,
                 "name": "tracing",
                 "type": "Tracing"
-              },
-              {
-                "id": 20,
-                "name": "metrics_service_address",
-                "type": "string"
               }
             ]
           }

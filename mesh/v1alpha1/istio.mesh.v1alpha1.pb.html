@@ -896,6 +896,14 @@ DEPRECATED: Use <a href="#ProxyConfig-tracing">tracing</a> instead.</p>
 
 </td>
 </tr>
+<tr id="ProxyConfig-metrics_service_address">
+<td><code>metricsServiceAddress</code></td>
+<td><code>string</code></td>
+<td>
+<p>Address of the Envoy Metrics Service implementation (e.g. metrics-service:15000).</p>
+
+</td>
+</tr>
 <tr id="ProxyConfig-proxy_admin_port">
 <td><code>proxyAdminPort</code></td>
 <td><code>int32</code></td>
@@ -963,14 +971,6 @@ Increase the value of this field if you find that the metrics from Envoys are tr
 <td><code><a href="#Tracing">Tracing</a></code></td>
 <td>
 <p>Tracing configuration to be used by the proxy.</p>
-
-</td>
-</tr>
-<tr id="ProxyConfig-metrics_service_address">
-<td><code>metricsServiceAddress</code></td>
-<td><code>string</code></td>
-<td>
-<p>Address of the Envoy Metrics Service implementation (e.g. metrics-service:15000).</p>
 
 </td>
 </tr>
