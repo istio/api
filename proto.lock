@@ -3735,9 +3735,6 @@
                 "type": "Headers"
               }
             ],
-            "reserved_ids": [
-              5
-            ],
             "maps": [
               {
                 "key_type": "string",
@@ -3763,6 +3760,9 @@
                   "type": "string"
                 }
               }
+            ],
+            "reserved_ids": [
+              5
             ]
           },
           {
