@@ -164,4 +164,7 @@ message ProxyConfig {
 
   // Tracing configuration to be used by the proxy.
   Tracing tracing = 19;
+
+  // Address of the Envoy Metrics Service implementation (e.g. metrics-service:15000).
+  string metrics_service_address = 20;
 }
