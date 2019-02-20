@@ -196,7 +196,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //         host: istio-egressgateway.istio-system.svc.cluster.local
 //   - match:
 //     - port: 80
-//       gateway:
+//       gateways:
 //       - istio-egressgateway
 //     route:
 //     - destination:
