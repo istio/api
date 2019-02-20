@@ -3325,7 +3325,7 @@ spec:
         host: istio-egressgateway.istio-system.svc.cluster.local
   - match:
     - port: 80
-      gateway:
+      gateways:
       - istio-egressgateway
     route:
     - destination:
