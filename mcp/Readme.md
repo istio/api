@@ -135,6 +135,13 @@ The following example shows what happens when a change cannot be applied.
 
 ![Resource update error](v1alpha1/diagrams/collection-update-error.svg)
 
+The sink should only NACK in _exceptional_ cases. For example, if a set of 
+resources was invalid, malformed, or could not be decoded. NACK'd updates
+should raise an alarm for subsequent investigation by a human. The source 
+should not resend the same set of resources that were previously NACK'd. 
+Canary pushes to dedicated sinks may also be used to verify correctness 
+(non-NACK) before pushing to a larger fleet of resource sinks.
+
 The nonce in MCP is used to match RequestResources and Resources. On
 reconnect, the sinks may attempt to resume a session with the same
 source by specifying the known resources version with
