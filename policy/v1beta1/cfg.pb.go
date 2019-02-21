@@ -724,8 +724,7 @@ func (m *Sampling) GetRateLimit() *RateLimitSampling {
 // `sampling_rate` would be set `12.5`.
 //
 // This sampling configuration is meant to closely match the access log RuntimeFilter configuration
-// supported by Envoy:
-// https://github.com/envoyproxy/data-plane-api/blob/master/envoy/config/filter/accesslog/v2/accesslog.proto#L113
+// [supported by Envoy](https://github.com/envoyproxy/data-plane-api/blob/master/envoy/config/filter/accesslog/v2/accesslog.proto#L113)
 type RandomSampling struct {
 	// Specifies an attribute expression to use to override the numerator in the `percent_sampled` field.
 	// If this value is set, but no value is found OR if that value is not a numeric value, then

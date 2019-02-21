@@ -269,7 +269,7 @@ func _HTTPAPISpecPattern_OneofSizer(msg proto.Message) (n int) {
 // APIKey defines the explicit configuration for generating the
 // `request.api_key` attribute from HTTP requests.
 //
-// See https://swagger.io/docs/specification/authentication/api-keys
+// See [API Keys](https://swagger.io/docs/specification/authentication/api-keys)
 // for a general overview of API keys as defined by OpenAPI.
 type APIKey struct {
 	// Types that are valid to be assigned to Key:

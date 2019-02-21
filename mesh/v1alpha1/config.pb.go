@@ -261,7 +261,7 @@ type MeshConfig struct {
 	// This isn't supported for non-k8s case.
 	SdsUseK8SSaJwt bool `protobuf:"varint,29,opt,name=sds_use_k8s_sa_jwt,json=sdsUseK8sSaJwt,proto3" json:"sds_use_k8s_sa_jwt,omitempty"`
 	// The trust domain corresponds to the trust root of a system.
-	// Refer to https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain
+	// Refer to [SPIFEE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)
 	// Fallback to old identity format(without trust domain) if not set.
 	TrustDomain string `protobuf:"bytes,26,opt,name=trust_domain,json=trustDomain,proto3" json:"trust_domain,omitempty"`
 	// $hide_from_docs
@@ -616,7 +616,7 @@ func (m *ConfigSource) GetTlsSettings() *istio_networking_v1alpha31.TLSSettings 
 // traffic originates and where it will terminate. These localities are
 // specified using arbitrary labels that designate a hierarchy of localities in
 // {region}/{zone}/{sub-zone} form. For additional detail refer to
-// https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing/locality_weight
+// [Locality Weight](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing/locality_weight)
 // The following example shows how to setup locality weights mesh-wide.
 //
 // Given a mesh with workloads and their service deployed to "us-west/zone1/*"
