@@ -110,6 +110,9 @@ ACK/NACK. Upon receiving an update, the sink is expected to send an
 ACK/NACK relatively quickly after decoding, validating, and persisting
 the update to its internal configuration store.
 
+The source should ignore requests with stale and unknown nonces that
+do not match the nonce in the most recently sent `Resource` message.
+
 ### Success examples
 
 The following example shows the sink receiving a sequence of changes
