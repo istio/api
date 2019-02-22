@@ -1313,7 +1313,7 @@
               },
               {
                 "id": 20,
-                "name": "metrics_service_address",
+                "name": "envoy_metrics_service_address",
                 "type": "string"
               },
               {

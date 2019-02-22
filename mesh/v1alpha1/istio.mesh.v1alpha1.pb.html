@@ -896,11 +896,13 @@ DEPRECATED: Use <a href="#ProxyConfig-tracing">tracing</a> instead.</p>
 
 </td>
 </tr>
-<tr id="ProxyConfig-metrics_service_address">
-<td><code>metricsServiceAddress</code></td>
+<tr id="ProxyConfig-envoy_metrics_service_address">
+<td><code>envoyMetricsServiceAddress</code></td>
 <td><code>string</code></td>
 <td>
-<p>Address of the Envoy Metrics Service implementation (e.g. metrics-service:15000).</p>
+<p>Address of the Envoy Metrics Service implementation (e.g. metrics-service:15000).
+See https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/metrics/v2/metrics_service.proto
+for details about Envoy&rsquo;s Metrics Service API.</p>
 
 </td>
 </tr>
