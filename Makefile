@@ -243,19 +243,12 @@ routing_v1alpha3_pb_gos := $(routing_v1alpha3_protos:.proto=.pb.go)
 routing_v1alpha3_pb_pythons := $(routing_v1alpha3_protos:.proto=_pb2.py)
 routing_v1alpha3_pb_docs := $(routing_v1alpha3_protos:.proto=.pb.html)
 
-generate-routing-go: $(routing_v1alpha3_pb_gos)
+generate-routing-go: $(routing_v1alpha3_pb_gos) $(routing_v1alpha3_pb_docs)
 
-$(routing_v1alpha3_pb_gos): $(routing_v1alpha3_protos)
+$(routing_v1alpha3_pb_gos) $(routing_v1alpha3_pb_docs): $(routing_v1alpha3_protos)
 	## Generate networking/v1alpha3/*.pb.go
 	@$(docker_lock) status
-	@$(docker_gen) $(gogofast_plugin) $^
-
-generate-routing-doc: $(routing_v1alpha3_pb_docs)
-
-$(routing_v1alpha3_pb_docs): $(routing_v1alpha3_protos)
-	## Generate networking/v1alpha3/*.pb.html
-	@$(docker_lock) status
-	@$(docker_gen) $(protoc_gen_docs_plugin_for_networking)$(routing_v1alpha3_path) $^
+	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin_for_networking)$(routing_v1alpha3_path) $^
 
 generate-routing-python: $(routing_v1alpha3_pb_pythons)
 
