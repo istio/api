@@ -640,13 +640,14 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 //
 // Examples:
 //
-// Policy to enable mTLS for all services in namespace frod
+// Policy to enable mTLS for all services in namespace frod. The policy name must be
+// `default`, and it contains no rule for `targets`.
 //
 // ```yaml
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
-//   name: mTLS_enable
+//   name: default
 //   namespace: frod
 // spec:
 //   peers:
@@ -658,7 +659,7 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
-//   name: mTLS_disable
+//   name: productpage_mTLS_disable
 //   namespace: frod
 // spec:
 //   targets:
@@ -671,7 +672,7 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 // apiVersion: authentication.istio.io/v1alpha1
 // kind: Policy
 // metadata:
-//   name: mTLS_enable
+//   name: productpage_mTLS_with_JWT
 //   namespace: frod
 // spec:
 //   target:
