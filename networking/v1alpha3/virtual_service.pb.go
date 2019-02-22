@@ -18,66 +18,6 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-// A `VirtualService` defines a set of traffic routing rules to apply when a host is
-// addressed. Each routing rule defines matching criteria for traffic of a specific
-// protocol. If the traffic is matched, then it is sent to a named destination service
-// (or subset/version of it) defined in the registry.
-//
-// The source of traffic can also be matched in a routing rule. This allows routing
-// to be customized for specific client contexts.
-//
-// The following example on Kubernetes, routes all HTTP traffic by default to
-// pods of the reviews service with label "version: v1". In addition,
-// HTTP requests with path starting with /wpcatalog/ or /consumercatalog/ will
-// be rewritten to /newcatalog and sent to pods with label "version: v2".
-//
-//
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: VirtualService
-// metadata:
-//   name: reviews-route
-// spec:
-//   hosts:
-//   - reviews.prod.svc.cluster.local
-//   http:
-//   - match:
-//     - uri:
-//         prefix: "/wpcatalog"
-//     - uri:
-//         prefix: "/consumercatalog"
-//     rewrite:
-//       uri: "/newcatalog"
-//     route:
-//     - destination:
-//         host: reviews.prod.svc.cluster.local
-//         subset: v2
-//   - route:
-//     - destination:
-//         host: reviews.prod.svc.cluster.local
-//         subset: v1
-// ```
-//
-// A subset/version of a route destination is identified with a reference
-// to a named service subset which must be declared in a corresponding
-// `DestinationRule`.
-//
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: DestinationRule
-// metadata:
-//   name: reviews-destination
-// spec:
-//   host: reviews.prod.svc.cluster.local
-//   subsets:
-//   - name: v1
-//     labels:
-//       version: v1
-//   - name: v2
-//     labels:
-//       version: v2
-// ```
-//
 type VirtualService struct {
 	// REQUIRED. The destination hosts to which traffic is being sent. Could
 	// be a DNS name with wildcard prefix or an IP address.  Depending on the
@@ -202,7 +142,7 @@ func (m *VirtualService) GetExportTo() []string {
 // registry. Istio's service registry is composed of all the services found
 // in the platform's service registry (e.g., Kubernetes services, Consul
 // services), as well as services declared through the
-// [ServiceEntry](#ServiceEntry) resource.
+// [ServiceEntry](/docs/reference/config/networking/v1alpha3/service-entry/#ServiceEntry) resource.
 //
 // *Note for Kubernetes users*: When short names are used (e.g. "reviews"
 // instead of "reviews.default.svc.cluster.local"), Istio will interpret
@@ -327,7 +267,7 @@ type Destination struct {
 	// REQUIRED. The name of a service from the service registry. Service
 	// names are looked up from the platform's service registry (e.g.,
 	// Kubernetes services, Consul services, etc.) and from the hosts
-	// declared by [ServiceEntry](#ServiceEntry). Traffic forwarded to
+	// declared by [ServiceEntry](/docs/reference/config/networking/v1alpha3/service-entry/#ServiceEntry). Traffic forwarded to
 	// destinations that are not found in either of the two, will be dropped.
 	//
 	// *Note for Kubernetes users*: When short names are used (e.g. "reviews"
