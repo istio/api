@@ -19,7 +19,7 @@ import "google/protobuf/wrappers.proto";
 
 // $title: Virtual Service
 // $description: Configuration affecting label/content routing, sni routing, etc.
-// $location: https://istio.io/docs/reference/config/networking/v1alpha3/virtual-service.html
+// $location: https://istio.io/docs/reference/config/networking/v1alpha3/virtual_service.html
 
 // Configuration affecting traffic routing. Here are a few terms useful to define
 // in the context of traffic routing.
@@ -196,7 +196,7 @@ message VirtualService {
 // registry. Istio's service registry is composed of all the services found
 // in the platform's service registry (e.g., Kubernetes services, Consul
 // services), as well as services declared through the
-// [ServiceEntry](#ServiceEntry) resource.
+// [ServiceEntry](/docs/reference/config/networking/v1alpha3/service_entry/#ServiceEntry) resource.
 //
 // *Note for Kubernetes users*: When short names are used (e.g. "reviews"
 // instead of "reviews.default.svc.cluster.local"), Istio will interpret
@@ -321,7 +321,7 @@ message Destination {
   // REQUIRED. The name of a service from the service registry. Service
   // names are looked up from the platform's service registry (e.g.,
   // Kubernetes services, Consul services, etc.) and from the hosts
-  // declared by [ServiceEntry](#ServiceEntry). Traffic forwarded to
+  // declared by [ServiceEntry](/docs/reference/config/networking/v1alpha3/service-entry/#ServiceEntry). Traffic forwarded to
   // destinations that are not found in either of the two, will be dropped.
   //
   // *Note for Kubernetes users*: When short names are used (e.g. "reviews"

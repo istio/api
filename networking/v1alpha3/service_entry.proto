@@ -18,7 +18,7 @@ import "networking/v1alpha3/gateway.proto";
 
 // $title: Service Entry
 // $description: Configuration affecting service registry.
-// $location: https://istio.io/docs/reference/config/networking/v1alpha3/service-entry.html
+// $location: https://istio.io/docs/reference/config/networking/v1alpha3/service_entry.html
 
 // `ServiceEntry` enables adding additional entries into Istio's internal
 // service registry, so that auto-discovered services in the mesh can
@@ -494,7 +494,7 @@ message ServiceEntry {
 
   // The list of subject alternate names allowed for workloads that
   // implement this service. This information is used to enforce
-  // secure-naming <https://istio.io/docs/concepts/security/#secure-naming>.
+  // [secure-naming](/docs/concepts/security/#secure-naming).
   // If specified, the proxy will verify that the server
   // certificate's subject alternate name matches one of the specified values.
   repeated string subject_alt_names = 8;
