@@ -19,7 +19,7 @@ import "networking/v1alpha3/gateway.proto";
 // $title: Sidecar
 // $description: Configuration affecting network reachability of a sidecar.
 // $location: https://istio.io/docs/reference/config/networking/v1alpha3/sidecar.html
-//
+
 // `Sidecar` describes the configuration of the sidecar proxy that mediates
 // inbound and outbound communication to the workload it is attached to. By
 // default, Istio will program all sidecar proxies in the mesh with the

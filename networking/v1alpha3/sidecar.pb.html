@@ -1,9 +1,86 @@
 ---
-title: istio.networking.v1alpha3
+title: Sidecar
+description: Configuration affecting network reachability of a sidecar.
+location: https://istio.io/docs/reference/config/networking/v1alpha3/sidecar.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 6
+number_of_entries: 5
 ---
+<p><code>Sidecar</code> describes the configuration of the sidecar proxy that mediates
+inbound and outbound communication to the workload it is attached to. By
+default, Istio will program all sidecar proxies in the mesh with the
+necessary configuration required to reach every workload in the mesh, as
+well as accept traffic on all the ports associated with the
+workload. The Sidecar resource provides a way to fine tune the set of
+ports, protocols that the proxy will accept when forwarding traffic to
+and from the workload. In addition, it is possible to restrict the set
+of services that the proxy can reach when forwarding outbound traffic
+from the workload.</p>
+
+<p>Services and configuration in a mesh are organized into one or more
+namespaces (e.g., a Kubernetes namespace or a CF org/space). A Sidecar
+resource in a namespace will apply to one or more workloads in the same
+namespace, selected using the workloadSelector. In the absence of a
+workloadSelector, it will apply to all workloads in the same
+namespace. When determining the Sidecar resource to be applied to a
+workload, preference will be given to the resource with a
+workloadSelector that selects this workload, over a Sidecar resource
+without any workloadSelector.</p>
+
+<p>NOTE: <em><em>Each namespace can have only one Sidecar resource without any
+workload selector</em></em>. The behavior of the system is undefined if more
+than one selector-less Sidecar resources exist in a given namespace. The
+behavior of the system is undefined if two or more Sidecar resources
+with a workload selector select the same workload.</p>
+
+<p>The example below declares a Sidecar resource in the prod-us1 namespace
+that configures the sidecars in the namespace to allow egress traffic to
+public services in the prod-us1, prod-apis, and the istio-system
+namespaces.</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: Sidecar
+metadata:
+  name: default
+  namespace: prod-us1
+spec:
+  egress:
+  - hosts:
+    - &quot;prod-us1/*&quot;
+    - &quot;prod-apis/*&quot;
+    - &quot;istio-system/*&quot;
+</code></pre>
+
+<p>The example below declares a Sidecar resource in the prod-us1 namespace
+that accepts inbound HTTP traffic on port 9080 and forwards
+it to the attached workload listening on a unix domain socket. In the
+egress direction, in addition to the istio-system namespace, the sidecar
+proxies only HTTP traffic bound for port 9080 for services in the
+prod-us1 namespace.</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: Sidecar
+metadata:
+  name: default
+  namespace: prod-us1
+spec:
+  ingress:
+  - port:
+      number: 9080
+      protocol: HTTP
+      name: somename
+    defaultEndpoint: unix:///var/run/someuds.sock
+  egress:
+  - hosts:
+    - &quot;istio-system/*&quot;
+  - port:
+      number: 9080
+      protocol: HTTP
+      name: egresshttp
+    hosts:
+    - &quot;prod-us1/*&quot;
+</code></pre>
+
 <h2 id="CaptureMode">CaptureMode</h2>
 <section>
 <p>CaptureMode describes how traffic to a listener is expected to be
@@ -61,7 +138,7 @@ listener on the sidecar proxy attached to a workload.</p>
 <tbody>
 <tr id="IstioEgressListener-port">
 <td><code>port</code></td>
-<td><code><a href="#Port">Port</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/v1alpha3/gateway.html#Port">Port</a></code></td>
 <td>
 <p>The port associated with the listener. If using unix domain socket,
 use 0 as the port number, with a valid protocol. The port if
@@ -143,7 +220,7 @@ traffic listener on the sidecar proxy attached to a workload.</p>
 <tbody>
 <tr id="IstioIngressListener-port">
 <td><code>port</code></td>
-<td><code><a href="#Port">Port</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/v1alpha3/gateway.html#Port">Port</a></code></td>
 <td>
 <p>REQUIRED. The port associated with the listener. If using
 unix domain socket, use 0 as the port number, with a valid
@@ -182,49 +259,6 @@ traffic should be forwarded to. This configuration can be used to
 redirect traffic arriving at the bind point on the sidecar to a port
 or unix domain socket where the application workload is listening for
 connections. Format should be 127.0.0.1:PORT or unix:///path/to/socket</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="Port">Port</h2>
-<section>
-<p>Port describes the properties of a specific port of a service.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Port-number">
-<td><code>number</code></td>
-<td><code>uint32</code></td>
-<td>
-<p>REQUIRED: A valid non-negative integer port number.</p>
-
-</td>
-</tr>
-<tr id="Port-protocol">
-<td><code>protocol</code></td>
-<td><code>string</code></td>
-<td>
-<p>REQUIRED: The protocol exposed on the port.
-MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS.
-TLS implies the connection will be routed based on the SNI header to
-the destination without terminating the TLS connection.</p>
-
-</td>
-</tr>
-<tr id="Port-name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>Label assigned to the port.</p>
 
 </td>
 </tr>
