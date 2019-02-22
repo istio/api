@@ -58,7 +58,7 @@ syntax = "proto3";
 //     - uk.bookinfo.com
 //     - eu.bookinfo.com
 //     tls:
-//       mode: SIMPLE #enables HTTPS on this port
+//       mode: SIMPLE # enables HTTPS on this port
 //       serverCertificate: /etc/certs/servercert.pem
 //       privateKey: /etc/certs/privatekey.pem
 //   - port:
@@ -140,7 +140,7 @@ syntax = "proto3";
 //   namespace: bookinfo-namespace
 // spec:
 //   hosts:
-//   - mongosvr.prod.svc.cluster.local #name of internal Mongo service
+//   - mongosvr.prod.svc.cluster.local # name of internal Mongo service
 //   gateways:
 //   - some-config-namespace/my-gateway # can omit the namespace if gateway is in same
 //                                        namespace as virtual service.
