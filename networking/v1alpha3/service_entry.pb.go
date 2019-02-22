@@ -155,7 +155,7 @@ type ServiceEntry struct {
 	ExportTo []string `protobuf:"bytes,7,rep,name=export_to,json=exportTo" json:"export_to,omitempty"`
 	// The list of subject alternate names allowed for workloads that
 	// implement this service. This information is used to enforce
-	// secure-naming <https://istio.io/docs/concepts/security/#secure-naming>.
+	// [secure-naming](/docs/concepts/security/#secure-naming).
 	// If specified, the proxy will verify that the server
 	// certificate's subject alternate name matches one of the specified values.
 	SubjectAltNames []string `protobuf:"bytes,8,rep,name=subject_alt_names,json=subjectAltNames" json:"subject_alt_names,omitempty"`
