@@ -83,6 +83,7 @@ generate: \
 	generate-mixer-go \
 	generate-mixer-python \
 	generate-routing-go \
+	generate-routing-doc \
 	generate-routing-python \
 	generate-rbac-go \
 	generate-rbac-python \
@@ -241,11 +242,20 @@ routing_v1alpha3_pb_gos := $(routing_v1alpha3_protos:.proto=.pb.go)
 routing_v1alpha3_pb_pythons := $(routing_v1alpha3_protos:.proto=_pb2.py)
 routing_v1alpha3_pb_docs := $(routing_v1alpha3_protos:.proto=.pb.html)
 routing_v1alpha3_pb_docs_options := ",per_file=true"
-generate-routing-go: $(routing_v1alpha3_pb_gos) $(routing_v1alpha3_pb_docs)
-$(routing_v1alpha3_pb_gos) $(routing_v1alpha3_pb_docs): $(routing_v1alpha3_protos)
+
+generate-routing-go: $(routing_v1alpha3_pb_gos)
+
+$(routing_v1alpha3_pb_gos): $(routing_v1alpha3_protos)
 	## Generate networking/v1alpha3/*.pb.go
 	@$(docker_lock) status
-	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(routing_v1alpha3_path)$(routing_v1alpha3_pb_docs_options) $^
+	@$(docker_gen) $(gogofast_plugin) $^
+
+generate-routing-doc: $(routing_v1alpha3_pb_docs)
+
+$(routing_v1alpha3_pb_docs): $(routing_v1alpha3_protos)
+	## Generate networking/v1alpha3/*.pb.html
+	@$(docker_lock) status
+	@$(docker_gen) $(protoc_gen_docs_plugin)$(routing_v1alpha3_path)$(routing_v1alpha3_pb_docs_options) $^
 
 generate-routing-python: $(routing_v1alpha3_pb_pythons)
 
