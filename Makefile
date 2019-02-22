@@ -84,7 +84,6 @@ generate: \
 	generate-mixer-go \
 	generate-mixer-python \
 	generate-routing-go \
-	generate-routing-doc \
 	generate-routing-python \
 	generate-rbac-go \
 	generate-rbac-python \
