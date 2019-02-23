@@ -99,6 +99,312 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptorServiceEntry, []int{0, 1}
 }
 
+// `ServiceEntry` enables adding additional entries into Istio's internal
+// service registry, so that auto-discovered services in the mesh can
+// access/route to these manually specified services. A service entry
+// describes the properties of a service (DNS name, VIPs, ports, protocols,
+// endpoints). These services could be external to the mesh (e.g., web
+// APIs) or mesh-internal services that are not part of the platform's
+// service registry (e.g., a set of VMs talking to services in Kubernetes).
+//
+// The following configuration adds a set of MongoDB instances running on
+// unmanaged VMs to Istio's registry, so that these services can be treated
+// as any other service in the mesh. The associated DestinationRule is used
+// to initiate mTLS connections to the database instances.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: external-svc-mongocluster
+// spec:
+//   hosts:
+//   - mymongodb.somedomain # not used
+//   addresses:
+//   - 192.192.192.192/24 # VIPs
+//   ports:
+//   - number: 27018
+//     name: mongodb
+//     protocol: MONGO
+//   location: MESH_INTERNAL
+//   resolution: STATIC
+//   endpoints:
+//   - address: 2.2.2.2
+//   - address: 3.3.3.3
+// ```
+//
+// and the associated DestinationRule
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: mtls-mongocluster
+// spec:
+//   host: mymongodb.somedomain
+//   trafficPolicy:
+//     tls:
+//       mode: MUTUAL
+//       clientCertificate: /etc/certs/myclientcert.pem
+//       privateKey: /etc/certs/client_private_key.pem
+//       caCertificates: /etc/certs/rootcacerts.pem
+// ```
+//
+// The following example uses a combination of service entry and TLS
+// routing in virtual service to demonstrate the use of SNI routing to
+// forward unterminated TLS traffic from the application to external
+// services via the sidecar. The sidecar inspects the SNI value in the
+// ClientHello message to route to the appropriate external service.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: external-svc-https
+// spec:
+//   hosts:
+//   - api.dropboxapi.com
+//   - www.googleapis.com
+//   - api.facebook.com
+//   location: MESH_EXTERNAL
+//   ports:
+//   - number: 443
+//     name: https
+//     protocol: TLS
+//   resolution: DNS
+// ```
+//
+// And the associated VirtualService to route based on the SNI value.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: tls-routing
+// spec:
+//   hosts:
+//   - api.dropboxapi.com
+//   - www.googleapis.com
+//   - api.facebook.com
+//   tls:
+//   - match:
+//     - port: 443
+//       sniHosts:
+//       - api.dropboxapi.com
+//     route:
+//     - destination:
+//         host: api.dropboxapi.com
+//   - match:
+//     - port: 443
+//       sniHosts:
+//       - www.googleapis.com
+//     route:
+//     - destination:
+//         host: www.googleapis.com
+//   - match:
+//     - port: 443
+//       sniHosts:
+//       - api.facebook.com
+//     route:
+//     - destination:
+//         host: api.facebook.com
+//
+// ```
+//
+// The following example demonstrates the use of a dedicated egress gateway
+// through which all external service traffic is forwarded.
+// The 'exportTo' field allows for control over the visibility of a service
+// declaration to other namespaces in the mesh. By default a service is exported
+// to all namespaces. The following example restricts the visibility to the
+// current namespace, represented by ".", so that it cannot be used by other
+// namespaces.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: external-svc-httpbin
+//   namespace : egress
+// spec:
+//   hosts:
+//   - httpbin.com
+//   exportTo:
+//   - "."
+//   location: MESH_EXTERNAL
+//   ports:
+//   - number: 80
+//     name: http
+//     protocol: HTTP
+//   resolution: DNS
+// ```
+//
+// Define a gateway to handle all egress traffic.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: Gateway
+// metadata:
+//  name: istio-egressgateway
+//  namespace: egress
+// spec:
+//  selector:
+//    istio: egressgateway
+//  servers:
+//  - port:
+//      number: 80
+//      name: http
+//      protocol: HTTP
+//    hosts:
+//    - "*"
+// ```
+//
+// And the associated VirtualService to route from the sidecar to the
+// gateway service (istio-egressgateway.istio-system.svc.cluster.local), as
+// well as route from the gateway to the external service. Note that the
+// virtual service is exported to all namespaces enabling them to route traffic
+// through the gateway to the external service. Forcing traffic to go through
+// a managed middle proxy like this is a common practice.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: gateway-routing
+//   namespace: egress
+// spec:
+//   hosts:
+//   - httpbin.com
+//   exportTo:
+//   - *
+//   gateways:
+//   - mesh
+//   - istio-egressgateway
+//   http:
+//   - match:
+//     - port: 80
+//       gateways:
+//       - mesh
+//     route:
+//     - destination:
+//         host: istio-egressgateway.istio-system.svc.cluster.local
+//   - match:
+//     - port: 80
+//       gateway:
+//       - istio-egressgateway
+//     route:
+//     - destination:
+//         host: httpbin.com
+// ```
+//
+// The following example demonstrates the use of wildcards in the hosts for
+// external services. If the connection has to be routed to the IP address
+// requested by the application (i.e. application resolves DNS and attempts
+// to connect to a specific IP), the discovery mode must be set to `NONE`.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: external-svc-wildcard-example
+// spec:
+//   hosts:
+//   - "*.bar.com"
+//   location: MESH_EXTERNAL
+//   ports:
+//   - number: 80
+//     name: http
+//     protocol: HTTP
+//   resolution: NONE
+// ```
+//
+// The following example demonstrates a service that is available via a
+// Unix Domain Socket on the host of the client. The resolution must be
+// set to STATIC to use unix address endpoints.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: unix-domain-socket-example
+// spec:
+//   hosts:
+//   - "example.unix.local"
+//   location: MESH_EXTERNAL
+//   ports:
+//   - number: 80
+//     name: http
+//     protocol: HTTP
+//   resolution: STATIC
+//   endpoints:
+//   - address: unix:///var/run/example/socket
+// ```
+//
+// For HTTP-based services, it is possible to create a VirtualService
+// backed by multiple DNS addressable endpoints. In such a scenario, the
+// application can use the HTTP_PROXY environment variable to transparently
+// reroute API calls for the VirtualService to a chosen backend. For
+// example, the following configuration creates a non-existent external
+// service called foo.bar.com backed by three domains: us.foo.bar.com:8080,
+// uk.foo.bar.com:9080, and in.foo.bar.com:7080
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: external-svc-dns
+// spec:
+//   hosts:
+//   - foo.bar.com
+//   location: MESH_EXTERNAL
+//   ports:
+//   - number: 80
+//     name: http
+//     protocol: HTTP
+//   resolution: DNS
+//   endpoints:
+//   - address: us.foo.bar.com
+//     ports:
+//       https: 8080
+//   - address: uk.foo.bar.com
+//     ports:
+//       https: 9080
+//   - address: in.foo.bar.com
+//     ports:
+//       https: 7080
+// ```
+//
+// With `HTTP_PROXY=http://localhost/`, calls from the application to
+// `http://foo.bar.com` will be load balanced across the three domains
+// specified above. In other words, a call to `http://foo.bar.com/baz` would
+// be translated to `http://uk.foo.bar.com/baz`.
+//
+// The following example illustrates the usage of a ServiceEntry
+// containing a subject alternate name
+// whose format conforms to the SPIFEE standard
+// <https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md>:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: httpbin
+//   namespace : httpbin-ns
+// spec:
+//   hosts:
+//   - httpbin.com
+//   location: MESH_INTERNAL
+//   ports:
+//   - number: 80
+//     name: http
+//     protocol: HTTP
+//   resolution: STATIC
+//   endpoints:
+//   - address: 2.2.2.2
+//   - address: 3.3.3.3
+//   subjectAltNames:
+//   - "spiffe://cluster.local/ns/httpbin-ns/sa/httpbin-service-account"
+// ```
+//
 type ServiceEntry struct {
 	// REQUIRED. The hosts associated with the ServiceEntry. Could be a DNS
 	// name with wildcard prefix (external services only). DNS names in hosts
@@ -155,7 +461,7 @@ type ServiceEntry struct {
 	ExportTo []string `protobuf:"bytes,7,rep,name=export_to,json=exportTo" json:"export_to,omitempty"`
 	// The list of subject alternate names allowed for workloads that
 	// implement this service. This information is used to enforce
-	// [secure-naming](/docs/concepts/security/#secure-naming).
+	// secure-naming <https://istio.io/docs/concepts/security/#secure-naming>.
 	// If specified, the proxy will verify that the server
 	// certificate's subject alternate name matches one of the specified values.
 	SubjectAltNames []string `protobuf:"bytes,8,rep,name=subject_alt_names,json=subjectAltNames" json:"subject_alt_names,omitempty"`

@@ -4,77 +4,6 @@
 /*
 	Package v1alpha3 is a generated protocol buffer package.
 
-	`DestinationRule` defines policies that apply to traffic intended for a
-	service after routing has occurred. These rules specify configuration
-	for load balancing, connection pool size from the sidecar, and outlier
-	detection settings to detect and evict unhealthy hosts from the load
-	balancing pool. For example, a simple load balancing policy for the
-	ratings service would look as follows:
-
-	```yaml
-	apiVersion: networking.istio.io/v1alpha3
-	kind: DestinationRule
-	metadata:
-	  name: bookinfo-ratings
-	spec:
-	  host: ratings.prod.svc.cluster.local
-	  trafficPolicy:
-	    loadBalancer:
-	      simple: LEAST_CONN
-	```
-
-	Version specific policies can be specified by defining a named
-	`subset` and overriding the settings specified at the service level. The
-	following rule uses a round robin load balancing policy for all traffic
-	going to a subset named testversion that is composed of endpoints (e.g.,
-	pods) with labels (version:v3).
-
-	```yaml
-	apiVersion: networking.istio.io/v1alpha3
-	kind: DestinationRule
-	metadata:
-	  name: bookinfo-ratings
-	spec:
-	  host: ratings.prod.svc.cluster.local
-	  trafficPolicy:
-	    loadBalancer:
-	      simple: LEAST_CONN
-	  subsets:
-	  - name: testversion
-	    labels:
-	      version: v3
-	    trafficPolicy:
-	      loadBalancer:
-	        simple: ROUND_ROBIN
-	```
-
-	**Note:** Policies specified for subsets will not take effect until
-	a route rule explicitly sends traffic to this subset.
-
-	Traffic policies can be customized to specific ports as well. The
-	following rule uses the least connection load balancing policy for all
-	traffic to port 80, while uses a round robin load balancing setting for
-	traffic to the port 9080.
-
-	```yaml
-	apiVersion: networking.istio.io/v1alpha3
-	kind: DestinationRule
-	metadata:
-	  name: bookinfo-ratings-port
-	spec:
-	  host: ratings.prod.svc.cluster.local
-	  trafficPolicy: # Apply to all ports
-	    portLevelSettings:
-	    - port:
-	        number: 80
-	      loadBalancer:
-	        simple: LEAST_CONN
-	    - port:
-	        number: 9080
-	      loadBalancer:
-	        simple: ROUND_ROBIN
-	```
-
 	It is generated from these files:
 		networking/v1alpha3/destination_rule.proto
 		networking/v1alpha3/envoy_filter.proto
@@ -227,11 +156,81 @@ func (TLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptorDestinationRule, []int{6, 0}
 }
 
+// `DestinationRule` defines policies that apply to traffic intended for a
+// service after routing has occurred. These rules specify configuration
+// for load balancing, connection pool size from the sidecar, and outlier
+// detection settings to detect and evict unhealthy hosts from the load
+// balancing pool. For example, a simple load balancing policy for the
+// ratings service would look as follows:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: bookinfo-ratings
+// spec:
+//   host: ratings.prod.svc.cluster.local
+//   trafficPolicy:
+//     loadBalancer:
+//       simple: LEAST_CONN
+// ```
+//
+// Version specific policies can be specified by defining a named
+// `subset` and overriding the settings specified at the service level. The
+// following rule uses a round robin load balancing policy for all traffic
+// going to a subset named testversion that is composed of endpoints (e.g.,
+// pods) with labels (version:v3).
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: bookinfo-ratings
+// spec:
+//   host: ratings.prod.svc.cluster.local
+//   trafficPolicy:
+//     loadBalancer:
+//       simple: LEAST_CONN
+//   subsets:
+//   - name: testversion
+//     labels:
+//       version: v3
+//     trafficPolicy:
+//       loadBalancer:
+//         simple: ROUND_ROBIN
+// ```
+//
+// **Note:** Policies specified for subsets will not take effect until
+// a route rule explicitly sends traffic to this subset.
+//
+// Traffic policies can be customized to specific ports as well. The
+// following rule uses the least connection load balancing policy for all
+// traffic to port 80, while uses a round robin load balancing setting for
+// traffic to the port 9080.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: bookinfo-ratings-port
+// spec:
+//   host: ratings.prod.svc.cluster.local
+//   trafficPolicy: # Apply to all ports
+//     portLevelSettings:
+//     - port:
+//         number: 80
+//       loadBalancer:
+//         simple: LEAST_CONN
+//     - port:
+//         number: 9080
+//       loadBalancer:
+//         simple: ROUND_ROBIN
+// ```
 type DestinationRule struct {
 	// REQUIRED. The name of a service from the service registry. Service
 	// names are looked up from the platform's service registry (e.g.,
 	// Kubernetes services, Consul services, etc.) and from the hosts
-	// declared by [ServiceEntries](/docs/reference/config/networking/v1alpha3/service-entry/#ServiceEntry). Rules defined for
+	// declared by [ServiceEntries](#ServiceEntry). Rules defined for
 	// services that do not exist in the service registry will be ignored.
 	//
 	// *Note for Kubernetes users*: When short names are used (e.g. "reviews"
@@ -413,7 +412,7 @@ func (m *TrafficPolicy_PortTrafficPolicy) GetTls() *TLSSettings {
 
 // A subset of endpoints of a service. Subsets can be used for scenarios
 // like A/B testing, or routing to a specific version of a service. Refer
-// to [VirtualService](/docs/reference/config/networking/v1alpha3/virtual-service/#VirtualService) documentation for examples of using
+// to [VirtualService](#VirtualService) documentation for examples of using
 // subsets in these scenarios. In addition, traffic policies defined at the
 // service-level can be overridden at a subset-level. The following rule
 // uses a round robin load balancing policy for all traffic going to a

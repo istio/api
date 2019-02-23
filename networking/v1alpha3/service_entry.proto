@@ -16,9 +16,9 @@ syntax = "proto3";
 
 import "networking/v1alpha3/gateway.proto";
 
-// $title: Service Entry
-// $description: Configuration affecting service registry.
-// $location: https://istio.io/docs/reference/config/networking/v1alpha3/service-entry.html
+package istio.networking.v1alpha3;
+
+option go_package = "istio.io/api/networking/v1alpha3";
 
 // `ServiceEntry` enables adding additional entries into Istio's internal
 // service registry, so that auto-discovered services in the mesh can
@@ -326,10 +326,6 @@ import "networking/v1alpha3/gateway.proto";
 //   - "spiffe://cluster.local/ns/httpbin-ns/sa/httpbin-service-account"
 // ```
 //
-package istio.networking.v1alpha3;
-
-option go_package = "istio.io/api/networking/v1alpha3";
-
 message ServiceEntry {
   // REQUIRED. The hosts associated with the ServiceEntry. Could be a DNS
   // name with wildcard prefix (external services only). DNS names in hosts
@@ -494,7 +490,7 @@ message ServiceEntry {
 
   // The list of subject alternate names allowed for workloads that
   // implement this service. This information is used to enforce
-  // [secure-naming](/docs/concepts/security/#secure-naming).
+  // secure-naming <https://istio.io/docs/concepts/security/#secure-naming>.
   // If specified, the proxy will verify that the server
   // certificate's subject alternate name matches one of the specified values.
   repeated string subject_alt_names = 8;

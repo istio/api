@@ -70,7 +70,6 @@ gogoslick_plugin := $(gogoslick_plugin_prefix)$(gogo_mapping):$(out_path)
 ########################
 
 protoc_gen_docs_plugin := --docs_out=warnings=true,mode=html_fragment_with_front_matter:$(repo_dir)/
-protoc_gen_docs_plugin_for_networking := --docs_out=warnings=true,per_file=true,mode=html_fragment_with_front_matter:$(repo_dir)/
 
 #####################
 # Generation Rules
@@ -240,14 +239,14 @@ routing_v1alpha3_path := networking/v1alpha3
 routing_v1alpha3_protos := $(shell find networking/v1alpha3 -type f -name '*.proto' | sort)
 routing_v1alpha3_pb_gos := $(routing_v1alpha3_protos:.proto=.pb.go)
 routing_v1alpha3_pb_pythons := $(routing_v1alpha3_protos:.proto=_pb2.py)
-routing_v1alpha3_pb_docs := $(routing_v1alpha3_protos:.proto=.pb.html)
+routing_v1alpha3_pb_doc := $(routing_v1alpha3_path)/istio.routing.v1alpha3.pb.html
 
-generate-routing-go: $(routing_v1alpha3_pb_gos) $(routing_v1alpha3_pb_docs)
+generate-routing-go: $(routing_v1alpha3_pb_gos) $(routing_v1alpha3_pb_doc)
 
-$(routing_v1alpha3_pb_gos) $(routing_v1alpha3_pb_docs): $(routing_v1alpha3_protos)
+$(routing_v1alpha3_pb_gos) $(routing_v1alpha3_pb_doc): $(routing_v1alpha3_protos)
 	## Generate networking/v1alpha3/*.pb.go
 	@$(docker_lock) status
-	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin_for_networking)$(routing_v1alpha3_path) $^
+	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(routing_v1alpha3_path) $^
 
 generate-routing-python: $(routing_v1alpha3_pb_pythons)
 
@@ -258,7 +257,7 @@ $(routing_v1alpha3_pb_pythons): $(routing_v1alpha3_protos)
 
 clean-routing:
 	rm -f $(routing_v1alpha3_pb_gos)
-	rm -f $(routing_v1alpha3_pb_docs)
+	rm -f $(routing_v1alpha3_pb_doc)
 
 #####################
 # rbac/...
