@@ -13,9 +13,9 @@ out_path = $(OUT_PATH)
 docker_lock = protolock
 docker_tool = prototool
 else
-gen_img := docker.io/rshriram/protoc:2019-02-25
+gen_img := gcr.io/istio-testing/protoc:2019-02-25
 lock_img := gcr.io/istio-testing/protolock:2018-10-23
-all_img := docker.io/rshriram/api-build-tools:2019-02-25
+all_img := gcr.io/istio-testing/api-build-tools:2019-02-25
 pwd := $(shell pwd)
 mount_dir := /src
 repo_dir := istio.io/api
