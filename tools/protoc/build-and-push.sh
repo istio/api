@@ -4,9 +4,10 @@
 # place and procedure for generation. PLEASE use with caution
 # (read: not for general usage).
 
-HUB=gcr.io/istio-testing
+HUB=docker.io/rshriram
+#gcr.io/istio-testing
 VERSION=$(date +%Y-%m-%d)
 
 docker build --no-cache -t $HUB/protoc:$VERSION .
 
-gcloud docker -- push $HUB/protoc:$VERSION
+docker push $HUB/protoc:$VERSION

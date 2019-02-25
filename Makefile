@@ -13,9 +13,9 @@ out_path = $(OUT_PATH)
 docker_lock = protolock
 docker_tool = prototool
 else
-gen_img := gcr.io/istio-testing/protoc:2018-06-12
+gen_img := docker.io/rshriram/protoc:2019-02-25
 lock_img := gcr.io/istio-testing/protolock:2018-10-23
-all_img := gcr.io/istio-testing/api-build-tools:2018-10-31
+all_img := docker.io/rshriram/api-build-tools:2019-02-25
 pwd := $(shell pwd)
 mount_dir := /src
 repo_dir := istio.io/api
@@ -331,7 +331,7 @@ generate-envoy-go: $(envoy_pb_gos) $(envoy_pb_doc)
 $(envoy_pb_gos): $(envoy_protos)
 	## Generate envoy/*/*.pb.go
 	@$(docker_lock) status
-	@$(docker_gen) $(gogofast_plugin) $^
+	@$(docker_gen) $(gogofast_plugin) $<
 
 generate-envoy-python: $(envoy_pb_pythons)
 
