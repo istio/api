@@ -328,7 +328,7 @@ envoy_pb_pythons := $(envoy_protos:.proto=_pb2.py)
 generate-envoy-go: $(envoy_pb_gos) $(envoy_pb_doc)
 
 # Envoy APIs is internal APIs, documents is not required.
-$(envoy_pb_gos): $(envoy_protos)
+$(envoy_pb_gos): %.pb.go : %.proto
 	## Generate envoy/*/*.pb.go
 	@$(docker_lock) status
 	@$(docker_gen) $(gogofast_plugin) $<
