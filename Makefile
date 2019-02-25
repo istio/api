@@ -331,7 +331,7 @@ generate-envoy-go: $(envoy_pb_gos) $(envoy_pb_doc)
 $(envoy_pb_gos): $(envoy_protos)
 	## Generate envoy/*/*.pb.go
 	@$(docker_lock) status
-	@$(docker_gen) $(gogofast_plugin) $^
+	@$(docker_gen) $(gogofast_plugin) $<
 
 generate-envoy-python: $(envoy_pb_pythons)
 
