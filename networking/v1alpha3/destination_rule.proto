@@ -120,7 +120,7 @@ message DestinationRule {
 
   // A list of namespaces to which this destination rule is exported.
   // The resolution of a destination rule to apply to a service occurs in the
-  // context of a hierarchy of namespaces. Exporting a desintation rule allows
+  // context of a hierarchy of namespaces. Exporting a destination rule allows
   // it to be included in the resolution hierarchy for services in
   // other namespaces. This feature provides a mechanism for service owners
   // and mesh administrators to control the visibility of destination rules
