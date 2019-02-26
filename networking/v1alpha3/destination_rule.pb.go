@@ -206,9 +206,23 @@ type DestinationRule struct {
 	// One or more named sets that represent individual versions of a
 	// service. Traffic policies can be overridden at subset level.
 	Subsets []*Subset `protobuf:"bytes,3,rep,name=subsets,proto3" json:"subsets,omitempty"`
-	// The resolution of a DestinationRule to apply to a service occurs in the
-	// context of a hierarchy of namespaces. This rule controls whether those
-	// namespaces are allowed to select this rule.
+	// A list of namespaces to which this destination rule is exported.
+	// The resolution of a destination rule to apply to a service occurs in the
+	// context of a hierarchy of namespaces. Exporting a destination rule allows
+	// it to be included in the resolution hierarchy for services in
+	// other namespaces. This feature provides a mechanism for service owners
+	// and mesh administrators to control the visibility of destination rules
+	// across namespace boundaries.
+	//
+	// If no namespaces are specified then the destination rule is exported to all
+	// namespaces by default.
+	//
+	// The value "." is reserved and defines an export to the same namespace that
+	// the destination rule is declared in. Similarly, the value "*" is reserved and
+	// defines an export to all namespaces.
+	//
+	// NOTE: in the current release, the `exportTo` value is restricted to
+	// "." or "*" (i.e., the current namespace or all namespaces).
 	ExportTo             []string `protobuf:"bytes,4,rep,name=export_to,json=exportTo,proto3" json:"export_to,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
