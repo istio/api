@@ -1,0 +1,11 @@
+DNS
+Istio
+Kubernetes
+MCP
+namespace
+RPC
+SNI
+TCP
+TLS
+unterminated
+URL
