@@ -214,7 +214,7 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 // The following example demonstrates the use of a dedicated egress gateway
 // through which all external service traffic is forwarded.
 // The 'exportTo' field allows for control over the visibility of a service
-// declaration to other namespaces in the mesh. By default a service is exported
+// declaration to other namespaces in the mesh. By default, a service is exported
 // to all namespaces. The following example restricts the visibility to the
 // current namespace, represented by ".", so that it cannot be used by other
 // namespaces.
@@ -275,7 +275,7 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 //   hosts:
 //   - httpbin.com
 //   exportTo:
-//   - *
+//   - "*"
 //   gateways:
 //   - mesh
 //   - istio-egressgateway
@@ -443,7 +443,7 @@ type ServiceEntry struct {
 	// One or more endpoints associated with the service.
 	Endpoints []*ServiceEntry_Endpoint `protobuf:"bytes,6,rep,name=endpoints" json:"endpoints,omitempty"`
 	// A list of namespaces to which this service is exported. Exporting a service
-	// allows it to used by sidecars, gateways and virtual services defined in
+	// allows it to be used by sidecars, gateways and virtual services defined in
 	// other namespaces. This feature provides a mechanism for service owners
 	// and mesh administrators to control the visibility of services across
 	// namespace boundaries.
@@ -452,12 +452,15 @@ type ServiceEntry struct {
 	// namespaces by default.
 	//
 	// The value "." is reserved and defines an export to the same namespace that
-	// the service is declared in, similarly the value "*" is reserved and
+	// the service is declared in. Similarly, the value "*" is reserved and
 	// defines an export to all namespaces.
 	//
-	// For a Kubernetes Service the equivalent effect can be achieved by setting
+	// For a Kubernetes Service, the equivalent effect can be achieved by setting
 	// the annotation "networking.istio.io/exportTo" to a comma-separated list
 	// of namespace names.
+	//
+	// NOTE: in the current release, the `exportTo` value is restricted to
+	// "." or "*" (i.e., the current namespace or all namespaces).
 	ExportTo []string `protobuf:"bytes,7,rep,name=export_to,json=exportTo" json:"export_to,omitempty"`
 	// The list of subject alternate names allowed for workloads that
 	// implement this service. This information is used to enforce
