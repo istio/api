@@ -170,7 +170,7 @@ type VirtualService struct {
 	// matching an incoming request is used.
 	Tcp []*TCPRoute `protobuf:"bytes,4,rep,name=tcp,proto3" json:"tcp,omitempty"`
 	// A list of namespaces to which this virtual service is exported. Exporting a
-	// virtual service allows it to used by sidecars and gateways defined in
+	// virtual service allows it to be used by sidecars and gateways defined in
 	// other namespaces. This feature provides a mechanism for service owners
 	// and mesh administrators to control the visibility of virtual services
 	// across namespace boundaries.
@@ -179,8 +179,11 @@ type VirtualService struct {
 	// namespaces by default.
 	//
 	// The value "." is reserved and defines an export to the same namespace that
-	// the virtual service is declared in, similarly the value "*" is reserved and
+	// the virtual service is declared in. Similarly the value "*" is reserved and
 	// defines an export to all namespaces.
+	//
+	// NOTE: in the current release, the `exportTo` value is restricted to
+	// "." or "*" (i.e., the current namespace or all namespaces).
 	ExportTo             []string `protobuf:"bytes,6,rep,name=export_to,json=exportTo,proto3" json:"export_to,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
