@@ -441,7 +441,7 @@ type ServiceEntry struct {
 	// addresses are not supported in this field.
 	Addresses []string `protobuf:"bytes,2,rep,name=addresses,proto3" json:"addresses,omitempty"`
 	// REQUIRED. The ports associated with the external service. If the
-	// Endpoints are unix domain socket addresses, there must be exactly one
+	// Endpoints are Unix domain socket addresses, there must be exactly one
 	// port.
 	Ports []*Port `protobuf:"bytes,3,rep,name=ports,proto3" json:"ports,omitempty"`
 	// Specify whether the service should be considered external to the mesh
@@ -580,7 +580,7 @@ type ServiceEntry_Endpoint struct {
 	// REQUIRED: Address associated with the network endpoint without the
 	// port.  Domain names can be used if and only if the resolution is set
 	// to DNS, and must be fully-qualified without wildcards. Use the form
-	// unix:///absolute/path/to/socket for unix domain socket endpoints.
+	// unix:///absolute/path/to/socket for Unix domain socket endpoints.
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	// Set of ports associated with the endpoint. The ports must be
 	// associated with a port name that was declared as part of the
