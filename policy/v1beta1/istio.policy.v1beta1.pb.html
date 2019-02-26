@@ -267,7 +267,7 @@ be used.</p>
 </section>
 <h2 id="DNSName">DNSName</h2>
 <section>
-<p>An instance field of type DNSName denotes that the expression for the field must evaluatee to
+<p>An instance field of type DNSName denotes that the expression for the field must evaluate to
 <a href="#ValueType-DNS_NAME">ValueType.DNS_NAME</a></p>
 
 <p>Objects of type DNSName are also passed to the adapters during request-time for the instance fields of
@@ -336,7 +336,7 @@ to an RPC error.</p>
 </section>
 <h2 id="Duration">Duration</h2>
 <section>
-<p>An instance field of type Duration denotes that the expression for the field must evaluatee to
+<p>An instance field of type Duration denotes that the expression for the field must evaluate to
 <a href="#ValueType-DURATION">ValueType.DURATION</a></p>
 
 <p>Objects of type Duration are also passed to the adapters during request-time for the instance fields of
@@ -365,7 +365,7 @@ type Duration</p>
 <h2 id="EmailAddress">EmailAddress</h2>
 <section>
 <p>DO NOT USE !! Under Development
-An instance field of type EmailAddress denotes that the expression for the field must evaluatee to
+An instance field of type EmailAddress denotes that the expression for the field must evaluate to
 <a href="#ValueType-EMAIL_ADDRESS">ValueType.EMAIL_ADDRESS</a></p>
 
 <p>Objects of type EmailAddress are also passed to the adapters during request-time for the instance fields of
@@ -430,7 +430,7 @@ type EmailAddress</p>
 Each adapter implementation defines its own <code>params</code> proto.</p>
 
 <p>In the following example we define a <code>metrics</code> handler for the <code>prometheus</code> adapter.
-The example is in the form of aKubernetes resource:
+The example is in the form of a Kubernetes resource:
 * The <code>metadata.name</code> is the name of the handler
 * The <code>kind</code> refers to the adapter name
 * The <code>spec</code> block represents adapter-specific configuration as well as the connection information</p>
@@ -845,7 +845,7 @@ For more details: http://www.iana.org/assignments/http-status-codes/http-status-
 </section>
 <h2 id="IPAddress">IPAddress</h2>
 <section>
-<p>An instance field of type IPAddress denotes that the expression for the field must evaluatee to
+<p>An instance field of type IPAddress denotes that the expression for the field must evaluate to
 <a href="#ValueType-IP_ADDRESS">ValueType.IP_ADDRESS</a></p>
 
 <p>Objects of type IPAddress are also passed to the adapters during request-time for the instance fields of
@@ -1241,7 +1241,7 @@ adapter to optionally modify the headers.</p>
 </section>
 <h2 id="TimeStamp">TimeStamp</h2>
 <section>
-<p>An instance field of type TimeStamp denotes that the expression for the field must evaluatee to
+<p>An instance field of type TimeStamp denotes that the expression for the field must evaluate to
 <a href="#ValueType-TIMESTAMP">ValueType.TIMESTAMP</a></p>
 
 <p>Objects of type TimeStamp are also passed to the adapters during request-time for the instance fields of
@@ -1370,7 +1370,7 @@ bearer some-token).</p>
 <h2 id="Uri">Uri</h2>
 <section>
 <p>DO NOT USE !! Under Development
-An instance field of type Uri denotes that the expression for the field must evaluatee to
+An instance field of type Uri denotes that the expression for the field must evaluate to
 <a href="#ValueType-URI">ValueType.URI</a></p>
 
 <p>Objects of type Uri are also passed to the adapters during request-time for the instance fields of
@@ -1398,7 +1398,7 @@ type Uri</p>
 </section>
 <h2 id="Value">Value</h2>
 <section>
-<p>An instance field of type Value denotes that the expression for the field is of dynamic type and can evaluatee to any
+<p>An instance field of type Value denotes that the expression for the field is of dynamic type and can evaluate to any
 <a href="#ValueType">ValueType</a> enum values. For example, when
 authoring an instance configuration for a template that has a field <code>data</code> of type <code>istio.policy.v1beta1.Value</code>,
 both of the following expressions are valid <code>data: source.ip | ip(&quot;0.0.0.0&quot;)</code>, <code>data: request.id | &quot;&quot;</code>;

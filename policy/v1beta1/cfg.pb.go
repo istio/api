@@ -672,7 +672,7 @@ func (m *Instance) GetAttributeBindings() map[string]string {
 // Each adapter implementation defines its own `params` proto.
 //
 // In the following example we define a `metrics` handler for the `prometheus` adapter.
-// The example is in the form of aKubernetes resource:
+// The example is in the form of a Kubernetes resource:
 // * The `metadata.name` is the name of the handler
 // * The `kind` refers to the adapter name
 // * The `spec` block represents adapter-specific configuration as well as the connection information

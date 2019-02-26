@@ -330,7 +330,7 @@ type IstioEgressListener struct {
 	// in namespace/dnsName format.  Publicly scoped services and
 	// VirtualServices from remote namespaces corresponding to the specified
 	// hosts will be imported. The service in a namespace can be a service in
-	// the service registry (e.g., aKubernetes or cloud foundry service) or
+	// the service registry (e.g., a Kubernetes or cloud foundry service) or
 	// a service specified via ServiceEntry configuration. In addition, any
 	// publicly scoped DestinationRule associated with the imported services
 	// will also be imported.
