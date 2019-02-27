@@ -49,7 +49,7 @@
 //
 // The example below declares a Sidecar resource in the prod-us1 namespace
 // that accepts inbound HTTP traffic on port 9080 and forwards
-// it to the attached workload listening on a unix domain socket. In the
+// it to the attached workload listening on a Unix domain socket. In the
 // egress direction, in addition to the istio-system namespace, the sidecar
 // proxies only HTTP traffic bound for port 9080 for services in the
 // prod-us1 namespace.
@@ -144,13 +144,13 @@ type Sidecar struct {
 	WorkloadSelector *WorkloadSelector `protobuf:"bytes,1,opt,name=workload_selector,json=workloadSelector,proto3" json:"workload_selector,omitempty"`
 	// Ingress specifies the configuration of the sidecar for processing
 	// inbound traffic to the attached workload. If omitted, Istio will
-	// autoconfigure the sidecar based on the information about the workload
+	// automatically configure the sidecar based on the information about the workload
 	// obtained from the orchestration platform (e.g., exposed ports, services,
 	// etc.).
 	Ingress []*IstioIngressListener `protobuf:"bytes,2,rep,name=ingress,proto3" json:"ingress,omitempty"`
 	// Egress specifies the configuration of the sidecar for processing
 	// outbound traffic from the attached workload to other services in the
-	// mesh. If omitted, Istio will autoconfigure the sidecar to be able to
+	// mesh. If omitted, Istio will automatically configure the sidecar to be able to
 	// reach every service in the mesh that is visible to this namespace.
 	Egress               []*IstioEgressListener `protobuf:"bytes,3,rep,name=egress,proto3" json:"egress,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
@@ -216,23 +216,23 @@ func (m *Sidecar) GetEgress() []*IstioEgressListener {
 // traffic listener on the sidecar proxy attached to a workload.
 type IstioIngressListener struct {
 	// REQUIRED. The port associated with the listener. If using
-	// unix domain socket, use 0 as the port number, with a valid
+	// Unix domain socket, use 0 as the port number, with a valid
 	// protocol.
 	Port *Port `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
-	// The ip or the unix domain socket to which the listener should be bound
-	// to. Format: x.x.x.x or unix:///path/to/uds or unix://@foobar (Linux
-	// abstract namespace). If omitted, Istio will autoconfigure the defaults
+	// The ip or the Unix domain socket to which the listener should be bound
+	// to. Format: `x.x.x.x` or `unix:///path/to/uds` or `unix://@foobar` (Linux
+	// abstract namespace). If omitted, Istio will automatically configure the defaults
 	// based on imported services and the workload to which this
 	// configuration is applied to.
 	Bind string `protobuf:"bytes,2,opt,name=bind,proto3" json:"bind,omitempty"`
 	// When the bind address is an IP, the captureMode option dictates
 	// how traffic to the listener is expected to be captured (or not).
-	// captureMode must be DEFAULT or NONE for unix domain socket binds.
+	// captureMode must be DEFAULT or NONE for Unix domain socket binds.
 	CaptureMode CaptureMode `protobuf:"varint,3,opt,name=capture_mode,json=captureMode,proto3,enum=istio.networking.v1alpha3.CaptureMode" json:"capture_mode,omitempty"`
-	// REQUIRED: The loopback IP endpoint or unix domain socket to which
+	// REQUIRED: The loopback IP endpoint or Unix domain socket to which
 	// traffic should be forwarded to. This configuration can be used to
 	// redirect traffic arriving at the bind point on the sidecar to a port
-	// or unix domain socket where the application workload is listening for
+	// or Unix domain socket where the application workload is listening for
 	// connections. Format should be 127.0.0.1:PORT or unix:///path/to/socket
 	DefaultEndpoint      string   `protobuf:"bytes,4,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -304,7 +304,7 @@ func (m *IstioIngressListener) GetDefaultEndpoint() string {
 // IstioEgressListener specifies the properties of an outbound traffic
 // listener on the sidecar proxy attached to a workload.
 type IstioEgressListener struct {
-	// The port associated with the listener. If using unix domain socket,
+	// The port associated with the listener. If using Unix domain socket,
 	// use 0 as the port number, with a valid protocol. The port if
 	// specified, will be used as the default destination port associated
 	// with the imported hosts. If the port is omitted, Istio will infer the
@@ -314,23 +314,23 @@ type IstioEgressListener struct {
 	// listener port will be based on the listener with the most specific
 	// port.
 	Port *Port `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
-	// The ip or the unix domain socket to which the listener should be bound
-	// to. Port MUST be specified if bind is not empty. Format: x.x.x.x or
-	// unix:///path/to/uds or unix://@foobar (Linux abstract namespace). If
-	// omitted, Istio will autoconfigure the defaults based on imported
+	// The ip or the Unix domain socket to which the listener should be bound
+	// to. Port MUST be specified if bind is not empty. Format: `x.x.x.x` or
+	// `unix:///path/to/uds` or `unix://@foobar` (Linux abstract namespace). If
+	// omitted, Istio will automatically configure the defaults based on imported
 	// services, the workload to which this configuration is applied to and
 	// the captureMode. If captureMode is NONE, bind will default to
 	// 127.0.0.1.
 	Bind string `protobuf:"bytes,2,opt,name=bind,proto3" json:"bind,omitempty"`
 	// When the bind address is an IP, the captureMode option dictates
 	// how traffic to the listener is expected to be captured (or not).
-	// captureMode must be DEFAULT or NONE for unix domain socket binds.
+	// captureMode must be DEFAULT or NONE for Unix domain socket binds.
 	CaptureMode CaptureMode `protobuf:"varint,3,opt,name=capture_mode,json=captureMode,proto3,enum=istio.networking.v1alpha3.CaptureMode" json:"capture_mode,omitempty"`
 	// REQUIRED: One or more services/virtualServices exposed by the listener
 	// in namespace/dnsName format.  Publicly scoped services and
 	// VirtualServices from remote namespaces corresponding to the specified
 	// hosts will be imported. The service in a namespace can be a service in
-	// the service registry (e.g., a kubernetes or cloud foundry service) or
+	// the service registry (e.g., a Kubernetes or cloud foundry service) or
 	// a service specified via ServiceEntry configuration. In addition, any
 	// publicly scoped DestinationRule associated with the imported services
 	// will also be imported.

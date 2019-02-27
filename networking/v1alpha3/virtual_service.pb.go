@@ -284,7 +284,7 @@ func (m *VirtualService) GetExportTo() []string {
 //
 // The following Kubernetes example routes all traffic by default to pods
 // of the reviews service with label "version: v1" (i.e., subset v1), and
-// some to subset v2, in a kubernetes environment.
+// some to subset v2, in a Kubernetes environment.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3

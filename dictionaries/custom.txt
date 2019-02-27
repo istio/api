@@ -1,5 +1,7 @@
 ACK
 backend
+balancer
+Bookinfo
 CIDR
 DNS
 FQDN
@@ -8,6 +10,7 @@ HTTP
 HTTP2
 Istio
 jitter
+JSON
 JWT
 Kubernetes
 MCP
@@ -16,6 +19,7 @@ NACK
 namespace
 namespaces
 OIDC
+programmatically
 RBAC
 RPC
 runtime
@@ -27,8 +31,7 @@ TCP
 TLS
 UDP
 undiscriminated
-unresolved
+unmanaged
 unterminated
 URI
 URL
-
