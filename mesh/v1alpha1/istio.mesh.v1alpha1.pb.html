@@ -980,7 +980,8 @@ Increase the value of this field if you find that the metrics from Envoys are tr
 <td><code>tlsCertsToWatch</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Absolute paths to cert/key files to watch for changes (e.g. /etc/certs/key.pem,/etc/certs/cert.pem)</p>
+<p>Absolute path to certs/key files used for istio mTLS. If omitted, defaults to
+/etc/certs/cert-chain.pem,/etc/certs/key.pem,/etc/certs/root-cert.pem</p>
 
 </td>
 </tr>
