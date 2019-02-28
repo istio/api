@@ -377,20 +377,29 @@ type Server struct {
 	// to. Format: `x.x.x.x` or `unix:///path/to/uds` or `unix://@foobar` (Linux
 	// abstract namespace).
 	Bind string `protobuf:"bytes,4,opt,name=bind,proto3" json:"bind,omitempty"`
-	// REQUIRED. A list of hosts exposed by this gateway. At least one
-	// host is required. While typically applicable to
-	// HTTP services, it can also be used for TCP services using TLS with
-	// SNI. May contain a wildcard prefix for the bottom-level component of
-	// a domain name. For example `*.foo.com` matches `bar.foo.com`
-	// and `*.com` matches `bar.foo.com`, `example.com`, and so on.
+	// REQUIRED. One or more hosts exposed by this gateway.
+	// While typically applicable to
+	// HTTP services, it can also be used for TCP services using TLS with SNI.
+	// A host is specified as a `dnsName` with an optional `namespace/` prefix.
+	// The `dnsName` should be specified using FQDN format, opionally including
+	// a wildcard character in the left-most component (e.g., `prod/*.example.com`).
+	// Set the `dnsName` to `*` to select all services from the specified
+	// namespace (e.g.,`prod/*`). If no `namespace/` is specified, the service
+	// will be selected from any available namespace.
+	// Any associated `DestinationRule` in the same namespace will also be used.
 	//
-	// **Note**: A `VirtualService` that is bound to a gateway must have one
-	// or more hosts that match the hosts specified in a server. The match
+	// A `VirtualService`, bound to the gateway, must have one or more hosts
+	// that match the hosts specified in a server. The match
 	// could be an exact match or a suffix match with the server's hosts. For
-	// example, if the server's hosts specifies "*.example.com",
-	// VirtualServices with hosts dev.example.com, prod.example.com will
-	// match. However, VirtualServices with hosts example.com or
-	// newexample.com will not match.
+	// example, if the server's hosts specifies `*.example.com`, a
+	// `VirtualService` with hosts `dev.example.com` or `prod.example.com` will
+	// match. However, a `VirtualService` with host `example.com` or
+	// `newexample.com` will not match.
+	//
+	// NOTE: Only exported virtual services from a
+	// namespace can be used. Private configurations will not be
+	// available. Refer to the `exportTo` setting in `VirtualService`,
+	// `DestinationRule`, and `ServiceEntry` configurations for details.
 	Hosts []string `protobuf:"bytes,2,rep,name=hosts,proto3" json:"hosts,omitempty"`
 	// Set of TLS related options that govern the server's behavior. Use
 	// these options to control if all http requests should be redirected to
