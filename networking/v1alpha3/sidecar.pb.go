@@ -340,9 +340,10 @@ type IstioEgressListener struct {
 	// (e.g.,`prod/*`). The `namespace` can also be set to `*` to select a particular
 	// service from any available namespace (e.g., "*/foo.example.com").
 	//
-	// NOTE: Only exported services and configuration artifacts from a
-	// namespace can be used. Private configurations will not be
-	// available. Refer to the `exportTo` setting in `VirtualService`,
+	// NOTE: Only services and configuration artifacts exported to the sidecar's
+	// namespace (e.g., `exportTo` value of `*`) can be referenced.
+	// Private configurations (e.g., `exportTo` set to `.`) will
+	// not be available. Refer to the `exportTo` setting in `VirtualService`,
 	// `DestinationRule`, and `ServiceEntry` configurations for details.
 	Hosts                []string `protobuf:"bytes,4,rep,name=hosts,proto3" json:"hosts,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`

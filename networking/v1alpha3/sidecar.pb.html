@@ -194,9 +194,10 @@ Set the <code>dnsName</code> to <code>*</code> to select all services from the s
 (e.g.,<code>prod/*</code>). The <code>namespace</code> can also be set to <code>*</code> to select a particular
 service from any available namespace (e.g., &ldquo;*/foo.example.com&rdquo;).</p>
 
-<p>NOTE: Only exported services and configuration artifacts from a
-namespace can be used. Private configurations will not be
-available. Refer to the <code>exportTo</code> setting in <code>VirtualService</code>,
+<p>NOTE: Only services and configuration artifacts exported to the sidecar&rsquo;s
+namespace (e.g., <code>exportTo</code> value of <code>*</code>) can be referenced.
+Private configurations (e.g., <code>exportTo</code> set to <code>.</code>) will
+not be available. Refer to the <code>exportTo</code> setting in <code>VirtualService</code>,
 <code>DestinationRule</code>, and <code>ServiceEntry</code> configurations for details.</p>
 
 </td>
