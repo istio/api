@@ -169,4 +169,7 @@ message ProxyConfig {
 
   // Tracing configuration to be used by the proxy.
   Tracing tracing = 19;
+
+  // Absolute paths to cert/key files to watch for changes (e.g. /etc/certs/key.pem,/etc/certs/cert.pem)
+  repeated string tls_certs_to_watch = 21;
 }
