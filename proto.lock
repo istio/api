@@ -1000,6 +1000,11 @@
                 "id": 35,
                 "name": "locality_lb_setting",
                 "type": "LocalityLoadBalancerSetting"
+              },
+              {
+                "id": 36,
+                "name": "mesh_traffic_server_cert_paths",
+                "type": "ServerCertPaths"
               }
             ],
             "reserved_ids": [
@@ -1085,6 +1090,26 @@
                     "type": "string"
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "name": "ServerCertPaths",
+            "fields": [
+              {
+                "id": 1,
+                "name": "cert_chain",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "key",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "root_cert",
+                "type": "string"
               }
             ]
           }
@@ -1370,6 +1395,12 @@
                 "id": 19,
                 "name": "tracing",
                 "type": "Tracing"
+              },
+              {
+                "id": 20,
+                "name": "tls_certs_to_watch",
+                "type": "string",
+                "is_repeated": true
               }
             ]
           }
