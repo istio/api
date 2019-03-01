@@ -104,9 +104,9 @@ audiences will be accepted.</p>
 
 </td>
 </tr>
-<tr id="Jwt-jwks_uri">
+<tr id="Jwt-jwks_uri" class="oneof oneof-start">
 <td><code>jwksUri</code></td>
-<td><code>string</code></td>
+<td><code>string (oneof)</code></td>
 <td>
 <p>URL of the provider&rsquo;s public key set to validate signature of the
 JWT. See <a href="https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata">OpenID
@@ -119,6 +119,15 @@ the issuer or (b) inferred from the email domain of the issuer (e.g. a
 Google service account).</p>
 
 <p>Example: https://www.googleapis.com/oauth2/v1/certs</p>
+
+</td>
+</tr>
+<tr id="Jwt-jwks" class="oneof">
+<td><code>jwks</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>JSON Web Key Set of public keys to validate signature of the JWT.
+See https://auth0.com/docs/jwks.</p>
 
 </td>
 </tr>
