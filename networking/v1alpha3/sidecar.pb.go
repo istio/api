@@ -326,24 +326,25 @@ type IstioEgressListener struct {
 	// how traffic to the listener is expected to be captured (or not).
 	// captureMode must be DEFAULT or NONE for Unix domain socket binds.
 	CaptureMode CaptureMode `protobuf:"varint,3,opt,name=capture_mode,json=captureMode,proto3,enum=istio.networking.v1alpha3.CaptureMode" json:"capture_mode,omitempty"`
-	// REQUIRED: One or more services/virtualServices exposed by the listener
-	// in namespace/dnsName format.  Publicly scoped services and
-	// VirtualServices from remote namespaces corresponding to the specified
-	// hosts will be imported. The service in a namespace can be a service in
-	// the service registry (e.g., a Kubernetes or cloud foundry service) or
-	// a service specified via ServiceEntry configuration. In addition, any
-	// publicly scoped DestinationRule associated with the imported services
-	// will also be imported.
+	// REQUIRED: One or more service hosts exposed by the listener
+	// in `namespace/dnsName` format. Services in the specified namespace
+	// matching `dnsName` will be exposed.
+	// The corresponding service can be a service in the service registry
+	// (e.g., a Kubernetes or cloud foundry service) or a service specified
+	// using a `ServiceEntry` or `VirtualService` configuration. Any
+	// associated `DestinationRule` in the same namespace will also be used.
 	//
-	// Set the namespace to * to import a particular service from any
-	// available namespace (e.g., "*/foo.example.com"). Set the dnsName field
-	// to * to import all services from the specified namespace (e.g.,
-	// "prod/*"). The services should be specified using FQDN format.
+	// The `dnsName` should be specified using FQDN format, opionally including
+	// a wildcard character in the left-most component (e.g., `prod/*.example.com`).
+	// Set the `dnsName` to `*` to select all services from the specified namespace
+	// (e.g.,`prod/*`). The `namespace` can also be set to `*` to select a particular
+	// service from any available namespace (e.g., "*/foo.example.com").
 	//
-	// NOTE: Only exported services and configuration artifacts from a
-	// namespace can be imported. Private services/configuration will not be
-	// imported. Refer to the scope setting associated with VirtualService,
-	// DestinationRule, ServiceEntry, etc. for details.
+	// NOTE: Only services and configuration artifacts exported to the sidecar's
+	// namespace (e.g., `exportTo` value of `*`) can be referenced.
+	// Private configurations (e.g., `exportTo` set to `.`) will
+	// not be available. Refer to the `exportTo` setting in `VirtualService`,
+	// `DestinationRule`, and `ServiceEntry` configurations for details.
 	Hosts                []string `protobuf:"bytes,4,rep,name=hosts,proto3" json:"hosts,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
