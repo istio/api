@@ -104,13 +104,12 @@ audiences will be accepted.</p>
 
 </td>
 </tr>
-<tr id="Jwt-jwks_uri" class="oneof oneof-start">
+<tr id="Jwt-jwks_uri">
 <td><code>jwksUri</code></td>
-<td><code>string (oneof)</code></td>
+<td><code>string</code></td>
 <td>
 <p>URL of the provider&rsquo;s public key set to validate signature of the
-JWT. See <a href="https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata">OpenID
-Discovery</a>.</p>
+JWT. See <a href="https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata">OpenID Discovery</a>.</p>
 
 <p>Optional if the key set document can either (a) be retrieved from
 <a href="https://openid.net/specs/openid-connect-discovery-1_0.html">OpenID
@@ -120,14 +119,18 @@ Google service account).</p>
 
 <p>Example: https://www.googleapis.com/oauth2/v1/certs</p>
 
+<p>Note: Only one of jwks_uri and jwks should be used.</p>
+
 </td>
 </tr>
-<tr id="Jwt-jwks" class="oneof">
+<tr id="Jwt-jwks">
 <td><code>jwks</code></td>
-<td><code>string (oneof)</code></td>
+<td><code>string</code></td>
 <td>
 <p>JSON Web Key Set of public keys to validate signature of the JWT.
 See https://auth0.com/docs/jwks.</p>
+
+<p>Note: Only one of jwks_uri and jwks should be used.</p>
 
 </td>
 </tr>
