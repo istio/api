@@ -14,8 +14,8 @@ docker_lock = protolock
 docker_tool = prototool
 else
 gen_img := gcr.io/istio-testing/protoc:2019-02-25
-lock_img := gcr.io/istio-testing/protolock:2018-10-23
-all_img := gcr.io/istio-testing/api-build-tools:2019-02-25
+lock_img := gcr.io/istio-testing/protolock:2019-03-11
+all_img := gcr.io/istio-testing/api-build-tools:2019-03-11
 pwd := $(shell pwd)
 mount_dir := /src
 repo_dir := istio.io/api
@@ -355,6 +355,9 @@ proto-commit:
 
 proto-commit-force:
 	@$(docker_lock) commit --force
+
+proto-status:
+	@$(docker_lock) status
 
 #####################
 # Lint
