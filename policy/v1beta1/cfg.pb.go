@@ -1638,9 +1638,9 @@ type Mutual struct {
 	// verify the presented adapter certificates. By default Mixer should already
 	// include Istio CA certificates and system certificates in cert pool.
 	CaCertificates string `protobuf:"bytes,3,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
-	// Used to configure mixer MTLS client to supply server name for SNI.
+	// Used to configure mixer mutual TLS client to supply server name for SNI.
 	// It is not used to verify the hostname of the peer certificate, since
-	// Istio verifies whitelisted SAN fields in mTLS.
+	// Istio verifies whitelisted SAN fields in mutual TLS.
 	ServerName string `protobuf:"bytes,4,opt,name=server_name,json=serverName,proto3" json:"server_name,omitempty"`
 }
 
