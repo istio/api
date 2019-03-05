@@ -92,6 +92,11 @@
                 "type": "string"
               },
               {
+                "id": 10,
+                "name": "jwks",
+                "type": "string"
+              },
+              {
                 "id": 6,
                 "name": "jwt_headers",
                 "type": "string",
