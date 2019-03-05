@@ -24,12 +24,12 @@ syntax = "proto3";
 // use, SNI configuration for the load balancer, etc.
 //
 // For example, the following Gateway configuration sets up a proxy to act
-// as a load balancer exposing port 80 and 9080 (http), 443 (https), and
-// port 2379 (TCP) for ingress.  The gateway will be applied to the proxy
-// running on a pod with labels `app: my-gateway-controller`. While Istio
-// will configure the proxy to listen on these ports, it is the
-// responsibility of the user to ensure that external traffic to these
-// ports are allowed into the mesh.
+// as a load balancer exposing port 80 and 9080 (http), 443 (https),
+// 9443(https) and port 2379 (TCP) for ingress.  The gateway will be
+// applied to the proxy running on a pod with labels `app:
+// my-gateway-controller`. While Istio will configure the proxy to listen
+// on these ports, it is the responsibility of the user to ensure that
+// external traffic to these ports are allowed into the mesh.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -167,8 +167,8 @@ syntax = "proto3";
 // It is possible to restrict the set of virtual services that can bind to
 // a gateway server using the namespace/hostname syntax in the hosts field.
 // For example, the following Gateway allows any virtual service in the ns1
-// namespace to bind to it, while restricts only the virtual service with
-// foo.bar.com host in ns2 namespace to bind to it.
+// namespace to bind to it, while restricting only the virtual service with
+// foo.bar.com host in the ns2 namespace to bind to it.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3

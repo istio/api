@@ -75,8 +75,8 @@
 // ```
 //
 // The following example uses a combination of service entry and TLS
-// routing in virtual service to steer traffic based on the SNI value to an
-// internal egress firewall.
+// routing in a virtual service to steer traffic based on the SNI value to
+// an internal egress firewall.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
