@@ -351,8 +351,8 @@ message ServiceEntry {
   // The virtual IP addresses associated with the service. Could be CIDR
   // prefix. For HTTP/HTTPs services, the addresses field will be ignored and
   // the destination will be identified based on the HTTP Host/Authority
-  // header and Server Name Indication (SNI). For non-HTTP protocols
-  // such as mongo/opaque TCP, the hosts will be ignored.
+  // header for HTTP and Server Name Indication (SNI) for HTTPs.
+  // For non-HTTP protocols such as mongo/opaque TCP, the hosts will be ignored.
   // If one or more IP addresses are specified,
   // the incoming traffic will be identified as belonging to this service
   // if the destination IP matches the IP/CIDRs specified in the addresses
