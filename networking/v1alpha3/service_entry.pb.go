@@ -289,7 +289,7 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 //         host: istio-egressgateway.istio-system.svc.cluster.local
 //   - match:
 //     - port: 80
-//       gateway:
+//       gateways:
 //       - istio-egressgateway
 //     route:
 //     - destination:
