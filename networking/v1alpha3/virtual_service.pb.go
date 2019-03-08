@@ -1228,9 +1228,9 @@ func (m *TLSMatchAttributes) GetGateways() []string {
 //   - match:
 //     - uri:
 //         exact: /v1/getProductRatings
-//   redirect:
-//     uri: /v1/bookRatings
-//     authority: newratings.default.svc.cluster.local
+//     redirect:
+//       uri: /v1/bookRatings
+//       authority: newratings.default.svc.cluster.local
 //   ...
 // ```
 type HTTPRedirect struct {
