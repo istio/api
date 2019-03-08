@@ -343,7 +343,7 @@ message ServiceEntry {
   // the HTTP Host/Authority header will be matched against the hosts field.
   // For HTTPs or TLS traffic containing Server Name Indication (SNI), the SNI value
   // will be matched against the hosts field. For all other protocols
-  // the hosts will be ignored, and the port and addresses and ports fields
+  // the hosts will be ignored, and the port and addresses fields
   // will be used if present. Note that when resolution is set to type DNS
   // and no endpoints are specified, the host field will be used as the DNS name
   // of the endpoint to route traffic to.
