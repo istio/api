@@ -196,6 +196,7 @@
 //     route:
 //     - destination:
 //         host: istio-egressgateway.istio-system.svc.cluster.local
+//         subset: httpbin
 //   - match:
 //     - port: 80
 //       gateways:
@@ -203,6 +204,23 @@
 //     route:
 //     - destination:
 //         host: httpbin.com
+// ```
+//
+// Lastly, the associated DestinationRule, to define policies that apply to
+// traffic intended for the gateway service (istio-egressgateway.istio-system.svc.cluster.local)
+// after routing defined in the above VirtualService has occurred.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: egressgateway-for-httpbin
+// spec:
+//   host: istio-egressgateway.istio-system.svc.cluster.local
+//   subsets:
+//   - name: httpbin
+//     labels:
+//       istio: egressgateway
 // ```
 //
 // The following example demonstrates the use of wildcards in the hosts for
