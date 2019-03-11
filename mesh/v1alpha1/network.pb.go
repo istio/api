@@ -96,7 +96,7 @@ func (m *Network) GetGateways() []*Network_IstioNetworkGateway {
 //
 // 2. Explicitly:
 //
-//    a. By matching the registry name with one of the "from_registry"
+//    a. By matching the registry name with one of the "fromRegistry"
 //    in the mesh config. A "from_registry" can only be assigned to a
 //    single network.
 //
