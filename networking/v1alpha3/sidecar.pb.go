@@ -70,11 +70,11 @@
 //   egress:
 //   - hosts:
 //     - "istio-system/*"
-//   - port:
+//     port:
 //       number: 9080
 //       protocol: HTTP
 //       name: egresshttp
-//     hosts:
+//   - hosts:
 //     - "prod-us1/*"
 // ```
 //
