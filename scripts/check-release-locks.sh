@@ -16,7 +16,7 @@
 
 set -eu
 
-locks=$(find ./scripts/locks -type d -name 'release-*' | sort)
+locks=$(find ./releaselocks -type d -name 'release-*' | sort)
 fail=none
 
 for lock in $locks; do
