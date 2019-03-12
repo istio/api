@@ -953,7 +953,7 @@ message HTTPRetry {
 //       allowCredentials: false
 //       allowHeaders:
 //       - X-Foo-Bar
-//       maxAge: "1d"
+//       maxAge: "24h"
 // ```
 //
 message CorsPolicy {
