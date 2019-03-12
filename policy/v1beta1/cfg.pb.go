@@ -131,7 +131,7 @@ type AttributeManifest struct {
 	// match the regular expression `[\.-]`.
 	//
 	// Attribute names must be unique within a single Istio deployment. The set of canonical
-	// attributes are described at [here](https://istio.io/docs/reference/attribute-vocabulary.html).
+	// attributes are described at [here](https://istio.io/docs/reference/config/policy-and-telemetry/attribute-vocabulary/).
 	// Attributes not in that list should be named with a component-specific suffix such as
 	// `request.count-my.component`.
 	Attributes map[string]*AttributeManifest_AttributeInfo `protobuf:"bytes,3,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
