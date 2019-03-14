@@ -5967,6 +5967,12 @@
                 "id": 3,
                 "name": "mode",
                 "type": "EnforcementMode"
+              },
+              {
+                "id": 4,
+                "name": "actions",
+                "type": "AccessRule",
+                "is_repeated": true
               }
             ]
           },

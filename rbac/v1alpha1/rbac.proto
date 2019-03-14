@@ -226,6 +226,34 @@ message ServiceRoleBinding {
   // $hide_from_docs
   // Indicates enforcement mode of the ServiceRoleBinding.
   EnforcementMode mode = 3;
+
+  // $hide_from_docs
+  // Inline role definition. An inline role is a role that is defined inside an
+  // authorization policy, instead of explicitly defined in a ServiceRole object.
+  // Inline roles can be used for the role definitions that are not intended to
+  // be reused in other bindings, while explicit roles are reusable. Both inline
+  // roles (defined in "actions" field) and explicit roles (defined in ServiceRole)
+  // are supported. Users should use only one of them in a single binding.
+  // For example, the following “product-frontend” AuthorizationPolicy allows “frontend”
+  // service to view “product” service on “/info” path.
+  // ```yaml
+  // apiVersion: “rbac.istio.io/v1alpha1”
+  // kind: AuthorizationPolicy
+  // metadata:
+  //  name: product-frontend
+  //  namespace: ns1
+  // spec:
+  //  selector:
+  //    labels:
+  //      app: product
+  //  allow:
+  //  - subjects:
+  //    - names: ["cluster.local/ns/default/sa/frontend"]
+  //    actions:
+  //    - paths: [“/info”]
+  //      methods: [“GET”]
+  // Required. The set of access rules (permissions) that the role has.
+  repeated AccessRule actions = 4;
 }
 
 // Subject defines an identity. The identity is either a user or identified by a set of `properties`.
