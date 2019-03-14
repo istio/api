@@ -582,8 +582,8 @@ type ServiceRoleBinding struct {
 	//  - subjects:
 	//    - names: ["cluster.local/ns/default/sa/frontend"]
 	//    actions:
-	//    - paths: ["/info"]
-	//      methods: ["GET"]
+	//    - paths: [“/info/*”]
+	//      methods: [“GET”]
 	// Required. The set of access rules (permissions) that the role has.
 	Actions              []*AccessRule `protobuf:"bytes,4,rep,name=actions,proto3" json:"actions,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
