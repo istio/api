@@ -425,7 +425,7 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 }
 
 type ServiceEntry struct {
-	// REQUIRED. The hosts associated with the ServiceEntry. Could be a DNS
+	// The hosts associated with the ServiceEntry. Could be a DNS
 	// name with wildcard prefix (external services only). DNS names in hosts
 	// will be ignored if the application accesses the service over non-HTTP
 	// protocols such as mongo/opaque TCP/HTTPS. In such scenarios, the
