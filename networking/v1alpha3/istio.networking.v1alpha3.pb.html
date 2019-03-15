@@ -1166,7 +1166,7 @@ spec:
   - match:
     - headers:
         cookie:
-          user: dev-123
+          regex: "^(.*?;)?(user=dev-123)(;.*)?"
     route:
     - destination:
         port:
