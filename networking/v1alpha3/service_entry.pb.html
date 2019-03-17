@@ -45,8 +45,6 @@ kind: ServiceEntry
 metadata:
   name: external-svc-mongocluster
 spec:
-  hosts:
-  - mymongodb.somedomain # not used
   addresses:
   - 192.192.192.192/24 # VIPs
   ports:
@@ -327,7 +325,9 @@ name with wildcard prefix (external services only). DNS names in hosts
 will be ignored if the application accesses the service over non-HTTP
 protocols such as mongo/opaque TCP/HTTPS. In such scenarios, the
 IP addresses specified in the Addresses field or the port will be used
-to uniquely identify the destination.</p>
+to uniquely identify the destination.
+Note that the hosts and/or addresses field must be specified for
+a ServiceEntry to be valid.</p>
 
 </td>
 </tr>
@@ -348,7 +348,9 @@ which the service is being accessed must not be shared by any other
 service in the mesh. In other words, the sidecar will behave as a
 simple TCP proxy, forwarding incoming traffic on a specified port to
 the specified destination endpoint IP/host. Unix domain socket
-addresses are not supported in this field.</p>
+addresses are not supported in this field.
+Note that the hosts and/or addresses field must be specified for
+a ServiceEntry to be valid.</p>
 
 </td>
 </tr>

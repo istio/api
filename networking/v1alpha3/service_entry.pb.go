@@ -42,8 +42,6 @@
 // metadata:
 //   name: external-svc-mongocluster
 // spec:
-//   hosts:
-//   - mymongodb.somedomain # not used
 //   addresses:
 //   - 192.192.192.192/24 # VIPs
 //   ports:
@@ -431,6 +429,8 @@ type ServiceEntry struct {
 	// protocols such as mongo/opaque TCP/HTTPS. In such scenarios, the
 	// IP addresses specified in the Addresses field or the port will be used
 	// to uniquely identify the destination.
+	// Note that the hosts and/or addresses field must be specified for
+	// a ServiceEntry to be valid.
 	Hosts []string `protobuf:"bytes,1,rep,name=hosts,proto3" json:"hosts,omitempty"`
 	// The virtual IP addresses associated with the service. Could be CIDR
 	// prefix. For HTTP services, the addresses field will be ignored and
@@ -446,6 +446,8 @@ type ServiceEntry struct {
 	// simple TCP proxy, forwarding incoming traffic on a specified port to
 	// the specified destination endpoint IP/host. Unix domain socket
 	// addresses are not supported in this field.
+	// Note that the hosts and/or addresses field must be specified for
+	// a ServiceEntry to be valid.
 	Addresses []string `protobuf:"bytes,2,rep,name=addresses,proto3" json:"addresses,omitempty"`
 	// REQUIRED. The ports associated with the external service. If the
 	// Endpoints are Unix domain socket addresses, there must be exactly one
