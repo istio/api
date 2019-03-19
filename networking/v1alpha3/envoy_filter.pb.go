@@ -16,6 +16,9 @@
 // The behavior is undefined if multiple EnvoyFilter configurations conflict
 // with each other.
 //
+// NOTE 3: For filters of `filterType: HTTP` you must include a `listenerMatch` section
+// with a `listenerProtocol: HTTP` or the filter have no effect.
+//
 // The following example for Kubernetes enables Envoy's Lua filter for all
 // inbound HTTP calls arriving at service port 8080 of the reviews service pod with
 // labels "app: reviews".
@@ -195,7 +198,7 @@ func (EnvoyFilter_Filter_FilterType) EnumDescriptor() ([]byte, []int) {
 }
 
 type EnvoyFilter struct {
-	// One or more labels that indicate a specific set of pods/VMs whose
+	// Zero or more labels that indicate a specific set of pods/VMs whose
 	// proxies should be configured to use these additional filters.  The
 	// scope of label search is platform dependent. On Kubernetes, for
 	// example, the scope includes pods running in all reachable
