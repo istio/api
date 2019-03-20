@@ -154,7 +154,7 @@
 // kind: Gateway
 // metadata:
 //  name: istio-egressgateway
-//  namespace: egress
+//  namespace: istio-system
 // spec:
 //  selector:
 //    istio: egressgateway
