@@ -197,11 +197,9 @@ message Gateway {
   // REQUIRED: A list of server specifications.
   repeated Server servers = 1;
 
-  // REQUIRED: One or more labels that indicate a specific set of pods/VMs
-  // on which this gateway configuration should be applied. The scope of
-  // label search is restricted to the configuration namespace in which the
-  // the resource is present. In other words, the Gateway resource must
-  // reside in the same namespace as the gateway workload.
+  // REQUIRED: One or more labels used to select the specific gateway workload,
+  // of all the gateway workloads in the system, to which this configuration
+  // should be applied.
   map<string, string> selector = 2;
 }
 
