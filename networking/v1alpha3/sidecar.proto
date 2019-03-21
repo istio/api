@@ -87,14 +87,14 @@ import "networking/v1alpha3/gateway.proto";
 //       name: somename
 //     defaultEndpoint: unix:///var/run/someuds.sock
 //   egress:
+//   - hosts:
+//     - "istio-system/*"
 //   - port:
 //       number: 9080
 //       protocol: HTTP
 //       name: egresshttp
 //     hosts:
 //     - "prod-us1/*"
-//   - hosts:
-//     - "istio-system/*"
 // ```
 //
 // If the workload is deployed without IP tables based traffic capture, the
@@ -204,8 +204,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 message Sidecar {
   // Criteria used to select the specific set of pods/VMs on which this
   // sidecar configuration should be applied. If omitted, the sidecar
-  // configuration will be applied to all workloads in the same config
-  // namespace.
+  // configuration will be applied to all workloads in the same namespace.
   WorkloadSelector workload_selector = 1;
 
   // Ingress specifies the configuration of the sidecar for processing
@@ -247,7 +246,7 @@ message IstioIngressListener {
   // traffic should be forwarded to. This configuration can be used to
   // redirect traffic arriving at the bind point on the sidecar to a port
   // or Unix domain socket where the application workload is listening for
-  // connections. Format should be 127.0.0.1:PORT or unix:///path/to/socket
+  // connections. Format should be 127.0.0.1:PORT or `unix:///path/to/socket`
   string default_endpoint = 4;
 }
 
@@ -287,7 +286,7 @@ message IstioEgressListener {
   // using a `ServiceEntry` or `VirtualService` configuration. Any
   // associated `DestinationRule` in the same namespace will also be used.
   //
-  // The `dnsName` should be specified using FQDN format, opionally including
+  // The `dnsName` should be specified using FQDN format, optionally including
   // a wildcard character in the left-most component (e.g., `prod/*.example.com`).
   // Set the `dnsName` to `*` to select all services from the specified namespace
   // (e.g.,`prod/*`). The `namespace` can also be set to `*` to select a particular

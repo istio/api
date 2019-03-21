@@ -430,7 +430,7 @@ type Jwt struct {
 	// the issuer or (b) inferred from the email domain of the issuer (e.g. a
 	// Google service account).
 	//
-	// Example: https://www.googleapis.com/oauth2/v1/certs
+	// Example: `https://www.googleapis.com/oauth2/v1/certs`
 	//
 	// Note: Only one of jwks_uri and jwks should be used.
 	JwksUri string `protobuf:"bytes,3,opt,name=jwks_uri,json=jwksUri,proto3" json:"jwks_uri,omitempty"`

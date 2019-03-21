@@ -154,7 +154,7 @@ message Jwt {
   // the issuer or (b) inferred from the email domain of the issuer (e.g. a
   // Google service account).
   //
-  // Example: https://www.googleapis.com/oauth2/v1/certs
+  // Example: `https://www.googleapis.com/oauth2/v1/certs`
   //
   // Note: Only one of jwks_uri and jwks should be used.
   string jwks_uri = 3;

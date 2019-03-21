@@ -68,14 +68,14 @@
 //       name: somename
 //     defaultEndpoint: unix:///var/run/someuds.sock
 //   egress:
+//   - hosts:
+//     - "istio-system/*"
 //   - port:
 //       number: 9080
 //       protocol: HTTP
 //       name: egresshttp
 //     hosts:
 //     - "prod-us1/*"
-//   - hosts:
-//     - "istio-system/*"
 // ```
 //
 // If the workload is deployed without IP tables based traffic capture, the
@@ -239,8 +239,7 @@ func (CaptureMode) EnumDescriptor() ([]byte, []int) {
 type Sidecar struct {
 	// Criteria used to select the specific set of pods/VMs on which this
 	// sidecar configuration should be applied. If omitted, the sidecar
-	// configuration will be applied to all workloads in the same config
-	// namespace.
+	// configuration will be applied to all workloads in the same namespace.
 	WorkloadSelector *WorkloadSelector `protobuf:"bytes,1,opt,name=workload_selector,json=workloadSelector,proto3" json:"workload_selector,omitempty"`
 	// Ingress specifies the configuration of the sidecar for processing
 	// inbound traffic to the attached workload. If omitted, Istio will
@@ -334,7 +333,7 @@ type IstioIngressListener struct {
 	// traffic should be forwarded to. This configuration can be used to
 	// redirect traffic arriving at the bind point on the sidecar to a port
 	// or Unix domain socket where the application workload is listening for
-	// connections. Format should be 127.0.0.1:PORT or unix:///path/to/socket
+	// connections. Format should be 127.0.0.1:PORT or `unix:///path/to/socket`
 	DefaultEndpoint      string   `protobuf:"bytes,4,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -435,7 +434,7 @@ type IstioEgressListener struct {
 	// using a `ServiceEntry` or `VirtualService` configuration. Any
 	// associated `DestinationRule` in the same namespace will also be used.
 	//
-	// The `dnsName` should be specified using FQDN format, opionally including
+	// The `dnsName` should be specified using FQDN format, optionally including
 	// a wildcard character in the left-most component (e.g., `prod/*.example.com`).
 	// Set the `dnsName` to `*` to select all services from the specified namespace
 	// (e.g.,`prod/*`). The `namespace` can also be set to `*` to select a particular

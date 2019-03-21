@@ -71,14 +71,14 @@ spec:
       name: somename
     defaultEndpoint: unix:///var/run/someuds.sock
   egress:
+  - hosts:
+    - &quot;istio-system/*&quot;
   - port:
       number: 9080
       protocol: HTTP
       name: egresshttp
     hosts:
     - &quot;prod-us1/*&quot;
-  - hosts:
-    - &quot;istio-system/*&quot;
 </code></pre>
 
 <p>If the workload is deployed without IP tables based traffic capture, the
@@ -285,7 +285,7 @@ The corresponding service can be a service in the service registry
 using a <code>ServiceEntry</code> or <code>VirtualService</code> configuration. Any
 associated <code>DestinationRule</code> in the same namespace will also be used.</p>
 
-<p>The <code>dnsName</code> should be specified using FQDN format, opionally including
+<p>The <code>dnsName</code> should be specified using FQDN format, optionally including
 a wildcard character in the left-most component (e.g., <code>prod/*.example.com</code>).
 Set the <code>dnsName</code> to <code>*</code> to select all services from the specified namespace
 (e.g.,<code>prod/*</code>). The <code>namespace</code> can also be set to <code>*</code> to select a particular
@@ -356,7 +356,7 @@ captureMode must be DEFAULT or NONE for Unix domain socket binds.</p>
 traffic should be forwarded to. This configuration can be used to
 redirect traffic arriving at the bind point on the sidecar to a port
 or Unix domain socket where the application workload is listening for
-connections. Format should be 127.0.0.1:PORT or unix:///path/to/socket</p>
+connections. Format should be 127.0.0.1:PORT or <code>unix:///path/to/socket</code></p>
 
 </td>
 </tr>
@@ -380,8 +380,7 @@ connections. Format should be 127.0.0.1:PORT or unix:///path/to/socket</p>
 <td>
 <p>Criteria used to select the specific set of pods/VMs on which this
 sidecar configuration should be applied. If omitted, the sidecar
-configuration will be applied to all workloads in the same config
-namespace.</p>
+configuration will be applied to all workloads in the same namespace.</p>
 
 </td>
 </tr>
