@@ -282,8 +282,11 @@ message MeshConfig {
   // Configures DNS refresh rate for Envoy clusters of type STRICT_DNS
   google.protobuf.Duration dns_refresh_rate = 36;
 
+  // Configures mesh proxy idle timeout
+  google.protobuf.Duration http_idle_timeout = 37;
+
   // $hide_from_docs
-  // Next available field number: 37
+  // Next available field number: 38
 }
 
 // ConfigSource describes information about a configuration store inside a
