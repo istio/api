@@ -316,7 +316,10 @@ type MeshConfig struct {
 	LocalityLbSetting *LocalityLoadBalancerSetting `protobuf:"bytes,35,opt,name=locality_lb_setting,json=localityLbSetting,proto3" json:"locality_lb_setting,omitempty"`
 	// Configures DNS refresh rate for Envoy clusters of type STRICT_DNS
 	DnsRefreshRate *types.Duration `protobuf:"bytes,36,opt,name=dns_refresh_rate,json=dnsRefreshRate,proto3" json:"dns_refresh_rate,omitempty"`
-	// Configures mesh proxy idle timeout
+	// Configures idle timeout for edge and internal Envoy proxies
+	// by using Envoy HTTP connection manager `idle_timeout` property
+	// to gracefully close idle connections.
+	// There is no default value set for this timeout.
 	HttpIdleTimeout      *types.Duration `protobuf:"bytes,37,opt,name=http_idle_timeout,json=httpIdleTimeout,proto3" json:"http_idle_timeout,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_unrecognized     []byte          `json:"-"`

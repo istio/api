@@ -500,7 +500,10 @@ Fallback to old identity format(without trust domain) if not set.</p>
 <td><code>httpIdleTimeout</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
 <td>
-<p>Configures mesh proxy idle timeout</p>
+<p>Configures idle timeout for edge and internal Envoy proxies
+by using Envoy HTTP connection manager <code>idle_timeout</code> property
+to gracefully close idle connections.
+There is no default value set for this timeout.</p>
 
 </td>
 </tr>
