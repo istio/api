@@ -4,10 +4,46 @@ description: Authentication policy for Istio services.
 location: https://istio.io/docs/reference/config/istio.authentication.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 11
+number_of_entries: 14
 ---
 <p>This package defines user-facing authentication policy.</p>
 
+<h2 id="Delegate-Type">Delegate.Type</h2>
+<section>
+<p>The type of the credential that is authenticated remotely.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Delegate-Type-RC_TOKEN">
+<td><code>RC_TOKEN</code></td>
+<td>
+<p>RCToken credential type.</p>
+
+</td>
+</tr>
+<tr id="Delegate-Type-API_KEY">
+<td><code>API_KEY</code></td>
+<td>
+<p>API key credential type.</p>
+
+</td>
+</tr>
+<tr id="Delegate-Type-OPAQUE_TOKEN">
+<td><code>OPAQUE_TOKEN</code></td>
+<td>
+<p>Opaque vendor-specific credential type.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="Jwt">Jwt</h2>
 <section>
 <p>JSON Web Token (JWT) token format for authentication as defined by
@@ -592,6 +628,100 @@ networking API to avoid dependency.</p>
 <td>
 <p>ECMAscript style regex-based match as defined by <a href="http://en.cppreference.com/w/cpp/regex/ecmascript">EDCA-262</a>.
 Example: &ldquo;^/pets/(.*?)?&rdquo;</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="TLSOptions-TLSProtocol">TLSOptions.TLSProtocol</h2>
+<section>
+<p>TLS protocol versions.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="TLSOptions-TLSProtocol-TLS_AUTO">
+<td><code>TLS_AUTO</code></td>
+<td>
+<p>Automatically choose the optimal TLS version.</p>
+
+</td>
+</tr>
+<tr id="TLSOptions-TLSProtocol-TLSV1_0">
+<td><code>TLSV1_0</code></td>
+<td>
+<p>TLS version 1.0</p>
+
+</td>
+</tr>
+<tr id="TLSOptions-TLSProtocol-TLSV1_1">
+<td><code>TLSV1_1</code></td>
+<td>
+<p>TLS version 1.1</p>
+
+</td>
+</tr>
+<tr id="TLSOptions-TLSProtocol-TLSV1_2">
+<td><code>TLSV1_2</code></td>
+<td>
+<p>TLS version 1.2</p>
+
+</td>
+</tr>
+<tr id="TLSOptions-TLSProtocol-TLSV1_3">
+<td><code>TLSV1_3</code></td>
+<td>
+<p>TLS version 1.3</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="TLSOptions-TLSmode">TLSOptions.TLSmode</h2>
+<section>
+<p>TLS modes enforced by the proxy</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="TLSOptions-TLSmode-SIMPLE">
+<td><code>SIMPLE</code></td>
+<td>
+<p>Secure connections with standard TLS semantics.</p>
+
+</td>
+</tr>
+<tr id="TLSOptions-TLSmode-MUTUAL">
+<td><code>MUTUAL</code></td>
+<td>
+<p>Secure connections to the upstream using mutual TLS by presenting
+client certificates for authentication.</p>
+
+</td>
+</tr>
+<tr id="TLSOptions-TLSmode-PERMISSIVE_MUTUAL">
+<td><code>PERMISSIVE_MUTUAL</code></td>
+<td>
+<p>Plain text and mTLS are both acceptable.</p>
+
+</td>
+</tr>
+<tr id="TLSOptions-TLSmode-PERMISSIVE_TLS">
+<td><code>PERMISSIVE_TLS</code></td>
+<td>
+<p>Plain text and simple TLS are both acceptable.</p>
 
 </td>
 </tr>

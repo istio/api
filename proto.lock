@@ -27,6 +27,66 @@
                 "integer": 1
               }
             ]
+          },
+          {
+            "name": "TLSOptions.TLSmode",
+            "enum_fields": [
+              {
+                "name": "SIMPLE"
+              },
+              {
+                "name": "MUTUAL",
+                "integer": 1
+              },
+              {
+                "name": "PERMISSIVE_MUTUAL",
+                "integer": 2
+              },
+              {
+                "name": "PERMISSIVE_TLS",
+                "integer": 3
+              }
+            ]
+          },
+          {
+            "name": "TLSOptions.TLSProtocol",
+            "enum_fields": [
+              {
+                "name": "TLS_AUTO"
+              },
+              {
+                "name": "TLSV1_0",
+                "integer": 1
+              },
+              {
+                "name": "TLSV1_1",
+                "integer": 2
+              },
+              {
+                "name": "TLSV1_2",
+                "integer": 3
+              },
+              {
+                "name": "TLSV1_3",
+                "integer": 4
+              }
+            ]
+          },
+          {
+            "name": "Delegate.Type",
+            "enum_fields": [
+              {
+                "name": "RC_TOKEN"
+              },
+              {
+                "name": "API_KEY",
+                "integer": 1
+              },
+              {
+                "name": "OPAQUE_TOKEN",
+                "integer": 2
+              }
+            ]
           }
         ],
         "messages": [
@@ -145,6 +205,11 @@
                 "id": 2,
                 "name": "jwt",
                 "type": "Jwt"
+              },
+              {
+                "id": 3,
+                "name": "use",
+                "type": "string"
               }
             ]
           },
@@ -155,6 +220,11 @@
                 "id": 1,
                 "name": "jwt",
                 "type": "Jwt"
+              },
+              {
+                "id": 2,
+                "name": "use",
+                "type": "string"
               }
             ]
           },
@@ -236,6 +306,138 @@
                 "type": "string"
               }
             ]
+          },
+          {
+            "name": "TLSOptions",
+            "fields": [
+              {
+                "id": 1,
+                "name": "https_redirect",
+                "type": "bool"
+              },
+              {
+                "id": 2,
+                "name": "mode",
+                "type": "TLSmode"
+              },
+              {
+                "id": 3,
+                "name": "server_certificate",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "private_key",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "ca_certificates",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "subject_alt_names",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "min_protocol_version",
+                "type": "TLSProtocol"
+              },
+              {
+                "id": 8,
+                "name": "max_protocol_version",
+                "type": "TLSProtocol"
+              },
+              {
+                "id": 9,
+                "name": "cipher_suites",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 10,
+                "name": "sds_name",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "Location",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "grpc_attribute_name",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "dynamic_metadata_attribute_name",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "Delegate",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "Type"
+              },
+              {
+                "id": 2,
+                "name": "uri",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "input",
+                "type": "google.protobuf.Struct"
+              },
+              {
+                "id": 5,
+                "name": "output_location",
+                "type": "Location"
+              }
+            ]
+          },
+          {
+            "name": "AuthnMethod",
+            "fields": [
+              {
+                "id": 1,
+                "name": "mtls",
+                "type": "MutualTls"
+              },
+              {
+                "id": 2,
+                "name": "jwt",
+                "type": "Jwt"
+              },
+              {
+                "id": 3,
+                "name": "tls",
+                "type": "TLSOptions"
+              },
+              {
+                "id": 4,
+                "name": "delegate",
+                "type": "Delegate"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/struct.proto"
           }
         ],
         "package": {

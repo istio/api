@@ -14,6 +14,8 @@
 
 syntax = "proto3";
 
+import "google/protobuf/struct.proto";
+
 // $title: Authentication Policy
 // $description: Authentication policy for Istio services.
 // $location: https://istio.io/docs/reference/config/istio.authentication.v1alpha1.html
@@ -228,6 +230,10 @@ message PeerAuthenticationMethod {
     // $hide_from_docs
     // Set if JWT is used. This option is not yet available.
     Jwt jwt = 2;
+
+    // $hide_from_docs
+    // Set if using an AuthnMethod. This option is not yet available.
+    string use = 3;
   }
 }
 
@@ -237,6 +243,9 @@ message PeerAuthenticationMethod {
 message OriginAuthenticationMethod {
   // Jwt params for the method.
   Jwt jwt = 1;
+  // $hide_from_docs
+  // Set if using an AuthnMethod. This option is not yet available.
+  string use = 2;
 }
 
 // Associates authentication with request principal.
@@ -404,5 +413,152 @@ message PortSelector {
     uint32 number = 1;
     // Port name
     string name = 2;
+  }
+}
+
+// $hide_from_docs
+// This is forked from message Server.TLSOptions in networking/v1alpha3/gateway.proto
+// to avoid a direct dependency from authn API on networking API (TLS authn method
+// may evolve independently from networking TLS API). Moreover, message Server.TLSOptions
+// is defined inside of the message Server.
+// TLSOptions configures the TLS authn method.
+message TLSOptions {
+  // If set to true, the load balancer will send a 301 redirect for all
+  // http connections, asking the clients to use HTTPS.
+  bool https_redirect = 1;
+
+  // TLS modes enforced by the proxy
+  enum TLSmode {
+    // Secure connections with standard TLS semantics.
+    SIMPLE = 0;
+    // Secure connections to the upstream using mutual TLS by presenting
+    // client certificates for authentication.
+    MUTUAL = 1;
+    // Plain text and mTLS are both acceptable.
+    PERMISSIVE_MUTUAL = 2;
+    // Plain text and simple TLS are both acceptable.
+    PERMISSIVE_TLS = 3;
+  };
+
+  // The value of this field determines how TLS is enforced.
+  TLSmode mode = 2;
+
+  // REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
+  // holding the server-side TLS certificate to use.
+  string server_certificate = 3;
+
+  // REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
+  // holding the server's private key.
+  string private_key = 4;
+
+  // REQUIRED if mode is `MUTUAL`. The path to a file containing
+  // certificate authority certificates to use in verifying a presented
+  // client side certificate.
+  string ca_certificates = 5;
+
+  // A list of alternate names to verify the subject identity in the
+  // certificate presented by the client.
+  repeated string subject_alt_names = 6;
+
+  // TLS protocol versions.
+  enum TLSProtocol {
+    // Automatically choose the optimal TLS version.
+    TLS_AUTO = 0;
+
+    // TLS version 1.0
+    TLSV1_0 = 1;
+
+    // TLS version 1.1
+    TLSV1_1 = 2;
+
+    // TLS version 1.2
+    TLSV1_2 = 3;
+
+    // TLS version 1.3
+    TLSV1_3 = 4;
+  }
+
+  // Optional: Minimum TLS protocol version.
+  TLSProtocol min_protocol_version = 7;
+
+  // Optional: Maximum TLS protocol version.
+  TLSProtocol max_protocol_version = 8;
+
+  // Optional: If specified, only support the specified cipher list.
+  // Otherwise default to the default cipher list supported by Envoy.
+  repeated string cipher_suites = 9;
+
+  // Optional: If specified, Envoy (with SDS enabled) uses the specified name
+  // as the SDS secret config name to call the SDS server, to retrieve the TLS key and
+  // certificate. Otherwise, Envoy uses the TLS key and certificate configured
+  // in TLSOptions.
+  string sds_name = 10;
+}
+
+
+// $hide_from_docs
+// Location defines an input/output location.
+message Location {
+  oneof location {
+    // Optional: If specified, it is a http header.
+    string header = 1;
+    // Optional: If specified, it is a grpc metadata attribute.
+    string grpc_attribute_name = 2;
+    // Optional: If specified, it is an Envoy dynamic metadata attribute.
+    string dynamic_metadata_attribute_name = 3;
+  }
+}
+
+// $hide_from_docs
+// Delegate the authentication to a remote service.
+message Delegate {
+  // The type of the credential that is authenticated remotely.
+  enum Type {
+    // RCToken credential type.
+    RC_TOKEN = 0;
+    // API key credential type.
+    API_KEY = 1;
+    // Opaque vendor-specific credential type.
+    OPAQUE_TOKEN = 2;
+    // TODO: add more types that are authenticated remotely
+  }
+  // The type of credential, which should be recognizable to the delegated
+  // authentication service and dictates how the authentication requests
+  // will be sent and handled by the remote service.
+  Type type = 1;
+
+  // The remote authn service endpoint
+  string uri = 2;
+
+  // input specifies the input for the delegated authn request.
+  // It contains the input data required by the authn service and can be specific
+  // to a type of authentication. For example, to authenticate an API key,
+  // following input may be needed:
+  //  string secret_name = 3;
+  //  string secret_type = 4;
+  google.protobuf.Struct input = 3;
+
+  // Optional: if the delegated authn service does not specify where to put the
+  // output, this field is used to specify the output location.
+  Location output_location = 5;
+}
+
+// $hide_from_docs
+// AuthnMethod defines an authentication method.
+message AuthnMethod {
+  oneof method {
+    // Set to mTLS authn parameters when this authn method is mutual TLS.
+    MutualTls mtls = 1;
+
+    // Set to JWT authn parameters when this authn method is JWT.
+    Jwt jwt = 2;
+
+    // Set TLS authn parameters.
+    TLSOptions tls = 3;
+
+    // Set TLS authn parameters.
+    Delegate delegate = 4;
+
+    // TODO: add more authentication methods
   }
 }

@@ -8,6 +8,7 @@ package v1alpha1
 import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
+	types "github.com/gogo/protobuf/types"
 	io "io"
 	math "math"
 )
@@ -77,6 +78,115 @@ func (x MutualTls_Mode) String() string {
 
 func (MutualTls_Mode) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_30ec3f7cef93301a, []int{1, 0}
+}
+
+// TLS modes enforced by the proxy
+type TLSOptions_TLSmode int32
+
+const (
+	// Secure connections with standard TLS semantics.
+	TLSOptions_SIMPLE TLSOptions_TLSmode = 0
+	// Secure connections to the upstream using mutual TLS by presenting
+	// client certificates for authentication.
+	TLSOptions_MUTUAL TLSOptions_TLSmode = 1
+	// Plain text and mTLS are both acceptable.
+	TLSOptions_PERMISSIVE_MUTUAL TLSOptions_TLSmode = 2
+	// Plain text and simple TLS are both acceptable.
+	TLSOptions_PERMISSIVE_TLS TLSOptions_TLSmode = 3
+)
+
+var TLSOptions_TLSmode_name = map[int32]string{
+	0: "SIMPLE",
+	1: "MUTUAL",
+	2: "PERMISSIVE_MUTUAL",
+	3: "PERMISSIVE_TLS",
+}
+
+var TLSOptions_TLSmode_value = map[string]int32{
+	"SIMPLE":            0,
+	"MUTUAL":            1,
+	"PERMISSIVE_MUTUAL": 2,
+	"PERMISSIVE_TLS":    3,
+}
+
+func (x TLSOptions_TLSmode) String() string {
+	return proto.EnumName(TLSOptions_TLSmode_name, int32(x))
+}
+
+func (TLSOptions_TLSmode) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_30ec3f7cef93301a, []int{8, 0}
+}
+
+// TLS protocol versions.
+type TLSOptions_TLSProtocol int32
+
+const (
+	// Automatically choose the optimal TLS version.
+	TLSOptions_TLS_AUTO TLSOptions_TLSProtocol = 0
+	// TLS version 1.0
+	TLSOptions_TLSV1_0 TLSOptions_TLSProtocol = 1
+	// TLS version 1.1
+	TLSOptions_TLSV1_1 TLSOptions_TLSProtocol = 2
+	// TLS version 1.2
+	TLSOptions_TLSV1_2 TLSOptions_TLSProtocol = 3
+	// TLS version 1.3
+	TLSOptions_TLSV1_3 TLSOptions_TLSProtocol = 4
+)
+
+var TLSOptions_TLSProtocol_name = map[int32]string{
+	0: "TLS_AUTO",
+	1: "TLSV1_0",
+	2: "TLSV1_1",
+	3: "TLSV1_2",
+	4: "TLSV1_3",
+}
+
+var TLSOptions_TLSProtocol_value = map[string]int32{
+	"TLS_AUTO": 0,
+	"TLSV1_0":  1,
+	"TLSV1_1":  2,
+	"TLSV1_2":  3,
+	"TLSV1_3":  4,
+}
+
+func (x TLSOptions_TLSProtocol) String() string {
+	return proto.EnumName(TLSOptions_TLSProtocol_name, int32(x))
+}
+
+func (TLSOptions_TLSProtocol) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_30ec3f7cef93301a, []int{8, 1}
+}
+
+// The type of the credential that is authenticated remotely.
+type Delegate_Type int32
+
+const (
+	// RCToken credential type.
+	Delegate_RC_TOKEN Delegate_Type = 0
+	// API key credential type.
+	Delegate_API_KEY Delegate_Type = 1
+	// Opaque vendor-specific credential type.
+	Delegate_OPAQUE_TOKEN Delegate_Type = 2
+)
+
+var Delegate_Type_name = map[int32]string{
+	0: "RC_TOKEN",
+	1: "API_KEY",
+	2: "OPAQUE_TOKEN",
+}
+
+var Delegate_Type_value = map[string]int32{
+	"RC_TOKEN":     0,
+	"API_KEY":      1,
+	"OPAQUE_TOKEN": 2,
+}
+
+func (x Delegate_Type) String() string {
+	return proto.EnumName(Delegate_Type_name, int32(x))
+}
+
+func (Delegate_Type) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_30ec3f7cef93301a, []int{10, 0}
 }
 
 // Describes how to match a given string. Match is case-sensitive.
@@ -614,6 +724,7 @@ type PeerAuthenticationMethod struct {
 	// Types that are valid to be assigned to Params:
 	//	*PeerAuthenticationMethod_Mtls
 	//	*PeerAuthenticationMethod_Jwt
+	//	*PeerAuthenticationMethod_Use
 	Params               isPeerAuthenticationMethod_Params `protobuf_oneof:"params"`
 	XXX_NoUnkeyedLiteral struct{}                          `json:"-"`
 	XXX_unrecognized     []byte                            `json:"-"`
@@ -665,9 +776,13 @@ type PeerAuthenticationMethod_Mtls struct {
 type PeerAuthenticationMethod_Jwt struct {
 	Jwt *Jwt `protobuf:"bytes,2,opt,name=jwt,proto3,oneof"`
 }
+type PeerAuthenticationMethod_Use struct {
+	Use string `protobuf:"bytes,3,opt,name=use,proto3,oneof"`
+}
 
 func (*PeerAuthenticationMethod_Mtls) isPeerAuthenticationMethod_Params() {}
 func (*PeerAuthenticationMethod_Jwt) isPeerAuthenticationMethod_Params()  {}
+func (*PeerAuthenticationMethod_Use) isPeerAuthenticationMethod_Params()  {}
 
 func (m *PeerAuthenticationMethod) GetParams() isPeerAuthenticationMethod_Params {
 	if m != nil {
@@ -690,11 +805,19 @@ func (m *PeerAuthenticationMethod) GetJwt() *Jwt {
 	return nil
 }
 
+func (m *PeerAuthenticationMethod) GetUse() string {
+	if x, ok := m.GetParams().(*PeerAuthenticationMethod_Use); ok {
+		return x.Use
+	}
+	return ""
+}
+
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*PeerAuthenticationMethod) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _PeerAuthenticationMethod_OneofMarshaler, _PeerAuthenticationMethod_OneofUnmarshaler, _PeerAuthenticationMethod_OneofSizer, []interface{}{
 		(*PeerAuthenticationMethod_Mtls)(nil),
 		(*PeerAuthenticationMethod_Jwt)(nil),
+		(*PeerAuthenticationMethod_Use)(nil),
 	}
 }
 
@@ -712,6 +835,9 @@ func _PeerAuthenticationMethod_OneofMarshaler(msg proto.Message, b *proto.Buffer
 		if err := b.EncodeMessage(x.Jwt); err != nil {
 			return err
 		}
+	case *PeerAuthenticationMethod_Use:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		_ = b.EncodeStringBytes(x.Use)
 	case nil:
 	default:
 		return fmt.Errorf("PeerAuthenticationMethod.Params has unexpected type %T", x)
@@ -738,6 +864,13 @@ func _PeerAuthenticationMethod_OneofUnmarshaler(msg proto.Message, tag, wire int
 		err := b.DecodeMessage(msg)
 		m.Params = &PeerAuthenticationMethod_Jwt{msg}
 		return true, err
+	case 3: // params.use
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.Params = &PeerAuthenticationMethod_Use{x}
+		return true, err
 	default:
 		return false, nil
 	}
@@ -757,6 +890,10 @@ func _PeerAuthenticationMethod_OneofSizer(msg proto.Message) (n int) {
 		n += 1 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
+	case *PeerAuthenticationMethod_Use:
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(len(x.Use)))
+		n += len(x.Use)
 	case nil:
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
@@ -769,7 +906,10 @@ func _PeerAuthenticationMethod_OneofSizer(msg proto.Message) (n int) {
 // Currently, only JWT is supported for origin authentication.
 type OriginAuthenticationMethod struct {
 	// Jwt params for the method.
-	Jwt                  *Jwt     `protobuf:"bytes,1,opt,name=jwt,proto3" json:"jwt,omitempty"`
+	Jwt *Jwt `protobuf:"bytes,1,opt,name=jwt,proto3" json:"jwt,omitempty"`
+	// $hide_from_docs
+	// Set if using an AuthnMethod. This option is not yet available.
+	Use                  string   `protobuf:"bytes,2,opt,name=use,proto3" json:"use,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -813,6 +953,13 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 		return m.Jwt
 	}
 	return nil
+}
+
+func (m *OriginAuthenticationMethod) GetUse() string {
+	if m != nil {
+		return m.Use
+	}
+	return ""
 }
 
 // Policy defines what authentication methods can be accepted on workload(s),
@@ -1238,9 +1385,635 @@ func _PortSelector_OneofSizer(msg proto.Message) (n int) {
 	return n
 }
 
+// $hide_from_docs
+// This is forked from message Server.TLSOptions in networking/v1alpha3/gateway.proto
+// to avoid a direct dependency from authn API on networking API (TLS authn method
+// may evolve independently from networking TLS API). Moreover, message Server.TLSOptions
+// is defined inside of the message Server.
+// TLSOptions configures the TLS authn method.
+type TLSOptions struct {
+	// If set to true, the load balancer will send a 301 redirect for all
+	// http connections, asking the clients to use HTTPS.
+	HttpsRedirect bool `protobuf:"varint,1,opt,name=https_redirect,json=httpsRedirect,proto3" json:"https_redirect,omitempty"`
+	// The value of this field determines how TLS is enforced.
+	Mode TLSOptions_TLSmode `protobuf:"varint,2,opt,name=mode,proto3,enum=istio.authentication.v1alpha1.TLSOptions_TLSmode" json:"mode,omitempty"`
+	// REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
+	// holding the server-side TLS certificate to use.
+	ServerCertificate string `protobuf:"bytes,3,opt,name=server_certificate,json=serverCertificate,proto3" json:"server_certificate,omitempty"`
+	// REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
+	// holding the server's private key.
+	PrivateKey string `protobuf:"bytes,4,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
+	// REQUIRED if mode is `MUTUAL`. The path to a file containing
+	// certificate authority certificates to use in verifying a presented
+	// client side certificate.
+	CaCertificates string `protobuf:"bytes,5,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
+	// A list of alternate names to verify the subject identity in the
+	// certificate presented by the client.
+	SubjectAltNames []string `protobuf:"bytes,6,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
+	// Optional: Minimum TLS protocol version.
+	MinProtocolVersion TLSOptions_TLSProtocol `protobuf:"varint,7,opt,name=min_protocol_version,json=minProtocolVersion,proto3,enum=istio.authentication.v1alpha1.TLSOptions_TLSProtocol" json:"min_protocol_version,omitempty"`
+	// Optional: Maximum TLS protocol version.
+	MaxProtocolVersion TLSOptions_TLSProtocol `protobuf:"varint,8,opt,name=max_protocol_version,json=maxProtocolVersion,proto3,enum=istio.authentication.v1alpha1.TLSOptions_TLSProtocol" json:"max_protocol_version,omitempty"`
+	// Optional: If specified, only support the specified cipher list.
+	// Otherwise default to the default cipher list supported by Envoy.
+	CipherSuites []string `protobuf:"bytes,9,rep,name=cipher_suites,json=cipherSuites,proto3" json:"cipher_suites,omitempty"`
+	// Optional: If specified, Envoy (with SDS enabled) uses the specified name
+	// as the SDS secret config name to call the SDS server, to retrieve the TLS key and
+	// certificate. Otherwise, Envoy uses the TLS key and certificate configured
+	// in TLSOptions.
+	SdsName              string   `protobuf:"bytes,10,opt,name=sds_name,json=sdsName,proto3" json:"sds_name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *TLSOptions) Reset()         { *m = TLSOptions{} }
+func (m *TLSOptions) String() string { return proto.CompactTextString(m) }
+func (*TLSOptions) ProtoMessage()    {}
+func (*TLSOptions) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30ec3f7cef93301a, []int{8}
+}
+func (m *TLSOptions) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TLSOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_TLSOptions.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *TLSOptions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TLSOptions.Merge(m, src)
+}
+func (m *TLSOptions) XXX_Size() int {
+	return m.Size()
+}
+func (m *TLSOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_TLSOptions.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TLSOptions proto.InternalMessageInfo
+
+func (m *TLSOptions) GetHttpsRedirect() bool {
+	if m != nil {
+		return m.HttpsRedirect
+	}
+	return false
+}
+
+func (m *TLSOptions) GetMode() TLSOptions_TLSmode {
+	if m != nil {
+		return m.Mode
+	}
+	return TLSOptions_SIMPLE
+}
+
+func (m *TLSOptions) GetServerCertificate() string {
+	if m != nil {
+		return m.ServerCertificate
+	}
+	return ""
+}
+
+func (m *TLSOptions) GetPrivateKey() string {
+	if m != nil {
+		return m.PrivateKey
+	}
+	return ""
+}
+
+func (m *TLSOptions) GetCaCertificates() string {
+	if m != nil {
+		return m.CaCertificates
+	}
+	return ""
+}
+
+func (m *TLSOptions) GetSubjectAltNames() []string {
+	if m != nil {
+		return m.SubjectAltNames
+	}
+	return nil
+}
+
+func (m *TLSOptions) GetMinProtocolVersion() TLSOptions_TLSProtocol {
+	if m != nil {
+		return m.MinProtocolVersion
+	}
+	return TLSOptions_TLS_AUTO
+}
+
+func (m *TLSOptions) GetMaxProtocolVersion() TLSOptions_TLSProtocol {
+	if m != nil {
+		return m.MaxProtocolVersion
+	}
+	return TLSOptions_TLS_AUTO
+}
+
+func (m *TLSOptions) GetCipherSuites() []string {
+	if m != nil {
+		return m.CipherSuites
+	}
+	return nil
+}
+
+func (m *TLSOptions) GetSdsName() string {
+	if m != nil {
+		return m.SdsName
+	}
+	return ""
+}
+
+// $hide_from_docs
+// Location defines an input/output location.
+type Location struct {
+	// Types that are valid to be assigned to Location:
+	//	*Location_Header
+	//	*Location_GrpcAttributeName
+	//	*Location_DynamicMetadataAttributeName
+	Location             isLocation_Location `protobuf_oneof:"location"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
+}
+
+func (m *Location) Reset()         { *m = Location{} }
+func (m *Location) String() string { return proto.CompactTextString(m) }
+func (*Location) ProtoMessage()    {}
+func (*Location) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30ec3f7cef93301a, []int{9}
+}
+func (m *Location) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Location) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Location.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Location) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Location.Merge(m, src)
+}
+func (m *Location) XXX_Size() int {
+	return m.Size()
+}
+func (m *Location) XXX_DiscardUnknown() {
+	xxx_messageInfo_Location.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Location proto.InternalMessageInfo
+
+type isLocation_Location interface {
+	isLocation_Location()
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type Location_Header struct {
+	Header string `protobuf:"bytes,1,opt,name=header,proto3,oneof"`
+}
+type Location_GrpcAttributeName struct {
+	GrpcAttributeName string `protobuf:"bytes,2,opt,name=grpc_attribute_name,json=grpcAttributeName,proto3,oneof"`
+}
+type Location_DynamicMetadataAttributeName struct {
+	DynamicMetadataAttributeName string `protobuf:"bytes,3,opt,name=dynamic_metadata_attribute_name,json=dynamicMetadataAttributeName,proto3,oneof"`
+}
+
+func (*Location_Header) isLocation_Location()                       {}
+func (*Location_GrpcAttributeName) isLocation_Location()            {}
+func (*Location_DynamicMetadataAttributeName) isLocation_Location() {}
+
+func (m *Location) GetLocation() isLocation_Location {
+	if m != nil {
+		return m.Location
+	}
+	return nil
+}
+
+func (m *Location) GetHeader() string {
+	if x, ok := m.GetLocation().(*Location_Header); ok {
+		return x.Header
+	}
+	return ""
+}
+
+func (m *Location) GetGrpcAttributeName() string {
+	if x, ok := m.GetLocation().(*Location_GrpcAttributeName); ok {
+		return x.GrpcAttributeName
+	}
+	return ""
+}
+
+func (m *Location) GetDynamicMetadataAttributeName() string {
+	if x, ok := m.GetLocation().(*Location_DynamicMetadataAttributeName); ok {
+		return x.DynamicMetadataAttributeName
+	}
+	return ""
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*Location) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _Location_OneofMarshaler, _Location_OneofUnmarshaler, _Location_OneofSizer, []interface{}{
+		(*Location_Header)(nil),
+		(*Location_GrpcAttributeName)(nil),
+		(*Location_DynamicMetadataAttributeName)(nil),
+	}
+}
+
+func _Location_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*Location)
+	// location
+	switch x := m.Location.(type) {
+	case *Location_Header:
+		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
+		_ = b.EncodeStringBytes(x.Header)
+	case *Location_GrpcAttributeName:
+		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
+		_ = b.EncodeStringBytes(x.GrpcAttributeName)
+	case *Location_DynamicMetadataAttributeName:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		_ = b.EncodeStringBytes(x.DynamicMetadataAttributeName)
+	case nil:
+	default:
+		return fmt.Errorf("Location.Location has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _Location_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*Location)
+	switch tag {
+	case 1: // location.header
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.Location = &Location_Header{x}
+		return true, err
+	case 2: // location.grpc_attribute_name
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.Location = &Location_GrpcAttributeName{x}
+		return true, err
+	case 3: // location.dynamic_metadata_attribute_name
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.Location = &Location_DynamicMetadataAttributeName{x}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _Location_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*Location)
+	// location
+	switch x := m.Location.(type) {
+	case *Location_Header:
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(len(x.Header)))
+		n += len(x.Header)
+	case *Location_GrpcAttributeName:
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(len(x.GrpcAttributeName)))
+		n += len(x.GrpcAttributeName)
+	case *Location_DynamicMetadataAttributeName:
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(len(x.DynamicMetadataAttributeName)))
+		n += len(x.DynamicMetadataAttributeName)
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+// $hide_from_docs
+// Delegate the authentication to a remote service.
+type Delegate struct {
+	// The type of credential, which should be recognizable to the delegated
+	// authentication service and dictates how the authentication requests
+	// will be sent and handled by the remote service.
+	Type Delegate_Type `protobuf:"varint,1,opt,name=type,proto3,enum=istio.authentication.v1alpha1.Delegate_Type" json:"type,omitempty"`
+	// The remote authn service endpoint
+	Uri string `protobuf:"bytes,2,opt,name=uri,proto3" json:"uri,omitempty"`
+	// input specifies the input for the delegated authn request.
+	// It contains the input data required by the authn service and can be specific
+	// to a type of authentication. For example, to authenticate an API key,
+	// following input may be needed:
+	//  string secret_name = 3;
+	//  string secret_type = 4;
+	Input *types.Struct `protobuf:"bytes,3,opt,name=input,proto3" json:"input,omitempty"`
+	// Optional: if the delegated authn service does not specify where to put the
+	// output, this field is used to specify the output location.
+	OutputLocation       *Location `protobuf:"bytes,5,opt,name=output_location,json=outputLocation,proto3" json:"output_location,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *Delegate) Reset()         { *m = Delegate{} }
+func (m *Delegate) String() string { return proto.CompactTextString(m) }
+func (*Delegate) ProtoMessage()    {}
+func (*Delegate) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30ec3f7cef93301a, []int{10}
+}
+func (m *Delegate) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Delegate) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Delegate.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Delegate) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Delegate.Merge(m, src)
+}
+func (m *Delegate) XXX_Size() int {
+	return m.Size()
+}
+func (m *Delegate) XXX_DiscardUnknown() {
+	xxx_messageInfo_Delegate.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Delegate proto.InternalMessageInfo
+
+func (m *Delegate) GetType() Delegate_Type {
+	if m != nil {
+		return m.Type
+	}
+	return Delegate_RC_TOKEN
+}
+
+func (m *Delegate) GetUri() string {
+	if m != nil {
+		return m.Uri
+	}
+	return ""
+}
+
+func (m *Delegate) GetInput() *types.Struct {
+	if m != nil {
+		return m.Input
+	}
+	return nil
+}
+
+func (m *Delegate) GetOutputLocation() *Location {
+	if m != nil {
+		return m.OutputLocation
+	}
+	return nil
+}
+
+// $hide_from_docs
+// AuthnMethod defines an authentication method.
+type AuthnMethod struct {
+	// Types that are valid to be assigned to Method:
+	//	*AuthnMethod_Mtls
+	//	*AuthnMethod_Jwt
+	//	*AuthnMethod_Tls
+	//	*AuthnMethod_Delegate
+	Method               isAuthnMethod_Method `protobuf_oneof:"method"`
+	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
+	XXX_unrecognized     []byte               `json:"-"`
+	XXX_sizecache        int32                `json:"-"`
+}
+
+func (m *AuthnMethod) Reset()         { *m = AuthnMethod{} }
+func (m *AuthnMethod) String() string { return proto.CompactTextString(m) }
+func (*AuthnMethod) ProtoMessage()    {}
+func (*AuthnMethod) Descriptor() ([]byte, []int) {
+	return fileDescriptor_30ec3f7cef93301a, []int{11}
+}
+func (m *AuthnMethod) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AuthnMethod) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AuthnMethod.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AuthnMethod) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AuthnMethod.Merge(m, src)
+}
+func (m *AuthnMethod) XXX_Size() int {
+	return m.Size()
+}
+func (m *AuthnMethod) XXX_DiscardUnknown() {
+	xxx_messageInfo_AuthnMethod.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AuthnMethod proto.InternalMessageInfo
+
+type isAuthnMethod_Method interface {
+	isAuthnMethod_Method()
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type AuthnMethod_Mtls struct {
+	Mtls *MutualTls `protobuf:"bytes,1,opt,name=mtls,proto3,oneof"`
+}
+type AuthnMethod_Jwt struct {
+	Jwt *Jwt `protobuf:"bytes,2,opt,name=jwt,proto3,oneof"`
+}
+type AuthnMethod_Tls struct {
+	Tls *TLSOptions `protobuf:"bytes,3,opt,name=tls,proto3,oneof"`
+}
+type AuthnMethod_Delegate struct {
+	Delegate *Delegate `protobuf:"bytes,4,opt,name=delegate,proto3,oneof"`
+}
+
+func (*AuthnMethod_Mtls) isAuthnMethod_Method()     {}
+func (*AuthnMethod_Jwt) isAuthnMethod_Method()      {}
+func (*AuthnMethod_Tls) isAuthnMethod_Method()      {}
+func (*AuthnMethod_Delegate) isAuthnMethod_Method() {}
+
+func (m *AuthnMethod) GetMethod() isAuthnMethod_Method {
+	if m != nil {
+		return m.Method
+	}
+	return nil
+}
+
+func (m *AuthnMethod) GetMtls() *MutualTls {
+	if x, ok := m.GetMethod().(*AuthnMethod_Mtls); ok {
+		return x.Mtls
+	}
+	return nil
+}
+
+func (m *AuthnMethod) GetJwt() *Jwt {
+	if x, ok := m.GetMethod().(*AuthnMethod_Jwt); ok {
+		return x.Jwt
+	}
+	return nil
+}
+
+func (m *AuthnMethod) GetTls() *TLSOptions {
+	if x, ok := m.GetMethod().(*AuthnMethod_Tls); ok {
+		return x.Tls
+	}
+	return nil
+}
+
+func (m *AuthnMethod) GetDelegate() *Delegate {
+	if x, ok := m.GetMethod().(*AuthnMethod_Delegate); ok {
+		return x.Delegate
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*AuthnMethod) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _AuthnMethod_OneofMarshaler, _AuthnMethod_OneofUnmarshaler, _AuthnMethod_OneofSizer, []interface{}{
+		(*AuthnMethod_Mtls)(nil),
+		(*AuthnMethod_Jwt)(nil),
+		(*AuthnMethod_Tls)(nil),
+		(*AuthnMethod_Delegate)(nil),
+	}
+}
+
+func _AuthnMethod_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*AuthnMethod)
+	// method
+	switch x := m.Method.(type) {
+	case *AuthnMethod_Mtls:
+		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Mtls); err != nil {
+			return err
+		}
+	case *AuthnMethod_Jwt:
+		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Jwt); err != nil {
+			return err
+		}
+	case *AuthnMethod_Tls:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Tls); err != nil {
+			return err
+		}
+	case *AuthnMethod_Delegate:
+		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Delegate); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("AuthnMethod.Method has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _AuthnMethod_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*AuthnMethod)
+	switch tag {
+	case 1: // method.mtls
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(MutualTls)
+		err := b.DecodeMessage(msg)
+		m.Method = &AuthnMethod_Mtls{msg}
+		return true, err
+	case 2: // method.jwt
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(Jwt)
+		err := b.DecodeMessage(msg)
+		m.Method = &AuthnMethod_Jwt{msg}
+		return true, err
+	case 3: // method.tls
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(TLSOptions)
+		err := b.DecodeMessage(msg)
+		m.Method = &AuthnMethod_Tls{msg}
+		return true, err
+	case 4: // method.delegate
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(Delegate)
+		err := b.DecodeMessage(msg)
+		m.Method = &AuthnMethod_Delegate{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _AuthnMethod_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*AuthnMethod)
+	// method
+	switch x := m.Method.(type) {
+	case *AuthnMethod_Mtls:
+		s := proto.Size(x.Mtls)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *AuthnMethod_Jwt:
+		s := proto.Size(x.Jwt)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *AuthnMethod_Tls:
+		s := proto.Size(x.Tls)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *AuthnMethod_Delegate:
+		s := proto.Size(x.Delegate)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
 func init() {
 	proto.RegisterEnum("istio.authentication.v1alpha1.PrincipalBinding", PrincipalBinding_name, PrincipalBinding_value)
 	proto.RegisterEnum("istio.authentication.v1alpha1.MutualTls_Mode", MutualTls_Mode_name, MutualTls_Mode_value)
+	proto.RegisterEnum("istio.authentication.v1alpha1.TLSOptions_TLSmode", TLSOptions_TLSmode_name, TLSOptions_TLSmode_value)
+	proto.RegisterEnum("istio.authentication.v1alpha1.TLSOptions_TLSProtocol", TLSOptions_TLSProtocol_name, TLSOptions_TLSProtocol_value)
+	proto.RegisterEnum("istio.authentication.v1alpha1.Delegate_Type", Delegate_Type_name, Delegate_Type_value)
 	proto.RegisterType((*StringMatch)(nil), "istio.authentication.v1alpha1.StringMatch")
 	proto.RegisterType((*MutualTls)(nil), "istio.authentication.v1alpha1.MutualTls")
 	proto.RegisterType((*Jwt)(nil), "istio.authentication.v1alpha1.Jwt")
@@ -1251,6 +2024,10 @@ func init() {
 	proto.RegisterType((*TargetSelector)(nil), "istio.authentication.v1alpha1.TargetSelector")
 	proto.RegisterMapType((map[string]string)(nil), "istio.authentication.v1alpha1.TargetSelector.LabelsEntry")
 	proto.RegisterType((*PortSelector)(nil), "istio.authentication.v1alpha1.PortSelector")
+	proto.RegisterType((*TLSOptions)(nil), "istio.authentication.v1alpha1.TLSOptions")
+	proto.RegisterType((*Location)(nil), "istio.authentication.v1alpha1.Location")
+	proto.RegisterType((*Delegate)(nil), "istio.authentication.v1alpha1.Delegate")
+	proto.RegisterType((*AuthnMethod)(nil), "istio.authentication.v1alpha1.AuthnMethod")
 }
 
 func init() {
@@ -1258,60 +2035,96 @@ func init() {
 }
 
 var fileDescriptor_30ec3f7cef93301a = []byte{
-	// 847 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x55, 0xc1, 0x6e, 0x23, 0x45,
-	0x10, 0xcd, 0x64, 0xec, 0x89, 0x5d, 0x4e, 0x2c, 0xd3, 0x5a, 0xad, 0x86, 0xc0, 0x86, 0x68, 0xb4,
-	0x07, 0x6b, 0x81, 0x31, 0x6b, 0x10, 0xb0, 0x1c, 0x90, 0x62, 0x64, 0x36, 0x5e, 0x61, 0xe2, 0x6d,
-	0x7b, 0x39, 0x20, 0xa4, 0x51, 0xc7, 0xee, 0xb5, 0xdb, 0xdb, 0x9e, 0x19, 0x75, 0xf7, 0xac, 0xe3,
-	0x13, 0x9f, 0xc0, 0x0f, 0xf0, 0x07, 0x1c, 0x11, 0xff, 0xc0, 0x91, 0x4f, 0x40, 0xf9, 0x07, 0xee,
-	0xa8, 0xbb, 0x67, 0x88, 0xbd, 0x22, 0x4c, 0xb8, 0xd5, 0xab, 0x9a, 0x7a, 0x55, 0xf3, 0xba, 0xba,
-	0x1a, 0x1e, 0x92, 0x4c, 0x2d, 0x68, 0xac, 0xd8, 0x94, 0x28, 0x96, 0xc4, 0x9d, 0xd7, 0x8f, 0x09,
-	0x4f, 0x17, 0xe4, 0x71, 0x27, 0x4d, 0x38, 0x9b, 0x6e, 0xc2, 0x54, 0x24, 0x2a, 0x41, 0x0f, 0x98,
-	0x54, 0x2c, 0x09, 0x77, 0xbf, 0x0d, 0x8b, 0x6f, 0x83, 0x1f, 0xa1, 0x31, 0x56, 0x82, 0xc5, 0xf3,
-	0x21, 0x51, 0xd3, 0x05, 0xba, 0x0f, 0x55, 0x7a, 0x45, 0xa6, 0xca, 0x77, 0x4e, 0x9d, 0x76, 0xfd,
-	0x7c, 0x0f, 0x5b, 0x88, 0x7c, 0xf0, 0x52, 0x41, 0x5f, 0xb2, 0x2b, 0x7f, 0x3f, 0x0f, 0xe4, 0x58,
-	0x47, 0x64, 0xf6, 0x52, 0x47, 0xdc, 0x22, 0x62, 0xb1, 0xe6, 0x12, 0x74, 0x4e, 0xaf, 0xfc, 0x4a,
-	0xc1, 0x65, 0x60, 0xef, 0x10, 0x60, 0xa5, 0x8b, 0x45, 0x6a, 0x93, 0xd2, 0xe0, 0x27, 0x07, 0xea,
-	0xc3, 0x4c, 0x65, 0x84, 0x4f, 0xb8, 0x44, 0xef, 0x40, 0x9d, 0x70, 0x9e, 0xac, 0x23, 0xc5, 0xa5,
-	0xe9, 0xa1, 0x86, 0x6b, 0xc6, 0xa1, 0x83, 0x67, 0x50, 0x59, 0x25, 0x33, 0x6a, 0x5a, 0x68, 0x76,
-	0x3f, 0x0c, 0xff, 0xf3, 0xcf, 0xc2, 0x7f, 0x48, 0xc3, 0x61, 0x32, 0xa3, 0xd8, 0xa4, 0x06, 0x01,
-	0x54, 0x34, 0x42, 0x00, 0xde, 0x78, 0x82, 0x07, 0x5f, 0x4d, 0x5a, 0x7b, 0xa8, 0x09, 0x30, 0xea,
-	0xe3, 0xe1, 0x60, 0x3c, 0x1e, 0x7c, 0xd7, 0x6f, 0x39, 0xc1, 0x6f, 0x2e, 0xb8, 0xcf, 0xd6, 0x0a,
-	0xdd, 0x07, 0x8f, 0x49, 0x99, 0x51, 0x61, 0xc5, 0xc0, 0x39, 0x42, 0xef, 0x42, 0x9d, 0x64, 0x33,
-	0x46, 0xe3, 0x29, 0x95, 0xfe, 0xfe, 0xa9, 0xdb, 0xae, 0xe3, 0x1b, 0x07, 0x7a, 0x1b, 0x6a, 0xcb,
-	0xf5, 0x2b, 0x19, 0x65, 0x82, 0x59, 0x45, 0xf0, 0x81, 0xc6, 0x2f, 0x04, 0x43, 0x08, 0x2a, 0xda,
-	0xf4, 0xc1, 0xb8, 0x8d, 0x8d, 0xde, 0x83, 0xc6, 0x72, 0xad, 0xa2, 0x05, 0x25, 0x33, 0x2a, 0xa4,
-	0xef, 0x19, 0x3a, 0x58, 0xae, 0xd5, 0xb9, 0xf5, 0xa0, 0x07, 0xa0, 0x51, 0x94, 0x12, 0x41, 0x56,
-	0xd2, 0x3f, 0xb0, 0xe5, 0x96, 0x6b, 0x35, 0x32, 0x0e, 0x34, 0x86, 0x23, 0x25, 0xd8, 0x7c, 0x4e,
-	0x45, 0x24, 0x32, 0x4e, 0xa5, 0x5f, 0x3f, 0x75, 0xdb, 0x8d, 0x6e, 0x58, 0x22, 0xce, 0xb3, 0xb5,
-	0x0a, 0x27, 0x36, 0x0f, 0x67, 0x9c, 0xe2, 0x43, 0x75, 0x03, 0xe4, 0xf1, 0xaf, 0x0e, 0x34, 0xb6,
-	0xa2, 0xe8, 0x39, 0x34, 0xe9, 0xd5, 0x94, 0x67, 0x33, 0x3a, 0x8b, 0x52, 0xa2, 0x16, 0xfa, 0x68,
-	0x74, 0x95, 0x47, 0x25, 0x55, 0xb6, 0x26, 0x0b, 0x1f, 0x15, 0x0c, 0x23, 0x4d, 0xa0, 0x29, 0x59,
-	0xbc, 0x43, 0xb9, 0xff, 0xff, 0x29, 0x0b, 0x06, 0x43, 0x19, 0xfc, 0xec, 0x80, 0x3f, 0xa2, 0x54,
-	0x9c, 0xed, 0xa4, 0x0e, 0xa9, 0x5a, 0x24, 0x33, 0xf4, 0x25, 0x54, 0x56, 0xc5, 0x4c, 0x35, 0xba,
-	0xed, 0xbb, 0xce, 0xce, 0xf9, 0x1e, 0x36, 0x79, 0xe8, 0x53, 0x70, 0x97, 0x6b, 0x65, 0x46, 0xaf,
-	0xd1, 0x0d, 0xca, 0xd5, 0x3d, 0xdf, 0xc3, 0x3a, 0xa1, 0x57, 0x03, 0xcf, 0x1e, 0x5d, 0x80, 0xe1,
-	0xf8, 0x42, 0xb0, 0x39, 0x8b, 0xff, 0xb5, 0xbf, 0x4f, 0x2c, 0xbf, 0x73, 0x57, 0x7e, 0xc3, 0x1e,
-	0xfc, 0xe2, 0x82, 0x37, 0x32, 0xb7, 0x1d, 0x3d, 0x85, 0x03, 0x45, 0xc4, 0x9c, 0xaa, 0xe2, 0x70,
-	0xca, 0xee, 0xc7, 0xc4, 0x7c, 0x3d, 0xa6, 0x9c, 0x4e, 0x55, 0x22, 0x70, 0x91, 0x8d, 0x86, 0x50,
-	0x4d, 0xa9, 0x9e, 0x45, 0x7b, 0x20, 0x9f, 0x95, 0xd0, 0xdc, 0xa6, 0x38, 0xb6, 0x2c, 0xa8, 0x0d,
-	0x2d, 0x6d, 0x44, 0x4c, 0x46, 0x49, 0xaa, 0xc3, 0x84, 0x9b, 0x7b, 0x51, 0xc3, 0x4d, 0xed, 0x1f,
-	0xc8, 0x8b, 0xdc, 0x8b, 0xc6, 0x70, 0x90, 0x18, 0x81, 0xa4, 0x5f, 0x31, 0xa5, 0x9f, 0x94, 0x94,
-	0xbe, 0x5d, 0x4e, 0x5c, 0x30, 0xa1, 0x0f, 0x00, 0x59, 0x73, 0xa7, 0x81, 0xaa, 0x69, 0xa0, 0x65,
-	0x23, 0x5b, 0x2d, 0xfc, 0x00, 0x6f, 0xa5, 0x82, 0xc5, 0x53, 0x96, 0x12, 0x1e, 0x5d, 0xb2, 0x78,
-	0xc6, 0xe2, 0xb9, 0xef, 0x99, 0x75, 0xd3, 0x29, 0xd3, 0xa1, 0xc8, 0xeb, 0xd9, 0x34, 0xdc, 0x4a,
-	0xdf, 0xf0, 0x04, 0x7f, 0x39, 0xd0, 0xdc, 0x55, 0x5d, 0xaf, 0x84, 0x98, 0xac, 0x68, 0xbe, 0x61,
-	0x8c, 0x8d, 0x9e, 0x83, 0xc7, 0xc9, 0x25, 0xe5, 0xd2, 0x77, 0xef, 0x24, 0xc3, 0x2e, 0x65, 0xf8,
-	0x8d, 0xc9, 0xed, 0xc7, 0x4a, 0x6c, 0x70, 0x4e, 0x84, 0xce, 0xa0, 0x9a, 0x26, 0x42, 0x15, 0x67,
-	0xfa, 0x7e, 0xd9, 0xbf, 0x24, 0xe2, 0x66, 0x30, 0x6c, 0xe6, 0xf1, 0x13, 0x68, 0x6c, 0x31, 0xa3,
-	0x16, 0xb8, 0xaf, 0xe8, 0x26, 0xef, 0x5b, 0x9b, 0xe8, 0x1e, 0x54, 0x5f, 0x13, 0x9e, 0xd9, 0xf5,
-	0x5c, 0xc7, 0x16, 0x7c, 0xb1, 0xff, 0xb9, 0x13, 0x7c, 0x0d, 0x87, 0xdb, 0x8c, 0xfa, 0xc9, 0x88,
-	0xb3, 0xd5, 0x65, 0xbe, 0x58, 0x8f, 0xf4, 0x93, 0x61, 0x31, 0xba, 0x97, 0xcb, 0x51, 0x3c, 0x32,
-	0x06, 0xf5, 0x3c, 0xa8, 0xe8, 0x1e, 0x1e, 0x7d, 0x04, 0xad, 0x37, 0x55, 0x46, 0x87, 0x50, 0x7b,
-	0x31, 0xee, 0x47, 0xa3, 0x7e, 0x1f, 0xdb, 0x55, 0xae, 0xd1, 0x05, 0x1e, 0x3c, 0x1d, 0x7c, 0xdb,
-	0x72, 0x7a, 0xdd, 0xdf, 0xaf, 0x4f, 0x9c, 0x3f, 0xae, 0x4f, 0x9c, 0x3f, 0xaf, 0x4f, 0x9c, 0xef,
-	0x1f, 0xda, 0xbf, 0x66, 0x49, 0x87, 0xa4, 0xac, 0x73, 0xcb, 0xeb, 0x79, 0xe9, 0x99, 0x77, 0xf3,
-	0xe3, 0xbf, 0x03, 0x00, 0x00, 0xff, 0xff, 0xc9, 0x44, 0x8e, 0xc6, 0x5f, 0x07, 0x00, 0x00,
+	// 1422 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x57, 0x5f, 0x6f, 0x1b, 0x37,
+	0x12, 0xf7, 0x4a, 0xb2, 0x2c, 0x8d, 0x6c, 0x65, 0xcd, 0xcb, 0xe5, 0x74, 0xbe, 0xfc, 0xc3, 0x5e,
+	0x0e, 0xf1, 0xe5, 0x12, 0x39, 0x56, 0xae, 0x7f, 0x52, 0xa0, 0x45, 0xe5, 0x54, 0x8d, 0x95, 0x48,
+	0xb1, 0x42, 0xc9, 0x01, 0x5a, 0x14, 0x58, 0xd0, 0xbb, 0xb4, 0x44, 0x67, 0xb5, 0xbb, 0x20, 0xb9,
+	0x96, 0xfd, 0xd4, 0x8f, 0xd0, 0x97, 0xf6, 0x53, 0xe4, 0xa5, 0x40, 0xd1, 0xef, 0xd0, 0xc7, 0x7c,
+	0x84, 0x22, 0xdf, 0xa1, 0xef, 0x05, 0xc9, 0x5d, 0x4b, 0x72, 0x9b, 0xca, 0x41, 0x1f, 0xfa, 0xc6,
+	0x99, 0xe1, 0xfc, 0x66, 0xf6, 0x37, 0x24, 0x67, 0x16, 0x6e, 0x91, 0x44, 0x8e, 0x68, 0x28, 0x99,
+	0x47, 0x24, 0x8b, 0xc2, 0xad, 0xe3, 0x6d, 0x12, 0xc4, 0x23, 0xb2, 0xbd, 0x15, 0x47, 0x01, 0xf3,
+	0x4e, 0xeb, 0x31, 0x8f, 0x64, 0x84, 0xae, 0x31, 0x21, 0x59, 0x54, 0x9f, 0xdf, 0x5b, 0xcf, 0xf6,
+	0x6e, 0x5c, 0x1d, 0x46, 0xd1, 0x30, 0xa0, 0x5b, 0x7a, 0xf3, 0x41, 0x72, 0xb8, 0x25, 0x24, 0x4f,
+	0x3c, 0x69, 0x9c, 0x9d, 0xaf, 0xa1, 0xd2, 0x97, 0x9c, 0x85, 0xc3, 0x2e, 0x91, 0xde, 0x08, 0x5d,
+	0x81, 0x65, 0x7a, 0x42, 0x3c, 0x59, 0xb3, 0x6e, 0x5a, 0x9b, 0xe5, 0xdd, 0x25, 0x6c, 0x44, 0x54,
+	0x83, 0x62, 0xcc, 0xe9, 0x21, 0x3b, 0xa9, 0xe5, 0x52, 0x43, 0x2a, 0x2b, 0x8b, 0x48, 0x0e, 0x95,
+	0x25, 0x9f, 0x59, 0x8c, 0xac, 0xb0, 0x38, 0x1d, 0xd2, 0x93, 0x5a, 0x21, 0xc3, 0xd2, 0xe2, 0xce,
+	0x2a, 0xc0, 0x58, 0x05, 0x73, 0xe5, 0x69, 0x4c, 0x9d, 0x6f, 0x2c, 0x28, 0x77, 0x13, 0x99, 0x90,
+	0x60, 0x10, 0x08, 0xf4, 0x2f, 0x28, 0x93, 0x20, 0x88, 0x26, 0xae, 0x0c, 0x84, 0xce, 0xa1, 0x84,
+	0x4b, 0x5a, 0xa1, 0x8c, 0x4d, 0x28, 0x8c, 0x23, 0x9f, 0xea, 0x14, 0xaa, 0x8d, 0x7b, 0xf5, 0x3f,
+	0xfc, 0xee, 0xfa, 0x19, 0x68, 0xbd, 0x1b, 0xf9, 0x14, 0x6b, 0x57, 0xc7, 0x81, 0x82, 0x92, 0x10,
+	0x40, 0xb1, 0x3f, 0xc0, 0xed, 0x47, 0x03, 0x7b, 0x09, 0x55, 0x01, 0x7a, 0x2d, 0xdc, 0x6d, 0xf7,
+	0xfb, 0xed, 0x17, 0x2d, 0xdb, 0x72, 0x7e, 0xcc, 0x43, 0xfe, 0xc9, 0x44, 0xa2, 0x2b, 0x50, 0x64,
+	0x42, 0x24, 0x94, 0x1b, 0x32, 0x70, 0x2a, 0xa1, 0xab, 0x50, 0x26, 0x89, 0xcf, 0x68, 0xe8, 0x51,
+	0x51, 0xcb, 0xdd, 0xcc, 0x6f, 0x96, 0xf1, 0x54, 0x81, 0xfe, 0x09, 0xa5, 0xa3, 0xc9, 0x4b, 0xe1,
+	0x26, 0x9c, 0x19, 0x46, 0xf0, 0x8a, 0x92, 0xf7, 0x39, 0x43, 0x08, 0x0a, 0x6a, 0x59, 0x03, 0xad,
+	0xd6, 0x6b, 0x74, 0x03, 0x2a, 0x47, 0x13, 0xe9, 0x8e, 0x28, 0xf1, 0x29, 0x17, 0xb5, 0xa2, 0x86,
+	0x83, 0xa3, 0x89, 0xdc, 0x35, 0x1a, 0x74, 0x0d, 0x94, 0xe4, 0xc6, 0x84, 0x93, 0xb1, 0xa8, 0xad,
+	0x98, 0x70, 0x47, 0x13, 0xd9, 0xd3, 0x0a, 0xd4, 0x87, 0x35, 0xc9, 0xd9, 0x70, 0x48, 0xb9, 0xcb,
+	0x93, 0x80, 0x8a, 0x5a, 0xf9, 0x66, 0x7e, 0xb3, 0xd2, 0xa8, 0x2f, 0x20, 0xe7, 0xc9, 0x44, 0xd6,
+	0x07, 0xc6, 0x0f, 0x27, 0x01, 0xc5, 0xab, 0x72, 0x2a, 0x88, 0x8d, 0x1f, 0x2c, 0xa8, 0xcc, 0x58,
+	0xd1, 0x73, 0xa8, 0xd2, 0x13, 0x2f, 0x48, 0x7c, 0xea, 0xbb, 0x31, 0x91, 0x23, 0x55, 0x1a, 0x15,
+	0xe5, 0xce, 0x82, 0x28, 0x33, 0x27, 0x0b, 0xaf, 0x65, 0x08, 0x3d, 0x05, 0xa0, 0x20, 0x59, 0x38,
+	0x07, 0x99, 0x7b, 0x77, 0xc8, 0x0c, 0x41, 0x43, 0x3a, 0xdf, 0x5b, 0x50, 0xeb, 0x51, 0xca, 0x9b,
+	0x73, 0xae, 0x5d, 0x2a, 0x47, 0x91, 0x8f, 0x3e, 0x81, 0xc2, 0x38, 0x3b, 0x53, 0x95, 0xc6, 0xe6,
+	0x45, 0xcf, 0xce, 0xee, 0x12, 0xd6, 0x7e, 0xe8, 0x7d, 0xc8, 0x1f, 0x4d, 0xa4, 0x3e, 0x7a, 0x95,
+	0x86, 0xb3, 0x98, 0xdd, 0xdd, 0x25, 0xac, 0x1c, 0x10, 0x82, 0x7c, 0x22, 0xe8, 0xd9, 0xdd, 0x50,
+	0xc2, 0x4e, 0x09, 0x8a, 0xa6, 0x9c, 0x8e, 0x0f, 0x1b, 0x7b, 0x9c, 0x0d, 0x59, 0xf8, 0xbb, 0x39,
+	0xff, 0xdf, 0xc4, 0xb4, 0x2e, 0x1a, 0xd3, 0x44, 0xb4, 0x4d, 0x44, 0x7d, 0x4f, 0x75, 0x3c, 0xe7,
+	0x55, 0x1e, 0x8a, 0x3d, 0xfd, 0x62, 0xa0, 0xc7, 0xb0, 0x22, 0x09, 0x1f, 0x52, 0x99, 0x95, 0x70,
+	0xd1, 0x2d, 0x1a, 0xe8, 0xdd, 0x7d, 0x1a, 0x50, 0x4f, 0x46, 0x1c, 0x67, 0xde, 0xa8, 0x0b, 0xcb,
+	0x31, 0x55, 0x27, 0xd6, 0x94, 0xed, 0x83, 0x05, 0x30, 0x6f, 0xab, 0x0b, 0x36, 0x28, 0x68, 0x13,
+	0x6c, 0xb5, 0x70, 0x99, 0x70, 0xa3, 0x58, 0x99, 0x49, 0xa0, 0x39, 0x2b, 0xe1, 0xaa, 0xd2, 0xb7,
+	0xc5, 0x5e, 0xaa, 0x45, 0x7d, 0x58, 0x89, 0x34, 0x65, 0xa2, 0x56, 0xd0, 0xa1, 0x1f, 0x2e, 0x08,
+	0xfd, 0x76, 0x82, 0x71, 0x86, 0x84, 0xee, 0x02, 0x32, 0xcb, 0xb9, 0x04, 0x96, 0x75, 0x02, 0xb6,
+	0xb1, 0xcc, 0xa4, 0xf0, 0x15, 0xac, 0xc7, 0x9c, 0x85, 0x1e, 0x8b, 0x49, 0xe0, 0x1e, 0xb0, 0xd0,
+	0x67, 0xe1, 0xb0, 0x56, 0xd4, 0x8f, 0xd2, 0xd6, 0x22, 0x1e, 0x32, 0xbf, 0x1d, 0xe3, 0x86, 0xed,
+	0xf8, 0x9c, 0xc6, 0xf9, 0xc5, 0x82, 0xea, 0x3c, 0xeb, 0xea, 0xe1, 0x08, 0xc9, 0x98, 0xa6, 0xef,
+	0x90, 0x5e, 0xa3, 0xe7, 0x50, 0x0c, 0xc8, 0x01, 0x0d, 0x44, 0x2d, 0x7f, 0x21, 0x1a, 0xe6, 0x21,
+	0xeb, 0x1d, 0xed, 0xdb, 0x0a, 0x25, 0x3f, 0xc5, 0x29, 0x10, 0x6a, 0xc2, 0x72, 0x1c, 0x71, 0x99,
+	0xd5, 0xf4, 0x7f, 0x8b, 0xbe, 0x25, 0xe2, 0xd3, 0x83, 0x61, 0x3c, 0x37, 0x1e, 0x42, 0x65, 0x06,
+	0x59, 0x9d, 0xc5, 0x97, 0xf4, 0x34, 0xcd, 0x5b, 0x2d, 0xd1, 0x65, 0x58, 0x3e, 0x26, 0x41, 0x92,
+	0x9d, 0x4f, 0x23, 0x7c, 0x94, 0xfb, 0xd0, 0x72, 0x3e, 0x87, 0xd5, 0x59, 0x44, 0xd5, 0x58, 0xc2,
+	0x64, 0x7c, 0x90, 0x3e, 0xbf, 0x6b, 0xaa, 0xb1, 0x18, 0x19, 0x5d, 0x4e, 0xe9, 0xc8, 0x5a, 0x91,
+	0x96, 0x76, 0x8a, 0x50, 0x50, 0x39, 0x38, 0xaf, 0x97, 0x01, 0x06, 0x9d, 0xbe, 0xa9, 0x96, 0x40,
+	0xff, 0x81, 0xea, 0x48, 0xca, 0x58, 0xb8, 0x9c, 0xfa, 0x8c, 0xd3, 0xb4, 0xb5, 0x95, 0xf0, 0x9a,
+	0xd6, 0xe2, 0x54, 0x89, 0x5a, 0x73, 0xbd, 0x65, 0x7b, 0x11, 0x99, 0x67, 0xf8, 0x6a, 0x39, 0x3e,
+	0xeb, 0x2f, 0xe8, 0x1e, 0x20, 0x41, 0xf9, 0x31, 0xe5, 0xae, 0x47, 0xb9, 0x64, 0x87, 0xca, 0x33,
+	0xbd, 0xfd, 0x78, 0xdd, 0x58, 0x1e, 0x4d, 0x0d, 0xea, 0xf5, 0x8f, 0x39, 0x3b, 0x26, 0x92, 0xba,
+	0x8a, 0x27, 0xdd, 0x28, 0x31, 0xa4, 0xaa, 0xa7, 0xf4, 0x14, 0xdd, 0x86, 0x4b, 0x1e, 0x99, 0xc5,
+	0x12, 0xfa, 0x54, 0x96, 0x71, 0xd5, 0x23, 0x33, 0x40, 0x02, 0xdd, 0x81, 0x75, 0x91, 0x1c, 0x1c,
+	0x51, 0x4f, 0xba, 0x24, 0x90, 0xae, 0x62, 0x24, 0xeb, 0x26, 0x97, 0x52, 0x43, 0x33, 0x90, 0xcf,
+	0x94, 0x1a, 0x0d, 0xe1, 0xf2, 0x98, 0x85, 0xae, 0x1e, 0x00, 0xbc, 0x28, 0x70, 0x8f, 0x29, 0x17,
+	0x2c, 0x0a, 0x6b, 0x2b, 0xfa, 0xdb, 0xdf, 0x7b, 0xa7, 0x6f, 0xef, 0xa5, 0x20, 0x18, 0x8d, 0x59,
+	0x98, 0x09, 0x2f, 0x0c, 0xa0, 0x0e, 0x44, 0x4e, 0x7e, 0x1b, 0xa8, 0xf4, 0xe7, 0x02, 0x91, 0x93,
+	0xf3, 0x81, 0xfe, 0x0d, 0x6b, 0x1e, 0x8b, 0x47, 0x94, 0xbb, 0x22, 0x61, 0x32, 0xed, 0x82, 0x65,
+	0xbc, 0x6a, 0x94, 0x7d, 0xad, 0x53, 0x9d, 0x59, 0xf8, 0x42, 0x53, 0x93, 0xb6, 0xe0, 0x15, 0xe1,
+	0x0b, 0x45, 0x89, 0xd3, 0x81, 0x95, 0xb4, 0x8e, 0x7a, 0x32, 0x68, 0x77, 0x7b, 0x9d, 0x96, 0xbd,
+	0xa4, 0xd6, 0xdd, 0xfd, 0xc1, 0x7e, 0xb3, 0x63, 0x5b, 0xe8, 0xef, 0xb0, 0x3e, 0x9d, 0x12, 0xdc,
+	0x54, 0x9d, 0x43, 0x08, 0xaa, 0x33, 0xea, 0x41, 0xa7, 0x6f, 0xe7, 0x9d, 0x3d, 0xa8, 0xcc, 0x24,
+	0x8c, 0x56, 0xa1, 0x34, 0xe8, 0xf4, 0xdd, 0xe6, 0xfe, 0x60, 0xcf, 0x5e, 0x42, 0x15, 0x1d, 0xea,
+	0xc5, 0xb6, 0x7b, 0xdf, 0xb6, 0xa6, 0xc2, 0xb6, 0x9d, 0x9b, 0x0a, 0x0d, 0x3b, 0x3f, 0x15, 0x1e,
+	0xd8, 0x05, 0xe7, 0x95, 0x05, 0xa5, 0x4e, 0x64, 0xf8, 0x51, 0xf7, 0xc2, 0x4c, 0x0b, 0x67, 0x33,
+	0x5a, 0x2a, 0xa3, 0xfb, 0xf0, 0xb7, 0x21, 0x8f, 0x3d, 0x97, 0x48, 0xc9, 0xd9, 0x41, 0x22, 0xa9,
+	0x3b, 0x77, 0x4d, 0xd6, 0x95, 0xb1, 0x99, 0xd9, 0xd4, 0x77, 0xa3, 0xc7, 0x70, 0xc3, 0x3f, 0x0d,
+	0xc9, 0x98, 0x79, 0xee, 0x98, 0x4a, 0xe2, 0x13, 0x49, 0xce, 0x7b, 0x67, 0x9d, 0xeb, 0x6a, 0xba,
+	0xb1, 0x9b, 0xee, 0x9b, 0x03, 0xda, 0x01, 0x28, 0x05, 0x69, 0x82, 0xce, 0xb7, 0x39, 0x28, 0x7d,
+	0x46, 0x03, 0x3a, 0x54, 0x27, 0xfc, 0x53, 0x28, 0xa8, 0x31, 0x4f, 0xe7, 0x5a, 0x6d, 0xdc, 0x5d,
+	0x50, 0xf2, 0xcc, 0xad, 0x3e, 0x38, 0x8d, 0x29, 0xd6, 0x9e, 0xba, 0x9f, 0x71, 0x76, 0xd6, 0xcf,
+	0x38, 0x43, 0xf7, 0x60, 0x99, 0x85, 0x71, 0x22, 0x75, 0x6e, 0x95, 0xc6, 0x3f, 0xea, 0x66, 0xc2,
+	0xad, 0x67, 0x13, 0xae, 0x1a, 0x12, 0x12, 0x4f, 0x62, 0xb3, 0x0b, 0xf5, 0xe0, 0x52, 0x94, 0xc8,
+	0x38, 0x91, 0x6e, 0x96, 0xa2, 0xbe, 0x43, 0x95, 0xc6, 0xed, 0x05, 0xd9, 0x64, 0x94, 0xe3, 0xaa,
+	0xf1, 0xcf, 0x64, 0xe7, 0x01, 0x14, 0x54, 0x82, 0xaa, 0xb2, 0xf8, 0x91, 0x3b, 0xd8, 0x7b, 0xda,
+	0x7a, 0x66, 0x2a, 0xdb, 0xec, 0xb5, 0xdd, 0xa7, 0xad, 0x2f, 0x6c, 0x0b, 0xd9, 0xb0, 0xba, 0xd7,
+	0x6b, 0x3e, 0xdf, 0x6f, 0xa5, 0xe6, 0x9c, 0xf3, 0x5d, 0x0e, 0x2a, 0xaa, 0x0b, 0xfd, 0xd5, 0x13,
+	0xc9, 0xc7, 0x90, 0x97, 0xba, 0x6b, 0x28, 0xbf, 0xff, 0x5e, 0xf8, 0x0e, 0x2a, 0x77, 0x15, 0xb6,
+	0x05, 0x25, 0x3f, 0xad, 0x92, 0x7e, 0xaf, 0x16, 0xd3, 0x98, 0x15, 0x75, 0x77, 0x09, 0x9f, 0xb9,
+	0xaa, 0x19, 0x68, 0xac, 0x79, 0xb8, 0x73, 0x1f, 0xec, 0xf3, 0x5d, 0x51, 0x11, 0xbb, 0xdf, 0x6f,
+	0xb9, 0xbd, 0x56, 0x0b, 0x9b, 0x01, 0x5d, 0x49, 0x7b, 0xb8, 0xfd, 0xb8, 0xfd, 0xcc, 0xb6, 0x76,
+	0x1a, 0x3f, 0xbd, 0xb9, 0x6e, 0xbd, 0x7e, 0x73, 0xdd, 0xfa, 0xf9, 0xcd, 0x75, 0xeb, 0xcb, 0x5b,
+	0x26, 0x3a, 0x8b, 0xb6, 0x48, 0xcc, 0xb6, 0xde, 0xf2, 0xc7, 0x74, 0x50, 0xd4, 0x87, 0xe3, 0xc1,
+	0xaf, 0x01, 0x00, 0x00, 0xff, 0xff, 0xbf, 0x54, 0x85, 0x1d, 0x53, 0x0d, 0x00, 0x00,
 }
 
 func (m *StringMatch) Marshal() (dAtA []byte, err error) {
@@ -1607,6 +2420,14 @@ func (m *PeerAuthenticationMethod_Jwt) MarshalTo(dAtA []byte) (int, error) {
 	}
 	return i, nil
 }
+func (m *PeerAuthenticationMethod_Use) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x1a
+	i++
+	i = encodeVarintPolicy(dAtA, i, uint64(len(m.Use)))
+	i += copy(dAtA[i:], m.Use)
+	return i, nil
+}
 func (m *OriginAuthenticationMethod) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1631,6 +2452,12 @@ func (m *OriginAuthenticationMethod) MarshalTo(dAtA []byte) (int, error) {
 			return 0, err
 		}
 		i += n5
+	}
+	if len(m.Use) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(len(m.Use)))
+		i += copy(dAtA[i:], m.Use)
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -1817,6 +2644,294 @@ func (m *PortSelector_Name) MarshalTo(dAtA []byte) (int, error) {
 	i++
 	i = encodeVarintPolicy(dAtA, i, uint64(len(m.Name)))
 	i += copy(dAtA[i:], m.Name)
+	return i, nil
+}
+func (m *TLSOptions) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TLSOptions) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.HttpsRedirect {
+		dAtA[i] = 0x8
+		i++
+		if m.HttpsRedirect {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	if m.Mode != 0 {
+		dAtA[i] = 0x10
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(m.Mode))
+	}
+	if len(m.ServerCertificate) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(len(m.ServerCertificate)))
+		i += copy(dAtA[i:], m.ServerCertificate)
+	}
+	if len(m.PrivateKey) > 0 {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(len(m.PrivateKey)))
+		i += copy(dAtA[i:], m.PrivateKey)
+	}
+	if len(m.CaCertificates) > 0 {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(len(m.CaCertificates)))
+		i += copy(dAtA[i:], m.CaCertificates)
+	}
+	if len(m.SubjectAltNames) > 0 {
+		for _, s := range m.SubjectAltNames {
+			dAtA[i] = 0x32
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	if m.MinProtocolVersion != 0 {
+		dAtA[i] = 0x38
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(m.MinProtocolVersion))
+	}
+	if m.MaxProtocolVersion != 0 {
+		dAtA[i] = 0x40
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(m.MaxProtocolVersion))
+	}
+	if len(m.CipherSuites) > 0 {
+		for _, s := range m.CipherSuites {
+			dAtA[i] = 0x4a
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	if len(m.SdsName) > 0 {
+		dAtA[i] = 0x52
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(len(m.SdsName)))
+		i += copy(dAtA[i:], m.SdsName)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Location) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Location) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Location != nil {
+		nn7, err := m.Location.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn7
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Location_Header) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0xa
+	i++
+	i = encodeVarintPolicy(dAtA, i, uint64(len(m.Header)))
+	i += copy(dAtA[i:], m.Header)
+	return i, nil
+}
+func (m *Location_GrpcAttributeName) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x12
+	i++
+	i = encodeVarintPolicy(dAtA, i, uint64(len(m.GrpcAttributeName)))
+	i += copy(dAtA[i:], m.GrpcAttributeName)
+	return i, nil
+}
+func (m *Location_DynamicMetadataAttributeName) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x1a
+	i++
+	i = encodeVarintPolicy(dAtA, i, uint64(len(m.DynamicMetadataAttributeName)))
+	i += copy(dAtA[i:], m.DynamicMetadataAttributeName)
+	return i, nil
+}
+func (m *Delegate) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Delegate) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Type != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(m.Type))
+	}
+	if len(m.Uri) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(len(m.Uri)))
+		i += copy(dAtA[i:], m.Uri)
+	}
+	if m.Input != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(m.Input.Size()))
+		n8, err := m.Input.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n8
+	}
+	if m.OutputLocation != nil {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(m.OutputLocation.Size()))
+		n9, err := m.OutputLocation.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n9
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *AuthnMethod) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AuthnMethod) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Method != nil {
+		nn10, err := m.Method.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn10
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *AuthnMethod_Mtls) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Mtls != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(m.Mtls.Size()))
+		n11, err := m.Mtls.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n11
+	}
+	return i, nil
+}
+func (m *AuthnMethod_Jwt) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Jwt != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(m.Jwt.Size()))
+		n12, err := m.Jwt.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n12
+	}
+	return i, nil
+}
+func (m *AuthnMethod_Tls) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Tls != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(m.Tls.Size()))
+		n13, err := m.Tls.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n13
+	}
+	return i, nil
+}
+func (m *AuthnMethod_Delegate) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Delegate != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(m.Delegate.Size()))
+		n14, err := m.Delegate.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n14
+	}
 	return i, nil
 }
 func encodeVarintPolicy(dAtA []byte, offset int, v uint64) int {
@@ -2012,6 +3127,16 @@ func (m *PeerAuthenticationMethod_Jwt) Size() (n int) {
 	}
 	return n
 }
+func (m *PeerAuthenticationMethod_Use) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Use)
+	n += 1 + l + sovPolicy(uint64(l))
+	return n
+}
 func (m *OriginAuthenticationMethod) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2020,6 +3145,10 @@ func (m *OriginAuthenticationMethod) Size() (n int) {
 	_ = l
 	if m.Jwt != nil {
 		l = m.Jwt.Size()
+		n += 1 + l + sovPolicy(uint64(l))
+	}
+	l = len(m.Use)
+	if l > 0 {
 		n += 1 + l + sovPolicy(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
@@ -2129,6 +3258,193 @@ func (m *PortSelector_Name) Size() (n int) {
 	_ = l
 	l = len(m.Name)
 	n += 1 + l + sovPolicy(uint64(l))
+	return n
+}
+func (m *TLSOptions) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HttpsRedirect {
+		n += 2
+	}
+	if m.Mode != 0 {
+		n += 1 + sovPolicy(uint64(m.Mode))
+	}
+	l = len(m.ServerCertificate)
+	if l > 0 {
+		n += 1 + l + sovPolicy(uint64(l))
+	}
+	l = len(m.PrivateKey)
+	if l > 0 {
+		n += 1 + l + sovPolicy(uint64(l))
+	}
+	l = len(m.CaCertificates)
+	if l > 0 {
+		n += 1 + l + sovPolicy(uint64(l))
+	}
+	if len(m.SubjectAltNames) > 0 {
+		for _, s := range m.SubjectAltNames {
+			l = len(s)
+			n += 1 + l + sovPolicy(uint64(l))
+		}
+	}
+	if m.MinProtocolVersion != 0 {
+		n += 1 + sovPolicy(uint64(m.MinProtocolVersion))
+	}
+	if m.MaxProtocolVersion != 0 {
+		n += 1 + sovPolicy(uint64(m.MaxProtocolVersion))
+	}
+	if len(m.CipherSuites) > 0 {
+		for _, s := range m.CipherSuites {
+			l = len(s)
+			n += 1 + l + sovPolicy(uint64(l))
+		}
+	}
+	l = len(m.SdsName)
+	if l > 0 {
+		n += 1 + l + sovPolicy(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Location) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Location != nil {
+		n += m.Location.Size()
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Location_Header) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Header)
+	n += 1 + l + sovPolicy(uint64(l))
+	return n
+}
+func (m *Location_GrpcAttributeName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.GrpcAttributeName)
+	n += 1 + l + sovPolicy(uint64(l))
+	return n
+}
+func (m *Location_DynamicMetadataAttributeName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DynamicMetadataAttributeName)
+	n += 1 + l + sovPolicy(uint64(l))
+	return n
+}
+func (m *Delegate) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Type != 0 {
+		n += 1 + sovPolicy(uint64(m.Type))
+	}
+	l = len(m.Uri)
+	if l > 0 {
+		n += 1 + l + sovPolicy(uint64(l))
+	}
+	if m.Input != nil {
+		l = m.Input.Size()
+		n += 1 + l + sovPolicy(uint64(l))
+	}
+	if m.OutputLocation != nil {
+		l = m.OutputLocation.Size()
+		n += 1 + l + sovPolicy(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *AuthnMethod) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Method != nil {
+		n += m.Method.Size()
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *AuthnMethod_Mtls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Mtls != nil {
+		l = m.Mtls.Size()
+		n += 1 + l + sovPolicy(uint64(l))
+	}
+	return n
+}
+func (m *AuthnMethod_Jwt) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Jwt != nil {
+		l = m.Jwt.Size()
+		n += 1 + l + sovPolicy(uint64(l))
+	}
+	return n
+}
+func (m *AuthnMethod_Tls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Tls != nil {
+		l = m.Tls.Size()
+		n += 1 + l + sovPolicy(uint64(l))
+	}
+	return n
+}
+func (m *AuthnMethod_Delegate) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Delegate != nil {
+		l = m.Delegate.Size()
+		n += 1 + l + sovPolicy(uint64(l))
+	}
 	return n
 }
 
@@ -2921,6 +4237,38 @@ func (m *PeerAuthenticationMethod) Unmarshal(dAtA []byte) error {
 			}
 			m.Params = &PeerAuthenticationMethod_Jwt{v}
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Use", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Params = &PeerAuthenticationMethod_Use{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPolicy(dAtA[iNdEx:])
@@ -3010,6 +4358,38 @@ func (m *OriginAuthenticationMethod) Unmarshal(dAtA []byte) error {
 			if err := m.Jwt.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Use", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Use = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -3578,6 +4958,850 @@ func (m *PortSelector) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Port = &PortSelector_Name{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPolicy(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TLSOptions) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPolicy
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TLSOptions: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TLSOptions: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpsRedirect", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.HttpsRedirect = bool(v != 0)
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Mode", wireType)
+			}
+			m.Mode = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Mode |= TLSOptions_TLSmode(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServerCertificate", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ServerCertificate = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrivateKey", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PrivateKey = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CaCertificates", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CaCertificates = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubjectAltNames", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SubjectAltNames = append(m.SubjectAltNames, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MinProtocolVersion", wireType)
+			}
+			m.MinProtocolVersion = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MinProtocolVersion |= TLSOptions_TLSProtocol(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxProtocolVersion", wireType)
+			}
+			m.MaxProtocolVersion = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MaxProtocolVersion |= TLSOptions_TLSProtocol(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CipherSuites", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CipherSuites = append(m.CipherSuites, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SdsName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SdsName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPolicy(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Location) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPolicy
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Location: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Location: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Location = &Location_Header{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GrpcAttributeName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Location = &Location_GrpcAttributeName{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DynamicMetadataAttributeName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Location = &Location_DynamicMetadataAttributeName{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPolicy(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Delegate) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPolicy
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Delegate: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Delegate: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
+			}
+			m.Type = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Type |= Delegate_Type(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Uri", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Uri = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Input", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Input == nil {
+				m.Input = &types.Struct{}
+			}
+			if err := m.Input.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OutputLocation", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.OutputLocation == nil {
+				m.OutputLocation = &Location{}
+			}
+			if err := m.OutputLocation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPolicy(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AuthnMethod) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPolicy
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AuthnMethod: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AuthnMethod: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Mtls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &MutualTls{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Method = &AuthnMethod_Mtls{v}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Jwt", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &Jwt{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Method = &AuthnMethod_Jwt{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &TLSOptions{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Method = &AuthnMethod_Tls{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Delegate", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &Delegate{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Method = &AuthnMethod_Delegate{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
