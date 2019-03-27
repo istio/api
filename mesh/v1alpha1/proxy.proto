@@ -77,6 +77,13 @@ message Tracing {
   }
 }
 
+message SDS {
+  // True if SDS is enabled.
+  bool enabled = 1;
+  
+  // Path of k8s service account JWT path.
+  string k8s_sa_jwt_path = 2;
+}
 
 // ProxyConfig defines variables for individual Envoy instances.
 message ProxyConfig {
@@ -177,4 +184,7 @@ message ProxyConfig {
 
   // Tracing configuration to be used by the proxy.
   Tracing tracing = 19;
+
+  // secret discovery service(SDS) configuration to be used by the proxy.
+  SDS sds = 21;
 }
