@@ -454,6 +454,9 @@ func (m *Tracing_Datadog) GetAddress() string {
 	return ""
 }
 
+// SDS defines secret discovery service(SDS) configuration to be used by the proxy.
+// For workload, its values are set in sidecar injector(passed as arguments to istio-proxy container).
+// For pilot/mixer, it's passed as arguments to istio-proxy container in pilot/mixer deployment yaml files directly.
 type SDS struct {
 	// True if SDS is enabled.
 	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
