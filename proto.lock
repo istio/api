@@ -1110,6 +1110,11 @@
                 "id": 36,
                 "name": "dns_refresh_rate",
                 "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 37,
+                "name": "http_idle_timeout",
+                "type": "google.protobuf.Duration"
               }
             ],
             "reserved_ids": [
