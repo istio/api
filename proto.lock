@@ -5993,6 +5993,11 @@
                 "name": "actions",
                 "type": "AccessRule",
                 "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "role",
+                "type": "string"
               }
             ]
           },
