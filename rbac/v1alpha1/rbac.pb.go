@@ -556,7 +556,6 @@ type ServiceRoleBinding struct {
 	Subjects []*Subject `protobuf:"bytes,1,rep,name=subjects,proto3" json:"subjects,omitempty"`
 	// Required. Reference to the ServiceRole object.
 	RoleRef *RoleRef `protobuf:"bytes,2,opt,name=roleRef,proto3" json:"roleRef,omitempty"`
-	// $hide_from_docs
 	// Indicates enforcement mode of the ServiceRoleBinding.
 	Mode EnforcementMode `protobuf:"varint,3,opt,name=mode,proto3,enum=istio.rbac.v1alpha1.EnforcementMode" json:"mode,omitempty"`
 	// $hide_from_docs
@@ -582,8 +581,8 @@ type ServiceRoleBinding struct {
 	//  - subjects:
 	//    - names: ["cluster.local/ns/default/sa/frontend"]
 	//    actions:
-	//    - paths: [“/info/*”]
-	//      methods: [“GET”]
+	//    - paths: ["/info"]
+	//      methods: ["GET"]
 	// Required. The set of access rules (permissions) that the role has.
 	Actions              []*AccessRule `protobuf:"bytes,4,rep,name=actions,proto3" json:"actions,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
@@ -898,7 +897,6 @@ type RbacConfig struct {
 	// A list of services or namespaces that should not be enforced by Istio RBAC policies. Note: This field have
 	// effect only when mode is ON_WITH_EXCLUSION and will be ignored for any other modes.
 	Exclusion *RbacConfig_Target `protobuf:"bytes,3,opt,name=exclusion,proto3" json:"exclusion,omitempty"`
-	// $hide_from_docs
 	// Indicates enforcement mode of the RbacConfig, in ENFORCED mode by default.
 	// It's used to verify new RbacConfig work as expected before rolling to production.
 	// When setting as PERMISSIVE, RBAC isn't enforced and has no impact on users.

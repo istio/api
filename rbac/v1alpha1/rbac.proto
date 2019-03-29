@@ -223,7 +223,6 @@ message ServiceRoleBinding {
   // Required. Reference to the ServiceRole object.
   RoleRef roleRef = 2;
 
-  // $hide_from_docs
   // Indicates enforcement mode of the ServiceRoleBinding.
   EnforcementMode mode = 3;
 
@@ -382,7 +381,6 @@ message RbacConfig {
   // effect only when mode is ON_WITH_EXCLUSION and will be ignored for any other modes.
   Target exclusion = 3;
 
-  // $hide_from_docs
   // Indicates enforcement mode of the RbacConfig, in ENFORCED mode by default.
   // It's used to verify new RbacConfig work as expected before rolling to production.
   // When setting as PERMISSIVE, RBAC isn't enforced and has no impact on users.
