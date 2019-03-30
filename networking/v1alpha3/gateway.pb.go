@@ -551,7 +551,7 @@ type Server_TLSOptions struct {
 	// server expects the credentialName to match the name of the
 	// Kubernetes secret that holds the server certificate, the private
 	// key, and the CA certificate (if using mutual TLS). Set the
-	// ISTIO_META_USER_SDS metadata variable in the gateway's proxy to
+	// `ISTIO_META_USER_SDS` metadata variable in the gateway's proxy to
 	// enable the dynamic credential fetching feature.
 	CredentialName string `protobuf:"bytes,10,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
 	// A list of alternate names to verify the subject identity in the
