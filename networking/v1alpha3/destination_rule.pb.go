@@ -1283,7 +1283,7 @@ type ConnectionPoolSettings_HTTPSettings struct {
 	// Maximum number of retries that can be outstanding to all hosts in a
 	// cluster at a given time. Defaults to 3.
 	MaxRetries int32 `protobuf:"varint,4,opt,name=max_retries,json=maxRetries,proto3" json:"max_retries,omitempty"`
-	//  The idle timeout for upstream connection pool connections. The idle timeout is defined as the period in which there are no active requests.
+	// The idle timeout for upstream connection pool connections. The idle timeout is defined as the period in which there are no active requests.
 	// If not set, there is no idle timeout. When the idle timeout is reached the connection will be closed.
 	// Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive. Applies to both HTTP1.1 and HTTP2 connections.
 	IdleTimeout          *types.Duration `protobuf:"bytes,5,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"`
