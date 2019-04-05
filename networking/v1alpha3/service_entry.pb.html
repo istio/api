@@ -387,7 +387,8 @@ said port will be allowed (i.e. 0.0.0.0:&lt;port&gt;).</p>
 <td><code>endpoints</code></td>
 <td><code><a href="#ServiceEntry-Endpoint">ServiceEntry.Endpoint[]</a></code></td>
 <td>
-<p>One or more endpoints associated with the service.</p>
+<p>One or more endpoints associated with the service, which are currently
+ready to handle traffic.</p>
 
 </td>
 </tr>
@@ -426,6 +427,15 @@ implement this service. This information is used to enforce
 <a href="/docs/concepts/security/#secure-naming">secure-naming</a>.
 If specified, the proxy will verify that the server
 certificate&rsquo;s subject alternate name matches one of the specified values.</p>
+
+</td>
+</tr>
+<tr id="ServiceEntry-not_ready_endpoints">
+<td><code>notReadyEndpoints</code></td>
+<td><code><a href="#ServiceEntry-Endpoint">ServiceEntry.Endpoint[]</a></code></td>
+<td>
+<p>One or more endpoints associated with the service, which are not yet
+ready to handle traffic.</p>
 
 </td>
 </tr>

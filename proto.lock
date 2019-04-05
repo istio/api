@@ -3974,6 +3974,12 @@
                 "name": "subject_alt_names",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 9,
+                "name": "not_ready_endpoints",
+                "type": "Endpoint",
+                "is_repeated": true
               }
             ],
             "messages": [
