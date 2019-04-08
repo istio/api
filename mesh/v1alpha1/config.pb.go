@@ -318,7 +318,9 @@ type MeshConfig struct {
 	DnsRefreshRate *types.Duration `protobuf:"bytes,36,opt,name=dns_refresh_rate,json=dnsRefreshRate,proto3" json:"dns_refresh_rate,omitempty"`
 	// Configures idle timeout for edge and internal Envoy proxies
 	// by using Envoy HTTP connection manager `idle_timeout` property
-	// to gracefully close idle connections.
+	// to gracefully close idle connections. Comparing to DestinationRule level
+	// `idle_timeout` the one in meshConfig allows to configure only one value for
+	// entire cluster without configuring individual rules.
 	// There is no default value set for this timeout.
 	HttpIdleTimeout      *types.Duration `protobuf:"bytes,37,opt,name=http_idle_timeout,json=httpIdleTimeout,proto3" json:"http_idle_timeout,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`

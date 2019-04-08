@@ -502,7 +502,9 @@ Fallback to old identity format(without trust domain) if not set.</p>
 <td>
 <p>Configures idle timeout for edge and internal Envoy proxies
 by using Envoy HTTP connection manager <code>idle_timeout</code> property
-to gracefully close idle connections.
+to gracefully close idle connections. Comparing to DestinationRule level
+<code>idle_timeout</code> the one in meshConfig allows to configure only one value for
+entire cluster without configuring individual rules.
 There is no default value set for this timeout.</p>
 
 </td>

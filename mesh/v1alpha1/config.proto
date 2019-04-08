@@ -284,7 +284,9 @@ message MeshConfig {
 
   // Configures idle timeout for edge and internal Envoy proxies
   // by using Envoy HTTP connection manager `idle_timeout` property 
-  // to gracefully close idle connections.
+  // to gracefully close idle connections. Comparing to DestinationRule level 
+  // `idle_timeout` the one in meshConfig allows to configure only one value for
+  // entire cluster without configuring individual rules.
   // There is no default value set for this timeout.
   google.protobuf.Duration http_idle_timeout = 37;
 
