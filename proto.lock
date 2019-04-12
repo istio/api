@@ -3676,6 +3676,16 @@
                     "type": "InsertPosition"
                   },
                   {
+                    "id": 6,
+                    "name": "overwrite",
+                    "type": "bool"
+                  },
+                  {
+                    "id": 7,
+                    "name": "merge",
+                    "type": "bool"
+                  },
+                  {
                     "id": 3,
                     "name": "filter_type",
                     "type": "FilterType"
