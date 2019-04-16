@@ -1381,6 +1381,16 @@
                 "name": "tracing",
                 "type": "Tracing"
               }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 21,
+                  "name": "envoy_node_metadata",
+                  "type": "string"
+                }
+              }
             ]
           }
         ]
