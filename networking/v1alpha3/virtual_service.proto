@@ -144,14 +144,12 @@ message VirtualService {
   // only for services defined via the Gateway.
   repeated string hosts = 1;
 
-  // The names of gateways and sidecars that should apply these rules. A
-  // single VirtualService can be used for sidecars inside the mesh as well
-  // as for one or more gateways. The reserved word `mesh` is used to apply
-  // the rules to all sidecars in the mesh. If this field is omitted, `mesh`
-  // is implied by default. If a list of gateway names is provided, the
-  // rules will apply only to those gateways unless `mesh` is also included
-  // in the list. Gateways defined in a different namespace can be selected
-  // by prefixing the gateway name with `namespace/`.
+  // The names of gateways that should apply these rules. If omitted, the
+  // rules are only applied to sidecars inside the mesh. If a list of gateway
+  // names is provided, the rules will not be applied to sidecars inside the
+  // mesh unless the reserved gateway name `mesh` is included in the list.
+  // Gateways defined in a different namespace can be selected by prefixing
+  // the gateway name with `namespace/`.
   //
   // The selection condition imposed by this field can be overridden using
   // the source field in the match conditions of protocol-specific routes.
