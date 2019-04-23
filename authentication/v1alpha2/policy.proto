@@ -1,0 +1,188 @@
+// Copyright 2019 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "authentication/v1alpha2/method.proto";
+import "common/v1beta1/selector.proto";
+import "common/v1beta1/match.proto";
+
+// $title: Authentication Policy v1alpha2
+// $description: Authentication policy for Istio services.
+// $location: https://istio.io/docs/reference/config/istio.authentication.v1alpha2.html
+
+// This package defines user-facing authentication policy.
+package istio.authentication.v1alpha2;
+
+option go_package = "istio.io/api/authentication/v1alpha2";
+
+// AuthenticationPolicy describes authentication requirements for the workload(s) it is attached to.
+// Example of a simple policy that enable mTLS for all workloads in the namespace scope of the
+// policy. Note that `istio.mtls` is a name of the pre-define `AuthenticationMethod` for Istio
+// mutual TLS.
+//
+// ```
+// spec:
+//   policy:
+//     peers:
+//     - authentication:
+//         method: "istio.mtls"
+// ```
+//
+// This example set end-user authentication for workloads that match label `app`=`foo`, using JWT
+// The JWT authentication details are defined directly in the policy (`inline`).
+// ```
+// spec:
+//   workloadSelector:
+//     app: foo
+//   policy:
+//     origins:
+//     - apply:
+//         spec:
+//           jwt:
+//             issuer: "https://securetoken.google.com"
+//             audiences:
+//             - "productpage"
+//             jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
+// ```
+//
+// This last example shows a policy to set peer authentication with mTLS for all requests, and
+// end-user authentication if requests have "/create" or "/update" prefix. For all other paths,
+// end-user authentication is not rquired (though peer mTLS still needed)
+// ```
+// spec:
+//   workloadSelector:
+//     app: bar
+//   policy:
+//     peers:
+//     - authentication:
+//         method: "istio.mtls"
+//     origins:
+//     - match:
+//         paths:
+//         - prefix: "/create"
+//         - prefix: "/update"
+//       authentication:
+//         method: "my-jwt"
+// ```
+message AuthenticationPolicy {
+  // Criteria used to select the specific set of pods/VMs on which this
+  // authentication policy should be applied. If omitted, the authentication policy
+  // be applied to all workload instances in the same namespace.
+  istio.common.v1beta1.WorkloadSelector workload_selector = 1;
+
+  // REQUIRED. The authentication spec to be set for the selected workloads.
+  PolicyContent policy = 2;
+}
+
+// PolicyContent specifies the authentication requirements. It is composed of 2-part authentication:
+// - peer: verify caller service credentials. This part will set source.user
+// (peer identity).
+// - origin: verify the origin credentials. This part will set request.auth.user
+// (origin identity), as well as other attributes like request.auth.presenter,
+// request.auth.audiences and raw claims. Note that the identity could be
+// end-user, service account, device etc.
+//
+// Last but not least, the principal binding rule defines which identity (peer
+// or origin) should be used as principal. By default, it uses peer.
+// For examples, see `AuthenticationPolicy`
+message PolicyContent {
+  // List of authentication methods that can be used for peer authentication. Rule will be
+  // examined in order. Each rule may contain `match` conditions. The first (and only) rule that
+  // have the match conidtions satisfied will be activated, and the authentication result decides
+  // whether the request is allowed or denied. In other words, all other rules are ignored. If
+  // there is no rule meet the conditions, or if the list is empty, authentication is not required.
+  repeated AuthenticationRule peers = 2;
+
+  // List of authentication methods that can be used for origin authentication. See `peers` for
+  // more details.
+  repeated AuthenticationRule origins = 3;
+
+  // Define whether peer or origin identity should be use for principal. Default
+  // value is USE_PEER.
+  // If peer (or origin) identity is not available, either because of peer/origin
+  // authentication is not defined, or failed, principal will be left unset.
+  // In other words, binding rule does not affect the decision to accept or
+  // reject request.
+  PrincipalBinding principal_binding = 6;
+}
+
+// AuthenticationRule describes match conditions and the corresponding authentication action. See
+// AuthenticationPolicy for example.
+message AuthenticationRule {
+  // Define the conditions when the authentication mechanism will be activated. All conditions
+  // must be satisfied (ANDed) for the authentication mechanism to be used. If empty, it matches
+  // all requests.
+  repeated Match match = 1;
+
+  // AuthenticationMethodReference refers to `AuthenticationMethod` by name or define it inline.
+  message AuthenticationMethodReference {
+    oneof ref {
+      // Refers to the `AuthenticationMethod` CR with this name. If `AuthenticationMethod` resource
+      // with this name doesnot exit, Istio (Pilot) will log errors and also config envoy with
+      // `deny-all` equivalent.
+      string method = 1;
+
+      // Defines the required authentication method inline.
+      AuthenticationMethod spec = 2;
+    }
+  }
+
+  // REQUIRED. Authentication method to be used if the match conditions are satisfied.
+  AuthenticationMethodReference authentication = 2;
+}
+
+// Associates authentication with request principal.
+enum PrincipalBinding {
+  // Principal will be set to the identity from peer authentication.
+  USE_PEER = 0;
+
+  // Principal will be set to the identity from origin authentication.
+  USE_ORIGIN = 1;
+}
+
+// Match specifies a set of criterion to be met in order for the rule to be applied.
+// For example, the following restricts mTLS being applied only on port 8080, and JWT
+// authentication if the request path starts with /get.
+//
+// ```
+// spec:
+//   policy:
+//     peers:
+//     - match
+//         ports:
+//         - 8080
+//       method: istio.mtls
+//     origins:
+//     - match:
+//         paths:
+//         - prefix: "/get"
+//       method: example-jwt
+// ```
+message Match {
+  // Ports to match. If not specified, it matches to any port number.
+  // Note: these are workload ports, not service ports.
+  repeated uint32 ports = 1;
+
+  // Request path to match. Available for L7 authentication method only (e.g JWT). If not
+  // specified, it matches to any paths.
+  // Values are case-sensitive and formatted as follows:
+  //
+  // - `exact: "value"` for exact string match
+  //
+  // - `prefix: "value"` for prefix-based match
+  //
+  // - `regex: "value"` for ECMAscript style regex-based match
+  repeated istio.common.v1beta1.StringMatch paths = 2;
+}

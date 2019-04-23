@@ -80,6 +80,8 @@ protoc_gen_docs_plugin_for_networking := --docs_out=warnings=true,dictionary=$(r
 #####################
 
 generate: \
+	generate-common-go \
+	generate-common-python \
 	generate-mcp-go \
 	generate-mcp-python \
 	generate-mesh-go \
@@ -94,6 +96,34 @@ generate: \
 	generate-authn-python \
 	generate-envoy-go \
 	generate-envoy-python
+
+#####################
+# common/...
+#####################
+
+config_common_path := common/v1beta1
+config_common_protos := $(shell find $(config_common_path) -type f -name '*.proto' | sort)
+config_common_pb_gos := $(config_common_protos:.proto=.pb.go)
+config_common_pb_pythons := $(config_common_protos:.proto=_pb2.py)
+config_common_pb_doc := $(config_common_path)/istio.common.v1beta1.pb.html
+
+generate-common-go: $(config_common_pb_gos) $(config_common_pb_doc)
+
+$(config_common_pb_gos) $(config_common_pb_doc): $(config_common_protos)
+	## Generate common/v1beta1/*.pb.go + $(config_common_pb_doc)
+	@$(docker_lock) status
+	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(config_common_path) $^
+
+generate-common-python: $(config_common_pb_pythons)
+
+$(config_common_pb_pythons): $(config_common_protos)
+	## Generate python/istio_api/mcp/v1beta1/*_pb2.py
+	@$(docker_lock) status
+	@$(docker_gen) $(protoc_gen_python_plugin) $^
+
+clean-common:
+	rm -f $(config_common_pb_gos)
+	rm -f $(config_common_pb_doc)
 
 #####################
 # mcp/...
@@ -302,23 +332,41 @@ authn_v1alpha1_pb_gos := $(authn_v1alpha1_protos:.proto=.pb.go)
 authn_v1alpha1_pb_pythons := $(authn_v1alpha1_protos:.proto=_pb2.py)
 authn_v1alpha1_pb_doc := $(authn_v1alpha1_path)/istio.authentication.v1alpha1.pb.html
 
-generate-authn-go: $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc)
+authn_v1alpha2_path := authentication/v1alpha2
+authn_v1alpha2_protos := $(shell find $(authn_v1alpha2_path) -type f -name '*.proto' | sort)
+authn_v1alpha2_pb_gos := $(authn_v1alpha2_protos:.proto=.pb.go)
+authn_v1alpha2_pb_pythons := $(authn_v1alpha2_protos:.proto=_pb2.py)
+authn_v1alpha2_pb_doc := $(authn_v1alpha2_path)/istio.authentication.v1alpha2.pb.html
+
+generate-authn-go: $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc) $(authn_v1alpha2_pb_gos) $(authn_v1alpha2_pb_doc)
 
 $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc): $(authn_v1alpha1_protos)
 	## Generate authentication/v1alpha1/*.pb.go
 	@$(docker_lock) status
 	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(authn_v1alpha1_path) $^
 
-generate-authn-python: $(authn_v1alpha1_pb_pythons)
+$(authn_v1alpha2_pb_gos) $(authn_v1alpha2_pb_doc): $(authn_v1alpha2_protos)
+	## Generate authentication/v1alpha2/*.pb.go
+	@$(docker_lock) status
+	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(authn_v1alpha2_path) $^
+
+generate-authn-python: $(authn_v1alpha1_pb_pythons) $(authn_v1alpha2_pb_pythons)
 
 $(authn_v1alpha1_pb_pythons): $(authn_v1alpha1_protos)
 	## Generate python/istio_api/authentication/v1alpha1/*_pb2.py
 	@$(docker_lock) status
 	@$(docker_gen) $(protoc_gen_python_plugin) $^
 
+$(authn_v1alpha2_pb_pythons): $(authn_v1alpha2_protos)
+	## Generate python/istio_api/authentication/v1alpha2/*_pb2.py
+	@$(docker_lock) status
+	@$(docker_gen) $(protoc_gen_python_plugin) $^
+
 clean-authn:
 	rm -f $(authn_v1alpha1_pb_gos)
 	rm -f $(authn_v1alpha1_pb_doc)
+	rm -f $(authn_v1alpha2_pb_gos)
+	rm -f $(authn_v1alpha2_pb_doc)
 
 #####################
 # envoy/...

@@ -1,0 +1,41 @@
+// Copyright 2019 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+// $title: Authentication Policy v1alpha2
+// $description: Authentication policy for Istio services.
+// $location: https://istio.io/docs/reference/config/istio.authentication.v1alpha2.html
+
+package istio.authentication.v1alpha2;
+
+option go_package = "istio.io/api/authentication/v1alpha2";
+
+import "authentication/v1alpha2/mtls_method.proto";
+import "authentication/v1alpha2/jwt_method.proto";
+
+// AuthenticationMethod describes the authentication method to be enforced. This specification is
+// used for both peer and origin authentication (see more in `AuthentiationRule`), though there is
+// restriction what method can be used for each type of authentication. For example, as of speaking,
+// origin  authentication can use only JWT. This logic will be enforced by validation. System will
+// also properly ignore the invalid ones.
+message AuthenticationMethod {
+  oneof params {
+    // Set if Mutual TLS is used.
+    MutualTls mtls = 1;
+
+    // Set if JWT is used.
+    Jwt jwt = 2;
+  }
+}
