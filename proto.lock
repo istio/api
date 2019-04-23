@@ -4301,12 +4301,13 @@
                 "id": 1,
                 "name": "number",
                 "type": "uint32"
-              },
-              {
-                "id": 2,
-                "name": "name",
-                "type": "string"
               }
+            ],
+            "reserved_ids": [
+              2
+            ],
+            "reserved_names": [
+              "name"
             ]
           },
           {
