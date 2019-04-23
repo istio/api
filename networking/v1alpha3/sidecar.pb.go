@@ -448,11 +448,12 @@ type IstioEgressListener struct {
 	//
 	// **WARNING:** The list of egress hosts in a `Sidecar` must also include
 	// the Mixer control plane services if they are enabled. Envoy will not
-	// function properly otherwise. For example add host
-	// `- "istio-system/istio-telemetry.istio-system.svc.cluster.local"` to
-	// enable access to the telemetry service or `- "istio-system/*"` for all
-	// services in the `istio-system` namespace. This requirement is temporary
-	// and will be removed in a future Istio release.
+	// function properly otherwise. For example, add host
+	// `istio-system/istio-telemetry.istio-system.svc.cluster.local` if telemetry
+	// is enabled, `istio-system/istio-policy.istio-system.svc.cluster.local` if
+	// policy is enabled, or add `istio-system/*` to allow all services in the
+	// `istio-system` namespace. This requirement is temporary and will be removed
+	// in a future Istio release.
 	Hosts                []string `protobuf:"bytes,4,rep,name=hosts,proto3" json:"hosts,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
