@@ -300,7 +300,7 @@ message IstioEgressListener {
   //
   // **WARNING:** The list of egress hosts in a `Sidecar` must also include
   // the Mixer control plane services if they are enabled. Envoy will not
-  // function properly otherwise. For example, add host
+  // be able to reach them otherwise. For example, add host
   // `istio-system/istio-telemetry.istio-system.svc.cluster.local` if telemetry
   // is enabled, `istio-system/istio-policy.istio-system.svc.cluster.local` if
   // policy is enabled, or add `istio-system/*` to allow all services in the
