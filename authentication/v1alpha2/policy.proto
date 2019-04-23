@@ -98,19 +98,21 @@ message AuthenticationPolicy {
 // or origin) should be used as principal. By default, it uses peer.
 // For examples, see `AuthenticationPolicy`
 message PolicyContent {
-  // List of authentication methods that can be used for peer authentication. Rule will be
-  // examined in order. Each rule may contain `match` conditions. The first (and only) rule that
-  // have the match conidtions satisfied will be activated, and the authentication result decides
-  // whether the request is allowed or denied. In other words, all other rules are ignored. If
-  // there is no rule meet the conditions, or if the list is empty, authentication is not required.
+  // List of authentication methods that can be used for peer authentication.
+  // Rule will be examined in order. Each rule may contain match conditions.
+  // The first (and only) rule that have the match conditions satisfied will
+  // be activated, and the authentication result decides whether the request is
+  // allowed or denied. In other words, all other rules are ignored. If
+  // there is no rule meet the conditions, or if the list is empty,
+  // authentication is not required.
   repeated AuthenticationRule peers = 2;
 
-  // List of authentication methods that can be used for origin authentication. See `peers` for
-  // more details.
+  // List of authentication methods that can be used for origin authentication.
+  // See `peers` for more details.
   repeated AuthenticationRule origins = 3;
 
-  // Define whether peer or origin identity should be use for principal. Default
-  // value is USE_PEER.
+  // Define whether peer or origin identity should be used for request principal.
+  // Default value is USE_PEER.
   // If peer (or origin) identity is not available, either because of peer/origin
   // authentication is not defined, or failed, principal will be left unset.
   // In other words, binding rule does not affect the decision to accept or
@@ -121,17 +123,18 @@ message PolicyContent {
 // AuthenticationRule describes match conditions and the corresponding authentication action. See
 // AuthenticationPolicy for example.
 message AuthenticationRule {
-  // Define the conditions when the authentication mechanism will be activated. All conditions
-  // must be satisfied (ANDed) for the authentication mechanism to be used. If empty, it matches
-  // all requests.
+  // Define the conditions when the authentication mechanism will be activated.
+  // All conditions must be satisfied (ANDed) for the authentication mechanism
+  // to be used. If empty, it matches all requests.
   repeated Match match = 1;
 
   // AuthenticationMethodReference refers to `AuthenticationMethod` by name or define it inline.
   message AuthenticationMethodReference {
     oneof ref {
-      // Refers to the `AuthenticationMethod` CR with this name. If `AuthenticationMethod` resource
-      // with this name doesnot exit, Istio (Pilot) will log errors and also config envoy with
-      // `deny-all` equivalent.
+      // Refers to the AuthenticationMethod CR with this name.
+      // If the AuthenticationMethod resource with this name does not exist,
+      // Istio (Pilot) will log errors and also config proxy with method
+      // that is equivalent to `deny-all`.
       string method = 1;
 
       // Defines the required authentication method inline.
