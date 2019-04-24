@@ -53,6 +53,7 @@ func (MutualTls_Mode) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_ccf1cb0542497a24, []int{0, 0}
 }
 
+// $hide_from_docs
 // Mutual TLS authentication parameters.
 type MutualTls struct {
 	// Defines the mode of mTLS authentication.

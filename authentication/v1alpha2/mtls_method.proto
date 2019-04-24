@@ -22,6 +22,7 @@ package istio.authentication.v1alpha2;
 
 option go_package = "istio.io/api/authentication/v1alpha2";
 
+// $hide_from_docs
 // Mutual TLS authentication parameters.
 message MutualTls {
   // Defines the acceptable connection TLS mode.

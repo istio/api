@@ -21,6 +21,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
+// $hide_from_docs
 // AuthenticationMethod describes the authentication method to be enforced. This specification is
 // used for both peer and origin authentication (see more in `AuthentiationRule`), though there is
 // restriction what method can be used for each type of authentication. For example, as of speaking,

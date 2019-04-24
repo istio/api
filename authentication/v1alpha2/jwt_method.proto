@@ -22,6 +22,7 @@ package istio.authentication.v1alpha2;
 
 option go_package = "istio.io/api/authentication/v1alpha2";
 
+// $hide_from_docs
 // JSON Web Token (JWT) token format for authentication as defined by
 // [RFC 7519](`https://tools.ietf.org/html/rfc7519`). See [OAuth
 // 2.0](`https://tools.ietf.org/html/rfc6749`) and [OIDC

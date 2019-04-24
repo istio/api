@@ -21,6 +21,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
+// $hide_from_docs
 // JSON Web Token (JWT) token format for authentication as defined by
 // [RFC 7519](`https://tools.ietf.org/html/rfc7519`). See [OAuth
 // 2.0](`https://tools.ietf.org/html/rfc6749`) and [OIDC

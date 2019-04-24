@@ -25,6 +25,7 @@ option go_package = "istio.io/api/authentication/v1alpha2";
 import "authentication/v1alpha2/mtls_method.proto";
 import "authentication/v1alpha2/jwt_method.proto";
 
+// $hide_from_docs
 // AuthenticationMethod describes the authentication method to be enforced. This specification is
 // used for both peer and origin authentication (see more in `AuthentiationRule`), though there is
 // restriction what method can be used for each type of authentication. For example, as of speaking,

@@ -24,6 +24,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
+// $hide_from_docs
 // Associates authentication with request principal.
 type PrincipalBinding int32
 
@@ -52,6 +53,7 @@ func (PrincipalBinding) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_de35128e1eb23de7, []int{0}
 }
 
+// $hide_from_docs
 // AuthenticationPolicy describes authentication requirements for the workload(s) it is attached to.
 // Example of a simple policy that enable mTLS for all workloads in the namespace scope of the
 // policy. Note that `istio.mtls` is a name of the pre-define `AuthenticationMethod` for Istio
@@ -160,6 +162,7 @@ func (m *AuthenticationPolicy) GetPolicy() *PolicyContent {
 	return nil
 }
 
+// $hide_from_docs
 // PolicyContent specifies the authentication requirements. It is composed of 2-part authentication:
 // - peer: verify caller service credentials. This part will set `source.principal`
 // (peer identity).
@@ -249,6 +252,7 @@ func (m *PolicyContent) GetPrincipalBinding() PrincipalBinding {
 	return PrincipalBinding_USE_PEER
 }
 
+// $hide_from_docs
 // AuthenticationRule describes match conditions and the corresponding authentication action. See
 // AuthenticationPolicy for example.
 type AuthenticationRule struct {
@@ -467,6 +471,7 @@ func _AuthenticationRule_AuthenticationMethodReference_OneofSizer(msg proto.Mess
 	return n
 }
 
+// $hide_from_docs
 // Match specifies a set of criterion to be met in order for the rule to be applied.
 // For example, the following restricts mTLS being applied only on port 8080, and JWT
 // authentication if the request path starts with /get.

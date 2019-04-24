@@ -27,6 +27,7 @@ package istio.authentication.v1alpha2;
 
 option go_package = "istio.io/api/authentication/v1alpha2";
 
+// $hide_from_docs
 // AuthenticationPolicy describes authentication requirements for the workload(s) it is attached to.
 // Example of a simple policy that enable mTLS for all workloads in the namespace scope of the
 // policy. Note that `istio.mtls` is a name of the pre-define `AuthenticationMethod` for Istio
@@ -86,6 +87,7 @@ message AuthenticationPolicy {
   PolicyContent policy = 2;
 }
 
+// $hide_from_docs
 // PolicyContent specifies the authentication requirements. It is composed of 2-part authentication:
 // - peer: verify caller service credentials. This part will set `source.principal`
 // (peer identity).
@@ -120,6 +122,7 @@ message PolicyContent {
   PrincipalBinding principal_binding = 6;
 }
 
+// $hide_from_docs
 // AuthenticationRule describes match conditions and the corresponding authentication action. See
 // AuthenticationPolicy for example.
 message AuthenticationRule {
@@ -146,6 +149,7 @@ message AuthenticationRule {
   AuthenticationMethodReference authentication = 2;
 }
 
+// $hide_from_docs
 // Associates authentication with request principal.
 enum PrincipalBinding {
   // Principal will be set to the identity from peer authentication.
@@ -155,6 +159,7 @@ enum PrincipalBinding {
   USE_ORIGIN = 1;
 }
 
+// $hide_from_docs
 // Match specifies a set of criterion to be met in order for the rule to be applied.
 // For example, the following restricts mTLS being applied only on port 8080, and JWT
 // authentication if the request path starts with /get.
