@@ -25,10 +25,11 @@ const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 type MutualTls_Mode int32
 
 const (
+	// Must never be set.
 	MutualTls_INVALID MutualTls_Mode = 0
 	// Client cert must be presented, connection is in TLS.
 	MutualTls_STRICT MutualTls_Mode = 1
-	// Connection can be either plaintext or TLS, and client cert can be omitted.
+	// Connection can be either plain text or TLS, and client cert can be omitted.
 	MutualTls_PERMISSIVE MutualTls_Mode = 2
 )
 
@@ -52,7 +53,7 @@ func (MutualTls_Mode) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_ccf1cb0542497a24, []int{0, 0}
 }
 
-// Mutual TLS authentication params.
+// Mutual TLS authentication parameters.
 type MutualTls struct {
 	// Defines the mode of mTLS authentication.
 	Mode                 MutualTls_Mode `protobuf:"varint,2,opt,name=mode,proto3,enum=istio.authentication.v1alpha2.MutualTls_Mode" json:"mode,omitempty"`

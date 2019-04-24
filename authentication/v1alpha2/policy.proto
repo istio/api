@@ -59,7 +59,7 @@ option go_package = "istio.io/api/authentication/v1alpha2";
 //
 // This last example shows a policy to set peer authentication with mTLS for all requests, and
 // end-user authentication if requests have "/create" or "/update" prefix. For all other paths,
-// end-user authentication is not rquired (though peer mTLS still needed)
+// end-user authentication is not required (though peer mTLS still needed)
 // ```
 // spec:
 //   workloadSelector:
@@ -87,11 +87,11 @@ message AuthenticationPolicy {
 }
 
 // PolicyContent specifies the authentication requirements. It is composed of 2-part authentication:
-// - peer: verify caller service credentials. This part will set source.user
+// - peer: verify caller service credentials. This part will set `source.principal`
 // (peer identity).
-// - origin: verify the origin credentials. This part will set request.auth.user
-// (origin identity), as well as other attributes like request.auth.presenter,
-// request.auth.audiences and raw claims. Note that the identity could be
+// - origin: verify the origin credentials. This part will set `request.auth.user`
+// (origin identity), as well as other attributes like `request.auth.presenter`,
+// `request.auth.audiences` and raw claims. Note that the identity could be
 // end-user, service account, device etc.
 //
 // Last but not least, the principal binding rule defines which identity (peer
@@ -133,7 +133,7 @@ message AuthenticationRule {
     oneof ref {
       // Refers to the AuthenticationMethod CR with this name.
       // If the AuthenticationMethod resource with this name does not exist,
-      // Istio (Pilot) will log errors and also config proxy with method
+      // Istio (Pilot) will log errors and also configures proxy with method
       // that is equivalent to `deny-all`.
       string method = 1;
 
@@ -178,7 +178,7 @@ message Match {
   // Note: these are workload ports, not service ports.
   repeated uint32 ports = 1;
 
-  // Request path to match. Available for L7 authentication method only (e.g JWT). If not
+  // Request path to match. Available for `L7` authentication method only (e.g JWT). If not
   // specified, it matches to any paths.
   // Values are case-sensitive and formatted as follows:
   //

@@ -84,7 +84,7 @@ func (PrincipalBinding) EnumDescriptor() ([]byte, []int) {
 //
 // This last example shows a policy to set peer authentication with mTLS for all requests, and
 // end-user authentication if requests have "/create" or "/update" prefix. For all other paths,
-// end-user authentication is not rquired (though peer mTLS still needed)
+// end-user authentication is not required (though peer mTLS still needed)
 // ```
 // spec:
 //   workloadSelector:
@@ -161,28 +161,30 @@ func (m *AuthenticationPolicy) GetPolicy() *PolicyContent {
 }
 
 // PolicyContent specifies the authentication requirements. It is composed of 2-part authentication:
-// - peer: verify caller service credentials. This part will set source.user
+// - peer: verify caller service credentials. This part will set `source.principal`
 // (peer identity).
-// - origin: verify the origin credentials. This part will set request.auth.user
-// (origin identity), as well as other attributes like request.auth.presenter,
-// request.auth.audiences and raw claims. Note that the identity could be
+// - origin: verify the origin credentials. This part will set `request.auth.user`
+// (origin identity), as well as other attributes like `request.auth.presenter`,
+// `request.auth.audiences` and raw claims. Note that the identity could be
 // end-user, service account, device etc.
 //
 // Last but not least, the principal binding rule defines which identity (peer
 // or origin) should be used as principal. By default, it uses peer.
 // For examples, see `AuthenticationPolicy`
 type PolicyContent struct {
-	// List of authentication methods that can be used for peer authentication. Rule will be
-	// examined in order. Each rule may contain `match` conditions. The first (and only) rule that
-	// have the match conidtions satisfied will be activated, and the authentication result decides
-	// whether the request is allowed or denied. In other words, all other rules are ignored. If
-	// there is no rule meet the conditions, or if the list is empty, authentication is not required.
+	// List of authentication methods that can be used for peer authentication.
+	// Rule will be examined in order. Each rule may contain match conditions.
+	// The first (and only) rule that have the match conditions satisfied will
+	// be activated, and the authentication result decides whether the request is
+	// allowed or denied. In other words, all other rules are ignored. If
+	// there is no rule meet the conditions, or if the list is empty,
+	// authentication is not required.
 	Peers []*AuthenticationRule `protobuf:"bytes,2,rep,name=peers,proto3" json:"peers,omitempty"`
-	// List of authentication methods that can be used for origin authentication. See `peers` for
-	// more details.
+	// List of authentication methods that can be used for origin authentication.
+	// See `peers` for more details.
 	Origins []*AuthenticationRule `protobuf:"bytes,3,rep,name=origins,proto3" json:"origins,omitempty"`
-	// Define whether peer or origin identity should be use for principal. Default
-	// value is USE_PEER.
+	// Define whether peer or origin identity should be used for request principal.
+	// Default value is USE_PEER.
 	// If peer (or origin) identity is not available, either because of peer/origin
 	// authentication is not defined, or failed, principal will be left unset.
 	// In other words, binding rule does not affect the decision to accept or
@@ -250,9 +252,9 @@ func (m *PolicyContent) GetPrincipalBinding() PrincipalBinding {
 // AuthenticationRule describes match conditions and the corresponding authentication action. See
 // AuthenticationPolicy for example.
 type AuthenticationRule struct {
-	// Define the conditions when the authentication mechanism will be activated. All conditions
-	// must be satisfied (ANDed) for the authentication mechanism to be used. If empty, it matches
-	// all requests.
+	// Define the conditions when the authentication mechanism will be activated.
+	// All conditions must be satisfied (ANDed) for the authentication mechanism
+	// to be used. If empty, it matches all requests.
 	Match []*Match `protobuf:"bytes,1,rep,name=match,proto3" json:"match,omitempty"`
 	// REQUIRED. Authentication method to be used if the match conditions are satisfied.
 	Authentication       *AuthenticationRule_AuthenticationMethodReference `protobuf:"bytes,2,opt,name=authentication,proto3" json:"authentication,omitempty"`
@@ -487,7 +489,7 @@ type Match struct {
 	// Ports to match. If not specified, it matches to any port number.
 	// Note: these are workload ports, not service ports.
 	Ports []uint32 `protobuf:"varint,1,rep,packed,name=ports,proto3" json:"ports,omitempty"`
-	// Request path to match. Available for L7 authentication method only (e.g JWT). If not
+	// Request path to match. Available for `L7` authentication method only (e.g JWT). If not
 	// specified, it matches to any paths.
 	// Values are case-sensitive and formatted as follows:
 	//

@@ -426,7 +426,8 @@ lint:
 clean-python:
 	rm -rf python/istio_api/*
 
-clean: 	clean-mcp \
+clean: 	clean-common \
+  clean-mcp \
 	clean-mesh \
 	clean-mixer \
 	clean-routing \

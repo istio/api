@@ -1,9 +1,13 @@
 ---
-title: istio.common.v1beta1
+title: Istio common APIs v1beta1
+description: Common Istio APIs.
+location: https://istio.io/docs/reference/config/istio.common.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 number_of_entries: 2
 ---
+<p>This package defines common Istio APIs.</p>
+
 <h2 id="StringMatch">StringMatch</h2>
 <section>
 <p>Describes how to match a given string. Match is case-sensitive.</p>
@@ -45,7 +49,7 @@ number_of_entries: 2
 <td><code>regex</code></td>
 <td><code>string (oneof)</code></td>
 <td>
-<p>ECMAscript style regex-based match as defined by <a href="http://en.cppreference.com/w/cpp/regex/ecmascript">EDCA-262</a>.
+<p><code>ECMAscript</code> style regex-based match as defined by <a href="`http://en.cppreference.com/w/cpp/regex/ecmascript`"><code>EDCA-262</code></a>.
 Example: &ldquo;^/pets/(.*?)?&rdquo;</p>
 
 </td>

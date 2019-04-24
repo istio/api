@@ -22,16 +22,17 @@ package istio.authentication.v1alpha2;
 
 option go_package = "istio.io/api/authentication/v1alpha2";
 
-// Mutual TLS authentication params.
+// Mutual TLS authentication parameters.
 message MutualTls {
   // Defines the acceptable connection TLS mode.
   enum Mode {
+    // Must never be set.
     INVALID = 0;
 
     // Client cert must be presented, connection is in TLS.
     STRICT = 1;
 
-     // Connection can be either plaintext or TLS, and client cert can be omitted.
+     // Connection can be either plain text or TLS, and client cert can be omitted.
     PERMISSIVE = 2;
   };
 

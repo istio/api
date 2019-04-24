@@ -22,9 +22,9 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
 // JSON Web Token (JWT) token format for authentication as defined by
-// [RFC 7519](https://tools.ietf.org/html/rfc7519). See [OAuth
-// 2.0](https://tools.ietf.org/html/rfc6749) and [OIDC
-// 1.0](http://openid.net/connect) for how this is used in the whole
+// [RFC 7519](`https://tools.ietf.org/html/rfc7519`). See [OAuth
+// 2.0](`https://tools.ietf.org/html/rfc6749`) and [OIDC
+// 1.0](`http://openid.net/connect`) for how this is used in the whole
 // authentication flow.
 //
 // For example:
@@ -40,14 +40,14 @@ const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 // ```
 type Jwt struct {
 	// Identifies the issuer that issued the JWT. See
-	// [issuer](https://tools.ietf.org/html/rfc7519#section-4.1.1)
+	// [issuer](`https://tools.ietf.org/html/rfc7519#section-4.1.1`)
 	// Usually a URL or an email address.
 	//
-	// Example: https://securetoken.google.com
-	// Example: 1234567-compute@developer.gserviceaccount.com
+	// Example: `https://securetoken.google.com`
+	// Example: `1234567-compute@developer.gserviceaccount.com`
 	Issuer string `protobuf:"bytes,1,opt,name=issuer,proto3" json:"issuer,omitempty"`
 	// The list of JWT
-	// [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3).
+	// [audiences](`https://tools.ietf.org/html/rfc7519#section-4.1.3`).
 	// that are allowed to access. A JWT containing any of these
 	// audiences will be accepted.
 	//
@@ -62,28 +62,28 @@ type Jwt struct {
 	// ```
 	Audiences []string `protobuf:"bytes,2,rep,name=audiences,proto3" json:"audiences,omitempty"`
 	// URL of the provider's public key set to validate signature of the
-	// JWT. See [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
+	// JWT. See [OpenID Discovery](`https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata`).
 	//
 	// Optional if the key set document can either (a) be retrieved from
 	// [OpenID
-	// Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html) of
+	// Discovery](`https://openid.net/specs/openid-connect-discovery-1_0.html`) of
 	// the issuer or (b) inferred from the email domain of the issuer (e.g. a
 	// Google service account).
 	//
 	// Example: `https://www.googleapis.com/oauth2/v1/certs`
 	//
-	// Note: Only one of jwks_uri and jwks should be used.
+	// Note: Only one of `jwks_uri` and `jwks` should be used.
 	JwksUri string `protobuf:"bytes,3,opt,name=jwks_uri,json=jwksUri,proto3" json:"jwks_uri,omitempty"`
 	// JSON Web Key Set of public keys to validate signature of the JWT.
-	// See https://auth0.com/docs/jwks.
+	// See `https://auth0.com/docs/jwks`
 	//
-	// Note: Only one of jwks_uri and jwks should be used.
+	// Note: Only one of `jwks_uri` and `jwks` should be used.
 	Jwks string `protobuf:"bytes,10,opt,name=jwks,proto3" json:"jwks,omitempty"`
 	// JWT is sent in a request header. `header` represents the
 	// header name.
 	//
 	// For example, if `header=x-goog-iap-jwt-assertion`, the header
-	// format will be x-goog-iap-jwt-assertion: <JWT>.
+	// format will be `x-goog-iap-jwt-assertion`: $JWT.
 	JwtHeaders []string `protobuf:"bytes,6,rep,name=jwt_headers,json=jwtHeaders,proto3" json:"jwt_headers,omitempty"`
 	// JWT is sent in a query parameter. `query` represents the
 	// query parameter name.

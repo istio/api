@@ -14,6 +14,11 @@
 
 syntax = "proto3";
 
+// $title: Istio common APIs v1beta1
+// $description: Common Istio APIs.
+// $location: https://istio.io/docs/reference/config/istio.common.v1alpha1.html
+
+// This package defines common Istio APIs.
 package istio.common.v1beta1;
 
 option go_package = "istio.io/api/common/v1beta1";
@@ -30,8 +35,8 @@ message StringMatch {
     // suffix-based match.
     string suffix = 3;
 
-    // ECMAscript style regex-based match as defined by [EDCA-262](
-    // http://en.cppreference.com/w/cpp/regex/ecmascript).
+    // `ECMAscript` style regex-based match as defined by [`EDCA-262`](
+    // `http://en.cppreference.com/w/cpp/regex/ecmascript`).
     // Example: "^/pets/(.*?)?"
     string regex = 4;
   }
