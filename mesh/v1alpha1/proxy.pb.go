@@ -284,7 +284,7 @@ func _Tracing_OneofSizer(msg proto.Message) (n int) {
 type Tracing_Zipkin struct {
 	// Address of the Zipkin service (e.g. _zipkin:9411_).
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	// Control weather to turn on shared_span mode for Zipkin span generation.
+	// Controls whether to turn on shared_span mode for Zipkin span generation.
 	// If this is true, shared_span mode will be enabled and envoy will generate
 	// a new child span for ingress request. If this is false, share_span mode will
 	// be turned off, such that client and server span will share the same span id.

@@ -1358,6 +1358,11 @@
                     "id": 1,
                     "name": "address",
                     "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "shared_span_context",
+                    "type": "bool"
                   }
                 ]
               },
