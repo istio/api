@@ -1538,6 +1538,11 @@
                 "id": 21,
                 "name": "sds",
                 "type": "SDS"
+              },
+              {
+                "id": 22,
+                "name": "envoy_http_grpc_als_address",
+                "type": "string"
               }
             ]
           }
