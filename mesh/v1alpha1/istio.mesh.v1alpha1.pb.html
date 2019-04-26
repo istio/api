@@ -418,7 +418,7 @@ Default value is text.</p>
 </tr>
 <tr id="MeshConfig-envoy_accesslog_service">
 <td><code>envoyAccesslogService</code></td>
-<td><code><a href="#MeshConfig-EnvoyAccesslogService">MeshConfig.EnvoyAccesslogService</a></code></td>
+<td><code><a href="#MeshConfig-GoogleGrpcService">MeshConfig.GoogleGrpcService</a></code></td>
 <td>
 <p>The Envoy gRPC Access Log Service (ALS) implementation.
 See <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto#config-accesslog-v2-httpgrpcaccesslogconfig">Access Log Service</a>
@@ -532,7 +532,7 @@ Fallback to old identity format(without trust domain) if not set.</p>
 </tbody>
 </table>
 </section>
-<h2 id="MeshConfig-EnvoyAccesslogService">MeshConfig.EnvoyAccesslogService</h2>
+<h2 id="MeshConfig-GoogleGrpcService">MeshConfig.GoogleGrpcService</h2>
 <section>
 <table class="message-fields">
 <thead>
@@ -543,24 +543,26 @@ Fallback to old identity format(without trust domain) if not set.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-EnvoyAccesslogService-address">
-<td><code>address</code></td>
+<tr id="MeshConfig-GoogleGrpcService-target_uri">
+<td><code>targetUri</code></td>
 <td><code>string</code></td>
 <td>
-<p>host[:port]</p>
+<p>Required: host[:port] The target URI when using the Google gRPC client.</p>
 
 </td>
 </tr>
-<tr id="MeshConfig-EnvoyAccesslogService-credentials">
+<tr id="MeshConfig-GoogleGrpcService-credentials">
 <td><code>credentials</code></td>
-<td><code><a href="#MeshConfig-EnvoyAccesslogService-GrpcSSLCredentials">MeshConfig.EnvoyAccesslogService.GrpcSSLCredentials</a></code></td>
+<td><code><a href="#MeshConfig-GoogleGrpcService-SSLCredentials">MeshConfig.GoogleGrpcService.SSLCredentials</a></code></td>
 <td>
+<p>Optional: SSL credentials. If empty, client will use insecure gRPC channel.</p>
+
 </td>
 </tr>
 </tbody>
 </table>
 </section>
-<h2 id="MeshConfig-EnvoyAccesslogService-GrpcSSLCredentials">MeshConfig.EnvoyAccesslogService.GrpcSSLCredentials</h2>
+<h2 id="MeshConfig-GoogleGrpcService-SSLCredentials">MeshConfig.GoogleGrpcService.SSLCredentials</h2>
 <section>
 <table class="message-fields">
 <thead>
@@ -571,7 +573,7 @@ Fallback to old identity format(without trust domain) if not set.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-EnvoyAccesslogService-GrpcSSLCredentials-root_certs">
+<tr id="MeshConfig-GoogleGrpcService-SSLCredentials-root_certs">
 <td><code>rootCerts</code></td>
 <td><code>string</code></td>
 <td>
@@ -579,7 +581,7 @@ Fallback to old identity format(without trust domain) if not set.</p>
 
 </td>
 </tr>
-<tr id="MeshConfig-EnvoyAccesslogService-GrpcSSLCredentials-private_key">
+<tr id="MeshConfig-GoogleGrpcService-SSLCredentials-private_key">
 <td><code>privateKey</code></td>
 <td><code>string</code></td>
 <td>
@@ -587,7 +589,7 @@ Fallback to old identity format(without trust domain) if not set.</p>
 
 </td>
 </tr>
-<tr id="MeshConfig-EnvoyAccesslogService-GrpcSSLCredentials-cert_chain">
+<tr id="MeshConfig-GoogleGrpcService-SSLCredentials-cert_chain">
 <td><code>certChain</code></td>
 <td><code>string</code></td>
 <td>

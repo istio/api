@@ -1018,7 +1018,7 @@
               {
                 "id": 37,
                 "name": "envoy_accesslog_service",
-                "type": "EnvoyAccesslogService"
+                "type": "GoogleGrpcService"
               },
               {
                 "id": 14,
@@ -1123,22 +1123,22 @@
             ],
             "messages": [
               {
-                "name": "EnvoyAccesslogService",
+                "name": "GoogleGrpcService",
                 "fields": [
                   {
                     "id": 1,
-                    "name": "address",
+                    "name": "target_uri",
                     "type": "string"
                   },
                   {
                     "id": 2,
                     "name": "credentials",
-                    "type": "GrpcSSLCredentials"
+                    "type": "SSLCredentials"
                   }
                 ],
                 "messages": [
                   {
-                    "name": "GrpcSSLCredentials",
+                    "name": "SSLCredentials",
                     "fields": [
                       {
                         "id": 1,
