@@ -4,7 +4,7 @@ description: Configuration affecting the service mesh as a whole.
 location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 21
+number_of_entries: 23
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -416,6 +416,16 @@ Default value is text.</p>
 
 </td>
 </tr>
+<tr id="MeshConfig-envoy_accesslog_service">
+<td><code>envoyAccesslogService</code></td>
+<td><code><a href="#MeshConfig-EnvoyAccesslogService">MeshConfig.EnvoyAccesslogService</a></code></td>
+<td>
+<p>The Envoy gRPC Access Log Service (ALS) implementation.
+See <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto#config-accesslog-v2-httpgrpcaccesslogconfig">Access Log Service</a>
+for details about Envoy&rsquo;s gRPC Access Log Service API.</p>
+
+</td>
+</tr>
 <tr id="MeshConfig-default_config">
 <td><code>defaultConfig</code></td>
 <td><code><a href="#ProxyConfig">ProxyConfig</a></code></td>
@@ -517,6 +527,72 @@ Fallback to old identity format(without trust domain) if not set.</p>
 <tr id="MeshConfig-AccessLogEncoding-JSON">
 <td><code>JSON</code></td>
 <td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-EnvoyAccesslogService">MeshConfig.EnvoyAccesslogService</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-EnvoyAccesslogService-address">
+<td><code>address</code></td>
+<td><code>string</code></td>
+<td>
+<p>host[:port]</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-EnvoyAccesslogService-credentials">
+<td><code>credentials</code></td>
+<td><code><a href="#MeshConfig-EnvoyAccesslogService-GrpcSSLCredentials">MeshConfig.EnvoyAccesslogService.GrpcSSLCredentials</a></code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-EnvoyAccesslogService-GrpcSSLCredentials">MeshConfig.EnvoyAccesslogService.GrpcSSLCredentials</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-EnvoyAccesslogService-GrpcSSLCredentials-root_certs">
+<td><code>rootCerts</code></td>
+<td><code>string</code></td>
+<td>
+<p>The path to the PEM encoded file contains server root certificates.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-EnvoyAccesslogService-GrpcSSLCredentials-private_key">
+<td><code>privateKey</code></td>
+<td><code>string</code></td>
+<td>
+<p>The path to the PEM encoded file contains client private key.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-EnvoyAccesslogService-GrpcSSLCredentials-cert_chain">
+<td><code>certChain</code></td>
+<td><code>string</code></td>
+<td>
+<p>The path to the PEM encoded file contains client certificate chain.</p>
+
 </td>
 </tr>
 </tbody>
