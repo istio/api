@@ -4370,6 +4370,12 @@
                     "name": "remove",
                     "type": "string",
                     "is_repeated": true
+                  },
+                  {
+                    "id": 4,
+                    "name": "tracing_tags_from_headers",
+                    "type": "string",
+                    "is_repeated": true
                   }
                 ],
                 "maps": [
