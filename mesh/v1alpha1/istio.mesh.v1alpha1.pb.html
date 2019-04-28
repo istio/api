@@ -325,8 +325,19 @@ always target the same Mixer instance.</p>
 <td><code>proxyListenPort</code></td>
 <td><code>int32</code></td>
 <td>
-<p>Port on which Envoy should listen for incoming connections from
-other services.</p>
+<p>Port on which Envoy should listen for incoming connections from other services.
+Notes that In sidecar model, the connections may not include the ones initialized
+by the peers Envoys. See <code>proxy_inbound_listen_port</code></p>
+
+</td>
+</tr>
+<tr id="MeshConfig-proxy_inbound_listen_port">
+<td><code>proxyInboundListenPort</code></td>
+<td><code>int32</code></td>
+<td>
+<p>Port on which Envoy should listen for incoming connections from peer Envoys.
+If the inbound outbound redirection is not split, these connections are handled by
+<code>proxy_listen_port</code>.</p>
 
 </td>
 </tr>

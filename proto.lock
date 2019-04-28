@@ -944,6 +944,11 @@
                 "type": "int32"
               },
               {
+                "id": 37,
+                "name": "proxy_inbound_listen_port",
+                "type": "int32"
+              },
+              {
                 "id": 5,
                 "name": "proxy_http_port",
                 "type": "int32"
