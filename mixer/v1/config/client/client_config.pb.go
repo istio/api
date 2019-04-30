@@ -196,10 +196,12 @@ type TransportConfig struct {
 	// attributes are consumed by the proxy in front of mixer.
 	AttributesForMixerProxy *v1.Attributes `protobuf:"bytes,8,opt,name=attributes_for_mixer_proxy,json=attributesForMixerProxy,proto3" json:"attributes_for_mixer_proxy,omitempty"`
 	// When disable_report_batch is false, this value specifies after how many
-	// requests a batch report is sent
+	// requests a batch report is sent. The default report_batch_max_entries==0
+	// will use the hardcoded defaults of istio::mixerclient::ReportOptions.
 	ReportBatchMaxEntries uint32 `protobuf:"varint,9,opt,name=report_batch_max_entries,json=reportBatchMaxEntries,proto3" json:"report_batch_max_entries,omitempty"`
 	// When disable_report_batch is false, this value specifies after how much
-	// time a batch report is sent
+	// time a batch report is sent. The default report_batch_max_time==0 will
+	// use the hardcoded defaults of istio::mixerclient::ReportOptions.
 	ReportBatchMaxTime *types.Duration `protobuf:"bytes,10,opt,name=report_batch_max_time,json=reportBatchMaxTime,proto3" json:"report_batch_max_time,omitempty"`
 }
 
