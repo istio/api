@@ -145,6 +145,14 @@ message TransportConfig {
   // includes the "source.ip" and "source.uid" attributes. These
   // attributes are consumed by the proxy in front of mixer.
   Attributes attributes_for_mixer_proxy = 8;
+
+  // When disable_report_batch is false, this value specifies after how many
+  // requests a batch report is sent
+  uint32 report_batch_max_entries = 9;
+
+  // When disable_report_batch is false, this value specifies after how much
+  // time a batch report is sent
+  google.protobuf.Duration report_batch_max_time = 10;
 }
 
 // Defines the client config for HTTP.
