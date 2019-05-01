@@ -3,7 +3,6 @@
 
 import sys
 _b=sys.version_info[0]<3 and (lambda x:x) or (lambda x:x.encode('latin1'))
-from google.protobuf.internal import enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
@@ -14,7 +13,7 @@ from google.protobuf import descriptor_pb2
 _sym_db = _symbol_database.Default()
 
 
-from authentication.v1alpha2 import method_pb2 as authentication_dot_v1alpha2_dot_method__pb2
+from authentication.v1alpha2 import credential_pb2 as authentication_dot_v1alpha2_dot_credential__pb2
 from common.v1beta1 import selector_pb2 as common_dot_v1beta1_dot_selector__pb2
 from common.v1beta1 import match_pb2 as common_dot_v1beta1_dot_match__pb2
 
@@ -23,35 +22,10 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='authentication/v1alpha2/policy.proto',
   package='istio.authentication.v1alpha2',
   syntax='proto3',
-  serialized_pb=_b('\n$authentication/v1alpha2/policy.proto\x12\x1distio.authentication.v1alpha2\x1a$authentication/v1alpha2/method.proto\x1a\x1d\x63ommon/v1beta1/selector.proto\x1a\x1a\x63ommon/v1beta1/match.proto\"\x97\x01\n\x14\x41uthenticationPolicy\x12\x41\n\x11workload_selector\x18\x01 \x01(\x0b\x32&.istio.common.v1beta1.WorkloadSelector\x12<\n\x06policy\x18\x02 \x01(\x0b\x32,.istio.authentication.v1alpha2.PolicyContent\"\xe1\x01\n\rPolicyContent\x12@\n\x05peers\x18\x02 \x03(\x0b\x32\x31.istio.authentication.v1alpha2.AuthenticationRule\x12\x42\n\x07origins\x18\x03 \x03(\x0b\x32\x31.istio.authentication.v1alpha2.AuthenticationRule\x12J\n\x11principal_binding\x18\x06 \x01(\x0e\x32/.istio.authentication.v1alpha2.PrincipalBinding\"\xb1\x02\n\x12\x41uthenticationRule\x12\x33\n\x05match\x18\x01 \x03(\x0b\x32$.istio.authentication.v1alpha2.Match\x12g\n\x0e\x61uthentication\x18\x02 \x01(\x0b\x32O.istio.authentication.v1alpha2.AuthenticationRule.AuthenticationMethodReference\x1a}\n\x1d\x41uthenticationMethodReference\x12\x10\n\x06method\x18\x01 \x01(\tH\x00\x12\x43\n\x04spec\x18\x02 \x01(\x0b\x32\x33.istio.authentication.v1alpha2.AuthenticationMethodH\x00\x42\x05\n\x03ref\"H\n\x05Match\x12\r\n\x05ports\x18\x01 \x03(\r\x12\x30\n\x05paths\x18\x02 \x03(\x0b\x32!.istio.common.v1beta1.StringMatch*0\n\x10PrincipalBinding\x12\x0c\n\x08USE_PEER\x10\x00\x12\x0e\n\nUSE_ORIGIN\x10\x01\x42&Z$istio.io/api/authentication/v1alpha2b\x06proto3')
+  serialized_pb=_b('\n$authentication/v1alpha2/policy.proto\x12\x1distio.authentication.v1alpha2\x1a(authentication/v1alpha2/credential.proto\x1a\x1d\x63ommon/v1beta1/selector.proto\x1a\x1a\x63ommon/v1beta1/match.proto\"\x97\x01\n\x14\x41uthenticationPolicy\x12\x41\n\x11workload_selector\x18\x01 \x01(\x0b\x32&.istio.common.v1beta1.WorkloadSelector\x12<\n\x05rules\x18\x02 \x03(\x0b\x32-.istio.authentication.v1alpha2.CredentialRule\"\x8c\x01\n\x0e\x43redentialRule\x12\x33\n\x05match\x18\x01 \x03(\x0b\x32$.istio.authentication.v1alpha2.Match\x12\x45\n\x07require\x18\x02 \x03(\x0b\x32\x34.istio.authentication.v1alpha2.CredentialRequirement\"h\n\x15\x43redentialRequirement\x12\x12\n\ncredential\x18\x01 \x01(\t\x12;\n\x08override\x18\x02 \x01(\x0b\x32).istio.authentication.v1alpha2.Credential\"H\n\x05Match\x12\r\n\x05ports\x18\x01 \x03(\r\x12\x30\n\x05paths\x18\x02 \x03(\x0b\x32!.istio.common.v1beta1.StringMatchB&Z$istio.io/api/authentication/v1alpha2b\x06proto3')
   ,
-  dependencies=[authentication_dot_v1alpha2_dot_method__pb2.DESCRIPTOR,common_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,common_dot_v1beta1_dot_match__pb2.DESCRIPTOR,])
+  dependencies=[authentication_dot_v1alpha2_dot_credential__pb2.DESCRIPTOR,common_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,common_dot_v1beta1_dot_match__pb2.DESCRIPTOR,])
 
-_PRINCIPALBINDING = _descriptor.EnumDescriptor(
-  name='PrincipalBinding',
-  full_name='istio.authentication.v1alpha2.PrincipalBinding',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='USE_PEER', index=0, number=0,
-      options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='USE_ORIGIN', index=1, number=1,
-      options=None,
-      type=None),
-  ],
-  containing_type=None,
-  options=None,
-  serialized_start=932,
-  serialized_end=980,
-)
-_sym_db.RegisterEnumDescriptor(_PRINCIPALBINDING)
-
-PrincipalBinding = enum_type_wrapper.EnumTypeWrapper(_PRINCIPALBINDING)
-USE_PEER = 0
-USE_ORIGIN = 1
 
 
 
@@ -70,57 +44,12 @@ _AUTHENTICATIONPOLICY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='policy', full_name='istio.authentication.v1alpha2.AuthenticationPolicy.policy', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=169,
-  serialized_end=320,
-)
-
-
-_POLICYCONTENT = _descriptor.Descriptor(
-  name='PolicyContent',
-  full_name='istio.authentication.v1alpha2.PolicyContent',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='peers', full_name='istio.authentication.v1alpha2.PolicyContent.peers', index=0,
+      name='rules', full_name='istio.authentication.v1alpha2.AuthenticationPolicy.rules', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='origins', full_name='istio.authentication.v1alpha2.PolicyContent.origins', index=1,
-      number=3, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='principal_binding', full_name='istio.authentication.v1alpha2.PolicyContent.principal_binding', index=2,
-      number=6, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -133,76 +62,36 @@ _POLICYCONTENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=323,
-  serialized_end=548,
+  serialized_start=173,
+  serialized_end=324,
 )
 
 
-_AUTHENTICATIONRULE_AUTHENTICATIONMETHODREFERENCE = _descriptor.Descriptor(
-  name='AuthenticationMethodReference',
-  full_name='istio.authentication.v1alpha2.AuthenticationRule.AuthenticationMethodReference',
+_CREDENTIALRULE = _descriptor.Descriptor(
+  name='CredentialRule',
+  full_name='istio.authentication.v1alpha2.CredentialRule',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='method', full_name='istio.authentication.v1alpha2.AuthenticationRule.AuthenticationMethodReference.method', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='spec', full_name='istio.authentication.v1alpha2.AuthenticationRule.AuthenticationMethodReference.spec', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-    _descriptor.OneofDescriptor(
-      name='ref', full_name='istio.authentication.v1alpha2.AuthenticationRule.AuthenticationMethodReference.ref',
-      index=0, containing_type=None, fields=[]),
-  ],
-  serialized_start=731,
-  serialized_end=856,
-)
-
-_AUTHENTICATIONRULE = _descriptor.Descriptor(
-  name='AuthenticationRule',
-  full_name='istio.authentication.v1alpha2.AuthenticationRule',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='match', full_name='istio.authentication.v1alpha2.AuthenticationRule.match', index=0,
+      name='match', full_name='istio.authentication.v1alpha2.CredentialRule.match', index=0,
       number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='authentication', full_name='istio.authentication.v1alpha2.AuthenticationRule.authentication', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='require', full_name='istio.authentication.v1alpha2.CredentialRule.require', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
-  nested_types=[_AUTHENTICATIONRULE_AUTHENTICATIONMETHODREFERENCE, ],
+  nested_types=[],
   enum_types=[
   ],
   options=None,
@@ -211,8 +100,46 @@ _AUTHENTICATIONRULE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=551,
-  serialized_end=856,
+  serialized_start=327,
+  serialized_end=467,
+)
+
+
+_CREDENTIALREQUIREMENT = _descriptor.Descriptor(
+  name='CredentialRequirement',
+  full_name='istio.authentication.v1alpha2.CredentialRequirement',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='credential', full_name='istio.authentication.v1alpha2.CredentialRequirement.credential', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='override', full_name='istio.authentication.v1alpha2.CredentialRequirement.override', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=469,
+  serialized_end=573,
 )
 
 
@@ -249,31 +176,20 @@ _MATCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=858,
-  serialized_end=930,
+  serialized_start=575,
+  serialized_end=647,
 )
 
 _AUTHENTICATIONPOLICY.fields_by_name['workload_selector'].message_type = common_dot_v1beta1_dot_selector__pb2._WORKLOADSELECTOR
-_AUTHENTICATIONPOLICY.fields_by_name['policy'].message_type = _POLICYCONTENT
-_POLICYCONTENT.fields_by_name['peers'].message_type = _AUTHENTICATIONRULE
-_POLICYCONTENT.fields_by_name['origins'].message_type = _AUTHENTICATIONRULE
-_POLICYCONTENT.fields_by_name['principal_binding'].enum_type = _PRINCIPALBINDING
-_AUTHENTICATIONRULE_AUTHENTICATIONMETHODREFERENCE.fields_by_name['spec'].message_type = authentication_dot_v1alpha2_dot_method__pb2._AUTHENTICATIONMETHOD
-_AUTHENTICATIONRULE_AUTHENTICATIONMETHODREFERENCE.containing_type = _AUTHENTICATIONRULE
-_AUTHENTICATIONRULE_AUTHENTICATIONMETHODREFERENCE.oneofs_by_name['ref'].fields.append(
-  _AUTHENTICATIONRULE_AUTHENTICATIONMETHODREFERENCE.fields_by_name['method'])
-_AUTHENTICATIONRULE_AUTHENTICATIONMETHODREFERENCE.fields_by_name['method'].containing_oneof = _AUTHENTICATIONRULE_AUTHENTICATIONMETHODREFERENCE.oneofs_by_name['ref']
-_AUTHENTICATIONRULE_AUTHENTICATIONMETHODREFERENCE.oneofs_by_name['ref'].fields.append(
-  _AUTHENTICATIONRULE_AUTHENTICATIONMETHODREFERENCE.fields_by_name['spec'])
-_AUTHENTICATIONRULE_AUTHENTICATIONMETHODREFERENCE.fields_by_name['spec'].containing_oneof = _AUTHENTICATIONRULE_AUTHENTICATIONMETHODREFERENCE.oneofs_by_name['ref']
-_AUTHENTICATIONRULE.fields_by_name['match'].message_type = _MATCH
-_AUTHENTICATIONRULE.fields_by_name['authentication'].message_type = _AUTHENTICATIONRULE_AUTHENTICATIONMETHODREFERENCE
+_AUTHENTICATIONPOLICY.fields_by_name['rules'].message_type = _CREDENTIALRULE
+_CREDENTIALRULE.fields_by_name['match'].message_type = _MATCH
+_CREDENTIALRULE.fields_by_name['require'].message_type = _CREDENTIALREQUIREMENT
+_CREDENTIALREQUIREMENT.fields_by_name['override'].message_type = authentication_dot_v1alpha2_dot_credential__pb2._CREDENTIAL
 _MATCH.fields_by_name['paths'].message_type = common_dot_v1beta1_dot_match__pb2._STRINGMATCH
 DESCRIPTOR.message_types_by_name['AuthenticationPolicy'] = _AUTHENTICATIONPOLICY
-DESCRIPTOR.message_types_by_name['PolicyContent'] = _POLICYCONTENT
-DESCRIPTOR.message_types_by_name['AuthenticationRule'] = _AUTHENTICATIONRULE
+DESCRIPTOR.message_types_by_name['CredentialRule'] = _CREDENTIALRULE
+DESCRIPTOR.message_types_by_name['CredentialRequirement'] = _CREDENTIALREQUIREMENT
 DESCRIPTOR.message_types_by_name['Match'] = _MATCH
-DESCRIPTOR.enum_types_by_name['PrincipalBinding'] = _PRINCIPALBINDING
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 AuthenticationPolicy = _reflection.GeneratedProtocolMessageType('AuthenticationPolicy', (_message.Message,), dict(
@@ -283,27 +199,19 @@ AuthenticationPolicy = _reflection.GeneratedProtocolMessageType('AuthenticationP
   ))
 _sym_db.RegisterMessage(AuthenticationPolicy)
 
-PolicyContent = _reflection.GeneratedProtocolMessageType('PolicyContent', (_message.Message,), dict(
-  DESCRIPTOR = _POLICYCONTENT,
+CredentialRule = _reflection.GeneratedProtocolMessageType('CredentialRule', (_message.Message,), dict(
+  DESCRIPTOR = _CREDENTIALRULE,
   __module__ = 'authentication.v1alpha2.policy_pb2'
-  # @@protoc_insertion_point(class_scope:istio.authentication.v1alpha2.PolicyContent)
+  # @@protoc_insertion_point(class_scope:istio.authentication.v1alpha2.CredentialRule)
   ))
-_sym_db.RegisterMessage(PolicyContent)
+_sym_db.RegisterMessage(CredentialRule)
 
-AuthenticationRule = _reflection.GeneratedProtocolMessageType('AuthenticationRule', (_message.Message,), dict(
-
-  AuthenticationMethodReference = _reflection.GeneratedProtocolMessageType('AuthenticationMethodReference', (_message.Message,), dict(
-    DESCRIPTOR = _AUTHENTICATIONRULE_AUTHENTICATIONMETHODREFERENCE,
-    __module__ = 'authentication.v1alpha2.policy_pb2'
-    # @@protoc_insertion_point(class_scope:istio.authentication.v1alpha2.AuthenticationRule.AuthenticationMethodReference)
-    ))
-  ,
-  DESCRIPTOR = _AUTHENTICATIONRULE,
+CredentialRequirement = _reflection.GeneratedProtocolMessageType('CredentialRequirement', (_message.Message,), dict(
+  DESCRIPTOR = _CREDENTIALREQUIREMENT,
   __module__ = 'authentication.v1alpha2.policy_pb2'
-  # @@protoc_insertion_point(class_scope:istio.authentication.v1alpha2.AuthenticationRule)
+  # @@protoc_insertion_point(class_scope:istio.authentication.v1alpha2.CredentialRequirement)
   ))
-_sym_db.RegisterMessage(AuthenticationRule)
-_sym_db.RegisterMessage(AuthenticationRule.AuthenticationMethodReference)
+_sym_db.RegisterMessage(CredentialRequirement)
 
 Match = _reflection.GeneratedProtocolMessageType('Match', (_message.Message,), dict(
   DESCRIPTOR = _MATCH,

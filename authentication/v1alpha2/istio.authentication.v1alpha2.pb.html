@@ -4,45 +4,10 @@ description: Authentication policy for Istio services.
 location: https://istio.io/docs/reference/config/istio.authentication.v1alpha2.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 2
+number_of_entries: 1
 ---
 <p>This package defines user-facing authentication policy.</p>
 
-<h2 id="AuthenticationRule-AuthenticationMethodReference">AuthenticationRule.AuthenticationMethodReference</h2>
-<section>
-<p>AuthenticationMethodReference refers to <code>AuthenticationMethod</code> by name or define it inline.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="AuthenticationRule-AuthenticationMethodReference-method" class="oneof oneof-start">
-<td><code>method</code></td>
-<td><code>string (oneof)</code></td>
-<td>
-<p>Refers to the AuthenticationMethod CR with this name.
-If the AuthenticationMethod resource with this name does not exist,
-Istio (Pilot) will log errors and also configures proxy with method
-that is equivalent to <code>deny-all</code>.</p>
-
-</td>
-</tr>
-<tr id="AuthenticationRule-AuthenticationMethodReference-spec" class="oneof">
-<td><code>spec</code></td>
-<td><code><a href="#AuthenticationMethod">AuthenticationMethod (oneof)</a></code></td>
-<td>
-<p>Defines the required authentication method inline.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="MutualTls-Mode">MutualTls.Mode</h2>
 <section>
 <p>Defines the acceptable connection TLS mode.</p>

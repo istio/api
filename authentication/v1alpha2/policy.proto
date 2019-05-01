@@ -14,7 +14,7 @@
 
 syntax = "proto3";
 
-import "authentication/v1alpha2/method.proto";
+import "authentication/v1alpha2/credential.proto";
 import "common/v1beta1/selector.proto";
 import "common/v1beta1/match.proto";
 
@@ -30,33 +30,61 @@ option go_package = "istio.io/api/authentication/v1alpha2";
 // $hide_from_docs
 // AuthenticationPolicy describes authentication requirements for the workload(s) it is attached to.
 // Example of a simple policy that enable mTLS for all workloads in the namespace scope of the
-// policy. Note that `istio.mtls` is a name of the pre-define `AuthenticationMethod` for Istio
+// policy. Note that `istio.mtls` is a name of the pre-define `Credential` for Istio
 // mutual TLS.
 //
 // ```
 // spec:
-//   policy:
-//     peers:
-//     - authentication:
-//         method: "istio.mtls"
+//   rules:
+//   - require:
+//       credential: "istio.mtls"
 // ```
 //
-// This example set end-user authentication for workloads that match label `app`=`foo`, using JWT
+// This example sets end-user authentication for workloads that match label `app=foo`, using JWT
 // The JWT authentication details are defined directly in the policy (`inline`).
 // ```
 // spec:
 //   workloadSelector:
 //     app: foo
-//   policy:
-//     origins:
-//     - apply:
-//         spec:
-//           jwt:
-//             issuer: "https://securetoken.google.com"
-//             audiences:
-//             - "productpage"
-//             jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
+//   rules:
+//   - require:
+//     - credential: "none"
+//       override:
+//         jwt:
+//           issuer: "https://securetoken.google.com"
+//           audiences:
+//           - "productpage"
+//           jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
 // ```
+//
+// This example sets policy for workload `app=foo`, requires mTLS for all traffic, and JWT for
+// (HTTP) request with path start with `/set`
+// ```
+// spec:
+//   workloadSelector:
+//     app: foo
+//   rules:
+//   - require:
+//     - credential: "istio.mtls"
+//   - match:
+//       paths:
+//         prefix: '/set'
+//     require:
+//     - credential: "my-jwt"
+// ```
+// This example requires mTLS *or* JWT for port 9090, and mTLS (only) else where.
+// ```
+// spec:
+//   workloadSelector:
+//     app: foo
+//   rules:
+//   - match:
+//       ports: [9090]
+//     require:
+//     - credential: "istio.mtls"
+//     - credential: "my-jwt"
+//   - require:
+//     - credential: "istio.mtls"
 //
 // This last example shows a policy to set peer authentication with mTLS for all requests, and
 // end-user authentication if requests have "/create" or "/update" prefix. For all other paths,
@@ -65,17 +93,15 @@ option go_package = "istio.io/api/authentication/v1alpha2";
 // spec:
 //   workloadSelector:
 //     app: bar
-//   policy:
-//     peers:
-//     - authentication:
-//         method: "istio.mtls"
-//     origins:
-//     - match:
-//         paths:
-//         - prefix: "/create"
-//         - prefix: "/update"
-//       authentication:
-//         method: "my-jwt"
+//   rules:
+//   - require:
+//     - credential: "istio.mtls"
+//   - match:
+//       paths:
+//       - prefix: "/create"
+//       - prefix: "/update"
+//     require:
+//     - credential: "my-jwt"
 // ```
 message AuthenticationPolicy {
   // Criteria used to select the specific set of pods/VMs on which this
@@ -83,80 +109,74 @@ message AuthenticationPolicy {
   // be applied to all workload instances in the same namespace.
   istio.common.v1beta1.WorkloadSelector workload_selector = 1;
 
-  // REQUIRED. The authentication spec to be set for the selected workloads.
-  PolicyContent policy = 2;
+  // Rules specify what credential(s) can be used to authenticate with the service. Each rule
+  // contains (match) conditions. The first one that meets the conditions will be applied, i.e
+  // the corresponding credentials must be provided and and valid. If the list is empty, or no
+  // rule is activated, authentication is not required.
+  repeated CredentialRule rules = 2;
 }
 
 // $hide_from_docs
-// PolicyContent specifies the authentication requirements. It is composed of 2-part authentication:
-// - peer: verify caller service credentials. This part will set `source.principal`
-// (peer identity).
-// - origin: verify the origin credentials. This part will set `request.auth.user`
-// (origin identity), as well as other attributes like `request.auth.presenter`,
-// `request.auth.audiences` and raw claims. Note that the identity could be
-// end-user, service account, device etc.
-//
-// Last but not least, the principal binding rule defines which identity (peer
-// or origin) should be used as principal. By default, it uses peer.
-// For examples, see `AuthenticationPolicy`
-message PolicyContent {
-  // List of authentication methods that can be used for peer authentication.
-  // Rule will be examined in order. Each rule may contain match conditions.
-  // The first (and only) rule that have the match conditions satisfied will
-  // be activated, and the authentication result decides whether the request is
-  // allowed or denied. In other words, all other rules are ignored. If
-  // there is no rule meet the conditions, or if the list is empty,
-  // authentication is not required.
-  repeated AuthenticationRule peers = 2;
-
-  // List of authentication methods that can be used for origin authentication.
-  // See `peers` for more details.
-  repeated AuthenticationRule origins = 3;
-
-  // Define whether peer or origin identity should be used for request principal.
-  // Default value is USE_PEER.
-  // If peer (or origin) identity is not available, either because of peer/origin
-  // authentication is not defined, or failed, principal will be left unset.
-  // In other words, binding rule does not affect the decision to accept or
-  // reject request.
-  PrincipalBinding principal_binding = 6;
-}
-
-// $hide_from_docs
-// AuthenticationRule describes match conditions and the corresponding authentication action. See
-// AuthenticationPolicy for example.
-message AuthenticationRule {
-  // Define the conditions when the authentication mechanism will be activated.
-  // All conditions must be satisfied (ANDed) for the authentication mechanism
-  // to be used. If empty, it matches all requests.
+// CredentialRule specifies the conditions, if any, and the credential(s) required in that case.
+// Examples:
+// - Rule to require mTLS for all:
+// ```
+// require:
+//   credential: "istio.mtls"
+// ```
+// - Rule to require mTLS *or* JWT
+// ```
+// require:
+//   credential: "istio.mtls"
+//   credential: "my-jwt"
+// ```
+// - Rule to require mTLS only on port 9090
+// ```
+// require:
+//   match:
+//     ports: [9090]
+//   require:
+//     credential: "istio.mtls"
+// ```
+message CredentialRule {
+  // Defines the conditions that require the credentials below.
   repeated Match match = 1;
 
-  // AuthenticationMethodReference refers to `AuthenticationMethod` by name or define it inline.
-  message AuthenticationMethodReference {
-    oneof ref {
-      // Refers to the AuthenticationMethod CR with this name.
-      // If the AuthenticationMethod resource with this name does not exist,
-      // Istio (Pilot) will log errors and also configures proxy with method
-      // that is equivalent to `deny-all`.
-      string method = 1;
-
-      // Defines the required authentication method inline.
-      AuthenticationMethod spec = 2;
-    }
-  }
-
-  // REQUIRED. Authentication method to be used if the match conditions are satisfied.
-  AuthenticationMethodReference authentication = 2;
+  // If the `match` conditions are satisfied, all of these credential requirement must be
+  // provided (ANDed).
+  repeated CredentialRequirement require = 2;
 }
 
 // $hide_from_docs
-// Associates authentication with request principal.
-enum PrincipalBinding {
-  // Principal will be set to the identity from peer authentication.
-  USE_PEER = 0;
+// CredentialRequirement defines the credential(s) to be provided. The credential is referred by name,
+// and can be defined/overriden inline.
+// Example (see AuthenticationPolicy for the use of this in the full context)
+// - Require "istio.mtls" credential:
+// ```
+// credential: "istio.mtls"
+// ```
+// - Require JWT-type credential, defining inline:
+// ```
+// credential: "none" # or leave empty
+// override:
+//   jwt:
+//     issuer: "secret@example.com"
+// ```
+// - Require JWT-type credential, based on "foo-jwt", with specific `audience` require.
+// ```
+// credential: "foo-jwt"
+// override:
+//   jwt:
+//     aud: "my-service"
+// ```
+message CredentialRequirement{
+  // Name of the required credential. This is one of `Credential` CRs, or Istio pre-defined one, such as
+  // `none`, `istio.mtls` etc. If not set, it will be treated as `none`.
+  string credential = 1;
 
-  // Principal will be set to the identity from origin authentication.
-  USE_ORIGIN = 1;
+  // Override credential definition. The override credential must be the same type as the one
+  // defined by the `credential` (name) above, unless the base credential is `none`.
+  Credential override = 2;
 }
 
 // $hide_from_docs

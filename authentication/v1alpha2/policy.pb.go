@@ -25,64 +25,63 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
 // $hide_from_docs
-// Associates authentication with request principal.
-type PrincipalBinding int32
-
-const (
-	// Principal will be set to the identity from peer authentication.
-	PrincipalBinding_USE_PEER PrincipalBinding = 0
-	// Principal will be set to the identity from origin authentication.
-	PrincipalBinding_USE_ORIGIN PrincipalBinding = 1
-)
-
-var PrincipalBinding_name = map[int32]string{
-	0: "USE_PEER",
-	1: "USE_ORIGIN",
-}
-
-var PrincipalBinding_value = map[string]int32{
-	"USE_PEER":   0,
-	"USE_ORIGIN": 1,
-}
-
-func (x PrincipalBinding) String() string {
-	return proto.EnumName(PrincipalBinding_name, int32(x))
-}
-
-func (PrincipalBinding) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_de35128e1eb23de7, []int{0}
-}
-
-// $hide_from_docs
 // AuthenticationPolicy describes authentication requirements for the workload(s) it is attached to.
 // Example of a simple policy that enable mTLS for all workloads in the namespace scope of the
-// policy. Note that `istio.mtls` is a name of the pre-define `AuthenticationMethod` for Istio
+// policy. Note that `istio.mtls` is a name of the pre-define `Credential` for Istio
 // mutual TLS.
 //
 // ```
 // spec:
-//   policy:
-//     peers:
-//     - authentication:
-//         method: "istio.mtls"
+//   rules:
+//   - require:
+//       credential: "istio.mtls"
 // ```
 //
-// This example set end-user authentication for workloads that match label `app`=`foo`, using JWT
+// This example sets end-user authentication for workloads that match label `app=foo`, using JWT
 // The JWT authentication details are defined directly in the policy (`inline`).
 // ```
 // spec:
 //   workloadSelector:
 //     app: foo
-//   policy:
-//     origins:
-//     - apply:
-//         spec:
-//           jwt:
-//             issuer: "https://securetoken.google.com"
-//             audiences:
-//             - "productpage"
-//             jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
+//   rules:
+//   - require:
+//     - credential: "none"
+//       override:
+//         jwt:
+//           issuer: "https://securetoken.google.com"
+//           audiences:
+//           - "productpage"
+//           jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
 // ```
+//
+// This example sets policy for workload `app=foo`, requires mTLS for all traffic, and JWT for
+// (HTTP) request with path start with `/set`
+// ```
+// spec:
+//   workloadSelector:
+//     app: foo
+//   rules:
+//   - require:
+//     - credential: "istio.mtls"
+//   - match:
+//       paths:
+//         prefix: '/set'
+//     require:
+//     - credential: "my-jwt"
+// ```
+// This example requires mTLS *or* JWT for port 9090, and mTLS (only) else where.
+// ```
+// spec:
+//   workloadSelector:
+//     app: foo
+//   rules:
+//   - match:
+//       ports: [9090]
+//     require:
+//     - credential: "istio.mtls"
+//     - credential: "my-jwt"
+//   - require:
+//     - credential: "istio.mtls"
 //
 // This last example shows a policy to set peer authentication with mTLS for all requests, and
 // end-user authentication if requests have "/create" or "/update" prefix. For all other paths,
@@ -91,28 +90,29 @@ func (PrincipalBinding) EnumDescriptor() ([]byte, []int) {
 // spec:
 //   workloadSelector:
 //     app: bar
-//   policy:
-//     peers:
-//     - authentication:
-//         method: "istio.mtls"
-//     origins:
-//     - match:
-//         paths:
-//         - prefix: "/create"
-//         - prefix: "/update"
-//       authentication:
-//         method: "my-jwt"
+//   rules:
+//   - require:
+//     - credential: "istio.mtls"
+//   - match:
+//       paths:
+//       - prefix: "/create"
+//       - prefix: "/update"
+//     require:
+//     - credential: "my-jwt"
 // ```
 type AuthenticationPolicy struct {
 	// Criteria used to select the specific set of pods/VMs on which this
 	// authentication policy should be applied. If omitted, the authentication policy
 	// be applied to all workload instances in the same namespace.
 	WorkloadSelector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=workload_selector,json=workloadSelector,proto3" json:"workload_selector,omitempty"`
-	// REQUIRED. The authentication spec to be set for the selected workloads.
-	Policy               *PolicyContent `protobuf:"bytes,2,opt,name=policy,proto3" json:"policy,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_unrecognized     []byte         `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	// Rules specify what credential(s) can be used to authenticate with the service. Each rule
+	// contains (match) conditions. The first one that meets the conditions will be applied, i.e
+	// the corresponding credentials must be provided and and valid. If the list is empty, or no
+	// rule is activated, authentication is not required.
+	Rules                []*CredentialRule `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
 }
 
 func (m *AuthenticationPolicy) Reset()         { *m = AuthenticationPolicy{} }
@@ -155,61 +155,58 @@ func (m *AuthenticationPolicy) GetWorkloadSelector() *v1beta1.WorkloadSelector {
 	return nil
 }
 
-func (m *AuthenticationPolicy) GetPolicy() *PolicyContent {
+func (m *AuthenticationPolicy) GetRules() []*CredentialRule {
 	if m != nil {
-		return m.Policy
+		return m.Rules
 	}
 	return nil
 }
 
 // $hide_from_docs
-// PolicyContent specifies the authentication requirements. It is composed of 2-part authentication:
-// - peer: verify caller service credentials. This part will set `source.principal`
-// (peer identity).
-// - origin: verify the origin credentials. This part will set `request.auth.user`
-// (origin identity), as well as other attributes like `request.auth.presenter`,
-// `request.auth.audiences` and raw claims. Note that the identity could be
-// end-user, service account, device etc.
-//
-// Last but not least, the principal binding rule defines which identity (peer
-// or origin) should be used as principal. By default, it uses peer.
-// For examples, see `AuthenticationPolicy`
-type PolicyContent struct {
-	// List of authentication methods that can be used for peer authentication.
-	// Rule will be examined in order. Each rule may contain match conditions.
-	// The first (and only) rule that have the match conditions satisfied will
-	// be activated, and the authentication result decides whether the request is
-	// allowed or denied. In other words, all other rules are ignored. If
-	// there is no rule meet the conditions, or if the list is empty,
-	// authentication is not required.
-	Peers []*AuthenticationRule `protobuf:"bytes,2,rep,name=peers,proto3" json:"peers,omitempty"`
-	// List of authentication methods that can be used for origin authentication.
-	// See `peers` for more details.
-	Origins []*AuthenticationRule `protobuf:"bytes,3,rep,name=origins,proto3" json:"origins,omitempty"`
-	// Define whether peer or origin identity should be used for request principal.
-	// Default value is USE_PEER.
-	// If peer (or origin) identity is not available, either because of peer/origin
-	// authentication is not defined, or failed, principal will be left unset.
-	// In other words, binding rule does not affect the decision to accept or
-	// reject request.
-	PrincipalBinding     PrincipalBinding `protobuf:"varint,6,opt,name=principal_binding,json=principalBinding,proto3,enum=istio.authentication.v1alpha2.PrincipalBinding" json:"principal_binding,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
-	XXX_unrecognized     []byte           `json:"-"`
-	XXX_sizecache        int32            `json:"-"`
+// CredentialRule specifies the conditions, if any, and the credential(s) required in that case.
+// Examples:
+// - Rule to require mTLS for all:
+// ```
+// require:
+//   credential: "istio.mtls"
+// ```
+// - Rule to require mTLS *or* JWT
+// ```
+// require:
+//   credential: "istio.mtls"
+//   credential: "my-jwt"
+// ```
+// - Rule to require mTLS only on port 9090
+// ```
+// require:
+//   match:
+//     ports: [9090]
+//   require:
+//     credential: "istio.mtls"
+// ```
+type CredentialRule struct {
+	// Defines the conditions that require the credentials below.
+	Match []*Match `protobuf:"bytes,1,rep,name=match,proto3" json:"match,omitempty"`
+	// If the `match` conditions are satisfied, all of these credential requirement must be
+	// provided (ANDed).
+	Require              []*CredentialRequirement `protobuf:"bytes,2,rep,name=require,proto3" json:"require,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
+	XXX_unrecognized     []byte                   `json:"-"`
+	XXX_sizecache        int32                    `json:"-"`
 }
 
-func (m *PolicyContent) Reset()         { *m = PolicyContent{} }
-func (m *PolicyContent) String() string { return proto.CompactTextString(m) }
-func (*PolicyContent) ProtoMessage()    {}
-func (*PolicyContent) Descriptor() ([]byte, []int) {
+func (m *CredentialRule) Reset()         { *m = CredentialRule{} }
+func (m *CredentialRule) String() string { return proto.CompactTextString(m) }
+func (*CredentialRule) ProtoMessage()    {}
+func (*CredentialRule) Descriptor() ([]byte, []int) {
 	return fileDescriptor_de35128e1eb23de7, []int{1}
 }
-func (m *PolicyContent) XXX_Unmarshal(b []byte) error {
+func (m *CredentialRule) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *PolicyContent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *CredentialRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_PolicyContent.Marshal(b, m, deterministic)
+		return xxx_messageInfo_CredentialRule.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -219,128 +216,78 @@ func (m *PolicyContent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error
 		return b[:n], nil
 	}
 }
-func (m *PolicyContent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PolicyContent.Merge(m, src)
+func (m *CredentialRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CredentialRule.Merge(m, src)
 }
-func (m *PolicyContent) XXX_Size() int {
+func (m *CredentialRule) XXX_Size() int {
 	return m.Size()
 }
-func (m *PolicyContent) XXX_DiscardUnknown() {
-	xxx_messageInfo_PolicyContent.DiscardUnknown(m)
+func (m *CredentialRule) XXX_DiscardUnknown() {
+	xxx_messageInfo_CredentialRule.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PolicyContent proto.InternalMessageInfo
+var xxx_messageInfo_CredentialRule proto.InternalMessageInfo
 
-func (m *PolicyContent) GetPeers() []*AuthenticationRule {
-	if m != nil {
-		return m.Peers
-	}
-	return nil
-}
-
-func (m *PolicyContent) GetOrigins() []*AuthenticationRule {
-	if m != nil {
-		return m.Origins
-	}
-	return nil
-}
-
-func (m *PolicyContent) GetPrincipalBinding() PrincipalBinding {
-	if m != nil {
-		return m.PrincipalBinding
-	}
-	return PrincipalBinding_USE_PEER
-}
-
-// $hide_from_docs
-// AuthenticationRule describes match conditions and the corresponding authentication action. See
-// AuthenticationPolicy for example.
-type AuthenticationRule struct {
-	// Define the conditions when the authentication mechanism will be activated.
-	// All conditions must be satisfied (ANDed) for the authentication mechanism
-	// to be used. If empty, it matches all requests.
-	Match []*Match `protobuf:"bytes,1,rep,name=match,proto3" json:"match,omitempty"`
-	// REQUIRED. Authentication method to be used if the match conditions are satisfied.
-	Authentication       *AuthenticationRule_AuthenticationMethodReference `protobuf:"bytes,2,opt,name=authentication,proto3" json:"authentication,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                                          `json:"-"`
-	XXX_unrecognized     []byte                                            `json:"-"`
-	XXX_sizecache        int32                                             `json:"-"`
-}
-
-func (m *AuthenticationRule) Reset()         { *m = AuthenticationRule{} }
-func (m *AuthenticationRule) String() string { return proto.CompactTextString(m) }
-func (*AuthenticationRule) ProtoMessage()    {}
-func (*AuthenticationRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_de35128e1eb23de7, []int{2}
-}
-func (m *AuthenticationRule) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AuthenticationRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AuthenticationRule.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *AuthenticationRule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AuthenticationRule.Merge(m, src)
-}
-func (m *AuthenticationRule) XXX_Size() int {
-	return m.Size()
-}
-func (m *AuthenticationRule) XXX_DiscardUnknown() {
-	xxx_messageInfo_AuthenticationRule.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AuthenticationRule proto.InternalMessageInfo
-
-func (m *AuthenticationRule) GetMatch() []*Match {
+func (m *CredentialRule) GetMatch() []*Match {
 	if m != nil {
 		return m.Match
 	}
 	return nil
 }
 
-func (m *AuthenticationRule) GetAuthentication() *AuthenticationRule_AuthenticationMethodReference {
+func (m *CredentialRule) GetRequire() []*CredentialRequirement {
 	if m != nil {
-		return m.Authentication
+		return m.Require
 	}
 	return nil
 }
 
-// AuthenticationMethodReference refers to `AuthenticationMethod` by name or define it inline.
-type AuthenticationRule_AuthenticationMethodReference struct {
-	// Types that are valid to be assigned to Ref:
-	//	*AuthenticationRule_AuthenticationMethodReference_Method
-	//	*AuthenticationRule_AuthenticationMethodReference_Spec
-	Ref                  isAuthenticationRule_AuthenticationMethodReference_Ref `protobuf_oneof:"ref"`
-	XXX_NoUnkeyedLiteral struct{}                                               `json:"-"`
-	XXX_unrecognized     []byte                                                 `json:"-"`
-	XXX_sizecache        int32                                                  `json:"-"`
+// $hide_from_docs
+// CredentialRequirement defines the credential(s) to be provided. The credential is referred by name,
+// and can be defined/overriden inline.
+// Example (see AuthenticationPolicy for the use of this in the full context)
+// - Require "istio.mtls" credential:
+// ```
+// credential: "istio.mtls"
+// ```
+// - Require JWT-type credential, defining inline:
+// ```
+// credential: "none" # or leave empty
+// override:
+//   jwt:
+//     issuer: "secret@example.com"
+// ```
+// - Require JWT-type credential, based on "foo-jwt", with specific `audience` require.
+// ```
+// credential: "foo-jwt"
+// override:
+//   jwt:
+//     aud: "my-service"
+// ```
+type CredentialRequirement struct {
+	// Name of the required credential. This is one of `Credential` CRs, or Istio pre-defined one, such as
+	// `none`, `istio.mtls` etc. If not set, it will be treated as `none`.
+	Credential string `protobuf:"bytes,1,opt,name=credential,proto3" json:"credential,omitempty"`
+	// Override credential definition. The override credential must be the same type as the one
+	// defined by the `credential` (name) above, unless the base credential is `none`.
+	Override             *Credential `protobuf:"bytes,2,opt,name=override,proto3" json:"override,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
-func (m *AuthenticationRule_AuthenticationMethodReference) Reset() {
-	*m = AuthenticationRule_AuthenticationMethodReference{}
+func (m *CredentialRequirement) Reset()         { *m = CredentialRequirement{} }
+func (m *CredentialRequirement) String() string { return proto.CompactTextString(m) }
+func (*CredentialRequirement) ProtoMessage()    {}
+func (*CredentialRequirement) Descriptor() ([]byte, []int) {
+	return fileDescriptor_de35128e1eb23de7, []int{2}
 }
-func (m *AuthenticationRule_AuthenticationMethodReference) String() string {
-	return proto.CompactTextString(m)
-}
-func (*AuthenticationRule_AuthenticationMethodReference) ProtoMessage() {}
-func (*AuthenticationRule_AuthenticationMethodReference) Descriptor() ([]byte, []int) {
-	return fileDescriptor_de35128e1eb23de7, []int{2, 0}
-}
-func (m *AuthenticationRule_AuthenticationMethodReference) XXX_Unmarshal(b []byte) error {
+func (m *CredentialRequirement) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *AuthenticationRule_AuthenticationMethodReference) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *CredentialRequirement) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_AuthenticationRule_AuthenticationMethodReference.Marshal(b, m, deterministic)
+		return xxx_messageInfo_CredentialRequirement.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -350,125 +297,30 @@ func (m *AuthenticationRule_AuthenticationMethodReference) XXX_Marshal(b []byte,
 		return b[:n], nil
 	}
 }
-func (m *AuthenticationRule_AuthenticationMethodReference) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AuthenticationRule_AuthenticationMethodReference.Merge(m, src)
+func (m *CredentialRequirement) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CredentialRequirement.Merge(m, src)
 }
-func (m *AuthenticationRule_AuthenticationMethodReference) XXX_Size() int {
+func (m *CredentialRequirement) XXX_Size() int {
 	return m.Size()
 }
-func (m *AuthenticationRule_AuthenticationMethodReference) XXX_DiscardUnknown() {
-	xxx_messageInfo_AuthenticationRule_AuthenticationMethodReference.DiscardUnknown(m)
+func (m *CredentialRequirement) XXX_DiscardUnknown() {
+	xxx_messageInfo_CredentialRequirement.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_AuthenticationRule_AuthenticationMethodReference proto.InternalMessageInfo
+var xxx_messageInfo_CredentialRequirement proto.InternalMessageInfo
 
-type isAuthenticationRule_AuthenticationMethodReference_Ref interface {
-	isAuthenticationRule_AuthenticationMethodReference_Ref()
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type AuthenticationRule_AuthenticationMethodReference_Method struct {
-	Method string `protobuf:"bytes,1,opt,name=method,proto3,oneof"`
-}
-type AuthenticationRule_AuthenticationMethodReference_Spec struct {
-	Spec *AuthenticationMethod `protobuf:"bytes,2,opt,name=spec,proto3,oneof"`
-}
-
-func (*AuthenticationRule_AuthenticationMethodReference_Method) isAuthenticationRule_AuthenticationMethodReference_Ref() {
-}
-func (*AuthenticationRule_AuthenticationMethodReference_Spec) isAuthenticationRule_AuthenticationMethodReference_Ref() {
-}
-
-func (m *AuthenticationRule_AuthenticationMethodReference) GetRef() isAuthenticationRule_AuthenticationMethodReference_Ref {
+func (m *CredentialRequirement) GetCredential() string {
 	if m != nil {
-		return m.Ref
-	}
-	return nil
-}
-
-func (m *AuthenticationRule_AuthenticationMethodReference) GetMethod() string {
-	if x, ok := m.GetRef().(*AuthenticationRule_AuthenticationMethodReference_Method); ok {
-		return x.Method
+		return m.Credential
 	}
 	return ""
 }
 
-func (m *AuthenticationRule_AuthenticationMethodReference) GetSpec() *AuthenticationMethod {
-	if x, ok := m.GetRef().(*AuthenticationRule_AuthenticationMethodReference_Spec); ok {
-		return x.Spec
+func (m *CredentialRequirement) GetOverride() *Credential {
+	if m != nil {
+		return m.Override
 	}
 	return nil
-}
-
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*AuthenticationRule_AuthenticationMethodReference) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _AuthenticationRule_AuthenticationMethodReference_OneofMarshaler, _AuthenticationRule_AuthenticationMethodReference_OneofUnmarshaler, _AuthenticationRule_AuthenticationMethodReference_OneofSizer, []interface{}{
-		(*AuthenticationRule_AuthenticationMethodReference_Method)(nil),
-		(*AuthenticationRule_AuthenticationMethodReference_Spec)(nil),
-	}
-}
-
-func _AuthenticationRule_AuthenticationMethodReference_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*AuthenticationRule_AuthenticationMethodReference)
-	// ref
-	switch x := m.Ref.(type) {
-	case *AuthenticationRule_AuthenticationMethodReference_Method:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Method)
-	case *AuthenticationRule_AuthenticationMethodReference_Spec:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Spec); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("AuthenticationRule_AuthenticationMethodReference.Ref has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _AuthenticationRule_AuthenticationMethodReference_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*AuthenticationRule_AuthenticationMethodReference)
-	switch tag {
-	case 1: // ref.method
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Ref = &AuthenticationRule_AuthenticationMethodReference_Method{x}
-		return true, err
-	case 2: // ref.spec
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(AuthenticationMethod)
-		err := b.DecodeMessage(msg)
-		m.Ref = &AuthenticationRule_AuthenticationMethodReference_Spec{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _AuthenticationRule_AuthenticationMethodReference_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*AuthenticationRule_AuthenticationMethodReference)
-	// ref
-	switch x := m.Ref.(type) {
-	case *AuthenticationRule_AuthenticationMethodReference_Method:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.Method)))
-		n += len(x.Method)
-	case *AuthenticationRule_AuthenticationMethodReference_Spec:
-		s := proto.Size(x.Spec)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // $hide_from_docs
@@ -557,11 +409,9 @@ func (m *Match) GetPaths() []*v1beta1.StringMatch {
 }
 
 func init() {
-	proto.RegisterEnum("istio.authentication.v1alpha2.PrincipalBinding", PrincipalBinding_name, PrincipalBinding_value)
 	proto.RegisterType((*AuthenticationPolicy)(nil), "istio.authentication.v1alpha2.AuthenticationPolicy")
-	proto.RegisterType((*PolicyContent)(nil), "istio.authentication.v1alpha2.PolicyContent")
-	proto.RegisterType((*AuthenticationRule)(nil), "istio.authentication.v1alpha2.AuthenticationRule")
-	proto.RegisterType((*AuthenticationRule_AuthenticationMethodReference)(nil), "istio.authentication.v1alpha2.AuthenticationRule.AuthenticationMethodReference")
+	proto.RegisterType((*CredentialRule)(nil), "istio.authentication.v1alpha2.CredentialRule")
+	proto.RegisterType((*CredentialRequirement)(nil), "istio.authentication.v1alpha2.CredentialRequirement")
 	proto.RegisterType((*Match)(nil), "istio.authentication.v1alpha2.Match")
 }
 
@@ -570,38 +420,31 @@ func init() {
 }
 
 var fileDescriptor_de35128e1eb23de7 = []byte{
-	// 493 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x4f, 0x6b, 0x13, 0x41,
-	0x14, 0xcf, 0x24, 0x6e, 0xd4, 0x57, 0x1b, 0xd2, 0xa1, 0x87, 0x25, 0x90, 0x10, 0x43, 0x90, 0x20,
-	0xb2, 0x6b, 0xd2, 0x83, 0xe0, 0xcd, 0x68, 0x68, 0x83, 0xd4, 0x96, 0x09, 0x2a, 0x88, 0x10, 0x26,
-	0x9b, 0x69, 0x76, 0x70, 0x33, 0x33, 0xcc, 0x4e, 0x0d, 0x9e, 0x3d, 0xfa, 0x69, 0xfc, 0x16, 0x1e,
-	0xbd, 0x79, 0x95, 0x7c, 0x12, 0xe9, 0xcc, 0xee, 0x61, 0x57, 0xdb, 0x50, 0x8f, 0x33, 0xef, 0xf7,
-	0xef, 0xbd, 0x79, 0xbb, 0xd0, 0xa7, 0x97, 0x26, 0x66, 0xc2, 0xf0, 0x88, 0x1a, 0x2e, 0x45, 0xf8,
-	0x79, 0x48, 0x13, 0x15, 0xd3, 0x51, 0xa8, 0x64, 0xc2, 0xa3, 0x2f, 0x81, 0xd2, 0xd2, 0x48, 0xdc,
-	0xe6, 0xa9, 0xe1, 0x32, 0x28, 0x62, 0x83, 0x1c, 0xdb, 0xba, 0x56, 0x64, 0xcd, 0x4c, 0x2c, 0x97,
-	0x4e, 0xa4, 0xd5, 0x8e, 0xe4, 0x7a, 0x6d, 0xab, 0x0b, 0x66, 0xe8, 0x30, 0x4c, 0x59, 0xc2, 0x22,
-	0x23, 0x75, 0x56, 0x6e, 0x95, 0xca, 0x6b, 0x6a, 0xa2, 0xd8, 0xd5, 0x7a, 0xdf, 0x11, 0x1c, 0xbe,
-	0x28, 0x78, 0x9c, 0xdb, 0x78, 0x78, 0x06, 0x07, 0x1b, 0xa9, 0x3f, 0x25, 0x92, 0x2e, 0xe7, 0xb9,
-	0x9e, 0x8f, 0xba, 0x68, 0xb0, 0x37, 0x7a, 0x14, 0xb8, 0xd0, 0x4e, 0x36, 0xc8, 0x64, 0x83, 0xf7,
-	0x19, 0x7c, 0x96, 0xa1, 0x49, 0x73, 0x53, 0xba, 0xc1, 0xaf, 0xa0, 0xee, 0xba, 0xf7, 0xab, 0x56,
-	0xe9, 0x49, 0x70, 0x63, 0xfb, 0x81, 0xcb, 0xf2, 0x52, 0x0a, 0xc3, 0x84, 0x21, 0x19, 0xb7, 0xf7,
-	0xb5, 0x0a, 0xfb, 0x85, 0x0a, 0x3e, 0x06, 0x4f, 0x31, 0xa6, 0x53, 0xbf, 0xda, 0xad, 0x0d, 0xf6,
-	0x46, 0xc3, 0x1d, 0xb2, 0xc5, 0x86, 0xc9, 0x65, 0xc2, 0x88, 0xe3, 0xe3, 0xd7, 0x70, 0x57, 0x6a,
-	0xbe, 0xe2, 0x22, 0xf5, 0x6b, 0xff, 0x2b, 0x95, 0x2b, 0xe0, 0x8f, 0x70, 0xa0, 0x34, 0x17, 0x11,
-	0x57, 0x34, 0x99, 0x2f, 0xb8, 0x58, 0x72, 0xb1, 0xf2, 0xeb, 0x5d, 0x34, 0x68, 0x8c, 0xc2, 0x5d,
-	0x8d, 0xe7, 0xbc, 0xb1, 0xa3, 0x91, 0xa6, 0x2a, 0xdd, 0xf4, 0x7e, 0x55, 0x01, 0xff, 0xed, 0x8e,
-	0x9f, 0x83, 0x67, 0xdf, 0xd7, 0x47, 0x36, 0x7f, 0x7f, 0x87, 0xd1, 0xe9, 0x15, 0x96, 0x38, 0x0a,
-	0xde, 0x40, 0xa3, 0x88, 0xcb, 0x9e, 0xe9, 0xec, 0xd6, 0x43, 0x28, 0x5d, 0x9d, 0xda, 0x6d, 0x25,
-	0xec, 0x82, 0x69, 0x26, 0x22, 0x46, 0x4a, 0x36, 0xad, 0x6f, 0x08, 0xda, 0x37, 0x32, 0xb0, 0x0f,
-	0x75, 0xb7, 0xf2, 0x76, 0x07, 0xef, 0x9f, 0x54, 0x48, 0x76, 0xc6, 0x53, 0xb8, 0x93, 0x2a, 0x16,
-	0x65, 0x51, 0x8f, 0x6e, 0x15, 0xd5, 0xb9, 0x9c, 0x54, 0x88, 0x95, 0x18, 0x7b, 0x50, 0xd3, 0xec,
-	0xa2, 0xf7, 0x0e, 0x3c, 0x3b, 0x16, 0x7c, 0x08, 0x9e, 0x92, 0xda, 0xa4, 0x76, 0x96, 0xfb, 0xc4,
-	0x1d, 0xf0, 0x33, 0xf0, 0x14, 0x35, 0x71, 0xbe, 0x6c, 0x0f, 0xff, 0xfd, 0x35, 0xcc, 0x8c, 0xe6,
-	0x62, 0x95, 0x8d, 0xd7, 0xe2, 0x1f, 0x3f, 0x85, 0x66, 0xf9, 0x5d, 0xf1, 0x03, 0xb8, 0xf7, 0x76,
-	0x36, 0x99, 0x9f, 0x4f, 0x26, 0xa4, 0x59, 0xc1, 0x0d, 0x80, 0xab, 0xd3, 0x19, 0x99, 0x1e, 0x4f,
-	0xdf, 0x34, 0xd1, 0x78, 0xf4, 0x63, 0xdb, 0x41, 0x3f, 0xb7, 0x1d, 0xf4, 0x7b, 0xdb, 0x41, 0x1f,
-	0xfa, 0xce, 0x88, 0xcb, 0x90, 0x2a, 0x1e, 0x5e, 0xf3, 0x67, 0x58, 0xd4, 0xed, 0x87, 0x7d, 0xf4,
-	0x27, 0x00, 0x00, 0xff, 0xff, 0x71, 0xdf, 0xcc, 0x59, 0x80, 0x04, 0x00, 0x00,
+	// 371 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x52, 0xdd, 0x4a, 0xc3, 0x30,
+	0x14, 0x26, 0x4a, 0xfd, 0xc9, 0x50, 0x34, 0x4c, 0x18, 0x83, 0x95, 0x59, 0x86, 0xcc, 0x0b, 0x53,
+	0x56, 0x05, 0xc1, 0x3b, 0x1d, 0x5e, 0x2a, 0xd2, 0x81, 0x82, 0x37, 0x92, 0x75, 0xc1, 0x06, 0xd3,
+	0xa6, 0xa6, 0xe9, 0x86, 0x37, 0x3e, 0x89, 0x0f, 0xe1, 0x63, 0x78, 0xe9, 0x23, 0xc8, 0x9e, 0x44,
+	0x9a, 0xb4, 0xd3, 0x8d, 0x4d, 0x77, 0xd9, 0xf3, 0xfd, 0xf4, 0x3b, 0xdf, 0x09, 0x6c, 0x91, 0x4c,
+	0x85, 0x34, 0x56, 0x2c, 0x20, 0x8a, 0x89, 0xd8, 0x1d, 0x76, 0x08, 0x4f, 0x42, 0xe2, 0xb9, 0x89,
+	0xe0, 0x2c, 0x78, 0xc1, 0x89, 0x14, 0x4a, 0xa0, 0x06, 0x4b, 0x15, 0x13, 0x78, 0x9a, 0x8b, 0x4b,
+	0x6e, 0xbd, 0xbd, 0xc8, 0x24, 0x90, 0x74, 0x90, 0xcf, 0x09, 0x37, 0x46, 0xf5, 0x46, 0x20, 0xa2,
+	0x48, 0x33, 0xfa, 0x54, 0x91, 0x8e, 0x9b, 0x52, 0x4e, 0x03, 0x25, 0x64, 0x01, 0xd7, 0x67, 0xe0,
+	0x88, 0xa8, 0x20, 0x34, 0x98, 0xf3, 0x0e, 0x60, 0xf5, 0x7c, 0xea, 0x3f, 0x37, 0x3a, 0x22, 0xea,
+	0xc1, 0xdd, 0x91, 0x90, 0x4f, 0x5c, 0x90, 0xc1, 0x43, 0xe9, 0x57, 0x03, 0x4d, 0xd0, 0xae, 0x78,
+	0x07, 0xd8, 0x04, 0x37, 0xb6, 0xb8, 0xb0, 0xc5, 0x77, 0x05, 0xbd, 0x57, 0xb0, 0xfd, 0x9d, 0xd1,
+	0xcc, 0x04, 0x75, 0xa1, 0x25, 0x33, 0x4e, 0xd3, 0xda, 0x4a, 0x73, 0xb5, 0x5d, 0xf1, 0x8e, 0xf0,
+	0x9f, 0x0d, 0xe0, 0xee, 0x64, 0x51, 0x3f, 0xe3, 0xd4, 0x37, 0x5a, 0xe7, 0x0d, 0xc0, 0xed, 0x69,
+	0x04, 0x9d, 0x41, 0x4b, 0x2f, 0x55, 0x03, 0xda, 0xb7, 0xf5, 0x8f, 0xef, 0x55, 0xce, 0xf5, 0x8d,
+	0x04, 0x5d, 0xc3, 0x75, 0x49, 0x9f, 0x33, 0x26, 0x69, 0x91, 0xea, 0x64, 0xf9, 0x54, 0x46, 0x17,
+	0xd1, 0x58, 0xf9, 0xa5, 0x89, 0xf3, 0x0a, 0xf7, 0xe6, 0x32, 0x90, 0x0d, 0xe1, 0xcf, 0xe5, 0x74,
+	0x95, 0x9b, 0xfe, 0xaf, 0x09, 0xba, 0x84, 0x1b, 0x62, 0x48, 0xa5, 0x64, 0x83, 0x3c, 0x49, 0x5e,
+	0xf4, 0xe1, 0xf2, 0x49, 0x26, 0x52, 0xe7, 0x16, 0x5a, 0x7a, 0x3f, 0x54, 0x85, 0x56, 0x22, 0xa4,
+	0x4a, 0x75, 0x29, 0x5b, 0xbe, 0xf9, 0x40, 0xa7, 0xd0, 0x4a, 0x88, 0x0a, 0xcb, 0x13, 0xec, 0xcf,
+	0xbf, 0x65, 0x4f, 0x49, 0x16, 0x3f, 0x16, 0x3d, 0x69, 0xfe, 0x85, 0xf7, 0x31, 0xb6, 0xc1, 0xe7,
+	0xd8, 0x06, 0x5f, 0x63, 0x1b, 0xdc, 0xb7, 0x8c, 0x8c, 0x09, 0x97, 0x24, 0xcc, 0x5d, 0xf0, 0x52,
+	0xfb, 0x6b, 0xfa, 0x91, 0x1d, 0x7f, 0x07, 0x00, 0x00, 0xff, 0xff, 0x1a, 0x32, 0xfc, 0xe7, 0x10,
+	0x03, 0x00, 0x00,
 }
 
 func (m *AuthenticationPolicy) Marshal() (dAtA []byte, err error) {
@@ -629,39 +472,8 @@ func (m *AuthenticationPolicy) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n1
 	}
-	if m.Policy != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintPolicy(dAtA, i, uint64(m.Policy.Size()))
-		n2, err2 := m.Policy.MarshalTo(dAtA[i:])
-		if err2 != nil {
-			return 0, err2
-		}
-		i += n2
-	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	return i, nil
-}
-
-func (m *PolicyContent) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *PolicyContent) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.Peers) > 0 {
-		for _, msg := range m.Peers {
+	if len(m.Rules) > 0 {
+		for _, msg := range m.Rules {
 			dAtA[i] = 0x12
 			i++
 			i = encodeVarintPolicy(dAtA, i, uint64(msg.Size()))
@@ -672,30 +484,13 @@ func (m *PolicyContent) MarshalTo(dAtA []byte) (int, error) {
 			i += n
 		}
 	}
-	if len(m.Origins) > 0 {
-		for _, msg := range m.Origins {
-			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintPolicy(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.PrincipalBinding != 0 {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintPolicy(dAtA, i, uint64(m.PrincipalBinding))
-	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	return i, nil
 }
 
-func (m *AuthenticationRule) Marshal() (dAtA []byte, err error) {
+func (m *CredentialRule) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -705,7 +500,7 @@ func (m *AuthenticationRule) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *AuthenticationRule) MarshalTo(dAtA []byte) (int, error) {
+func (m *CredentialRule) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -722,15 +517,17 @@ func (m *AuthenticationRule) MarshalTo(dAtA []byte) (int, error) {
 			i += n
 		}
 	}
-	if m.Authentication != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintPolicy(dAtA, i, uint64(m.Authentication.Size()))
-		n3, err3 := m.Authentication.MarshalTo(dAtA[i:])
-		if err3 != nil {
-			return 0, err3
+	if len(m.Require) > 0 {
+		for _, msg := range m.Require {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintPolicy(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
 		}
-		i += n3
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -738,7 +535,7 @@ func (m *AuthenticationRule) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *AuthenticationRule_AuthenticationMethodReference) Marshal() (dAtA []byte, err error) {
+func (m *CredentialRequirement) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -748,17 +545,26 @@ func (m *AuthenticationRule_AuthenticationMethodReference) Marshal() (dAtA []byt
 	return dAtA[:n], nil
 }
 
-func (m *AuthenticationRule_AuthenticationMethodReference) MarshalTo(dAtA []byte) (int, error) {
+func (m *CredentialRequirement) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.Ref != nil {
-		nn4, err4 := m.Ref.MarshalTo(dAtA[i:])
-		if err4 != nil {
-			return 0, err4
+	if len(m.Credential) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(len(m.Credential)))
+		i += copy(dAtA[i:], m.Credential)
+	}
+	if m.Override != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintPolicy(dAtA, i, uint64(m.Override.Size()))
+		n2, err2 := m.Override.MarshalTo(dAtA[i:])
+		if err2 != nil {
+			return 0, err2
 		}
-		i += nn4
+		i += n2
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -766,28 +572,6 @@ func (m *AuthenticationRule_AuthenticationMethodReference) MarshalTo(dAtA []byte
 	return i, nil
 }
 
-func (m *AuthenticationRule_AuthenticationMethodReference_Method) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0xa
-	i++
-	i = encodeVarintPolicy(dAtA, i, uint64(len(m.Method)))
-	i += copy(dAtA[i:], m.Method)
-	return i, nil
-}
-func (m *AuthenticationRule_AuthenticationMethodReference_Spec) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.Spec != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintPolicy(dAtA, i, uint64(m.Spec.Size()))
-		n5, err5 := m.Spec.MarshalTo(dAtA[i:])
-		if err5 != nil {
-			return 0, err5
-		}
-		i += n5
-	}
-	return i, nil
-}
 func (m *Match) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -804,21 +588,21 @@ func (m *Match) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if len(m.Ports) > 0 {
-		dAtA7 := make([]byte, len(m.Ports)*10)
-		var j6 int
+		dAtA4 := make([]byte, len(m.Ports)*10)
+		var j3 int
 		for _, num := range m.Ports {
 			for num >= 1<<7 {
-				dAtA7[j6] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA4[j3] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
-				j6++
+				j3++
 			}
-			dAtA7[j6] = uint8(num)
-			j6++
+			dAtA4[j3] = uint8(num)
+			j3++
 		}
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintPolicy(dAtA, i, uint64(j6))
-		i += copy(dAtA[i:], dAtA7[:j6])
+		i = encodeVarintPolicy(dAtA, i, uint64(j3))
+		i += copy(dAtA[i:], dAtA4[:j3])
 	}
 	if len(m.Paths) > 0 {
 		for _, msg := range m.Paths {
@@ -857,9 +641,11 @@ func (m *AuthenticationPolicy) Size() (n int) {
 		l = m.WorkloadSelector.Size()
 		n += 1 + l + sovPolicy(uint64(l))
 	}
-	if m.Policy != nil {
-		l = m.Policy.Size()
-		n += 1 + l + sovPolicy(uint64(l))
+	if len(m.Rules) > 0 {
+		for _, e := range m.Rules {
+			l = e.Size()
+			n += 1 + l + sovPolicy(uint64(l))
+		}
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -867,34 +653,7 @@ func (m *AuthenticationPolicy) Size() (n int) {
 	return n
 }
 
-func (m *PolicyContent) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Peers) > 0 {
-		for _, e := range m.Peers {
-			l = e.Size()
-			n += 1 + l + sovPolicy(uint64(l))
-		}
-	}
-	if len(m.Origins) > 0 {
-		for _, e := range m.Origins {
-			l = e.Size()
-			n += 1 + l + sovPolicy(uint64(l))
-		}
-	}
-	if m.PrincipalBinding != 0 {
-		n += 1 + sovPolicy(uint64(m.PrincipalBinding))
-	}
-	if m.XXX_unrecognized != nil {
-		n += len(m.XXX_unrecognized)
-	}
-	return n
-}
-
-func (m *AuthenticationRule) Size() (n int) {
+func (m *CredentialRule) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -906,8 +665,30 @@ func (m *AuthenticationRule) Size() (n int) {
 			n += 1 + l + sovPolicy(uint64(l))
 		}
 	}
-	if m.Authentication != nil {
-		l = m.Authentication.Size()
+	if len(m.Require) > 0 {
+		for _, e := range m.Require {
+			l = e.Size()
+			n += 1 + l + sovPolicy(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *CredentialRequirement) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Credential)
+	if l > 0 {
+		n += 1 + l + sovPolicy(uint64(l))
+	}
+	if m.Override != nil {
+		l = m.Override.Size()
 		n += 1 + l + sovPolicy(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
@@ -916,43 +697,6 @@ func (m *AuthenticationRule) Size() (n int) {
 	return n
 }
 
-func (m *AuthenticationRule_AuthenticationMethodReference) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Ref != nil {
-		n += m.Ref.Size()
-	}
-	if m.XXX_unrecognized != nil {
-		n += len(m.XXX_unrecognized)
-	}
-	return n
-}
-
-func (m *AuthenticationRule_AuthenticationMethodReference_Method) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Method)
-	n += 1 + l + sovPolicy(uint64(l))
-	return n
-}
-func (m *AuthenticationRule_AuthenticationMethodReference_Spec) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Spec != nil {
-		l = m.Spec.Size()
-		n += 1 + l + sovPolicy(uint64(l))
-	}
-	return n
-}
 func (m *Match) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1058,7 +802,7 @@ func (m *AuthenticationPolicy) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Policy", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Rules", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1085,10 +829,8 @@ func (m *AuthenticationPolicy) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Policy == nil {
-				m.Policy = &PolicyContent{}
-			}
-			if err := m.Policy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.Rules = append(m.Rules, &CredentialRule{})
+			if err := m.Rules[len(m.Rules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1117,7 +859,7 @@ func (m *AuthenticationPolicy) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *PolicyContent) Unmarshal(dAtA []byte) error {
+func (m *CredentialRule) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1140,151 +882,10 @@ func (m *PolicyContent) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: PolicyContent: wiretype end group for non-group")
+			return fmt.Errorf("proto: CredentialRule: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PolicyContent: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Peers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPolicy
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthPolicy
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthPolicy
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Peers = append(m.Peers, &AuthenticationRule{})
-			if err := m.Peers[len(m.Peers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Origins", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPolicy
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthPolicy
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthPolicy
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Origins = append(m.Origins, &AuthenticationRule{})
-			if err := m.Origins[len(m.Origins)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PrincipalBinding", wireType)
-			}
-			m.PrincipalBinding = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPolicy
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.PrincipalBinding |= PrincipalBinding(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPolicy(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPolicy
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPolicy
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AuthenticationRule) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPolicy
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AuthenticationRule: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AuthenticationRule: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CredentialRule: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1323,7 +924,7 @@ func (m *AuthenticationRule) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Authentication", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Require", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1350,10 +951,8 @@ func (m *AuthenticationRule) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Authentication == nil {
-				m.Authentication = &AuthenticationRule_AuthenticationMethodReference{}
-			}
-			if err := m.Authentication.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.Require = append(m.Require, &CredentialRequirement{})
+			if err := m.Require[len(m.Require)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1382,7 +981,7 @@ func (m *AuthenticationRule) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AuthenticationRule_AuthenticationMethodReference) Unmarshal(dAtA []byte) error {
+func (m *CredentialRequirement) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1405,15 +1004,15 @@ func (m *AuthenticationRule_AuthenticationMethodReference) Unmarshal(dAtA []byte
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AuthenticationMethodReference: wiretype end group for non-group")
+			return fmt.Errorf("proto: CredentialRequirement: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AuthenticationMethodReference: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CredentialRequirement: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Method", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Credential", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1441,11 +1040,11 @@ func (m *AuthenticationRule_AuthenticationMethodReference) Unmarshal(dAtA []byte
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Ref = &AuthenticationRule_AuthenticationMethodReference_Method{string(dAtA[iNdEx:postIndex])}
+			m.Credential = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Spec", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Override", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1472,11 +1071,12 @@ func (m *AuthenticationRule_AuthenticationMethodReference) Unmarshal(dAtA []byte
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &AuthenticationMethod{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if m.Override == nil {
+				m.Override = &Credential{}
+			}
+			if err := m.Override.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.Ref = &AuthenticationRule_AuthenticationMethodReference_Spec{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
