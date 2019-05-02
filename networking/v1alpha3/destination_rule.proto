@@ -412,10 +412,10 @@ message ConnectionPoolSettings {
 
   // Settings applicable to HTTP1.1/HTTP2/GRPC connections.
   message HTTPSettings {
-    // Maximum number of pending HTTP requests to a destination.
+    // Maximum number of pending HTTP requests to a destination. Default 1024.
     int32 http1_max_pending_requests = 1;
 
-    // Maximum number of requests to a backend.
+    // Maximum number of requests to a backend. Default 1024.
     int32 http2_max_requests = 2;
 
     // Maximum number of requests per connection to a backend. Setting this

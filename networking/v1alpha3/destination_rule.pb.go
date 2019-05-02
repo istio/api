@@ -1273,9 +1273,9 @@ func (m *ConnectionPoolSettings_TCPSettings_TcpKeepalive) GetInterval() *types.D
 
 // Settings applicable to HTTP1.1/HTTP2/GRPC connections.
 type ConnectionPoolSettings_HTTPSettings struct {
-	// Maximum number of pending HTTP requests to a destination.
+	// Maximum number of pending HTTP requests to a destination. Default 1024.
 	Http1MaxPendingRequests int32 `protobuf:"varint,1,opt,name=http1_max_pending_requests,json=http1MaxPendingRequests,proto3" json:"http1_max_pending_requests,omitempty"`
-	// Maximum number of requests to a backend.
+	// Maximum number of requests to a backend. Default 1024.
 	Http2MaxRequests int32 `protobuf:"varint,2,opt,name=http2_max_requests,json=http2MaxRequests,proto3" json:"http2_max_requests,omitempty"`
 	// Maximum number of requests per connection to a backend. Setting this
 	// parameter to 1 disables keep alive.
