@@ -1,0 +1,42 @@
+// Copyright 2019 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+// $title: Authentication Policy v1alpha2
+// $description: Authentication policy for Istio services.
+// $location: https://istio.io/docs/reference/config/istio.authentication.v1alpha2.html
+
+package istio.authentication.v1alpha2;
+
+option go_package = "istio.io/api/authentication/v1alpha2";
+
+// $hide_from_docs
+// Mutual TLS authentication parameters.
+message MutualTls {
+  // Defines the acceptable connection TLS mode.
+  enum Mode {
+    // Must never be set.
+    INVALID = 0;
+
+    // Client cert must be presented, connection is in TLS.
+    STRICT = 1;
+
+     // Connection can be either plain text or TLS, and client cert can be omitted.
+    PERMISSIVE = 2;
+  };
+
+   // Defines the mode of mTLS authentication.
+  Mode mode = 2;
+}

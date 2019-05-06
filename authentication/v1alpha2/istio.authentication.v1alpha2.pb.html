@@ -1,0 +1,98 @@
+---
+title: Authentication Policy v1alpha2
+description: Authentication policy for Istio services.
+location: https://istio.io/docs/reference/config/istio.authentication.v1alpha2.html
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+number_of_entries: 2
+---
+<p>This package defines user-facing authentication policy.</p>
+
+<h2 id="Authenticator-PrincipalType">Authenticator.PrincipalType</h2>
+<section>
+<p>PrincipalType defines which principal (<code>source.principal</code> or <code>request.auth.principal</code>)
+that the authenticator will set if succeeds.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Authenticator-PrincipalType-INVALID">
+<td><code>INVALID</code></td>
+<td>
+<p>Sentinel value to make sure the principal type must be set.</p>
+
+</td>
+</tr>
+<tr id="Authenticator-PrincipalType-NONE">
+<td><code>NONE</code></td>
+<td>
+<p>Does not set any principal attributes. This is often used to validate extra credentials
+without changing the principal outputs.</p>
+
+</td>
+</tr>
+<tr id="Authenticator-PrincipalType-SOURCE">
+<td><code>SOURCE</code></td>
+<td>
+<p>Output principal to <code>source.principal</code></p>
+
+</td>
+</tr>
+<tr id="Authenticator-PrincipalType-REQUEST">
+<td><code>REQUEST</code></td>
+<td>
+<p>Output principal to <code>request.auth.principal</code></p>
+
+</td>
+</tr>
+<tr id="Authenticator-PrincipalType-BOTH">
+<td><code>BOTH</code></td>
+<td>
+<p>Output principal to both <code>source.principal</code> and <code>request.auth.principal</code>.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MutualTls-Mode">MutualTls.Mode</h2>
+<section>
+<p>Defines the acceptable connection TLS mode.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MutualTls-Mode-INVALID">
+<td><code>INVALID</code></td>
+<td>
+<p>Must never be set.</p>
+
+</td>
+</tr>
+<tr id="MutualTls-Mode-STRICT">
+<td><code>STRICT</code></td>
+<td>
+<p>Client cert must be presented, connection is in TLS.</p>
+
+</td>
+</tr>
+<tr id="MutualTls-Mode-PERMISSIVE">
+<td><code>PERMISSIVE</code></td>
+<td>
+<p>Connection can be either plain text or TLS, and client cert can be omitted.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
