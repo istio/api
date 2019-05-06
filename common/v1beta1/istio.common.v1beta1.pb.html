@@ -1,0 +1,85 @@
+---
+title: Istio common APIs v1beta1
+description: Common Istio APIs.
+location: https://istio.io/docs/reference/config/istio.common.v1alpha1.html
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+number_of_entries: 2
+---
+<p>This package defines common Istio APIs.</p>
+
+<h2 id="StringMatch">StringMatch</h2>
+<section>
+<p>Describes how to match a given string. Match is case-sensitive.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="StringMatch-exact" class="oneof oneof-start">
+<td><code>exact</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>exact string match.</p>
+
+</td>
+</tr>
+<tr id="StringMatch-prefix" class="oneof">
+<td><code>prefix</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>prefix-based match.</p>
+
+</td>
+</tr>
+<tr id="StringMatch-suffix" class="oneof">
+<td><code>suffix</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>suffix-based match.</p>
+
+</td>
+</tr>
+<tr id="StringMatch-regex" class="oneof">
+<td><code>regex</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p><code>ECMAscript</code> style regex-based match as defined by <a href="`http://en.cppreference.com/w/cpp/regex/ecmascript`"><code>EDCA-262</code></a>.
+Example: &ldquo;^/pets/(.*?)?&rdquo;</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="WorkloadSelector">WorkloadSelector</h2>
+<section>
+<p>WorkloadSelector specifies the criteria used to determine if a resource can be applied to a
+workload (proxy).</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="WorkloadSelector-labels">
+<td><code>labels</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>REQUIRED: One or more labels that indicate a specific set of pods/VMs. The scope of
+label search is restricted to the configuration namespace in which the resource is present.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
