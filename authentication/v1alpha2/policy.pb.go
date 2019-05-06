@@ -33,8 +33,8 @@ const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 // If more than one rules are activated, all of them (authenticators) will be run, and the results
 // are combined in an ANDed semantic.
 // Each authenticator may set `source.principal` or `request.auth.principal` attribute or both
-// (see `Authenticator` for details). If two (or more) authenticator that set the same principal
-// are used, the last one wins.
+// (see `Authenticator` for details). If two (or more) authenticators that set the same principal
+// are used, the last one will overwrite that principal value.
 //
 // Examples:
 //
