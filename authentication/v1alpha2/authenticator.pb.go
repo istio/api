@@ -21,56 +21,53 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
-// PrincipalType defines which principal (`source.principal` or `request.auth.principal`)
+// PrincipalOutput defines which principal (`source.principal` or `request.auth.principal`)
 // that the authenticator will set if succeeds.
-type Authenticator_PrincipalType int32
+type Authenticator_PrincipalOutput int32
 
 const (
 	// Sentinel value to make sure the principal type must be set.
-	Authenticator_INVALID Authenticator_PrincipalType = 0
-	// Does not set any principal attributes. This is often used to validate extra credentials
-	// without changing the principal outputs.
-	Authenticator_NONE Authenticator_PrincipalType = 1
+	Authenticator_UNSPECIFIED Authenticator_PrincipalOutput = 0
+	// Does not set any principal attributes. Use this if you want the authenticator validating
+	// extra credentials without changing the principal outputs.
+	Authenticator_VALIDATE_ONLY Authenticator_PrincipalOutput = 1
 	// Output principal to `source.principal`
-	Authenticator_SOURCE Authenticator_PrincipalType = 2
+	Authenticator_SOURCE_PRINCIPAL Authenticator_PrincipalOutput = 2
 	// Output principal to `request.auth.principal`
-	Authenticator_REQUEST Authenticator_PrincipalType = 3
-	// Output principal to both `source.principal` and `request.auth.principal`.
-	Authenticator_BOTH Authenticator_PrincipalType = 4
+	Authenticator_REQUEST_AUTH_PRINCIPAL Authenticator_PrincipalOutput = 3
 )
 
-var Authenticator_PrincipalType_name = map[int32]string{
-	0: "INVALID",
-	1: "NONE",
-	2: "SOURCE",
-	3: "REQUEST",
-	4: "BOTH",
+var Authenticator_PrincipalOutput_name = map[int32]string{
+	0: "UNSPECIFIED",
+	1: "VALIDATE_ONLY",
+	2: "SOURCE_PRINCIPAL",
+	3: "REQUEST_AUTH_PRINCIPAL",
 }
 
-var Authenticator_PrincipalType_value = map[string]int32{
-	"INVALID": 0,
-	"NONE":    1,
-	"SOURCE":  2,
-	"REQUEST": 3,
-	"BOTH":    4,
+var Authenticator_PrincipalOutput_value = map[string]int32{
+	"UNSPECIFIED":            0,
+	"VALIDATE_ONLY":          1,
+	"SOURCE_PRINCIPAL":       2,
+	"REQUEST_AUTH_PRINCIPAL": 3,
 }
 
-func (x Authenticator_PrincipalType) String() string {
-	return proto.EnumName(Authenticator_PrincipalType_name, int32(x))
+func (x Authenticator_PrincipalOutput) String() string {
+	return proto.EnumName(Authenticator_PrincipalOutput_name, int32(x))
 }
 
-func (Authenticator_PrincipalType) EnumDescriptor() ([]byte, []int) {
+func (Authenticator_PrincipalOutput) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_bd7d6b963d764225, []int{0, 0}
 }
 
 // $hide_from_docs
-// Authenticator describes the type and parameters needed for that authenticator. Each authenticator
-// can be defined in a separate CR (of `authenticator` kind) and referred in the authentication
-// policy by name, or defined inline in the policy. Name of the authenticator CR must have prefix
-// indicating the type (e.g `mtls`, `jwt` etc).
-// Istio will also provide several default authenticators for mTLS, such as `mtls-strict` and
-// `mtls-permissive`. This example below is just for illustration of `mtls-strict` authenticator,
-// users generally don't have to define it:
+// Authenticator describes the type and parameters needed for that authenticator.
+// Each authenticator can be defined in a separate CR (of `authenticator` kind)
+// and referred in the authentication policy by name, or defined inline in the
+// policy. Name of the authenticator CR must have prefix indicating the type
+// (e.g `mtls`, `jwt` etc).
+// Istio will also provide several stock authenticators, such as `mtls-strict`
+//  and `mtls-permissive` (these will be reserved name)
+// This example below illustrates the spec for `mtls-strict` authenticator:
 //
 // ```
 // apiVersion: authentication.istio.io/v1alpha2
@@ -81,7 +78,7 @@ func (Authenticator_PrincipalType) EnumDescriptor() ([]byte, []int) {
 // spec:
 //   mtls:
 //     mode: STRICT
-//   principal_type: BOTH
+//   principal: SOURCE_PRINCIPAL
 // ```
 //
 // Here is another example for JWT authenticator.
@@ -98,7 +95,7 @@ func (Authenticator_PrincipalType) EnumDescriptor() ([]byte, []int) {
 //     audiences:
 //     - bar
 //     - baz
-//   principal_type: REQUEST
+//   principal: REQUEST_AUTH_PRINCIPAL
 // ```
 type Authenticator struct {
 	// Types that are valid to be assigned to Type:
@@ -106,10 +103,10 @@ type Authenticator struct {
 	//	*Authenticator_Jwt
 	Type isAuthenticator_Type `protobuf_oneof:"type"`
 	// Defines the principal type that the authenticator will set if succeeds.
-	PrincipalType        Authenticator_PrincipalType `protobuf:"varint,3,opt,name=principal_type,json=principalType,proto3,enum=istio.authentication.v1alpha2.Authenticator_PrincipalType" json:"principal_type,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                    `json:"-"`
-	XXX_unrecognized     []byte                      `json:"-"`
-	XXX_sizecache        int32                       `json:"-"`
+	Principal            Authenticator_PrincipalOutput `protobuf:"varint,3,opt,name=principal,proto3,enum=istio.authentication.v1alpha2.Authenticator_PrincipalOutput" json:"principal,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                      `json:"-"`
+	XXX_unrecognized     []byte                        `json:"-"`
+	XXX_sizecache        int32                         `json:"-"`
 }
 
 func (m *Authenticator) Reset()         { *m = Authenticator{} }
@@ -182,11 +179,11 @@ func (m *Authenticator) GetJwt() *Jwt {
 	return nil
 }
 
-func (m *Authenticator) GetPrincipalType() Authenticator_PrincipalType {
+func (m *Authenticator) GetPrincipal() Authenticator_PrincipalOutput {
 	if m != nil {
-		return m.PrincipalType
+		return m.Principal
 	}
-	return Authenticator_INVALID
+	return Authenticator_UNSPECIFIED
 }
 
 // XXX_OneofFuncs is for the internal use of the proto package.
@@ -264,7 +261,7 @@ func _Authenticator_OneofSizer(msg proto.Message) (n int) {
 }
 
 func init() {
-	proto.RegisterEnum("istio.authentication.v1alpha2.Authenticator_PrincipalType", Authenticator_PrincipalType_name, Authenticator_PrincipalType_value)
+	proto.RegisterEnum("istio.authentication.v1alpha2.Authenticator_PrincipalOutput", Authenticator_PrincipalOutput_name, Authenticator_PrincipalOutput_value)
 	proto.RegisterType((*Authenticator)(nil), "istio.authentication.v1alpha2.Authenticator")
 }
 
@@ -273,27 +270,28 @@ func init() {
 }
 
 var fileDescriptor_bd7d6b963d764225 = []byte{
-	// 307 bytes of a gzipped FileDescriptorProto
+	// 327 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xd2, 0x4e, 0x2c, 0x2d, 0xc9,
 	0x48, 0xcd, 0x2b, 0xc9, 0x4c, 0x4e, 0x2c, 0xc9, 0xcc, 0xcf, 0xd3, 0x2f, 0x33, 0x4c, 0xcc, 0x29,
 	0xc8, 0x48, 0x34, 0xd2, 0x47, 0x12, 0xcf, 0x2f, 0xd2, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x92,
 	0xcd, 0x2c, 0x2e, 0xc9, 0xcc, 0xd7, 0x43, 0xd5, 0xa2, 0x07, 0xd3, 0x22, 0xa5, 0x89, 0xcb, 0xac,
 	0xdc, 0x92, 0x9c, 0xe2, 0xf8, 0xdc, 0xd4, 0x92, 0x8c, 0xfc, 0x14, 0x88, 0x49, 0x52, 0x1a, 0xb8,
-	0x94, 0x66, 0x95, 0x97, 0xa0, 0xa8, 0x54, 0xda, 0xcb, 0xc4, 0xc5, 0xeb, 0x88, 0xec, 0x16, 0x21,
+	0x94, 0x66, 0x95, 0x97, 0xa0, 0xa8, 0x54, 0xba, 0xc2, 0xc4, 0xc5, 0xeb, 0x88, 0xec, 0x16, 0x21,
 	0x3b, 0x2e, 0x16, 0x90, 0x81, 0x12, 0x8c, 0x0a, 0x8c, 0x1a, 0xdc, 0x46, 0x1a, 0x7a, 0x78, 0x1d,
 	0xa5, 0xe7, 0x5b, 0x5a, 0x52, 0x9a, 0x98, 0x13, 0x92, 0x53, 0xec, 0xc1, 0x10, 0x04, 0xd6, 0x27,
 	0x64, 0xc6, 0xc5, 0x9c, 0x55, 0x5e, 0x22, 0xc1, 0x04, 0xd6, 0xae, 0x44, 0x40, 0xbb, 0x57, 0x79,
-	0x89, 0x07, 0x43, 0x10, 0x48, 0x83, 0x50, 0x22, 0x17, 0x5f, 0x41, 0x51, 0x66, 0x5e, 0x72, 0x66,
-	0x41, 0x62, 0x4e, 0x7c, 0x49, 0x65, 0x41, 0xaa, 0x04, 0xb3, 0x02, 0xa3, 0x06, 0x9f, 0x91, 0x15,
-	0x01, 0x23, 0x50, 0x5c, 0xaf, 0x17, 0x00, 0x33, 0x22, 0xa4, 0xb2, 0x20, 0x35, 0x88, 0xb7, 0x00,
-	0x99, 0xab, 0xe4, 0xc9, 0xc5, 0x8b, 0x22, 0x2f, 0xc4, 0xcd, 0xc5, 0xee, 0xe9, 0x17, 0xe6, 0xe8,
-	0xe3, 0xe9, 0x22, 0xc0, 0x20, 0xc4, 0xc1, 0xc5, 0xe2, 0xe7, 0xef, 0xe7, 0x2a, 0xc0, 0x28, 0xc4,
-	0xc5, 0xc5, 0x16, 0xec, 0x1f, 0x1a, 0xe4, 0xec, 0x2a, 0xc0, 0x04, 0x52, 0x12, 0xe4, 0x1a, 0x18,
-	0xea, 0x1a, 0x1c, 0x22, 0xc0, 0x0c, 0x52, 0xe2, 0xe4, 0x1f, 0xe2, 0x21, 0xc0, 0xe2, 0xc4, 0xc6,
-	0xc5, 0x02, 0x72, 0xa3, 0x93, 0xd1, 0x89, 0x47, 0x72, 0x8c, 0x17, 0x1e, 0xc9, 0x31, 0x3e, 0x78,
-	0x24, 0xc7, 0x18, 0xa5, 0x02, 0x71, 0x6a, 0x66, 0xbe, 0x7e, 0x62, 0x41, 0xa6, 0x3e, 0x8e, 0x48,
-	0x48, 0x62, 0x03, 0x07, 0xbd, 0x31, 0x20, 0x00, 0x00, 0xff, 0xff, 0x1c, 0x64, 0x56, 0xc3, 0x1d,
-	0x02, 0x00, 0x00,
+	0x89, 0x07, 0x43, 0x10, 0x48, 0x83, 0x50, 0x14, 0x17, 0x67, 0x41, 0x51, 0x66, 0x5e, 0x72, 0x66,
+	0x41, 0x62, 0x8e, 0x04, 0xb3, 0x02, 0xa3, 0x06, 0x9f, 0x91, 0x0d, 0x01, 0xdd, 0x28, 0x0e, 0xd7,
+	0x0b, 0x80, 0xe9, 0xf6, 0x2f, 0x2d, 0x29, 0x28, 0x2d, 0x09, 0x42, 0x18, 0xa7, 0x94, 0xce, 0xc5,
+	0x8f, 0x26, 0x2b, 0xc4, 0xcf, 0xc5, 0x1d, 0xea, 0x17, 0x1c, 0xe0, 0xea, 0xec, 0xe9, 0xe6, 0xe9,
+	0xea, 0x22, 0xc0, 0x20, 0x24, 0xc8, 0xc5, 0x1b, 0xe6, 0xe8, 0xe3, 0xe9, 0xe2, 0x18, 0xe2, 0x1a,
+	0xef, 0xef, 0xe7, 0x13, 0x29, 0xc0, 0x28, 0x24, 0xc2, 0x25, 0x10, 0xec, 0x1f, 0x1a, 0xe4, 0xec,
+	0x1a, 0x1f, 0x10, 0xe4, 0xe9, 0xe7, 0xec, 0x19, 0xe0, 0xe8, 0x23, 0xc0, 0x24, 0x24, 0xc5, 0x25,
+	0x16, 0xe4, 0x1a, 0x18, 0xea, 0x1a, 0x1c, 0x12, 0xef, 0x18, 0x1a, 0xe2, 0x81, 0x24, 0xc7, 0xec,
+	0xc4, 0xc6, 0xc5, 0x52, 0x52, 0x59, 0x90, 0xea, 0x64, 0x74, 0xe2, 0x91, 0x1c, 0xe3, 0x85, 0x47,
+	0x72, 0x8c, 0x0f, 0x1e, 0xc9, 0x31, 0x46, 0xa9, 0x40, 0xbc, 0x91, 0x99, 0xaf, 0x9f, 0x58, 0x90,
+	0xa9, 0x8f, 0x23, 0x6e, 0x92, 0xd8, 0xc0, 0x31, 0x62, 0x0c, 0x08, 0x00, 0x00, 0xff, 0xff, 0x50,
+	0xb2, 0xed, 0xc2, 0x34, 0x02, 0x00, 0x00,
 }
 
 func (m *Authenticator) Marshal() (dAtA []byte, err error) {
@@ -318,10 +316,10 @@ func (m *Authenticator) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += nn1
 	}
-	if m.PrincipalType != 0 {
+	if m.Principal != 0 {
 		dAtA[i] = 0x18
 		i++
-		i = encodeVarintAuthenticator(dAtA, i, uint64(m.PrincipalType))
+		i = encodeVarintAuthenticator(dAtA, i, uint64(m.Principal))
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -375,8 +373,8 @@ func (m *Authenticator) Size() (n int) {
 	if m.Type != nil {
 		n += m.Type.Size()
 	}
-	if m.PrincipalType != 0 {
-		n += 1 + sovAuthenticator(uint64(m.PrincipalType))
+	if m.Principal != 0 {
+		n += 1 + sovAuthenticator(uint64(m.Principal))
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -523,9 +521,9 @@ func (m *Authenticator) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 3:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PrincipalType", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Principal", wireType)
 			}
-			m.PrincipalType = 0
+			m.Principal = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowAuthenticator
@@ -535,7 +533,7 @@ func (m *Authenticator) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PrincipalType |= Authenticator_PrincipalType(b&0x7F) << shift
+				m.Principal |= Authenticator_PrincipalOutput(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

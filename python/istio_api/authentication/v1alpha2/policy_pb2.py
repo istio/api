@@ -13,7 +13,6 @@ from google.protobuf import descriptor_pb2
 _sym_db = _symbol_database.Default()
 
 
-from authentication.v1alpha2 import authenticator_pb2 as authentication_dot_v1alpha2_dot_authenticator__pb2
 from common.v1beta1 import selector_pb2 as common_dot_v1beta1_dot_selector__pb2
 from common.v1beta1 import match_pb2 as common_dot_v1beta1_dot_match__pb2
 
@@ -22,9 +21,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='authentication/v1alpha2/policy.proto',
   package='istio.authentication.v1alpha2',
   syntax='proto3',
-  serialized_pb=_b('\n$authentication/v1alpha2/policy.proto\x12\x1distio.authentication.v1alpha2\x1a+authentication/v1alpha2/authenticator.proto\x1a\x1d\x63ommon/v1beta1/selector.proto\x1a\x1a\x63ommon/v1beta1/match.proto\"\x9a\x01\n\x14\x41uthenticationPolicy\x12\x41\n\x11workload_selector\x18\x01 \x01(\x0b\x32&.istio.common.v1beta1.WorkloadSelector\x12?\n\x05rules\x18\x02 \x03(\x0b\x32\x30.istio.authentication.v1alpha2.AuthenticatorRule\"\xca\x01\n\x11\x41uthenticatorRule\x12\x33\n\x05match\x18\x01 \x03(\x0b\x32$.istio.authentication.v1alpha2.Match\x12\x37\n\tnot_match\x18\x02 \x03(\x0b\x32$.istio.authentication.v1alpha2.Match\x12G\n\x0e\x61uthenticators\x18\x03 \x03(\x0b\x32/.istio.authentication.v1alpha2.AuthenticatorRef\"_\n\x10\x41uthenticatorRef\x12\x0b\n\x03use\x18\x01 \x01(\t\x12>\n\x08override\x18\x02 \x01(\x0b\x32,.istio.authentication.v1alpha2.Authenticator\"F\n\x05Match\x12\r\n\x05ports\x18\x01 \x01(\r\x12.\n\x03uri\x18\x03 \x01(\x0b\x32!.istio.common.v1beta1.StringMatchB&Z$istio.io/api/authentication/v1alpha2b\x06proto3')
+  serialized_pb=_b('\n$authentication/v1alpha2/policy.proto\x12\x1distio.authentication.v1alpha2\x1a\x1d\x63ommon/v1beta1/selector.proto\x1a\x1a\x63ommon/v1beta1/match.proto\"\x89\x01\n\x14\x41uthenticationPolicy\x12\x30\n\x08selector\x18\x01 \x01(\x0b\x32\x1e.istio.common.v1beta1.Selector\x12?\n\x05rules\x18\x02 \x03(\x0b\x32\x30.istio.authentication.v1alpha2.AuthenticatorRule\"\xca\x01\n\x11\x41uthenticatorRule\x12\x33\n\x05match\x18\x01 \x03(\x0b\x32$.istio.authentication.v1alpha2.Match\x12\x37\n\tnot_match\x18\x02 \x03(\x0b\x32$.istio.authentication.v1alpha2.Match\x12G\n\x0e\x61uthenticators\x18\x03 \x03(\x0b\x32/.istio.authentication.v1alpha2.AuthenticatorRef\"\x1f\n\x10\x41uthenticatorRef\x12\x0b\n\x03use\x18\x01 \x01(\t\"E\n\x05Match\x12\x0c\n\x04port\x18\x01 \x01(\r\x12.\n\x03uri\x18\x03 \x01(\x0b\x32!.istio.common.v1beta1.StringMatchB&Z$istio.io/api/authentication/v1alpha2b\x06proto3')
   ,
-  dependencies=[authentication_dot_v1alpha2_dot_authenticator__pb2.DESCRIPTOR,common_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,common_dot_v1beta1_dot_match__pb2.DESCRIPTOR,])
+  dependencies=[common_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,common_dot_v1beta1_dot_match__pb2.DESCRIPTOR,])
 
 
 
@@ -37,7 +36,7 @@ _AUTHENTICATIONPOLICY = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='workload_selector', full_name='istio.authentication.v1alpha2.AuthenticationPolicy.workload_selector', index=0,
+      name='selector', full_name='istio.authentication.v1alpha2.AuthenticationPolicy.selector', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -62,8 +61,8 @@ _AUTHENTICATIONPOLICY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=176,
-  serialized_end=330,
+  serialized_start=131,
+  serialized_end=268,
 )
 
 
@@ -107,8 +106,8 @@ _AUTHENTICATORRULE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=333,
-  serialized_end=535,
+  serialized_start=271,
+  serialized_end=473,
 )
 
 
@@ -126,13 +125,6 @@ _AUTHENTICATORREF = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='override', full_name='istio.authentication.v1alpha2.AuthenticatorRef.override', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -145,8 +137,8 @@ _AUTHENTICATORREF = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=537,
-  serialized_end=632,
+  serialized_start=475,
+  serialized_end=506,
 )
 
 
@@ -158,7 +150,7 @@ _MATCH = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='ports', full_name='istio.authentication.v1alpha2.Match.ports', index=0,
+      name='port', full_name='istio.authentication.v1alpha2.Match.port', index=0,
       number=1, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -183,16 +175,15 @@ _MATCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=634,
-  serialized_end=704,
+  serialized_start=508,
+  serialized_end=577,
 )
 
-_AUTHENTICATIONPOLICY.fields_by_name['workload_selector'].message_type = common_dot_v1beta1_dot_selector__pb2._WORKLOADSELECTOR
+_AUTHENTICATIONPOLICY.fields_by_name['selector'].message_type = common_dot_v1beta1_dot_selector__pb2._SELECTOR
 _AUTHENTICATIONPOLICY.fields_by_name['rules'].message_type = _AUTHENTICATORRULE
 _AUTHENTICATORRULE.fields_by_name['match'].message_type = _MATCH
 _AUTHENTICATORRULE.fields_by_name['not_match'].message_type = _MATCH
 _AUTHENTICATORRULE.fields_by_name['authenticators'].message_type = _AUTHENTICATORREF
-_AUTHENTICATORREF.fields_by_name['override'].message_type = authentication_dot_v1alpha2_dot_authenticator__pb2._AUTHENTICATOR
 _MATCH.fields_by_name['uri'].message_type = common_dot_v1beta1_dot_match__pb2._STRINGMATCH
 DESCRIPTOR.message_types_by_name['AuthenticationPolicy'] = _AUTHENTICATIONPOLICY
 DESCRIPTOR.message_types_by_name['AuthenticatorRule'] = _AUTHENTICATORRULE

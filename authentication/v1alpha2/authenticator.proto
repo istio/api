@@ -26,13 +26,14 @@ import "authentication/v1alpha2/mtls_method.proto";
 import "authentication/v1alpha2/jwt_method.proto";
 
 // $hide_from_docs
-// Authenticator describes the type and parameters needed for that authenticator. Each authenticator
-// can be defined in a separate CR (of `authenticator` kind) and referred in the authentication
-// policy by name, or defined inline in the policy. Name of the authenticator CR must have prefix
-// indicating the type (e.g `mtls`, `jwt` etc).
-// Istio will also provide several default authenticators for mTLS, such as `mtls-strict` and
-// `mtls-permissive`. This example below is just for illustration of `mtls-strict` authenticator,
-// users generally don't have to define it:
+// Authenticator describes the type and parameters needed for that authenticator.
+// Each authenticator can be defined in a separate CR (of `authenticator` kind)
+// and referred in the authentication policy by name, or defined inline in the
+// policy. Name of the authenticator CR must have prefix indicating the type
+// (e.g `mtls`, `jwt` etc).
+// Istio will also provide several stock authenticators, such as `mtls-strict`
+//  and `mtls-permissive` (these will be reserved name)
+// This example below illustrates the spec for `mtls-strict` authenticator:
 //
 // ```
 // apiVersion: authentication.istio.io/v1alpha2
@@ -43,7 +44,7 @@ import "authentication/v1alpha2/jwt_method.proto";
 // spec:
 //   mtls:
 //     mode: STRICT
-//   principal_type: BOTH
+//   principal: SOURCE_PRINCIPAL
 // ```
 //
 // Here is another example for JWT authenticator.
@@ -60,7 +61,7 @@ import "authentication/v1alpha2/jwt_method.proto";
 //     audiences:
 //     - bar
 //     - baz
-//   principal_type: REQUEST
+//   principal: REQUEST_AUTH_PRINCIPAL
 // ```
 message Authenticator {
   oneof type {
@@ -71,22 +72,20 @@ message Authenticator {
     Jwt jwt = 2;
   }
 
-  // PrincipalType defines which principal (`source.principal` or `request.auth.principal`)
+  // PrincipalOutput defines which principal (`source.principal` or `request.auth.principal`)
   // that the authenticator will set if succeeds.
-  enum PrincipalType {
+  enum PrincipalOutput {
     // Sentinel value to make sure the principal type must be set.
-    INVALID = 0;
-    // Does not set any principal attributes. This is often used to validate extra credentials
-    // without changing the principal outputs.
-    NONE = 1;
+    UNSPECIFIED = 0;
+    // Does not set any principal attributes. Use this if you want the authenticator validating
+    // extra credentials without changing the principal outputs.
+    VALIDATE_ONLY = 1;
     // Output principal to `source.principal`
-    SOURCE = 2;
+    SOURCE_PRINCIPAL = 2;
     // Output principal to `request.auth.principal`
-    REQUEST = 3;
-    // Output principal to both `source.principal` and `request.auth.principal`.
-    BOTH = 4;
+    REQUEST_AUTH_PRINCIPAL = 3;
   }
 
   // Defines the principal type that the authenticator will set if succeeds.
-  PrincipalType principal_type = 3;
+  PrincipalOutput principal = 3;
 }

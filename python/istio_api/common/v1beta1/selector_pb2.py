@@ -19,28 +19,28 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='common/v1beta1/selector.proto',
   package='istio.common.v1beta1',
   syntax='proto3',
-  serialized_pb=_b('\n\x1d\x63ommon/v1beta1/selector.proto\x12\x14istio.common.v1beta1\"\x85\x01\n\x10WorkloadSelector\x12\x42\n\x06labels\x18\x01 \x03(\x0b\x32\x32.istio.common.v1beta1.WorkloadSelector.LabelsEntry\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\x1dZ\x1bistio.io/api/common/v1beta1b\x06proto3')
+  serialized_pb=_b('\n\x1d\x63ommon/v1beta1/selector.proto\x12\x14istio.common.v1beta1\"\x85\x01\n\x08Selector\x12\x45\n\x0cmatch_labels\x18\x01 \x03(\x0b\x32/.istio.common.v1beta1.Selector.MatchLabelsEntry\x1a\x32\n\x10MatchLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\x1dZ\x1bistio.io/api/common/v1beta1b\x06proto3')
 )
 
 
 
 
-_WORKLOADSELECTOR_LABELSENTRY = _descriptor.Descriptor(
-  name='LabelsEntry',
-  full_name='istio.common.v1beta1.WorkloadSelector.LabelsEntry',
+_SELECTOR_MATCHLABELSENTRY = _descriptor.Descriptor(
+  name='MatchLabelsEntry',
+  full_name='istio.common.v1beta1.Selector.MatchLabelsEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='istio.common.v1beta1.WorkloadSelector.LabelsEntry.key', index=0,
+      name='key', full_name='istio.common.v1beta1.Selector.MatchLabelsEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value', full_name='istio.common.v1beta1.WorkloadSelector.LabelsEntry.value', index=1,
+      name='value', full_name='istio.common.v1beta1.Selector.MatchLabelsEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -58,19 +58,19 @@ _WORKLOADSELECTOR_LABELSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=144,
+  serialized_start=139,
   serialized_end=189,
 )
 
-_WORKLOADSELECTOR = _descriptor.Descriptor(
-  name='WorkloadSelector',
-  full_name='istio.common.v1beta1.WorkloadSelector',
+_SELECTOR = _descriptor.Descriptor(
+  name='Selector',
+  full_name='istio.common.v1beta1.Selector',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='labels', full_name='istio.common.v1beta1.WorkloadSelector.labels', index=0,
+      name='match_labels', full_name='istio.common.v1beta1.Selector.match_labels', index=0,
       number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -79,7 +79,7 @@ _WORKLOADSELECTOR = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_WORKLOADSELECTOR_LABELSENTRY, ],
+  nested_types=[_SELECTOR_MATCHLABELSENTRY, ],
   enum_types=[
   ],
   options=None,
@@ -92,29 +92,29 @@ _WORKLOADSELECTOR = _descriptor.Descriptor(
   serialized_end=189,
 )
 
-_WORKLOADSELECTOR_LABELSENTRY.containing_type = _WORKLOADSELECTOR
-_WORKLOADSELECTOR.fields_by_name['labels'].message_type = _WORKLOADSELECTOR_LABELSENTRY
-DESCRIPTOR.message_types_by_name['WorkloadSelector'] = _WORKLOADSELECTOR
+_SELECTOR_MATCHLABELSENTRY.containing_type = _SELECTOR
+_SELECTOR.fields_by_name['match_labels'].message_type = _SELECTOR_MATCHLABELSENTRY
+DESCRIPTOR.message_types_by_name['Selector'] = _SELECTOR
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-WorkloadSelector = _reflection.GeneratedProtocolMessageType('WorkloadSelector', (_message.Message,), dict(
+Selector = _reflection.GeneratedProtocolMessageType('Selector', (_message.Message,), dict(
 
-  LabelsEntry = _reflection.GeneratedProtocolMessageType('LabelsEntry', (_message.Message,), dict(
-    DESCRIPTOR = _WORKLOADSELECTOR_LABELSENTRY,
+  MatchLabelsEntry = _reflection.GeneratedProtocolMessageType('MatchLabelsEntry', (_message.Message,), dict(
+    DESCRIPTOR = _SELECTOR_MATCHLABELSENTRY,
     __module__ = 'common.v1beta1.selector_pb2'
-    # @@protoc_insertion_point(class_scope:istio.common.v1beta1.WorkloadSelector.LabelsEntry)
+    # @@protoc_insertion_point(class_scope:istio.common.v1beta1.Selector.MatchLabelsEntry)
     ))
   ,
-  DESCRIPTOR = _WORKLOADSELECTOR,
+  DESCRIPTOR = _SELECTOR,
   __module__ = 'common.v1beta1.selector_pb2'
-  # @@protoc_insertion_point(class_scope:istio.common.v1beta1.WorkloadSelector)
+  # @@protoc_insertion_point(class_scope:istio.common.v1beta1.Selector)
   ))
-_sym_db.RegisterMessage(WorkloadSelector)
-_sym_db.RegisterMessage(WorkloadSelector.LabelsEntry)
+_sym_db.RegisterMessage(Selector)
+_sym_db.RegisterMessage(Selector.MatchLabelsEntry)
 
 
 DESCRIPTOR.has_options = True
 DESCRIPTOR._options = _descriptor._ParseOptions(descriptor_pb2.FileOptions(), _b('Z\033istio.io/api/common/v1beta1'))
-_WORKLOADSELECTOR_LABELSENTRY.has_options = True
-_WORKLOADSELECTOR_LABELSENTRY._options = _descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001'))
+_SELECTOR_MATCHLABELSENTRY.has_options = True
+_SELECTOR_MATCHLABELSENTRY._options = _descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001'))
 # @@protoc_insertion_point(module_scope)

@@ -18,10 +18,10 @@ package istio.common.v1beta1;
 
 option go_package = "istio.io/api/common/v1beta1";
 
-// WorkloadSelector specifies the criteria used to determine if a resource can be applied to a
+// Selector specifies the criteria used to determine if a resource can be applied to a
 // workload (proxy).
-message WorkloadSelector {
+message Selector {
   // REQUIRED: One or more labels that indicate a specific set of pods/VMs. The scope of
   // label search is restricted to the configuration namespace in which the resource is present.
-  map<string, string> labels = 1;
+  map<string, string> match_labels = 1;
 }

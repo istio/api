@@ -25,21 +25,24 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
 // $hide_from_docs
-// AuthenticationPolicy describes how a request will be authenticated for the workload(s) it is
-// attached to. It bascially contains:
-// - Workload selector: defines the criteria used to select a specific set of pods/VMs on which
-// this authentication policy should be applied.
-// - Authenticator rules: defines when and what a particular `authenticator` will be activated.
-// If more than one rules are activated, all of them (authenticators) will be run, and the results
-// are combined in an ANDed semantic.
-// Each authenticator may set `source.principal` or `request.auth.principal` attribute or both
-// (see `Authenticator` for details). If two (or more) authenticators that set the same principal
-// are used, the last one will overwrite that principal value.
+// AuthenticationPolicy describes how a request will be authenticated for the
+// workload(s) it is attached to. It basically contains:
+// - Workload selector: defines the criteria used to select a specific set of
+// pods/VMs on which the authentication policy should be applied.
+// - Authenticator rules: defines when and what a particular `authenticator`
+// (or authenticators) will be activated.
+// If more than one rules are activated, all of them (authenticators) will be
+// run, and the results are combined in a AND semantic.
+// Each authenticator may set `source.principal` or `request.auth.principal`
+// attribute or both (see `Authenticator` for details). If two (or more)
+// authenticators that set the same principal are used, the last one will
+// overwrite the others.
 //
 // Examples:
 //
-// - Policy that enable mTLS for all workloads in the namespace scope of the policy. Note that
-// the name of the poicy is `default` and workload selector block is empty.
+// - Policy that enable mTLS for all workloads in the namespace scope of the
+// policy. Note that the name of the policy is `default` and workload
+// selector block is empty.
 //
 // ```
 // apiVersion: authentication.isio.io/v1alpha2
@@ -52,8 +55,8 @@ const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 //      use: "mtls-strict"
 // ```
 //
-// - Policy for workloads that match label `app=foo`. This policy eanbles JWT authentication for
-// all request to that workload.
+// - Policy for workloads that match label `app=foo`. This policy enables JWT
+// authentication for all request to that workload.
 // ```
 // apiVersion: authentication.isio.io/v1alpha2
 // metadata:
@@ -84,24 +87,6 @@ const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 //           audiences:
 //           - "productpage"
 //           jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
-// ```
-//
-// - Policy with partial-override authenticator parameters: the `jwt-example` authenticator
-// will be used, with the `audiences` field is set to `my-audidence`:
-//
-// ```
-// apiVersion: authentication.isio.io/v1alpha2
-// metadata:
-//   name: overrid-jwt-example
-//   namespace: foo
-// spec:
-//   rules:
-//   - authenticator:
-//     - use: "jwt-example"
-//       override:
-//         jwt:
-//           audiences:
-//           - "my-audience"
 // ```
 //
 // - Policy that requires both mTLS and end user credentials JWT on all requests.
@@ -209,11 +194,13 @@ type AuthenticationPolicy struct {
 	// Criteria used to select the specific set of pods/VMs on which this
 	// authentication policy should be applied. If omitted, the authentication policy
 	// be applied to all workload instances in the same namespace.
-	WorkloadSelector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=workload_selector,json=workloadSelector,proto3" json:"workload_selector,omitempty"`
-	// Rules specify what credential(s) can be used to authenticate with the service. Each rule
-	// contains (match) conditions. If the conditions are satisfied, the associated authenticator
-	// in the rule will be used to authenticate the request. If more than one rules meet the
-	// conditions, all of them (authenticator) will be run.
+	Selector *v1beta1.Selector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
+	// Rules specify when and what authenticators should be used for authentication.
+	// Each rule contains (match) conditions. If the conditions are
+	// satisfied, the associated authenticator in the rule will be used to
+	//authenticate the request. This has AND-semantic, which means if more than
+	// one rule meet the conditions, request is allowed if and only if all of
+	// activated authenticator succeed.
 	Rules                []*AuthenticatorRule `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
 	XXX_unrecognized     []byte               `json:"-"`
@@ -253,9 +240,9 @@ func (m *AuthenticationPolicy) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AuthenticationPolicy proto.InternalMessageInfo
 
-func (m *AuthenticationPolicy) GetWorkloadSelector() *v1beta1.WorkloadSelector {
+func (m *AuthenticationPolicy) GetSelector() *v1beta1.Selector {
 	if m != nil {
-		return m.WorkloadSelector
+		return m.Selector
 	}
 	return nil
 }
@@ -268,10 +255,10 @@ func (m *AuthenticationPolicy) GetRules() []*AuthenticatorRule {
 }
 
 // $hide_from_docs
-// AuthenticatorRule specifies the conditions, if any, and the authenticator that will be run if
-// the contidions are met to authenticate the request. If `match` is not defined, the specified
-// authenticators will be used on all requests. Note that, if the authenticator operates on
-// L3/4 (e.g mTLS), then HTTP match conditions will be ignored.
+// AuthenticatorRule specifies the conditions, if any, and the authenticator
+// that will be run if the conditions are met to authenticate the request. If //`match` is not defined, the specified authenticators will be used on all
+// requests. Note that, if the authenticator operates on L3/4 (e.g mTLS), then
+// HTTP match conditions cannot be used (validation will reject the policy).
 // Examples:
 // - Rule to that matches all requests and then enable mTLS
 // ```
@@ -305,7 +292,8 @@ func (m *AuthenticationPolicy) GetRules() []*AuthenticatorRule {
 // - use: "jwt-my-example"
 // ```
 //
-// - Rule that requires JWT on port 8080 or 80, except on path '/healthz' (for any ports)
+// - Rule that requires JWT on port 8080 or 80, except on path '/healthz' (for
+// any ports)
 //
 // ```
 // match:
@@ -318,7 +306,8 @@ func (m *AuthenticationPolicy) GetRules() []*AuthenticatorRule {
 // - use: "jwt-my-example"
 // ```
 //
-// - Rule that requires JWT on port 8080 or 80, except on path '/healthz' for port 80.
+// - Rule that requires JWT on port 8080 or 80, except on path '/healthz' for
+// port 80.
 //
 // ```
 // match:
@@ -330,11 +319,13 @@ func (m *AuthenticationPolicy) GetRules() []*AuthenticatorRule {
 //     exact: '/healthz'
 // authenticators:
 // - use: "jwt-my-example"
+// ```
 type AuthenticatorRule struct {
-	// Defines the conditions that the authenticators below should be used. All conditions inside a
-	// single match block have AND semantics, while the list of match blocks have OR semantics.
-	// If one of the authenticators (or more) operates on L3/4 (e.g mTLS), then the match block
-	// cannot use L7 (HTTP) conditions.
+	// Defines the conditions that the authenticators below should be used. All
+	// conditions inside a single match block have AND semantics, while the list of
+	// match blocks have OR semantics.
+	// If one authenticator (or more) operate on L3/4 (e.g mTLS), then
+	// the match block cannot use L7 (HTTP) conditions.
 	Match []*Match `protobuf:"bytes,1,rep,name=match,proto3" json:"match,omitempty"`
 	// Negative match conditions. Each `match` block is evaluated as usual, but the result is inverted
 	// then ANDed together. The final result is then AND with the (positive) match conditions above.
@@ -403,9 +394,7 @@ func (m *AuthenticatorRule) GetAuthenticators() []*AuthenticatorRef {
 }
 
 // $hide_from_docs
-// AuthenticatorRef refers to the authenticator to run, as well as overriden parameters if
-// neccessary. It can also have a list of authoticators to be tried in an ORed fashion:
-// The first succeed one will be used to output (principal) and the rest are ignored
+// AuthenticatorRef refers to the authenticator to run.
 //
 // Example (see AuthenticationPolicy to see in the full context)
 // - Use Istio stock mtls-strict
@@ -421,18 +410,12 @@ func (m *AuthenticatorRule) GetAuthenticators() []*AuthenticatorRef {
 //   principal_type: SOURCE
 // ```
 type AuthenticatorRef struct {
-	// Refer to the name of the authenticator to run. It could be one of the custome authenticators
-	// that are defined in the authenticator CRD (hence the name is the name of the CR), or one of
-	// Istio stock authenticator (e.g `mtls-strict`, `mtls-permissve` etc). Leave this blank, or
-	// set to `none` to define the whole authenticator spec with the `override` block below.
-	Use string `protobuf:"bytes,1,opt,name=use,proto3" json:"use,omitempty"`
-	// Set to override parameters of the authenticator above. It must have the same type as the
-	// authenticator referred by `use` (unless use `none`, in which case, this `override` defines
-	// the whole authenticator to be used).
-	Override             *Authenticator `protobuf:"bytes,2,opt,name=override,proto3" json:"override,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_unrecognized     []byte         `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	// REQUIRE. Refer to the name of the authenticator to run. The authenticator spec is defined in
+	// the `authenticator` kind CR with that name.
+	Use                  string   `protobuf:"bytes,1,opt,name=use,proto3" json:"use,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *AuthenticatorRef) Reset()         { *m = AuthenticatorRef{} }
@@ -475,13 +458,6 @@ func (m *AuthenticatorRef) GetUse() string {
 	return ""
 }
 
-func (m *AuthenticatorRef) GetOverride() *Authenticator {
-	if m != nil {
-		return m.Override
-	}
-	return nil
-}
-
 // $hide_from_docs
 // Match specifies a set of criterion to be met in order for the rule to be applied.
 // For example, the following restricts mTLS being applied only on port 8080, and JWT
@@ -509,7 +485,7 @@ func (m *AuthenticatorRef) GetOverride() *Authenticator {
 //
 type Match struct {
 	// Workload port to match. If not specified, it matches to any port number.
-	Ports uint32 `protobuf:"varint,1,opt,name=ports,proto3" json:"ports,omitempty"`
+	Port uint32 `protobuf:"varint,1,opt,name=port,proto3" json:"port,omitempty"`
 	// URI to match.
 	// values are case-sensitive and formatted as follows:
 	//
@@ -558,9 +534,9 @@ func (m *Match) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Match proto.InternalMessageInfo
 
-func (m *Match) GetPorts() uint32 {
+func (m *Match) GetPort() uint32 {
 	if m != nil {
-		return m.Ports
+		return m.Port
 	}
 	return 0
 }
@@ -584,31 +560,29 @@ func init() {
 }
 
 var fileDescriptor_de35128e1eb23de7 = []byte{
-	// 381 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0x4f, 0x6b, 0x22, 0x31,
-	0x18, 0xc6, 0x89, 0xc3, 0x2c, 0x1a, 0xd9, 0x45, 0x83, 0x87, 0x41, 0x50, 0xdc, 0x41, 0x16, 0x61,
-	0x97, 0xcc, 0x3a, 0xde, 0xf6, 0xe6, 0x1e, 0x4a, 0x2f, 0x85, 0x12, 0x0f, 0x42, 0x2f, 0x12, 0xc7,
-	0xb4, 0x86, 0x8e, 0xf3, 0x0e, 0x99, 0x8c, 0xd2, 0xcf, 0xd5, 0x2f, 0xd1, 0x63, 0x3f, 0x42, 0xf1,
-	0xda, 0x2f, 0x51, 0x4c, 0xb4, 0xd5, 0x69, 0x6d, 0xf1, 0x96, 0xe4, 0x7d, 0x9e, 0xdf, 0x9b, 0xf7,
-	0x0f, 0xee, 0xf2, 0x5c, 0xcf, 0x45, 0xa2, 0x65, 0xc4, 0xb5, 0x84, 0x24, 0x58, 0xf6, 0x79, 0x9c,
-	0xce, 0x79, 0x18, 0xa4, 0x10, 0xcb, 0xe8, 0x8e, 0xa6, 0x0a, 0x34, 0x90, 0x96, 0xcc, 0xb4, 0x04,
-	0x7a, 0xa8, 0xa5, 0x3b, 0x6d, 0xf3, 0xf7, 0x31, 0xc8, 0xde, 0x3b, 0x28, 0xcb, 0x6a, 0xb6, 0x22,
-	0x58, 0x2c, 0x8c, 0x68, 0x2a, 0x34, 0xef, 0x07, 0x99, 0x88, 0x45, 0xf4, 0x16, 0x6e, 0x16, 0xc2,
-	0x0b, 0xae, 0xa3, 0xb9, 0x8d, 0xf9, 0xf7, 0x08, 0x37, 0x86, 0x07, 0xa9, 0x2e, 0xcd, 0x2f, 0xc9,
-	0x08, 0xd7, 0x57, 0xa0, 0x6e, 0x63, 0xe0, 0xb3, 0xc9, 0x8e, 0xe7, 0xa1, 0x0e, 0xea, 0x55, 0xc3,
-	0x5f, 0xd4, 0xfe, 0xdd, 0x62, 0xe9, 0x16, 0x4b, 0xc7, 0x5b, 0xf9, 0x68, 0xab, 0x66, 0xb5, 0x55,
-	0xe1, 0x85, 0x9c, 0x61, 0x57, 0xe5, 0xb1, 0xc8, 0xbc, 0x52, 0xc7, 0xe9, 0x55, 0xc3, 0xbf, 0xf4,
-	0xd3, 0x26, 0xd0, 0xe1, 0x7e, 0xad, 0x2c, 0x8f, 0x05, 0xb3, 0x76, 0xff, 0x19, 0xe1, 0xfa, 0xbb,
-	0x20, 0xf9, 0x87, 0x5d, 0x53, 0x9a, 0x87, 0x0c, 0xbd, 0xfb, 0x05, 0xfd, 0x62, 0xa3, 0x65, 0xd6,
-	0x42, 0x86, 0xb8, 0x92, 0x80, 0x9e, 0x58, 0x7f, 0xe9, 0x04, 0x7f, 0x39, 0x01, 0x6d, 0x4e, 0x64,
-	0x8c, 0x7f, 0x1c, 0x0c, 0x27, 0xf3, 0x1c, 0xc3, 0x09, 0x4e, 0xaa, 0x52, 0x5c, 0xb3, 0x02, 0xc6,
-	0x4f, 0x70, 0xad, 0xa8, 0x21, 0x35, 0xec, 0xe4, 0x99, 0x30, 0x03, 0xa9, 0xb0, 0xcd, 0x91, 0x9c,
-	0xe3, 0x32, 0x2c, 0x85, 0x52, 0x72, 0x26, 0xbc, 0x92, 0x99, 0xd3, 0x9f, 0x93, 0x12, 0xbf, 0xba,
-	0x7d, 0x86, 0x5d, 0x5b, 0x51, 0x03, 0xbb, 0x29, 0x28, 0x9d, 0x99, 0x34, 0xdf, 0x99, 0xbd, 0x90,
-	0x01, 0x76, 0x72, 0x25, 0x3d, 0xc7, 0xe4, 0xf8, 0xf9, 0xf1, 0x2e, 0x8c, 0xb4, 0x92, 0xc9, 0x8d,
-	0xed, 0xd0, 0x46, 0xfd, 0x3f, 0x7c, 0x58, 0xb7, 0xd1, 0xe3, 0xba, 0x8d, 0x9e, 0xd6, 0x6d, 0x74,
-	0xd5, 0xb5, 0x26, 0x09, 0x01, 0x4f, 0x65, 0x70, 0x64, 0xd5, 0xa7, 0xdf, 0xcc, 0x8a, 0x0e, 0x5e,
-	0x02, 0x00, 0x00, 0xff, 0xff, 0xc2, 0xfe, 0xd0, 0x06, 0x51, 0x03, 0x00, 0x00,
+	// 338 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0xc1, 0x4a, 0xf3, 0x40,
+	0x14, 0x85, 0x99, 0xe6, 0xef, 0x4f, 0x7b, 0x8b, 0x52, 0x07, 0x17, 0xa1, 0xd0, 0x50, 0x43, 0x16,
+	0x5d, 0x4d, 0x6c, 0xba, 0xeb, 0xae, 0x2e, 0xdc, 0x09, 0x65, 0x5c, 0x08, 0x6e, 0x64, 0x1a, 0x46,
+	0x3b, 0x90, 0x66, 0xc2, 0xe4, 0x46, 0xf0, 0x55, 0x7c, 0x22, 0x97, 0x3e, 0x82, 0x74, 0xeb, 0x4b,
+	0x48, 0x67, 0x5a, 0x69, 0x23, 0x55, 0xba, 0xbb, 0x70, 0xce, 0xf9, 0xe6, 0x5c, 0xee, 0x40, 0x24,
+	0x2a, 0x5c, 0xc8, 0x1c, 0x55, 0x2a, 0x50, 0xe9, 0x3c, 0x7e, 0x1e, 0x89, 0xac, 0x58, 0x88, 0x24,
+	0x2e, 0x74, 0xa6, 0xd2, 0x17, 0x56, 0x18, 0x8d, 0x9a, 0xf6, 0x55, 0x89, 0x4a, 0xb3, 0x7d, 0x2f,
+	0xdb, 0x7a, 0x7b, 0xfd, 0x54, 0x2f, 0x97, 0x36, 0x3c, 0x97, 0x28, 0x46, 0x71, 0x29, 0x33, 0x99,
+	0xa2, 0x36, 0x2e, 0xdd, 0xeb, 0xd5, 0xe4, 0xa5, 0xc0, 0x74, 0xe1, 0xb4, 0xf0, 0x95, 0xc0, 0xf9,
+	0x74, 0x0f, 0x3b, 0xb3, 0x0f, 0xd3, 0x09, 0xb4, 0xb6, 0x18, 0x9f, 0x0c, 0xc8, 0xb0, 0x93, 0x04,
+	0xcc, 0xb5, 0x70, 0x34, 0xb6, 0xa1, 0xb1, 0xdb, 0x8d, 0x8b, 0x7f, 0xfb, 0xe9, 0x35, 0x34, 0x4d,
+	0x95, 0xc9, 0xd2, 0x6f, 0x0c, 0xbc, 0x61, 0x27, 0xb9, 0x64, 0xbf, 0xd6, 0x67, 0x3b, 0xef, 0x6b,
+	0xc3, 0xab, 0x4c, 0x72, 0x17, 0x0f, 0x3f, 0x09, 0x9c, 0xfd, 0x10, 0xe9, 0x04, 0x9a, 0x76, 0x03,
+	0x9f, 0x58, 0x7a, 0xf4, 0x07, 0xfd, 0x66, 0xed, 0xe5, 0x2e, 0x42, 0xa7, 0xd0, 0xce, 0x35, 0x3e,
+	0xb8, 0x7c, 0xe3, 0x88, 0x7c, 0x2b, 0xd7, 0x68, 0x27, 0x7a, 0x07, 0xa7, 0x62, 0xb7, 0x53, 0xe9,
+	0x7b, 0x96, 0x13, 0x1f, 0xb5, 0xa5, 0x7c, 0xe4, 0x35, 0x4c, 0x18, 0x41, 0xb7, 0xee, 0xa1, 0x5d,
+	0xf0, 0xaa, 0x52, 0xda, 0x03, 0xb4, 0xf9, 0x7a, 0x0c, 0x67, 0xd0, 0x74, 0x3d, 0x28, 0xfc, 0x2b,
+	0xb4, 0x41, 0xab, 0x9d, 0x70, 0x3b, 0xd3, 0x31, 0x78, 0x95, 0x51, 0xbe, 0x67, 0xef, 0x75, 0x71,
+	0xe0, 0x5e, 0x68, 0x54, 0xfe, 0xe4, 0xb6, 0x5a, 0xbb, 0xaf, 0x92, 0xb7, 0x55, 0x40, 0xde, 0x57,
+	0x01, 0xf9, 0x58, 0x05, 0xe4, 0x3e, 0x72, 0x21, 0xa5, 0x63, 0x51, 0xa8, 0xf8, 0xc0, 0xef, 0x9c,
+	0xff, 0xb7, 0xbf, 0x67, 0xfc, 0x15, 0x00, 0x00, 0xff, 0xff, 0x4f, 0x53, 0x8c, 0xeb, 0xbf, 0x02,
+	0x00, 0x00,
 }
 
 func (m *AuthenticationPolicy) Marshal() (dAtA []byte, err error) {
@@ -626,11 +600,11 @@ func (m *AuthenticationPolicy) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.WorkloadSelector != nil {
+	if m.Selector != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintPolicy(dAtA, i, uint64(m.WorkloadSelector.Size()))
-		n1, err1 := m.WorkloadSelector.MarshalTo(dAtA[i:])
+		i = encodeVarintPolicy(dAtA, i, uint64(m.Selector.Size()))
+		n1, err1 := m.Selector.MarshalTo(dAtA[i:])
 		if err1 != nil {
 			return 0, err1
 		}
@@ -732,16 +706,6 @@ func (m *AuthenticatorRef) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintPolicy(dAtA, i, uint64(len(m.Use)))
 		i += copy(dAtA[i:], m.Use)
 	}
-	if m.Override != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintPolicy(dAtA, i, uint64(m.Override.Size()))
-		n2, err2 := m.Override.MarshalTo(dAtA[i:])
-		if err2 != nil {
-			return 0, err2
-		}
-		i += n2
-	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
 	}
@@ -763,20 +727,20 @@ func (m *Match) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Ports != 0 {
+	if m.Port != 0 {
 		dAtA[i] = 0x8
 		i++
-		i = encodeVarintPolicy(dAtA, i, uint64(m.Ports))
+		i = encodeVarintPolicy(dAtA, i, uint64(m.Port))
 	}
 	if m.Uri != nil {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintPolicy(dAtA, i, uint64(m.Uri.Size()))
-		n3, err3 := m.Uri.MarshalTo(dAtA[i:])
-		if err3 != nil {
-			return 0, err3
+		n2, err2 := m.Uri.MarshalTo(dAtA[i:])
+		if err2 != nil {
+			return 0, err2
 		}
-		i += n3
+		i += n2
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -799,8 +763,8 @@ func (m *AuthenticationPolicy) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.WorkloadSelector != nil {
-		l = m.WorkloadSelector.Size()
+	if m.Selector != nil {
+		l = m.Selector.Size()
 		n += 1 + l + sovPolicy(uint64(l))
 	}
 	if len(m.Rules) > 0 {
@@ -855,10 +819,6 @@ func (m *AuthenticatorRef) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovPolicy(uint64(l))
 	}
-	if m.Override != nil {
-		l = m.Override.Size()
-		n += 1 + l + sovPolicy(uint64(l))
-	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
 	}
@@ -871,8 +831,8 @@ func (m *Match) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Ports != 0 {
-		n += 1 + sovPolicy(uint64(m.Ports))
+	if m.Port != 0 {
+		n += 1 + sovPolicy(uint64(m.Port))
 	}
 	if m.Uri != nil {
 		l = m.Uri.Size()
@@ -928,7 +888,7 @@ func (m *AuthenticationPolicy) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WorkloadSelector", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Selector", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -955,10 +915,10 @@ func (m *AuthenticationPolicy) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.WorkloadSelector == nil {
-				m.WorkloadSelector = &v1beta1.WorkloadSelector{}
+			if m.Selector == nil {
+				m.Selector = &v1beta1.Selector{}
 			}
-			if err := m.WorkloadSelector.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Selector.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1238,42 +1198,6 @@ func (m *AuthenticatorRef) Unmarshal(dAtA []byte) error {
 			}
 			m.Use = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Override", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPolicy
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthPolicy
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthPolicy
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Override == nil {
-				m.Override = &Authenticator{}
-			}
-			if err := m.Override.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPolicy(dAtA[iNdEx:])
@@ -1330,9 +1254,9 @@ func (m *Match) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Ports", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
 			}
-			m.Ports = 0
+			m.Port = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowPolicy
@@ -1342,7 +1266,7 @@ func (m *Match) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Ports |= uint32(b&0x7F) << shift
+				m.Port |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

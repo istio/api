@@ -14,7 +14,6 @@
 
 syntax = "proto3";
 
-import "authentication/v1alpha2/authenticator.proto";
 import "common/v1beta1/selector.proto";
 import "common/v1beta1/match.proto";
 
@@ -28,21 +27,24 @@ package istio.authentication.v1alpha2;
 option go_package = "istio.io/api/authentication/v1alpha2";
 
 // $hide_from_docs
-// AuthenticationPolicy describes how a request will be authenticated for the workload(s) it is
-// attached to. It bascially contains:
-// - Workload selector: defines the criteria used to select a specific set of pods/VMs on which
-// this authentication policy should be applied.
-// - Authenticator rules: defines when and what a particular `authenticator` will be activated.
-// If more than one rules are activated, all of them (authenticators) will be run, and the results
-// are combined in an ANDed semantic.
-// Each authenticator may set `source.principal` or `request.auth.principal` attribute or both
-// (see `Authenticator` for details). If two (or more) authenticators that set the same principal
-// are used, the last one will overwrite that principal value.
+// AuthenticationPolicy describes how a request will be authenticated for the
+// workload(s) it is attached to. It basically contains:
+// - Workload selector: defines the criteria used to select a specific set of
+// pods/VMs on which the authentication policy should be applied.
+// - Authenticator rules: defines when and what a particular `authenticator`
+// (or authenticators) will be activated.
+// If more than one rules are activated, all of them (authenticators) will be
+// run, and the results are combined in a AND semantic.
+// Each authenticator may set `source.principal` or `request.auth.principal`
+// attribute or both (see `Authenticator` for details). If two (or more)
+// authenticators that set the same principal are used, the last one will
+// overwrite the others.
 //
 // Examples:
 //
-// - Policy that enable mTLS for all workloads in the namespace scope of the policy. Note that
-// the name of the poicy is `default` and workload selector block is empty.
+// - Policy that enable mTLS for all workloads in the namespace scope of the
+// policy. Note that the name of the policy is `default` and workload
+// selector block is empty.
 //
 // ```
 // apiVersion: authentication.isio.io/v1alpha2
@@ -55,8 +57,8 @@ option go_package = "istio.io/api/authentication/v1alpha2";
 //      use: "mtls-strict"
 // ```
 //
-// - Policy for workloads that match label `app=foo`. This policy eanbles JWT authentication for
-// all request to that workload.
+// - Policy for workloads that match label `app=foo`. This policy enables JWT
+// authentication for all request to that workload.
 // ```
 // apiVersion: authentication.isio.io/v1alpha2
 // metadata:
@@ -87,24 +89,6 @@ option go_package = "istio.io/api/authentication/v1alpha2";
 //           audiences:
 //           - "productpage"
 //           jwksUri: "https://www.googleapis.com/oauth2/v1/certs"
-// ```
-//
-// - Policy with partial-override authenticator parameters: the `jwt-example` authenticator
-// will be used, with the `audiences` field is set to `my-audidence`:
-//
-// ```
-// apiVersion: authentication.isio.io/v1alpha2
-// metadata:
-//   name: overrid-jwt-example
-//   namespace: foo
-// spec:
-//   rules:
-//   - authenticator:
-//     - use: "jwt-example"
-//       override:
-//         jwt:
-//           audiences:
-//           - "my-audience"
 // ```
 //
 // - Policy that requires both mTLS and end user credentials JWT on all requests.
@@ -212,20 +196,22 @@ message AuthenticationPolicy {
   // Criteria used to select the specific set of pods/VMs on which this
   // authentication policy should be applied. If omitted, the authentication policy
   // be applied to all workload instances in the same namespace.
-  istio.common.v1beta1.WorkloadSelector workload_selector = 1;
+  istio.common.v1beta1.Selector selector = 1;
 
-  // Rules specify what credential(s) can be used to authenticate with the service. Each rule
-  // contains (match) conditions. If the conditions are satisfied, the associated authenticator
-  // in the rule will be used to authenticate the request. If more than one rules meet the
-  // conditions, all of them (authenticator) will be run.
+  // Rules specify when and what authenticators should be used for authentication.
+  // Each rule contains (match) conditions. If the conditions are
+  // satisfied, the associated authenticator in the rule will be used to
+  //authenticate the request. This has AND-semantic, which means if more than
+  // one rule meet the conditions, request is allowed if and only if all of
+  // activated authenticator succeed.
   repeated AuthenticatorRule rules = 2;
 }
 
 // $hide_from_docs
-// AuthenticatorRule specifies the conditions, if any, and the authenticator that will be run if
-// the contidions are met to authenticate the request. If `match` is not defined, the specified
-// authenticators will be used on all requests. Note that, if the authenticator operates on
-// L3/4 (e.g mTLS), then HTTP match conditions will be ignored.
+// AuthenticatorRule specifies the conditions, if any, and the authenticator
+// that will be run if the conditions are met to authenticate the request. If //`match` is not defined, the specified authenticators will be used on all
+// requests. Note that, if the authenticator operates on L3/4 (e.g mTLS), then
+// HTTP match conditions cannot be used (validation will reject the policy).
 // Examples:
 // - Rule to that matches all requests and then enable mTLS
 // ```
@@ -259,7 +245,8 @@ message AuthenticationPolicy {
 // - use: "jwt-my-example"
 // ```
 //
-// - Rule that requires JWT on port 8080 or 80, except on path '/healthz' (for any ports)
+// - Rule that requires JWT on port 8080 or 80, except on path '/healthz' (for
+// any ports)
 //
 // ```
 // match:
@@ -272,7 +259,8 @@ message AuthenticationPolicy {
 // - use: "jwt-my-example"
 // ```
 //
-// - Rule that requires JWT on port 8080 or 80, except on path '/healthz' for port 80.
+// - Rule that requires JWT on port 8080 or 80, except on path '/healthz' for
+// port 80.
 //
 // ```
 // match:
@@ -284,11 +272,13 @@ message AuthenticationPolicy {
 //     exact: '/healthz'
 // authenticators:
 // - use: "jwt-my-example"
+// ```
 message AuthenticatorRule {
-  // Defines the conditions that the authenticators below should be used. All conditions inside a
-  // single match block have AND semantics, while the list of match blocks have OR semantics.
-  // If one of the authenticators (or more) operates on L3/4 (e.g mTLS), then the match block
-  // cannot use L7 (HTTP) conditions.
+  // Defines the conditions that the authenticators below should be used. All
+  // conditions inside a single match block have AND semantics, while the list of
+  // match blocks have OR semantics.
+  // If one authenticator (or more) operate on L3/4 (e.g mTLS), then
+  // the match block cannot use L7 (HTTP) conditions.
   repeated Match match = 1;
 
   // Negative match conditions. Each `match` block is evaluated as usual, but the result is inverted
@@ -302,9 +292,7 @@ message AuthenticatorRule {
 }
 
 // $hide_from_docs
-// AuthenticatorRef refers to the authenticator to run, as well as overriden parameters if
-// neccessary. It can also have a list of authoticators to be tried in an ORed fashion:
-// The first succeed one will be used to output (principal) and the rest are ignored
+// AuthenticatorRef refers to the authenticator to run.
 //
 // Example (see AuthenticationPolicy to see in the full context)
 // - Use Istio stock mtls-strict
@@ -320,16 +308,9 @@ message AuthenticatorRule {
 //   principal_type: SOURCE
 // ```
 message AuthenticatorRef{
-  // Refer to the name of the authenticator to run. It could be one of the custome authenticators
-  // that are defined in the authenticator CRD (hence the name is the name of the CR), or one of
-  // Istio stock authenticator (e.g `mtls-strict`, `mtls-permissve` etc). Leave this blank, or
-  // set to `none` to define the whole authenticator spec with the `override` block below.
+  // REQUIRE. Refer to the name of the authenticator to run. The authenticator spec is defined in
+  // the `authenticator` kind CR with that name.
   string use = 1;
-
-  // Set to override parameters of the authenticator above. It must have the same type as the
-  // authenticator referred by `use` (unless use `none`, in which case, this `override` defines
-  // the whole authenticator to be used).
-  Authenticator override = 2;
 }
 
 // $hide_from_docs
@@ -359,7 +340,7 @@ message AuthenticatorRef{
 //
 message Match {
   // Workload port to match. If not specified, it matches to any port number.
-  uint32 ports = 1;
+  uint32 port = 1;
 
   // URI to match.
   // values are case-sensitive and formatted as follows:
