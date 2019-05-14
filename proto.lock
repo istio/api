@@ -1912,6 +1912,17 @@
                     "id": 3,
                     "name": "granted_amount",
                     "type": "int64"
+                  },
+                  {
+                    "id": 4,
+                    "name": "status",
+                    "type": "google.rpc.Status",
+                    "options": [
+                      {
+                        "name": "(gogoproto.nullable)",
+                        "value": "false"
+                      }
+                    ]
                   }
                 ]
               }
@@ -1924,6 +1935,9 @@
           },
           {
             "path": "google/protobuf/duration.proto"
+          },
+          {
+            "path": "google/rpc/status.proto"
           }
         ],
         "package": {
