@@ -20,7 +20,7 @@ option go_package="istio.io/api/mixer/v1/config/client";
 
 import "gogoproto/gogo.proto";
 
-import "mixer/v1/attributes.proto";
+import "policy/v1beta1/attributes.proto";
 import "mixer/v1/config/client/service.proto";
 
 option (gogoproto.goproto_getters_all) = false;
@@ -87,7 +87,7 @@ message HTTPAPISpec {
   // List of attributes that are generated when *any* of the HTTP
   // patterns match. This list typically includes the "api.service"
   // and "api.version" attributes.
-  Attributes attributes = 1;
+  istio.policy.v1beta1.Attributes attributes = 1;
 
   // List of HTTP patterns to match.
   repeated HTTPAPISpecPattern patterns = 2;
@@ -121,7 +121,7 @@ message HTTPAPISpecPattern {
   // List of attributes that are generated if the HTTP request matches
   // the specified http_method and uri_template. This typically
   // includes the "api.operation" attribute.
-  Attributes attributes = 1;
+  istio.policy.v1beta1.Attributes attributes = 1;
 
   // HTTP request method to match against as defined by
   // [rfc7231](https://tools.ietf.org/html/rfc7231#page-21). For

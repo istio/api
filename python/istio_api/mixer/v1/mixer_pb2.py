@@ -16,48 +16,18 @@ _sym_db = _symbol_database.Default()
 from gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
 from google.protobuf import duration_pb2 as google_dot_protobuf_dot_duration__pb2
 from google.rpc import status_pb2 as google_dot_rpc_dot_status__pb2
-from mixer.v1 import attributes_pb2 as mixer_dot_v1_dot_attributes__pb2
+from policy.v1beta1 import attributes_pb2 as policy_dot_v1beta1_dot_attributes__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='mixer/v1/mixer.proto',
   package='istio.mixer.v1',
   syntax='proto3',
-  serialized_pb=_b('\n\x14mixer/v1/mixer.proto\x12\x0eistio.mixer.v1\x1a\x14gogoproto/gogo.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x17google/rpc/status.proto\x1a\x19mixer/v1/attributes.proto\"\xd0\x02\n\x0c\x43heckRequest\x12>\n\nattributes\x18\x01 \x01(\x0b\x32$.istio.mixer.v1.CompressedAttributesB\x04\xc8\xde\x1f\x00\x12\x19\n\x11global_word_count\x18\x02 \x01(\r\x12\x18\n\x10\x64\x65\x64uplication_id\x18\x03 \x01(\t\x12>\n\x06quotas\x18\x04 \x03(\x0b\x32(.istio.mixer.v1.CheckRequest.QuotasEntryB\x04\xc8\xde\x1f\x00\x1a\x32\n\x0bQuotaParams\x12\x0e\n\x06\x61mount\x18\x01 \x01(\x03\x12\x13\n\x0b\x62\x65st_effort\x18\x02 \x01(\x08\x1aW\n\x0bQuotasEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x37\n\x05value\x18\x02 \x01(\x0b\x32(.istio.mixer.v1.CheckRequest.QuotaParams:\x02\x38\x01\"\xc3\x05\n\rCheckResponse\x12L\n\x0cprecondition\x18\x02 \x01(\x0b\x32\x30.istio.mixer.v1.CheckResponse.PreconditionResultB\x04\xc8\xde\x1f\x00\x12?\n\x06quotas\x18\x03 \x03(\x0b\x32).istio.mixer.v1.CheckResponse.QuotasEntryB\x04\xc8\xde\x1f\x00\x1a\x98\x02\n\x12PreconditionResult\x12(\n\x06status\x18\x01 \x01(\x0b\x32\x12.google.rpc.StatusB\x04\xc8\xde\x1f\x00\x12;\n\x0evalid_duration\x18\x02 \x01(\x0b\x32\x19.google.protobuf.DurationB\x08\xc8\xde\x1f\x00\x98\xdf\x1f\x01\x12\x17\n\x0fvalid_use_count\x18\x03 \x01(\x05\x12\x43\n\x15referenced_attributes\x18\x05 \x01(\x0b\x32$.istio.mixer.v1.ReferencedAttributes\x12\x37\n\x0froute_directive\x18\x06 \x01(\x0b\x32\x1e.istio.mixer.v1.RouteDirectiveJ\x04\x08\x04\x10\x05\x1a\xad\x01\n\x0bQuotaResult\x12;\n\x0evalid_duration\x18\x01 \x01(\x0b\x32\x19.google.protobuf.DurationB\x08\xc8\xde\x1f\x00\x98\xdf\x1f\x01\x12\x16\n\x0egranted_amount\x18\x02 \x01(\x03\x12I\n\x15referenced_attributes\x18\x05 \x01(\x0b\x32$.istio.mixer.v1.ReferencedAttributesB\x04\xc8\xde\x1f\x00\x1aX\n\x0bQuotasEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x38\n\x05value\x18\x02 \x01(\x0b\x32).istio.mixer.v1.CheckResponse.QuotaResult:\x02\x38\x01\"\xca\x02\n\x14ReferencedAttributes\x12\r\n\x05words\x18\x01 \x03(\t\x12T\n\x11\x61ttribute_matches\x18\x02 \x03(\x0b\x32\x33.istio.mixer.v1.ReferencedAttributes.AttributeMatchB\x04\xc8\xde\x1f\x00\x1a\x81\x01\n\x0e\x41ttributeMatch\x12\x0c\n\x04name\x18\x01 \x01(\x11\x12\x41\n\tcondition\x18\x02 \x01(\x0e\x32..istio.mixer.v1.ReferencedAttributes.Condition\x12\r\n\x05regex\x18\x03 \x01(\t\x12\x0f\n\x07map_key\x18\x04 \x01(\x11\"I\n\tCondition\x12\x19\n\x15\x43ONDITION_UNSPECIFIED\x10\x00\x12\x0b\n\x07\x41\x42SENCE\x10\x01\x12\t\n\x05\x45XACT\x10\x02\x12\t\n\x05REGEX\x10\x03\"\x9e\x01\n\x0fHeaderOperation\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\x12<\n\toperation\x18\x03 \x01(\x0e\x32).istio.mixer.v1.HeaderOperation.Operation\"0\n\tOperation\x12\x0b\n\x07REPLACE\x10\x00\x12\n\n\x06REMOVE\x10\x01\x12\n\n\x06\x41PPEND\x10\x02\"\xe1\x01\n\x0eRouteDirective\x12H\n\x19request_header_operations\x18\x01 \x03(\x0b\x32\x1f.istio.mixer.v1.HeaderOperationB\x04\xc8\xde\x1f\x00\x12I\n\x1aresponse_header_operations\x18\x02 \x03(\x0b\x32\x1f.istio.mixer.v1.HeaderOperationB\x04\xc8\xde\x1f\x00\x12\x1c\n\x14\x64irect_response_code\x18\x03 \x01(\r\x12\x1c\n\x14\x64irect_response_body\x18\x04 \x01(\t\"\xb0\x02\n\rReportRequest\x12>\n\nattributes\x18\x01 \x03(\x0b\x32$.istio.mixer.v1.CompressedAttributesB\x04\xc8\xde\x1f\x00\x12`\n\x1drepeated_attributes_semantics\x18\x04 \x01(\x0e\x32\x39.istio.mixer.v1.ReportRequest.RepeatedAttributesSemantics\x12\x15\n\rdefault_words\x18\x02 \x03(\t\x12\x19\n\x11global_word_count\x18\x03 \x01(\r\"K\n\x1bRepeatedAttributesSemantics\x12\x12\n\x0e\x44\x45LTA_ENCODING\x10\x00\x12\x18\n\x14INDEPENDENT_ENCODING\x10\x01\"\x10\n\x0eReportResponse2\x9a\x01\n\x05Mixer\x12\x46\n\x05\x43heck\x12\x1c.istio.mixer.v1.CheckRequest\x1a\x1d.istio.mixer.v1.CheckResponse\"\x00\x12I\n\x06Report\x12\x1d.istio.mixer.v1.ReportRequest\x1a\x1e.istio.mixer.v1.ReportResponse\"\x00\x42)Z\x15istio.io/api/mixer/v1\x80\x01\x01\xf8\x01\x01\xc8\xe1\x1e\x00\xa8\xe2\x1e\x00\xf0\xe1\x1e\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x14mixer/v1/mixer.proto\x12\x0eistio.mixer.v1\x1a\x14gogoproto/gogo.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x17google/rpc/status.proto\x1a\x1fpolicy/v1beta1/attributes.proto\"\xd6\x02\n\x0c\x43heckRequest\x12\x44\n\nattributes\x18\x01 \x01(\x0b\x32*.istio.policy.v1beta1.CompressedAttributesB\x04\xc8\xde\x1f\x00\x12\x19\n\x11global_word_count\x18\x02 \x01(\r\x12\x18\n\x10\x64\x65\x64uplication_id\x18\x03 \x01(\t\x12>\n\x06quotas\x18\x04 \x03(\x0b\x32(.istio.mixer.v1.CheckRequest.QuotasEntryB\x04\xc8\xde\x1f\x00\x1a\x32\n\x0bQuotaParams\x12\x0e\n\x06\x61mount\x18\x01 \x01(\x03\x12\x13\n\x0b\x62\x65st_effort\x18\x02 \x01(\x08\x1aW\n\x0bQuotasEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x37\n\x05value\x18\x02 \x01(\x0b\x32(.istio.mixer.v1.CheckRequest.QuotaParams:\x02\x38\x01\"\xcf\x05\n\rCheckResponse\x12L\n\x0cprecondition\x18\x02 \x01(\x0b\x32\x30.istio.mixer.v1.CheckResponse.PreconditionResultB\x04\xc8\xde\x1f\x00\x12?\n\x06quotas\x18\x03 \x03(\x0b\x32).istio.mixer.v1.CheckResponse.QuotasEntryB\x04\xc8\xde\x1f\x00\x1a\x9e\x02\n\x12PreconditionResult\x12(\n\x06status\x18\x01 \x01(\x0b\x32\x12.google.rpc.StatusB\x04\xc8\xde\x1f\x00\x12;\n\x0evalid_duration\x18\x02 \x01(\x0b\x32\x19.google.protobuf.DurationB\x08\xc8\xde\x1f\x00\x98\xdf\x1f\x01\x12\x17\n\x0fvalid_use_count\x18\x03 \x01(\x05\x12I\n\x15referenced_attributes\x18\x05 \x01(\x0b\x32*.istio.policy.v1beta1.ReferencedAttributes\x12\x37\n\x0froute_directive\x18\x06 \x01(\x0b\x32\x1e.istio.mixer.v1.RouteDirectiveJ\x04\x08\x04\x10\x05\x1a\xb3\x01\n\x0bQuotaResult\x12;\n\x0evalid_duration\x18\x01 \x01(\x0b\x32\x19.google.protobuf.DurationB\x08\xc8\xde\x1f\x00\x98\xdf\x1f\x01\x12\x16\n\x0egranted_amount\x18\x02 \x01(\x03\x12O\n\x15referenced_attributes\x18\x05 \x01(\x0b\x32*.istio.policy.v1beta1.ReferencedAttributesB\x04\xc8\xde\x1f\x00\x1aX\n\x0bQuotasEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x38\n\x05value\x18\x02 \x01(\x0b\x32).istio.mixer.v1.CheckResponse.QuotaResult:\x02\x38\x01\"\x9e\x01\n\x0fHeaderOperation\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\x12<\n\toperation\x18\x03 \x01(\x0e\x32).istio.mixer.v1.HeaderOperation.Operation\"0\n\tOperation\x12\x0b\n\x07REPLACE\x10\x00\x12\n\n\x06REMOVE\x10\x01\x12\n\n\x06\x41PPEND\x10\x02\"\xe1\x01\n\x0eRouteDirective\x12H\n\x19request_header_operations\x18\x01 \x03(\x0b\x32\x1f.istio.mixer.v1.HeaderOperationB\x04\xc8\xde\x1f\x00\x12I\n\x1aresponse_header_operations\x18\x02 \x03(\x0b\x32\x1f.istio.mixer.v1.HeaderOperationB\x04\xc8\xde\x1f\x00\x12\x1c\n\x14\x64irect_response_code\x18\x03 \x01(\r\x12\x1c\n\x14\x64irect_response_body\x18\x04 \x01(\t\"\xb6\x02\n\rReportRequest\x12\x44\n\nattributes\x18\x01 \x03(\x0b\x32*.istio.policy.v1beta1.CompressedAttributesB\x04\xc8\xde\x1f\x00\x12`\n\x1drepeated_attributes_semantics\x18\x04 \x01(\x0e\x32\x39.istio.mixer.v1.ReportRequest.RepeatedAttributesSemantics\x12\x15\n\rdefault_words\x18\x02 \x03(\t\x12\x19\n\x11global_word_count\x18\x03 \x01(\r\"K\n\x1bRepeatedAttributesSemantics\x12\x12\n\x0e\x44\x45LTA_ENCODING\x10\x00\x12\x18\n\x14INDEPENDENT_ENCODING\x10\x01\"\x10\n\x0eReportResponse2\x9a\x01\n\x05Mixer\x12\x46\n\x05\x43heck\x12\x1c.istio.mixer.v1.CheckRequest\x1a\x1d.istio.mixer.v1.CheckResponse\"\x00\x12I\n\x06Report\x12\x1d.istio.mixer.v1.ReportRequest\x1a\x1e.istio.mixer.v1.ReportResponse\"\x00\x42)Z\x15istio.io/api/mixer/v1\x80\x01\x01\xf8\x01\x01\xc8\xe1\x1e\x00\xa8\xe2\x1e\x00\xf0\xe1\x1e\x00\x62\x06proto3')
   ,
-  dependencies=[gogoproto_dot_gogo__pb2.DESCRIPTOR,google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_rpc_dot_status__pb2.DESCRIPTOR,mixer_dot_v1_dot_attributes__pb2.DESCRIPTOR,])
+  dependencies=[gogoproto_dot_gogo__pb2.DESCRIPTOR,google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_rpc_dot_status__pb2.DESCRIPTOR,policy_dot_v1beta1_dot_attributes__pb2.DESCRIPTOR,])
 
 
-
-_REFERENCEDATTRIBUTES_CONDITION = _descriptor.EnumDescriptor(
-  name='Condition',
-  full_name='istio.mixer.v1.ReferencedAttributes.Condition',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='CONDITION_UNSPECIFIED', index=0, number=0,
-      options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='ABSENCE', index=1, number=1,
-      options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='EXACT', index=2, number=2,
-      options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='REGEX', index=3, number=3,
-      options=None,
-      type=None),
-  ],
-  containing_type=None,
-  options=None,
-  serialized_start=1453,
-  serialized_end=1526,
-)
-_sym_db.RegisterEnumDescriptor(_REFERENCEDATTRIBUTES_CONDITION)
 
 _HEADEROPERATION_OPERATION = _descriptor.EnumDescriptor(
   name='Operation',
@@ -80,8 +50,8 @@ _HEADEROPERATION_OPERATION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1639,
-  serialized_end=1687,
+  serialized_start=1330,
+  serialized_end=1378,
 )
 _sym_db.RegisterEnumDescriptor(_HEADEROPERATION_OPERATION)
 
@@ -102,8 +72,8 @@ _REPORTREQUEST_REPEATEDATTRIBUTESSEMANTICS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2147,
-  serialized_end=2222,
+  serialized_start=1844,
+  serialized_end=1919,
 )
 _sym_db.RegisterEnumDescriptor(_REPORTREQUEST_REPEATEDATTRIBUTESSEMANTICS)
 
@@ -141,8 +111,8 @@ _CHECKREQUEST_QUOTAPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=344,
-  serialized_end=394,
+  serialized_start=356,
+  serialized_end=406,
 )
 
 _CHECKREQUEST_QUOTASENTRY = _descriptor.Descriptor(
@@ -178,8 +148,8 @@ _CHECKREQUEST_QUOTASENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=396,
-  serialized_end=483,
+  serialized_start=408,
+  serialized_end=495,
 )
 
 _CHECKREQUEST = _descriptor.Descriptor(
@@ -229,8 +199,8 @@ _CHECKREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=147,
-  serialized_end=483,
+  serialized_start=153,
+  serialized_end=495,
 )
 
 
@@ -288,8 +258,8 @@ _CHECKRESPONSE_PRECONDITIONRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=647,
-  serialized_end=927,
+  serialized_start=659,
+  serialized_end=945,
 )
 
 _CHECKRESPONSE_QUOTARESULT = _descriptor.Descriptor(
@@ -332,8 +302,8 @@ _CHECKRESPONSE_QUOTARESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=930,
-  serialized_end=1103,
+  serialized_start=948,
+  serialized_end=1127,
 )
 
 _CHECKRESPONSE_QUOTASENTRY = _descriptor.Descriptor(
@@ -369,8 +339,8 @@ _CHECKRESPONSE_QUOTASENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1105,
-  serialized_end=1193,
+  serialized_start=1129,
+  serialized_end=1217,
 )
 
 _CHECKRESPONSE = _descriptor.Descriptor(
@@ -406,98 +376,8 @@ _CHECKRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=486,
-  serialized_end=1193,
-)
-
-
-_REFERENCEDATTRIBUTES_ATTRIBUTEMATCH = _descriptor.Descriptor(
-  name='AttributeMatch',
-  full_name='istio.mixer.v1.ReferencedAttributes.AttributeMatch',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='name', full_name='istio.mixer.v1.ReferencedAttributes.AttributeMatch.name', index=0,
-      number=1, type=17, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='condition', full_name='istio.mixer.v1.ReferencedAttributes.AttributeMatch.condition', index=1,
-      number=2, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='regex', full_name='istio.mixer.v1.ReferencedAttributes.AttributeMatch.regex', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='map_key', full_name='istio.mixer.v1.ReferencedAttributes.AttributeMatch.map_key', index=3,
-      number=4, type=17, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1322,
-  serialized_end=1451,
-)
-
-_REFERENCEDATTRIBUTES = _descriptor.Descriptor(
-  name='ReferencedAttributes',
-  full_name='istio.mixer.v1.ReferencedAttributes',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='words', full_name='istio.mixer.v1.ReferencedAttributes.words', index=0,
-      number=1, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='attribute_matches', full_name='istio.mixer.v1.ReferencedAttributes.attribute_matches', index=1,
-      number=2, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=_descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\310\336\037\000')), file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[_REFERENCEDATTRIBUTES_ATTRIBUTEMATCH, ],
-  enum_types=[
-    _REFERENCEDATTRIBUTES_CONDITION,
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1196,
-  serialized_end=1526,
+  serialized_start=498,
+  serialized_end=1217,
 )
 
 
@@ -542,8 +422,8 @@ _HEADEROPERATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1529,
-  serialized_end=1687,
+  serialized_start=1220,
+  serialized_end=1378,
 )
 
 
@@ -594,8 +474,8 @@ _ROUTEDIRECTIVE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1690,
-  serialized_end=1915,
+  serialized_start=1381,
+  serialized_end=1606,
 )
 
 
@@ -647,8 +527,8 @@ _REPORTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1918,
-  serialized_end=2222,
+  serialized_start=1609,
+  serialized_end=1919,
 )
 
 
@@ -671,41 +551,36 @@ _REPORTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2224,
-  serialized_end=2240,
+  serialized_start=1921,
+  serialized_end=1937,
 )
 
 _CHECKREQUEST_QUOTAPARAMS.containing_type = _CHECKREQUEST
 _CHECKREQUEST_QUOTASENTRY.fields_by_name['value'].message_type = _CHECKREQUEST_QUOTAPARAMS
 _CHECKREQUEST_QUOTASENTRY.containing_type = _CHECKREQUEST
-_CHECKREQUEST.fields_by_name['attributes'].message_type = mixer_dot_v1_dot_attributes__pb2._COMPRESSEDATTRIBUTES
+_CHECKREQUEST.fields_by_name['attributes'].message_type = policy_dot_v1beta1_dot_attributes__pb2._COMPRESSEDATTRIBUTES
 _CHECKREQUEST.fields_by_name['quotas'].message_type = _CHECKREQUEST_QUOTASENTRY
 _CHECKRESPONSE_PRECONDITIONRESULT.fields_by_name['status'].message_type = google_dot_rpc_dot_status__pb2._STATUS
 _CHECKRESPONSE_PRECONDITIONRESULT.fields_by_name['valid_duration'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
-_CHECKRESPONSE_PRECONDITIONRESULT.fields_by_name['referenced_attributes'].message_type = _REFERENCEDATTRIBUTES
+_CHECKRESPONSE_PRECONDITIONRESULT.fields_by_name['referenced_attributes'].message_type = policy_dot_v1beta1_dot_attributes__pb2._REFERENCEDATTRIBUTES
 _CHECKRESPONSE_PRECONDITIONRESULT.fields_by_name['route_directive'].message_type = _ROUTEDIRECTIVE
 _CHECKRESPONSE_PRECONDITIONRESULT.containing_type = _CHECKRESPONSE
 _CHECKRESPONSE_QUOTARESULT.fields_by_name['valid_duration'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
-_CHECKRESPONSE_QUOTARESULT.fields_by_name['referenced_attributes'].message_type = _REFERENCEDATTRIBUTES
+_CHECKRESPONSE_QUOTARESULT.fields_by_name['referenced_attributes'].message_type = policy_dot_v1beta1_dot_attributes__pb2._REFERENCEDATTRIBUTES
 _CHECKRESPONSE_QUOTARESULT.containing_type = _CHECKRESPONSE
 _CHECKRESPONSE_QUOTASENTRY.fields_by_name['value'].message_type = _CHECKRESPONSE_QUOTARESULT
 _CHECKRESPONSE_QUOTASENTRY.containing_type = _CHECKRESPONSE
 _CHECKRESPONSE.fields_by_name['precondition'].message_type = _CHECKRESPONSE_PRECONDITIONRESULT
 _CHECKRESPONSE.fields_by_name['quotas'].message_type = _CHECKRESPONSE_QUOTASENTRY
-_REFERENCEDATTRIBUTES_ATTRIBUTEMATCH.fields_by_name['condition'].enum_type = _REFERENCEDATTRIBUTES_CONDITION
-_REFERENCEDATTRIBUTES_ATTRIBUTEMATCH.containing_type = _REFERENCEDATTRIBUTES
-_REFERENCEDATTRIBUTES.fields_by_name['attribute_matches'].message_type = _REFERENCEDATTRIBUTES_ATTRIBUTEMATCH
-_REFERENCEDATTRIBUTES_CONDITION.containing_type = _REFERENCEDATTRIBUTES
 _HEADEROPERATION.fields_by_name['operation'].enum_type = _HEADEROPERATION_OPERATION
 _HEADEROPERATION_OPERATION.containing_type = _HEADEROPERATION
 _ROUTEDIRECTIVE.fields_by_name['request_header_operations'].message_type = _HEADEROPERATION
 _ROUTEDIRECTIVE.fields_by_name['response_header_operations'].message_type = _HEADEROPERATION
-_REPORTREQUEST.fields_by_name['attributes'].message_type = mixer_dot_v1_dot_attributes__pb2._COMPRESSEDATTRIBUTES
+_REPORTREQUEST.fields_by_name['attributes'].message_type = policy_dot_v1beta1_dot_attributes__pb2._COMPRESSEDATTRIBUTES
 _REPORTREQUEST.fields_by_name['repeated_attributes_semantics'].enum_type = _REPORTREQUEST_REPEATEDATTRIBUTESSEMANTICS
 _REPORTREQUEST_REPEATEDATTRIBUTESSEMANTICS.containing_type = _REPORTREQUEST
 DESCRIPTOR.message_types_by_name['CheckRequest'] = _CHECKREQUEST
 DESCRIPTOR.message_types_by_name['CheckResponse'] = _CHECKRESPONSE
-DESCRIPTOR.message_types_by_name['ReferencedAttributes'] = _REFERENCEDATTRIBUTES
 DESCRIPTOR.message_types_by_name['HeaderOperation'] = _HEADEROPERATION
 DESCRIPTOR.message_types_by_name['RouteDirective'] = _ROUTEDIRECTIVE
 DESCRIPTOR.message_types_by_name['ReportRequest'] = _REPORTREQUEST
@@ -766,21 +641,6 @@ _sym_db.RegisterMessage(CheckResponse.PreconditionResult)
 _sym_db.RegisterMessage(CheckResponse.QuotaResult)
 _sym_db.RegisterMessage(CheckResponse.QuotasEntry)
 
-ReferencedAttributes = _reflection.GeneratedProtocolMessageType('ReferencedAttributes', (_message.Message,), dict(
-
-  AttributeMatch = _reflection.GeneratedProtocolMessageType('AttributeMatch', (_message.Message,), dict(
-    DESCRIPTOR = _REFERENCEDATTRIBUTES_ATTRIBUTEMATCH,
-    __module__ = 'mixer.v1.mixer_pb2'
-    # @@protoc_insertion_point(class_scope:istio.mixer.v1.ReferencedAttributes.AttributeMatch)
-    ))
-  ,
-  DESCRIPTOR = _REFERENCEDATTRIBUTES,
-  __module__ = 'mixer.v1.mixer_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mixer.v1.ReferencedAttributes)
-  ))
-_sym_db.RegisterMessage(ReferencedAttributes)
-_sym_db.RegisterMessage(ReferencedAttributes.AttributeMatch)
-
 HeaderOperation = _reflection.GeneratedProtocolMessageType('HeaderOperation', (_message.Message,), dict(
   DESCRIPTOR = _HEADEROPERATION,
   __module__ = 'mixer.v1.mixer_pb2'
@@ -832,8 +692,6 @@ _CHECKRESPONSE.fields_by_name['precondition'].has_options = True
 _CHECKRESPONSE.fields_by_name['precondition']._options = _descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\310\336\037\000'))
 _CHECKRESPONSE.fields_by_name['quotas'].has_options = True
 _CHECKRESPONSE.fields_by_name['quotas']._options = _descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\310\336\037\000'))
-_REFERENCEDATTRIBUTES.fields_by_name['attribute_matches'].has_options = True
-_REFERENCEDATTRIBUTES.fields_by_name['attribute_matches']._options = _descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\310\336\037\000'))
 _ROUTEDIRECTIVE.fields_by_name['request_header_operations'].has_options = True
 _ROUTEDIRECTIVE.fields_by_name['request_header_operations']._options = _descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\310\336\037\000'))
 _ROUTEDIRECTIVE.fields_by_name['response_header_operations'].has_options = True
@@ -847,8 +705,8 @@ _MIXER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   options=None,
-  serialized_start=2243,
-  serialized_end=2397,
+  serialized_start=1940,
+  serialized_end=2094,
   methods=[
   _descriptor.MethodDescriptor(
     name='Check',

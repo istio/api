@@ -17,7 +17,7 @@ syntax = "proto3";
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 
-import "mixer/v1/attributes.proto";
+import "policy/v1beta1/attributes.proto";
 import "mixer/v1/config/client/api_spec.proto";
 import "mixer/v1/config/client/quota.proto";
 
@@ -73,7 +73,7 @@ message ServiceConfig {
   // typically includes the "destination.service" attribute.
   // In case of a per-route override, per-route attributes take precedence
   // over the attributes supplied in the client configuration.
-  Attributes mixer_attributes = 3;
+  istio.policy.v1beta1.Attributes mixer_attributes = 3;
 
   // HTTP API specifications to generate API attributes.
   repeated HTTPAPISpec http_api_spec = 4;
@@ -99,7 +99,7 @@ message ServiceConfig {
   // 3. forwarded attributes from the source filter config (if any);
   // 4. forwarded attributes from the source route config (if any);
   // 5. derived attributes from the request metadata.
-  Attributes forward_attributes = 8;
+  istio.policy.v1beta1.Attributes forward_attributes = 8;
 }
 
 // Defines the transport config on how to call Mixer.
@@ -144,7 +144,7 @@ message TransportConfig {
   // Default attributes to forward to Mixer upstream. This typically
   // includes the "source.ip" and "source.uid" attributes. These
   // attributes are consumed by the proxy in front of mixer.
-  Attributes attributes_for_mixer_proxy = 8;
+  istio.policy.v1beta1.Attributes attributes_for_mixer_proxy = 8;
 
   // When disable_report_batch is false, this value specifies the maximum number
   // of requests that are batched in report. If left unspecified, the default value 
@@ -176,11 +176,11 @@ message HttpClientConfig {
   // Default attributes to send to Mixer in both Check and
   // Report. This typically includes "destination.ip" and
   // "destination.uid" attributes.
-  Attributes mixer_attributes = 4;
+  istio.policy.v1beta1.Attributes mixer_attributes = 4;
 
   // Default attributes to forward to upstream. This typically
   // includes the "source.ip" and "source.uid" attributes.
-  Attributes forward_attributes = 5;
+  istio.policy.v1beta1.Attributes forward_attributes = 5;
 }
 
 // Defines the client config for TCP.
@@ -191,7 +191,7 @@ message TcpClientConfig {
   // Default attributes to send to Mixer in both Check and
   // Report. This typically includes "destination.ip" and
   // "destination.uid" attributes.
-  Attributes mixer_attributes = 2;
+  istio.policy.v1beta1.Attributes mixer_attributes = 2;
 
   // If set to true, disables Mixer check calls.
   bool disable_check_calls = 3;

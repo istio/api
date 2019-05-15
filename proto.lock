@@ -1970,216 +1970,6 @@
       }
     },
     {
-      "protopath": "mixer:/:v1:/:attributes.proto",
-      "def": {
-        "messages": [
-          {
-            "name": "Attributes",
-            "maps": [
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 1,
-                  "name": "attributes",
-                  "type": "AttributeValue"
-                }
-              }
-            ],
-            "messages": [
-              {
-                "name": "AttributeValue",
-                "fields": [
-                  {
-                    "id": 2,
-                    "name": "string_value",
-                    "type": "string"
-                  },
-                  {
-                    "id": 3,
-                    "name": "int64_value",
-                    "type": "int64"
-                  },
-                  {
-                    "id": 4,
-                    "name": "double_value",
-                    "type": "double"
-                  },
-                  {
-                    "id": 5,
-                    "name": "bool_value",
-                    "type": "bool"
-                  },
-                  {
-                    "id": 6,
-                    "name": "bytes_value",
-                    "type": "bytes"
-                  },
-                  {
-                    "id": 7,
-                    "name": "timestamp_value",
-                    "type": "google.protobuf.Timestamp"
-                  },
-                  {
-                    "id": 8,
-                    "name": "duration_value",
-                    "type": "google.protobuf.Duration"
-                  },
-                  {
-                    "id": 9,
-                    "name": "string_map_value",
-                    "type": "StringMap"
-                  }
-                ]
-              },
-              {
-                "name": "StringMap",
-                "maps": [
-                  {
-                    "key_type": "string",
-                    "field": {
-                      "id": 1,
-                      "name": "entries",
-                      "type": "string"
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "name": "CompressedAttributes",
-            "fields": [
-              {
-                "id": 1,
-                "name": "words",
-                "type": "string",
-                "is_repeated": true
-              }
-            ],
-            "maps": [
-              {
-                "key_type": "sint32",
-                "field": {
-                  "id": 2,
-                  "name": "strings",
-                  "type": "sint32"
-                }
-              },
-              {
-                "key_type": "sint32",
-                "field": {
-                  "id": 3,
-                  "name": "int64s",
-                  "type": "int64"
-                }
-              },
-              {
-                "key_type": "sint32",
-                "field": {
-                  "id": 4,
-                  "name": "doubles",
-                  "type": "double"
-                }
-              },
-              {
-                "key_type": "sint32",
-                "field": {
-                  "id": 5,
-                  "name": "bools",
-                  "type": "bool"
-                }
-              },
-              {
-                "key_type": "sint32",
-                "field": {
-                  "id": 6,
-                  "name": "timestamps",
-                  "type": "google.protobuf.Timestamp",
-                  "options": [
-                    {
-                      "name": "(gogoproto.nullable)",
-                      "value": "false"
-                    },
-                    {
-                      "name": "(gogoproto.stdtime)",
-                      "value": "true"
-                    }
-                  ]
-                }
-              },
-              {
-                "key_type": "sint32",
-                "field": {
-                  "id": 7,
-                  "name": "durations",
-                  "type": "google.protobuf.Duration",
-                  "options": [
-                    {
-                      "name": "(gogoproto.nullable)",
-                      "value": "false"
-                    },
-                    {
-                      "name": "(gogoproto.stdduration)",
-                      "value": "true"
-                    }
-                  ]
-                }
-              },
-              {
-                "key_type": "sint32",
-                "field": {
-                  "id": 8,
-                  "name": "bytes",
-                  "type": "bytes"
-                }
-              },
-              {
-                "key_type": "sint32",
-                "field": {
-                  "id": 9,
-                  "name": "string_maps",
-                  "type": "StringMap",
-                  "options": [
-                    {
-                      "name": "(gogoproto.nullable)",
-                      "value": "false"
-                    }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "name": "StringMap",
-            "maps": [
-              {
-                "key_type": "sint32",
-                "field": {
-                  "id": 1,
-                  "name": "entries",
-                  "type": "sint32"
-                }
-              }
-            ]
-          }
-        ],
-        "imports": [
-          {
-            "path": "gogoproto/gogo.proto"
-          },
-          {
-            "path": "google/protobuf/duration.proto"
-          },
-          {
-            "path": "google/protobuf/timestamp.proto"
-          }
-        ],
-        "package": {
-          "name": "istio.mixer.v1"
-        }
-      }
-    },
-    {
       "protopath": "mixer:/:v1:/:config:/:client:/:api_spec.proto",
       "def": {
         "messages": [
@@ -2189,7 +1979,7 @@
               {
                 "id": 1,
                 "name": "attributes",
-                "type": "Attributes"
+                "type": "istio.policy.v1beta1.Attributes"
               },
               {
                 "id": 2,
@@ -2211,7 +2001,7 @@
               {
                 "id": 1,
                 "name": "attributes",
-                "type": "Attributes"
+                "type": "istio.policy.v1beta1.Attributes"
               },
               {
                 "id": 2,
@@ -2288,7 +2078,7 @@
             "path": "gogoproto/gogo.proto"
           },
           {
-            "path": "mixer/v1/attributes.proto"
+            "path": "policy/v1beta1/attributes.proto"
           },
           {
             "path": "mixer/v1/config/client/service.proto"
@@ -2358,7 +2148,7 @@
               {
                 "id": 3,
                 "name": "mixer_attributes",
-                "type": "Attributes"
+                "type": "istio.policy.v1beta1.Attributes"
               },
               {
                 "id": 4,
@@ -2380,7 +2170,7 @@
               {
                 "id": 8,
                 "name": "forward_attributes",
-                "type": "Attributes"
+                "type": "istio.policy.v1beta1.Attributes"
               }
             ]
           },
@@ -2425,7 +2215,7 @@
               {
                 "id": 8,
                 "name": "attributes_for_mixer_proxy",
-                "type": "Attributes"
+                "type": "istio.policy.v1beta1.Attributes"
               },
               {
                 "id": 9,
@@ -2455,12 +2245,12 @@
               {
                 "id": 4,
                 "name": "mixer_attributes",
-                "type": "Attributes"
+                "type": "istio.policy.v1beta1.Attributes"
               },
               {
                 "id": 5,
                 "name": "forward_attributes",
-                "type": "Attributes"
+                "type": "istio.policy.v1beta1.Attributes"
               }
             ],
             "maps": [
@@ -2485,7 +2275,7 @@
               {
                 "id": 2,
                 "name": "mixer_attributes",
-                "type": "Attributes"
+                "type": "istio.policy.v1beta1.Attributes"
               },
               {
                 "id": 3,
@@ -2518,7 +2308,7 @@
             "path": "google/protobuf/duration.proto"
           },
           {
-            "path": "mixer/v1/attributes.proto"
+            "path": "policy/v1beta1/attributes.proto"
           },
           {
             "path": "mixer/v1/config/client/api_spec.proto"
@@ -2715,26 +2505,6 @@
       "def": {
         "enums": [
           {
-            "name": "ReferencedAttributes.Condition",
-            "enum_fields": [
-              {
-                "name": "CONDITION_UNSPECIFIED"
-              },
-              {
-                "name": "ABSENCE",
-                "integer": 1
-              },
-              {
-                "name": "EXACT",
-                "integer": 2
-              },
-              {
-                "name": "REGEX",
-                "integer": 3
-              }
-            ]
-          },
-          {
             "name": "HeaderOperation.Operation",
             "enum_fields": [
               {
@@ -2770,7 +2540,7 @@
               {
                 "id": 1,
                 "name": "attributes",
-                "type": "CompressedAttributes",
+                "type": "istio.policy.v1beta1.CompressedAttributes",
                 "options": [
                   {
                     "name": "(gogoproto.nullable)",
@@ -2892,7 +2662,7 @@
                   {
                     "id": 5,
                     "name": "referenced_attributes",
-                    "type": "ReferencedAttributes"
+                    "type": "istio.policy.v1beta1.ReferencedAttributes"
                   },
                   {
                     "id": 6,
@@ -2930,63 +2700,13 @@
                   {
                     "id": 5,
                     "name": "referenced_attributes",
-                    "type": "ReferencedAttributes",
+                    "type": "istio.policy.v1beta1.ReferencedAttributes",
                     "options": [
                       {
                         "name": "(gogoproto.nullable)",
                         "value": "false"
                       }
                     ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "name": "ReferencedAttributes",
-            "fields": [
-              {
-                "id": 1,
-                "name": "words",
-                "type": "string",
-                "is_repeated": true
-              },
-              {
-                "id": 2,
-                "name": "attribute_matches",
-                "type": "AttributeMatch",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(gogoproto.nullable)",
-                    "value": "false"
-                  }
-                ]
-              }
-            ],
-            "messages": [
-              {
-                "name": "AttributeMatch",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "name",
-                    "type": "sint32"
-                  },
-                  {
-                    "id": 2,
-                    "name": "condition",
-                    "type": "Condition"
-                  },
-                  {
-                    "id": 3,
-                    "name": "regex",
-                    "type": "string"
-                  },
-                  {
-                    "id": 4,
-                    "name": "map_key",
-                    "type": "sint32"
                   }
                 ]
               }
@@ -3057,7 +2777,7 @@
               {
                 "id": 1,
                 "name": "attributes",
-                "type": "CompressedAttributes",
+                "type": "istio.policy.v1beta1.CompressedAttributes",
                 "is_repeated": true,
                 "options": [
                   {
@@ -3116,7 +2836,7 @@
             "path": "google/rpc/status.proto"
           },
           {
-            "path": "mixer/v1/attributes.proto"
+            "path": "policy/v1beta1/attributes.proto"
           }
         ],
         "package": {
@@ -4901,6 +4621,288 @@
       }
     },
     {
+      "protopath": "policy:/:v1beta1:/:attributes.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "ReferencedAttributes.Condition",
+            "enum_fields": [
+              {
+                "name": "CONDITION_UNSPECIFIED"
+              },
+              {
+                "name": "ABSENCE",
+                "integer": 1
+              },
+              {
+                "name": "EXACT",
+                "integer": 2
+              },
+              {
+                "name": "REGEX",
+                "integer": 3
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "name": "Attributes",
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 1,
+                  "name": "attributes",
+                  "type": "AttributeValue"
+                }
+              }
+            ],
+            "messages": [
+              {
+                "name": "AttributeValue",
+                "fields": [
+                  {
+                    "id": 2,
+                    "name": "string_value",
+                    "type": "string"
+                  },
+                  {
+                    "id": 3,
+                    "name": "int64_value",
+                    "type": "int64"
+                  },
+                  {
+                    "id": 4,
+                    "name": "double_value",
+                    "type": "double"
+                  },
+                  {
+                    "id": 5,
+                    "name": "bool_value",
+                    "type": "bool"
+                  },
+                  {
+                    "id": 6,
+                    "name": "bytes_value",
+                    "type": "bytes"
+                  },
+                  {
+                    "id": 7,
+                    "name": "timestamp_value",
+                    "type": "google.protobuf.Timestamp"
+                  },
+                  {
+                    "id": 8,
+                    "name": "duration_value",
+                    "type": "google.protobuf.Duration"
+                  },
+                  {
+                    "id": 9,
+                    "name": "string_map_value",
+                    "type": "StringMap"
+                  }
+                ]
+              },
+              {
+                "name": "StringMap",
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 1,
+                      "name": "entries",
+                      "type": "string"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "CompressedAttributes",
+            "fields": [
+              {
+                "id": 1,
+                "name": "words",
+                "type": "string",
+                "is_repeated": true
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "sint32",
+                "field": {
+                  "id": 2,
+                  "name": "strings",
+                  "type": "sint32"
+                }
+              },
+              {
+                "key_type": "sint32",
+                "field": {
+                  "id": 3,
+                  "name": "int64s",
+                  "type": "int64"
+                }
+              },
+              {
+                "key_type": "sint32",
+                "field": {
+                  "id": 4,
+                  "name": "doubles",
+                  "type": "double"
+                }
+              },
+              {
+                "key_type": "sint32",
+                "field": {
+                  "id": 5,
+                  "name": "bools",
+                  "type": "bool"
+                }
+              },
+              {
+                "key_type": "sint32",
+                "field": {
+                  "id": 6,
+                  "name": "timestamps",
+                  "type": "google.protobuf.Timestamp",
+                  "options": [
+                    {
+                      "name": "(gogoproto.nullable)",
+                      "value": "false"
+                    },
+                    {
+                      "name": "(gogoproto.stdtime)",
+                      "value": "true"
+                    }
+                  ]
+                }
+              },
+              {
+                "key_type": "sint32",
+                "field": {
+                  "id": 7,
+                  "name": "durations",
+                  "type": "google.protobuf.Duration",
+                  "options": [
+                    {
+                      "name": "(gogoproto.nullable)",
+                      "value": "false"
+                    },
+                    {
+                      "name": "(gogoproto.stdduration)",
+                      "value": "true"
+                    }
+                  ]
+                }
+              },
+              {
+                "key_type": "sint32",
+                "field": {
+                  "id": 8,
+                  "name": "bytes",
+                  "type": "bytes"
+                }
+              },
+              {
+                "key_type": "sint32",
+                "field": {
+                  "id": 9,
+                  "name": "string_maps",
+                  "type": "StringMap",
+                  "options": [
+                    {
+                      "name": "(gogoproto.nullable)",
+                      "value": "false"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "name": "StringMap",
+            "maps": [
+              {
+                "key_type": "sint32",
+                "field": {
+                  "id": 1,
+                  "name": "entries",
+                  "type": "sint32"
+                }
+              }
+            ]
+          },
+          {
+            "name": "ReferencedAttributes",
+            "fields": [
+              {
+                "id": 1,
+                "name": "words",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "attribute_matches",
+                "type": "AttributeMatch",
+                "is_repeated": true,
+                "options": [
+                  {
+                    "name": "(gogoproto.nullable)",
+                    "value": "false"
+                  }
+                ]
+              }
+            ],
+            "messages": [
+              {
+                "name": "AttributeMatch",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "sint32"
+                  },
+                  {
+                    "id": 2,
+                    "name": "condition",
+                    "type": "Condition"
+                  },
+                  {
+                    "id": 3,
+                    "name": "regex",
+                    "type": "string"
+                  },
+                  {
+                    "id": 4,
+                    "name": "map_key",
+                    "type": "sint32"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "gogoproto/gogo.proto"
+          },
+          {
+            "path": "google/protobuf/duration.proto"
+          },
+          {
+            "path": "google/protobuf/timestamp.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.policy.v1beta1"
+        }
+      }
+    },
+    {
       "protopath": "policy:/:v1beta1:/:cfg.proto",
       "def": {
         "enums": [
@@ -5828,6 +5830,337 @@
         ],
         "package": {
           "name": "istio.policy.v1beta1"
+        }
+      }
+    },
+    {
+      "protopath": "protoc-tmp:/:google:/:rpc:/:code.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "Code",
+            "enum_fields": [
+              {
+                "name": "OK"
+              },
+              {
+                "name": "CANCELLED",
+                "integer": 1
+              },
+              {
+                "name": "UNKNOWN",
+                "integer": 2
+              },
+              {
+                "name": "INVALID_ARGUMENT",
+                "integer": 3
+              },
+              {
+                "name": "DEADLINE_EXCEEDED",
+                "integer": 4
+              },
+              {
+                "name": "NOT_FOUND",
+                "integer": 5
+              },
+              {
+                "name": "ALREADY_EXISTS",
+                "integer": 6
+              },
+              {
+                "name": "PERMISSION_DENIED",
+                "integer": 7
+              },
+              {
+                "name": "UNAUTHENTICATED",
+                "integer": 16
+              },
+              {
+                "name": "RESOURCE_EXHAUSTED",
+                "integer": 8
+              },
+              {
+                "name": "FAILED_PRECONDITION",
+                "integer": 9
+              },
+              {
+                "name": "ABORTED",
+                "integer": 10
+              },
+              {
+                "name": "OUT_OF_RANGE",
+                "integer": 11
+              },
+              {
+                "name": "UNIMPLEMENTED",
+                "integer": 12
+              },
+              {
+                "name": "INTERNAL",
+                "integer": 13
+              },
+              {
+                "name": "UNAVAILABLE",
+                "integer": 14
+              },
+              {
+                "name": "DATA_LOSS",
+                "integer": 15
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "google.rpc"
+        }
+      }
+    },
+    {
+      "protopath": "protoc-tmp:/:google:/:rpc:/:error_details.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "RetryInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "retry_delay",
+                "type": "google.protobuf.Duration"
+              }
+            ]
+          },
+          {
+            "name": "DebugInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "stack_entries",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "detail",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "QuotaFailure",
+            "fields": [
+              {
+                "id": 1,
+                "name": "violations",
+                "type": "Violation",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "Violation",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "subject",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "description",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "PreconditionFailure",
+            "fields": [
+              {
+                "id": 1,
+                "name": "violations",
+                "type": "Violation",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "Violation",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "type",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "subject",
+                    "type": "string"
+                  },
+                  {
+                    "id": 3,
+                    "name": "description",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "BadRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "field_violations",
+                "type": "FieldViolation",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "FieldViolation",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "field",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "description",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "RequestInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "request_id",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "serving_data",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "ResourceInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "resource_type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "resource_name",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "owner",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "description",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "Help",
+            "fields": [
+              {
+                "id": 1,
+                "name": "links",
+                "type": "Link",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "Link",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "description",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "url",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "LocalizedMessage",
+            "fields": [
+              {
+                "id": 1,
+                "name": "locale",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "message",
+                "type": "string"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/duration.proto"
+          }
+        ],
+        "package": {
+          "name": "google.rpc"
+        }
+      }
+    },
+    {
+      "protopath": "protoc-tmp:/:google:/:rpc:/:status.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "Status",
+            "fields": [
+              {
+                "id": 1,
+                "name": "code",
+                "type": "int32"
+              },
+              {
+                "id": 2,
+                "name": "message",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "details",
+                "type": "google.protobuf.Any",
+                "is_repeated": true
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/any.proto"
+          }
+        ],
+        "package": {
+          "name": "google.rpc"
         }
       }
     },

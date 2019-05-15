@@ -24,7 +24,7 @@ option cc_generic_services = true;
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 import "google/rpc/status.proto";
-import "mixer/v1/attributes.proto";
+import "policy/v1beta1/attributes.proto";
 
 option (gogoproto.goproto_getters_all) = false;
 option (gogoproto.equal_all) = false;
@@ -73,7 +73,7 @@ message CheckRequest {
   //
   // Mixer's configuration determines how these attributes are used to
   // establish the result returned in the response.
-  CompressedAttributes attributes = 1 [(gogoproto.nullable) = false];
+  istio.policy.v1beta1.CompressedAttributes attributes = 1 [(gogoproto.nullable) = false];
 
   // The number of words in the global dictionary, used with to populate the attributes.
   // This value is used as a quick way to determine whether the client is using a dictionary that
@@ -107,7 +107,7 @@ message CheckResponse {
 
     // The total set of attributes that were used in producing the result
     // along with matching conditions.
-    ReferencedAttributes referenced_attributes = 5;
+    istio.policy.v1beta1.ReferencedAttributes referenced_attributes = 5;
 
     // An optional routing directive, used to manipulate the traffic metadata
     // whenever all preconditions are satisfied.
@@ -125,7 +125,7 @@ message CheckResponse {
 
     // The total set of attributes that were used in producing the result
     // along with matching conditions.
-    ReferencedAttributes referenced_attributes = 5 [(gogoproto.nullable) = false];
+    istio.policy.v1beta1.ReferencedAttributes referenced_attributes = 5 [(gogoproto.nullable) = false];
   }
 
   // The precondition check results.
@@ -133,51 +133,6 @@ message CheckResponse {
 
   // The resulting quota, one entry per requested quota.
   map<string, QuotaResult> quotas = 3 [(gogoproto.nullable) = false];
-}
-
-// Describes the attributes that were used to determine the response.
-// This can be used to construct a response cache.
-message ReferencedAttributes {
-  // How an attribute's value was matched
-  enum Condition {
-    CONDITION_UNSPECIFIED = 0;    // should not occur
-    ABSENCE = 1;                  // match when attribute doesn't exist
-    EXACT = 2;                    // match when attribute value is an exact byte-for-byte match
-    REGEX = 3;                    // match when attribute value matches the included regex
-  }
-
-  // Describes a single attribute match.
-  message AttributeMatch {
-    // The name of the attribute. This is a dictionary index encoded in a manner identical
-    // to all strings in the [CompressedAttributes][istio.mixer.v1.CompressedAttributes] message.
-    sint32 name = 1;
-
-    // The kind of match against the attribute value.
-    Condition condition = 2;
-
-    // If a REGEX condition is provided for a STRING_MAP attribute,
-    // clients should use the regex value to match against map keys.
-    string regex = 3;
-
-    // A key in a STRING_MAP. When multiple keys from a STRING_MAP
-    // attribute were referenced, there will be multiple AttributeMatch
-    // messages with different map_key values. Values for map_key SHOULD
-    // be ignored for attributes that are not STRING_MAP.
-    //
-    // Indices for the keys are used (taken either from the
-    // message dictionary from the `words` field or the global dictionary).
-    //
-    // If no map_key value is provided for a STRING_MAP attribute, the
-    // entire STRING_MAP will be used.
-    sint32 map_key = 4;
-  }
-
-  // The message-level dictionary. Refer to [CompressedAttributes][istio.mixer.v1.CompressedAttributes] for information
-  // on using dictionaries.
-  repeated string words = 1;
-
-  // Describes a set of attributes.
-  repeated AttributeMatch attribute_matches = 2 [(gogoproto.nullable) = false];
 }
 
 // Operation on HTTP headers to replace, append, or remove a header. Header
@@ -242,7 +197,7 @@ message ReportRequest {
   // Each `Attributes` element represents the state of a single action. Multiple actions
   // can be provided in a single message in order to improve communication efficiency. The
   // client can accumulate a set of actions and send them all in one single message.
-  repeated CompressedAttributes attributes = 1 [(gogoproto.nullable) = false];
+  repeated istio.policy.v1beta1.CompressedAttributes attributes = 1 [(gogoproto.nullable) = false];
 
   // Indicates how to decode the attributes sets in this request.
   RepeatedAttributesSemantics repeated_attributes_semantics = 4;

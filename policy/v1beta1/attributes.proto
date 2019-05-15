@@ -14,13 +14,13 @@
 
 syntax = "proto3";
 
-package istio.mixer.v1;
-
-option go_package = "istio.io/api/mixer/v1";
-
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
+
+package istio.policy.v1beta1;
+
+option go_package="istio.io/api/policy/v1beta1";
 
 option (gogoproto.goproto_getters_all) = false;
 option (gogoproto.equal_all) = false;
@@ -146,3 +146,49 @@ message StringMap {
   // Holds a set of name/value pairs.
   map<sint32, sint32> entries = 1;
 }
+
+// Describes the attributes that were used to determine the response.
+// This can be used to construct a response cache.
+message ReferencedAttributes {
+  // How an attribute's value was matched
+  enum Condition {
+    CONDITION_UNSPECIFIED = 0;    // should not occur
+    ABSENCE = 1;                  // match when attribute doesn't exist
+    EXACT = 2;                    // match when attribute value is an exact byte-for-byte match
+    REGEX = 3;                    // match when attribute value matches the included regex
+  }
+
+  // Describes a single attribute match.
+  message AttributeMatch {
+    // The name of the attribute. This is a dictionary index encoded in a manner identical
+    // to all strings in the [CompressedAttributes][istio.mixer.v1.CompressedAttributes] message.
+    sint32 name = 1;
+
+    // The kind of match against the attribute value.
+    Condition condition = 2;
+
+    // If a REGEX condition is provided for a STRING_MAP attribute,
+    // clients should use the regex value to match against map keys.
+    string regex = 3;
+
+    // A key in a STRING_MAP. When multiple keys from a STRING_MAP
+    // attribute were referenced, there will be multiple AttributeMatch
+    // messages with different map_key values. Values for map_key SHOULD
+    // be ignored for attributes that are not STRING_MAP.
+    //
+    // Indices for the keys are used (taken either from the
+    // message dictionary from the `words` field or the global dictionary).
+    //
+    // If no map_key value is provided for a STRING_MAP attribute, the
+    // entire STRING_MAP will be used.
+    sint32 map_key = 4;
+  }
+
+  // The message-level dictionary. Refer to [CompressedAttributes][istio.mixer.v1.CompressedAttributes] for information
+  // on using dictionaries.
+  repeated string words = 1;
+
+  // Describes a set of attributes.
+  repeated AttributeMatch attribute_matches = 2 [(gogoproto.nullable) = false];
+}
+
