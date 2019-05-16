@@ -3773,6 +3773,11 @@
                 "name": "servers",
                 "type": "Server",
                 "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "http",
+                "type": "HTTPOptions"
               }
             ],
             "maps": [
@@ -3783,6 +3788,18 @@
                   "name": "selector",
                   "type": "string"
                 }
+              }
+            ],
+            "messages": [
+              {
+                "name": "HTTPOptions",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "xff_num_trusted_hops",
+                    "type": "uint32"
+                  }
+                ]
               }
             ]
           },

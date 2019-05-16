@@ -4,7 +4,7 @@ description: Configuration affecting edge load balancer.
 location: https://istio.io/docs/reference/config/networking/v1alpha3/gateway.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 6
+number_of_entries: 7
 ---
 <p><code>Gateway</code> describes a load balancer operating at the edge of the mesh
 receiving incoming or outgoing HTTP/TCP connections. The specification
@@ -201,6 +201,86 @@ on which this gateway configuration should be applied. The scope of
 label search is restricted to the configuration namespace in which the
 the resource is present. In other words, the Gateway resource must
 reside in the same namespace as the gateway workload instance.</p>
+
+</td>
+</tr>
+<tr id="Gateway-http">
+<td><code>http</code></td>
+<td><code><a href="#Gateway-HTTPOptions">Gateway.HTTPOptions</a></code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Gateway-HTTPOptions">Gateway.HTTPOptions</h2>
+<section>
+<p>Set of HTTP related options that govern the gateway&rsquo;s behavior.
+Use these options to control http behavior, including trusted
+client IP address and headers.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Gateway-HTTPOptions-xff_num_trusted_hops">
+<td><code>xffNumTrustedHops</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>The number of additional ingress proxy hops from the right side of the
+X-Xorwarded-For HTTP header to trust when determining the origin client’s
+IP address.</p>
+
+<p>Gateways on cloud infrastructure are commonly placed behind at least
+1 external cloud load balancer (e.g. GCP or AWS Load Balancers), and
+potentially further internal load balancers (e.g. Kubernetes Service).</p>
+
+<p>This setting affects the trusted client remote IP address, X-Forwarded-For
+header, and X-Envoy-External-address and X-Envoy-Internal headers
+for use cases including:
+- traffic management e.g. consistent hash load balancing by IP
+  address or X-Forwarded-For header
+- policy enforcement e.g. security whitelist or blacklisting IP ranges</p>
+
+<p>For reference and examples of behavior,
+see the following Envoy documentation:
+https://www.envoyproxy.io/docs/envoy/latest/configuration/http<em>conn</em>man/headers#x-forwarded-for</p>
+
+<p>For example, a Gateway running behind 1 external cloud load balancer
+and 1 internal load balancer would receive X-Forwarded-For in the format:</p>
+
+<pre><code>x-forwarded-for=&lt;possible untrusted ips&gt;, &lt;client ip&gt;, &lt;external LB ip&gt;, &lt;internal LB ip&gt;
+</code></pre>
+
+<p>The following configuration with <code>xff_num_trusted_hops: 2</code> would
+set the trusted client source IP to <code>&lt;client ip&gt;</code>, as desired,
+which is 2 hops from the right side of the X-Forwarded-For header.</p>
+
+<p>Without this configuration, the trusted client source IP would
+be set to <code>&lt;internal LB ip&gt;</code>, which is not useful nor accurate.</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: my-gateway
+spec:
+  selector:
+    app: my-gateway-controller
+  httpOptions:
+    xff_num_trusted_hops: 2
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - &quot;*.myapp.com&quot;
+</code></pre>
 
 </td>
 </tr>
