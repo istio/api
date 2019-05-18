@@ -5706,6 +5706,11 @@
                 "id": 10,
                 "name": "uri_value",
                 "type": "Uri"
+              },
+              {
+                "id": 11,
+                "name": "string_map_value",
+                "type": "StringMap"
               }
             ]
           },
@@ -5746,6 +5751,19 @@
                 "id": 1,
                 "name": "value",
                 "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "StringMap",
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 1,
+                  "name": "value",
+                  "type": "string"
+                }
               }
             ]
           },
