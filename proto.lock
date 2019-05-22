@@ -1110,6 +1110,21 @@
                 "id": 36,
                 "name": "dns_refresh_rate",
                 "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 37,
+                "name": "disable_report_batch",
+                "type": "bool"
+              },
+              {
+                "id": 38,
+                "name": "report_batch_max_entries",
+                "type": "uint32"
+              },
+              {
+                "id": 39,
+                "name": "report_batch_max_time",
+                "type": "google.protobuf.Duration"
               }
             ],
             "reserved_ids": [
