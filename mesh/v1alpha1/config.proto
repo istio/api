@@ -317,6 +317,18 @@ message MeshConfig {
   // defaults of istio::mixerclient::ReportOptions.
   google.protobuf.Duration report_batch_max_time = 39;
 
+  // Default Policy for upgrading http1.1 connections to http2.
+  enum H2UpgradePolicy {
+    // Do not upgrade connections to http2.
+    DO_NOT_UPGRADE = 0;
+    // Upgrade the connections to http2.
+    UPGRADE = 1;
+  }
+
+  // Specify if http1.1 connections should be upgraded to http2 by default.
+  // destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy overrides this setting.
+  H2UpgradePolicy h2_upgrade_policy = 40;
+
   // $hide_from_docs
   // Next available field number: 41
 }
