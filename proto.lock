@@ -3616,6 +3616,26 @@
                 "integer": 2
               }
             ]
+          },
+          {
+            "name": "Patch.Operator",
+            "enum_fields": [
+              {
+                "name": "MERGE"
+              },
+              {
+                "name": "MERGE_UNSET",
+                "integer": 1
+              },
+              {
+                "name": "ADD",
+                "integer": 2
+              },
+              {
+                "name": "REMOVE",
+                "integer": 3
+              }
+            ]
           }
         ],
         "messages": [
@@ -3626,6 +3646,24 @@
                 "id": 2,
                 "name": "filters",
                 "type": "Filter",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "listeners",
+                "type": "Listener",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "clusters",
+                "type": "Cluster",
+                "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "routes",
+                "type": "Route",
                 "is_repeated": true
               }
             ],
@@ -3700,16 +3738,6 @@
                     "type": "InsertPosition"
                   },
                   {
-                    "id": 6,
-                    "name": "overwrite",
-                    "type": "bool"
-                  },
-                  {
-                    "id": 7,
-                    "name": "merge",
-                    "type": "bool"
-                  },
-                  {
                     "id": 3,
                     "name": "filter_type",
                     "type": "FilterType"
@@ -3723,6 +3751,106 @@
                     "id": 5,
                     "name": "filter_config",
                     "type": "google.protobuf.Struct"
+                  }
+                ]
+              },
+              {
+                "name": "ClusterMatch",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "RouteMatch",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "Patch",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "path",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "operator",
+                    "type": "Operator"
+                  },
+                  {
+                    "id": 3,
+                    "name": "value",
+                    "type": "google.protobuf.Value"
+                  }
+                ]
+              },
+              {
+                "name": "Listener",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "match",
+                    "type": "ListenerMatch"
+                  },
+                  {
+                    "id": 2,
+                    "name": "patches",
+                    "type": "Patch",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 3,
+                    "name": "additions",
+                    "type": "google.protobuf.Struct",
+                    "is_repeated": true
+                  }
+                ]
+              },
+              {
+                "name": "Cluster",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "match",
+                    "type": "ClusterMatch"
+                  },
+                  {
+                    "id": 2,
+                    "name": "patches",
+                    "type": "Patch",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 3,
+                    "name": "additions",
+                    "type": "google.protobuf.Struct",
+                    "is_repeated": true
+                  }
+                ]
+              },
+              {
+                "name": "Route",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "match",
+                    "type": "RouteMatch"
+                  },
+                  {
+                    "id": 2,
+                    "name": "patches",
+                    "type": "Patch",
+                    "is_repeated": true
                   }
                 ]
               }
