@@ -118,7 +118,9 @@ added before envoy.http<em>connection</em>manager.</p>
 <td>
 <p>REQUIRED: Atleast one of filters, listeners, clusters, or routes
 should be specified. Changes to be applied to one or more Envoy
-listeners.</p>
+listeners. To add a new listener, use the ADD operator with no
+match condition, empty path field, and a valid listener as the
+value in a patch.</p>
 
 </td>
 </tr>
@@ -128,7 +130,9 @@ listeners.</p>
 <td>
 <p>REQUIRED: Atleast one of filters, listeners, clusters, or routes
 should be specified. Changes to be applied to one or more Envoy
-clusters.</p>
+clusters. To add a new listener, use the ADD operator with no
+match condition, empty path field, and a valid cluster as the
+value in a patch.</p>
 
 </td>
 </tr>
@@ -171,14 +175,6 @@ routes.</p>
 <td><code><a href="#EnvoyFilter-Patch">EnvoyFilter.Patch[]</a></code></td>
 <td>
 <p>Patches to apply on the matched cluster.</p>
-
-</td>
-</tr>
-<tr id="EnvoyFilter-Cluster-additions">
-<td><code>additions</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">google.protobuf.Struct[]</a></code></td>
-<td>
-<p>Clusters to be added. They will be shipped as is to the workload.</p>
 
 </td>
 </tr>
@@ -421,14 +417,6 @@ will be applied to all listeners.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilter-Listener-additions">
-<td><code>additions</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">google.protobuf.Struct[]</a></code></td>
-<td>
-<p>Listeners to be added. They will be shipped as is to the workload.</p>
-
-</td>
-</tr>
 </tbody>
 </table>
 </section>
@@ -595,10 +583,11 @@ content to merge/remove on the specific path.</p>
 <td><code>path</code></td>
 <td><code>string</code></td>
 <td>
-<p>A valid JSON Path expression against the type declared
-above. The path expression specifies the point in the object
+<p>A valid JSON Path expression specifying the point in the object
 graph where the mutation operation should occur. The patch is
-ignored if there is no object on the specified path.</p>
+ignored if there is no object on the specified path. If the
+path is omitted and the ADD operator is used, the JSON value
+specified will be added to the object graph.</p>
 
 </td>
 </tr>
@@ -615,7 +604,7 @@ ignored if there is no object on the specified path.</p>
 <td><code><a href="#google-protobuf-Value">google.protobuf.Value</a></code></td>
 <td>
 <p>The proto equivalent of JSON Value. This will be merged using
-protobuf merge semantics with the existing proto in the path.</p>
+json merge semantics with the existing proto in the path.</p>
 
 </td>
 </tr>
@@ -636,8 +625,8 @@ protobuf merge semantics with the existing proto in the path.</p>
 <td><code>MERGE</code></td>
 <td>
 <p>Overlay the value onto the element selected by the path using
-protobuf merge semantics. For primitive fields this is
-equivalent to ADD.</p>
+json merge semantics. For primitive fields this is equivalent
+to ADD.</p>
 
 </td>
 </tr>
@@ -645,7 +634,7 @@ equivalent to ADD.</p>
 <td><code>MERGE_UNSET</code></td>
 <td>
 <p>Overlay the value onto the element selected by the path using
-protobuf merge semantics but only for fields that are set to
+json merge semantics but only for fields that are set to
 their default values, or fields that are unset.</p>
 
 </td>
