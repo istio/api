@@ -3807,12 +3807,6 @@
                     "name": "patches",
                     "type": "Patch",
                     "is_repeated": true
-                  },
-                  {
-                    "id": 3,
-                    "name": "additions",
-                    "type": "google.protobuf.Struct",
-                    "is_repeated": true
                   }
                 ]
               },
@@ -3828,12 +3822,6 @@
                     "id": 2,
                     "name": "patches",
                     "type": "Patch",
-                    "is_repeated": true
-                  },
-                  {
-                    "id": 3,
-                    "name": "additions",
-                    "type": "google.protobuf.Struct",
                     "is_repeated": true
                   }
                 ]
