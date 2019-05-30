@@ -409,6 +409,8 @@ message Server {
   // these options to control if all http requests should be redirected to
   // https, and the TLS modes to use.
   TLSOptions tls = 3;
+
+  reserved 5;
 }
 
 // Port describes the properties of a specific port of a service.
