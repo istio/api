@@ -411,6 +411,7 @@ message Server {
   TLSOptions tls = 3;
 
   reserved 5;
+  reserved "default_endpoint";
 }
 
 // Port describes the properties of a specific port of a service.
