@@ -409,11 +409,6 @@ message Server {
   // these options to control if all http requests should be redirected to
   // https, and the TLS modes to use.
   TLSOptions tls = 3;
-
-  // The loopback IP endpoint or Unix domain socket to which traffic should
-  // be forwarded to by default. Format should be `127.0.0.1:PORT` or
-  // `unix:///path/to/socket` or `unix://@foobar` (Linux abstract namespace).
-  string default_endpoint = 5;
 }
 
 // Port describes the properties of a specific port of a service.
