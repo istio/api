@@ -3838,12 +3838,13 @@
                 "id": 3,
                 "name": "tls",
                 "type": "TLSOptions"
-              },
-              {
-                "id": 5,
-                "name": "default_endpoint",
-                "type": "string"
               }
+            ],
+            "reserved_ids": [
+              5
+            ],
+            "reserved_names": [
+              "default_endpoint"
             ],
             "messages": [
               {
