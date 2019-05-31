@@ -369,6 +369,7 @@ release-lock-status:
 #####################
 
 lint:
+	@scripts/check_license.sh
 	@$(docker_tool) lint --protoc-bin-path=/usr/bin/protoc --protoc-wkt-path=/protobuf
 
 #####################
@@ -386,3 +387,5 @@ clean: 	clean-mcp \
 	clean-authn \
 	clean-envoy \
 	clean-python
+
+include Makefile.common.mk
