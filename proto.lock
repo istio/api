@@ -1016,6 +1016,11 @@
                 "type": "AccessLogEncoding"
               },
               {
+                "id": 40,
+                "name": "envoy_accesslog_service",
+                "type": "GoogleGrpcService"
+              },
+              {
                 "id": 14,
                 "name": "default_config",
                 "type": "ProxyConfig"
@@ -1132,6 +1137,43 @@
               18
             ],
             "messages": [
+              {
+                "name": "GoogleGrpcService",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "target_uri",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "credentials",
+                    "type": "SSLCredentials"
+                  }
+                ],
+                "messages": [
+                  {
+                    "name": "SSLCredentials",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "root_certs",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "private_key",
+                        "type": "string"
+                      },
+                      {
+                        "id": 3,
+                        "name": "cert_chain",
+                        "type": "string"
+                      }
+                    ]
+                  }
+                ]
+              },
               {
                 "name": "OutboundTrafficPolicy",
                 "fields": [
