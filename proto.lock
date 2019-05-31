@@ -3774,7 +3774,27 @@
                 "fields": [
                   {
                     "id": 1,
-                    "name": "name",
+                    "name": "port_number",
+                    "type": "uint32"
+                  },
+                  {
+                    "id": 2,
+                    "name": "hostname",
+                    "type": "string"
+                  },
+                  {
+                    "id": 3,
+                    "name": "subset",
+                    "type": "string"
+                  },
+                  {
+                    "id": 4,
+                    "name": "direction",
+                    "type": "string"
+                  },
+                  {
+                    "id": 5,
+                    "name": "regex",
                     "type": "string"
                   }
                 ]
@@ -3784,7 +3804,7 @@
                 "fields": [
                   {
                     "id": 1,
-                    "name": "name",
+                    "name": "regex",
                     "type": "string"
                   }
                 ]
