@@ -1016,7 +1016,7 @@
                 "type": "AccessLogEncoding"
               },
               {
-                "id": 37,
+                "id": 40,
                 "name": "envoy_accesslog_service",
                 "type": "GoogleGrpcService"
               },
@@ -1114,6 +1114,21 @@
               {
                 "id": 36,
                 "name": "dns_refresh_rate",
+                "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 37,
+                "name": "disable_report_batch",
+                "type": "bool"
+              },
+              {
+                "id": 38,
+                "name": "report_batch_max_entries",
+                "type": "uint32"
+              },
+              {
+                "id": 39,
+                "name": "report_batch_max_time",
                 "type": "google.protobuf.Duration"
               }
             ],
@@ -1954,6 +1969,17 @@
                     "id": 3,
                     "name": "granted_amount",
                     "type": "int64"
+                  },
+                  {
+                    "id": 4,
+                    "name": "status",
+                    "type": "google.rpc.Status",
+                    "options": [
+                      {
+                        "name": "(gogoproto.nullable)",
+                        "value": "false"
+                      }
+                    ]
                   }
                 ]
               }
@@ -1966,6 +1992,9 @@
           },
           {
             "path": "google/protobuf/duration.proto"
+          },
+          {
+            "path": "google/rpc/status.proto"
           }
         ],
         "package": {
@@ -2468,6 +2497,16 @@
                 "id": 8,
                 "name": "attributes_for_mixer_proxy",
                 "type": "Attributes"
+              },
+              {
+                "id": 9,
+                "name": "report_batch_max_entries",
+                "type": "uint32"
+              },
+              {
+                "id": 10,
+                "name": "report_batch_max_time",
+                "type": "google.protobuf.Duration"
               }
             ]
           },
@@ -4502,6 +4541,11 @@
                 "name": "gateways",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 10,
+                "name": "ignore_uri_case",
+                "type": "bool"
               }
             ],
             "maps": [

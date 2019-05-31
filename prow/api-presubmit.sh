@@ -40,7 +40,7 @@ ROOT=$(dirname $WD)
 
 cd ${ROOT}
 
-./scripts/generate-protos.sh || die "Could not generate *.pb.go"
+make clean generate || die "Could not generate *.pb.go"
 make proto-commit || die "Could not commit new proto.lock"
 make lint || die "Lint errors"
 make release-lock-status || die "Proto changes affect compatibility with older release."
