@@ -1,3 +1,5 @@
+[![Mergify Status](https://gh.mergify.io/badges/istio/istio.png?style=cut)](https://mergify.io)
+
 # Istio APIs and Common Configuration Definitions
 
 This repository defines component-level APIs and common configuration formats for the Istio
