@@ -426,7 +426,7 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 type ServiceEntry struct {
 	// REQUIRED. The hosts associated with the ServiceEntry. Could be a DNS
 	// name with wildcard prefix.
-	// 1. The hosts field is used to select VirtualServices and DestinationRules.
+	// 1. The hosts field is used to select matching hosts in VirtualServices and DestinationRules.
 	// 2. For HTTP traffic the HTTP Host/Authority header will be matched against the hosts field.
 	// 3. For HTTPs or TLS traffic containing Server Name Indication (SNI), the SNI value
 	// will be matched against the hosts field.
@@ -435,7 +435,7 @@ type ServiceEntry struct {
 	// of the endpoint to route traffic to.
 	Hosts []string `protobuf:"bytes,1,rep,name=hosts,proto3" json:"hosts,omitempty"`
 	// The virtual IP addresses associated with the service. Could be CIDR
-	// prefix. For HTTP traffic the addresses field will be used to generate http route domains
+	// prefix. For HTTP traffic the addresses field can be used to generate http route domains
 	// along with hosts field and the destination will be identified based on the HTTP Host/Authority
 	// header. If one or more IP addresses are specified,
 	// the incoming traffic will be identified as belonging to this service
