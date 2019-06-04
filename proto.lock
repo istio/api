@@ -1029,8 +1029,8 @@
               },
               {
                 "id": 40,
-                "name": "envoy_accesslog_service",
-                "type": "GoogleGrpcService"
+                "name": "enable_envoy_access_log_service",
+                "type": "bool"
               },
               {
                 "id": 14,
@@ -1154,43 +1154,6 @@
               18
             ],
             "messages": [
-              {
-                "name": "GoogleGrpcService",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "target_uri",
-                    "type": "string"
-                  },
-                  {
-                    "id": 2,
-                    "name": "credentials",
-                    "type": "SSLCredentials"
-                  }
-                ],
-                "messages": [
-                  {
-                    "name": "SSLCredentials",
-                    "fields": [
-                      {
-                        "id": 1,
-                        "name": "root_certs",
-                        "type": "string"
-                      },
-                      {
-                        "id": 2,
-                        "name": "private_key",
-                        "type": "string"
-                      },
-                      {
-                        "id": 3,
-                        "name": "cert_chain",
-                        "type": "string"
-                      }
-                    ]
-                  }
-                ]
-              },
               {
                 "name": "OutboundTrafficPolicy",
                 "fields": [
@@ -1612,6 +1575,11 @@
                 "id": 21,
                 "name": "sds",
                 "type": "SDS"
+              },
+              {
+                "id": 22,
+                "name": "envoy_access_log_service_address",
+                "type": "string"
               }
             ]
           }
