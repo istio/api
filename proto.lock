@@ -907,6 +907,18 @@
             "reserved_names": [
               "VIRTUAL_SERVICE_ONLY"
             ]
+          },
+          {
+            "name": "MeshConfig.H2UpgradePolicy",
+            "enum_fields": [
+              {
+                "name": "DO_NOT_UPGRADE"
+              },
+              {
+                "name": "UPGRADE",
+                "integer": 1
+              }
+            ]
           }
         ],
         "messages": [
@@ -1014,6 +1026,11 @@
                 "id": 27,
                 "name": "access_log_encoding",
                 "type": "AccessLogEncoding"
+              },
+              {
+                "id": 40,
+                "name": "enable_envoy_access_log_service",
+                "type": "bool"
               },
               {
                 "id": 14,
@@ -1125,6 +1142,11 @@
                 "id": 39,
                 "name": "report_batch_max_time",
                 "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 41,
+                "name": "h2_upgrade_policy",
+                "type": "H2UpgradePolicy"
               }
             ],
             "reserved_ids": [
@@ -1553,6 +1575,11 @@
                 "id": 21,
                 "name": "sds",
                 "type": "SDS"
+              },
+              {
+                "id": 22,
+                "name": "envoy_access_log_service_address",
+                "type": "string"
               }
             ]
           }
@@ -3178,6 +3205,22 @@
             ]
           },
           {
+            "name": "HTTPSettings.H2UpgradePolicy",
+            "enum_fields": [
+              {
+                "name": "DEFAULT"
+              },
+              {
+                "name": "DO_NOT_UPGRADE",
+                "integer": 1
+              },
+              {
+                "name": "UPGRADE",
+                "integer": 2
+              }
+            ]
+          },
+          {
             "name": "TLSSettings.TLSmode",
             "enum_fields": [
               {
@@ -3468,6 +3511,11 @@
                     "id": 5,
                     "name": "idle_timeout",
                     "type": "google.protobuf.Duration"
+                  },
+                  {
+                    "id": 6,
+                    "name": "h2_upgrade_policy",
+                    "type": "H2UpgradePolicy"
                   }
                 ]
               }
