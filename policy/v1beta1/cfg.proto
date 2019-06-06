@@ -531,7 +531,7 @@ message Mutual {
   string ca_certificates = 3;
 
   // Used to configure mixer mutual TLS client to supply server name for SNI.
-  // It is not used to verify the hostname of the peer certificate, since 
+  // It is not used to verify the hostname of the peer certificate, since
   // Istio verifies whitelisted SAN fields in mutual TLS.
   string server_name = 4;
 }
