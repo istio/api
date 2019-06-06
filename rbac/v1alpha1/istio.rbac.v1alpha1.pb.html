@@ -14,7 +14,7 @@ the following standard fields:</p>
 
 <ul>
 <li>services: a list of services.</li>
-<li>methods: HTTP methods. In the case of gRPC, this field is ignored because the value is always &ldquo;POST&rdquo;.</li>
+<li>methods: A list of HTTP methods. You can set the value to <code>*</code> to include all HTTP methods. This field should not be set for TCP and gRPC services.</li>
 <li>paths: HTTP paths or gRPC methods. Note that gRPC methods should be
 presented in the form of &ldquo;/packageName.serviceName/methodName&rdquo; and are case sensitive.</li>
 </ul>
@@ -118,8 +118,8 @@ If not specified, it matches to any path.</p>
 <td><code>string[]</code></td>
 <td>
 <p>Optional. A list of HTTP methods (e.g., &ldquo;GET&rdquo;, &ldquo;POST&rdquo;).
-It is ignored in gRPC case because the value is always &ldquo;POST&rdquo;.
-If not specified, it matches to any methods.</p>
+If not specified or specified as &ldquo;*&rdquo;, it matches to any methods.<br />
+This field should not be set for TCP and gRPC services.</p>
 
 </td>
 </tr>

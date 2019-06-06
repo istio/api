@@ -8,7 +8,7 @@
 // the following standard fields:
 //
 //   * services: a list of services.
-//   * methods: HTTP methods. In the case of gRPC, this field is ignored because the value is always "POST".
+//   * methods: A list of HTTP methods. You can set the value to `*` to include all HTTP methods. This field should not be set for TCP and gRPC services.
 //   * paths: HTTP paths or gRPC methods. Note that gRPC methods should be
 //     presented in the form of "/packageName.serviceName/methodName" and are case sensitive.
 //
@@ -363,8 +363,8 @@ type AccessRule struct {
 	// Optional. A list of HTTP paths or gRPC methods that must not be matched.
 	NotPaths []string `protobuf:"bytes,7,rep,name=not_paths,json=notPaths,proto3" json:"not_paths,omitempty"`
 	// Optional. A list of HTTP methods (e.g., "GET", "POST").
-	// It is ignored in gRPC case because the value is always "POST".
-	// If not specified, it matches to any methods.
+	// If not specified or specified as "*", it matches to any methods.
+	// This field should not be set for TCP and gRPC services.
 	Methods []string `protobuf:"bytes,3,rep,name=methods,proto3" json:"methods,omitempty"`
 	// $hide_from_docs
 	// Optional. A list of HTTP methods that must not be matched.
