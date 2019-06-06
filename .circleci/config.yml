@@ -1,0 +1,20 @@
+version: 2
+jobs:
+  lint:
+    docker:
+      - image: gcr.io/istio-testing/website-builder:2019-05-03
+
+    working_directory: ~/site
+
+    steps:
+      - checkout
+
+      - run:
+          name: Checking links
+          command: htmlproofer . --url-swap "istio.io:preliminary.istio.io" --assume-extension --check-html --check-external-hash --check-opengraph --timeframe 2d --storage-dir .htmlproofer --url-ignore "/localhost/"
+
+workflows:
+  version: 2
+  all:
+    jobs:
+      - lint
