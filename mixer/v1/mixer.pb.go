@@ -89,7 +89,7 @@ func (HeaderOperation_Operation) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_f6f59c90bff4c1e2, []int{3, 0}
 }
 
-// Used to signal how the sets of compressed attributes should be reconstitued server-side.
+// Used to signal how the sets of compressed attributes should be reconstituted server-side.
 type ReportRequest_RepeatedAttributesSemantics int32
 
 const (
