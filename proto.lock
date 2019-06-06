@@ -3609,7 +3609,7 @@
       "def": {
         "enums": [
           {
-            "name": "ListenerMatch.ListenerType",
+            "name": "EnvoyFilter.Context",
             "enum_fields": [
               {
                 "name": "ANY"
@@ -3757,7 +3757,7 @@
                   {
                     "id": 3,
                     "name": "listener_type",
-                    "type": "ListenerType"
+                    "type": "Context"
                   },
                   {
                     "id": 4,
@@ -3852,6 +3852,16 @@
                 "fields": [
                   {
                     "id": 1,
+                    "name": "port_number",
+                    "type": "uint32"
+                  },
+                  {
+                    "id": 2,
+                    "name": "route_type",
+                    "type": "Context"
+                  },
+                  {
+                    "id": 3,
                     "name": "regex",
                     "type": "string"
                   }

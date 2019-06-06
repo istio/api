@@ -252,6 +252,47 @@ traffic bound for unknown destinations.</p>
 </tbody>
 </table>
 </section>
+<h2 id="EnvoyFilter-Context">EnvoyFilter.Context</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="EnvoyFilter-Context-ANY">
+<td><code>ANY</code></td>
+<td>
+<p>All listeners/routes</p>
+
+</td>
+</tr>
+<tr id="EnvoyFilter-Context-SIDECAR_INBOUND">
+<td><code>SIDECAR_INBOUND</code></td>
+<td>
+<p>Inbound listener/route in sidecar</p>
+
+</td>
+</tr>
+<tr id="EnvoyFilter-Context-SIDECAR_OUTBOUND">
+<td><code>SIDECAR_OUTBOUND</code></td>
+<td>
+<p>Outbound listener/route in sidecar</p>
+
+</td>
+</tr>
+<tr id="EnvoyFilter-Context-GATEWAY">
+<td><code>GATEWAY</code></td>
+<td>
+<p>Gateway listener/route</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="EnvoyFilter-Filter">EnvoyFilter.Filter</h2>
 <section>
 <p>Envoy filters to be added to a network or http filter chain.</p>
@@ -496,7 +537,7 @@ insensitive.</p>
 </tr>
 <tr id="EnvoyFilter-ListenerMatch-listener_type">
 <td><code>listenerType</code></td>
-<td><code><a href="#EnvoyFilter-ListenerMatch-ListenerType">EnvoyFilter.ListenerMatch.ListenerType</a></code></td>
+<td><code><a href="#EnvoyFilter-Context">EnvoyFilter.Context</a></code></td>
 <td>
 <p>Inbound vs outbound sidecar listener or gateway listener. If not specified,
 matches all listeners.</p>
@@ -555,47 +596,6 @@ specified, should match at least one address in the list.</p>
 <td><code>TCP</code></td>
 <td>
 <p>Any non-HTTP listener</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="EnvoyFilter-ListenerMatch-ListenerType">EnvoyFilter.ListenerMatch.ListenerType</h2>
-<section>
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="EnvoyFilter-ListenerMatch-ListenerType-ANY">
-<td><code>ANY</code></td>
-<td>
-<p>All listeners</p>
-
-</td>
-</tr>
-<tr id="EnvoyFilter-ListenerMatch-ListenerType-SIDECAR_INBOUND">
-<td><code>SIDECAR_INBOUND</code></td>
-<td>
-<p>Inbound listener in sidecar</p>
-
-</td>
-</tr>
-<tr id="EnvoyFilter-ListenerMatch-ListenerType-SIDECAR_OUTBOUND">
-<td><code>SIDECAR_OUTBOUND</code></td>
-<td>
-<p>Outbound listener in sidecar</p>
-
-</td>
-</tr>
-<tr id="EnvoyFilter-ListenerMatch-ListenerType-GATEWAY">
-<td><code>GATEWAY</code></td>
-<td>
-<p>Gateway listener</p>
 
 </td>
 </tr>
@@ -746,6 +746,24 @@ to be applied to a route.</p>
 </tr>
 </thead>
 <tbody>
+<tr id="EnvoyFilter-RouteMatch-port_number">
+<td><code>portNumber</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>The service port or gateway server port for which this route
+was generated.  If omitted, applies to all routes.</p>
+
+</td>
+</tr>
+<tr id="EnvoyFilter-RouteMatch-route_type">
+<td><code>routeType</code></td>
+<td><code><a href="#EnvoyFilter-Context">EnvoyFilter.Context</a></code></td>
+<td>
+<p>Selects either inbound routes, outbound routes in sidecars, or
+routes on a gateway.</p>
+
+</td>
+</tr>
 <tr id="EnvoyFilter-RouteMatch-regex">
 <td><code>regex</code></td>
 <td><code>string</code></td>

@@ -105,6 +105,20 @@ message EnvoyFilter {
   // the mesh.
   map<string, string> workload_labels = 1;
 
+  enum Context {
+    // All listeners/routes
+    ANY = 0;
+
+    // Inbound listener/route in sidecar
+    SIDECAR_INBOUND = 1;
+
+    // Outbound listener/route in sidecar
+    SIDECAR_OUTBOUND = 2;
+
+    // Gateway listener/route
+    GATEWAY = 3;
+  };
+
   // Select a listener to add the filter to based on the match conditions.
   // All conditions specified in the ListenerMatch must be met for the filter
   // to be applied to a listener.
@@ -121,23 +135,9 @@ message EnvoyFilter {
     // insensitive.
     string port_name_prefix = 2;
 
-    enum ListenerType {
-      // All listeners
-      ANY = 0;
-
-      // Inbound listener in sidecar
-      SIDECAR_INBOUND = 1;
-
-      // Outbound listener in sidecar
-      SIDECAR_OUTBOUND = 2;
-
-      // Gateway listener
-      GATEWAY = 3;
-    };
-
     // Inbound vs outbound sidecar listener or gateway listener. If not specified,
     // matches all listeners.
-    ListenerType listener_type = 3;
+    Context listener_type = 3;
 
     enum ListenerProtocol {
       // All protocols
@@ -256,6 +256,14 @@ message EnvoyFilter {
   // Conditions specified in RouteMatch must be met for the patch
   // to be applied to a route.
   message RouteMatch {
+    // The service port or gateway server port for which this route
+    // was generated.  If omitted, applies to all routes.
+    uint32 port_number = 1;
+
+    // Selects either inbound routes, outbound routes in sidecars, or
+    // routes on a gateway.
+    Context route_type = 2;
+
     // A regular expression to match on the Envoy route name. The
     // regular expression pattern should follow Golang's regular
     // expression (RE2) format as specified here
@@ -273,7 +281,7 @@ message EnvoyFilter {
     // plain text servers on a gateway or
     // https.<server.portNumber>.<server.portName>.<gateway.Name>.<gateway.Namespace>
     // for HTTPS servers (with TLS termination) on a gateway.
-    string regex = 1;
+    string regex = 3;
   };
 
   // Patch specifies the JSON path in the generated proto and the

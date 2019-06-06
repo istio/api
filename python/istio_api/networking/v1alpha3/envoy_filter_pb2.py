@@ -20,41 +20,11 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='networking/v1alpha3/envoy_filter.proto',
   package='istio.networking.v1alpha3',
   syntax='proto3',
-  serialized_pb=_b('\n&networking/v1alpha3/envoy_filter.proto\x12\x19istio.networking.v1alpha3\x1a\x1cgoogle/protobuf/struct.proto\"\xba\x10\n\x0b\x45nvoyFilter\x12S\n\x0fworkload_labels\x18\x01 \x03(\x0b\x32:.istio.networking.v1alpha3.EnvoyFilter.WorkloadLabelsEntry\x12>\n\x07\x66ilters\x18\x02 \x03(\x0b\x32-.istio.networking.v1alpha3.EnvoyFilter.Filter\x12\x42\n\tlisteners\x18\x03 \x03(\x0b\x32/.istio.networking.v1alpha3.EnvoyFilter.Listener\x12@\n\x08\x63lusters\x18\x04 \x03(\x0b\x32..istio.networking.v1alpha3.EnvoyFilter.Cluster\x12<\n\x06routes\x18\x05 \x03(\x0b\x32,.istio.networking.v1alpha3.EnvoyFilter.Route\x1a\x35\n\x13WorkloadLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x8c\x03\n\rListenerMatch\x12\x13\n\x0bport_number\x18\x01 \x01(\r\x12\x18\n\x10port_name_prefix\x18\x02 \x01(\t\x12X\n\rlistener_type\x18\x03 \x01(\x0e\x32\x41.istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.ListenerType\x12`\n\x11listener_protocol\x18\x04 \x01(\x0e\x32\x45.istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.ListenerProtocol\x12\x0f\n\x07\x61\x64\x64ress\x18\x05 \x03(\t\"O\n\x0cListenerType\x12\x07\n\x03\x41NY\x10\x00\x12\x13\n\x0fSIDECAR_INBOUND\x10\x01\x12\x14\n\x10SIDECAR_OUTBOUND\x10\x02\x12\x0b\n\x07GATEWAY\x10\x03\".\n\x10ListenerProtocol\x12\x07\n\x03\x41LL\x10\x00\x12\x08\n\x04HTTP\x10\x01\x12\x07\n\x03TCP\x10\x02\x1a\xa6\x01\n\x0eInsertPosition\x12J\n\x05index\x18\x01 \x01(\x0e\x32;.istio.networking.v1alpha3.EnvoyFilter.InsertPosition.Index\x12\x13\n\x0brelative_to\x18\x02 \x01(\t\"3\n\x05Index\x12\t\n\x05\x46IRST\x10\x00\x12\x08\n\x04LAST\x10\x01\x12\n\n\x06\x42\x45\x46ORE\x10\x02\x12\t\n\x05\x41\x46TER\x10\x03\x1a\xec\x02\n\x06\x46ilter\x12L\n\x0elistener_match\x18\x01 \x01(\x0b\x32\x34.istio.networking.v1alpha3.EnvoyFilter.ListenerMatch\x12N\n\x0finsert_position\x18\x02 \x01(\x0b\x32\x35.istio.networking.v1alpha3.EnvoyFilter.InsertPosition\x12M\n\x0b\x66ilter_type\x18\x03 \x01(\x0e\x32\x38.istio.networking.v1alpha3.EnvoyFilter.Filter.FilterType\x12\x13\n\x0b\x66ilter_name\x18\x04 \x01(\t\x12.\n\rfilter_config\x18\x05 \x01(\x0b\x32\x17.google.protobuf.Struct\"0\n\nFilterType\x12\x0b\n\x07INVALID\x10\x00\x12\x08\n\x04HTTP\x10\x01\x12\x0b\n\x07NETWORK\x10\x02\x1ag\n\x0c\x43lusterMatch\x12\x13\n\x0bport_number\x18\x01 \x01(\r\x12\x10\n\x08hostname\x18\x02 \x01(\t\x12\x0e\n\x06subset\x18\x03 \x01(\t\x12\x11\n\tdirection\x18\x04 \x01(\t\x12\r\n\x05regex\x18\x05 \x01(\t\x1a\x1b\n\nRouteMatch\x12\r\n\x05regex\x18\x01 \x01(\t\x1a\xc2\x01\n\x05Patch\x12\x0c\n\x04path\x18\x01 \x01(\t\x12G\n\x08operator\x18\x02 \x01(\x0e\x32\x35.istio.networking.v1alpha3.EnvoyFilter.Patch.Operator\x12%\n\x05value\x18\x03 \x01(\x0b\x32\x16.google.protobuf.Value\";\n\x08Operator\x12\t\n\x05MERGE\x10\x00\x12\x0f\n\x0bMERGE_UNSET\x10\x01\x12\x07\n\x03\x41\x44\x44\x10\x02\x12\n\n\x06REMOVE\x10\x03\x1a\x8e\x01\n\x08Listener\x12\x43\n\x05match\x18\x01 \x01(\x0b\x32\x34.istio.networking.v1alpha3.EnvoyFilter.ListenerMatch\x12=\n\x07patches\x18\x02 \x03(\x0b\x32,.istio.networking.v1alpha3.EnvoyFilter.Patch\x1a\x8c\x01\n\x07\x43luster\x12\x42\n\x05match\x18\x01 \x01(\x0b\x32\x33.istio.networking.v1alpha3.EnvoyFilter.ClusterMatch\x12=\n\x07patches\x18\x02 \x03(\x0b\x32,.istio.networking.v1alpha3.EnvoyFilter.Patch\x1a\x88\x01\n\x05Route\x12@\n\x05match\x18\x01 \x01(\x0b\x32\x31.istio.networking.v1alpha3.EnvoyFilter.RouteMatch\x12=\n\x07patches\x18\x02 \x03(\x0b\x32,.istio.networking.v1alpha3.EnvoyFilter.PatchB\"Z istio.io/api/networking/v1alpha3b\x06proto3')
+  serialized_pb=_b('\n&networking/v1alpha3/envoy_filter.proto\x12\x19istio.networking.v1alpha3\x1a\x1cgoogle/protobuf/struct.proto\"\xfb\x10\n\x0b\x45nvoyFilter\x12S\n\x0fworkload_labels\x18\x01 \x03(\x0b\x32:.istio.networking.v1alpha3.EnvoyFilter.WorkloadLabelsEntry\x12>\n\x07\x66ilters\x18\x02 \x03(\x0b\x32-.istio.networking.v1alpha3.EnvoyFilter.Filter\x12\x42\n\tlisteners\x18\x03 \x03(\x0b\x32/.istio.networking.v1alpha3.EnvoyFilter.Listener\x12@\n\x08\x63lusters\x18\x04 \x03(\x0b\x32..istio.networking.v1alpha3.EnvoyFilter.Cluster\x12<\n\x06routes\x18\x05 \x03(\x0b\x32,.istio.networking.v1alpha3.EnvoyFilter.Route\x1a\x35\n\x13WorkloadLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\xa8\x02\n\rListenerMatch\x12\x13\n\x0bport_number\x18\x01 \x01(\r\x12\x18\n\x10port_name_prefix\x18\x02 \x01(\t\x12\x45\n\rlistener_type\x18\x03 \x01(\x0e\x32..istio.networking.v1alpha3.EnvoyFilter.Context\x12`\n\x11listener_protocol\x18\x04 \x01(\x0e\x32\x45.istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.ListenerProtocol\x12\x0f\n\x07\x61\x64\x64ress\x18\x05 \x03(\t\".\n\x10ListenerProtocol\x12\x07\n\x03\x41LL\x10\x00\x12\x08\n\x04HTTP\x10\x01\x12\x07\n\x03TCP\x10\x02\x1a\xa6\x01\n\x0eInsertPosition\x12J\n\x05index\x18\x01 \x01(\x0e\x32;.istio.networking.v1alpha3.EnvoyFilter.InsertPosition.Index\x12\x13\n\x0brelative_to\x18\x02 \x01(\t\"3\n\x05Index\x12\t\n\x05\x46IRST\x10\x00\x12\x08\n\x04LAST\x10\x01\x12\n\n\x06\x42\x45\x46ORE\x10\x02\x12\t\n\x05\x41\x46TER\x10\x03\x1a\xec\x02\n\x06\x46ilter\x12L\n\x0elistener_match\x18\x01 \x01(\x0b\x32\x34.istio.networking.v1alpha3.EnvoyFilter.ListenerMatch\x12N\n\x0finsert_position\x18\x02 \x01(\x0b\x32\x35.istio.networking.v1alpha3.EnvoyFilter.InsertPosition\x12M\n\x0b\x66ilter_type\x18\x03 \x01(\x0e\x32\x38.istio.networking.v1alpha3.EnvoyFilter.Filter.FilterType\x12\x13\n\x0b\x66ilter_name\x18\x04 \x01(\t\x12.\n\rfilter_config\x18\x05 \x01(\x0b\x32\x17.google.protobuf.Struct\"0\n\nFilterType\x12\x0b\n\x07INVALID\x10\x00\x12\x08\n\x04HTTP\x10\x01\x12\x0b\n\x07NETWORK\x10\x02\x1ag\n\x0c\x43lusterMatch\x12\x13\n\x0bport_number\x18\x01 \x01(\r\x12\x10\n\x08hostname\x18\x02 \x01(\t\x12\x0e\n\x06subset\x18\x03 \x01(\t\x12\x11\n\tdirection\x18\x04 \x01(\t\x12\r\n\x05regex\x18\x05 \x01(\t\x1at\n\nRouteMatch\x12\x13\n\x0bport_number\x18\x01 \x01(\r\x12\x42\n\nroute_type\x18\x02 \x01(\x0e\x32..istio.networking.v1alpha3.EnvoyFilter.Context\x12\r\n\x05regex\x18\x03 \x01(\t\x1a\xc2\x01\n\x05Patch\x12\x0c\n\x04path\x18\x01 \x01(\t\x12G\n\x08operator\x18\x02 \x01(\x0e\x32\x35.istio.networking.v1alpha3.EnvoyFilter.Patch.Operator\x12%\n\x05value\x18\x03 \x01(\x0b\x32\x16.google.protobuf.Value\";\n\x08Operator\x12\t\n\x05MERGE\x10\x00\x12\x0f\n\x0bMERGE_UNSET\x10\x01\x12\x07\n\x03\x41\x44\x44\x10\x02\x12\n\n\x06REMOVE\x10\x03\x1a\x8e\x01\n\x08Listener\x12\x43\n\x05match\x18\x01 \x01(\x0b\x32\x34.istio.networking.v1alpha3.EnvoyFilter.ListenerMatch\x12=\n\x07patches\x18\x02 \x03(\x0b\x32,.istio.networking.v1alpha3.EnvoyFilter.Patch\x1a\x8c\x01\n\x07\x43luster\x12\x42\n\x05match\x18\x01 \x01(\x0b\x32\x33.istio.networking.v1alpha3.EnvoyFilter.ClusterMatch\x12=\n\x07patches\x18\x02 \x03(\x0b\x32,.istio.networking.v1alpha3.EnvoyFilter.Patch\x1a\x88\x01\n\x05Route\x12@\n\x05match\x18\x01 \x01(\x0b\x32\x31.istio.networking.v1alpha3.EnvoyFilter.RouteMatch\x12=\n\x07patches\x18\x02 \x03(\x0b\x32,.istio.networking.v1alpha3.EnvoyFilter.Patch\"J\n\x07\x43ontext\x12\x07\n\x03\x41NY\x10\x00\x12\x13\n\x0fSIDECAR_INBOUND\x10\x01\x12\x14\n\x10SIDECAR_OUTBOUND\x10\x02\x12\x0b\n\x07GATEWAY\x10\x03\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,])
 
 
-
-_ENVOYFILTER_LISTENERMATCH_LISTENERTYPE = _descriptor.EnumDescriptor(
-  name='ListenerType',
-  full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.ListenerType',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='ANY', index=0, number=0,
-      options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='SIDECAR_INBOUND', index=1, number=1,
-      options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='SIDECAR_OUTBOUND', index=2, number=2,
-      options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='GATEWAY', index=3, number=3,
-      options=None,
-      type=None),
-  ],
-  containing_type=None,
-  options=None,
-  serialized_start=785,
-  serialized_end=864,
-)
-_sym_db.RegisterEnumDescriptor(_ENVOYFILTER_LISTENERMATCH_LISTENERTYPE)
 
 _ENVOYFILTER_LISTENERMATCH_LISTENERPROTOCOL = _descriptor.EnumDescriptor(
   name='ListenerProtocol',
@@ -77,8 +47,8 @@ _ENVOYFILTER_LISTENERMATCH_LISTENERPROTOCOL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=866,
-  serialized_end=912,
+  serialized_start=766,
+  serialized_end=812,
 )
 _sym_db.RegisterEnumDescriptor(_ENVOYFILTER_LISTENERMATCH_LISTENERPROTOCOL)
 
@@ -107,8 +77,8 @@ _ENVOYFILTER_INSERTPOSITION_INDEX = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1030,
-  serialized_end=1081,
+  serialized_start=930,
+  serialized_end=981,
 )
 _sym_db.RegisterEnumDescriptor(_ENVOYFILTER_INSERTPOSITION_INDEX)
 
@@ -133,8 +103,8 @@ _ENVOYFILTER_FILTER_FILTERTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1400,
-  serialized_end=1448,
+  serialized_start=1300,
+  serialized_end=1348,
 )
 _sym_db.RegisterEnumDescriptor(_ENVOYFILTER_FILTER_FILTERTYPE)
 
@@ -163,10 +133,40 @@ _ENVOYFILTER_PATCH_OPERATOR = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1720,
-  serialized_end=1779,
+  serialized_start=1709,
+  serialized_end=1768,
 )
 _sym_db.RegisterEnumDescriptor(_ENVOYFILTER_PATCH_OPERATOR)
+
+_ENVOYFILTER_CONTEXT = _descriptor.EnumDescriptor(
+  name='Context',
+  full_name='istio.networking.v1alpha3.EnvoyFilter.Context',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='ANY', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='SIDECAR_INBOUND', index=1, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='SIDECAR_OUTBOUND', index=2, number=2,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='GATEWAY', index=3, number=3,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=2197,
+  serialized_end=2271,
+)
+_sym_db.RegisterEnumDescriptor(_ENVOYFILTER_CONTEXT)
 
 
 _ENVOYFILTER_WORKLOADLABELSENTRY = _descriptor.Descriptor(
@@ -253,7 +253,6 @@ _ENVOYFILTER_LISTENERMATCH = _descriptor.Descriptor(
   ],
   nested_types=[],
   enum_types=[
-    _ENVOYFILTER_LISTENERMATCH_LISTENERTYPE,
     _ENVOYFILTER_LISTENERMATCH_LISTENERPROTOCOL,
   ],
   options=None,
@@ -263,7 +262,7 @@ _ENVOYFILTER_LISTENERMATCH = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=516,
-  serialized_end=912,
+  serialized_end=812,
 )
 
 _ENVOYFILTER_INSERTPOSITION = _descriptor.Descriptor(
@@ -300,8 +299,8 @@ _ENVOYFILTER_INSERTPOSITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=915,
-  serialized_end=1081,
+  serialized_start=815,
+  serialized_end=981,
 )
 
 _ENVOYFILTER_FILTER = _descriptor.Descriptor(
@@ -359,8 +358,8 @@ _ENVOYFILTER_FILTER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1084,
-  serialized_end=1448,
+  serialized_start=984,
+  serialized_end=1348,
 )
 
 _ENVOYFILTER_CLUSTERMATCH = _descriptor.Descriptor(
@@ -417,8 +416,8 @@ _ENVOYFILTER_CLUSTERMATCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1450,
-  serialized_end=1553,
+  serialized_start=1350,
+  serialized_end=1453,
 )
 
 _ENVOYFILTER_ROUTEMATCH = _descriptor.Descriptor(
@@ -429,8 +428,22 @@ _ENVOYFILTER_ROUTEMATCH = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='regex', full_name='istio.networking.v1alpha3.EnvoyFilter.RouteMatch.regex', index=0,
-      number=1, type=9, cpp_type=9, label=1,
+      name='port_number', full_name='istio.networking.v1alpha3.EnvoyFilter.RouteMatch.port_number', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='route_type', full_name='istio.networking.v1alpha3.EnvoyFilter.RouteMatch.route_type', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='regex', full_name='istio.networking.v1alpha3.EnvoyFilter.RouteMatch.regex', index=2,
+      number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -447,8 +460,8 @@ _ENVOYFILTER_ROUTEMATCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1555,
-  serialized_end=1582,
+  serialized_start=1455,
+  serialized_end=1571,
 )
 
 _ENVOYFILTER_PATCH = _descriptor.Descriptor(
@@ -492,8 +505,8 @@ _ENVOYFILTER_PATCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1585,
-  serialized_end=1779,
+  serialized_start=1574,
+  serialized_end=1768,
 )
 
 _ENVOYFILTER_LISTENER = _descriptor.Descriptor(
@@ -529,8 +542,8 @@ _ENVOYFILTER_LISTENER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1782,
-  serialized_end=1924,
+  serialized_start=1771,
+  serialized_end=1913,
 )
 
 _ENVOYFILTER_CLUSTER = _descriptor.Descriptor(
@@ -566,8 +579,8 @@ _ENVOYFILTER_CLUSTER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1927,
-  serialized_end=2067,
+  serialized_start=1916,
+  serialized_end=2056,
 )
 
 _ENVOYFILTER_ROUTE = _descriptor.Descriptor(
@@ -603,8 +616,8 @@ _ENVOYFILTER_ROUTE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2070,
-  serialized_end=2206,
+  serialized_start=2059,
+  serialized_end=2195,
 )
 
 _ENVOYFILTER = _descriptor.Descriptor(
@@ -654,6 +667,7 @@ _ENVOYFILTER = _descriptor.Descriptor(
   ],
   nested_types=[_ENVOYFILTER_WORKLOADLABELSENTRY, _ENVOYFILTER_LISTENERMATCH, _ENVOYFILTER_INSERTPOSITION, _ENVOYFILTER_FILTER, _ENVOYFILTER_CLUSTERMATCH, _ENVOYFILTER_ROUTEMATCH, _ENVOYFILTER_PATCH, _ENVOYFILTER_LISTENER, _ENVOYFILTER_CLUSTER, _ENVOYFILTER_ROUTE, ],
   enum_types=[
+    _ENVOYFILTER_CONTEXT,
   ],
   options=None,
   is_extendable=False,
@@ -662,14 +676,13 @@ _ENVOYFILTER = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=100,
-  serialized_end=2206,
+  serialized_end=2271,
 )
 
 _ENVOYFILTER_WORKLOADLABELSENTRY.containing_type = _ENVOYFILTER
-_ENVOYFILTER_LISTENERMATCH.fields_by_name['listener_type'].enum_type = _ENVOYFILTER_LISTENERMATCH_LISTENERTYPE
+_ENVOYFILTER_LISTENERMATCH.fields_by_name['listener_type'].enum_type = _ENVOYFILTER_CONTEXT
 _ENVOYFILTER_LISTENERMATCH.fields_by_name['listener_protocol'].enum_type = _ENVOYFILTER_LISTENERMATCH_LISTENERPROTOCOL
 _ENVOYFILTER_LISTENERMATCH.containing_type = _ENVOYFILTER
-_ENVOYFILTER_LISTENERMATCH_LISTENERTYPE.containing_type = _ENVOYFILTER_LISTENERMATCH
 _ENVOYFILTER_LISTENERMATCH_LISTENERPROTOCOL.containing_type = _ENVOYFILTER_LISTENERMATCH
 _ENVOYFILTER_INSERTPOSITION.fields_by_name['index'].enum_type = _ENVOYFILTER_INSERTPOSITION_INDEX
 _ENVOYFILTER_INSERTPOSITION.containing_type = _ENVOYFILTER
@@ -681,6 +694,7 @@ _ENVOYFILTER_FILTER.fields_by_name['filter_config'].message_type = google_dot_pr
 _ENVOYFILTER_FILTER.containing_type = _ENVOYFILTER
 _ENVOYFILTER_FILTER_FILTERTYPE.containing_type = _ENVOYFILTER_FILTER
 _ENVOYFILTER_CLUSTERMATCH.containing_type = _ENVOYFILTER
+_ENVOYFILTER_ROUTEMATCH.fields_by_name['route_type'].enum_type = _ENVOYFILTER_CONTEXT
 _ENVOYFILTER_ROUTEMATCH.containing_type = _ENVOYFILTER
 _ENVOYFILTER_PATCH.fields_by_name['operator'].enum_type = _ENVOYFILTER_PATCH_OPERATOR
 _ENVOYFILTER_PATCH.fields_by_name['value'].message_type = google_dot_protobuf_dot_struct__pb2._VALUE
@@ -700,6 +714,7 @@ _ENVOYFILTER.fields_by_name['filters'].message_type = _ENVOYFILTER_FILTER
 _ENVOYFILTER.fields_by_name['listeners'].message_type = _ENVOYFILTER_LISTENER
 _ENVOYFILTER.fields_by_name['clusters'].message_type = _ENVOYFILTER_CLUSTER
 _ENVOYFILTER.fields_by_name['routes'].message_type = _ENVOYFILTER_ROUTE
+_ENVOYFILTER_CONTEXT.containing_type = _ENVOYFILTER
 DESCRIPTOR.message_types_by_name['EnvoyFilter'] = _ENVOYFILTER
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
