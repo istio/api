@@ -339,10 +339,12 @@ option go_package = "istio.io/api/networking/v1alpha3";
 message ServiceEntry {
   // REQUIRED. The hosts associated with the ServiceEntry. Could be a DNS
   // name with wildcard prefix.
+  //
   // 1. The hosts field is used to select matching hosts in VirtualServices and DestinationRules.
   // 2. For HTTP traffic the HTTP Host/Authority header will be matched against the hosts field.
   // 3. For HTTPs or TLS traffic containing Server Name Indication (SNI), the SNI value
   // will be matched against the hosts field.
+  //
   // Note that when resolution is set to type DNS
   // and no endpoints are specified, the host field will be used as the DNS name
   // of the endpoint to route traffic to.
