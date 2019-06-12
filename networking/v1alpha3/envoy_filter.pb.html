@@ -118,7 +118,7 @@ added before envoy.http<em>connection</em>manager.</p>
 <td>
 <p>REQUIRED: Atleast one of filters, listeners, clusters, or routes
 should be specified. Changes to be applied to one or more Envoy
-listeners. To add a new listener, use the ADD operator with no
+listeners. To add a new listener, use the ADD operation with no
 match condition, empty path field, and a valid listener as the
 value in a patch.</p>
 
@@ -130,7 +130,7 @@ value in a patch.</p>
 <td>
 <p>REQUIRED: Atleast one of filters, listeners, clusters, or routes
 should be specified. Changes to be applied to one or more Envoy
-clusters. To add a new listener, use the ADD operator with no
+clusters. To add a new listener, use the ADD operation with no
 match condition, empty path field, and a valid cluster as the
 value in a patch.</p>
 
@@ -623,14 +623,14 @@ content to merge/remove on the specific path.</p>
 <p>A valid JSON Path expression specifying the point in the object
 graph where the mutation operation should occur. The patch is
 ignored if there is no object on the specified path. If the
-path is omitted and the ADD operator is used, the JSON value
+path is omitted and the ADD operation is used, the JSON value
 specified will be added to the object graph.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilter-Patch-operator">
-<td><code>operator</code></td>
-<td><code><a href="#EnvoyFilter-Patch-Operator">EnvoyFilter.Patch.Operator</a></code></td>
+<tr id="EnvoyFilter-Patch-operation">
+<td><code>operation</code></td>
+<td><code><a href="#EnvoyFilter-Patch-Operation">EnvoyFilter.Patch.Operation</a></code></td>
 <td>
 <p>Default behavior is MERGE.</p>
 
@@ -648,7 +648,7 @@ json merge semantics with the existing proto in the path.</p>
 </tbody>
 </table>
 </section>
-<h2 id="EnvoyFilter-Patch-Operator">EnvoyFilter.Patch.Operator</h2>
+<h2 id="EnvoyFilter-Patch-Operation">EnvoyFilter.Patch.Operation</h2>
 <section>
 <table class="enum-values">
 <thead>
@@ -658,7 +658,7 @@ json merge semantics with the existing proto in the path.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="EnvoyFilter-Patch-Operator-MERGE">
+<tr id="EnvoyFilter-Patch-Operation-MERGE">
 <td><code>MERGE</code></td>
 <td>
 <p>Overlay the value onto the element selected by the path using
@@ -667,7 +667,7 @@ to ADD.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilter-Patch-Operator-MERGE_UNSET">
+<tr id="EnvoyFilter-Patch-Operation-MERGE_UNSET">
 <td><code>MERGE_UNSET</code></td>
 <td>
 <p>Overlay the value onto the element selected by the path using
@@ -676,7 +676,7 @@ their default values, or fields that are unset.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilter-Patch-Operator-ADD">
+<tr id="EnvoyFilter-Patch-Operation-ADD">
 <td><code>ADD</code></td>
 <td>
 <p>For arrays this will insert the value before the selected
@@ -688,7 +688,7 @@ replace the value.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilter-Patch-Operator-REMOVE">
+<tr id="EnvoyFilter-Patch-Operation-REMOVE">
 <td><code>REMOVE</code></td>
 <td>
 <p>Remove the selected elements from their parent. Does not

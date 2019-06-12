@@ -3681,7 +3681,7 @@
             ]
           },
           {
-            "name": "Patch.Operator",
+            "name": "Patch.Operation",
             "enum_fields": [
               {
                 "name": "MERGE"
@@ -3877,8 +3877,8 @@
                   },
                   {
                     "id": 2,
-                    "name": "operator",
-                    "type": "Operator"
+                    "name": "operation",
+                    "type": "Operation"
                   },
                   {
                     "id": 3,

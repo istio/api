@@ -290,11 +290,11 @@ message EnvoyFilter {
     // A valid JSON Path expression specifying the point in the object
     // graph where the mutation operation should occur. The patch is
     // ignored if there is no object on the specified path. If the
-    // path is omitted and the ADD operator is used, the JSON value
+    // path is omitted and the ADD operation is used, the JSON value
     // specified will be added to the object graph.
     string path = 1;
 
-    enum Operator {
+    enum Operation {
 
       // Overlay the value onto the element selected by the path using
       // json merge semantics. For primitive fields this is equivalent
@@ -321,7 +321,7 @@ message EnvoyFilter {
     }
 
     // Default behavior is MERGE.
-    Operator operator = 2;
+    Operation operation = 2;
 
     // The proto equivalent of JSON Value. This will be merged using
     // json merge semantics with the existing proto in the path.
@@ -362,14 +362,14 @@ message EnvoyFilter {
 
   // REQUIRED: Atleast one of filters, listeners, clusters, or routes
   // should be specified. Changes to be applied to one or more Envoy
-  // listeners. To add a new listener, use the ADD operator with no
+  // listeners. To add a new listener, use the ADD operation with no
   // match condition, empty path field, and a valid listener as the
   // value in a patch.
   repeated Listener listeners = 3;
 
   // REQUIRED: Atleast one of filters, listeners, clusters, or routes
   // should be specified. Changes to be applied to one or more Envoy
-  // clusters. To add a new listener, use the ADD operator with no
+  // clusters. To add a new listener, use the ADD operation with no
   // match condition, empty path field, and a valid cluster as the
   // value in a patch.
   repeated Cluster clusters = 4;
