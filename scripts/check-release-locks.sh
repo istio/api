@@ -23,7 +23,7 @@ for lock in $locks; do
     echo "Testing $lock"
     protolock status --lockdir=${lock} | sort -fd > status && :
     diff status ${lock}/proto.lock.status > diff.out || fail=$lock
-    #rm status
+    rm status
     if [[ $fail != "none" ]]; then
         echo "Error $fail"
         cat diff.out
