@@ -3713,20 +3713,20 @@
               },
               {
                 "id": 3,
-                "name": "listeners",
-                "type": "Listener",
+                "name": "listener_patches",
+                "type": "ListenerPatch",
                 "is_repeated": true
               },
               {
                 "id": 4,
-                "name": "clusters",
-                "type": "Cluster",
+                "name": "cluster_patches",
+                "type": "ClusterPatch",
                 "is_repeated": true
               },
               {
                 "id": 5,
-                "name": "routes",
-                "type": "Route",
+                "name": "route_patches",
+                "type": "RoutePatch",
                 "is_repeated": true
               }
             ],
@@ -3757,6 +3757,17 @@
                   {
                     "id": 3,
                     "name": "listener_type",
+                    "type": "Context",
+                    "options": [
+                      {
+                        "name": "deprecated",
+                        "value": "true"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 6,
+                    "name": "context",
                     "type": "Context"
                   },
                   {
@@ -3837,12 +3848,12 @@
                   },
                   {
                     "id": 4,
-                    "name": "direction",
-                    "type": "string"
+                    "name": "context",
+                    "type": "Context"
                   },
                   {
                     "id": 5,
-                    "name": "regex",
+                    "name": "name",
                     "type": "string"
                   }
                 ]
@@ -3857,12 +3868,22 @@
                   },
                   {
                     "id": 2,
-                    "name": "route_type",
-                    "type": "Context"
+                    "name": "port_name",
+                    "type": "uint32"
                   },
                   {
                     "id": 3,
-                    "name": "regex",
+                    "name": "context",
+                    "type": "Context"
+                  },
+                  {
+                    "id": 4,
+                    "name": "gateway",
+                    "type": "string"
+                  },
+                  {
+                    "id": 5,
+                    "name": "name",
                     "type": "string"
                   }
                 ]
@@ -3888,7 +3909,7 @@
                 ]
               },
               {
-                "name": "Listener",
+                "name": "ListenerPatch",
                 "fields": [
                   {
                     "id": 1,
@@ -3904,7 +3925,7 @@
                 ]
               },
               {
-                "name": "Cluster",
+                "name": "ClusterPatch",
                 "fields": [
                   {
                     "id": 1,
@@ -3920,7 +3941,7 @@
                 ]
               },
               {
-                "name": "Route",
+                "name": "RoutePatch",
                 "fields": [
                   {
                     "id": 1,
