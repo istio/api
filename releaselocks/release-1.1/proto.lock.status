@@ -1,8 +1,0 @@
-CONFLICT: "ListenerMatch.ListenerType" field: "ANY" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
-CONFLICT: "ListenerMatch.ListenerType" field: "GATEWAY" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
-CONFLICT: "ListenerMatch.ListenerType" field: "SIDECAR_INBOUND" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
-CONFLICT: "ListenerMatch.ListenerType" field: "SIDECAR_OUTBOUND" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
-CONFLICT: "ListenerMatch.ListenerType" integer: "0" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
-CONFLICT: "ListenerMatch.ListenerType" integer: "1" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
-CONFLICT: "ListenerMatch.ListenerType" integer: "2" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
-CONFLICT: "ListenerMatch.ListenerType" integer: "3" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
