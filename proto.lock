@@ -3609,7 +3609,7 @@
       "def": {
         "enums": [
           {
-            "name": "EnvoyFilter.Context",
+            "name": "EnvoyFilter.PatchContext",
             "enum_fields": [
               {
                 "name": "ANY"
@@ -3706,28 +3706,22 @@
             "name": "EnvoyFilter",
             "fields": [
               {
+                "id": 3,
+                "name": "config_patches",
+                "type": "EnvoyConfigObjectPatch",
+                "is_repeated": true
+              },
+              {
                 "id": 2,
                 "name": "filters",
                 "type": "Filter",
-                "is_repeated": true
-              },
-              {
-                "id": 3,
-                "name": "listener_patches",
-                "type": "ListenerPatch",
-                "is_repeated": true
-              },
-              {
-                "id": 4,
-                "name": "cluster_patches",
-                "type": "ClusterPatch",
-                "is_repeated": true
-              },
-              {
-                "id": 5,
-                "name": "route_patches",
-                "type": "RoutePatch",
-                "is_repeated": true
+                "is_repeated": true,
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               }
             ],
             "maps": [
@@ -3757,7 +3751,7 @@
                   {
                     "id": 3,
                     "name": "listener_type",
-                    "type": "Context",
+                    "type": "PatchContext",
                     "options": [
                       {
                         "name": "deprecated",
@@ -3768,7 +3762,7 @@
                   {
                     "id": 6,
                     "name": "context",
-                    "type": "Context"
+                    "type": "PatchContext"
                   },
                   {
                     "id": 4,
@@ -3849,7 +3843,7 @@
                   {
                     "id": 4,
                     "name": "context",
-                    "type": "Context"
+                    "type": "PatchContext"
                   },
                   {
                     "id": 5,
@@ -3859,7 +3853,7 @@
                 ]
               },
               {
-                "name": "RouteMatch",
+                "name": "RouteConfigurationMatch",
                 "fields": [
                   {
                     "id": 1,
@@ -3874,7 +3868,7 @@
                   {
                     "id": 3,
                     "name": "context",
-                    "type": "Context"
+                    "type": "PatchContext"
                   },
                   {
                     "id": 4,
@@ -3884,6 +3878,61 @@
                   {
                     "id": 5,
                     "name": "name",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "VirtualHostMatch",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "context",
+                    "type": "PatchContext"
+                  },
+                  {
+                    "id": 2,
+                    "name": "route_configuration",
+                    "type": "string"
+                  },
+                  {
+                    "id": 3,
+                    "name": "host",
+                    "type": "string"
+                  },
+                  {
+                    "id": 4,
+                    "name": "port_number",
+                    "type": "uint32"
+                  },
+                  {
+                    "id": 5,
+                    "name": "name",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "FilterChainMatch",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "context",
+                    "type": "PatchContext"
+                  },
+                  {
+                    "id": 2,
+                    "name": "sni",
+                    "type": "string"
+                  },
+                  {
+                    "id": 3,
+                    "name": "alpn",
+                    "type": "string"
+                  },
+                  {
+                    "id": 4,
+                    "name": "listener_name",
                     "type": "string"
                   }
                 ]
@@ -3909,44 +3958,42 @@
                 ]
               },
               {
-                "name": "ListenerPatch",
+                "name": "EnvoyConfigObjectMatch",
                 "fields": [
                   {
                     "id": 1,
-                    "name": "match",
+                    "name": "listener",
                     "type": "ListenerMatch"
                   },
                   {
                     "id": 2,
-                    "name": "patches",
-                    "type": "Patch",
-                    "is_repeated": true
-                  }
-                ]
-              },
-              {
-                "name": "ClusterPatch",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "match",
-                    "type": "ClusterMatch"
+                    "name": "filter_chain",
+                    "type": "FilterChainMatch"
                   },
                   {
-                    "id": 2,
-                    "name": "patches",
-                    "type": "Patch",
-                    "is_repeated": true
+                    "id": 3,
+                    "name": "route_configuration",
+                    "type": "RouteConfigurationMatch"
+                  },
+                  {
+                    "id": 4,
+                    "name": "virtual_host",
+                    "type": "VirtualHostMatch"
+                  },
+                  {
+                    "id": 5,
+                    "name": "cluster",
+                    "type": "ClusterMatch"
                   }
                 ]
               },
               {
-                "name": "RoutePatch",
+                "name": "EnvoyConfigObjectPatch",
                 "fields": [
                   {
                     "id": 1,
                     "name": "match",
-                    "type": "RouteMatch"
+                    "type": "EnvoyConfigObjectMatch"
                   },
                   {
                     "id": 2,
