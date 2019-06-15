@@ -894,7 +894,7 @@ message HTTPRewrite {
 }
 
 // Describes how to match a given string in HTTP headers. Match is
-// case-sensitive.
+// case-sensitive by default.
 message StringMatch {
   oneof match_type {
 
@@ -907,6 +907,10 @@ message StringMatch {
     // ECMAscript style regex-based match
     string regex = 3;
   }
+
+   // Indicates that string matching should be case insensitive. The default is true.
+   // $hide_from_docs
+   bool case_sensitive = 4;
 }
 
 // Describes the retry policy to use when a HTTP request fails. For
