@@ -2637,6 +2637,11 @@
                 "id": 3,
                 "name": "regex",
                 "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "case_sensitive",
+                "type": "bool"
               }
             ]
           },
