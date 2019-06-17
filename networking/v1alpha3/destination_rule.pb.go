@@ -76,14 +76,13 @@ package v1alpha3
 
 import (
 	fmt "fmt"
-	io "io"
-	math "math"
-	time "time"
-
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	github_com_gogo_protobuf_types "github.com/gogo/protobuf/types"
 	types "github.com/gogo/protobuf/types"
+	io "io"
+	math "math"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1368,7 +1367,7 @@ func (m *ConnectionPoolSettings_HTTPSettings) GetIdleTimeout() *types.Duration {
 // of time. For TCP services, connection timeouts or connection
 // failures to a given host counts as an error when measuring the
 // consecutive errors metric. See Envoy's [outlier
-// detection](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/outlier)
+// detection](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/outlier)
 // for more details.
 //
 // The following rule sets a connection pool size of 100 connections and
