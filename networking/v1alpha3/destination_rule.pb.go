@@ -580,7 +580,7 @@ func (m *Subset) GetTrafficPolicy() *TrafficPolicy {
 
 // Load balancing policies to apply for a specific destination. See Envoy's
 // load balancing
-// [documentation](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing/load_balancing)
+// [documentation](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancing)
 // for more details.
 //
 // For example, the following rule uses a round robin load balancing policy
@@ -1047,7 +1047,7 @@ func (m *LoadBalancerSettings_ConsistentHashLB_HTTPCookie) GetTtl() *time.Durati
 
 // Connection pool settings for an upstream host. The settings apply to
 // each individual host in the upstream service.  See Envoy's [circuit
-// breaker](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/circuit_breaking)
+// breaker](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/circuit_breaking)
 // for more details. Connection pool settings can be applied at the TCP
 // level as well as at HTTP level.
 //
@@ -1367,7 +1367,7 @@ func (m *ConnectionPoolSettings_HTTPSettings) GetIdleTimeout() *types.Duration {
 // of time. For TCP services, connection timeouts or connection
 // failures to a given host counts as an error when measuring the
 // consecutive errors metric. See Envoy's [outlier
-// detection](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/outlier)
+// detection](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/outlier)
 // for more details.
 //
 // The following rule sets a connection pool size of 100 connections and
