@@ -341,7 +341,7 @@ message ConfigSource {
 // traffic originates and where it will terminate. These localities are
 // specified using arbitrary labels that designate a hierarchy of localities in
 // {region}/{zone}/{sub-zone} form. For additional detail refer to
-// [Locality Weight](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing/locality_weight)
+// [Locality Weight](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)
 // The following example shows how to setup locality weights mesh-wide.
 //
 // Given a mesh with workloads and their service deployed to "us-west/zone1/*"
@@ -419,7 +419,7 @@ message LocalityLoadBalancerSetting{
 
   // Optional: only one of distribute or failover can be set.
   // Explicitly specify loadbalancing weight across different zones and geographical locations.
-  // Refer to [Locality weighted load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing/locality_weight)
+  // Refer to [Locality weighted load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)
   // If empty, the locality weight is set according to the endpoints number within it.
   repeated Distribute distribute = 1;
 
