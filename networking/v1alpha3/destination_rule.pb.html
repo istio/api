@@ -4,7 +4,7 @@ description: Configuration affecting load balancing, outlier detection, etc.
 location: https://istio.io/docs/reference/config/networking/v1alpha3/destination-rule.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 16
+number_of_entries: 19
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -717,6 +717,153 @@ across all hosts in the pool (healthy and unhealthy).  The default is 50%.</p>
 </tbody>
 </table>
 </section>
+<h2 id="ProtocolOptions">ProtocolOptions</h2>
+<section>
+<p>Protocol settings for specific protocols for upstream connections. See
+Envoy&rsquo;s <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/core/protocol.proto">Protocol
+options</a>
+for more details. These settings are common to all upstream hosts in a
+cluster.</p>
+
+<p>For example, the following rule configures a client to use specific HTTP
+and HTTP2 settings.</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: db-protocol-options-http2
+spec:
+  host: mydbserver.prod.svc.cluster.local
+  protocolOptions:
+    http:
+      idleTimeout: 1s
+    http2:
+      hpackTableSize: 4096
+      maxConcurrentStreams: 100
+      initialStreamWindowSize: 4096
+      initialConnectionWindowSize: 4096
+      allowConnect: true
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProtocolOptions-http">
+<td><code>http</code></td>
+<td><code><a href="#ProtocolOptions-HttpOptions">ProtocolOptions.HttpOptions</a></code></td>
+<td>
+<p>Common HTTP options</p>
+
+</td>
+</tr>
+<tr id="ProtocolOptions-http2">
+<td><code>http2</code></td>
+<td><code><a href="#ProtocolOptions-Http2Options">ProtocolOptions.Http2Options</a></code></td>
+<td>
+<p>HTTP2 options</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProtocolOptions-Http2Options">ProtocolOptions.Http2Options</h2>
+<section>
+<p>HTTP2 options</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProtocolOptions-Http2Options-hpack_table_size">
+<td><code>hpackTableSize</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Maximum table size (in octets) that the encoder is permitted to use for
+the dynamic HPACK table. Valid values range from 0 to 2^32-1. 0
+disables header compression.</p>
+
+</td>
+</tr>
+<tr id="ProtocolOptions-Http2Options-max_concurrent_streams">
+<td><code>maxConcurrentStreams</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Maximum concurrent streams allowed for peer on one HTTP2 connection.
+Valid values range from 1 to 2^31-1.</p>
+
+</td>
+</tr>
+<tr id="ProtocolOptions-Http2Options-initial_stream_window_size">
+<td><code>initialStreamWindowSize</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>This field also acts as a soft limit on the number of bytes Envoy will
+buffer per stream in the HTTP2 codec buffers. Once the buffer reaches
+this pointer, watermark callbacks will fire to stop the flow of data to
+the codec buffers.</p>
+
+</td>
+</tr>
+<tr id="ProtocolOptions-Http2Options-initial_connection_window_size">
+<td><code>initialConnectionWindowSize</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Similar to initial<em>stream</em>window_size, but for connection-level
+flow-control window.</p>
+
+</td>
+</tr>
+<tr id="ProtocolOptions-Http2Options-allow_connect">
+<td><code>allowConnect</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Allow proxying websocket and other upgrades over H2 connect.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProtocolOptions-HttpOptions">ProtocolOptions.HttpOptions</h2>
+<section>
+<p>Http general options</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProtocolOptions-HttpOptions-idle_timeout">
+<td><code>idleTimeout</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td>
+<p>The idle timeout for upstream connection pool connections. The idle
+timeout is defined as the period in which there are no active requests.
+If not set, there is no idle timeout. When the idle timeout is reached
+the connection will be closed. Note that request based timeouts mean
+that HTTP2 PINGs will not keep the connection alive.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="Subset">Subset</h2>
 <section>
 <p>A subset of endpoints of a service. Subsets can be used for scenarios
@@ -1022,6 +1169,15 @@ settings will override the destination-level settings. Traffic
 settings specified at the destination-level will not be inherited when
 overridden by port-level settings, i.e. default values will be applied
 to fields omitted in port-level traffic policies.</p>
+
+</td>
+</tr>
+<tr id="TrafficPolicy-protocol_options">
+<td><code>protocolOptions</code></td>
+<td><code><a href="#ProtocolOptions">ProtocolOptions</a></code></td>
+<td>
+<p>Protocol options for HTTP and HTTP2 envoy configuration in upstream
+clusters.</p>
 
 </td>
 </tr>
