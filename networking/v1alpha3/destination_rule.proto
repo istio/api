@@ -187,10 +187,6 @@ message TrafficPolicy {
   // overridden by port-level settings, i.e. default values will be applied
   // to fields omitted in port-level traffic policies.
   repeated PortTrafficPolicy port_level_settings = 5;
-
-  // Protocol options for HTTP and HTTP2 envoy configuration in upstream
-  // clusters.
-  ProtocolOptions protocol_options = 6;
 }
 
 // A subset of endpoints of a service. Subsets can be used for scenarios
@@ -449,6 +445,28 @@ message ConnectionPoolSettings {
     };
     // Specify if http1.1 connection should be upgraded to http2 for the associated destination.
     H2UpgradePolicy h2_upgrade_policy = 6;
+
+    // Maximum table size (in octets) that the encoder is permitted to use for
+    // the dynamic HPACK table. Valid values range from 0 to 2^32-1. 0
+    // disables header compression.
+    uint32 hpack_table_size = 7;
+
+    // Maximum concurrent streams allowed for peer on one HTTP2 connection.
+    // Valid values range from 1 to 2^31-1.
+    uint32 max_concurrent_streams = 8;
+
+    // This field also acts as a soft limit on the number of bytes Envoy will
+    // buffer per stream in the HTTP2 codec buffers. Once the buffer reaches
+    // this pointer, watermark callbacks will fire to stop the flow of data to
+    // the codec buffers. 
+    uint32 initial_stream_window_size = 9;
+
+    // Similar to initial_stream_window_size, but for connection-level
+    // flow-control window.
+    uint32 initial_connection_window_size = 10;
+
+    // Allow proxying websocket and other upgrades over H2 connect.
+    bool allow_connect = 11;
   };
 
   // Settings common to both HTTP and TCP upstream connections.
@@ -624,66 +642,4 @@ message TLSSettings {
 
   // SNI string to present to the server during TLS handshake.
   string sni = 6;
-}
-
-// Protocol settings for specific protocols for upstream connections. See
-// Envoy's [Protocol
-// options](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/core/protocol.proto)
-// for more details. These settings are common to all upstream hosts in a
-// cluster.
-//
-// For example, the following rule configures a client to use specific HTTP
-// and HTTP2 settings.
-//
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: DestinationRule
-// metadata:
-//   name: db-protocol-options-http2
-// spec:
-//   host: mydbserver.prod.svc.cluster.local
-//   protocolOptions:
-//     http:
-//       idleTimeout: 1s
-//     http2:
-//       hpackTableSize: 4096
-//       maxConcurrentStreams: 100
-//       initialStreamWindowSize: 4096
-//       initialConnectionWindowSize: 4096
-//       allowConnect: true
-// ```
-message ProtocolOptions {
-  // Http general options
-  message HttpOptions {
-    // The idle timeout for upstream connection pool connections. The idle
-    // timeout is defined as the period in which there are no active requests.
-    // If not set, there is no idle timeout. When the idle timeout is reached
-    // the connection will be closed. Note that request based timeouts mean
-    // that HTTP2 PINGs will not keep the connection alive.
-    google.protobuf.Duration idle_timeout = 1 [ (gogoproto.stdduration) = true ];
-  };
-  // HTTP2 options
-  message Http2Options {
-    // Maximum table size (in octets) that the encoder is permitted to use for
-    // the dynamic HPACK table. Valid values range from 0 to 2^32-1. 0
-    // disables header compression.
-    uint32 hpack_table_size = 1;
-    // Maximum concurrent streams allowed for peer on one HTTP2 connection.
-    // Valid values range from 1 to 2^31-1.
-    uint32 max_concurrent_streams = 2;
-    // This field also acts as a soft limit on the number of bytes Envoy will
-    // buffer per stream in the HTTP2 codec buffers. Once the buffer reaches
-    // this pointer, watermark callbacks will fire to stop the flow of data to
-    // the codec buffers. 
-    uint32 initial_stream_window_size = 3;
-    // Similar to initial_stream_window_size, but for connection-level
-    // flow-control window.
-    uint32 initial_connection_window_size = 4;
-    // Allow proxying websocket and other upgrades over H2 connect.
-    bool allow_connect = 5;
-  };
-  // Common HTTP options
-  HttpOptions http = 1;
-  // HTTP2 options
-  Http2Options http2 = 2;
 }
