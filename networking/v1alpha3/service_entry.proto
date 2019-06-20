@@ -351,9 +351,10 @@ message ServiceEntry {
   repeated string hosts = 1;
 
   // The virtual IP addresses associated with the service. Could be CIDR
-  // prefix. For HTTP traffic the addresses field can be used to generate http route domains
-  // along with hosts field and the destination will be identified based on the HTTP Host/Authority
-  // header. If one or more IP addresses are specified,
+  // prefix. For HTTP traffic, generated route configurations will include http route
+  // domains for both the `addresses` and `hosts` field values and the destination will
+  // be identified based on the HTTP Host/Authority header.
+  // If one or more IP addresses are specified,
   // the incoming traffic will be identified as belonging to this service
   // if the destination IP matches the IP/CIDRs specified in the addresses
   // field. If the Addresses field is empty, traffic will be identified
