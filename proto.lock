@@ -3907,7 +3907,7 @@
                   },
                   {
                     "id": 2,
-                    "name": "hostname",
+                    "name": "service",
                     "type": "string"
                   },
                   {

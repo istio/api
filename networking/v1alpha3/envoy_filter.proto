@@ -374,9 +374,11 @@ message EnvoyFilter {
     // omitted, applies to clusters for any port.
     uint32 port_number = 1;
 
-    // The FQDN of the service name for this cluster. If omitted,
-    // applies to clusters for any service.
-    string hostname = 2;
+    // The fully qualified service name for this cluster. If omitted,
+    // applies to clusters for any service. For services defined
+    // through service entries, the service name is same as the hosts
+    // defined in the service entry.
+    string service = 2;
 
     // The subset associated with the service. If omitted, applies to
     // clusters for any subset of a service.

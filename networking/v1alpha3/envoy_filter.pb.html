@@ -311,12 +311,14 @@ omitted, applies to clusters for any port.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilter-ClusterMatch-hostname">
-<td><code>hostname</code></td>
+<tr id="EnvoyFilter-ClusterMatch-service">
+<td><code>service</code></td>
 <td><code>string</code></td>
 <td>
-<p>The FQDN of the service name for this cluster. If omitted,
-applies to clusters for any service.</p>
+<p>The fully qualified service name for this cluster. If omitted,
+applies to clusters for any service. For services defined
+through service entries, the service name is same as the hosts
+defined in the service entry.</p>
 
 </td>
 </tr>
