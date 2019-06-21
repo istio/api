@@ -20,15 +20,45 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='networking/v1alpha3/envoy_filter.proto',
   package='istio.networking.v1alpha3',
   syntax='proto3',
-  serialized_pb=_b('\n&networking/v1alpha3/envoy_filter.proto\x12\x19istio.networking.v1alpha3\x1a\x1cgoogle/protobuf/struct.proto\"\xc0\x15\n\x0b\x45nvoyFilter\x12S\n\x0fworkload_labels\x18\x01 \x03(\x0b\x32:.istio.networking.v1alpha3.EnvoyFilter.WorkloadLabelsEntry\x12U\n\x0e\x63onfig_patches\x18\x03 \x03(\x0b\x32=.istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch\x12\x42\n\x07\x66ilters\x18\x02 \x03(\x0b\x32-.istio.networking.v1alpha3.EnvoyFilter.FilterB\x02\x18\x01\x1a\x35\n\x13WorkloadLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\xf7\x02\n\rListenerMatch\x12\x13\n\x0bport_number\x18\x01 \x01(\r\x12\x18\n\x10port_name_prefix\x18\x02 \x01(\t\x12N\n\rlistener_type\x18\x03 \x01(\x0e\x32\x33.istio.networking.v1alpha3.EnvoyFilter.PatchContextB\x02\x18\x01\x12\x44\n\x07\x63ontext\x18\x06 \x01(\x0e\x32\x33.istio.networking.v1alpha3.EnvoyFilter.PatchContext\x12`\n\x11listener_protocol\x18\x04 \x01(\x0e\x32\x45.istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.ListenerProtocol\x12\x0f\n\x07\x61\x64\x64ress\x18\x05 \x03(\t\".\n\x10ListenerProtocol\x12\x07\n\x03\x41LL\x10\x00\x12\x08\n\x04HTTP\x10\x01\x12\x07\n\x03TCP\x10\x02\x1a\xa6\x01\n\x0eInsertPosition\x12J\n\x05index\x18\x01 \x01(\x0e\x32;.istio.networking.v1alpha3.EnvoyFilter.InsertPosition.Index\x12\x13\n\x0brelative_to\x18\x02 \x01(\t\"3\n\x05Index\x12\t\n\x05\x46IRST\x10\x00\x12\x08\n\x04LAST\x10\x01\x12\n\n\x06\x42\x45\x46ORE\x10\x02\x12\t\n\x05\x41\x46TER\x10\x03\x1a\xec\x02\n\x06\x46ilter\x12L\n\x0elistener_match\x18\x01 \x01(\x0b\x32\x34.istio.networking.v1alpha3.EnvoyFilter.ListenerMatch\x12N\n\x0finsert_position\x18\x02 \x01(\x0b\x32\x35.istio.networking.v1alpha3.EnvoyFilter.InsertPosition\x12M\n\x0b\x66ilter_type\x18\x03 \x01(\x0e\x32\x38.istio.networking.v1alpha3.EnvoyFilter.Filter.FilterType\x12\x13\n\x0b\x66ilter_name\x18\x04 \x01(\t\x12.\n\rfilter_config\x18\x05 \x01(\x0b\x32\x17.google.protobuf.Struct\"0\n\nFilterType\x12\x0b\n\x07INVALID\x10\x00\x12\x08\n\x04HTTP\x10\x01\x12\x0b\n\x07NETWORK\x10\x02\x1a\x99\x01\n\x0c\x43lusterMatch\x12\x13\n\x0bport_number\x18\x01 \x01(\r\x12\x10\n\x08hostname\x18\x02 \x01(\t\x12\x0e\n\x06subset\x18\x03 \x01(\t\x12\x44\n\x07\x63ontext\x18\x04 \x01(\x0e\x32\x33.istio.networking.v1alpha3.EnvoyFilter.PatchContext\x12\x0c\n\x04name\x18\x05 \x01(\t\x1a\xa6\x01\n\x17RouteConfigurationMatch\x12\x13\n\x0bport_number\x18\x01 \x01(\r\x12\x11\n\tport_name\x18\x02 \x01(\r\x12\x44\n\x07\x63ontext\x18\x03 \x01(\x0e\x32\x33.istio.networking.v1alpha3.EnvoyFilter.PatchContext\x12\x0f\n\x07gateway\x18\x04 \x01(\t\x12\x0c\n\x04name\x18\x05 \x01(\t\x1a\xa6\x01\n\x10VirtualHostMatch\x12\x44\n\x07\x63ontext\x18\x01 \x01(\x0e\x32\x33.istio.networking.v1alpha3.EnvoyFilter.PatchContext\x12\x1b\n\x13route_configuration\x18\x02 \x01(\t\x12\x0c\n\x04host\x18\x03 \x01(\t\x12\x13\n\x0bport_number\x18\x04 \x01(\r\x12\x0c\n\x04name\x18\x05 \x01(\t\x1a\x8a\x01\n\x10\x46ilterChainMatch\x12\x44\n\x07\x63ontext\x18\x01 \x01(\x0e\x32\x33.istio.networking.v1alpha3.EnvoyFilter.PatchContext\x12\x0b\n\x03sni\x18\x02 \x01(\t\x12\x0c\n\x04\x61lpn\x18\x03 \x01(\t\x12\x15\n\rlistener_name\x18\x04 \x01(\t\x1a\xc5\x01\n\x05Patch\x12\x0c\n\x04path\x18\x01 \x01(\t\x12I\n\toperation\x18\x02 \x01(\x0e\x32\x36.istio.networking.v1alpha3.EnvoyFilter.Patch.Operation\x12%\n\x05value\x18\x03 \x01(\x0b\x32\x16.google.protobuf.Value\"<\n\tOperation\x12\t\n\x05MERGE\x10\x00\x12\x0f\n\x0bMERGE_UNSET\x10\x01\x12\x07\n\x03\x41\x44\x44\x10\x02\x12\n\n\x06REMOVE\x10\x03\x1a\xbb\x03\n\x16\x45nvoyConfigObjectMatch\x12H\n\x08listener\x18\x01 \x01(\x0b\x32\x34.istio.networking.v1alpha3.EnvoyFilter.ListenerMatchH\x00\x12O\n\x0c\x66ilter_chain\x18\x02 \x01(\x0b\x32\x37.istio.networking.v1alpha3.EnvoyFilter.FilterChainMatchH\x00\x12]\n\x13route_configuration\x18\x03 \x01(\x0b\x32>.istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatchH\x00\x12O\n\x0cvirtual_host\x18\x04 \x01(\x0b\x32\x37.istio.networking.v1alpha3.EnvoyFilter.VirtualHostMatchH\x00\x12\x46\n\x07\x63luster\x18\x05 \x01(\x0b\x32\x33.istio.networking.v1alpha3.EnvoyFilter.ClusterMatchH\x00\x42\x0e\n\x0cobject_types\x1a\xa5\x01\n\x16\x45nvoyConfigObjectPatch\x12L\n\x05match\x18\x01 \x01(\x0b\x32=.istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch\x12=\n\x07patches\x18\x02 \x03(\x0b\x32,.istio.networking.v1alpha3.EnvoyFilter.Patch\"O\n\x0cPatchContext\x12\x07\n\x03\x41NY\x10\x00\x12\x13\n\x0fSIDECAR_INBOUND\x10\x01\x12\x14\n\x10SIDECAR_OUTBOUND\x10\x02\x12\x0b\n\x07GATEWAY\x10\x03\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
+  serialized_pb=_b('\n&networking/v1alpha3/envoy_filter.proto\x12\x19istio.networking.v1alpha3\x1a\x1cgoogle/protobuf/struct.proto\"\xcd\x1a\n\x0b\x45nvoyFilter\x12W\n\x0fworkload_labels\x18\x01 \x03(\x0b\x32:.istio.networking.v1alpha3.EnvoyFilter.WorkloadLabelsEntryB\x02\x18\x01\x12\x42\n\x07\x66ilters\x18\x02 \x03(\x0b\x32-.istio.networking.v1alpha3.EnvoyFilter.FilterB\x02\x18\x01\x12W\n\x11workload_selector\x18\x03 \x03(\x0b\x32<.istio.networking.v1alpha3.EnvoyFilter.WorkloadSelectorEntry\x12U\n\x0e\x63onfig_patches\x18\x04 \x03(\x0b\x32=.istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch\x1a\xaa\x03\n\x17\x44\x65precatedListenerMatch\x12\x13\n\x0bport_number\x18\x01 \x01(\r\x12\x18\n\x10port_name_prefix\x18\x02 \x01(\t\x12\x62\n\rlistener_type\x18\x03 \x01(\x0e\x32K.istio.networking.v1alpha3.EnvoyFilter.DeprecatedListenerMatch.ListenerType\x12j\n\x11listener_protocol\x18\x04 \x01(\x0e\x32O.istio.networking.v1alpha3.EnvoyFilter.DeprecatedListenerMatch.ListenerProtocol\x12\x0f\n\x07\x61\x64\x64ress\x18\x05 \x03(\t\"O\n\x0cListenerType\x12\x07\n\x03\x41NY\x10\x00\x12\x13\n\x0fSIDECAR_INBOUND\x10\x01\x12\x14\n\x10SIDECAR_OUTBOUND\x10\x02\x12\x0b\n\x07GATEWAY\x10\x03\".\n\x10ListenerProtocol\x12\x07\n\x03\x41LL\x10\x00\x12\x08\n\x04HTTP\x10\x01\x12\x07\n\x03TCP\x10\x02\x1a\xa6\x01\n\x0eInsertPosition\x12J\n\x05index\x18\x01 \x01(\x0e\x32;.istio.networking.v1alpha3.EnvoyFilter.InsertPosition.Index\x12\x13\n\x0brelative_to\x18\x02 \x01(\t\"3\n\x05Index\x12\t\n\x05\x46IRST\x10\x00\x12\x08\n\x04LAST\x10\x01\x12\n\n\x06\x42\x45\x46ORE\x10\x02\x12\t\n\x05\x41\x46TER\x10\x03\x1a\xec\x02\n\x06\x46ilter\x12L\n\x0elistener_match\x18\x01 \x01(\x0b\x32\x34.istio.networking.v1alpha3.EnvoyFilter.ListenerMatch\x12N\n\x0finsert_position\x18\x02 \x01(\x0b\x32\x35.istio.networking.v1alpha3.EnvoyFilter.InsertPosition\x12M\n\x0b\x66ilter_type\x18\x03 \x01(\x0e\x32\x38.istio.networking.v1alpha3.EnvoyFilter.Filter.FilterType\x12\x13\n\x0b\x66ilter_name\x18\x04 \x01(\t\x12.\n\rfilter_config\x18\x05 \x01(\x0b\x32\x17.google.protobuf.Struct\"0\n\nFilterType\x12\x0b\n\x07INVALID\x10\x00\x12\x08\n\x04HTTP\x10\x01\x12\x0b\n\x07NETWORK\x10\x02\x1aS\n\x0c\x43lusterMatch\x12\x13\n\x0bport_number\x18\x01 \x01(\r\x12\x10\n\x08hostname\x18\x02 \x01(\t\x12\x0e\n\x06subset\x18\x03 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x1a\xf1\x01\n\x17RouteConfigurationMatch\x12\x13\n\x0bport_number\x18\x01 \x01(\r\x12 \n\x18gateway_server_port_name\x18\x02 \x01(\r\x12\x0f\n\x07gateway\x18\x03 \x01(\t\x12^\n\x05vhost\x18\x04 \x01(\x0b\x32O.istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.VirtualHostMatch\x12\x0c\n\x04name\x18\x05 \x01(\t\x1a \n\x10VirtualHostMatch\x12\x0c\n\x04name\x18\x01 \x01(\t\x1a\xd0\x03\n\rListenerMatch\x12\x13\n\x0bport_number\x18\x01 \x01(\r\x12\x19\n\x11service_port_name\x18\x02 \x01(\t\x12[\n\x0c\x66ilter_chain\x18\x03 \x01(\x0b\x32\x45.istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch\x12\x0c\n\x04name\x18\x04 \x01(\t\x1a\x8d\x01\n\x10\x46ilterChainMatch\x12\x0b\n\x03sni\x18\x01 \x01(\t\x12\x1a\n\x12transport_protocol\x18\x02 \x01(\t\x12P\n\x06\x66ilter\x18\x03 \x01(\x0b\x32@.istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch\x1at\n\x0b\x46ilterMatch\x12\x0c\n\x04name\x18\x01 \x01(\t\x12W\n\nsub_filter\x18\x02 \x01(\x0b\x32\x43.istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.SubFilterMatch\x1a\x1e\n\x0eSubFilterMatch\x12\x0c\n\x04name\x18\x01 \x01(\t\x1a\xfc\x01\n\x05Patch\x12I\n\toperation\x18\x01 \x01(\x0e\x32\x36.istio.networking.v1alpha3.EnvoyFilter.Patch.Operation\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.google.protobuf.Value\"\x80\x01\n\tOperation\x12\x0b\n\x07INVALID\x10\x00\x12\t\n\x05MERGE\x10\x01\x12\x07\n\x03\x41\x44\x44\x10\x02\x12\n\n\x06REMOVE\x10\x03\x12\x10\n\x0cINSERT_FIRST\x10\x04\x12\x0f\n\x0bINSERT_LAST\x10\x05\x12\x11\n\rINSERT_BEFORE\x10\x06\x12\x10\n\x0cINSERT_AFTER\x10\x07\x1a\x99\x02\n\x16\x45nvoyConfigObjectMatch\x12H\n\x08listener\x18\x01 \x01(\x0b\x32\x34.istio.networking.v1alpha3.EnvoyFilter.ListenerMatchH\x00\x12]\n\x13route_configuration\x18\x03 \x01(\x0b\x32>.istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatchH\x00\x12\x46\n\x07\x63luster\x18\x05 \x01(\x0b\x32\x33.istio.networking.v1alpha3.EnvoyFilter.ClusterMatchH\x00\x42\x0e\n\x0cobject_types\x1a\xaf\x01\n\x19\x45nvoyFilterMatchCondition\x12\x44\n\x07\x63ontext\x18\x01 \x01(\x0e\x32\x33.istio.networking.v1alpha3.EnvoyFilter.PatchContext\x12L\n\x05match\x18\x02 \x01(\x0b\x32=.istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch\x1a\xe5\x01\n\x16\x45nvoyConfigObjectPatch\x12@\n\x08\x61pply_to\x18\x01 \x01(\x0e\x32..istio.networking.v1alpha3.EnvoyFilter.ApplyTo\x12L\n\x05match\x18\x02 \x01(\x0b\x32=.istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch\x12;\n\x05patch\x18\x03 \x01(\x0b\x32,.istio.networking.v1alpha3.EnvoyFilter.Patch\x1a\x35\n\x13WorkloadLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x37\n\x15WorkloadSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x99\x01\n\x07\x41pplyTo\x12\x0b\n\x07INVALID\x10\x00\x12\x0c\n\x08LISTENER\x10\x01\x12\x16\n\x12\x46ILTER_CHAIN_MATCH\x10\x02\x12\x12\n\x0eNETWORK_FILTER\x10\x03\x12\x0f\n\x0bHTTP_FILTER\x10\x04\x12\x17\n\x13ROUTE_CONFIGURATION\x10\x05\x12\x10\n\x0cVIRTUAL_HOST\x10\x06\x12\x0b\n\x07\x43LUSTER\x10\x07\"O\n\x0cPatchContext\x12\x07\n\x03\x41NY\x10\x00\x12\x13\n\x0fSIDECAR_INBOUND\x10\x01\x12\x14\n\x10SIDECAR_OUTBOUND\x10\x02\x12\x0b\n\x07GATEWAY\x10\x03\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,])
 
 
 
-_ENVOYFILTER_LISTENERMATCH_LISTENERPROTOCOL = _descriptor.EnumDescriptor(
+_ENVOYFILTER_DEPRECATEDLISTENERMATCH_LISTENERTYPE = _descriptor.EnumDescriptor(
+  name='ListenerType',
+  full_name='istio.networking.v1alpha3.EnvoyFilter.DeprecatedListenerMatch.ListenerType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='ANY', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='SIDECAR_INBOUND', index=1, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='SIDECAR_OUTBOUND', index=2, number=2,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='GATEWAY', index=3, number=3,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=748,
+  serialized_end=827,
+)
+_sym_db.RegisterEnumDescriptor(_ENVOYFILTER_DEPRECATEDLISTENERMATCH_LISTENERTYPE)
+
+_ENVOYFILTER_DEPRECATEDLISTENERMATCH_LISTENERPROTOCOL = _descriptor.EnumDescriptor(
   name='ListenerProtocol',
-  full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.ListenerProtocol',
+  full_name='istio.networking.v1alpha3.EnvoyFilter.DeprecatedListenerMatch.ListenerProtocol',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -47,10 +77,10 @@ _ENVOYFILTER_LISTENERMATCH_LISTENERPROTOCOL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=740,
-  serialized_end=786,
+  serialized_start=829,
+  serialized_end=875,
 )
-_sym_db.RegisterEnumDescriptor(_ENVOYFILTER_LISTENERMATCH_LISTENERPROTOCOL)
+_sym_db.RegisterEnumDescriptor(_ENVOYFILTER_DEPRECATEDLISTENERMATCH_LISTENERPROTOCOL)
 
 _ENVOYFILTER_INSERTPOSITION_INDEX = _descriptor.EnumDescriptor(
   name='Index',
@@ -77,8 +107,8 @@ _ENVOYFILTER_INSERTPOSITION_INDEX = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=904,
-  serialized_end=955,
+  serialized_start=993,
+  serialized_end=1044,
 )
 _sym_db.RegisterEnumDescriptor(_ENVOYFILTER_INSERTPOSITION_INDEX)
 
@@ -103,8 +133,8 @@ _ENVOYFILTER_FILTER_FILTERTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1274,
-  serialized_end=1322,
+  serialized_start=1363,
+  serialized_end=1411,
 )
 _sym_db.RegisterEnumDescriptor(_ENVOYFILTER_FILTER_FILTERTYPE)
 
@@ -115,11 +145,11 @@ _ENVOYFILTER_PATCH_OPERATION = _descriptor.EnumDescriptor(
   file=DESCRIPTOR,
   values=[
     _descriptor.EnumValueDescriptor(
-      name='MERGE', index=0, number=0,
+      name='INVALID', index=0, number=0,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='MERGE_UNSET', index=1, number=1,
+      name='MERGE', index=1, number=1,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
@@ -130,13 +160,75 @@ _ENVOYFILTER_PATCH_OPERATION = _descriptor.EnumDescriptor(
       name='REMOVE', index=3, number=3,
       options=None,
       type=None),
+    _descriptor.EnumValueDescriptor(
+      name='INSERT_FIRST', index=4, number=4,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='INSERT_LAST', index=5, number=5,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='INSERT_BEFORE', index=6, number=6,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='INSERT_AFTER', index=7, number=7,
+      options=None,
+      type=None),
   ],
   containing_type=None,
   options=None,
-  serialized_start=2097,
-  serialized_end=2157,
+  serialized_start=2334,
+  serialized_end=2462,
 )
 _sym_db.RegisterEnumDescriptor(_ENVOYFILTER_PATCH_OPERATION)
+
+_ENVOYFILTER_APPLYTO = _descriptor.EnumDescriptor(
+  name='ApplyTo',
+  full_name='istio.networking.v1alpha3.EnvoyFilter.ApplyTo',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='INVALID', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='LISTENER', index=1, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='FILTER_CHAIN_MATCH', index=2, number=2,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='NETWORK_FILTER', index=3, number=3,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='HTTP_FILTER', index=4, number=4,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='ROUTE_CONFIGURATION', index=5, number=5,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='VIRTUAL_HOST', index=6, number=6,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='CLUSTER', index=7, number=7,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=3271,
+  serialized_end=3424,
+)
+_sym_db.RegisterEnumDescriptor(_ENVOYFILTER_APPLYTO)
 
 _ENVOYFILTER_PATCHCONTEXT = _descriptor.EnumDescriptor(
   name='PatchContext',
@@ -163,93 +255,49 @@ _ENVOYFILTER_PATCHCONTEXT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2773,
-  serialized_end=2852,
+  serialized_start=3426,
+  serialized_end=3505,
 )
 _sym_db.RegisterEnumDescriptor(_ENVOYFILTER_PATCHCONTEXT)
 
 
-_ENVOYFILTER_WORKLOADLABELSENTRY = _descriptor.Descriptor(
-  name='WorkloadLabelsEntry',
-  full_name='istio.networking.v1alpha3.EnvoyFilter.WorkloadLabelsEntry',
+_ENVOYFILTER_DEPRECATEDLISTENERMATCH = _descriptor.Descriptor(
+  name='DeprecatedListenerMatch',
+  full_name='istio.networking.v1alpha3.EnvoyFilter.DeprecatedListenerMatch',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='istio.networking.v1alpha3.EnvoyFilter.WorkloadLabelsEntry.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='istio.networking.v1alpha3.EnvoyFilter.WorkloadLabelsEntry.value', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=_descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001')),
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=355,
-  serialized_end=408,
-)
-
-_ENVOYFILTER_LISTENERMATCH = _descriptor.Descriptor(
-  name='ListenerMatch',
-  full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='port_number', full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.port_number', index=0,
+      name='port_number', full_name='istio.networking.v1alpha3.EnvoyFilter.DeprecatedListenerMatch.port_number', index=0,
       number=1, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='port_name_prefix', full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.port_name_prefix', index=1,
+      name='port_name_prefix', full_name='istio.networking.v1alpha3.EnvoyFilter.DeprecatedListenerMatch.port_name_prefix', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='listener_type', full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.listener_type', index=2,
+      name='listener_type', full_name='istio.networking.v1alpha3.EnvoyFilter.DeprecatedListenerMatch.listener_type', index=2,
       number=3, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=_descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\030\001')), file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='context', full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.context', index=3,
-      number=6, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='listener_protocol', full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.listener_protocol', index=4,
+      name='listener_protocol', full_name='istio.networking.v1alpha3.EnvoyFilter.DeprecatedListenerMatch.listener_protocol', index=3,
       number=4, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='address', full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.address', index=5,
+      name='address', full_name='istio.networking.v1alpha3.EnvoyFilter.DeprecatedListenerMatch.address', index=4,
       number=5, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -260,7 +308,8 @@ _ENVOYFILTER_LISTENERMATCH = _descriptor.Descriptor(
   ],
   nested_types=[],
   enum_types=[
-    _ENVOYFILTER_LISTENERMATCH_LISTENERPROTOCOL,
+    _ENVOYFILTER_DEPRECATEDLISTENERMATCH_LISTENERTYPE,
+    _ENVOYFILTER_DEPRECATEDLISTENERMATCH_LISTENERPROTOCOL,
   ],
   options=None,
   is_extendable=False,
@@ -268,8 +317,8 @@ _ENVOYFILTER_LISTENERMATCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=411,
-  serialized_end=786,
+  serialized_start=449,
+  serialized_end=875,
 )
 
 _ENVOYFILTER_INSERTPOSITION = _descriptor.Descriptor(
@@ -306,8 +355,8 @@ _ENVOYFILTER_INSERTPOSITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=789,
-  serialized_end=955,
+  serialized_start=878,
+  serialized_end=1044,
 )
 
 _ENVOYFILTER_FILTER = _descriptor.Descriptor(
@@ -365,8 +414,8 @@ _ENVOYFILTER_FILTER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=958,
-  serialized_end=1322,
+  serialized_start=1047,
+  serialized_end=1411,
 )
 
 _ENVOYFILTER_CLUSTERMATCH = _descriptor.Descriptor(
@@ -398,15 +447,8 @@ _ENVOYFILTER_CLUSTERMATCH = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='context', full_name='istio.networking.v1alpha3.EnvoyFilter.ClusterMatch.context', index=3,
-      number=4, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='name', full_name='istio.networking.v1alpha3.EnvoyFilter.ClusterMatch.name', index=4,
-      number=5, type=9, cpp_type=9, label=1,
+      name='name', full_name='istio.networking.v1alpha3.EnvoyFilter.ClusterMatch.name', index=3,
+      number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -423,8 +465,38 @@ _ENVOYFILTER_CLUSTERMATCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1325,
-  serialized_end=1478,
+  serialized_start=1413,
+  serialized_end=1496,
+)
+
+_ENVOYFILTER_ROUTECONFIGURATIONMATCH_VIRTUALHOSTMATCH = _descriptor.Descriptor(
+  name='VirtualHostMatch',
+  full_name='istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.VirtualHostMatch',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.VirtualHostMatch.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1708,
+  serialized_end=1740,
 )
 
 _ENVOYFILTER_ROUTECONFIGURATIONMATCH = _descriptor.Descriptor(
@@ -442,23 +514,23 @@ _ENVOYFILTER_ROUTECONFIGURATIONMATCH = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='port_name', full_name='istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.port_name', index=1,
+      name='gateway_server_port_name', full_name='istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.gateway_server_port_name', index=1,
       number=2, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='context', full_name='istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.context', index=2,
-      number=3, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
+      name='gateway', full_name='istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.gateway', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='gateway', full_name='istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.gateway', index=3,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      name='vhost', full_name='istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.vhost', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
@@ -472,6 +544,50 @@ _ENVOYFILTER_ROUTECONFIGURATIONMATCH = _descriptor.Descriptor(
   ],
   extensions=[
   ],
+  nested_types=[_ENVOYFILTER_ROUTECONFIGURATIONMATCH_VIRTUALHOSTMATCH, ],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1499,
+  serialized_end=1740,
+)
+
+_ENVOYFILTER_LISTENERMATCH_FILTERCHAINMATCH = _descriptor.Descriptor(
+  name='FilterChainMatch',
+  full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='sni', full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch.sni', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='transport_protocol', full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch.transport_protocol', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='filter', full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch.filter', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
   nested_types=[],
   enum_types=[
   ],
@@ -481,48 +597,57 @@ _ENVOYFILTER_ROUTECONFIGURATIONMATCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1481,
-  serialized_end=1647,
+  serialized_start=1916,
+  serialized_end=2057,
 )
 
-_ENVOYFILTER_VIRTUALHOSTMATCH = _descriptor.Descriptor(
-  name='VirtualHostMatch',
-  full_name='istio.networking.v1alpha3.EnvoyFilter.VirtualHostMatch',
+_ENVOYFILTER_LISTENERMATCH_FILTERMATCH = _descriptor.Descriptor(
+  name='FilterMatch',
+  full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='context', full_name='istio.networking.v1alpha3.EnvoyFilter.VirtualHostMatch.context', index=0,
-      number=1, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='route_configuration', full_name='istio.networking.v1alpha3.EnvoyFilter.VirtualHostMatch.route_configuration', index=1,
-      number=2, type=9, cpp_type=9, label=1,
+      name='name', full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='host', full_name='istio.networking.v1alpha3.EnvoyFilter.VirtualHostMatch.host', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      name='sub_filter', full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch.sub_filter', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2059,
+  serialized_end=2175,
+)
+
+_ENVOYFILTER_LISTENERMATCH_SUBFILTERMATCH = _descriptor.Descriptor(
+  name='SubFilterMatch',
+  full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.SubFilterMatch',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
     _descriptor.FieldDescriptor(
-      name='port_number', full_name='istio.networking.v1alpha3.EnvoyFilter.VirtualHostMatch.port_number', index=3,
-      number=4, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='name', full_name='istio.networking.v1alpha3.EnvoyFilter.VirtualHostMatch.name', index=4,
-      number=5, type=9, cpp_type=9, label=1,
+      name='name', full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.SubFilterMatch.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -539,40 +664,40 @@ _ENVOYFILTER_VIRTUALHOSTMATCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1650,
-  serialized_end=1816,
+  serialized_start=2177,
+  serialized_end=2207,
 )
 
-_ENVOYFILTER_FILTERCHAINMATCH = _descriptor.Descriptor(
-  name='FilterChainMatch',
-  full_name='istio.networking.v1alpha3.EnvoyFilter.FilterChainMatch',
+_ENVOYFILTER_LISTENERMATCH = _descriptor.Descriptor(
+  name='ListenerMatch',
+  full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='context', full_name='istio.networking.v1alpha3.EnvoyFilter.FilterChainMatch.context', index=0,
-      number=1, type=14, cpp_type=8, label=1,
+      name='port_number', full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.port_number', index=0,
+      number=1, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sni', full_name='istio.networking.v1alpha3.EnvoyFilter.FilterChainMatch.sni', index=1,
+      name='service_port_name', full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.service_port_name', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='alpn', full_name='istio.networking.v1alpha3.EnvoyFilter.FilterChainMatch.alpn', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      name='filter_chain', full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.filter_chain', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='listener_name', full_name='istio.networking.v1alpha3.EnvoyFilter.FilterChainMatch.listener_name', index=3,
+      name='name', full_name='istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.name', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -581,7 +706,7 @@ _ENVOYFILTER_FILTERCHAINMATCH = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[],
+  nested_types=[_ENVOYFILTER_LISTENERMATCH_FILTERCHAINMATCH, _ENVOYFILTER_LISTENERMATCH_FILTERMATCH, _ENVOYFILTER_LISTENERMATCH_SUBFILTERMATCH, ],
   enum_types=[
   ],
   options=None,
@@ -590,8 +715,8 @@ _ENVOYFILTER_FILTERCHAINMATCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1819,
-  serialized_end=1957,
+  serialized_start=1743,
+  serialized_end=2207,
 )
 
 _ENVOYFILTER_PATCH = _descriptor.Descriptor(
@@ -602,22 +727,15 @@ _ENVOYFILTER_PATCH = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='path', full_name='istio.networking.v1alpha3.EnvoyFilter.Patch.path', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='operation', full_name='istio.networking.v1alpha3.EnvoyFilter.Patch.operation', index=1,
-      number=2, type=14, cpp_type=8, label=1,
+      name='operation', full_name='istio.networking.v1alpha3.EnvoyFilter.Patch.operation', index=0,
+      number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value', full_name='istio.networking.v1alpha3.EnvoyFilter.Patch.value', index=2,
-      number=3, type=11, cpp_type=10, label=1,
+      name='value', full_name='istio.networking.v1alpha3.EnvoyFilter.Patch.value', index=1,
+      number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -635,8 +753,8 @@ _ENVOYFILTER_PATCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1960,
-  serialized_end=2157,
+  serialized_start=2210,
+  serialized_end=2462,
 )
 
 _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH = _descriptor.Descriptor(
@@ -654,28 +772,14 @@ _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='filter_chain', full_name='istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.filter_chain', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='route_configuration', full_name='istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.route_configuration', index=2,
+      name='route_configuration', full_name='istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.route_configuration', index=1,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='virtual_host', full_name='istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.virtual_host', index=3,
-      number=4, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='cluster', full_name='istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.cluster', index=4,
+      name='cluster', full_name='istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.cluster', index=2,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -696,28 +800,28 @@ _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH = _descriptor.Descriptor(
       name='object_types', full_name='istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch.object_types',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=2160,
-  serialized_end=2603,
+  serialized_start=2465,
+  serialized_end=2746,
 )
 
-_ENVOYFILTER_ENVOYCONFIGOBJECTPATCH = _descriptor.Descriptor(
-  name='EnvoyConfigObjectPatch',
-  full_name='istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch',
+_ENVOYFILTER_ENVOYFILTERMATCHCONDITION = _descriptor.Descriptor(
+  name='EnvoyFilterMatchCondition',
+  full_name='istio.networking.v1alpha3.EnvoyFilter.EnvoyFilterMatchCondition',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='match', full_name='istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch.match', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='context', full_name='istio.networking.v1alpha3.EnvoyFilter.EnvoyFilterMatchCondition.context', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='patches', full_name='istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch.patches', index=1,
-      number=2, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
+      name='match', full_name='istio.networking.v1alpha3.EnvoyFilter.EnvoyFilterMatchCondition.match', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
@@ -733,8 +837,126 @@ _ENVOYFILTER_ENVOYCONFIGOBJECTPATCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2606,
-  serialized_end=2771,
+  serialized_start=2749,
+  serialized_end=2924,
+)
+
+_ENVOYFILTER_ENVOYCONFIGOBJECTPATCH = _descriptor.Descriptor(
+  name='EnvoyConfigObjectPatch',
+  full_name='istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='apply_to', full_name='istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch.apply_to', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='match', full_name='istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch.match', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='patch', full_name='istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch.patch', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2927,
+  serialized_end=3156,
+)
+
+_ENVOYFILTER_WORKLOADLABELSENTRY = _descriptor.Descriptor(
+  name='WorkloadLabelsEntry',
+  full_name='istio.networking.v1alpha3.EnvoyFilter.WorkloadLabelsEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.networking.v1alpha3.EnvoyFilter.WorkloadLabelsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.networking.v1alpha3.EnvoyFilter.WorkloadLabelsEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=_descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001')),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3158,
+  serialized_end=3211,
+)
+
+_ENVOYFILTER_WORKLOADSELECTORENTRY = _descriptor.Descriptor(
+  name='WorkloadSelectorEntry',
+  full_name='istio.networking.v1alpha3.EnvoyFilter.WorkloadSelectorEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.networking.v1alpha3.EnvoyFilter.WorkloadSelectorEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.networking.v1alpha3.EnvoyFilter.WorkloadSelectorEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=_descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001')),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3213,
+  serialized_end=3268,
 )
 
 _ENVOYFILTER = _descriptor.Descriptor(
@@ -750,26 +972,34 @@ _ENVOYFILTER = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      options=_descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\030\001')), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='config_patches', full_name='istio.networking.v1alpha3.EnvoyFilter.config_patches', index=1,
+      name='filters', full_name='istio.networking.v1alpha3.EnvoyFilter.filters', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=_descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\030\001')), file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='workload_selector', full_name='istio.networking.v1alpha3.EnvoyFilter.workload_selector', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='filters', full_name='istio.networking.v1alpha3.EnvoyFilter.filters', index=2,
-      number=2, type=11, cpp_type=10, label=3,
+      name='config_patches', full_name='istio.networking.v1alpha3.EnvoyFilter.config_patches', index=3,
+      number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=_descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\030\001')), file=DESCRIPTOR),
+      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
-  nested_types=[_ENVOYFILTER_WORKLOADLABELSENTRY, _ENVOYFILTER_LISTENERMATCH, _ENVOYFILTER_INSERTPOSITION, _ENVOYFILTER_FILTER, _ENVOYFILTER_CLUSTERMATCH, _ENVOYFILTER_ROUTECONFIGURATIONMATCH, _ENVOYFILTER_VIRTUALHOSTMATCH, _ENVOYFILTER_FILTERCHAINMATCH, _ENVOYFILTER_PATCH, _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH, _ENVOYFILTER_ENVOYCONFIGOBJECTPATCH, ],
+  nested_types=[_ENVOYFILTER_DEPRECATEDLISTENERMATCH, _ENVOYFILTER_INSERTPOSITION, _ENVOYFILTER_FILTER, _ENVOYFILTER_CLUSTERMATCH, _ENVOYFILTER_ROUTECONFIGURATIONMATCH, _ENVOYFILTER_LISTENERMATCH, _ENVOYFILTER_PATCH, _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH, _ENVOYFILTER_ENVOYFILTERMATCHCONDITION, _ENVOYFILTER_ENVOYCONFIGOBJECTPATCH, _ENVOYFILTER_WORKLOADLABELSENTRY, _ENVOYFILTER_WORKLOADSELECTORENTRY, ],
   enum_types=[
+    _ENVOYFILTER_APPLYTO,
     _ENVOYFILTER_PATCHCONTEXT,
   ],
   options=None,
@@ -779,15 +1009,14 @@ _ENVOYFILTER = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=100,
-  serialized_end=2852,
+  serialized_end=3505,
 )
 
-_ENVOYFILTER_WORKLOADLABELSENTRY.containing_type = _ENVOYFILTER
-_ENVOYFILTER_LISTENERMATCH.fields_by_name['listener_type'].enum_type = _ENVOYFILTER_PATCHCONTEXT
-_ENVOYFILTER_LISTENERMATCH.fields_by_name['context'].enum_type = _ENVOYFILTER_PATCHCONTEXT
-_ENVOYFILTER_LISTENERMATCH.fields_by_name['listener_protocol'].enum_type = _ENVOYFILTER_LISTENERMATCH_LISTENERPROTOCOL
-_ENVOYFILTER_LISTENERMATCH.containing_type = _ENVOYFILTER
-_ENVOYFILTER_LISTENERMATCH_LISTENERPROTOCOL.containing_type = _ENVOYFILTER_LISTENERMATCH
+_ENVOYFILTER_DEPRECATEDLISTENERMATCH.fields_by_name['listener_type'].enum_type = _ENVOYFILTER_DEPRECATEDLISTENERMATCH_LISTENERTYPE
+_ENVOYFILTER_DEPRECATEDLISTENERMATCH.fields_by_name['listener_protocol'].enum_type = _ENVOYFILTER_DEPRECATEDLISTENERMATCH_LISTENERPROTOCOL
+_ENVOYFILTER_DEPRECATEDLISTENERMATCH.containing_type = _ENVOYFILTER
+_ENVOYFILTER_DEPRECATEDLISTENERMATCH_LISTENERTYPE.containing_type = _ENVOYFILTER_DEPRECATEDLISTENERMATCH
+_ENVOYFILTER_DEPRECATEDLISTENERMATCH_LISTENERPROTOCOL.containing_type = _ENVOYFILTER_DEPRECATEDLISTENERMATCH
 _ENVOYFILTER_INSERTPOSITION.fields_by_name['index'].enum_type = _ENVOYFILTER_INSERTPOSITION_INDEX
 _ENVOYFILTER_INSERTPOSITION.containing_type = _ENVOYFILTER
 _ENVOYFILTER_INSERTPOSITION_INDEX.containing_type = _ENVOYFILTER_INSERTPOSITION
@@ -797,62 +1026,58 @@ _ENVOYFILTER_FILTER.fields_by_name['filter_type'].enum_type = _ENVOYFILTER_FILTE
 _ENVOYFILTER_FILTER.fields_by_name['filter_config'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
 _ENVOYFILTER_FILTER.containing_type = _ENVOYFILTER
 _ENVOYFILTER_FILTER_FILTERTYPE.containing_type = _ENVOYFILTER_FILTER
-_ENVOYFILTER_CLUSTERMATCH.fields_by_name['context'].enum_type = _ENVOYFILTER_PATCHCONTEXT
 _ENVOYFILTER_CLUSTERMATCH.containing_type = _ENVOYFILTER
-_ENVOYFILTER_ROUTECONFIGURATIONMATCH.fields_by_name['context'].enum_type = _ENVOYFILTER_PATCHCONTEXT
+_ENVOYFILTER_ROUTECONFIGURATIONMATCH_VIRTUALHOSTMATCH.containing_type = _ENVOYFILTER_ROUTECONFIGURATIONMATCH
+_ENVOYFILTER_ROUTECONFIGURATIONMATCH.fields_by_name['vhost'].message_type = _ENVOYFILTER_ROUTECONFIGURATIONMATCH_VIRTUALHOSTMATCH
 _ENVOYFILTER_ROUTECONFIGURATIONMATCH.containing_type = _ENVOYFILTER
-_ENVOYFILTER_VIRTUALHOSTMATCH.fields_by_name['context'].enum_type = _ENVOYFILTER_PATCHCONTEXT
-_ENVOYFILTER_VIRTUALHOSTMATCH.containing_type = _ENVOYFILTER
-_ENVOYFILTER_FILTERCHAINMATCH.fields_by_name['context'].enum_type = _ENVOYFILTER_PATCHCONTEXT
-_ENVOYFILTER_FILTERCHAINMATCH.containing_type = _ENVOYFILTER
+_ENVOYFILTER_LISTENERMATCH_FILTERCHAINMATCH.fields_by_name['filter'].message_type = _ENVOYFILTER_LISTENERMATCH_FILTERMATCH
+_ENVOYFILTER_LISTENERMATCH_FILTERCHAINMATCH.containing_type = _ENVOYFILTER_LISTENERMATCH
+_ENVOYFILTER_LISTENERMATCH_FILTERMATCH.fields_by_name['sub_filter'].message_type = _ENVOYFILTER_LISTENERMATCH_SUBFILTERMATCH
+_ENVOYFILTER_LISTENERMATCH_FILTERMATCH.containing_type = _ENVOYFILTER_LISTENERMATCH
+_ENVOYFILTER_LISTENERMATCH_SUBFILTERMATCH.containing_type = _ENVOYFILTER_LISTENERMATCH
+_ENVOYFILTER_LISTENERMATCH.fields_by_name['filter_chain'].message_type = _ENVOYFILTER_LISTENERMATCH_FILTERCHAINMATCH
+_ENVOYFILTER_LISTENERMATCH.containing_type = _ENVOYFILTER
 _ENVOYFILTER_PATCH.fields_by_name['operation'].enum_type = _ENVOYFILTER_PATCH_OPERATION
 _ENVOYFILTER_PATCH.fields_by_name['value'].message_type = google_dot_protobuf_dot_struct__pb2._VALUE
 _ENVOYFILTER_PATCH.containing_type = _ENVOYFILTER
 _ENVOYFILTER_PATCH_OPERATION.containing_type = _ENVOYFILTER_PATCH
 _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.fields_by_name['listener'].message_type = _ENVOYFILTER_LISTENERMATCH
-_ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.fields_by_name['filter_chain'].message_type = _ENVOYFILTER_FILTERCHAINMATCH
 _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.fields_by_name['route_configuration'].message_type = _ENVOYFILTER_ROUTECONFIGURATIONMATCH
-_ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.fields_by_name['virtual_host'].message_type = _ENVOYFILTER_VIRTUALHOSTMATCH
 _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.fields_by_name['cluster'].message_type = _ENVOYFILTER_CLUSTERMATCH
 _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.containing_type = _ENVOYFILTER
 _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.oneofs_by_name['object_types'].fields.append(
   _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.fields_by_name['listener'])
 _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.fields_by_name['listener'].containing_oneof = _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.oneofs_by_name['object_types']
 _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.oneofs_by_name['object_types'].fields.append(
-  _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.fields_by_name['filter_chain'])
-_ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.fields_by_name['filter_chain'].containing_oneof = _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.oneofs_by_name['object_types']
-_ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.oneofs_by_name['object_types'].fields.append(
   _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.fields_by_name['route_configuration'])
 _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.fields_by_name['route_configuration'].containing_oneof = _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.oneofs_by_name['object_types']
 _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.oneofs_by_name['object_types'].fields.append(
-  _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.fields_by_name['virtual_host'])
-_ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.fields_by_name['virtual_host'].containing_oneof = _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.oneofs_by_name['object_types']
-_ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.oneofs_by_name['object_types'].fields.append(
   _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.fields_by_name['cluster'])
 _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.fields_by_name['cluster'].containing_oneof = _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH.oneofs_by_name['object_types']
+_ENVOYFILTER_ENVOYFILTERMATCHCONDITION.fields_by_name['context'].enum_type = _ENVOYFILTER_PATCHCONTEXT
+_ENVOYFILTER_ENVOYFILTERMATCHCONDITION.fields_by_name['match'].message_type = _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH
+_ENVOYFILTER_ENVOYFILTERMATCHCONDITION.containing_type = _ENVOYFILTER
+_ENVOYFILTER_ENVOYCONFIGOBJECTPATCH.fields_by_name['apply_to'].enum_type = _ENVOYFILTER_APPLYTO
 _ENVOYFILTER_ENVOYCONFIGOBJECTPATCH.fields_by_name['match'].message_type = _ENVOYFILTER_ENVOYCONFIGOBJECTMATCH
-_ENVOYFILTER_ENVOYCONFIGOBJECTPATCH.fields_by_name['patches'].message_type = _ENVOYFILTER_PATCH
+_ENVOYFILTER_ENVOYCONFIGOBJECTPATCH.fields_by_name['patch'].message_type = _ENVOYFILTER_PATCH
 _ENVOYFILTER_ENVOYCONFIGOBJECTPATCH.containing_type = _ENVOYFILTER
+_ENVOYFILTER_WORKLOADLABELSENTRY.containing_type = _ENVOYFILTER
+_ENVOYFILTER_WORKLOADSELECTORENTRY.containing_type = _ENVOYFILTER
 _ENVOYFILTER.fields_by_name['workload_labels'].message_type = _ENVOYFILTER_WORKLOADLABELSENTRY
-_ENVOYFILTER.fields_by_name['config_patches'].message_type = _ENVOYFILTER_ENVOYCONFIGOBJECTPATCH
 _ENVOYFILTER.fields_by_name['filters'].message_type = _ENVOYFILTER_FILTER
+_ENVOYFILTER.fields_by_name['workload_selector'].message_type = _ENVOYFILTER_WORKLOADSELECTORENTRY
+_ENVOYFILTER.fields_by_name['config_patches'].message_type = _ENVOYFILTER_ENVOYCONFIGOBJECTPATCH
+_ENVOYFILTER_APPLYTO.containing_type = _ENVOYFILTER
 _ENVOYFILTER_PATCHCONTEXT.containing_type = _ENVOYFILTER
 DESCRIPTOR.message_types_by_name['EnvoyFilter'] = _ENVOYFILTER
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 EnvoyFilter = _reflection.GeneratedProtocolMessageType('EnvoyFilter', (_message.Message,), dict(
 
-  WorkloadLabelsEntry = _reflection.GeneratedProtocolMessageType('WorkloadLabelsEntry', (_message.Message,), dict(
-    DESCRIPTOR = _ENVOYFILTER_WORKLOADLABELSENTRY,
+  DeprecatedListenerMatch = _reflection.GeneratedProtocolMessageType('DeprecatedListenerMatch', (_message.Message,), dict(
+    DESCRIPTOR = _ENVOYFILTER_DEPRECATEDLISTENERMATCH,
     __module__ = 'networking.v1alpha3.envoy_filter_pb2'
-    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilter.WorkloadLabelsEntry)
-    ))
-  ,
-
-  ListenerMatch = _reflection.GeneratedProtocolMessageType('ListenerMatch', (_message.Message,), dict(
-    DESCRIPTOR = _ENVOYFILTER_LISTENERMATCH,
-    __module__ = 'networking.v1alpha3.envoy_filter_pb2'
-    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilter.ListenerMatch)
+    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilter.DeprecatedListenerMatch)
     ))
   ,
 
@@ -878,23 +1103,44 @@ EnvoyFilter = _reflection.GeneratedProtocolMessageType('EnvoyFilter', (_message.
   ,
 
   RouteConfigurationMatch = _reflection.GeneratedProtocolMessageType('RouteConfigurationMatch', (_message.Message,), dict(
+
+    VirtualHostMatch = _reflection.GeneratedProtocolMessageType('VirtualHostMatch', (_message.Message,), dict(
+      DESCRIPTOR = _ENVOYFILTER_ROUTECONFIGURATIONMATCH_VIRTUALHOSTMATCH,
+      __module__ = 'networking.v1alpha3.envoy_filter_pb2'
+      # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch.VirtualHostMatch)
+      ))
+    ,
     DESCRIPTOR = _ENVOYFILTER_ROUTECONFIGURATIONMATCH,
     __module__ = 'networking.v1alpha3.envoy_filter_pb2'
     # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch)
     ))
   ,
 
-  VirtualHostMatch = _reflection.GeneratedProtocolMessageType('VirtualHostMatch', (_message.Message,), dict(
-    DESCRIPTOR = _ENVOYFILTER_VIRTUALHOSTMATCH,
-    __module__ = 'networking.v1alpha3.envoy_filter_pb2'
-    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilter.VirtualHostMatch)
-    ))
-  ,
+  ListenerMatch = _reflection.GeneratedProtocolMessageType('ListenerMatch', (_message.Message,), dict(
 
-  FilterChainMatch = _reflection.GeneratedProtocolMessageType('FilterChainMatch', (_message.Message,), dict(
-    DESCRIPTOR = _ENVOYFILTER_FILTERCHAINMATCH,
+    FilterChainMatch = _reflection.GeneratedProtocolMessageType('FilterChainMatch', (_message.Message,), dict(
+      DESCRIPTOR = _ENVOYFILTER_LISTENERMATCH_FILTERCHAINMATCH,
+      __module__ = 'networking.v1alpha3.envoy_filter_pb2'
+      # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch)
+      ))
+    ,
+
+    FilterMatch = _reflection.GeneratedProtocolMessageType('FilterMatch', (_message.Message,), dict(
+      DESCRIPTOR = _ENVOYFILTER_LISTENERMATCH_FILTERMATCH,
+      __module__ = 'networking.v1alpha3.envoy_filter_pb2'
+      # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterMatch)
+      ))
+    ,
+
+    SubFilterMatch = _reflection.GeneratedProtocolMessageType('SubFilterMatch', (_message.Message,), dict(
+      DESCRIPTOR = _ENVOYFILTER_LISTENERMATCH_SUBFILTERMATCH,
+      __module__ = 'networking.v1alpha3.envoy_filter_pb2'
+      # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.SubFilterMatch)
+      ))
+    ,
+    DESCRIPTOR = _ENVOYFILTER_LISTENERMATCH,
     __module__ = 'networking.v1alpha3.envoy_filter_pb2'
-    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilter.FilterChainMatch)
+    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilter.ListenerMatch)
     ))
   ,
 
@@ -912,10 +1158,31 @@ EnvoyFilter = _reflection.GeneratedProtocolMessageType('EnvoyFilter', (_message.
     ))
   ,
 
+  EnvoyFilterMatchCondition = _reflection.GeneratedProtocolMessageType('EnvoyFilterMatchCondition', (_message.Message,), dict(
+    DESCRIPTOR = _ENVOYFILTER_ENVOYFILTERMATCHCONDITION,
+    __module__ = 'networking.v1alpha3.envoy_filter_pb2'
+    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilter.EnvoyFilterMatchCondition)
+    ))
+  ,
+
   EnvoyConfigObjectPatch = _reflection.GeneratedProtocolMessageType('EnvoyConfigObjectPatch', (_message.Message,), dict(
     DESCRIPTOR = _ENVOYFILTER_ENVOYCONFIGOBJECTPATCH,
     __module__ = 'networking.v1alpha3.envoy_filter_pb2'
     # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch)
+    ))
+  ,
+
+  WorkloadLabelsEntry = _reflection.GeneratedProtocolMessageType('WorkloadLabelsEntry', (_message.Message,), dict(
+    DESCRIPTOR = _ENVOYFILTER_WORKLOADLABELSENTRY,
+    __module__ = 'networking.v1alpha3.envoy_filter_pb2'
+    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilter.WorkloadLabelsEntry)
+    ))
+  ,
+
+  WorkloadSelectorEntry = _reflection.GeneratedProtocolMessageType('WorkloadSelectorEntry', (_message.Message,), dict(
+    DESCRIPTOR = _ENVOYFILTER_WORKLOADSELECTORENTRY,
+    __module__ = 'networking.v1alpha3.envoy_filter_pb2'
+    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilter.WorkloadSelectorEntry)
     ))
   ,
   DESCRIPTOR = _ENVOYFILTER,
@@ -923,25 +1190,32 @@ EnvoyFilter = _reflection.GeneratedProtocolMessageType('EnvoyFilter', (_message.
   # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.EnvoyFilter)
   ))
 _sym_db.RegisterMessage(EnvoyFilter)
-_sym_db.RegisterMessage(EnvoyFilter.WorkloadLabelsEntry)
-_sym_db.RegisterMessage(EnvoyFilter.ListenerMatch)
+_sym_db.RegisterMessage(EnvoyFilter.DeprecatedListenerMatch)
 _sym_db.RegisterMessage(EnvoyFilter.InsertPosition)
 _sym_db.RegisterMessage(EnvoyFilter.Filter)
 _sym_db.RegisterMessage(EnvoyFilter.ClusterMatch)
 _sym_db.RegisterMessage(EnvoyFilter.RouteConfigurationMatch)
-_sym_db.RegisterMessage(EnvoyFilter.VirtualHostMatch)
-_sym_db.RegisterMessage(EnvoyFilter.FilterChainMatch)
+_sym_db.RegisterMessage(EnvoyFilter.RouteConfigurationMatch.VirtualHostMatch)
+_sym_db.RegisterMessage(EnvoyFilter.ListenerMatch)
+_sym_db.RegisterMessage(EnvoyFilter.ListenerMatch.FilterChainMatch)
+_sym_db.RegisterMessage(EnvoyFilter.ListenerMatch.FilterMatch)
+_sym_db.RegisterMessage(EnvoyFilter.ListenerMatch.SubFilterMatch)
 _sym_db.RegisterMessage(EnvoyFilter.Patch)
 _sym_db.RegisterMessage(EnvoyFilter.EnvoyConfigObjectMatch)
+_sym_db.RegisterMessage(EnvoyFilter.EnvoyFilterMatchCondition)
 _sym_db.RegisterMessage(EnvoyFilter.EnvoyConfigObjectPatch)
+_sym_db.RegisterMessage(EnvoyFilter.WorkloadLabelsEntry)
+_sym_db.RegisterMessage(EnvoyFilter.WorkloadSelectorEntry)
 
 
 DESCRIPTOR.has_options = True
 DESCRIPTOR._options = _descriptor._ParseOptions(descriptor_pb2.FileOptions(), _b('Z istio.io/api/networking/v1alpha3'))
 _ENVOYFILTER_WORKLOADLABELSENTRY.has_options = True
 _ENVOYFILTER_WORKLOADLABELSENTRY._options = _descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001'))
-_ENVOYFILTER_LISTENERMATCH.fields_by_name['listener_type'].has_options = True
-_ENVOYFILTER_LISTENERMATCH.fields_by_name['listener_type']._options = _descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\030\001'))
+_ENVOYFILTER_WORKLOADSELECTORENTRY.has_options = True
+_ENVOYFILTER_WORKLOADSELECTORENTRY._options = _descriptor._ParseOptions(descriptor_pb2.MessageOptions(), _b('8\001'))
+_ENVOYFILTER.fields_by_name['workload_labels'].has_options = True
+_ENVOYFILTER.fields_by_name['workload_labels']._options = _descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\030\001'))
 _ENVOYFILTER.fields_by_name['filters'].has_options = True
 _ENVOYFILTER.fields_by_name['filters']._options = _descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\030\001'))
 # @@protoc_insertion_point(module_scope)

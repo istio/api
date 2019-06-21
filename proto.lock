@@ -3609,7 +3609,7 @@
       "def": {
         "enums": [
           {
-            "name": "EnvoyFilter.PatchContext",
+            "name": "DeprecatedListenerMatch.ListenerType",
             "enum_fields": [
               {
                 "name": "ANY"
@@ -3629,7 +3629,7 @@
             ]
           },
           {
-            "name": "ListenerMatch.ListenerProtocol",
+            "name": "DeprecatedListenerMatch.ListenerProtocol",
             "enum_fields": [
               {
                 "name": "ALL"
@@ -3681,13 +3681,69 @@
             ]
           },
           {
+            "name": "EnvoyFilter.ApplyTo",
+            "enum_fields": [
+              {
+                "name": "INVALID"
+              },
+              {
+                "name": "LISTENER",
+                "integer": 1
+              },
+              {
+                "name": "FILTER_CHAIN_MATCH",
+                "integer": 2
+              },
+              {
+                "name": "NETWORK_FILTER",
+                "integer": 3
+              },
+              {
+                "name": "HTTP_FILTER",
+                "integer": 4
+              },
+              {
+                "name": "ROUTE_CONFIGURATION",
+                "integer": 5
+              },
+              {
+                "name": "VIRTUAL_HOST",
+                "integer": 6
+              },
+              {
+                "name": "CLUSTER",
+                "integer": 7
+              }
+            ]
+          },
+          {
+            "name": "EnvoyFilter.PatchContext",
+            "enum_fields": [
+              {
+                "name": "ANY"
+              },
+              {
+                "name": "SIDECAR_INBOUND",
+                "integer": 1
+              },
+              {
+                "name": "SIDECAR_OUTBOUND",
+                "integer": 2
+              },
+              {
+                "name": "GATEWAY",
+                "integer": 3
+              }
+            ]
+          },
+          {
             "name": "Patch.Operation",
             "enum_fields": [
               {
-                "name": "MERGE"
+                "name": "INVALID"
               },
               {
-                "name": "MERGE_UNSET",
+                "name": "MERGE",
                 "integer": 1
               },
               {
@@ -3697,6 +3753,22 @@
               {
                 "name": "REMOVE",
                 "integer": 3
+              },
+              {
+                "name": "INSERT_FIRST",
+                "integer": 4
+              },
+              {
+                "name": "INSERT_LAST",
+                "integer": 5
+              },
+              {
+                "name": "INSERT_BEFORE",
+                "integer": 6
+              },
+              {
+                "name": "INSERT_AFTER",
+                "integer": 7
               }
             ]
           }
@@ -3705,12 +3777,6 @@
           {
             "name": "EnvoyFilter",
             "fields": [
-              {
-                "id": 3,
-                "name": "config_patches",
-                "type": "EnvoyConfigObjectPatch",
-                "is_repeated": true
-              },
               {
                 "id": 2,
                 "name": "filters",
@@ -3722,6 +3788,12 @@
                     "value": "true"
                   }
                 ]
+              },
+              {
+                "id": 4,
+                "name": "config_patches",
+                "type": "EnvoyConfigObjectPatch",
+                "is_repeated": true
               }
             ],
             "maps": [
@@ -3730,13 +3802,27 @@
                 "field": {
                   "id": 1,
                   "name": "workload_labels",
+                  "type": "string",
+                  "options": [
+                    {
+                      "name": "deprecated",
+                      "value": "true"
+                    }
+                  ]
+                }
+              },
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 3,
+                  "name": "workload_selector",
                   "type": "string"
                 }
               }
             ],
             "messages": [
               {
-                "name": "ListenerMatch",
+                "name": "DeprecatedListenerMatch",
                 "fields": [
                   {
                     "id": 1,
@@ -3751,18 +3837,7 @@
                   {
                     "id": 3,
                     "name": "listener_type",
-                    "type": "PatchContext",
-                    "options": [
-                      {
-                        "name": "deprecated",
-                        "value": "true"
-                      }
-                    ]
-                  },
-                  {
-                    "id": 6,
-                    "name": "context",
-                    "type": "PatchContext"
+                    "type": "ListenerType"
                   },
                   {
                     "id": 4,
@@ -3842,11 +3917,6 @@
                   },
                   {
                     "id": 4,
-                    "name": "context",
-                    "type": "PatchContext"
-                  },
-                  {
-                    "id": 5,
                     "name": "name",
                     "type": "string"
                   }
@@ -3862,78 +3932,107 @@
                   },
                   {
                     "id": 2,
-                    "name": "port_name",
+                    "name": "gateway_server_port_name",
                     "type": "uint32"
                   },
                   {
                     "id": 3,
-                    "name": "context",
-                    "type": "PatchContext"
-                  },
-                  {
-                    "id": 4,
                     "name": "gateway",
                     "type": "string"
                   },
                   {
+                    "id": 4,
+                    "name": "vhost",
+                    "type": "VirtualHostMatch"
+                  },
+                  {
                     "id": 5,
                     "name": "name",
                     "type": "string"
                   }
+                ],
+                "messages": [
+                  {
+                    "name": "VirtualHostMatch",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "name",
+                        "type": "string"
+                      }
+                    ]
+                  }
                 ]
               },
               {
-                "name": "VirtualHostMatch",
+                "name": "ListenerMatch",
                 "fields": [
                   {
                     "id": 1,
-                    "name": "context",
-                    "type": "PatchContext"
-                  },
-                  {
-                    "id": 2,
-                    "name": "route_configuration",
-                    "type": "string"
-                  },
-                  {
-                    "id": 3,
-                    "name": "host",
-                    "type": "string"
-                  },
-                  {
-                    "id": 4,
                     "name": "port_number",
                     "type": "uint32"
                   },
                   {
-                    "id": 5,
-                    "name": "name",
-                    "type": "string"
-                  }
-                ]
-              },
-              {
-                "name": "FilterChainMatch",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "context",
-                    "type": "PatchContext"
-                  },
-                  {
                     "id": 2,
-                    "name": "sni",
+                    "name": "service_port_name",
                     "type": "string"
                   },
                   {
                     "id": 3,
-                    "name": "alpn",
-                    "type": "string"
+                    "name": "filter_chain",
+                    "type": "FilterChainMatch"
                   },
                   {
                     "id": 4,
-                    "name": "listener_name",
+                    "name": "name",
                     "type": "string"
+                  }
+                ],
+                "messages": [
+                  {
+                    "name": "FilterChainMatch",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "sni",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "transport_protocol",
+                        "type": "string"
+                      },
+                      {
+                        "id": 3,
+                        "name": "filter",
+                        "type": "FilterMatch"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "FilterMatch",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "name",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "sub_filter",
+                        "type": "SubFilterMatch"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "SubFilterMatch",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "name",
+                        "type": "string"
+                      }
+                    ]
                   }
                 ]
               },
@@ -3942,16 +4041,11 @@
                 "fields": [
                   {
                     "id": 1,
-                    "name": "path",
-                    "type": "string"
-                  },
-                  {
-                    "id": 2,
                     "name": "operation",
                     "type": "Operation"
                   },
                   {
-                    "id": 3,
+                    "id": 2,
                     "name": "value",
                     "type": "google.protobuf.Value"
                   }
@@ -3966,19 +4060,9 @@
                     "type": "ListenerMatch"
                   },
                   {
-                    "id": 2,
-                    "name": "filter_chain",
-                    "type": "FilterChainMatch"
-                  },
-                  {
                     "id": 3,
                     "name": "route_configuration",
                     "type": "RouteConfigurationMatch"
-                  },
-                  {
-                    "id": 4,
-                    "name": "virtual_host",
-                    "type": "VirtualHostMatch"
                   },
                   {
                     "id": 5,
@@ -3988,18 +4072,37 @@
                 ]
               },
               {
+                "name": "EnvoyFilterMatchCondition",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "context",
+                    "type": "PatchContext"
+                  },
+                  {
+                    "id": 2,
+                    "name": "match",
+                    "type": "EnvoyConfigObjectMatch"
+                  }
+                ]
+              },
+              {
                 "name": "EnvoyConfigObjectPatch",
                 "fields": [
                   {
                     "id": 1,
+                    "name": "apply_to",
+                    "type": "ApplyTo"
+                  },
+                  {
+                    "id": 2,
                     "name": "match",
                     "type": "EnvoyConfigObjectMatch"
                   },
                   {
-                    "id": 2,
-                    "name": "patches",
-                    "type": "Patch",
-                    "is_repeated": true
+                    "id": 3,
+                    "name": "patch",
+                    "type": "Patch"
                   }
                 ]
               }
