@@ -4101,6 +4101,9 @@
         "imports": [
           {
             "path": "google/protobuf/struct.proto"
+          },
+          {
+            "path": "networking/v1alpha3/sidecar.proto"
           }
         ],
         "package": {
