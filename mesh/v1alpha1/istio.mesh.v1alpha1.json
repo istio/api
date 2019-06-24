@@ -158,18 +158,21 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig"
           },
           "default_destination_rule_export_to": {
+            "description": "The default value for the DestinationRule.export_to field. Has the same syntax as 'default_service_export_to'.",
             "items": {
               "type": "string"
             },
             "type": "array"
           },
           "default_service_export_to": {
+            "description": "The default value for the ServiceEntry.export_to field and services imported through container registry integrations, e.g. this applies to Kubernetes Service resources. The value is a list of namespace names and reserved namespace aliases. The allowed namespace aliases are:",
             "items": {
               "type": "string"
             },
             "type": "array"
           },
           "default_virtual_service_export_to": {
+            "description": "The default value for the VirtualService.export_to field. Has the same syntax as 'default_service_export_to'.",
             "items": {
               "type": "string"
             },
@@ -305,6 +308,7 @@
             "type": "object"
           },
           "root_namespace": {
+            "description": "The namespace to treat as the administrative root namespace for Istio configuration. When processing a leaf namespace Istio will search for declarations in that namespace first and if none are found it will search in the root namespace. Any matching declaration found in the root namespace is processed as if it were declared in the leaf namespace.",
             "type": "string"
           },
           "sds_uds_path": {
