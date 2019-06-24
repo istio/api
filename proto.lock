@@ -3862,7 +3862,7 @@
                   {
                     "id": 1,
                     "name": "listener_match",
-                    "type": "ListenerMatch"
+                    "type": "DeprecatedListenerMatch"
                   },
                   {
                     "id": 2,
