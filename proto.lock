@@ -3921,8 +3921,8 @@
                   },
                   {
                     "id": 2,
-                    "name": "gateway_server_port_name",
-                    "type": "uint32"
+                    "name": "port_name",
+                    "type": "string"
                   },
                   {
                     "id": 3,

@@ -408,9 +408,9 @@ message EnvoyFilter {
     // route configurations for all ports.
     uint32 port_number = 1;
 
-    // The gateway server port name for which this route configuration
-    // was generated. Port name is not applicable for sidecar contexts.
-    uint32 gateway_server_port_name = 2;
+    // Applicable only for GATEWAY context. The gateway server port
+    // name for which this route configuration was generated.
+    string port_name = 2;
 
     // The Istio gateway config's namespace/name for which this route
     // configuration was generated. Applies only if the context is
