@@ -1,0 +1,316 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Configuration for Role Based Access Control.",
+    "version": "v1alpha1"
+  },
+  "components": {
+    "schemas": {
+      "istio.rbac.v1alpha1.AccessRule": {
+        "description": "AccessRule defines a permission to access a list of services.",
+        "properties": {
+          "constraints": {
+            "description": "Optional. Extra constraints in the ServiceRole specification.",
+            "items": {
+              "description": "Definition of a custom constraint. The supported keys are listed in the \"constraint and properties\" page.",
+              "properties": {
+                "key": {
+                  "description": "Key of the constraint.",
+                  "type": "string"
+                },
+                "values": {
+                  "description": "List of valid values for the constraint. Exact match, prefix match, and suffix match are supported. For example, the value \"v1alpha2\" matches \"v1alpha2\" (exact match), or \"v1*\" (prefix match), or \"*alpha2\" (suffix match).",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "hosts": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "methods": {
+            "description": "Optional. A list of HTTP methods (e.g., \"GET\", \"POST\"). If not specified or specified as \"*\", it matches to any methods. This field should not be set for TCP services. The policy will be ignored. For gRPC services, only `POST` is allowed; other methods will result in denying services.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "not_hosts": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "not_methods": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "not_paths": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "not_ports": {
+            "items": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "paths": {
+            "description": "Optional. A list of HTTP paths or gRPC methods. gRPC methods must be presented as fully-qualified name in the form of \"/packageName.serviceName/methodName\" and are case sensitive. Exact match, prefix match, and suffix match are supported. For example, the path \"/books/review\" matches \"/books/review\" (exact match), or \"/books/*\" (prefix match), or \"*/review\" (suffix match). If not specified, it matches to any path. This field should not be set for TCP services. The policy will be ignored.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "ports": {
+            "items": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "services": {
+            "description": "Required. A list of service names. Exact match, prefix match, and suffix match are supported for service names. For example, the service name \"bookstore.mtv.cluster.local\" matches \"bookstore.mtv.cluster.local\" (exact match), or \"bookstore*\" (prefix match), or \"*.mtv.cluster.local\" (suffix match). If set to [\"*\"], it refers to all services in the namespace.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "istio.rbac.v1alpha1.AuthorizationPolicy": {
+        "properties": {
+          "allow": {
+            "$ref": "#/components/schemas/istio.rbac.v1alpha1.ServiceRoleBinding"
+          },
+          "workload_selector": {
+            "$ref": "#/components/schemas/istio.rbac.v1alpha1.WorkloadSelector"
+          }
+        },
+        "type": "object"
+      },
+      "istio.rbac.v1alpha1.EnforcementMode": {
+        "enum": [
+          [
+            "ENFORCED",
+            "PERMISSIVE"
+          ]
+        ],
+        "type": "string"
+      },
+      "istio.rbac.v1alpha1.RbacConfig": {
+        "properties": {
+          "enforcement_mode": {
+            "enum": [
+              [
+                "ENFORCED",
+                "PERMISSIVE"
+              ]
+            ],
+            "type": "string"
+          },
+          "exclusion": {
+            "description": "A list of services or namespaces that should not be enforced by Istio RBAC policies. Note: This field have effect only when mode is ON_WITH_EXCLUSION and will be ignored for any other modes.",
+            "properties": {
+              "namespaces": {
+                "description": "A list of namespaces.",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "services": {
+                "description": "A list of services.",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "workload_selectors": {
+                "$ref": "#/components/schemas/istio.rbac.v1alpha1.WorkloadSelector"
+              }
+            },
+            "type": "object"
+          },
+          "inclusion": {
+            "description": "A list of services or namespaces that should be enforced by Istio RBAC policies. Note: This field have effect only when mode is ON_WITH_INCLUSION and will be ignored for any other modes.",
+            "properties": {
+              "namespaces": {
+                "description": "A list of namespaces.",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "services": {
+                "description": "A list of services.",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "workload_selectors": {
+                "$ref": "#/components/schemas/istio.rbac.v1alpha1.WorkloadSelector"
+              }
+            },
+            "type": "object"
+          },
+          "mode": {
+            "description": "Istio RBAC mode.",
+            "enum": [
+              [
+                "OFF",
+                "ON",
+                "ON_WITH_INCLUSION",
+                "ON_WITH_EXCLUSION"
+              ]
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "istio.rbac.v1alpha1.RoleRef": {
+        "description": "RoleRef refers to a role object.",
+        "properties": {
+          "kind": {
+            "description": "Required. The type of the role being referenced. Currently, \"ServiceRole\" is the only supported value for \"kind\".",
+            "type": "string"
+          },
+          "name": {
+            "description": "Required. The name of the ServiceRole object being referenced. The ServiceRole object must be in the same namespace as the ServiceRoleBinding object.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "istio.rbac.v1alpha1.ServiceRole": {
+        "description": "ServiceRole specification contains a list of access rules (permissions).",
+        "properties": {
+          "rules": {
+            "$ref": "#/components/schemas/istio.rbac.v1alpha1.AccessRule"
+          }
+        },
+        "type": "object"
+      },
+      "istio.rbac.v1alpha1.ServiceRoleBinding": {
+        "description": "ServiceRoleBinding assigns a ServiceRole to a list of subjects.",
+        "properties": {
+          "actions": {
+            "$ref": "#/components/schemas/istio.rbac.v1alpha1.AccessRule"
+          },
+          "mode": {
+            "enum": [
+              [
+                "ENFORCED",
+                "PERMISSIVE"
+              ]
+            ],
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "roleRef": {
+            "$ref": "#/components/schemas/istio.rbac.v1alpha1.RoleRef"
+          },
+          "subjects": {
+            "$ref": "#/components/schemas/istio.rbac.v1alpha1.Subject"
+          }
+        },
+        "type": "object"
+      },
+      "istio.rbac.v1alpha1.Subject": {
+        "description": "Subject defines an identity. The identity is either a user or identified by a set of `properties`. The supported keys in `properties` are listed in \"constraint and properties\" page.",
+        "properties": {
+          "groups": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "ips": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "names": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "namespaces": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "not_groups": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "not_ips": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "not_names": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "not_namespaces": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "properties": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Optional. The set of properties that identify the subject.",
+            "type": "object"
+          },
+          "user": {
+            "description": "Optional. The user name/ID that the subject represents.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "istio.rbac.v1alpha1.WorkloadSelector": {
+        "properties": {
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "One or more labels that indicate a specific set of pods/VMs on which this sidecar configuration should be applied. The scope of label search is restricted to the configuration namespace in which the the resource is present.",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      }
+    }
+  }
+}

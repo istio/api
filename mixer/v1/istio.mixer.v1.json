@@ -1,0 +1,479 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "This package defines the Mixer API that the sidecar proxy uses to perform precondition checks, manage quotas, and report telemetry.",
+    "version": "v1"
+  },
+  "components": {
+    "schemas": {
+      "istio.mixer.v1.Attributes": {
+        "description": "Attributes represents a set of typed name/value pairs. Many of Mixer's API either consume and/or return attributes.",
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "properties": {
+                "value": {
+                  "oneOf": [
+                    {
+                      "description": "Used for values of type STRING, DNS_NAME, EMAIL_ADDRESS, and URI",
+                      "type": "string"
+                    },
+                    {
+                      "description": "Used for values of type INT64",
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    {
+                      "description": "Used for values of type DOUBLE",
+                      "type": "number"
+                    },
+                    {
+                      "description": "Used for values of type BOOL",
+                      "type": "boolean"
+                    },
+                    {
+                      "description": "Used for values of type BYTES",
+                      "format": "byte",
+                      "type": "string"
+                    },
+                    {
+                      "description": "Used for values of type TIMESTAMP",
+                      "properties": {
+                        "nanos": {
+                          "description": "Non-negative fractions of a second at nanosecond resolution. Negative second values with fractions must still have non-negative nanos values that count forward in time. Must be from 0 to 999,999,999 inclusive.",
+                          "format": "int32",
+                          "type": "integer"
+                        },
+                        "seconds": {
+                          "description": "Represents seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive.",
+                          "format": "int64",
+                          "type": "integer"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    {
+                      "description": "Used for values of type DURATION",
+                      "properties": {
+                        "nanos": {
+                          "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                          "format": "int32",
+                          "type": "integer"
+                        },
+                        "seconds": {
+                          "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                          "format": "int64",
+                          "type": "integer"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    {
+                      "description": "Used for values of type STRING_MAP",
+                      "properties": {
+                        "entries": {
+                          "additionalProperties": {
+                            "type": "string"
+                          },
+                          "description": "Holds a set of name/value pairs.",
+                          "type": "object"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              },
+              "type": "object"
+            },
+            "description": "A map of attribute name to its value.",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.v1.CheckRequest": {
+        "description": "Used to get a thumbs-up/thumbs-down before performing an action.",
+        "properties": {
+          "attributes": {
+            "$ref": "#/components/schemas/istio.mixer.v1.CompressedAttributes"
+          },
+          "deduplication_id": {
+            "description": "Used for deduplicating `Check` calls in the case of failed RPCs and retries. This should be a UUID per call, where the same UUID is used for retries of the same call.",
+            "type": "string"
+          },
+          "global_word_count": {
+            "description": "The number of words in the global dictionary, used with to populate the attributes. This value is used as a quick way to determine whether the client is using a dictionary that the server understands.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "quotas": {
+            "additionalProperties": {
+              "properties": {
+                "amount": {
+                  "description": "Amount of quota to allocate",
+                  "format": "int64",
+                  "type": "integer"
+                },
+                "best_effort": {
+                  "description": "When true, supports returning less quota than what was requested.",
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "description": "The individual quotas to allocate",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.v1.CheckResponse": {
+        "description": "The response generated by the Check method.",
+        "properties": {
+          "precondition": {
+            "description": "The precondition check results.",
+            "properties": {
+              "referenced_attributes": {
+                "$ref": "#/components/schemas/istio.mixer.v1.ReferencedAttributes"
+              },
+              "route_directive": {
+                "$ref": "#/components/schemas/istio.mixer.v1.RouteDirective"
+              },
+              "status": {
+                "description": "A status code of OK indicates all preconditions were satisfied. Any other code indicates not all preconditions were satisfied and details describe why.",
+                "properties": {
+                  "code": {
+                    "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
+                    "format": "int32",
+                    "type": "integer"
+                  },
+                  "details": {
+                    "description": "A list of messages that carry the error details. There is a common set of message types for APIs to use.",
+                    "items": {
+                      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message.",
+                      "properties": {
+                        "type_url": {
+                          "description": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message. This string must contain at least one \"/\" character. The last segment of the URL's path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading \".\" is not accepted).",
+                          "type": "string"
+                        },
+                        "value": {
+                          "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                          "format": "byte",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "message": {
+                    "description": "A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "valid_duration": {
+                "description": "The amount of time for which this result can be considered valid.",
+                "properties": {
+                  "nanos": {
+                    "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                    "format": "int32",
+                    "type": "integer"
+                  },
+                  "seconds": {
+                    "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                    "format": "int64",
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              },
+              "valid_use_count": {
+                "description": "The number of uses for which this result can be considered valid.",
+                "format": "int32",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "quotas": {
+            "additionalProperties": {
+              "properties": {
+                "granted_amount": {
+                  "description": "The amount of granted quota. When `QuotaParams.best_effort` is true, this will be \u003e= 0. If `QuotaParams.best_effort` is false, this will be either 0 or \u003e= `QuotaParams.amount`.",
+                  "format": "int64",
+                  "type": "integer"
+                },
+                "referenced_attributes": {
+                  "$ref": "#/components/schemas/istio.mixer.v1.ReferencedAttributes"
+                },
+                "valid_duration": {
+                  "description": "The amount of time for which this result can be considered valid.",
+                  "properties": {
+                    "nanos": {
+                      "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "seconds": {
+                      "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                      "format": "int64",
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
+            "description": "The resulting quota, one entry per requested quota.",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.v1.CompressedAttributes": {
+        "description": "Defines a list of attributes in compressed format optimized for transport. Within this message, strings are referenced using integer indices into one of two string dictionaries. Positive integers index into the global deployment-wide dictionary, whereas negative integers index into the message-level dictionary instead. The message-level dictionary is carried by the `words` field of this message, the deployment-wide dictionary is determined via configuration.",
+        "properties": {
+          "bools": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "description": "Holds attributes of type BOOL",
+            "type": "object"
+          },
+          "bytes": {
+            "additionalProperties": {
+              "format": "byte",
+              "type": "string"
+            },
+            "description": "Holds attributes of type BYTES",
+            "type": "object"
+          },
+          "doubles": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "description": "Holds attributes of type DOUBLE",
+            "type": "object"
+          },
+          "durations": {
+            "additionalProperties": {
+              "properties": {
+                "nanos": {
+                  "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                  "format": "int32",
+                  "type": "integer"
+                },
+                "seconds": {
+                  "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                  "format": "int64",
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "description": "Holds attributes of type DURATION",
+            "type": "object"
+          },
+          "int64s": {
+            "additionalProperties": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "description": "Holds attributes of type INT64",
+            "type": "object"
+          },
+          "string_maps": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/istio.mixer.v1.StringMap"
+            },
+            "description": "Holds attributes of type STRING_MAP",
+            "type": "object"
+          },
+          "strings": {
+            "additionalProperties": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "description": "Holds attributes of type STRING, DNS_NAME, EMAIL_ADDRESS, URI",
+            "type": "object"
+          },
+          "timestamps": {
+            "additionalProperties": {
+              "properties": {
+                "nanos": {
+                  "description": "Non-negative fractions of a second at nanosecond resolution. Negative second values with fractions must still have non-negative nanos values that count forward in time. Must be from 0 to 999,999,999 inclusive.",
+                  "format": "int32",
+                  "type": "integer"
+                },
+                "seconds": {
+                  "description": "Represents seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive.",
+                  "format": "int64",
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "description": "Holds attributes of type TIMESTAMP",
+            "type": "object"
+          },
+          "words": {
+            "description": "The message-level dictionary.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.v1.HeaderOperation": {
+        "description": "Operation on HTTP headers to replace, append, or remove a header. Header names are normalized to lower-case with dashes, e.g. \"x-request-id\". Pseudo-headers \":path\", \":authority\", and \":method\" are supported to modify the request headers.",
+        "properties": {
+          "name": {
+            "description": "Header name.",
+            "type": "string"
+          },
+          "operation": {
+            "description": "Header operation.",
+            "enum": [
+              [
+                "REPLACE",
+                "REMOVE",
+                "APPEND"
+              ]
+            ],
+            "type": "string"
+          },
+          "value": {
+            "description": "Header value.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.v1.ReferencedAttributes": {
+        "description": "Describes the attributes that were used to determine the response. This can be used to construct a response cache.",
+        "properties": {
+          "attribute_matches": {
+            "description": "Describes a set of attributes.",
+            "items": {
+              "description": "Describes a single attribute match.",
+              "properties": {
+                "condition": {
+                  "description": "The kind of match against the attribute value.",
+                  "enum": [
+                    [
+                      "CONDITION_UNSPECIFIED",
+                      "ABSENCE",
+                      "EXACT",
+                      "REGEX"
+                    ]
+                  ],
+                  "type": "string"
+                },
+                "map_key": {
+                  "description": "A key in a STRING_MAP. When multiple keys from a STRING_MAP attribute were referenced, there will be multiple AttributeMatch messages with different map_key values. Values for map_key SHOULD be ignored for attributes that are not STRING_MAP.",
+                  "format": "int32",
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "The name of the attribute. This is a dictionary index encoded in a manner identical to all strings in the [CompressedAttributes][istio.mixer.v1.CompressedAttributes] message.",
+                  "format": "int32",
+                  "type": "integer"
+                },
+                "regex": {
+                  "description": "If a REGEX condition is provided for a STRING_MAP attribute, clients should use the regex value to match against map keys.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "words": {
+            "description": "The message-level dictionary. Refer to [CompressedAttributes][istio.mixer.v1.CompressedAttributes] for information on using dictionaries.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.v1.ReportRequest": {
+        "description": "Used to report telemetry after performing one or more actions.",
+        "properties": {
+          "attributes": {
+            "$ref": "#/components/schemas/istio.mixer.v1.CompressedAttributes"
+          },
+          "default_words": {
+            "description": "The default message-level dictionary for all the attributes. Individual attribute messages can have their own dictionaries, but if they don't then this set of words, if it is provided, is used instead.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "global_word_count": {
+            "description": "The number of words in the global dictionary. To detect global dictionary out of sync between client and server.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "repeated_attributes_semantics": {
+            "description": "Indicates how to decode the attributes sets in this request.",
+            "enum": [
+              [
+                "DELTA_ENCODING",
+                "INDEPENDENT_ENCODING"
+              ]
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.v1.ReportResponse": {
+        "description": "Used to carry responses to telemetry reports",
+        "type": "object"
+      },
+      "istio.mixer.v1.RouteDirective": {
+        "description": "Expresses the routing manipulation actions to be performed on behalf of Mixer in response to a precondition check.",
+        "properties": {
+          "direct_response_body": {
+            "description": "Supplies the response body for the direct response. If this setting is omitted, no body is included in the generated response.",
+            "type": "string"
+          },
+          "direct_response_code": {
+            "description": "If set, enables a direct response without proxying the request to the routing destination. Required to be a value in the 2xx or 3xx range.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "request_header_operations": {
+            "$ref": "#/components/schemas/istio.mixer.v1.HeaderOperation"
+          },
+          "response_header_operations": {
+            "$ref": "#/components/schemas/istio.mixer.v1.HeaderOperation"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.v1.StringMap": {
+        "description": "A map of string to string. The keys and values in this map are dictionary indices (see the [Attributes][istio.mixer.v1.CompressedAttributes] message for an explanation)",
+        "properties": {
+          "entries": {
+            "additionalProperties": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "description": "Holds a set of name/value pairs.",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      }
+    }
+  }
+}

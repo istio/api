@@ -1,0 +1,643 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Configuration affecting the service mesh as a whole.",
+    "version": "v1alpha1"
+  },
+  "components": {
+    "schemas": {
+      "istio.mesh.v1alpha1.AuthenticationPolicy": {
+        "description": "AuthenticationPolicy defines authentication policy. It can be set for different scopes (mesh, service …), and the most narrow scope with non-INHERIT value will be used. Mesh policy cannot be INHERIT.",
+        "enum": [
+          [
+            "NONE",
+            "MUTUAL_TLS",
+            "INHERIT"
+          ]
+        ],
+        "type": "string"
+      },
+      "istio.mesh.v1alpha1.ConfigSource": {
+        "description": "ConfigSource describes information about a configuration store inside a mesh. A single control plane instance can interact with one or more data sources.",
+        "properties": {
+          "address": {
+            "description": "Address of the server implementing the Istio Mesh Configuration protocol (MCP). Can be IP address or a fully qualified DNS name. Use fs:/// to specify a file-based backend with absolute path to the directory.",
+            "type": "string"
+          },
+          "tls_settings": {
+            "description": "Use the tls_settings to specify the tls mode to use. If the MCP server uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS mode as `ISTIO_MUTUAL`.",
+            "properties": {
+              "ca_certificates": {
+                "description": "OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate. If omitted, the proxy will not verify the server's certificate. Should be empty if mode is `ISTIO_MUTUAL`.",
+                "type": "string"
+              },
+              "client_certificate": {
+                "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client-side TLS certificate to use. Should be empty if mode is `ISTIO_MUTUAL`.",
+                "type": "string"
+              },
+              "mode": {
+                "description": "REQUIRED: Indicates whether connections to this port should be secured using TLS. The value of this field determines how TLS is enforced.",
+                "enum": [
+                  [
+                    "DISABLE",
+                    "SIMPLE",
+                    "MUTUAL",
+                    "ISTIO_MUTUAL"
+                  ]
+                ],
+                "type": "string"
+              },
+              "private_key": {
+                "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client's private key. Should be empty if mode is `ISTIO_MUTUAL`.",
+                "type": "string"
+              },
+              "sni": {
+                "description": "SNI string to present to the server during TLS handshake.",
+                "type": "string"
+              },
+              "subject_alt_names": {
+                "description": "A list of alternate names to verify the subject identity in the certificate. If specified, the proxy will verify that the server certificate's subject alt name matches one of the specified values. If specified, this list overrides the value of subject_alt_names from the ServiceEntry.",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mesh.v1alpha1.LocalityLoadBalancerSetting": {
+        "description": "Locality-weighted load balancing allows administrators to control the distribution of traffic to endpoints based on the localities of where the traffic originates and where it will terminate. These localities are specified using arbitrary labels that designate a hierarchy of localities in {region}/{zone}/{sub-zone} form. For additional detail refer to [Locality Weight](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight) The following example shows how to setup locality weights mesh-wide.",
+        "properties": {
+          "distribute": {
+            "description": "Optional: only one of distribute or failover can be set. Explicitly specify loadbalancing weight across different zones and geographical locations. Refer to [Locality weighted load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight) If empty, the locality weight is set according to the endpoints number within it.",
+            "items": {
+              "description": "Describes how traffic originating in the 'from' zone or sub-zone is distributed over a set of 'to' zones. Syntax for specifying a zone is {region}/{zone}/{sub-zone} and terminal wildcards are allowed on any segment of the specification. Examples: * - matches all localities us-west/* - all zones and sub-zones within the us-west region us-west/zone-1/* - all sub-zones within us-west/zone-1",
+              "properties": {
+                "from": {
+                  "description": "Originating locality, '/' separated, e.g. 'region/zone/sub_zone'.",
+                  "type": "string"
+                },
+                "to": {
+                  "additionalProperties": {
+                    "format": "int32",
+                    "type": "integer"
+                  },
+                  "description": "Map of upstream localities to traffic distribution weights. The sum of all weights should be == 100. Any locality not assigned a weight will receive no traffic.",
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "failover": {
+            "description": "Optional: only failover or distribute can be set. Explicitly specify the region traffic will land on when endpoints in local region becomes unhealthy. Should be used together with OutlierDetection to detect unhealthy endpoints. Note: if no OutlierDetection specified, this will not take effect.",
+            "items": {
+              "description": "Specify the traffic failover policy across regions. Since zone and sub-zone failover is supported by default this only needs to be specified for regions when the operator needs to constrain traffic failover so that the default behavior of failing over to any endpoint globally does not apply. This is useful when failing over traffic across regions would not improve service health or may need to be restricted for other reasons like regulatory controls.",
+              "properties": {
+                "from": {
+                  "description": "Originating region.",
+                  "type": "string"
+                },
+                "to": {
+                  "description": "Destination region the traffic will fail over to when endpoints in the 'from' region becomes unhealthy.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mesh.v1alpha1.MeshConfig": {
+        "description": "MeshConfig defines mesh-wide variables shared by all Envoy instances in the Istio service mesh.",
+        "properties": {
+          "access_log_encoding": {
+            "description": "Encoding for the proxy access log (text or json). Default value is text.",
+            "enum": [
+              [
+                "TEXT",
+                "JSON"
+              ]
+            ],
+            "type": "string"
+          },
+          "access_log_file": {
+            "description": "File address for the proxy access log (e.g. /dev/stdout). Empty value disables access logging.",
+            "type": "string"
+          },
+          "access_log_format": {
+            "description": "Format for the proxy access log Empty value results in proxy's default access log format",
+            "type": "string"
+          },
+          "config_sources": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ConfigSource"
+          },
+          "connect_timeout": {
+            "description": "Connection timeout used by Envoy. (MUST BE \u003e=1ms)",
+            "properties": {
+              "nanos": {
+                "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                "format": "int32",
+                "type": "integer"
+              },
+              "seconds": {
+                "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                "format": "int64",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "default_config": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig"
+          },
+          "default_destination_rule_export_to": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "default_service_export_to": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "default_virtual_service_export_to": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "disable_policy_checks": {
+            "description": "Disable policy checks by the Mixer service. Default is false, i.e. Mixer policy check is enabled by default.",
+            "type": "boolean"
+          },
+          "disable_report_batch": {
+            "description": "The flag to disable report batch.",
+            "type": "boolean"
+          },
+          "dns_refresh_rate": {
+            "description": "Configures DNS refresh rate for Envoy clusters of type STRICT_DNS",
+            "properties": {
+              "nanos": {
+                "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                "format": "int32",
+                "type": "integer"
+              },
+              "seconds": {
+                "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                "format": "int64",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "enable_client_side_policy_check": {
+            "description": "Enables clide side policy checks.",
+            "type": "boolean"
+          },
+          "enable_envoy_access_log_service": {
+            "description": "This flag enables Envoy's gRPC Access Log Service. See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto) for details about Envoy's gRPC Access Log Service API.",
+            "type": "boolean"
+          },
+          "enable_sds_token_mount": {
+            "type": "boolean"
+          },
+          "enable_tracing": {
+            "description": "Flag to control generation of trace spans and request IDs. Requires a trace span collector defined in the proxy configuration.",
+            "type": "boolean"
+          },
+          "h2_upgrade_policy": {
+            "description": "Specify if http1.1 connections should be upgraded to http2 by default. if sidecar is installed on all pods in the mesh, then this should be set to UPGRADE. If one or more services or namespaces do not have sidecar(s), then this should be set to DO_NOT_UPGRADE. It can be enabled by destination using the destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy override.",
+            "enum": [
+              [
+                "DO_NOT_UPGRADE",
+                "UPGRADE"
+              ]
+            ],
+            "type": "string"
+          },
+          "ingress_class": {
+            "description": "Class of ingress resources to be processed by Istio ingress controller. This corresponds to the value of \"kubernetes.io/ingress.class\" annotation.",
+            "type": "string"
+          },
+          "ingress_controller_mode": {
+            "description": "Defines whether to use Istio ingress controller for annotated or all ingress resources.",
+            "enum": [
+              [
+                "OFF",
+                "DEFAULT",
+                "STRICT"
+              ]
+            ],
+            "type": "string"
+          },
+          "ingress_service": {
+            "description": "Name of theKubernetes service used for the istio ingress controller.",
+            "type": "string"
+          },
+          "locality_lb_setting": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.LocalityLoadBalancerSetting"
+          },
+          "mixer_check_server": {
+            "description": "Address of the server that will be used by the proxies for policy check calls. By using different names for mixerCheckServer and mixerReportServer, it is possible to have one set of Mixer servers handle policy check calls while another set of Mixer servers handle telemetry calls.",
+            "type": "string"
+          },
+          "mixer_report_server": {
+            "description": "Address of the server that will be used by the proxies for policy report calls.",
+            "type": "string"
+          },
+          "outbound_traffic_policy": {
+            "description": "Set the default behavior of the sidecar for handling outbound traffic from the application. If your application uses one or more external services that are not known apriori, setting the policy to ALLOW_ANY will cause the sidecars to route any unknown traffic originating from the application to its requested destination. Users are strongly encouraged to use ServiceEntries to explicitly declare any external dependencies, instead of using allow_any, so that traffic to these services can be monitored.",
+            "properties": {
+              "mode": {
+                "enum": [
+                  [
+                    "REGISTRY_ONLY",
+                    "ALLOW_ANY"
+                  ]
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "policy_check_fail_open": {
+            "description": "Allow all traffic in cases when the Mixer policy service cannot be reached. Default is false which means the traffic is denied when the client is unable to connect to Mixer.",
+            "type": "boolean"
+          },
+          "proxy_http_port": {
+            "description": "Port on which Envoy should listen for HTTP PROXY requests if set.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "proxy_listen_port": {
+            "description": "Port on which Envoy should listen for incoming connections from other services.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "report_batch_max_entries": {
+            "description": "When disable_report_batch is false, this value specifies the maximum number of requests that are batched in report. If left unspecified, the default value of report_batch_max_entries == 0 will use the hardcoded defaults of istio::mixerclient::ReportOptions.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "report_batch_max_time": {
+            "description": "When disable_report_batch is false, this value specifies the maximum elapsed time a batched report will be sent after a user request is processed. If left unspecified, the default report_batch_max_time == 0 will use the hardcoded defaults of istio::mixerclient::ReportOptions.",
+            "properties": {
+              "nanos": {
+                "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                "format": "int32",
+                "type": "integer"
+              },
+              "seconds": {
+                "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                "format": "int64",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "root_namespace": {
+            "type": "string"
+          },
+          "sds_uds_path": {
+            "description": "Unix Domain Socket through which Envoy communicates with NodeAgent SDS to get key/cert for mTLS. Use secret-mount files instead of SDS if set to empty.",
+            "type": "string"
+          },
+          "sds_use_k8s_sa_jwt": {
+            "type": "boolean"
+          },
+          "sidecar_to_telemetry_session_affinity": {
+            "description": "Enable session affinity for Envoy Mixer reports so that calls from a proxy will always target the same Mixer instance.",
+            "type": "boolean"
+          },
+          "tcp_keepalive": {
+            "description": "If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.",
+            "properties": {
+              "interval": {
+                "description": "The time duration between keep-alive probes. Default is to use the OS level configuration (unless overridden, Linux defaults to 75s.)",
+                "properties": {
+                  "nanos": {
+                    "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                    "format": "int32",
+                    "type": "integer"
+                  },
+                  "seconds": {
+                    "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                    "format": "int64",
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              },
+              "probes": {
+                "description": "Maximum number of keepalive probes to send without response before deciding the connection is dead. Default is to use the OS level configuration (unless overridden, Linux defaults to 9.)",
+                "format": "int32",
+                "type": "integer"
+              },
+              "time": {
+                "description": "The time duration a connection needs to be idle before keep-alive probes start being sent. Default is to use the OS level configuration (unless overridden, Linux defaults to 7200s (ie 2 hours.)",
+                "properties": {
+                  "nanos": {
+                    "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                    "format": "int32",
+                    "type": "integer"
+                  },
+                  "seconds": {
+                    "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                    "format": "int64",
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "trust_domain": {
+            "description": "The trust domain corresponds to the trust root of a system. Refer to [SPIFEE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain) Fallback to old identity format(without trust domain) if not set.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mesh.v1alpha1.MeshNetworks": {
+        "description": "MeshNetworks (config map) provides information about the set of networks inside a mesh and how to route to endpoints in each network. For example",
+        "properties": {
+          "networks": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.Network"
+            },
+            "description": "REQUIRED: The set of networks inside this mesh. Each network should have a unique name and information about how to infer the endpoints in the network as well as the gateways associated with the network.",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mesh.v1alpha1.Network": {
+        "description": "Network provides information about the endpoints in a routable L3 network. A single routable L3 network can have one or more service registries. Note that the network has no relation to the locality of the endpoint. The endpoint locality will be obtained from the service registry.",
+        "properties": {
+          "endpoints": {
+            "description": "REQUIRED: The list of endpoints in the network (obtained through the constituent service registries or from CIDR ranges). All endpoints in the network are directly accessible to one another.",
+            "items": {
+              "description": "NetworkEndpoints describes how the network associated with an endpoint should be inferred. An endpoint will be assigned to a network based on the following rules:",
+              "properties": {
+                "ne": {
+                  "oneOf": [
+                    {
+                      "description": "A CIDR range for the set of endpoints in this network. The CIDR ranges for endpoints from different networks must not overlap.",
+                      "type": "string"
+                    },
+                    {
+                      "description": "Add all endpoints from the specified registry into this network. The names of the registries should correspond to the secret name that was used to configure the registry (Kubernetes multicluster) or supplied by MCP server.",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "gateways": {
+            "description": "REQUIRED: Set of gateways associated with the network.",
+            "items": {
+              "description": "The gateway associated with this network. Traffic from remote networks will arrive at the specified gateway:port. All incoming traffic must use mTLS.",
+              "properties": {
+                "gw": {
+                  "oneOf": [
+                    {
+                      "description": "A fully qualified domain name of the gateway service. Pilot will lookup the service from the service registries in the network and obtain the endpoint IPs of the gateway from the service registry. Note that while the service name is a fully qualified domain name, it need not be resolvable outside the orchestration platform for the registry. e.g., this could be istio-ingressgateway.istio-system.svc.cluster.local.",
+                      "type": "string"
+                    },
+                    {
+                      "description": "IP address or externally resolvable DNS address associated with the gateway.",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "locality": {
+                  "description": "The locality associated with an explicitly specified gateway (i.e. ip)",
+                  "type": "string"
+                },
+                "port": {
+                  "description": "REQUIRED: The port associated with the gateway.",
+                  "format": "int32",
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mesh.v1alpha1.ProxyConfig": {
+        "description": "ProxyConfig defines variables for individual Envoy instances.",
+        "properties": {
+          "binary_path": {
+            "description": "Path to the proxy binary",
+            "type": "string"
+          },
+          "concurrency": {
+            "description": "The number of worker threads to run. Default value is number of cores on the machine.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "config_path": {
+            "description": "Path to the generated configuration file directory. Proxy agent generates the actual configuration and stores it in this directory.",
+            "type": "string"
+          },
+          "connect_timeout": {
+            "description": "Connection timeout used by Envoy for supporting services. (MUST BE \u003e=1ms)",
+            "properties": {
+              "nanos": {
+                "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                "format": "int32",
+                "type": "integer"
+              },
+              "seconds": {
+                "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                "format": "int64",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "control_plane_auth_policy": {
+            "description": "Authentication policy defines the global switch to control authentication for Envoy-to-Envoy communication for istio components Mixer and Pilot.",
+            "enum": [
+              [
+                "NONE",
+                "MUTUAL_TLS",
+                "INHERIT"
+              ]
+            ],
+            "type": "string"
+          },
+          "custom_config_file": {
+            "description": "File path of custom proxy configuration, currently used by proxies in front of Mixer and Pilot.",
+            "type": "string"
+          },
+          "discovery_address": {
+            "description": "Address of the discovery service exposing xDS with mTLS connection.",
+            "type": "string"
+          },
+          "drain_duration": {
+            "description": "The time in seconds that Envoy will drain connections during a hot restart. MUST be \u003e=1s (e.g., _1s/1m/1h_)",
+            "properties": {
+              "nanos": {
+                "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                "format": "int32",
+                "type": "integer"
+              },
+              "seconds": {
+                "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                "format": "int64",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "envoy_access_log_service_address": {
+            "description": "Address of the service to which access logs from Envoys should be sent. (e.g. accesslog-service:15000). See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto) for details about Envoy's gRPC Access Log Service API.",
+            "type": "string"
+          },
+          "envoy_metrics_service_address": {
+            "description": "Address of the Envoy Metrics Service implementation (e.g. metrics-service:15000). See [Metric Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/metrics/v2/metrics_service.proto) for details about Envoy's Metrics Service API.",
+            "type": "string"
+          },
+          "interception_mode": {
+            "description": "The mode used to redirect inbound traffic to Envoy.",
+            "enum": [
+              [
+                "REDIRECT",
+                "TPROXY"
+              ]
+            ],
+            "type": "string"
+          },
+          "parent_shutdown_duration": {
+            "description": "The time in seconds that Envoy will wait before shutting down the parent process during a hot restart. MUST be \u003e=1s (e.g., _1s/1m/1h_). MUST BE greater than _drain_duration_ parameter.",
+            "properties": {
+              "nanos": {
+                "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                "format": "int32",
+                "type": "integer"
+              },
+              "seconds": {
+                "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                "format": "int64",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "proxy_admin_port": {
+            "description": "Port on which Envoy should listen for administrative commands.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "proxy_bootstrap_template_path": {
+            "description": "Path to the proxy bootstrap template file",
+            "type": "string"
+          },
+          "sds": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.SDS"
+          },
+          "service_cluster": {
+            "description": "Service cluster defines the name for the service_cluster that is shared by all Envoy instances. This setting corresponds to _--service-cluster_ flag in Envoy. In a typical Envoy deployment, the _service-cluster_ flag is used to identify the caller, for source-based routing scenarios.",
+            "type": "string"
+          },
+          "stat_name_length": {
+            "description": "Maximum length of name field in Envoy's metrics. The length of the name field is determined by the length of a name field in a service and the set of labels that comprise a particular version of the service. The default value is set to 189 characters. Envoy's internal metrics take up 67 characters, for a total of 256 character name per metric. Increase the value of this field if you find that the metrics from Envoys are truncated.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "statsd_udp_address": {
+            "description": "IP Address and Port of a statsd UDP listener (e.g. _10.75.241.127:9125_).",
+            "type": "string"
+          },
+          "tracing": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mesh.v1alpha1.SDS": {
+        "description": "SDS defines secret discovery service(SDS) configuration to be used by the proxy. For workload, its values are set in sidecar injector(passed as arguments to istio-proxy container). For pilot/mixer, it's passed as arguments to istio-proxy container in pilot/mixer deployment yaml files directly.",
+        "properties": {
+          "enabled": {
+            "description": "True if SDS is enabled.",
+            "type": "boolean"
+          },
+          "k8s_sa_jwt_path": {
+            "description": "Path of k8s service account JWT path.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mesh.v1alpha1.Tracing": {
+        "description": "Tracing defines configuration for the tracing performed by Envoy instances.",
+        "properties": {
+          "tracer": {
+            "oneOf": [
+              {
+                "description": "Use a Zipkin tracer.",
+                "properties": {
+                  "address": {
+                    "description": "Address of the Zipkin service (e.g. _zipkin:9411_).",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              {
+                "description": "Use a LightStep tracer.",
+                "properties": {
+                  "access_token": {
+                    "description": "The LightStep access token.",
+                    "type": "string"
+                  },
+                  "address": {
+                    "description": "Address of the LightStep Satellite pool.",
+                    "type": "string"
+                  },
+                  "cacert_path": {
+                    "description": "Path to the trusted cacert used to authenticate the pool.",
+                    "type": "string"
+                  },
+                  "secure": {
+                    "description": "True if a secure connection should be used when communicating with the pool.",
+                    "type": "boolean"
+                  }
+                },
+                "type": "object"
+              },
+              {
+                "description": "Use a Datadog tracer.",
+                "properties": {
+                  "address": {
+                    "description": "Address of the Datadog Agent.",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            ]
+          }
+        },
+        "type": "object"
+      }
+    }
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Configuration affecting insertion of custom Envoy filters.",
+    "version": "v1alpha3"
+  },
+  "components": {
+    "schemas": {
+      "istio.networking.v1alpha3.EnvoyFilter": {
+        "properties": {
+          "filters": {
+            "description": "REQUIRED: Envoy network filters/http filters to be added to matching listeners. When adding network filters to http connections, care should be taken to ensure that the filter is added before envoy.http_connection_manager.",
+            "items": {
+              "description": "Envoy filters to be added to a network or http filter chain.",
+              "properties": {
+                "filter_config": {
+                  "description": "REQUIRED: Filter specific configuration which depends on the filter being instantiated.",
+                  "properties": {
+                    "fields": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    }
+                  }
+                },
+                "filter_name": {
+                  "description": "REQUIRED: The name of the filter to instantiate. The name must match a supported filter _compiled into_ Envoy.",
+                  "type": "string"
+                },
+                "filter_type": {
+                  "description": "REQUIRED: The type of filter to instantiate.",
+                  "enum": [
+                    [
+                      "INVALID",
+                      "HTTP",
+                      "NETWORK"
+                    ]
+                  ],
+                  "type": "string"
+                },
+                "insert_position": {
+                  "description": "Insert position in the filter chain. Defaults to FIRST",
+                  "properties": {
+                    "index": {
+                      "description": "Position of this filter in the filter chain.",
+                      "enum": [
+                        [
+                          "FIRST",
+                          "LAST",
+                          "BEFORE",
+                          "AFTER"
+                        ]
+                      ],
+                      "type": "string"
+                    },
+                    "relative_to": {
+                      "description": "If BEFORE or AFTER position is specified, specify the name of the filter relative to which this filter should be inserted.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "listener_match": {
+                  "description": "Filter will be added to the listener only if the match conditions are true. If not specified, the filters will be applied to all listeners where possible, potentially resulting in invalid configurations. It is recommended to specify the listener match criteria for all filter insertions.",
+                  "properties": {
+                    "address": {
+                      "description": "One or more IP addresses to which the listener is bound. If specified, should match at least one address in the list.",
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "listener_protocol": {
+                      "description": "Selects a class of listeners for the same protocol. Use the protocol selection to select all HTTP listeners (includes HTTP2/gRPC/HTTPS where Envoy terminates TLS) or all TCP listeners (includes HTTPS passthrough using SNI). When adding a HTTP filter, the listenerProtocol should be set to HTTP.",
+                      "enum": [
+                        [
+                          "ALL",
+                          "HTTP",
+                          "TCP"
+                        ]
+                      ],
+                      "type": "string"
+                    },
+                    "listener_type": {
+                      "description": "Inbound vs outbound sidecar listener or gateway listener. If not specified, matches all listeners.",
+                      "enum": [
+                        [
+                          "ANY",
+                          "SIDECAR_INBOUND",
+                          "SIDECAR_OUTBOUND",
+                          "GATEWAY"
+                        ]
+                      ],
+                      "type": "string"
+                    },
+                    "port_name_prefix": {
+                      "description": "Instead of using specific port numbers, a set of ports matching a given port name prefix can be selected. E.g., \"mongo\" selects ports named mongo-port, mongo, mongoDB, MONGO, etc. Matching is case insensitive.",
+                      "type": "string"
+                    },
+                    "port_number": {
+                      "description": "The service port/gateway port to which traffic is being sent/received. If not specified, matches all listeners. Even though inbound listeners are generated for the instance/pod ports, only service ports should be used to match listeners.",
+                      "format": "int32",
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "workload_labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Zero or more labels that indicate a specific set of pods/VMs whose proxies should be configured to use these additional filters. The scope of label search is platform dependent. On Kubernetes, for example, the scope includes pods running in all reachable namespaces. Omitting the selector applies the filter to all proxies in the mesh.",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      }
+    }
+  }
+}

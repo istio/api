@@ -1,0 +1,140 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Configuration affecting network reachability of a sidecar.",
+    "version": "v1alpha3"
+  },
+  "components": {
+    "schemas": {
+      "istio.networking.v1alpha3.CaptureMode": {
+        "description": "CaptureMode describes how traffic to a listener is expected to be captured. Applicable only when the listener is bound to an IP.",
+        "enum": [
+          [
+            "DEFAULT",
+            "IPTABLES",
+            "NONE"
+          ]
+        ],
+        "type": "string"
+      },
+      "istio.networking.v1alpha3.IstioEgressListener": {
+        "description": "IstioEgressListener specifies the properties of an outbound traffic listener on the sidecar proxy attached to a workload instance.",
+        "properties": {
+          "bind": {
+            "description": "The ip or the Unix domain socket to which the listener should be bound to. Port MUST be specified if bind is not empty. Format: `x.x.x.x` or `unix:///path/to/uds` or `unix://@foobar` (Linux abstract namespace). If omitted, Istio will automatically configure the defaults based on imported services, the workload instances to which this configuration is applied to and the captureMode. If captureMode is NONE, bind will default to 127.0.0.1.",
+            "type": "string"
+          },
+          "capture_mode": {
+            "description": "When the bind address is an IP, the captureMode option dictates how traffic to the listener is expected to be captured (or not). captureMode must be DEFAULT or NONE for Unix domain socket binds.",
+            "enum": [
+              [
+                "DEFAULT",
+                "IPTABLES",
+                "NONE"
+              ]
+            ],
+            "type": "string"
+          },
+          "hosts": {
+            "description": "REQUIRED: One or more service hosts exposed by the listener in `namespace/dnsName` format. Services in the specified namespace matching `dnsName` will be exposed. The corresponding service can be a service in the service registry (e.g., a Kubernetes or cloud foundry service) or a service specified using a `ServiceEntry` or `VirtualService` configuration. Any associated `DestinationRule` in the same namespace will also be used.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "port": {
+            "description": "The port associated with the listener. If using Unix domain socket, use 0 as the port number, with a valid protocol. The port if specified, will be used as the default destination port associated with the imported hosts. If the port is omitted, Istio will infer the listener ports based on the imported hosts. Note that when multiple egress listeners are specified, where one or more listeners have specific ports while others have no port, the hosts exposed on a listener port will be based on the listener with the most specific port.",
+            "properties": {
+              "name": {
+                "description": "Label assigned to the port.",
+                "type": "string"
+              },
+              "number": {
+                "description": "REQUIRED: A valid non-negative integer port number.",
+                "format": "int32",
+                "type": "integer"
+              },
+              "protocol": {
+                "description": "REQUIRED: The protocol exposed on the port. MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS. TLS implies the connection will be routed based on the SNI header to the destination without terminating the TLS connection.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.IstioIngressListener": {
+        "description": "IstioIngressListener specifies the properties of an inbound traffic listener on the sidecar proxy attached to a workload instance.",
+        "properties": {
+          "bind": {
+            "description": "The ip or the Unix domain socket to which the listener should be bound to. Format: `x.x.x.x` or `unix:///path/to/uds` or `unix://@foobar` (Linux abstract namespace). If omitted, Istio will automatically configure the defaults based on imported services and the workload instances to which this configuration is applied to.",
+            "type": "string"
+          },
+          "capture_mode": {
+            "description": "When the bind address is an IP, the captureMode option dictates how traffic to the listener is expected to be captured (or not). captureMode must be DEFAULT or NONE for Unix domain socket binds.",
+            "enum": [
+              [
+                "DEFAULT",
+                "IPTABLES",
+                "NONE"
+              ]
+            ],
+            "type": "string"
+          },
+          "default_endpoint": {
+            "description": "REQUIRED: The loopback IP endpoint or Unix domain socket to which traffic should be forwarded to. This configuration can be used to redirect traffic arriving at the bind point on the sidecar to a port or Unix domain socket where the application workload instance is listening for connections. Format should be 127.0.0.1:PORT or `unix:///path/to/socket`",
+            "type": "string"
+          },
+          "port": {
+            "description": "REQUIRED. The port associated with the listener. If using Unix domain socket, use 0 as the port number, with a valid protocol.",
+            "properties": {
+              "name": {
+                "description": "Label assigned to the port.",
+                "type": "string"
+              },
+              "number": {
+                "description": "REQUIRED: A valid non-negative integer port number.",
+                "format": "int32",
+                "type": "integer"
+              },
+              "protocol": {
+                "description": "REQUIRED: The protocol exposed on the port. MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS. TLS implies the connection will be routed based on the SNI header to the destination without terminating the TLS connection.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.Sidecar": {
+        "properties": {
+          "egress": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.IstioEgressListener"
+          },
+          "ingress": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.IstioIngressListener"
+          },
+          "workload_selector": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.WorkloadSelector"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.WorkloadSelector": {
+        "description": "WorkloadSelector specifies the criteria used to determine if the Gateway or Sidecar resource can be applied to a proxy. The matching criteria includes the metadata associated with a proxy, workload instance info such as labels attached to the pod/VM, or any other info that the proxy provides to Istio during the initial handshake. If multiple conditions are specified, all conditions need to match in order for the workload instance to be selected. Currently, only label based selection mechanism is supported.",
+        "properties": {
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "REQUIRED: One or more labels that indicate a specific set of pods/VMs on which this sidecar configuration should be applied. The scope of label search is restricted to the configuration namespace in which the the resource is present.",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      }
+    }
+  }
+}

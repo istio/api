@@ -1,0 +1,607 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Configuration affecting label/content routing, sni routing, etc.",
+    "version": "v1alpha3"
+  },
+  "components": {
+    "schemas": {
+      "istio.networking.v1alpha3.CorsPolicy": {
+        "description": "Describes the Cross-Origin Resource Sharing (CORS) policy, for a given service. Refer to [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS) for further details about cross origin resource sharing. For example, the following rule restricts cross origin requests to those originating from example.com domain using HTTP POST/GET, and sets the `Access-Control-Allow-Credentials` header to false. In addition, it only exposes `X-Foo-bar` header and sets an expiry period of 1 day.",
+        "properties": {
+          "allow_credentials": {
+            "description": "Indicates whether the caller is allowed to send the actual request (not the preflight) using credentials. Translates to `Access-Control-Allow-Credentials` header.",
+            "properties": {
+              "value": {
+                "description": "The bool value.",
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          },
+          "allow_headers": {
+            "description": "List of HTTP headers that can be used when requesting the resource. Serialized to Access-Control-Allow-Headers header.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "allow_methods": {
+            "description": "List of HTTP methods allowed to access the resource. The content will be serialized into the Access-Control-Allow-Methods header.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "allow_origin": {
+            "description": "The list of origins that are allowed to perform CORS requests. The content will be serialized into the Access-Control-Allow-Origin header. Wildcard * will allow all origins.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "expose_headers": {
+            "description": "A white list of HTTP headers that the browsers are allowed to access. Serialized into Access-Control-Expose-Headers header.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "max_age": {
+            "description": "Specifies how long the results of a preflight request can be cached. Translates to the `Access-Control-Max-Age` header.",
+            "properties": {
+              "nanos": {
+                "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                "format": "int32",
+                "type": "integer"
+              },
+              "seconds": {
+                "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                "format": "int64",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.Destination": {
+        "description": "Destination indicates the network addressable service to which the request/connection will be sent after processing a routing rule. The destination.host should unambiguously refer to a service in the service registry. Istio's service registry is composed of all the services found in the platform's service registry (e.g., Kubernetes services, Consul services), as well as services declared through the [ServiceEntry](https://istio.io/docs/reference/config/networking/v1alpha3/service-entry/#ServiceEntry) resource.",
+        "properties": {
+          "host": {
+            "description": "REQUIRED. The name of a service from the service registry. Service names are looked up from the platform's service registry (e.g., Kubernetes services, Consul services, etc.) and from the hosts declared by [ServiceEntry](https://istio.io/docs/reference/config/networking/v1alpha3/service-entry/#ServiceEntry). Traffic forwarded to destinations that are not found in either of the two, will be dropped.",
+            "type": "string"
+          },
+          "port": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.PortSelector"
+          },
+          "subset": {
+            "description": "The name of a subset within the service. Applicable only to services within the mesh. The subset must be defined in a corresponding DestinationRule.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.HTTPFaultInjection": {
+        "description": "HTTPFaultInjection can be used to specify one or more faults to inject while forwarding http requests to the destination specified in a route. Fault specification is part of a VirtualService rule. Faults include aborting the Http request from downstream service, and/or delaying proxying of requests. A fault rule MUST HAVE delay or abort or both.",
+        "properties": {
+          "abort": {
+            "description": "Abort Http request attempts and return error codes back to downstream service, giving the impression that the upstream service is faulty.",
+            "properties": {
+              "error_type": {
+                "oneOf": [
+                  {
+                    "description": "REQUIRED. HTTP status code to use to abort the Http request.",
+                    "format": "int32",
+                    "type": "integer"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "percentage": {
+                "$ref": "#/components/schemas/istio.networking.v1alpha3.Percent"
+              }
+            },
+            "type": "object"
+          },
+          "delay": {
+            "description": "Delay requests before forwarding, emulating various failures such as network issues, overloaded upstream service, etc.",
+            "properties": {
+              "http_delay_type": {
+                "oneOf": [
+                  {
+                    "description": "REQUIRED. Add a fixed delay before forwarding the request. Format: 1h/1m/1s/1ms. MUST be \u003e=1ms.",
+                    "properties": {
+                      "nanos": {
+                        "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                        "format": "int32",
+                        "type": "integer"
+                      },
+                      "seconds": {
+                        "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                        "format": "int64",
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "nanos": {
+                        "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                        "format": "int32",
+                        "type": "integer"
+                      },
+                      "seconds": {
+                        "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                        "format": "int64",
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  }
+                ]
+              },
+              "percentage": {
+                "$ref": "#/components/schemas/istio.networking.v1alpha3.Percent"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.HTTPMatchRequest": {
+        "description": "HttpMatchRequest specifies a set of criterion to be met in order for the rule to be applied to the HTTP request. For example, the following restricts the rule to match only requests where the URL path starts with /ratings/v2/ and the request contains a custom `end-user` header with value `jason`.",
+        "properties": {
+          "authority": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.StringMatch"
+          },
+          "gateways": {
+            "description": "Names of gateways where the rule should be applied to. Gateway names at the top of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "headers": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.StringMatch"
+            },
+            "description": "The header keys must be lowercase and use hyphen as the separator, e.g. _x-request-id_.",
+            "type": "object"
+          },
+          "ignore_uri_case": {
+            "description": "Flag to specify whether the URI matching should be case-insensitive.",
+            "type": "boolean"
+          },
+          "method": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.StringMatch"
+          },
+          "port": {
+            "description": "Specifies the ports on the host that is being addressed. Many services only expose a single port or label ports with the protocols they support, in these cases it is not required to explicitly select the port.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "query_params": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.StringMatch"
+            },
+            "description": "Query parameters for matching.",
+            "type": "object"
+          },
+          "scheme": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.StringMatch"
+          },
+          "source_labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified at the top, it should include the reserved gateway `mesh` in order for this field to be applicable.",
+            "type": "object"
+          },
+          "uri": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.StringMatch"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.HTTPRedirect": {
+        "description": "HTTPRedirect can be used to send a 301 redirect response to the caller, where the Authority/Host and the URI in the response can be swapped with the specified values. For example, the following rule redirects requests for /v1/getProductRatings API on the ratings service to /v1/bookRatings provided by the bookratings service.",
+        "properties": {
+          "authority": {
+            "description": "On a redirect, overwrite the Authority/Host portion of the URL with this value.",
+            "type": "string"
+          },
+          "uri": {
+            "description": "On a redirect, overwrite the Path portion of the URL with this value. Note that the entire path will be replaced, irrespective of the request URI being matched as an exact path or prefix.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.HTTPRetry": {
+        "description": "Describes the retry policy to use when a HTTP request fails. For example, the following rule sets the maximum number of retries to 3 when calling ratings:v1 service, with a 2s timeout per retry attempt.",
+        "properties": {
+          "attempts": {
+            "description": "REQUIRED. Number of retries for a given request. The interval between retries will be determined automatically (25ms+). Actual number of retries attempted depends on the httpReqTimeout.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "per_try_timeout": {
+            "description": "Timeout per retry attempt for a given request. format: 1h/1m/1s/1ms. MUST BE \u003e=1ms.",
+            "properties": {
+              "nanos": {
+                "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                "format": "int32",
+                "type": "integer"
+              },
+              "seconds": {
+                "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                "format": "int64",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "retry_on": {
+            "description": "Specifies the conditions under which retry takes place. One or more policies can be specified using a ‘,’ delimited list. See the [supported policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http_filters/router_filter#x-envoy-retry-on) and [here](https://www.envoyproxy.io/docs/envoy/latest/configuration/http_filters/router_filter#x-envoy-retry-grpc-on) for more details.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.HTTPRewrite": {
+        "description": "HTTPRewrite can be used to rewrite specific parts of a HTTP request before forwarding the request to the destination. Rewrite primitive can be used only with HTTPRouteDestination. The following example demonstrates how to rewrite the URL prefix for api call (/ratings) to ratings service before making the actual API call.",
+        "properties": {
+          "authority": {
+            "description": "rewrite the Authority/Host header with this value.",
+            "type": "string"
+          },
+          "uri": {
+            "description": "rewrite the path (or the prefix) portion of the URI with this value. If the original URI was matched based on prefix, the value provided in this field will replace the corresponding matched prefix.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.HTTPRoute": {
+        "description": "Describes match conditions and actions for routing HTTP/1.1, HTTP2, and gRPC traffic. See VirtualService for usage examples.",
+        "properties": {
+          "cors_policy": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.CorsPolicy"
+          },
+          "fault": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPFaultInjection"
+          },
+          "headers": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Headers"
+          },
+          "match": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPMatchRequest"
+          },
+          "mirror": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Destination"
+          },
+          "redirect": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPRedirect"
+          },
+          "retries": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPRetry"
+          },
+          "rewrite": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPRewrite"
+          },
+          "route": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPRouteDestination"
+          },
+          "timeout": {
+            "description": "Timeout for HTTP requests.",
+            "properties": {
+              "nanos": {
+                "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                "format": "int32",
+                "type": "integer"
+              },
+              "seconds": {
+                "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                "format": "int64",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "websocket_upgrade": {
+            "description": "Deprecated. Websocket upgrades are done automatically starting from Istio 1.0. $hide_from_docs",
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.HTTPRouteDestination": {
+        "description": "Each routing rule is associated with one or more service versions (see glossary in beginning of document). Weights associated with the version determine the proportion of traffic it receives. For example, the following rule will route 25% of traffic for the \"reviews\" service to instances with the \"v2\" tag and the remaining traffic (i.e., 75%) to \"v1\".",
+        "properties": {
+          "destination": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Destination"
+          },
+          "headers": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Headers"
+          },
+          "weight": {
+            "description": "REQUIRED. The proportion of traffic to be forwarded to the service version. (0-100). Sum of weights across destinations SHOULD BE == 100. If there is only one destination in a rule, the weight value is assumed to be 100.",
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.Headers": {
+        "description": "Header manipulation rules",
+        "properties": {
+          "request": {
+            "description": "Header manipulation rules to apply before forwarding a request to the destination service",
+            "properties": {
+              "add": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Append the given values to the headers specified by keys (will create a comma-separated list of values)",
+                "type": "object"
+              },
+              "remove": {
+                "description": "Remove a the specified headers",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "set": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Overwrite the headers specified by key with the given values",
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "response": {
+            "description": "Header manipulation rules to apply before returning a response to the caller",
+            "properties": {
+              "add": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Append the given values to the headers specified by keys (will create a comma-separated list of values)",
+                "type": "object"
+              },
+              "remove": {
+                "description": "Remove a the specified headers",
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "set": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "Overwrite the headers specified by key with the given values",
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.L4MatchAttributes": {
+        "description": "L4 connection match attributes. Note that L4 connection matching support is incomplete.",
+        "properties": {
+          "destination_subnets": {
+            "description": "IPv4 or IPv6 ip addresses of destination with optional subnet. E.g., a.b.c.d/xx form or just a.b.c.d.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "gateways": {
+            "description": "Names of gateways where the rule should be applied to. Gateway names at the top of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "port": {
+            "description": "Specifies the port on the host that is being addressed. Many services only expose a single port or label ports with the protocols they support, in these cases it is not required to explicitly select the port.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "source_labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified at the top, it should include the reserved gateway `mesh` in order for this field to be applicable.",
+            "type": "object"
+          },
+          "source_subnet": {
+            "description": "IPv4 or IPv6 ip address of source with optional subnet. E.g., a.b.c.d/xx form or just a.b.c.d $hide_from_docs",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.Percent": {
+        "description": "Percent specifies a percentage in the range of [0.0, 100.0].",
+        "properties": {
+          "value": {
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.PortSelector": {
+        "description": "PortSelector specifies the number of a port to be used for matching or selection for final routing.",
+        "properties": {
+          "port": {
+            "oneOf": [
+              {
+                "description": "Valid port number",
+                "format": "int32",
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.RouteDestination": {
+        "description": "L4 routing rule weighted destination.",
+        "properties": {
+          "destination": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Destination"
+          },
+          "weight": {
+            "description": "REQUIRED. The proportion of traffic to be forwarded to the service version. If there is only one destination in a rule, all traffic will be routed to it irrespective of the weight.",
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.StringMatch": {
+        "description": "Describes how to match a given string in HTTP headers. Match is case-sensitive.",
+        "properties": {
+          "match_type": {
+            "oneOf": [
+              {
+                "description": "exact string match",
+                "type": "string"
+              },
+              {
+                "description": "prefix-based match",
+                "type": "string"
+              },
+              {
+                "description": "ECMAscript style regex-based match",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.TCPRoute": {
+        "description": "Describes match conditions and actions for routing TCP traffic. The following routing rule forwards traffic arriving at port 27017 for mongo.prod.svc.cluster.local to another Mongo server on port 5555.",
+        "properties": {
+          "match": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.L4MatchAttributes"
+          },
+          "route": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.RouteDestination"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.TLSMatchAttributes": {
+        "description": "TLS connection match attributes.",
+        "properties": {
+          "destination_subnets": {
+            "description": "IPv4 or IPv6 ip addresses of destination with optional subnet. E.g., a.b.c.d/xx form or just a.b.c.d.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "gateways": {
+            "description": "Names of gateways where the rule should be applied to. Gateway names at the top of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "port": {
+            "description": "Specifies the port on the host that is being addressed. Many services only expose a single port or label ports with the protocols they support, in these cases it is not required to explicitly select the port.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "sni_hosts": {
+            "description": "REQUIRED. SNI (server name indicator) to match on. Wildcard prefixes can be used in the SNI value, e.g., *.com will match foo.example.com as well as example.com. An SNI value must be a subset (i.e., fall within the domain) of the corresponding virtual serivce's hosts.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "source_labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified at the top, it should include the reserved gateway `mesh` in order for this field to be applicable.",
+            "type": "object"
+          },
+          "source_subnet": {
+            "description": "IPv4 or IPv6 ip address of source with optional subnet. E.g., a.b.c.d/xx form or just a.b.c.d $hide_from_docs",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.TLSRoute": {
+        "description": "Describes match conditions and actions for routing unterminated TLS traffic (TLS/HTTPS) The following routing rule forwards unterminated TLS traffic arriving at port 443 of gateway called \"mygateway\" to internal services in the mesh based on the SNI value.",
+        "properties": {
+          "match": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSMatchAttributes"
+          },
+          "route": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.RouteDestination"
+          }
+        },
+        "type": "object"
+      },
+      "istio.networking.v1alpha3.VirtualService": {
+        "properties": {
+          "export_to": {
+            "description": "A list of namespaces to which this virtual service is exported. Exporting a virtual service allows it to be used by sidecars and gateways defined in other namespaces. This feature provides a mechanism for service owners and mesh administrators to control the visibility of virtual services across namespace boundaries.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "gateways": {
+            "description": "The names of gateways and sidecars that should apply these routes. A single VirtualService is used for sidecars inside the mesh as well as for one or more gateways. The selection condition imposed by this field can be overridden using the source field in the match conditions of protocol-specific routes. The reserved word `mesh` is used to imply all the sidecars in the mesh. When this field is omitted, the default gateway (`mesh`) will be used, which would apply the rule to all sidecars in the mesh. If a list of gateway names is provided, the rules will apply only to the gateways. To apply the rules to both gateways and sidecars, specify `mesh` as one of the gateway names.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "hosts": {
+            "description": "REQUIRED. The destination hosts to which traffic is being sent. Could be a DNS name with wildcard prefix or an IP address. Depending on the platform, short-names can also be used instead of a FQDN (i.e. has no dots in the name). In such a scenario, the FQDN of the host would be derived based on the underlying platform.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "http": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPRoute"
+          },
+          "tcp": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.TCPRoute"
+          },
+          "tls": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSRoute"
+          }
+        },
+        "type": "object"
+      }
+    }
+  }
+}

@@ -1,0 +1,434 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Definitions used to create adapters and templates.",
+    "version": "v1beta1"
+  },
+  "components": {
+    "schemas": {
+      "istio.mixer.adapter.model.v1beta1.CheckResult": {
+        "description": "Expresses the result of a precondition check.",
+        "properties": {
+          "status": {
+            "description": "A status code of OK indicates preconditions were satisfied. Any other code indicates preconditions were not satisfied and details describe why.",
+            "properties": {
+              "code": {
+                "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
+                "format": "int32",
+                "type": "integer"
+              },
+              "details": {
+                "description": "A list of messages that carry the error details. There is a common set of message types for APIs to use.",
+                "items": {
+                  "description": "`Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message.",
+                  "properties": {
+                    "type_url": {
+                      "description": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message. This string must contain at least one \"/\" character. The last segment of the URL's path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading \".\" is not accepted).",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                      "format": "byte",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "message": {
+                "description": "A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "valid_duration": {
+            "description": "The amount of time for which this result can be considered valid.",
+            "properties": {
+              "nanos": {
+                "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                "format": "int32",
+                "type": "integer"
+              },
+              "seconds": {
+                "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                "format": "int64",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "valid_use_count": {
+            "description": "The number of uses for which this result can be considered valid.",
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.adapter.model.v1beta1.CloseSessionRequest": {
+        "description": "Request message for `CloseSession` method.",
+        "properties": {
+          "session_id": {
+            "description": "Id of the session to be closed.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.adapter.model.v1beta1.CloseSessionResponse": {
+        "description": "Response message for `CloseSession` method.",
+        "properties": {
+          "status": {
+            "description": "The success/failure status of close session call.",
+            "properties": {
+              "code": {
+                "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
+                "format": "int32",
+                "type": "integer"
+              },
+              "details": {
+                "description": "A list of messages that carry the error details. There is a common set of message types for APIs to use.",
+                "items": {
+                  "description": "`Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message.",
+                  "properties": {
+                    "type_url": {
+                      "description": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message. This string must contain at least one \"/\" character. The last segment of the URL's path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading \".\" is not accepted).",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                      "format": "byte",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "message": {
+                "description": "A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.adapter.model.v1beta1.CreateSessionRequest": {
+        "description": "Request message for `CreateSession` method.",
+        "properties": {
+          "adapter_config": {
+            "description": "Adapter specific configuration.",
+            "properties": {
+              "type_url": {
+                "description": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message. This string must contain at least one \"/\" character. The last segment of the URL's path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading \".\" is not accepted).",
+                "type": "string"
+              },
+              "value": {
+                "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                "format": "byte",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "inferred_types": {
+            "additionalProperties": {
+              "properties": {
+                "type_url": {
+                  "description": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message. This string must contain at least one \"/\" character. The last segment of the URL's path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading \".\" is not accepted).",
+                  "type": "string"
+                },
+                "value": {
+                  "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                  "format": "byte",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "description": "Map of instance names to their template-specific inferred type.",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.adapter.model.v1beta1.CreateSessionResponse": {
+        "description": "Response message for `CreateSession` method.",
+        "properties": {
+          "session_id": {
+            "description": "Id of the created session.",
+            "type": "string"
+          },
+          "status": {
+            "description": "The success/failure status of create session call.",
+            "properties": {
+              "code": {
+                "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
+                "format": "int32",
+                "type": "integer"
+              },
+              "details": {
+                "description": "A list of messages that carry the error details. There is a common set of message types for APIs to use.",
+                "items": {
+                  "description": "`Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message.",
+                  "properties": {
+                    "type_url": {
+                      "description": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message. This string must contain at least one \"/\" character. The last segment of the URL's path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading \".\" is not accepted).",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                      "format": "byte",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "message": {
+                "description": "A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.adapter.model.v1beta1.Info": {
+        "description": "Info describes an adapter or a backend that wants to provide telemetry and policy functionality to Mixer as an out of process adapter.",
+        "properties": {
+          "config": {
+            "description": "Base64 encoded proto descriptor of the adapter configuration.",
+            "type": "string"
+          },
+          "description": {
+            "description": "User-friendly description of the adapter.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the adapter. It must be an RFC 1035 compatible DNS label matching the `^[a-z]([-a-z0-9]*[a-z0-9])?$` regular expression. Name is used in Istio configuration, therefore it should be descriptive but short. example: denier Vendor adapters should use a vendor prefix. example: mycompany-denier",
+            "type": "string"
+          },
+          "session_based": {
+            "description": "True if backend has implemented the [InfrastructureBackend](https://github.com/istio/api/blob/master/mixer/adapter/model/v1beta1/infrastructure_backend.proto) service; false otherwise.",
+            "type": "boolean"
+          },
+          "templates": {
+            "description": "Names of the templates the adapter supports.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.adapter.model.v1beta1.QuotaRequest": {
+        "description": "Expresses the quota allocation request.",
+        "properties": {
+          "quotas": {
+            "additionalProperties": {
+              "properties": {
+                "amount": {
+                  "description": "Amount of quota to allocate",
+                  "format": "int64",
+                  "type": "integer"
+                },
+                "best_effort": {
+                  "description": "When true, supports returning less quota than what was requested.",
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "description": "The individual quotas to allocate",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.adapter.model.v1beta1.QuotaResult": {
+        "description": "Expresses the result of multiple quota allocations.",
+        "properties": {
+          "quotas": {
+            "additionalProperties": {
+              "properties": {
+                "granted_amount": {
+                  "description": "The amount of granted quota. When `QuotaParams.best_effort` is true, this will be \u003e= 0. If `QuotaParams.best_effort` is false, this will be either 0 or \u003e= `QuotaParams.amount`.",
+                  "format": "int64",
+                  "type": "integer"
+                },
+                "status": {
+                  "description": "A status code of OK indicates quota was fetched successfully. Any other code indicates error in fetching quota.",
+                  "properties": {
+                    "code": {
+                      "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "details": {
+                      "description": "A list of messages that carry the error details. There is a common set of message types for APIs to use.",
+                      "items": {
+                        "description": "`Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message.",
+                        "properties": {
+                          "type_url": {
+                            "description": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message. This string must contain at least one \"/\" character. The last segment of the URL's path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading \".\" is not accepted).",
+                            "type": "string"
+                          },
+                          "value": {
+                            "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                            "format": "byte",
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "message": {
+                      "description": "A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "valid_duration": {
+                  "description": "The amount of time for which this result can be considered valid.",
+                  "properties": {
+                    "nanos": {
+                      "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "seconds": {
+                      "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+                      "format": "int64",
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
+            "description": "The resulting quota, one entry per requested quota.",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.adapter.model.v1beta1.ReportResult": {
+        "description": "Expresses the result of a report call.",
+        "type": "object"
+      },
+      "istio.mixer.adapter.model.v1beta1.Template": {
+        "description": "Template provides the details of a Mixer template.",
+        "properties": {
+          "descriptor": {
+            "description": "Base64 encoded proto descriptor of the template.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.adapter.model.v1beta1.TemplateVariety": {
+        "description": "The available varieties of templates, controlling the semantics of what an adapter does with each instance.",
+        "enum": [
+          [
+            "TEMPLATE_VARIETY_CHECK",
+            "TEMPLATE_VARIETY_REPORT",
+            "TEMPLATE_VARIETY_QUOTA",
+            "TEMPLATE_VARIETY_ATTRIBUTE_GENERATOR",
+            "TEMPLATE_VARIETY_CHECK_WITH_OUTPUT"
+          ]
+        ],
+        "type": "string"
+      },
+      "istio.mixer.adapter.model.v1beta1.ValidateRequest": {
+        "description": "Request message for `Validate` method.",
+        "properties": {
+          "adapter_config": {
+            "description": "Adapter specific configuration.",
+            "properties": {
+              "type_url": {
+                "description": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message. This string must contain at least one \"/\" character. The last segment of the URL's path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading \".\" is not accepted).",
+                "type": "string"
+              },
+              "value": {
+                "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                "format": "byte",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "inferred_types": {
+            "additionalProperties": {
+              "properties": {
+                "type_url": {
+                  "description": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message. This string must contain at least one \"/\" character. The last segment of the URL's path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading \".\" is not accepted).",
+                  "type": "string"
+                },
+                "value": {
+                  "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                  "format": "byte",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "description": "Map of instance names to their template-specific inferred type.",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "istio.mixer.adapter.model.v1beta1.ValidateResponse": {
+        "description": "Response message for `Validate` method.",
+        "properties": {
+          "status": {
+            "description": "The success/failure status of validation call.",
+            "properties": {
+              "code": {
+                "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
+                "format": "int32",
+                "type": "integer"
+              },
+              "details": {
+                "description": "A list of messages that carry the error details. There is a common set of message types for APIs to use.",
+                "items": {
+                  "description": "`Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message.",
+                  "properties": {
+                    "type_url": {
+                      "description": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message. This string must contain at least one \"/\" character. The last segment of the URL's path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading \".\" is not accepted).",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                      "format": "byte",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "message": {
+                "description": "A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      }
+    }
+  }
+}
