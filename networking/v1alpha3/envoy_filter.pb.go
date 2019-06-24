@@ -203,6 +203,7 @@ const (
 	// Applies the patch to the listener.
 	EnvoyFilter_LISTENER EnvoyFilter_ApplyTo = 1
 	// Applies the patch to the filter chain.
+	// $hide_from_docs
 	EnvoyFilter_FILTER_CHAIN EnvoyFilter_ApplyTo = 2
 	// Applies the patch to the network filter chain, to modify an
 	// existing filter or add a new filter.
@@ -213,8 +214,10 @@ const (
 	EnvoyFilter_HTTP_FILTER EnvoyFilter_ApplyTo = 4
 	// Applies the patch to the Route configuration (rds output) inside a HTTP
 	// connection manager. This does not apply to the virtual host.
+	// $hide_from_docs
 	EnvoyFilter_ROUTE_CONFIGURATION EnvoyFilter_ApplyTo = 5
 	// Applies the patch to a virtual host inside a route configuration.
+	// $hide_from_docs
 	EnvoyFilter_VIRTUAL_HOST EnvoyFilter_ApplyTo = 6
 	// Applies the patch to a cluster in a CDS output. Also used to add new clusters.
 	EnvoyFilter_CLUSTER EnvoyFilter_ApplyTo = 7

@@ -328,6 +328,7 @@ message EnvoyFilter {
     LISTENER = 1;
 
     // Applies the patch to the filter chain.
+    // $hide_from_docs
     FILTER_CHAIN = 2;
 
     // Applies the patch to the network filter chain, to modify an
@@ -341,9 +342,11 @@ message EnvoyFilter {
 
     // Applies the patch to the Route configuration (rds output) inside a HTTP
     // connection manager. This does not apply to the virtual host.
+    // $hide_from_docs
     ROUTE_CONFIGURATION = 5;
 
     // Applies the patch to a virtual host inside a route configuration.
+    // $hide_from_docs
     VIRTUAL_HOST = 6;
 
     // Applies the patch to a cluster in a CDS output. Also used to add new clusters.
