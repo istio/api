@@ -537,8 +537,8 @@ func (m *IstioEgressListener) GetHosts() []string {
 	return nil
 }
 
-// WorkloadSelector specifies the criteria used to determine if the Gateway
-// or Sidecar resource can be applied to a proxy. The matching criteria
+// WorkloadSelector specifies the criteria used to determine if the Gateway,
+// Sidecar, or EnvoyFilter resource can be applied to a proxy. The matching criteria
 // includes the metadata associated with a proxy, workload instance info such as
 // labels attached to the pod/VM, or any other info that the proxy provides
 // to Istio during the initial handshake. If multiple conditions are

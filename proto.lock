@@ -3691,7 +3691,7 @@
                 "integer": 1
               },
               {
-                "name": "FILTER_CHAIN_MATCH",
+                "name": "FILTER_CHAIN",
                 "integer": 2
               },
               {
@@ -3755,20 +3755,12 @@
                 "integer": 3
               },
               {
-                "name": "INSERT_FIRST",
+                "name": "INSERT_BEFORE",
                 "integer": 4
               },
               {
-                "name": "INSERT_LAST",
-                "integer": 5
-              },
-              {
-                "name": "INSERT_BEFORE",
-                "integer": 6
-              },
-              {
                 "name": "INSERT_AFTER",
-                "integer": 7
+                "integer": 5
               }
             ]
           }
@@ -3790,6 +3782,11 @@
                 ]
               },
               {
+                "id": 3,
+                "name": "workload_selector",
+                "type": "WorkloadSelector"
+              },
+              {
                 "id": 4,
                 "name": "config_patches",
                 "type": "EnvoyConfigObjectPatch",
@@ -3809,14 +3806,6 @@
                       "value": "true"
                     }
                   ]
-                }
-              },
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 3,
-                  "name": "workload_selector",
-                  "type": "string"
                 }
               }
             ],
@@ -3974,7 +3963,7 @@
                   },
                   {
                     "id": 2,
-                    "name": "service_port_name",
+                    "name": "port_name",
                     "type": "string"
                   },
                   {

@@ -437,8 +437,8 @@ reach every service in the mesh that is visible to this namespace.</p>
 </section>
 <h2 id="WorkloadSelector">WorkloadSelector</h2>
 <section>
-<p>WorkloadSelector specifies the criteria used to determine if the Gateway
-or Sidecar resource can be applied to a proxy. The matching criteria
+<p>WorkloadSelector specifies the criteria used to determine if the Gateway,
+Sidecar, or EnvoyFilter resource can be applied to a proxy. The matching criteria
 includes the metadata associated with a proxy, workload instance info such as
 labels attached to the pod/VM, or any other info that the proxy provides
 to Istio during the initial handshake. If multiple conditions are
