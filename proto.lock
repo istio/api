@@ -3609,7 +3609,7 @@
       "def": {
         "enums": [
           {
-            "name": "ListenerMatch.ListenerType",
+            "name": "DeprecatedListenerMatch.ListenerType",
             "enum_fields": [
               {
                 "name": "ANY"
@@ -3629,7 +3629,7 @@
             ]
           },
           {
-            "name": "ListenerMatch.ListenerProtocol",
+            "name": "DeprecatedListenerMatch.ListenerProtocol",
             "enum_fields": [
               {
                 "name": "ALL"
@@ -3679,6 +3679,90 @@
                 "integer": 2
               }
             ]
+          },
+          {
+            "name": "EnvoyFilter.ApplyTo",
+            "enum_fields": [
+              {
+                "name": "INVALID"
+              },
+              {
+                "name": "LISTENER",
+                "integer": 1
+              },
+              {
+                "name": "FILTER_CHAIN",
+                "integer": 2
+              },
+              {
+                "name": "NETWORK_FILTER",
+                "integer": 3
+              },
+              {
+                "name": "HTTP_FILTER",
+                "integer": 4
+              },
+              {
+                "name": "ROUTE_CONFIGURATION",
+                "integer": 5
+              },
+              {
+                "name": "VIRTUAL_HOST",
+                "integer": 6
+              },
+              {
+                "name": "CLUSTER",
+                "integer": 7
+              }
+            ]
+          },
+          {
+            "name": "EnvoyFilter.PatchContext",
+            "enum_fields": [
+              {
+                "name": "ANY"
+              },
+              {
+                "name": "SIDECAR_INBOUND",
+                "integer": 1
+              },
+              {
+                "name": "SIDECAR_OUTBOUND",
+                "integer": 2
+              },
+              {
+                "name": "GATEWAY",
+                "integer": 3
+              }
+            ]
+          },
+          {
+            "name": "Patch.Operation",
+            "enum_fields": [
+              {
+                "name": "INVALID"
+              },
+              {
+                "name": "MERGE",
+                "integer": 1
+              },
+              {
+                "name": "ADD",
+                "integer": 2
+              },
+              {
+                "name": "REMOVE",
+                "integer": 3
+              },
+              {
+                "name": "INSERT_BEFORE",
+                "integer": 4
+              },
+              {
+                "name": "INSERT_AFTER",
+                "integer": 5
+              }
+            ]
           }
         ],
         "messages": [
@@ -3689,6 +3773,23 @@
                 "id": 2,
                 "name": "filters",
                 "type": "Filter",
+                "is_repeated": true,
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "workload_selector",
+                "type": "WorkloadSelector"
+              },
+              {
+                "id": 4,
+                "name": "config_patches",
+                "type": "EnvoyConfigObjectPatch",
                 "is_repeated": true
               }
             ],
@@ -3698,13 +3799,19 @@
                 "field": {
                   "id": 1,
                   "name": "workload_labels",
-                  "type": "string"
+                  "type": "string",
+                  "options": [
+                    {
+                      "name": "deprecated",
+                      "value": "true"
+                    }
+                  ]
                 }
               }
             ],
             "messages": [
               {
-                "name": "ListenerMatch",
+                "name": "DeprecatedListenerMatch",
                 "fields": [
                   {
                     "id": 1,
@@ -3778,6 +3885,215 @@
                     "type": "google.protobuf.Struct"
                   }
                 ]
+              },
+              {
+                "name": "ClusterMatch",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "port_number",
+                    "type": "uint32"
+                  },
+                  {
+                    "id": 2,
+                    "name": "service",
+                    "type": "string"
+                  },
+                  {
+                    "id": 3,
+                    "name": "subset",
+                    "type": "string"
+                  },
+                  {
+                    "id": 4,
+                    "name": "name",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "RouteConfigurationMatch",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "port_number",
+                    "type": "uint32"
+                  },
+                  {
+                    "id": 2,
+                    "name": "port_name",
+                    "type": "string"
+                  },
+                  {
+                    "id": 3,
+                    "name": "gateway",
+                    "type": "string"
+                  },
+                  {
+                    "id": 4,
+                    "name": "vhost",
+                    "type": "VirtualHostMatch"
+                  },
+                  {
+                    "id": 5,
+                    "name": "name",
+                    "type": "string"
+                  }
+                ],
+                "messages": [
+                  {
+                    "name": "VirtualHostMatch",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "name",
+                        "type": "string"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "ListenerMatch",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "port_number",
+                    "type": "uint32"
+                  },
+                  {
+                    "id": 2,
+                    "name": "port_name",
+                    "type": "string"
+                  },
+                  {
+                    "id": 3,
+                    "name": "filter_chain",
+                    "type": "FilterChainMatch"
+                  },
+                  {
+                    "id": 4,
+                    "name": "name",
+                    "type": "string"
+                  }
+                ],
+                "messages": [
+                  {
+                    "name": "FilterChainMatch",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "sni",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "transport_protocol",
+                        "type": "string"
+                      },
+                      {
+                        "id": 3,
+                        "name": "filter",
+                        "type": "FilterMatch"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "FilterMatch",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "name",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "sub_filter",
+                        "type": "SubFilterMatch"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "SubFilterMatch",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "name",
+                        "type": "string"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Patch",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "operation",
+                    "type": "Operation"
+                  },
+                  {
+                    "id": 2,
+                    "name": "value",
+                    "type": "google.protobuf.Value"
+                  }
+                ]
+              },
+              {
+                "name": "EnvoyConfigObjectMatch",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "listener",
+                    "type": "ListenerMatch"
+                  },
+                  {
+                    "id": 3,
+                    "name": "route_configuration",
+                    "type": "RouteConfigurationMatch"
+                  },
+                  {
+                    "id": 5,
+                    "name": "cluster",
+                    "type": "ClusterMatch"
+                  }
+                ]
+              },
+              {
+                "name": "EnvoyFilterMatchCondition",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "context",
+                    "type": "PatchContext"
+                  },
+                  {
+                    "id": 2,
+                    "name": "match",
+                    "type": "EnvoyConfigObjectMatch"
+                  }
+                ]
+              },
+              {
+                "name": "EnvoyConfigObjectPatch",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "apply_to",
+                    "type": "ApplyTo"
+                  },
+                  {
+                    "id": 2,
+                    "name": "match",
+                    "type": "EnvoyConfigObjectMatch"
+                  },
+                  {
+                    "id": 3,
+                    "name": "patch",
+                    "type": "Patch"
+                  }
+                ]
               }
             ]
           }
@@ -3785,6 +4101,9 @@
         "imports": [
           {
             "path": "google/protobuf/struct.proto"
+          },
+          {
+            "path": "networking/v1alpha3/sidecar.proto"
           }
         ],
         "package": {
