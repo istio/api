@@ -10,6 +10,7 @@ import (
 	io "io"
 	v1 "istio.io/api/mixer/v1"
 	math "math"
+	math_bits "math/bits"
 	reflect "reflect"
 	strings "strings"
 )
@@ -991,14 +992,7 @@ func (m *HTTPAPISpecBinding) Size() (n int) {
 }
 
 func sovApiSpec(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozApiSpec(x uint64) (n int) {
 	return sovApiSpec(uint64((x << 1) ^ uint64((int64(x) >> 63))))

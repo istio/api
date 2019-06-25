@@ -9,6 +9,7 @@ import (
 	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 	io "io"
 	math "math"
+	math_bits "math/bits"
 	reflect "reflect"
 	strconv "strconv"
 	strings "strings"
@@ -511,14 +512,7 @@ func (m *DirectHttpResponse) Size() (n int) {
 }
 
 func sovHttpResponse(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozHttpResponse(x uint64) (n int) {
 	return sovHttpResponse(uint64((x << 1) ^ uint64((int64(x) >> 63))))

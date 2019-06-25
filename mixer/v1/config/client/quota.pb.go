@@ -10,6 +10,7 @@ import (
 	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 	io "io"
 	math "math"
+	math_bits "math/bits"
 	reflect "reflect"
 	strings "strings"
 )
@@ -909,14 +910,7 @@ func (m *QuotaSpecBinding_QuotaSpecReference) Size() (n int) {
 }
 
 func sovQuota(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozQuota(x uint64) (n int) {
 	return sovQuota(uint64((x << 1) ^ uint64((int64(x) >> 63))))

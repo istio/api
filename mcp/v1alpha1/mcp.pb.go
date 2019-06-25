@@ -11,8 +11,11 @@ import (
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	io "io"
 	math "math"
+	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1191,6 +1194,17 @@ type AggregatedMeshConfigServiceServer interface {
 	IncrementalAggregatedResources(AggregatedMeshConfigService_IncrementalAggregatedResourcesServer) error
 }
 
+// UnimplementedAggregatedMeshConfigServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedAggregatedMeshConfigServiceServer struct {
+}
+
+func (*UnimplementedAggregatedMeshConfigServiceServer) StreamAggregatedResources(srv AggregatedMeshConfigService_StreamAggregatedResourcesServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamAggregatedResources not implemented")
+}
+func (*UnimplementedAggregatedMeshConfigServiceServer) IncrementalAggregatedResources(srv AggregatedMeshConfigService_IncrementalAggregatedResourcesServer) error {
+	return status.Errorf(codes.Unimplemented, "method IncrementalAggregatedResources not implemented")
+}
+
 func RegisterAggregatedMeshConfigServiceServer(s *grpc.Server, srv AggregatedMeshConfigServiceServer) {
 	s.RegisterService(&_AggregatedMeshConfigService_serviceDesc, srv)
 }
@@ -1325,6 +1339,14 @@ type ResourceSourceServer interface {
 	EstablishResourceStream(ResourceSource_EstablishResourceStreamServer) error
 }
 
+// UnimplementedResourceSourceServer can be embedded to have forward compatible implementations.
+type UnimplementedResourceSourceServer struct {
+}
+
+func (*UnimplementedResourceSourceServer) EstablishResourceStream(srv ResourceSource_EstablishResourceStreamServer) error {
+	return status.Errorf(codes.Unimplemented, "method EstablishResourceStream not implemented")
+}
+
 func RegisterResourceSourceServer(s *grpc.Server, srv ResourceSourceServer) {
 	s.RegisterService(&_ResourceSource_serviceDesc, srv)
 }
@@ -1425,6 +1447,14 @@ type ResourceSinkServer interface {
 	// with the sink. The sink sends RequestResources message to and
 	// receives Resources messages from the source.
 	EstablishResourceStream(ResourceSink_EstablishResourceStreamServer) error
+}
+
+// UnimplementedResourceSinkServer can be embedded to have forward compatible implementations.
+type UnimplementedResourceSinkServer struct {
+}
+
+func (*UnimplementedResourceSinkServer) EstablishResourceStream(srv ResourceSink_EstablishResourceStreamServer) error {
+	return status.Errorf(codes.Unimplemented, "method EstablishResourceStream not implemented")
 }
 
 func RegisterResourceSinkServer(s *grpc.Server, srv ResourceSinkServer) {
@@ -2154,14 +2184,7 @@ func (m *Resources) Size() (n int) {
 }
 
 func sovMcp(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozMcp(x uint64) (n int) {
 	return sovMcp(uint64((x << 1) ^ uint64((int64(x) >> 63))))

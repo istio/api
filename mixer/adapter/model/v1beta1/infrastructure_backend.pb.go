@@ -14,8 +14,11 @@ import (
 	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 	types "github.com/gogo/protobuf/types"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	io "io"
 	math "math"
+	math_bits "math/bits"
 	reflect "reflect"
 	strings "strings"
 )
@@ -759,6 +762,20 @@ type InfrastructureBackendServer interface {
 	CloseSession(context.Context, *CloseSessionRequest) (*CloseSessionResponse, error)
 }
 
+// UnimplementedInfrastructureBackendServer can be embedded to have forward compatible implementations.
+type UnimplementedInfrastructureBackendServer struct {
+}
+
+func (*UnimplementedInfrastructureBackendServer) Validate(ctx context.Context, req *ValidateRequest) (*ValidateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Validate not implemented")
+}
+func (*UnimplementedInfrastructureBackendServer) CreateSession(ctx context.Context, req *CreateSessionRequest) (*CreateSessionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateSession not implemented")
+}
+func (*UnimplementedInfrastructureBackendServer) CloseSession(ctx context.Context, req *CloseSessionRequest) (*CloseSessionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CloseSession not implemented")
+}
+
 func RegisterInfrastructureBackendServer(s *grpc.Server, srv InfrastructureBackendServer) {
 	s.RegisterService(&_InfrastructureBackend_serviceDesc, srv)
 }
@@ -1182,14 +1199,7 @@ func (m *CloseSessionResponse) Size() (n int) {
 }
 
 func sovInfrastructureBackend(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozInfrastructureBackend(x uint64) (n int) {
 	return sovInfrastructureBackend(uint64((x << 1) ^ uint64((int64(x) >> 63))))

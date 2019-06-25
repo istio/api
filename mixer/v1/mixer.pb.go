@@ -16,8 +16,11 @@ import (
 	_ "github.com/gogo/protobuf/types"
 	github_com_gogo_protobuf_types "github.com/gogo/protobuf/types"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	io "io"
 	math "math"
+	math_bits "math/bits"
 	reflect "reflect"
 	strconv "strconv"
 	strings "strings"
@@ -802,6 +805,17 @@ type MixerServer interface {
 	// The reported information depends on the set of supplied attributes and the
 	// active configuration.
 	Report(context.Context, *ReportRequest) (*ReportResponse, error)
+}
+
+// UnimplementedMixerServer can be embedded to have forward compatible implementations.
+type UnimplementedMixerServer struct {
+}
+
+func (*UnimplementedMixerServer) Check(ctx context.Context, req *CheckRequest) (*CheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
+}
+func (*UnimplementedMixerServer) Report(ctx context.Context, req *ReportRequest) (*ReportResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Report not implemented")
 }
 
 func RegisterMixerServer(s *grpc.Server, srv MixerServer) {
@@ -1591,14 +1605,7 @@ func (m *ReportResponse) Size() (n int) {
 }
 
 func sovMixer(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozMixer(x uint64) (n int) {
 	return sovMixer(uint64((x << 1) ^ uint64((int64(x) >> 63))))

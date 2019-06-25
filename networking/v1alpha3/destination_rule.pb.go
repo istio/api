@@ -82,6 +82,7 @@ import (
 	types "github.com/gogo/protobuf/types"
 	io "io"
 	math "math"
+	math_bits "math/bits"
 	time "time"
 )
 
@@ -2953,14 +2954,7 @@ func (m *TLSSettings) Size() (n int) {
 }
 
 func sovDestinationRule(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozDestinationRule(x uint64) (n int) {
 	return sovDestinationRule(uint64((x << 1) ^ uint64((int64(x) >> 63))))
