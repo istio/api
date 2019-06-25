@@ -370,7 +370,7 @@
             "type": "string"
           },
           "params": {
-            "description": "Optional. Depends on adapter implementation. Struct representation of a proto defined by the adapter implementation; this varies depending on the value of field `adapter`.",
+            "description": "Required. Depends on referenced template. Struct representation of a proto defined by the template; this varies depending on the value of field `template`.",
             "properties": {
               "fields": {
                 "additionalProperties": true,
@@ -476,7 +476,7 @@
             "type": "string"
           },
           "params": {
-            "description": "Optional. Depends on adapter implementation. Struct representation of a proto defined by the adapter implementation; this varies depending on the value of field `adapter`.",
+            "description": "Required. Depends on referenced template. Struct representation of a proto defined by the template; this varies depending on the value of field `template`.",
             "properties": {
               "fields": {
                 "additionalProperties": true,
