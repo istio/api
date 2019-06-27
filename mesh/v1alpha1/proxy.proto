@@ -91,13 +91,13 @@ message Tracing {
 
     enum TraceContext {
       // W3C Trace-Context format "traceparent:" header.
-      trace_context = 0;
+      TRACE_CONTEXT = 0;
 
       // Binary "grpc-trace-bin:" header.
-      grpc_trace_bin = 1;
+      GRPC_TRACE_BIN = 1;
 
       // "X-Cloud-Trace-Context:" header.
-      cloud_trace_context = 2;
+      CLOUD_TRACE_CONTEXT = 2;
     }
 
     // List of incoming trace context headers we will accept. First one found

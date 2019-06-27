@@ -1358,14 +1358,14 @@
             "name": "OpenCensus.TraceContext",
             "enum_fields": [
               {
-                "name": "trace_context"
+                "name": "TRACE_CONTEXT"
               },
               {
-                "name": "grpc_trace_bin",
+                "name": "GRPC_TRACE_BIN",
                 "integer": 1
               },
               {
-                "name": "cloud_trace_context",
+                "name": "CLOUD_TRACE_CONTEXT",
                 "integer": 2
               }
             ]
