@@ -66,6 +66,48 @@ message Tracing {
     string address = 1;
   }
 
+  // OpenCensus defines configuration for a OpenCensus tracer.
+  message OpenCensus {
+    // NOTE: The trace config, available via the Envoy OpenCensus, is not currently
+    // exposed here as the main purpose is to configure the sampling, but the implementation
+    // then defers to the Envoy sampling decision, so has no effect.
+
+    // Enables the stdout exporter if set to true. This is intended for debugging
+    // purposes.
+    bool stdout_exporter_enabled = 1;
+
+    // Enables the Stackdriver exporter if set to true. The project_id must also
+    // be set.
+    bool stackdriver_exporter_enabled = 2;
+
+    // The Cloud project_id to use for Stackdriver tracing.
+    string stackdriver_project_id = 3;
+
+    // Enables the Zipkin exporter if set to true. The url must also be set.
+    bool zipkin_exporter_enabled = 4;
+
+    // The URL to Zipkin, e.g. "http://127.0.0.1:9411/api/v2/spans"
+    string zipkin_url = 5;
+
+    enum TraceContext {
+      // W3C Trace-Context format "traceparent:" header.
+      trace_context = 0;
+
+      // Binary "grpc-trace-bin:" header.
+      grpc_trace_bin = 1;
+
+      // "X-Cloud-Trace-Context:" header.
+      cloud_trace_context = 2;
+    }
+
+    // List of incoming trace context headers we will accept. First one found
+    // wins.
+    repeated TraceContext incoming_trace_context = 6;
+
+    // List of outgoing trace context headers we will produce.
+    repeated TraceContext outgoing_trace_context = 7;
+  }
+
   // The tracer implementation to be used by Envoy.
   oneof tracer {
     // Use a Zipkin tracer.
@@ -74,6 +116,8 @@ message Tracing {
     Lightstep lightstep = 2;
     // Use a Datadog tracer.
     Datadog datadog = 3;
+    // Use a OpenCensus tracer.
+    OpenCensus opencensus = 4;
   }
 }
 

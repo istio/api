@@ -1355,6 +1355,22 @@
             ]
           },
           {
+            "name": "OpenCensus.TraceContext",
+            "enum_fields": [
+              {
+                "name": "trace_context"
+              },
+              {
+                "name": "grpc_trace_bin",
+                "integer": 1
+              },
+              {
+                "name": "cloud_trace_context",
+                "integer": 2
+              }
+            ]
+          },
+          {
             "name": "ProxyConfig.InboundInterceptionMode",
             "enum_fields": [
               {
@@ -1385,6 +1401,11 @@
                 "id": 3,
                 "name": "datadog",
                 "type": "Datadog"
+              },
+              {
+                "id": 4,
+                "name": "opencensus",
+                "type": "OpenCensus"
               }
             ],
             "messages": [
@@ -1430,6 +1451,48 @@
                     "id": 1,
                     "name": "address",
                     "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "OpenCensus",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "stdout_exporter_enabled",
+                    "type": "bool"
+                  },
+                  {
+                    "id": 2,
+                    "name": "stackdriver_exporter_enabled",
+                    "type": "bool"
+                  },
+                  {
+                    "id": 3,
+                    "name": "stackdriver_project_id",
+                    "type": "string"
+                  },
+                  {
+                    "id": 4,
+                    "name": "zipkin_exporter_enabled",
+                    "type": "bool"
+                  },
+                  {
+                    "id": 5,
+                    "name": "zipkin_url",
+                    "type": "string"
+                  },
+                  {
+                    "id": 6,
+                    "name": "incoming_trace_context",
+                    "type": "TraceContext",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 7,
+                    "name": "outgoing_trace_context",
+                    "type": "TraceContext",
+                    "is_repeated": true
                   }
                 ]
               }
