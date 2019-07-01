@@ -1385,6 +1385,11 @@
                 "id": 3,
                 "name": "datadog",
                 "type": "Datadog"
+              },
+              {
+                "id": 4,
+                "name": "stackdriver",
+                "type": "Stackdriver"
               }
             ],
             "messages": [
@@ -1430,6 +1435,31 @@
                     "id": 1,
                     "name": "address",
                     "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "Stackdriver",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "debug",
+                    "type": "bool"
+                  },
+                  {
+                    "id": 2,
+                    "name": "max_number_of_attributes",
+                    "type": "google.protobuf.Int64Value"
+                  },
+                  {
+                    "id": 3,
+                    "name": "max_number_of_annotations",
+                    "type": "google.protobuf.Int64Value"
+                  },
+                  {
+                    "id": 4,
+                    "name": "max_number_of_message_events",
+                    "type": "google.protobuf.Int64Value"
                   }
                 ]
               }
@@ -1587,6 +1617,9 @@
         "imports": [
           {
             "path": "google/protobuf/duration.proto"
+          },
+          {
+            "path": "google/protobuf/wrappers.proto"
           }
         ],
         "package": {
