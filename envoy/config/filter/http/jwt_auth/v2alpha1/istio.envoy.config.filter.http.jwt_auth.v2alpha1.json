@@ -1,0 +1,217 @@
+{
+  "openapi": "3.0.0",
+  "components": {
+    "schema": {
+      "istio.envoy.config.filter.http.jwt_auth.v2alpha1.HttpUri": {
+        "description": "Copied from @envoy/api/envoy/api/v2/core/http_uri.proto\n Envoy external URI descriptor",
+        "type": "object",
+        "properties": {
+          "cluster": {
+            "description": "A cluster is created in the Envoy \"cluster_manager\" config\n section. This field specifies the cluster name.\n\n Example:\n\n .. code-block:: yaml\n\n    cluster: jwks_cluster",
+            "type": "string",
+            "format": "string"
+          },
+          "timeout": {
+            "$ref": "#/components/schema/google.protobuf.Duration"
+          },
+          "uri": {
+            "description": "The HTTP server URI. It should be a full FQDN with protocol, host and path.\n\n Example:\n\n .. code-block:: yaml\n\n    uri: https://www.googleapis.com/oauth2/v1/certs",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.envoy.config.filter.http.jwt_auth.v2alpha1.DataSource": {
+        "description": "Copied from @envoy/api/envoy/api/v2/core/base.proto\n Data source consisting of either a file or an inline value.",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "filename": {
+                "description": "Local filesystem data source.",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "inlineBytes": {
+                "description": "Bytes inlined in the configuration.",
+                "type": "string",
+                "format": "byte"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "inlineString": {
+                "description": "String inlined in the configuration.",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          }
+        ]
+      },
+      "istio.envoy.config.filter.http.jwt_auth.v2alpha1.JwtRule": {
+        "description": "This message specifies how a JSON Web Token (JWT) can be verified. See the [JWT format definition](https://tools.ietf.org/html/rfc7519)\n for details. Please see [OAuth2.0](https://tools.ietf.org/html/rfc6749) and\n [OIDC1.0](http://openid.net/connect) for\n the authentication flow.\n\n Example:\n\n ```yaml\n     issuer: https://example.com\n     audiences:\n     - bookstore_android.apps.googleusercontent.com\n       bookstore_web.apps.googleusercontent.com\n     remote_jwks:\n     - http_uri:\n       - uri: https://example.com/.well-known/jwks.json\n         cluster: example_jwks_cluster\n       cache_duration:\n       - seconds: 300\n ```",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "audiences": {
+                "description": "The list of JWT `audiences \u003chttps://tools.ietf.org/html/rfc7519#section-4.1.3\u003e`_. that are\n allowed to access. A JWT containing any of these audiences will be accepted. If not specified,\n will not check audiences in the token.\n\n Example:\n\n .. code-block:: yaml\n\n     audiences:\n     - bookstore_android.apps.googleusercontent.com\n       bookstore_web.apps.googleusercontent.com",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "string"
+                }
+              },
+              "forward": {
+                "description": "If false, the JWT is removed in the request after a success verification. If true, the JWT is\n not removed in the request. Default value is false.",
+                "type": "boolean"
+              },
+              "forwardPayloadHeader": {
+                "description": "This field specifies the header name to forward a successfully verified JWT payload to the\n backend. The forwarded data is::\n\n    base64_encoded(jwt_payload_in_JSON)\n\n If it is not specified, the payload will not be forwarded.\n Multiple JWTs in a request from different issuers will be supported. Multiple JWTs from the\n same issuer will not be supported. Each issuer can config this `forward_payload_header`. If\n multiple JWTs from different issuers want to forward their payloads, their\n `forward_payload_header` should be different.",
+                "type": "string",
+                "format": "string"
+              },
+              "fromHeaders": {
+                "description": "Specify the HTTP headers to extract JWT token. For examples, following config:\n\n .. code-block:: yaml\n\n   from_headers:\n   - name: x-goog-iap-jwt-assertion\n\n can be used to extract token from header::\n\n   x-goog-iap-jwt-assertion: \u003cJWT\u003e.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schema/istio.envoy.config.filter.http.jwt_auth.v2alpha1.JwtHeader"
+                }
+              },
+              "fromParams": {
+                "description": "JWT is sent in a query parameter. `jwt_params` represents the query parameter names.\n\n For example, if config is:\n\n .. code-block:: yaml\n\n   from_params:\n   - jwt_token\n\n The JWT format in query parameter is::\n\n    /path?jwt_token=\u003cJWT\u003e",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "string"
+                }
+              },
+              "issuer": {
+                "description": "Identifies the principal that issued the JWT. See `here\n  \u003chttps://tools.ietf.org/html/rfc7519#section-4.1.1\u003e`_. Usually a URL or an email address.\n\n Example: https://securetoken.google.com\n Example: 1234567-compute@developer.gserviceaccount.com",
+                "type": "string",
+                "format": "string"
+              },
+              "remoteJwks": {
+                "$ref": "#/components/schema/istio.envoy.config.filter.http.jwt_auth.v2alpha1.RemoteJwks"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "audiences": {
+                "description": "The list of JWT `audiences \u003chttps://tools.ietf.org/html/rfc7519#section-4.1.3\u003e`_. that are\n allowed to access. A JWT containing any of these audiences will be accepted. If not specified,\n will not check audiences in the token.\n\n Example:\n\n .. code-block:: yaml\n\n     audiences:\n     - bookstore_android.apps.googleusercontent.com\n       bookstore_web.apps.googleusercontent.com",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "string"
+                }
+              },
+              "forward": {
+                "description": "If false, the JWT is removed in the request after a success verification. If true, the JWT is\n not removed in the request. Default value is false.",
+                "type": "boolean"
+              },
+              "forwardPayloadHeader": {
+                "description": "This field specifies the header name to forward a successfully verified JWT payload to the\n backend. The forwarded data is::\n\n    base64_encoded(jwt_payload_in_JSON)\n\n If it is not specified, the payload will not be forwarded.\n Multiple JWTs in a request from different issuers will be supported. Multiple JWTs from the\n same issuer will not be supported. Each issuer can config this `forward_payload_header`. If\n multiple JWTs from different issuers want to forward their payloads, their\n `forward_payload_header` should be different.",
+                "type": "string",
+                "format": "string"
+              },
+              "fromHeaders": {
+                "description": "Specify the HTTP headers to extract JWT token. For examples, following config:\n\n .. code-block:: yaml\n\n   from_headers:\n   - name: x-goog-iap-jwt-assertion\n\n can be used to extract token from header::\n\n   x-goog-iap-jwt-assertion: \u003cJWT\u003e.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schema/istio.envoy.config.filter.http.jwt_auth.v2alpha1.JwtHeader"
+                }
+              },
+              "fromParams": {
+                "description": "JWT is sent in a query parameter. `jwt_params` represents the query parameter names.\n\n For example, if config is:\n\n .. code-block:: yaml\n\n   from_params:\n   - jwt_token\n\n The JWT format in query parameter is::\n\n    /path?jwt_token=\u003cJWT\u003e",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "string"
+                }
+              },
+              "issuer": {
+                "description": "Identifies the principal that issued the JWT. See `here\n  \u003chttps://tools.ietf.org/html/rfc7519#section-4.1.1\u003e`_. Usually a URL or an email address.\n\n Example: https://securetoken.google.com\n Example: 1234567-compute@developer.gserviceaccount.com",
+                "type": "string",
+                "format": "string"
+              },
+              "localJwks": {
+                "$ref": "#/components/schema/istio.envoy.config.filter.http.jwt_auth.v2alpha1.DataSource"
+              }
+            }
+          }
+        ]
+      },
+      "istio.envoy.config.filter.http.jwt_auth.v2alpha1.JwtHeader": {
+        "description": "This message specifies a header location to extract JWT token.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The HTTP header name.",
+            "type": "string",
+            "format": "string"
+          },
+          "valuePrefix": {
+            "description": "The value prefix. The value format is \"value_prefix\u003ctoken\u003e\"\n For example, for \"Authorization: Bearer \u003ctoken\u003e\", value_prefix=\"Bearer \" with a space at the\n end.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.envoy.config.filter.http.jwt_auth.v2alpha1.RemoteJwks": {
+        "description": "This message specifies how to fetch JWKS from remote and how to cache it.",
+        "type": "object",
+        "properties": {
+          "cacheDuration": {
+            "$ref": "#/components/schema/google.protobuf.Duration"
+          },
+          "httpUri": {
+            "$ref": "#/components/schema/istio.envoy.config.filter.http.jwt_auth.v2alpha1.HttpUri"
+          }
+        }
+      },
+      "istio.envoy.config.filter.http.jwt_auth.v2alpha1.JwtAuthentication": {
+        "description": "This is the Envoy HTTP filter config for JWT authentication.\n [#not-implemented-hide:]",
+        "type": "object",
+        "properties": {
+          "allowMissingOrFailed": {
+            "description": "If true, the request is allowed if JWT is missing or JWT verification fails.\n Default is false, a request without JWT or failed JWT verification is not allowed.",
+            "type": "boolean"
+          },
+          "rules": {
+            "description": "List of JWT rules to valide.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schema/istio.envoy.config.filter.http.jwt_auth.v2alpha1.JwtRule"
+            }
+          }
+        }
+      },
+      "google.protobuf.Duration": {
+        "description": "Duration after which the cached JWKS should be expired. If not specified, default cache\n duration is 5 minutes.",
+        "type": "object",
+        "properties": {
+          "nanos": {
+            "description": "Signed fractions of a second at nanosecond resolution of the span\n of time. Durations less than one second are represented with a 0\n `seconds` field and a positive or negative `nanos` field. For durations\n of one second or more, a non-zero value for the `nanos` field must be\n of the same sign as the `seconds` field. Must be from -999,999,999\n to +999,999,999 inclusive.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "seconds": {
+            "description": "Signed seconds of the span of time. Must be from -315,576,000,000\n to +315,576,000,000 inclusive. Note: these bounds are computed from:\n 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      }
+    }
+  }
+}

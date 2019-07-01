@@ -1,0 +1,290 @@
+{
+  "openapi": "3.0.0",
+  "components": {
+    "schema": {
+      "istio.envoy.config.filter.http.authn.v2alpha1.FilterConfig": {
+        "description": "FilterConfig is the config for Istio-specific filter that is used to enforce\n authentication policy on Envoy.",
+        "type": "object",
+        "required": [
+          "jwtOutputPayloadLocations"
+        ],
+        "properties": {
+          "jwtOutputPayloadLocations": {
+            "description": "Map from issuer to location of the payload that is emitted by Jwt filter.\n This information is added by pilot when construct and add Jwt and\n authN filters.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "policy": {
+            "$ref": "#/components/schema/istio.authentication.v1alpha1.Policy"
+          }
+        }
+      },
+      "istio.authentication.v1alpha1.Policy": {
+        "description": "Policy is the original copy of the policy.",
+        "type": "object",
+        "properties": {
+          "originIsOptional": {
+            "description": "Set this flag to true to accept request (for origin authentication perspective),\n even when none of the origin authentication methods defined above satisfied.\n Typically, this is used to delay the rejection decision to next layer (e.g\n authorization).\n This flag is ignored if no authentication defined for origin (origins field is empty).",
+            "type": "boolean"
+          },
+          "origins": {
+            "description": "List of authentication methods that can be used for origin authentication.\n Similar to peers, these will be evaluated in order; the first validate one\n will be used to set origin identity and attributes (i.e request.auth.user,\n request.auth.issuer etc). If none of these methods pass, request will be\n rejected with authentication failed error (401).\n A method may be skipped, depends on its trigger rule. If all of these methods\n are skipped, origin authentication will be ignored, as if it is not defined.\n Leave the list empty if origin authentication is not required.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schema/istio.authentication.v1alpha1.OriginAuthenticationMethod"
+            }
+          },
+          "peerIsOptional": {
+            "description": "Set this flag to true to accept request (for peer authentication perspective),\n even when none of the peer authentication methods defined above satisfied.\n Typically, this is used to delay the rejection decision to next layer (e.g\n authorization).\n This flag is ignored if no authentication defined for peer (peers field is empty).",
+            "type": "boolean"
+          },
+          "peers": {
+            "description": "List of authentication methods that can be used for peer authentication.\n They will be evaluated in order; the first validate one will be used to\n set peer identity (source.user) and other peer attributes. If none of\n these methods pass, request will be rejected with authentication failed error (401).\n Leave the list empty if peer authentication is not required",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schema/istio.authentication.v1alpha1.PeerAuthenticationMethod"
+            }
+          },
+          "principalBinding": {
+            "$ref": "#/components/schema/istio.authentication.v1alpha1.PrincipalBinding"
+          },
+          "targets": {
+            "description": "List rules to select workloads that the policy should be applied on.\n If empty, policy will be used on all workloads in the same namespace.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schema/istio.authentication.v1alpha1.TargetSelector"
+            }
+          }
+        }
+      },
+      "istio.authentication.v1alpha1.OriginAuthenticationMethod": {
+        "type": "object",
+        "properties": {
+          "jwt": {
+            "$ref": "#/components/schema/istio.authentication.v1alpha1.Jwt"
+          }
+        }
+      },
+      "istio.authentication.v1alpha1.PeerAuthenticationMethod": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "mtls": {
+                "$ref": "#/components/schema/istio.authentication.v1alpha1.MutualTls"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "jwt": {
+                "$ref": "#/components/schema/istio.authentication.v1alpha1.Jwt"
+              }
+            }
+          }
+        ]
+      },
+      "istio.authentication.v1alpha1.PrincipalBinding": {
+        "description": "Define whether peer or origin identity should be use for principal. Default\n value is USE_PEER.\n If peer (or origin) identity is not available, either because of peer/origin\n authentication is not defined, or failed, principal will be left unset.\n In other words, binding rule does not affect the decision to accept or\n reject request.",
+        "enum": [
+          "USE_PEER",
+          "USE_ORIGIN"
+        ],
+        "default": "USE_PEER"
+      },
+      "istio.authentication.v1alpha1.TargetSelector": {
+        "type": "object",
+        "required": [
+          "labels"
+        ],
+        "properties": {
+          "labels": {
+            "description": "$hide_from_docs\n $not-implemented-hide\n Select workload by labels.\n Once implemented, this is the preferred way rather than using the service name.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "name": {
+            "description": "REQUIRED. The name must be a short name from the service registry. The\n fully qualified domain name will be resolved in a platform specific manner.",
+            "type": "string",
+            "format": "string"
+          },
+          "ports": {
+            "description": "Specifies the ports. Note that this is the port(s) exposed by the service, not workload instance ports.\n For example, if a service is defined as below, then `8000` should be used, not `9000`.\n ```yaml\n kind: Service\n metadata:\n   ...\n spec:\n   ports:\n   - name: http\n     port: 8000\n     targetPort: 9000\n   selector:\n     app: backend\n ```\nLeave empty to match all ports that are exposed.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schema/istio.authentication.v1alpha1.PortSelector"
+            }
+          }
+        }
+      },
+      "istio.authentication.v1alpha1.Jwt": {
+        "description": "$hide_from_docs\n Set if JWT is used. This option is not yet available.",
+        "type": "object",
+        "properties": {
+          "audiences": {
+            "description": "The list of JWT\n [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3).\n that are allowed to access. A JWT containing any of these\n audiences will be accepted.\n\n The service name will be accepted if audiences is empty.\n\n Example:\n\n ```yaml\n audiences:\n - bookstore_android.apps.googleusercontent.com\n   bookstore_web.apps.googleusercontent.com\n ```",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "issuer": {
+            "description": "Identifies the issuer that issued the JWT. See\n [issuer](https://tools.ietf.org/html/rfc7519#section-4.1.1)\n Usually a URL or an email address.\n\n Example: https://securetoken.google.com\n Example: 1234567-compute@developer.gserviceaccount.com",
+            "type": "string",
+            "format": "string"
+          },
+          "jwks": {
+            "description": "JSON Web Key Set of public keys to validate signature of the JWT.\n See https://auth0.com/docs/jwks.\n\n Note: Only one of jwks_uri and jwks should be used.",
+            "type": "string",
+            "format": "string"
+          },
+          "jwksUri": {
+            "description": "URL of the provider's public key set to validate signature of the\n JWT. See [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).\n\n Optional if the key set document can either (a) be retrieved from\n [OpenID\n Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html) of\n the issuer or (b) inferred from the email domain of the issuer (e.g. a\n Google service account).\n\n Example: `https://www.googleapis.com/oauth2/v1/certs`\n\n Note: Only one of jwks_uri and jwks should be used.",
+            "type": "string",
+            "format": "string"
+          },
+          "jwtHeaders": {
+            "description": "JWT is sent in a request header. `header` represents the\n header name.\n\n For example, if `header=x-goog-iap-jwt-assertion`, the header\n format will be x-goog-iap-jwt-assertion: \u003cJWT\u003e.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "jwtParams": {
+            "description": "JWT is sent in a query parameter. `query` represents the\n query parameter name.\n\n For example, `query=jwt_token`.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "triggerRules": {
+            "description": "List of trigger rules to decide if this JWT should be used to validate the\n request. The JWT validation happens if any one of the rules matched.\n If the list is not empty and none of the rules matched, authentication will\n skip the JWT validation.\n Leave this empty to always trigger the JWT validation.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schema/istio.authentication.v1alpha1.Jwt.TriggerRule"
+            }
+          }
+        }
+      },
+      "istio.authentication.v1alpha1.MutualTls": {
+        "description": "Set if mTLS is used.",
+        "type": "object",
+        "properties": {
+          "allowTls": {
+            "description": "WILL BE DEPRECATED, if set, will translates to `TLS_PERMISSIVE` mode.\n Set this flag to true to allow regular TLS (i.e without client x509\n certificate). If request carries client certificate, identity will be\n extracted and used (set to peer identity). Otherwise, peer identity will\n be left unset.\n When the flag is false (default), request must have client certificate.",
+            "type": "boolean"
+          },
+          "mode": {
+            "$ref": "#/components/schema/istio.authentication.v1alpha1.MutualTls.Mode"
+          }
+        }
+      },
+      "istio.authentication.v1alpha1.PortSelector": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "number": {
+                "description": "Valid port number",
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 4294967295
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Port name",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          }
+        ]
+      },
+      "istio.authentication.v1alpha1.Jwt.TriggerRule": {
+        "type": "object",
+        "properties": {
+          "excludedPaths": {
+            "description": "List of paths to be excluded from the request. The rule is satisfied if\n request path does not match to any of the path in this list.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schema/istio.authentication.v1alpha1.StringMatch"
+            }
+          },
+          "includedPaths": {
+            "description": "List of paths that the request must include. If the list is not empty, the\n rule is satisfied if request path matches at least one of the path in the list.\n If the list is empty, the rule is ignored, in other words the rule is always satisfied.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schema/istio.authentication.v1alpha1.StringMatch"
+            }
+          }
+        }
+      },
+      "istio.authentication.v1alpha1.MutualTls.Mode": {
+        "description": "Defines the mode of mTLS authentication.",
+        "enum": [
+          "STRICT",
+          "PERMISSIVE"
+        ],
+        "default": "STRICT"
+      },
+      "istio.authentication.v1alpha1.StringMatch": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "exact": {
+                "description": "exact string match.",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "prefix": {
+                "description": "prefix-based match.",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "suffix": {
+                "description": "suffix-based match.",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "regex": {
+                "description": "ECMAscript style regex-based match as defined by [EDCA-262](\n http://en.cppreference.com/w/cpp/regex/ecmascript).\n Example: \"^/pets/(.*?)?\"",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
