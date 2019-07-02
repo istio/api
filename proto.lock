@@ -3017,6 +3017,17 @@
                     "type": "int64"
                   },
                   {
+                    "id": 6,
+                    "name": "status",
+                    "type": "google.rpc.Status",
+                    "options": [
+                      {
+                        "name": "(gogoproto.nullable)",
+                        "value": "false"
+                      }
+                    ]
+                  },
+                  {
                     "id": 5,
                     "name": "referenced_attributes",
                     "type": "ReferencedAttributes",
