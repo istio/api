@@ -4447,8 +4447,7 @@
             "name": "OutboundTrafficPolicy.Mode",
             "enum_fields": [
               {
-                "name": "REGISTRY_ONLY",
-                "integer": 0
+                "name": "REGISTRY_ONLY"
               },
               {
                 "name": "ALLOW_ANY",
