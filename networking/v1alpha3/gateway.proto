@@ -414,7 +414,6 @@ message Server {
       // the additional options (
       // :ref:`require_client_certificate`
       // :ref:`verify_certificate_spki`
-      // :ref:`verify_subject_alt_name`
       // is also specified.
       //
       // See :ref:`the TLS overview <arch_overview_ssl_enabling_verification>`
@@ -438,18 +437,17 @@ message Server {
       //   NvqYIYSbgK2vCJpQhObf77vv+bQWtc5ek5RIOwPiC9A=
       //
       // This is the format used in HTTP Public Key Pinning.
-      repeated string verify_certificate_spki = 2
-      [(validate.rules).repeated.items.string = {min_bytes: 44, max_bytes: 44}];
+      repeated string verify_certificate_spki = 2;
     
       // An optional `certificate revocation list 
       // <https://en.wikipedia.org/wiki/Certificate_revocation_list>`_
       // (in PEM format). If specified, Envoy will verify that the presented
       // peer certificate has not been revoked by this CRL. If this DataSource
       // contains multiple CRLs, all of them will be used.
-      repeated string crl = 4;
+      repeated string crl = 3;
     
       // If specified, Envoy will not reject expired certificates.
-      bool allow_expired_certificate = 5;
+      bool allow_expired_certificate = 4;
     }
 
     // Optional: If specified, use these options for default tls
