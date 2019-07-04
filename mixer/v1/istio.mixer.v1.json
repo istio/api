@@ -1,9 +1,13 @@
 {
   "openapi": "3.0.0",
+  "info": {
+    "title": "",
+    "version": "v1"
+  },
   "components": {
-    "schema": {
+    "schemas": {
       "istio.mixer.v1.Attributes": {
-        "description": "Attributes represents a set of typed name/value pairs. Many of Mixer's\n API either consume and/or return attributes.\n\n Istio uses attributes to control the runtime behavior of services running in the service mesh.\n Attributes are named and typed pieces of metadata describing ingress and egress traffic and the\n environment this traffic occurs in. An Istio attribute carries a specific piece\n of information such as the error code of an API request, the latency of an API request, or the\n original IP address of a TCP connection. For example:\n\n ```yaml\n request.path: xyz/abc\n request.size: 234\n request.time: 12:34:56.789 04/17/2017\n source.ip: 192.168.0.1\n target.service: example\n ```\n\n A given Istio deployment has a fixed vocabulary of attributes that it understands.\n The specific vocabulary is determined by the set of attribute producers being used\n in the deployment. The primary attribute producer in Istio is Envoy, although\n specialized Mixer adapters and services can also generate attributes.\n\n The common baseline set of attributes available in most Istio deployments is defined\n [here](https://istio.io/docs/reference/config/policy-and-telemetry/attribute-vocabulary/).\n\n Attributes are strongly typed. The supported attribute types are defined by\n [ValueType](https://github.com/istio/api/blob/master/policy/v1beta1/value_type.proto).\n Each type of value is encoded into one of the so-called transport types present\n in this message.\n\n Defines a map of attributes in uncompressed format.\n Following places may use this message:\n 1) Configure Istio/Proxy with static per-proxy attributes, such as source.uid.\n 2) Service IDL definition to extract api attributes for active requests.\n 3) Forward attributes from client proxy to server proxy for HTTP requests.",
+        "description": "Attributes represents a set of typed name/value pairs. Many of Mixer's\n API either consume and/or return attributes.",
         "type": "object",
         "required": [
           "attributes"
@@ -13,7 +17,7 @@
             "description": "A map of attribute name to its value.",
             "type": "object",
             "additionalProperties": {
-              "$ref": "#/components/schema/istio.mixer.v1.Attributes.AttributeValue"
+              "$ref": "#/components/schemas/istio.mixer.v1.Attributes.AttributeValue"
             }
           }
         }
@@ -74,7 +78,7 @@
             "type": "object",
             "properties": {
               "timestampValue": {
-                "$ref": "#/components/schema/google.protobuf.Timestamp"
+                "$ref": "#/components/schemas/google.protobuf.Timestamp"
               }
             }
           },
@@ -82,7 +86,7 @@
             "type": "object",
             "properties": {
               "durationValue": {
-                "$ref": "#/components/schema/google.protobuf.Duration"
+                "$ref": "#/components/schemas/google.protobuf.Duration"
               }
             }
           },
@@ -90,7 +94,7 @@
             "type": "object",
             "properties": {
               "stringMapValue": {
-                "$ref": "#/components/schema/istio.mixer.v1.Attributes.StringMap"
+                "$ref": "#/components/schemas/istio.mixer.v1.Attributes.StringMap"
               }
             }
           }
@@ -127,11 +131,12 @@
           "stringMaps"
         ],
         "properties": {
-          "bools": {
-            "description": "Holds attributes of type BOOL",
+          "strings": {
+            "description": "Holds attributes of type STRING, DNS_NAME, EMAIL_ADDRESS, URI",
             "type": "object",
             "additionalProperties": {
-              "type": "boolean"
+              "type": "integer",
+              "format": "int32"
             }
           },
           "bytes": {
@@ -141,19 +146,12 @@
               "type": "object"
             }
           },
-          "doubles": {
-            "description": "Holds attributes of type DOUBLE",
-            "type": "object",
-            "additionalProperties": {
-              "type": "number",
-              "format": "double"
-            }
-          },
-          "durations": {
-            "description": "Holds attributes of type DURATION",
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schema/google.protobuf.Duration"
+          "words": {
+            "description": "The message-level dictionary.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
             }
           },
           "int64s": {
@@ -164,34 +162,40 @@
               "format": "int64"
             }
           },
-          "stringMaps": {
-            "description": "Holds attributes of type STRING_MAP",
+          "doubles": {
+            "description": "Holds attributes of type DOUBLE",
             "type": "object",
             "additionalProperties": {
-              "$ref": "#/components/schema/istio.mixer.v1.StringMap"
+              "type": "number",
+              "format": "double"
             }
           },
-          "strings": {
-            "description": "Holds attributes of type STRING, DNS_NAME, EMAIL_ADDRESS, URI",
+          "bools": {
+            "description": "Holds attributes of type BOOL",
             "type": "object",
             "additionalProperties": {
-              "type": "integer",
-              "format": "int32"
+              "type": "boolean"
             }
           },
           "timestamps": {
             "description": "Holds attributes of type TIMESTAMP",
             "type": "object",
             "additionalProperties": {
-              "$ref": "#/components/schema/google.protobuf.Timestamp"
+              "$ref": "#/components/schemas/google.protobuf.Timestamp"
             }
           },
-          "words": {
-            "description": "The message-level dictionary.",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
+          "durations": {
+            "description": "Holds attributes of type DURATION",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/google.protobuf.Duration"
+            }
+          },
+          "stringMaps": {
+            "description": "Holds attributes of type STRING_MAP",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/istio.mixer.v1.StringMap"
             }
           }
         }
@@ -220,22 +224,20 @@
           "quotas"
         ],
         "properties": {
+          "globalWordCount": {
+            "description": "The number of words in the global dictionary, used with to populate the attributes.\n This value is used as a quick way to determine whether the client is using a dictionary that\n the server understands.",
+            "type": "integer"
+          },
           "deduplicationId": {
             "description": "Used for deduplicating `Check` calls in the case of failed RPCs and retries. This should be a UUID\n per call, where the same UUID is used for retries of the same call.",
             "type": "string",
             "format": "string"
           },
-          "globalWordCount": {
-            "description": "The number of words in the global dictionary, used with to populate the attributes.\n This value is used as a quick way to determine whether the client is using a dictionary that\n the server understands.",
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 4294967295
-          },
           "quotas": {
             "description": "The individual quotas to allocate",
             "type": "object",
             "additionalProperties": {
-              "$ref": "#/components/schema/istio.mixer.v1.CheckRequest.QuotaParams"
+              "$ref": "#/components/schemas/istio.mixer.v1.CheckRequest.QuotaParams"
             }
           }
         }
@@ -266,7 +268,7 @@
             "description": "The resulting quota, one entry per requested quota.",
             "type": "object",
             "additionalProperties": {
-              "$ref": "#/components/schema/istio.mixer.v1.CheckResponse.QuotaResult"
+              "$ref": "#/components/schemas/istio.mixer.v1.CheckResponse.QuotaResult"
             }
           }
         }
@@ -286,16 +288,16 @@
         "description": "Expresses the result of a precondition check.",
         "type": "object",
         "properties": {
-          "referencedAttributes": {
-            "$ref": "#/components/schema/istio.mixer.v1.ReferencedAttributes"
-          },
-          "routeDirective": {
-            "$ref": "#/components/schema/istio.mixer.v1.RouteDirective"
-          },
           "validUseCount": {
             "description": "The number of uses for which this result can be considered valid.",
             "type": "integer",
             "format": "int32"
+          },
+          "referencedAttributes": {
+            "$ref": "#/components/schemas/istio.mixer.v1.ReferencedAttributes"
+          },
+          "routeDirective": {
+            "$ref": "#/components/schemas/istio.mixer.v1.RouteDirective"
           }
         }
       },
@@ -317,16 +319,14 @@
         "description": "Expresses the routing manipulation actions to be performed on behalf of\n Mixer in response to a precondition check.",
         "type": "object",
         "properties": {
+          "directResponseCode": {
+            "description": "If set, enables a direct response without proxying the request to the routing\n destination. Required to be a value in the 2xx or 3xx range.",
+            "type": "integer"
+          },
           "directResponseBody": {
             "description": "Supplies the response body for the direct response.\n If this setting is omitted, no body is included in the generated response.",
             "type": "string",
             "format": "string"
-          },
-          "directResponseCode": {
-            "description": "If set, enables a direct response without proxying the request to the routing\n destination. Required to be a value in the 2xx or 3xx range.",
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 4294967295
           }
         }
       },
@@ -344,23 +344,23 @@
         "description": "Describes a single attribute match.",
         "type": "object",
         "properties": {
-          "condition": {
-            "$ref": "#/components/schema/istio.mixer.v1.ReferencedAttributes.Condition"
-          },
-          "mapKey": {
-            "description": "A key in a STRING_MAP. When multiple keys from a STRING_MAP\n attribute were referenced, there will be multiple AttributeMatch\n messages with different map_key values. Values for map_key SHOULD\n be ignored for attributes that are not STRING_MAP.\n\n Indices for the keys are used (taken either from the\n message dictionary from the `words` field or the global dictionary).\n\n If no map_key value is provided for a STRING_MAP attribute, the\n entire STRING_MAP will be used.",
-            "type": "integer",
-            "format": "int32"
-          },
           "name": {
             "description": "The name of the attribute. This is a dictionary index encoded in a manner identical\n to all strings in the [CompressedAttributes][istio.mixer.v1.CompressedAttributes] message.",
             "type": "integer",
             "format": "int32"
           },
+          "condition": {
+            "$ref": "#/components/schemas/istio.mixer.v1.ReferencedAttributes.Condition"
+          },
           "regex": {
             "description": "If a REGEX condition is provided for a STRING_MAP attribute,\n clients should use the regex value to match against map keys.",
             "type": "string",
             "format": "string"
+          },
+          "mapKey": {
+            "description": "A key in a STRING_MAP. When multiple keys from a STRING_MAP\n attribute were referenced, there will be multiple AttributeMatch\n messages with different map_key values. Values for map_key SHOULD\n be ignored for attributes that are not STRING_MAP.",
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -373,13 +373,13 @@
             "type": "string",
             "format": "string"
           },
-          "operation": {
-            "$ref": "#/components/schema/istio.mixer.v1.HeaderOperation.Operation"
-          },
           "value": {
             "description": "Header value.",
             "type": "string",
             "format": "string"
+          },
+          "operation": {
+            "$ref": "#/components/schemas/istio.mixer.v1.HeaderOperation.Operation"
           }
         }
       },
@@ -396,22 +396,20 @@
         "description": "Used to report telemetry after performing one or more actions.",
         "type": "object",
         "properties": {
+          "globalWordCount": {
+            "description": "The number of words in the global dictionary.\n To detect global dictionary out of sync between client and server.",
+            "type": "integer"
+          },
+          "repeatedAttributesSemantics": {
+            "$ref": "#/components/schemas/istio.mixer.v1.ReportRequest.RepeatedAttributesSemantics"
+          },
           "defaultWords": {
-            "description": "The default message-level dictionary for all the attributes.\n Individual attribute messages can have their own dictionaries, but if they don't\n then this set of words, if it is provided, is used instead.\n\n This makes it possible to share the same dictionary for all attributes in this\n request, which can substantially reduce the overall request size.",
+            "description": "The default message-level dictionary for all the attributes.\n Individual attribute messages can have their own dictionaries, but if they don't\n then this set of words, if it is provided, is used instead.",
             "type": "array",
             "items": {
               "type": "string",
               "format": "string"
             }
-          },
-          "globalWordCount": {
-            "description": "The number of words in the global dictionary.\n To detect global dictionary out of sync between client and server.",
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 4294967295
-          },
-          "repeatedAttributesSemantics": {
-            "$ref": "#/components/schema/istio.mixer.v1.ReportRequest.RepeatedAttributesSemantics"
           }
         }
       },
@@ -430,30 +428,30 @@
       "google.protobuf.Duration": {
         "type": "object",
         "properties": {
-          "nanos": {
-            "description": "Signed fractions of a second at nanosecond resolution of the span\n of time. Durations less than one second are represented with a 0\n `seconds` field and a positive or negative `nanos` field. For durations\n of one second or more, a non-zero value for the `nanos` field must be\n of the same sign as the `seconds` field. Must be from -999,999,999\n to +999,999,999 inclusive.",
-            "type": "integer",
-            "format": "int32"
-          },
           "seconds": {
             "description": "Signed seconds of the span of time. Must be from -315,576,000,000\n to +315,576,000,000 inclusive. Note: these bounds are computed from:\n 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
             "type": "integer",
             "format": "int64"
+          },
+          "nanos": {
+            "description": "Signed fractions of a second at nanosecond resolution of the span\n of time. Durations less than one second are represented with a 0\n `seconds` field and a positive or negative `nanos` field. For durations\n of one second or more, a non-zero value for the `nanos` field must be\n of the same sign as the `seconds` field. Must be from -999,999,999\n to +999,999,999 inclusive.",
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
       "google.protobuf.Timestamp": {
         "type": "object",
         "properties": {
-          "nanos": {
-            "description": "Non-negative fractions of a second at nanosecond resolution. Negative\n second values with fractions must still have non-negative nanos values\n that count forward in time. Must be from 0 to 999,999,999\n inclusive.",
-            "type": "integer",
-            "format": "int32"
-          },
           "seconds": {
             "description": "Represents seconds of UTC time since Unix epoch\n 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to\n 9999-12-31T23:59:59Z inclusive.",
             "type": "integer",
             "format": "int64"
+          },
+          "nanos": {
+            "description": "Non-negative fractions of a second at nanosecond resolution. Negative\n second values with fractions must still have non-negative nanos values\n that count forward in time. Must be from 0 to 999,999,999\n inclusive.",
+            "type": "integer",
+            "format": "int32"
           }
         }
       }

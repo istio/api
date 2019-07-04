@@ -1,7 +1,11 @@
 {
   "openapi": "3.0.0",
+  "info": {
+    "title": "Configuration for Role Based Access Control.",
+    "version": "v1alpha1"
+  },
   "components": {
-    "schema": {
+    "schemas": {
       "istio.rbac.v1alpha1.WorkloadSelector": {
         "description": "$hide_from_docs\n This is forked from the networking/v1alpha3/sidecar.proto to avoid a direct\n dependency from the rbac API on networking API.\n TODO: Move the WorkloadSelector to a common place to be shared by other packages.\n WorkloadSelector specifies the criteria used to determine if the Gateway\n or Sidecar resource can be applied to a proxy. The matching criteria\n includes the metadata associated with a proxy, workload instance info such as\n labels attached to the pod/VM, or any other info that the proxy provides\n to Istio during the initial handshake. If multiple conditions are\n specified, all conditions need to match in order for the workload instance to be\n selected. Currently, only label based selection mechanism is supported.",
         "type": "object",
@@ -23,15 +27,15 @@
         "description": "$hide_from_docs\n AuthorizationPolicy to enforce access control on a selected workload instance.",
         "type": "object",
         "properties": {
+          "workloadSelector": {
+            "$ref": "#/components/schemas/istio.rbac.v1alpha1.WorkloadSelector"
+          },
           "allow": {
             "description": "$hide_from_docs\n A list of bindings that specify the subjects and permissions to the selected workload instance.",
             "type": "array",
             "items": {
-              "$ref": "#/components/schema/istio.rbac.v1alpha1.ServiceRoleBinding"
+              "$ref": "#/components/schemas/istio.rbac.v1alpha1.ServiceRoleBinding"
             }
-          },
-          "workloadSelector": {
-            "$ref": "#/components/schema/istio.rbac.v1alpha1.WorkloadSelector"
           }
         }
       },
@@ -39,30 +43,30 @@
         "description": "ServiceRoleBinding assigns a ServiceRole to a list of subjects.",
         "type": "object",
         "properties": {
+          "subjects": {
+            "description": "Required. List of subjects that are assigned the ServiceRole object.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.rbac.v1alpha1.Subject"
+            }
+          },
+          "roleRef": {
+            "$ref": "#/components/schemas/istio.rbac.v1alpha1.RoleRef"
+          },
+          "mode": {
+            "$ref": "#/components/schemas/istio.rbac.v1alpha1.EnforcementMode"
+          },
           "actions": {
             "description": "$hide_from_docs\n Inline role definition. An inline role is a role that is defined inside an\n authorization policy, instead of explicitly defined in a ServiceRole object.\n Inline roles can be used for the role definitions that are not intended to\n be reused in other bindings, while explicit roles are reusable. Both inline\n roles (defined in \"actions\" field) and explicit roles (defined in ServiceRole)\n are supported. Users should use only one of them in a single binding.\n For example, the following “product-frontend” AuthorizationPolicy allows “frontend”\n service to view “product” service on “/info” path.\n ```yaml\n apiVersion: \"rbac.istio.io/v1alpha1\"\n kind: AuthorizationPolicy\n metadata:\n  name: product-frontend\n  namespace: ns1\n spec:\n  selector:\n    labels:\n      app: product\n  allow:\n  - subjects:\n    - names: [\"cluster.local/ns/default/sa/frontend\"]\n    actions:\n    - paths: [\"/info\"]\n      methods: [\"GET\"]\n Required. The set of access rules (permissions) that the role has.",
             "type": "array",
             "items": {
-              "$ref": "#/components/schema/istio.rbac.v1alpha1.AccessRule"
+              "$ref": "#/components/schemas/istio.rbac.v1alpha1.AccessRule"
             }
-          },
-          "mode": {
-            "$ref": "#/components/schema/istio.rbac.v1alpha1.EnforcementMode"
           },
           "role": {
             "description": "$hide_from_docs\n A `role` inside a ServiceRoleBinding refers to the ServiceRole that this\n ServiceRoleBinding binds to. A ServiceRoleBinding can bind to a ServiceRole\n in the same namespace or the root namespace. A ServiceRole in the root namespace\n represents a mesh global ServiceRole.\n The value of `role` is the name of the ServiceRole, and it can start with or without a forward slash (\"/\").\n When a `role` starts with \"/\", e.g. \"/service-viewer\", it means that this ServiceRoleBinding\n refers to the ServiceRole in the configurable Istio root namespace.\n When a `role` starts without \"/\", this ServiceRoleBinding refers to the ServiceRole in the\n same namespace as the AuthorizationPolicy's, which contains said ServiceRoleBinding.",
             "type": "string",
             "format": "string"
-          },
-          "roleRef": {
-            "$ref": "#/components/schema/istio.rbac.v1alpha1.RoleRef"
-          },
-          "subjects": {
-            "description": "Required. List of subjects that are assigned the ServiceRole object.",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schema/istio.rbac.v1alpha1.Subject"
-            }
           }
         }
       },
@@ -74,7 +78,7 @@
             "description": "Required. The set of access rules (permissions) that the role has.",
             "type": "array",
             "items": {
-              "$ref": "#/components/schema/istio.rbac.v1alpha1.AccessRule"
+              "$ref": "#/components/schemas/istio.rbac.v1alpha1.AccessRule"
             }
           }
         }
@@ -83,23 +87,16 @@
         "description": "AccessRule defines a permission to access a list of services.",
         "type": "object",
         "properties": {
-          "constraints": {
-            "description": "Optional. Extra constraints in the ServiceRole specification.",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schema/istio.rbac.v1alpha1.AccessRule.Constraint"
-            }
-          },
-          "hosts": {
-            "description": "$hide_from_docs\n Optional. A list of HTTP hosts. This is matched against the HOST header in\n a HTTP request. Exact match, prefix match and suffix match are supported.\n For example, the host \"test.abc.com\" matches \"test.abc.com\" (exact match),\n or \"*.abc.com\" (prefix match), or \"test.abc.*\" (suffix match).\n If not specified, it matches to any host.\n This field should not be set for TCP services. The policy will be ignored.",
+          "services": {
+            "description": "Required. A list of service names.\n Exact match, prefix match, and suffix match are supported for service names.\n For example, the service name \"bookstore.mtv.cluster.local\" matches\n \"bookstore.mtv.cluster.local\" (exact match), or \"bookstore*\" (prefix match),\n or \"*.mtv.cluster.local\" (suffix match).\n If set to [\"*\"], it refers to all services in the namespace.",
             "type": "array",
             "items": {
               "type": "string",
               "format": "string"
             }
           },
-          "methods": {
-            "description": "Optional. A list of HTTP methods (e.g., \"GET\", \"POST\").\n If not specified or specified as \"*\", it matches to any methods.\n This field should not be set for TCP services. The policy will be ignored.\n For gRPC services, only `POST` is allowed; other methods will result in denying services.",
+          "hosts": {
+            "description": "$hide_from_docs\n Optional. A list of HTTP hosts. This is matched against the HOST header in\n a HTTP request. Exact match, prefix match and suffix match are supported.\n For example, the host \"test.abc.com\" matches \"test.abc.com\" (exact match),\n or \"*.abc.com\" (prefix match), or \"test.abc.*\" (suffix match).\n If not specified, it matches to any host.\n This field should not be set for TCP services. The policy will be ignored.",
             "type": "array",
             "items": {
               "type": "string",
@@ -114,8 +111,8 @@
               "format": "string"
             }
           },
-          "notMethods": {
-            "description": "$hide_from_docs\n Optional. A list of HTTP methods that must not be matched.\n Note: It's an error to set methods and not_methods at the same time.",
+          "paths": {
+            "description": "Optional. A list of HTTP paths or gRPC methods.\n gRPC methods must be presented as fully-qualified name in the form of\n \"/packageName.serviceName/methodName\" and are case sensitive.\n Exact match, prefix match, and suffix match are supported. For example,\n the path \"/books/review\" matches \"/books/review\" (exact match),\n or \"/books/*\" (prefix match), or \"*/review\" (suffix match).\n If not specified, it matches to any path.\n This field should not be set for TCP services. The policy will be ignored.",
             "type": "array",
             "items": {
               "type": "string",
@@ -130,16 +127,16 @@
               "format": "string"
             }
           },
-          "notPorts": {
-            "description": "$hide_from_docs\n Optional.  A list of port numbers that must not be matched.\n Note: It's an error to set ports and not_ports at the same time.",
+          "methods": {
+            "description": "Optional. A list of HTTP methods (e.g., \"GET\", \"POST\").\n If not specified or specified as \"*\", it matches to any methods.\n This field should not be set for TCP services. The policy will be ignored.\n For gRPC services, only `POST` is allowed; other methods will result in denying services.",
             "type": "array",
             "items": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string",
+              "format": "string"
             }
           },
-          "paths": {
-            "description": "Optional. A list of HTTP paths or gRPC methods.\n gRPC methods must be presented as fully-qualified name in the form of\n \"/packageName.serviceName/methodName\" and are case sensitive.\n Exact match, prefix match, and suffix match are supported. For example,\n the path \"/books/review\" matches \"/books/review\" (exact match),\n or \"/books/*\" (prefix match), or \"*/review\" (suffix match).\n If not specified, it matches to any path.\n This field should not be set for TCP services. The policy will be ignored.",
+          "notMethods": {
+            "description": "$hide_from_docs\n Optional. A list of HTTP methods that must not be matched.\n Note: It's an error to set methods and not_methods at the same time.",
             "type": "array",
             "items": {
               "type": "string",
@@ -154,12 +151,19 @@
               "format": "int32"
             }
           },
-          "services": {
-            "description": "Required. A list of service names.\n Exact match, prefix match, and suffix match are supported for service names.\n For example, the service name \"bookstore.mtv.cluster.local\" matches\n \"bookstore.mtv.cluster.local\" (exact match), or \"bookstore*\" (prefix match),\n or \"*.mtv.cluster.local\" (suffix match).\n If set to [\"*\"], it refers to all services in the namespace.",
+          "notPorts": {
+            "description": "$hide_from_docs\n Optional.  A list of port numbers that must not be matched.\n Note: It's an error to set ports and not_ports at the same time.",
             "type": "array",
             "items": {
-              "type": "string",
-              "format": "string"
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "constraints": {
+            "description": "Optional. Extra constraints in the ServiceRole specification.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.rbac.v1alpha1.AccessRule.Constraint"
             }
           }
         }
@@ -198,53 +202,13 @@
           "properties"
         ],
         "properties": {
-          "group": {
-            "description": "$hide_from_docs\n Optional. The group that the subject belongs to.\n Deprecated. Use groups and not_groups instead.",
+          "user": {
+            "description": "Optional. The user name/ID that the subject represents.",
             "type": "string",
             "format": "string"
           },
-          "groups": {
-            "description": "$hide_from_docs\n Optional. A list of groups that the subject represents. This is matched to the\n `request.auth.claims[groups]` attribute. If not specified, it applies to any groups.",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "ips": {
-            "description": "$hide_from_docs\n Optional. A list of IP address or CIDR ranges that the subject represents.\n E.g. 192.168.100.2 or 10.1.0.0/16. If not specified, it applies to any IP addresses.",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
-            }
-          },
           "names": {
             "description": "$hide_from_docs\n Optional. A list of subject names. This is matched to the\n `source.principal` attribute. If one of subject names is \"*\", it matches to a subject with any name.\n Prefix and suffix matches are supported.",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "namespaces": {
-            "description": "$hide_from_docs\n Optional. A list of namespaces that the subject represents. This is matched to\n the `source.namespace` attribute. If not specified, it applies to any namespaces.",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "notGroups": {
-            "description": "$hide_from_docs\n Optional. A list of groups that must not be matched.",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "notIps": {
-            "description": "$hide_from_docs\n Optional. A list of IP addresses or CIDR ranges that must not be matched.",
             "type": "array",
             "items": {
               "type": "string",
@@ -259,8 +223,53 @@
               "format": "string"
             }
           },
+          "group": {
+            "description": "$hide_from_docs\n Optional. The group that the subject belongs to.\n Deprecated. Use groups and not_groups instead.",
+            "type": "string",
+            "format": "string"
+          },
+          "groups": {
+            "description": "$hide_from_docs\n Optional. A list of groups that the subject represents. This is matched to the\n `request.auth.claims[groups]` attribute. If not specified, it applies to any groups.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "notGroups": {
+            "description": "$hide_from_docs\n Optional. A list of groups that must not be matched.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "namespaces": {
+            "description": "$hide_from_docs\n Optional. A list of namespaces that the subject represents. This is matched to\n the `source.namespace` attribute. If not specified, it applies to any namespaces.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
           "notNamespaces": {
             "description": "$hide_from_docs\n Optional. A list of namespaces that must not be matched.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "ips": {
+            "description": "$hide_from_docs\n Optional. A list of IP address or CIDR ranges that the subject represents.\n E.g. 192.168.100.2 or 10.1.0.0/16. If not specified, it applies to any IP addresses.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "notIps": {
+            "description": "$hide_from_docs\n Optional. A list of IP addresses or CIDR ranges that must not be matched.",
             "type": "array",
             "items": {
               "type": "string",
@@ -274,11 +283,6 @@
               "type": "string",
               "format": "string"
             }
-          },
-          "user": {
-            "description": "Optional. The user name/ID that the subject represents.",
-            "type": "string",
-            "format": "string"
           }
         }
       },
@@ -286,33 +290,33 @@
         "description": "RoleRef refers to a role object.",
         "type": "object",
         "properties": {
-          "kind": {
-            "description": "Required. The type of the role being referenced.\n Currently, \"ServiceRole\" is the only supported value for \"kind\".",
+          "name": {
+            "description": "Required. The name of the ServiceRole object being referenced.\n The ServiceRole object must be in the same namespace as the ServiceRoleBinding object.",
             "type": "string",
             "format": "string"
           },
-          "name": {
-            "description": "Required. The name of the ServiceRole object being referenced.\n The ServiceRole object must be in the same namespace as the ServiceRoleBinding object.",
+          "kind": {
+            "description": "Required. The type of the role being referenced.\n Currently, \"ServiceRole\" is the only supported value for \"kind\".",
             "type": "string",
             "format": "string"
           }
         }
       },
       "istio.rbac.v1alpha1.RbacConfig": {
-        "description": "$hide_from_docs\n RbacConfig is deprecated.  RbacConfig defined the global config to control Istio RBAC behavior.\n This Custom Resource is a singleton where only one Custom Resource should be created globally in\n the mesh and the namespace should be the same to other Istio components, which usually is `istio-system`.\n Note: This is enforced in both `istioctl` and server side, new Custom Resource will be rejected if found any\n existing one, the user should either delete the existing one or change the existing one directly.\n\n Below is an example of an `RbacConfig` resource called `istio-rbac-config` which enables Istio RBAC for all\n services in the default namespace.\n\n ```yaml\n apiVersion: \"rbac.istio.io/v1alpha1\"\n kind: RbacConfig\n metadata:\n   name: default\n   namespace: istio-system\n spec:\n   mode: ON_WITH_INCLUSION\n   inclusion:\n     namespaces: [ \"default\" ]\n ```",
+        "description": "$hide_from_docs\n RbacConfig is deprecated.  RbacConfig defined the global config to control Istio RBAC behavior.\n This Custom Resource is a singleton where only one Custom Resource should be created globally in\n the mesh and the namespace should be the same to other Istio components, which usually is `istio-system`.\n Note: This is enforced in both `istioctl` and server side, new Custom Resource will be rejected if found any\n existing one, the user should either delete the existing one or change the existing one directly.",
         "type": "object",
         "properties": {
-          "enforcementMode": {
-            "$ref": "#/components/schema/istio.rbac.v1alpha1.EnforcementMode"
-          },
-          "exclusion": {
-            "$ref": "#/components/schema/istio.rbac.v1alpha1.RbacConfig.Target"
+          "mode": {
+            "$ref": "#/components/schemas/istio.rbac.v1alpha1.RbacConfig.Mode"
           },
           "inclusion": {
-            "$ref": "#/components/schema/istio.rbac.v1alpha1.RbacConfig.Target"
+            "$ref": "#/components/schemas/istio.rbac.v1alpha1.RbacConfig.Target"
           },
-          "mode": {
-            "$ref": "#/components/schema/istio.rbac.v1alpha1.RbacConfig.Mode"
+          "exclusion": {
+            "$ref": "#/components/schemas/istio.rbac.v1alpha1.RbacConfig.Target"
+          },
+          "enforcementMode": {
+            "$ref": "#/components/schemas/istio.rbac.v1alpha1.EnforcementMode"
           }
         }
       },
@@ -329,16 +333,16 @@
         "description": "Target defines a list of services or namespaces.",
         "type": "object",
         "properties": {
-          "namespaces": {
-            "description": "A list of namespaces.",
+          "services": {
+            "description": "A list of services.",
             "type": "array",
             "items": {
               "type": "string",
               "format": "string"
             }
           },
-          "services": {
-            "description": "A list of services.",
+          "namespaces": {
+            "description": "A list of namespaces.",
             "type": "array",
             "items": {
               "type": "string",
@@ -349,7 +353,7 @@
             "description": "$hide_from_docs\n A list of workload instances.",
             "type": "array",
             "items": {
-              "$ref": "#/components/schema/istio.rbac.v1alpha1.WorkloadSelector"
+              "$ref": "#/components/schemas/istio.rbac.v1alpha1.WorkloadSelector"
             }
           }
         }

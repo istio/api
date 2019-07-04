@@ -1,7 +1,11 @@
 {
   "openapi": "3.0.0",
+  "info": {
+    "title": "Definitions used to create adapters and templates.",
+    "version": "v1beta1"
+  },
   "components": {
-    "schema": {
+    "schemas": {
       "istio.mixer.adapter.model.v1beta1.CheckResult": {
         "description": "Expresses the result of a precondition check.",
         "type": "object",
@@ -28,8 +32,8 @@
         "description": "Info describes an adapter or a backend that wants to provide telemetry and policy functionality to Mixer as an\n out of process adapter.",
         "type": "object",
         "properties": {
-          "config": {
-            "description": "Base64 encoded proto descriptor of the adapter configuration.",
+          "name": {
+            "description": "Name of the adapter. It must be an RFC 1035 compatible DNS label\n matching the `^[a-z]([-a-z0-9]*[a-z0-9])?$` regular expression.\n Name is used in Istio configuration, therefore it should be descriptive but short.\n example: denier\n Vendor adapters should use a vendor prefix.\n example: mycompany-denier",
             "type": "string",
             "format": "string"
           },
@@ -38,15 +42,6 @@
             "type": "string",
             "format": "string"
           },
-          "name": {
-            "description": "Name of the adapter. It must be an RFC 1035 compatible DNS label\n matching the `^[a-z]([-a-z0-9]*[a-z0-9])?$` regular expression.\n Name is used in Istio configuration, therefore it should be descriptive but short.\n example: denier\n Vendor adapters should use a vendor prefix.\n example: mycompany-denier",
-            "type": "string",
-            "format": "string"
-          },
-          "sessionBased": {
-            "description": "True if backend has implemented the\n [InfrastructureBackend](https://github.com/istio/api/blob/master/mixer/adapter/model/v1beta1/infrastructure_backend.proto)\n service; false otherwise.\n\n If true, during configuration time, Mixer calls the `InfrastructureBackend`' rpcs\n to validate and pass the handler configuration. And during request-time, Mixer does not pass the handler\n configuration, and only passes the template-specific Instance payload using the template-specific handle service (Example\n [HandlerMetricService](https://github.com/istio/istio/blob/master/mixer/template/metric/template_handler_service.proto),\n [HandlerListEntryService](https://github.com/istio/istio/blob/master/mixer/template/logentry/template_handler_service.proto),\n [HandleQuotaService](https://github.com/istio/istio/blob/master/mixer/template/quota/template_handler_service.proto) and more).\n If `session_based` is false, Mixer does not expect backend to implement `InfrastructureBackend` service, and\n only communicates with the backends during request-time through the template-specific handle service. Without\n `InfrastructureBackend` service, Mixer passes the handler configuration on each call during request-time.",
-            "type": "boolean"
-          },
           "templates": {
             "description": "Names of the templates the adapter supports.",
             "type": "array",
@@ -54,6 +49,15 @@
               "type": "string",
               "format": "string"
             }
+          },
+          "config": {
+            "description": "Base64 encoded proto descriptor of the adapter configuration.",
+            "type": "string",
+            "format": "string"
+          },
+          "sessionBased": {
+            "description": "True if backend has implemented the\n [InfrastructureBackend](https://github.com/istio/api/blob/master/mixer/adapter/model/v1beta1/infrastructure_backend.proto)\n service; false otherwise.",
+            "type": "boolean"
           }
         }
       },
@@ -65,13 +69,13 @@
         ],
         "properties": {
           "adapterConfig": {
-            "$ref": "#/components/schema/google.protobuf.Any"
+            "$ref": "#/components/schemas/google.protobuf.Any"
           },
           "inferredTypes": {
             "description": "Map of instance names to their template-specific inferred type.",
             "type": "object",
             "additionalProperties": {
-              "$ref": "#/components/schema/google.protobuf.Any"
+              "$ref": "#/components/schemas/google.protobuf.Any"
             }
           }
         }
@@ -80,13 +84,13 @@
         "description": "Response message for `CreateSession` method.",
         "type": "object",
         "properties": {
+          "status": {
+            "$ref": "#/components/schemas/google.rpc.Status"
+          },
           "sessionId": {
             "description": "Id of the created session.",
             "type": "string",
             "format": "string"
-          },
-          "status": {
-            "$ref": "#/components/schema/google.rpc.Status"
           }
         }
       },
@@ -98,13 +102,13 @@
         ],
         "properties": {
           "adapterConfig": {
-            "$ref": "#/components/schema/google.protobuf.Any"
+            "$ref": "#/components/schemas/google.protobuf.Any"
           },
           "inferredTypes": {
             "description": "Map of instance names to their template-specific inferred type.",
             "type": "object",
             "additionalProperties": {
-              "$ref": "#/components/schema/google.protobuf.Any"
+              "$ref": "#/components/schemas/google.protobuf.Any"
             }
           }
         }
@@ -114,7 +118,7 @@
         "type": "object",
         "properties": {
           "status": {
-            "$ref": "#/components/schema/google.rpc.Status"
+            "$ref": "#/components/schemas/google.rpc.Status"
           }
         }
       },
@@ -134,7 +138,7 @@
         "type": "object",
         "properties": {
           "status": {
-            "$ref": "#/components/schema/google.rpc.Status"
+            "$ref": "#/components/schemas/google.rpc.Status"
           }
         }
       },
@@ -149,7 +153,7 @@
             "description": "The individual quotas to allocate",
             "type": "object",
             "additionalProperties": {
-              "$ref": "#/components/schema/istio.mixer.adapter.model.v1beta1.QuotaRequest.QuotaParams"
+              "$ref": "#/components/schemas/istio.mixer.adapter.model.v1beta1.QuotaRequest.QuotaParams"
             }
           }
         }
@@ -180,7 +184,7 @@
             "description": "The resulting quota, one entry per requested quota.",
             "type": "object",
             "additionalProperties": {
-              "$ref": "#/components/schema/istio.mixer.adapter.model.v1beta1.QuotaResult.Result"
+              "$ref": "#/components/schemas/istio.mixer.adapter.model.v1beta1.QuotaResult.Result"
             }
           }
         }
@@ -215,7 +219,7 @@
         "type": "object",
         "properties": {
           "typeUrl": {
-            "description": "A URL/resource name that uniquely identifies the type of the serialized\n protocol buffer message. This string must contain at least\n one \"/\" character. The last segment of the URL's path must represent\n the fully qualified name of the type (as in\n `path/google.protobuf.Duration`). The name should be in a canonical form\n (e.g., leading \".\" is not accepted).\n\n In practice, teams usually precompile into the binary all types that they\n expect it to use in the context of Any. However, for URLs which use the\n scheme `http`, `https`, or no scheme, one can optionally set up a type\n server that maps type URLs to message definitions as follows:\n\n * If no scheme is provided, `https` is assumed.\n * An HTTP GET on the URL must yield a [google.protobuf.Type][]\n   value in binary format, or produce an error.\n * Applications are allowed to cache lookup results based on the\n   URL, or have them precompiled into a binary to avoid any\n   lookup. Therefore, binary compatibility needs to be preserved\n   on changes to types. (Use versioned type names to manage\n   breaking changes.)\n\n Note: this functionality is not currently available in the official\n protobuf release, and it is not used for type URLs beginning with\n type.googleapis.com.\n\n Schemes other than `http`, `https` (or the empty scheme) might be\n used with implementation specific semantics.",
+            "description": "A URL/resource name that uniquely identifies the type of the serialized\n protocol buffer message. This string must contain at least\n one \"/\" character. The last segment of the URL's path must represent\n the fully qualified name of the type (as in\n `path/google.protobuf.Duration`). The name should be in a canonical form\n (e.g., leading \".\" is not accepted).",
             "type": "string",
             "format": "string"
           },
@@ -235,17 +239,17 @@
             "type": "integer",
             "format": "int32"
           },
-          "details": {
-            "description": "A list of messages that carry the error details.  There is a common set of\n message types for APIs to use.",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schema/google.protobuf.Any"
-            }
-          },
           "message": {
             "description": "A developer-facing error message, which should be in English. Any\n user-facing error message should be localized and sent in the\n [google.rpc.Status.details][google.rpc.Status.details] field, or localized\n by the client.",
             "type": "string",
             "format": "string"
+          },
+          "details": {
+            "description": "A list of messages that carry the error details.  There is a common set of\n message types for APIs to use.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/google.protobuf.Any"
+            }
           }
         }
       }
