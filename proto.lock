@@ -4477,6 +4477,18 @@
       "def": {
         "enums": [
           {
+            "name": "OutboundTrafficPolicy.Mode",
+            "enum_fields": [
+              {
+                "name": "REGISTRY_ONLY"
+              },
+              {
+                "name": "ALLOW_ANY",
+                "integer": 1
+              }
+            ]
+          },
+          {
             "name": "CaptureMode",
             "enum_fields": [
               {
@@ -4513,6 +4525,11 @@
                 "name": "egress",
                 "type": "IstioEgressListener",
                 "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "outbound_traffic_policy",
+                "type": "OutboundTrafficPolicy"
               }
             ]
           },
@@ -4577,6 +4594,16 @@
                   "name": "labels",
                   "type": "string"
                 }
+              }
+            ]
+          },
+          {
+            "name": "OutboundTrafficPolicy",
+            "fields": [
+              {
+                "id": 1,
+                "name": "mode",
+                "type": "Mode"
               }
             ]
           }
