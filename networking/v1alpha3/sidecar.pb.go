@@ -18,7 +18,7 @@
 // namespace, selected using the workloadSelector. In the absence of a
 // workloadSelector, it will apply to all workload instances in the same
 // namespace. When determining the Sidecar resource to be applied to a
-// workload instsance, preference will be given to the resource with a
+// workload instance, preference will be given to the resource with a
 // workloadSelector that selects this workload instance, over a Sidecar resource
 // without any workloadSelector.
 //
