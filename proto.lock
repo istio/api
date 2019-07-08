@@ -4089,6 +4089,11 @@
                 "fields": [
                   {
                     "id": 1,
+                    "name": "context",
+                    "type": "PatchContext"
+                  },
+                  {
+                    "id": 2,
                     "name": "listener",
                     "type": "ListenerMatch"
                   },
@@ -4098,24 +4103,9 @@
                     "type": "RouteConfigurationMatch"
                   },
                   {
-                    "id": 5,
+                    "id": 4,
                     "name": "cluster",
                     "type": "ClusterMatch"
-                  }
-                ]
-              },
-              {
-                "name": "EnvoyFilterMatchCondition",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "context",
-                    "type": "PatchContext"
-                  },
-                  {
-                    "id": 2,
-                    "name": "match",
-                    "type": "EnvoyConfigObjectMatch"
                   }
                 ]
               },
