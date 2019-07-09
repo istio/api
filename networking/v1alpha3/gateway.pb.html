@@ -4,7 +4,7 @@ description: Configuration affecting edge load balancer.
 location: https://istio.io/docs/reference/config/networking/v1alpha3/gateway.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 6
+number_of_entries: 7
 ---
 <p><code>Gateway</code> describes a load balancer operating at the edge of the mesh
 receiving incoming or outgoing HTTP/TCP connections. The specification
@@ -495,6 +495,95 @@ certificate presented by the client.</p>
 <td>
 <p>Optional: If specified, only support the specified cipher list.
 Otherwise default to the default cipher list supported by Envoy.</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-default_validation_context">
+<td><code>defaultValidationContext</code></td>
+<td><code><a href="#Server-TLSOptions-CertificateValidationContext">Server.TLSOptions.CertificateValidationContext</a></code></td>
+<td>
+<p>Optional: If specified, use these options for default tls
+validation. Will be merged with the validation context from
+SDS.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Server-TLSOptions-CertificateValidationContext">Server.TLSOptions.CertificateValidationContext</h2>
+<section>
+<p>Options for validatating a certificate</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Server-TLSOptions-CertificateValidationContext-trusted_ca">
+<td><code>trustedCa</code></td>
+<td><code>string</code></td>
+<td>
+<p>Name of a TLS certificate secret containing certificate authority
+certificates to use in verifying a presented peer certificate (e.g.
+server certificate for clusters or client certificate for listeners).
+If not specified and a peer certificate is presented it will not be
+verified. By default, a client certificate is optional, unless one of
+the additional options (
+:ref:<code>require_client_certificate</code>
+:ref:<code>verify_certificate_spki</code>
+is also specified.</p>
+
+<p>See :ref:<code>the TLS overview &lt;arch_overview_ssl_enabling_verification&gt;</code>
+for a list of common system CA locations.</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-CertificateValidationContext-verify_certificate_spki">
+<td><code>verifyCertificateSpki</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>An optional list of base64-encoded SHA-256 hashes. If specified, Envoy
+will verify that the SHA-256 of the DER-encoded Subject Public Key
+Information (SPKI) of the presented certificate matches one of the
+specified values.</p>
+
+<p>A base64-encoded SHA-256 of the Subject Public Key Information (SPKI)
+of the certificate can be generated with the following command:</p>
+
+<p>.. code-block:: bash</p>
+
+<p>$ openssl x509 -in path/to/client.crt -noout -pubkey \
+    | openssl pkey -pubin -outform DER \
+    | openssl dgst -sha256 -binary \
+    | openssl enc -base64
+  NvqYIYSbgK2vCJpQhObf77vv+bQWtc5ek5RIOwPiC9A=</p>
+
+<p>This is the format used in HTTP Public Key Pinning.</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-CertificateValidationContext-crl">
+<td><code>crl</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>An optional <code>certificate revocation list 
+&lt;https://en.wikipedia.org/wiki/Certificate_revocation_list&gt;</code>_
+(in PEM format). If specified, Envoy will verify that the presented
+peer certificate has not been revoked by this CRL. If this DataSource
+contains multiple CRLs, all of them will be used.</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-CertificateValidationContext-allow_expired_certificate">
+<td><code>allowExpiredCertificate</code></td>
+<td><code>bool</code></td>
+<td>
+<p>If specified, Envoy will not reject expired certificates.</p>
 
 </td>
 </tr>
