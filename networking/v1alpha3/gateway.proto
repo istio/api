@@ -415,9 +415,6 @@ message Server {
       // :ref:`require_client_certificate`
       // :ref:`verify_certificate_spki`
       // is also specified.
-      //
-      // See :ref:`the TLS overview <arch_overview_ssl_enabling_verification>`
-      // for a list of common system CA locations.
       string trusted_ca = 1;
     
       // An optional list of base64-encoded SHA-256 hashes. If specified, Envoy
@@ -438,15 +435,8 @@ message Server {
       //
       // This is the format used in HTTP Public Key Pinning.
       repeated string verify_certificate_spki = 2;
-    
-      // An optional `certificate revocation list 
-      // <https://en.wikipedia.org/wiki/Certificate_revocation_list>`_
-      // (in PEM format). If specified, Envoy will verify that the presented
-      // peer certificate has not been revoked by this CRL. If this DataSource
-      // contains multiple CRLs, all of them will be used.
-      repeated string crl = 3;
-    
-      // If specified, Envoy will not reject expired certificates.
+
+      // If specified and set to true, do not reject expired certificates.
       bool allow_expired_certificate = 4;
     }
 
