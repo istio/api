@@ -4,7 +4,7 @@ description: Configuration affecting edge load balancer.
 location: https://istio.io/docs/reference/config/networking/v1alpha3/gateway.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 6
+number_of_entries: 7
 ---
 <p><code>Gateway</code> describes a load balancer operating at the edge of the mesh
 receiving incoming or outgoing HTTP/TCP connections. The specification
@@ -495,6 +495,55 @@ certificate presented by the client.</p>
 <td>
 <p>Optional: If specified, only support the specified cipher list.
 Otherwise default to the default cipher list supported by Envoy.</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-default_validation_context">
+<td><code>defaultValidationContext</code></td>
+<td><code><a href="#Server-TLSOptions-CertificateValidationContext">Server.TLSOptions.CertificateValidationContext</a></code></td>
+<td>
+<p>Optional: If specified, use these options for default TLS validation.
+This context will be merged with the context from SDS.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Server-TLSOptions-CertificateValidationContext">Server.TLSOptions.CertificateValidationContext</h2>
+<section>
+<p>Options for validating a certificate</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Server-TLSOptions-CertificateValidationContext-trusted_ca">
+<td><code>trustedCa</code></td>
+<td><code>string</code></td>
+<td>
+<p>Name of a TLS certificate secret containing certificate authority
+certificates to use in verifying a presented peer certificate (e.g.
+server certificate for cluster or client certificate for listeners).
+If not specified and a peer certificate is presented it will not be
+verified. By default, a client certificate is optional unless TLS
+mode is MUTUAL.</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-CertificateValidationContext-verify_certificate_spki">
+<td><code>verifyCertificateSpki</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>An optional list of base64-encoded SHA-256 hashes. If specified, the
+proxy will verify that the SHA-256 of the DER-encoded Subject Public
+Key Information (SPKI) of the presented certificate matches one of
+the specified values.</p>
 
 </td>
 </tr>

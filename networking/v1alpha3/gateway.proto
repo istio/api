@@ -411,6 +411,28 @@ message Server {
     // Optional: If specified, only support the specified cipher list.
     // Otherwise default to the default cipher list supported by Envoy.
     repeated string cipher_suites = 9;
+
+    // Options for validating a certificate
+    message CertificateValidationContext
+    {
+      // Name of a TLS certificate secret containing certificate authority
+      // certificates to use in verifying a presented peer certificate (e.g.
+      // server certificate for cluster or client certificate for listeners).
+      // If not specified and a peer certificate is presented it will not be
+      // verified. By default, a client certificate is optional unless TLS
+      // mode is MUTUAL.
+      string trusted_ca = 1;
+
+      // An optional list of base64-encoded SHA-256 hashes. If specified, the
+      // proxy will verify that the SHA-256 of the DER-encoded Subject Public
+      // Key Information (SPKI) of the presented certificate matches one of
+      // the specified values.
+      repeated string verify_certificate_spki = 2;
+    }
+
+    // Optional: If specified, use these options for default TLS validation.
+    // This context will be merged with the context from SDS.
+    CertificateValidationContext default_validation_context = 11;
   }
 
   // Set of TLS related options that govern the server's behavior. Use
