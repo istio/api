@@ -32,4 +32,3 @@ all:
   title: All Istio types.
   version: v1alpha1
   oapiFilename: istio.json
-
