@@ -677,7 +677,7 @@ type Port struct {
 	// REQUIRED: A valid non-negative integer port number.
 	Number uint32 `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
 	// REQUIRED: The protocol exposed on the port.
-	// MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS.
+	// MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|REDIS|MYSQL|TCP|TLS|UDP.
 	// TLS implies the connection will be routed based on the SNI header to
 	// the destination without terminating the TLS connection.
 	Protocol string `protobuf:"bytes,2,opt,name=protocol,proto3" json:"protocol,omitempty"`
