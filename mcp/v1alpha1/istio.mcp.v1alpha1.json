@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "",
+    "title": "This package defines the common, core types used by the Mesh Configuration Protocol.",
     "version": "v1alpha1"
   },
   "components": {

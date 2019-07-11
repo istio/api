@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "",
+    "title": "This package defines the Mixer API that the sidecar proxy uses to perform precondition checks, manage quotas, and report telemetry.",
     "version": "v1"
   },
   "components": {
