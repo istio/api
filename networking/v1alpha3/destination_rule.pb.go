@@ -416,7 +416,7 @@ func (m *TrafficPolicy) GetPortLevelSettings() []*TrafficPolicy_PortTrafficPolic
 
 // Traffic policies that apply to specific ports of the service
 type TrafficPolicy_PortTrafficPolicy struct {
-	// Specifies the port number of a port on the destination service
+	// Specifies the number of a port on the destination service
 	// on which this policy is being applied.
 	//
 	Port *PortSelector `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
