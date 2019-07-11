@@ -203,6 +203,68 @@ message Gateway {
   // as the gateway workload.
   // This may become a requirement in the future.
   map<string, string> selector = 2;
+  
+
+  // Set of HTTP related options that govern the gateway's behavior.
+  // Use these options to control http behavior, including trusted
+  // client IP address and headers.
+  message HTTPOptions {
+
+    // The number of additional ingress proxy hops from the right side of the
+    // X-Xorwarded-For HTTP header to trust when determining the origin client’s
+    // IP address.
+    //
+    // Gateways on cloud infrastructure are commonly placed behind at least
+    // 1 external cloud load balancer (e.g. GCP or AWS Load Balancers), and
+    // potentially further internal load balancers (e.g. Kubernetes Service).
+    //
+    // This setting affects the trusted client remote IP address, X-Forwarded-For
+    // header, and X-Envoy-External-address and X-Envoy-Internal headers
+    // for use cases including:
+    // - traffic management e.g. consistent hash load balancing by IP
+    //   address or X-Forwarded-For header
+    // - policy enforcement e.g. security whitelist or blacklisting IP ranges
+    //
+    // For reference and examples of behavior,
+    // see the following Envoy documentation:
+    // https://www.envoyproxy.io/docs/envoy/latest/configuration/http_conn_man/headers#x-forwarded-for
+    //
+    // For example, a Gateway running behind 1 external cloud load balancer
+    // and 1 internal load balancer would receive X-Forwarded-For in the format:
+    //
+    // ```
+    // x-forwarded-for=<possible untrusted ips>, <client ip>, <external LB ip>, <internal LB ip>
+    // ```
+    //
+    // The following configuration with `xff_num_trusted_hops: 2` would
+    // set the trusted client source IP to `<client ip>`, as desired,
+    // which is 2 hops from the right side of the X-Forwarded-For header.
+    //
+    // Without this configuration, the trusted client source IP would
+    // be set to `<internal LB ip>`, which is not useful nor accurate.
+    //
+    // ```yaml
+    // apiVersion: networking.istio.io/v1alpha3
+    // kind: Gateway
+    // metadata:
+    //   name: my-gateway
+    // spec:
+    //   selector:
+    //     app: my-gateway-controller
+    //   httpOptions:
+    //     xff_num_trusted_hops: 2
+    //   servers:
+    //   - port:
+    //       number: 80
+    //       name: http
+    //       protocol: HTTP
+    //     hosts:
+    //     - "*.myapp.com"
+    // ```
+    uint32 xff_num_trusted_hops = 1;
+  }
+
+  HTTPOptions http = 3;
 }
 
 // `Server` describes the properties of the proxy on a given load balancer
