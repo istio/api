@@ -6,7 +6,8 @@ This repository defines component-level APIs and common configuration formats fo
 platform. These definitions are specified using the [protobuf](https://github.com/google/protobuf)
 syntax.
 
-This repository depends only on the [tools](https://github.com/istio/tools) repository for tools used during build. This repository *will not* depend on any other repositories. Except for tools, all other Istio repositories can take a dependency on the api repository. 
+This repository depends only on the [tools](https://github.com/istio/tools) repository for tools used during build. This repository *will not* depend on any
+other repositories. Except for tools, all other Istio repositories can take a dependency on the api repository. 
 
 ## API Guidelines
 
