@@ -448,7 +448,7 @@ message HTTPRoute {
 //   http:
 //   - headers:
 //       request:
-//         add:
+//         set:
 //           test: true
 //     route:
 //     - destination:
