@@ -254,6 +254,11 @@
                 "id": 1,
                 "name": "policy",
                 "type": "istio.authentication.v1alpha1.Policy"
+              },
+              {
+                "id": 3,
+                "name": "skip_validate_trust_domain",
+                "type": "bool"
               }
             ],
             "maps": [

@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='envoy/config/filter/http/authn/v2alpha1/config.proto',
   package='istio.envoy.config.filter.http.authn.v2alpha1',
   syntax='proto3',
-  serialized_pb=_b('\n4envoy/config/filter/http/authn/v2alpha1/config.proto\x12-istio.envoy.config.filter.http.authn.v2alpha1\x1a$authentication/v1alpha1/policy.proto\"\x8a\x02\n\x0c\x46ilterConfig\x12\x35\n\x06policy\x18\x01 \x01(\x0b\x32%.istio.authentication.v1alpha1.Policy\x12\x80\x01\n\x1cjwt_output_payload_locations\x18\x02 \x03(\x0b\x32Z.istio.envoy.config.filter.http.authn.v2alpha1.FilterConfig.JwtOutputPayloadLocationsEntry\x1a@\n\x1eJwtOutputPayloadLocationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\x36Z4istio.io/api/envoy/config/filter/http/authn/v2alpha1b\x06proto3')
+  serialized_pb=_b('\n4envoy/config/filter/http/authn/v2alpha1/config.proto\x12-istio.envoy.config.filter.http.authn.v2alpha1\x1a$authentication/v1alpha1/policy.proto\"\xae\x02\n\x0c\x46ilterConfig\x12\x35\n\x06policy\x18\x01 \x01(\x0b\x32%.istio.authentication.v1alpha1.Policy\x12\x80\x01\n\x1cjwt_output_payload_locations\x18\x02 \x03(\x0b\x32Z.istio.envoy.config.filter.http.authn.v2alpha1.FilterConfig.JwtOutputPayloadLocationsEntry\x12\"\n\x1askip_validate_trust_domain\x18\x03 \x01(\x08\x1a@\n\x1eJwtOutputPayloadLocationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\x36Z4istio.io/api/envoy/config/filter/http/authn/v2alpha1b\x06proto3')
   ,
   dependencies=[authentication_dot_v1alpha1_dot_policy__pb2.DESCRIPTOR,])
 
@@ -60,8 +60,8 @@ _FILTERCONFIG_JWTOUTPUTPAYLOADLOCATIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=344,
-  serialized_end=408,
+  serialized_start=380,
+  serialized_end=444,
 )
 
 _FILTERCONFIG = _descriptor.Descriptor(
@@ -85,6 +85,13 @@ _FILTERCONFIG = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='skip_validate_trust_domain', full_name='istio.envoy.config.filter.http.authn.v2alpha1.FilterConfig.skip_validate_trust_domain', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -98,7 +105,7 @@ _FILTERCONFIG = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=142,
-  serialized_end=408,
+  serialized_end=444,
 )
 
 _FILTERCONFIG_JWTOUTPUTPAYLOADLOCATIONSENTRY.containing_type = _FILTERCONFIG
