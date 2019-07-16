@@ -700,10 +700,8 @@ type Server_TLSOptions_CertificateValidationContext struct {
 	// verified. By default, a client certificate is optional unless TLS
 	// mode is MUTUAL.
 	TrustedCa string `protobuf:"bytes,1,opt,name=trusted_ca,json=trustedCa,proto3" json:"trusted_ca,omitempty"`
-	// An optional list of base64-encoded SHA-256 hashes. If specified, the
-	// proxy will verify that the SHA-256 of the DER-encoded Subject Public
-	// Key Information (SPKI) of the presented certificate matches one of
-	// the specified values.
+	// An optional list of base64-encoded SHA-256 hashes of the SPKIs of
+	// authorized client certificates.
 	VerifyCertificateSpki []string `protobuf:"bytes,2,rep,name=verify_certificate_spki,json=verifyCertificateSpki,proto3" json:"verify_certificate_spki,omitempty"`
 	XXX_NoUnkeyedLiteral  struct{} `json:"-"`
 	XXX_unrecognized      []byte   `json:"-"`
