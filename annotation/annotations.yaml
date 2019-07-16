@@ -165,3 +165,27 @@ annotations:
       (from VM) will be treated as outbound.
     deprecated: false
     hidden: false
+  - name: policy.istio.io/lang
+    description: Selects the attribute expression langauge runtime for Mixer..
+    deprecated: false
+    hidden: false
+  - name: policy.istio.io/check
+    description: Determines the policy for behavior when unable to connect to Mixer. If
+      not set, FAIL_CLOSE is set, rejecting requests.
+    deprecated: false
+    hidden: false
+  - name: policy.istio.io/checkRetries
+    description: The maximum number of retries on transport errors to Mixer. If not set,
+      this will be 0, indicating no retries.
+    deprecated: false
+    hidden: false
+  - name: policy.istio.io/checkBaseRetryWaitTime
+    description: Base time to wait between retries, will be adjusted by backoff and jitter.
+      In duration format. If not set, this will be 80ms.
+    deprecated: false
+    hidden: false
+  - name: policy.istio.io/checkMaxRetryWaitTime
+    description: Maximum time to wait between retries to Mixer. In duration format. If not
+      set, this will be 1000ms.
+    deprecated: false
+    hidden: false

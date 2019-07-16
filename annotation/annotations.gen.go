@@ -260,4 +260,46 @@ var (
 		Hidden:     false,
 		Deprecated: false,
 	}
+
+	PolicyLang = Instance{
+		Name: "policy.istio.io/lang",
+		Description: "Selects the attribute expression langauge runtime for " +
+			"Mixer..",
+		Hidden:     false,
+		Deprecated: false,
+	}
+
+	PolicyCheck = Instance{
+		Name: "policy.istio.io/check",
+		Description: "Determines the policy for behavior when unable to connect " +
+			"to Mixer. If not set, FAIL_CLOSE is set, rejecting " +
+			"requests.",
+		Hidden:     false,
+		Deprecated: false,
+	}
+
+	PolicyCheckRetries = Instance{
+		Name: "policy.istio.io/checkRetries",
+		Description: "The maximum number of retries on transport errors to " +
+			"Mixer. If not set, this will be 0, indicating no retries.",
+		Hidden:     false,
+		Deprecated: false,
+	}
+
+	PolicyCheckBaseRetryWaitTime = Instance{
+		Name: "policy.istio.io/checkBaseRetryWaitTime",
+		Description: "Base time to wait between retries, will be adjusted by " +
+			"backoff and jitter. In duration format. If not set, this " +
+			"will be 80ms.",
+		Hidden:     false,
+		Deprecated: false,
+	}
+
+	PolicyCheckMaxRetryWaitTime = Instance{
+		Name: "policy.istio.io/checkMaxRetryWaitTime",
+		Description: "Maximum time to wait between retries to Mixer. In " +
+			"duration format. If not set, this will be 1000ms.",
+		Hidden:     false,
+		Deprecated: false,
+	}
 )
