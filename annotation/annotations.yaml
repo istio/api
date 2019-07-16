@@ -14,11 +14,13 @@
 
 annotations:
   - name: alpha.istio.io/kubernetes-serviceaccounts
+    variableName: KubernetesServiceAccounts
     description: Specifies the Kubernetes service accounts that are allowed to run this
       service on the VMs.
     deprecated: false
     hidden: false
   - name: alpha.istio.io/canonical-serviceaccounts
+    variableName: CanonicalServiceAccounts
     description: Specifies the non-Kubernetes service accounts that are allowed to
       run this service.
     deprecated: false
@@ -30,6 +32,7 @@ annotations:
     deprecated: false
     hidden: false
   - name: alpha.istio.io/identity
+    variableName: Identity
     description:
     deprecated: false
     hidden: false
