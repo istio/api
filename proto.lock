@@ -4109,7 +4109,7 @@
                   {
                     "id": 2,
                     "name": "value",
-                    "type": "google.protobuf.Value"
+                    "type": "google.protobuf.Struct"
                   }
                 ]
               },
