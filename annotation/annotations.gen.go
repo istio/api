@@ -7,14 +7,6 @@
 package annotation
 
 var (
-	IngressClass = Instance{
-		Name: "kubernetes.io/ingress.class",
-		Description: "Annotation on ingress resources for the class of " +
-			"controllers responsible for it.",
-		Hidden:     false,
-		Deprecated: false,
-	}
-
 	KubernetesServiceaccounts = Instance{
 		Name: "alpha.istio.io/kubernetes-serviceaccounts",
 		Description: "Specifies the Kubernetes service accounts that are " +
