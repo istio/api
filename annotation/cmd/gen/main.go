@@ -17,6 +17,7 @@ package main
 import (
 	"bytes"
 	"flag"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -27,7 +28,6 @@ import (
 	"github.com/ghodss/yaml"
 	"github.com/spf13/cobra"
 
-	"io/ioutil"
 	"istio.io/api/annotation"
 )
 
@@ -83,7 +83,7 @@ var (
 					log.Fatalf("annotation %d in input file missing name", i)
 				}
 				if cfg.Annotations[i].VariableName == "" {
-					cfg.Annotations[i].VariableName = camelCase(cfg.Annotations[i].Name)
+					cfg.Annotations[i].VariableName = generateVariableName(cfg.Annotations[i].Name)
 				}
 			}
 
@@ -141,18 +141,39 @@ func getPackage() string {
 	return filepath.Base(filepath.Dir(output))
 }
 
-func camelCase(name string) string {
-	// Take the portion of the name after "/"
-	name = strings.Split(name, "/")[1]
+func generateVariableName(annoName string) string {
+	// Split the annotation name to separate the namespace/name portions.
+	parts := strings.Split(annoName, "/")
+	ns := parts[0]
+	name := parts[1]
 
-	// Replace any separator characters with spaces.
+	// First, process the namespace portion ...
+
+	// Strip .istio.io from the namespace portion of the annotation name.
+	ns = strings.TrimSuffix(ns, ".istio.io")
+
+	// Separate the words by spaces and capitalize each word.
+	ns = strings.ReplaceAll(ns, ".", " ")
+	ns = strings.Title(ns)
+
+	// Reverse the namespace words so that they increase in specificity from left to right.
+	nsParts := strings.Split(ns, " ")
+	ns = ""
+	for i := len(nsParts) - 1; i >= 0; i-- {
+		ns += nsParts[i]
+	}
+
+	// Now, process the name portion ...
+
+	// Separate the words with spaces and capitalize each word.
 	name = nameSeparator.ReplaceAllString(name, " ")
-
-	// Capitalize the first letter of each word
 	name = strings.Title(name)
 
 	// Remove the spaces to generate a camel case variable name.
-	return strings.ReplaceAll(name, " ", "")
+	name = strings.ReplaceAll(name, " ", "")
+
+	// Concatenate the names together.
+	return ns + name
 }
 
 func wordWrap(in string, indent int) string {
