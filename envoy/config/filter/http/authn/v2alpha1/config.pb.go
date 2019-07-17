@@ -36,9 +36,8 @@ type FilterConfig struct {
 	// the local service is not in the same trust domain.
 	// Set this field to true to skip the validation and allows peers from any
 	// trust domains.
-	// Note, the istio authn filter only validates the trust domain when both mTLS
-	// policy and the STRICT mode is used, In other words, this field has no
-	// effect when plaintext or PERMISSIVE mode is used.
+	// Note, the istio authn filter only validates the trust domain when mTLS is
+	// used, In other words, this field has no effect for plaintext traffic.
 	SkipValidateTrustDomain bool     `protobuf:"varint,3,opt,name=skip_validate_trust_domain,json=skipValidateTrustDomain,proto3" json:"skip_validate_trust_domain,omitempty"`
 	XXX_NoUnkeyedLiteral    struct{} `json:"-"`
 	XXX_unrecognized        []byte   `json:"-"`
