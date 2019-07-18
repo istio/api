@@ -5176,6 +5176,11 @@
                 "id": 2,
                 "name": "authority",
                 "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "redirect_code",
+                "type": "uint32"
               }
             ]
           },
