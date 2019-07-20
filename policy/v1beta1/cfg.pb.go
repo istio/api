@@ -682,30 +682,13 @@ func (m *Instance) GetAttributeBindings() map[string]string {
 // # Note: if connection information is not specified, the adapter configuration is directly inside
 // # `spec` block. This is going to be DEPRECATED in favor of Sample-2
 // apiVersion: "config.istio.io/v1alpha2"
-// kind: prometheus
+// kind: handler
 // metadata:
-//   name: handler
+//   name: requestcount
 //   namespace: istio-system
 // spec:
-//   metrics:
-//   - name: request_count
-//     instance_name: requestcount.metric.istio-system
-//     kind: COUNTER
-//     label_names:
-//     - source_service
-//     - source_version
-//     - destination_service
-//     - destination_version
-// ---
-// # Sample-2: With connection information (for out-of-process adapters)
-// # Note: Unlike sample-1, the adapter configuration is parallel to `connection` and is nested inside `param` block.
-// apiVersion: "config.istio.io/v1alpha2"
-// kind: prometheus
-// metadata:
-//   name: handler
-//   namespace: istio-system
-// spec:
-//   param:
+//   compiledAdapter: prometheus
+//   params:
 //     metrics:
 //     - name: request_count
 //       instance_name: requestcount.metric.istio-system
@@ -715,8 +698,29 @@ func (m *Instance) GetAttributeBindings() map[string]string {
 //       - source_version
 //       - destination_service
 //       - destination_version
-//   connection:
-//     address: localhost:8090
+// ---
+// # Sample-2: With connection information (for out-of-process adapters)
+// # Note: Unlike sample-1, the adapter configuration is parallel to `connection` and is nested inside `param` block.
+// apiVersion: "config.istio.io/v1alpha2"
+// kind: handler
+// metadata:
+//   name: requestcount
+//   namespace: istio-system
+// spec:
+//   compiledAdapter: prometheus
+//   params:
+//     param:
+//       metrics:
+//       - name: request_count
+//         instance_name: requestcount.metric.istio-system
+//         kind: COUNTER
+//         label_names:
+//         - source_service
+//         - source_version
+//         - destination_service
+//         - destination_version
+//     connection:
+//       address: localhost:8090
 // ---
 // ```
 type Handler struct {
