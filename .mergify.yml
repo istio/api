@@ -4,7 +4,7 @@ pull_request_rules:
       - status-success=prow/api-presubmit.sh
       - status-success=cla/google
       - "status-success=ci/circleci: lint"
-      - "#approved-reviews-by>=1"
+      - "#approved-reviews-by>=2"
       - label!=do-not-merge
       - label!=do-not-merge/work-in-progress
       - label!=do-not-merge/hold
