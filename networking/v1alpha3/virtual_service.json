@@ -359,6 +359,10 @@
             "description": "On a redirect, overwrite the Authority/Host portion of the URL with\n this value.",
             "type": "string",
             "format": "string"
+          },
+          "redirectCode": {
+            "description": "On a redirect, Specifies the HTTP status code to use in the redirect\n response. The default response code is MOVED_PERMANENTLY (301).",
+            "type": "integer"
           }
         }
       },
