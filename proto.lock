@@ -4200,6 +4200,10 @@
               {
                 "name": "AUTO_PASSTHROUGH",
                 "integer": 3
+              },
+              {
+                "name": "ISTIO_MUTUAL",
+                "integer": 4
               }
             ]
           },
