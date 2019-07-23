@@ -29,11 +29,11 @@
         "default": "TEMPLATE_VARIETY_CHECK"
       },
       "istio.mixer.adapter.model.v1beta1.Info": {
-        "description": "Info describes an adapter or a backend that wants to provide telemetry and policy functionality to Mixer as an\n out of process adapter.",
+        "description": "Info describes an adapter or a backend that wants to provide telemetry and policy functionality to Mixer as an out of process adapter.",
         "type": "object",
         "properties": {
           "name": {
-            "description": "Name of the adapter. It must be an RFC 1035 compatible DNS label\n matching the `^[a-z]([-a-z0-9]*[a-z0-9])?$` regular expression.\n Name is used in Istio configuration, therefore it should be descriptive but short.\n example: denier\n Vendor adapters should use a vendor prefix.\n example: mycompany-denier",
+            "description": "Name of the adapter. It must be an RFC 1035 compatible DNS label matching the `^[a-z]([-a-z0-9]*[a-z0-9])?$` regular expression. Name is used in Istio configuration, therefore it should be descriptive but short. example: denier Vendor adapters should use a vendor prefix. example: mycompany-denier",
             "type": "string",
             "format": "string"
           },
@@ -56,7 +56,7 @@
             "format": "string"
           },
           "sessionBased": {
-            "description": "True if backend has implemented the\n [InfrastructureBackend](https://github.com/istio/api/blob/master/mixer/adapter/model/v1beta1/infrastructure_backend.proto)\n service; false otherwise.",
+            "description": "True if backend has implemented the [InfrastructureBackend](https://github.com/istio/api/blob/master/mixer/adapter/model/v1beta1/infrastructure_backend.proto) service; false otherwise.",
             "type": "boolean"
           }
         }
@@ -194,7 +194,7 @@
         "type": "object",
         "properties": {
           "grantedAmount": {
-            "description": "The amount of granted quota. When `QuotaParams.best_effort` is true, this will be \u003e= 0.\n If `QuotaParams.best_effort` is false, this will be either 0 or \u003e= `QuotaParams.amount`.",
+            "description": "The amount of granted quota. When `QuotaParams.best_effort` is true, this will be \u003e= 0. If `QuotaParams.best_effort` is false, this will be either 0 or \u003e= `QuotaParams.amount`.",
             "type": "integer",
             "format": "int64"
           }
@@ -219,7 +219,7 @@
         "type": "object",
         "properties": {
           "typeUrl": {
-            "description": "A URL/resource name that uniquely identifies the type of the serialized\n protocol buffer message. This string must contain at least\n one \"/\" character. The last segment of the URL's path must represent\n the fully qualified name of the type (as in\n `path/google.protobuf.Duration`). The name should be in a canonical form\n (e.g., leading \".\" is not accepted).",
+            "description": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message. This string must contain at least one \"/\" character. The last segment of the URL's path must represent the fully qualified name of the type (as in `path/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading \".\" is not accepted).",
             "type": "string",
             "format": "string"
           },
@@ -240,12 +240,12 @@
             "format": "int32"
           },
           "message": {
-            "description": "A developer-facing error message, which should be in English. Any\n user-facing error message should be localized and sent in the\n [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
+            "description": "A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
             "type": "string",
             "format": "string"
           },
           "details": {
-            "description": "A list of messages that carry the error details.  There is a common set of\n message types for APIs to use.",
+            "description": "A list of messages that carry the error details. There is a common set of message types for APIs to use.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/google.protobuf.Any"

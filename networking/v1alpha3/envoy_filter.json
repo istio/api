@@ -13,7 +13,7 @@
         ],
         "properties": {
           "workloadLabels": {
-            "description": "Deprecated. Use workload_selector instead.\n $hide_from_docs",
+            "description": "Deprecated. Use workload_selector instead. $hide_from_docs",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -40,7 +40,7 @@
         }
       },
       "istio.networking.v1alpha3.EnvoyFilter.Filter": {
-        "description": "Deprecated.\n Envoy filters to be added to a network or http filter chain.\n $hide_from_docs",
+        "description": "Deprecated. Envoy filters to be added to a network or http filter chain. $hide_from_docs",
         "type": "object",
         "properties": {
           "listenerMatch": {
@@ -53,7 +53,7 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.Filter.FilterType"
           },
           "filterName": {
-            "description": "REQUIRED: The name of the filter to instantiate. The name must match a supported\n filter _compiled into_ Envoy.",
+            "description": "REQUIRED: The name of the filter to instantiate. The name must match a supported filter _compiled into_ Envoy.",
             "type": "string",
             "format": "string"
           },
@@ -63,14 +63,14 @@
         }
       },
       "istio.networking.v1alpha3.WorkloadSelector": {
-        "description": "WorkloadSelector specifies the criteria used to determine if the Gateway,\n Sidecar, or EnvoyFilter resource can be applied to a proxy. The matching criteria\n includes the metadata associated with a proxy, workload instance info such as\n labels attached to the pod/VM, or any other info that the proxy provides\n to Istio during the initial handshake. If multiple conditions are\n specified, all conditions need to match in order for the workload instance to be\n selected. Currently, only label based selection mechanism is supported.",
+        "description": "WorkloadSelector specifies the criteria used to determine if the Gateway, Sidecar, or EnvoyFilter resource can be applied to a proxy. The matching criteria includes the metadata associated with a proxy, workload instance info such as labels attached to the pod/VM, or any other info that the proxy provides to Istio during the initial handshake. If multiple conditions are specified, all conditions need to match in order for the workload instance to be selected. Currently, only label based selection mechanism is supported.",
         "type": "object",
         "required": [
           "labels"
         ],
         "properties": {
           "labels": {
-            "description": "REQUIRED: One or more labels that indicate a specific set of pods/VMs\n on which this sidecar configuration should be applied. The scope of\n label search is restricted to the configuration namespace in which the\n the resource is present.",
+            "description": "REQUIRED: One or more labels that indicate a specific set of pods/VMs on which this sidecar configuration should be applied. The scope of label search is restricted to the configuration namespace in which the the resource is present.",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -95,15 +95,15 @@
         }
       },
       "istio.networking.v1alpha3.EnvoyFilter.DeprecatedListenerMatch": {
-        "description": "Deprecated.\n Select a listener to add the filter to based on the match conditions.\n All conditions specified in the ListenerMatch must be met for the filter\n to be applied to a listener.\n $hide_from_docs",
+        "description": "Deprecated. Select a listener to add the filter to based on the match conditions. All conditions specified in the ListenerMatch must be met for the filter to be applied to a listener. $hide_from_docs",
         "type": "object",
         "properties": {
           "portNumber": {
-            "description": "The service port/gateway port to which traffic is being\n sent/received. If not specified, matches all listeners. Even though\n inbound listeners are generated for the instance/pod ports, only\n service ports should be used to match listeners.",
+            "description": "The service port/gateway port to which traffic is being sent/received. If not specified, matches all listeners. Even though inbound listeners are generated for the instance/pod ports, only service ports should be used to match listeners.",
             "type": "integer"
           },
           "portNamePrefix": {
-            "description": "Instead of using specific port numbers, a set of ports matching a\n given port name prefix can be selected. E.g., \"mongo\" selects ports\n named mongo-port, mongo, mongoDB, MONGO, etc. Matching is case\n insensitive.",
+            "description": "Instead of using specific port numbers, a set of ports matching a given port name prefix can be selected. E.g., \"mongo\" selects ports named mongo-port, mongo, mongoDB, MONGO, etc. Matching is case insensitive.",
             "type": "string",
             "format": "string"
           },
@@ -114,7 +114,7 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.DeprecatedListenerMatch.ListenerProtocol"
           },
           "address": {
-            "description": "One or more IP addresses to which the listener is bound. If\n specified, should match at least one address in the list.",
+            "description": "One or more IP addresses to which the listener is bound. If specified, should match at least one address in the list.",
             "type": "array",
             "items": {
               "type": "string",
@@ -141,14 +141,14 @@
         "default": "ALL"
       },
       "istio.networking.v1alpha3.EnvoyFilter.InsertPosition": {
-        "description": "Deprecated.\n Indicates the relative index in the filter chain where the filter should be inserted.\n $hide_from_docs",
+        "description": "Deprecated. Indicates the relative index in the filter chain where the filter should be inserted. $hide_from_docs",
         "type": "object",
         "properties": {
           "index": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.InsertPosition.Index"
           },
           "relativeTo": {
-            "description": "If BEFORE or AFTER position is specified, specify the name of the\n filter relative to which this filter should be inserted.",
+            "description": "If BEFORE or AFTER position is specified, specify the name of the filter relative to which this filter should be inserted.",
             "type": "string",
             "format": "string"
           }
@@ -187,7 +187,7 @@
         "default": "INVALID"
       },
       "istio.networking.v1alpha3.EnvoyFilter.PatchContext": {
-        "description": "PatchContext selects a class of configurations based on the\n traffic flow direction and workload type.",
+        "description": "PatchContext selects a class of configurations based on the traffic flow direction and workload type.",
         "enum": [
           "ANY",
           "SIDECAR_INBOUND",
@@ -197,50 +197,50 @@
         "default": "ANY"
       },
       "istio.networking.v1alpha3.EnvoyFilter.ClusterMatch": {
-        "description": "Conditions specified in ClusterMatch must be met for the patch\n to be applied to a cluster.",
+        "description": "Conditions specified in ClusterMatch must be met for the patch to be applied to a cluster.",
         "type": "object",
         "properties": {
           "name": {
-            "description": "The exact name of the cluster to match. To match a specific\n cluster by name, such as the internally generated \"Passthrough\"\n cluster, leave all fields in clusterMatch empty, except the\n name.",
+            "description": "The exact name of the cluster to match. To match a specific cluster by name, such as the internally generated \"Passthrough\" cluster, leave all fields in clusterMatch empty, except the name.",
             "type": "string",
             "format": "string"
           },
           "portNumber": {
-            "description": "The service port for which this cluster was generated.  If\n omitted, applies to clusters for any port.",
+            "description": "The service port for which this cluster was generated. If omitted, applies to clusters for any port.",
             "type": "integer"
           },
           "service": {
-            "description": "The fully qualified service name for this cluster. If omitted,\n applies to clusters for any service. For services defined\n through service entries, the service name is same as the hosts\n defined in the service entry.",
+            "description": "The fully qualified service name for this cluster. If omitted, applies to clusters for any service. For services defined through service entries, the service name is same as the hosts defined in the service entry.",
             "type": "string",
             "format": "string"
           },
           "subset": {
-            "description": "The subset associated with the service. If omitted, applies to\n clusters for any subset of a service.",
+            "description": "The subset associated with the service. If omitted, applies to clusters for any subset of a service.",
             "type": "string",
             "format": "string"
           }
         }
       },
       "istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch": {
-        "description": "Conditions specified in RouteConfigurationMatch must be met for\n the patch to be applied to a route configuration object or a\n specific virtual host within the route configuration.",
+        "description": "Conditions specified in RouteConfigurationMatch must be met for the patch to be applied to a route configuration object or a specific virtual host within the route configuration.",
         "type": "object",
         "properties": {
           "name": {
-            "description": "Route configuration name to match on. Can be used to match a\n specific route configuration by name, such as the internally\n generated \"http_proxy\" route configuration for all sidecars.",
+            "description": "Route configuration name to match on. Can be used to match a specific route configuration by name, such as the internally generated \"http_proxy\" route configuration for all sidecars.",
             "type": "string",
             "format": "string"
           },
           "portNumber": {
-            "description": "The service port number or gateway server port number for which\n this route configuration was generated. If omitted, applies to\n route configurations for all ports.",
+            "description": "The service port number or gateway server port number for which this route configuration was generated. If omitted, applies to route configurations for all ports.",
             "type": "integer"
           },
           "portName": {
-            "description": "Applicable only for GATEWAY context. The gateway server port\n name for which this route configuration was generated.",
+            "description": "Applicable only for GATEWAY context. The gateway server port name for which this route configuration was generated.",
             "type": "string",
             "format": "string"
           },
           "gateway": {
-            "description": "The Istio gateway config's namespace/name for which this route\n configuration was generated. Applies only if the context is\n GATEWAY. Should be in the namespace/name format. Use this field\n in conjunction with the portNumber and portName to accurately\n select the Envoy route configuration for a specific HTTPS\n server within a gateway config object.",
+            "description": "The Istio gateway config's namespace/name for which this route configuration was generated. Applies only if the context is GATEWAY. Should be in the namespace/name format. Use this field in conjunction with the portNumber and portName to accurately select the Envoy route configuration for a specific HTTPS server within a gateway config object.",
             "type": "string",
             "format": "string"
           },
@@ -254,27 +254,27 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "The VirtualHosts objects generated by Istio are named as\n host:port, where the host typically corresponds to the\n VirtualService's host field or the hostname of a service in the\n registry.",
+            "description": "The VirtualHosts objects generated by Istio are named as host:port, where the host typically corresponds to the VirtualService's host field or the hostname of a service in the registry.",
             "type": "string",
             "format": "string"
           }
         }
       },
       "istio.networking.v1alpha3.EnvoyFilter.ListenerMatch": {
-        "description": "Conditions specified in a listener match must be met for the\n patch to be applied to a specific listener across all filter\n chains, or a specific filter chain inside the listener.",
+        "description": "Conditions specified in a listener match must be met for the patch to be applied to a specific listener across all filter chains, or a specific filter chain inside the listener.",
         "type": "object",
         "properties": {
           "name": {
-            "description": "Match a specific listener by its name. The listeners generated\n by Pilot are typically named as IP:Port.",
+            "description": "Match a specific listener by its name. The listeners generated by Pilot are typically named as IP:Port.",
             "type": "string",
             "format": "string"
           },
           "portNumber": {
-            "description": "The service port/gateway port to which traffic is being\n sent/received. If not specified, matches all listeners. Even though\n inbound listeners are generated for the instance/pod ports, only\n service ports should be used to match listeners.",
+            "description": "The service port/gateway port to which traffic is being sent/received. If not specified, matches all listeners. Even though inbound listeners are generated for the instance/pod ports, only service ports should be used to match listeners.",
             "type": "integer"
           },
           "portName": {
-            "description": "Instead of using specific port numbers, a set of ports matching\n a given service's port name can be selected. Matching is case\n insensitive.",
+            "description": "Instead of using specific port numbers, a set of ports matching a given service's port name can be selected. Matching is case insensitive.",
             "type": "string",
             "format": "string"
           },
@@ -284,16 +284,16 @@
         }
       },
       "istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.FilterChainMatch": {
-        "description": "For listeners with multiple filter chains (e.g., inbound\n listeners on sidecars with permissive mTLS, gateway listeners\n with multiple SNI matches), the filter chain match can be used\n to select a specific filter chain to patch.",
+        "description": "For listeners with multiple filter chains (e.g., inbound listeners on sidecars with permissive mTLS, gateway listeners with multiple SNI matches), the filter chain match can be used to select a specific filter chain to patch.",
         "type": "object",
         "properties": {
           "sni": {
-            "description": "The SNI value used by a filter chain's match condition.  This\n condition will evaluate to false if the filter chain has no\n sni match.",
+            "description": "The SNI value used by a filter chain's match condition. This condition will evaluate to false if the filter chain has no sni match.",
             "type": "string",
             "format": "string"
           },
           "transportProtocol": {
-            "description": "Applies only to SIDECAR_INBOUND context. If non-empty, a\n transport protocol to consider when determining a filter\n chain match.  This value will be compared against the\n transport protocol of a new connection, when it's detected by\n one of the listener filters.",
+            "description": "Applies only to SIDECAR_INBOUND context. If non-empty, a transport protocol to consider when determining a filter chain match. This value will be compared against the transport protocol of a new connection, when it's detected by one of the listener filters.",
             "type": "string",
             "format": "string"
           },
@@ -317,7 +317,7 @@
         }
       },
       "istio.networking.v1alpha3.EnvoyFilter.ListenerMatch.SubFilterMatch": {
-        "description": "Conditions to match a specific filter within another\n filter. This field is typically useful to match a HTTP filter\n inside the envoy.http_connection_manager network filter. This\n could also be applicable for thrift filters.",
+        "description": "Conditions to match a specific filter within another filter. This field is typically useful to match a HTTP filter inside the envoy.http_connection_manager network filter. This could also be applicable for thrift filters.",
         "type": "object",
         "properties": {
           "name": {
@@ -340,7 +340,7 @@
         }
       },
       "istio.networking.v1alpha3.EnvoyFilter.Patch.Operation": {
-        "description": "Operation denotes how the patch should be applied to the selected\n configuration.",
+        "description": "Operation denotes how the patch should be applied to the selected configuration.",
         "enum": [
           "INVALID",
           "MERGE",

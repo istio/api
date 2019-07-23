@@ -7,7 +7,7 @@
   "components": {
     "schemas": {
       "istio.mixer.v1.config.client.HTTPAPISpec": {
-        "description": "HTTPAPISpec defines the canonical configuration for generating\n API-related attributes from HTTP requests based on the method and\n uri templated path matches. It is sufficient for defining the API\n surface of a service for the purposes of API attribute\n generation. It is not intended to represent auth, quota,\n documentation, or other information commonly found in other API\n specifications, e.g. OpenAPI.",
+        "description": "HTTPAPISpec defines the canonical configuration for generating API-related attributes from HTTP requests based on the method and uri templated path matches. It is sufficient for defining the API surface of a service for the purposes of API attribute generation. It is not intended to represent auth, quota, documentation, or other information commonly found in other API specifications, e.g. OpenAPI.",
         "type": "object",
         "properties": {
           "attributes": {
@@ -21,7 +21,7 @@
             }
           },
           "apiKeys": {
-            "description": "List of APIKey that describes how to extract an API-KEY from an\n HTTP request. The first API-Key match found in the list is used,\n i.e. 'OR' semantics.",
+            "description": "List of APIKey that describes how to extract an API-KEY from an HTTP request. The first API-Key match found in the list is used, i.e. 'OR' semantics.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mixer.v1.config.client.APIKey"
@@ -30,7 +30,7 @@
         }
       },
       "istio.mixer.v1.config.client.HTTPAPISpecPattern": {
-        "description": "HTTPAPISpecPattern defines a single pattern to match against\n incoming HTTP requests. The per-pattern list of attributes is\n generated if both the http_method and uri_template match. In\n addition, the top-level list of attributes in the HTTPAPISpec is also\n generated.",
+        "description": "HTTPAPISpecPattern defines a single pattern to match against incoming HTTP requests. The per-pattern list of attributes is generated if both the http_method and uri_template match. In addition, the top-level list of attributes in the HTTPAPISpec is also generated.",
         "oneOf": [
           {
             "type": "object",
@@ -39,12 +39,12 @@
                 "$ref": "#/components/schemas/istio.mixer.v1.Attributes"
               },
               "httpMethod": {
-                "description": "HTTP request method to match against as defined by\n [rfc7231](https://tools.ietf.org/html/rfc7231#page-21). For\n example: GET, HEAD, POST, PUT, DELETE.",
+                "description": "HTTP request method to match against as defined by [rfc7231](https://tools.ietf.org/html/rfc7231#page-21). For example: GET, HEAD, POST, PUT, DELETE.",
                 "type": "string",
                 "format": "string"
               },
               "uriTemplate": {
-                "description": "URI template to match against as defined by\n [rfc6570](https://tools.ietf.org/html/rfc6570). For example, the\n following are valid URI templates:\n\n     /pets\n     /pets/{id}\n     /dictionary/{term:1}/{term}\n     /search{?q*,lang}",
+                "description": "URI template to match against as defined by [rfc6570](https://tools.ietf.org/html/rfc6570). For example, the following are valid URI templates: /pets /pets/{id} /dictionary/{term:1}/{term} /search{?q*,lang}",
                 "type": "string",
                 "format": "string"
               }
@@ -57,12 +57,12 @@
                 "$ref": "#/components/schemas/istio.mixer.v1.Attributes"
               },
               "regex": {
-                "description": "EXPERIMENTAL:\n\n ecmascript style regex-based match as defined by\n [EDCA-262](http://en.cppreference.com/w/cpp/regex/ecmascript). For\n example,",
+                "description": "EXPERIMENTAL: ecmascript style regex-based match as defined by [EDCA-262](http://en.cppreference.com/w/cpp/regex/ecmascript). For example,",
                 "type": "string",
                 "format": "string"
               },
               "httpMethod": {
-                "description": "HTTP request method to match against as defined by\n [rfc7231](https://tools.ietf.org/html/rfc7231#page-21). For\n example: GET, HEAD, POST, PUT, DELETE.",
+                "description": "HTTP request method to match against as defined by [rfc7231](https://tools.ietf.org/html/rfc7231#page-21). For example: GET, HEAD, POST, PUT, DELETE.",
                 "type": "string",
                 "format": "string"
               }
@@ -71,13 +71,13 @@
         ]
       },
       "istio.mixer.v1.config.client.APIKey": {
-        "description": "APIKey defines the explicit configuration for generating the\n `request.api_key` attribute from HTTP requests.",
+        "description": "APIKey defines the explicit configuration for generating the `request.api_key` attribute from HTTP requests.",
         "oneOf": [
           {
             "type": "object",
             "properties": {
               "query": {
-                "description": "API Key is sent as a query parameter. `query` represents the\n query string parameter name.",
+                "description": "API Key is sent as a query parameter. `query` represents the query string parameter name.",
                 "type": "string",
                 "format": "string"
               }
@@ -87,7 +87,7 @@
             "type": "object",
             "properties": {
               "header": {
-                "description": "API key is sent in a request header. `header` represents the\n header name.",
+                "description": "API key is sent in a request header. `header` represents the header name.",
                 "type": "string",
                 "format": "string"
               }
@@ -97,7 +97,7 @@
             "type": "object",
             "properties": {
               "cookie": {
-                "description": "API key is sent in a\n [cookie](https://swagger.io/docs/specification/authentication/cookie-authentication),",
+                "description": "API key is sent in a [cookie](https://swagger.io/docs/specification/authentication/cookie-authentication),",
                 "type": "string",
                 "format": "string"
               }
@@ -106,23 +106,23 @@
         ]
       },
       "istio.mixer.v1.config.client.HTTPAPISpecReference": {
-        "description": "HTTPAPISpecReference defines a reference to an HTTPAPISpec. This is\n typically used for establishing bindings between an HTTPAPISpec and an\n IstioService. For example, the following defines an\n HTTPAPISpecReference for service `foo` in namespace `bar`.",
+        "description": "HTTPAPISpecReference defines a reference to an HTTPAPISpec. This is typically used for establishing bindings between an HTTPAPISpec and an IstioService. For example, the following defines an HTTPAPISpecReference for service `foo` in namespace `bar`.",
         "type": "object",
         "properties": {
           "name": {
-            "description": "REQUIRED. The short name of the HTTPAPISpec. This is the resource\n name defined by the metadata name field.",
+            "description": "REQUIRED. The short name of the HTTPAPISpec. This is the resource name defined by the metadata name field.",
             "type": "string",
             "format": "string"
           },
           "namespace": {
-            "description": "Optional namespace of the HTTPAPISpec. Defaults to the encompassing\n HTTPAPISpecBinding's metadata namespace field.",
+            "description": "Optional namespace of the HTTPAPISpec. Defaults to the encompassing HTTPAPISpecBinding's metadata namespace field.",
             "type": "string",
             "format": "string"
           }
         }
       },
       "istio.mixer.v1.config.client.HTTPAPISpecBinding": {
-        "description": "HTTPAPISpecBinding defines the binding between HTTPAPISpecs and one or more\n IstioService. For example, the following establishes a binding\n between the HTTPAPISpec `petstore` and service `foo` in namespace `bar`.",
+        "description": "HTTPAPISpecBinding defines the binding between HTTPAPISpecs and one or more IstioService. For example, the following establishes a binding between the HTTPAPISpec `petstore` and service `foo` in namespace `bar`.",
         "type": "object",
         "properties": {
           "services": {
@@ -133,7 +133,7 @@
             }
           },
           "apiSpecs": {
-            "description": "REQUIRED. One or more HTTPAPISpec references that should be mapped to\n the specified service(s). The aggregate collection of match\n conditions defined in the HTTPAPISpecs should not overlap.",
+            "description": "REQUIRED. One or more HTTPAPISpec references that should be mapped to the specified service(s). The aggregate collection of match conditions defined in the HTTPAPISpecs should not overlap.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mixer.v1.config.client.HTTPAPISpecReference"
@@ -142,7 +142,7 @@
         }
       },
       "istio.mixer.v1.config.client.IstioService": {
-        "description": "IstioService identifies a service and optionally service version.\n The FQDN of the service is composed from the name, namespace, and implementation-specific domain suffix\n (e.g. on Kubernetes, \"reviews\" + \"default\" + \"svc.cluster.local\" -\u003e \"reviews.default.svc.cluster.local\").",
+        "description": "IstioService identifies a service and optionally service version. The FQDN of the service is composed from the name, namespace, and implementation-specific domain suffix (e.g. on Kubernetes, \"reviews\" + \"default\" + \"svc.cluster.local\" -\u003e \"reviews.default.svc.cluster.local\").",
         "type": "object",
         "required": [
           "labels"
@@ -278,12 +278,12 @@
             "$ref": "#/components/schemas/google.protobuf.Duration"
           },
           "checkCluster": {
-            "description": "Name of the cluster that will forward check calls to a pool of mixer\n servers. Defaults to \"mixer_server\". By using different names for\n checkCluster and reportCluster, it is possible to have one set of\n Mixer servers handle check calls, while another set of Mixer servers\n handle report calls.",
+            "description": "Name of the cluster that will forward check calls to a pool of mixer servers. Defaults to \"mixer_server\". By using different names for checkCluster and reportCluster, it is possible to have one set of Mixer servers handle check calls, while another set of Mixer servers handle report calls.",
             "type": "string",
             "format": "string"
           },
           "reportCluster": {
-            "description": "Name of the cluster that will forward report calls to a pool of mixer\n servers. Defaults to \"mixer_server\". By using different names for\n checkCluster and reportCluster, it is possible to have one set of\n Mixer servers handle check calls, while another set of Mixer servers\n handle report calls.",
+            "description": "Name of the cluster that will forward report calls to a pool of mixer servers. Defaults to \"mixer_server\". By using different names for checkCluster and reportCluster, it is possible to have one set of Mixer servers handle check calls, while another set of Mixer servers handle report calls.",
             "type": "string",
             "format": "string"
           },
@@ -291,7 +291,7 @@
             "$ref": "#/components/schemas/istio.mixer.v1.Attributes"
           },
           "reportBatchMaxEntries": {
-            "description": "When disable_report_batch is false, this value specifies the maximum number\n of requests that are batched in report. If left unspecified, the default value\n of report_batch_max_entries == 0 will use the hardcoded defaults of\n istio::mixerclient::ReportOptions.",
+            "description": "When disable_report_batch is false, this value specifies the maximum number of requests that are batched in report. If left unspecified, the default value of report_batch_max_entries == 0 will use the hardcoded defaults of istio::mixerclient::ReportOptions.",
             "type": "integer"
           },
           "reportBatchMaxTime": {
@@ -316,14 +316,14 @@
             "$ref": "#/components/schemas/istio.mixer.v1.config.client.TransportConfig"
           },
           "serviceConfigs": {
-            "description": "Map of control configuration indexed by destination.service. This\n is used to support per-service configuration for cases where a\n mixerclient serves multiple services.",
+            "description": "Map of control configuration indexed by destination.service. This is used to support per-service configuration for cases where a mixerclient serves multiple services.",
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/istio.mixer.v1.config.client.ServiceConfig"
             }
           },
           "defaultDestinationService": {
-            "description": "Default destination service name if none was specified in the\n client request.",
+            "description": "Default destination service name if none was specified in the client request.",
             "type": "string",
             "format": "string"
           }
@@ -356,7 +356,7 @@
         }
       },
       "istio.mixer.v1.config.client.QuotaRule": {
-        "description": "Specifies a rule with list of matches and list of quotas.\n If any clause matched, the list of quotas will be used.",
+        "description": "Specifies a rule with list of matches and list of quotas. If any clause matched, the list of quotas will be used.",
         "type": "object",
         "properties": {
           "quotas": {
@@ -367,7 +367,7 @@
             }
           },
           "match": {
-            "description": "If empty, match all request.\n If any of match is true, it is matched.",
+            "description": "If empty, match all request. If any of match is true, it is matched.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mixer.v1.config.client.AttributeMatch"
@@ -383,7 +383,7 @@
         ],
         "properties": {
           "clause": {
-            "description": "Map of attribute names to StringMatch type.\n Each map element specifies one condition to match.",
+            "description": "Map of attribute names to StringMatch type. Each map element specifies one condition to match.",
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/istio.mixer.v1.config.client.StringMatch"
@@ -408,7 +408,7 @@
         }
       },
       "istio.mixer.v1.config.client.StringMatch": {
-        "description": "Describes how to match a given string in HTTP headers. Match is\n case-sensitive.",
+        "description": "Describes how to match a given string in HTTP headers. Match is case-sensitive.",
         "oneOf": [
           {
             "type": "object",
@@ -443,7 +443,7 @@
         ]
       },
       "istio.mixer.v1.config.client.QuotaSpecBinding": {
-        "description": "QuotaSpecBinding defines the binding between QuotaSpecs and one or more\n IstioService.",
+        "description": "QuotaSpecBinding defines the binding between QuotaSpecs and one or more IstioService.",
         "type": "object",
         "properties": {
           "services": {
@@ -454,7 +454,7 @@
             }
           },
           "quotaSpecs": {
-            "description": "REQUIRED. One or more QuotaSpec references that should be mapped to\n the specified service(s). The aggregate collection of match\n conditions defined in the QuotaSpecs should not overlap.",
+            "description": "REQUIRED. One or more QuotaSpec references that should be mapped to the specified service(s). The aggregate collection of match conditions defined in the QuotaSpecs should not overlap.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mixer.v1.config.client.QuotaSpecBinding.QuotaSpecReference"
@@ -463,16 +463,16 @@
         }
       },
       "istio.mixer.v1.config.client.QuotaSpecBinding.QuotaSpecReference": {
-        "description": "QuotaSpecReference uniquely identifies the QuotaSpec used in the\n Binding.",
+        "description": "QuotaSpecReference uniquely identifies the QuotaSpec used in the Binding.",
         "type": "object",
         "properties": {
           "name": {
-            "description": "REQUIRED. The short name of the QuotaSpec. This is the resource\n name defined by the metadata name field.",
+            "description": "REQUIRED. The short name of the QuotaSpec. This is the resource name defined by the metadata name field.",
             "type": "string",
             "format": "string"
           },
           "namespace": {
-            "description": "Optional namespace of the QuotaSpec. Defaults to the value of the\n metadata namespace field.",
+            "description": "Optional namespace of the QuotaSpec. Defaults to the value of the metadata namespace field.",
             "type": "string",
             "format": "string"
           }
@@ -483,19 +483,19 @@
         "type": "object",
         "properties": {
           "seconds": {
-            "description": "Signed seconds of the span of time. Must be from -315,576,000,000\n to +315,576,000,000 inclusive. Note: these bounds are computed from:\n 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+            "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
             "type": "integer",
             "format": "int64"
           },
           "nanos": {
-            "description": "Signed fractions of a second at nanosecond resolution of the span\n of time. Durations less than one second are represented with a 0\n `seconds` field and a positive or negative `nanos` field. For durations\n of one second or more, a non-zero value for the `nanos` field must be\n of the same sign as the `seconds` field. Must be from -999,999,999\n to +999,999,999 inclusive.",
+            "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
             "type": "integer",
             "format": "int32"
           }
         }
       },
       "istio.mixer.v1.Attributes": {
-        "description": "Default attributes to send to Mixer in both Check and\n Report. This typically includes \"destination.ip\" and\n \"destination.uid\" attributes.",
+        "description": "Default attributes to send to Mixer in both Check and Report. This typically includes \"destination.ip\" and \"destination.uid\" attributes.",
         "type": "object",
         "required": [
           "attributes"
@@ -592,12 +592,12 @@
         "type": "object",
         "properties": {
           "seconds": {
-            "description": "Represents seconds of UTC time since Unix epoch\n 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to\n 9999-12-31T23:59:59Z inclusive.",
+            "description": "Represents seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive.",
             "type": "integer",
             "format": "int64"
           },
           "nanos": {
-            "description": "Non-negative fractions of a second at nanosecond resolution. Negative\n second values with fractions must still have non-negative nanos values\n that count forward in time. Must be from 0 to 999,999,999\n inclusive.",
+            "description": "Non-negative fractions of a second at nanosecond resolution. Negative second values with fractions must still have non-negative nanos values that count forward in time. Must be from 0 to 999,999,999 inclusive.",
             "type": "integer",
             "format": "int32"
           }

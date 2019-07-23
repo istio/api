@@ -7,7 +7,7 @@
   "components": {
     "schemas": {
       "istio.mixer.v1.Attributes": {
-        "description": "Attributes represents a set of typed name/value pairs. Many of Mixer's\n API either consume and/or return attributes.",
+        "description": "Attributes represents a set of typed name/value pairs. Many of Mixer's API either consume and/or return attributes.",
         "type": "object",
         "required": [
           "attributes"
@@ -118,7 +118,7 @@
         }
       },
       "istio.mixer.v1.CompressedAttributes": {
-        "description": "Defines a list of attributes in compressed format optimized for transport.\n Within this message, strings are referenced using integer indices into\n one of two string dictionaries. Positive integers index into the global\n deployment-wide dictionary, whereas negative integers index into the message-level\n dictionary instead. The message-level dictionary is carried by the\n `words` field of this message, the deployment-wide dictionary is determined via\n configuration.",
+        "description": "Defines a list of attributes in compressed format optimized for transport. Within this message, strings are referenced using integer indices into one of two string dictionaries. Positive integers index into the global deployment-wide dictionary, whereas negative integers index into the message-level dictionary instead. The message-level dictionary is carried by the `words` field of this message, the deployment-wide dictionary is determined via configuration.",
         "type": "object",
         "required": [
           "strings",
@@ -201,7 +201,7 @@
         }
       },
       "istio.mixer.v1.StringMap": {
-        "description": "A map of string to string. The keys and values in this map are dictionary\n indices (see the [Attributes][istio.mixer.v1.CompressedAttributes] message for an explanation)",
+        "description": "A map of string to string. The keys and values in this map are dictionary indices (see the [Attributes][istio.mixer.v1.CompressedAttributes] message for an explanation)",
         "type": "object",
         "required": [
           "entries"
@@ -225,11 +225,11 @@
         ],
         "properties": {
           "globalWordCount": {
-            "description": "The number of words in the global dictionary, used with to populate the attributes.\n This value is used as a quick way to determine whether the client is using a dictionary that\n the server understands.",
+            "description": "The number of words in the global dictionary, used with to populate the attributes. This value is used as a quick way to determine whether the client is using a dictionary that the server understands.",
             "type": "integer"
           },
           "deduplicationId": {
-            "description": "Used for deduplicating `Check` calls in the case of failed RPCs and retries. This should be a UUID\n per call, where the same UUID is used for retries of the same call.",
+            "description": "Used for deduplicating `Check` calls in the case of failed RPCs and retries. This should be a UUID per call, where the same UUID is used for retries of the same call.",
             "type": "string",
             "format": "string"
           },
@@ -278,7 +278,7 @@
         "type": "object",
         "properties": {
           "grantedAmount": {
-            "description": "The amount of granted quota. When `QuotaParams.best_effort` is true, this will be \u003e= 0.\n If `QuotaParams.best_effort` is false, this will be either 0 or \u003e= `QuotaParams.amount`.",
+            "description": "The amount of granted quota. When `QuotaParams.best_effort` is true, this will be \u003e= 0. If `QuotaParams.best_effort` is false, this will be either 0 or \u003e= `QuotaParams.amount`.",
             "type": "integer",
             "format": "int64"
           }
@@ -302,11 +302,11 @@
         }
       },
       "istio.mixer.v1.ReferencedAttributes": {
-        "description": "Describes the attributes that were used to determine the response.\n This can be used to construct a response cache.",
+        "description": "Describes the attributes that were used to determine the response. This can be used to construct a response cache.",
         "type": "object",
         "properties": {
           "words": {
-            "description": "The message-level dictionary. Refer to [CompressedAttributes][istio.mixer.v1.CompressedAttributes] for information\n on using dictionaries.",
+            "description": "The message-level dictionary. Refer to [CompressedAttributes][istio.mixer.v1.CompressedAttributes] for information on using dictionaries.",
             "type": "array",
             "items": {
               "type": "string",
@@ -316,15 +316,15 @@
         }
       },
       "istio.mixer.v1.RouteDirective": {
-        "description": "Expresses the routing manipulation actions to be performed on behalf of\n Mixer in response to a precondition check.",
+        "description": "Expresses the routing manipulation actions to be performed on behalf of Mixer in response to a precondition check.",
         "type": "object",
         "properties": {
           "directResponseCode": {
-            "description": "If set, enables a direct response without proxying the request to the routing\n destination. Required to be a value in the 2xx or 3xx range.",
+            "description": "If set, enables a direct response without proxying the request to the routing destination. Required to be a value in the 2xx or 3xx range.",
             "type": "integer"
           },
           "directResponseBody": {
-            "description": "Supplies the response body for the direct response.\n If this setting is omitted, no body is included in the generated response.",
+            "description": "Supplies the response body for the direct response. If this setting is omitted, no body is included in the generated response.",
             "type": "string",
             "format": "string"
           }
@@ -345,7 +345,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "The name of the attribute. This is a dictionary index encoded in a manner identical\n to all strings in the [CompressedAttributes][istio.mixer.v1.CompressedAttributes] message.",
+            "description": "The name of the attribute. This is a dictionary index encoded in a manner identical to all strings in the [CompressedAttributes][istio.mixer.v1.CompressedAttributes] message.",
             "type": "integer",
             "format": "int32"
           },
@@ -353,19 +353,19 @@
             "$ref": "#/components/schemas/istio.mixer.v1.ReferencedAttributes.Condition"
           },
           "regex": {
-            "description": "If a REGEX condition is provided for a STRING_MAP attribute,\n clients should use the regex value to match against map keys.",
+            "description": "If a REGEX condition is provided for a STRING_MAP attribute, clients should use the regex value to match against map keys.",
             "type": "string",
             "format": "string"
           },
           "mapKey": {
-            "description": "A key in a STRING_MAP. When multiple keys from a STRING_MAP\n attribute were referenced, there will be multiple AttributeMatch\n messages with different map_key values. Values for map_key SHOULD\n be ignored for attributes that are not STRING_MAP.",
+            "description": "A key in a STRING_MAP. When multiple keys from a STRING_MAP attribute were referenced, there will be multiple AttributeMatch messages with different map_key values. Values for map_key SHOULD be ignored for attributes that are not STRING_MAP.",
             "type": "integer",
             "format": "int32"
           }
         }
       },
       "istio.mixer.v1.HeaderOperation": {
-        "description": "Operation on HTTP headers to replace, append, or remove a header. Header\n names are normalized to lower-case with dashes, e.g.  \"x-request-id\".\n Pseudo-headers \":path\", \":authority\", and \":method\" are supported to modify\n the request headers.",
+        "description": "Operation on HTTP headers to replace, append, or remove a header. Header names are normalized to lower-case with dashes, e.g. \"x-request-id\". Pseudo-headers \":path\", \":authority\", and \":method\" are supported to modify the request headers.",
         "type": "object",
         "properties": {
           "name": {
@@ -397,14 +397,14 @@
         "type": "object",
         "properties": {
           "globalWordCount": {
-            "description": "The number of words in the global dictionary.\n To detect global dictionary out of sync between client and server.",
+            "description": "The number of words in the global dictionary. To detect global dictionary out of sync between client and server.",
             "type": "integer"
           },
           "repeatedAttributesSemantics": {
             "$ref": "#/components/schemas/istio.mixer.v1.ReportRequest.RepeatedAttributesSemantics"
           },
           "defaultWords": {
-            "description": "The default message-level dictionary for all the attributes.\n Individual attribute messages can have their own dictionaries, but if they don't\n then this set of words, if it is provided, is used instead.",
+            "description": "The default message-level dictionary for all the attributes. Individual attribute messages can have their own dictionaries, but if they don't then this set of words, if it is provided, is used instead.",
             "type": "array",
             "items": {
               "type": "string",
@@ -429,12 +429,12 @@
         "type": "object",
         "properties": {
           "seconds": {
-            "description": "Signed seconds of the span of time. Must be from -315,576,000,000\n to +315,576,000,000 inclusive. Note: these bounds are computed from:\n 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+            "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
             "type": "integer",
             "format": "int64"
           },
           "nanos": {
-            "description": "Signed fractions of a second at nanosecond resolution of the span\n of time. Durations less than one second are represented with a 0\n `seconds` field and a positive or negative `nanos` field. For durations\n of one second or more, a non-zero value for the `nanos` field must be\n of the same sign as the `seconds` field. Must be from -999,999,999\n to +999,999,999 inclusive.",
+            "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
             "type": "integer",
             "format": "int32"
           }
@@ -444,12 +444,12 @@
         "type": "object",
         "properties": {
           "seconds": {
-            "description": "Represents seconds of UTC time since Unix epoch\n 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to\n 9999-12-31T23:59:59Z inclusive.",
+            "description": "Represents seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive.",
             "type": "integer",
             "format": "int64"
           },
           "nanos": {
-            "description": "Non-negative fractions of a second at nanosecond resolution. Negative\n second values with fractions must still have non-negative nanos values\n that count forward in time. Must be from 0 to 999,999,999\n inclusive.",
+            "description": "Non-negative fractions of a second at nanosecond resolution. Negative second values with fractions must still have non-negative nanos values that count forward in time. Must be from 0 to 999,999,999 inclusive.",
             "type": "integer",
             "format": "int32"
           }

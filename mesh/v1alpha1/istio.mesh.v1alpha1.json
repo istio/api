@@ -7,7 +7,7 @@
   "components": {
     "schemas": {
       "istio.mesh.v1alpha1.MeshConfig": {
-        "description": "MeshConfig defines mesh-wide variables shared by all Envoy instances in the\n Istio service mesh.",
+        "description": "MeshConfig defines mesh-wide variables shared by all Envoy instances in the Istio service mesh.",
         "type": "object",
         "properties": {
           "connectTimeout": {
@@ -23,29 +23,29 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy"
           },
           "mixerCheckServer": {
-            "description": "Address of the server that will be used by the proxies for policy\n check calls. By using different names for mixerCheckServer and\n mixerReportServer, it is possible to have one set of Mixer servers handle\n policy check calls while another set of Mixer servers handle telemetry\n calls.",
+            "description": "Address of the server that will be used by the proxies for policy check calls. By using different names for mixerCheckServer and mixerReportServer, it is possible to have one set of Mixer servers handle policy check calls while another set of Mixer servers handle telemetry calls.",
             "type": "string",
             "format": "string"
           },
           "mixerReportServer": {
-            "description": "Address of the server that will be used by the proxies for policy report\n calls.",
+            "description": "Address of the server that will be used by the proxies for policy report calls.",
             "type": "string",
             "format": "string"
           },
           "disablePolicyChecks": {
-            "description": "Disable policy checks by the Mixer service. Default\n is false, i.e. Mixer policy check is enabled by default.",
+            "description": "Disable policy checks by the Mixer service. Default is false, i.e. Mixer policy check is enabled by default.",
             "type": "boolean"
           },
           "policyCheckFailOpen": {
-            "description": "Allow all traffic in cases when the Mixer policy service cannot be reached.\n Default is false which means the traffic is denied when the client is unable\n to connect to Mixer.",
+            "description": "Allow all traffic in cases when the Mixer policy service cannot be reached. Default is false which means the traffic is denied when the client is unable to connect to Mixer.",
             "type": "boolean"
           },
           "sidecarToTelemetrySessionAffinity": {
-            "description": "Enable session affinity for Envoy Mixer reports so that calls from a proxy will\n always target the same Mixer instance.",
+            "description": "Enable session affinity for Envoy Mixer reports so that calls from a proxy will always target the same Mixer instance.",
             "type": "boolean"
           },
           "proxyListenPort": {
-            "description": "Port on which Envoy should listen for incoming connections from\n other services.",
+            "description": "Port on which Envoy should listen for incoming connections from other services.",
             "type": "integer",
             "format": "int32"
           },
@@ -55,7 +55,7 @@
             "format": "int32"
           },
           "ingressClass": {
-            "description": "Class of ingress resources to be processed by Istio ingress\n controller.  This corresponds to the value of\n \"kubernetes.io/ingress.class\" annotation.",
+            "description": "Class of ingress resources to be processed by Istio ingress controller. This corresponds to the value of \"kubernetes.io/ingress.class\" annotation.",
             "type": "string",
             "format": "string"
           },
@@ -74,16 +74,16 @@
             "$ref": "#/components/schemas/google.protobuf.Duration"
           },
           "enableTracing": {
-            "description": "Flag to control generation of trace spans and request IDs.\n Requires a trace span collector defined in the proxy configuration.",
+            "description": "Flag to control generation of trace spans and request IDs. Requires a trace span collector defined in the proxy configuration.",
             "type": "boolean"
           },
           "accessLogFile": {
-            "description": "File address for the proxy access log (e.g. /dev/stdout).\n Empty value disables access logging.",
+            "description": "File address for the proxy access log (e.g. /dev/stdout). Empty value disables access logging.",
             "type": "string",
             "format": "string"
           },
           "accessLogFormat": {
-            "description": "Format for the proxy access log\n Empty value results in proxy's default access log format",
+            "description": "Format for the proxy access log Empty value results in proxy's default access log format",
             "type": "string",
             "format": "string"
           },
@@ -91,7 +91,7 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.AccessLogEncoding"
           },
           "enableEnvoyAccessLogService": {
-            "description": "This flag enables Envoy's gRPC Access Log Service.\n See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto)\n for details about Envoy's gRPC Access Log Service API.",
+            "description": "This flag enables Envoy's gRPC Access Log Service. See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto) for details about Envoy's gRPC Access Log Service API.",
             "type": "boolean"
           },
           "defaultConfig": {
@@ -107,7 +107,7 @@
             "type": "boolean"
           },
           "sdsUdsPath": {
-            "description": "Unix Domain Socket through which Envoy communicates with NodeAgent SDS to get key/cert for mTLS.\n Use secret-mount files instead of SDS if set to empty.",
+            "description": "Unix Domain Socket through which Envoy communicates with NodeAgent SDS to get key/cert for mTLS. Use secret-mount files instead of SDS if set to empty.",
             "type": "string",
             "format": "string"
           },
@@ -115,27 +115,27 @@
             "$ref": "#/components/schemas/google.protobuf.Duration"
           },
           "configSources": {
-            "description": "ConfigSource describes a source of configuration data for networking\n rules, and other Istio configuration artifacts. Multiple data sources\n can be configured for a single control plane.",
+            "description": "ConfigSource describes a source of configuration data for networking rules, and other Istio configuration artifacts. Multiple data sources can be configured for a single control plane.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.ConfigSource"
             }
           },
           "enableSdsTokenMount": {
-            "description": "$hide_from_docs\n This flag is used by secret discovery service(SDS).\n If set to true ([prerequisite](https://kubernetes.io/docs/concepts/storage/volumes/#projected)), Istio will inject volumes mount\n for Kubernetes service account trustworthy JWT(which is available with Kubernetes 1.12 or higher), so that the Kubernetes API server\n mounts Kubernetes service account trustworthy JWT to the Envoy container, which will be used to request key/cert eventually.\n This isn't supported for non-Kubernetes cases.",
+            "description": "This flag is used by secret discovery service(SDS). If set to true ([prerequisite](https://kubernetes.io/docs/concepts/storage/volumes/#projected)), Istio will inject volumes mount for Kubernetes service account trustworthy JWT(which is available with Kubernetes 1.12 or higher), so that the Kubernetes API server mounts Kubernetes service account trustworthy JWT to the Envoy container, which will be used to request key/cert eventually. This isn't supported for non-Kubernetes cases.",
             "type": "boolean"
           },
           "sdsUseK8sSaJwt": {
-            "description": "$hide_from_docs\n This flag is used by secret discovery service(SDS).\n If set to true, Envoy will fetch a normal Kubernetes service account JWT from '/var/run/secrets/kubernetes.io/serviceaccount/token'\n (https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod)\n and pass to sds server, which will be used to request key/cert eventually.\n If both enable_sds_token_mount and sds_use_k8s_sa_jwt are set to true, enable_sds_token_mount(trustworthy jwt) takes precedence.\n This isn't supported for non-k8s case.",
+            "description": "This flag is used by secret discovery service(SDS). If set to true, Envoy will fetch a normal Kubernetes service account JWT from '/var/run/secrets/kubernetes.io/serviceaccount/token' (https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod) and pass to sds server, which will be used to request key/cert eventually. If both enable_sds_token_mount and sds_use_k8s_sa_jwt are set to true, enable_sds_token_mount(trustworthy jwt) takes precedence. This isn't supported for non-k8s case.",
             "type": "boolean"
           },
           "trustDomain": {
-            "description": "The trust domain corresponds to the trust root of a system.\n Refer to [SPIFEE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)\n Fallback to old identity format(without trust domain) if not set.",
+            "description": "The trust domain corresponds to the trust root of a system. Refer to [SPIFEE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain) Fallback to old identity format(without trust domain) if not set.",
             "type": "string",
             "format": "string"
           },
           "defaultServiceExportTo": {
-            "description": "The default value for the ServiceEntry.export_to field and services\n imported through container registry integrations, e.g. this applies to\n Kubernetes Service resources. The value is a list of namespace names and\n reserved namespace aliases. The allowed namespace aliases are:\n\n * - All Namespaces\n . - Current Namespace\n ~ - No Namespace",
+            "description": "The default value for the ServiceEntry.export_to field and services imported through container registry integrations, e.g. this applies to Kubernetes Service resources. The value is a list of namespace names and reserved namespace aliases. The allowed namespace aliases are: * - All Namespaces . - Current Namespace ~ - No Namespace",
             "type": "array",
             "items": {
               "type": "string",
@@ -143,7 +143,7 @@
             }
           },
           "defaultVirtualServiceExportTo": {
-            "description": "The default value for the VirtualService.export_to field. Has the same\n syntax as 'default_service_export_to'.",
+            "description": "The default value for the VirtualService.export_to field. Has the same syntax as 'default_service_export_to'.",
             "type": "array",
             "items": {
               "type": "string",
@@ -151,7 +151,7 @@
             }
           },
           "defaultDestinationRuleExportTo": {
-            "description": "The default value for the DestinationRule.export_to field. Has the same\n syntax as 'default_service_export_to'.",
+            "description": "The default value for the DestinationRule.export_to field. Has the same syntax as 'default_service_export_to'.",
             "type": "array",
             "items": {
               "type": "string",
@@ -159,7 +159,7 @@
             }
           },
           "rootNamespace": {
-            "description": "The namespace to treat as the administrative root namespace for\n Istio configuration. When processing a leaf namespace Istio will search for\n declarations in that namespace first and if none are found it will\n search in the root namespace. Any matching declaration found in the root\n namespace is processed as if it were declared in the leaf namespace.",
+            "description": "The namespace to treat as the administrative root namespace for Istio configuration. When processing a leaf namespace Istio will search for declarations in that namespace first and if none are found it will search in the root namespace. Any matching declaration found in the root namespace is processed as if it were declared in the leaf namespace.",
             "type": "string",
             "format": "string"
           },
@@ -174,7 +174,7 @@
             "type": "boolean"
           },
           "reportBatchMaxEntries": {
-            "description": "When disable_report_batch is false, this value specifies the maximum number\n of requests that are batched in report. If left unspecified, the default value\n of report_batch_max_entries == 0 will use the hardcoded defaults of\n istio::mixerclient::ReportOptions.",
+            "description": "When disable_report_batch is false, this value specifies the maximum number of requests that are batched in report. If left unspecified, the default value of report_batch_max_entries == 0 will use the hardcoded defaults of istio::mixerclient::ReportOptions.",
             "type": "integer"
           },
           "reportBatchMaxTime": {
@@ -220,7 +220,7 @@
             "$ref": "#/components/schemas/google.protobuf.Duration"
           },
           "configPath": {
-            "description": "Path to the generated configuration file directory.\n Proxy agent generates the actual configuration and stores it in this directory.",
+            "description": "Path to the generated configuration file directory. Proxy agent generates the actual configuration and stores it in this directory.",
             "type": "string",
             "format": "string"
           },
@@ -230,7 +230,7 @@
             "format": "string"
           },
           "serviceCluster": {
-            "description": "Service cluster defines the name for the service_cluster that is\n shared by all Envoy instances. This setting corresponds to\n _--service-cluster_ flag in Envoy.  In a typical Envoy deployment, the\n _service-cluster_ flag is used to identify the caller, for\n source-based routing scenarios.",
+            "description": "Service cluster defines the name for the service_cluster that is shared by all Envoy instances. This setting corresponds to _--service-cluster_ flag in Envoy. In a typical Envoy deployment, the _service-cluster_ flag is used to identify the caller, for source-based routing scenarios.",
             "type": "string",
             "format": "string"
           },
@@ -249,7 +249,7 @@
             "$ref": "#/components/schemas/google.protobuf.Duration"
           },
           "zipkinAddress": {
-            "description": "Address of the Zipkin service (e.g. _zipkin:9411_).\n DEPRECATED: Use [tracing][istio.mesh.v1alpha1.ProxyConfig.tracing] instead.",
+            "description": "Address of the Zipkin service (e.g. _zipkin:9411_). DEPRECATED: Use [tracing][istio.mesh.v1alpha1.ProxyConfig.tracing] instead.",
             "type": "string",
             "format": "string"
           },
@@ -259,7 +259,7 @@
             "format": "string"
           },
           "envoyMetricsServiceAddress": {
-            "description": "Address of the Envoy Metrics Service implementation (e.g. metrics-service:15000).\n See [Metric Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/metrics/v2/metrics_service.proto)\n for details about Envoy's Metrics Service API.",
+            "description": "Address of the Envoy Metrics Service implementation (e.g. metrics-service:15000). See [Metric Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/metrics/v2/metrics_service.proto) for details about Envoy's Metrics Service API.",
             "type": "string",
             "format": "string"
           },
@@ -277,12 +277,12 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.AuthenticationPolicy"
           },
           "customConfigFile": {
-            "description": "File path of custom proxy configuration, currently used by proxies\n in front of Mixer and Pilot.",
+            "description": "File path of custom proxy configuration, currently used by proxies in front of Mixer and Pilot.",
             "type": "string",
             "format": "string"
           },
           "statNameLength": {
-            "description": "Maximum length of name field in Envoy's metrics. The length of the name field\n is determined by the length of a name field in a service and the set of labels that\n comprise a particular version of the service. The default value is set to 189 characters.\n Envoy's internal metrics take up 67 characters, for a total of 256 character name per metric.\n Increase the value of this field if you find that the metrics from Envoys are truncated.",
+            "description": "Maximum length of name field in Envoy's metrics. The length of the name field is determined by the length of a name field in a service and the set of labels that comprise a particular version of the service. The default value is set to 189 characters. Envoy's internal metrics take up 67 characters, for a total of 256 character name per metric. Increase the value of this field if you find that the metrics from Envoys are truncated.",
             "type": "integer",
             "format": "int32"
           },
@@ -306,7 +306,7 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.SDS"
           },
           "envoyAccessLogServiceAddress": {
-            "description": "Address of the service to which access logs from Envoys should be\n sent. (e.g. accesslog-service:15000). See [Access Log\n Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto)\n for details about Envoy's gRPC Access Log Service API.",
+            "description": "Address of the service to which access logs from Envoys should be sent. (e.g. accesslog-service:15000). See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto) for details about Envoy's gRPC Access Log Service API.",
             "type": "string",
             "format": "string"
           }
@@ -321,11 +321,11 @@
         }
       },
       "istio.mesh.v1alpha1.ConfigSource": {
-        "description": "ConfigSource describes information about a configuration store inside a\n mesh. A single control plane instance can interact with one or more data\n sources.",
+        "description": "ConfigSource describes information about a configuration store inside a mesh. A single control plane instance can interact with one or more data sources.",
         "type": "object",
         "properties": {
           "address": {
-            "description": "Address of the server implementing the Istio Mesh Configuration\n protocol (MCP). Can be IP address or a fully qualified DNS name.\n Use fs:/// to specify a file-based backend with absolute path to the directory.",
+            "description": "Address of the server implementing the Istio Mesh Configuration protocol (MCP). Can be IP address or a fully qualified DNS name. Use fs:/// to specify a file-based backend with absolute path to the directory.",
             "type": "string",
             "format": "string"
           },
@@ -335,18 +335,18 @@
         }
       },
       "istio.mesh.v1alpha1.LocalityLoadBalancerSetting": {
-        "description": "Locality-weighted load balancing allows administrators to control the\n distribution of traffic to endpoints based on the localities of where the\n traffic originates and where it will terminate. These localities are\n specified using arbitrary labels that designate a hierarchy of localities in\n {region}/{zone}/{sub-zone} form. For additional detail refer to\n [Locality Weight](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)\n The following example shows how to setup locality weights mesh-wide.",
+        "description": "Locality-weighted load balancing allows administrators to control the distribution of traffic to endpoints based on the localities of where the traffic originates and where it will terminate. These localities are specified using arbitrary labels that designate a hierarchy of localities in {region}/{zone}/{sub-zone} form. For additional detail refer to [Locality Weight](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight) The following example shows how to setup locality weights mesh-wide.",
         "type": "object",
         "properties": {
           "distribute": {
-            "description": "Optional: only one of distribute or failover can be set.\n Explicitly specify loadbalancing weight across different zones and geographical locations.\n Refer to [Locality weighted load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)\n If empty, the locality weight is set according to the endpoints number within it.",
+            "description": "Optional: only one of distribute or failover can be set. Explicitly specify loadbalancing weight across different zones and geographical locations. Refer to [Locality weighted load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight) If empty, the locality weight is set according to the endpoints number within it.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.LocalityLoadBalancerSetting.Distribute"
             }
           },
           "failover": {
-            "description": "Optional: only failover or distribute can be set.\n Explicitly specify the region traffic will land on when endpoints in local region becomes unhealthy.\n Should be used together with OutlierDetection to detect unhealthy endpoints.\n Note: if no OutlierDetection specified, this will not take effect.",
+            "description": "Optional: only failover or distribute can be set. Explicitly specify the region traffic will land on when endpoints in local region becomes unhealthy. Should be used together with OutlierDetection to detect unhealthy endpoints. Note: if no OutlierDetection specified, this will not take effect.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.LocalityLoadBalancerSetting.Failover"
@@ -383,7 +383,7 @@
         "default": "REGISTRY_ONLY"
       },
       "istio.mesh.v1alpha1.LocalityLoadBalancerSetting.Distribute": {
-        "description": "Describes how traffic originating in the 'from' zone or sub-zone is\n distributed over a set of 'to' zones. Syntax for specifying a zone is\n {region}/{zone}/{sub-zone} and terminal wildcards are allowed on any\n segment of the specification. Examples:\n * - matches all localities\n us-west/* - all zones and sub-zones within the us-west region\n us-west/zone-1/* - all sub-zones within us-west/zone-1",
+        "description": "Describes how traffic originating in the 'from' zone or sub-zone is distributed over a set of 'to' zones. Syntax for specifying a zone is {region}/{zone}/{sub-zone} and terminal wildcards are allowed on any segment of the specification. Examples: * - matches all localities us-west/* - all zones and sub-zones within the us-west region us-west/zone-1/* - all sub-zones within us-west/zone-1",
         "type": "object",
         "required": [
           "to"
@@ -395,7 +395,7 @@
             "format": "string"
           },
           "to": {
-            "description": "Map of upstream localities to traffic distribution weights. The sum of\n all weights should be == 100. Any locality not assigned a weight will\n receive no traffic.",
+            "description": "Map of upstream localities to traffic distribution weights. The sum of all weights should be == 100. Any locality not assigned a weight will receive no traffic.",
             "type": "object",
             "additionalProperties": {
               "type": "integer"
@@ -404,7 +404,7 @@
         }
       },
       "istio.mesh.v1alpha1.LocalityLoadBalancerSetting.Failover": {
-        "description": "Specify the traffic failover policy across regions. Since zone and sub-zone\n failover is supported by default this only needs to be specified for\n regions when the operator needs to constrain traffic failover so that\n the default behavior of failing over to any endpoint globally does not\n apply. This is useful when failing over traffic across regions would not\n improve service health or may need to be restricted for other reasons\n like regulatory controls.",
+        "description": "Specify the traffic failover policy across regions. Since zone and sub-zone failover is supported by default this only needs to be specified for regions when the operator needs to constrain traffic failover so that the default behavior of failing over to any endpoint globally does not apply. This is useful when failing over traffic across regions would not improve service health or may need to be restricted for other reasons like regulatory controls.",
         "type": "object",
         "properties": {
           "from": {
@@ -413,7 +413,7 @@
             "format": "string"
           },
           "to": {
-            "description": "Destination region the traffic will fail over to when endpoints in\n the 'from' region becomes unhealthy.",
+            "description": "Destination region the traffic will fail over to when endpoints in the 'from' region becomes unhealthy.",
             "type": "string",
             "format": "string"
           }
@@ -427,11 +427,11 @@
         ]
       },
       "istio.mesh.v1alpha1.Network": {
-        "description": "Network provides information about the endpoints in a routable L3\n network. A single routable L3 network can have one or more service\n registries. Note that the network has no relation to the locality of the\n endpoint. The endpoint locality will be obtained from the service\n registry.",
+        "description": "Network provides information about the endpoints in a routable L3 network. A single routable L3 network can have one or more service registries. Note that the network has no relation to the locality of the endpoint. The endpoint locality will be obtained from the service registry.",
         "type": "object",
         "properties": {
           "endpoints": {
-            "description": "REQUIRED: The list of endpoints in the network (obtained through the\n constituent service registries or from CIDR ranges). All endpoints in\n the network are directly accessible to one another.",
+            "description": "REQUIRED: The list of endpoints in the network (obtained through the constituent service registries or from CIDR ranges). All endpoints in the network are directly accessible to one another.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.Network.NetworkEndpoints"
@@ -447,13 +447,13 @@
         }
       },
       "istio.mesh.v1alpha1.Network.NetworkEndpoints": {
-        "description": "NetworkEndpoints describes how the network associated with an endpoint\n should be inferred. An endpoint will be assigned to a network based on\n the following rules:\n\n 1. Implicitly: If the registry explicitly provides information about\n the network to which the endpoint belongs to. In some cases, its\n possible to indicate the network associated with the endpoint by\n adding the `ISTIO_META_NETWORK` environment variable to the sidecar.",
+        "description": "NetworkEndpoints describes how the network associated with an endpoint should be inferred. An endpoint will be assigned to a network based on the following rules: 1. Implicitly: If the registry explicitly provides information about the network to which the endpoint belongs to. In some cases, its possible to indicate the network associated with the endpoint by adding the `ISTIO_META_NETWORK` environment variable to the sidecar.",
         "oneOf": [
           {
             "type": "object",
             "properties": {
               "fromCidr": {
-                "description": "A CIDR range for the set of endpoints in this network. The CIDR\n ranges for endpoints from different networks must not overlap.",
+                "description": "A CIDR range for the set of endpoints in this network. The CIDR ranges for endpoints from different networks must not overlap.",
                 "type": "string",
                 "format": "string"
               }
@@ -463,7 +463,7 @@
             "type": "object",
             "properties": {
               "fromRegistry": {
-                "description": "Add all endpoints from the specified registry into this network.\n The names of the registries should correspond to the secret name\n that was used to configure the registry (Kubernetes multicluster) or\n supplied by MCP server.",
+                "description": "Add all endpoints from the specified registry into this network. The names of the registries should correspond to the secret name that was used to configure the registry (Kubernetes multicluster) or supplied by MCP server.",
                 "type": "string",
                 "format": "string"
               }
@@ -472,7 +472,7 @@
         ]
       },
       "istio.mesh.v1alpha1.Network.IstioNetworkGateway": {
-        "description": "The gateway associated with this network. Traffic from remote networks\n will arrive at the specified gateway:port. All incoming traffic must\n use mTLS.",
+        "description": "The gateway associated with this network. Traffic from remote networks will arrive at the specified gateway:port. All incoming traffic must use mTLS.",
         "oneOf": [
           {
             "type": "object",
@@ -487,7 +487,7 @@
                 "format": "string"
               },
               "registryServiceName": {
-                "description": "A fully qualified domain name of the gateway service.  Pilot will\n lookup the service from the service registries in the network and\n obtain the endpoint IPs of the gateway from the service\n registry. Note that while the service name is a fully qualified\n domain name, it need not be resolvable outside the orchestration\n platform for the registry. e.g., this could be\n istio-ingressgateway.istio-system.svc.cluster.local.",
+                "description": "A fully qualified domain name of the gateway service. Pilot will lookup the service from the service registries in the network and obtain the endpoint IPs of the gateway from the service registry. Note that while the service name is a fully qualified domain name, it need not be resolvable outside the orchestration platform for the registry. e.g., this could be istio-ingressgateway.istio-system.svc.cluster.local.",
                 "type": "string",
                 "format": "string"
               }
@@ -515,14 +515,14 @@
         ]
       },
       "istio.mesh.v1alpha1.MeshNetworks": {
-        "description": "MeshNetworks (config map) provides information about the set of networks\n inside a mesh and how to route to endpoints in each network. For example",
+        "description": "MeshNetworks (config map) provides information about the set of networks inside a mesh and how to route to endpoints in each network. For example",
         "type": "object",
         "required": [
           "networks"
         ],
         "properties": {
           "networks": {
-            "description": "REQUIRED: The set of networks inside this mesh. Each network should\n have a unique name and information about how to infer the endpoints in\n the network as well as the gateways associated with the network.",
+            "description": "REQUIRED: The set of networks inside this mesh. Each network should have a unique name and information about how to infer the endpoints in the network as well as the gateways associated with the network.",
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.Network"
@@ -531,7 +531,7 @@
         }
       },
       "istio.mesh.v1alpha1.AuthenticationPolicy": {
-        "description": "AuthenticationPolicy defines authentication policy. It can be set for\n different scopes (mesh, service …), and the most narrow scope with\n non-INHERIT value will be used.\n Mesh policy cannot be INHERIT.",
+        "description": "AuthenticationPolicy defines authentication policy. It can be set for different scopes (mesh, service …), and the most narrow scope with non-INHERIT value will be used. Mesh policy cannot be INHERIT.",
         "enum": [
           "NONE",
           "MUTUAL_TLS",
@@ -624,11 +624,11 @@
         }
       },
       "istio.mesh.v1alpha1.Tracing.Stackdriver": {
-        "description": "Stackdriver defines configuration for a Stackdriver tracer.\n See [Opencensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.",
+        "description": "Stackdriver defines configuration for a Stackdriver tracer. See [Opencensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.",
         "type": "object",
         "properties": {
           "debug": {
-            "description": "debug enables trace output to stdout.\n $hide_from_docs",
+            "description": "debug enables trace output to stdout. $hide_from_docs",
             "type": "boolean"
           },
           "maxNumberOfAttributes": {
@@ -643,7 +643,7 @@
         }
       },
       "istio.mesh.v1alpha1.SDS": {
-        "description": "SDS defines secret discovery service(SDS) configuration to be used by the proxy.\n For workload, its values are set in sidecar injector(passed as arguments to istio-proxy container).\n For pilot/mixer, it's passed as arguments to istio-proxy container in pilot/mixer deployment yaml files directly.",
+        "description": "SDS defines secret discovery service(SDS) configuration to be used by the proxy. For workload, its values are set in sidecar injector(passed as arguments to istio-proxy container). For pilot/mixer, it's passed as arguments to istio-proxy container in pilot/mixer deployment yaml files directly.",
         "type": "object",
         "properties": {
           "enabled": {
@@ -658,7 +658,7 @@
         }
       },
       "istio.mesh.v1alpha1.ProxyConfig.InboundInterceptionMode": {
-        "description": "The mode used to redirect inbound traffic to Envoy.\n This setting has no effect on outbound traffic: iptables REDIRECT is always used for\n outbound connections.",
+        "description": "The mode used to redirect inbound traffic to Envoy. This setting has no effect on outbound traffic: iptables REDIRECT is always used for outbound connections.",
         "enum": [
           "REDIRECT",
           "TPROXY"
@@ -666,23 +666,23 @@
         "default": "REDIRECT"
       },
       "google.protobuf.Duration": {
-        "description": "The time duration between keep-alive probes.\n Default is to use the OS level configuration\n (unless overridden, Linux defaults to 75s.)",
+        "description": "The time duration between keep-alive probes. Default is to use the OS level configuration (unless overridden, Linux defaults to 75s.)",
         "type": "object",
         "properties": {
           "seconds": {
-            "description": "Signed seconds of the span of time. Must be from -315,576,000,000\n to +315,576,000,000 inclusive. Note: these bounds are computed from:\n 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+            "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
             "type": "integer",
             "format": "int64"
           },
           "nanos": {
-            "description": "Signed fractions of a second at nanosecond resolution of the span\n of time. Durations less than one second are represented with a 0\n `seconds` field and a positive or negative `nanos` field. For durations\n of one second or more, a non-zero value for the `nanos` field must be\n of the same sign as the `seconds` field. Must be from -999,999,999\n to +999,999,999 inclusive.",
+            "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
             "type": "integer",
             "format": "int32"
           }
         }
       },
       "google.protobuf.Int64Value": {
-        "description": "The global default max number of message events per span.\n default is 200.\n $hide_from_docs",
+        "description": "The global default max number of message events per span. default is 200. $hide_from_docs",
         "type": "object",
         "properties": {
           "value": {
@@ -700,7 +700,7 @@
             "$ref": "#/components/schemas/google.protobuf.Duration"
           },
           "probes": {
-            "description": "Maximum number of keepalive probes to send without response before\n deciding the connection is dead. Default is to use the OS level configuration\n (unless overridden, Linux defaults to 9.)",
+            "description": "Maximum number of keepalive probes to send without response before deciding the connection is dead. Default is to use the OS level configuration (unless overridden, Linux defaults to 9.)",
             "type": "integer"
           },
           "interval": {
@@ -709,29 +709,29 @@
         }
       },
       "istio.networking.v1alpha3.TLSSettings": {
-        "description": "Use the tls_settings to specify the tls mode to use. If the MCP server\n uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS\n mode as `ISTIO_MUTUAL`.",
+        "description": "Use the tls_settings to specify the tls mode to use. If the MCP server uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS mode as `ISTIO_MUTUAL`.",
         "type": "object",
         "properties": {
           "mode": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSSettings.TLSmode"
           },
           "clientCertificate": {
-            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the\n client-side TLS certificate to use.\n Should be empty if mode is `ISTIO_MUTUAL`.",
+            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client-side TLS certificate to use. Should be empty if mode is `ISTIO_MUTUAL`.",
             "type": "string",
             "format": "string"
           },
           "privateKey": {
-            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the\n client's private key.\n Should be empty if mode is `ISTIO_MUTUAL`.",
+            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client's private key. Should be empty if mode is `ISTIO_MUTUAL`.",
             "type": "string",
             "format": "string"
           },
           "caCertificates": {
-            "description": "OPTIONAL: The path to the file containing certificate authority\n certificates to use in verifying a presented server certificate. If\n omitted, the proxy will not verify the server's certificate.\n Should be empty if mode is `ISTIO_MUTUAL`.",
+            "description": "OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate. If omitted, the proxy will not verify the server's certificate. Should be empty if mode is `ISTIO_MUTUAL`.",
             "type": "string",
             "format": "string"
           },
           "subjectAltNames": {
-            "description": "A list of alternate names to verify the subject identity in the\n certificate. If specified, the proxy will verify that the server\n certificate's subject alt name matches one of the specified values.\n If specified, this list overrides the value of subject_alt_names\n from the ServiceEntry.",
+            "description": "A list of alternate names to verify the subject identity in the certificate. If specified, the proxy will verify that the server certificate's subject alt name matches one of the specified values. If specified, this list overrides the value of subject_alt_names from the ServiceEntry.",
             "type": "array",
             "items": {
               "type": "string",
@@ -746,7 +746,7 @@
         }
       },
       "istio.networking.v1alpha3.TLSSettings.TLSmode": {
-        "description": "REQUIRED: Indicates whether connections to this port should be secured\n using TLS. The value of this field determines how TLS is enforced.",
+        "description": "REQUIRED: Indicates whether connections to this port should be secured using TLS. The value of this field determines how TLS is enforced.",
         "enum": [
           "DISABLE",
           "SIMPLE",

@@ -7,7 +7,7 @@
   "components": {
     "schemas": {
       "istio.policy.v1beta1.Duration": {
-        "description": "An instance field of type Duration denotes that the expression for the field must evaluate to\n [ValueType.DURATION][istio.policy.v1beta1.ValueType.DURATION]",
+        "description": "An instance field of type Duration denotes that the expression for the field must evaluate to [ValueType.DURATION][istio.policy.v1beta1.ValueType.DURATION]",
         "type": "object",
         "properties": {
           "value": {
@@ -16,7 +16,7 @@
         }
       },
       "istio.policy.v1beta1.Value": {
-        "description": "An instance field of type Value denotes that the expression for the field is of dynamic type and can evaluate to any\n [ValueType][istio.policy.v1beta1.ValueType] enum values. For example, when\n authoring an instance configuration for a template that has a field `data` of type `istio.policy.v1beta1.Value`,\n both of the following expressions are valid `data: source.ip | ip(\"0.0.0.0\")`, `data: request.id | \"\"`;\n the resulting type is either ValueType.IP_ADDRESS or ValueType.STRING for the two cases respectively.",
+        "description": "An instance field of type Value denotes that the expression for the field is of dynamic type and can evaluate to any [ValueType][istio.policy.v1beta1.ValueType] enum values. For example, when authoring an instance configuration for a template that has a field `data` of type `istio.policy.v1beta1.Value`, both of the following expressions are valid `data: source.ip | ip(\"0.0.0.0\")`, `data: request.id | \"\"`; the resulting type is either ValueType.IP_ADDRESS or ValueType.STRING for the two cases respectively.",
         "oneOf": [
           {
             "type": "object",
@@ -116,14 +116,14 @@
         ]
       },
       "istio.policy.v1beta1.AttributeManifest": {
-        "description": "AttributeManifest describes a set of Attributes produced by some component\n of an Istio deployment.",
+        "description": "AttributeManifest describes a set of Attributes produced by some component of an Istio deployment.",
         "type": "object",
         "required": [
           "attributes"
         ],
         "properties": {
           "name": {
-            "description": "Required. Name of the component producing these attributes. This can be\n the proxy (with the canonical name `istio-proxy`) or the name of an\n `attributes` kind adapter in Mixer.",
+            "description": "Required. Name of the component producing these attributes. This can be the proxy (with the canonical name `istio-proxy`) or the name of an `attributes` kind adapter in Mixer.",
             "type": "string",
             "format": "string"
           },
@@ -133,7 +133,7 @@
             "format": "string"
           },
           "attributes": {
-            "description": "The set of attributes this Istio component will be responsible for producing at runtime.\n We map from attribute name to the attribute's specification. The name of an attribute,\n which is how attributes are referred to in aspect configuration, must conform to:\n\n     Name = IDENT { SEPARATOR IDENT };",
+            "description": "The set of attributes this Istio component will be responsible for producing at runtime. We map from attribute name to the attribute's specification. The name of an attribute, which is how attributes are referred to in aspect configuration, must conform to: Name = IDENT { SEPARATOR IDENT };",
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/istio.policy.v1beta1.AttributeManifest.AttributeInfo"
@@ -156,7 +156,7 @@
         }
       },
       "istio.policy.v1beta1.ValueType": {
-        "description": "ValueType describes the types that values in the Istio system can take. These\n are used to describe the type of Attributes at run time, describe the type of\n the result of evaluating an expression, and to describe the runtime type of\n fields of other descriptors.",
+        "description": "ValueType describes the types that values in the Istio system can take. These are used to describe the type of Attributes at run time, describe the type of the result of evaluating an expression, and to describe the runtime type of fields of other descriptors.",
         "enum": [
           "VALUE_TYPE_UNSPECIFIED",
           "STRING",
@@ -174,11 +174,11 @@
         "default": "VALUE_TYPE_UNSPECIFIED"
       },
       "istio.policy.v1beta1.Rule": {
-        "description": "A Rule is a selector and a set of intentions to be executed when the\n selector is `true`",
+        "description": "A Rule is a selector and a set of intentions to be executed when the selector is `true`",
         "type": "object",
         "properties": {
           "match": {
-            "description": "Required. Match is an attribute based predicate. When Mixer receives a\n request it evaluates the match expression and executes all the associated `actions`\n if the match evaluates to true.",
+            "description": "Required. Match is an attribute based predicate. When Mixer receives a request it evaluates the match expression and executes all the associated `actions` if the match evaluates to true.",
             "type": "string",
             "format": "string"
           },
@@ -190,14 +190,14 @@
             }
           },
           "requestHeaderOperations": {
-            "description": "Optional. Templatized operations on the request headers using values produced by the\n rule actions. Require the check action result to be OK.",
+            "description": "Optional. Templatized operations on the request headers using values produced by the rule actions. Require the check action result to be OK.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.policy.v1beta1.Rule.HeaderOperationTemplate"
             }
           },
           "responseHeaderOperations": {
-            "description": "Optional. Templatized operations on the response headers using values produced by the\n rule actions. Require the check action result to be OK.",
+            "description": "Optional. Templatized operations on the response headers using values produced by the rule actions. Require the check action result to be OK.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.policy.v1beta1.Rule.HeaderOperationTemplate"
@@ -218,12 +218,12 @@
             "format": "string"
           },
           "handler": {
-            "description": "Required. Fully qualified name of the handler to invoke.\n Must match the `name` of a [Handler][istio.policy.v1beta1.Handler.name].",
+            "description": "Required. Fully qualified name of the handler to invoke. Must match the `name` of a [Handler][istio.policy.v1beta1.Handler.name].",
             "type": "string",
             "format": "string"
           },
           "instances": {
-            "description": "Required. Each value must match the fully qualified name of the\n [Instance][istio.policy.v1beta1.Instance.name]s.\n Referenced instances are evaluated by resolving the attributes/literals for all the fields.\n The constructed objects are then passed to the `handler` referenced within this action.",
+            "description": "Required. Each value must match the fully qualified name of the [Instance][istio.policy.v1beta1.Instance.name]s. Referenced instances are evaluated by resolving the attributes/literals for all the fields. The constructed objects are then passed to the `handler` referenced within this action.",
             "type": "array",
             "items": {
               "type": "string",
@@ -233,7 +233,7 @@
         }
       },
       "istio.policy.v1beta1.Rule.HeaderOperationTemplate": {
-        "description": "A template for an HTTP header manipulation. Values in the template are expressions\n that may reference action outputs by name. For example, if an action `x` produces an output\n with a field `f`, then the header value expressions may use attribute `x.output.f` to reference\n the field value:\n\n ```yaml\n request_header_operations:\n - name: x-istio-header\n   values:\n   - x.output.f\n ```",
+        "description": "A template for an HTTP header manipulation. Values in the template are expressions that may reference action outputs by name. For example, if an action `x` produces an output with a field `f`, then the header value expressions may use attribute `x.output.f` to reference the field value: ```yaml request_header_operations: - name: x-istio-header values: - x.output.f ```",
         "type": "object",
         "properties": {
           "name": {
@@ -255,7 +255,7 @@
         }
       },
       "istio.policy.v1beta1.Sampling": {
-        "description": "$hide_from_docs\n Sampling provides configuration of sampling strategies for Rule actions.\n Multiple sampling strategies are supported. When multiple strategies are configured,\n a request must be selected by all configured sampling strategies.",
+        "description": "Sampling provides configuration of sampling strategies for Rule actions. Multiple sampling strategies are supported. When multiple strategies are configured, a request must be selected by all configured sampling strategies.",
         "type": "object",
         "properties": {
           "random": {
@@ -288,12 +288,12 @@
             "format": "string"
           },
           "compiledTemplate": {
-            "description": "Required. The name of the compiled in template this instance creates instances for. For referencing non compiled-in\n templates, use the `template` field instead.",
+            "description": "Required. The name of the compiled in template this instance creates instances for. For referencing non compiled-in templates, use the `template` field instead.",
             "type": "string",
             "format": "string"
           },
           "template": {
-            "description": "Required. The name of the template this instance creates instances for. For referencing compiled-in\n templates, use the `compiled_template` field instead.",
+            "description": "Required. The name of the template this instance creates instances for. For referencing compiled-in templates, use the `compiled_template` field instead.",
             "type": "string",
             "format": "string"
           },
@@ -301,7 +301,7 @@
             "$ref": "#/components/schemas/google.protobuf.Struct"
           },
           "attributeBindings": {
-            "description": "Optional. Defines attribute bindings to map the output of attribute-producing adapters back into\n the attribute space. The variable `output` refers to the output template instance produced\n by the adapter.\n The following example derives `source.namespace` from `source.uid` in the context of Kubernetes:\n ```yaml\n params:\n   # Pass the required attribute data to the adapter\n   source_uid: source.uid | \"\"\n attribute_bindings:\n   # Fill the new attributes from the adapter produced output\n   source.namespace: output.source_namespace\n ```",
+            "description": "Optional. Defines attribute bindings to map the output of attribute-producing adapters back into the attribute space. The variable `output` refers to the output template instance produced by the adapter. The following example derives `source.namespace` from `source.uid` in the context of Kubernetes: ```yaml params: # Pass the required attribute data to the adapter source_uid: source.uid | \"\" attribute_bindings: # Fill the new attributes from the adapter produced output source.namespace: output.source_namespace ```",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -311,11 +311,11 @@
         }
       },
       "istio.policy.v1beta1.Handler": {
-        "description": "Handler allows the operator to configure a specific adapter implementation.\n Each adapter implementation defines its own `params` proto.",
+        "description": "Handler allows the operator to configure a specific adapter implementation. Each adapter implementation defines its own `params` proto.",
         "type": "object",
         "properties": {
           "name": {
-            "description": "Required. Must be unique in the entire Mixer configuration. Used by [Actions][istio.policy.v1beta1.Action.handler]\n to refer to this handler.",
+            "description": "Required. Must be unique in the entire Mixer configuration. Used by [Actions][istio.policy.v1beta1.Action.handler] to refer to this handler.",
             "type": "string",
             "format": "string"
           },
@@ -323,12 +323,12 @@
             "$ref": "#/components/schemas/google.protobuf.Struct"
           },
           "compiledAdapter": {
-            "description": "Required. The name of the compiled in adapter this handler instantiates. For referencing non compiled-in\n adapters, use the `adapter` field instead.",
+            "description": "Required. The name of the compiled in adapter this handler instantiates. For referencing non compiled-in adapters, use the `adapter` field instead.",
             "type": "string",
             "format": "string"
           },
           "adapter": {
-            "description": "Required. The name of a specific adapter implementation. For referencing compiled-in\n adapters, use the `compiled_adapter` field instead.",
+            "description": "Required. The name of a specific adapter implementation. For referencing compiled-in adapters, use the `compiled_adapter` field instead.",
             "type": "string",
             "format": "string"
           },
@@ -338,7 +338,7 @@
         }
       },
       "istio.policy.v1beta1.Connection": {
-        "description": "Connection allows the operator to specify the endpoint for out-of-process infrastructure backend.\n Connection is part of the handler custom resource and is specified alongside adapter specific configuration.",
+        "description": "Connection allows the operator to specify the endpoint for out-of-process infrastructure backend. Connection is part of the handler custom resource and is specified alongside adapter specific configuration.",
         "type": "object",
         "properties": {
           "address": {
@@ -352,7 +352,7 @@
         }
       },
       "istio.policy.v1beta1.Authentication": {
-        "description": "Authentication allows the operator to specify the authentication of\n connections to out-of-process infrastructure backend.",
+        "description": "Authentication allows the operator to specify the authentication of connections to out-of-process infrastructure backend.",
         "oneOf": [
           {
             "type": "object",
@@ -373,11 +373,11 @@
         ]
       },
       "istio.policy.v1beta1.RandomSampling": {
-        "description": "$hide_from_docs\n RandomSampling will filter based on the comparison of a randomly-generated value\n against the threshold provided.",
+        "description": "RandomSampling will filter based on the comparison of a randomly-generated value against the threshold provided.",
         "type": "object",
         "properties": {
           "attributeExpression": {
-            "description": "Specifies an attribute expression to use to override the numerator in the `percent_sampled` field.\n If this value is set, but no value is found OR if that value is not a numeric value, then\n the derived sampling rate will be 0 (meaning no `Action`s are executed for a `Rule`).",
+            "description": "Specifies an attribute expression to use to override the numerator in the `percent_sampled` field. If this value is set, but no value is found OR if that value is not a numeric value, then the derived sampling rate will be 0 (meaning no `Action`s are executed for a `Rule`).",
             "type": "string",
             "format": "string"
           },
@@ -385,13 +385,13 @@
             "$ref": "#/components/schemas/istio.policy.v1beta1.FractionalPercent"
           },
           "useIndependentRandomness": {
-            "description": "By default sampling will be based on the value of the request header `x-request-id`.\n This behavior will cause consistent sampling across `Rule`s and for the full trace of a\n request through a mesh (across hosts). If that value is not present and/or\n `use_independent_randomness` is set to true, the sampling will be done based on the value of\n attribute specified in `attribute_epxression`. If that attribute does not exist, the system\n will behave as if the sampling rate was 0 (meaning no `Action`s are executed for a `Rule`).",
+            "description": "By default sampling will be based on the value of the request header `x-request-id`. This behavior will cause consistent sampling across `Rule`s and for the full trace of a request through a mesh (across hosts). If that value is not present and/or `use_independent_randomness` is set to true, the sampling will be done based on the value of attribute specified in `attribute_epxression`. If that attribute does not exist, the system will behave as if the sampling rate was 0 (meaning no `Action`s are executed for a `Rule`).",
             "type": "boolean"
           }
         }
       },
       "istio.policy.v1beta1.RateLimitSampling": {
-        "description": "$hide_from_docs\n RateLimitSampling provides the ability to limit the number of Rule action executions that\n occur over a period of time.",
+        "description": "RateLimitSampling provides the ability to limit the number of Rule action executions that occur over a period of time.",
         "type": "object",
         "properties": {
           "maxUnsampledEntries": {
@@ -400,14 +400,14 @@
             "format": "int64"
           },
           "samplingRate": {
-            "description": "The rate at which to sample entries once the unsampled limit has been reached. Sampling will be enforced\n as 1 per every `sampling_rate` entries allowed.",
+            "description": "The rate at which to sample entries once the unsampled limit has been reached. Sampling will be enforced as 1 per every `sampling_rate` entries allowed.",
             "type": "integer",
             "format": "int64"
           }
         }
       },
       "istio.policy.v1beta1.FractionalPercent": {
-        "description": "$hide_from_docs\n A fractional percentage is used in cases in which for performance reasons performing floating\n point to integer conversions during randomness calculations is undesirable. The message includes\n both a numerator and denominator that together determine the final fractional value.",
+        "description": "A fractional percentage is used in cases in which for performance reasons performing floating point to integer conversions during randomness calculations is undesirable. The message includes both a numerator and denominator that together determine the final fractional value.",
         "type": "object",
         "properties": {
           "numerator": {
@@ -428,23 +428,23 @@
         "default": "HUNDRED"
       },
       "istio.policy.v1beta1.Tls": {
-        "description": "Tls let operator specify client authentication setting when TLS is used for\n connection to the backend.",
+        "description": "Tls let operator specify client authentication setting when TLS is used for connection to the backend.",
         "oneOf": [
           {
             "type": "object",
             "properties": {
               "caCertificates": {
-                "description": "The path to the file holding additional CA certificates to well known\n public certs.",
+                "description": "The path to the file holding additional CA certificates to well known public certs.",
                 "type": "string",
                 "format": "string"
               },
               "serverName": {
-                "description": "Used to configure mixer TLS client to verify the hostname on the returned\n certificates. It is also included in the client's handshake to support SNI.",
+                "description": "Used to configure mixer TLS client to verify the hostname on the returned certificates. It is also included in the client's handshake to support SNI.",
                 "type": "string",
                 "format": "string"
               },
               "tokenPath": {
-                "description": "The path to the file holding the auth token (password, jwt token, api\n key, etc).",
+                "description": "The path to the file holding the auth token (password, jwt token, api key, etc).",
                 "type": "string",
                 "format": "string"
               },
@@ -457,22 +457,22 @@
             "type": "object",
             "properties": {
               "caCertificates": {
-                "description": "The path to the file holding additional CA certificates to well known\n public certs.",
+                "description": "The path to the file holding additional CA certificates to well known public certs.",
                 "type": "string",
                 "format": "string"
               },
               "serverName": {
-                "description": "Used to configure mixer TLS client to verify the hostname on the returned\n certificates. It is also included in the client's handshake to support SNI.",
+                "description": "Used to configure mixer TLS client to verify the hostname on the returned certificates. It is also included in the client's handshake to support SNI.",
                 "type": "string",
                 "format": "string"
               },
               "tokenPath": {
-                "description": "The path to the file holding the auth token (password, jwt token, api\n key, etc).",
+                "description": "The path to the file holding the auth token (password, jwt token, api key, etc).",
                 "type": "string",
                 "format": "string"
               },
               "customHeader": {
-                "description": "Customized header key to hold access token, e.g. x-api-key. Token will be\n passed as what it is.",
+                "description": "Customized header key to hold access token, e.g. x-api-key. Token will be passed as what it is.",
                 "type": "string",
                 "format": "string"
               }
@@ -482,12 +482,12 @@
             "type": "object",
             "properties": {
               "caCertificates": {
-                "description": "The path to the file holding additional CA certificates to well known\n public certs.",
+                "description": "The path to the file holding additional CA certificates to well known public certs.",
                 "type": "string",
                 "format": "string"
               },
               "serverName": {
-                "description": "Used to configure mixer TLS client to verify the hostname on the returned\n certificates. It is also included in the client's handshake to support SNI.",
+                "description": "Used to configure mixer TLS client to verify the hostname on the returned certificates. It is also included in the client's handshake to support SNI.",
                 "type": "string",
                 "format": "string"
               },
@@ -503,12 +503,12 @@
             "type": "object",
             "properties": {
               "caCertificates": {
-                "description": "The path to the file holding additional CA certificates to well known\n public certs.",
+                "description": "The path to the file holding additional CA certificates to well known public certs.",
                 "type": "string",
                 "format": "string"
               },
               "serverName": {
-                "description": "Used to configure mixer TLS client to verify the hostname on the returned\n certificates. It is also included in the client's handshake to support SNI.",
+                "description": "Used to configure mixer TLS client to verify the hostname on the returned certificates. It is also included in the client's handshake to support SNI.",
                 "type": "string",
                 "format": "string"
               },
@@ -516,7 +516,7 @@
                 "$ref": "#/components/schemas/istio.policy.v1beta1.OAuth"
               },
               "customHeader": {
-                "description": "Customized header key to hold access token, e.g. x-api-key. Token will be\n passed as what it is.",
+                "description": "Customized header key to hold access token, e.g. x-api-key. Token will be passed as what it is.",
                 "type": "string",
                 "format": "string"
               }
@@ -525,33 +525,33 @@
         ]
       },
       "istio.policy.v1beta1.Mutual": {
-        "description": "Mutual let operator specify TLS configuration for Mixer as client if mutual TLS is used to\n secure connection to adapter backend.",
+        "description": "Mutual let operator specify TLS configuration for Mixer as client if mutual TLS is used to secure connection to adapter backend.",
         "type": "object",
         "properties": {
           "caCertificates": {
-            "description": "The path to the file holding additional CA certificates that are needed to\n verify the presented adapter certificates. By default Mixer should already\n include Istio CA certificates and system certificates in cert pool.",
+            "description": "The path to the file holding additional CA certificates that are needed to verify the presented adapter certificates. By default Mixer should already include Istio CA certificates and system certificates in cert pool.",
             "type": "string",
             "format": "string"
           },
           "serverName": {
-            "description": "Used to configure mixer mutual TLS client to supply server name for SNI.\n It is not used to verify the hostname of the peer certificate, since\n Istio verifies whitelisted SAN fields in mutual TLS.",
+            "description": "Used to configure mixer mutual TLS client to supply server name for SNI. It is not used to verify the hostname of the peer certificate, since Istio verifies whitelisted SAN fields in mutual TLS.",
             "type": "string",
             "format": "string"
           },
           "privateKey": {
-            "description": "The path to the file holding the private key for mutual TLS. If omitted, the\n default Mixer private key will be used.",
+            "description": "The path to the file holding the private key for mutual TLS. If omitted, the default Mixer private key will be used.",
             "type": "string",
             "format": "string"
           },
           "clientCertificate": {
-            "description": "The path to the file holding client certificate for mutual TLS. If omitted, the\n default Mixer certificates will be used.",
+            "description": "The path to the file holding client certificate for mutual TLS. If omitted, the default Mixer certificates will be used.",
             "type": "string",
             "format": "string"
           }
         }
       },
       "istio.policy.v1beta1.OAuth": {
-        "description": "OAuth let operator specify config to fetch access token via oauth when using\n TLS for connection to the backend.",
+        "description": "OAuth let operator specify config to fetch access token via oauth when using TLS for connection to the backend.",
         "type": "object",
         "required": [
           "endpointParams"
@@ -599,7 +599,7 @@
         "default": "PLAIN"
       },
       "istio.policy.v1beta1.DirectHttpResponse": {
-        "description": "Direct HTTP response for a client-facing error message which can be attached\n to an RPC error.",
+        "description": "Direct HTTP response for a client-facing error message which can be attached to an RPC error.",
         "type": "object",
         "required": [
           "headers"
@@ -624,7 +624,7 @@
         }
       },
       "istio.policy.v1beta1.HttpStatusCode": {
-        "description": "HTTP response codes.\n For more details: http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml",
+        "description": "HTTP response codes. For more details: http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml",
         "enum": [
           "Empty",
           "Continue",
@@ -687,7 +687,7 @@
         "default": "Empty"
       },
       "istio.policy.v1beta1.IPAddress": {
-        "description": "An instance field of type IPAddress denotes that the expression for the field must evaluate to\n [ValueType.IP_ADDRESS][istio.policy.v1beta1.ValueType.IP_ADDRESS]",
+        "description": "An instance field of type IPAddress denotes that the expression for the field must evaluate to [ValueType.IP_ADDRESS][istio.policy.v1beta1.ValueType.IP_ADDRESS]",
         "type": "object",
         "properties": {
           "value": {
@@ -698,7 +698,7 @@
         }
       },
       "istio.policy.v1beta1.TimeStamp": {
-        "description": "An instance field of type TimeStamp denotes that the expression for the field must evaluate to\n [ValueType.TIMESTAMP][istio.policy.v1beta1.ValueType.TIMESTAMP]",
+        "description": "An instance field of type TimeStamp denotes that the expression for the field must evaluate to [ValueType.TIMESTAMP][istio.policy.v1beta1.ValueType.TIMESTAMP]",
         "type": "object",
         "properties": {
           "value": {
@@ -707,7 +707,7 @@
         }
       },
       "istio.policy.v1beta1.EmailAddress": {
-        "description": "DO NOT USE !! Under Development\n An instance field of type EmailAddress denotes that the expression for the field must evaluate to\n [ValueType.EMAIL_ADDRESS][istio.policy.v1beta1.ValueType.EMAIL_ADDRESS]",
+        "description": "DO NOT USE !! Under Development An instance field of type EmailAddress denotes that the expression for the field must evaluate to [ValueType.EMAIL_ADDRESS][istio.policy.v1beta1.ValueType.EMAIL_ADDRESS]",
         "type": "object",
         "properties": {
           "value": {
@@ -718,7 +718,7 @@
         }
       },
       "istio.policy.v1beta1.DNSName": {
-        "description": "An instance field of type DNSName denotes that the expression for the field must evaluate to\n [ValueType.DNS_NAME][istio.policy.v1beta1.ValueType.DNS_NAME]",
+        "description": "An instance field of type DNSName denotes that the expression for the field must evaluate to [ValueType.DNS_NAME][istio.policy.v1beta1.ValueType.DNS_NAME]",
         "type": "object",
         "properties": {
           "value": {
@@ -729,7 +729,7 @@
         }
       },
       "istio.policy.v1beta1.Uri": {
-        "description": "DO NOT USE !! Under Development\n An instance field of type Uri denotes that the expression for the field must evaluate to\n [ValueType.URI][istio.policy.v1beta1.ValueType.URI]",
+        "description": "DO NOT USE !! Under Development An instance field of type Uri denotes that the expression for the field must evaluate to [ValueType.URI][istio.policy.v1beta1.ValueType.URI]",
         "type": "object",
         "properties": {
           "value": {
@@ -740,7 +740,7 @@
         }
       },
       "istio.policy.v1beta1.StringMap": {
-        "description": "An instance field of type StringMap denotes that the expression for the field must evaluate to\n [ValueType.STRING_MAP][istio.policy.v1beta1.ValueType.STRING_MAP]",
+        "description": "An instance field of type StringMap denotes that the expression for the field must evaluate to [ValueType.STRING_MAP][istio.policy.v1beta1.ValueType.STRING_MAP]",
         "type": "object",
         "required": [
           "value"
@@ -761,12 +761,12 @@
         "type": "object",
         "properties": {
           "seconds": {
-            "description": "Signed seconds of the span of time. Must be from -315,576,000,000\n to +315,576,000,000 inclusive. Note: these bounds are computed from:\n 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
+            "description": "Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years",
             "type": "integer",
             "format": "int64"
           },
           "nanos": {
-            "description": "Signed fractions of a second at nanosecond resolution of the span\n of time. Durations less than one second are represented with a 0\n `seconds` field and a positive or negative `nanos` field. For durations\n of one second or more, a non-zero value for the `nanos` field must be\n of the same sign as the `seconds` field. Must be from -999,999,999\n to +999,999,999 inclusive.",
+            "description": "Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.",
             "type": "integer",
             "format": "int32"
           }
@@ -793,12 +793,12 @@
         "type": "object",
         "properties": {
           "seconds": {
-            "description": "Represents seconds of UTC time since Unix epoch\n 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to\n 9999-12-31T23:59:59Z inclusive.",
+            "description": "Represents seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive.",
             "type": "integer",
             "format": "int64"
           },
           "nanos": {
-            "description": "Non-negative fractions of a second at nanosecond resolution. Negative\n second values with fractions must still have non-negative nanos values\n that count forward in time. Must be from 0 to 999,999,999\n inclusive.",
+            "description": "Non-negative fractions of a second at nanosecond resolution. Negative second values with fractions must still have non-negative nanos values that count forward in time. Must be from 0 to 999,999,999 inclusive.",
             "type": "integer",
             "format": "int32"
           }
