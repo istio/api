@@ -566,19 +566,29 @@ type Server_TLSOptions struct {
 	// A list of alternate names to verify the subject identity in the
 	// certificate presented by the client.
 	SubjectAltNames []string `protobuf:"bytes,6,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
+	// An optional list of base64-encoded SHA-256 hashes of the SKPIs of
+	// authorized client certificates.
+	// Note: When both verify_certificate_hash and verify_certificate_spki
+	// are specified, a hash matching either value will result in the
+	// certificate being accepted.
+	VerifyCertificateSpki []string `protobuf:"bytes,11,rep,name=verify_certificate_spki,json=verifyCertificateSpki,proto3" json:"verify_certificate_spki,omitempty"`
+	// An optional list of hex-encoded SHA-256 hashes of the
+	// authorized client certificates. Both simple and colon separated
+	// formats are acceptable.
+	// Note: When both verify_certificate_hash and verify_certificate_spki
+	// are specified, a hash matching either value will result in the
+	// certificate being accepted.
+	VerifyCertificateHash []string `protobuf:"bytes,12,rep,name=verify_certificate_hash,json=verifyCertificateHash,proto3" json:"verify_certificate_hash,omitempty"`
 	// Optional: Minimum TLS protocol version.
 	MinProtocolVersion Server_TLSOptions_TLSProtocol `protobuf:"varint,7,opt,name=min_protocol_version,json=minProtocolVersion,proto3,enum=istio.networking.v1alpha3.Server_TLSOptions_TLSProtocol" json:"min_protocol_version,omitempty"`
 	// Optional: Maximum TLS protocol version.
 	MaxProtocolVersion Server_TLSOptions_TLSProtocol `protobuf:"varint,8,opt,name=max_protocol_version,json=maxProtocolVersion,proto3,enum=istio.networking.v1alpha3.Server_TLSOptions_TLSProtocol" json:"max_protocol_version,omitempty"`
 	// Optional: If specified, only support the specified cipher list.
 	// Otherwise default to the default cipher list supported by Envoy.
-	CipherSuites []string `protobuf:"bytes,9,rep,name=cipher_suites,json=cipherSuites,proto3" json:"cipher_suites,omitempty"`
-	// Optional: If specified, use these options for default TLS validation.
-	// This context will be merged with the context from SDS.
-	DefaultCertificateValidationContext *Server_TLSOptions_CertificateValidationContext `protobuf:"bytes,11,opt,name=default_certificate_validation_context,json=defaultCertificateValidationContext,proto3" json:"default_certificate_validation_context,omitempty"`
-	XXX_NoUnkeyedLiteral                struct{}                                        `json:"-"`
-	XXX_unrecognized                    []byte                                          `json:"-"`
-	XXX_sizecache                       int32                                           `json:"-"`
+	CipherSuites         []string `protobuf:"bytes,9,rep,name=cipher_suites,json=cipherSuites,proto3" json:"cipher_suites,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *Server_TLSOptions) Reset()         { *m = Server_TLSOptions{} }
@@ -663,6 +673,20 @@ func (m *Server_TLSOptions) GetSubjectAltNames() []string {
 	return nil
 }
 
+func (m *Server_TLSOptions) GetVerifyCertificateSpki() []string {
+	if m != nil {
+		return m.VerifyCertificateSpki
+	}
+	return nil
+}
+
+func (m *Server_TLSOptions) GetVerifyCertificateHash() []string {
+	if m != nil {
+		return m.VerifyCertificateHash
+	}
+	return nil
+}
+
 func (m *Server_TLSOptions) GetMinProtocolVersion() Server_TLSOptions_TLSProtocol {
 	if m != nil {
 		return m.MinProtocolVersion
@@ -680,81 +704,6 @@ func (m *Server_TLSOptions) GetMaxProtocolVersion() Server_TLSOptions_TLSProtoco
 func (m *Server_TLSOptions) GetCipherSuites() []string {
 	if m != nil {
 		return m.CipherSuites
-	}
-	return nil
-}
-
-func (m *Server_TLSOptions) GetDefaultCertificateValidationContext() *Server_TLSOptions_CertificateValidationContext {
-	if m != nil {
-		return m.DefaultCertificateValidationContext
-	}
-	return nil
-}
-
-// Options for validating a certificate
-type Server_TLSOptions_CertificateValidationContext struct {
-	// Name of a TLS certificate secret containing certificate authority
-	// certificates to use in verifying a presented peer certificate (e.g.
-	// server certificate for cluster or client certificate for listeners).
-	// If not specified and a peer certificate is presented it will not be
-	// verified. By default, a client certificate is optional unless TLS
-	// mode is MUTUAL.
-	TrustedCa string `protobuf:"bytes,1,opt,name=trusted_ca,json=trustedCa,proto3" json:"trusted_ca,omitempty"`
-	// An optional list of base64-encoded SHA-256 hashes of the SPKIs of
-	// authorized client certificates.
-	VerifyCertificateSpki []string `protobuf:"bytes,2,rep,name=verify_certificate_spki,json=verifyCertificateSpki,proto3" json:"verify_certificate_spki,omitempty"`
-	XXX_NoUnkeyedLiteral  struct{} `json:"-"`
-	XXX_unrecognized      []byte   `json:"-"`
-	XXX_sizecache         int32    `json:"-"`
-}
-
-func (m *Server_TLSOptions_CertificateValidationContext) Reset() {
-	*m = Server_TLSOptions_CertificateValidationContext{}
-}
-func (m *Server_TLSOptions_CertificateValidationContext) String() string {
-	return proto.CompactTextString(m)
-}
-func (*Server_TLSOptions_CertificateValidationContext) ProtoMessage() {}
-func (*Server_TLSOptions_CertificateValidationContext) Descriptor() ([]byte, []int) {
-	return fileDescriptor_067d98d02f84cc0b, []int{1, 0, 0}
-}
-func (m *Server_TLSOptions_CertificateValidationContext) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *Server_TLSOptions_CertificateValidationContext) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Server_TLSOptions_CertificateValidationContext.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *Server_TLSOptions_CertificateValidationContext) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Server_TLSOptions_CertificateValidationContext.Merge(m, src)
-}
-func (m *Server_TLSOptions_CertificateValidationContext) XXX_Size() int {
-	return m.Size()
-}
-func (m *Server_TLSOptions_CertificateValidationContext) XXX_DiscardUnknown() {
-	xxx_messageInfo_Server_TLSOptions_CertificateValidationContext.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Server_TLSOptions_CertificateValidationContext proto.InternalMessageInfo
-
-func (m *Server_TLSOptions_CertificateValidationContext) GetTrustedCa() string {
-	if m != nil {
-		return m.TrustedCa
-	}
-	return ""
-}
-
-func (m *Server_TLSOptions_CertificateValidationContext) GetVerifyCertificateSpki() []string {
-	if m != nil {
-		return m.VerifyCertificateSpki
 	}
 	return nil
 }
@@ -836,13 +785,13 @@ func init() {
 	proto.RegisterMapType((map[string]string)(nil), "istio.networking.v1alpha3.Gateway.SelectorEntry")
 	proto.RegisterType((*Server)(nil), "istio.networking.v1alpha3.Server")
 	proto.RegisterType((*Server_TLSOptions)(nil), "istio.networking.v1alpha3.Server.TLSOptions")
-	proto.RegisterType((*Server_TLSOptions_CertificateValidationContext)(nil), "istio.networking.v1alpha3.Server.TLSOptions.CertificateValidationContext")
 	proto.RegisterType((*Port)(nil), "istio.networking.v1alpha3.Port")
 }
 
 func init() { proto.RegisterFile("networking/v1alpha3/gateway.proto", fileDescriptor_067d98d02f84cc0b) }
 
 var fileDescriptor_067d98d02f84cc0b = []byte{
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	// 684 bytes of a gzipped FileDescriptorProto
@@ -991,6 +940,54 @@ var fileDescriptor_067d98d02f84cc0b = []byte{
 	0x92, 0xf1, 0xd2, 0xb0, 0x86, 0x23, 0x5a, 0xfb, 0x87, 0xff, 0xc9, 0x20, 0x2b, 0xd9, 0x1a, 0x7f,
 	0x06, 0x00, 0x00, 0xff, 0xff, 0x1a, 0x15, 0xce, 0xa4, 0x6d, 0x06, 0x00, 0x00,
 >>>>>>> Regenerate files
+=======
+	// 714 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x54, 0xdd, 0x4e, 0xdb, 0x4a,
+	0x10, 0xc6, 0x49, 0xc8, 0xcf, 0x84, 0x10, 0xb3, 0xe2, 0x9c, 0xe3, 0xc3, 0x05, 0x3f, 0x39, 0x3a,
+	0x2a, 0xad, 0x5a, 0x07, 0x92, 0xaa, 0x42, 0x45, 0xaa, 0x94, 0x56, 0x88, 0x54, 0x0d, 0x24, 0xb2,
+	0x13, 0x2e, 0x7a, 0x63, 0x6d, 0x9c, 0x05, 0x2f, 0x71, 0x6c, 0x6b, 0x77, 0x13, 0xc8, 0x1b, 0xf5,
+	0x51, 0x7a, 0xd9, 0xaa, 0x2f, 0x50, 0xf1, 0x24, 0x95, 0x77, 0x1d, 0x92, 0xfe, 0x40, 0x85, 0x7a,
+	0x37, 0x3f, 0xdf, 0xf7, 0xcd, 0xec, 0x8c, 0xc7, 0xb0, 0x13, 0x10, 0x71, 0x15, 0xb2, 0x21, 0x0d,
+	0x2e, 0xaa, 0x93, 0x7d, 0xec, 0x47, 0x1e, 0xae, 0x57, 0x2f, 0xb0, 0x20, 0x57, 0x78, 0x6a, 0x46,
+	0x2c, 0x14, 0x21, 0xfa, 0x97, 0x72, 0x41, 0x43, 0x73, 0x0e, 0x34, 0x67, 0xc0, 0xca, 0x67, 0x0d,
+	0x72, 0xc7, 0x0a, 0x8c, 0x0e, 0x21, 0xc7, 0x09, 0x9b, 0x10, 0xc6, 0x0d, 0x6d, 0x3b, 0xbd, 0x5b,
+	0xac, 0xed, 0x98, 0x77, 0x12, 0x4d, 0x5b, 0x22, 0xad, 0x19, 0x03, 0xb5, 0x20, 0xcf, 0x89, 0x4f,
+	0x5c, 0x11, 0x32, 0x23, 0x25, 0xd9, 0x7b, 0xf7, 0xb0, 0x93, 0x92, 0xa6, 0x9d, 0x50, 0x8e, 0x02,
+	0xc1, 0xa6, 0xd6, 0xad, 0xc2, 0xc6, 0x21, 0x94, 0xbe, 0x4b, 0x21, 0x1d, 0xd2, 0x43, 0x32, 0x35,
+	0xb4, 0x6d, 0x6d, 0xb7, 0x60, 0xc5, 0x26, 0x5a, 0x87, 0xe5, 0x09, 0xf6, 0xc7, 0xc4, 0x48, 0xc9,
+	0x98, 0x72, 0x5e, 0xa6, 0x0e, 0xb4, 0xca, 0x87, 0x3c, 0x64, 0x55, 0x7b, 0xa8, 0x0e, 0x99, 0x28,
+	0x64, 0x42, 0xf2, 0x8a, 0xb5, 0xad, 0x7b, 0x3a, 0xea, 0x84, 0x4c, 0x58, 0x12, 0x8c, 0x10, 0x64,
+	0xfa, 0x34, 0x18, 0x18, 0x19, 0x29, 0x2c, 0xed, 0xb8, 0x9a, 0x17, 0x72, 0xc1, 0xe5, 0xdb, 0x0a,
+	0x96, 0x72, 0xd0, 0x2b, 0x48, 0x0b, 0x9f, 0x1b, 0x69, 0xa9, 0xfe, 0xf4, 0xb7, 0xd3, 0x32, 0xbb,
+	0x2d, 0xbb, 0x1d, 0x09, 0x1a, 0x06, 0xdc, 0x8a, 0x89, 0xe8, 0x31, 0xe8, 0x03, 0x72, 0x8e, 0xc7,
+	0xbe, 0x70, 0x48, 0x30, 0x88, 0x42, 0x1a, 0x08, 0x63, 0x59, 0x56, 0x2d, 0x27, 0xf1, 0xa3, 0x24,
+	0xbc, 0xf1, 0x25, 0x0b, 0x30, 0xa7, 0xa3, 0xff, 0x61, 0xd5, 0x13, 0x22, 0xe2, 0x0e, 0x23, 0x03,
+	0xca, 0x88, 0xab, 0x9e, 0x98, 0xb7, 0x4a, 0x32, 0x6a, 0x25, 0x41, 0xd4, 0x84, 0xcc, 0x28, 0x1c,
+	0xa8, 0x19, 0xad, 0xd6, 0x9e, 0x3f, 0xa4, 0xc3, 0xd8, 0x8c, 0xb9, 0x96, 0x54, 0x40, 0xcf, 0x00,
+	0xa9, 0x55, 0x3b, 0x2e, 0x61, 0x82, 0x9e, 0x53, 0x17, 0x0b, 0x22, 0x5f, 0x5e, 0xb0, 0xd6, 0x54,
+	0xe6, 0xcd, 0x3c, 0x81, 0xb6, 0xa0, 0x18, 0x31, 0x3a, 0xc1, 0x82, 0x38, 0xf1, 0xde, 0xd4, 0x28,
+	0x21, 0x09, 0xbd, 0x23, 0x53, 0xf4, 0x08, 0xca, 0x2e, 0x5e, 0xd4, 0xe2, 0xc9, 0xcb, 0x57, 0x5d,
+	0xbc, 0x20, 0xc4, 0x25, 0x90, 0x91, 0x01, 0x09, 0x04, 0xc5, 0xbe, 0x13, 0xe0, 0x11, 0x31, 0x20,
+	0x01, 0xde, 0x86, 0x4f, 0xf1, 0x88, 0xa0, 0x27, 0xb0, 0xc6, 0xc7, 0xfd, 0x4b, 0xe2, 0x0a, 0x07,
+	0xfb, 0x42, 0x22, 0xb9, 0x91, 0x95, 0xeb, 0x2a, 0x27, 0x89, 0x86, 0x2f, 0x62, 0x28, 0x47, 0x2f,
+	0xe0, 0x9f, 0x09, 0x61, 0xf4, 0x7c, 0xba, 0xd8, 0x81, 0xc3, 0xa3, 0x21, 0x35, 0x8a, 0x92, 0xf1,
+	0x97, 0x4a, 0x2f, 0x74, 0x62, 0x47, 0x43, 0x7a, 0x07, 0xcf, 0xc3, 0xdc, 0x33, 0x56, 0xee, 0xe0,
+	0x35, 0x31, 0xf7, 0xd0, 0x25, 0xac, 0x8f, 0x68, 0xe0, 0xc8, 0x73, 0x74, 0x43, 0xdf, 0x89, 0x4f,
+	0x86, 0x86, 0x81, 0x91, 0x93, 0x7b, 0x39, 0x78, 0xe8, 0x5e, 0x3a, 0x89, 0x8e, 0x85, 0x46, 0x34,
+	0x98, 0x39, 0x67, 0x4a, 0x53, 0xd6, 0xc2, 0xd7, 0x3f, 0xd7, 0xca, 0xff, 0x71, 0x2d, 0x7c, 0xfd,
+	0x63, 0xad, 0xff, 0xa0, 0xe4, 0xd2, 0xc8, 0x23, 0xcc, 0xe1, 0x63, 0x1a, 0xef, 0xb0, 0x20, 0xa7,
+	0xb0, 0xa2, 0x82, 0xb6, 0x8c, 0x55, 0x9a, 0x90, 0x4b, 0xbe, 0x25, 0x54, 0x86, 0x62, 0xa7, 0x61,
+	0xdb, 0xdd, 0xa6, 0xd5, 0xee, 0x1d, 0x37, 0xf5, 0x25, 0x04, 0x90, 0xb5, 0xdf, 0x9e, 0x74, 0x5a,
+	0x47, 0xba, 0x16, 0xdb, 0x27, 0xbd, 0x6e, 0xaf, 0xd1, 0xd2, 0x53, 0x68, 0x1d, 0xf4, 0x46, 0xaf,
+	0xdb, 0x76, 0x16, 0xd1, 0xe9, 0x4a, 0x1b, 0x8a, 0x0b, 0x1d, 0xa1, 0x15, 0xc8, 0x77, 0x5b, 0xb6,
+	0x13, 0x03, 0xf5, 0x25, 0x54, 0x94, 0x65, 0xce, 0xf6, 0x9d, 0x3d, 0x5d, 0x9b, 0x3b, 0xfb, 0x7a,
+	0x6a, 0xee, 0xd4, 0xf4, 0xf4, 0xdc, 0xa9, 0xeb, 0x99, 0xca, 0x29, 0x64, 0xe2, 0xc3, 0x47, 0x7f,
+	0x43, 0x36, 0x18, 0x8f, 0xfa, 0x84, 0xc9, 0x33, 0x2a, 0x59, 0x89, 0x87, 0x36, 0x20, 0x3f, 0x9b,
+	0x63, 0xf2, 0x9f, 0xb9, 0xf5, 0xe3, 0xdf, 0x84, 0xfc, 0x1a, 0xd5, 0x0d, 0x48, 0xfb, 0xb5, 0xf9,
+	0xf1, 0x66, 0x53, 0xfb, 0x74, 0xb3, 0xa9, 0x7d, 0xbd, 0xd9, 0xd4, 0xde, 0x6f, 0xab, 0x51, 0xd3,
+	0xb0, 0x8a, 0x23, 0x5a, 0xfd, 0xc5, 0x7f, 0xba, 0x9f, 0x95, 0x6a, 0xf5, 0x6f, 0x01, 0x00, 0x00,
+	0xff, 0xff, 0x98, 0x7a, 0x0e, 0x24, 0xc5, 0x05, 0x00, 0x00,
+>>>>>>> Remove trusted_ca field and CertificateValidationContext message.
 }
 
 func (m *Gateway) Marshal() (dAtA []byte, err error) {
@@ -1205,46 +1202,24 @@ func (m *Server_TLSOptions) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintGateway(dAtA, i, uint64(len(m.CredentialName)))
 		i += copy(dAtA[i:], m.CredentialName)
 	}
-	if m.DefaultCertificateValidationContext != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintGateway(dAtA, i, uint64(m.DefaultCertificateValidationContext.Size()))
-		n3, err3 := m.DefaultCertificateValidationContext.MarshalTo(dAtA[i:])
-		if err3 != nil {
-			return 0, err3
-		}
-		i += n3
-	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	return i, nil
-}
-
-func (m *Server_TLSOptions_CertificateValidationContext) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Server_TLSOptions_CertificateValidationContext) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.TrustedCa) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintGateway(dAtA, i, uint64(len(m.TrustedCa)))
-		i += copy(dAtA[i:], m.TrustedCa)
-	}
 	if len(m.VerifyCertificateSpki) > 0 {
 		for _, s := range m.VerifyCertificateSpki {
-			dAtA[i] = 0x12
+			dAtA[i] = 0x5a
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	if len(m.VerifyCertificateHash) > 0 {
+		for _, s := range m.VerifyCertificateHash {
+			dAtA[i] = 0x62
 			i++
 			l = len(s)
 			for l >= 1<<7 {
@@ -1416,28 +1391,14 @@ func (m *Server_TLSOptions) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovGateway(uint64(l))
 	}
-	if m.DefaultCertificateValidationContext != nil {
-		l = m.DefaultCertificateValidationContext.Size()
-		n += 1 + l + sovGateway(uint64(l))
-	}
-	if m.XXX_unrecognized != nil {
-		n += len(m.XXX_unrecognized)
-	}
-	return n
-}
-
-func (m *Server_TLSOptions_CertificateValidationContext) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.TrustedCa)
-	if l > 0 {
-		n += 1 + l + sovGateway(uint64(l))
-	}
 	if len(m.VerifyCertificateSpki) > 0 {
 		for _, s := range m.VerifyCertificateSpki {
+			l = len(s)
+			n += 1 + l + sovGateway(uint64(l))
+		}
+	}
+	if len(m.VerifyCertificateHash) > 0 {
+		for _, s := range m.VerifyCertificateHash {
 			l = len(s)
 			n += 1 + l + sovGateway(uint64(l))
 		}
@@ -2221,128 +2182,6 @@ func (m *Server_TLSOptions) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 11:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultCertificateValidationContext", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGateway
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGateway
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGateway
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.DefaultCertificateValidationContext == nil {
-				m.DefaultCertificateValidationContext = &Server_TLSOptions_CertificateValidationContext{}
-			}
-			if err := m.DefaultCertificateValidationContext.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGateway(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthGateway
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthGateway
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Server_TLSOptions_CertificateValidationContext) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGateway
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CertificateValidationContext: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CertificateValidationContext: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TrustedCa", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGateway
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthGateway
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthGateway
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TrustedCa = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field VerifyCertificateSpki", wireType)
 			}
 			var stringLen uint64
@@ -2372,6 +2211,38 @@ func (m *Server_TLSOptions_CertificateValidationContext) Unmarshal(dAtA []byte) 
 				return io.ErrUnexpectedEOF
 			}
 			m.VerifyCertificateSpki = append(m.VerifyCertificateSpki, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerifyCertificateHash", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGateway
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGateway
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGateway
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VerifyCertificateHash = append(m.VerifyCertificateHash, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

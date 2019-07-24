@@ -4,7 +4,7 @@ description: Configuration affecting edge load balancer.
 location: https://istio.io/docs/reference/config/networking/v1alpha3/gateway.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 7
+number_of_entries: 6
 ---
 <p><code>Gateway</code> describes a load balancer operating at the edge of the mesh
 receiving incoming or outgoing HTTP/TCP connections. The specification
@@ -473,6 +473,31 @@ certificate presented by the client.</p>
 
 </td>
 </tr>
+<tr id="Server-TLSOptions-verify_certificate_spki">
+<td><code>verifyCertificateSpki</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>An optional list of base64-encoded SHA-256 hashes of the SKPIs of
+authorized client certificates.
+Note: When both verify<em>certificate</em>hash and verify<em>certificate</em>spki
+are specified, a hash matching either value will result in the
+certificate being accepted.</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-verify_certificate_hash">
+<td><code>verifyCertificateHash</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>An optional list of hex-encoded SHA-256 hashes of the
+authorized client certificates. Both simple and colon separated
+formats are acceptable.
+Note: When both verify<em>certificate</em>hash and verify<em>certificate</em>spki
+are specified, a hash matching either value will result in the
+certificate being accepted.</p>
+
+</td>
+</tr>
 <tr id="Server-TLSOptions-min_protocol_version">
 <td><code>minProtocolVersion</code></td>
 <td><code><a href="#Server-TLSOptions-TLSProtocol">Server.TLSOptions.TLSProtocol</a></code></td>
@@ -495,53 +520,6 @@ certificate presented by the client.</p>
 <td>
 <p>Optional: If specified, only support the specified cipher list.
 Otherwise default to the default cipher list supported by Envoy.</p>
-
-</td>
-</tr>
-<tr id="Server-TLSOptions-default_certificate_validation_context">
-<td><code>defaultCertificateValidationContext</code></td>
-<td><code><a href="#Server-TLSOptions-CertificateValidationContext">Server.TLSOptions.CertificateValidationContext</a></code></td>
-<td>
-<p>Optional: If specified, use these options for default TLS validation.
-This context will be merged with the context from SDS.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="Server-TLSOptions-CertificateValidationContext">Server.TLSOptions.CertificateValidationContext</h2>
-<section>
-<p>Options for validating a certificate</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Server-TLSOptions-CertificateValidationContext-trusted_ca">
-<td><code>trustedCa</code></td>
-<td><code>string</code></td>
-<td>
-<p>Name of a TLS certificate secret containing certificate authority
-certificates to use in verifying a presented peer certificate (e.g.
-server certificate for cluster or client certificate for listeners).
-If not specified and a peer certificate is presented it will not be
-verified. By default, a client certificate is optional unless TLS
-mode is MUTUAL.</p>
-
-</td>
-</tr>
-<tr id="Server-TLSOptions-CertificateValidationContext-verify_certificate_spki">
-<td><code>verifyCertificateSpki</code></td>
-<td><code>string[]</code></td>
-<td>
-<p>An optional list of base64-encoded SHA-256 hashes of the SPKIs of
-authorized client certificates.</p>
 
 </td>
 </tr>
