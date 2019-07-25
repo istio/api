@@ -139,7 +139,8 @@
           "PASSTHROUGH",
           "SIMPLE",
           "MUTUAL",
-          "AUTO_PASSTHROUGH"
+          "AUTO_PASSTHROUGH",
+          "ISTIO_MUTUAL"
         ],
         "default": "PASSTHROUGH"
       },

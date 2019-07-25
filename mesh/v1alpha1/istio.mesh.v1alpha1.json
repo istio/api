@@ -179,13 +179,6 @@
           },
           "reportBatchMaxTime": {
             "$ref": "#/components/schemas/google.protobuf.Duration"
-          },
-          "features": {
-            "description": "Optional: Features is used to enable/disable specific features.",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/istio.mesh.v1alpha1.Feature"
-            }
           }
         }
       },
@@ -362,19 +355,6 @@
         ],
         "default": "DO_NOT_UPGRADE"
       },
-      "istio.mesh.v1alpha1.Feature": {
-        "description": "Feature specify to enable or disable a specific feature.",
-        "type": "object",
-        "properties": {
-          "feature": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.FeatureName"
-          },
-          "enable": {
-            "description": "Specify true to enable the feature or false to disable the feature.",
-            "type": "boolean"
-          }
-        }
-      },
       "istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode": {
         "enum": [
           "REGISTRY_ONLY",
@@ -418,13 +398,6 @@
             "format": "string"
           }
         }
-      },
-      "istio.mesh.v1alpha1.FeatureName": {
-        "description": "FeatureName describes the features which are currently supported.",
-        "type": "string",
-        "enum": [
-          "LOCALITY_AWARE_ROUTING"
-        ]
       },
       "istio.mesh.v1alpha1.Network": {
         "description": "Network provides information about the endpoints in a routable L3 network. A single routable L3 network can have one or more service registries. Note that the network has no relation to the locality of the endpoint. The endpoint locality will be obtained from the service registry.",
