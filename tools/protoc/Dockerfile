@@ -38,6 +38,8 @@ RUN go get -u -v -ldflags '-w -s' github.com/gogo/protobuf/protoc-gen-gogofast
 RUN go get -u -v -ldflags '-w -s' github.com/gogo/protobuf/protoc-gen-gogofaster
 RUN go get -u -v -ldflags '-w -s' github.com/gogo/protobuf/protoc-gen-gogoslick
 RUN go get -u -v -ldflags '-w -s' istio.io/tools/protoc-gen-docs
+
+# And finally, install other tools needed by the API repo
 RUN go get -u -v -ldflags '-w -s' istio.io/tools/cmd/annotations_prep
 
 ENTRYPOINT ["/usr/bin/protoc", "-I/protobuf"]
