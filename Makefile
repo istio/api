@@ -4,19 +4,9 @@ all: generate
 # docker_gen
 ########################
 
-# Use a different generation mechanism when running from the
-# image itself
-ifdef CIRCLECI
-repo_dir = .
-docker_gen = /usr/bin/protoc -I/protobuf -I$(repo_dir)
-out_path = $(OUT_PATH)
-docker_lock = protolock
-docker_lock_release = ./scripts/check-release-locks.sh
-docker_tool = prototool
-else
-gen_img := gcr.io/istio-testing/protoc:2019-03-29
+gen_img := gcr.io/istio-testing/protoc:2019-07-25
 lock_img := gcr.io/istio-testing/protolock:2019-03-11
-all_img := gcr.io/istio-testing/api-build-tools:2019-03-11
+all_img := gcr.io/istio-testing/api-build-tools:2019-07-25
 pwd := $(shell pwd)
 mount_dir := /src
 repo_dir := istio.io/api
@@ -27,7 +17,7 @@ out_path = .
 docker_lock = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(repo_mount) $(lock_img)
 docker_lock_release = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(repo_mount) --entrypoint=/bin/ash $(lock_img) $(repo_mount)/scripts/check-release-locks.sh
 docker_tool = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(repo_mount) $(all_img) prototool
-endif
+annotations_prep = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(repo_mount) --entrypoint=/go/bin/annotations_prep $(gen_img)
 
 ########################
 # protoc_gen_gogo*
@@ -93,7 +83,8 @@ generate: \
 	generate-authn-go \
 	generate-authn-python \
 	generate-envoy-go \
-	generate-envoy-python
+	generate-envoy-python \
+	generate-annotations \
 
 #####################
 # mcp/...
@@ -346,7 +337,23 @@ $(envoy_pb_pythons): $(envoy_protos)
 	@$(docker_gen) $(protoc_gen_python_plugin) $^
 
 clean-envoy:
-	rm -f $(envoy_pb_gos)
+	@rm -f $(envoy_pb_gos)
+
+#####################
+# annotation/...
+#####################
+
+annotations_path := annotation
+annotations_pb_go := $(annotations_path)/annotations.gen.go
+annotations_pb_doc := $(annotations_path)/annotations.pb.html
+
+$(annotations_pb_go) $(annotations_pb_doc): $(annotations_path)/annotations.yaml
+	@$(annotations_prep) --input $(annotations_path)/annotations.yaml --output $(annotations_pb_go) --html_output $(annotations_pb_doc)
+
+generate-annotations: $(annotations_pb_go) $(annotations_pb_doc)
+
+clean-annotations:
+	@rm -f $(annotations_pb_go) $(annotations_pb_doc)
 
 #####################
 # Protolock
@@ -379,13 +386,15 @@ lint:
 clean-python:
 	rm -rf python/istio_api/*
 
-clean: 	clean-mcp \
+clean: \
+	clean-mcp \
 	clean-mesh \
 	clean-mixer \
 	clean-routing \
 	clean-rbac \
 	clean-authn \
 	clean-envoy \
-	clean-python
+	clean-python \
+	clean-annotations \
 
 include Makefile.common.mk
