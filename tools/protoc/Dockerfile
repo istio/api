@@ -1,6 +1,6 @@
 FROM golang:1.12 as golang-build-env
 
-# Build gRPC from source
+# Install deps required for protoc and gRPC from source builds
 RUN apt-get update
 RUN apt-get install -y build-essential unzip autoconf libtool zlibc zlib1g-dev libc-ares-dev libssl-dev
 
