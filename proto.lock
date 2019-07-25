@@ -924,14 +924,6 @@
                 "integer": 1
               }
             ]
-          },
-          {
-            "name": "FeatureName",
-            "enum_fields": [
-              {
-                "name": "LOCALITY_AWARE_ROUTING"
-              }
-            ]
           }
         ],
         "messages": [
@@ -1160,12 +1152,6 @@
                 "id": 41,
                 "name": "h2_upgrade_policy",
                 "type": "H2UpgradePolicy"
-              },
-              {
-                "id": 42,
-                "name": "features",
-                "type": "Feature",
-                "is_repeated": true
               }
             ],
             "reserved_ids": [
@@ -1251,21 +1237,6 @@
                     "type": "string"
                   }
                 ]
-              }
-            ]
-          },
-          {
-            "name": "Feature",
-            "fields": [
-              {
-                "id": 1,
-                "name": "feature",
-                "type": "FeatureName"
-              },
-              {
-                "id": 2,
-                "name": "enable",
-                "type": "bool"
               }
             ]
           }
