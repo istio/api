@@ -383,6 +383,21 @@ message Server {
     // A list of alternate names to verify the subject identity in the
     // certificate presented by the client.
     repeated string subject_alt_names = 6;
+    
+    // An optional list of base64-encoded SHA-256 hashes of the SKPIs of
+    // authorized client certificates.
+    // Note: When both verify_certificate_hash and verify_certificate_spki
+    // are specified, a hash matching either value will result in the
+    // certificate being accepted.
+    repeated string verify_certificate_spki = 11;
+
+    // An optional list of hex-encoded SHA-256 hashes of the
+    // authorized client certificates. Both simple and colon separated
+    // formats are acceptable.
+    // Note: When both verify_certificate_hash and verify_certificate_spki
+    // are specified, a hash matching either value will result in the
+    // certificate being accepted.
+    repeated string verify_certificate_hash = 12;
 
     // TLS protocol versions.
     enum TLSProtocol {

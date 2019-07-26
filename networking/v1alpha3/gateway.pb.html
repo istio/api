@@ -473,6 +473,31 @@ certificate presented by the client.</p>
 
 </td>
 </tr>
+<tr id="Server-TLSOptions-verify_certificate_spki">
+<td><code>verifyCertificateSpki</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>An optional list of base64-encoded SHA-256 hashes of the SKPIs of
+authorized client certificates.
+Note: When both verify<em>certificate</em>hash and verify<em>certificate</em>spki
+are specified, a hash matching either value will result in the
+certificate being accepted.</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-verify_certificate_hash">
+<td><code>verifyCertificateHash</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>An optional list of hex-encoded SHA-256 hashes of the
+authorized client certificates. Both simple and colon separated
+formats are acceptable.
+Note: When both verify<em>certificate</em>hash and verify<em>certificate</em>spki
+are specified, a hash matching either value will result in the
+certificate being accepted.</p>
+
+</td>
+</tr>
 <tr id="Server-TLSOptions-min_protocol_version">
 <td><code>minProtocolVersion</code></td>
 <td><code><a href="#Server-TLSOptions-TLSProtocol">Server.TLSOptions.TLSProtocol</a></code></td>

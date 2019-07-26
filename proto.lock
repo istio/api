@@ -4296,6 +4296,18 @@
                     "is_repeated": true
                   },
                   {
+                    "id": 11,
+                    "name": "verify_certificate_spki",
+                    "type": "string",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 12,
+                    "name": "verify_certificate_hash",
+                    "type": "string",
+                    "is_repeated": true
+                  },
+                  {
                     "id": 7,
                     "name": "min_protocol_version",
                     "type": "TLSProtocol"
