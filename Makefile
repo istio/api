@@ -4,7 +4,7 @@ all: generate
 # docker_gen
 ########################
 
-gen_img := gcr.io/istio-testing/protoc:2019-07-25
+gen_img := gcr.io/istio-testing/protoc:2019-07-26
 lock_img := gcr.io/istio-testing/protolock:2019-03-11
 all_img := gcr.io/istio-testing/api-build-tools:2019-07-25
 pwd := $(shell pwd)
@@ -17,7 +17,7 @@ out_path = .
 docker_lock = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(repo_mount) $(lock_img)
 docker_lock_release = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(repo_mount) --entrypoint=/bin/ash $(lock_img) $(repo_mount)/scripts/check-release-locks.sh
 docker_tool = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(repo_mount) $(all_img) prototool
-annotations_prep = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(repo_mount) --entrypoint=/go/bin/annotations_prep $(gen_img)
+annotations_prep = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(repo_mount) --entrypoint=/usr/bin/annotations_prep $(gen_img)
 
 ########################
 # protoc_gen_gogo*
