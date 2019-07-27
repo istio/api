@@ -1,41 +1,38 @@
 all: generate
 
 ########################
-# docker_gen
+# setup
 ########################
 
-gen_img := gcr.io/istio-testing/protoc:2019-07-26
-lock_img := gcr.io/istio-testing/protolock:2019-03-11
-all_img := gcr.io/istio-testing/api-build-tools:2019-07-26
+apitools_img := gcr.io/istio-testing/api-build-tools:2019-07-26
+websitetools_img := gcr.io/istio-testing/website-tools:2019-07-25
+
 pwd := $(shell pwd)
 mount_dir := /src
 repo_dir := istio.io/api
 repo_mount := $(mount_dir)/istio.io/api
-uid := $(shell id -u)
-docker_gen := docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(mount_dir) $(gen_img) -I$(repo_dir)
 out_path = .
-docker_lock = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(repo_mount) $(lock_img)
-docker_lock_release = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(repo_mount) --entrypoint=/bin/ash $(lock_img) $(repo_mount)/scripts/check-release-locks.sh
-docker_tool = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(repo_mount) $(all_img) prototool
-annotations_prep = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(repo_mount) --entrypoint=/usr/bin/annotations_prep $(gen_img)
+uid := $(shell id -u)
+
+protoc = docker run --user $(uid) -v /etc/passwd:/etc/passwd:ro --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(apitools_img) protoc -I/protobuf -I$(repo_dir)
+
+run = docker run --user $(uid) -v /etc/passwd:/etc/passwd:ro --rm -v $(pwd):$(repo_mount) -w $(repo_mount) $(apitools_img)
+protolock = $(run) protolock
+protolock_release = $(run) /bin/bash $(repo_mount)/scripts/check-release-locks.sh
+prototool = $(run) prototool
+annotations_prep = $(run) annotations_prep
+
+htmlproofer = docker run --user $(uid) -v /etc/passwd:/etc/passwd:ro --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(websitetools_img) htmlproofer
 
 ########################
 # protoc_gen_gogo*
 ########################
 
-gogo_plugin_prefix := --gogo_out=plugins=grpc,
 gogofast_plugin_prefix := --gogofast_out=plugins=grpc,
 gogoslick_plugin_prefix := --gogoslick_out=plugins=grpc,
 
-########################
-# protoc_gen_python
-########################
-
-protoc_gen_python_prefix := --python_out=,
-protoc_gen_python_plugin := $(protoc_gen_python_prefix):$(repo_dir)/python/istio_api
-
 comma := ,
-empty:=
+empty :=
 space := $(empty) $(empty)
 
 importmaps := \
@@ -54,9 +51,16 @@ importmaps := \
 mapping_with_spaces := $(foreach map,$(importmaps),M$(map),)
 gogo_mapping := $(subst $(space),$(empty),$(mapping_with_spaces))
 
-gogo_plugin := $(gogo_plugin_prefix)$(gogo_mapping):$(out_path)
 gogofast_plugin := $(gogofast_plugin_prefix)$(gogo_mapping):$(out_path)
 gogoslick_plugin := $(gogoslick_plugin_prefix)$(gogo_mapping):$(out_path)
+
+########################
+# protoc_gen_python
+########################
+
+python_output_path := python/istio_api
+protoc_gen_python_prefix := --python_out=,
+protoc_gen_python_plugin := $(protoc_gen_python_prefix):$(repo_dir)/$(python_output_path)
 
 ########################
 # protoc_gen_docs
@@ -70,49 +74,34 @@ protoc_gen_docs_plugin_for_networking := --docs_out=warnings=true,dictionary=$(r
 #####################
 
 generate: \
-	generate-mcp-go \
-	generate-mcp-python \
-	generate-mesh-go \
-	generate-mesh-python \
-	generate-mixer-go \
-	generate-mixer-python \
-	generate-routing-go \
-	generate-routing-python \
-	generate-rbac-go \
-	generate-rbac-python \
-	generate-authn-go \
-	generate-authn-python \
-	generate-envoy-go \
-	generate-envoy-python \
-	generate-annotations \
+	generate-mcp \
+	generate-mesh \
+	generate-mixer \
+	generate-networking \
+	generate-rbac \
+	generate-authn \
+	generate-envoy \
+	generate-policy \
+	generate-annotations
 
 #####################
 # mcp/...
 #####################
 
-config_mcp_path := mcp/v1alpha1
-config_mcp_protos := $(shell find $(config_mcp_path) -type f -name '*.proto' | sort)
-config_mcp_pb_gos := $(config_mcp_protos:.proto=.pb.go)
-config_mcp_pb_pythons := $(config_mcp_protos:.proto=_pb2.py)
-config_mcp_pb_doc := $(config_mcp_path)/istio.mcp.v1alpha1.pb.html
+mcp_path := mcp/v1alpha1
+mcp_protos := $(shell find $(mcp_path) -type f -name '*.proto' | sort)
+mcp_pb_gos := $(mcp_protos:.proto=.pb.go)
+mcp_pb_pythons := $(patsubst $(mcp_path)/%.proto,$(python_output_path)/$(mcp_path)/%_pb2.py,$(mcp_protos))
+mcp_pb_doc := $(mcp_path)/istio.mcp.v1alpha1.pb.html
 
-generate-mcp-go: $(config_mcp_pb_gos) $(config_mcp_pb_doc)
+$(mcp_pb_gos) $(mcp_pb_doc) $(mcp_pb_pythons): $(mcp_protos)
+	@$(protolock) status
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(mcp_path) $(protoc_gen_python_plugin) $^
 
-$(config_mcp_pb_gos) $(config_mcp_pb_doc): $(config_mcp_protos)
-	## Generate mcp/v1alpha1/*.pb.go + $(config_mcp_pb_doc)
-	@$(docker_lock) status
-	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(config_mcp_path) $^
-
-generate-mcp-python: $(config_mcp_pb_pythons)
-
-$(config_mcp_pb_pythons): $(config_mcp_protos)
-	## Generate python/istio_api/mcp/v1alpha1/*_pb2.py
-	@$(docker_lock) status
-	@$(docker_gen) $(protoc_gen_python_plugin) $^
+generate-mcp: $(mcp_pb_gos) $(mcp_pb_doc) $(mcp_pb_pythons)
 
 clean-mcp:
-	rm -f $(config_mcp_pb_gos)
-	rm -f $(config_mcp_pb_doc)
+	@rm -fr $(mcp_pb_gos) $(mcp_pb_doc) $(mcp_pb_pythons)
 
 #####################
 # mesh/...
@@ -121,26 +110,36 @@ clean-mcp:
 mesh_path := mesh/v1alpha1
 mesh_protos := $(shell find $(mesh_path) -type f -name '*.proto' | sort)
 mesh_pb_gos := $(mesh_protos:.proto=.pb.go)
-mesh_pb_pythons := $(mesh_protos:.proto=_pb2.py)
+mesh_pb_pythons := $(patsubst $(mesh_path)/%.proto,$(python_output_path)/$(mesh_path)/%_pb2.py,$(mesh_protos))
 mesh_pb_doc := $(mesh_path)/istio.mesh.v1alpha1.pb.html
 
-generate-mesh-go: $(mesh_pb_gos) $(mesh_pb_doc)
+$(mesh_pb_gos) $(mesh_pb_doc) $(mesh_pb_pythons): $(mesh_protos)
+	@$(protolock) status
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(mesh_path) $(protoc_gen_python_plugin) $^
 
-$(mesh_pb_gos) $(mesh_pb_doc): $(mesh_protos)
-	## Generate mesh/v1alpha1/*.pb.go + $(mesh_pb_doc)
-	@$(docker_lock) status
-	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(mesh_path) $^
-
-generate-mesh-python: $(mesh_pb_pythons)
-
-$(mesh_pb_pythons): $(mesh_protos)
-	## Generate python/istio_api/mesh/v1alpha1/*_pb2.py
-	@$(docker_lock) status
-	@$(docker_gen) $(protoc_gen_python_plugin) $^
+generate-mesh: $(mesh_pb_gos) $(mesh_pb_doc) $(mesh_pb_pythons)
 
 clean-mesh:
-	rm -f $(mesh_pb_gos)
-	rm -f $(mesh_pb_doc)
+	@rm -fr $(mesh_pb_gos) $(mesh_pb_doc) $(mesh_pb_pythons)
+
+#####################
+# policy/...
+#####################
+
+policy_v1beta1_path := policy/v1beta1
+policy_v1beta1_protos := $(shell find $(policy_v1beta1_path) -maxdepth 1 -type f -name '*.proto' | sort)
+policy_v1beta1_pb_gos := $(policy_v1beta1_protos:.proto=.pb.go)
+policy_v1beta1_pb_pythons := $(patsubst $(policy_v1beta1_path)/%.proto,$(python_output_path)/$(policy_v1beta1_path)/%_pb2.py,$(policy_protos))
+policy_v1beta1_pb_doc := $(policy_v1beta1_path)/istio.policy.v1beta1.pb.html
+
+$(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc) $(policy_v1beta1_pb_pythons): $(policy_v1beta1_protos)
+	@$(protolock) status
+	@$(protoc) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(policy_v1beta1_path) $(protoc_gen_python_plugin) $^
+
+generate-policy: $(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc) $(policy_v1beta1_pb_pythons)
+
+clean-policy:
+	@rm -fr $(policy_v1beta1_pb_gos) policy/v1beta1/fixed_cfg.pb.go $(policy_v1beta1_pb_doc) $(policy_v1beta1_pb_pythons)
 
 #####################
 # mixer/...
@@ -150,109 +149,62 @@ mixer_v1_path := mixer/v1
 mixer_v1_protos :=  $(shell find $(mixer_v1_path) -maxdepth 1 -type f -name '*.proto' | sort)
 mixer_v1_pb_gos := $(mixer_v1_protos:.proto=.pb.go)
 mixer_v1_pb_pythons := $(mixer_v1_protos:.proto=_pb2.py)
+mixer_v1_pb_pythons := $(patsubst $(mixer_v1_path)/%.proto,$(python_output_path)/$(mixer_v1_path)/%_pb2.py,$(mixer_v1_protos))
 mixer_v1_pb_doc := $(mixer_v1_path)/istio.mixer.v1.pb.html
 
 mixer_config_client_path := mixer/v1/config/client
 mixer_config_client_protos := $(shell find $(mixer_config_client_path) -maxdepth 1 -type f -name '*.proto' | sort)
 mixer_config_client_pb_gos := $(mixer_config_client_protos:.proto=.pb.go)
 mixer_config_client_pb_pythons := $(mixer_config_client_protos:.proto=_pb2.py)
+mixer_config_client_pb_pythons := $(patsubst $(mixer_config_client_path)/%.proto,$(python_output_path)/$(mixer_client_config_path)/%_pb2.py,$(mixer_client_config_protos))
 mixer_config_client_pb_doc := $(mixer_config_client_path)/istio.mixer.v1.config.client.pb.html
 
 mixer_adapter_model_v1beta1_path := mixer/adapter/model/v1beta1
 mixer_adapter_model_v1beta1_protos := $(shell find $(mixer_adapter_model_v1beta1_path) -maxdepth 1 -type f -name '*.proto' | sort)
 mixer_adapter_model_v1beta1_pb_gos := $(mixer_adapter_model_v1beta1_protos:.proto=.pb.go)
-mixer_adapter_model_v1beta1_pb_pythons := $(mixer_adapter_model_v1beta1_protos:.proto=_pb2.py)
+mixer_adapter_model_pb_pythons := $(patsubst $(mixer_adapter_model_path)/%.proto,$(python_output_path)/$(mixer_adapter_model_path)/%_pb2.py,$(mixer_adapter_model_protos))
 mixer_adapter_model_v1beta1_pb_doc := $(mixer_adapter_model_v1beta1_path)/istio.mixer.adapter.model.v1beta1.pb.html
 
-policy_v1beta1_path := policy/v1beta1
-policy_v1beta1_protos := $(shell find $(policy_v1beta1_path) -maxdepth 1 -type f -name '*.proto' | sort)
-policy_v1beta1_pb_gos := $(policy_v1beta1_protos:.proto=.pb.go)
-policy_v1beta1_pb_pythons := $(policy_v1beta1_protos:.proto=_pb2.py)
-policy_v1beta1_pb_doc := $(policy_v1beta1_path)/istio.policy.v1beta1.pb.html
+$(mixer_v1_pb_gos) $(mixer_v1_pb_doc) $(mixer_v1_pb_pythons): $(mixer_v1_protos)
+	@$(protolock) status
+	@$(protoc) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_v1_path) $(protoc_gen_python_plugin) $^
 
-generate-mixer-go: \
-	$(mixer_v1_pb_gos) $(mixer_v1_pb_doc) \
-	$(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc) \
-	$(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_doc) \
-	$(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc)
+$(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc)  $(mixer_config_client_pb_pythons): $(mixer_config_client_protos)
+	@$(protolock) status
+	@$(protoc) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_config_client_path) $(protoc_gen_python_plugin) $^
 
-$(mixer_v1_pb_gos) $(mixer_v1_pb_doc): $(mixer_v1_protos)
-	## Generate mixer/v1/*.pb.go + $(mixer_v1_pb_doc)
-	@$(docker_lock) status
-	@$(docker_gen) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_v1_path) $^
+$(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_doc) $(mixer_adapter_model_v1beta1_pb_pythons): $(mixer_adapter_model_v1beta1_protos)
+	@$(protolock) status
+	@$(protoc) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_adapter_model_v1beta1_path) $(protoc_gen_python_plugin)  $^
 
-$(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc): $(mixer_config_client_protos)
-	## Generate mixer/v1/config/client/*.pb.go + $(mixer_config_client_pb_doc)
-	@$(docker_lock) status
-	@$(docker_gen) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_config_client_path) $^
-
-$(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_doc) : $(mixer_adapter_model_v1beta1_protos)
-	## Generate mixer/adapter/model/v1beta1/*.pb.go + $(mixer_adapter_model_v1beta1_pb_doc)
-	@$(docker_lock) status
-	@$(docker_gen) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_adapter_model_v1beta1_path) $^
-
-$(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc) : $(policy_v1beta1_protos)
-	## Generate policy/v1beta1/*.pb.go + $(policy_v1beta1_pb_doc)
-	@$(docker_lock) status
-	@$(docker_gen) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(policy_v1beta1_path) $^
-
-generate-mixer-python: \
-	$(mixer_v1_pb_pythons) \
-	$(mixer_config_client_pb_pythons) \
-	$(mixer_adapter_model_v1beta1_pb_pythons) \
-	$(policy_v1beta1_pb_pythons)
-
-$(mixer_v1_pb_pythons): $(mixer_v1_protos)
-	## Generate python/istio_api/mixer/v1/*_pb2.py
-	@$(docker_lock) status
-	@$(docker_gen) $(protoc_gen_python_plugin) $^
-
-$(mixer_config_client_pb_pythons): $(mixer_config_client_protos)
-	## Generate python/istio_api/mixer/v1/config/client/*_pb2.py
-	@$(docker_lock) status
-	@$(docker_gen) $(protoc_gen_python_plugin) $^
-
-$(mixer_adapter_model_v1beta1_pb_pythons): $(mixer_adapter_model_v1beta1_protos)
-	## Generate python/istio_api/mixer/adapter/model/v1beta1/*_pb2.py
-	@$(docker_lock) status
-	@$(docker_gen) $(protoc_gen_python_plugin) $^
-
-$(policy_v1beta1_pb_pythons): $(policy_v1beta1_protos)
-	## Generate python/istio_api/policy/v1beta1/*_pb2.py
-	@$(docker_lock) status
-	@$(docker_gen) $(protoc_gen_python_plugin) $^
+generate-mixer: \
+	$(mixer_v1_pb_gos) $(mixer_v1_pb_doc) $(mixer_v1_pb_pythons) \
+	$(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc) $(mixer_config_client_pb_pythons) \
+	$(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_doc) $(mixer_adapter_model_v1beta1_pb_pythons)
 
 clean-mixer:
-	rm -f $(mixer_v1_pb_gos) $(mixer_config_client_pb_gos) $(mixer_adapter_model_v1beta1_pb_gos) $(policy_v1beta1_pb_gos) policy/v1beta1/fixed_cfg.pb.go
-	rm -f $(mixer_v1_pb_doc) $(mixer_config_client_pb_doc) $(mixer_adapter_model_v1beta1_pb_doc) $(policy_v1beta1_pb_doc)
+	@rm -fr $(mixer_v1_pb_gos) $(mixer_v1_pb_doc) $(mixer_v1_pb_pythons)
+	@rm -fr $(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc) $(mixer_config_client_pb_pythons)
+	@rm -fr $(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_doc) $(mixer_adapter_model_v1beta1_pb_pythons)
 
 #####################
-# routing/...
+# networking/...
 #####################
 
-routing_v1alpha3_path := networking/v1alpha3
-routing_v1alpha3_protos := $(shell find networking/v1alpha3 -type f -name '*.proto' | sort)
-routing_v1alpha3_pb_gos := $(routing_v1alpha3_protos:.proto=.pb.go)
-routing_v1alpha3_pb_pythons := $(routing_v1alpha3_protos:.proto=_pb2.py)
-routing_v1alpha3_pb_docs := $(routing_v1alpha3_protos:.proto=.pb.html)
+networking_v1alpha3_path := networking/v1alpha3
+networking_v1alpha3_protos := $(shell find networking/v1alpha3 -type f -name '*.proto' | sort)
+networking_v1alpha3_pb_gos := $(networking_v1alpha3_protos:.proto=.pb.go)
+networking_v1alpha3_pb_pythons := $(patsubst $(networking_v1alpha3_path)/%.proto,$(python_output_path)/$(networking_v1alpha3_path)/%_pb2.py,$(networking_protos))
+networking_v1alpha3_pb_docs := $(networking_v1alpha3_protos:.proto=.pb.html)
 
-generate-routing-go: $(routing_v1alpha3_pb_gos) $(routing_v1alpha3_pb_docs)
+$(networking_v1alpha3_pb_gos) $(networking_v1alpha3_pb_docs) $(networking_v1alpha3_pb_pythons): $(networking_v1alpha3_protos)
+	@$(protolock) status
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin_for_networking)$(networking_v1alpha3_path) $(protoc_gen_python_plugin) $^
 
-$(routing_v1alpha3_pb_gos) $(routing_v1alpha3_pb_docs): $(routing_v1alpha3_protos)
-	## Generate networking/v1alpha3/*.pb.go
-	@$(docker_lock) status
-	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin_for_networking)$(routing_v1alpha3_path) $^
+generate-networking: $(networking_v1alpha3_pb_gos) $(networking_v1alpha3_pb_docs) $(networking_v1alpha3_pb_pythons)
 
-generate-routing-python: $(routing_v1alpha3_pb_pythons)
-
-$(routing_v1alpha3_pb_pythons): $(routing_v1alpha3_protos)
-	## Generate python/istio_api/networking/v1alpha3/*_pb2.py
-	@$(docker_lock) status
-	@$(docker_gen) $(protoc_gen_python_plugin) $^
-
-clean-routing:
-	rm -f $(routing_v1alpha3_pb_gos)
-	rm -f $(routing_v1alpha3_pb_docs)
+clean-networking:
+	@rm -fr $(networking_v1alpha3_pb_gos) $(networking_v1alpha3_pb_docs) $(networking_v1alpha3_pb_pythons)
 
 #####################
 # rbac/...
@@ -261,27 +213,17 @@ clean-routing:
 rbac_v1alpha1_path := rbac/v1alpha1
 rbac_v1alpha1_protos := $(shell find $(rbac_v1alpha1_path) -type f -name '*.proto' | sort)
 rbac_v1alpha1_pb_gos := $(rbac_v1alpha1_protos:.proto=.pb.go)
-rbac_v1alpha1_pb_pythons := $(rbac_v1alpha1_protos:.proto=_pb2.py)
+rbac_v1alpha1_pb_pythons := $(patsubst $(rbac_v1alpha1_path)/%.proto,$(python_output_path)/$(rbac_v1alpha1_path)/%_pb2.py,$(rbac_protos))
 rbac_v1alpha1_pb_doc := $(rbac_v1alpha1_path)/istio.rbac.v1alpha1.pb.html
 
-generate-rbac-go: $(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc)
+$(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc)  $(rbac_v1alpha1_pb_pythons): $(rbac_v1alpha1_protos)
+	@$(protolock) status
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(rbac_v1alpha1_path) $(protoc_gen_python_plugin) $^
 
-$(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc): $(rbac_v1alpha1_protos)
-	## Generate rbac/v1alpha1/*.pb.go
-	@$(docker_lock) status
-	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(rbac_v1alpha1_path) $^
-
-generate-rbac-python: $(rbac_v1alpha1_protos)
-
-$(rbac_v1alpha1_pb_pythons): $(rbac_v1alpha1_protos)
-	## Generate python/istio_api/rbac/v1alpha1/*_pb2.py
-	@$(docker_lock) status
-	@$(docker_gen) $(protoc_gen_python_plugin) $^
+generate-rbac: $(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc) $(rbac_v1alpha1_protos)
 
 clean-rbac:
-	rm -f $(rbac_v1alpha1_pb_gos)
-	rm -f $(rbac_v1alpha1_pb_doc)
-
+	@rm -fr $(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc) $(rbac_v1alpha1_pb_pythons)
 
 #####################
 # authentication/...
@@ -290,26 +232,17 @@ clean-rbac:
 authn_v1alpha1_path := authentication/v1alpha1
 authn_v1alpha1_protos := $(shell find $(authn_v1alpha1_path) -type f -name '*.proto' | sort)
 authn_v1alpha1_pb_gos := $(authn_v1alpha1_protos:.proto=.pb.go)
-authn_v1alpha1_pb_pythons := $(authn_v1alpha1_protos:.proto=_pb2.py)
+authn_v1alpha1_pb_pythons := $(patsubst $(authn_v1alpha1_path)/%.proto,$(python_output_path)/$(authn_v1alpha1_path)/%_pb2.py,$(authn_protos))
 authn_v1alpha1_pb_doc := $(authn_v1alpha1_path)/istio.authentication.v1alpha1.pb.html
 
-generate-authn-go: $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc)
+$(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc) $(authn_v1alpha1_pb_pythons): $(authn_v1alpha1_protos)
+	@$(protolock) status
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(authn_v1alpha1_path) $(protoc_gen_python_plugin) $^
 
-$(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc): $(authn_v1alpha1_protos)
-	## Generate authentication/v1alpha1/*.pb.go
-	@$(docker_lock) status
-	@$(docker_gen) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(authn_v1alpha1_path) $^
-
-generate-authn-python: $(authn_v1alpha1_pb_pythons)
-
-$(authn_v1alpha1_pb_pythons): $(authn_v1alpha1_protos)
-	## Generate python/istio_api/authentication/v1alpha1/*_pb2.py
-	@$(docker_lock) status
-	@$(docker_gen) $(protoc_gen_python_plugin) $^
+generate-authn: $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc) $(authn_v1alpha1_pb_pythons)
 
 clean-authn:
-	rm -f $(authn_v1alpha1_pb_gos)
-	rm -f $(authn_v1alpha1_pb_doc)
+	@rm -fr $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc) $(authn_v1alpha1_pb_pythons)
 
 #####################
 # envoy/...
@@ -318,26 +251,20 @@ clean-authn:
 envoy_path := envoy
 envoy_protos := $(shell find $(envoy_path) -type f -name '*.proto' | sort)
 envoy_pb_gos := $(envoy_protos:.proto=.pb.go)
-envoy_pb_pythons := $(envoy_protos:.proto=_pb2.py)
+envoy_pb_pythons := $(patsubst $(envoy_path)/%.proto,$(python_output_path)/$(envoy_path)/%_pb2.py,$(envoy_protos))
 
-generate-envoy-go: $(envoy_pb_gos) $(envoy_pb_doc)
-
-# Envoy APIs is internal APIs, documents is not required.
 $(envoy_pb_gos): %.pb.go : %.proto
-	## Generate envoy/*/*.pb.go
-	@$(docker_lock) status
-	@$(docker_gen) $(gogofast_plugin) $<
+	@$(protolock) status
+	@$(protoc) $(gogofast_plugin) $<
 
-generate-envoy-python: $(envoy_pb_pythons)
-
-# Envoy APIs is internal APIs, documents is not required.
 $(envoy_pb_pythons): $(envoy_protos)
-	## Generate envoy/*/*_pb2.py
-	@$(docker_lock) status
-	@$(docker_gen) $(protoc_gen_python_plugin) $^
+	@$(protolock) status
+	@$(protoc) $(protoc_gen_python_plugin) $^
+
+generate-envoy: $(envoy_pb_gos) $(envoy_pb_pythons)
 
 clean-envoy:
-	@rm -f $(envoy_pb_gos)
+	@rm -fr $(envoy_pb_gos) $(envoy_pb_pythons)
 
 #####################
 # annotation/...
@@ -353,23 +280,23 @@ $(annotations_pb_go) $(annotations_pb_doc): $(annotations_path)/annotations.yaml
 generate-annotations: $(annotations_pb_go) $(annotations_pb_doc)
 
 clean-annotations:
-	@rm -f $(annotations_pb_go) $(annotations_pb_doc)
+	@rm -fr $(annotations_pb_go) $(annotations_pb_doc)
 
 #####################
 # Protolock
 #####################
 
 proto-commit:
-	@$(docker_lock) commit
+	@$(protolock) commit
 
 proto-commit-force:
-	@$(docker_lock) commit --force
+	@$(protolock) commit --force
 
 proto-status:
-	@$(docker_lock) status
+	@$(protolock) status
 
 release-lock-status:
-	@$(docker_lock_release)
+	@$(protolock_release)
 
 #####################
 # Lint
@@ -377,24 +304,22 @@ release-lock-status:
 
 lint:
 	@scripts/check_license.sh
-	@$(docker_tool) lint --protoc-bin-path=/usr/bin/protoc --protoc-wkt-path=/protobuf
+	@$(prototool) lint --protoc-bin-path=/usr/bin/protoc --protoc-wkt-path=/protobuf
+	@$(htmlproofer) . --url-swap "istio.io:preliminary.istio.io" --assume-extension --check-html --check-external-hash --check-opengraph --timeframe 2d --storage-dir $(repo_dir)/.htmlproofer --url-ignore "/localhost/"
 
 #####################
 # Cleanup
 #####################
 
-clean-python:
-	rm -rf python/istio_api/*
-
 clean: \
 	clean-mcp \
 	clean-mesh \
 	clean-mixer \
-	clean-routing \
+	clean-networking \
 	clean-rbac \
 	clean-authn \
 	clean-envoy \
-	clean-python \
+	clean-policy \
 	clean-annotations \
 
 include Makefile.common.mk
