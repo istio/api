@@ -9,7 +9,6 @@ import (
 	types "github.com/gogo/protobuf/types"
 	io "io"
 	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -64,7 +63,7 @@ func (m *HttpUri) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_HttpUri.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -201,7 +200,7 @@ func (m *DataSource) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_DataSource.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -455,7 +454,7 @@ func (m *JwtRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_JwtRule.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -660,7 +659,7 @@ func (m *RemoteJwks) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_RemoteJwks.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -720,7 +719,7 @@ func (m *JwtHeader) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_JwtHeader.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -780,7 +779,7 @@ func (m *JwtAuthentication) XXX_Marshal(b []byte, deterministic bool) ([]byte, e
 		return xxx_messageInfo_JwtAuthentication.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -876,7 +875,7 @@ var fileDescriptor_7c36de3e06e3b641 = []byte{
 func (m *HttpUri) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -884,67 +883,51 @@ func (m *HttpUri) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *HttpUri) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HttpUri) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if m.Timeout != nil {
-		{
-			size, err := m.Timeout.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintConfig(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
+	if len(m.Uri) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintConfig(dAtA, i, uint64(len(m.Uri)))
+		i += copy(dAtA[i:], m.Uri)
 	}
 	if m.HttpUpstreamType != nil {
-		{
-			size := m.HttpUpstreamType.Size()
-			i -= size
-			if _, err := m.HttpUpstreamType.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
+		nn1, err := m.HttpUpstreamType.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
+		i += nn1
 	}
-	if len(m.Uri) > 0 {
-		i -= len(m.Uri)
-		copy(dAtA[i:], m.Uri)
-		i = encodeVarintConfig(dAtA, i, uint64(len(m.Uri)))
-		i--
-		dAtA[i] = 0xa
+	if m.Timeout != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintConfig(dAtA, i, uint64(m.Timeout.Size()))
+		n2, err := m.Timeout.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *HttpUri_Cluster) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *HttpUri_Cluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.Cluster)
-	copy(dAtA[i:], m.Cluster)
-	i = encodeVarintConfig(dAtA, i, uint64(len(m.Cluster)))
-	i--
+	i := 0
 	dAtA[i] = 0x12
-	return len(dAtA) - i, nil
+	i++
+	i = encodeVarintConfig(dAtA, i, uint64(len(m.Cluster)))
+	i += copy(dAtA[i:], m.Cluster)
+	return i, nil
 }
 func (m *DataSource) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -952,76 +935,53 @@ func (m *DataSource) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *DataSource) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DataSource) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
 	if m.Specifier != nil {
-		{
-			size := m.Specifier.Size()
-			i -= size
-			if _, err := m.Specifier.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
+		nn3, err := m.Specifier.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
+		i += nn3
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *DataSource_Filename) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *DataSource_Filename) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.Filename)
-	copy(dAtA[i:], m.Filename)
-	i = encodeVarintConfig(dAtA, i, uint64(len(m.Filename)))
-	i--
+	i := 0
 	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	i++
+	i = encodeVarintConfig(dAtA, i, uint64(len(m.Filename)))
+	i += copy(dAtA[i:], m.Filename)
+	return i, nil
 }
 func (m *DataSource_InlineBytes) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *DataSource_InlineBytes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	i := 0
 	if m.InlineBytes != nil {
-		i -= len(m.InlineBytes)
-		copy(dAtA[i:], m.InlineBytes)
-		i = encodeVarintConfig(dAtA, i, uint64(len(m.InlineBytes)))
-		i--
 		dAtA[i] = 0x12
+		i++
+		i = encodeVarintConfig(dAtA, i, uint64(len(m.InlineBytes)))
+		i += copy(dAtA[i:], m.InlineBytes)
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 func (m *DataSource_InlineString) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *DataSource_InlineString) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.InlineString)
-	copy(dAtA[i:], m.InlineString)
-	i = encodeVarintConfig(dAtA, i, uint64(len(m.InlineString)))
-	i--
+	i := 0
 	dAtA[i] = 0x1a
-	return len(dAtA) - i, nil
+	i++
+	i = encodeVarintConfig(dAtA, i, uint64(len(m.InlineString)))
+	i += copy(dAtA[i:], m.InlineString)
+	return i, nil
 }
 func (m *JwtRule) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1029,131 +989,119 @@ func (m *JwtRule) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *JwtRule) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *JwtRule) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
+	if len(m.Issuer) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintConfig(dAtA, i, uint64(len(m.Issuer)))
+		i += copy(dAtA[i:], m.Issuer)
 	}
-	if len(m.ForwardPayloadHeader) > 0 {
-		i -= len(m.ForwardPayloadHeader)
-		copy(dAtA[i:], m.ForwardPayloadHeader)
-		i = encodeVarintConfig(dAtA, i, uint64(len(m.ForwardPayloadHeader)))
-		i--
-		dAtA[i] = 0x42
-	}
-	if len(m.FromParams) > 0 {
-		for iNdEx := len(m.FromParams) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.FromParams[iNdEx])
-			copy(dAtA[i:], m.FromParams[iNdEx])
-			i = encodeVarintConfig(dAtA, i, uint64(len(m.FromParams[iNdEx])))
-			i--
-			dAtA[i] = 0x3a
-		}
-	}
-	if len(m.FromHeaders) > 0 {
-		for iNdEx := len(m.FromHeaders) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.FromHeaders[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintConfig(dAtA, i, uint64(size))
+	if len(m.Audiences) > 0 {
+		for _, s := range m.Audiences {
+			dAtA[i] = 0x12
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
 			}
-			i--
-			dAtA[i] = 0x32
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
 		}
+	}
+	if m.JwksSourceSpecifier != nil {
+		nn4, err := m.JwksSourceSpecifier.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn4
 	}
 	if m.Forward {
-		i--
+		dAtA[i] = 0x28
+		i++
 		if m.Forward {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i--
-		dAtA[i] = 0x28
+		i++
 	}
-	if m.JwksSourceSpecifier != nil {
-		{
-			size := m.JwksSourceSpecifier.Size()
-			i -= size
-			if _, err := m.JwksSourceSpecifier.MarshalTo(dAtA[i:]); err != nil {
+	if len(m.FromHeaders) > 0 {
+		for _, msg := range m.FromHeaders {
+			dAtA[i] = 0x32
+			i++
+			i = encodeVarintConfig(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
 				return 0, err
 			}
+			i += n
 		}
 	}
-	if len(m.Audiences) > 0 {
-		for iNdEx := len(m.Audiences) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.Audiences[iNdEx])
-			copy(dAtA[i:], m.Audiences[iNdEx])
-			i = encodeVarintConfig(dAtA, i, uint64(len(m.Audiences[iNdEx])))
-			i--
-			dAtA[i] = 0x12
+	if len(m.FromParams) > 0 {
+		for _, s := range m.FromParams {
+			dAtA[i] = 0x3a
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
 		}
 	}
-	if len(m.Issuer) > 0 {
-		i -= len(m.Issuer)
-		copy(dAtA[i:], m.Issuer)
-		i = encodeVarintConfig(dAtA, i, uint64(len(m.Issuer)))
-		i--
-		dAtA[i] = 0xa
+	if len(m.ForwardPayloadHeader) > 0 {
+		dAtA[i] = 0x42
+		i++
+		i = encodeVarintConfig(dAtA, i, uint64(len(m.ForwardPayloadHeader)))
+		i += copy(dAtA[i:], m.ForwardPayloadHeader)
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *JwtRule_RemoteJwks) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *JwtRule_RemoteJwks) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	i := 0
 	if m.RemoteJwks != nil {
-		{
-			size, err := m.RemoteJwks.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintConfig(dAtA, i, uint64(size))
-		}
-		i--
 		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintConfig(dAtA, i, uint64(m.RemoteJwks.Size()))
+		n5, err := m.RemoteJwks.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n5
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 func (m *JwtRule_LocalJwks) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *JwtRule_LocalJwks) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	i := 0
 	if m.LocalJwks != nil {
-		{
-			size, err := m.LocalJwks.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintConfig(dAtA, i, uint64(size))
-		}
-		i--
 		dAtA[i] = 0x22
+		i++
+		i = encodeVarintConfig(dAtA, i, uint64(m.LocalJwks.Size()))
+		n6, err := m.LocalJwks.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n6
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 func (m *RemoteJwks) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1161,50 +1109,40 @@ func (m *RemoteJwks) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *RemoteJwks) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *RemoteJwks) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
+	if m.HttpUri != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintConfig(dAtA, i, uint64(m.HttpUri.Size()))
+		n7, err := m.HttpUri.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n7
 	}
 	if m.CacheDuration != nil {
-		{
-			size, err := m.CacheDuration.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintConfig(dAtA, i, uint64(size))
-		}
-		i--
 		dAtA[i] = 0x12
-	}
-	if m.HttpUri != nil {
-		{
-			size, err := m.HttpUri.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintConfig(dAtA, i, uint64(size))
+		i++
+		i = encodeVarintConfig(dAtA, i, uint64(m.CacheDuration.Size()))
+		n8, err := m.CacheDuration.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0xa
+		i += n8
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *JwtHeader) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1212,40 +1150,32 @@ func (m *JwtHeader) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *JwtHeader) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *JwtHeader) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
+	if len(m.Name) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintConfig(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
 	}
 	if len(m.ValuePrefix) > 0 {
-		i -= len(m.ValuePrefix)
-		copy(dAtA[i:], m.ValuePrefix)
-		i = encodeVarintConfig(dAtA, i, uint64(len(m.ValuePrefix)))
-		i--
 		dAtA[i] = 0x12
+		i++
+		i = encodeVarintConfig(dAtA, i, uint64(len(m.ValuePrefix)))
+		i += copy(dAtA[i:], m.ValuePrefix)
 	}
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintConfig(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 
 func (m *JwtAuthentication) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1253,56 +1183,46 @@ func (m *JwtAuthentication) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *JwtAuthentication) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *JwtAuthentication) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
+	if len(m.Rules) > 0 {
+		for _, msg := range m.Rules {
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintConfig(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
 	}
 	if m.AllowMissingOrFailed {
-		i--
+		dAtA[i] = 0x10
+		i++
 		if m.AllowMissingOrFailed {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i--
-		dAtA[i] = 0x10
+		i++
 	}
-	if len(m.Rules) > 0 {
-		for iNdEx := len(m.Rules) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Rules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintConfig(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 
 func encodeVarintConfig(dAtA []byte, offset int, v uint64) int {
-	offset -= sovConfig(v)
-	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return base
+	return offset + 1
 }
 func (m *HttpUri) Size() (n int) {
 	if m == nil {
@@ -1514,7 +1434,14 @@ func (m *JwtAuthentication) Size() (n int) {
 }
 
 func sovConfig(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
+	for {
+		n++
+		x >>= 7
+		if x == 0 {
+			break
+		}
+	}
+	return n
 }
 func sozConfig(x uint64) (n int) {
 	return sovConfig(uint64((x << 1) ^ uint64((int64(x) >> 63))))

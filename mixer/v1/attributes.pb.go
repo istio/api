@@ -13,7 +13,6 @@ import (
 	types "github.com/gogo/protobuf/types"
 	io "io"
 	math "math"
-	math_bits "math/bits"
 	reflect "reflect"
 	strings "strings"
 	time "time"
@@ -81,7 +80,7 @@ func (m *Attributes) XXX_Unmarshal(b []byte) error {
 }
 func (m *Attributes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
+	n, err := m.MarshalTo(b)
 	if err != nil {
 		return nil, err
 	}
@@ -125,7 +124,7 @@ func (m *Attributes_AttributeValue) XXX_Unmarshal(b []byte) error {
 }
 func (m *Attributes_AttributeValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
+	n, err := m.MarshalTo(b)
 	if err != nil {
 		return nil, err
 	}
@@ -431,7 +430,7 @@ func (m *Attributes_StringMap) XXX_Unmarshal(b []byte) error {
 }
 func (m *Attributes_StringMap) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
+	n, err := m.MarshalTo(b)
 	if err != nil {
 		return nil, err
 	}
@@ -487,7 +486,7 @@ func (m *CompressedAttributes) XXX_Unmarshal(b []byte) error {
 }
 func (m *CompressedAttributes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
+	n, err := m.MarshalTo(b)
 	if err != nil {
 		return nil, err
 	}
@@ -522,7 +521,7 @@ func (m *StringMap) XXX_Unmarshal(b []byte) error {
 }
 func (m *StringMap) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
+	n, err := m.MarshalTo(b)
 	if err != nil {
 		return nil, err
 	}
@@ -619,7 +618,7 @@ var fileDescriptor_6504964367320bd3 = []byte{
 func (m *Attributes) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -627,53 +626,50 @@ func (m *Attributes) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Attributes) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Attributes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
 	if len(m.Attributes) > 0 {
 		keysForAttributes := make([]string, 0, len(m.Attributes))
-		for k := range m.Attributes {
+		for k, _ := range m.Attributes {
 			keysForAttributes = append(keysForAttributes, string(k))
 		}
 		github_com_gogo_protobuf_sortkeys.Strings(keysForAttributes)
-		for iNdEx := len(keysForAttributes) - 1; iNdEx >= 0; iNdEx-- {
-			v := m.Attributes[string(keysForAttributes[iNdEx])]
-			baseI := i
+		for _, k := range keysForAttributes {
+			dAtA[i] = 0xa
+			i++
+			v := m.Attributes[string(k)]
+			msgSize := 0
 			if v != nil {
-				{
-					size, err := v.MarshalToSizedBuffer(dAtA[:i])
-					if err != nil {
-						return 0, err
-					}
-					i -= size
-					i = encodeVarintAttributes(dAtA, i, uint64(size))
-				}
-				i--
-				dAtA[i] = 0x12
+				msgSize = v.Size()
+				msgSize += 1 + sovAttributes(uint64(msgSize))
 			}
-			i -= len(keysForAttributes[iNdEx])
-			copy(dAtA[i:], keysForAttributes[iNdEx])
-			i = encodeVarintAttributes(dAtA, i, uint64(len(keysForAttributes[iNdEx])))
-			i--
+			mapSize := 1 + len(k) + sovAttributes(uint64(len(k))) + msgSize
+			i = encodeVarintAttributes(dAtA, i, uint64(mapSize))
 			dAtA[i] = 0xa
-			i = encodeVarintAttributes(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0xa
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64(len(k)))
+			i += copy(dAtA[i:], k)
+			if v != nil {
+				dAtA[i] = 0x12
+				i++
+				i = encodeVarintAttributes(dAtA, i, uint64(v.Size()))
+				n1, err := v.MarshalTo(dAtA[i:])
+				if err != nil {
+					return 0, err
+				}
+				i += n1
+			}
 		}
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 
 func (m *Attributes_AttributeValue) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -681,158 +677,111 @@ func (m *Attributes_AttributeValue) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Attributes_AttributeValue) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Attributes_AttributeValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
 	if m.Value != nil {
-		{
-			size := m.Value.Size()
-			i -= size
-			if _, err := m.Value.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
+		nn2, err := m.Value.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
+		i += nn2
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 
 func (m *Attributes_AttributeValue_StringValue) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *Attributes_AttributeValue_StringValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.StringValue)
-	copy(dAtA[i:], m.StringValue)
-	i = encodeVarintAttributes(dAtA, i, uint64(len(m.StringValue)))
-	i--
+	i := 0
 	dAtA[i] = 0x12
-	return len(dAtA) - i, nil
+	i++
+	i = encodeVarintAttributes(dAtA, i, uint64(len(m.StringValue)))
+	i += copy(dAtA[i:], m.StringValue)
+	return i, nil
 }
 func (m *Attributes_AttributeValue_Int64Value) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *Attributes_AttributeValue_Int64Value) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i = encodeVarintAttributes(dAtA, i, uint64(m.Int64Value))
-	i--
+	i := 0
 	dAtA[i] = 0x18
-	return len(dAtA) - i, nil
+	i++
+	i = encodeVarintAttributes(dAtA, i, uint64(m.Int64Value))
+	return i, nil
 }
 func (m *Attributes_AttributeValue_DoubleValue) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *Attributes_AttributeValue_DoubleValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= 8
-	encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.DoubleValue))))
-	i--
+	i := 0
 	dAtA[i] = 0x21
-	return len(dAtA) - i, nil
+	i++
+	encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.DoubleValue))))
+	i += 8
+	return i, nil
 }
 func (m *Attributes_AttributeValue_BoolValue) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *Attributes_AttributeValue_BoolValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i--
+	i := 0
+	dAtA[i] = 0x28
+	i++
 	if m.BoolValue {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i--
-	dAtA[i] = 0x28
-	return len(dAtA) - i, nil
+	i++
+	return i, nil
 }
 func (m *Attributes_AttributeValue_BytesValue) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *Attributes_AttributeValue_BytesValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	i := 0
 	if m.BytesValue != nil {
-		i -= len(m.BytesValue)
-		copy(dAtA[i:], m.BytesValue)
-		i = encodeVarintAttributes(dAtA, i, uint64(len(m.BytesValue)))
-		i--
 		dAtA[i] = 0x32
+		i++
+		i = encodeVarintAttributes(dAtA, i, uint64(len(m.BytesValue)))
+		i += copy(dAtA[i:], m.BytesValue)
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 func (m *Attributes_AttributeValue_TimestampValue) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *Attributes_AttributeValue_TimestampValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	i := 0
 	if m.TimestampValue != nil {
-		{
-			size, err := m.TimestampValue.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintAttributes(dAtA, i, uint64(size))
-		}
-		i--
 		dAtA[i] = 0x3a
+		i++
+		i = encodeVarintAttributes(dAtA, i, uint64(m.TimestampValue.Size()))
+		n3, err := m.TimestampValue.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 func (m *Attributes_AttributeValue_DurationValue) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *Attributes_AttributeValue_DurationValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	i := 0
 	if m.DurationValue != nil {
-		{
-			size, err := m.DurationValue.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintAttributes(dAtA, i, uint64(size))
-		}
-		i--
 		dAtA[i] = 0x42
+		i++
+		i = encodeVarintAttributes(dAtA, i, uint64(m.DurationValue.Size()))
+		n4, err := m.DurationValue.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n4
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 func (m *Attributes_AttributeValue_StringMapValue) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *Attributes_AttributeValue_StringMapValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	i := 0
 	if m.StringMapValue != nil {
-		{
-			size, err := m.StringMapValue.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintAttributes(dAtA, i, uint64(size))
-		}
-		i--
 		dAtA[i] = 0x4a
+		i++
+		i = encodeVarintAttributes(dAtA, i, uint64(m.StringMapValue.Size()))
+		n5, err := m.StringMapValue.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n5
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 func (m *Attributes_StringMap) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -840,46 +789,39 @@ func (m *Attributes_StringMap) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Attributes_StringMap) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Attributes_StringMap) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
 	if len(m.Entries) > 0 {
 		keysForEntries := make([]string, 0, len(m.Entries))
-		for k := range m.Entries {
+		for k, _ := range m.Entries {
 			keysForEntries = append(keysForEntries, string(k))
 		}
 		github_com_gogo_protobuf_sortkeys.Strings(keysForEntries)
-		for iNdEx := len(keysForEntries) - 1; iNdEx >= 0; iNdEx-- {
-			v := m.Entries[string(keysForEntries[iNdEx])]
-			baseI := i
-			i -= len(v)
-			copy(dAtA[i:], v)
-			i = encodeVarintAttributes(dAtA, i, uint64(len(v)))
-			i--
+		for _, k := range keysForEntries {
+			dAtA[i] = 0xa
+			i++
+			v := m.Entries[string(k)]
+			mapSize := 1 + len(k) + sovAttributes(uint64(len(k))) + 1 + len(v) + sovAttributes(uint64(len(v)))
+			i = encodeVarintAttributes(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64(len(k)))
+			i += copy(dAtA[i:], k)
 			dAtA[i] = 0x12
-			i -= len(keysForEntries[iNdEx])
-			copy(dAtA[i:], keysForEntries[iNdEx])
-			i = encodeVarintAttributes(dAtA, i, uint64(len(keysForEntries[iNdEx])))
-			i--
-			dAtA[i] = 0xa
-			i = encodeVarintAttributes(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0xa
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64(len(v)))
+			i += copy(dAtA[i:], v)
 		}
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 
 func (m *CompressedAttributes) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -887,218 +829,235 @@ func (m *CompressedAttributes) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CompressedAttributes) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CompressedAttributes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if len(m.StringMaps) > 0 {
-		keysForStringMaps := make([]int32, 0, len(m.StringMaps))
-		for k := range m.StringMaps {
-			keysForStringMaps = append(keysForStringMaps, int32(k))
-		}
-		github_com_gogo_protobuf_sortkeys.Int32s(keysForStringMaps)
-		for iNdEx := len(keysForStringMaps) - 1; iNdEx >= 0; iNdEx-- {
-			v := m.StringMaps[int32(keysForStringMaps[iNdEx])]
-			baseI := i
-			{
-				size, err := (&v).MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintAttributes(dAtA, i, uint64(size))
+	if len(m.Words) > 0 {
+		for _, s := range m.Words {
+			dAtA[i] = 0xa
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
 			}
-			i--
-			dAtA[i] = 0x12
-			i = encodeVarintAttributes(dAtA, i, uint64((uint32(keysForStringMaps[iNdEx])<<1)^uint32((keysForStringMaps[iNdEx]>>31))))
-			i--
-			dAtA[i] = 0x8
-			i = encodeVarintAttributes(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0x4a
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
 		}
 	}
-	if len(m.Bytes) > 0 {
-		keysForBytes := make([]int32, 0, len(m.Bytes))
-		for k := range m.Bytes {
-			keysForBytes = append(keysForBytes, int32(k))
+	if len(m.Strings) > 0 {
+		keysForStrings := make([]int32, 0, len(m.Strings))
+		for k, _ := range m.Strings {
+			keysForStrings = append(keysForStrings, int32(k))
 		}
-		github_com_gogo_protobuf_sortkeys.Int32s(keysForBytes)
-		for iNdEx := len(keysForBytes) - 1; iNdEx >= 0; iNdEx-- {
-			v := m.Bytes[int32(keysForBytes[iNdEx])]
-			baseI := i
-			if len(v) > 0 {
-				i -= len(v)
-				copy(dAtA[i:], v)
-				i = encodeVarintAttributes(dAtA, i, uint64(len(v)))
-				i--
-				dAtA[i] = 0x12
-			}
-			i = encodeVarintAttributes(dAtA, i, uint64((uint32(keysForBytes[iNdEx])<<1)^uint32((keysForBytes[iNdEx]>>31))))
-			i--
+		github_com_gogo_protobuf_sortkeys.Int32s(keysForStrings)
+		for _, k := range keysForStrings {
+			dAtA[i] = 0x12
+			i++
+			v := m.Strings[int32(k)]
+			mapSize := 1 + sozAttributes(uint64(k)) + 1 + sozAttributes(uint64(v))
+			i = encodeVarintAttributes(dAtA, i, uint64(mapSize))
 			dAtA[i] = 0x8
-			i = encodeVarintAttributes(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0x42
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64((uint32(k)<<1)^uint32((k>>31))))
+			dAtA[i] = 0x10
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64((uint32(v)<<1)^uint32((v>>31))))
 		}
 	}
-	if len(m.Durations) > 0 {
-		keysForDurations := make([]int32, 0, len(m.Durations))
-		for k := range m.Durations {
-			keysForDurations = append(keysForDurations, int32(k))
+	if len(m.Int64S) > 0 {
+		keysForInt64S := make([]int32, 0, len(m.Int64S))
+		for k, _ := range m.Int64S {
+			keysForInt64S = append(keysForInt64S, int32(k))
 		}
-		github_com_gogo_protobuf_sortkeys.Int32s(keysForDurations)
-		for iNdEx := len(keysForDurations) - 1; iNdEx >= 0; iNdEx-- {
-			v := m.Durations[int32(keysForDurations[iNdEx])]
-			baseI := i
-			n6, err6 := github_com_gogo_protobuf_types.StdDurationMarshalTo((*(&v)), dAtA[i-github_com_gogo_protobuf_types.SizeOfStdDuration((*(&v))):])
-			if err6 != nil {
-				return 0, err6
-			}
-			i -= n6
-			i = encodeVarintAttributes(dAtA, i, uint64(n6))
-			i--
-			dAtA[i] = 0x12
-			i = encodeVarintAttributes(dAtA, i, uint64((uint32(keysForDurations[iNdEx])<<1)^uint32((keysForDurations[iNdEx]>>31))))
-			i--
+		github_com_gogo_protobuf_sortkeys.Int32s(keysForInt64S)
+		for _, k := range keysForInt64S {
+			dAtA[i] = 0x1a
+			i++
+			v := m.Int64S[int32(k)]
+			mapSize := 1 + sozAttributes(uint64(k)) + 1 + sovAttributes(uint64(v))
+			i = encodeVarintAttributes(dAtA, i, uint64(mapSize))
 			dAtA[i] = 0x8
-			i = encodeVarintAttributes(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0x3a
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64((uint32(k)<<1)^uint32((k>>31))))
+			dAtA[i] = 0x10
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64(v))
 		}
 	}
-	if len(m.Timestamps) > 0 {
-		keysForTimestamps := make([]int32, 0, len(m.Timestamps))
-		for k := range m.Timestamps {
-			keysForTimestamps = append(keysForTimestamps, int32(k))
+	if len(m.Doubles) > 0 {
+		keysForDoubles := make([]int32, 0, len(m.Doubles))
+		for k, _ := range m.Doubles {
+			keysForDoubles = append(keysForDoubles, int32(k))
 		}
-		github_com_gogo_protobuf_sortkeys.Int32s(keysForTimestamps)
-		for iNdEx := len(keysForTimestamps) - 1; iNdEx >= 0; iNdEx-- {
-			v := m.Timestamps[int32(keysForTimestamps[iNdEx])]
-			baseI := i
-			n7, err7 := github_com_gogo_protobuf_types.StdTimeMarshalTo((*(&v)), dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime((*(&v))):])
-			if err7 != nil {
-				return 0, err7
-			}
-			i -= n7
-			i = encodeVarintAttributes(dAtA, i, uint64(n7))
-			i--
-			dAtA[i] = 0x12
-			i = encodeVarintAttributes(dAtA, i, uint64((uint32(keysForTimestamps[iNdEx])<<1)^uint32((keysForTimestamps[iNdEx]>>31))))
-			i--
+		github_com_gogo_protobuf_sortkeys.Int32s(keysForDoubles)
+		for _, k := range keysForDoubles {
+			dAtA[i] = 0x22
+			i++
+			v := m.Doubles[int32(k)]
+			mapSize := 1 + sozAttributes(uint64(k)) + 1 + 8
+			i = encodeVarintAttributes(dAtA, i, uint64(mapSize))
 			dAtA[i] = 0x8
-			i = encodeVarintAttributes(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0x32
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64((uint32(k)<<1)^uint32((k>>31))))
+			dAtA[i] = 0x11
+			i++
+			encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(v))))
+			i += 8
 		}
 	}
 	if len(m.Bools) > 0 {
 		keysForBools := make([]int32, 0, len(m.Bools))
-		for k := range m.Bools {
+		for k, _ := range m.Bools {
 			keysForBools = append(keysForBools, int32(k))
 		}
 		github_com_gogo_protobuf_sortkeys.Int32s(keysForBools)
-		for iNdEx := len(keysForBools) - 1; iNdEx >= 0; iNdEx-- {
-			v := m.Bools[int32(keysForBools[iNdEx])]
-			baseI := i
-			i--
+		for _, k := range keysForBools {
+			dAtA[i] = 0x2a
+			i++
+			v := m.Bools[int32(k)]
+			mapSize := 1 + sozAttributes(uint64(k)) + 1 + 1
+			i = encodeVarintAttributes(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0x8
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64((uint32(k)<<1)^uint32((k>>31))))
+			dAtA[i] = 0x10
+			i++
 			if v {
 				dAtA[i] = 1
 			} else {
 				dAtA[i] = 0
 			}
-			i--
-			dAtA[i] = 0x10
-			i = encodeVarintAttributes(dAtA, i, uint64((uint32(keysForBools[iNdEx])<<1)^uint32((keysForBools[iNdEx]>>31))))
-			i--
-			dAtA[i] = 0x8
-			i = encodeVarintAttributes(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0x2a
+			i++
 		}
 	}
-	if len(m.Doubles) > 0 {
-		keysForDoubles := make([]int32, 0, len(m.Doubles))
-		for k := range m.Doubles {
-			keysForDoubles = append(keysForDoubles, int32(k))
+	if len(m.Timestamps) > 0 {
+		keysForTimestamps := make([]int32, 0, len(m.Timestamps))
+		for k, _ := range m.Timestamps {
+			keysForTimestamps = append(keysForTimestamps, int32(k))
 		}
-		github_com_gogo_protobuf_sortkeys.Int32s(keysForDoubles)
-		for iNdEx := len(keysForDoubles) - 1; iNdEx >= 0; iNdEx-- {
-			v := m.Doubles[int32(keysForDoubles[iNdEx])]
-			baseI := i
-			i -= 8
-			encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(v))))
-			i--
-			dAtA[i] = 0x11
-			i = encodeVarintAttributes(dAtA, i, uint64((uint32(keysForDoubles[iNdEx])<<1)^uint32((keysForDoubles[iNdEx]>>31))))
-			i--
+		github_com_gogo_protobuf_sortkeys.Int32s(keysForTimestamps)
+		for _, k := range keysForTimestamps {
+			dAtA[i] = 0x32
+			i++
+			v := m.Timestamps[int32(k)]
+			msgSize := 0
+			if (&v) != nil {
+				msgSize = github_com_gogo_protobuf_types.SizeOfStdTime(*(&v))
+				msgSize += 1 + sovAttributes(uint64(msgSize))
+			}
+			mapSize := 1 + sozAttributes(uint64(k)) + msgSize
+			i = encodeVarintAttributes(dAtA, i, uint64(mapSize))
 			dAtA[i] = 0x8
-			i = encodeVarintAttributes(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0x22
-		}
-	}
-	if len(m.Int64S) > 0 {
-		keysForInt64S := make([]int32, 0, len(m.Int64S))
-		for k := range m.Int64S {
-			keysForInt64S = append(keysForInt64S, int32(k))
-		}
-		github_com_gogo_protobuf_sortkeys.Int32s(keysForInt64S)
-		for iNdEx := len(keysForInt64S) - 1; iNdEx >= 0; iNdEx-- {
-			v := m.Int64S[int32(keysForInt64S[iNdEx])]
-			baseI := i
-			i = encodeVarintAttributes(dAtA, i, uint64(v))
-			i--
-			dAtA[i] = 0x10
-			i = encodeVarintAttributes(dAtA, i, uint64((uint32(keysForInt64S[iNdEx])<<1)^uint32((keysForInt64S[iNdEx]>>31))))
-			i--
-			dAtA[i] = 0x8
-			i = encodeVarintAttributes(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0x1a
-		}
-	}
-	if len(m.Strings) > 0 {
-		keysForStrings := make([]int32, 0, len(m.Strings))
-		for k := range m.Strings {
-			keysForStrings = append(keysForStrings, int32(k))
-		}
-		github_com_gogo_protobuf_sortkeys.Int32s(keysForStrings)
-		for iNdEx := len(keysForStrings) - 1; iNdEx >= 0; iNdEx-- {
-			v := m.Strings[int32(keysForStrings[iNdEx])]
-			baseI := i
-			i = encodeVarintAttributes(dAtA, i, uint64((uint32(v)<<1)^uint32((v>>31))))
-			i--
-			dAtA[i] = 0x10
-			i = encodeVarintAttributes(dAtA, i, uint64((uint32(keysForStrings[iNdEx])<<1)^uint32((keysForStrings[iNdEx]>>31))))
-			i--
-			dAtA[i] = 0x8
-			i = encodeVarintAttributes(dAtA, i, uint64(baseI-i))
-			i--
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64((uint32(k)<<1)^uint32((k>>31))))
 			dAtA[i] = 0x12
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64(github_com_gogo_protobuf_types.SizeOfStdTime(*(&v))))
+			n6, err := github_com_gogo_protobuf_types.StdTimeMarshalTo(*(&v), dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n6
 		}
 	}
-	if len(m.Words) > 0 {
-		for iNdEx := len(m.Words) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.Words[iNdEx])
-			copy(dAtA[i:], m.Words[iNdEx])
-			i = encodeVarintAttributes(dAtA, i, uint64(len(m.Words[iNdEx])))
-			i--
-			dAtA[i] = 0xa
+	if len(m.Durations) > 0 {
+		keysForDurations := make([]int32, 0, len(m.Durations))
+		for k, _ := range m.Durations {
+			keysForDurations = append(keysForDurations, int32(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Int32s(keysForDurations)
+		for _, k := range keysForDurations {
+			dAtA[i] = 0x3a
+			i++
+			v := m.Durations[int32(k)]
+			msgSize := 0
+			if (&v) != nil {
+				msgSize = github_com_gogo_protobuf_types.SizeOfStdDuration(*(&v))
+				msgSize += 1 + sovAttributes(uint64(msgSize))
+			}
+			mapSize := 1 + sozAttributes(uint64(k)) + msgSize
+			i = encodeVarintAttributes(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0x8
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64((uint32(k)<<1)^uint32((k>>31))))
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64(github_com_gogo_protobuf_types.SizeOfStdDuration(*(&v))))
+			n7, err := github_com_gogo_protobuf_types.StdDurationMarshalTo(*(&v), dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n7
 		}
 	}
-	return len(dAtA) - i, nil
+	if len(m.Bytes) > 0 {
+		keysForBytes := make([]int32, 0, len(m.Bytes))
+		for k, _ := range m.Bytes {
+			keysForBytes = append(keysForBytes, int32(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Int32s(keysForBytes)
+		for _, k := range keysForBytes {
+			dAtA[i] = 0x42
+			i++
+			v := m.Bytes[int32(k)]
+			byteSize := 0
+			if len(v) > 0 {
+				byteSize = 1 + len(v) + sovAttributes(uint64(len(v)))
+			}
+			mapSize := 1 + sozAttributes(uint64(k)) + byteSize
+			i = encodeVarintAttributes(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0x8
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64((uint32(k)<<1)^uint32((k>>31))))
+			if len(v) > 0 {
+				dAtA[i] = 0x12
+				i++
+				i = encodeVarintAttributes(dAtA, i, uint64(len(v)))
+				i += copy(dAtA[i:], v)
+			}
+		}
+	}
+	if len(m.StringMaps) > 0 {
+		keysForStringMaps := make([]int32, 0, len(m.StringMaps))
+		for k, _ := range m.StringMaps {
+			keysForStringMaps = append(keysForStringMaps, int32(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Int32s(keysForStringMaps)
+		for _, k := range keysForStringMaps {
+			dAtA[i] = 0x4a
+			i++
+			v := m.StringMaps[int32(k)]
+			msgSize := 0
+			if (&v) != nil {
+				msgSize = (&v).Size()
+				msgSize += 1 + sovAttributes(uint64(msgSize))
+			}
+			mapSize := 1 + sozAttributes(uint64(k)) + msgSize
+			i = encodeVarintAttributes(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0x8
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64((uint32(k)<<1)^uint32((k>>31))))
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64((&v).Size()))
+			n8, err := (&v).MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n8
+		}
+	}
+	return i, nil
 }
 
 func (m *StringMap) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1106,48 +1065,41 @@ func (m *StringMap) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *StringMap) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *StringMap) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
 	if len(m.Entries) > 0 {
 		keysForEntries := make([]int32, 0, len(m.Entries))
-		for k := range m.Entries {
+		for k, _ := range m.Entries {
 			keysForEntries = append(keysForEntries, int32(k))
 		}
 		github_com_gogo_protobuf_sortkeys.Int32s(keysForEntries)
-		for iNdEx := len(keysForEntries) - 1; iNdEx >= 0; iNdEx-- {
-			v := m.Entries[int32(keysForEntries[iNdEx])]
-			baseI := i
-			i = encodeVarintAttributes(dAtA, i, uint64((uint32(v)<<1)^uint32((v>>31))))
-			i--
-			dAtA[i] = 0x10
-			i = encodeVarintAttributes(dAtA, i, uint64((uint32(keysForEntries[iNdEx])<<1)^uint32((keysForEntries[iNdEx]>>31))))
-			i--
-			dAtA[i] = 0x8
-			i = encodeVarintAttributes(dAtA, i, uint64(baseI-i))
-			i--
+		for _, k := range keysForEntries {
 			dAtA[i] = 0xa
+			i++
+			v := m.Entries[int32(k)]
+			mapSize := 1 + sozAttributes(uint64(k)) + 1 + sozAttributes(uint64(v))
+			i = encodeVarintAttributes(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0x8
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64((uint32(k)<<1)^uint32((k>>31))))
+			dAtA[i] = 0x10
+			i++
+			i = encodeVarintAttributes(dAtA, i, uint64((uint32(v)<<1)^uint32((v>>31))))
 		}
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 
 func encodeVarintAttributes(dAtA []byte, offset int, v uint64) int {
-	offset -= sovAttributes(v)
-	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return base
+	return offset + 1
 }
 func (m *Attributes) Size() (n int) {
 	if m == nil {
@@ -1389,7 +1341,14 @@ func (m *StringMap) Size() (n int) {
 }
 
 func sovAttributes(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
+	for {
+		n++
+		x >>= 7
+		if x == 0 {
+			break
+		}
+	}
+	return n
 }
 func sozAttributes(x uint64) (n int) {
 	return sovAttributes(uint64((x << 1) ^ uint64((int64(x) >> 63))))

@@ -82,7 +82,6 @@ import (
 	types "github.com/gogo/protobuf/types"
 	io "io"
 	math "math"
-	math_bits "math/bits"
 	time "time"
 )
 
@@ -278,7 +277,7 @@ func (m *DestinationRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, err
 		return xxx_messageInfo_DestinationRule.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -361,7 +360,7 @@ func (m *TrafficPolicy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error
 		return xxx_messageInfo_TrafficPolicy.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -448,7 +447,7 @@ func (m *TrafficPolicy_PortTrafficPolicy) XXX_Marshal(b []byte, deterministic bo
 		return xxx_messageInfo_TrafficPolicy_PortTrafficPolicy.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -569,7 +568,7 @@ func (m *Subset) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Subset.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -674,7 +673,7 @@ func (m *LoadBalancerSettings) XXX_Marshal(b []byte, deterministic bool) ([]byte
 		return xxx_messageInfo_LoadBalancerSettings.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -838,7 +837,7 @@ func (m *LoadBalancerSettings_ConsistentHashLB) XXX_Marshal(b []byte, determinis
 		return xxx_messageInfo_LoadBalancerSettings_ConsistentHashLB.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -1036,7 +1035,7 @@ func (m *LoadBalancerSettings_ConsistentHashLB_HTTPCookie) XXX_Marshal(b []byte,
 		return xxx_messageInfo_LoadBalancerSettings_ConsistentHashLB_HTTPCookie.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -1125,7 +1124,7 @@ func (m *ConnectionPoolSettings) XXX_Marshal(b []byte, deterministic bool) ([]by
 		return xxx_messageInfo_ConnectionPoolSettings.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -1185,7 +1184,7 @@ func (m *ConnectionPoolSettings_TCPSettings) XXX_Marshal(b []byte, deterministic
 		return xxx_messageInfo_ConnectionPoolSettings_TCPSettings.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -1262,7 +1261,7 @@ func (m *ConnectionPoolSettings_TCPSettings_TcpKeepalive) XXX_Marshal(b []byte, 
 		return xxx_messageInfo_ConnectionPoolSettings_TCPSettings_TcpKeepalive.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -1340,7 +1339,7 @@ func (m *ConnectionPoolSettings_HTTPSettings) XXX_Marshal(b []byte, deterministi
 		return xxx_messageInfo_ConnectionPoolSettings_HTTPSettings.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -1482,7 +1481,7 @@ func (m *OutlierDetection) XXX_Marshal(b []byte, deterministic bool) ([]byte, er
 		return xxx_messageInfo_OutlierDetection.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -1631,7 +1630,7 @@ func (m *TLSSettings) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) 
 		return xxx_messageInfo_TLSSettings.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -1816,7 +1815,7 @@ var fileDescriptor_12899beb695152c8 = []byte{
 func (m *DestinationRule) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1824,68 +1823,63 @@ func (m *DestinationRule) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *DestinationRule) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DestinationRule) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if len(m.ExportTo) > 0 {
-		for iNdEx := len(m.ExportTo) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.ExportTo[iNdEx])
-			copy(dAtA[i:], m.ExportTo[iNdEx])
-			i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.ExportTo[iNdEx])))
-			i--
-			dAtA[i] = 0x22
-		}
-	}
-	if len(m.Subsets) > 0 {
-		for iNdEx := len(m.Subsets) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Subsets[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1a
-		}
+	if len(m.Host) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.Host)))
+		i += copy(dAtA[i:], m.Host)
 	}
 	if m.TrafficPolicy != nil {
-		{
-			size, err := m.TrafficPolicy.MarshalToSizedBuffer(dAtA[:i])
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.TrafficPolicy.Size()))
+		n1, err := m.TrafficPolicy.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n1
+	}
+	if len(m.Subsets) > 0 {
+		for _, msg := range m.Subsets {
+			dAtA[i] = 0x1a
+			i++
+			i = encodeVarintDestinationRule(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
 			if err != nil {
 				return 0, err
 			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
+			i += n
 		}
-		i--
-		dAtA[i] = 0x12
 	}
-	if len(m.Host) > 0 {
-		i -= len(m.Host)
-		copy(dAtA[i:], m.Host)
-		i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.Host)))
-		i--
-		dAtA[i] = 0xa
+	if len(m.ExportTo) > 0 {
+		for _, s := range m.ExportTo {
+			dAtA[i] = 0x22
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *TrafficPolicy) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1893,88 +1887,72 @@ func (m *TrafficPolicy) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *TrafficPolicy) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *TrafficPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if len(m.PortLevelSettings) > 0 {
-		for iNdEx := len(m.PortLevelSettings) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.PortLevelSettings[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x2a
+	if m.LoadBalancer != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.LoadBalancer.Size()))
+		n2, err := m.LoadBalancer.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
-	}
-	if m.Tls != nil {
-		{
-			size, err := m.Tls.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.OutlierDetection != nil {
-		{
-			size, err := m.OutlierDetection.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
+		i += n2
 	}
 	if m.ConnectionPool != nil {
-		{
-			size, err := m.ConnectionPool.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-		}
-		i--
 		dAtA[i] = 0x12
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.ConnectionPool.Size()))
+		n3, err := m.ConnectionPool.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
 	}
-	if m.LoadBalancer != nil {
-		{
-			size, err := m.LoadBalancer.MarshalToSizedBuffer(dAtA[:i])
+	if m.OutlierDetection != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.OutlierDetection.Size()))
+		n4, err := m.OutlierDetection.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n4
+	}
+	if m.Tls != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.Tls.Size()))
+		n5, err := m.Tls.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n5
+	}
+	if len(m.PortLevelSettings) > 0 {
+		for _, msg := range m.PortLevelSettings {
+			dAtA[i] = 0x2a
+			i++
+			i = encodeVarintDestinationRule(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
 			if err != nil {
 				return 0, err
 			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
+			i += n
 		}
-		i--
-		dAtA[i] = 0xa
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *TrafficPolicy_PortTrafficPolicy) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1982,86 +1960,70 @@ func (m *TrafficPolicy_PortTrafficPolicy) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *TrafficPolicy_PortTrafficPolicy) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *TrafficPolicy_PortTrafficPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if m.Tls != nil {
-		{
-			size, err := m.Tls.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
+	if m.Port != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.Port.Size()))
+		n6, err := m.Port.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.OutlierDetection != nil {
-		{
-			size, err := m.OutlierDetection.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.ConnectionPool != nil {
-		{
-			size, err := m.ConnectionPool.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
+		i += n6
 	}
 	if m.LoadBalancer != nil {
-		{
-			size, err := m.LoadBalancer.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-		}
-		i--
 		dAtA[i] = 0x12
-	}
-	if m.Port != nil {
-		{
-			size, err := m.Port.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.LoadBalancer.Size()))
+		n7, err := m.LoadBalancer.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0xa
+		i += n7
 	}
-	return len(dAtA) - i, nil
+	if m.ConnectionPool != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.ConnectionPool.Size()))
+		n8, err := m.ConnectionPool.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n8
+	}
+	if m.OutlierDetection != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.OutlierDetection.Size()))
+		n9, err := m.OutlierDetection.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n9
+	}
+	if m.Tls != nil {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.Tls.Size()))
+		n10, err := m.Tls.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n10
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *Subset) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -2069,64 +2031,53 @@ func (m *Subset) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Subset) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Subset) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if m.TrafficPolicy != nil {
-		{
-			size, err := m.TrafficPolicy.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
+	if len(m.Name) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
 	}
 	if len(m.Labels) > 0 {
-		for k := range m.Labels {
+		for k, _ := range m.Labels {
+			dAtA[i] = 0x12
+			i++
 			v := m.Labels[k]
-			baseI := i
-			i -= len(v)
-			copy(dAtA[i:], v)
-			i = encodeVarintDestinationRule(dAtA, i, uint64(len(v)))
-			i--
-			dAtA[i] = 0x12
-			i -= len(k)
-			copy(dAtA[i:], k)
-			i = encodeVarintDestinationRule(dAtA, i, uint64(len(k)))
-			i--
+			mapSize := 1 + len(k) + sovDestinationRule(uint64(len(k))) + 1 + len(v) + sovDestinationRule(uint64(len(v)))
+			i = encodeVarintDestinationRule(dAtA, i, uint64(mapSize))
 			dAtA[i] = 0xa
-			i = encodeVarintDestinationRule(dAtA, i, uint64(baseI-i))
-			i--
+			i++
+			i = encodeVarintDestinationRule(dAtA, i, uint64(len(k)))
+			i += copy(dAtA[i:], k)
 			dAtA[i] = 0x12
+			i++
+			i = encodeVarintDestinationRule(dAtA, i, uint64(len(v)))
+			i += copy(dAtA[i:], v)
 		}
 	}
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
+	if m.TrafficPolicy != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.TrafficPolicy.Size()))
+		n11, err := m.TrafficPolicy.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n11
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *LoadBalancerSettings) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -2134,66 +2085,48 @@ func (m *LoadBalancerSettings) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *LoadBalancerSettings) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *LoadBalancerSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
 	if m.LbPolicy != nil {
-		{
-			size := m.LbPolicy.Size()
-			i -= size
-			if _, err := m.LbPolicy.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
+		nn12, err := m.LbPolicy.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
+		i += nn12
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *LoadBalancerSettings_Simple) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *LoadBalancerSettings_Simple) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i = encodeVarintDestinationRule(dAtA, i, uint64(m.Simple))
-	i--
+	i := 0
 	dAtA[i] = 0x8
-	return len(dAtA) - i, nil
+	i++
+	i = encodeVarintDestinationRule(dAtA, i, uint64(m.Simple))
+	return i, nil
 }
 func (m *LoadBalancerSettings_ConsistentHash) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *LoadBalancerSettings_ConsistentHash) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	i := 0
 	if m.ConsistentHash != nil {
-		{
-			size, err := m.ConsistentHash.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-		}
-		i--
 		dAtA[i] = 0x12
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.ConsistentHash.Size()))
+		n13, err := m.ConsistentHash.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n13
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 func (m *LoadBalancerSettings_ConsistentHashLB) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -2201,89 +2134,66 @@ func (m *LoadBalancerSettings_ConsistentHashLB) Marshal() (dAtA []byte, err erro
 }
 
 func (m *LoadBalancerSettings_ConsistentHashLB) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *LoadBalancerSettings_ConsistentHashLB) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
+	if m.HashKey != nil {
+		nn14, err := m.HashKey.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn14
 	}
 	if m.MinimumRingSize != 0 {
-		i = encodeVarintDestinationRule(dAtA, i, uint64(m.MinimumRingSize))
-		i--
 		dAtA[i] = 0x20
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.MinimumRingSize))
 	}
-	if m.HashKey != nil {
-		{
-			size := m.HashKey.Size()
-			i -= size
-			if _, err := m.HashKey.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 
 func (m *LoadBalancerSettings_ConsistentHashLB_HttpHeaderName) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *LoadBalancerSettings_ConsistentHashLB_HttpHeaderName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.HttpHeaderName)
-	copy(dAtA[i:], m.HttpHeaderName)
-	i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.HttpHeaderName)))
-	i--
+	i := 0
 	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	i++
+	i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.HttpHeaderName)))
+	i += copy(dAtA[i:], m.HttpHeaderName)
+	return i, nil
 }
 func (m *LoadBalancerSettings_ConsistentHashLB_HttpCookie) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *LoadBalancerSettings_ConsistentHashLB_HttpCookie) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	i := 0
 	if m.HttpCookie != nil {
-		{
-			size, err := m.HttpCookie.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-		}
-		i--
 		dAtA[i] = 0x12
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.HttpCookie.Size()))
+		n15, err := m.HttpCookie.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n15
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 func (m *LoadBalancerSettings_ConsistentHashLB_UseSourceIp) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *LoadBalancerSettings_ConsistentHashLB_UseSourceIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i--
+	i := 0
+	dAtA[i] = 0x18
+	i++
 	if m.UseSourceIp {
 		dAtA[i] = 1
 	} else {
 		dAtA[i] = 0
 	}
-	i--
-	dAtA[i] = 0x18
-	return len(dAtA) - i, nil
+	i++
+	return i, nil
 }
 func (m *LoadBalancerSettings_ConsistentHashLB_HTTPCookie) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -2291,50 +2201,42 @@ func (m *LoadBalancerSettings_ConsistentHashLB_HTTPCookie) Marshal() (dAtA []byt
 }
 
 func (m *LoadBalancerSettings_ConsistentHashLB_HTTPCookie) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *LoadBalancerSettings_ConsistentHashLB_HTTPCookie) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if m.Ttl != nil {
-		n14, err14 := github_com_gogo_protobuf_types.StdDurationMarshalTo(*m.Ttl, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdDuration(*m.Ttl):])
-		if err14 != nil {
-			return 0, err14
-		}
-		i -= n14
-		i = encodeVarintDestinationRule(dAtA, i, uint64(n14))
-		i--
-		dAtA[i] = 0x1a
+	if len(m.Name) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
 	}
 	if len(m.Path) > 0 {
-		i -= len(m.Path)
-		copy(dAtA[i:], m.Path)
-		i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.Path)))
-		i--
 		dAtA[i] = 0x12
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.Path)))
+		i += copy(dAtA[i:], m.Path)
 	}
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
+	if m.Ttl != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(github_com_gogo_protobuf_types.SizeOfStdDuration(*m.Ttl)))
+		n16, err := github_com_gogo_protobuf_types.StdDurationMarshalTo(*m.Ttl, dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n16
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *ConnectionPoolSettings) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -2342,50 +2244,40 @@ func (m *ConnectionPoolSettings) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ConnectionPoolSettings) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ConnectionPoolSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
+	if m.Tcp != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.Tcp.Size()))
+		n17, err := m.Tcp.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n17
 	}
 	if m.Http != nil {
-		{
-			size, err := m.Http.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-		}
-		i--
 		dAtA[i] = 0x12
-	}
-	if m.Tcp != nil {
-		{
-			size, err := m.Tcp.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.Http.Size()))
+		n18, err := m.Http.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0xa
+		i += n18
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *ConnectionPoolSettings_TCPSettings) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -2393,55 +2285,45 @@ func (m *ConnectionPoolSettings_TCPSettings) Marshal() (dAtA []byte, err error) 
 }
 
 func (m *ConnectionPoolSettings_TCPSettings) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ConnectionPoolSettings_TCPSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if m.TcpKeepalive != nil {
-		{
-			size, err := m.TcpKeepalive.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
+	if m.MaxConnections != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.MaxConnections))
 	}
 	if m.ConnectTimeout != nil {
-		{
-			size, err := m.ConnectTimeout.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-		}
-		i--
 		dAtA[i] = 0x12
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.ConnectTimeout.Size()))
+		n19, err := m.ConnectTimeout.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n19
 	}
-	if m.MaxConnections != 0 {
-		i = encodeVarintDestinationRule(dAtA, i, uint64(m.MaxConnections))
-		i--
-		dAtA[i] = 0x8
+	if m.TcpKeepalive != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.TcpKeepalive.Size()))
+		n20, err := m.TcpKeepalive.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n20
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *ConnectionPoolSettings_TCPSettings_TcpKeepalive) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -2449,55 +2331,45 @@ func (m *ConnectionPoolSettings_TCPSettings_TcpKeepalive) Marshal() (dAtA []byte
 }
 
 func (m *ConnectionPoolSettings_TCPSettings_TcpKeepalive) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ConnectionPoolSettings_TCPSettings_TcpKeepalive) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if m.Interval != nil {
-		{
-			size, err := m.Interval.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
+	if m.Probes != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.Probes))
 	}
 	if m.Time != nil {
-		{
-			size, err := m.Time.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-		}
-		i--
 		dAtA[i] = 0x12
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.Time.Size()))
+		n21, err := m.Time.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n21
 	}
-	if m.Probes != 0 {
-		i = encodeVarintDestinationRule(dAtA, i, uint64(m.Probes))
-		i--
-		dAtA[i] = 0x8
+	if m.Interval != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.Interval.Size()))
+		n22, err := m.Interval.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n22
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *ConnectionPoolSettings_HTTPSettings) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -2505,63 +2377,55 @@ func (m *ConnectionPoolSettings_HTTPSettings) Marshal() (dAtA []byte, err error)
 }
 
 func (m *ConnectionPoolSettings_HTTPSettings) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ConnectionPoolSettings_HTTPSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if m.H2UpgradePolicy != 0 {
-		i = encodeVarintDestinationRule(dAtA, i, uint64(m.H2UpgradePolicy))
-		i--
-		dAtA[i] = 0x30
-	}
-	if m.IdleTimeout != nil {
-		{
-			size, err := m.IdleTimeout.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.MaxRetries != 0 {
-		i = encodeVarintDestinationRule(dAtA, i, uint64(m.MaxRetries))
-		i--
-		dAtA[i] = 0x20
-	}
-	if m.MaxRequestsPerConnection != 0 {
-		i = encodeVarintDestinationRule(dAtA, i, uint64(m.MaxRequestsPerConnection))
-		i--
-		dAtA[i] = 0x18
+	if m.Http1MaxPendingRequests != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.Http1MaxPendingRequests))
 	}
 	if m.Http2MaxRequests != 0 {
-		i = encodeVarintDestinationRule(dAtA, i, uint64(m.Http2MaxRequests))
-		i--
 		dAtA[i] = 0x10
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.Http2MaxRequests))
 	}
-	if m.Http1MaxPendingRequests != 0 {
-		i = encodeVarintDestinationRule(dAtA, i, uint64(m.Http1MaxPendingRequests))
-		i--
-		dAtA[i] = 0x8
+	if m.MaxRequestsPerConnection != 0 {
+		dAtA[i] = 0x18
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.MaxRequestsPerConnection))
 	}
-	return len(dAtA) - i, nil
+	if m.MaxRetries != 0 {
+		dAtA[i] = 0x20
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.MaxRetries))
+	}
+	if m.IdleTimeout != nil {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.IdleTimeout.Size()))
+		n23, err := m.IdleTimeout.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n23
+	}
+	if m.H2UpgradePolicy != 0 {
+		dAtA[i] = 0x30
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.H2UpgradePolicy))
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *OutlierDetection) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -2569,65 +2433,55 @@ func (m *OutlierDetection) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *OutlierDetection) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *OutlierDetection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if m.MinHealthPercent != 0 {
-		i = encodeVarintDestinationRule(dAtA, i, uint64(m.MinHealthPercent))
-		i--
-		dAtA[i] = 0x28
-	}
-	if m.MaxEjectionPercent != 0 {
-		i = encodeVarintDestinationRule(dAtA, i, uint64(m.MaxEjectionPercent))
-		i--
-		dAtA[i] = 0x20
-	}
-	if m.BaseEjectionTime != nil {
-		{
-			size, err := m.BaseEjectionTime.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
+	if m.ConsecutiveErrors != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.ConsecutiveErrors))
 	}
 	if m.Interval != nil {
-		{
-			size, err := m.Interval.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintDestinationRule(dAtA, i, uint64(size))
-		}
-		i--
 		dAtA[i] = 0x12
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.Interval.Size()))
+		n24, err := m.Interval.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n24
 	}
-	if m.ConsecutiveErrors != 0 {
-		i = encodeVarintDestinationRule(dAtA, i, uint64(m.ConsecutiveErrors))
-		i--
-		dAtA[i] = 0x8
+	if m.BaseEjectionTime != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.BaseEjectionTime.Size()))
+		n25, err := m.BaseEjectionTime.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n25
 	}
-	return len(dAtA) - i, nil
+	if m.MaxEjectionPercent != 0 {
+		dAtA[i] = 0x20
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.MaxEjectionPercent))
+	}
+	if m.MinHealthPercent != 0 {
+		dAtA[i] = 0x28
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.MinHealthPercent))
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *TLSSettings) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -2635,74 +2489,68 @@ func (m *TLSSettings) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *TLSSettings) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *TLSSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if len(m.Sni) > 0 {
-		i -= len(m.Sni)
-		copy(dAtA[i:], m.Sni)
-		i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.Sni)))
-		i--
-		dAtA[i] = 0x32
-	}
-	if len(m.SubjectAltNames) > 0 {
-		for iNdEx := len(m.SubjectAltNames) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.SubjectAltNames[iNdEx])
-			copy(dAtA[i:], m.SubjectAltNames[iNdEx])
-			i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.SubjectAltNames[iNdEx])))
-			i--
-			dAtA[i] = 0x2a
-		}
-	}
-	if len(m.CaCertificates) > 0 {
-		i -= len(m.CaCertificates)
-		copy(dAtA[i:], m.CaCertificates)
-		i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.CaCertificates)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.PrivateKey) > 0 {
-		i -= len(m.PrivateKey)
-		copy(dAtA[i:], m.PrivateKey)
-		i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.PrivateKey)))
-		i--
-		dAtA[i] = 0x1a
+	if m.Mode != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(m.Mode))
 	}
 	if len(m.ClientCertificate) > 0 {
-		i -= len(m.ClientCertificate)
-		copy(dAtA[i:], m.ClientCertificate)
-		i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.ClientCertificate)))
-		i--
 		dAtA[i] = 0x12
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.ClientCertificate)))
+		i += copy(dAtA[i:], m.ClientCertificate)
 	}
-	if m.Mode != 0 {
-		i = encodeVarintDestinationRule(dAtA, i, uint64(m.Mode))
-		i--
-		dAtA[i] = 0x8
+	if len(m.PrivateKey) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.PrivateKey)))
+		i += copy(dAtA[i:], m.PrivateKey)
 	}
-	return len(dAtA) - i, nil
+	if len(m.CaCertificates) > 0 {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.CaCertificates)))
+		i += copy(dAtA[i:], m.CaCertificates)
+	}
+	if len(m.SubjectAltNames) > 0 {
+		for _, s := range m.SubjectAltNames {
+			dAtA[i] = 0x2a
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	if len(m.Sni) > 0 {
+		dAtA[i] = 0x32
+		i++
+		i = encodeVarintDestinationRule(dAtA, i, uint64(len(m.Sni)))
+		i += copy(dAtA[i:], m.Sni)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func encodeVarintDestinationRule(dAtA []byte, offset int, v uint64) int {
-	offset -= sovDestinationRule(v)
-	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return base
+	return offset + 1
 }
 func (m *DestinationRule) Size() (n int) {
 	if m == nil {
@@ -3103,7 +2951,14 @@ func (m *TLSSettings) Size() (n int) {
 }
 
 func sovDestinationRule(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
+	for {
+		n++
+		x >>= 7
+		if x == 0 {
+			break
+		}
+	}
+	return n
 }
 func sozDestinationRule(x uint64) (n int) {
 	return sovDestinationRule(uint64((x << 1) ^ uint64((int64(x) >> 63))))
