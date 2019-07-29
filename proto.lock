@@ -3936,6 +3936,21 @@
                 ]
               },
               {
+                "name": "ProxyVersion",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "ge",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "eq",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
                 "name": "ClusterMatch",
                 "fields": [
                   {
@@ -4099,16 +4114,21 @@
                   },
                   {
                     "id": 2,
+                    "name": "proxy_version",
+                    "type": "ProxyVersion"
+                  },
+                  {
+                    "id": 3,
                     "name": "listener",
                     "type": "ListenerMatch"
                   },
                   {
-                    "id": 3,
+                    "id": 4,
                     "name": "route_configuration",
                     "type": "RouteConfigurationMatch"
                   },
                   {
-                    "id": 4,
+                    "id": 5,
                     "name": "cluster",
                     "type": "ClusterMatch"
                   }
