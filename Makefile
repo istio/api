@@ -6,7 +6,7 @@ all: generate
 
 apitools_img := gcr.io/istio-testing/api-build-tools:2019-07-29
 websitetools_img := gcr.io/istio-testing/website-tools:2019-07-25
-
+cue_img := gcr.io/istio-testing/cue:2019-07-23
 pwd := $(shell pwd)
 mount_dir := /src
 repo_dir := istio.io/api
@@ -23,6 +23,8 @@ prototool = $(run) prototool
 annotations_prep = $(run) annotations_prep
 
 htmlproofer = docker run --user $(uid) -v /etc/passwd:/etc/passwd:ro --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(websitetools_img) htmlproofer
+
+cue = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(mount_dir) $(cue_img)
 
 ########################
 # protoc_gen_gogo*
@@ -82,7 +84,8 @@ generate: \
 	generate-authn \
 	generate-envoy \
 	generate-policy \
-	generate-annotations
+	generate-annotations \
+	generate-openapi-schema
 
 #####################
 # mcp/...
@@ -92,6 +95,7 @@ mcp_v1alpha1_path := mcp/v1alpha1
 mcp_v1alpha1_protos := $(wildcard $(mcp_v1alpha1_path)/*.proto)
 mcp_v1alpha1_pb_gos := $(mcp_v1alpha1_protos:.proto=.pb.go)
 mcp_v1alpha1_pb_pythons := $(patsubst $(mcp_v1alpha1_path)/%.proto,$(python_output_path)/$(mcp_v1alpha1_path)/%_pb2.py,$(mcp_v1alpha1_protos))
+config_mcp_openapi := $(config_mcp_path)/istio.mcp.v1alpha1.json
 
 $(mcp_v1alpha1_pb_gos) $(mcp_v1alpha1_pb_pythons): $(mcp_v1alpha1_protos)
 	@$(protolock) status
@@ -100,7 +104,7 @@ $(mcp_v1alpha1_pb_gos) $(mcp_v1alpha1_pb_pythons): $(mcp_v1alpha1_protos)
 generate-mcp: $(mcp_v1alpha1_pb_gos) $(mcp_v1alpha1_pb_doc) $(mcp_v1alpha1_pb_pythons)
 
 clean-mcp:
-	@rm -fr $(mcp_v1alpha1_pb_gos) $(mcp_v1alpha1_pb_pythons)
+	@rm -fr $(mcp_v1alpha1_pb_gos) $(mcp_v1alpha1_pb_pythons) $(config_mcp_openapi)
 
 #####################
 # mesh/...
@@ -111,6 +115,7 @@ mesh_v1alpha1_protos := $(wildcard $(mesh_v1alpha1_path)/*.proto)
 mesh_v1alpha1_pb_gos := $(mesh_v1alpha1_protos:.proto=.pb.go)
 mesh_v1alpha1_pb_pythons := $(patsubst $(mesh_v1alpha1_path)/%.proto,$(python_output_path)/$(mesh_v1alpha1_path)/%_pb2.py,$(mesh_v1alpha1_protos))
 mesh_v1alpha1_pb_doc := $(mesh_v1alpha1_path)/istio.mesh.v1alpha1.pb.html
+mesh_openapi := $(mesh_path)/istio.mesh.v1alpha1.json
 
 $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons): $(mesh_v1alpha1_protos)
 	@$(protolock) status
@@ -119,7 +124,7 @@ $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons): $(m
 generate-mesh: $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons)
 
 clean-mesh:
-	@rm -fr $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons)
+	@rm -fr $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons) $(mesh_openapi)
 
 #####################
 # policy/...
@@ -130,6 +135,7 @@ policy_v1beta1_protos := $(wildcard $(policy_v1beta1_path)/*.proto)
 policy_v1beta1_pb_gos := $(policy_v1beta1_protos:.proto=.pb.go)
 policy_v1beta1_pb_pythons := $(patsubst $(policy_v1beta1_path)/%.proto,$(python_output_path)/$(policy_v1beta1_path)/%_pb2.py,$(policy_v1beta1_protos))
 policy_v1beta1_pb_doc := $(policy_v1beta1_path)/istio.policy.v1beta1.pb.html
+policy_v1beta1_openapi := $(policy_v1beta1_path)/istio.policy.v1beta1.json
 
 $(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc) $(policy_v1beta1_pb_pythons): $(policy_v1beta1_protos)
 	@$(protolock) status
@@ -138,7 +144,7 @@ $(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc) $(policy_v1beta1_pb_pythons): 
 generate-policy: $(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc) $(policy_v1beta1_pb_pythons)
 
 clean-policy:
-	@rm -fr $(policy_v1beta1_pb_gos) policy/v1beta1/fixed_cfg.pb.go $(policy_v1beta1_pb_doc) $(policy_v1beta1_pb_pythons)
+	@rm -fr $(policy_v1beta1_pb_gos) policy/v1beta1/fixed_cfg.pb.go $(policy_v1beta1_pb_doc) $(policy_v1beta1_pb_pythons) $(policy_v1beta1_openapi)
 
 #####################
 # mixer/...
@@ -148,17 +154,20 @@ mixer_v1_path := mixer/v1
 mixer_v1_protos :=  $(wildcard $(mixer_v1_path)/*.proto)
 mixer_v1_pb_gos := $(mixer_v1_protos:.proto=.pb.go)
 mixer_v1_pb_pythons := $(patsubst $(mixer_v1_path)/%.proto,$(python_output_path)/$(mixer_v1_path)/%_pb2.py,$(mixer_v1_protos))
+mixer_v1_openapi := $(mixer_v1_path)/istio.mixer.v1.json
 
 mixer_config_client_path := mixer/v1/config/client
 mixer_config_client_protos := $(wildcard $(mixer_config_client_path)/*.proto)
 mixer_config_client_pb_gos := $(mixer_config_client_protos:.proto=.pb.go)
 mixer_config_client_pb_pythons := $(patsubst $(mixer_config_client_path)/%.proto,$(python_output_path)/$(mixer_client_config_path)/%_pb2.py,$(mixer_client_config_protos))
 mixer_config_client_pb_doc := $(mixer_config_client_path)/istio.mixer.v1.config.client.pb.html
+mixer_config_client_openapi := $(mixer_config_client_path)/istio.mixer.v1.config.client.json
 
 mixer_adapter_model_v1beta1_path := mixer/adapter/model/v1beta1
 mixer_adapter_model_v1beta1_protos := $(wildcard $(mixer_adapter_model_v1beta1_path)/*.proto)
 mixer_adapter_model_v1beta1_pb_gos := $(mixer_adapter_model_v1beta1_protos:.proto=.pb.go)
 mixer_adapter_model_pb_pythons := $(patsubst $(mixer_adapter_model_path)/%.proto,$(python_output_path)/$(mixer_adapter_model_path)/%_pb2.py,$(mixer_adapter_model_protos))
+mixer_adapter_model_v1beta1_openapi := $(mixer_adapter_model_v1beta1_path)/istio.mixer.adapter.model.v1beta1.json
 
 $(mixer_v1_pb_gos) $(mixer_v1_pb_pythons): $(mixer_v1_protos)
 	@$(protolock) status
@@ -178,9 +187,9 @@ generate-mixer: \
 	$(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_pythons)
 
 clean-mixer:
-	@rm -fr $(mixer_v1_pb_gos) $(mixer_v1_pb_pythons)
-	@rm -fr $(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc) $(mixer_config_client_pb_pythons)
-	@rm -fr $(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_pythons)
+	@rm -fr $(mixer_v1_pb_gos) $(mixer_v1_pb_pythons) $(mixer_v1_openapi)
+	@rm -fr $(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc) $(mixer_config_client_pb_pythons) $(mixer_config_client_openapi)
+	@rm -fr $(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_pythons) $(mixer_adapter_model_v1beta1_openapi)
 
 #####################
 # networking/...
@@ -191,6 +200,7 @@ networking_v1alpha3_protos := $(wildcard $(networking_v1alpha3_path)/*.proto)
 networking_v1alpha3_pb_gos := $(networking_v1alpha3_protos:.proto=.pb.go)
 networking_v1alpha3_pb_pythons := $(patsubst $(networking_v1alpha3_path)/%.proto,$(python_output_path)/$(networking_v1alpha3_path)/%_pb2.py,$(networking_v1alpha3_protos))
 networking_v1alpha3_pb_docs := $(networking_v1alpha3_protos:.proto=.pb.html)
+networking_v1alpha3_openapi := $(networking_v1alpha3_protos:.proto=.json)
 
 $(networking_v1alpha3_pb_gos) $(networking_v1alpha3_pb_docs) $(networking_v1alpha3_pb_pythons): $(networking_v1alpha3_protos)
 	@$(protolock) status
@@ -199,7 +209,7 @@ $(networking_v1alpha3_pb_gos) $(networking_v1alpha3_pb_docs) $(networking_v1alph
 generate-networking: $(networking_v1alpha3_pb_gos) $(networking_v1alpha3_pb_docs) $(networking_v1alpha3_pb_pythons)
 
 clean-networking:
-	@rm -fr $(networking_v1alpha3_pb_gos) $(networking_v1alpha3_pb_docs) $(networking_v1alpha3_pb_pythons)
+	@rm -fr $(networking_v1alpha3_pb_gos) $(networking_v1alpha3_pb_docs) $(networking_v1alpha3_pb_pythons) $(networking_v1alpha3_openapi)
 
 #####################
 # rbac/...
@@ -210,6 +220,7 @@ rbac_v1alpha1_protos := $(wildcard $(rbac_v1alpha1_path)/*.proto)
 rbac_v1alpha1_pb_gos := $(rbac_v1alpha1_protos:.proto=.pb.go)
 rbac_v1alpha1_pb_pythons := $(patsubst $(rbac_v1alpha1_path)/%.proto,$(python_output_path)/$(rbac_v1alpha1_path)/%_pb2.py,$(rbac_v1alpha1_protos))
 rbac_v1alpha1_pb_doc := $(rbac_v1alpha1_path)/istio.rbac.v1alpha1.pb.html
+rbac_v1alpha1_openapi := $(rbac_v1alpha1_path)/istio.rbac.v1alpha1.json
 
 $(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc) $(rbac_v1alpha1_pb_pythons): $(rbac_v1alpha1_protos)
 	@$(protolock) status
@@ -218,7 +229,7 @@ $(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc) $(rbac_v1alpha1_pb_pythons): $(r
 generate-rbac: $(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc) $(rbac_v1alpha1_protos)
 
 clean-rbac:
-	@rm -fr $(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc) $(rbac_v1alpha1_pb_pythons)
+	@rm -fr $(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc) $(rbac_v1alpha1_pb_pythons) $(rbac_v1alpha1_openapi)
 
 #####################
 # authentication/...
@@ -229,6 +240,7 @@ authn_v1alpha1_protos := $(wildcard $(authn_v1alpha1_path)/*.proto)
 authn_v1alpha1_pb_gos := $(authn_v1alpha1_protos:.proto=.pb.go)
 authn_v1alpha1_pb_pythons := $(patsubst $(authn_v1alpha1_path)/%.proto,$(python_output_path)/$(authn_v1alpha1_path)/%_pb2.py,$(authn_v1alpha1_protos))
 authn_v1alpha1_pb_doc := $(authn_v1alpha1_path)/istio.authentication.v1alpha1.pb.html
+authn_v1alpha1_openapi := $(authn_v1alpha1_path)/istio.authentication.v1alpha1.json
 
 $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc) $(authn_v1alpha1_pb_pythons): $(authn_v1alpha1_protos)
 	@$(protolock) status
@@ -237,7 +249,7 @@ $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc) $(authn_v1alpha1_pb_pythons): 
 generate-authn: $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc) $(authn_v1alpha1_pb_pythons)
 
 clean-authn:
-	@rm -fr $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc) $(authn_v1alpha1_pb_pythons)
+	@rm -fr $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc) $(authn_v1alpha1_pb_pythons) $(authn_v1alpha1_openapi)
 
 #####################
 # envoy/...
@@ -301,6 +313,13 @@ lint:
 	@scripts/check_license.sh
 	@$(prototool) lint --protoc-bin-path=/usr/bin/protoc --protoc-wkt-path=/usr/include/protobuf
 	@$(htmlproofer) . --url-swap "istio.io:preliminary.istio.io" --assume-extension --check-html --check-external-hash --check-opengraph --timeframe 2d --storage-dir $(repo_dir)/.htmlproofer --url-ignore "/localhost/"
+
+#####################
+# OpenAPI Schema
+#####################
+
+generate-openapi-schema:
+	@$(cue) -f=$(repo_dir)/cue.yaml
 
 #####################
 # Cleanup
