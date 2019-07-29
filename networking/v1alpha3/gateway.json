@@ -117,6 +117,22 @@
             "type": "string",
             "format": "string"
           },
+          "verifyCertificateSpki": {
+            "description": "An optional list of base64-encoded SHA-256 hashes of the SKPIs of authorized client certificates. Note: When both verify_certificate_hash and verify_certificate_spki are specified, a hash matching either value will result in the certificate being accepted.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "verifyCertificateHash": {
+            "description": "An optional list of hex-encoded SHA-256 hashes of the authorized client certificates. Both simple and colon separated formats are acceptable. Note: When both verify_certificate_hash and verify_certificate_spki are specified, a hash matching either value will result in the certificate being accepted.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
           "minProtocolVersion": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Server.TLSOptions.TLSProtocol"
           },

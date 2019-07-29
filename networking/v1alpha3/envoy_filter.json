@@ -196,6 +196,53 @@
         ],
         "default": "ANY"
       },
+      "istio.networking.v1alpha3.EnvoyFilter.ProxyMatch": {
+        "description": "One or more properties of the proxy to match on.",
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "metadata"
+            ],
+            "properties": {
+              "metadata": {
+                "description": "Match on the node metadata supplied by a proxy when connecting to Istio Pilot. Note that while Envoy's node metadata is of type Struct, only string key-value pairs are processed by Pilot. All keys specified in the metadata must match with exact values. The match will fail if any of the specified keys are absent or the values fail to match.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "format": "string"
+                }
+              },
+              "versionGe": {
+                "description": "Version restricts the patches to sidecars or gateways with from a specific version of Istio. The Istio version for a given proxy is obtained from the node metadata field ISTIO_VERSION supplied by the proxy when connecting to Pilot. This value is embedded as an environment variable (ISTIO_META_ISTIO_VERSION) in the Istio proxy docker image. Custom proxy implementations should provide this metadata variable to take advantage of the Istio version check option.",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "metadata"
+            ],
+            "properties": {
+              "metadata": {
+                "description": "Match on the node metadata supplied by a proxy when connecting to Istio Pilot. Note that while Envoy's node metadata is of type Struct, only string key-value pairs are processed by Pilot. All keys specified in the metadata must match with exact values. The match will fail if any of the specified keys are absent or the values fail to match.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "format": "string"
+                }
+              },
+              "versionEq": {
+                "description": "Checks if the Istio version in the proxy is equal to the exact version specified.",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          }
+        ]
+      },
       "istio.networking.v1alpha3.EnvoyFilter.ClusterMatch": {
         "description": "Conditions specified in ClusterMatch must be met for the patch to be applied to a cluster.",
         "type": "object",
@@ -274,7 +321,7 @@
             "type": "integer"
           },
           "portName": {
-            "description": "Instead of using specific port numbers, a set of ports matching a given service's port name can be selected. Matching is case insensitive.",
+            "description": "Instead of using specific port numbers, a set of ports matching a given service's port name can be selected. Matching is case insensitive. Not implemented. $hide_from_docs",
             "type": "string",
             "format": "string"
           },
@@ -352,12 +399,16 @@
         "default": "INVALID"
       },
       "istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch": {
+        "description": "One or more match conditions to be met before a patch is applied to the generated configuration for a given proxy.",
         "oneOf": [
           {
             "type": "object",
             "properties": {
               "context": {
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.PatchContext"
+              },
+              "proxy": {
+                "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.ProxyMatch"
               },
               "listener": {
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.ListenerMatch"
@@ -370,6 +421,9 @@
               "context": {
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.PatchContext"
               },
+              "proxy": {
+                "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.ProxyMatch"
+              },
               "routeConfiguration": {
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch"
               }
@@ -380,6 +434,9 @@
             "properties": {
               "context": {
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.PatchContext"
+              },
+              "proxy": {
+                "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.ProxyMatch"
               },
               "cluster": {
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.ClusterMatch"
