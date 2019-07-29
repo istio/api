@@ -419,6 +419,9 @@ name.</p>
 </section>
 <h2 id="EnvoyFilter-EnvoyConfigObjectMatch">EnvoyFilter.EnvoyConfigObjectMatch</h2>
 <section>
+<p>One or more match conditions to be met before a patch is applied
+to the generated configuration for a given proxy.</p>
+
 <table class="message-fields">
 <thead>
 <tr>
@@ -432,30 +435,42 @@ name.</p>
 <td><code>context</code></td>
 <td><code><a href="#EnvoyFilter-PatchContext">EnvoyFilter.PatchContext</a></code></td>
 <td>
+<p>The specific config generation context to match on. Istio Pilot
+generates envoy configuration in the context of a gateway,
+inbound traffic to sidecar and outbound traffic from sidecar.</p>
+
 </td>
 </tr>
-<tr id="EnvoyFilter-EnvoyConfigObjectMatch-proxy_version">
-<td><code>proxyVersion</code></td>
-<td><code><a href="#EnvoyFilter-ProxyVersion">EnvoyFilter.ProxyVersion</a></code></td>
+<tr id="EnvoyFilter-EnvoyConfigObjectMatch-proxy">
+<td><code>proxy</code></td>
+<td><code><a href="#EnvoyFilter-ProxyMatch">EnvoyFilter.ProxyMatch</a></code></td>
 <td>
+<p>Match on properties associated with a proxy.</p>
+
 </td>
 </tr>
 <tr id="EnvoyFilter-EnvoyConfigObjectMatch-listener" class="oneof oneof-start">
 <td><code>listener</code></td>
 <td><code><a href="#EnvoyFilter-ListenerMatch">EnvoyFilter.ListenerMatch (oneof)</a></code></td>
 <td>
+<p>Match on envoy listener attributes.</p>
+
 </td>
 </tr>
 <tr id="EnvoyFilter-EnvoyConfigObjectMatch-route_configuration" class="oneof">
 <td><code>routeConfiguration</code></td>
 <td><code><a href="#EnvoyFilter-RouteConfigurationMatch">EnvoyFilter.RouteConfigurationMatch (oneof)</a></code></td>
 <td>
+<p>Match on envoy HTTP route configuration attributes.</p>
+
 </td>
 </tr>
 <tr id="EnvoyFilter-EnvoyConfigObjectMatch-cluster" class="oneof">
 <td><code>cluster</code></td>
 <td><code><a href="#EnvoyFilter-ClusterMatch">EnvoyFilter.ClusterMatch (oneof)</a></code></td>
 <td>
+<p>Match on envoy cluster attributes.</p>
+
 </td>
 </tr>
 </tbody>
@@ -907,16 +922,9 @@ traffic flow direction and workload type.</p>
 </tbody>
 </table>
 </section>
-<h2 id="EnvoyFilter-ProxyVersion">EnvoyFilter.ProxyVersion</h2>
+<h2 id="EnvoyFilter-ProxyMatch">EnvoyFilter.ProxyMatch</h2>
 <section>
-<p>ProxyVersion restricts the patches to sidecars or gateways with
-from a specific version of Istio. The Istio version for a given
-proxy is obtained from the node metadata field ISTIO<em>VERSION
-supplied by the proxy when connecting to Pilot. This value is
-embedded as an environment variable (ISTIO</em>META<em>ISTIO</em>VERSION) in
-the Istio proxy docker image. Custom proxy implementations should
-provide this metadata variable to take advantage of the Istio
-version check option.</p>
+<p>One or more properties of the proxy to match on.</p>
 
 <table class="message-fields">
 <thead>
@@ -927,19 +935,43 @@ version check option.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="EnvoyFilter-ProxyVersion-ge" class="oneof oneof-start">
-<td><code>ge</code></td>
+<tr id="EnvoyFilter-ProxyMatch-version_ge" class="oneof oneof-start">
+<td><code>versionGe</code></td>
 <td><code>string (oneof)</code></td>
 <td>
-<p>Greater than or equal to the specified value.</p>
+<p>Version restricts the patches to sidecars or gateways with
+from a specific version of Istio. The Istio version for a given
+proxy is obtained from the node metadata field ISTIO<em>VERSION
+supplied by the proxy when connecting to Pilot. This value is
+embedded as an environment variable (ISTIO</em>META<em>ISTIO</em>VERSION) in
+the Istio proxy docker image. Custom proxy implementations should
+provide this metadata variable to take advantage of the Istio
+version check option.</p>
+
+<p>Checks if the Istio version in the proxy is greater than or
+equal to the specified value.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilter-ProxyVersion-eq" class="oneof">
-<td><code>eq</code></td>
+<tr id="EnvoyFilter-ProxyMatch-version_eq" class="oneof">
+<td><code>versionEq</code></td>
 <td><code>string (oneof)</code></td>
 <td>
-<p>Match on the exact version specified.</p>
+<p>Checks if the Istio version in the proxy is equal to the
+exact version specified.</p>
+
+</td>
+</tr>
+<tr id="EnvoyFilter-ProxyMatch-metadata">
+<td><code>metadata</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>Match on the node metadata supplied by a proxy when connecting
+to Istio Pilot. Note that while Envoy&rsquo;s node metadata is of
+type Struct, only string key-value pairs are processed by
+Pilot. All keys specified in the metadata must match with exact
+values. The match will fail if any of the specified keys are
+absent or the values fail to match.</p>
 
 </td>
 </tr>

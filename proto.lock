@@ -3936,17 +3936,27 @@
                 ]
               },
               {
-                "name": "ProxyVersion",
+                "name": "ProxyMatch",
                 "fields": [
                   {
                     "id": 1,
-                    "name": "ge",
+                    "name": "version_ge",
                     "type": "string"
                   },
                   {
                     "id": 2,
-                    "name": "eq",
+                    "name": "version_eq",
                     "type": "string"
+                  }
+                ],
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 3,
+                      "name": "metadata",
+                      "type": "string"
+                    }
                   }
                 ]
               },
@@ -4114,8 +4124,8 @@
                   },
                   {
                     "id": 2,
-                    "name": "proxy_version",
-                    "type": "ProxyVersion"
+                    "name": "proxy",
+                    "type": "ProxyMatch"
                   },
                   {
                     "id": 3,
