@@ -826,7 +826,13 @@ func (m *EnvoyFilter_Filter) GetFilterConfig() *types.Struct {
 }
 
 // ProxyVersion restricts the patches to sidecars or gateways with
-// from a specific version of Istio.
+// from a specific version of Istio. The Istio version for a given
+// proxy is obtained from the node metadata field ISTIO_VERSION
+// supplied by the proxy when connecting to Pilot. This value is
+// embedded as an environment variable (ISTIO_META_ISTIO_VERSION) in
+// the Istio proxy docker image. Custom proxy implementations should
+// provide this metadata variable to take advantage of the Istio
+// version check option.
 type EnvoyFilter_ProxyVersion struct {
 	// Types that are valid to be assigned to VersionMatch:
 	//	*EnvoyFilter_ProxyVersion_Ge

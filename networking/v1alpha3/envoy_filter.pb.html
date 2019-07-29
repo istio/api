@@ -910,7 +910,13 @@ traffic flow direction and workload type.</p>
 <h2 id="EnvoyFilter-ProxyVersion">EnvoyFilter.ProxyVersion</h2>
 <section>
 <p>ProxyVersion restricts the patches to sidecars or gateways with
-from a specific version of Istio.</p>
+from a specific version of Istio. The Istio version for a given
+proxy is obtained from the node metadata field ISTIO<em>VERSION
+supplied by the proxy when connecting to Pilot. This value is
+embedded as an environment variable (ISTIO</em>META<em>ISTIO</em>VERSION) in
+the Istio proxy docker image. Custom proxy implementations should
+provide this metadata variable to take advantage of the Istio
+version check option.</p>
 
 <table class="message-fields">
 <thead>
