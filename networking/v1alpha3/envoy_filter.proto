@@ -366,6 +366,17 @@ message EnvoyFilter {
     GATEWAY = 3;
   };
 
+  // ProxyVersion restricts the patches to sidecars or gateways with
+  // from a specific version of Istio.
+  message ProxyVersion {
+    oneof version_match {
+      // Greater than or equal to the specified value.
+      string ge = 1;
+      // Match on the exact version specified.
+      string eq = 2;
+    }
+  };
+
   // Conditions specified in ClusterMatch must be met for the patch
   // to be applied to a cluster.
   message ClusterMatch {
@@ -490,6 +501,8 @@ message EnvoyFilter {
     // Instead of using specific port numbers, a set of ports matching
     // a given service's port name can be selected. Matching is case
     // insensitive.
+    // Not implemented.
+    // $hide_from_docs
     string port_name = 2;
 
     // Match a specific filter chain in a listener. If specified, the
@@ -557,11 +570,11 @@ message EnvoyFilter {
 
   message EnvoyConfigObjectMatch {
     PatchContext context = 1;
-
+    ProxyVersion proxy_version = 2;
     oneof object_types {
-      ListenerMatch listener = 2;
-      RouteConfigurationMatch route_configuration = 3;
-      ClusterMatch cluster = 4;
+      ListenerMatch listener = 3;
+      RouteConfigurationMatch route_configuration = 4;
+      ClusterMatch cluster = 5;
     }
   };
 
