@@ -4,7 +4,7 @@ all: generate
 # setup
 ########################
 
-apitools_img := gcr.io/istio-testing/api-build-tools:2019-07-26
+apitools_img := gcr.io/istio-testing/api-build-tools:2019-07-29
 websitetools_img := gcr.io/istio-testing/website-tools:2019-07-25
 
 pwd := $(shell pwd)
@@ -14,7 +14,7 @@ repo_mount := $(mount_dir)/istio.io/api
 out_path = .
 uid := $(shell id -u)
 
-protoc = docker run --user $(uid) -v /etc/passwd:/etc/passwd:ro --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(apitools_img) protoc -I/protobuf -I$(repo_dir)
+protoc = docker run --user $(uid) -v /etc/passwd:/etc/passwd:ro --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(apitools_img) protoc -I/usr/include/protobuf -I$(repo_dir)
 
 run = docker run --user $(uid) -v /etc/passwd:/etc/passwd:ro --rm -v $(pwd):$(repo_mount) -w $(repo_mount) $(apitools_img)
 protolock = $(run) protolock
@@ -299,7 +299,7 @@ release-lock-status:
 
 lint:
 	@scripts/check_license.sh
-	@$(prototool) lint --protoc-bin-path=/usr/bin/protoc --protoc-wkt-path=/protobuf
+	@$(prototool) lint --protoc-bin-path=/usr/bin/protoc --protoc-wkt-path=/usr/include/protobuf
 	@$(htmlproofer) . --url-swap "istio.io:preliminary.istio.io" --assume-extension --check-html --check-external-hash --check-opengraph --timeframe 2d --storage-dir $(repo_dir)/.htmlproofer --url-ignore "/localhost/"
 
 #####################
@@ -315,6 +315,6 @@ clean: \
 	clean-authn \
 	clean-envoy \
 	clean-policy \
-	clean-annotations \
+	clean-annotations
 
 include Makefile.common.mk
