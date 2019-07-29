@@ -48,7 +48,7 @@ make release-lock-status || die "Proto changes affect compatibility with older r
 if [[ -n $(git status --porcelain) ]]; then
     git status
     git diff
-    die "Repo has unstaged changes. Re-run ./scripts/generate-protos.sh or make proto-commit"
+    die "Repo has unstaged changes. Run 'make' or 'make proto-commit' and add any changes files to the PR"
 fi
 
 exit 0

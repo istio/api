@@ -240,7 +240,13 @@
         ],
         "package": {
           "name": "istio.authentication.v1alpha1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/authentication/v1alpha1"
+          }
+        ]
       }
     },
     {
@@ -280,7 +286,13 @@
         ],
         "package": {
           "name": "istio.envoy.config.filter.http.authn.v2alpha1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/envoy/config/filter/http/authn/v2alpha1"
+          }
+        ]
       }
     },
     {
@@ -429,7 +441,13 @@
         ],
         "package": {
           "name": "istio.envoy.config.filter.http.jwt_auth.v2alpha1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/envoy/config/filter/http/jwt_auth/v2alpha1"
+          }
+        ]
       }
     },
     {
@@ -454,7 +472,13 @@
         ],
         "package": {
           "name": "istio.envoy.config.filter.network.tcp_cluster_rewrite.v2alpha1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/envoy/config/filter/network/tcp_cluster_rewrite/v2alpha1"
+          }
+        ]
       }
     },
     {
@@ -753,7 +777,17 @@
         ],
         "package": {
           "name": "istio.mcp.v1alpha1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mcp/v1alpha1"
+          },
+          {
+            "name": "(gogoproto.equal_all)",
+            "value": "true"
+          }
+        ]
       }
     },
     {
@@ -812,7 +846,17 @@
         ],
         "package": {
           "name": "istio.mcp.v1alpha1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mcp/v1alpha1"
+          },
+          {
+            "name": "(gogoproto.equal_all)",
+            "value": "true"
+          }
+        ]
       }
     },
     {
@@ -848,7 +892,17 @@
         ],
         "package": {
           "name": "istio.mcp.v1alpha1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mcp/v1alpha1"
+          },
+          {
+            "name": "(gogoproto.equal_all)",
+            "value": "true"
+          }
+        ]
       }
     },
     {
@@ -1254,7 +1308,13 @@
         ],
         "package": {
           "name": "istio.mesh.v1alpha1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mesh/v1alpha1"
+          }
+        ]
       }
     },
     {
@@ -1336,7 +1396,13 @@
         ],
         "package": {
           "name": "istio.mesh.v1alpha1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mesh/v1alpha1"
+          }
+        ]
       }
     },
     {
@@ -1629,7 +1695,13 @@
         ],
         "package": {
           "name": "istio.mesh.v1alpha1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mesh/v1alpha1"
+          }
+        ]
       }
     },
     {
@@ -1686,7 +1758,25 @@
         ],
         "package": {
           "name": "istio.mixer.adapter.model.v1beta1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mixer/adapter/model/v1beta1"
+          },
+          {
+            "name": "(gogoproto.goproto_getters_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.equal_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.gostring_all)",
+            "value": "false"
+          }
+        ]
       }
     },
     {
@@ -1742,7 +1832,13 @@
         ],
         "package": {
           "name": "istio.mixer.adapter.model.v1beta1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mixer/adapter/model/v1beta1"
+          }
+        ]
       }
     },
     {
@@ -1783,7 +1879,13 @@
         ],
         "package": {
           "name": "istio.mixer.adapter.model.v1beta1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mixer/adapter/model/v1beta1"
+          }
+        ]
       }
     },
     {
@@ -1908,7 +2010,17 @@
         ],
         "package": {
           "name": "istio.mixer.adapter.model.v1beta1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mixer/adapter/model/v1beta1"
+          },
+          {
+            "name": "cc_generic_services",
+            "value": "true"
+          }
+        ]
       }
     },
     {
@@ -2022,7 +2134,25 @@
         ],
         "package": {
           "name": "istio.mixer.adapter.model.v1beta1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mixer/adapter/model/v1beta1"
+          },
+          {
+            "name": "(gogoproto.goproto_getters_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.equal_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.gostring_all)",
+            "value": "false"
+          }
+        ]
       }
     },
     {
@@ -2040,7 +2170,25 @@
         ],
         "package": {
           "name": "istio.mixer.adapter.model.v1beta1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mixer/adapter/model/v1beta1"
+          },
+          {
+            "name": "(gogoproto.goproto_getters_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.equal_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.gostring_all)",
+            "value": "false"
+          }
+        ]
       }
     },
     {
@@ -2060,7 +2208,13 @@
         ],
         "package": {
           "name": "istio.mixer.adapter.model.v1beta1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mixer/adapter/model/v1beta1"
+          }
+        ]
       }
     },
     {
@@ -2270,7 +2424,33 @@
         ],
         "package": {
           "name": "istio.mixer.v1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mixer/v1"
+          },
+          {
+            "name": "(gogoproto.goproto_getters_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.equal_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.gostring_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.stable_marshaler_all)",
+            "value": "true"
+          },
+          {
+            "name": "cc_enable_arenas",
+            "value": "true"
+          }
+        ]
       }
     },
     {
@@ -2390,7 +2570,29 @@
         ],
         "package": {
           "name": "istio.mixer.v1.config.client"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mixer/v1/config/client"
+          },
+          {
+            "name": "(gogoproto.goproto_getters_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.equal_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.gostring_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.stable_marshaler_all)",
+            "value": "true"
+          }
+        ]
       }
     },
     {
@@ -2623,7 +2825,29 @@
         ],
         "package": {
           "name": "istio.mixer.v1.config.client"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mixer/v1/config/client"
+          },
+          {
+            "name": "(gogoproto.goproto_getters_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.equal_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.gostring_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.stable_marshaler_all)",
+            "value": "true"
+          }
+        ]
       }
     },
     {
@@ -2751,7 +2975,29 @@
         ],
         "package": {
           "name": "istio.mixer.v1.config.client"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mixer/v1/config/client"
+          },
+          {
+            "name": "(gogoproto.goproto_getters_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.equal_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.gostring_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.stable_marshaler_all)",
+            "value": "true"
+          }
+        ]
       }
     },
     {
@@ -2801,7 +3047,29 @@
         ],
         "package": {
           "name": "istio.mixer.v1.config.client"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mixer/v1/config/client"
+          },
+          {
+            "name": "(gogoproto.goproto_getters_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.equal_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.gostring_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.stable_marshaler_all)",
+            "value": "true"
+          }
+        ]
       }
     },
     {
@@ -3226,7 +3494,33 @@
         ],
         "package": {
           "name": "istio.mixer.v1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mixer/v1"
+          },
+          {
+            "name": "cc_generic_services",
+            "value": "true"
+          },
+          {
+            "name": "(gogoproto.goproto_getters_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.equal_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.gostring_all)",
+            "value": "false"
+          },
+          {
+            "name": "cc_enable_arenas",
+            "value": "true"
+          }
+        ]
       }
     },
     {
@@ -3650,7 +3944,13 @@
         ],
         "package": {
           "name": "istio.networking.v1alpha3"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1alpha3"
+          }
+        ]
       }
     },
     {
@@ -4177,7 +4477,13 @@
         ],
         "package": {
           "name": "istio.networking.v1alpha3"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1alpha3"
+          }
+        ]
       }
     },
     {
@@ -4380,7 +4686,13 @@
         ],
         "package": {
           "name": "istio.networking.v1alpha3"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1alpha3"
+          }
+        ]
       }
     },
     {
@@ -4521,7 +4833,13 @@
         ],
         "package": {
           "name": "istio.networking.v1alpha3"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1alpha3"
+          }
+        ]
       }
     },
     {
@@ -4667,7 +4985,13 @@
         ],
         "package": {
           "name": "istio.networking.v1alpha3"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1alpha3"
+          }
+        ]
       }
     },
     {
@@ -5415,7 +5739,13 @@
         ],
         "package": {
           "name": "istio.networking.v1alpha3"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1alpha3"
+          }
+        ]
       }
     },
     {
@@ -5882,7 +6212,13 @@
         ],
         "package": {
           "name": "istio.policy.v1beta1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/policy/v1beta1"
+          }
+        ]
       }
     },
     {
@@ -6151,7 +6487,13 @@
         ],
         "package": {
           "name": "istio.policy.v1beta1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/policy/v1beta1"
+          }
+        ]
       }
     },
     {
@@ -6302,7 +6644,13 @@
         ],
         "package": {
           "name": "istio.policy.v1beta1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/policy/v1beta1"
+          }
+        ]
       }
     },
     {
@@ -6364,7 +6712,13 @@
         ],
         "package": {
           "name": "istio.policy.v1beta1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/policy/v1beta1"
+          }
+        ]
       }
     },
     {
@@ -6707,7 +7061,13 @@
         ],
         "package": {
           "name": "istio.rbac.v1alpha1"
-        }
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/rbac/v1alpha1"
+          }
+        ]
       }
     }
   ]
