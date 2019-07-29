@@ -26,7 +26,6 @@ htmlproofer = docker run --user $(uid) -v /etc/passwd:/etc/passwd:ro --rm -v $(p
 
 cue = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(mount_dir) $(cue_img)
 
-
 ########################
 # protoc_gen_gogo*
 ########################
@@ -107,7 +106,6 @@ generate-mcp: $(mcp_v1alpha1_pb_gos) $(mcp_v1alpha1_pb_doc) $(mcp_v1alpha1_pb_py
 clean-mcp:
 	@rm -fr $(mcp_v1alpha1_pb_gos) $(mcp_v1alpha1_pb_pythons) $(config_mcp_openapi)
 
-
 #####################
 # mesh/...
 #####################
@@ -127,7 +125,6 @@ generate-mesh: $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_p
 
 clean-mesh:
 	@rm -fr $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons) $(mesh_openapi)
-
 
 #####################
 # policy/...
