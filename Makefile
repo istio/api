@@ -88,48 +88,47 @@ generate: \
 # mcp/...
 #####################
 
-mcp_path := mcp/v1alpha1
-mcp_protos := $(shell find $(mcp_path) -type f -name '*.proto' | sort)
-mcp_pb_gos := $(mcp_protos:.proto=.pb.go)
-mcp_pb_pythons := $(patsubst $(mcp_path)/%.proto,$(python_output_path)/$(mcp_path)/%_pb2.py,$(mcp_protos))
-mcp_pb_doc := $(mcp_path)/istio.mcp.v1alpha1.pb.html
+mcp_v1alpha1_path := mcp/v1alpha1
+mcp_v1alpha1_protos := $(wildcard $(mcp_v1alpha1_path)/*.proto)
+mcp_v1alpha1_pb_gos := $(mcp_v1alpha1_protos:.proto=.pb.go)
+mcp_v1alpha1_pb_pythons := $(patsubst $(mcp_v1alpha1_path)/%.proto,$(python_output_path)/$(mcp_v1alpha1_path)/%_pb2.py,$(mcp_v1alpha1_protos))
 
-$(mcp_pb_gos) $(mcp_pb_doc) $(mcp_pb_pythons): $(mcp_protos)
+$(mcp_v1alpha1_pb_gos) $(mcp_v1alpha1_pb_pythons): $(mcp_v1alpha1_protos)
 	@$(protolock) status
-	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(mcp_path) $(protoc_gen_python_plugin) $^
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_python_plugin) $^
 
-generate-mcp: $(mcp_pb_gos) $(mcp_pb_doc) $(mcp_pb_pythons)
+generate-mcp: $(mcp_v1alpha1_pb_gos) $(mcp_v1alpha1_pb_doc) $(mcp_v1alpha1_pb_pythons)
 
 clean-mcp:
-	@rm -fr $(mcp_pb_gos) $(mcp_pb_doc) $(mcp_pb_pythons)
+	@rm -fr $(mcp_v1alpha1_pb_gos) $(mcp_v1alpha1_pb_pythons)
 
 #####################
 # mesh/...
 #####################
 
-mesh_path := mesh/v1alpha1
-mesh_protos := $(shell find $(mesh_path) -type f -name '*.proto' | sort)
-mesh_pb_gos := $(mesh_protos:.proto=.pb.go)
-mesh_pb_pythons := $(patsubst $(mesh_path)/%.proto,$(python_output_path)/$(mesh_path)/%_pb2.py,$(mesh_protos))
-mesh_pb_doc := $(mesh_path)/istio.mesh.v1alpha1.pb.html
+mesh_v1alpha1_path := mesh/v1alpha1
+mesh_v1alpha1_protos := $(wildcard $(mesh_v1alpha1_path)/*.proto)
+mesh_v1alpha1_pb_gos := $(mesh_v1alpha1_protos:.proto=.pb.go)
+mesh_v1alpha1_pb_pythons := $(patsubst $(mesh_v1alpha1_path)/%.proto,$(python_output_path)/$(mesh_v1alpha1_path)/%_pb2.py,$(mesh_v1alpha1_protos))
+mesh_v1alpha1_pb_doc := $(mesh_v1alpha1_path)/istio.mesh.v1alpha1.pb.html
 
-$(mesh_pb_gos) $(mesh_pb_doc) $(mesh_pb_pythons): $(mesh_protos)
+$(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons): $(mesh_v1alpha1_protos)
 	@$(protolock) status
-	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(mesh_path) $(protoc_gen_python_plugin) $^
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(mesh_v1alpha1_path) $(protoc_gen_python_plugin) $^
 
-generate-mesh: $(mesh_pb_gos) $(mesh_pb_doc) $(mesh_pb_pythons)
+generate-mesh: $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons)
 
 clean-mesh:
-	@rm -fr $(mesh_pb_gos) $(mesh_pb_doc) $(mesh_pb_pythons)
+	@rm -fr $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons)
 
 #####################
 # policy/...
 #####################
 
 policy_v1beta1_path := policy/v1beta1
-policy_v1beta1_protos := $(shell find $(policy_v1beta1_path) -maxdepth 1 -type f -name '*.proto' | sort)
+policy_v1beta1_protos := $(wildcard $(policy_v1beta1_path)/*.proto)
 policy_v1beta1_pb_gos := $(policy_v1beta1_protos:.proto=.pb.go)
-policy_v1beta1_pb_pythons := $(patsubst $(policy_v1beta1_path)/%.proto,$(python_output_path)/$(policy_v1beta1_path)/%_pb2.py,$(policy_protos))
+policy_v1beta1_pb_pythons := $(patsubst $(policy_v1beta1_path)/%.proto,$(python_output_path)/$(policy_v1beta1_path)/%_pb2.py,$(policy_v1beta1_protos))
 policy_v1beta1_pb_doc := $(policy_v1beta1_path)/istio.policy.v1beta1.pb.html
 
 $(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc) $(policy_v1beta1_pb_pythons): $(policy_v1beta1_protos)
@@ -146,55 +145,51 @@ clean-policy:
 #####################
 
 mixer_v1_path := mixer/v1
-mixer_v1_protos :=  $(shell find $(mixer_v1_path) -maxdepth 1 -type f -name '*.proto' | sort)
+mixer_v1_protos :=  $(wildcard $(mixer_v1_path)/*.proto)
 mixer_v1_pb_gos := $(mixer_v1_protos:.proto=.pb.go)
-mixer_v1_pb_pythons := $(mixer_v1_protos:.proto=_pb2.py)
 mixer_v1_pb_pythons := $(patsubst $(mixer_v1_path)/%.proto,$(python_output_path)/$(mixer_v1_path)/%_pb2.py,$(mixer_v1_protos))
-mixer_v1_pb_doc := $(mixer_v1_path)/istio.mixer.v1.pb.html
 
 mixer_config_client_path := mixer/v1/config/client
-mixer_config_client_protos := $(shell find $(mixer_config_client_path) -maxdepth 1 -type f -name '*.proto' | sort)
+mixer_config_client_protos := $(wildcard $(mixer_config_client_path)/*.proto)
 mixer_config_client_pb_gos := $(mixer_config_client_protos:.proto=.pb.go)
-mixer_config_client_pb_pythons := $(mixer_config_client_protos:.proto=_pb2.py)
 mixer_config_client_pb_pythons := $(patsubst $(mixer_config_client_path)/%.proto,$(python_output_path)/$(mixer_client_config_path)/%_pb2.py,$(mixer_client_config_protos))
 mixer_config_client_pb_doc := $(mixer_config_client_path)/istio.mixer.v1.config.client.pb.html
 
 mixer_adapter_model_v1beta1_path := mixer/adapter/model/v1beta1
-mixer_adapter_model_v1beta1_protos := $(shell find $(mixer_adapter_model_v1beta1_path) -maxdepth 1 -type f -name '*.proto' | sort)
+mixer_adapter_model_v1beta1_protos := $(wildcard $(mixer_adapter_model_v1beta1_path)/*.proto)
 mixer_adapter_model_v1beta1_pb_gos := $(mixer_adapter_model_v1beta1_protos:.proto=.pb.go)
 mixer_adapter_model_pb_pythons := $(patsubst $(mixer_adapter_model_path)/%.proto,$(python_output_path)/$(mixer_adapter_model_path)/%_pb2.py,$(mixer_adapter_model_protos))
-mixer_adapter_model_v1beta1_pb_doc := $(mixer_adapter_model_v1beta1_path)/istio.mixer.adapter.model.v1beta1.pb.html
 
-$(mixer_v1_pb_gos) $(mixer_v1_pb_doc) $(mixer_v1_pb_pythons): $(mixer_v1_protos)
+$(mixer_v1_pb_gos) $(mixer_v1_pb_pythons): $(mixer_v1_protos)
 	@$(protolock) status
-	@$(protoc) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_v1_path) $(protoc_gen_python_plugin) $^
+	@$(protoc) $(gogoslick_plugin) $(protoc_gen_python_plugin) $^
 
-$(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc)  $(mixer_config_client_pb_pythons): $(mixer_config_client_protos)
+$(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc) $(mixer_config_client_pb_pythons): $(mixer_config_client_protos)
 	@$(protolock) status
 	@$(protoc) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_config_client_path) $(protoc_gen_python_plugin) $^
 
-$(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_doc) $(mixer_adapter_model_v1beta1_pb_pythons): $(mixer_adapter_model_v1beta1_protos)
+$(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_pythons): $(mixer_adapter_model_v1beta1_protos)
 	@$(protolock) status
-	@$(protoc) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_adapter_model_v1beta1_path) $(protoc_gen_python_plugin)  $^
+	@$(protoc) $(gogoslick_plugin) $(protoc_gen_python_plugin)  $^
 
 generate-mixer: \
-	$(mixer_v1_pb_gos) $(mixer_v1_pb_doc) $(mixer_v1_pb_pythons) \
+	$(mixer_v1_pb_gos) $(mixer_v1_pb_pythons) \
 	$(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc) $(mixer_config_client_pb_pythons) \
-	$(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_doc) $(mixer_adapter_model_v1beta1_pb_pythons)
+	$(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_pythons)
 
 clean-mixer:
-	@rm -fr $(mixer_v1_pb_gos) $(mixer_v1_pb_doc) $(mixer_v1_pb_pythons)
+	@rm -fr $(mixer_v1_pb_gos) $(mixer_v1_pb_pythons)
 	@rm -fr $(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc) $(mixer_config_client_pb_pythons)
-	@rm -fr $(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_doc) $(mixer_adapter_model_v1beta1_pb_pythons)
+	@rm -fr $(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_pythons)
 
 #####################
 # networking/...
 #####################
 
 networking_v1alpha3_path := networking/v1alpha3
-networking_v1alpha3_protos := $(shell find networking/v1alpha3 -type f -name '*.proto' | sort)
+networking_v1alpha3_protos := $(wildcard $(networking_v1alpha3_path)/*.proto)
 networking_v1alpha3_pb_gos := $(networking_v1alpha3_protos:.proto=.pb.go)
-networking_v1alpha3_pb_pythons := $(patsubst $(networking_v1alpha3_path)/%.proto,$(python_output_path)/$(networking_v1alpha3_path)/%_pb2.py,$(networking_protos))
+networking_v1alpha3_pb_pythons := $(patsubst $(networking_v1alpha3_path)/%.proto,$(python_output_path)/$(networking_v1alpha3_path)/%_pb2.py,$(networking_v1alpha3_protos))
 networking_v1alpha3_pb_docs := $(networking_v1alpha3_protos:.proto=.pb.html)
 
 $(networking_v1alpha3_pb_gos) $(networking_v1alpha3_pb_docs) $(networking_v1alpha3_pb_pythons): $(networking_v1alpha3_protos)
@@ -211,12 +206,12 @@ clean-networking:
 #####################
 
 rbac_v1alpha1_path := rbac/v1alpha1
-rbac_v1alpha1_protos := $(shell find $(rbac_v1alpha1_path) -type f -name '*.proto' | sort)
+rbac_v1alpha1_protos := $(wildcard $(rbac_v1alpha1_path)/*.proto)
 rbac_v1alpha1_pb_gos := $(rbac_v1alpha1_protos:.proto=.pb.go)
-rbac_v1alpha1_pb_pythons := $(patsubst $(rbac_v1alpha1_path)/%.proto,$(python_output_path)/$(rbac_v1alpha1_path)/%_pb2.py,$(rbac_protos))
+rbac_v1alpha1_pb_pythons := $(patsubst $(rbac_v1alpha1_path)/%.proto,$(python_output_path)/$(rbac_v1alpha1_path)/%_pb2.py,$(rbac_v1alpha1_protos))
 rbac_v1alpha1_pb_doc := $(rbac_v1alpha1_path)/istio.rbac.v1alpha1.pb.html
 
-$(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc)  $(rbac_v1alpha1_pb_pythons): $(rbac_v1alpha1_protos)
+$(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc) $(rbac_v1alpha1_pb_pythons): $(rbac_v1alpha1_protos)
 	@$(protolock) status
 	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(rbac_v1alpha1_path) $(protoc_gen_python_plugin) $^
 
@@ -230,9 +225,9 @@ clean-rbac:
 #####################
 
 authn_v1alpha1_path := authentication/v1alpha1
-authn_v1alpha1_protos := $(shell find $(authn_v1alpha1_path) -type f -name '*.proto' | sort)
+authn_v1alpha1_protos := $(wildcard $(authn_v1alpha1_path)/*.proto)
 authn_v1alpha1_pb_gos := $(authn_v1alpha1_protos:.proto=.pb.go)
-authn_v1alpha1_pb_pythons := $(patsubst $(authn_v1alpha1_path)/%.proto,$(python_output_path)/$(authn_v1alpha1_path)/%_pb2.py,$(authn_protos))
+authn_v1alpha1_pb_pythons := $(patsubst $(authn_v1alpha1_path)/%.proto,$(python_output_path)/$(authn_v1alpha1_path)/%_pb2.py,$(authn_v1alpha1_protos))
 authn_v1alpha1_pb_doc := $(authn_v1alpha1_path)/istio.authentication.v1alpha1.pb.html
 
 $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc) $(authn_v1alpha1_pb_pythons): $(authn_v1alpha1_protos)
