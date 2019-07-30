@@ -60,7 +60,7 @@
 //             name: "envoy.tcp_proxy"
 //     patch:
 //       operation: INSERT_BEFORE
-//       value: |
+//       value:
 //         name: "envoy.config.filter.network.custom_protocol"
 //         config:
 //          ...
@@ -73,7 +73,7 @@
 //             name: "envoy.http_connection_manager"
 //     patch:
 //       operation: MERGE
-//       value: |
+//       value:
 //         idle_timeout: 30s
 //```
 //
@@ -92,7 +92,8 @@
 //   namespace: bookinfo
 // spec:
 //   workloadSelector:
-//     app: reviews
+//     labels:
+//       app: reviews
 //   configPatches:
 //     # The first patch adds the lua filter to the listener/http connection manager
 //   - applyTo: HTTP_FILTER
@@ -156,7 +157,8 @@
 //   namespace: istio-system
 // spec:
 //   workloadSelector:
-//     istio: ingress-gateway
+//     labels:
+//       istio: ingress-gateway
 //   configPatches:
 //   - applyTo: NETWORK_FILTER # http connection manager is a filter in Envoy
 //     match:
@@ -168,7 +170,7 @@
 //             name: "envoy.http_connection_manager"
 //     patch:
 //       operation: MERGE
-//       value: |
+//       value:
 //         idle_timeout: 30s
 //         xff_num_trusted_hops: 5
 //```
