@@ -4236,31 +4236,6 @@
                 ]
               },
               {
-                "name": "ProxyMatch",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "version_ge",
-                    "type": "string"
-                  },
-                  {
-                    "id": 2,
-                    "name": "version_eq",
-                    "type": "string"
-                  }
-                ],
-                "maps": [
-                  {
-                    "key_type": "string",
-                    "field": {
-                      "id": 3,
-                      "name": "metadata",
-                      "type": "string"
-                    }
-                  }
-                ]
-              },
-              {
                 "name": "ClusterMatch",
                 "fields": [
                   {
@@ -4424,21 +4399,16 @@
                   },
                   {
                     "id": 2,
-                    "name": "proxy",
-                    "type": "ProxyMatch"
-                  },
-                  {
-                    "id": 3,
                     "name": "listener",
                     "type": "ListenerMatch"
                   },
                   {
-                    "id": 4,
+                    "id": 3,
                     "name": "route_configuration",
                     "type": "RouteConfigurationMatch"
                   },
                   {
-                    "id": 5,
+                    "id": 4,
                     "name": "cluster",
                     "type": "ClusterMatch"
                   }
@@ -4956,12 +4926,27 @@
           },
           {
             "name": "WorkloadSelector",
+            "fields": [
+              {
+                "id": 2,
+                "name": "proxy_version",
+                "type": "string"
+              }
+            ],
             "maps": [
               {
                 "key_type": "string",
                 "field": {
                   "id": 1,
                   "name": "labels",
+                  "type": "string"
+                }
+              },
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 3,
+                  "name": "proxy_metadata",
                   "type": "string"
                 }
               }
@@ -6761,12 +6746,27 @@
         "messages": [
           {
             "name": "WorkloadSelector",
+            "fields": [
+              {
+                "id": 2,
+                "name": "proxy_version",
+                "type": "string"
+              }
+            ],
             "maps": [
               {
                 "key_type": "string",
                 "field": {
                   "id": 1,
                   "name": "labels",
+                  "type": "string"
+                }
+              },
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 3,
+                  "name": "proxy_metadata",
                   "type": "string"
                 }
               }
