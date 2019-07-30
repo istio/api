@@ -2,7 +2,7 @@ module istio.io/api
 
 go 1.12
 
-replace github.com/gogo/protobuf => github.com/istio/gogo-protobuf v1.2.2-0.20190726125433-4c9abdb3090c
+replace github.com/gogo/protobuf => github.com/istio/gogo-protobuf v1.2.2
 
 require (
 	github.com/gogo/googleapis v1.2.0
