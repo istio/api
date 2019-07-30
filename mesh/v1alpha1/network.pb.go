@@ -8,7 +8,6 @@ import (
 	proto "github.com/gogo/protobuf/proto"
 	io "io"
 	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -53,7 +52,7 @@ func (m *Network) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Network.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -130,7 +129,7 @@ func (m *Network_NetworkEndpoints) XXX_Marshal(b []byte, deterministic bool) ([]
 		return xxx_messageInfo_Network_NetworkEndpoints.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -283,7 +282,7 @@ func (m *Network_IstioNetworkGateway) XXX_Marshal(b []byte, deterministic bool) 
 		return xxx_messageInfo_Network_IstioNetworkGateway.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -463,7 +462,7 @@ func (m *MeshNetworks) XXX_Marshal(b []byte, deterministic bool) ([]byte, error)
 		return xxx_messageInfo_MeshNetworks.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -532,7 +531,7 @@ var fileDescriptor_a15df2a96e10cd86 = []byte{
 func (m *Network) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -540,54 +539,44 @@ func (m *Network) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Network) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Network) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
+	if len(m.Endpoints) > 0 {
+		for _, msg := range m.Endpoints {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintNetwork(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
 	}
 	if len(m.Gateways) > 0 {
-		for iNdEx := len(m.Gateways) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Gateways[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintNetwork(dAtA, i, uint64(size))
-			}
-			i--
+		for _, msg := range m.Gateways {
 			dAtA[i] = 0x1a
-		}
-	}
-	if len(m.Endpoints) > 0 {
-		for iNdEx := len(m.Endpoints) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Endpoints[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintNetwork(dAtA, i, uint64(size))
+			i++
+			i = encodeVarintNetwork(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
 			}
-			i--
-			dAtA[i] = 0x12
+			i += n
 		}
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *Network_NetworkEndpoints) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -595,61 +584,43 @@ func (m *Network_NetworkEndpoints) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Network_NetworkEndpoints) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Network_NetworkEndpoints) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
 	if m.Ne != nil {
-		{
-			size := m.Ne.Size()
-			i -= size
-			if _, err := m.Ne.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
+		nn1, err := m.Ne.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
+		i += nn1
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *Network_NetworkEndpoints_FromCidr) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *Network_NetworkEndpoints_FromCidr) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.FromCidr)
-	copy(dAtA[i:], m.FromCidr)
-	i = encodeVarintNetwork(dAtA, i, uint64(len(m.FromCidr)))
-	i--
+	i := 0
 	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	i++
+	i = encodeVarintNetwork(dAtA, i, uint64(len(m.FromCidr)))
+	i += copy(dAtA[i:], m.FromCidr)
+	return i, nil
 }
 func (m *Network_NetworkEndpoints_FromRegistry) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *Network_NetworkEndpoints_FromRegistry) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.FromRegistry)
-	copy(dAtA[i:], m.FromRegistry)
-	i = encodeVarintNetwork(dAtA, i, uint64(len(m.FromRegistry)))
-	i--
+	i := 0
 	dAtA[i] = 0x12
-	return len(dAtA) - i, nil
+	i++
+	i = encodeVarintNetwork(dAtA, i, uint64(len(m.FromRegistry)))
+	i += copy(dAtA[i:], m.FromRegistry)
+	return i, nil
 }
 func (m *Network_IstioNetworkGateway) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -657,73 +628,54 @@ func (m *Network_IstioNetworkGateway) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Network_IstioNetworkGateway) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Network_IstioNetworkGateway) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if len(m.Locality) > 0 {
-		i -= len(m.Locality)
-		copy(dAtA[i:], m.Locality)
-		i = encodeVarintNetwork(dAtA, i, uint64(len(m.Locality)))
-		i--
-		dAtA[i] = 0x22
+	if m.Gw != nil {
+		nn2, err := m.Gw.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn2
 	}
 	if m.Port != 0 {
-		i = encodeVarintNetwork(dAtA, i, uint64(m.Port))
-		i--
 		dAtA[i] = 0x18
+		i++
+		i = encodeVarintNetwork(dAtA, i, uint64(m.Port))
 	}
-	if m.Gw != nil {
-		{
-			size := m.Gw.Size()
-			i -= size
-			if _, err := m.Gw.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
+	if len(m.Locality) > 0 {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintNetwork(dAtA, i, uint64(len(m.Locality)))
+		i += copy(dAtA[i:], m.Locality)
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *Network_IstioNetworkGateway_RegistryServiceName) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *Network_IstioNetworkGateway_RegistryServiceName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.RegistryServiceName)
-	copy(dAtA[i:], m.RegistryServiceName)
-	i = encodeVarintNetwork(dAtA, i, uint64(len(m.RegistryServiceName)))
-	i--
+	i := 0
 	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	i++
+	i = encodeVarintNetwork(dAtA, i, uint64(len(m.RegistryServiceName)))
+	i += copy(dAtA[i:], m.RegistryServiceName)
+	return i, nil
 }
 func (m *Network_IstioNetworkGateway_Address) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *Network_IstioNetworkGateway_Address) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.Address)
-	copy(dAtA[i:], m.Address)
-	i = encodeVarintNetwork(dAtA, i, uint64(len(m.Address)))
-	i--
+	i := 0
 	dAtA[i] = 0x12
-	return len(dAtA) - i, nil
+	i++
+	i = encodeVarintNetwork(dAtA, i, uint64(len(m.Address)))
+	i += copy(dAtA[i:], m.Address)
+	return i, nil
 }
 func (m *MeshNetworks) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -731,58 +683,52 @@ func (m *MeshNetworks) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *MeshNetworks) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MeshNetworks) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
 	if len(m.Networks) > 0 {
-		for k := range m.Networks {
+		for k, _ := range m.Networks {
+			dAtA[i] = 0xa
+			i++
 			v := m.Networks[k]
-			baseI := i
+			msgSize := 0
 			if v != nil {
-				{
-					size, err := v.MarshalToSizedBuffer(dAtA[:i])
-					if err != nil {
-						return 0, err
-					}
-					i -= size
-					i = encodeVarintNetwork(dAtA, i, uint64(size))
-				}
-				i--
-				dAtA[i] = 0x12
+				msgSize = v.Size()
+				msgSize += 1 + sovNetwork(uint64(msgSize))
 			}
-			i -= len(k)
-			copy(dAtA[i:], k)
+			mapSize := 1 + len(k) + sovNetwork(uint64(len(k))) + msgSize
+			i = encodeVarintNetwork(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0xa
+			i++
 			i = encodeVarintNetwork(dAtA, i, uint64(len(k)))
-			i--
-			dAtA[i] = 0xa
-			i = encodeVarintNetwork(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0xa
+			i += copy(dAtA[i:], k)
+			if v != nil {
+				dAtA[i] = 0x12
+				i++
+				i = encodeVarintNetwork(dAtA, i, uint64(v.Size()))
+				n3, err := v.MarshalTo(dAtA[i:])
+				if err != nil {
+					return 0, err
+				}
+				i += n3
+			}
 		}
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func encodeVarintNetwork(dAtA []byte, offset int, v uint64) int {
-	offset -= sovNetwork(v)
-	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return base
+	return offset + 1
 }
 func (m *Network) Size() (n int) {
 	if m == nil {
@@ -911,7 +857,14 @@ func (m *MeshNetworks) Size() (n int) {
 }
 
 func sovNetwork(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
+	for {
+		n++
+		x >>= 7
+		if x == 0 {
+			break
+		}
+	}
+	return n
 }
 func sozNetwork(x uint64) (n int) {
 	return sovNetwork(uint64((x << 1) ^ uint64((int64(x) >> 63))))

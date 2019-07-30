@@ -10,7 +10,6 @@ import (
 	io "io"
 	v1 "istio.io/api/mixer/v1"
 	math "math"
-	math_bits "math/bits"
 	reflect "reflect"
 	strings "strings"
 )
@@ -110,7 +109,7 @@ func (m *HTTPAPISpec) XXX_Unmarshal(b []byte) error {
 }
 func (m *HTTPAPISpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
+	n, err := m.MarshalTo(b)
 	if err != nil {
 		return nil, err
 	}
@@ -166,7 +165,7 @@ func (m *HTTPAPISpecPattern) XXX_Unmarshal(b []byte) error {
 }
 func (m *HTTPAPISpecPattern) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
+	n, err := m.MarshalTo(b)
 	if err != nil {
 		return nil, err
 	}
@@ -310,7 +309,7 @@ func (m *APIKey) XXX_Unmarshal(b []byte) error {
 }
 func (m *APIKey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
+	n, err := m.MarshalTo(b)
 	if err != nil {
 		return nil, err
 	}
@@ -485,7 +484,7 @@ func (m *HTTPAPISpecReference) XXX_Unmarshal(b []byte) error {
 }
 func (m *HTTPAPISpecReference) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
+	n, err := m.MarshalTo(b)
 	if err != nil {
 		return nil, err
 	}
@@ -540,7 +539,7 @@ func (m *HTTPAPISpecBinding) XXX_Unmarshal(b []byte) error {
 }
 func (m *HTTPAPISpecBinding) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
+	n, err := m.MarshalTo(b)
 	if err != nil {
 		return nil, err
 	}
@@ -610,7 +609,7 @@ var fileDescriptor_fb6b15fd2f44b459 = []byte{
 func (m *HTTPAPISpec) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -618,62 +617,51 @@ func (m *HTTPAPISpec) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *HTTPAPISpec) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPAPISpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if len(m.ApiKeys) > 0 {
-		for iNdEx := len(m.ApiKeys) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.ApiKeys[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintApiSpec(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1a
+	if m.Attributes != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintApiSpec(dAtA, i, uint64(m.Attributes.Size()))
+		n1, err := m.Attributes.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
+		i += n1
 	}
 	if len(m.Patterns) > 0 {
-		for iNdEx := len(m.Patterns) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Patterns[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintApiSpec(dAtA, i, uint64(size))
-			}
-			i--
+		for _, msg := range m.Patterns {
 			dAtA[i] = 0x12
-		}
-	}
-	if m.Attributes != nil {
-		{
-			size, err := m.Attributes.MarshalToSizedBuffer(dAtA[:i])
+			i++
+			i = encodeVarintApiSpec(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
 			if err != nil {
 				return 0, err
 			}
-			i -= size
-			i = encodeVarintApiSpec(dAtA, i, uint64(size))
+			i += n
 		}
-		i--
-		dAtA[i] = 0xa
 	}
-	return len(dAtA) - i, nil
+	if len(m.ApiKeys) > 0 {
+		for _, msg := range m.ApiKeys {
+			dAtA[i] = 0x1a
+			i++
+			i = encodeVarintApiSpec(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
 }
 
 func (m *HTTPAPISpecPattern) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -681,76 +669,56 @@ func (m *HTTPAPISpecPattern) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *HTTPAPISpecPattern) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPAPISpecPattern) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.Pattern != nil {
-		{
-			size := m.Pattern.Size()
-			i -= size
-			if _, err := m.Pattern.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
+	if m.Attributes != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintApiSpec(dAtA, i, uint64(m.Attributes.Size()))
+		n2, err := m.Attributes.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
+		i += n2
 	}
 	if len(m.HttpMethod) > 0 {
-		i -= len(m.HttpMethod)
-		copy(dAtA[i:], m.HttpMethod)
-		i = encodeVarintApiSpec(dAtA, i, uint64(len(m.HttpMethod)))
-		i--
 		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApiSpec(dAtA, i, uint64(len(m.HttpMethod)))
+		i += copy(dAtA[i:], m.HttpMethod)
 	}
-	if m.Attributes != nil {
-		{
-			size, err := m.Attributes.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintApiSpec(dAtA, i, uint64(size))
+	if m.Pattern != nil {
+		nn3, err := m.Pattern.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0xa
+		i += nn3
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 
 func (m *HTTPAPISpecPattern_UriTemplate) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *HTTPAPISpecPattern_UriTemplate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.UriTemplate)
-	copy(dAtA[i:], m.UriTemplate)
-	i = encodeVarintApiSpec(dAtA, i, uint64(len(m.UriTemplate)))
-	i--
+	i := 0
 	dAtA[i] = 0x1a
-	return len(dAtA) - i, nil
+	i++
+	i = encodeVarintApiSpec(dAtA, i, uint64(len(m.UriTemplate)))
+	i += copy(dAtA[i:], m.UriTemplate)
+	return i, nil
 }
 func (m *HTTPAPISpecPattern_Regex) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *HTTPAPISpecPattern_Regex) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.Regex)
-	copy(dAtA[i:], m.Regex)
-	i = encodeVarintApiSpec(dAtA, i, uint64(len(m.Regex)))
-	i--
+	i := 0
 	dAtA[i] = 0x22
-	return len(dAtA) - i, nil
+	i++
+	i = encodeVarintApiSpec(dAtA, i, uint64(len(m.Regex)))
+	i += copy(dAtA[i:], m.Regex)
+	return i, nil
 }
 func (m *APIKey) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -758,70 +726,48 @@ func (m *APIKey) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *APIKey) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *APIKey) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
 	if m.Key != nil {
-		{
-			size := m.Key.Size()
-			i -= size
-			if _, err := m.Key.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
+		nn4, err := m.Key.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
+		i += nn4
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 
 func (m *APIKey_Query) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *APIKey_Query) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.Query)
-	copy(dAtA[i:], m.Query)
-	i = encodeVarintApiSpec(dAtA, i, uint64(len(m.Query)))
-	i--
+	i := 0
 	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	i++
+	i = encodeVarintApiSpec(dAtA, i, uint64(len(m.Query)))
+	i += copy(dAtA[i:], m.Query)
+	return i, nil
 }
 func (m *APIKey_Header) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *APIKey_Header) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.Header)
-	copy(dAtA[i:], m.Header)
-	i = encodeVarintApiSpec(dAtA, i, uint64(len(m.Header)))
-	i--
+	i := 0
 	dAtA[i] = 0x12
-	return len(dAtA) - i, nil
+	i++
+	i = encodeVarintApiSpec(dAtA, i, uint64(len(m.Header)))
+	i += copy(dAtA[i:], m.Header)
+	return i, nil
 }
 func (m *APIKey_Cookie) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *APIKey_Cookie) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.Cookie)
-	copy(dAtA[i:], m.Cookie)
-	i = encodeVarintApiSpec(dAtA, i, uint64(len(m.Cookie)))
-	i--
+	i := 0
 	dAtA[i] = 0x1a
-	return len(dAtA) - i, nil
+	i++
+	i = encodeVarintApiSpec(dAtA, i, uint64(len(m.Cookie)))
+	i += copy(dAtA[i:], m.Cookie)
+	return i, nil
 }
 func (m *HTTPAPISpecReference) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -829,36 +775,29 @@ func (m *HTTPAPISpecReference) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *HTTPAPISpecReference) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPAPISpecReference) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if len(m.Namespace) > 0 {
-		i -= len(m.Namespace)
-		copy(dAtA[i:], m.Namespace)
-		i = encodeVarintApiSpec(dAtA, i, uint64(len(m.Namespace)))
-		i--
-		dAtA[i] = 0x12
-	}
 	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintApiSpec(dAtA, i, uint64(len(m.Name)))
-		i--
 		dAtA[i] = 0xa
+		i++
+		i = encodeVarintApiSpec(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
 	}
-	return len(dAtA) - i, nil
+	if len(m.Namespace) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApiSpec(dAtA, i, uint64(len(m.Namespace)))
+		i += copy(dAtA[i:], m.Namespace)
+	}
+	return i, nil
 }
 
 func (m *HTTPAPISpecBinding) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -866,56 +805,45 @@ func (m *HTTPAPISpecBinding) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *HTTPAPISpecBinding) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *HTTPAPISpecBinding) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if len(m.ApiSpecs) > 0 {
-		for iNdEx := len(m.ApiSpecs) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.ApiSpecs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintApiSpec(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
 	if len(m.Services) > 0 {
-		for iNdEx := len(m.Services) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Services[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintApiSpec(dAtA, i, uint64(size))
-			}
-			i--
+		for _, msg := range m.Services {
 			dAtA[i] = 0xa
+			i++
+			i = encodeVarintApiSpec(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
 		}
 	}
-	return len(dAtA) - i, nil
+	if len(m.ApiSpecs) > 0 {
+		for _, msg := range m.ApiSpecs {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintApiSpec(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
 }
 
 func encodeVarintApiSpec(dAtA []byte, offset int, v uint64) int {
-	offset -= sovApiSpec(v)
-	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return base
+	return offset + 1
 }
 func (m *HTTPAPISpec) Size() (n int) {
 	if m == nil {
@@ -1063,7 +991,14 @@ func (m *HTTPAPISpecBinding) Size() (n int) {
 }
 
 func sovApiSpec(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
+	for {
+		n++
+		x >>= 7
+		if x == 0 {
+			break
+		}
+	}
+	return n
 }
 func sozApiSpec(x uint64) (n int) {
 	return sovApiSpec(uint64((x << 1) ^ uint64((int64(x) >> 63))))
@@ -1072,20 +1007,10 @@ func (this *HTTPAPISpec) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForPatterns := "[]*HTTPAPISpecPattern{"
-	for _, f := range this.Patterns {
-		repeatedStringForPatterns += strings.Replace(f.String(), "HTTPAPISpecPattern", "HTTPAPISpecPattern", 1) + ","
-	}
-	repeatedStringForPatterns += "}"
-	repeatedStringForApiKeys := "[]*APIKey{"
-	for _, f := range this.ApiKeys {
-		repeatedStringForApiKeys += strings.Replace(f.String(), "APIKey", "APIKey", 1) + ","
-	}
-	repeatedStringForApiKeys += "}"
 	s := strings.Join([]string{`&HTTPAPISpec{`,
 		`Attributes:` + strings.Replace(fmt.Sprintf("%v", this.Attributes), "Attributes", "v1.Attributes", 1) + `,`,
-		`Patterns:` + repeatedStringForPatterns + `,`,
-		`ApiKeys:` + repeatedStringForApiKeys + `,`,
+		`Patterns:` + strings.Replace(fmt.Sprintf("%v", this.Patterns), "HTTPAPISpecPattern", "HTTPAPISpecPattern", 1) + `,`,
+		`ApiKeys:` + strings.Replace(fmt.Sprintf("%v", this.ApiKeys), "APIKey", "APIKey", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1177,19 +1102,9 @@ func (this *HTTPAPISpecBinding) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForServices := "[]*IstioService{"
-	for _, f := range this.Services {
-		repeatedStringForServices += strings.Replace(fmt.Sprintf("%v", f), "IstioService", "IstioService", 1) + ","
-	}
-	repeatedStringForServices += "}"
-	repeatedStringForApiSpecs := "[]*HTTPAPISpecReference{"
-	for _, f := range this.ApiSpecs {
-		repeatedStringForApiSpecs += strings.Replace(f.String(), "HTTPAPISpecReference", "HTTPAPISpecReference", 1) + ","
-	}
-	repeatedStringForApiSpecs += "}"
 	s := strings.Join([]string{`&HTTPAPISpecBinding{`,
-		`Services:` + repeatedStringForServices + `,`,
-		`ApiSpecs:` + repeatedStringForApiSpecs + `,`,
+		`Services:` + strings.Replace(fmt.Sprintf("%v", this.Services), "IstioService", "IstioService", 1) + `,`,
+		`ApiSpecs:` + strings.Replace(fmt.Sprintf("%v", this.ApiSpecs), "HTTPAPISpecReference", "HTTPAPISpecReference", 1) + `,`,
 		`}`,
 	}, "")
 	return s

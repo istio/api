@@ -180,7 +180,6 @@ import (
 	proto "github.com/gogo/protobuf/proto"
 	io "io"
 	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -319,7 +318,7 @@ func (m *Gateway) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Gateway.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -475,7 +474,7 @@ func (m *Server) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Server.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -606,7 +605,7 @@ func (m *Server_TLSOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, e
 		return xxx_messageInfo_Server_TLSOptions.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -739,7 +738,7 @@ func (m *Port) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Port.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -844,7 +843,7 @@ var fileDescriptor_067d98d02f84cc0b = []byte{
 func (m *Gateway) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -852,59 +851,49 @@ func (m *Gateway) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Gateway) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Gateway) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
+	if len(m.Servers) > 0 {
+		for _, msg := range m.Servers {
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintGateway(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
 	}
 	if len(m.Selector) > 0 {
-		for k := range m.Selector {
+		for k, _ := range m.Selector {
+			dAtA[i] = 0x12
+			i++
 			v := m.Selector[k]
-			baseI := i
-			i -= len(v)
-			copy(dAtA[i:], v)
-			i = encodeVarintGateway(dAtA, i, uint64(len(v)))
-			i--
-			dAtA[i] = 0x12
-			i -= len(k)
-			copy(dAtA[i:], k)
+			mapSize := 1 + len(k) + sovGateway(uint64(len(k))) + 1 + len(v) + sovGateway(uint64(len(v)))
+			i = encodeVarintGateway(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0xa
+			i++
 			i = encodeVarintGateway(dAtA, i, uint64(len(k)))
-			i--
-			dAtA[i] = 0xa
-			i = encodeVarintGateway(dAtA, i, uint64(baseI-i))
-			i--
+			i += copy(dAtA[i:], k)
 			dAtA[i] = 0x12
+			i++
+			i = encodeVarintGateway(dAtA, i, uint64(len(v)))
+			i += copy(dAtA[i:], v)
 		}
 	}
-	if len(m.Servers) > 0 {
-		for iNdEx := len(m.Servers) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Servers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintGateway(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 
 func (m *Server) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -912,73 +901,67 @@ func (m *Server) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Server) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Server) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if len(m.DefaultEndpoint) > 0 {
-		i -= len(m.DefaultEndpoint)
-		copy(dAtA[i:], m.DefaultEndpoint)
-		i = encodeVarintGateway(dAtA, i, uint64(len(m.DefaultEndpoint)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.Bind) > 0 {
-		i -= len(m.Bind)
-		copy(dAtA[i:], m.Bind)
-		i = encodeVarintGateway(dAtA, i, uint64(len(m.Bind)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.Tls != nil {
-		{
-			size, err := m.Tls.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintGateway(dAtA, i, uint64(size))
+	if m.Port != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintGateway(dAtA, i, uint64(m.Port.Size()))
+		n1, err := m.Port.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x1a
+		i += n1
 	}
 	if len(m.Hosts) > 0 {
-		for iNdEx := len(m.Hosts) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.Hosts[iNdEx])
-			copy(dAtA[i:], m.Hosts[iNdEx])
-			i = encodeVarintGateway(dAtA, i, uint64(len(m.Hosts[iNdEx])))
-			i--
+		for _, s := range m.Hosts {
 			dAtA[i] = 0x12
-		}
-	}
-	if m.Port != nil {
-		{
-			size, err := m.Port.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
 			}
-			i -= size
-			i = encodeVarintGateway(dAtA, i, uint64(size))
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
 		}
-		i--
-		dAtA[i] = 0xa
 	}
-	return len(dAtA) - i, nil
+	if m.Tls != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintGateway(dAtA, i, uint64(m.Tls.Size()))
+		n2, err := m.Tls.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
+	}
+	if len(m.Bind) > 0 {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintGateway(dAtA, i, uint64(len(m.Bind)))
+		i += copy(dAtA[i:], m.Bind)
+	}
+	if len(m.DefaultEndpoint) > 0 {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintGateway(dAtA, i, uint64(len(m.DefaultEndpoint)))
+		i += copy(dAtA[i:], m.DefaultEndpoint)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *Server_TLSOptions) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -986,115 +969,129 @@ func (m *Server_TLSOptions) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Server_TLSOptions) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Server_TLSOptions) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if len(m.VerifyCertificateHash) > 0 {
-		for iNdEx := len(m.VerifyCertificateHash) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.VerifyCertificateHash[iNdEx])
-			copy(dAtA[i:], m.VerifyCertificateHash[iNdEx])
-			i = encodeVarintGateway(dAtA, i, uint64(len(m.VerifyCertificateHash[iNdEx])))
-			i--
-			dAtA[i] = 0x62
-		}
-	}
-	if len(m.VerifyCertificateSpki) > 0 {
-		for iNdEx := len(m.VerifyCertificateSpki) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.VerifyCertificateSpki[iNdEx])
-			copy(dAtA[i:], m.VerifyCertificateSpki[iNdEx])
-			i = encodeVarintGateway(dAtA, i, uint64(len(m.VerifyCertificateSpki[iNdEx])))
-			i--
-			dAtA[i] = 0x5a
-		}
-	}
-	if len(m.CredentialName) > 0 {
-		i -= len(m.CredentialName)
-		copy(dAtA[i:], m.CredentialName)
-		i = encodeVarintGateway(dAtA, i, uint64(len(m.CredentialName)))
-		i--
-		dAtA[i] = 0x52
-	}
-	if len(m.CipherSuites) > 0 {
-		for iNdEx := len(m.CipherSuites) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.CipherSuites[iNdEx])
-			copy(dAtA[i:], m.CipherSuites[iNdEx])
-			i = encodeVarintGateway(dAtA, i, uint64(len(m.CipherSuites[iNdEx])))
-			i--
-			dAtA[i] = 0x4a
-		}
-	}
-	if m.MaxProtocolVersion != 0 {
-		i = encodeVarintGateway(dAtA, i, uint64(m.MaxProtocolVersion))
-		i--
-		dAtA[i] = 0x40
-	}
-	if m.MinProtocolVersion != 0 {
-		i = encodeVarintGateway(dAtA, i, uint64(m.MinProtocolVersion))
-		i--
-		dAtA[i] = 0x38
-	}
-	if len(m.SubjectAltNames) > 0 {
-		for iNdEx := len(m.SubjectAltNames) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.SubjectAltNames[iNdEx])
-			copy(dAtA[i:], m.SubjectAltNames[iNdEx])
-			i = encodeVarintGateway(dAtA, i, uint64(len(m.SubjectAltNames[iNdEx])))
-			i--
-			dAtA[i] = 0x32
-		}
-	}
-	if len(m.CaCertificates) > 0 {
-		i -= len(m.CaCertificates)
-		copy(dAtA[i:], m.CaCertificates)
-		i = encodeVarintGateway(dAtA, i, uint64(len(m.CaCertificates)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.PrivateKey) > 0 {
-		i -= len(m.PrivateKey)
-		copy(dAtA[i:], m.PrivateKey)
-		i = encodeVarintGateway(dAtA, i, uint64(len(m.PrivateKey)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.ServerCertificate) > 0 {
-		i -= len(m.ServerCertificate)
-		copy(dAtA[i:], m.ServerCertificate)
-		i = encodeVarintGateway(dAtA, i, uint64(len(m.ServerCertificate)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.Mode != 0 {
-		i = encodeVarintGateway(dAtA, i, uint64(m.Mode))
-		i--
-		dAtA[i] = 0x10
-	}
 	if m.HttpsRedirect {
-		i--
+		dAtA[i] = 0x8
+		i++
 		if m.HttpsRedirect {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i--
-		dAtA[i] = 0x8
+		i++
 	}
-	return len(dAtA) - i, nil
+	if m.Mode != 0 {
+		dAtA[i] = 0x10
+		i++
+		i = encodeVarintGateway(dAtA, i, uint64(m.Mode))
+	}
+	if len(m.ServerCertificate) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintGateway(dAtA, i, uint64(len(m.ServerCertificate)))
+		i += copy(dAtA[i:], m.ServerCertificate)
+	}
+	if len(m.PrivateKey) > 0 {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintGateway(dAtA, i, uint64(len(m.PrivateKey)))
+		i += copy(dAtA[i:], m.PrivateKey)
+	}
+	if len(m.CaCertificates) > 0 {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintGateway(dAtA, i, uint64(len(m.CaCertificates)))
+		i += copy(dAtA[i:], m.CaCertificates)
+	}
+	if len(m.SubjectAltNames) > 0 {
+		for _, s := range m.SubjectAltNames {
+			dAtA[i] = 0x32
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	if m.MinProtocolVersion != 0 {
+		dAtA[i] = 0x38
+		i++
+		i = encodeVarintGateway(dAtA, i, uint64(m.MinProtocolVersion))
+	}
+	if m.MaxProtocolVersion != 0 {
+		dAtA[i] = 0x40
+		i++
+		i = encodeVarintGateway(dAtA, i, uint64(m.MaxProtocolVersion))
+	}
+	if len(m.CipherSuites) > 0 {
+		for _, s := range m.CipherSuites {
+			dAtA[i] = 0x4a
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	if len(m.CredentialName) > 0 {
+		dAtA[i] = 0x52
+		i++
+		i = encodeVarintGateway(dAtA, i, uint64(len(m.CredentialName)))
+		i += copy(dAtA[i:], m.CredentialName)
+	}
+	if len(m.VerifyCertificateSpki) > 0 {
+		for _, s := range m.VerifyCertificateSpki {
+			dAtA[i] = 0x5a
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	if len(m.VerifyCertificateHash) > 0 {
+		for _, s := range m.VerifyCertificateHash {
+			dAtA[i] = 0x62
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *Port) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1102,51 +1099,41 @@ func (m *Port) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Port) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Port) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintGateway(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0x1a
+	if m.Number != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintGateway(dAtA, i, uint64(m.Number))
 	}
 	if len(m.Protocol) > 0 {
-		i -= len(m.Protocol)
-		copy(dAtA[i:], m.Protocol)
-		i = encodeVarintGateway(dAtA, i, uint64(len(m.Protocol)))
-		i--
 		dAtA[i] = 0x12
+		i++
+		i = encodeVarintGateway(dAtA, i, uint64(len(m.Protocol)))
+		i += copy(dAtA[i:], m.Protocol)
 	}
-	if m.Number != 0 {
-		i = encodeVarintGateway(dAtA, i, uint64(m.Number))
-		i--
-		dAtA[i] = 0x8
+	if len(m.Name) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintGateway(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func encodeVarintGateway(dAtA []byte, offset int, v uint64) int {
-	offset -= sovGateway(v)
-	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return base
+	return offset + 1
 }
 func (m *Gateway) Size() (n int) {
 	if m == nil {
@@ -1296,7 +1283,14 @@ func (m *Port) Size() (n int) {
 }
 
 func sovGateway(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
+	for {
+		n++
+		x >>= 7
+		if x == 0 {
+			break
+		}
+	}
+	return n
 }
 func sozGateway(x uint64) (n int) {
 	return sovGateway(uint64((x << 1) ^ uint64((int64(x) >> 63))))
