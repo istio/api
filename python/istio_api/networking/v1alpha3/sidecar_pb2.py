@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.networking.v1alpha3',
   syntax='proto3',
   serialized_options=_b('Z istio.io/api/networking/v1alpha3'),
-  serialized_pb=_b('\n!networking/v1alpha3/sidecar.proto\x12\x19istio.networking.v1alpha3\x1a!networking/v1alpha3/gateway.proto\"\xa6\x02\n\x07Sidecar\x12\x46\n\x11workload_selector\x18\x01 \x01(\x0b\x32+.istio.networking.v1alpha3.WorkloadSelector\x12@\n\x07ingress\x18\x02 \x03(\x0b\x32/.istio.networking.v1alpha3.IstioIngressListener\x12>\n\x06\x65gress\x18\x03 \x03(\x0b\x32..istio.networking.v1alpha3.IstioEgressListener\x12Q\n\x17outbound_traffic_policy\x18\x04 \x01(\x0b\x32\x30.istio.networking.v1alpha3.OutboundTrafficPolicy\"\xab\x01\n\x14IstioIngressListener\x12-\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.Port\x12\x0c\n\x04\x62ind\x18\x02 \x01(\t\x12<\n\x0c\x63\x61pture_mode\x18\x03 \x01(\x0e\x32&.istio.networking.v1alpha3.CaptureMode\x12\x18\n\x10\x64\x65\x66\x61ult_endpoint\x18\x04 \x01(\t\"\x9f\x01\n\x13IstioEgressListener\x12-\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.Port\x12\x0c\n\x04\x62ind\x18\x02 \x01(\t\x12<\n\x0c\x63\x61pture_mode\x18\x03 \x01(\x0e\x32&.istio.networking.v1alpha3.CaptureMode\x12\r\n\x05hosts\x18\x04 \x03(\t\"\x8a\x01\n\x10WorkloadSelector\x12G\n\x06labels\x18\x01 \x03(\x0b\x32\x37.istio.networking.v1alpha3.WorkloadSelector.LabelsEntry\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x86\x01\n\x15OutboundTrafficPolicy\x12\x43\n\x04mode\x18\x01 \x01(\x0e\x32\x35.istio.networking.v1alpha3.OutboundTrafficPolicy.Mode\"(\n\x04Mode\x12\x11\n\rREGISTRY_ONLY\x10\x00\x12\r\n\tALLOW_ANY\x10\x01*2\n\x0b\x43\x61ptureMode\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x00\x12\x0c\n\x08IPTABLES\x10\x01\x12\x08\n\x04NONE\x10\x02\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
+  serialized_pb=_b('\n!networking/v1alpha3/sidecar.proto\x12\x19istio.networking.v1alpha3\x1a!networking/v1alpha3/gateway.proto\"\xa6\x02\n\x07Sidecar\x12\x46\n\x11workload_selector\x18\x01 \x01(\x0b\x32+.istio.networking.v1alpha3.WorkloadSelector\x12@\n\x07ingress\x18\x02 \x03(\x0b\x32/.istio.networking.v1alpha3.IstioIngressListener\x12>\n\x06\x65gress\x18\x03 \x03(\x0b\x32..istio.networking.v1alpha3.IstioEgressListener\x12Q\n\x17outbound_traffic_policy\x18\x04 \x01(\x0b\x32\x30.istio.networking.v1alpha3.OutboundTrafficPolicy\"\xab\x01\n\x14IstioIngressListener\x12-\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.Port\x12\x0c\n\x04\x62ind\x18\x02 \x01(\t\x12<\n\x0c\x63\x61pture_mode\x18\x03 \x01(\x0e\x32&.istio.networking.v1alpha3.CaptureMode\x12\x18\n\x10\x64\x65\x66\x61ult_endpoint\x18\x04 \x01(\t\"\x9f\x01\n\x13IstioEgressListener\x12-\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.Port\x12\x0c\n\x04\x62ind\x18\x02 \x01(\t\x12<\n\x0c\x63\x61pture_mode\x18\x03 \x01(\x0e\x32&.istio.networking.v1alpha3.CaptureMode\x12\r\n\x05hosts\x18\x04 \x03(\t\"\xaf\x02\n\x10WorkloadSelector\x12G\n\x06labels\x18\x01 \x03(\x0b\x32\x37.istio.networking.v1alpha3.WorkloadSelector.LabelsEntry\x12\x15\n\rproxy_version\x18\x02 \x01(\t\x12V\n\x0eproxy_metadata\x18\x03 \x03(\x0b\x32>.istio.networking.v1alpha3.WorkloadSelector.ProxyMetadataEntry\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x34\n\x12ProxyMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x86\x01\n\x15OutboundTrafficPolicy\x12\x43\n\x04mode\x18\x01 \x01(\x0e\x32\x35.istio.networking.v1alpha3.OutboundTrafficPolicy.Mode\"(\n\x04Mode\x12\x11\n\rREGISTRY_ONLY\x10\x00\x12\r\n\tALLOW_ANY\x10\x01*2\n\x0b\x43\x61ptureMode\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x00\x12\x0c\n\x08IPTABLES\x10\x01\x12\x08\n\x04NONE\x10\x02\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
   ,
   dependencies=[networking_dot_v1alpha3_dot_gateway__pb2.DESCRIPTOR,])
 
@@ -46,8 +46,8 @@ _CAPTUREMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1010,
-  serialized_end=1060,
+  serialized_start=1175,
+  serialized_end=1225,
 )
 _sym_db.RegisterEnumDescriptor(_CAPTUREMODE)
 
@@ -74,8 +74,8 @@ _OUTBOUNDTRAFFICPOLICY_MODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=968,
-  serialized_end=1008,
+  serialized_start=1133,
+  serialized_end=1173,
 )
 _sym_db.RegisterEnumDescriptor(_OUTBOUNDTRAFFICPOLICY_MODE)
 
@@ -269,8 +269,45 @@ _WORKLOADSELECTOR_LABELSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=826,
-  serialized_end=871,
+  serialized_start=937,
+  serialized_end=982,
+)
+
+_WORKLOADSELECTOR_PROXYMETADATAENTRY = _descriptor.Descriptor(
+  name='ProxyMetadataEntry',
+  full_name='istio.networking.v1alpha3.WorkloadSelector.ProxyMetadataEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.networking.v1alpha3.WorkloadSelector.ProxyMetadataEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.networking.v1alpha3.WorkloadSelector.ProxyMetadataEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=984,
+  serialized_end=1036,
 )
 
 _WORKLOADSELECTOR = _descriptor.Descriptor(
@@ -287,10 +324,24 @@ _WORKLOADSELECTOR = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='proxy_version', full_name='istio.networking.v1alpha3.WorkloadSelector.proxy_version', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='proxy_metadata', full_name='istio.networking.v1alpha3.WorkloadSelector.proxy_metadata', index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
-  nested_types=[_WORKLOADSELECTOR_LABELSENTRY, ],
+  nested_types=[_WORKLOADSELECTOR_LABELSENTRY, _WORKLOADSELECTOR_PROXYMETADATAENTRY, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -300,7 +351,7 @@ _WORKLOADSELECTOR = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=733,
-  serialized_end=871,
+  serialized_end=1036,
 )
 
 
@@ -331,8 +382,8 @@ _OUTBOUNDTRAFFICPOLICY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=874,
-  serialized_end=1008,
+  serialized_start=1039,
+  serialized_end=1173,
 )
 
 _SIDECAR.fields_by_name['workload_selector'].message_type = _WORKLOADSELECTOR
@@ -344,7 +395,9 @@ _ISTIOINGRESSLISTENER.fields_by_name['capture_mode'].enum_type = _CAPTUREMODE
 _ISTIOEGRESSLISTENER.fields_by_name['port'].message_type = networking_dot_v1alpha3_dot_gateway__pb2._PORT
 _ISTIOEGRESSLISTENER.fields_by_name['capture_mode'].enum_type = _CAPTUREMODE
 _WORKLOADSELECTOR_LABELSENTRY.containing_type = _WORKLOADSELECTOR
+_WORKLOADSELECTOR_PROXYMETADATAENTRY.containing_type = _WORKLOADSELECTOR
 _WORKLOADSELECTOR.fields_by_name['labels'].message_type = _WORKLOADSELECTOR_LABELSENTRY
+_WORKLOADSELECTOR.fields_by_name['proxy_metadata'].message_type = _WORKLOADSELECTOR_PROXYMETADATAENTRY
 _OUTBOUNDTRAFFICPOLICY.fields_by_name['mode'].enum_type = _OUTBOUNDTRAFFICPOLICY_MODE
 _OUTBOUNDTRAFFICPOLICY_MODE.containing_type = _OUTBOUNDTRAFFICPOLICY
 DESCRIPTOR.message_types_by_name['Sidecar'] = _SIDECAR
@@ -384,12 +437,20 @@ WorkloadSelector = _reflection.GeneratedProtocolMessageType('WorkloadSelector', 
     # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.WorkloadSelector.LabelsEntry)
     ))
   ,
+
+  ProxyMetadataEntry = _reflection.GeneratedProtocolMessageType('ProxyMetadataEntry', (_message.Message,), dict(
+    DESCRIPTOR = _WORKLOADSELECTOR_PROXYMETADATAENTRY,
+    __module__ = 'networking.v1alpha3.sidecar_pb2'
+    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.WorkloadSelector.ProxyMetadataEntry)
+    ))
+  ,
   DESCRIPTOR = _WORKLOADSELECTOR,
   __module__ = 'networking.v1alpha3.sidecar_pb2'
   # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.WorkloadSelector)
   ))
 _sym_db.RegisterMessage(WorkloadSelector)
 _sym_db.RegisterMessage(WorkloadSelector.LabelsEntry)
+_sym_db.RegisterMessage(WorkloadSelector.ProxyMetadataEntry)
 
 OutboundTrafficPolicy = _reflection.GeneratedProtocolMessageType('OutboundTrafficPolicy', (_message.Message,), dict(
   DESCRIPTOR = _OUTBOUNDTRAFFICPOLICY,
@@ -401,4 +462,5 @@ _sym_db.RegisterMessage(OutboundTrafficPolicy)
 
 DESCRIPTOR._options = None
 _WORKLOADSELECTOR_LABELSENTRY._options = None
+_WORKLOADSELECTOR_PROXYMETADATAENTRY._options = None
 # @@protoc_insertion_point(module_scope)

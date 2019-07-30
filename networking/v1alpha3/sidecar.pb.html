@@ -538,10 +538,38 @@ selected. Currently, only label based selection mechanism is supported.</p>
 <td><code>labels</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>REQUIRED: One or more labels that indicate a specific set of pods/VMs
-on which this sidecar configuration should be applied. The scope of
-label search is restricted to the configuration namespace in which the
-the resource is present.</p>
+<p>One or more labels that indicate a specific set of pods/VMs on
+which this sidecar configuration should be applied. The scope of
+label search is restricted to the configuration namespace in
+which the the resource is present.</p>
+
+</td>
+</tr>
+<tr id="WorkloadSelector-proxy_version">
+<td><code>proxyVersion</code></td>
+<td><code>string</code></td>
+<td>
+<p>A regular expression in golang regex format (RE2) that can be
+used to select proxies using a specific version of istio
+proxy. The Istio version for a given proxy is obtained from the
+node metadata field ISTIO<em>VERSION supplied by the proxy when
+connecting to Pilot. This value is embedded as an environment
+variable (ISTIO</em>META<em>ISTIO</em>VERSION) in the Istio proxy docker
+image. Custom proxy implementations should provide this metadata
+variable to take advantage of the Istio version check option.</p>
+
+</td>
+</tr>
+<tr id="WorkloadSelector-proxy_metadata">
+<td><code>proxyMetadata</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>Match on the node metadata supplied by a proxy when connecting
+to Istio Pilot. Note that while Envoy&rsquo;s node metadata is of
+type Struct, only string key-value pairs are processed by
+Pilot. All keys specified in the metadata must match with exact
+values. The match will fail if any of the specified keys are
+absent or the values fail to match.</p>
 
 </td>
 </tr>

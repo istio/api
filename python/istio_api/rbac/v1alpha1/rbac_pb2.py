@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.rbac.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\032istio.io/api/rbac/v1alpha1'),
-  serialized_pb=_b('\n\x18rbac/v1alpha1/rbac.proto\x12\x13istio.rbac.v1alpha1\"\x84\x01\n\x10WorkloadSelector\x12\x41\n\x06labels\x18\x01 \x03(\x0b\x32\x31.istio.rbac.v1alpha1.WorkloadSelector.LabelsEntry\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8f\x01\n\x13\x41uthorizationPolicy\x12@\n\x11workload_selector\x18\x01 \x01(\x0b\x32%.istio.rbac.v1alpha1.WorkloadSelector\x12\x36\n\x05\x61llow\x18\x02 \x03(\x0b\x32\'.istio.rbac.v1alpha1.ServiceRoleBinding\"=\n\x0bServiceRole\x12.\n\x05rules\x18\x01 \x03(\x0b\x32\x1f.istio.rbac.v1alpha1.AccessRule\"\x96\x02\n\nAccessRule\x12\x10\n\x08services\x18\x01 \x03(\t\x12\r\n\x05hosts\x18\x05 \x03(\t\x12\x11\n\tnot_hosts\x18\x06 \x03(\t\x12\r\n\x05paths\x18\x02 \x03(\t\x12\x11\n\tnot_paths\x18\x07 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\x13\n\x0bnot_methods\x18\x08 \x03(\t\x12\r\n\x05ports\x18\t \x03(\x05\x12\x11\n\tnot_ports\x18\n \x03(\x05\x12?\n\x0b\x63onstraints\x18\x04 \x03(\x0b\x32*.istio.rbac.v1alpha1.AccessRule.Constraint\x1a)\n\nConstraint\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x0e\n\x06values\x18\x02 \x03(\t\"\xe7\x01\n\x12ServiceRoleBinding\x12.\n\x08subjects\x18\x01 \x03(\x0b\x32\x1c.istio.rbac.v1alpha1.Subject\x12-\n\x07roleRef\x18\x02 \x01(\x0b\x32\x1c.istio.rbac.v1alpha1.RoleRef\x12\x32\n\x04mode\x18\x03 \x01(\x0e\x32$.istio.rbac.v1alpha1.EnforcementMode\x12\x30\n\x07\x61\x63tions\x18\x04 \x03(\x0b\x32\x1f.istio.rbac.v1alpha1.AccessRule\x12\x0c\n\x04role\x18\x05 \x01(\t\"\xaf\x02\n\x07Subject\x12\x0c\n\x04user\x18\x01 \x01(\t\x12\r\n\x05names\x18\x04 \x03(\t\x12\x11\n\tnot_names\x18\x05 \x03(\t\x12\x11\n\x05group\x18\x02 \x01(\tB\x02\x18\x01\x12\x0e\n\x06groups\x18\x06 \x03(\t\x12\x12\n\nnot_groups\x18\x07 \x03(\t\x12\x12\n\nnamespaces\x18\x08 \x03(\t\x12\x16\n\x0enot_namespaces\x18\t \x03(\t\x12\x0b\n\x03ips\x18\n \x03(\t\x12\x0f\n\x07not_ips\x18\x0b \x03(\t\x12@\n\nproperties\x18\x03 \x03(\x0b\x32,.istio.rbac.v1alpha1.Subject.PropertiesEntry\x1a\x31\n\x0fPropertiesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"%\n\x07RoleRef\x12\x0c\n\x04kind\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\"\xb0\x03\n\nRbacConfig\x12\x32\n\x04mode\x18\x01 \x01(\x0e\x32$.istio.rbac.v1alpha1.RbacConfig.Mode\x12\x39\n\tinclusion\x18\x02 \x01(\x0b\x32&.istio.rbac.v1alpha1.RbacConfig.Target\x12\x39\n\texclusion\x18\x03 \x01(\x0b\x32&.istio.rbac.v1alpha1.RbacConfig.Target\x12>\n\x10\x65nforcement_mode\x18\x04 \x01(\x0e\x32$.istio.rbac.v1alpha1.EnforcementMode\x1aq\n\x06Target\x12\x10\n\x08services\x18\x01 \x03(\t\x12\x41\n\x12workload_selectors\x18\x03 \x03(\x0b\x32%.istio.rbac.v1alpha1.WorkloadSelector\x12\x12\n\nnamespaces\x18\x02 \x03(\t\"E\n\x04Mode\x12\x07\n\x03OFF\x10\x00\x12\x06\n\x02ON\x10\x01\x12\x15\n\x11ON_WITH_INCLUSION\x10\x02\x12\x15\n\x11ON_WITH_EXCLUSION\x10\x03*/\n\x0f\x45nforcementMode\x12\x0c\n\x08\x45NFORCED\x10\x00\x12\x0e\n\nPERMISSIVE\x10\x01\x42\x1cZ\x1aistio.io/api/rbac/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x18rbac/v1alpha1/rbac.proto\x12\x13istio.rbac.v1alpha1\"\xa3\x02\n\x10WorkloadSelector\x12\x41\n\x06labels\x18\x01 \x03(\x0b\x32\x31.istio.rbac.v1alpha1.WorkloadSelector.LabelsEntry\x12\x15\n\rproxy_version\x18\x02 \x01(\t\x12P\n\x0eproxy_metadata\x18\x03 \x03(\x0b\x32\x38.istio.rbac.v1alpha1.WorkloadSelector.ProxyMetadataEntry\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x34\n\x12ProxyMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8f\x01\n\x13\x41uthorizationPolicy\x12@\n\x11workload_selector\x18\x01 \x01(\x0b\x32%.istio.rbac.v1alpha1.WorkloadSelector\x12\x36\n\x05\x61llow\x18\x02 \x03(\x0b\x32\'.istio.rbac.v1alpha1.ServiceRoleBinding\"=\n\x0bServiceRole\x12.\n\x05rules\x18\x01 \x03(\x0b\x32\x1f.istio.rbac.v1alpha1.AccessRule\"\x96\x02\n\nAccessRule\x12\x10\n\x08services\x18\x01 \x03(\t\x12\r\n\x05hosts\x18\x05 \x03(\t\x12\x11\n\tnot_hosts\x18\x06 \x03(\t\x12\r\n\x05paths\x18\x02 \x03(\t\x12\x11\n\tnot_paths\x18\x07 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\x13\n\x0bnot_methods\x18\x08 \x03(\t\x12\r\n\x05ports\x18\t \x03(\x05\x12\x11\n\tnot_ports\x18\n \x03(\x05\x12?\n\x0b\x63onstraints\x18\x04 \x03(\x0b\x32*.istio.rbac.v1alpha1.AccessRule.Constraint\x1a)\n\nConstraint\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x0e\n\x06values\x18\x02 \x03(\t\"\xe7\x01\n\x12ServiceRoleBinding\x12.\n\x08subjects\x18\x01 \x03(\x0b\x32\x1c.istio.rbac.v1alpha1.Subject\x12-\n\x07roleRef\x18\x02 \x01(\x0b\x32\x1c.istio.rbac.v1alpha1.RoleRef\x12\x32\n\x04mode\x18\x03 \x01(\x0e\x32$.istio.rbac.v1alpha1.EnforcementMode\x12\x30\n\x07\x61\x63tions\x18\x04 \x03(\x0b\x32\x1f.istio.rbac.v1alpha1.AccessRule\x12\x0c\n\x04role\x18\x05 \x01(\t\"\xaf\x02\n\x07Subject\x12\x0c\n\x04user\x18\x01 \x01(\t\x12\r\n\x05names\x18\x04 \x03(\t\x12\x11\n\tnot_names\x18\x05 \x03(\t\x12\x11\n\x05group\x18\x02 \x01(\tB\x02\x18\x01\x12\x0e\n\x06groups\x18\x06 \x03(\t\x12\x12\n\nnot_groups\x18\x07 \x03(\t\x12\x12\n\nnamespaces\x18\x08 \x03(\t\x12\x16\n\x0enot_namespaces\x18\t \x03(\t\x12\x0b\n\x03ips\x18\n \x03(\t\x12\x0f\n\x07not_ips\x18\x0b \x03(\t\x12@\n\nproperties\x18\x03 \x03(\x0b\x32,.istio.rbac.v1alpha1.Subject.PropertiesEntry\x1a\x31\n\x0fPropertiesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"%\n\x07RoleRef\x12\x0c\n\x04kind\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\"\xb0\x03\n\nRbacConfig\x12\x32\n\x04mode\x18\x01 \x01(\x0e\x32$.istio.rbac.v1alpha1.RbacConfig.Mode\x12\x39\n\tinclusion\x18\x02 \x01(\x0b\x32&.istio.rbac.v1alpha1.RbacConfig.Target\x12\x39\n\texclusion\x18\x03 \x01(\x0b\x32&.istio.rbac.v1alpha1.RbacConfig.Target\x12>\n\x10\x65nforcement_mode\x18\x04 \x01(\x0e\x32$.istio.rbac.v1alpha1.EnforcementMode\x1aq\n\x06Target\x12\x10\n\x08services\x18\x01 \x03(\t\x12\x41\n\x12workload_selectors\x18\x03 \x03(\x0b\x32%.istio.rbac.v1alpha1.WorkloadSelector\x12\x12\n\nnamespaces\x18\x02 \x03(\t\"E\n\x04Mode\x12\x07\n\x03OFF\x10\x00\x12\x06\n\x02ON\x10\x01\x12\x15\n\x11ON_WITH_INCLUSION\x10\x02\x12\x15\n\x11ON_WITH_EXCLUSION\x10\x03*/\n\x0f\x45nforcementMode\x12\x0c\n\x08\x45NFORCED\x10\x00\x12\x0e\n\nPERMISSIVE\x10\x01\x42\x1cZ\x1aistio.io/api/rbac/v1alpha1b\x06proto3')
 )
 
 _ENFORCEMENTMODE = _descriptor.EnumDescriptor(
@@ -40,8 +40,8 @@ _ENFORCEMENTMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1688,
-  serialized_end=1735,
+  serialized_start=1847,
+  serialized_end=1894,
 )
 _sym_db.RegisterEnumDescriptor(_ENFORCEMENTMODE)
 
@@ -75,8 +75,8 @@ _RBACCONFIG_MODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1617,
-  serialized_end=1686,
+  serialized_start=1776,
+  serialized_end=1845,
 )
 _sym_db.RegisterEnumDescriptor(_RBACCONFIG_MODE)
 
@@ -114,8 +114,45 @@ _WORKLOADSELECTOR_LABELSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=137,
-  serialized_end=182,
+  serialized_start=242,
+  serialized_end=287,
+)
+
+_WORKLOADSELECTOR_PROXYMETADATAENTRY = _descriptor.Descriptor(
+  name='ProxyMetadataEntry',
+  full_name='istio.rbac.v1alpha1.WorkloadSelector.ProxyMetadataEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.rbac.v1alpha1.WorkloadSelector.ProxyMetadataEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.rbac.v1alpha1.WorkloadSelector.ProxyMetadataEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=289,
+  serialized_end=341,
 )
 
 _WORKLOADSELECTOR = _descriptor.Descriptor(
@@ -132,10 +169,24 @@ _WORKLOADSELECTOR = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='proxy_version', full_name='istio.rbac.v1alpha1.WorkloadSelector.proxy_version', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='proxy_metadata', full_name='istio.rbac.v1alpha1.WorkloadSelector.proxy_metadata', index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
-  nested_types=[_WORKLOADSELECTOR_LABELSENTRY, ],
+  nested_types=[_WORKLOADSELECTOR_LABELSENTRY, _WORKLOADSELECTOR_PROXYMETADATAENTRY, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -145,7 +196,7 @@ _WORKLOADSELECTOR = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=50,
-  serialized_end=182,
+  serialized_end=341,
 )
 
 
@@ -182,8 +233,8 @@ _AUTHORIZATIONPOLICY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=185,
-  serialized_end=328,
+  serialized_start=344,
+  serialized_end=487,
 )
 
 
@@ -213,8 +264,8 @@ _SERVICEROLE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=330,
-  serialized_end=391,
+  serialized_start=489,
+  serialized_end=550,
 )
 
 
@@ -251,8 +302,8 @@ _ACCESSRULE_CONSTRAINT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=631,
-  serialized_end=672,
+  serialized_start=790,
+  serialized_end=831,
 )
 
 _ACCESSRULE = _descriptor.Descriptor(
@@ -344,8 +395,8 @@ _ACCESSRULE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=394,
-  serialized_end=672,
+  serialized_start=553,
+  serialized_end=831,
 )
 
 
@@ -403,8 +454,8 @@ _SERVICEROLEBINDING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=675,
-  serialized_end=906,
+  serialized_start=834,
+  serialized_end=1065,
 )
 
 
@@ -441,8 +492,8 @@ _SUBJECT_PROPERTIESENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1163,
-  serialized_end=1212,
+  serialized_start=1322,
+  serialized_end=1371,
 )
 
 _SUBJECT = _descriptor.Descriptor(
@@ -541,8 +592,8 @@ _SUBJECT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=909,
-  serialized_end=1212,
+  serialized_start=1068,
+  serialized_end=1371,
 )
 
 
@@ -579,8 +630,8 @@ _ROLEREF = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1214,
-  serialized_end=1251,
+  serialized_start=1373,
+  serialized_end=1410,
 )
 
 
@@ -624,8 +675,8 @@ _RBACCONFIG_TARGET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1502,
-  serialized_end=1615,
+  serialized_start=1661,
+  serialized_end=1774,
 )
 
 _RBACCONFIG = _descriptor.Descriptor(
@@ -676,12 +727,14 @@ _RBACCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1254,
-  serialized_end=1686,
+  serialized_start=1413,
+  serialized_end=1845,
 )
 
 _WORKLOADSELECTOR_LABELSENTRY.containing_type = _WORKLOADSELECTOR
+_WORKLOADSELECTOR_PROXYMETADATAENTRY.containing_type = _WORKLOADSELECTOR
 _WORKLOADSELECTOR.fields_by_name['labels'].message_type = _WORKLOADSELECTOR_LABELSENTRY
+_WORKLOADSELECTOR.fields_by_name['proxy_metadata'].message_type = _WORKLOADSELECTOR_PROXYMETADATAENTRY
 _AUTHORIZATIONPOLICY.fields_by_name['workload_selector'].message_type = _WORKLOADSELECTOR
 _AUTHORIZATIONPOLICY.fields_by_name['allow'].message_type = _SERVICEROLEBINDING
 _SERVICEROLE.fields_by_name['rules'].message_type = _ACCESSRULE
@@ -719,12 +772,20 @@ WorkloadSelector = _reflection.GeneratedProtocolMessageType('WorkloadSelector', 
     # @@protoc_insertion_point(class_scope:istio.rbac.v1alpha1.WorkloadSelector.LabelsEntry)
     ))
   ,
+
+  ProxyMetadataEntry = _reflection.GeneratedProtocolMessageType('ProxyMetadataEntry', (_message.Message,), dict(
+    DESCRIPTOR = _WORKLOADSELECTOR_PROXYMETADATAENTRY,
+    __module__ = 'rbac.v1alpha1.rbac_pb2'
+    # @@protoc_insertion_point(class_scope:istio.rbac.v1alpha1.WorkloadSelector.ProxyMetadataEntry)
+    ))
+  ,
   DESCRIPTOR = _WORKLOADSELECTOR,
   __module__ = 'rbac.v1alpha1.rbac_pb2'
   # @@protoc_insertion_point(class_scope:istio.rbac.v1alpha1.WorkloadSelector)
   ))
 _sym_db.RegisterMessage(WorkloadSelector)
 _sym_db.RegisterMessage(WorkloadSelector.LabelsEntry)
+_sym_db.RegisterMessage(WorkloadSelector.ProxyMetadataEntry)
 
 AuthorizationPolicy = _reflection.GeneratedProtocolMessageType('AuthorizationPolicy', (_message.Message,), dict(
   DESCRIPTOR = _AUTHORIZATIONPOLICY,
@@ -802,6 +863,7 @@ _sym_db.RegisterMessage(RbacConfig.Target)
 
 DESCRIPTOR._options = None
 _WORKLOADSELECTOR_LABELSENTRY._options = None
+_WORKLOADSELECTOR_PROXYMETADATAENTRY._options = None
 _SUBJECT_PROPERTIESENTRY._options = None
 _SUBJECT.fields_by_name['group']._options = None
 # @@protoc_insertion_point(module_scope)

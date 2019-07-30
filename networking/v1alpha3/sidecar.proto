@@ -349,11 +349,29 @@ message IstioEgressListener {
 // specified, all conditions need to match in order for the workload instance to be
 // selected. Currently, only label based selection mechanism is supported.
 message WorkloadSelector {
-  // REQUIRED: One or more labels that indicate a specific set of pods/VMs
-  // on which this sidecar configuration should be applied. The scope of
-  // label search is restricted to the configuration namespace in which the
-  // the resource is present.
+  // One or more labels that indicate a specific set of pods/VMs on
+  // which this sidecar configuration should be applied. The scope of
+  // label search is restricted to the configuration namespace in
+  // which the the resource is present.
   map<string, string> labels = 1;
+
+  // A regular expression in golang regex format (RE2) that can be
+  // used to select proxies using a specific version of istio
+  // proxy. The Istio version for a given proxy is obtained from the
+  // node metadata field ISTIO_VERSION supplied by the proxy when
+  // connecting to Pilot. This value is embedded as an environment
+  // variable (ISTIO_META_ISTIO_VERSION) in the Istio proxy docker
+  // image. Custom proxy implementations should provide this metadata
+  // variable to take advantage of the Istio version check option.
+  string proxy_version = 2;
+
+  // Match on the node metadata supplied by a proxy when connecting
+  // to Istio Pilot. Note that while Envoy's node metadata is of
+  // type Struct, only string key-value pairs are processed by
+  // Pilot. All keys specified in the metadata must match with exact
+  // values. The match will fail if any of the specified keys are
+  // absent or the values fail to match.
+  map<string, string> proxy_metadata = 3;
 
   // $hide_from_docs
   // other forms of identification supplied by the proxy
