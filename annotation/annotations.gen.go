@@ -223,7 +223,7 @@ var (
           Name: "sidecar.istio.io/proxyCPU",
           Description: "Specifies the requested CPU setting for the istio-proxy "+
                         "sidecar.",
-          Hidden: false,
+          Hidden: true,
           Deprecated: false,
         }
 	
@@ -239,7 +239,7 @@ var (
           Name: "sidecar.istio.io/proxyMemory",
           Description: "Specifies the requested memory setting for the "+
                         "istio-proxy sidecar.",
-          Hidden: false,
+          Hidden: true,
           Deprecated: false,
         }
 	

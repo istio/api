@@ -92,11 +92,11 @@ annotations:
   - name: sidecar.istio.io/proxyCPU
     description: Specifies the requested CPU setting for the istio-proxy sidecar.
     deprecated: false
-    hidden: false
+    hidden: true
   - name: sidecar.istio.io/proxyMemory
     description: Specifies the requested memory setting for the istio-proxy sidecar.
     deprecated: false
-    hidden: false
+    hidden: true
   - name: sidecar.istio.io/interceptionMode
     description: Specifies the mode used to redirect inbound connections to Envoy
       (REDIRECT or TPROXY).
