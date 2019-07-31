@@ -4,7 +4,7 @@ all: generate
 # setup
 ########################
 
-apitools_img := gcr.io/istio-testing/api-build-tools:2019-07-30
+apitools_img := gcr.io/istio-testing/api-build-tools:2019-07-31
 websitetools_img := gcr.io/istio-testing/website-tools:2019-07-25
 cue_img := gcr.io/istio-testing/cue:2019-07-23
 pwd := $(shell pwd)
