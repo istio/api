@@ -85,6 +85,7 @@ generate: \
 	generate-envoy \
 	generate-policy \
 	generate-annotations \
+	generate-operator \
 	generate-openapi-schema
 
 #####################
@@ -290,6 +291,25 @@ clean-annotations:
 	@rm -fr $(annotations_pb_go) $(annotations_pb_doc)
 
 #####################
+# operator/...
+#####################
+
+operator_path := operator/valpha1
+operator_protos := $(wildcard $(operator_path)/*.proto)
+operator_pb_gos := $(operator_protos:.proto=.pb.go)
+operator_pb_pythons := $(patsubst $(operator_path)/%.proto,$(python_output_path)/$(operator_path)/%_pb2.py,$(operator_protos))
+operator_pb_doc := $(operator_path)/istio.operator.v1alpha1.pb.html
+
+$(operator_pb_gos) $(operator_pb_doc) $(operator_pb_pythons): $(operator_protos)
+	@$(protolock) status
+	@$(protoc) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(operator_path) $(protoc_gen_python_plugin) $^
+
+generate-operator: $(operator_pb_gos) $(operator_pb_doc) $(operator_pb_pythons)
+
+clean-operator:
+	@rm -fr $(operator_pb_gos) $(operator_pb_doc) $(operator_pb_pythons)
+
+#####################
 # Protolock
 #####################
 
@@ -334,6 +354,7 @@ clean: \
 	clean-authn \
 	clean-envoy \
 	clean-policy \
-	clean-annotations
+	clean-annotations \
+	clean-operator
 
 include Makefile.common.mk
