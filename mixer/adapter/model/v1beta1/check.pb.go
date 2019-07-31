@@ -5,12 +5,12 @@ package v1beta1
 
 import (
 	fmt "fmt"
-	rpc "github.com/gogo/googleapis/google/rpc"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/gogo/protobuf/types"
 	github_com_gogo_protobuf_types "github.com/gogo/protobuf/types"
 	io "io"
+	rpc "istio.io/gogo-genproto/googleapis/google/rpc"
 	math "math"
 	math_bits "math/bits"
 	reflect "reflect"
