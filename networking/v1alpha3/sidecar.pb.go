@@ -302,10 +302,9 @@ type Sidecar struct {
 	// etc.). If specified, inbound ports are configured if and only if the
 	// workload instance is associated with a service.
 	Ingress []*IstioIngressListener `protobuf:"bytes,2,rep,name=ingress,proto3" json:"ingress,omitempty"`
-	// Egress specifies the configuration of the sidecar for processing
+	// REQUIRED. Egress specifies the configuration of the sidecar for processing
 	// outbound traffic from the attached workload instance to other services in the
-	// mesh. If omitted, Istio will automatically configure the sidecar to be able to
-	// reach every service in the mesh that is visible to this namespace.
+	// mesh.
 	Egress []*IstioEgressListener `protobuf:"bytes,3,rep,name=egress,proto3" json:"egress,omitempty"`
 	// This allows to configure the outbound traffic policy.
 	// If your application uses one or more external
@@ -506,6 +505,8 @@ type IstioEgressListener struct {
 	// Set the `dnsName` to `*` to select all services from the specified namespace
 	// (e.g., `prod/*`). The `namespace` can also be set to `*` to select a particular
 	// service from any available namespace (e.g., `*/foo.example.com`).
+	// If a host is set to `*/*`,  Istio will automatically configure the sidecar to
+	// be able to reach every service in the mesh that is visible to this namespace.
 	//
 	// NOTE: Only services and configuration artifacts exported to the sidecar's
 	// namespace (e.g., `exportTo` value of `*`) can be referenced.
