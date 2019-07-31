@@ -4240,12 +4240,7 @@
                 "fields": [
                   {
                     "id": 1,
-                    "name": "version_ge",
-                    "type": "string"
-                  },
-                  {
-                    "id": 2,
-                    "name": "version_eq",
+                    "name": "proxy_version",
                     "type": "string"
                   }
                 ],
@@ -4253,7 +4248,7 @@
                   {
                     "key_type": "string",
                     "field": {
-                      "id": 3,
+                      "id": 2,
                       "name": "metadata",
                       "type": "string"
                     }

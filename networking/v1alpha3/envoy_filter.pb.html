@@ -937,30 +937,18 @@ traffic flow direction and workload type.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="EnvoyFilter-ProxyMatch-version_ge" class="oneof oneof-start">
-<td><code>versionGe</code></td>
-<td><code>string (oneof)</code></td>
+<tr id="EnvoyFilter-ProxyMatch-proxy_version">
+<td><code>proxyVersion</code></td>
+<td><code>string</code></td>
 <td>
-<p>Version restricts the patches to sidecars or gateways with
-from a specific version of Istio. The Istio version for a given
-proxy is obtained from the node metadata field ISTIO<em>VERSION
-supplied by the proxy when connecting to Pilot. This value is
-embedded as an environment variable (ISTIO</em>META<em>ISTIO</em>VERSION) in
-the Istio proxy docker image. Custom proxy implementations should
-provide this metadata variable to take advantage of the Istio
-version check option.</p>
-
-<p>Checks if the Istio version in the proxy is greater than or
-equal to the specified value.</p>
-
-</td>
-</tr>
-<tr id="EnvoyFilter-ProxyMatch-version_eq" class="oneof">
-<td><code>versionEq</code></td>
-<td><code>string (oneof)</code></td>
-<td>
-<p>Checks if the Istio version in the proxy is equal to the
-exact version specified.</p>
+<p>A regular expression in golang regex format (RE2) that can be
+used to select proxies using a specific version of istio
+proxy. The Istio version for a given proxy is obtained from the
+node metadata field ISTIO<em>VERSION supplied by the proxy when
+connecting to Pilot. This value is embedded as an environment
+variable (ISTIO</em>META<em>ISTIO</em>VERSION) in the Istio proxy docker
+image. Custom proxy implementations should provide this metadata
+variable to take advantage of the Istio version check option.</p>
 
 </td>
 </tr>
