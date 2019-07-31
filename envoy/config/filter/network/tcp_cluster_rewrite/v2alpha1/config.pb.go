@@ -8,6 +8,7 @@ import (
 	proto "github.com/gogo/protobuf/proto"
 	io "io"
 	math "math"
+	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -46,7 +47,7 @@ func (m *TcpClusterRewrite) XXX_Marshal(b []byte, deterministic bool) ([]byte, e
 		return xxx_messageInfo_TcpClusterRewrite.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.MarshalToSizedBuffer(b)
 		if err != nil {
 			return nil, err
 		}
@@ -108,7 +109,7 @@ var fileDescriptor_3df0613c72936227 = []byte{
 func (m *TcpClusterRewrite) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -116,36 +117,46 @@ func (m *TcpClusterRewrite) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *TcpClusterRewrite) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TcpClusterRewrite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.ClusterPattern) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintConfig(dAtA, i, uint64(len(m.ClusterPattern)))
-		i += copy(dAtA[i:], m.ClusterPattern)
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if len(m.ClusterReplacement) > 0 {
-		dAtA[i] = 0x12
-		i++
+		i -= len(m.ClusterReplacement)
+		copy(dAtA[i:], m.ClusterReplacement)
 		i = encodeVarintConfig(dAtA, i, uint64(len(m.ClusterReplacement)))
-		i += copy(dAtA[i:], m.ClusterReplacement)
+		i--
+		dAtA[i] = 0x12
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+	if len(m.ClusterPattern) > 0 {
+		i -= len(m.ClusterPattern)
+		copy(dAtA[i:], m.ClusterPattern)
+		i = encodeVarintConfig(dAtA, i, uint64(len(m.ClusterPattern)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintConfig(dAtA []byte, offset int, v uint64) int {
+	offset -= sovConfig(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *TcpClusterRewrite) Size() (n int) {
 	if m == nil {
@@ -168,14 +179,7 @@ func (m *TcpClusterRewrite) Size() (n int) {
 }
 
 func sovConfig(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozConfig(x uint64) (n int) {
 	return sovConfig(uint64((x << 1) ^ uint64((int64(x) >> 63))))
