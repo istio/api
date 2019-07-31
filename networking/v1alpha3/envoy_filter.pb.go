@@ -2176,25 +2176,12 @@ func (m *EnvoyFilter_ProxyMatch) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	_ = i
 	var l int
 	_ = l
-<<<<<<< HEAD
-	if len(m.ProxyVersion) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintEnvoyFilter(dAtA, i, uint64(len(m.ProxyVersion)))
-		i += copy(dAtA[i:], m.ProxyVersion)
-	}
-	if len(m.Metadata) > 0 {
-		for k, _ := range m.Metadata {
-			dAtA[i] = 0x12
-			i++
-=======
 	if m.XXX_unrecognized != nil {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if len(m.Metadata) > 0 {
 		for k := range m.Metadata {
->>>>>>> a66c9b061e2364b240b7c0537262645910999165
 			v := m.Metadata[k]
 			baseI := i
 			i -= len(v)
@@ -2209,50 +2196,19 @@ func (m *EnvoyFilter_ProxyMatch) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 			dAtA[i] = 0xa
 			i = encodeVarintEnvoyFilter(dAtA, i, uint64(baseI-i))
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x12
 		}
 	}
-	if m.VersionMatch != nil {
-		{
-			size := m.VersionMatch.Size()
-			i -= size
-			if _, err := m.VersionMatch.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
+	if len(m.ProxyVersion) > 0 {
+		i -= len(m.ProxyVersion)
+		copy(dAtA[i:], m.ProxyVersion)
+		i = encodeVarintEnvoyFilter(dAtA, i, uint64(len(m.ProxyVersion)))
+		i--
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
 
-<<<<<<< HEAD
-=======
-func (m *EnvoyFilter_ProxyMatch_VersionGe) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *EnvoyFilter_ProxyMatch_VersionGe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.VersionGe)
-	copy(dAtA[i:], m.VersionGe)
-	i = encodeVarintEnvoyFilter(dAtA, i, uint64(len(m.VersionGe)))
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-func (m *EnvoyFilter_ProxyMatch_VersionEq) MarshalTo(dAtA []byte) (int, error) {
-	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
-}
-
-func (m *EnvoyFilter_ProxyMatch_VersionEq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.VersionEq)
-	copy(dAtA[i:], m.VersionEq)
-	i = encodeVarintEnvoyFilter(dAtA, i, uint64(len(m.VersionEq)))
-	i--
-	dAtA[i] = 0x12
-	return len(dAtA) - i, nil
-}
->>>>>>> a66c9b061e2364b240b7c0537262645910999165
 func (m *EnvoyFilter_ClusterMatch) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2338,16 +2294,6 @@ func (m *EnvoyFilter_RouteConfigurationMatch) MarshalToSizedBuffer(dAtA []byte) 
 		dAtA[i] = 0x2a
 	}
 	if m.Vhost != nil {
-<<<<<<< HEAD
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintEnvoyFilter(dAtA, i, uint64(m.Vhost.Size()))
-		n5, err := m.Vhost.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n5
-=======
 		{
 			size, err := m.Vhost.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
@@ -2358,7 +2304,6 @@ func (m *EnvoyFilter_RouteConfigurationMatch) MarshalToSizedBuffer(dAtA []byte) 
 		}
 		i--
 		dAtA[i] = 0x22
->>>>>>> a66c9b061e2364b240b7c0537262645910999165
 	}
 	if len(m.Gateway) > 0 {
 		i -= len(m.Gateway)
@@ -2448,16 +2393,6 @@ func (m *EnvoyFilter_ListenerMatch) MarshalToSizedBuffer(dAtA []byte) (int, erro
 		dAtA[i] = 0x22
 	}
 	if m.FilterChain != nil {
-<<<<<<< HEAD
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintEnvoyFilter(dAtA, i, uint64(m.FilterChain.Size()))
-		n6, err := m.FilterChain.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n6
-=======
 		{
 			size, err := m.FilterChain.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
@@ -2468,7 +2403,6 @@ func (m *EnvoyFilter_ListenerMatch) MarshalToSizedBuffer(dAtA []byte) (int, erro
 		}
 		i--
 		dAtA[i] = 0x1a
->>>>>>> a66c9b061e2364b240b7c0537262645910999165
 	}
 	if len(m.PortName) > 0 {
 		i -= len(m.PortName)
@@ -2510,16 +2444,6 @@ func (m *EnvoyFilter_ListenerMatch_FilterChainMatch) MarshalToSizedBuffer(dAtA [
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if m.Filter != nil {
-<<<<<<< HEAD
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintEnvoyFilter(dAtA, i, uint64(m.Filter.Size()))
-		n7, err := m.Filter.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n7
-=======
 		{
 			size, err := m.Filter.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
@@ -2530,7 +2454,6 @@ func (m *EnvoyFilter_ListenerMatch_FilterChainMatch) MarshalToSizedBuffer(dAtA [
 		}
 		i--
 		dAtA[i] = 0x1a
->>>>>>> a66c9b061e2364b240b7c0537262645910999165
 	}
 	if len(m.TransportProtocol) > 0 {
 		i -= len(m.TransportProtocol)
@@ -2574,16 +2497,6 @@ func (m *EnvoyFilter_ListenerMatch_FilterMatch) MarshalToSizedBuffer(dAtA []byte
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if m.SubFilter != nil {
-<<<<<<< HEAD
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintEnvoyFilter(dAtA, i, uint64(m.SubFilter.Size()))
-		n8, err := m.SubFilter.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n8
-=======
 		{
 			size, err := m.SubFilter.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
@@ -2594,7 +2507,6 @@ func (m *EnvoyFilter_ListenerMatch_FilterMatch) MarshalToSizedBuffer(dAtA []byte
 		}
 		i--
 		dAtA[i] = 0x12
->>>>>>> a66c9b061e2364b240b7c0537262645910999165
 	}
 	if len(m.Name) > 0 {
 		i -= len(m.Name)
@@ -2665,16 +2577,6 @@ func (m *EnvoyFilter_Patch) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if m.Value != nil {
-<<<<<<< HEAD
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintEnvoyFilter(dAtA, i, uint64(m.Value.Size()))
-		n9, err := m.Value.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n9
-=======
 		{
 			size, err := m.Value.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
@@ -2685,7 +2587,6 @@ func (m *EnvoyFilter_Patch) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x12
->>>>>>> a66c9b061e2364b240b7c0537262645910999165
 	}
 	if m.Operation != 0 {
 		i = encodeVarintEnvoyFilter(dAtA, i, uint64(m.Operation))
@@ -2719,24 +2620,6 @@ func (m *EnvoyFilter_EnvoyConfigObjectMatch) MarshalToSizedBuffer(dAtA []byte) (
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-<<<<<<< HEAD
-	if m.Proxy != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintEnvoyFilter(dAtA, i, uint64(m.Proxy.Size()))
-		n10, err := m.Proxy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n10
-	}
-	if m.ObjectTypes != nil {
-		nn11, err := m.ObjectTypes.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn11
-=======
 	if m.ObjectTypes != nil {
 		{
 			size := m.ObjectTypes.Size()
@@ -2757,7 +2640,6 @@ func (m *EnvoyFilter_EnvoyConfigObjectMatch) MarshalToSizedBuffer(dAtA []byte) (
 		}
 		i--
 		dAtA[i] = 0x12
->>>>>>> a66c9b061e2364b240b7c0537262645910999165
 	}
 	if m.Context != 0 {
 		i = encodeVarintEnvoyFilter(dAtA, i, uint64(m.Context))
@@ -2774,16 +2656,6 @@ func (m *EnvoyFilter_EnvoyConfigObjectMatch_Listener) MarshalTo(dAtA []byte) (in
 func (m *EnvoyFilter_EnvoyConfigObjectMatch_Listener) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	if m.Listener != nil {
-<<<<<<< HEAD
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintEnvoyFilter(dAtA, i, uint64(m.Listener.Size()))
-		n12, err := m.Listener.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n12
-=======
 		{
 			size, err := m.Listener.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
@@ -2794,7 +2666,6 @@ func (m *EnvoyFilter_EnvoyConfigObjectMatch_Listener) MarshalToSizedBuffer(dAtA 
 		}
 		i--
 		dAtA[i] = 0x1a
->>>>>>> a66c9b061e2364b240b7c0537262645910999165
 	}
 	return len(dAtA) - i, nil
 }
@@ -2805,16 +2676,6 @@ func (m *EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration) MarshalTo(dAtA [
 func (m *EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	if m.RouteConfiguration != nil {
-<<<<<<< HEAD
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintEnvoyFilter(dAtA, i, uint64(m.RouteConfiguration.Size()))
-		n13, err := m.RouteConfiguration.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n13
-=======
 		{
 			size, err := m.RouteConfiguration.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
@@ -2825,7 +2686,6 @@ func (m *EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration) MarshalToSizedBu
 		}
 		i--
 		dAtA[i] = 0x22
->>>>>>> a66c9b061e2364b240b7c0537262645910999165
 	}
 	return len(dAtA) - i, nil
 }
@@ -2836,16 +2696,6 @@ func (m *EnvoyFilter_EnvoyConfigObjectMatch_Cluster) MarshalTo(dAtA []byte) (int
 func (m *EnvoyFilter_EnvoyConfigObjectMatch_Cluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	if m.Cluster != nil {
-<<<<<<< HEAD
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintEnvoyFilter(dAtA, i, uint64(m.Cluster.Size()))
-		n14, err := m.Cluster.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n14
-=======
 		{
 			size, err := m.Cluster.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
@@ -2856,7 +2706,6 @@ func (m *EnvoyFilter_EnvoyConfigObjectMatch_Cluster) MarshalToSizedBuffer(dAtA [
 		}
 		i--
 		dAtA[i] = 0x2a
->>>>>>> a66c9b061e2364b240b7c0537262645910999165
 	}
 	return len(dAtA) - i, nil
 }
@@ -2880,26 +2729,9 @@ func (m *EnvoyFilter_EnvoyConfigObjectPatch) MarshalToSizedBuffer(dAtA []byte) (
 	_ = i
 	var l int
 	_ = l
-<<<<<<< HEAD
-	if m.ApplyTo != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintEnvoyFilter(dAtA, i, uint64(m.ApplyTo))
-	}
-	if m.Match != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintEnvoyFilter(dAtA, i, uint64(m.Match.Size()))
-		n15, err := m.Match.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n15
-=======
 	if m.XXX_unrecognized != nil {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
->>>>>>> a66c9b061e2364b240b7c0537262645910999165
 	}
 	if m.Patch != nil {
 		{
@@ -2912,15 +2744,6 @@ func (m *EnvoyFilter_EnvoyConfigObjectPatch) MarshalToSizedBuffer(dAtA []byte) (
 		}
 		i--
 		dAtA[i] = 0x1a
-<<<<<<< HEAD
-		i++
-		i = encodeVarintEnvoyFilter(dAtA, i, uint64(m.Patch.Size()))
-		n16, err := m.Patch.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n16
-=======
 	}
 	if m.Match != nil {
 		{
@@ -2933,7 +2756,6 @@ func (m *EnvoyFilter_EnvoyConfigObjectPatch) MarshalToSizedBuffer(dAtA []byte) (
 		}
 		i--
 		dAtA[i] = 0x12
->>>>>>> a66c9b061e2364b240b7c0537262645910999165
 	}
 	if m.ApplyTo != 0 {
 		i = encodeVarintEnvoyFilter(dAtA, i, uint64(m.ApplyTo))
