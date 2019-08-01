@@ -298,6 +298,7 @@ operator_path := operator/v1alpha1
 operator_protos := $(wildcard $(operator_path)/*.proto)
 operator_pb_gos := $(operator_protos:.proto=.pb.go)
 operator_pb_doc := $(operator_path)/istio.operator.v1alpha1.pb.html
+operator_pb_pythons := $(patsubst $(operator_path)/%.proto,$(python_output_path)/$(operator_path)/%_pb2.py,$(operator_protos))
 k8s_dir := $(pwd)/../../k8s.io
 k8s_mount := $(mount_dir)/k8s.io
 
@@ -310,7 +311,7 @@ $(operator_pb_gos) $(operator_pb_doc): $(operator_protos)
 	go get k8s.io/api/core/v1 k8s.io/api/autoscaling/v2beta1 k8s.io/apimachinery/pkg/apis/meta/v1/
 	@$(protoc_k8s) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(operator_path) $^
 
-generate-operator: $(operator_pb_gos) $(operator_pb_doc)
+generate-operator: $(operator_pb_gos) $(operator_pb_doc) $(operator_pb_pythons)
 
 clean-operator:
 	@rm -fr $(operator_pb_gos) $(operator_pb_doc) $(operator_pb_pythons)
