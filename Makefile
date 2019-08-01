@@ -85,6 +85,7 @@ generate: \
 	generate-envoy \
 	generate-policy \
 	generate-annotations \
+	generate-operator \
 	generate-openapi-schema
 
 #####################
@@ -290,6 +291,31 @@ clean-annotations:
 	@rm -fr $(annotations_pb_go) $(annotations_pb_doc)
 
 #####################
+# operator/...
+#####################
+
+operator_v1alpha1_path := operator/v1alpha1
+operator_v1alpha1_protos := $(wildcard $(operator_v1alpha1_path)/*.proto)
+operator_v1alpha1_pb_gos := $(operator_v1alpha1_protos:.proto=.pb.go)
+operator_v1alpha1_pb_pythons := $(patsubst $(operator_v1alpha1_path)/%.proto,$(python_output_path)/$(operator_v1alpha1_path)/%_pb2.py,$(operator_v1alpha1_protos))
+operator_v1alpha1_pb_doc := $(operator_v1alpha1_path)/istio.operator.v1alpha1.pb.html
+
+k8s_dir := $(pwd)/../../k8s.io
+k8s_mount := $(mount_dir)/k8s.io
+
+protoc_k8s = docker run --user $(uid) -v /etc/passwd:/etc/passwd:ro --rm -v $(pwd):$(repo_mount) -v $(k8s_dir):$(k8s_mount) -w $(mount_dir) $(apitools_img) protoc -I/usr/include/protobuf -I$(repo_dir) -I$(mount_dir)
+
+$(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons): $(operator_v1alpha1_protos)
+	@$(protolock) status
+	go get k8s.io/api/core/v1 k8s.io/api/autoscaling/v2beta1 k8s.io/apimachinery/pkg/apis/meta/v1/
+	@$(protoc_k8s) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(operator_v1alpha1_path) $(protoc_gen_python_plugin) $^
+
+generate-operator: $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons)
+
+clean-operator:
+	@rm -fr $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons)
+
+#####################
 # Protolock
 #####################
 
@@ -334,6 +360,7 @@ clean: \
 	clean-authn \
 	clean-envoy \
 	clean-policy \
-	clean-annotations
+	clean-annotations \
+	clean-operator
 
 include Makefile.common.mk
