@@ -27,6 +27,8 @@ directories:
     - mode: all
   rbac/v1alpha1:
     - mode: all
+  security/v1beta1:
+    - mode: all
 
 # All is used when generating all types referenced in the above directories to
 # one file.
