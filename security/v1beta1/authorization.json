@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "",
+    "title": "Configuration for access control on workloads.",
     "version": "v1beta1"
   },
   "components": {
@@ -131,8 +131,8 @@
               "format": "string"
             }
           },
-          "ips": {
-            "description": "Optional. A list of IPs, which matches to the “source.ip” attribute. Both single IP (e.g. \"1.2.3.4\") or CIDR (e.g. \"1.2.3.0/24\") are supported.",
+          "ipBlocks": {
+            "description": "Optional. A list of IP blocks, which matches to the “source.ip” attribute. Single IP (e.g. \"1.2.3.4\") and CIDR (e.g. \"1.2.3.0/24\") are supported.",
             "type": "array",
             "items": {
               "type": "string",

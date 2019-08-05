@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.security.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\035istio.io/api/security/v1beta1'),
-  serialized_pb=_b('\n$security/v1beta1/authorization.proto\x12\x16istio.security.v1beta1\"~\n\x13\x41uthorizationPolicy\x12:\n\x08selector\x18\x01 \x01(\x0b\x32(.istio.security.v1beta1.WorkloadSelector\x12+\n\x05rules\x18\x02 \x03(\x0b\x32\x1c.istio.security.v1beta1.Rule\"\x97\x01\n\x10WorkloadSelector\x12O\n\x0cmatch_labels\x18\x01 \x03(\x0b\x32\x39.istio.security.v1beta1.WorkloadSelector.MatchLabelsEntry\x1a\x32\n\x10MatchLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x89\x02\n\x04Rule\x12/\n\x04\x66rom\x18\x01 \x03(\x0b\x32!.istio.security.v1beta1.Rule.From\x12+\n\x02to\x18\x02 \x03(\x0b\x32\x1f.istio.security.v1beta1.Rule.To\x12/\n\x04when\x18\x03 \x03(\x0b\x32!.istio.security.v1beta1.Condition\x1a\x36\n\x04\x46rom\x12.\n\x06source\x18\x01 \x01(\x0b\x32\x1e.istio.security.v1beta1.Source\x1a:\n\x02To\x12\x34\n\toperation\x18\x01 \x01(\x0b\x32!.istio.security.v1beta1.Operation\"Y\n\x06Source\x12\x12\n\nprincipals\x18\x01 \x03(\t\x12\x1a\n\x12request_principals\x18\x02 \x03(\t\x12\x12\n\nnamespaces\x18\x03 \x03(\t\x12\x0b\n\x03ips\x18\x04 \x03(\t\"I\n\tOperation\x12\r\n\x05hosts\x18\x01 \x03(\t\x12\r\n\x05ports\x18\x02 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\r\n\x05paths\x18\x04 \x03(\t\"(\n\tCondition\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x0e\n\x06values\x18\x02 \x03(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
+  serialized_pb=_b('\n$security/v1beta1/authorization.proto\x12\x16istio.security.v1beta1\"~\n\x13\x41uthorizationPolicy\x12:\n\x08selector\x18\x01 \x01(\x0b\x32(.istio.security.v1beta1.WorkloadSelector\x12+\n\x05rules\x18\x02 \x03(\x0b\x32\x1c.istio.security.v1beta1.Rule\"\x97\x01\n\x10WorkloadSelector\x12O\n\x0cmatch_labels\x18\x01 \x03(\x0b\x32\x39.istio.security.v1beta1.WorkloadSelector.MatchLabelsEntry\x1a\x32\n\x10MatchLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x89\x02\n\x04Rule\x12/\n\x04\x66rom\x18\x01 \x03(\x0b\x32!.istio.security.v1beta1.Rule.From\x12+\n\x02to\x18\x02 \x03(\x0b\x32\x1f.istio.security.v1beta1.Rule.To\x12/\n\x04when\x18\x03 \x03(\x0b\x32!.istio.security.v1beta1.Condition\x1a\x36\n\x04\x46rom\x12.\n\x06source\x18\x01 \x01(\x0b\x32\x1e.istio.security.v1beta1.Source\x1a:\n\x02To\x12\x34\n\toperation\x18\x01 \x01(\x0b\x32!.istio.security.v1beta1.Operation\"_\n\x06Source\x12\x12\n\nprincipals\x18\x01 \x03(\t\x12\x1a\n\x12request_principals\x18\x02 \x03(\t\x12\x12\n\nnamespaces\x18\x03 \x03(\t\x12\x11\n\tip_blocks\x18\x04 \x03(\t\"I\n\tOperation\x12\r\n\x05hosts\x18\x01 \x03(\t\x12\r\n\x05ports\x18\x02 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\r\n\x05paths\x18\x04 \x03(\t\"(\n\tCondition\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x0e\n\x06values\x18\x02 \x03(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
 )
 
 
@@ -265,7 +265,7 @@ _SOURCE = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='ips', full_name='istio.security.v1beta1.Source.ips', index=3,
+      name='ip_blocks', full_name='istio.security.v1beta1.Source.ip_blocks', index=3,
       number=4, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -284,7 +284,7 @@ _SOURCE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=614,
-  serialized_end=703,
+  serialized_end=709,
 )
 
 
@@ -335,8 +335,8 @@ _OPERATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=705,
-  serialized_end=778,
+  serialized_start=711,
+  serialized_end=784,
 )
 
 
@@ -373,8 +373,8 @@ _CONDITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=780,
-  serialized_end=820,
+  serialized_start=786,
+  serialized_end=826,
 )
 
 _AUTHORIZATIONPOLICY.fields_by_name['selector'].message_type = _WORKLOADSELECTOR

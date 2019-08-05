@@ -17,7 +17,7 @@ syntax = "proto3";
 // $title: Authorization Policy
 // $description: Configuration for access control on workloads.
 // $location: https://istio.io/docs/reference/config/security/v1beta1/authorization-policy.html
-//
+
 // Istio Authorization Policy enables access control on workloads in the mesh.
 //
 // For example, the following authorization policy applies to workloads matched with
@@ -29,7 +29,7 @@ syntax = "proto3";
 // to access the workload with:
 // - "GET" method at paths of prefix "/info" or,
 // - "POST" method at path "/data".
-// when the request has a valid JWT token issued by "istio.io".
+// when the request has a valid JWT token issued by "https://accounts.google.com".
 //
 // Any other requests will be rejected.
 //
@@ -59,7 +59,7 @@ syntax = "proto3";
 //        paths: ["/data"]
 //    when:
 //    - key: request.auth.claims[iss]
-//      values: [“istio.io”]
+//      values: [“https://accounts.google.com”]
 // ```
 //
 // Access control is enabled on a workload if there is any authorization policies selecting
@@ -67,18 +67,18 @@ syntax = "proto3";
 // which means requests to the workload will be rejected if the request is not allowed by any of
 // the authorization policies selecting the workload.
 //
-// Multiple authorization policies selecting the same workload are OR-ed together.
-// The effect of authorization policy is additive, more authorization policies
-// always allow more sources to access the workload.
+// Currently AuthorizationPolicy only supports "ALLOW" action. This means that
+// if multiple authorization policies apply to the same workload, the effect is additive.
 //
-// Authorization policy could be specified in workload, namespace and mesh level.
-// - workload level: The selector is not empty and the namespace is not root namespace.
-// - namespace level: The selector is empty and the namespace is not root namespace.
-// - mesh level: The namespace is root namespace.
+// Authorization Policy scope (target) is determined by "metadata/namespace" and
+// an optional “selector”.
+// - "metadata/namespace" tells which namespace the policy applies. If set to root
+// namespace, the policy applies to all namespaces in a mesh.
+// - workload "selector" can be used to further restrict where a policy applies.
 //
 // For example,
 //
-// The following workload level authorization policy selects the workload with label
+// The following authorization policy applies to workloads containing label
 // "app: httpbin" in namespace bar.
 //
 // ```yaml
@@ -93,7 +93,7 @@ syntax = "proto3";
 //      app: httpbin
 // ```
 //
-// The following namespace level authorization policy selects all workloads in namespace foo.
+// The following authorization policy applies to all workloads in namespace foo.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -102,12 +102,11 @@ syntax = "proto3";
 //  name: policy
 //  namespace: foo
 // spec:
-//  selector:
-//    matchLabels: {}
 // ```
 //
-// The following mesh level authorization policy selects workloads with label "version: v1"
-// in every namespaces. (the root namespace is configured to "istio-config").
+// The following authorization policy applies to workloads containing label
+// "version: v1" in all namespaces in the mesh. (Assuming the root namespace is
+// configured to "istio-config").
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -160,7 +159,7 @@ message AuthorizationPolicy {
 
   // Optional. A list of rules to specify the allowed access to the workload.
   //
-  // If not set, all access will be denied.
+  // If not set, access is denied unless explicitly allowed by other authorization policy.
   repeated Rule rules = 2;
 }
 
@@ -179,7 +178,7 @@ message WorkloadSelector {
 // Rule allows access from a list of sources to perform a list of operations when
 // the condition is matched.
 //
-// String field in the rule supports Exact, Prefix, Suffix and Presence match:
+// Any string field in the rule supports Exact, Prefix, Suffix and Presence match:
 // - Exact match: "abc" will match on value "abc".
 // - Prefix match: "abc*" will match on value "abc" and "abcd".
 // - Suffix match: "*abc" will match on value "abc" and "xabc".
@@ -221,7 +220,7 @@ message Source {
   // Optional. A list of source peer identities (i.e. service account), which
   // matches to the "source.principal" attribute.
   //
-  // If not set, any principal is allowed. Must be used only when mTLS is enabled.
+  // If not set, any principal is allowed.
   repeated string principals = 1;
 
   // Optional. A list of request identities (i.e. “iss/sub” claims), which
@@ -233,14 +232,14 @@ message Source {
   // Optional. A list of namespaces, which matches to the “source.namespace”
   // attribute.
   //
-  // If not set, any namespace is allowed. Must be used only when mTLS is enabled.
+  // If not set, any namespace is allowed.
   repeated string namespaces = 3;
 
-  // Optional. A list of IPs, which matches to the “source.ip” attribute.
-  // Both single IP (e.g. "1.2.3.4") or CIDR (e.g. "1.2.3.0/24") are supported.
+  // Optional. A list of IP blocks, which matches to the “source.ip” attribute.
+  // Single IP (e.g. "1.2.3.4") and CIDR (e.g. "1.2.3.0/24") are supported.
   //
-  // If not set, any ip is allowed.
-  repeated string ips = 4;
+  // If not set, any IP is allowed.
+  repeated string ip_blocks = 4;
 }
 
 // $hide_from_docs

@@ -1,14 +1,12 @@
 ---
-title: istio.security.v1beta1
+title: Authorization Policy
+description: Configuration for access control on workloads.
+location: https://istio.io/docs/reference/config/security/v1beta1/authorization-policy.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
+hide_from_docs
 number_of_entries: 0
 ---
-<p>$hide<em>from</em>docs
-$title: Authorization Policy
-$description: Configuration for access control on workloads.
-$location: https://istio.io/docs/reference/config/security/v1beta1/authorization-policy.html</p>
-
 <p>Istio Authorization Policy enables access control on workloads in the mesh.</p>
 
 <p>For example, the following authorization policy applies to workloads matched with
@@ -20,7 +18,7 @@ label selector &ldquo;app: httpbin, version: v1&rdquo;.</p>
 to access the workload with:
 - &ldquo;GET&rdquo; method at paths of prefix &ldquo;/info&rdquo; or,
 - &ldquo;POST&rdquo; method at path &ldquo;/data&rdquo;.
-when the request has a valid JWT token issued by &ldquo;istio.io&rdquo;.</p>
+when the request has a valid JWT token issued by &ldquo;https://accounts.google.com&rdquo;.</p>
 
 <p>Any other requests will be rejected.</p>
 
@@ -49,7 +47,7 @@ spec:
        paths: [&quot;/data&quot;]
    when:
    - key: request.auth.claims[iss]
-     values: [“istio.io”]
+     values: [“https://accounts.google.com”]
 </code></pre>
 
 <p>Access control is enabled on a workload if there is any authorization policies selecting
@@ -57,18 +55,18 @@ the workload. When access control is enabled, the default behavior is deny (deny
 which means requests to the workload will be rejected if the request is not allowed by any of
 the authorization policies selecting the workload.</p>
 
-<p>Multiple authorization policies selecting the same workload are OR-ed together.
-The effect of authorization policy is additive, more authorization policies
-always allow more sources to access the workload.</p>
+<p>Currently AuthorizationPolicy only supports &ldquo;ALLOW&rdquo; action. This means that
+if multiple authorization policies apply to the same workload, the effect is additive.</p>
 
-<p>Authorization policy could be specified in workload, namespace and mesh level.
-- workload level: The selector is not empty and the namespace is not root namespace.
-- namespace level: The selector is empty and the namespace is not root namespace.
-- mesh level: The namespace is root namespace.</p>
+<p>Authorization Policy scope (target) is determined by &ldquo;metadata/namespace&rdquo; and
+an optional “selector”.
+- &ldquo;metadata/namespace&rdquo; tells which namespace the policy applies. If set to root
+namespace, the policy applies to all namespaces in a mesh.
+- workload &ldquo;selector&rdquo; can be used to further restrict where a policy applies.</p>
 
 <p>For example,</p>
 
-<p>The following workload level authorization policy selects the workload with label
+<p>The following authorization policy applies to workloads containing label
 &ldquo;app: httpbin&rdquo; in namespace bar.</p>
 
 <pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
@@ -82,7 +80,7 @@ spec:
      app: httpbin
 </code></pre>
 
-<p>The following namespace level authorization policy selects all workloads in namespace foo.</p>
+<p>The following authorization policy applies to all workloads in namespace foo.</p>
 
 <pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -90,12 +88,11 @@ metadata:
  name: policy
  namespace: foo
 spec:
- selector:
-   matchLabels: &lbrace;}
 </code></pre>
 
-<p>The following mesh level authorization policy selects workloads with label &ldquo;version: v1&rdquo;
-in every namespaces. (the root namespace is configured to &ldquo;istio-config&rdquo;).</p>
+<p>The following authorization policy applies to workloads containing label
+&ldquo;version: v1&rdquo; in all namespaces in the mesh. (Assuming the root namespace is
+configured to &ldquo;istio-config&rdquo;).</p>
 
 <pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy

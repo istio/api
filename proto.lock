@@ -7166,7 +7166,7 @@
               },
               {
                 "id": 4,
-                "name": "ips",
+                "name": "ip_blocks",
                 "type": "string",
                 "is_repeated": true
               }
