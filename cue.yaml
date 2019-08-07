@@ -4,7 +4,7 @@ module: istio.io/api
 
 openapi:
   selfContained: true
-  fieldFilter: "min.*|max.*"
+  fieldFilter: "min.*|max.*|default|required"
 
 directories:
   type/v1beta1:
@@ -39,3 +39,577 @@ all:
   title: All Istio types.
   version: v1alpha1
   oapiFilename: istio.json
+
+crd:
+  crdconfigs:
+    VirtualService:
+      schemaname:
+        istio.networking.v1alpha3.VirtualService
+      metadata:
+        name: virtualservices.networking.istio.io
+        labels:
+          app: istio-pilot
+          chart: istio
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: networking.istio.io
+        names:
+          kind: VirtualService
+          listKind: VirtualServiceList
+          plural: virtualservices
+          singular: virtualservice
+          shortNames:
+          - vs
+          categories:
+          - istio-io
+          - networking-istio-io
+        scope: Namespaced
+        versions:
+          - name: v1alpha3
+            served: true
+            storage: true
+        additionalPrinterColumns:
+        - JSONPath: .spec.gateways
+          description: The names of gateways and sidecars that should apply these routes
+          name: Gateways
+          type: string
+        - JSONPath: .spec.hosts
+          description: The destination hosts to which traffic is being sent
+          name: Hosts
+          type: string
+        - JSONPath: .metadata.creationTimestamp
+          description: |-
+            CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+            Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
+          name: Age
+          type: date
+    DestinationRule:
+      schemaname:
+        istio.networking.v1alpha3.DestinationRule
+      metadata:
+        name: destinationrules.networking.istio.io
+        labels:
+          app: istio-pilot
+          chart: istio
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: networking.istio.io
+        names:
+          kind: DestinationRule
+          listKind: DestinationRuleList
+          plural: destinationrules
+          singular: destinationrule
+          shortNames:
+          - dr
+          categories:
+          - istio-io
+          - networking-istio-io
+        scope: Namespaced
+        versions:
+          - name: v1alpha3
+            served: true
+            storage: true
+        additionalPrinterColumns:
+        - JSONPath: .spec.host
+          description: The name of a service from the service registry
+          name: Host
+          type: string
+        - JSONPath: .metadata.creationTimestamp
+          description: |-
+            CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+            Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
+          name: Age
+          type: date
+    ServiceEntry:
+      schemaname:
+        istio.networking.v1alpha3.ServiceEntry
+      metadata:
+        name: serviceentries.networking.istio.io
+        labels:
+          app: istio-pilot
+          chart: istio
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: networking.istio.io
+        names:
+          kind: ServiceEntry
+          listKind: ServiceEntryList
+          plural: serviceentries
+          singular: serviceentry
+          shortNames:
+          - se
+          categories:
+          - istio-io
+          - networking-istio-io
+        scope: Namespaced
+        versions:
+          - name: v1alpha3
+            served: true
+            storage: true
+        additionalPrinterColumns:
+        - JSONPath: .spec.hosts
+          description: The hosts associated with the ServiceEntry
+          name: Hosts
+          type: string
+        - JSONPath: .spec.location
+          description: Whether the service is external to the mesh or part of the mesh (MESH_EXTERNAL or MESH_INTERNAL)
+          name: Location
+          type: string
+        - JSONPath: .spec.resolution
+          description: Service discovery mode for the hosts (NONE, STATIC, or DNS)
+          name: Resolution
+          type: string
+        - JSONPath: .metadata.creationTimestamp
+          description: |-
+            CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+            Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
+          name: Age
+          type: date
+    Gateway:
+      schemaname:
+        istio.networking.v1alpha3.Gateway
+      metadata:
+        name: gateways.networking.istio.io
+        labels:
+          app: istio-pilot
+          chart: istio
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: networking.istio.io
+        names:
+          kind: Gateway
+          plural: gateways
+          singular: gateway
+          shortNames:
+          - gw
+          categories:
+          - istio-io
+          - networking-istio-io
+        scope: Namespaced
+        versions:
+          - name: v1alpha3
+            served: true
+            storage: true
+    EnvoyFilter:
+      schemaname:
+        istio.networking.v1alpha3.EnvoyFilter
+      metadata:
+        name: envoyfilters.networking.istio.io
+        labels:
+          app: istio-pilot
+          chart: istio
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: networking.istio.io
+        names:
+          kind: EnvoyFilter
+          plural: envoyfilters
+          singular: envoyfilter
+          categories:
+          - istio-io
+          - networking-istio-io
+        scope: Namespaced
+        versions:
+          - name: v1alpha3
+            served: true
+            storage: true
+    RbacConfig:
+      schemaname:
+        istio.rbac.v1alpha1.RbacConfig
+      metadata:
+        name: rbacconfigs.rbac.istio.io
+        labels:
+          app: mixer
+          package: istio.io.mixer
+          istio: rbac
+          chart: istio
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: rbac.istio.io
+        names:
+          kind: RbacConfig
+          plural: rbacconfigs
+          singular: rbacconfig
+          categories:
+          - istio-io
+          - rbac-istio-io
+        scope: Namespaced
+        versions:
+          - name: v1alpha1
+            served: true
+            storage: true
+    ClusterRbacConfig:
+      schemaname:
+        istio.rbac.v1alpha1.RbacConfig
+      metadata:
+        name: clusterrbacconfigs.rbac.istio.io
+        labels:
+          app: istio-pilot
+          istio: rbac
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: rbac.istio.io
+        names:
+          kind: ClusterRbacConfig
+          plural: clusterrbacconfigs
+          singular: clusterrbacconfig
+          categories:
+          - istio-io
+          - rbac-istio-io
+        scope: Cluster
+        versions:
+          - name: v1alpha1
+            served: true
+            storage: true
+    Policy:
+      schemaname:
+        istio.authentication.v1alpha1.Policy
+      metadata:
+        name: policies.authentication.istio.io
+        labels:
+          app: istio-citadel
+          chart: istio
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: authentication.istio.io
+        names:
+          kind: Policy
+          plural: policies
+          singular: policy
+          categories:
+          - istio-io
+          - authentication-istio-io
+        scope: Namespaced
+        versions:
+          - name: v1alpha1
+            served: true
+            storage: true
+    MeshPolicy:
+      schemaname:
+        istio.authentication.v1alpha1.Policy
+      metadata:
+        name: meshpolicies.authentication.istio.io
+        labels:
+          app: istio-citadel
+          chart: istio
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: authentication.istio.io
+        names:
+          kind: MeshPolicy
+          listKind: MeshPolicyList
+          plural: meshpolicies
+          singular: meshpolicy
+          categories:
+          - istio-io
+          - authentication-istio-io
+        scope: Cluster
+        versions:
+          - name: v1alpha1
+            served: true
+            storage: true
+    HTTPAPISpecBinding:
+      schemaname:
+        istio.mixer.v1.config.client.HTTPAPISpecBinding
+      metadata:
+        name: httpapispecbindings.config.istio.io
+        labels:
+          app: istio-mixer
+          chart: istio
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: config.istio.io
+        names:
+          kind: HTTPAPISpecBinding
+          plural: httpapispecbindings
+          singular: httpapispecbinding
+          categories:
+          - istio-io
+          - apim-istio-io
+        scope: Namespaced
+        versions:
+          - name: v1alpha2
+            served: true
+            storage: true
+    HTTPAPISpec:
+      schemaname:
+        istio.mixer.v1.config.client.HTTPAPISpec
+      metadata:
+        name: httpapispecs.config.istio.io
+        labels:
+          app: istio-mixer
+          chart: istio
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: config.istio.io
+        names:
+          kind: HTTPAPISpec
+          plural: httpapispecs
+          singular: httpapispec
+          categories:
+          - istio-io
+          - apim-istio-io
+        scope: Namespaced
+        versions:
+          - name: v1alpha2
+            served: true
+            storage: true
+    QuotaSpecBinding:
+      schemaname:
+        istio.mixer.v1.config.client.QuotaSpecBinding
+      metadata:
+        name: quotaspecbindings.config.istio.io
+        labels:
+          app: istio-mixer
+          chart: istio
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: config.istio.io
+        names:
+          kind: QuotaSpecBinding
+          plural: quotaspecbindings
+          singular: quotaspecbinding
+          categories:
+          - istio-io
+          - apim-istio-io
+        scope: Namespaced
+        versions:
+          - name: v1alpha2
+            served: true
+            storage: true
+    QuotaSpec:
+      schemaname:
+        istio.mixer.v1.config.client.QuotaSpec
+      metadata:
+        name: quotaspecs.config.istio.io
+        labels:
+          app: istio-mixer
+          chart: istio
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: config.istio.io
+        names:
+          kind: QuotaSpec
+          plural: quotaspecs
+          singular: quotaspec
+          categories:
+          - istio-io
+          - apim-istio-io
+        scope: Namespaced
+        versions:
+          - name: v1alpha2
+            served: true
+            storage: true
+    Rule:
+      schemaname:
+        istio.policy.v1beta1.Rule
+      metadata:
+        name: rules.config.istio.io
+        labels:
+          app: mixer
+          package: istio.io.mixer
+          istio: core
+          chart: istio
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: config.istio.io
+        names:
+          kind: rule
+          plural: rules
+          singular: rule
+          categories:
+          - istio-io
+          - policy-istio-io
+        scope: Namespaced
+        versions:
+          - name: v1alpha2
+            served: true
+            storage: true
+    AttributeManifest:
+      schemaname:
+        istio.policy.v1beta1.AttributeManifest
+      metadata:
+        name: attributemanifests.config.istio.io
+        labels:
+          app: mixer
+          package: istio.io.mixer
+          istio: core
+          chart: istio
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: config.istio.io
+        names:
+          kind: attributemanifest
+          plural: attributemanifests
+          singular: attributemanifest
+          categories:
+          - istio-io
+          - policy-istio-io
+        scope: Namespaced
+        versions:
+          - name: v1alpha2
+            served: true
+            storage: true
+    ServiceRole:
+      schemaname:
+        istio.rbac.v1alpha1.ServiceRole
+      metadata:
+        name: serviceroles.rbac.istio.io
+        labels:
+          app: mixer
+          package: istio.io.mixer
+          istio: rbac
+          chart: istio
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: rbac.istio.io
+        names:
+          kind: ServiceRole
+          plural: serviceroles
+          singular: servicerole
+          categories:
+          - istio-io
+          - rbac-istio-io
+        scope: Namespaced
+        versions:
+          - name: v1alpha1
+            served: true
+            storage: true
+    ServiceRoleBinding:
+      schemaname:
+        istio.rbac.v1alpha1.ServiceRoleBinding
+      metadata:
+        name: servicerolebindings.rbac.istio.io
+        labels:
+          app: mixer
+          package: istio.io.mixer
+          istio: rbac
+          chart: istio
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: rbac.istio.io
+        names:
+          kind: ServiceRoleBinding
+          plural: servicerolebindings
+          singular: servicerolebinding
+          categories:
+          - istio-io
+          - rbac-istio-io
+        scope: Namespaced
+        versions:
+          - name: v1alpha1
+            served: true
+            storage: true
+        additionalPrinterColumns:
+        - JSONPath: .spec.roleRef.name
+          description: The name of the ServiceRole object being referenced
+          name: Reference
+          type: string
+        - JSONPath: .metadata.creationTimestamp
+          description: |-
+            CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+            Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
+          name: Age
+          type: date
+    Sidecar:
+      schemaname:
+        istio.networking.v1alpha3.Sidecar
+      metadata:
+        name: sidecars.networking.istio.io
+        labels:
+          app: istio-pilot
+          chart: istio
+          heritage: Tiller
+          release: istio
+        annotations:
+          "helm.sh/resource-policy": keep
+      spec:
+        group: networking.istio.io
+        names:
+          kind: Sidecar
+          plural: sidecars
+          singular: sidecar
+          categories:
+          - istio-io
+          - networking-istio-io
+        scope: Namespaced
+        versions:
+          - name: v1alpha3
+            served: true
+            storage: true
+    AuthorizationPolicy:
+      schemaname:
+        istio.rbac.v1alpha1.AuthorizationPolicy
+      metadata:
+        name: authorizationpolicies.rbac.istio.io
+        labels:
+          app: istio-pilot
+          istio: rbac
+          heritage: Tiller
+          release: istio
+      spec:
+        group: rbac.istio.io
+        names:
+          kind: AuthorizationPolicy
+          plural: authorizationpolicies
+          singular: authorizationpolicy
+          categories:
+            - istio-io
+            - rbac-istio-io
+        scope: Namespaced
+        versions:
+          - name: v1alpha1
+            served: true
+            storage: true
+
