@@ -1619,7 +1619,13 @@
               {
                 "id": 20,
                 "name": "envoy_metrics_service_address",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 11,
@@ -1679,8 +1685,28 @@
               },
               {
                 "id": 22,
-                "name": "envoy_access_log_service_address",
+                "name": "envoy_access_log_service",
+                "type": "RemoteService"
+              },
+              {
+                "id": 23,
+                "name": "envoy_metrics_service",
+                "type": "RemoteService"
+              }
+            ]
+          },
+          {
+            "name": "RemoteService",
+            "fields": [
+              {
+                "id": 1,
+                "name": "address",
                 "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "tls_settings",
+                "type": "istio.networking.v1alpha3.TLSSettings"
               }
             ]
           }
@@ -1691,6 +1717,9 @@
           },
           {
             "path": "google/protobuf/wrappers.proto"
+          },
+          {
+            "path": "networking/v1alpha3/destination_rule.proto"
           }
         ],
         "package": {
