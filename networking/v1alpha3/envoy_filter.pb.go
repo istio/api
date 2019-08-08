@@ -214,12 +214,16 @@ const (
 	// connection manager, to modify an existing filter or add a new
 	// filter.
 	EnvoyFilter_HTTP_FILTER EnvoyFilter_ApplyTo = 4
-	// Applies the patch to the Route configuration (rds output) inside a HTTP
-	// connection manager. This does not apply to the virtual host.
+	// Applies the patch to the Route configuration (rds output)
+	// inside a HTTP connection manager. This does not apply to the
+	// virtual host. Currently, only MERGE operation is allowed on the
+	// route configuration objects.
 	EnvoyFilter_ROUTE_CONFIGURATION EnvoyFilter_ApplyTo = 5
 	// Applies the patch to a virtual host inside a route configuration.
 	EnvoyFilter_VIRTUAL_HOST EnvoyFilter_ApplyTo = 6
-	// Applies the patch to a route object inside the matched virtual host in a route configuration.
+	// Applies the patch to a route object inside the matched virtual
+	// host in a route configuration. Currently, only MERGE operation
+	// is allowed on the route objects.
 	EnvoyFilter_HTTP_ROUTE EnvoyFilter_ApplyTo = 7
 	// Applies the patch to a cluster in a CDS output. Also used to add new clusters.
 	EnvoyFilter_CLUSTER EnvoyFilter_ApplyTo = 8
@@ -475,13 +479,13 @@ const (
 	// Add the provided config to an existing list (of listeners,
 	// clusters, virtual hosts, network filters, or http
 	// filters). This operation will be ignored when applyTo is set
-	// to ROUTE_CONFIGURATION.
+	// to ROUTE_CONFIGURATION, or HTTP_ROUTE.
 	EnvoyFilter_Patch_ADD EnvoyFilter_Patch_Operation = 2
 	// Remove the selected object from the list (of listeners,
 	// clusters, virtual hosts, network filters, or http
 	// filters). Does not require a value to be specified. This
 	// operation will be ignored when applyTo is set to
-	// ROUTE_CONFIGURATION.
+	// ROUTE_CONFIGURATION, or HTTP_ROUTE.
 	EnvoyFilter_Patch_REMOVE EnvoyFilter_Patch_Operation = 3
 	// Insert operation on an array of named objects. This operation
 	// is typically useful only in the context of filters, where the
