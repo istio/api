@@ -89,18 +89,18 @@
           "appendRequestHeaders"
         ],
         "properties": {
-          "match": {
-            "description": "Match conditions to be satisfied for the rule to be activated. All conditions inside a single match block have AND semantics, while the list of match blocks have OR semantics. The rule is matched if any one of the match blocks succeed.",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPMatchRequest"
-            }
-          },
           "route": {
             "description": "A http rule can either redirect or forward (default) traffic. The forwarding target can be one of several versions of a service (see glossary in beginning of document). Weights associated with the service version determine the proportion of traffic it receives.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPRouteDestination"
+            }
+          },
+          "match": {
+            "description": "Match conditions to be satisfied for the rule to be activated. All conditions inside a single match block have AND semantics, while the list of match blocks have OR semantics. The rule is matched if any one of the match blocks succeed.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPMatchRequest"
             }
           },
           "redirect": {
@@ -177,18 +177,18 @@
         "description": "Describes match conditions and actions for routing unterminated TLS traffic (TLS/HTTPS) The following routing rule forwards unterminated TLS traffic arriving at port 443 of gateway called \"mygateway\" to internal services in the mesh based on the SNI value.",
         "type": "object",
         "properties": {
-          "match": {
-            "description": "REQUIRED. Match conditions to be satisfied for the rule to be activated. All conditions inside a single match block have AND semantics, while the list of match blocks have OR semantics. The rule is matched if any one of the match blocks succeed.",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSMatchAttributes"
-            }
-          },
           "route": {
             "description": "The destination to which the connection should be forwarded to.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1alpha3.RouteDestination"
+            }
+          },
+          "match": {
+            "description": "REQUIRED. Match conditions to be satisfied for the rule to be activated. All conditions inside a single match block have AND semantics, while the list of match blocks have OR semantics. The rule is matched if any one of the match blocks succeed.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSMatchAttributes"
             }
           }
         }
@@ -197,18 +197,18 @@
         "description": "Describes match conditions and actions for routing TCP traffic. The following routing rule forwards traffic arriving at port 27017 for mongo.prod.svc.cluster.local to another Mongo server on port 5555.",
         "type": "object",
         "properties": {
-          "match": {
-            "description": "Match conditions to be satisfied for the rule to be activated. All conditions inside a single match block have AND semantics, while the list of match blocks have OR semantics. The rule is matched if any one of the match blocks succeed.",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/istio.networking.v1alpha3.L4MatchAttributes"
-            }
-          },
           "route": {
             "description": "The destination to which the connection should be forwarded to.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1alpha3.RouteDestination"
+            }
+          },
+          "match": {
+            "description": "Match conditions to be satisfied for the rule to be activated. All conditions inside a single match block have AND semantics, while the list of match blocks have OR semantics. The rule is matched if any one of the match blocks succeed.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.L4MatchAttributes"
             }
           }
         }

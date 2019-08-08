@@ -4094,8 +4094,12 @@
                 "integer": 6
               },
               {
-                "name": "CLUSTER",
+                "name": "HTTP_ROUTE",
                 "integer": 7
+              },
+              {
+                "name": "CLUSTER",
+                "integer": 8
               }
             ]
           },
@@ -4115,6 +4119,26 @@
               },
               {
                 "name": "GATEWAY",
+                "integer": 3
+              }
+            ]
+          },
+          {
+            "name": "RouteMatch.Action",
+            "enum_fields": [
+              {
+                "name": "ANY"
+              },
+              {
+                "name": "ROUTE",
+                "integer": 1
+              },
+              {
+                "name": "REDIRECT",
+                "integer": 2
+              },
+              {
+                "name": "DIRECT_RESPONSE",
                 "integer": 3
               }
             ]
@@ -4345,12 +4369,32 @@
                 ],
                 "messages": [
                   {
+                    "name": "RouteMatch",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "name",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "action",
+                        "type": "Action"
+                      }
+                    ]
+                  },
+                  {
                     "name": "VirtualHostMatch",
                     "fields": [
                       {
                         "id": 1,
                         "name": "name",
                         "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "route",
+                        "type": "RouteMatch"
                       }
                     ]
                   }
@@ -4386,16 +4430,26 @@
                     "fields": [
                       {
                         "id": 1,
-                        "name": "sni",
+                        "name": "name",
                         "type": "string"
                       },
                       {
                         "id": 2,
-                        "name": "transport_protocol",
+                        "name": "sni",
                         "type": "string"
                       },
                       {
                         "id": 3,
+                        "name": "transport_protocol",
+                        "type": "string"
+                      },
+                      {
+                        "id": 4,
+                        "name": "application_protocols",
+                        "type": "string"
+                      },
+                      {
+                        "id": 5,
                         "name": "filter",
                         "type": "FilterMatch"
                       }
