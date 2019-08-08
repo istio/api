@@ -4373,6 +4373,11 @@
                     "fields": [
                       {
                         "id": 1,
+                        "name": "name",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
                         "name": "action",
                         "type": "Action"
                       }
