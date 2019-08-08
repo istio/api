@@ -4373,11 +4373,6 @@
                     "fields": [
                       {
                         "id": 1,
-                        "name": "name",
-                        "type": "string"
-                      },
-                      {
-                        "id": 2,
                         "name": "action",
                         "type": "Action"
                       }
@@ -5146,6 +5141,11 @@
             "name": "HTTPRoute",
             "fields": [
               {
+                "id": 17,
+                "name": "name",
+                "type": "string"
+              },
+              {
                 "id": 1,
                 "name": "match",
                 "type": "HTTPMatchRequest",
@@ -5355,6 +5355,11 @@
           {
             "name": "HTTPMatchRequest",
             "fields": [
+              {
+                "id": 11,
+                "name": "name",
+                "type": "string"
+              },
               {
                 "id": 1,
                 "name": "uri",
