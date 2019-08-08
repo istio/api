@@ -4,7 +4,7 @@ all: generate
 # setup
 ########################
 
-apitools_img := gcr.io/istio-testing/api-build-tools:2019-07-31
+buildtools_img := gcr.io/istio-testing/build-tools:2019-08-08
 websitetools_img := gcr.io/istio-testing/website-tools:2019-07-25
 cue_img := gcr.io/istio-testing/cue:2019-07-23
 pwd := $(shell pwd)
@@ -14,9 +14,9 @@ repo_mount := $(mount_dir)/istio.io/api
 out_path = .
 uid := $(shell id -u)
 
-protoc = docker run --user $(uid) -v /etc/passwd:/etc/passwd:ro --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(apitools_img) protoc -I/usr/include/protobuf -I$(repo_dir)
+protoc = docker run --user $(uid) -v /etc/passwd:/etc/passwd:ro --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(buildtools_img) protoc -I/usr/include/protobuf -I$(repo_dir)
 
-run = docker run --user $(uid) -v /etc/passwd:/etc/passwd:ro --rm -v $(pwd):$(repo_mount) -w $(repo_mount) $(apitools_img)
+run = docker run --user $(uid) -v /etc/passwd:/etc/passwd:ro --rm -v $(pwd):$(repo_mount) -w $(repo_mount) $(buildtools_img)
 protolock = $(run) protolock
 protolock_release = $(run) /bin/bash $(repo_mount)/scripts/check-release-locks.sh
 prototool = $(run) prototool
