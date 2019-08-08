@@ -29,7 +29,7 @@ metadata:
  namespace: foo
 spec:
  selector:
-   matchLabels:
+   labels:
      app: httpbin
      version: v1
  rules:
@@ -76,7 +76,7 @@ metadata:
  namespace: bar
 spec:
  selector:
-   matchLabels:
+   labels:
      app: httpbin
 </code></pre>
 
@@ -101,7 +101,7 @@ metadata:
  namespace: istio-config
 spec:
  selector:
-   matchLabels:
+   labels:
      version: v1
 </code></pre>
 

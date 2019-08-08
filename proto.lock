@@ -7075,26 +7075,13 @@
               {
                 "id": 1,
                 "name": "selector",
-                "type": "WorkloadSelector"
+                "type": "istio.networking.v1alpha3.WorkloadSelector"
               },
               {
                 "id": 2,
                 "name": "rules",
                 "type": "Rule",
                 "is_repeated": true
-              }
-            ]
-          },
-          {
-            "name": "WorkloadSelector",
-            "maps": [
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 1,
-                  "name": "match_labels",
-                  "type": "string"
-                }
               }
             ]
           },
@@ -7216,6 +7203,11 @@
                 "is_repeated": true
               }
             ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "networking/v1alpha3/sidecar.proto"
           }
         ],
         "package": {
