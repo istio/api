@@ -235,4 +235,7 @@ message RemoteService {
   // uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
   // mode as `ISTIO_MUTUAL`.
   istio.networking.v1alpha3.TLSSettings tls_settings = 2;
+
+  // If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+  istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive tcp_keepalive = 3;
 }
