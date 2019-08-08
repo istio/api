@@ -46,6 +46,15 @@ var (
           Deprecated: false,
         }
 	
+		AuthenticationMtlsReady = Instance {
+          Name: "authentication.istio.io/mtlsReady",
+          Description: "Label injected by either istioctl or webhook which "+
+                        "specifies whether a service instance is ready to accept "+
+                        "mTLS traffic.",
+          Hidden: false,
+          Deprecated: false,
+        }
+	
 		IoKubernetesIngressClass = Instance {
           Name: "kubernetes.io/ingress.class",
           Description: "Annotation on an Ingress resources denoting the class of "+

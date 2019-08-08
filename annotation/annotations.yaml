@@ -223,3 +223,8 @@ annotations:
     description: Annotation on an Ingress resources denoting the class of controllers responsible for it.
     deprecated: false
     hidden: false
+  - name: authentication.istio.io/mtlsReady
+    description: Label injected by either istioctl or webhook which specifies whether a
+      service instance is ready to accept mTLS traffic.
+    deprecated: false
+    hidden: false
