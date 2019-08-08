@@ -642,6 +642,9 @@
       "istio.mesh.v1alpha1.RemoteService": {
         "type": "object",
         "properties": {
+          "tcpKeepalive": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive"
+          },
           "address": {
             "description": "Address of a remove service used for various purposes (access log receiver, metrics receiver, etc.). Can be IP address or a fully qualified DNS name.",
             "type": "string",

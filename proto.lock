@@ -1707,6 +1707,11 @@
                 "id": 2,
                 "name": "tls_settings",
                 "type": "istio.networking.v1alpha3.TLSSettings"
+              },
+              {
+                "id": 3,
+                "name": "tcp_keepalive",
+                "type": "istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive"
               }
             ]
           }
