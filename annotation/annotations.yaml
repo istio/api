@@ -52,6 +52,14 @@ annotations:
       NOTE This API is Alpha and has no stability guarantees.
     deprecated: false
     hidden: true
+  - name: traffic.sidecar.alpha.istio.io/enableProtocolSniffing 
+    description: A boolean value indicates that if protocol sniffing is enabled. 
+      This is an alpha API, no backward compatibility guarantee. If enabled, protocol sniffing 
+      will be used for each listener that istio cannot parse the protocol from its name. 
+      The listener will select the filter chain by inspecting the application protocol 
+      from the incoming packet. Sniffing is not supported on H2 and gRPC port in 1.3.
+    deprecated: false
+    hidden: true
   - name: networking.istio.io/exportTo
     description: Specifies the namespaces to which this service should be exported to.
       A value of '*' indicates it is reachable within the mesh '.' indicates it is
@@ -193,14 +201,6 @@ annotations:
   - name: traffic.sidecar.istio.io/kubevirtInterfaces
     description: A comma separated list of virtual interfaces whose inbound traffic
       (from VM) will be treated as outbound.
-    deprecated: false
-    hidden: false
-  - name: traffic.sidecar.istio.io/enableProtocolSniffing 
-    description: A boolean value indicates that if protocol sniffing is enabled. 
-      This is an alpha API, no backward compatibility guarantee. If enabled, protocol sniffing 
-      will be used for each listener that istio cannot parse the protocol from its name. 
-      The listener will select the filter chain by inspecting the application protocol 
-      from the incoming packet. Sniffing is not supported on H2 and gRPC port in 1.3.
     deprecated: false
     hidden: false
   - name: policy.istio.io/lang

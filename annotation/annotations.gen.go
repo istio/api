@@ -318,8 +318,8 @@ var (
           Deprecated: false,
         }
 	
-		SidecarTrafficEnableProtocolSniffing = Instance {
-          Name: "traffic.sidecar.istio.io/enableProtocolSniffing",
+		AlphaSidecarTrafficEnableProtocolSniffing = Instance {
+          Name: "traffic.sidecar.alpha.istio.io/enableProtocolSniffing",
           Description: "A boolean value indicates that if protocol sniffing is "+
                         "enabled. This is an alpha API, no backward compatibility "+
                         "guarantee. If enabled, protocol sniffing will be used for "+
