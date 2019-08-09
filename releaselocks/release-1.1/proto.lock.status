@@ -1,3 +1,7 @@
+CONFLICT: "AuthorizationPolicy" field: "allow" has been removed, but is not reserved [rbac/v1alpha1/rbac.proto]
+CONFLICT: "AuthorizationPolicy" field: "workload_selector" has been removed, but is not reserved [rbac/v1alpha1/rbac.proto]
+CONFLICT: "AuthorizationPolicy" ID: "1" has been removed, but is not reserved [rbac/v1alpha1/rbac.proto]
+CONFLICT: "AuthorizationPolicy" ID: "2" has been removed, but is not reserved [rbac/v1alpha1/rbac.proto]
 CONFLICT: "ListenerMatch.ListenerProtocol" field: "ALL" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
 CONFLICT: "ListenerMatch.ListenerProtocol" field: "HTTP" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
 CONFLICT: "ListenerMatch.ListenerProtocol" field: "TCP" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
@@ -12,3 +16,5 @@ CONFLICT: "ListenerMatch.ListenerType" integer: "0" has been removed, but is not
 CONFLICT: "ListenerMatch.ListenerType" integer: "1" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
 CONFLICT: "ListenerMatch.ListenerType" integer: "2" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
 CONFLICT: "ListenerMatch.ListenerType" integer: "3" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
+CONFLICT: "WorkloadSelector" field: "labels" has been removed, but is not reserved [rbac/v1alpha1/rbac.proto]
+CONFLICT: "WorkloadSelector" ID: "1" has been removed, but is not reserved [rbac/v1alpha1/rbac.proto]
