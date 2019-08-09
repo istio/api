@@ -328,7 +328,7 @@ var (
                         "inspecting the application protocol from the incoming "+
                         "packet. Sniffing is not supported on H2 and gRPC port in "+
                         "1.3.",
-          Hidden: false,
+          Hidden: true,
           Deprecated: false,
         }
 	
