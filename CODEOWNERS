@@ -1,1 +1,15 @@
 *   @geeknoid, @rshriram, @andraxylia, @costinm, @diemtvu, @frankbu, @GregHanson, @mandarjog, @ozevren, @wattli
+# @frankbu added as he frequenlty edits comments/docs
+
+networking/* @rshriram @louiscryan @frankbu
+
+mesh/* @costinm @mandarjog
+annotation/* @costinm @mandarjog
+
+mixer/* @kyessenov @mandarjog @geeknoid
+
+authentication/* @diemtvu @wattli
+security/* @diemtvu @wattli
+rbac/* @diemtvu @wattli
+
+mcp/* @ozevren
