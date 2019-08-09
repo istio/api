@@ -324,9 +324,10 @@ var (
                         "enabled. This is an alpha API, no backward compatibility "+
                         "guarantee. If enabled, protocol sniffing will be used for "+
                         "each listener that istio cannot parse the protocol from "+
-                        "it's name. The listener will select the filter chain by "+
+                        "its name. The listener will select the filter chain by "+
                         "inspecting the application protocol from the incoming "+
-                        "packet. Sniffing is not supported on H2 and gRPC port.",
+                        "packet. Sniffing is not supported on H2 and gRPC port in "+
+                        "1.3.",
           Hidden: false,
           Deprecated: false,
         }

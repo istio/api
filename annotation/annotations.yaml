@@ -198,9 +198,9 @@ annotations:
   - name: traffic.sidecar.istio.io/enableProtocolSniffing 
     description: A boolean value indicates that if protocol sniffing is enabled. 
       This is an alpha API, no backward compatibility guarantee. If enabled, protocol sniffing 
-      will be used for each listener that istio cannot parse the protocol from it's name. 
+      will be used for each listener that istio cannot parse the protocol from its name. 
       The listener will select the filter chain by inspecting the application protocol 
-      from the incoming packet. Sniffing is not supported on H2 and gRPC port.
+      from the incoming packet. Sniffing is not supported on H2 and gRPC port in 1.3.
     deprecated: false
     hidden: false
   - name: policy.istio.io/lang
