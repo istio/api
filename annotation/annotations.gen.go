@@ -321,7 +321,12 @@ var (
 		SidecarTrafficEnableProtocolSniffing = Instance {
           Name: "traffic.sidecar.istio.io/enableProtocolSniffing",
           Description: "A boolean value indicates that if protocol sniffing is "+
-                        "enabled.",
+                        "enabled. This is an alpha API, no backward compatibility "+
+                        "guarantee. If enabled, protocol sniffing will be used for "+
+                        "each listener that istio cannot parse the protocol from "+
+                        "it's name. The listener will select the filter chain by "+
+                        "inspecting the application protocol from the incoming "+
+                        "packet. Sniffing is not supported on H2 and gRPC port.",
           Hidden: false,
           Deprecated: false,
         }
