@@ -7,6 +7,8 @@ openapi:
   fieldFilter: "min.*|max.*"
 
 directories:
+  type/v1beta1:
+    - mode: all
   authentication/v1alpha1:
     - mode: all
   mcp/v1alpha1:
@@ -29,6 +31,7 @@ directories:
     - mode: all
   security/v1beta1:
     - mode: perFile
+
 
 # All is used when generating all types referenced in the above directories to
 # one file.

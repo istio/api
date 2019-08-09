@@ -7173,7 +7173,7 @@
               {
                 "id": 1,
                 "name": "selector",
-                "type": "istio.networking.v1alpha3.WorkloadSelector"
+                "type": "istio.type.v1beta1.WorkloadSelector"
               },
               {
                 "id": 2,
@@ -7305,7 +7305,7 @@
         ],
         "imports": [
           {
-            "path": "networking/v1alpha3/sidecar.proto"
+            "path": "type/v1beta1/selector.proto"
           }
         ],
         "package": {
@@ -7315,6 +7315,35 @@
           {
             "name": "go_package",
             "value": "istio.io/api/security/v1beta1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "type:/:v1beta1:/:selector.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "WorkloadSelector",
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 1,
+                  "name": "match_labels",
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "istio.type.v1beta1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/type/v1beta1"
           }
         ]
       }
