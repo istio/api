@@ -7162,6 +7162,162 @@
           }
         ]
       }
+    },
+    {
+      "protopath": "security:/:v1beta1:/:authorization.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "AuthorizationPolicy",
+            "fields": [
+              {
+                "id": 1,
+                "name": "selector",
+                "type": "istio.networking.v1alpha3.WorkloadSelector"
+              },
+              {
+                "id": 2,
+                "name": "rules",
+                "type": "Rule",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "Rule",
+            "fields": [
+              {
+                "id": 1,
+                "name": "from",
+                "type": "From",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "to",
+                "type": "To",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "when",
+                "type": "Condition",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "From",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "source",
+                    "type": "Source"
+                  }
+                ]
+              },
+              {
+                "name": "To",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "operation",
+                    "type": "Operation"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Source",
+            "fields": [
+              {
+                "id": 1,
+                "name": "principals",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "request_principals",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "namespaces",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "ip_blocks",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "Operation",
+            "fields": [
+              {
+                "id": 1,
+                "name": "hosts",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "ports",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "methods",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "paths",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "Condition",
+            "fields": [
+              {
+                "id": 1,
+                "name": "key",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "values",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "networking/v1alpha3/sidecar.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.security.v1beta1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/security/v1beta1"
+          }
+        ]
+      }
     }
   ]
 }

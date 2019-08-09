@@ -1,0 +1,107 @@
+---
+title: Authorization Policy
+description: Configuration for access control on workloads.
+location: https://istio.io/docs/reference/config/security/v1beta1/authorization-policy.html
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+hide_from_docs
+number_of_entries: 0
+---
+<p>Istio Authorization Policy enables access control on workloads in the mesh.</p>
+
+<p>For example, the following authorization policy applies to workloads matched with
+label selector &ldquo;app: httpbin, version: v1&rdquo;.</p>
+
+<p>It allows requests from:
+- service account &ldquo;cluster.local/ns/default/sa/sleep&rdquo; or
+- namespace &ldquo;test&rdquo;
+to access the workload with:
+- &ldquo;GET&rdquo; method at paths of prefix &ldquo;/info&rdquo; or,
+- &ldquo;POST&rdquo; method at path &ldquo;/data&rdquo;.
+when the request has a valid JWT token issued by &ldquo;https://accounts.google.com&rdquo;.</p>
+
+<p>Any other requests will be rejected.</p>
+
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+ name: httpbin
+ namespace: foo
+spec:
+ selector:
+   labels:
+     app: httpbin
+     version: v1
+ rules:
+ - from:
+   - source:
+       principals: [“cluster.local/ns/default/sa/sleep&quot;]
+   - source:
+       namespaces: [“test”]
+   to:
+   - operation:
+       methods: [“GET”]
+       paths: [&quot;/info*&quot;]
+   - operation:
+       methods: [&quot;POST&quot;]
+       paths: [&quot;/data&quot;]
+   when:
+   - key: request.auth.claims[iss]
+     values: [“https://accounts.google.com”]
+</code></pre>
+
+<p>Access control is enabled on a workload if there is any authorization policies selecting
+the workload. When access control is enabled, the default behavior is deny (deny-by-default)
+which means requests to the workload will be rejected if the request is not allowed by any of
+the authorization policies selecting the workload.</p>
+
+<p>Currently AuthorizationPolicy only supports &ldquo;ALLOW&rdquo; action. This means that
+if multiple authorization policies apply to the same workload, the effect is additive.</p>
+
+<p>Authorization Policy scope (target) is determined by &ldquo;metadata/namespace&rdquo; and
+an optional “selector”.
+- &ldquo;metadata/namespace&rdquo; tells which namespace the policy applies. If set to root
+namespace, the policy applies to all namespaces in a mesh.
+- workload &ldquo;selector&rdquo; can be used to further restrict where a policy applies.</p>
+
+<p>For example,</p>
+
+<p>The following authorization policy applies to workloads containing label
+&ldquo;app: httpbin&rdquo; in namespace bar.</p>
+
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+ name: policy
+ namespace: bar
+spec:
+ selector:
+   labels:
+     app: httpbin
+</code></pre>
+
+<p>The following authorization policy applies to all workloads in namespace foo.</p>
+
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+ name: policy
+ namespace: foo
+spec:
+</code></pre>
+
+<p>The following authorization policy applies to workloads containing label
+&ldquo;version: v1&rdquo; in all namespaces in the mesh. (Assuming the root namespace is
+configured to &ldquo;istio-config&rdquo;).</p>
+
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+ name: policy
+ namespace: istio-config
+spec:
+ selector:
+   labels:
+     version: v1
+</code></pre>
+

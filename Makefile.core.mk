@@ -70,6 +70,7 @@ protoc_gen_python_plugin := $(protoc_gen_python_prefix):$(repo_dir)/$(python_out
 
 protoc_gen_docs_plugin := --docs_out=warnings=true,dictionary=$(repo_dir)/dictionaries/en-US,custom_word_list=$(repo_dir)/dictionaries/custom.txt,mode=html_fragment_with_front_matter:$(repo_dir)/
 protoc_gen_docs_plugin_for_networking := --docs_out=warnings=true,dictionary=$(repo_dir)/dictionaries/en-US,custom_word_list=$(repo_dir)/dictionaries/custom.txt,per_file=true,mode=html_fragment_with_front_matter:$(repo_dir)/
+protoc_gen_docs_plugin_for_security := --docs_out=warnings=true,dictionary=$(repo_dir)/dictionaries/en-US,custom_word_list=$(repo_dir)/dictionaries/custom.txt,per_file=true,mode=html_fragment_with_front_matter:$(repo_dir)/
 
 #####################
 # Generation Rules
@@ -82,6 +83,7 @@ generate: \
 	generate-networking \
 	generate-rbac \
 	generate-authn \
+	generate-security \
 	generate-envoy \
 	generate-policy \
 	generate-annotations \
@@ -252,6 +254,26 @@ clean-authn:
 	@rm -fr $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc) $(authn_v1alpha1_pb_pythons)
 
 #####################
+# security/...
+#####################
+
+security_v1beta1_path := security/v1beta1
+security_v1beta1_protos := $(wildcard $(security_v1beta1_path)/*.proto)
+security_v1beta1_pb_gos := $(security_v1beta1_protos:.proto=.pb.go)
+security_v1beta1_pb_pythons := $(patsubst $(security_v1beta1_path)/%.proto,$(python_output_path)/$(security_v1beta1_path)/%_pb2.py,$(security_v1beta1_protos))
+security_v1beta1_pb_docs := $(security_v1beta1_protos:.proto=.pb.html)
+security_v1beta1_openapi := $(security_v1beta1_protos:.proto=.json)
+
+$(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons): $(security_v1beta1_protos)
+	@$(protolock) status
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin_for_security)$(security_v1beta1_path) $(protoc_gen_python_plugin) $^
+
+generate-security: $(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons)
+
+clean-security:
+	@rm -fr $(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons) $(security_v1beta1_openapi)
+
+#####################
 # envoy/...
 #####################
 
@@ -327,7 +349,8 @@ all_protos := \
 	$(mixer_adapter_model_v1beta1_protos) \
 	$(networking_v1alpha3_protos) \
 	$(rbac_v1alpha1_protos) \
-	$(authn_v1alpha1_protos)
+	$(authn_v1alpha1_protos) \
+	$(security_v1beta1_protos)
 
 all_openapi := \
 	$(mcp_v1alpha1_openapi) \
@@ -338,7 +361,8 @@ all_openapi := \
 	$(mixer_adapter_model_v1beta1_openapi) \
 	$(networking_v1alpha3_openapi) \
 	$(rbac_v1alpha1_openapi) \
-	$(authn_v1alpha1_openapi)
+	$(authn_v1alpha1_openapi) \
+	$(security_v1beta1_openapi)
 
 $(all_openapi): $(all_protos)
 	@$(cue) -f=$(repo_dir)/cue.yaml
@@ -362,6 +386,7 @@ clean: \
 	clean-envoy \
 	clean-policy \
 	clean-annotations \
-	clean-openapi-schema
+	clean-openapi-schema \
+	clean-security
 
 include Makefile.common.mk
