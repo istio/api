@@ -6853,35 +6853,6 @@
         ],
         "messages": [
           {
-            "name": "WorkloadSelector",
-            "maps": [
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 1,
-                  "name": "labels",
-                  "type": "string"
-                }
-              }
-            ]
-          },
-          {
-            "name": "AuthorizationPolicy",
-            "fields": [
-              {
-                "id": 1,
-                "name": "workload_selector",
-                "type": "WorkloadSelector"
-              },
-              {
-                "id": 2,
-                "name": "allow",
-                "type": "ServiceRoleBinding",
-                "is_repeated": true
-              }
-            ]
-          },
-          {
             "name": "ServiceRole",
             "fields": [
               {
@@ -7133,12 +7104,6 @@
                     "id": 1,
                     "name": "services",
                     "type": "string",
-                    "is_repeated": true
-                  },
-                  {
-                    "id": 3,
-                    "name": "workload_selectors",
-                    "type": "WorkloadSelector",
                     "is_repeated": true
                   },
                   {
