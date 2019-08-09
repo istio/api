@@ -318,6 +318,14 @@ var (
           Deprecated: false,
         }
 	
+		SidecarTrafficEnableProtocolSniffing = Instance {
+          Name: "traffic.sidecar.istio.io/enableProtocolSniffing",
+          Description: "A boolean value indicates that if protocol sniffing is "+
+                        "enabled.",
+          Hidden: false,
+          Deprecated: false,
+        }
+	
 		SidecarTrafficExcludeInboundPorts = Instance {
           Name: "traffic.sidecar.istio.io/excludeInboundPorts",
           Description: "A comma separated list of inbound ports to be excluded "+

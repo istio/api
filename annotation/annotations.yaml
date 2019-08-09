@@ -195,6 +195,10 @@ annotations:
       (from VM) will be treated as outbound.
     deprecated: false
     hidden: false
+  - name: traffic.sidecar.istio.io/enableProtocolSniffing 
+    description: A boolean value indicates that if protocol sniffing is enabled.
+    deprecated: false
+    hidden: false
   - name: policy.istio.io/lang
     description: Selects the attribute expression langauge runtime for Mixer..
     deprecated: false
