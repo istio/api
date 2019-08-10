@@ -8,7 +8,7 @@ openapi:
 
 directories:
   type/v1beta1:
-    - mode: all
+    - mode: perFile
   authentication/v1alpha1:
     - mode: all
   mcp/v1alpha1:

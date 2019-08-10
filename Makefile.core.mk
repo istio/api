@@ -100,7 +100,7 @@ type_v1beta1_protos := $(wildcard $(type_v1beta1_path)/*.proto)
 type_v1beta1_pb_gos := $(type_v1beta1_protos:.proto=.pb.go)
 type_v1beta1_pb_pythons := $(patsubst $(type_v1beta1_path)/%.proto,$(python_output_path)/$(type_v1beta1_path)/%_pb2.py,$(type_v1beta1_protos))
 type_v1beta1_pb_docs := $(type_v1beta1_protos:.proto=.pb.html)
-type_v1beta1_openapi := $(type_v1beta1_protos:.proto=.json)
+type_v1beta1_openapi := $(type_v1beta1_path)/istio.type.v1beta1.json
 
 $(type_v1beta1_pb_gos) $(type_v1beta1_pb_docs) $(type_v1beta1_pb_pythons): $(type_v1beta1_protos)
 	@$(protolock) status
