@@ -125,7 +125,6 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
-// $hide_from_docs
 // AuthorizationPolicy enables access control on workloads.
 //
 // For example, the following authorization policy denies all requests to workloads
@@ -214,7 +213,6 @@ func (m *AuthorizationPolicy) GetRules() []*Rule {
 	return nil
 }
 
-// $hide_from_docs
 // Rule allows access from a list of sources to perform a list of operations when
 // the condition is matched.
 //
@@ -295,7 +293,6 @@ func (m *Rule) GetWhen() []*Condition {
 	return nil
 }
 
-// $hide_from_docs
 // From includes a list or sources.
 type Rule_From struct {
 	// Source specifies the source of a request.
@@ -345,7 +342,6 @@ func (m *Rule_From) GetSource() *Source {
 	return nil
 }
 
-// $hide_from_docs
 // To includes a list or operations.
 type Rule_To struct {
 	// Operation specifies the operation of a request.
@@ -395,7 +391,6 @@ func (m *Rule_To) GetOperation() *Operation {
 	return nil
 }
 
-// $hide_from_docs
 // Source specifies the source identities of a request.
 type Source struct {
 	// Optional. A list of source peer identities (i.e. service account), which
@@ -484,7 +479,6 @@ func (m *Source) GetIpBlocks() []string {
 	return nil
 }
 
-// $hide_from_docs
 // Operation specifies the operations of a request.
 type Operation struct {
 	// Optional. A list of hosts, which matches to the “request.host” attribute.
@@ -571,7 +565,6 @@ func (m *Operation) GetPaths() []string {
 	return nil
 }
 
-// $hide_from_docs
 // Condition specifies additional required attributes.
 type Condition struct {
 	// Required. The name of an Istio attribute.

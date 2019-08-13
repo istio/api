@@ -22,7 +22,6 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
-// $hide_from_docs
 // WorkloadSelector specifies the criteria used to determine if a policy can be applied
 // to a proxy. The matching criteria includes the metadata associated with a proxy,
 // workload instance info such as labels attached to the pod/VM, or any other info
