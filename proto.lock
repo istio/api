@@ -1025,6 +1025,11 @@
                 "type": "google.protobuf.Duration"
               },
               {
+                "id": 42,
+                "name": "protocol_detection_timeout",
+                "type": "google.protobuf.Duration"
+              },
+              {
                 "id": 28,
                 "name": "tcp_keepalive",
                 "type": "istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive"
