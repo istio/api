@@ -428,8 +428,12 @@
           "ABSENCE",
           "EXACT",
           "REGEX"
+<<<<<<< HEAD
         ],
         "default": "CONDITION_UNSPECIFIED"
+=======
+        ]
+>>>>>>> Generate structural schemas for CRDs
       },
       "istio.mixer.v1.HeaderOperation": {
         "description": "Operation on HTTP headers to replace, append, or remove a header. Header names are normalized to lower-case with dashes, e.g. \"x-request-id\". Pseudo-headers \":path\", \":authority\", and \":method\" are supported to modify the request headers.",
@@ -457,8 +461,7 @@
           "REPLACE",
           "REMOVE",
           "APPEND"
-        ],
-        "default": "REPLACE"
+        ]
       },
       "istio.mixer.v1.ReportRequest": {
         "description": "Used to report telemetry after performing one or more actions.",
@@ -494,8 +497,7 @@
         "enum": [
           "DELTA_ENCODING",
           "INDEPENDENT_ENCODING"
-        ],
-        "default": "DELTA_ENCODING"
+        ]
       },
       "istio.mixer.v1.ReportResponse": {
         "description": "Used to carry responses to telemetry reports",

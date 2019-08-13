@@ -194,24 +194,21 @@
           "OFF",
           "DEFAULT",
           "STRICT"
-        ],
-        "default": "OFF"
+        ]
       },
       "istio.mesh.v1alpha1.MeshConfig.AuthPolicy": {
         "type": "string",
         "enum": [
           "NONE",
           "MUTUAL_TLS"
-        ],
-        "default": "NONE"
+        ]
       },
       "istio.mesh.v1alpha1.MeshConfig.AccessLogEncoding": {
         "type": "string",
         "enum": [
           "TEXT",
           "JSON"
-        ],
-        "default": "TEXT"
+        ]
       },
       "istio.mesh.v1alpha1.ProxyConfig": {
         "description": "ProxyConfig defines variables for individual Envoy instances.",
@@ -363,16 +360,14 @@
         "enum": [
           "DO_NOT_UPGRADE",
           "UPGRADE"
-        ],
-        "default": "DO_NOT_UPGRADE"
+        ]
       },
       "istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode": {
         "type": "string",
         "enum": [
           "REGISTRY_ONLY",
           "ALLOW_ANY"
-        ],
-        "default": "REGISTRY_ONLY"
+        ]
       },
       "istio.mesh.v1alpha1.LocalityLoadBalancerSetting.Distribute": {
         "description": "Describes how traffic originating in the 'from' zone or sub-zone is distributed over a set of 'to' zones. Syntax for specifying a zone is {region}/{zone}/{sub-zone} and terminal wildcards are allowed on any segment of the specification. Examples: * - matches all localities us-west/* - all zones and sub-zones within the us-west region us-west/zone-1/* - all sub-zones within us-west/zone-1",
@@ -532,8 +527,7 @@
           "NONE",
           "MUTUAL_TLS",
           "INHERIT"
-        ],
-        "default": "NONE"
+        ]
       },
       "istio.mesh.v1alpha1.Tracing": {
         "description": "Tracing defines configuration for the tracing performed by Envoy instances.",
@@ -674,8 +668,7 @@
         "enum": [
           "REDIRECT",
           "TPROXY"
-        ],
-        "default": "REDIRECT"
+        ]
       },
       "istio.mesh.v1alpha1.RemoteService": {
         "type": "object",
@@ -756,8 +749,7 @@
           "SIMPLE",
           "MUTUAL",
           "ISTIO_MUTUAL"
-        ],
-        "default": "DISABLE"
+        ]
       }
     }
   }

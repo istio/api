@@ -89,8 +89,7 @@
         "enum": [
           "MESH_EXTERNAL",
           "MESH_INTERNAL"
-        ],
-        "default": "MESH_EXTERNAL"
+        ]
       },
       "istio.networking.v1alpha3.ServiceEntry.Resolution": {
         "description": "Resolution determines how the proxy will resolve the IP addresses of the network endpoints associated with the service, so that it can route to one of them. The resolution mode specified here has no impact on how the application resolves the IP address associated with the service. The application may still have to use DNS to resolve the service to an IP so that the outbound traffic can be captured by the Proxy. Alternatively, for HTTP services, the application could directly communicate with the proxy (e.g., by setting HTTP_PROXY) to talk to these services.",
@@ -99,8 +98,7 @@
           "NONE",
           "STATIC",
           "DNS"
-        ],
-        "default": "NONE"
+        ]
       },
       "istio.networking.v1alpha3.ServiceEntry.Endpoint": {
         "description": "Endpoint defines a network address (IP or hostname) associated with the mesh service.",

@@ -590,7 +590,7 @@ crd:
             storage: true
     AuthorizationPolicy:
       schemaname:
-        istio.rbac.v1alpha1.AuthorizationPolicy
+        istio.security.v1beta1.AuthorizationPolicy
       metadata:
         name: authorizationpolicies.rbac.istio.io
         labels:

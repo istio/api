@@ -335,6 +335,7 @@ spec:
                           have client certificate.
                         type: boolean
                       mode:
+                        default: STRICT
                         description: Defines the mode of mTLS authentication.
                         enum:
                         - STRICT
@@ -344,6 +345,7 @@ spec:
                 type: object
               type: array
             principalBinding:
+              default: USE_PEER
               description: Define whether peer or origin identity should be use for
                 principal. Default value is USE_PEER. If peer (or origin) identity
                 is not available, either because of peer/origin authentication is
@@ -749,6 +751,7 @@ spec:
                           have client certificate.
                         type: boolean
                       mode:
+                        default: STRICT
                         description: Defines the mode of mTLS authentication.
                         enum:
                         - STRICT
@@ -758,6 +761,7 @@ spec:
                 type: object
               type: array
             principalBinding:
+              default: USE_PEER
               description: Define whether peer or origin identity should be use for
                 principal. Default value is USE_PEER. If peer (or origin) identity
                 is not available, either because of peer/origin authentication is
@@ -1456,6 +1460,7 @@ spec:
                             description: HTTP connection pool settings.
                             properties:
                               h2UpgradePolicy:
+                                default: DEFAULT
                                 description: Specify if http1.1 connection should
                                   be upgraded to http2 for the associated destination.
                                 enum:
@@ -1586,6 +1591,7 @@ spec:
                                 type: boolean
                             type: object
                           simple:
+                            default: ROUND_ROBIN
                             enum:
                             - ROUND_ROBIN
                             - LEAST_CONN
@@ -1655,6 +1661,7 @@ spec:
                                   description: HTTP connection pool settings.
                                   properties:
                                     h2UpgradePolicy:
+                                      default: DEFAULT
                                       description: Specify if http1.1 connection should
                                         be upgraded to http2 for the associated destination.
                                       enum:
@@ -1788,6 +1795,7 @@ spec:
                                       type: boolean
                                   type: object
                                 simple:
+                                  default: ROUND_ROBIN
                                   enum:
                                   - ROUND_ROBIN
                                   - LEAST_CONN
@@ -1880,6 +1888,7 @@ spec:
                                   format: string
                                   type: string
                                 mode:
+                                  default: DISABLE
                                   description: 'REQUIRED: Indicates whether connections
                                     to this port should be secured using TLS. The
                                     value of this field determines how TLS is enforced.'
@@ -1933,6 +1942,7 @@ spec:
                             format: string
                             type: string
                           mode:
+                            default: DISABLE
                             description: 'REQUIRED: Indicates whether connections
                               to this port should be secured using TLS. The value
                               of this field determines how TLS is enforced.'
@@ -1982,6 +1992,7 @@ spec:
                       description: HTTP connection pool settings.
                       properties:
                         h2UpgradePolicy:
+                          default: DEFAULT
                           description: Specify if http1.1 connection should be upgraded
                             to http2 for the associated destination.
                           enum:
@@ -2107,6 +2118,7 @@ spec:
                           type: boolean
                       type: object
                     simple:
+                      default: ROUND_ROBIN
                       enum:
                       - ROUND_ROBIN
                       - LEAST_CONN
@@ -2174,6 +2186,7 @@ spec:
                             description: HTTP connection pool settings.
                             properties:
                               h2UpgradePolicy:
+                                default: DEFAULT
                                 description: Specify if http1.1 connection should
                                   be upgraded to http2 for the associated destination.
                                 enum:
@@ -2304,6 +2317,7 @@ spec:
                                 type: boolean
                             type: object
                           simple:
+                            default: ROUND_ROBIN
                             enum:
                             - ROUND_ROBIN
                             - LEAST_CONN
@@ -2391,6 +2405,7 @@ spec:
                             format: string
                             type: string
                           mode:
+                            default: DISABLE
                             description: 'REQUIRED: Indicates whether connections
                               to this port should be secured using TLS. The value
                               of this field determines how TLS is enforced.'
@@ -2443,6 +2458,7 @@ spec:
                       format: string
                       type: string
                     mode:
+                      default: DISABLE
                       description: 'REQUIRED: Indicates whether connections to this
                         port should be secured using TLS. The value of this field
                         determines how TLS is enforced.'
@@ -2521,6 +2537,7 @@ spec:
               items:
                 properties:
                   applyTo:
+                    default: INVALID
                     description: Specifies where in the Envoy configuration, the patch
                       should be applied. The match is expected to select the appropriate
                       object based on applyTo. For example, an applyTo with HTTP_FILTER
@@ -2538,6 +2555,7 @@ spec:
                     - HTTP_FILTER
                     - ROUTE_CONFIGURATION
                     - VIRTUAL_HOST
+                    - HTTP_ROUTE
                     - CLUSTER
                     type: string
                   match:
@@ -2578,6 +2596,7 @@ spec:
                             type: string
                         type: object
                       context:
+                        default: ANY
                         description: The specific config generation context to match
                           on. Istio Pilot generates envoy configuration in the context
                           of a gateway, inbound traffic to sidecar and outbound traffic
@@ -2597,6 +2616,15 @@ spec:
                               chain (and a specific filter if specified) and not to
                               other filter chains in the listener.
                             properties:
+                              applicationProtocols:
+                                description: Applies only to sidecars. If non-empty,
+                                  a comma separated set of application protocols to
+                                  consider when determining a filter chain match.
+                                  This value will be compared against the application
+                                  protocols of a new connection, when it's detected
+                                  by one of the listener filters such as the http_inspector.
+                                format: string
+                                type: string
                               filter:
                                 description: The name of a specific filter to apply
                                   the patch to. Set this to envoy.http_connection_manager
@@ -2618,6 +2646,10 @@ spec:
                                         type: string
                                     type: object
                                 type: object
+                              name:
+                                description: The name assigned to the filter chain.
+                                format: string
+                                type: string
                               sni:
                                 description: The SNI value used by a filter chain's
                                   match condition. This condition will evaluate to
@@ -2629,8 +2661,8 @@ spec:
                                   If non-empty, a transport protocol to consider when
                                   determining a filter chain match. This value will
                                   be compared against the transport protocol of a
-                                  new connection, when it's detected by one of the
-                                  listener filters.
+                                  new connection, when it's detected by the tls_inspector
+                                  listener filter.
                                 format: string
                                 type: string
                             type: object
@@ -2728,6 +2760,28 @@ spec:
                                   the hostname of a service in the registry.
                                 format: string
                                 type: string
+                              route:
+                                description: Match a specific route within the virtual
+                                  host.
+                                properties:
+                                  action:
+                                    default: ANY
+                                    description: Match a route with specific action
+                                      type.
+                                    enum:
+                                    - ANY
+                                    - ROUTE
+                                    - REDIRECT
+                                    - DIRECT_RESPONSE
+                                    type: string
+                                  name:
+                                    description: The Route objects generated by default
+                                      are named as "default". Route objects generated
+                                      using a virtual service will carry the name
+                                      used in the virtual service's HTTP routes.
+                                    format: string
+                                    type: string
+                                type: object
                             type: object
                         type: object
                     type: object
@@ -2735,6 +2789,7 @@ spec:
                     description: The patch to apply along with the operation.
                     properties:
                       operation:
+                        default: INVALID
                         description: Determines how the patch should be applied.
                         enum:
                         - INVALID
@@ -2765,6 +2820,7 @@ spec:
                     format: string
                     type: string
                   filterType:
+                    default: INVALID
                     description: 'REQUIRED: The type of filter to instantiate.'
                     enum:
                     - INVALID
@@ -2776,6 +2832,7 @@ spec:
                       FIRST
                     properties:
                       index:
+                        default: FIRST
                         description: Position of this filter in the filter chain.
                         enum:
                         - FIRST
@@ -2806,6 +2863,7 @@ spec:
                           type: string
                         type: array
                       listenerProtocol:
+                        default: ALL
                         description: Selects a class of listeners for the same protocol.
                           Use the protocol selection to select all HTTP listeners
                           (includes HTTP2/gRPC/HTTPS where Envoy terminates TLS) or
@@ -2818,6 +2876,7 @@ spec:
                         - TCP
                         type: string
                       listenerType:
+                        default: ANY
                         description: Inbound vs outbound sidecar listener or gateway
                           listener. If not specified, matches all listeners.
                         enum:
@@ -3025,6 +3084,7 @@ spec:
                           to use HTTPS.
                         type: boolean
                       maxProtocolVersion:
+                        default: TLS_AUTO
                         description: 'Optional: Maximum TLS protocol version.'
                         enum:
                         - TLS_AUTO
@@ -3034,6 +3094,7 @@ spec:
                         - TLSV1_3
                         type: string
                       minProtocolVersion:
+                        default: TLS_AUTO
                         description: 'Optional: Minimum TLS protocol version.'
                         enum:
                         - TLS_AUTO
@@ -3043,6 +3104,7 @@ spec:
                         - TLSV1_3
                         type: string
                       mode:
+                        default: PASSTHROUGH
                         description: 'Optional: Indicates whether connections to this
                           port should be secured using TLS. The value of this field
                           determines how TLS is enforced.'
@@ -3261,6 +3323,7 @@ spec:
                 type: string
               type: array
             location:
+              default: MESH_EXTERNAL
               description: Specify whether the service should be considered external
                 to the mesh or part of the mesh.
               enum:
@@ -3290,6 +3353,7 @@ spec:
                 type: object
               type: array
             resolution:
+              default: NONE
               description: 'REQUIRED: Service discovery mode for the hosts. Care must
                 be taken when setting the resolution mode to NONE for a TCP port without
                 accompanying IP addresses. In such cases, traffic to any IP on said
@@ -3367,6 +3431,7 @@ spec:
                     format: string
                     type: string
                   captureMode:
+                    default: DEFAULT
                     description: When the bind address is an IP, the captureMode option
                       dictates how traffic to the listener is expected to be captured
                       (or not). captureMode must be DEFAULT or NONE for Unix domain
@@ -3436,6 +3501,7 @@ spec:
                     format: string
                     type: string
                   captureMode:
+                    default: DEFAULT
                     description: When the bind address is an IP, the captureMode option
                       dictates how traffic to the listener is expected to be captured
                       (or not). captureMode must be DEFAULT or NONE for Unix domain
@@ -3485,6 +3551,7 @@ spec:
                 requested destination.
               properties:
                 mode:
+                  default: REGISTRY_ONLY
                   enum:
                   - REGISTRY_ONLY
                   - ALLOW_ANY
@@ -3614,22 +3681,16 @@ spec:
                     additionalProperties:
                       format: string
                       type: string
-                    description: Use of `append_headers` is deprecated. Use the `headers`
-                      field instead.
                     type: object
                   appendRequestHeaders:
                     additionalProperties:
                       format: string
                       type: string
-                    description: Use of `append_request_headers` is deprecated. Use
-                      the `headers` field instead.
                     type: object
                   appendResponseHeaders:
                     additionalProperties:
                       format: string
                       type: string
-                    description: Use of `append_response_headers` is deprecated. Use
-                      the `headers` field instead.
                     type: object
                   corsPolicy:
                     description: Cross-Origin Resource Sharing policy (CORS). Refer
@@ -3848,10 +3909,6 @@ spec:
                               type: string
                           type: object
                         gateways:
-                          description: Names of gateways where the rule should be
-                            applied to. Gateway names at the top of the VirtualService
-                            (if any) are overridden. The gateway match is independent
-                            of sourceLabels.
                           items:
                             format: string
                             type: string
@@ -3911,6 +3968,13 @@ spec:
                               format: string
                               type: string
                           type: object
+                        name:
+                          description: The name assigned to a match. The match's name
+                            will be concatenated with the parent route's name and
+                            will be logged in the access logs for requests matching
+                            this route.
+                          format: string
+                          type: string
                         port:
                           description: Specifies the ports on the host that is being
                             addressed. Many services only expose a single port or
@@ -3970,11 +4034,6 @@ spec:
                           additionalProperties:
                             format: string
                             type: string
-                          description: One or more labels that constrain the applicability
-                            of a rule to workloads with the given labels. If the VirtualService
-                            has a list of gateways specified at the top, it should
-                            include the reserved gateway `mesh` in order for this
-                            field to be applicable.
                           type: object
                         uri:
                           description: 'URI to match values are case-sensitive and
@@ -4048,6 +4107,13 @@ spec:
                         format: string
                         type: string
                     type: object
+                  name:
+                    description: The name assigned to the route for debugging purposes.
+                      The route's name will be concatenated with the match's name
+                      and will be logged in the access logs for requests matching
+                      this route/match.
+                    format: string
+                    type: string
                   redirect:
                     description: A http rule can either redirect or forward (default)
                       traffic. If traffic passthrough option is specified in the rule,
@@ -4073,15 +4139,11 @@ spec:
                         type: string
                     type: object
                   removeRequestHeaders:
-                    description: Use of `remove_request_headers` is deprecated. Use
-                      the `headers` field instead.
                     items:
                       format: string
                       type: string
                     type: array
                   removeResponseHeaders:
-                    description: Use of `remove_response_header` is deprecated. Use
-                      the `headers` field instead.
                     items:
                       format: string
                       type: string
@@ -4576,6 +4638,7 @@ spec:
                     format: string
                     type: string
                   valueType:
+                    default: VALUE_TYPE_UNSPECIFIED
                     description: Required. The type of data carried by this attribute.
                     enum:
                     - VALUE_TYPE_UNSPECIFIED
@@ -4699,6 +4762,7 @@ spec:
                     format: string
                     type: string
                   operation:
+                    default: REPLACE
                     description: Optional. Header operation type. Default operation
                       is to replace the value of the header by name.
                     enum:
@@ -4725,6 +4789,7 @@ spec:
                     format: string
                     type: string
                   operation:
+                    default: REPLACE
                     description: Optional. Header operation type. Default operation
                       is to replace the value of the header by name.
                     enum:
@@ -4763,6 +4828,7 @@ spec:
                         Defaults to 0% with a denominator of 100.
                       properties:
                         denominator:
+                          default: HUNDRED
                           description: Specifies the denominator. If the denominator
                             specified is less than the numerator, the final fractional
                             percentage is capped at 1 (100%).
@@ -4823,309 +4889,143 @@ status:
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
+  annotations:
+    "helm.sh/resource-policy": keep
   creationTimestamp: null
   labels:
-    app: istio-pilot
+    app: mixer
+    chart: istio
     heritage: Tiller
     istio: rbac
+    package: istio.io.mixer
     release: istio
-  name: authorizationpolicies.rbac.istio.io
+  name: serviceroles.rbac.istio.io
 spec:
   group: rbac.istio.io
   names:
     categories:
     - istio-io
     - rbac-istio-io
-    kind: AuthorizationPolicy
-    plural: authorizationpolicies
-    singular: authorizationpolicy
+    kind: ServiceRole
+    plural: serviceroles
+    singular: servicerole
   scope: Namespaced
   validation:
     openAPIV3Schema:
       properties:
         spec:
-          description: AuthorizationPolicy to enforce access control on a selected
-            workload instance.
+          description: ServiceRole specification contains a list of access rules (permissions).
           properties:
-            allow:
-              description: A list of bindings that specify the subjects and permissions
-                to the selected workload instance.
+            rules:
+              description: Required. The set of access rules (permissions) that the
+                role has.
               items:
                 properties:
-                  actions:
-                    description: 'Inline role definition. An inline role is a role
-                      that is defined inside an authorization policy, instead of explicitly
-                      defined in a ServiceRole object. Inline roles can be used for
-                      the role definitions that are not intended to be reused in other
-                      bindings, while explicit roles are reusable. Both inline roles
-                      (defined in "actions" field) and explicit roles (defined in
-                      ServiceRole) are supported. Users should use only one of them
-                      in a single binding. For example, the following “product-frontend”
-                      AuthorizationPolicy allows “frontend” service to view “product”
-                      service on “/info” path. ```yaml apiVersion: "rbac.istio.io/v1alpha1"
-                      kind: AuthorizationPolicy metadata: name: product-frontend namespace:
-                      ns1 spec: selector: labels: app: product allow: - subjects:
-                      - names: ["cluster.local/ns/default/sa/frontend"] actions: -
-                      paths: ["/info"] methods: ["GET"] Required. The set of access
-                      rules (permissions) that the role has.'
+                  constraints:
+                    description: Optional. Extra constraints in the ServiceRole specification.
                     items:
                       properties:
-                        constraints:
-                          description: Optional. Extra constraints in the ServiceRole
-                            specification.
-                          items:
-                            properties:
-                              key:
-                                description: Key of the constraint.
-                                format: string
-                                type: string
-                              values:
-                                description: List of valid values for the constraint.
-                                  Exact match, prefix match, and suffix match are
-                                  supported. For example, the value "v1alpha2" matches
-                                  "v1alpha2" (exact match), or "v1*" (prefix match),
-                                  or "*alpha2" (suffix match).
-                                items:
-                                  format: string
-                                  type: string
-                                type: array
-                            type: object
-                          type: array
-                        hosts:
-                          description: Optional. A list of HTTP hosts. This is matched
-                            against the HOST header in a HTTP request. Exact match,
-                            prefix match and suffix match are supported. For example,
-                            the host "test.abc.com" matches "test.abc.com" (exact
-                            match), or "*.abc.com" (prefix match), or "test.abc.*"
-                            (suffix match). If not specified, it matches to any host.
-                            This field should not be set for TCP services. The policy
-                            will be ignored.
-                          items:
-                            format: string
-                            type: string
-                          type: array
-                        methods:
-                          description: Optional. A list of HTTP methods (e.g., "GET",
-                            "POST"). If not specified or specified as "*", it matches
-                            to any methods. This field should not be set for TCP services.
-                            The policy will be ignored. For gRPC services, only `POST`
-                            is allowed; other methods will result in denying services.
-                          items:
-                            format: string
-                            type: string
-                          type: array
-                        notHosts:
-                          description: Optional. A list of HTTP hosts that must not
-                            be matched.
-                          items:
-                            format: string
-                            type: string
-                          type: array
-                        notMethods:
-                          description: 'Optional. A list of HTTP methods that must
-                            not be matched. Note: It''s an error to set methods and
-                            not_methods at the same time.'
-                          items:
-                            format: string
-                            type: string
-                          type: array
-                        notPaths:
-                          description: Optional. A list of HTTP paths or gRPC methods
-                            that must not be matched.
-                          items:
-                            format: string
-                            type: string
-                          type: array
-                        notPorts:
-                          description: 'Optional. A list of port numbers that must
-                            not be matched. Note: It''s an error to set ports and
-                            not_ports at the same time.'
-                          items:
-                            format: int32
-                            type: integer
-                          type: array
-                        paths:
-                          description: Optional. A list of HTTP paths or gRPC methods.
-                            gRPC methods must be presented as fully-qualified name
-                            in the form of "/packageName.serviceName/methodName" and
-                            are case sensitive. Exact match, prefix match, and suffix
-                            match are supported. For example, the path "/books/review"
-                            matches "/books/review" (exact match), or "/books/*" (prefix
-                            match), or "*/review" (suffix match). If not specified,
-                            it matches to any path. This field should not be set for
-                            TCP services. The policy will be ignored.
-                          items:
-                            format: string
-                            type: string
-                          type: array
-                        ports:
-                          description: 'Optional. A list of port numbers of the request.
-                            If not specified, it matches to any port number. Note:
-                            It''s an error to set ports and not_ports at the same
-                            time.'
-                          items:
-                            format: int32
-                            type: integer
-                          type: array
-                        services:
-                          description: Required. A list of service names. Exact match,
-                            prefix match, and suffix match are supported for service
-                            names. For example, the service name "bookstore.mtv.cluster.local"
-                            matches "bookstore.mtv.cluster.local" (exact match), or
-                            "bookstore*" (prefix match), or "*.mtv.cluster.local"
-                            (suffix match). If set to ["*"], it refers to all services
-                            in the namespace.
+                        key:
+                          description: Key of the constraint.
+                          format: string
+                          type: string
+                        values:
+                          description: List of valid values for the constraint. Exact
+                            match, prefix match, and suffix match are supported. For
+                            example, the value "v1alpha2" matches "v1alpha2" (exact
+                            match), or "v1*" (prefix match), or "*alpha2" (suffix
+                            match).
                           items:
                             format: string
                             type: string
                           type: array
                       type: object
                     type: array
-                  mode:
-                    description: Indicates enforcement mode of the ServiceRoleBinding.
-                    enum:
-                    - ENFORCED
-                    - PERMISSIVE
-                    type: string
-                  role:
-                    description: A `role` inside a ServiceRoleBinding refers to the
-                      ServiceRole that this ServiceRoleBinding binds to. A ServiceRoleBinding
-                      can bind to a ServiceRole in the same namespace or the root
-                      namespace. A ServiceRole in the root namespace represents a
-                      mesh global ServiceRole. The value of `role` is the name of
-                      the ServiceRole, and it can start with or without a forward
-                      slash ("/"). When a `role` starts with "/", e.g. "/service-viewer",
-                      it means that this ServiceRoleBinding refers to the ServiceRole
-                      in the configurable Istio root namespace. When a `role` starts
-                      without "/", this ServiceRoleBinding refers to the ServiceRole
-                      in the same namespace as the AuthorizationPolicy's, which contains
-                      said ServiceRoleBinding.
-                    format: string
-                    type: string
-                  roleRef:
-                    description: Required. Reference to the ServiceRole object.
-                    properties:
-                      kind:
-                        description: Required. The type of the role being referenced.
-                          Currently, "ServiceRole" is the only supported value for
-                          "kind".
-                        format: string
-                        type: string
-                      name:
-                        description: Required. The name of the ServiceRole object
-                          being referenced. The ServiceRole object must be in the
-                          same namespace as the ServiceRoleBinding object.
-                        format: string
-                        type: string
-                    type: object
-                  subjects:
-                    description: Required. List of subjects that are assigned the
-                      ServiceRole object.
+                  hosts:
+                    description: Optional. A list of HTTP hosts. This is matched against
+                      the HOST header in a HTTP request. Exact match, prefix match
+                      and suffix match are supported. For example, the host "test.abc.com"
+                      matches "test.abc.com" (exact match), or "*.abc.com" (prefix
+                      match), or "test.abc.*" (suffix match). If not specified, it
+                      matches to any host. This field should not be set for TCP services.
+                      The policy will be ignored.
                     items:
-                      properties:
-                        group:
-                          description: Optional. The group that the subject belongs
-                            to. Deprecated. Use groups and not_groups instead.
-                          format: string
-                          type: string
-                        groups:
-                          description: Optional. A list of groups that the subject
-                            represents. This is matched to the `request.auth.claims[groups]`
-                            attribute. If not specified, it applies to any groups.
-                          items:
-                            format: string
-                            type: string
-                          type: array
-                        ips:
-                          description: Optional. A list of IP address or CIDR ranges
-                            that the subject represents. E.g. 192.168.100.2 or 10.1.0.0/16.
-                            If not specified, it applies to any IP addresses.
-                          items:
-                            format: string
-                            type: string
-                          type: array
-                        names:
-                          description: Optional. A list of subject names. This is
-                            matched to the `source.principal` attribute. If one of
-                            subject names is "*", it matches to a subject with any
-                            name. Prefix and suffix matches are supported.
-                          items:
-                            format: string
-                            type: string
-                          type: array
-                        namespaces:
-                          description: Optional. A list of namespaces that the subject
-                            represents. This is matched to the `source.namespace`
-                            attribute. If not specified, it applies to any namespaces.
-                          items:
-                            format: string
-                            type: string
-                          type: array
-                        notGroups:
-                          description: Optional. A list of groups that must not be
-                            matched.
-                          items:
-                            format: string
-                            type: string
-                          type: array
-                        notIps:
-                          description: Optional. A list of IP addresses or CIDR ranges
-                            that must not be matched.
-                          items:
-                            format: string
-                            type: string
-                          type: array
-                        notNames:
-                          description: Optional. A list of subject names that must
-                            not be matched.
-                          items:
-                            format: string
-                            type: string
-                          type: array
-                        notNamespaces:
-                          description: Optional. A list of namespaces that must not
-                            be matched.
-                          items:
-                            format: string
-                            type: string
-                          type: array
-                        properties:
-                          additionalProperties:
-                            format: string
-                            type: string
-                          description: Optional. The set of properties that identify
-                            the subject.
-                          type: object
-                        user:
-                          description: Optional. The user name/ID that the subject
-                            represents.
-                          format: string
-                          type: string
-                      required:
-                      - properties
-                      type: object
+                      format: string
+                      type: string
+                    type: array
+                  methods:
+                    description: Optional. A list of HTTP methods (e.g., "GET", "POST").
+                      If not specified or specified as "*", it matches to any methods.
+                      This field should not be set for TCP services. The policy will
+                      be ignored. For gRPC services, only `POST` is allowed; other
+                      methods will result in denying services.
+                    items:
+                      format: string
+                      type: string
+                    type: array
+                  notHosts:
+                    description: Optional. A list of HTTP hosts that must not be matched.
+                    items:
+                      format: string
+                      type: string
+                    type: array
+                  notMethods:
+                    description: 'Optional. A list of HTTP methods that must not be
+                      matched. Note: It''s an error to set methods and not_methods
+                      at the same time.'
+                    items:
+                      format: string
+                      type: string
+                    type: array
+                  notPaths:
+                    description: Optional. A list of HTTP paths or gRPC methods that
+                      must not be matched.
+                    items:
+                      format: string
+                      type: string
+                    type: array
+                  notPorts:
+                    description: 'Optional. A list of port numbers that must not be
+                      matched. Note: It''s an error to set ports and not_ports at
+                      the same time.'
+                    items:
+                      format: int32
+                      type: integer
+                    type: array
+                  paths:
+                    description: Optional. A list of HTTP paths or gRPC methods. gRPC
+                      methods must be presented as fully-qualified name in the form
+                      of "/packageName.serviceName/methodName" and are case sensitive.
+                      Exact match, prefix match, and suffix match are supported. For
+                      example, the path "/books/review" matches "/books/review" (exact
+                      match), or "/books/*" (prefix match), or "*/review" (suffix
+                      match). If not specified, it matches to any path. This field
+                      should not be set for TCP services. The policy will be ignored.
+                    items:
+                      format: string
+                      type: string
+                    type: array
+                  ports:
+                    description: 'Optional. A list of port numbers of the request.
+                      If not specified, it matches to any port number. Note: It''s
+                      an error to set ports and not_ports at the same time.'
+                    items:
+                      format: int32
+                      type: integer
+                    type: array
+                  services:
+                    description: Required. A list of service names. Exact match, prefix
+                      match, and suffix match are supported for service names. For
+                      example, the service name "bookstore.mtv.cluster.local" matches
+                      "bookstore.mtv.cluster.local" (exact match), or "bookstore*"
+                      (prefix match), or "*.mtv.cluster.local" (suffix match). If
+                      set to ["*"], it refers to all services in the namespace.
+                    items:
+                      format: string
+                      type: string
                     type: array
                 type: object
               type: array
-            workloadSelector:
-              description: Optional. One or more labels that indicate a specific set
-                of pods/VMs on which this authorization policy should be applied.
-                Leave this empty to select all pods/VMs. The scope of label search
-                is platform dependent. On Kubernetes, for example, the scope includes
-                pods running in the same namespace as the authorization policy itself.
-              properties:
-                labels:
-                  additionalProperties:
-                    format: string
-                    type: string
-                  description: One or more labels that indicate a specific set of
-                    pods/VMs on which this sidecar configuration should be applied.
-                    The scope of label search is restricted to the configuration namespace
-                    in which the the resource is present.
-                  type: object
-              required:
-              - labels
-              type: object
           type: object
       type: object
   versions:
@@ -5304,6 +5204,7 @@ spec:
                 type: object
               type: array
             mode:
+              default: ENFORCED
               description: Indicates enforcement mode of the ServiceRoleBinding.
               enum:
               - ENFORCED
@@ -5449,160 +5350,6 @@ metadata:
     istio: rbac
     package: istio.io.mixer
     release: istio
-  name: serviceroles.rbac.istio.io
-spec:
-  group: rbac.istio.io
-  names:
-    categories:
-    - istio-io
-    - rbac-istio-io
-    kind: ServiceRole
-    plural: serviceroles
-    singular: servicerole
-  scope: Namespaced
-  validation:
-    openAPIV3Schema:
-      properties:
-        spec:
-          description: ServiceRole specification contains a list of access rules (permissions).
-          properties:
-            rules:
-              description: Required. The set of access rules (permissions) that the
-                role has.
-              items:
-                properties:
-                  constraints:
-                    description: Optional. Extra constraints in the ServiceRole specification.
-                    items:
-                      properties:
-                        key:
-                          description: Key of the constraint.
-                          format: string
-                          type: string
-                        values:
-                          description: List of valid values for the constraint. Exact
-                            match, prefix match, and suffix match are supported. For
-                            example, the value "v1alpha2" matches "v1alpha2" (exact
-                            match), or "v1*" (prefix match), or "*alpha2" (suffix
-                            match).
-                          items:
-                            format: string
-                            type: string
-                          type: array
-                      type: object
-                    type: array
-                  hosts:
-                    description: Optional. A list of HTTP hosts. This is matched against
-                      the HOST header in a HTTP request. Exact match, prefix match
-                      and suffix match are supported. For example, the host "test.abc.com"
-                      matches "test.abc.com" (exact match), or "*.abc.com" (prefix
-                      match), or "test.abc.*" (suffix match). If not specified, it
-                      matches to any host. This field should not be set for TCP services.
-                      The policy will be ignored.
-                    items:
-                      format: string
-                      type: string
-                    type: array
-                  methods:
-                    description: Optional. A list of HTTP methods (e.g., "GET", "POST").
-                      If not specified or specified as "*", it matches to any methods.
-                      This field should not be set for TCP services. The policy will
-                      be ignored. For gRPC services, only `POST` is allowed; other
-                      methods will result in denying services.
-                    items:
-                      format: string
-                      type: string
-                    type: array
-                  notHosts:
-                    description: Optional. A list of HTTP hosts that must not be matched.
-                    items:
-                      format: string
-                      type: string
-                    type: array
-                  notMethods:
-                    description: 'Optional. A list of HTTP methods that must not be
-                      matched. Note: It''s an error to set methods and not_methods
-                      at the same time.'
-                    items:
-                      format: string
-                      type: string
-                    type: array
-                  notPaths:
-                    description: Optional. A list of HTTP paths or gRPC methods that
-                      must not be matched.
-                    items:
-                      format: string
-                      type: string
-                    type: array
-                  notPorts:
-                    description: 'Optional. A list of port numbers that must not be
-                      matched. Note: It''s an error to set ports and not_ports at
-                      the same time.'
-                    items:
-                      format: int32
-                      type: integer
-                    type: array
-                  paths:
-                    description: Optional. A list of HTTP paths or gRPC methods. gRPC
-                      methods must be presented as fully-qualified name in the form
-                      of "/packageName.serviceName/methodName" and are case sensitive.
-                      Exact match, prefix match, and suffix match are supported. For
-                      example, the path "/books/review" matches "/books/review" (exact
-                      match), or "/books/*" (prefix match), or "*/review" (suffix
-                      match). If not specified, it matches to any path. This field
-                      should not be set for TCP services. The policy will be ignored.
-                    items:
-                      format: string
-                      type: string
-                    type: array
-                  ports:
-                    description: 'Optional. A list of port numbers of the request.
-                      If not specified, it matches to any port number. Note: It''s
-                      an error to set ports and not_ports at the same time.'
-                    items:
-                      format: int32
-                      type: integer
-                    type: array
-                  services:
-                    description: Required. A list of service names. Exact match, prefix
-                      match, and suffix match are supported for service names. For
-                      example, the service name "bookstore.mtv.cluster.local" matches
-                      "bookstore.mtv.cluster.local" (exact match), or "bookstore*"
-                      (prefix match), or "*.mtv.cluster.local" (suffix match). If
-                      set to ["*"], it refers to all services in the namespace.
-                    items:
-                      format: string
-                      type: string
-                    type: array
-                type: object
-              type: array
-          type: object
-      type: object
-  versions:
-  - name: v1alpha1
-    served: true
-    storage: true
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
-
----
-apiVersion: apiextensions.k8s.io/v1beta1
-kind: CustomResourceDefinition
-metadata:
-  annotations:
-    "helm.sh/resource-policy": keep
-  creationTimestamp: null
-  labels:
-    app: mixer
-    chart: istio
-    heritage: Tiller
-    istio: rbac
-    package: istio.io.mixer
-    release: istio
   name: rbacconfigs.rbac.istio.io
 spec:
   group: rbac.istio.io
@@ -5625,6 +5372,7 @@ spec:
             components, which usually is `istio-system`.
           properties:
             enforcementMode:
+              default: ENFORCED
               description: Indicates enforcement mode of the RbacConfig, in ENFORCED
                 mode by default. It's used to verify new RbacConfig work as expected
                 before rolling to production. When setting as PERMISSIVE, RBAC isn't
@@ -5652,23 +5400,6 @@ spec:
                     format: string
                     type: string
                   type: array
-                workloadSelectors:
-                  description: A list of workload instances.
-                  items:
-                    properties:
-                      labels:
-                        additionalProperties:
-                          format: string
-                          type: string
-                        description: One or more labels that indicate a specific set
-                          of pods/VMs on which this sidecar configuration should be
-                          applied. The scope of label search is restricted to the
-                          configuration namespace in which the the resource is present.
-                        type: object
-                    required:
-                    - labels
-                    type: object
-                  type: array
               type: object
             inclusion:
               description: 'A list of services or namespaces that should be enforced
@@ -5687,25 +5418,9 @@ spec:
                     format: string
                     type: string
                   type: array
-                workloadSelectors:
-                  description: A list of workload instances.
-                  items:
-                    properties:
-                      labels:
-                        additionalProperties:
-                          format: string
-                          type: string
-                        description: One or more labels that indicate a specific set
-                          of pods/VMs on which this sidecar configuration should be
-                          applied. The scope of label search is restricted to the
-                          configuration namespace in which the the resource is present.
-                        type: object
-                    required:
-                    - labels
-                    type: object
-                  type: array
               type: object
             mode:
+              default: "OFF"
               description: Istio RBAC mode.
               enum:
               - "OFF"
@@ -5760,6 +5475,7 @@ spec:
             components, which usually is `istio-system`.
           properties:
             enforcementMode:
+              default: ENFORCED
               description: Indicates enforcement mode of the RbacConfig, in ENFORCED
                 mode by default. It's used to verify new RbacConfig work as expected
                 before rolling to production. When setting as PERMISSIVE, RBAC isn't
@@ -5787,23 +5503,6 @@ spec:
                     format: string
                     type: string
                   type: array
-                workloadSelectors:
-                  description: A list of workload instances.
-                  items:
-                    properties:
-                      labels:
-                        additionalProperties:
-                          format: string
-                          type: string
-                        description: One or more labels that indicate a specific set
-                          of pods/VMs on which this sidecar configuration should be
-                          applied. The scope of label search is restricted to the
-                          configuration namespace in which the the resource is present.
-                        type: object
-                    required:
-                    - labels
-                    type: object
-                  type: array
               type: object
             inclusion:
               description: 'A list of services or namespaces that should be enforced
@@ -5822,25 +5521,9 @@ spec:
                     format: string
                     type: string
                   type: array
-                workloadSelectors:
-                  description: A list of workload instances.
-                  items:
-                    properties:
-                      labels:
-                        additionalProperties:
-                          format: string
-                          type: string
-                        description: One or more labels that indicate a specific set
-                          of pods/VMs on which this sidecar configuration should be
-                          applied. The scope of label search is restricted to the
-                          configuration namespace in which the the resource is present.
-                        type: object
-                    required:
-                    - labels
-                    type: object
-                  type: array
               type: object
             mode:
+              default: "OFF"
               description: Istio RBAC mode.
               enum:
               - "OFF"
@@ -5848,6 +5531,171 @@ spec:
               - ON_WITH_INCLUSION
               - ON_WITH_EXCLUSION
               type: string
+          type: object
+      type: object
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    app: istio-pilot
+    heritage: Tiller
+    istio: rbac
+    release: istio
+  name: authorizationpolicies.rbac.istio.io
+spec:
+  group: rbac.istio.io
+  names:
+    categories:
+    - istio-io
+    - rbac-istio-io
+    kind: AuthorizationPolicy
+    plural: authorizationpolicies
+    singular: authorizationpolicy
+  scope: Namespaced
+  validation:
+    openAPIV3Schema:
+      properties:
+        spec:
+          description: AuthorizationPolicy enables access control on workloads.
+          properties:
+            rules:
+              description: Optional. A list of rules to specify the allowed access
+                to the workload.
+              items:
+                properties:
+                  from:
+                    description: Optional. from specifies the source of a request.
+                    items:
+                      properties:
+                        source:
+                          description: Source specifies the source of a request.
+                          properties:
+                            ipBlocks:
+                              description: Optional. A list of IP blocks, which matches
+                                to the “source.ip” attribute. Single IP (e.g. "1.2.3.4")
+                                and CIDR (e.g. "1.2.3.0/24") are supported.
+                              items:
+                                format: string
+                                type: string
+                              type: array
+                            namespaces:
+                              description: Optional. A list of namespaces, which matches
+                                to the “source.namespace” attribute.
+                              items:
+                                format: string
+                                type: string
+                              type: array
+                            principals:
+                              description: Optional. A list of source peer identities
+                                (i.e. service account), which matches to the "source.principal"
+                                attribute.
+                              items:
+                                format: string
+                                type: string
+                              type: array
+                            requestPrincipals:
+                              description: Optional. A list of request identities
+                                (i.e. “iss/sub” claims), which matches to the “request.auth.principal”
+                                attribute.
+                              items:
+                                format: string
+                                type: string
+                              type: array
+                          type: object
+                      type: object
+                    type: array
+                  to:
+                    description: Optional. to specifies the operation of a request.
+                    items:
+                      properties:
+                        operation:
+                          description: Operation specifies the operation of a request.
+                          properties:
+                            hosts:
+                              description: Optional. A list of hosts, which matches
+                                to the “request.host” attribute.
+                              items:
+                                format: string
+                                type: string
+                              type: array
+                            methods:
+                              description: Optional. A list of methods, which matches
+                                to the “request.method” attribute. For gRPC service,
+                                this should be the fully-qualified name in the form
+                                of "/package.service/method"
+                              items:
+                                format: string
+                                type: string
+                              type: array
+                            paths:
+                              description: Optional. A list of paths, which matches
+                                to the “request.url_path” attribute.
+                              items:
+                                format: string
+                                type: string
+                              type: array
+                            ports:
+                              description: Optional. A list of ports, which matches
+                                to the “destination.port” attribute.
+                              items:
+                                format: string
+                                type: string
+                              type: array
+                          type: object
+                      type: object
+                    type: array
+                  when:
+                    description: Optional. when specifies a list of additional conditions
+                      of a request.
+                    items:
+                      properties:
+                        key:
+                          description: 'Required. The name of an Istio attribute.
+                            Note: Check https://istio.io/docs/reference/config/ for
+                            the list of supported attribute name.'
+                          format: string
+                          type: string
+                        values:
+                          description: Required. The allowed values for the attribute.
+                          items:
+                            format: string
+                            type: string
+                          type: array
+                      type: object
+                    type: array
+                type: object
+              type: array
+            selector:
+              description: Optional. Workload selector decides where to apply the
+                authorization policy. If not set, the authorization policy will be
+                applied to all workloads in the same namespace as the authorization
+                policy.
+              properties:
+                matchLabels:
+                  additionalProperties:
+                    format: string
+                    type: string
+                  description: 'REQUIRED: One or more labels that indicate a specific
+                    set of pods/VMs on which a policy should be applied. The scope
+                    of label search is restricted to the configuration namespace in
+                    which the resource is present.'
+                  type: object
+              required:
+              - matchLabels
+              type: object
           type: object
       type: object
   versions:

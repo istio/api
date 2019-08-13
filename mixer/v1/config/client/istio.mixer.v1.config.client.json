@@ -217,8 +217,7 @@
         "enum": [
           "FAIL_OPEN",
           "FAIL_CLOSE"
-        ],
-        "default": "FAIL_OPEN"
+        ]
       },
       "istio.mixer.v1.config.client.ServiceConfig": {
         "description": "Defines the per-service client configuration.",

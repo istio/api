@@ -245,8 +245,7 @@
           "LEAST_CONN",
           "RANDOM",
           "PASSTHROUGH"
-        ],
-        "default": "ROUND_ROBIN"
+        ]
       },
       "istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB": {
         "description": "Consistent Hash-based load balancing can be used to provide soft session affinity based on HTTP headers, cookies or other properties. This load balancing policy is applicable only for HTTP connections. The affinity to a particular destination host will be lost when one or more hosts are added/removed from the destination service.",
@@ -395,8 +394,7 @@
           "DEFAULT",
           "DO_NOT_UPGRADE",
           "UPGRADE"
-        ],
-        "default": "DEFAULT"
+        ]
       },
       "istio.networking.v1alpha3.TLSSettings.TLSmode": {
         "description": "TLS connection mode",
@@ -406,8 +404,12 @@
           "SIMPLE",
           "MUTUAL",
           "ISTIO_MUTUAL"
+<<<<<<< HEAD
         ],
         "default": "DISABLE"
+=======
+        ]
+>>>>>>> Generate structural schemas for CRDs
       }
     }
   }
