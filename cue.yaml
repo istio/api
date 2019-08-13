@@ -4,7 +4,7 @@ module: istio.io/api
 
 openapi:
   selfContained: true
-  fieldFilter: "min.*|max.*|default|required"
+  fieldFilter: "min.*|max.*|default"
 
 directories:
   type/v1beta1:
