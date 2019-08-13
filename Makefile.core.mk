@@ -71,12 +71,14 @@ protoc_gen_python_plugin := $(protoc_gen_python_prefix):$(repo_dir)/$(python_out
 protoc_gen_docs_plugin := --docs_out=warnings=true,dictionary=$(repo_dir)/dictionaries/en-US,custom_word_list=$(repo_dir)/dictionaries/custom.txt,mode=html_fragment_with_front_matter:$(repo_dir)/
 protoc_gen_docs_plugin_for_networking := --docs_out=warnings=true,dictionary=$(repo_dir)/dictionaries/en-US,custom_word_list=$(repo_dir)/dictionaries/custom.txt,per_file=true,mode=html_fragment_with_front_matter:$(repo_dir)/
 protoc_gen_docs_plugin_for_security := --docs_out=warnings=true,dictionary=$(repo_dir)/dictionaries/en-US,custom_word_list=$(repo_dir)/dictionaries/custom.txt,per_file=true,mode=html_fragment_with_front_matter:$(repo_dir)/
+protoc_gen_docs_plugin_for_type := --docs_out=warnings=true,dictionary=$(repo_dir)/dictionaries/en-US,custom_word_list=$(repo_dir)/dictionaries/custom.txt,per_file=true,mode=html_fragment_with_front_matter:$(repo_dir)/
 
 #####################
 # Generation Rules
 #####################
 
 generate: \
+    generate-type \
 	generate-mcp \
 	generate-mesh \
 	generate-mixer \
@@ -88,6 +90,26 @@ generate: \
 	generate-policy \
 	generate-annotations \
 	generate-openapi-schema
+
+#####################
+# type/...
+#####################
+
+type_v1beta1_path := type/v1beta1
+type_v1beta1_protos := $(wildcard $(type_v1beta1_path)/*.proto)
+type_v1beta1_pb_gos := $(type_v1beta1_protos:.proto=.pb.go)
+type_v1beta1_pb_pythons := $(patsubst $(type_v1beta1_path)/%.proto,$(python_output_path)/$(type_v1beta1_path)/%_pb2.py,$(type_v1beta1_protos))
+type_v1beta1_pb_docs := $(type_v1beta1_protos:.proto=.pb.html)
+type_v1beta1_openapi := $(type_v1beta1_protos:.proto=.json)
+
+$(type_v1beta1_pb_gos) $(type_v1beta1_pb_docs) $(type_v1beta1_pb_pythons): $(type_v1beta1_protos)
+	@$(protolock) status
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin_for_type)$(type_v1beta1_path) $(protoc_gen_python_plugin) $^
+
+generate-type: $(type_v1beta1_pb_gos) $(type_v1beta1_pb_docs) $(type_v1beta1_pb_pythons)
+
+clean-type:
+	@rm -fr $(type_v1beta1_pb_gos) $(type_v1beta1_pb_docs) $(type_v1beta1_pb_pythons) $(security_v1beta1_openapi)
 
 #####################
 # mcp/...
@@ -350,7 +372,8 @@ all_protos := \
 	$(networking_v1alpha3_protos) \
 	$(rbac_v1alpha1_protos) \
 	$(authn_v1alpha1_protos) \
-	$(security_v1beta1_protos)
+	$(security_v1beta1_protos) \
+	$(type_v1beta1_protos)
 
 all_openapi := \
 	$(mcp_v1alpha1_openapi) \
@@ -362,7 +385,8 @@ all_openapi := \
 	$(networking_v1alpha3_openapi) \
 	$(rbac_v1alpha1_openapi) \
 	$(authn_v1alpha1_openapi) \
-	$(security_v1beta1_openapi)
+	$(security_v1beta1_openapi) \
+	$(type_v1beta1_openapi)
 
 $(all_openapi): $(all_protos)
 	@$(cue) -f=$(repo_dir)/cue.yaml
@@ -387,6 +411,7 @@ clean: \
 	clean-policy \
 	clean-annotations \
 	clean-openapi-schema \
-	clean-security
+	clean-security \
+	clean-type
 
 include Makefile.common.mk

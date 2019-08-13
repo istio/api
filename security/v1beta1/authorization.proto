@@ -13,9 +13,8 @@
 // limitations under the License.
 syntax = "proto3";
 
-import "networking/v1alpha3/sidecar.proto";
+import "type/v1beta1/selector.proto";
 
-// $hide_from_docs
 // $title: Authorization Policy
 // $description: Configuration for access control on workloads.
 // $location: https://istio.io/docs/reference/config/security/v1beta1/authorization-policy.html
@@ -43,7 +42,7 @@ import "networking/v1alpha3/sidecar.proto";
 //  namespace: foo
 // spec:
 //  selector:
-//    labels:
+//    matchLabels:
 //      app: httpbin
 //      version: v1
 //  rules:
@@ -91,7 +90,7 @@ import "networking/v1alpha3/sidecar.proto";
 //  namespace: bar
 // spec:
 //  selector:
-//    labels:
+//    matchLabels:
 //      app: httpbin
 // ```
 //
@@ -118,14 +117,13 @@ import "networking/v1alpha3/sidecar.proto";
 //  namespace: istio-config
 // spec:
 //  selector:
-//    labels:
+//    matchLabels:
 //      version: v1
 // ```
 package istio.security.v1beta1;
 
 option go_package="istio.io/api/security/v1beta1";
 
-// $hide_from_docs
 // AuthorizationPolicy enables access control on workloads.
 //
 // For example, the following authorization policy denies all requests to workloads
@@ -157,7 +155,7 @@ message AuthorizationPolicy {
   // Optional. Workload selector decides where to apply the authorization policy.
   // If not set, the authorization policy will be applied to all workloads in the
   // same namespace as the authorization policy.
-  istio.networking.v1alpha3.WorkloadSelector selector = 1;
+  istio.type.v1beta1.WorkloadSelector selector = 1;
 
   // Optional. A list of rules to specify the allowed access to the workload.
   //
@@ -165,7 +163,6 @@ message AuthorizationPolicy {
   repeated Rule rules = 2;
 }
 
-// $hide_from_docs
 // Rule allows access from a list of sources to perform a list of operations when
 // the condition is matched.
 //
@@ -175,7 +172,6 @@ message AuthorizationPolicy {
 // - Suffix match: "*abc" will match on value "abc" and "xabc".
 // - Presence match: "*" will match when value is not empty.
 message Rule {
-  // $hide_from_docs
   // From includes a list or sources.
   message From {
     // Source specifies the source of a request.
@@ -187,7 +183,6 @@ message Rule {
   // If not set, any source is allowed.
   repeated From from = 1;
 
-  // $hide_from_docs
   // To includes a list or operations.
   message To {
     // Operation specifies the operation of a request.
@@ -205,7 +200,6 @@ message Rule {
   repeated Condition when = 3;
 }
 
-// $hide_from_docs
 // Source specifies the source identities of a request.
 message Source {
   // Optional. A list of source peer identities (i.e. service account), which
@@ -233,7 +227,6 @@ message Source {
   repeated string ip_blocks = 4;
 }
 
-// $hide_from_docs
 // Operation specifies the operations of a request.
 message Operation {
   // Optional. A list of hosts, which matches to the “request.host” attribute.
@@ -259,7 +252,6 @@ message Operation {
   repeated string paths = 4;
 }
 
-// $hide_from_docs
 // Condition specifies additional required attributes.
 message Condition {
   // Required. The name of an Istio attribute.
