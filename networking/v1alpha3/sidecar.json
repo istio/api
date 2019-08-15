@@ -76,7 +76,7 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Port"
           },
           "bind": {
-            "description": "The ip to which the listener should be bound to. Format: `x.x.x.x`. Unix domain socket addresses are not allowed in the bind field for ingress listeners. If omitted, Istio will automatically configure the defaults based on imported services and the workload instances to which this configuration is applied to.",
+            "description": "The ip to which the listener should be bound. Must be in the format `x.x.x.x`. Unix domain socket addresses are not allowed in the bind field for ingress listeners. If omitted, Istio will automatically configure the defaults based on imported services and the workload instances to which this configuration is applied to.",
             "type": "string",
             "format": "string"
           },

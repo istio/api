@@ -363,9 +363,9 @@ traffic listener on the sidecar proxy attached to a workload instance.</p>
 <td><code>bind</code></td>
 <td><code>string</code></td>
 <td>
-<p>The ip to which the listener should be bound to. Format:
-<code>x.x.x.x</code>. Unix domain socket addresses are not allowed in the
-bind field for ingress listeners. If omitted, Istio will
+<p>The ip to which the listener should be bound. Must be in the
+format <code>x.x.x.x</code>. Unix domain socket addresses are not allowed in
+the bind field for ingress listeners. If omitted, Istio will
 automatically configure the defaults based on imported services
 and the workload instances to which this configuration is applied
 to.</p>

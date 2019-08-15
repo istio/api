@@ -384,9 +384,9 @@ func (m *Sidecar) GetOutboundTrafficPolicy() *OutboundTrafficPolicy {
 type IstioIngressListener struct {
 	// REQUIRED. The port associated with the listener.
 	Port *Port `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
-	// The ip to which the listener should be bound to. Format:
-	// `x.x.x.x`. Unix domain socket addresses are not allowed in the
-	// bind field for ingress listeners. If omitted, Istio will
+	// The ip to which the listener should be bound. Must be in the
+	// format `x.x.x.x`. Unix domain socket addresses are not allowed in
+	// the bind field for ingress listeners. If omitted, Istio will
 	// automatically configure the defaults based on imported services
 	// and the workload instances to which this configuration is applied
 	// to.
