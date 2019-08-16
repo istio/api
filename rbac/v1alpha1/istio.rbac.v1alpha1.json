@@ -125,6 +125,7 @@
       },
       "istio.rbac.v1alpha1.EnforcementMode": {
         "description": "RBAC ServiceRoleBinding enforcement mode, used to verify new ServiceRoleBinding configs work as expected before rolling to production. RBAC engine only logs results from configs that are in permissive mode, and discards result before returning to the user.",
+        "type": "string",
         "enum": [
           "ENFORCED",
           "PERMISSIVE"
@@ -288,6 +289,7 @@
         }
       },
       "istio.rbac.v1alpha1.RbacConfig.Mode": {
+        "type": "string",
         "enum": [
           "OFF",
           "ON",

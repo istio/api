@@ -4,9 +4,7 @@ all: generate
 # setup
 ########################
 
-buildtools_img := gcr.io/istio-testing/build-tools:2019-08-12
-websitetools_img := gcr.io/istio-testing/website-tools:2019-07-25
-cue_img := gcr.io/istio-testing/cue:2019-07-23
+buildtools_img := gcr.io/istio-testing/build-tools:2019-08-16
 pwd := $(shell pwd)
 mount_dir := /src
 repo_dir := istio.io/api
@@ -22,9 +20,9 @@ protolock_release = $(run) /bin/bash $(repo_mount)/scripts/check-release-locks.s
 prototool = $(run) prototool
 annotations_prep = $(run) annotations_prep
 
-htmlproofer = docker run --user $(uid) -v /etc/passwd:/etc/passwd:ro --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(websitetools_img) htmlproofer
+htmlproofer = docker run --user $(uid) -v /etc/passwd:/etc/passwd:ro --rm -v $(pwd):$(repo_mount) -w $(mount_dir) $(buildtools_img) htmlproofer
 
-cue = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(mount_dir) $(cue_img)
+cue = docker run --rm --user $(uid) -v /etc/passwd:/etc/passwd:ro -v $(pwd):$(repo_mount) -w $(mount_dir) $(buildtools_img) cue --paths=/usr/include/protobuf,$(repo_dir)
 
 ########################
 # protoc_gen_gogo*
