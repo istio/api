@@ -5,8 +5,6 @@ all: generate
 ########################
 
 buildtools_img := gcr.io/istio-testing/build-tools:2019-08-16
-#websitetools_img := gcr.io/istio-testing/website-tools:2019-07-25
-#cue_img := gcr.io/istio-testing/cue:2019-07-23
 pwd := $(shell pwd)
 mount_dir := /src
 repo_dir := istio.io/api
