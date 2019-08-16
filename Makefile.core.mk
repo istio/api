@@ -422,10 +422,6 @@ clean: \
 	clean-openapi-schema \
 	clean-security \
 	clean-type \
-<<<<<<< HEAD
-	clean-opeanpi-crd
-=======
 	clean-openapi-crd
->>>>>>> Generate structural schemas for CRDs
 
 include Makefile.common.mk

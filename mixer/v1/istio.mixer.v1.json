@@ -428,12 +428,7 @@
           "ABSENCE",
           "EXACT",
           "REGEX"
-<<<<<<< HEAD
-        ],
-        "default": "CONDITION_UNSPECIFIED"
-=======
         ]
->>>>>>> Generate structural schemas for CRDs
       },
       "istio.mixer.v1.HeaderOperation": {
         "description": "Operation on HTTP headers to replace, append, or remove a header. Header names are normalized to lower-case with dashes, e.g. \"x-request-id\". Pseudo-headers \":path\", \":authority\", and \":method\" are supported to modify the request headers.",

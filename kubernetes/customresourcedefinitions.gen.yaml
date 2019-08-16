@@ -4604,20 +4604,18 @@ spec:
               items:
                 properties:
                   bind:
-                    description: 'The ip or the Unix domain socket to which the listener
-                      should be bound to. Format: `x.x.x.x` or `unix:///path/to/uds`
-                      or `unix://@foobar` (Linux abstract namespace). If omitted,
+                    description: The ip to which the listener should be bound. Must
+                      be in the format `x.x.x.x`. Unix domain socket addresses are
+                      not allowed in the bind field for ingress listeners. If omitted,
                       Istio will automatically configure the defaults based on imported
                       services and the workload instances to which this configuration
-                      is applied to.'
+                      is applied to.
                     format: string
                     type: string
                   captureMode:
                     default: DEFAULT
-                    description: When the bind address is an IP, the captureMode option
-                      dictates how traffic to the listener is expected to be captured
-                      (or not). captureMode must be DEFAULT or NONE for Unix domain
-                      socket binds.
+                    description: The captureMode option dictates how traffic to the
+                      listener is expected to be captured (or not).
                     enum:
                     - DEFAULT
                     - IPTABLES
@@ -4626,16 +4624,14 @@ spec:
                   defaultEndpoint:
                     description: 'REQUIRED: The loopback IP endpoint or Unix domain
                       socket to which traffic should be forwarded to. This configuration
-                      can be used to redirect traffic arriving at the bind point on
-                      the sidecar to a port or Unix domain socket where the application
-                      workload instance is listening for connections. Format should
-                      be 127.0.0.1:PORT or `unix:///path/to/socket`'
+                      can be used to redirect traffic arriving at the bind IP:Port
+                      on the sidecar to a localhost:port or Unix domain socket where
+                      the application workload instance is listening for connections.
+                      Format should be 127.0.0.1:PORT or `unix:///path/to/socket`'
                     format: string
                     type: string
                   port:
                     description: REQUIRED. The port associated with the listener.
-                      If using Unix domain socket, use 0 as the port number, with
-                      a valid protocol.
                     properties:
                       name:
                         description: Label assigned to the port.
@@ -4813,6 +4809,7 @@ spec:
                         description: Indicates whether the caller is allowed to send
                           the actual request (not the preflight) using credentials.
                           Translates to `Access-Control-Allow-Credentials` header.
+                        nullable: true
                         type: boolean
                       allowHeaders:
                         description: List of HTTP headers that can be used when requesting

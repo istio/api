@@ -404,12 +404,7 @@
           "SIMPLE",
           "MUTUAL",
           "ISTIO_MUTUAL"
-<<<<<<< HEAD
-        ],
-        "default": "DISABLE"
-=======
         ]
->>>>>>> Generate structural schemas for CRDs
       }
     }
   }
