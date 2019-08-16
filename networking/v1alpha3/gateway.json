@@ -151,6 +151,7 @@
       },
       "istio.networking.v1alpha3.Server.TLSOptions.TLSmode": {
         "description": "TLS modes enforced by the proxy",
+        "type": "string",
         "enum": [
           "PASSTHROUGH",
           "SIMPLE",
@@ -162,6 +163,7 @@
       },
       "istio.networking.v1alpha3.Server.TLSOptions.TLSProtocol": {
         "description": "TLS protocol versions.",
+        "type": "string",
         "enum": [
           "TLS_AUTO",
           "TLSV1_0",
