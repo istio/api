@@ -4,7 +4,7 @@ all: generate
 # setup
 ########################
 
-buildtools_img := gcr.io/istio-testing/build-tools:2019-08-16
+buildtools_img := gcr.io/istio-testing/build-tools:2019-08-16T21-37-07
 pwd := $(shell pwd)
 mount_dir := /src
 repo_dir := istio.io/api

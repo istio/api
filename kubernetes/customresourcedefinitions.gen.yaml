@@ -40,7 +40,6 @@ spec:
                     format: string
                     type: string
                   valueType:
-                    default: VALUE_TYPE_UNSPECIFIED
                     description: Required. The type of data carried by this attribute.
                     enum:
                     - VALUE_TYPE_UNSPECIFIED
@@ -287,7 +286,6 @@ spec:
             components, which usually is `istio-system`.
           properties:
             enforcementMode:
-              default: ENFORCED
               description: Indicates enforcement mode of the RbacConfig, in ENFORCED
                 mode by default. It's used to verify new RbacConfig work as expected
                 before rolling to production. When setting as PERMISSIVE, RBAC isn't
@@ -335,7 +333,6 @@ spec:
                   type: array
               type: object
             mode:
-              default: "OFF"
               description: Istio RBAC mode.
               enum:
               - "OFF"
@@ -452,7 +449,6 @@ spec:
                             description: HTTP connection pool settings.
                             properties:
                               h2UpgradePolicy:
-                                default: DEFAULT
                                 description: Specify if http1.1 connection should
                                   be upgraded to http2 for the associated destination.
                                 enum:
@@ -583,7 +579,6 @@ spec:
                                 type: boolean
                             type: object
                           simple:
-                            default: ROUND_ROBIN
                             enum:
                             - ROUND_ROBIN
                             - LEAST_CONN
@@ -653,7 +648,6 @@ spec:
                                   description: HTTP connection pool settings.
                                   properties:
                                     h2UpgradePolicy:
-                                      default: DEFAULT
                                       description: Specify if http1.1 connection should
                                         be upgraded to http2 for the associated destination.
                                       enum:
@@ -787,7 +781,6 @@ spec:
                                       type: boolean
                                   type: object
                                 simple:
-                                  default: ROUND_ROBIN
                                   enum:
                                   - ROUND_ROBIN
                                   - LEAST_CONN
@@ -880,7 +873,6 @@ spec:
                                   format: string
                                   type: string
                                 mode:
-                                  default: DISABLE
                                   description: 'REQUIRED: Indicates whether connections
                                     to this port should be secured using TLS. The
                                     value of this field determines how TLS is enforced.'
@@ -934,7 +926,6 @@ spec:
                             format: string
                             type: string
                           mode:
-                            default: DISABLE
                             description: 'REQUIRED: Indicates whether connections
                               to this port should be secured using TLS. The value
                               of this field determines how TLS is enforced.'
@@ -984,7 +975,6 @@ spec:
                       description: HTTP connection pool settings.
                       properties:
                         h2UpgradePolicy:
-                          default: DEFAULT
                           description: Specify if http1.1 connection should be upgraded
                             to http2 for the associated destination.
                           enum:
@@ -1110,7 +1100,6 @@ spec:
                           type: boolean
                       type: object
                     simple:
-                      default: ROUND_ROBIN
                       enum:
                       - ROUND_ROBIN
                       - LEAST_CONN
@@ -1178,7 +1167,6 @@ spec:
                             description: HTTP connection pool settings.
                             properties:
                               h2UpgradePolicy:
-                                default: DEFAULT
                                 description: Specify if http1.1 connection should
                                   be upgraded to http2 for the associated destination.
                                 enum:
@@ -1309,7 +1297,6 @@ spec:
                                 type: boolean
                             type: object
                           simple:
-                            default: ROUND_ROBIN
                             enum:
                             - ROUND_ROBIN
                             - LEAST_CONN
@@ -1397,7 +1384,6 @@ spec:
                             format: string
                             type: string
                           mode:
-                            default: DISABLE
                             description: 'REQUIRED: Indicates whether connections
                               to this port should be secured using TLS. The value
                               of this field determines how TLS is enforced.'
@@ -1450,7 +1436,6 @@ spec:
                       format: string
                       type: string
                     mode:
-                      default: DISABLE
                       description: 'REQUIRED: Indicates whether connections to this
                         port should be secured using TLS. The value of this field
                         determines how TLS is enforced.'
@@ -1529,7 +1514,6 @@ spec:
               items:
                 properties:
                   applyTo:
-                    default: INVALID
                     description: Specifies where in the Envoy configuration, the patch
                       should be applied. The match is expected to select the appropriate
                       object based on applyTo. For example, an applyTo with HTTP_FILTER
@@ -1588,7 +1572,6 @@ spec:
                             type: string
                         type: object
                       context:
-                        default: ANY
                         description: The specific config generation context to match
                           on. Istio Pilot generates envoy configuration in the context
                           of a gateway, inbound traffic to sidecar and outbound traffic
@@ -1757,7 +1740,6 @@ spec:
                                   host.
                                 properties:
                                   action:
-                                    default: ANY
                                     description: Match a route with specific action
                                       type.
                                     enum:
@@ -1781,7 +1763,6 @@ spec:
                     description: The patch to apply along with the operation.
                     properties:
                       operation:
-                        default: INVALID
                         description: Determines how the patch should be applied.
                         enum:
                         - INVALID
@@ -1812,7 +1793,6 @@ spec:
                     format: string
                     type: string
                   filterType:
-                    default: INVALID
                     description: 'REQUIRED: The type of filter to instantiate.'
                     enum:
                     - INVALID
@@ -1824,7 +1804,6 @@ spec:
                       FIRST
                     properties:
                       index:
-                        default: FIRST
                         description: Position of this filter in the filter chain.
                         enum:
                         - FIRST
@@ -1855,7 +1834,6 @@ spec:
                           type: string
                         type: array
                       listenerProtocol:
-                        default: ALL
                         description: Selects a class of listeners for the same protocol.
                           Use the protocol selection to select all HTTP listeners
                           (includes HTTP2/gRPC/HTTPS where Envoy terminates TLS) or
@@ -1868,7 +1846,6 @@ spec:
                         - TCP
                         type: string
                       listenerType:
-                        default: ANY
                         description: Inbound vs outbound sidecar listener or gateway
                           listener. If not specified, matches all listeners.
                         enum:
@@ -2076,7 +2053,6 @@ spec:
                           to use HTTPS.
                         type: boolean
                       maxProtocolVersion:
-                        default: TLS_AUTO
                         description: 'Optional: Maximum TLS protocol version.'
                         enum:
                         - TLS_AUTO
@@ -2086,7 +2062,6 @@ spec:
                         - TLSV1_3
                         type: string
                       minProtocolVersion:
-                        default: TLS_AUTO
                         description: 'Optional: Minimum TLS protocol version.'
                         enum:
                         - TLS_AUTO
@@ -2096,7 +2071,6 @@ spec:
                         - TLSV1_3
                         type: string
                       mode:
-                        default: PASSTHROUGH
                         description: 'Optional: Indicates whether connections to this
                           port should be secured using TLS. The value of this field
                           determines how TLS is enforced.'
@@ -2842,7 +2816,6 @@ spec:
                           have client certificate.
                         type: boolean
                       mode:
-                        default: STRICT
                         description: Defines the mode of mTLS authentication.
                         enum:
                         - STRICT
@@ -2852,7 +2825,6 @@ spec:
                 type: object
               type: array
             principalBinding:
-              default: USE_PEER
               description: Define whether peer or origin identity should be use for
                 principal. Default value is USE_PEER. If peer (or origin) identity
                 is not available, either because of peer/origin authentication is
@@ -3257,7 +3229,6 @@ spec:
                           have client certificate.
                         type: boolean
                       mode:
-                        default: STRICT
                         description: Defines the mode of mTLS authentication.
                         enum:
                         - STRICT
@@ -3267,7 +3238,6 @@ spec:
                 type: object
               type: array
             principalBinding:
-              default: USE_PEER
               description: Define whether peer or origin identity should be use for
                 principal. Default value is USE_PEER. If peer (or origin) identity
                 is not available, either because of peer/origin authentication is
@@ -3564,7 +3534,6 @@ spec:
             components, which usually is `istio-system`.
           properties:
             enforcementMode:
-              default: ENFORCED
               description: Indicates enforcement mode of the RbacConfig, in ENFORCED
                 mode by default. It's used to verify new RbacConfig work as expected
                 before rolling to production. When setting as PERMISSIVE, RBAC isn't
@@ -3612,7 +3581,6 @@ spec:
                   type: array
               type: object
             mode:
-              default: "OFF"
               description: Istio RBAC mode.
               enum:
               - "OFF"
@@ -3709,7 +3677,6 @@ spec:
                     format: string
                     type: string
                   operation:
-                    default: REPLACE
                     description: Optional. Header operation type. Default operation
                       is to replace the value of the header by name.
                     enum:
@@ -3736,7 +3703,6 @@ spec:
                     format: string
                     type: string
                   operation:
-                    default: REPLACE
                     description: Optional. Header operation type. Default operation
                       is to replace the value of the header by name.
                     enum:
@@ -3775,7 +3741,6 @@ spec:
                         Defaults to 0% with a denominator of 100.
                       properties:
                         denominator:
-                          default: HUNDRED
                           description: Specifies the denominator. If the denominator
                             specified is less than the numerator, the final fractional
                             percentage is capped at 1 (100%).
@@ -3984,7 +3949,6 @@ spec:
                 type: string
               type: array
             location:
-              default: MESH_EXTERNAL
               description: Specify whether the service should be considered external
                 to the mesh or part of the mesh.
               enum:
@@ -4014,7 +3978,6 @@ spec:
                 type: object
               type: array
             resolution:
-              default: NONE
               description: 'REQUIRED: Service discovery mode for the hosts. Care must
                 be taken when setting the resolution mode to NONE for a TCP port without
                 accompanying IP addresses. In such cases, traffic to any IP on said
@@ -4212,7 +4175,6 @@ spec:
                 type: object
               type: array
             mode:
-              default: ENFORCED
               description: Indicates enforcement mode of the ServiceRoleBinding.
               enum:
               - ENFORCED
@@ -4543,7 +4505,6 @@ spec:
                     format: string
                     type: string
                   captureMode:
-                    default: DEFAULT
                     description: When the bind address is an IP, the captureMode option
                       dictates how traffic to the listener is expected to be captured
                       (or not). captureMode must be DEFAULT or NONE for Unix domain
@@ -4613,7 +4574,6 @@ spec:
                     format: string
                     type: string
                   captureMode:
-                    default: DEFAULT
                     description: The captureMode option dictates how traffic to the
                       listener is expected to be captured (or not).
                     enum:
@@ -4659,7 +4619,6 @@ spec:
                 requested destination.
               properties:
                 mode:
-                  default: REGISTRY_ONLY
                   enum:
                   - REGISTRY_ONLY
                   - ALLOW_ANY
