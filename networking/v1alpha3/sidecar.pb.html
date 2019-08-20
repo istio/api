@@ -312,10 +312,16 @@ associated <code>DestinationRule</code> in the same namespace will also be used.
 <p>The <code>dnsName</code> should be specified using FQDN format, optionally including
 a wildcard character in the left-most component (e.g., <code>prod/*.example.com</code>).
 Set the <code>dnsName</code> to <code>*</code> to select all services from the specified namespace
-(e.g., <code>prod/*</code>). The <code>namespace</code> can also be set to <code>*</code> to select a particular
-service from any available namespace (e.g., <code>*/foo.example.com</code>).
-If a host is set to <code>*/*</code>,  Istio will automatically configure the sidecar to
-be able to reach every service in the mesh that is visible to this namespace.</p>
+(e.g., <code>prod/*</code>).</p>
+
+<p>The <code>namespace</code> can be set to <code>*</code>, <code>.</code>, or <code>~</code>, representing any, the current,
+or no namespace, respectively. For example, <code>*/foo.example.com</code> selects the
+service from any available namespace while <code>./foo.example.com</code> only selects
+the service from the namespace of the sidecar. If a host is set to <code>*/*</code>,
+Istio will configure the sidecar to be able to reach every service in the
+mesh that is exported to the sidecar&rsquo;s namespace. The value <code>~/*</code> can be used
+to completely trim the configuration for sidecars that simply receive traffic
+and respond, but make no outbound connections of their own.</p>
 
 <p>NOTE: Only services and configuration artifacts exported to the sidecar&rsquo;s
 namespace (e.g., <code>exportTo</code> value of <code>*</code>) can be referenced.
