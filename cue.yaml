@@ -7,6 +7,8 @@ openapi:
   fieldFilter: "min.*|max.*"
 
 directories:
+  core/v1alpha1:
+    - mode: perFile
   type/v1beta1:
     - mode: perFile
   authentication/v1alpha1:

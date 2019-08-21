@@ -1,0 +1,347 @@
+---
+title: istio.core.v1alpha1
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+hide_from_docs
+hide_from_docs
+number_of_entries: 10
+---
+<h2 id="CaptureMode">CaptureMode</h2>
+<section>
+<p>CaptureMode describes how traffic to a listener is expected to be
+captured. Applicable only when the listener is bound to an IP.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="CaptureMode-DEFAULT">
+<td><code>DEFAULT</code></td>
+<td>
+<p>OZNOTE: This creates a defaulting mechanism
+The default capture mode defined by the environment</p>
+
+</td>
+</tr>
+<tr id="CaptureMode-IPTABLES">
+<td><code>IPTABLES</code></td>
+<td>
+<p>Capture traffic using IPtables redirection</p>
+
+</td>
+</tr>
+<tr id="CaptureMode-NONE">
+<td><code>NONE</code></td>
+<td>
+<p>No traffic capture. When used in egress listener, the application is
+expected to explicitly communicate with the listener port/unix
+domain socket. When used in ingress listener, care needs to be taken
+to ensure that the listener port is not in use by other processes on
+the host.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Egress">Egress</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Egress-port">
+<td><code>port</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/core/workload-selector.html#Port">Port</a></code></td>
+<td>
+<p>The port associated with the listener. If using Unix domain socket,
+use 0 as the port number, with a valid protocol. The port if
+specified, will be used as the default destination port associated
+with the imported hosts. If the port is omitted, Istio will infer the
+listener ports based on the imported hosts. Note that when multiple
+egress listeners are specified, where one or more listeners have
+specific ports while others have no port, the hosts exposed on a
+listener port will be based on the listener with the most specific
+port.</p>
+
+</td>
+</tr>
+<tr id="Egress-bind">
+<td><code>bind</code></td>
+<td><code>string</code></td>
+<td>
+<p>The ip or the Unix domain socket to which the listener should be bound
+to. Port MUST be specified if bind is not empty. Format: <code>x.x.x.x</code> or
+<code>unix:///path/to/uds</code> or <code>unix://@foobar</code> (Linux abstract namespace). If
+omitted, Istio will automatically configure the defaults based on imported
+services, the workload instances to which this configuration is applied to and
+the captureMode. If captureMode is NONE, bind will default to
+127.0.0.1.</p>
+
+</td>
+</tr>
+<tr id="Egress-capture_mode">
+<td><code>captureMode</code></td>
+<td><code><a href="#CaptureMode">CaptureMode</a></code></td>
+<td>
+<p>When the bind address is an IP, the captureMode option dictates
+how traffic to the listener is expected to be captured (or not).
+captureMode must be DEFAULT or NONE for Unix domain socket binds.</p>
+
+</td>
+</tr>
+<tr id="Egress-hosts">
+<td><code>hosts</code></td>
+<td><code><a href="#Egress-HostSelector">Egress.HostSelector[]</a></code></td>
+<td>
+<p>REQUIRED: One or more service hosts exposed by the listener.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Egress-HostSelector">Egress.HostSelector</h2>
+<section>
+<p>OZNOTE: Why do we need a selector? Host should be good enough here?
+Is it for Access control, or for pruning of config?</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Egress-HostSelector-namespace">
+<td><code>namespace</code></td>
+<td><code>string</code></td>
+<td>
+<p>namespace from which the service is imported from.
+can be &lsquo;*&rsquo;, &lsquo;.&rsquo;, &lsquo;~&rsquo; to indicate any, local or no namespace respectively.</p>
+
+</td>
+</tr>
+<tr id="Egress-HostSelector-host">
+<td><code>host</code></td>
+<td><code>string</code></td>
+<td>
+<p>host name. Can be prefix (i.e. &lsquo;<em>&rsquo; or &lsquo;</em>.foo.example.com&rsquo;.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Ingress">Ingress</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Ingress-port">
+<td><code>port</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/core/workload-selector.html#Port">Port</a></code></td>
+<td>
+<p>REQUIRED. The port associated with the listener.</p>
+
+</td>
+</tr>
+<tr id="Ingress-bind">
+<td><code>bind</code></td>
+<td><code>string</code></td>
+<td>
+<p>The ip to which the listener should be bound. Must be in the
+format <code>x.x.x.x</code>. Unix domain socket addresses are not allowed in
+the bind field for ingress listeners. If omitted, Istio will
+automatically configure the defaults based on imported services
+and the workload instances to which this configuration is applied
+to.</p>
+
+</td>
+</tr>
+<tr id="Ingress-capture_mode">
+<td><code>captureMode</code></td>
+<td><code><a href="#CaptureMode">CaptureMode</a></code></td>
+<td>
+<p>The captureMode option dictates how traffic to the listener is
+expected to be captured (or not).</p>
+
+</td>
+</tr>
+<tr id="Ingress-default_endpoint">
+<td><code>defaultEndpoint</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED: The loopback IP endpoint or Unix domain socket to which
+traffic should be forwarded to. This configuration can be used to
+redirect traffic arriving at the bind IP:Port on the sidecar to a localhost:port
+or Unix domain socket where the application workload instance is listening for
+connections. Format should be 127.0.0.1:PORT or <code>unix:///path/to/socket</code></p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Network">Network</h2>
+<section>
+<p>Network configuration for a Workload.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Network-ingress">
+<td><code>ingress</code></td>
+<td><code><a href="#Ingress">Ingress[]</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="Network-egress">
+<td><code>egress</code></td>
+<td><code><a href="#Egress">Egress[]</a></code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Port">Port</h2>
+<section>
+<p>Port describes the properties of a specific port of a service.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Port-number">
+<td><code>number</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>REQUIRED: A valid non-negative integer port number.</p>
+
+</td>
+</tr>
+<tr id="Port-protocol">
+<td><code>protocol</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED: The protocol exposed on the port.
+MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS.
+TLS implies the connection will be routed based on the SNI header to
+the destination without terminating the TLS connection.</p>
+
+</td>
+</tr>
+<tr id="Port-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Label assigned to the port.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Security">Security</h2>
+<section>
+<p>Security configuration for a Workload.</p>
+
+</section>
+<h2 id="Selector">Selector</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Selector-labels">
+<td><code>labels</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Telemetry">Telemetry</h2>
+<section>
+<p>Telemetry configuration for a Workload.</p>
+
+</section>
+<h2 id="Workload">Workload</h2>
+<section>
+<p>Configuration for a Workload.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Workload-select">
+<td><code>select</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/core/workload-selector.html#Selector">Selector</a></code></td>
+<td>
+<p>Criteria used to select the specific set of pods/VMs on which this
+sidecar configuration should be applied. If omitted, the sidecar
+configuration will be applied to all workload instances in the same namespace.</p>
+
+</td>
+</tr>
+<tr id="Workload-network">
+<td><code>network</code></td>
+<td><code><a href="#Network">Network</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="Workload-telemetry">
+<td><code>telemetry</code></td>
+<td><code><a href="#Telemetry">Telemetry</a></code></td>
+<td>
+</td>
+</tr>
+<tr id="Workload-security">
+<td><code>security</code></td>
+<td><code><a href="#Security">Security</a></code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
