@@ -25,7 +25,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.mixer.v1.config.client',
   syntax='proto3',
   serialized_options=_b('Z#istio.io/api/mixer/v1/config/client\310\341\036\000\250\342\036\000\360\341\036\000\330\342\036\001'),
-  serialized_pb=_b('\n*mixer/v1/config/client/client_config.proto\x12\x1cistio.mixer.v1.config.client\x1a\x14gogoproto/gogo.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x19mixer/v1/attributes.proto\x1a%mixer/v1/config/client/api_spec.proto\x1a\"mixer/v1/config/client/quota.proto\"\x86\x02\n\x11NetworkFailPolicy\x12J\n\x06policy\x18\x01 \x01(\x0e\x32:.istio.mixer.v1.config.client.NetworkFailPolicy.FailPolicy\x12\x11\n\tmax_retry\x18\x02 \x01(\r\x12\x32\n\x0f\x62\x61se_retry_wait\x18\x03 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x31\n\x0emax_retry_wait\x18\x04 \x01(\x0b\x32\x19.google.protobuf.Duration\"+\n\nFailPolicy\x12\r\n\tFAIL_OPEN\x10\x00\x12\x0e\n\nFAIL_CLOSE\x10\x01\"\x85\x03\n\rServiceConfig\x12\x1b\n\x13\x64isable_check_calls\x18\x01 \x01(\x08\x12\x1c\n\x14\x64isable_report_calls\x18\x02 \x01(\x08\x12\x34\n\x10mixer_attributes\x18\x03 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\x12@\n\rhttp_api_spec\x18\x04 \x03(\x0b\x32).istio.mixer.v1.config.client.HTTPAPISpec\x12;\n\nquota_spec\x18\x05 \x03(\x0b\x32\'.istio.mixer.v1.config.client.QuotaSpec\x12L\n\x13network_fail_policy\x18\x07 \x01(\x0b\x32/.istio.mixer.v1.config.client.NetworkFailPolicy\x12\x36\n\x12\x66orward_attributes\x18\x08 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\"\xbc\x03\n\x0fTransportConfig\x12\x1b\n\x13\x64isable_check_cache\x18\x01 \x01(\x08\x12\x1b\n\x13\x64isable_quota_cache\x18\x02 \x01(\x08\x12\x1c\n\x14\x64isable_report_batch\x18\x03 \x01(\x08\x12L\n\x13network_fail_policy\x18\x04 \x01(\x0b\x32/.istio.mixer.v1.config.client.NetworkFailPolicy\x12\x38\n\x15stats_update_interval\x18\x05 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x15\n\rcheck_cluster\x18\x06 \x01(\t\x12\x16\n\x0ereport_cluster\x18\x07 \x01(\t\x12>\n\x1a\x61ttributes_for_mixer_proxy\x18\x08 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\x12 \n\x18report_batch_max_entries\x18\t \x01(\r\x12\x38\n\x15report_batch_max_time\x18\n \x01(\x0b\x32\x19.google.protobuf.Duration\"\xa8\x03\n\x10HttpClientConfig\x12@\n\ttransport\x18\x01 \x01(\x0b\x32-.istio.mixer.v1.config.client.TransportConfig\x12[\n\x0fservice_configs\x18\x02 \x03(\x0b\x32\x42.istio.mixer.v1.config.client.HttpClientConfig.ServiceConfigsEntry\x12#\n\x1b\x64\x65\x66\x61ult_destination_service\x18\x03 \x01(\t\x12\x34\n\x10mixer_attributes\x18\x04 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\x12\x36\n\x12\x66orward_attributes\x18\x05 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\x1a\x62\n\x13ServiceConfigsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12:\n\x05value\x18\x02 \x01(\x0b\x32+.istio.mixer.v1.config.client.ServiceConfig:\x02\x38\x01\"\xc0\x02\n\x0fTcpClientConfig\x12@\n\ttransport\x18\x01 \x01(\x0b\x32-.istio.mixer.v1.config.client.TransportConfig\x12\x34\n\x10mixer_attributes\x18\x02 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\x12\x1b\n\x13\x64isable_check_calls\x18\x03 \x01(\x08\x12\x1c\n\x14\x64isable_report_calls\x18\x04 \x01(\x08\x12\x46\n\x15\x63onnection_quota_spec\x18\x05 \x01(\x0b\x32\'.istio.mixer.v1.config.client.QuotaSpec\x12\x32\n\x0freport_interval\x18\x06 \x01(\x0b\x32\x19.google.protobuf.DurationB5Z#istio.io/api/mixer/v1/config/client\xc8\xe1\x1e\x00\xa8\xe2\x1e\x00\xf0\xe1\x1e\x00\xd8\xe2\x1e\x01\x62\x06proto3')
+  serialized_pb=_b('\n*mixer/v1/config/client/client_config.proto\x12\x1cistio.mixer.v1.config.client\x1a\x14gogoproto/gogo.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x19mixer/v1/attributes.proto\x1a%mixer/v1/config/client/api_spec.proto\x1a\"mixer/v1/config/client/quota.proto\"\x86\x02\n\x11NetworkFailPolicy\x12J\n\x06policy\x18\x01 \x01(\x0e\x32:.istio.mixer.v1.config.client.NetworkFailPolicy.FailPolicy\x12\x11\n\tmax_retry\x18\x02 \x01(\r\x12\x32\n\x0f\x62\x61se_retry_wait\x18\x03 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x31\n\x0emax_retry_wait\x18\x04 \x01(\x0b\x32\x19.google.protobuf.Duration\"+\n\nFailPolicy\x12\r\n\tFAIL_OPEN\x10\x00\x12\x0e\n\nFAIL_CLOSE\x10\x01\"\x85\x03\n\rServiceConfig\x12\x1b\n\x13\x64isable_check_calls\x18\x01 \x01(\x08\x12\x1c\n\x14\x64isable_report_calls\x18\x02 \x01(\x08\x12\x34\n\x10mixer_attributes\x18\x03 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\x12@\n\rhttp_api_spec\x18\x04 \x03(\x0b\x32).istio.mixer.v1.config.client.HTTPAPISpec\x12;\n\nquota_spec\x18\x05 \x03(\x0b\x32\'.istio.mixer.v1.config.client.QuotaSpec\x12L\n\x13network_fail_policy\x18\x07 \x01(\x0b\x32/.istio.mixer.v1.config.client.NetworkFailPolicy\x12\x36\n\x12\x66orward_attributes\x18\x08 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\"\xbc\x03\n\x0fTransportConfig\x12\x1b\n\x13\x64isable_check_cache\x18\x01 \x01(\x08\x12\x1b\n\x13\x64isable_quota_cache\x18\x02 \x01(\x08\x12\x1c\n\x14\x64isable_report_batch\x18\x03 \x01(\x08\x12L\n\x13network_fail_policy\x18\x04 \x01(\x0b\x32/.istio.mixer.v1.config.client.NetworkFailPolicy\x12\x38\n\x15stats_update_interval\x18\x05 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x15\n\rcheck_cluster\x18\x06 \x01(\t\x12\x16\n\x0ereport_cluster\x18\x07 \x01(\t\x12>\n\x1a\x61ttributes_for_mixer_proxy\x18\x08 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\x12 \n\x18report_batch_max_entries\x18\t \x01(\r\x12\x38\n\x15report_batch_max_time\x18\n \x01(\x0b\x32\x19.google.protobuf.Duration\"\xa8\x03\n\x10HttpClientConfig\x12@\n\ttransport\x18\x01 \x01(\x0b\x32-.istio.mixer.v1.config.client.TransportConfig\x12[\n\x0fservice_configs\x18\x02 \x03(\x0b\x32\x42.istio.mixer.v1.config.client.HttpClientConfig.ServiceConfigsEntry\x12#\n\x1b\x64\x65\x66\x61ult_destination_service\x18\x03 \x01(\t\x12\x34\n\x10mixer_attributes\x18\x04 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\x12\x36\n\x12\x66orward_attributes\x18\x05 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\x1a\x62\n\x13ServiceConfigsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12:\n\x05value\x18\x02 \x01(\x0b\x32+.istio.mixer.v1.config.client.ServiceConfig:\x02\x38\x01\"\xc0\x02\n\x0fTcpClientConfig\x12@\n\ttransport\x18\x01 \x01(\x0b\x32-.istio.mixer.v1.config.client.TransportConfig\x12\x34\n\x10mixer_attributes\x18\x02 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\x12\x1b\n\x13\x64isable_check_calls\x18\x03 \x01(\x08\x12\x1c\n\x14\x64isable_report_calls\x18\x04 \x01(\x08\x12\x46\n\x15\x63onnection_quota_spec\x18\x05 \x01(\x0b\x32\'.istio.mixer.v1.config.client.QuotaSpec\x12\x32\n\x0freport_interval\x18\x06 \x01(\x0b\x32\x19.google.protobuf.Duration\"\xa8\x04\n\x12ThriftClientConfig\x12@\n\ttransport\x18\x01 \x01(\x0b\x32-.istio.mixer.v1.config.client.TransportConfig\x12]\n\x0fservice_configs\x18\x02 \x03(\x0b\x32\x44.istio.mixer.v1.config.client.ThriftClientConfig.ServiceConfigsEntry\x12#\n\x1b\x64\x65\x66\x61ult_destination_service\x18\x03 \x01(\t\x12\x34\n\x10mixer_attributes\x18\x04 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\x12\x36\n\x12\x66orward_attributes\x18\x05 \x01(\x0b\x32\x1a.istio.mixer.v1.Attributes\x12\x46\n\x15\x63onnection_quota_spec\x18\x06 \x01(\x0b\x32\'.istio.mixer.v1.config.client.QuotaSpec\x12\x32\n\x0freport_interval\x18\x07 \x01(\x0b\x32\x19.google.protobuf.Duration\x1a\x62\n\x13ServiceConfigsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12:\n\x05value\x18\x02 \x01(\x0b\x32+.istio.mixer.v1.config.client.ServiceConfig:\x02\x38\x01\x42\x35Z#istio.io/api/mixer/v1/config/client\xc8\xe1\x1e\x00\xa8\xe2\x1e\x00\xf0\xe1\x1e\x00\xd8\xe2\x1e\x01\x62\x06proto3')
   ,
   dependencies=[gogoproto_dot_gogo__pb2.DESCRIPTOR,google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,mixer_dot_v1_dot_attributes__pb2.DESCRIPTOR,mixer_dot_v1_dot_config_dot_client_dot_api__spec__pb2.DESCRIPTOR,mixer_dot_v1_dot_config_dot_client_dot_quota__pb2.DESCRIPTOR,])
 
@@ -435,6 +435,116 @@ _TCPCLIENTCONFIG = _descriptor.Descriptor(
   serialized_end=2084,
 )
 
+
+_THRIFTCLIENTCONFIG_SERVICECONFIGSENTRY = _descriptor.Descriptor(
+  name='ServiceConfigsEntry',
+  full_name='istio.mixer.v1.config.client.ThriftClientConfig.ServiceConfigsEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.mixer.v1.config.client.ThriftClientConfig.ServiceConfigsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.mixer.v1.config.client.ThriftClientConfig.ServiceConfigsEntry.value', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1663,
+  serialized_end=1761,
+)
+
+_THRIFTCLIENTCONFIG = _descriptor.Descriptor(
+  name='ThriftClientConfig',
+  full_name='istio.mixer.v1.config.client.ThriftClientConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='transport', full_name='istio.mixer.v1.config.client.ThriftClientConfig.transport', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='service_configs', full_name='istio.mixer.v1.config.client.ThriftClientConfig.service_configs', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='default_destination_service', full_name='istio.mixer.v1.config.client.ThriftClientConfig.default_destination_service', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='mixer_attributes', full_name='istio.mixer.v1.config.client.ThriftClientConfig.mixer_attributes', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='forward_attributes', full_name='istio.mixer.v1.config.client.ThriftClientConfig.forward_attributes', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='connection_quota_spec', full_name='istio.mixer.v1.config.client.ThriftClientConfig.connection_quota_spec', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='report_interval', full_name='istio.mixer.v1.config.client.ThriftClientConfig.report_interval', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_THRIFTCLIENTCONFIG_SERVICECONFIGSENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2087,
+  serialized_end=2639,
+)
+
 _NETWORKFAILPOLICY.fields_by_name['policy'].enum_type = _NETWORKFAILPOLICY_FAILPOLICY
 _NETWORKFAILPOLICY.fields_by_name['base_retry_wait'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
 _NETWORKFAILPOLICY.fields_by_name['max_retry_wait'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
@@ -458,11 +568,20 @@ _TCPCLIENTCONFIG.fields_by_name['transport'].message_type = _TRANSPORTCONFIG
 _TCPCLIENTCONFIG.fields_by_name['mixer_attributes'].message_type = mixer_dot_v1_dot_attributes__pb2._ATTRIBUTES
 _TCPCLIENTCONFIG.fields_by_name['connection_quota_spec'].message_type = mixer_dot_v1_dot_config_dot_client_dot_quota__pb2._QUOTASPEC
 _TCPCLIENTCONFIG.fields_by_name['report_interval'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
+_THRIFTCLIENTCONFIG_SERVICECONFIGSENTRY.fields_by_name['value'].message_type = _SERVICECONFIG
+_THRIFTCLIENTCONFIG_SERVICECONFIGSENTRY.containing_type = _THRIFTCLIENTCONFIG
+_THRIFTCLIENTCONFIG.fields_by_name['transport'].message_type = _TRANSPORTCONFIG
+_THRIFTCLIENTCONFIG.fields_by_name['service_configs'].message_type = _THRIFTCLIENTCONFIG_SERVICECONFIGSENTRY
+_THRIFTCLIENTCONFIG.fields_by_name['mixer_attributes'].message_type = mixer_dot_v1_dot_attributes__pb2._ATTRIBUTES
+_THRIFTCLIENTCONFIG.fields_by_name['forward_attributes'].message_type = mixer_dot_v1_dot_attributes__pb2._ATTRIBUTES
+_THRIFTCLIENTCONFIG.fields_by_name['connection_quota_spec'].message_type = mixer_dot_v1_dot_config_dot_client_dot_quota__pb2._QUOTASPEC
+_THRIFTCLIENTCONFIG.fields_by_name['report_interval'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
 DESCRIPTOR.message_types_by_name['NetworkFailPolicy'] = _NETWORKFAILPOLICY
 DESCRIPTOR.message_types_by_name['ServiceConfig'] = _SERVICECONFIG
 DESCRIPTOR.message_types_by_name['TransportConfig'] = _TRANSPORTCONFIG
 DESCRIPTOR.message_types_by_name['HttpClientConfig'] = _HTTPCLIENTCONFIG
 DESCRIPTOR.message_types_by_name['TcpClientConfig'] = _TCPCLIENTCONFIG
+DESCRIPTOR.message_types_by_name['ThriftClientConfig'] = _THRIFTCLIENTCONFIG
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 NetworkFailPolicy = _reflection.GeneratedProtocolMessageType('NetworkFailPolicy', (_message.Message,), {
@@ -508,7 +627,23 @@ TcpClientConfig = _reflection.GeneratedProtocolMessageType('TcpClientConfig', (_
   })
 _sym_db.RegisterMessage(TcpClientConfig)
 
+ThriftClientConfig = _reflection.GeneratedProtocolMessageType('ThriftClientConfig', (_message.Message,), {
+
+  'ServiceConfigsEntry' : _reflection.GeneratedProtocolMessageType('ServiceConfigsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _THRIFTCLIENTCONFIG_SERVICECONFIGSENTRY,
+    '__module__' : 'mixer.v1.config.client.client_config_pb2'
+    # @@protoc_insertion_point(class_scope:istio.mixer.v1.config.client.ThriftClientConfig.ServiceConfigsEntry)
+    })
+  ,
+  'DESCRIPTOR' : _THRIFTCLIENTCONFIG,
+  '__module__' : 'mixer.v1.config.client.client_config_pb2'
+  # @@protoc_insertion_point(class_scope:istio.mixer.v1.config.client.ThriftClientConfig)
+  })
+_sym_db.RegisterMessage(ThriftClientConfig)
+_sym_db.RegisterMessage(ThriftClientConfig.ServiceConfigsEntry)
+
 
 DESCRIPTOR._options = None
 _HTTPCLIENTCONFIG_SERVICECONFIGSENTRY._options = None
+_THRIFTCLIENTCONFIG_SERVICECONFIGSENTRY._options = None
 # @@protoc_insertion_point(module_scope)

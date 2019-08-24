@@ -276,15 +276,15 @@
         "description": "A status code of OK indicates quota was fetched successfully. Any other code indicates error in fetching quota.",
         "type": "object",
         "properties": {
-          "code": {
-            "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
-            "type": "integer",
-            "format": "int32"
-          },
           "message": {
             "description": "A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
             "type": "string",
             "format": "string"
+          },
+          "code": {
+            "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
+            "type": "integer",
+            "format": "int32"
           },
           "details": {
             "description": "A list of messages that carry the error details. There is a common set of message types for APIs to use.",
