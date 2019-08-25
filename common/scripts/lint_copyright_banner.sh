@@ -23,18 +23,17 @@
 
 set -e
 
-SCRIPTPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-ROOTDIR=$(dirname "${SCRIPTPATH}")
-cd "${ROOTDIR}"
+ec=0
+for fn in "$@"; do
+  if ! grep -L -q -e "Apache License, Version 2" "${fn}"; then
+    echo "Missing license: ${fn}"
+    ec=1
+  fi
 
-if [[ "$1" == "--fix" ]]
-then
-    FIX="--fix"
-fi
+  if ! grep -L -q -e "Copyright" "${fn}"; then
+    echo "Missing copyright: ${fn}"
+    ec=1
+  fi
+done
 
-# if you want to update this version, also change the version number in .golangci.yml
-GOLANGCI_VERSION="v1.16.0"
-curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b "$GOPATH"/bin "$GOLANGCI_VERSION"
-golangci-lint --version
-# For tuning and when switching versions PLEASE REFERENCE: https://github.com/istio/istio/issues/14888
-env GOGC=25 golangci-lint run ${FIX} -j 8 -v ./...
+exit $ec
