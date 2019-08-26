@@ -86,15 +86,15 @@ type_v1beta1_path := type/v1beta1
 type_v1beta1_protos := $(wildcard $(type_v1beta1_path)/*.proto)
 type_v1beta1_pb_gos := $(type_v1beta1_protos:.proto=.pb.go)
 type_v1beta1_pb_pythons := $(patsubst $(type_v1beta1_path)/%.proto,$(python_output_path)/$(type_v1beta1_path)/%_pb2.py,$(type_v1beta1_protos))
-type_v1beta1_pb_docs := $(type_v1beta1_protos:.proto=.pb.html)
+type_v1beta1_pb_doc := $(type_v1beta1_path)/istio.type.v1beta1.pb.html
 type_v1beta1_openapi := $(type_v1beta1_protos:.proto=.json)
 
-$(type_v1beta1_pb_gos) $(type_v1beta1_pb_docs) $(type_v1beta1_pb_pythons): $(type_v1beta1_protos)
+$(type_v1beta1_pb_gos) $(type_v1beta1_pb_doc) $(type_v1beta1_pb_pythons): $(type_v1beta1_protos)
 	@$(protolock) status
 	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(type_v1beta1_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/type/* type
 
-generate-type: $(type_v1beta1_pb_gos) $(type_v1beta1_pb_docs) $(type_v1beta1_pb_pythons)
+generate-type: $(type_v1beta1_pb_gos) $(type_v1beta1_pb_doc) $(type_v1beta1_pb_pythons)
 
 clean-type:
 	@rm -fr $(type_v1beta1_pb_gos) $(type_v1beta1_pb_docs) $(type_v1beta1_pb_pythons)
@@ -280,18 +280,18 @@ security_v1beta1_path := security/v1beta1
 security_v1beta1_protos := $(wildcard $(security_v1beta1_path)/*.proto)
 security_v1beta1_pb_gos := $(security_v1beta1_protos:.proto=.pb.go)
 security_v1beta1_pb_pythons := $(patsubst $(security_v1beta1_path)/%.proto,$(python_output_path)/$(security_v1beta1_path)/%_pb2.py,$(security_v1beta1_protos))
-security_v1beta1_pb_docs := $(security_v1beta1_protos:.proto=.pb.html)
+security_v1beta1_pb_doc := $(security_v1beta1_path)/istio.security.v1beta1.pb.html
 security_v1beta1_openapi := $(security_v1beta1_protos:.proto=.json)
 
-$(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons): $(security_v1beta1_protos)
+$(security_v1beta1_pb_gos) $(security_v1beta1_pb_doc) $(security_v1beta1_pb_pythons): $(security_v1beta1_protos)
 	@$(protolock) status
 	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(security_v1beta1_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/security/* security
 
-generate-security: $(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons)
+generate-security: $(security_v1beta1_pb_gos) $(security_v1beta1_pb_doc) $(security_v1beta1_pb_pythons)
 
 clean-security:
-	@rm -fr $(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons) $(security_v1beta1_openapi)
+	@rm -fr $(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons)
 
 #####################
 # envoy/...
@@ -352,8 +352,7 @@ release-lock-status:
 # Lint
 #####################
 
-lint:
-	@scripts/check_license.sh
+lint: lint-copyright-banner
 	@$(prototool) lint --protoc-bin-path=/usr/bin/protoc --protoc-wkt-path=/usr/include/protobuf
 	@$(htmlproofer) . --url-swap "istio.io:preliminary.istio.io" --assume-extension --check-html --check-external-hash --check-opengraph --timeframe 2d --storage-dir $(repo_dir)/.htmlproofer --url-ignore "/localhost/"
 
@@ -418,10 +417,10 @@ clean: \
 #####################
 
 presubmit: clean generate proto-commit lint release-lock-status
-preaubmit: presubmit
+postsubmit: presubmit
 
 #####################
 # Common definitions
 #####################
 
-include Makefile.common.mk
+include common/Makefile.common.mk
