@@ -261,7 +261,7 @@ type DestinationRule struct {
 	ExportTo []string `protobuf:"bytes,4,rep,name=export_to,json=exportTo,proto3" json:"export_to,omitempty"`
 	// Name to be used while emitting statistics for inbound traffic.
 	// By default, Istio emits statistics with the pattern inbound|<port>|<port-name>|<service-FQDN>.
-	// This can be used to override that pattern.
+	// For example inbound|7443|grpc-reviews|reviews.prod.svc.cluster.local. This can be used to override that pattern.
 	//
 	// A Pattern can be composed of various pre-defined variables. The following variables are supported.
 	// %SERVICE% - Will be substituted with name of the service.
@@ -274,14 +274,15 @@ type DestinationRule struct {
 	// %SERVICE% will use reviews.prod as the stats name.
 	InboundStatName string `protobuf:"bytes,5,opt,name=inbound_stat_name,json=inboundStatName,proto3" json:"inbound_stat_name,omitempty"`
 	// Name to be used while emitting statistics for outbound traffic.
-	// By default, Istio emits statistics with the pattern outbound|<port>|<port-name>|<service-FQDN>.
-	// This can be used to override that pattern.
+	// By default, Istio emits statistics with the pattern outbound|<port>|<subsetname>|<service-FQDN>.
+	// For example outbound|8080|v2|reviews.prod.svc.cluster.local. This can be used to override that pattern.
 	//
 	// A Pattern can be composed of various pre-defined variables. The following variables are supported.
 	// %SERVICE% - Will be substituted with name of the service.
 	// %SERVICE_FQDN% - Will be substituted with FQDN of the service.
 	// %SERVICE_PORT% - Will be substituted with port of the service.
 	// %SERVICE_PORT_NAME% - Will be substituted with port name of the service.
+	// %SUBSET_NAME% - Will be substituted with subset.
 	//
 	// Following are some examples of supported patterns for reviews.
 	// %SERVICE_FQDN%_%SERVICE_PORT% will use reviews.prod.svc.cluster.local_7443 as the stats name.
