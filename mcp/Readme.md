@@ -4,7 +4,7 @@
 
 This folder contains the proto buffers for the Mesh Configuration
 Protocol (MCP). MCP is based on
-[XDS](https://github.com/envoyproxy/data-plane-api/blob/master/XDS_PROTOCOL.md#streaming-grpc-subscriptions)
+[XDS](https://github.com/envoyproxy/data-plane-api/blob/master/xds_protocol.rst#streaming-grpc-subscriptions)
 and maintains conceptual alignment with it, despite the specific
 service and proto definitions being different.
 
