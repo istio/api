@@ -34,7 +34,7 @@ type Metadata struct {
 	// resource name within the context of that directory.
 	//
 	// The directory and basename are composed of one or more segments. Segments must be
-	// valid [DNS labels](https://tools.ietf.org/html/rfc1123). “/” is the delimiter between
+	// valid [DNS labels](https://tools.ietf.org/html/rfc1123). "/" is the delimiter between
 	// segments
 	//
 	// The rightmost segment is the basename. All segments to the

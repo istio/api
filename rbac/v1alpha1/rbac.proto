@@ -204,8 +204,8 @@ message ServiceRoleBinding {
   // be reused in other bindings, while explicit roles are reusable. Both inline
   // roles (defined in "actions" field) and explicit roles (defined in ServiceRole)
   // are supported. Users should use only one of them in a single binding.
-  // For example, the following “product-frontend” AuthorizationPolicy allows “frontend”
-  // service to view “product” service on “/info” path.
+  // For example, the following "product-frontend" AuthorizationPolicy allows "frontend"
+  // service to view "product" service on "/info" path.
   // ```yaml
   // apiVersion: "rbac.istio.io/v1alpha1"
   // kind: AuthorizationPolicy
