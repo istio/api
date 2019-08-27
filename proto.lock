@@ -839,9 +839,6 @@
           },
           {
             "path": "google/protobuf/timestamp.proto"
-          },
-          {
-            "path": "google/protobuf/struct.proto"
           }
         ],
         "package": {
@@ -1145,6 +1142,11 @@
                 "is_repeated": true
               },
               {
+                "id": 43,
+                "name": "enable_auto_mtls",
+                "type": "google.protobuf.BoolValue"
+              },
+              {
                 "id": 23,
                 "name": "enable_sds_token_mount",
                 "type": "bool"
@@ -1303,6 +1305,9 @@
         "imports": [
           {
             "path": "google/protobuf/duration.proto"
+          },
+          {
+            "path": "google/protobuf/wrappers.proto"
           },
           {
             "path": "mesh/v1alpha1/proxy.proto"
