@@ -166,9 +166,6 @@
       "istio.rbac.v1alpha1.Subject": {
         "description": "Subject defines an identity. The identity is either a user or identified by a set of `properties`. The supported keys in `properties` are listed in \"constraint and properties\" page.",
         "type": "object",
-        "required": [
-          "properties"
-        ],
         "properties": {
           "user": {
             "description": "Optional. The user name/ID that the subject represents.",
@@ -194,7 +191,8 @@
           "group": {
             "description": "Optional. The group that the subject belongs to. Deprecated. Use groups and not_groups instead.",
             "type": "string",
-            "format": "string"
+            "format": "string",
+            "deprecated": true
           },
           "groups": {
             "description": "Optional. A list of groups that the subject represents. This is matched to the `request.auth.claims[groups]` attribute. If not specified, it applies to any groups.",

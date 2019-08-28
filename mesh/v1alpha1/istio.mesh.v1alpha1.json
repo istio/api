@@ -73,10 +73,12 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.IngressControllerMode"
           },
           "authPolicy": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.AuthPolicy"
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.AuthPolicy",
+            "deprecated": true
           },
           "rdsRefreshDelay": {
-            "type": "string"
+            "type": "string",
+            "deprecated": true
           },
           "enableTracing": {
             "description": "Flag to control generation of trace spans and request IDs. Requires a trace span collector defined in the proxy configuration.",
@@ -104,7 +106,8 @@
           },
           "mixerAddress": {
             "type": "string",
-            "format": "string"
+            "format": "string",
+            "deprecated": true
           },
           "enableClientSidePolicyCheck": {
             "description": "Enables clide side policy checks.",
@@ -116,7 +119,8 @@
             "format": "string"
           },
           "sdsRefreshDelay": {
-            "type": "string"
+            "type": "string",
+            "deprecated": true
           },
           "configSources": {
             "description": "ConfigSource describes a source of configuration data for networking rules, and other Istio configuration artifacts. Multiple data sources can be configured for a single control plane.",
@@ -255,12 +259,14 @@
             "format": "string"
           },
           "discoveryRefreshDelay": {
-            "type": "string"
+            "type": "string",
+            "deprecated": true
           },
           "zipkinAddress": {
             "description": "Address of the Zipkin service (e.g. _zipkin:9411_). DEPRECATED: Use [tracing][istio.mesh.v1alpha1.ProxyConfig.tracing] instead.",
             "type": "string",
-            "format": "string"
+            "format": "string",
+            "deprecated": true
           },
           "statsdUdpAddress": {
             "description": "IP Address and Port of a statsd UDP listener (e.g. _10.75.241.127:9125_).",
@@ -269,7 +275,8 @@
           },
           "envoyMetricsServiceAddress": {
             "type": "string",
-            "format": "string"
+            "format": "string",
+            "deprecated": true
           },
           "proxyAdminPort": {
             "description": "Port on which Envoy should listen for administrative commands.",
@@ -278,7 +285,8 @@
           },
           "availabilityZone": {
             "type": "string",
-            "format": "string"
+            "format": "string",
+            "deprecated": true
           },
           "controlPlaneAuthPolicy": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.AuthenticationPolicy"
@@ -382,9 +390,6 @@
       "istio.mesh.v1alpha1.LocalityLoadBalancerSetting.Distribute": {
         "description": "Describes how traffic originating in the 'from' zone or sub-zone is distributed over a set of 'to' zones. Syntax for specifying a zone is {region}/{zone}/{sub-zone} and terminal wildcards are allowed on any segment of the specification. Examples: * - matches all localities us-west/* - all zones and sub-zones within the us-west region us-west/zone-1/* - all sub-zones within us-west/zone-1",
         "type": "object",
-        "required": [
-          "to"
-        ],
         "properties": {
           "from": {
             "description": "Originating locality, '/' separated, e.g. 'region/zone/sub_zone'.",
@@ -517,9 +522,6 @@
       "istio.mesh.v1alpha1.MeshNetworks": {
         "description": "MeshNetworks (config map) provides information about the set of networks inside a mesh and how to route to endpoints in each network. For example",
         "type": "object",
-        "required": [
-          "networks"
-        ],
         "properties": {
           "networks": {
             "description": "REQUIRED: The set of networks inside this mesh. Each network should have a unique name and information about how to infer the endpoints in the network as well as the gateways associated with the network.",

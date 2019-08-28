@@ -8,9 +8,6 @@
     "schemas": {
       "istio.networking.v1alpha3.Gateway": {
         "type": "object",
-        "required": [
-          "selector"
-        ],
         "properties": {
           "servers": {
             "description": "REQUIRED: A list of server specifications.",

@@ -72,9 +72,6 @@
       "istio.mixer.adapter.model.v1beta1.CreateSessionRequest": {
         "description": "Request message for `CreateSession` method.",
         "type": "object",
-        "required": [
-          "inferredTypes"
-        ],
         "properties": {
           "adapterConfig": {
             "description": "Adapter specific configuration.",
@@ -126,9 +123,6 @@
       "istio.mixer.adapter.model.v1beta1.ValidateRequest": {
         "description": "Request message for `Validate` method.",
         "type": "object",
-        "required": [
-          "inferredTypes"
-        ],
         "properties": {
           "adapterConfig": {
             "description": "Adapter specific configuration.",
@@ -195,9 +189,6 @@
       "istio.mixer.adapter.model.v1beta1.QuotaRequest": {
         "description": "Expresses the quota allocation request.",
         "type": "object",
-        "required": [
-          "quotas"
-        ],
         "properties": {
           "quotas": {
             "description": "The individual quotas to allocate",
@@ -226,9 +217,6 @@
       "istio.mixer.adapter.model.v1beta1.QuotaResult": {
         "description": "Expresses the result of multiple quota allocations.",
         "type": "object",
-        "required": [
-          "quotas"
-        ],
         "properties": {
           "quotas": {
             "description": "The resulting quota, one entry per requested quota.",

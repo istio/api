@@ -7,13 +7,13 @@ all: generate
 repo_dir := .
 out_path = /tmp
 
-protoc = protoc -I/usr/include/protobuf -I.
+protoc = protoc -Icommon-protos -I.
 protolock = protolock
 protolock_release = /bin/bash scripts/check-release-locks.sh
 prototool = prototool
 annotations_prep = annotations_prep
 htmlproofer = htmlproofer
-cue = cue --paths=/usr/include/protobuf,$(repo_dir)
+cue = cue -paths=common-protos
 
 ########################
 # protoc_gen_gogo*
