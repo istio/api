@@ -45,11 +45,11 @@
         "description": "Configuration for a Workload.",
         "type": "object",
         "properties": {
-          "select": {
-            "$ref": "#/components/schemas/istio.core.v1alpha1.Selector"
-          },
           "network": {
             "$ref": "#/components/schemas/istio.core.v1alpha1.Network"
+          },
+          "select": {
+            "$ref": "#/components/schemas/istio.core.v1alpha1.Selector"
           },
           "telemetry": {
             "$ref": "#/components/schemas/istio.core.v1alpha1.Telemetry"
@@ -109,6 +109,13 @@
       "istio.core.v1alpha1.Egress": {
         "type": "object",
         "properties": {
+          "hosts": {
+            "description": "REQUIRED: One or more service hosts exposed by the listener.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.core.v1alpha1.Egress.HostSelector"
+            }
+          },
           "port": {
             "$ref": "#/components/schemas/istio.core.v1alpha1.Port"
           },
@@ -119,13 +126,6 @@
           },
           "captureMode": {
             "$ref": "#/components/schemas/istio.core.v1alpha1.CaptureMode"
-          },
-          "hosts": {
-            "description": "REQUIRED: One or more service hosts exposed by the listener.",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/istio.core.v1alpha1.Egress.HostSelector"
-            }
           }
         }
       },
