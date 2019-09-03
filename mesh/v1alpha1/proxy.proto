@@ -44,28 +44,37 @@ message Tracing {
   // Zipkin defines configuration for a Zipkin tracer.
   message Zipkin {
     // Address of the Zipkin service (e.g. _zipkin:9411_).
-    string address = 1;
+    string address = 1 [deprecated=true];
+
+    // Address of the Zipkin service with mTLS connection if configured.
+    RemoteService service = 2;
   }
 
   // Defines configuration for a LightStep tracer.
   message Lightstep {
+    // Address of the Lightstep Satellite pool with mTLS connection if configured.
+    RemoteService service = 5;
+
     // Address of the LightStep Satellite pool.
-    string address = 1;
+    string address = 1 [deprecated=true];
 
     // The LightStep access token.
     string access_token = 2;
 
     // True if a secure connection should be used when communicating with the pool.
-    bool secure = 3;
+    bool secure = 3 [deprecated=true];
 
     // Path to the trusted cacert used to authenticate the pool.
-    string cacert_path = 4;
+    string cacert_path = 4 [deprecated=true];
   }
 
   // Datadog defines configuration for a Datadog tracer.
   message Datadog {
     // Address of the Datadog Agent.
-    string address = 1;
+    string address = 1 [deprecated=true];
+
+    // Address of the Datadog Agent with mTLS connection if configured.
+    RemoteService service = 2;
   }
 
   // Stackdriver defines configuration for a Stackdriver tracer.
@@ -146,7 +155,7 @@ message ProxyConfig {
   google.protobuf.Duration parent_shutdown_duration = 5;
 
   // Address of the discovery service exposing xDS with mTLS connection.
-  string discovery_address = 6;
+  string discovery_address = 6 [deprecated=true];
 
   // $hide_from_docs
   google.protobuf.Duration discovery_refresh_delay = 7 [deprecated=true];
@@ -173,6 +182,7 @@ message ProxyConfig {
   // Authentication policy defines the global switch to control authentication
   // for Envoy-to-Envoy communication for istio components Mixer and Pilot.
   AuthenticationPolicy control_plane_auth_policy = 13;
+
   // File path of custom proxy configuration, currently used by proxies
   // in front of Mixer and Pilot.
   string custom_config_file = 14;
@@ -223,10 +233,13 @@ message ProxyConfig {
   // See [Metric Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/metrics/v2/metrics_service.proto)
   // for details about Envoy's Metrics Service API.
   RemoteService envoy_metrics_service = 23;
+
+  // Address of the discovery service exposing xDS with mTLS connection.
+  RemoteService discovery_service = 24;
 }
 
 message RemoteService {
-  // Address of a remove service used for various purposes (access log
+  // Address of a remote service used for various purposes (access log
   // receiver, metrics receiver, etc.). Can be IP address or a fully
   // qualified DNS name.
   string address = 1;

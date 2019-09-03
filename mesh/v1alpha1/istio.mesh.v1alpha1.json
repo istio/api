@@ -327,6 +327,9 @@
           },
           "envoyMetricsService": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.RemoteService"
+          },
+          "discoveryService": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.RemoteService"
           }
         }
       },
@@ -604,6 +607,25 @@
             "description": "Address of the Zipkin service (e.g. _zipkin:9411_).",
             "type": "string",
             "format": "string"
+          },
+          "service": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.RemoteService"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.RemoteService": {
+        "type": "object",
+        "properties": {
+          "tcpKeepalive": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive"
+          },
+          "address": {
+            "description": "Address of a remote service used for various purposes (access log receiver, metrics receiver, etc.). Can be IP address or a fully qualified DNS name.",
+            "type": "string",
+            "format": "string"
+          },
+          "tlsSettings": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSSettings"
           }
         }
       },
@@ -615,6 +637,9 @@
             "description": "Address of the LightStep Satellite pool.",
             "type": "string",
             "format": "string"
+          },
+          "service": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.RemoteService"
           },
           "accessToken": {
             "description": "The LightStep access token.",
@@ -640,6 +665,9 @@
             "description": "Address of the Datadog Agent.",
             "type": "string",
             "format": "string"
+          },
+          "service": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.RemoteService"
           }
         }
       },
@@ -691,22 +719,6 @@
           "TPROXY"
         ],
         "default": "REDIRECT"
-      },
-      "istio.mesh.v1alpha1.RemoteService": {
-        "type": "object",
-        "properties": {
-          "tcpKeepalive": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive"
-          },
-          "address": {
-            "description": "Address of a remove service used for various purposes (access log receiver, metrics receiver, etc.). Can be IP address or a fully qualified DNS name.",
-            "type": "string",
-            "format": "string"
-          },
-          "tlsSettings": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSSettings"
-          }
-        }
       },
       "istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive": {
         "description": "If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.",
