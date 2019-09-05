@@ -7,9 +7,9 @@ about: Report a bug to help us improve Istio
   To ask questions about how to use Istio, please visit <https://discuss.istio.io>
 )
 
-**Bug description**
+<em>Bug description</em>
 
-**Affected product area (please put an X in all that apply)**
+<em>Affected product area (please put an X in all that apply)</em>
 
 [ ] Configuration Infrastructure
 [ ] Docs
@@ -21,16 +21,15 @@ about: Report a bug to help us improve Istio
 [ ] Test and Release
 [ ] User Experience
 
-**Expected behavior**
+<em>Expected behavior</em>
 
-**Steps to reproduce the bug**
+<em>Steps to reproduce the bug</em>
 
-**Version (include the output of `istioctl version --remote` and `kubectl version`)**
+<em>Version (include the output of `istioctl version --remote` and `kubectl version`)</em>
 
-**How was Istio installed?**
+<em>How was Istio installed?</em>
 
-**Environment where bug was observed (cloud vendor, OS, etc)**
+<em>Environment where the bug was observed (cloud vendor, OS, etc)</em>
 
 Additionally, please consider attaching a [cluster state archive](http://istio.io/help/bugs/#generating-a-cluster-state-archive) by attaching
 the dump file to this issue.
-
