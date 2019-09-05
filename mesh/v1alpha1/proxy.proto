@@ -155,6 +155,7 @@ message ProxyConfig {
   google.protobuf.Duration parent_shutdown_duration = 5;
 
   // Address of the discovery service exposing xDS with mTLS connection.
+  // DEPRECATED: Use [discovery_service][istio.mesh.v1alpha1.ProxyConfig.discovery_service] instead.
   string discovery_address = 6 [deprecated=true];
 
   // $hide_from_docs
