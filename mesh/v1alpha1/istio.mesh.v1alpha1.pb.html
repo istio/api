@@ -1149,7 +1149,10 @@ DEPRECATED: Use <a href="#ProxyConfig-tracing">tracing</a> instead.</p>
 <td><code><a href="#AuthenticationPolicy">AuthenticationPolicy</a></code></td>
 <td>
 <p>Authentication policy defines the global switch to control authentication
-for Envoy-to-Envoy communication for istio components Mixer and Pilot.</p>
+for Envoy-to-Envoy communication for istio components Mixer and Pilot.
+This will only be applied for Pilot if discovery<em>address is used to specify pilot address.
+If discovery</em>service is used to specify Pilot address, the TLSSettings in RemoteService
+drives the authentication policy for Pilot.</p>
 
 </td>
 </tr>

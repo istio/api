@@ -180,7 +180,10 @@ message ProxyConfig {
   string availability_zone = 12 [deprecated=true];
 
   // Authentication policy defines the global switch to control authentication
-  // for Envoy-to-Envoy communication for istio components Mixer and Pilot.
+  // for Envoy-to-Envoy communication for istio components Mixer and Pilot. 
+  // This will only be applied for Pilot if discovery_address is used to specify pilot address.
+  // If discovery_service is used to specify Pilot address, the TLSSettings in RemoteService 
+  // drives the authentication policy for Pilot.   
   AuthenticationPolicy control_plane_auth_policy = 13;
 
   // File path of custom proxy configuration, currently used by proxies

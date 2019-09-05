@@ -710,6 +710,9 @@ type ProxyConfig struct {
 	AvailabilityZone string `protobuf:"bytes,12,opt,name=availability_zone,json=availabilityZone,proto3" json:"availability_zone,omitempty"` // Deprecated: Do not use.
 	// Authentication policy defines the global switch to control authentication
 	// for Envoy-to-Envoy communication for istio components Mixer and Pilot.
+	// This will only be applied for Pilot if discovery_address is used to specify pilot address.
+	// If discovery_service is used to specify Pilot address, the TLSSettings in RemoteService
+	// drives the authentication policy for Pilot.
 	ControlPlaneAuthPolicy AuthenticationPolicy `protobuf:"varint,13,opt,name=control_plane_auth_policy,json=controlPlaneAuthPolicy,proto3,enum=istio.mesh.v1alpha1.AuthenticationPolicy" json:"control_plane_auth_policy,omitempty"`
 	// File path of custom proxy configuration, currently used by proxies
 	// in front of Mixer and Pilot.
