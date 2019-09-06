@@ -65,7 +65,7 @@ RUN = docker run -t -i --sig-proxy=true -u $(UID) --rm \
 	-e GOBIN="$(GOBIN)" \
 	-e BUILD_WITH_CONTAINER="$(BUILD_WITH_CONTAINER)" \
 	-v /etc/passwd:/etc/passwd:ro \
-	-v $(readlink /etc/localtime):/etc/localtime:ro \
+	-v $(realpath /etc/localtime):/etc/localtime:ro \
 	$(CONTAINER_OPTIONS) \
 	--mount type=bind,source="$(PWD)",destination="/work" \
 	--mount type=volume,source=istio-go-mod,destination="/go/pkg/mod" \
