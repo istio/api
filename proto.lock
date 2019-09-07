@@ -1211,6 +1211,16 @@
                 "id": 41,
                 "name": "h2_upgrade_policy",
                 "type": "H2UpgradePolicy"
+              },
+              {
+                "id": 43,
+                "name": "inbound_cluster_stat_name",
+                "type": "string"
+              },
+              {
+                "id": 44,
+                "name": "outbound_cluster_stat_name",
+                "type": "string"
               }
             ],
             "reserved_ids": [
