@@ -352,8 +352,7 @@ release-lock-status:
 # Lint
 #####################
 
-lint: lint-copyright-banner
-	@$(prototool) lint --protoc-bin-path=/usr/bin/protoc --protoc-wkt-path=common-protos
+lint: lint-copyright-banner lint-protos
 	@$(htmlproofer) . --url-swap "istio.io:preliminary.istio.io" --assume-extension --check-html --check-external-hash --check-opengraph --timeframe 2d --storage-dir $(repo_dir)/.htmlproofer --url-ignore "/localhost/"
 
 #####################
