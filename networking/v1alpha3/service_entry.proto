@@ -308,7 +308,7 @@ import "networking/v1alpha3/gateway.proto";
 //
 // The following example illustrates the usage of a `ServiceEntry`
 // containing a subject alternate name
-// whose format conforms to the [SPIFEE standard](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md):
+// whose format conforms to the [SPIFFE standard](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md):
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
