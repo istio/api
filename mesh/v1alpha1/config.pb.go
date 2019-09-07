@@ -225,7 +225,7 @@ type MeshConfig struct {
 	// If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
 	TcpKeepalive *v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,28,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcp_keepalive,omitempty"`
 	// Class of ingress resources to be processed by Istio ingress
-	// controller.  This corresponds to the value of
+	// controller. This corresponds to the value of
 	// "kubernetes.io/ingress.class" annotation.
 	IngressClass string `protobuf:"bytes,7,opt,name=ingress_class,json=ingressClass,proto3" json:"ingress_class,omitempty"`
 	// Name of theKubernetes service used for the istio ingress controller.
@@ -308,7 +308,7 @@ type MeshConfig struct {
 	// This isn't supported for non-k8s case.
 	SdsUseK8SSaJwt bool `protobuf:"varint,29,opt,name=sds_use_k8s_sa_jwt,json=sdsUseK8sSaJwt,proto3" json:"sds_use_k8s_sa_jwt,omitempty"`
 	// The trust domain corresponds to the trust root of a system.
-	// Refer to [SPIFEE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)
+	// Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)
 	// Fallback to old identity format(without trust domain) if not set.
 	TrustDomain string `protobuf:"bytes,26,opt,name=trust_domain,json=trustDomain,proto3" json:"trust_domain,omitempty"`
 	// The default value for the ServiceEntry.export_to field and services

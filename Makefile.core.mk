@@ -1,3 +1,17 @@
+# Copyright Istio Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 all: generate
 
 ########################
@@ -7,13 +21,13 @@ all: generate
 repo_dir := .
 out_path = /tmp
 
-protoc = protoc -I/usr/include/protobuf -I.
+protoc = protoc -Icommon-protos -I.
 protolock = protolock
 protolock_release = /bin/bash scripts/check-release-locks.sh
 prototool = prototool
 annotations_prep = annotations_prep
 htmlproofer = htmlproofer
-cue = cue --paths=/usr/include/protobuf,$(repo_dir)
+cue = cue -paths=common-protos
 
 ########################
 # protoc_gen_gogo*
@@ -352,9 +366,8 @@ release-lock-status:
 # Lint
 #####################
 
-lint: lint-copyright-banner
-	@$(prototool) lint --protoc-bin-path=/usr/bin/protoc --protoc-wkt-path=/usr/include/protobuf
-	@$(htmlproofer) . --url-swap "istio.io:preliminary.istio.io" --assume-extension --check-html --check-external-hash --check-opengraph --timeframe 2d --storage-dir $(repo_dir)/.htmlproofer --url-ignore "/localhost/"
+lint: lint-copyright-banner lint-protos
+ 	@$(htmlproofer) . --url-swap "istio.io:preliminary.istio.io" --assume-extension --check-html --check-external-hash --check-opengraph --timeframe 2d --storage-dir $(repo_dir)/.htmlproofer --url-ignore "/localhost/"
 
 #####################
 # OpenAPI Schema

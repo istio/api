@@ -105,10 +105,6 @@
       "istio.networking.v1alpha3.ServiceEntry.Endpoint": {
         "description": "Endpoint defines a network address (IP or hostname) associated with the mesh service.",
         "type": "object",
-        "required": [
-          "labels",
-          "ports"
-        ],
         "properties": {
           "labels": {
             "description": "One or more labels associated with the endpoint.",

@@ -9,9 +9,6 @@
       "istio.mcp.v1alpha1.SinkNode": {
         "description": "Identifies a specific MCP sink node instance. The node identifier is presented to the resource source, which may use this identifier to distinguish per sink configuration for serving. This information is not authoritative. Authoritative identity should come from the underlying transport layer (e.g. rpc credentials).",
         "type": "object",
-        "required": [
-          "annotations"
-        ],
         "properties": {
           "id": {
             "description": "An opaque identifier for the MCP node.",
@@ -109,9 +106,6 @@
       "istio.mcp.v1alpha1.IncrementalMeshConfigRequest": {
         "description": "IncrementalMeshConfigRequest are be sent in 2 situations: 1. Initial message in a MCP bidirectional gRPC stream.",
         "type": "object",
-        "required": [
-          "initialResourceVersions"
-        ],
         "properties": {
           "sinkNode": {
             "$ref": "#/components/schemas/istio.mcp.v1alpha1.SinkNode"
@@ -173,9 +167,6 @@
       "istio.mcp.v1alpha1.RequestResources": {
         "description": "A RequestResource can be sent in two situations: Initial message in an MCP bidirectional change stream as an ACK or NACK response to a previous Resources. In this case the response_nonce is set to the nonce value in the Resources. ACK/NACK is determined by the presence of error_detail.",
         "type": "object",
-        "required": [
-          "initialResourceVersions"
-        ],
         "properties": {
           "sinkNode": {
             "$ref": "#/components/schemas/istio.mcp.v1alpha1.SinkNode"
@@ -250,10 +241,6 @@
       "istio.mcp.v1alpha1.Metadata": {
         "description": "Metadata information that all resources within the Mesh Configuration Protocol must have.",
         "type": "object",
-        "required": [
-          "annotations",
-          "labels"
-        ],
         "properties": {
           "name": {
             "description": "Fully qualified name of the resource. Unique in context of a collection.",

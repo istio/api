@@ -8,9 +8,6 @@
     "schemas": {
       "istio.networking.v1alpha3.EnvoyFilter": {
         "type": "object",
-        "required": [
-          "workloadLabels"
-        ],
         "properties": {
           "workloadLabels": {
             "description": "Deprecated. Use workload_selector instead. $hide_from_docs",
@@ -18,13 +15,15 @@
             "additionalProperties": {
               "type": "string",
               "format": "string"
-            }
+            },
+            "deprecated": true
           },
           "filters": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.Filter"
-            }
+            },
+            "deprecated": true
           },
           "workloadSelector": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.WorkloadSelector"
@@ -65,9 +64,6 @@
       "istio.networking.v1alpha3.WorkloadSelector": {
         "description": "WorkloadSelector specifies the criteria used to determine if the Gateway, Sidecar, or EnvoyFilter resource can be applied to a proxy. The matching criteria includes the metadata associated with a proxy, workload instance info such as labels attached to the pod/VM, or any other info that the proxy provides to Istio during the initial handshake. If multiple conditions are specified, all conditions need to match in order for the workload instance to be selected. Currently, only label based selection mechanism is supported.",
         "type": "object",
-        "required": [
-          "labels"
-        ],
         "properties": {
           "labels": {
             "description": "REQUIRED: One or more labels that indicate a specific set of pods/VMs on which this sidecar configuration should be applied. The scope of label search is restricted to the configuration namespace in which the the resource is present.",
@@ -206,9 +202,6 @@
       "istio.networking.v1alpha3.EnvoyFilter.ProxyMatch": {
         "description": "One or more properties of the proxy to match on.",
         "type": "object",
-        "required": [
-          "metadata"
-        ],
         "properties": {
           "proxyVersion": {
             "description": "A regular expression in golang regex format (RE2) that can be used to select proxies using a specific version of istio proxy. The Istio version for a given proxy is obtained from the node metadata field ISTIO_VERSION supplied by the proxy when connecting to Pilot. This value is embedded as an environment variable (ISTIO_META_ISTIO_VERSION) in the Istio proxy docker image. Custom proxy implementations should provide this metadata variable to take advantage of the Istio version check option.",
