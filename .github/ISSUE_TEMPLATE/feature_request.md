@@ -1,14 +1,15 @@
 ---
 name: Feature request
 about: Suggest an idea to improve Istio
+
 ---
 (This is used to request new product features, please visit <https://discuss.istio.io> for questions on using Istio)
 
-<em>Describe the feature request</em>
+**Describe the feature request**
 
-<em>Describe alternatives you've considered</em>
+**Describe alternatives you've considered**
 
-<em>Affected product area (please put an X in all that apply)</em>
+**Affected product area (please put an X in all that apply)**
 
 [ ] Configuration Infrastructure
 [ ] Docs
@@ -20,4 +21,4 @@ about: Suggest an idea to improve Istio
 [ ] Test and Release
 [ ] User Experience
 
-<em>Additional context</em>
+**Additional context**
