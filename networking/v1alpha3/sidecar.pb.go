@@ -93,14 +93,14 @@
 //       name: somename
 //     defaultEndpoint: unix:///var/run/someuds.sock
 //   egress:
-//   - hosts:
-//     - "istio-system/*"
 //   - port:
 //       number: 9080
 //       protocol: HTTP
 //       name: egresshttp
 //     hosts:
 //     - "prod-us1/*"
+//   - hosts:
+//     - "istio-system/*"
 // ```
 //
 // If the workload is deployed without IPTables based traffic capture, the

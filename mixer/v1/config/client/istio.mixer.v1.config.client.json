@@ -156,9 +156,6 @@
       "istio.mixer.v1.config.client.IstioService": {
         "description": "IstioService identifies a service and optionally service version. The FQDN of the service is composed from the name, namespace, and implementation-specific domain suffix (e.g. on Kubernetes, \"reviews\" + \"default\" + \"svc.cluster.local\" -\u003e \"reviews.default.svc.cluster.local\").",
         "type": "object",
-        "required": [
-          "labels"
-        ],
         "properties": {
           "name": {
             "description": "The short name of the service such as \"foo\".",
@@ -319,9 +316,6 @@
       "istio.mixer.v1.config.client.HttpClientConfig": {
         "description": "Defines the client config for HTTP.",
         "type": "object",
-        "required": [
-          "serviceConfigs"
-        ],
         "properties": {
           "mixerAttributes": {
             "$ref": "#/components/schemas/istio.mixer.v1.Attributes"
@@ -396,9 +390,6 @@
       "istio.mixer.v1.config.client.AttributeMatch": {
         "description": "Specifies a match clause to match Istio attributes",
         "type": "object",
-        "required": [
-          "clause"
-        ],
         "properties": {
           "clause": {
             "description": "Map of attribute names to StringMatch type. Each map element specifies one condition to match.",
@@ -506,9 +497,6 @@
       "istio.mixer.v1.Attributes": {
         "description": "Default attributes to send to Mixer in both Check and Report. This typically includes \"destination.ip\" and \"destination.uid\" attributes.",
         "type": "object",
-        "required": [
-          "attributes"
-        ],
         "properties": {
           "attributes": {
             "description": "A map of attribute name to its value.",
@@ -619,9 +607,6 @@
       "istio.mixer.v1.Attributes.StringMap": {
         "description": "Used for values of type STRING_MAP",
         "type": "object",
-        "required": [
-          "entries"
-        ],
         "properties": {
           "entries": {
             "description": "Holds a set of name/value pairs.",

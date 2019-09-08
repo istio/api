@@ -19,9 +19,6 @@
       "istio.policy.v1beta1.AttributeManifest": {
         "description": "AttributeManifest describes a set of Attributes produced by some component of an Istio deployment.",
         "type": "object",
-        "required": [
-          "attributes"
-        ],
         "properties": {
           "name": {
             "description": "Required. Name of the component producing these attributes. This can be the proxy (with the canonical name `istio-proxy`) or the name of an `attributes` kind adapter in Mixer.",
@@ -181,9 +178,6 @@
       "istio.policy.v1beta1.Instance": {
         "description": "An Instance tells Mixer how to create instances for particular template.",
         "type": "object",
-        "required": [
-          "attributeBindings"
-        ],
         "properties": {
           "name": {
             "description": "Required. The name of this instance",
@@ -445,9 +439,6 @@
       "istio.policy.v1beta1.OAuth": {
         "description": "OAuth let operator specify config to fetch access token via oauth when using TLS for connection to the backend.",
         "type": "object",
-        "required": [
-          "endpointParams"
-        ],
         "properties": {
           "clientId": {
             "description": "REQUIRED. OAuth client id for mixer.",
@@ -494,9 +485,6 @@
       "istio.policy.v1beta1.DirectHttpResponse": {
         "description": "Direct HTTP response for a client-facing error message which can be attached to an RPC error.",
         "type": "object",
-        "required": [
-          "headers"
-        ],
         "properties": {
           "body": {
             "description": "HTTP response body.",
@@ -761,9 +749,6 @@
       "istio.policy.v1beta1.StringMap": {
         "description": "An instance field of type StringMap denotes that the expression for the field must evaluate to [ValueType.STRING_MAP][istio.policy.v1beta1.ValueType.STRING_MAP]",
         "type": "object",
-        "required": [
-          "value"
-        ],
         "properties": {
           "value": {
             "description": "StringMap encoded as a map of strings",

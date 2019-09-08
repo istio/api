@@ -239,9 +239,6 @@
       "istio.authentication.v1alpha1.TargetSelector": {
         "description": "TargetSelector defines a matching rule to a workload. A workload is selected if it is associated with the service name and service port(s) specified in the selector rule.",
         "type": "object",
-        "required": [
-          "labels"
-        ],
         "properties": {
           "name": {
             "description": "REQUIRED. The name must be a short name from the service registry. The fully qualified domain name will be resolved in a platform specific manner.",
