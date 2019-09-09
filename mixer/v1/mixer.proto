@@ -227,7 +227,7 @@ message RouteDirective {
 message ReportRequest {
   // next value: 5
 
-  // Used to signal how the sets of compressed attributes should be reconstitued server-side.
+  // Used to signal how the sets of compressed attributes should be reconstituted server-side.
   enum RepeatedAttributesSemantics {
     // Use delta encoding between sets of compressed attributes to reduce the overall on-wire
     // request size. Each individual set of attributes is used to modify the previous set.
