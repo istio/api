@@ -1,12 +1,11 @@
-[![Mergify Status](https://gh.mergify.io/badges/istio/istio.png?style=cut)](https://mergify.io)
-
 # Istio APIs and Common Configuration Definitions
 
 This repository defines component-level APIs and common configuration formats for the Istio
 platform. These definitions are specified using the [protobuf](https://github.com/google/protobuf)
 syntax.
 
-This repository depends only on the [tools](https://github.com/istio/tools) repository for tools used during build. This repository *will not* depend on any other repositories. Except for tools, all other Istio repositories can take a dependency on the api repository. 
+This repository depends only on the [tools](https://github.com/istio/tools) repository for tools used during build. This repository *will not* depend on any
+other repositories. Except for tools, all other Istio repositories can take a dependency on the api repository. 
 
 ## API Guidelines
 
@@ -32,3 +31,4 @@ blocked by protolock. To force these changes in, install
 
 You must include a note in your PR that you had to force the
 protolock and why.
+

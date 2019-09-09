@@ -4,7 +4,7 @@
 
 This folder contains the proto buffers for the Mesh Configuration
 Protocol (MCP). MCP is based on
-[XDS](https://github.com/envoyproxy/data-plane-api/blob/master/XDS_PROTOCOL.md#streaming-grpc-subscriptions)
+[XDS](https://github.com/envoyproxy/data-plane-api/blob/master/xds_protocol.rst#streaming-grpc-subscriptions)
 and maintains conceptual alignment with it, despite the specific
 service and proto definitions being different.
 
@@ -47,9 +47,9 @@ metadata format and resource specific contents is defined elsewhere
 
 ### Collections
 
-Resources of the same type are organization into named
+Resources of the same type are organized into named
 collections. Istio API collection names are of the form
-`istio/<area>/<version>/<api>` where `<area>`, `<version>`, and `<api`
+`istio/<area>/<version>/<api>` where `<area>`, `<version>`, and `<api>`
 are defined by the [API style guidelines](../GUIDELINES.md). For
 example, the collection name for VirtualService is
 `istio/networking/v1alpha3/virtualservices`.

@@ -1,0 +1,41 @@
+# Cuelang configuration to generate OpenAPI schema for Istio configs.
+
+module: istio.io/api
+
+openapi:
+  selfContained: true
+  fieldFilter: "min.*|max.*"
+
+directories:
+  type/v1beta1:
+    - mode: perFile
+  authentication/v1alpha1:
+    - mode: all
+  mcp/v1alpha1:
+    - mode: all
+      title: This package defines the common, core types used by the Mesh Configuration Protocol.
+  mesh/v1alpha1:
+    - mode: all
+  mixer/adapter/model/v1beta1:
+    - mode: all
+  mixer/v1/config/client:
+    - mode: all
+  mixer/v1:
+    - mode: all
+      title: This package defines the Mixer API that the sidecar proxy uses to perform precondition checks, manage quotas, and report telemetry.
+  networking/v1alpha3:
+    - mode: perFile
+  policy/v1beta1:
+    - mode: all
+  rbac/v1alpha1:
+    - mode: all
+  security/v1beta1:
+    - mode: perFile
+
+
+# All is used when generating all types referenced in the above directories to
+# one file.
+all:
+  title: All Istio types.
+  version: v1alpha1
+  oapiFilename: istio.json
