@@ -363,11 +363,13 @@ release-lock-status:
 	@$(protolock_release)
 
 #####################
-# Lint
+# Misc
 #####################
 
-lint: lint-copyright-banner lint-protos
+lint: lint-all
  	@$(htmlproofer) . --url-swap "istio.io:preliminary.istio.io" --assume-extension --check-html --check-external-hash --check-opengraph --timeframe 2d --storage-dir $(repo_dir)/.htmlproofer --url-ignore "/localhost/"
+
+fmt: format-python
 
 #####################
 # OpenAPI Schema

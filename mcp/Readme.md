@@ -43,7 +43,7 @@ initiates the connection and opens the grpc stream.
 MCP is the mechanism of transport whereby Pilot and Mixer can be
 configured by a manager component. MCP defines a common per-resource
 metadata format and resource specific contents is defined elsewhere
-(e.g. https://github.com/istio/api/tree/master/networking/v1alpha3).
+(e.g. <https://github.com/istio/api/tree/master/networking/v1alpha3>).
 
 ### Collections
 
@@ -138,11 +138,11 @@ The following example shows what happens when a change cannot be applied.
 
 ![Resource update error](v1alpha1/diagrams/collection-update-error.svg)
 
-The sink should only NACK in _exceptional_ cases. For example, if a set of 
+The sink should only NACK in _exceptional_ cases. For example, if a set of
 resources was invalid, malformed, or could not be decoded. NACK'd updates
-should raise an alarm for subsequent investigation by a human. The source 
-should not resend the same set of resources that were previously NACK'd. 
-Canary pushes to dedicated sinks may also be used to verify correctness 
+should raise an alarm for subsequent investigation by a human. The source
+should not resend the same set of resources that were previously NACK'd.
+Canary pushes to dedicated sinks may also be used to verify correctness
 (non-NACK) before pushing to a larger fleet of resource sinks.
 
 The nonce in MCP is used to match RequestResources and Resources. On

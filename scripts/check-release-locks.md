@@ -1,4 +1,4 @@
-## How to Update
+# How to Update
 
 If you are making a proto change and "make release-lock-status" is
 failing, you will need to update the status file. First keep in mind
