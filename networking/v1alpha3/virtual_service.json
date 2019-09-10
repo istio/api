@@ -130,6 +130,11 @@
           "mirror": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Destination"
           },
+          "mirrorPercent": {
+            "description": "Percentage of the traffic to be mirrored by the `mirror` field. If this field is absent, all the traffic (100%) will be mirrored. Max value is 100.",
+            "type": "integer",
+            "nullable": true
+          },
           "corsPolicy": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.CorsPolicy"
           },
