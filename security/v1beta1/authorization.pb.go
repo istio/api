@@ -152,6 +152,13 @@ const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 //  rules:
 //  - {}
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=security.istio.io/v1beta1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type AuthorizationPolicy struct {
 	// Optional. Workload selector decides where to apply the authorization policy.
 	// If not set, the authorization policy will be applied to all workloads in the

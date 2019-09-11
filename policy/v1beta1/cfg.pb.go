@@ -115,6 +115,13 @@ func (Tls_AuthHeader) EnumDescriptor() ([]byte, []int) {
 
 // AttributeManifest describes a set of Attributes produced by some component
 // of an Istio deployment.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type AttributeManifest struct {
 	// Optional. The revision of this document. Assigned by server.
 	Revision string `protobuf:"bytes,1,opt,name=revision,proto3" json:"revision,omitempty"`
@@ -298,6 +305,13 @@ func (m *AttributeManifest_AttributeInfo) GetValueType() ValueType {
 //     instances:
 //     - RequestCountByService
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type Rule struct {
 	// Required. Match is an attribute based predicate. When Mixer receives a
 	// request it evaluates the match expression and executes all the associated `actions`
@@ -568,6 +582,13 @@ func (m *Action) GetName() string {
 //       source: source.name
 //       destination_ip: destination.ip
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type Instance struct {
 	// Required. The name of this instance
 	//
@@ -724,6 +745,13 @@ func (m *Instance) GetAttributeBindings() map[string]string {
 //       address: localhost:8090
 // ---
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type Handler struct {
 	// Required. Must be unique in the entire Mixer configuration. Used by [Actions][istio.policy.v1beta1.Action.handler]
 	// to refer to this handler.

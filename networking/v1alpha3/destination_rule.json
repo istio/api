@@ -7,6 +7,7 @@
   "components": {
     "schemas": {
       "istio.networking.v1alpha3.DestinationRule": {
+        "description": "DestinationRule defines policies that apply to traffic intended for a service after routing has occurred.",
         "type": "object",
         "properties": {
           "host": {

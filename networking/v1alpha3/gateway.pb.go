@@ -291,6 +291,15 @@ func (Server_TLSOptions_TLSProtocol) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_067d98d02f84cc0b, []int{1, 0, 1}
 }
 
+// Gateway describes a load balancer operating at the edge of the mesh
+// receiving incoming or outgoing HTTP/TCP connections.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type Gateway struct {
 	// REQUIRED: A list of server specifications.
 	Servers []*Server `protobuf:"bytes,1,rep,name=servers,proto3" json:"servers,omitempty"`

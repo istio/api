@@ -27,6 +27,7 @@
         }
       },
       "istio.networking.v1alpha3.ServiceEntry": {
+        "description": "ServiceEntry enables adding additional entries into Istio's internal service registry.",
         "type": "object",
         "properties": {
           "exportTo": {

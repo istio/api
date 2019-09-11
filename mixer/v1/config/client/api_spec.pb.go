@@ -81,6 +81,13 @@ const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 //   apiKeys:
 //   - query: api-key
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type HTTPAPISpec struct {
 	// List of attributes that are generated when *any* of the HTTP
 	// patterns match. This list typically includes the "api.service"
@@ -521,6 +528,13 @@ var xxx_messageInfo_HTTPAPISpecReference proto.InternalMessageInfo
 //   - name: petstore
 //     namespace: default
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type HTTPAPISpecBinding struct {
 	// REQUIRED. One or more services to map the listed HTTPAPISpec onto.
 	Services []*IstioService `protobuf:"bytes,1,rep,name=services,proto3" json:"services,omitempty"`

@@ -116,6 +116,14 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
+// Configuration affecting traffic routing.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type VirtualService struct {
 	// REQUIRED. The destination hosts to which traffic is being sent. Could
 	// be a DNS name with wildcard prefix or an IP address.  Depending on the
@@ -134,7 +142,7 @@ type VirtualService struct {
 	// *Note for Kubernetes users*: When short names are used (e.g. "reviews"
 	// instead of "reviews.default.svc.cluster.local"), Istio will interpret
 	// the short name based on the namespace of the rule, not the service. A
-	// rule in the "default" namespace containing a host "reviews will be
+	// rule in the "default" namespace containing a host "reviews" will be
 	// interpreted as "reviews.default.svc.cluster.local", irrespective of
 	// the actual namespace associated with the reviews service. _To avoid
 	// potential misconfigurations, it is recommended to always use fully

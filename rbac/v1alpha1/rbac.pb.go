@@ -160,6 +160,13 @@ func (RbacConfig_Mode) EnumDescriptor() ([]byte, []int) {
 }
 
 // ServiceRole specification contains a list of access rules (permissions).
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=rbac.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type ServiceRole struct {
 	// Required. The set of access rules (permissions) that the role has.
 	Rules                []*AccessRule `protobuf:"bytes,1,rep,name=rules,proto3" json:"rules,omitempty"`
@@ -430,6 +437,13 @@ func (m *AccessRule_Constraint) GetValues() []string {
 }
 
 // ServiceRoleBinding assigns a ServiceRole to a list of subjects.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=rbac.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type ServiceRoleBinding struct {
 	// Required. List of subjects that are assigned the ServiceRole object.
 	Subjects []*Subject `protobuf:"bytes,1,rep,name=subjects,proto3" json:"subjects,omitempty"`
@@ -783,6 +797,16 @@ func (m *RoleRef) GetName() string {
 //   inclusion:
 //     namespaces: [ "default" ]
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=rbac.istio.io/v1alpha1
+// +kubetype-gen:kubeType=RbacConfig
+// +kubetype-gen:kubeType=ClusterRbacConfig
+// +kubetype-gen:ClusterRbacConfig:tag=genclient:nonNamespaced
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type RbacConfig struct {
 	// Istio RBAC mode.
 	Mode RbacConfig_Mode `protobuf:"varint,1,opt,name=mode,proto3,enum=istio.rbac.v1alpha1.RbacConfig_Mode" json:"mode,omitempty"`

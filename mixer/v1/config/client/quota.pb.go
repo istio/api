@@ -27,6 +27,13 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
 // Determines the quotas used for individual requests.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type QuotaSpec struct {
 	// A list of Quota rules.
 	Rules []*QuotaRule `protobuf:"bytes,1,rep,name=rules,proto3" json:"rules,omitempty"`
@@ -346,6 +353,13 @@ var xxx_messageInfo_Quota proto.InternalMessageInfo
 
 // QuotaSpecBinding defines the binding between QuotaSpecs and one or more
 // IstioService.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type QuotaSpecBinding struct {
 	// REQUIRED. One or more services to map the listed QuotaSpec onto.
 	Services []*IstioService `protobuf:"bytes,1,rep,name=services,proto3" json:"services,omitempty"`

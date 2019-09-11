@@ -291,6 +291,16 @@ func (OutboundTrafficPolicy_Mode) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_b5c11342f04ad3d1, []int{4, 0}
 }
 
+// Sidecar describes the configuration of the sidecar proxy that mediates
+// inbound and outbound communication of the workload instance to which it is
+// attached.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type Sidecar struct {
 	// Criteria used to select the specific set of pods/VMs on which this
 	// sidecar configuration should be applied. If omitted, the sidecar

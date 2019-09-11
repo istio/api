@@ -487,7 +487,7 @@
             ],
             "properties": {
               "fromRegistry": {
-                "description": "Add all endpoints from the specified registry into this network. The names of the registries should correspond to the secret name that was used to configure the registry (Kubernetes multicluster) or supplied by MCP server.",
+                "description": "Add all endpoints from the specified registry into this network. The names of the registries should correspond to the kubeconfig file name inside the secret that was used to configure the registry (Kubernetes multicluster) or supplied by MCP server.",
                 "type": "string",
                 "format": "string"
               }
