@@ -67,6 +67,13 @@ option (gogoproto.stable_marshaler_all) = true;
 // ```
 
 // Determines the quotas used for individual requests.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message QuotaSpec {
   // A list of Quota rules.
   repeated QuotaRule rules = 1;
@@ -122,6 +129,13 @@ message Quota {
 
 // QuotaSpecBinding defines the binding between QuotaSpecs and one or more
 // IstioService.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message QuotaSpecBinding {
   // REQUIRED. One or more services to map the listed QuotaSpec onto.
   repeated IstioService services = 1;
