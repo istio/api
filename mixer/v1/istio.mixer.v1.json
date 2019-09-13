@@ -464,7 +464,7 @@
         }
       },
       "istio.mixer.v1.ReportRequest.RepeatedAttributesSemantics": {
-        "description": "Used to signal how the sets of compressed attributes should be reconstitued server-side.",
+        "description": "Used to signal how the sets of compressed attributes should be reconstituted server-side.",
         "type": "string",
         "enum": [
           "DELTA_ENCODING",

@@ -4,7 +4,7 @@ description: Configuration affecting label/content routing, sni routing, etc.
 location: https://istio.io/docs/reference/config/networking/v1alpha3/virtual-service.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 22
+number_of_entries: 23
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -1033,6 +1033,16 @@ destination.</p>
 
 </td>
 </tr>
+<tr id="HTTPRoute-mirror_percent">
+<td><code>mirrorPercent</code></td>
+<td><code><a href="#google-protobuf-UInt32Value">google.protobuf.UInt32Value</a></code></td>
+<td>
+<p>Percentage of the traffic to be mirrored by the <code>mirror</code> field.
+If this field is absent, all the traffic (100%) will be mirrored.
+Max value is 100.</p>
+
+</td>
+</tr>
 <tr id="HTTPRoute-cors_policy">
 <td><code>corsPolicy</code></td>
 <td><code><a href="#CorsPolicy">CorsPolicy</a></code></td>
@@ -1789,6 +1799,32 @@ defines an export to all namespaces.</p>
 
 <p>NOTE: in the current release, the <code>exportTo</code> value is restricted to
 &ldquo;.&rdquo; or &ldquo;*&rdquo; (i.e., the current namespace or all namespaces).</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="google-protobuf-UInt32Value">google.protobuf.UInt32Value</h2>
+<section>
+<p>Wrapper message for <code>uint32</code>.</p>
+
+<p>The JSON representation for <code>UInt32Value</code> is JSON number.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="google-protobuf-UInt32Value-value">
+<td><code>value</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>The uint32 value.</p>
 
 </td>
 </tr>
