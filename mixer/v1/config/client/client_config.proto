@@ -92,12 +92,15 @@ message ServiceConfig {
   // In case of a per-route override, per-route attributes take precedence
   // over the attributes supplied in the client configuration.
   //
-  // Forwarded attributes take precedence over the static Mixer attributes.
+  // Forwarded attributes take precedence over the static Mixer attributes,
+  // except in cases where there is clear configuration to ignore forwarded
+  // attributes. Gateways, for instance, should never use forwarded attributes.
+  //
   // The full order of application is as follows:
   // 1. static Mixer attributes from the filter config;
   // 2. static Mixer attributes from the route config;
-  // 3. forwarded attributes from the source filter config (if any);
-  // 4. forwarded attributes from the source route config (if any);
+  // 3. forwarded attributes from the source filter config (if any and not ignored);
+  // 4. forwarded attributes from the source route config (if any and not ignored);
   // 5. derived attributes from the request metadata.
   Attributes forward_attributes = 8;
 }
