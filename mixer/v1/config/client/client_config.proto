@@ -181,6 +181,12 @@ message HttpClientConfig {
   // Default attributes to forward to upstream. This typically
   // includes the "source.ip" and "source.uid" attributes.
   Attributes forward_attributes = 5;
+
+  // Whether or not to use attributes forwarded in the request headers to 
+  // create the attribute bag to send to mixer. For intra-mesh traffic,
+  // this should be set to "false". For ingress/egress gateways, this
+  // should be set to "true".
+  bool ignore_forwarded_attributes = 6;
 }
 
 // Defines the client config for TCP.
