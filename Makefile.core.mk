@@ -33,6 +33,7 @@ cue = cue -paths=common-protos
 # protoc_gen_gogo*
 ########################
 
+go_plugin_prefix := --go_out=plugins=grpc,
 gogofast_plugin_prefix := --gogofast_out=plugins=grpc,
 gogoslick_plugin_prefix := --gogoslick_out=plugins=grpc,
 
@@ -56,6 +57,7 @@ importmaps := \
 mapping_with_spaces := $(foreach map,$(importmaps),M$(map),)
 gogo_mapping := $(subst $(space),$(empty),$(mapping_with_spaces))
 
+go_plugin := $(go_plugin_prefix):$(out_path)
 gogofast_plugin := $(gogofast_plugin_prefix)$(gogo_mapping):$(out_path)
 gogoslick_plugin := $(gogoslick_plugin_prefix)$(gogo_mapping):$(out_path)
 
@@ -205,7 +207,7 @@ $(mixer_v1_pb_gos) $(mixer_v1_pb_pythons): $(mixer_v1_protos)
 
 $(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc) $(mixer_config_client_pb_pythons): $(mixer_config_client_protos)
 	@$(protolock) status
-	@$(protoc) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_config_client_path) $(protoc_gen_python_plugin) $^
+	@$(protoc) $(go_plugin) $(protoc_gen_docs_plugin)$(mixer_config_client_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/mixer/* mixer
 
 $(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_pythons): $(mixer_adapter_model_v1beta1_protos)
