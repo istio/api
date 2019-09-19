@@ -340,7 +340,7 @@ envoy_pb_pythons := $(patsubst $(envoy_path)/%.proto,$(python_output_path)/$(env
 
 $(envoy_pb_gos): %.pb.go : %.proto
 	@$(protolock) status
-	@$(protoc) $(gogofast_plugin) $<
+	@$(protoc) --go_out=$(out_path) $<
 	@cp -r /tmp/istio.io/api/envoy/* envoy
 
 $(envoy_pb_pythons): $(envoy_protos)
