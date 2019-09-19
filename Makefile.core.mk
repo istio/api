@@ -33,7 +33,6 @@ cue = cue -paths=common-protos
 # protoc_gen_gogo*
 ########################
 
-go_plugin_prefix := --go_out=plugins=grpc,
 gogofast_plugin_prefix := --gogofast_out=plugins=grpc,
 gogoslick_plugin_prefix := --gogoslick_out=plugins=grpc,
 
@@ -57,7 +56,6 @@ importmaps := \
 mapping_with_spaces := $(foreach map,$(importmaps),M$(map),)
 gogo_mapping := $(subst $(space),$(empty),$(mapping_with_spaces))
 
-go_plugin := $(go_plugin_prefix):$(out_path)
 gogofast_plugin := $(gogofast_plugin_prefix)$(gogo_mapping):$(out_path)
 gogoslick_plugin := $(gogoslick_plugin_prefix)$(gogo_mapping):$(out_path)
 
@@ -81,6 +79,7 @@ protoc_gen_docs_plugin_for_networking := --docs_out=warnings=true,dictionary=$(r
 #####################
 
 generate: \
+	generate-core \
     generate-type \
 	generate-mcp \
 	generate-mesh \
@@ -93,6 +92,27 @@ generate: \
 	generate-policy \
 	generate-annotations \
 	generate-openapi-schema
+
+#####################
+# core/...
+#####################
+
+core_v1alpha1_path := core/v1alpha1
+core_v1alpha1_protos := $(wildcard $(core_v1alpha1_path)/*.proto)
+core_v1alpha1_pb_gos := $(core_v1alpha1_protos:.proto=.pb.go)
+core_v1alpha1_pb_pythons := $(patsubst $(core_v1alpha1_path)/%.proto,$(python_output_path)/$(core_v1alpha1_path)/%_pb2.py,$(core_v1alpha1_protos))
+core_v1alpha1_pb_docs := $(core_v1alpha1_protos:.proto=.pb.html)
+core_v1alpha1_openapi := $(core_v1alpha1_protos:.proto=.json)
+
+$(core_v1alpha1_pb_gos) $(core_v1alpha1_pb_docs) $(core_v1alpha1_pb_pythons): $(core_v1alpha1_protos)
+	@$(protolock) status
+	@$(protoc) $(gogofast_plugin)  $(protoc_gen_python_plugin) $(protoc_gen_docs_plugin)$(core_v1alpha1_path) $^
+	@cp -r /tmp/istio.io/api/core/* core
+
+generate-core: $(core_v1alpha1_pb_gos) $(core_v1alpha1_pb_docs) $(core_v1alpha1_pb_pythons)
+
+clean-core:
+	@rm -fr $(core_v1alpha1_pb_gos) $(core_v1alpha1_pb_docs) $(core_v1alpha1_pb_pythons)
 
 #####################
 # type/...
@@ -207,7 +227,7 @@ $(mixer_v1_pb_gos) $(mixer_v1_pb_pythons): $(mixer_v1_protos)
 
 $(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc) $(mixer_config_client_pb_pythons): $(mixer_config_client_protos)
 	@$(protolock) status
-	@$(protoc) $(go_plugin) $(protoc_gen_docs_plugin)$(mixer_config_client_path) $(protoc_gen_python_plugin) $^
+	@$(protoc) $(gogoslick_plugin) $(protoc_gen_docs_plugin)$(mixer_config_client_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/mixer/* mixer
 
 $(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_pythons): $(mixer_adapter_model_v1beta1_protos)
@@ -378,6 +398,7 @@ fmt: format-python
 #####################
 
 all_protos := \
+	$(core_v1alpha1_protos) \
 	$(mcp_v1alpha1_protos) \
 	$(mesh_v1alpha1_protos) \
 	$(policy_v1beta1_protos) \
@@ -391,6 +412,7 @@ all_protos := \
 	$(type_v1beta1_protos)
 
 all_openapi := \
+	$(core_v1alpha1_openapi) \
 	$(mcp_v1alpha1_openapi) \
 	$(mesh_v1alpha1_openapi) \
 	$(policy_v1beta1_openapi) \
@@ -416,6 +438,7 @@ clean-openapi-schema:
 #####################
 
 clean: \
+	clean-core \
 	clean-mcp \
 	clean-mesh \
 	clean-mixer \
