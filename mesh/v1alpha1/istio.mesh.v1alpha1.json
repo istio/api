@@ -357,6 +357,13 @@
           },
           "tlsSettings": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSSettings"
+          },
+          "subscribedResources": {
+            "description": "Describes the source of configuration, if nothing is specified default is MCP",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.Resource"
+            }
           }
         }
       },
@@ -396,6 +403,13 @@
           "ALLOW_ANY"
         ],
         "default": "REGISTRY_ONLY"
+      },
+      "istio.mesh.v1alpha1.Resource": {
+        "description": "Resource describes the source of configuration",
+        "type": "string",
+        "enum": [
+          "SERVICE_REGISTRY"
+        ]
       },
       "istio.mesh.v1alpha1.LocalityLoadBalancerSetting.Distribute": {
         "description": "Describes how traffic originating in the 'from' zone or sub-zone is distributed over a set of 'to' zones. Syntax for specifying a zone is {region}/{zone}/{sub-zone} and terminal wildcards are allowed on any segment of the specification. Examples: * - matches all localities us-west/* - all zones and sub-zones within the us-west region us-west/zone-1/* - all sub-zones within us-west/zone-1",
