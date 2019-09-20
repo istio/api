@@ -74,6 +74,11 @@ annotations:
       istio-proxy sidecar.
     deprecated: false
     hidden: false
+  - name: security.istio.io/OptInAutoMTLS
+    description: Determined whether the client Envoy opt-in auto mTLS behavior. This overrides
+      mesh global default specified in MeshConfig.enable_auto_mtls field.
+    hidden: true
+    deprecated: false
   - name: sidecar.istio.io/controlPlaneAuthPolicy
     description: Specifies the auth policy used by the Istio control plane. If NONE,
       traffic will not be encrypted. If MUTUAL_TLS, traffic between istio-proxy sidecars
