@@ -74,7 +74,9 @@
 //     patch:
 //       operation: MERGE
 //       value:
-//         idle_timeout: 30s
+//         typed_config:
+//           "@type": "type.googleapis.com/envoy.config.filter.network.http_connection_manager.v2.HttpConnectionManager"
+//           idle_timeout: 30s
 //```
 //
 // The following example enables Envoy's Lua filter for all inbound
