@@ -75,7 +75,7 @@ annotations:
     deprecated: false
     hidden: false
   - name: security.istio.io/OptInAutoMTLS
-    description: Determined whether the client Envoy opt-in auto mTLS behavior. This overrides
+    description: Determine whether the client Envoy opt-in auto mTLS behavior. This overrides
       mesh global default specified in MeshConfig.enable_auto_mtls field.
     hidden: true
     deprecated: false
