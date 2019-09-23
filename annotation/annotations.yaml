@@ -58,6 +58,11 @@ annotations:
       reachable within its namespace.
     deprecated: false
     hidden: false
+  - name: security.istio.io/autoMTLS
+    description: Determines whether the client proxy uses auto mTLS. This overrides the mesh
+      default specified in MeshConfig.enable_auto_mtls.
+    hidden: true
+    deprecated: false
   - name: sidecar.istio.io/inject
     description: Specifies whether or not an istio-proxy sidecar should be automatically
       injected into the workload.
@@ -74,11 +79,6 @@ annotations:
       istio-proxy sidecar.
     deprecated: false
     hidden: false
-  - name: security.istio.io/autoMTLS
-    description: Determines whether the client proxy uses auto mTLS. This overrides the mesh 
-      default specified in MeshConfig.enable_auto_mtls.
-    hidden: true
-    deprecated: false
   - name: sidecar.istio.io/controlPlaneAuthPolicy
     description: Specifies the auth policy used by the Istio control plane. If NONE,
       traffic will not be encrypted. If MUTUAL_TLS, traffic between istio-proxy sidecars
