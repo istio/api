@@ -171,9 +171,9 @@ var (
           Deprecated: false,
         }
 	
-		SecurityOptInAutoMTLS = Instance {
-          Name: "security.istio.io/OptInAutoMTLS",
-          Description: "Determined whether the client Envoy opt-in auto mTLS "+
+		SecurityAutoMTLS = Instance {
+          Name: "security.istio.io/autoMTLS",
+          Description: "Determine whether the client Envoy opt-in auto mTLS "+
                         "behavior. This overrides mesh global default specified in "+
                         "MeshConfig.enable_auto_mtls field.",
           Hidden: true,
