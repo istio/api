@@ -327,6 +327,14 @@ var (
           Deprecated: false,
         }
 	
+		TrafficLocality = Instance {
+          Name: "traffic.istio.io/locality",
+          Description: "Specifies the component locality in the "+
+                        "region/zone/sub_zone format.",
+          Hidden: true,
+          Deprecated: false,
+        }
+	
 		SidecarTrafficExcludeInboundPorts = Instance {
           Name: "traffic.sidecar.istio.io/excludeInboundPorts",
           Description: "A comma separated list of inbound ports to be excluded "+

@@ -168,6 +168,10 @@ annotations:
       to receive traffic.
     deprecated: false
     hidden: false
+  - name: traffic.istio.io/locality
+    description: Specifies the component locality in the region/zone/sub_zone format.
+    deprecated: false
+    hidden: true
   - name: traffic.sidecar.istio.io/includeOutboundIPRanges
     description: A comma separated list of IP ranges in CIDR form to redirect to envoy
       (optional). The wildcard character '*' can be used to redirect all outbound traffic.
