@@ -171,6 +171,15 @@ var (
           Deprecated: false,
         }
 	
+		SecurityAutoMTLS = Instance {
+          Name: "security.istio.io/autoMTLS",
+          Description: "Determines whether the client proxy uses auto mTLS. This "+
+                        "overrides the mesh default specified in "+
+                        "MeshConfig.enable_auto_mtls.",
+          Hidden: true,
+          Deprecated: false,
+        }
+	
 		SidecarBootstrapOverride = Instance {
           Name: "sidecar.istio.io/bootstrapOverride",
           Description: "Specifies an alternative Envoy bootstrap configuration "+
