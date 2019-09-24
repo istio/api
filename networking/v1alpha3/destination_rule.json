@@ -209,30 +209,12 @@
       "istio.networking.v1alpha3.PortSelector": {
         "description": "PortSelector specifies the number of a port to be used for matching or selection for final routing.",
         "type": "object",
-        "oneOf": [
-          {
-            "required": [
-              "number"
-            ],
-            "properties": {
-              "number": {
-                "description": "Valid port number",
-                "type": "integer"
-              }
-            }
-          },
-          {
-            "required": [
-              "name"
-            ],
-            "properties": {
-              "name": {
-                "type": "string",
-                "format": "string"
-              }
-            }
+        "properties": {
+          "number": {
+            "description": "Valid port number",
+            "type": "integer"
           }
-        ]
+        }
       },
       "istio.networking.v1alpha3.LoadBalancerSettings.SimpleLB": {
         "description": "Standard load balancing algorithms that require no tuning.",
