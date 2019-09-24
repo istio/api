@@ -858,7 +858,7 @@ inside a mesh and how to route to endpoints in each network. For example</p>
 <pre><code class="language-yaml">networks:
   network1:
   - endpoints:
-    - fromRegistry: registry1 #must match kubeconfig name in Kubernetes secret
+    - fromRegistry: registry1 #must match secret name in Kubernetes
     - fromCidr: 192.168.100.0/22 #a VM network for example
     gateways:
     - registryServiceName: istio-ingressgateway.istio-system.svc.cluster.local
@@ -1033,9 +1033,9 @@ ranges for endpoints from different networks must not overlap.</p>
 <td><code>string (oneof)</code></td>
 <td>
 <p>Add all endpoints from the specified registry into this network.
-The names of the registries should correspond to the kubeconfig file name
-inside the secret that was used to configure the registry (Kubernetes
-multicluster) or supplied by MCP server.</p>
+The names of the registries should correspond to the secret name
+that was used to configure the registry (Kubernetes multicluster) or
+supplied by MCP server.</p>
 
 </td>
 </tr>
