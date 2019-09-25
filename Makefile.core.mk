@@ -456,7 +456,16 @@ clean: \
 # CI System
 #####################
 
-presubmit: clean generate proto-commit lint release-lock-status
+CHANGES=$(shell git status --porcelain)
+
+check_clean:
+ifneq ($(CHANGES),)
+	@git diff
+	@echo "Please run make and include any changed files in your PR"
+	@exit 1
+endif
+
+presubmit: clean generate proto-commit lint release-lock-status check_clean
 postsubmit: presubmit
 
 #####################
