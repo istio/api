@@ -7,6 +7,7 @@
   "components": {
     "schemas": {
       "istio.networking.v1alpha3.Gateway": {
+        "description": "Gateway describes a load balancer operating at the edge of the mesh receiving incoming or outgoing HTTP/TCP connections.",
         "type": "object",
         "properties": {
           "servers": {

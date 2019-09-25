@@ -116,6 +116,14 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
+// Configuration affecting traffic routing.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type VirtualService struct {
 	// REQUIRED. The destination hosts to which traffic is being sent. Could
 	// be a DNS name with wildcard prefix or an IP address.  Depending on the

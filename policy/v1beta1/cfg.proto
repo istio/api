@@ -25,6 +25,13 @@ option go_package="istio.io/api/policy/v1beta1";
 
 // AttributeManifest describes a set of Attributes produced by some component
 // of an Istio deployment.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message AttributeManifest {
   // Optional. The revision of this document. Assigned by server.
   string revision = 1;
@@ -110,6 +117,13 @@ message AttributeManifest {
 //     instances:
 //     - RequestCountByService
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message Rule {
   // Required. Match is an attribute based predicate. When Mixer receives a
   // request it evaluates the match expression and executes all the associated `actions`
@@ -228,6 +242,13 @@ message Action {
 //       source: source.name
 //       destination_ip: destination.ip
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message Instance {
   // Required. The name of this instance
   //
@@ -321,6 +342,13 @@ message Instance {
 //       address: localhost:8090
 // ---
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message Handler {
   // Required. Must be unique in the entire Mixer configuration. Used by [Actions][istio.policy.v1beta1.Action.handler]
   // to refer to this handler.

@@ -41,6 +41,7 @@
         }
       },
       "istio.networking.v1alpha3.Sidecar": {
+        "description": "Sidecar describes the configuration of the sidecar proxy that mediates inbound and outbound communication of the workload instance to which it is attached.",
         "type": "object",
         "properties": {
           "workloadSelector": {

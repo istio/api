@@ -217,6 +217,15 @@ func (TLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_12899beb695152c8, []int{6, 0}
 }
 
+// DestinationRule defines policies that apply to traffic intended for a service
+// after routing has occurred.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type DestinationRule struct {
 	// REQUIRED. The name of a service from the service registry. Service
 	// names are looked up from the platform's service registry (e.g.,

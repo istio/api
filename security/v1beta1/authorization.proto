@@ -151,6 +151,13 @@ option go_package="istio.io/api/security/v1beta1";
 //  rules:
 //  - {}
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=security.istio.io/v1beta1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message AuthorizationPolicy {
   // Optional. Workload selector decides where to apply the authorization policy.
   // If not set, the authorization policy will be applied to all workloads in the

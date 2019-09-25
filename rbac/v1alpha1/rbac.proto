@@ -87,6 +87,13 @@ package istio.rbac.v1alpha1;
 option go_package="istio.io/api/rbac/v1alpha1";
 
 // ServiceRole specification contains a list of access rules (permissions).
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=rbac.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message ServiceRole {
   // Required. The set of access rules (permissions) that the role has.
   repeated AccessRule rules = 1;
@@ -186,6 +193,13 @@ enum EnforcementMode {
 }
 
 // ServiceRoleBinding assigns a ServiceRole to a list of subjects.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=rbac.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message ServiceRoleBinding {
   // Required. List of subjects that are assigned the ServiceRole object.
   repeated Subject subjects = 1;
@@ -322,6 +336,16 @@ message RoleRef {
 //   inclusion:
 //     namespaces: [ "default" ]
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=rbac.istio.io/v1alpha1
+// +kubetype-gen:kubeType=RbacConfig
+// +kubetype-gen:kubeType=ClusterRbacConfig
+// +kubetype-gen:ClusterRbacConfig:tag=genclient:nonNamespaced
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message RbacConfig {
   enum Mode {
     // Disable Istio RBAC completely, Istio RBAC policies will not be enforced.

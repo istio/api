@@ -424,6 +424,15 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_9220e0fa673c4bf8, []int{0, 1}
 }
 
+// ServiceEntry enables adding additional entries into Istio's internal
+// service registry.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type ServiceEntry struct {
 	// REQUIRED. The hosts associated with the ServiceEntry. Could be a DNS
 	// name with wildcard prefix.

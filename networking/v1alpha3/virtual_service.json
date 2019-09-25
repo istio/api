@@ -17,6 +17,7 @@
         }
       },
       "istio.networking.v1alpha3.VirtualService": {
+        "description": "Configuration affecting traffic routing.",
         "type": "object",
         "properties": {
           "exportTo": {

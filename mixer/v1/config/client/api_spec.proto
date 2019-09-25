@@ -83,6 +83,13 @@ option (gogoproto.stable_marshaler_all) = true;
 //   apiKeys:
 //   - query: api-key
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message HTTPAPISpec {
   // List of attributes that are generated when *any* of the HTTP
   // patterns match. This list typically includes the "api.service"
@@ -230,6 +237,13 @@ message HTTPAPISpecReference {
 //   - name: petstore
 //     namespace: default
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message HTTPAPISpecBinding {
   // REQUIRED. One or more services to map the listed HTTPAPISpec onto.
   repeated IstioService services = 1;
