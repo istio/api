@@ -56,10 +56,6 @@ message MeshConfig {
 
 // Configuration options for traffic management.
 message TrafficManagementFeatureSpec {
-  // Selects whether traffic management is installed.
-  // Must be enabled to enable any sub-component.
-  google.protobuf.BoolValue enabled = 1;
-
   // Address of the server that will be used by the proxies for policy report
   // calls.
   string mixer_report_server = 10;
@@ -117,6 +113,9 @@ message TrafficManagementFeatureSpec {
   // It can be enabled by destination using the destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy override.
   H2UpgradePolicy h2_upgrade_policy = 21;
 
+  // Locality based load balancing distribution or failover settings.
+  LocalityLoadBalancerSetting locality_lb_setting = 22;
+
   // Component specific config.
   message Components {
     // Namespace that all traffic management components are installed into.
@@ -130,10 +129,6 @@ message TrafficManagementFeatureSpec {
 
 // Configuration options for the policy feature.
 message PolicyFeatureSpec {
-  // Selects whether policy is installed.
-  // Must be enabled to enable any sub-component.
-  google.protobuf.BoolValue enabled = 1;
-
   // Disable policy checks by the Mixer service. Default
   // is false, i.e. Mixer policy check is enabled by default.
   bool disable_policy_checks = 11;
@@ -224,10 +219,6 @@ message PolicyFeatureSpec {
 
 // Configuration options for the telemetry feature.
 message TelemetryFeatureSpec {
-  // Selects whether telemetry is installed.
-  // Must be enabled to enable any sub-component.
-  google.protobuf.BoolValue enabled = 1;
-
   // Address of the server that will be used by the proxies for policy
   // check calls. By using different names for mixerCheckServer and
   // mixerReportServer, it is possible to have one set of Mixer servers handle
@@ -300,9 +291,6 @@ message TelemetryFeatureSpec {
 
 // Configuration options for security feature.
 message SecurityFeatureSpec {
-  // Selects whether security feature is installed. Must be set for any sub-component to be installed.
-  google.protobuf.BoolValue enabled = 1;
-
   // This flag is used to enable mutual TLS automatically for service to service communication
   // within the mesh, default false.
   // If set to true, and a given service does not have a corresponding DestinationRule configured,
@@ -352,9 +340,6 @@ message SecurityFeatureSpec {
 
 // Configuration options for configuration management feature.
 message ConfigManagementFeatureSpec {
-  // Selects whether config management feature is installed. Must be set for any sub-component to be installed.
-  google.protobuf.BoolValue enabled = 1;
-
   message Components {
     // Namespace that security components are installed into.
     string namespace = 1;
@@ -367,9 +352,6 @@ message ConfigManagementFeatureSpec {
 
 // Configuration options for auto injection feature.
 message AutoInjectionFeatureSpec {
-  // Selects whether auto injection feature is installed. Must be set for any sub-component to be installed.
-  google.protobuf.BoolValue enabled = 1;
-
   message Components {
     // Namespace that auto injections components are installed into.
     string namespace = 1;
@@ -382,9 +364,6 @@ message AutoInjectionFeatureSpec {
 
 // Configuration options for gateway feature.
 message GatewayFeatureSpec {
-  // Selects whether gateway feature is installed. Must be set for any sub-component to be installed.
-  google.protobuf.BoolValue enabled = 1;
-
   // Class of ingress resources to be processed by Istio ingress
   // controller. This corresponds to the value of
   // "kubernetes.io/ingress.class" annotation.
@@ -414,9 +393,6 @@ message GatewayFeatureSpec {
 
   // Defines whether to use Istio ingress controller for annotated or all ingress resources.
   IngressControllerMode ingress_controller_mode = 12;
-
-  // Locality based load balancing distribution or failover settings.
-  LocalityLoadBalancerSetting locality_lb_setting = 13;
 
   message Components {
     // Namespace that auto injections components are installed into.
@@ -494,7 +470,6 @@ message PilotComponentSpec {
 
 // Configuration options for the proxy.
 message ProxyComponentSpec {
-  google.protobuf.BoolValue enabled = 1;
   string namespace = 2;
 
   // Default proxy config used by the proxy injection mechanism operating in the mesh
