@@ -4,7 +4,7 @@ description: Configuration affecting service registry.
 location: https://istio.io/docs/reference/config/networking/v1alpha3/service-entry.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 4
+number_of_entries: 3
 ---
 <p><code>ServiceEntry</code> enables adding additional entries into Istio&rsquo;s internal
 service registry, so that auto-discovered services in the mesh can
@@ -27,7 +27,6 @@ spec:
   - api.dropboxapi.com
   - www.googleapis.com
   - api.facebook.com
-  location: MESH_EXTERNAL
   ports:
   - number: 443
     name: https
@@ -53,7 +52,6 @@ spec:
   - number: 27018
     name: mongodb
     protocol: MONGO
-  location: MESH_INTERNAL
   resolution: STATIC
   endpoints:
   - address: 2.2.2.2
@@ -88,7 +86,6 @@ spec:
   hosts:
   - wikipedia.org
   - &quot;*.wikipedia.org&quot;
-  location: MESH_EXTERNAL
   ports:
   - number: 443
     name: https
@@ -138,7 +135,6 @@ spec:
   - httpbin.com
   exportTo:
   - &quot;.&quot;
-  location: MESH_EXTERNAL
   ports:
   - number: 80
     name: http
@@ -214,7 +210,6 @@ metadata:
 spec:
   hosts:
   - &quot;*.bar.com&quot;
-  location: MESH_EXTERNAL
   ports:
   - number: 80
     name: http
@@ -233,7 +228,6 @@ metadata:
 spec:
   hosts:
   - &quot;example.unix.local&quot;
-  location: MESH_EXTERNAL
   ports:
   - number: 80
     name: http
@@ -258,7 +252,6 @@ metadata:
 spec:
   hosts:
   - foo.bar.com
-  location: MESH_EXTERNAL
   ports:
   - number: 80
     name: http
@@ -293,7 +286,6 @@ metadata:
 spec:
   hosts:
   - httpbin.com
-  location: MESH_INTERNAL
   ports:
   - number: 80
     name: http
@@ -368,15 +360,6 @@ addresses are not supported in this field.</p>
 <p>REQUIRED. The ports associated with the external service. If the
 Endpoints are Unix domain socket addresses, there must be exactly one
 port.</p>
-
-</td>
-</tr>
-<tr id="ServiceEntry-location">
-<td><code>location</code></td>
-<td><code><a href="#ServiceEntry-Location">ServiceEntry.Location</a></code></td>
-<td>
-<p>Specify whether the service should be considered external to the mesh
-or part of the mesh.</p>
 
 </td>
 </tr>
@@ -528,44 +511,6 @@ standard service endpoint.</p>
 <td>
 <p>The load balancing weight associated with the endpoint. Endpoints
 with higher weights will receive proportionally higher traffic.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="ServiceEntry-Location">ServiceEntry.Location</h2>
-<section>
-<p>Location specifies whether the service is part of Istio mesh or
-outside the mesh.  Location determines the behavior of several
-features, such as service-to-service mTLS authentication, policy
-enforcement, etc. When communicating with services outside the mesh,
-Istio&rsquo;s mTLS authentication is disabled, and policy enforcement is
-performed on the client-side as opposed to server-side.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="ServiceEntry-Location-MESH_EXTERNAL">
-<td><code>MESH_EXTERNAL</code></td>
-<td>
-<p>Signifies that the service is external to the mesh. Typically used
-to indicate external services consumed through APIs.</p>
-
-</td>
-</tr>
-<tr id="ServiceEntry-Location-MESH_INTERNAL">
-<td><code>MESH_INTERNAL</code></td>
-<td>
-<p>Signifies that the service is part of the mesh. Typically used to
-indicate services added explicitly as part of expanding the service
-mesh to include unmanaged infrastructure (e.g., VMs added to a
-Kubernetes based service mesh).</p>
 
 </td>
 </tr>

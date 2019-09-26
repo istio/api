@@ -23,7 +23,6 @@
 //   - api.dropboxapi.com
 //   - www.googleapis.com
 //   - api.facebook.com
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 443
 //     name: https
@@ -50,7 +49,6 @@
 //   - number: 27018
 //     name: mongodb
 //     protocol: MONGO
-//   location: MESH_INTERNAL
 //   resolution: STATIC
 //   endpoints:
 //   - address: 2.2.2.2
@@ -87,7 +85,6 @@
 //   hosts:
 //   - wikipedia.org
 //   - "*.wikipedia.org"
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 443
 //     name: https
@@ -139,7 +136,6 @@
 //   - httpbin.com
 //   exportTo:
 //   - "."
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 80
 //     name: http
@@ -218,7 +214,6 @@
 // spec:
 //   hosts:
 //   - "*.bar.com"
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 80
 //     name: http
@@ -238,7 +233,6 @@
 // spec:
 //   hosts:
 //   - "example.unix.local"
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 80
 //     name: http
@@ -264,7 +258,6 @@
 // spec:
 //   hosts:
 //   - foo.bar.com
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 80
 //     name: http
@@ -300,7 +293,6 @@
 // spec:
 //   hosts:
 //   - httpbin.com
-//   location: MESH_INTERNAL
 //   ports:
 //   - number: 80
 //     name: http
@@ -341,6 +333,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // enforcement, etc. When communicating with services outside the mesh,
 // Istio's mTLS authentication is disabled, and policy enforcement is
 // performed on the client-side as opposed to server-side.
+// $hide_from_docs
 type ServiceEntry_Location int32
 
 const (
@@ -467,6 +460,7 @@ type ServiceEntry struct {
 	Ports []*Port `protobuf:"bytes,3,rep,name=ports,proto3" json:"ports,omitempty"`
 	// Specify whether the service should be considered external to the mesh
 	// or part of the mesh.
+	// $hide_from_docs
 	Location ServiceEntry_Location `protobuf:"varint,4,opt,name=location,proto3,enum=istio.networking.v1alpha3.ServiceEntry_Location" json:"location,omitempty"`
 	// REQUIRED: Service discovery mode for the hosts. Care must be taken
 	// when setting the resolution mode to NONE for a TCP port without

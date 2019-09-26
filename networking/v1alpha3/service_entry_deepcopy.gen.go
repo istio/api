@@ -23,7 +23,6 @@
 //   - api.dropboxapi.com
 //   - www.googleapis.com
 //   - api.facebook.com
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 443
 //     name: https
@@ -50,7 +49,6 @@
 //   - number: 27018
 //     name: mongodb
 //     protocol: MONGO
-//   location: MESH_INTERNAL
 //   resolution: STATIC
 //   endpoints:
 //   - address: 2.2.2.2
@@ -87,7 +85,6 @@
 //   hosts:
 //   - wikipedia.org
 //   - "*.wikipedia.org"
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 443
 //     name: https
@@ -139,7 +136,6 @@
 //   - httpbin.com
 //   exportTo:
 //   - "."
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 80
 //     name: http
@@ -218,7 +214,6 @@
 // spec:
 //   hosts:
 //   - "*.bar.com"
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 80
 //     name: http
@@ -238,7 +233,6 @@
 // spec:
 //   hosts:
 //   - "example.unix.local"
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 80
 //     name: http
@@ -264,7 +258,6 @@
 // spec:
 //   hosts:
 //   - foo.bar.com
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 80
 //     name: http
@@ -300,7 +293,6 @@
 // spec:
 //   hosts:
 //   - httpbin.com
-//   location: MESH_INTERNAL
 //   ports:
 //   - number: 80
 //     name: http

@@ -42,7 +42,6 @@ import "networking/v1alpha3/gateway.proto";
 //   - api.dropboxapi.com
 //   - www.googleapis.com
 //   - api.facebook.com
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 443
 //     name: https
@@ -69,7 +68,6 @@ import "networking/v1alpha3/gateway.proto";
 //   - number: 27018
 //     name: mongodb
 //     protocol: MONGO
-//   location: MESH_INTERNAL
 //   resolution: STATIC
 //   endpoints:
 //   - address: 2.2.2.2
@@ -106,7 +104,6 @@ import "networking/v1alpha3/gateway.proto";
 //   hosts:
 //   - wikipedia.org
 //   - "*.wikipedia.org"
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 443
 //     name: https
@@ -158,7 +155,6 @@ import "networking/v1alpha3/gateway.proto";
 //   - httpbin.com
 //   exportTo:
 //   - "."
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 80
 //     name: http
@@ -237,7 +233,6 @@ import "networking/v1alpha3/gateway.proto";
 // spec:
 //   hosts:
 //   - "*.bar.com"
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 80
 //     name: http
@@ -257,7 +252,6 @@ import "networking/v1alpha3/gateway.proto";
 // spec:
 //   hosts:
 //   - "example.unix.local"
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 80
 //     name: http
@@ -283,7 +277,6 @@ import "networking/v1alpha3/gateway.proto";
 // spec:
 //   hosts:
 //   - foo.bar.com
-//   location: MESH_EXTERNAL
 //   ports:
 //   - number: 80
 //     name: http
@@ -319,7 +312,6 @@ import "networking/v1alpha3/gateway.proto";
 // spec:
 //   hosts:
 //   - httpbin.com
-//   location: MESH_INTERNAL
 //   ports:
 //   - number: 80
 //     name: http
@@ -386,6 +378,7 @@ message ServiceEntry {
   // enforcement, etc. When communicating with services outside the mesh,
   // Istio's mTLS authentication is disabled, and policy enforcement is
   // performed on the client-side as opposed to server-side.
+  // $hide_from_docs
   enum Location {
     // Signifies that the service is external to the mesh. Typically used
     // to indicate external services consumed through APIs.
@@ -400,6 +393,7 @@ message ServiceEntry {
 
   // Specify whether the service should be considered external to the mesh
   // or part of the mesh.
+  // $hide_from_docs
   Location location = 4;
 
   // Resolution determines how the proxy will resolve the IP addresses of
