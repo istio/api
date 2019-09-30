@@ -142,17 +142,6 @@ func (this *HTTPFaultInjection_Abort) UnmarshalJSON(b []byte) error {
 	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler supporting oneof fields for PortSelector
-func (this *PortSelector) MarshalJSON() ([]byte, error) {
-	str, err := VirtualServiceMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler supporting oneof fields for PortSelector
-func (this *PortSelector) UnmarshalJSON(b []byte) error {
-	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
 var (
 	VirtualServiceMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
 	VirtualServiceUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}

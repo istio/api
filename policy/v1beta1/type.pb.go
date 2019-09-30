@@ -28,7 +28,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // An instance field of type Value denotes that the expression for the field is of dynamic type and can evaluate to any
 // [ValueType][istio.policy.v1beta1.ValueType] enum values. For example, when
@@ -224,9 +224,9 @@ func (m *Value) GetStringMapValue() *StringMap {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*Value) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _Value_OneofMarshaler, _Value_OneofUnmarshaler, _Value_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*Value) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*Value_StringValue)(nil),
 		(*Value_Int64Value)(nil),
 		(*Value_DoubleValue)(nil),
@@ -239,219 +239,6 @@ func (*Value) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, 
 		(*Value_UriValue)(nil),
 		(*Value_StringMapValue)(nil),
 	}
-}
-
-func _Value_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*Value)
-	// value
-	switch x := m.Value.(type) {
-	case *Value_StringValue:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.StringValue)
-	case *Value_Int64Value:
-		_ = b.EncodeVarint(2<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(uint64(x.Int64Value))
-	case *Value_DoubleValue:
-		_ = b.EncodeVarint(3<<3 | proto.WireFixed64)
-		_ = b.EncodeFixed64(math.Float64bits(x.DoubleValue))
-	case *Value_BoolValue:
-		t := uint64(0)
-		if x.BoolValue {
-			t = 1
-		}
-		_ = b.EncodeVarint(4<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *Value_IpAddressValue:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.IpAddressValue); err != nil {
-			return err
-		}
-	case *Value_TimestampValue:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.TimestampValue); err != nil {
-			return err
-		}
-	case *Value_DurationValue:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DurationValue); err != nil {
-			return err
-		}
-	case *Value_EmailAddressValue:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EmailAddressValue); err != nil {
-			return err
-		}
-	case *Value_DnsNameValue:
-		_ = b.EncodeVarint(9<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DnsNameValue); err != nil {
-			return err
-		}
-	case *Value_UriValue:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.UriValue); err != nil {
-			return err
-		}
-	case *Value_StringMapValue:
-		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StringMapValue); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("Value.Value has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _Value_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*Value)
-	switch tag {
-	case 1: // value.string_value
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Value = &Value_StringValue{x}
-		return true, err
-	case 2: // value.int64_value
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Value = &Value_Int64Value{int64(x)}
-		return true, err
-	case 3: // value.double_value
-		if wire != proto.WireFixed64 {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeFixed64()
-		m.Value = &Value_DoubleValue{math.Float64frombits(x)}
-		return true, err
-	case 4: // value.bool_value
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Value = &Value_BoolValue{x != 0}
-		return true, err
-	case 5: // value.ip_address_value
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(IPAddress)
-		err := b.DecodeMessage(msg)
-		m.Value = &Value_IpAddressValue{msg}
-		return true, err
-	case 6: // value.timestamp_value
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(TimeStamp)
-		err := b.DecodeMessage(msg)
-		m.Value = &Value_TimestampValue{msg}
-		return true, err
-	case 7: // value.duration_value
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(Duration)
-		err := b.DecodeMessage(msg)
-		m.Value = &Value_DurationValue{msg}
-		return true, err
-	case 8: // value.email_address_value
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(EmailAddress)
-		err := b.DecodeMessage(msg)
-		m.Value = &Value_EmailAddressValue{msg}
-		return true, err
-	case 9: // value.dns_name_value
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(DNSName)
-		err := b.DecodeMessage(msg)
-		m.Value = &Value_DnsNameValue{msg}
-		return true, err
-	case 10: // value.uri_value
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(Uri)
-		err := b.DecodeMessage(msg)
-		m.Value = &Value_UriValue{msg}
-		return true, err
-	case 11: // value.string_map_value
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(StringMap)
-		err := b.DecodeMessage(msg)
-		m.Value = &Value_StringMapValue{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _Value_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*Value)
-	// value
-	switch x := m.Value.(type) {
-	case *Value_StringValue:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.StringValue)))
-		n += len(x.StringValue)
-	case *Value_Int64Value:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(x.Int64Value))
-	case *Value_DoubleValue:
-		n += 1 // tag and wire
-		n += 8
-	case *Value_BoolValue:
-		n += 1 // tag and wire
-		n += 1
-	case *Value_IpAddressValue:
-		s := proto.Size(x.IpAddressValue)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Value_TimestampValue:
-		s := proto.Size(x.TimestampValue)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Value_DurationValue:
-		s := proto.Size(x.DurationValue)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Value_EmailAddressValue:
-		s := proto.Size(x.EmailAddressValue)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Value_DnsNameValue:
-		s := proto.Size(x.DnsNameValue)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Value_UriValue:
-		s := proto.Size(x.UriValue)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Value_StringMapValue:
-		s := proto.Size(x.StringMapValue)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // An instance field of type IPAddress denotes that the expression for the field must evaluate to

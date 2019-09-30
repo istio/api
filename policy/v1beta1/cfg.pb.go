@@ -29,7 +29,7 @@ var _ = time.Kitchen
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Header operation type.
 type Rule_HeaderOperationTemplate_Operation int32
@@ -1250,78 +1250,12 @@ func (m *Authentication) GetMutual() *Mutual {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*Authentication) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _Authentication_OneofMarshaler, _Authentication_OneofUnmarshaler, _Authentication_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*Authentication) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*Authentication_Tls)(nil),
 		(*Authentication_Mutual)(nil),
 	}
-}
-
-func _Authentication_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*Authentication)
-	// auth_type
-	switch x := m.AuthType.(type) {
-	case *Authentication_Tls:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Tls); err != nil {
-			return err
-		}
-	case *Authentication_Mutual:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Mutual); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("Authentication.AuthType has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _Authentication_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*Authentication)
-	switch tag {
-	case 1: // auth_type.tls
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(Tls)
-		err := b.DecodeMessage(msg)
-		m.AuthType = &Authentication_Tls{msg}
-		return true, err
-	case 2: // auth_type.mutual
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(Mutual)
-		err := b.DecodeMessage(msg)
-		m.AuthType = &Authentication_Mutual{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _Authentication_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*Authentication)
-	// auth_type
-	switch x := m.AuthType.(type) {
-	case *Authentication_Tls:
-		s := proto.Size(x.Tls)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Authentication_Mutual:
-		s := proto.Size(x.Mutual)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Tls let operator specify client authentication setting when TLS is used for
@@ -1465,115 +1399,14 @@ func (m *Tls) GetServerName() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*Tls) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _Tls_OneofMarshaler, _Tls_OneofUnmarshaler, _Tls_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*Tls) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*Tls_TokenPath)(nil),
 		(*Tls_Oauth)(nil),
 		(*Tls_AuthHeader_)(nil),
 		(*Tls_CustomHeader)(nil),
 	}
-}
-
-func _Tls_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*Tls)
-	// token_source
-	switch x := m.TokenSource.(type) {
-	case *Tls_TokenPath:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.TokenPath)
-	case *Tls_Oauth:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Oauth); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("Tls.TokenSource has unexpected type %T", x)
-	}
-	// token_type
-	switch x := m.TokenType.(type) {
-	case *Tls_AuthHeader_:
-		_ = b.EncodeVarint(4<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(uint64(x.AuthHeader))
-	case *Tls_CustomHeader:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.CustomHeader)
-	case nil:
-	default:
-		return fmt.Errorf("Tls.TokenType has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _Tls_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*Tls)
-	switch tag {
-	case 2: // token_source.token_path
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.TokenSource = &Tls_TokenPath{x}
-		return true, err
-	case 3: // token_source.oauth
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(OAuth)
-		err := b.DecodeMessage(msg)
-		m.TokenSource = &Tls_Oauth{msg}
-		return true, err
-	case 4: // token_type.auth_header
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.TokenType = &Tls_AuthHeader_{Tls_AuthHeader(x)}
-		return true, err
-	case 5: // token_type.custom_header
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.TokenType = &Tls_CustomHeader{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _Tls_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*Tls)
-	// token_source
-	switch x := m.TokenSource.(type) {
-	case *Tls_TokenPath:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.TokenPath)))
-		n += len(x.TokenPath)
-	case *Tls_Oauth:
-		s := proto.Size(x.Oauth)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// token_type
-	switch x := m.TokenType.(type) {
-	case *Tls_AuthHeader_:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(x.AuthHeader))
-	case *Tls_CustomHeader:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.CustomHeader)))
-		n += len(x.CustomHeader)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // OAuth let operator specify config to fetch access token via oauth when using

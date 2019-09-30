@@ -198,7 +198,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // ApplyTo specifies where in the Envoy configuration, the given patch should be applied.
 type EnvoyFilter_ApplyTo int32
@@ -1755,97 +1755,13 @@ func (m *EnvoyFilter_EnvoyConfigObjectMatch) GetCluster() *EnvoyFilter_ClusterMa
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*EnvoyFilter_EnvoyConfigObjectMatch) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _EnvoyFilter_EnvoyConfigObjectMatch_OneofMarshaler, _EnvoyFilter_EnvoyConfigObjectMatch_OneofUnmarshaler, _EnvoyFilter_EnvoyConfigObjectMatch_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*EnvoyFilter_EnvoyConfigObjectMatch) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*EnvoyFilter_EnvoyConfigObjectMatch_Listener)(nil),
 		(*EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration)(nil),
 		(*EnvoyFilter_EnvoyConfigObjectMatch_Cluster)(nil),
 	}
-}
-
-func _EnvoyFilter_EnvoyConfigObjectMatch_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*EnvoyFilter_EnvoyConfigObjectMatch)
-	// object_types
-	switch x := m.ObjectTypes.(type) {
-	case *EnvoyFilter_EnvoyConfigObjectMatch_Listener:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Listener); err != nil {
-			return err
-		}
-	case *EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RouteConfiguration); err != nil {
-			return err
-		}
-	case *EnvoyFilter_EnvoyConfigObjectMatch_Cluster:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Cluster); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("EnvoyFilter_EnvoyConfigObjectMatch.ObjectTypes has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _EnvoyFilter_EnvoyConfigObjectMatch_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*EnvoyFilter_EnvoyConfigObjectMatch)
-	switch tag {
-	case 3: // object_types.listener
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(EnvoyFilter_ListenerMatch)
-		err := b.DecodeMessage(msg)
-		m.ObjectTypes = &EnvoyFilter_EnvoyConfigObjectMatch_Listener{msg}
-		return true, err
-	case 4: // object_types.route_configuration
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(EnvoyFilter_RouteConfigurationMatch)
-		err := b.DecodeMessage(msg)
-		m.ObjectTypes = &EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration{msg}
-		return true, err
-	case 5: // object_types.cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(EnvoyFilter_ClusterMatch)
-		err := b.DecodeMessage(msg)
-		m.ObjectTypes = &EnvoyFilter_EnvoyConfigObjectMatch_Cluster{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _EnvoyFilter_EnvoyConfigObjectMatch_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*EnvoyFilter_EnvoyConfigObjectMatch)
-	// object_types
-	switch x := m.ObjectTypes.(type) {
-	case *EnvoyFilter_EnvoyConfigObjectMatch_Listener:
-		s := proto.Size(x.Listener)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *EnvoyFilter_EnvoyConfigObjectMatch_RouteConfiguration:
-		s := proto.Size(x.RouteConfiguration)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *EnvoyFilter_EnvoyConfigObjectMatch_Cluster:
-		s := proto.Size(x.Cluster)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Changes to be made to various envoy config objects.

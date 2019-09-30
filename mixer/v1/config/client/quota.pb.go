@@ -24,7 +24,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Determines the quotas used for individual requests.
 //
@@ -191,85 +191,13 @@ func (m *StringMatch) GetRegex() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*StringMatch) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _StringMatch_OneofMarshaler, _StringMatch_OneofUnmarshaler, _StringMatch_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*StringMatch) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*StringMatch_Exact)(nil),
 		(*StringMatch_Prefix)(nil),
 		(*StringMatch_Regex)(nil),
 	}
-}
-
-func _StringMatch_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*StringMatch)
-	// match_type
-	switch x := m.MatchType.(type) {
-	case *StringMatch_Exact:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Exact)
-	case *StringMatch_Prefix:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Prefix)
-	case *StringMatch_Regex:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Regex)
-	case nil:
-	default:
-		return fmt.Errorf("StringMatch.MatchType has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _StringMatch_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*StringMatch)
-	switch tag {
-	case 1: // match_type.exact
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.MatchType = &StringMatch_Exact{x}
-		return true, err
-	case 2: // match_type.prefix
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.MatchType = &StringMatch_Prefix{x}
-		return true, err
-	case 3: // match_type.regex
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.MatchType = &StringMatch_Regex{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _StringMatch_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*StringMatch)
-	// match_type
-	switch x := m.MatchType.(type) {
-	case *StringMatch_Exact:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.Exact)))
-		n += len(x.Exact)
-	case *StringMatch_Prefix:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.Prefix)))
-		n += len(x.Prefix)
-	case *StringMatch_Regex:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.Regex)))
-		n += len(x.Regex)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Specifies a match clause to match Istio attributes
