@@ -336,8 +336,7 @@ type MeshConfig struct {
 	// The trust domain corresponds to the trust root of a system.
 	// Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)
 	TrustDomain string `protobuf:"bytes,26,opt,name=trust_domain,json=trustDomain,proto3" json:"trust_domain,omitempty"`
-	// The trust domain aliases represent the aliases of the local trust domain in the mesh.
-	// Any alias in the list of trust domain aliases is treated as the local trust domain.
+	// The trust domain aliases represent the aliases of trust_domain.
 	// For example, if we have
 	// trustDomain: td1
 	// trustDomainAliases: [“td2”, "td3"]

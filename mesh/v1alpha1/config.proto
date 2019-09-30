@@ -245,8 +245,7 @@ message MeshConfig {
   // Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)
   string trust_domain = 26;
 
-  // The trust domain aliases represent the aliases of the local trust domain in the mesh.
-  // Any alias in the list of trust domain aliases is treated as the local trust domain.
+  // The trust domain aliases represent the aliases of trust_domain.
   // For example, if we have
   // trustDomain: td1
   // trustDomainAliases: [“td2”, "td3"]
