@@ -243,8 +243,17 @@ message MeshConfig {
 
   // The trust domain corresponds to the trust root of a system.
   // Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)
-  // Fallback to old identity format(without trust domain) if not set.
   string trust_domain = 26;
+
+  // The trust domain aliases represent the aliases of `trust_domain`.
+  // For example, if we have
+  // ```yaml
+  // trustDomain: td1
+  // trustDomainAliases: [“td2”, "td3"]
+  // ```
+  // Any service with the identity `td1/ns/foo/sa/a-service-account`, `td2/ns/foo/sa/a-service-account`,
+  // or `td3/ns/foo/sa/a-service-account` will be treated the same in the Istio mesh.
+  repeated string trust_domain_aliases = 46;
 
   // The default value for the ServiceEntry.export_to field and services
   // imported through container registry integrations, e.g. this applies to
@@ -331,7 +340,7 @@ message MeshConfig {
   // It can be enabled by destination using the destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy override.
   H2UpgradePolicy h2_upgrade_policy = 41;
 
-  // Name to be used while emitting statistics for inbound clusters. 
+  // Name to be used while emitting statistics for inbound clusters.
   // By default, Istio emits statistics with the pattern inbound|<port>|<port-name>|<service-FQDN>.
   // For example inbound|7443|grpc-reviews|reviews.prod.svc.cluster.local. This can be used to override that pattern.
   //
@@ -340,13 +349,13 @@ message MeshConfig {
   // %SERVICE_FQDN% - Will be substituted with FQDN of the service.
   // %SERVICE_PORT% - Will be substituted with port of the service.
   // %SERVICE_PORT_NAME% - Will be substituted with port name of the service.
-  //  
+  //
   // Following are some examples of supported patterns for reviews.
   // %SERVICE_FQDN%_%SERVICE_PORT% will use reviews.prod.svc.cluster.local_7443 as the stats name.
   // %SERVICE% will use reviews.prod as the stats name.
   string inbound_cluster_stat_name = 44;
 
-  // Name to be used while emitting statistics for outbound clusters. 
+  // Name to be used while emitting statistics for outbound clusters.
   // By default, Istio emits statistics with the pattern outbound|<port>|<subsetname>|<service-FQDN>.
   // For example outbound|8080|v2|reviews.prod.svc.cluster.local. This can be used to override that pattern.
   //
@@ -356,14 +365,14 @@ message MeshConfig {
   // %SERVICE_PORT% - Will be substituted with port of the service.
   // %SERVICE_PORT_NAME% - Will be substituted with port name of the service.
   // %SUBSET_NAME% - Will be substituted with subset.
-  //  
+  //
   // Following are some examples of supported patterns for reviews.
   // %SERVICE_FQDN%_%SERVICE_PORT% will use reviews.prod.svc.cluster.local_7443 as the stats name.
   // %SERVICE% will use reviews.prod as the stats name.
   string outbound_cluster_stat_name = 45;
 
   // $hide_from_docs
-  // Next available field number: 46
+  // Next available field number: 47
 }
 
 // Resource describes the source of configuration

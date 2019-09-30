@@ -35893,6 +35893,12 @@
                 "type": "string"
               },
               {
+                "id": 46,
+                "name": "trust_domain_aliases",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
                 "id": 31,
                 "name": "default_service_export_to",
                 "type": "string",
@@ -40565,12 +40571,13 @@
                 "id": 1,
                 "name": "number",
                 "type": "uint32"
-              },
-              {
-                "id": 2,
-                "name": "name",
-                "type": "string"
               }
+            ],
+            "reserved_ids": [
+              2
+            ],
+            "reserved_names": [
+              "name"
             ]
           },
           {

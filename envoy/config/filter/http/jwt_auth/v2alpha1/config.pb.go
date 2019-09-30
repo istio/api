@@ -21,7 +21,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Copied from @envoy/api/envoy/api/v2/core/http_uri.proto
 // Envoy external URI descriptor
@@ -123,55 +123,11 @@ func (m *HttpUri) GetTimeout() *types.Duration {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*HttpUri) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _HttpUri_OneofMarshaler, _HttpUri_OneofUnmarshaler, _HttpUri_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*HttpUri) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*HttpUri_Cluster)(nil),
 	}
-}
-
-func _HttpUri_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*HttpUri)
-	// http_upstream_type
-	switch x := m.HttpUpstreamType.(type) {
-	case *HttpUri_Cluster:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Cluster)
-	case nil:
-	default:
-		return fmt.Errorf("HttpUri.HttpUpstreamType has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _HttpUri_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*HttpUri)
-	switch tag {
-	case 2: // http_upstream_type.cluster
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.HttpUpstreamType = &HttpUri_Cluster{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _HttpUri_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*HttpUri)
-	// http_upstream_type
-	switch x := m.HttpUpstreamType.(type) {
-	case *HttpUri_Cluster:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.Cluster)))
-		n += len(x.Cluster)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Copied from @envoy/api/envoy/api/v2/core/base.proto
@@ -268,85 +224,13 @@ func (m *DataSource) GetInlineString() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*DataSource) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _DataSource_OneofMarshaler, _DataSource_OneofUnmarshaler, _DataSource_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*DataSource) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*DataSource_Filename)(nil),
 		(*DataSource_InlineBytes)(nil),
 		(*DataSource_InlineString)(nil),
 	}
-}
-
-func _DataSource_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*DataSource)
-	// specifier
-	switch x := m.Specifier.(type) {
-	case *DataSource_Filename:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Filename)
-	case *DataSource_InlineBytes:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeRawBytes(x.InlineBytes)
-	case *DataSource_InlineString:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.InlineString)
-	case nil:
-	default:
-		return fmt.Errorf("DataSource.Specifier has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _DataSource_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*DataSource)
-	switch tag {
-	case 1: // specifier.filename
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Specifier = &DataSource_Filename{x}
-		return true, err
-	case 2: // specifier.inline_bytes
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeRawBytes(true)
-		m.Specifier = &DataSource_InlineBytes{x}
-		return true, err
-	case 3: // specifier.inline_string
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Specifier = &DataSource_InlineString{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _DataSource_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*DataSource)
-	// specifier
-	switch x := m.Specifier.(type) {
-	case *DataSource_Filename:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.Filename)))
-		n += len(x.Filename)
-	case *DataSource_InlineBytes:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.InlineBytes)))
-		n += len(x.InlineBytes)
-	case *DataSource_InlineString:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.InlineString)))
-		n += len(x.InlineString)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // This message specifies how a JSON Web Token (JWT) can be verified. See the [JWT format definition](https://tools.ietf.org/html/rfc7519)
@@ -553,78 +437,12 @@ func (m *JwtRule) GetForwardPayloadHeader() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*JwtRule) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _JwtRule_OneofMarshaler, _JwtRule_OneofUnmarshaler, _JwtRule_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*JwtRule) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*JwtRule_RemoteJwks)(nil),
 		(*JwtRule_LocalJwks)(nil),
 	}
-}
-
-func _JwtRule_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*JwtRule)
-	// jwks_source_specifier
-	switch x := m.JwksSourceSpecifier.(type) {
-	case *JwtRule_RemoteJwks:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RemoteJwks); err != nil {
-			return err
-		}
-	case *JwtRule_LocalJwks:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LocalJwks); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("JwtRule.JwksSourceSpecifier has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _JwtRule_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*JwtRule)
-	switch tag {
-	case 3: // jwks_source_specifier.remote_jwks
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(RemoteJwks)
-		err := b.DecodeMessage(msg)
-		m.JwksSourceSpecifier = &JwtRule_RemoteJwks{msg}
-		return true, err
-	case 4: // jwks_source_specifier.local_jwks
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(DataSource)
-		err := b.DecodeMessage(msg)
-		m.JwksSourceSpecifier = &JwtRule_LocalJwks{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _JwtRule_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*JwtRule)
-	// jwks_source_specifier
-	switch x := m.JwksSourceSpecifier.(type) {
-	case *JwtRule_RemoteJwks:
-		s := proto.Size(x.RemoteJwks)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *JwtRule_LocalJwks:
-		s := proto.Size(x.LocalJwks)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // This message specifies how to fetch JWKS from remote and how to cache it.

@@ -20,7 +20,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Network provides information about the endpoints in a routable L3
 // network. A single routable L3 network can have one or more service
@@ -186,70 +186,12 @@ func (m *Network_NetworkEndpoints) GetFromRegistry() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*Network_NetworkEndpoints) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _Network_NetworkEndpoints_OneofMarshaler, _Network_NetworkEndpoints_OneofUnmarshaler, _Network_NetworkEndpoints_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*Network_NetworkEndpoints) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*Network_NetworkEndpoints_FromCidr)(nil),
 		(*Network_NetworkEndpoints_FromRegistry)(nil),
 	}
-}
-
-func _Network_NetworkEndpoints_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*Network_NetworkEndpoints)
-	// ne
-	switch x := m.Ne.(type) {
-	case *Network_NetworkEndpoints_FromCidr:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.FromCidr)
-	case *Network_NetworkEndpoints_FromRegistry:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.FromRegistry)
-	case nil:
-	default:
-		return fmt.Errorf("Network_NetworkEndpoints.Ne has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _Network_NetworkEndpoints_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*Network_NetworkEndpoints)
-	switch tag {
-	case 1: // ne.from_cidr
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Ne = &Network_NetworkEndpoints_FromCidr{x}
-		return true, err
-	case 2: // ne.from_registry
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Ne = &Network_NetworkEndpoints_FromRegistry{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _Network_NetworkEndpoints_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*Network_NetworkEndpoints)
-	// ne
-	switch x := m.Ne.(type) {
-	case *Network_NetworkEndpoints_FromCidr:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.FromCidr)))
-		n += len(x.FromCidr)
-	case *Network_NetworkEndpoints_FromRegistry:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.FromRegistry)))
-		n += len(x.FromRegistry)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // The gateway associated with this network. Traffic from remote networks
@@ -353,70 +295,12 @@ func (m *Network_IstioNetworkGateway) GetLocality() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*Network_IstioNetworkGateway) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _Network_IstioNetworkGateway_OneofMarshaler, _Network_IstioNetworkGateway_OneofUnmarshaler, _Network_IstioNetworkGateway_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*Network_IstioNetworkGateway) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*Network_IstioNetworkGateway_RegistryServiceName)(nil),
 		(*Network_IstioNetworkGateway_Address)(nil),
 	}
-}
-
-func _Network_IstioNetworkGateway_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*Network_IstioNetworkGateway)
-	// gw
-	switch x := m.Gw.(type) {
-	case *Network_IstioNetworkGateway_RegistryServiceName:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.RegistryServiceName)
-	case *Network_IstioNetworkGateway_Address:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Address)
-	case nil:
-	default:
-		return fmt.Errorf("Network_IstioNetworkGateway.Gw has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _Network_IstioNetworkGateway_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*Network_IstioNetworkGateway)
-	switch tag {
-	case 1: // gw.registry_service_name
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Gw = &Network_IstioNetworkGateway_RegistryServiceName{x}
-		return true, err
-	case 2: // gw.address
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Gw = &Network_IstioNetworkGateway_Address{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _Network_IstioNetworkGateway_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*Network_IstioNetworkGateway)
-	// gw
-	switch x := m.Gw.(type) {
-	case *Network_IstioNetworkGateway_RegistryServiceName:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.RegistryServiceName)))
-		n += len(x.RegistryServiceName)
-	case *Network_IstioNetworkGateway_Address:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.Address)))
-		n += len(x.Address)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // MeshNetworks (config map) provides information about the set of networks
