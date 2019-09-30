@@ -22,7 +22,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // AuthenticationPolicy defines authentication policy. It can be set for
 // different scopes (mesh, service …), and the most narrow scope with
@@ -201,116 +201,14 @@ func (m *Tracing) GetStackdriver() *Tracing_Stackdriver {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*Tracing) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _Tracing_OneofMarshaler, _Tracing_OneofUnmarshaler, _Tracing_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*Tracing) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*Tracing_Zipkin_)(nil),
 		(*Tracing_Lightstep_)(nil),
 		(*Tracing_Datadog_)(nil),
 		(*Tracing_Stackdriver_)(nil),
 	}
-}
-
-func _Tracing_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*Tracing)
-	// tracer
-	switch x := m.Tracer.(type) {
-	case *Tracing_Zipkin_:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Zipkin); err != nil {
-			return err
-		}
-	case *Tracing_Lightstep_:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Lightstep); err != nil {
-			return err
-		}
-	case *Tracing_Datadog_:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Datadog); err != nil {
-			return err
-		}
-	case *Tracing_Stackdriver_:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Stackdriver); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("Tracing.Tracer has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _Tracing_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*Tracing)
-	switch tag {
-	case 1: // tracer.zipkin
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(Tracing_Zipkin)
-		err := b.DecodeMessage(msg)
-		m.Tracer = &Tracing_Zipkin_{msg}
-		return true, err
-	case 2: // tracer.lightstep
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(Tracing_Lightstep)
-		err := b.DecodeMessage(msg)
-		m.Tracer = &Tracing_Lightstep_{msg}
-		return true, err
-	case 3: // tracer.datadog
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(Tracing_Datadog)
-		err := b.DecodeMessage(msg)
-		m.Tracer = &Tracing_Datadog_{msg}
-		return true, err
-	case 4: // tracer.stackdriver
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(Tracing_Stackdriver)
-		err := b.DecodeMessage(msg)
-		m.Tracer = &Tracing_Stackdriver_{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _Tracing_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*Tracing)
-	// tracer
-	switch x := m.Tracer.(type) {
-	case *Tracing_Zipkin_:
-		s := proto.Size(x.Zipkin)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Tracing_Lightstep_:
-		s := proto.Size(x.Lightstep)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Tracing_Datadog_:
-		s := proto.Size(x.Datadog)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Tracing_Stackdriver_:
-		s := proto.Size(x.Stackdriver)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Zipkin defines configuration for a Zipkin tracer.

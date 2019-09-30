@@ -143,9 +143,17 @@
             "type": "boolean"
           },
           "trustDomain": {
-            "description": "The trust domain corresponds to the trust root of a system. Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain) Fallback to old identity format(without trust domain) if not set.",
+            "description": "The trust domain corresponds to the trust root of a system. Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)",
             "type": "string",
             "format": "string"
+          },
+          "trustDomainAliases": {
+            "description": "The trust domain aliases represent the aliases of the local trust domain in the mesh. Any alias in the list of trust domain aliases is treated as the local trust domain. For example, if we have trustDomain: td1 trustDomainAliases: [“td2”, \"td3\"] Any service with the identity \"td1/ns/foo/sa/a-service-account\", \"td2/ns/foo/sa/a-service-account\", or \"td3/ns/foo/sa/a-service-account\" will be treated the same in the Istio mesh.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
           },
           "defaultServiceExportTo": {
             "description": "The default value for the ServiceEntry.export_to field and services imported through container registry integrations, e.g. this applies to Kubernetes Service resources. The value is a list of namespace names and reserved namespace aliases. The allowed namespace aliases are: * - All Namespaces . - Current Namespace ~ - No Namespace",
