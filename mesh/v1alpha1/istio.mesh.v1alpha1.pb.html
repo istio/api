@@ -535,12 +535,15 @@ Refer to <a href="https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-
 <td><code>trustDomainAliases</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>The trust domain aliases represent the aliases of trust_domain.
-For example, if we have
-trustDomain: td1
-trustDomainAliases: [“td2”, &ldquo;td3&rdquo;]
-Any service with the identity &ldquo;td1/ns/foo/sa/a-service-account&rdquo;, &ldquo;td2/ns/foo/sa/a-service-account&rdquo;,
-or &ldquo;td3/ns/foo/sa/a-service-account&rdquo; will be treated the same in the Istio mesh.</p>
+<p>The trust domain aliases represent the aliases of <code>trust_domain</code>.
+For example, if we have</p>
+
+<pre><code class="language-yaml">trustDomain: td1
+trustDomainAliases: [“td2”, &quot;td3&quot;]
+</code></pre>
+
+<p>Any service with the identity <code>td1/ns/foo/sa/a-service-account</code>, <code>td2/ns/foo/sa/a-service-account</code>,
+or <code>td3/ns/foo/sa/a-service-account</code> will be treated the same in the Istio mesh.</p>
 
 </td>
 </tr>

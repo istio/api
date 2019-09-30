@@ -245,12 +245,14 @@ message MeshConfig {
   // Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)
   string trust_domain = 26;
 
-  // The trust domain aliases represent the aliases of trust_domain.
+  // The trust domain aliases represent the aliases of `trust_domain`.
   // For example, if we have
+  // ```yaml
   // trustDomain: td1
   // trustDomainAliases: [“td2”, "td3"]
-  // Any service with the identity "td1/ns/foo/sa/a-service-account", "td2/ns/foo/sa/a-service-account",
-  // or "td3/ns/foo/sa/a-service-account" will be treated the same in the Istio mesh.
+  // ```
+  // Any service with the identity `td1/ns/foo/sa/a-service-account`, `td2/ns/foo/sa/a-service-account`,
+  // or `td3/ns/foo/sa/a-service-account` will be treated the same in the Istio mesh.
   repeated string trust_domain_aliases = 46;
 
   // The default value for the ServiceEntry.export_to field and services

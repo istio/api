@@ -336,12 +336,14 @@ type MeshConfig struct {
 	// The trust domain corresponds to the trust root of a system.
 	// Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)
 	TrustDomain string `protobuf:"bytes,26,opt,name=trust_domain,json=trustDomain,proto3" json:"trust_domain,omitempty"`
-	// The trust domain aliases represent the aliases of trust_domain.
+	// The trust domain aliases represent the aliases of `trust_domain`.
 	// For example, if we have
+	// ```yaml
 	// trustDomain: td1
 	// trustDomainAliases: [“td2”, "td3"]
-	// Any service with the identity "td1/ns/foo/sa/a-service-account", "td2/ns/foo/sa/a-service-account",
-	// or "td3/ns/foo/sa/a-service-account" will be treated the same in the Istio mesh.
+	// ```
+	// Any service with the identity `td1/ns/foo/sa/a-service-account`, `td2/ns/foo/sa/a-service-account`,
+	// or `td3/ns/foo/sa/a-service-account` will be treated the same in the Istio mesh.
 	TrustDomainAliases []string `protobuf:"bytes,46,rep,name=trust_domain_aliases,json=trustDomainAliases,proto3" json:"trust_domain_aliases,omitempty"`
 	// The default value for the ServiceEntry.export_to field and services
 	// imported through container registry integrations, e.g. this applies to
