@@ -24,7 +24,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // HTTPAPISpec defines the canonical configuration for generating
 // API-related attributes from HTTP requests based on the method and
@@ -228,70 +228,12 @@ func (m *HTTPAPISpecPattern) GetRegex() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*HTTPAPISpecPattern) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _HTTPAPISpecPattern_OneofMarshaler, _HTTPAPISpecPattern_OneofUnmarshaler, _HTTPAPISpecPattern_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*HTTPAPISpecPattern) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*HTTPAPISpecPattern_UriTemplate)(nil),
 		(*HTTPAPISpecPattern_Regex)(nil),
 	}
-}
-
-func _HTTPAPISpecPattern_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*HTTPAPISpecPattern)
-	// pattern
-	switch x := m.Pattern.(type) {
-	case *HTTPAPISpecPattern_UriTemplate:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.UriTemplate)
-	case *HTTPAPISpecPattern_Regex:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Regex)
-	case nil:
-	default:
-		return fmt.Errorf("HTTPAPISpecPattern.Pattern has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _HTTPAPISpecPattern_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*HTTPAPISpecPattern)
-	switch tag {
-	case 3: // pattern.uri_template
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Pattern = &HTTPAPISpecPattern_UriTemplate{x}
-		return true, err
-	case 4: // pattern.regex
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Pattern = &HTTPAPISpecPattern_Regex{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _HTTPAPISpecPattern_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*HTTPAPISpecPattern)
-	// pattern
-	switch x := m.Pattern.(type) {
-	case *HTTPAPISpecPattern_UriTemplate:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.UriTemplate)))
-		n += len(x.UriTemplate)
-	case *HTTPAPISpecPattern_Regex:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.Regex)))
-		n += len(x.Regex)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // APIKey defines the explicit configuration for generating the
@@ -383,85 +325,13 @@ func (m *APIKey) GetCookie() string {
 	return ""
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*APIKey) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _APIKey_OneofMarshaler, _APIKey_OneofUnmarshaler, _APIKey_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*APIKey) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*APIKey_Query)(nil),
 		(*APIKey_Header)(nil),
 		(*APIKey_Cookie)(nil),
 	}
-}
-
-func _APIKey_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*APIKey)
-	// key
-	switch x := m.Key.(type) {
-	case *APIKey_Query:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Query)
-	case *APIKey_Header:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Header)
-	case *APIKey_Cookie:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Cookie)
-	case nil:
-	default:
-		return fmt.Errorf("APIKey.Key has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _APIKey_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*APIKey)
-	switch tag {
-	case 1: // key.query
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Key = &APIKey_Query{x}
-		return true, err
-	case 2: // key.header
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Key = &APIKey_Header{x}
-		return true, err
-	case 3: // key.cookie
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Key = &APIKey_Cookie{x}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _APIKey_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*APIKey)
-	// key
-	switch x := m.Key.(type) {
-	case *APIKey_Query:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.Query)))
-		n += len(x.Query)
-	case *APIKey_Header:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.Header)))
-		n += len(x.Header)
-	case *APIKey_Cookie:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.Cookie)))
-		n += len(x.Cookie)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // HTTPAPISpecReference defines a reference to an HTTPAPISpec. This is
