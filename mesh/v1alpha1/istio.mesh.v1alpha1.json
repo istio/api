@@ -37,6 +37,10 @@
             "description": "Disable policy checks by the Mixer service. Default is false, i.e. Mixer policy check is enabled by default.",
             "type": "boolean"
           },
+          "disableMixerHttpReports": {
+            "description": "Disable telemetry reporting by the Mixer service for HTTP traffic. Default is false (telemetry reporting via Mixer is enabled). This option provides a transition path for Istio extensibility v2.",
+            "type": "boolean"
+          },
           "policyCheckFailOpen": {
             "description": "Allow all traffic in cases when the Mixer policy service cannot be reached. Default is false which means the traffic is denied when the client is unable to connect to Mixer.",
             "type": "boolean"
