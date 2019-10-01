@@ -52,7 +52,7 @@
             ],
             "properties": {
               "regex": {
-                "description": "ECMAscript style regex-based match as defined by [EDCA-262]( http://en.cppreference.com/w/cpp/regex/ecmascript). Example: \"^/pets/(.*?)?\"",
+                "description": "ECMAscript style regex-based match as defined by [EDCA-262](http://en.cppreference.com/w/cpp/regex/ecmascript). Example: \"^/pets/(.*?)?\"",
                 "type": "string",
                 "format": "string"
               }

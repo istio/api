@@ -262,8 +262,7 @@ message Operation {
 // Condition specifies additional required attributes.
 message Condition {
   // Required. The name of an Istio attribute.
-  // Note: Check https://istio.io/docs/reference/config/ for the list of supported
-  // attribute name.
+  // See the [full list of supported attributes](https://istio.io/docs/reference/config/).
   string key = 1;
 
   // Required. The allowed values for the attribute.

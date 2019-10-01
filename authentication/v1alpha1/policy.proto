@@ -36,8 +36,7 @@ message StringMatch {
     // suffix-based match.
     string suffix = 3;
 
-    // ECMAscript style regex-based match as defined by [EDCA-262](
-    // http://en.cppreference.com/w/cpp/regex/ecmascript).
+    // ECMAscript style regex-based match as defined by [EDCA-262](http://en.cppreference.com/w/cpp/regex/ecmascript).
     // Example: "^/pets/(.*?)?"
     string regex = 4;
   }
@@ -67,9 +66,8 @@ message MutualTls {
 }
 
 // JSON Web Token (JWT) token format for authentication as defined by
-// [RFC 7519](https://tools.ietf.org/html/rfc7519). See [OAuth
-// 2.0](https://tools.ietf.org/html/rfc6749) and [OIDC
-// 1.0](http://openid.net/connect) for how this is used in the whole
+// [RFC 7519](https://tools.ietf.org/html/rfc7519). See [OAuth 2.0](https://tools.ietf.org/html/rfc6749) and
+// [OIDC 1.0](http://openid.net/connect) for how this is used in the whole
 // authentication flow.
 //
 // For example:

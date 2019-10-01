@@ -72,7 +72,7 @@
         "type": "object",
         "properties": {
           "key": {
-            "description": "Required. The name of an Istio attribute. Note: Check https://istio.io/docs/reference/config/ for the list of supported attribute name.",
+            "description": "Required. The name of an Istio attribute. See the [full list of supported attributes](https://istio.io/docs/reference/config/).",
             "type": "string",
             "format": "string"
           },
