@@ -212,6 +212,13 @@
             "description": "Name to be used while emitting statistics for outbound clusters. By default, Istio emits statistics with the pattern outbound|\u003cport\u003e|\u003csubsetname\u003e|\u003cservice-FQDN\u003e. For example outbound|8080|v2|reviews.prod.svc.cluster.local. This can be used to override that pattern.",
             "type": "string",
             "format": "string"
+          },
+          "certificates": {
+            "description": "Configure the provision of certificates.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.Certificate"
+            }
           }
         }
       },
@@ -403,6 +410,25 @@
           "UPGRADE"
         ],
         "default": "DO_NOT_UPGRADE"
+      },
+      "istio.mesh.v1alpha1.Certificate": {
+        "description": "Certificate configures the provision of a certificate and its key. Example 1: key and cert stored in a secret { secretName: galley-cert secretNamespace: istio-system dnsNames: - galley.istio-system.svc - galley.mydomain.com } Example 2: key and cert stored in a directory { dnsNames: - pilot.istio-system - pilot.istio-system.svc - pilot.mydomain.com }",
+        "type": "object",
+        "properties": {
+          "secretName": {
+            "description": "Name of the secret the certificate and its key will be stored into. If it is empty, it will not be stored into a secret. Instead, the certificate and its key will be stored into a hard-coded directory.",
+            "type": "string",
+            "format": "string"
+          },
+          "dnsNames": {
+            "description": "The DNS names for the certificate. A certificate may contain multiple DNS names.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        }
       },
       "istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode": {
         "type": "string",
