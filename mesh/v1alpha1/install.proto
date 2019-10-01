@@ -1,0 +1,391 @@
+// Copyright 2019 Istio Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+import "k8s.io/api/core/v1/generated.proto";
+import "k8s.io/api/autoscaling/v2beta1/generated.proto";
+import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
+import "github.com/gogo/protobuf/protobuf/google/protobuf/wrappers.proto";
+
+package istio.mesh.v1alpha1;
+
+option go_package="istio.io/api/mesh/v1alpha1";
+
+/*
+IstioControlPlaneSpec is a schema for both defining and customizing Istio control plane installation resources.
+
+The simplest install specialization is to point the user InstallSpec profile to a different values file, for
+example an Istio minimal control plane, which will use the values associated with the minimal control plane profile for
+Istio.
+
+Deeper customization is possible at three levels:
+
+1. New APIs defined in this file
+
+Components can be enabled/disabled and k8s resources can be modified.
+
+2. values.yaml
+
+The entirety of values.yaml settings is accessible through IstioControlPlaneSpec.values.
+This API will gradually be deprecated and is here to support migration. Values will be migrated either here (for
+installation settings) or MeshConfig (for runtime config).
+
+3. k8s resource overlays
+
+Once a manifest is rendered, a further customization can be applied by specifying k8s resource overlays.
+
+EXAMPLES
+
+1. Default Istio install
+
+    ```yaml
+    install:
+    ```
+
+1. Default minimal profile install
+
+    ```yaml
+    install:
+      profile: minimal
+    ```
+
+1. Default install with telemetry disabled
+
+    ```yaml
+    install:
+      telemetry:
+        enabled: false
+    ```
+
+1. Default install with specialized k8s settings for pilot
+
+    ```yaml
+    install:
+      pilot:
+        k8s:
+          resources:
+            limits:
+              cpu: 444m
+              memory: 333Mi
+            requests:
+              cpu: 222m
+              memory: 111Mi
+          readinessProbe:
+            failureThreshold: 44
+            initialDelaySeconds: 11
+            periodSeconds: 22
+            successThreshold: 33
+    ```
+
+1. Default install with values.yaml customizations for proxy
+
+    ```yaml
+    install:
+      values:
+        global:
+          proxy:
+            enableCoreDump: true
+            dnsRefreshRate: 10s
+    ```
+
+1. Default install with modification to container flag in galley
+
+    ```yaml
+    install:
+      galley:
+        k8s:
+          overlays:
+          - apiVersion: extensions/v1beta1
+            kind: Deployment
+            name: istio-galley
+            patches:
+            - path: spec.template.spec.containers.[name:galley].command.[--livenessProbeInterval]
+              value: --livenessProbeInterval=123s
+    ```
+*/
+
+// IstioControlPlaneSpec defines the desired installed state of IstioControlPlane.
+// The spec is a used to define a customization of the default profile values that are supplied with each Istio release.
+// Because the spec is a customization API, specifying an empty InstallSpec results in a default Istio control plane.
+message IstioControlPlaneSpec {
+    // Default namespace if feature or component namespaces are not set.
+    string default_namespace = 5;
+
+    PilotComponentSpec pilot = 30;
+    ProxyComponentSpec proxy = 31;
+    SidecarInjectorComponentSpec sidecar_injector = 32;
+    PolicyComponentSpec policy = 33;
+    TelemetryComponentSpec telemetry = 34;
+    CitadelComponentSpec citadel = 35;
+    CertManagerComponentSpec cert_manager = 36;
+    NodeAgentComponentSpec node_agent = 37;
+    GalleyComponentSpec galley = 38;
+    IngressGatewayComponentSpec ingress_gateway = 39;
+    EgressGatewayComponentSpec egress_gateway = 40;
+    CNIComponentSpec cni = 41;
+
+    // Overrides for default values.yaml.
+    TypeMapStringInterface values = 50;
+    // Unvalidated overrides for default values.yaml. Used for custom templates where new parameters are added.
+    TypeMapStringInterface unvalidatedValues = 51;
+    // Path or name for the profile e.g.
+    //     - minimal (looks in profiles dir for a file called minimal.yaml)
+    //     - /tmp/istio/install/values/custom/custom-install.yaml (local file path)
+    // default profile is used if this field is unset.
+    string profile = 100;
+    // Path for the install package. e.g.
+    //     - /tmp/istio-installer/nightly (local file path)
+    string install_package_path = 102;
+    // Root for docker image paths e.g. docker.io/istio-release.
+    // Releases are published to docker hub under 'istio' project.
+    // Daily builds from prow are on gcr.io, and nightly builds from circle on docker.io/istionightly
+    string hub = 110;
+    // Version tag for docker images e.g. 1.0.6
+    string tag = 111;
+}
+
+// Configuration common to all components.
+
+// Selects whether this component is installed.
+// google.protobuf.BoolValue enabled = 1;
+
+// Kubernetes resource spec.
+// KubernetesResourcesSpec k8s = 80;
+
+// Configuration options for the pilot component.
+message PilotComponentSpec {
+    google.protobuf.BoolValue enabled = 1;
+    KubernetesResourcesSpec k8s = 80;
+}
+
+// Configuration options for the proxy.
+message ProxyComponentSpec {
+    google.protobuf.BoolValue enabled = 1;
+    KubernetesResourcesSpec k8s = 80;
+}
+
+// Configuration options for the sidecar injector component.
+message SidecarInjectorComponentSpec {
+    google.protobuf.BoolValue enabled = 1;
+    KubernetesResourcesSpec k8s = 80;
+}
+
+// Configuration options for the policy enforcement component.
+message PolicyComponentSpec {
+    google.protobuf.BoolValue enabled = 1;
+    KubernetesResourcesSpec k8s = 80;
+}
+
+// Configuration options for the telemetry component.
+message TelemetryComponentSpec {
+    google.protobuf.BoolValue enabled = 1;
+    KubernetesResourcesSpec k8s = 80;
+}
+
+// Configuration options for Citadel component.
+message CitadelComponentSpec {
+    google.protobuf.BoolValue enabled = 1;
+    KubernetesResourcesSpec k8s = 80;
+}
+
+// Configuration options for certificate manager component.
+message CertManagerComponentSpec {
+    google.protobuf.BoolValue enabled = 1;
+    KubernetesResourcesSpec k8s = 80;
+}
+
+// Configuration options for node agent component.
+message NodeAgentComponentSpec {
+    google.protobuf.BoolValue enabled = 1;
+    KubernetesResourcesSpec k8s = 80;
+}
+
+// Configuration options for galley component.
+message GalleyComponentSpec {
+    google.protobuf.BoolValue enabled = 1;
+    KubernetesResourcesSpec k8s = 80;
+}
+
+// Configuration options for ingress gateways.
+message IngressGatewayComponentSpec {
+    google.protobuf.BoolValue enabled = 1;
+    KubernetesResourcesSpec k8s = 80;
+}
+
+// Configuration options for egress gateways.
+message EgressGatewayComponentSpec {
+    google.protobuf.BoolValue enabled = 1;
+    KubernetesResourcesSpec k8s = 80;
+}
+
+// Configuration options for cni component.
+message CNIComponentSpec {
+    google.protobuf.BoolValue enabled = 1;
+    KubernetesResourcesSpec k8s = 80;
+}
+
+// KubernetesResourcesConfig is a common set of k8s resource configs for components.
+message KubernetesResourcesSpec {
+    // k8s affinity.
+    // https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    k8s.io.api.core.v1.Affinity affinity = 1;
+    // Deployment environment variables.
+    // https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
+    repeated k8s.io.api.core.v1.EnvVar env = 2;
+    // k8s HorizontalPodAutoscaler settings.
+    // https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+    k8s.io.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec hpa_spec = 3;
+    // k8s imagePullPolicy.
+    // https://kubernetes.io/docs/concepts/containers/images/
+    string image_pull_policy = 4;
+    // k8s nodeSelector.
+    // https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+    map<string, string> node_selector = 5;
+    // k8s PodDisruptionBudget settings.
+    // https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#how-disruption-budgets-work
+    PodDisruptionBudgetSpec pod_disruption_budget = 6;
+    // k8s pod annotations.
+    // https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    map<string, string> pod_annotations = 7;
+    // k8s priority_class_name. Default for all resources unless overridden.
+    // https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+    string priority_class_name = 8;
+    // k8s readinessProbe settings.
+    // https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+    // k8s.io.api.core.v1.Probe readiness_probe = 9;
+    ReadinessProbe readiness_probe = 9;
+    // k8s Deployment replicas setting.
+    // https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+    uint32 replica_count = 10;
+    // k8s resources settings.
+    // https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container
+    Resources resources = 11;
+    // k8s Service settings.
+    // https://kubernetes.io/docs/concepts/services-networking/service/
+    k8s.io.api.core.v1.ServiceSpec service = 12;
+    // k8s deployment strategy.
+    // https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+    DeploymentStrategy strategy = 13;
+    // k8s toleration
+    // https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    repeated k8s.io.api.core.v1.Toleration tolerations = 14;
+
+    // Overlays for k8s resources in rendered manifests.
+    repeated k8sObjectOverlay overlays = 100;
+}
+
+// Patch for an existing k8s resource.
+message k8sObjectOverlay {
+    message PathValue {
+        // Path of the form a.b:c.e.:f
+        // Where b:c is a list element selector of the form key:value and :f is a list selector of the form :value.
+        // All path intermediate nodes must exist.
+        string path = 1;
+        // Value to add, delete or replace.
+        // For add, the path should be a new leaf.
+        // For delete, value should be unset.
+        // For replace, path should reference an existing node.
+        // All values are strings but are converted into appropriate type based on schema.
+        TypeInterface value = 2;
+    }
+    // Resource API version.
+    string api_version = 1;
+    // Resource kind.
+    string kind = 2;
+    // Name of resource.
+    // Namespace is always the component namespace.
+    string name = 3;
+
+    // List of patches to apply to resource.
+    repeated PathValue patches = 4;
+}
+
+// Mirrors k8s.io.api.core.v1.ResourceRequirements for unmarshaling.
+message Resources {
+    map<string, string> limits = 1;
+    map<string, string> requests = 2;
+}
+
+// Mirrors k8s.io.api.core.v1.Probe for unmarshaling
+message ReadinessProbe {
+    ExecAction exec = 1;
+    HTTPGetAction httpGet = 2;
+    TCPSocketAction tcpSocket = 3;
+    int32 initialDelaySeconds = 4;
+    int32 timeoutSeconds = 5;
+    int32 periodSeconds = 6;
+    int32 successThreshold = 7;
+    int32 failureThreshold = 8;
+}
+
+// Mirrors k8s.io.api.core.v1.ExecAction for unmarshaling
+message ExecAction {
+    repeated string command = 1;
+}
+
+// Mirrors k8s.io.api.core.v1.HTTPGetAction for unmarshaling
+message HTTPGetAction {
+    string path = 1;
+    TypeIntOrStringForPB port = 2;
+    string host = 3;
+    string scheme = 4;
+    repeated HTTPHeader httpHeaders = 5;
+}
+
+// Mirrors k8s.io.api.core.v1.HTTPHeader for unmarshaling
+message HTTPHeader {
+    string name = 1;
+    string value = 2;
+}
+
+// Mirrors k8s.io.api.core.v1.TCPSocketAction for unmarshaling
+message TCPSocketAction {
+    TypeIntOrStringForPB port = 1;
+    string host = 2;
+}
+
+// Mirrors k8s.io.api.policy.v1beta1.PodDisruptionBudget for unmarshaling.
+message PodDisruptionBudgetSpec {
+    uint32 minAvailable = 1;
+    k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 2;
+    uint32 maxUnavailable = 3;
+}
+
+// Mirrors k8s.io.api.apps.v1.DeploymentStrategy for unmarshaling.
+message DeploymentStrategy {
+    string type = 1;
+    RollingUpdateDeployment rollingUpdate = 2;
+}
+
+// Mirrors k8s.io.api.apps.v1.RollingUpdateDeployment for unmarshaling.
+message RollingUpdateDeployment {
+    TypeIntOrStringForPB maxUnavailable = 1;
+    TypeIntOrStringForPB maxSurge = 2;
+}
+
+message ObjectMeta {
+    // From k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta
+    string name = 5;
+    string namespace = 6;
+}
+
+// GOTYPE: map[string]interface{}
+message TypeMapStringInterface {}
+
+// GOTYPE: interface{}
+message TypeInterface {}
+
+// GOTYPE: *IntOrStringForPB
+message TypeIntOrStringForPB {}
