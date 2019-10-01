@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-all: generate
+all: gen
 
 ########################
 # setup
@@ -84,7 +84,8 @@ protoc_gen_k8s_support_plugins := --jsonshim_out=$(gogo_mapping):$(out_path) --d
 # Generation Rules
 #####################
 
-generate: \
+generate: gen
+gen: \
 	generate-core \
     generate-type \
 	generate-mcp \
@@ -201,7 +202,7 @@ policy_v1beta1_k8s_gos := \
 
 $(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc) $(policy_v1beta1_pb_pythons) $(policy_v1beta1_k8s_gos): $(policy_v1beta1_protos)
 	@$(protolock) status
-	$(protoc) $(gogoslick_plugin) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin)$(policy_v1beta1_path) $(protoc_gen_python_plugin) $^
+	@$(protoc) $(gogoslick_plugin) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin)$(policy_v1beta1_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/policy/* policy
 
 generate-policy: $(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc) $(policy_v1beta1_pb_pythons) $(policy_v1beta1_k8s_gos)
@@ -487,16 +488,10 @@ clean: \
 # CI System
 #####################
 
-CHANGES=$(shell git status --porcelain)
-
 check_clean:
-ifneq ($(CHANGES),)
-	@git diff
-	@echo "Please run make and include any changed files in your PR"
-	@exit 1
-endif
+	@scripts/check-clean.sh
 
-presubmit: clean generate proto-commit lint release-lock-status check_clean
+presubmit: clean gen check_clean proto-commit lint release-lock-status
 postsubmit: presubmit
 
 #####################
