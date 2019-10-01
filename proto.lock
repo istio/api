@@ -35960,6 +35960,12 @@
                 "id": 45,
                 "name": "outbound_cluster_stat_name",
                 "type": "string"
+              },
+              {
+                "id": 47,
+                "name": "certificates",
+                "type": "Certificate",
+                "is_repeated": true
               }
             ],
             "reserved_ids": [
@@ -36051,6 +36057,22 @@
                     "type": "string"
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "name": "Certificate",
+            "fields": [
+              {
+                "id": 1,
+                "name": "secret_name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "dns_names",
+                "type": "string",
+                "is_repeated": true
               }
             ]
           }

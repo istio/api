@@ -371,8 +371,11 @@ message MeshConfig {
   // %SERVICE% will use reviews.prod as the stats name.
   string outbound_cluster_stat_name = 45;
 
+  // Configure the provision of certificates.
+  repeated Certificate certificates = 47;
+
   // $hide_from_docs
-  // Next available field number: 47
+  // Next available field number: 48
 }
 
 // Resource describes the source of configuration
@@ -491,4 +494,28 @@ message LocalityLoadBalancerSetting{
   // Should be used together with OutlierDetection to detect unhealthy endpoints.
   // Note: if no OutlierDetection specified, this will not take effect.
   repeated Failover failover = 2;
+}
+
+// Certificate configures the provision of a certificate and its key.
+// Example 1: key and cert stored in a secret
+// { secretName: galley-cert
+//   secretNamespace: istio-system
+//   dnsNames:
+//     - galley.istio-system.svc
+//     - galley.mydomain.com
+// }
+// Example 2: key and cert stored in a directory
+// { dnsNames:
+//     - pilot.istio-system
+//     - pilot.istio-system.svc
+//     - pilot.mydomain.com
+// }
+message Certificate {
+  // Name of the secret the certificate and its key will be stored into.
+  // If it is empty, it will not be stored into a secret.
+  // Instead, the certificate and its key will be stored into a hard-coded directory.
+  string secret_name = 1;
+  // The DNS names for the certificate. A certificate may contain
+  // multiple DNS names.
+  repeated string dns_names = 2;
 }
