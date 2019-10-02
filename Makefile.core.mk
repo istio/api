@@ -84,7 +84,6 @@ protoc_gen_k8s_support_plugins := --jsonshim_out=$(gogo_mapping):$(out_path) --d
 # Generation Rules
 #####################
 
-generate: gen
 gen: \
 	generate-core \
     generate-type \
@@ -99,6 +98,8 @@ gen: \
 	generate-policy \
 	generate-annotations \
 	generate-openapi-schema
+
+gen-check: clean gen check-clean-repo
 
 #####################
 # core/...
@@ -488,10 +489,7 @@ clean: \
 # CI System
 #####################
 
-check_clean:
-	@scripts/check-clean.sh
-
-presubmit: clean gen check_clean proto-commit lint release-lock-status
+presubmit: proto-commit lint release-lock-status
 postsubmit: presubmit
 
 #####################
