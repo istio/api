@@ -120,16 +120,12 @@ EXAMPLES
 // The spec is a used to define a customization of the default profile values that are supplied with each Istio release.
 // Because the spec is a customization API, specifying an empty InstallSpec results in a default Istio control plane.
 message IstioControlPlaneSpec {
-    // Default namespace if feature or component namespaces are not set.
-    string default_namespace = 5;
-
     PilotComponentSpec pilot = 30;
     ProxyComponentSpec proxy = 31;
     SidecarInjectorComponentSpec sidecar_injector = 32;
     PolicyComponentSpec policy = 33;
     TelemetryComponentSpec telemetry = 34;
     CitadelComponentSpec citadel = 35;
-    CertManagerComponentSpec cert_manager = 36;
     NodeAgentComponentSpec node_agent = 37;
     GalleyComponentSpec galley = 38;
     IngressGatewayComponentSpec ingress_gateway = 39;
@@ -172,7 +168,6 @@ message PilotComponentSpec {
 
 // Configuration options for the proxy.
 message ProxyComponentSpec {
-    google.protobuf.BoolValue enabled = 1;
     KubernetesResourcesSpec k8s = 80;
 }
 
@@ -196,12 +191,6 @@ message TelemetryComponentSpec {
 
 // Configuration options for Citadel component.
 message CitadelComponentSpec {
-    google.protobuf.BoolValue enabled = 1;
-    KubernetesResourcesSpec k8s = 80;
-}
-
-// Configuration options for certificate manager component.
-message CertManagerComponentSpec {
     google.protobuf.BoolValue enabled = 1;
     KubernetesResourcesSpec k8s = 80;
 }
