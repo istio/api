@@ -357,7 +357,7 @@ type Jwt struct {
 	// header name.
 	//
 	// For example, if `header=x-goog-iap-jwt-assertion`, the header
-	// format will be x-goog-iap-jwt-assertion: <JWT>.
+	// format will be `x-goog-iap-jwt-assertion: <JWT>`.
 	JwtHeaders []string `protobuf:"bytes,6,rep,name=jwt_headers,json=jwtHeaders,proto3" json:"jwt_headers,omitempty"`
 	// JWT is sent in a query parameter. `query` represents the
 	// query parameter name.
