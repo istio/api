@@ -24,9 +24,9 @@ package istio.mesh.v1alpha1;
 option go_package="istio.io/api/mesh/v1alpha1";
 
 /*
-IstioControlPlaneSpec is a schema for both defining and customizing Istio control plane installation resources.
+IstioControlPlaneSpec is a schema for both defining and customizing Istio control plane resources.
 
-The simplest install specialization is to point the user InstallSpec profile to a different values file, for
+The simplest specialization is to point the user IstioControlPlaneSpec profile to a different values file, for
 example an Istio minimal control plane, which will use the values associated with the minimal control plane profile for
 Istio.
 
@@ -34,7 +34,7 @@ Deeper customization is possible at three levels:
 
 1. New APIs defined in this file
 
-Components can be enabled/disabled and k8s resources can be modified.
+Components can be enabled/disabled and Kubernetes resources can be modified.
 
 2. values.yaml
 
@@ -42,9 +42,9 @@ The entirety of values.yaml settings is accessible through IstioControlPlaneSpec
 This API will gradually be deprecated and is here to support migration. Values will be migrated either here (for
 installation settings) or MeshConfig (for runtime config).
 
-3. k8s resource overlays
+3. Kubernetes resource overlays
 
-Once a manifest is rendered, a further customization can be applied by specifying k8s resource overlays.
+Once a manifest is rendered, a further customization can be applied by specifying Kubernetes resource overlays.
 
 EXAMPLES
 
@@ -69,7 +69,7 @@ EXAMPLES
         enabled: false
     ```
 
-1. Default install with specialized k8s settings for pilot
+1. Default install with specialized Kubernetes settings for pilot
 
     ```yaml
     install:
@@ -225,57 +225,57 @@ message CNIComponentSpec {
     KubernetesResourcesSpec k8s = 80;
 }
 
-// KubernetesResourcesConfig is a common set of k8s resource configs for components.
+// KubernetesResourcesConfig is a common set of Kubernetes resource configs for components.
 message KubernetesResourcesSpec {
-    // k8s affinity.
+    // Kubernetes affinity.
     // https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
     k8s.io.api.core.v1.Affinity affinity = 1;
     // Deployment environment variables.
     // https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
     repeated k8s.io.api.core.v1.EnvVar env = 2;
-    // k8s HorizontalPodAutoscaler settings.
+    // Kubernetes HorizontalPodAutoscaler settings.
     // https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
     k8s.io.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec hpa_spec = 3;
-    // k8s imagePullPolicy.
+    // Kubernetes imagePullPolicy.
     // https://kubernetes.io/docs/concepts/containers/images/
     string image_pull_policy = 4;
-    // k8s nodeSelector.
+    // Kubernetes nodeSelector.
     // https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
     map<string, string> node_selector = 5;
-    // k8s PodDisruptionBudget settings.
+    // Kubernetes PodDisruptionBudget settings.
     // https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#how-disruption-budgets-work
     PodDisruptionBudgetSpec pod_disruption_budget = 6;
-    // k8s pod annotations.
+    // Kubernetes pod annotations.
     // https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     map<string, string> pod_annotations = 7;
-    // k8s priority_class_name. Default for all resources unless overridden.
+    // Kubernetes priority_class_name. Default for all resources unless overridden.
     // https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
     string priority_class_name = 8;
-    // k8s readinessProbe settings.
+    // Kubernetes readinessProbe settings.
     // https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
     // k8s.io.api.core.v1.Probe readiness_probe = 9;
     ReadinessProbe readiness_probe = 9;
-    // k8s Deployment replicas setting.
+    // Kubernetes Deployment replicas setting.
     // https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
     uint32 replica_count = 10;
-    // k8s resources settings.
+    // Kubernetes resources settings.
     // https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container
     Resources resources = 11;
-    // k8s Service settings.
+    // Kubernetes Service settings.
     // https://kubernetes.io/docs/concepts/services-networking/service/
     k8s.io.api.core.v1.ServiceSpec service = 12;
-    // k8s deployment strategy.
+    // Kubernetes deployment strategy.
     // https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
     DeploymentStrategy strategy = 13;
-    // k8s toleration
+    // Kubernetes toleration
     // https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     repeated k8s.io.api.core.v1.Toleration tolerations = 14;
 
-    // Overlays for k8s resources in rendered manifests.
+    // Overlays for Kubernetes resources in rendered manifests.
     repeated k8sObjectOverlay overlays = 100;
 }
 
-// Patch for an existing k8s resource.
+// Patch for an existing Kubernetes resource.
 message k8sObjectOverlay {
     message PathValue {
         // Path of the form a.b:c.e.:f
