@@ -56,6 +56,12 @@ message MeshConfig {
   // is false, i.e. Mixer policy check is enabled by default.
   bool disable_policy_checks = 3;
 
+  // $hide_from_docs
+  // Disable telemetry reporting by the Mixer service for HTTP traffic.
+  // Default is false (telemetry reporting via Mixer is enabled).
+  // This option provides a transition path for Istio extensibility v2.
+  bool disable_mixer_http_reports = 48;
+
   // Allow all traffic in cases when the Mixer policy service cannot be reached.
   // Default is false which means the traffic is denied when the client is unable
   // to connect to Mixer.
@@ -375,7 +381,7 @@ message MeshConfig {
   repeated Certificate certificates = 47;
 
   // $hide_from_docs
-  // Next available field number: 48
+  // Next available field number: 49
 }
 
 // Resource describes the source of configuration
