@@ -362,8 +362,10 @@ message MeshConfig {
   // %SERVICE% will use reviews.prod as the stats name.
   string outbound_cluster_stat_name = 45;
 
-  // Installation parameters.
-  IstioControlPlaneSpec install = 46;
+  TrafficManagementFeatureSpec traffic_management = 46;
+  PolicyFeatureSpec policy = 47;
+  TelemetryFeatureSpec telemetry = 48;
+  SecurityFeatureSpec security = 49;
   // $hide_from_docs
   // Next available field number: 47
 }
@@ -484,4 +486,20 @@ message LocalityLoadBalancerSetting{
   // Should be used together with OutlierDetection to detect unhealthy endpoints.
   // Note: if no OutlierDetection specified, this will not take effect.
   repeated Failover failover = 2;
+}
+
+// Configuration options for traffic management.
+message TrafficManagementFeatureSpec {
+}
+
+// Configuration options for the policy feature.
+message PolicyFeatureSpec {
+}
+
+// Configuration options for the telemetry feature.
+message TelemetryFeatureSpec {
+}
+
+// Configuration options for security feature.
+message SecurityFeatureSpec {
 }

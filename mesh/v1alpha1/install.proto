@@ -185,7 +185,6 @@ message PolicyComponentSpec {
 
 // Configuration options for the telemetry component.
 message TelemetryComponentSpec {
-    google.protobuf.BoolValue enabled = 1;
     KubernetesResourcesSpec k8s = 80;
 }
 
