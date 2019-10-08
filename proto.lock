@@ -34973,6 +34973,33 @@
       }
     },
     {
+      "protopath": "envoy:/:config:/:filter:/:http:/:alpn:/:v2alpha1:/:config.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "FilterConfig",
+            "fields": [
+              {
+                "id": 1,
+                "name": "alpn_override",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "istio.envoy.config.filter.http.alpn.v2alpha1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/envoy/config/filter/http/alpn/v2alpha1"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "envoy:/:config:/:filter:/:http:/:authn:/:v2alpha1:/:config.proto",
       "def": {
         "messages": [
@@ -35725,6 +35752,11 @@
               {
                 "id": 3,
                 "name": "disable_policy_checks",
+                "type": "bool"
+              },
+              {
+                "id": 48,
+                "name": "disable_mixer_http_reports",
                 "type": "bool"
               },
               {
@@ -37576,6 +37608,11 @@
                 "id": 5,
                 "name": "forward_attributes",
                 "type": "Attributes"
+              },
+              {
+                "id": 6,
+                "name": "ignore_forwarded_attributes",
+                "type": "bool"
               }
             ],
             "maps": [
