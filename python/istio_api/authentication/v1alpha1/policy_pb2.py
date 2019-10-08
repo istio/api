@@ -14,7 +14,6 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from google.api import field_behavior_pb2 as google_dot_api_dot_field__behavior__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -70,8 +69,8 @@ _MUTUALTLS_MODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=296,
-  serialized_end=330,
+  serialized_start=263,
+  serialized_end=297,
 )
 _sym_db.RegisterEnumDescriptor(_MUTUALTLS_MODE)
 
@@ -126,8 +125,8 @@ _STRINGMATCH = _descriptor.Descriptor(
       name='match_type', full_name='istio.authentication.v1alpha1.StringMatch.match_type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=104,
-  serialized_end=201,
+  serialized_start=71,
+  serialized_end=168,
 )
 
 
@@ -165,8 +164,8 @@ _MUTUALTLS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=203,
-  serialized_end=330,
+  serialized_start=170,
+  serialized_end=297,
 )
 
 
@@ -203,8 +202,8 @@ _JWT_TRIGGERRULE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=520,
-  serialized_end=669,
+  serialized_start=487,
+  serialized_end=636,
 )
 
 _JWT = _descriptor.Descriptor(
@@ -275,8 +274,8 @@ _JWT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=333,
-  serialized_end=669,
+  serialized_start=300,
+  serialized_end=636,
 )
 
 
@@ -316,8 +315,8 @@ _PEERAUTHENTICATIONMETHOD = _descriptor.Descriptor(
       name='params', full_name='istio.authentication.v1alpha1.PeerAuthenticationMethod.params',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=672,
-  serialized_end=817,
+  serialized_start=639,
+  serialized_end=784,
 )
 
 
@@ -347,8 +346,8 @@ _ORIGINAUTHENTICATIONMETHOD = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=819,
-  serialized_end=896,
+  serialized_start=786,
+  serialized_end=863,
 )
 
 
@@ -413,8 +412,8 @@ _POLICY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=899,
-  serialized_end=1249,
+  serialized_start=866,
+  serialized_end=1216,
 )
 
 
@@ -468,16 +467,9 @@ _TARGETSELECTOR = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='labels', full_name='istio.authentication.v1alpha1.TargetSelector.labels', index=1,
-      number=3, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='ports', full_name='istio.authentication.v1alpha1.TargetSelector.ports', index=2,
+      name='ports', full_name='istio.authentication.v1alpha1.TargetSelector.ports', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -486,7 +478,7 @@ _TARGETSELECTOR = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_TARGETSELECTOR_LABELSENTRY, ],
+  nested_types=[],
   enum_types=[
   ],
   serialized_options=None,
@@ -571,8 +563,6 @@ _POLICY.fields_by_name['targets'].message_type = _TARGETSELECTOR
 _POLICY.fields_by_name['peers'].message_type = _PEERAUTHENTICATIONMETHOD
 _POLICY.fields_by_name['origins'].message_type = _ORIGINAUTHENTICATIONMETHOD
 _POLICY.fields_by_name['principal_binding'].enum_type = _PRINCIPALBINDING
-_TARGETSELECTOR_LABELSENTRY.containing_type = _TARGETSELECTOR
-_TARGETSELECTOR.fields_by_name['labels'].message_type = _TARGETSELECTOR_LABELSENTRY
 _TARGETSELECTOR.fields_by_name['ports'].message_type = _PORTSELECTOR
 _PORTSELECTOR.oneofs_by_name['port'].fields.append(
   _PORTSELECTOR.fields_by_name['number'])
@@ -642,19 +632,11 @@ Policy = _reflection.GeneratedProtocolMessageType('Policy', (_message.Message,),
 _sym_db.RegisterMessage(Policy)
 
 TargetSelector = _reflection.GeneratedProtocolMessageType('TargetSelector', (_message.Message,), {
-
-  'LabelsEntry' : _reflection.GeneratedProtocolMessageType('LabelsEntry', (_message.Message,), {
-    'DESCRIPTOR' : _TARGETSELECTOR_LABELSENTRY,
-    '__module__' : 'authentication.v1alpha1.policy_pb2'
-    # @@protoc_insertion_point(class_scope:istio.authentication.v1alpha1.TargetSelector.LabelsEntry)
-    })
-  ,
   'DESCRIPTOR' : _TARGETSELECTOR,
   '__module__' : 'authentication.v1alpha1.policy_pb2'
   # @@protoc_insertion_point(class_scope:istio.authentication.v1alpha1.TargetSelector)
   })
 _sym_db.RegisterMessage(TargetSelector)
-_sym_db.RegisterMessage(TargetSelector.LabelsEntry)
 
 PortSelector = _reflection.GeneratedProtocolMessageType('PortSelector', (_message.Message,), {
   'DESCRIPTOR' : _PORTSELECTOR,
