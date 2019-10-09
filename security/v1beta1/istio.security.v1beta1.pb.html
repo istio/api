@@ -161,6 +161,26 @@ same namespace as the authorization policy.</p>
 
 </td>
 </tr>
+<tr id="AuthorizationPolicy-selector">
+<td><code>selector</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/v1beta1/workload-selector.html#WorkloadSelector">istio.type.v1beta1.WorkloadSelector</a></code></td>
+<td>
+<p>Optional. Workload selector decides where to apply the authorization policy.
+If not set, the authorization policy will be applied to all workloads in the
+same namespace as the authorization policy.</p>
+
+</td>
+</tr>
+<tr id="AuthorizationPolicy-rules">
+<td><code>rules</code></td>
+<td><code><a href="#Rule">Rule[]</a></code></td>
+<td>
+<p>Optional. A list of rules to specify the allowed access to the workload.</p>
+
+<p>If not set, access is denied unless explicitly allowed by other authorization policy.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -194,6 +214,23 @@ See the <a href="https://istio.io/docs/reference/config/">full list of supported
 
 </td>
 </tr>
+<tr id="Condition-key">
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>
+<p>Required. The name of an Istio attribute.
+See the <a href="https://istio.io/docs/reference/config/">full list of supported attributes</a>.</p>
+
+</td>
+</tr>
+<tr id="Condition-values">
+<td><code>values</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Required. The allowed values for the attribute.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -210,6 +247,48 @@ See the <a href="https://istio.io/docs/reference/config/">full list of supported
 </tr>
 </thead>
 <tbody>
+<tr id="Operation-hosts">
+<td><code>hosts</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Optional. A list of hosts, which matches to the &ldquo;request.host&rdquo; attribute.</p>
+
+<p>If not set, any host is allowed. Must be used only with HTTP.</p>
+
+</td>
+</tr>
+<tr id="Operation-ports">
+<td><code>ports</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Optional. A list of ports, which matches to the &ldquo;destination.port&rdquo; attribute.</p>
+
+<p>If not set, any port is allowed.</p>
+
+</td>
+</tr>
+<tr id="Operation-methods">
+<td><code>methods</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Optional. A list of methods, which matches to the &ldquo;request.method&rdquo; attribute.
+For gRPC service, this should be the fully-qualified name in the form of
+&ldquo;/package.service/method&rdquo;</p>
+
+<p>If not set, any method is allowed. Must be used only with HTTP or gRPC.</p>
+
+</td>
+</tr>
+<tr id="Operation-paths">
+<td><code>paths</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Optional. A list of paths, which matches to the &ldquo;request.url_path&rdquo; attribute.</p>
+
+<p>If not set, any path is allowed. Must be used only with HTTP.</p>
+
+</td>
+</tr>
 <tr id="Operation-hosts">
 <td><code>hosts</code></td>
 <td><code>string[]</code></td>
@@ -305,6 +384,36 @@ the condition is matched.</p>
 
 </td>
 </tr>
+<tr id="Rule-from">
+<td><code>from</code></td>
+<td><code><a href="#Rule-From">Rule.From[]</a></code></td>
+<td>
+<p>Optional. from specifies the source of a request.</p>
+
+<p>If not set, any source is allowed.</p>
+
+</td>
+</tr>
+<tr id="Rule-to">
+<td><code>to</code></td>
+<td><code><a href="#Rule-To">Rule.To[]</a></code></td>
+<td>
+<p>Optional. to specifies the operation of a request.</p>
+
+<p>If not set, any operation is allowed.</p>
+
+</td>
+</tr>
+<tr id="Rule-when">
+<td><code>when</code></td>
+<td><code><a href="#Condition">Condition[]</a></code></td>
+<td>
+<p>Optional. when specifies a list of additional conditions of a request.</p>
+
+<p>If not set, any condition is allowed.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -329,6 +438,14 @@ the condition is matched.</p>
 
 </td>
 </tr>
+<tr id="Rule-From-source">
+<td><code>source</code></td>
+<td><code><a href="#Source">Source</a></code></td>
+<td>
+<p>Source specifies the source of a request.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -345,6 +462,14 @@ the condition is matched.</p>
 </tr>
 </thead>
 <tbody>
+<tr id="Rule-To-operation">
+<td><code>operation</code></td>
+<td><code><a href="#Operation">Operation</a></code></td>
+<td>
+<p>Operation specifies the operation of a request.</p>
+
+</td>
+</tr>
 <tr id="Rule-To-operation">
 <td><code>operation</code></td>
 <td><code><a href="#Operation">Operation</a></code></td>
@@ -413,6 +538,50 @@ Single IP (e.g. &ldquo;1.2.3.4&rdquo;) and CIDR (e.g. &ldquo;1.2.3.0/24&rdquo;) 
 
 </td>
 </tr>
+<tr id="Source-principals">
+<td><code>principals</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Optional. A list of source peer identities (i.e. service account), which
+matches to the &ldquo;source.principal&rdquo; attribute.</p>
+
+<p>If not set, any principal is allowed.</p>
+
+</td>
+</tr>
+<tr id="Source-request_principals">
+<td><code>requestPrincipals</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Optional. A list of request identities (i.e. &ldquo;iss/sub&rdquo; claims), which
+matches to the &ldquo;request.auth.principal&rdquo; attribute.</p>
+
+<p>If not set, any request principal is allowed.</p>
+
+</td>
+</tr>
+<tr id="Source-namespaces">
+<td><code>namespaces</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Optional. A list of namespaces, which matches to the &ldquo;source.namespace&rdquo;
+attribute.</p>
+
+<p>If not set, any namespace is allowed.</p>
+
+</td>
+</tr>
+<tr id="Source-ip_blocks">
+<td><code>ipBlocks</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Optional. A list of IP blocks, which matches to the &ldquo;source.ip&rdquo; attribute.
+Single IP (e.g. &ldquo;1.2.3.4&rdquo;) and CIDR (e.g. &ldquo;1.2.3.0/24&rdquo;) are supported.</p>
+
+<p>If not set, any IP is allowed.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -434,6 +603,16 @@ selected. Currently, only label based selection mechanism is supported.</p>
 </tr>
 </thead>
 <tbody>
+<tr id="istio-type-v1beta1-WorkloadSelector-match_labels">
+<td><code>matchLabels</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>REQUIRED: One or more labels that indicate a specific set of pods/VMs
+on which a policy should be applied. The scope of label search is restricted to
+the configuration namespace in which the resource is present.</p>
+
+</td>
+</tr>
 <tr id="istio-type-v1beta1-WorkloadSelector-match_labels">
 <td><code>matchLabels</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>

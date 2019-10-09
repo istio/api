@@ -3,6 +3,16 @@
 
 package annotation
 
+type ResourceTypes int
+
+const (
+	Unknown ResourceTypes = iota
+    Ingress
+    Pod
+    Service
+    ServiceEntry
+)
+
 // Instance describes a single resource annotation
 type Instance struct {
 	// The name of the annotation.
@@ -16,6 +26,9 @@ type Instance struct {
 
 	// Mark this annotation as deprecated when generating usage information.
 	Deprecated bool
+
+	// The types of resources this annotation applies to.
+	Resources []ResourceTypes
 }
 
 var (
@@ -27,6 +40,7 @@ var (
                         "has no stability guarantees.",
           Hidden: true,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Service, },
         }
 	
 		AlphaIdentity = Instance {
@@ -35,6 +49,7 @@ var (
                         "no stability guarantees.",
           Hidden: true,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		AlphaKubernetesServiceAccounts = Instance {
@@ -44,6 +59,7 @@ var (
                         "Alpha and has no stability guarantees.",
           Hidden: true,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Service, },
         }
 	
 		IoKubernetesIngressClass = Instance {
@@ -52,6 +68,7 @@ var (
                         "controllers responsible for it.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Ingress, },
         }
 	
 		AlphaNetworkingEndpointsVersion = Instance {
@@ -62,6 +79,7 @@ var (
                         "and has no stability guarantees.",
           Hidden: true,
           Deprecated: false,
+		  Resources: []ResourceTypes{ ServiceEntry, },
         }
 	
 		AlphaNetworkingNotReadyEndpoints = Instance {
@@ -72,6 +90,7 @@ var (
                         "NOTE This API is Alpha and has no stability guarantees.",
           Hidden: true,
           Deprecated: false,
+		  Resources: []ResourceTypes{ ServiceEntry, },
         }
 	
 		AlphaNetworkingServiceVersion = Instance {
@@ -83,6 +102,7 @@ var (
                         "no stability guarantees.",
           Hidden: true,
           Deprecated: false,
+		  Resources: []ResourceTypes{ ServiceEntry, },
         }
 	
 		NetworkingExportTo = Instance {
@@ -93,6 +113,7 @@ var (
                         "namespace.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Service, },
         }
 	
 		PolicyCheck = Instance {
@@ -102,6 +123,7 @@ var (
                         "requests.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		PolicyCheckBaseRetryWaitTime = Instance {
@@ -111,6 +133,7 @@ var (
                         "will be 80ms.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		PolicyCheckMaxRetryWaitTime = Instance {
@@ -119,6 +142,7 @@ var (
                         "duration format. If not set, this will be 1000ms.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		PolicyCheckRetries = Instance {
@@ -127,6 +151,7 @@ var (
                         "Mixer. If not set, this will be 0, indicating no retries.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		PolicyLang = Instance {
@@ -135,6 +160,7 @@ var (
                         "Mixer.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarStatusReadinessApplicationPorts = Instance {
@@ -145,6 +171,7 @@ var (
                         "traffic.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarStatusReadinessFailureThreshold = Instance {
@@ -153,6 +180,7 @@ var (
                         "readiness probe.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarStatusReadinessInitialDelaySeconds = Instance {
@@ -161,6 +189,7 @@ var (
                         "sidecar readiness probe.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarStatusReadinessPeriodSeconds = Instance {
@@ -169,6 +198,7 @@ var (
                         "readiness probe.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SecurityAutoMTLS = Instance {
@@ -178,6 +208,7 @@ var (
                         "MeshConfig.enable_auto_mtls.",
           Hidden: true,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarBootstrapOverride = Instance {
@@ -186,6 +217,7 @@ var (
                         "file.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarComponentLogLevel = Instance {
@@ -193,6 +225,7 @@ var (
           Description: "Specifies the component log level for Envoy.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarControlPlaneAuthPolicy = Instance {
@@ -203,6 +236,7 @@ var (
                         "into mutual TLS connections.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarDiscoveryAddress = Instance {
@@ -211,6 +245,7 @@ var (
                         "Envoy sidecar.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarInject = Instance {
@@ -219,6 +254,7 @@ var (
                         "automatically injected into the workload.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarInterceptionMode = Instance {
@@ -227,6 +263,7 @@ var (
                         "to Envoy (REDIRECT or TPROXY).",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarLogLevel = Instance {
@@ -234,6 +271,7 @@ var (
           Description: "Specifies the log level for Envoy.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarProxyCPU = Instance {
@@ -242,6 +280,7 @@ var (
                         "sidecar.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarProxyImage = Instance {
@@ -250,6 +289,7 @@ var (
                         "sidecar.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarProxyMemory = Instance {
@@ -258,6 +298,7 @@ var (
                         "sidecar.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarRewriteAppHTTPProbers = Instance {
@@ -266,6 +307,7 @@ var (
                         "redirected to the Envoy sidecar.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarStatsInclusionPrefixes = Instance {
@@ -274,6 +316,7 @@ var (
                         "stats to be emitted by Envoy.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarStatsInclusionRegexps = Instance {
@@ -282,6 +325,7 @@ var (
                         "should match to be emitted by Envoy.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarStatsInclusionSuffixes = Instance {
@@ -290,6 +334,7 @@ var (
                         "stats to be emitted by Envoy.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarStatus = Instance {
@@ -300,6 +345,7 @@ var (
                         "resources.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarUserVolume = Instance {
@@ -308,6 +354,7 @@ var (
                         "be added to the Envoy sidecar.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarUserVolumeMount = Instance {
@@ -316,6 +363,7 @@ var (
                         "array) to be added to the Envoy sidecar.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarStatusPort = Instance {
@@ -324,6 +372,7 @@ var (
                         "zero, the sidecar will not provide status.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarTrafficExcludeInboundPorts = Instance {
@@ -333,6 +382,7 @@ var (
                         "traffic (i.e. '*') is being redirected.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarTrafficExcludeOutboundIPRanges = Instance {
@@ -342,6 +392,7 @@ var (
                         "traffic (i.e. '*') is being redirected.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarTrafficExcludeOutboundPorts = Instance {
@@ -350,6 +401,7 @@ var (
                         "from redirection to Envoy.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarTrafficIncludeInboundPorts = Instance {
@@ -360,6 +412,7 @@ var (
                         "empty list will disable all inbound redirection.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarTrafficIncludeOutboundIPRanges = Instance {
@@ -370,6 +423,7 @@ var (
                         "list will disable all outbound redirection.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 		SidecarTrafficKubevirtInterfaces = Instance {
@@ -378,6 +432,7 @@ var (
                         "inbound traffic (from VM) will be treated as outbound.",
           Hidden: false,
           Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
         }
 	
 )
