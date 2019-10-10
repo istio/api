@@ -345,7 +345,7 @@ type MeshConfig struct {
 	// For example, if we have
 	// ```yaml
 	// trustDomain: td1
-	// trustDomainAliases: [“td2”, "td3"]
+	// trustDomainAliases: ["td2", "td3"]
 	// ```
 	// Any service with the identity `td1/ns/foo/sa/a-service-account`, `td2/ns/foo/sa/a-service-account`,
 	// or `td3/ns/foo/sa/a-service-account` will be treated the same in the Istio mesh.
