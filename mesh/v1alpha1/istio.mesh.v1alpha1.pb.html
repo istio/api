@@ -899,12 +899,15 @@ For example outbound|8080|v2|reviews.prod.svc.cluster.local. This can be used to
 
 </td>
 </tr>
-<tr id="MeshConfig-operator">
-<td><code>operator</code></td>
+<tr id="MeshConfig-operator_manage_webhooks">
+<td><code>operatorManageWebhooks</code></td>
 <td><code>bool</code></td>
 <td>
 <p>Configure whether Operator manages webhook configurations. The current behavior
-of Galley and Sidecar Injector is that they manage their own webhook configurations.</p>
+of Galley and Sidecar Injector is that they manage their own webhook configurations.
+When this option is set as true, Istio Operator, instead of webhooks, manages the
+webhook configurations. When this option is set as false, webhooks manage their
+own webhook configurations.</p>
 
 </td>
 </tr>
@@ -1356,12 +1359,15 @@ For example outbound|8080|v2|reviews.prod.svc.cluster.local. This can be used to
 
 </td>
 </tr>
-<tr id="MeshConfig-operator">
-<td><code>operator</code></td>
+<tr id="MeshConfig-operator_manage_webhooks">
+<td><code>operatorManageWebhooks</code></td>
 <td><code>bool</code></td>
 <td>
 <p>Configure whether Operator manages webhook configurations. The current behavior
-of Galley and Sidecar Injector is that they manage their own webhook configurations.</p>
+of Galley and Sidecar Injector is that they manage their own webhook configurations.
+When this option is set as true, Istio Operator, instead of webhooks, manages the
+webhook configurations. When this option is set as false, webhooks manage their
+own webhook configurations.</p>
 
 </td>
 </tr>

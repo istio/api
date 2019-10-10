@@ -383,8 +383,7 @@ message MeshConfig {
   // Configure whether Operator manages webhook configurations. The current behavior
   // of Galley and Sidecar Injector is that they manage their own webhook configurations.
   // When this option is set as true, Istio Operator, instead of webhooks, manages the
-  // webhook configurations. When this option is set as false, webhooks manage their
-  // own webhook configurations.
+  // webhook configurations.
   bool operator_manage_webhooks = 49;
 
   // $hide_from_docs

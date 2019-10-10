@@ -36001,7 +36001,7 @@
               },
               {
                 "id": 49,
-                "name": "operator",
+                "name": "operator_manage_webhooks",
                 "type": "bool"
               }
             ],

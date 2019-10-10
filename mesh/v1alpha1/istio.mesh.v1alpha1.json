@@ -224,8 +224,8 @@
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.Certificate"
             }
           },
-          "operator": {
-            "description": "Configure whether Operator manages webhook configurations. The current behavior of Galley and Sidecar Injector is that they manage their own webhook configurations.",
+          "operatorManageWebhooks": {
+            "description": "Configure whether Operator manages webhook configurations. The current behavior of Galley and Sidecar Injector is that they manage their own webhook configurations. When this option is set as true, Istio Operator, instead of webhooks, manages the webhook configurations. When this option is set as false, webhooks manage their own webhook configurations.",
             "type": "boolean"
           }
         }
