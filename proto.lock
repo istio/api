@@ -35998,6 +35998,11 @@
                 "name": "certificates",
                 "type": "Certificate",
                 "is_repeated": true
+              },
+              {
+                "id": 49,
+                "name": "operator",
+                "type": "bool"
               }
             ],
             "reserved_ids": [

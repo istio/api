@@ -380,8 +380,12 @@ message MeshConfig {
   // Configure the provision of certificates.
   repeated Certificate certificates = 47;
 
+  // Configure whether Operator manages webhook configurations. The current behavior
+  // of Galley and Sidecar Injector is that they manage their own webhook configurations.
+  bool operator = 49;
+
   // $hide_from_docs
-  // Next available field number: 49
+  // Next available field number: 50
 }
 
 // Resource describes the source of configuration

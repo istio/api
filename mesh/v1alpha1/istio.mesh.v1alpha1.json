@@ -223,6 +223,10 @@
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.Certificate"
             }
+          },
+          "operator": {
+            "description": "Configure whether Operator manages webhook configurations. The current behavior of Galley and Sidecar Injector is that they manage their own webhook configurations.",
+            "type": "boolean"
           }
         }
       },
