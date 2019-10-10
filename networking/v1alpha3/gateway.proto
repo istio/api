@@ -14,6 +14,8 @@
 
 syntax = "proto3";
 
+import "google/api/field_behavior.proto";
+
 // $title: Gateway
 // $description: Configuration affecting edge load balancer.
 // $location: https://istio.io/docs/reference/config/networking/v1alpha3/gateway.html
@@ -203,15 +205,15 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // +k8s:deepcopy-gen=true
 // -->
 message Gateway {
-  // REQUIRED: A list of server specifications.
-  repeated Server servers = 1;
+  // A list of server specifications.
+  repeated Server servers = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // REQUIRED: One or more labels that indicate a specific set of pods/VMs
+  // One or more labels that indicate a specific set of pods/VMs
   // on which this gateway configuration should be applied. The scope of
   // label search is restricted to the configuration namespace in which the
   // the resource is present. In other words, the Gateway resource must
   // reside in the same namespace as the gateway workload instance.
-  map<string, string> selector = 2;
+  map<string, string> selector = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 // `Server` describes the properties of the proxy on a given load balancer
@@ -276,9 +278,9 @@ message Gateway {
 //       privateKey: /etc/certs/privatekey.pem
 // ```
 message Server {
-  // REQUIRED: The Port on which the proxy should listen for incoming
+  // The Port on which the proxy should listen for incoming
   // connections.
-  Port port = 1;
+  Port port = 1 [(google.api.field_behavior) = REQUIRED];
 
   // $hide_from_docs
   // The ip or the Unix domain socket to which the listener should be bound
@@ -287,7 +289,7 @@ message Server {
   // number should be 0.
   string bind = 4;
 
-  // REQUIRED. One or more hosts exposed by this gateway.
+  // One or more hosts exposed by this gateway.
   // While typically applicable to
   // HTTP services, it can also be used for TCP services using TLS with SNI.
   // A host is specified as a `dnsName` with an optional `namespace/` prefix.
@@ -316,7 +318,7 @@ message Server {
   // Private configurations (e.g., `exportTo` set to `.`) will not be
   // available. Refer to the `exportTo` setting in `VirtualService`,
   // `DestinationRule`, and `ServiceEntry` configurations for details.
-  repeated string hosts = 2;
+  repeated string hosts = 2 [(google.api.field_behavior) = REQUIRED];
 
   message TLSOptions {
     // If set to true, the load balancer will send a 301 redirect for all
@@ -455,14 +457,14 @@ message Server {
 
 // Port describes the properties of a specific port of a service.
 message Port {
-  // REQUIRED: A valid non-negative integer port number.
-  uint32 number = 1;
+  // A valid non-negative integer port number.
+  uint32 number = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // REQUIRED: The protocol exposed on the port.
+  // The protocol exposed on the port.
   // MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS.
   // TLS implies the connection will be routed based on the SNI header to
   // the destination without terminating the TLS connection.
-  string protocol = 2;
+  string protocol = 2 [(google.api.field_behavior) = REQUIRED];
 
   // Label assigned to the port.
   string name = 3;

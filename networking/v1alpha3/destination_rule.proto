@@ -13,6 +13,7 @@
 //   limitations under the License.
 syntax = "proto3";
 
+import "google/api/field_behavior.proto";
 import "google/protobuf/duration.proto";
 import "networking/v1alpha3/virtual_service.proto";
 import "gogoproto/gogo.proto";
@@ -105,7 +106,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // +k8s:deepcopy-gen=true
 // -->
 message DestinationRule {
-  // REQUIRED. The name of a service from the service registry. Service
+  // The name of a service from the service registry. Service
   // names are looked up from the platform's service registry (e.g.,
   // Kubernetes services, Consul services, etc.) and from the hosts
   // declared by [ServiceEntries](https://istio.io/docs/reference/config/networking/v1alpha3/service-entry/#ServiceEntry). Rules defined for
@@ -121,7 +122,7 @@ message DestinationRule {
   // qualified domain names over short names._
   //
   // Note that the host field applies to both HTTP and TCP services.
-  string host = 1;
+  string host = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Traffic policies to apply (load balancing policy, connection pool
   // sizes, outlier detection).
@@ -231,9 +232,9 @@ message TrafficPolicy {
 // may be meaningful. In this case a traffic policy with [TLSSettings](#TLSSettings)
 // can be used to identify a specific SNI host corresponding to the named subset.
 message Subset {
-  // REQUIRED. Name of the subset. The service name and the subset name can
+  // Name of the subset. The service name and the subset name can
   // be used for traffic splitting in a route rule.
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Labels apply a filter over the endpoints of a service in the
   // service registry. See route rules for examples of usage.
@@ -320,15 +321,15 @@ message LoadBalancerSettings {
     // Consistent Hash load balancer. If the cookie is not present, it will
     // be generated.
     message HTTPCookie {
-      // REQUIRED. Name of the cookie.
-      string name = 1;
+      // Name of the cookie.
+      string name = 1 [(google.api.field_behavior) = REQUIRED];
       // Path to set for the cookie.
       string path = 2;
-      // REQUIRED. Lifetime of the cookie.
-      google.protobuf.Duration ttl = 3 [(gogoproto.stdduration) = true];
+      // Lifetime of the cookie.
+      google.protobuf.Duration ttl = 3 [(google.api.field_behavior) = REQUIRED, (gogoproto.stdduration) = true];
     };
 
-    // REQUIRED: The hash key to use.
+    // The hash key to use.
     oneof hash_key {
       // Hash based on a specific HTTP header.
       string http_header_name = 1;
@@ -598,9 +599,9 @@ message TLSSettings {
     ISTIO_MUTUAL = 3;
   };
 
-  // REQUIRED: Indicates whether connections to this port should be secured
+  // Indicates whether connections to this port should be secured
   // using TLS. The value of this field determines how TLS is enforced.
-  TLSmode mode = 1;
+  TLSmode mode = 1 [(google.api.field_behavior) = REQUIRED];
 
   // REQUIRED if mode is `MUTUAL`. The path to the file holding the
   // client-side TLS certificate to use.

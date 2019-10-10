@@ -14,6 +14,8 @@
 
 syntax = "proto3";
 
+import "google/api/field_behavior.proto";
+
 // $title: RBAC
 // $description: Configuration for Role Based Access Control.
 // $location: https://istio.io/docs/reference/config/authorization/istio.rbac.v1alpha1.html
@@ -95,19 +97,19 @@ option go_package="istio.io/api/rbac/v1alpha1";
 // +k8s:deepcopy-gen=true
 // -->
 message ServiceRole {
-  // Required. The set of access rules (permissions) that the role has.
-  repeated AccessRule rules = 1;
+  // The set of access rules (permissions) that the role has.
+  repeated AccessRule rules = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 // AccessRule defines a permission to access a list of services.
 message AccessRule {
-  // Required. A list of service names.
+  // A list of service names.
   // Exact match, prefix match, and suffix match are supported for service names.
   // For example, the service name "bookstore.mtv.cluster.local" matches
   // "bookstore.mtv.cluster.local" (exact match), or "bookstore\*" (prefix match),
   // or "\*.mtv.cluster.local" (suffix match).
   // If set to ["\*"], it refers to all services in the namespace.
-  repeated string services = 1;
+  repeated string services = 1 [(google.api.field_behavior) = REQUIRED];
 
   // $hide_from_docs
   // Optional. A list of HTTP hosts. This is matched against the HOST header in
@@ -201,11 +203,11 @@ enum EnforcementMode {
 // +k8s:deepcopy-gen=true
 // -->
 message ServiceRoleBinding {
-  // Required. List of subjects that are assigned the ServiceRole object.
-  repeated Subject subjects = 1;
+  // List of subjects that are assigned the ServiceRole object.
+  repeated Subject subjects = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. Reference to the ServiceRole object.
-  RoleRef roleRef = 2;
+  // Reference to the ServiceRole object.
+  RoleRef roleRef = 2 [(google.api.field_behavior) = REQUIRED];
 
   // $hide_from_docs
   // Indicates enforcement mode of the ServiceRoleBinding.
@@ -236,8 +238,8 @@ message ServiceRoleBinding {
   //    actions:
   //    - paths: ["/info"]
   //      methods: ["GET"]
-  // Required. The set of access rules (permissions) that the role has.
-  repeated AccessRule actions = 4;
+  // The set of access rules (permissions) that the role has.
+  repeated AccessRule actions = 4 [(google.api.field_behavior) = REQUIRED];
 
   // $hide_from_docs
   // A `role` inside a ServiceRoleBinding refers to the ServiceRole that this
@@ -309,13 +311,13 @@ message Subject {
 
 // RoleRef refers to a role object.
 message RoleRef {
-  // Required. The type of the role being referenced.
+  // The type of the role being referenced.
   // Currently, "ServiceRole" is the only supported value for "kind".
-  string kind = 1;
+  string kind = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. The name of the ServiceRole object being referenced.
+  // The name of the ServiceRole object being referenced.
   // The ServiceRole object must be in the same namespace as the ServiceRoleBinding object.
-  string name = 2;
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 // RbacConfig implements the ClusterRbacConfig Custom Resource Definition for controlling Istio RBAC behavior.
