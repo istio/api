@@ -34,7 +34,7 @@ option go_package="istio.io/api/policy/v1beta1";
 // +k8s:deepcopy-gen=true
 // -->
 message AttributeManifest {
-  // Optional. The revision of this document. Assigned by server.
+  // The revision of this document. Assigned by server.
   string revision = 1;
   // Name of the component producing these attributes. This can be
   // the proxy (with the canonical name `istio-proxy`) or the name of an
@@ -83,7 +83,7 @@ message AttributeManifest {
   // attribute name and value becomes the HTTP header name and value. The actual
   // encoding scheme will be decided later.
   message AttributeInfo {
-    // Optional. A human-readable description of the attribute's purpose.
+    // A human-readable description of the attribute's purpose.
     string description = 1;
 
     // The type of data carried by this attribute.
@@ -137,9 +137,9 @@ message Rule {
   // * `match(destination.service.host, "ratings.*")` selects any request targeting a service whose
   // name starts with "ratings"
   // * `attr1 == "20" && attr2 == "30"` logical AND, OR, and NOT are also available
-  string match = 1 [(google.api.field_behavior) = REQUIRED];
+  string match = 1;
 
-  // Optional. The actions that will be executed when match evaluates to `true`.
+  // The actions that will be executed when match evaluates to `true`.
   repeated Action actions = 2;
 
   // A template for an HTTP header manipulation. Values in the template are expressions
@@ -162,7 +162,7 @@ message Rule {
     // Header name literal value.
     string name = 1 [(google.api.field_behavior) = REQUIRED];
 
-    // Optional. Header value expressions.
+    // Header value expressions.
     repeated string values = 2;
 
     // Header operation type.
@@ -177,20 +177,20 @@ message Rule {
       APPEND = 2;
     }
 
-    // Optional. Header operation type. Default operation is to replace the value of the header by name.
+    // Header operation type. Default operation is to replace the value of the header by name.
     Operation operation = 3;
   }
 
-  // Optional. Templatized operations on the request headers using values produced by the
+  // Templatized operations on the request headers using values produced by the
   // rule actions. Require the check action result to be OK.
   repeated HeaderOperationTemplate request_header_operations = 3;
 
-  // Optional. Templatized operations on the response headers using values produced by the
+  // Templatized operations on the response headers using values produced by the
   // rule actions. Require the check action result to be OK.
   repeated HeaderOperationTemplate response_header_operations = 4;
 
   // $hide_from_docs
-  // Optional. Provides the ability to add a sampling configuration for Mixer rules. This sampling
+  // Provides the ability to add a sampling configuration for Mixer rules. This sampling
   // will limit the scenarios in which the `actions` of the rule are executed. The sampling will
   // only take place after a `match` predicate has evaluated to true.
   //
@@ -219,7 +219,7 @@ message Action {
   // The constructed objects are then passed to the `handler` referenced within this action.
   repeated string instances = 3 [(google.api.field_behavior) = REQUIRED];
 
-  // Optional. A handle to refer to the results of the action.
+  // A handle to refer to the results of the action.
   string name = 4;
 }
 
@@ -267,13 +267,13 @@ message Instance {
   // templates, use the `compiled_template` field instead.
   //
   // The value must match the name of the available template in scope.
-  string template = 2 [(google.api.field_behavior) = REQUIRED];
+  string template = 2;
 
   // Depends on referenced template. Struct representation of a
   // proto defined by the template; this varies depending on the value of field `template`.
   google.protobuf.Struct params = 3 [(google.api.field_behavior) = REQUIRED];
 
-  // Optional. Defines attribute bindings to map the output of attribute-producing adapters back into
+  // Defines attribute bindings to map the output of attribute-producing adapters back into
   // the attribute space. The variable `output` refers to the output template instance produced
   // by the adapter.
   // The following example derives `source.namespace` from `source.uid` in the context of Kubernetes:
@@ -366,13 +366,13 @@ message Handler {
   // adapters, use the `compiled_adapter` field instead.
   //
   // An adapter's implementation name is typically a constant in its code.
-  string adapter = 2 [(google.api.field_behavior) = REQUIRED];
+  string adapter = 2;
 
-  // Optional. Depends on adapter implementation. Struct representation of a
+  // Depends on adapter implementation. Struct representation of a
   // proto defined by the adapter implementation; this varies depending on the value of field `adapter`.
   google.protobuf.Struct params = 3;
 
-  // Optional. Information on how to connect to the out-of-process adapter.
+  // Information on how to connect to the out-of-process adapter.
   // This is used if the adapter is not compiled into Mixer binary and is running as a separate process.
   Connection connection = 4;
 }
@@ -396,9 +396,9 @@ message Connection {
 // Multiple sampling strategies are supported. When multiple strategies are configured,
 // a request must be selected by all configured sampling strategies.
 message Sampling {
-  // Optional. Provides filtering of actions based on random selection per request.
+  // Provides filtering of actions based on random selection per request.
   RandomSampling random = 1;
-  // Optional. Provides filtering of actions based on number of requests observed within
+  // Provides filtering of actions based on number of requests observed within
   // a configured time window.
   RateLimitSampling rate_limit = 2;
 }
