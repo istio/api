@@ -26,7 +26,7 @@
             "format": "string"
           },
           "revision": {
-            "description": "Optional. The revision of this document. Assigned by server.",
+            "description": "The revision of this document. Assigned by server.",
             "type": "string",
             "format": "string"
           },
@@ -44,7 +44,7 @@
         "type": "object",
         "properties": {
           "description": {
-            "description": "Optional. A human-readable description of the attribute's purpose.",
+            "description": "A human-readable description of the attribute's purpose.",
             "type": "string",
             "format": "string"
           },
@@ -81,21 +81,21 @@
             "format": "string"
           },
           "actions": {
-            "description": "Optional. The actions that will be executed when match evaluates to `true`.",
+            "description": "The actions that will be executed when match evaluates to `true`.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.policy.v1beta1.Action"
             }
           },
           "requestHeaderOperations": {
-            "description": "Optional. Templatized operations on the request headers using values produced by the rule actions. Require the check action result to be OK.",
+            "description": "Templatized operations on the request headers using values produced by the rule actions. Require the check action result to be OK.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.policy.v1beta1.Rule.HeaderOperationTemplate"
             }
           },
           "responseHeaderOperations": {
-            "description": "Optional. Templatized operations on the response headers using values produced by the rule actions. Require the check action result to be OK.",
+            "description": "Templatized operations on the response headers using values produced by the rule actions. Require the check action result to be OK.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.policy.v1beta1.Rule.HeaderOperationTemplate"
@@ -111,7 +111,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "Optional. A handle to refer to the results of the action.",
+            "description": "A handle to refer to the results of the action.",
             "type": "string",
             "format": "string"
           },
@@ -140,7 +140,7 @@
             "format": "string"
           },
           "values": {
-            "description": "Optional. Header value expressions.",
+            "description": "Header value expressions.",
             "type": "array",
             "items": {
               "type": "string",
@@ -197,7 +197,7 @@
             "type": "object"
           },
           "attributeBindings": {
-            "description": "Optional. Defines attribute bindings to map the output of attribute-producing adapters back into the attribute space. The variable `output` refers to the output template instance produced by the adapter. The following example derives `source.namespace` from `source.uid` in the context of Kubernetes: ```yaml params: # Pass the required attribute data to the adapter source_uid: source.uid | \"\" attribute_bindings: # Fill the new attributes from the adapter produced output source.namespace: output.source_namespace ```",
+            "description": "Defines attribute bindings to map the output of attribute-producing adapters back into the attribute space. The variable `output` refers to the output template instance produced by the adapter. The following example derives `source.namespace` from `source.uid` in the context of Kubernetes: ```yaml params: # Pass the required attribute data to the adapter source_uid: source.uid | \"\" attribute_bindings: # Fill the new attributes from the adapter produced output source.namespace: output.source_namespace ```",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -216,7 +216,7 @@
             "format": "string"
           },
           "params": {
-            "description": "Optional. Depends on adapter implementation. Struct representation of a proto defined by the adapter implementation; this varies depending on the value of field `adapter`.",
+            "description": "Depends on adapter implementation. Struct representation of a proto defined by the adapter implementation; this varies depending on the value of field `adapter`.",
             "type": "object"
           },
           "compiledAdapter": {
@@ -491,7 +491,7 @@
             "$ref": "#/components/schemas/istio.policy.v1beta1.HttpStatusCode"
           },
           "headers": {
-            "description": "Optional HTTP response headers.",
+            "description": "HTTP response headers.",
             "type": "object",
             "additionalProperties": {
               "type": "string",

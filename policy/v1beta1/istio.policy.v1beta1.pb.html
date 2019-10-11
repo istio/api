@@ -60,7 +60,7 @@ Yes
 <td><code>name</code></td>
 <td><code>string</code></td>
 <td>
-<p>Optional. A handle to refer to the results of the action.</p>
+<p>A handle to refer to the results of the action.</p>
 
 </td>
 <td>
@@ -89,7 +89,7 @@ of an Istio deployment.</p>
 <td><code>revision</code></td>
 <td><code>string</code></td>
 <td>
-<p>Optional. The revision of this document. Assigned by server.</p>
+<p>The revision of this document. Assigned by server.</p>
 
 </td>
 <td>
@@ -194,7 +194,7 @@ encoding scheme will be decided later.</p>
 <td><code>description</code></td>
 <td><code>string</code></td>
 <td>
-<p>Optional. A human-readable description of the attribute&rsquo;s purpose.</p>
+<p>A human-readable description of the attribute&rsquo;s purpose.</p>
 
 </td>
 <td>
@@ -360,7 +360,7 @@ to an RPC error.</p>
 <td><code>code</code></td>
 <td><code><a href="#HttpStatusCode">HttpStatusCode</a></code></td>
 <td>
-<p>Optional HTTP status code. If not set, RPC error code is used.</p>
+<p>HTTP status code. If not set, RPC error code is used.</p>
 
 </td>
 <td>
@@ -382,7 +382,7 @@ No
 <td><code>headers</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>Optional HTTP response headers.</p>
+<p>HTTP response headers.</p>
 
 </td>
 <td>
@@ -595,14 +595,14 @@ adapters, use the <code>compiled_adapter</code> field instead.</p>
 
 </td>
 <td>
-Yes
+No
 </td>
 </tr>
 <tr id="Handler-params">
 <td><code>params</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">google.protobuf.Struct</a></code></td>
 <td>
-<p>Optional. Depends on adapter implementation. Struct representation of a
+<p>Depends on adapter implementation. Struct representation of a
 proto defined by the adapter implementation; this varies depending on the value of field <code>adapter</code>.</p>
 
 </td>
@@ -614,7 +614,7 @@ No
 <td><code>connection</code></td>
 <td><code><a href="#Connection">Connection</a></code></td>
 <td>
-<p>Optional. Information on how to connect to the out-of-process adapter.
+<p>Information on how to connect to the out-of-process adapter.
 This is used if the adapter is not compiled into Mixer binary and is running as a separate process.</p>
 
 </td>
@@ -1032,7 +1032,7 @@ templates, use the <code>compiled_template</code> field instead.</p>
 
 </td>
 <td>
-Yes
+No
 </td>
 </tr>
 <tr id="Instance-params">
@@ -1051,7 +1051,7 @@ Yes
 <td><code>attributeBindings</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>Optional. Defines attribute bindings to map the output of attribute-producing adapters back into
+<p>Defines attribute bindings to map the output of attribute-producing adapters back into
 the attribute space. The variable <code>output</code> refers to the output template instance produced
 by the adapter.
 The following example derives <code>source.namespace</code> from <code>source.uid</code> in the context of Kubernetes:</p>
@@ -1258,14 +1258,14 @@ name starts with &ldquo;ratings&rdquo;</li>
 
 </td>
 <td>
-Yes
+No
 </td>
 </tr>
 <tr id="Rule-actions">
 <td><code>actions</code></td>
 <td><code><a href="#Action">Action[]</a></code></td>
 <td>
-<p>Optional. The actions that will be executed when match evaluates to <code>true</code>.</p>
+<p>The actions that will be executed when match evaluates to <code>true</code>.</p>
 
 </td>
 <td>
@@ -1276,7 +1276,7 @@ No
 <td><code>requestHeaderOperations</code></td>
 <td><code><a href="#Rule-HeaderOperationTemplate">Rule.HeaderOperationTemplate[]</a></code></td>
 <td>
-<p>Optional. Templatized operations on the request headers using values produced by the
+<p>Templatized operations on the request headers using values produced by the
 rule actions. Require the check action result to be OK.</p>
 
 </td>
@@ -1288,7 +1288,7 @@ No
 <td><code>responseHeaderOperations</code></td>
 <td><code><a href="#Rule-HeaderOperationTemplate">Rule.HeaderOperationTemplate[]</a></code></td>
 <td>
-<p>Optional. Templatized operations on the response headers using values produced by the
+<p>Templatized operations on the response headers using values produced by the
 rule actions. Require the check action result to be OK.</p>
 
 </td>
@@ -1341,7 +1341,7 @@ Yes
 <td><code>values</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Optional. Header value expressions.</p>
+<p>Header value expressions.</p>
 
 </td>
 <td>
@@ -1352,7 +1352,7 @@ No
 <td><code>operation</code></td>
 <td><code><a href="#Rule-HeaderOperationTemplate-Operation">Rule.HeaderOperationTemplate.Operation</a></code></td>
 <td>
-<p>Optional. Header operation type. Default operation is to replace the value of the header by name.</p>
+<p>Header operation type. Default operation is to replace the value of the header by name.</p>
 
 </td>
 <td>
