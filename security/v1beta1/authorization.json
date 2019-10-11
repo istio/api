@@ -72,12 +72,12 @@
         "type": "object",
         "properties": {
           "key": {
-            "description": "Required. The name of an Istio attribute. See the [full list of supported attributes](https://istio.io/docs/reference/config/).",
+            "description": "The name of an Istio attribute. See the [full list of supported attributes](https://istio.io/docs/reference/config/).",
             "type": "string",
             "format": "string"
           },
           "values": {
-            "description": "Required. The allowed values for the attribute.",
+            "description": "The allowed values for the attribute.",
             "type": "array",
             "items": {
               "type": "string",
@@ -167,7 +167,7 @@
         "type": "object",
         "properties": {
           "matchLabels": {
-            "description": "REQUIRED: One or more labels that indicate a specific set of pods/VMs on which a policy should be applied. The scope of label search is restricted to the configuration namespace in which the resource is present.",
+            "description": "One or more labels that indicate a specific set of pods/VMs on which a policy should be applied. The scope of label search is restricted to the configuration namespace in which the resource is present.",
             "type": "object",
             "additionalProperties": {
               "type": "string",

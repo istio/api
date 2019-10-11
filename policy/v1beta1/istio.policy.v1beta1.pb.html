@@ -34,26 +34,26 @@ constructed using the instance &lsquo;RequestCountByService&rsquo;.</p>
 <td><code>handler</code></td>
 <td><code>string</code></td>
 <td>
-<p>Required. Fully qualified name of the handler to invoke.
+<p>Fully qualified name of the handler to invoke.
 Must match the <code>name</code> of a <a href="#Handler-name">Handler</a>.</p>
 
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr id="Action-instances">
 <td><code>instances</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Required. Each value must match the fully qualified name of the
+<p>Each value must match the fully qualified name of the
 <a href="#Instance-name">Instance</a>s.
 Referenced instances are evaluated by resolving the attributes/literals for all the fields.
 The constructed objects are then passed to the <code>handler</code> referenced within this action.</p>
 
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr id="Action-name">
@@ -100,13 +100,13 @@ No
 <td><code>name</code></td>
 <td><code>string</code></td>
 <td>
-<p>Required. Name of the component producing these attributes. This can be
+<p>Name of the component producing these attributes. This can be
 the proxy (with the canonical name <code>istio-proxy</code>) or the name of an
 <code>attributes</code> kind adapter in Mixer.</p>
 
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr id="AttributeManifest-attributes">
@@ -205,11 +205,11 @@ No
 <td><code>valueType</code></td>
 <td><code><a href="#ValueType">ValueType</a></code></td>
 <td>
-<p>Required. The type of data carried by this attribute.</p>
+<p>The type of data carried by this attribute.</p>
 
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 </tbody>
@@ -561,19 +561,19 @@ spec:
 <td><code>name</code></td>
 <td><code>string</code></td>
 <td>
-<p>Required. Must be unique in the entire Mixer configuration. Used by <a href="#Action-handler">Actions</a>
+<p>Must be unique in the entire Mixer configuration. Used by <a href="#Action-handler">Actions</a>
 to refer to this handler.</p>
 
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr id="Handler-compiled_adapter">
 <td><code>compiledAdapter</code></td>
 <td><code>string</code></td>
 <td>
-<p>Required. The name of the compiled in adapter this handler instantiates. For referencing non compiled-in
+<p>The name of the compiled in adapter this handler instantiates. For referencing non compiled-in
 adapters, use the <code>adapter</code> field instead.</p>
 
 <p>The value must match the name of the available adapter Mixer is built with. An adapter&rsquo;s name is typically a
@@ -581,21 +581,21 @@ constant in its code.</p>
 
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr id="Handler-adapter">
 <td><code>adapter</code></td>
 <td><code>string</code></td>
 <td>
-<p>Required. The name of a specific adapter implementation. For referencing compiled-in
+<p>The name of a specific adapter implementation. For referencing compiled-in
 adapters, use the <code>compiled_adapter</code> field instead.</p>
 
 <p>An adapter&rsquo;s implementation name is typically a constant in its code.</p>
 
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr id="Handler-params">
@@ -997,54 +997,54 @@ Instances produced with this instance can be referenced by <a href="#Action">Act
 <td><code>name</code></td>
 <td><code>string</code></td>
 <td>
-<p>Required. The name of this instance</p>
+<p>The name of this instance</p>
 
 <p>Must be unique amongst other Instances in scope. Used by <a href="#Action">Action</a> to refer
 to an instance produced by this instance.</p>
 
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr id="Instance-compiled_template">
 <td><code>compiledTemplate</code></td>
 <td><code>string</code></td>
 <td>
-<p>Required. The name of the compiled in template this instance creates instances for. For referencing non compiled-in
+<p>The name of the compiled in template this instance creates instances for. For referencing non compiled-in
 templates, use the <code>template</code> field instead.</p>
 
 <p>The value must match the name of the available template Mixer is built with.</p>
 
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr id="Instance-template">
 <td><code>template</code></td>
 <td><code>string</code></td>
 <td>
-<p>Required. The name of the template this instance creates instances for. For referencing compiled-in
+<p>The name of the template this instance creates instances for. For referencing compiled-in
 templates, use the <code>compiled_template</code> field instead.</p>
 
 <p>The value must match the name of the available template in scope.</p>
 
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr id="Instance-params">
 <td><code>params</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct">google.protobuf.Struct</a></code></td>
 <td>
-<p>Required. Depends on referenced template. Struct representation of a
+<p>Depends on referenced template. Struct representation of a
 proto defined by the template; this varies depending on the value of field <code>template</code>.</p>
 
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr id="Instance-attribute_bindings">
@@ -1159,33 +1159,33 @@ TLS for connection to the backend.</p>
 <td><code>clientId</code></td>
 <td><code>string</code></td>
 <td>
-<p>REQUIRED. OAuth client id for mixer.</p>
+<p>OAuth client id for mixer.</p>
 
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr id="OAuth-client_secret">
 <td><code>clientSecret</code></td>
 <td><code>string</code></td>
 <td>
-<p>REQUIRED. The path to the file holding the client secret for oauth.</p>
+<p>The path to the file holding the client secret for oauth.</p>
 
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr id="OAuth-token_url">
 <td><code>tokenUrl</code></td>
 <td><code>string</code></td>
 <td>
-<p>REQUIRED. The Resource server&rsquo;s token endpoint URL.</p>
+<p>The Resource server&rsquo;s token endpoint URL.</p>
 
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr id="OAuth-scopes">
@@ -1242,7 +1242,7 @@ instance constructed using the &lsquo;RequestCountByService&rsquo; instance.</p>
 <td><code>match</code></td>
 <td><code>string</code></td>
 <td>
-<p>Required. Match is an attribute based predicate. When Mixer receives a
+<p>Match is an attribute based predicate. When Mixer receives a
 request it evaluates the match expression and executes all the associated <code>actions</code>
 if the match evaluates to true.</p>
 
@@ -1258,7 +1258,7 @@ name starts with &ldquo;ratings&rdquo;</li>
 
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr id="Rule-actions">
@@ -1330,11 +1330,11 @@ adapter to optionally modify the headers.</p>
 <td><code>name</code></td>
 <td><code>string</code></td>
 <td>
-<p>Required. Header name literal value.</p>
+<p>Header name literal value.</p>
 
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr id="Rule-HeaderOperationTemplate-values">

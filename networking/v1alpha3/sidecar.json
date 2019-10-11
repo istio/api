@@ -11,7 +11,7 @@
         "type": "object",
         "properties": {
           "labels": {
-            "description": "REQUIRED: One or more labels that indicate a specific set of pods/VMs on which this sidecar configuration should be applied. The scope of label search is restricted to the configuration namespace in which the the resource is present.",
+            "description": "One or more labels that indicate a specific set of pods/VMs on which this sidecar configuration should be applied. The scope of label search is restricted to the configuration namespace in which the the resource is present.",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -30,11 +30,11 @@
             "format": "string"
           },
           "number": {
-            "description": "REQUIRED: A valid non-negative integer port number.",
+            "description": "A valid non-negative integer port number.",
             "type": "integer"
           },
           "protocol": {
-            "description": "REQUIRED: The protocol exposed on the port. MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS. TLS implies the connection will be routed based on the SNI header to the destination without terminating the TLS connection.",
+            "description": "The protocol exposed on the port. MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS. TLS implies the connection will be routed based on the SNI header to the destination without terminating the TLS connection.",
             "type": "string",
             "format": "string"
           }
@@ -55,7 +55,7 @@
             }
           },
           "egress": {
-            "description": "REQUIRED. Egress specifies the configuration of the sidecar for processing outbound traffic from the attached workload instance to other services in the mesh.",
+            "description": "Egress specifies the configuration of the sidecar for processing outbound traffic from the attached workload instance to other services in the mesh.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1alpha3.IstioEgressListener"
@@ -79,7 +79,7 @@
             "format": "string"
           },
           "defaultEndpoint": {
-            "description": "REQUIRED: The loopback IP endpoint or Unix domain socket to which traffic should be forwarded to. This configuration can be used to redirect traffic arriving at the bind IP:Port on the sidecar to a localhost:port or Unix domain socket where the application workload instance is listening for connections. Format should be 127.0.0.1:PORT or `unix:///path/to/socket`",
+            "description": "The loopback IP endpoint or Unix domain socket to which traffic should be forwarded to. This configuration can be used to redirect traffic arriving at the bind IP:Port on the sidecar to a localhost:port or Unix domain socket where the application workload instance is listening for connections. Format should be 127.0.0.1:PORT or `unix:///path/to/socket`",
             "type": "string",
             "format": "string"
           },
@@ -101,7 +101,7 @@
             "format": "string"
           },
           "hosts": {
-            "description": "REQUIRED: One or more service hosts exposed by the listener in `namespace/dnsName` format. Services in the specified namespace matching `dnsName` will be exposed. The corresponding service can be a service in the service registry (e.g., a Kubernetes or cloud foundry service) or a service specified using a `ServiceEntry` or `VirtualService` configuration. Any associated `DestinationRule` in the same namespace will also be used.",
+            "description": "One or more service hosts exposed by the listener in `namespace/dnsName` format. Services in the specified namespace matching `dnsName` will be exposed. The corresponding service can be a service in the service registry (e.g., a Kubernetes or cloud foundry service) or a service specified using a `ServiceEntry` or `VirtualService` configuration. Any associated `DestinationRule` in the same namespace will also be used.",
             "type": "array",
             "items": {
               "type": "string",

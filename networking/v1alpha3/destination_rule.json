@@ -11,7 +11,7 @@
         "type": "object",
         "properties": {
           "host": {
-            "description": "REQUIRED. The name of a service from the service registry. Service names are looked up from the platform's service registry (e.g., Kubernetes services, Consul services, etc.) and from the hosts declared by [ServiceEntries](https://istio.io/docs/reference/config/networking/v1alpha3/service-entry/#ServiceEntry). Rules defined for services that do not exist in the service registry will be ignored.",
+            "description": "The name of a service from the service registry. Service names are looked up from the platform's service registry (e.g., Kubernetes services, Consul services, etc.) and from the hosts declared by [ServiceEntries](https://istio.io/docs/reference/config/networking/v1alpha3/service-entry/#ServiceEntry). Rules defined for services that do not exist in the service registry will be ignored.",
             "type": "string",
             "format": "string"
           },
@@ -65,7 +65,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "REQUIRED. Name of the subset. The service name and the subset name can be used for traffic splitting in a route rule.",
+            "description": "Name of the subset. The service name and the subset name can be used for traffic splitting in a route rule.",
             "type": "string",
             "format": "string"
           },
@@ -288,12 +288,12 @@
             "format": "string"
           },
           "name": {
-            "description": "REQUIRED. Name of the cookie.",
+            "description": "Name of the cookie.",
             "type": "string",
             "format": "string"
           },
           "ttl": {
-            "description": "REQUIRED. Lifetime of the cookie.",
+            "description": "Lifetime of the cookie.",
             "type": "string"
           }
         }

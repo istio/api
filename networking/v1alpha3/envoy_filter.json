@@ -30,7 +30,7 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.WorkloadSelector"
           },
           "configPatches": {
-            "description": "REQUIRED. One or more patches with match conditions.",
+            "description": "One or more patches with match conditions.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectPatch"
@@ -52,12 +52,12 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.Filter.FilterType"
           },
           "filterName": {
-            "description": "REQUIRED: The name of the filter to instantiate. The name must match a supported filter _compiled into_ Envoy.",
+            "description": "The name of the filter to instantiate. The name must match a supported filter _compiled into_ Envoy.",
             "type": "string",
             "format": "string"
           },
           "filterConfig": {
-            "description": "REQUIRED: Filter specific configuration which depends on the filter being instantiated.",
+            "description": "Filter specific configuration which depends on the filter being instantiated.",
             "type": "object"
           }
         }
@@ -67,7 +67,7 @@
         "type": "object",
         "properties": {
           "labels": {
-            "description": "REQUIRED: One or more labels that indicate a specific set of pods/VMs on which this sidecar configuration should be applied. The scope of label search is restricted to the configuration namespace in which the the resource is present.",
+            "description": "One or more labels that indicate a specific set of pods/VMs on which this sidecar configuration should be applied. The scope of label search is restricted to the configuration namespace in which the the resource is present.",
             "type": "object",
             "additionalProperties": {
               "type": "string",

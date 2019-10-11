@@ -11,7 +11,7 @@
         "type": "object",
         "properties": {
           "rules": {
-            "description": "Required. The set of access rules (permissions) that the role has.",
+            "description": "The set of access rules (permissions) that the role has.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.rbac.v1alpha1.AccessRule"
@@ -24,7 +24,7 @@
         "type": "object",
         "properties": {
           "services": {
-            "description": "Required. A list of service names. Exact match, prefix match, and suffix match are supported for service names. For example, the service name \"bookstore.mtv.cluster.local\" matches \"bookstore.mtv.cluster.local\" (exact match), or \"bookstore\\*\" (prefix match), or \"\\*.mtv.cluster.local\" (suffix match). If set to [\"\\*\"], it refers to all services in the namespace.",
+            "description": "A list of service names. Exact match, prefix match, and suffix match are supported for service names. For example, the service name \"bookstore.mtv.cluster.local\" matches \"bookstore.mtv.cluster.local\" (exact match), or \"bookstore\\*\" (prefix match), or \"\\*.mtv.cluster.local\" (suffix match). If set to [\"\\*\"], it refers to all services in the namespace.",
             "type": "array",
             "items": {
               "type": "string",
@@ -136,7 +136,7 @@
         "type": "object",
         "properties": {
           "subjects": {
-            "description": "Required. List of subjects that are assigned the ServiceRole object.",
+            "description": "List of subjects that are assigned the ServiceRole object.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.rbac.v1alpha1.Subject"
@@ -149,7 +149,7 @@
             "$ref": "#/components/schemas/istio.rbac.v1alpha1.EnforcementMode"
           },
           "actions": {
-            "description": "Inline role definition. An inline role is a role that is defined inside an authorization policy, instead of explicitly defined in a ServiceRole object. Inline roles can be used for the role definitions that are not intended to be reused in other bindings, while explicit roles are reusable. Both inline roles (defined in \"actions\" field) and explicit roles (defined in ServiceRole) are supported. Users should use only one of them in a single binding. For example, the following \"product-frontend\" AuthorizationPolicy allows \"frontend\" service to view \"product\" service on \"/info\" path. ```yaml apiVersion: \"rbac.istio.io/v1alpha1\" kind: AuthorizationPolicy metadata: name: product-frontend namespace: ns1 spec: selector: labels: app: product allow: - subjects: - names: [\"cluster.local/ns/default/sa/frontend\"] actions: - paths: [\"/info\"] methods: [\"GET\"] Required. The set of access rules (permissions) that the role has.",
+            "description": "Inline role definition. An inline role is a role that is defined inside an authorization policy, instead of explicitly defined in a ServiceRole object. Inline roles can be used for the role definitions that are not intended to be reused in other bindings, while explicit roles are reusable. Both inline roles (defined in \"actions\" field) and explicit roles (defined in ServiceRole) are supported. Users should use only one of them in a single binding. For example, the following \"product-frontend\" AuthorizationPolicy allows \"frontend\" service to view \"product\" service on \"/info\" path. ```yaml apiVersion: \"rbac.istio.io/v1alpha1\" kind: AuthorizationPolicy metadata: name: product-frontend namespace: ns1 spec: selector: labels: app: product allow: - subjects: - names: [\"cluster.local/ns/default/sa/frontend\"] actions: - paths: [\"/info\"] methods: [\"GET\"] The set of access rules (permissions) that the role has.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.rbac.v1alpha1.AccessRule"
@@ -256,12 +256,12 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "Required. The name of the ServiceRole object being referenced. The ServiceRole object must be in the same namespace as the ServiceRoleBinding object.",
+            "description": "The name of the ServiceRole object being referenced. The ServiceRole object must be in the same namespace as the ServiceRoleBinding object.",
             "type": "string",
             "format": "string"
           },
           "kind": {
-            "description": "Required. The type of the role being referenced. Currently, \"ServiceRole\" is the only supported value for \"kind\".",
+            "description": "The type of the role being referenced. Currently, \"ServiceRole\" is the only supported value for \"kind\".",
             "type": "string",
             "format": "string"
           }

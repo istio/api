@@ -21,7 +21,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "Required. Name of the component producing these attributes. This can be the proxy (with the canonical name `istio-proxy`) or the name of an `attributes` kind adapter in Mixer.",
+            "description": "Name of the component producing these attributes. This can be the proxy (with the canonical name `istio-proxy`) or the name of an `attributes` kind adapter in Mixer.",
             "type": "string",
             "format": "string"
           },
@@ -76,7 +76,7 @@
         "type": "object",
         "properties": {
           "match": {
-            "description": "Required. Match is an attribute based predicate. When Mixer receives a request it evaluates the match expression and executes all the associated `actions` if the match evaluates to true.",
+            "description": "Match is an attribute based predicate. When Mixer receives a request it evaluates the match expression and executes all the associated `actions` if the match evaluates to true.",
             "type": "string",
             "format": "string"
           },
@@ -116,12 +116,12 @@
             "format": "string"
           },
           "handler": {
-            "description": "Required. Fully qualified name of the handler to invoke. Must match the `name` of a [Handler][istio.policy.v1beta1.Handler.name].",
+            "description": "Fully qualified name of the handler to invoke. Must match the `name` of a [Handler][istio.policy.v1beta1.Handler.name].",
             "type": "string",
             "format": "string"
           },
           "instances": {
-            "description": "Required. Each value must match the fully qualified name of the [Instance][istio.policy.v1beta1.Instance.name]s. Referenced instances are evaluated by resolving the attributes/literals for all the fields. The constructed objects are then passed to the `handler` referenced within this action.",
+            "description": "Each value must match the fully qualified name of the [Instance][istio.policy.v1beta1.Instance.name]s. Referenced instances are evaluated by resolving the attributes/literals for all the fields. The constructed objects are then passed to the `handler` referenced within this action.",
             "type": "array",
             "items": {
               "type": "string",
@@ -135,7 +135,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "Required. Header name literal value.",
+            "description": "Header name literal value.",
             "type": "string",
             "format": "string"
           },
@@ -178,22 +178,22 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "Required. The name of this instance",
+            "description": "The name of this instance",
             "type": "string",
             "format": "string"
           },
           "compiledTemplate": {
-            "description": "Required. The name of the compiled in template this instance creates instances for. For referencing non compiled-in templates, use the `template` field instead.",
+            "description": "The name of the compiled in template this instance creates instances for. For referencing non compiled-in templates, use the `template` field instead.",
             "type": "string",
             "format": "string"
           },
           "template": {
-            "description": "Required. The name of the template this instance creates instances for. For referencing compiled-in templates, use the `compiled_template` field instead.",
+            "description": "The name of the template this instance creates instances for. For referencing compiled-in templates, use the `compiled_template` field instead.",
             "type": "string",
             "format": "string"
           },
           "params": {
-            "description": "Required. Depends on referenced template. Struct representation of a proto defined by the template; this varies depending on the value of field `template`.",
+            "description": "Depends on referenced template. Struct representation of a proto defined by the template; this varies depending on the value of field `template`.",
             "type": "object"
           },
           "attributeBindings": {
@@ -211,7 +211,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "Required. Must be unique in the entire Mixer configuration. Used by [Actions][istio.policy.v1beta1.Action.handler] to refer to this handler.",
+            "description": "Must be unique in the entire Mixer configuration. Used by [Actions][istio.policy.v1beta1.Action.handler] to refer to this handler.",
             "type": "string",
             "format": "string"
           },
@@ -220,12 +220,12 @@
             "type": "object"
           },
           "compiledAdapter": {
-            "description": "Required. The name of the compiled in adapter this handler instantiates. For referencing non compiled-in adapters, use the `adapter` field instead.",
+            "description": "The name of the compiled in adapter this handler instantiates. For referencing non compiled-in adapters, use the `adapter` field instead.",
             "type": "string",
             "format": "string"
           },
           "adapter": {
-            "description": "Required. The name of a specific adapter implementation. For referencing compiled-in adapters, use the `compiled_adapter` field instead.",
+            "description": "The name of a specific adapter implementation. For referencing compiled-in adapters, use the `compiled_adapter` field instead.",
             "type": "string",
             "format": "string"
           },
@@ -438,17 +438,17 @@
         "type": "object",
         "properties": {
           "clientId": {
-            "description": "REQUIRED. OAuth client id for mixer.",
+            "description": "OAuth client id for mixer.",
             "type": "string",
             "format": "string"
           },
           "clientSecret": {
-            "description": "REQUIRED. The path to the file holding the client secret for oauth.",
+            "description": "The path to the file holding the client secret for oauth.",
             "type": "string",
             "format": "string"
           },
           "tokenUrl": {
-            "description": "REQUIRED. The Resource server's token endpoint URL.",
+            "description": "The Resource server's token endpoint URL.",
             "type": "string",
             "format": "string"
           },
