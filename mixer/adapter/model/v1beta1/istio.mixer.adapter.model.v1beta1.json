@@ -33,8 +33,7 @@
           "TEMPLATE_VARIETY_QUOTA",
           "TEMPLATE_VARIETY_ATTRIBUTE_GENERATOR",
           "TEMPLATE_VARIETY_CHECK_WITH_OUTPUT"
-        ],
-        "default": "TEMPLATE_VARIETY_CHECK"
+        ]
       },
       "istio.mixer.adapter.model.v1beta1.Info": {
         "description": "Info describes an adapter or a backend that wants to provide telemetry and policy functionality to Mixer as an out of process adapter.",

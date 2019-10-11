@@ -129,16 +129,14 @@
           "DEFAULT",
           "IPTABLES",
           "NONE"
-        ],
-        "default": "DEFAULT"
+        ]
       },
       "istio.networking.v1alpha3.OutboundTrafficPolicy.Mode": {
         "type": "string",
         "enum": [
           "REGISTRY_ONLY",
           "ALLOW_ANY"
-        ],
-        "default": "REGISTRY_ONLY"
+        ]
       }
     }
   }

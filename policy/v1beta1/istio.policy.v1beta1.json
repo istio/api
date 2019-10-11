@@ -69,8 +69,7 @@
           "DNS_NAME",
           "DURATION",
           "STRING_MAP"
-        ],
-        "default": "VALUE_TYPE_UNSPECIFIED"
+        ]
       },
       "istio.policy.v1beta1.Rule": {
         "description": "A Rule is a selector and a set of intentions to be executed when the selector is `true`",
@@ -172,8 +171,7 @@
           "REPLACE",
           "REMOVE",
           "APPEND"
-        ],
-        "default": "REPLACE"
+        ]
       },
       "istio.policy.v1beta1.Instance": {
         "description": "An Instance tells Mixer how to create instances for particular template.",
@@ -337,8 +335,7 @@
         "enum": [
           "HUNDRED",
           "TEN_THOUSAND"
-        ],
-        "default": "HUNDRED"
+        ]
       },
       "istio.policy.v1beta1.Tls": {
         "description": "Tls let operator specify client authentication setting when TLS is used for connection to the backend.",
@@ -479,8 +476,7 @@
         "enum": [
           "PLAIN",
           "BEARER"
-        ],
-        "default": "PLAIN"
+        ]
       },
       "istio.policy.v1beta1.DirectHttpResponse": {
         "description": "Direct HTTP response for a client-facing error message which can be attached to an RPC error.",
@@ -565,8 +561,7 @@
           "LoopDetected",
           "NotExtended",
           "NetworkAuthenticationRequired"
-        ],
-        "default": "Empty"
+        ]
       },
       "istio.policy.v1beta1.Value": {
         "description": "An instance field of type Value denotes that the expression for the field is of dynamic type and can evaluate to any [ValueType][istio.policy.v1beta1.ValueType] enum values. For example, when authoring an instance configuration for a template that has a field `data` of type `istio.policy.v1beta1.Value`, both of the following expressions are valid `data: source.ip | ip(\"0.0.0.0\")`, `data: request.id | \"\"`; the resulting type is either ValueType.IP_ADDRESS or ValueType.STRING for the two cases respectively.",
