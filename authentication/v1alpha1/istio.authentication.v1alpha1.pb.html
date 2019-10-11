@@ -68,6 +68,7 @@ triggerRules:
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -83,103 +84,8 @@ Usually a URL or an email address.</p>
 Example: 1234567-compute@developer.gserviceaccount.com</p>
 
 </td>
-</tr>
-<tr id="Jwt-audiences">
-<td><code>audiences</code></td>
-<td><code>string[]</code></td>
 <td>
-<p>The list of JWT
-<a href="https://tools.ietf.org/html/rfc7519#section-4.1.3">audiences</a>.
-that are allowed to access. A JWT containing any of these
-audiences will be accepted.</p>
-
-<p>The service name will be accepted if audiences is empty.</p>
-
-<p>Example:</p>
-
-<pre><code class="language-yaml">audiences:
-- bookstore_android.apps.googleusercontent.com
-  bookstore_web.apps.googleusercontent.com
-</code></pre>
-
-</td>
-</tr>
-<tr id="Jwt-jwks_uri">
-<td><code>jwksUri</code></td>
-<td><code>string</code></td>
-<td>
-<p>URL of the provider&rsquo;s public key set to validate signature of the
-JWT. See <a href="https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata">OpenID Discovery</a>.</p>
-
-<p>Optional if the key set document can either (a) be retrieved from
-<a href="https://openid.net/specs/openid-connect-discovery-1_0.html">OpenID
-Discovery</a> of
-the issuer or (b) inferred from the email domain of the issuer (e.g. a
-Google service account).</p>
-
-<p>Example: <code>https://www.googleapis.com/oauth2/v1/certs</code></p>
-
-<p>Note: Only one of jwks_uri and jwks should be used.</p>
-
-</td>
-</tr>
-<tr id="Jwt-jwks">
-<td><code>jwks</code></td>
-<td><code>string</code></td>
-<td>
-<p>JSON Web Key Set of public keys to validate signature of the JWT.
-See https://auth0.com/docs/jwks.</p>
-
-<p>Note: Only one of jwks_uri and jwks should be used.</p>
-
-</td>
-</tr>
-<tr id="Jwt-jwt_headers">
-<td><code>jwtHeaders</code></td>
-<td><code>string[]</code></td>
-<td>
-<p>JWT is sent in a request header. <code>header</code> represents the
-header name.</p>
-
-<p>For example, if <code>header=x-goog-iap-jwt-assertion</code>, the header
-format will be <code>x-goog-iap-jwt-assertion: &lt;JWT&gt;</code>.</p>
-
-</td>
-</tr>
-<tr id="Jwt-jwt_params">
-<td><code>jwtParams</code></td>
-<td><code>string[]</code></td>
-<td>
-<p>JWT is sent in a query parameter. <code>query</code> represents the
-query parameter name.</p>
-
-<p>For example, <code>query=jwt_token</code>.</p>
-
-</td>
-</tr>
-<tr id="Jwt-trigger_rules">
-<td><code>triggerRules</code></td>
-<td><code><a href="#Jwt-TriggerRule">Jwt.TriggerRule[]</a></code></td>
-<td>
-<p>List of trigger rules to decide if this JWT should be used to validate the
-request. The JWT validation happens if any one of the rules matched.
-If the list is not empty and none of the rules matched, authentication will
-skip the JWT validation.
-Leave this empty to always trigger the JWT validation.</p>
-
-</td>
-</tr>
-<tr id="Jwt-issuer">
-<td><code>issuer</code></td>
-<td><code>string</code></td>
-<td>
-<p>Identifies the issuer that issued the JWT. See
-<a href="https://tools.ietf.org/html/rfc7519#section-4.1.1">issuer</a>
-Usually a URL or an email address.</p>
-
-<p>Example: https://securetoken.google.com
-Example: 1234567-compute@developer.gserviceaccount.com</p>
-
+No
 </td>
 </tr>
 <tr id="Jwt-audiences">
@@ -201,6 +107,9 @@ audiences will be accepted.</p>
 </code></pre>
 
 </td>
+<td>
+No
+</td>
 </tr>
 <tr id="Jwt-jwks_uri">
 <td><code>jwksUri</code></td>
@@ -220,6 +129,9 @@ Google service account).</p>
 <p>Note: Only one of jwks_uri and jwks should be used.</p>
 
 </td>
+<td>
+No
+</td>
 </tr>
 <tr id="Jwt-jwks">
 <td><code>jwks</code></td>
@@ -230,6 +142,9 @@ See https://auth0.com/docs/jwks.</p>
 
 <p>Note: Only one of jwks_uri and jwks should be used.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 <tr id="Jwt-jwt_headers">
@@ -243,6 +158,9 @@ header name.</p>
 format will be <code>x-goog-iap-jwt-assertion: &lt;JWT&gt;</code>.</p>
 
 </td>
+<td>
+No
+</td>
 </tr>
 <tr id="Jwt-jwt_params">
 <td><code>jwtParams</code></td>
@@ -253,6 +171,9 @@ query parameter name.</p>
 
 <p>For example, <code>query=jwt_token</code>.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 <tr id="Jwt-trigger_rules">
@@ -265,6 +186,9 @@ If the list is not empty and none of the rules matched, authentication will
 skip the JWT validation.
 Leave this empty to always trigger the JWT validation.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 </tbody>
@@ -281,6 +205,7 @@ and only if both rules, excluded<em>paths and include</em>paths are satisfied.</
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -292,24 +217,8 @@ and only if both rules, excluded<em>paths and include</em>paths are satisfied.</
 request path does not match to any of the path in this list.</p>
 
 </td>
-</tr>
-<tr id="Jwt-TriggerRule-included_paths">
-<td><code>includedPaths</code></td>
-<td><code><a href="#StringMatch">StringMatch[]</a></code></td>
 <td>
-<p>List of paths that the request must include. If the list is not empty, the
-rule is satisfied if request path matches at least one of the path in the list.
-If the list is empty, the rule is ignored, in other words the rule is always satisfied.</p>
-
-</td>
-</tr>
-<tr id="Jwt-TriggerRule-excluded_paths">
-<td><code>excludedPaths</code></td>
-<td><code><a href="#StringMatch">StringMatch[]</a></code></td>
-<td>
-<p>List of paths to be excluded from the request. The rule is satisfied if
-request path does not match to any of the path in this list.</p>
-
+No
 </td>
 </tr>
 <tr id="Jwt-TriggerRule-included_paths">
@@ -320,6 +229,9 @@ request path does not match to any of the path in this list.</p>
 rule is satisfied if request path matches at least one of the path in the list.
 If the list is empty, the rule is ignored, in other words the rule is always satisfied.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 </tbody>
@@ -335,6 +247,7 @@ If the list is empty, the rule is ignored, in other words the rule is always sat
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -350,26 +263,8 @@ be left unset.
 When the flag is false (default), request must have client certificate.</p>
 
 </td>
-</tr>
-<tr id="MutualTls-mode">
-<td><code>mode</code></td>
-<td><code><a href="#MutualTls-Mode">MutualTls.Mode</a></code></td>
 <td>
-<p>Defines the mode of mTLS authentication.</p>
-
-</td>
-</tr>
-<tr id="MutualTls-allow_tls">
-<td><code>allowTls</code></td>
-<td><code>bool</code></td>
-<td>
-<p>WILL BE DEPRECATED, if set, will translates to <code>TLS_PERMISSIVE</code> mode.
-Set this flag to true to allow regular TLS (i.e without client x509
-certificate). If request carries client certificate, identity will be
-extracted and used (set to peer identity). Otherwise, peer identity will
-be left unset.
-When the flag is false (default), request must have client certificate.</p>
-
+No
 </td>
 </tr>
 <tr id="MutualTls-mode">
@@ -378,6 +273,9 @@ When the flag is false (default), request must have client certificate.</p>
 <td>
 <p>Defines the mode of mTLS authentication.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 </tbody>
@@ -409,20 +307,6 @@ When the flag is false (default), request must have client certificate.</p>
 
 </td>
 </tr>
-<tr id="MutualTls-Mode-STRICT">
-<td><code>STRICT</code></td>
-<td>
-<p>Client cert must be presented, connection is in TLS.</p>
-
-</td>
-</tr>
-<tr id="MutualTls-Mode-PERMISSIVE">
-<td><code>PERMISSIVE</code></td>
-<td>
-<p>Connection can be either plaintext or TLS, and client cert can be omitted.</p>
-
-</td>
-</tr>
 </tbody>
 </table>
 </section>
@@ -438,6 +322,7 @@ Currently, only JWT is supported for origin authentication.</p>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -448,13 +333,8 @@ Currently, only JWT is supported for origin authentication.</p>
 <p>Jwt params for the method.</p>
 
 </td>
-</tr>
-<tr id="OriginAuthenticationMethod-jwt">
-<td><code>jwt</code></td>
-<td><code><a href="#Jwt">Jwt</a></code></td>
 <td>
-<p>Jwt params for the method.</p>
-
+No
 </td>
 </tr>
 </tbody>
@@ -474,6 +354,7 @@ The type can be progammatically determine by checking the type of the
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -484,13 +365,8 @@ The type can be progammatically determine by checking the type of the
 <p>Set if mTLS is used.</p>
 
 </td>
-</tr>
-<tr id="PeerAuthenticationMethod-mtls" class="oneof oneof-start">
-<td><code>mtls</code></td>
-<td><code><a href="#MutualTls">MutualTls (oneof)</a></code></td>
 <td>
-<p>Set if mTLS is used.</p>
-
+Yes
 </td>
 </tr>
 </tbody>
@@ -575,6 +451,7 @@ spec:
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -586,6 +463,9 @@ spec:
 If empty, policy will be used on all workloads in the same namespace.</p>
 
 </td>
+<td>
+No
+</td>
 </tr>
 <tr id="Policy-peers">
 <td><code>peers</code></td>
@@ -598,6 +478,9 @@ these methods pass, request will be rejected with authentication failed error (4
 Leave the list empty if peer authentication is not required</p>
 
 </td>
+<td>
+No
+</td>
 </tr>
 <tr id="Policy-peer_is_optional">
 <td><code>peerIsOptional</code></td>
@@ -609,6 +492,9 @@ Typically, this is used to delay the rejection decision to next layer (e.g
 authorization).
 This flag is ignored if no authentication defined for peer (peers field is empty).</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 <tr id="Policy-origins">
@@ -625,6 +511,9 @@ are skipped, origin authentication will be ignored, as if it is not defined.
 Leave the list empty if origin authentication is not required.</p>
 
 </td>
+<td>
+No
+</td>
 </tr>
 <tr id="Policy-origin_is_optional">
 <td><code>originIsOptional</code></td>
@@ -636,6 +525,9 @@ Typically, this is used to delay the rejection decision to next layer (e.g
 authorization).
 This flag is ignored if no authentication defined for origin (origins field is empty).</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 <tr id="Policy-principal_binding">
@@ -650,78 +542,8 @@ In other words, binding rule does not affect the decision to accept or
 reject request.</p>
 
 </td>
-</tr>
-<tr id="Policy-targets">
-<td><code>targets</code></td>
-<td><code><a href="#TargetSelector">TargetSelector[]</a></code></td>
 <td>
-<p>List rules to select workloads that the policy should be applied on.
-If empty, policy will be used on all workloads in the same namespace.</p>
-
-</td>
-</tr>
-<tr id="Policy-peers">
-<td><code>peers</code></td>
-<td><code><a href="#PeerAuthenticationMethod">PeerAuthenticationMethod[]</a></code></td>
-<td>
-<p>List of authentication methods that can be used for peer authentication.
-They will be evaluated in order; the first validate one will be used to
-set peer identity (source.user) and other peer attributes. If none of
-these methods pass, request will be rejected with authentication failed error (401).
-Leave the list empty if peer authentication is not required</p>
-
-</td>
-</tr>
-<tr id="Policy-peer_is_optional">
-<td><code>peerIsOptional</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Set this flag to true to accept request (for peer authentication perspective),
-even when none of the peer authentication methods defined above satisfied.
-Typically, this is used to delay the rejection decision to next layer (e.g
-authorization).
-This flag is ignored if no authentication defined for peer (peers field is empty).</p>
-
-</td>
-</tr>
-<tr id="Policy-origins">
-<td><code>origins</code></td>
-<td><code><a href="#OriginAuthenticationMethod">OriginAuthenticationMethod[]</a></code></td>
-<td>
-<p>List of authentication methods that can be used for origin authentication.
-Similar to peers, these will be evaluated in order; the first validate one
-will be used to set origin identity and attributes (i.e request.auth.user,
-request.auth.issuer etc). If none of these methods pass, request will be
-rejected with authentication failed error (401).
-A method may be skipped, depends on its trigger rule. If all of these methods
-are skipped, origin authentication will be ignored, as if it is not defined.
-Leave the list empty if origin authentication is not required.</p>
-
-</td>
-</tr>
-<tr id="Policy-origin_is_optional">
-<td><code>originIsOptional</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Set this flag to true to accept request (for origin authentication perspective),
-even when none of the origin authentication methods defined above satisfied.
-Typically, this is used to delay the rejection decision to next layer (e.g
-authorization).
-This flag is ignored if no authentication defined for origin (origins field is empty).</p>
-
-</td>
-</tr>
-<tr id="Policy-principal_binding">
-<td><code>principalBinding</code></td>
-<td><code><a href="#PrincipalBinding">PrincipalBinding</a></code></td>
-<td>
-<p>Define whether peer or origin identity should be use for principal. Default
-value is USE_PEER.
-If peer (or origin) identity is not available, either because of peer/origin
-authentication is not defined, or failed, principal will be left unset.
-In other words, binding rule does not affect the decision to accept or
-reject request.</p>
-
+No
 </td>
 </tr>
 </tbody>
@@ -739,6 +561,7 @@ networking API to avoid dependency.</p>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -749,21 +572,8 @@ networking API to avoid dependency.</p>
 <p>Valid port number</p>
 
 </td>
-</tr>
-<tr id="PortSelector-name" class="oneof">
-<td><code>name</code></td>
-<td><code>string (oneof)</code></td>
 <td>
-<p>Port name</p>
-
-</td>
-</tr>
-<tr id="PortSelector-number" class="oneof oneof-start">
-<td><code>number</code></td>
-<td><code>uint32 (oneof)</code></td>
-<td>
-<p>Valid port number</p>
-
+Yes
 </td>
 </tr>
 <tr id="PortSelector-name" class="oneof">
@@ -772,6 +582,9 @@ networking API to avoid dependency.</p>
 <td>
 <p>Port name</p>
 
+</td>
+<td>
+Yes
 </td>
 </tr>
 </tbody>
@@ -803,20 +616,6 @@ networking API to avoid dependency.</p>
 
 </td>
 </tr>
-<tr id="PrincipalBinding-USE_PEER">
-<td><code>USE_PEER</code></td>
-<td>
-<p>Principal will be set to the identity from peer authentication.</p>
-
-</td>
-</tr>
-<tr id="PrincipalBinding-USE_ORIGIN">
-<td><code>USE_ORIGIN</code></td>
-<td>
-<p>Principal will be set to the identity from origin authentication.</p>
-
-</td>
-</tr>
 </tbody>
 </table>
 </section>
@@ -830,6 +629,7 @@ networking API to avoid dependency.</p>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -840,6 +640,9 @@ networking API to avoid dependency.</p>
 <p>exact string match.</p>
 
 </td>
+<td>
+Yes
+</td>
 </tr>
 <tr id="StringMatch-prefix" class="oneof">
 <td><code>prefix</code></td>
@@ -848,6 +651,9 @@ networking API to avoid dependency.</p>
 <p>prefix-based match.</p>
 
 </td>
+<td>
+Yes
+</td>
 </tr>
 <tr id="StringMatch-suffix" class="oneof">
 <td><code>suffix</code></td>
@@ -855,6 +661,9 @@ networking API to avoid dependency.</p>
 <td>
 <p>suffix-based match.</p>
 
+</td>
+<td>
+Yes
 </td>
 </tr>
 <tr id="StringMatch-regex" class="oneof">
@@ -865,38 +674,8 @@ networking API to avoid dependency.</p>
 Example: &ldquo;^/pets/(.*?)?&rdquo;</p>
 
 </td>
-</tr>
-<tr id="StringMatch-exact" class="oneof oneof-start">
-<td><code>exact</code></td>
-<td><code>string (oneof)</code></td>
 <td>
-<p>exact string match.</p>
-
-</td>
-</tr>
-<tr id="StringMatch-prefix" class="oneof">
-<td><code>prefix</code></td>
-<td><code>string (oneof)</code></td>
-<td>
-<p>prefix-based match.</p>
-
-</td>
-</tr>
-<tr id="StringMatch-suffix" class="oneof">
-<td><code>suffix</code></td>
-<td><code>string (oneof)</code></td>
-<td>
-<p>suffix-based match.</p>
-
-</td>
-</tr>
-<tr id="StringMatch-regex" class="oneof">
-<td><code>regex</code></td>
-<td><code>string (oneof)</code></td>
-<td>
-<p>ECMAscript style regex-based match as defined by <a href="http://en.cppreference.com/w/cpp/regex/ecmascript">EDCA-262</a>.
-Example: &ldquo;^/pets/(.*?)?&rdquo;</p>
-
+Yes
 </td>
 </tr>
 </tbody>
@@ -913,6 +692,7 @@ if it is associated with the service name and service port(s) specified in the s
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -924,37 +704,8 @@ if it is associated with the service name and service port(s) specified in the s
 fully qualified domain name will be resolved in a platform specific manner.</p>
 
 </td>
-</tr>
-<tr id="TargetSelector-ports">
-<td><code>ports</code></td>
-<td><code><a href="#PortSelector">PortSelector[]</a></code></td>
 <td>
-<p>Specifies the ports. Note that this is the port(s) exposed by the service, not workload instance ports.
-For example, if a service is defined as below, then <code>8000</code> should be used, not <code>9000</code>.</p>
-
-<pre><code class="language-yaml">kind: Service
-metadata:
-  ...
-spec:
-  ports:
-  - name: http
-    port: 8000
-    targetPort: 9000
-  selector:
-    app: backend
-</code></pre>
-
-<p>Leave empty to match all ports that are exposed.</p>
-
-</td>
-</tr>
-<tr id="TargetSelector-name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>REQUIRED. The name must be a short name from the service registry. The
-fully qualified domain name will be resolved in a platform specific manner.</p>
-
+No
 </td>
 </tr>
 <tr id="TargetSelector-ports">
@@ -978,6 +729,9 @@ spec:
 
 <p>Leave empty to match all ports that are exposed.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 </tbody>

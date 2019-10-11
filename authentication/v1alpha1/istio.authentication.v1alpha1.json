@@ -79,8 +79,7 @@
         "enum": [
           "STRICT",
           "PERMISSIVE"
-        ],
-        "default": "STRICT"
+        ]
       },
       "istio.authentication.v1alpha1.Jwt": {
         "description": "JSON Web Token (JWT) token format for authentication as defined by [RFC 7519](https://tools.ietf.org/html/rfc7519). See [OAuth 2.0](https://tools.ietf.org/html/rfc6749) and [OIDC 1.0](http://openid.net/connect) for how this is used in the whole authentication flow.",
@@ -195,8 +194,7 @@
         "enum": [
           "USE_PEER",
           "USE_ORIGIN"
-        ],
-        "default": "USE_PEER"
+        ]
       },
       "istio.authentication.v1alpha1.Policy": {
         "description": "Policy defines what authentication methods can be accepted on workload(s), and if authenticated, which method/certificate will set the request principal (i.e request.auth.principal attribute).",

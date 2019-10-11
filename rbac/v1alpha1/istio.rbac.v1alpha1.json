@@ -129,8 +129,7 @@
         "enum": [
           "ENFORCED",
           "PERMISSIVE"
-        ],
-        "default": "ENFORCED"
+        ]
       },
       "istio.rbac.v1alpha1.ServiceRoleBinding": {
         "description": "ServiceRoleBinding assigns a ServiceRole to a list of subjects.",
@@ -293,8 +292,7 @@
           "ON",
           "ON_WITH_INCLUSION",
           "ON_WITH_EXCLUSION"
-        ],
-        "default": "OFF"
+        ]
       },
       "istio.rbac.v1alpha1.RbacConfig.Target": {
         "description": "Target defines a list of services or namespaces.",

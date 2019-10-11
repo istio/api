@@ -156,8 +156,7 @@
           "MUTUAL",
           "AUTO_PASSTHROUGH",
           "ISTIO_MUTUAL"
-        ],
-        "default": "PASSTHROUGH"
+        ]
       },
       "istio.networking.v1alpha3.Server.TLSOptions.TLSProtocol": {
         "description": "TLS protocol versions.",
@@ -168,8 +167,7 @@
           "TLSV1_1",
           "TLSV1_2",
           "TLSV1_3"
-        ],
-        "default": "TLS_AUTO"
+        ]
       }
     }
   }

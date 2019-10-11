@@ -232,24 +232,21 @@
           "OFF",
           "DEFAULT",
           "STRICT"
-        ],
-        "default": "OFF"
+        ]
       },
       "istio.mesh.v1alpha1.MeshConfig.AuthPolicy": {
         "type": "string",
         "enum": [
           "NONE",
           "MUTUAL_TLS"
-        ],
-        "default": "NONE"
+        ]
       },
       "istio.mesh.v1alpha1.MeshConfig.AccessLogEncoding": {
         "type": "string",
         "enum": [
           "TEXT",
           "JSON"
-        ],
-        "default": "TEXT"
+        ]
       },
       "istio.mesh.v1alpha1.ProxyConfig": {
         "description": "ProxyConfig defines variables for individual Envoy instances.",
@@ -412,8 +409,7 @@
         "enum": [
           "DO_NOT_UPGRADE",
           "UPGRADE"
-        ],
-        "default": "DO_NOT_UPGRADE"
+        ]
       },
       "istio.mesh.v1alpha1.Certificate": {
         "description": "Certificate configures the provision of a certificate and its key. Example 1: key and cert stored in a secret { secretName: galley-cert secretNamespace: istio-system dnsNames: - galley.istio-system.svc - galley.mydomain.com } Example 2: key and cert stored in a directory { dnsNames: - pilot.istio-system - pilot.istio-system.svc - pilot.mydomain.com }",
@@ -439,8 +435,7 @@
         "enum": [
           "REGISTRY_ONLY",
           "ALLOW_ANY"
-        ],
-        "default": "REGISTRY_ONLY"
+        ]
       },
       "istio.mesh.v1alpha1.Resource": {
         "description": "Resource describes the source of configuration",
@@ -601,8 +596,7 @@
           "NONE",
           "MUTUAL_TLS",
           "INHERIT"
-        ],
-        "default": "NONE"
+        ]
       },
       "istio.mesh.v1alpha1.Tracing": {
         "description": "Tracing defines configuration for the tracing performed by Envoy instances.",
@@ -743,8 +737,7 @@
         "enum": [
           "REDIRECT",
           "TPROXY"
-        ],
-        "default": "REDIRECT"
+        ]
       },
       "istio.mesh.v1alpha1.RemoteService": {
         "type": "object",
@@ -825,8 +818,7 @@
           "SIMPLE",
           "MUTUAL",
           "ISTIO_MUTUAL"
-        ],
-        "default": "DISABLE"
+        ]
       }
     }
   }
