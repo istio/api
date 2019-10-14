@@ -21,13 +21,13 @@ option go_package="istio.io/api/policy/v1beta1";
 // Direct HTTP response for a client-facing error message which can be attached
 // to an RPC error.
 message DirectHttpResponse {
-  // Optional HTTP status code. If not set, RPC error code is used.
+  // HTTP status code. If not set, RPC error code is used.
   HttpStatusCode code = 1;
 
   // HTTP response body.
   string body = 2;
 
-  // Optional HTTP response headers.
+  // HTTP response headers.
   map<string, string> headers = 3;
 }
 

@@ -22,6 +22,8 @@ syntax = "proto3";
 // This package defines user-facing authentication policy.
 package istio.authentication.v1alpha1;
 
+import "google/api/field_behavior.proto";
+
 option go_package = "istio.io/api/authentication/v1alpha1";
 
 // Describes how to match a given string. Match is case-sensitive.
@@ -376,9 +378,9 @@ message Policy {
 // TargetSelector defines a matching rule to a workload. A workload is selected
 // if it is associated with the service name and service port(s) specified in the selector rule.
 message TargetSelector {
-  // REQUIRED. The name must be a short name from the service registry. The
+  // The name must be a short name from the service registry. The
   // fully qualified domain name will be resolved in a platform specific manner.
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // $hide_from_docs
   // $not-implemented-hide

@@ -50,7 +50,7 @@
             }
           },
           "hosts": {
-            "description": "REQUIRED. The destination hosts to which traffic is being sent. Could be a DNS name with wildcard prefix or an IP address. Depending on the platform, short-names can also be used instead of a FQDN (i.e. has no dots in the name). In such a scenario, the FQDN of the host would be derived based on the underlying platform.",
+            "description": "The destination hosts to which traffic is being sent. Could be a DNS name with wildcard prefix or an IP address. Depending on the platform, short-names can also be used instead of a FQDN (i.e. has no dots in the name). In such a scenario, the FQDN of the host would be derived based on the underlying platform.",
             "type": "array",
             "items": {
               "type": "string",
@@ -178,7 +178,7 @@
             }
           },
           "match": {
-            "description": "REQUIRED. Match conditions to be satisfied for the rule to be activated. All conditions inside a single match block have AND semantics, while the list of match blocks have OR semantics. The rule is matched if any one of the match blocks succeed.",
+            "description": "Match conditions to be satisfied for the rule to be activated. All conditions inside a single match block have AND semantics, while the list of match blocks have OR semantics. The rule is matched if any one of the match blocks succeed.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSMatchAttributes"
@@ -211,7 +211,7 @@
         "type": "object",
         "properties": {
           "host": {
-            "description": "REQUIRED. The name of a service from the service registry. Service names are looked up from the platform's service registry (e.g., Kubernetes services, Consul services, etc.) and from the hosts declared by [ServiceEntry](https://istio.io/docs/reference/config/networking/v1alpha3/service-entry/#ServiceEntry). Traffic forwarded to destinations that are not found in either of the two, will be dropped.",
+            "description": "The name of a service from the service registry. Service names are looked up from the platform's service registry (e.g., Kubernetes services, Consul services, etc.) and from the hosts declared by [ServiceEntry](https://istio.io/docs/reference/config/networking/v1alpha3/service-entry/#ServiceEntry). Traffic forwarded to destinations that are not found in either of the two, will be dropped.",
             "type": "string",
             "format": "string"
           },
@@ -290,7 +290,7 @@
         "type": "object",
         "properties": {
           "weight": {
-            "description": "REQUIRED. The proportion of traffic to be forwarded to the service version. (0-100). Sum of weights across destinations SHOULD BE == 100. If there is only one destination in a rule, the weight value is assumed to be 100.",
+            "description": "The proportion of traffic to be forwarded to the service version. (0-100). Sum of weights across destinations SHOULD BE == 100. If there is only one destination in a rule, the weight value is assumed to be 100.",
             "type": "integer",
             "format": "int32"
           },
@@ -379,7 +379,7 @@
         "type": "object",
         "properties": {
           "attempts": {
-            "description": "REQUIRED. Number of retries for a given request. The interval between retries will be determined automatically (25ms+). Actual number of retries attempted depends on the httpReqTimeout.",
+            "description": "Number of retries for a given request. The interval between retries will be determined automatically (25ms+). Actual number of retries attempted depends on the httpReqTimeout.",
             "type": "integer",
             "format": "int32"
           },
@@ -533,7 +533,7 @@
             "format": "string"
           },
           "sniHosts": {
-            "description": "REQUIRED. SNI (server name indicator) to match on. Wildcard prefixes can be used in the SNI value, e.g., *.com will match foo.example.com as well as example.com. An SNI value must be a subset (i.e., fall within the domain) of the corresponding virtual serivce's hosts.",
+            "description": "SNI (server name indicator) to match on. Wildcard prefixes can be used in the SNI value, e.g., *.com will match foo.example.com as well as example.com. An SNI value must be a subset (i.e., fall within the domain) of the corresponding virtual serivce's hosts.",
             "type": "array",
             "items": {
               "type": "string",
@@ -547,7 +547,7 @@
         "type": "object",
         "properties": {
           "weight": {
-            "description": "REQUIRED. The proportion of traffic to be forwarded to the service version. If there is only one destination in a rule, all traffic will be routed to it irrespective of the weight.",
+            "description": "The proportion of traffic to be forwarded to the service version. If there is only one destination in a rule, all traffic will be routed to it irrespective of the weight.",
             "type": "integer",
             "format": "int32"
           },
@@ -656,7 +656,7 @@
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.Percent"
               },
               "fixedDelay": {
-                "description": "REQUIRED. Add a fixed delay before forwarding the request. Format: 1h/1m/1s/1ms. MUST be \u003e=1ms.",
+                "description": "Add a fixed delay before forwarding the request. Format: 1h/1m/1s/1ms. MUST be \u003e=1ms.",
                 "type": "string"
               }
             }
@@ -701,7 +701,7 @@
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.Percent"
               },
               "httpStatus": {
-                "description": "REQUIRED. HTTP status code to use to abort the Http request.",
+                "description": "HTTP status code to use to abort the Http request.",
                 "type": "integer",
                 "format": "int32"
               }

@@ -13,6 +13,7 @@
 // limitations under the License.
 syntax = "proto3";
 
+import "google/api/field_behavior.proto";
 import "type/v1beta1/selector.proto";
 
 // $title: Authorization Policy
@@ -261,10 +262,10 @@ message Operation {
 
 // Condition specifies additional required attributes.
 message Condition {
-  // Required. The name of an Istio attribute.
+  // The name of an Istio attribute.
   // See the [full list of supported attributes](https://istio.io/docs/reference/config/).
-  string key = 1;
+  string key = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. The allowed values for the attribute.
-  repeated string values = 2;
+  // The allowed values for the attribute.
+  repeated string values = 2 [(google.api.field_behavior) = REQUIRED];
 }

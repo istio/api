@@ -14,6 +14,7 @@
 
 syntax = "proto3";
 
+import "google/api/field_behavior.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 
@@ -125,7 +126,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // +k8s:deepcopy-gen=true
 // -->
 message VirtualService {
-  // REQUIRED. The destination hosts to which traffic is being sent. Could
+  // The destination hosts to which traffic is being sent. Could
   // be a DNS name with wildcard prefix or an IP address.  Depending on the
   // platform, short-names can also be used instead of a FQDN (i.e. has no
   // dots in the name). In such a scenario, the FQDN of the host would be
@@ -152,7 +153,7 @@ message VirtualService {
   // the mesh, i.e., those found in the service registry, must always be
   // referred to using their alphanumeric names. IP addresses are allowed
   // only for services defined via the Gateway.
-  repeated string hosts = 1;
+  repeated string hosts = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The names of gateways and sidecars that should apply these routes. A
   // single VirtualService is used for sidecars inside the mesh as well as
@@ -335,7 +336,7 @@ message VirtualService {
 //         host: wikipedia.org
 // ```
 message Destination {
-  // REQUIRED. The name of a service from the service registry. Service
+  // The name of a service from the service registry. Service
   // names are looked up from the platform's service registry (e.g.,
   // Kubernetes services, Consul services, etc.) and from the hosts
   // declared by [ServiceEntry](https://istio.io/docs/reference/config/networking/v1alpha3/service-entry/#ServiceEntry). Traffic forwarded to
@@ -349,7 +350,7 @@ message Destination {
   // the actual namespace associated with the reviews service. _To avoid
   // potential misconfigurations, it is recommended to always use fully
   // qualified domain names over short names._
-  string host = 1;
+  string host = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The name of a subset within the service. Applicable only to services
   // within the mesh. The subset must be defined in a corresponding
@@ -532,11 +533,11 @@ message Headers {
 //         host: reviews.prod.svc.cluster.local
 // ```
 message TLSRoute {
-  // REQUIRED. Match conditions to be satisfied for the rule to be
+  // Match conditions to be satisfied for the rule to be
   // activated. All conditions inside a single match block have AND
   // semantics, while the list of match blocks have OR semantics. The rule
   // is matched if any one of the match blocks succeed.
-  repeated TLSMatchAttributes match = 1;
+  repeated TLSMatchAttributes match = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The destination to which the connection should be forwarded to.
   repeated RouteDestination route = 2;
@@ -770,11 +771,11 @@ message HTTPMatchRequest {
 //       weight: 75
 // ```
 message HTTPRouteDestination {
-  // REQUIRED. Destination uniquely identifies the instances of a service
+  // Destination uniquely identifies the instances of a service
   // to which the request/connection should be forwarded to.
-  Destination destination = 1;
+  Destination destination = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // REQUIRED. The proportion of traffic to be forwarded to the service
+  // The proportion of traffic to be forwarded to the service
   // version. (0-100). Sum of weights across destinations SHOULD BE == 100.
   // If there is only one destination in a rule, the weight value is assumed to
   // be 100.
@@ -802,11 +803,11 @@ message HTTPRouteDestination {
 
 // L4 routing rule weighted destination.
 message RouteDestination {
-  // REQUIRED. Destination uniquely identifies the instances of a service
+  // Destination uniquely identifies the instances of a service
   // to which the request/connection should be forwarded to.
-  Destination destination = 1;
+  Destination destination = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // REQUIRED. The proportion of traffic to be forwarded to the service
+  // The proportion of traffic to be forwarded to the service
   // version. If there is only one destination in a rule, all traffic will be
   // routed to it irrespective of the weight.
   int32 weight = 2;
@@ -843,11 +844,11 @@ message L4MatchAttributes {
 
 // TLS connection match attributes.
 message TLSMatchAttributes {
-  // REQUIRED. SNI (server name indicator) to match on. Wildcard prefixes
+  // SNI (server name indicator) to match on. Wildcard prefixes
   // can be used in the SNI value, e.g., *.com will match foo.example.com
   // as well as example.com. An SNI value must be a subset (i.e., fall
   // within the domain) of the corresponding virtual serivce's hosts.
-  repeated string sni_hosts = 1;
+  repeated string sni_hosts = 1 [(google.api.field_behavior) = REQUIRED];
 
   // IPv4 or IPv6 ip addresses of destination with optional subnet.  E.g.,
   // a.b.c.d/xx form or just a.b.c.d.
@@ -990,10 +991,10 @@ message StringMatch {
 // ```
 //
 message HTTPRetry {
-  // REQUIRED. Number of retries for a given request. The interval
+  // Number of retries for a given request. The interval
   // between retries will be determined automatically (25ms+). Actual
   // number of retries attempted depends on the httpReqTimeout.
-  int32 attempts = 1;
+  int32 attempts = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Timeout per retry attempt for a given request. format: 1h/1m/1s/1ms. MUST BE >=1ms.
   google.protobuf.Duration per_try_timeout = 2;
@@ -1121,9 +1122,9 @@ message HTTPFaultInjection {
     int32 percent = 1 [deprecated=true];
 
     oneof http_delay_type {
-      // REQUIRED. Add a fixed delay before forwarding the request. Format:
+      // Add a fixed delay before forwarding the request. Format:
       // 1h/1m/1s/1ms. MUST be >=1ms.
-      google.protobuf.Duration fixed_delay = 2;
+      google.protobuf.Duration fixed_delay = 2 [(google.api.field_behavior) = REQUIRED];
 
       // $hide_from_docs
       google.protobuf.Duration exponential_delay = 3 ;
@@ -1168,8 +1169,8 @@ message HTTPFaultInjection {
     int32 percent = 1 [deprecated=true];
 
     oneof error_type {
-      // REQUIRED. HTTP status code to use to abort the Http request.
-      int32 http_status = 2;
+      // HTTP status code to use to abort the Http request.
+      int32 http_status = 2 [(google.api.field_behavior) = REQUIRED];
 
       // $hide_from_docs
       string grpc_status = 3;

@@ -122,7 +122,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "REQUIRED. The short name of the HTTPAPISpec. This is the resource name defined by the metadata name field.",
+            "description": "The short name of the HTTPAPISpec. This is the resource name defined by the metadata name field.",
             "type": "string",
             "format": "string"
           },
@@ -138,14 +138,14 @@
         "type": "object",
         "properties": {
           "services": {
-            "description": "REQUIRED. One or more services to map the listed HTTPAPISpec onto.",
+            "description": "One or more services to map the listed HTTPAPISpec onto.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mixer.v1.config.client.IstioService"
             }
           },
           "apiSpecs": {
-            "description": "REQUIRED. One or more HTTPAPISpec references that should be mapped to the specified service(s). The aggregate collection of match conditions defined in the HTTPAPISpecs should not overlap.",
+            "description": "One or more HTTPAPISpec references that should be mapped to the specified service(s). The aggregate collection of match conditions defined in the HTTPAPISpecs should not overlap.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mixer.v1.config.client.HTTPAPISpecReference"
@@ -466,14 +466,14 @@
         "type": "object",
         "properties": {
           "services": {
-            "description": "REQUIRED. One or more services to map the listed QuotaSpec onto.",
+            "description": "One or more services to map the listed QuotaSpec onto.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mixer.v1.config.client.IstioService"
             }
           },
           "quotaSpecs": {
-            "description": "REQUIRED. One or more QuotaSpec references that should be mapped to the specified service(s). The aggregate collection of match conditions defined in the QuotaSpecs should not overlap.",
+            "description": "One or more QuotaSpec references that should be mapped to the specified service(s). The aggregate collection of match conditions defined in the QuotaSpecs should not overlap.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mixer.v1.config.client.QuotaSpecBinding.QuotaSpecReference"
@@ -486,7 +486,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "REQUIRED. The short name of the QuotaSpec. This is the resource name defined by the metadata name field.",
+            "description": "The short name of the QuotaSpec. This is the resource name defined by the metadata name field.",
             "type": "string",
             "format": "string"
           },

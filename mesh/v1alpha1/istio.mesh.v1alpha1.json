@@ -483,14 +483,14 @@
         "type": "object",
         "properties": {
           "endpoints": {
-            "description": "REQUIRED: The list of endpoints in the network (obtained through the constituent service registries or from CIDR ranges). All endpoints in the network are directly accessible to one another.",
+            "description": "The list of endpoints in the network (obtained through the constituent service registries or from CIDR ranges). All endpoints in the network are directly accessible to one another.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.Network.NetworkEndpoints"
             }
           },
           "gateways": {
-            "description": "REQUIRED: Set of gateways associated with the network.",
+            "description": "Set of gateways associated with the network.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.Network.IstioNetworkGateway"
@@ -538,7 +538,7 @@
             ],
             "properties": {
               "port": {
-                "description": "REQUIRED: The port associated with the gateway.",
+                "description": "The port associated with the gateway.",
                 "type": "integer"
               },
               "locality": {
@@ -559,7 +559,7 @@
             ],
             "properties": {
               "port": {
-                "description": "REQUIRED: The port associated with the gateway.",
+                "description": "The port associated with the gateway.",
                 "type": "integer"
               },
               "address": {
@@ -581,7 +581,7 @@
         "type": "object",
         "properties": {
           "networks": {
-            "description": "REQUIRED: The set of networks inside this mesh. Each network should have a unique name and information about how to infer the endpoints in the network as well as the gateways associated with the network.",
+            "description": "The set of networks inside this mesh. Each network should have a unique name and information about how to infer the endpoints in the network as well as the gateways associated with the network.",
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.Network"
@@ -811,7 +811,7 @@
         }
       },
       "istio.networking.v1alpha3.TLSSettings.TLSmode": {
-        "description": "REQUIRED: Indicates whether connections to this port should be secured using TLS. The value of this field determines how TLS is enforced.",
+        "description": "Indicates whether connections to this port should be secured using TLS. The value of this field determines how TLS is enforced.",
         "type": "string",
         "enum": [
           "DISABLE",

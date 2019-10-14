@@ -51,6 +51,7 @@ importmaps := \
 	google/rpc/status.proto=istio.io/gogo-genproto/googleapis/google/rpc \
 	google/rpc/code.proto=istio.io/gogo-genproto/googleapis/google/rpc \
 	google/rpc/error_details.proto=istio.io/gogo-genproto/googleapis/google/rpc \
+	google/api/field_behavior.proto=istio.io/gogo-genproto/googleapis/google/api \
 
 # generate mapping directive with M<proto>:<go pkg>, format for each proto file
 mapping_with_spaces := $(foreach map,$(importmaps),M$(map),)

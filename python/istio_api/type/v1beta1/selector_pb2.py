@@ -13,6 +13,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
+from google.api import field_behavior_pb2 as google_dot_api_dot_field__behavior__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -20,8 +21,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.type.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\031istio.io/api/type/v1beta1'),
-  serialized_pb=_b('\n\x1btype/v1beta1/selector.proto\x12\x12istio.type.v1beta1\"\x93\x01\n\x10WorkloadSelector\x12K\n\x0cmatch_labels\x18\x01 \x03(\x0b\x32\x35.istio.type.v1beta1.WorkloadSelector.MatchLabelsEntry\x1a\x32\n\x10MatchLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\x1bZ\x19istio.io/api/type/v1beta1b\x06proto3')
-)
+  serialized_pb=_b('\n\x1btype/v1beta1/selector.proto\x12\x12istio.type.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\"\x98\x01\n\x10WorkloadSelector\x12P\n\x0cmatch_labels\x18\x01 \x03(\x0b\x32\x35.istio.type.v1beta1.WorkloadSelector.MatchLabelsEntryB\x03\xe0\x41\x02\x1a\x32\n\x10MatchLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\x1bZ\x19istio.io/api/type/v1beta1b\x06proto3')
+  ,
+  dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,])
 
 
 
@@ -59,8 +61,8 @@ _WORKLOADSELECTOR_MATCHLABELSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=149,
-  serialized_end=199,
+  serialized_start=187,
+  serialized_end=237,
 )
 
 _WORKLOADSELECTOR = _descriptor.Descriptor(
@@ -76,7 +78,7 @@ _WORKLOADSELECTOR = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -89,8 +91,8 @@ _WORKLOADSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=52,
-  serialized_end=199,
+  serialized_start=85,
+  serialized_end=237,
 )
 
 _WORKLOADSELECTOR_MATCHLABELSENTRY.containing_type = _WORKLOADSELECTOR
@@ -116,4 +118,5 @@ _sym_db.RegisterMessage(WorkloadSelector.MatchLabelsEntry)
 
 DESCRIPTOR._options = None
 _WORKLOADSELECTOR_MATCHLABELSENTRY._options = None
+_WORKLOADSELECTOR.fields_by_name['match_labels']._options = None
 # @@protoc_insertion_point(module_scope)
