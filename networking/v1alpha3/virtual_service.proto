@@ -779,7 +779,7 @@ message HTTPRouteDestination {
   // version. (0-100). Sum of weights across destinations SHOULD BE == 100.
   // If there is only one destination in a rule, the weight value is assumed to
   // be 100.
-  int32 weight = 2 [(google.api.field_behavior) = REQUIRED];
+  int32 weight = 2;
 
   // Use of `remove_response_header` is deprecated. Use the `headers`
   // field instead.
@@ -810,7 +810,7 @@ message RouteDestination {
   // The proportion of traffic to be forwarded to the service
   // version. If there is only one destination in a rule, all traffic will be
   // routed to it irrespective of the weight.
-  int32 weight = 2 [(google.api.field_behavior) = REQUIRED];
+  int32 weight = 2;
 }
 
 // L4 connection match attributes. Note that L4 connection matching support
