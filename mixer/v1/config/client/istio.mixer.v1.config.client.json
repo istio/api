@@ -415,7 +415,7 @@
           "charge": {
             "description": "The quota amount to charge",
             "type": "integer",
-            "format": "int64"
+            "format": "int32"
           }
         }
       },
