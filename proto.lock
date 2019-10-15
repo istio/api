@@ -37843,7 +37843,7 @@
               {
                 "id": 2,
                 "name": "charge",
-                "type": "int64"
+                "type": "int32"
               }
             ]
           },
@@ -40532,13 +40532,7 @@
               {
                 "id": 2,
                 "name": "weight",
-                "type": "int32",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "int32"
               },
               {
                 "id": 3,
@@ -40618,13 +40612,7 @@
               {
                 "id": 2,
                 "name": "weight",
-                "type": "int32",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "int32"
               }
             ]
           },
@@ -41085,13 +41073,7 @@
               {
                 "id": 1,
                 "name": "match",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "string"
               },
               {
                 "id": 2,
@@ -41208,13 +41190,7 @@
               {
                 "id": 2,
                 "name": "template",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "string"
               },
               {
                 "id": 3,
@@ -41267,13 +41243,7 @@
               {
                 "id": 2,
                 "name": "adapter",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "type": "string"
               },
               {
                 "id": 3,

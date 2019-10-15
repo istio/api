@@ -125,7 +125,7 @@ message Quota {
   string quota = 1;
 
   // The quota amount to charge
-  int64  charge = 2;
+  int32  charge = 2;
 }
 
 // QuotaSpecBinding defines the binding between QuotaSpecs and one or more

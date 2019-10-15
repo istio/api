@@ -102,6 +102,7 @@ CONFLICT: "ProxyConfig.InboundInterceptionMode" field: "REDIRECT" has been remov
 CONFLICT: "ProxyConfig.InboundInterceptionMode" field: "TPROXY" has been removed, but is not reserved [mesh/v1alpha1/config.proto]
 CONFLICT: "ProxyConfig.InboundInterceptionMode" integer: "0" has been removed, but is not reserved [mesh/v1alpha1/config.proto]
 CONFLICT: "ProxyConfig.InboundInterceptionMode" integer: "1" has been removed, but is not reserved [mesh/v1alpha1/config.proto]
+CONFLICT: "Quota" field: "charge" has a different type: int32, previously int64 [mixer/v1/config/client/quota.proto]
 CONFLICT: "ReferencedAttributes" field: "attribute_matches" has been removed, but is not reserved [mixer/v1/check.proto]
 CONFLICT: "ReferencedAttributes" field: "words" has been removed, but is not reserved [mixer/v1/check.proto]
 CONFLICT: "ReferencedAttributes" ID: "1" has been removed, but is not reserved [mixer/v1/check.proto]
