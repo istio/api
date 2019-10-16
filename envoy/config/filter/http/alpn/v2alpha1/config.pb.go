@@ -53,13 +53,11 @@ func (FilterConfig_Protocol) EnumDescriptor() ([]byte, []int) {
 
 // FilterConfig is the config for Istio-specific filter.
 type FilterConfig struct {
-	// A list of ALPN that will override the ALPN for upstream TLS connections.
-	AlpnOverride []string `protobuf:"bytes,1,rep,name=alpn_override,json=alpnOverride,proto3" json:"alpn_override,omitempty"` // Deprecated: Do not use.
 	// Map from upstream protocol to list of ALPN
-	AlpnOverridePerProtocol []*FilterConfig_AlpnOverride `protobuf:"bytes,2,rep,name=alpn_override_per_protocol,json=alpnOverridePerProtocol,proto3" json:"alpn_override_per_protocol,omitempty"`
-	XXX_NoUnkeyedLiteral    struct{}                     `json:"-"`
-	XXX_unrecognized        []byte                       `json:"-"`
-	XXX_sizecache           int32                        `json:"-"`
+	AlpnOverride         []*FilterConfig_AlpnOverride `protobuf:"bytes,1,rep,name=alpn_override,json=alpnOverride,proto3" json:"alpn_override,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                     `json:"-"`
+	XXX_unrecognized     []byte                       `json:"-"`
+	XXX_sizecache        int32                        `json:"-"`
 }
 
 func (m *FilterConfig) Reset()         { *m = FilterConfig{} }
@@ -95,17 +93,9 @@ func (m *FilterConfig) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_FilterConfig proto.InternalMessageInfo
 
-// Deprecated: Do not use.
-func (m *FilterConfig) GetAlpnOverride() []string {
+func (m *FilterConfig) GetAlpnOverride() []*FilterConfig_AlpnOverride {
 	if m != nil {
 		return m.AlpnOverride
-	}
-	return nil
-}
-
-func (m *FilterConfig) GetAlpnOverridePerProtocol() []*FilterConfig_AlpnOverride {
-	if m != nil {
-		return m.AlpnOverridePerProtocol
 	}
 	return nil
 }
@@ -114,7 +104,7 @@ type FilterConfig_AlpnOverride struct {
 	// Upstream protocol
 	UpstreamProtocol FilterConfig_Protocol `protobuf:"varint,1,opt,name=upstream_protocol,json=upstreamProtocol,proto3,enum=istio.envoy.config.filter.http.alpn.v2alpha1.FilterConfig_Protocol" json:"upstream_protocol,omitempty"`
 	// A list of ALPN that will override the ALPN for upstream TLS connections.
-	AlpnOverrides        []string `protobuf:"bytes,2,rep,name=alpn_overrides,json=alpnOverrides,proto3" json:"alpn_overrides,omitempty"`
+	AlpnOverride         []string `protobuf:"bytes,2,rep,name=alpn_override,json=alpnOverride,proto3" json:"alpn_override,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -160,9 +150,9 @@ func (m *FilterConfig_AlpnOverride) GetUpstreamProtocol() FilterConfig_Protocol 
 	return FilterConfig_HTTP10
 }
 
-func (m *FilterConfig_AlpnOverride) GetAlpnOverrides() []string {
+func (m *FilterConfig_AlpnOverride) GetAlpnOverride() []string {
 	if m != nil {
-		return m.AlpnOverrides
+		return m.AlpnOverride
 	}
 	return nil
 }
@@ -178,27 +168,24 @@ func init() {
 }
 
 var fileDescriptor_9dd199870dce382a = []byte{
-	// 306 bytes of a gzipped FileDescriptorProto
+	// 271 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x32, 0x4e, 0xcd, 0x2b, 0xcb,
 	0xaf, 0xd4, 0x4f, 0xce, 0xcf, 0x4b, 0xcb, 0x4c, 0xd7, 0x4f, 0xcb, 0xcc, 0x29, 0x49, 0x2d, 0xd2,
 	0xcf, 0x28, 0x29, 0x29, 0xd0, 0x4f, 0xcc, 0x29, 0xc8, 0xd3, 0x2f, 0x33, 0x4a, 0xcc, 0x29, 0xc8,
 	0x48, 0x34, 0x84, 0x2a, 0xd0, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xd2, 0xc9, 0x2c, 0x2e, 0xc9,
 	0xcc, 0xd7, 0x03, 0x6b, 0xd5, 0x83, 0xca, 0x40, 0xb4, 0xea, 0x81, 0xb4, 0xea, 0x81, 0xb4, 0xea,
-	0xc1, 0xb4, 0x2a, 0x4d, 0x67, 0xe6, 0xe2, 0x71, 0x03, 0xcb, 0x3a, 0x83, 0x95, 0x0a, 0xa9, 0x73,
+	0xc1, 0xb4, 0x2a, 0x5d, 0x66, 0xe2, 0xe2, 0x71, 0x03, 0xcb, 0x3a, 0x83, 0x95, 0x0a, 0xe5, 0x70,
 	0xf1, 0x82, 0x54, 0xc4, 0xe7, 0x97, 0xa5, 0x16, 0x15, 0x65, 0xa6, 0xa4, 0x4a, 0x30, 0x2a, 0x30,
-	0x6b, 0x70, 0x3a, 0x31, 0x49, 0x30, 0x06, 0xf1, 0x80, 0x24, 0xfc, 0xa1, 0xe2, 0x42, 0x2d, 0x8c,
-	0x5c, 0x52, 0x28, 0x2a, 0xe3, 0x0b, 0x52, 0x8b, 0xe2, 0xc1, 0x6e, 0x48, 0xce, 0xcf, 0x91, 0x60,
-	0x52, 0x60, 0xd6, 0xe0, 0x36, 0x72, 0xd7, 0x23, 0xc5, 0x35, 0x7a, 0xc8, 0x2e, 0xd1, 0x73, 0x44,
-	0xb2, 0x2d, 0x48, 0x1c, 0xd9, 0xee, 0x80, 0xd4, 0xa2, 0x00, 0xa8, 0x3d, 0x52, 0xcb, 0x19, 0xb9,
-	0x78, 0x90, 0x55, 0x0a, 0x15, 0x70, 0x09, 0x96, 0x16, 0x14, 0x97, 0x14, 0xa5, 0x26, 0xe6, 0x22,
-	0x5c, 0xc3, 0xa8, 0xc0, 0xa8, 0xc1, 0x67, 0xe4, 0x4c, 0x81, 0x6b, 0x60, 0x16, 0x06, 0x09, 0xc0,
-	0x4c, 0x87, 0x89, 0x08, 0xa9, 0x72, 0xf1, 0xa1, 0x04, 0x44, 0x31, 0xd8, 0xf3, 0x9c, 0x41, 0xbc,
-	0xc8, 0x6e, 0x2e, 0x56, 0xd2, 0xe5, 0xe2, 0x80, 0x6b, 0xe1, 0xe2, 0x62, 0xf3, 0x08, 0x09, 0x09,
-	0x30, 0x34, 0x10, 0x60, 0x80, 0xb3, 0x0d, 0x05, 0x18, 0x85, 0x38, 0xb9, 0x58, 0x41, 0x6c, 0x23,
-	0x01, 0x26, 0x27, 0xc7, 0x13, 0x8f, 0xe4, 0x18, 0x2f, 0x3c, 0x92, 0x63, 0x7c, 0xf0, 0x48, 0x8e,
-	0x31, 0xca, 0x18, 0xe2, 0xf2, 0xcc, 0x7c, 0xfd, 0xc4, 0x82, 0x4c, 0x7d, 0xe2, 0xd2, 0x45, 0x12,
-	0x1b, 0xd8, 0xff, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0x26, 0x8b, 0x55, 0xe2, 0x48, 0x02,
-	0x00, 0x00,
+	0x6b, 0x70, 0x1b, 0xb9, 0xeb, 0x91, 0x62, 0xac, 0x1e, 0xb2, 0x91, 0x7a, 0x8e, 0x39, 0x05, 0x79,
+	0xfe, 0x50, 0xe3, 0x82, 0x78, 0x12, 0x91, 0x78, 0x52, 0x4b, 0x19, 0xb9, 0x78, 0x90, 0xa5, 0x85,
+	0x0a, 0xb8, 0x04, 0x4b, 0x0b, 0x8a, 0x4b, 0x8a, 0x52, 0x13, 0x73, 0xe3, 0xc1, 0xfe, 0x49, 0xce,
+	0xcf, 0x91, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x33, 0x72, 0xa6, 0xc0, 0x09, 0x01, 0x50, 0xa3, 0x82,
+	0x04, 0x60, 0xa6, 0xc3, 0x44, 0x84, 0x94, 0xd1, 0x3d, 0xcc, 0xa4, 0xc0, 0xac, 0xc1, 0x89, 0xea,
+	0x4e, 0x25, 0x5d, 0x2e, 0x0e, 0xb8, 0x06, 0x2e, 0x2e, 0x36, 0x8f, 0x90, 0x90, 0x00, 0x43, 0x03,
+	0x01, 0x06, 0x38, 0xdb, 0x50, 0x80, 0x51, 0x88, 0x93, 0x8b, 0x15, 0xc4, 0x36, 0x12, 0x60, 0x72,
+	0x72, 0x3c, 0xf1, 0x48, 0x8e, 0xf1, 0xc2, 0x23, 0x39, 0xc6, 0x07, 0x8f, 0xe4, 0x18, 0xa3, 0x8c,
+	0x21, 0xee, 0xce, 0xcc, 0xd7, 0x4f, 0x2c, 0xc8, 0xd4, 0x27, 0x2e, 0x4e, 0x93, 0xd8, 0xc0, 0xbe,
+	0x37, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0x04, 0xaa, 0x10, 0x6d, 0x04, 0x02, 0x00, 0x00,
 }
 
 func (m *FilterConfig) Marshal() (dAtA []byte, err error) {
@@ -225,25 +212,16 @@ func (m *FilterConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	if len(m.AlpnOverridePerProtocol) > 0 {
-		for iNdEx := len(m.AlpnOverridePerProtocol) - 1; iNdEx >= 0; iNdEx-- {
+	if len(m.AlpnOverride) > 0 {
+		for iNdEx := len(m.AlpnOverride) - 1; iNdEx >= 0; iNdEx-- {
 			{
-				size, err := m.AlpnOverridePerProtocol[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				size, err := m.AlpnOverride[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
 				i -= size
 				i = encodeVarintConfig(dAtA, i, uint64(size))
 			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if len(m.AlpnOverride) > 0 {
-		for iNdEx := len(m.AlpnOverride) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.AlpnOverride[iNdEx])
-			copy(dAtA[i:], m.AlpnOverride[iNdEx])
-			i = encodeVarintConfig(dAtA, i, uint64(len(m.AlpnOverride[iNdEx])))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -275,11 +253,11 @@ func (m *FilterConfig_AlpnOverride) MarshalToSizedBuffer(dAtA []byte) (int, erro
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	if len(m.AlpnOverrides) > 0 {
-		for iNdEx := len(m.AlpnOverrides) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.AlpnOverrides[iNdEx])
-			copy(dAtA[i:], m.AlpnOverrides[iNdEx])
-			i = encodeVarintConfig(dAtA, i, uint64(len(m.AlpnOverrides[iNdEx])))
+	if len(m.AlpnOverride) > 0 {
+		for iNdEx := len(m.AlpnOverride) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.AlpnOverride[iNdEx])
+			copy(dAtA[i:], m.AlpnOverride[iNdEx])
+			i = encodeVarintConfig(dAtA, i, uint64(len(m.AlpnOverride[iNdEx])))
 			i--
 			dAtA[i] = 0x12
 		}
@@ -310,13 +288,7 @@ func (m *FilterConfig) Size() (n int) {
 	var l int
 	_ = l
 	if len(m.AlpnOverride) > 0 {
-		for _, s := range m.AlpnOverride {
-			l = len(s)
-			n += 1 + l + sovConfig(uint64(l))
-		}
-	}
-	if len(m.AlpnOverridePerProtocol) > 0 {
-		for _, e := range m.AlpnOverridePerProtocol {
+		for _, e := range m.AlpnOverride {
 			l = e.Size()
 			n += 1 + l + sovConfig(uint64(l))
 		}
@@ -336,8 +308,8 @@ func (m *FilterConfig_AlpnOverride) Size() (n int) {
 	if m.UpstreamProtocol != 0 {
 		n += 1 + sovConfig(uint64(m.UpstreamProtocol))
 	}
-	if len(m.AlpnOverrides) > 0 {
-		for _, s := range m.AlpnOverrides {
+	if len(m.AlpnOverride) > 0 {
+		for _, s := range m.AlpnOverride {
 			l = len(s)
 			n += 1 + l + sovConfig(uint64(l))
 		}
@@ -387,38 +359,6 @@ func (m *FilterConfig) Unmarshal(dAtA []byte) error {
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field AlpnOverride", wireType)
 			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthConfig
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthConfig
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AlpnOverride = append(m.AlpnOverride, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AlpnOverridePerProtocol", wireType)
-			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
@@ -444,8 +384,8 @@ func (m *FilterConfig) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.AlpnOverridePerProtocol = append(m.AlpnOverridePerProtocol, &FilterConfig_AlpnOverride{})
-			if err := m.AlpnOverridePerProtocol[len(m.AlpnOverridePerProtocol)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.AlpnOverride = append(m.AlpnOverride, &FilterConfig_AlpnOverride{})
+			if err := m.AlpnOverride[len(m.AlpnOverride)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -524,7 +464,7 @@ func (m *FilterConfig_AlpnOverride) Unmarshal(dAtA []byte) error {
 			}
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AlpnOverrides", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AlpnOverride", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -552,7 +492,7 @@ func (m *FilterConfig_AlpnOverride) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.AlpnOverrides = append(m.AlpnOverrides, string(dAtA[iNdEx:postIndex]))
+			m.AlpnOverride = append(m.AlpnOverride, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
