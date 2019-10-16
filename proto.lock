@@ -12852,7 +12852,13 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings"
+                        "name": "additional_bindings",
+                        "aggregated": [
+                          {
+                            "name": "get",
+                            "value": "/v1/services/{service_name}/config"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -34986,6 +34992,24 @@
     {
       "protopath": "envoy:/:config:/:filter:/:http:/:alpn:/:v2alpha1:/:config.proto",
       "def": {
+        "enums": [
+          {
+            "name": "FilterConfig.Protocol",
+            "enum_fields": [
+              {
+                "name": "HTTP10"
+              },
+              {
+                "name": "HTTP11",
+                "integer": 1
+              },
+              {
+                "name": "HTTP2",
+                "integer": 2
+              }
+            ]
+          }
+        ],
         "messages": [
           {
             "name": "FilterConfig",
@@ -34993,8 +35017,26 @@
               {
                 "id": 1,
                 "name": "alpn_override",
-                "type": "string",
+                "type": "AlpnOverride",
                 "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "AlpnOverride",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "upstream_protocol",
+                    "type": "Protocol"
+                  },
+                  {
+                    "id": 2,
+                    "name": "alpn_override",
+                    "type": "string",
+                    "is_repeated": true
+                  }
+                ]
               }
             ]
           }
