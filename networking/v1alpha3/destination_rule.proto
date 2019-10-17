@@ -20,7 +20,8 @@ import "gogoproto/gogo.proto";
 
 // $title: Destination Rule
 // $description: Configuration affecting load balancing, outlier detection, etc.
-// $location: https://istio.io/docs/reference/config/networking/v1alpha3/destination-rule.html
+// $location: https://istio.io/docs/reference/config/networking/destination-rule.html
+// $aliases: [https://istio.io/docs/reference/config/networking/v1alpha3/destination-rule.html]
 
 // `DestinationRule` defines policies that apply to traffic intended for a
 // service after routing has occurred. These rules specify configuration
@@ -521,8 +522,8 @@ message OutlierDetection {
   // pool has at least min_health_percent hosts in healthy mode. When the
   // percentage of healthy hosts in the load balancing pool drops below this
   // threshold, outlier detection will be disabled and the proxy will load balance
-  // across all hosts in the pool (healthy and unhealthy). The threshold can be 
-  // disabled by setting it to 0%. The default is 0% as it's not typically 
+  // across all hosts in the pool (healthy and unhealthy). The threshold can be
+  // disabled by setting it to 0%. The default is 0% as it's not typically
   // applicable in k8s environments with few pods per service.
   int32 min_health_percent = 5;
 }
