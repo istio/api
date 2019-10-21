@@ -36009,7 +36009,7 @@
               {
                 "id": 35,
                 "name": "locality_lb_setting",
-                "type": "istio.networking.v1alpha3.LocalityLoadBalancerSetting"
+                "type": "LocalityLoadBalancerSetting"
               },
               {
                 "id": 36,
@@ -36088,6 +36088,60 @@
                 "name": "subscribed_resources",
                 "type": "Resource",
                 "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "LocalityLoadBalancerSetting",
+            "fields": [
+              {
+                "id": 1,
+                "name": "distribute",
+                "type": "Distribute",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "failover",
+                "type": "Failover",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "Distribute",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "from",
+                    "type": "string"
+                  }
+                ],
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 2,
+                      "name": "to",
+                      "type": "uint32"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "Failover",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "from",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "to",
+                    "type": "string"
+                  }
+                ]
               }
             ]
           },
@@ -38572,11 +38626,6 @@
                 "name": "port_level_settings",
                 "type": "PortTrafficPolicy",
                 "is_repeated": true
-              },
-              {
-                "id": 6,
-                "name": "locality_lb_setting",
-                "type": "LocalityLoadBalancerSetting"
               }
             ],
             "messages": [
@@ -38886,60 +38935,6 @@
                 "id": 6,
                 "name": "sni",
                 "type": "string"
-              }
-            ]
-          },
-          {
-            "name": "LocalityLoadBalancerSetting",
-            "fields": [
-              {
-                "id": 1,
-                "name": "distribute",
-                "type": "Distribute",
-                "is_repeated": true
-              },
-              {
-                "id": 2,
-                "name": "failover",
-                "type": "Failover",
-                "is_repeated": true
-              }
-            ],
-            "messages": [
-              {
-                "name": "Distribute",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "from",
-                    "type": "string"
-                  }
-                ],
-                "maps": [
-                  {
-                    "key_type": "string",
-                    "field": {
-                      "id": 2,
-                      "name": "to",
-                      "type": "uint32"
-                    }
-                  }
-                ]
-              },
-              {
-                "name": "Failover",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "from",
-                    "type": "string"
-                  },
-                  {
-                    "id": 2,
-                    "name": "to",
-                    "type": "string"
-                  }
-                ]
               }
             ]
           }

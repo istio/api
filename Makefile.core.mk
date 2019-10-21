@@ -369,22 +369,16 @@ clean-security:
 
 envoy_path := envoy
 envoy_protos := $(shell find $(envoy_path) -type f -name '*.proto' | sort)
-envoy_pb_gos := $(envoy_protos:.proto=.pb.go)
 envoy_pb_pythons := $(patsubst $(envoy_path)/%.proto,$(python_output_path)/$(envoy_path)/%_pb2.py,$(envoy_protos))
-
-$(envoy_pb_gos): %.pb.go : %.proto
-	@$(protolock) status
-	@$(protoc) $(gogofast_plugin) $<
-	@cp -r /tmp/istio.io/api/envoy/* envoy
 
 $(envoy_pb_pythons): $(envoy_protos)
 	@$(protolock) status
 	@$(protoc) $(protoc_gen_python_plugin) $^
 
-generate-envoy: $(envoy_pb_gos) $(envoy_pb_pythons)
+generate-envoy: $(envoy_pb_pythons)
 
 clean-envoy:
-	@rm -fr $(envoy_pb_gos) $(envoy_pb_pythons)
+	@rm -fr $(envoy_pb_pythons)
 
 #####################
 # annotation/...
