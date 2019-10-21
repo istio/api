@@ -193,6 +193,11 @@ message TrafficPolicy {
   // overridden by port-level settings, i.e. default values will be applied
   // to fields omitted in port-level traffic policies.
   repeated PortTrafficPolicy port_level_settings = 5;
+
+  //locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
+  // between this object and the object one in MeshConfig
+  LocalityLoadBalancerSetting locality_lb_setting = 6;
+
 }
 
 // A subset of endpoints of a service. Subsets can be used for scenarios
@@ -628,4 +633,98 @@ message TLSSettings {
 
   // SNI string to present to the server during TLS handshake.
   string sni = 6;
+}
+
+// Locality-weighted load balancing allows administrators to control the
+// distribution of traffic to endpoints based on the localities of where the
+// traffic originates and where it will terminate. These localities are
+// specified using arbitrary labels that designate a hierarchy of localities in
+// {region}/{zone}/{sub-zone} form. For additional detail refer to
+// [Locality Weight](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)
+// The following example shows how to setup locality weights mesh-wide.
+//
+// Given a mesh with workloads and their service deployed to "us-west/zone1/*"
+// and "us-west/zone2/*". This example specifies that when traffic accessing a
+// service originates from workloads in "us-west/zone1/*", 80% of the traffic
+// will be sent to endpoints in "us-west/zone1/*", i.e the same zone, and the
+// remaining 20% will go to endpoints in "us-west/zone2/*". This setup is
+// intended to favor routing traffic to endpoints in the same locality.
+// A similar setting is specified for traffic originating in "us-west/zone2/*".
+//
+// ```yaml
+//   distribute:
+//     - from: us-west/zone1/*
+//       to:
+//         "us-west/zone1/*": 80
+//         "us-west/zone2/*": 20
+//     - from: us-west/zone2/*
+//       to:
+//         "us-west/zone1/*": 20
+//         "us-west/zone2/*": 80
+// ```
+//
+// If the goal of the operator is not to distribute load across zones and
+// regions but rather to restrict the regionality of failover to meet other
+// operational requirements an operator can set a 'failover' policy instead of
+// a 'distribute' policy.
+//
+// The following example sets up a locality failover policy for regions.
+// Assume a service resides in zones within us-east, us-west & eu-west
+// this example specifies that when endpoints within us-east become unhealthy
+// traffic should failover to endpoints in any zone or sub-zone within eu-west
+// and similarly us-west should failover to us-east.
+//
+// ```yaml
+//  failover:
+//    - from: us-east
+//      to: eu-west
+//    - from: us-west
+//      to: us-east
+// ```
+// Locality load balancing settings.
+message LocalityLoadBalancerSetting{
+    // Describes how traffic originating in the 'from' zone or sub-zone is
+    // distributed over a set of 'to' zones. Syntax for specifying a zone is
+    // {region}/{zone}/{sub-zone} and terminal wildcards are allowed on any
+    // segment of the specification. Examples:
+    // * - matches all localities
+    // us-west/* - all zones and sub-zones within the us-west region
+    // us-west/zone-1/* - all sub-zones within us-west/zone-1
+    message Distribute{
+        // Originating locality, '/' separated, e.g. 'region/zone/sub_zone'.
+        string from = 1;
+
+        // Map of upstream localities to traffic distribution weights. The sum of
+        // all weights should be == 100. Any locality not assigned a weight will
+        // receive no traffic.
+        map<string, uint32> to = 2;
+    };
+
+    // Specify the traffic failover policy across regions. Since zone and sub-zone
+    // failover is supported by default this only needs to be specified for
+    // regions when the operator needs to constrain traffic failover so that
+    // the default behavior of failing over to any endpoint globally does not
+    // apply. This is useful when failing over traffic across regions would not
+    // improve service health or may need to be restricted for other reasons
+    // like regulatory controls.
+    message Failover{
+        // Originating region.
+        string from = 1;
+
+        // Destination region the traffic will fail over to when endpoints in
+        // the 'from' region becomes unhealthy.
+        string to = 2;
+    };
+
+    // Optional: only one of distribute or failover can be set.
+    // Explicitly specify loadbalancing weight across different zones and geographical locations.
+    // Refer to [Locality weighted load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)
+    // If empty, the locality weight is set according to the endpoints number within it.
+    repeated Distribute distribute = 1;
+
+    // Optional: only failover or distribute can be set.
+    // Explicitly specify the region traffic will land on when endpoints in local region becomes unhealthy.
+    // Should be used together with OutlierDetection to detect unhealthy endpoints.
+    // Note: if no OutlierDetection specified, this will not take effect.
+    repeated Failover failover = 2;
 }
