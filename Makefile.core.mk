@@ -98,7 +98,8 @@ gen: \
 	generate-envoy \
 	generate-policy \
 	generate-annotations \
-	generate-openapi-schema
+	generate-openapi-schema \
+	generate-openapi-crd
 
 gen-check: clean gen check-clean-repo
 
@@ -453,13 +454,24 @@ all_openapi := \
 	$(security_v1beta1_openapi) \
 	$(type_v1beta1_openapi)
 
+all_openapi_crd := kubernetes/customresourcedefinition.gen.yaml
+
 $(all_openapi): $(all_protos)
 	@$(cue) -f=$(repo_dir)/cue.yaml
 
+# The fields are added at the end to generate snake cases. This is a temporary solution to accommodate some wrong namings currently exist.
+$(all_openapi_crd): $(all_protos)
+	@$(cue) -f=$(repo_dir)/cue.yaml --crd=true -snake=jwksUri,apiKeys,apiSpecs,includedPaths,jwtHeaders,triggerRules,excludedPaths,mirrorPercent
+
 generate-openapi-schema: $(all_openapi)
+
+generate-openapi-crd: $(all_openapi)
 
 clean-openapi-schema:
 	@rm -fr $(all_openapi)
+
+clean-openapi-crd:
+	@rm -fr $(all_openapi_crd)
 
 #####################
 # Cleanup
@@ -478,7 +490,8 @@ clean: \
 	clean-annotations \
 	clean-openapi-schema \
 	clean-security \
-	clean-type
+	clean-type \
+	clean-openapi-crd
 
 #####################
 # CI System

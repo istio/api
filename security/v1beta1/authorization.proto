@@ -16,6 +16,7 @@ syntax = "proto3";
 import "google/api/field_behavior.proto";
 import "type/v1beta1/selector.proto";
 
+// $schema: istio.security.v1beta1.AuthorizationPolicy
 // $title: Authorization Policy
 // $description: Configuration for access control on workloads.
 // $location: https://istio.io/docs/reference/config/security/v1beta1/authorization-policy.html

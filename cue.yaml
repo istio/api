@@ -55,6 +55,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: networking.istio.io
         names:
           kind: VirtualService
@@ -101,6 +102,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: networking.istio.io
         names:
           kind: DestinationRule
@@ -143,6 +145,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: networking.istio.io
         names:
           kind: ServiceEntry
@@ -193,6 +196,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: networking.istio.io
         names:
           kind: Gateway
@@ -223,6 +227,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: networking.istio.io
         names:
           kind: EnvoyFilter
@@ -253,6 +258,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: rbac.istio.io
         names:
           kind: RbacConfig
@@ -281,6 +287,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: rbac.istio.io
         names:
           kind: ClusterRbacConfig
@@ -309,6 +316,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: authentication.istio.io
         names:
           kind: Policy
@@ -337,6 +345,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: authentication.istio.io
         names:
           kind: MeshPolicy
@@ -366,6 +375,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: config.istio.io
         names:
           kind: HTTPAPISpecBinding
@@ -394,6 +404,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: config.istio.io
         names:
           kind: HTTPAPISpec
@@ -422,6 +433,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: config.istio.io
         names:
           kind: QuotaSpecBinding
@@ -450,6 +462,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: config.istio.io
         names:
           kind: QuotaSpec
@@ -480,6 +493,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: config.istio.io
         names:
           kind: rule
@@ -510,6 +524,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: config.istio.io
         names:
           kind: attributemanifest
@@ -540,6 +555,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: rbac.istio.io
         names:
           kind: ServiceRole
@@ -570,6 +586,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: rbac.istio.io
         names:
           kind: ServiceRoleBinding
@@ -609,6 +626,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: networking.istio.io
         names:
           kind: Sidecar
@@ -637,6 +655,7 @@ crd:
         annotations:
           "helm.sh/resource-policy": keep
       spec:
+        preserveUnknownFields: false
         group: security.istio.io
         names:
           kind: AuthorizationPolicy

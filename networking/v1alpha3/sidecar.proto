@@ -17,6 +17,7 @@ syntax = "proto3";
 import "google/api/field_behavior.proto";
 import "networking/v1alpha3/gateway.proto";
 
+// $schema: istio.networking.v1alpha3.Sidecar
 // $title: Sidecar
 // $description: Configuration affecting network reachability of a sidecar.
 // $location: https://istio.io/docs/reference/config/networking/sidecar.html
