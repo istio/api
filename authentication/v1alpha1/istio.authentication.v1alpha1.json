@@ -243,14 +243,6 @@
             "type": "string",
             "format": "string"
           },
-          "labels": {
-            "description": "Select workload by labels. Once implemented, this is the preferred way rather than using the service name.",
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "format": "string"
-            }
-          },
           "ports": {
             "description": "Specifies the ports. Note that this is the port(s) exposed by the service, not workload instance ports. For example, if a service is defined as below, then `8000` should be used, not `9000`. ```yaml kind: Service metadata: ... spec: ports: - name: http port: 8000 targetPort: 9000 selector: app: backend ``` Leave empty to match all ports that are exposed.",
             "type": "array",
