@@ -7,11 +7,11 @@
   "components": {
     "schemas": {
       "istio.networking.v1alpha3.WorkloadSelector": {
-        "description": "WorkloadSelector specifies the criteria used to determine if the Gateway, Sidecar, or EnvoyFilter resource can be applied to a proxy. The matching criteria includes the metadata associated with a proxy, workload instance info such as labels attached to the pod/VM, or any other info that the proxy provides to Istio during the initial handshake. If multiple conditions are specified, all conditions need to match in order for the workload instance to be selected. Currently, only label based selection mechanism is supported.",
+        "description": "`WorkloadSelector` specifies the criteria used to determine if the `Gateway`, `Sidecar`, or `EnvoyFilter` configuration can be applied to a proxy. The matching criteria includes the metadata associated with a proxy, workload instance info such as labels attached to the pod/VM, or any other info that the proxy provides to Istio during the initial handshake. If multiple conditions are specified, all conditions need to match in order for the workload instance to be selected. Currently, only label based selection mechanism is supported.",
         "type": "object",
         "properties": {
           "labels": {
-            "description": "One or more labels that indicate a specific set of pods/VMs on which this sidecar configuration should be applied. The scope of label search is restricted to the configuration namespace in which the the resource is present.",
+            "description": "One or more labels that indicate a specific set of pods/VMs on which this `Sidecar` configuration should be applied. The scope of label search is restricted to the configuration namespace in which the the resource is present.",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -41,7 +41,7 @@
         }
       },
       "istio.networking.v1alpha3.Sidecar": {
-        "description": "Sidecar describes the configuration of the sidecar proxy that mediates inbound and outbound communication of the workload instance to which it is attached.",
+        "description": "`Sidecar` describes the configuration of the sidecar proxy that mediates inbound and outbound communication of the workload instance to which it is attached.",
         "type": "object",
         "properties": {
           "workloadSelector": {
@@ -67,19 +67,19 @@
         }
       },
       "istio.networking.v1alpha3.IstioIngressListener": {
-        "description": "IstioIngressListener specifies the properties of an inbound traffic listener on the sidecar proxy attached to a workload instance.",
+        "description": "`IstioIngressListener` specifies the properties of an inbound traffic listener on the sidecar proxy attached to a workload instance.",
         "type": "object",
         "properties": {
           "port": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Port"
           },
           "bind": {
-            "description": "The ip to which the listener should be bound. Must be in the format `x.x.x.x`. Unix domain socket addresses are not allowed in the bind field for ingress listeners. If omitted, Istio will automatically configure the defaults based on imported services and the workload instances to which this configuration is applied to.",
+            "description": "The IP to which the listener should be bound. Must be in the format `x.x.x.x`. Unix domain socket addresses are not allowed in the bind field for ingress listeners. If omitted, Istio will automatically configure the defaults based on imported services and the workload instances to which this configuration is applied to.",
             "type": "string",
             "format": "string"
           },
           "defaultEndpoint": {
-            "description": "The loopback IP endpoint or Unix domain socket to which traffic should be forwarded to. This configuration can be used to redirect traffic arriving at the bind IP:Port on the sidecar to a localhost:port or Unix domain socket where the application workload instance is listening for connections. Format should be 127.0.0.1:PORT or `unix:///path/to/socket`",
+            "description": "The loopback IP endpoint or Unix domain socket to which traffic should be forwarded to. This configuration can be used to redirect traffic arriving at the bind `IP:Port` on the sidecar to a `localhost:port` or Unix domain socket where the application workload instance is listening for connections. Format should be `127.0.0.1:PORT` or `unix:///path/to/socket`",
             "type": "string",
             "format": "string"
           },
@@ -89,14 +89,14 @@
         }
       },
       "istio.networking.v1alpha3.IstioEgressListener": {
-        "description": "IstioEgressListener specifies the properties of an outbound traffic listener on the sidecar proxy attached to a workload instance.",
+        "description": "`IstioEgressListener` specifies the properties of an outbound traffic listener on the sidecar proxy attached to a workload instance.",
         "type": "object",
         "properties": {
           "port": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Port"
           },
           "bind": {
-            "description": "The ip or the Unix domain socket to which the listener should be bound to. Port MUST be specified if bind is not empty. Format: `x.x.x.x` or `unix:///path/to/uds` or `unix://@foobar` (Linux abstract namespace). If omitted, Istio will automatically configure the defaults based on imported services, the workload instances to which this configuration is applied to and the captureMode. If captureMode is NONE, bind will default to 127.0.0.1.",
+            "description": "The IP or the Unix domain socket to which the listener should be bound to. Port MUST be specified if bind is not empty. Format: `x.x.x.x` or `unix:///path/to/uds` or `unix://@foobar` (Linux abstract namespace). If omitted, Istio will automatically configure the defaults based on imported services, the workload instances to which this configuration is applied to and the captureMode. If captureMode is `NONE`, bind will default to 127.0.0.1.",
             "type": "string",
             "format": "string"
           },
@@ -114,7 +114,7 @@
         }
       },
       "istio.networking.v1alpha3.OutboundTrafficPolicy": {
-        "description": "OutboundTrafficPolicy sets the default behavior of the sidecar for handling outbound traffic from the application. If your application uses one or more external services that are not known apriori, setting the policy to ALLOW_ANY will cause the sidecars to route any unknown traffic originating from the application to its requested destination. Users are strongly encouraged to use ServiceEntries to explicitly declare any external dependencies, instead of using allow_any, so that traffic to these services can be monitored.",
+        "description": "`OutboundTrafficPolicy` sets the default behavior of the sidecar for handling outbound traffic from the application. If your application uses one or more external services that are not known apriori, setting the policy to `ALLOW_ANY` will cause the sidecars to route any unknown traffic originating from the application to its requested destination. Users are strongly encouraged to use `ServiceEntry` configurations to explicitly declare any external dependencies, instead of using `ALLOW_ANY`, so that traffic to these services can be monitored.",
         "type": "object",
         "properties": {
           "mode": {
@@ -123,7 +123,7 @@
         }
       },
       "istio.networking.v1alpha3.CaptureMode": {
-        "description": "CaptureMode describes how traffic to a listener is expected to be captured. Applicable only when the listener is bound to an IP.",
+        "description": "`CaptureMode` describes how traffic to a listener is expected to be captured. Applicable only when the listener is bound to an IP.",
         "type": "string",
         "enum": [
           "DEFAULT",
