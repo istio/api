@@ -195,7 +195,7 @@ message TrafficPolicy {
   // to fields omitted in port-level traffic policies.
   repeated PortTrafficPolicy port_level_settings = 5;
 
-  //locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
+  // Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
   // between this object and the object one in MeshConfig
   LocalityLoadBalancerSetting locality_lb_setting = 6;
 
