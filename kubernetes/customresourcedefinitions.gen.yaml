@@ -23,7 +23,6 @@ spec:
     kind: attributemanifest
     plural: attributemanifests
     singular: attributemanifest
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -104,7 +103,6 @@ spec:
     kind: AuthorizationPolicy
     plural: authorizationpolicies
     singular: authorizationpolicy
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -249,7 +247,6 @@ spec:
     kind: ClusterRbacConfig
     plural: clusterrbacconfigs
     singular: clusterrbacconfig
-  preserveUnknownFields: false
   scope: Cluster
   subresources:
     status: {}
@@ -356,7 +353,6 @@ spec:
     shortNames:
     - dr
     singular: destinationrule
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -1117,7 +1113,6 @@ spec:
     kind: EnvoyFilter
     plural: envoyfilters
     singular: envoyfilter
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -1421,7 +1416,6 @@ spec:
     shortNames:
     - gw
     singular: gateway
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -1574,7 +1568,6 @@ spec:
     kind: HTTPAPISpecBinding
     plural: httpapispecbindings
     singular: httpapispecbinding
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -1674,7 +1667,6 @@ spec:
     kind: HTTPAPISpec
     plural: httpapispecs
     singular: httpapispec
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -1893,7 +1885,6 @@ spec:
     listKind: MeshPolicyList
     plural: meshpolicies
     singular: meshpolicy
-  preserveUnknownFields: false
   scope: Cluster
   subresources:
     status: {}
@@ -2568,11 +2559,6 @@ spec:
                 applied on.
               items:
                 properties:
-                  labels:
-                    additionalProperties:
-                      format: string
-                      type: string
-                    type: object
                   name:
                     description: The name must be a short name from the service registry.
                     format: string
@@ -2630,7 +2616,6 @@ spec:
     kind: Policy
     plural: policies
     singular: policy
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -3305,11 +3290,6 @@ spec:
                 applied on.
               items:
                 properties:
-                  labels:
-                    additionalProperties:
-                      format: string
-                      type: string
-                    type: object
                   name:
                     description: The name must be a short name from the service registry.
                     format: string
@@ -3367,7 +3347,6 @@ spec:
     kind: QuotaSpecBinding
     plural: quotaspecbindings
     singular: quotaspecbinding
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -3454,7 +3433,6 @@ spec:
     kind: QuotaSpec
     plural: quotaspecs
     singular: quotaspec
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -3547,7 +3525,6 @@ spec:
     kind: RbacConfig
     plural: rbacconfigs
     singular: rbacconfig
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -3642,7 +3619,6 @@ spec:
     kind: rule
     plural: rules
     singular: rule
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -3825,7 +3801,6 @@ spec:
     shortNames:
     - se
     singular: serviceentry
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -3966,7 +3941,6 @@ spec:
     kind: ServiceRoleBinding
     plural: servicerolebindings
     singular: servicerolebinding
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -4162,7 +4136,6 @@ spec:
     kind: ServiceRole
     plural: serviceroles
     singular: servicerole
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -4278,7 +4251,6 @@ spec:
     kind: Sidecar
     plural: sidecars
     singular: sidecar
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -4327,7 +4299,7 @@ spec:
               items:
                 properties:
                   bind:
-                    description: The ip to which the listener should be bound.
+                    description: The IP to which the listener should be bound.
                     format: string
                     type: string
                   captureMode:
@@ -4426,7 +4398,6 @@ spec:
     shortNames:
     - vs
     singular: virtualservice
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -4785,6 +4756,11 @@ spec:
                         format: string
                         type: string
                     type: object
+                  mirror_percent:
+                    description: Percentage of the traffic to be mirrored by the `mirror`
+                      field.
+                    nullable: true
+                    type: integer
                   mirrorPercent:
                     description: Percentage of the traffic to be mirrored by the `mirror`
                       field.
