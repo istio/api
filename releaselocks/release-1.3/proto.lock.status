@@ -1,2 +1,7 @@
 CONFLICT: "AuthorizationPolicy" field: "selector" has a different type: istio.type.v1beta1.WorkloadSelector, previously istio.networking.v1alpha3.WorkloadSelector [security/v1beta1/authorization.proto]
+CONFLICT: "LocalityLoadBalancerSetting" field: "distribute" has been removed, but is not reserved [mesh/v1alpha1/config.proto]
+CONFLICT: "LocalityLoadBalancerSetting" field: "failover" has been removed, but is not reserved [mesh/v1alpha1/config.proto]
+CONFLICT: "LocalityLoadBalancerSetting" ID: "1" has been removed, but is not reserved [mesh/v1alpha1/config.proto]
+CONFLICT: "LocalityLoadBalancerSetting" ID: "2" has been removed, but is not reserved [mesh/v1alpha1/config.proto]
+CONFLICT: "MeshConfig" field: "locality_lb_setting" has a different type: istio.networking.v1alpha3.LocalityLoadBalancerSetting, previously LocalityLoadBalancerSetting [mesh/v1alpha1/config.proto]
 CONFLICT: "Quota" field: "charge" has a different type: int32, previously int64 [mixer/v1/config/client/quota.proto]
