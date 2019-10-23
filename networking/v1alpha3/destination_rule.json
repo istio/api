@@ -205,6 +205,9 @@
           "tls": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSSettings"
           },
+          "localityLbSetting": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.LocalityLoadBalancerSetting"
+          },
           "port": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.PortSelector"
           }

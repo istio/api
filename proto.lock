@@ -38601,6 +38601,11 @@
                     "id": 5,
                     "name": "tls",
                     "type": "TLSSettings"
+                  },
+                  {
+                    "id": 6,
+                    "name": "locality_lb_setting",
+                    "type": "LocalityLoadBalancerSetting"
                   }
                 ]
               }
