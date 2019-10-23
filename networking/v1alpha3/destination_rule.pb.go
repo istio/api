@@ -352,7 +352,7 @@ type TrafficPolicy struct {
 	// overridden by port-level settings, i.e. default values will be applied
 	// to fields omitted in port-level traffic policies.
 	PortLevelSettings []*TrafficPolicy_PortTrafficPolicy `protobuf:"bytes,5,rep,name=port_level_settings,json=portLevelSettings,proto3" json:"port_level_settings,omitempty"`
-	//locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
+	// Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
 	// between this object and the object one in MeshConfig
 	LocalityLbSetting    *LocalityLoadBalancerSetting `protobuf:"bytes,6,opt,name=locality_lb_setting,json=localityLbSetting,proto3" json:"locality_lb_setting,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                     `json:"-"`
