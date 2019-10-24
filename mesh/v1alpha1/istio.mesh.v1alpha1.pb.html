@@ -134,7 +134,7 @@ No
 </tr>
 <tr id="ConfigSource-tls_settings">
 <td><code>tlsSettings</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#TLSSettings">istio.networking.v1alpha3.TLSSettings</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#TLSSettings">TLSSettings</a></code></td>
 <td>
 <p>Use the tls<em>settings to specify the tls mode to use. If the MCP server
 uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
@@ -273,7 +273,7 @@ No
 </tr>
 <tr id="MeshConfig-connect_timeout">
 <td><code>connectTimeout</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>Connection timeout used by Envoy. (MUST BE &gt;=1ms)</p>
 
@@ -284,7 +284,7 @@ No
 </tr>
 <tr id="MeshConfig-protocol_detection_timeout">
 <td><code>protocolDetectionTimeout</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>Automatic protocol detection uses a set of heuristics to
 determine whether the connection is using TLS or not (on the
@@ -303,7 +303,7 @@ No
 </tr>
 <tr id="MeshConfig-tcp_keepalive">
 <td><code>tcpKeepalive</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ConnectionPoolSettings-TCPSettings-TcpKeepalive">istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ConnectionPoolSettings-TCPSettings-TcpKeepalive">TcpKeepalive</a></code></td>
 <td>
 <p>If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.</p>
 
@@ -338,7 +338,7 @@ No
 </tr>
 <tr id="MeshConfig-ingress_controller_mode">
 <td><code>ingressControllerMode</code></td>
-<td><code><a href="#MeshConfig-IngressControllerMode">MeshConfig.IngressControllerMode</a></code></td>
+<td><code><a href="#MeshConfig-IngressControllerMode">IngressControllerMode</a></code></td>
 <td>
 <p>Defines whether to use Istio ingress controller for annotated or all ingress resources.</p>
 
@@ -385,7 +385,7 @@ No
 </tr>
 <tr id="MeshConfig-access_log_encoding">
 <td><code>accessLogEncoding</code></td>
-<td><code><a href="#MeshConfig-AccessLogEncoding">MeshConfig.AccessLogEncoding</a></code></td>
+<td><code><a href="#MeshConfig-AccessLogEncoding">AccessLogEncoding</a></code></td>
 <td>
 <p>Encoding for the proxy access log (text or json).
 Default value is text.</p>
@@ -425,7 +425,7 @@ No
 </tr>
 <tr id="MeshConfig-outbound_traffic_policy">
 <td><code>outboundTrafficPolicy</code></td>
-<td><code><a href="#MeshConfig-OutboundTrafficPolicy">MeshConfig.OutboundTrafficPolicy</a></code></td>
+<td><code><a href="#MeshConfig-OutboundTrafficPolicy">OutboundTrafficPolicy</a></code></td>
 <td>
 <p>Set the default behavior of the sidecar for handling outbound traffic
 from the application.  If your application uses one or more external
@@ -479,7 +479,7 @@ No
 </tr>
 <tr id="MeshConfig-enable_auto_mtls">
 <td><code>enableAutoMtls</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">google.protobuf.BoolValue</a></code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
 <p>This flag is used to enable mutual TLS automatically for service to service communication
 within the mesh, default false.
@@ -626,7 +626,7 @@ No
 </tr>
 <tr id="MeshConfig-dns_refresh_rate">
 <td><code>dnsRefreshRate</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>Configures DNS refresh rate for Envoy clusters of type STRICT_DNS</p>
 
@@ -662,7 +662,7 @@ No
 </tr>
 <tr id="MeshConfig-report_batch_max_time">
 <td><code>reportBatchMaxTime</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>When disable<em>report</em>batch is false, this value specifies the maximum elapsed
 time a batched report will be sent after a user request is processed. If left
@@ -676,7 +676,7 @@ No
 </tr>
 <tr id="MeshConfig-h2_upgrade_policy">
 <td><code>h2UpgradePolicy</code></td>
-<td><code><a href="#MeshConfig-H2UpgradePolicy">MeshConfig.H2UpgradePolicy</a></code></td>
+<td><code><a href="#MeshConfig-H2UpgradePolicy">H2UpgradePolicy</a></code></td>
 <td>
 <p>Specify if http1.1 connections should be upgraded to http2 by default.
 if sidecar is installed on all pods in the mesh, then this should be set to UPGRADE.
@@ -857,7 +857,7 @@ cloud-provided ingress controller).</p>
 <tbody>
 <tr id="MeshConfig-OutboundTrafficPolicy-mode">
 <td><code>mode</code></td>
-<td><code><a href="#MeshConfig-OutboundTrafficPolicy-Mode">MeshConfig.OutboundTrafficPolicy.Mode</a></code></td>
+<td><code><a href="#MeshConfig-OutboundTrafficPolicy-Mode">Mode</a></code></td>
 <td>
 </td>
 <td>
@@ -963,7 +963,7 @@ registry.</p>
 <tbody>
 <tr id="Network-endpoints">
 <td><code>endpoints</code></td>
-<td><code><a href="#Network-NetworkEndpoints">Network.NetworkEndpoints[]</a></code></td>
+<td><code><a href="#Network-NetworkEndpoints">NetworkEndpoints[]</a></code></td>
 <td>
 <p>The list of endpoints in the network (obtained through the
 constituent service registries or from CIDR ranges). All endpoints in
@@ -976,7 +976,7 @@ Yes
 </tr>
 <tr id="Network-gateways">
 <td><code>gateways</code></td>
-<td><code><a href="#Network-IstioNetworkGateway">Network.IstioNetworkGateway[]</a></code></td>
+<td><code><a href="#Network-IstioNetworkGateway">IstioNetworkGateway[]</a></code></td>
 <td>
 <p>Set of gateways associated with the network.</p>
 
@@ -1183,7 +1183,7 @@ No
 </tr>
 <tr id="ProxyConfig-drain_duration">
 <td><code>drainDuration</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>The time in seconds that Envoy will drain connections during a hot
 restart. MUST be &gt;=1s (e.g., <em>1s/1m/1h</em>)</p>
@@ -1195,7 +1195,7 @@ No
 </tr>
 <tr id="ProxyConfig-parent_shutdown_duration">
 <td><code>parentShutdownDuration</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>The time in seconds that Envoy will wait before shutting down the
 parent process during a hot restart. MUST be &gt;=1s (e.g., <em>1s/1m/1h</em>).
@@ -1219,7 +1219,7 @@ No
 </tr>
 <tr id="ProxyConfig-connect_timeout">
 <td><code>connectTimeout</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>Connection timeout used by Envoy for supporting services. (MUST BE &gt;=1ms)</p>
 
@@ -1313,7 +1313,7 @@ No
 </tr>
 <tr id="ProxyConfig-interception_mode">
 <td><code>interceptionMode</code></td>
-<td><code><a href="#ProxyConfig-InboundInterceptionMode">ProxyConfig.InboundInterceptionMode</a></code></td>
+<td><code><a href="#ProxyConfig-InboundInterceptionMode">InboundInterceptionMode</a></code></td>
 <td>
 <p>The mode used to redirect inbound traffic to Envoy.</p>
 
@@ -1448,7 +1448,7 @@ No
 </tr>
 <tr id="RemoteService-tls_settings">
 <td><code>tlsSettings</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#TLSSettings">istio.networking.v1alpha3.TLSSettings</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#TLSSettings">TLSSettings</a></code></td>
 <td>
 <p>Use the tls_settings to specify the tls mode to use. If the remote service
 uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
@@ -1461,7 +1461,7 @@ No
 </tr>
 <tr id="RemoteService-tcp_keepalive">
 <td><code>tcpKeepalive</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ConnectionPoolSettings-TCPSettings-TcpKeepalive">istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ConnectionPoolSettings-TCPSettings-TcpKeepalive">TcpKeepalive</a></code></td>
 <td>
 <p>If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.</p>
 
@@ -1554,7 +1554,7 @@ No
 <tbody>
 <tr id="Tracing-zipkin" class="oneof oneof-start">
 <td><code>zipkin</code></td>
-<td><code><a href="#Tracing-Zipkin">Tracing.Zipkin (oneof)</a></code></td>
+<td><code><a href="#Tracing-Zipkin">Zipkin (oneof)</a></code></td>
 <td>
 <p>Use a Zipkin tracer.</p>
 
@@ -1565,7 +1565,7 @@ Yes
 </tr>
 <tr id="Tracing-lightstep" class="oneof">
 <td><code>lightstep</code></td>
-<td><code><a href="#Tracing-Lightstep">Tracing.Lightstep (oneof)</a></code></td>
+<td><code><a href="#Tracing-Lightstep">Lightstep (oneof)</a></code></td>
 <td>
 <p>Use a LightStep tracer.</p>
 
@@ -1576,7 +1576,7 @@ Yes
 </tr>
 <tr id="Tracing-datadog" class="oneof">
 <td><code>datadog</code></td>
-<td><code><a href="#Tracing-Datadog">Tracing.Datadog (oneof)</a></code></td>
+<td><code><a href="#Tracing-Datadog">Datadog (oneof)</a></code></td>
 <td>
 <p>Use a Datadog tracer.</p>
 
@@ -1587,7 +1587,7 @@ Yes
 </tr>
 <tr id="Tracing-stackdriver" class="oneof">
 <td><code>stackdriver</code></td>
-<td><code><a href="#Tracing-Stackdriver">Tracing.Stackdriver (oneof)</a></code></td>
+<td><code><a href="#Tracing-Stackdriver">Stackdriver (oneof)</a></code></td>
 <td>
 <p>Use a Stackdriver tracer.</p>
 
