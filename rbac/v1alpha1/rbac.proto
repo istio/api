@@ -16,6 +16,9 @@ syntax = "proto3";
 
 import "google/api/field_behavior.proto";
 
+// $schema: istio.rbac.v1alpha1.RbacConfig
+// $schema: istio.rbac.v1alpha1.ServiceRole
+// $schema: istio.rbac.v1alpha1.ServiceRoleBinding
 // $title: RBAC
 // $description: Configuration for Role Based Access Control.
 // $location: https://istio.io/docs/reference/config/authorization/istio.rbac.v1alpha1.html

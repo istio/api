@@ -1301,11 +1301,11 @@ func (m *ConnectionPoolSettings_HTTPSettings) GetH2UpgradePolicy() ConnectionPoo
 // detection](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/outlier)
 // for more details.
 //
-// The following rule sets a connection pool size of 100 connections and
-// 1000 concurrent HTTP2 requests, with no more than 10 req/connection to
-// "reviews" service. In addition, it configures upstream hosts to be
-// scanned every 5 mins, such that any host that fails 7 consecutive times
-// with 5XX error code will be ejected for 15 minutes.
+// The following rule sets a connection pool size of 100 HTTP1 connections
+// with no more than 10 req/connection to the "reviews" service. In addition,
+// it sets a limit of 1000 concurrent HTTP2 requests and configures upstream
+// hosts to be scanned every 5 mins so that any host that fails 7 consecutive
+// times with a 502, 503, or 504 error code will be ejected for 15 minutes.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -1329,7 +1329,7 @@ func (m *ConnectionPoolSettings_HTTPSettings) GetH2UpgradePolicy() ConnectionPoo
 type OutlierDetection struct {
 	// Number of errors before a host is ejected from the connection
 	// pool. Defaults to 5. When the upstream host is accessed over HTTP, a
-	// 502, 503 or 504 return code qualifies as an error. When the upstream host
+	// 502, 503, or 504 return code qualifies as an error. When the upstream host
 	// is accessed over an opaque TCP connection, connect timeouts and
 	// connection error/failure events qualify as an error.
 	ConsecutiveErrors int32 `protobuf:"varint,1,opt,name=consecutive_errors,json=consecutiveErrors,proto3" json:"consecutive_errors,omitempty"`

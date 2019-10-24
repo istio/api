@@ -6,38 +6,38 @@
 // default, Istio will program all sidecar proxies in the mesh with the
 // necessary configuration required to reach every workload instance in the mesh, as
 // well as accept traffic on all the ports associated with the
-// workload. The Sidecar resource provides a way to fine tune the set of
+// workload. The `Sidecar` configuration provides a way to fine tune the set of
 // ports, protocols that the proxy will accept when forwarding traffic to
 // and from the workload. In addition, it is possible to restrict the set
 // of services that the proxy can reach when forwarding outbound traffic
 // from workload instances.
 //
 // Services and configuration in a mesh are organized into one or more
-// namespaces (e.g., a Kubernetes namespace or a CF org/space). A Sidecar
-// resource in a namespace will apply to one or more workload instances in the same
-// namespace, selected using the workloadSelector. In the absence of a
-// workloadSelector, it will apply to all workload instances in the same
-// namespace. When determining the Sidecar resource to be applied to a
+// namespaces (e.g., a Kubernetes namespace or a CF org/space). A `Sidecar`
+// configuration in a namespace will apply to one or more workload instances in the same
+// namespace, selected using the `workloadSelector` field. In the absence of a
+// `workloadSelector`, it will apply to all workload instances in the same
+// namespace. When determining the `Sidecar` configuration to be applied to a
 // workload instance, preference will be given to the resource with a
-// workloadSelector that selects this workload instance, over a Sidecar resource
-// without any workloadSelector.
+// `workloadSelector` that selects this workload instance, over a `Sidecar` configuration
+// without any `workloadSelector`.
 //
-// NOTE 1: *_Each namespace can have only one Sidecar resource without any
-// workload selector_*. The behavior of the system is undefined if more
-// than one selector-less Sidecar resources exist in a given namespace. The
-// behavior of the system is undefined if two or more Sidecar resources
-// with a workload selector select the same workload instance.
+// NOTE 1: *_Each namespace can have only one `Sidecar` configuration without any
+// `workloadSelector`_*. The behavior of the system is undefined if more
+// than one selector-less `Sidecar` configurations exist in a given namespace. The
+// behavior of the system is undefined if two or more `Sidecar` configurations
+// with a `workloadSelector` select the same workload instance.
 //
-// NOTE 2: *_A sidecar resource in the config [root
-// namespace](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig)
-// will be applied by default to all namespaces without a sidecar
-// resource._*. This global default sidecar resource should not have
-// any workload selector.
+// NOTE 2: *_A `Sidecar` configuration in the `MeshConfig`
+// [root namespace](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig)
+// will be applied by default to all namespaces without a `Sidecar`
+// configuration_*. This global default `Sidecar` configuration should not have
+// any `workloadSelector`.
 //
-// The example below declares a global default Sidecar resource in the
+// The example below declares a global default `Sidecar` configuration in the
 // root namespace called `istio-config`, that configures sidecars in
 // all namespaces to allow egress traffic only to other workloads in
-// the same namespace, and to services in the istio-system namespace.
+// the same namespace, and to services in the `istio-system` namespace.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -52,10 +52,10 @@
 //     - "istio-system/*"
 //```
 //
-// The example below declares a Sidecar resource in the prod-us1
+// The example below declares a `Sidecar` configuration in the `prod-us1`
 // namespace that overrides the global default defined above, and
 // configures the sidecars in the namespace to allow egress traffic to
-// public services in the prod-us1, prod-apis, and the istio-system
+// public services in the `prod-us1`, `prod-apis`, and the `istio-system`
 // namespaces.
 //
 // ```yaml
@@ -72,12 +72,12 @@
 //     - "istio-system/*"
 // ```
 //
-// The example below declares a Sidecar resource in the prod-us1 namespace
+// The example below declares a `Sidecar` configuration in the `prod-us1` namespace
 // that accepts inbound HTTP traffic on port 9080 and forwards
 // it to the attached workload instance listening on a Unix domain socket. In the
-// egress direction, in addition to the istio-system namespace, the sidecar
+// egress direction, in addition to the `istio-system` namespace, the sidecar
 // proxies only HTTP traffic bound for port 9080 for services in the
-// prod-us1 namespace.
+// `prod-us1` namespace.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -103,18 +103,18 @@
 //     - "istio-system/*"
 // ```
 //
-// If the workload is deployed without IPTables based traffic capture, the
-// Sidecar resource is the only way to configure the ports on the proxy
-// attached to the workload instance. The following example declares a Sidecar
-// resource in the prod-us1 namespace for all pods with labels "app:
-// productpage" belonging to the productpage.prod-us1 service. Assuming
-// that these pods are deployed without IPtable rules (i.e. the Istio init
-// container) and the proxy metadata ISTIO_META_INTERCEPTION_MODE is set to
-// NONE, the specification below allows such pods to receive HTTP traffic
+// If the workload is deployed without IPTables-based traffic capture, the
+// `Sidecar` configuration is the only way to configure the ports on the proxy
+// attached to the workload instance. The following example declares a `Sidecar`
+// configuration in the `prod-us1` namespace for all pods with labels
+// `app: productpage` belonging to the `productpage.prod-us1` service. Assuming
+// that these pods are deployed without IPtable rules (i.e. the `istio-init`
+// container) and the proxy metadata `ISTIO_META_INTERCEPTION_MODE` is set to
+// `NONE`, the specification, below, allows such pods to receive HTTP traffic
 // on port 9080 and forward it to the application listening on
-// 127.0.0.1:8080. It also allows the application to communicate with a
-// backing MySQL database on 127.0.0.1:3306, that then gets proxied to the
-// externally hosted MySQL service at mysql.foo.com:3306.
+// `127.0.0.1:8080`. It also allows the application to communicate with a
+// backing MySQL database on `127.0.0.1:3306`, that then gets proxied to the
+// externally hosted MySQL service at `mysql.foo.com:3306`.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -144,7 +144,7 @@
 //     - "*/mysql.foo.com"
 // ```
 //
-// And the associated service entry for routing to mysql.foo.com:3306
+// And the associated service entry for routing to `mysql.foo.com:3306`
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -165,14 +165,14 @@
 //
 // It is also possible to mix and match traffic capture modes in a single
 // proxy. For example, consider a setup where internal services are on the
-// 192.168.0.0/16 subnet. So, IP tables are setup on the VM to capture all
-// outbound traffic on 192.168.0.0/16 subnet. Assume that the VM has an
-// additional network interface on 172.16.0.0/16 subnet for inbound
-// traffic. The following Sidecar configuration allows the VM to expose a
-// listener on 172.16.1.32:80 (the VM's IP) for traffic arriving from the
-// 172.16.0.0/16 subnet. Note that in this scenario, the
-// ISTIO_META_INTERCEPTION_MODE metadata on the proxy in the VM should
-// contain "REDIRECT" or "TPROXY" as its value, implying that IP tables
+// `192.168.0.0/16` subnet. So, IP tables are setup on the VM to capture all
+// outbound traffic on `192.168.0.0/16` subnet. Assume that the VM has an
+// additional network interface on `172.16.0.0/16` subnet for inbound
+// traffic. The following `Sidecar` configuration allows the VM to expose a
+// listener on `172.16.1.32:80` (the VM's IP) for traffic arriving from the
+// `172.16.0.0/16` subnet. Note that in this scenario, the
+// `ISTIO_META_INTERCEPTION_MODE` metadata on the proxy in the VM should
+// contain `REDIRECT` or `TPROXY` as its value, implying that IP tables
 // based traffic capture is active.
 //
 // ```yaml

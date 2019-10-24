@@ -14,6 +14,7 @@
 
 syntax = "proto3";
 
+// $schema: istio.authentication.v1alpha1.Policy
 // $title: Authentication Policy
 // $description: Authentication policy for Istio services.
 // $location: https://istio.io/docs/reference/config/istio.authentication.v1alpha1.html
@@ -382,11 +383,8 @@ message TargetSelector {
   // fully qualified domain name will be resolved in a platform specific manner.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // $hide_from_docs
-  // $not-implemented-hide
-  // Select workload by labels.
-  // Once implemented, this is the preferred way rather than using the service name.
-  map<string, string> labels = 3;
+  reserved 3;
+  reserved "labels";
 
   // Specifies the ports. Note that this is the port(s) exposed by the service, not workload instance ports.
   // For example, if a service is defined as below, then `8000` should be used, not `9000`.
