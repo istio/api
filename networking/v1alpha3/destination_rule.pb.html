@@ -532,6 +532,18 @@ Yes
 Yes
 </td>
 </tr>
+<tr id="LoadBalancerSettings-locality_lb_setting">
+<td><code>localityLbSetting</code></td>
+<td><code><a href="#LocalityLoadBalancerSetting">LocalityLoadBalancerSetting</a></code></td>
+<td>
+<p>Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
+between this object and the object one in MeshConfig</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1365,18 +1377,6 @@ to fields omitted in port-level traffic policies.</p>
 No
 </td>
 </tr>
-<tr id="TrafficPolicy-locality_lb_setting">
-<td><code>localityLbSetting</code></td>
-<td><code><a href="#LocalityLoadBalancerSetting">LocalityLoadBalancerSetting</a></code></td>
-<td>
-<p>Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
-between this object and the object one in MeshConfig</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 </tbody>
 </table>
 </section>
@@ -1444,18 +1444,6 @@ No
 <td><code><a href="#TLSSettings">TLSSettings</a></code></td>
 <td>
 <p>TLS related settings for connections to the upstream service.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="TrafficPolicy-PortTrafficPolicy-locality_lb_setting">
-<td><code>localityLbSetting</code></td>
-<td><code><a href="#LocalityLoadBalancerSetting">LocalityLoadBalancerSetting</a></code></td>
-<td>
-<p>Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
-between this object and the object one in MeshConfig</p>
 
 </td>
 <td>

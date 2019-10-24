@@ -57,9 +57,6 @@
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1alpha3.TrafficPolicy.PortTrafficPolicy"
             }
-          },
-          "localityLbSetting": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.LocalityLoadBalancerSetting"
           }
         }
       },
@@ -94,6 +91,9 @@
               "simple"
             ],
             "properties": {
+              "localityLbSetting": {
+                "$ref": "#/components/schemas/istio.networking.v1alpha3.LocalityLoadBalancerSetting"
+              },
               "simple": {
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.SimpleLB"
               }
@@ -104,6 +104,9 @@
               "consistentHash"
             ],
             "properties": {
+              "localityLbSetting": {
+                "$ref": "#/components/schemas/istio.networking.v1alpha3.LocalityLoadBalancerSetting"
+              },
               "consistentHash": {
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB"
               }
@@ -205,11 +208,18 @@
           "tls": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSSettings"
           },
-          "localityLbSetting": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.LocalityLoadBalancerSetting"
-          },
           "port": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.PortSelector"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.PortSelector": {
+        "description": "PortSelector specifies the number of a port to be used for matching or selection for final routing.",
+        "type": "object",
+        "properties": {
+          "number": {
+            "description": "Valid port number",
+            "type": "integer"
           }
         }
       },
@@ -230,16 +240,6 @@
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1alpha3.LocalityLoadBalancerSetting.Failover"
             }
-          }
-        }
-      },
-      "istio.networking.v1alpha3.PortSelector": {
-        "description": "PortSelector specifies the number of a port to be used for matching or selection for final routing.",
-        "type": "object",
-        "properties": {
-          "number": {
-            "description": "Valid port number",
-            "type": "integer"
           }
         }
       },

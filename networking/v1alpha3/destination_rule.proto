@@ -188,9 +188,6 @@ message TrafficPolicy {
     // TLS related settings for connections to the upstream service.
     TLSSettings tls = 5;
 
-    // Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
-    // between this object and the object one in MeshConfig
-    LocalityLoadBalancerSetting locality_lb_setting = 6;
   }
 
   // Traffic policies specific to individual ports. Note that port level
@@ -199,10 +196,6 @@ message TrafficPolicy {
   // overridden by port-level settings, i.e. default values will be applied
   // to fields omitted in port-level traffic policies.
   repeated PortTrafficPolicy port_level_settings = 5;
-
-  // Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
-  // between this object and the object one in MeshConfig
-  LocalityLoadBalancerSetting locality_lb_setting = 6;
 
 }
 
@@ -369,6 +362,10 @@ message LoadBalancerSettings {
     SimpleLB simple = 1;
     ConsistentHashLB consistent_hash = 2;
   }
+
+  // Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
+  // between this object and the object one in MeshConfig
+  LocalityLoadBalancerSetting locality_lb_setting = 3;
 }
 
 // Connection pool settings for an upstream host. The settings apply to

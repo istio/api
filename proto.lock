@@ -217,15 +217,11 @@
                 "is_repeated": true
               }
             ],
-            "maps": [
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 3,
-                  "name": "labels",
-                  "type": "string"
-                }
-              }
+            "reserved_ids": [
+              3
+            ],
+            "reserved_names": [
+              "labels"
             ]
           },
           {
@@ -12852,7 +12848,13 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings"
+                        "name": "additional_bindings",
+                        "aggregated": [
+                          {
+                            "name": "get",
+                            "value": "/v1/services/{service_name}/config"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -38566,11 +38568,6 @@
                 "name": "port_level_settings",
                 "type": "PortTrafficPolicy",
                 "is_repeated": true
-              },
-              {
-                "id": 6,
-                "name": "locality_lb_setting",
-                "type": "LocalityLoadBalancerSetting"
               }
             ],
             "messages": [
@@ -38601,11 +38598,6 @@
                     "id": 5,
                     "name": "tls",
                     "type": "TLSSettings"
-                  },
-                  {
-                    "id": 6,
-                    "name": "locality_lb_setting",
-                    "type": "LocalityLoadBalancerSetting"
                   }
                 ]
               }
@@ -38654,6 +38646,11 @@
                 "id": 2,
                 "name": "consistent_hash",
                 "type": "ConsistentHashLB"
+              },
+              {
+                "id": 3,
+                "name": "locality_lb_setting",
+                "type": "LocalityLoadBalancerSetting"
               }
             ],
             "messages": [
