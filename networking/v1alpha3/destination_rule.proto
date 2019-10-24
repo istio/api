@@ -18,6 +18,7 @@ import "google/protobuf/duration.proto";
 import "networking/v1alpha3/virtual_service.proto";
 import "gogoproto/gogo.proto";
 
+// $schema: istio.networking.v1alpha3.DestinationRule
 // $title: Destination Rule
 // $description: Configuration affecting load balancing, outlier detection, etc.
 // $location: https://istio.io/docs/reference/config/networking/destination-rule.html
