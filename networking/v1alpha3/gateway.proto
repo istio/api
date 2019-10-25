@@ -327,6 +327,19 @@ message Server {
     // http connections, asking the clients to use HTTPS.
     bool https_redirect = 1;
 
+    // Combining a true value of https_redirect field to represent to allow
+    // a trusted loadbalancer ahead to terminate TLS.
+    enum TLSRequirement {
+      // All request must use TLS. 
+      ALL = 0;
+
+      // External requests must use TLS. 
+      EXTERNAL_ONLY = 1;
+    }
+    
+    // Optional and meaningful only if http_redirect = true.   
+    TLSRequirement tls_requirement = 10;
+
     // TLS modes enforced by the proxy
     enum TLSmode {
       // The SNI string presented by the client will be used as the match
