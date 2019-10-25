@@ -6,38 +6,38 @@
 // default, Istio will program all sidecar proxies in the mesh with the
 // necessary configuration required to reach every workload instance in the mesh, as
 // well as accept traffic on all the ports associated with the
-// workload. The Sidecar resource provides a way to fine tune the set of
+// workload. The `Sidecar` configuration provides a way to fine tune the set of
 // ports, protocols that the proxy will accept when forwarding traffic to
 // and from the workload. In addition, it is possible to restrict the set
 // of services that the proxy can reach when forwarding outbound traffic
 // from workload instances.
 //
 // Services and configuration in a mesh are organized into one or more
-// namespaces (e.g., a Kubernetes namespace or a CF org/space). A Sidecar
-// resource in a namespace will apply to one or more workload instances in the same
-// namespace, selected using the workloadSelector. In the absence of a
-// workloadSelector, it will apply to all workload instances in the same
-// namespace. When determining the Sidecar resource to be applied to a
+// namespaces (e.g., a Kubernetes namespace or a CF org/space). A `Sidecar`
+// configuration in a namespace will apply to one or more workload instances in the same
+// namespace, selected using the `workloadSelector` field. In the absence of a
+// `workloadSelector`, it will apply to all workload instances in the same
+// namespace. When determining the `Sidecar` configuration to be applied to a
 // workload instance, preference will be given to the resource with a
-// workloadSelector that selects this workload instance, over a Sidecar resource
-// without any workloadSelector.
+// `workloadSelector` that selects this workload instance, over a `Sidecar` configuration
+// without any `workloadSelector`.
 //
-// NOTE 1: *_Each namespace can have only one Sidecar resource without any
-// workload selector_*. The behavior of the system is undefined if more
-// than one selector-less Sidecar resources exist in a given namespace. The
-// behavior of the system is undefined if two or more Sidecar resources
-// with a workload selector select the same workload instance.
+// NOTE 1: *_Each namespace can have only one `Sidecar` configuration without any
+// `workloadSelector`_*. The behavior of the system is undefined if more
+// than one selector-less `Sidecar` configurations exist in a given namespace. The
+// behavior of the system is undefined if two or more `Sidecar` configurations
+// with a `workloadSelector` select the same workload instance.
 //
-// NOTE 2: *_A sidecar resource in the config [root
-// namespace](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig)
-// will be applied by default to all namespaces without a sidecar
-// resource._*. This global default sidecar resource should not have
-// any workload selector.
+// NOTE 2: *_A `Sidecar` configuration in the `MeshConfig`
+// [root namespace](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig)
+// will be applied by default to all namespaces without a `Sidecar`
+// configuration_*. This global default `Sidecar` configuration should not have
+// any `workloadSelector`.
 //
-// The example below declares a global default Sidecar resource in the
+// The example below declares a global default `Sidecar` configuration in the
 // root namespace called `istio-config`, that configures sidecars in
 // all namespaces to allow egress traffic only to other workloads in
-// the same namespace, and to services in the istio-system namespace.
+// the same namespace, and to services in the `istio-system` namespace.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -52,10 +52,10 @@
 //     - "istio-system/*"
 //```
 //
-// The example below declares a Sidecar resource in the prod-us1
+// The example below declares a `Sidecar` configuration in the `prod-us1`
 // namespace that overrides the global default defined above, and
 // configures the sidecars in the namespace to allow egress traffic to
-// public services in the prod-us1, prod-apis, and the istio-system
+// public services in the `prod-us1`, `prod-apis`, and the `istio-system`
 // namespaces.
 //
 // ```yaml
@@ -72,12 +72,12 @@
 //     - "istio-system/*"
 // ```
 //
-// The example below declares a Sidecar resource in the prod-us1 namespace
+// The example below declares a `Sidecar` configuration in the `prod-us1` namespace
 // that accepts inbound HTTP traffic on port 9080 and forwards
 // it to the attached workload instance listening on a Unix domain socket. In the
-// egress direction, in addition to the istio-system namespace, the sidecar
+// egress direction, in addition to the `istio-system` namespace, the sidecar
 // proxies only HTTP traffic bound for port 9080 for services in the
-// prod-us1 namespace.
+// `prod-us1` namespace.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -103,18 +103,18 @@
 //     - "istio-system/*"
 // ```
 //
-// If the workload is deployed without IPTables based traffic capture, the
-// Sidecar resource is the only way to configure the ports on the proxy
-// attached to the workload instance. The following example declares a Sidecar
-// resource in the prod-us1 namespace for all pods with labels "app:
-// productpage" belonging to the productpage.prod-us1 service. Assuming
-// that these pods are deployed without IPtable rules (i.e. the Istio init
-// container) and the proxy metadata ISTIO_META_INTERCEPTION_MODE is set to
-// NONE, the specification below allows such pods to receive HTTP traffic
+// If the workload is deployed without IPTables-based traffic capture, the
+// `Sidecar` configuration is the only way to configure the ports on the proxy
+// attached to the workload instance. The following example declares a `Sidecar`
+// configuration in the `prod-us1` namespace for all pods with labels
+// `app: productpage` belonging to the `productpage.prod-us1` service. Assuming
+// that these pods are deployed without IPtable rules (i.e. the `istio-init`
+// container) and the proxy metadata `ISTIO_META_INTERCEPTION_MODE` is set to
+// `NONE`, the specification, below, allows such pods to receive HTTP traffic
 // on port 9080 and forward it to the application listening on
-// 127.0.0.1:8080. It also allows the application to communicate with a
-// backing MySQL database on 127.0.0.1:3306, that then gets proxied to the
-// externally hosted MySQL service at mysql.foo.com:3306.
+// `127.0.0.1:8080`. It also allows the application to communicate with a
+// backing MySQL database on `127.0.0.1:3306`, that then gets proxied to the
+// externally hosted MySQL service at `mysql.foo.com:3306`.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -144,7 +144,7 @@
 //     - "*/mysql.foo.com"
 // ```
 //
-// And the associated service entry for routing to mysql.foo.com:3306
+// And the associated service entry for routing to `mysql.foo.com:3306`
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -165,14 +165,14 @@
 //
 // It is also possible to mix and match traffic capture modes in a single
 // proxy. For example, consider a setup where internal services are on the
-// 192.168.0.0/16 subnet. So, IP tables are setup on the VM to capture all
-// outbound traffic on 192.168.0.0/16 subnet. Assume that the VM has an
-// additional network interface on 172.16.0.0/16 subnet for inbound
-// traffic. The following Sidecar configuration allows the VM to expose a
-// listener on 172.16.1.32:80 (the VM's IP) for traffic arriving from the
-// 172.16.0.0/16 subnet. Note that in this scenario, the
-// ISTIO_META_INTERCEPTION_MODE metadata on the proxy in the VM should
-// contain "REDIRECT" or "TPROXY" as its value, implying that IP tables
+// `192.168.0.0/16` subnet. So, IP tables are setup on the VM to capture all
+// outbound traffic on `192.168.0.0/16` subnet. Assume that the VM has an
+// additional network interface on `172.16.0.0/16` subnet for inbound
+// traffic. The following `Sidecar` configuration allows the VM to expose a
+// listener on `172.16.1.32:80` (the VM's IP) for traffic arriving from the
+// `172.16.0.0/16` subnet. Note that in this scenario, the
+// `ISTIO_META_INTERCEPTION_MODE` metadata on the proxy in the VM should
+// contain `REDIRECT` or `TPROXY` as its value, implying that IP tables
 // based traffic capture is active.
 //
 // ```yaml
@@ -226,18 +226,18 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// CaptureMode describes how traffic to a listener is expected to be
+// `CaptureMode` describes how traffic to a listener is expected to be
 // captured. Applicable only when the listener is bound to an IP.
 type CaptureMode int32
 
 const (
-	// The default capture mode defined by the environment
+	// The default capture mode defined by the environment.
 	CaptureMode_DEFAULT CaptureMode = 0
-	// Capture traffic using IPtables redirection
+	// Capture traffic using IPtables redirection.
 	CaptureMode_IPTABLES CaptureMode = 1
-	// No traffic capture. When used in egress listener, the application is
-	// expected to explicitly communicate with the listener port/unix
-	// domain socket. When used in ingress listener, care needs to be taken
+	// No traffic capture. When used in an egress listener, the application is
+	// expected to explicitly communicate with the listener port or Unix
+	// domain socket. When used in an ingress listener, care needs to be taken
 	// to ensure that the listener port is not in use by other processes on
 	// the host.
 	CaptureMode_NONE CaptureMode = 2
@@ -266,11 +266,11 @@ func (CaptureMode) EnumDescriptor() ([]byte, []int) {
 type OutboundTrafficPolicy_Mode int32
 
 const (
-	// outbound traffic will be restricted to services defined in the
-	// service registry as well as those defined through ServiceEntries
+	// Outbound traffic will be restricted to services defined in the
+	// service registry as well as those defined through `ServiceEntry` configurations.
 	OutboundTrafficPolicy_REGISTRY_ONLY OutboundTrafficPolicy_Mode = 0
-	// outbound traffic to unknown destinations will be allowed, in case
-	// there are no services or ServiceEntries for the destination port
+	// Outbound traffic to unknown destinations will be allowed, in case
+	// there are no services or `ServiceEntry` configurations for the destination port.
 	OutboundTrafficPolicy_ALLOW_ANY OutboundTrafficPolicy_Mode = 1
 )
 
@@ -292,7 +292,7 @@ func (OutboundTrafficPolicy_Mode) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_b5c11342f04ad3d1, []int{4, 0}
 }
 
-// Sidecar describes the configuration of the sidecar proxy that mediates
+// `Sidecar` describes the configuration of the sidecar proxy that mediates
 // inbound and outbound communication of the workload instance to which it is
 // attached.
 //
@@ -304,7 +304,7 @@ func (OutboundTrafficPolicy_Mode) EnumDescriptor() ([]byte, []int) {
 // -->
 type Sidecar struct {
 	// Criteria used to select the specific set of pods/VMs on which this
-	// sidecar configuration should be applied. If omitted, the sidecar
+	// `Sidecar` configuration should be applied. If omitted, the `Sidecar`
 	// configuration will be applied to all workload instances in the same namespace.
 	WorkloadSelector *WorkloadSelector `protobuf:"bytes,1,opt,name=workload_selector,json=workloadSelector,proto3" json:"workload_selector,omitempty"`
 	// Ingress specifies the configuration of the sidecar for processing
@@ -320,7 +320,7 @@ type Sidecar struct {
 	Egress []*IstioEgressListener `protobuf:"bytes,3,rep,name=egress,proto3" json:"egress,omitempty"`
 	// This allows to configure the outbound traffic policy.
 	// If your application uses one or more external
-	// services that are not known apriori, setting the policy to ALLOW_ANY
+	// services that are not known apriori, setting the policy to `ALLOW_ANY`
 	// will cause the sidecars to route any unknown traffic originating from
 	// the application to its requested destination.
 	OutboundTrafficPolicy *OutboundTrafficPolicy `protobuf:"bytes,4,opt,name=outbound_traffic_policy,json=outboundTrafficPolicy,proto3" json:"outbound_traffic_policy,omitempty"`
@@ -390,12 +390,12 @@ func (m *Sidecar) GetOutboundTrafficPolicy() *OutboundTrafficPolicy {
 	return nil
 }
 
-// IstioIngressListener specifies the properties of an inbound
+// `IstioIngressListener` specifies the properties of an inbound
 // traffic listener on the sidecar proxy attached to a workload instance.
 type IstioIngressListener struct {
 	// The port associated with the listener.
 	Port *Port `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
-	// The ip to which the listener should be bound. Must be in the
+	// The IP to which the listener should be bound. Must be in the
 	// format `x.x.x.x`. Unix domain socket addresses are not allowed in
 	// the bind field for ingress listeners. If omitted, Istio will
 	// automatically configure the defaults based on imported services
@@ -407,9 +407,9 @@ type IstioIngressListener struct {
 	CaptureMode CaptureMode `protobuf:"varint,3,opt,name=capture_mode,json=captureMode,proto3,enum=istio.networking.v1alpha3.CaptureMode" json:"capture_mode,omitempty"`
 	// The loopback IP endpoint or Unix domain socket to which
 	// traffic should be forwarded to. This configuration can be used to
-	// redirect traffic arriving at the bind IP:Port on the sidecar to a localhost:port
+	// redirect traffic arriving at the bind `IP:Port` on the sidecar to a `localhost:port`
 	// or Unix domain socket where the application workload instance is listening for
-	// connections. Format should be 127.0.0.1:PORT or `unix:///path/to/socket`
+	// connections. Format should be `127.0.0.1:PORT` or `unix:///path/to/socket`
 	DefaultEndpoint      string   `protobuf:"bytes,4,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -477,7 +477,7 @@ func (m *IstioIngressListener) GetDefaultEndpoint() string {
 	return ""
 }
 
-// IstioEgressListener specifies the properties of an outbound traffic
+// `IstioEgressListener` specifies the properties of an outbound traffic
 // listener on the sidecar proxy attached to a workload instance.
 type IstioEgressListener struct {
 	// The port associated with the listener. If using Unix domain socket,
@@ -490,17 +490,17 @@ type IstioEgressListener struct {
 	// listener port will be based on the listener with the most specific
 	// port.
 	Port *Port `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
-	// The ip or the Unix domain socket to which the listener should be bound
+	// The IP or the Unix domain socket to which the listener should be bound
 	// to. Port MUST be specified if bind is not empty. Format: `x.x.x.x` or
 	// `unix:///path/to/uds` or `unix://@foobar` (Linux abstract namespace). If
 	// omitted, Istio will automatically configure the defaults based on imported
 	// services, the workload instances to which this configuration is applied to and
-	// the captureMode. If captureMode is NONE, bind will default to
+	// the captureMode. If captureMode is `NONE`, bind will default to
 	// 127.0.0.1.
 	Bind string `protobuf:"bytes,2,opt,name=bind,proto3" json:"bind,omitempty"`
 	// When the bind address is an IP, the captureMode option dictates
 	// how traffic to the listener is expected to be captured (or not).
-	// captureMode must be DEFAULT or NONE for Unix domain socket binds.
+	// captureMode must be DEFAULT or `NONE` for Unix domain socket binds.
 	CaptureMode CaptureMode `protobuf:"varint,3,opt,name=capture_mode,json=captureMode,proto3,enum=istio.networking.v1alpha3.CaptureMode" json:"capture_mode,omitempty"`
 	// One or more service hosts exposed by the listener
 	// in `namespace/dnsName` format. Services in the specified namespace
@@ -605,8 +605,8 @@ func (m *IstioEgressListener) GetHosts() []string {
 	return nil
 }
 
-// WorkloadSelector specifies the criteria used to determine if the Gateway,
-// Sidecar, or EnvoyFilter resource can be applied to a proxy. The matching criteria
+// `WorkloadSelector` specifies the criteria used to determine if the `Gateway`,
+// `Sidecar`, or `EnvoyFilter` configuration can be applied to a proxy. The matching criteria
 // includes the metadata associated with a proxy, workload instance info such as
 // labels attached to the pod/VM, or any other info that the proxy provides
 // to Istio during the initial handshake. If multiple conditions are
@@ -614,7 +614,7 @@ func (m *IstioEgressListener) GetHosts() []string {
 // selected. Currently, only label based selection mechanism is supported.
 type WorkloadSelector struct {
 	// One or more labels that indicate a specific set of pods/VMs
-	// on which this sidecar configuration should be applied. The scope of
+	// on which this `Sidecar` configuration should be applied. The scope of
 	// label search is restricted to the configuration namespace in which the
 	// the resource is present.
 	Labels               map[string]string `protobuf:"bytes,1,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
@@ -663,14 +663,14 @@ func (m *WorkloadSelector) GetLabels() map[string]string {
 	return nil
 }
 
-// OutboundTrafficPolicy sets the default behavior of the sidecar for
+// `OutboundTrafficPolicy` sets the default behavior of the sidecar for
 // handling outbound traffic from the application.
 // If your application uses one or more external
-// services that are not known apriori, setting the policy to ALLOW_ANY
+// services that are not known apriori, setting the policy to `ALLOW_ANY`
 // will cause the sidecars to route any unknown traffic originating from
 // the application to its requested destination.  Users are strongly
-// encouraged to use ServiceEntries to explicitly declare any external
-// dependencies, instead of using allow_any, so that traffic to these
+// encouraged to use `ServiceEntry` configurations to explicitly declare any external
+// dependencies, instead of using `ALLOW_ANY`, so that traffic to these
 // services can be monitored.
 type OutboundTrafficPolicy struct {
 	Mode                 OutboundTrafficPolicy_Mode `protobuf:"varint,1,opt,name=mode,proto3,enum=istio.networking.v1alpha3.OutboundTrafficPolicy_Mode" json:"mode,omitempty"`
