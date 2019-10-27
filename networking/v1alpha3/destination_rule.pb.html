@@ -114,7 +114,7 @@ spec:
 <tbody>
 <tr id="ConnectionPoolSettings-tcp">
 <td><code>tcp</code></td>
-<td><code><a href="#ConnectionPoolSettings-TCPSettings">ConnectionPoolSettings.TCPSettings</a></code></td>
+<td><code><a href="#ConnectionPoolSettings-TCPSettings">TCPSettings</a></code></td>
 <td>
 <p>Settings common to both HTTP and TCP upstream connections.</p>
 
@@ -125,7 +125,7 @@ No
 </tr>
 <tr id="ConnectionPoolSettings-http">
 <td><code>http</code></td>
-<td><code><a href="#ConnectionPoolSettings-HTTPSettings">ConnectionPoolSettings.HTTPSettings</a></code></td>
+<td><code><a href="#ConnectionPoolSettings-HTTPSettings">HTTPSettings</a></code></td>
 <td>
 <p>HTTP connection pool settings.</p>
 
@@ -200,7 +200,7 @@ No
 </tr>
 <tr id="ConnectionPoolSettings-HTTPSettings-idle_timeout">
 <td><code>idleTimeout</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>The idle timeout for upstream connection pool connections. The idle timeout is defined as the period in which there are no active requests.
 If not set, there is no idle timeout. When the idle timeout is reached the connection will be closed.
@@ -213,7 +213,7 @@ No
 </tr>
 <tr id="ConnectionPoolSettings-HTTPSettings-h2_upgrade_policy">
 <td><code>h2UpgradePolicy</code></td>
-<td><code><a href="#ConnectionPoolSettings-HTTPSettings-H2UpgradePolicy">ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy</a></code></td>
+<td><code><a href="#ConnectionPoolSettings-HTTPSettings-H2UpgradePolicy">H2UpgradePolicy</a></code></td>
 <td>
 <p>Specify if http1.1 connection should be upgraded to http2 for the associated destination.</p>
 
@@ -290,7 +290,7 @@ No
 </tr>
 <tr id="ConnectionPoolSettings-TCPSettings-connect_timeout">
 <td><code>connectTimeout</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>TCP connection timeout.</p>
 
@@ -301,7 +301,7 @@ No
 </tr>
 <tr id="ConnectionPoolSettings-TCPSettings-tcp_keepalive">
 <td><code>tcpKeepalive</code></td>
-<td><code><a href="#ConnectionPoolSettings-TCPSettings-TcpKeepalive">ConnectionPoolSettings.TCPSettings.TcpKeepalive</a></code></td>
+<td><code><a href="#ConnectionPoolSettings-TCPSettings-TcpKeepalive">TcpKeepalive</a></code></td>
 <td>
 <p>If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.</p>
 
@@ -342,7 +342,7 @@ No
 </tr>
 <tr id="ConnectionPoolSettings-TCPSettings-TcpKeepalive-time">
 <td><code>time</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>The time duration a connection needs to be idle before keep-alive
 probes start being sent. Default is to use the OS level configuration
@@ -355,7 +355,7 @@ No
 </tr>
 <tr id="ConnectionPoolSettings-TCPSettings-TcpKeepalive-interval">
 <td><code>interval</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>The time duration between keep-alive probes.
 Default is to use the OS level configuration
@@ -515,7 +515,7 @@ the User cookie as the hash key.</p>
 <tbody>
 <tr id="LoadBalancerSettings-simple" class="oneof oneof-start">
 <td><code>simple</code></td>
-<td><code><a href="#LoadBalancerSettings-SimpleLB">LoadBalancerSettings.SimpleLB (oneof)</a></code></td>
+<td><code><a href="#LoadBalancerSettings-SimpleLB">SimpleLB (oneof)</a></code></td>
 <td>
 </td>
 <td>
@@ -524,7 +524,7 @@ Yes
 </tr>
 <tr id="LoadBalancerSettings-consistent_hash" class="oneof">
 <td><code>consistentHash</code></td>
-<td><code><a href="#LoadBalancerSettings-ConsistentHashLB">LoadBalancerSettings.ConsistentHashLB (oneof)</a></code></td>
+<td><code><a href="#LoadBalancerSettings-ConsistentHashLB">ConsistentHashLB (oneof)</a></code></td>
 <td>
 </td>
 <td>
@@ -566,7 +566,7 @@ Yes
 </tr>
 <tr id="LoadBalancerSettings-ConsistentHashLB-http_cookie" class="oneof">
 <td><code>httpCookie</code></td>
-<td><code><a href="#LoadBalancerSettings-ConsistentHashLB-HTTPCookie">LoadBalancerSettings.ConsistentHashLB.HTTPCookie (oneof)</a></code></td>
+<td><code><a href="#LoadBalancerSettings-ConsistentHashLB-HTTPCookie">HTTPCookie (oneof)</a></code></td>
 <td>
 <p>Hash based on HTTP cookie.</p>
 
@@ -644,7 +644,7 @@ No
 </tr>
 <tr id="LoadBalancerSettings-ConsistentHashLB-HTTPCookie-ttl">
 <td><code>ttl</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>Lifetime of the cookie.</p>
 
@@ -771,7 +771,7 @@ No
 </tr>
 <tr id="OutlierDetection-interval">
 <td><code>interval</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>Time interval between ejection sweep analysis. format:
 1h/1m/1s/1ms. MUST BE &gt;=1ms. Default is 10s.</p>
@@ -783,7 +783,7 @@ No
 </tr>
 <tr id="OutlierDetection-base_ejection_time">
 <td><code>baseEjectionTime</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">google.protobuf.Duration</a></code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>Minimum ejection duration. A host will remain ejected for a period
 equal to the product of minimum ejection duration and the number of
@@ -980,7 +980,7 @@ spec:
 <tbody>
 <tr id="TLSSettings-mode">
 <td><code>mode</code></td>
-<td><code><a href="#TLSSettings-TLSmode">TLSSettings.TLSmode</a></code></td>
+<td><code><a href="#TLSSettings-TLSmode">TLSmode</a></code></td>
 <td>
 <p>Indicates whether connections to this port should be secured
 using TLS. The value of this field determines how TLS is enforced.</p>
@@ -1168,7 +1168,7 @@ No
 </tr>
 <tr id="TrafficPolicy-port_level_settings">
 <td><code>portLevelSettings</code></td>
-<td><code><a href="#TrafficPolicy-PortTrafficPolicy">TrafficPolicy.PortTrafficPolicy[]</a></code></td>
+<td><code><a href="#TrafficPolicy-PortTrafficPolicy">PortTrafficPolicy[]</a></code></td>
 <td>
 <p>Traffic policies specific to individual ports. Note that port level
 settings will override the destination-level settings. Traffic
