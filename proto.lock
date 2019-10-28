@@ -217,15 +217,11 @@
                 "is_repeated": true
               }
             ],
-            "maps": [
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 3,
-                  "name": "labels",
-                  "type": "string"
-                }
-              }
+            "reserved_ids": [
+              3
+            ],
+            "reserved_names": [
+              "labels"
             ]
           },
           {
@@ -12852,13 +12848,7 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings",
-                        "aggregated": [
-                          {
-                            "name": "get",
-                            "value": "/v1/services/{service_name}/config"
-                          }
-                        ]
+                        "name": "additional_bindings"
                       }
                     ]
                   }
@@ -36009,7 +35999,7 @@
               {
                 "id": 35,
                 "name": "locality_lb_setting",
-                "type": "LocalityLoadBalancerSetting"
+                "type": "istio.networking.v1alpha3.LocalityLoadBalancerSetting"
               },
               {
                 "id": 36,
@@ -36088,60 +36078,6 @@
                 "name": "subscribed_resources",
                 "type": "Resource",
                 "is_repeated": true
-              }
-            ]
-          },
-          {
-            "name": "LocalityLoadBalancerSetting",
-            "fields": [
-              {
-                "id": 1,
-                "name": "distribute",
-                "type": "Distribute",
-                "is_repeated": true
-              },
-              {
-                "id": 2,
-                "name": "failover",
-                "type": "Failover",
-                "is_repeated": true
-              }
-            ],
-            "messages": [
-              {
-                "name": "Distribute",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "from",
-                    "type": "string"
-                  }
-                ],
-                "maps": [
-                  {
-                    "key_type": "string",
-                    "field": {
-                      "id": 2,
-                      "name": "to",
-                      "type": "uint32"
-                    }
-                  }
-                ]
-              },
-              {
-                "name": "Failover",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "from",
-                    "type": "string"
-                  },
-                  {
-                    "id": 2,
-                    "name": "to",
-                    "type": "string"
-                  }
-                ]
               }
             ]
           },
@@ -38704,6 +38640,11 @@
                 "id": 2,
                 "name": "consistent_hash",
                 "type": "ConsistentHashLB"
+              },
+              {
+                "id": 3,
+                "name": "locality_lb_setting",
+                "type": "LocalityLoadBalancerSetting"
               }
             ],
             "messages": [
@@ -38935,6 +38876,60 @@
                 "id": 6,
                 "name": "sni",
                 "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "LocalityLoadBalancerSetting",
+            "fields": [
+              {
+                "id": 1,
+                "name": "distribute",
+                "type": "Distribute",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "failover",
+                "type": "Failover",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "Distribute",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "from",
+                    "type": "string"
+                  }
+                ],
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 2,
+                      "name": "to",
+                      "type": "uint32"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "Failover",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "from",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "to",
+                    "type": "string"
+                  }
+                ]
               }
             ]
           }
