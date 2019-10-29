@@ -1581,6 +1581,18 @@ spec:
                   defaultEndpoint:
                     format: string
                     type: string
+                  extensions:
+                    description: Configuration for custom extensions to the Istio
+                      Gateway.
+                    properties:
+                      '@type':
+                        description: A URL/resource name that uniquely identifies
+                          the type of the serialized protocol buffer message.
+                        format: string
+                        type: string
+                    required:
+                    - '@type'
+                    type: object
                   hosts:
                     description: One or more hosts exposed by this gateway.
                     items:

@@ -420,6 +420,23 @@ be forwarded to by default. Format should be <code>127.0.0.1:PORT</code> or
 No
 </td>
 </tr>
+<tr id="Server-extensions">
+<td><code>extensions</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#any">Any</a></code></td>
+<td>
+<p>Configuration for custom extensions to the Istio Gateway. Custom
+plugins can be compiled into Pilot to process the extension
+configuration in the OnOutboundListener callback and generate
+appropriate Envoy configuration in the listener or the HTTP
+Connection manager. For example, an extension could configure the
+Gateway with filters that perform custom JWT validation per
+server.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
