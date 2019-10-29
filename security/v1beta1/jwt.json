@@ -1,0 +1,56 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "",
+    "version": "v1beta1"
+  },
+  "components": {
+    "schemas": {
+      "istio.security.v1beta1.JWT": {
+        "description": "JSON Web Token (JWT) token format for authentication as defined by [RFC 7519](https://tools.ietf.org/html/rfc7519). See [OAuth 2.0](https://tools.ietf.org/html/rfc6749) and [OIDC 1.0](http://openid.net/connect) for how this is used in the whole authentication flow.",
+        "type": "object",
+        "properties": {
+          "issuer": {
+            "description": "Identifies the issuer that issued the JWT. See [issuer](https://tools.ietf.org/html/rfc7519#section-4.1.1) Usually a URL or an email address.",
+            "type": "string",
+            "format": "string"
+          },
+          "audiences": {
+            "description": "The list of JWT [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3). that are allowed to access. A JWT containing any of these audiences will be accepted.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "jwksUri": {
+            "description": "URL of the provider's public key set to validate signature of the JWT. See [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).",
+            "type": "string",
+            "format": "string"
+          },
+          "jwks": {
+            "description": "JSON Web Key Set of public keys to validate signature of the JWT. See https://auth0.com/docs/jwks.",
+            "type": "string",
+            "format": "string"
+          },
+          "jwtHeaders": {
+            "description": "JWT is sent in a request header. `header` represents the header name.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "jwtParams": {
+            "description": "JWT is sent in a query parameter. `query` represents the query parameter name.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

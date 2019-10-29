@@ -1,0 +1,141 @@
+// Copyright 2019 Istio Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+syntax = "proto3";
+
+import "type/v1beta1/selector.proto";
+import "security/v1beta1/jwt.proto";
+
+package istio.security.v1beta1;
+
+option go_package="istio.io/api/security/v1beta1";
+
+// $schema: istio.security.v1beta1.RequestAuthentication
+// $title: RequestAuthentication
+// $description: Request authentication configuration for an workloads.
+// $location: https://istio.io/docs/reference/config/security/request_authentication.html
+// $aliases: [/docs/reference/config/security/v1beta1/request_authentication.html]
+
+// RequestAuthentication defines what request authentication methods should be supported by an workload.
+// If a request carries a token at the location recognized by one of the rules in the configuration,
+// that token must be valid in order for a request to be accepted.
+// On the other hand, a request that doesn't haven any token is also accepted but will not have any
+// authenticated identity. To restrict access to authenticated requests only, this should be accompanied
+// with an authorization rule.
+// Examples:
+//
+// - Require JWT for all request for workspace `httpbin`
+//
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: RequestAuthentication
+// metadata:
+//  name: httpbin
+//  namespace: foo
+// spec:
+//   selector:
+//     matchLabels:
+//       app: httpbin
+//   jwtRules:
+//   - issuer: "issuer-foo"
+//     jwksUri: https://example.com/.well-known/jwks.json
+// ---
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//  name: httpbin
+//  namespace: foo
+// spec:
+//  selector:
+//    matchLabels:
+//      app: httpbin
+//  rules:
+//  - from:
+//    - source:
+//        requestPrincipals: ["*"]
+// ```
+//
+// - The next example shows how to set different JWT requirement for different `host`. The `RequestAuthentication`
+// declares it can accpet JWT issuer by either `issuer-foo` and `issuer-bar` (the public key set are implicted
+// set with OpenID Connect spec).
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: RequestAuthentication
+// metadata:
+//  name: httpbin
+//  namespace: foo
+// spec:
+//   selector:
+//     matchLabels:
+//       app: httpbin
+//   jwtRules:
+//   - issuer: "issuer-foo"
+//   - issuer: "issuer-bar"
+// ---
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//  name: httpbin
+//  namespace: foo
+// spec:
+//  selector:
+//    matchLabels:
+//      app: httpbin
+//  rules:
+//  - from:
+//    - source:
+//        requestPrincipals: ["issuer-foo/*"]
+//    to:
+//      hosts: ["example.com"]
+//  - from:
+//    - source:
+//        requestPrincipals: ["issuer-bar/*"]
+//    to:
+//      hosts: ["another-host.com"]
+// ```
+//
+// - You can fine tune the authorization policy to set different requirement per path. For example,
+// to require JWT on all paths, except /healthz, the same `RequestAuthentication` can be used, but the
+// authorization policy could be:
+//
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//  name: httpbin
+//  namespace: foo
+// spec:
+//  selector:
+//    matchLabels:
+//      app: httpbin
+//  rules:
+//  - from:
+//    - source:
+//        requestPrincipals: ["*"]
+//  - to:
+//    - operation:
+//        paths: ["/]
+//
+message RequestAuthentication {
+  // Optional. Workload selector decides where to apply the RequestAuthentication policy.
+  // If not set, the policy will be applied to all workloads in the
+  // same namespace as the policy.
+  istio.type.v1beta1.WorkloadSelector selector = 1;
+
+  // Define the list of JWTs that can be validated at the selected workloads' proxy.
+  // Each rule will be activated only when a token is presented at the location recorgnized by the
+  // rule. The token will be validated based on the JWT rule config. If validation fails, request will
+  // be rejected.
+  // Note: while it is supported to validate all tokens if more than one prensented (at different locations
+  // but still recognized by one of the rules), the output principal is nondeterministic.
+  repeated JWT jwt_rules = 2;
+}
