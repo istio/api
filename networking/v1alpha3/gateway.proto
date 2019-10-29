@@ -464,7 +464,7 @@ message Server {
   // Connection manager. For example, an extension could configure the
   // Gateway with filters that perform custom JWT validation per
   // server.
-  google.protobuf.Any extensions = 6;
+  repeated google.protobuf.Any extensions = 6;
 }
 
 // Port describes the properties of a specific port of a service.
