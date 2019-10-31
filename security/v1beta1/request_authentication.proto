@@ -131,11 +131,11 @@ message RequestAuthentication {
   // same namespace as the policy.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
-  // Define the list of JWTs that can be validated at the selected workloads' proxy.
+  // Define the list of JWTs that can be validated at the selected workloads' proxy. A valid token
+  // will be used to extract the authenticated identity.
   // Each rule will be activated only when a token is presented at the location recorgnized by the
-  // rule. The token will be validated based on the JWT rule config. If validation fails, request will
+  // rule. The token will be validated based on the JWT rule config. If validation fails, the request will
   // be rejected.
-  // Note: while it is supported to validate all tokens if more than one prensented (at different locations
-  // but still recognized by one of the rules), the output principal is nondeterministic.
+  // Note: if more than one token is presented (at different locations), the output principal is nondeterministic.
   repeated JWT jwt_rules = 2;
 }

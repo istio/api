@@ -13,6 +13,8 @@
 // limitations under the License.
 syntax = "proto3";
 
+import "google/api/field_behavior.proto";
+
 package istio.security.v1beta1;
 
 option go_package="istio.io/api/security/v1beta1";
@@ -28,25 +30,37 @@ option go_package="istio.io/api/security/v1beta1";
 // [OIDC 1.0](http://openid.net/connect) for how this is used in the whole
 // authentication flow.
 //
-// For example:
+// Examples:
 //
-// A JWT for any requests:
+// Spec for a JWT that is issued by `https://example.com`, with the audience claims must be either
+// `bookstore_android.apps.googleusercontent.com` or `bookstore_web.apps.googleusercontent.com`.
+// The token should be presented at the `Authorization` header (default). The Json web key set (JWKS)
+// will be discovered followwing OpenID Connect protocol.
 //
 // ```yaml
 // issuer: https://example.com
 // audiences:
 // - bookstore_android.apps.googleusercontent.com
 //   bookstore_web.apps.googleusercontent.com
-// jwksUri: https://example.com/.well-known/jwks.json
+// ```
+//
+// This example specifies token in non-default location (`x-goog-iap-jwt-assertion` header). It also
+// defines the URI to fetch JWKS explicitly.
+//
+// ```yaml
+// issuer: https://example.com
+// jwksUri: https://example.com/.secret/jwks.json
+// jwtHeaders:
+// - "x-goog-iap-jwt-assertion"
 // ```
 message JWT {
   // Identifies the issuer that issued the JWT. See
   // [issuer](https://tools.ietf.org/html/rfc7519#section-4.1.1)
   // Usually a URL or an email address.
   //
-  // Example: https://securetoken.google.com
+  // Example: https://foobar.auth0.com
   // Example: 1234567-compute@developer.gserviceaccount.com
-  string issuer = 1;
+  string issuer = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The list of JWT
   // [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3).
@@ -75,16 +89,16 @@ message JWT {
   //
   // Example: `https://www.googleapis.com/oauth2/v1/certs`
   //
-  // Note: Only one of jwks_uri and jwks should be used.
+  // Note: Only one of jwks_uri and jwks should be used. jwks_uri will be ignored if it does.
   string jwks_uri = 3;
 
   // JSON Web Key Set of public keys to validate signature of the JWT.
   // See https://auth0.com/docs/jwks.
   //
-  // Note: Only one of jwks_uri and jwks should be used.
+  // Note: Only one of jwks_uri and jwks should be used. jwks_uri will be ignored if it does.
   string jwks = 10;
 
-  // Two fields below define where to extract the JWT from an HTTP request.
+  // The next two fields define how to extract the JWT from an HTTP request.
   //
   // If no explicit location is specified the following default
   // locations are tried in order:
@@ -94,7 +108,7 @@ message JWT {
   //        [Authorization Request Header
   //        Field](https://tools.ietf.org/html/rfc6750#section-2.1))
   //
-  //     2) `access_token` query parameter (see
+  //     2) The `access_token` query parameter (see
   //     [URI Query Parameter](https://tools.ietf.org/html/rfc6750#section-2.3))
 
   // JWT is sent in a request header. `header` represents the

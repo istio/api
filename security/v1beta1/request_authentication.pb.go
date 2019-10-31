@@ -127,12 +127,12 @@ type RequestAuthentication struct {
 	// If not set, the policy will be applied to all workloads in the
 	// same namespace as the policy.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
-	// Define the list of JWTs that can be validated at the selected workloads' proxy.
+	// Define the list of JWTs that can be validated at the selected workloads' proxy. A valid token
+	// will be used to extract the authenticated identity.
 	// Each rule will be activated only when a token is presented at the location recorgnized by the
-	// rule. The token will be validated based on the JWT rule config. If validation fails, request will
+	// rule. The token will be validated based on the JWT rule config. If validation fails, the request will
 	// be rejected.
-	// Note: while it is supported to validate all tokens if more than one prensented (at different locations
-	// but still recognized by one of the rules), the output principal is nondeterministic.
+	// Note: if more than one token is presented (at different locations), the output principal is nondeterministic.
 	JwtRules             []*JWT   `protobuf:"bytes,2,rep,name=jwt_rules,json=jwtRules,proto3" json:"jwt_rules,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
