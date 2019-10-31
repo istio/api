@@ -23,15 +23,14 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// RequestAuthentication defines what request authentication methods should be supported by an workload.
-// If a request carries a token at the location recognized by one of the rules in the configuration,
-// that token must be valid in order for a request to be accepted.
-// On the other hand, a request that doesn't haven any token is also accepted but will not have any
-// authenticated identity. To restrict access to authenticated requests only, this should be accompanied
-// with an authorization rule.
+// RequestAuthentication defines what request authentication methods are supported by a workload.
+// If will reject a request if the request contains invalid authentication information, based on the
+// configured authentication rules. A request that does not contain any authentication credentials
+// will be accepted but will not have any authenticated identity. To restrict access to authenticated
+// requests only, this should be accompanied by an authorization rule.
 // Examples:
 //
-// - Require JWT for all request for workspace `httpbin`
+// - Require JWT for all request for workloads that have label `app:httpbin`
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -62,9 +61,9 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //        requestPrincipals: ["*"]
 // ```
 //
-// - The next example shows how to set different JWT requirement for different `host`. The `RequestAuthentication`
-// declares it can accpet JWT issuer by either `issuer-foo` and `issuer-bar` (the public key set are implicted
-// set with OpenID Connect spec).
+// - The next example shows how to set a different JWT requirement for a different `host`. The `RequestAuthentication`
+// declares it can accpet JWTs issuer by either `issuer-foo` or `issuer-bar` (the public key set is implicitly
+// set from the OpenID Connect spec).
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
 // kind: RequestAuthentication
@@ -120,12 +119,11 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //        requestPrincipals: ["*"]
 //  - to:
 //    - operation:
-//        paths: ["/]
+//        paths: ["/healthz]
 //
 type RequestAuthentication struct {
-	// Optional. Workload selector decides where to apply the RequestAuthentication policy.
-	// If not set, the policy will be applied to all workloads in the
-	// same namespace as the policy.
+	// Optional. The selector determines the workloads to apply the RequestAuthentication on.
+	// If not set, the policy will be applied to all workloads in the same namespace as the policy.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
 	// Define the list of JWTs that can be validated at the selected workloads' proxy. A valid token
 	// will be used to extract the authenticated identity.
