@@ -33,21 +33,36 @@
             "type": "string",
             "format": "string"
           },
-          "jwtHeaders": {
-            "description": "JWT is sent in a request header. `header` represents the header name.",
+          "fromHeaders": {
+            "description": "List of header locations from which JWT is expected. For example, below is the location spec if if JWT is expected to be found in `x-goog-iap-jwt-assertion` header, and have \"Bearer \" prefix: ``` fromHeaders: - name: x-goog-iap-jwt-assertion prefix: \"Bearer \" ```",
             "type": "array",
             "items": {
-              "type": "string",
-              "format": "string"
+              "$ref": "#/components/schemas/istio.security.v1beta1.JwtHeader"
             }
           },
-          "jwtParams": {
-            "description": "JWT is sent in a query parameter. `query` represents the query parameter name.",
+          "fromParams": {
+            "description": "List of query parameters from which JWT is expected. For example, if JWT is provided via query parameter `my_token` (e.g /path?my_token=\u003cJWT\u003e), the config is: ``` fromParams: - \"my_token\" ```",
             "type": "array",
             "items": {
               "type": "string",
               "format": "string"
             }
+          }
+        }
+      },
+      "istio.security.v1beta1.JwtHeader": {
+        "description": "This message specifies a header location to extract JWT token.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The HTTP header name.",
+            "type": "string",
+            "format": "string"
+          },
+          "valuePrefix": {
+            "description": "The value prefix. The value format is \"value_prefix\u003ctoken\u003e\" For example, for \"Authorization: Bearer \u003ctoken\u003e\", value_prefix=\"Bearer \" with a space at the end.",
+            "type": "string",
+            "format": "string"
           }
         }
       }

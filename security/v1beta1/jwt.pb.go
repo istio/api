@@ -92,17 +92,21 @@ type JWT struct {
 	//
 	// Note: Only one of jwks_uri and jwks should be used. jwks_uri will be ignored if it does.
 	Jwks string `protobuf:"bytes,10,opt,name=jwks,proto3" json:"jwks,omitempty"`
-	// JWT is sent in a request header. `header` represents the
-	// header name.
-	//
-	// For example, if `header=x-goog-iap-jwt-assertion`, the header
-	// format will be x-goog-iap-jwt-assertion: <JWT>.
-	JwtHeaders []string `protobuf:"bytes,6,rep,name=jwt_headers,json=jwtHeaders,proto3" json:"jwt_headers,omitempty"`
-	// JWT is sent in a query parameter. `query` represents the
-	// query parameter name.
-	//
-	// For example, `query=jwt_token`.
-	JwtParams            []string `protobuf:"bytes,7,rep,name=jwt_params,json=jwtParams,proto3" json:"jwt_params,omitempty"`
+	// List of header locations from which JWT is expected. For example, below is the location spec if
+	// if JWT is expected to be found in `x-goog-iap-jwt-assertion` header, and have "Bearer " prefix:
+	// ```
+	//   fromHeaders:
+	//   - name: x-goog-iap-jwt-assertion
+	//     prefix: "Bearer "
+	// ```
+	FromHeaders []*JwtHeader `protobuf:"bytes,6,rep,name=from_headers,json=fromHeaders,proto3" json:"from_headers,omitempty"`
+	// List of query parameters from which JWT is expected. For example, if JWT is provided via query
+	// parameter `my_token` (e.g /path?my_token=<JWT>), the config is:
+	// ```
+	//   fromParams:
+	//   - "my_token"
+	// ```
+	FromParams           []string `protobuf:"bytes,7,rep,name=from_params,json=fromParams,proto3" json:"from_params,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -169,45 +173,109 @@ func (m *JWT) GetJwks() string {
 	return ""
 }
 
-func (m *JWT) GetJwtHeaders() []string {
+func (m *JWT) GetFromHeaders() []*JwtHeader {
 	if m != nil {
-		return m.JwtHeaders
+		return m.FromHeaders
 	}
 	return nil
 }
 
-func (m *JWT) GetJwtParams() []string {
+func (m *JWT) GetFromParams() []string {
 	if m != nil {
-		return m.JwtParams
+		return m.FromParams
 	}
 	return nil
+}
+
+// This message specifies a header location to extract JWT token.
+type JwtHeader struct {
+	// The HTTP header name.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// The value prefix. The value format is "value_prefix<token>"
+	// For example, for "Authorization: Bearer <token>", value_prefix="Bearer " with a space at the
+	// end.
+	ValuePrefix          string   `protobuf:"bytes,2,opt,name=value_prefix,json=valuePrefix,proto3" json:"value_prefix,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *JwtHeader) Reset()         { *m = JwtHeader{} }
+func (m *JwtHeader) String() string { return proto.CompactTextString(m) }
+func (*JwtHeader) ProtoMessage()    {}
+func (*JwtHeader) Descriptor() ([]byte, []int) {
+	return fileDescriptor_163ab6fd32fb6b15, []int{1}
+}
+func (m *JwtHeader) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *JwtHeader) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_JwtHeader.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *JwtHeader) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JwtHeader.Merge(m, src)
+}
+func (m *JwtHeader) XXX_Size() int {
+	return m.Size()
+}
+func (m *JwtHeader) XXX_DiscardUnknown() {
+	xxx_messageInfo_JwtHeader.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_JwtHeader proto.InternalMessageInfo
+
+func (m *JwtHeader) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *JwtHeader) GetValuePrefix() string {
+	if m != nil {
+		return m.ValuePrefix
+	}
+	return ""
 }
 
 func init() {
 	proto.RegisterType((*JWT)(nil), "istio.security.v1beta1.JWT")
+	proto.RegisterType((*JwtHeader)(nil), "istio.security.v1beta1.JwtHeader")
 }
 
 func init() { proto.RegisterFile("security/v1beta1/jwt.proto", fileDescriptor_163ab6fd32fb6b15) }
 
 var fileDescriptor_163ab6fd32fb6b15 = []byte{
-	// 259 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x5c, 0x90, 0xd1, 0x4a, 0xc3, 0x30,
-	0x18, 0x85, 0xc9, 0x2a, 0x9b, 0xfd, 0xbd, 0xcb, 0x85, 0xc4, 0xe9, 0xba, 0xe1, 0xd5, 0x40, 0x68,
-	0x19, 0x3e, 0x81, 0xbb, 0x12, 0xaf, 0xa4, 0x28, 0x82, 0x37, 0x25, 0x5d, 0x7f, 0xb7, 0x3f, 0x4e,
-	0x53, 0x92, 0x74, 0xc1, 0xa7, 0xf2, 0x35, 0xbc, 0xf4, 0x11, 0x46, 0x9f, 0x44, 0x9a, 0x4e, 0x04,
-	0xef, 0xce, 0xf9, 0x38, 0x27, 0xe1, 0xfc, 0x30, 0xb6, 0xb8, 0x6a, 0x0c, 0xb9, 0x8f, 0x6c, 0xb7,
-	0x28, 0xd1, 0xc9, 0x45, 0xa6, 0xbc, 0x4b, 0x6b, 0xa3, 0x9d, 0xe6, 0xa7, 0x64, 0x1d, 0xe9, 0xf4,
-	0x37, 0x91, 0x1e, 0x12, 0xe3, 0xe9, 0x5a, 0xeb, 0xf5, 0x16, 0x33, 0x59, 0x53, 0xf6, 0x42, 0xb8,
-	0xad, 0x8a, 0x12, 0x37, 0x72, 0x47, 0xda, 0xf4, 0xc5, 0xcb, 0x4f, 0x06, 0xd1, 0xdd, 0xd3, 0x03,
-	0x3f, 0x87, 0x21, 0x59, 0xdb, 0xa0, 0x11, 0x6c, 0xc6, 0xe6, 0xf1, 0x32, 0xda, 0xdf, 0x0c, 0xf2,
-	0x03, 0xe2, 0x17, 0x10, 0xcb, 0xa6, 0x22, 0x7c, 0x5f, 0xa1, 0x15, 0x83, 0x59, 0x34, 0x8f, 0xf3,
-	0x3f, 0xc0, 0xcf, 0xe0, 0x58, 0xf9, 0x57, 0x5b, 0x34, 0x86, 0x44, 0xd4, 0x95, 0xf3, 0x51, 0xe7,
-	0x1f, 0x0d, 0x71, 0x0e, 0x47, 0x9d, 0x14, 0x10, 0x70, 0xd0, 0x7c, 0x0a, 0x27, 0xca, 0xbb, 0x62,
-	0x83, 0xb2, 0x42, 0x63, 0xc5, 0x30, 0x3c, 0x07, 0xca, 0xbb, 0xdb, 0x9e, 0xf0, 0x09, 0x74, 0xae,
-	0xa8, 0xa5, 0x91, 0x6f, 0x56, 0x8c, 0xfa, 0xef, 0x94, 0x77, 0xf7, 0x01, 0x2c, 0xaf, 0xbe, 0xda,
-	0x84, 0x7d, 0xb7, 0x09, 0xdb, 0xb7, 0x09, 0x7b, 0x9e, 0xf4, 0xc3, 0x49, 0x87, 0x89, 0xff, 0x2f,
-	0x54, 0x0e, 0xc3, 0xca, 0xeb, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x0b, 0x11, 0x41, 0xe2, 0x3c,
-	0x01, 0x00, 0x00,
+	// 310 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x91, 0xcb, 0x4e, 0x32, 0x41,
+	0x10, 0x85, 0x33, 0x0c, 0x81, 0x7f, 0x0a, 0x56, 0xbd, 0xf8, 0x6d, 0x51, 0xb9, 0xad, 0x48, 0x4c,
+	0x66, 0x82, 0x3e, 0x81, 0xc4, 0x44, 0xc3, 0x8a, 0x4c, 0x34, 0x26, 0x6e, 0x26, 0x0d, 0x14, 0x50,
+	0x08, 0xf4, 0xa4, 0xbb, 0x07, 0xf4, 0x0d, 0x5d, 0xba, 0x72, 0x4d, 0x78, 0x12, 0x33, 0x05, 0x5e,
+	0x62, 0xdc, 0x9d, 0xfa, 0x72, 0x4e, 0x72, 0xaa, 0x0a, 0x6a, 0x16, 0x47, 0x99, 0x21, 0xf7, 0x12,
+	0xad, 0xbb, 0x43, 0x74, 0xaa, 0x1b, 0xcd, 0x37, 0x2e, 0x4c, 0x8d, 0x76, 0x5a, 0xfc, 0x27, 0xeb,
+	0x48, 0x87, 0x9f, 0x8e, 0xf0, 0xe0, 0xa8, 0x35, 0xa6, 0x5a, 0x4f, 0x17, 0x18, 0xa9, 0x94, 0xa2,
+	0x09, 0xe1, 0x62, 0x9c, 0x0c, 0x71, 0xa6, 0xd6, 0xa4, 0xcd, 0x3e, 0xd8, 0x7e, 0xf7, 0xc0, 0xef,
+	0x3f, 0xdc, 0x89, 0x13, 0x28, 0x91, 0xb5, 0x19, 0x1a, 0xe9, 0x35, 0xbd, 0x4e, 0xd0, 0xf3, 0xb7,
+	0x57, 0x85, 0xf8, 0x80, 0xc4, 0x29, 0x04, 0x2a, 0x1b, 0x13, 0xae, 0x46, 0x68, 0x65, 0xa1, 0xe9,
+	0x77, 0x82, 0xf8, 0x1b, 0x88, 0x63, 0xf8, 0x37, 0xdf, 0x3c, 0xd9, 0x24, 0x33, 0x24, 0xfd, 0x3c,
+	0x1c, 0x97, 0xf3, 0xf9, 0xde, 0x90, 0x10, 0x50, 0xcc, 0xa5, 0x04, 0xc6, 0xac, 0xc5, 0x35, 0x54,
+	0x27, 0x46, 0x2f, 0x93, 0x19, 0xaa, 0x31, 0x1a, 0x2b, 0x4b, 0x4d, 0xbf, 0x53, 0xb9, 0x68, 0x85,
+	0x7f, 0x6f, 0x10, 0xf6, 0x37, 0xee, 0x96, 0x9d, 0x71, 0x25, 0x8f, 0xed, 0xb5, 0x15, 0x0d, 0xe0,
+	0x31, 0x49, 0x95, 0x51, 0x4b, 0x2b, 0xcb, 0x5c, 0x0a, 0x72, 0x34, 0x60, 0xd2, 0xbe, 0x81, 0xe0,
+	0x2b, 0x2a, 0x8e, 0xa0, 0xb8, 0x52, 0x4b, 0xfc, 0xb9, 0x1b, 0x03, 0xd1, 0x82, 0xea, 0x5a, 0x2d,
+	0x32, 0x4c, 0x52, 0x83, 0x13, 0x7a, 0x96, 0x05, 0x2e, 0x5a, 0x61, 0x36, 0x60, 0xd4, 0x3b, 0x7f,
+	0xdd, 0xd5, 0xbd, 0xb7, 0x5d, 0xdd, 0xdb, 0xee, 0xea, 0xde, 0xe3, 0xd9, 0xbe, 0x26, 0x69, 0x3e,
+	0xe9, 0xef, 0x8f, 0x0c, 0x4b, 0x7c, 0xd5, 0xcb, 0x8f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x09, 0x01,
+	0x5c, 0x86, 0xac, 0x01, 0x00, 0x00,
 }
 
 func (m *JWT) Marshal() (dAtA []byte, err error) {
@@ -241,20 +309,25 @@ func (m *JWT) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x52
 	}
-	if len(m.JwtParams) > 0 {
-		for iNdEx := len(m.JwtParams) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.JwtParams[iNdEx])
-			copy(dAtA[i:], m.JwtParams[iNdEx])
-			i = encodeVarintJwt(dAtA, i, uint64(len(m.JwtParams[iNdEx])))
+	if len(m.FromParams) > 0 {
+		for iNdEx := len(m.FromParams) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.FromParams[iNdEx])
+			copy(dAtA[i:], m.FromParams[iNdEx])
+			i = encodeVarintJwt(dAtA, i, uint64(len(m.FromParams[iNdEx])))
 			i--
 			dAtA[i] = 0x3a
 		}
 	}
-	if len(m.JwtHeaders) > 0 {
-		for iNdEx := len(m.JwtHeaders) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.JwtHeaders[iNdEx])
-			copy(dAtA[i:], m.JwtHeaders[iNdEx])
-			i = encodeVarintJwt(dAtA, i, uint64(len(m.JwtHeaders[iNdEx])))
+	if len(m.FromHeaders) > 0 {
+		for iNdEx := len(m.FromHeaders) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.FromHeaders[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintJwt(dAtA, i, uint64(size))
+			}
 			i--
 			dAtA[i] = 0x32
 		}
@@ -279,6 +352,47 @@ func (m *JWT) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.Issuer)
 		copy(dAtA[i:], m.Issuer)
 		i = encodeVarintJwt(dAtA, i, uint64(len(m.Issuer)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *JwtHeader) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *JwtHeader) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *JwtHeader) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.ValuePrefix) > 0 {
+		i -= len(m.ValuePrefix)
+		copy(dAtA[i:], m.ValuePrefix)
+		i = encodeVarintJwt(dAtA, i, uint64(len(m.ValuePrefix)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintJwt(dAtA, i, uint64(len(m.Name)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -316,19 +430,39 @@ func (m *JWT) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovJwt(uint64(l))
 	}
-	if len(m.JwtHeaders) > 0 {
-		for _, s := range m.JwtHeaders {
-			l = len(s)
+	if len(m.FromHeaders) > 0 {
+		for _, e := range m.FromHeaders {
+			l = e.Size()
 			n += 1 + l + sovJwt(uint64(l))
 		}
 	}
-	if len(m.JwtParams) > 0 {
-		for _, s := range m.JwtParams {
+	if len(m.FromParams) > 0 {
+		for _, s := range m.FromParams {
 			l = len(s)
 			n += 1 + l + sovJwt(uint64(l))
 		}
 	}
 	l = len(m.Jwks)
+	if l > 0 {
+		n += 1 + l + sovJwt(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *JwtHeader) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovJwt(uint64(l))
+	}
+	l = len(m.ValuePrefix)
 	if l > 0 {
 		n += 1 + l + sovJwt(uint64(l))
 	}
@@ -471,9 +605,9 @@ func (m *JWT) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JwtHeaders", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field FromHeaders", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowJwt
@@ -483,27 +617,29 @@ func (m *JWT) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthJwt
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthJwt
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.JwtHeaders = append(m.JwtHeaders, string(dAtA[iNdEx:postIndex]))
+			m.FromHeaders = append(m.FromHeaders, &JwtHeader{})
+			if err := m.FromHeaders[len(m.FromHeaders)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JwtParams", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field FromParams", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -531,7 +667,7 @@ func (m *JWT) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.JwtParams = append(m.JwtParams, string(dAtA[iNdEx:postIndex]))
+			m.FromParams = append(m.FromParams, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		case 10:
 			if wireType != 2 {
@@ -564,6 +700,124 @@ func (m *JWT) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Jwks = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipJwt(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthJwt
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthJwt
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *JwtHeader) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowJwt
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: JwtHeader: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: JwtHeader: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowJwt
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthJwt
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthJwt
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ValuePrefix", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowJwt
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthJwt
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthJwt
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ValuePrefix = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

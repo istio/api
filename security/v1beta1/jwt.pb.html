@@ -2,7 +2,7 @@
 title: istio.security.v1beta1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 1
+number_of_entries: 2
 ---
 <h2 id="JWT">JWT</h2>
 <section>
@@ -118,29 +118,74 @@ See https://auth0.com/docs/jwks.</p>
 No
 </td>
 </tr>
-<tr id="JWT-jwt_headers">
-<td><code>jwtHeaders</code></td>
-<td><code>string[]</code></td>
+<tr id="JWT-from_headers">
+<td><code>fromHeaders</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/security/v1beta1/authorization-policy.html#JwtHeader">JwtHeader[]</a></code></td>
 <td>
-<p>JWT is sent in a request header. <code>header</code> represents the
-header name.</p>
+<p>List of header locations from which JWT is expected. For example, below is the location spec if
+if JWT is expected to be found in <code>x-goog-iap-jwt-assertion</code> header, and have &ldquo;Bearer &rdquo; prefix:</p>
 
-<p>For example, if <code>header=x-goog-iap-jwt-assertion</code>, the header
-format will be x-goog-iap-jwt-assertion: <JWT>.</p>
+<pre><code>  fromHeaders:
+  - name: x-goog-iap-jwt-assertion
+    prefix: &quot;Bearer &quot;
+</code></pre>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="JWT-jwt_params">
-<td><code>jwtParams</code></td>
+<tr id="JWT-from_params">
+<td><code>fromParams</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>JWT is sent in a query parameter. <code>query</code> represents the
-query parameter name.</p>
+<p>List of query parameters from which JWT is expected. For example, if JWT is provided via query
+parameter <code>my_token</code> (e.g /path?my_token=<JWT>), the config is:</p>
 
-<p>For example, <code>query=jwt_token</code>.</p>
+<pre><code>  fromParams:
+  - &quot;my_token&quot;
+</code></pre>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="JwtHeader">JwtHeader</h2>
+<section>
+<p>This message specifies a header location to extract JWT token.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="JwtHeader-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>The HTTP header name.</p>
+
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr id="JwtHeader-value_prefix">
+<td><code>valuePrefix</code></td>
+<td><code>string</code></td>
+<td>
+<p>The value prefix. The value format is &ldquo;value<em>prefix<token>&rdquo;
+For example, for &ldquo;Authorization: Bearer <token>&rdquo;, value</em>prefix=&ldquo;Bearer &rdquo; with a space at the
+end.</p>
 
 </td>
 <td>

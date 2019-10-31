@@ -111,16 +111,31 @@ message JWT {
   //     2) The `access_token` query parameter (see
   //     [URI Query Parameter](https://tools.ietf.org/html/rfc6750#section-2.3))
 
-  // JWT is sent in a request header. `header` represents the
-  // header name.
-  //
-  // For example, if `header=x-goog-iap-jwt-assertion`, the header
-  // format will be x-goog-iap-jwt-assertion: <JWT>.
-  repeated string jwt_headers = 6;
+  // List of header locations from which JWT is expected. For example, below is the location spec if
+  // if JWT is expected to be found in `x-goog-iap-jwt-assertion` header, and have "Bearer " prefix:
+  // ```
+  //   fromHeaders:
+  //   - name: x-goog-iap-jwt-assertion
+  //     prefix: "Bearer "
+  // ```
+  repeated JwtHeader from_headers = 6;
 
-  // JWT is sent in a query parameter. `query` represents the
-  // query parameter name.
-  //
-  // For example, `query=jwt_token`.
-  repeated string jwt_params = 7;
+  // List of query parameters from which JWT is expected. For example, if JWT is provided via query
+  // parameter `my_token` (e.g /path?my_token=<JWT>), the config is:
+  // ```
+  //   fromParams:
+  //   - "my_token"
+  // ```
+  repeated string from_params = 7;
+}
+
+// This message specifies a header location to extract JWT token.
+message JwtHeader {
+  // The HTTP header name.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The value prefix. The value format is "value_prefix<token>"
+  // For example, for "Authorization: Bearer <token>", value_prefix="Bearer " with a space at the
+  // end.
+  string value_prefix = 2;
 }

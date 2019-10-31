@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.security.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\035istio.io/api/security/v1beta1'),
-  serialized_pb=_b('\n\x1asecurity/v1beta1/jwt.proto\x12\x16istio.security.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\"v\n\x03JWT\x12\x13\n\x06issuer\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x11\n\taudiences\x18\x02 \x03(\t\x12\x10\n\x08jwks_uri\x18\x03 \x01(\t\x12\x0c\n\x04jwks\x18\n \x01(\t\x12\x13\n\x0bjwt_headers\x18\x06 \x03(\t\x12\x12\n\njwt_params\x18\x07 \x03(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
+  serialized_pb=_b('\n\x1asecurity/v1beta1/jwt.proto\x12\x16istio.security.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\"\x9b\x01\n\x03JWT\x12\x13\n\x06issuer\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x11\n\taudiences\x18\x02 \x03(\t\x12\x10\n\x08jwks_uri\x18\x03 \x01(\t\x12\x0c\n\x04jwks\x18\n \x01(\t\x12\x37\n\x0c\x66rom_headers\x18\x06 \x03(\x0b\x32!.istio.security.v1beta1.JwtHeader\x12\x13\n\x0b\x66rom_params\x18\x07 \x03(\t\"4\n\tJwtHeader\x12\x11\n\x04name\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x14\n\x0cvalue_prefix\x18\x02 \x01(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,])
 
@@ -64,14 +64,14 @@ _JWT = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='jwt_headers', full_name='istio.security.v1beta1.JWT.jwt_headers', index=4,
-      number=6, type=9, cpp_type=9, label=3,
+      name='from_headers', full_name='istio.security.v1beta1.JWT.from_headers', index=4,
+      number=6, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='jwt_params', full_name='istio.security.v1beta1.JWT.jwt_params', index=5,
+      name='from_params', full_name='istio.security.v1beta1.JWT.from_params', index=5,
       number=7, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -89,11 +89,51 @@ _JWT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=87,
-  serialized_end=205,
+  serialized_start=88,
+  serialized_end=243,
 )
 
+
+_JWTHEADER = _descriptor.Descriptor(
+  name='JwtHeader',
+  full_name='istio.security.v1beta1.JwtHeader',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.security.v1beta1.JwtHeader.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value_prefix', full_name='istio.security.v1beta1.JwtHeader.value_prefix', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=245,
+  serialized_end=297,
+)
+
+_JWT.fields_by_name['from_headers'].message_type = _JWTHEADER
 DESCRIPTOR.message_types_by_name['JWT'] = _JWT
+DESCRIPTOR.message_types_by_name['JwtHeader'] = _JWTHEADER
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 JWT = _reflection.GeneratedProtocolMessageType('JWT', (_message.Message,), {
@@ -103,7 +143,15 @@ JWT = _reflection.GeneratedProtocolMessageType('JWT', (_message.Message,), {
   })
 _sym_db.RegisterMessage(JWT)
 
+JwtHeader = _reflection.GeneratedProtocolMessageType('JwtHeader', (_message.Message,), {
+  'DESCRIPTOR' : _JWTHEADER,
+  '__module__' : 'security.v1beta1.jwt_pb2'
+  # @@protoc_insertion_point(class_scope:istio.security.v1beta1.JwtHeader)
+  })
+_sym_db.RegisterMessage(JwtHeader)
+
 
 DESCRIPTOR._options = None
 _JWT.fields_by_name['issuer']._options = None
+_JWTHEADER.fields_by_name['name']._options = None
 # @@protoc_insertion_point(module_scope)
