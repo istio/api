@@ -118,7 +118,7 @@ message JWT {
   //   - name: x-goog-iap-jwt-assertion
   //     prefix: "Bearer "
   // ```
-  repeated JwtHeader from_headers = 6;
+  repeated JWTHeader from_headers = 6;
 
   // List of query parameters from which JWT is expected. For example, if JWT is provided via query
   // parameter `my_token` (e.g /path?my_token=<JWT>), the config is:
@@ -130,7 +130,7 @@ message JWT {
 }
 
 // This message specifies a header location to extract JWT token.
-message JwtHeader {
+message JWTHeader {
   // The HTTP header name.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 

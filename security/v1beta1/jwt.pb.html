@@ -120,7 +120,7 @@ No
 </tr>
 <tr id="JWT-from_headers">
 <td><code>fromHeaders</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/security/v1beta1/authorization-policy.html#JwtHeader">JwtHeader[]</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/security/v1beta1/authorization-policy.html#JWTHeader">JWTHeader[]</a></code></td>
 <td>
 <p>List of header locations from which JWT is expected. For example, below is the location spec if
 if JWT is expected to be found in <code>x-goog-iap-jwt-assertion</code> header, and have &ldquo;Bearer &rdquo; prefix:</p>
@@ -154,7 +154,7 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="JwtHeader">JwtHeader</h2>
+<h2 id="JWTHeader">JWTHeader</h2>
 <section>
 <p>This message specifies a header location to extract JWT token.</p>
 
@@ -168,7 +168,7 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="JwtHeader-name">
+<tr id="JWTHeader-name">
 <td><code>name</code></td>
 <td><code>string</code></td>
 <td>
@@ -179,7 +179,7 @@ No
 Yes
 </td>
 </tr>
-<tr id="JwtHeader-prefix">
+<tr id="JWTHeader-prefix">
 <td><code>prefix</code></td>
 <td><code>string</code></td>
 <td>
