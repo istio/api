@@ -179,13 +179,13 @@ No
 Yes
 </td>
 </tr>
-<tr id="JwtHeader-value_prefix">
-<td><code>valuePrefix</code></td>
+<tr id="JwtHeader-prefix">
+<td><code>prefix</code></td>
 <td><code>string</code></td>
 <td>
-<p>The value prefix. The value format is &ldquo;value<em>prefix<token>&rdquo;
-For example, for &ldquo;Authorization: Bearer <token>&rdquo;, value</em>prefix=&ldquo;Bearer &rdquo; with a space at the
-end.</p>
+<p>The prefix that should be stripped before decoding the token.
+For example, for &ldquo;Authorization: Bearer <token>&rdquo;, prefix=&ldquo;Bearer &rdquo; with a space at the end.
+If the header doesn&rsquo;t have this exact prefix, it is considerred invalid.</p>
 
 </td>
 <td>

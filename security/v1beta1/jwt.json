@@ -59,8 +59,8 @@
             "type": "string",
             "format": "string"
           },
-          "valuePrefix": {
-            "description": "The value prefix. The value format is \"value_prefix\u003ctoken\u003e\" For example, for \"Authorization: Bearer \u003ctoken\u003e\", value_prefix=\"Bearer \" with a space at the end.",
+          "prefix": {
+            "description": "The prefix that should be stripped before decoding the token. For example, for \"Authorization: Bearer \u003ctoken\u003e\", prefix=\"Bearer \" with a space at the end. If the header doesn't have this exact prefix, it is considerred invalid.",
             "type": "string",
             "format": "string"
           }

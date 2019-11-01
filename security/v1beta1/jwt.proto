@@ -134,8 +134,8 @@ message JwtHeader {
   // The HTTP header name.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // The value prefix. The value format is "value_prefix<token>"
-  // For example, for "Authorization: Bearer <token>", value_prefix="Bearer " with a space at the
-  // end.
-  string value_prefix = 2;
+  // The prefix that should be stripped before decoding the token.
+  // For example, for "Authorization: Bearer <token>", prefix="Bearer " with a space at the end.
+  // If the header doesn't have this exact prefix, it is considerred invalid.
+  string prefix = 2;
 }

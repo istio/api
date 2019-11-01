@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.security.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\035istio.io/api/security/v1beta1'),
-  serialized_pb=_b('\n\x1asecurity/v1beta1/jwt.proto\x12\x16istio.security.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\"\x9b\x01\n\x03JWT\x12\x13\n\x06issuer\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x11\n\taudiences\x18\x02 \x03(\t\x12\x10\n\x08jwks_uri\x18\x03 \x01(\t\x12\x0c\n\x04jwks\x18\n \x01(\t\x12\x37\n\x0c\x66rom_headers\x18\x06 \x03(\x0b\x32!.istio.security.v1beta1.JwtHeader\x12\x13\n\x0b\x66rom_params\x18\x07 \x03(\t\"4\n\tJwtHeader\x12\x11\n\x04name\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x14\n\x0cvalue_prefix\x18\x02 \x01(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
+  serialized_pb=_b('\n\x1asecurity/v1beta1/jwt.proto\x12\x16istio.security.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\"\x9b\x01\n\x03JWT\x12\x13\n\x06issuer\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x11\n\taudiences\x18\x02 \x03(\t\x12\x10\n\x08jwks_uri\x18\x03 \x01(\t\x12\x0c\n\x04jwks\x18\n \x01(\t\x12\x37\n\x0c\x66rom_headers\x18\x06 \x03(\x0b\x32!.istio.security.v1beta1.JwtHeader\x12\x13\n\x0b\x66rom_params\x18\x07 \x03(\t\".\n\tJwtHeader\x12\x11\n\x04name\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x0e\n\x06prefix\x18\x02 \x01(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,])
 
@@ -109,7 +109,7 @@ _JWTHEADER = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=_b('\340A\002'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value_prefix', full_name='istio.security.v1beta1.JwtHeader.value_prefix', index=1,
+      name='prefix', full_name='istio.security.v1beta1.JwtHeader.prefix', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -128,7 +128,7 @@ _JWTHEADER = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=245,
-  serialized_end=297,
+  serialized_end=291,
 )
 
 _JWT.fields_by_name['from_headers'].message_type = _JWTHEADER
