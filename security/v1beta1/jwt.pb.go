@@ -92,7 +92,7 @@ type JWT struct {
 	//
 	// Note: Only one of jwks_uri and jwks should be used. jwks_uri will be ignored if it does.
 	Jwks string `protobuf:"bytes,10,opt,name=jwks,proto3" json:"jwks,omitempty"`
-	// List of header locations from which JWT is expected. For example, below is the location spec if
+	// List of header locations from which JWT is expected. For example, below is the location spec
 	// if JWT is expected to be found in `x-goog-iap-jwt-assertion` header, and have "Bearer " prefix:
 	// ```
 	//   fromHeaders:
