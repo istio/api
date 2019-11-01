@@ -111,7 +111,7 @@ message JWT {
   //     2) The `access_token` query parameter (see
   //     [URI Query Parameter](https://tools.ietf.org/html/rfc6750#section-2.3))
 
-  // List of header locations from which JWT is expected. For example, below is the location spec if
+  // List of header locations from which JWT is expected. For example, below is the location spec
   // if JWT is expected to be found in `x-goog-iap-jwt-assertion` header, and have "Bearer " prefix:
   // ```
   //   fromHeaders:
