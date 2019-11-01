@@ -19,25 +19,58 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-// MarshalJSON is a custom marshaler supporting oneof fields for HTTPAPISpecPattern
+// MarshalJSON is a custom marshaler for HTTPAPISpec
+func (this *HTTPAPISpec) MarshalJSON() ([]byte, error) {
+	str, err := ApiSpecMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for HTTPAPISpec
+func (this *HTTPAPISpec) UnmarshalJSON(b []byte) error {
+	return ApiSpecUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for HTTPAPISpecPattern
 func (this *HTTPAPISpecPattern) MarshalJSON() ([]byte, error) {
 	str, err := ApiSpecMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler supporting oneof fields for HTTPAPISpecPattern
+// UnmarshalJSON is a custom unmarshaler for HTTPAPISpecPattern
 func (this *HTTPAPISpecPattern) UnmarshalJSON(b []byte) error {
 	return ApiSpecUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler supporting oneof fields for APIKey
+// MarshalJSON is a custom marshaler for APIKey
 func (this *APIKey) MarshalJSON() ([]byte, error) {
 	str, err := ApiSpecMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler supporting oneof fields for APIKey
+// UnmarshalJSON is a custom unmarshaler for APIKey
 func (this *APIKey) UnmarshalJSON(b []byte) error {
+	return ApiSpecUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for HTTPAPISpecReference
+func (this *HTTPAPISpecReference) MarshalJSON() ([]byte, error) {
+	str, err := ApiSpecMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for HTTPAPISpecReference
+func (this *HTTPAPISpecReference) UnmarshalJSON(b []byte) error {
+	return ApiSpecUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for HTTPAPISpecBinding
+func (this *HTTPAPISpecBinding) MarshalJSON() ([]byte, error) {
+	str, err := ApiSpecMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for HTTPAPISpecBinding
+func (this *HTTPAPISpecBinding) UnmarshalJSON(b []byte) error {
 	return ApiSpecUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
