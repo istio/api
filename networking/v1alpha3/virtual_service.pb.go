@@ -154,9 +154,12 @@ type VirtualService struct {
 	// referred to using their alphanumeric names. IP addresses are allowed
 	// only for services defined via the Gateway.
 	Hosts []string `protobuf:"bytes,1,rep,name=hosts,proto3" json:"hosts,omitempty"`
-	// The names of gateways and sidecars that should apply these routes. A
-	// single VirtualService is used for sidecars inside the mesh as well as
-	// for one or more gateways. The selection condition imposed by this
+	// The names of gateways and sidecars that should apply these routes.
+	// Gateways in other namespaces may be referred to by
+	// `<gateway namespace>/<gateway name>`; specifying a gateway with no
+	// namespace qualifier is the same as specifying the VirtualService's
+	// namespace. A single VirtualService is used for sidecars inside the mesh as
+	// well as for one or more gateways. The selection condition imposed by this
 	// field can be overridden using the source field in the match conditions
 	// of protocol-specific routes. The reserved word `mesh` is used to imply
 	// all the sidecars in the mesh. When this field is omitted, the default
