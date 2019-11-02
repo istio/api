@@ -4,6 +4,7 @@ description: Configuration for access control on workloads.
 location: https://istio.io/docs/reference/config/security/v1beta1/authorization-policy.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
+schema: istio.security.v1beta1.AuthorizationPolicy
 number_of_entries: 8
 ---
 <p>Istio Authorization Policy enables access control on workloads in the mesh.</p>
@@ -138,17 +139,21 @@ spec:
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
 <tr id="AuthorizationPolicy-selector">
 <td><code>selector</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/type/v1beta1/workload-selector.html#WorkloadSelector">istio.type.v1beta1.WorkloadSelector</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/v1beta1/workload-selector.html#WorkloadSelector">WorkloadSelector</a></code></td>
 <td>
 <p>Optional. Workload selector decides where to apply the authorization policy.
 If not set, the authorization policy will be applied to all workloads in the
 same namespace as the authorization policy.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 <tr id="AuthorizationPolicy-rules">
@@ -159,6 +164,9 @@ same namespace as the authorization policy.</p>
 
 <p>If not set, access is denied unless explicitly allowed by other authorization policy.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 </tbody>
@@ -174,6 +182,7 @@ same namespace as the authorization policy.</p>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -181,18 +190,23 @@ same namespace as the authorization policy.</p>
 <td><code>key</code></td>
 <td><code>string</code></td>
 <td>
-<p>Required. The name of an Istio attribute.
-Note: Check https://istio.io/docs/reference/config/ for the list of supported
-attribute name.</p>
+<p>The name of an Istio attribute.
+See the <a href="https://istio.io/docs/reference/config/">full list of supported attributes</a>.</p>
 
+</td>
+<td>
+Yes
 </td>
 </tr>
 <tr id="Condition-values">
 <td><code>values</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Required. The allowed values for the attribute.</p>
+<p>The allowed values for the attribute.</p>
 
+</td>
+<td>
+Yes
 </td>
 </tr>
 </tbody>
@@ -208,6 +222,7 @@ attribute name.</p>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -220,6 +235,9 @@ attribute name.</p>
 <p>If not set, any host is allowed. Must be used only with HTTP.</p>
 
 </td>
+<td>
+No
+</td>
 </tr>
 <tr id="Operation-ports">
 <td><code>ports</code></td>
@@ -229,6 +247,9 @@ attribute name.</p>
 
 <p>If not set, any port is allowed.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 <tr id="Operation-methods">
@@ -242,6 +263,9 @@ For gRPC service, this should be the fully-qualified name in the form of
 <p>If not set, any method is allowed. Must be used only with HTTP or gRPC.</p>
 
 </td>
+<td>
+No
+</td>
 </tr>
 <tr id="Operation-paths">
 <td><code>paths</code></td>
@@ -251,6 +275,9 @@ For gRPC service, this should be the fully-qualified name in the form of
 
 <p>If not set, any path is allowed. Must be used only with HTTP.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 </tbody>
@@ -273,27 +300,34 @@ the condition is matched.</p>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
 <tr id="Rule-from">
 <td><code>from</code></td>
-<td><code><a href="#Rule-From">Rule.From[]</a></code></td>
+<td><code><a href="#Rule-From">From[]</a></code></td>
 <td>
 <p>Optional. from specifies the source of a request.</p>
 
 <p>If not set, any source is allowed.</p>
 
 </td>
+<td>
+No
+</td>
 </tr>
 <tr id="Rule-to">
 <td><code>to</code></td>
-<td><code><a href="#Rule-To">Rule.To[]</a></code></td>
+<td><code><a href="#Rule-To">To[]</a></code></td>
 <td>
 <p>Optional. to specifies the operation of a request.</p>
 
 <p>If not set, any operation is allowed.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 <tr id="Rule-when">
@@ -304,6 +338,9 @@ the condition is matched.</p>
 
 <p>If not set, any condition is allowed.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 </tbody>
@@ -319,6 +356,7 @@ the condition is matched.</p>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -328,6 +366,9 @@ the condition is matched.</p>
 <td>
 <p>Source specifies the source of a request.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 </tbody>
@@ -343,6 +384,7 @@ the condition is matched.</p>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -352,6 +394,9 @@ the condition is matched.</p>
 <td>
 <p>Operation specifies the operation of a request.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 </tbody>
@@ -367,6 +412,7 @@ the condition is matched.</p>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -380,6 +426,9 @@ matches to the &ldquo;source.principal&rdquo; attribute.</p>
 <p>If not set, any principal is allowed.</p>
 
 </td>
+<td>
+No
+</td>
 </tr>
 <tr id="Source-request_principals">
 <td><code>requestPrincipals</code></td>
@@ -390,6 +439,9 @@ matches to the &ldquo;request.auth.principal&rdquo; attribute.</p>
 
 <p>If not set, any request principal is allowed.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 <tr id="Source-namespaces">
@@ -402,6 +454,9 @@ attribute.</p>
 <p>If not set, any namespace is allowed.</p>
 
 </td>
+<td>
+No
+</td>
 </tr>
 <tr id="Source-ip_blocks">
 <td><code>ipBlocks</code></td>
@@ -412,6 +467,9 @@ Single IP (e.g. &ldquo;1.2.3.4&rdquo;) and CIDR (e.g. &ldquo;1.2.3.0/24&rdquo;) 
 
 <p>If not set, any IP is allowed.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 </tbody>
@@ -432,6 +490,7 @@ selected. Currently, only label based selection mechanism is supported.</p>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -439,10 +498,13 @@ selected. Currently, only label based selection mechanism is supported.</p>
 <td><code>matchLabels</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>REQUIRED: One or more labels that indicate a specific set of pods/VMs
+<p>One or more labels that indicate a specific set of pods/VMs
 on which a policy should be applied. The scope of label search is restricted to
 the configuration namespace in which the resource is present.</p>
 
+</td>
+<td>
+Yes
 </td>
 </tr>
 </tbody>

@@ -24,7 +24,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // HTTP response codes.
 // For more details: http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
@@ -219,11 +219,11 @@ func (HttpStatusCode) EnumDescriptor() ([]byte, []int) {
 // Direct HTTP response for a client-facing error message which can be attached
 // to an RPC error.
 type DirectHttpResponse struct {
-	// Optional HTTP status code. If not set, RPC error code is used.
+	// HTTP status code. If not set, RPC error code is used.
 	Code HttpStatusCode `protobuf:"varint,1,opt,name=code,proto3,enum=istio.policy.v1beta1.HttpStatusCode" json:"code,omitempty"`
 	// HTTP response body.
 	Body string `protobuf:"bytes,2,opt,name=body,proto3" json:"body,omitempty"`
-	// Optional HTTP response headers.
+	// HTTP response headers.
 	Headers map[string]string `protobuf:"bytes,3,rep,name=headers,proto3" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 

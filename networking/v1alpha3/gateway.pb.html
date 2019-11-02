@@ -1,9 +1,11 @@
 ---
 title: Gateway
 description: Configuration affecting edge load balancer.
-location: https://istio.io/docs/reference/config/networking/v1alpha3/gateway.html
+location: https://istio.io/docs/reference/config/networking/gateway.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
+schema: istio.networking.v1alpha3.Gateway
+aliases: [/docs/reference/config/networking/v1alpha3/gateway.html]
 number_of_entries: 6
 ---
 <p><code>Gateway</code> describes a load balancer operating at the edge of the mesh
@@ -175,12 +177,16 @@ spec:
 
 <h2 id="Gateway">Gateway</h2>
 <section>
+<p>Gateway describes a load balancer operating at the edge of the mesh
+receiving incoming or outgoing HTTP/TCP connections.</p>
+
 <table class="message-fields">
 <thead>
 <tr>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -188,20 +194,26 @@ spec:
 <td><code>servers</code></td>
 <td><code><a href="#Server">Server[]</a></code></td>
 <td>
-<p>REQUIRED: A list of server specifications.</p>
+<p>A list of server specifications.</p>
 
+</td>
+<td>
+Yes
 </td>
 </tr>
 <tr id="Gateway-selector">
 <td><code>selector</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>REQUIRED: One or more labels that indicate a specific set of pods/VMs
+<p>One or more labels that indicate a specific set of pods/VMs
 on which this gateway configuration should be applied. The scope of
 label search is restricted to the configuration namespace in which the
 the resource is present. In other words, the Gateway resource must
 reside in the same namespace as the gateway workload instance.</p>
 
+</td>
+<td>
+Yes
 </td>
 </tr>
 </tbody>
@@ -217,6 +229,7 @@ reside in the same namespace as the gateway workload instance.</p>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -224,19 +237,25 @@ reside in the same namespace as the gateway workload instance.</p>
 <td><code>number</code></td>
 <td><code>uint32</code></td>
 <td>
-<p>REQUIRED: A valid non-negative integer port number.</p>
+<p>A valid non-negative integer port number.</p>
 
+</td>
+<td>
+Yes
 </td>
 </tr>
 <tr id="Port-protocol">
 <td><code>protocol</code></td>
 <td><code>string</code></td>
 <td>
-<p>REQUIRED: The protocol exposed on the port.
+<p>The protocol exposed on the port.
 MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS.
 TLS implies the connection will be routed based on the SNI header to
 the destination without terminating the TLS connection.</p>
 
+</td>
+<td>
+Yes
 </td>
 </tr>
 <tr id="Port-name">
@@ -245,6 +264,9 @@ the destination without terminating the TLS connection.</p>
 <td>
 <p>Label assigned to the port.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 </tbody>
@@ -317,6 +339,7 @@ spec:
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -324,16 +347,19 @@ spec:
 <td><code>port</code></td>
 <td><code><a href="#Port">Port</a></code></td>
 <td>
-<p>REQUIRED: The Port on which the proxy should listen for incoming
+<p>The Port on which the proxy should listen for incoming
 connections.</p>
 
+</td>
+<td>
+Yes
 </td>
 </tr>
 <tr id="Server-hosts">
 <td><code>hosts</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>REQUIRED. One or more hosts exposed by this gateway.
+<p>One or more hosts exposed by this gateway.
 While typically applicable to
 HTTP services, it can also be used for TCP services using TLS with SNI.
 A host is specified as a <code>dnsName</code> with an optional <code>namespace/</code> prefix.
@@ -364,15 +390,21 @@ available. Refer to the <code>exportTo</code> setting in <code>VirtualService</c
 <code>DestinationRule</code>, and <code>ServiceEntry</code> configurations for details.</p>
 
 </td>
+<td>
+Yes
+</td>
 </tr>
 <tr id="Server-tls">
 <td><code>tls</code></td>
-<td><code><a href="#Server-TLSOptions">Server.TLSOptions</a></code></td>
+<td><code><a href="#Server-TLSOptions">TLSOptions</a></code></td>
 <td>
 <p>Set of TLS related options that govern the server&rsquo;s behavior. Use
 these options to control if all http requests should be redirected to
 https, and the TLS modes to use.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 <tr id="Server-default_endpoint">
@@ -383,6 +415,9 @@ https, and the TLS modes to use.</p>
 be forwarded to by default. Format should be <code>127.0.0.1:PORT</code> or
 <code>unix:///path/to/socket</code> or <code>unix://@foobar</code> (Linux abstract namespace).</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 </tbody>
@@ -396,6 +431,7 @@ be forwarded to by default. Format should be <code>127.0.0.1:PORT</code> or
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -407,15 +443,21 @@ be forwarded to by default. Format should be <code>127.0.0.1:PORT</code> or
 http connections, asking the clients to use HTTPS.</p>
 
 </td>
+<td>
+No
+</td>
 </tr>
 <tr id="Server-TLSOptions-mode">
 <td><code>mode</code></td>
-<td><code><a href="#Server-TLSOptions-TLSmode">Server.TLSOptions.TLSmode</a></code></td>
+<td><code><a href="#Server-TLSOptions-TLSmode">TLSmode</a></code></td>
 <td>
 <p>Optional: Indicates whether connections to this port should be
 secured using TLS. The value of this field determines how TLS is
 enforced.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 <tr id="Server-TLSOptions-server_certificate">
@@ -426,6 +468,9 @@ enforced.</p>
 holding the server-side TLS certificate to use.</p>
 
 </td>
+<td>
+No
+</td>
 </tr>
 <tr id="Server-TLSOptions-private_key">
 <td><code>privateKey</code></td>
@@ -434,6 +479,9 @@ holding the server-side TLS certificate to use.</p>
 <p>REQUIRED if mode is <code>SIMPLE</code> or <code>MUTUAL</code>. The path to the file
 holding the server&rsquo;s private key.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 <tr id="Server-TLSOptions-ca_certificates">
@@ -444,6 +492,9 @@ holding the server&rsquo;s private key.</p>
 certificate authority certificates to use in verifying a presented
 client side certificate.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 <tr id="Server-TLSOptions-credential_name">
@@ -468,6 +519,9 @@ key, and the CA certificate (if using mutual TLS). Set the
 enable the dynamic credential fetching feature.</p>
 
 </td>
+<td>
+No
+</td>
 </tr>
 <tr id="Server-TLSOptions-subject_alt_names">
 <td><code>subjectAltNames</code></td>
@@ -476,6 +530,9 @@ enable the dynamic credential fetching feature.</p>
 <p>A list of alternate names to verify the subject identity in the
 certificate presented by the client.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 <tr id="Server-TLSOptions-verify_certificate_spki">
@@ -488,6 +545,9 @@ Note: When both verify<em>certificate</em>hash and verify<em>certificate</em>spk
 are specified, a hash matching either value will result in the
 certificate being accepted.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 <tr id="Server-TLSOptions-verify_certificate_hash">
@@ -502,21 +562,30 @@ are specified, a hash matching either value will result in the
 certificate being accepted.</p>
 
 </td>
+<td>
+No
+</td>
 </tr>
 <tr id="Server-TLSOptions-min_protocol_version">
 <td><code>minProtocolVersion</code></td>
-<td><code><a href="#Server-TLSOptions-TLSProtocol">Server.TLSOptions.TLSProtocol</a></code></td>
+<td><code><a href="#Server-TLSOptions-TLSProtocol">TLSProtocol</a></code></td>
 <td>
 <p>Optional: Minimum TLS protocol version.</p>
 
 </td>
+<td>
+No
+</td>
 </tr>
 <tr id="Server-TLSOptions-max_protocol_version">
 <td><code>maxProtocolVersion</code></td>
-<td><code><a href="#Server-TLSOptions-TLSProtocol">Server.TLSOptions.TLSProtocol</a></code></td>
+<td><code><a href="#Server-TLSOptions-TLSProtocol">TLSProtocol</a></code></td>
 <td>
 <p>Optional: Maximum TLS protocol version.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 <tr id="Server-TLSOptions-cipher_suites">
@@ -526,6 +595,9 @@ certificate being accepted.</p>
 <p>Optional: If specified, only support the specified cipher list.
 Otherwise default to the default cipher list supported by Envoy.</p>
 
+</td>
+<td>
+No
 </td>
 </tr>
 </tbody>

@@ -29,7 +29,7 @@ var _ = time.Kitchen
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Attributes represents a set of typed name/value pairs. Many of Mixer's
 // API either consume and/or return attributes.
@@ -246,9 +246,9 @@ func (m *Attributes_AttributeValue) GetStringMapValue() *Attributes_StringMap {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*Attributes_AttributeValue) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _Attributes_AttributeValue_OneofMarshaler, _Attributes_AttributeValue_OneofUnmarshaler, _Attributes_AttributeValue_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*Attributes_AttributeValue) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*Attributes_AttributeValue_StringValue)(nil),
 		(*Attributes_AttributeValue_Int64Value)(nil),
 		(*Attributes_AttributeValue_DoubleValue)(nil),
@@ -258,161 +258,6 @@ func (*Attributes_AttributeValue) XXX_OneofFuncs() (func(msg proto.Message, b *p
 		(*Attributes_AttributeValue_DurationValue)(nil),
 		(*Attributes_AttributeValue_StringMapValue)(nil),
 	}
-}
-
-func _Attributes_AttributeValue_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*Attributes_AttributeValue)
-	// value
-	switch x := m.Value.(type) {
-	case *Attributes_AttributeValue_StringValue:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.StringValue)
-	case *Attributes_AttributeValue_Int64Value:
-		_ = b.EncodeVarint(3<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(uint64(x.Int64Value))
-	case *Attributes_AttributeValue_DoubleValue:
-		_ = b.EncodeVarint(4<<3 | proto.WireFixed64)
-		_ = b.EncodeFixed64(math.Float64bits(x.DoubleValue))
-	case *Attributes_AttributeValue_BoolValue:
-		t := uint64(0)
-		if x.BoolValue {
-			t = 1
-		}
-		_ = b.EncodeVarint(5<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(t)
-	case *Attributes_AttributeValue_BytesValue:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		_ = b.EncodeRawBytes(x.BytesValue)
-	case *Attributes_AttributeValue_TimestampValue:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.TimestampValue); err != nil {
-			return err
-		}
-	case *Attributes_AttributeValue_DurationValue:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DurationValue); err != nil {
-			return err
-		}
-	case *Attributes_AttributeValue_StringMapValue:
-		_ = b.EncodeVarint(9<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.StringMapValue); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("Attributes_AttributeValue.Value has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _Attributes_AttributeValue_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*Attributes_AttributeValue)
-	switch tag {
-	case 2: // value.string_value
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Value = &Attributes_AttributeValue_StringValue{x}
-		return true, err
-	case 3: // value.int64_value
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Value = &Attributes_AttributeValue_Int64Value{int64(x)}
-		return true, err
-	case 4: // value.double_value
-		if wire != proto.WireFixed64 {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeFixed64()
-		m.Value = &Attributes_AttributeValue_DoubleValue{math.Float64frombits(x)}
-		return true, err
-	case 5: // value.bool_value
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Value = &Attributes_AttributeValue_BoolValue{x != 0}
-		return true, err
-	case 6: // value.bytes_value
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeRawBytes(true)
-		m.Value = &Attributes_AttributeValue_BytesValue{x}
-		return true, err
-	case 7: // value.timestamp_value
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(types.Timestamp)
-		err := b.DecodeMessage(msg)
-		m.Value = &Attributes_AttributeValue_TimestampValue{msg}
-		return true, err
-	case 8: // value.duration_value
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(types.Duration)
-		err := b.DecodeMessage(msg)
-		m.Value = &Attributes_AttributeValue_DurationValue{msg}
-		return true, err
-	case 9: // value.string_map_value
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(Attributes_StringMap)
-		err := b.DecodeMessage(msg)
-		m.Value = &Attributes_AttributeValue_StringMapValue{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _Attributes_AttributeValue_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*Attributes_AttributeValue)
-	// value
-	switch x := m.Value.(type) {
-	case *Attributes_AttributeValue_StringValue:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.StringValue)))
-		n += len(x.StringValue)
-	case *Attributes_AttributeValue_Int64Value:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(x.Int64Value))
-	case *Attributes_AttributeValue_DoubleValue:
-		n += 1 // tag and wire
-		n += 8
-	case *Attributes_AttributeValue_BoolValue:
-		n += 1 // tag and wire
-		n += 1
-	case *Attributes_AttributeValue_BytesValue:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.BytesValue)))
-		n += len(x.BytesValue)
-	case *Attributes_AttributeValue_TimestampValue:
-		s := proto.Size(x.TimestampValue)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Attributes_AttributeValue_DurationValue:
-		s := proto.Size(x.DurationValue)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *Attributes_AttributeValue_StringMapValue:
-		s := proto.Size(x.StringMapValue)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 // Defines a string map.

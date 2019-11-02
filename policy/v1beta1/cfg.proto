@@ -15,6 +15,7 @@
 syntax = "proto3";
 
 import "gogoproto/gogo.proto";
+import "google/api/field_behavior.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/duration.proto";
 import "policy/v1beta1/value_type.proto";
@@ -25,13 +26,20 @@ option go_package="istio.io/api/policy/v1beta1";
 
 // AttributeManifest describes a set of Attributes produced by some component
 // of an Istio deployment.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message AttributeManifest {
-  // Optional. The revision of this document. Assigned by server.
+  // The revision of this document. Assigned by server.
   string revision = 1;
-  // Required. Name of the component producing these attributes. This can be
+  // Name of the component producing these attributes. This can be
   // the proxy (with the canonical name `istio-proxy`) or the name of an
   // `attributes` kind adapter in Mixer.
-  string name = 2;
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
 
   // AttributeInfo describes the schema of an Istio `Attribute`.
   //
@@ -75,11 +83,11 @@ message AttributeManifest {
   // attribute name and value becomes the HTTP header name and value. The actual
   // encoding scheme will be decided later.
   message AttributeInfo {
-    // Optional. A human-readable description of the attribute's purpose.
+    // A human-readable description of the attribute's purpose.
     string description = 1;
 
-    // Required. The type of data carried by this attribute.
-    istio.policy.v1beta1.ValueType value_type = 2;
+    // The type of data carried by this attribute.
+    istio.policy.v1beta1.ValueType value_type = 2 [(google.api.field_behavior) = REQUIRED];
   }
   // The set of attributes this Istio component will be responsible for producing at runtime.
   // We map from attribute name to the attribute's specification. The name of an attribute,
@@ -110,8 +118,15 @@ message AttributeManifest {
 //     instances:
 //     - RequestCountByService
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message Rule {
-  // Required. Match is an attribute based predicate. When Mixer receives a
+  // Match is an attribute based predicate. When Mixer receives a
   // request it evaluates the match expression and executes all the associated `actions`
   // if the match evaluates to true.
   //
@@ -124,7 +139,7 @@ message Rule {
   // * `attr1 == "20" && attr2 == "30"` logical AND, OR, and NOT are also available
   string match = 1;
 
-  // Optional. The actions that will be executed when match evaluates to `true`.
+  // The actions that will be executed when match evaluates to `true`.
   repeated Action actions = 2;
 
   // A template for an HTTP header manipulation. Values in the template are expressions
@@ -144,10 +159,10 @@ message Rule {
   // adapter to optionally modify the headers.
   message HeaderOperationTemplate {
 
-    // Required. Header name literal value.
-    string name = 1;
+    // Header name literal value.
+    string name = 1 [(google.api.field_behavior) = REQUIRED];
 
-    // Optional. Header value expressions.
+    // Header value expressions.
     repeated string values = 2;
 
     // Header operation type.
@@ -162,20 +177,20 @@ message Rule {
       APPEND = 2;
     }
 
-    // Optional. Header operation type. Default operation is to replace the value of the header by name.
+    // Header operation type. Default operation is to replace the value of the header by name.
     Operation operation = 3;
   }
 
-  // Optional. Templatized operations on the request headers using values produced by the
+  // Templatized operations on the request headers using values produced by the
   // rule actions. Require the check action result to be OK.
   repeated HeaderOperationTemplate request_header_operations = 3;
 
-  // Optional. Templatized operations on the response headers using values produced by the
+  // Templatized operations on the response headers using values produced by the
   // rule actions. Require the check action result to be OK.
   repeated HeaderOperationTemplate response_header_operations = 4;
 
   // $hide_from_docs
-  // Optional. Provides the ability to add a sampling configuration for Mixer rules. This sampling
+  // Provides the ability to add a sampling configuration for Mixer rules. This sampling
   // will limit the scenarios in which the `actions` of the rule are executed. The sampling will
   // only take place after a `match` predicate has evaluated to true.
   //
@@ -194,17 +209,17 @@ message Rule {
 //   - RequestCountByService
 // ```
 message Action {
-  // Required. Fully qualified name of the handler to invoke.
+  // Fully qualified name of the handler to invoke.
   // Must match the `name` of a [Handler][istio.policy.v1beta1.Handler.name].
-  string handler = 2;
+  string handler = 2 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. Each value must match the fully qualified name of the
+  // Each value must match the fully qualified name of the
   // [Instance][istio.policy.v1beta1.Instance.name]s.
   // Referenced instances are evaluated by resolving the attributes/literals for all the fields.
   // The constructed objects are then passed to the `handler` referenced within this action.
-  repeated string instances = 3;
+  repeated string instances = 3 [(google.api.field_behavior) = REQUIRED];
 
-  // Optional. A handle to refer to the results of the action.
+  // A handle to refer to the results of the action.
   string name = 4;
 }
 
@@ -228,30 +243,37 @@ message Action {
 //       source: source.name
 //       destination_ip: destination.ip
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message Instance {
-  // Required. The name of this instance
+  // The name of this instance
   //
   // Must be unique amongst other Instances in scope. Used by [Action][istio.policy.v1beta1.Action] to refer
   // to an instance produced by this instance.
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. The name of the compiled in template this instance creates instances for. For referencing non compiled-in
+  // The name of the compiled in template this instance creates instances for. For referencing non compiled-in
   // templates, use the `template` field instead.
   //
   // The value must match the name of the available template Mixer is built with.
-  string compiled_template = 67794676;
+  string compiled_template = 67794676 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. The name of the template this instance creates instances for. For referencing compiled-in
+  // The name of the template this instance creates instances for. For referencing compiled-in
   // templates, use the `compiled_template` field instead.
   //
   // The value must match the name of the available template in scope.
   string template = 2;
 
-  // Required. Depends on referenced template. Struct representation of a
+  // Depends on referenced template. Struct representation of a
   // proto defined by the template; this varies depending on the value of field `template`.
-  google.protobuf.Struct params = 3;
+  google.protobuf.Struct params = 3 [(google.api.field_behavior) = REQUIRED];
 
-  // Optional. Defines attribute bindings to map the output of attribute-producing adapters back into
+  // Defines attribute bindings to map the output of attribute-producing adapters back into
   // the attribute space. The variable `output` refers to the output template instance produced
   // by the adapter.
   // The following example derives `source.namespace` from `source.uid` in the context of Kubernetes:
@@ -321,29 +343,36 @@ message Instance {
 //       address: localhost:8090
 // ---
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message Handler {
-  // Required. Must be unique in the entire Mixer configuration. Used by [Actions][istio.policy.v1beta1.Action.handler]
+  // Must be unique in the entire Mixer configuration. Used by [Actions][istio.policy.v1beta1.Action.handler]
   // to refer to this handler.
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. The name of the compiled in adapter this handler instantiates. For referencing non compiled-in
+  // The name of the compiled in adapter this handler instantiates. For referencing non compiled-in
   // adapters, use the `adapter` field instead.
   //
   // The value must match the name of the available adapter Mixer is built with. An adapter's name is typically a
   // constant in its code.
-  string compiled_adapter = 67794676;
+  string compiled_adapter = 67794676 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. The name of a specific adapter implementation. For referencing compiled-in
+  // The name of a specific adapter implementation. For referencing compiled-in
   // adapters, use the `compiled_adapter` field instead.
   //
   // An adapter's implementation name is typically a constant in its code.
   string adapter = 2;
 
-  // Optional. Depends on adapter implementation. Struct representation of a
+  // Depends on adapter implementation. Struct representation of a
   // proto defined by the adapter implementation; this varies depending on the value of field `adapter`.
   google.protobuf.Struct params = 3;
 
-  // Optional. Information on how to connect to the out-of-process adapter.
+  // Information on how to connect to the out-of-process adapter.
   // This is used if the adapter is not compiled into Mixer binary and is running as a separate process.
   Connection connection = 4;
 }
@@ -367,9 +396,9 @@ message Connection {
 // Multiple sampling strategies are supported. When multiple strategies are configured,
 // a request must be selected by all configured sampling strategies.
 message Sampling {
-  // Optional. Provides filtering of actions based on random selection per request.
+  // Provides filtering of actions based on random selection per request.
   RandomSampling random = 1;
-  // Optional. Provides filtering of actions based on number of requests observed within
+  // Provides filtering of actions based on number of requests observed within
   // a configured time window.
   RateLimitSampling rate_limit = 2;
 }
@@ -502,14 +531,14 @@ message Tls {
 // OAuth let operator specify config to fetch access token via oauth when using
 // TLS for connection to the backend.
 message OAuth {
-  // REQUIRED. OAuth client id for mixer.
-  string client_id = 1;
+  // OAuth client id for mixer.
+  string client_id = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // REQUIRED. The path to the file holding the client secret for oauth.
-  string client_secret = 2;
+  // The path to the file holding the client secret for oauth.
+  string client_secret = 2 [(google.api.field_behavior) = REQUIRED];
 
-  // REQUIRED. The Resource server's token endpoint URL.
-  string token_url = 3;
+  // The Resource server's token endpoint URL.
+  string token_url = 3 [(google.api.field_behavior) = REQUIRED];
 
   // List of requested permissions.
   repeated string scopes = 4;

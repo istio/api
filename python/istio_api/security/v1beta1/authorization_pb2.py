@@ -13,6 +13,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
+from google.api import field_behavior_pb2 as google_dot_api_dot_field__behavior__pb2
 from type.v1beta1 import selector_pb2 as type_dot_v1beta1_dot_selector__pb2
 
 
@@ -21,9 +22,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.security.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\035istio.io/api/security/v1beta1'),
-  serialized_pb=_b('\n$security/v1beta1/authorization.proto\x12\x16istio.security.v1beta1\x1a\x1btype/v1beta1/selector.proto\"z\n\x13\x41uthorizationPolicy\x12\x36\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\x12+\n\x05rules\x18\x02 \x03(\x0b\x32\x1c.istio.security.v1beta1.Rule\"\x89\x02\n\x04Rule\x12/\n\x04\x66rom\x18\x01 \x03(\x0b\x32!.istio.security.v1beta1.Rule.From\x12+\n\x02to\x18\x02 \x03(\x0b\x32\x1f.istio.security.v1beta1.Rule.To\x12/\n\x04when\x18\x03 \x03(\x0b\x32!.istio.security.v1beta1.Condition\x1a\x36\n\x04\x46rom\x12.\n\x06source\x18\x01 \x01(\x0b\x32\x1e.istio.security.v1beta1.Source\x1a:\n\x02To\x12\x34\n\toperation\x18\x01 \x01(\x0b\x32!.istio.security.v1beta1.Operation\"_\n\x06Source\x12\x12\n\nprincipals\x18\x01 \x03(\t\x12\x1a\n\x12request_principals\x18\x02 \x03(\t\x12\x12\n\nnamespaces\x18\x03 \x03(\t\x12\x11\n\tip_blocks\x18\x04 \x03(\t\"I\n\tOperation\x12\r\n\x05hosts\x18\x01 \x03(\t\x12\r\n\x05ports\x18\x02 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\r\n\x05paths\x18\x04 \x03(\t\"(\n\tCondition\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x0e\n\x06values\x18\x02 \x03(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
+  serialized_pb=_b('\n$security/v1beta1/authorization.proto\x12\x16istio.security.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1btype/v1beta1/selector.proto\"z\n\x13\x41uthorizationPolicy\x12\x36\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\x12+\n\x05rules\x18\x02 \x03(\x0b\x32\x1c.istio.security.v1beta1.Rule\"\x89\x02\n\x04Rule\x12/\n\x04\x66rom\x18\x01 \x03(\x0b\x32!.istio.security.v1beta1.Rule.From\x12+\n\x02to\x18\x02 \x03(\x0b\x32\x1f.istio.security.v1beta1.Rule.To\x12/\n\x04when\x18\x03 \x03(\x0b\x32!.istio.security.v1beta1.Condition\x1a\x36\n\x04\x46rom\x12.\n\x06source\x18\x01 \x01(\x0b\x32\x1e.istio.security.v1beta1.Source\x1a:\n\x02To\x12\x34\n\toperation\x18\x01 \x01(\x0b\x32!.istio.security.v1beta1.Operation\"_\n\x06Source\x12\x12\n\nprincipals\x18\x01 \x03(\t\x12\x1a\n\x12request_principals\x18\x02 \x03(\t\x12\x12\n\nnamespaces\x18\x03 \x03(\t\x12\x11\n\tip_blocks\x18\x04 \x03(\t\"I\n\tOperation\x12\r\n\x05hosts\x18\x01 \x03(\t\x12\r\n\x05ports\x18\x02 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\r\n\x05paths\x18\x04 \x03(\t\"2\n\tCondition\x12\x10\n\x03key\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x13\n\x06values\x18\x02 \x03(\tB\x03\xe0\x41\x02\x42\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
   ,
-  dependencies=[type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
 
 
 
@@ -61,8 +62,8 @@ _AUTHORIZATIONPOLICY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=93,
-  serialized_end=215,
+  serialized_start=126,
+  serialized_end=248,
 )
 
 
@@ -92,8 +93,8 @@ _RULE_FROM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=369,
-  serialized_end=423,
+  serialized_start=402,
+  serialized_end=456,
 )
 
 _RULE_TO = _descriptor.Descriptor(
@@ -122,8 +123,8 @@ _RULE_TO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=425,
-  serialized_end=483,
+  serialized_start=458,
+  serialized_end=516,
 )
 
 _RULE = _descriptor.Descriptor(
@@ -166,8 +167,8 @@ _RULE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=218,
-  serialized_end=483,
+  serialized_start=251,
+  serialized_end=516,
 )
 
 
@@ -218,8 +219,8 @@ _SOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=485,
-  serialized_end=580,
+  serialized_start=518,
+  serialized_end=613,
 )
 
 
@@ -270,8 +271,8 @@ _OPERATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=582,
-  serialized_end=655,
+  serialized_start=615,
+  serialized_end=688,
 )
 
 
@@ -288,14 +289,14 @@ _CONDITION = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='values', full_name='istio.security.v1beta1.Condition.values', index=1,
       number=2, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -308,8 +309,8 @@ _CONDITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=657,
-  serialized_end=697,
+  serialized_start=690,
+  serialized_end=740,
 )
 
 _AUTHORIZATIONPOLICY.fields_by_name['selector'].message_type = type_dot_v1beta1_dot_selector__pb2._WORKLOADSELECTOR
@@ -381,4 +382,6 @@ _sym_db.RegisterMessage(Condition)
 
 
 DESCRIPTOR._options = None
+_CONDITION.fields_by_name['key']._options = None
+_CONDITION.fields_by_name['values']._options = None
 # @@protoc_insertion_point(module_scope)

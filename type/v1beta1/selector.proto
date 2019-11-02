@@ -13,6 +13,8 @@
 // limitations under the License.
 syntax = "proto3";
 
+import "google/api/field_behavior.proto";
+
 // $hide_from_docs
 // $title: Workload Selector
 // $description: Definition of a workload selector.
@@ -29,8 +31,8 @@ option go_package="istio.io/api/type/v1beta1";
 // specified, all conditions need to match in order for the workload instance to be
 // selected. Currently, only label based selection mechanism is supported.
 message WorkloadSelector {
-  // REQUIRED: One or more labels that indicate a specific set of pods/VMs
+  // One or more labels that indicate a specific set of pods/VMs
   // on which a policy should be applied. The scope of label search is restricted to
   // the configuration namespace in which the resource is present.
-  map<string, string> match_labels = 1;
+  map<string, string> match_labels = 1 [(google.api.field_behavior) = REQUIRED];
 }

@@ -56,6 +56,12 @@ message MeshConfig {
   // is false, i.e. Mixer policy check is enabled by default.
   bool disable_policy_checks = 3;
 
+  // $hide_from_docs
+  // Disable telemetry reporting by the Mixer service for HTTP traffic.
+  // Default is false (telemetry reporting via Mixer is enabled).
+  // This option provides a transition path for Istio extensibility v2.
+  bool disable_mixer_http_reports = 48;
+
   // Allow all traffic in cases when the Mixer policy service cannot be reached.
   // Default is false which means the traffic is denied when the client is unable
   // to connect to Mixer.
@@ -243,8 +249,17 @@ message MeshConfig {
 
   // The trust domain corresponds to the trust root of a system.
   // Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)
-  // Fallback to old identity format(without trust domain) if not set.
   string trust_domain = 26;
+
+  // The trust domain aliases represent the aliases of `trust_domain`.
+  // For example, if we have
+  // ```yaml
+  // trustDomain: td1
+  // trustDomainAliases: ["td2", "td3"]
+  // ```
+  // Any service with the identity `td1/ns/foo/sa/a-service-account`, `td2/ns/foo/sa/a-service-account`,
+  // or `td3/ns/foo/sa/a-service-account` will be treated the same in the Istio mesh.
+  repeated string trust_domain_aliases = 46;
 
   // The default value for the ServiceEntry.export_to field and services
   // imported through container registry integrations, e.g. this applies to
@@ -297,7 +312,7 @@ message MeshConfig {
   string root_namespace = 34;
 
   // Locality based load balancing distribution or failover settings.
-  LocalityLoadBalancerSetting locality_lb_setting = 35;
+  istio.networking.v1alpha3.LocalityLoadBalancerSetting locality_lb_setting = 35;
 
   // Configures DNS refresh rate for Envoy clusters of type STRICT_DNS
   google.protobuf.Duration dns_refresh_rate = 36;
@@ -331,7 +346,7 @@ message MeshConfig {
   // It can be enabled by destination using the destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy override.
   H2UpgradePolicy h2_upgrade_policy = 41;
 
-  // Name to be used while emitting statistics for inbound clusters. 
+  // Name to be used while emitting statistics for inbound clusters.
   // By default, Istio emits statistics with the pattern inbound|<port>|<port-name>|<service-FQDN>.
   // For example inbound|7443|grpc-reviews|reviews.prod.svc.cluster.local. This can be used to override that pattern.
   //
@@ -340,13 +355,13 @@ message MeshConfig {
   // %SERVICE_FQDN% - Will be substituted with FQDN of the service.
   // %SERVICE_PORT% - Will be substituted with port of the service.
   // %SERVICE_PORT_NAME% - Will be substituted with port name of the service.
-  //  
+  //
   // Following are some examples of supported patterns for reviews.
   // %SERVICE_FQDN%_%SERVICE_PORT% will use reviews.prod.svc.cluster.local_7443 as the stats name.
   // %SERVICE% will use reviews.prod as the stats name.
   string inbound_cluster_stat_name = 44;
 
-  // Name to be used while emitting statistics for outbound clusters. 
+  // Name to be used while emitting statistics for outbound clusters.
   // By default, Istio emits statistics with the pattern outbound|<port>|<subsetname>|<service-FQDN>.
   // For example outbound|8080|v2|reviews.prod.svc.cluster.local. This can be used to override that pattern.
   //
@@ -356,14 +371,17 @@ message MeshConfig {
   // %SERVICE_PORT% - Will be substituted with port of the service.
   // %SERVICE_PORT_NAME% - Will be substituted with port name of the service.
   // %SUBSET_NAME% - Will be substituted with subset.
-  //  
+  //
   // Following are some examples of supported patterns for reviews.
   // %SERVICE_FQDN%_%SERVICE_PORT% will use reviews.prod.svc.cluster.local_7443 as the stats name.
   // %SERVICE% will use reviews.prod as the stats name.
   string outbound_cluster_stat_name = 45;
 
+  // Configure the provision of certificates.
+  repeated Certificate certificates = 47;
+
   // $hide_from_docs
-  // Next available field number: 46
+  // Next available field number: 49
 }
 
 // Resource describes the source of configuration
@@ -390,96 +408,28 @@ message ConfigSource {
  repeated Resource subscribed_resources = 3;
 }
 
-// Locality-weighted load balancing allows administrators to control the
-// distribution of traffic to endpoints based on the localities of where the
-// traffic originates and where it will terminate. These localities are
-// specified using arbitrary labels that designate a hierarchy of localities in
-// {region}/{zone}/{sub-zone} form. For additional detail refer to
-// [Locality Weight](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)
-// The following example shows how to setup locality weights mesh-wide.
-//
-// Given a mesh with workloads and their service deployed to "us-west/zone1/*"
-// and "us-west/zone2/*". This example specifies that when traffic accessing a
-// service originates from workloads in "us-west/zone1/*", 80% of the traffic
-// will be sent to endpoints in "us-west/zone1/*", i.e the same zone, and the
-// remaining 20% will go to endpoints in "us-west/zone2/*". This setup is
-// intended to favor routing traffic to endpoints in the same locality.
-// A similar setting is specified for traffic originating in "us-west/zone2/*".
-//
-// ```yaml
-//   distribute:
-//     - from: us-west/zone1/*
-//       to:
-//         "us-west/zone1/*": 80
-//         "us-west/zone2/*": 20
-//     - from: us-west/zone2/*
-//       to:
-//         "us-west/zone1/*": 20
-//         "us-west/zone2/*": 80
-// ```
-//
-// If the goal of the operator is not to distribute load across zones and
-// regions but rather to restrict the regionality of failover to meet other
-// operational requirements an operator can set a 'failover' policy instead of
-// a 'distribute' policy.
-//
-// The following example sets up a locality failover policy for regions.
-// Assume a service resides in zones within us-east, us-west & eu-west
-// this example specifies that when endpoints within us-east become unhealthy
-// traffic should failover to endpoints in any zone or sub-zone within eu-west
-// and similarly us-west should failover to us-east.
-//
-// ```yaml
-//  failover:
-//    - from: us-east
-//      to: eu-west
-//    - from: us-west
-//      to: us-east
-// ```
-// Locality load balancing settings.
-message LocalityLoadBalancerSetting{
-  // Describes how traffic originating in the 'from' zone or sub-zone is
-  // distributed over a set of 'to' zones. Syntax for specifying a zone is
-  // {region}/{zone}/{sub-zone} and terminal wildcards are allowed on any
-  // segment of the specification. Examples:
-  // * - matches all localities
-  // us-west/* - all zones and sub-zones within the us-west region
-  // us-west/zone-1/* - all sub-zones within us-west/zone-1
-  message Distribute{
-      // Originating locality, '/' separated, e.g. 'region/zone/sub_zone'.
-      string from = 1;
 
-      // Map of upstream localities to traffic distribution weights. The sum of
-      // all weights should be == 100. Any locality not assigned a weight will
-      // receive no traffic.
-      map<string, uint32> to = 2;
-  };
 
-  // Specify the traffic failover policy across regions. Since zone and sub-zone
-  // failover is supported by default this only needs to be specified for
-  // regions when the operator needs to constrain traffic failover so that
-  // the default behavior of failing over to any endpoint globally does not
-  // apply. This is useful when failing over traffic across regions would not
-  // improve service health or may need to be restricted for other reasons
-  // like regulatory controls.
-  message Failover{
-      // Originating region.
-      string from = 1;
-
-      // Destination region the traffic will fail over to when endpoints in
-      // the 'from' region becomes unhealthy.
-      string to = 2;
-  };
-
-  // Optional: only one of distribute or failover can be set.
-  // Explicitly specify loadbalancing weight across different zones and geographical locations.
-  // Refer to [Locality weighted load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)
-  // If empty, the locality weight is set according to the endpoints number within it.
-  repeated Distribute distribute = 1;
-
-  // Optional: only failover or distribute can be set.
-  // Explicitly specify the region traffic will land on when endpoints in local region becomes unhealthy.
-  // Should be used together with OutlierDetection to detect unhealthy endpoints.
-  // Note: if no OutlierDetection specified, this will not take effect.
-  repeated Failover failover = 2;
+// Certificate configures the provision of a certificate and its key.
+// Example 1: key and cert stored in a secret
+// { secretName: galley-cert
+//   secretNamespace: istio-system
+//   dnsNames:
+//     - galley.istio-system.svc
+//     - galley.mydomain.com
+// }
+// Example 2: key and cert stored in a directory
+// { dnsNames:
+//     - pilot.istio-system
+//     - pilot.istio-system.svc
+//     - pilot.mydomain.com
+// }
+message Certificate {
+  // Name of the secret the certificate and its key will be stored into.
+  // If it is empty, it will not be stored into a secret.
+  // Instead, the certificate and its key will be stored into a hard-coded directory.
+  string secret_name = 1;
+  // The DNS names for the certificate. A certificate may contain
+  // multiple DNS names.
+  repeated string dns_names = 2;
 }

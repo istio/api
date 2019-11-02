@@ -14,6 +14,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
+from google.api import field_behavior_pb2 as google_dot_api_dot_field__behavior__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -21,8 +22,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.rbac.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\032istio.io/api/rbac/v1alpha1'),
-  serialized_pb=_b('\n\x18rbac/v1alpha1/rbac.proto\x12\x13istio.rbac.v1alpha1\"=\n\x0bServiceRole\x12.\n\x05rules\x18\x01 \x03(\x0b\x32\x1f.istio.rbac.v1alpha1.AccessRule\"\x96\x02\n\nAccessRule\x12\x10\n\x08services\x18\x01 \x03(\t\x12\r\n\x05hosts\x18\x05 \x03(\t\x12\x11\n\tnot_hosts\x18\x06 \x03(\t\x12\r\n\x05paths\x18\x02 \x03(\t\x12\x11\n\tnot_paths\x18\x07 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\x13\n\x0bnot_methods\x18\x08 \x03(\t\x12\r\n\x05ports\x18\t \x03(\x05\x12\x11\n\tnot_ports\x18\n \x03(\x05\x12?\n\x0b\x63onstraints\x18\x04 \x03(\x0b\x32*.istio.rbac.v1alpha1.AccessRule.Constraint\x1a)\n\nConstraint\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x0e\n\x06values\x18\x02 \x03(\t\"\xe7\x01\n\x12ServiceRoleBinding\x12.\n\x08subjects\x18\x01 \x03(\x0b\x32\x1c.istio.rbac.v1alpha1.Subject\x12-\n\x07roleRef\x18\x02 \x01(\x0b\x32\x1c.istio.rbac.v1alpha1.RoleRef\x12\x32\n\x04mode\x18\x03 \x01(\x0e\x32$.istio.rbac.v1alpha1.EnforcementMode\x12\x30\n\x07\x61\x63tions\x18\x04 \x03(\x0b\x32\x1f.istio.rbac.v1alpha1.AccessRule\x12\x0c\n\x04role\x18\x05 \x01(\t\"\xaf\x02\n\x07Subject\x12\x0c\n\x04user\x18\x01 \x01(\t\x12\r\n\x05names\x18\x04 \x03(\t\x12\x11\n\tnot_names\x18\x05 \x03(\t\x12\x11\n\x05group\x18\x02 \x01(\tB\x02\x18\x01\x12\x0e\n\x06groups\x18\x06 \x03(\t\x12\x12\n\nnot_groups\x18\x07 \x03(\t\x12\x12\n\nnamespaces\x18\x08 \x03(\t\x12\x16\n\x0enot_namespaces\x18\t \x03(\t\x12\x0b\n\x03ips\x18\n \x03(\t\x12\x0f\n\x07not_ips\x18\x0b \x03(\t\x12@\n\nproperties\x18\x03 \x03(\x0b\x32,.istio.rbac.v1alpha1.Subject.PropertiesEntry\x1a\x31\n\x0fPropertiesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"%\n\x07RoleRef\x12\x0c\n\x04kind\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\"\xed\x02\n\nRbacConfig\x12\x32\n\x04mode\x18\x01 \x01(\x0e\x32$.istio.rbac.v1alpha1.RbacConfig.Mode\x12\x39\n\tinclusion\x18\x02 \x01(\x0b\x32&.istio.rbac.v1alpha1.RbacConfig.Target\x12\x39\n\texclusion\x18\x03 \x01(\x0b\x32&.istio.rbac.v1alpha1.RbacConfig.Target\x12>\n\x10\x65nforcement_mode\x18\x04 \x01(\x0e\x32$.istio.rbac.v1alpha1.EnforcementMode\x1a.\n\x06Target\x12\x10\n\x08services\x18\x01 \x03(\t\x12\x12\n\nnamespaces\x18\x02 \x03(\t\"E\n\x04Mode\x12\x07\n\x03OFF\x10\x00\x12\x06\n\x02ON\x10\x01\x12\x15\n\x11ON_WITH_INCLUSION\x10\x02\x12\x15\n\x11ON_WITH_EXCLUSION\x10\x03*/\n\x0f\x45nforcementMode\x12\x0c\n\x08\x45NFORCED\x10\x00\x12\x0e\n\nPERMISSIVE\x10\x01\x42\x1cZ\x1aistio.io/api/rbac/v1alpha1b\x06proto3')
-)
+  serialized_pb=_b('\n\x18rbac/v1alpha1/rbac.proto\x12\x13istio.rbac.v1alpha1\x1a\x1fgoogle/api/field_behavior.proto\"B\n\x0bServiceRole\x12\x33\n\x05rules\x18\x01 \x03(\x0b\x32\x1f.istio.rbac.v1alpha1.AccessRuleB\x03\xe0\x41\x02\"\x9b\x02\n\nAccessRule\x12\x15\n\x08services\x18\x01 \x03(\tB\x03\xe0\x41\x02\x12\r\n\x05hosts\x18\x05 \x03(\t\x12\x11\n\tnot_hosts\x18\x06 \x03(\t\x12\r\n\x05paths\x18\x02 \x03(\t\x12\x11\n\tnot_paths\x18\x07 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\x13\n\x0bnot_methods\x18\x08 \x03(\t\x12\r\n\x05ports\x18\t \x03(\x05\x12\x11\n\tnot_ports\x18\n \x03(\x05\x12?\n\x0b\x63onstraints\x18\x04 \x03(\x0b\x32*.istio.rbac.v1alpha1.AccessRule.Constraint\x1a)\n\nConstraint\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x0e\n\x06values\x18\x02 \x03(\t\"\xf6\x01\n\x12ServiceRoleBinding\x12\x33\n\x08subjects\x18\x01 \x03(\x0b\x32\x1c.istio.rbac.v1alpha1.SubjectB\x03\xe0\x41\x02\x12\x32\n\x07roleRef\x18\x02 \x01(\x0b\x32\x1c.istio.rbac.v1alpha1.RoleRefB\x03\xe0\x41\x02\x12\x32\n\x04mode\x18\x03 \x01(\x0e\x32$.istio.rbac.v1alpha1.EnforcementMode\x12\x35\n\x07\x61\x63tions\x18\x04 \x03(\x0b\x32\x1f.istio.rbac.v1alpha1.AccessRuleB\x03\xe0\x41\x02\x12\x0c\n\x04role\x18\x05 \x01(\t\"\xaf\x02\n\x07Subject\x12\x0c\n\x04user\x18\x01 \x01(\t\x12\r\n\x05names\x18\x04 \x03(\t\x12\x11\n\tnot_names\x18\x05 \x03(\t\x12\x11\n\x05group\x18\x02 \x01(\tB\x02\x18\x01\x12\x0e\n\x06groups\x18\x06 \x03(\t\x12\x12\n\nnot_groups\x18\x07 \x03(\t\x12\x12\n\nnamespaces\x18\x08 \x03(\t\x12\x16\n\x0enot_namespaces\x18\t \x03(\t\x12\x0b\n\x03ips\x18\n \x03(\t\x12\x0f\n\x07not_ips\x18\x0b \x03(\t\x12@\n\nproperties\x18\x03 \x03(\x0b\x32,.istio.rbac.v1alpha1.Subject.PropertiesEntry\x1a\x31\n\x0fPropertiesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"/\n\x07RoleRef\x12\x11\n\x04kind\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x11\n\x04name\x18\x02 \x01(\tB\x03\xe0\x41\x02\"\xed\x02\n\nRbacConfig\x12\x32\n\x04mode\x18\x01 \x01(\x0e\x32$.istio.rbac.v1alpha1.RbacConfig.Mode\x12\x39\n\tinclusion\x18\x02 \x01(\x0b\x32&.istio.rbac.v1alpha1.RbacConfig.Target\x12\x39\n\texclusion\x18\x03 \x01(\x0b\x32&.istio.rbac.v1alpha1.RbacConfig.Target\x12>\n\x10\x65nforcement_mode\x18\x04 \x01(\x0e\x32$.istio.rbac.v1alpha1.EnforcementMode\x1a.\n\x06Target\x12\x10\n\x08services\x18\x01 \x03(\t\x12\x12\n\nnamespaces\x18\x02 \x03(\t\"E\n\x04Mode\x12\x07\n\x03OFF\x10\x00\x12\x06\n\x02ON\x10\x01\x12\x15\n\x11ON_WITH_INCLUSION\x10\x02\x12\x15\n\x11ON_WITH_EXCLUSION\x10\x03*/\n\x0f\x45nforcementMode\x12\x0c\n\x08\x45NFORCED\x10\x00\x12\x0e\n\nPERMISSIVE\x10\x01\x42\x1cZ\x1aistio.io/api/rbac/v1alpha1b\x06proto3')
+  ,
+  dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,])
 
 _ENFORCEMENTMODE = _descriptor.EnumDescriptor(
   name='EnforcementMode',
@@ -41,8 +43,8 @@ _ENFORCEMENTMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1340,
-  serialized_end=1387,
+  serialized_start=1408,
+  serialized_end=1455,
 )
 _sym_db.RegisterEnumDescriptor(_ENFORCEMENTMODE)
 
@@ -76,8 +78,8 @@ _RBACCONFIG_MODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1269,
-  serialized_end=1338,
+  serialized_start=1337,
+  serialized_end=1406,
 )
 _sym_db.RegisterEnumDescriptor(_RBACCONFIG_MODE)
 
@@ -95,7 +97,7 @@ _SERVICEROLE = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -108,8 +110,8 @@ _SERVICEROLE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=49,
-  serialized_end=110,
+  serialized_start=82,
+  serialized_end=148,
 )
 
 
@@ -146,8 +148,8 @@ _ACCESSRULE_CONSTRAINT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=350,
-  serialized_end=391,
+  serialized_start=393,
+  serialized_end=434,
 )
 
 _ACCESSRULE = _descriptor.Descriptor(
@@ -163,7 +165,7 @@ _ACCESSRULE = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='hosts', full_name='istio.rbac.v1alpha1.AccessRule.hosts', index=1,
       number=5, type=9, cpp_type=9, label=3,
@@ -239,8 +241,8 @@ _ACCESSRULE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=113,
-  serialized_end=391,
+  serialized_start=151,
+  serialized_end=434,
 )
 
 
@@ -257,14 +259,14 @@ _SERVICEROLEBINDING = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='roleRef', full_name='istio.rbac.v1alpha1.ServiceRoleBinding.roleRef', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='mode', full_name='istio.rbac.v1alpha1.ServiceRoleBinding.mode', index=2,
       number=3, type=14, cpp_type=8, label=1,
@@ -278,7 +280,7 @@ _SERVICEROLEBINDING = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='role', full_name='istio.rbac.v1alpha1.ServiceRoleBinding.role', index=4,
       number=5, type=9, cpp_type=9, label=1,
@@ -298,8 +300,8 @@ _SERVICEROLEBINDING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=394,
-  serialized_end=625,
+  serialized_start=437,
+  serialized_end=683,
 )
 
 
@@ -336,8 +338,8 @@ _SUBJECT_PROPERTIESENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=882,
-  serialized_end=931,
+  serialized_start=940,
+  serialized_end=989,
 )
 
 _SUBJECT = _descriptor.Descriptor(
@@ -436,8 +438,8 @@ _SUBJECT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=628,
-  serialized_end=931,
+  serialized_start=686,
+  serialized_end=989,
 )
 
 
@@ -454,14 +456,14 @@ _ROLEREF = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='name', full_name='istio.rbac.v1alpha1.RoleRef.name', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -474,8 +476,8 @@ _ROLEREF = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=933,
-  serialized_end=970,
+  serialized_start=991,
+  serialized_end=1038,
 )
 
 
@@ -512,8 +514,8 @@ _RBACCONFIG_TARGET = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1221,
-  serialized_end=1267,
+  serialized_start=1289,
+  serialized_end=1335,
 )
 
 _RBACCONFIG = _descriptor.Descriptor(
@@ -564,8 +566,8 @@ _RBACCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=973,
-  serialized_end=1338,
+  serialized_start=1041,
+  serialized_end=1406,
 )
 
 _SERVICEROLE.fields_by_name['rules'].message_type = _ACCESSRULE
@@ -660,6 +662,13 @@ _sym_db.RegisterMessage(RbacConfig.Target)
 
 
 DESCRIPTOR._options = None
+_SERVICEROLE.fields_by_name['rules']._options = None
+_ACCESSRULE.fields_by_name['services']._options = None
+_SERVICEROLEBINDING.fields_by_name['subjects']._options = None
+_SERVICEROLEBINDING.fields_by_name['roleRef']._options = None
+_SERVICEROLEBINDING.fields_by_name['actions']._options = None
 _SUBJECT_PROPERTIESENTRY._options = None
 _SUBJECT.fields_by_name['group']._options = None
+_ROLEREF.fields_by_name['kind']._options = None
+_ROLEREF.fields_by_name['name']._options = None
 # @@protoc_insertion_point(module_scope)

@@ -20,6 +20,7 @@ selected. Currently, only label based selection mechanism is supported.</p>
 <th>Field</th>
 <th>Type</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
@@ -27,10 +28,13 @@ selected. Currently, only label based selection mechanism is supported.</p>
 <td><code>matchLabels</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>REQUIRED: One or more labels that indicate a specific set of pods/VMs
+<p>One or more labels that indicate a specific set of pods/VMs
 on which a policy should be applied. The scope of label search is restricted to
 the configuration namespace in which the resource is present.</p>
 
+</td>
+<td>
+Yes
 </td>
 </tr>
 </tbody>

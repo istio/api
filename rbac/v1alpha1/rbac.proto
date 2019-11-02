@@ -14,6 +14,11 @@
 
 syntax = "proto3";
 
+import "google/api/field_behavior.proto";
+
+// $schema: istio.rbac.v1alpha1.RbacConfig
+// $schema: istio.rbac.v1alpha1.ServiceRole
+// $schema: istio.rbac.v1alpha1.ServiceRoleBinding
 // $title: RBAC
 // $description: Configuration for Role Based Access Control.
 // $location: https://istio.io/docs/reference/config/authorization/istio.rbac.v1alpha1.html
@@ -87,20 +92,27 @@ package istio.rbac.v1alpha1;
 option go_package="istio.io/api/rbac/v1alpha1";
 
 // ServiceRole specification contains a list of access rules (permissions).
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=rbac.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message ServiceRole {
-  // Required. The set of access rules (permissions) that the role has.
-  repeated AccessRule rules = 1;
+  // The set of access rules (permissions) that the role has.
+  repeated AccessRule rules = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 // AccessRule defines a permission to access a list of services.
 message AccessRule {
-  // Required. A list of service names.
+  // A list of service names.
   // Exact match, prefix match, and suffix match are supported for service names.
   // For example, the service name "bookstore.mtv.cluster.local" matches
   // "bookstore.mtv.cluster.local" (exact match), or "bookstore\*" (prefix match),
   // or "\*.mtv.cluster.local" (suffix match).
   // If set to ["\*"], it refers to all services in the namespace.
-  repeated string services = 1;
+  repeated string services = 1 [(google.api.field_behavior) = REQUIRED];
 
   // $hide_from_docs
   // Optional. A list of HTTP hosts. This is matched against the HOST header in
@@ -186,12 +198,19 @@ enum EnforcementMode {
 }
 
 // ServiceRoleBinding assigns a ServiceRole to a list of subjects.
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=rbac.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message ServiceRoleBinding {
-  // Required. List of subjects that are assigned the ServiceRole object.
-  repeated Subject subjects = 1;
+  // List of subjects that are assigned the ServiceRole object.
+  repeated Subject subjects = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. Reference to the ServiceRole object.
-  RoleRef roleRef = 2;
+  // Reference to the ServiceRole object.
+  RoleRef roleRef = 2 [(google.api.field_behavior) = REQUIRED];
 
   // $hide_from_docs
   // Indicates enforcement mode of the ServiceRoleBinding.
@@ -222,8 +241,8 @@ message ServiceRoleBinding {
   //    actions:
   //    - paths: ["/info"]
   //      methods: ["GET"]
-  // Required. The set of access rules (permissions) that the role has.
-  repeated AccessRule actions = 4;
+  // The set of access rules (permissions) that the role has.
+  repeated AccessRule actions = 4 [(google.api.field_behavior) = REQUIRED];
 
   // $hide_from_docs
   // A `role` inside a ServiceRoleBinding refers to the ServiceRole that this
@@ -295,17 +314,17 @@ message Subject {
 
 // RoleRef refers to a role object.
 message RoleRef {
-  // Required. The type of the role being referenced.
+  // The type of the role being referenced.
   // Currently, "ServiceRole" is the only supported value for "kind".
-  string kind = 1;
+  string kind = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // Required. The name of the ServiceRole object being referenced.
+  // The name of the ServiceRole object being referenced.
   // The ServiceRole object must be in the same namespace as the ServiceRoleBinding object.
-  string name = 2;
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
-// RbacConfig implements the ClusterRbaConfig Custom Resource Definition for controlling Istio RBAC behavior.
-// The ClusterRbaConfig Custom Resource is a singleton where only one ClusterRbaConfig should be created
+// RbacConfig implements the ClusterRbacConfig Custom Resource Definition for controlling Istio RBAC behavior.
+// The ClusterRbacConfig Custom Resource is a singleton where only one ClusterRbacConfig should be created
 // globally in the mesh and the namespace should be the same to other Istio components, which usually is `istio-system`.
 //
 // Below is an example of an `ClusterRbacConfig` resource called `istio-rbac-config` which enables Istio RBAC for all
@@ -322,6 +341,16 @@ message RoleRef {
 //   inclusion:
 //     namespaces: [ "default" ]
 // ```
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=rbac.istio.io/v1alpha1
+// +kubetype-gen:kubeType=RbacConfig
+// +kubetype-gen:kubeType=ClusterRbacConfig
+// +kubetype-gen:ClusterRbacConfig:tag=genclient:nonNamespaced
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message RbacConfig {
   enum Mode {
     // Disable Istio RBAC completely, Istio RBAC policies will not be enforced.

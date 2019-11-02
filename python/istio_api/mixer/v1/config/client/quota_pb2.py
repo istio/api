@@ -14,6 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 from gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
+from google.api import field_behavior_pb2 as google_dot_api_dot_field__behavior__pb2
 from mixer.v1.config.client import service_pb2 as mixer_dot_v1_dot_config_dot_client_dot_service__pb2
 
 
@@ -22,9 +23,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.mixer.v1.config.client',
   syntax='proto3',
   serialized_options=_b('Z#istio.io/api/mixer/v1/config/client\310\341\036\000\250\342\036\000\360\341\036\000\330\342\036\001'),
-  serialized_pb=_b('\n\"mixer/v1/config/client/quota.proto\x12\x1cistio.mixer.v1.config.client\x1a\x14gogoproto/gogo.proto\x1a$mixer/v1/config/client/service.proto\"C\n\tQuotaSpec\x12\x36\n\x05rules\x18\x01 \x03(\x0b\x32\'.istio.mixer.v1.config.client.QuotaRule\"}\n\tQuotaRule\x12;\n\x05match\x18\x01 \x03(\x0b\x32,.istio.mixer.v1.config.client.AttributeMatch\x12\x33\n\x06quotas\x18\x02 \x03(\x0b\x32#.istio.mixer.v1.config.client.Quota\"O\n\x0bStringMatch\x12\x0f\n\x05\x65xact\x18\x01 \x01(\tH\x00\x12\x10\n\x06prefix\x18\x02 \x01(\tH\x00\x12\x0f\n\x05regex\x18\x03 \x01(\tH\x00\x42\x0c\n\nmatch_type\"\xb4\x01\n\x0e\x41ttributeMatch\x12H\n\x06\x63lause\x18\x01 \x03(\x0b\x32\x38.istio.mixer.v1.config.client.AttributeMatch.ClauseEntry\x1aX\n\x0b\x43lauseEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x38\n\x05value\x18\x02 \x01(\x0b\x32).istio.mixer.v1.config.client.StringMatch:\x02\x38\x01\"&\n\x05Quota\x12\r\n\x05quota\x18\x01 \x01(\t\x12\x0e\n\x06\x63harge\x18\x02 \x01(\x03\"\xdf\x01\n\x10QuotaSpecBinding\x12<\n\x08services\x18\x01 \x03(\x0b\x32*.istio.mixer.v1.config.client.IstioService\x12V\n\x0bquota_specs\x18\x02 \x03(\x0b\x32\x41.istio.mixer.v1.config.client.QuotaSpecBinding.QuotaSpecReference\x1a\x35\n\x12QuotaSpecReference\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tnamespace\x18\x02 \x01(\tB5Z#istio.io/api/mixer/v1/config/client\xc8\xe1\x1e\x00\xa8\xe2\x1e\x00\xf0\xe1\x1e\x00\xd8\xe2\x1e\x01\x62\x06proto3')
+  serialized_pb=_b('\n\"mixer/v1/config/client/quota.proto\x12\x1cistio.mixer.v1.config.client\x1a\x14gogoproto/gogo.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a$mixer/v1/config/client/service.proto\"C\n\tQuotaSpec\x12\x36\n\x05rules\x18\x01 \x03(\x0b\x32\'.istio.mixer.v1.config.client.QuotaRule\"}\n\tQuotaRule\x12;\n\x05match\x18\x01 \x03(\x0b\x32,.istio.mixer.v1.config.client.AttributeMatch\x12\x33\n\x06quotas\x18\x02 \x03(\x0b\x32#.istio.mixer.v1.config.client.Quota\"O\n\x0bStringMatch\x12\x0f\n\x05\x65xact\x18\x01 \x01(\tH\x00\x12\x10\n\x06prefix\x18\x02 \x01(\tH\x00\x12\x0f\n\x05regex\x18\x03 \x01(\tH\x00\x42\x0c\n\nmatch_type\"\xb4\x01\n\x0e\x41ttributeMatch\x12H\n\x06\x63lause\x18\x01 \x03(\x0b\x32\x38.istio.mixer.v1.config.client.AttributeMatch.ClauseEntry\x1aX\n\x0b\x43lauseEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x38\n\x05value\x18\x02 \x01(\x0b\x32).istio.mixer.v1.config.client.StringMatch:\x02\x38\x01\"&\n\x05Quota\x12\r\n\x05quota\x18\x01 \x01(\t\x12\x0e\n\x06\x63harge\x18\x02 \x01(\x05\"\xee\x01\n\x10QuotaSpecBinding\x12\x41\n\x08services\x18\x01 \x03(\x0b\x32*.istio.mixer.v1.config.client.IstioServiceB\x03\xe0\x41\x02\x12[\n\x0bquota_specs\x18\x02 \x03(\x0b\x32\x41.istio.mixer.v1.config.client.QuotaSpecBinding.QuotaSpecReferenceB\x03\xe0\x41\x02\x1a:\n\x12QuotaSpecReference\x12\x11\n\x04name\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x11\n\tnamespace\x18\x02 \x01(\tB5Z#istio.io/api/mixer/v1/config/client\xc8\xe1\x1e\x00\xa8\xe2\x1e\x00\xf0\xe1\x1e\x00\xd8\xe2\x1e\x01\x62\x06proto3')
   ,
-  dependencies=[gogoproto_dot_gogo__pb2.DESCRIPTOR,mixer_dot_v1_dot_config_dot_client_dot_service__pb2.DESCRIPTOR,])
+  dependencies=[gogoproto_dot_gogo__pb2.DESCRIPTOR,google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,mixer_dot_v1_dot_config_dot_client_dot_service__pb2.DESCRIPTOR,])
 
 
 
@@ -55,8 +56,8 @@ _QUOTASPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=128,
-  serialized_end=195,
+  serialized_start=161,
+  serialized_end=228,
 )
 
 
@@ -93,8 +94,8 @@ _QUOTARULE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=197,
-  serialized_end=322,
+  serialized_start=230,
+  serialized_end=355,
 )
 
 
@@ -141,8 +142,8 @@ _STRINGMATCH = _descriptor.Descriptor(
       name='match_type', full_name='istio.mixer.v1.config.client.StringMatch.match_type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=324,
-  serialized_end=403,
+  serialized_start=357,
+  serialized_end=436,
 )
 
 
@@ -179,8 +180,8 @@ _ATTRIBUTEMATCH_CLAUSEENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=498,
-  serialized_end=586,
+  serialized_start=531,
+  serialized_end=619,
 )
 
 _ATTRIBUTEMATCH = _descriptor.Descriptor(
@@ -209,8 +210,8 @@ _ATTRIBUTEMATCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=406,
-  serialized_end=586,
+  serialized_start=439,
+  serialized_end=619,
 )
 
 
@@ -230,7 +231,7 @@ _QUOTA = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='charge', full_name='istio.mixer.v1.config.client.Quota.charge', index=1,
-      number=2, type=3, cpp_type=2, label=1,
+      number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -247,8 +248,8 @@ _QUOTA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=588,
-  serialized_end=626,
+  serialized_start=621,
+  serialized_end=659,
 )
 
 
@@ -265,7 +266,7 @@ _QUOTASPECBINDING_QUOTASPECREFERENCE = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='namespace', full_name='istio.mixer.v1.config.client.QuotaSpecBinding.QuotaSpecReference.namespace', index=1,
       number=2, type=9, cpp_type=9, label=1,
@@ -285,8 +286,8 @@ _QUOTASPECBINDING_QUOTASPECREFERENCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=799,
-  serialized_end=852,
+  serialized_start=842,
+  serialized_end=900,
 )
 
 _QUOTASPECBINDING = _descriptor.Descriptor(
@@ -302,14 +303,14 @@ _QUOTASPECBINDING = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='quota_specs', full_name='istio.mixer.v1.config.client.QuotaSpecBinding.quota_specs', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -322,8 +323,8 @@ _QUOTASPECBINDING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=629,
-  serialized_end=852,
+  serialized_start=662,
+  serialized_end=900,
 )
 
 _QUOTASPEC.fields_by_name['rules'].message_type = _QUOTARULE
@@ -413,4 +414,7 @@ _sym_db.RegisterMessage(QuotaSpecBinding.QuotaSpecReference)
 
 DESCRIPTOR._options = None
 _ATTRIBUTEMATCH_CLAUSEENTRY._options = None
+_QUOTASPECBINDING_QUOTASPECREFERENCE.fields_by_name['name']._options = None
+_QUOTASPECBINDING.fields_by_name['services']._options = None
+_QUOTASPECBINDING.fields_by_name['quota_specs']._options = None
 # @@protoc_insertion_point(module_scope)
