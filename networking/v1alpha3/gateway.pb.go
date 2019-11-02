@@ -177,11 +177,12 @@ package v1alpha3
 
 import (
 	fmt "fmt"
-	proto "github.com/gogo/protobuf/proto"
 	io "io"
-	_ "istio.io/gogo-genproto/googleapis/google/api"
 	math "math"
 	math_bits "math/bits"
+
+	proto "github.com/gogo/protobuf/proto"
+	_ "istio.io/gogo-genproto/googleapis/google/api"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -547,21 +548,21 @@ func (m *Server) GetDefaultEndpoint() string {
 type Server_TLSOptions struct {
 	// If set to true, the load balancer will send a 301 redirect for all
 	// http connections, asking the clients to use HTTPS.
-	HttpsRedirect bool `protobuf:"varint,1,opt,name=https_redirect,json=httpsRedirect,proto3" json:"https_redirect,omitempty"`
+	HttpsRedirect *bool `protobuf:"varint,1,opt,name=https_redirect,json=httpsRedirect,proto3" json:"https_redirect,omitempty"`
 	// Optional: Indicates whether connections to this port should be
 	// secured using TLS. The value of this field determines how TLS is
 	// enforced.
-	Mode Server_TLSOptions_TLSmode `protobuf:"varint,2,opt,name=mode,proto3,enum=istio.networking.v1alpha3.Server_TLSOptions_TLSmode" json:"mode,omitempty"`
+	Mode *Server_TLSOptions_TLSmode `protobuf:"varint,2,opt,name=mode,proto3,enum=istio.networking.v1alpha3.Server_TLSOptions_TLSmode" json:"mode,omitempty"`
 	// REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
 	// holding the server-side TLS certificate to use.
-	ServerCertificate string `protobuf:"bytes,3,opt,name=server_certificate,json=serverCertificate,proto3" json:"server_certificate,omitempty"`
+	ServerCertificate *string `protobuf:"bytes,3,opt,name=server_certificate,json=serverCertificate,proto3" json:"server_certificate,omitempty"`
 	// REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file
 	// holding the server's private key.
-	PrivateKey string `protobuf:"bytes,4,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
+	PrivateKey *string `protobuf:"bytes,4,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
 	// REQUIRED if mode is `MUTUAL`. The path to a file containing
 	// certificate authority certificates to use in verifying a presented
 	// client side certificate.
-	CaCertificates string `protobuf:"bytes,5,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
+	CaCertificates *string `protobuf:"bytes,5,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
 	// The credentialName stands for a unique identifier that can be used
 	// to identify the serverCertificate and the privateKey. The
 	// credentialName appended with suffix "-cacert" is used to identify
@@ -578,33 +579,33 @@ type Server_TLSOptions struct {
 	// key, and the CA certificate (if using mutual TLS). Set the
 	// `ISTIO_META_USER_SDS` metadata variable in the gateway's proxy to
 	// enable the dynamic credential fetching feature.
-	CredentialName string `protobuf:"bytes,10,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
+	CredentialName *string `protobuf:"bytes,10,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
 	// A list of alternate names to verify the subject identity in the
 	// certificate presented by the client.
-	SubjectAltNames []string `protobuf:"bytes,6,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
+	SubjectAltNames *[]string `protobuf:"bytes,6,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
 	// An optional list of base64-encoded SHA-256 hashes of the SKPIs of
 	// authorized client certificates.
 	// Note: When both verify_certificate_hash and verify_certificate_spki
 	// are specified, a hash matching either value will result in the
 	// certificate being accepted.
-	VerifyCertificateSpki []string `protobuf:"bytes,11,rep,name=verify_certificate_spki,json=verifyCertificateSpki,proto3" json:"verify_certificate_spki,omitempty"`
+	VerifyCertificateSpki *[]string `protobuf:"bytes,11,rep,name=verify_certificate_spki,json=verifyCertificateSpki,proto3" json:"verify_certificate_spki,omitempty"`
 	// An optional list of hex-encoded SHA-256 hashes of the
 	// authorized client certificates. Both simple and colon separated
 	// formats are acceptable.
 	// Note: When both verify_certificate_hash and verify_certificate_spki
 	// are specified, a hash matching either value will result in the
 	// certificate being accepted.
-	VerifyCertificateHash []string `protobuf:"bytes,12,rep,name=verify_certificate_hash,json=verifyCertificateHash,proto3" json:"verify_certificate_hash,omitempty"`
+	VerifyCertificateHash *[]string `protobuf:"bytes,12,rep,name=verify_certificate_hash,json=verifyCertificateHash,proto3" json:"verify_certificate_hash,omitempty"`
 	// Optional: Minimum TLS protocol version.
-	MinProtocolVersion Server_TLSOptions_TLSProtocol `protobuf:"varint,7,opt,name=min_protocol_version,json=minProtocolVersion,proto3,enum=istio.networking.v1alpha3.Server_TLSOptions_TLSProtocol" json:"min_protocol_version,omitempty"`
+	MinProtocolVersion *Server_TLSOptions_TLSProtocol `protobuf:"varint,7,opt,name=min_protocol_version,json=minProtocolVersion,proto3,enum=istio.networking.v1alpha3.Server_TLSOptions_TLSProtocol" json:"min_protocol_version,omitempty"`
 	// Optional: Maximum TLS protocol version.
-	MaxProtocolVersion Server_TLSOptions_TLSProtocol `protobuf:"varint,8,opt,name=max_protocol_version,json=maxProtocolVersion,proto3,enum=istio.networking.v1alpha3.Server_TLSOptions_TLSProtocol" json:"max_protocol_version,omitempty"`
+	MaxProtocolVersion *Server_TLSOptions_TLSProtocol `protobuf:"varint,8,opt,name=max_protocol_version,json=maxProtocolVersion,proto3,enum=istio.networking.v1alpha3.Server_TLSOptions_TLSProtocol" json:"max_protocol_version,omitempty"`
 	// Optional: If specified, only support the specified cipher list.
 	// Otherwise default to the default cipher list supported by Envoy.
-	CipherSuites         []string `protobuf:"bytes,9,rep,name=cipher_suites,json=cipherSuites,proto3" json:"cipher_suites,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	CipherSuites         *[]string `protobuf:"bytes,9,rep,name=cipher_suites,json=cipherSuites,proto3" json:"cipher_suites,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *Server_TLSOptions) Reset()         { *m = Server_TLSOptions{} }
