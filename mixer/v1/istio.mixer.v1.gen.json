@@ -438,7 +438,7 @@
         "type": "object",
         "properties": {
           "attributes": {
-            "description": "The attributes to use for this request.",
+            "description": "next value: 5",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.mixer.v1.CompressedAttributes"
