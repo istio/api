@@ -74,7 +74,7 @@ var (
 	
 		OperatorInstallOwnerGeneration = Instance {
           Name: "install.operator.istio.io/owner-generation",
-          Description: "Represents the generate to which the resource was last "+
+          Description: "Represents the generation to which the resource was last "+
                         "reconciled.",
           Hidden: false,
           Deprecated: false,
@@ -83,7 +83,7 @@ var (
 	
 		OperatorInstallVersion = Instance {
           Name: "install.operator.istio.io/version",
-          Description: "Represents the Istio version associate with the resource",
+          Description: "Represents the Istio version associated with the resource",
           Hidden: false,
           Deprecated: false,
 		  Resources: []ResourceTypes{ Any, },
