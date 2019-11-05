@@ -319,13 +319,13 @@ annotations:
     resources:
       - Any
   - name: install.operator.istio.io/owner-generation
-    description: Represents the generate to which the resource was last reconciled.
+    description: Represents the generation to which the resource was last reconciled.
     deprecated: false
     hidden: false
     resources:
       - Any
   - name: install.operator.istio.io/version
-    description: Represents the Istio version associate with the resource
+    description: Represents the Istio version associated with the resource
     deprecated: false
     hidden: false
     resources:
