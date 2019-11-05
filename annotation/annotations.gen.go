@@ -7,6 +7,7 @@ type ResourceTypes int
 
 const (
 	Unknown ResourceTypes = iota
+    Any
     Ingress
     Pod
     Service
@@ -60,6 +61,32 @@ var (
           Hidden: true,
           Deprecated: false,
 		  Resources: []ResourceTypes{ Service, },
+        }
+	
+		OperatorInstallChartOwner = Instance {
+          Name: "install.operator.istio.io/chart-owner",
+          Description: "Represents the name of the chart used to create this "+
+                        "resource.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Any, },
+        }
+	
+		OperatorInstallOwnerGeneration = Instance {
+          Name: "install.operator.istio.io/owner-generation",
+          Description: "Represents the generate to which the resource was last "+
+                        "reconciled.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Any, },
+        }
+	
+		OperatorInstallVersion = Instance {
+          Name: "install.operator.istio.io/version",
+          Description: "Represents the Istio version associate with the resource",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Any, },
         }
 	
 		IoKubernetesIngressClass = Instance {
