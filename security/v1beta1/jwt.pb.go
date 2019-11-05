@@ -54,7 +54,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type JWT struct {
 	// Identifies the issuer that issued the JWT. See
 	// [issuer](https://tools.ietf.org/html/rfc7519#section-4.1.1)
-	// Usually a URL or an email address.
+	// A JWT with different `iss` claim will be rejected.
 	//
 	// Example: https://foobar.auth0.com
 	// Example: 1234567-compute@developer.gserviceaccount.com

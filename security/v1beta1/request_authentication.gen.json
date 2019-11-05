@@ -11,7 +11,7 @@
         "type": "object",
         "properties": {
           "issuer": {
-            "description": "Identifies the issuer that issued the JWT. See [issuer](https://tools.ietf.org/html/rfc7519#section-4.1.1) Usually a URL or an email address.",
+            "description": "Identifies the issuer that issued the JWT. See [issuer](https://tools.ietf.org/html/rfc7519#section-4.1.1) A JWT with different `iss` claim will be rejected.",
             "type": "string",
             "format": "string"
           },
