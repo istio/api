@@ -463,3 +463,63 @@ var (
         }
 	
 )
+
+func AllResourceAnnotations() []*Instance {
+	return []*Instance {
+		&AlphaCanonicalServiceAccounts,
+		&AlphaIdentity,
+		&AlphaKubernetesServiceAccounts,
+		&OperatorInstallChartOwner,
+		&OperatorInstallOwnerGeneration,
+		&OperatorInstallVersion,
+		&IoKubernetesIngressClass,
+		&AlphaNetworkingEndpointsVersion,
+		&AlphaNetworkingNotReadyEndpoints,
+		&AlphaNetworkingServiceVersion,
+		&NetworkingExportTo,
+		&PolicyCheck,
+		&PolicyCheckBaseRetryWaitTime,
+		&PolicyCheckMaxRetryWaitTime,
+		&PolicyCheckRetries,
+		&PolicyLang,
+		&SidecarStatusReadinessApplicationPorts,
+		&SidecarStatusReadinessFailureThreshold,
+		&SidecarStatusReadinessInitialDelaySeconds,
+		&SidecarStatusReadinessPeriodSeconds,
+		&SecurityAutoMTLS,
+		&SidecarBootstrapOverride,
+		&SidecarComponentLogLevel,
+		&SidecarControlPlaneAuthPolicy,
+		&SidecarDiscoveryAddress,
+		&SidecarInject,
+		&SidecarInterceptionMode,
+		&SidecarLogLevel,
+		&SidecarProxyCPU,
+		&SidecarProxyImage,
+		&SidecarProxyMemory,
+		&SidecarRewriteAppHTTPProbers,
+		&SidecarStatsInclusionPrefixes,
+		&SidecarStatsInclusionRegexps,
+		&SidecarStatsInclusionSuffixes,
+		&SidecarStatus,
+		&SidecarUserVolume,
+		&SidecarUserVolumeMount,
+		&SidecarStatusPort,
+		&SidecarTrafficExcludeInboundPorts,
+		&SidecarTrafficExcludeOutboundIPRanges,
+		&SidecarTrafficExcludeOutboundPorts,
+		&SidecarTrafficIncludeInboundPorts,
+		&SidecarTrafficIncludeOutboundIPRanges,
+		&SidecarTrafficKubevirtInterfaces,
+	}
+}
+
+func AllResourceTypes() []string {
+	return []string {
+		"Any",
+		"Ingress",
+		"Pod",
+		"Service",
+		"ServiceEntry",
+	}
+}
