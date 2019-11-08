@@ -19,10 +19,12 @@ var _ = math.Inf
 
 // DeepCopyInto supports using HTTPAPISpec within kubernetes types, where deepcopy-gen is used.
 func (in *HTTPAPISpec) DeepCopyInto(out *HTTPAPISpec) {
-	proto.Merge(out, in)
+	p := proto.Clone(in).(*HTTPAPISpec)
+	*out = *p
 }
 
 // DeepCopyInto supports using HTTPAPISpecBinding within kubernetes types, where deepcopy-gen is used.
 func (in *HTTPAPISpecBinding) DeepCopyInto(out *HTTPAPISpecBinding) {
-	proto.Merge(out, in)
+	p := proto.Clone(in).(*HTTPAPISpecBinding)
+	*out = *p
 }

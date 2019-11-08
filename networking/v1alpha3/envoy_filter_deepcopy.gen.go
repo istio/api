@@ -195,5 +195,6 @@ var _ = math.Inf
 
 // DeepCopyInto supports using EnvoyFilter within kubernetes types, where deepcopy-gen is used.
 func (in *EnvoyFilter) DeepCopyInto(out *EnvoyFilter) {
-	proto.Merge(out, in)
+	p := proto.Clone(in).(*EnvoyFilter)
+	*out = *p
 }

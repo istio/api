@@ -120,5 +120,6 @@ var _ = math.Inf
 
 // DeepCopyInto supports using AuthorizationPolicy within kubernetes types, where deepcopy-gen is used.
 func (in *AuthorizationPolicy) DeepCopyInto(out *AuthorizationPolicy) {
-	proto.Merge(out, in)
+	p := proto.Clone(in).(*AuthorizationPolicy)
+	*out = *p
 }

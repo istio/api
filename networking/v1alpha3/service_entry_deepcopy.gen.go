@@ -330,5 +330,6 @@ var _ = math.Inf
 
 // DeepCopyInto supports using ServiceEntry within kubernetes types, where deepcopy-gen is used.
 func (in *ServiceEntry) DeepCopyInto(out *ServiceEntry) {
-	proto.Merge(out, in)
+	p := proto.Clone(in).(*ServiceEntry)
+	*out = *p
 }

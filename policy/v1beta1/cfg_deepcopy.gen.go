@@ -19,20 +19,24 @@ var _ = math.Inf
 
 // DeepCopyInto supports using AttributeManifest within kubernetes types, where deepcopy-gen is used.
 func (in *AttributeManifest) DeepCopyInto(out *AttributeManifest) {
-	proto.Merge(out, in)
+	p := proto.Clone(in).(*AttributeManifest)
+	*out = *p
 }
 
 // DeepCopyInto supports using Rule within kubernetes types, where deepcopy-gen is used.
 func (in *Rule) DeepCopyInto(out *Rule) {
-	proto.Merge(out, in)
+	p := proto.Clone(in).(*Rule)
+	*out = *p
 }
 
 // DeepCopyInto supports using Instance within kubernetes types, where deepcopy-gen is used.
 func (in *Instance) DeepCopyInto(out *Instance) {
-	proto.Merge(out, in)
+	p := proto.Clone(in).(*Instance)
+	*out = *p
 }
 
 // DeepCopyInto supports using Handler within kubernetes types, where deepcopy-gen is used.
 func (in *Handler) DeepCopyInto(out *Handler) {
-	proto.Merge(out, in)
+	p := proto.Clone(in).(*Handler)
+	*out = *p
 }
