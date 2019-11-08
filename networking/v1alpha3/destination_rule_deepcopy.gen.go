@@ -90,5 +90,6 @@ var _ = math.Inf
 
 // DeepCopyInto supports using DestinationRule within kubernetes types, where deepcopy-gen is used.
 func (in *DestinationRule) DeepCopyInto(out *DestinationRule) {
-	proto.Merge(out, in)
+	p := proto.Clone(in).(*DestinationRule)
+	*out = *p
 }

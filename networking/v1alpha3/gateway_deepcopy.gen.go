@@ -189,5 +189,6 @@ var _ = math.Inf
 
 // DeepCopyInto supports using Gateway within kubernetes types, where deepcopy-gen is used.
 func (in *Gateway) DeepCopyInto(out *Gateway) {
-	proto.Merge(out, in)
+	p := proto.Clone(in).(*Gateway)
+	*out = *p
 }

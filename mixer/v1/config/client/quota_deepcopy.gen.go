@@ -18,10 +18,12 @@ var _ = math.Inf
 
 // DeepCopyInto supports using QuotaSpec within kubernetes types, where deepcopy-gen is used.
 func (in *QuotaSpec) DeepCopyInto(out *QuotaSpec) {
-	proto.Merge(out, in)
+	p := proto.Clone(in).(*QuotaSpec)
+	*out = *p
 }
 
 // DeepCopyInto supports using QuotaSpecBinding within kubernetes types, where deepcopy-gen is used.
 func (in *QuotaSpecBinding) DeepCopyInto(out *QuotaSpecBinding) {
-	proto.Merge(out, in)
+	p := proto.Clone(in).(*QuotaSpecBinding)
+	*out = *p
 }
