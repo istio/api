@@ -220,5 +220,6 @@ var _ = math.Inf
 
 // DeepCopyInto supports using Sidecar within kubernetes types, where deepcopy-gen is used.
 func (in *Sidecar) DeepCopyInto(out *Sidecar) {
-	proto.Merge(out, in)
+	p := proto.Clone(in).(*Sidecar)
+	*out = *p
 }
