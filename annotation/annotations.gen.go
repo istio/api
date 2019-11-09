@@ -14,6 +14,22 @@ const (
     ServiceEntry
 )
 
+func (r ResourceTypes) String() string {
+	switch r {
+	case 1:
+		return "Any"
+	case 2:
+		return "Ingress"
+	case 3:
+		return "Pod"
+	case 4:
+		return "Service"
+	case 5:
+		return "ServiceEntry"
+	}
+	return "Unknown"
+}
+
 // Instance describes a single resource annotation
 type Instance struct {
 	// The name of the annotation.
