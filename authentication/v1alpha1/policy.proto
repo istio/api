@@ -17,8 +17,9 @@ syntax = "proto3";
 // $schema: istio.authentication.v1alpha1.Policy
 // $title: Authentication Policy
 // $description: Authentication policy for Istio services.
-// $location: https://istio.io/docs/reference/config/istio.authentication.v1alpha1.html
-// $weight: 29
+// $location: https://istio.io/docs/reference/config/security/istio.authentication.v1alpha1.html
+// $weight: 10
+// $aliases: [/docs/reference/config/istio.authentication.v1alpha1.html]
 
 // This package defines user-facing authentication policy.
 package istio.authentication.v1alpha1;
