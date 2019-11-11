@@ -19,9 +19,10 @@ import "google/protobuf/wrappers.proto";
 import "mesh/v1alpha1/proxy.proto";
 import "networking/v1alpha3/destination_rule.proto";
 
-// $title: Service Mesh
+// $title: Global Mesh Options
 // $description: Configuration affecting the service mesh as a whole.
 // $location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
+// $weight: 20
 
 // Configuration affecting the service mesh as a whole.
 package istio.mesh.v1alpha1;
