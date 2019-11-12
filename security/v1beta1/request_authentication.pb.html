@@ -120,7 +120,7 @@ No
 </tr>
 <tr id="JWT-from_headers">
 <td><code>fromHeaders</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/security/v1beta1/authorization-policy.html#JWTHeader">JWTHeader[]</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/security/authorization-policy.html#JWTHeader">JWTHeader[]</a></code></td>
 <td>
 <p>List of header locations from which JWT is expected. For example, below is the location spec
 if JWT is expected to be found in <code>x-goog-iap-jwt-assertion</code> header, and have &ldquo;Bearer &rdquo; prefix:</p>
@@ -282,7 +282,7 @@ No
 </tr>
 <tr id="RequestAuthentication-jwt_rules">
 <td><code>jwtRules</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/security/v1beta1/authorization-policy.html#JWT">JWT[]</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/security/authorization-policy.html#JWT">JWT[]</a></code></td>
 <td>
 <p>Define the list of JWTs that can be validated at the selected workloads&rsquo; proxy. A valid token
 will be used to extract the authenticated identity.
