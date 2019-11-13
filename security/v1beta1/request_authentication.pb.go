@@ -104,6 +104,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // to require JWT on all paths, except /healthz, the same `RequestAuthentication` can be used, but the
 // authorization policy could be:
 //
+// ```yaml
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
@@ -120,7 +121,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //  - to:
 //    - operation:
 //        paths: ["/healthz]
-//
+// ```
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=security.istio.io/v1beta1
