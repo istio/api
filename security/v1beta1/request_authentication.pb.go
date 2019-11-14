@@ -122,6 +122,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //    - operation:
 //        paths: ["/healthz]
 // ```
+//
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=security.istio.io/v1beta1
