@@ -107,6 +107,7 @@ option go_package="istio.io/api/security/v1beta1";
 // to require JWT on all paths, except /healthz, the same `RequestAuthentication` can be used, but the
 // authorization policy could be:
 //
+// ```yaml
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
@@ -123,6 +124,7 @@ option go_package="istio.io/api/security/v1beta1";
 //  - to:
 //    - operation:
 //        paths: ["/healthz]
+// ```
 //
 // <!-- go code generation tags
 // +kubetype-gen
