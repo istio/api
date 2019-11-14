@@ -3737,7 +3737,8 @@ spec:
                 type: object
               type: array
             selector:
-              description: Optional.
+              description: The selector determines the workloads to apply the RequestAuthentication
+                on.
               properties:
                 matchLabels:
                   additionalProperties:

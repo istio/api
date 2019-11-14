@@ -163,7 +163,7 @@
         }
       },
       "istio.type.v1beta1.WorkloadSelector": {
-        "description": "Optional. The selector determines the workloads to apply the RequestAuthentication on. If not set, the policy will be applied to all workloads in the same namespace as the policy.",
+        "description": "The selector determines the workloads to apply the RequestAuthentication on. If not set, the policy will be applied to all workloads in the same namespace as the policy.",
         "type": "object",
         "properties": {
           "matchLabels": {
