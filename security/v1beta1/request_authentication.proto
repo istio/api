@@ -124,8 +124,14 @@ option go_package="istio.io/api/security/v1beta1";
 //    - operation:
 //        paths: ["/healthz]
 //
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=security.istio.io/v1beta1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 message RequestAuthentication {
-  // Optional. The selector determines the workloads to apply the RequestAuthentication on.
+  // The selector determines the workloads to apply the RequestAuthentication on.
   // If not set, the policy will be applied to all workloads in the same namespace as the policy.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 

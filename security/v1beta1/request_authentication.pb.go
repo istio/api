@@ -121,8 +121,14 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //    - operation:
 //        paths: ["/healthz]
 //
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=security.istio.io/v1beta1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type RequestAuthentication struct {
-	// Optional. The selector determines the workloads to apply the RequestAuthentication on.
+	// The selector determines the workloads to apply the RequestAuthentication on.
 	// If not set, the policy will be applied to all workloads in the same namespace as the policy.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
 	// Define the list of JWTs that can be validated at the selected workloads' proxy. A valid token

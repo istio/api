@@ -95,6 +95,7 @@ RUN = $(CONTAINER_CLI) run -t -i --sig-proxy=true -u $(UID):$(GID) --rm \
 	-e TARGET_ARCH="$(TARGET_ARCH)" \
 	-e TARGET_OS="$(TARGET_OS)" \
 	-e TARGET_OUT="$(TARGET_OUT)" \
+	-e USER="${USER}" \
 	$(ENV_VARS) \
 	-v /etc/passwd:/etc/passwd:ro \
 	$(DOCKER_SOCKET_MOUNT) \
@@ -118,7 +119,7 @@ default:
 else
 
 $(info Building with your local toolchain.)
-GOBIN ?= $(GOPATH)/bin
+export GOBIN ?= $(GOPATH)/bin
 include Makefile.core.mk
 
 endif
