@@ -24,7 +24,7 @@ option go_package="istio.io/api/security/v1beta1";
 // $title: RequestAuthentication
 // $description: Request authentication configuration for workloads.
 // $location: https://istio.io/docs/reference/config/security/request_authentication.html
-// $aliases: [/docs/reference/config/security/v1beta1/request_authentication.html]
+// $aliases: [/docs/reference/config/security/v1beta1/request_authentication]
 
 // RequestAuthentication defines what request authentication methods are supported by a workload.
 // If will reject a request if the request contains invalid authentication information, based on the
