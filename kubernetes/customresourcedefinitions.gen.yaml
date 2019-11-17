@@ -5382,6 +5382,13 @@ spec:
                       format: string
                       type: string
                     type: array
+                  forwardOriginal:
+                    description: If false, the JWT is removed in the request after
+                      a success verification.
+                    type: boolean
+                  forwardPayloadHeader:
+                    format: string
+                    type: string
                   fromHeaders:
                     description: List of header locations from which JWT is expected.
                     items:

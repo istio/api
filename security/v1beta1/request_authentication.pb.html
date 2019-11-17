@@ -4,7 +4,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 number_of_entries: 2
 ---
-<h2 id="JWT">JWT</h2>
+<h2 id="JWTRule">JWTRule</h2>
 <section>
 <p>JSON Web Token (JWT) token format for authentication as defined by
 <a href="https://tools.ietf.org/html/rfc7519">RFC 7519</a>. See <a href="https://tools.ietf.org/html/rfc6749">OAuth 2.0</a> and
@@ -43,7 +43,7 @@ jwtHeaders:
 </tr>
 </thead>
 <tbody>
-<tr id="JWT-issuer">
+<tr id="JWTRule-issuer">
 <td><code>issuer</code></td>
 <td><code>string</code></td>
 <td>
@@ -59,7 +59,7 @@ Example: 1234567-compute@developer.gserviceaccount.com</p>
 Yes
 </td>
 </tr>
-<tr id="JWT-audiences">
+<tr id="JWTRule-audiences">
 <td><code>audiences</code></td>
 <td><code>string[]</code></td>
 <td>
@@ -82,7 +82,7 @@ audiences will be accepted.</p>
 No
 </td>
 </tr>
-<tr id="JWT-jwks_uri">
+<tr id="JWTRule-jwks_uri">
 <td><code>jwksUri</code></td>
 <td><code>string</code></td>
 <td>
@@ -104,7 +104,7 @@ Google service account).</p>
 No
 </td>
 </tr>
-<tr id="JWT-jwks">
+<tr id="JWTRule-jwks">
 <td><code>jwks</code></td>
 <td><code>string</code></td>
 <td>
@@ -118,7 +118,7 @@ See https://auth0.com/docs/jwks.</p>
 No
 </td>
 </tr>
-<tr id="JWT-from_headers">
+<tr id="JWTRule-from_headers">
 <td><code>fromHeaders</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/security/authorization-policy.html#JWTHeader">JWTHeader[]</a></code></td>
 <td>
@@ -135,7 +135,7 @@ if JWT is expected to be found in <code>x-goog-iap-jwt-assertion</code> header, 
 No
 </td>
 </tr>
-<tr id="JWT-from_params">
+<tr id="JWTRule-from_params">
 <td><code>fromParams</code></td>
 <td><code>string[]</code></td>
 <td>
@@ -145,6 +145,31 @@ parameter <code>my_token</code> (e.g /path?my_token=<JWT>), the config is:</p>
 <pre><code>  fromParams:
   - &quot;my_token&quot;
 </code></pre>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="JWTRule-forward_original">
+<td><code>forwardOriginal</code></td>
+<td><code>bool</code></td>
+<td>
+<p>If false, the JWT is removed in the request after a success verification. If true, the JWT is
+not removed in the request. Default value is false.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="JWTRule-forward_payload_header">
+<td><code>forwardPayloadHeader</code></td>
+<td><code>string</code></td>
+<td>
+<p>This field specifies the header name to forward a successfully verified JWT payload to the
+backend. The forwarded data is <code>base64_encoded(jwt_payload_in_JSON)</code>. If it is not specified,
+the payload will not be forwarded.</p>
 
 </td>
 <td>
@@ -284,7 +309,7 @@ No
 </tr>
 <tr id="RequestAuthentication-jwt_rules">
 <td><code>jwtRules</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/security/authorization-policy.html#JWT">JWT[]</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/security/authorization-policy.html#JWTRule">JWTRule[]</a></code></td>
 <td>
 <p>Define the list of JWTs that can be validated at the selected workloads&rsquo; proxy. A valid token
 will be used to extract the authenticated identity.
