@@ -114,9 +114,13 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Destination"
           },
           "mirrorPercent": {
-            "description": "Percentage of the traffic to be mirrored by the `mirror` field. If this field is absent, all the traffic (100%) will be mirrored. Max value is 100.",
+            "description": "Percentage of the traffic to be mirrored by the `mirror` field. Use of integer `mirror_percent` value is deprecated. Use the double `mirror_percentage` field instead",
             "type": "integer",
+            "deprecated": true,
             "nullable": true
+          },
+          "mirrorPercentage": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Percent"
           },
           "corsPolicy": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.CorsPolicy"
@@ -403,6 +407,16 @@
           },
           "abort": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPFaultInjection.Abort"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.Percent": {
+        "description": "Percent specifies a percentage in the range of [0.0, 100.0].",
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "format": "double"
           }
         }
       },
@@ -748,16 +762,6 @@
             }
           }
         ]
-      },
-      "istio.networking.v1alpha3.Percent": {
-        "description": "Percent specifies a percentage in the range of [0.0, 100.0].",
-        "type": "object",
-        "properties": {
-          "value": {
-            "type": "number",
-            "format": "double"
-          }
-        }
       }
     }
   }

@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.networking.v1alpha3',
   syntax='proto3',
   serialized_options=_b('Z istio.io/api/networking/v1alpha3'),
-  serialized_pb=_b('\n)networking/v1alpha3/virtual_service.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\xe1\x01\n\x0eVirtualService\x12\x12\n\x05hosts\x18\x01 \x03(\tB\x03\xe0\x41\x02\x12\x10\n\x08gateways\x18\x02 \x03(\t\x12\x32\n\x04http\x18\x03 \x03(\x0b\x32$.istio.networking.v1alpha3.HTTPRoute\x12\x30\n\x03tls\x18\x05 \x03(\x0b\x32#.istio.networking.v1alpha3.TLSRoute\x12\x30\n\x03tcp\x18\x04 \x03(\x0b\x32#.istio.networking.v1alpha3.TCPRoute\x12\x11\n\texport_to\x18\x06 \x03(\t\"g\n\x0b\x44\x65stination\x12\x11\n\x04host\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x0e\n\x06subset\x18\x02 \x01(\t\x12\x35\n\x04port\x18\x03 \x01(\x0b\x32\'.istio.networking.v1alpha3.PortSelector\"\xbd\t\n\tHTTPRoute\x12\x0c\n\x04name\x18\x11 \x01(\t\x12:\n\x05match\x18\x01 \x03(\x0b\x32+.istio.networking.v1alpha3.HTTPMatchRequest\x12>\n\x05route\x18\x02 \x03(\x0b\x32/.istio.networking.v1alpha3.HTTPRouteDestination\x12\x39\n\x08redirect\x18\x03 \x01(\x0b\x32\'.istio.networking.v1alpha3.HTTPRedirect\x12\x37\n\x07rewrite\x18\x04 \x01(\x0b\x32&.istio.networking.v1alpha3.HTTPRewrite\x12\x19\n\x11websocket_upgrade\x18\x05 \x01(\x08\x12*\n\x07timeout\x18\x06 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x35\n\x07retries\x18\x07 \x01(\x0b\x32$.istio.networking.v1alpha3.HTTPRetry\x12<\n\x05\x66\x61ult\x18\x08 \x01(\x0b\x32-.istio.networking.v1alpha3.HTTPFaultInjection\x12\x36\n\x06mirror\x18\t \x01(\x0b\x32&.istio.networking.v1alpha3.Destination\x12\x34\n\x0emirror_percent\x18\x12 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12:\n\x0b\x63ors_policy\x18\n \x01(\x0b\x32%.istio.networking.v1alpha3.CorsPolicy\x12S\n\x0e\x61ppend_headers\x18\x0b \x03(\x0b\x32\x37.istio.networking.v1alpha3.HTTPRoute.AppendHeadersEntryB\x02\x18\x01\x12#\n\x17remove_response_headers\x18\x0c \x03(\tB\x02\x18\x01\x12\x64\n\x17\x61ppend_response_headers\x18\r \x03(\x0b\x32?.istio.networking.v1alpha3.HTTPRoute.AppendResponseHeadersEntryB\x02\x18\x01\x12\"\n\x16remove_request_headers\x18\x0e \x03(\tB\x02\x18\x01\x12\x62\n\x16\x61ppend_request_headers\x18\x0f \x03(\x0b\x32>.istio.networking.v1alpha3.HTTPRoute.AppendRequestHeadersEntryB\x02\x18\x01\x12\x33\n\x07headers\x18\x10 \x01(\x0b\x32\".istio.networking.v1alpha3.Headers\x1a\x34\n\x12\x41ppendHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a<\n\x1a\x41ppendResponseHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a;\n\x19\x41ppendRequestHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xa9\x03\n\x07Headers\x12\x44\n\x07request\x18\x01 \x01(\x0b\x32\x33.istio.networking.v1alpha3.Headers.HeaderOperations\x12\x45\n\x08response\x18\x02 \x01(\x0b\x32\x33.istio.networking.v1alpha3.Headers.HeaderOperations\x1a\x90\x02\n\x10HeaderOperations\x12I\n\x03set\x18\x01 \x03(\x0b\x32<.istio.networking.v1alpha3.Headers.HeaderOperations.SetEntry\x12I\n\x03\x61\x64\x64\x18\x02 \x03(\x0b\x32<.istio.networking.v1alpha3.Headers.HeaderOperations.AddEntry\x12\x0e\n\x06remove\x18\x03 \x03(\t\x1a*\n\x08SetEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a*\n\x08\x41\x64\x64\x45ntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x89\x01\n\x08TLSRoute\x12\x41\n\x05match\x18\x01 \x03(\x0b\x32-.istio.networking.v1alpha3.TLSMatchAttributesB\x03\xe0\x41\x02\x12:\n\x05route\x18\x02 \x03(\x0b\x32+.istio.networking.v1alpha3.RouteDestination\"\x83\x01\n\x08TCPRoute\x12;\n\x05match\x18\x01 \x03(\x0b\x32,.istio.networking.v1alpha3.L4MatchAttributes\x12:\n\x05route\x18\x02 \x03(\x0b\x32+.istio.networking.v1alpha3.RouteDestination\"\x97\x06\n\x10HTTPMatchRequest\x12\x0c\n\x04name\x18\x0b \x01(\t\x12\x33\n\x03uri\x18\x01 \x01(\x0b\x32&.istio.networking.v1alpha3.StringMatch\x12\x36\n\x06scheme\x18\x02 \x01(\x0b\x32&.istio.networking.v1alpha3.StringMatch\x12\x36\n\x06method\x18\x03 \x01(\x0b\x32&.istio.networking.v1alpha3.StringMatch\x12\x39\n\tauthority\x18\x04 \x01(\x0b\x32&.istio.networking.v1alpha3.StringMatch\x12I\n\x07headers\x18\x05 \x03(\x0b\x32\x38.istio.networking.v1alpha3.HTTPMatchRequest.HeadersEntry\x12\x0c\n\x04port\x18\x06 \x01(\r\x12T\n\rsource_labels\x18\x07 \x03(\x0b\x32=.istio.networking.v1alpha3.HTTPMatchRequest.SourceLabelsEntry\x12\x10\n\x08gateways\x18\x08 \x03(\t\x12R\n\x0cquery_params\x18\t \x03(\x0b\x32<.istio.networking.v1alpha3.HTTPMatchRequest.QueryParamsEntry\x12\x17\n\x0fignore_uri_case\x18\n \x01(\x08\x1aV\n\x0cHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x35\n\x05value\x18\x02 \x01(\x0b\x32&.istio.networking.v1alpha3.StringMatch:\x02\x38\x01\x1a\x33\n\x11SourceLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1aZ\n\x10QueryParamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x35\n\x05value\x18\x02 \x01(\x0b\x32&.istio.networking.v1alpha3.StringMatch:\x02\x38\x01\"\xc1\x04\n\x14HTTPRouteDestination\x12@\n\x0b\x64\x65stination\x18\x01 \x01(\x0b\x32&.istio.networking.v1alpha3.DestinationB\x03\xe0\x41\x02\x12\x0e\n\x06weight\x18\x02 \x01(\x05\x12#\n\x17remove_response_headers\x18\x03 \x03(\tB\x02\x18\x01\x12o\n\x17\x61ppend_response_headers\x18\x04 \x03(\x0b\x32J.istio.networking.v1alpha3.HTTPRouteDestination.AppendResponseHeadersEntryB\x02\x18\x01\x12\"\n\x16remove_request_headers\x18\x05 \x03(\tB\x02\x18\x01\x12m\n\x16\x61ppend_request_headers\x18\x06 \x03(\x0b\x32I.istio.networking.v1alpha3.HTTPRouteDestination.AppendRequestHeadersEntryB\x02\x18\x01\x12\x33\n\x07headers\x18\x07 \x01(\x0b\x32\".istio.networking.v1alpha3.Headers\x1a<\n\x1a\x41ppendResponseHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a;\n\x19\x41ppendRequestHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"d\n\x10RouteDestination\x12@\n\x0b\x64\x65stination\x18\x01 \x01(\x0b\x32&.istio.networking.v1alpha3.DestinationB\x03\xe0\x41\x02\x12\x0e\n\x06weight\x18\x02 \x01(\x05\"\xf3\x01\n\x11L4MatchAttributes\x12\x1b\n\x13\x64\x65stination_subnets\x18\x01 \x03(\t\x12\x0c\n\x04port\x18\x02 \x01(\r\x12\x15\n\rsource_subnet\x18\x03 \x01(\t\x12U\n\rsource_labels\x18\x04 \x03(\x0b\x32>.istio.networking.v1alpha3.L4MatchAttributes.SourceLabelsEntry\x12\x10\n\x08gateways\x18\x05 \x03(\t\x1a\x33\n\x11SourceLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8d\x02\n\x12TLSMatchAttributes\x12\x16\n\tsni_hosts\x18\x01 \x03(\tB\x03\xe0\x41\x02\x12\x1b\n\x13\x64\x65stination_subnets\x18\x02 \x03(\t\x12\x0c\n\x04port\x18\x03 \x01(\r\x12\x15\n\rsource_subnet\x18\x04 \x01(\t\x12V\n\rsource_labels\x18\x05 \x03(\x0b\x32?.istio.networking.v1alpha3.TLSMatchAttributes.SourceLabelsEntry\x12\x10\n\x08gateways\x18\x06 \x03(\t\x1a\x33\n\x11SourceLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"E\n\x0cHTTPRedirect\x12\x0b\n\x03uri\x18\x01 \x01(\t\x12\x11\n\tauthority\x18\x02 \x01(\t\x12\x15\n\rredirect_code\x18\x03 \x01(\r\"-\n\x0bHTTPRewrite\x12\x0b\n\x03uri\x18\x01 \x01(\t\x12\x11\n\tauthority\x18\x02 \x01(\t\"O\n\x0bStringMatch\x12\x0f\n\x05\x65xact\x18\x01 \x01(\tH\x00\x12\x10\n\x06prefix\x18\x02 \x01(\tH\x00\x12\x0f\n\x05regex\x18\x03 \x01(\tH\x00\x42\x0c\n\nmatch_type\"h\n\tHTTPRetry\x12\x15\n\x08\x61ttempts\x18\x01 \x01(\x05\x42\x03\xe0\x41\x02\x12\x32\n\x0fper_try_timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x10\n\x08retry_on\x18\x03 \x01(\t\"\xcb\x01\n\nCorsPolicy\x12\x14\n\x0c\x61llow_origin\x18\x01 \x03(\t\x12\x15\n\rallow_methods\x18\x02 \x03(\t\x12\x15\n\rallow_headers\x18\x03 \x03(\t\x12\x16\n\x0e\x65xpose_headers\x18\x04 \x03(\t\x12*\n\x07max_age\x18\x05 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x35\n\x11\x61llow_credentials\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\"\xa4\x04\n\x12HTTPFaultInjection\x12\x42\n\x05\x64\x65lay\x18\x01 \x01(\x0b\x32\x33.istio.networking.v1alpha3.HTTPFaultInjection.Delay\x12\x42\n\x05\x61\x62ort\x18\x02 \x01(\x0b\x32\x33.istio.networking.v1alpha3.HTTPFaultInjection.Abort\x1a\xd6\x01\n\x05\x44\x65lay\x12\x13\n\x07percent\x18\x01 \x01(\x05\x42\x02\x18\x01\x12\x35\n\x0b\x66ixed_delay\x18\x02 \x01(\x0b\x32\x19.google.protobuf.DurationB\x03\xe0\x41\x02H\x00\x12\x36\n\x11\x65xponential_delay\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationH\x00\x12\x36\n\npercentage\x18\x05 \x01(\x0b\x32\".istio.networking.v1alpha3.PercentB\x11\n\x0fhttp_delay_type\x1a\xac\x01\n\x05\x41\x62ort\x12\x13\n\x07percent\x18\x01 \x01(\x05\x42\x02\x18\x01\x12\x1a\n\x0bhttp_status\x18\x02 \x01(\x05\x42\x03\xe0\x41\x02H\x00\x12\x15\n\x0bgrpc_status\x18\x03 \x01(\tH\x00\x12\x15\n\x0bhttp2_error\x18\x04 \x01(\tH\x00\x12\x36\n\npercentage\x18\x05 \x01(\x0b\x32\".istio.networking.v1alpha3.PercentB\x0c\n\nerror_type\"*\n\x0cPortSelector\x12\x0e\n\x06number\x18\x01 \x01(\rJ\x04\x08\x02\x10\x03R\x04name\"\x18\n\x07Percent\x12\r\n\x05value\x18\x01 \x01(\x01\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
+  serialized_pb=_b('\n)networking/v1alpha3/virtual_service.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\xe1\x01\n\x0eVirtualService\x12\x12\n\x05hosts\x18\x01 \x03(\tB\x03\xe0\x41\x02\x12\x10\n\x08gateways\x18\x02 \x03(\t\x12\x32\n\x04http\x18\x03 \x03(\x0b\x32$.istio.networking.v1alpha3.HTTPRoute\x12\x30\n\x03tls\x18\x05 \x03(\x0b\x32#.istio.networking.v1alpha3.TLSRoute\x12\x30\n\x03tcp\x18\x04 \x03(\x0b\x32#.istio.networking.v1alpha3.TCPRoute\x12\x11\n\texport_to\x18\x06 \x03(\t\"g\n\x0b\x44\x65stination\x12\x11\n\x04host\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x0e\n\x06subset\x18\x02 \x01(\t\x12\x35\n\x04port\x18\x03 \x01(\x0b\x32\'.istio.networking.v1alpha3.PortSelector\"\x80\n\n\tHTTPRoute\x12\x0c\n\x04name\x18\x11 \x01(\t\x12:\n\x05match\x18\x01 \x03(\x0b\x32+.istio.networking.v1alpha3.HTTPMatchRequest\x12>\n\x05route\x18\x02 \x03(\x0b\x32/.istio.networking.v1alpha3.HTTPRouteDestination\x12\x39\n\x08redirect\x18\x03 \x01(\x0b\x32\'.istio.networking.v1alpha3.HTTPRedirect\x12\x37\n\x07rewrite\x18\x04 \x01(\x0b\x32&.istio.networking.v1alpha3.HTTPRewrite\x12\x19\n\x11websocket_upgrade\x18\x05 \x01(\x08\x12*\n\x07timeout\x18\x06 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x35\n\x07retries\x18\x07 \x01(\x0b\x32$.istio.networking.v1alpha3.HTTPRetry\x12<\n\x05\x66\x61ult\x18\x08 \x01(\x0b\x32-.istio.networking.v1alpha3.HTTPFaultInjection\x12\x36\n\x06mirror\x18\t \x01(\x0b\x32&.istio.networking.v1alpha3.Destination\x12\x38\n\x0emirror_percent\x18\x12 \x01(\x0b\x32\x1c.google.protobuf.UInt32ValueB\x02\x18\x01\x12=\n\x11mirror_percentage\x18\x13 \x01(\x0b\x32\".istio.networking.v1alpha3.Percent\x12:\n\x0b\x63ors_policy\x18\n \x01(\x0b\x32%.istio.networking.v1alpha3.CorsPolicy\x12S\n\x0e\x61ppend_headers\x18\x0b \x03(\x0b\x32\x37.istio.networking.v1alpha3.HTTPRoute.AppendHeadersEntryB\x02\x18\x01\x12#\n\x17remove_response_headers\x18\x0c \x03(\tB\x02\x18\x01\x12\x64\n\x17\x61ppend_response_headers\x18\r \x03(\x0b\x32?.istio.networking.v1alpha3.HTTPRoute.AppendResponseHeadersEntryB\x02\x18\x01\x12\"\n\x16remove_request_headers\x18\x0e \x03(\tB\x02\x18\x01\x12\x62\n\x16\x61ppend_request_headers\x18\x0f \x03(\x0b\x32>.istio.networking.v1alpha3.HTTPRoute.AppendRequestHeadersEntryB\x02\x18\x01\x12\x33\n\x07headers\x18\x10 \x01(\x0b\x32\".istio.networking.v1alpha3.Headers\x1a\x34\n\x12\x41ppendHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a<\n\x1a\x41ppendResponseHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a;\n\x19\x41ppendRequestHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xa9\x03\n\x07Headers\x12\x44\n\x07request\x18\x01 \x01(\x0b\x32\x33.istio.networking.v1alpha3.Headers.HeaderOperations\x12\x45\n\x08response\x18\x02 \x01(\x0b\x32\x33.istio.networking.v1alpha3.Headers.HeaderOperations\x1a\x90\x02\n\x10HeaderOperations\x12I\n\x03set\x18\x01 \x03(\x0b\x32<.istio.networking.v1alpha3.Headers.HeaderOperations.SetEntry\x12I\n\x03\x61\x64\x64\x18\x02 \x03(\x0b\x32<.istio.networking.v1alpha3.Headers.HeaderOperations.AddEntry\x12\x0e\n\x06remove\x18\x03 \x03(\t\x1a*\n\x08SetEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a*\n\x08\x41\x64\x64\x45ntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x89\x01\n\x08TLSRoute\x12\x41\n\x05match\x18\x01 \x03(\x0b\x32-.istio.networking.v1alpha3.TLSMatchAttributesB\x03\xe0\x41\x02\x12:\n\x05route\x18\x02 \x03(\x0b\x32+.istio.networking.v1alpha3.RouteDestination\"\x83\x01\n\x08TCPRoute\x12;\n\x05match\x18\x01 \x03(\x0b\x32,.istio.networking.v1alpha3.L4MatchAttributes\x12:\n\x05route\x18\x02 \x03(\x0b\x32+.istio.networking.v1alpha3.RouteDestination\"\x97\x06\n\x10HTTPMatchRequest\x12\x0c\n\x04name\x18\x0b \x01(\t\x12\x33\n\x03uri\x18\x01 \x01(\x0b\x32&.istio.networking.v1alpha3.StringMatch\x12\x36\n\x06scheme\x18\x02 \x01(\x0b\x32&.istio.networking.v1alpha3.StringMatch\x12\x36\n\x06method\x18\x03 \x01(\x0b\x32&.istio.networking.v1alpha3.StringMatch\x12\x39\n\tauthority\x18\x04 \x01(\x0b\x32&.istio.networking.v1alpha3.StringMatch\x12I\n\x07headers\x18\x05 \x03(\x0b\x32\x38.istio.networking.v1alpha3.HTTPMatchRequest.HeadersEntry\x12\x0c\n\x04port\x18\x06 \x01(\r\x12T\n\rsource_labels\x18\x07 \x03(\x0b\x32=.istio.networking.v1alpha3.HTTPMatchRequest.SourceLabelsEntry\x12\x10\n\x08gateways\x18\x08 \x03(\t\x12R\n\x0cquery_params\x18\t \x03(\x0b\x32<.istio.networking.v1alpha3.HTTPMatchRequest.QueryParamsEntry\x12\x17\n\x0fignore_uri_case\x18\n \x01(\x08\x1aV\n\x0cHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x35\n\x05value\x18\x02 \x01(\x0b\x32&.istio.networking.v1alpha3.StringMatch:\x02\x38\x01\x1a\x33\n\x11SourceLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1aZ\n\x10QueryParamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x35\n\x05value\x18\x02 \x01(\x0b\x32&.istio.networking.v1alpha3.StringMatch:\x02\x38\x01\"\xc1\x04\n\x14HTTPRouteDestination\x12@\n\x0b\x64\x65stination\x18\x01 \x01(\x0b\x32&.istio.networking.v1alpha3.DestinationB\x03\xe0\x41\x02\x12\x0e\n\x06weight\x18\x02 \x01(\x05\x12#\n\x17remove_response_headers\x18\x03 \x03(\tB\x02\x18\x01\x12o\n\x17\x61ppend_response_headers\x18\x04 \x03(\x0b\x32J.istio.networking.v1alpha3.HTTPRouteDestination.AppendResponseHeadersEntryB\x02\x18\x01\x12\"\n\x16remove_request_headers\x18\x05 \x03(\tB\x02\x18\x01\x12m\n\x16\x61ppend_request_headers\x18\x06 \x03(\x0b\x32I.istio.networking.v1alpha3.HTTPRouteDestination.AppendRequestHeadersEntryB\x02\x18\x01\x12\x33\n\x07headers\x18\x07 \x01(\x0b\x32\".istio.networking.v1alpha3.Headers\x1a<\n\x1a\x41ppendResponseHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a;\n\x19\x41ppendRequestHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"d\n\x10RouteDestination\x12@\n\x0b\x64\x65stination\x18\x01 \x01(\x0b\x32&.istio.networking.v1alpha3.DestinationB\x03\xe0\x41\x02\x12\x0e\n\x06weight\x18\x02 \x01(\x05\"\xf3\x01\n\x11L4MatchAttributes\x12\x1b\n\x13\x64\x65stination_subnets\x18\x01 \x03(\t\x12\x0c\n\x04port\x18\x02 \x01(\r\x12\x15\n\rsource_subnet\x18\x03 \x01(\t\x12U\n\rsource_labels\x18\x04 \x03(\x0b\x32>.istio.networking.v1alpha3.L4MatchAttributes.SourceLabelsEntry\x12\x10\n\x08gateways\x18\x05 \x03(\t\x1a\x33\n\x11SourceLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8d\x02\n\x12TLSMatchAttributes\x12\x16\n\tsni_hosts\x18\x01 \x03(\tB\x03\xe0\x41\x02\x12\x1b\n\x13\x64\x65stination_subnets\x18\x02 \x03(\t\x12\x0c\n\x04port\x18\x03 \x01(\r\x12\x15\n\rsource_subnet\x18\x04 \x01(\t\x12V\n\rsource_labels\x18\x05 \x03(\x0b\x32?.istio.networking.v1alpha3.TLSMatchAttributes.SourceLabelsEntry\x12\x10\n\x08gateways\x18\x06 \x03(\t\x1a\x33\n\x11SourceLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"E\n\x0cHTTPRedirect\x12\x0b\n\x03uri\x18\x01 \x01(\t\x12\x11\n\tauthority\x18\x02 \x01(\t\x12\x15\n\rredirect_code\x18\x03 \x01(\r\"-\n\x0bHTTPRewrite\x12\x0b\n\x03uri\x18\x01 \x01(\t\x12\x11\n\tauthority\x18\x02 \x01(\t\"O\n\x0bStringMatch\x12\x0f\n\x05\x65xact\x18\x01 \x01(\tH\x00\x12\x10\n\x06prefix\x18\x02 \x01(\tH\x00\x12\x0f\n\x05regex\x18\x03 \x01(\tH\x00\x42\x0c\n\nmatch_type\"h\n\tHTTPRetry\x12\x15\n\x08\x61ttempts\x18\x01 \x01(\x05\x42\x03\xe0\x41\x02\x12\x32\n\x0fper_try_timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x10\n\x08retry_on\x18\x03 \x01(\t\"\xcb\x01\n\nCorsPolicy\x12\x14\n\x0c\x61llow_origin\x18\x01 \x03(\t\x12\x15\n\rallow_methods\x18\x02 \x03(\t\x12\x15\n\rallow_headers\x18\x03 \x03(\t\x12\x16\n\x0e\x65xpose_headers\x18\x04 \x03(\t\x12*\n\x07max_age\x18\x05 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x35\n\x11\x61llow_credentials\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\"\xa4\x04\n\x12HTTPFaultInjection\x12\x42\n\x05\x64\x65lay\x18\x01 \x01(\x0b\x32\x33.istio.networking.v1alpha3.HTTPFaultInjection.Delay\x12\x42\n\x05\x61\x62ort\x18\x02 \x01(\x0b\x32\x33.istio.networking.v1alpha3.HTTPFaultInjection.Abort\x1a\xd6\x01\n\x05\x44\x65lay\x12\x13\n\x07percent\x18\x01 \x01(\x05\x42\x02\x18\x01\x12\x35\n\x0b\x66ixed_delay\x18\x02 \x01(\x0b\x32\x19.google.protobuf.DurationB\x03\xe0\x41\x02H\x00\x12\x36\n\x11\x65xponential_delay\x18\x03 \x01(\x0b\x32\x19.google.protobuf.DurationH\x00\x12\x36\n\npercentage\x18\x05 \x01(\x0b\x32\".istio.networking.v1alpha3.PercentB\x11\n\x0fhttp_delay_type\x1a\xac\x01\n\x05\x41\x62ort\x12\x13\n\x07percent\x18\x01 \x01(\x05\x42\x02\x18\x01\x12\x1a\n\x0bhttp_status\x18\x02 \x01(\x05\x42\x03\xe0\x41\x02H\x00\x12\x15\n\x0bgrpc_status\x18\x03 \x01(\tH\x00\x12\x15\n\x0bhttp2_error\x18\x04 \x01(\tH\x00\x12\x36\n\npercentage\x18\x05 \x01(\x0b\x32\".istio.networking.v1alpha3.PercentB\x0c\n\nerror_type\"*\n\x0cPortSelector\x12\x0e\n\x06number\x18\x01 \x01(\rJ\x04\x08\x02\x10\x03R\x04name\"\x18\n\x07Percent\x12\r\n\x05value\x18\x01 \x01(\x01\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
 
@@ -174,8 +174,8 @@ _HTTPROUTE_APPENDHEADERSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1541,
-  serialized_end=1593,
+  serialized_start=1608,
+  serialized_end=1660,
 )
 
 _HTTPROUTE_APPENDRESPONSEHEADERSENTRY = _descriptor.Descriptor(
@@ -211,8 +211,8 @@ _HTTPROUTE_APPENDRESPONSEHEADERSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1595,
-  serialized_end=1655,
+  serialized_start=1662,
+  serialized_end=1722,
 )
 
 _HTTPROUTE_APPENDREQUESTHEADERSENTRY = _descriptor.Descriptor(
@@ -248,8 +248,8 @@ _HTTPROUTE_APPENDREQUESTHEADERSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1657,
-  serialized_end=1716,
+  serialized_start=1724,
+  serialized_end=1783,
 )
 
 _HTTPROUTE = _descriptor.Descriptor(
@@ -335,51 +335,58 @@ _HTTPROUTE = _descriptor.Descriptor(
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
+      serialized_options=_b('\030\001'), file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='mirror_percentage', full_name='istio.networking.v1alpha3.HTTPRoute.mirror_percentage', index=11,
+      number=19, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='cors_policy', full_name='istio.networking.v1alpha3.HTTPRoute.cors_policy', index=11,
+      name='cors_policy', full_name='istio.networking.v1alpha3.HTTPRoute.cors_policy', index=12,
       number=10, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='append_headers', full_name='istio.networking.v1alpha3.HTTPRoute.append_headers', index=12,
+      name='append_headers', full_name='istio.networking.v1alpha3.HTTPRoute.append_headers', index=13,
       number=11, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=_b('\030\001'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='remove_response_headers', full_name='istio.networking.v1alpha3.HTTPRoute.remove_response_headers', index=13,
+      name='remove_response_headers', full_name='istio.networking.v1alpha3.HTTPRoute.remove_response_headers', index=14,
       number=12, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=_b('\030\001'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='append_response_headers', full_name='istio.networking.v1alpha3.HTTPRoute.append_response_headers', index=14,
+      name='append_response_headers', full_name='istio.networking.v1alpha3.HTTPRoute.append_response_headers', index=15,
       number=13, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=_b('\030\001'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='remove_request_headers', full_name='istio.networking.v1alpha3.HTTPRoute.remove_request_headers', index=15,
+      name='remove_request_headers', full_name='istio.networking.v1alpha3.HTTPRoute.remove_request_headers', index=16,
       number=14, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=_b('\030\001'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='append_request_headers', full_name='istio.networking.v1alpha3.HTTPRoute.append_request_headers', index=16,
+      name='append_request_headers', full_name='istio.networking.v1alpha3.HTTPRoute.append_request_headers', index=17,
       number=15, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=_b('\030\001'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='headers', full_name='istio.networking.v1alpha3.HTTPRoute.headers', index=17,
+      name='headers', full_name='istio.networking.v1alpha3.HTTPRoute.headers', index=18,
       number=16, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -398,7 +405,7 @@ _HTTPROUTE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=503,
-  serialized_end=1716,
+  serialized_end=1783,
 )
 
 
@@ -435,8 +442,8 @@ _HEADERS_HEADEROPERATIONS_SETENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2058,
-  serialized_end=2100,
+  serialized_start=2125,
+  serialized_end=2167,
 )
 
 _HEADERS_HEADEROPERATIONS_ADDENTRY = _descriptor.Descriptor(
@@ -472,8 +479,8 @@ _HEADERS_HEADEROPERATIONS_ADDENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2102,
-  serialized_end=2144,
+  serialized_start=2169,
+  serialized_end=2211,
 )
 
 _HEADERS_HEADEROPERATIONS = _descriptor.Descriptor(
@@ -516,8 +523,8 @@ _HEADERS_HEADEROPERATIONS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1872,
-  serialized_end=2144,
+  serialized_start=1939,
+  serialized_end=2211,
 )
 
 _HEADERS = _descriptor.Descriptor(
@@ -553,8 +560,8 @@ _HEADERS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1719,
-  serialized_end=2144,
+  serialized_start=1786,
+  serialized_end=2211,
 )
 
 
@@ -591,8 +598,8 @@ _TLSROUTE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2147,
-  serialized_end=2284,
+  serialized_start=2214,
+  serialized_end=2351,
 )
 
 
@@ -629,8 +636,8 @@ _TCPROUTE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2287,
-  serialized_end=2418,
+  serialized_start=2354,
+  serialized_end=2485,
 )
 
 
@@ -667,8 +674,8 @@ _HTTPMATCHREQUEST_HEADERSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2981,
-  serialized_end=3067,
+  serialized_start=3048,
+  serialized_end=3134,
 )
 
 _HTTPMATCHREQUEST_SOURCELABELSENTRY = _descriptor.Descriptor(
@@ -704,8 +711,8 @@ _HTTPMATCHREQUEST_SOURCELABELSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3069,
-  serialized_end=3120,
+  serialized_start=3136,
+  serialized_end=3187,
 )
 
 _HTTPMATCHREQUEST_QUERYPARAMSENTRY = _descriptor.Descriptor(
@@ -741,8 +748,8 @@ _HTTPMATCHREQUEST_QUERYPARAMSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3122,
-  serialized_end=3212,
+  serialized_start=3189,
+  serialized_end=3279,
 )
 
 _HTTPMATCHREQUEST = _descriptor.Descriptor(
@@ -841,8 +848,8 @@ _HTTPMATCHREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2421,
-  serialized_end=3212,
+  serialized_start=2488,
+  serialized_end=3279,
 )
 
 
@@ -879,8 +886,8 @@ _HTTPROUTEDESTINATION_APPENDRESPONSEHEADERSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1595,
-  serialized_end=1655,
+  serialized_start=1662,
+  serialized_end=1722,
 )
 
 _HTTPROUTEDESTINATION_APPENDREQUESTHEADERSENTRY = _descriptor.Descriptor(
@@ -916,8 +923,8 @@ _HTTPROUTEDESTINATION_APPENDREQUESTHEADERSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1657,
-  serialized_end=1716,
+  serialized_start=1724,
+  serialized_end=1783,
 )
 
 _HTTPROUTEDESTINATION = _descriptor.Descriptor(
@@ -988,8 +995,8 @@ _HTTPROUTEDESTINATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3215,
-  serialized_end=3792,
+  serialized_start=3282,
+  serialized_end=3859,
 )
 
 
@@ -1026,8 +1033,8 @@ _ROUTEDESTINATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3794,
-  serialized_end=3894,
+  serialized_start=3861,
+  serialized_end=3961,
 )
 
 
@@ -1064,8 +1071,8 @@ _L4MATCHATTRIBUTES_SOURCELABELSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3069,
-  serialized_end=3120,
+  serialized_start=3136,
+  serialized_end=3187,
 )
 
 _L4MATCHATTRIBUTES = _descriptor.Descriptor(
@@ -1122,8 +1129,8 @@ _L4MATCHATTRIBUTES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3897,
-  serialized_end=4140,
+  serialized_start=3964,
+  serialized_end=4207,
 )
 
 
@@ -1160,8 +1167,8 @@ _TLSMATCHATTRIBUTES_SOURCELABELSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3069,
-  serialized_end=3120,
+  serialized_start=3136,
+  serialized_end=3187,
 )
 
 _TLSMATCHATTRIBUTES = _descriptor.Descriptor(
@@ -1225,8 +1232,8 @@ _TLSMATCHATTRIBUTES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4143,
-  serialized_end=4412,
+  serialized_start=4210,
+  serialized_end=4479,
 )
 
 
@@ -1270,8 +1277,8 @@ _HTTPREDIRECT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4414,
-  serialized_end=4483,
+  serialized_start=4481,
+  serialized_end=4550,
 )
 
 
@@ -1308,8 +1315,8 @@ _HTTPREWRITE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4485,
-  serialized_end=4530,
+  serialized_start=4552,
+  serialized_end=4597,
 )
 
 
@@ -1356,8 +1363,8 @@ _STRINGMATCH = _descriptor.Descriptor(
       name='match_type', full_name='istio.networking.v1alpha3.StringMatch.match_type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=4532,
-  serialized_end=4611,
+  serialized_start=4599,
+  serialized_end=4678,
 )
 
 
@@ -1401,8 +1408,8 @@ _HTTPRETRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4613,
-  serialized_end=4717,
+  serialized_start=4680,
+  serialized_end=4784,
 )
 
 
@@ -1467,8 +1474,8 @@ _CORSPOLICY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4720,
-  serialized_end=4923,
+  serialized_start=4787,
+  serialized_end=4990,
 )
 
 
@@ -1522,8 +1529,8 @@ _HTTPFAULTINJECTION_DELAY = _descriptor.Descriptor(
       name='http_delay_type', full_name='istio.networking.v1alpha3.HTTPFaultInjection.Delay.http_delay_type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=5085,
-  serialized_end=5299,
+  serialized_start=5152,
+  serialized_end=5366,
 )
 
 _HTTPFAULTINJECTION_ABORT = _descriptor.Descriptor(
@@ -1583,8 +1590,8 @@ _HTTPFAULTINJECTION_ABORT = _descriptor.Descriptor(
       name='error_type', full_name='istio.networking.v1alpha3.HTTPFaultInjection.Abort.error_type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=5302,
-  serialized_end=5474,
+  serialized_start=5369,
+  serialized_end=5541,
 )
 
 _HTTPFAULTINJECTION = _descriptor.Descriptor(
@@ -1620,8 +1627,8 @@ _HTTPFAULTINJECTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4926,
-  serialized_end=5474,
+  serialized_start=4993,
+  serialized_end=5541,
 )
 
 
@@ -1651,8 +1658,8 @@ _PORTSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5476,
-  serialized_end=5518,
+  serialized_start=5543,
+  serialized_end=5585,
 )
 
 
@@ -1682,8 +1689,8 @@ _PERCENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5520,
-  serialized_end=5544,
+  serialized_start=5587,
+  serialized_end=5611,
 )
 
 _VIRTUALSERVICE.fields_by_name['http'].message_type = _HTTPROUTE
@@ -1702,6 +1709,7 @@ _HTTPROUTE.fields_by_name['retries'].message_type = _HTTPRETRY
 _HTTPROUTE.fields_by_name['fault'].message_type = _HTTPFAULTINJECTION
 _HTTPROUTE.fields_by_name['mirror'].message_type = _DESTINATION
 _HTTPROUTE.fields_by_name['mirror_percent'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
+_HTTPROUTE.fields_by_name['mirror_percentage'].message_type = _PERCENT
 _HTTPROUTE.fields_by_name['cors_policy'].message_type = _CORSPOLICY
 _HTTPROUTE.fields_by_name['append_headers'].message_type = _HTTPROUTE_APPENDHEADERSENTRY
 _HTTPROUTE.fields_by_name['append_response_headers'].message_type = _HTTPROUTE_APPENDRESPONSEHEADERSENTRY
@@ -2057,6 +2065,7 @@ _DESTINATION.fields_by_name['host']._options = None
 _HTTPROUTE_APPENDHEADERSENTRY._options = None
 _HTTPROUTE_APPENDRESPONSEHEADERSENTRY._options = None
 _HTTPROUTE_APPENDREQUESTHEADERSENTRY._options = None
+_HTTPROUTE.fields_by_name['mirror_percent']._options = None
 _HTTPROUTE.fields_by_name['append_headers']._options = None
 _HTTPROUTE.fields_by_name['remove_response_headers']._options = None
 _HTTPROUTE.fields_by_name['append_response_headers']._options = None
