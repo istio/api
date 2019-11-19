@@ -192,20 +192,8 @@ parameter <code>my_token</code> (e.g /path?my_token=<JWT>), the config is:</p>
 No
 </td>
 </tr>
-<tr id="JWTRule-forward_original">
-<td><code>forwardOriginal</code></td>
-<td><code>bool</code></td>
-<td>
-<p>If false, the JWT is removed in the request after a success verification. If true, the JWT is
-not removed in the request. Default value is false.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="JWTRule-forward_payload_header">
-<td><code>forwardPayloadHeader</code></td>
+<tr id="JWTRule-forward_payload_to_header">
+<td><code>forwardPayloadToHeader</code></td>
 <td><code>string</code></td>
 <td>
 <p>This field specifies the header name to forward a successfully verified JWT payload to the
