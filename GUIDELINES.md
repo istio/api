@@ -35,7 +35,7 @@ This section captures guidelines that apply to the proto form of the configurati
 - **Prefer** complete words for file names.
 
     ```
-    config.proto // Not cfg.proto!
+    index.proto // Not idx.proto!
     ```
 
 #### Package Names
