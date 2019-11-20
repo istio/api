@@ -75,9 +75,8 @@
 // The example below declares a `Sidecar` configuration in the `prod-us1` namespace
 // that accepts inbound HTTP traffic on port 9080 and forwards
 // it to the attached workload instance listening on a Unix domain socket. In the
-// egress direction, in addition to the `istio-system` namespace, the sidecar
-// proxies only HTTP traffic bound for port 9080 for services in the
-// `prod-us1` namespace.
+// egress direction, the sidecar proxies only HTTP traffic bound for port 9080 for
+// services in the `prod-us1` namespace.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -99,8 +98,6 @@
 //       name: egresshttp
 //     hosts:
 //     - "prod-us1/*"
-//   - hosts:
-//     - "istio-system/*"
 // ```
 //
 // If the workload is deployed without IPTables-based traffic capture, the
