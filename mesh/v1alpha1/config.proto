@@ -381,8 +381,13 @@ message MeshConfig {
   // Configure the provision of certificates.
   repeated Certificate certificates = 47;
 
+  TrafficManagementFeatureSpec traffic_management = 49;
+  PolicyFeatureSpec policy = 50;
+  TelemetryFeatureSpec telemetry = 51;
+  SecurityFeatureSpec security = 52;
+
   // $hide_from_docs
-  // Next available field number: 49
+  // Next available field number: 53
 }
 
 // Resource describes the source of configuration
@@ -433,4 +438,20 @@ message Certificate {
   // The DNS names for the certificate. A certificate may contain
   // multiple DNS names.
   repeated string dns_names = 2;
+}
+
+// Configuration options for traffic management.
+message TrafficManagementFeatureSpec {
+}
+
+// Configuration options for the policy feature.
+message PolicyFeatureSpec {
+}
+
+// Configuration options for the telemetry feature.
+message TelemetryFeatureSpec {
+}
+
+// Configuration options for security feature.
+message SecurityFeatureSpec {
 }

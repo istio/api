@@ -1,0 +1,160 @@
+// Copyright 2019 Istio Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+import "k8s.io/api/core/v1/generated.proto";
+import "k8s.io/api/autoscaling/v2beta1/generated.proto";
+import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
+import "github.com/gogo/protobuf/protobuf/google/protobuf/wrappers.proto";
+
+package istio.mesh.v1alpha1;
+
+option go_package="istio.io/api/mesh/v1alpha1";
+
+/*
+IstioOperatorSpec is an API for managing as Istio control plane. It is used to define both profiles that are included
+with Istio releases, and user overlays, which are used to override profile values.
+
+The simplest overlay is to point the user IstioOperatorSpec profile to a different values file, for
+example an Istio minimal control plane, which will use the values associated with the minimal control plane profile for
+Istio.
+
+Deeper customization is possible at three levels:
+
+1. IstioComponentSpec
+
+Components can be enabled/disabled and Kubernetes resources can be modified.
+
+2. values.yaml
+
+The entirety of values.yaml settings is accessible through IstioOperatorSpec.values.
+This API will gradually be deprecated and is here to support migration. Values will be migrated either here (for
+installation settings) or MeshConfig (for runtime config).
+
+3. Kubernetes resource overlays
+
+Once a manifest is rendered, a further customization can be applied by specifying Kubernetes resource overlays.
+
+EXAMPLES
+
+1. Default Istio install
+
+    ```yaml
+    spec:
+    ```
+
+1. Default minimal profile install
+
+    ```yaml
+    spec:
+      profile: minimal
+    ```
+
+1. Default install with telemetry disabled
+
+    ```yaml
+    spec:
+      components:
+        telemetry:
+          enabled: false
+    ```
+
+1. Default install with specialized Kubernetes settings for pilot
+
+    ```yaml
+    spec:
+      components:
+        pilot:
+          k8s:
+            resources:
+              limits:
+                cpu: 444m
+                memory: 333Mi
+              requests:
+                cpu: 222m
+                memory: 111Mi
+            readinessProbe:
+              failureThreshold: 44
+              initialDelaySeconds: 11
+              periodSeconds: 22
+              successThreshold: 33
+    ```
+
+1. Default install with values.yaml customizations for proxy
+
+    ```yaml
+    spec:
+      values:
+        global:
+          proxy:
+            enableCoreDump: true
+            dnsRefreshRate: 10s
+    ```
+
+1. Default install with modification to container flag in galley
+
+    ```yaml
+    spec:
+      components:
+        galley:
+          k8s:
+            overlays:
+            - apiVersion: extensions/v1beta1
+              kind: Deployment
+              name: istio-galley
+              patches:
+              - path: spec.template.spec.containers.[name:galley].command.[--livenessProbeInterval]
+                value: --livenessProbeInterval=123s
+    ```
+*/
+
+// IstioOperatorSpec defines the desired installed state of Istio components.
+// The spec is a used to define a customization of the default profile values that are supplied with each Istio release.
+// Because the spec is a customization API, specifying an empty IstioOperatorSpec results in a default Istio
+// component values.
+message IstioOperatorSpec {
+    // Path or name for the profile e.g.
+    //     - minimal (looks in profiles dir for a file called minimal.yaml)
+    //     - /tmp/istio/install/values/custom/custom-install.yaml (local file path)
+    // default profile is used if this field is unset.
+    string profile = 10;
+    // Path for the install package. e.g.
+    //     - /tmp/istio-installer/nightly (local file path)
+    string install_package_path = 11;
+    // Root for docker image paths e.g. docker.io/istio-release.
+    // Releases are published to docker hub under 'istio' project.
+    // Daily builds from prow are on gcr.io, and nightly builds from circle on docker.io/istionightly
+    string hub = 12;
+    // Version tag for docker images e.g. 1.0.6
+    string tag = 13;
+
+    // Config used by control plane components internally.
+    MeshConfig meshConfig = 40;
+
+    // Kubernetes resource settings, enablement and component-specific settings that are not internal to the
+    // component.
+    IstioComponentSpec components = 50;
+
+    // Overrides for default values.yaml.
+    TypeMapStringInterface values = 100;
+    // Unvalidated overrides for default values.yaml. Used for custom templates where new parameters are added.
+    TypeMapStringInterface unvalidatedValues = 101;
+}
+
+// GOTYPE: map[string]interface{}
+message TypeMapStringInterface {}
+
+// GOTYPE: *IntOrStringForPB
+message TypeIntOrStringForPB {}
