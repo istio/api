@@ -1,6 +1,153 @@
 {
   "definitions": [
     {
+      "protopath": "analysis:/:v1alpha1:/:message.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "AnalysisMessageBase.Level",
+            "enum_fields": [
+              {
+                "name": "UNKNOWN"
+              },
+              {
+                "name": "ERROR",
+                "integer": 3
+              },
+              {
+                "name": "WARNING",
+                "integer": 8
+              },
+              {
+                "name": "INFO",
+                "integer": 12
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "name": "AnalysisMessageBase",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "code",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "level",
+                "type": "Level"
+              },
+              {
+                "id": 4,
+                "name": "documentation_url",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "AnalysisMessageWeakSchema",
+            "fields": [
+              {
+                "id": 1,
+                "name": "message_base",
+                "type": "AnalysisMessageBase"
+              },
+              {
+                "id": 2,
+                "name": "description",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "template",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "args",
+                "type": "ArgType",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "ArgType",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "go_type",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "GenericAnalysisMessage",
+            "fields": [
+              {
+                "id": 1,
+                "name": "message_base",
+                "type": "AnalysisMessageBase"
+              },
+              {
+                "id": 2,
+                "name": "args",
+                "type": "google.protobuf.Struct"
+              },
+              {
+                "id": 3,
+                "name": "resource_paths",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "InternalErrorAnalysisMessage",
+            "fields": [
+              {
+                "id": 1,
+                "name": "message_base",
+                "type": "AnalysisMessageBase"
+              },
+              {
+                "id": 2,
+                "name": "detail",
+                "type": "string"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/struct.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.analysis.v1alpha1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/analysis/v1alpha1"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "authentication:/:v1alpha1:/:policy.proto",
       "def": {
         "enums": [
