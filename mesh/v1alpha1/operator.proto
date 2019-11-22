@@ -133,9 +133,7 @@ message IstioOperatorSpec {
     // Path for the install package. e.g.
     //     - /tmp/istio-installer/nightly (local file path)
     string install_package_path = 11;
-    // Root for docker image paths e.g. docker.io/istio-release.
-    // Releases are published to docker hub under 'istio' project.
-    // Daily builds from prow are on gcr.io, and nightly builds from circle on docker.io/istionightly
+    // Root for docker image paths e.g. docker.io/istio
     string hub = 12;
     // Version tag for docker images e.g. 1.0.6
     string tag = 13;
