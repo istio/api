@@ -31,15 +31,20 @@ message IstioComponentSpec {
     PolicyComponentSpec policy = 33;
     TelemetryComponentSpec telemetry = 34;
     CitadelComponentSpec citadel = 35;
-    NodeAgentComponentSpec node_agent = 37;
-    GalleyComponentSpec galley = 38;
-    repeated GatewayComponentSpec gateways = 39;
-    CNIComponentSpec cni = 40;
-    CoreDNSComponentSpec coreDNS = 41;
+    NodeAgentComponentSpec node_agent = 36;
+    GalleyComponentSpec galley = 37;
+    GatewayComponentSpec ingressGateway = 38;
+    GatewayComponentSpec egressGateway = 39;
+    // Map key is the name of the resources for the component. All k8s resources accessible through
+    // KubernetesResourcesSpec must have the same name.
+    map<string, CustomGatewayComponentSpec> customGateways = 40;
+    CNIComponentSpec cni = 41;
+    CoreDNSComponentSpec coreDNS = 42;
+    IstiodComponentSpec istiod = 43;
 
     // Non-core components. Map key is the name of the resources for the component. All k8s resources accessible through
     // KubernetesResourcesSpec must have the same name.
-    map<string, ExtensionComponentSpec> = 42;
+    map<string, ExtensionComponentSpec> = 100;
 }
 
 // Configuration common to all components.
@@ -75,6 +80,7 @@ message PolicyComponentSpec {
 
 // Configuration options for the telemetry component.
 message TelemetryComponentSpec {
+    TypeBoolValueForPB enabled = 1;
     KubernetesResourcesSpec k8s = 80;
 }
 
@@ -96,9 +102,14 @@ message GalleyComponentSpec {
     KubernetesResourcesSpec k8s = 80;
 }
 
-// Configuration options for gateways.
+// Configuration options for built-in gateways.
 message GatewayComponentSpec {
-    string name = 1;
+    TypeBoolValueForPB enabled = 1;
+    KubernetesResourcesSpec k8s = 80;
+}
+
+// Configuration options for custom gateways.
+message CustomGatewayComponentSpec {
     KubernetesResourcesSpec k8s = 80;
 }
 
@@ -110,6 +121,12 @@ message CNIComponentSpec {
 
 // Configuration options for CoreDNS component.
 message CoreDNSComponentSpec {
+    TypeBoolValueForPB enabled = 1;
+    KubernetesResourcesSpec k8s = 80;
+}
+
+// Configuration options for the istiod component.
+message IstiodComponentSpec {
     TypeBoolValueForPB enabled = 1;
     KubernetesResourcesSpec k8s = 80;
 }
