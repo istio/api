@@ -33,10 +33,13 @@ message IstioComponentSpec {
     CitadelComponentSpec citadel = 35;
     NodeAgentComponentSpec node_agent = 37;
     GalleyComponentSpec galley = 38;
-    IngressGatewayComponentSpec ingress_gateway = 39;
-    EgressGatewayComponentSpec egress_gateway = 40;
-    CNIComponentSpec cni = 41;
-    CoreDNSFeatureSpec coreDNS = 33;
+    repeated GatewayComponentSpec gateways = 39;
+    CNIComponentSpec cni = 40;
+    CoreDNSComponentSpec coreDNS = 41;
+
+    // Non-core components. Map key is the name of the resources for the component. All k8s resources accessible through
+    // KubernetesResourcesSpec must have the same name.
+    map<string, ExtensionComponentSpec> = 42;
 }
 
 // Configuration common to all components.
@@ -93,15 +96,9 @@ message GalleyComponentSpec {
     KubernetesResourcesSpec k8s = 80;
 }
 
-// Configuration options for ingress gateways.
-message IngressGatewayComponentSpec {
-    TypeBoolValueForPB enabled = 1;
-    KubernetesResourcesSpec k8s = 80;
-}
-
-// Configuration options for egress gateways.
-message EgressGatewayComponentSpec {
-    TypeBoolValueForPB enabled = 1;
+// Configuration options for gateways.
+message GatewayComponentSpec {
+    string name = 1;
     KubernetesResourcesSpec k8s = 80;
 }
 
@@ -114,14 +111,11 @@ message CNIComponentSpec {
 // Configuration options for CoreDNS component.
 message CoreDNSComponentSpec {
     TypeBoolValueForPB enabled = 1;
-    string namespace = 2;
     KubernetesResourcesSpec k8s = 80;
 }
 
 // Configuration options for CoreDNS component.
-message CoreDNSComponentSpec {
-    TypeBoolValueForPB enabled = 1;
-    string namespace = 2;
+message ExtensionComponentSpec {
     KubernetesResourcesSpec k8s = 80;
 }
 
@@ -226,7 +220,7 @@ message Resources {
     map<string, string> requests = 2;
 }
 
-// Mirrors k8s.io.api.core.v1.Probe for unmarshaling
+// Mirrors k8s.io.api.core.v1.Probe for unmarshaling.
 message ReadinessProbe {
     ExecAction exec = 1;
     HTTPGetAction httpGet = 2;
@@ -238,12 +232,12 @@ message ReadinessProbe {
     int32 failureThreshold = 8;
 }
 
-// Mirrors k8s.io.api.core.v1.ExecAction for unmarshaling
+// Mirrors k8s.io.api.core.v1.ExecAction for unmarshaling.
 message ExecAction {
     repeated string command = 1;
 }
 
-// Mirrors k8s.io.api.core.v1.HTTPGetAction for unmarshaling
+// Mirrors k8s.io.api.core.v1.HTTPGetAction for unmarshaling.
 message HTTPGetAction {
     string path = 1;
     TypeIntOrStringForPB port = 2;
@@ -252,13 +246,13 @@ message HTTPGetAction {
     repeated HTTPHeader httpHeaders = 5;
 }
 
-// Mirrors k8s.io.api.core.v1.HTTPHeader for unmarshaling
+// Mirrors k8s.io.api.core.v1.HTTPHeader for unmarshaling.
 message HTTPHeader {
     string name = 1;
     string value = 2;
 }
 
-// Mirrors k8s.io.api.core.v1.TCPSocketAction for unmarshaling
+// Mirrors k8s.io.api.core.v1.TCPSocketAction for unmarshaling.
 message TCPSocketAction {
     TypeIntOrStringForPB port = 1;
     string host = 2;
@@ -284,7 +278,7 @@ message RollingUpdateDeployment {
 }
 
 message ObjectMeta {
-    // From k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta
+    // From k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta.
     string name = 5;
     string namespace = 6;
 }

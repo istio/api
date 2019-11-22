@@ -24,12 +24,11 @@ package istio.mesh.v1alpha1;
 option go_package="istio.io/api/mesh/v1alpha1";
 
 /*
-IstioOperatorSpec is an API for managing as Istio control plane. It is used to define both profiles that are included
+IstioOperatorSpec is an API for managing an Istio control plane. It is used to define profiles that are included
 with Istio releases, and user overlays, which are used to override profile values.
 
-The simplest overlay is to point the user IstioOperatorSpec profile to a different values file, for
-example an Istio minimal control plane, which will use the values associated with the minimal control plane profile for
-Istio.
+The simplest overlay is to set the profile to a different value, for example "minimal", which will use the values
+associated with the minimal control plane profile for Istio.
 
 Deeper customization is possible at three levels:
 
