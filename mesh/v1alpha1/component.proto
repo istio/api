@@ -195,25 +195,6 @@ message k8sObjectOverlay {
     repeated PathValue patches = 4;
 }
 
-// Observed state of IstioControlPlane.
-message InstallStatus {
-    enum Status {
-        NONE = 0;
-        UPDATING = 1;
-        HEALTHY = 2;
-        ERROR = 3;
-        RECONCILING = 4;
-    }
-    message VersionStatus {
-        string version = 1;
-        Status status = 2;
-        string statusString = 3;
-        string error = 4;
-    }
-
-    map<string, VersionStatus> status = 1;
-}
-
 // Mirrors k8s.io.api.core.v1.ResourceRequirements for unmarshaling.
 message Resources {
     map<string, string> limits = 1;

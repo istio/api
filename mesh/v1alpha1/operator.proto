@@ -148,6 +148,32 @@ message IstioOperatorSpec {
     TypeMapStringInterface values = 100;
     // Unvalidated overrides for default values.yaml. Used for custom templates where new parameters are added.
     TypeMapStringInterface unvalidatedValues = 101;
+
+    // Status describes the current state of a component.
+    enum Status {
+        NONE = 0;
+        UPDATING = 1;
+        RECONCILING = 2;
+        HEALTHY = 3;
+        ERROR = 4;
+    }
+    // VersionStatus is the status and version of a component.
+    message VersionStatus {
+        string version = 1;
+        Status status = 2;
+        string statusString = 3;
+        string error = 4;
+    }
+    // Overall status of all components controlled by the operator.
+    // - If all components have status NONE, overall status is NONE.
+    // - If all components are HEALTHY, overall status is HEALTHY.
+    // - If one or more components are RECONCILING and others are HEALTHY, overall status is RECONCILING.
+    // - If one or more components are UPDATING and others are HEALTHY, overall status is UPDATING.
+    // - If components are a mix of RECONCILING, UPDATING and HEALTHY, overall status is UPDATING.
+    // - If any component is in ERROR state, overall status is ERROR.
+    Status status = 200;
+    // Individual status of each component controlled by the operator. The map key is the name of the component.
+    map<string, VersionStatus> componentStatus = 201;
 }
 
 // GOTYPE: map[string]interface{}
