@@ -19,5 +19,6 @@ var _ = math.Inf
 
 // DeepCopyInto supports using Policy within kubernetes types, where deepcopy-gen is used.
 func (in *Policy) DeepCopyInto(out *Policy) {
-	proto.Merge(out, in)
+	p := proto.Clone(in).(*Policy)
+	*out = *p
 }

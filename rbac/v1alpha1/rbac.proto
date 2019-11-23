@@ -19,10 +19,15 @@ import "google/api/field_behavior.proto";
 // $schema: istio.rbac.v1alpha1.RbacConfig
 // $schema: istio.rbac.v1alpha1.ServiceRole
 // $schema: istio.rbac.v1alpha1.ServiceRoleBinding
-// $title: RBAC
+// $title: RBAC (deprecated)
 // $description: Configuration for Role Based Access Control.
-// $location: https://istio.io/docs/reference/config/authorization/istio.rbac.v1alpha1.html
+// $location: https://istio.io/docs/reference/config/security/istio.rbac.v1alpha1.html
+// $weight: 40
+// $aliases: [/docs/reference/config/authorization/istio.rbac.v1alpha1]
 
+// Note: The v1alpha1 RBAC policy is deprecated by the v1beta1 Authorization policy.
+// This page is kept for migration purpose and will be removed in Istio 1.6.
+//
 // Istio RBAC (Role Based Access Control) defines ServiceRole and ServiceRoleBinding
 // objects.
 //

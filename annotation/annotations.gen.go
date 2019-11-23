@@ -7,11 +7,28 @@ type ResourceTypes int
 
 const (
 	Unknown ResourceTypes = iota
+    Any
     Ingress
     Pod
     Service
     ServiceEntry
 )
+
+func (r ResourceTypes) String() string {
+	switch r {
+	case 1:
+		return "Any"
+	case 2:
+		return "Ingress"
+	case 3:
+		return "Pod"
+	case 4:
+		return "Service"
+	case 5:
+		return "ServiceEntry"
+	}
+	return "Unknown"
+}
 
 // Instance describes a single resource annotation
 type Instance struct {
@@ -60,6 +77,32 @@ var (
           Hidden: true,
           Deprecated: false,
 		  Resources: []ResourceTypes{ Service, },
+        }
+	
+		OperatorInstallChartOwner = Instance {
+          Name: "install.operator.istio.io/chart-owner",
+          Description: "Represents the name of the chart used to create this "+
+                        "resource.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Any, },
+        }
+	
+		OperatorInstallOwnerGeneration = Instance {
+          Name: "install.operator.istio.io/owner-generation",
+          Description: "Represents the generation to which the resource was last "+
+                        "reconciled.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Any, },
+        }
+	
+		OperatorInstallVersion = Instance {
+          Name: "install.operator.istio.io/version",
+          Description: "Represents the Istio version associated with the resource",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Any, },
         }
 	
 		IoKubernetesIngressClass = Instance {
@@ -436,3 +479,63 @@ var (
         }
 	
 )
+
+func AllResourceAnnotations() []*Instance {
+	return []*Instance {
+		&AlphaCanonicalServiceAccounts,
+		&AlphaIdentity,
+		&AlphaKubernetesServiceAccounts,
+		&OperatorInstallChartOwner,
+		&OperatorInstallOwnerGeneration,
+		&OperatorInstallVersion,
+		&IoKubernetesIngressClass,
+		&AlphaNetworkingEndpointsVersion,
+		&AlphaNetworkingNotReadyEndpoints,
+		&AlphaNetworkingServiceVersion,
+		&NetworkingExportTo,
+		&PolicyCheck,
+		&PolicyCheckBaseRetryWaitTime,
+		&PolicyCheckMaxRetryWaitTime,
+		&PolicyCheckRetries,
+		&PolicyLang,
+		&SidecarStatusReadinessApplicationPorts,
+		&SidecarStatusReadinessFailureThreshold,
+		&SidecarStatusReadinessInitialDelaySeconds,
+		&SidecarStatusReadinessPeriodSeconds,
+		&SecurityAutoMTLS,
+		&SidecarBootstrapOverride,
+		&SidecarComponentLogLevel,
+		&SidecarControlPlaneAuthPolicy,
+		&SidecarDiscoveryAddress,
+		&SidecarInject,
+		&SidecarInterceptionMode,
+		&SidecarLogLevel,
+		&SidecarProxyCPU,
+		&SidecarProxyImage,
+		&SidecarProxyMemory,
+		&SidecarRewriteAppHTTPProbers,
+		&SidecarStatsInclusionPrefixes,
+		&SidecarStatsInclusionRegexps,
+		&SidecarStatsInclusionSuffixes,
+		&SidecarStatus,
+		&SidecarUserVolume,
+		&SidecarUserVolumeMount,
+		&SidecarStatusPort,
+		&SidecarTrafficExcludeInboundPorts,
+		&SidecarTrafficExcludeOutboundIPRanges,
+		&SidecarTrafficExcludeOutboundPorts,
+		&SidecarTrafficIncludeInboundPorts,
+		&SidecarTrafficIncludeOutboundIPRanges,
+		&SidecarTrafficKubevirtInterfaces,
+	}
+}
+
+func AllResourceTypes() []string {
+	return []string {
+		"Any",
+		"Ingress",
+		"Pod",
+		"Service",
+		"ServiceEntry",
+	}
+}

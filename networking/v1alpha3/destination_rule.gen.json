@@ -329,7 +329,7 @@
         "type": "object",
         "properties": {
           "maxConnections": {
-            "description": "Maximum number of HTTP1 /TCP connections to a destination host. Default 1024.",
+            "description": "Maximum number of HTTP1 /TCP connections to a destination host. Default 2^32-1.",
             "type": "integer",
             "format": "int32"
           },
@@ -347,12 +347,12 @@
         "type": "object",
         "properties": {
           "http1MaxPendingRequests": {
-            "description": "Maximum number of pending HTTP requests to a destination. Default 1024.",
+            "description": "Maximum number of pending HTTP requests to a destination. Default 2^32-1.",
             "type": "integer",
             "format": "int32"
           },
           "http2MaxRequests": {
-            "description": "Maximum number of requests to a backend. Default 1024.",
+            "description": "Maximum number of requests to a backend. Default 2^32-1.",
             "type": "integer",
             "format": "int32"
           },
@@ -362,7 +362,7 @@
             "format": "int32"
           },
           "maxRetries": {
-            "description": "Maximum number of retries that can be outstanding to all hosts in a cluster at a given time. Defaults to 1024.",
+            "description": "Maximum number of retries that can be outstanding to all hosts in a cluster at a given time. Defaults to 2^32-1.",
             "type": "integer",
             "format": "int32"
           },

@@ -312,3 +312,21 @@ annotations:
     hidden: false
     resources:
       - Ingress
+  - name: install.operator.istio.io/chart-owner
+    description: Represents the name of the chart used to create this resource.
+    deprecated: false
+    hidden: false
+    resources:
+      - Any
+  - name: install.operator.istio.io/owner-generation
+    description: Represents the generation to which the resource was last reconciled.
+    deprecated: false
+    hidden: false
+    resources:
+      - Any
+  - name: install.operator.istio.io/version
+    description: Represents the Istio version associated with the resource
+    deprecated: false
+    hidden: false
+    resources:
+      - Any

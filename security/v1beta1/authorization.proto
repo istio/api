@@ -19,7 +19,9 @@ import "type/v1beta1/selector.proto";
 // $schema: istio.security.v1beta1.AuthorizationPolicy
 // $title: Authorization Policy
 // $description: Configuration for access control on workloads.
-// $location: https://istio.io/docs/reference/config/security/v1beta1/authorization-policy.html
+// $location: https://istio.io/docs/reference/config/security/authorization-policy.html
+// $weight: 20
+// $aliases: [/docs/reference/config/authorization/authorization-policy]
 
 // Istio Authorization Policy enables access control on workloads in the mesh.
 //

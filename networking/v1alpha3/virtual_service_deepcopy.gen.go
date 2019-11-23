@@ -110,5 +110,6 @@ var _ = math.Inf
 
 // DeepCopyInto supports using VirtualService within kubernetes types, where deepcopy-gen is used.
 func (in *VirtualService) DeepCopyInto(out *VirtualService) {
-	proto.Merge(out, in)
+	p := proto.Clone(in).(*VirtualService)
+	*out = *p
 }
