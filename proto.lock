@@ -42591,6 +42591,132 @@
       }
     },
     {
+      "protopath": "security:/:v1beta1:/:jwt.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "JWT",
+            "fields": [
+              {
+                "id": 1,
+                "name": "issuer",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "audiences",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "jwks_uri",
+                "type": "string"
+              },
+              {
+                "id": 10,
+                "name": "jwks",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "from_headers",
+                "type": "JWTHeader",
+                "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "from_params",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "JWTHeader",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "prefix",
+                "type": "string"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/api/field_behavior.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.security.v1beta1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/security/v1beta1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "security:/:v1beta1:/:request_authentication.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "RequestAuthentication",
+            "fields": [
+              {
+                "id": 1,
+                "name": "selector",
+                "type": "istio.type.v1beta1.WorkloadSelector"
+              },
+              {
+                "id": 2,
+                "name": "jwt_rules",
+                "type": "JWT",
+                "is_repeated": true
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "type/v1beta1/selector.proto"
+          },
+          {
+            "path": "security/v1beta1/jwt.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.security.v1beta1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/security/v1beta1"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "type:/:v1beta1:/:selector.proto",
       "def": {
         "messages": [
