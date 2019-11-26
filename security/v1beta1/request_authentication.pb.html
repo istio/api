@@ -151,13 +151,13 @@ parameter <code>my_token</code> (e.g /path?my_token=<JWT>), the config is:</p>
 No
 </td>
 </tr>
-<tr id="JWTRule-forward_payload_to_header">
-<td><code>forwardPayloadToHeader</code></td>
+<tr id="JWTRule-output_payload_to_header">
+<td><code>outputPayloadToHeader</code></td>
 <td><code>string</code></td>
 <td>
-<p>This field specifies the header name to forward a successfully verified JWT payload to the
+<p>This field specifies the header name to output a successfully verified JWT payload to the
 backend. The forwarded data is <code>base64_encoded(jwt_payload_in_JSON)</code>. If it is not specified,
-the payload will not be forwarded.</p>
+the payload will not be emitted.</p>
 
 </td>
 <td>

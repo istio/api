@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.security.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\035istio.io/api/security/v1beta1'),
-  serialized_pb=_b('\n\x1asecurity/v1beta1/jwt.proto\x12\x16istio.security.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\"\xc2\x01\n\x07JWTRule\x12\x13\n\x06issuer\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x11\n\taudiences\x18\x02 \x03(\t\x12\x10\n\x08jwks_uri\x18\x03 \x01(\t\x12\x0c\n\x04jwks\x18\n \x01(\t\x12\x37\n\x0c\x66rom_headers\x18\x06 \x03(\x0b\x32!.istio.security.v1beta1.JWTHeader\x12\x13\n\x0b\x66rom_params\x18\x07 \x03(\t\x12!\n\x19\x66orward_payload_to_header\x18\x08 \x01(\t\".\n\tJWTHeader\x12\x11\n\x04name\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x0e\n\x06prefix\x18\x02 \x01(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
+  serialized_pb=_b('\n\x1asecurity/v1beta1/jwt.proto\x12\x16istio.security.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\"\xc1\x01\n\x07JWTRule\x12\x13\n\x06issuer\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x11\n\taudiences\x18\x02 \x03(\t\x12\x10\n\x08jwks_uri\x18\x03 \x01(\t\x12\x0c\n\x04jwks\x18\n \x01(\t\x12\x37\n\x0c\x66rom_headers\x18\x06 \x03(\x0b\x32!.istio.security.v1beta1.JWTHeader\x12\x13\n\x0b\x66rom_params\x18\x07 \x03(\t\x12 \n\x18output_payload_to_header\x18\x08 \x01(\t\".\n\tJWTHeader\x12\x11\n\x04name\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x0e\n\x06prefix\x18\x02 \x01(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,])
 
@@ -78,7 +78,7 @@ _JWTRULE = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='forward_payload_to_header', full_name='istio.security.v1beta1.JWTRule.forward_payload_to_header', index=6,
+      name='output_payload_to_header', full_name='istio.security.v1beta1.JWTRule.output_payload_to_header', index=6,
       number=8, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -97,7 +97,7 @@ _JWTRULE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=88,
-  serialized_end=282,
+  serialized_end=281,
 )
 
 
@@ -134,8 +134,8 @@ _JWTHEADER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=284,
-  serialized_end=330,
+  serialized_start=283,
+  serialized_end=329,
 )
 
 _JWTRULE.fields_by_name['from_headers'].message_type = _JWTHEADER

@@ -5382,9 +5382,6 @@ spec:
                       format: string
                       type: string
                     type: array
-                  forwardPayloadToHeader:
-                    format: string
-                    type: string
                   fromHeaders:
                     description: List of header locations from which JWT is expected.
                     items:
@@ -5419,6 +5416,9 @@ spec:
                     format: string
                     type: string
                   jwksUri:
+                    format: string
+                    type: string
+                  outputPayloadToHeader:
                     format: string
                     type: string
                 type: object
