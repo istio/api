@@ -1188,9 +1188,9 @@ destination.</p>
 No
 </td>
 </tr>
-<tr id="HTTPRoute-mirror_percent">
-<td><code>mirrorPercent</code></td>
-<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<tr id="HTTPRoute-mirror_percentage">
+<td><code>mirrorPercentage</code></td>
+<td><code><a href="#Percent">Percent</a></code></td>
 <td>
 <p>Percentage of the traffic to be mirrored by the <code>mirror</code> field.
 If this field is absent, all the traffic (100%) will be mirrored.
@@ -1219,6 +1219,19 @@ No
 <td><code><a href="#Headers">Headers</a></code></td>
 <td>
 <p>Header manipulation rules</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPRoute-mirror_percent" class="deprecated ">
+<td><code>mirrorPercent</code></td>
+<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<td>
+<p>Percentage of the traffic to be mirrored by the <code>mirror</code> field.
+Use of integer <code>mirror_percent</code> value is deprecated. Use the
+double <code>mirror_percentage</code> field instead</p>
 
 </td>
 <td>

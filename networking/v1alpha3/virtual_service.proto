@@ -420,9 +420,14 @@ message HTTPRoute {
   Destination mirror = 9;
 
   // Percentage of the traffic to be mirrored by the `mirror` field.
+  // Use of integer `mirror_percent` value is deprecated. Use the
+  // double `mirror_percentage` field instead
+  google.protobuf.UInt32Value mirror_percent = 18 [deprecated=true];
+
+  // Percentage of the traffic to be mirrored by the `mirror` field.
   // If this field is absent, all the traffic (100%) will be mirrored.
   // Max value is 100.
-  google.protobuf.UInt32Value mirror_percent = 18;
+  Percent mirror_percentage = 19;
 
   // Cross-Origin Resource Sharing policy (CORS). Refer to
   // [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)

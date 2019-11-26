@@ -4894,6 +4894,14 @@ spec:
                       field.
                     nullable: true
                     type: integer
+                  mirrorPercentage:
+                    description: Percentage of the traffic to be mirrored by the `mirror`
+                      field.
+                    properties:
+                      value:
+                        format: double
+                        type: number
+                    type: object
                   name:
                     description: The name assigned to the route for debugging purposes.
                     format: string
