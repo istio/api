@@ -382,7 +382,7 @@ message MeshConfig {
   repeated Certificate certificates = 47;
 
   // $hide_from_docs
-  // Next available field number: 53
+  // Next available field number: 49
 }
 
 // Resource describes the source of configuration

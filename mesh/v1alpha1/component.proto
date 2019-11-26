@@ -40,7 +40,6 @@ message IstioComponentSpec {
     map<string, CustomGatewayComponentSpec> customGateways = 40;
     CNIComponentSpec cni = 41;
     CoreDNSComponentSpec coreDNS = 42;
-    IstiodComponentSpec istiod = 43;
 
     // Non-core components. Map key is the name of the resources for the component. All k8s resources accessible through
     // KubernetesResourcesSpec must have the same name.
