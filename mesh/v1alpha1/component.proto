@@ -43,7 +43,7 @@ message IstioComponentSpec {
 
     // Non-core components. Map key is the name of the resources for the component. All k8s resources accessible through
     // KubernetesResourcesSpec must have the same name.
-    map<string, ExtensionComponentSpec> = 100;
+    map<string, ExtensionComponentSpec> extraComponents = 100;
 }
 
 // Configuration common to all components.
@@ -120,12 +120,6 @@ message CNIComponentSpec {
 
 // Configuration options for CoreDNS component.
 message CoreDNSComponentSpec {
-    TypeBoolValueForPB enabled = 1;
-    KubernetesResourcesSpec k8s = 80;
-}
-
-// Configuration options for the istiod component.
-message IstiodComponentSpec {
     TypeBoolValueForPB enabled = 1;
     KubernetesResourcesSpec k8s = 80;
 }
