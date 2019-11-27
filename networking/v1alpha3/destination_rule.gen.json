@@ -135,7 +135,12 @@
             "type": "string"
           },
           "consecutiveErrors": {
-            "description": "Number of errors before a host is ejected from the connection pool. Defaults to 5. When the upstream host is accessed over HTTP, a 502, 503, or 504 return code qualifies as an error. When the upstream host is accessed over an opaque TCP connection, connect timeouts and connection error/failure events qualify as an error.",
+            "description": "Number of gateway errors (502, 503 or 504) before a host is ejected from the connection pool. When the upstream host is accessed over an opaque TCP connection, connect timeouts and connection error/failure events qualify as a gateway error. Defaults to 5.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "consecutive5xxErrors": {
+            "description": "Number of 5xx errors before a host is ejected from the connection pool. When the upstream host is accessed over TCP, errors are internally mapped to HTTP 5xx codes and treated as such. Default is 0, which disables this feature. consecutive_errors and consecutive_5xx_errors can be used separately or together. The errors counted by consecutive_errors are also included in consecutive_5xx_errors, so consecutive_errors should be less than consecutive_5xx_errors when both are used.",
             "type": "integer",
             "format": "int32"
           },

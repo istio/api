@@ -954,11 +954,27 @@ spec:
 <td><code>consecutiveErrors</code></td>
 <td><code>int32</code></td>
 <td>
-<p>Number of errors before a host is ejected from the connection
-pool. Defaults to 5. When the upstream host is accessed over HTTP, a
-502, 503, or 504 return code qualifies as an error. When the upstream host
-is accessed over an opaque TCP connection, connect timeouts and
-connection error/failure events qualify as an error.</p>
+<p>Number of gateway errors (502, 503 or 504) before a host is ejected
+from the connection pool. When the upstream host is accessed over an
+opaque TCP connection, connect timeouts and connection error/failure
+events qualify as a gateway error. Defaults to 5.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="OutlierDetection-consecutive_5xx_errors">
+<td><code>consecutive5xxErrors</code></td>
+<td><code>int32</code></td>
+<td>
+<p>Number of 5xx errors before a host is ejected from the connection pool.
+When the upstream host is accessed over TCP, errors are internally mapped
+to HTTP 5xx codes and treated as such. Default is 0, which disables this
+feature. consecutive<em>errors and consecutive</em>5xx<em>errors can be used
+separately or together. The errors counted by consecutive</em>errors are also
+included in consecutive<em>5xx</em>errors, so consecutive<em>errors should be less
+than consecutive</em>5xx_errors when both are used.</p>
 
 </td>
 <td>
