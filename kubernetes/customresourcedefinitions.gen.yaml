@@ -4907,7 +4907,7 @@ spec:
                     format: string
                     type: string
                   redirect:
-                    description: A http rule can either redirect or forward (default)
+                    description: A HTTP rule can either redirect or forward (default)
                       traffic.
                     properties:
                       authority:
@@ -4957,7 +4957,7 @@ spec:
                         type: string
                     type: object
                   route:
-                    description: A http rule can either redirect or forward (default)
+                    description: A HTTP rule can either redirect or forward (default)
                       traffic.
                     items:
                       properties:

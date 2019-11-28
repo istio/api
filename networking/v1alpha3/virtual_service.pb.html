@@ -225,7 +225,7 @@ destination.host should unambiguously refer to a service in the service
 registry. Istio&rsquo;s service registry is composed of all the services found
 in the platform&rsquo;s service registry (e.g., Kubernetes services, Consul
 services), as well as services declared through the
-<a href="https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry">ServiceEntry</a> resource.</p>
+<a href="/docs/reference/config/networking/service-entry/#ServiceEntry">ServiceEntry</a> resource.</p>
 
 <p><em>Note for Kubernetes users</em>: When short names are used (e.g. &ldquo;reviews&rdquo;
 instead of &ldquo;reviews.default.svc.cluster.local&rdquo;), Istio will interpret
@@ -313,7 +313,7 @@ spec:
 services must first be added to Istio&rsquo;s internal service registry using the
 ServiceEntry resource. VirtualServices can then be defined to control traffic
 bound to these external services. For example, the following rules define a
-Service for wikipedia.org and set a timeout of 5s for http requests.</p>
+Service for wikipedia.org and set a timeout of 5s for HTTP requests.</p>
 
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
 kind: ServiceEntry
@@ -360,7 +360,7 @@ spec:
 <p>The name of a service from the service registry. Service
 names are looked up from the platform&rsquo;s service registry (e.g.,
 Kubernetes services, Consul services, etc.) and from the hosts
-declared by <a href="https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry">ServiceEntry</a>. Traffic forwarded to
+declared by <a href="/docs/reference/config/networking/service-entry/#ServiceEntry">ServiceEntry</a>. Traffic forwarded to
 destinations that are not found in either of the two, will be dropped.</p>
 
 <p><em>Note for Kubernetes users</em>: When short names are used (e.g. &ldquo;reviews&rdquo;
@@ -409,7 +409,7 @@ No
 <h2 id="HTTPFaultInjection">HTTPFaultInjection</h2>
 <section>
 <p>HTTPFaultInjection can be used to specify one or more faults to inject
-while forwarding http requests to the destination specified in a route.
+while forwarding HTTP requests to the destination specified in a route.
 Fault specification is part of a VirtualService rule. Faults include
 aborting the Http request from downstream service, and/or delaying
 proxying of requests. A fault rule MUST HAVE delay or abort or both.</p>
@@ -955,7 +955,8 @@ spec:
 <td>
 <p>Number of retries for a given request. The interval
 between retries will be determined automatically (25ms+). Actual
-number of retries attempted depends on the httpReqTimeout.</p>
+number of retries attempted depends on the request <code>timeout</code> of the
+<a href="#HTTPRoute">HTTP route</a>.</p>
 
 </td>
 <td>
@@ -1101,7 +1102,7 @@ No
 <td><code>route</code></td>
 <td><code><a href="#HTTPRouteDestination">HTTPRouteDestination[]</a></code></td>
 <td>
-<p>A http rule can either redirect or forward (default) traffic. The
+<p>A HTTP rule can either redirect or forward (default) traffic. The
 forwarding target can be one of several versions of a service (see
 glossary in beginning of document). Weights associated with the
 service version determine the proportion of traffic it receives.</p>
@@ -1115,7 +1116,7 @@ No
 <td><code>redirect</code></td>
 <td><code><a href="#HTTPRedirect">HTTPRedirect</a></code></td>
 <td>
-<p>A http rule can either redirect or forward (default) traffic. If
+<p>A HTTP rule can either redirect or forward (default) traffic. If
 traffic passthrough option is specified in the rule,
 route/redirect will be ignored. The redirect primitive can be used to
 send a HTTP 301 redirect to a different URI or Authority.</p>
@@ -1993,7 +1994,7 @@ properties of the corresponding hosts, including those for multiple
 HTTP and TCP ports. Alternatively, the traffic properties of a host
 can be defined using more than one VirtualService, with certain
 caveats. Refer to the
-<a href="https://istio.io/docs/ops/best-practices/traffic-management/#split-virtual-services">Operations Guide</a>
+<a href="/docs/ops/best-practices/traffic-management/#split-virtual-services">Operations Guide</a>
 for details.</p>
 
 <p><em>Note for Kubernetes users</em>: When short names are used (e.g. &ldquo;reviews&rdquo;
