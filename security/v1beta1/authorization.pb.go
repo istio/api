@@ -84,7 +84,7 @@
 // metadata:
 //  name: policy
 //  namespace: foo
-// spec:
+// spec: {}
 // ```
 //
 // The following authorization policy applies to workloads containing label
@@ -137,7 +137,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // metadata:
 //  name: deny-all
 //  namespace: foo
-// spec:
+// spec: {}
 // ```
 //
 // The following authorization policy allows all requests to workloads in namespace
