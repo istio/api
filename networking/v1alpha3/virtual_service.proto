@@ -310,7 +310,7 @@ message VirtualService {
 // services must first be added to Istio's internal service registry using the
 // ServiceEntry resource. VirtualServices can then be defined to control traffic
 // bound to these external services. For example, the following rules define a
-// Service for wikipedia.org and set a timeout of 5s for http requests.
+// Service for wikipedia.org and set a timeout of 5s for HTTP requests.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -383,13 +383,13 @@ message HTTPRoute {
   // is matched if any one of the match blocks succeed.
   repeated HTTPMatchRequest match = 1;
 
-  // A http rule can either redirect or forward (default) traffic. The
+  // A HTTP rule can either redirect or forward (default) traffic. The
   // forwarding target can be one of several versions of a service (see
   // glossary in beginning of document). Weights associated with the
   // service version determine the proportion of traffic it receives.
   repeated HTTPRouteDestination route = 2;
 
-  // A http rule can either redirect or forward (default) traffic. If
+  // A HTTP rule can either redirect or forward (default) traffic. If
   // traffic passthrough option is specified in the rule,
   // route/redirect will be ignored. The redirect primitive can be used to
   // send a HTTP 301 redirect to a different URI or Authority.
@@ -1003,7 +1003,8 @@ message StringMatch {
 message HTTPRetry {
   // Number of retries for a given request. The interval
   // between retries will be determined automatically (25ms+). Actual
-  // number of retries attempted depends on the httpReqTimeout.
+  // number of retries attempted depends on the request `timeout` of the
+  // [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute).
   int32 attempts = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Timeout per retry attempt for a given request. format: 1h/1m/1s/1ms. MUST BE >=1ms.
@@ -1078,7 +1079,7 @@ message CorsPolicy {
 }
 
 // HTTPFaultInjection can be used to specify one or more faults to inject
-// while forwarding http requests to the destination specified in a route.
+// while forwarding HTTP requests to the destination specified in a route.
 // Fault specification is part of a VirtualService rule. Faults include
 // aborting the Http request from downstream service, and/or delaying
 // proxying of requests. A fault rule MUST HAVE delay or abort or both.

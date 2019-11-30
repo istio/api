@@ -381,7 +381,7 @@ func (m *VirtualService) GetExportTo() []string {
 // services must first be added to Istio's internal service registry using the
 // ServiceEntry resource. VirtualServices can then be defined to control traffic
 // bound to these external services. For example, the following rules define a
-// Service for wikipedia.org and set a timeout of 5s for http requests.
+// Service for wikipedia.org and set a timeout of 5s for HTTP requests.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -507,12 +507,12 @@ type HTTPRoute struct {
 	// semantics, while the list of match blocks have OR semantics. The rule
 	// is matched if any one of the match blocks succeed.
 	Match []*HTTPMatchRequest `protobuf:"bytes,1,rep,name=match,proto3" json:"match,omitempty"`
-	// A http rule can either redirect or forward (default) traffic. The
+	// A HTTP rule can either redirect or forward (default) traffic. The
 	// forwarding target can be one of several versions of a service (see
 	// glossary in beginning of document). Weights associated with the
 	// service version determine the proportion of traffic it receives.
 	Route []*HTTPRouteDestination `protobuf:"bytes,2,rep,name=route,proto3" json:"route,omitempty"`
-	// A http rule can either redirect or forward (default) traffic. If
+	// A HTTP rule can either redirect or forward (default) traffic. If
 	// traffic passthrough option is specified in the rule,
 	// route/redirect will be ignored. The redirect primitive can be used to
 	// send a HTTP 301 redirect to a different URI or Authority.
@@ -2057,7 +2057,8 @@ func (*StringMatch) XXX_OneofWrappers() []interface{} {
 type HTTPRetry struct {
 	// Number of retries for a given request. The interval
 	// between retries will be determined automatically (25ms+). Actual
-	// number of retries attempted depends on the httpReqTimeout.
+	// number of retries attempted depends on the request `timeout` of the
+	// [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute).
 	Attempts int32 `protobuf:"varint,1,opt,name=attempts,proto3" json:"attempts,omitempty"`
 	// Timeout per retry attempt for a given request. format: 1h/1m/1s/1ms. MUST BE >=1ms.
 	PerTryTimeout *types.Duration `protobuf:"bytes,2,opt,name=per_try_timeout,json=perTryTimeout,proto3" json:"per_try_timeout,omitempty"`
@@ -2260,7 +2261,7 @@ func (m *CorsPolicy) GetAllowCredentials() *types.BoolValue {
 }
 
 // HTTPFaultInjection can be used to specify one or more faults to inject
-// while forwarding http requests to the destination specified in a route.
+// while forwarding HTTP requests to the destination specified in a route.
 // Fault specification is part of a VirtualService rule. Faults include
 // aborting the Http request from downstream service, and/or delaying
 // proxying of requests. A fault rule MUST HAVE delay or abort or both.
