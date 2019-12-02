@@ -127,13 +127,14 @@ message MeshConfig {
   IngressControllerMode ingress_controller_mode = 9;
 
   // $hide_from_docs
+  // deprecated.
   enum AuthPolicy {
     NONE = 0;
-    MUTUAL_TLS = 1;
+    reserved 1;
+    reserved "MUTUAL_TLS";
   }
-
-  // $hide_from_docs
-  AuthPolicy auth_policy = 10 [deprecated=true];
+  reserved 10;
+  reserved "auth_policy";
 
   // $hide_from_docs
   google.protobuf.Duration rds_refresh_delay = 11 [deprecated=true];
@@ -230,6 +231,19 @@ message MeshConfig {
   // mutual TLS when server sides are capable of accepting mutual TLS traffic.
   // If service DestinationRule exists and has TLSSettings specified, that is always used instead.
   google.protobuf.BoolValue enable_auto_mtls = 43;
+
+  // Describe the mTLS mode for workloads in data plane.
+  enum MutualTLSMode {
+    // Can handle either plain-text or mTLS.
+    MTLS_PERMISSIVE = 0;
+    // Can handle mTLS only.
+    MTLS_STRICT = 1;
+    // Can handle plaintex only.
+    MTLS_DISABLE = 99;
+  }
+
+  // Define the default mesh-wide mTLS mode. This value can be overriden per namespace by namespace annotation.
+  MutualTLSMode mtls_mode = 49;
 
   // $hide_from_docs
   // This flag is used by secret discovery service(SDS).
@@ -382,7 +396,7 @@ message MeshConfig {
   repeated Certificate certificates = 47;
 
   // $hide_from_docs
-  // Next available field number: 49
+  // Next available field number: 50
 }
 
 // Resource describes the source of configuration

@@ -79,10 +79,6 @@
           "ingressControllerMode": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.IngressControllerMode"
           },
-          "authPolicy": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.AuthPolicy",
-            "deprecated": true
-          },
           "rdsRefreshDelay": {
             "type": "string",
             "deprecated": true
@@ -140,6 +136,9 @@
             "description": "This flag is used to enable mutual TLS automatically for service to service communication within the mesh, default false. If set to true, and a given service does not have a corresponding DestinationRule configured, or its DestinationRule does not have TLSSettings specified, Istio configures client side TLS configuration appropriately. More specifically, If the upstream authentication policy is in STRICT mode, use Istio provisioned certificate for mutual TLS to connect to upstream. If upstream service is in plain text mode, use plain text. If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use mutual TLS when server sides are capable of accepting mutual TLS traffic. If service DestinationRule exists and has TLSSettings specified, that is always used instead.",
             "type": "boolean",
             "nullable": true
+          },
+          "mtlsMode": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.MutualTLSMode"
           },
           "enableSdsTokenMount": {
             "description": "This flag is used by secret discovery service(SDS). If set to true ([prerequisite](https://kubernetes.io/docs/concepts/storage/volumes/#projected)), Istio will inject volumes mount for Kubernetes service account trustworthy JWT(which is available with Kubernetes 1.12 or higher), so that the Kubernetes API server mounts Kubernetes service account trustworthy JWT to the Envoy container, which will be used to request key/cert eventually. This isn't supported for non-Kubernetes cases.",
@@ -232,13 +231,6 @@
           "OFF",
           "DEFAULT",
           "STRICT"
-        ]
-      },
-      "istio.mesh.v1alpha1.MeshConfig.AuthPolicy": {
-        "type": "string",
-        "enum": [
-          "NONE",
-          "MUTUAL_TLS"
         ]
       },
       "istio.mesh.v1alpha1.MeshConfig.AccessLogEncoding": {
@@ -383,6 +375,15 @@
           }
         }
       },
+      "istio.mesh.v1alpha1.MeshConfig.MutualTLSMode": {
+        "description": "Describe the mTLS mode for workloads in data plane.",
+        "type": "string",
+        "enum": [
+          "MTLS_PERMISSIVE",
+          "MTLS_STRICT",
+          "MTLS_DISABLE"
+        ]
+      },
       "istio.mesh.v1alpha1.MeshConfig.H2UpgradePolicy": {
         "description": "Default Policy for upgrading http1.1 connections to http2.",
         "type": "string",
@@ -409,6 +410,13 @@
             }
           }
         }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.AuthPolicy": {
+        "description": "deprecated.",
+        "type": "string",
+        "enum": [
+          "NONE"
+        ]
       },
       "istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode": {
         "type": "string",
