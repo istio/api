@@ -139,7 +139,7 @@ message VirtualService {
   // HTTP and TCP ports. Alternatively, the traffic properties of a host
   // can be defined using more than one VirtualService, with certain
   // caveats. Refer to the
-  // [Operations Guide](https://istio.io/docs/ops/traffic-management/deploy-guidelines/#multiple-virtual-services-and-destination-rules-for-the-same-host)
+  // [Operations Guide](https://istio.io/docs/ops/best-practices/traffic-management/#split-virtual-services)
   // for details.
   //
   // *Note for Kubernetes users*: When short names are used (e.g. "reviews"
@@ -157,9 +157,12 @@ message VirtualService {
   // only for services defined via the Gateway.
   repeated string hosts = 1 [(google.api.field_behavior) = REQUIRED];
 
-  // The names of gateways and sidecars that should apply these routes. A
-  // single VirtualService is used for sidecars inside the mesh as well as
-  // for one or more gateways. The selection condition imposed by this
+  // The names of gateways and sidecars that should apply these routes.
+  // Gateways in other namespaces may be referred to by
+  // `<gateway namespace>/<gateway name>`; specifying a gateway with no
+  // namespace qualifier is the same as specifying the VirtualService's
+  // namespace. A single VirtualService is used for sidecars inside the mesh as
+  // well as for one or more gateways. The selection condition imposed by this
   // field can be overridden using the source field in the match conditions
   // of protocol-specific routes. The reserved word `mesh` is used to imply
   // all the sidecars in the mesh. When this field is omitted, the default
@@ -307,7 +310,7 @@ message VirtualService {
 // services must first be added to Istio's internal service registry using the
 // ServiceEntry resource. VirtualServices can then be defined to control traffic
 // bound to these external services. For example, the following rules define a
-// Service for wikipedia.org and set a timeout of 5s for http requests.
+// Service for wikipedia.org and set a timeout of 5s for HTTP requests.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -380,13 +383,13 @@ message HTTPRoute {
   // is matched if any one of the match blocks succeed.
   repeated HTTPMatchRequest match = 1;
 
-  // A http rule can either redirect or forward (default) traffic. The
+  // A HTTP rule can either redirect or forward (default) traffic. The
   // forwarding target can be one of several versions of a service (see
   // glossary in beginning of document). Weights associated with the
   // service version determine the proportion of traffic it receives.
   repeated HTTPRouteDestination route = 2;
 
-  // A http rule can either redirect or forward (default) traffic. If
+  // A HTTP rule can either redirect or forward (default) traffic. If
   // traffic passthrough option is specified in the rule,
   // route/redirect will be ignored. The redirect primitive can be used to
   // send a HTTP 301 redirect to a different URI or Authority.
@@ -420,9 +423,14 @@ message HTTPRoute {
   Destination mirror = 9;
 
   // Percentage of the traffic to be mirrored by the `mirror` field.
+  // Use of integer `mirror_percent` value is deprecated. Use the
+  // double `mirror_percentage` field instead
+  google.protobuf.UInt32Value mirror_percent = 18 [deprecated=true];
+
+  // Percentage of the traffic to be mirrored by the `mirror` field.
   // If this field is absent, all the traffic (100%) will be mirrored.
   // Max value is 100.
-  google.protobuf.UInt32Value mirror_percent = 18;
+  Percent mirror_percentage = 19;
 
   // Cross-Origin Resource Sharing policy (CORS). Refer to
   // [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
@@ -995,7 +1003,8 @@ message StringMatch {
 message HTTPRetry {
   // Number of retries for a given request. The interval
   // between retries will be determined automatically (25ms+). Actual
-  // number of retries attempted depends on the httpReqTimeout.
+  // number of retries attempted depends on the request `timeout` of the
+  // [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute).
   int32 attempts = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Timeout per retry attempt for a given request. format: 1h/1m/1s/1ms. MUST BE >=1ms.
@@ -1070,7 +1079,7 @@ message CorsPolicy {
 }
 
 // HTTPFaultInjection can be used to specify one or more faults to inject
-// while forwarding http requests to the destination specified in a route.
+// while forwarding HTTP requests to the destination specified in a route.
 // Fault specification is part of a VirtualService rule. Faults include
 // aborting the Http request from downstream service, and/or delaying
 // proxying of requests. A fault rule MUST HAVE delay or abort or both.

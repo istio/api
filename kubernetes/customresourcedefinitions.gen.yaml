@@ -4894,12 +4894,20 @@ spec:
                       field.
                     nullable: true
                     type: integer
+                  mirrorPercentage:
+                    description: Percentage of the traffic to be mirrored by the `mirror`
+                      field.
+                    properties:
+                      value:
+                        format: double
+                        type: number
+                    type: object
                   name:
                     description: The name assigned to the route for debugging purposes.
                     format: string
                     type: string
                   redirect:
-                    description: A http rule can either redirect or forward (default)
+                    description: A HTTP rule can either redirect or forward (default)
                       traffic.
                     properties:
                       authority:
@@ -4949,7 +4957,7 @@ spec:
                         type: string
                     type: object
                   route:
-                    description: A http rule can either redirect or forward (default)
+                    description: A HTTP rule can either redirect or forward (default)
                       traffic.
                     items:
                       properties:
