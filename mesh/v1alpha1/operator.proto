@@ -14,10 +14,8 @@
 
 syntax = "proto3";
 
-import "k8s.io/api/core/v1/generated.proto";
-import "k8s.io/api/autoscaling/v2beta1/generated.proto";
-import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
-import "github.com/gogo/protobuf/protobuf/google/protobuf/wrappers.proto";
+import "mesh/v1alpha1/config.proto";
+import "mesh/v1alpha1/component.proto";
 
 package istio.mesh.v1alpha1;
 
@@ -175,9 +173,3 @@ message IstioOperatorSpec {
     // Individual status of each component controlled by the operator. The map key is the name of the component.
     map<string, VersionStatus> componentStatus = 201;
 }
-
-// GOTYPE: map[string]interface{}
-message TypeMapStringInterface {}
-
-// GOTYPE: *IntOrStringForPB
-message TypeIntOrStringForPB {}
