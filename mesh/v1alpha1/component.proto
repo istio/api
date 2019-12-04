@@ -27,7 +27,7 @@ option go_package="istio.io/api/mesh/v1alpha1";
 // IstioComponentSpec defines the desired installed state of Istio components.
 message IstioComponentSetSpec {
     ComponentSpec pilot = 30;
-    ProxyComponentSpec proxy = 31;
+    EnabledComponentSpec proxy = 31;
     ComponentSpec sidecar_injector = 32;
     ComponentSpec policy = 33;
     ComponentSpec telemetry = 34;
@@ -68,13 +68,6 @@ message EnabledComponentSpec {
     // Schema to validate spec against.
     google.protobuf.Any schema = 4;
     // Kubernetes resource spec.
-    KubernetesResourcesSpec k8s = 5;
-}
-
-// Configuration options for the proxy.
-message ProxyComponentSpec {
-    TypeInterface spec = 3;
-    google.protobuf.Any schema = 4;
     KubernetesResourcesSpec k8s = 5;
 }
 
