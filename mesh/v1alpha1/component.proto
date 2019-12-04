@@ -14,6 +14,7 @@
 
 syntax = "proto3";
 
+import "google/protobuf/any.proto";
 import "k8s.io/api/core/v1/generated.proto";
 import "k8s.io/api/autoscaling/v2beta1/generated.proto";
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
@@ -24,109 +25,49 @@ package istio.mesh.v1alpha1;
 option go_package="istio.io/api/mesh/v1alpha1";
 
 // IstioComponentSpec defines the desired installed state of Istio components.
-message IstioComponentSpec {
-    PilotComponentSpec pilot = 30;
+message IstioComponentSetSpec {
+    ComponentSpec pilot = 30;
     ProxyComponentSpec proxy = 31;
-    SidecarInjectorComponentSpec sidecar_injector = 32;
-    PolicyComponentSpec policy = 33;
-    TelemetryComponentSpec telemetry = 34;
-    CitadelComponentSpec citadel = 35;
-    NodeAgentComponentSpec node_agent = 36;
-    GalleyComponentSpec galley = 37;
-    GatewayComponentSpec ingressGateway = 38;
-    GatewayComponentSpec egressGateway = 39;
+    ComponentSpec sidecar_injector = 32;
+    ComponentSpec policy = 33;
+    ComponentSpec telemetry = 34;
+    ComponentSpec citadel = 35;
+    ComponentSpec node_agent = 36;
+    ComponentSpec galley = 37;
+
+    ComponentSpec ingressGateway = 38;
+    ComponentSpec egressGateway = 39;
     // Map key is the name of the resources for the component. All k8s resources accessible through
     // KubernetesResourcesSpec must have the same name.
-    map<string, CustomGatewayComponentSpec> customGateways = 40;
-    CNIComponentSpec cni = 41;
-    CoreDNSComponentSpec coreDNS = 42;
+    map<string, ComponentSpec> customGateways = 40;
+
+    ComponentSpec cni = 41;
+    ComponentSpec coreDNS = 42;
 
     // Non-core components. Map key is the name of the resources for the component. All k8s resources accessible through
     // KubernetesResourcesSpec must have the same name.
-    map<string, ExtensionComponentSpec> extraComponents = 100;
+    map<string, ComponentSpec> extraComponents = 100;
 }
 
-// Configuration common to all components.
-
-// Selects whether this component is installed.
-// TypeBoolValueForPB enabled = 1;
-
-// Kubernetes resource spec.
-// KubernetesResourcesSpec k8s = 80;
-
-// Configuration options for the pilot component.
-message PilotComponentSpec {
+// Configuration common to most components.
+message ComponentSpec {
+    // Selects whether this component is installed.
     TypeBoolValueForPB enabled = 1;
-    KubernetesResourcesSpec k8s = 80;
+    // Namespace for the component.
+    string namespace = 2;
+    // Arbitrary install time configuration for the component.
+    TypeInterface spec = 3;
+    // Schema to validate spec against.
+    google.protobuf.Any schema = 4;
+    // Kubernetes resource spec.
+    KubernetesResourcesSpec k8s = 5;
 }
 
 // Configuration options for the proxy.
 message ProxyComponentSpec {
-    KubernetesResourcesSpec k8s = 80;
-}
-
-// Configuration options for the sidecar injector component.
-message SidecarInjectorComponentSpec {
-    TypeBoolValueForPB enabled = 1;
-    KubernetesResourcesSpec k8s = 80;
-}
-
-// Configuration options for the policy enforcement component.
-message PolicyComponentSpec {
-    TypeBoolValueForPB enabled = 1;
-    KubernetesResourcesSpec k8s = 80;
-}
-
-// Configuration options for the telemetry component.
-message TelemetryComponentSpec {
-    TypeBoolValueForPB enabled = 1;
-    KubernetesResourcesSpec k8s = 80;
-}
-
-// Configuration options for Citadel component.
-message CitadelComponentSpec {
-    TypeBoolValueForPB enabled = 1;
-    KubernetesResourcesSpec k8s = 80;
-}
-
-// Configuration options for node agent component.
-message NodeAgentComponentSpec {
-    TypeBoolValueForPB enabled = 1;
-    KubernetesResourcesSpec k8s = 80;
-}
-
-// Configuration options for galley component.
-message GalleyComponentSpec {
-    TypeBoolValueForPB enabled = 1;
-    KubernetesResourcesSpec k8s = 80;
-}
-
-// Configuration options for built-in gateways.
-message GatewayComponentSpec {
-    TypeBoolValueForPB enabled = 1;
-    KubernetesResourcesSpec k8s = 80;
-}
-
-// Configuration options for custom gateways.
-message CustomGatewayComponentSpec {
-    KubernetesResourcesSpec k8s = 80;
-}
-
-// Configuration options for cni component.
-message CNIComponentSpec {
-    TypeBoolValueForPB enabled = 1;
-    KubernetesResourcesSpec k8s = 80;
-}
-
-// Configuration options for CoreDNS component.
-message CoreDNSComponentSpec {
-    TypeBoolValueForPB enabled = 1;
-    KubernetesResourcesSpec k8s = 80;
-}
-
-// Configuration options for CoreDNS component.
-message ExtensionComponentSpec {
-    KubernetesResourcesSpec k8s = 80;
+    TypeInterface spec = 3;
+    google.protobuf.Any schema = 4;
+    KubernetesResourcesSpec k8s = 5;
 }
 
 // KubernetesResourcesConfig is a common set of k8s resource configs for components.

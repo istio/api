@@ -140,7 +140,7 @@ message IstioOperatorSpec {
 
     // Kubernetes resource settings, enablement and component-specific settings that are not internal to the
     // component.
-    IstioComponentSpec components = 50;
+    IstioComponentSetSpec components = 50;
 
     // Overrides for default values.yaml. This is a validated pass-through to Helm templates.
     // See the Helm installation options for schema details: https://istio.io/docs/reference/config/installation-options/.
