@@ -37,8 +37,8 @@ message IstioComponentSetSpec {
     ComponentSpec cni = 38;
     ComponentSpec coreDNS = 39;
 
-    map<string, EnabledComponentSpec> ingress_gateways = 40;
-    map<string, EnabledComponentSpec> egress_gateways = 41;
+    map<string, GatewaySpec> ingress_gateways = 40;
+    map<string, GatewaySpec> egress_gateways = 41;
 
     // Extra addon components which are not explicitly specified above.
     map<string, EnabledComponentSpec> extra_components = 100;
@@ -67,6 +67,16 @@ message EnabledComponentSpec {
     TypeInterface spec = 3;
     // Schema to validate spec against.
     google.protobuf.Any schema = 4;
+    // Kubernetes resource spec.
+    KubernetesResourcesSpec k8s = 5;
+}
+
+// Configuration for gateways.
+message GatewaySpec {
+    // Name for the gateway.
+    string name = 1;
+    // Namespace for the gateway.
+    string namespace = 2;
     // Kubernetes resource spec.
     KubernetesResourcesSpec k8s = 5;
 }
