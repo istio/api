@@ -142,7 +142,8 @@ message IstioOperatorSpec {
     // component.
     IstioComponentSpec components = 50;
 
-    // Overrides for default values.yaml.
+    // Overrides for default values.yaml. This is a validated pass-through to Helm templates.
+    // See the Helm installation options for schema details: https://istio.io/docs/reference/config/installation-options/.
     TypeMapStringInterface values = 100;
     // Unvalidated overrides for default values.yaml. Used for custom templates where new parameters are added.
     TypeMapStringInterface unvalidatedValues = 101;
