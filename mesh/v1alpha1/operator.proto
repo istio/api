@@ -134,9 +134,12 @@ message IstioOperatorSpec {
     string hub = 12;
     // Version tag for docker images e.g. 1.0.6
     string tag = 13;
+    // Resource suffix is appended to all resources installed by each component. Used in upgrade scenarios where two
+    // Istio control planes must exist in the same namespace.
+    string resource_suffix = 14;
 
     // Config used by control plane components internally.
-    MeshConfig meshConfig = 40;
+    MeshConfig mesh_config = 40;
 
     // Kubernetes resource settings, enablement and component-specific settings that are not internal to the
     // component.
@@ -146,7 +149,7 @@ message IstioOperatorSpec {
     // See the Helm installation options for schema details: https://istio.io/docs/reference/config/installation-options/.
     TypeMapStringInterface values = 100;
     // Unvalidated overrides for default values.yaml. Used for custom templates where new parameters are added.
-    TypeMapStringInterface unvalidatedValues = 101;
+    TypeMapStringInterface unvalidated_values = 101;
 
     // Status describes the current state of a component.
     enum Status {
@@ -160,7 +163,7 @@ message IstioOperatorSpec {
     message VersionStatus {
         string version = 1;
         Status status = 2;
-        string statusString = 3;
+        string status_string = 3;
         string error = 4;
     }
     // Overall status of all components controlled by the operator.
@@ -172,5 +175,5 @@ message IstioOperatorSpec {
     // - If any component is in ERROR state, overall status is ERROR.
     Status status = 200;
     // Individual status of each component controlled by the operator. The map key is the name of the component.
-    map<string, VersionStatus> componentStatus = 201;
+    map<string, VersionStatus> component_status = 201;
 }

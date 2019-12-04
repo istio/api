@@ -34,25 +34,33 @@ message IstioComponentSetSpec {
     ComponentSpec citadel = 35;
     ComponentSpec node_agent = 36;
     ComponentSpec galley = 37;
+    ComponentSpec cni = 38;
+    ComponentSpec coreDNS = 39;
 
-    ComponentSpec ingressGateway = 38;
-    ComponentSpec egressGateway = 39;
-    // Map key is the name of the resources for the component. All k8s resources accessible through
-    // KubernetesResourcesSpec must have the same name.
-    map<string, ComponentSpec> customGateways = 40;
+    map<string, EnabledComponentSpec> ingress_gateways = 40;
+    map<string, EnabledComponentSpec> egress_gateways = 41;
 
-    ComponentSpec cni = 41;
-    ComponentSpec coreDNS = 42;
-
-    // Non-core components. Map key is the name of the resources for the component. All k8s resources accessible through
-    // KubernetesResourcesSpec must have the same name.
-    map<string, ComponentSpec> extraComponents = 100;
+    // Extra addon components which are not explicitly specified above.
+    map<string, EnabledComponentSpec> extra_components = 100;
 }
 
 // Configuration common to most components.
 message ComponentSpec {
     // Selects whether this component is installed.
     TypeBoolValueForPB enabled = 1;
+    // Namespace for the component.
+    string namespace = 2;
+    // Arbitrary install time configuration for the component.
+    TypeInterface spec = 3;
+    // Schema to validate spec against.
+    google.protobuf.Any schema = 4;
+    // Kubernetes resource spec.
+    KubernetesResourcesSpec k8s = 5;
+}
+
+// Configuration common to most components, used in cases where component is in a map and therefore implicitly enabled
+// by its presence there.
+message EnabledComponentSpec {
     // Namespace for the component.
     string namespace = 2;
     // Arbitrary install time configuration for the component.
