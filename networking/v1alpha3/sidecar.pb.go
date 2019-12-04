@@ -296,6 +296,17 @@ func (OutboundTrafficPolicy_Mode) EnumDescriptor() ([]byte, []int) {
 // inbound and outbound communication of the workload instance to which it is
 // attached.
 //
+// <!-- crd generation tags
+// +cue-gen:Sidecar:groupName:networking.istio.io
+// +cue-gen:Sidecar:version:v1alpha3
+// +cue-gen:Sidecar:storageVersion
+// +cue-gen:Sidecar:annotations:helm.sh/resource-policy=keep
+// +cue-gen:Sidecar:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:Sidecar:subresource:status
+// +cue-gen:Sidecar:scope:Namespaced
+// +cue-gen:Sidecar:resource:categories=istio-io,networking-istio-io
+// -->
+//
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
