@@ -2241,7 +2241,6 @@ spec:
                               type: string
                             type: array
                         type: object
-<<<<<<< HEAD
                       subset:
                         description: The name of a subset within the service.
                         format: string
@@ -2323,17 +2322,6 @@ spec:
                     description: A HTTP rule can either redirect or forward (default)
                       traffic.
                     items:
-=======
-                    type: object
-                type: object
-              type: array
-            trafficPolicy:
-              properties:
-                connectionPool:
-                  properties:
-                    http:
-                      description: HTTP connection pool settings.
->>>>>>> change crd gen to use annotations
                       properties:
                         h2UpgradePolicy:
                           description: Specify if http1.1 connection should be upgraded

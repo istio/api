@@ -27,9 +27,21 @@ option go_package="istio.io/api/policy/v1beta1";
 // AttributeManifest describes a set of Attributes produced by some component
 // of an Istio deployment.
 //
+// <!-- crd generation tags
+// +cue-gen:AttributeManifest:schema:istio.policy.v1beta1.AttributeManifest
+// +cue-gen:AttributeManifest:groupName:config.istio.io
+// +cue-gen:AttributeManifest:version:v1alpha2
+// +cue-gen:AttributeManifest:storageVersion
+// +cue-gen:AttributeManifest:annotations:helm.sh/resource-policy=keep
+// +cue-gen:AttributeManifest:labels:app=mixer,chart=istio,heritage=Tiller,istio=core,package=istio.io.mixer,release=istio
+// +cue-gen:AttributeManifest:subresource:status
+// +cue-gen:AttributeManifest:scope:Namespaced
+// +cue-gen:AttributeManifest:resource:categories=istio-io,policy-istio-io
+// -->
+//
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +kubetype-gen:groupVersion=config.istio.io/v1beta1
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
@@ -119,9 +131,21 @@ message AttributeManifest {
 //     - RequestCountByService
 // ```
 //
+// <!-- crd generation tags
+// +cue-gen:Rule:schema:istio.policy.v1beta1.Rule
+// +cue-gen:Rule:groupName:config.istio.io
+// +cue-gen:Rule:version:v1alpha2
+// +cue-gen:Rule:storageVersion
+// +cue-gen:Rule:annotations:helm.sh/resource-policy=keep
+// +cue-gen:Rule:labels:app=mixer,chart=istio,heritage=Tiller,istio=core,package=istio.io.mixer,release=istio
+// +cue-gen:Rule:subresource:status
+// +cue-gen:Rule:scope:Namespaced
+// +cue-gen:Rule:resource:categories=istio-io,policy-istio-io
+// -->
+//
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +kubetype-gen:groupVersion=config.istio.io/v1beta1
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
@@ -244,9 +268,21 @@ message Action {
 //       destination_ip: destination.ip
 // ```
 //
+// <!-- crd generation tags
+// +cue-gen:Instance:schema:istio.policy.v1beta1.Instance
+// +cue-gen:Instance:groupName:config.istio.io
+// +cue-gen:Instance:version:v1alpha2
+// +cue-gen:Instance:storageVersion
+// +cue-gen:Instance:annotations:helm.sh/resource-policy=keep
+// +cue-gen:Instance:labels:app=mixer,chart=istio,heritage=Tiller,istio=mixer-instance,package=instance,release=istio
+// +cue-gen:Instance:subresource:status
+// +cue-gen:Instance:scope:Namespaced
+// +cue-gen:Instance:resource:categories=istio-io,policy-istio-io
+// -->
+//
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +kubetype-gen:groupVersion=config.istio.io/v1beta1
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
@@ -301,7 +337,7 @@ message Instance {
 // # Sample-1: No connection specified (for compiled in adapters)
 // # Note: if connection information is not specified, the adapter configuration is directly inside
 // # `spec` block. This is going to be DEPRECATED in favor of Sample-2
-// apiVersion: "config.istio.io/v1alpha2"
+// apiVersion: "config.istio.io/v1beta1"
 // kind: handler
 // metadata:
 //   name: requestcount
@@ -321,7 +357,7 @@ message Instance {
 // ---
 // # Sample-2: With connection information (for out-of-process adapters)
 // # Note: Unlike sample-1, the adapter configuration is parallel to `connection` and is nested inside `param` block.
-// apiVersion: "config.istio.io/v1alpha2"
+// apiVersion: "config.istio.io/v1beta1"
 // kind: handler
 // metadata:
 //   name: requestcount
@@ -344,9 +380,21 @@ message Instance {
 // ---
 // ```
 //
+// <!-- crd generation tags
+// +cue-gen:Handler:schema:istio.policy.v1beta1.Handler
+// +cue-gen:Handler:groupName:config.istio.io
+// +cue-gen:Handler:version:v1alpha2
+// +cue-gen:Handler:storageVersion
+// +cue-gen:Handler:annotations:helm.sh/resource-policy=keep
+// +cue-gen:Handler:labels:app=mixer,chart=istio,heritage=Tiller,istio=mixer-handler,package=handler,release=istio
+// +cue-gen:Handler:subresource:status
+// +cue-gen:Handler:scope:Namespaced
+// +cue-gen:Handler:resource:categories=istio-io,policy-istio-io
+// -->
+//
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +kubetype-gen:groupVersion=config.istio.io/v1beta1
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
