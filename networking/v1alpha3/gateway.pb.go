@@ -295,6 +295,17 @@ func (Server_TLSOptions_TLSProtocol) EnumDescriptor() ([]byte, []int) {
 // Gateway describes a load balancer operating at the edge of the mesh
 // receiving incoming or outgoing HTTP/TCP connections.
 //
+// <!-- crd generation tags
+// +cue-gen:Gateway:groupName:networking.istio.io
+// +cue-gen:Gateway:version:v1alpha3
+// +cue-gen:Gateway:storageVersion
+// +cue-gen:Gateway:annotations:helm.sh/resource-policy=keep
+// +cue-gen:Gateway:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:Gateway:subresource:status
+// +cue-gen:Gateway:scope:Namespaced
+// +cue-gen:Gateway:resource:categories=istio-io,networking-istio-io,shortNames=gw
+// -->
+//
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
