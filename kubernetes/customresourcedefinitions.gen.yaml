@@ -2143,11 +2143,6 @@ spec:
                           baseEjectionTime:
                             description: Minimum ejection duration.
                             type: string
-                          consecutive5xxErrors:
-                            description: Number of 5xx errors before a host is ejected
-                              from the connection pool.
-                            format: int32
-                            type: integer
                           consecutiveErrors:
                             format: int32
                             type: integer
@@ -2321,11 +2316,6 @@ spec:
                                 baseEjectionTime:
                                   description: Minimum ejection duration.
                                   type: string
-                                consecutive5xxErrors:
-                                  description: Number of 5xx errors before a host
-                                    is ejected from the connection pool.
-                                  format: int32
-                                  type: integer
                                 consecutiveErrors:
                                   format: int32
                                   type: integer
@@ -2570,11 +2560,6 @@ spec:
                     baseEjectionTime:
                       description: Minimum ejection duration.
                       type: string
-                    consecutive5xxErrors:
-                      description: Number of 5xx errors before a host is ejected from
-                        the connection pool.
-                      format: int32
-                      type: integer
                     consecutiveErrors:
                       format: int32
                       type: integer
@@ -2746,11 +2731,6 @@ spec:
                           baseEjectionTime:
                             description: Minimum ejection duration.
                             type: string
-                          consecutive5xxErrors:
-                            description: Number of 5xx errors before a host is ejected
-                              from the connection pool.
-                            format: int32
-                            type: integer
                           consecutiveErrors:
                             format: int32
                             type: integer

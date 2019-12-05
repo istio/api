@@ -38816,11 +38816,6 @@
                 "type": "int32"
               },
               {
-                "id": 6,
-                "name": "consecutive_5xx_errors",
-                "type": "int32"
-              },
-              {
                 "id": 2,
                 "name": "interval",
                 "type": "google.protobuf.Duration"
@@ -40317,18 +40312,7 @@
               {
                 "id": 18,
                 "name": "mirror_percent",
-                "type": "google.protobuf.UInt32Value",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 19,
-                "name": "mirror_percentage",
-                "type": "Percent"
+                "type": "google.protobuf.UInt32Value"
               },
               {
                 "id": 10,
