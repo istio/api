@@ -506,7 +506,7 @@ The example is in the form of a Kubernetes resource:
 <pre><code class="language-yaml">### Sample-1: No connection specified (for compiled in adapters)
 ### Note: if connection information is not specified, the adapter configuration is directly inside
 ### `spec` block. This is going to be DEPRECATED in favor of Sample-2
-apiVersion: &quot;config.istio.io/v1beta1&quot;
+apiVersion: &quot;config.istio.io/v1alpha2&quot;
 kind: handler
 metadata:
   name: requestcount
@@ -526,7 +526,7 @@ spec:
 ---
 ### Sample-2: With connection information (for out-of-process adapters)
 ### Note: Unlike sample-1, the adapter configuration is parallel to `connection` and is nested inside `param` block.
-apiVersion: &quot;config.istio.io/v1beta1&quot;
+apiVersion: &quot;config.istio.io/v1alpha2&quot;
 kind: handler
 metadata:
   name: requestcount

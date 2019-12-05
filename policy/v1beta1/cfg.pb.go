@@ -131,7 +131,7 @@ func (Tls_AuthHeader) EnumDescriptor() ([]byte, []int) {
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=config.istio.io/v1beta1
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
@@ -333,7 +333,7 @@ func (m *AttributeManifest_AttributeInfo) GetValueType() ValueType {
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=config.istio.io/v1beta1
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
@@ -622,7 +622,7 @@ func (m *Action) GetName() string {
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=config.istio.io/v1beta1
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
@@ -740,7 +740,7 @@ func (m *Instance) GetAttributeBindings() map[string]string {
 // # Sample-1: No connection specified (for compiled in adapters)
 // # Note: if connection information is not specified, the adapter configuration is directly inside
 // # `spec` block. This is going to be DEPRECATED in favor of Sample-2
-// apiVersion: "config.istio.io/v1beta1"
+// apiVersion: "config.istio.io/v1alpha2"
 // kind: handler
 // metadata:
 //   name: requestcount
@@ -760,7 +760,7 @@ func (m *Instance) GetAttributeBindings() map[string]string {
 // ---
 // # Sample-2: With connection information (for out-of-process adapters)
 // # Note: Unlike sample-1, the adapter configuration is parallel to `connection` and is nested inside `param` block.
-// apiVersion: "config.istio.io/v1beta1"
+// apiVersion: "config.istio.io/v1alpha2"
 // kind: handler
 // metadata:
 //   name: requestcount
@@ -797,7 +797,7 @@ func (m *Instance) GetAttributeBindings() map[string]string {
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=config.istio.io/v1beta1
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->

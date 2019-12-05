@@ -41,7 +41,7 @@ option go_package="istio.io/api/policy/v1beta1";
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=config.istio.io/v1beta1
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
@@ -145,7 +145,7 @@ message AttributeManifest {
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=config.istio.io/v1beta1
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
@@ -282,7 +282,7 @@ message Action {
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=config.istio.io/v1beta1
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
@@ -337,7 +337,7 @@ message Instance {
 // # Sample-1: No connection specified (for compiled in adapters)
 // # Note: if connection information is not specified, the adapter configuration is directly inside
 // # `spec` block. This is going to be DEPRECATED in favor of Sample-2
-// apiVersion: "config.istio.io/v1beta1"
+// apiVersion: "config.istio.io/v1alpha2"
 // kind: handler
 // metadata:
 //   name: requestcount
@@ -357,7 +357,7 @@ message Instance {
 // ---
 // # Sample-2: With connection information (for out-of-process adapters)
 // # Note: Unlike sample-1, the adapter configuration is parallel to `connection` and is nested inside `param` block.
-// apiVersion: "config.istio.io/v1beta1"
+// apiVersion: "config.istio.io/v1alpha2"
 // kind: handler
 // metadata:
 //   name: requestcount
@@ -394,7 +394,7 @@ message Instance {
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=config.istio.io/v1beta1
+// +kubetype-gen:groupVersion=config.istio.io/v1alpha2
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
