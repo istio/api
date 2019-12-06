@@ -2143,8 +2143,18 @@ spec:
                           baseEjectionTime:
                             description: Minimum ejection duration.
                             type: string
+                          consecutive5xxErrors:
+                            description: Number of 5xx errors before a host is ejected
+                              from the connection pool.
+                            nullable: true
+                            type: integer
                           consecutiveErrors:
                             format: int32
+                            type: integer
+                          consecutiveGatewayErrors:
+                            description: Number of gateway errors before a host is
+                              ejected from the connection pool.
+                            nullable: true
                             type: integer
                           interval:
                             description: Time interval between ejection sweep analysis.
@@ -2316,8 +2326,18 @@ spec:
                                 baseEjectionTime:
                                   description: Minimum ejection duration.
                                   type: string
+                                consecutive5xxErrors:
+                                  description: Number of 5xx errors before a host
+                                    is ejected from the connection pool.
+                                  nullable: true
+                                  type: integer
                                 consecutiveErrors:
                                   format: int32
+                                  type: integer
+                                consecutiveGatewayErrors:
+                                  description: Number of gateway errors before a host
+                                    is ejected from the connection pool.
+                                  nullable: true
                                   type: integer
                                 interval:
                                   description: Time interval between ejection sweep
@@ -2560,8 +2580,18 @@ spec:
                     baseEjectionTime:
                       description: Minimum ejection duration.
                       type: string
+                    consecutive5xxErrors:
+                      description: Number of 5xx errors before a host is ejected from
+                        the connection pool.
+                      nullable: true
+                      type: integer
                     consecutiveErrors:
                       format: int32
+                      type: integer
+                    consecutiveGatewayErrors:
+                      description: Number of gateway errors before a host is ejected
+                        from the connection pool.
+                      nullable: true
                       type: integer
                     interval:
                       description: Time interval between ejection sweep analysis.
@@ -2731,8 +2761,18 @@ spec:
                           baseEjectionTime:
                             description: Minimum ejection duration.
                             type: string
+                          consecutive5xxErrors:
+                            description: Number of 5xx errors before a host is ejected
+                              from the connection pool.
+                            nullable: true
+                            type: integer
                           consecutiveErrors:
                             format: int32
+                            type: integer
+                          consecutiveGatewayErrors:
+                            description: Number of gateway errors before a host is
+                              ejected from the connection pool.
+                            nullable: true
                             type: integer
                           interval:
                             description: Time interval between ejection sweep analysis.
