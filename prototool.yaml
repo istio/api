@@ -7,9 +7,13 @@ protoc:
 lint:
   # Linter files to ignore.
   ignores:
+    - id: MESSAGE_NAMES_CAMEL_CASE
+      files:
+        - mesh/v1alpha1/kubernetes.proto
     - id: MESSAGE_FIELD_NAMES_LOWER_SNAKE_CASE
       files:
         - rbac/v1alpha1/rbac.proto
+        - mesh/v1alpha1/kubernetes.proto
     - id: ENUM_FIELD_NAMES_UPPER_SNAKE_CASE
       files:
         - networking/v1alpha3/gateway.proto

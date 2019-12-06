@@ -15,9 +15,7 @@
 syntax = "proto3";
 
 import "google/protobuf/any.proto";
-import "k8s.io/api/core/v1/generated.proto";
 import "k8s.io/api/autoscaling/v2beta1/generated.proto";
-import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 import "mesh/v1alpha1/kubernetes.proto";
 
 package istio.mesh.v1alpha1;
@@ -35,7 +33,7 @@ message IstioComponentSetSpec {
     ComponentSpec node_agent = 36;
     ComponentSpec galley = 37;
     ComponentSpec cni = 38;
-    ComponentSpec coreDNS = 39;
+    ComponentSpec core_dNS = 39;
 
     repeated GatewaySpec ingress_gateways = 40;
     repeated GatewaySpec egress_gateways = 41;
@@ -137,11 +135,11 @@ message KubernetesResourcesSpec {
     Toleration tolerations = 14;
 
     // Overlays for k8s resources in rendered manifests.
-    repeated k8sObjectOverlay overlays = 100;
+    repeated K8sObjectOverlay overlays = 100;
 }
 
 // Patch for an existing k8s resource.
-message k8sObjectOverlay {
+message K8sObjectOverlay {
     message PathValue {
         // Path of the form a.b:c.e.:f
         // Where b:c is a list element selector of the form key:value and :f is a list selector of the form :value.
