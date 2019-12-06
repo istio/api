@@ -13,6 +13,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
+from google.protobuf import any_pb2 as google_dot_protobuf_dot_any__pb2
 from k8s.io.api.core.v1 import generated_pb2 as k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2
 from k8s.io.api.autoscaling.v2beta1 import generated_pb2 as k8s_dot_io_dot_api_dot_autoscaling_dot_v2beta1_dot_generated__pb2
 from k8s.io.apimachinery.pkg.apis.meta.v1 import generated_pb2 as k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2
@@ -24,66 +25,29 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.mesh.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\032istio.io/api/mesh/v1alpha1'),
-  serialized_pb=_b('\n\x1dmesh/v1alpha1/component.proto\x12\x13istio.mesh.v1alpha1\x1a\"k8s.io/api/core/v1/generated.proto\x1a.k8s.io/api/autoscaling/v2beta1/generated.proto\x1a\x34k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto\x1a\x1emesh/v1alpha1/kubernetes.proto\"\xf0\x08\n\x12IstioComponentSpec\x12\x36\n\x05pilot\x18\x1e \x01(\x0b\x32\'.istio.mesh.v1alpha1.PilotComponentSpec\x12\x36\n\x05proxy\x18\x1f \x01(\x0b\x32\'.istio.mesh.v1alpha1.ProxyComponentSpec\x12K\n\x10sidecar_injector\x18  \x01(\x0b\x32\x31.istio.mesh.v1alpha1.SidecarInjectorComponentSpec\x12\x38\n\x06policy\x18! \x01(\x0b\x32(.istio.mesh.v1alpha1.PolicyComponentSpec\x12>\n\ttelemetry\x18\" \x01(\x0b\x32+.istio.mesh.v1alpha1.TelemetryComponentSpec\x12:\n\x07\x63itadel\x18# \x01(\x0b\x32).istio.mesh.v1alpha1.CitadelComponentSpec\x12?\n\nnode_agent\x18$ \x01(\x0b\x32+.istio.mesh.v1alpha1.NodeAgentComponentSpec\x12\x38\n\x06galley\x18% \x01(\x0b\x32(.istio.mesh.v1alpha1.GalleyComponentSpec\x12\x41\n\x0eingressGateway\x18& \x01(\x0b\x32).istio.mesh.v1alpha1.GatewayComponentSpec\x12@\n\regressGateway\x18\' \x01(\x0b\x32).istio.mesh.v1alpha1.GatewayComponentSpec\x12S\n\x0e\x63ustomGateways\x18( \x03(\x0b\x32;.istio.mesh.v1alpha1.IstioComponentSpec.CustomGatewaysEntry\x12\x32\n\x03\x63ni\x18) \x01(\x0b\x32%.istio.mesh.v1alpha1.CNIComponentSpec\x12:\n\x07\x63oreDNS\x18* \x01(\x0b\x32).istio.mesh.v1alpha1.CoreDNSComponentSpec\x12U\n\x0f\x65xtraComponents\x18\x64 \x03(\x0b\x32<.istio.mesh.v1alpha1.IstioComponentSpec.ExtraComponentsEntry\x1a\x66\n\x13\x43ustomGatewaysEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12>\n\x05value\x18\x02 \x01(\x0b\x32/.istio.mesh.v1alpha1.CustomGatewayComponentSpec:\x02\x38\x01\x1a\x63\n\x14\x45xtraComponentsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12:\n\x05value\x18\x02 \x01(\x0b\x32+.istio.mesh.v1alpha1.ExtensionComponentSpec:\x02\x38\x01\"\x89\x01\n\x12PilotComponentSpec\x12\x38\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\'.istio.mesh.v1alpha1.TypeBoolValueForPB\x12\x39\n\x03k8s\x18P \x01(\x0b\x32,.istio.mesh.v1alpha1.KubernetesResourcesSpec\"O\n\x12ProxyComponentSpec\x12\x39\n\x03k8s\x18P \x01(\x0b\x32,.istio.mesh.v1alpha1.KubernetesResourcesSpec\"\x93\x01\n\x1cSidecarInjectorComponentSpec\x12\x38\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\'.istio.mesh.v1alpha1.TypeBoolValueForPB\x12\x39\n\x03k8s\x18P \x01(\x0b\x32,.istio.mesh.v1alpha1.KubernetesResourcesSpec\"\x8a\x01\n\x13PolicyComponentSpec\x12\x38\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\'.istio.mesh.v1alpha1.TypeBoolValueForPB\x12\x39\n\x03k8s\x18P \x01(\x0b\x32,.istio.mesh.v1alpha1.KubernetesResourcesSpec\"\x8d\x01\n\x16TelemetryComponentSpec\x12\x38\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\'.istio.mesh.v1alpha1.TypeBoolValueForPB\x12\x39\n\x03k8s\x18P \x01(\x0b\x32,.istio.mesh.v1alpha1.KubernetesResourcesSpec\"\x8b\x01\n\x14\x43itadelComponentSpec\x12\x38\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\'.istio.mesh.v1alpha1.TypeBoolValueForPB\x12\x39\n\x03k8s\x18P \x01(\x0b\x32,.istio.mesh.v1alpha1.KubernetesResourcesSpec\"\x8d\x01\n\x16NodeAgentComponentSpec\x12\x38\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\'.istio.mesh.v1alpha1.TypeBoolValueForPB\x12\x39\n\x03k8s\x18P \x01(\x0b\x32,.istio.mesh.v1alpha1.KubernetesResourcesSpec\"\x8a\x01\n\x13GalleyComponentSpec\x12\x38\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\'.istio.mesh.v1alpha1.TypeBoolValueForPB\x12\x39\n\x03k8s\x18P \x01(\x0b\x32,.istio.mesh.v1alpha1.KubernetesResourcesSpec\"\x8b\x01\n\x14GatewayComponentSpec\x12\x38\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\'.istio.mesh.v1alpha1.TypeBoolValueForPB\x12\x39\n\x03k8s\x18P \x01(\x0b\x32,.istio.mesh.v1alpha1.KubernetesResourcesSpec\"W\n\x1a\x43ustomGatewayComponentSpec\x12\x39\n\x03k8s\x18P \x01(\x0b\x32,.istio.mesh.v1alpha1.KubernetesResourcesSpec\"\x87\x01\n\x10\x43NIComponentSpec\x12\x38\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\'.istio.mesh.v1alpha1.TypeBoolValueForPB\x12\x39\n\x03k8s\x18P \x01(\x0b\x32,.istio.mesh.v1alpha1.KubernetesResourcesSpec\"\x8b\x01\n\x14\x43oreDNSComponentSpec\x12\x38\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\'.istio.mesh.v1alpha1.TypeBoolValueForPB\x12\x39\n\x03k8s\x18P \x01(\x0b\x32,.istio.mesh.v1alpha1.KubernetesResourcesSpec\"S\n\x16\x45xtensionComponentSpec\x12\x39\n\x03k8s\x18P \x01(\x0b\x32,.istio.mesh.v1alpha1.KubernetesResourcesSpec\"\xcb\x07\n\x17KubernetesResourcesSpec\x12/\n\x08\x61\x66\x66inity\x18\x01 \x01(\x0b\x32\x1d.istio.mesh.v1alpha1.Affinity\x12(\n\x03\x65nv\x18\x02 \x03(\x0b\x32\x1b.istio.mesh.v1alpha1.EnvVar\x12M\n\x08hpa_spec\x18\x03 \x01(\x0b\x32;.k8s.io.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec\x12\x19\n\x11image_pull_policy\x18\x04 \x01(\t\x12U\n\rnode_selector\x18\x05 \x03(\x0b\x32>.istio.mesh.v1alpha1.KubernetesResourcesSpec.NodeSelectorEntry\x12K\n\x15pod_disruption_budget\x18\x06 \x01(\x0b\x32,.istio.mesh.v1alpha1.PodDisruptionBudgetSpec\x12Y\n\x0fpod_annotations\x18\x07 \x03(\x0b\x32@.istio.mesh.v1alpha1.KubernetesResourcesSpec.PodAnnotationsEntry\x12\x1b\n\x13priority_class_name\x18\x08 \x01(\t\x12<\n\x0freadiness_probe\x18\t \x01(\x0b\x32#.istio.mesh.v1alpha1.ReadinessProbe\x12\x15\n\rreplica_count\x18\n \x01(\r\x12\x31\n\tresources\x18\x0b \x01(\x0b\x32\x1e.istio.mesh.v1alpha1.Resources\x12\x31\n\x07service\x18\x0c \x01(\x0b\x32 .istio.mesh.v1alpha1.ServiceSpec\x12\x39\n\x08strategy\x18\r \x01(\x0b\x32\'.istio.mesh.v1alpha1.DeploymentStrategy\x12\x34\n\x0btolerations\x18\x0e \x01(\x0b\x32\x1f.istio.mesh.v1alpha1.Toleration\x12\x37\n\x08overlays\x18\x64 \x03(\x0b\x32%.istio.mesh.v1alpha1.k8sObjectOverlay\x1a\x33\n\x11NodeSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x35\n\x13PodAnnotationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xd3\x01\n\x10k8sObjectOverlay\x12\x13\n\x0b\x61pi_version\x18\x01 \x01(\t\x12\x0c\n\x04kind\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12@\n\x07patches\x18\x04 \x03(\x0b\x32/.istio.mesh.v1alpha1.k8sObjectOverlay.PathValue\x1aL\n\tPathValue\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x31\n\x05value\x18\x02 \x01(\x0b\x32\".istio.mesh.v1alpha1.TypeInterface\"\x18\n\x16TypeMapStringInterface\"\x0f\n\rTypeInterface\"\x14\n\x12TypeBoolValueForPBB\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x1dmesh/v1alpha1/component.proto\x12\x13istio.mesh.v1alpha1\x1a\x19google/protobuf/any.proto\x1a\"k8s.io/api/core/v1/generated.proto\x1a.k8s.io/api/autoscaling/v2beta1/generated.proto\x1a\x34k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto\x1a\x1emesh/v1alpha1/kubernetes.proto\"\xe3\x06\n\x15IstioComponentSetSpec\x12\x31\n\x05pilot\x18\x1e \x01(\x0b\x32\".istio.mesh.v1alpha1.ComponentSpec\x12\x31\n\x05proxy\x18\x1f \x01(\x0b\x32\".istio.mesh.v1alpha1.ComponentSpec\x12<\n\x10sidecar_injector\x18  \x01(\x0b\x32\".istio.mesh.v1alpha1.ComponentSpec\x12\x32\n\x06policy\x18! \x01(\x0b\x32\".istio.mesh.v1alpha1.ComponentSpec\x12\x35\n\ttelemetry\x18\" \x01(\x0b\x32\".istio.mesh.v1alpha1.ComponentSpec\x12\x33\n\x07\x63itadel\x18# \x01(\x0b\x32\".istio.mesh.v1alpha1.ComponentSpec\x12\x36\n\nnode_agent\x18$ \x01(\x0b\x32\".istio.mesh.v1alpha1.ComponentSpec\x12\x32\n\x06galley\x18% \x01(\x0b\x32\".istio.mesh.v1alpha1.ComponentSpec\x12/\n\x03\x63ni\x18& \x01(\x0b\x32\".istio.mesh.v1alpha1.ComponentSpec\x12\x33\n\x07\x63oreDNS\x18\' \x01(\x0b\x32\".istio.mesh.v1alpha1.ComponentSpec\x12:\n\x10ingress_gateways\x18( \x03(\x0b\x32 .istio.mesh.v1alpha1.GatewaySpec\x12\x39\n\x0f\x65gress_gateways\x18) \x03(\x0b\x32 .istio.mesh.v1alpha1.GatewaySpec\x12Y\n\x10\x65xtra_components\x18\x64 \x03(\x0b\x32?.istio.mesh.v1alpha1.IstioComponentSetSpec.ExtraComponentsEntry\x1a\x62\n\x14\x45xtraComponentsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x39\n\x05value\x18\x02 \x01(\x0b\x32*.istio.mesh.v1alpha1.ExternalComponentSpec:\x02\x38\x01\"\xc9\x01\n\rComponentSpec\x12\x38\n\x07\x65nabled\x18\x01 \x01(\x0b\x32\'.istio.mesh.v1alpha1.TypeBoolValueForPB\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x30\n\x04spec\x18\n \x01(\x0b\x32\".istio.mesh.v1alpha1.TypeInterface\x12\x39\n\x03k8s\x18\x32 \x01(\x0b\x32,.istio.mesh.v1alpha1.KubernetesResourcesSpec\"\xd1\x01\n\x15\x45xternalComponentSpec\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x30\n\x04spec\x18\n \x01(\x0b\x32\".istio.mesh.v1alpha1.TypeInterface\x12\x12\n\nchart_path\x18\x1e \x01(\t\x12$\n\x06schema\x18# \x01(\x0b\x32\x14.google.protobuf.Any\x12\x39\n\x03k8s\x18\x32 \x01(\x0b\x32,.istio.mesh.v1alpha1.KubernetesResourcesSpec\"i\n\x0bGatewaySpec\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x39\n\x03k8s\x18\x32 \x01(\x0b\x32,.istio.mesh.v1alpha1.KubernetesResourcesSpec\"\xcb\x07\n\x17KubernetesResourcesSpec\x12/\n\x08\x61\x66\x66inity\x18\x01 \x01(\x0b\x32\x1d.istio.mesh.v1alpha1.Affinity\x12(\n\x03\x65nv\x18\x02 \x03(\x0b\x32\x1b.istio.mesh.v1alpha1.EnvVar\x12M\n\x08hpa_spec\x18\x03 \x01(\x0b\x32;.k8s.io.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec\x12\x19\n\x11image_pull_policy\x18\x04 \x01(\t\x12U\n\rnode_selector\x18\x05 \x03(\x0b\x32>.istio.mesh.v1alpha1.KubernetesResourcesSpec.NodeSelectorEntry\x12K\n\x15pod_disruption_budget\x18\x06 \x01(\x0b\x32,.istio.mesh.v1alpha1.PodDisruptionBudgetSpec\x12Y\n\x0fpod_annotations\x18\x07 \x03(\x0b\x32@.istio.mesh.v1alpha1.KubernetesResourcesSpec.PodAnnotationsEntry\x12\x1b\n\x13priority_class_name\x18\x08 \x01(\t\x12<\n\x0freadiness_probe\x18\t \x01(\x0b\x32#.istio.mesh.v1alpha1.ReadinessProbe\x12\x15\n\rreplica_count\x18\n \x01(\r\x12\x31\n\tresources\x18\x0b \x01(\x0b\x32\x1e.istio.mesh.v1alpha1.Resources\x12\x31\n\x07service\x18\x0c \x01(\x0b\x32 .istio.mesh.v1alpha1.ServiceSpec\x12\x39\n\x08strategy\x18\r \x01(\x0b\x32\'.istio.mesh.v1alpha1.DeploymentStrategy\x12\x34\n\x0btolerations\x18\x0e \x01(\x0b\x32\x1f.istio.mesh.v1alpha1.Toleration\x12\x37\n\x08overlays\x18\x64 \x03(\x0b\x32%.istio.mesh.v1alpha1.k8sObjectOverlay\x1a\x33\n\x11NodeSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x35\n\x13PodAnnotationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xd3\x01\n\x10k8sObjectOverlay\x12\x13\n\x0b\x61pi_version\x18\x01 \x01(\t\x12\x0c\n\x04kind\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12@\n\x07patches\x18\x04 \x03(\x0b\x32/.istio.mesh.v1alpha1.k8sObjectOverlay.PathValue\x1aL\n\tPathValue\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x31\n\x05value\x18\x02 \x01(\x0b\x32\".istio.mesh.v1alpha1.TypeInterface\"\x18\n\x16TypeMapStringInterface\"\x0f\n\rTypeInterface\"\x14\n\x12TypeBoolValueForPBB\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
   ,
-  dependencies=[k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_api_dot_autoscaling_dot_v2beta1_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2.DESCRIPTOR,mesh_dot_v1alpha1_dot_kubernetes__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_api_dot_autoscaling_dot_v2beta1_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2.DESCRIPTOR,mesh_dot_v1alpha1_dot_kubernetes__pb2.DESCRIPTOR,])
 
 
 
 
-_ISTIOCOMPONENTSPEC_CUSTOMGATEWAYSENTRY = _descriptor.Descriptor(
-  name='CustomGatewaysEntry',
-  full_name='istio.mesh.v1alpha1.IstioComponentSpec.CustomGatewaysEntry',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='istio.mesh.v1alpha1.IstioComponentSpec.CustomGatewaysEntry.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='istio.mesh.v1alpha1.IstioComponentSpec.CustomGatewaysEntry.value', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=_b('8\001'),
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1158,
-  serialized_end=1260,
-)
-
-_ISTIOCOMPONENTSPEC_EXTRACOMPONENTSENTRY = _descriptor.Descriptor(
+_ISTIOCOMPONENTSETSPEC_EXTRACOMPONENTSENTRY = _descriptor.Descriptor(
   name='ExtraComponentsEntry',
-  full_name='istio.mesh.v1alpha1.IstioComponentSpec.ExtraComponentsEntry',
+  full_name='istio.mesh.v1alpha1.IstioComponentSetSpec.ExtraComponentsEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='istio.mesh.v1alpha1.IstioComponentSpec.ExtraComponentsEntry.key', index=0,
+      name='key', full_name='istio.mesh.v1alpha1.IstioComponentSetSpec.ExtraComponentsEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='value', full_name='istio.mesh.v1alpha1.IstioComponentSpec.ExtraComponentsEntry.value', index=1,
+      name='value', full_name='istio.mesh.v1alpha1.IstioComponentSetSpec.ExtraComponentsEntry.value', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -101,110 +65,103 @@ _ISTIOCOMPONENTSPEC_EXTRACOMPONENTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1262,
-  serialized_end=1361,
+  serialized_start=1021,
+  serialized_end=1119,
 )
 
-_ISTIOCOMPONENTSPEC = _descriptor.Descriptor(
-  name='IstioComponentSpec',
-  full_name='istio.mesh.v1alpha1.IstioComponentSpec',
+_ISTIOCOMPONENTSETSPEC = _descriptor.Descriptor(
+  name='IstioComponentSetSpec',
+  full_name='istio.mesh.v1alpha1.IstioComponentSetSpec',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='pilot', full_name='istio.mesh.v1alpha1.IstioComponentSpec.pilot', index=0,
+      name='pilot', full_name='istio.mesh.v1alpha1.IstioComponentSetSpec.pilot', index=0,
       number=30, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='proxy', full_name='istio.mesh.v1alpha1.IstioComponentSpec.proxy', index=1,
+      name='proxy', full_name='istio.mesh.v1alpha1.IstioComponentSetSpec.proxy', index=1,
       number=31, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sidecar_injector', full_name='istio.mesh.v1alpha1.IstioComponentSpec.sidecar_injector', index=2,
+      name='sidecar_injector', full_name='istio.mesh.v1alpha1.IstioComponentSetSpec.sidecar_injector', index=2,
       number=32, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='policy', full_name='istio.mesh.v1alpha1.IstioComponentSpec.policy', index=3,
+      name='policy', full_name='istio.mesh.v1alpha1.IstioComponentSetSpec.policy', index=3,
       number=33, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='telemetry', full_name='istio.mesh.v1alpha1.IstioComponentSpec.telemetry', index=4,
+      name='telemetry', full_name='istio.mesh.v1alpha1.IstioComponentSetSpec.telemetry', index=4,
       number=34, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='citadel', full_name='istio.mesh.v1alpha1.IstioComponentSpec.citadel', index=5,
+      name='citadel', full_name='istio.mesh.v1alpha1.IstioComponentSetSpec.citadel', index=5,
       number=35, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='node_agent', full_name='istio.mesh.v1alpha1.IstioComponentSpec.node_agent', index=6,
+      name='node_agent', full_name='istio.mesh.v1alpha1.IstioComponentSetSpec.node_agent', index=6,
       number=36, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='galley', full_name='istio.mesh.v1alpha1.IstioComponentSpec.galley', index=7,
+      name='galley', full_name='istio.mesh.v1alpha1.IstioComponentSetSpec.galley', index=7,
       number=37, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='ingressGateway', full_name='istio.mesh.v1alpha1.IstioComponentSpec.ingressGateway', index=8,
+      name='cni', full_name='istio.mesh.v1alpha1.IstioComponentSetSpec.cni', index=8,
       number=38, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='egressGateway', full_name='istio.mesh.v1alpha1.IstioComponentSpec.egressGateway', index=9,
+      name='coreDNS', full_name='istio.mesh.v1alpha1.IstioComponentSetSpec.coreDNS', index=9,
       number=39, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='customGateways', full_name='istio.mesh.v1alpha1.IstioComponentSpec.customGateways', index=10,
+      name='ingress_gateways', full_name='istio.mesh.v1alpha1.IstioComponentSetSpec.ingress_gateways', index=10,
       number=40, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='cni', full_name='istio.mesh.v1alpha1.IstioComponentSpec.cni', index=11,
-      number=41, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='egress_gateways', full_name='istio.mesh.v1alpha1.IstioComponentSetSpec.egress_gateways', index=11,
+      number=41, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='coreDNS', full_name='istio.mesh.v1alpha1.IstioComponentSpec.coreDNS', index=12,
-      number=42, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='extraComponents', full_name='istio.mesh.v1alpha1.IstioComponentSpec.extraComponents', index=13,
+      name='extra_components', full_name='istio.mesh.v1alpha1.IstioComponentSetSpec.extra_components', index=12,
       number=100, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -213,7 +170,7 @@ _ISTIOCOMPONENTSPEC = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_ISTIOCOMPONENTSPEC_CUSTOMGATEWAYSENTRY, _ISTIOCOMPONENTSPEC_EXTRACOMPONENTSENTRY, ],
+  nested_types=[_ISTIOCOMPONENTSETSPEC_EXTRACOMPONENTSENTRY, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -222,28 +179,42 @@ _ISTIOCOMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=225,
-  serialized_end=1361,
+  serialized_start=252,
+  serialized_end=1119,
 )
 
 
-_PILOTCOMPONENTSPEC = _descriptor.Descriptor(
-  name='PilotComponentSpec',
-  full_name='istio.mesh.v1alpha1.PilotComponentSpec',
+_COMPONENTSPEC = _descriptor.Descriptor(
+  name='ComponentSpec',
+  full_name='istio.mesh.v1alpha1.ComponentSpec',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='istio.mesh.v1alpha1.PilotComponentSpec.enabled', index=0,
+      name='enabled', full_name='istio.mesh.v1alpha1.ComponentSpec.enabled', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='k8s', full_name='istio.mesh.v1alpha1.PilotComponentSpec.k8s', index=1,
-      number=80, type=11, cpp_type=10, label=1,
+      name='namespace', full_name='istio.mesh.v1alpha1.ComponentSpec.namespace', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='spec', full_name='istio.mesh.v1alpha1.ComponentSpec.spec', index=2,
+      number=10, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='k8s', full_name='istio.mesh.v1alpha1.ComponentSpec.k8s', index=3,
+      number=50, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -260,21 +231,49 @@ _PILOTCOMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1364,
-  serialized_end=1501,
+  serialized_start=1122,
+  serialized_end=1323,
 )
 
 
-_PROXYCOMPONENTSPEC = _descriptor.Descriptor(
-  name='ProxyComponentSpec',
-  full_name='istio.mesh.v1alpha1.ProxyComponentSpec',
+_EXTERNALCOMPONENTSPEC = _descriptor.Descriptor(
+  name='ExternalComponentSpec',
+  full_name='istio.mesh.v1alpha1.ExternalComponentSpec',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='k8s', full_name='istio.mesh.v1alpha1.ProxyComponentSpec.k8s', index=0,
-      number=80, type=11, cpp_type=10, label=1,
+      name='namespace', full_name='istio.mesh.v1alpha1.ExternalComponentSpec.namespace', index=0,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='spec', full_name='istio.mesh.v1alpha1.ExternalComponentSpec.spec', index=1,
+      number=10, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='chart_path', full_name='istio.mesh.v1alpha1.ExternalComponentSpec.chart_path', index=2,
+      number=30, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='schema', full_name='istio.mesh.v1alpha1.ExternalComponentSpec.schema', index=3,
+      number=35, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='k8s', full_name='istio.mesh.v1alpha1.ExternalComponentSpec.k8s', index=4,
+      number=50, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -291,28 +290,35 @@ _PROXYCOMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1503,
-  serialized_end=1582,
+  serialized_start=1326,
+  serialized_end=1535,
 )
 
 
-_SIDECARINJECTORCOMPONENTSPEC = _descriptor.Descriptor(
-  name='SidecarInjectorComponentSpec',
-  full_name='istio.mesh.v1alpha1.SidecarInjectorComponentSpec',
+_GATEWAYSPEC = _descriptor.Descriptor(
+  name='GatewaySpec',
+  full_name='istio.mesh.v1alpha1.GatewaySpec',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='enabled', full_name='istio.mesh.v1alpha1.SidecarInjectorComponentSpec.enabled', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='namespace', full_name='istio.mesh.v1alpha1.GatewaySpec.namespace', index=0,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='k8s', full_name='istio.mesh.v1alpha1.SidecarInjectorComponentSpec.k8s', index=1,
-      number=80, type=11, cpp_type=10, label=1,
+      name='name', full_name='istio.mesh.v1alpha1.GatewaySpec.name', index=1,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='k8s', full_name='istio.mesh.v1alpha1.GatewaySpec.k8s', index=2,
+      number=50, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -329,374 +335,8 @@ _SIDECARINJECTORCOMPONENTSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1585,
-  serialized_end=1732,
-)
-
-
-_POLICYCOMPONENTSPEC = _descriptor.Descriptor(
-  name='PolicyComponentSpec',
-  full_name='istio.mesh.v1alpha1.PolicyComponentSpec',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='enabled', full_name='istio.mesh.v1alpha1.PolicyComponentSpec.enabled', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='k8s', full_name='istio.mesh.v1alpha1.PolicyComponentSpec.k8s', index=1,
-      number=80, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1735,
-  serialized_end=1873,
-)
-
-
-_TELEMETRYCOMPONENTSPEC = _descriptor.Descriptor(
-  name='TelemetryComponentSpec',
-  full_name='istio.mesh.v1alpha1.TelemetryComponentSpec',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='enabled', full_name='istio.mesh.v1alpha1.TelemetryComponentSpec.enabled', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='k8s', full_name='istio.mesh.v1alpha1.TelemetryComponentSpec.k8s', index=1,
-      number=80, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1876,
-  serialized_end=2017,
-)
-
-
-_CITADELCOMPONENTSPEC = _descriptor.Descriptor(
-  name='CitadelComponentSpec',
-  full_name='istio.mesh.v1alpha1.CitadelComponentSpec',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='enabled', full_name='istio.mesh.v1alpha1.CitadelComponentSpec.enabled', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='k8s', full_name='istio.mesh.v1alpha1.CitadelComponentSpec.k8s', index=1,
-      number=80, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2020,
-  serialized_end=2159,
-)
-
-
-_NODEAGENTCOMPONENTSPEC = _descriptor.Descriptor(
-  name='NodeAgentComponentSpec',
-  full_name='istio.mesh.v1alpha1.NodeAgentComponentSpec',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='enabled', full_name='istio.mesh.v1alpha1.NodeAgentComponentSpec.enabled', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='k8s', full_name='istio.mesh.v1alpha1.NodeAgentComponentSpec.k8s', index=1,
-      number=80, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2162,
-  serialized_end=2303,
-)
-
-
-_GALLEYCOMPONENTSPEC = _descriptor.Descriptor(
-  name='GalleyComponentSpec',
-  full_name='istio.mesh.v1alpha1.GalleyComponentSpec',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='enabled', full_name='istio.mesh.v1alpha1.GalleyComponentSpec.enabled', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='k8s', full_name='istio.mesh.v1alpha1.GalleyComponentSpec.k8s', index=1,
-      number=80, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2306,
-  serialized_end=2444,
-)
-
-
-_GATEWAYCOMPONENTSPEC = _descriptor.Descriptor(
-  name='GatewayComponentSpec',
-  full_name='istio.mesh.v1alpha1.GatewayComponentSpec',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='enabled', full_name='istio.mesh.v1alpha1.GatewayComponentSpec.enabled', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='k8s', full_name='istio.mesh.v1alpha1.GatewayComponentSpec.k8s', index=1,
-      number=80, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2447,
-  serialized_end=2586,
-)
-
-
-_CUSTOMGATEWAYCOMPONENTSPEC = _descriptor.Descriptor(
-  name='CustomGatewayComponentSpec',
-  full_name='istio.mesh.v1alpha1.CustomGatewayComponentSpec',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='k8s', full_name='istio.mesh.v1alpha1.CustomGatewayComponentSpec.k8s', index=0,
-      number=80, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2588,
-  serialized_end=2675,
-)
-
-
-_CNICOMPONENTSPEC = _descriptor.Descriptor(
-  name='CNIComponentSpec',
-  full_name='istio.mesh.v1alpha1.CNIComponentSpec',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='enabled', full_name='istio.mesh.v1alpha1.CNIComponentSpec.enabled', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='k8s', full_name='istio.mesh.v1alpha1.CNIComponentSpec.k8s', index=1,
-      number=80, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2678,
-  serialized_end=2813,
-)
-
-
-_COREDNSCOMPONENTSPEC = _descriptor.Descriptor(
-  name='CoreDNSComponentSpec',
-  full_name='istio.mesh.v1alpha1.CoreDNSComponentSpec',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='enabled', full_name='istio.mesh.v1alpha1.CoreDNSComponentSpec.enabled', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='k8s', full_name='istio.mesh.v1alpha1.CoreDNSComponentSpec.k8s', index=1,
-      number=80, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2816,
-  serialized_end=2955,
-)
-
-
-_EXTENSIONCOMPONENTSPEC = _descriptor.Descriptor(
-  name='ExtensionComponentSpec',
-  full_name='istio.mesh.v1alpha1.ExtensionComponentSpec',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='k8s', full_name='istio.mesh.v1alpha1.ExtensionComponentSpec.k8s', index=0,
-      number=80, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2957,
-  serialized_end=3040,
+  serialized_start=1537,
+  serialized_end=1642,
 )
 
 
@@ -733,8 +373,8 @@ _KUBERNETESRESOURCESSPEC_NODESELECTORENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3908,
-  serialized_end=3959,
+  serialized_start=2510,
+  serialized_end=2561,
 )
 
 _KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY = _descriptor.Descriptor(
@@ -770,8 +410,8 @@ _KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3961,
-  serialized_end=4014,
+  serialized_start=2563,
+  serialized_end=2616,
 )
 
 _KUBERNETESRESOURCESSPEC = _descriptor.Descriptor(
@@ -898,8 +538,8 @@ _KUBERNETESRESOURCESSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3043,
-  serialized_end=4014,
+  serialized_start=1645,
+  serialized_end=2616,
 )
 
 
@@ -936,8 +576,8 @@ _K8SOBJECTOVERLAY_PATHVALUE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4152,
-  serialized_end=4228,
+  serialized_start=2754,
+  serialized_end=2830,
 )
 
 _K8SOBJECTOVERLAY = _descriptor.Descriptor(
@@ -987,8 +627,8 @@ _K8SOBJECTOVERLAY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4017,
-  serialized_end=4228,
+  serialized_start=2619,
+  serialized_end=2830,
 )
 
 
@@ -1011,8 +651,8 @@ _TYPEMAPSTRINGINTERFACE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4230,
-  serialized_end=4254,
+  serialized_start=2832,
+  serialized_end=2856,
 )
 
 
@@ -1035,8 +675,8 @@ _TYPEINTERFACE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4256,
-  serialized_end=4271,
+  serialized_start=2858,
+  serialized_end=2873,
 )
 
 
@@ -1059,51 +699,32 @@ _TYPEBOOLVALUEFORPB = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4273,
-  serialized_end=4293,
+  serialized_start=2875,
+  serialized_end=2895,
 )
 
-_ISTIOCOMPONENTSPEC_CUSTOMGATEWAYSENTRY.fields_by_name['value'].message_type = _CUSTOMGATEWAYCOMPONENTSPEC
-_ISTIOCOMPONENTSPEC_CUSTOMGATEWAYSENTRY.containing_type = _ISTIOCOMPONENTSPEC
-_ISTIOCOMPONENTSPEC_EXTRACOMPONENTSENTRY.fields_by_name['value'].message_type = _EXTENSIONCOMPONENTSPEC
-_ISTIOCOMPONENTSPEC_EXTRACOMPONENTSENTRY.containing_type = _ISTIOCOMPONENTSPEC
-_ISTIOCOMPONENTSPEC.fields_by_name['pilot'].message_type = _PILOTCOMPONENTSPEC
-_ISTIOCOMPONENTSPEC.fields_by_name['proxy'].message_type = _PROXYCOMPONENTSPEC
-_ISTIOCOMPONENTSPEC.fields_by_name['sidecar_injector'].message_type = _SIDECARINJECTORCOMPONENTSPEC
-_ISTIOCOMPONENTSPEC.fields_by_name['policy'].message_type = _POLICYCOMPONENTSPEC
-_ISTIOCOMPONENTSPEC.fields_by_name['telemetry'].message_type = _TELEMETRYCOMPONENTSPEC
-_ISTIOCOMPONENTSPEC.fields_by_name['citadel'].message_type = _CITADELCOMPONENTSPEC
-_ISTIOCOMPONENTSPEC.fields_by_name['node_agent'].message_type = _NODEAGENTCOMPONENTSPEC
-_ISTIOCOMPONENTSPEC.fields_by_name['galley'].message_type = _GALLEYCOMPONENTSPEC
-_ISTIOCOMPONENTSPEC.fields_by_name['ingressGateway'].message_type = _GATEWAYCOMPONENTSPEC
-_ISTIOCOMPONENTSPEC.fields_by_name['egressGateway'].message_type = _GATEWAYCOMPONENTSPEC
-_ISTIOCOMPONENTSPEC.fields_by_name['customGateways'].message_type = _ISTIOCOMPONENTSPEC_CUSTOMGATEWAYSENTRY
-_ISTIOCOMPONENTSPEC.fields_by_name['cni'].message_type = _CNICOMPONENTSPEC
-_ISTIOCOMPONENTSPEC.fields_by_name['coreDNS'].message_type = _COREDNSCOMPONENTSPEC
-_ISTIOCOMPONENTSPEC.fields_by_name['extraComponents'].message_type = _ISTIOCOMPONENTSPEC_EXTRACOMPONENTSENTRY
-_PILOTCOMPONENTSPEC.fields_by_name['enabled'].message_type = _TYPEBOOLVALUEFORPB
-_PILOTCOMPONENTSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
-_PROXYCOMPONENTSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
-_SIDECARINJECTORCOMPONENTSPEC.fields_by_name['enabled'].message_type = _TYPEBOOLVALUEFORPB
-_SIDECARINJECTORCOMPONENTSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
-_POLICYCOMPONENTSPEC.fields_by_name['enabled'].message_type = _TYPEBOOLVALUEFORPB
-_POLICYCOMPONENTSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
-_TELEMETRYCOMPONENTSPEC.fields_by_name['enabled'].message_type = _TYPEBOOLVALUEFORPB
-_TELEMETRYCOMPONENTSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
-_CITADELCOMPONENTSPEC.fields_by_name['enabled'].message_type = _TYPEBOOLVALUEFORPB
-_CITADELCOMPONENTSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
-_NODEAGENTCOMPONENTSPEC.fields_by_name['enabled'].message_type = _TYPEBOOLVALUEFORPB
-_NODEAGENTCOMPONENTSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
-_GALLEYCOMPONENTSPEC.fields_by_name['enabled'].message_type = _TYPEBOOLVALUEFORPB
-_GALLEYCOMPONENTSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
-_GATEWAYCOMPONENTSPEC.fields_by_name['enabled'].message_type = _TYPEBOOLVALUEFORPB
-_GATEWAYCOMPONENTSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
-_CUSTOMGATEWAYCOMPONENTSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
-_CNICOMPONENTSPEC.fields_by_name['enabled'].message_type = _TYPEBOOLVALUEFORPB
-_CNICOMPONENTSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
-_COREDNSCOMPONENTSPEC.fields_by_name['enabled'].message_type = _TYPEBOOLVALUEFORPB
-_COREDNSCOMPONENTSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
-_EXTENSIONCOMPONENTSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
+_ISTIOCOMPONENTSETSPEC_EXTRACOMPONENTSENTRY.fields_by_name['value'].message_type = _EXTERNALCOMPONENTSPEC
+_ISTIOCOMPONENTSETSPEC_EXTRACOMPONENTSENTRY.containing_type = _ISTIOCOMPONENTSETSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['pilot'].message_type = _COMPONENTSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['proxy'].message_type = _COMPONENTSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['sidecar_injector'].message_type = _COMPONENTSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['policy'].message_type = _COMPONENTSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['telemetry'].message_type = _COMPONENTSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['citadel'].message_type = _COMPONENTSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['node_agent'].message_type = _COMPONENTSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['galley'].message_type = _COMPONENTSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['cni'].message_type = _COMPONENTSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['coreDNS'].message_type = _COMPONENTSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['ingress_gateways'].message_type = _GATEWAYSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['egress_gateways'].message_type = _GATEWAYSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['extra_components'].message_type = _ISTIOCOMPONENTSETSPEC_EXTRACOMPONENTSENTRY
+_COMPONENTSPEC.fields_by_name['enabled'].message_type = _TYPEBOOLVALUEFORPB
+_COMPONENTSPEC.fields_by_name['spec'].message_type = _TYPEINTERFACE
+_COMPONENTSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
+_EXTERNALCOMPONENTSPEC.fields_by_name['spec'].message_type = _TYPEINTERFACE
+_EXTERNALCOMPONENTSPEC.fields_by_name['schema'].message_type = google_dot_protobuf_dot_any__pb2._ANY
+_EXTERNALCOMPONENTSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
+_GATEWAYSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
 _KUBERNETESRESOURCESSPEC_NODESELECTORENTRY.containing_type = _KUBERNETESRESOURCESSPEC
 _KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY.containing_type = _KUBERNETESRESOURCESSPEC
 _KUBERNETESRESOURCESSPEC.fields_by_name['affinity'].message_type = mesh_dot_v1alpha1_dot_kubernetes__pb2._AFFINITY
@@ -1121,20 +742,10 @@ _KUBERNETESRESOURCESSPEC.fields_by_name['overlays'].message_type = _K8SOBJECTOVE
 _K8SOBJECTOVERLAY_PATHVALUE.fields_by_name['value'].message_type = _TYPEINTERFACE
 _K8SOBJECTOVERLAY_PATHVALUE.containing_type = _K8SOBJECTOVERLAY
 _K8SOBJECTOVERLAY.fields_by_name['patches'].message_type = _K8SOBJECTOVERLAY_PATHVALUE
-DESCRIPTOR.message_types_by_name['IstioComponentSpec'] = _ISTIOCOMPONENTSPEC
-DESCRIPTOR.message_types_by_name['PilotComponentSpec'] = _PILOTCOMPONENTSPEC
-DESCRIPTOR.message_types_by_name['ProxyComponentSpec'] = _PROXYCOMPONENTSPEC
-DESCRIPTOR.message_types_by_name['SidecarInjectorComponentSpec'] = _SIDECARINJECTORCOMPONENTSPEC
-DESCRIPTOR.message_types_by_name['PolicyComponentSpec'] = _POLICYCOMPONENTSPEC
-DESCRIPTOR.message_types_by_name['TelemetryComponentSpec'] = _TELEMETRYCOMPONENTSPEC
-DESCRIPTOR.message_types_by_name['CitadelComponentSpec'] = _CITADELCOMPONENTSPEC
-DESCRIPTOR.message_types_by_name['NodeAgentComponentSpec'] = _NODEAGENTCOMPONENTSPEC
-DESCRIPTOR.message_types_by_name['GalleyComponentSpec'] = _GALLEYCOMPONENTSPEC
-DESCRIPTOR.message_types_by_name['GatewayComponentSpec'] = _GATEWAYCOMPONENTSPEC
-DESCRIPTOR.message_types_by_name['CustomGatewayComponentSpec'] = _CUSTOMGATEWAYCOMPONENTSPEC
-DESCRIPTOR.message_types_by_name['CNIComponentSpec'] = _CNICOMPONENTSPEC
-DESCRIPTOR.message_types_by_name['CoreDNSComponentSpec'] = _COREDNSCOMPONENTSPEC
-DESCRIPTOR.message_types_by_name['ExtensionComponentSpec'] = _EXTENSIONCOMPONENTSPEC
+DESCRIPTOR.message_types_by_name['IstioComponentSetSpec'] = _ISTIOCOMPONENTSETSPEC
+DESCRIPTOR.message_types_by_name['ComponentSpec'] = _COMPONENTSPEC
+DESCRIPTOR.message_types_by_name['ExternalComponentSpec'] = _EXTERNALCOMPONENTSPEC
+DESCRIPTOR.message_types_by_name['GatewaySpec'] = _GATEWAYSPEC
 DESCRIPTOR.message_types_by_name['KubernetesResourcesSpec'] = _KUBERNETESRESOURCESSPEC
 DESCRIPTOR.message_types_by_name['k8sObjectOverlay'] = _K8SOBJECTOVERLAY
 DESCRIPTOR.message_types_by_name['TypeMapStringInterface'] = _TYPEMAPSTRINGINTERFACE
@@ -1142,119 +753,41 @@ DESCRIPTOR.message_types_by_name['TypeInterface'] = _TYPEINTERFACE
 DESCRIPTOR.message_types_by_name['TypeBoolValueForPB'] = _TYPEBOOLVALUEFORPB
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-IstioComponentSpec = _reflection.GeneratedProtocolMessageType('IstioComponentSpec', (_message.Message,), {
-
-  'CustomGatewaysEntry' : _reflection.GeneratedProtocolMessageType('CustomGatewaysEntry', (_message.Message,), {
-    'DESCRIPTOR' : _ISTIOCOMPONENTSPEC_CUSTOMGATEWAYSENTRY,
-    '__module__' : 'mesh.v1alpha1.component_pb2'
-    # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.IstioComponentSpec.CustomGatewaysEntry)
-    })
-  ,
+IstioComponentSetSpec = _reflection.GeneratedProtocolMessageType('IstioComponentSetSpec', (_message.Message,), {
 
   'ExtraComponentsEntry' : _reflection.GeneratedProtocolMessageType('ExtraComponentsEntry', (_message.Message,), {
-    'DESCRIPTOR' : _ISTIOCOMPONENTSPEC_EXTRACOMPONENTSENTRY,
+    'DESCRIPTOR' : _ISTIOCOMPONENTSETSPEC_EXTRACOMPONENTSENTRY,
     '__module__' : 'mesh.v1alpha1.component_pb2'
-    # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.IstioComponentSpec.ExtraComponentsEntry)
+    # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.IstioComponentSetSpec.ExtraComponentsEntry)
     })
   ,
-  'DESCRIPTOR' : _ISTIOCOMPONENTSPEC,
+  'DESCRIPTOR' : _ISTIOCOMPONENTSETSPEC,
   '__module__' : 'mesh.v1alpha1.component_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.IstioComponentSpec)
+  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.IstioComponentSetSpec)
   })
-_sym_db.RegisterMessage(IstioComponentSpec)
-_sym_db.RegisterMessage(IstioComponentSpec.CustomGatewaysEntry)
-_sym_db.RegisterMessage(IstioComponentSpec.ExtraComponentsEntry)
+_sym_db.RegisterMessage(IstioComponentSetSpec)
+_sym_db.RegisterMessage(IstioComponentSetSpec.ExtraComponentsEntry)
 
-PilotComponentSpec = _reflection.GeneratedProtocolMessageType('PilotComponentSpec', (_message.Message,), {
-  'DESCRIPTOR' : _PILOTCOMPONENTSPEC,
+ComponentSpec = _reflection.GeneratedProtocolMessageType('ComponentSpec', (_message.Message,), {
+  'DESCRIPTOR' : _COMPONENTSPEC,
   '__module__' : 'mesh.v1alpha1.component_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.PilotComponentSpec)
+  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.ComponentSpec)
   })
-_sym_db.RegisterMessage(PilotComponentSpec)
+_sym_db.RegisterMessage(ComponentSpec)
 
-ProxyComponentSpec = _reflection.GeneratedProtocolMessageType('ProxyComponentSpec', (_message.Message,), {
-  'DESCRIPTOR' : _PROXYCOMPONENTSPEC,
+ExternalComponentSpec = _reflection.GeneratedProtocolMessageType('ExternalComponentSpec', (_message.Message,), {
+  'DESCRIPTOR' : _EXTERNALCOMPONENTSPEC,
   '__module__' : 'mesh.v1alpha1.component_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.ProxyComponentSpec)
+  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.ExternalComponentSpec)
   })
-_sym_db.RegisterMessage(ProxyComponentSpec)
+_sym_db.RegisterMessage(ExternalComponentSpec)
 
-SidecarInjectorComponentSpec = _reflection.GeneratedProtocolMessageType('SidecarInjectorComponentSpec', (_message.Message,), {
-  'DESCRIPTOR' : _SIDECARINJECTORCOMPONENTSPEC,
+GatewaySpec = _reflection.GeneratedProtocolMessageType('GatewaySpec', (_message.Message,), {
+  'DESCRIPTOR' : _GATEWAYSPEC,
   '__module__' : 'mesh.v1alpha1.component_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.SidecarInjectorComponentSpec)
+  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.GatewaySpec)
   })
-_sym_db.RegisterMessage(SidecarInjectorComponentSpec)
-
-PolicyComponentSpec = _reflection.GeneratedProtocolMessageType('PolicyComponentSpec', (_message.Message,), {
-  'DESCRIPTOR' : _POLICYCOMPONENTSPEC,
-  '__module__' : 'mesh.v1alpha1.component_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.PolicyComponentSpec)
-  })
-_sym_db.RegisterMessage(PolicyComponentSpec)
-
-TelemetryComponentSpec = _reflection.GeneratedProtocolMessageType('TelemetryComponentSpec', (_message.Message,), {
-  'DESCRIPTOR' : _TELEMETRYCOMPONENTSPEC,
-  '__module__' : 'mesh.v1alpha1.component_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.TelemetryComponentSpec)
-  })
-_sym_db.RegisterMessage(TelemetryComponentSpec)
-
-CitadelComponentSpec = _reflection.GeneratedProtocolMessageType('CitadelComponentSpec', (_message.Message,), {
-  'DESCRIPTOR' : _CITADELCOMPONENTSPEC,
-  '__module__' : 'mesh.v1alpha1.component_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.CitadelComponentSpec)
-  })
-_sym_db.RegisterMessage(CitadelComponentSpec)
-
-NodeAgentComponentSpec = _reflection.GeneratedProtocolMessageType('NodeAgentComponentSpec', (_message.Message,), {
-  'DESCRIPTOR' : _NODEAGENTCOMPONENTSPEC,
-  '__module__' : 'mesh.v1alpha1.component_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.NodeAgentComponentSpec)
-  })
-_sym_db.RegisterMessage(NodeAgentComponentSpec)
-
-GalleyComponentSpec = _reflection.GeneratedProtocolMessageType('GalleyComponentSpec', (_message.Message,), {
-  'DESCRIPTOR' : _GALLEYCOMPONENTSPEC,
-  '__module__' : 'mesh.v1alpha1.component_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.GalleyComponentSpec)
-  })
-_sym_db.RegisterMessage(GalleyComponentSpec)
-
-GatewayComponentSpec = _reflection.GeneratedProtocolMessageType('GatewayComponentSpec', (_message.Message,), {
-  'DESCRIPTOR' : _GATEWAYCOMPONENTSPEC,
-  '__module__' : 'mesh.v1alpha1.component_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.GatewayComponentSpec)
-  })
-_sym_db.RegisterMessage(GatewayComponentSpec)
-
-CustomGatewayComponentSpec = _reflection.GeneratedProtocolMessageType('CustomGatewayComponentSpec', (_message.Message,), {
-  'DESCRIPTOR' : _CUSTOMGATEWAYCOMPONENTSPEC,
-  '__module__' : 'mesh.v1alpha1.component_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.CustomGatewayComponentSpec)
-  })
-_sym_db.RegisterMessage(CustomGatewayComponentSpec)
-
-CNIComponentSpec = _reflection.GeneratedProtocolMessageType('CNIComponentSpec', (_message.Message,), {
-  'DESCRIPTOR' : _CNICOMPONENTSPEC,
-  '__module__' : 'mesh.v1alpha1.component_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.CNIComponentSpec)
-  })
-_sym_db.RegisterMessage(CNIComponentSpec)
-
-CoreDNSComponentSpec = _reflection.GeneratedProtocolMessageType('CoreDNSComponentSpec', (_message.Message,), {
-  'DESCRIPTOR' : _COREDNSCOMPONENTSPEC,
-  '__module__' : 'mesh.v1alpha1.component_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.CoreDNSComponentSpec)
-  })
-_sym_db.RegisterMessage(CoreDNSComponentSpec)
-
-ExtensionComponentSpec = _reflection.GeneratedProtocolMessageType('ExtensionComponentSpec', (_message.Message,), {
-  'DESCRIPTOR' : _EXTENSIONCOMPONENTSPEC,
-  '__module__' : 'mesh.v1alpha1.component_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.ExtensionComponentSpec)
-  })
-_sym_db.RegisterMessage(ExtensionComponentSpec)
+_sym_db.RegisterMessage(GatewaySpec)
 
 KubernetesResourcesSpec = _reflection.GeneratedProtocolMessageType('KubernetesResourcesSpec', (_message.Message,), {
 
@@ -1317,8 +850,7 @@ _sym_db.RegisterMessage(TypeBoolValueForPB)
 
 
 DESCRIPTOR._options = None
-_ISTIOCOMPONENTSPEC_CUSTOMGATEWAYSENTRY._options = None
-_ISTIOCOMPONENTSPEC_EXTRACOMPONENTSENTRY._options = None
+_ISTIOCOMPONENTSETSPEC_EXTRACOMPONENTSENTRY._options = None
 _KUBERNETESRESOURCESSPEC_NODESELECTORENTRY._options = None
 _KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY._options = None
 # @@protoc_insertion_point(module_scope)

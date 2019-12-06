@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 83
+number_of_entries: 73
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -93,41 +93,6 @@ policy.</p>
 </tbody>
 </table>
 </section>
-<h2 id="CNIComponentSpec">CNIComponentSpec</h2>
-<section>
-<p>Configuration options for cni component.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="CNIComponentSpec-enabled">
-<td><code>enabled</code></td>
-<td><code><a href="#TypeBoolValueForPB">TypeBoolValueForPB</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="CNIComponentSpec-k8s">
-<td><code>k8s</code></td>
-<td><code><a href="#KubernetesResourcesSpec">KubernetesResourcesSpec</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="Certificate">Certificate</h2>
 <section>
 <p>Certificate configures the provision of a certificate and its key.
@@ -183,41 +148,6 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="CitadelComponentSpec">CitadelComponentSpec</h2>
-<section>
-<p>Configuration options for Citadel component.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="CitadelComponentSpec-enabled">
-<td><code>enabled</code></td>
-<td><code><a href="#TypeBoolValueForPB">TypeBoolValueForPB</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="CitadelComponentSpec-k8s">
-<td><code>k8s</code></td>
-<td><code><a href="#KubernetesResourcesSpec">KubernetesResourcesSpec</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="ClientIPConfig">ClientIPConfig</h2>
 <section>
 <table class="message-fields">
@@ -234,6 +164,67 @@ No
 <td><code>timeoutSeconds</code></td>
 <td><code>int32</code></td>
 <td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ComponentSpec">ComponentSpec</h2>
+<section>
+<p>Configuration for internal components.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ComponentSpec-enabled">
+<td><code>enabled</code></td>
+<td><code><a href="#TypeBoolValueForPB">TypeBoolValueForPB</a></code></td>
+<td>
+<p>Selects whether this component is installed.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ComponentSpec-namespace">
+<td><code>namespace</code></td>
+<td><code>string</code></td>
+<td>
+<p>Namespace for the component.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ComponentSpec-spec">
+<td><code>spec</code></td>
+<td><code><a href="#TypeInterface">TypeInterface</a></code></td>
+<td>
+<p>Arbitrary install time configuration for the component.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ComponentSpec-k8s">
+<td><code>k8s</code></td>
+<td><code><a href="#KubernetesResourcesSpec">KubernetesResourcesSpec</a></code></td>
+<td>
+<p>Kubernetes resource spec.</p>
+
 </td>
 <td>
 No
@@ -332,67 +323,6 @@ No
 <td>
 <p>Describes the source of configuration, if nothing is specified default is MCP</p>
 
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="CoreDNSComponentSpec">CoreDNSComponentSpec</h2>
-<section>
-<p>Configuration options for CoreDNS component.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="CoreDNSComponentSpec-enabled">
-<td><code>enabled</code></td>
-<td><code><a href="#TypeBoolValueForPB">TypeBoolValueForPB</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="CoreDNSComponentSpec-k8s">
-<td><code>k8s</code></td>
-<td><code><a href="#KubernetesResourcesSpec">KubernetesResourcesSpec</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="CustomGatewayComponentSpec">CustomGatewayComponentSpec</h2>
-<section>
-<p>Configuration options for custom gateways.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="CustomGatewayComponentSpec-k8s">
-<td><code>k8s</code></td>
-<td><code><a href="#KubernetesResourcesSpec">KubernetesResourcesSpec</a></code></td>
-<td>
 </td>
 <td>
 No
@@ -555,9 +485,9 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="ExtensionComponentSpec">ExtensionComponentSpec</h2>
+<h2 id="ExternalComponentSpec">ExternalComponentSpec</h2>
 <section>
-<p>Configuration options for CoreDNS component.</p>
+<p>Configuration for external components.</p>
 
 <table class="message-fields">
 <thead>
@@ -569,10 +499,56 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="ExtensionComponentSpec-k8s">
+<tr id="ExternalComponentSpec-namespace">
+<td><code>namespace</code></td>
+<td><code>string</code></td>
+<td>
+<p>Namespace for the component.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExternalComponentSpec-spec">
+<td><code>spec</code></td>
+<td><code><a href="#TypeInterface">TypeInterface</a></code></td>
+<td>
+<p>Arbitrary install time configuration for the component.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExternalComponentSpec-chart_path">
+<td><code>chartPath</code></td>
+<td><code>string</code></td>
+<td>
+<p>Chart path for addon components.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExternalComponentSpec-schema">
+<td><code>schema</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#any">Any</a></code></td>
+<td>
+<p>Optional schema to validate spec against.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExternalComponentSpec-k8s">
 <td><code>k8s</code></td>
 <td><code><a href="#KubernetesResourcesSpec">KubernetesResourcesSpec</a></code></td>
 <td>
+<p>Kubernetes resource spec.</p>
+
 </td>
 <td>
 No
@@ -581,9 +557,9 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="GalleyComponentSpec">GalleyComponentSpec</h2>
+<h2 id="GatewaySpec">GatewaySpec</h2>
 <section>
-<p>Configuration options for galley component.</p>
+<p>Configuration for gateways.</p>
 
 <table class="message-fields">
 <thead>
@@ -595,54 +571,34 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="GalleyComponentSpec-enabled">
-<td><code>enabled</code></td>
-<td><code><a href="#TypeBoolValueForPB">TypeBoolValueForPB</a></code></td>
+<tr id="GatewaySpec-namespace">
+<td><code>namespace</code></td>
+<td><code>string</code></td>
 <td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="GalleyComponentSpec-k8s">
-<td><code>k8s</code></td>
-<td><code><a href="#KubernetesResourcesSpec">KubernetesResourcesSpec</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="GatewayComponentSpec">GatewayComponentSpec</h2>
-<section>
-<p>Configuration options for built-in gateways.</p>
+<p>Namespace for the gateway.</p>
 
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="GatewayComponentSpec-enabled">
-<td><code>enabled</code></td>
-<td><code><a href="#TypeBoolValueForPB">TypeBoolValueForPB</a></code></td>
-<td>
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="GatewayComponentSpec-k8s">
+<tr id="GatewaySpec-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Name for the gateway.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GatewaySpec-k8s">
 <td><code>k8s</code></td>
 <td><code><a href="#KubernetesResourcesSpec">KubernetesResourcesSpec</a></code></td>
 <td>
+<p>Kubernetes resource spec.</p>
+
 </td>
 <td>
 No
@@ -748,7 +704,7 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="IstioComponentSpec">IstioComponentSpec</h2>
+<h2 id="IstioComponentSetSpec">IstioComponentSetSpec</h2>
 <section>
 <p>IstioComponentSpec defines the desired installed state of Istio components.</p>
 
@@ -762,132 +718,119 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="IstioComponentSpec-pilot">
+<tr id="IstioComponentSetSpec-pilot">
 <td><code>pilot</code></td>
-<td><code><a href="#PilotComponentSpec">PilotComponentSpec</a></code></td>
+<td><code><a href="#ComponentSpec">ComponentSpec</a></code></td>
 <td>
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="IstioComponentSpec-proxy">
+<tr id="IstioComponentSetSpec-proxy">
 <td><code>proxy</code></td>
-<td><code><a href="#ProxyComponentSpec">ProxyComponentSpec</a></code></td>
+<td><code><a href="#ComponentSpec">ComponentSpec</a></code></td>
 <td>
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="IstioComponentSpec-sidecar_injector">
+<tr id="IstioComponentSetSpec-sidecar_injector">
 <td><code>sidecarInjector</code></td>
-<td><code><a href="#SidecarInjectorComponentSpec">SidecarInjectorComponentSpec</a></code></td>
+<td><code><a href="#ComponentSpec">ComponentSpec</a></code></td>
 <td>
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="IstioComponentSpec-policy">
+<tr id="IstioComponentSetSpec-policy">
 <td><code>policy</code></td>
-<td><code><a href="#PolicyComponentSpec">PolicyComponentSpec</a></code></td>
+<td><code><a href="#ComponentSpec">ComponentSpec</a></code></td>
 <td>
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="IstioComponentSpec-telemetry">
+<tr id="IstioComponentSetSpec-telemetry">
 <td><code>telemetry</code></td>
-<td><code><a href="#TelemetryComponentSpec">TelemetryComponentSpec</a></code></td>
+<td><code><a href="#ComponentSpec">ComponentSpec</a></code></td>
 <td>
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="IstioComponentSpec-citadel">
+<tr id="IstioComponentSetSpec-citadel">
 <td><code>citadel</code></td>
-<td><code><a href="#CitadelComponentSpec">CitadelComponentSpec</a></code></td>
+<td><code><a href="#ComponentSpec">ComponentSpec</a></code></td>
 <td>
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="IstioComponentSpec-node_agent">
+<tr id="IstioComponentSetSpec-node_agent">
 <td><code>nodeAgent</code></td>
-<td><code><a href="#NodeAgentComponentSpec">NodeAgentComponentSpec</a></code></td>
+<td><code><a href="#ComponentSpec">ComponentSpec</a></code></td>
 <td>
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="IstioComponentSpec-galley">
+<tr id="IstioComponentSetSpec-galley">
 <td><code>galley</code></td>
-<td><code><a href="#GalleyComponentSpec">GalleyComponentSpec</a></code></td>
+<td><code><a href="#ComponentSpec">ComponentSpec</a></code></td>
 <td>
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="IstioComponentSpec-ingressGateway">
-<td><code>ingressGateway</code></td>
-<td><code><a href="#GatewayComponentSpec">GatewayComponentSpec</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="IstioComponentSpec-egressGateway">
-<td><code>egressGateway</code></td>
-<td><code><a href="#GatewayComponentSpec">GatewayComponentSpec</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="IstioComponentSpec-customGateways">
-<td><code>customGateways</code></td>
-<td><code>map&lt;string,&nbsp;<a href="#CustomGatewayComponentSpec">CustomGatewayComponentSpec</a>&gt;</code></td>
-<td>
-<p>Map key is the name of the resources for the component. All k8s resources accessible through
-KubernetesResourcesSpec must have the same name.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="IstioComponentSpec-cni">
+<tr id="IstioComponentSetSpec-cni">
 <td><code>cni</code></td>
-<td><code><a href="#CNIComponentSpec">CNIComponentSpec</a></code></td>
+<td><code><a href="#ComponentSpec">ComponentSpec</a></code></td>
 <td>
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="IstioComponentSpec-coreDNS">
+<tr id="IstioComponentSetSpec-coreDNS">
 <td><code>coreDNS</code></td>
-<td><code><a href="#CoreDNSComponentSpec">CoreDNSComponentSpec</a></code></td>
+<td><code><a href="#ComponentSpec">ComponentSpec</a></code></td>
 <td>
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="IstioComponentSpec-extraComponents">
-<td><code>extraComponents</code></td>
-<td><code>map&lt;string,&nbsp;<a href="#ExtensionComponentSpec">ExtensionComponentSpec</a>&gt;</code></td>
+<tr id="IstioComponentSetSpec-ingress_gateways">
+<td><code>ingressGateways</code></td>
+<td><code><a href="#GatewaySpec">GatewaySpec[]</a></code></td>
 <td>
-<p>Non-core components. Map key is the name of the resources for the component. All k8s resources accessible through
-KubernetesResourcesSpec must have the same name.</p>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="IstioComponentSetSpec-egress_gateways">
+<td><code>egressGateways</code></td>
+<td><code><a href="#GatewaySpec">GatewaySpec[]</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="IstioComponentSetSpec-extra_components">
+<td><code>extraComponents</code></td>
+<td><code>map&lt;string,&nbsp;<a href="#ExternalComponentSpec">ExternalComponentSpec</a>&gt;</code></td>
+<td>
+<p>Extra addon components which are not explicitly specified above.</p>
 
 </td>
 <td>
@@ -962,7 +905,19 @@ No
 No
 </td>
 </tr>
-<tr id="IstioOperatorSpec-meshConfig">
+<tr id="IstioOperatorSpec-resource_suffix">
+<td><code>resourceSuffix</code></td>
+<td><code>string</code></td>
+<td>
+<p>Resource suffix is appended to all resources installed by each component. Used in upgrade scenarios where two
+Istio control planes must exist in the same namespace.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="IstioOperatorSpec-mesh_config">
 <td><code>meshConfig</code></td>
 <td><code><a href="#MeshConfig">MeshConfig</a></code></td>
 <td>
@@ -975,7 +930,7 @@ No
 </tr>
 <tr id="IstioOperatorSpec-components">
 <td><code>components</code></td>
-<td><code><a href="#IstioComponentSpec">IstioComponentSpec</a></code></td>
+<td><code><a href="#IstioComponentSetSpec">IstioComponentSetSpec</a></code></td>
 <td>
 <p>Kubernetes resource settings, enablement and component-specific settings that are not internal to the
 component.</p>
@@ -989,14 +944,15 @@ No
 <td><code>values</code></td>
 <td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
 <td>
-<p>Overrides for default values.yaml.</p>
+<p>Overrides for default values.yaml. This is a validated pass-through to Helm templates.
+See the Helm installation options for schema details: https://istio.io/docs/reference/config/installation-options/.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="IstioOperatorSpec-unvalidatedValues">
+<tr id="IstioOperatorSpec-unvalidated_values">
 <td><code>unvalidatedValues</code></td>
 <td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
 <td>
@@ -1024,7 +980,7 @@ No
 No
 </td>
 </tr>
-<tr id="IstioOperatorSpec-componentStatus">
+<tr id="IstioOperatorSpec-component_status">
 <td><code>componentStatus</code></td>
 <td><code>map&lt;string,&nbsp;<a href="#IstioOperatorSpec-VersionStatus">VersionStatus</a>&gt;</code></td>
 <td>
@@ -1110,7 +1066,7 @@ No
 No
 </td>
 </tr>
-<tr id="IstioOperatorSpec-VersionStatus-statusString">
+<tr id="IstioOperatorSpec-VersionStatus-status_string">
 <td><code>statusString</code></td>
 <td><code>string</code></td>
 <td>
@@ -2347,41 +2303,6 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="NodeAgentComponentSpec">NodeAgentComponentSpec</h2>
-<section>
-<p>Configuration options for node agent component.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="NodeAgentComponentSpec-enabled">
-<td><code>enabled</code></td>
-<td><code><a href="#TypeBoolValueForPB">TypeBoolValueForPB</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="NodeAgentComponentSpec-k8s">
-<td><code>k8s</code></td>
-<td><code><a href="#KubernetesResourcesSpec">KubernetesResourcesSpec</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="NodeSelector">NodeSelector</h2>
 <section>
 <table class="message-fields">
@@ -2549,41 +2470,6 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="PilotComponentSpec">PilotComponentSpec</h2>
-<section>
-<p>Configuration options for the pilot component.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="PilotComponentSpec-enabled">
-<td><code>enabled</code></td>
-<td><code><a href="#TypeBoolValueForPB">TypeBoolValueForPB</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="PilotComponentSpec-k8s">
-<td><code>k8s</code></td>
-<td><code><a href="#KubernetesResourcesSpec">KubernetesResourcesSpec</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="PodAffinity">PodAffinity</h2>
 <section>
 <table class="message-fields">
@@ -2736,41 +2622,6 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="PolicyComponentSpec">PolicyComponentSpec</h2>
-<section>
-<p>Configuration options for the policy enforcement component.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="PolicyComponentSpec-enabled">
-<td><code>enabled</code></td>
-<td><code><a href="#TypeBoolValueForPB">TypeBoolValueForPB</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="PolicyComponentSpec-k8s">
-<td><code>k8s</code></td>
-<td><code><a href="#KubernetesResourcesSpec">KubernetesResourcesSpec</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="PreferredSchedulingTerm">PreferredSchedulingTerm</h2>
 <section>
 <table class="message-fields">
@@ -2795,32 +2646,6 @@ No
 <tr id="PreferredSchedulingTerm-preference">
 <td><code>preference</code></td>
 <td><code><a href="#NodeSelectorTerm">NodeSelectorTerm</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="ProxyComponentSpec">ProxyComponentSpec</h2>
-<section>
-<p>Configuration options for the proxy.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="ProxyComponentSpec-k8s">
-<td><code>k8s</code></td>
-<td><code><a href="#KubernetesResourcesSpec">KubernetesResourcesSpec</a></code></td>
 <td>
 </td>
 <td>
@@ -3706,41 +3531,6 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="SidecarInjectorComponentSpec">SidecarInjectorComponentSpec</h2>
-<section>
-<p>Configuration options for the sidecar injector component.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="SidecarInjectorComponentSpec-enabled">
-<td><code>enabled</code></td>
-<td><code><a href="#TypeBoolValueForPB">TypeBoolValueForPB</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="SidecarInjectorComponentSpec-k8s">
-<td><code>k8s</code></td>
-<td><code><a href="#KubernetesResourcesSpec">KubernetesResourcesSpec</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="TCPSocketAction">TCPSocketAction</h2>
 <section>
 <p>Mirrors k8s.io.api.core.v1.TCPSocketAction for unmarshaling.</p>
@@ -3767,41 +3557,6 @@ No
 <tr id="TCPSocketAction-host">
 <td><code>host</code></td>
 <td><code>string</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="TelemetryComponentSpec">TelemetryComponentSpec</h2>
-<section>
-<p>Configuration options for the telemetry component.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="TelemetryComponentSpec-enabled">
-<td><code>enabled</code></td>
-<td><code><a href="#TypeBoolValueForPB">TypeBoolValueForPB</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="TelemetryComponentSpec-k8s">
-<td><code>k8s</code></td>
-<td><code><a href="#KubernetesResourcesSpec">KubernetesResourcesSpec</a></code></td>
 <td>
 </td>
 <td>

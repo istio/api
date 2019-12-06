@@ -20,66 +20,73 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.IstioComponentSpec": {
+      "istio.mesh.v1alpha1.IstioComponentSetSpec": {
         "description": "IstioComponentSpec defines the desired installed state of Istio components.",
         "type": "object",
         "properties": {
           "pilot": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.PilotComponentSpec"
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ComponentSpec"
           },
           "proxy": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyComponentSpec"
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ComponentSpec"
           },
           "sidecarInjector": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.SidecarInjectorComponentSpec"
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ComponentSpec"
           },
           "policy": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.PolicyComponentSpec"
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ComponentSpec"
           },
           "telemetry": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.TelemetryComponentSpec"
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ComponentSpec"
           },
           "citadel": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.CitadelComponentSpec"
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ComponentSpec"
           },
           "nodeAgent": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.NodeAgentComponentSpec"
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ComponentSpec"
           },
           "galley": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.GalleyComponentSpec"
-          },
-          "ingressGateway": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.GatewayComponentSpec"
-          },
-          "egressGateway": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.GatewayComponentSpec"
-          },
-          "customGateways": {
-            "description": "Map key is the name of the resources for the component. All k8s resources accessible through KubernetesResourcesSpec must have the same name.",
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/istio.mesh.v1alpha1.CustomGatewayComponentSpec"
-            }
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ComponentSpec"
           },
           "cni": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.CNIComponentSpec"
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ComponentSpec"
           },
           "coreDNS": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.CoreDNSComponentSpec"
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ComponentSpec"
+          },
+          "ingressGateways": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.GatewaySpec"
+            }
+          },
+          "egressGateways": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.GatewaySpec"
+            }
           },
           "extraComponents": {
-            "description": "Non-core components. Map key is the name of the resources for the component. All k8s resources accessible through KubernetesResourcesSpec must have the same name.",
+            "description": "Extra addon components which are not explicitly specified above.",
             "type": "object",
             "additionalProperties": {
-              "$ref": "#/components/schemas/istio.mesh.v1alpha1.ExtensionComponentSpec"
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.ExternalComponentSpec"
             }
           }
         }
       },
-      "istio.mesh.v1alpha1.PilotComponentSpec": {
-        "description": "Configuration options for the pilot component.",
+      "istio.mesh.v1alpha1.ComponentSpec": {
+        "description": "Configuration for internal components.",
         "type": "object",
         "properties": {
+          "namespace": {
+            "description": "Namespace for the component.",
+            "type": "string",
+            "format": "string"
+          },
+          "spec": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeInterface"
+          },
           "enabled": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeBoolValueForPB"
           },
@@ -88,143 +95,67 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.ProxyComponentSpec": {
-        "description": "Configuration options for the proxy.",
+      "istio.mesh.v1alpha1.GatewaySpec": {
+        "description": "Configuration for gateways.",
         "type": "object",
         "properties": {
-          "k8s": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.KubernetesResourcesSpec"
-          }
-        }
-      },
-      "istio.mesh.v1alpha1.SidecarInjectorComponentSpec": {
-        "description": "Configuration options for the sidecar injector component.",
-        "type": "object",
-        "properties": {
-          "enabled": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeBoolValueForPB"
+          "name": {
+            "description": "Name for the gateway.",
+            "type": "string",
+            "format": "string"
+          },
+          "namespace": {
+            "description": "Enablement is implied by the existence of this spec.",
+            "type": "string",
+            "format": "string"
           },
           "k8s": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.KubernetesResourcesSpec"
           }
         }
       },
-      "istio.mesh.v1alpha1.PolicyComponentSpec": {
-        "description": "Configuration options for the policy enforcement component.",
+      "istio.mesh.v1alpha1.ExternalComponentSpec": {
+        "description": "Configuration for external components.",
         "type": "object",
         "properties": {
-          "enabled": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeBoolValueForPB"
+          "namespace": {
+            "description": "Enablement is implied by the existence of this spec.",
+            "type": "string",
+            "format": "string"
+          },
+          "spec": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeInterface"
           },
           "k8s": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.KubernetesResourcesSpec"
-          }
-        }
-      },
-      "istio.mesh.v1alpha1.TelemetryComponentSpec": {
-        "description": "Configuration options for the telemetry component.",
-        "type": "object",
-        "properties": {
-          "enabled": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeBoolValueForPB"
           },
-          "k8s": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.KubernetesResourcesSpec"
-          }
-        }
-      },
-      "istio.mesh.v1alpha1.CitadelComponentSpec": {
-        "description": "Configuration options for Citadel component.",
-        "type": "object",
-        "properties": {
-          "enabled": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeBoolValueForPB"
+          "chartPath": {
+            "description": "Chart path for addon components.",
+            "type": "string",
+            "format": "string"
           },
-          "k8s": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.KubernetesResourcesSpec"
-          }
-        }
-      },
-      "istio.mesh.v1alpha1.NodeAgentComponentSpec": {
-        "description": "Configuration options for node agent component.",
-        "type": "object",
-        "properties": {
-          "enabled": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeBoolValueForPB"
-          },
-          "k8s": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.KubernetesResourcesSpec"
-          }
-        }
-      },
-      "istio.mesh.v1alpha1.GalleyComponentSpec": {
-        "description": "Configuration options for galley component.",
-        "type": "object",
-        "properties": {
-          "enabled": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeBoolValueForPB"
-          },
-          "k8s": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.KubernetesResourcesSpec"
-          }
-        }
-      },
-      "istio.mesh.v1alpha1.GatewayComponentSpec": {
-        "description": "Configuration options for built-in gateways.",
-        "type": "object",
-        "properties": {
-          "enabled": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeBoolValueForPB"
-          },
-          "k8s": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.KubernetesResourcesSpec"
-          }
-        }
-      },
-      "istio.mesh.v1alpha1.CustomGatewayComponentSpec": {
-        "description": "Configuration options for custom gateways.",
-        "type": "object",
-        "properties": {
-          "k8s": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.KubernetesResourcesSpec"
-          }
-        }
-      },
-      "istio.mesh.v1alpha1.CNIComponentSpec": {
-        "description": "Configuration options for cni component.",
-        "type": "object",
-        "properties": {
-          "enabled": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeBoolValueForPB"
-          },
-          "k8s": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.KubernetesResourcesSpec"
-          }
-        }
-      },
-      "istio.mesh.v1alpha1.CoreDNSComponentSpec": {
-        "description": "Configuration options for CoreDNS component.",
-        "type": "object",
-        "properties": {
-          "enabled": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeBoolValueForPB"
-          },
-          "k8s": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.KubernetesResourcesSpec"
-          }
-        }
-      },
-      "istio.mesh.v1alpha1.ExtensionComponentSpec": {
-        "description": "Configuration options for CoreDNS component.",
-        "type": "object",
-        "properties": {
-          "k8s": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.KubernetesResourcesSpec"
+          "schema": {
+            "description": "Optional schema to validate spec against.",
+            "type": "object",
+            "required": [
+              "@type"
+            ],
+            "properties": {
+              "@type": {
+                "description": "A URL/resource name that uniquely identifies the type of the serialized protocol buffer message. This string must contain at least one \"/\" character. The last segment of the URL's path must represent the fully qualified name of the type (as in `type.googleapis.com/google.protobuf.Duration`). The name should be in a canonical form (e.g., leading \".\" is not accepted). The remaining fields of this object correspond to fields of the proto messsage. If the embedded message is well-known and has a custom JSON representation, that representation is assigned to the 'value' field.",
+                "type": "string",
+                "format": "string"
+              }
+            }
           }
         }
       },
       "istio.mesh.v1alpha1.TypeBoolValueForPB": {
         "description": "GOTYPE: *BoolValueForPB",
+        "type": "object"
+      },
+      "istio.mesh.v1alpha1.TypeInterface": {
+        "description": "GOTYPE: interface{}",
         "type": "object"
       },
       "istio.mesh.v1alpha1.KubernetesResourcesSpec": {
@@ -546,10 +477,6 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeInterface"
           }
         }
-      },
-      "istio.mesh.v1alpha1.TypeInterface": {
-        "description": "GOTYPE: interface{}",
-        "type": "object"
       },
       "istio.mesh.v1alpha1.TypeMapStringInterface": {
         "description": "GOTYPE: map[string]interface{}",
@@ -1462,11 +1389,16 @@
             "type": "string",
             "format": "string"
           },
+          "resourceSuffix": {
+            "description": "Resource suffix is appended to all resources installed by each component. Used in upgrade scenarios where two Istio control planes must exist in the same namespace.",
+            "type": "string",
+            "format": "string"
+          },
           "meshConfig": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig"
           },
           "components": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.IstioComponentSpec"
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.IstioComponentSetSpec"
           },
           "unvalidatedValues": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeMapStringInterface"
