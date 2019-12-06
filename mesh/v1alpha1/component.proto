@@ -27,7 +27,7 @@ option go_package="istio.io/api/mesh/v1alpha1";
 // IstioComponentSpec defines the desired installed state of Istio components.
 message IstioComponentSetSpec {
     ComponentSpec pilot = 30;
-    EnabledComponentSpec proxy = 31;
+    ComponentSpec proxy = 31;
     ComponentSpec sidecar_injector = 32;
     ComponentSpec policy = 33;
     ComponentSpec telemetry = 34;
@@ -37,48 +37,57 @@ message IstioComponentSetSpec {
     ComponentSpec cni = 38;
     ComponentSpec coreDNS = 39;
 
-    map<string, GatewaySpec> ingress_gateways = 40;
-    map<string, GatewaySpec> egress_gateways = 41;
+    repeated GatewaySpec ingress_gateways = 40;
+    repeated GatewaySpec egress_gateways = 41;
 
     // Extra addon components which are not explicitly specified above.
-    map<string, EnabledComponentSpec> extra_components = 100;
+    map<string, ExternalComponentSpec> extra_components = 100;
 }
 
-// Configuration common to most components.
+// Configuration for internal components.
 message ComponentSpec {
     // Selects whether this component is installed.
     TypeBoolValueForPB enabled = 1;
     // Namespace for the component.
     string namespace = 2;
+
     // Arbitrary install time configuration for the component.
-    TypeInterface spec = 3;
-    // Schema to validate spec against.
-    google.protobuf.Any schema = 4;
+    TypeInterface spec = 10;
+
     // Kubernetes resource spec.
-    KubernetesResourcesSpec k8s = 5;
+    KubernetesResourcesSpec k8s = 50;
 }
 
-// Configuration common to most components, used in cases where component is in a map and therefore implicitly enabled
-// by its presence there.
-message EnabledComponentSpec {
+// Configuration for external components.
+message ExternalComponentSpec {
+    // Enablement is implied by the existence of this spec.
+
     // Namespace for the component.
     string namespace = 2;
+
     // Arbitrary install time configuration for the component.
-    TypeInterface spec = 3;
-    // Schema to validate spec against.
-    google.protobuf.Any schema = 4;
+    TypeInterface spec = 10;
+
+    // Chart path for addon components.
+    string chart_path = 30;
+    // Optional schema to validate spec against.
+    google.protobuf.Any schema = 35;
+
     // Kubernetes resource spec.
-    KubernetesResourcesSpec k8s = 5;
+    KubernetesResourcesSpec k8s = 50;
 }
 
 // Configuration for gateways.
 message GatewaySpec {
-    // Name for the gateway.
-    string name = 1;
+    // Enablement is implied by the existence of this spec.
+
     // Namespace for the gateway.
     string namespace = 2;
+    // Name for the gateway.
+    string name = 3;
+
     // Kubernetes resource spec.
-    KubernetesResourcesSpec k8s = 5;
+    KubernetesResourcesSpec k8s = 50;
 }
 
 // KubernetesResourcesConfig is a common set of k8s resource configs for components.
