@@ -84,7 +84,8 @@
 // metadata:
 //  name: policy
 //  namespace: foo
-// spec: {}
+// spec:
+//   {}
 // ```
 //
 // The following authorization policy applies to workloads containing label
