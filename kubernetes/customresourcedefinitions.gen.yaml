@@ -5421,6 +5421,10 @@ spec:
                   outputPayloadToHeader:
                     format: string
                     type: string
+                  retainOriginalToken:
+                    description: If set to true, the orginal token will be kept for
+                      the ustream request.
+                    type: boolean
                 type: object
               type: array
             selector:
