@@ -117,6 +117,18 @@ func (Tls_AuthHeader) EnumDescriptor() ([]byte, []int) {
 // AttributeManifest describes a set of Attributes produced by some component
 // of an Istio deployment.
 //
+// <!-- crd generation tags
+// +cue-gen:AttributeManifest:schema:istio.policy.v1beta1.AttributeManifest
+// +cue-gen:AttributeManifest:groupName:config.istio.io
+// +cue-gen:AttributeManifest:version:v1alpha2
+// +cue-gen:AttributeManifest:storageVersion
+// +cue-gen:AttributeManifest:annotations:helm.sh/resource-policy=keep
+// +cue-gen:AttributeManifest:labels:app=mixer,chart=istio,heritage=Tiller,istio=core,package=istio.io.mixer,release=istio
+// +cue-gen:AttributeManifest:subresource:status
+// +cue-gen:AttributeManifest:scope:Namespaced
+// +cue-gen:AttributeManifest:resource:categories=istio-io,policy-istio-io
+// -->
+//
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=config.istio.io/v1alpha2
@@ -306,6 +318,18 @@ func (m *AttributeManifest_AttributeInfo) GetValueType() ValueType {
 //     instances:
 //     - RequestCountByService
 // ```
+//
+// <!-- crd generation tags
+// +cue-gen:Rule:schema:istio.policy.v1beta1.Rule
+// +cue-gen:Rule:groupName:config.istio.io
+// +cue-gen:Rule:version:v1alpha2
+// +cue-gen:Rule:storageVersion
+// +cue-gen:Rule:annotations:helm.sh/resource-policy=keep
+// +cue-gen:Rule:labels:app=mixer,chart=istio,heritage=Tiller,istio=core,package=istio.io.mixer,release=istio
+// +cue-gen:Rule:subresource:status
+// +cue-gen:Rule:scope:Namespaced
+// +cue-gen:Rule:resource:categories=istio-io,policy-istio-io
+// -->
 //
 // <!-- go code generation tags
 // +kubetype-gen
@@ -584,6 +608,18 @@ func (m *Action) GetName() string {
 //       destination_ip: destination.ip
 // ```
 //
+// <!-- crd generation tags
+// +cue-gen:Instance:schema:istio.policy.v1beta1.Instance
+// +cue-gen:Instance:groupName:config.istio.io
+// +cue-gen:Instance:version:v1alpha2
+// +cue-gen:Instance:storageVersion
+// +cue-gen:Instance:annotations:helm.sh/resource-policy=keep
+// +cue-gen:Instance:labels:app=mixer,chart=istio,heritage=Tiller,istio=mixer-instance,package=instance,release=istio
+// +cue-gen:Instance:subresource:status
+// +cue-gen:Instance:scope:Namespaced
+// +cue-gen:Instance:resource:categories=istio-io,policy-istio-io
+// -->
+//
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=config.istio.io/v1alpha2
@@ -746,6 +782,18 @@ func (m *Instance) GetAttributeBindings() map[string]string {
 //       address: localhost:8090
 // ---
 // ```
+//
+// <!-- crd generation tags
+// +cue-gen:Handler:schema:istio.policy.v1beta1.Handler
+// +cue-gen:Handler:groupName:config.istio.io
+// +cue-gen:Handler:version:v1alpha2
+// +cue-gen:Handler:storageVersion
+// +cue-gen:Handler:annotations:helm.sh/resource-policy=keep
+// +cue-gen:Handler:labels:app=mixer,chart=istio,heritage=Tiller,istio=mixer-handler,package=handler,release=istio
+// +cue-gen:Handler:subresource:status
+// +cue-gen:Handler:scope:Namespaced
+// +cue-gen:Handler:resource:categories=istio-io,policy-istio-io
+// -->
 //
 // <!-- go code generation tags
 // +kubetype-gen

@@ -123,6 +123,17 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //        paths: ["/healthz]
 // ```
 //
+// <!-- crd generation tags
+// +cue-gen:RequestAuthentication:groupName:security.istio.io
+// +cue-gen:RequestAuthentication:version:v1beta1
+// +cue-gen:RequestAuthentication:storageVersion
+// +cue-gen:RequestAuthentication:annotations:helm.sh/resource-policy=keep
+// +cue-gen:RequestAuthentication:labels:app=istio-pilot,chart=istio,istio=security,heritage=Tiller,release=istio
+// +cue-gen:RequestAuthentication:subresource:status
+// +cue-gen:RequestAuthentication:scope:Namespaced
+// +cue-gen:RequestAuthentication:resource:categories=istio-io,security-istio-io
+// -->
+//
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=security.istio.io/v1beta1
