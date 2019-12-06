@@ -21,10 +21,15 @@ in the config <a href="https://istio.io/docs/reference/config/istio.mesh.v1alpha
 namespace</a>,
 followed by all matching EnvoyFilters in the workload&rsquo;s namespace.</p>
 
-<p><strong>NOTE 1</strong>: The envoy configuration provided through this mechanism
-should be carefully monitored across Istio proxy version upgrades,
-to ensure that deprecated fields are removed and replaced
-appropriately.</p>
+<p><strong>NOTE 1</strong>: This API is deeply tied to the internal implementation
+in Istio networking subsystem as well as Envoy&rsquo;s XDS API. While
+every effort will be made to preserve backward compatibility where
+possible, EnvoyFilter API objects should be carefully vetted across
+Istio version upgrades to ensure that there are no
+breakages. Specifically, any envoy configuration provided through
+this mechanism should be carefully monitored across Istio proxy
+version upgrades, to ensure that deprecated fields are removed and
+replaced appropriately.</p>
 
 <p><strong>NOTE 2</strong>: When multiple EnvoyFilters are bound to the same
 workload in a given namespace, all patches will be processed
