@@ -83,6 +83,8 @@ message GatewaySpec {
     string namespace = 2;
     // Name for the gateway.
     string name = 3;
+    // Label for the gateway.
+    string label = 4;
 
     // Kubernetes resource spec.
     KubernetesResourcesSpec k8s = 50;

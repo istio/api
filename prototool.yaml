@@ -9,11 +9,13 @@ lint:
   ignores:
     - id: MESSAGE_NAMES_CAMEL_CASE
       files:
+        - mesh/v1alpha1/component.proto
         - mesh/v1alpha1/kubernetes.proto
     - id: MESSAGE_FIELD_NAMES_LOWER_SNAKE_CASE
       files:
-        - rbac/v1alpha1/rbac.proto
+        - mesh/v1alpha1/component.proto
         - mesh/v1alpha1/kubernetes.proto
+        - rbac/v1alpha1/rbac.proto
     - id: ENUM_FIELD_NAMES_UPPER_SNAKE_CASE
       files:
         - networking/v1alpha3/gateway.proto
@@ -32,3 +34,4 @@ lint:
       - FILE_OPTIONS_EQUAL_GO_PACKAGE_PB_SUFFIX
       - ENUM_FIELD_PREFIXES
       - ENUM_ZERO_VALUES_INVALID
+      - COMMENTS_NO_C_STYLE
