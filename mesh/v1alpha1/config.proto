@@ -206,9 +206,10 @@ message MeshConfig {
   // Enables client side policy checks.
   bool enable_client_side_policy_check = 19;
 
+  // $hide_from_docs
   // Unix Domain Socket through which Envoy communicates with NodeAgent SDS to get key/cert for mTLS.
   // Use secret-mount files instead of SDS if set to empty.
-  // @deprecated - istiod agent will detect and send the path to envoy.
+  // @deprecated - istio agent will detect and send the path to envoy.
   string sds_uds_path = 20 [deprecated=true];
 
   // $hide_from_docs
