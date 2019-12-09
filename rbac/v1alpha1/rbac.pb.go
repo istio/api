@@ -165,6 +165,17 @@ func (RbacConfig_Mode) EnumDescriptor() ([]byte, []int) {
 
 // ServiceRole specification contains a list of access rules (permissions).
 //
+// <!-- crd generation tags
+// +cue-gen:ServiceRole:groupName:rbac.istio.io
+// +cue-gen:ServiceRole:version:v1alpha1
+// +cue-gen:ServiceRole:storageVersion
+// +cue-gen:ServiceRole:annotations:helm.sh/resource-policy=keep
+// +cue-gen:ServiceRole:labels:app=mixer,chart=istio,heritage=Tiller,release=istio,package=istio.io.mixer,istio=rbac
+// +cue-gen:ServiceRole:subresource:status
+// +cue-gen:ServiceRole:scope:Namespaced
+// +cue-gen:ServiceRole:resource:categories=istio-io,rbac-istio-io
+// -->
+//
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=rbac.istio.io/v1alpha1
@@ -441,6 +452,22 @@ func (m *AccessRule_Constraint) GetValues() []string {
 }
 
 // ServiceRoleBinding assigns a ServiceRole to a list of subjects.
+//
+// <!-- crd generation tags
+// +cue-gen:ServiceRoleBinding:groupName:rbac.istio.io
+// +cue-gen:ServiceRoleBinding:version:v1alpha1
+// +cue-gen:ServiceRoleBinding:storageVersion
+// +cue-gen:ServiceRoleBinding:annotations:helm.sh/resource-policy=keep
+// +cue-gen:ServiceRoleBinding:labels:app=mixer,chart=istio,heritage=Tiller,release=istio,package=istio.io.mixer,istio=rbac
+// +cue-gen:ServiceRoleBinding:subresource:status
+// +cue-gen:ServiceRoleBinding:scope:Namespaced
+// +cue-gen:ServiceRoleBinding:resource:categories=istio-io,rbac-istio-io
+// +cue-gen:ServiceRoleBinding:printerColumn:name=Reference,type=string,JSONPath=.spec.roleRef.name,description="The name of the ServiceRole object being referenced"
+// +cue-gen:ServiceRoleBinding:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
+// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
+// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// -->
 //
 // <!-- go code generation tags
 // +kubetype-gen
@@ -801,6 +828,28 @@ func (m *RoleRef) GetName() string {
 //   inclusion:
 //     namespaces: [ "default" ]
 // ```
+//
+// <!-- crd generation tags
+// +cue-gen:RbacConfig:groupName:rbac.istio.io
+// +cue-gen:RbacConfig:version:v1alpha1
+// +cue-gen:RbacConfig:storageVersion
+// +cue-gen:RbacConfig:annotations:helm.sh/resource-policy=keep
+// +cue-gen:RbacConfig:labels:app=mixer,chart=istio,istio=rbac,heritage=Tiller,release=istio,package=istio.io.mixer
+// +cue-gen:RbacConfig:subresource:status
+// +cue-gen:RbacConfig:scope:Namespaced
+// +cue-gen:RbacConfig:resource:categories=istio-io,rbac-istio-io
+// -->
+//
+// <!-- crd generation tags
+// +cue-gen:ClusterRbacConfig:groupName:rbac.istio.io
+// +cue-gen:ClusterRbacConfig:version:v1alpha1
+// +cue-gen:ClusterRbacConfig:storageVersion
+// +cue-gen:ClusterRbacConfig:annotations:helm.sh/resource-policy=keep
+// +cue-gen:ClusterRbacConfig:labels:app=istio-pilot,chart=istio,istio=rbac,heritage=Tiller,release=istio
+// +cue-gen:ClusterRbacConfig:subresource:status
+// +cue-gen:ClusterRbacConfig:scope:Cluster
+// +cue-gen:ClusterRbacConfig:resource:categories=istio-io,rbac-istio-io
+// -->
 //
 // <!-- go code generation tags
 // +kubetype-gen
