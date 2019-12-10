@@ -59,7 +59,7 @@ type MutualTls_Mode int32
 const (
 	// Client cert must be presented, connection is in TLS.
 	MutualTls_STRICT MutualTls_Mode = 0
-	// Connection can be either plaintext or TLS, and client cert can be omitted.
+	// Connection can be either plaintext or TLS with Client cert.
 	MutualTls_PERMISSIVE MutualTls_Mode = 1
 )
 

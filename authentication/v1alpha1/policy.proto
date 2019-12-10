@@ -53,7 +53,7 @@ message MutualTls {
     // Client cert must be presented, connection is in TLS.
     STRICT = 0;
 
-    // Connection can be either plaintext or TLS, and client cert can be omitted.
+    // Connection can be either plaintext or TLS with Client cert.
     PERMISSIVE = 1;
   };
 
