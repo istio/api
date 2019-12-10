@@ -13,8 +13,6 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from k8s.io.api.core.v1 import generated_pb2 as k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2
-from k8s.io.api.autoscaling.v2beta1 import generated_pb2 as k8s_dot_io_dot_api_dot_autoscaling_dot_v2beta1_dot_generated__pb2
 from k8s.io.apimachinery.pkg.apis.meta.v1 import generated_pb2 as k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2
 from k8s.io.apimachinery.pkg.api.resource import generated_pb2 as k8s_dot_io_dot_apimachinery_dot_pkg_dot_api_dot_resource_dot_generated__pb2
 from k8s.io.apimachinery.pkg.util.intstr import generated_pb2 as k8s_dot_io_dot_apimachinery_dot_pkg_dot_util_dot_intstr_dot_generated__pb2
@@ -25,9 +23,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.mesh.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\032istio.io/api/mesh/v1alpha1'),
-  serialized_pb=_b('\n\x1emesh/v1alpha1/kubernetes.proto\x12\x13istio.mesh.v1alpha1\x1a\"k8s.io/api/core/v1/generated.proto\x1a.k8s.io/api/autoscaling/v2beta1/generated.proto\x1a\x34k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto\x1a\x34k8s.io/apimachinery/pkg/api/resource/generated.proto\x1a\x33k8s.io/apimachinery/pkg/util/intstr/generated.proto\"\xe7\x01\n\tResources\x12:\n\x06limits\x18\x01 \x03(\x0b\x32*.istio.mesh.v1alpha1.Resources.LimitsEntry\x12>\n\x08requests\x18\x02 \x03(\x0b\x32,.istio.mesh.v1alpha1.Resources.RequestsEntry\x1a-\n\x0bLimitsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a/\n\rRequestsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xb9\x01\n\x08\x41\x66\x66inity\x12\x37\n\x0cnodeAffinity\x18\x01 \x01(\x0b\x32!.istio.mesh.v1alpha1.NodeAffinity\x12\x35\n\x0bpodAffinity\x18\x02 \x01(\x0b\x32 .istio.mesh.v1alpha1.PodAffinity\x12=\n\x0fpodAntiAffinity\x18\x03 \x01(\x0b\x32$.istio.mesh.v1alpha1.PodAntiAffinity\"\xd0\x01\n\x0cNodeAffinity\x12Y\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x01(\x0b\x32!.istio.mesh.v1alpha1.NodeSelector\x12\x65\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32,.istio.mesh.v1alpha1.PreferredSchedulingTerm\"P\n\x0cNodeSelector\x12@\n\x11nodeSelectorTerms\x18\x01 \x03(\x0b\x32%.istio.mesh.v1alpha1.NodeSelectorTerm\"\x9d\x01\n\x10NodeSelectorTerm\x12\x46\n\x10matchExpressions\x18\x01 \x03(\x0b\x32,.istio.mesh.v1alpha1.NodeSelectorRequirement\x12\x41\n\x0bmatchFields\x18\x02 \x03(\x0b\x32,.istio.mesh.v1alpha1.NodeSelectorRequirement\"H\n\x17NodeSelectorRequirement\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x10\n\x08operator\x18\x02 \x01(\t\x12\x0e\n\x06values\x18\x03 \x03(\t\"\xd2\x01\n\x0bPodAffinity\x12\\\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x03(\x0b\x32$.istio.mesh.v1alpha1.PodAffinityTerm\x12\x65\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32,.istio.mesh.v1alpha1.WeightedPodAffinityTerm\"\xd6\x01\n\x0fPodAntiAffinity\x12\\\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x03(\x0b\x32$.istio.mesh.v1alpha1.PodAffinityTerm\x12\x65\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32,.istio.mesh.v1alpha1.WeightedPodAffinityTerm\"\x86\x01\n\x0fPodAffinityTerm\x12J\n\rlabelSelector\x18\x01 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector\x12\x12\n\nnamespaces\x18\x02 \x03(\t\x12\x13\n\x0btopologyKey\x18\x03 \x01(\t\"h\n\x17WeightedPodAffinityTerm\x12\x0e\n\x06weight\x18\x01 \x01(\x05\x12=\n\x0fpodAffinityTerm\x18\x02 \x01(\x0b\x32$.istio.mesh.v1alpha1.PodAffinityTerm\"d\n\x17PreferredSchedulingTerm\x12\x0e\n\x06weight\x18\x01 \x01(\x05\x12\x39\n\npreference\x18\x02 \x01(\x0b\x32%.istio.mesh.v1alpha1.NodeSelectorTerm\"\xad\x02\n\x0eReadinessProbe\x12-\n\x04\x65xec\x18\x01 \x01(\x0b\x32\x1f.istio.mesh.v1alpha1.ExecAction\x12\x33\n\x07httpGet\x18\x02 \x01(\x0b\x32\".istio.mesh.v1alpha1.HTTPGetAction\x12\x37\n\ttcpSocket\x18\x03 \x01(\x0b\x32$.istio.mesh.v1alpha1.TCPSocketAction\x12\x1b\n\x13initialDelaySeconds\x18\x04 \x01(\x05\x12\x16\n\x0etimeoutSeconds\x18\x05 \x01(\x05\x12\x15\n\rperiodSeconds\x18\x06 \x01(\x05\x12\x18\n\x10successThreshold\x18\x07 \x01(\x05\x12\x18\n\x10\x66\x61ilureThreshold\x18\x08 \x01(\x05\"\x1d\n\nExecAction\x12\x0f\n\x07\x63ommand\x18\x01 \x03(\t\"\xaa\x01\n\rHTTPGetAction\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x37\n\x04port\x18\x02 \x01(\x0b\x32).istio.mesh.v1alpha1.TypeIntOrStringForPB\x12\x0c\n\x04host\x18\x03 \x01(\t\x12\x0e\n\x06scheme\x18\x04 \x01(\t\x12\x34\n\x0bhttpHeaders\x18\x05 \x03(\x0b\x32\x1f.istio.mesh.v1alpha1.HTTPHeader\")\n\nHTTPHeader\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"X\n\x0fTCPSocketAction\x12\x37\n\x04port\x18\x01 \x01(\x0b\x32).istio.mesh.v1alpha1.TypeIntOrStringForPB\x12\x0c\n\x04host\x18\x02 \x01(\t\"\x8e\x01\n\x17PodDisruptionBudgetSpec\x12\x14\n\x0cminAvailable\x18\x01 \x01(\r\x12\x45\n\x08selector\x18\x02 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector\x12\x16\n\x0emaxUnavailable\x18\x03 \x01(\r\"g\n\x12\x44\x65ploymentStrategy\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x43\n\rrollingUpdate\x18\x02 \x01(\x0b\x32,.istio.mesh.v1alpha1.RollingUpdateDeployment\"\x99\x01\n\x17RollingUpdateDeployment\x12\x41\n\x0emaxUnavailable\x18\x01 \x01(\x0b\x32).istio.mesh.v1alpha1.TypeIntOrStringForPB\x12;\n\x08maxSurge\x18\x02 \x01(\x0b\x32).istio.mesh.v1alpha1.TypeIntOrStringForPB\"-\n\nObjectMeta\x12\x0c\n\x04name\x18\x05 \x01(\t\x12\x11\n\tnamespace\x18\x06 \x01(\t\"[\n\x06\x45nvVar\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\x12\x34\n\tvalueFrom\x18\x03 \x01(\x0b\x32!.istio.mesh.v1alpha1.EnvVarSource\"\x92\x02\n\x0c\x45nvVarSource\x12:\n\x08\x66ieldRef\x18\x01 \x01(\x0b\x32(.istio.mesh.v1alpha1.ObjectFieldSelector\x12\x44\n\x10resourceFieldRef\x18\x02 \x01(\x0b\x32*.istio.mesh.v1alpha1.ResourceFieldSelector\x12\x42\n\x0f\x63onfigMapKeyRef\x18\x03 \x01(\x0b\x32).istio.mesh.v1alpha1.ConfigMapKeySelector\x12<\n\x0csecretKeyRef\x18\x04 \x01(\x0b\x32&.istio.mesh.v1alpha1.SecretKeySelector\"<\n\x13ObjectFieldSelector\x12\x12\n\napiVersion\x18\x01 \x01(\t\x12\x11\n\tfieldPath\x18\x02 \x01(\t\"\x81\x01\n\x15ResourceFieldSelector\x12\x15\n\rcontainerName\x18\x01 \x01(\t\x12\x10\n\x08resource\x18\x02 \x01(\t\x12?\n\x07\x64ivisor\x18\x03 \x01(\x0b\x32..k8s.io.apimachinery.pkg.api.resource.Quantity\"~\n\x14\x43onfigMapKeySelector\x12G\n\x14localObjectReference\x18\x01 \x01(\x0b\x32).istio.mesh.v1alpha1.LocalObjectReference\x12\x0b\n\x03key\x18\x02 \x01(\t\x12\x10\n\x08optional\x18\x03 \x01(\x08\"{\n\x11SecretKeySelector\x12G\n\x14localObjectReference\x18\x01 \x01(\x0b\x32).istio.mesh.v1alpha1.LocalObjectReference\x12\x0b\n\x03key\x18\x02 \x01(\t\x12\x10\n\x08optional\x18\x03 \x01(\x08\"$\n\x14LocalObjectReference\x12\x0c\n\x04name\x18\x01 \x01(\t\"\xf9\x03\n\x0bServiceSpec\x12/\n\x05ports\x18\x01 \x03(\x0b\x32 .istio.mesh.v1alpha1.ServicePort\x12@\n\x08selector\x18\x02 \x03(\x0b\x32..istio.mesh.v1alpha1.ServiceSpec.SelectorEntry\x12\x11\n\tclusterIP\x18\x03 \x01(\t\x12\x0c\n\x04type\x18\x04 \x01(\t\x12\x13\n\x0b\x65xternalIPs\x18\x05 \x03(\t\x12\x17\n\x0fsessionAffinity\x18\x07 \x01(\t\x12\x16\n\x0eloadBalancerIP\x18\x08 \x01(\t\x12 \n\x18loadBalancerSourceRanges\x18\t \x03(\t\x12\x14\n\x0c\x65xternalName\x18\n \x01(\t\x12\x1d\n\x15\x65xternalTrafficPolicy\x18\x0b \x01(\t\x12\x1b\n\x13healthCheckNodePort\x18\x0c \x01(\x05\x12 \n\x18publishNotReadyAddresses\x18\r \x01(\x08\x12I\n\x15sessionAffinityConfig\x18\x0e \x01(\x0b\x32*.istio.mesh.v1alpha1.SessionAffinityConfig\x1a/\n\rSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x93\x01\n\x0bServicePort\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08protocol\x18\x02 \x01(\t\x12\x0c\n\x04port\x18\x03 \x01(\x05\x12\x44\n\ntargetPort\x18\x04 \x01(\x0b\x32\x30.k8s.io.apimachinery.pkg.util.intstr.IntOrString\x12\x10\n\x08nodePort\x18\x05 \x01(\x05\"N\n\x15SessionAffinityConfig\x12\x35\n\x08\x63lientIP\x18\x01 \x01(\x0b\x32#.istio.mesh.v1alpha1.ClientIPConfig\"(\n\x0e\x43lientIPConfig\x12\x16\n\x0etimeoutSeconds\x18\x01 \x01(\x05\"e\n\nToleration\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x10\n\x08operator\x18\x02 \x01(\t\x12\r\n\x05value\x18\x03 \x01(\t\x12\x0e\n\x06\x65\x66\x66\x65\x63t\x18\x04 \x01(\t\x12\x19\n\x11tolerationSeconds\x18\x05 \x01(\x03\"\x16\n\x14TypeIntOrStringForPBB\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x1emesh/v1alpha1/kubernetes.proto\x12\x13istio.mesh.v1alpha1\x1a\x34k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto\x1a\x34k8s.io/apimachinery/pkg/api/resource/generated.proto\x1a\x33k8s.io/apimachinery/pkg/util/intstr/generated.proto\"\xe7\x01\n\tResources\x12:\n\x06limits\x18\x01 \x03(\x0b\x32*.istio.mesh.v1alpha1.Resources.LimitsEntry\x12>\n\x08requests\x18\x02 \x03(\x0b\x32,.istio.mesh.v1alpha1.Resources.RequestsEntry\x1a-\n\x0bLimitsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a/\n\rRequestsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xb9\x01\n\x08\x41\x66\x66inity\x12\x37\n\x0cnodeAffinity\x18\x01 \x01(\x0b\x32!.istio.mesh.v1alpha1.NodeAffinity\x12\x35\n\x0bpodAffinity\x18\x02 \x01(\x0b\x32 .istio.mesh.v1alpha1.PodAffinity\x12=\n\x0fpodAntiAffinity\x18\x03 \x01(\x0b\x32$.istio.mesh.v1alpha1.PodAntiAffinity\"\xd0\x01\n\x0cNodeAffinity\x12Y\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x01(\x0b\x32!.istio.mesh.v1alpha1.NodeSelector\x12\x65\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32,.istio.mesh.v1alpha1.PreferredSchedulingTerm\"P\n\x0cNodeSelector\x12@\n\x11nodeSelectorTerms\x18\x01 \x03(\x0b\x32%.istio.mesh.v1alpha1.NodeSelectorTerm\"\x9d\x01\n\x10NodeSelectorTerm\x12\x46\n\x10matchExpressions\x18\x01 \x03(\x0b\x32,.istio.mesh.v1alpha1.NodeSelectorRequirement\x12\x41\n\x0bmatchFields\x18\x02 \x03(\x0b\x32,.istio.mesh.v1alpha1.NodeSelectorRequirement\"H\n\x17NodeSelectorRequirement\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x10\n\x08operator\x18\x02 \x01(\t\x12\x0e\n\x06values\x18\x03 \x03(\t\"\xd2\x01\n\x0bPodAffinity\x12\\\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x03(\x0b\x32$.istio.mesh.v1alpha1.PodAffinityTerm\x12\x65\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32,.istio.mesh.v1alpha1.WeightedPodAffinityTerm\"\xd6\x01\n\x0fPodAntiAffinity\x12\\\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x03(\x0b\x32$.istio.mesh.v1alpha1.PodAffinityTerm\x12\x65\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32,.istio.mesh.v1alpha1.WeightedPodAffinityTerm\"\x86\x01\n\x0fPodAffinityTerm\x12J\n\rlabelSelector\x18\x01 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector\x12\x12\n\nnamespaces\x18\x02 \x03(\t\x12\x13\n\x0btopologyKey\x18\x03 \x01(\t\"h\n\x17WeightedPodAffinityTerm\x12\x0e\n\x06weight\x18\x01 \x01(\x05\x12=\n\x0fpodAffinityTerm\x18\x02 \x01(\x0b\x32$.istio.mesh.v1alpha1.PodAffinityTerm\"d\n\x17PreferredSchedulingTerm\x12\x0e\n\x06weight\x18\x01 \x01(\x05\x12\x39\n\npreference\x18\x02 \x01(\x0b\x32%.istio.mesh.v1alpha1.NodeSelectorTerm\"\xad\x02\n\x0eReadinessProbe\x12-\n\x04\x65xec\x18\x01 \x01(\x0b\x32\x1f.istio.mesh.v1alpha1.ExecAction\x12\x33\n\x07httpGet\x18\x02 \x01(\x0b\x32\".istio.mesh.v1alpha1.HTTPGetAction\x12\x37\n\ttcpSocket\x18\x03 \x01(\x0b\x32$.istio.mesh.v1alpha1.TCPSocketAction\x12\x1b\n\x13initialDelaySeconds\x18\x04 \x01(\x05\x12\x16\n\x0etimeoutSeconds\x18\x05 \x01(\x05\x12\x15\n\rperiodSeconds\x18\x06 \x01(\x05\x12\x18\n\x10successThreshold\x18\x07 \x01(\x05\x12\x18\n\x10\x66\x61ilureThreshold\x18\x08 \x01(\x05\"\x1d\n\nExecAction\x12\x0f\n\x07\x63ommand\x18\x01 \x03(\t\"\xaa\x01\n\rHTTPGetAction\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x37\n\x04port\x18\x02 \x01(\x0b\x32).istio.mesh.v1alpha1.TypeIntOrStringForPB\x12\x0c\n\x04host\x18\x03 \x01(\t\x12\x0e\n\x06scheme\x18\x04 \x01(\t\x12\x34\n\x0bhttpHeaders\x18\x05 \x03(\x0b\x32\x1f.istio.mesh.v1alpha1.HTTPHeader\")\n\nHTTPHeader\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"X\n\x0fTCPSocketAction\x12\x37\n\x04port\x18\x01 \x01(\x0b\x32).istio.mesh.v1alpha1.TypeIntOrStringForPB\x12\x0c\n\x04host\x18\x02 \x01(\t\"\x8e\x01\n\x17PodDisruptionBudgetSpec\x12\x14\n\x0cminAvailable\x18\x01 \x01(\r\x12\x45\n\x08selector\x18\x02 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector\x12\x16\n\x0emaxUnavailable\x18\x03 \x01(\r\"g\n\x12\x44\x65ploymentStrategy\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x43\n\rrollingUpdate\x18\x02 \x01(\x0b\x32,.istio.mesh.v1alpha1.RollingUpdateDeployment\"\x99\x01\n\x17RollingUpdateDeployment\x12\x41\n\x0emaxUnavailable\x18\x01 \x01(\x0b\x32).istio.mesh.v1alpha1.TypeIntOrStringForPB\x12;\n\x08maxSurge\x18\x02 \x01(\x0b\x32).istio.mesh.v1alpha1.TypeIntOrStringForPB\"-\n\nObjectMeta\x12\x0c\n\x04name\x18\x05 \x01(\t\x12\x11\n\tnamespace\x18\x06 \x01(\t\"[\n\x06\x45nvVar\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\x12\x34\n\tvalueFrom\x18\x03 \x01(\x0b\x32!.istio.mesh.v1alpha1.EnvVarSource\"\x92\x02\n\x0c\x45nvVarSource\x12:\n\x08\x66ieldRef\x18\x01 \x01(\x0b\x32(.istio.mesh.v1alpha1.ObjectFieldSelector\x12\x44\n\x10resourceFieldRef\x18\x02 \x01(\x0b\x32*.istio.mesh.v1alpha1.ResourceFieldSelector\x12\x42\n\x0f\x63onfigMapKeyRef\x18\x03 \x01(\x0b\x32).istio.mesh.v1alpha1.ConfigMapKeySelector\x12<\n\x0csecretKeyRef\x18\x04 \x01(\x0b\x32&.istio.mesh.v1alpha1.SecretKeySelector\"<\n\x13ObjectFieldSelector\x12\x12\n\napiVersion\x18\x01 \x01(\t\x12\x11\n\tfieldPath\x18\x02 \x01(\t\"\x81\x01\n\x15ResourceFieldSelector\x12\x15\n\rcontainerName\x18\x01 \x01(\t\x12\x10\n\x08resource\x18\x02 \x01(\t\x12?\n\x07\x64ivisor\x18\x03 \x01(\x0b\x32..k8s.io.apimachinery.pkg.api.resource.Quantity\"~\n\x14\x43onfigMapKeySelector\x12G\n\x14localObjectReference\x18\x01 \x01(\x0b\x32).istio.mesh.v1alpha1.LocalObjectReference\x12\x0b\n\x03key\x18\x02 \x01(\t\x12\x10\n\x08optional\x18\x03 \x01(\x08\"{\n\x11SecretKeySelector\x12G\n\x14localObjectReference\x18\x01 \x01(\x0b\x32).istio.mesh.v1alpha1.LocalObjectReference\x12\x0b\n\x03key\x18\x02 \x01(\t\x12\x10\n\x08optional\x18\x03 \x01(\x08\"$\n\x14LocalObjectReference\x12\x0c\n\x04name\x18\x01 \x01(\t\"\xf9\x03\n\x0bServiceSpec\x12/\n\x05ports\x18\x01 \x03(\x0b\x32 .istio.mesh.v1alpha1.ServicePort\x12@\n\x08selector\x18\x02 \x03(\x0b\x32..istio.mesh.v1alpha1.ServiceSpec.SelectorEntry\x12\x11\n\tclusterIP\x18\x03 \x01(\t\x12\x0c\n\x04type\x18\x04 \x01(\t\x12\x13\n\x0b\x65xternalIPs\x18\x05 \x03(\t\x12\x17\n\x0fsessionAffinity\x18\x07 \x01(\t\x12\x16\n\x0eloadBalancerIP\x18\x08 \x01(\t\x12 \n\x18loadBalancerSourceRanges\x18\t \x03(\t\x12\x14\n\x0c\x65xternalName\x18\n \x01(\t\x12\x1d\n\x15\x65xternalTrafficPolicy\x18\x0b \x01(\t\x12\x1b\n\x13healthCheckNodePort\x18\x0c \x01(\x05\x12 \n\x18publishNotReadyAddresses\x18\r \x01(\x08\x12I\n\x15sessionAffinityConfig\x18\x0e \x01(\x0b\x32*.istio.mesh.v1alpha1.SessionAffinityConfig\x1a/\n\rSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x93\x01\n\x0bServicePort\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08protocol\x18\x02 \x01(\t\x12\x0c\n\x04port\x18\x03 \x01(\x05\x12\x44\n\ntargetPort\x18\x04 \x01(\x0b\x32\x30.k8s.io.apimachinery.pkg.util.intstr.IntOrString\x12\x10\n\x08nodePort\x18\x05 \x01(\x05\"N\n\x15SessionAffinityConfig\x12\x35\n\x08\x63lientIP\x18\x01 \x01(\x0b\x32#.istio.mesh.v1alpha1.ClientIPConfig\"(\n\x0e\x43lientIPConfig\x12\x16\n\x0etimeoutSeconds\x18\x01 \x01(\x05\"e\n\nToleration\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x10\n\x08operator\x18\x02 \x01(\t\x12\r\n\x05value\x18\x03 \x01(\t\x12\x0e\n\x06\x65\x66\x66\x65\x63t\x18\x04 \x01(\t\x12\x19\n\x11tolerationSeconds\x18\x05 \x01(\x03\"\x16\n\x14TypeIntOrStringForPBB\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
   ,
-  dependencies=[k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_api_dot_autoscaling_dot_v2beta1_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_api_dot_resource_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_util_dot_intstr_dot_generated__pb2.DESCRIPTOR,])
+  dependencies=[k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_api_dot_resource_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_util_dot_intstr_dot_generated__pb2.DESCRIPTOR,])
 
 
 
@@ -65,8 +63,8 @@ _RESOURCES_LIMITSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=438,
-  serialized_end=483,
+  serialized_start=354,
+  serialized_end=399,
 )
 
 _RESOURCES_REQUESTSENTRY = _descriptor.Descriptor(
@@ -102,8 +100,8 @@ _RESOURCES_REQUESTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=485,
-  serialized_end=532,
+  serialized_start=401,
+  serialized_end=448,
 )
 
 _RESOURCES = _descriptor.Descriptor(
@@ -139,8 +137,8 @@ _RESOURCES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=301,
-  serialized_end=532,
+  serialized_start=217,
+  serialized_end=448,
 )
 
 
@@ -184,8 +182,8 @@ _AFFINITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=535,
-  serialized_end=720,
+  serialized_start=451,
+  serialized_end=636,
 )
 
 
@@ -222,8 +220,8 @@ _NODEAFFINITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=723,
-  serialized_end=931,
+  serialized_start=639,
+  serialized_end=847,
 )
 
 
@@ -253,8 +251,8 @@ _NODESELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=933,
-  serialized_end=1013,
+  serialized_start=849,
+  serialized_end=929,
 )
 
 
@@ -291,8 +289,8 @@ _NODESELECTORTERM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1016,
-  serialized_end=1173,
+  serialized_start=932,
+  serialized_end=1089,
 )
 
 
@@ -336,8 +334,8 @@ _NODESELECTORREQUIREMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1175,
-  serialized_end=1247,
+  serialized_start=1091,
+  serialized_end=1163,
 )
 
 
@@ -374,8 +372,8 @@ _PODAFFINITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1250,
-  serialized_end=1460,
+  serialized_start=1166,
+  serialized_end=1376,
 )
 
 
@@ -412,8 +410,8 @@ _PODANTIAFFINITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1463,
-  serialized_end=1677,
+  serialized_start=1379,
+  serialized_end=1593,
 )
 
 
@@ -457,8 +455,8 @@ _PODAFFINITYTERM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1680,
-  serialized_end=1814,
+  serialized_start=1596,
+  serialized_end=1730,
 )
 
 
@@ -495,8 +493,8 @@ _WEIGHTEDPODAFFINITYTERM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1816,
-  serialized_end=1920,
+  serialized_start=1732,
+  serialized_end=1836,
 )
 
 
@@ -533,8 +531,8 @@ _PREFERREDSCHEDULINGTERM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1922,
-  serialized_end=2022,
+  serialized_start=1838,
+  serialized_end=1938,
 )
 
 
@@ -613,8 +611,8 @@ _READINESSPROBE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2025,
-  serialized_end=2326,
+  serialized_start=1941,
+  serialized_end=2242,
 )
 
 
@@ -644,8 +642,8 @@ _EXECACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2328,
-  serialized_end=2357,
+  serialized_start=2244,
+  serialized_end=2273,
 )
 
 
@@ -703,8 +701,8 @@ _HTTPGETACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2360,
-  serialized_end=2530,
+  serialized_start=2276,
+  serialized_end=2446,
 )
 
 
@@ -741,8 +739,8 @@ _HTTPHEADER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2532,
-  serialized_end=2573,
+  serialized_start=2448,
+  serialized_end=2489,
 )
 
 
@@ -779,8 +777,8 @@ _TCPSOCKETACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2575,
-  serialized_end=2663,
+  serialized_start=2491,
+  serialized_end=2579,
 )
 
 
@@ -824,8 +822,8 @@ _PODDISRUPTIONBUDGETSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2666,
-  serialized_end=2808,
+  serialized_start=2582,
+  serialized_end=2724,
 )
 
 
@@ -862,8 +860,8 @@ _DEPLOYMENTSTRATEGY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2810,
-  serialized_end=2913,
+  serialized_start=2726,
+  serialized_end=2829,
 )
 
 
@@ -900,8 +898,8 @@ _ROLLINGUPDATEDEPLOYMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2916,
-  serialized_end=3069,
+  serialized_start=2832,
+  serialized_end=2985,
 )
 
 
@@ -938,8 +936,8 @@ _OBJECTMETA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3071,
-  serialized_end=3116,
+  serialized_start=2987,
+  serialized_end=3032,
 )
 
 
@@ -983,8 +981,8 @@ _ENVVAR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3118,
-  serialized_end=3209,
+  serialized_start=3034,
+  serialized_end=3125,
 )
 
 
@@ -1035,8 +1033,8 @@ _ENVVARSOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3212,
-  serialized_end=3486,
+  serialized_start=3128,
+  serialized_end=3402,
 )
 
 
@@ -1073,8 +1071,8 @@ _OBJECTFIELDSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3488,
-  serialized_end=3548,
+  serialized_start=3404,
+  serialized_end=3464,
 )
 
 
@@ -1118,8 +1116,8 @@ _RESOURCEFIELDSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3551,
-  serialized_end=3680,
+  serialized_start=3467,
+  serialized_end=3596,
 )
 
 
@@ -1163,8 +1161,8 @@ _CONFIGMAPKEYSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3682,
-  serialized_end=3808,
+  serialized_start=3598,
+  serialized_end=3724,
 )
 
 
@@ -1208,8 +1206,8 @@ _SECRETKEYSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3810,
-  serialized_end=3933,
+  serialized_start=3726,
+  serialized_end=3849,
 )
 
 
@@ -1239,8 +1237,8 @@ _LOCALOBJECTREFERENCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3935,
-  serialized_end=3971,
+  serialized_start=3851,
+  serialized_end=3887,
 )
 
 
@@ -1277,8 +1275,8 @@ _SERVICESPEC_SELECTORENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4432,
-  serialized_end=4479,
+  serialized_start=4348,
+  serialized_end=4395,
 )
 
 _SERVICESPEC = _descriptor.Descriptor(
@@ -1391,8 +1389,8 @@ _SERVICESPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3974,
-  serialized_end=4479,
+  serialized_start=3890,
+  serialized_end=4395,
 )
 
 
@@ -1450,8 +1448,8 @@ _SERVICEPORT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4482,
-  serialized_end=4629,
+  serialized_start=4398,
+  serialized_end=4545,
 )
 
 
@@ -1481,8 +1479,8 @@ _SESSIONAFFINITYCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4631,
-  serialized_end=4709,
+  serialized_start=4547,
+  serialized_end=4625,
 )
 
 
@@ -1512,8 +1510,8 @@ _CLIENTIPCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4711,
-  serialized_end=4751,
+  serialized_start=4627,
+  serialized_end=4667,
 )
 
 
@@ -1571,8 +1569,8 @@ _TOLERATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4753,
-  serialized_end=4854,
+  serialized_start=4669,
+  serialized_end=4770,
 )
 
 
@@ -1595,8 +1593,8 @@ _TYPEINTORSTRINGFORPB = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4856,
-  serialized_end=4878,
+  serialized_start=4772,
+  serialized_end=4794,
 )
 
 _RESOURCES_LIMITSENTRY.containing_type = _RESOURCES

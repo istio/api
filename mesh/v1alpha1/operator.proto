@@ -147,16 +147,23 @@ message IstioOperatorSpec {
 
     // Overrides for default values.yaml. This is a validated pass-through to Helm templates.
     // See the Helm installation options for schema details: https://istio.io/docs/reference/config/installation-options/.
+    // Anything that is available in IstioOperatorSpec should be set above rather than using the passthrough. This
+    // includes Kubernetes resource settings for components in KubernetesResourcesSpec.
     TypeMapStringInterface values = 100;
     // Unvalidated overrides for default values.yaml. Used for custom templates where new parameters are added.
     TypeMapStringInterface unvalidated_values = 101;
 
     // Status describes the current state of a component.
     enum Status {
+        // Component is not present.
         NONE = 0;
+        // Component is being updated to a different version.
         UPDATING = 1;
+        // Controller has started but not yet completed reconciliation loop for the component.
         RECONCILING = 2;
+        // Component is healthy.
         HEALTHY = 3;
+        // Component is in an error state.
         ERROR = 4;
     }
     // VersionStatus is the status and version of a component.

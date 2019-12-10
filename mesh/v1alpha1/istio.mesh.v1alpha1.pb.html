@@ -208,6 +208,28 @@ No
 No
 </td>
 </tr>
+<tr id="ComponentSpec-hub">
+<td><code>hub</code></td>
+<td><code>string</code></td>
+<td>
+<p>Hub for the component (overrides top level hub setting).</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ComponentSpec-tag">
+<td><code>tag</code></td>
+<td><code>string</code></td>
+<td>
+<p>Tag for the component (overrides top level tag setting).</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="ComponentSpec-spec">
 <td><code>spec</code></td>
 <td><code><a href="#TypeInterface">TypeInterface</a></code></td>
@@ -593,6 +615,39 @@ No
 No
 </td>
 </tr>
+<tr id="GatewaySpec-label">
+<td><code>label</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>Labels for the gateway.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GatewaySpec-hub">
+<td><code>hub</code></td>
+<td><code>string</code></td>
+<td>
+<p>Hub for the component (overrides top level hub setting).</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GatewaySpec-tag">
+<td><code>tag</code></td>
+<td><code>string</code></td>
+<td>
+<p>Tag for the component (overrides top level tag setting).</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="GatewaySpec-k8s">
 <td><code>k8s</code></td>
 <td><code><a href="#KubernetesResourcesSpec">KubernetesResourcesSpec</a></code></td>
@@ -799,7 +854,7 @@ No
 No
 </td>
 </tr>
-<tr id="IstioComponentSetSpec-coreDNS">
+<tr id="IstioComponentSetSpec-core_dNS">
 <td><code>coreDNS</code></td>
 <td><code><a href="#ComponentSpec">ComponentSpec</a></code></td>
 <td>
@@ -945,7 +1000,9 @@ No
 <td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
 <td>
 <p>Overrides for default values.yaml. This is a validated pass-through to Helm templates.
-See the Helm installation options for schema details: https://istio.io/docs/reference/config/installation-options/.</p>
+See the Helm installation options for schema details: https://istio.io/docs/reference/config/installation-options/.
+Anything that is available in IstioOperatorSpec should be set above rather than using the passthrough. This
+includes Kubernetes resource settings for components in KubernetesResourcesSpec.</p>
 
 </td>
 <td>
@@ -1009,26 +1066,36 @@ No
 <tr id="IstioOperatorSpec-Status-NONE">
 <td><code>NONE</code></td>
 <td>
+<p>Component is not present.</p>
+
 </td>
 </tr>
 <tr id="IstioOperatorSpec-Status-UPDATING">
 <td><code>UPDATING</code></td>
 <td>
+<p>Component is being updated to a different version.</p>
+
 </td>
 </tr>
 <tr id="IstioOperatorSpec-Status-RECONCILING">
 <td><code>RECONCILING</code></td>
 <td>
+<p>Controller has started but not yet completed reconciliation loop for the component.</p>
+
 </td>
 </tr>
 <tr id="IstioOperatorSpec-Status-HEALTHY">
 <td><code>HEALTHY</code></td>
 <td>
+<p>Component is healthy.</p>
+
 </td>
 </tr>
 <tr id="IstioOperatorSpec-Status-ERROR">
 <td><code>ERROR</code></td>
 <td>
+<p>Component is in an error state.</p>
+
 </td>
 </tr>
 </tbody>
@@ -1079,6 +1146,111 @@ No
 <td><code>error</code></td>
 <td><code>string</code></td>
 <td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="K8sObjectOverlay">K8sObjectOverlay</h2>
+<section>
+<p>Patch for an existing k8s resource.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="K8sObjectOverlay-api_version">
+<td><code>apiVersion</code></td>
+<td><code>string</code></td>
+<td>
+<p>Resource API version.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="K8sObjectOverlay-kind">
+<td><code>kind</code></td>
+<td><code>string</code></td>
+<td>
+<p>Resource kind.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="K8sObjectOverlay-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Name of resource.
+Namespace is always the component namespace.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="K8sObjectOverlay-patches">
+<td><code>patches</code></td>
+<td><code><a href="#K8sObjectOverlay-PathValue">PathValue[]</a></code></td>
+<td>
+<p>List of patches to apply to resource.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="K8sObjectOverlay-PathValue">K8sObjectOverlay.PathValue</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="K8sObjectOverlay-PathValue-path">
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>
+<p>Path of the form a.b:c.e.:f
+Where b:c is a list element selector of the form key:value and :f is a list selector of the form :value.
+All path intermediate nodes must exist.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="K8sObjectOverlay-PathValue-value">
+<td><code>value</code></td>
+<td><code><a href="#TypeInterface">TypeInterface</a></code></td>
+<td>
+<p>Value to add, delete or replace.
+For add, the path should be a new leaf.
+For delete, value should be unset.
+For replace, path should reference an existing node.
+All values are strings but are converted into appropriate type based on schema.</p>
+
 </td>
 <td>
 No
@@ -1272,7 +1444,7 @@ No
 </tr>
 <tr id="KubernetesResourcesSpec-overlays">
 <td><code>overlays</code></td>
-<td><code><a href="#k8sObjectOverlay">k8sObjectOverlay[]</a></code></td>
+<td><code><a href="#K8sObjectOverlay">K8sObjectOverlay[]</a></code></td>
 <td>
 <p>Overlays for k8s resources in rendered manifests.</p>
 
@@ -4122,111 +4294,6 @@ No
 <td><code>strVal</code></td>
 <td><code>string</code></td>
 <td>
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="k8sObjectOverlay">k8sObjectOverlay</h2>
-<section>
-<p>Patch for an existing k8s resource.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="k8sObjectOverlay-api_version">
-<td><code>apiVersion</code></td>
-<td><code>string</code></td>
-<td>
-<p>Resource API version.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="k8sObjectOverlay-kind">
-<td><code>kind</code></td>
-<td><code>string</code></td>
-<td>
-<p>Resource kind.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="k8sObjectOverlay-name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>Name of resource.
-Namespace is always the component namespace.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="k8sObjectOverlay-patches">
-<td><code>patches</code></td>
-<td><code><a href="#k8sObjectOverlay-PathValue">PathValue[]</a></code></td>
-<td>
-<p>List of patches to apply to resource.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="k8sObjectOverlay-PathValue">k8sObjectOverlay.PathValue</h2>
-<section>
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="k8sObjectOverlay-PathValue-path">
-<td><code>path</code></td>
-<td><code>string</code></td>
-<td>
-<p>Path of the form a.b:c.e.:f
-Where b:c is a list element selector of the form key:value and :f is a list selector of the form :value.
-All path intermediate nodes must exist.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="k8sObjectOverlay-PathValue-value">
-<td><code>value</code></td>
-<td><code><a href="#TypeInterface">TypeInterface</a></code></td>
-<td>
-<p>Value to add, delete or replace.
-For add, the path should be a new leaf.
-For delete, value should be unset.
-For replace, path should reference an existing node.
-All values are strings but are converted into appropriate type based on schema.</p>
-
 </td>
 <td>
 No

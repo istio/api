@@ -26,11 +26,16 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type IstioOperatorSpec_Status int32
 
 const (
-	IstioOperatorSpec_NONE        IstioOperatorSpec_Status = 0
-	IstioOperatorSpec_UPDATING    IstioOperatorSpec_Status = 1
+	// Component is not present.
+	IstioOperatorSpec_NONE IstioOperatorSpec_Status = 0
+	// Component is being updated to a different version.
+	IstioOperatorSpec_UPDATING IstioOperatorSpec_Status = 1
+	// Controller has started but not yet completed reconciliation loop for the component.
 	IstioOperatorSpec_RECONCILING IstioOperatorSpec_Status = 2
-	IstioOperatorSpec_HEALTHY     IstioOperatorSpec_Status = 3
-	IstioOperatorSpec_ERROR       IstioOperatorSpec_Status = 4
+	// Component is healthy.
+	IstioOperatorSpec_HEALTHY IstioOperatorSpec_Status = 3
+	// Component is in an error state.
+	IstioOperatorSpec_ERROR IstioOperatorSpec_Status = 4
 )
 
 var IstioOperatorSpec_Status_name = map[int32]string{
@@ -84,6 +89,8 @@ type IstioOperatorSpec struct {
 	Components *IstioComponentSetSpec `protobuf:"bytes,50,opt,name=components,proto3" json:"components,omitempty"`
 	// Overrides for default values.yaml. This is a validated pass-through to Helm templates.
 	// See the Helm installation options for schema details: https://istio.io/docs/reference/config/installation-options/.
+	// Anything that is available in IstioOperatorSpec should be set above rather than using the passthrough. This
+	// includes Kubernetes resource settings for components in KubernetesResourcesSpec.
 	Values *TypeMapStringInterface `protobuf:"bytes,100,opt,name=values,proto3" json:"values,omitempty"`
 	// Unvalidated overrides for default values.yaml. Used for custom templates where new parameters are added.
 	UnvalidatedValues *TypeMapStringInterface `protobuf:"bytes,101,opt,name=unvalidated_values,json=unvalidatedValues,proto3" json:"unvalidated_values,omitempty"`

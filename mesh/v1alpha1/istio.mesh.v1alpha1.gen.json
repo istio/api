@@ -90,6 +90,16 @@
           "enabled": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeBoolValueForPB"
           },
+          "hub": {
+            "description": "Hub for the component (overrides top level hub setting).",
+            "type": "string",
+            "format": "string"
+          },
+          "tag": {
+            "description": "Tag for the component (overrides top level tag setting).",
+            "type": "string",
+            "format": "string"
+          },
           "k8s": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.KubernetesResourcesSpec"
           }
@@ -109,8 +119,26 @@
             "type": "string",
             "format": "string"
           },
+          "hub": {
+            "description": "Hub for the component (overrides top level hub setting).",
+            "type": "string",
+            "format": "string"
+          },
+          "tag": {
+            "description": "Tag for the component (overrides top level tag setting).",
+            "type": "string",
+            "format": "string"
+          },
           "k8s": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.KubernetesResourcesSpec"
+          },
+          "label": {
+            "description": "Labels for the gateway.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "string"
+            }
           }
         }
       },
@@ -227,7 +255,7 @@
             "description": "Overlays for k8s resources in rendered manifests.",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/istio.mesh.v1alpha1.k8sObjectOverlay"
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.K8sObjectOverlay"
             }
           }
         }
@@ -437,7 +465,7 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.k8sObjectOverlay": {
+      "istio.mesh.v1alpha1.K8sObjectOverlay": {
         "description": "Patch for an existing k8s resource.",
         "type": "object",
         "properties": {
@@ -460,12 +488,12 @@
             "description": "List of patches to apply to resource.",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/istio.mesh.v1alpha1.k8sObjectOverlay.PathValue"
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.K8sObjectOverlay.PathValue"
             }
           }
         }
       },
-      "istio.mesh.v1alpha1.k8sObjectOverlay.PathValue": {
+      "istio.mesh.v1alpha1.K8sObjectOverlay.PathValue": {
         "type": "object",
         "properties": {
           "path": {
@@ -1369,16 +1397,6 @@
           "values": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeMapStringInterface"
           },
-          "profile": {
-            "description": "Path or name for the profile e.g. - minimal (looks in profiles dir for a file called minimal.yaml) - /tmp/istio/install/values/custom/custom-install.yaml (local file path) default profile is used if this field is unset.",
-            "type": "string",
-            "format": "string"
-          },
-          "installPackagePath": {
-            "description": "Path for the install package. e.g. - /tmp/istio-installer/nightly (local file path)",
-            "type": "string",
-            "format": "string"
-          },
           "hub": {
             "description": "Root for docker image paths e.g. docker.io/istio",
             "type": "string",
@@ -1386,6 +1404,16 @@
           },
           "tag": {
             "description": "Version tag for docker images e.g. 1.0.6",
+            "type": "string",
+            "format": "string"
+          },
+          "profile": {
+            "description": "Path or name for the profile e.g. - minimal (looks in profiles dir for a file called minimal.yaml) - /tmp/istio/install/values/custom/custom-install.yaml (local file path) default profile is used if this field is unset.",
+            "type": "string",
+            "format": "string"
+          },
+          "installPackagePath": {
+            "description": "Path for the install package. e.g. - /tmp/istio-installer/nightly (local file path)",
             "type": "string",
             "format": "string"
           },
