@@ -34,7 +34,7 @@
             "format": "string"
           },
           "fromHeaders": {
-            "description": "List of header locations from which JWT is expected. For example, below is the location spec if JWT is expected to be found in `x-goog-iap-jwt-assertion` header, and have \"Bearer \" prefix: ``` fromHeaders: - name: x-goog-iap-jwt-assertion prefix: \"Bearer \" ```",
+            "description": "List of header locations from which JWT is expected. For example, below is the location spec if JWT is expected to be found in `x-jwt-assertion` header, and have \"Bearer \" prefix: ``` fromHeaders: - name: x-jwt-assertion prefix: \"Bearer \" ```",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.security.v1beta1.JWTHeader"

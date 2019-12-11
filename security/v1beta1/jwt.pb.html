@@ -55,14 +55,14 @@ authentication flow.</p>
 <p>Examples:</p>
 
 <p>Spec for a JWT that is issued by <code>https://example.com</code>, with the audience claims must be either
-<code>bookstore_android.apps.googleusercontent.com</code> or <code>bookstore_web.apps.googleusercontent.com</code>.
+<code>bookstore_android.apps.example.com</code> or <code>bookstore_web.apps.example.com</code>.
 The token should be presented at the <code>Authorization</code> header (default). The Json web key set (JWKS)
 will be discovered followwing OpenID Connect protocol.</p>
 
 <pre><code class="language-yaml">issuer: https://example.com
 audiences:
-- bookstore_android.apps.googleusercontent.com
-  bookstore_web.apps.googleusercontent.com
+- bookstore_android.apps.example.com
+  bookstore_web.apps.example.com
 </code></pre>
 
 <p>This example specifies token in non-default location (<code>x-goog-iap-jwt-assertion</code> header). It also
@@ -114,8 +114,8 @@ audiences will be accepted.</p>
 <p>Example:</p>
 
 <pre><code class="language-yaml">audiences:
-- bookstore_android.apps.googleusercontent.com
-  bookstore_web.apps.googleusercontent.com
+- bookstore_android.apps.example.com
+  bookstore_web.apps.example.com
 </code></pre>
 
 </td>
@@ -164,10 +164,10 @@ No
 <td><code><a href="https://istio.io/docs/reference/config/security/authorization-policy.html#JWTHeader">JWTHeader[]</a></code></td>
 <td>
 <p>List of header locations from which JWT is expected. For example, below is the location spec
-if JWT is expected to be found in <code>x-goog-iap-jwt-assertion</code> header, and have &ldquo;Bearer &rdquo; prefix:</p>
+if JWT is expected to be found in <code>x-jwt-assertion</code> header, and have &ldquo;Bearer &rdquo; prefix:</p>
 
 <pre><code>  fromHeaders:
-  - name: x-goog-iap-jwt-assertion
+  - name: x-jwt-assertion
     prefix: &quot;Bearer &quot;
 </code></pre>
 

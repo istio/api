@@ -31,15 +31,15 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // Examples:
 //
 // Spec for a JWT that is issued by `https://example.com`, with the audience claims must be either
-// `bookstore_android.apps.googleusercontent.com` or `bookstore_web.apps.googleusercontent.com`.
+// `bookstore_android.apps.example.com` or `bookstore_web.apps.example.com`.
 // The token should be presented at the `Authorization` header (default). The Json web key set (JWKS)
 // will be discovered followwing OpenID Connect protocol.
 //
 // ```yaml
 // issuer: https://example.com
 // audiences:
-// - bookstore_android.apps.googleusercontent.com
-//   bookstore_web.apps.googleusercontent.com
+// - bookstore_android.apps.example.com
+//   bookstore_web.apps.example.com
 // ```
 //
 // This example specifies token in non-default location (`x-goog-iap-jwt-assertion` header). It also
@@ -70,8 +70,8 @@ type JWTRule struct {
 	//
 	// ```yaml
 	// audiences:
-	// - bookstore_android.apps.googleusercontent.com
-	//   bookstore_web.apps.googleusercontent.com
+	// - bookstore_android.apps.example.com
+	//   bookstore_web.apps.example.com
 	// ```
 	Audiences []string `protobuf:"bytes,2,rep,name=audiences,proto3" json:"audiences,omitempty"`
 	// URL of the provider's public key set to validate signature of the
@@ -93,10 +93,10 @@ type JWTRule struct {
 	// Note: Only one of jwks_uri and jwks should be used. jwks_uri will be ignored if it does.
 	Jwks string `protobuf:"bytes,10,opt,name=jwks,proto3" json:"jwks,omitempty"`
 	// List of header locations from which JWT is expected. For example, below is the location spec
-	// if JWT is expected to be found in `x-goog-iap-jwt-assertion` header, and have "Bearer " prefix:
+	// if JWT is expected to be found in `x-jwt-assertion` header, and have "Bearer " prefix:
 	// ```
 	//   fromHeaders:
-	//   - name: x-goog-iap-jwt-assertion
+	//   - name: x-jwt-assertion
 	//     prefix: "Bearer "
 	// ```
 	FromHeaders []*JWTHeader `protobuf:"bytes,6,rep,name=from_headers,json=fromHeaders,proto3" json:"from_headers,omitempty"`
