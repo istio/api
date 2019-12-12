@@ -225,9 +225,9 @@ message ProxyConfig {
   // for details about Envoy's Metrics Service API.
   RemoteService envoy_metrics_service = 23;
 
-  // Additional env variables to inject into sidecar.
+  // Additional env variables for the proxy.
   // Names starting with ISTIO_META_ will be included in the generated bootstrap and sent to the XDS server.
-  map<string,string> meta = 24;
+  map<string,string> proxy_metadata = 24;
 }
 
 message RemoteService {

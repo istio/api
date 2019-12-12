@@ -625,9 +625,10 @@
             "type": "boolean"
           },
           "sdsUdsPath": {
-            "description": "Unix Domain Socket through which Envoy communicates with NodeAgent SDS to get key/cert for mTLS. Use secret-mount files instead of SDS if set to empty.",
+            "description": "Unix Domain Socket through which Envoy communicates with NodeAgent SDS to get key/cert for mTLS. Use secret-mount files instead of SDS if set to empty. @deprecated - istio agent will detect and send the path to envoy.",
             "type": "string",
-            "format": "string"
+            "format": "string",
+            "deprecated": true
           },
           "sdsRefreshDelay": {
             "type": "string",
@@ -784,7 +785,7 @@
             "type": "string"
           },
           "discoveryAddress": {
-            "description": "Address of the discovery service exposing xDS with mTLS connection.",
+            "description": "Address of the discovery service exposing xDS with mTLS connection. The inject configuration may override this value.",
             "type": "string",
             "format": "string"
           },
@@ -855,6 +856,14 @@
           },
           "envoyMetricsService": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.RemoteService"
+          },
+          "proxyMetadata": {
+            "description": "Additional env variables for the proxy. Names starting with ISTIO_META_ will be included in the generated bootstrap and sent to the XDS server.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "string"
+            }
           }
         }
       },

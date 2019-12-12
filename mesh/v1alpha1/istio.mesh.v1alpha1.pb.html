@@ -1773,18 +1773,6 @@ No
 No
 </td>
 </tr>
-<tr id="MeshConfig-sds_uds_path">
-<td><code>sdsUdsPath</code></td>
-<td><code>string</code></td>
-<td>
-<p>Unix Domain Socket through which Envoy communicates with NodeAgent SDS to get key/cert for mTLS.
-Use secret-mount files instead of SDS if set to empty.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="MeshConfig-config_sources">
 <td><code>configSources</code></td>
 <td><code><a href="#ConfigSource">ConfigSource[]</a></code></td>
@@ -2916,7 +2904,8 @@ No
 <td><code>discoveryAddress</code></td>
 <td><code>string</code></td>
 <td>
-<p>Address of the discovery service exposing xDS with mTLS connection.</p>
+<p>Address of the discovery service exposing xDS with mTLS connection.
+The inject configuration may override this value.</p>
 
 </td>
 <td>
@@ -3071,6 +3060,18 @@ No
 <p>Address of the Envoy Metrics Service implementation (e.g. metrics-service:15000).
 See <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/metrics/v2/metrics_service.proto">Metric Service</a>
 for details about Envoy&rsquo;s Metrics Service API.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-proxy_metadata">
+<td><code>proxyMetadata</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>Additional env variables for the proxy.
+Names starting with ISTIO<em>META</em> will be included in the generated bootstrap and sent to the XDS server.</p>
 
 </td>
 <td>
