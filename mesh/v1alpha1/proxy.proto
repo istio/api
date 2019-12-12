@@ -146,6 +146,7 @@ message ProxyConfig {
   google.protobuf.Duration parent_shutdown_duration = 5;
 
   // Address of the discovery service exposing xDS with mTLS connection.
+  // The inject configuration may override this value.
   string discovery_address = 6;
 
   // $hide_from_docs
@@ -223,6 +224,11 @@ message ProxyConfig {
   // See [Metric Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/metrics/v2/metrics_service.proto)
   // for details about Envoy's Metrics Service API.
   RemoteService envoy_metrics_service = 23;
+
+  // $hide_from_docs
+  // Additional env variables for the proxy.
+  // Names starting with ISTIO_META_ will be included in the generated bootstrap and sent to the XDS server.
+  map<string,string> proxy_metadata = 24;
 }
 
 message RemoteService {
