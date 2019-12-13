@@ -1,4 +1,4 @@
-*               @istio/technical-oversight-committee
+*                @linsun @rshriram @dcberg @louiscryan @geeknoid @smawson
 /Makefile*       @istio/wg-test-and-release-maintainers
 /*.md            @istio/wg-test-and-release-maintainers
 /common/         @istio/wg-test-and-release-maintainers
