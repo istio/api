@@ -35275,137 +35275,6 @@
       }
     },
     {
-      "protopath": "extensions:/:field_rules.proto",
-      "def": {
-        "messages": [
-          {
-            "name": "google.protobuf.FieldOptions",
-            "fields": [
-              {
-                "id": 1200,
-                "name": "rules",
-                "type": "FieldRules"
-              }
-            ]
-          },
-          {
-            "name": "FieldRules",
-            "fields": [
-              {
-                "id": 1,
-                "name": "float",
-                "type": "FloatRules"
-              },
-              {
-                "id": 2,
-                "name": "double",
-                "type": "DoubleRules"
-              },
-              {
-                "id": 3,
-                "name": "string",
-                "type": "StringRules"
-              },
-              {
-                "id": 4,
-                "name": "bool",
-                "type": "BoolRules"
-              },
-              {
-                "id": 5,
-                "name": "int32",
-                "type": "Int32Rules"
-              },
-              {
-                "id": 6,
-                "name": "int64",
-                "type": "Int64Rules"
-              }
-            ]
-          },
-          {
-            "name": "FloatRules",
-            "fields": [
-              {
-                "id": 1,
-                "name": "default",
-                "type": "float"
-              }
-            ]
-          },
-          {
-            "name": "DoubleRules",
-            "fields": [
-              {
-                "id": 1,
-                "name": "default",
-                "type": "double"
-              }
-            ]
-          },
-          {
-            "name": "StringRules",
-            "fields": [
-              {
-                "id": 1,
-                "name": "default",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "pattern",
-                "type": "string"
-              }
-            ]
-          },
-          {
-            "name": "BoolRules",
-            "fields": [
-              {
-                "id": 1,
-                "name": "default",
-                "type": "bool"
-              }
-            ]
-          },
-          {
-            "name": "Int32Rules",
-            "fields": [
-              {
-                "id": 1,
-                "name": "default",
-                "type": "int32"
-              }
-            ]
-          },
-          {
-            "name": "Int64Rules",
-            "fields": [
-              {
-                "id": 1,
-                "name": "default",
-                "type": "int64"
-              }
-            ]
-          }
-        ],
-        "imports": [
-          {
-            "path": "google/protobuf/descriptor.proto"
-          }
-        ],
-        "package": {
-          "name": "istio.extensions"
-        },
-        "options": [
-          {
-            "name": "go_package",
-            "value": "istio.io/api/extensions"
-          }
-        ]
-      }
-    },
-    {
       "protopath": "mcp:/:v1alpha1:/:mcp.proto",
       "def": {
         "messages": [
@@ -35827,6 +35696,357 @@
       }
     },
     {
+      "protopath": "mesh:/:v1alpha1:/:component.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "IstioComponentSetSpec",
+            "fields": [
+              {
+                "id": 30,
+                "name": "pilot",
+                "type": "ComponentSpec"
+              },
+              {
+                "id": 31,
+                "name": "proxy",
+                "type": "ComponentSpec"
+              },
+              {
+                "id": 32,
+                "name": "sidecar_injector",
+                "type": "ComponentSpec"
+              },
+              {
+                "id": 33,
+                "name": "policy",
+                "type": "ComponentSpec"
+              },
+              {
+                "id": 34,
+                "name": "telemetry",
+                "type": "ComponentSpec"
+              },
+              {
+                "id": 35,
+                "name": "citadel",
+                "type": "ComponentSpec"
+              },
+              {
+                "id": 36,
+                "name": "node_agent",
+                "type": "ComponentSpec"
+              },
+              {
+                "id": 37,
+                "name": "galley",
+                "type": "ComponentSpec"
+              },
+              {
+                "id": 38,
+                "name": "cni",
+                "type": "ComponentSpec"
+              },
+              {
+                "id": 39,
+                "name": "core_dNS",
+                "type": "ComponentSpec"
+              },
+              {
+                "id": 40,
+                "name": "ingress_gateways",
+                "type": "GatewaySpec",
+                "is_repeated": true
+              },
+              {
+                "id": 41,
+                "name": "egress_gateways",
+                "type": "GatewaySpec",
+                "is_repeated": true
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 100,
+                  "name": "extra_components",
+                  "type": "ExternalComponentSpec"
+                }
+              }
+            ]
+          },
+          {
+            "name": "ComponentSpec",
+            "fields": [
+              {
+                "id": 1,
+                "name": "enabled",
+                "type": "TypeBoolValueForPB"
+              },
+              {
+                "id": 2,
+                "name": "namespace",
+                "type": "string"
+              },
+              {
+                "id": 10,
+                "name": "hub",
+                "type": "string"
+              },
+              {
+                "id": 11,
+                "name": "tag",
+                "type": "string"
+              },
+              {
+                "id": 30,
+                "name": "spec",
+                "type": "TypeInterface"
+              },
+              {
+                "id": 50,
+                "name": "k8s",
+                "type": "KubernetesResourcesSpec"
+              }
+            ]
+          },
+          {
+            "name": "ExternalComponentSpec",
+            "fields": [
+              {
+                "id": 2,
+                "name": "namespace",
+                "type": "string"
+              },
+              {
+                "id": 10,
+                "name": "spec",
+                "type": "TypeInterface"
+              },
+              {
+                "id": 30,
+                "name": "chart_path",
+                "type": "string"
+              },
+              {
+                "id": 35,
+                "name": "schema",
+                "type": "google.protobuf.Any"
+              },
+              {
+                "id": 50,
+                "name": "k8s",
+                "type": "KubernetesResourcesSpec"
+              }
+            ]
+          },
+          {
+            "name": "GatewaySpec",
+            "fields": [
+              {
+                "id": 2,
+                "name": "namespace",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 10,
+                "name": "hub",
+                "type": "string"
+              },
+              {
+                "id": 11,
+                "name": "tag",
+                "type": "string"
+              },
+              {
+                "id": 50,
+                "name": "k8s",
+                "type": "KubernetesResourcesSpec"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 4,
+                  "name": "label",
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          {
+            "name": "KubernetesResourcesSpec",
+            "fields": [
+              {
+                "id": 1,
+                "name": "affinity",
+                "type": "Affinity"
+              },
+              {
+                "id": 2,
+                "name": "env",
+                "type": "EnvVar",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "hpa_spec",
+                "type": "k8s.io.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec"
+              },
+              {
+                "id": 4,
+                "name": "image_pull_policy",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "pod_disruption_budget",
+                "type": "PodDisruptionBudgetSpec"
+              },
+              {
+                "id": 8,
+                "name": "priority_class_name",
+                "type": "string"
+              },
+              {
+                "id": 9,
+                "name": "readiness_probe",
+                "type": "ReadinessProbe"
+              },
+              {
+                "id": 10,
+                "name": "replica_count",
+                "type": "uint32"
+              },
+              {
+                "id": 11,
+                "name": "resources",
+                "type": "Resources"
+              },
+              {
+                "id": 12,
+                "name": "service",
+                "type": "ServiceSpec"
+              },
+              {
+                "id": 13,
+                "name": "strategy",
+                "type": "DeploymentStrategy"
+              },
+              {
+                "id": 14,
+                "name": "tolerations",
+                "type": "Toleration"
+              },
+              {
+                "id": 100,
+                "name": "overlays",
+                "type": "K8sObjectOverlay",
+                "is_repeated": true
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 5,
+                  "name": "node_selector",
+                  "type": "string"
+                }
+              },
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 7,
+                  "name": "pod_annotations",
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          {
+            "name": "K8sObjectOverlay",
+            "fields": [
+              {
+                "id": 1,
+                "name": "api_version",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "kind",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "patches",
+                "type": "PathValue",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "PathValue",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "path",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "value",
+                    "type": "TypeInterface"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "TypeMapStringInterface"
+          },
+          {
+            "name": "TypeInterface"
+          },
+          {
+            "name": "TypeBoolValueForPB"
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/any.proto"
+          },
+          {
+            "path": "k8s.io/api/autoscaling/v2beta1/generated.proto"
+          },
+          {
+            "path": "mesh/v1alpha1/kubernetes.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.mesh.v1alpha1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mesh/v1alpha1"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "mesh:/:v1alpha1:/:config.proto",
       "def": {
         "enums": [
@@ -36059,7 +36279,13 @@
               {
                 "id": 20,
                 "name": "sds_uds_path",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 21,
@@ -36255,6 +36481,697 @@
       }
     },
     {
+      "protopath": "mesh:/:v1alpha1:/:kubernetes.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "Resources",
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 1,
+                  "name": "limits",
+                  "type": "string"
+                }
+              },
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 2,
+                  "name": "requests",
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Affinity",
+            "fields": [
+              {
+                "id": 1,
+                "name": "nodeAffinity",
+                "type": "NodeAffinity"
+              },
+              {
+                "id": 2,
+                "name": "podAffinity",
+                "type": "PodAffinity"
+              },
+              {
+                "id": 3,
+                "name": "podAntiAffinity",
+                "type": "PodAntiAffinity"
+              }
+            ]
+          },
+          {
+            "name": "NodeAffinity",
+            "fields": [
+              {
+                "id": 1,
+                "name": "requiredDuringSchedulingIgnoredDuringExecution",
+                "type": "NodeSelector"
+              },
+              {
+                "id": 2,
+                "name": "preferredDuringSchedulingIgnoredDuringExecution",
+                "type": "PreferredSchedulingTerm",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "NodeSelector",
+            "fields": [
+              {
+                "id": 1,
+                "name": "nodeSelectorTerms",
+                "type": "NodeSelectorTerm",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "NodeSelectorTerm",
+            "fields": [
+              {
+                "id": 1,
+                "name": "matchExpressions",
+                "type": "NodeSelectorRequirement",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "matchFields",
+                "type": "NodeSelectorRequirement",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "NodeSelectorRequirement",
+            "fields": [
+              {
+                "id": 1,
+                "name": "key",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "operator",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "values",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "PodAffinity",
+            "fields": [
+              {
+                "id": 1,
+                "name": "requiredDuringSchedulingIgnoredDuringExecution",
+                "type": "PodAffinityTerm",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "preferredDuringSchedulingIgnoredDuringExecution",
+                "type": "WeightedPodAffinityTerm",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "PodAntiAffinity",
+            "fields": [
+              {
+                "id": 1,
+                "name": "requiredDuringSchedulingIgnoredDuringExecution",
+                "type": "PodAffinityTerm",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "preferredDuringSchedulingIgnoredDuringExecution",
+                "type": "WeightedPodAffinityTerm",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "PodAffinityTerm",
+            "fields": [
+              {
+                "id": 1,
+                "name": "labelSelector",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
+              },
+              {
+                "id": 2,
+                "name": "namespaces",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "topologyKey",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "WeightedPodAffinityTerm",
+            "fields": [
+              {
+                "id": 1,
+                "name": "weight",
+                "type": "int32"
+              },
+              {
+                "id": 2,
+                "name": "podAffinityTerm",
+                "type": "PodAffinityTerm"
+              }
+            ]
+          },
+          {
+            "name": "PreferredSchedulingTerm",
+            "fields": [
+              {
+                "id": 1,
+                "name": "weight",
+                "type": "int32"
+              },
+              {
+                "id": 2,
+                "name": "preference",
+                "type": "NodeSelectorTerm"
+              }
+            ]
+          },
+          {
+            "name": "ReadinessProbe",
+            "fields": [
+              {
+                "id": 1,
+                "name": "exec",
+                "type": "ExecAction"
+              },
+              {
+                "id": 2,
+                "name": "httpGet",
+                "type": "HTTPGetAction"
+              },
+              {
+                "id": 3,
+                "name": "tcpSocket",
+                "type": "TCPSocketAction"
+              },
+              {
+                "id": 4,
+                "name": "initialDelaySeconds",
+                "type": "int32"
+              },
+              {
+                "id": 5,
+                "name": "timeoutSeconds",
+                "type": "int32"
+              },
+              {
+                "id": 6,
+                "name": "periodSeconds",
+                "type": "int32"
+              },
+              {
+                "id": 7,
+                "name": "successThreshold",
+                "type": "int32"
+              },
+              {
+                "id": 8,
+                "name": "failureThreshold",
+                "type": "int32"
+              }
+            ]
+          },
+          {
+            "name": "ExecAction",
+            "fields": [
+              {
+                "id": 1,
+                "name": "command",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "HTTPGetAction",
+            "fields": [
+              {
+                "id": 1,
+                "name": "path",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "port",
+                "type": "TypeIntOrStringForPB"
+              },
+              {
+                "id": 3,
+                "name": "host",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "scheme",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "httpHeaders",
+                "type": "HTTPHeader",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "HTTPHeader",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "TCPSocketAction",
+            "fields": [
+              {
+                "id": 1,
+                "name": "port",
+                "type": "TypeIntOrStringForPB"
+              },
+              {
+                "id": 2,
+                "name": "host",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "PodDisruptionBudgetSpec",
+            "fields": [
+              {
+                "id": 1,
+                "name": "minAvailable",
+                "type": "uint32"
+              },
+              {
+                "id": 2,
+                "name": "selector",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
+              },
+              {
+                "id": 3,
+                "name": "maxUnavailable",
+                "type": "uint32"
+              }
+            ]
+          },
+          {
+            "name": "DeploymentStrategy",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "rollingUpdate",
+                "type": "RollingUpdateDeployment"
+              }
+            ]
+          },
+          {
+            "name": "RollingUpdateDeployment",
+            "fields": [
+              {
+                "id": 1,
+                "name": "maxUnavailable",
+                "type": "TypeIntOrStringForPB"
+              },
+              {
+                "id": 2,
+                "name": "maxSurge",
+                "type": "TypeIntOrStringForPB"
+              }
+            ]
+          },
+          {
+            "name": "ObjectMeta",
+            "fields": [
+              {
+                "id": 5,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "namespace",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "EnvVar",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "valueFrom",
+                "type": "EnvVarSource"
+              }
+            ]
+          },
+          {
+            "name": "EnvVarSource",
+            "fields": [
+              {
+                "id": 1,
+                "name": "fieldRef",
+                "type": "ObjectFieldSelector"
+              },
+              {
+                "id": 2,
+                "name": "resourceFieldRef",
+                "type": "ResourceFieldSelector"
+              },
+              {
+                "id": 3,
+                "name": "configMapKeyRef",
+                "type": "ConfigMapKeySelector"
+              },
+              {
+                "id": 4,
+                "name": "secretKeyRef",
+                "type": "SecretKeySelector"
+              }
+            ]
+          },
+          {
+            "name": "ObjectFieldSelector",
+            "fields": [
+              {
+                "id": 1,
+                "name": "apiVersion",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "fieldPath",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "ResourceFieldSelector",
+            "fields": [
+              {
+                "id": 1,
+                "name": "containerName",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "resource",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "divisor",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              }
+            ]
+          },
+          {
+            "name": "ConfigMapKeySelector",
+            "fields": [
+              {
+                "id": 1,
+                "name": "localObjectReference",
+                "type": "LocalObjectReference"
+              },
+              {
+                "id": 2,
+                "name": "key",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "optional",
+                "type": "bool"
+              }
+            ]
+          },
+          {
+            "name": "SecretKeySelector",
+            "fields": [
+              {
+                "id": 1,
+                "name": "localObjectReference",
+                "type": "LocalObjectReference"
+              },
+              {
+                "id": 2,
+                "name": "key",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "optional",
+                "type": "bool"
+              }
+            ]
+          },
+          {
+            "name": "LocalObjectReference",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "ServiceSpec",
+            "fields": [
+              {
+                "id": 1,
+                "name": "ports",
+                "type": "ServicePort",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "clusterIP",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "externalIPs",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "sessionAffinity",
+                "type": "string"
+              },
+              {
+                "id": 8,
+                "name": "loadBalancerIP",
+                "type": "string"
+              },
+              {
+                "id": 9,
+                "name": "loadBalancerSourceRanges",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 10,
+                "name": "externalName",
+                "type": "string"
+              },
+              {
+                "id": 11,
+                "name": "externalTrafficPolicy",
+                "type": "string"
+              },
+              {
+                "id": 12,
+                "name": "healthCheckNodePort",
+                "type": "int32"
+              },
+              {
+                "id": 13,
+                "name": "publishNotReadyAddresses",
+                "type": "bool"
+              },
+              {
+                "id": 14,
+                "name": "sessionAffinityConfig",
+                "type": "SessionAffinityConfig"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 2,
+                  "name": "selector",
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          {
+            "name": "ServicePort",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "protocol",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "port",
+                "type": "int32"
+              },
+              {
+                "id": 4,
+                "name": "targetPort",
+                "type": "k8s.io.apimachinery.pkg.util.intstr.IntOrString"
+              },
+              {
+                "id": 5,
+                "name": "nodePort",
+                "type": "int32"
+              }
+            ]
+          },
+          {
+            "name": "SessionAffinityConfig",
+            "fields": [
+              {
+                "id": 1,
+                "name": "clientIP",
+                "type": "ClientIPConfig"
+              }
+            ]
+          },
+          {
+            "name": "ClientIPConfig",
+            "fields": [
+              {
+                "id": 1,
+                "name": "timeoutSeconds",
+                "type": "int32"
+              }
+            ]
+          },
+          {
+            "name": "Toleration",
+            "fields": [
+              {
+                "id": 1,
+                "name": "key",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "operator",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "value",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "effect",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "tolerationSeconds",
+                "type": "int64"
+              }
+            ]
+          },
+          {
+            "name": "TypeIntOrStringForPB"
+          }
+        ],
+        "imports": [
+          {
+            "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
+          },
+          {
+            "path": "k8s.io/apimachinery/pkg/api/resource/generated.proto"
+          },
+          {
+            "path": "k8s.io/apimachinery/pkg/util/intstr/generated.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.mesh.v1alpha1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mesh/v1alpha1"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "mesh:/:v1alpha1:/:network.proto",
       "def": {
         "messages": [
@@ -36358,6 +37275,148 @@
         "imports": [
           {
             "path": "google/api/field_behavior.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.mesh.v1alpha1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/mesh/v1alpha1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "mesh:/:v1alpha1:/:operator.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "IstioOperatorSpec.Status",
+            "enum_fields": [
+              {
+                "name": "NONE"
+              },
+              {
+                "name": "UPDATING",
+                "integer": 1
+              },
+              {
+                "name": "RECONCILING",
+                "integer": 2
+              },
+              {
+                "name": "HEALTHY",
+                "integer": 3
+              },
+              {
+                "name": "ERROR",
+                "integer": 4
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "name": "IstioOperatorSpec",
+            "fields": [
+              {
+                "id": 10,
+                "name": "profile",
+                "type": "string"
+              },
+              {
+                "id": 11,
+                "name": "install_package_path",
+                "type": "string"
+              },
+              {
+                "id": 12,
+                "name": "hub",
+                "type": "string"
+              },
+              {
+                "id": 13,
+                "name": "tag",
+                "type": "string"
+              },
+              {
+                "id": 14,
+                "name": "resource_suffix",
+                "type": "string"
+              },
+              {
+                "id": 40,
+                "name": "mesh_config",
+                "type": "MeshConfig"
+              },
+              {
+                "id": 50,
+                "name": "components",
+                "type": "IstioComponentSetSpec"
+              },
+              {
+                "id": 100,
+                "name": "values",
+                "type": "TypeMapStringInterface"
+              },
+              {
+                "id": 101,
+                "name": "unvalidated_values",
+                "type": "TypeMapStringInterface"
+              },
+              {
+                "id": 200,
+                "name": "status",
+                "type": "Status"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 201,
+                  "name": "component_status",
+                  "type": "VersionStatus"
+                }
+              }
+            ],
+            "messages": [
+              {
+                "name": "VersionStatus",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "version",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "status",
+                    "type": "Status"
+                  },
+                  {
+                    "id": 3,
+                    "name": "status_string",
+                    "type": "string"
+                  },
+                  {
+                    "id": 4,
+                    "name": "error",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "mesh/v1alpha1/config.proto"
+          },
+          {
+            "path": "mesh/v1alpha1/component.proto"
           }
         ],
         "package": {
@@ -36658,6 +37717,16 @@
                 "id": 23,
                 "name": "envoy_metrics_service",
                 "type": "RemoteService"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 24,
+                  "name": "proxy_metadata",
+                  "type": "string"
+                }
               }
             ]
           },
