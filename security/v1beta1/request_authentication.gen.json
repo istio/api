@@ -53,7 +53,7 @@
             "type": "string",
             "format": "string"
           },
-          "retainOriginalToken": {
+          "forwardOriginalToken": {
             "description": "If set to true, the orginal token will be kept for the ustream request. Default is false.",
             "type": "boolean"
           }

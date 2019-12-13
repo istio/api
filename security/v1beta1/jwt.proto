@@ -134,7 +134,7 @@ message JWTRule {
   string output_payload_to_header = 8;
 
   // If set to true, the orginal token will be kept for the ustream request. Default is false.
-  bool retain_original_token = 9;
+  bool forward_original_token = 9;
 }
 
 // This message specifies a header location to extract JWT token.
