@@ -492,7 +492,7 @@ type ServiceEntry struct {
 	// Service discovery mode for the hosts. Care must be taken
 	// when setting the resolution mode to NONE for a TCP port without
 	// accompanying IP addresses. In such cases, traffic to any IP on
-	// said port will be allowed (i.e. 0.0.0.0:<port>).
+	// said port will be allowed (i.e. `0.0.0.0:<port>`).
 	Resolution ServiceEntry_Resolution `protobuf:"varint,5,opt,name=resolution,proto3,enum=istio.networking.v1alpha3.ServiceEntry_Resolution" json:"resolution,omitempty"`
 	// One or more endpoints associated with the service.
 	Endpoints []*ServiceEntry_Endpoint `protobuf:"bytes,6,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
@@ -635,7 +635,7 @@ type ServiceEntry_Endpoint struct {
 	// directly reachable from one another. When endpoints in different
 	// networks cannot reach each other directly, an Istio Gateway can be
 	// used to establish connectivity (usually using the
-	// AUTO_PASSTHROUGH mode in a Gateway Server). This is
+	// `AUTO_PASSTHROUGH` mode in a Gateway Server). This is
 	// an advanced configuration used typically for spanning an Istio mesh
 	// over multiple clusters.
 	Network string `protobuf:"bytes,4,opt,name=network,proto3" json:"network,omitempty"`

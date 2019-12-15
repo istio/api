@@ -420,33 +420,37 @@ type MeshConfig struct {
 	// It can be enabled by destination using the destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy override.
 	H2UpgradePolicy MeshConfig_H2UpgradePolicy `protobuf:"varint,41,opt,name=h2_upgrade_policy,json=h2UpgradePolicy,proto3,enum=istio.mesh.v1alpha1.MeshConfig_H2UpgradePolicy" json:"h2_upgrade_policy,omitempty"`
 	// Name to be used while emitting statistics for inbound clusters.
-	// By default, Istio emits statistics with the pattern inbound|<port>|<port-name>|<service-FQDN>.
-	// For example inbound|7443|grpc-reviews|reviews.prod.svc.cluster.local. This can be used to override that pattern.
+	// By default, Istio emits statistics with the pattern `inbound|<port>|<port-name>|<service-FQDN>`.
+	// For example `inbound|7443|grpc-reviews|reviews.prod.svc.cluster.local`. This can be used to override that pattern.
 	//
 	// A Pattern can be composed of various pre-defined variables. The following variables are supported.
-	// %SERVICE% - Will be substituted with name of the service.
-	// %SERVICE_FQDN% - Will be substituted with FQDN of the service.
-	// %SERVICE_PORT% - Will be substituted with port of the service.
-	// %SERVICE_PORT_NAME% - Will be substituted with port name of the service.
 	//
-	// Following are some examples of supported patterns for reviews.
-	// %SERVICE_FQDN%_%SERVICE_PORT% will use reviews.prod.svc.cluster.local_7443 as the stats name.
-	// %SERVICE% will use reviews.prod as the stats name.
+	// - `%SERVICE%` - Will be substituted with name of the service.
+	// - `%SERVICE_FQDN%` - Will be substituted with FQDN of the service.
+	// - `%SERVICE_PORT%` - Will be substituted with port of the service.
+	// - `%SERVICE_PORT_NAME%` - Will be substituted with port name of the service.
+	//
+	// Following are some examples of supported patterns for reviews:
+	//
+	// - `%SERVICE_FQDN%_%SERVICE_PORT%` will use reviews.prod.svc.cluster.local_7443 as the stats name.
+	// - `%SERVICE%` will use reviews.prod as the stats name.
 	InboundClusterStatName string `protobuf:"bytes,44,opt,name=inbound_cluster_stat_name,json=inboundClusterStatName,proto3" json:"inbound_cluster_stat_name,omitempty"`
 	// Name to be used while emitting statistics for outbound clusters.
-	// By default, Istio emits statistics with the pattern outbound|<port>|<subsetname>|<service-FQDN>.
-	// For example outbound|8080|v2|reviews.prod.svc.cluster.local. This can be used to override that pattern.
+	// By default, Istio emits statistics with the pattern `outbound|<port>|<subsetname>|<service-FQDN>`.
+	// For example `outbound|8080|v2|reviews.prod.svc.cluster.local`. This can be used to override that pattern.
 	//
 	// A Pattern can be composed of various pre-defined variables. The following variables are supported.
-	// %SERVICE% - Will be substituted with name of the service.
-	// %SERVICE_FQDN% - Will be substituted with FQDN of the service.
-	// %SERVICE_PORT% - Will be substituted with port of the service.
-	// %SERVICE_PORT_NAME% - Will be substituted with port name of the service.
-	// %SUBSET_NAME% - Will be substituted with subset.
 	//
-	// Following are some examples of supported patterns for reviews.
-	// %SERVICE_FQDN%_%SERVICE_PORT% will use reviews.prod.svc.cluster.local_7443 as the stats name.
-	// %SERVICE% will use reviews.prod as the stats name.
+	// - `%SERVICE%` - Will be substituted with name of the service.
+	// - `%SERVICE_FQDN%` - Will be substituted with FQDN of the service.
+	// - `%SERVICE_PORT%` - Will be substituted with port of the service.
+	// - `%SERVICE_PORT_NAME%` - Will be substituted with port name of the service.
+	// - `%SUBSET_NAME%` - Will be substituted with subset.
+	//
+	// Following are some examples of supported patterns for reviews:
+	//
+	// - `%SERVICE_FQDN%_%SERVICE_PORT%` will use reviews.prod.svc.cluster.local_7443 as the stats name.
+	// - `%SERVICE%` will use reviews.prod as the stats name.
 	OutboundClusterStatName string `protobuf:"bytes,45,opt,name=outbound_cluster_stat_name,json=outboundClusterStatName,proto3" json:"outbound_cluster_stat_name,omitempty"`
 	// Configure the provision of certificates.
 	Certificates         []*Certificate `protobuf:"bytes,47,rep,name=certificates,proto3" json:"certificates,omitempty"`
