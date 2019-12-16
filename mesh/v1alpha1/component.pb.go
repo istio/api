@@ -172,7 +172,7 @@ func (m *IstioComponentSetSpec) GetExtraComponents() map[string]*ExternalCompone
 // Configuration for internal components.
 type ComponentSpec struct {
 	// Selects whether this component is installed.
-	Enabled *BoolValueForPB `protobuf:"bytes,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	Enabled *TypeBoolValueForPB `protobuf:"bytes,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
 	// Namespace for the component.
 	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	// Hub for the component (overrides top level hub setting).
@@ -180,7 +180,7 @@ type ComponentSpec struct {
 	// Tag for the component (overrides top level tag setting).
 	Tag string `protobuf:"bytes,11,opt,name=tag,proto3" json:"tag,omitempty"`
 	// Arbitrary install time configuration for the component.
-	Spec interface{} `protobuf:"bytes,30,opt,name=spec,proto3" json:"spec,omitempty"`
+	Spec *TypeInterface `protobuf:"bytes,30,opt,name=spec,proto3" json:"spec,omitempty"`
 	// Kubernetes resource spec.
 	K8S                  *KubernetesResourcesSpec `protobuf:"bytes,50,opt,name=k8s,proto3" json:"k8s,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
@@ -221,7 +221,7 @@ func (m *ComponentSpec) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ComponentSpec proto.InternalMessageInfo
 
-func (m *ComponentSpec) GetEnabled() *BoolValueForPB {
+func (m *ComponentSpec) GetEnabled() *TypeBoolValueForPB {
 	if m != nil {
 		return m.Enabled
 	}
@@ -249,7 +249,7 @@ func (m *ComponentSpec) GetTag() string {
 	return ""
 }
 
-func (m *ComponentSpec) GetSpec() interface{} {
+func (m *ComponentSpec) GetSpec() *TypeInterface {
 	if m != nil {
 		return m.Spec
 	}
@@ -268,7 +268,7 @@ type ExternalComponentSpec struct {
 	// Namespace for the component.
 	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	// Arbitrary install time configuration for the component.
-	Spec interface{} `protobuf:"bytes,10,opt,name=spec,proto3" json:"spec,omitempty"`
+	Spec *TypeInterface `protobuf:"bytes,10,opt,name=spec,proto3" json:"spec,omitempty"`
 	// Chart path for addon components.
 	ChartPath string `protobuf:"bytes,30,opt,name=chart_path,json=chartPath,proto3" json:"chart_path,omitempty"`
 	// Optional schema to validate spec against.
@@ -320,7 +320,7 @@ func (m *ExternalComponentSpec) GetNamespace() string {
 	return ""
 }
 
-func (m *ExternalComponentSpec) GetSpec() interface{} {
+func (m *ExternalComponentSpec) GetSpec() *TypeInterface {
 	if m != nil {
 		return m.Spec
 	}
@@ -719,7 +719,7 @@ type K8SObjectOverlay_PathValue struct {
 	// For delete, value should be unset.
 	// For replace, path should reference an existing node.
 	// All values are strings but are converted into appropriate type based on schema.
-	Value                interface{} `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Value                *TypeInterface `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
 	XXX_unrecognized     []byte         `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
@@ -765,15 +765,132 @@ func (m *K8SObjectOverlay_PathValue) GetPath() string {
 	return ""
 }
 
-func (m *K8SObjectOverlay_PathValue) GetValue() interface{} {
+func (m *K8SObjectOverlay_PathValue) GetValue() *TypeInterface {
 	if m != nil {
 		return m.Value
 	}
 	return nil
 }
 
+// GOTYPE: map[string]interface{}
+type TypeMapStringInterface struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
 
+func (m *TypeMapStringInterface) Reset()         { *m = TypeMapStringInterface{} }
+func (m *TypeMapStringInterface) String() string { return proto.CompactTextString(m) }
+func (*TypeMapStringInterface) ProtoMessage()    {}
+func (*TypeMapStringInterface) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b5877e569391b8b7, []int{6}
+}
+func (m *TypeMapStringInterface) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TypeMapStringInterface) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_TypeMapStringInterface.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *TypeMapStringInterface) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TypeMapStringInterface.Merge(m, src)
+}
+func (m *TypeMapStringInterface) XXX_Size() int {
+	return m.Size()
+}
+func (m *TypeMapStringInterface) XXX_DiscardUnknown() {
+	xxx_messageInfo_TypeMapStringInterface.DiscardUnknown(m)
+}
 
+var xxx_messageInfo_TypeMapStringInterface proto.InternalMessageInfo
+
+// GOTYPE: interface{}
+type TypeInterface struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *TypeInterface) Reset()         { *m = TypeInterface{} }
+func (m *TypeInterface) String() string { return proto.CompactTextString(m) }
+func (*TypeInterface) ProtoMessage()    {}
+func (*TypeInterface) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b5877e569391b8b7, []int{7}
+}
+func (m *TypeInterface) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TypeInterface) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_TypeInterface.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *TypeInterface) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TypeInterface.Merge(m, src)
+}
+func (m *TypeInterface) XXX_Size() int {
+	return m.Size()
+}
+func (m *TypeInterface) XXX_DiscardUnknown() {
+	xxx_messageInfo_TypeInterface.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TypeInterface proto.InternalMessageInfo
+
+// GOTYPE: *BoolValueForPB
+type TypeBoolValueForPB struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *TypeBoolValueForPB) Reset()         { *m = TypeBoolValueForPB{} }
+func (m *TypeBoolValueForPB) String() string { return proto.CompactTextString(m) }
+func (*TypeBoolValueForPB) ProtoMessage()    {}
+func (*TypeBoolValueForPB) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b5877e569391b8b7, []int{8}
+}
+func (m *TypeBoolValueForPB) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TypeBoolValueForPB) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_TypeBoolValueForPB.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *TypeBoolValueForPB) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TypeBoolValueForPB.Merge(m, src)
+}
+func (m *TypeBoolValueForPB) XXX_Size() int {
+	return m.Size()
+}
+func (m *TypeBoolValueForPB) XXX_DiscardUnknown() {
+	xxx_messageInfo_TypeBoolValueForPB.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TypeBoolValueForPB proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterType((*IstioComponentSetSpec)(nil), "istio.mesh.v1alpha1.IstioComponentSetSpec")
@@ -787,6 +904,9 @@ func init() {
 	proto.RegisterMapType((map[string]string)(nil), "istio.mesh.v1alpha1.KubernetesResourcesSpec.PodAnnotationsEntry")
 	proto.RegisterType((*K8SObjectOverlay)(nil), "istio.mesh.v1alpha1.K8sObjectOverlay")
 	proto.RegisterType((*K8SObjectOverlay_PathValue)(nil), "istio.mesh.v1alpha1.K8sObjectOverlay.PathValue")
+	proto.RegisterType((*TypeMapStringInterface)(nil), "istio.mesh.v1alpha1.TypeMapStringInterface")
+	proto.RegisterType((*TypeInterface)(nil), "istio.mesh.v1alpha1.TypeInterface")
+	proto.RegisterType((*TypeBoolValueForPB)(nil), "istio.mesh.v1alpha1.TypeBoolValueForPB")
 }
 
 func init() { proto.RegisterFile("mesh/v1alpha1/component.proto", fileDescriptor_b5877e569391b8b7) }
@@ -1679,7 +1799,7 @@ func (m *K8SObjectOverlay_PathValue) MarshalToSizedBuffer(dAtA []byte) (int, err
 	return len(dAtA) - i, nil
 }
 
-func (m map[string]interface{}) Marshal() (dAtA []byte, err error) {
+func (m *TypeMapStringInterface) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1689,12 +1809,12 @@ func (m map[string]interface{}) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m map[string]interface{}) MarshalTo(dAtA []byte) (int, error) {
+func (m *TypeMapStringInterface) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m map[string]interface{}) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *TypeMapStringInterface) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1706,7 +1826,7 @@ func (m map[string]interface{}) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m interface{}) Marshal() (dAtA []byte, err error) {
+func (m *TypeInterface) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1716,12 +1836,12 @@ func (m interface{}) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m interface{}) MarshalTo(dAtA []byte) (int, error) {
+func (m *TypeInterface) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m interface{}) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *TypeInterface) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1733,7 +1853,7 @@ func (m interface{}) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *BoolValueForPB) Marshal() (dAtA []byte, err error) {
+func (m *TypeBoolValueForPB) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1743,12 +1863,12 @@ func (m *BoolValueForPB) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *BoolValueForPB) MarshalTo(dAtA []byte) (int, error) {
+func (m *TypeBoolValueForPB) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *BoolValueForPB) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *TypeBoolValueForPB) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2089,7 +2209,7 @@ func (m *K8SObjectOverlay_PathValue) Size() (n int) {
 	return n
 }
 
-func (m map[string]interface{}) Size() (n int) {
+func (m *TypeMapStringInterface) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2101,7 +2221,7 @@ func (m map[string]interface{}) Size() (n int) {
 	return n
 }
 
-func (m interface{}) Size() (n int) {
+func (m *TypeInterface) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2113,7 +2233,7 @@ func (m interface{}) Size() (n int) {
 	return n
 }
 
-func (m *BoolValueForPB) Size() (n int) {
+func (m *TypeBoolValueForPB) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -4624,7 +4744,7 @@ func (m *K8SObjectOverlay_PathValue) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m map[string]interface{}) Unmarshal(dAtA []byte) error {
+func (m *TypeMapStringInterface) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4678,7 +4798,7 @@ func (m map[string]interface{}) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m interface{}) Unmarshal(dAtA []byte) error {
+func (m *TypeInterface) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4732,7 +4852,7 @@ func (m interface{}) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *BoolValueForPB) Unmarshal(dAtA []byte) error {
+func (m *TypeBoolValueForPB) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
