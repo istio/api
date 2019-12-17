@@ -43806,7 +43806,7 @@
       "def": {
         "messages": [
           {
-            "name": "JWT",
+            "name": "JWTRule",
             "fields": [
               {
                 "id": 1,
@@ -43846,6 +43846,11 @@
                 "name": "from_params",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 8,
+                "name": "output_payload_to_header",
+                "type": "string"
               }
             ]
           },
@@ -43902,7 +43907,7 @@
               {
                 "id": 2,
                 "name": "jwt_rules",
-                "type": "JWT",
+                "type": "JWTRule",
                 "is_repeated": true
               }
             ]

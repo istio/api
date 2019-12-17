@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.security.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\035istio.io/api/security/v1beta1'),
-  serialized_pb=_b('\n-security/v1beta1/request_authentication.proto\x12\x16istio.security.v1beta1\x1a\x1btype/v1beta1/selector.proto\x1a\x1asecurity/v1beta1/jwt.proto\"\x7f\n\x15RequestAuthentication\x12\x36\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\x12.\n\tjwt_rules\x18\x02 \x03(\x0b\x32\x1b.istio.security.v1beta1.JWTB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
+  serialized_pb=_b('\n-security/v1beta1/request_authentication.proto\x12\x16istio.security.v1beta1\x1a\x1btype/v1beta1/selector.proto\x1a\x1asecurity/v1beta1/jwt.proto\"\x83\x01\n\x15RequestAuthentication\x12\x36\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\x12\x32\n\tjwt_rules\x18\x02 \x03(\x0b\x32\x1f.istio.security.v1beta1.JWTRuleB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
   ,
   dependencies=[type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,security_dot_v1beta1_dot_jwt__pb2.DESCRIPTOR,])
 
@@ -62,12 +62,12 @@ _REQUESTAUTHENTICATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=130,
-  serialized_end=257,
+  serialized_start=131,
+  serialized_end=262,
 )
 
 _REQUESTAUTHENTICATION.fields_by_name['selector'].message_type = type_dot_v1beta1_dot_selector__pb2._WORKLOADSELECTOR
-_REQUESTAUTHENTICATION.fields_by_name['jwt_rules'].message_type = security_dot_v1beta1_dot_jwt__pb2._JWT
+_REQUESTAUTHENTICATION.fields_by_name['jwt_rules'].message_type = security_dot_v1beta1_dot_jwt__pb2._JWTRULE
 DESCRIPTOR.message_types_by_name['RequestAuthentication'] = _REQUESTAUTHENTICATION
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
