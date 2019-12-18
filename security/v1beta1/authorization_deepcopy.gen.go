@@ -85,6 +85,7 @@
 //  name: policy
 //  namespace: foo
 // spec:
+//   {}
 // ```
 //
 // The following authorization policy applies to workloads containing label

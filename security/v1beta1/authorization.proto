@@ -107,6 +107,7 @@ import "type/v1beta1/selector.proto";
 //  name: policy
 //  namespace: foo
 // spec:
+//   {}
 // ```
 //
 // The following authorization policy applies to workloads containing label
@@ -140,6 +141,7 @@ option go_package="istio.io/api/security/v1beta1";
 //  name: deny-all
 //  namespace: foo
 // spec:
+//   {}
 // ```
 //
 // The following authorization policy allows all requests to workloads in namespace
