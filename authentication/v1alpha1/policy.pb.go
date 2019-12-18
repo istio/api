@@ -26,6 +26,8 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // $hide_from_docs
+// Deprecated. When using security/v1beta1/RequestAuthentication, the request principal is always
+// come from request authentication (i.e JWT).
 // Associates authentication with request principal.
 type PrincipalBinding int32
 
@@ -200,8 +202,8 @@ func (*StringMatch) XXX_OneofWrappers() []interface{} {
 
 // TLS authentication params.
 type MutualTls struct {
-	// $hide_from_docs
-	// if set, will translates to `TLS_PERMISSIVE` mode.
+	// Deprecated. Please use mode = PERMISSIVE instead.
+	// If set, will translate to `TLS_PERMISSIVE` mode.
 	// Set this flag to true to allow regular TLS (i.e without client x509
 	// certificate). If request carries client certificate, identity will be
 	// extracted and used (set to peer identity). Otherwise, peer identity will
@@ -527,9 +529,8 @@ func (m *Jwt_TriggerRule) GetIncludedPaths() []*StringMatch {
 	return nil
 }
 
-// PeerAuthenticationMethod defines one particular type of authentication, e.g
-// mutual TLS, JWT etc, (no authentication is one type by itself) that can
-// be used for peer authentication.
+// PeerAuthenticationMethod defines one particular type of authentication. Only mTLS is supported
+// at the moment.
 // The type can be progammatically determine by checking the type of the
 // "params" field.
 type PeerAuthenticationMethod struct {
@@ -778,7 +779,6 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 // +k8s:deepcopy-gen=true
 // -->
 type Policy struct {
-	// $hide_from_docs
 	// Deprecated. Only mesh-level and namespace-level policies are supported.
 	// List rules to select workloads that the policy should be applied on.
 	// If empty, policy will be used on all workloads in the same namespace.
@@ -789,14 +789,13 @@ type Policy struct {
 	// these methods pass, request will be rejected with authentication failed error (401).
 	// Leave the list empty if peer authentication is not required
 	Peers []*PeerAuthenticationMethod `protobuf:"bytes,2,rep,name=peers,proto3" json:"peers,omitempty"`
-	// $hide_from_docs
+	// Deprecated. Should set mTLS to PERMISSIVE instead.
 	// Set this flag to true to accept request (for peer authentication perspective),
 	// even when none of the peer authentication methods defined above satisfied.
 	// Typically, this is used to delay the rejection decision to next layer (e.g
 	// authorization).
 	// This flag is ignored if no authentication defined for peer (peers field is empty).
 	PeerIsOptional bool `protobuf:"varint,3,opt,name=peer_is_optional,json=peerIsOptional,proto3" json:"peer_is_optional,omitempty"` // Deprecated: Do not use.
-	// $hide_from_docs
 	// Deprecated. Please use security/v1beta1/RequestAuthentication instead.
 	// List of authentication methods that can be used for origin authentication.
 	// Similar to peers, these will be evaluated in order; the first validate one
@@ -807,7 +806,6 @@ type Policy struct {
 	// are skipped, origin authentication will be ignored, as if it is not defined.
 	// Leave the list empty if origin authentication is not required.
 	Origins []*OriginAuthenticationMethod `protobuf:"bytes,4,rep,name=origins,proto3" json:"origins,omitempty"` // Deprecated: Do not use.
-	// $hide_from_docs
 	// Deprecated. Please use security/v1beta1/RequestAuthentication instead.
 	// Set this flag to true to accept request (for origin authentication perspective),
 	// even when none of the origin authentication methods defined above satisfied.
@@ -815,7 +813,6 @@ type Policy struct {
 	// authorization).
 	// This flag is ignored if no authentication defined for origin (origins field is empty).
 	OriginIsOptional bool `protobuf:"varint,5,opt,name=origin_is_optional,json=originIsOptional,proto3" json:"origin_is_optional,omitempty"` // Deprecated: Do not use.
-	// $hide_from_docs
 	// Deprecated. Source principal is always from peer, and request principal is always from
 	// RequestAuthentication.
 	// Define whether peer or origin identity should be use for principal. Default
@@ -911,6 +908,7 @@ func (m *Policy) GetPrincipalBinding() PrincipalBinding {
 }
 
 // $hide_from_docs
+// Deprecated. Only support mesh and namespace level policy in the future.
 // TargetSelector defines a matching rule to a workload. A workload is selected
 // if it is associated with the service name and service port(s) specified in the selector rule.
 type TargetSelector struct {
@@ -986,6 +984,7 @@ func (m *TargetSelector) GetPorts() []*PortSelector {
 }
 
 // $hide_from_docs
+// Deprecated. Only support mesh and namespace level policy in the future.
 // PortSelector specifies the name or number of a port to be used for
 // matching targets for authentication policy. This is copied from
 // networking API to avoid dependency.

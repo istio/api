@@ -58,8 +58,8 @@ message MutualTls {
     PERMISSIVE = 1;
   };
 
-  // $hide_from_docs
-  // if set, will translates to `TLS_PERMISSIVE` mode.
+  // Deprecated. Please use mode = PERMISSIVE instead.
+  // If set, will translate to `TLS_PERMISSIVE` mode.
   // Set this flag to true to allow regular TLS (i.e without client x509
   // certificate). If request carries client certificate, identity will be
   // extracted and used (set to peer identity). Otherwise, peer identity will
@@ -223,9 +223,8 @@ message Jwt {
   // Next available field number: 11
 }
 
-// PeerAuthenticationMethod defines one particular type of authentication, e.g
-// mutual TLS, JWT etc, (no authentication is one type by itself) that can
-// be used for peer authentication.
+// PeerAuthenticationMethod defines one particular type of authentication. Only mTLS is supported
+// at the moment.
 // The type can be progammatically determine by checking the type of the
 // "params" field.
 message PeerAuthenticationMethod {
@@ -234,7 +233,8 @@ message PeerAuthenticationMethod {
     MutualTls mtls = 1;
 
     // $hide_from_docs
-    // Set if JWT is used. This option is not yet available.
+    // Deprecated.
+    // Set if JWT is used. This option was never available.
     Jwt jwt = 2 [deprecated=true];
   }
 }
@@ -250,6 +250,8 @@ message OriginAuthenticationMethod {
 }
 
 // $hide_from_docs
+// Deprecated. When using security/v1beta1/RequestAuthentication, the request principal is always
+// come from request authentication (i.e JWT).
 // Associates authentication with request principal.
 enum PrincipalBinding {
   // Principal will be set to the identity from peer authentication.
@@ -363,7 +365,6 @@ enum PrincipalBinding {
 // +k8s:deepcopy-gen=true
 // -->
 message Policy {
-  // $hide_from_docs
   // Deprecated. Only mesh-level and namespace-level policies are supported.
   // List rules to select workloads that the policy should be applied on.
   // If empty, policy will be used on all workloads in the same namespace.
@@ -376,7 +377,7 @@ message Policy {
   // Leave the list empty if peer authentication is not required
   repeated PeerAuthenticationMethod peers = 2;
 
-  // $hide_from_docs
+  // Deprecated. Should set mTLS to PERMISSIVE instead.
   // Set this flag to true to accept request (for peer authentication perspective),
   // even when none of the peer authentication methods defined above satisfied.
   // Typically, this is used to delay the rejection decision to next layer (e.g
@@ -384,7 +385,6 @@ message Policy {
   // This flag is ignored if no authentication defined for peer (peers field is empty).
   bool peer_is_optional = 3 [deprecated=true];
 
-  // $hide_from_docs
   // Deprecated. Please use security/v1beta1/RequestAuthentication instead.
   // List of authentication methods that can be used for origin authentication.
   // Similar to peers, these will be evaluated in order; the first validate one
@@ -396,7 +396,6 @@ message Policy {
   // Leave the list empty if origin authentication is not required.
   repeated OriginAuthenticationMethod origins = 4 [deprecated=true];
 
-  // $hide_from_docs
   // Deprecated. Please use security/v1beta1/RequestAuthentication instead.
   // Set this flag to true to accept request (for origin authentication perspective),
   // even when none of the origin authentication methods defined above satisfied.
@@ -405,7 +404,6 @@ message Policy {
   // This flag is ignored if no authentication defined for origin (origins field is empty).
   bool origin_is_optional = 5 [deprecated=true];
 
-  // $hide_from_docs
   // Deprecated. Source principal is always from peer, and request principal is always from
   // RequestAuthentication.
   // Define whether peer or origin identity should be use for principal. Default
@@ -418,6 +416,7 @@ message Policy {
 }
 
 // $hide_from_docs
+// Deprecated. Only support mesh and namespace level policy in the future.
 // TargetSelector defines a matching rule to a workload. A workload is selected
 // if it is associated with the service name and service port(s) specified in the selector rule.
 message TargetSelector {
@@ -447,6 +446,7 @@ message TargetSelector {
 }
 
 // $hide_from_docs
+// Deprecated. Only support mesh and namespace level policy in the future.
 // PortSelector specifies the name or number of a port to be used for
 // matching targets for authentication policy. This is copied from
 // networking API to avoid dependency.

@@ -31,8 +31,10 @@ spec:
             at: https://istio.io/docs/reference/config/security/istio.authentication.v1alpha1.html'
           properties:
             originIsOptional:
+              description: Deprecated.
               type: boolean
             origins:
+              description: Deprecated.
               items:
                 properties:
                   jwt:
@@ -346,6 +348,7 @@ spec:
                 type: object
               type: array
             peerIsOptional:
+              description: Deprecated.
               type: boolean
             peers:
               description: List of authentication methods that can be used for peer
@@ -670,6 +673,7 @@ spec:
                     description: Set if mTLS is used.
                     properties:
                       allowTls:
+                        description: Deprecated.
                         type: boolean
                       mode:
                         description: Defines the mode of mTLS authentication.
@@ -681,11 +685,13 @@ spec:
                 type: object
               type: array
             principalBinding:
+              description: Deprecated.
               enum:
               - USE_PEER
               - USE_ORIGIN
               type: string
             targets:
+              description: Deprecated.
               items:
                 properties:
                   name:
@@ -750,8 +756,10 @@ spec:
             at: https://istio.io/docs/reference/config/security/istio.authentication.v1alpha1.html'
           properties:
             originIsOptional:
+              description: Deprecated.
               type: boolean
             origins:
+              description: Deprecated.
               items:
                 properties:
                   jwt:
@@ -1065,6 +1073,7 @@ spec:
                 type: object
               type: array
             peerIsOptional:
+              description: Deprecated.
               type: boolean
             peers:
               description: List of authentication methods that can be used for peer
@@ -1389,6 +1398,7 @@ spec:
                     description: Set if mTLS is used.
                     properties:
                       allowTls:
+                        description: Deprecated.
                         type: boolean
                       mode:
                         description: Defines the mode of mTLS authentication.
@@ -1400,11 +1410,13 @@ spec:
                 type: object
               type: array
             principalBinding:
+              description: Deprecated.
               enum:
               - USE_PEER
               - USE_ORIGIN
               type: string
             targets:
+              description: Deprecated.
               items:
                 properties:
                   name:

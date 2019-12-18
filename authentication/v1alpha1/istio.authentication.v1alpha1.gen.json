@@ -65,7 +65,7 @@
         "type": "object",
         "properties": {
           "allowTls": {
-            "description": "if set, will translates to `TLS_PERMISSIVE` mode. Set this flag to true to allow regular TLS (i.e without client x509 certificate). If request carries client certificate, identity will be extracted and used (set to peer identity). Otherwise, peer identity will be left unset. When the flag is false (default), request must have client certificate.",
+            "description": "Deprecated. Please use mode = PERMISSIVE instead. If set, will translate to `TLS_PERMISSIVE` mode. Set this flag to true to allow regular TLS (i.e without client x509 certificate). If request carries client certificate, identity will be extracted and used (set to peer identity). Otherwise, peer identity will be left unset. When the flag is false (default), request must have client certificate.",
             "type": "boolean",
             "deprecated": true
           },
@@ -155,7 +155,7 @@
         }
       },
       "istio.authentication.v1alpha1.PeerAuthenticationMethod": {
-        "description": "PeerAuthenticationMethod defines one particular type of authentication, e.g mutual TLS, JWT etc, (no authentication is one type by itself) that can be used for peer authentication. The type can be progammatically determine by checking the type of the \"params\" field.",
+        "description": "PeerAuthenticationMethod defines one particular type of authentication. Only mTLS is supported at the moment. The type can be progammatically determine by checking the type of the \"params\" field.",
         "type": "object",
         "oneOf": [
           {
@@ -191,7 +191,7 @@
         }
       },
       "istio.authentication.v1alpha1.PrincipalBinding": {
-        "description": "Associates authentication with request principal.",
+        "description": "Deprecated. When using security/v1beta1/RequestAuthentication, the request principal is always come from request authentication (i.e JWT). Associates authentication with request principal.",
         "type": "string",
         "enum": [
           "USE_PEER",
@@ -218,7 +218,7 @@
             }
           },
           "peerIsOptional": {
-            "description": "Set this flag to true to accept request (for peer authentication perspective), even when none of the peer authentication methods defined above satisfied. Typically, this is used to delay the rejection decision to next layer (e.g authorization). This flag is ignored if no authentication defined for peer (peers field is empty).",
+            "description": "Deprecated. Should set mTLS to PERMISSIVE instead. Set this flag to true to accept request (for peer authentication perspective), even when none of the peer authentication methods defined above satisfied. Typically, this is used to delay the rejection decision to next layer (e.g authorization). This flag is ignored if no authentication defined for peer (peers field is empty).",
             "type": "boolean",
             "deprecated": true
           },
@@ -242,7 +242,7 @@
         }
       },
       "istio.authentication.v1alpha1.TargetSelector": {
-        "description": "TargetSelector defines a matching rule to a workload. A workload is selected if it is associated with the service name and service port(s) specified in the selector rule.",
+        "description": "Deprecated. Only support mesh and namespace level policy in the future. TargetSelector defines a matching rule to a workload. A workload is selected if it is associated with the service name and service port(s) specified in the selector rule.",
         "type": "object",
         "properties": {
           "name": {
@@ -260,7 +260,7 @@
         }
       },
       "istio.authentication.v1alpha1.PortSelector": {
-        "description": "PortSelector specifies the name or number of a port to be used for matching targets for authentication policy. This is copied from networking API to avoid dependency.",
+        "description": "Deprecated. Only support mesh and namespace level policy in the future. PortSelector specifies the name or number of a port to be used for matching targets for authentication policy. This is copied from networking API to avoid dependency.",
         "type": "object",
         "oneOf": [
           {
