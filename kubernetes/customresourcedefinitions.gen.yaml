@@ -3794,6 +3794,8 @@ spec:
                               type: string
                           type: object
                         gateways:
+                          description: Names of gateways where the rule should be
+                            applied to.
                           items:
                             format: string
                             type: string

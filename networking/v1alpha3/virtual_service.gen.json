@@ -246,6 +246,7 @@
             "type": "integer"
           },
           "gateways": {
+            "description": "Names of gateways where the rule should be applied to. Gateway names at the top of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
             "type": "array",
             "items": {
               "type": "string",
