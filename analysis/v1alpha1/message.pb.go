@@ -61,21 +61,14 @@ func (AnalysisMessageBase_Level) EnumDescriptor() ([]byte, []int) {
 // AnalysisMessageBase describes some common information that is needed for all
 // messages. All information should be static with respect to the error code.
 type AnalysisMessageBase struct {
-	// A human-readable name for the message type. e.g. "InternalError",
-	// "PodMissingProxy". This should be the same for all messages of the same type.
-	// Required.
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// A 7 character code matching `^IST[0-9]{4}$` intended to uniquely identify
-	// the message type. (e.g. "IST0001" is mapped to the "InternalError" message
-	// type.) 0000-0100 are reserved. Required.
-	Code string `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`
+	Type *AnalysisMessageBase_Type `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
 	// Represents how severe a message is. Required.
-	Level AnalysisMessageBase_Level `protobuf:"varint,3,opt,name=level,proto3,enum=istio.analysis.v1alpha1.AnalysisMessageBase_Level" json:"level,omitempty"`
+	Level AnalysisMessageBase_Level `protobuf:"varint,2,opt,name=level,proto3,enum=istio.analysis.v1alpha1.AnalysisMessageBase_Level" json:"level,omitempty"`
 	// A url pointing to the Istio documentation for this specific error type.
 	// Should be of the form
 	// `^http(s)?://(preliminary\.)?istio.io/docs/reference/config/analysis/`
 	// Required.
-	DocumentationUrl     string   `protobuf:"bytes,4,opt,name=documentation_url,json=documentationUrl,proto3" json:"documentation_url,omitempty"`
+	DocumentationUrl     string   `protobuf:"bytes,3,opt,name=documentation_url,json=documentationUrl,proto3" json:"documentation_url,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -114,18 +107,11 @@ func (m *AnalysisMessageBase) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AnalysisMessageBase proto.InternalMessageInfo
 
-func (m *AnalysisMessageBase) GetName() string {
+func (m *AnalysisMessageBase) GetType() *AnalysisMessageBase_Type {
 	if m != nil {
-		return m.Name
+		return m.Type
 	}
-	return ""
-}
-
-func (m *AnalysisMessageBase) GetCode() string {
-	if m != nil {
-		return m.Code
-	}
-	return ""
+	return nil
 }
 
 func (m *AnalysisMessageBase) GetLevel() AnalysisMessageBase_Level {
@@ -142,6 +128,71 @@ func (m *AnalysisMessageBase) GetDocumentationUrl() string {
 	return ""
 }
 
+// A unique identifier for the type of message. Name is intended to be
+// human-readable, code is intended to be machine readable. There should be a
+// one-to-one mapping between name and code. (i.e. do not re-use names or
+// codes between message types.)
+type AnalysisMessageBase_Type struct {
+	// A human-readable name for the message type. e.g. "InternalError",
+	// "PodMissingProxy". This should be the same for all messages of the same type.
+	// Required.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// A 7 character code matching `^IST[0-9]{4}$` intended to uniquely identify
+	// the message type. (e.g. "IST0001" is mapped to the "InternalError" message
+	// type.) 0000-0100 are reserved. Required.
+	Code                 string   `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *AnalysisMessageBase_Type) Reset()         { *m = AnalysisMessageBase_Type{} }
+func (m *AnalysisMessageBase_Type) String() string { return proto.CompactTextString(m) }
+func (*AnalysisMessageBase_Type) ProtoMessage()    {}
+func (*AnalysisMessageBase_Type) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4d6fd1414dfe3800, []int{0, 0}
+}
+func (m *AnalysisMessageBase_Type) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AnalysisMessageBase_Type) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AnalysisMessageBase_Type.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AnalysisMessageBase_Type) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnalysisMessageBase_Type.Merge(m, src)
+}
+func (m *AnalysisMessageBase_Type) XXX_Size() int {
+	return m.Size()
+}
+func (m *AnalysisMessageBase_Type) XXX_DiscardUnknown() {
+	xxx_messageInfo_AnalysisMessageBase_Type.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AnalysisMessageBase_Type proto.InternalMessageInfo
+
+func (m *AnalysisMessageBase_Type) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *AnalysisMessageBase_Type) GetCode() string {
+	if m != nil {
+		return m.Code
+	}
+	return ""
+}
+
 // AnalysisMessageWeakSchema is the set of information that's needed to define a
 // weakly-typed schema. The purpose of this proto is to provide a mechanism for
 // validating istio/istio/galley/pkg/config/analysis/msg/messages.yaml to make
@@ -151,8 +202,9 @@ type AnalysisMessageWeakSchema struct {
 	MessageBase *AnalysisMessageBase `protobuf:"bytes,1,opt,name=message_base,json=messageBase,proto3" json:"message_base,omitempty"`
 	// A human readable description of what the error means. Required.
 	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
-	// A go-style template string defining how to combine the args for a
-	// particular message into a log line. Required.
+	// A go-style template string (https://golang.org/pkg/fmt/#hdr-Printing)
+	// defining how to combine the args for a  particular message into a log line.
+	// Required.
 	Template string `protobuf:"bytes,3,opt,name=template,proto3" json:"template,omitempty"`
 	// A description of the arguments for a particular message type
 	Args                 []*AnalysisMessageWeakSchema_ArgType `protobuf:"bytes,4,rep,name=args,proto3" json:"args,omitempty"`
@@ -225,7 +277,10 @@ func (m *AnalysisMessageWeakSchema) GetArgs() []*AnalysisMessageWeakSchema_ArgTy
 type AnalysisMessageWeakSchema_ArgType struct {
 	// Required
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// Required. Should be a golang type, used in code generation
+	// Required. Should be a golang type, used in code generation.
+	// Ideally this will change to a less language-pinned type before this gets
+	// out of alpha, but for compatibility with current istio/istio code it's
+	// go_type for now.
 	GoType               string   `protobuf:"bytes,2,opt,name=go_type,json=goType,proto3" json:"go_type,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -290,8 +345,12 @@ type GenericAnalysisMessage struct {
 	MessageBase *AnalysisMessageBase `protobuf:"bytes,1,opt,name=message_base,json=messageBase,proto3" json:"message_base,omitempty"`
 	// Any message-type specific arguments that need to get codified. Optional.
 	Args *types.Struct `protobuf:"bytes,2,opt,name=args,proto3" json:"args,omitempty"`
-	// A list of strings specifying the path for resources which were the cause of
-	// message generation. At least one is required.
+	// A list of strings specifying the resource identifiers that were the cause
+	// of message generation. A "path" here is a (NAMESPACE\/)?RESOURCETYPE/NAME
+	// tuple that uniquely identifies a particular resource. There doesn't seem to
+	// be a single concept for this, but this is intuitively taken from
+	// https://kubernetes.io/docs/reference/using-api/api-concepts/#standard-api-terminology
+	// At least one is required.
 	ResourcePaths        []string `protobuf:"bytes,3,rep,name=resource_paths,json=resourcePaths,proto3" json:"resource_paths,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -414,6 +473,7 @@ func (m *InternalErrorAnalysisMessage) GetDetail() string {
 func init() {
 	proto.RegisterEnum("istio.analysis.v1alpha1.AnalysisMessageBase_Level", AnalysisMessageBase_Level_name, AnalysisMessageBase_Level_value)
 	proto.RegisterType((*AnalysisMessageBase)(nil), "istio.analysis.v1alpha1.AnalysisMessageBase")
+	proto.RegisterType((*AnalysisMessageBase_Type)(nil), "istio.analysis.v1alpha1.AnalysisMessageBase.Type")
 	proto.RegisterType((*AnalysisMessageWeakSchema)(nil), "istio.analysis.v1alpha1.AnalysisMessageWeakSchema")
 	proto.RegisterType((*AnalysisMessageWeakSchema_ArgType)(nil), "istio.analysis.v1alpha1.AnalysisMessageWeakSchema.ArgType")
 	proto.RegisterType((*GenericAnalysisMessage)(nil), "istio.analysis.v1alpha1.GenericAnalysisMessage")
@@ -423,38 +483,40 @@ func init() {
 func init() { proto.RegisterFile("analysis/v1alpha1/message.proto", fileDescriptor_4d6fd1414dfe3800) }
 
 var fileDescriptor_4d6fd1414dfe3800 = []byte{
-	// 493 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x53, 0x5d, 0x6b, 0x13, 0x41,
-	0x14, 0x75, 0x9b, 0xef, 0x9b, 0x5a, 0xe2, 0x08, 0xcd, 0x1a, 0x4a, 0x0c, 0x01, 0x21, 0xd0, 0x32,
-	0x4b, 0x23, 0xf4, 0xc1, 0xb7, 0x14, 0x6a, 0x0d, 0xea, 0x46, 0xa6, 0x96, 0x80, 0x2f, 0x61, 0xb2,
-	0xb9, 0x6e, 0x16, 0x67, 0x77, 0x96, 0x99, 0xd9, 0x42, 0x7e, 0x81, 0xff, 0xc7, 0x77, 0xdf, 0x7d,
-	0xf4, 0x27, 0x48, 0x9e, 0xfd, 0x11, 0xb2, 0x5f, 0x5a, 0x6b, 0x05, 0x05, 0x7d, 0x9b, 0x39, 0x7b,
-	0xef, 0xb9, 0xe7, 0x9c, 0xb9, 0x0b, 0x0f, 0x79, 0xc4, 0xc5, 0x46, 0x07, 0xda, 0xb9, 0x3a, 0xe6,
-	0x22, 0x5e, 0xf3, 0x63, 0x27, 0x44, 0xad, 0xb9, 0x8f, 0x34, 0x56, 0xd2, 0x48, 0xd2, 0x0d, 0xb4,
-	0x09, 0x24, 0x2d, 0xcb, 0x68, 0x59, 0xd6, 0x3b, 0xf0, 0xa5, 0xf4, 0x05, 0x3a, 0x59, 0xd9, 0x32,
-	0x79, 0xeb, 0x68, 0xa3, 0x12, 0xcf, 0xe4, 0x6d, 0xc3, 0xaf, 0x16, 0xdc, 0x9f, 0x14, 0x3d, 0x2f,
-	0x73, 0xc2, 0x53, 0xae, 0x91, 0x10, 0xa8, 0x46, 0x3c, 0x44, 0xdb, 0x1a, 0x58, 0xa3, 0x16, 0xcb,
-	0xce, 0x29, 0xe6, 0xc9, 0x15, 0xda, 0x3b, 0x39, 0x96, 0x9e, 0xc9, 0x33, 0xa8, 0x09, 0xbc, 0x42,
-	0x61, 0x57, 0x06, 0xd6, 0x68, 0x6f, 0x3c, 0xa6, 0xbf, 0x91, 0x41, 0x6f, 0x19, 0x42, 0x5f, 0xa4,
-	0x9d, 0x2c, 0x27, 0x20, 0x87, 0x70, 0x6f, 0x25, 0xbd, 0x24, 0xc4, 0xc8, 0x70, 0x13, 0xc8, 0x68,
-	0x91, 0x28, 0x61, 0x57, 0xb3, 0x51, 0x9d, 0x9f, 0x3e, 0x5c, 0x2a, 0x31, 0x3c, 0x81, 0x5a, 0xd6,
-	0x4c, 0xda, 0xd0, 0xb8, 0x74, 0x9f, 0xbb, 0xb3, 0xb9, 0xdb, 0xb9, 0x43, 0x5a, 0x50, 0x3b, 0x63,
-	0x6c, 0xc6, 0x3a, 0x95, 0x14, 0x9f, 0x4f, 0x98, 0x3b, 0x75, 0xcf, 0x3b, 0x4d, 0xd2, 0x84, 0xea,
-	0xd4, 0x7d, 0x3a, 0xeb, 0xec, 0x0e, 0x3f, 0xec, 0xc0, 0x83, 0x1b, 0x4a, 0xe6, 0xc8, 0xdf, 0x5d,
-	0x78, 0x6b, 0x0c, 0x39, 0x99, 0xc1, 0x6e, 0x11, 0xea, 0x62, 0xc9, 0x75, 0x6e, 0xbe, 0x3d, 0x3e,
-	0xfa, 0x1b, 0x4f, 0xac, 0x1d, 0x5e, 0x4b, 0x71, 0x00, 0xed, 0x15, 0x6a, 0x4f, 0x05, 0x71, 0x2a,
-	0xbc, 0x08, 0xee, 0x3a, 0x44, 0x7a, 0xd0, 0x34, 0x18, 0xc6, 0x82, 0x1b, 0xcc, 0x22, 0x6c, 0xb1,
-	0xef, 0x77, 0xe2, 0x42, 0x95, 0x2b, 0x5f, 0xdb, 0xd5, 0x41, 0x65, 0xd4, 0x1e, 0x3f, 0xf9, 0x53,
-	0x19, 0x3f, 0x0c, 0xd1, 0x89, 0xf2, 0x5f, 0x6f, 0x62, 0x64, 0x19, 0x4f, 0xef, 0x04, 0x1a, 0x05,
-	0x70, 0xeb, 0xf3, 0x76, 0xa1, 0xe1, 0xcb, 0x85, 0xd9, 0xc4, 0xe5, 0x0b, 0xd7, 0x7d, 0x99, 0x16,
-	0x0f, 0x3f, 0x5a, 0xb0, 0x7f, 0x8e, 0x11, 0xaa, 0xc0, 0xbb, 0x31, 0xea, 0xdf, 0x27, 0x76, 0x58,
-	0x78, 0xde, 0xc9, 0x88, 0xba, 0x34, 0x5f, 0x5e, 0x5a, 0x2e, 0x2f, 0xbd, 0xc8, 0x96, 0x37, 0x37,
-	0x44, 0x1e, 0xc1, 0x9e, 0x42, 0x2d, 0x13, 0xe5, 0xe1, 0x22, 0xe6, 0x66, 0xad, 0xed, 0xca, 0xa0,
-	0x32, 0x6a, 0xb1, 0xbb, 0x25, 0xfa, 0x2a, 0x05, 0x87, 0xef, 0x2d, 0x38, 0x98, 0x46, 0x06, 0x55,
-	0xc4, 0xc5, 0x99, 0x52, 0x52, 0xfd, 0x77, 0x17, 0xfb, 0x50, 0x5f, 0xa1, 0xe1, 0x81, 0x28, 0x93,
-	0xcc, 0x6f, 0xa7, 0x47, 0x9f, 0xb6, 0x7d, 0xeb, 0xf3, 0xb6, 0x6f, 0x7d, 0xd9, 0xf6, 0xad, 0x37,
-	0xfd, 0x9c, 0x3f, 0x90, 0x0e, 0x8f, 0x03, 0xe7, 0x97, 0x1f, 0x7c, 0x59, 0xcf, 0x5c, 0x3f, 0xfe,
-	0x16, 0x00, 0x00, 0xff, 0xff, 0x2d, 0x1b, 0x42, 0xc2, 0xfc, 0x03, 0x00, 0x00,
+	// 514 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x54, 0x5d, 0x6b, 0x13, 0x41,
+	0x14, 0x75, 0x93, 0xcd, 0xd7, 0x4d, 0x2d, 0x71, 0x84, 0x26, 0x86, 0x12, 0x97, 0x80, 0x10, 0x68,
+	0x99, 0x25, 0x11, 0xfa, 0xe0, 0x5b, 0x0a, 0xb1, 0x06, 0x75, 0x23, 0x53, 0x4b, 0xc0, 0x97, 0x30,
+	0xd9, 0x5c, 0x37, 0x8b, 0xbb, 0x3b, 0xcb, 0xcc, 0xa4, 0x90, 0x5f, 0xe0, 0xff, 0xf1, 0x55, 0x7c,
+	0xf7, 0xd1, 0x9f, 0x20, 0xf9, 0x25, 0xb2, 0x5f, 0x5a, 0x6b, 0x05, 0x0b, 0xf6, 0x6d, 0xe6, 0xe4,
+	0xde, 0x33, 0xe7, 0x9c, 0x9b, 0xbb, 0xf0, 0x98, 0x47, 0x3c, 0xd8, 0x2a, 0x5f, 0xd9, 0x97, 0x43,
+	0x1e, 0xc4, 0x6b, 0x3e, 0xb4, 0x43, 0x54, 0x8a, 0x7b, 0x48, 0x63, 0x29, 0xb4, 0x20, 0x6d, 0x5f,
+	0x69, 0x5f, 0xd0, 0xa2, 0x8c, 0x16, 0x65, 0xdd, 0x43, 0x4f, 0x08, 0x2f, 0x40, 0x3b, 0x2d, 0x5b,
+	0x6e, 0xde, 0xdb, 0x4a, 0xcb, 0x8d, 0xab, 0xb3, 0xb6, 0xfe, 0xe7, 0x12, 0x3c, 0x1c, 0xe7, 0x3d,
+	0xaf, 0x33, 0xc2, 0x53, 0xae, 0x90, 0x4c, 0xc0, 0xd4, 0xdb, 0x18, 0x3b, 0x86, 0x65, 0x0c, 0x9a,
+	0xa3, 0x21, 0xfd, 0x0b, 0x3b, 0xbd, 0xa1, 0x97, 0xbe, 0xdd, 0xc6, 0xc8, 0xd2, 0x76, 0xf2, 0x02,
+	0x2a, 0x01, 0x5e, 0x62, 0xd0, 0x29, 0x59, 0xc6, 0x60, 0x7f, 0x34, 0xba, 0x15, 0xcf, 0xab, 0xa4,
+	0x93, 0x65, 0x04, 0xe4, 0x08, 0x1e, 0xac, 0x84, 0xbb, 0x09, 0x31, 0xd2, 0x5c, 0xfb, 0x22, 0x5a,
+	0x6c, 0x64, 0xd0, 0x29, 0x5b, 0xc6, 0xa0, 0xc1, 0x5a, 0xbf, 0xfd, 0x70, 0x21, 0x83, 0x2e, 0x05,
+	0x33, 0x11, 0x41, 0x08, 0x98, 0x11, 0x0f, 0x33, 0x17, 0x0d, 0x96, 0x9e, 0x13, 0xcc, 0x15, 0x2b,
+	0x4c, 0x15, 0x35, 0x58, 0x7a, 0xee, 0x9f, 0x40, 0x25, 0x7d, 0x8c, 0x34, 0xa1, 0x76, 0xe1, 0xbc,
+	0x74, 0x66, 0x73, 0xa7, 0x75, 0x8f, 0x34, 0xa0, 0x32, 0x61, 0x6c, 0xc6, 0x5a, 0xe5, 0x04, 0x9f,
+	0x8f, 0x99, 0x33, 0x75, 0xce, 0x5a, 0x75, 0x52, 0x07, 0x73, 0xea, 0x3c, 0x9f, 0xb5, 0xf6, 0xfa,
+	0x9f, 0x4a, 0xf0, 0xe8, 0x9a, 0xf2, 0x39, 0xf2, 0x0f, 0xe7, 0xee, 0x1a, 0x43, 0x4e, 0x66, 0xb0,
+	0x97, 0xcf, 0x68, 0xb1, 0xe4, 0xaa, 0xc8, 0xf2, 0xf8, 0x36, 0x19, 0xb0, 0x66, 0x78, 0x65, 0x28,
+	0x16, 0x34, 0x57, 0xa8, 0x5c, 0xe9, 0xc7, 0x89, 0xd1, 0xdc, 0xc1, 0x55, 0x88, 0x74, 0xa1, 0xae,
+	0x31, 0x8c, 0x03, 0xae, 0x31, 0x0f, 0xe7, 0xe7, 0x9d, 0x38, 0x60, 0x72, 0xe9, 0xa9, 0x8e, 0x69,
+	0x95, 0x07, 0xcd, 0xd1, 0xb3, 0x7f, 0x95, 0xf1, 0xcb, 0x10, 0x1d, 0x4b, 0x2f, 0x9b, 0x6d, 0xc2,
+	0xd3, 0x3d, 0x81, 0x5a, 0x0e, 0xdc, 0x98, 0x73, 0x1b, 0x6a, 0x9e, 0x58, 0xa4, 0x7f, 0xa2, 0x4c,
+	0x68, 0xd5, 0x13, 0x49, 0x71, 0xff, 0x8b, 0x01, 0x07, 0x67, 0x18, 0xa1, 0xf4, 0xdd, 0x6b, 0x4f,
+	0xfd, 0xff, 0xc4, 0x8e, 0x72, 0xcf, 0xa5, 0x94, 0xa8, 0x4d, 0xb3, 0x5d, 0xa0, 0xc5, 0x2e, 0xd0,
+	0xf3, 0x74, 0x17, 0x32, 0x43, 0xe4, 0x09, 0xec, 0x4b, 0x54, 0x62, 0x23, 0x5d, 0x5c, 0xc4, 0x5c,
+	0xaf, 0x55, 0xa7, 0x6c, 0x95, 0x07, 0x0d, 0x76, 0xbf, 0x40, 0xdf, 0x24, 0x60, 0xff, 0xa3, 0x01,
+	0x87, 0xd3, 0x48, 0xa3, 0x8c, 0x78, 0x30, 0x91, 0x52, 0xc8, 0x3b, 0x77, 0x71, 0x00, 0xd5, 0x15,
+	0x6a, 0xee, 0x07, 0x45, 0x92, 0xd9, 0xed, 0xf4, 0xf8, 0xeb, 0xae, 0x67, 0x7c, 0xdb, 0xf5, 0x8c,
+	0xef, 0xbb, 0x9e, 0xf1, 0xae, 0x97, 0xf1, 0xfb, 0xc2, 0xe6, 0xb1, 0x6f, 0xff, 0xf1, 0xbd, 0x58,
+	0x56, 0x53, 0xd7, 0x4f, 0x7f, 0x04, 0x00, 0x00, 0xff, 0xff, 0x82, 0x20, 0xa3, 0x36, 0x4b, 0x04,
+	0x00, 0x00,
 }
 
 func (m *AnalysisMessageBase) Marshal() (dAtA []byte, err error) {
@@ -486,12 +548,51 @@ func (m *AnalysisMessageBase) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		copy(dAtA[i:], m.DocumentationUrl)
 		i = encodeVarintMessage(dAtA, i, uint64(len(m.DocumentationUrl)))
 		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0x1a
 	}
 	if m.Level != 0 {
 		i = encodeVarintMessage(dAtA, i, uint64(m.Level))
 		i--
-		dAtA[i] = 0x18
+		dAtA[i] = 0x10
+	}
+	if m.Type != nil {
+		{
+			size, err := m.Type.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintMessage(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AnalysisMessageBase_Type) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AnalysisMessageBase_Type) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AnalysisMessageBase_Type) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if len(m.Code) > 0 {
 		i -= len(m.Code)
@@ -741,18 +842,34 @@ func (m *AnalysisMessageBase) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovMessage(uint64(l))
-	}
-	l = len(m.Code)
-	if l > 0 {
+	if m.Type != nil {
+		l = m.Type.Size()
 		n += 1 + l + sovMessage(uint64(l))
 	}
 	if m.Level != 0 {
 		n += 1 + sovMessage(uint64(m.Level))
 	}
 	l = len(m.DocumentationUrl)
+	if l > 0 {
+		n += 1 + l + sovMessage(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *AnalysisMessageBase_Type) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovMessage(uint64(l))
+	}
+	l = len(m.Code)
 	if l > 0 {
 		n += 1 + l + sovMessage(uint64(l))
 	}
@@ -895,6 +1012,147 @@ func (m *AnalysisMessageBase) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessage
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthMessage
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessage
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Type == nil {
+				m.Type = &AnalysisMessageBase_Type{}
+			}
+			if err := m.Type.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Level", wireType)
+			}
+			m.Level = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessage
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Level |= AnalysisMessageBase_Level(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DocumentationUrl", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessage
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMessage
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessage
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DocumentationUrl = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMessage(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthMessage
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthMessage
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AnalysisMessageBase_Type) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMessage
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Type: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Type: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
 			}
 			var stringLen uint64
@@ -956,57 +1214,6 @@ func (m *AnalysisMessageBase) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Code = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Level", wireType)
-			}
-			m.Level = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessage
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Level |= AnalysisMessageBase_Level(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DocumentationUrl", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessage
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMessage
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessage
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.DocumentationUrl = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
