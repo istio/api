@@ -31,23 +31,35 @@
             "fields": [
               {
                 "id": 1,
-                "name": "name",
-                "type": "string"
+                "name": "type",
+                "type": "Type"
               },
               {
                 "id": 2,
-                "name": "code",
-                "type": "string"
-              },
-              {
-                "id": 3,
                 "name": "level",
                 "type": "Level"
               },
               {
-                "id": 4,
+                "id": 3,
                 "name": "documentation_url",
                 "type": "string"
+              }
+            ],
+            "messages": [
+              {
+                "name": "Type",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "code",
+                    "type": "string"
+                  }
+                ]
               }
             ]
           },

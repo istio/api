@@ -43,15 +43,23 @@ option go_package="istio.io/api/analysis/v1alpha1";
 // AnalysisMessageBase describes some common information that is needed for all
 // messages. All information should be static with respect to the error code.
 message AnalysisMessageBase {
-  // A human-readable name for the message type. e.g. "InternalError",
-  // "PodMissingProxy". This should be the same for all messages of the same type.
-  // Required.
-  string name = 1;
+  // A unique identifier for the type of message. Name is intended to be
+  // human-readable, code is intended to be machine readable. There should be a
+  // one-to-one mapping between name and code. (i.e. do not re-use names or
+  // codes between message types.)
+  message Type {
+    // A human-readable name for the message type. e.g. "InternalError",
+    // "PodMissingProxy". This should be the same for all messages of the same type.
+    // Required.
+    string name = 1;
 
-  // A 7 character code matching `^IST[0-9]{4}$` intended to uniquely identify
-  // the message type. (e.g. "IST0001" is mapped to the "InternalError" message
-  // type.) 0000-0100 are reserved. Required.
-  string code = 2;
+    // A 7 character code matching `^IST[0-9]{4}$` intended to uniquely identify
+    // the message type. (e.g. "IST0001" is mapped to the "InternalError" message
+    // type.) 0000-0100 are reserved. Required.
+    string code = 2;
+  }
+
+  Type type = 1;
 
   // The values here are chosen so that more severe messages get sorted higher,
   // as well as leaving space in between to add more later
@@ -63,13 +71,13 @@ message AnalysisMessageBase {
   }
 
   // Represents how severe a message is. Required.
-  Level level = 3;
+  Level level = 2;
 
   // A url pointing to the Istio documentation for this specific error type.
   // Should be of the form
   // `^http(s)?://(preliminary\.)?istio.io/docs/reference/config/analysis/`
   // Required.
-  string documentation_url = 4;
+  string documentation_url = 3;
 
 }
 
@@ -84,14 +92,18 @@ message AnalysisMessageWeakSchema {
   // A human readable description of what the error means. Required.
   string description = 2;
 
-  // A go-style template string defining how to combine the args for a
-  // particular message into a log line. Required.
+  // A go-style template string (https://golang.org/pkg/fmt/#hdr-Printing)
+  // defining how to combine the args for a  particular message into a log line.
+  // Required.
   string template = 3;
 
   message ArgType {
     // Required
     string name = 1;
-    // Required. Should be a golang type, used in code generation
+    // Required. Should be a golang type, used in code generation.
+    // Ideally this will change to a less language-pinned type before this gets
+    // out of alpha, but for compatibility with current istio/istio code it's
+    // go_type for now.
     string go_type = 2;
   }
 
@@ -112,8 +124,12 @@ message GenericAnalysisMessage {
   // Any message-type specific arguments that need to get codified. Optional.
   google.protobuf.Struct args = 2;
 
-  // A list of strings specifying the path for resources which were the cause of
-  // message generation. At least one is required.
+  // A list of strings specifying the resource identifiers that were the cause
+  // of message generation. A "path" here is a (NAMESPACE\/)?RESOURCETYPE/NAME
+  // tuple that uniquely identifies a particular resource. There doesn't seem to
+  // be a single concept for this, but this is intuitively taken from
+  // https://kubernetes.io/docs/reference/using-api/api-concepts/#standard-api-terminology
+  // At least one is required.
   repeated string resource_paths = 3;
 }
 
