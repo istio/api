@@ -708,7 +708,9 @@ message HTTPMatchRequest {
   // `mesh` for this field to be applicable.
   map<string, string> source_labels = 7;
 
-  // $hide_from_docs
+  // Names of gateways where the rule should be applied to. Gateway names
+  // at the top of the VirtualService (if any) are overridden. The gateway
+  // match is independent of sourceLabels.
   repeated string gateways = 8;
 
   // Query parameters for matching.
