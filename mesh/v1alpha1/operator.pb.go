@@ -261,6 +261,7 @@ func (m *IstioOperatorSpec_VersionStatus) GetError() string {
 	return ""
 }
 
+// This is required because synthetic type definition has file rather than package scope.
 
 func init() {
 	proto.RegisterEnum("istio.mesh.v1alpha1.IstioOperatorSpec_Status", IstioOperatorSpec_Status_name, IstioOperatorSpec_Status_value)
