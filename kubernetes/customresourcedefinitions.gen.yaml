@@ -3795,7 +3795,7 @@ spec:
                           type: object
                         gateways:
                           description: Names of gateways where the rule should be
-                            applied to.
+                            applied.
                           items:
                             format: string
                             type: string
@@ -4125,7 +4125,7 @@ spec:
                           type: array
                         gateways:
                           description: Names of gateways where the rule should be
-                            applied to.
+                            applied.
                           items:
                             format: string
                             type: string
@@ -4192,7 +4192,7 @@ spec:
                           type: array
                         gateways:
                           description: Names of gateways where the rule should be
-                            applied to.
+                            applied.
                           items:
                             format: string
                             type: string

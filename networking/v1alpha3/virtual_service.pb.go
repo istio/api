@@ -1188,7 +1188,7 @@ type HTTPMatchRequest struct {
 	// gateways specified in the top-level `gateways` field, it must include the reserved gateway
 	// `mesh` for this field to be applicable.
 	SourceLabels map[string]string `protobuf:"bytes,7,rep,name=source_labels,json=sourceLabels,proto3" json:"source_labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// Names of gateways where the rule should be applied to. Gateway names
+	// Names of gateways where the rule should be applied. Gateway names
 	// in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
 	// match is independent of sourceLabels.
 	Gateways []string `protobuf:"bytes,8,rep,name=gateways,proto3" json:"gateways,omitempty"`
@@ -1585,7 +1585,7 @@ type L4MatchAttributes struct {
 	// gateways specified in the top-level `gateways` field, it should include the reserved gateway
 	// `mesh` in order for this field to be applicable.
 	SourceLabels map[string]string `protobuf:"bytes,4,rep,name=source_labels,json=sourceLabels,proto3" json:"source_labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// Names of gateways where the rule should be applied to. Gateway names
+	// Names of gateways where the rule should be applied. Gateway names
 	// in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
 	// match is independent of sourceLabels.
 	Gateways             []string `protobuf:"bytes,5,rep,name=gateways,proto3" json:"gateways,omitempty"`
@@ -1686,7 +1686,7 @@ type TLSMatchAttributes struct {
 	// gateways specified in the top-level `gateways` field, it should include the reserved gateway
 	// `mesh` in order for this field to be applicable.
 	SourceLabels map[string]string `protobuf:"bytes,5,rep,name=source_labels,json=sourceLabels,proto3" json:"source_labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// Names of gateways where the rule should be applied to. Gateway names
+	// Names of gateways where the rule should be applied. Gateway names
 	// in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
 	// match is independent of sourceLabels.
 	Gateways             []string `protobuf:"bytes,6,rep,name=gateways,proto3" json:"gateways,omitempty"`

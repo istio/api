@@ -708,7 +708,7 @@ message HTTPMatchRequest {
   // `mesh` for this field to be applicable.
   map<string, string> source_labels = 7;
 
-  // Names of gateways where the rule should be applied to. Gateway names
+  // Names of gateways where the rule should be applied. Gateway names
   // in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
   // match is independent of sourceLabels.
   repeated string gateways = 8;
@@ -866,7 +866,7 @@ message L4MatchAttributes {
   // `mesh` in order for this field to be applicable.
   map<string, string> source_labels = 4;
 
-  // Names of gateways where the rule should be applied to. Gateway names
+  // Names of gateways where the rule should be applied. Gateway names
   // in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
   // match is independent of sourceLabels.
   repeated string gateways = 5;
@@ -901,7 +901,7 @@ message TLSMatchAttributes {
   // `mesh` in order for this field to be applicable.
   map<string, string> source_labels = 5;
 
-  // Names of gateways where the rule should be applied to. Gateway names
+  // Names of gateways where the rule should be applied. Gateway names
   // in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
   // match is independent of sourceLabels.
   repeated string gateways = 6;
