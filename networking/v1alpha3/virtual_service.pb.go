@@ -1185,11 +1185,11 @@ type HTTPMatchRequest struct {
 	Port uint32 `protobuf:"varint,6,opt,name=port,proto3" json:"port,omitempty"`
 	// One or more labels that constrain the applicability of a rule to
 	// workloads with the given labels. If the VirtualService has a list of
-	// gateways specified at the top, it must include the reserved gateway
+	// gateways specified in the top-level `gateways` field, it must include the reserved gateway
 	// `mesh` for this field to be applicable.
 	SourceLabels map[string]string `protobuf:"bytes,7,rep,name=source_labels,json=sourceLabels,proto3" json:"source_labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Names of gateways where the rule should be applied to. Gateway names
-	// at the top of the VirtualService (if any) are overridden. The gateway
+	// in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
 	// match is independent of sourceLabels.
 	Gateways []string `protobuf:"bytes,8,rep,name=gateways,proto3" json:"gateways,omitempty"`
 	// Query parameters for matching.
@@ -1582,11 +1582,11 @@ type L4MatchAttributes struct {
 	SourceSubnet string `protobuf:"bytes,3,opt,name=source_subnet,json=sourceSubnet,proto3" json:"source_subnet,omitempty"`
 	// One or more labels that constrain the applicability of a rule to
 	// workloads with the given labels. If the VirtualService has a list of
-	// gateways specified at the top, it should include the reserved gateway
+	// gateways specified in the top-level `gateways` field, it should include the reserved gateway
 	// `mesh` in order for this field to be applicable.
 	SourceLabels map[string]string `protobuf:"bytes,4,rep,name=source_labels,json=sourceLabels,proto3" json:"source_labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Names of gateways where the rule should be applied to. Gateway names
-	// at the top of the VirtualService (if any) are overridden. The gateway
+	// in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
 	// match is independent of sourceLabels.
 	Gateways             []string `protobuf:"bytes,5,rep,name=gateways,proto3" json:"gateways,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -1683,11 +1683,11 @@ type TLSMatchAttributes struct {
 	SourceSubnet string `protobuf:"bytes,4,opt,name=source_subnet,json=sourceSubnet,proto3" json:"source_subnet,omitempty"`
 	// One or more labels that constrain the applicability of a rule to
 	// workloads with the given labels. If the VirtualService has a list of
-	// gateways specified at the top, it should include the reserved gateway
+	// gateways specified in the top-level `gateways` field, it should include the reserved gateway
 	// `mesh` in order for this field to be applicable.
 	SourceLabels map[string]string `protobuf:"bytes,5,rep,name=source_labels,json=sourceLabels,proto3" json:"source_labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Names of gateways where the rule should be applied to. Gateway names
-	// at the top of the VirtualService (if any) are overridden. The gateway
+	// in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
 	// match is independent of sourceLabels.
 	Gateways             []string `protobuf:"bytes,6,rep,name=gateways,proto3" json:"gateways,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`

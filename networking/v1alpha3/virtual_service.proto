@@ -704,12 +704,12 @@ message HTTPMatchRequest {
 
   // One or more labels that constrain the applicability of a rule to
   // workloads with the given labels. If the VirtualService has a list of
-  // gateways specified at the top, it must include the reserved gateway
+  // gateways specified in the top-level `gateways` field, it must include the reserved gateway
   // `mesh` for this field to be applicable.
   map<string, string> source_labels = 7;
 
   // Names of gateways where the rule should be applied to. Gateway names
-  // at the top of the VirtualService (if any) are overridden. The gateway
+  // in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
   // match is independent of sourceLabels.
   repeated string gateways = 8;
 
@@ -862,12 +862,12 @@ message L4MatchAttributes {
 
   // One or more labels that constrain the applicability of a rule to
   // workloads with the given labels. If the VirtualService has a list of
-  // gateways specified at the top, it should include the reserved gateway
+  // gateways specified in the top-level `gateways` field, it should include the reserved gateway
   // `mesh` in order for this field to be applicable.
   map<string, string> source_labels = 4;
 
   // Names of gateways where the rule should be applied to. Gateway names
-  // at the top of the VirtualService (if any) are overridden. The gateway
+  // in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
   // match is independent of sourceLabels.
   repeated string gateways = 5;
 }
@@ -897,12 +897,12 @@ message TLSMatchAttributes {
 
   // One or more labels that constrain the applicability of a rule to
   // workloads with the given labels. If the VirtualService has a list of
-  // gateways specified at the top, it should include the reserved gateway
+  // gateways specified in the top-level `gateways` field, it should include the reserved gateway
   // `mesh` in order for this field to be applicable.
   map<string, string> source_labels = 5;
 
   // Names of gateways where the rule should be applied to. Gateway names
-  // at the top of the VirtualService (if any) are overridden. The gateway
+  // in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
   // match is independent of sourceLabels.
   repeated string gateways = 6;
 }
