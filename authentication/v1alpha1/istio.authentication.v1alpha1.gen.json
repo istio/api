@@ -191,7 +191,7 @@
         }
       },
       "istio.authentication.v1alpha1.PrincipalBinding": {
-        "description": "Deprecated. When using security/v1beta1/RequestAuthentication, the request principal is always come from request authentication (i.e JWT). Associates authentication with request principal.",
+        "description": "Deprecated. When using security/v1beta1/RequestAuthentication, the request principal always comes from request authentication (i.e JWT). Associates authentication with request principal.",
         "type": "string",
         "enum": [
           "USE_PEER",

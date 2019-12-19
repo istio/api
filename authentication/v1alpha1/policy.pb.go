@@ -26,8 +26,8 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // $hide_from_docs
-// Deprecated. When using security/v1beta1/RequestAuthentication, the request principal is always
-// come from request authentication (i.e JWT).
+// Deprecated. When using security/v1beta1/RequestAuthentication, the request principal always
+// comes from request authentication (i.e JWT).
 // Associates authentication with request principal.
 type PrincipalBinding int32
 
