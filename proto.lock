@@ -43851,6 +43851,11 @@
                 "id": 8,
                 "name": "output_payload_to_header",
                 "type": "string"
+              },
+              {
+                "id": 9,
+                "name": "forward_original_token",
+                "type": "bool"
               }
             ]
           },

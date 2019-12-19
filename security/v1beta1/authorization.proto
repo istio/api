@@ -279,7 +279,7 @@ message Operation {
 // Condition specifies additional required attributes.
 message Condition {
   // The name of an Istio attribute.
-  // See the [full list of supported attributes](https://istio.io/docs/reference/config/).
+  // See the [full list of supported attributes](https://istio.io/docs/reference/config/policy-and-telemetry/attribute-vocabulary/).
   string key = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The allowed values for the attribute.

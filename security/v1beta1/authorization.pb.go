@@ -589,7 +589,7 @@ func (m *Operation) GetPaths() []string {
 // Condition specifies additional required attributes.
 type Condition struct {
 	// The name of an Istio attribute.
-	// See the [full list of supported attributes](https://istio.io/docs/reference/config/).
+	// See the [full list of supported attributes](https://istio.io/docs/reference/config/policy-and-telemetry/attribute-vocabulary/).
 	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
 	// The allowed values for the attribute.
 	Values               []string `protobuf:"bytes,2,rep,name=values,proto3" json:"values,omitempty"`
