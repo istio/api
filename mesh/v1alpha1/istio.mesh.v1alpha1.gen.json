@@ -1404,7 +1404,7 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.IstioOperatorSpec.Status"
           },
           "values": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeMapStringInterface"
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeMapStringInterface2"
           },
           "hub": {
             "description": "Root for docker image paths e.g. docker.io/istio",
@@ -1438,7 +1438,7 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.IstioComponentSetSpec"
           },
           "unvalidatedValues": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeMapStringInterface"
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.TypeMapStringInterface2"
           },
           "componentStatus": {
             "description": "Individual status of each component controlled by the operator. The map key is the name of the component.",
@@ -1448,6 +1448,10 @@
             }
           }
         }
+      },
+      "istio.mesh.v1alpha1.TypeMapStringInterface2": {
+        "description": "This is required because synthetic type definition has file rather than package scope. GOTYPE: map[string]interface{}",
+        "type": "object"
       },
       "istio.mesh.v1alpha1.IstioOperatorSpec.Status": {
         "description": "Status describes the current state of a component.",
