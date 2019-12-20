@@ -1342,19 +1342,28 @@ type OutlierDetection struct {
 	ConsecutiveErrors int32 `protobuf:"varint,1,opt,name=consecutive_errors,json=consecutiveErrors,proto3" json:"consecutive_errors,omitempty"` // Deprecated: Do not use.
 	// Number of gateway errors before a host is ejected from the connection pool.
 	// When the upstream host is accessed over HTTP, a 502, 503, or 504 return
-	// code qualifies as an error. When the upstream host is accessed over an
-	// opaque TCP connection, connect timeouts and connection error/failure
+	// code qualifies as a gateway error. When the upstream host is accessed over
+	// an opaque TCP connection, connect timeouts and connection error/failure
 	// events qualify as a gateway error.
-	// If set to 0, this feature is disabled. Defaults to 5.
-	ConsecutiveGatewayErrors *types.UInt32Value `protobuf:"bytes,6,opt,name=consecutive_gateway_errors,json=consecutiveGatewayErrors,proto3" json:"consecutive_gateway_errors,omitempty"`
-	// Number of 5xx errors before a host is ejected from the connection pool.
-	// When the upstream host is accessed over TCP, errors are internally mapped
-	// to HTTP 5xx codes and treated as such.
 	// If set to 0, this feature is disabled. Defaults to 0.
 	// consecutive_gateway_errors and consecutive_5xx_errors can be used
-	// separately or together. The errors counted by consecutive_gateway_errors
-	// are also included in consecutive_5xx_errors, so consecutive_gateway_errors
-	// should be less than consecutive_5xx_errors when both are used.
+	// separately or together. Because the errors counted by
+	// consecutive_gateway_errors are also included in consecutive_5xx_errors,
+	// if the value of consecutive_gateway_errors is greater than or equal to
+	// the value of consecutive_5xx_errors, consecutive_gateway_errors will have
+	// no effect.
+	ConsecutiveGatewayErrors *types.UInt32Value `protobuf:"bytes,6,opt,name=consecutive_gateway_errors,json=consecutiveGatewayErrors,proto3" json:"consecutive_gateway_errors,omitempty"`
+	// Number of 5xx errors before a host is ejected from the connection pool.
+	// When the upstream host is accessed over an opaque TCP connection, connect
+	// timeouts, connection error/failure and request failure events qualify as a
+	// 5xx error.
+	// If set to 0, this feature is disabled. Defaults to 5.
+	// consecutive_gateway_errors and consecutive_5xx_errors can be used
+	// separately or together. Because the errors counted by
+	// consecutive_gateway_errors are also included in consecutive_5xx_errors,
+	// if the value of consecutive_gateway_errors is greater than or equal to
+	// the value of consecutive_5xx_errors, consecutive_gateway_errors will have
+	// no effect.
 	Consecutive_5XxErrors *types.UInt32Value `protobuf:"bytes,7,opt,name=consecutive_5xx_errors,json=consecutive5xxErrors,proto3" json:"consecutive_5xx_errors,omitempty"`
 	// Time interval between ejection sweep analysis. format:
 	// 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
