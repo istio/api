@@ -16,13 +16,13 @@ syntax = "proto3";
 
 package istio.troubleshooting.v1alpha1;
 
-import "google/protobuf/duration.proto";
+import "type/v1beta1/selector.proto";
 
 option go_package = "istio.io/api/troubleshooting/v1alpha1";
 
 // MeshTroubleshootingService is the mesh wide trouble shooting API.
 service MeshTroubleshootingService{
-  // GetConfigDump gets the config dump of the proxy.
+  // GetConfigDump gets the configuratoin dump of the proxy.
   rpc GetConfigDump(GetConfigDumpRequest)
     returns(stream GetConfigDumpResponse){
   }
@@ -33,44 +33,34 @@ service MeshTroubleshootingService{
   }
 }
 
-// NodeSelector specifies the proxy filtering of the troubleshooting API targetted scope.
+// ProxySelector specifies the proxy filtering of the troubleshooting API targetted scope.
 // All the fields in this selector are and-ed by each other. Empty fields will selector all the
 // proxy.
-message NodeSelector {
-  enum NodeType { proxy = 0; ROUTER = 1; }
+message ProxySelector {
+  enum ProxyType { proxy = 0; ROUTER = 1; }
 
-  // TODO: shall we refactor proxy.proto workload selector in this PR?
-  // RESOLVE BEFORE MERGE!
-  message LabelSelector {
-    // One or more labels that indicate a specific set of pods/VMs
-    // on which this `proxy` configuration should be applied. The scope of
-    // label search is restricted to the configuration namespace in which the
-    // the resource is present.
-    map<string, string> labels = 1;
-  }
-
-  // The type of the proxy runs as.
-  repeated NodeType types = 1;
+  // The types of the proxy runs as.
+  repeated ProxyType types = 1;
 
   // The namespaces of the proxy reside in.
   repeated string namespaces = 2;
 
-  // the name of the proxys to be selected. For Kubernetes, this is the pod id.
+  // the names of the proxy to be selected. For Kubernetes, this is the pod id.
   repeated string names = 3;
 
-  // The labels that selected proxys must have.
-  LabelSelector labels = 4;
+  // Selector of proxy based on workload labels.
+  istio.type.v1beta1.WorkloadSelector selector = 4;
 }
 
 // GetConfigDumpRequest is the request of GetConfigDump.
 message GetConfigDumpRequest{
-  // Selector selects a subset of the proxys for troubleshooting.
-  NodeSelector selector = 1;
+  // Selector selects a subset of the proxies for troubleshooting.
+  ProxySelector selector = 1;
 }
 
 // GetConfigDumpResponse is the request of GetConfigDump.
 message GetConfigDumpResponse {
-  // The actual config dump payload.
+  // The actual configuration dump payload.
   string payload = 1;
 }
 
@@ -97,8 +87,8 @@ message LoggerLogLevel {
 }
 
 message SetLogLevelRequest {
-  // Selector selects a subset of the proxys for troubleshooting.
-  NodeSelector selector = 1;
+  // Selector selects a subset of the proxies for troubleshooting.
+  ProxySelector selector = 1;
   // The log levels to be updated to.
   // Empty list means no change to the existing log level settings of the proxy.
   repeated LoggerLogLevel logger_levels = 2;

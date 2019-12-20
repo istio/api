@@ -2,7 +2,7 @@
 title: istio.troubleshooting.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 13
+number_of_entries: 12
 ---
 <h2 id="Services">Services</h2>
 <h3 id="MeshTroubleshootingService">MeshTroubleshootingService</h3>
@@ -11,7 +11,7 @@ number_of_entries: 13
 
 <pre id="MeshTroubleshootingService-GetConfigDump"><code class="language-proto">rpc GetConfigDump(GetConfigDumpRequest) returns (GetConfigDumpResponse)
 </code></pre>
-<p>GetConfigDump gets the config dump of the proxy.</p>
+<p>GetConfigDump gets the configuratoin dump of the proxy.</p>
 
 <pre id="MeshTroubleshootingService-SetLogLevel"><code class="language-proto">rpc SetLogLevel(SetLogLevelRequest) returns (SetLogLevelResponse)
 </code></pre>
@@ -49,9 +49,9 @@ workflow. This is why we have response/request in reversed position.</p>
 <tbody>
 <tr id="GetConfigDumpRequest-selector">
 <td><code>selector</code></td>
-<td><code><a href="#NodeSelector">NodeSelector</a></code></td>
+<td><code><a href="#ProxySelector">ProxySelector</a></code></td>
 <td>
-<p>Selector selects a subset of the proxys for troubleshooting.</p>
+<p>Selector selects a subset of the proxies for troubleshooting.</p>
 
 </td>
 <td>
@@ -79,7 +79,7 @@ No
 <td><code>payload</code></td>
 <td><code>string</code></td>
 <td>
-<p>The actual config dump payload.</p>
+<p>The actual configuration dump payload.</p>
 
 </td>
 <td>
@@ -179,9 +179,9 @@ No
 </tbody>
 </table>
 </section>
-<h3 id="NodeSelector">NodeSelector</h3>
+<h3 id="ProxySelector">ProxySelector</h3>
 <section>
-<p>NodeSelector specifies the proxy filtering of the troubleshooting API targetted scope.
+<p>ProxySelector specifies the proxy filtering of the troubleshooting API targetted scope.
 All the fields in this selector are and-ed by each other. Empty fields will selector all the
 proxy.</p>
 
@@ -195,18 +195,18 @@ proxy.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="NodeSelector-types">
+<tr id="ProxySelector-types">
 <td><code>types</code></td>
-<td><code><a href="#NodeSelector-NodeType">NodeType[]</a></code></td>
+<td><code><a href="#ProxySelector-ProxyType">ProxyType[]</a></code></td>
 <td>
-<p>The type of the proxy runs as.</p>
+<p>The types of the proxy runs as.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="NodeSelector-namespaces">
+<tr id="ProxySelector-namespaces">
 <td><code>namespaces</code></td>
 <td><code>string[]</code></td>
 <td>
@@ -217,54 +217,22 @@ No
 No
 </td>
 </tr>
-<tr id="NodeSelector-names">
+<tr id="ProxySelector-names">
 <td><code>names</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>the name of the proxys to be selected. For Kubernetes, this is the pod id.</p>
+<p>the names of the proxy to be selected. For Kubernetes, this is the pod id.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="NodeSelector-labels">
-<td><code>labels</code></td>
-<td><code><a href="#NodeSelector-LabelSelector">LabelSelector</a></code></td>
+<tr id="ProxySelector-selector">
+<td><code>selector</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/v1beta1/workload-selector.html#WorkloadSelector">WorkloadSelector</a></code></td>
 <td>
-<p>The labels that selected proxys must have.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h3 id="NodeSelector-LabelSelector">NodeSelector.LabelSelector</h3>
-<section>
-<p>TODO: shall we refactor proxy.proto workload selector in this PR?
-RESOLVE BEFORE MERGE!</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="NodeSelector-LabelSelector-labels">
-<td><code>labels</code></td>
-<td><code>map&lt;string,&nbsp;string&gt;</code></td>
-<td>
-<p>One or more labels that indicate a specific set of pods/VMs
-on which this <code>proxy</code> configuration should be applied. The scope of
-label search is restricted to the configuration namespace in which the
-the resource is present.</p>
+<p>Selector of proxy based on workload labels.</p>
 
 </td>
 <td>
@@ -274,7 +242,7 @@ No
 </tbody>
 </table>
 </section>
-<h3 id="NodeSelector-NodeType">NodeSelector.NodeType</h3>
+<h3 id="ProxySelector-ProxyType">ProxySelector.ProxyType</h3>
 <section>
 <table class="enum-values">
 <thead>
@@ -284,12 +252,12 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="NodeSelector-NodeType-proxy">
+<tr id="ProxySelector-ProxyType-proxy">
 <td><code>proxy</code></td>
 <td>
 </td>
 </tr>
-<tr id="NodeSelector-NodeType-ROUTER">
+<tr id="ProxySelector-ProxyType-ROUTER">
 <td><code>ROUTER</code></td>
 <td>
 </td>
@@ -311,9 +279,9 @@ No
 <tbody>
 <tr id="SetLogLevelRequest-selector">
 <td><code>selector</code></td>
-<td><code><a href="#NodeSelector">NodeSelector</a></code></td>
+<td><code><a href="#ProxySelector">ProxySelector</a></code></td>
 <td>
-<p>Selector selects a subset of the proxys for troubleshooting.</p>
+<p>Selector selects a subset of the proxies for troubleshooting.</p>
 
 </td>
 <td>

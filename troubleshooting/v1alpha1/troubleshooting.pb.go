@@ -7,11 +7,11 @@ import (
 	context "context"
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
-	_ "github.com/gogo/protobuf/types"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	io "io"
+	v1beta1 "istio.io/api/type/v1beta1"
 	math "math"
 	math_bits "math/bits"
 )
@@ -68,60 +68,60 @@ func (LogLevel) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_d9fca2f482bbaff3, []int{0}
 }
 
-type NodeSelector_NodeType int32
+type ProxySelector_ProxyType int32
 
 const (
-	NodeSelector_proxy  NodeSelector_NodeType = 0
-	NodeSelector_ROUTER NodeSelector_NodeType = 1
+	ProxySelector_proxy  ProxySelector_ProxyType = 0
+	ProxySelector_ROUTER ProxySelector_ProxyType = 1
 )
 
-var NodeSelector_NodeType_name = map[int32]string{
+var ProxySelector_ProxyType_name = map[int32]string{
 	0: "proxy",
 	1: "ROUTER",
 }
 
-var NodeSelector_NodeType_value = map[string]int32{
+var ProxySelector_ProxyType_value = map[string]int32{
 	"proxy":  0,
 	"ROUTER": 1,
 }
 
-func (x NodeSelector_NodeType) String() string {
-	return proto.EnumName(NodeSelector_NodeType_name, int32(x))
+func (x ProxySelector_ProxyType) String() string {
+	return proto.EnumName(ProxySelector_ProxyType_name, int32(x))
 }
 
-func (NodeSelector_NodeType) EnumDescriptor() ([]byte, []int) {
+func (ProxySelector_ProxyType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_d9fca2f482bbaff3, []int{0, 0}
 }
 
-// NodeSelector specifies the proxy filtering of the troubleshooting API targetted scope.
+// ProxySelector specifies the proxy filtering of the troubleshooting API targetted scope.
 // All the fields in this selector are and-ed by each other. Empty fields will selector all the
 // proxy.
-type NodeSelector struct {
-	// The type of the proxy runs as.
-	Types []NodeSelector_NodeType `protobuf:"varint,1,rep,packed,name=types,proto3,enum=istio.troubleshooting.v1alpha1.NodeSelector_NodeType" json:"types,omitempty"`
+type ProxySelector struct {
+	// The types of the proxy runs as.
+	Types []ProxySelector_ProxyType `protobuf:"varint,1,rep,packed,name=types,proto3,enum=istio.troubleshooting.v1alpha1.ProxySelector_ProxyType" json:"types,omitempty"`
 	// The namespaces of the proxy reside in.
 	Namespaces []string `protobuf:"bytes,2,rep,name=namespaces,proto3" json:"namespaces,omitempty"`
-	// the name of the proxys to be selected. For Kubernetes, this is the pod id.
+	// the names of the proxy to be selected. For Kubernetes, this is the pod id.
 	Names []string `protobuf:"bytes,3,rep,name=names,proto3" json:"names,omitempty"`
-	// The labels that selected proxys must have.
-	Labels               *NodeSelector_LabelSelector `protobuf:"bytes,4,opt,name=labels,proto3" json:"labels,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                    `json:"-"`
-	XXX_unrecognized     []byte                      `json:"-"`
-	XXX_sizecache        int32                       `json:"-"`
+	// Selector of proxy based on workload labels.
+	Selector             *v1beta1.WorkloadSelector `protobuf:"bytes,4,opt,name=selector,proto3" json:"selector,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                  `json:"-"`
+	XXX_unrecognized     []byte                    `json:"-"`
+	XXX_sizecache        int32                     `json:"-"`
 }
 
-func (m *NodeSelector) Reset()         { *m = NodeSelector{} }
-func (m *NodeSelector) String() string { return proto.CompactTextString(m) }
-func (*NodeSelector) ProtoMessage()    {}
-func (*NodeSelector) Descriptor() ([]byte, []int) {
+func (m *ProxySelector) Reset()         { *m = ProxySelector{} }
+func (m *ProxySelector) String() string { return proto.CompactTextString(m) }
+func (*ProxySelector) ProtoMessage()    {}
+func (*ProxySelector) Descriptor() ([]byte, []int) {
 	return fileDescriptor_d9fca2f482bbaff3, []int{0}
 }
-func (m *NodeSelector) XXX_Unmarshal(b []byte) error {
+func (m *ProxySelector) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *NodeSelector) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *ProxySelector) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_NodeSelector.Marshal(b, m, deterministic)
+		return xxx_messageInfo_ProxySelector.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -131,106 +131,53 @@ func (m *NodeSelector) XXX_Marshal(b []byte, deterministic bool) ([]byte, error)
 		return b[:n], nil
 	}
 }
-func (m *NodeSelector) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NodeSelector.Merge(m, src)
+func (m *ProxySelector) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProxySelector.Merge(m, src)
 }
-func (m *NodeSelector) XXX_Size() int {
+func (m *ProxySelector) XXX_Size() int {
 	return m.Size()
 }
-func (m *NodeSelector) XXX_DiscardUnknown() {
-	xxx_messageInfo_NodeSelector.DiscardUnknown(m)
+func (m *ProxySelector) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProxySelector.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_NodeSelector proto.InternalMessageInfo
+var xxx_messageInfo_ProxySelector proto.InternalMessageInfo
 
-func (m *NodeSelector) GetTypes() []NodeSelector_NodeType {
+func (m *ProxySelector) GetTypes() []ProxySelector_ProxyType {
 	if m != nil {
 		return m.Types
 	}
 	return nil
 }
 
-func (m *NodeSelector) GetNamespaces() []string {
+func (m *ProxySelector) GetNamespaces() []string {
 	if m != nil {
 		return m.Namespaces
 	}
 	return nil
 }
 
-func (m *NodeSelector) GetNames() []string {
+func (m *ProxySelector) GetNames() []string {
 	if m != nil {
 		return m.Names
 	}
 	return nil
 }
 
-func (m *NodeSelector) GetLabels() *NodeSelector_LabelSelector {
+func (m *ProxySelector) GetSelector() *v1beta1.WorkloadSelector {
 	if m != nil {
-		return m.Labels
-	}
-	return nil
-}
-
-// TODO: shall we refactor proxy.proto workload selector in this PR?
-// RESOLVE BEFORE MERGE!
-type NodeSelector_LabelSelector struct {
-	// One or more labels that indicate a specific set of pods/VMs
-	// on which this `proxy` configuration should be applied. The scope of
-	// label search is restricted to the configuration namespace in which the
-	// the resource is present.
-	Labels               map[string]string `protobuf:"bytes,1,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_unrecognized     []byte            `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
-}
-
-func (m *NodeSelector_LabelSelector) Reset()         { *m = NodeSelector_LabelSelector{} }
-func (m *NodeSelector_LabelSelector) String() string { return proto.CompactTextString(m) }
-func (*NodeSelector_LabelSelector) ProtoMessage()    {}
-func (*NodeSelector_LabelSelector) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d9fca2f482bbaff3, []int{0, 0}
-}
-func (m *NodeSelector_LabelSelector) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *NodeSelector_LabelSelector) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_NodeSelector_LabelSelector.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *NodeSelector_LabelSelector) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NodeSelector_LabelSelector.Merge(m, src)
-}
-func (m *NodeSelector_LabelSelector) XXX_Size() int {
-	return m.Size()
-}
-func (m *NodeSelector_LabelSelector) XXX_DiscardUnknown() {
-	xxx_messageInfo_NodeSelector_LabelSelector.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_NodeSelector_LabelSelector proto.InternalMessageInfo
-
-func (m *NodeSelector_LabelSelector) GetLabels() map[string]string {
-	if m != nil {
-		return m.Labels
+		return m.Selector
 	}
 	return nil
 }
 
 // GetConfigDumpRequest is the request of GetConfigDump.
 type GetConfigDumpRequest struct {
-	// Selector selects a subset of the proxys for troubleshooting.
-	Selector             *NodeSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
-	XXX_unrecognized     []byte        `json:"-"`
-	XXX_sizecache        int32         `json:"-"`
+	// Selector selects a subset of the proxies for troubleshooting.
+	Selector             *ProxySelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
 }
 
 func (m *GetConfigDumpRequest) Reset()         { *m = GetConfigDumpRequest{} }
@@ -266,7 +213,7 @@ func (m *GetConfigDumpRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetConfigDumpRequest proto.InternalMessageInfo
 
-func (m *GetConfigDumpRequest) GetSelector() *NodeSelector {
+func (m *GetConfigDumpRequest) GetSelector() *ProxySelector {
 	if m != nil {
 		return m.Selector
 	}
@@ -275,7 +222,7 @@ func (m *GetConfigDumpRequest) GetSelector() *NodeSelector {
 
 // GetConfigDumpResponse is the request of GetConfigDump.
 type GetConfigDumpResponse struct {
-	// The actual config dump payload.
+	// The actual configuration dump payload.
 	Payload              string   `protobuf:"bytes,1,opt,name=payload,proto3" json:"payload,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -383,8 +330,8 @@ func (m *LoggerLogLevel) GetLogLevel() LogLevel {
 }
 
 type SetLogLevelRequest struct {
-	// Selector selects a subset of the proxys for troubleshooting.
-	Selector *NodeSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
+	// Selector selects a subset of the proxies for troubleshooting.
+	Selector *ProxySelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
 	// The log levels to be updated to.
 	// Empty list means no change to the existing log level settings of the proxy.
 	LoggerLevels         []*LoggerLogLevel `protobuf:"bytes,2,rep,name=logger_levels,json=loggerLevels,proto3" json:"logger_levels,omitempty"`
@@ -426,7 +373,7 @@ func (m *SetLogLevelRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SetLogLevelRequest proto.InternalMessageInfo
 
-func (m *SetLogLevelRequest) GetSelector() *NodeSelector {
+func (m *SetLogLevelRequest) GetSelector() *ProxySelector {
 	if m != nil {
 		return m.Selector
 	}
@@ -695,10 +642,8 @@ func (*TroubleshootResponse) XXX_OneofWrappers() []interface{} {
 
 func init() {
 	proto.RegisterEnum("istio.troubleshooting.v1alpha1.LogLevel", LogLevel_name, LogLevel_value)
-	proto.RegisterEnum("istio.troubleshooting.v1alpha1.NodeSelector_NodeType", NodeSelector_NodeType_name, NodeSelector_NodeType_value)
-	proto.RegisterType((*NodeSelector)(nil), "istio.troubleshooting.v1alpha1.NodeSelector")
-	proto.RegisterType((*NodeSelector_LabelSelector)(nil), "istio.troubleshooting.v1alpha1.NodeSelector.LabelSelector")
-	proto.RegisterMapType((map[string]string)(nil), "istio.troubleshooting.v1alpha1.NodeSelector.LabelSelector.LabelsEntry")
+	proto.RegisterEnum("istio.troubleshooting.v1alpha1.ProxySelector_ProxyType", ProxySelector_ProxyType_name, ProxySelector_ProxyType_value)
+	proto.RegisterType((*ProxySelector)(nil), "istio.troubleshooting.v1alpha1.ProxySelector")
 	proto.RegisterType((*GetConfigDumpRequest)(nil), "istio.troubleshooting.v1alpha1.GetConfigDumpRequest")
 	proto.RegisterType((*GetConfigDumpResponse)(nil), "istio.troubleshooting.v1alpha1.GetConfigDumpResponse")
 	proto.RegisterType((*LoggerLogLevel)(nil), "istio.troubleshooting.v1alpha1.LoggerLogLevel")
@@ -713,57 +658,53 @@ func init() {
 }
 
 var fileDescriptor_d9fca2f482bbaff3 = []byte{
-	// 792 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x96, 0x4b, 0x8f, 0xea, 0x54,
-	0x1c, 0xc0, 0x39, 0x3c, 0xcb, 0xbf, 0x30, 0x69, 0xce, 0x9d, 0x9b, 0x34, 0x18, 0x11, 0x9b, 0x98,
-	0x10, 0x63, 0xe0, 0x4e, 0xc7, 0x1b, 0xf5, 0xee, 0x06, 0x2e, 0xcc, 0x10, 0x11, 0xcc, 0x81, 0xf1,
-	0x31, 0x0b, 0x6b, 0x81, 0x33, 0x9d, 0x6a, 0xe1, 0xd4, 0x9e, 0x42, 0x86, 0x95, 0x7e, 0x0d, 0x37,
-	0x7e, 0x00, 0xe3, 0xce, 0xf8, 0x1d, 0x5c, 0xfa, 0x11, 0xcc, 0xec, 0x74, 0xef, 0xde, 0xf4, 0x39,
-	0x65, 0xc2, 0x88, 0xa0, 0x77, 0xf7, 0x7f, 0x9c, 0xff, 0xeb, 0x77, 0xfe, 0x3d, 0x29, 0x34, 0x5c,
-	0x87, 0x2d, 0x27, 0x16, 0xe5, 0x37, 0x8c, 0xb9, 0xe6, 0xc2, 0x68, 0xae, 0x4e, 0x74, 0xcb, 0xbe,
-	0xd1, 0x4f, 0x9a, 0x0f, 0x1c, 0x0d, 0xdb, 0x61, 0x2e, 0xc3, 0x55, 0x93, 0xbb, 0x26, 0x7b, 0x18,
-	0xd5, 0x88, 0xa2, 0x2a, 0x55, 0x83, 0x31, 0xc3, 0xa2, 0x4d, 0xff, 0xf4, 0x64, 0x79, 0xdd, 0x9c,
-	0x2d, 0x1d, 0xdd, 0x35, 0xd9, 0x22, 0x88, 0x57, 0x7e, 0xc9, 0x40, 0x69, 0xc0, 0x66, 0x74, 0x44,
-	0x2d, 0x3a, 0x75, 0x99, 0x83, 0x3f, 0x84, 0x9c, 0xbb, 0xb6, 0x29, 0x97, 0x51, 0x2d, 0x53, 0x3f,
-	0x52, 0x9f, 0x37, 0xfe, 0xb9, 0x40, 0x23, 0x19, 0xec, 0x2b, 0xe3, 0xb5, 0x4d, 0x49, 0x90, 0x03,
-	0x57, 0x01, 0x16, 0xfa, 0x9c, 0x72, 0x5b, 0x9f, 0x52, 0x2e, 0xa7, 0x6b, 0x99, 0x7a, 0x91, 0x24,
-	0x2c, 0xf8, 0x18, 0x72, 0xbe, 0x26, 0x67, 0x7c, 0x57, 0xa0, 0x60, 0x02, 0x79, 0x4b, 0x9f, 0x50,
-	0x8b, 0xcb, 0xd9, 0x1a, 0xaa, 0x8b, 0xea, 0x8b, 0xbd, 0x7a, 0xe8, 0x7b, 0xa1, 0x91, 0x46, 0xc2,
-	0x4c, 0x95, 0x1f, 0x11, 0x94, 0x37, 0x3c, 0xf8, 0x8b, 0xb8, 0x8a, 0x37, 0xa9, 0xa8, 0x76, 0x0f,
-	0xaf, 0x12, 0x68, 0xbc, 0xb3, 0x70, 0x9d, 0x75, 0x5c, 0xf1, 0x03, 0x10, 0x13, 0x66, 0x2c, 0x41,
-	0xe6, 0x6b, 0xba, 0x96, 0x51, 0x0d, 0xd5, 0x8b, 0xc4, 0x13, 0xbd, 0xe1, 0x57, 0xba, 0xb5, 0xa4,
-	0x72, 0xda, 0xb7, 0x05, 0xca, 0x8b, 0xf4, 0xfb, 0x48, 0x79, 0x13, 0x84, 0x88, 0x24, 0x2e, 0x42,
-	0xce, 0x76, 0xd8, 0xed, 0x5a, 0x4a, 0x61, 0x80, 0x3c, 0x19, 0x5e, 0x8e, 0x3b, 0x44, 0x42, 0xca,
-	0x97, 0x70, 0x7c, 0x4e, 0xdd, 0x36, 0x5b, 0x5c, 0x9b, 0xc6, 0xcb, 0xe5, 0xdc, 0x26, 0xf4, 0x9b,
-	0x25, 0xe5, 0x2e, 0xbe, 0x00, 0x81, 0x87, 0x5d, 0xf9, 0xb5, 0x44, 0xf5, 0x9d, 0x7d, 0xe6, 0x22,
-	0x71, 0xb4, 0x72, 0x02, 0x4f, 0x1f, 0x54, 0xe0, 0x36, 0x5b, 0x70, 0x8a, 0x65, 0x28, 0xd8, 0xfa,
-	0xda, 0x62, 0xfa, 0x2c, 0x9c, 0x26, 0x52, 0x95, 0x5b, 0x38, 0xea, 0x33, 0xc3, 0xa0, 0x4e, 0x9f,
-	0x19, 0x7d, 0xba, 0xa2, 0x16, 0x7e, 0x03, 0x44, 0xcb, 0xb7, 0x68, 0xde, 0xd5, 0x86, 0xe7, 0x21,
-	0x30, 0x0d, 0xf4, 0x39, 0xc5, 0x1d, 0x28, 0x5a, 0xcc, 0xd0, 0x2c, 0xef, 0xb4, 0x0f, 0xe2, 0x48,
-	0xad, 0xef, 0x6a, 0x38, 0xca, 0x4e, 0x04, 0x2b, 0x94, 0x94, 0x9f, 0x11, 0xe0, 0x11, 0x75, 0x63,
-	0xcf, 0xff, 0x4d, 0x03, 0x8f, 0xa0, 0x1c, 0x0e, 0xe2, 0xb7, 0x1a, 0x2c, 0xb3, 0xa8, 0x36, 0xfe,
-	0x45, 0xaf, 0x09, 0x1e, 0xa4, 0x14, 0x24, 0xf1, 0x15, 0xae, 0x7c, 0x05, 0x4f, 0x36, 0x9a, 0x0e,
-	0x01, 0xbf, 0x92, 0x5a, 0x7f, 0x21, 0x78, 0x32, 0x4e, 0x44, 0x46, 0x88, 0x5e, 0x07, 0x70, 0x02,
-	0x51, 0x33, 0x83, 0x0b, 0xcd, 0x92, 0x62, 0x68, 0xe9, 0xcd, 0xf0, 0x67, 0x20, 0x4e, 0xfd, 0x15,
-	0xd0, 0x66, 0xcb, 0xb9, 0x2d, 0xff, 0x51, 0xf0, 0x29, 0xbe, 0xbb, 0xab, 0x95, 0x6d, 0xbb, 0x79,
-	0x91, 0x22, 0x30, 0x8d, 0x8d, 0xf8, 0x0a, 0xca, 0x9c, 0xba, 0xda, 0xfd, 0xed, 0xff, 0x19, 0xe4,
-	0x3e, 0xdd, 0x95, 0x7b, 0x0b, 0xb2, 0x8b, 0x14, 0x11, 0xf9, 0xbd, 0xb9, 0x55, 0x84, 0x42, 0x38,
-	0x82, 0xf2, 0x53, 0x1a, 0x8e, 0x37, 0xe7, 0x0e, 0x29, 0xef, 0x18, 0xfc, 0x3d, 0x90, 0x2d, 0x9d,
-	0xbb, 0x9a, 0x13, 0x9e, 0xd7, 0x5c, 0xa6, 0x85, 0x5e, 0x7f, 0x4f, 0x05, 0xf2, 0xd4, 0xf3, 0x47,
-	0xe9, 0xc6, 0x2c, 0x02, 0xfa, 0xf9, 0x56, 0x62, 0xcf, 0xf7, 0x24, 0x16, 0xcf, 0x95, 0x44, 0x76,
-	0x09, 0x10, 0xe3, 0xe2, 0xff, 0x91, 0x57, 0x31, 0xfa, 0x76, 0x78, 0x0b, 0x40, 0x88, 0xa6, 0x7c,
-	0xfb, 0x13, 0x10, 0xe2, 0x8f, 0xb7, 0x00, 0x99, 0x61, 0xb7, 0x2b, 0xa5, 0x70, 0x09, 0x84, 0x36,
-	0xe9, 0x8d, 0x7b, 0xed, 0xb3, 0xbe, 0x84, 0xbc, 0x17, 0xa9, 0x43, 0xc8, 0x90, 0x48, 0x69, 0x2c,
-	0x40, 0xf6, 0xd3, 0x33, 0x32, 0x90, 0x32, 0x9e, 0xd4, 0x1b, 0x74, 0x87, 0x52, 0xd6, 0x73, 0xbf,
-	0xec, 0xb4, 0x2e, 0xcf, 0xa5, 0x9c, 0x27, 0x8e, 0xc9, 0x59, 0xbb, 0x23, 0xe5, 0xd5, 0xef, 0xd3,
-	0x50, 0xf9, 0x88, 0xf2, 0x9b, 0xf1, 0x66, 0x97, 0x23, 0xea, 0xac, 0xcc, 0x29, 0xc5, 0xdf, 0x21,
-	0x28, 0x6f, 0x10, 0xc0, 0x07, 0xad, 0x58, 0xe5, 0x30, 0xcc, 0x4a, 0xea, 0x19, 0xc2, 0xb7, 0x20,
-	0x26, 0x48, 0x61, 0x75, 0x2f, 0xac, 0x41, 0xf5, 0x43, 0xae, 0x42, 0x49, 0xa9, 0x3f, 0x20, 0x78,
-	0xed, 0x63, 0xef, 0x8d, 0x7f, 0x04, 0xce, 0xb7, 0x50, 0x4a, 0x7a, 0x76, 0xa3, 0xd9, 0xb6, 0xef,
-	0xbb, 0x9b, 0xdb, 0xf2, 0x3a, 0x28, 0xa9, 0x3a, 0x7a, 0x86, 0x5a, 0xa7, 0xbf, 0xde, 0x55, 0xd1,
-	0x6f, 0x77, 0x55, 0xf4, 0xfb, 0x5d, 0x15, 0x5d, 0xbd, 0x15, 0xe4, 0x31, 0x59, 0x53, 0xb7, 0xcd,
-	0xe6, 0x63, 0xff, 0x2b, 0x93, 0xbc, 0xff, 0x83, 0x71, 0xfa, 0x77, 0x00, 0x00, 0x00, 0xff, 0xff,
-	0x88, 0xb5, 0x45, 0x47, 0xd2, 0x08, 0x00, 0x00,
+	// 732 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x95, 0xcf, 0x6e, 0xd3, 0x4e,
+	0x10, 0xc7, 0xb3, 0xf9, 0xd3, 0xc4, 0x93, 0xa6, 0xb2, 0xb6, 0xad, 0x64, 0xb5, 0xfa, 0xe5, 0x17,
+	0x59, 0x20, 0x45, 0x48, 0x38, 0x4d, 0x0a, 0xea, 0x95, 0x26, 0x4d, 0xdb, 0x48, 0x69, 0x83, 0x36,
+	0x2e, 0x85, 0x5e, 0x2c, 0x37, 0x5d, 0x52, 0x83, 0x93, 0x35, 0x5e, 0x27, 0x6a, 0x4e, 0xf0, 0x1a,
+	0x5c, 0x78, 0x02, 0x8e, 0x3c, 0x04, 0x47, 0x1e, 0x01, 0xf5, 0x06, 0x77, 0x2e, 0x9c, 0x90, 0xff,
+	0xd6, 0xa9, 0x02, 0xa1, 0x05, 0x6e, 0x3b, 0x33, 0x9e, 0x99, 0xef, 0x7c, 0x3c, 0x5e, 0x83, 0xe2,
+	0xd8, 0x6c, 0x74, 0x6a, 0x52, 0x7e, 0xce, 0x98, 0x63, 0x0c, 0xfb, 0x95, 0x71, 0x55, 0x37, 0xad,
+	0x73, 0xbd, 0x5a, 0xb9, 0x16, 0x50, 0x2c, 0x9b, 0x39, 0x0c, 0x17, 0x0d, 0xee, 0x18, 0xec, 0x7a,
+	0x96, 0x12, 0x66, 0xad, 0xad, 0x3b, 0x13, 0x8b, 0x56, 0xc6, 0xd5, 0x53, 0xea, 0xe8, 0xd5, 0x0a,
+	0xa7, 0x26, 0xed, 0x39, 0xcc, 0xf6, 0x93, 0xe5, 0xef, 0x08, 0x0a, 0x8f, 0x6d, 0x76, 0x31, 0xe9,
+	0x06, 0x7e, 0x7c, 0x00, 0x19, 0x37, 0x81, 0x4b, 0xa8, 0x94, 0x2a, 0x2f, 0xd5, 0xb6, 0x94, 0x5f,
+	0x97, 0x57, 0xa6, 0xb2, 0x7d, 0x4b, 0x9d, 0x58, 0x94, 0xf8, 0x55, 0x70, 0x11, 0x60, 0xa8, 0x0f,
+	0x28, 0xb7, 0xf4, 0x1e, 0xe5, 0x52, 0xb2, 0x94, 0x2a, 0x0b, 0x24, 0xe6, 0xc1, 0x2b, 0x90, 0xf1,
+	0x2c, 0x29, 0xe5, 0x85, 0x7c, 0x03, 0x3f, 0x82, 0x5c, 0x28, 0x54, 0x4a, 0x97, 0x50, 0x39, 0x5f,
+	0xbb, 0x13, 0xea, 0x98, 0x58, 0x54, 0x09, 0x86, 0x51, 0x8e, 0x99, 0xfd, 0xd2, 0x64, 0xfa, 0x59,
+	0xd8, 0x9e, 0x44, 0x59, 0xb2, 0x0c, 0x42, 0xa4, 0x05, 0x0b, 0x90, 0xb1, 0x5c, 0x43, 0x4c, 0x60,
+	0x80, 0x05, 0xd2, 0x39, 0x52, 0x9b, 0x44, 0x44, 0xb2, 0x0e, 0x2b, 0x7b, 0xd4, 0x69, 0xb0, 0xe1,
+	0x73, 0xa3, 0xbf, 0x33, 0x1a, 0x58, 0x84, 0xbe, 0x1a, 0x51, 0xee, 0xe0, 0x56, 0xac, 0x3b, 0xf2,
+	0xba, 0xdf, 0xbf, 0x11, 0x85, 0x98, 0x8c, 0x2a, 0xac, 0x5e, 0x6b, 0xc1, 0x2d, 0x36, 0xe4, 0x14,
+	0x4b, 0x90, 0xb5, 0xf4, 0x89, 0x2b, 0xde, 0x6b, 0x21, 0x90, 0xd0, 0x94, 0x2f, 0x60, 0xa9, 0xcd,
+	0xfa, 0x7d, 0x6a, 0xb7, 0x59, 0xbf, 0x4d, 0xc7, 0xd4, 0xc4, 0xff, 0x43, 0xde, 0xf4, 0x3c, 0x9a,
+	0x4b, 0x27, 0x78, 0x1e, 0x7c, 0xd7, 0xa1, 0x3e, 0xa0, 0xb8, 0x09, 0x82, 0xc9, 0xfa, 0x9a, 0xe9,
+	0x3e, 0x2d, 0x25, 0x4b, 0xa8, 0xbc, 0x54, 0x2b, 0xcf, 0x53, 0x1c, 0x56, 0x27, 0x39, 0x33, 0x38,
+	0xc9, 0x1f, 0x10, 0xe0, 0x2e, 0x75, 0xa2, 0xc8, 0x5f, 0xc7, 0x81, 0xbb, 0x50, 0x08, 0x26, 0xf1,
+	0xb4, 0xfa, 0x0b, 0x91, 0xaf, 0x29, 0xbf, 0x21, 0x36, 0x06, 0x84, 0x2c, 0xfa, 0x45, 0x3c, 0x83,
+	0xcb, 0x2f, 0x60, 0x79, 0x4a, 0x75, 0x40, 0xf8, 0x9f, 0xf4, 0xfa, 0x86, 0x60, 0x59, 0x8d, 0x65,
+	0x86, 0x8c, 0xfe, 0x03, 0xb0, 0xfd, 0xa3, 0x66, 0xf8, 0x6f, 0x34, 0x4d, 0x84, 0xc0, 0xd3, 0x3a,
+	0xc3, 0x4f, 0x21, 0xdf, 0xf3, 0x76, 0x40, 0x3b, 0x1b, 0x0d, 0x2c, 0xe9, 0x4b, 0xd6, 0xc3, 0xf8,
+	0x60, 0x9e, 0x94, 0x59, 0xdb, 0xb9, 0x9f, 0x20, 0xd0, 0x8b, 0x9c, 0xf8, 0x04, 0x0a, 0x9c, 0x3a,
+	0xda, 0xd5, 0xeb, 0xff, 0xea, 0xd7, 0xde, 0x9c, 0x57, 0x7b, 0x06, 0xb2, 0xfd, 0x04, 0xc9, 0xf3,
+	0x2b, 0x77, 0x5d, 0x80, 0x6c, 0x30, 0x82, 0xfc, 0x3e, 0x09, 0x2b, 0xd3, 0x73, 0x07, 0x94, 0xe7,
+	0x0c, 0xbe, 0x05, 0x92, 0xa9, 0x73, 0x47, 0xb3, 0x83, 0xe7, 0x35, 0x87, 0x69, 0x41, 0xd4, 0x5b,
+	0xd4, 0x1c, 0x59, 0x75, 0xe3, 0x61, 0x39, 0x95, 0x85, 0x40, 0x9f, 0xcd, 0x24, 0xf6, 0xf0, 0x86,
+	0xc4, 0xa2, 0xb9, 0xe2, 0xc8, 0x8e, 0x00, 0x22, 0x5c, 0xfc, 0x0f, 0x79, 0x09, 0xe1, 0xc7, 0xc3,
+	0xeb, 0x00, 0xb9, 0x70, 0xca, 0x7b, 0x4f, 0x20, 0x17, 0x7d, 0xbd, 0x59, 0x48, 0x75, 0x76, 0x77,
+	0xc5, 0x04, 0x5e, 0x84, 0x5c, 0x83, 0xb4, 0xd4, 0x56, 0x63, 0xbb, 0x2d, 0x22, 0xf7, 0x4e, 0x6a,
+	0x12, 0xd2, 0x21, 0x62, 0x12, 0xe7, 0x20, 0x7d, 0xbc, 0x4d, 0x0e, 0xc5, 0x94, 0x7b, 0x6a, 0x1d,
+	0xee, 0x76, 0xc4, 0xb4, 0x1b, 0xde, 0x69, 0xd6, 0x8f, 0xf6, 0xc4, 0x8c, 0x7b, 0x54, 0xc9, 0x76,
+	0xa3, 0x29, 0x2e, 0xd4, 0xde, 0x26, 0x61, 0xed, 0x80, 0xf2, 0x73, 0x75, 0x5a, 0x65, 0x97, 0xda,
+	0x63, 0xa3, 0x47, 0xf1, 0x1b, 0x04, 0x85, 0x29, 0x02, 0xf8, 0x56, 0x2b, 0xb6, 0x76, 0x3b, 0xcc,
+	0x72, 0x62, 0x03, 0xe1, 0x0b, 0xc8, 0xc7, 0x48, 0xe1, 0xda, 0x8d, 0xb0, 0xfa, 0xdd, 0x6f, 0xf3,
+	0x2a, 0xe4, 0x44, 0xed, 0x1d, 0x82, 0x75, 0xff, 0xca, 0x9f, 0x0d, 0xe7, 0x35, 0x2c, 0xc6, 0x23,
+	0xf3, 0xd1, 0xcc, 0xda, 0xf7, 0xf9, 0xe2, 0x66, 0xdc, 0x0e, 0x72, 0xa2, 0x8c, 0x36, 0x50, 0x7d,
+	0xf3, 0xe3, 0x65, 0x11, 0x7d, 0xba, 0x2c, 0xa2, 0xcf, 0x97, 0x45, 0x74, 0x72, 0xd7, 0xaf, 0x63,
+	0xb0, 0x8a, 0x6e, 0x19, 0x95, 0x9f, 0xfd, 0xf3, 0x4f, 0x17, 0xbc, 0xff, 0xf4, 0xe6, 0x8f, 0x00,
+	0x00, 0x00, 0xff, 0xff, 0x16, 0x2a, 0x11, 0x7c, 0x16, 0x08, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -778,7 +719,7 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MeshTroubleshootingServiceClient interface {
-	// GetConfigDump gets the config dump of the proxy.
+	// GetConfigDump gets the configuratoin dump of the proxy.
 	GetConfigDump(ctx context.Context, in *GetConfigDumpRequest, opts ...grpc.CallOption) (MeshTroubleshootingService_GetConfigDumpClient, error)
 	// Set the proxy log level.
 	SetLogLevel(ctx context.Context, in *SetLogLevelRequest, opts ...grpc.CallOption) (*SetLogLevelResponse, error)
@@ -835,7 +776,7 @@ func (c *meshTroubleshootingServiceClient) SetLogLevel(ctx context.Context, in *
 
 // MeshTroubleshootingServiceServer is the server API for MeshTroubleshootingService service.
 type MeshTroubleshootingServiceServer interface {
-	// GetConfigDump gets the config dump of the proxy.
+	// GetConfigDump gets the configuratoin dump of the proxy.
 	GetConfigDump(*GetConfigDumpRequest, MeshTroubleshootingService_GetConfigDumpServer) error
 	// Set the proxy log level.
 	SetLogLevel(context.Context, *SetLogLevelRequest) (*SetLogLevelResponse, error)
@@ -1028,7 +969,7 @@ var _ProxyTroubleshootingService_serviceDesc = grpc.ServiceDesc{
 	Metadata: "troubleshooting/v1alpha1/troubleshooting.proto",
 }
 
-func (m *NodeSelector) Marshal() (dAtA []byte, err error) {
+func (m *ProxySelector) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1038,12 +979,12 @@ func (m *NodeSelector) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *NodeSelector) MarshalTo(dAtA []byte) (int, error) {
+func (m *ProxySelector) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *NodeSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *ProxySelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1052,9 +993,9 @@ func (m *NodeSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	if m.Labels != nil {
+	if m.Selector != nil {
 		{
-			size, err := m.Labels.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.Selector.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1099,52 +1040,6 @@ func (m *NodeSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintTroubleshooting(dAtA, i, uint64(j2))
 		i--
 		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *NodeSelector_LabelSelector) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *NodeSelector_LabelSelector) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *NodeSelector_LabelSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if len(m.Labels) > 0 {
-		for k := range m.Labels {
-			v := m.Labels[k]
-			baseI := i
-			i -= len(v)
-			copy(dAtA[i:], v)
-			i = encodeVarintTroubleshooting(dAtA, i, uint64(len(v)))
-			i--
-			dAtA[i] = 0x12
-			i -= len(k)
-			copy(dAtA[i:], k)
-			i = encodeVarintTroubleshooting(dAtA, i, uint64(len(k)))
-			i--
-			dAtA[i] = 0xa
-			i = encodeVarintTroubleshooting(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0xa
-		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -1546,7 +1441,7 @@ func encodeVarintTroubleshooting(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *NodeSelector) Size() (n int) {
+func (m *ProxySelector) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1571,29 +1466,9 @@ func (m *NodeSelector) Size() (n int) {
 			n += 1 + l + sovTroubleshooting(uint64(l))
 		}
 	}
-	if m.Labels != nil {
-		l = m.Labels.Size()
+	if m.Selector != nil {
+		l = m.Selector.Size()
 		n += 1 + l + sovTroubleshooting(uint64(l))
-	}
-	if m.XXX_unrecognized != nil {
-		n += len(m.XXX_unrecognized)
-	}
-	return n
-}
-
-func (m *NodeSelector_LabelSelector) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Labels) > 0 {
-		for k, v := range m.Labels {
-			_ = k
-			_ = v
-			mapEntrySize := 1 + len(k) + sovTroubleshooting(uint64(len(k))) + 1 + len(v) + sovTroubleshooting(uint64(len(v)))
-			n += mapEntrySize + 1 + sovTroubleshooting(uint64(mapEntrySize))
-		}
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -1786,7 +1661,7 @@ func sovTroubleshooting(x uint64) (n int) {
 func sozTroubleshooting(x uint64) (n int) {
 	return sovTroubleshooting(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *NodeSelector) Unmarshal(dAtA []byte) error {
+func (m *ProxySelector) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1809,15 +1684,15 @@ func (m *NodeSelector) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: NodeSelector: wiretype end group for non-group")
+			return fmt.Errorf("proto: ProxySelector: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: NodeSelector: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: ProxySelector: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType == 0 {
-				var v NodeSelector_NodeType
+				var v ProxySelector_ProxyType
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return ErrIntOverflowTroubleshooting
@@ -1827,7 +1702,7 @@ func (m *NodeSelector) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					v |= NodeSelector_NodeType(b&0x7F) << shift
+					v |= ProxySelector_ProxyType(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1861,10 +1736,10 @@ func (m *NodeSelector) Unmarshal(dAtA []byte) error {
 				}
 				var elementCount int
 				if elementCount != 0 && len(m.Types) == 0 {
-					m.Types = make([]NodeSelector_NodeType, 0, elementCount)
+					m.Types = make([]ProxySelector_ProxyType, 0, elementCount)
 				}
 				for iNdEx < postIndex {
-					var v NodeSelector_NodeType
+					var v ProxySelector_ProxyType
 					for shift := uint(0); ; shift += 7 {
 						if shift >= 64 {
 							return ErrIntOverflowTroubleshooting
@@ -1874,7 +1749,7 @@ func (m *NodeSelector) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						v |= NodeSelector_NodeType(b&0x7F) << shift
+						v |= ProxySelector_ProxyType(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -1950,7 +1825,7 @@ func (m *NodeSelector) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Labels", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Selector", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1977,193 +1852,12 @@ func (m *NodeSelector) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Labels == nil {
-				m.Labels = &NodeSelector_LabelSelector{}
+			if m.Selector == nil {
+				m.Selector = &v1beta1.WorkloadSelector{}
 			}
-			if err := m.Labels.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Selector.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTroubleshooting(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTroubleshooting
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTroubleshooting
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *NodeSelector_LabelSelector) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTroubleshooting
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: LabelSelector: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: LabelSelector: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Labels", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTroubleshooting
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTroubleshooting
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTroubleshooting
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Labels == nil {
-				m.Labels = make(map[string]string)
-			}
-			var mapkey string
-			var mapvalue string
-			for iNdEx < postIndex {
-				entryPreIndex := iNdEx
-				var wire uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTroubleshooting
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					wire |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				fieldNum := int32(wire >> 3)
-				if fieldNum == 1 {
-					var stringLenmapkey uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowTroubleshooting
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapkey |= uint64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapkey := int(stringLenmapkey)
-					if intStringLenmapkey < 0 {
-						return ErrInvalidLengthTroubleshooting
-					}
-					postStringIndexmapkey := iNdEx + intStringLenmapkey
-					if postStringIndexmapkey < 0 {
-						return ErrInvalidLengthTroubleshooting
-					}
-					if postStringIndexmapkey > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
-					iNdEx = postStringIndexmapkey
-				} else if fieldNum == 2 {
-					var stringLenmapvalue uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowTroubleshooting
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapvalue |= uint64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapvalue := int(stringLenmapvalue)
-					if intStringLenmapvalue < 0 {
-						return ErrInvalidLengthTroubleshooting
-					}
-					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
-					if postStringIndexmapvalue < 0 {
-						return ErrInvalidLengthTroubleshooting
-					}
-					if postStringIndexmapvalue > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
-					iNdEx = postStringIndexmapvalue
-				} else {
-					iNdEx = entryPreIndex
-					skippy, err := skipTroubleshooting(dAtA[iNdEx:])
-					if err != nil {
-						return err
-					}
-					if skippy < 0 {
-						return ErrInvalidLengthTroubleshooting
-					}
-					if (iNdEx + skippy) > postIndex {
-						return io.ErrUnexpectedEOF
-					}
-					iNdEx += skippy
-				}
-			}
-			m.Labels[mapkey] = mapvalue
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2249,7 +1943,7 @@ func (m *GetConfigDumpRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Selector == nil {
-				m.Selector = &NodeSelector{}
+				m.Selector = &ProxySelector{}
 			}
 			if err := m.Selector.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2530,7 +2224,7 @@ func (m *SetLogLevelRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Selector == nil {
-				m.Selector = &NodeSelector{}
+				m.Selector = &ProxySelector{}
 			}
 			if err := m.Selector.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
