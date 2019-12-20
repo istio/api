@@ -8,6 +8,7 @@ import (
 	fmt "fmt"
 	github_com_gogo_protobuf_jsonpb "github.com/gogo/protobuf/jsonpb"
 	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/gogo/protobuf/types"
 	_ "istio.io/api/type/v1beta1"
 	math "math"
 )
@@ -83,25 +84,25 @@ func (this *SetLogLevelResponse) UnmarshalJSON(b []byte) error {
 	return TroubleshootingUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for TroubleshootRequest
-func (this *TroubleshootRequest) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for TroubleShootingRequest
+func (this *TroubleShootingRequest) MarshalJSON() ([]byte, error) {
 	str, err := TroubleshootingMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for TroubleshootRequest
-func (this *TroubleshootRequest) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for TroubleShootingRequest
+func (this *TroubleShootingRequest) UnmarshalJSON(b []byte) error {
 	return TroubleshootingUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for TroubleshootResponse
-func (this *TroubleshootResponse) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for TroubleShootingResponse
+func (this *TroubleShootingResponse) MarshalJSON() ([]byte, error) {
 	str, err := TroubleshootingMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for TroubleshootResponse
-func (this *TroubleshootResponse) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for TroubleShootingResponse
+func (this *TroubleShootingResponse) UnmarshalJSON(b []byte) error {
 	return TroubleshootingUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

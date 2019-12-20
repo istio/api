@@ -7,6 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
+	types "github.com/gogo/protobuf/types"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -68,37 +69,38 @@ func (LogLevel) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_d9fca2f482bbaff3, []int{0}
 }
 
-type ProxySelector_ProxyType int32
+// The type of the proxy runs as.
+type ProxySelector_NodeType int32
 
 const (
-	ProxySelector_SIDECAR ProxySelector_ProxyType = 0
-	ProxySelector_ROUTER  ProxySelector_ProxyType = 1
+	ProxySelector_SIDECAR ProxySelector_NodeType = 0
+	ProxySelector_ROUTER  ProxySelector_NodeType = 1
 )
 
-var ProxySelector_ProxyType_name = map[int32]string{
+var ProxySelector_NodeType_name = map[int32]string{
 	0: "SIDECAR",
 	1: "ROUTER",
 }
 
-var ProxySelector_ProxyType_value = map[string]int32{
+var ProxySelector_NodeType_value = map[string]int32{
 	"SIDECAR": 0,
 	"ROUTER":  1,
 }
 
-func (x ProxySelector_ProxyType) String() string {
-	return proto.EnumName(ProxySelector_ProxyType_name, int32(x))
+func (x ProxySelector_NodeType) String() string {
+	return proto.EnumName(ProxySelector_NodeType_name, int32(x))
 }
 
-func (ProxySelector_ProxyType) EnumDescriptor() ([]byte, []int) {
+func (ProxySelector_NodeType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_d9fca2f482bbaff3, []int{0, 0}
 }
 
 // ProxySelector specifies the proxy filtering of the troubleshooting API targetted scope.
-// All the fields in this selector are and-ed by each other. Empty fields will selector all the
+// All the fields in this selector are and-ed together. Empty fields will selector all the
 // proxy.
 type ProxySelector struct {
 	// The types of the proxy runs as.
-	Types []ProxySelector_ProxyType `protobuf:"varint,1,rep,packed,name=types,proto3,enum=istio.troubleshooting.v1alpha1.ProxySelector_ProxyType" json:"types,omitempty"`
+	Types []ProxySelector_NodeType `protobuf:"varint,1,rep,packed,name=types,proto3,enum=istio.troubleshooting.v1alpha1.ProxySelector_NodeType" json:"types,omitempty"`
 	// The namespaces of the proxy reside in.
 	Namespaces []string `protobuf:"bytes,2,rep,name=namespaces,proto3" json:"namespaces,omitempty"`
 	// the names of the proxy to be selected. For Kubernetes, this is the pod id.
@@ -143,7 +145,7 @@ func (m *ProxySelector) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ProxySelector proto.InternalMessageInfo
 
-func (m *ProxySelector) GetTypes() []ProxySelector_ProxyType {
+func (m *ProxySelector) GetTypes() []ProxySelector_NodeType {
 	if m != nil {
 		return m.Types
 	}
@@ -435,31 +437,35 @@ func (m *SetLogLevelResponse) GetLoggerLevels() []*LoggerLogLevel {
 	return nil
 }
 
-// Proxy level troubleshoot request.
-type TroubleshootRequest struct {
+// Proxy level troubleshooting request.
+type TroubleShootingRequest struct {
 	// request_id is the the identifier for each troubleshooting session.
 	RequestId uint64 `protobuf:"varint,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	// timeout specifies the timeout for the troubleshooting request.
+	// We have to specify the timeout in the payload since request flow is reverse
+	// direction of the actual gRPC service.
+	Timeout *types.Duration `protobuf:"bytes,2,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	// Types that are valid to be assigned to Request:
-	//	*TroubleshootRequest_ConfigDump
-	//	*TroubleshootRequest_SetLogLevel
-	Request              isTroubleshootRequest_Request `protobuf_oneof:"request"`
-	XXX_NoUnkeyedLiteral struct{}                      `json:"-"`
-	XXX_unrecognized     []byte                        `json:"-"`
-	XXX_sizecache        int32                         `json:"-"`
+	//	*TroubleShootingRequest_ConfigDump
+	//	*TroubleShootingRequest_SetLogLevel
+	Request              isTroubleShootingRequest_Request `protobuf_oneof:"request"`
+	XXX_NoUnkeyedLiteral struct{}                         `json:"-"`
+	XXX_unrecognized     []byte                           `json:"-"`
+	XXX_sizecache        int32                            `json:"-"`
 }
 
-func (m *TroubleshootRequest) Reset()         { *m = TroubleshootRequest{} }
-func (m *TroubleshootRequest) String() string { return proto.CompactTextString(m) }
-func (*TroubleshootRequest) ProtoMessage()    {}
-func (*TroubleshootRequest) Descriptor() ([]byte, []int) {
+func (m *TroubleShootingRequest) Reset()         { *m = TroubleShootingRequest{} }
+func (m *TroubleShootingRequest) String() string { return proto.CompactTextString(m) }
+func (*TroubleShootingRequest) ProtoMessage()    {}
+func (*TroubleShootingRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_d9fca2f482bbaff3, []int{6}
 }
-func (m *TroubleshootRequest) XXX_Unmarshal(b []byte) error {
+func (m *TroubleShootingRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *TroubleshootRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *TroubleShootingRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_TroubleshootRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_TroubleShootingRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -469,97 +475,104 @@ func (m *TroubleshootRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte,
 		return b[:n], nil
 	}
 }
-func (m *TroubleshootRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TroubleshootRequest.Merge(m, src)
+func (m *TroubleShootingRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TroubleShootingRequest.Merge(m, src)
 }
-func (m *TroubleshootRequest) XXX_Size() int {
+func (m *TroubleShootingRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *TroubleshootRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_TroubleshootRequest.DiscardUnknown(m)
+func (m *TroubleShootingRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_TroubleShootingRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_TroubleshootRequest proto.InternalMessageInfo
+var xxx_messageInfo_TroubleShootingRequest proto.InternalMessageInfo
 
-type isTroubleshootRequest_Request interface {
-	isTroubleshootRequest_Request()
+type isTroubleShootingRequest_Request interface {
+	isTroubleShootingRequest_Request()
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
 
-type TroubleshootRequest_ConfigDump struct {
+type TroubleShootingRequest_ConfigDump struct {
 	ConfigDump *GetConfigDumpRequest `protobuf:"bytes,1001,opt,name=config_dump,json=configDump,proto3,oneof"`
 }
-type TroubleshootRequest_SetLogLevel struct {
+type TroubleShootingRequest_SetLogLevel struct {
 	SetLogLevel *SetLogLevelResponse `protobuf:"bytes,1002,opt,name=set_log_level,json=setLogLevel,proto3,oneof"`
 }
 
-func (*TroubleshootRequest_ConfigDump) isTroubleshootRequest_Request()  {}
-func (*TroubleshootRequest_SetLogLevel) isTroubleshootRequest_Request() {}
+func (*TroubleShootingRequest_ConfigDump) isTroubleShootingRequest_Request()  {}
+func (*TroubleShootingRequest_SetLogLevel) isTroubleShootingRequest_Request() {}
 
-func (m *TroubleshootRequest) GetRequest() isTroubleshootRequest_Request {
+func (m *TroubleShootingRequest) GetRequest() isTroubleShootingRequest_Request {
 	if m != nil {
 		return m.Request
 	}
 	return nil
 }
 
-func (m *TroubleshootRequest) GetRequestId() uint64 {
+func (m *TroubleShootingRequest) GetRequestId() uint64 {
 	if m != nil {
 		return m.RequestId
 	}
 	return 0
 }
 
-func (m *TroubleshootRequest) GetConfigDump() *GetConfigDumpRequest {
-	if x, ok := m.GetRequest().(*TroubleshootRequest_ConfigDump); ok {
+func (m *TroubleShootingRequest) GetTimeout() *types.Duration {
+	if m != nil {
+		return m.Timeout
+	}
+	return nil
+}
+
+func (m *TroubleShootingRequest) GetConfigDump() *GetConfigDumpRequest {
+	if x, ok := m.GetRequest().(*TroubleShootingRequest_ConfigDump); ok {
 		return x.ConfigDump
 	}
 	return nil
 }
 
-func (m *TroubleshootRequest) GetSetLogLevel() *SetLogLevelResponse {
-	if x, ok := m.GetRequest().(*TroubleshootRequest_SetLogLevel); ok {
+func (m *TroubleShootingRequest) GetSetLogLevel() *SetLogLevelResponse {
+	if x, ok := m.GetRequest().(*TroubleShootingRequest_SetLogLevel); ok {
 		return x.SetLogLevel
 	}
 	return nil
 }
 
 // XXX_OneofWrappers is for the internal use of the proto package.
-func (*TroubleshootRequest) XXX_OneofWrappers() []interface{} {
+func (*TroubleShootingRequest) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*TroubleshootRequest_ConfigDump)(nil),
-		(*TroubleshootRequest_SetLogLevel)(nil),
+		(*TroubleShootingRequest_ConfigDump)(nil),
+		(*TroubleShootingRequest_SetLogLevel)(nil),
 	}
 }
 
 // Proxy level troubleshoot response.
-type TroubleshootResponse struct {
+type TroubleShootingResponse struct {
 	// request_id ties this response to the original request with the same request_id.
 	RequestId uint64 `protobuf:"varint,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
 	// If true, this is the last response for a given request_id. The response will be empty.
 	LastResponseToRequest bool `protobuf:"varint,2,opt,name=last_response_to_request,json=lastResponseToRequest,proto3" json:"last_response_to_request,omitempty"`
 	// Types that are valid to be assigned to Response:
-	//	*TroubleshootResponse_ConfigDump
-	//	*TroubleshootResponse_LogLevels
-	Response             isTroubleshootResponse_Response `protobuf_oneof:"response"`
-	XXX_NoUnkeyedLiteral struct{}                        `json:"-"`
-	XXX_unrecognized     []byte                          `json:"-"`
-	XXX_sizecache        int32                           `json:"-"`
+	//	*TroubleShootingResponse_ConfigDump
+	//	*TroubleShootingResponse_LogLevels
+	Response             isTroubleShootingResponse_Response `protobuf_oneof:"response"`
+	XXX_NoUnkeyedLiteral struct{}                           `json:"-"`
+	XXX_unrecognized     []byte                             `json:"-"`
+	XXX_sizecache        int32                              `json:"-"`
 }
 
-func (m *TroubleshootResponse) Reset()         { *m = TroubleshootResponse{} }
-func (m *TroubleshootResponse) String() string { return proto.CompactTextString(m) }
-func (*TroubleshootResponse) ProtoMessage()    {}
-func (*TroubleshootResponse) Descriptor() ([]byte, []int) {
+func (m *TroubleShootingResponse) Reset()         { *m = TroubleShootingResponse{} }
+func (m *TroubleShootingResponse) String() string { return proto.CompactTextString(m) }
+func (*TroubleShootingResponse) ProtoMessage()    {}
+func (*TroubleShootingResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_d9fca2f482bbaff3, []int{7}
 }
-func (m *TroubleshootResponse) XXX_Unmarshal(b []byte) error {
+func (m *TroubleShootingResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *TroubleshootResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *TroubleShootingResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_TroubleshootResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_TroubleShootingResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -569,88 +582,88 @@ func (m *TroubleshootResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte
 		return b[:n], nil
 	}
 }
-func (m *TroubleshootResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TroubleshootResponse.Merge(m, src)
+func (m *TroubleShootingResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TroubleShootingResponse.Merge(m, src)
 }
-func (m *TroubleshootResponse) XXX_Size() int {
+func (m *TroubleShootingResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *TroubleshootResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_TroubleshootResponse.DiscardUnknown(m)
+func (m *TroubleShootingResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_TroubleShootingResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_TroubleshootResponse proto.InternalMessageInfo
+var xxx_messageInfo_TroubleShootingResponse proto.InternalMessageInfo
 
-type isTroubleshootResponse_Response interface {
-	isTroubleshootResponse_Response()
+type isTroubleShootingResponse_Response interface {
+	isTroubleShootingResponse_Response()
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
 
-type TroubleshootResponse_ConfigDump struct {
+type TroubleShootingResponse_ConfigDump struct {
 	ConfigDump *GetConfigDumpResponse `protobuf:"bytes,1001,opt,name=config_dump,json=configDump,proto3,oneof"`
 }
-type TroubleshootResponse_LogLevels struct {
+type TroubleShootingResponse_LogLevels struct {
 	LogLevels *SetLogLevelResponse `protobuf:"bytes,1002,opt,name=log_levels,json=logLevels,proto3,oneof"`
 }
 
-func (*TroubleshootResponse_ConfigDump) isTroubleshootResponse_Response() {}
-func (*TroubleshootResponse_LogLevels) isTroubleshootResponse_Response()  {}
+func (*TroubleShootingResponse_ConfigDump) isTroubleShootingResponse_Response() {}
+func (*TroubleShootingResponse_LogLevels) isTroubleShootingResponse_Response()  {}
 
-func (m *TroubleshootResponse) GetResponse() isTroubleshootResponse_Response {
+func (m *TroubleShootingResponse) GetResponse() isTroubleShootingResponse_Response {
 	if m != nil {
 		return m.Response
 	}
 	return nil
 }
 
-func (m *TroubleshootResponse) GetRequestId() uint64 {
+func (m *TroubleShootingResponse) GetRequestId() uint64 {
 	if m != nil {
 		return m.RequestId
 	}
 	return 0
 }
 
-func (m *TroubleshootResponse) GetLastResponseToRequest() bool {
+func (m *TroubleShootingResponse) GetLastResponseToRequest() bool {
 	if m != nil {
 		return m.LastResponseToRequest
 	}
 	return false
 }
 
-func (m *TroubleshootResponse) GetConfigDump() *GetConfigDumpResponse {
-	if x, ok := m.GetResponse().(*TroubleshootResponse_ConfigDump); ok {
+func (m *TroubleShootingResponse) GetConfigDump() *GetConfigDumpResponse {
+	if x, ok := m.GetResponse().(*TroubleShootingResponse_ConfigDump); ok {
 		return x.ConfigDump
 	}
 	return nil
 }
 
-func (m *TroubleshootResponse) GetLogLevels() *SetLogLevelResponse {
-	if x, ok := m.GetResponse().(*TroubleshootResponse_LogLevels); ok {
+func (m *TroubleShootingResponse) GetLogLevels() *SetLogLevelResponse {
+	if x, ok := m.GetResponse().(*TroubleShootingResponse_LogLevels); ok {
 		return x.LogLevels
 	}
 	return nil
 }
 
 // XXX_OneofWrappers is for the internal use of the proto package.
-func (*TroubleshootResponse) XXX_OneofWrappers() []interface{} {
+func (*TroubleShootingResponse) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*TroubleshootResponse_ConfigDump)(nil),
-		(*TroubleshootResponse_LogLevels)(nil),
+		(*TroubleShootingResponse_ConfigDump)(nil),
+		(*TroubleShootingResponse_LogLevels)(nil),
 	}
 }
 
 func init() {
 	proto.RegisterEnum("istio.troubleshooting.v1alpha1.LogLevel", LogLevel_name, LogLevel_value)
-	proto.RegisterEnum("istio.troubleshooting.v1alpha1.ProxySelector_ProxyType", ProxySelector_ProxyType_name, ProxySelector_ProxyType_value)
+	proto.RegisterEnum("istio.troubleshooting.v1alpha1.ProxySelector_NodeType", ProxySelector_NodeType_name, ProxySelector_NodeType_value)
 	proto.RegisterType((*ProxySelector)(nil), "istio.troubleshooting.v1alpha1.ProxySelector")
 	proto.RegisterType((*GetConfigDumpRequest)(nil), "istio.troubleshooting.v1alpha1.GetConfigDumpRequest")
 	proto.RegisterType((*GetConfigDumpResponse)(nil), "istio.troubleshooting.v1alpha1.GetConfigDumpResponse")
 	proto.RegisterType((*LoggerLogLevel)(nil), "istio.troubleshooting.v1alpha1.LoggerLogLevel")
 	proto.RegisterType((*SetLogLevelRequest)(nil), "istio.troubleshooting.v1alpha1.SetLogLevelRequest")
 	proto.RegisterType((*SetLogLevelResponse)(nil), "istio.troubleshooting.v1alpha1.SetLogLevelResponse")
-	proto.RegisterType((*TroubleshootRequest)(nil), "istio.troubleshooting.v1alpha1.TroubleshootRequest")
-	proto.RegisterType((*TroubleshootResponse)(nil), "istio.troubleshooting.v1alpha1.TroubleshootResponse")
+	proto.RegisterType((*TroubleShootingRequest)(nil), "istio.troubleshooting.v1alpha1.TroubleShootingRequest")
+	proto.RegisterType((*TroubleShootingResponse)(nil), "istio.troubleshooting.v1alpha1.TroubleShootingResponse")
 }
 
 func init() {
@@ -658,53 +671,57 @@ func init() {
 }
 
 var fileDescriptor_d9fca2f482bbaff3 = []byte{
-	// 735 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x95, 0xcd, 0x6e, 0xd3, 0x40,
-	0x10, 0xc7, 0xb3, 0xf9, 0x68, 0xe2, 0x49, 0x53, 0x59, 0xdb, 0x56, 0xb2, 0x5a, 0x11, 0x22, 0xab,
-	0x48, 0x11, 0x12, 0x4e, 0x93, 0x82, 0x7a, 0x25, 0x49, 0xd3, 0x36, 0x52, 0xda, 0xa0, 0x4d, 0x4a,
-	0xa1, 0x17, 0xcb, 0x4d, 0x97, 0xd4, 0xe0, 0x64, 0x8d, 0xd7, 0x89, 0x9a, 0x13, 0xbc, 0x06, 0x17,
-	0x9e, 0x80, 0x23, 0x0f, 0xc1, 0x91, 0x47, 0x40, 0xbd, 0xc1, 0x9d, 0x1b, 0x07, 0xe4, 0xcf, 0x3a,
-	0x55, 0x20, 0xb4, 0xc0, 0x6d, 0x67, 0xc6, 0x33, 0xf3, 0x9f, 0xdf, 0x8e, 0x6d, 0x50, 0x6c, 0x8b,
-	0x8d, 0x4e, 0x0d, 0xca, 0xcf, 0x19, 0xb3, 0xf5, 0x61, 0xbf, 0x34, 0x2e, 0x6b, 0x86, 0x79, 0xae,
-	0x95, 0x4b, 0xd7, 0x02, 0x8a, 0x69, 0x31, 0x9b, 0xe1, 0xbc, 0xce, 0x6d, 0x9d, 0x5d, 0xcf, 0x52,
-	0x82, 0xac, 0xb5, 0x75, 0x7b, 0x62, 0xd2, 0xd2, 0xb8, 0x7c, 0x4a, 0x6d, 0xad, 0x5c, 0xe2, 0xd4,
-	0xa0, 0x3d, 0x9b, 0x59, 0x5e, 0xb2, 0xfc, 0x03, 0x41, 0xee, 0x89, 0xc5, 0x2e, 0x26, 0x1d, 0xdf,
-	0x8f, 0x0f, 0x20, 0xe5, 0x24, 0x70, 0x09, 0x15, 0x12, 0xc5, 0xa5, 0xca, 0xb6, 0xf2, 0xfb, 0xf2,
-	0xca, 0x54, 0xb6, 0x67, 0x75, 0x27, 0x26, 0x25, 0x5e, 0x15, 0x9c, 0x07, 0x18, 0x6a, 0x03, 0xca,
-	0x4d, 0xad, 0x47, 0xb9, 0x14, 0x2f, 0x24, 0x8a, 0x02, 0x89, 0x78, 0xf0, 0x0a, 0xa4, 0x5c, 0x4b,
-	0x4a, 0xb8, 0x21, 0xcf, 0xc0, 0x8f, 0x21, 0x13, 0x08, 0x95, 0x92, 0x05, 0x54, 0xcc, 0x56, 0x36,
-	0x02, 0x1d, 0x13, 0x93, 0x2a, 0xfe, 0x30, 0xca, 0x31, 0xb3, 0x5e, 0x19, 0x4c, 0x3b, 0x0b, 0xda,
-	0x93, 0x30, 0x4b, 0xde, 0x00, 0x21, 0xd4, 0x82, 0xb3, 0x90, 0xee, 0x34, 0x77, 0x1a, 0xf5, 0x2a,
-	0x11, 0x63, 0x18, 0x60, 0x81, 0xb4, 0x8f, 0xba, 0x0d, 0x22, 0x22, 0x59, 0x83, 0x95, 0x3d, 0x6a,
-	0xd7, 0xd9, 0xf0, 0x85, 0xde, 0xdf, 0x19, 0x0d, 0x4c, 0x42, 0x5f, 0x8f, 0x28, 0xb7, 0x71, 0x33,
-	0xd2, 0x1f, 0xb9, 0xfd, 0x1f, 0xdc, 0x88, 0x43, 0x44, 0x48, 0x19, 0x56, 0xaf, 0xb5, 0xe0, 0x26,
-	0x1b, 0x72, 0x8a, 0x25, 0x48, 0x9b, 0xda, 0xc4, 0x91, 0xef, 0xb6, 0x10, 0x48, 0x60, 0xca, 0x17,
-	0xb0, 0xd4, 0x62, 0xfd, 0x3e, 0xb5, 0x5a, 0xac, 0xdf, 0xa2, 0x63, 0x6a, 0xe0, 0xbb, 0x90, 0x35,
-	0x5c, 0x8f, 0xea, 0xf0, 0xf1, 0x9f, 0x07, 0xcf, 0x75, 0xa8, 0x0d, 0x28, 0x6e, 0x80, 0x60, 0xb0,
-	0xbe, 0x6a, 0x38, 0x4f, 0x4b, 0xf1, 0x02, 0x2a, 0x2e, 0x55, 0x8a, 0xf3, 0x14, 0x07, 0xd5, 0x49,
-	0xc6, 0xf0, 0x4f, 0xf2, 0x47, 0x04, 0xb8, 0x43, 0xed, 0x30, 0xf2, 0xcf, 0x71, 0xe0, 0x0e, 0xe4,
-	0xfc, 0x49, 0x5c, 0xad, 0xde, 0x4a, 0x64, 0x2b, 0xca, 0x1f, 0x88, 0x8d, 0x00, 0x21, 0x8b, 0x5e,
-	0x11, 0xd7, 0xe0, 0xf2, 0x4b, 0x58, 0x9e, 0x52, 0xed, 0x13, 0xfe, 0x2f, 0xbd, 0xbe, 0x23, 0x58,
-	0xee, 0x46, 0x32, 0x03, 0x46, 0x77, 0x00, 0x2c, 0xef, 0xa8, 0xea, 0xde, 0x8d, 0x26, 0x89, 0xe0,
-	0x7b, 0x9a, 0x67, 0xf8, 0x19, 0x64, 0x7b, 0xee, 0x0e, 0xa8, 0x67, 0xa3, 0x81, 0x29, 0x7d, 0x4d,
-	0xbb, 0x18, 0x1f, 0xce, 0x93, 0x32, 0x6b, 0x3b, 0xf7, 0x63, 0x04, 0x7a, 0xa1, 0x13, 0x9f, 0x40,
-	0x8e, 0x53, 0x5b, 0xbd, 0xba, 0xfe, 0x6f, 0x5e, 0xed, 0xad, 0x79, 0xb5, 0x67, 0x20, 0xdb, 0x8f,
-	0x91, 0x2c, 0xbf, 0x72, 0xd7, 0x04, 0x48, 0xfb, 0x23, 0xc8, 0x1f, 0xe2, 0xb0, 0x32, 0x3d, 0xb7,
-	0x4f, 0x79, 0xce, 0xe0, 0xdb, 0x20, 0x19, 0x1a, 0xb7, 0x55, 0xcb, 0x7f, 0x5e, 0xb5, 0x99, 0xea,
-	0x47, 0xdd, 0x45, 0xcd, 0x90, 0x55, 0x27, 0x1e, 0x94, 0xeb, 0xb2, 0x00, 0xe8, 0xf3, 0x99, 0xc4,
-	0x1e, 0xdd, 0x90, 0x58, 0x38, 0x57, 0x14, 0xd9, 0x11, 0x40, 0x88, 0x8b, 0xff, 0x25, 0x2f, 0x21,
-	0x78, 0x79, 0x78, 0x0d, 0x20, 0x13, 0x4c, 0x79, 0xff, 0x29, 0x64, 0xc2, 0xb7, 0x37, 0x0d, 0x89,
-	0xf6, 0xee, 0xae, 0x18, 0xc3, 0x8b, 0x90, 0xa9, 0x93, 0x66, 0xb7, 0x59, 0xaf, 0xb6, 0x44, 0x84,
-	0x05, 0x48, 0x35, 0x08, 0x69, 0x13, 0x31, 0x8e, 0x33, 0x90, 0x3c, 0xae, 0x92, 0x43, 0x31, 0xe1,
-	0x9c, 0x9a, 0x87, 0xbb, 0x6d, 0x31, 0xe9, 0x84, 0x77, 0x1a, 0xb5, 0xa3, 0x3d, 0x31, 0xe5, 0x1c,
-	0xbb, 0xa4, 0x5a, 0x6f, 0x88, 0x0b, 0x95, 0x77, 0x71, 0x58, 0x3b, 0xa0, 0xfc, 0xbc, 0x3b, 0xad,
-	0xb2, 0x43, 0xad, 0xb1, 0xde, 0xa3, 0xf8, 0x2d, 0x82, 0xdc, 0x14, 0x01, 0x7c, 0xab, 0x15, 0x5b,
-	0xbb, 0x1d, 0x66, 0x39, 0xb6, 0x89, 0xf0, 0x05, 0x64, 0x23, 0xa4, 0x70, 0xe5, 0x46, 0x58, 0xbd,
-	0xee, 0xb7, 0xb9, 0x0a, 0x39, 0x56, 0x79, 0x8f, 0x60, 0xdd, 0xfb, 0xe8, 0xcf, 0x86, 0xf3, 0x06,
-	0x16, 0xa3, 0x91, 0xf9, 0x68, 0x66, 0xed, 0xfb, 0x7c, 0x71, 0x33, 0xbe, 0x0e, 0x72, 0xac, 0x88,
-	0x36, 0x51, 0x6d, 0xeb, 0xd3, 0x65, 0x1e, 0x7d, 0xbe, 0xcc, 0xa3, 0x2f, 0x97, 0x79, 0x74, 0x72,
-	0xcf, 0xab, 0xa3, 0xb3, 0x92, 0x66, 0xea, 0xa5, 0x5f, 0xfd, 0xf5, 0x4f, 0x17, 0xdc, 0x3f, 0xf5,
-	0xd6, 0xcf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x21, 0x9a, 0x8e, 0x29, 0x18, 0x08, 0x00, 0x00,
+	// 794 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x96, 0xcd, 0x8e, 0xe3, 0x44,
+	0x10, 0x80, 0xd3, 0xc9, 0x64, 0xe2, 0x94, 0x27, 0x23, 0xab, 0xd9, 0x05, 0x93, 0x15, 0x21, 0x32,
+	0x20, 0x45, 0x48, 0xd8, 0x1b, 0x07, 0x76, 0xaf, 0xe4, 0x6f, 0x76, 0x23, 0x85, 0x04, 0x75, 0x32,
+	0x2c, 0xec, 0xc5, 0x72, 0x92, 0x5e, 0x8f, 0xc1, 0x49, 0x1b, 0x77, 0x27, 0x9a, 0xdc, 0xb8, 0xf0,
+	0x10, 0x3c, 0x00, 0x47, 0xc4, 0x85, 0x87, 0xe0, 0xc8, 0x23, 0xa0, 0xb9, 0xc1, 0x23, 0x70, 0x42,
+	0xfe, 0xcb, 0x24, 0xc3, 0x0c, 0x21, 0x03, 0xdc, 0xba, 0xab, 0xba, 0xfe, 0xbe, 0xaa, 0xb2, 0x0c,
+	0xba, 0x08, 0xd8, 0x72, 0xe2, 0x51, 0x7e, 0xc1, 0x98, 0x70, 0x17, 0x8e, 0xb1, 0xaa, 0xdb, 0x9e,
+	0x7f, 0x61, 0xd7, 0x8d, 0x1b, 0x0a, 0xdd, 0x0f, 0x98, 0x60, 0xb8, 0xe2, 0x72, 0xe1, 0xb2, 0x9b,
+	0x56, 0x7a, 0x6a, 0x55, 0xae, 0x38, 0x8c, 0x39, 0x1e, 0x35, 0xa2, 0xd7, 0x93, 0xe5, 0x2b, 0x63,
+	0xb6, 0x0c, 0x6c, 0xe1, 0xb2, 0x45, 0x6c, 0x5f, 0x7e, 0x24, 0xd6, 0x3e, 0x35, 0x56, 0xf5, 0x09,
+	0x15, 0x76, 0xdd, 0xe0, 0xd4, 0xa3, 0x53, 0xc1, 0x82, 0x58, 0xa9, 0xfd, 0x81, 0xa0, 0xf4, 0x69,
+	0xc0, 0x2e, 0xd7, 0xa3, 0x44, 0x8e, 0xfb, 0x90, 0x0f, 0x0d, 0xb8, 0x8a, 0xaa, 0xb9, 0xda, 0xa9,
+	0xf9, 0x44, 0xff, 0xfb, 0xf0, 0xfa, 0x8e, 0xb5, 0x3e, 0x60, 0x33, 0x3a, 0x5e, 0xfb, 0x94, 0xc4,
+	0x4e, 0x70, 0x05, 0x60, 0x61, 0xcf, 0x29, 0xf7, 0xed, 0x29, 0xe5, 0x6a, 0xb6, 0x9a, 0xab, 0x15,
+	0xc9, 0x96, 0x04, 0x3f, 0x80, 0x7c, 0x74, 0x53, 0x73, 0x91, 0x2a, 0xbe, 0xe0, 0x8f, 0x41, 0x4a,
+	0xf3, 0x54, 0x8f, 0xaa, 0xa8, 0x26, 0x9b, 0xef, 0xa6, 0x69, 0xac, 0x7d, 0xaa, 0x27, 0xb5, 0xe8,
+	0x2f, 0x58, 0xf0, 0x95, 0xc7, 0xec, 0x59, 0x1a, 0x9d, 0x6c, 0xac, 0xb4, 0x77, 0x40, 0x4a, 0x53,
+	0xc1, 0x32, 0x14, 0x46, 0xbd, 0x4e, 0xb7, 0xdd, 0x24, 0x4a, 0x06, 0x03, 0x1c, 0x93, 0xe1, 0xf9,
+	0xb8, 0x4b, 0x14, 0xa4, 0xd9, 0xf0, 0xe0, 0x19, 0x15, 0x6d, 0xb6, 0x78, 0xe5, 0x3a, 0x9d, 0xe5,
+	0xdc, 0x27, 0xf4, 0xeb, 0x25, 0xe5, 0x02, 0xf7, 0xb6, 0xc2, 0xa3, 0x28, 0xfc, 0x07, 0x07, 0x51,
+	0xd8, 0xca, 0xa3, 0x0e, 0x0f, 0x6f, 0x84, 0xe0, 0x3e, 0x5b, 0x70, 0x8a, 0x55, 0x28, 0xf8, 0xf6,
+	0x3a, 0xcc, 0x3e, 0x0a, 0x51, 0x24, 0xe9, 0x55, 0xbb, 0x84, 0xd3, 0x3e, 0x73, 0x1c, 0x1a, 0xf4,
+	0x99, 0xd3, 0xa7, 0x2b, 0xea, 0xe1, 0xb7, 0x41, 0xf6, 0x22, 0x89, 0x15, 0xe2, 0x49, 0xde, 0x43,
+	0x2c, 0x1a, 0xd8, 0x73, 0x8a, 0xbb, 0x50, 0xf4, 0x98, 0x63, 0x79, 0xe1, 0x6b, 0x35, 0x5b, 0x45,
+	0xb5, 0x53, 0xb3, 0xb6, 0x2f, 0xe3, 0xd4, 0x3b, 0x91, 0xbc, 0xe4, 0xa4, 0xfd, 0x84, 0x00, 0x8f,
+	0xa8, 0xd8, 0x68, 0xfe, 0x73, 0x1c, 0x78, 0x04, 0xa5, 0xa4, 0x92, 0x28, 0xd7, 0x78, 0x22, 0x64,
+	0x53, 0xff, 0x07, 0xc9, 0x6e, 0x01, 0x21, 0x27, 0xb1, 0x93, 0xe8, 0xc2, 0xb5, 0x2f, 0xe1, 0xb5,
+	0x9d, 0xac, 0x13, 0xc2, 0xff, 0x4b, 0xac, 0x1f, 0xb2, 0xf0, 0xfa, 0x38, 0xb6, 0x1c, 0x25, 0x96,
+	0x29, 0xa6, 0xb7, 0x00, 0x82, 0xf8, 0x68, 0xb9, 0x71, 0x53, 0x8f, 0x48, 0x31, 0x91, 0xf4, 0x66,
+	0xb8, 0x01, 0x05, 0xe1, 0xce, 0x29, 0x5b, 0x8a, 0xa8, 0x43, 0xb2, 0xf9, 0xa6, 0x1e, 0x2f, 0xae,
+	0x9e, 0x2e, 0xae, 0xde, 0x49, 0x16, 0x97, 0xa4, 0x2f, 0xf1, 0xe7, 0x20, 0x4f, 0xa3, 0xd9, 0xb1,
+	0x66, 0xcb, 0xb9, 0xaf, 0xfe, 0x56, 0x88, 0x2c, 0x3f, 0xdc, 0x57, 0xc2, 0x6d, 0x53, 0xfd, 0x3c,
+	0x43, 0x60, 0xba, 0x11, 0xe2, 0x97, 0x50, 0xe2, 0x54, 0x58, 0xd7, 0x63, 0xf3, 0x7b, 0xec, 0xbb,
+	0xb1, 0xcf, 0xf7, 0x2d, 0xa8, 0x9f, 0x67, 0x88, 0xcc, 0xaf, 0xc5, 0xad, 0x22, 0x14, 0x92, 0xba,
+	0xb5, 0x1f, 0xb3, 0xf0, 0xc6, 0x5f, 0x78, 0x25, 0x0d, 0xda, 0x03, 0xec, 0x29, 0xa8, 0x9e, 0xcd,
+	0x85, 0x15, 0x24, 0xef, 0x2d, 0xc1, 0xac, 0x44, 0x1b, 0x11, 0x94, 0xc8, 0xc3, 0x50, 0x9f, 0xba,
+	0x1b, 0xb3, 0xb4, 0x11, 0x5f, 0xdc, 0x0a, 0xed, 0xa3, 0x03, 0xa1, 0x6d, 0x4a, 0xdb, 0xa6, 0x76,
+	0x0e, 0xb0, 0x21, 0xc6, 0xff, 0x25, 0xb2, 0x62, 0xba, 0x77, 0xbc, 0x05, 0x20, 0xa5, 0x55, 0xbe,
+	0xff, 0x19, 0x48, 0x9b, 0xc5, 0x2f, 0x40, 0x6e, 0x78, 0x76, 0xa6, 0x64, 0xf0, 0x09, 0x48, 0x6d,
+	0xd2, 0x1b, 0xf7, 0xda, 0xcd, 0xbe, 0x82, 0x70, 0x11, 0xf2, 0x5d, 0x42, 0x86, 0x44, 0xc9, 0x62,
+	0x09, 0x8e, 0x5e, 0x34, 0xc9, 0x40, 0xc9, 0x85, 0xa7, 0xde, 0xe0, 0x6c, 0xa8, 0x1c, 0x85, 0xea,
+	0x4e, 0xb7, 0x75, 0xfe, 0x4c, 0xc9, 0x87, 0xc7, 0x31, 0x69, 0xb6, 0xbb, 0xca, 0xb1, 0xf9, 0x5d,
+	0x16, 0xca, 0x9f, 0x50, 0x7e, 0x31, 0xde, 0xcd, 0x72, 0x44, 0x83, 0x95, 0x3b, 0xa5, 0xf8, 0x1b,
+	0x04, 0xa5, 0x1d, 0x02, 0xf8, 0x5e, 0x53, 0x56, 0xbe, 0x1f, 0x66, 0x2d, 0xf3, 0x18, 0xe1, 0x4b,
+	0x90, 0xb7, 0x48, 0x61, 0xf3, 0x20, 0xac, 0x71, 0xf4, 0xfb, 0xb4, 0x42, 0xcb, 0x98, 0xdf, 0x23,
+	0x78, 0x14, 0x7d, 0xb2, 0xee, 0x80, 0xf3, 0x2d, 0x82, 0x93, 0x6d, 0x15, 0x7e, 0xba, 0x2f, 0xce,
+	0x1d, 0x33, 0x5f, 0x7e, 0x72, 0xb0, 0x61, 0xbc, 0x47, 0x99, 0x1a, 0x7a, 0x8c, 0x5a, 0x8d, 0x9f,
+	0xaf, 0x2a, 0xe8, 0x97, 0xab, 0x0a, 0xfa, 0xf5, 0xaa, 0x82, 0x5e, 0xbe, 0x17, 0xbb, 0x72, 0x99,
+	0x61, 0xfb, 0xae, 0x71, 0xd7, 0x5f, 0xc5, 0xe4, 0x38, 0xfa, 0xbe, 0x34, 0xfe, 0x0c, 0x00, 0x00,
+	0xff, 0xff, 0x50, 0x14, 0x43, 0x60, 0x78, 0x08, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -859,7 +876,7 @@ var _MeshTroubleshootingService_serviceDesc = grpc.ServiceDesc{
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type ProxyTroubleshootingServiceClient interface {
-	// TroubleShoot request on proxy level.
+	// TroubleShooting request on proxy level.
 	// Note in the actual architecture, we have proxy level agent, e.g. pilot agent, connecting to the
 	// centralized control plane (istiod or pilot). Thus from gRPC's point of view, centralized control
 	// plane is the server. But when troubleshooting API is used, centralized control plane initiates
@@ -885,8 +902,8 @@ func (c *proxyTroubleshootingServiceClient) Troubleshoot(ctx context.Context, op
 }
 
 type ProxyTroubleshootingService_TroubleshootClient interface {
-	Send(*TroubleshootResponse) error
-	Recv() (*TroubleshootRequest, error)
+	Send(*TroubleShootingResponse) error
+	Recv() (*TroubleShootingRequest, error)
 	grpc.ClientStream
 }
 
@@ -894,12 +911,12 @@ type proxyTroubleshootingServiceTroubleshootClient struct {
 	grpc.ClientStream
 }
 
-func (x *proxyTroubleshootingServiceTroubleshootClient) Send(m *TroubleshootResponse) error {
+func (x *proxyTroubleshootingServiceTroubleshootClient) Send(m *TroubleShootingResponse) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *proxyTroubleshootingServiceTroubleshootClient) Recv() (*TroubleshootRequest, error) {
-	m := new(TroubleshootRequest)
+func (x *proxyTroubleshootingServiceTroubleshootClient) Recv() (*TroubleShootingRequest, error) {
+	m := new(TroubleShootingRequest)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -908,7 +925,7 @@ func (x *proxyTroubleshootingServiceTroubleshootClient) Recv() (*TroubleshootReq
 
 // ProxyTroubleshootingServiceServer is the server API for ProxyTroubleshootingService service.
 type ProxyTroubleshootingServiceServer interface {
-	// TroubleShoot request on proxy level.
+	// TroubleShooting request on proxy level.
 	// Note in the actual architecture, we have proxy level agent, e.g. pilot agent, connecting to the
 	// centralized control plane (istiod or pilot). Thus from gRPC's point of view, centralized control
 	// plane is the server. But when troubleshooting API is used, centralized control plane initiates
@@ -933,8 +950,8 @@ func _ProxyTroubleshootingService_Troubleshoot_Handler(srv interface{}, stream g
 }
 
 type ProxyTroubleshootingService_TroubleshootServer interface {
-	Send(*TroubleshootRequest) error
-	Recv() (*TroubleshootResponse, error)
+	Send(*TroubleShootingRequest) error
+	Recv() (*TroubleShootingResponse, error)
 	grpc.ServerStream
 }
 
@@ -942,12 +959,12 @@ type proxyTroubleshootingServiceTroubleshootServer struct {
 	grpc.ServerStream
 }
 
-func (x *proxyTroubleshootingServiceTroubleshootServer) Send(m *TroubleshootRequest) error {
+func (x *proxyTroubleshootingServiceTroubleshootServer) Send(m *TroubleShootingRequest) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *proxyTroubleshootingServiceTroubleshootServer) Recv() (*TroubleshootResponse, error) {
-	m := new(TroubleshootResponse)
+func (x *proxyTroubleshootingServiceTroubleshootServer) Recv() (*TroubleShootingResponse, error) {
+	m := new(TroubleShootingResponse)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -1250,7 +1267,7 @@ func (m *SetLogLevelResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *TroubleshootRequest) Marshal() (dAtA []byte, err error) {
+func (m *TroubleShootingRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1260,12 +1277,12 @@ func (m *TroubleshootRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *TroubleshootRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *TroubleShootingRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *TroubleshootRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *TroubleShootingRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1283,6 +1300,18 @@ func (m *TroubleshootRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 		}
 	}
+	if m.Timeout != nil {
+		{
+			size, err := m.Timeout.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTroubleshooting(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
 	if m.RequestId != 0 {
 		i = encodeVarintTroubleshooting(dAtA, i, uint64(m.RequestId))
 		i--
@@ -1291,11 +1320,11 @@ func (m *TroubleshootRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *TroubleshootRequest_ConfigDump) MarshalTo(dAtA []byte) (int, error) {
+func (m *TroubleShootingRequest_ConfigDump) MarshalTo(dAtA []byte) (int, error) {
 	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
-func (m *TroubleshootRequest_ConfigDump) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *TroubleShootingRequest_ConfigDump) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	if m.ConfigDump != nil {
 		{
@@ -1313,11 +1342,11 @@ func (m *TroubleshootRequest_ConfigDump) MarshalToSizedBuffer(dAtA []byte) (int,
 	}
 	return len(dAtA) - i, nil
 }
-func (m *TroubleshootRequest_SetLogLevel) MarshalTo(dAtA []byte) (int, error) {
+func (m *TroubleShootingRequest_SetLogLevel) MarshalTo(dAtA []byte) (int, error) {
 	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
-func (m *TroubleshootRequest_SetLogLevel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *TroubleShootingRequest_SetLogLevel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	if m.SetLogLevel != nil {
 		{
@@ -1335,7 +1364,7 @@ func (m *TroubleshootRequest_SetLogLevel) MarshalToSizedBuffer(dAtA []byte) (int
 	}
 	return len(dAtA) - i, nil
 }
-func (m *TroubleshootResponse) Marshal() (dAtA []byte, err error) {
+func (m *TroubleShootingResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1345,12 +1374,12 @@ func (m *TroubleshootResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *TroubleshootResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *TroubleShootingResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *TroubleshootResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *TroubleShootingResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1386,11 +1415,11 @@ func (m *TroubleshootResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *TroubleshootResponse_ConfigDump) MarshalTo(dAtA []byte) (int, error) {
+func (m *TroubleShootingResponse_ConfigDump) MarshalTo(dAtA []byte) (int, error) {
 	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
-func (m *TroubleshootResponse_ConfigDump) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *TroubleShootingResponse_ConfigDump) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	if m.ConfigDump != nil {
 		{
@@ -1408,11 +1437,11 @@ func (m *TroubleshootResponse_ConfigDump) MarshalToSizedBuffer(dAtA []byte) (int
 	}
 	return len(dAtA) - i, nil
 }
-func (m *TroubleshootResponse_LogLevels) MarshalTo(dAtA []byte) (int, error) {
+func (m *TroubleShootingResponse_LogLevels) MarshalTo(dAtA []byte) (int, error) {
 	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
 }
 
-func (m *TroubleshootResponse_LogLevels) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *TroubleShootingResponse_LogLevels) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	if m.LogLevels != nil {
 		{
@@ -1567,7 +1596,7 @@ func (m *SetLogLevelResponse) Size() (n int) {
 	return n
 }
 
-func (m *TroubleshootRequest) Size() (n int) {
+func (m *TroubleShootingRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1575,6 +1604,10 @@ func (m *TroubleshootRequest) Size() (n int) {
 	_ = l
 	if m.RequestId != 0 {
 		n += 1 + sovTroubleshooting(uint64(m.RequestId))
+	}
+	if m.Timeout != nil {
+		l = m.Timeout.Size()
+		n += 1 + l + sovTroubleshooting(uint64(l))
 	}
 	if m.Request != nil {
 		n += m.Request.Size()
@@ -1585,7 +1618,7 @@ func (m *TroubleshootRequest) Size() (n int) {
 	return n
 }
 
-func (m *TroubleshootRequest_ConfigDump) Size() (n int) {
+func (m *TroubleShootingRequest_ConfigDump) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1597,7 +1630,7 @@ func (m *TroubleshootRequest_ConfigDump) Size() (n int) {
 	}
 	return n
 }
-func (m *TroubleshootRequest_SetLogLevel) Size() (n int) {
+func (m *TroubleShootingRequest_SetLogLevel) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1609,7 +1642,7 @@ func (m *TroubleshootRequest_SetLogLevel) Size() (n int) {
 	}
 	return n
 }
-func (m *TroubleshootResponse) Size() (n int) {
+func (m *TroubleShootingResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1630,7 +1663,7 @@ func (m *TroubleshootResponse) Size() (n int) {
 	return n
 }
 
-func (m *TroubleshootResponse_ConfigDump) Size() (n int) {
+func (m *TroubleShootingResponse_ConfigDump) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1642,7 +1675,7 @@ func (m *TroubleshootResponse_ConfigDump) Size() (n int) {
 	}
 	return n
 }
-func (m *TroubleshootResponse_LogLevels) Size() (n int) {
+func (m *TroubleShootingResponse_LogLevels) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1692,7 +1725,7 @@ func (m *ProxySelector) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType == 0 {
-				var v ProxySelector_ProxyType
+				var v ProxySelector_NodeType
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return ErrIntOverflowTroubleshooting
@@ -1702,7 +1735,7 @@ func (m *ProxySelector) Unmarshal(dAtA []byte) error {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					v |= ProxySelector_ProxyType(b&0x7F) << shift
+					v |= ProxySelector_NodeType(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1736,10 +1769,10 @@ func (m *ProxySelector) Unmarshal(dAtA []byte) error {
 				}
 				var elementCount int
 				if elementCount != 0 && len(m.Types) == 0 {
-					m.Types = make([]ProxySelector_ProxyType, 0, elementCount)
+					m.Types = make([]ProxySelector_NodeType, 0, elementCount)
 				}
 				for iNdEx < postIndex {
-					var v ProxySelector_ProxyType
+					var v ProxySelector_NodeType
 					for shift := uint(0); ; shift += 7 {
 						if shift >= 64 {
 							return ErrIntOverflowTroubleshooting
@@ -1749,7 +1782,7 @@ func (m *ProxySelector) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						v |= ProxySelector_ProxyType(b&0x7F) << shift
+						v |= ProxySelector_NodeType(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
@@ -2377,7 +2410,7 @@ func (m *SetLogLevelResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *TroubleshootRequest) Unmarshal(dAtA []byte) error {
+func (m *TroubleShootingRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2400,10 +2433,10 @@ func (m *TroubleshootRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: TroubleshootRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: TroubleShootingRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: TroubleshootRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: TroubleShootingRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2425,6 +2458,42 @@ func (m *TroubleshootRequest) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Timeout", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTroubleshooting
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTroubleshooting
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTroubleshooting
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Timeout == nil {
+				m.Timeout = &types.Duration{}
+			}
+			if err := m.Timeout.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		case 1001:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ConfigDump", wireType)
@@ -2458,7 +2527,7 @@ func (m *TroubleshootRequest) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.Request = &TroubleshootRequest_ConfigDump{v}
+			m.Request = &TroubleShootingRequest_ConfigDump{v}
 			iNdEx = postIndex
 		case 1002:
 			if wireType != 2 {
@@ -2493,7 +2562,7 @@ func (m *TroubleshootRequest) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.Request = &TroubleshootRequest_SetLogLevel{v}
+			m.Request = &TroubleShootingRequest_SetLogLevel{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2520,7 +2589,7 @@ func (m *TroubleshootRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *TroubleshootResponse) Unmarshal(dAtA []byte) error {
+func (m *TroubleShootingResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2543,10 +2612,10 @@ func (m *TroubleshootResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: TroubleshootResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: TroubleShootingResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: TroubleshootResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: TroubleShootingResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2621,7 +2690,7 @@ func (m *TroubleshootResponse) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.Response = &TroubleshootResponse_ConfigDump{v}
+			m.Response = &TroubleShootingResponse_ConfigDump{v}
 			iNdEx = postIndex
 		case 1002:
 			if wireType != 2 {
@@ -2656,7 +2725,7 @@ func (m *TroubleshootResponse) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.Response = &TroubleshootResponse_LogLevels{v}
+			m.Response = &TroubleShootingResponse_LogLevels{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

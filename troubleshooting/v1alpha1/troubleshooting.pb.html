@@ -23,9 +23,9 @@ number_of_entries: 12
 <p>ProxyTroubleshootingService is exposed by the proxy management component on each node.
 Currently this is pilot.</p>
 
-<pre id="ProxyTroubleshootingService-Troubleshoot"><code class="language-proto">rpc Troubleshoot(TroubleshootResponse) returns (TroubleshootRequest)
+<pre id="ProxyTroubleshootingService-Troubleshoot"><code class="language-proto">rpc Troubleshoot(TroubleShootingResponse) returns (TroubleShootingRequest)
 </code></pre>
-<p>TroubleShoot request on proxy level.
+<p>TroubleShooting request on proxy level.
 Note in the actual architecture, we have proxy level agent, e.g. pilot agent, connecting to the
 centralized control plane (istiod or pilot). Thus from gRPC&rsquo;s point of view, centralized control
 plane is the server. But when troubleshooting API is used, centralized control plane initiates
@@ -182,7 +182,7 @@ No
 <h3 id="ProxySelector">ProxySelector</h3>
 <section>
 <p>ProxySelector specifies the proxy filtering of the troubleshooting API targetted scope.
-All the fields in this selector are and-ed by each other. Empty fields will selector all the
+All the fields in this selector are and-ed together. Empty fields will selector all the
 proxy.</p>
 
 <table class="message-fields">
@@ -197,7 +197,7 @@ proxy.</p>
 <tbody>
 <tr id="ProxySelector-types">
 <td><code>types</code></td>
-<td><code><a href="#ProxySelector-ProxyType">ProxyType[]</a></code></td>
+<td><code><a href="#ProxySelector-NodeType">NodeType[]</a></code></td>
 <td>
 <p>The types of the proxy runs as.</p>
 
@@ -242,8 +242,10 @@ No
 </tbody>
 </table>
 </section>
-<h3 id="ProxySelector-ProxyType">ProxySelector.ProxyType</h3>
+<h3 id="ProxySelector-NodeType">ProxySelector.NodeType</h3>
 <section>
+<p>The type of the proxy runs as.</p>
+
 <table class="enum-values">
 <thead>
 <tr>
@@ -252,12 +254,12 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="ProxySelector-ProxyType-SIDECAR">
+<tr id="ProxySelector-NodeType-SIDECAR">
 <td><code>SIDECAR</code></td>
 <td>
 </td>
 </tr>
-<tr id="ProxySelector-ProxyType-ROUTER">
+<tr id="ProxySelector-NodeType-ROUTER">
 <td><code>ROUTER</code></td>
 <td>
 </td>
@@ -329,9 +331,9 @@ No
 </tbody>
 </table>
 </section>
-<h3 id="TroubleshootRequest">TroubleshootRequest</h3>
+<h3 id="TroubleShootingRequest">TroubleShootingRequest</h3>
 <section>
-<p>Proxy level troubleshoot request.</p>
+<p>Proxy level troubleshooting request.</p>
 
 <table class="message-fields">
 <thead>
@@ -343,7 +345,7 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="TroubleshootRequest-request_id">
+<tr id="TroubleShootingRequest-request_id">
 <td><code>requestId</code></td>
 <td><code>uint64</code></td>
 <td>
@@ -354,7 +356,20 @@ No
 No
 </td>
 </tr>
-<tr id="TroubleshootRequest-config_dump" class="oneof oneof-start">
+<tr id="TroubleShootingRequest-timeout">
+<td><code>timeout</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>timeout specifies the timeout for the troubleshooting request.
+We have to specify the timeout in the payload since request flow is reverse
+direction of the actual gRPC service.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="TroubleShootingRequest-config_dump" class="oneof oneof-start">
 <td><code>configDump</code></td>
 <td><code><a href="#GetConfigDumpRequest">GetConfigDumpRequest (oneof)</a></code></td>
 <td>
@@ -363,7 +378,7 @@ No
 Yes
 </td>
 </tr>
-<tr id="TroubleshootRequest-set_log_level" class="oneof">
+<tr id="TroubleShootingRequest-set_log_level" class="oneof">
 <td><code>setLogLevel</code></td>
 <td><code><a href="#SetLogLevelResponse">SetLogLevelResponse (oneof)</a></code></td>
 <td>
@@ -375,7 +390,7 @@ Yes
 </tbody>
 </table>
 </section>
-<h3 id="TroubleshootResponse">TroubleshootResponse</h3>
+<h3 id="TroubleShootingResponse">TroubleShootingResponse</h3>
 <section>
 <p>Proxy level troubleshoot response.</p>
 
@@ -389,7 +404,7 @@ Yes
 </tr>
 </thead>
 <tbody>
-<tr id="TroubleshootResponse-request_id">
+<tr id="TroubleShootingResponse-request_id">
 <td><code>requestId</code></td>
 <td><code>uint64</code></td>
 <td>
@@ -400,7 +415,7 @@ Yes
 No
 </td>
 </tr>
-<tr id="TroubleshootResponse-last_response_to_request">
+<tr id="TroubleShootingResponse-last_response_to_request">
 <td><code>lastResponseToRequest</code></td>
 <td><code>bool</code></td>
 <td>
@@ -411,7 +426,7 @@ No
 No
 </td>
 </tr>
-<tr id="TroubleshootResponse-config_dump" class="oneof oneof-start">
+<tr id="TroubleShootingResponse-config_dump" class="oneof oneof-start">
 <td><code>configDump</code></td>
 <td><code><a href="#GetConfigDumpResponse">GetConfigDumpResponse (oneof)</a></code></td>
 <td>
@@ -420,7 +435,7 @@ No
 Yes
 </td>
 </tr>
-<tr id="TroubleshootResponse-log_levels" class="oneof">
+<tr id="TroubleShootingResponse-log_levels" class="oneof">
 <td><code>logLevels</code></td>
 <td><code><a href="#SetLogLevelResponse">SetLogLevelResponse (oneof)</a></code></td>
 <td>
