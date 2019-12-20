@@ -25,7 +25,11 @@ Currently this is pilot.</p>
 
 <pre id="ProxyTroubleshootingService-Troubleshoot"><code class="language-proto">rpc Troubleshoot(TroubleshootResponse) returns (TroubleshootRequest)
 </code></pre>
-<p>TroubleShoot request on proxy level.</p>
+<p>TroubleShoot request on proxy level.
+Note in the actual architecture, we have proxy level agent, e.g. pilot agent, connecting to the
+centralized control plane (istiod or pilot). Thus from gRPC&rsquo;s point of view, centralized control
+plane is the server. But when troubleshooting API is used, centralized control plane initiates
+workflow. This is why we have response/request in reversed position.</p>
 
 </section>
 <h2 id="Types">Types</h2>

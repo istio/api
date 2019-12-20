@@ -919,6 +919,10 @@ var _MeshTroubleshootingService_serviceDesc = grpc.ServiceDesc{
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type ProxyTroubleshootingServiceClient interface {
 	// TroubleShoot request on proxy level.
+	// Note in the actual architecture, we have proxy level agent, e.g. pilot agent, connecting to the
+	// centralized control plane (istiod or pilot). Thus from gRPC's point of view, centralized control
+	// plane is the server. But when troubleshooting API is used, centralized control plane initiates
+	// workflow. This is why we have response/request in reversed position.
 	Troubleshoot(ctx context.Context, opts ...grpc.CallOption) (ProxyTroubleshootingService_TroubleshootClient, error)
 }
 
@@ -964,6 +968,10 @@ func (x *proxyTroubleshootingServiceTroubleshootClient) Recv() (*TroubleshootReq
 // ProxyTroubleshootingServiceServer is the server API for ProxyTroubleshootingService service.
 type ProxyTroubleshootingServiceServer interface {
 	// TroubleShoot request on proxy level.
+	// Note in the actual architecture, we have proxy level agent, e.g. pilot agent, connecting to the
+	// centralized control plane (istiod or pilot). Thus from gRPC's point of view, centralized control
+	// plane is the server. But when troubleshooting API is used, centralized control plane initiates
+	// workflow. This is why we have response/request in reversed position.
 	Troubleshoot(ProxyTroubleshootingService_TroubleshootServer) error
 }
 
