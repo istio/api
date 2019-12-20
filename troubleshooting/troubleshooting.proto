@@ -1,0 +1,145 @@
+// Copyright 2019 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+package istio.troubleshooting.v1alpha1;
+
+import "google/protobuf/duration.proto";
+
+option go_package = "istio.io/api/troubleshooting/v1alpha1";
+
+// MeshTroubleshootingService is the mesh wide trouble shooting API.
+service MeshTroubleshootingService{
+  // Retrieves the config dump of an proxy.
+  rpc GetConfigDump(GetConfigDumpRequest)
+    returns(stream GetConfigDumpResponse){
+  }
+
+  // Set the proxy log level.
+  rpc SetLogLevel(SetLogLevelRequest)
+    returns(SetLogLevelResponse){
+  }
+}
+
+// NodeSelector specifies the proxy filtering of the troubleshooting API targetted scope.
+// All the fields in this selector are and-ed by each other. Empty fields will selector all the
+// proxy.
+message NodeSelector {
+  enum NodeType { proxy = 0; ROUTER = 1; }
+
+  // TODO: shall we refactor proxy.proto workload selector in this PR?
+  // RESOLVE BEFORE MERGE!
+  message LabelSelector {
+    // One or more labels that indicate a specific set of pods/VMs
+    // on which this `proxy` configuration should be applied. The scope of
+    // label search is restricted to the configuration namespace in which the
+    // the resource is present.
+    map<string, string> labels = 1;
+  }
+
+  // The type of the proxy runs as.
+  repeated NodeType types = 1;
+
+  // The namespaces of the proxy reside in.
+  repeated string namespaces = 2;
+
+  // the name of the proxys to be selected. For Kubernetes, this is the pod id.
+  repeated string names = 3;
+
+  // The labels that selected proxys must have.
+  LabelSelector labels = 4;
+}
+
+// GetConfigDumpRequest is the request of GetConfigDump.
+message GetConfigDumpRequest{
+  // Selector selects a subset of the proxys for troubleshooting.
+  NodeSelector selector = 1;
+}
+
+// GetConfigDumpResponse is the request of GetConfigDump.
+message GetConfigDumpResponse {
+  // The actual config dump payload.
+  string payload = 1;
+}
+
+// Log level settings of proxy.
+enum LogLevel {
+  OFF = 0;
+  CRITICAL = 1;
+  ERROR = 2;
+  WARN = 3;
+  INFO = 4;
+  DEBUG = 5;
+  TRACE = 6;
+}
+
+message LoggerLogLevel {
+  // The name of the logger in proxy. For example, "upstream", "connection",
+  // etc.
+  // TODO(incfly): add validation annotation to ensure the logger name is one of
+  // the supported logger.
+  string logger_name = 1;
+
+  // The corresponding log level to be set.
+  LogLevel log_level = 2;
+}
+
+message SetLogLevelRequest {
+  // Selector selects a subset of the proxys for troubleshooting.
+  NodeSelector selector = 1;
+  // The log levels to be updated to.
+  // Empty list means no change to the existing log level settings of the proxy.
+  repeated LoggerLogLevel logger_levels = 2;
+}
+
+message SetLogLevelResponse {
+  // ManagedNode managed_node = 1;
+  repeated LoggerLogLevel logger_levels = 2;
+}
+
+// ProxyTroubleshootingService is exposed by the proxy managmenet component on each node.
+// Currently this is pilot.
+service ProxyTroubleshootingService {
+  rpc Troubleshoot(stream TroubleshootResponse)
+      returns(stream TroubleshootRequest) {}
+}
+
+// Proxy level troubleshoot request.
+message TroubleshootRequest {
+  // request_id is the the identifier for each troubleshooting session.
+  uint64 request_id = 1;
+
+  // Shall this be set via gRPC library level? I don't feel this should be set in the request proto level.
+  // google.protobuf.Duration timeout = 2;
+
+  oneof request {
+    GetConfigDumpRequest config_dump = 1001;
+    SetLogLevelResponse set_log_level = 1002;
+  }
+}
+
+// Proxy level troubleshoot response.
+message TroubleshootResponse {
+  // request_id ties this response to the original request with the same request_id.
+  uint64 request_id = 1;
+
+  // If true, this is the last response for a given request_id. The response will be empty.
+  bool last_response_to_request = 2;
+
+  oneof response {
+    GetConfigDumpResponse config_dump = 1001;
+    SetLogLevelResponse log_levels = 1002;
+  }
+}
