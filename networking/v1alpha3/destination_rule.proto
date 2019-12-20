@@ -531,9 +531,10 @@ message OutlierDetection {
   // code qualifies as a gateway error. When the upstream host is accessed over
   // an opaque TCP connection, connect timeouts and connection error/failure
   // events qualify as a gateway error.
-  // If set to 0, this feature is disabled. Defaults to 0.
-  // consecutive_gateway_errors and consecutive_5xx_errors can be used
-  // separately or together. Because the errors counted by
+  // This feature is disabled by default or when set to the value 0.
+  //
+  // Note that consecutive_gateway_errors and consecutive_5xx_errors can be
+  // used separately or together. Because the errors counted by
   // consecutive_gateway_errors are also included in consecutive_5xx_errors,
   // if the value of consecutive_gateway_errors is greater than or equal to
   // the value of consecutive_5xx_errors, consecutive_gateway_errors will have
@@ -544,9 +545,10 @@ message OutlierDetection {
   // When the upstream host is accessed over an opaque TCP connection, connect
   // timeouts, connection error/failure and request failure events qualify as a
   // 5xx error.
-  // If set to 0, this feature is disabled. Defaults to 5.
-  // consecutive_gateway_errors and consecutive_5xx_errors can be used
-  // separately or together. Because the errors counted by
+  // This feature defaults to 5 but can be disabled by setting the value to 0.
+  //
+  // Note that consecutive_gateway_errors and consecutive_5xx_errors can be
+  // used separately or together. Because the errors counted by
   // consecutive_gateway_errors are also included in consecutive_5xx_errors,
   // if the value of consecutive_gateway_errors is greater than or equal to
   // the value of consecutive_5xx_errors, consecutive_gateway_errors will have
