@@ -40016,7 +40016,23 @@
               {
                 "id": 1,
                 "name": "consecutive_errors",
-                "type": "int32"
+                "type": "int32",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
+              },
+              {
+                "id": 6,
+                "name": "consecutive_gateway_errors",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 7,
+                "name": "consecutive_5xx_errors",
+                "type": "google.protobuf.UInt32Value"
               },
               {
                 "id": 2,
@@ -40143,6 +40159,9 @@
           },
           {
             "path": "google/protobuf/duration.proto"
+          },
+          {
+            "path": "google/protobuf/wrappers.proto"
           },
           {
             "path": "networking/v1alpha3/virtual_service.proto"
