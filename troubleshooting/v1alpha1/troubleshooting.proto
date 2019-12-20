@@ -37,7 +37,7 @@ service MeshTroubleshootingService{
 // All the fields in this selector are and-ed by each other. Empty fields will selector all the
 // proxy.
 message ProxySelector {
-  enum ProxyType { proxy = 0; ROUTER = 1; }
+  enum ProxyType { SIDECAR = 0; ROUTER = 1; }
 
   // The types of the proxy runs as.
   repeated ProxyType types = 1;
@@ -89,6 +89,7 @@ message LoggerLogLevel {
 message SetLogLevelRequest {
   // Selector selects a subset of the proxies for troubleshooting.
   ProxySelector selector = 1;
+
   // The log levels to be updated to.
   // Empty list means no change to the existing log level settings of the proxy.
   repeated LoggerLogLevel logger_levels = 2;
