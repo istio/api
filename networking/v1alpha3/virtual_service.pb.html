@@ -793,8 +793,21 @@ No
 <td>
 <p>One or more labels that constrain the applicability of a rule to
 workloads with the given labels. If the VirtualService has a list of
-gateways specified at the top, it must include the reserved gateway
+gateways specified in the top-level <code>gateways</code> field, it must include the reserved gateway
 <code>mesh</code> for this field to be applicable.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPMatchRequest-gateways">
+<td><code>gateways</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Names of gateways where the rule should be applied. Gateway names
+in the top-level <code>gateways</code> field of the VirtualService (if any) are overridden. The gateway
+match is independent of sourceLabels.</p>
 
 </td>
 <td>
@@ -1577,7 +1590,7 @@ No
 <td>
 <p>One or more labels that constrain the applicability of a rule to
 workloads with the given labels. If the VirtualService has a list of
-gateways specified at the top, it should include the reserved gateway
+gateways specified in the top-level <code>gateways</code> field, it should include the reserved gateway
 <code>mesh</code> in order for this field to be applicable.</p>
 
 </td>
@@ -1589,8 +1602,8 @@ No
 <td><code>gateways</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Names of gateways where the rule should be applied to. Gateway names
-at the top of the VirtualService (if any) are overridden. The gateway
+<p>Names of gateways where the rule should be applied. Gateway names
+in the top-level <code>gateways</code> field of the VirtualService (if any) are overridden. The gateway
 match is independent of sourceLabels.</p>
 
 </td>
@@ -1870,7 +1883,7 @@ No
 <td>
 <p>One or more labels that constrain the applicability of a rule to
 workloads with the given labels. If the VirtualService has a list of
-gateways specified at the top, it should include the reserved gateway
+gateways specified in the top-level <code>gateways</code> field, it should include the reserved gateway
 <code>mesh</code> in order for this field to be applicable.</p>
 
 </td>
@@ -1882,8 +1895,8 @@ No
 <td><code>gateways</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Names of gateways where the rule should be applied to. Gateway names
-at the top of the VirtualService (if any) are overridden. The gateway
+<p>Names of gateways where the rule should be applied. Gateway names
+in the top-level <code>gateways</code> field of the VirtualService (if any) are overridden. The gateway
 match is independent of sourceLabels.</p>
 
 </td>

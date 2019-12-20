@@ -246,6 +246,7 @@
             "type": "integer"
           },
           "gateways": {
+            "description": "Names of gateways where the rule should be applied. Gateway names in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
             "type": "array",
             "items": {
               "type": "string",
@@ -269,7 +270,7 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.StringMatch"
           },
           "sourceLabels": {
-            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified at the top, it must include the reserved gateway `mesh` for this field to be applicable.",
+            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified in the top-level `gateways` field, it must include the reserved gateway `mesh` for this field to be applicable.",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -518,7 +519,7 @@
             "type": "integer"
           },
           "gateways": {
-            "description": "Names of gateways where the rule should be applied to. Gateway names at the top of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
+            "description": "Names of gateways where the rule should be applied. Gateway names in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
             "type": "array",
             "items": {
               "type": "string",
@@ -526,7 +527,7 @@
             }
           },
           "sourceLabels": {
-            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified at the top, it should include the reserved gateway `mesh` in order for this field to be applicable.",
+            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified in the top-level `gateways` field, it should include the reserved gateway `mesh` in order for this field to be applicable.",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -579,7 +580,7 @@
             "type": "integer"
           },
           "gateways": {
-            "description": "Names of gateways where the rule should be applied to. Gateway names at the top of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
+            "description": "Names of gateways where the rule should be applied. Gateway names in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
             "type": "array",
             "items": {
               "type": "string",
@@ -587,7 +588,7 @@
             }
           },
           "sourceLabels": {
-            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified at the top, it should include the reserved gateway `mesh` in order for this field to be applicable.",
+            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified in the top-level `gateways` field, it should include the reserved gateway `mesh` in order for this field to be applicable.",
             "type": "object",
             "additionalProperties": {
               "type": "string",
