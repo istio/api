@@ -22,7 +22,7 @@ option go_package = "istio.io/api/troubleshooting/v1alpha1";
 
 // MeshTroubleshootingService is the mesh wide trouble shooting API.
 service MeshTroubleshootingService{
-  // Retrieves the config dump of an proxy.
+  // GetConfigDump gets the config dump of the proxy.
   rpc GetConfigDump(GetConfigDumpRequest)
     returns(stream GetConfigDumpResponse){
   }
@@ -109,9 +109,10 @@ message SetLogLevelResponse {
   repeated LoggerLogLevel logger_levels = 2;
 }
 
-// ProxyTroubleshootingService is exposed by the proxy managmenet component on each node.
+// ProxyTroubleshootingService is exposed by the proxy management component on each node.
 // Currently this is pilot.
 service ProxyTroubleshootingService {
+  // TroubleShoot request on proxy level.
   rpc Troubleshoot(stream TroubleshootResponse)
       returns(stream TroubleshootRequest) {}
 }

@@ -87,7 +87,7 @@ protoc_gen_k8s_support_plugins := --jsonshim_out=$(gogo_mapping):$(out_path) --d
 
 gen: \
 	generate-core \
-    generate-type \
+	generate-type \
 	generate-mcp \
 	generate-mesh \
 	generate-mixer \
@@ -95,6 +95,7 @@ gen: \
 	generate-rbac \
 	generate-authn \
 	generate-security \
+	generate-troubleshooting \
 	generate-envoy \
 	generate-policy \
 	generate-annotations \
@@ -365,6 +366,30 @@ generate-security: $(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(secu
 
 clean-security:
 	@rm -fr $(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons) $(security_v1beta1_k8s_gos)
+
+#####################
+# troubleshooting/...
+#####################
+
+troubleshooting_v1alpha1_path := troubleshooting/v1alpha1
+troubleshooting_v1alpha1_protos := $(wildcard $(troubleshooting_v1alpha1_path)/*.proto)
+troubleshooting_v1alpha1_pb_gos := $(troubleshooting_v1alpha1_protos:.proto=.pb.go)
+troubleshooting_v1alpha1_pb_pythons := $(patsubst $(troubleshooting_v1alpha1_path)/%.proto,$(python_output_path)/$(troubleshooting_v1alpha1_path)/%_pb2.py,$(troubleshooting_v1alpha1_protos))
+troubleshooting_v1alpha1_pb_docs := $(troubleshooting_v1alpha1_protos:.proto=.pb.html)
+troubleshooting_v1alpha1_openapi := $(troubleshooting_v1alpha1_protos:.proto=.gen.json)
+troubleshooting_v1alpha1_k8s_gos := \
+	$(patsubst $(troubleshooting_v1alpha1_path)/%.proto,$(troubleshooting_v1alpha1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(troubleshooting_v1alpha1_protos))) \
+	$(patsubst $(troubleshooting_v1alpha1_path)/%.proto,$(troubleshooting_v1alpha1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(troubleshooting_v1alpha1_protos)))
+
+$(troubleshooting_v1alpha1_pb_gos) $(troubleshooting_v1alpha1_pb_docs) $(troubleshooting_v1alpha1_pb_pythons) $(troubleshooting_v1alpha1_k8s_gos): $(troubleshooting_v1alpha1_protos)
+	@$(protolock) status
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin_per_file)$(troubleshooting_v1alpha1_path) $(protoc_gen_python_plugin) $^
+	@cp -r /tmp/istio.io/api/troubleshooting/* troubleshooting
+
+generate-troubleshooting: $(troubleshooting_v1alpha1_pb_gos) $(troubleshooting_v1alpha1_pb_docs) $(troubleshooting_v1alpha1_pb_pythons) $(troubleshooting_v1alpha1_k8s_gos)
+
+clean-troubleshooting:
+	@rm -fr $(troubleshooting_v1alpha1_pb_gos) $(troubleshooting_v1alpha1_pb_docs) $(troubleshooting_v1alpha1_pb_pythons) $(troubleshooting_v1alpha1_k8s_gos)
 
 #####################
 # envoy/...

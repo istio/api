@@ -1,0 +1,462 @@
+---
+title: istio.troubleshooting.v1alpha1
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+number_of_entries: 13
+---
+<h2 id="Services">Services</h2>
+<h3 id="MeshTroubleshootingService">MeshTroubleshootingService</h3>
+<section>
+<p>MeshTroubleshootingService is the mesh wide trouble shooting API.</p>
+
+<pre id="MeshTroubleshootingService-GetConfigDump"><code class="language-proto">rpc GetConfigDump(GetConfigDumpRequest) returns (GetConfigDumpResponse)
+</code></pre>
+<p>GetConfigDump gets the config dump of the proxy.</p>
+
+<pre id="MeshTroubleshootingService-SetLogLevel"><code class="language-proto">rpc SetLogLevel(SetLogLevelRequest) returns (SetLogLevelResponse)
+</code></pre>
+<p>Set the proxy log level.</p>
+
+</section>
+<h3 id="ProxyTroubleshootingService">ProxyTroubleshootingService</h3>
+<section>
+<p>ProxyTroubleshootingService is exposed by the proxy management component on each node.
+Currently this is pilot.</p>
+
+<pre id="ProxyTroubleshootingService-Troubleshoot"><code class="language-proto">rpc Troubleshoot(TroubleshootResponse) returns (TroubleshootRequest)
+</code></pre>
+<p>TroubleShoot request on proxy level.</p>
+
+</section>
+<h2 id="Types">Types</h2>
+<h3 id="GetConfigDumpRequest">GetConfigDumpRequest</h3>
+<section>
+<p>GetConfigDumpRequest is the request of GetConfigDump.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="GetConfigDumpRequest-selector">
+<td><code>selector</code></td>
+<td><code><a href="#NodeSelector">NodeSelector</a></code></td>
+<td>
+<p>Selector selects a subset of the proxys for troubleshooting.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="GetConfigDumpResponse">GetConfigDumpResponse</h3>
+<section>
+<p>GetConfigDumpResponse is the request of GetConfigDump.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="GetConfigDumpResponse-payload">
+<td><code>payload</code></td>
+<td><code>string</code></td>
+<td>
+<p>The actual config dump payload.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="LogLevel">LogLevel</h3>
+<section>
+<p>Log level settings of proxy.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LogLevel-OFF">
+<td><code>OFF</code></td>
+<td>
+</td>
+</tr>
+<tr id="LogLevel-CRITICAL">
+<td><code>CRITICAL</code></td>
+<td>
+</td>
+</tr>
+<tr id="LogLevel-ERROR">
+<td><code>ERROR</code></td>
+<td>
+</td>
+</tr>
+<tr id="LogLevel-WARN">
+<td><code>WARN</code></td>
+<td>
+</td>
+</tr>
+<tr id="LogLevel-INFO">
+<td><code>INFO</code></td>
+<td>
+</td>
+</tr>
+<tr id="LogLevel-DEBUG">
+<td><code>DEBUG</code></td>
+<td>
+</td>
+</tr>
+<tr id="LogLevel-TRACE">
+<td><code>TRACE</code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="LoggerLogLevel">LoggerLogLevel</h3>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LoggerLogLevel-logger_name">
+<td><code>loggerName</code></td>
+<td><code>string</code></td>
+<td>
+<p>The name of the logger in proxy. For example, &ldquo;upstream&rdquo;, &ldquo;connection&rdquo;,
+etc.
+TODO(incfly): add validation annotation to ensure the logger name is one of
+the supported logger.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LoggerLogLevel-log_level">
+<td><code>logLevel</code></td>
+<td><code><a href="#LogLevel">LogLevel</a></code></td>
+<td>
+<p>The corresponding log level to be set.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="NodeSelector">NodeSelector</h3>
+<section>
+<p>NodeSelector specifies the proxy filtering of the troubleshooting API targetted scope.
+All the fields in this selector are and-ed by each other. Empty fields will selector all the
+proxy.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="NodeSelector-types">
+<td><code>types</code></td>
+<td><code><a href="#NodeSelector-NodeType">NodeType[]</a></code></td>
+<td>
+<p>The type of the proxy runs as.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="NodeSelector-namespaces">
+<td><code>namespaces</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>The namespaces of the proxy reside in.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="NodeSelector-names">
+<td><code>names</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>the name of the proxys to be selected. For Kubernetes, this is the pod id.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="NodeSelector-labels">
+<td><code>labels</code></td>
+<td><code><a href="#NodeSelector-LabelSelector">LabelSelector</a></code></td>
+<td>
+<p>The labels that selected proxys must have.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="NodeSelector-LabelSelector">NodeSelector.LabelSelector</h3>
+<section>
+<p>TODO: shall we refactor proxy.proto workload selector in this PR?
+RESOLVE BEFORE MERGE!</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="NodeSelector-LabelSelector-labels">
+<td><code>labels</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>One or more labels that indicate a specific set of pods/VMs
+on which this <code>proxy</code> configuration should be applied. The scope of
+label search is restricted to the configuration namespace in which the
+the resource is present.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="NodeSelector-NodeType">NodeSelector.NodeType</h3>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="NodeSelector-NodeType-proxy">
+<td><code>proxy</code></td>
+<td>
+</td>
+</tr>
+<tr id="NodeSelector-NodeType-ROUTER">
+<td><code>ROUTER</code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="SetLogLevelRequest">SetLogLevelRequest</h3>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="SetLogLevelRequest-selector">
+<td><code>selector</code></td>
+<td><code><a href="#NodeSelector">NodeSelector</a></code></td>
+<td>
+<p>Selector selects a subset of the proxys for troubleshooting.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="SetLogLevelRequest-logger_levels">
+<td><code>loggerLevels</code></td>
+<td><code><a href="#LoggerLogLevel">LoggerLogLevel[]</a></code></td>
+<td>
+<p>The log levels to be updated to.
+Empty list means no change to the existing log level settings of the proxy.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="SetLogLevelResponse">SetLogLevelResponse</h3>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="SetLogLevelResponse-logger_levels">
+<td><code>loggerLevels</code></td>
+<td><code><a href="#LoggerLogLevel">LoggerLogLevel[]</a></code></td>
+<td>
+<p>ManagedNode managed_node = 1;</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="TroubleshootRequest">TroubleshootRequest</h3>
+<section>
+<p>Proxy level troubleshoot request.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="TroubleshootRequest-request_id">
+<td><code>requestId</code></td>
+<td><code>uint64</code></td>
+<td>
+<p>request_id is the the identifier for each troubleshooting session.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="TroubleshootRequest-config_dump" class="oneof oneof-start">
+<td><code>configDump</code></td>
+<td><code><a href="#GetConfigDumpRequest">GetConfigDumpRequest (oneof)</a></code></td>
+<td>
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr id="TroubleshootRequest-set_log_level" class="oneof">
+<td><code>setLogLevel</code></td>
+<td><code><a href="#SetLogLevelResponse">SetLogLevelResponse (oneof)</a></code></td>
+<td>
+</td>
+<td>
+Yes
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="TroubleshootResponse">TroubleshootResponse</h3>
+<section>
+<p>Proxy level troubleshoot response.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="TroubleshootResponse-request_id">
+<td><code>requestId</code></td>
+<td><code>uint64</code></td>
+<td>
+<p>request<em>id ties this response to the original request with the same request</em>id.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="TroubleshootResponse-last_response_to_request">
+<td><code>lastResponseToRequest</code></td>
+<td><code>bool</code></td>
+<td>
+<p>If true, this is the last response for a given request_id. The response will be empty.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="TroubleshootResponse-config_dump" class="oneof oneof-start">
+<td><code>configDump</code></td>
+<td><code><a href="#GetConfigDumpResponse">GetConfigDumpResponse (oneof)</a></code></td>
+<td>
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr id="TroubleshootResponse-log_levels" class="oneof">
+<td><code>logLevels</code></td>
+<td><code><a href="#SetLogLevelResponse">SetLogLevelResponse (oneof)</a></code></td>
+<td>
+</td>
+<td>
+Yes
+</td>
+</tr>
+</tbody>
+</table>
+</section>
