@@ -428,6 +428,26 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 // ServiceEntry enables adding additional entries into Istio's internal
 // service registry.
 //
+// <!-- crd generation tags
+// +cue-gen:ServiceEntry:groupName:networking.istio.io
+// +cue-gen:ServiceEntry:version:v1alpha3
+// +cue-gen:ServiceEntry:storageVersion
+// +cue-gen:ServiceEntry:annotations:helm.sh/resource-policy=keep
+// +cue-gen:ServiceEntry:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:ServiceEntry:subresource:status
+// +cue-gen:ServiceEntry:scope:Namespaced
+// +cue-gen:ServiceEntry:resource:categories=istio-io,networking-istio-io,shortNames=se,plural=serviceentries
+// +cue-gen:ServiceEntry:printerColumn:name=Hosts,type=string,JSONPath=.spec.hosts,description="The hosts associated with the ServiceEntry"
+// +cue-gen:ServiceEntry:printerColumn:name=Location,type=string,JSONPath=.spec.location,description="Whether the service is external to the
+// mesh or part of the mesh (MESH_EXTERNAL or MESH_INTERNAL)"
+// +cue-gen:ServiceEntry:printerColumn:name=Resolution,type=string,JSONPath=.spec.resolution,description="Service discovery mode for the hosts
+// (NONE, STATIC, or DNS)"
+// +cue-gen:ServiceEntry:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
+// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
+// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// -->
+//
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
@@ -472,7 +492,7 @@ type ServiceEntry struct {
 	// Service discovery mode for the hosts. Care must be taken
 	// when setting the resolution mode to NONE for a TCP port without
 	// accompanying IP addresses. In such cases, traffic to any IP on
-	// said port will be allowed (i.e. 0.0.0.0:<port>).
+	// said port will be allowed (i.e. `0.0.0.0:<port>`).
 	Resolution ServiceEntry_Resolution `protobuf:"varint,5,opt,name=resolution,proto3,enum=istio.networking.v1alpha3.ServiceEntry_Resolution" json:"resolution,omitempty"`
 	// One or more endpoints associated with the service.
 	Endpoints []*ServiceEntry_Endpoint `protobuf:"bytes,6,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
@@ -615,7 +635,7 @@ type ServiceEntry_Endpoint struct {
 	// directly reachable from one another. When endpoints in different
 	// networks cannot reach each other directly, an Istio Gateway can be
 	// used to establish connectivity (usually using the
-	// AUTO_PASSTHROUGH mode in a Gateway Server). This is
+	// `AUTO_PASSTHROUGH` mode in a Gateway Server). This is
 	// an advanced configuration used typically for spanning an Istio mesh
 	// over multiple clusters.
 	Network string `protobuf:"bytes,4,opt,name=network,proto3" json:"network,omitempty"`

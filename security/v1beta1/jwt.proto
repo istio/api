@@ -19,9 +19,9 @@ package istio.security.v1beta1;
 
 option go_package="istio.io/api/security/v1beta1";
 
-// $schema: istio.security.v1beta1.JWT
-// $title: JWT
-// $description: JWT configuration.
+// $schema: istio.security.v1beta1.JWTRule
+// $title: JWTRule
+// $description: Configuration to validate JWT.
 // $location: https://istio.io/docs/reference/config/security/jwt.html
 // $aliases: [/docs/reference/config/security/v1beta1/jwt]
 
@@ -33,15 +33,15 @@ option go_package="istio.io/api/security/v1beta1";
 // Examples:
 //
 // Spec for a JWT that is issued by `https://example.com`, with the audience claims must be either
-// `bookstore_android.apps.googleusercontent.com` or `bookstore_web.apps.googleusercontent.com`.
+// `bookstore_android.apps.example.com` or `bookstore_web.apps.example.com`.
 // The token should be presented at the `Authorization` header (default). The Json web key set (JWKS)
 // will be discovered followwing OpenID Connect protocol.
 //
 // ```yaml
 // issuer: https://example.com
 // audiences:
-// - bookstore_android.apps.googleusercontent.com
-//   bookstore_web.apps.googleusercontent.com
+// - bookstore_android.apps.example.com
+//   bookstore_web.apps.example.com
 // ```
 //
 // This example specifies token in non-default location (`x-goog-iap-jwt-assertion` header). It also
@@ -53,7 +53,7 @@ option go_package="istio.io/api/security/v1beta1";
 // jwtHeaders:
 // - "x-goog-iap-jwt-assertion"
 // ```
-message JWT {
+message JWTRule {
   // Identifies the issuer that issued the JWT. See
   // [issuer](https://tools.ietf.org/html/rfc7519#section-4.1.1)
   // A JWT with different `iss` claim will be rejected.
@@ -73,8 +73,8 @@ message JWT {
   //
   // ```yaml
   // audiences:
-  // - bookstore_android.apps.googleusercontent.com
-  //   bookstore_web.apps.googleusercontent.com
+  // - bookstore_android.apps.example.com
+  //   bookstore_web.apps.example.com
   // ```
   repeated string audiences = 2;
 
@@ -112,10 +112,10 @@ message JWT {
   //     [URI Query Parameter](https://tools.ietf.org/html/rfc6750#section-2.3))
 
   // List of header locations from which JWT is expected. For example, below is the location spec
-  // if JWT is expected to be found in `x-goog-iap-jwt-assertion` header, and have "Bearer " prefix:
+  // if JWT is expected to be found in `x-jwt-assertion` header, and have "Bearer " prefix:
   // ```
   //   fromHeaders:
-  //   - name: x-goog-iap-jwt-assertion
+  //   - name: x-jwt-assertion
   //     prefix: "Bearer "
   // ```
   repeated JWTHeader from_headers = 6;
@@ -127,6 +127,14 @@ message JWT {
   //   - "my_token"
   // ```
   repeated string from_params = 7;
+
+  // This field specifies the header name to output a successfully verified JWT payload to the
+  // backend. The forwarded data is `base64_encoded(jwt_payload_in_JSON)`. If it is not specified,
+  // the payload will not be emitted.
+  string output_payload_to_header = 8;
+
+  // If set to true, the orginal token will be kept for the ustream request. Default is false.
+  bool forward_original_token = 9;
 }
 
 // This message specifies a header location to extract JWT token.

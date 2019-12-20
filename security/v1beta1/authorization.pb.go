@@ -85,6 +85,7 @@
 //  name: policy
 //  namespace: foo
 // spec:
+//   {}
 // ```
 //
 // The following authorization policy applies to workloads containing label
@@ -138,6 +139,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //  name: deny-all
 //  namespace: foo
 // spec:
+//   {}
 // ```
 //
 // The following authorization policy allows all requests to workloads in namespace
@@ -153,6 +155,17 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //  rules:
 //  - {}
 // ```
+//
+// <!-- crd generation tags
+// +cue-gen:AuthorizationPolicy:groupName:security.istio.io
+// +cue-gen:AuthorizationPolicy:version:v1beta1
+// +cue-gen:AuthorizationPolicy:storageVersion
+// +cue-gen:AuthorizationPolicy:annotations:helm.sh/resource-policy=keep
+// +cue-gen:AuthorizationPolicy:labels:app=istio-pilot,chart=istio,istio=security,heritage=Tiller,release=istio
+// +cue-gen:AuthorizationPolicy:subresource:status
+// +cue-gen:AuthorizationPolicy:scope:Namespaced
+// +cue-gen:AuthorizationPolicy:resource:categories=istio-io,security-istio-io,plural=authorizationpolicies
+// -->
 //
 // <!-- go code generation tags
 // +kubetype-gen

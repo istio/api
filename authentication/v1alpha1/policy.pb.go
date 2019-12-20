@@ -59,7 +59,7 @@ type MutualTls_Mode int32
 const (
 	// Client cert must be presented, connection is in TLS.
 	MutualTls_STRICT MutualTls_Mode = 0
-	// Connection can be either plaintext or TLS, and client cert can be omitted.
+	// Connection can be either plaintext or TLS with Client cert.
 	MutualTls_PERMISSIVE MutualTls_Mode = 1
 )
 
@@ -735,6 +735,28 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 //         - exact: /health_check
 //   principalBinding: USE_ORIGIN
 // ```
+//
+// <!-- crd generation tags
+// +cue-gen:Policy:groupName:authentication.istio.io
+// +cue-gen:Policy:version:v1alpha1
+// +cue-gen:Policy:storageVersion
+// +cue-gen:Policy:annotations:helm.sh/resource-policy=keep
+// +cue-gen:Policy:labels:app=istio-citadel,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:Policy:subresource:status
+// +cue-gen:Policy:scope:Namespaced
+// +cue-gen:Policy:resource:categories=istio-io,authentication-istio-io,plural=policies
+// -->
+//
+// <!-- crd generation tags
+// +cue-gen:MeshPolicy:groupName:authentication.istio.io
+// +cue-gen:MeshPolicy:version:v1alpha1
+// +cue-gen:MeshPolicy:storageVersion
+// +cue-gen:MeshPolicy:annotations:helm.sh/resource-policy=keep
+// +cue-gen:MeshPolicy:labels:app=istio-citadel,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:MeshPolicy:subresource:status
+// +cue-gen:MeshPolicy:scope:Cluster
+// +cue-gen:MeshPolicy:resource:categories=istio-io,authentication-istio-io,plural=meshpolicies
+// -->
 //
 // <!-- go code generation tags
 // +kubetype-gen

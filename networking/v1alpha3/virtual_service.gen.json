@@ -58,7 +58,7 @@
             }
           },
           "gateways": {
-            "description": "The names of gateways and sidecars that should apply these routes. A single VirtualService is used for sidecars inside the mesh as well as for one or more gateways. The selection condition imposed by this field can be overridden using the source field in the match conditions of protocol-specific routes. The reserved word `mesh` is used to imply all the sidecars in the mesh. When this field is omitted, the default gateway (`mesh`) will be used, which would apply the rule to all sidecars in the mesh. If a list of gateway names is provided, the rules will apply only to the gateways. To apply the rules to both gateways and sidecars, specify `mesh` as one of the gateway names.",
+            "description": "The names of gateways and sidecars that should apply these routes. Gateways in other namespaces may be referred to by `\u003cgateway namespace\u003e/\u003cgateway name\u003e`; specifying a gateway with no namespace qualifier is the same as specifying the VirtualService's namespace. A single VirtualService is used for sidecars inside the mesh as well as for one or more gateways. The selection condition imposed by this field can be overridden using the source field in the match conditions of protocol-specific routes. The reserved word `mesh` is used to imply all the sidecars in the mesh. When this field is omitted, the default gateway (`mesh`) will be used, which would apply the rule to all sidecars in the mesh. If a list of gateway names is provided, the rules will apply only to the gateways. To apply the rules to both gateways and sidecars, specify `mesh` as one of the gateway names.",
             "type": "array",
             "items": {
               "type": "string",
@@ -77,7 +77,7 @@
             "format": "string"
           },
           "route": {
-            "description": "A http rule can either redirect or forward (default) traffic. The forwarding target can be one of several versions of a service (see glossary in beginning of document). Weights associated with the service version determine the proportion of traffic it receives.",
+            "description": "A HTTP rule can either redirect or forward (default) traffic. The forwarding target can be one of several versions of a service (see glossary in beginning of document). Weights associated with the service version determine the proportion of traffic it receives.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPRouteDestination"
@@ -114,9 +114,13 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Destination"
           },
           "mirrorPercent": {
-            "description": "Percentage of the traffic to be mirrored by the `mirror` field. If this field is absent, all the traffic (100%) will be mirrored. Max value is 100.",
+            "description": "Percentage of the traffic to be mirrored by the `mirror` field. Use of integer `mirror_percent` value is deprecated. Use the double `mirror_percentage` field instead",
             "type": "integer",
+            "deprecated": true,
             "nullable": true
+          },
+          "mirrorPercentage": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Percent"
           },
           "corsPolicy": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.CorsPolicy"
@@ -242,6 +246,7 @@
             "type": "integer"
           },
           "gateways": {
+            "description": "Names of gateways where the rule should be applied. Gateway names in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
             "type": "array",
             "items": {
               "type": "string",
@@ -265,7 +270,7 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.StringMatch"
           },
           "sourceLabels": {
-            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified at the top, it must include the reserved gateway `mesh` for this field to be applicable.",
+            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified in the top-level `gateways` field, it must include the reserved gateway `mesh` for this field to be applicable.",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -379,7 +384,7 @@
         "type": "object",
         "properties": {
           "attempts": {
-            "description": "Number of retries for a given request. The interval between retries will be determined automatically (25ms+). Actual number of retries attempted depends on the httpReqTimeout.",
+            "description": "Number of retries for a given request. The interval between retries will be determined automatically (25ms+). Actual number of retries attempted depends on the request `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute).",
             "type": "integer",
             "format": "int32"
           },
@@ -395,7 +400,7 @@
         }
       },
       "istio.networking.v1alpha3.HTTPFaultInjection": {
-        "description": "HTTPFaultInjection can be used to specify one or more faults to inject while forwarding http requests to the destination specified in a route. Fault specification is part of a VirtualService rule. Faults include aborting the Http request from downstream service, and/or delaying proxying of requests. A fault rule MUST HAVE delay or abort or both.",
+        "description": "HTTPFaultInjection can be used to specify one or more faults to inject while forwarding HTTP requests to the destination specified in a route. Fault specification is part of a VirtualService rule. Faults include aborting the Http request from downstream service, and/or delaying proxying of requests. A fault rule MUST HAVE delay or abort or both.",
         "type": "object",
         "properties": {
           "delay": {
@@ -403,6 +408,16 @@
           },
           "abort": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPFaultInjection.Abort"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.Percent": {
+        "description": "Percent specifies a percentage in the range of [0.0, 100.0].",
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "format": "double"
           }
         }
       },
@@ -504,7 +519,7 @@
             "type": "integer"
           },
           "gateways": {
-            "description": "Names of gateways where the rule should be applied to. Gateway names at the top of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
+            "description": "Names of gateways where the rule should be applied. Gateway names in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
             "type": "array",
             "items": {
               "type": "string",
@@ -512,7 +527,7 @@
             }
           },
           "sourceLabels": {
-            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified at the top, it should include the reserved gateway `mesh` in order for this field to be applicable.",
+            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified in the top-level `gateways` field, it should include the reserved gateway `mesh` in order for this field to be applicable.",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -565,7 +580,7 @@
             "type": "integer"
           },
           "gateways": {
-            "description": "Names of gateways where the rule should be applied to. Gateway names at the top of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
+            "description": "Names of gateways where the rule should be applied. Gateway names in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
             "type": "array",
             "items": {
               "type": "string",
@@ -573,7 +588,7 @@
             }
           },
           "sourceLabels": {
-            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified at the top, it should include the reserved gateway `mesh` in order for this field to be applicable.",
+            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified in the top-level `gateways` field, it should include the reserved gateway `mesh` in order for this field to be applicable.",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -748,16 +763,6 @@
             }
           }
         ]
-      },
-      "istio.networking.v1alpha3.Percent": {
-        "description": "Percent specifies a percentage in the range of [0.0, 100.0].",
-        "type": "object",
-        "properties": {
-          "value": {
-            "type": "number",
-            "format": "double"
-          }
-        }
       }
     }
   }
