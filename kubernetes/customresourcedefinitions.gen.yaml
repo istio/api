@@ -4297,11 +4297,6 @@ spec:
                             format: string
                             type: string
                           type: object
-                        sourceSubnet:
-                          description: IPv4 or IPv6 ip address of source with optional
-                            subnet.
-                          format: string
-                          type: string
                       type: object
                     type: array
                   route:

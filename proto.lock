@@ -40367,11 +40367,6 @@
                 "type": "HTTPRewrite"
               },
               {
-                "id": 5,
-                "name": "websocket_upgrade",
-                "type": "bool"
-              },
-              {
                 "id": 6,
                 "name": "timeout",
                 "type": "google.protobuf.Duration"
@@ -40413,78 +40408,26 @@
                 "type": "CorsPolicy"
               },
               {
-                "id": 12,
-                "name": "remove_response_headers",
-                "type": "string",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 14,
-                "name": "remove_request_headers",
-                "type": "string",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
                 "id": 16,
                 "name": "headers",
                 "type": "Headers"
               }
             ],
-            "maps": [
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 11,
-                  "name": "append_headers",
-                  "type": "string",
-                  "options": [
-                    {
-                      "name": "deprecated",
-                      "value": "true"
-                    }
-                  ]
-                }
-              },
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 13,
-                  "name": "append_response_headers",
-                  "type": "string",
-                  "options": [
-                    {
-                      "name": "deprecated",
-                      "value": "true"
-                    }
-                  ]
-                }
-              },
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 15,
-                  "name": "append_request_headers",
-                  "type": "string",
-                  "options": [
-                    {
-                      "name": "deprecated",
-                      "value": "true"
-                    }
-                  ]
-                }
-              }
+            "reserved_ids": [
+              5,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "reserved_names": [
+              "websocket_upgrade",
+              "append_headers",
+              "remove_response_headers",
+              "append_response_headers",
+              "remove_request_headers",
+              "append_request_headers"
             ]
           },
           {
@@ -40665,64 +40608,22 @@
                 "type": "int32"
               },
               {
-                "id": 3,
-                "name": "remove_response_headers",
-                "type": "string",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 5,
-                "name": "remove_request_headers",
-                "type": "string",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
                 "id": 7,
                 "name": "headers",
                 "type": "Headers"
               }
             ],
-            "maps": [
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 4,
-                  "name": "append_response_headers",
-                  "type": "string",
-                  "options": [
-                    {
-                      "name": "deprecated",
-                      "value": "true"
-                    }
-                  ]
-                }
-              },
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 6,
-                  "name": "append_request_headers",
-                  "type": "string",
-                  "options": [
-                    {
-                      "name": "deprecated",
-                      "value": "true"
-                    }
-                  ]
-                }
-              }
+            "reserved_ids": [
+              3,
+              4,
+              5,
+              6
+            ],
+            "reserved_names": [
+              "remove_response_headers",
+              "append_response_headers",
+              "remove_request_headers",
+              "append_request_headers"
             ]
           },
           {
@@ -40810,11 +40711,6 @@
                 "type": "uint32"
               },
               {
-                "id": 4,
-                "name": "source_subnet",
-                "type": "string"
-              },
-              {
                 "id": 6,
                 "name": "gateways",
                 "type": "string",
@@ -40830,6 +40726,12 @@
                   "type": "string"
                 }
               }
+            ],
+            "reserved_ids": [
+              4
+            ],
+            "reserved_names": [
+              "source_subnet"
             ]
           },
           {
@@ -41020,17 +40922,6 @@
                 "name": "Abort",
                 "fields": [
                   {
-                    "id": 1,
-                    "name": "percent",
-                    "type": "int32",
-                    "options": [
-                      {
-                        "name": "deprecated",
-                        "value": "true"
-                      }
-                    ]
-                  },
-                  {
                     "id": 2,
                     "name": "http_status",
                     "type": "int32",
@@ -41056,6 +40947,12 @@
                     "name": "percentage",
                     "type": "Percent"
                   }
+                ],
+                "reserved_ids": [
+                  1
+                ],
+                "reserved_names": [
+                  "percent"
                 ]
               }
             ]

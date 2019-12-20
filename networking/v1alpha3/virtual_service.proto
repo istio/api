@@ -370,9 +370,9 @@ message Destination {
   // the short name based on the namespace of the rule, not the service. A
   // rule in the "default" namespace containing a host "reviews will be
   // interpreted as "reviews.default.svc.cluster.local", irrespective of
-  // the actual namespace associated with the reviews service. _To avoid
-  // potential misconfigurations, it is recommended to always use fully
-  // qualified domain names over short names._
+  // the actual namespace associated with the reviews service. To avoid
+  // potential misconfiguration, it is recommended to always use fully
+  // qualified domain names over short names.
   string host = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The name of a subset within the service. Applicable only to services
@@ -417,9 +417,8 @@ message HTTPRoute {
   // Redirect primitive. Rewrite will be performed before forwarding.
   HTTPRewrite rewrite = 4;
 
-  // Deprecated. Websocket upgrades are done automatically starting from Istio 1.0.
-  // $hide_from_docs
-  bool websocket_upgrade = 5;
+  reserved 5;
+  reserved "websocket_upgrade";
 
   // Timeout for HTTP requests.
   google.protobuf.Duration timeout = 6;
@@ -455,20 +454,8 @@ message HTTPRoute {
   // for further details about cross origin resource sharing.
   CorsPolicy cors_policy = 10;
 
-  // $hide_from_docs
-  map<string, string> append_headers = 11 [deprecated=true];
-
-  // $hide_from_docs
-  repeated string remove_response_headers = 12 [deprecated=true];
-
-  // $hide_from_docs
-  map<string, string> append_response_headers = 13 [deprecated=true];
-
-  // $hide_from_docs
-  repeated string remove_request_headers = 14 [deprecated=true];
-
-  // $hide_from_docs
-  map<string, string> append_request_headers = 15 [deprecated=true];
+  reserved 11 to 15;
+  reserved "append_headers", "remove_response_headers", "append_response_headers","remove_request_headers", "append_request_headers";
 
   // Header manipulation rules
   Headers headers = 16;
@@ -811,21 +798,8 @@ message HTTPRouteDestination {
   // be 100.
   int32 weight = 2;
 
-  // Use of `remove_response_header` is deprecated. Use the `headers`
-  // field instead.
-  repeated string remove_response_headers = 3 [deprecated=true];
-
-  // Use of `append_response_headers` is deprecated. Use the `headers`
-  // field instead.
-  map<string, string> append_response_headers = 4 [deprecated=true];
-
-  // Use of `remove_request_headers` is deprecated. Use the `headers`
-  // field instead.
-  repeated string remove_request_headers = 5 [deprecated=true];
-
-  // Use of `append_request_headers` is deprecated. Use the `headers`
-  // field instead.
-  map<string, string> append_request_headers = 6 [deprecated=true];
+  reserved 3 to 6;
+  reserved "remove_response_headers", "append_response_headers", "remove_request_headers", "append_request_headers";
 
   // Header manipulation rules
   Headers headers = 7;
@@ -890,10 +864,8 @@ message TLSMatchAttributes {
   // port.
   uint32 port = 3;
 
-  // IPv4 or IPv6 ip address of source with optional subnet. E.g., a.b.c.d/xx
-  // form or just a.b.c.d
-  // $hide_from_docs
-  string source_subnet = 4;
+  reserved 4;
+  reserved "source_subnet";
 
   // One or more labels that constrain the applicability of a rule to
   // workloads with the given labels. If the VirtualService has a list of
@@ -1200,10 +1172,8 @@ message HTTPFaultInjection {
   // abort a certain percentage of requests. If not specified, all requests are
   // aborted.
   message Abort {
-    // Percentage of requests to be aborted with the error code provided (0-100).
-    // Use of integer `percent` value is deprecated. Use the double `percentage`
-    // field instead.
-    int32 percent = 1 [deprecated=true];
+    reserved 1;
+    reserved "percent";
 
     oneof error_type {
       // HTTP status code to use to abort the Http request.
