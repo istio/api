@@ -37359,12 +37359,12 @@
               {
                 "id": 100,
                 "name": "values",
-                "type": "TypeMapStringInterface2"
+                "type": "TypeMapStringInterface"
               },
               {
                 "id": 101,
                 "name": "unvalidated_values",
-                "type": "TypeMapStringInterface2"
+                "type": "TypeMapStringInterface"
               },
               {
                 "id": 200,
@@ -37409,9 +37409,6 @@
                 ]
               }
             ]
-          },
-          {
-            "name": "TypeMapStringInterface2"
           }
         ],
         "imports": [
@@ -43873,11 +43870,6 @@
                 "id": 8,
                 "name": "output_payload_to_header",
                 "type": "string"
-              },
-              {
-                "id": 9,
-                "name": "forward_original_token",
-                "type": "bool"
               }
             ]
           },

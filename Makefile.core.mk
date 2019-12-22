@@ -29,9 +29,6 @@ annotations_prep = annotations_prep
 htmlproofer = htmlproofer
 cue = cue-gen -paths=common-protos
 
-go_plugin_prefix := --go_out=plugins=grpc,
-go_plugin := $(go_plugin_prefix):$(out_path)
-
 ########################
 # protoc_gen_gogo*
 ########################
@@ -186,10 +183,9 @@ mesh_v1alpha1_openapi := $(mesh_v1alpha1_path)/istio.mesh.v1alpha1.gen.json
 
 $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons): $(mesh_v1alpha1_protos)
 	@$(protolock) status
-	@$(protoc) $(go_plugin) $(protoc_gen_docs_plugin)$(mesh_v1alpha1_path) $(protoc_gen_python_plugin) $^
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(mesh_v1alpha1_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/mesh/* mesh
 	@go run $(repo_dir)/mesh/fixup_structs/main.go -f $(mesh_v1alpha1_path)/component.pb.go
-	@go run $(repo_dir)/mesh/fixup_structs/main.go -f $(mesh_v1alpha1_path)/kubernetes.pb.go
 	@go run $(repo_dir)/mesh/fixup_structs/main.go -f $(mesh_v1alpha1_path)/operator.pb.go
 	@sed -i 's|<key,value,effect>|\&lt\;key,value,effect\&gt\;|g' $(mesh_v1alpha1_path)/istio.mesh.v1alpha1.pb.html
 	@sed -i 's|<operator>|\&lt\;operator\&gt\;|g' $(mesh_v1alpha1_path)/istio.mesh.v1alpha1.pb.html
