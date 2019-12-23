@@ -97,7 +97,7 @@ func (ProxySelector_NodeType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_d9fca2f482bbaff3, []int{0, 0}
 }
 
-// ProxySelector specifies the proxy filtering of the troubleshooting API targetted scope.
+// ProxySelector specifies the proxy filtering of the troubleshooting API targeted scope.
 // All the fields in this selector are and-ed together. Empty fields will selector all the
 // proxy.
 type ProxySelector struct {
@@ -879,8 +879,8 @@ var _MeshTroubleshootingService_serviceDesc = grpc.ServiceDesc{
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type ProxyTroubleshootingServiceClient interface {
 	// TroubleShooting request on proxy level.
-	// Note in the actual architecture, we have proxy level agent, e.g. pilot agent, connecting to the
-	// centralized troubleshooting control plane. Thus from gRPC's point of view, centralized control
+	// Note in the actual architecture, we have proxy agent, e.g. pilot agent, connecting to the
+	// the troubleshooting control plane. From gRPC's point of view, the control
 	// plane is the server. But when troubleshooting API is used, the control plane initiates
 	// workflow. This is why we have response/request in reversed position.
 	Troubleshoot(ctx context.Context, opts ...grpc.CallOption) (ProxyTroubleshootingService_TroubleshootClient, error)
@@ -928,8 +928,8 @@ func (x *proxyTroubleshootingServiceTroubleshootClient) Recv() (*TroubleShooting
 // ProxyTroubleshootingServiceServer is the server API for ProxyTroubleshootingService service.
 type ProxyTroubleshootingServiceServer interface {
 	// TroubleShooting request on proxy level.
-	// Note in the actual architecture, we have proxy level agent, e.g. pilot agent, connecting to the
-	// centralized troubleshooting control plane. Thus from gRPC's point of view, centralized control
+	// Note in the actual architecture, we have proxy agent, e.g. pilot agent, connecting to the
+	// the troubleshooting control plane. From gRPC's point of view, the control
 	// plane is the server. But when troubleshooting API is used, the control plane initiates
 	// workflow. This is why we have response/request in reversed position.
 	Troubleshoot(ProxyTroubleshootingService_TroubleshootServer) error

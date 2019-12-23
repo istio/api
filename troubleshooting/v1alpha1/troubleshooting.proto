@@ -107,12 +107,12 @@ message SetLogLevelResponse {
   repeated LoggerLogLevel logger_levels = 2;
 }
 
-// ProxyTroubleshootingService is exposed by the proxy management component on each node.
-// Currently this is pilot.
+// ProxyTroubleshootingService is exposed by the centralized troubleshooting control plane.
+// Proxy agent will connect to this service and stream the troubleshooting information.
 service ProxyTroubleshootingService {
   // TroubleShooting request on proxy level.
-  // Note in the actual architecture, we have proxy level agent, e.g. pilot agent, connecting to the
-  // centralized troubleshooting control plane. Thus from gRPC's point of view, centralized control
+  // Note in the actual architecture, we have proxy agent, e.g. pilot agent, connecting to the
+  // the troubleshooting control plane. From gRPC's point of view, the control
   // plane is the server. But when troubleshooting API is used, the control plane initiates
   // workflow. This is why we have response/request in reversed position.
   rpc Troubleshoot(stream TroubleShootingResponse)
