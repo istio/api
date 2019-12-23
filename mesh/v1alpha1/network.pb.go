@@ -6,13 +6,10 @@ package v1alpha1
 import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
-	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 	io "io"
 	_ "istio.io/gogo-genproto/googleapis/google/api"
 	math "math"
 	math_bits "math/bits"
-	reflect "reflect"
-	strings "strings"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -37,11 +34,15 @@ type Network struct {
 	// the network are directly accessible to one another.
 	Endpoints []*Network_NetworkEndpoints `protobuf:"bytes,2,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
 	// Set of gateways associated with the network.
-	Gateways []*Network_IstioNetworkGateway `protobuf:"bytes,3,rep,name=gateways,proto3" json:"gateways,omitempty"`
+	Gateways             []*Network_IstioNetworkGateway `protobuf:"bytes,3,rep,name=gateways,proto3" json:"gateways,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                       `json:"-"`
+	XXX_unrecognized     []byte                         `json:"-"`
+	XXX_sizecache        int32                          `json:"-"`
 }
 
-func (m *Network) Reset()      { *m = Network{} }
-func (*Network) ProtoMessage() {}
+func (m *Network) Reset()         { *m = Network{} }
+func (m *Network) String() string { return proto.CompactTextString(m) }
+func (*Network) ProtoMessage()    {}
 func (*Network) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a15df2a96e10cd86, []int{0}
 }
@@ -110,11 +111,15 @@ type Network_NetworkEndpoints struct {
 	// Types that are valid to be assigned to Ne:
 	//	*Network_NetworkEndpoints_FromCidr
 	//	*Network_NetworkEndpoints_FromRegistry
-	Ne isNetwork_NetworkEndpoints_Ne `protobuf_oneof:"ne"`
+	Ne                   isNetwork_NetworkEndpoints_Ne `protobuf_oneof:"ne"`
+	XXX_NoUnkeyedLiteral struct{}                      `json:"-"`
+	XXX_unrecognized     []byte                        `json:"-"`
+	XXX_sizecache        int32                         `json:"-"`
 }
 
-func (m *Network_NetworkEndpoints) Reset()      { *m = Network_NetworkEndpoints{} }
-func (*Network_NetworkEndpoints) ProtoMessage() {}
+func (m *Network_NetworkEndpoints) Reset()         { *m = Network_NetworkEndpoints{} }
+func (m *Network_NetworkEndpoints) String() string { return proto.CompactTextString(m) }
+func (*Network_NetworkEndpoints) ProtoMessage()    {}
 func (*Network_NetworkEndpoints) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a15df2a96e10cd86, []int{0, 0}
 }
@@ -147,7 +152,6 @@ var xxx_messageInfo_Network_NetworkEndpoints proto.InternalMessageInfo
 
 type isNetwork_NetworkEndpoints_Ne interface {
 	isNetwork_NetworkEndpoints_Ne()
-	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
@@ -202,11 +206,15 @@ type Network_IstioNetworkGateway struct {
 	// The port associated with the gateway.
 	Port uint32 `protobuf:"varint,3,opt,name=port,proto3" json:"port,omitempty"`
 	// The locality associated with an explicitly specified gateway (i.e. ip)
-	Locality string `protobuf:"bytes,4,opt,name=locality,proto3" json:"locality,omitempty"`
+	Locality             string   `protobuf:"bytes,4,opt,name=locality,proto3" json:"locality,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Network_IstioNetworkGateway) Reset()      { *m = Network_IstioNetworkGateway{} }
-func (*Network_IstioNetworkGateway) ProtoMessage() {}
+func (m *Network_IstioNetworkGateway) Reset()         { *m = Network_IstioNetworkGateway{} }
+func (m *Network_IstioNetworkGateway) String() string { return proto.CompactTextString(m) }
+func (*Network_IstioNetworkGateway) ProtoMessage()    {}
 func (*Network_IstioNetworkGateway) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a15df2a96e10cd86, []int{0, 1}
 }
@@ -239,7 +247,6 @@ var xxx_messageInfo_Network_IstioNetworkGateway proto.InternalMessageInfo
 
 type isNetwork_IstioNetworkGateway_Gw interface {
 	isNetwork_IstioNetworkGateway_Gw()
-	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
@@ -321,11 +328,15 @@ type MeshNetworks struct {
 	// The set of networks inside this mesh. Each network should
 	// have a unique name and information about how to infer the endpoints in
 	// the network as well as the gateways associated with the network.
-	Networks map[string]*Network `protobuf:"bytes,1,rep,name=networks,proto3" json:"networks,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Networks             map[string]*Network `protobuf:"bytes,1,rep,name=networks,proto3" json:"networks,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
 }
 
-func (m *MeshNetworks) Reset()      { *m = MeshNetworks{} }
-func (*MeshNetworks) ProtoMessage() {}
+func (m *MeshNetworks) Reset()         { *m = MeshNetworks{} }
+func (m *MeshNetworks) String() string { return proto.CompactTextString(m) }
+func (*MeshNetworks) ProtoMessage()    {}
 func (*MeshNetworks) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a15df2a96e10cd86, []int{1}
 }
@@ -374,370 +385,36 @@ func init() {
 func init() { proto.RegisterFile("mesh/v1alpha1/network.proto", fileDescriptor_a15df2a96e10cd86) }
 
 var fileDescriptor_a15df2a96e10cd86 = []byte{
-	// 475 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x53, 0x3f, 0x6f, 0xd3, 0x40,
-	0x14, 0xf7, 0xd9, 0x81, 0x26, 0xaf, 0x8d, 0x54, 0x5d, 0x84, 0xb0, 0x0c, 0x1c, 0x51, 0x25, 0xa4,
-	0x2c, 0xd8, 0x34, 0x30, 0x20, 0x36, 0x82, 0x2a, 0x60, 0xa0, 0x0a, 0x66, 0x82, 0x81, 0xe8, 0x1a,
-	0x5f, 0x9d, 0x53, 0x1d, 0x9f, 0x75, 0x67, 0x12, 0x65, 0xe3, 0x23, 0xf0, 0x19, 0x98, 0xd8, 0x19,
-	0xf9, 0x02, 0x8c, 0x19, 0x3b, 0x36, 0xce, 0xc2, 0xd8, 0x8f, 0x80, 0xec, 0xf3, 0x05, 0x5a, 0x45,
-	0x9d, 0xec, 0xf7, 0xfb, 0xbd, 0xdf, 0xef, 0xfd, 0xf1, 0x33, 0xdc, 0x9b, 0x32, 0x35, 0x09, 0x66,
-	0x87, 0x34, 0xc9, 0x26, 0xf4, 0x30, 0x48, 0x59, 0x3e, 0x17, 0xf2, 0xcc, 0xcf, 0xa4, 0xc8, 0x05,
-	0xee, 0x70, 0x95, 0x73, 0xe1, 0x97, 0x29, 0xbe, 0x49, 0xf1, 0x1e, 0xc6, 0x42, 0xc4, 0x09, 0x0b,
-	0x68, 0xc6, 0x83, 0x53, 0xce, 0x92, 0x68, 0x74, 0xc2, 0x26, 0x74, 0xc6, 0x85, 0xd4, 0xaa, 0x83,
-	0x9f, 0x0e, 0xec, 0x1c, 0x6b, 0x1f, 0x3c, 0x84, 0x16, 0x4b, 0xa3, 0x4c, 0xf0, 0x34, 0x57, 0xae,
-	0xdd, 0x75, 0x7a, 0xbb, 0xfd, 0xc7, 0xfe, 0x16, 0x57, 0xbf, 0x16, 0x98, 0xe7, 0x91, 0x11, 0x0d,
-	0x9c, 0x8b, 0x97, 0x76, 0xf8, 0xcf, 0x04, 0xbf, 0x87, 0x66, 0x4c, 0x73, 0x36, 0xa7, 0x0b, 0xe5,
-	0x3a, 0x95, 0xe1, 0x93, 0x1b, 0x0d, 0xdf, 0x96, 0x5c, 0x1d, 0xbc, 0xd6, 0x42, 0xed, 0xb9, 0xb1,
-	0xf1, 0x3e, 0xc3, 0xfe, 0xf5, 0xb2, 0xf8, 0x01, 0xb4, 0x4e, 0xa5, 0x98, 0x8e, 0xc6, 0x3c, 0x92,
-	0x2e, 0xea, 0xa2, 0x5e, 0xeb, 0x8d, 0x15, 0x36, 0x4b, 0xe8, 0x15, 0x8f, 0x24, 0x7e, 0x04, 0xed,
-	0x8a, 0x96, 0x2c, 0xe6, 0x2a, 0x97, 0x0b, 0xd7, 0xae, 0x53, 0xf6, 0x4a, 0x38, 0xac, 0xd1, 0x41,
-	0x03, 0xec, 0x94, 0x79, 0xdf, 0x11, 0x74, 0xb6, 0xb4, 0x81, 0x9f, 0xc1, 0x1d, 0xa3, 0x1f, 0x29,
-	0x26, 0x67, 0x7c, 0xcc, 0x46, 0x29, 0x9d, 0xb2, 0x4d, 0xbd, 0x8e, 0xa1, 0x3f, 0x68, 0xf6, 0x98,
-	0x4e, 0x19, 0xf6, 0x60, 0x87, 0x46, 0x91, 0x64, 0x4a, 0x6d, 0x8a, 0x1a, 0x00, 0xdf, 0x85, 0x46,
-	0x26, 0x64, 0xee, 0x3a, 0x5d, 0xd4, 0x6b, 0xeb, 0x31, 0x2b, 0x00, 0x7b, 0xd0, 0x4c, 0xc4, 0x98,
-	0x26, 0x3c, 0x5f, 0xb8, 0x8d, 0x52, 0x15, 0x6e, 0xe2, 0xb2, 0xc9, 0x78, 0x7e, 0xf0, 0x0b, 0xc1,
-	0xde, 0x3b, 0xa6, 0x26, 0x75, 0x8f, 0x0a, 0x0f, 0xa1, 0x59, 0x5f, 0x83, 0x72, 0x51, 0xb5, 0xe8,
-	0x60, 0xeb, 0xa2, 0xff, 0x17, 0x99, 0xad, 0xab, 0xa3, 0xb4, 0x1c, 0x5f, 0xef, 0xd9, 0xb8, 0x78,
-	0x1f, 0xa1, 0x7d, 0x85, 0xc7, 0xfb, 0xe0, 0x9c, 0xb1, 0x85, 0x1e, 0x37, 0x2c, 0x5f, 0x71, 0x1f,
-	0x6e, 0xcd, 0x68, 0xf2, 0x85, 0x55, 0xa3, 0xed, 0xf6, 0xef, 0xdf, 0xf4, 0x69, 0x43, 0x9d, 0xfa,
-	0xc2, 0x7e, 0x8e, 0x06, 0xc3, 0xe5, 0x8a, 0x58, 0xe7, 0x2b, 0x62, 0x5d, 0xae, 0x08, 0xfa, 0x5a,
-	0x10, 0xf4, 0xa3, 0x20, 0xe8, 0x77, 0x41, 0xd0, 0xb2, 0x20, 0xe8, 0xa2, 0x20, 0xe8, 0x4f, 0x41,
-	0xac, 0xcb, 0x82, 0xa0, 0x6f, 0x6b, 0x62, 0x2d, 0xd7, 0xc4, 0x3a, 0x5f, 0x13, 0xeb, 0x93, 0xa7,
-	0xdd, 0xb9, 0xa8, 0x8e, 0xf9, 0xca, 0x9f, 0x70, 0x72, 0xbb, 0x3a, 0xe6, 0xa7, 0x7f, 0x03, 0x00,
-	0x00, 0xff, 0xff, 0xec, 0x01, 0x10, 0x39, 0x21, 0x03, 0x00, 0x00,
+	// 432 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x52, 0xcd, 0x6e, 0xd3, 0x40,
+	0x10, 0x66, 0xed, 0x40, 0x93, 0x69, 0x23, 0x55, 0x1b, 0x21, 0x2c, 0x03, 0x21, 0xaa, 0x84, 0x94,
+	0x0b, 0x36, 0x0d, 0x1c, 0x10, 0x37, 0x82, 0x2a, 0xe0, 0x40, 0x55, 0xcc, 0x09, 0x0e, 0x44, 0xdb,
+	0x78, 0xea, 0xac, 0xea, 0x78, 0xad, 0xdd, 0xc5, 0x91, 0x5f, 0x87, 0x57, 0xe0, 0xc8, 0x0b, 0x70,
+	0xe4, 0x11, 0xaa, 0x3c, 0x09, 0x5a, 0xaf, 0xd7, 0xd0, 0x2a, 0xea, 0xc9, 0x9e, 0xef, 0x9b, 0xef,
+	0x9b, 0x9f, 0x1d, 0x78, 0xb8, 0x46, 0xb5, 0x8a, 0xab, 0x63, 0x96, 0x97, 0x2b, 0x76, 0x1c, 0x17,
+	0xa8, 0x37, 0x42, 0x5e, 0x46, 0xa5, 0x14, 0x5a, 0xd0, 0x11, 0x57, 0x9a, 0x8b, 0xc8, 0xa4, 0x44,
+	0x2e, 0x25, 0x7c, 0x92, 0x09, 0x91, 0xe5, 0x18, 0xb3, 0x92, 0xc7, 0x17, 0x1c, 0xf3, 0x74, 0x71,
+	0x8e, 0x2b, 0x56, 0x71, 0x21, 0xad, 0xea, 0xe8, 0xa7, 0x0f, 0x7b, 0xa7, 0xd6, 0x87, 0x9e, 0xc1,
+	0x00, 0x8b, 0xb4, 0x14, 0xbc, 0xd0, 0x2a, 0xf0, 0x26, 0xfe, 0x74, 0x7f, 0xf6, 0x2c, 0xda, 0xe1,
+	0x1a, 0xb5, 0x02, 0xf7, 0x3d, 0x71, 0xa2, 0xb9, 0x7f, 0xf5, 0xc6, 0x4b, 0xfe, 0x99, 0xd0, 0x4f,
+	0xd0, 0xcf, 0x98, 0xc6, 0x0d, 0xab, 0x55, 0xe0, 0x37, 0x86, 0xcf, 0x6f, 0x35, 0xfc, 0x60, 0xb8,
+	0x36, 0x78, 0x67, 0x85, 0xd6, 0xb3, 0xb3, 0x09, 0xbf, 0xc1, 0xe1, 0xcd, 0xb2, 0xf4, 0x31, 0x0c,
+	0x2e, 0xa4, 0x58, 0x2f, 0x96, 0x3c, 0x95, 0x01, 0x99, 0x90, 0xe9, 0xe0, 0xfd, 0x9d, 0xa4, 0x6f,
+	0xa0, 0xb7, 0x3c, 0x95, 0xf4, 0x29, 0x0c, 0x1b, 0x5a, 0x62, 0xc6, 0x95, 0x96, 0x75, 0xe0, 0xb5,
+	0x29, 0x07, 0x06, 0x4e, 0x5a, 0x74, 0xde, 0x03, 0xaf, 0xc0, 0xf0, 0x07, 0x81, 0xd1, 0x8e, 0x36,
+	0xe8, 0x4b, 0xb8, 0xef, 0xf4, 0x0b, 0x85, 0xb2, 0xe2, 0x4b, 0x5c, 0x14, 0x6c, 0x8d, 0x5d, 0xbd,
+	0x91, 0xa3, 0x3f, 0x5b, 0xf6, 0x94, 0xad, 0x91, 0x86, 0xb0, 0xc7, 0xd2, 0x54, 0xa2, 0x52, 0x5d,
+	0x51, 0x07, 0xd0, 0x07, 0xd0, 0x2b, 0x85, 0xd4, 0x81, 0x3f, 0x21, 0xd3, 0xa1, 0x1d, 0xb3, 0x01,
+	0x68, 0x08, 0xfd, 0x5c, 0x2c, 0x59, 0xce, 0x75, 0x1d, 0xf4, 0x8c, 0x2a, 0xe9, 0x62, 0xd3, 0x64,
+	0xb6, 0x39, 0xfa, 0x45, 0xe0, 0xe0, 0x23, 0xaa, 0x55, 0xdb, 0xa3, 0xa2, 0x67, 0xd0, 0x6f, 0xaf,
+	0x41, 0x05, 0xa4, 0x59, 0x74, 0xbc, 0x73, 0xd1, 0xff, 0x8b, 0xdc, 0xd6, 0xd5, 0x49, 0x61, 0xc6,
+	0xb7, 0x7b, 0x76, 0x2e, 0xe1, 0x17, 0x18, 0x5e, 0xe3, 0xe9, 0x21, 0xf8, 0x97, 0x58, 0xdb, 0x71,
+	0x13, 0xf3, 0x4b, 0x67, 0x70, 0xb7, 0x62, 0xf9, 0x77, 0x6c, 0x46, 0xdb, 0x9f, 0x3d, 0xba, 0xed,
+	0x69, 0x13, 0x9b, 0xfa, 0xda, 0x7b, 0x45, 0xe6, 0xd3, 0xdf, 0xdb, 0x31, 0xf9, 0xb3, 0x1d, 0x93,
+	0xab, 0xed, 0x98, 0x7c, 0x0d, 0xad, 0x8a, 0x8b, 0xe6, 0x48, 0xaf, 0x5d, 0xf8, 0xf9, 0xbd, 0xe6,
+	0x48, 0x5f, 0xfc, 0x0d, 0x00, 0x00, 0xff, 0xff, 0x17, 0xcd, 0x07, 0x4e, 0xf9, 0x02, 0x00, 0x00,
 }
 
-func (this *Network) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Network)
-	if !ok {
-		that2, ok := that.(Network)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Endpoints) != len(that1.Endpoints) {
-		return false
-	}
-	for i := range this.Endpoints {
-		if !this.Endpoints[i].Equal(that1.Endpoints[i]) {
-			return false
-		}
-	}
-	if len(this.Gateways) != len(that1.Gateways) {
-		return false
-	}
-	for i := range this.Gateways {
-		if !this.Gateways[i].Equal(that1.Gateways[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *Network_NetworkEndpoints) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Network_NetworkEndpoints)
-	if !ok {
-		that2, ok := that.(Network_NetworkEndpoints)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.Ne == nil {
-		if this.Ne != nil {
-			return false
-		}
-	} else if this.Ne == nil {
-		return false
-	} else if !this.Ne.Equal(that1.Ne) {
-		return false
-	}
-	return true
-}
-func (this *Network_NetworkEndpoints_FromCidr) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Network_NetworkEndpoints_FromCidr)
-	if !ok {
-		that2, ok := that.(Network_NetworkEndpoints_FromCidr)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.FromCidr != that1.FromCidr {
-		return false
-	}
-	return true
-}
-func (this *Network_NetworkEndpoints_FromRegistry) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Network_NetworkEndpoints_FromRegistry)
-	if !ok {
-		that2, ok := that.(Network_NetworkEndpoints_FromRegistry)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.FromRegistry != that1.FromRegistry {
-		return false
-	}
-	return true
-}
-func (this *Network_IstioNetworkGateway) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Network_IstioNetworkGateway)
-	if !ok {
-		that2, ok := that.(Network_IstioNetworkGateway)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.Gw == nil {
-		if this.Gw != nil {
-			return false
-		}
-	} else if this.Gw == nil {
-		return false
-	} else if !this.Gw.Equal(that1.Gw) {
-		return false
-	}
-	if this.Port != that1.Port {
-		return false
-	}
-	if this.Locality != that1.Locality {
-		return false
-	}
-	return true
-}
-func (this *Network_IstioNetworkGateway_RegistryServiceName) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Network_IstioNetworkGateway_RegistryServiceName)
-	if !ok {
-		that2, ok := that.(Network_IstioNetworkGateway_RegistryServiceName)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.RegistryServiceName != that1.RegistryServiceName {
-		return false
-	}
-	return true
-}
-func (this *Network_IstioNetworkGateway_Address) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Network_IstioNetworkGateway_Address)
-	if !ok {
-		that2, ok := that.(Network_IstioNetworkGateway_Address)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Address != that1.Address {
-		return false
-	}
-	return true
-}
-func (this *MeshNetworks) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MeshNetworks)
-	if !ok {
-		that2, ok := that.(MeshNetworks)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Networks) != len(that1.Networks) {
-		return false
-	}
-	for i := range this.Networks {
-		if !this.Networks[i].Equal(that1.Networks[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *Network) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&v1alpha1.Network{")
-	if this.Endpoints != nil {
-		s = append(s, "Endpoints: "+fmt.Sprintf("%#v", this.Endpoints)+",\n")
-	}
-	if this.Gateways != nil {
-		s = append(s, "Gateways: "+fmt.Sprintf("%#v", this.Gateways)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *Network_NetworkEndpoints) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&v1alpha1.Network_NetworkEndpoints{")
-	if this.Ne != nil {
-		s = append(s, "Ne: "+fmt.Sprintf("%#v", this.Ne)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *Network_NetworkEndpoints_FromCidr) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&v1alpha1.Network_NetworkEndpoints_FromCidr{` +
-		`FromCidr:` + fmt.Sprintf("%#v", this.FromCidr) + `}`}, ", ")
-	return s
-}
-func (this *Network_NetworkEndpoints_FromRegistry) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&v1alpha1.Network_NetworkEndpoints_FromRegistry{` +
-		`FromRegistry:` + fmt.Sprintf("%#v", this.FromRegistry) + `}`}, ", ")
-	return s
-}
-func (this *Network_IstioNetworkGateway) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 8)
-	s = append(s, "&v1alpha1.Network_IstioNetworkGateway{")
-	if this.Gw != nil {
-		s = append(s, "Gw: "+fmt.Sprintf("%#v", this.Gw)+",\n")
-	}
-	s = append(s, "Port: "+fmt.Sprintf("%#v", this.Port)+",\n")
-	s = append(s, "Locality: "+fmt.Sprintf("%#v", this.Locality)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *Network_IstioNetworkGateway_RegistryServiceName) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&v1alpha1.Network_IstioNetworkGateway_RegistryServiceName{` +
-		`RegistryServiceName:` + fmt.Sprintf("%#v", this.RegistryServiceName) + `}`}, ", ")
-	return s
-}
-func (this *Network_IstioNetworkGateway_Address) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&v1alpha1.Network_IstioNetworkGateway_Address{` +
-		`Address:` + fmt.Sprintf("%#v", this.Address) + `}`}, ", ")
-	return s
-}
-func (this *MeshNetworks) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&v1alpha1.MeshNetworks{")
-	keysForNetworks := make([]string, 0, len(this.Networks))
-	for k, _ := range this.Networks {
-		keysForNetworks = append(keysForNetworks, k)
-	}
-	github_com_gogo_protobuf_sortkeys.Strings(keysForNetworks)
-	mapStringForNetworks := "map[string]*Network{"
-	for _, k := range keysForNetworks {
-		mapStringForNetworks += fmt.Sprintf("%#v: %#v,", k, this.Networks[k])
-	}
-	mapStringForNetworks += "}"
-	if this.Networks != nil {
-		s = append(s, "Networks: "+mapStringForNetworks+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func valueToGoStringNetwork(v interface{}, typ string) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
-}
 func (m *Network) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -758,6 +435,10 @@ func (m *Network) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
 	if len(m.Gateways) > 0 {
 		for iNdEx := len(m.Gateways) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -809,6 +490,10 @@ func (m *Network_NetworkEndpoints) MarshalToSizedBuffer(dAtA []byte) (int, error
 	_ = i
 	var l int
 	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
 	if m.Ne != nil {
 		{
 			size := m.Ne.Size()
@@ -867,6 +552,10 @@ func (m *Network_IstioNetworkGateway) MarshalToSizedBuffer(dAtA []byte) (int, er
 	_ = i
 	var l int
 	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
 	if len(m.Locality) > 0 {
 		i -= len(m.Locality)
 		copy(dAtA[i:], m.Locality)
@@ -937,6 +626,10 @@ func (m *MeshNetworks) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
 	if len(m.Networks) > 0 {
 		for k := range m.Networks {
 			v := m.Networks[k]
@@ -995,6 +688,9 @@ func (m *Network) Size() (n int) {
 			n += 1 + l + sovNetwork(uint64(l))
 		}
 	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
 	return n
 }
 
@@ -1006,6 +702,9 @@ func (m *Network_NetworkEndpoints) Size() (n int) {
 	_ = l
 	if m.Ne != nil {
 		n += m.Ne.Size()
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
 	}
 	return n
 }
@@ -1045,6 +744,9 @@ func (m *Network_IstioNetworkGateway) Size() (n int) {
 	l = len(m.Locality)
 	if l > 0 {
 		n += 1 + l + sovNetwork(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
 	}
 	return n
 }
@@ -1088,6 +790,9 @@ func (m *MeshNetworks) Size() (n int) {
 			n += mapEntrySize + 1 + sovNetwork(uint64(mapEntrySize))
 		}
 	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
 	return n
 }
 
@@ -1096,117 +801,6 @@ func sovNetwork(x uint64) (n int) {
 }
 func sozNetwork(x uint64) (n int) {
 	return sovNetwork(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (this *Network) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForEndpoints := "[]*Network_NetworkEndpoints{"
-	for _, f := range this.Endpoints {
-		repeatedStringForEndpoints += strings.Replace(fmt.Sprintf("%v", f), "Network_NetworkEndpoints", "Network_NetworkEndpoints", 1) + ","
-	}
-	repeatedStringForEndpoints += "}"
-	repeatedStringForGateways := "[]*Network_IstioNetworkGateway{"
-	for _, f := range this.Gateways {
-		repeatedStringForGateways += strings.Replace(fmt.Sprintf("%v", f), "Network_IstioNetworkGateway", "Network_IstioNetworkGateway", 1) + ","
-	}
-	repeatedStringForGateways += "}"
-	s := strings.Join([]string{`&Network{`,
-		`Endpoints:` + repeatedStringForEndpoints + `,`,
-		`Gateways:` + repeatedStringForGateways + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Network_NetworkEndpoints) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Network_NetworkEndpoints{`,
-		`Ne:` + fmt.Sprintf("%v", this.Ne) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Network_NetworkEndpoints_FromCidr) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Network_NetworkEndpoints_FromCidr{`,
-		`FromCidr:` + fmt.Sprintf("%v", this.FromCidr) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Network_NetworkEndpoints_FromRegistry) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Network_NetworkEndpoints_FromRegistry{`,
-		`FromRegistry:` + fmt.Sprintf("%v", this.FromRegistry) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Network_IstioNetworkGateway) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Network_IstioNetworkGateway{`,
-		`Gw:` + fmt.Sprintf("%v", this.Gw) + `,`,
-		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
-		`Locality:` + fmt.Sprintf("%v", this.Locality) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Network_IstioNetworkGateway_RegistryServiceName) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Network_IstioNetworkGateway_RegistryServiceName{`,
-		`RegistryServiceName:` + fmt.Sprintf("%v", this.RegistryServiceName) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Network_IstioNetworkGateway_Address) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Network_IstioNetworkGateway_Address{`,
-		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MeshNetworks) String() string {
-	if this == nil {
-		return "nil"
-	}
-	keysForNetworks := make([]string, 0, len(this.Networks))
-	for k, _ := range this.Networks {
-		keysForNetworks = append(keysForNetworks, k)
-	}
-	github_com_gogo_protobuf_sortkeys.Strings(keysForNetworks)
-	mapStringForNetworks := "map[string]*Network{"
-	for _, k := range keysForNetworks {
-		mapStringForNetworks += fmt.Sprintf("%v: %v,", k, this.Networks[k])
-	}
-	mapStringForNetworks += "}"
-	s := strings.Join([]string{`&MeshNetworks{`,
-		`Networks:` + mapStringForNetworks + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func valueToStringNetwork(v interface{}) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("*%v", pv)
 }
 func (m *Network) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -1320,6 +914,7 @@ func (m *Network) Unmarshal(dAtA []byte) error {
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
 			iNdEx += skippy
 		}
 	}
@@ -1437,6 +1032,7 @@ func (m *Network_NetworkEndpoints) Unmarshal(dAtA []byte) error {
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
 			iNdEx += skippy
 		}
 	}
@@ -1605,6 +1201,7 @@ func (m *Network_IstioNetworkGateway) Unmarshal(dAtA []byte) error {
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
 			iNdEx += skippy
 		}
 	}
@@ -1787,6 +1384,7 @@ func (m *MeshNetworks) Unmarshal(dAtA []byte) error {
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
 			iNdEx += skippy
 		}
 	}

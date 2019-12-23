@@ -6,15 +6,11 @@ package v1alpha1
 import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
-	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 	types "github.com/gogo/protobuf/types"
 	io "io"
 	v1alpha3 "istio.io/api/networking/v1alpha3"
 	math "math"
 	math_bits "math/bits"
-	reflect "reflect"
-	strconv "strconv"
-	strings "strings"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -36,12 +32,12 @@ type AuthenticationPolicy int32
 
 const (
 	// Do not encrypt Envoy to Envoy traffic.
-	NONE AuthenticationPolicy = 0
+	AuthenticationPolicy_NONE AuthenticationPolicy = 0
 	// Envoy to Envoy traffic is wrapped into mutual TLS connections.
-	MUTUAL_TLS AuthenticationPolicy = 1
+	AuthenticationPolicy_MUTUAL_TLS AuthenticationPolicy = 1
 	// Use the policy defined by the parent scope. Should not be used for mesh
 	// policy.
-	INHERIT AuthenticationPolicy = 1000
+	AuthenticationPolicy_INHERIT AuthenticationPolicy = 1000
 )
 
 var AuthenticationPolicy_name = map[int32]string{
@@ -56,6 +52,10 @@ var AuthenticationPolicy_value = map[string]int32{
 	"INHERIT":    1000,
 }
 
+func (x AuthenticationPolicy) String() string {
+	return proto.EnumName(AuthenticationPolicy_name, int32(x))
+}
+
 func (AuthenticationPolicy) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_5efecd978cf3d28d, []int{0}
 }
@@ -68,12 +68,12 @@ type ProxyConfig_InboundInterceptionMode int32
 const (
 	// The REDIRECT mode uses iptables REDIRECT to NAT and redirect to Envoy. This mode loses
 	// source IP addresses during redirection.
-	REDIRECT ProxyConfig_InboundInterceptionMode = 0
+	ProxyConfig_REDIRECT ProxyConfig_InboundInterceptionMode = 0
 	// The TPROXY mode uses iptables TPROXY to redirect to Envoy. This mode preserves both the
 	// source and destination IP addresses and ports, so that they can be used for advanced
 	// filtering and manipulation. This mode also configures the sidecar to run with the
 	// CAP_NET_ADMIN capability, which is required to use TPROXY.
-	TPROXY ProxyConfig_InboundInterceptionMode = 1
+	ProxyConfig_TPROXY ProxyConfig_InboundInterceptionMode = 1
 )
 
 var ProxyConfig_InboundInterceptionMode_name = map[int32]string{
@@ -84,6 +84,10 @@ var ProxyConfig_InboundInterceptionMode_name = map[int32]string{
 var ProxyConfig_InboundInterceptionMode_value = map[string]int32{
 	"REDIRECT": 0,
 	"TPROXY":   1,
+}
+
+func (x ProxyConfig_InboundInterceptionMode) String() string {
+	return proto.EnumName(ProxyConfig_InboundInterceptionMode_name, int32(x))
 }
 
 func (ProxyConfig_InboundInterceptionMode) EnumDescriptor() ([]byte, []int) {
@@ -99,11 +103,15 @@ type Tracing struct {
 	//	*Tracing_Lightstep_
 	//	*Tracing_Datadog_
 	//	*Tracing_Stackdriver_
-	Tracer isTracing_Tracer `protobuf_oneof:"tracer"`
+	Tracer               isTracing_Tracer `protobuf_oneof:"tracer"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *Tracing) Reset()      { *m = Tracing{} }
-func (*Tracing) ProtoMessage() {}
+func (m *Tracing) Reset()         { *m = Tracing{} }
+func (m *Tracing) String() string { return proto.CompactTextString(m) }
+func (*Tracing) ProtoMessage()    {}
 func (*Tracing) Descriptor() ([]byte, []int) {
 	return fileDescriptor_5efecd978cf3d28d, []int{0}
 }
@@ -136,7 +144,6 @@ var xxx_messageInfo_Tracing proto.InternalMessageInfo
 
 type isTracing_Tracer interface {
 	isTracing_Tracer()
-	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
@@ -207,11 +214,15 @@ func (*Tracing) XXX_OneofWrappers() []interface{} {
 // Zipkin defines configuration for a Zipkin tracer.
 type Tracing_Zipkin struct {
 	// Address of the Zipkin service (e.g. _zipkin:9411_).
-	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	Address              string   `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Tracing_Zipkin) Reset()      { *m = Tracing_Zipkin{} }
-func (*Tracing_Zipkin) ProtoMessage() {}
+func (m *Tracing_Zipkin) Reset()         { *m = Tracing_Zipkin{} }
+func (m *Tracing_Zipkin) String() string { return proto.CompactTextString(m) }
+func (*Tracing_Zipkin) ProtoMessage()    {}
 func (*Tracing_Zipkin) Descriptor() ([]byte, []int) {
 	return fileDescriptor_5efecd978cf3d28d, []int{0, 0}
 }
@@ -258,11 +269,15 @@ type Tracing_Lightstep struct {
 	// True if a secure connection should be used when communicating with the pool.
 	Secure bool `protobuf:"varint,3,opt,name=secure,proto3" json:"secure,omitempty"`
 	// Path to the trusted cacert used to authenticate the pool.
-	CacertPath string `protobuf:"bytes,4,opt,name=cacert_path,json=cacertPath,proto3" json:"cacert_path,omitempty"`
+	CacertPath           string   `protobuf:"bytes,4,opt,name=cacert_path,json=cacertPath,proto3" json:"cacert_path,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Tracing_Lightstep) Reset()      { *m = Tracing_Lightstep{} }
-func (*Tracing_Lightstep) ProtoMessage() {}
+func (m *Tracing_Lightstep) Reset()         { *m = Tracing_Lightstep{} }
+func (m *Tracing_Lightstep) String() string { return proto.CompactTextString(m) }
+func (*Tracing_Lightstep) ProtoMessage()    {}
 func (*Tracing_Lightstep) Descriptor() ([]byte, []int) {
 	return fileDescriptor_5efecd978cf3d28d, []int{0, 1}
 }
@@ -324,11 +339,15 @@ func (m *Tracing_Lightstep) GetCacertPath() string {
 // Datadog defines configuration for a Datadog tracer.
 type Tracing_Datadog struct {
 	// Address of the Datadog Agent.
-	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	Address              string   `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Tracing_Datadog) Reset()      { *m = Tracing_Datadog{} }
-func (*Tracing_Datadog) ProtoMessage() {}
+func (m *Tracing_Datadog) Reset()         { *m = Tracing_Datadog{} }
+func (m *Tracing_Datadog) String() string { return proto.CompactTextString(m) }
+func (*Tracing_Datadog) ProtoMessage()    {}
 func (*Tracing_Datadog) Descriptor() ([]byte, []int) {
 	return fileDescriptor_5efecd978cf3d28d, []int{0, 2}
 }
@@ -384,10 +403,14 @@ type Tracing_Stackdriver struct {
 	// default is 200.
 	// $hide_from_docs
 	MaxNumberOfMessageEvents *types.Int64Value `protobuf:"bytes,4,opt,name=max_number_of_message_events,json=maxNumberOfMessageEvents,proto3" json:"max_number_of_message_events,omitempty"`
+	XXX_NoUnkeyedLiteral     struct{}          `json:"-"`
+	XXX_unrecognized         []byte            `json:"-"`
+	XXX_sizecache            int32             `json:"-"`
 }
 
-func (m *Tracing_Stackdriver) Reset()      { *m = Tracing_Stackdriver{} }
-func (*Tracing_Stackdriver) ProtoMessage() {}
+func (m *Tracing_Stackdriver) Reset()         { *m = Tracing_Stackdriver{} }
+func (m *Tracing_Stackdriver) String() string { return proto.CompactTextString(m) }
+func (*Tracing_Stackdriver) ProtoMessage()    {}
 func (*Tracing_Stackdriver) Descriptor() ([]byte, []int) {
 	return fileDescriptor_5efecd978cf3d28d, []int{0, 3}
 }
@@ -453,11 +476,15 @@ type SDS struct {
 	// True if SDS is enabled.
 	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
 	// Path of k8s service account JWT path.
-	K8SSaJwtPath string `protobuf:"bytes,2,opt,name=k8s_sa_jwt_path,json=k8sSaJwtPath,proto3" json:"k8s_sa_jwt_path,omitempty"`
+	K8SSaJwtPath         string   `protobuf:"bytes,2,opt,name=k8s_sa_jwt_path,json=k8sSaJwtPath,proto3" json:"k8s_sa_jwt_path,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *SDS) Reset()      { *m = SDS{} }
-func (*SDS) ProtoMessage() {}
+func (m *SDS) Reset()         { *m = SDS{} }
+func (m *SDS) String() string { return proto.CompactTextString(m) }
+func (*SDS) ProtoMessage()    {}
 func (*SDS) Descriptor() ([]byte, []int) {
 	return fileDescriptor_5efecd978cf3d28d, []int{1}
 }
@@ -582,11 +609,15 @@ type ProxyConfig struct {
 	// $hide_from_docs
 	// Additional env variables for the proxy.
 	// Names starting with ISTIO_META_ will be included in the generated bootstrap and sent to the XDS server.
-	ProxyMetadata map[string]string `protobuf:"bytes,24,rep,name=proxy_metadata,json=proxyMetadata,proto3" json:"proxy_metadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	ProxyMetadata        map[string]string `protobuf:"bytes,24,rep,name=proxy_metadata,json=proxyMetadata,proto3" json:"proxy_metadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
 }
 
-func (m *ProxyConfig) Reset()      { *m = ProxyConfig{} }
-func (*ProxyConfig) ProtoMessage() {}
+func (m *ProxyConfig) Reset()         { *m = ProxyConfig{} }
+func (m *ProxyConfig) String() string { return proto.CompactTextString(m) }
+func (*ProxyConfig) ProtoMessage()    {}
 func (*ProxyConfig) Descriptor() ([]byte, []int) {
 	return fileDescriptor_5efecd978cf3d28d, []int{2}
 }
@@ -716,7 +747,7 @@ func (m *ProxyConfig) GetControlPlaneAuthPolicy() AuthenticationPolicy {
 	if m != nil {
 		return m.ControlPlaneAuthPolicy
 	}
-	return NONE
+	return AuthenticationPolicy_NONE
 }
 
 func (m *ProxyConfig) GetCustomConfigFile() string {
@@ -751,7 +782,7 @@ func (m *ProxyConfig) GetInterceptionMode() ProxyConfig_InboundInterceptionMode 
 	if m != nil {
 		return m.InterceptionMode
 	}
-	return REDIRECT
+	return ProxyConfig_REDIRECT
 }
 
 func (m *ProxyConfig) GetTracing() *Tracing {
@@ -799,11 +830,15 @@ type RemoteService struct {
 	// mode as `ISTIO_MUTUAL`.
 	TlsSettings *v1alpha3.TLSSettings `protobuf:"bytes,2,opt,name=tls_settings,json=tlsSettings,proto3" json:"tls_settings,omitempty"`
 	// If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
-	TcpKeepalive *v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,3,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcp_keepalive,omitempty"`
+	TcpKeepalive         *v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,3,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcp_keepalive,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                                                  `json:"-"`
+	XXX_unrecognized     []byte                                                    `json:"-"`
+	XXX_sizecache        int32                                                     `json:"-"`
 }
 
-func (m *RemoteService) Reset()      { *m = RemoteService{} }
-func (*RemoteService) ProtoMessage() {}
+func (m *RemoteService) Reset()         { *m = RemoteService{} }
+func (m *RemoteService) String() string { return proto.CompactTextString(m) }
+func (*RemoteService) ProtoMessage()    {}
 func (*RemoteService) Descriptor() ([]byte, []int) {
 	return fileDescriptor_5efecd978cf3d28d, []int{3}
 }
@@ -872,698 +907,94 @@ func init() {
 func init() { proto.RegisterFile("mesh/v1alpha1/proxy.proto", fileDescriptor_5efecd978cf3d28d) }
 
 var fileDescriptor_5efecd978cf3d28d = []byte{
-	// 1395 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x56, 0xcd, 0x6e, 0x1b, 0xb7,
-	0x16, 0xd6, 0xd8, 0x89, 0x64, 0x53, 0xb2, 0x2c, 0x33, 0xb1, 0x33, 0xd6, 0x4d, 0x74, 0x7d, 0x9d,
-	0x7b, 0x6f, 0x9d, 0xb4, 0x90, 0x90, 0xb8, 0x08, 0x8c, 0x02, 0x2d, 0xe2, 0xbf, 0xc0, 0x4e, 0x6d,
-	0x47, 0x18, 0xc9, 0x41, 0xeb, 0x2c, 0x06, 0xd4, 0xcc, 0xb1, 0xc4, 0x6a, 0x44, 0x0e, 0x48, 0x8e,
-	0x1c, 0x65, 0xd5, 0xbe, 0x41, 0x1f, 0x23, 0xab, 0x3e, 0x47, 0x96, 0x59, 0x66, 0xd9, 0x38, 0x28,
-	0x90, 0x65, 0x1e, 0xa1, 0x18, 0x72, 0x46, 0x56, 0x12, 0x45, 0xee, 0x6e, 0x78, 0xf8, 0x7d, 0xdf,
-	0xf0, 0x7c, 0x3c, 0x3c, 0x24, 0x5a, 0xee, 0x81, 0xec, 0xd4, 0xfa, 0xf7, 0x48, 0x10, 0x76, 0xc8,
-	0xbd, 0x5a, 0x28, 0xf8, 0xf3, 0x41, 0x35, 0x14, 0x5c, 0x71, 0x7c, 0x8d, 0x4a, 0x45, 0x79, 0x35,
-	0x06, 0x54, 0x53, 0x40, 0xb9, 0xd2, 0xe6, 0xbc, 0x1d, 0x40, 0x4d, 0x43, 0x5a, 0xd1, 0x69, 0xcd,
-	0x8f, 0x04, 0x51, 0x94, 0x33, 0x43, 0xfa, 0x7c, 0xfe, 0x4c, 0x90, 0x30, 0x04, 0x21, 0x93, 0xf9,
-	0xbb, 0x0c, 0xd4, 0x19, 0x17, 0x5d, 0xca, 0xda, 0xe9, 0x5f, 0xd7, 0x6b, 0x3e, 0x48, 0x45, 0x99,
-	0x96, 0x71, 0x45, 0x14, 0x80, 0xc1, 0xae, 0xbe, 0xcc, 0xa2, 0x5c, 0x53, 0x10, 0x8f, 0xb2, 0x36,
-	0xfe, 0x1e, 0x65, 0x5f, 0xd0, 0xb0, 0x4b, 0x99, 0x6d, 0xad, 0x58, 0x6b, 0xf9, 0xfb, 0xb7, 0xab,
-	0x63, 0x56, 0x57, 0x4d, 0xd0, 0xd5, 0x13, 0x0d, 0xdd, 0xcb, 0x38, 0x09, 0x09, 0x3f, 0x42, 0xb3,
-	0x01, 0x6d, 0x77, 0x94, 0x54, 0x10, 0xda, 0x53, 0x5a, 0xe1, 0xff, 0x13, 0x15, 0x0e, 0x52, 0xf4,
-	0x5e, 0xc6, 0xb9, 0xa0, 0xe2, 0x87, 0x28, 0xe7, 0x13, 0x45, 0x7c, 0xde, 0xb6, 0xa7, 0xb5, 0xca,
-	0x7f, 0x27, 0xaa, 0xec, 0x18, 0xec, 0x5e, 0xc6, 0x49, 0x69, 0xf8, 0x00, 0xe5, 0xa5, 0x22, 0x5e,
-	0xd7, 0x17, 0xb4, 0x0f, 0xc2, 0xbe, 0xa2, 0x55, 0xd6, 0x26, 0xaa, 0x34, 0x2e, 0xf0, 0x7b, 0x19,
-	0x67, 0x94, 0x5e, 0x5e, 0x45, 0x59, 0x93, 0x2b, 0xb6, 0x51, 0x8e, 0xf8, 0xbe, 0x00, 0x29, 0xb5,
-	0x43, 0xb3, 0x4e, 0x3a, 0x2c, 0xff, 0x66, 0xa1, 0xd9, 0x61, 0x3a, 0x5f, 0xc6, 0xe1, 0xff, 0xa0,
-	0x02, 0xf1, 0x3c, 0x90, 0xd2, 0x55, 0xbc, 0x0b, 0x4c, 0xdb, 0x34, 0xeb, 0xe4, 0x4d, 0xac, 0x19,
-	0x87, 0xf0, 0x12, 0xca, 0x4a, 0xf0, 0x22, 0x01, 0x3a, 0xfb, 0x19, 0x27, 0x19, 0xe1, 0x7f, 0xa3,
-	0xbc, 0x47, 0x3c, 0x10, 0xca, 0x0d, 0x89, 0xea, 0xe8, 0xa4, 0x66, 0x1d, 0x64, 0x42, 0x75, 0xa2,
-	0x3a, 0xe5, 0xdb, 0x28, 0x97, 0x78, 0x31, 0x61, 0xa1, 0x7f, 0x4c, 0xa1, 0xfc, 0x48, 0xae, 0xf8,
-	0x3a, 0xba, 0xea, 0x43, 0x2b, 0x6a, 0x6b, 0xdc, 0x8c, 0x63, 0x06, 0xb8, 0x89, 0xec, 0x1e, 0x79,
-	0xee, 0xb2, 0xa8, 0xd7, 0x02, 0xe1, 0xf2, 0x53, 0x97, 0x28, 0x25, 0x68, 0x2b, 0x52, 0x20, 0x93,
-	0x9d, 0xfd, 0x57, 0xd5, 0x14, 0x61, 0x35, 0x2d, 0xc2, 0xea, 0x3e, 0x53, 0x0f, 0xbe, 0x7d, 0x4a,
-	0x82, 0x08, 0x9c, 0xc5, 0x1e, 0x79, 0x7e, 0xa4, 0xb9, 0x4f, 0x4e, 0x37, 0x87, 0x4c, 0xfc, 0x14,
-	0x2d, 0x7f, 0xa2, 0xca, 0x18, 0x57, 0xba, 0x24, 0x65, 0xb2, 0xd5, 0x13, 0x65, 0x97, 0x46, 0x65,
-	0x2f, 0xa8, 0xf8, 0x19, 0xba, 0xf9, 0xb1, 0x6e, 0x0f, 0xa4, 0x24, 0x6d, 0x70, 0xa1, 0x0f, 0x4c,
-	0xc9, 0x64, 0xff, 0x27, 0x4a, 0xdb, 0x23, 0xd2, 0x87, 0x86, 0xbd, 0xab, 0xc9, 0x5b, 0x33, 0x28,
-	0xab, 0x44, 0x6c, 0xf2, 0xea, 0x23, 0x34, 0xdd, 0xd8, 0x69, 0xc4, 0xde, 0x02, 0x23, 0xad, 0x00,
-	0xfc, 0xc4, 0xb3, 0x74, 0x88, 0xff, 0x87, 0xe6, 0xbb, 0x1b, 0xd2, 0x95, 0xc4, 0xfd, 0xe5, 0x2c,
-	0xd9, 0x25, 0xb3, 0xbf, 0x85, 0xee, 0x86, 0x6c, 0x90, 0xc7, 0x67, 0x7a, 0x9f, 0x56, 0x5f, 0x15,
-	0x50, 0xbe, 0x1e, 0xf7, 0x80, 0x6d, 0xce, 0x4e, 0x69, 0x5b, 0x6f, 0xac, 0xfe, 0x32, 0x14, 0x2b,
-	0xd9, 0x58, 0x1d, 0x8a, 0x09, 0x31, 0xa0, 0x45, 0x19, 0x11, 0x83, 0x51, 0x4d, 0x64, 0x42, 0x1a,
-	0xf0, 0x15, 0x9a, 0x97, 0x20, 0xfa, 0xd4, 0x03, 0xd7, 0x0b, 0x22, 0xa9, 0x40, 0x68, 0x3b, 0x67,
-	0x9d, 0x62, 0x12, 0xde, 0x36, 0x51, 0xfc, 0x10, 0x15, 0x7d, 0x41, 0x28, 0x73, 0xd3, 0x8e, 0x92,
-	0x78, 0xb3, 0xfc, 0x99, 0x37, 0x3b, 0x09, 0xc0, 0x99, 0xd3, 0x84, 0x74, 0x88, 0x1b, 0xc8, 0x0e,
-	0x89, 0x00, 0xa6, 0x5c, 0xd9, 0x89, 0x94, 0xcf, 0xcf, 0x46, 0xb4, 0xae, 0x5e, 0xa6, 0xb5, 0x64,
-	0xa8, 0x8d, 0x84, 0x39, 0x14, 0xfd, 0x1a, 0x2d, 0xf8, 0x54, 0x7a, 0xbc, 0x0f, 0x62, 0xe0, 0xa6,
-	0x85, 0x9b, 0xd5, 0x19, 0x94, 0x86, 0x13, 0x9b, 0xc9, 0x11, 0x3a, 0x46, 0x37, 0x2e, 0xc0, 0x02,
-	0x4e, 0x05, 0xc8, 0x8e, 0xeb, 0x43, 0x40, 0x06, 0x76, 0xee, 0x92, 0x05, 0x6c, 0x4d, 0xd9, 0x96,
-	0xb3, 0x38, 0x64, 0x3b, 0x86, 0xbc, 0x13, 0x73, 0xf1, 0x1d, 0x54, 0x34, 0x7d, 0x6c, 0xb8, 0x80,
-	0x99, 0x78, 0x01, 0x9a, 0x32, 0x67, 0x66, 0xd2, 0x15, 0x6c, 0xa1, 0x79, 0x8f, 0x33, 0x06, 0x9e,
-	0x72, 0x15, 0xed, 0x01, 0x8f, 0x94, 0x3d, 0x7b, 0x59, 0xea, 0xc5, 0x84, 0xd1, 0x34, 0x04, 0xfc,
-	0x0d, 0xc2, 0x52, 0x11, 0x25, 0x7d, 0x37, 0xf2, 0xc3, 0xe1, 0x2f, 0x91, 0xc9, 0xd9, 0xcc, 0x1c,
-	0xfb, 0x61, 0xfa, 0xc7, 0x5d, 0x74, 0x0b, 0x58, 0x9f, 0x0f, 0xdc, 0x1e, 0x28, 0x41, 0x3d, 0xe9,
-	0xa6, 0xdb, 0x9d, 0x12, 0xaf, 0x0f, 0xd7, 0x5a, 0xd6, 0xc0, 0x43, 0x83, 0x6b, 0x18, 0x58, 0x2a,
-	0xb3, 0x86, 0x4a, 0xfa, 0xf2, 0x71, 0x89, 0xdf, 0xa3, 0xcc, 0x0d, 0xb9, 0x50, 0x76, 0x7e, 0xc5,
-	0x5a, 0xbb, 0xea, 0x14, 0x75, 0x7c, 0x33, 0x0e, 0xd7, 0xb9, 0x50, 0xb8, 0x86, 0x16, 0x48, 0x9f,
-	0xd0, 0x80, 0xb4, 0x68, 0x40, 0xd5, 0xc0, 0x7d, 0xc1, 0x19, 0xd8, 0x85, 0xe1, 0x4f, 0x4a, 0xa3,
-	0x93, 0x27, 0x9c, 0x01, 0xf6, 0xd1, 0xb2, 0xc7, 0x99, 0x12, 0x3c, 0x70, 0xc3, 0x80, 0x30, 0x70,
-	0x49, 0xa4, 0x3a, 0x6e, 0xc8, 0x03, 0xea, 0x0d, 0xec, 0xb9, 0x15, 0x6b, 0xad, 0x78, 0xff, 0xce,
-	0xd8, 0x06, 0xbc, 0x19, 0xa9, 0x0e, 0x30, 0x45, 0x3d, 0xed, 0x53, 0x5d, 0x13, 0x9c, 0xa5, 0x44,
-	0xab, 0x1e, 0x4b, 0xc5, 0x08, 0x13, 0x8f, 0x5d, 0xf3, 0x22, 0xa9, 0x78, 0xcf, 0x4d, 0x4e, 0xcc,
-	0x29, 0x0d, 0xc0, 0x2e, 0x1a, 0xd7, 0xcc, 0x8c, 0x39, 0x54, 0x8f, 0x68, 0x00, 0x71, 0xba, 0xb1,
-	0x93, 0x2e, 0x23, 0x3d, 0x70, 0x03, 0x60, 0x6d, 0xd5, 0xb1, 0xe7, 0x4d, 0xba, 0x71, 0xfc, 0x88,
-	0xf4, 0xe0, 0x40, 0x47, 0xf1, 0x8a, 0x3e, 0x82, 0x5e, 0x24, 0x04, 0x30, 0x6f, 0x60, 0x97, 0x34,
-	0x68, 0x34, 0x84, 0x37, 0xd1, 0x2d, 0x63, 0x5d, 0x8b, 0x73, 0x25, 0x95, 0x20, 0xa1, 0xab, 0xa0,
-	0x17, 0x06, 0x44, 0x81, 0x39, 0x95, 0x0b, 0x7a, 0x11, 0x65, 0x0d, 0xda, 0x4a, 0x31, 0xcd, 0x04,
-	0xa2, 0x4f, 0x29, 0xa0, 0x05, 0xca, 0x14, 0x08, 0x0f, 0x42, 0x7d, 0x0b, 0xf7, 0xb8, 0x0f, 0x36,
-	0xd6, 0xd6, 0x6c, 0x8c, 0xb5, 0x66, 0xa4, 0x49, 0x54, 0xf7, 0x59, 0x8b, 0x47, 0xcc, 0xdf, 0x1f,
-	0x11, 0x38, 0xe4, 0x3e, 0x38, 0x25, 0xfa, 0x49, 0x04, 0x3f, 0x40, 0x39, 0x65, 0x2e, 0x35, 0xfb,
-	0x9a, 0xae, 0xca, 0x9b, 0x93, 0x2e, 0x3e, 0x27, 0x05, 0xe3, 0xbb, 0x68, 0x5a, 0xfa, 0xd2, 0x5e,
-	0xd4, 0x1c, 0x7b, 0x2c, 0xa7, 0xb1, 0xd3, 0x70, 0x62, 0x10, 0x7e, 0x86, 0x6c, 0x53, 0x8f, 0xc9,
-	0x65, 0x16, 0xf0, 0x76, 0x5a, 0x92, 0xf6, 0x92, 0x16, 0x58, 0x1d, 0x2b, 0xe0, 0x40, 0x8f, 0x2b,
-	0x48, 0xaa, 0xd2, 0x59, 0xd4, 0x1a, 0x9b, 0x5a, 0xe2, 0x80, 0xb7, 0x93, 0x30, 0x7e, 0x8a, 0x16,
-	0xc7, 0x16, 0xbb, 0x7d, 0xe3, 0x1f, 0x2b, 0x5f, 0x1b, 0x73, 0x08, 0xf0, 0x09, 0x32, 0x55, 0x1e,
-	0xeb, 0x92, 0xf8, 0xa9, 0x60, 0xdb, 0x2b, 0xd3, 0x6b, 0xf9, 0xfb, 0xeb, 0x97, 0x9a, 0xaf, 0xbf,
-	0x0f, 0x13, 0xd6, 0x2e, 0x53, 0x62, 0xe0, 0xcc, 0x85, 0xa3, 0xb1, 0xf2, 0x43, 0x84, 0x3f, 0x07,
-	0xe1, 0x12, 0x9a, 0xee, 0xc2, 0x20, 0xe9, 0xe8, 0xf1, 0x67, 0x7c, 0xdd, 0xf6, 0xe3, 0x0b, 0x27,
-	0x69, 0xe2, 0x66, 0xf0, 0xdd, 0xd4, 0x86, 0xb5, 0xba, 0x8e, 0x6e, 0x7c, 0x61, 0x8f, 0x71, 0x01,
-	0xcd, 0x38, 0xbb, 0x3b, 0xfb, 0xce, 0xee, 0x76, 0xb3, 0x94, 0xc1, 0x08, 0x65, 0x9b, 0x75, 0xe7,
-	0xc9, 0x4f, 0x3f, 0x97, 0xac, 0xd5, 0xbf, 0x2c, 0x34, 0xf7, 0x51, 0xe6, 0x13, 0x9e, 0x1e, 0xfb,
-	0xa8, 0xa0, 0x82, 0xd8, 0x4c, 0xa5, 0x28, 0x6b, 0xcb, 0x4f, 0x5e, 0x68, 0x17, 0x4f, 0xc6, 0xd4,
-	0x82, 0xf5, 0x6a, 0xf3, 0xa0, 0xd1, 0x48, 0xd0, 0x4e, 0x5e, 0x05, 0x32, 0x1d, 0x60, 0x8e, 0xe6,
-	0x94, 0x17, 0xba, 0x5d, 0x80, 0x90, 0x04, 0xb4, 0x0f, 0xc9, 0xe5, 0xfd, 0x78, 0x82, 0xd6, 0xb6,
-	0x69, 0x7f, 0xfa, 0x88, 0xf3, 0x20, 0x55, 0xaa, 0x36, 0xb7, 0xeb, 0x17, 0xdf, 0x5e, 0xf8, 0x63,
-	0xaa, 0xe8, 0x14, 0xd4, 0xc8, 0xe8, 0xee, 0x0f, 0xe8, 0xfa, 0xb8, 0x3e, 0x81, 0x67, 0xd0, 0x95,
-	0xa3, 0x27, 0x47, 0xbb, 0xa5, 0x0c, 0x2e, 0x22, 0x74, 0x78, 0xdc, 0x3c, 0xde, 0x3c, 0x70, 0x9b,
-	0x07, 0x8d, 0x92, 0x85, 0x0b, 0x28, 0xb7, 0x7f, 0xb4, 0xb7, 0xeb, 0xec, 0x37, 0x4b, 0xef, 0x73,
-	0x5b, 0xf5, 0xd7, 0x6f, 0x2b, 0x99, 0x37, 0x6f, 0x2b, 0x99, 0x0f, 0x6f, 0x2b, 0xd6, 0xaf, 0xe7,
-	0x15, 0xeb, 0xe5, 0x79, 0xc5, 0x7a, 0x75, 0x5e, 0xb1, 0x5e, 0x9f, 0x57, 0xac, 0x3f, 0xcf, 0x2b,
-	0xd6, 0xfb, 0xf3, 0x4a, 0xe6, 0xc3, 0x79, 0xc5, 0xfa, 0xfd, 0x5d, 0x25, 0xf3, 0xfa, 0x5d, 0x25,
-	0xf3, 0xe6, 0x5d, 0x25, 0x73, 0x52, 0x36, 0xe9, 0x50, 0x5e, 0x23, 0x21, 0xad, 0x7d, 0xf4, 0x88,
-	0x6f, 0x65, 0x75, 0x8b, 0x5f, 0xff, 0x3b, 0x00, 0x00, 0xff, 0xff, 0x78, 0x00, 0xa5, 0xde, 0xdc,
-	0x0b, 0x00, 0x00,
+	// 1346 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x56, 0xdd, 0x4e, 0x1b, 0x47,
+	0x14, 0xc6, 0x90, 0xd8, 0x70, 0x6c, 0x8c, 0x99, 0x04, 0xb2, 0xb8, 0x09, 0xa5, 0xa4, 0x3f, 0x24,
+	0xad, 0x6c, 0x25, 0x54, 0x11, 0xaa, 0xd4, 0x2a, 0xfc, 0x45, 0x90, 0x02, 0x41, 0x6b, 0x13, 0xb5,
+	0xe4, 0x62, 0x35, 0xde, 0x3d, 0xd8, 0x53, 0xaf, 0x67, 0x56, 0x33, 0xb3, 0x26, 0xce, 0x5d, 0xdf,
+	0xa6, 0x57, 0x7d, 0x8e, 0x5c, 0xf6, 0x11, 0xaa, 0x48, 0x95, 0xfa, 0x18, 0xd5, 0xce, 0xec, 0x1a,
+	0x27, 0x71, 0x4c, 0xef, 0x76, 0xce, 0x7c, 0xdf, 0xb7, 0x73, 0xbe, 0x39, 0x73, 0x66, 0x60, 0xa5,
+	0x87, 0xaa, 0x53, 0xef, 0x3f, 0xa2, 0x61, 0xd4, 0xa1, 0x8f, 0xea, 0x91, 0x14, 0xaf, 0x07, 0xb5,
+	0x48, 0x0a, 0x2d, 0xc8, 0x2d, 0xa6, 0x34, 0x13, 0xb5, 0x04, 0x50, 0xcb, 0x00, 0xd5, 0xd5, 0xb6,
+	0x10, 0xed, 0x10, 0xeb, 0x06, 0xd2, 0x8a, 0x2f, 0xea, 0x41, 0x2c, 0xa9, 0x66, 0x82, 0x5b, 0xd2,
+	0xc7, 0xf3, 0x97, 0x92, 0x46, 0x11, 0x4a, 0x95, 0xce, 0x3f, 0xe4, 0xa8, 0x2f, 0x85, 0xec, 0x32,
+	0xde, 0xce, 0xfe, 0xba, 0x59, 0x0f, 0x50, 0x69, 0xc6, 0x8d, 0x8c, 0x27, 0xe3, 0x10, 0x2d, 0x76,
+	0xfd, 0x8f, 0x3c, 0x14, 0x9a, 0x92, 0xfa, 0x8c, 0xb7, 0xc9, 0x8f, 0x90, 0x7f, 0xc3, 0xa2, 0x2e,
+	0xe3, 0x4e, 0x6e, 0x2d, 0xb7, 0x51, 0x7c, 0x7c, 0xbf, 0x36, 0x66, 0x75, 0xb5, 0x14, 0x5d, 0x3b,
+	0x37, 0xd0, 0x83, 0x29, 0x37, 0x25, 0x91, 0x67, 0x30, 0x17, 0xb2, 0x76, 0x47, 0x2b, 0x8d, 0x91,
+	0x33, 0x6d, 0x14, 0xbe, 0x9e, 0xa8, 0x70, 0x94, 0xa1, 0x0f, 0xa6, 0xdc, 0x2b, 0x2a, 0x79, 0x0a,
+	0x85, 0x80, 0x6a, 0x1a, 0x88, 0xb6, 0x33, 0x63, 0x54, 0xbe, 0x9c, 0xa8, 0xb2, 0x67, 0xb1, 0x07,
+	0x53, 0x6e, 0x46, 0x23, 0x47, 0x50, 0x54, 0x9a, 0xfa, 0xdd, 0x40, 0xb2, 0x3e, 0x4a, 0xe7, 0x86,
+	0x51, 0xd9, 0x98, 0xa8, 0xd2, 0xb8, 0xc2, 0x1f, 0x4c, 0xb9, 0xa3, 0xf4, 0xea, 0x3a, 0xe4, 0x6d,
+	0xae, 0xc4, 0x81, 0x02, 0x0d, 0x02, 0x89, 0x4a, 0x19, 0x87, 0xe6, 0xdc, 0x6c, 0x58, 0xfd, 0x3d,
+	0x07, 0x73, 0xc3, 0x74, 0x3e, 0x8d, 0x23, 0x5f, 0x40, 0x89, 0xfa, 0x3e, 0x2a, 0xe5, 0x69, 0xd1,
+	0x45, 0x6e, 0x6c, 0x9a, 0x73, 0x8b, 0x36, 0xd6, 0x4c, 0x42, 0x64, 0x19, 0xf2, 0x0a, 0xfd, 0x58,
+	0xa2, 0xc9, 0x7e, 0xd6, 0x4d, 0x47, 0xe4, 0x73, 0x28, 0xfa, 0xd4, 0x47, 0xa9, 0xbd, 0x88, 0xea,
+	0x8e, 0x49, 0x6a, 0xce, 0x05, 0x1b, 0x3a, 0xa5, 0xba, 0x53, 0xbd, 0x0f, 0x85, 0xd4, 0x8b, 0x09,
+	0x0b, 0xfd, 0x73, 0x1a, 0x8a, 0x23, 0xb9, 0x92, 0xdb, 0x70, 0x33, 0xc0, 0x56, 0xdc, 0x36, 0xb8,
+	0x59, 0xd7, 0x0e, 0x48, 0x13, 0x9c, 0x1e, 0x7d, 0xed, 0xf1, 0xb8, 0xd7, 0x42, 0xe9, 0x89, 0x0b,
+	0x8f, 0x6a, 0x2d, 0x59, 0x2b, 0xd6, 0xa8, 0xd2, 0x9d, 0xfd, 0xac, 0x66, 0x8b, 0xb0, 0x96, 0x15,
+	0x61, 0xed, 0x90, 0xeb, 0x27, 0xdf, 0xbf, 0xa4, 0x61, 0x8c, 0xee, 0x52, 0x8f, 0xbe, 0x3e, 0x31,
+	0xdc, 0x17, 0x17, 0xdb, 0x43, 0x26, 0x79, 0x09, 0x2b, 0x1f, 0xa8, 0x72, 0x2e, 0xb4, 0x29, 0x49,
+	0x95, 0x6e, 0xf5, 0x44, 0xd9, 0xe5, 0x51, 0xd9, 0x2b, 0x2a, 0x79, 0x05, 0x77, 0xdf, 0xd7, 0xed,
+	0xa1, 0x52, 0xb4, 0x8d, 0x1e, 0xf6, 0x91, 0x6b, 0x95, 0xee, 0xff, 0x44, 0x69, 0x67, 0x44, 0xfa,
+	0xd8, 0xb2, 0xf7, 0x0d, 0x79, 0x67, 0x16, 0xf2, 0x5a, 0x26, 0x26, 0xaf, 0x3f, 0x83, 0x99, 0xc6,
+	0x5e, 0x23, 0xf1, 0x16, 0x39, 0x6d, 0x85, 0x18, 0xa4, 0x9e, 0x65, 0x43, 0xf2, 0x15, 0x2c, 0x74,
+	0xb7, 0x94, 0xa7, 0xa8, 0xf7, 0xdb, 0x65, 0xba, 0x4b, 0x76, 0x7f, 0x4b, 0xdd, 0x2d, 0xd5, 0xa0,
+	0xcf, 0x2f, 0xcd, 0x3e, 0xad, 0xbf, 0x2d, 0x41, 0xf1, 0x34, 0xe9, 0x01, 0xbb, 0x82, 0x5f, 0xb0,
+	0xb6, 0xd9, 0x58, 0xf3, 0x65, 0x29, 0xb9, 0x74, 0x63, 0x4d, 0x28, 0x21, 0x24, 0x80, 0x16, 0xe3,
+	0x54, 0x0e, 0x46, 0x35, 0xc1, 0x86, 0x0c, 0xe0, 0x1b, 0x58, 0x50, 0x28, 0xfb, 0xcc, 0x47, 0xcf,
+	0x0f, 0x63, 0xa5, 0x51, 0x1a, 0x3b, 0xe7, 0xdc, 0x72, 0x1a, 0xde, 0xb5, 0x51, 0xf2, 0x14, 0xca,
+	0x81, 0xa4, 0x8c, 0x7b, 0x59, 0x47, 0x49, 0xbd, 0x59, 0xf9, 0xc8, 0x9b, 0xbd, 0x14, 0xe0, 0xce,
+	0x1b, 0x42, 0x36, 0x24, 0x0d, 0x70, 0x22, 0x2a, 0x91, 0x6b, 0x4f, 0x75, 0x62, 0x1d, 0x88, 0xcb,
+	0x11, 0xad, 0x9b, 0xd7, 0x69, 0x2d, 0x5b, 0x6a, 0x23, 0x65, 0x0e, 0x45, 0xbf, 0x85, 0xc5, 0x80,
+	0x29, 0x5f, 0xf4, 0x51, 0x0e, 0xbc, 0xac, 0x70, 0xf3, 0x26, 0x83, 0xca, 0x70, 0x62, 0x3b, 0x3d,
+	0x42, 0x67, 0x70, 0xe7, 0x0a, 0x2c, 0xf1, 0x42, 0xa2, 0xea, 0x78, 0x01, 0x86, 0x74, 0xe0, 0x14,
+	0xae, 0x59, 0xc0, 0xce, 0xb4, 0x93, 0x73, 0x97, 0x86, 0x6c, 0xd7, 0x92, 0xf7, 0x12, 0x2e, 0x79,
+	0x00, 0x65, 0xdb, 0xc7, 0x86, 0x0b, 0x98, 0x4d, 0x16, 0x60, 0x28, 0xf3, 0x76, 0x26, 0x5b, 0xc1,
+	0x0e, 0x2c, 0xf8, 0x82, 0x73, 0xf4, 0xb5, 0xa7, 0x59, 0x0f, 0x45, 0xac, 0x9d, 0xb9, 0xeb, 0x52,
+	0x2f, 0xa7, 0x8c, 0xa6, 0x25, 0x90, 0xef, 0x80, 0x28, 0x4d, 0xb5, 0x0a, 0xbc, 0x38, 0x88, 0x86,
+	0xbf, 0x04, 0x9b, 0xb3, 0x9d, 0x39, 0x0b, 0xa2, 0xec, 0x8f, 0xfb, 0x70, 0x0f, 0x79, 0x5f, 0x0c,
+	0xbc, 0x1e, 0x6a, 0xc9, 0x7c, 0xe5, 0x65, 0xdb, 0x9d, 0x11, 0x6f, 0x0f, 0xd7, 0x5a, 0x35, 0xc0,
+	0x63, 0x8b, 0x6b, 0x58, 0x58, 0x26, 0xb3, 0x01, 0x15, 0x73, 0xf9, 0x78, 0x34, 0xe8, 0x31, 0xee,
+	0x45, 0x42, 0x6a, 0xa7, 0xb8, 0x96, 0xdb, 0xb8, 0xe9, 0x96, 0x4d, 0x7c, 0x3b, 0x09, 0x9f, 0x0a,
+	0xa9, 0x49, 0x1d, 0x16, 0x69, 0x9f, 0xb2, 0x90, 0xb6, 0x58, 0xc8, 0xf4, 0xc0, 0x7b, 0x23, 0x38,
+	0x3a, 0xa5, 0xe1, 0x4f, 0x2a, 0xa3, 0x93, 0xe7, 0x82, 0x23, 0x09, 0x60, 0xc5, 0x17, 0x5c, 0x4b,
+	0x11, 0x7a, 0x51, 0x48, 0x39, 0x7a, 0x34, 0xd6, 0x1d, 0x2f, 0x12, 0x21, 0xf3, 0x07, 0xce, 0xfc,
+	0x5a, 0x6e, 0xa3, 0xfc, 0xf8, 0xc1, 0xd8, 0x06, 0xbc, 0x1d, 0xeb, 0x0e, 0x72, 0xcd, 0x7c, 0xe3,
+	0xd3, 0xa9, 0x21, 0xb8, 0xcb, 0xa9, 0xd6, 0x69, 0x22, 0x95, 0x20, 0x6c, 0x3c, 0x71, 0xcd, 0x8f,
+	0x95, 0x16, 0x3d, 0x2f, 0x3d, 0x31, 0x17, 0x2c, 0x44, 0xa7, 0x6c, 0x5d, 0xb3, 0x33, 0xf6, 0x50,
+	0x3d, 0x63, 0x21, 0x26, 0xe9, 0x26, 0x4e, 0x7a, 0x9c, 0xf6, 0xd0, 0x0b, 0x91, 0xb7, 0x75, 0xc7,
+	0x59, 0xb0, 0xe9, 0x26, 0xf1, 0x13, 0xda, 0xc3, 0x23, 0x13, 0x25, 0x6b, 0xe6, 0x08, 0xfa, 0xb1,
+	0x94, 0xc8, 0xfd, 0x81, 0x53, 0x31, 0xa0, 0xd1, 0x10, 0xd9, 0x86, 0x7b, 0xd6, 0xba, 0x96, 0x10,
+	0x5a, 0x69, 0x49, 0x23, 0x4f, 0x63, 0x2f, 0x0a, 0xa9, 0x46, 0x7b, 0x2a, 0x17, 0xcd, 0x22, 0xaa,
+	0x06, 0xb4, 0x93, 0x61, 0x9a, 0x29, 0xc4, 0x9c, 0x52, 0x84, 0x45, 0xc6, 0x35, 0x4a, 0x1f, 0x23,
+	0x73, 0x0b, 0xf7, 0x44, 0x80, 0x0e, 0x31, 0xd6, 0x6c, 0x8d, 0xb5, 0x66, 0xa4, 0x49, 0xd4, 0x0e,
+	0x79, 0x4b, 0xc4, 0x3c, 0x38, 0x1c, 0x11, 0x38, 0x16, 0x01, 0xba, 0x15, 0xf6, 0x41, 0x84, 0x3c,
+	0x81, 0x82, 0xb6, 0x97, 0x9a, 0x73, 0xcb, 0x54, 0xe5, 0xdd, 0x49, 0x17, 0x9f, 0x9b, 0x81, 0xc9,
+	0x43, 0x98, 0x51, 0x81, 0x72, 0x96, 0x0c, 0xc7, 0x19, 0xcb, 0x69, 0xec, 0x35, 0xdc, 0x04, 0x44,
+	0x5e, 0x81, 0x63, 0xeb, 0x31, 0xbd, 0xcc, 0x42, 0xd1, 0xce, 0x4a, 0xd2, 0x59, 0x36, 0x02, 0xeb,
+	0x63, 0x05, 0x5c, 0xec, 0x09, 0x8d, 0x69, 0x55, 0xba, 0x4b, 0x46, 0x63, 0xdb, 0x48, 0x1c, 0x89,
+	0x76, 0x1a, 0x26, 0x2f, 0x61, 0x69, 0x6c, 0xb1, 0x3b, 0x77, 0xfe, 0xb7, 0xf2, 0xad, 0x31, 0x87,
+	0x80, 0x9c, 0x83, 0xad, 0xf2, 0x44, 0x97, 0x26, 0x4f, 0x05, 0xc7, 0x59, 0x9b, 0xd9, 0x28, 0x3e,
+	0xde, 0xbc, 0xd6, 0x7c, 0xf3, 0x7d, 0x9c, 0xb2, 0xf6, 0xb9, 0x96, 0x03, 0x77, 0x3e, 0x1a, 0x8d,
+	0x55, 0x9f, 0x02, 0xf9, 0x18, 0x44, 0x2a, 0x30, 0xd3, 0xc5, 0x41, 0xda, 0xd1, 0x93, 0xcf, 0xe4,
+	0xba, 0xed, 0x27, 0x17, 0x4e, 0xda, 0xc4, 0xed, 0xe0, 0x87, 0xe9, 0xad, 0xdc, 0xfa, 0x26, 0xdc,
+	0xf9, 0xc4, 0x1e, 0x93, 0x12, 0xcc, 0xba, 0xfb, 0x7b, 0x87, 0xee, 0xfe, 0x6e, 0xb3, 0x32, 0x45,
+	0x00, 0xf2, 0xcd, 0x53, 0xf7, 0xc5, 0x2f, 0xbf, 0x56, 0x72, 0xeb, 0xff, 0xe4, 0x60, 0xfe, 0xbd,
+	0xcc, 0x27, 0x3c, 0x3d, 0x0e, 0xa1, 0xa4, 0xc3, 0xc4, 0x4c, 0xad, 0x19, 0x6f, 0xab, 0x0f, 0x5e,
+	0x68, 0x57, 0x4f, 0xc6, 0xcc, 0x82, 0xcd, 0x5a, 0xf3, 0xa8, 0xd1, 0x48, 0xd1, 0x6e, 0x51, 0x87,
+	0x2a, 0x1b, 0x10, 0x01, 0xf3, 0xda, 0x8f, 0xbc, 0x2e, 0x62, 0x44, 0x43, 0xd6, 0xc7, 0xf4, 0xf2,
+	0x7e, 0x3e, 0x41, 0x6b, 0xd7, 0xb6, 0x3f, 0x73, 0xc4, 0x45, 0x98, 0x29, 0xd5, 0x9a, 0xbb, 0xa7,
+	0x57, 0xdf, 0x7e, 0xf4, 0x73, 0xa6, 0xe8, 0x96, 0xf4, 0xc8, 0xe8, 0xe1, 0x4f, 0x70, 0x7b, 0x5c,
+	0x9f, 0x20, 0xb3, 0x70, 0xe3, 0xe4, 0xc5, 0xc9, 0x7e, 0x65, 0x8a, 0x94, 0x01, 0x8e, 0xcf, 0x9a,
+	0x67, 0xdb, 0x47, 0x5e, 0xf3, 0xa8, 0x51, 0xc9, 0x91, 0x12, 0x14, 0x0e, 0x4f, 0x0e, 0xf6, 0xdd,
+	0xc3, 0x66, 0xe5, 0xdf, 0xc2, 0xce, 0xc6, 0xdb, 0x77, 0xab, 0xb9, 0xbf, 0xde, 0xad, 0xe6, 0xfe,
+	0x7e, 0xb7, 0x9a, 0x3b, 0xaf, 0xda, 0x65, 0x32, 0x51, 0xa7, 0x11, 0xab, 0xbf, 0xf7, 0x38, 0x6f,
+	0xe5, 0x4d, 0xeb, 0xde, 0xfc, 0x2f, 0x00, 0x00, 0xff, 0xff, 0xf0, 0xc4, 0xe3, 0x6b, 0xb4, 0x0b,
+	0x00, 0x00,
 }
 
-func (x AuthenticationPolicy) String() string {
-	s, ok := AuthenticationPolicy_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x ProxyConfig_InboundInterceptionMode) String() string {
-	s, ok := ProxyConfig_InboundInterceptionMode_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (this *Tracing) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Tracing)
-	if !ok {
-		that2, ok := that.(Tracing)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.Tracer == nil {
-		if this.Tracer != nil {
-			return false
-		}
-	} else if this.Tracer == nil {
-		return false
-	} else if !this.Tracer.Equal(that1.Tracer) {
-		return false
-	}
-	return true
-}
-func (this *Tracing_Zipkin_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Tracing_Zipkin_)
-	if !ok {
-		that2, ok := that.(Tracing_Zipkin_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Zipkin.Equal(that1.Zipkin) {
-		return false
-	}
-	return true
-}
-func (this *Tracing_Lightstep_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Tracing_Lightstep_)
-	if !ok {
-		that2, ok := that.(Tracing_Lightstep_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Lightstep.Equal(that1.Lightstep) {
-		return false
-	}
-	return true
-}
-func (this *Tracing_Datadog_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Tracing_Datadog_)
-	if !ok {
-		that2, ok := that.(Tracing_Datadog_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Datadog.Equal(that1.Datadog) {
-		return false
-	}
-	return true
-}
-func (this *Tracing_Stackdriver_) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Tracing_Stackdriver_)
-	if !ok {
-		that2, ok := that.(Tracing_Stackdriver_)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Stackdriver.Equal(that1.Stackdriver) {
-		return false
-	}
-	return true
-}
-func (this *Tracing_Zipkin) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Tracing_Zipkin)
-	if !ok {
-		that2, ok := that.(Tracing_Zipkin)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Address != that1.Address {
-		return false
-	}
-	return true
-}
-func (this *Tracing_Lightstep) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Tracing_Lightstep)
-	if !ok {
-		that2, ok := that.(Tracing_Lightstep)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Address != that1.Address {
-		return false
-	}
-	if this.AccessToken != that1.AccessToken {
-		return false
-	}
-	if this.Secure != that1.Secure {
-		return false
-	}
-	if this.CacertPath != that1.CacertPath {
-		return false
-	}
-	return true
-}
-func (this *Tracing_Datadog) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Tracing_Datadog)
-	if !ok {
-		that2, ok := that.(Tracing_Datadog)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Address != that1.Address {
-		return false
-	}
-	return true
-}
-func (this *Tracing_Stackdriver) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Tracing_Stackdriver)
-	if !ok {
-		that2, ok := that.(Tracing_Stackdriver)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Debug != that1.Debug {
-		return false
-	}
-	if !this.MaxNumberOfAttributes.Equal(that1.MaxNumberOfAttributes) {
-		return false
-	}
-	if !this.MaxNumberOfAnnotations.Equal(that1.MaxNumberOfAnnotations) {
-		return false
-	}
-	if !this.MaxNumberOfMessageEvents.Equal(that1.MaxNumberOfMessageEvents) {
-		return false
-	}
-	return true
-}
-func (this *SDS) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SDS)
-	if !ok {
-		that2, ok := that.(SDS)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Enabled != that1.Enabled {
-		return false
-	}
-	if this.K8SSaJwtPath != that1.K8SSaJwtPath {
-		return false
-	}
-	return true
-}
-func (this *ProxyConfig) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ProxyConfig)
-	if !ok {
-		that2, ok := that.(ProxyConfig)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.ConfigPath != that1.ConfigPath {
-		return false
-	}
-	if this.BinaryPath != that1.BinaryPath {
-		return false
-	}
-	if this.ServiceCluster != that1.ServiceCluster {
-		return false
-	}
-	if !this.DrainDuration.Equal(that1.DrainDuration) {
-		return false
-	}
-	if !this.ParentShutdownDuration.Equal(that1.ParentShutdownDuration) {
-		return false
-	}
-	if this.DiscoveryAddress != that1.DiscoveryAddress {
-		return false
-	}
-	if !this.DiscoveryRefreshDelay.Equal(that1.DiscoveryRefreshDelay) {
-		return false
-	}
-	if this.ZipkinAddress != that1.ZipkinAddress {
-		return false
-	}
-	if !this.ConnectTimeout.Equal(that1.ConnectTimeout) {
-		return false
-	}
-	if this.StatsdUdpAddress != that1.StatsdUdpAddress {
-		return false
-	}
-	if this.EnvoyMetricsServiceAddress != that1.EnvoyMetricsServiceAddress {
-		return false
-	}
-	if this.ProxyAdminPort != that1.ProxyAdminPort {
-		return false
-	}
-	if this.AvailabilityZone != that1.AvailabilityZone {
-		return false
-	}
-	if this.ControlPlaneAuthPolicy != that1.ControlPlaneAuthPolicy {
-		return false
-	}
-	if this.CustomConfigFile != that1.CustomConfigFile {
-		return false
-	}
-	if this.StatNameLength != that1.StatNameLength {
-		return false
-	}
-	if this.Concurrency != that1.Concurrency {
-		return false
-	}
-	if this.ProxyBootstrapTemplatePath != that1.ProxyBootstrapTemplatePath {
-		return false
-	}
-	if this.InterceptionMode != that1.InterceptionMode {
-		return false
-	}
-	if !this.Tracing.Equal(that1.Tracing) {
-		return false
-	}
-	if !this.Sds.Equal(that1.Sds) {
-		return false
-	}
-	if !this.EnvoyAccessLogService.Equal(that1.EnvoyAccessLogService) {
-		return false
-	}
-	if !this.EnvoyMetricsService.Equal(that1.EnvoyMetricsService) {
-		return false
-	}
-	if len(this.ProxyMetadata) != len(that1.ProxyMetadata) {
-		return false
-	}
-	for i := range this.ProxyMetadata {
-		if this.ProxyMetadata[i] != that1.ProxyMetadata[i] {
-			return false
-		}
-	}
-	return true
-}
-func (this *RemoteService) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RemoteService)
-	if !ok {
-		that2, ok := that.(RemoteService)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Address != that1.Address {
-		return false
-	}
-	if !this.TlsSettings.Equal(that1.TlsSettings) {
-		return false
-	}
-	if !this.TcpKeepalive.Equal(that1.TcpKeepalive) {
-		return false
-	}
-	return true
-}
-func (this *Tracing) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 8)
-	s = append(s, "&v1alpha1.Tracing{")
-	if this.Tracer != nil {
-		s = append(s, "Tracer: "+fmt.Sprintf("%#v", this.Tracer)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *Tracing_Zipkin_) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&v1alpha1.Tracing_Zipkin_{` +
-		`Zipkin:` + fmt.Sprintf("%#v", this.Zipkin) + `}`}, ", ")
-	return s
-}
-func (this *Tracing_Lightstep_) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&v1alpha1.Tracing_Lightstep_{` +
-		`Lightstep:` + fmt.Sprintf("%#v", this.Lightstep) + `}`}, ", ")
-	return s
-}
-func (this *Tracing_Datadog_) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&v1alpha1.Tracing_Datadog_{` +
-		`Datadog:` + fmt.Sprintf("%#v", this.Datadog) + `}`}, ", ")
-	return s
-}
-func (this *Tracing_Stackdriver_) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&v1alpha1.Tracing_Stackdriver_{` +
-		`Stackdriver:` + fmt.Sprintf("%#v", this.Stackdriver) + `}`}, ", ")
-	return s
-}
-func (this *Tracing_Zipkin) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&v1alpha1.Tracing_Zipkin{")
-	s = append(s, "Address: "+fmt.Sprintf("%#v", this.Address)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *Tracing_Lightstep) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 8)
-	s = append(s, "&v1alpha1.Tracing_Lightstep{")
-	s = append(s, "Address: "+fmt.Sprintf("%#v", this.Address)+",\n")
-	s = append(s, "AccessToken: "+fmt.Sprintf("%#v", this.AccessToken)+",\n")
-	s = append(s, "Secure: "+fmt.Sprintf("%#v", this.Secure)+",\n")
-	s = append(s, "CacertPath: "+fmt.Sprintf("%#v", this.CacertPath)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *Tracing_Datadog) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&v1alpha1.Tracing_Datadog{")
-	s = append(s, "Address: "+fmt.Sprintf("%#v", this.Address)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *Tracing_Stackdriver) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 8)
-	s = append(s, "&v1alpha1.Tracing_Stackdriver{")
-	s = append(s, "Debug: "+fmt.Sprintf("%#v", this.Debug)+",\n")
-	if this.MaxNumberOfAttributes != nil {
-		s = append(s, "MaxNumberOfAttributes: "+fmt.Sprintf("%#v", this.MaxNumberOfAttributes)+",\n")
-	}
-	if this.MaxNumberOfAnnotations != nil {
-		s = append(s, "MaxNumberOfAnnotations: "+fmt.Sprintf("%#v", this.MaxNumberOfAnnotations)+",\n")
-	}
-	if this.MaxNumberOfMessageEvents != nil {
-		s = append(s, "MaxNumberOfMessageEvents: "+fmt.Sprintf("%#v", this.MaxNumberOfMessageEvents)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *SDS) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&v1alpha1.SDS{")
-	s = append(s, "Enabled: "+fmt.Sprintf("%#v", this.Enabled)+",\n")
-	s = append(s, "K8SSaJwtPath: "+fmt.Sprintf("%#v", this.K8SSaJwtPath)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *ProxyConfig) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 28)
-	s = append(s, "&v1alpha1.ProxyConfig{")
-	s = append(s, "ConfigPath: "+fmt.Sprintf("%#v", this.ConfigPath)+",\n")
-	s = append(s, "BinaryPath: "+fmt.Sprintf("%#v", this.BinaryPath)+",\n")
-	s = append(s, "ServiceCluster: "+fmt.Sprintf("%#v", this.ServiceCluster)+",\n")
-	if this.DrainDuration != nil {
-		s = append(s, "DrainDuration: "+fmt.Sprintf("%#v", this.DrainDuration)+",\n")
-	}
-	if this.ParentShutdownDuration != nil {
-		s = append(s, "ParentShutdownDuration: "+fmt.Sprintf("%#v", this.ParentShutdownDuration)+",\n")
-	}
-	s = append(s, "DiscoveryAddress: "+fmt.Sprintf("%#v", this.DiscoveryAddress)+",\n")
-	if this.DiscoveryRefreshDelay != nil {
-		s = append(s, "DiscoveryRefreshDelay: "+fmt.Sprintf("%#v", this.DiscoveryRefreshDelay)+",\n")
-	}
-	s = append(s, "ZipkinAddress: "+fmt.Sprintf("%#v", this.ZipkinAddress)+",\n")
-	if this.ConnectTimeout != nil {
-		s = append(s, "ConnectTimeout: "+fmt.Sprintf("%#v", this.ConnectTimeout)+",\n")
-	}
-	s = append(s, "StatsdUdpAddress: "+fmt.Sprintf("%#v", this.StatsdUdpAddress)+",\n")
-	s = append(s, "EnvoyMetricsServiceAddress: "+fmt.Sprintf("%#v", this.EnvoyMetricsServiceAddress)+",\n")
-	s = append(s, "ProxyAdminPort: "+fmt.Sprintf("%#v", this.ProxyAdminPort)+",\n")
-	s = append(s, "AvailabilityZone: "+fmt.Sprintf("%#v", this.AvailabilityZone)+",\n")
-	s = append(s, "ControlPlaneAuthPolicy: "+fmt.Sprintf("%#v", this.ControlPlaneAuthPolicy)+",\n")
-	s = append(s, "CustomConfigFile: "+fmt.Sprintf("%#v", this.CustomConfigFile)+",\n")
-	s = append(s, "StatNameLength: "+fmt.Sprintf("%#v", this.StatNameLength)+",\n")
-	s = append(s, "Concurrency: "+fmt.Sprintf("%#v", this.Concurrency)+",\n")
-	s = append(s, "ProxyBootstrapTemplatePath: "+fmt.Sprintf("%#v", this.ProxyBootstrapTemplatePath)+",\n")
-	s = append(s, "InterceptionMode: "+fmt.Sprintf("%#v", this.InterceptionMode)+",\n")
-	if this.Tracing != nil {
-		s = append(s, "Tracing: "+fmt.Sprintf("%#v", this.Tracing)+",\n")
-	}
-	if this.Sds != nil {
-		s = append(s, "Sds: "+fmt.Sprintf("%#v", this.Sds)+",\n")
-	}
-	if this.EnvoyAccessLogService != nil {
-		s = append(s, "EnvoyAccessLogService: "+fmt.Sprintf("%#v", this.EnvoyAccessLogService)+",\n")
-	}
-	if this.EnvoyMetricsService != nil {
-		s = append(s, "EnvoyMetricsService: "+fmt.Sprintf("%#v", this.EnvoyMetricsService)+",\n")
-	}
-	keysForProxyMetadata := make([]string, 0, len(this.ProxyMetadata))
-	for k, _ := range this.ProxyMetadata {
-		keysForProxyMetadata = append(keysForProxyMetadata, k)
-	}
-	github_com_gogo_protobuf_sortkeys.Strings(keysForProxyMetadata)
-	mapStringForProxyMetadata := "map[string]string{"
-	for _, k := range keysForProxyMetadata {
-		mapStringForProxyMetadata += fmt.Sprintf("%#v: %#v,", k, this.ProxyMetadata[k])
-	}
-	mapStringForProxyMetadata += "}"
-	if this.ProxyMetadata != nil {
-		s = append(s, "ProxyMetadata: "+mapStringForProxyMetadata+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *RemoteService) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 7)
-	s = append(s, "&v1alpha1.RemoteService{")
-	s = append(s, "Address: "+fmt.Sprintf("%#v", this.Address)+",\n")
-	if this.TlsSettings != nil {
-		s = append(s, "TlsSettings: "+fmt.Sprintf("%#v", this.TlsSettings)+",\n")
-	}
-	if this.TcpKeepalive != nil {
-		s = append(s, "TcpKeepalive: "+fmt.Sprintf("%#v", this.TcpKeepalive)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func valueToGoStringProxy(v interface{}, typ string) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
-}
 func (m *Tracing) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1584,6 +1015,10 @@ func (m *Tracing) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
 	if m.Tracer != nil {
 		{
 			size := m.Tracer.Size()
@@ -1696,6 +1131,10 @@ func (m *Tracing_Zipkin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
 	if len(m.Address) > 0 {
 		i -= len(m.Address)
 		copy(dAtA[i:], m.Address)
@@ -1726,6 +1165,10 @@ func (m *Tracing_Lightstep) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
 	if len(m.CacertPath) > 0 {
 		i -= len(m.CacertPath)
 		copy(dAtA[i:], m.CacertPath)
@@ -1780,6 +1223,10 @@ func (m *Tracing_Datadog) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
 	if len(m.Address) > 0 {
 		i -= len(m.Address)
 		copy(dAtA[i:], m.Address)
@@ -1810,6 +1257,10 @@ func (m *Tracing_Stackdriver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
 	if m.MaxNumberOfMessageEvents != nil {
 		{
 			size, err := m.MaxNumberOfMessageEvents.MarshalToSizedBuffer(dAtA[:i])
@@ -1879,6 +1330,10 @@ func (m *SDS) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
 	if len(m.K8SSaJwtPath) > 0 {
 		i -= len(m.K8SSaJwtPath)
 		copy(dAtA[i:], m.K8SSaJwtPath)
@@ -1919,6 +1374,10 @@ func (m *ProxyConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
 	if len(m.ProxyMetadata) > 0 {
 		for k := range m.ProxyMetadata {
 			v := m.ProxyMetadata[k]
@@ -2170,6 +1629,10 @@ func (m *RemoteService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
 	if m.TcpKeepalive != nil {
 		{
 			size, err := m.TcpKeepalive.MarshalToSizedBuffer(dAtA[:i])
@@ -2223,6 +1686,9 @@ func (m *Tracing) Size() (n int) {
 	_ = l
 	if m.Tracer != nil {
 		n += m.Tracer.Size()
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
 	}
 	return n
 }
@@ -2285,6 +1751,9 @@ func (m *Tracing_Zipkin) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovProxy(uint64(l))
 	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
 	return n
 }
 
@@ -2309,6 +1778,9 @@ func (m *Tracing_Lightstep) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovProxy(uint64(l))
 	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
 	return n
 }
 
@@ -2321,6 +1793,9 @@ func (m *Tracing_Datadog) Size() (n int) {
 	l = len(m.Address)
 	if l > 0 {
 		n += 1 + l + sovProxy(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
 	}
 	return n
 }
@@ -2346,6 +1821,9 @@ func (m *Tracing_Stackdriver) Size() (n int) {
 		l = m.MaxNumberOfMessageEvents.Size()
 		n += 1 + l + sovProxy(uint64(l))
 	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
 	return n
 }
 
@@ -2361,6 +1839,9 @@ func (m *SDS) Size() (n int) {
 	l = len(m.K8SSaJwtPath)
 	if l > 0 {
 		n += 1 + l + sovProxy(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
 	}
 	return n
 }
@@ -2466,6 +1947,9 @@ func (m *ProxyConfig) Size() (n int) {
 			n += mapEntrySize + 2 + sovProxy(uint64(mapEntrySize))
 		}
 	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
 	return n
 }
 
@@ -2487,6 +1971,9 @@ func (m *RemoteService) Size() (n int) {
 		l = m.TcpKeepalive.Size()
 		n += 1 + l + sovProxy(uint64(l))
 	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
 	return n
 }
 
@@ -2495,176 +1982,6 @@ func sovProxy(x uint64) (n int) {
 }
 func sozProxy(x uint64) (n int) {
 	return sovProxy(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (this *Tracing) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Tracing{`,
-		`Tracer:` + fmt.Sprintf("%v", this.Tracer) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Tracing_Zipkin_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Tracing_Zipkin_{`,
-		`Zipkin:` + strings.Replace(fmt.Sprintf("%v", this.Zipkin), "Tracing_Zipkin", "Tracing_Zipkin", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Tracing_Lightstep_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Tracing_Lightstep_{`,
-		`Lightstep:` + strings.Replace(fmt.Sprintf("%v", this.Lightstep), "Tracing_Lightstep", "Tracing_Lightstep", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Tracing_Datadog_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Tracing_Datadog_{`,
-		`Datadog:` + strings.Replace(fmt.Sprintf("%v", this.Datadog), "Tracing_Datadog", "Tracing_Datadog", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Tracing_Stackdriver_) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Tracing_Stackdriver_{`,
-		`Stackdriver:` + strings.Replace(fmt.Sprintf("%v", this.Stackdriver), "Tracing_Stackdriver", "Tracing_Stackdriver", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Tracing_Zipkin) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Tracing_Zipkin{`,
-		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Tracing_Lightstep) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Tracing_Lightstep{`,
-		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
-		`AccessToken:` + fmt.Sprintf("%v", this.AccessToken) + `,`,
-		`Secure:` + fmt.Sprintf("%v", this.Secure) + `,`,
-		`CacertPath:` + fmt.Sprintf("%v", this.CacertPath) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Tracing_Datadog) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Tracing_Datadog{`,
-		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Tracing_Stackdriver) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Tracing_Stackdriver{`,
-		`Debug:` + fmt.Sprintf("%v", this.Debug) + `,`,
-		`MaxNumberOfAttributes:` + strings.Replace(fmt.Sprintf("%v", this.MaxNumberOfAttributes), "Int64Value", "types.Int64Value", 1) + `,`,
-		`MaxNumberOfAnnotations:` + strings.Replace(fmt.Sprintf("%v", this.MaxNumberOfAnnotations), "Int64Value", "types.Int64Value", 1) + `,`,
-		`MaxNumberOfMessageEvents:` + strings.Replace(fmt.Sprintf("%v", this.MaxNumberOfMessageEvents), "Int64Value", "types.Int64Value", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SDS) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SDS{`,
-		`Enabled:` + fmt.Sprintf("%v", this.Enabled) + `,`,
-		`K8SSaJwtPath:` + fmt.Sprintf("%v", this.K8SSaJwtPath) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ProxyConfig) String() string {
-	if this == nil {
-		return "nil"
-	}
-	keysForProxyMetadata := make([]string, 0, len(this.ProxyMetadata))
-	for k, _ := range this.ProxyMetadata {
-		keysForProxyMetadata = append(keysForProxyMetadata, k)
-	}
-	github_com_gogo_protobuf_sortkeys.Strings(keysForProxyMetadata)
-	mapStringForProxyMetadata := "map[string]string{"
-	for _, k := range keysForProxyMetadata {
-		mapStringForProxyMetadata += fmt.Sprintf("%v: %v,", k, this.ProxyMetadata[k])
-	}
-	mapStringForProxyMetadata += "}"
-	s := strings.Join([]string{`&ProxyConfig{`,
-		`ConfigPath:` + fmt.Sprintf("%v", this.ConfigPath) + `,`,
-		`BinaryPath:` + fmt.Sprintf("%v", this.BinaryPath) + `,`,
-		`ServiceCluster:` + fmt.Sprintf("%v", this.ServiceCluster) + `,`,
-		`DrainDuration:` + strings.Replace(fmt.Sprintf("%v", this.DrainDuration), "Duration", "types.Duration", 1) + `,`,
-		`ParentShutdownDuration:` + strings.Replace(fmt.Sprintf("%v", this.ParentShutdownDuration), "Duration", "types.Duration", 1) + `,`,
-		`DiscoveryAddress:` + fmt.Sprintf("%v", this.DiscoveryAddress) + `,`,
-		`DiscoveryRefreshDelay:` + strings.Replace(fmt.Sprintf("%v", this.DiscoveryRefreshDelay), "Duration", "types.Duration", 1) + `,`,
-		`ZipkinAddress:` + fmt.Sprintf("%v", this.ZipkinAddress) + `,`,
-		`ConnectTimeout:` + strings.Replace(fmt.Sprintf("%v", this.ConnectTimeout), "Duration", "types.Duration", 1) + `,`,
-		`StatsdUdpAddress:` + fmt.Sprintf("%v", this.StatsdUdpAddress) + `,`,
-		`ProxyAdminPort:` + fmt.Sprintf("%v", this.ProxyAdminPort) + `,`,
-		`AvailabilityZone:` + fmt.Sprintf("%v", this.AvailabilityZone) + `,`,
-		`ControlPlaneAuthPolicy:` + fmt.Sprintf("%v", this.ControlPlaneAuthPolicy) + `,`,
-		`CustomConfigFile:` + fmt.Sprintf("%v", this.CustomConfigFile) + `,`,
-		`StatNameLength:` + fmt.Sprintf("%v", this.StatNameLength) + `,`,
-		`Concurrency:` + fmt.Sprintf("%v", this.Concurrency) + `,`,
-		`ProxyBootstrapTemplatePath:` + fmt.Sprintf("%v", this.ProxyBootstrapTemplatePath) + `,`,
-		`InterceptionMode:` + fmt.Sprintf("%v", this.InterceptionMode) + `,`,
-		`Tracing:` + strings.Replace(this.Tracing.String(), "Tracing", "Tracing", 1) + `,`,
-		`EnvoyMetricsServiceAddress:` + fmt.Sprintf("%v", this.EnvoyMetricsServiceAddress) + `,`,
-		`Sds:` + strings.Replace(this.Sds.String(), "SDS", "SDS", 1) + `,`,
-		`EnvoyAccessLogService:` + strings.Replace(this.EnvoyAccessLogService.String(), "RemoteService", "RemoteService", 1) + `,`,
-		`EnvoyMetricsService:` + strings.Replace(this.EnvoyMetricsService.String(), "RemoteService", "RemoteService", 1) + `,`,
-		`ProxyMetadata:` + mapStringForProxyMetadata + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RemoteService) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RemoteService{`,
-		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
-		`TlsSettings:` + strings.Replace(fmt.Sprintf("%v", this.TlsSettings), "TLSSettings", "v1alpha3.TLSSettings", 1) + `,`,
-		`TcpKeepalive:` + strings.Replace(fmt.Sprintf("%v", this.TcpKeepalive), "ConnectionPoolSettings_TCPSettings_TcpKeepalive", "v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func valueToStringProxy(v interface{}) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("*%v", pv)
 }
 func (m *Tracing) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -2850,6 +2167,7 @@ func (m *Tracing) Unmarshal(dAtA []byte) error {
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
 			iNdEx += skippy
 		}
 	}
@@ -2935,6 +2253,7 @@ func (m *Tracing_Zipkin) Unmarshal(dAtA []byte) error {
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
 			iNdEx += skippy
 		}
 	}
@@ -3104,6 +2423,7 @@ func (m *Tracing_Lightstep) Unmarshal(dAtA []byte) error {
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
 			iNdEx += skippy
 		}
 	}
@@ -3189,6 +2509,7 @@ func (m *Tracing_Datadog) Unmarshal(dAtA []byte) error {
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
 			iNdEx += skippy
 		}
 	}
@@ -3370,6 +2691,7 @@ func (m *Tracing_Stackdriver) Unmarshal(dAtA []byte) error {
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
 			iNdEx += skippy
 		}
 	}
@@ -3475,6 +2797,7 @@ func (m *SDS) Unmarshal(dAtA []byte) error {
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
 			iNdEx += skippy
 		}
 	}
@@ -4358,6 +3681,7 @@ func (m *ProxyConfig) Unmarshal(dAtA []byte) error {
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
 			iNdEx += skippy
 		}
 	}
@@ -4515,6 +3839,7 @@ func (m *RemoteService) Unmarshal(dAtA []byte) error {
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
 			iNdEx += skippy
 		}
 	}
