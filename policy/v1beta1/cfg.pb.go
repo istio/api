@@ -118,15 +118,15 @@ func (Tls_AuthHeader) EnumDescriptor() ([]byte, []int) {
 // of an Istio deployment.
 //
 // <!-- crd generation tags
-// +cue-gen:AttributeManifest:schema:istio.policy.v1beta1.AttributeManifest
-// +cue-gen:AttributeManifest:groupName:config.istio.io
-// +cue-gen:AttributeManifest:version:v1alpha2
-// +cue-gen:AttributeManifest:storageVersion
-// +cue-gen:AttributeManifest:annotations:helm.sh/resource-policy=keep
-// +cue-gen:AttributeManifest:labels:app=mixer,chart=istio,heritage=Tiller,istio=core,package=istio.io.mixer,release=istio
-// +cue-gen:AttributeManifest:subresource:status
-// +cue-gen:AttributeManifest:scope:Namespaced
-// +cue-gen:AttributeManifest:resource:categories=istio-io,policy-istio-io
+// +cue-gen:attributemanifest:schema:istio.policy.v1beta1.AttributeManifest
+// +cue-gen:attributemanifest:groupName:config.istio.io
+// +cue-gen:attributemanifest:version:v1alpha2
+// +cue-gen:attributemanifest:storageVersion
+// +cue-gen:attributemanifest:annotations:helm.sh/resource-policy=keep
+// +cue-gen:attributemanifest:labels:app=mixer,chart=istio,heritage=Tiller,istio=core,package=istio.io.mixer,release=istio
+// +cue-gen:attributemanifest:subresource:status
+// +cue-gen:attributemanifest:scope:Namespaced
+// +cue-gen:attributemanifest:resource:categories=istio-io,policy-istio-io
 // -->
 //
 // <!-- go code generation tags
@@ -320,15 +320,15 @@ func (m *AttributeManifest_AttributeInfo) GetValueType() ValueType {
 // ```
 //
 // <!-- crd generation tags
-// +cue-gen:Rule:schema:istio.policy.v1beta1.Rule
-// +cue-gen:Rule:groupName:config.istio.io
-// +cue-gen:Rule:version:v1alpha2
-// +cue-gen:Rule:storageVersion
-// +cue-gen:Rule:annotations:helm.sh/resource-policy=keep
-// +cue-gen:Rule:labels:app=mixer,chart=istio,heritage=Tiller,istio=core,package=istio.io.mixer,release=istio
-// +cue-gen:Rule:subresource:status
-// +cue-gen:Rule:scope:Namespaced
-// +cue-gen:Rule:resource:categories=istio-io,policy-istio-io
+// +cue-gen:rule:schema:istio.policy.v1beta1.Rule
+// +cue-gen:rule:groupName:config.istio.io
+// +cue-gen:rule:version:v1alpha2
+// +cue-gen:rule:storageVersion
+// +cue-gen:rule:annotations:helm.sh/resource-policy=keep
+// +cue-gen:rule:labels:app=mixer,chart=istio,heritage=Tiller,istio=core,package=istio.io.mixer,release=istio
+// +cue-gen:rule:subresource:status
+// +cue-gen:rule:scope:Namespaced
+// +cue-gen:rule:resource:categories=istio-io,policy-istio-io
 // -->
 //
 // <!-- go code generation tags
@@ -609,15 +609,15 @@ func (m *Action) GetName() string {
 // ```
 //
 // <!-- crd generation tags
-// +cue-gen:Instance:schema:istio.policy.v1beta1.Instance
-// +cue-gen:Instance:groupName:config.istio.io
-// +cue-gen:Instance:version:v1alpha2
-// +cue-gen:Instance:storageVersion
-// +cue-gen:Instance:annotations:helm.sh/resource-policy=keep
-// +cue-gen:Instance:labels:app=mixer,chart=istio,heritage=Tiller,istio=mixer-instance,package=instance,release=istio
-// +cue-gen:Instance:subresource:status
-// +cue-gen:Instance:scope:Namespaced
-// +cue-gen:Instance:resource:categories=istio-io,policy-istio-io
+// +cue-gen:instance:schema:istio.policy.v1beta1.Instance
+// +cue-gen:instance:groupName:config.istio.io
+// +cue-gen:instance:version:v1alpha2
+// +cue-gen:instance:storageVersion
+// +cue-gen:instance:annotations:helm.sh/resource-policy=keep
+// +cue-gen:instance:labels:app=mixer,chart=istio,heritage=Tiller,istio=mixer-instance,package=instance,release=istio
+// +cue-gen:instance:subresource:status
+// +cue-gen:instance:scope:Namespaced
+// +cue-gen:instance:resource:categories=istio-io,policy-istio-io
 // -->
 //
 // <!-- go code generation tags
@@ -784,15 +784,15 @@ func (m *Instance) GetAttributeBindings() map[string]string {
 // ```
 //
 // <!-- crd generation tags
-// +cue-gen:Handler:schema:istio.policy.v1beta1.Handler
-// +cue-gen:Handler:groupName:config.istio.io
-// +cue-gen:Handler:version:v1alpha2
-// +cue-gen:Handler:storageVersion
-// +cue-gen:Handler:annotations:helm.sh/resource-policy=keep
-// +cue-gen:Handler:labels:app=mixer,chart=istio,heritage=Tiller,istio=mixer-handler,package=handler,release=istio
-// +cue-gen:Handler:subresource:status
-// +cue-gen:Handler:scope:Namespaced
-// +cue-gen:Handler:resource:categories=istio-io,policy-istio-io
+// +cue-gen:handler:schema:istio.policy.v1beta1.Handler
+// +cue-gen:handler:groupName:config.istio.io
+// +cue-gen:handler:version:v1alpha2
+// +cue-gen:handler:storageVersion
+// +cue-gen:handler:annotations:helm.sh/resource-policy=keep
+// +cue-gen:handler:labels:app=mixer,chart=istio,heritage=Tiller,istio=mixer-handler,package=handler,release=istio
+// +cue-gen:handler:subresource:status
+// +cue-gen:handler:scope:Namespaced
+// +cue-gen:handler:resource:categories=istio-io,policy-istio-io
 // -->
 //
 // <!-- go code generation tags
