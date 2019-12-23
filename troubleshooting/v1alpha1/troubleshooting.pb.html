@@ -11,7 +11,7 @@ number_of_entries: 12
 
 <pre id="MeshTroubleshootingService-GetConfigDump"><code class="language-proto">rpc GetConfigDump(GetConfigDumpRequest) returns (GetConfigDumpResponse)
 </code></pre>
-<p>GetConfigDump gets the configuratoin dump of the proxy.</p>
+<p>GetConfigDump gets the configuration dump of the proxy.</p>
 
 <pre id="MeshTroubleshootingService-SetLogLevel"><code class="language-proto">rpc SetLogLevel(SetLogLevelRequest) returns (SetLogLevelResponse)
 </code></pre>
@@ -27,8 +27,8 @@ Currently this is pilot.</p>
 </code></pre>
 <p>TroubleShooting request on proxy level.
 Note in the actual architecture, we have proxy level agent, e.g. pilot agent, connecting to the
-centralized control plane (istiod or pilot). Thus from gRPC&rsquo;s point of view, centralized control
-plane is the server. But when troubleshooting API is used, centralized control plane initiates
+centralized troubleshooting control plane. Thus from gRPC&rsquo;s point of view, centralized control
+plane is the server. But when troubleshooting API is used, the control plane initiates
 workflow. This is why we have response/request in reversed position.</p>
 
 </section>
@@ -257,11 +257,15 @@ No
 <tr id="ProxySelector-NodeType-SIDECAR">
 <td><code>SIDECAR</code></td>
 <td>
+<p>Runs as workload sidecar mode.</p>
+
 </td>
 </tr>
-<tr id="ProxySelector-NodeType-ROUTER">
-<td><code>ROUTER</code></td>
+<tr id="ProxySelector-NodeType-GATEWAY">
+<td><code>GATEWAY</code></td>
 <td>
+<p>Runs as gateway.</p>
+
 </td>
 </tr>
 </tbody>

@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.troubleshooting.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z%istio.io/api/troubleshooting/v1alpha1'),
-  serialized_pb=_b('\n.troubleshooting/v1alpha1/troubleshooting.proto\x12\x1eistio.troubleshooting.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1btype/v1beta1/selector.proto\"\xd6\x01\n\rProxySelector\x12\x45\n\x05types\x18\x01 \x03(\x0e\x32\x36.istio.troubleshooting.v1alpha1.ProxySelector.NodeType\x12\x12\n\nnamespaces\x18\x02 \x03(\t\x12\r\n\x05names\x18\x03 \x03(\t\x12\x36\n\x08selector\x18\x04 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\"#\n\x08NodeType\x12\x0b\n\x07SIDECAR\x10\x00\x12\n\n\x06ROUTER\x10\x01\"W\n\x14GetConfigDumpRequest\x12?\n\x08selector\x18\x01 \x01(\x0b\x32-.istio.troubleshooting.v1alpha1.ProxySelector\"(\n\x15GetConfigDumpResponse\x12\x0f\n\x07payload\x18\x01 \x01(\t\"b\n\x0eLoggerLogLevel\x12\x13\n\x0blogger_name\x18\x01 \x01(\t\x12;\n\tlog_level\x18\x02 \x01(\x0e\x32(.istio.troubleshooting.v1alpha1.LogLevel\"\x9c\x01\n\x12SetLogLevelRequest\x12?\n\x08selector\x18\x01 \x01(\x0b\x32-.istio.troubleshooting.v1alpha1.ProxySelector\x12\x45\n\rlogger_levels\x18\x02 \x03(\x0b\x32..istio.troubleshooting.v1alpha1.LoggerLogLevel\"\\\n\x13SetLogLevelResponse\x12\x45\n\rlogger_levels\x18\x02 \x03(\x0b\x32..istio.troubleshooting.v1alpha1.LoggerLogLevel\"\x80\x02\n\x16TroubleShootingRequest\x12\x12\n\nrequest_id\x18\x01 \x01(\x04\x12*\n\x07timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\x12L\n\x0b\x63onfig_dump\x18\xe9\x07 \x01(\x0b\x32\x34.istio.troubleshooting.v1alpha1.GetConfigDumpRequestH\x00\x12M\n\rset_log_level\x18\xea\x07 \x01(\x0b\x32\x33.istio.troubleshooting.v1alpha1.SetLogLevelResponseH\x00\x42\t\n\x07request\"\xf6\x01\n\x17TroubleShootingResponse\x12\x12\n\nrequest_id\x18\x01 \x01(\x04\x12 \n\x18last_response_to_request\x18\x02 \x01(\x08\x12M\n\x0b\x63onfig_dump\x18\xe9\x07 \x01(\x0b\x32\x35.istio.troubleshooting.v1alpha1.GetConfigDumpResponseH\x00\x12J\n\nlog_levels\x18\xea\x07 \x01(\x0b\x32\x33.istio.troubleshooting.v1alpha1.SetLogLevelResponseH\x00\x42\n\n\x08response*V\n\x08LogLevel\x12\x07\n\x03OFF\x10\x00\x12\x0c\n\x08\x43RITICAL\x10\x01\x12\t\n\x05\x45RROR\x10\x02\x12\x08\n\x04WARN\x10\x03\x12\x08\n\x04INFO\x10\x04\x12\t\n\x05\x44\x45\x42UG\x10\x05\x12\t\n\x05TRACE\x10\x06\x32\x99\x02\n\x1aMeshTroubleshootingService\x12\x80\x01\n\rGetConfigDump\x12\x34.istio.troubleshooting.v1alpha1.GetConfigDumpRequest\x1a\x35.istio.troubleshooting.v1alpha1.GetConfigDumpResponse\"\x00\x30\x01\x12x\n\x0bSetLogLevel\x12\x32.istio.troubleshooting.v1alpha1.SetLogLevelRequest\x1a\x33.istio.troubleshooting.v1alpha1.SetLogLevelResponse\"\x00\x32\xa5\x01\n\x1bProxyTroubleshootingService\x12\x85\x01\n\x0cTroubleshoot\x12\x37.istio.troubleshooting.v1alpha1.TroubleShootingResponse\x1a\x36.istio.troubleshooting.v1alpha1.TroubleShootingRequest\"\x00(\x01\x30\x01\x42\'Z%istio.io/api/troubleshooting/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n.troubleshooting/v1alpha1/troubleshooting.proto\x12\x1eistio.troubleshooting.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1btype/v1beta1/selector.proto\"\xd7\x01\n\rProxySelector\x12\x45\n\x05types\x18\x01 \x03(\x0e\x32\x36.istio.troubleshooting.v1alpha1.ProxySelector.NodeType\x12\x12\n\nnamespaces\x18\x02 \x03(\t\x12\r\n\x05names\x18\x03 \x03(\t\x12\x36\n\x08selector\x18\x04 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\"$\n\x08NodeType\x12\x0b\n\x07SIDECAR\x10\x00\x12\x0b\n\x07GATEWAY\x10\x01\"W\n\x14GetConfigDumpRequest\x12?\n\x08selector\x18\x01 \x01(\x0b\x32-.istio.troubleshooting.v1alpha1.ProxySelector\"(\n\x15GetConfigDumpResponse\x12\x0f\n\x07payload\x18\x01 \x01(\t\"b\n\x0eLoggerLogLevel\x12\x13\n\x0blogger_name\x18\x01 \x01(\t\x12;\n\tlog_level\x18\x02 \x01(\x0e\x32(.istio.troubleshooting.v1alpha1.LogLevel\"\x9c\x01\n\x12SetLogLevelRequest\x12?\n\x08selector\x18\x01 \x01(\x0b\x32-.istio.troubleshooting.v1alpha1.ProxySelector\x12\x45\n\rlogger_levels\x18\x02 \x03(\x0b\x32..istio.troubleshooting.v1alpha1.LoggerLogLevel\"\\\n\x13SetLogLevelResponse\x12\x45\n\rlogger_levels\x18\x02 \x03(\x0b\x32..istio.troubleshooting.v1alpha1.LoggerLogLevel\"\x80\x02\n\x16TroubleShootingRequest\x12\x12\n\nrequest_id\x18\x01 \x01(\x04\x12*\n\x07timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\x12L\n\x0b\x63onfig_dump\x18\xe9\x07 \x01(\x0b\x32\x34.istio.troubleshooting.v1alpha1.GetConfigDumpRequestH\x00\x12M\n\rset_log_level\x18\xea\x07 \x01(\x0b\x32\x33.istio.troubleshooting.v1alpha1.SetLogLevelResponseH\x00\x42\t\n\x07request\"\xf6\x01\n\x17TroubleShootingResponse\x12\x12\n\nrequest_id\x18\x01 \x01(\x04\x12 \n\x18last_response_to_request\x18\x02 \x01(\x08\x12M\n\x0b\x63onfig_dump\x18\xe9\x07 \x01(\x0b\x32\x35.istio.troubleshooting.v1alpha1.GetConfigDumpResponseH\x00\x12J\n\nlog_levels\x18\xea\x07 \x01(\x0b\x32\x33.istio.troubleshooting.v1alpha1.SetLogLevelResponseH\x00\x42\n\n\x08response*V\n\x08LogLevel\x12\x07\n\x03OFF\x10\x00\x12\x0c\n\x08\x43RITICAL\x10\x01\x12\t\n\x05\x45RROR\x10\x02\x12\x08\n\x04WARN\x10\x03\x12\x08\n\x04INFO\x10\x04\x12\t\n\x05\x44\x45\x42UG\x10\x05\x12\t\n\x05TRACE\x10\x06\x32\x99\x02\n\x1aMeshTroubleshootingService\x12\x80\x01\n\rGetConfigDump\x12\x34.istio.troubleshooting.v1alpha1.GetConfigDumpRequest\x1a\x35.istio.troubleshooting.v1alpha1.GetConfigDumpResponse\"\x00\x30\x01\x12x\n\x0bSetLogLevel\x12\x32.istio.troubleshooting.v1alpha1.SetLogLevelRequest\x1a\x33.istio.troubleshooting.v1alpha1.SetLogLevelResponse\"\x00\x32\xa5\x01\n\x1bProxyTroubleshootingService\x12\x85\x01\n\x0cTroubleshoot\x12\x37.istio.troubleshooting.v1alpha1.TroubleShootingResponse\x1a\x36.istio.troubleshooting.v1alpha1.TroubleShootingRequest\"\x00(\x01\x30\x01\x42\'Z%istio.io/api/troubleshooting/v1alpha1b\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
 
@@ -64,8 +64,8 @@ _LOGLEVEL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1352,
-  serialized_end=1438,
+  serialized_start=1353,
+  serialized_end=1439,
 )
 _sym_db.RegisterEnumDescriptor(_LOGLEVEL)
 
@@ -90,14 +90,14 @@ _PROXYSELECTOR_NODETYPE = _descriptor.EnumDescriptor(
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='ROUTER', index=1, number=1,
+      name='GATEWAY', index=1, number=1,
       serialized_options=None,
       type=None),
   ],
   containing_type=None,
   serialized_options=None,
   serialized_start=323,
-  serialized_end=358,
+  serialized_end=359,
 )
 _sym_db.RegisterEnumDescriptor(_PROXYSELECTOR_NODETYPE)
 
@@ -151,7 +151,7 @@ _PROXYSELECTOR = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=144,
-  serialized_end=358,
+  serialized_end=359,
 )
 
 
@@ -181,8 +181,8 @@ _GETCONFIGDUMPREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=360,
-  serialized_end=447,
+  serialized_start=361,
+  serialized_end=448,
 )
 
 
@@ -212,8 +212,8 @@ _GETCONFIGDUMPRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=449,
-  serialized_end=489,
+  serialized_start=450,
+  serialized_end=490,
 )
 
 
@@ -250,8 +250,8 @@ _LOGGERLOGLEVEL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=491,
-  serialized_end=589,
+  serialized_start=492,
+  serialized_end=590,
 )
 
 
@@ -288,8 +288,8 @@ _SETLOGLEVELREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=592,
-  serialized_end=748,
+  serialized_start=593,
+  serialized_end=749,
 )
 
 
@@ -319,8 +319,8 @@ _SETLOGLEVELRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=750,
-  serialized_end=842,
+  serialized_start=751,
+  serialized_end=843,
 )
 
 
@@ -374,8 +374,8 @@ _TROUBLESHOOTINGREQUEST = _descriptor.Descriptor(
       name='request', full_name='istio.troubleshooting.v1alpha1.TroubleShootingRequest.request',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=845,
-  serialized_end=1101,
+  serialized_start=846,
+  serialized_end=1102,
 )
 
 
@@ -429,8 +429,8 @@ _TROUBLESHOOTINGRESPONSE = _descriptor.Descriptor(
       name='response', full_name='istio.troubleshooting.v1alpha1.TroubleShootingResponse.response',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=1104,
-  serialized_end=1350,
+  serialized_start=1105,
+  serialized_end=1351,
 )
 
 _PROXYSELECTOR.fields_by_name['types'].enum_type = _PROXYSELECTOR_NODETYPE
@@ -534,8 +534,8 @@ _MESHTROUBLESHOOTINGSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=1441,
-  serialized_end=1722,
+  serialized_start=1442,
+  serialized_end=1723,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetConfigDump',
@@ -567,8 +567,8 @@ _PROXYTROUBLESHOOTINGSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=1,
   serialized_options=None,
-  serialized_start=1725,
-  serialized_end=1890,
+  serialized_start=1726,
+  serialized_end=1891,
   methods=[
   _descriptor.MethodDescriptor(
     name='Troubleshoot',

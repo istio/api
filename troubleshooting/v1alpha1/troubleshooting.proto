@@ -23,7 +23,7 @@ option go_package = "istio.io/api/troubleshooting/v1alpha1";
 
 // MeshTroubleshootingService is the mesh wide trouble shooting API.
 service MeshTroubleshootingService{
-  // GetConfigDump gets the configuratoin dump of the proxy.
+  // GetConfigDump gets the configuration dump of the proxy.
   rpc GetConfigDump(GetConfigDumpRequest)
     returns(stream GetConfigDumpResponse){
   }
@@ -34,12 +34,17 @@ service MeshTroubleshootingService{
   }
 }
 
-// ProxySelector specifies the proxy filtering of the troubleshooting API targetted scope.
+// ProxySelector specifies the proxy filtering of the troubleshooting API targeted scope.
 // All the fields in this selector are and-ed together. Empty fields will selector all the
 // proxy.
 message ProxySelector {
   // The type of the proxy runs as.
-  enum NodeType { SIDECAR = 0; ROUTER = 1; }
+  enum NodeType { 
+    // Runs as workload sidecar mode.
+    SIDECAR = 0;
+    // Runs as gateway.
+    GATEWAY = 1;
+  }
 
   // The types of the proxy runs as.
   repeated NodeType types = 1;
@@ -107,8 +112,8 @@ message SetLogLevelResponse {
 service ProxyTroubleshootingService {
   // TroubleShooting request on proxy level.
   // Note in the actual architecture, we have proxy level agent, e.g. pilot agent, connecting to the
-  // centralized control plane (istiod or pilot). Thus from gRPC's point of view, centralized control
-  // plane is the server. But when troubleshooting API is used, centralized control plane initiates
+  // centralized troubleshooting control plane. Thus from gRPC's point of view, centralized control
+  // plane is the server. But when troubleshooting API is used, the control plane initiates
   // workflow. This is why we have response/request in reversed position.
   rpc Troubleshoot(stream TroubleShootingResponse)
       returns(stream TroubleShootingRequest) {}
