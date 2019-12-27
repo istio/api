@@ -30,6 +30,8 @@ option go_package="istio.io/api/policy/v1beta1";
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +kubetype-gen:kubeType=AttributeManifest
+// +kubetype-gen:AttributeManifest:tag=kubetype-gen:lowerCaseScheme
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
@@ -122,6 +124,8 @@ message AttributeManifest {
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +kubetype-gen:kubeType=Rule
+// +kubetype-gen:Rule:tag=kubetype-gen:lowerCaseScheme
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
@@ -247,6 +251,8 @@ message Action {
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +kubetype-gen:kubeType=Instance
+// +kubetype-gen:Instance:tag=kubetype-gen:lowerCaseScheme
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
@@ -347,6 +353,8 @@ message Instance {
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +kubetype-gen:kubeType=Handler
+// +kubetype-gen:Handler:tag=kubetype-gen:lowerCaseScheme
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
