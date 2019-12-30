@@ -16,14 +16,15 @@ syntax = "proto3";
 
 import "google/protobuf/any.proto";
 import "k8s.io/api/autoscaling/v2beta1/generated.proto";
-import "mesh/v1alpha1/kubernetes.proto";
+import "operator/v1alpha1/kubernetes.proto";
 
-package istio.mesh.v1alpha1;
+package istio.operator.v1alpha1;
 
-option go_package="istio.io/api/mesh/v1alpha1";
+option go_package="istio.io/api/operator/v1alpha1";
 
 // IstioComponentSpec defines the desired installed state of Istio components.
 message IstioComponentSetSpec {
+    BaseComponentSpec base = 29;
     ComponentSpec pilot = 30;
     ComponentSpec proxy = 31;
     ComponentSpec sidecar_injector = 32;
@@ -37,9 +38,12 @@ message IstioComponentSetSpec {
 
     repeated GatewaySpec ingress_gateways = 40;
     repeated GatewaySpec egress_gateways = 41;
+}
 
-    // Extra addon components which are not explicitly specified above.
-    map<string, ExternalComponentSpec> extra_components = 100;
+// Configuration for base component.
+message BaseComponentSpec {
+    // Selects whether this component is installed.
+    TypeBoolValueForPB enabled = 1;
 }
 
 // Configuration for internal components.
@@ -62,7 +66,8 @@ message ComponentSpec {
 
 // Configuration for external components.
 message ExternalComponentSpec {
-    // Enablement is implied by the existence of this spec.
+    // Selects whether this component is installed.
+    TypeBoolValueForPB enabled = 1;
 
     // Namespace for the component.
     string namespace = 2;
