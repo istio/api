@@ -487,28 +487,46 @@ func (m *Rule_To) GetOperation() *Operation {
 	return nil
 }
 
-// Source specifies the source identities of a request.
+// Source specifies the source identities of a request. Fields in the source are
+// ANDed together.
+//
+// For example, the following source matches if the principal is "admin" or "dev"
+// and the namespace is "prod" or "test" and the ip is not "1.2.3.4".
+//
+// ```yaml
+// principals: ["admin", "dev"]
+// namespaces: ["prod", "test"]
+// not_ipblocks: ["1.2.3.4"]
+// ```
 type Source struct {
 	// Optional. A list of source peer identities (i.e. service account), which
 	// matches to the "source.principal" attribute. This field requires mTLS enabled.
 	//
 	// If not set, any principal is allowed.
 	Principals []string `protobuf:"bytes,1,rep,name=principals,proto3" json:"principals,omitempty"`
+	// Optional. A list of negative match of source peer identities.
+	NotPrincipals []string `protobuf:"bytes,5,rep,name=not_principals,json=notPrincipals,proto3" json:"not_principals,omitempty"`
 	// Optional. A list of request identities (i.e. "iss/sub" claims), which
 	// matches to the "request.auth.principal" attribute.
 	//
 	// If not set, any request principal is allowed.
 	RequestPrincipals []string `protobuf:"bytes,2,rep,name=request_principals,json=requestPrincipals,proto3" json:"request_principals,omitempty"`
+	// Optional. A list of negative match of request identities.
+	NotRequestPrincipals []string `protobuf:"bytes,6,rep,name=not_request_principals,json=notRequestPrincipals,proto3" json:"not_request_principals,omitempty"`
 	// Optional. A list of namespaces, which matches to the "source.namespace"
 	// attribute. This field requires mTLS enabled.
 	//
 	// If not set, any namespace is allowed.
 	Namespaces []string `protobuf:"bytes,3,rep,name=namespaces,proto3" json:"namespaces,omitempty"`
+	// Optional. A list of negative match of namespaces.
+	NotNamespaces []string `protobuf:"bytes,7,rep,name=not_namespaces,json=notNamespaces,proto3" json:"not_namespaces,omitempty"`
 	// Optional. A list of IP blocks, which matches to the "source.ip" attribute.
 	// Single IP (e.g. "1.2.3.4") and CIDR (e.g. "1.2.3.0/24") are supported.
 	//
 	// If not set, any IP is allowed.
-	IpBlocks             []string `protobuf:"bytes,4,rep,name=ip_blocks,json=ipBlocks,proto3" json:"ip_blocks,omitempty"`
+	IpBlocks []string `protobuf:"bytes,4,rep,name=ip_blocks,json=ipBlocks,proto3" json:"ip_blocks,omitempty"`
+	// Optional. A list of negative match of IP blocks.
+	NotIpBlocks          []string `protobuf:"bytes,8,rep,name=not_ip_blocks,json=notIpBlocks,proto3" json:"not_ip_blocks,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -554,9 +572,23 @@ func (m *Source) GetPrincipals() []string {
 	return nil
 }
 
+func (m *Source) GetNotPrincipals() []string {
+	if m != nil {
+		return m.NotPrincipals
+	}
+	return nil
+}
+
 func (m *Source) GetRequestPrincipals() []string {
 	if m != nil {
 		return m.RequestPrincipals
+	}
+	return nil
+}
+
+func (m *Source) GetNotRequestPrincipals() []string {
+	if m != nil {
+		return m.NotRequestPrincipals
 	}
 	return nil
 }
@@ -568,6 +600,13 @@ func (m *Source) GetNamespaces() []string {
 	return nil
 }
 
+func (m *Source) GetNotNamespaces() []string {
+	if m != nil {
+		return m.NotNamespaces
+	}
+	return nil
+}
+
 func (m *Source) GetIpBlocks() []string {
 	if m != nil {
 		return m.IpBlocks
@@ -575,26 +614,51 @@ func (m *Source) GetIpBlocks() []string {
 	return nil
 }
 
-// Operation specifies the operations of a request.
+func (m *Source) GetNotIpBlocks() []string {
+	if m != nil {
+		return m.NotIpBlocks
+	}
+	return nil
+}
+
+// Operation specifies the operations of a request. Fields in the operation are
+// ANDed together.
+//
+// For example, the following operation matches if the host has suffix ".example.com"
+// and the method is "GET" or "HEAD" and the path doesn't have prefix "/admin".
+//
+// ```yaml
+// hosts: ["*.example.com"]
+// methods: ["GET", "HEAD"]
+// not_paths: ["/admin*"]
+// ```
 type Operation struct {
 	// Optional. A list of hosts, which matches to the "request.host" attribute.
 	//
 	// If not set, any host is allowed. Must be used only with HTTP.
 	Hosts []string `protobuf:"bytes,1,rep,name=hosts,proto3" json:"hosts,omitempty"`
+	// Optional. A list of negative match of hosts.
+	NotHosts []string `protobuf:"bytes,5,rep,name=not_hosts,json=notHosts,proto3" json:"not_hosts,omitempty"`
 	// Optional. A list of ports, which matches to the "destination.port" attribute.
 	//
 	// If not set, any port is allowed.
 	Ports []string `protobuf:"bytes,2,rep,name=ports,proto3" json:"ports,omitempty"`
+	// Optional. A list of negative match of ports.
+	NotPorts []string `protobuf:"bytes,6,rep,name=not_ports,json=notPorts,proto3" json:"not_ports,omitempty"`
 	// Optional. A list of methods, which matches to the "request.method" attribute.
 	// For gRPC service, this should be the fully-qualified name in the form of
 	// "/package.service/method"
 	//
 	// If not set, any method is allowed. Must be used only with HTTP or gRPC.
 	Methods []string `protobuf:"bytes,3,rep,name=methods,proto3" json:"methods,omitempty"`
+	// Optional. A list of negative match of methods.
+	NotMethods []string `protobuf:"bytes,7,rep,name=not_methods,json=notMethods,proto3" json:"not_methods,omitempty"`
 	// Optional. A list of paths, which matches to the "request.url_path" attribute.
 	//
 	// If not set, any path is allowed. Must be used only with HTTP.
-	Paths                []string `protobuf:"bytes,4,rep,name=paths,proto3" json:"paths,omitempty"`
+	Paths []string `protobuf:"bytes,4,rep,name=paths,proto3" json:"paths,omitempty"`
+	// Optional. A list of negative match of paths.
+	NotPaths             []string `protobuf:"bytes,8,rep,name=not_paths,json=notPaths,proto3" json:"not_paths,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -640,9 +704,23 @@ func (m *Operation) GetHosts() []string {
 	return nil
 }
 
+func (m *Operation) GetNotHosts() []string {
+	if m != nil {
+		return m.NotHosts
+	}
+	return nil
+}
+
 func (m *Operation) GetPorts() []string {
 	if m != nil {
 		return m.Ports
+	}
+	return nil
+}
+
+func (m *Operation) GetNotPorts() []string {
+	if m != nil {
+		return m.NotPorts
 	}
 	return nil
 }
@@ -654,9 +732,23 @@ func (m *Operation) GetMethods() []string {
 	return nil
 }
 
+func (m *Operation) GetNotMethods() []string {
+	if m != nil {
+		return m.NotMethods
+	}
+	return nil
+}
+
 func (m *Operation) GetPaths() []string {
 	if m != nil {
 		return m.Paths
+	}
+	return nil
+}
+
+func (m *Operation) GetNotPaths() []string {
+	if m != nil {
+		return m.NotPaths
 	}
 	return nil
 }
@@ -666,8 +758,10 @@ type Condition struct {
 	// The name of an Istio attribute.
 	// See the [full list of supported attributes](https://istio.io/docs/reference/config/security/conditions/).
 	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	// The allowed values for the attribute.
-	Values               []string `protobuf:"bytes,2,rep,name=values,proto3" json:"values,omitempty"`
+	// Optional. The allowed values for the attribute.
+	Values []string `protobuf:"bytes,2,rep,name=values,proto3" json:"values,omitempty"`
+	// Optional. A list of negative match of values.
+	NotValues            []string `protobuf:"bytes,3,rep,name=not_values,json=notValues,proto3" json:"not_values,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -720,6 +814,13 @@ func (m *Condition) GetValues() []string {
 	return nil
 }
 
+func (m *Condition) GetNotValues() []string {
+	if m != nil {
+		return m.NotValues
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterEnum("istio.security.v1beta1.AuthorizationPolicy_Action", AuthorizationPolicy_Action_name, AuthorizationPolicy_Action_value)
 	proto.RegisterType((*AuthorizationPolicy)(nil), "istio.security.v1beta1.AuthorizationPolicy")
@@ -736,41 +837,48 @@ func init() {
 }
 
 var fileDescriptor_b72f4bc212a83269 = []byte{
-	// 544 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x93, 0xcf, 0x6e, 0xd3, 0x40,
-	0x10, 0xc6, 0xb1, 0x93, 0x9a, 0x7a, 0x2a, 0xa1, 0xb2, 0xfc, 0x91, 0x95, 0x52, 0x37, 0x58, 0x3d,
-	0x44, 0x42, 0x38, 0x6a, 0x10, 0x1c, 0x29, 0x09, 0x94, 0x03, 0xaa, 0x68, 0xe5, 0x56, 0xaa, 0xe0,
-	0x12, 0x6d, 0x9c, 0x6d, 0xbc, 0x8a, 0x93, 0x31, 0xbb, 0xeb, 0xa0, 0xf0, 0x1c, 0x3c, 0x06, 0x0f,
-	0xc2, 0x91, 0x47, 0xa8, 0xf2, 0x10, 0x9c, 0x91, 0xd7, 0xeb, 0x34, 0x42, 0x4d, 0x8e, 0x33, 0xf3,
-	0x9b, 0xf9, 0xbe, 0x1d, 0x7b, 0xe0, 0x50, 0xb2, 0x38, 0x17, 0x5c, 0xcd, 0xdb, 0xb3, 0xa3, 0x01,
-	0x53, 0xf4, 0xa8, 0x4d, 0x73, 0x95, 0xa0, 0xe0, 0x3f, 0xa8, 0xe2, 0x38, 0x0d, 0x33, 0x81, 0x0a,
-	0xc9, 0x53, 0x2e, 0x15, 0xc7, 0xb0, 0x62, 0x43, 0xc3, 0x36, 0x0e, 0x46, 0x88, 0xa3, 0x94, 0xb5,
-	0x69, 0xc6, 0xdb, 0xd7, 0x9c, 0xa5, 0xc3, 0xfe, 0x80, 0x25, 0x74, 0xc6, 0x51, 0x94, 0x8d, 0x8d,
-	0x3d, 0x35, 0xcf, 0xd8, 0x72, 0xb4, 0x64, 0x29, 0x8b, 0x55, 0x55, 0x0c, 0xfe, 0x5a, 0xf0, 0xa8,
-	0xbb, 0xaa, 0x76, 0x8e, 0x29, 0x8f, 0xe7, 0xe4, 0x1d, 0x6c, 0x57, 0xa4, 0x67, 0x35, 0xad, 0xd6,
-	0x4e, 0xe7, 0x30, 0x2c, 0x0d, 0x14, 0xd3, 0x2a, 0xf1, 0xf0, 0x0a, 0xc5, 0x38, 0x45, 0x3a, 0xbc,
-	0x30, 0x6c, 0xb4, 0xec, 0x22, 0x1d, 0xd8, 0x12, 0x79, 0xca, 0xa4, 0x67, 0x37, 0x6b, 0xad, 0x9d,
-	0xce, 0xb3, 0xf0, 0x6e, 0xff, 0x61, 0x94, 0xa7, 0x2c, 0x2a, 0x51, 0xf2, 0x09, 0x1c, 0x1a, 0x17,
-	0x2e, 0xbc, 0x5a, 0xd3, 0x6a, 0x3d, 0xe8, 0x74, 0xd6, 0x35, 0xdd, 0x61, 0x39, 0xec, 0xea, 0xce,
-	0xc8, 0x4c, 0x08, 0xf6, 0xc1, 0x29, 0x33, 0xc4, 0x85, 0xad, 0xee, 0xe9, 0xe9, 0xd9, 0xd5, 0xee,
-	0x3d, 0xb2, 0x0d, 0xf5, 0x0f, 0x27, 0x9f, 0xbf, 0xec, 0x5a, 0xc1, 0x2f, 0x1b, 0xea, 0x85, 0x34,
-	0x79, 0x0d, 0xf5, 0x6b, 0x81, 0x13, 0xcf, 0xd2, 0x36, 0x9f, 0x6f, 0xb2, 0x19, 0x7e, 0x14, 0x38,
-	0x89, 0x34, 0x4e, 0xda, 0x60, 0x2b, 0x34, 0x6f, 0x3b, 0xd8, 0xd8, 0x74, 0x89, 0x91, 0xad, 0xb0,
-	0xd0, 0xf9, 0x9e, 0xb0, 0xe2, 0x65, 0x1b, 0x75, 0xde, 0xe3, 0x74, 0xc8, 0xf5, 0x43, 0x34, 0xde,
-	0x78, 0x0b, 0xf5, 0x42, 0x95, 0xbc, 0x01, 0x47, 0x62, 0x2e, 0x62, 0x66, 0x3e, 0x87, 0xbf, 0x6e,
-	0xc0, 0x85, 0xa6, 0x22, 0x43, 0x37, 0x4e, 0xc0, 0xbe, 0x44, 0x72, 0x0c, 0x2e, 0x66, 0x4c, 0xe8,
-	0x75, 0x99, 0x01, 0x6b, 0x1d, 0x9c, 0x55, 0x60, 0x74, 0xdb, 0x13, 0xfc, 0xb4, 0xc0, 0x29, 0x27,
-	0x13, 0x1f, 0x20, 0x13, 0x7c, 0x1a, 0xf3, 0x8c, 0xa6, 0x52, 0xaf, 0xcd, 0x8d, 0x56, 0x32, 0xe4,
-	0x25, 0x10, 0xc1, 0xbe, 0xe5, 0x4c, 0xaa, 0xfe, 0x0a, 0x67, 0x6b, 0xee, 0xa1, 0xa9, 0x9c, 0xdf,
-	0xe2, 0x3e, 0xc0, 0x94, 0x4e, 0x98, 0xcc, 0x68, 0xcc, 0xa4, 0xde, 0x8e, 0x1b, 0xad, 0x64, 0xc8,
-	0x1e, 0xb8, 0x3c, 0xeb, 0x0f, 0x52, 0x8c, 0xc7, 0xd2, 0xab, 0xeb, 0xf2, 0x36, 0xcf, 0x7a, 0x3a,
-	0x0e, 0x46, 0xe0, 0x2e, 0xed, 0x92, 0xc7, 0xb0, 0x95, 0xa0, 0x54, 0x95, 0xa7, 0x32, 0x28, 0xb2,
-	0x19, 0x0a, 0x55, 0x39, 0x28, 0x03, 0xe2, 0xc1, 0xfd, 0x09, 0x53, 0x09, 0x0e, 0x2b, 0xc9, 0x2a,
-	0xd4, 0x3c, 0x55, 0x49, 0xa5, 0x55, 0x06, 0xc1, 0x31, 0xb8, 0xcb, 0x2f, 0x43, 0x9e, 0x40, 0x6d,
-	0xcc, 0xe6, 0x7a, 0x8f, 0x6e, 0xaf, 0x76, 0xd3, 0xb5, 0xa3, 0x22, 0x26, 0x7b, 0xe0, 0xcc, 0x68,
-	0x9a, 0x9b, 0x5f, 0xde, 0x54, 0x4c, 0xaa, 0xf7, 0xe2, 0xf7, 0xc2, 0xb7, 0xfe, 0x2c, 0x7c, 0xeb,
-	0x66, 0xe1, 0x5b, 0x5f, 0xf7, 0xcb, 0xdd, 0x73, 0xd4, 0x67, 0xfb, 0xff, 0xfd, 0x0f, 0x1c, 0x7d,
-	0x9c, 0xaf, 0xfe, 0x05, 0x00, 0x00, 0xff, 0xff, 0x88, 0x70, 0xbb, 0x5e, 0x1a, 0x04, 0x00, 0x00,
+	// 654 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x94, 0xdd, 0x6e, 0xd3, 0x4e,
+	0x10, 0xc5, 0xff, 0x76, 0x12, 0x37, 0x9e, 0xea, 0x5f, 0x95, 0xa5, 0x54, 0x51, 0x4a, 0xd3, 0x62,
+	0x15, 0xa9, 0x12, 0xc2, 0x51, 0xc3, 0xc7, 0x25, 0x90, 0x42, 0x11, 0xa0, 0xd2, 0x56, 0x6e, 0x45,
+	0x55, 0x6e, 0x22, 0xc7, 0xd9, 0x36, 0xab, 0x3a, 0x1e, 0x63, 0xaf, 0x8b, 0xc2, 0x33, 0xf1, 0x08,
+	0x3c, 0x00, 0x97, 0xbc, 0x01, 0x55, 0x1f, 0x82, 0x6b, 0xb4, 0x5f, 0x4e, 0x80, 0x36, 0x97, 0xb3,
+	0xf3, 0x3b, 0x73, 0xce, 0x8e, 0xad, 0x85, 0x8d, 0x9c, 0x46, 0x45, 0xc6, 0xf8, 0xb8, 0x7d, 0xb1,
+	0xd5, 0xa7, 0x3c, 0xdc, 0x6a, 0x87, 0x05, 0x1f, 0x62, 0xc6, 0xbe, 0x84, 0x9c, 0x61, 0xe2, 0xa7,
+	0x19, 0x72, 0x24, 0xcb, 0x2c, 0xe7, 0x0c, 0x7d, 0xc3, 0xfa, 0x9a, 0x6d, 0xae, 0x9d, 0x21, 0x9e,
+	0xc5, 0xb4, 0x1d, 0xa6, 0xac, 0x7d, 0xca, 0x68, 0x3c, 0xe8, 0xf5, 0xe9, 0x30, 0xbc, 0x60, 0x98,
+	0x29, 0x61, 0x73, 0x85, 0x8f, 0x53, 0x5a, 0x8e, 0xce, 0x69, 0x4c, 0x23, 0x6e, 0x9a, 0xde, 0x2f,
+	0x0b, 0x6e, 0x77, 0xa7, 0xdd, 0x0e, 0x30, 0x66, 0xd1, 0x98, 0xbc, 0x80, 0xba, 0x21, 0x1b, 0xd6,
+	0xba, 0xb5, 0x39, 0xdf, 0xd9, 0xf0, 0x55, 0x00, 0x31, 0xcd, 0x98, 0xfb, 0xc7, 0x98, 0x9d, 0xc7,
+	0x18, 0x0e, 0x0e, 0x35, 0x1b, 0x94, 0x2a, 0xd2, 0x81, 0x5a, 0x56, 0xc4, 0x34, 0x6f, 0xd8, 0xeb,
+	0x95, 0xcd, 0xf9, 0xce, 0x5d, 0xff, 0xfa, 0xfc, 0x7e, 0x50, 0xc4, 0x34, 0x50, 0x28, 0x79, 0x07,
+	0x4e, 0x18, 0x89, 0x14, 0x8d, 0xca, 0xba, 0xb5, 0xb9, 0xd0, 0xe9, 0xdc, 0x24, 0xba, 0x26, 0xb2,
+	0xdf, 0x95, 0xca, 0x40, 0x4f, 0xf0, 0x56, 0xc1, 0x51, 0x27, 0xc4, 0x85, 0x5a, 0x77, 0x77, 0x77,
+	0xff, 0x78, 0xf1, 0x3f, 0x52, 0x87, 0xea, 0xab, 0x9d, 0xbd, 0x93, 0x45, 0xcb, 0xfb, 0x6a, 0x43,
+	0x55, 0x58, 0x93, 0x27, 0x50, 0x3d, 0xcd, 0x70, 0xd4, 0xb0, 0x64, 0xcc, 0x7b, 0xb3, 0x62, 0xfa,
+	0xaf, 0x33, 0x1c, 0x05, 0x12, 0x27, 0x6d, 0xb0, 0x39, 0xea, 0xbb, 0xad, 0xcd, 0x14, 0x1d, 0x61,
+	0x60, 0x73, 0x14, 0x3e, 0x9f, 0x87, 0x54, 0xdc, 0x6c, 0xa6, 0xcf, 0x4b, 0x4c, 0x06, 0x4c, 0x5e,
+	0x44, 0xe2, 0xcd, 0x67, 0x50, 0x15, 0xae, 0xe4, 0x29, 0x38, 0x39, 0x16, 0x59, 0x44, 0xf5, 0xe7,
+	0x68, 0xdd, 0x34, 0xe0, 0x50, 0x52, 0x81, 0xa6, 0x9b, 0x3b, 0x60, 0x1f, 0x21, 0x79, 0x0e, 0x2e,
+	0xa6, 0x34, 0x93, 0xeb, 0xd2, 0x03, 0x6e, 0x4c, 0xb0, 0x6f, 0xc0, 0x60, 0xa2, 0xf1, 0xbe, 0xd9,
+	0xe0, 0xa8, 0xc9, 0xa4, 0x05, 0x90, 0x66, 0x2c, 0x89, 0x58, 0x1a, 0xc6, 0xb9, 0x5c, 0x9b, 0x1b,
+	0x4c, 0x9d, 0x90, 0xfb, 0xb0, 0x90, 0x20, 0xef, 0x4d, 0x31, 0x35, 0xc9, 0xfc, 0x9f, 0x20, 0x3f,
+	0x98, 0x60, 0x0f, 0x81, 0x64, 0xf4, 0x53, 0x41, 0xf3, 0x3f, 0x50, 0x5b, 0xa2, 0xb7, 0x74, 0x67,
+	0x0a, 0x7f, 0x0c, 0xcb, 0x62, 0xea, 0x35, 0x12, 0x47, 0x4a, 0x96, 0x12, 0xe4, 0xc1, 0x3f, 0xaa,
+	0x16, 0x40, 0x12, 0x8e, 0x68, 0x9e, 0x86, 0x11, 0xcd, 0xe5, 0xea, 0xdd, 0x60, 0xea, 0xc4, 0x64,
+	0x9d, 0x62, 0xe6, 0xca, 0xac, 0x7b, 0x13, 0x6c, 0x05, 0x5c, 0x96, 0xf6, 0xfa, 0x31, 0x46, 0xe7,
+	0x79, 0xa3, 0x2a, 0x89, 0x3a, 0x4b, 0xb7, 0x65, 0x4d, 0x3c, 0x10, 0x74, 0x6f, 0x02, 0xd4, 0x25,
+	0x30, 0x9f, 0x20, 0x7f, 0xab, 0x19, 0xef, 0xa7, 0x05, 0x6e, 0xb9, 0x57, 0xb2, 0x04, 0xb5, 0x21,
+	0xe6, 0xdc, 0x2c, 0x4f, 0x15, 0xc2, 0x44, 0xcc, 0x51, 0x1d, 0xb5, 0xb2, 0x7a, 0x82, 0xfc, 0x8d,
+	0x6c, 0x2e, 0x41, 0x2d, 0xc5, 0x8c, 0x9b, 0x05, 0xa9, 0xc2, 0x48, 0x54, 0xc7, 0x29, 0x25, 0x07,
+	0xb2, 0xd9, 0x80, 0xb9, 0x11, 0xe5, 0x43, 0x1c, 0x98, 0x8b, 0x9b, 0x92, 0xac, 0x81, 0x08, 0xd7,
+	0x33, 0xdd, 0x39, 0xbd, 0x16, 0xe4, 0xef, 0x35, 0x20, 0xdc, 0x42, 0x3e, 0x34, 0x77, 0x55, 0x45,
+	0xe9, 0x26, 0x3b, 0xf5, 0x89, 0x9b, 0xa8, 0xbd, 0x13, 0x70, 0xcb, 0x5f, 0x97, 0xdc, 0x81, 0xca,
+	0x39, 0x1d, 0xcb, 0x1f, 0xcd, 0xdd, 0xae, 0x5c, 0x76, 0xed, 0x40, 0xd4, 0x64, 0x19, 0x9c, 0x8b,
+	0x30, 0x2e, 0xa8, 0xb9, 0x85, 0xae, 0xc8, 0x2a, 0x08, 0xf3, 0x9e, 0xee, 0xa9, 0xb0, 0xc2, 0xea,
+	0x83, 0x3c, 0xd8, 0x7e, 0xf0, 0xfd, 0xaa, 0x65, 0xfd, 0xb8, 0x6a, 0x59, 0x97, 0x57, 0x2d, 0xeb,
+	0xe3, 0xaa, 0xfa, 0x6d, 0x19, 0xca, 0x17, 0xef, 0xef, 0xa7, 0xb3, 0xef, 0xc8, 0x77, 0xed, 0xd1,
+	0xef, 0x00, 0x00, 0x00, 0xff, 0xff, 0x59, 0x1f, 0xf3, 0xa8, 0x55, 0x05, 0x00, 0x00,
 }
 
 func (m *AuthorizationPolicy) Marshal() (dAtA []byte, err error) {
@@ -1002,6 +1110,42 @@ func (m *Source) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
+	if len(m.NotIpBlocks) > 0 {
+		for iNdEx := len(m.NotIpBlocks) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.NotIpBlocks[iNdEx])
+			copy(dAtA[i:], m.NotIpBlocks[iNdEx])
+			i = encodeVarintAuthorization(dAtA, i, uint64(len(m.NotIpBlocks[iNdEx])))
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if len(m.NotNamespaces) > 0 {
+		for iNdEx := len(m.NotNamespaces) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.NotNamespaces[iNdEx])
+			copy(dAtA[i:], m.NotNamespaces[iNdEx])
+			i = encodeVarintAuthorization(dAtA, i, uint64(len(m.NotNamespaces[iNdEx])))
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.NotRequestPrincipals) > 0 {
+		for iNdEx := len(m.NotRequestPrincipals) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.NotRequestPrincipals[iNdEx])
+			copy(dAtA[i:], m.NotRequestPrincipals[iNdEx])
+			i = encodeVarintAuthorization(dAtA, i, uint64(len(m.NotRequestPrincipals[iNdEx])))
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.NotPrincipals) > 0 {
+		for iNdEx := len(m.NotPrincipals) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.NotPrincipals[iNdEx])
+			copy(dAtA[i:], m.NotPrincipals[iNdEx])
+			i = encodeVarintAuthorization(dAtA, i, uint64(len(m.NotPrincipals[iNdEx])))
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
 	if len(m.IpBlocks) > 0 {
 		for iNdEx := len(m.IpBlocks) - 1; iNdEx >= 0; iNdEx-- {
 			i -= len(m.IpBlocks[iNdEx])
@@ -1065,6 +1209,42 @@ func (m *Operation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
+	if len(m.NotPaths) > 0 {
+		for iNdEx := len(m.NotPaths) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.NotPaths[iNdEx])
+			copy(dAtA[i:], m.NotPaths[iNdEx])
+			i = encodeVarintAuthorization(dAtA, i, uint64(len(m.NotPaths[iNdEx])))
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if len(m.NotMethods) > 0 {
+		for iNdEx := len(m.NotMethods) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.NotMethods[iNdEx])
+			copy(dAtA[i:], m.NotMethods[iNdEx])
+			i = encodeVarintAuthorization(dAtA, i, uint64(len(m.NotMethods[iNdEx])))
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.NotPorts) > 0 {
+		for iNdEx := len(m.NotPorts) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.NotPorts[iNdEx])
+			copy(dAtA[i:], m.NotPorts[iNdEx])
+			i = encodeVarintAuthorization(dAtA, i, uint64(len(m.NotPorts[iNdEx])))
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.NotHosts) > 0 {
+		for iNdEx := len(m.NotHosts) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.NotHosts[iNdEx])
+			copy(dAtA[i:], m.NotHosts[iNdEx])
+			i = encodeVarintAuthorization(dAtA, i, uint64(len(m.NotHosts[iNdEx])))
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
 	if len(m.Paths) > 0 {
 		for iNdEx := len(m.Paths) - 1; iNdEx >= 0; iNdEx-- {
 			i -= len(m.Paths[iNdEx])
@@ -1127,6 +1307,15 @@ func (m *Condition) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.XXX_unrecognized != nil {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.NotValues) > 0 {
+		for iNdEx := len(m.NotValues) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.NotValues[iNdEx])
+			copy(dAtA[i:], m.NotValues[iNdEx])
+			i = encodeVarintAuthorization(dAtA, i, uint64(len(m.NotValues[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
+		}
 	}
 	if len(m.Values) > 0 {
 		for iNdEx := len(m.Values) - 1; iNdEx >= 0; iNdEx-- {
@@ -1275,6 +1464,30 @@ func (m *Source) Size() (n int) {
 			n += 1 + l + sovAuthorization(uint64(l))
 		}
 	}
+	if len(m.NotPrincipals) > 0 {
+		for _, s := range m.NotPrincipals {
+			l = len(s)
+			n += 1 + l + sovAuthorization(uint64(l))
+		}
+	}
+	if len(m.NotRequestPrincipals) > 0 {
+		for _, s := range m.NotRequestPrincipals {
+			l = len(s)
+			n += 1 + l + sovAuthorization(uint64(l))
+		}
+	}
+	if len(m.NotNamespaces) > 0 {
+		for _, s := range m.NotNamespaces {
+			l = len(s)
+			n += 1 + l + sovAuthorization(uint64(l))
+		}
+	}
+	if len(m.NotIpBlocks) > 0 {
+		for _, s := range m.NotIpBlocks {
+			l = len(s)
+			n += 1 + l + sovAuthorization(uint64(l))
+		}
+	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
 	}
@@ -1311,6 +1524,30 @@ func (m *Operation) Size() (n int) {
 			n += 1 + l + sovAuthorization(uint64(l))
 		}
 	}
+	if len(m.NotHosts) > 0 {
+		for _, s := range m.NotHosts {
+			l = len(s)
+			n += 1 + l + sovAuthorization(uint64(l))
+		}
+	}
+	if len(m.NotPorts) > 0 {
+		for _, s := range m.NotPorts {
+			l = len(s)
+			n += 1 + l + sovAuthorization(uint64(l))
+		}
+	}
+	if len(m.NotMethods) > 0 {
+		for _, s := range m.NotMethods {
+			l = len(s)
+			n += 1 + l + sovAuthorization(uint64(l))
+		}
+	}
+	if len(m.NotPaths) > 0 {
+		for _, s := range m.NotPaths {
+			l = len(s)
+			n += 1 + l + sovAuthorization(uint64(l))
+		}
+	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
 	}
@@ -1329,6 +1566,12 @@ func (m *Condition) Size() (n int) {
 	}
 	if len(m.Values) > 0 {
 		for _, s := range m.Values {
+			l = len(s)
+			n += 1 + l + sovAuthorization(uint64(l))
+		}
+	}
+	if len(m.NotValues) > 0 {
+		for _, s := range m.NotValues {
 			l = len(s)
 			n += 1 + l + sovAuthorization(uint64(l))
 		}
@@ -1981,6 +2224,134 @@ func (m *Source) Unmarshal(dAtA []byte) error {
 			}
 			m.IpBlocks = append(m.IpBlocks, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NotPrincipals", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuthorization
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NotPrincipals = append(m.NotPrincipals, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NotRequestPrincipals", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuthorization
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NotRequestPrincipals = append(m.NotRequestPrincipals, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NotNamespaces", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuthorization
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NotNamespaces = append(m.NotNamespaces, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NotIpBlocks", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuthorization
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NotIpBlocks = append(m.NotIpBlocks, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipAuthorization(dAtA[iNdEx:])
@@ -2163,6 +2534,134 @@ func (m *Operation) Unmarshal(dAtA []byte) error {
 			}
 			m.Paths = append(m.Paths, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NotHosts", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuthorization
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NotHosts = append(m.NotHosts, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NotPorts", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuthorization
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NotPorts = append(m.NotPorts, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NotMethods", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuthorization
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NotMethods = append(m.NotMethods, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NotPaths", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuthorization
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NotPaths = append(m.NotPaths, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipAuthorization(dAtA[iNdEx:])
@@ -2280,6 +2779,38 @@ func (m *Condition) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Values = append(m.Values, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NotValues", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuthorization
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuthorization
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NotValues = append(m.NotValues, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
