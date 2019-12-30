@@ -1,0 +1,189 @@
+// Copyright 2019 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+// $schema: istio.extension.v1alpha1.ExtensionManifest
+// $title: Extension Manifest
+
+// `ExtensionManifest` specifies additional extensions to be
+// applied in a service mesh. Extensions are injected into the
+// data plane processing based on a set of criteria, such as
+// the workload labels, service ports, protocols, etc.
+//
+// ```yaml
+// apiVersion: extension.istio.io/v1alpha1
+// kind: ExtensionManifest
+// metadata:
+//   name: zip
+//   namespace: istio-config
+// spec:
+//   filters:
+//   - match:
+//       proxyVersion: '1\.4.*'
+//       context: SIDECAR_OUTBOUND
+//       portNumber: 8080
+//     type: HTTP_FILTER
+//     name: envoy.filters.http.gzip
+//     config:
+//       typeUrl: config.filter.http.gzip.v2.Gzip
+//       value:
+//         compression_level: BEST
+//     function: POST_PROCESSING
+//```
+//
+package istio.extension.v1alpha1;
+
+option go_package = "istio.io/api/extension/v1alpha1";
+
+import "google/protobuf/struct.proto";
+
+// Opaque configuration for an extension (wire-compatible with UDPA).
+message TypedStruct {
+  // A URL that uniquely identifies the type of the serialize protocol buffer
+  // message. This has same semantics and format described in
+  // google.protobuf.Any:
+  // https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/any.proto
+  string type_url = 1;
+
+  // A JSON representation of the above specified type.
+  google.protobuf.Struct value = 2;
+}
+
+// A condition limiting the extent of the extension application.
+message MatchContext {
+  // A regular expression in golang regex format (RE2) that can be
+  // used to select proxies using a specific version of istio
+  // proxy. The Istio version for a given proxy is obtained from the
+  // node metadata field ISTIO_VERSION supplied by the proxy when
+  // connecting to Pilot. This value is embedded as an environment
+  // variable (ISTIO_META_ISTIO_VERSION) in the Istio proxy docker
+  // image. Custom proxy implementations should provide this metadata
+  // variable to take advantage of the Istio version check option.
+  string proxy_version = 1;
+
+  // Match on the node metadata supplied by a proxy when connecting
+  // to Istio Pilot. Note that while Envoy's node metadata is of
+  // type Struct, only string key-value pairs are processed by
+  // Pilot. All keys specified in the metadata must match with exact
+  // values. The match will fail if any of the specified keys are
+  // absent or the values fail to match.
+  map<string, string> metadata = 2;
+
+  // Configuration type.
+  enum ProxyContext {
+    UNSPECIFIED = 0;
+    SIDECAR_INBOUND = 1;
+    SIDECAR_OUTBOUND = 2;
+    GATEWAY = 3;
+  };
+
+  // Match on the proxy type (applicable for network and HTTP filters).
+  ProxyContext context = 3;
+
+  // The service port of the upstream or downstream configuration resource. If
+  // omitted, applies to clusters and listeners for any port.
+  uint32 port_number = 4;
+
+  // The Istio gateway config's namespace/name for which this route
+  // configuration was generated. Applies only if the context is GATEWAY. Should
+  // be in the namespace/name format. Use this field in conjunction with the
+  // portNumber to accurately select the Envoy route configuration for a
+  // specific HTTPS server within a gateway config object.
+  string gateway = 5;
+
+  // The fully qualified service name for this cluster or listener. For
+  // services defined through service entries, the service name is same as the
+  // hosts defined in the service entry.
+  string service = 6;
+
+  // The subset associated with the service. If omitted, applies to
+  // clusters for any subset of a service.
+  string subset = 7;
+
+  // Criteria used to select the specific set of pods/VMs on which
+  // this patch configuration should be applied. If omitted, the set
+  // of patches in this configuration will be applied to all workload
+  // instances in the same namespace.  If omitted, the EnvoyFilter
+  // patches will be applied to all workloads in the same
+  // namespace. If the EnvoyFilter is present in the config root
+  // namespace, it will be applied to all applicable workloads in any
+  // namespace.
+  map<string, string> workload_labels = 8;
+}
+
+// ExtensionManifest specifies a set of custom extensions.
+// Manifests can be applied in any namespace, in which case, a per-namespace
+// manifest overrides the root manifest of the same name. Beyond that, the
+// order of application of the manifests is unspecified.
+// Additional control over the delegation of the extension injection should
+// be enforced with either resource-level RBAC or an admission controller.
+message ExtensionManifest {
+  // Extension filter type.
+  enum FilterType {
+    UNSPECIFIED_FILTER_TYPE = 0;
+    HTTP_FILTER = 1;
+    NETWORK_FILTER = 2;
+    UPSTREAM_NETWORK_FILTER = 3;
+    LISTENER_FILTER = 4;
+  };
+
+  // Extension function serving as a hint to determine the order of the
+  // application of an extension in a chain of extensions. Istio recognizes the
+  // following categories of extensions and applies them in the order specified
+  // here.
+  enum Function {
+    UNSPECIFIED_FUNCTION = 0;
+    TELEMETRY = 1;
+    PRE_PROCESSING = 2;
+    AUTHORIZATION = 3;
+    POST_PROCESSING = 4;
+  };
+
+  // Allows adding, replacing or removing of the extension by name. Note that
+  // for replacement, the function field is optional, and for removal, the
+  // config field is optional.
+  enum Operation {
+    ADD = 0;
+    REPLACE = 1;
+    REMOVE = 2;
+  };
+
+  // Extension description for a data plane filter.
+  message FilterExtension {
+    // Conditions to limit the scope of the extension.
+    // Any of the conditions must be satisfied for the filter to be applied.
+    repeated MatchContext match = 1;
+
+    // Specifies the type of the filter.
+    FilterType type = 2;
+
+    // The name of the filter (corresponding to the envoy extension name).
+    string name = 3;
+
+    // Opaque configuration for the filter.
+    TypedStruct config = 4;
+
+    // Purpose of the extension.
+    Function function = 5;
+
+    // Modification operation (function is optional in case of replacement or
+    // removal).
+    Operation operation = 6;
+  };
+
+  // A list of extensions to be applied. If the order of extensions is
+  // ambiguous, then this list serves as the canonical order of application.
+  repeated FilterExtension filters = 1;
+}
