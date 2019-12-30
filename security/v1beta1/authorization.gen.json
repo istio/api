@@ -14,16 +14,19 @@
             "$ref": "#/components/schemas/istio.type.v1beta1.WorkloadSelector"
           },
           "rules": {
-            "description": "Optional. A list of rules to specify the allowed access to the workload.",
+            "description": "Optional. A list of rules to match the request. A match occurs when at least one rule matches the request.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.security.v1beta1.Rule"
             }
+          },
+          "action": {
+            "$ref": "#/components/schemas/istio.security.v1beta1.AuthorizationPolicy.Action"
           }
         }
       },
       "istio.security.v1beta1.Rule": {
-        "description": "Rule allows access from a list of sources to perform a list of operations when the condition is matched.",
+        "description": "Rule matches requests from a list of sources that perform a list of operations when the condition is matched. A match occurs when at least one source, operation and condition matches the request. An empty rule is always matched.",
         "type": "object",
         "properties": {
           "from": {
@@ -48,6 +51,14 @@
             }
           }
         }
+      },
+      "istio.security.v1beta1.AuthorizationPolicy.Action": {
+        "description": "Action specifies the operation to take.",
+        "type": "string",
+        "enum": [
+          "ALLOW",
+          "DENY"
+        ]
       },
       "istio.security.v1beta1.Rule.From": {
         "description": "From includes a list or sources.",

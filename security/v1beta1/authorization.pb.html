@@ -7,22 +7,40 @@ generator: protoc-gen-docs
 schema: istio.security.v1beta1.AuthorizationPolicy
 weight: 20
 aliases: [/docs/reference/config/authorization/authorization-policy]
-number_of_entries: 7
+number_of_entries: 8
 ---
 <p>Istio Authorization Policy enables access control on workloads in the mesh.</p>
 
-<p>For example, the following authorization policy applies to workloads matched with
-label selector &ldquo;app: httpbin, version: v1&rdquo;.</p>
+<p>The authorization policy supports both safe-list style and block-list style access
+control.</p>
 
-<p>It allows requests from:
-- service account &ldquo;cluster.local/ns/default/sa/sleep&rdquo; or
-- namespace &ldquo;test&rdquo;
-to access the workload with:
-- &ldquo;GET&rdquo; method at paths of prefix &ldquo;/info&rdquo; or,
-- &ldquo;POST&rdquo; method at path &ldquo;/data&rdquo;.
-when the request has a valid JWT token issued by &ldquo;https://accounts.google.com&rdquo;.</p>
+<ul>
+<li>The safe-list style means a request is allowed only if it matches any of the
+ALLOW policies.</li>
+<li>The block-list style means a request is allowed if it doesn&rsquo;t match any of
+the DENY policies.</li>
+</ul>
 
-<p>Any other requests will be rejected.</p>
+<p>For example, the following authorization policy sets the <code>action</code> to ALLOW to use
+the safe-list access control.</p>
+
+<p>It allows requests from:</p>
+
+<ul>
+<li>service account &ldquo;cluster.local/ns/default/sa/sleep&rdquo; or</li>
+<li>namespace &ldquo;test&rdquo;</li>
+</ul>
+
+<p>to access the workload with:</p>
+
+<ul>
+<li>&ldquo;GET&rdquo; method at paths of prefix &ldquo;/info&rdquo; or,</li>
+<li>&ldquo;POST&rdquo; method at path &ldquo;/data&rdquo;.</li>
+</ul>
+
+<p>when the request has a valid JWT token issued by &ldquo;https://accounts.google.com&rdquo;.</p>
+
+<p>Any other requests will be denied.</p>
 
 <pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -30,10 +48,7 @@ metadata:
  name: httpbin
  namespace: foo
 spec:
- selector:
-   matchLabels:
-     app: httpbin
-     version: v1
+ action: ALLOW
  rules:
  - from:
    - source:
@@ -52,19 +67,47 @@ spec:
      values: [&quot;https://accounts.google.com&quot;]
 </code></pre>
 
-<p>Access control is enabled on a workload if there is any authorization policies selecting
-the workload. When access control is enabled, the default behavior is deny (deny-by-default)
-which means requests to the workload will be rejected if the request is not allowed by any of
-the authorization policies selecting the workload.</p>
+<p>The following is an example that sets <code>action</code> to &ldquo;DENY&rdquo; to use the block-list
+access control. It denies requests from namespace &ldquo;dev&rdquo; to access the workload with
+&ldquo;POST&rdquo; method.</p>
 
-<p>Currently AuthorizationPolicy only supports &ldquo;ALLOW&rdquo; action. This means that
-if multiple authorization policies apply to the same workload, the effect is additive.</p>
+<p>Any other requests will be allowed.</p>
+
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+ name: httpbin
+ namespace: foo
+spec:
+ action: DENY
+ rules:
+ - from:
+   - source:
+       namespaces: [&quot;dev&quot;]
+   to:
+   - operation:
+       methods: [&quot;POST&quot;]
+</code></pre>
+
+<p>Safe-list and Block-list access control could be used on the same workload at the same
+time. When both DENY policies and ALLOW policies are exist for a workload, the DENY policies
+are evaluated first. The evaluation is determined by the following rules:</p>
+
+<ol>
+<li>Are there any DENY policies selecting the workload? If Yes goto step 2, otherwise goto step 3.</li>
+<li>Are any of these DENY policies matched the request? If Yes then deny (block-list style), otherwise goto step 3.</li>
+<li>Are there any ALLOW policies selecting the workload? If Yes goto step 4, otherwise allow.</li>
+<li>Are any of these ALLOW policies matched the request? If Yes then allow, otherwise deny (safe-list style).</li>
+</ol>
 
 <p>Authorization Policy scope (target) is determined by &ldquo;metadata/namespace&rdquo; and
-an optional &ldquo;selector&rdquo;.
-- &ldquo;metadata/namespace&rdquo; tells which namespace the policy applies. If set to root
-namespace, the policy applies to all namespaces in a mesh.
-- workload &ldquo;selector&rdquo; can be used to further restrict where a policy applies.</p>
+an optional &ldquo;selector&rdquo;.</p>
+
+<ul>
+<li>&ldquo;metadata/namespace&rdquo; tells which namespace the policy applies. If set to root
+namespace, the policy applies to all namespaces in a mesh.</li>
+<li>workload &ldquo;selector&rdquo; can be used to further restrict where a policy applies.</li>
+</ul>
 
 <p>For example,</p>
 
@@ -164,13 +207,55 @@ No
 <td><code>rules</code></td>
 <td><code><a href="#Rule">Rule[]</a></code></td>
 <td>
-<p>Optional. A list of rules to specify the allowed access to the workload.</p>
+<p>Optional. A list of rules to match the request. A match occurs when at least
+one rule matches the request.</p>
 
-<p>If not set, access is denied unless explicitly allowed by other authorization policy.</p>
+<p>If not set, matches nothing. In other words, it is always not matched.</p>
 
 </td>
 <td>
 No
+</td>
+</tr>
+<tr id="AuthorizationPolicy-action">
+<td><code>action</code></td>
+<td><code><a href="#AuthorizationPolicy-Action">Action</a></code></td>
+<td>
+<p>Optional. The action to take if the request is matched with the rules.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AuthorizationPolicy-Action">AuthorizationPolicy.Action</h2>
+<section>
+<p>Action specifies the operation to take.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AuthorizationPolicy-Action-ALLOW">
+<td><code>ALLOW</code></td>
+<td>
+<p>Allow a request only if it matches the rules (safe-list style). This is
+the default type.</p>
+
+</td>
+</tr>
+<tr id="AuthorizationPolicy-Action-DENY">
+<td><code>DENY</code></td>
+<td>
+<p>Deny a request if it matches any of the rules (block-list style).</p>
+
 </td>
 </tr>
 </tbody>
@@ -289,14 +374,18 @@ No
 </section>
 <h2 id="Rule">Rule</h2>
 <section>
-<p>Rule allows access from a list of sources to perform a list of operations when
-the condition is matched.</p>
+<p>Rule matches requests from a list of sources that perform a list of operations when
+the condition is matched. A match occurs when at least one source, operation and condition
+matches the request. An empty rule is always matched.</p>
 
-<p>Any string field in the rule supports Exact, Prefix, Suffix and Presence match:
-- Exact match: &ldquo;abc&rdquo; will match on value &ldquo;abc&rdquo;.
-- Prefix match: &ldquo;abc<em>&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;abcd&rdquo;.
-- Suffix match: &ldquo;</em>abc&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;xabc&rdquo;.
-- Presence match: &ldquo;*&rdquo; will match when value is not empty.</p>
+<p>Any string field in the rule supports Exact, Prefix, Suffix and Presence match:</p>
+
+<ul>
+<li>Exact match: &ldquo;abc&rdquo; will match on value &ldquo;abc&rdquo;.</li>
+<li>Prefix match: &ldquo;abc*&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;abcd&rdquo;.</li>
+<li>Suffix match: &ldquo;*abc&rdquo; will match on value &ldquo;abc&rdquo; and &ldquo;xabc&rdquo;.</li>
+<li>Presence match: &ldquo;*&rdquo; will match when value is not empty.</li>
+</ul>
 
 <table class="message-fields">
 <thead>

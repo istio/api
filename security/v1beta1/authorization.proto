@@ -25,18 +25,30 @@ import "type/v1beta1/selector.proto";
 
 // Istio Authorization Policy enables access control on workloads in the mesh.
 //
-// For example, the following authorization policy applies to workloads matched with
-// label selector "app: httpbin, version: v1".
+// The authorization policy supports both safe-list style and block-list style access
+// control.
+//
+// - The safe-list style means a request is allowed only if it matches any of the
+// ALLOW policies.
+// - The block-list style means a request is allowed if it doesn't match any of
+// the DENY policies.
+//
+// For example, the following authorization policy sets the `action` to ALLOW to use
+// the safe-list access control.
 //
 // It allows requests from:
+//
 // - service account "cluster.local/ns/default/sa/sleep" or
 // - namespace "test"
+//
 // to access the workload with:
+//
 // - "GET" method at paths of prefix "/info" or,
 // - "POST" method at path "/data".
+//
 // when the request has a valid JWT token issued by "https://accounts.google.com".
 //
-// Any other requests will be rejected.
+// Any other requests will be denied.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -45,10 +57,7 @@ import "type/v1beta1/selector.proto";
 //  name: httpbin
 //  namespace: foo
 // spec:
-//  selector:
-//    matchLabels:
-//      app: httpbin
-//      version: v1
+//  action: ALLOW
 //  rules:
 //  - from:
 //    - source:
@@ -67,16 +76,41 @@ import "type/v1beta1/selector.proto";
 //      values: ["https://accounts.google.com"]
 // ```
 //
-// Access control is enabled on a workload if there is any authorization policies selecting
-// the workload. When access control is enabled, the default behavior is deny (deny-by-default)
-// which means requests to the workload will be rejected if the request is not allowed by any of
-// the authorization policies selecting the workload.
+// The following is an example that sets `action` to "DENY" to use the block-list
+// access control. It denies requests from namespace "dev" to access the workload with
+// "POST" method.
 //
-// Currently AuthorizationPolicy only supports "ALLOW" action. This means that
-// if multiple authorization policies apply to the same workload, the effect is additive.
+// Any other requests will be allowed.
+//
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//  name: httpbin
+//  namespace: foo
+// spec:
+//  action: DENY
+//  rules:
+//  - from:
+//    - source:
+//        namespaces: ["dev"]
+//    to:
+//    - operation:
+//        methods: ["POST"]
+// ```
+//
+// Safe-list and Block-list access control could be used on the same workload at the same
+// time. When both DENY policies and ALLOW policies are exist for a workload, the DENY policies
+// are evaluated first. The evaluation is determined by the following rules:
+//
+// 1. Are there any DENY policies selecting the workload? If Yes goto step 2, otherwise goto step 3.
+// 2. Are any of these DENY policies matched the request? If Yes then deny (block-list style), otherwise goto step 3.
+// 3. Are there any ALLOW policies selecting the workload? If Yes goto step 4, otherwise allow.
+// 4. Are any of these ALLOW policies matched the request? If Yes then allow, otherwise deny (safe-list style).
 //
 // Authorization Policy scope (target) is determined by "metadata/namespace" and
 // an optional "selector".
+//
 // - "metadata/namespace" tells which namespace the policy applies. If set to root
 // namespace, the policy applies to all namespaces in a mesh.
 // - workload "selector" can be used to further restrict where a policy applies.
@@ -181,16 +215,32 @@ message AuthorizationPolicy {
   // same namespace as the authorization policy.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
-  // Optional. A list of rules to specify the allowed access to the workload.
+  // Optional. A list of rules to match the request. A match occurs when at least
+  // one rule matches the request.
   //
-  // If not set, access is denied unless explicitly allowed by other authorization policy.
+  // If not set, matches nothing. In other words, it is always not matched.
   repeated Rule rules = 2;
+
+  // Action specifies the operation to take.
+  enum Action {
+    // Allow a request only if it matches the rules (safe-list style). This is
+    // the default type.
+    ALLOW = 0;
+
+    // Deny a request if it matches any of the rules (block-list style).
+    DENY = 1;
+  }
+
+  // Optional. The action to take if the request is matched with the rules.
+  Action action = 3;
 }
 
-// Rule allows access from a list of sources to perform a list of operations when
-// the condition is matched.
+// Rule matches requests from a list of sources that perform a list of operations when
+// the condition is matched. A match occurs when at least one source, operation and condition
+// matches the request. An empty rule is always matched.
 //
 // Any string field in the rule supports Exact, Prefix, Suffix and Presence match:
+//
 // - Exact match: "abc" will match on value "abc".
 // - Prefix match: "abc*" will match on value "abc" and "abcd".
 // - Suffix match: "*abc" will match on value "abc" and "xabc".

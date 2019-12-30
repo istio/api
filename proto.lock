@@ -43720,6 +43720,20 @@
     {
       "protopath": "security:/:v1beta1:/:authorization.proto",
       "def": {
+        "enums": [
+          {
+            "name": "AuthorizationPolicy.Action",
+            "enum_fields": [
+              {
+                "name": "ALLOW"
+              },
+              {
+                "name": "DENY",
+                "integer": 1
+              }
+            ]
+          }
+        ],
         "messages": [
           {
             "name": "AuthorizationPolicy",
@@ -43734,6 +43748,11 @@
                 "name": "rules",
                 "type": "Rule",
                 "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "action",
+                "type": "Action"
               }
             ]
           },
