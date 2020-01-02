@@ -35,7 +35,7 @@ syntax = "proto3";
 //       context: SIDECAR_OUTBOUND
 //       portNumber: 8080
 //     type: HTTP_FILTER
-//     name: envoy.filters.http.gzip
+//     name: compress-outbound
 //     config:
 //       typeUrl: config.filter.http.gzip.v2.Gzip
 //       value:
@@ -49,7 +49,7 @@ option go_package = "istio.io/api/extension/v1alpha1";
 
 import "google/protobuf/struct.proto";
 
-// Opaque configuration for an extension (wire-compatible with UDPA).
+// Opaque configuration for an extension (wire and JSON compatible with UDPA).
 message TypedStruct {
   // A URL that uniquely identifies the type of the serialize protocol buffer
   // message. This has same semantics and format described in
@@ -121,12 +121,16 @@ message MatchContext {
   // namespace, it will be applied to all applicable workloads in any
   // namespace.
   map<string, string> workload_labels = 8;
+
+  // Namespace of the proxy.
+  string namespace = 9;
 }
 
 // ExtensionManifest specifies a set of custom extensions.
-// Manifests can be applied in any namespace, in which case, a per-namespace
-// manifest overrides the root manifest of the same name. Beyond that, the
-// order of application of the manifests is unspecified.
+// Manifests can be applied in any namespace. Per-namespace manifests
+// may override the root manifests for the overlapping filter names if
+// both match conditions are satisfied.
+// Beyond that, the order of application of the manifests is unspecified.
 // Additional control over the delegation of the extension injection should
 // be enforced with either resource-level RBAC or an admission controller.
 message ExtensionManifest {
@@ -139,7 +143,19 @@ message ExtensionManifest {
     LISTENER_FILTER = 4;
   };
 
-  // Extension function serving as a hint to determine the order of the
+  // Operation performed with the supplied config when the match condition is
+  // satisfied. By default, the operation is to displace the filter with the
+  // same name. If no filter with the same name is present, then the filter is
+  // added to chain using the provided function hint to locate the position of
+  // insertion. If the operation is to remove, then the filter with the same
+  // name is removed (config is optional). If no filter with the same name is
+  // found then, then it is a no-op.
+  enum Operation {
+    ADD = 0;
+    REMOVE = 2;
+  };
+
+  // Extension purpose serving as a hint to determine the order of the
   // application of an extension in a chain of extensions. Istio recognizes the
   // following categories of extensions and applies them in the order specified
   // here.
@@ -151,39 +167,34 @@ message ExtensionManifest {
     POST_PROCESSING = 4;
   };
 
-  // Allows adding, replacing or removing of the extension by name. Note that
-  // for replacement, the function field is optional, and for removal, the
-  // config field is optional.
-  enum Operation {
-    ADD = 0;
-    REPLACE = 1;
-    REMOVE = 2;
-  };
-
   // Extension description for a data plane filter.
   message FilterExtension {
-    // Conditions to limit the scope of the extension.
-    // Any of the conditions must be satisfied for the filter to be applied.
+    // Optional conditions to limit the scope of the extension.
+    // At least one of the conditions must be satisfied for the filter to be
+    // applied.
     repeated MatchContext match = 1;
 
     // Specifies the type of the filter.
     FilterType type = 2;
 
-    // The name of the filter (corresponding to the envoy extension name).
+    // The required name of the filter instance. The name should generally be
+    // unique in a filter chain.
     string name = 3;
 
     // Opaque configuration for the filter.
     TypedStruct config = 4;
 
-    // Purpose of the extension.
-    Function function = 5;
-
     // Modification operation (function is optional in case of replacement or
     // removal).
-    Operation operation = 6;
+    Operation operation = 5;
+
+    // Purpose of the extension used to place the filter in a chain.
+    Function function = 6;
   };
 
-  // A list of extensions to be applied. If the order of extensions is
-  // ambiguous, then this list serves as the canonical order of application.
+  // A list of extensions to be applied. The filter extensions are processed in
+  // the order specified here. If multiple extension conditions are satisfied
+  // for the same filter name within a manifest, then the last filter config
+  // applies.
   repeated FilterExtension filters = 1;
 }
