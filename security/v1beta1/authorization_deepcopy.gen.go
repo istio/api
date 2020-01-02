@@ -3,12 +3,14 @@
 
 // Istio Authorization Policy enables access control on workloads in the mesh.
 //
-// The authorization policy supports both allow policy and deny policy.
+// The authorization policy supports both allow policy and deny policy. When
+// allow policies and deny policies are used for a workload at the same time,
+// the deny policies are evaluated first. The evaluation is determined by the following rules:
 //
-// - The allow policy means a request is allowed only if it matches any of the
-// allow policies, otherwise it is denied.
-// - The deny policy means a request is allowed if it doesn't match any of
-// the deny policies, otherwise it is allowed.
+// 1. Are there any DENY policies for the workload? Yes -> step 2, No -> step 3.
+// 2. Is the request matched with any of the DENY policies? Yes -> deny, No -> step 3.
+// 3. Are there any ALLOW policies for the workload? Yes -> step 4, No -> allow.
+// 4. Is the request matched with any of the ALLOW policies? Yes -> allow, No -> deny.
 //
 // For example, the following authorization policy sets the `action` to "ALLOW"
 // to use the allow policy.
@@ -53,10 +55,8 @@
 //      values: ["https://accounts.google.com"]
 // ```
 //
-// The following is an example that sets `action` to "DENY" to use the deny policy.
+// The following is another example that sets `action` to "DENY" to use the deny policy.
 // It denies requests from namespace "dev" to access the workload with "POST" method.
-//
-// Any other requests will be allowed.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -74,15 +74,6 @@
 //    - operation:
 //        methods: ["POST"]
 // ```
-//
-// Allow policy and deny policy could be used at the same time. When both allow
-// policies and deny policies exist for a workload, the deny policies are
-// evaluated first. The evaluation is determined by the following rules:
-//
-// 1. Are there any DENY policies selecting the workload? Yes -> step 2, No -> step 3.
-// 2. Are any of these DENY policies matched the request? Yes -> deny, No -> step 3.
-// 3. Are there any ALLOW policies selecting the workload? Yes -> step 4, No -> allow.
-// 4. Are any of these ALLOW policies matched the request? Yes -> allow, No -> deny.
 //
 // Authorization Policy scope (target) is determined by "metadata/namespace" and
 // an optional "selector".
