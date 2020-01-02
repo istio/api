@@ -11,18 +11,17 @@ number_of_entries: 8
 ---
 <p>Istio Authorization Policy enables access control on workloads in the mesh.</p>
 
-<p>The authorization policy supports both safe-list style and block-list style access
-control.</p>
+<p>The authorization policy supports both allow policy and deny policy.</p>
 
 <ul>
-<li>The safe-list style means a request is allowed only if it matches any of the
-ALLOW policies.</li>
-<li>The block-list style means a request is allowed if it doesn&rsquo;t match any of
-the DENY policies.</li>
+<li>The allow policy means a request is allowed only if it matches any of the
+allow policies, otherwise it is denied.</li>
+<li>The deny policy means a request is allowed if it doesn&rsquo;t match any of
+the deny policies, otherwise it is allowed.</li>
 </ul>
 
-<p>For example, the following authorization policy sets the <code>action</code> to ALLOW to use
-the safe-list access control.</p>
+<p>For example, the following authorization policy sets the <code>action</code> to &ldquo;ALLOW&rdquo;
+to use the allow policy.</p>
 
 <p>It allows requests from:</p>
 
@@ -67,9 +66,8 @@ spec:
      values: [&quot;https://accounts.google.com&quot;]
 </code></pre>
 
-<p>The following is an example that sets <code>action</code> to &ldquo;DENY&rdquo; to use the block-list
-access control. It denies requests from namespace &ldquo;dev&rdquo; to access the workload with
-&ldquo;POST&rdquo; method.</p>
+<p>The following is an example that sets <code>action</code> to &ldquo;DENY&rdquo; to use the deny policy.
+It denies requests from namespace &ldquo;dev&rdquo; to access the workload with &ldquo;POST&rdquo; method.</p>
 
 <p>Any other requests will be allowed.</p>
 
@@ -89,15 +87,15 @@ spec:
        methods: [&quot;POST&quot;]
 </code></pre>
 
-<p>Safe-list and Block-list access control could be used on the same workload at the same
-time. When both DENY policies and ALLOW policies are exist for a workload, the DENY policies
-are evaluated first. The evaluation is determined by the following rules:</p>
+<p>Allow policy and deny policy could be used at the same time. When both allow
+policies and deny policies exist for a workload, the deny policies are
+evaluated first. The evaluation is determined by the following rules:</p>
 
 <ol>
-<li>Are there any DENY policies selecting the workload? If Yes goto step 2, otherwise goto step 3.</li>
-<li>Are any of these DENY policies matched the request? If Yes then deny (block-list style), otherwise goto step 3.</li>
-<li>Are there any ALLOW policies selecting the workload? If Yes goto step 4, otherwise allow.</li>
-<li>Are any of these ALLOW policies matched the request? If Yes then allow, otherwise deny (safe-list style).</li>
+<li>Are there any DENY policies selecting the workload? Yes -&gt; step 2, No -&gt; step 3.</li>
+<li>Are any of these DENY policies matched the request? Yes -&gt; deny, No -&gt; step 3.</li>
+<li>Are there any ALLOW policies selecting the workload? Yes -&gt; step 4, No -&gt; allow.</li>
+<li>Are any of these ALLOW policies matched the request? Yes -&gt; allow, No -&gt; deny.</li>
 </ol>
 
 <p>Authorization Policy scope (target) is determined by &ldquo;metadata/namespace&rdquo; and
@@ -210,7 +208,7 @@ No
 <p>Optional. A list of rules to match the request. A match occurs when at least
 one rule matches the request.</p>
 
-<p>If not set, matches nothing. In other words, it is always not matched.</p>
+<p>If not set, requests to the target workload are denied by default.</p>
 
 </td>
 <td>
@@ -246,15 +244,14 @@ No
 <tr id="AuthorizationPolicy-Action-ALLOW">
 <td><code>ALLOW</code></td>
 <td>
-<p>Allow a request only if it matches the rules (safe-list style). This is
-the default type.</p>
+<p>Allow a request only if it matches the rules. This is the default type.</p>
 
 </td>
 </tr>
 <tr id="AuthorizationPolicy-Action-DENY">
 <td><code>DENY</code></td>
 <td>
-<p>Deny a request if it matches any of the rules (block-list style).</p>
+<p>Deny a request if it matches any of the rules.</p>
 
 </td>
 </tr>
