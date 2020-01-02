@@ -9,12 +9,12 @@ lint:
   ignores:
     - id: MESSAGE_NAMES_CAMEL_CASE
       files:
-        - mesh/v1alpha1/component.proto
-        - mesh/v1alpha1/kubernetes.proto
+        - operator/v1alpha1/component.proto
+        - operator/v1alpha1/kubernetes.proto
     - id: MESSAGE_FIELD_NAMES_LOWER_SNAKE_CASE
       files:
-        - mesh/v1alpha1/component.proto
-        - mesh/v1alpha1/kubernetes.proto
+        - operator/v1alpha1/component.proto
+        - operator/v1alpha1/kubernetes.proto
         - rbac/v1alpha1/rbac.proto
     - id: ENUM_FIELD_NAMES_UPPER_SNAKE_CASE
       files:
