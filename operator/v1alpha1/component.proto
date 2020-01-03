@@ -68,7 +68,6 @@ message ComponentSpec {
 message ExternalComponentSpec {
     // Selects whether this component is installed.
     TypeBoolValueForPB enabled = 1;
-
     // Namespace for the component.
     string namespace = 2;
 
@@ -99,6 +98,9 @@ message GatewaySpec {
     string hub = 10;
     // Tag for the component (overrides top level tag setting).
     string tag = 11;
+
+    // Overrides for values.yaml.
+    TypeMapStringInterface values = 30;
 
     // Kubernetes resource spec.
     KubernetesResourcesSpec k8s = 50;
@@ -157,8 +159,9 @@ message KubernetesResourcesSpec {
 // Patch for an existing k8s resource.
 message K8sObjectOverlay {
     message PathValue {
-        // Path of the form a.b:c.e.:f
-        // Where b:c is a list element selector of the form key:value and :f is a list selector of the form :value.
+        // Path of the form a.[key1:value1].b.[:value2]
+        // Where [key1:value1] is a selector for a key-value pair to identify a list element and [:value] is a value
+        // selector to identify a list element in a leaf list.
         // All path intermediate nodes must exist.
         string path = 1;
         // Value to add, delete or replace.
