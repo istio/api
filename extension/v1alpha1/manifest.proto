@@ -50,7 +50,9 @@ option go_package = "istio.io/api/extension/v1alpha1";
 import "google/protobuf/struct.proto";
 
 // Opaque configuration for an extension (wire and JSON compatible with UDPA).
-message TypedStruct {
+// The extension resource allows white-listing pre-defined configuration for
+// extensions.
+message Extension {
   // A URL that uniquely identifies the type of the serialize protocol buffer
   // message. This has same semantics and format described in
   // google.protobuf.Any:
@@ -59,6 +61,12 @@ message TypedStruct {
 
   // A JSON representation of the above specified type.
   google.protobuf.Struct value = 2;
+}
+
+// Reference to extension resource.
+message ExtensionRef {
+  string name = 1;
+  string namespace = 2;
 }
 
 // A condition limiting the extent of the extension application.
@@ -182,14 +190,19 @@ message ExtensionManifest {
     string name = 3;
 
     // Opaque configuration for the filter.
-    TypedStruct config = 4;
+    oneof configuration {
+      // Inlined extension configuration.
+      Extension config = 4;
+      // Configuration reference.
+      ExtensionRef config_ref = 5;
+    }
 
     // Modification operation (function is optional in case of replacement or
     // removal).
-    Operation operation = 5;
+    Operation operation = 6;
 
     // Purpose of the extension used to place the filter in a chain.
-    Function function = 6;
+    Function function = 7;
   };
 
   // A list of extensions to be applied. The filter extensions are processed in
