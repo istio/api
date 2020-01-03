@@ -531,6 +531,17 @@ No
 No
 </td>
 </tr>
+<tr id="GatewaySpec-values">
+<td><code>values</code></td>
+<td><code><a href="#TypeMapStringInterface">TypeMapStringInterface</a></code></td>
+<td>
+<p>Overrides for values.yaml.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="GatewaySpec-k8s">
 <td><code>k8s</code></td>
 <td><code><a href="#KubernetesResourcesSpec">KubernetesResourcesSpec</a></code></td>
@@ -1124,8 +1135,9 @@ No
 <td><code>path</code></td>
 <td><code>string</code></td>
 <td>
-<p>Path of the form a.b:c.e.:f
-Where b:c is a list element selector of the form key:value and :f is a list selector of the form :value.
+<p>Path of the form a.[key1:value1].b.[:value2]
+Where [key1:value1] is a selector for a key-value pair to identify a list element and [:value] is a value
+selector to identify a list element in a leaf list.
 All path intermediate nodes must exist.</p>
 
 </td>
