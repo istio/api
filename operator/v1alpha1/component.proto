@@ -85,8 +85,8 @@ message ExternalComponentSpec {
 
 // Configuration for gateways.
 message GatewaySpec {
-    // Enablement is implied by the existence of this spec.
-
+    // Selects whether this gateway is installed.
+    TypeBoolValueForPB enabled = 1;
     // Namespace for the gateway.
     string namespace = 2;
     // Name for the gateway.
