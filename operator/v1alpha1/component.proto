@@ -34,7 +34,6 @@ message IstioComponentSetSpec {
     ComponentSpec node_agent = 36;
     ComponentSpec galley = 37;
     ComponentSpec cni = 38;
-    ComponentSpec core_dNS = 39;
 
     repeated GatewaySpec ingress_gateways = 40;
     repeated GatewaySpec egress_gateways = 41;
@@ -98,9 +97,6 @@ message GatewaySpec {
     string hub = 10;
     // Tag for the component (overrides top level tag setting).
     string tag = 11;
-
-    // Overrides for values.yaml.
-    TypeMapStringInterface values = 30;
 
     // Kubernetes resource spec.
     KubernetesResourcesSpec k8s = 50;
