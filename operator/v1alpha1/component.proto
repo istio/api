@@ -16,14 +16,15 @@ syntax = "proto3";
 
 import "google/protobuf/any.proto";
 import "k8s.io/api/autoscaling/v2beta1/generated.proto";
-import "mesh/v1alpha1/kubernetes.proto";
+import "operator/v1alpha1/kubernetes.proto";
 
-package istio.mesh.v1alpha1;
+package istio.operator.v1alpha1;
 
-option go_package="istio.io/api/mesh/v1alpha1";
+option go_package="istio.io/api/operator/v1alpha1";
 
 // IstioComponentSpec defines the desired installed state of Istio components.
 message IstioComponentSetSpec {
+    BaseComponentSpec base = 29;
     ComponentSpec pilot = 30;
     ComponentSpec proxy = 31;
     ComponentSpec sidecar_injector = 32;
@@ -33,13 +34,15 @@ message IstioComponentSetSpec {
     ComponentSpec node_agent = 36;
     ComponentSpec galley = 37;
     ComponentSpec cni = 38;
-    ComponentSpec core_dNS = 39;
 
     repeated GatewaySpec ingress_gateways = 40;
     repeated GatewaySpec egress_gateways = 41;
+}
 
-    // Extra addon components which are not explicitly specified above.
-    map<string, ExternalComponentSpec> extra_components = 100;
+// Configuration for base component.
+message BaseComponentSpec {
+    // Selects whether this component is installed.
+    TypeBoolValueForPB enabled = 1;
 }
 
 // Configuration for internal components.
@@ -62,8 +65,8 @@ message ComponentSpec {
 
 // Configuration for external components.
 message ExternalComponentSpec {
-    // Enablement is implied by the existence of this spec.
-
+    // Selects whether this component is installed.
+    TypeBoolValueForPB enabled = 1;
     // Namespace for the component.
     string namespace = 2;
 
@@ -81,8 +84,8 @@ message ExternalComponentSpec {
 
 // Configuration for gateways.
 message GatewaySpec {
-    // Enablement is implied by the existence of this spec.
-
+    // Selects whether this gateway is installed.
+    TypeBoolValueForPB enabled = 1;
     // Namespace for the gateway.
     string namespace = 2;
     // Name for the gateway.
@@ -152,8 +155,9 @@ message KubernetesResourcesSpec {
 // Patch for an existing k8s resource.
 message K8sObjectOverlay {
     message PathValue {
-        // Path of the form a.b:c.e.:f
-        // Where b:c is a list element selector of the form key:value and :f is a list selector of the form :value.
+        // Path of the form a.[key1:value1].b.[:value2]
+        // Where [key1:value1] is a selector for a key-value pair to identify a list element and [:value] is a value
+        // selector to identify a list element in a leaf list.
         // All path intermediate nodes must exist.
         string path = 1;
         // Value to add, delete or replace.
