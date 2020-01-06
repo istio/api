@@ -132,6 +132,8 @@ func (Tls_AuthHeader) EnumDescriptor() ([]byte, []int) {
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +kubetype-gen:kubeType=AttributeManifest
+// +kubetype-gen:AttributeManifest:tag=kubetype-gen:lowerCaseScheme
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
@@ -334,6 +336,8 @@ func (m *AttributeManifest_AttributeInfo) GetValueType() ValueType {
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +kubetype-gen:kubeType=Rule
+// +kubetype-gen:Rule:tag=kubetype-gen:lowerCaseScheme
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
@@ -623,6 +627,8 @@ func (m *Action) GetName() string {
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +kubetype-gen:kubeType=Instance
+// +kubetype-gen:Instance:tag=kubetype-gen:lowerCaseScheme
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
@@ -798,6 +804,8 @@ func (m *Instance) GetAttributeBindings() map[string]string {
 // <!-- go code generation tags
 // +kubetype-gen
 // +kubetype-gen:groupVersion=config.istio.io/v1alpha2
+// +kubetype-gen:kubeType=Handler
+// +kubetype-gen:Handler:tag=kubetype-gen:lowerCaseScheme
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
