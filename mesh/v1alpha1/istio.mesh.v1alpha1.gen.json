@@ -224,6 +224,10 @@
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.Certificate"
             }
+          },
+          "signCertAtKubernetesCa": {
+            "description": "Configure whether istio uses Kubernetes CA APIs to sign the control plane certificate.",
+            "type": "boolean"
           }
         }
       },

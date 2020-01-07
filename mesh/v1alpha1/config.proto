@@ -387,8 +387,11 @@ message MeshConfig {
   // Configure the provision of certificates.
   repeated Certificate certificates = 47;
 
+  // Configure whether istio uses Kubernetes CA APIs to sign the control plane certificate.
+  bool sign_cert_at_kubernetes_ca = 49;
+
   // $hide_from_docs
-  // Next available field number: 49
+  // Next available field number: 50
 }
 
 // Resource describes the source of configuration
