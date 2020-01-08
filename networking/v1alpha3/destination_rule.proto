@@ -775,4 +775,8 @@ message LocalityLoadBalancerSetting{
     // Should be used together with OutlierDetection to detect unhealthy endpoints.
     // Note: if no OutlierDetection specified, this will not take effect.
     repeated Failover failover = 2;
+
+    // enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
+    // e.g. true means that turn on locality load balancing for this DestinationRule no matter what mesh wide settings is.
+    google.protobuf.BoolValue enabled = 3;
 }
