@@ -2115,6 +2115,12 @@ spec:
                                       type: object
                                   type: object
                                 type: array
+                              enabled:
+                                description: enable locality load balancing, this
+                                  is DestinationRule-level and will override mesh
+                                  wide settings in entirety.
+                                nullable: true
+                                type: boolean
                               failover:
                                 description: 'Optional: only failover or distribute
                                   can be set.'
@@ -2298,6 +2304,12 @@ spec:
                                             type: object
                                         type: object
                                       type: array
+                                    enabled:
+                                      description: enable locality load balancing,
+                                        this is DestinationRule-level and will override
+                                        mesh wide settings in entirety.
+                                      nullable: true
+                                      type: boolean
                                     failover:
                                       description: 'Optional: only failover or distribute
                                         can be set.'
@@ -2552,6 +2564,11 @@ spec:
                                 type: object
                             type: object
                           type: array
+                        enabled:
+                          description: enable locality load balancing, this is DestinationRule-level
+                            and will override mesh wide settings in entirety.
+                          nullable: true
+                          type: boolean
                         failover:
                           description: 'Optional: only failover or distribute can
                             be set.'
@@ -2733,6 +2750,12 @@ spec:
                                       type: object
                                   type: object
                                 type: array
+                              enabled:
+                                description: enable locality load balancing, this
+                                  is DestinationRule-level and will override mesh
+                                  wide settings in entirety.
+                                nullable: true
+                                type: boolean
                               failover:
                                 description: 'Optional: only failover or distribute
                                   can be set.'

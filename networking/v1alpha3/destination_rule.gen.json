@@ -251,6 +251,11 @@
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1alpha3.LocalityLoadBalancerSetting.Failover"
             }
+          },
+          "enabled": {
+            "description": "enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety. e.g. true means that turn on locality load balancing for this DestinationRule no matter what mesh wide settings is.",
+            "type": "boolean",
+            "nullable": true
           }
         }
       },
