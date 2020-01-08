@@ -65,7 +65,7 @@ message GetConfigDumpRequest{
   ProxySelector selector = 1;
 }
 
-// GetConfigDumpResponse is the request of GetConfigDump.
+// GetConfigDumpResponse is the response of GetConfigDump.
 message GetConfigDumpResponse {
   // The actual configuration dump payload.
   string payload = 1;

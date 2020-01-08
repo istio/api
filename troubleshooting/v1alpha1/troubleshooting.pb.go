@@ -224,7 +224,7 @@ func (m *GetConfigDumpRequest) GetSelector() *ProxySelector {
 	return nil
 }
 
-// GetConfigDumpResponse is the request of GetConfigDump.
+// GetConfigDumpResponse is the response of GetConfigDump.
 type GetConfigDumpResponse struct {
 	// The actual configuration dump payload.
 	Payload              string   `protobuf:"bytes,1,opt,name=payload,proto3" json:"payload,omitempty"`
