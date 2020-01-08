@@ -182,6 +182,12 @@ annotations:
     hidden: false
     resources:
       - Pod
+  - name: sidecar.istio.io/enableCoreDump
+    description: Specifies whether or not an Envoy sidecar should enable core dump.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
   - name: status.sidecar.istio.io/port
     description: Specifies the HTTP status Port for the Envoy sidecar. If zero, the
       sidecar will not provide status.

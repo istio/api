@@ -291,6 +291,15 @@ var (
 		  Resources: []ResourceTypes{ Pod, },
         }
 	
+		SidecarEnableCoreDump = Instance {
+          Name: "sidecar.istio.io/enableCoreDump",
+          Description: "Specifies whether or not an Envoy sidecar should enable "+
+                        "core dump.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
+        }
+	
 		SidecarInject = Instance {
           Name: "sidecar.istio.io/inject",
           Description: "Specifies whether or not an Envoy sidecar should be "+
@@ -507,6 +516,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarComponentLogLevel,
 		&SidecarControlPlaneAuthPolicy,
 		&SidecarDiscoveryAddress,
+		&SidecarEnableCoreDump,
 		&SidecarInject,
 		&SidecarInterceptionMode,
 		&SidecarLogLevel,
