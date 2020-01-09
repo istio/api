@@ -415,7 +415,7 @@ func (m *Rule_To) GetOperation() *Operation {
 // Source specifies the source identities of a request.
 type Source struct {
 	// Optional. A list of source peer identities (i.e. service account), which
-	// matches to the "source.principal" attribute.
+	// matches to the "source.principal" attribute. This field requires mTLS enabled.
 	//
 	// If not set, any principal is allowed.
 	Principals []string `protobuf:"bytes,1,rep,name=principals,proto3" json:"principals,omitempty"`
@@ -425,7 +425,7 @@ type Source struct {
 	// If not set, any request principal is allowed.
 	RequestPrincipals []string `protobuf:"bytes,2,rep,name=request_principals,json=requestPrincipals,proto3" json:"request_principals,omitempty"`
 	// Optional. A list of namespaces, which matches to the "source.namespace"
-	// attribute.
+	// attribute. This field requires mTLS enabled.
 	//
 	// If not set, any namespace is allowed.
 	Namespaces []string `protobuf:"bytes,3,rep,name=namespaces,proto3" json:"namespaces,omitempty"`
@@ -589,7 +589,7 @@ func (m *Operation) GetPaths() []string {
 // Condition specifies additional required attributes.
 type Condition struct {
 	// The name of an Istio attribute.
-	// See the [full list of supported attributes](https://istio.io/docs/reference/config/).
+	// See the [full list of supported attributes](https://istio.io/docs/reference/config/security/conditions/).
 	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
 	// The allowed values for the attribute.
 	Values               []string `protobuf:"bytes,2,rep,name=values,proto3" json:"values,omitempty"`

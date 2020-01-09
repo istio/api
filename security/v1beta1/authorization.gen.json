@@ -72,7 +72,7 @@
         "type": "object",
         "properties": {
           "key": {
-            "description": "The name of an Istio attribute. See the [full list of supported attributes](https://istio.io/docs/reference/config/).",
+            "description": "The name of an Istio attribute. See the [full list of supported attributes](https://istio.io/docs/reference/config/security/conditions/).",
             "type": "string",
             "format": "string"
           },
@@ -91,7 +91,7 @@
         "type": "object",
         "properties": {
           "principals": {
-            "description": "Optional. A list of source peer identities (i.e. service account), which matches to the \"source.principal\" attribute.",
+            "description": "Optional. A list of source peer identities (i.e. service account), which matches to the \"source.principal\" attribute. This field requires mTLS enabled.",
             "type": "array",
             "items": {
               "type": "string",
@@ -107,7 +107,7 @@
             }
           },
           "namespaces": {
-            "description": "Optional. A list of namespaces, which matches to the \"source.namespace\" attribute.",
+            "description": "Optional. A list of namespaces, which matches to the \"source.namespace\" attribute. This field requires mTLS enabled.",
             "type": "array",
             "items": {
               "type": "string",
