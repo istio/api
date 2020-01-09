@@ -12890,7 +12890,13 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings"
+                        "name": "additional_bindings",
+                        "aggregated": [
+                          {
+                            "name": "get",
+                            "value": "/v1/services/{service_name}/config"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -41981,7 +41987,7 @@
               {
                 "id": 4,
                 "name": "targetPort",
-                "type": "k8s.io.apimachinery.pkg.util.intstr.IntOrString"
+                "type": "TypeIntOrStringForPB"
               },
               {
                 "id": 5,
