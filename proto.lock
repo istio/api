@@ -41380,6 +41380,14 @@
                   "name": "pod_annotations",
                   "type": "string"
                 }
+              },
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 15,
+                  "name": "service_annotations",
+                  "type": "string"
+                }
               }
             ]
           },
