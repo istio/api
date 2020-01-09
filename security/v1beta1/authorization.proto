@@ -227,7 +227,7 @@ message Rule {
 // Source specifies the source identities of a request.
 message Source {
   // Optional. A list of source peer identities (i.e. service account), which
-  // matches to the "source.principal" attribute.
+  // matches to the "source.principal" attribute. This field requires mTLS enabled.
   //
   // If not set, any principal is allowed.
   repeated string principals = 1;
@@ -239,7 +239,7 @@ message Source {
   repeated string request_principals = 2;
 
   // Optional. A list of namespaces, which matches to the "source.namespace"
-  // attribute.
+  // attribute. This field requires mTLS enabled.
   //
   // If not set, any namespace is allowed.
   repeated string namespaces = 3;
@@ -279,7 +279,7 @@ message Operation {
 // Condition specifies additional required attributes.
 message Condition {
   // The name of an Istio attribute.
-  // See the [full list of supported attributes](https://istio.io/docs/reference/config/).
+  // See the [full list of supported attributes](https://istio.io/docs/reference/config/security/conditions/).
   string key = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The allowed values for the attribute.

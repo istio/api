@@ -195,7 +195,7 @@ No
 <td><code>string</code></td>
 <td>
 <p>The name of an Istio attribute.
-See the <a href="https://istio.io/docs/reference/config/">full list of supported attributes</a>.</p>
+See the <a href="https://istio.io/docs/reference/config/security/conditions/">full list of supported attributes</a>.</p>
 
 </td>
 <td>
@@ -425,7 +425,7 @@ No
 <td><code>string[]</code></td>
 <td>
 <p>Optional. A list of source peer identities (i.e. service account), which
-matches to the &ldquo;source.principal&rdquo; attribute.</p>
+matches to the &ldquo;source.principal&rdquo; attribute. This field requires mTLS enabled.</p>
 
 <p>If not set, any principal is allowed.</p>
 
@@ -453,7 +453,7 @@ No
 <td><code>string[]</code></td>
 <td>
 <p>Optional. A list of namespaces, which matches to the &ldquo;source.namespace&rdquo;
-attribute.</p>
+attribute. This field requires mTLS enabled.</p>
 
 <p>If not set, any namespace is allowed.</p>
 
