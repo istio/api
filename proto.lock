@@ -40920,6 +40920,18 @@
                 "id": 1,
                 "name": "allow_origin",
                 "type": "string",
+                "is_repeated": true,
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
+              },
+              {
+                "id": 7,
+                "name": "allow_origins",
+                "type": "StringMatch",
                 "is_repeated": true
               },
               {
