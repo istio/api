@@ -199,10 +199,8 @@ No
 <p>Optional. A list of rules to match the request. A match occurs when at least
 one rule matches the request.</p>
 
-<p>If not set, the match will never occur. You can leave this field unset and
-set the action to &ldquo;ALLOW&rdquo; to create a deny-all policy. It is meaningless to
-leave this field unset but set the action to &ldquo;DENY&rdquo; as the deny action will
-never happen.</p>
+<p>If not set, the match will never occur. This is equivalent to setting a
+default of deny for the target workloads.</p>
 
 </td>
 <td>
@@ -283,7 +281,7 @@ Yes
 <td><code>string[]</code></td>
 <td>
 <p>Optional. A list of allowed values for the attribute.
-Note: at least one of the values or not_values field must be set.</p>
+Note: at least one of values or not_values must be set.</p>
 
 </td>
 <td>
@@ -295,7 +293,7 @@ No
 <td><code>string[]</code></td>
 <td>
 <p>Optional. A list of negative match of values for the attribute.
-Note: at least one of the values or not_values field must be set.</p>
+Note: at least one of values or not_values must be set.</p>
 
 </td>
 <td>

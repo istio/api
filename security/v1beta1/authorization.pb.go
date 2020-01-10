@@ -234,10 +234,8 @@ type AuthorizationPolicy struct {
 	// Optional. A list of rules to match the request. A match occurs when at least
 	// one rule matches the request.
 	//
-	// If not set, the match will never occur. You can leave this field unset and
-	// set the action to "ALLOW" to create a deny-all policy. It is meaningless to
-	// leave this field unset but set the action to "DENY" as the deny action will
-	// never happen.
+	// If not set, the match will never occur. This is equivalent to setting a
+	// default of deny for the target workloads.
 	Rules []*Rule `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
 	// Optional. The action to take if the request is matched with the rules.
 	Action               AuthorizationPolicy_Action `protobuf:"varint,3,opt,name=action,proto3,enum=istio.security.v1beta1.AuthorizationPolicy_Action" json:"action,omitempty"`
@@ -752,10 +750,10 @@ type Condition struct {
 	// See the [full list of supported attributes](https://istio.io/docs/reference/config/security/conditions/).
 	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
 	// Optional. A list of allowed values for the attribute.
-	// Note: at least one of the values or not_values field must be set.
+	// Note: at least one of values or not_values must be set.
 	Values []string `protobuf:"bytes,2,rep,name=values,proto3" json:"values,omitempty"`
 	// Optional. A list of negative match of values for the attribute.
-	// Note: at least one of the values or not_values field must be set.
+	// Note: at least one of values or not_values must be set.
 	NotValues            []string `protobuf:"bytes,3,rep,name=not_values,json=notValues,proto3" json:"not_values,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`

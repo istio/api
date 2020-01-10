@@ -209,10 +209,8 @@ message AuthorizationPolicy {
   // Optional. A list of rules to match the request. A match occurs when at least
   // one rule matches the request.
   //
-  // If not set, the match will never occur. You can leave this field unset and
-  // set the action to "ALLOW" to create a deny-all policy. It is meaningless to
-  // leave this field unset but set the action to "DENY" as the deny action will
-  // never happen.
+  // If not set, the match will never occur. This is equivalent to setting a
+  // default of deny for the target workloads.
   repeated Rule rules = 2;
 
   // Action specifies the operation to take.
@@ -370,10 +368,10 @@ message Condition {
   string key = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Optional. A list of allowed values for the attribute.
-  // Note: at least one of the values or not_values field must be set.
+  // Note: at least one of values or not_values must be set.
   repeated string values = 2;
 
   // Optional. A list of negative match of values for the attribute.
-  // Note: at least one of the values or not_values field must be set.
+  // Note: at least one of values or not_values must be set.
   repeated string not_values = 3;
 }
