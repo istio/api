@@ -26,7 +26,7 @@
         }
       },
       "istio.security.v1beta1.Rule": {
-        "description": "Rule matches requests from a list of sources that perform a list of operations when the condition is matched. A match occurs when at least one source, operation and condition matches the request. An empty rule is always matched.",
+        "description": "Rule matches requests from a list of sources that perform a list of operations subject to a list of conditions. A match occurs when at least one source, operation and condition matches the request. An empty rule is always matched.",
         "type": "object",
         "properties": {
           "from": {
@@ -88,7 +88,7 @@
             "format": "string"
           },
           "values": {
-            "description": "Optional. The allowed values for the attribute.",
+            "description": "Optional. A list of allowed values for the attribute. Note: at least one of the values or not_values field must be set.",
             "type": "array",
             "items": {
               "type": "string",
@@ -96,7 +96,7 @@
             }
           },
           "notValues": {
-            "description": "Optional. A list of negative match of values.",
+            "description": "Optional. A list of negative match of values for the attribute. Note: at least one of the values or not_values field must be set.",
             "type": "array",
             "items": {
               "type": "string",

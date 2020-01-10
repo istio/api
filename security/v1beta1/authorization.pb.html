@@ -11,19 +11,20 @@ number_of_entries: 8
 ---
 <p>Istio Authorization Policy enables access control on workloads in the mesh.</p>
 
-<p>The authorization policy supports both allow policy and deny policy. When
-allow policies and deny policies are used for a workload at the same time,
-the deny policies are evaluated first. The evaluation is determined by the following rules:</p>
+<p>Authorization policy supports both allow and deny policies. When allow and
+deny policies are used for a workload at the same time, the deny policies are
+evaluated first. The evaluation is determined by the following rules:</p>
 
 <ol>
-<li>Are there any DENY policies for the workload? Yes -&gt; step 2, No -&gt; step 3.</li>
-<li>Is the request matched with any of the DENY policies? Yes -&gt; deny, No -&gt; step 3.</li>
-<li>Are there any ALLOW policies for the workload? Yes -&gt; step 4, No -&gt; allow.</li>
-<li>Is the request matched with any of the ALLOW policies? Yes -&gt; allow, No -&gt; deny.</li>
+<li>If there are any DENY policies that match the request, deny the request.</li>
+<li>If there are no ALLOW policies for the workload, allow the request.</li>
+<li>If any of the ALLOW policies match the request, allow the request.</li>
+<li>Deny the request.</li>
 </ol>
 
 <p>For example, the following authorization policy sets the <code>action</code> to &ldquo;ALLOW&rdquo;
-to use the allow policy.</p>
+to create an allow policy. The default action is &ldquo;ALLOW&rdquo; but it is useful
+to be explicit in the policy.</p>
 
 <p>It allows requests from:</p>
 
@@ -68,8 +69,9 @@ spec:
      values: [&quot;https://accounts.google.com&quot;]
 </code></pre>
 
-<p>The following is another example that sets <code>action</code> to &ldquo;DENY&rdquo; to use the deny policy.
-It denies requests from namespace &ldquo;dev&rdquo; to access the workload with &ldquo;POST&rdquo; method.</p>
+<p>The following is another example that sets <code>action</code> to &ldquo;DENY&rdquo; to create a deny policy.
+It denies requests from the &ldquo;dev&rdquo; namespace to the &ldquo;POST&rdquo; method on all workloads
+in the &ldquo;foo&rdquo; namespace.</p>
 
 <pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -197,7 +199,10 @@ No
 <p>Optional. A list of rules to match the request. A match occurs when at least
 one rule matches the request.</p>
 
-<p>If not set, requests to the target workload are denied by default.</p>
+<p>If not set, the match will never occur. You can leave this field unset and
+set the action to &ldquo;ALLOW&rdquo; to create a deny-all policy. It is meaningless to
+leave this field unset but set the action to &ldquo;DENY&rdquo; as the deny action will
+never happen.</p>
 
 </td>
 <td>
@@ -277,7 +282,8 @@ Yes
 <td><code>values</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Optional. The allowed values for the attribute.</p>
+<p>Optional. A list of allowed values for the attribute.
+Note: at least one of the values or not_values field must be set.</p>
 
 </td>
 <td>
@@ -288,7 +294,8 @@ No
 <td><code>notValues</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Optional. A list of negative match of values.</p>
+<p>Optional. A list of negative match of values for the attribute.
+Note: at least one of the values or not_values field must be set.</p>
 
 </td>
 <td>
@@ -424,8 +431,8 @@ No
 </section>
 <h2 id="Rule">Rule</h2>
 <section>
-<p>Rule matches requests from a list of sources that perform a list of operations when
-the condition is matched. A match occurs when at least one source, operation and condition
+<p>Rule matches requests from a list of sources that perform a list of operations subject to a
+list of conditions. A match occurs when at least one source, operation and condition
 matches the request. An empty rule is always matched.</p>
 
 <p>Any string field in the rule supports Exact, Prefix, Suffix and Presence match:</p>

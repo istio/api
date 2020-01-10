@@ -3,17 +3,18 @@
 
 // Istio Authorization Policy enables access control on workloads in the mesh.
 //
-// The authorization policy supports both allow policy and deny policy. When
-// allow policies and deny policies are used for a workload at the same time,
-// the deny policies are evaluated first. The evaluation is determined by the following rules:
+// Authorization policy supports both allow and deny policies. When allow and
+// deny policies are used for a workload at the same time, the deny policies are
+// evaluated first. The evaluation is determined by the following rules:
 //
-// 1. Are there any DENY policies for the workload? Yes -> step 2, No -> step 3.
-// 2. Is the request matched with any of the DENY policies? Yes -> deny, No -> step 3.
-// 3. Are there any ALLOW policies for the workload? Yes -> step 4, No -> allow.
-// 4. Is the request matched with any of the ALLOW policies? Yes -> allow, No -> deny.
+// 1. If there are any DENY policies that match the request, deny the request.
+// 2. If there are no ALLOW policies for the workload, allow the request.
+// 3. If any of the ALLOW policies match the request, allow the request.
+// 4. Deny the request.
 //
 // For example, the following authorization policy sets the `action` to "ALLOW"
-// to use the allow policy.
+// to create an allow policy. The default action is "ALLOW" but it is useful
+// to be explicit in the policy.
 //
 // It allows requests from:
 //
@@ -55,8 +56,9 @@
 //      values: ["https://accounts.google.com"]
 // ```
 //
-// The following is another example that sets `action` to "DENY" to use the deny policy.
-// It denies requests from namespace "dev" to access the workload with "POST" method.
+// The following is another example that sets `action` to "DENY" to create a deny policy.
+// It denies requests from the "dev" namespace to the "POST" method on all workloads
+// in the "foo" namespace.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -232,7 +234,10 @@ type AuthorizationPolicy struct {
 	// Optional. A list of rules to match the request. A match occurs when at least
 	// one rule matches the request.
 	//
-	// If not set, requests to the target workload are denied by default.
+	// If not set, the match will never occur. You can leave this field unset and
+	// set the action to "ALLOW" to create a deny-all policy. It is meaningless to
+	// leave this field unset but set the action to "DENY" as the deny action will
+	// never happen.
 	Rules []*Rule `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
 	// Optional. The action to take if the request is matched with the rules.
 	Action               AuthorizationPolicy_Action `protobuf:"varint,3,opt,name=action,proto3,enum=istio.security.v1beta1.AuthorizationPolicy_Action" json:"action,omitempty"`
@@ -295,8 +300,8 @@ func (m *AuthorizationPolicy) GetAction() AuthorizationPolicy_Action {
 	return AuthorizationPolicy_ALLOW
 }
 
-// Rule matches requests from a list of sources that perform a list of operations when
-// the condition is matched. A match occurs when at least one source, operation and condition
+// Rule matches requests from a list of sources that perform a list of operations subject to a
+// list of conditions. A match occurs when at least one source, operation and condition
 // matches the request. An empty rule is always matched.
 //
 // Any string field in the rule supports Exact, Prefix, Suffix and Presence match:
@@ -746,9 +751,11 @@ type Condition struct {
 	// The name of an Istio attribute.
 	// See the [full list of supported attributes](https://istio.io/docs/reference/config/security/conditions/).
 	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	// Optional. The allowed values for the attribute.
+	// Optional. A list of allowed values for the attribute.
+	// Note: at least one of the values or not_values field must be set.
 	Values []string `protobuf:"bytes,2,rep,name=values,proto3" json:"values,omitempty"`
-	// Optional. A list of negative match of values.
+	// Optional. A list of negative match of values for the attribute.
+	// Note: at least one of the values or not_values field must be set.
 	NotValues            []string `protobuf:"bytes,3,rep,name=not_values,json=notValues,proto3" json:"not_values,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
