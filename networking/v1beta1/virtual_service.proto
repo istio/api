@@ -18,11 +18,11 @@ import "google/api/field_behavior.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 
-// $schema: istio.networking.v1alpha3.VirtualService
+// $schema: istio.networking.v1beta1.VirtualService
 // $title: Virtual Service
 // $description: Configuration affecting label/content routing, sni routing, etc.
 // $location: https://istio.io/docs/reference/config/networking/virtual-service.html
-// $aliases: [/docs/reference/config/networking/v1alpha3/virtual-service]
+// $aliases: [/docs/reference/config/networking/v1beta1/virtual-service]
 
 // Configuration affecting traffic routing. Here are a few terms useful to define
 // in the context of traffic routing.
@@ -68,7 +68,7 @@ import "google/protobuf/wrappers.proto";
 //
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: reviews-route
@@ -100,7 +100,7 @@ import "google/protobuf/wrappers.proto";
 // `DestinationRule`.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
 // metadata:
 //   name: reviews-destination
@@ -115,15 +115,16 @@ import "google/protobuf/wrappers.proto";
 //       version: v2
 // ```
 //
-package istio.networking.v1alpha3;
+package istio.networking.v1beta1;
 
-option go_package = "istio.io/api/networking/v1alpha3";
+option go_package = "istio.io/api/networking/v1beta1";
 
 // Configuration affecting traffic routing.
 //
 // <!-- crd generation tags
 // +cue-gen:VirtualService:groupName:networking.istio.io
-// +cue-gen:VirtualService:version:v1alpha3
+// +cue-gen:VirtualService:version:v1beta1
+// +cue-gen:VirtualService:storageVersion
 // +cue-gen:VirtualService:annotations:helm.sh/resource-policy=keep
 // +cue-gen:VirtualService:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:VirtualService:subresource:status
@@ -140,7 +141,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +kubetype-gen:groupVersion=networking.istio.io/v1beta1
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
@@ -252,7 +253,7 @@ message VirtualService {
 // some to subset v2, in a Kubernetes environment.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: reviews-route
@@ -281,7 +282,7 @@ message VirtualService {
 // And the associated DestinationRule
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
 // metadata:
 //   name: reviews-destination
@@ -308,7 +309,7 @@ message VirtualService {
 // not have an impact in resolving the name of the productpage service.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: my-productpage-rule
@@ -330,7 +331,7 @@ message VirtualService {
 // Service for wikipedia.org and set a timeout of 5s for HTTP requests.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-wikipedia
@@ -344,7 +345,7 @@ message VirtualService {
 //     protocol: HTTP
 //   resolution: DNS
 //
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: my-wiki-rule
@@ -369,9 +370,9 @@ message Destination {
   // the short name based on the namespace of the rule, not the service. A
   // rule in the "default" namespace containing a host "reviews will be
   // interpreted as "reviews.default.svc.cluster.local", irrespective of
-  // the actual namespace associated with the reviews service. To avoid
-  // potential misconfiguration, it is recommended to always use fully
-  // qualified domain names over short names.
+  // the actual namespace associated with the reviews service. _To avoid
+  // potential misconfigurations, it is recommended to always use fully
+  // qualified domain names over short names._
   string host = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The name of a subset within the service. Applicable only to services
@@ -416,8 +417,9 @@ message HTTPRoute {
   // Redirect primitive. Rewrite will be performed before forwarding.
   HTTPRewrite rewrite = 4;
 
-  reserved 5;
-  reserved "websocket_upgrade";
+  // Deprecated. Websocket upgrades are done automatically starting from Istio 1.0.
+  // $hide_from_docs
+  bool websocket_upgrade = 5;
 
   // Timeout for HTTP requests.
   google.protobuf.Duration timeout = 6;
@@ -453,8 +455,20 @@ message HTTPRoute {
   // for further details about cross origin resource sharing.
   CorsPolicy cors_policy = 10;
 
-  reserved 11 to 15;
-  reserved "append_headers", "remove_response_headers", "append_response_headers","remove_request_headers", "append_request_headers";
+  // $hide_from_docs
+  map<string, string> append_headers = 11 [deprecated=true];
+
+  // $hide_from_docs
+  repeated string remove_response_headers = 12 [deprecated=true];
+
+  // $hide_from_docs
+  map<string, string> append_response_headers = 13 [deprecated=true];
+
+  // $hide_from_docs
+  repeated string remove_request_headers = 14 [deprecated=true];
+
+  // $hide_from_docs
+  map<string, string> append_request_headers = 15 [deprecated=true];
 
   // Header manipulation rules
   Headers headers = 16;
@@ -469,7 +483,7 @@ message HTTPRoute {
 // coming from the `v1` subset (version) of the `reviews` service.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: reviews-route
@@ -521,7 +535,7 @@ message Headers {
 // services in the mesh based on the SNI value.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: bookinfo-sni
@@ -562,7 +576,7 @@ message TLSRoute {
 // mongo.prod.svc.cluster.local to another Mongo server on port 5555.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: bookinfo-Mongo
@@ -596,7 +610,7 @@ message TCPRoute {
 // with value `jason`.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: ratings-route
@@ -728,7 +742,7 @@ message HTTPMatchRequest {
 // "v1".
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: reviews-route
@@ -750,7 +764,7 @@ message HTTPMatchRequest {
 // And the associated DestinationRule
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
 // metadata:
 //   name: reviews-destination
@@ -770,7 +784,7 @@ message HTTPMatchRequest {
 // traffic to reviews.com to dev.reviews.com
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: reviews-route-two-domains
@@ -797,8 +811,21 @@ message HTTPRouteDestination {
   // be 100.
   int32 weight = 2;
 
-  reserved 3 to 6;
-  reserved "remove_response_headers", "append_response_headers", "remove_request_headers", "append_request_headers";
+  // Use of `remove_response_header` is deprecated. Use the `headers`
+  // field instead.
+  repeated string remove_response_headers = 3 [deprecated=true];
+
+  // Use of `append_response_headers` is deprecated. Use the `headers`
+  // field instead.
+  map<string, string> append_response_headers = 4 [deprecated=true];
+
+  // Use of `remove_request_headers` is deprecated. Use the `headers`
+  // field instead.
+  repeated string remove_request_headers = 5 [deprecated=true];
+
+  // Use of `append_request_headers` is deprecated. Use the `headers`
+  // field instead.
+  map<string, string> append_request_headers = 6 [deprecated=true];
 
   // Header manipulation rules
   Headers headers = 7;
@@ -863,8 +890,10 @@ message TLSMatchAttributes {
   // port.
   uint32 port = 3;
 
-  reserved 4;
-  reserved "source_subnet";
+  // IPv4 or IPv6 ip address of source with optional subnet. E.g., a.b.c.d/xx
+  // form or just a.b.c.d
+  // $hide_from_docs
+  string source_subnet = 4;
 
   // One or more labels that constrain the applicability of a rule to
   // workloads with the given labels. If the VirtualService has a list of
@@ -885,7 +914,7 @@ message TLSMatchAttributes {
 // /v1/bookRatings provided by the bookratings service.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: ratings-route
@@ -923,7 +952,7 @@ message HTTPRedirect {
 // ratings service before making the actual API call.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: ratings-route
@@ -973,7 +1002,7 @@ message StringMatch {
 // calling ratings:v1 service, with a 2s timeout per retry attempt.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: ratings-route
@@ -1017,7 +1046,7 @@ message HTTPRetry {
 // exposes `X-Foo-bar` header and sets an expiry period of 1 day.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: ratings-route
@@ -1045,13 +1074,7 @@ message CorsPolicy {
   // The list of origins that are allowed to perform CORS requests. The
   // content will be serialized into the Access-Control-Allow-Origin
   // header. Wildcard * will allow all origins.
-  // $hide_from_docs
-  repeated string allow_origin = 1 [deprecated=true];
-
-  // String patterns that match allowed origins.
-  // An origin is allowed if any of the string matchers match.
-  // If a match is found, then the outgoing Access-Control-Allow-Origin would be set to the origin as provided by the client.
-  repeated StringMatch allow_origins = 7;
+  repeated string allow_origin = 1;
 
   // List of HTTP methods allowed to access the resource. The content will
   // be serialized into the Access-Control-Allow-Methods header.
@@ -1098,7 +1121,7 @@ message HTTPFaultInjection {
   // service from all pods with label env: prod
   //
   // ```yaml
-  // apiVersion: networking.istio.io/v1alpha3
+  // apiVersion: networking.istio.io/v1beta1
   // kind: VirtualService
   // metadata:
   //   name: reviews-route
@@ -1147,7 +1170,7 @@ message HTTPFaultInjection {
   // error code for 1 out of every 1000 requests to the "ratings" service "v1".
   //
   // ```yaml
-  // apiVersion: networking.istio.io/v1alpha3
+  // apiVersion: networking.istio.io/v1beta1
   // kind: VirtualService
   // metadata:
   //   name: ratings-route
@@ -1171,8 +1194,10 @@ message HTTPFaultInjection {
   // abort a certain percentage of requests. If not specified, all requests are
   // aborted.
   message Abort {
-    reserved 1;
-    reserved "percent";
+    // Percentage of requests to be aborted with the error code provided (0-100).
+    // Use of integer `percent` value is deprecated. Use the double `percentage`
+    // field instead.
+    int32 percent = 1 [deprecated=true];
 
     oneof error_type {
       // HTTP status code to use to abort the Http request.

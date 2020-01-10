@@ -15,13 +15,13 @@
 syntax = "proto3";
 
 import "google/api/field_behavior.proto";
-import "networking/v1alpha3/gateway.proto";
+import "networking/v1beta1/gateway.proto";
 
-// $schema: istio.networking.v1alpha3.Sidecar
+// $schema: istio.networking.v1beta1.Sidecar
 // $title: Sidecar
 // $description: Configuration affecting network reachability of a sidecar.
 // $location: https://istio.io/docs/reference/config/networking/sidecar.html
-// $aliases: [/docs/reference/config/networking/v1alpha3/sidecar]
+// $aliases: [/docs/reference/config/networking/v1beta1/sidecar]
 
 // `Sidecar` describes the configuration of the sidecar proxy that mediates
 // inbound and outbound communication to the workload instance it is attached to. By
@@ -62,7 +62,7 @@ import "networking/v1alpha3/gateway.proto";
 // the same namespace, and to services in the `istio-system` namespace.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: Sidecar
 // metadata:
 //   name: default
@@ -81,7 +81,7 @@ import "networking/v1alpha3/gateway.proto";
 // namespaces.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: Sidecar
 // metadata:
 //   name: default
@@ -102,7 +102,7 @@ import "networking/v1alpha3/gateway.proto";
 // `prod-us1` namespace.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: Sidecar
 // metadata:
 //   name: default
@@ -139,7 +139,7 @@ import "networking/v1alpha3/gateway.proto";
 // externally hosted MySQL service at `mysql.foo.com:3306`.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: Sidecar
 // metadata:
 //   name: no-ip-tables
@@ -169,7 +169,7 @@ import "networking/v1alpha3/gateway.proto";
 // And the associated service entry for routing to `mysql.foo.com:3306`
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-mysql
@@ -198,7 +198,7 @@ import "networking/v1alpha3/gateway.proto";
 // based traffic capture is active.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: Sidecar
 // metadata:
 //   name: partial-ip-tables
@@ -225,9 +225,9 @@ import "networking/v1alpha3/gateway.proto";
 //     - "*/*"
 // ```
 //
-package istio.networking.v1alpha3;
+package istio.networking.v1beta1;
 
-option go_package = "istio.io/api/networking/v1alpha3";
+option go_package = "istio.io/api/networking/v1beta1";
 
 // `Sidecar` describes the configuration of the sidecar proxy that mediates
 // inbound and outbound communication of the workload instance to which it is
@@ -235,7 +235,8 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //
 // <!-- crd generation tags
 // +cue-gen:Sidecar:groupName:networking.istio.io
-// +cue-gen:Sidecar:version:v1alpha3
+// +cue-gen:Sidecar:version:v1beta1
+// +cue-gen:Sidecar:storageVersion
 // +cue-gen:Sidecar:annotations:helm.sh/resource-policy=keep
 // +cue-gen:Sidecar:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:Sidecar:subresource:status
@@ -245,7 +246,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +kubetype-gen:groupVersion=networking.istio.io/v1beta1
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
