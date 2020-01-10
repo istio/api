@@ -5252,6 +5252,12 @@ spec:
           description: 'Configuration for access control on workloads. See more details
             at: https://istio.io/docs/reference/config/security/authorization-policy.html'
           properties:
+            action:
+              description: Optional.
+              enum:
+              - ALLOW
+              - DENY
+              type: string
             rules:
               description: Optional.
               items:
@@ -5270,6 +5276,30 @@ spec:
                                 type: string
                               type: array
                             namespaces:
+                              description: Optional.
+                              items:
+                                format: string
+                                type: string
+                              type: array
+                            notIpBlocks:
+                              description: Optional.
+                              items:
+                                format: string
+                                type: string
+                              type: array
+                            notNamespaces:
+                              description: Optional.
+                              items:
+                                format: string
+                                type: string
+                              type: array
+                            notPrincipals:
+                              description: Optional.
+                              items:
+                                format: string
+                                type: string
+                              type: array
+                            notRequestPrincipals:
                               description: Optional.
                               items:
                                 format: string
@@ -5309,6 +5339,30 @@ spec:
                                 format: string
                                 type: string
                               type: array
+                            notHosts:
+                              description: Optional.
+                              items:
+                                format: string
+                                type: string
+                              type: array
+                            notMethods:
+                              description: Optional.
+                              items:
+                                format: string
+                                type: string
+                              type: array
+                            notPaths:
+                              description: Optional.
+                              items:
+                                format: string
+                                type: string
+                              type: array
+                            notPorts:
+                              description: Optional.
+                              items:
+                                format: string
+                                type: string
+                              type: array
                             paths:
                               description: Optional.
                               items:
@@ -5332,8 +5386,14 @@ spec:
                           description: The name of an Istio attribute.
                           format: string
                           type: string
+                        notValues:
+                          description: Optional.
+                          items:
+                            format: string
+                            type: string
+                          type: array
                         values:
-                          description: The allowed values for the attribute.
+                          description: Optional.
                           items:
                             format: string
                             type: string

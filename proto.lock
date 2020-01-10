@@ -43637,6 +43637,20 @@
     {
       "protopath": "security:/:v1beta1:/:authorization.proto",
       "def": {
+        "enums": [
+          {
+            "name": "AuthorizationPolicy.Action",
+            "enum_fields": [
+              {
+                "name": "ALLOW"
+              },
+              {
+                "name": "DENY",
+                "integer": 1
+              }
+            ]
+          }
+        ],
         "messages": [
           {
             "name": "AuthorizationPolicy",
@@ -43651,6 +43665,11 @@
                 "name": "rules",
                 "type": "Rule",
                 "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "action",
+                "type": "Action"
               }
             ]
           },
@@ -43709,8 +43728,20 @@
                 "is_repeated": true
               },
               {
+                "id": 5,
+                "name": "not_principals",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
                 "id": 2,
                 "name": "request_principals",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 6,
+                "name": "not_request_principals",
                 "type": "string",
                 "is_repeated": true
               },
@@ -43721,8 +43752,20 @@
                 "is_repeated": true
               },
               {
+                "id": 7,
+                "name": "not_namespaces",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
                 "id": 4,
                 "name": "ip_blocks",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 8,
+                "name": "not_ip_blocks",
                 "type": "string",
                 "is_repeated": true
               }
@@ -43738,8 +43781,20 @@
                 "is_repeated": true
               },
               {
+                "id": 5,
+                "name": "not_hosts",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
                 "id": 2,
                 "name": "ports",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 6,
+                "name": "not_ports",
                 "type": "string",
                 "is_repeated": true
               },
@@ -43750,8 +43805,20 @@
                 "is_repeated": true
               },
               {
+                "id": 7,
+                "name": "not_methods",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
                 "id": 4,
                 "name": "paths",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 8,
+                "name": "not_paths",
                 "type": "string",
                 "is_repeated": true
               }
@@ -43775,13 +43842,13 @@
                 "id": 2,
                 "name": "values",
                 "type": "string",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "not_values",
+                "type": "string",
+                "is_repeated": true
               }
             ]
           }
