@@ -426,11 +426,19 @@
         "type": "object",
         "properties": {
           "allowOrigin": {
-            "description": "The list of origins that are allowed to perform CORS requests. The content will be serialized into the Access-Control-Allow-Origin header. Wildcard * will allow all origins.",
+            "description": "The list of origins that are allowed to perform CORS requests. The content will be serialized into the Access-Control-Allow-Origin header. Wildcard * will allow all origins. $hide_from_docs",
             "type": "array",
             "items": {
               "type": "string",
               "format": "string"
+            },
+            "deprecated": true
+          },
+          "allowOrigins": {
+            "description": "String patterns that match allowed origins. An origin is allowed if any of the string matchers match. If a match is found, then the outgoing Access-Control-Allow-Origin would be set to the origin as provided by the client.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.StringMatch"
             }
           },
           "allowMethods": {

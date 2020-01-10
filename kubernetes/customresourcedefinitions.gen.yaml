@@ -3712,6 +3712,28 @@ spec:
                           format: string
                           type: string
                         type: array
+                      allowOrigins:
+                        description: String patterns that match allowed origins.
+                        items:
+                          oneOf:
+                          - required:
+                            - exact
+                          - required:
+                            - prefix
+                          - required:
+                            - regex
+                          properties:
+                            exact:
+                              format: string
+                              type: string
+                            prefix:
+                              format: string
+                              type: string
+                            regex:
+                              format: string
+                              type: string
+                          type: object
+                        type: array
                       exposeHeaders:
                         items:
                           format: string
