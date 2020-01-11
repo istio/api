@@ -155,7 +155,10 @@ message IstioOperatorSpec {
     TypeMapStringInterface2 values = 100;
     // Unvalidated overrides for default values.yaml. Used for custom templates where new parameters are added.
     TypeMapStringInterface2 unvalidated_values = 101;
+}
 
+// Observed state of IstioOperator
+message InstallStatus {
     // Status describes the current state of a component.
     enum Status {
         // Component is not present.
@@ -183,9 +186,9 @@ message IstioOperatorSpec {
     // - If one or more components are UPDATING and others are HEALTHY, overall status is UPDATING.
     // - If components are a mix of RECONCILING, UPDATING and HEALTHY, overall status is UPDATING.
     // - If any component is in ERROR state, overall status is ERROR.
-    Status status = 200;
+    Status status = 1;
     // Individual status of each component controlled by the operator. The map key is the name of the component.
-    map<string, VersionStatus> component_status = 201;
+    map<string, VersionStatus> component_status = 2;
 }
 
 // This is required because synthetic type definition has file rather than package scope.

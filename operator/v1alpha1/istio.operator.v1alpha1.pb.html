@@ -2,7 +2,7 @@
 title: istio.operator.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 52
+number_of_entries: 53
 ---
 <h2 id="Affinity">Affinity</h2>
 <section>
@@ -653,6 +653,154 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="InstallStatus">InstallStatus</h2>
+<section>
+<p>Observed state of IstioOperator</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="InstallStatus-status">
+<td><code>status</code></td>
+<td><code><a href="#InstallStatus-Status">Status</a></code></td>
+<td>
+<p>Overall status of all components controlled by the operator.
+- If all components have status NONE, overall status is NONE.
+- If all components are HEALTHY, overall status is HEALTHY.
+- If one or more components are RECONCILING and others are HEALTHY, overall status is RECONCILING.
+- If one or more components are UPDATING and others are HEALTHY, overall status is UPDATING.
+- If components are a mix of RECONCILING, UPDATING and HEALTHY, overall status is UPDATING.
+- If any component is in ERROR state, overall status is ERROR.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="InstallStatus-component_status">
+<td><code>componentStatus</code></td>
+<td><code>map&lt;string,&nbsp;<a href="#InstallStatus-VersionStatus">VersionStatus</a>&gt;</code></td>
+<td>
+<p>Individual status of each component controlled by the operator. The map key is the name of the component.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="InstallStatus-Status">InstallStatus.Status</h2>
+<section>
+<p>Status describes the current state of a component.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="InstallStatus-Status-NONE">
+<td><code>NONE</code></td>
+<td>
+<p>Component is not present.</p>
+
+</td>
+</tr>
+<tr id="InstallStatus-Status-UPDATING">
+<td><code>UPDATING</code></td>
+<td>
+<p>Component is being updated to a different version.</p>
+
+</td>
+</tr>
+<tr id="InstallStatus-Status-RECONCILING">
+<td><code>RECONCILING</code></td>
+<td>
+<p>Controller has started but not yet completed reconciliation loop for the component.</p>
+
+</td>
+</tr>
+<tr id="InstallStatus-Status-HEALTHY">
+<td><code>HEALTHY</code></td>
+<td>
+<p>Component is healthy.</p>
+
+</td>
+</tr>
+<tr id="InstallStatus-Status-ERROR">
+<td><code>ERROR</code></td>
+<td>
+<p>Component is in an error state.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="InstallStatus-VersionStatus">InstallStatus.VersionStatus</h2>
+<section>
+<p>VersionStatus is the status and version of a component.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="InstallStatus-VersionStatus-version">
+<td><code>version</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="InstallStatus-VersionStatus-status">
+<td><code>status</code></td>
+<td><code><a href="#InstallStatus-Status">Status</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="InstallStatus-VersionStatus-status_string">
+<td><code>statusString</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="InstallStatus-VersionStatus-error">
+<td><code>error</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="IstioComponentSetSpec">IstioComponentSetSpec</h2>
 <section>
 <p>IstioComponentSpec defines the desired installed state of Istio components.</p>
@@ -909,137 +1057,6 @@ No
 <td>
 <p>Unvalidated overrides for default values.yaml. Used for custom templates where new parameters are added.</p>
 
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="IstioOperatorSpec-status">
-<td><code>status</code></td>
-<td><code><a href="#IstioOperatorSpec-Status">Status</a></code></td>
-<td>
-<p>Overall status of all components controlled by the operator.
-- If all components have status NONE, overall status is NONE.
-- If all components are HEALTHY, overall status is HEALTHY.
-- If one or more components are RECONCILING and others are HEALTHY, overall status is RECONCILING.
-- If one or more components are UPDATING and others are HEALTHY, overall status is UPDATING.
-- If components are a mix of RECONCILING, UPDATING and HEALTHY, overall status is UPDATING.
-- If any component is in ERROR state, overall status is ERROR.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="IstioOperatorSpec-component_status">
-<td><code>componentStatus</code></td>
-<td><code>map&lt;string,&nbsp;<a href="#IstioOperatorSpec-VersionStatus">VersionStatus</a>&gt;</code></td>
-<td>
-<p>Individual status of each component controlled by the operator. The map key is the name of the component.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="IstioOperatorSpec-Status">IstioOperatorSpec.Status</h2>
-<section>
-<p>Status describes the current state of a component.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="IstioOperatorSpec-Status-NONE">
-<td><code>NONE</code></td>
-<td>
-<p>Component is not present.</p>
-
-</td>
-</tr>
-<tr id="IstioOperatorSpec-Status-UPDATING">
-<td><code>UPDATING</code></td>
-<td>
-<p>Component is being updated to a different version.</p>
-
-</td>
-</tr>
-<tr id="IstioOperatorSpec-Status-RECONCILING">
-<td><code>RECONCILING</code></td>
-<td>
-<p>Controller has started but not yet completed reconciliation loop for the component.</p>
-
-</td>
-</tr>
-<tr id="IstioOperatorSpec-Status-HEALTHY">
-<td><code>HEALTHY</code></td>
-<td>
-<p>Component is healthy.</p>
-
-</td>
-</tr>
-<tr id="IstioOperatorSpec-Status-ERROR">
-<td><code>ERROR</code></td>
-<td>
-<p>Component is in an error state.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="IstioOperatorSpec-VersionStatus">IstioOperatorSpec.VersionStatus</h2>
-<section>
-<p>VersionStatus is the status and version of a component.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="IstioOperatorSpec-VersionStatus-version">
-<td><code>version</code></td>
-<td><code>string</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="IstioOperatorSpec-VersionStatus-status">
-<td><code>status</code></td>
-<td><code><a href="#IstioOperatorSpec-Status">Status</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="IstioOperatorSpec-VersionStatus-status_string">
-<td><code>statusString</code></td>
-<td><code>string</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="IstioOperatorSpec-VersionStatus-error">
-<td><code>error</code></td>
-<td><code>string</code></td>
-<td>
 </td>
 <td>
 No

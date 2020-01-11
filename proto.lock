@@ -42071,7 +42071,7 @@
       "def": {
         "enums": [
           {
-            "name": "IstioOperatorSpec.Status",
+            "name": "InstallStatus.Status",
             "enum_fields": [
               {
                 "name": "NONE"
@@ -42143,11 +42143,6 @@
                 "id": 101,
                 "name": "unvalidated_values",
                 "type": "TypeMapStringInterface2"
-              },
-              {
-                "id": 200,
-                "name": "status",
-                "type": "Status"
               }
             ],
             "maps": [
@@ -42158,11 +42153,23 @@
                   "name": "addon_components",
                   "type": "ExternalComponentSpec"
                 }
-              },
+              }
+            ]
+          },
+          {
+            "name": "InstallStatus",
+            "fields": [
+              {
+                "id": 1,
+                "name": "status",
+                "type": "Status"
+              }
+            ],
+            "maps": [
               {
                 "key_type": "string",
                 "field": {
-                  "id": 201,
+                  "id": 2,
                   "name": "component_status",
                   "type": "VersionStatus"
                 }
