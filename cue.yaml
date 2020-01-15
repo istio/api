@@ -25,6 +25,8 @@ directories:
       title: This package defines the Mixer API that the sidecar proxy uses to perform precondition checks, manage quotas, and report telemetry.
   networking/v1alpha3:
     - mode: perFile
+  networking/v1beta1:
+    - mode: perFile
   policy/v1beta1:
     - mode: all
   rbac/v1alpha1:

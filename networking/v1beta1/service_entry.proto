@@ -1,4 +1,4 @@
-// Copyright 2018 Istio Authors
+// Copyright 2020 Istio Authors
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
 syntax = "proto3";
 
 import "google/api/field_behavior.proto";
-import "networking/v1alpha3/gateway.proto";
+import "networking/v1beta1/gateway.proto";
 
-// $schema: istio.networking.v1alpha3.ServiceEntry
+// $schema: istio.networking.v1beta1.ServiceEntry
 // $title: Service Entry
 // $description: Configuration affecting service registry.
 // $location: https://istio.io/docs/reference/config/networking/service-entry.html
-// $aliases: [/docs/reference/config/networking/v1alpha3/service-entry]
+// $aliases: [/docs/reference/config/networking/v1beta1/service-entry]
 
 // `ServiceEntry` enables adding additional entries into Istio's internal
 // service registry, so that auto-discovered services in the mesh can
@@ -36,7 +36,7 @@ import "networking/v1alpha3/gateway.proto";
 // ClientHello message to route to the appropriate external service.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-https
@@ -59,7 +59,7 @@ import "networking/v1alpha3/gateway.proto";
 // to initiate mTLS connections to the database instances.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-mongocluster
@@ -82,7 +82,7 @@ import "networking/v1alpha3/gateway.proto";
 // and the associated DestinationRule
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
 // metadata:
 //   name: mtls-mongocluster
@@ -101,7 +101,7 @@ import "networking/v1alpha3/gateway.proto";
 // an internal egress firewall.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-redirect
@@ -120,7 +120,7 @@ import "networking/v1alpha3/gateway.proto";
 // And the associated VirtualService to route based on the SNI value.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: tls-routing
@@ -151,7 +151,7 @@ import "networking/v1alpha3/gateway.proto";
 // namespaces.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-httpbin
@@ -172,7 +172,7 @@ import "networking/v1alpha3/gateway.proto";
 // Define a gateway to handle all egress traffic.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: Gateway
 // metadata:
 //  name: istio-egressgateway
@@ -197,7 +197,7 @@ import "networking/v1alpha3/gateway.proto";
 // a managed middle proxy like this is a common practice.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: gateway-routing
@@ -233,7 +233,7 @@ import "networking/v1alpha3/gateway.proto";
 // to connect to a specific IP), the discovery mode must be set to `NONE`.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-wildcard-example
@@ -253,7 +253,7 @@ import "networking/v1alpha3/gateway.proto";
 // set to STATIC to use Unix address endpoints.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
 // metadata:
 //   name: unix-domain-socket-example
@@ -279,7 +279,7 @@ import "networking/v1alpha3/gateway.proto";
 // uk.foo.bar.com:9080, and in.foo.bar.com:7080
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
 // metadata:
 //   name: external-svc-dns
@@ -314,7 +314,7 @@ import "networking/v1alpha3/gateway.proto";
 // whose format conforms to the [SPIFFE standard](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md):
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
 // metadata:
 //   name: httpbin
@@ -335,16 +335,17 @@ import "networking/v1alpha3/gateway.proto";
 //   - "spiffe://cluster.local/ns/httpbin-ns/sa/httpbin-service-account"
 // ```
 //
-package istio.networking.v1alpha3;
+package istio.networking.v1beta1;
 
-option go_package = "istio.io/api/networking/v1alpha3";
+option go_package = "istio.io/api/networking/v1beta1";
 
 // ServiceEntry enables adding additional entries into Istio's internal
 // service registry.
 //
 // <!-- crd generation tags
 // +cue-gen:ServiceEntry:groupName:networking.istio.io
-// +cue-gen:ServiceEntry:version:v1alpha3
+// +cue-gen:ServiceEntry:version:v1beta1
+// +cue-gen:ServiceEntry:storageVersion
 // +cue-gen:ServiceEntry:annotations:helm.sh/resource-policy=keep
 // +cue-gen:ServiceEntry:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:ServiceEntry:subresource:status
@@ -363,7 +364,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +kubetype-gen:groupVersion=networking.istio.io/v1beta1
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->

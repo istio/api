@@ -1,4 +1,4 @@
-// Copyright 2017 Istio Authors
+// Copyright 2020 Istio Authors
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@ syntax = "proto3";
 
 import "google/api/field_behavior.proto";
 
-// $schema: istio.networking.v1alpha3.Gateway
+// $schema: istio.networking.v1beta1.Gateway
 // $title: Gateway
 // $description: Configuration affecting edge load balancer.
 // $location: https://istio.io/docs/reference/config/networking/gateway.html
-// $aliases: [/docs/reference/config/networking/v1alpha3/gateway]
+// $aliases: [/docs/reference/config/networking/v1beta1/gateway]
 
 // `Gateway` describes a load balancer operating at the edge of the mesh
 // receiving incoming or outgoing HTTP/TCP connections. The specification
@@ -36,7 +36,7 @@ import "google/api/field_behavior.proto";
 // external traffic to these ports are allowed into the mesh.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: Gateway
 // metadata:
 //   name: my-gateway
@@ -104,7 +104,7 @@ import "google/api/field_behavior.proto";
 // gets redirected to `https://uk.bookinfo.com` (i.e. 80 redirects to 443).
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: bookinfo-rule
@@ -147,7 +147,7 @@ import "google/api/field_behavior.proto";
 // reserved name `mesh`.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
 //   name: bookinfo-Mongo
@@ -175,7 +175,7 @@ import "google/api/field_behavior.proto";
 // foo.bar.com host in the ns2 namespace to bind to it.
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: Gateway
 // metadata:
 //   name: my-gateway
@@ -193,16 +193,17 @@ import "google/api/field_behavior.proto";
 //     - "ns2/foo.bar.com"
 // ```
 //
-package istio.networking.v1alpha3;
+package istio.networking.v1beta1;
 
-option go_package = "istio.io/api/networking/v1alpha3";
+option go_package = "istio.io/api/networking/v1beta1";
 
 // Gateway describes a load balancer operating at the edge of the mesh
 // receiving incoming or outgoing HTTP/TCP connections.
 //
 // <!-- crd generation tags
 // +cue-gen:Gateway:groupName:networking.istio.io
-// +cue-gen:Gateway:version:v1alpha3
+// +cue-gen:Gateway:version:v1beta1
+// +cue-gen:Gateway:storageVersion
 // +cue-gen:Gateway:annotations:helm.sh/resource-policy=keep
 // +cue-gen:Gateway:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:Gateway:subresource:status
@@ -212,7 +213,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +kubetype-gen:groupVersion=networking.istio.io/v1beta1
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
@@ -232,7 +233,7 @@ message Gateway {
 // port. For example,
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: Gateway
 // metadata:
 //   name: my-ingress
@@ -251,7 +252,7 @@ message Gateway {
 // Another example
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: Gateway
 // metadata:
 //   name: my-tcp-ingress
@@ -270,7 +271,7 @@ message Gateway {
 // The following is an example of TLS configuration for port 443
 //
 // ```yaml
-// apiVersion: networking.istio.io/v1alpha3
+// apiVersion: networking.istio.io/v1beta1
 // kind: Gateway
 // metadata:
 //   name: my-tls-ingress
