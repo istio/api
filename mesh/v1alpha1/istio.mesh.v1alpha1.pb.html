@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 23
+number_of_entries: 24
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -747,30 +747,6 @@ No
 No
 </td>
 </tr>
-<tr id="MeshConfig-thrift_rate_limit_url">
-<td><code>thriftRateLimitUrl</code></td>
-<td><code>string</code></td>
-<td>
-<p>Specify thrift rate limit service URL. If pilot has thrift protocol support enabled,
-this will enable the rate limit service for destinations that have matching rate
-limit configurations.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-thrift_rate_limit_timeout">
-<td><code>thriftRateLimitTimeout</code></td>
-<td><code>string</code></td>
-<td>
-<p>Specify thrift rate limit service timeout, in milliseconds</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 </tbody>
 </table>
 </section>
@@ -916,6 +892,45 @@ service registry as well as those defined through ServiceEntries</p>
 <p>outbound traffic to unknown destinations will be allowed, in case
 there are no services or ServiceEntries for the destination port</p>
 
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ThriftConfig">MeshConfig.ThriftConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ThriftConfig-thrift_rate_limit_url">
+<td><code>thriftRateLimitUrl</code></td>
+<td><code>string</code></td>
+<td>
+<p>Specify thrift rate limit service URL. If pilot has thrift protocol support enabled,
+this will enable the rate limit service for destinations that have matching rate
+limit configurations.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ThriftConfig-thrift_rate_limit_timeout">
+<td><code>thriftRateLimitTimeout</code></td>
+<td><code>string</code></td>
+<td>
+<p>Specify thrift rate limit service timeout, in milliseconds</p>
+
+</td>
+<td>
+No
 </td>
 </tr>
 </tbody>
