@@ -909,8 +909,8 @@ there are no services or ServiceEntries for the destination port</p>
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-ThriftConfig-thrift_rate_limit_url">
-<td><code>thriftRateLimitUrl</code></td>
+<tr id="MeshConfig-ThriftConfig-rate_limit_url">
+<td><code>rateLimitUrl</code></td>
 <td><code>string</code></td>
 <td>
 <p>Specify thrift rate limit service URL. If pilot has thrift protocol support enabled,
@@ -922,11 +922,11 @@ limit configurations.</p>
 No
 </td>
 </tr>
-<tr id="MeshConfig-ThriftConfig-thrift_rate_limit_timeout">
-<td><code>thriftRateLimitTimeout</code></td>
-<td><code>string</code></td>
+<tr id="MeshConfig-ThriftConfig-rate_limit_timeout">
+<td><code>rateLimitTimeout</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
-<p>Specify thrift rate limit service timeout, in milliseconds</p>
+<p>Specify thrift rate limit service timeout, in milliseconds. Default is 50ms</p>
 
 </td>
 <td>

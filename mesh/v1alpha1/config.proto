@@ -391,10 +391,10 @@ message MeshConfig {
     // Specify thrift rate limit service URL. If pilot has thrift protocol support enabled,
     // this will enable the rate limit service for destinations that have matching rate
     // limit configurations.
-    string thrift_rate_limit_url = 1;
+    string rate_limit_url = 1;
 
-    // Specify thrift rate limit service timeout, in milliseconds
-    string thrift_rate_limit_timeout = 2;
+    // Specify thrift rate limit service timeout, in milliseconds. Default is 50ms
+    google.protobuf.Duration rate_limit_timeout = 2;
   }
 
   // $hide_from_docs
