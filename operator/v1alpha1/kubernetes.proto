@@ -213,13 +213,6 @@ message SessionAffinityConfig {
 message ClientIPConfig {
   int32 timeoutSeconds = 1;
 }
-message Toleration {
-  string key = 1;
-  string operator = 2;
-  string value = 3;
-  string effect = 4;
-  int64 tolerationSeconds = 5;
-}
 
 // GOTYPE: *IntOrStringForPB
 message TypeIntOrStringForPB {}

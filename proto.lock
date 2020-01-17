@@ -43170,7 +43170,8 @@
               {
                 "id": 14,
                 "name": "tolerations",
-                "type": "Toleration"
+                "type": "k8s.io.api.core.v1.Toleration",
+                "is_repeated": true
               },
               {
                 "id": 100,
@@ -43913,36 +43914,6 @@
                 "id": 1,
                 "name": "timeoutSeconds",
                 "type": "int32"
-              }
-            ]
-          },
-          {
-            "name": "Toleration",
-            "fields": [
-              {
-                "id": 1,
-                "name": "key",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "operator",
-                "type": "string"
-              },
-              {
-                "id": 3,
-                "name": "value",
-                "type": "string"
-              },
-              {
-                "id": 4,
-                "name": "effect",
-                "type": "string"
-              },
-              {
-                "id": 5,
-                "name": "tolerationSeconds",
-                "type": "int64"
               }
             ]
           },
