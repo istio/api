@@ -2,7 +2,7 @@
 title: istio.operator.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 53
+number_of_entries: 52
 ---
 <h2 id="Affinity">Affinity</h2>
 <section>
@@ -2073,7 +2073,7 @@ No
 </tr>
 <tr id="ServicePort-targetPort">
 <td><code>targetPort</code></td>
-<td><code><a href="#k8s-io-apimachinery-pkg-util-intstr-IntOrString">IntOrString</a></code></td>
+<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
 <td>
 </td>
 <td>
@@ -2597,58 +2597,6 @@ No
 <p>matchExpressions is a list of label selector requirements. The requirements are ANDed.
 +optional</p>
 
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="k8s-io-apimachinery-pkg-util-intstr-IntOrString">k8s.io.apimachinery.pkg.util.intstr.IntOrString</h2>
-<section>
-<p>IntOrString is a type that can hold an int32 or a string.  When used in
-JSON or YAML marshalling and unmarshalling, it produces or consumes the
-inner type.  This allows you to have, for example, a JSON field that can
-accept a name or number.
-TODO: Rename to Int32OrString</p>
-
-<p>+protobuf=true
-+protobuf.options.(gogoproto.goproto_stringer)=false
-+k8s:openapi-gen=true</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="k8s-io-apimachinery-pkg-util-intstr-IntOrString-type">
-<td><code>type</code></td>
-<td><code>int64</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="k8s-io-apimachinery-pkg-util-intstr-IntOrString-intVal">
-<td><code>intVal</code></td>
-<td><code>int32</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="k8s-io-apimachinery-pkg-util-intstr-IntOrString-strVal">
-<td><code>strVal</code></td>
-<td><code>string</code></td>
-<td>
 </td>
 <td>
 No

@@ -204,7 +204,7 @@ message ServicePort {
   string name = 1;
   string protocol = 2;
   int32 port = 3;
-  k8s.io.apimachinery.pkg.util.intstr.IntOrString targetPort = 4;
+  TypeIntOrStringForPB targetPort = 4;
   int32 nodePort = 5;
 }
 message SessionAffinityConfig {
