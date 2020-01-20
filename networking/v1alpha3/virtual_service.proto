@@ -680,6 +680,7 @@ message HTTPMatchRequest {
   //
   // - `regex: "value"` for ECMAscript style regex-based match
   //
+  // If the value is empty and only the name of header is specfied, presence of the header is checked.
   // **Note:** The keys `uri`, `scheme`, `method`, and `authority` will be ignored.
   map<string, StringMatch> headers = 5;
 
@@ -718,6 +719,10 @@ message HTTPMatchRequest {
   // **Note:** The case will be ignored only in the case of `exact` and `prefix`
   // URI matches.
   bool ignore_uri_case = 10;
+  
+  // withoutHeader has the same syntax with the header, but has opposite meaning.
+  // If a header is matched with a matching rule among withoutHeader, the traffic becomes not matched one.
+  map<string, StringMatch> without_headers = 12;
 }
 
 // Each routing rule is associated with one or more service versions (see
