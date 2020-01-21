@@ -295,7 +295,8 @@ the first bits of data. For server first protocols like MySQL,
 MongoDB, etc., Envoy will timeout on the protocol detection after
 the specified period, defaulting to non mTLS plain TCP
 traffic. Set this field to tweak the period that Envoy will wait
-for the client to send the first bits of data. (MUST BE &gt;=1ms)</p>
+for the client to send the first bits of data. (MUST BE &gt;=1ms or
+0s to disable)</p>
 
 </td>
 <td>
