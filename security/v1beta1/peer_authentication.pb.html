@@ -1,0 +1,116 @@
+---
+title: istio.security.v1beta1
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+number_of_entries: 2
+---
+<h2 id="PeerAuthentication">PeerAuthentication</h2>
+<section>
+<p>PeerAuthentication defines how traffic will be tunneled (or not) to the sidecar.</p>
+
+<p>Examples:</p>
+
+<p>Policy to allow mTLS traffic for all workloads under namespace <code>foo</code>:</p>
+
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: foo
+spec:
+  mode: STRICT
+</code></pre>
+
+<p>Policies to allow both mTLS &amp; plaintext traffic for all workloads under namespace <code>foo</code>, but
+require mTLS for workload <code>finance</code>.</p>
+
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: foo
+spec:
+  mode: PERMISSIVE
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: foo
+spec:
+  selector:
+    matchLabels:
+      app: finance
+  mode: STRICT
+</code></pre>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PeerAuthentication-selector">
+<td><code>selector</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/type/v1beta1/workload-selector.html#WorkloadSelector">WorkloadSelector</a></code></td>
+<td>
+<p>The selector determines the workloads to apply the ChannelAuthentication on.
+If not set, the policy will be applied to all workloads in the same namespace as the policy.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PeerAuthentication-mode">
+<td><code>mode</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/security/authorization-policy.html#PeerAuthentication-Mode">Mode</a></code></td>
+<td>
+<p>Defines the mode of peer authentication.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="PeerAuthentication-Mode">PeerAuthentication.Mode</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PeerAuthentication-Mode-PERMISSIVE">
+<td><code>PERMISSIVE</code></td>
+<td>
+<p>Connection can be either plaintext or mTLS tunnel.</p>
+
+</td>
+</tr>
+<tr id="PeerAuthentication-Mode-STRICT">
+<td><code>STRICT</code></td>
+<td>
+<p>Connection is in mTLS tunnel (TLS with client cert must be presented).</p>
+
+</td>
+</tr>
+<tr id="PeerAuthentication-Mode-DISABLE">
+<td><code>DISABLE</code></td>
+<td>
+<p>Connection is not tunneled.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>

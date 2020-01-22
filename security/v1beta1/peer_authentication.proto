@@ -1,0 +1,77 @@
+// Copyright 2019 Istio Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+syntax = "proto3";
+
+import "type/v1beta1/selector.proto";
+
+package istio.security.v1beta1;
+
+option go_package="istio.io/api/security/v1beta1";
+
+
+// PeerAuthentication defines how traffic will be tunneled (or not) to the sidecar.
+//
+// Examples:
+//
+// Policy to allow mTLS traffic for all workloads under namespace `foo`:
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: PeerAuthentication
+// metadata:
+//   name: default
+//   namespace: foo
+// spec:
+//   mode: STRICT
+// ```
+// Policies to allow both mTLS & plaintext traffic for all workloads under namespace `foo`, but
+// require mTLS for workload `finance`.
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: PeerAuthentication
+// metadata:
+//   name: default
+//   namespace: foo
+// spec:
+//   mode: PERMISSIVE
+// ---
+// apiVersion: security.istio.io/v1beta1
+// kind: PeerAuthentication
+// metadata:
+//   name: default
+//   namespace: foo
+// spec:
+//   selector:
+//     matchLabels:
+//       app: finance
+//   mode: STRICT
+// ```
+message PeerAuthentication {
+  // The selector determines the workloads to apply the ChannelAuthentication on.
+  // If not set, the policy will be applied to all workloads in the same namespace as the policy.
+  istio.type.v1beta1.WorkloadSelector selector = 1;
+
+  enum Mode {
+    // Connection can be either plaintext or mTLS tunnel.
+    PERMISSIVE = 0;
+
+    // Connection is in mTLS tunnel (TLS with client cert must be presented).
+    STRICT = 1;
+
+    // Connection is not tunneled.
+    DISABLE = 2;
+  }
+
+  // Defines the mode of peer authentication.
+  Mode mode = 2;
+}
