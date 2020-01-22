@@ -134,9 +134,10 @@ message IstioOperatorSpec {
     string hub = 12;
     // Version tag for docker images e.g. 1.0.6
     string tag = 13;
-    // Resource suffix is appended to all resources installed by each component. Used in upgrade scenarios where two
-    // Istio control planes must exist in the same namespace.
+    // Resource suffix is appended to all resources installed by each component.
     string resource_suffix = 14;
+    // Namespace to install control plane resources into. Required.
+    string namespace = 15;
 
     // Config used by control plane components internally.
     istio.mesh.v1alpha1.MeshConfig mesh_config = 40;
