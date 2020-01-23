@@ -40609,6 +40609,14 @@
                   "name": "query_params",
                   "type": "StringMatch"
                 }
+              },
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 12,
+                  "name": "without_headers",
+                  "type": "StringMatch"
+                }
               }
             ]
           },
@@ -43281,6 +43289,9 @@
         "imports": [
           {
             "path": "google/protobuf/any.proto"
+          },
+          {
+            "path": "k8s.io/api/core/v1/generated.proto"
           },
           {
             "path": "k8s.io/api/core/v1/generated.proto"
@@ -46033,6 +46044,60 @@
         "imports": [
           {
             "path": "google/api/field_behavior.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.security.v1beta1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/security/v1beta1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "security:/:v1beta1:/:peer_authentication.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "PeerAuthentication.Mode",
+            "enum_fields": [
+              {
+                "name": "PERMISSIVE"
+              },
+              {
+                "name": "STRICT",
+                "integer": 1
+              },
+              {
+                "name": "DISABLE",
+                "integer": 2
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "name": "PeerAuthentication",
+            "fields": [
+              {
+                "id": 1,
+                "name": "selector",
+                "type": "istio.type.v1beta1.WorkloadSelector"
+              },
+              {
+                "id": 2,
+                "name": "mode",
+                "type": "Mode"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "type/v1beta1/selector.proto"
           }
         ],
         "package": {

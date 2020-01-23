@@ -90,6 +90,24 @@ func (PeerAuthentication_Mode) EnumDescriptor() ([]byte, []int) {
 //       app: finance
 //   mode: STRICT
 // ```
+//
+// <!-- crd generation tags
+// +cue-gen:PeerAuthentication:groupName:security.istio.io
+// +cue-gen:PeerAuthentication:version:v1beta1
+// +cue-gen:PeerAuthentication:storageVersion
+// +cue-gen:PeerAuthentication:annotations:helm.sh/resource-policy=keep
+// +cue-gen:PeerAuthentication:labels:app=istio-pilot,chart=istio,istio=security,heritage=Tiller,release=istio
+// +cue-gen:PeerAuthentication:subresource:status
+// +cue-gen:PeerAuthentication:scope:Namespaced
+// +cue-gen:PeerAuthentication:resource:categories=istio-io,security-istio-io
+// -->
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=security.istio.io/v1beta1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 type PeerAuthentication struct {
 	// The selector determines the workloads to apply the ChannelAuthentication on.
 	// If not set, the policy will be applied to all workloads in the same namespace as the policy.
