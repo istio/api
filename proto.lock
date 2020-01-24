@@ -42517,6 +42517,14 @@
                   "name": "query_params",
                   "type": "StringMatch"
                 }
+              },
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 12,
+                  "name": "without_headers",
+                  "type": "StringMatch"
+                }
               }
             ]
           },
