@@ -14,16 +14,19 @@
             "$ref": "#/components/schemas/istio.type.v1beta1.WorkloadSelector"
           },
           "rules": {
-            "description": "Optional. A list of rules to specify the allowed access to the workload.",
+            "description": "Optional. A list of rules to match the request. A match occurs when at least one rule matches the request.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.security.v1beta1.Rule"
             }
+          },
+          "action": {
+            "$ref": "#/components/schemas/istio.security.v1beta1.AuthorizationPolicy.Action"
           }
         }
       },
       "istio.security.v1beta1.Rule": {
-        "description": "Rule allows access from a list of sources to perform a list of operations when the condition is matched.",
+        "description": "Rule matches requests from a list of sources that perform a list of operations subject to a list of conditions. A match occurs when at least one source, operation and condition matches the request. An empty rule is always matched.",
         "type": "object",
         "properties": {
           "from": {
@@ -49,6 +52,14 @@
           }
         }
       },
+      "istio.security.v1beta1.AuthorizationPolicy.Action": {
+        "description": "Action specifies the operation to take.",
+        "type": "string",
+        "enum": [
+          "ALLOW",
+          "DENY"
+        ]
+      },
       "istio.security.v1beta1.Rule.From": {
         "description": "From includes a list or sources.",
         "type": "object",
@@ -72,12 +83,20 @@
         "type": "object",
         "properties": {
           "key": {
-            "description": "The name of an Istio attribute. See the [full list of supported attributes](https://istio.io/docs/reference/config/).",
+            "description": "The name of an Istio attribute. See the [full list of supported attributes](https://istio.io/docs/reference/config/security/conditions/).",
             "type": "string",
             "format": "string"
           },
           "values": {
-            "description": "The allowed values for the attribute.",
+            "description": "Optional. A list of allowed values for the attribute. Note: at least one of values or not_values must be set.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "notValues": {
+            "description": "Optional. A list of negative match of values for the attribute. Note: at least one of values or not_values must be set.",
             "type": "array",
             "items": {
               "type": "string",
@@ -87,11 +106,19 @@
         }
       },
       "istio.security.v1beta1.Source": {
-        "description": "Source specifies the source identities of a request.",
+        "description": "Source specifies the source identities of a request. Fields in the source are ANDed together.",
         "type": "object",
         "properties": {
           "principals": {
-            "description": "Optional. A list of source peer identities (i.e. service account), which matches to the \"source.principal\" attribute.",
+            "description": "Optional. A list of source peer identities (i.e. service account), which matches to the \"source.principal\" attribute. This field requires mTLS enabled.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "notPrincipals": {
+            "description": "Optional. A list of negative match of source peer identities.",
             "type": "array",
             "items": {
               "type": "string",
@@ -106,8 +133,24 @@
               "format": "string"
             }
           },
+          "notRequestPrincipals": {
+            "description": "Optional. A list of negative match of request identities.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
           "namespaces": {
-            "description": "Optional. A list of namespaces, which matches to the \"source.namespace\" attribute.",
+            "description": "Optional. A list of namespaces, which matches to the \"source.namespace\" attribute. This field requires mTLS enabled.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "notNamespaces": {
+            "description": "Optional. A list of negative match of namespaces.",
             "type": "array",
             "items": {
               "type": "string",
@@ -121,15 +164,31 @@
               "type": "string",
               "format": "string"
             }
+          },
+          "notIpBlocks": {
+            "description": "Optional. A list of negative match of IP blocks.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
           }
         }
       },
       "istio.security.v1beta1.Operation": {
-        "description": "Operation specifies the operations of a request.",
+        "description": "Operation specifies the operations of a request. Fields in the operation are ANDed together.",
         "type": "object",
         "properties": {
           "hosts": {
             "description": "Optional. A list of hosts, which matches to the \"request.host\" attribute.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "notHosts": {
+            "description": "Optional. A list of negative match of hosts.",
             "type": "array",
             "items": {
               "type": "string",
@@ -144,6 +203,14 @@
               "format": "string"
             }
           },
+          "notPorts": {
+            "description": "Optional. A list of negative match of ports.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
           "methods": {
             "description": "Optional. A list of methods, which matches to the \"request.method\" attribute. For gRPC service, this should be the fully-qualified name in the form of \"/package.service/method\"",
             "type": "array",
@@ -152,8 +219,24 @@
               "format": "string"
             }
           },
+          "notMethods": {
+            "description": "Optional. A list of negative match of methods.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
           "paths": {
             "description": "Optional. A list of paths, which matches to the \"request.url_path\" attribute.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "notPaths": {
+            "description": "Optional. A list of negative match of paths.",
             "type": "array",
             "items": {
               "type": "string",

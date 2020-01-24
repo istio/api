@@ -96,10 +96,6 @@
           "rewrite": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPRewrite"
           },
-          "websocketUpgrade": {
-            "description": "Deprecated. Websocket upgrades are done automatically starting from Istio 1.0. $hide_from_docs",
-            "type": "boolean"
-          },
           "timeout": {
             "description": "Timeout for HTTP requests.",
             "type": "string"
@@ -124,46 +120,6 @@
           },
           "corsPolicy": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.CorsPolicy"
-          },
-          "appendHeaders": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "format": "string"
-            },
-            "deprecated": true
-          },
-          "removeResponseHeaders": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
-            },
-            "deprecated": true
-          },
-          "appendResponseHeaders": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "format": "string"
-            },
-            "deprecated": true
-          },
-          "removeRequestHeaders": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
-            },
-            "deprecated": true
-          },
-          "appendRequestHeaders": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "format": "string"
-            },
-            "deprecated": true
           },
           "headers": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Headers"
@@ -246,6 +202,7 @@
             "type": "integer"
           },
           "gateways": {
+            "description": "Names of gateways where the rule should be applied. Gateway names in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
             "type": "array",
             "items": {
               "type": "string",
@@ -269,7 +226,7 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.StringMatch"
           },
           "sourceLabels": {
-            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified at the top, it must include the reserved gateway `mesh` for this field to be applicable.",
+            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified in the top-level `gateways` field, it must include the reserved gateway `mesh` for this field to be applicable.",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -286,6 +243,13 @@
           "ignoreUriCase": {
             "description": "Flag to specify whether the URI matching should be case-insensitive.",
             "type": "boolean"
+          },
+          "withoutHeaders": {
+            "description": "withoutHeader has the same syntax with the header, but has opposite meaning. If a header is matched with a matching rule among withoutHeader, the traffic becomes not matched one.",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.StringMatch"
+            }
           }
         }
       },
@@ -297,42 +261,6 @@
             "description": "The proportion of traffic to be forwarded to the service version. (0-100). Sum of weights across destinations SHOULD BE == 100. If there is only one destination in a rule, the weight value is assumed to be 100.",
             "type": "integer",
             "format": "int32"
-          },
-          "removeResponseHeaders": {
-            "description": "Use of `remove_response_header` is deprecated. Use the `headers` field instead.",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
-            },
-            "deprecated": true
-          },
-          "appendResponseHeaders": {
-            "description": "Use of `append_response_headers` is deprecated. Use the `headers` field instead.",
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "format": "string"
-            },
-            "deprecated": true
-          },
-          "removeRequestHeaders": {
-            "description": "Use of `remove_request_headers` is deprecated. Use the `headers` field instead.",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
-            },
-            "deprecated": true
-          },
-          "appendRequestHeaders": {
-            "description": "Use of `append_request_headers` is deprecated. Use the `headers` field instead.",
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "format": "string"
-            },
-            "deprecated": true
           },
           "headers": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Headers"
@@ -425,11 +353,19 @@
         "type": "object",
         "properties": {
           "allowOrigin": {
-            "description": "The list of origins that are allowed to perform CORS requests. The content will be serialized into the Access-Control-Allow-Origin header. Wildcard * will allow all origins.",
+            "description": "The list of origins that are allowed to perform CORS requests. The content will be serialized into the Access-Control-Allow-Origin header. Wildcard * will allow all origins. $hide_from_docs",
             "type": "array",
             "items": {
               "type": "string",
               "format": "string"
+            },
+            "deprecated": true
+          },
+          "allowOrigins": {
+            "description": "String patterns that match allowed origins. An origin is allowed if any of the string matchers match. If a match is found, then the outgoing Access-Control-Allow-Origin would be set to the origin as provided by the client.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.StringMatch"
             }
           },
           "allowMethods": {
@@ -518,7 +454,7 @@
             "type": "integer"
           },
           "gateways": {
-            "description": "Names of gateways where the rule should be applied to. Gateway names at the top of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
+            "description": "Names of gateways where the rule should be applied. Gateway names in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
             "type": "array",
             "items": {
               "type": "string",
@@ -526,7 +462,7 @@
             }
           },
           "sourceLabels": {
-            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified at the top, it should include the reserved gateway `mesh` in order for this field to be applicable.",
+            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified in the top-level `gateways` field, it should include the reserved gateway `mesh` in order for this field to be applicable.",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -540,11 +476,6 @@
               "type": "string",
               "format": "string"
             }
-          },
-          "sourceSubnet": {
-            "description": "IPv4 or IPv6 ip address of source with optional subnet. E.g., a.b.c.d/xx form or just a.b.c.d $hide_from_docs",
-            "type": "string",
-            "format": "string"
           },
           "sniHosts": {
             "description": "SNI (server name indicator) to match on. Wildcard prefixes can be used in the SNI value, e.g., *.com will match foo.example.com as well as example.com. An SNI value must be a subset (i.e., fall within the domain) of the corresponding virtual serivce's hosts.",
@@ -579,7 +510,7 @@
             "type": "integer"
           },
           "gateways": {
-            "description": "Names of gateways where the rule should be applied to. Gateway names at the top of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
+            "description": "Names of gateways where the rule should be applied. Gateway names in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway match is independent of sourceLabels.",
             "type": "array",
             "items": {
               "type": "string",
@@ -587,7 +518,7 @@
             }
           },
           "sourceLabels": {
-            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified at the top, it should include the reserved gateway `mesh` in order for this field to be applicable.",
+            "description": "One or more labels that constrain the applicability of a rule to workloads with the given labels. If the VirtualService has a list of gateways specified in the top-level `gateways` field, it should include the reserved gateway `mesh` in order for this field to be applicable.",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -705,12 +636,6 @@
               "httpStatus"
             ],
             "properties": {
-              "percent": {
-                "description": "Percentage of requests to be aborted with the error code provided (0-100). Use of integer `percent` value is deprecated. Use the double `percentage` field instead.",
-                "type": "integer",
-                "format": "int32",
-                "deprecated": true
-              },
               "percentage": {
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.Percent"
               },
@@ -726,12 +651,6 @@
               "grpcStatus"
             ],
             "properties": {
-              "percent": {
-                "description": "Percentage of requests to be aborted with the error code provided (0-100). Use of integer `percent` value is deprecated. Use the double `percentage` field instead.",
-                "type": "integer",
-                "format": "int32",
-                "deprecated": true
-              },
               "percentage": {
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.Percent"
               },
@@ -746,12 +665,6 @@
               "http2Error"
             ],
             "properties": {
-              "percent": {
-                "description": "Percentage of requests to be aborted with the error code provided (0-100). Use of integer `percent` value is deprecated. Use the double `percentage` field instead.",
-                "type": "integer",
-                "format": "int32",
-                "deprecated": true
-              },
               "percentage": {
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.Percent"
               },

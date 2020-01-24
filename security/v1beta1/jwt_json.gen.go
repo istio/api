@@ -17,14 +17,14 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-// MarshalJSON is a custom marshaler for JWT
-func (this *JWT) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for JWTRule
+func (this *JWTRule) MarshalJSON() ([]byte, error) {
 	str, err := JwtMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for JWT
-func (this *JWT) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for JWTRule
+func (this *JWTRule) UnmarshalJSON(b []byte) error {
 	return JwtUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

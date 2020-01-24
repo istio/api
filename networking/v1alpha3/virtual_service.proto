@@ -124,7 +124,6 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // <!-- crd generation tags
 // +cue-gen:VirtualService:groupName:networking.istio.io
 // +cue-gen:VirtualService:version:v1alpha3
-// +cue-gen:VirtualService:storageVersion
 // +cue-gen:VirtualService:annotations:helm.sh/resource-policy=keep
 // +cue-gen:VirtualService:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:VirtualService:subresource:status
@@ -370,9 +369,9 @@ message Destination {
   // the short name based on the namespace of the rule, not the service. A
   // rule in the "default" namespace containing a host "reviews will be
   // interpreted as "reviews.default.svc.cluster.local", irrespective of
-  // the actual namespace associated with the reviews service. _To avoid
-  // potential misconfigurations, it is recommended to always use fully
-  // qualified domain names over short names._
+  // the actual namespace associated with the reviews service. To avoid
+  // potential misconfiguration, it is recommended to always use fully
+  // qualified domain names over short names.
   string host = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The name of a subset within the service. Applicable only to services
@@ -417,9 +416,8 @@ message HTTPRoute {
   // Redirect primitive. Rewrite will be performed before forwarding.
   HTTPRewrite rewrite = 4;
 
-  // Deprecated. Websocket upgrades are done automatically starting from Istio 1.0.
-  // $hide_from_docs
-  bool websocket_upgrade = 5;
+  reserved 5;
+  reserved "websocket_upgrade";
 
   // Timeout for HTTP requests.
   google.protobuf.Duration timeout = 6;
@@ -455,20 +453,8 @@ message HTTPRoute {
   // for further details about cross origin resource sharing.
   CorsPolicy cors_policy = 10;
 
-  // $hide_from_docs
-  map<string, string> append_headers = 11 [deprecated=true];
-
-  // $hide_from_docs
-  repeated string remove_response_headers = 12 [deprecated=true];
-
-  // $hide_from_docs
-  map<string, string> append_response_headers = 13 [deprecated=true];
-
-  // $hide_from_docs
-  repeated string remove_request_headers = 14 [deprecated=true];
-
-  // $hide_from_docs
-  map<string, string> append_request_headers = 15 [deprecated=true];
+  reserved 11 to 15;
+  reserved "append_headers", "remove_response_headers", "append_response_headers","remove_request_headers", "append_request_headers";
 
   // Header manipulation rules
   Headers headers = 16;
@@ -694,6 +680,7 @@ message HTTPMatchRequest {
   //
   // - `regex: "value"` for ECMAscript style regex-based match
   //
+  // If the value is empty and only the name of header is specfied, presence of the header is checked.
   // **Note:** The keys `uri`, `scheme`, `method`, and `authority` will be ignored.
   map<string, StringMatch> headers = 5;
 
@@ -704,11 +691,13 @@ message HTTPMatchRequest {
 
   // One or more labels that constrain the applicability of a rule to
   // workloads with the given labels. If the VirtualService has a list of
-  // gateways specified at the top, it must include the reserved gateway
+  // gateways specified in the top-level `gateways` field, it must include the reserved gateway
   // `mesh` for this field to be applicable.
   map<string, string> source_labels = 7;
 
-  // $hide_from_docs
+  // Names of gateways where the rule should be applied. Gateway names
+  // in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
+  // match is independent of sourceLabels.
   repeated string gateways = 8;
 
   // Query parameters for matching.
@@ -730,6 +719,10 @@ message HTTPMatchRequest {
   // **Note:** The case will be ignored only in the case of `exact` and `prefix`
   // URI matches.
   bool ignore_uri_case = 10;
+  
+  // withoutHeader has the same syntax with the header, but has opposite meaning.
+  // If a header is matched with a matching rule among withoutHeader, the traffic becomes not matched one.
+  map<string, StringMatch> without_headers = 12;
 }
 
 // Each routing rule is associated with one or more service versions (see
@@ -809,21 +802,8 @@ message HTTPRouteDestination {
   // be 100.
   int32 weight = 2;
 
-  // Use of `remove_response_header` is deprecated. Use the `headers`
-  // field instead.
-  repeated string remove_response_headers = 3 [deprecated=true];
-
-  // Use of `append_response_headers` is deprecated. Use the `headers`
-  // field instead.
-  map<string, string> append_response_headers = 4 [deprecated=true];
-
-  // Use of `remove_request_headers` is deprecated. Use the `headers`
-  // field instead.
-  repeated string remove_request_headers = 5 [deprecated=true];
-
-  // Use of `append_request_headers` is deprecated. Use the `headers`
-  // field instead.
-  map<string, string> append_request_headers = 6 [deprecated=true];
+  reserved 3 to 6;
+  reserved "remove_response_headers", "append_response_headers", "remove_request_headers", "append_request_headers";
 
   // Header manipulation rules
   Headers headers = 7;
@@ -860,12 +840,12 @@ message L4MatchAttributes {
 
   // One or more labels that constrain the applicability of a rule to
   // workloads with the given labels. If the VirtualService has a list of
-  // gateways specified at the top, it should include the reserved gateway
+  // gateways specified in the top-level `gateways` field, it should include the reserved gateway
   // `mesh` in order for this field to be applicable.
   map<string, string> source_labels = 4;
 
-  // Names of gateways where the rule should be applied to. Gateway names
-  // at the top of the VirtualService (if any) are overridden. The gateway
+  // Names of gateways where the rule should be applied. Gateway names
+  // in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
   // match is independent of sourceLabels.
   repeated string gateways = 5;
 }
@@ -888,19 +868,17 @@ message TLSMatchAttributes {
   // port.
   uint32 port = 3;
 
-  // IPv4 or IPv6 ip address of source with optional subnet. E.g., a.b.c.d/xx
-  // form or just a.b.c.d
-  // $hide_from_docs
-  string source_subnet = 4;
+  reserved 4;
+  reserved "source_subnet";
 
   // One or more labels that constrain the applicability of a rule to
   // workloads with the given labels. If the VirtualService has a list of
-  // gateways specified at the top, it should include the reserved gateway
+  // gateways specified in the top-level `gateways` field, it should include the reserved gateway
   // `mesh` in order for this field to be applicable.
   map<string, string> source_labels = 5;
 
-  // Names of gateways where the rule should be applied to. Gateway names
-  // at the top of the VirtualService (if any) are overridden. The gateway
+  // Names of gateways where the rule should be applied. Gateway names
+  // in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
   // match is independent of sourceLabels.
   repeated string gateways = 6;
 }
@@ -1072,7 +1050,13 @@ message CorsPolicy {
   // The list of origins that are allowed to perform CORS requests. The
   // content will be serialized into the Access-Control-Allow-Origin
   // header. Wildcard * will allow all origins.
-  repeated string allow_origin = 1;
+  // $hide_from_docs
+  repeated string allow_origin = 1 [deprecated=true];
+
+  // String patterns that match allowed origins.
+  // An origin is allowed if any of the string matchers match.
+  // If a match is found, then the outgoing Access-Control-Allow-Origin would be set to the origin as provided by the client.
+  repeated StringMatch allow_origins = 7;
 
   // List of HTTP methods allowed to access the resource. The content will
   // be serialized into the Access-Control-Allow-Methods header.
@@ -1192,10 +1176,8 @@ message HTTPFaultInjection {
   // abort a certain percentage of requests. If not specified, all requests are
   // aborted.
   message Abort {
-    // Percentage of requests to be aborted with the error code provided (0-100).
-    // Use of integer `percent` value is deprecated. Use the double `percentage`
-    // field instead.
-    int32 percent = 1 [deprecated=true];
+    reserved 1;
+    reserved "percent";
 
     oneof error_type {
       // HTTP status code to use to abort the Http request.

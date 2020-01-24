@@ -182,6 +182,12 @@ annotations:
     hidden: false
     resources:
       - Pod
+  - name: sidecar.istio.io/enableCoreDump
+    description: Specifies whether or not an Envoy sidecar should enable core dump.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
   - name: status.sidecar.istio.io/port
     description: Specifies the HTTP status Port for the Envoy sidecar. If zero, the
       sidecar will not provide status.
@@ -326,6 +332,17 @@ annotations:
       - Any
   - name: install.operator.istio.io/version
     description: Represents the Istio version associated with the resource
+    deprecated: false
+    hidden: false
+    resources:
+      - Any
+  - name: galley.istio.io/analyze-suppress
+    description: A comma separated list of configuration analysis message codes
+      to suppress when Istio analyzers are run. For example, to suppress
+      reporting of IST0103 (PodMissingProxy) and IST0108 (UnknownAnnotation) on
+      a resource, apply the annotation
+      'galley.istio.io/analyze-suppress=IST0108,IST0103'. If the value is '*',
+      then all configuration analysis messages are suppressed.
     deprecated: false
     hidden: false
     resources:

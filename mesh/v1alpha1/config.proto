@@ -90,7 +90,8 @@ message MeshConfig {
   // MongoDB, etc., Envoy will timeout on the protocol detection after
   // the specified period, defaulting to non mTLS plain TCP
   // traffic. Set this field to tweak the period that Envoy will wait
-  // for the client to send the first bits of data. (MUST BE >=1ms)
+  // for the client to send the first bits of data. (MUST BE >=1ms or 
+  // 0s to disable)
   google.protobuf.Duration protocol_detection_timeout = 42;
 
   // If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
@@ -206,9 +207,11 @@ message MeshConfig {
   // Enables client side policy checks.
   bool enable_client_side_policy_check = 19;
 
+  // $hide_from_docs
   // Unix Domain Socket through which Envoy communicates with NodeAgent SDS to get key/cert for mTLS.
   // Use secret-mount files instead of SDS if set to empty.
-  string sds_uds_path = 20;
+  // @deprecated - istio agent will detect and send the path to envoy.
+  string sds_uds_path = 20 [deprecated=true];
 
   // $hide_from_docs
   google.protobuf.Duration sds_refresh_delay = 21 [deprecated=true];
@@ -348,38 +351,52 @@ message MeshConfig {
   H2UpgradePolicy h2_upgrade_policy = 41;
 
   // Name to be used while emitting statistics for inbound clusters.
-  // By default, Istio emits statistics with the pattern inbound|<port>|<port-name>|<service-FQDN>.
-  // For example inbound|7443|grpc-reviews|reviews.prod.svc.cluster.local. This can be used to override that pattern.
+  // By default, Istio emits statistics with the pattern `inbound|<port>|<port-name>|<service-FQDN>`.
+  // For example `inbound|7443|grpc-reviews|reviews.prod.svc.cluster.local`. This can be used to override that pattern.
   //
   // A Pattern can be composed of various pre-defined variables. The following variables are supported.
-  // %SERVICE% - Will be substituted with name of the service.
-  // %SERVICE_FQDN% - Will be substituted with FQDN of the service.
-  // %SERVICE_PORT% - Will be substituted with port of the service.
-  // %SERVICE_PORT_NAME% - Will be substituted with port name of the service.
   //
-  // Following are some examples of supported patterns for reviews.
-  // %SERVICE_FQDN%_%SERVICE_PORT% will use reviews.prod.svc.cluster.local_7443 as the stats name.
-  // %SERVICE% will use reviews.prod as the stats name.
+  // - `%SERVICE%` - Will be substituted with name of the service.
+  // - `%SERVICE_FQDN%` - Will be substituted with FQDN of the service.
+  // - `%SERVICE_PORT%` - Will be substituted with port of the service.
+  // - `%SERVICE_PORT_NAME%` - Will be substituted with port name of the service.
+  //
+  // Following are some examples of supported patterns for reviews:
+  //
+  // - `%SERVICE_FQDN%_%SERVICE_PORT%` will use reviews.prod.svc.cluster.local_7443 as the stats name.
+  // - `%SERVICE%` will use reviews.prod as the stats name.
   string inbound_cluster_stat_name = 44;
 
   // Name to be used while emitting statistics for outbound clusters.
-  // By default, Istio emits statistics with the pattern outbound|<port>|<subsetname>|<service-FQDN>.
-  // For example outbound|8080|v2|reviews.prod.svc.cluster.local. This can be used to override that pattern.
+  // By default, Istio emits statistics with the pattern `outbound|<port>|<subsetname>|<service-FQDN>`.
+  // For example `outbound|8080|v2|reviews.prod.svc.cluster.local`. This can be used to override that pattern.
   //
   // A Pattern can be composed of various pre-defined variables. The following variables are supported.
-  // %SERVICE% - Will be substituted with name of the service.
-  // %SERVICE_FQDN% - Will be substituted with FQDN of the service.
-  // %SERVICE_PORT% - Will be substituted with port of the service.
-  // %SERVICE_PORT_NAME% - Will be substituted with port name of the service.
-  // %SUBSET_NAME% - Will be substituted with subset.
   //
-  // Following are some examples of supported patterns for reviews.
-  // %SERVICE_FQDN%_%SERVICE_PORT% will use reviews.prod.svc.cluster.local_7443 as the stats name.
-  // %SERVICE% will use reviews.prod as the stats name.
+  // - `%SERVICE%` - Will be substituted with name of the service.
+  // - `%SERVICE_FQDN%` - Will be substituted with FQDN of the service.
+  // - `%SERVICE_PORT%` - Will be substituted with port of the service.
+  // - `%SERVICE_PORT_NAME%` - Will be substituted with port name of the service.
+  // - `%SUBSET_NAME%` - Will be substituted with subset.
+  //
+  // Following are some examples of supported patterns for reviews:
+  //
+  // - `%SERVICE_FQDN%_%SERVICE_PORT%` will use reviews.prod.svc.cluster.local_7443 as the stats name.
+  // - `%SERVICE%` will use reviews.prod as the stats name.
   string outbound_cluster_stat_name = 45;
 
   // Configure the provision of certificates.
   repeated Certificate certificates = 47;
+
+  message ThriftConfig {
+    // Specify thrift rate limit service URL. If pilot has thrift protocol support enabled,
+    // this will enable the rate limit service for destinations that have matching rate
+    // limit configurations.
+    string rate_limit_url = 1;
+
+    // Specify thrift rate limit service timeout, in milliseconds. Default is 50ms
+    google.protobuf.Duration rate_limit_timeout = 2;
+  }
 
   // $hide_from_docs
   // Next available field number: 49

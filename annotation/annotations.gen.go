@@ -79,6 +79,21 @@ var (
 		  Resources: []ResourceTypes{ Service, },
         }
 	
+		GalleyAnalyzeSuppress = Instance {
+          Name: "galley.istio.io/analyze-suppress",
+          Description: "A comma separated list of configuration analysis message "+
+                        "codes to suppress when Istio analyzers are run. For "+
+                        "example, to suppress reporting of IST0103 "+
+                        "(PodMissingProxy) and IST0108 (UnknownAnnotation) on a "+
+                        "resource, apply the annotation "+
+                        "'galley.istio.io/analyze-suppress=IST0108,IST0103'. If "+
+                        "the value is '*', then all configuration analysis "+
+                        "messages are suppressed.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Any, },
+        }
+	
 		OperatorInstallChartOwner = Instance {
           Name: "install.operator.istio.io/chart-owner",
           Description: "Represents the name of the chart used to create this "+
@@ -291,6 +306,15 @@ var (
 		  Resources: []ResourceTypes{ Pod, },
         }
 	
+		SidecarEnableCoreDump = Instance {
+          Name: "sidecar.istio.io/enableCoreDump",
+          Description: "Specifies whether or not an Envoy sidecar should enable "+
+                        "core dump.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
+        }
+	
 		SidecarInject = Instance {
           Name: "sidecar.istio.io/inject",
           Description: "Specifies whether or not an Envoy sidecar should be "+
@@ -485,6 +509,7 @@ func AllResourceAnnotations() []*Instance {
 		&AlphaCanonicalServiceAccounts,
 		&AlphaIdentity,
 		&AlphaKubernetesServiceAccounts,
+		&GalleyAnalyzeSuppress,
 		&OperatorInstallChartOwner,
 		&OperatorInstallOwnerGeneration,
 		&OperatorInstallVersion,
@@ -507,6 +532,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarComponentLogLevel,
 		&SidecarControlPlaneAuthPolicy,
 		&SidecarDiscoveryAddress,
+		&SidecarEnableCoreDump,
 		&SidecarInject,
 		&SidecarInterceptionMode,
 		&SidecarLogLevel,
