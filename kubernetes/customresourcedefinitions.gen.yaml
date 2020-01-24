@@ -3511,104 +3511,265 @@ spec:
   scope: Namespaced
   subresources:
     status: {}
-  validation:
-    openAPIV3Schema:
-      properties:
-        spec:
-          description: 'Configuration affecting network reachability of a sidecar.
-            See more details at: https://istio.io/docs/reference/config/networking/sidecar.html'
-          properties:
-            egress:
-              items:
-                properties:
-                  bind:
-                    format: string
-                    type: string
-                  captureMode:
-                    enum:
-                    - DEFAULT
-                    - IPTABLES
-                    - NONE
-                    type: string
-                  hosts:
-                    items:
-                      format: string
-                      type: string
-                    type: array
-                  port:
-                    description: The port associated with the listener.
-                    properties:
-                      name:
-                        description: Label assigned to the port.
-                        format: string
-                        type: string
-                      number:
-                        description: A valid non-negative integer port number.
-                        type: integer
-                      protocol:
-                        description: The protocol exposed on the port.
-                        format: string
-                        type: string
-                    type: object
-                type: object
-              type: array
-            ingress:
-              items:
-                properties:
-                  bind:
-                    description: The IP to which the listener should be bound.
-                    format: string
-                    type: string
-                  captureMode:
-                    enum:
-                    - DEFAULT
-                    - IPTABLES
-                    - NONE
-                    type: string
-                  defaultEndpoint:
-                    format: string
-                    type: string
-                  port:
-                    description: The port associated with the listener.
-                    properties:
-                      name:
-                        description: Label assigned to the port.
-                        format: string
-                        type: string
-                      number:
-                        description: A valid non-negative integer port number.
-                        type: integer
-                      protocol:
-                        description: The protocol exposed on the port.
-                        format: string
-                        type: string
-                    type: object
-                type: object
-              type: array
-            outboundTrafficPolicy:
-              description: This allows to configure the outbound traffic policy.
-              properties:
-                mode:
-                  enum:
-                  - REGISTRY_ONLY
-                  - ALLOW_ANY
-                  type: string
-              type: object
-            workloadSelector:
-              properties:
-                labels:
-                  additionalProperties:
-                    format: string
-                    type: string
-                  type: object
-              type: object
-          type: object
-      type: object
   versions:
   - name: v1alpha3
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            description: 'Configuration affecting network reachability of a sidecar.
+              See more details at: https://istio.io/docs/reference/config/networking/sidecar.html'
+            properties:
+              egress:
+                items:
+                  properties:
+                    bind:
+                      format: string
+                      type: string
+                    captureMode:
+                      enum:
+                      - DEFAULT
+                      - IPTABLES
+                      - NONE
+                      type: string
+                    hosts:
+                      items:
+                        format: string
+                        type: string
+                      type: array
+                    port:
+                      description: The port associated with the listener.
+                      properties:
+                        name:
+                          description: Label assigned to the port.
+                          format: string
+                          type: string
+                        number:
+                          description: A valid non-negative integer port number.
+                          type: integer
+                        protocol:
+                          description: The protocol exposed on the port.
+                          format: string
+                          type: string
+                      type: object
+                  type: object
+                type: array
+              ingress:
+                items:
+                  properties:
+                    bind:
+                      description: The IP to which the listener should be bound.
+                      format: string
+                      type: string
+                    captureMode:
+                      enum:
+                      - DEFAULT
+                      - IPTABLES
+                      - NONE
+                      type: string
+                    defaultEndpoint:
+                      format: string
+                      type: string
+                    port:
+                      description: The port associated with the listener.
+                      properties:
+                        name:
+                          description: Label assigned to the port.
+                          format: string
+                          type: string
+                        number:
+                          description: A valid non-negative integer port number.
+                          type: integer
+                        protocol:
+                          description: The protocol exposed on the port.
+                          format: string
+                          type: string
+                      type: object
+                    tls:
+                      properties:
+                        caCertificates:
+                          description: REQUIRED if mode is `MUTUAL`.
+                          format: string
+                          type: string
+                        cipherSuites:
+                          description: 'Optional: If specified, only support the specified
+                            cipher list.'
+                          items:
+                            format: string
+                            type: string
+                          type: array
+                        credentialName:
+                          format: string
+                          type: string
+                        httpsRedirect:
+                          type: boolean
+                        maxProtocolVersion:
+                          description: 'Optional: Maximum TLS protocol version.'
+                          enum:
+                          - TLS_AUTO
+                          - TLSV1_0
+                          - TLSV1_1
+                          - TLSV1_2
+                          - TLSV1_3
+                          type: string
+                        minProtocolVersion:
+                          description: 'Optional: Minimum TLS protocol version.'
+                          enum:
+                          - TLS_AUTO
+                          - TLSV1_0
+                          - TLSV1_1
+                          - TLSV1_2
+                          - TLSV1_3
+                          type: string
+                        mode:
+                          enum:
+                          - PASSTHROUGH
+                          - SIMPLE
+                          - MUTUAL
+                          - AUTO_PASSTHROUGH
+                          - ISTIO_MUTUAL
+                          type: string
+                        privateKey:
+                          description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                          format: string
+                          type: string
+                        serverCertificate:
+                          description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
+                          format: string
+                          type: string
+                        subjectAltNames:
+                          items:
+                            format: string
+                            type: string
+                          type: array
+                        verifyCertificateHash:
+                          items:
+                            format: string
+                            type: string
+                          type: array
+                        verifyCertificateSpki:
+                          items:
+                            format: string
+                            type: string
+                          type: array
+                      type: object
+                  type: object
+                type: array
+              outboundTrafficPolicy:
+                description: This allows to configure the outbound traffic policy.
+                properties:
+                  mode:
+                    enum:
+                    - REGISTRY_ONLY
+                    - ALLOW_ANY
+                    type: string
+                type: object
+              workloadSelector:
+                properties:
+                  labels:
+                    additionalProperties:
+                      format: string
+                      type: string
+                    type: object
+                type: object
+            type: object
+        type: object
     served: true
     storage: false
   - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            description: 'Configuration affecting network reachability of a sidecar.
+              See more details at: https://istio.io/docs/reference/config/networking/sidecar.html'
+            properties:
+              egress:
+                items:
+                  properties:
+                    bind:
+                      format: string
+                      type: string
+                    captureMode:
+                      enum:
+                      - DEFAULT
+                      - IPTABLES
+                      - NONE
+                      type: string
+                    hosts:
+                      items:
+                        format: string
+                        type: string
+                      type: array
+                    port:
+                      description: The port associated with the listener.
+                      properties:
+                        name:
+                          description: Label assigned to the port.
+                          format: string
+                          type: string
+                        number:
+                          description: A valid non-negative integer port number.
+                          type: integer
+                        protocol:
+                          description: The protocol exposed on the port.
+                          format: string
+                          type: string
+                      type: object
+                  type: object
+                type: array
+              ingress:
+                items:
+                  properties:
+                    bind:
+                      description: The IP to which the listener should be bound.
+                      format: string
+                      type: string
+                    captureMode:
+                      enum:
+                      - DEFAULT
+                      - IPTABLES
+                      - NONE
+                      type: string
+                    defaultEndpoint:
+                      format: string
+                      type: string
+                    port:
+                      description: The port associated with the listener.
+                      properties:
+                        name:
+                          description: Label assigned to the port.
+                          format: string
+                          type: string
+                        number:
+                          description: A valid non-negative integer port number.
+                          type: integer
+                        protocol:
+                          description: The protocol exposed on the port.
+                          format: string
+                          type: string
+                      type: object
+                  type: object
+                type: array
+              outboundTrafficPolicy:
+                description: This allows to configure the outbound traffic policy.
+                properties:
+                  mode:
+                    enum:
+                    - REGISTRY_ONLY
+                    - ALLOW_ANY
+                    type: string
+                type: object
+              workloadSelector:
+                properties:
+                  labels:
+                    additionalProperties:
+                      format: string
+                      type: string
+                    type: object
+                type: object
+            type: object
+        type: object
     served: true
     storage: true
 
