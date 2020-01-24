@@ -1152,6 +1152,7 @@ type HTTPMatchRequest struct {
 	IgnoreUriCase bool `protobuf:"varint,10,opt,name=ignore_uri_case,json=ignoreUriCase,proto3" json:"ignore_uri_case,omitempty"`
 	// withoutHeader has the same syntax with the header, but has opposite meaning.
 	// If a header is matched with a matching rule among withoutHeader, the traffic becomes not matched one.
+	// $hide_from_docs
 	WithoutHeaders       map[string]*StringMatch `protobuf:"bytes,12,rep,name=without_headers,json=withoutHeaders,proto3" json:"without_headers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
 	XXX_unrecognized     []byte                  `json:"-"`

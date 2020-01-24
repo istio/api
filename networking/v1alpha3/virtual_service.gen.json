@@ -245,7 +245,7 @@
             "type": "boolean"
           },
           "withoutHeaders": {
-            "description": "withoutHeader has the same syntax with the header, but has opposite meaning. If a header is matched with a matching rule among withoutHeader, the traffic becomes not matched one.",
+            "description": "withoutHeader has the same syntax with the header, but has opposite meaning. If a header is matched with a matching rule among withoutHeader, the traffic becomes not matched one. $hide_from_docs",
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/istio.networking.v1alpha3.StringMatch"

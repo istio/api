@@ -722,6 +722,7 @@ message HTTPMatchRequest {
   
   // withoutHeader has the same syntax with the header, but has opposite meaning.
   // If a header is matched with a matching rule among withoutHeader, the traffic becomes not matched one.
+  // $hide_from_docs
   map<string, StringMatch> without_headers = 12;
 }
 
