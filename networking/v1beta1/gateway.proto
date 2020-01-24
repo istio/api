@@ -343,15 +343,16 @@ message Server {
     enum TLSmode {
       // The SNI string presented by the client will be used as the
       // match criterion in a VirtualService TLS route to determine
-      // the destination service from the service registry. Not
-      // applicable in Sidecar ingress context.
+      // the destination service from the service registry. On a
+      // sidecar, TLS traffic will be forwarded as is to the default
+      // endpoint defined in the Ingress Listener.
       PASSTHROUGH = 0;
 
       // Secure connections with standard TLS semantics.
       SIMPLE = 1;
 
-      // Secure connections to the downstream using mutual TLS by presenting
-      // server certificates for authentication.
+      // Secure connections to the downstream using mutual TLS by
+      // presenting server certificates for authentication.
       MUTUAL = 2;
 
       // Similar to the passthrough mode, except servers with this TLS
@@ -373,9 +374,12 @@ message Server {
       // to Mutual mode, this mode uses certificates, representing
       // gateway workload identity, generated automatically by Istio
       // for mTLS authentication. When this mode is used, all other
-      // fields in `TLSOptions` should be empty. Not applicable in
-      // Sidecar ingress context.
+      // fields in `TLSOptions` should be empty.
       ISTIO_MUTUAL = 4;
+
+      // Disable TLS on the port. Applicable only in Sidecar ingress
+      // context.
+      DISABLED = 5;
     };
 
     // Optional: Indicates whether connections to this port should be
