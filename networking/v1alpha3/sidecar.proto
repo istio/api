@@ -44,22 +44,24 @@ import "networking/v1alpha3/gateway.proto";
 // `workloadSelector` that selects this workload instance, over a `Sidecar` configuration
 // without any `workloadSelector`.
 //
-// NOTE 1: *_Each namespace can have only one `Sidecar` configuration without any
+// **NOTE 1**: *_Each namespace can have only one `Sidecar` configuration without any
 // `workloadSelector`_*. The behavior of the system is undefined if more
 // than one selector-less `Sidecar` configurations exist in a given namespace. The
 // behavior of the system is undefined if two or more `Sidecar` configurations
 // with a `workloadSelector` select the same workload instance.
 //
-// NOTE 2: *_A `Sidecar` configuration in the `MeshConfig`
+// **NOTE 2**: *_A `Sidecar` configuration in the `MeshConfig`
 // [root namespace](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig)
 // will be applied by default to all namespaces without a `Sidecar`
 // configuration_*. This global default `Sidecar` configuration should not have
 // any `workloadSelector`.
 //
-// The example below declares a global default `Sidecar` configuration in the
-// root namespace called `istio-config`, that configures sidecars in
-// all namespaces to allow egress traffic only to other workloads in
-// the same namespace, and to services in the `istio-system` namespace.
+// The example below declares a global default `Sidecar` configuration
+// in the root namespace called `istio-config`, that configures
+// sidecars in all namespaces to accept both plaintext and Istio
+// mutual TLS traffic, and allow egress traffic only to other
+// workloads in the same namespace as well as to services in the
+// `istio-system` namespace.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -68,16 +70,19 @@ import "networking/v1alpha3/gateway.proto";
 //   name: default
 //   namespace: istio-config
 // spec:
+//   inboundTrafficPolicy:
+//     mode: ISTIO_MUTUAL_AND_PLAINTEXT
 //   egress:
 //   - hosts:
 //     - "./*"
 //     - "istio-system/*"
 //```
 //
-// The example below declares a `Sidecar` configuration in the `prod-us1`
-// namespace that overrides the global default defined above, and
-// configures the sidecars in the namespace to allow egress traffic to
-// public services in the `prod-us1`, `prod-apis`, and the `istio-system`
+// The example below declares a `Sidecar` configuration in the
+// `prod-us1` namespace that overrides the global default defined
+// above, and configures the sidecars in the namespace to only accept
+// Istio mutual TLS traffic and allow egress traffic to public
+// services in the `prod-us1`, `prod-apis`, and the `istio-system`
 // namespaces.
 //
 // ```yaml
@@ -87,6 +92,8 @@ import "networking/v1alpha3/gateway.proto";
 //   name: default
 //   namespace: prod-us1
 // spec:
+//   inboundTrafficPolicy:
+//     mode: ISTIO_MUTUAL_ONLY
 //   egress:
 //   - hosts:
 //     - "prod-us1/*"
@@ -94,34 +101,44 @@ import "networking/v1alpha3/gateway.proto";
 //     - "istio-system/*"
 // ```
 //
-// The example below declares a `Sidecar` configuration in the
-// `prod-us1` namespace that accepts inbound HTTP traffic on port
-// 9080, and HTTPS traffic on port 9443 with TLS termination. The
-// traffic is then forwarded to the attached workload instance
-// listening on a Unix domain socket. In the egress direction, in
-// addition to the `istio-system` namespace, the sidecar proxies only
-// HTTP traffic bound for port 9080 for services in the `prod-us1`
-// namespace.
+// The following example declares a `Sidecar`
+// configuration in the `prod-us1` namespace for all pods with labels
+// `app: ratings` belonging to the `ratings.prod-us1` service.
+// The workload accepts inbound HTTP traffic on port 9080 without any
+// authentication, and HTTPS traffic on port 9443 with one-way TLS
+// termination using custom certificates. _The TLS settings for these
+// two ports override the namespace-wide defaults for Istio mutual TLS
+// defined previously. Any other auto-generated listener for this
+// workload will still obey the namespace-wide defaults_. The traffic
+// is then forwarded to the attached workload instance listening on a
+// Unix domain socket. In the egress direction, in addition to the
+// `istio-system` namespace, the sidecar proxies only HTTP traffic
+// bound for port 9080 for services in the `prod-us1` namespace.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: Sidecar
 // metadata:
-//   name: default
+//   name: ratings
 //   namespace: prod-us1
 // spec:
+//   workloadSelector:
+//     labels:
+//       app: ratings
 //   ingress:
 //   - port:
 //       number: 9080
 //       protocol: HTTP
 //       name: somename
+//     tls:
+//       mode: DISABLED # allow plaintext on 9080
 //     defaultEndpoint: unix:///var/run/someuds.sock
 //   - port:
 //       number: 9443
 //       protocol: HTTPS
 //       name: httpsport
 //     tls:
-//       mode: SIMPLE
+//       mode: SIMPLE # overrides namespace default
 //       serverCertificate: /etc/certs/servercert.pem
 //       privateKey: /etc/certs/privatekey.pem
 //     defaultEndpoint: unix:///var/run/someuds.sock
@@ -148,6 +165,12 @@ import "networking/v1alpha3/gateway.proto";
 // `127.0.0.1:8080`. It also allows the application to communicate with a
 // backing MySQL database on `127.0.0.1:3306`, that then gets proxied to the
 // externally hosted MySQL service at `mysql.foo.com:3306`.
+//
+// ** NOTE 1**: Since the ingress listener for port 9080 does not
+// override the TLS mode, the default inbound traffic policy defined
+// by the namespace-wide sidecar, i.e. ISTIO_MUTUAL_ONLY, will be
+// applied to port 80. Clients connecting to this port are expected to
+// be other sidecars in the mesh, initiating Istio mutual TLS connection.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -203,10 +226,11 @@ import "networking/v1alpha3/gateway.proto";
 // additional network interface on `172.16.0.0/16` subnet for inbound
 // traffic. The following `Sidecar` configuration allows the VM to expose a
 // listener on `172.16.1.32:80` (the VM's IP) for traffic arriving from the
-// `172.16.0.0/16` subnet. Note that in this scenario, the
-// `ISTIO_META_INTERCEPTION_MODE` metadata on the proxy in the VM should
-// contain `REDIRECT` or `TPROXY` as its value, implying that IP tables
-// based traffic capture is active.
+// `172.16.0.0/16` subnet.
+//
+// **NOTE**: The `ISTIO_META_INTERCEPTION_MODE` metadata on the
+// proxy in the VM should contain `REDIRECT` or `TPROXY` as its value,
+// implying that IP tables based traffic capture is active.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -226,6 +250,8 @@ import "networking/v1alpha3/gateway.proto";
 //       name: somename
 //     defaultEndpoint: 127.0.0.1:8080
 //     captureMode: NONE
+//     tls:
+//       mode: DISABLED # allow plaintext on 80
 //   egress:
 //     # use the system detected defaults
 //     # sets up configuration to handle outbound traffic to services
@@ -275,16 +301,27 @@ message Sidecar {
   repeated IstioIngressListener ingress = 2;
 
   // Egress specifies the configuration of the sidecar for processing
-  // outbound traffic from the attached workload instance to other services in the
-  // mesh.
-  repeated IstioEgressListener egress = 3 [(google.api.field_behavior) = REQUIRED];
+  // outbound traffic from the attached workload instance to other
+  // services in the mesh. If not specified, inherits the system
+  // detected defaults from the namespace-wide or the global default Sidecar.
+  repeated IstioEgressListener egress = 3;
 
-  // This allows to configure the outbound traffic policy.
-  // If your application uses one or more external
-  // services that are not known apriori, setting the policy to `ALLOW_ANY`
-  // will cause the sidecars to route any unknown traffic originating from
-  // the application to its requested destination.
+  // Configuration for the outbound traffic policy.  If your
+  // application uses one or more external services that are not known
+  // apriori, setting the policy to `ALLOW_ANY` will cause the
+  // sidecars to route any unknown traffic originating from the
+  // application to its requested destination. If not specified,
+  // inherits the system detected defaults from the namespace-wide or
+  // the global default Sidecar.
   OutboundTrafficPolicy outbound_traffic_policy = 4;
+
+  // Configuration for the inbound traffic policy, specifically Istio
+  // mutual TLS based authentication for inbound connections to the
+  // sidecar. Applies to all inbound traffic. Ingress listeners with
+  // valid TLS options can override this setting for a given port. If
+  // not specified, inherits the system detected defaults from the
+  // namespace-wide or the global default Sidecar.
+  InboundTrafficPolicy inbound_traffic_policy = 5;
 }
 
 // `IstioIngressListener` specifies the properties of an inbound
@@ -313,7 +350,9 @@ message IstioIngressListener {
   string default_endpoint = 4 [(google.api.field_behavior) = REQUIRED];
 
   // Set of TLS related options that allow a listener to terminate
-  // SIMPLE or MUTUAL TLS connections at the sidecar.
+  // SIMPLE or MUTUAL TLS connections at the sidecar. If not
+  // specified, the connection may be subject to Istio mutual TLS
+  // authentication based on the InboundTrafficPolicy.
   Server.TLSOptions tls = 5;
 }
 
@@ -413,6 +452,22 @@ message WorkloadSelector {
 // encouraged to use `ServiceEntry` configurations to explicitly declare any external
 // dependencies, instead of using `ALLOW_ANY`, so that traffic to these
 // services can be monitored.
+//
+// ** NOTE **: OutboundTrafficPolicy property, if not specified, is
+// inherited as follows:
+//
+// 1. A workload-specific Sidecar inherits the policy, if not set,
+// from a namespace-wide Sidecar if present.
+//
+// 2. The namespace-wide Sidecar (i.e. the one without a workload
+// selector) inherts the policy, if not set, from the global default
+// sidecar defined in the [root
+// namespace](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig)
+// if present.
+//
+// 3. The global sidecar inherits the policy, if not specified, from
+// the [OutboundTrafficPolicy in the
+// MeshConfig](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig-OutboundTrafficPolicy).
 message OutboundTrafficPolicy {
   enum Mode {
     // Outbound traffic will be restricted to services defined in the
@@ -441,4 +496,39 @@ enum CaptureMode {
   // to ensure that the listener port is not in use by other processes on
   // the host.
   NONE = 2;
+}
+
+// `InboundTrafficPolicy` sets the default behavior of the sidecar for
+// authenticating inbound traffic to the application using Istio
+// mutual TLS authentication.
+//
+// ** NOTE 1**: InboundTrafficPolicy property, if not specified, is
+// inherited as follows:
+//
+// 1. A workload-specific Sidecar inherits the policy, if not set,
+// from a namespace-wide Sidecar if present.
+//
+// 2. The namespace-wide Sidecar (i.e. the one without a workload
+// selector) inherts the policy, if not set, from the global default
+// sidecar defined in the [root
+// namespace](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig)
+// if present.
+//
+// ** NOTE 2**: An ingress listener with TLS options overrides the
+// ** inbound traffic policy for that port.
+message InboundTrafficPolicy {
+  enum IstioMutualTLSMode {
+    // Unset. Inherit from parent or global defaults.
+    UNSET = 0;
+
+    // Disable Istio mutual TLS authentication. Use only plaintext.
+    DISABLED = 1;
+
+    // Allow both Istio mutual TLS and plaintext connections.
+    ISTIO_MUTUAL_AND_PLAINTEXT = 2;
+
+    // Allow only Istio mutual TLS connections.
+    ISTIO_MUTUAL_ONLY = 3;
+  }
+  Mode mode = 1;
 }
