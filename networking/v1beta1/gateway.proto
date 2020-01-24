@@ -383,7 +383,7 @@ message Server {
       ISTIO_MUTUAL_AND_PLAINTEXT = 5;
 
       // Disable TLS on the port. Applicable only in Sidecar API.
-      DISABLED = 6;
+      DISABLE = 6;
     };
 
     // Optional: Indicates whether connections to this port should be

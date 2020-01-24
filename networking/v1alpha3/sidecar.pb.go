@@ -111,7 +111,7 @@
 //       protocol: HTTP
 //       name: somename
 //     tls:
-//       mode: DISABLED # allow plaintext on 9080
+//       mode: DISABLE # allow plaintext on 9080
 //     defaultEndpoint: unix:///var/run/someuds.sock
 //   - port:
 //       number: 9443
@@ -131,6 +131,30 @@
 //     - "prod-us1/*"
 //   - hosts:
 //     - "istio-system/*"
+// ```
+//
+// and the associated DestinationRule to ensure that the clients use
+// the appropriate TLS settings:
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: ratings-istio-mtls-exception
+//   namespace: prod-us1
+// spec:
+//   host: ratings.prod-us1.svc.cluster.local
+//   trafficPolicy:
+//    portLevelSettings:
+//    - port:
+//        number: 9080
+//      tls:
+//        mode: DISABLE
+//    - port:
+//        number: 9443
+//      tls:
+//        mode: SIMPLE
+//        caCertificates: /etc/certs/ca-certs.pem
 // ```
 //
 // If the workload is deployed without IPTables-based traffic capture, the
@@ -231,7 +255,7 @@
 //     defaultEndpoint: 127.0.0.1:8080
 //     captureMode: NONE
 //     tls:
-//       mode: DISABLED # allow plaintext on 80
+//       mode: DISABLE # allow plaintext on 80
 //   egress:
 //     # use the system detected defaults
 //     # sets up configuration to handle outbound traffic to services
@@ -830,7 +854,28 @@ func (m *OutboundTrafficPolicy) GetMode() OutboundTrafficPolicy_Mode {
 // if present.
 //
 // ** NOTE 2**: An ingress listener with TLS options overrides the
-// ** inbound traffic policy for that port.
+// inbound traffic policy for that port.
+//
+// ** NOTE 3**: All sidecars default to using Istio mutual TLS
+// authentication when initiating an outbound connection to other
+// sidecars in the mesh (the presence of a sidecar is determined by
+// the existence of `security.istio.io/tlsMode: istio` label on the
+// pod or the VM). If a workload specific Sidecar is defined
+// (i.e. with the `workloadSelector`) and the inbound traffic policy
+// or the ingress listener disables Istio mutual TLS mode on a
+// specific port or sets its value to anything other than ISTIO_MUTUAL
+// or ISTIO_MUTUAL_AND_PLAINTEXT, DestinationRule for the associated
+// service must be specified to ensure that other client sidecars
+// connecting to this sidecar use the appropriate TLS mode for their
+// outbound connections. _No action is necessary if the TLS mode is
+// disabled using a namespace-wide or global default Sidecar_.
+//
+// ** NOTE 3**: InboundTrafficPolicy settings for TLS mode take
+// precedance over the deprecated API
+// `authentication.istio.io/v1alpha1` that allowed STRICT and
+// PERMISSIVE mutual TLS modes. However, if InboundTrafficPolicy is
+// not present, existing authentication policy for TLS mode specified
+// using the above API will apply.
 type InboundTrafficPolicy struct {
 	// TLS to be applied to inbound traffic on all auto detected ingress
 	// ports as well as explicitly declared ingress ports.

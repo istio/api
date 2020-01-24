@@ -157,7 +157,7 @@
           "AUTO_PASSTHROUGH",
           "ISTIO_MUTUAL",
           "ISTIO_MUTUAL_AND_PLAINTEXT",
-          "DISABLED"
+          "DISABLE"
         ]
       },
       "istio.networking.v1alpha3.Server.TLSOptions.TLSProtocol": {
