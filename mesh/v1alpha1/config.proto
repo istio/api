@@ -401,8 +401,11 @@ message MeshConfig {
     google.protobuf.Duration rate_limit_timeout = 2;
   }
 
+  // Set configuration for Thrift protocol
+  ThriftConfig thrift_config = 49;
+
   // $hide_from_docs
-  // Next available field number: 49
+  // Next available field number: 50
 }
 
 // Resource describes the source of configuration
