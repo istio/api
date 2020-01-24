@@ -658,8 +658,9 @@ No
 <td>
 <p>The SNI string presented by the client will be used as the
 match criterion in a VirtualService TLS route to determine
-the destination service from the service registry. Not
-applicable in Sidecar ingress context.</p>
+the destination service from the service registry. On a
+sidecar, TLS traffic will be forwarded as is to the default
+endpoint defined in the Ingress Listener.</p>
 
 </td>
 </tr>
@@ -673,8 +674,8 @@ applicable in Sidecar ingress context.</p>
 <tr id="Server-TLSOptions-TLSmode-MUTUAL">
 <td><code>MUTUAL</code></td>
 <td>
-<p>Secure connections to the downstream using mutual TLS by presenting
-server certificates for authentication.</p>
+<p>Secure connections to the downstream using mutual TLS by
+presenting server certificates for authentication.</p>
 
 </td>
 </tr>
@@ -704,8 +705,15 @@ presenting server certificates for authentication.  Compared
 to Mutual mode, this mode uses certificates, representing
 gateway workload identity, generated automatically by Istio
 for mTLS authentication. When this mode is used, all other
-fields in <code>TLSOptions</code> should be empty. Not applicable in
-Sidecar ingress context.</p>
+fields in <code>TLSOptions</code> should be empty.</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-TLSmode-DISABLED">
+<td><code>DISABLED</code></td>
+<td>
+<p>Disable TLS on the port. Applicable only in Sidecar ingress
+context.</p>
 
 </td>
 </tr>

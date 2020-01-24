@@ -3301,6 +3301,7 @@ spec:
                         - MUTUAL
                         - AUTO_PASSTHROUGH
                         - ISTIO_MUTUAL
+                        - DISABLED
                         type: string
                       privateKey:
                         description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
@@ -3552,6 +3553,16 @@ spec:
                     type: object
                 type: object
               type: array
+            inboundTrafficPolicy:
+              properties:
+                mode:
+                  enum:
+                  - UNSET
+                  - DISABLED
+                  - ISTIO_MUTUAL_AND_PLAINTEXT
+                  - ISTIO_MUTUAL_ONLY
+                  type: string
+              type: object
             ingress:
               items:
                 properties:
@@ -3626,6 +3637,7 @@ spec:
                         - MUTUAL
                         - AUTO_PASSTHROUGH
                         - ISTIO_MUTUAL
+                        - DISABLED
                         type: string
                       privateKey:
                         description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
@@ -3654,7 +3666,7 @@ spec:
                 type: object
               type: array
             outboundTrafficPolicy:
-              description: This allows to configure the outbound traffic policy.
+              description: Configuration for the outbound traffic policy.
               properties:
                 mode:
                   enum:

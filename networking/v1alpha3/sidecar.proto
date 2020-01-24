@@ -530,5 +530,5 @@ message InboundTrafficPolicy {
     // Allow only Istio mutual TLS connections.
     ISTIO_MUTUAL_ONLY = 3;
   }
-  Mode mode = 1;
+  IstioMutualTLSMode mode = 1;
 }

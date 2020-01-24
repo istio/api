@@ -104,7 +104,8 @@
           "SIMPLE",
           "MUTUAL",
           "AUTO_PASSTHROUGH",
-          "ISTIO_MUTUAL"
+          "ISTIO_MUTUAL",
+          "DISABLED"
         ]
       },
       "istio.networking.v1beta1.Server.TLSOptions.TLSProtocol": {
@@ -133,7 +134,7 @@
             }
           },
           "egress": {
-            "description": "Egress specifies the configuration of the sidecar for processing outbound traffic from the attached workload instance to other services in the mesh.",
+            "description": "Egress specifies the configuration of the sidecar for processing outbound traffic from the attached workload instance to other services in the mesh. If not specified, inherits the system detected defaults from the namespace-wide or the global default Sidecar.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1beta1.IstioEgressListener"
@@ -141,6 +142,9 @@
           },
           "outboundTrafficPolicy": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.OutboundTrafficPolicy"
+          },
+          "inboundTrafficPolicy": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.InboundTrafficPolicy"
           }
         }
       },
@@ -217,6 +221,15 @@
           }
         }
       },
+      "istio.networking.v1beta1.InboundTrafficPolicy": {
+        "description": "`InboundTrafficPolicy` sets the default behavior of the sidecar for authenticating inbound traffic to the application using Istio mutual TLS authentication.",
+        "type": "object",
+        "properties": {
+          "mode": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.InboundTrafficPolicy.IstioMutualTLSMode"
+          }
+        }
+      },
       "istio.networking.v1beta1.CaptureMode": {
         "description": "`CaptureMode` describes how traffic to a listener is expected to be captured. Applicable only when the listener is bound to an IP.",
         "type": "string",
@@ -231,6 +244,15 @@
         "enum": [
           "REGISTRY_ONLY",
           "ALLOW_ANY"
+        ]
+      },
+      "istio.networking.v1beta1.InboundTrafficPolicy.IstioMutualTLSMode": {
+        "type": "string",
+        "enum": [
+          "UNSET",
+          "DISABLED",
+          "ISTIO_MUTUAL_AND_PLAINTEXT",
+          "ISTIO_MUTUAL_ONLY"
         ]
       }
     }
