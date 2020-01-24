@@ -165,8 +165,8 @@
         "description": "`IstioIngressListener` specifies the properties of an inbound traffic listener on the sidecar proxy attached to a workload instance.",
         "type": "object",
         "properties": {
-          "tls": {
-            "$ref": "#/components/schemas/istio.networking.v1beta1.Server.TLSOptions"
+          "trafficPolicy": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.InboundTrafficPolicy"
           },
           "port": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.Port"

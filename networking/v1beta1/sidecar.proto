@@ -379,11 +379,10 @@ message IstioIngressListener {
   // connections. Format should be `127.0.0.1:PORT` or `unix:///path/to/socket`
   string default_endpoint = 4 [(google.api.field_behavior) = REQUIRED];
 
-  // Set of TLS related options that allow a listener to terminate
-  // SIMPLE or MUTUAL TLS or ISTIO_MUTUAL TLS connections at the
-  // sidecar. If not specified, the connection may be subject to TLS
-  // authentication based on the InboundTrafficPolicy.
-  Server.TLSOptions tls = 5;
+  // Settings that determine how the peer should be authenticated, as
+  // well as settings to terminate application level TLS using user
+  // specified certificates.
+  InboundTrafficPolicy traffic_policy = 5;
 }
 
 // `IstioEgressListener` specifies the properties of an outbound traffic
