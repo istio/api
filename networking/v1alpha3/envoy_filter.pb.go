@@ -14,15 +14,13 @@
 // namespace](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig),
 // followed by all matching EnvoyFilters in the workload's namespace.
 //
-// **NOTE 1**: This API is deeply tied to the internal implementation
-// in Istio networking subsystem as well as Envoy's XDS API. While
-// every effort will be made to preserve backward compatibility where
-// possible, EnvoyFilter API objects should be carefully vetted across
-// Istio version upgrades to ensure that there are no
-// breakages. Specifically, any envoy configuration provided through
-// this mechanism should be carefully monitored across Istio proxy
-// version upgrades, to ensure that deprecated fields are removed and
-// replaced appropriately.
+// **NOTE 1**: Some aspects of this API is deeply tied to the internal
+// implementation in Istio networking subsystem as well as Envoy's XDS
+// API. While the EnvoyFilter API by itself will maintain backward
+// compatibility, any envoy configuration provided through this
+// mechanism should be carefully monitored across Istio proxy version
+// upgrades, to ensure that deprecated fields are removed and replaced
+// appropriately.
 //
 // **NOTE 2**: When multiple EnvoyFilters are bound to the same
 // workload in a given namespace, all patches will be processed
