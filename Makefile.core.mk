@@ -334,7 +334,7 @@ release-lock-status:
 lint:
 	@scripts/check_license.sh
 	@$(prototool) lint --protoc-bin-path=/usr/bin/protoc --protoc-wkt-path=/usr/include/protobuf
-	@$(htmlproofer) . --url-swap "istio.io:preliminary.istio.io" --assume-extension --check-html --check-external-hash --check-opengraph --timeframe 2d --storage-dir $(repo_dir)/.htmlproofer --url-ignore "/localhost/"
+	@$(htmlproofer) . --url-swap "istio.io:archive.istio.io/v1.3" --assume-extension --check-html --check-external-hash --check-opengraph --timeframe 2d --storage-dir $(repo_dir)/.htmlproofer --url-ignore "/localhost/"
 
 #####################
 # OpenAPI Schema

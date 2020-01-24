@@ -2796,6 +2796,11 @@
                 "id": 5,
                 "name": "forward_attributes",
                 "type": "Attributes"
+              },
+              {
+                "id": 6,
+                "name": "ignore_forwarded_attributes",
+                "type": "bool"
               }
             ],
             "maps": [
