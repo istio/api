@@ -26,6 +26,98 @@
           }
         }
       },
+      "istio.networking.v1beta1.Server.TLSOptions": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.Server.TLSOptions.TLSmode"
+          },
+          "privateKey": {
+            "description": "REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file holding the server's private key.",
+            "type": "string",
+            "format": "string"
+          },
+          "caCertificates": {
+            "description": "REQUIRED if mode is `MUTUAL`. The path to a file containing certificate authority certificates to use in verifying a presented client side certificate.",
+            "type": "string",
+            "format": "string"
+          },
+          "subjectAltNames": {
+            "description": "A list of alternate names to verify the subject identity in the certificate presented by the client.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "httpsRedirect": {
+            "description": "If set to true, the load balancer will send a 301 redirect for all http connections, asking the clients to use HTTPS. Not applicable in Sidecar ingress context.",
+            "type": "boolean"
+          },
+          "serverCertificate": {
+            "description": "REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file holding the server-side TLS certificate to use.",
+            "type": "string",
+            "format": "string"
+          },
+          "credentialName": {
+            "description": "The credentialName stands for a unique identifier that can be used to identify the serverCertificate and the privateKey. The credentialName appended with suffix \"-cacert\" is used to identify the CaCertificates associated with this server. Proxies capable of fetching credentials from a remote credential store such as Kubernetes secrets, will be configured to retrieve the serverCertificate and the privateKey using credentialName, instead of using the file system paths specified above. If using mutual TLS, proxy instances will retrieve the CaCertificates using credentialName-cacert. The semantics of the name are platform dependent. In Kubernetes, the default Istio supplied credential server expects the credentialName to match the name of the Kubernetes secret that holds the server certificate, the private key, and the CA certificate (if using mutual TLS). Set the `ISTIO_META_USER_SDS` metadata variable in the proxy to enable the dynamic credential fetching feature.",
+            "type": "string",
+            "format": "string"
+          },
+          "verifyCertificateSpki": {
+            "description": "An optional list of base64-encoded SHA-256 hashes of the SKPIs of authorized client certificates. Note: When both verify_certificate_hash and verify_certificate_spki are specified, a hash matching either value will result in the certificate being accepted.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "verifyCertificateHash": {
+            "description": "An optional list of hex-encoded SHA-256 hashes of the authorized client certificates. Both simple and colon separated formats are acceptable. Note: When both verify_certificate_hash and verify_certificate_spki are specified, a hash matching either value will result in the certificate being accepted.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "minProtocolVersion": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.Server.TLSOptions.TLSProtocol"
+          },
+          "maxProtocolVersion": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.Server.TLSOptions.TLSProtocol"
+          },
+          "cipherSuites": {
+            "description": "Optional: If specified, only support the specified cipher list. Otherwise default to the default cipher list supported by Envoy.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        }
+      },
+      "istio.networking.v1beta1.Server.TLSOptions.TLSmode": {
+        "description": "TLS modes enforced by the proxy",
+        "type": "string",
+        "enum": [
+          "PASSTHROUGH",
+          "SIMPLE",
+          "MUTUAL",
+          "AUTO_PASSTHROUGH",
+          "ISTIO_MUTUAL"
+        ]
+      },
+      "istio.networking.v1beta1.Server.TLSOptions.TLSProtocol": {
+        "description": "TLS protocol versions.",
+        "type": "string",
+        "enum": [
+          "TLS_AUTO",
+          "TLSV1_0",
+          "TLSV1_1",
+          "TLSV1_2",
+          "TLSV1_3"
+        ]
+      },
       "istio.networking.v1beta1.Sidecar": {
         "description": "`Sidecar` describes the configuration of the sidecar proxy that mediates inbound and outbound communication of the workload instance to which it is attached.",
         "type": "object",
@@ -70,6 +162,9 @@
         "description": "`IstioIngressListener` specifies the properties of an inbound traffic listener on the sidecar proxy attached to a workload instance.",
         "type": "object",
         "properties": {
+          "tls": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.Server.TLSOptions"
+          },
           "port": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.Port"
           },

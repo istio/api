@@ -77,12 +77,14 @@ spec:
     - &quot;istio-system/*&quot;
 </code></pre>
 
-<p>The example below declares a <code>Sidecar</code> configuration in the <code>prod-us1</code> namespace
-that accepts inbound HTTP traffic on port 9080 and forwards
-it to the attached workload instance listening on a Unix domain socket. In the
-egress direction, in addition to the <code>istio-system</code> namespace, the sidecar
-proxies only HTTP traffic bound for port 9080 for services in the
-<code>prod-us1</code> namespace.</p>
+<p>The example below declares a <code>Sidecar</code> configuration in the
+<code>prod-us1</code> namespace that accepts inbound HTTP traffic on port
+9080, and HTTPS traffic on port 9443 with TLS termination. The
+traffic is then forwarded to the attached workload instance
+listening on a Unix domain socket. In the egress direction, in
+addition to the <code>istio-system</code> namespace, the sidecar proxies only
+HTTP traffic bound for port 9080 for services in the <code>prod-us1</code>
+namespace.</p>
 
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
 kind: Sidecar
@@ -95,6 +97,15 @@ spec:
       number: 9080
       protocol: HTTP
       name: somename
+    defaultEndpoint: unix:///var/run/someuds.sock
+  - port:
+      number: 9443
+      protocol: HTTPS
+      name: httpsport
+    tls:
+      mode: SIMPLE
+      serverCertificate: /etc/certs/servercert.pem
+      privateKey: /etc/certs/privatekey.pem
     defaultEndpoint: unix:///var/run/someuds.sock
   egress:
   - port:
@@ -431,6 +442,9 @@ Yes
 <td><code>tls</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/networking/gateway.html#Server-TLSOptions">TLSOptions</a></code></td>
 <td>
+<p>Set of TLS related options that allow a listener to terminate
+SIMPLE or MUTUAL TLS connections at the sidecar.</p>
+
 </td>
 <td>
 No

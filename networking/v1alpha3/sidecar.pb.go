@@ -72,12 +72,14 @@
 //     - "istio-system/*"
 // ```
 //
-// The example below declares a `Sidecar` configuration in the `prod-us1` namespace
-// that accepts inbound HTTP traffic on port 9080 and forwards
-// it to the attached workload instance listening on a Unix domain socket. In the
-// egress direction, in addition to the `istio-system` namespace, the sidecar
-// proxies only HTTP traffic bound for port 9080 for services in the
-// `prod-us1` namespace.
+// The example below declares a `Sidecar` configuration in the
+// `prod-us1` namespace that accepts inbound HTTP traffic on port
+// 9080, and HTTPS traffic on port 9443 with TLS termination. The
+// traffic is then forwarded to the attached workload instance
+// listening on a Unix domain socket. In the egress direction, in
+// addition to the `istio-system` namespace, the sidecar proxies only
+// HTTP traffic bound for port 9080 for services in the `prod-us1`
+// namespace.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -91,6 +93,15 @@
 //       number: 9080
 //       protocol: HTTP
 //       name: somename
+//     defaultEndpoint: unix:///var/run/someuds.sock
+//   - port:
+//       number: 9443
+//       protocol: HTTPS
+//       name: httpsport
+//     tls:
+//       mode: SIMPLE
+//       serverCertificate: /etc/certs/servercert.pem
+//       privateKey: /etc/certs/privatekey.pem
 //     defaultEndpoint: unix:///var/run/someuds.sock
 //   egress:
 //   - port:
@@ -420,7 +431,9 @@ type IstioIngressListener struct {
 	// redirect traffic arriving at the bind `IP:Port` on the sidecar to a `localhost:port`
 	// or Unix domain socket where the application workload instance is listening for
 	// connections. Format should be `127.0.0.1:PORT` or `unix:///path/to/socket`
-	DefaultEndpoint      string             `protobuf:"bytes,4,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
+	DefaultEndpoint string `protobuf:"bytes,4,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
+	// Set of TLS related options that allow a listener to terminate
+	// SIMPLE or MUTUAL TLS connections at the sidecar.
 	Tls                  *Server_TLSOptions `protobuf:"bytes,5,opt,name=tls,proto3" json:"tls,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
 	XXX_unrecognized     []byte             `json:"-"`
