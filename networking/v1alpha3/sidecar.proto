@@ -71,7 +71,8 @@ import "networking/v1alpha3/gateway.proto";
 //   namespace: istio-config
 // spec:
 //   inboundTrafficPolicy:
-//     mode: ISTIO_MUTUAL_AND_PLAINTEXT
+//     tls:
+//       mode: ISTIO_MUTUAL_AND_PLAINTEXT
 //   egress:
 //   - hosts:
 //     - "./*"
@@ -93,7 +94,8 @@ import "networking/v1alpha3/gateway.proto";
 //   namespace: prod-us1
 // spec:
 //   inboundTrafficPolicy:
-//     mode: ISTIO_MUTUAL_ONLY
+//     tls:
+//       mode: ISTIO_MUTUAL
 //   egress:
 //   - hosts:
 //     - "prod-us1/*"
@@ -168,7 +170,7 @@ import "networking/v1alpha3/gateway.proto";
 //
 // ** NOTE 1**: Since the ingress listener for port 9080 does not
 // override the TLS mode, the default inbound traffic policy defined
-// by the namespace-wide sidecar, i.e. ISTIO_MUTUAL_ONLY, will be
+// by the namespace-wide sidecar, i.e. ISTIO_MUTUAL, will be
 // applied to port 80. Clients connecting to this port are expected to
 // be other sidecars in the mesh, initiating Istio mutual TLS connection.
 //
@@ -350,8 +352,8 @@ message IstioIngressListener {
   string default_endpoint = 4 [(google.api.field_behavior) = REQUIRED];
 
   // Set of TLS related options that allow a listener to terminate
-  // SIMPLE or MUTUAL TLS connections at the sidecar. If not
-  // specified, the connection may be subject to Istio mutual TLS
+  // SIMPLE or MUTUAL TLS or ISTIO_MUTUAL TLS connections at the
+  // sidecar. If not specified, the connection may be subject to TLS
   // authentication based on the InboundTrafficPolicy.
   Server.TLSOptions tls = 5;
 }
@@ -517,18 +519,7 @@ enum CaptureMode {
 // ** NOTE 2**: An ingress listener with TLS options overrides the
 // ** inbound traffic policy for that port.
 message InboundTrafficPolicy {
-  enum IstioMutualTLSMode {
-    // Unset. Inherit from parent or global defaults.
-    UNSET = 0;
-
-    // Disable Istio mutual TLS authentication. Use only plaintext.
-    DISABLED = 1;
-
-    // Allow both Istio mutual TLS and plaintext connections.
-    ISTIO_MUTUAL_AND_PLAINTEXT = 2;
-
-    // Allow only Istio mutual TLS connections.
-    ISTIO_MUTUAL_ONLY = 3;
-  }
-  IstioMutualTLSMode mode = 1;
+  // TLS to be applied to inbound traffic on all auto detected ingress
+  // ports as well as explicitly declared ingress ports.
+  Server.TLSOptions tls = 1;
 }

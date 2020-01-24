@@ -49,7 +49,8 @@
 //   namespace: istio-config
 // spec:
 //   inboundTrafficPolicy:
-//     mode: ISTIO_MUTUAL_AND_PLAINTEXT
+//     tls:
+//       mode: ISTIO_MUTUAL_AND_PLAINTEXT
 //   egress:
 //   - hosts:
 //     - "./*"
@@ -71,7 +72,8 @@
 //   namespace: prod-us1
 // spec:
 //   inboundTrafficPolicy:
-//     mode: ISTIO_MUTUAL_ONLY
+//     tls:
+//       mode: ISTIO_MUTUAL
 //   egress:
 //   - hosts:
 //     - "prod-us1/*"
@@ -146,7 +148,7 @@
 //
 // ** NOTE 1**: Since the ingress listener for port 9080 does not
 // override the TLS mode, the default inbound traffic policy defined
-// by the namespace-wide sidecar, i.e. ISTIO_MUTUAL_ONLY, will be
+// by the namespace-wide sidecar, i.e. ISTIO_MUTUAL, will be
 // applied to port 80. Clients connecting to this port are expected to
 // be other sidecars in the mesh, initiating Istio mutual TLS connection.
 //

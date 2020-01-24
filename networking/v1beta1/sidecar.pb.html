@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1beta1.Sidecar
 aliases: [/docs/reference/config/networking/v1beta1/sidecar]
-number_of_entries: 9
+number_of_entries: 8
 ---
 <p><code>Sidecar</code> describes the configuration of the sidecar proxy that mediates
 inbound and outbound communication to the workload instance it is attached to. By
@@ -55,7 +55,8 @@ metadata:
   namespace: istio-config
 spec:
   inboundTrafficPolicy:
-    mode: ISTIO_MUTUAL_AND_PLAINTEXT
+    tls:
+      mode: ISTIO_MUTUAL_AND_PLAINTEXT
   egress:
   - hosts:
     - &quot;./*&quot;
@@ -76,7 +77,8 @@ metadata:
   namespace: prod-us1
 spec:
   inboundTrafficPolicy:
-    mode: ISTIO_MUTUAL_ONLY
+    tls:
+      mode: ISTIO_MUTUAL
   egress:
   - hosts:
     - &quot;prod-us1/*&quot;
@@ -150,7 +152,7 @@ externally hosted MySQL service at <code>mysql.foo.com:3306</code>.</p>
 
 <p>** NOTE 1**: Since the ingress listener for port 9080 does not
 override the TLS mode, the default inbound traffic policy defined
-by the namespace-wide sidecar, i.e. ISTIO<em>MUTUAL</em>ONLY, will be
+by the namespace-wide sidecar, i.e. ISTIO_MUTUAL, will be
 applied to port 80. Clients connecting to this port are expected to
 be other sidecars in the mesh, initiating Istio mutual TLS connection.</p>
 
@@ -315,54 +317,16 @@ if present.</p></li>
 </tr>
 </thead>
 <tbody>
-<tr id="InboundTrafficPolicy-mode">
-<td><code>mode</code></td>
-<td><code><a href="#InboundTrafficPolicy-IstioMutualTLSMode">IstioMutualTLSMode</a></code></td>
+<tr id="InboundTrafficPolicy-tls">
+<td><code>tls</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/gateway.html#Server-TLSOptions">TLSOptions</a></code></td>
 <td>
+<p>TLS to be applied to inbound traffic on all auto detected ingress
+ports as well as explicitly declared ingress ports.</p>
+
 </td>
 <td>
 No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="InboundTrafficPolicy-IstioMutualTLSMode">InboundTrafficPolicy.IstioMutualTLSMode</h2>
-<section>
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="InboundTrafficPolicy-IstioMutualTLSMode-UNSET">
-<td><code>UNSET</code></td>
-<td>
-<p>Unset. Inherit from parent or global defaults.</p>
-
-</td>
-</tr>
-<tr id="InboundTrafficPolicy-IstioMutualTLSMode-DISABLED">
-<td><code>DISABLED</code></td>
-<td>
-<p>Disable Istio mutual TLS authentication. Use only plaintext.</p>
-
-</td>
-</tr>
-<tr id="InboundTrafficPolicy-IstioMutualTLSMode-ISTIO_MUTUAL_AND_PLAINTEXT">
-<td><code>ISTIO_MUTUAL_AND_PLAINTEXT</code></td>
-<td>
-<p>Allow both Istio mutual TLS and plaintext connections.</p>
-
-</td>
-</tr>
-<tr id="InboundTrafficPolicy-IstioMutualTLSMode-ISTIO_MUTUAL_ONLY">
-<td><code>ISTIO_MUTUAL_ONLY</code></td>
-<td>
-<p>Allow only Istio mutual TLS connections.</p>
-
 </td>
 </tr>
 </tbody>
@@ -555,8 +519,8 @@ Yes
 <td><code><a href="https://istio.io/docs/reference/config/networking/gateway.html#Server-TLSOptions">TLSOptions</a></code></td>
 <td>
 <p>Set of TLS related options that allow a listener to terminate
-SIMPLE or MUTUAL TLS connections at the sidecar. If not
-specified, the connection may be subject to Istio mutual TLS
+SIMPLE or MUTUAL TLS or ISTIO_MUTUAL TLS connections at the
+sidecar. If not specified, the connection may be subject to TLS
 authentication based on the InboundTrafficPolicy.</p>
 
 </td>

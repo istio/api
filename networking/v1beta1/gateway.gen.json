@@ -102,7 +102,7 @@
             }
           },
           "httpsRedirect": {
-            "description": "If set to true, the load balancer will send a 301 redirect for all http connections, asking the clients to use HTTPS. Not applicable in Sidecar ingress context.",
+            "description": "If set to true, the load balancer will send a 301 redirect for all http connections, asking the clients to use HTTPS. Not applicable in Sidecar API.",
             "type": "boolean"
           },
           "serverCertificate": {
@@ -156,6 +156,7 @@
           "MUTUAL",
           "AUTO_PASSTHROUGH",
           "ISTIO_MUTUAL",
+          "ISTIO_MUTUAL_AND_PLAINTEXT",
           "DISABLED"
         ]
       },

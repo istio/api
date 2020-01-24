@@ -65,7 +65,7 @@
             }
           },
           "httpsRedirect": {
-            "description": "If set to true, the load balancer will send a 301 redirect for all http connections, asking the clients to use HTTPS. Not applicable in Sidecar ingress context.",
+            "description": "If set to true, the load balancer will send a 301 redirect for all http connections, asking the clients to use HTTPS. Not applicable in Sidecar API.",
             "type": "boolean"
           },
           "serverCertificate": {
@@ -119,6 +119,7 @@
           "MUTUAL",
           "AUTO_PASSTHROUGH",
           "ISTIO_MUTUAL",
+          "ISTIO_MUTUAL_AND_PLAINTEXT",
           "DISABLED"
         ]
       },
@@ -225,8 +226,8 @@
         "description": "`InboundTrafficPolicy` sets the default behavior of the sidecar for authenticating inbound traffic to the application using Istio mutual TLS authentication.",
         "type": "object",
         "properties": {
-          "mode": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.InboundTrafficPolicy.IstioMutualTLSMode"
+          "tls": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Server.TLSOptions"
           }
         }
       },
@@ -244,15 +245,6 @@
         "enum": [
           "REGISTRY_ONLY",
           "ALLOW_ANY"
-        ]
-      },
-      "istio.networking.v1alpha3.InboundTrafficPolicy.IstioMutualTLSMode": {
-        "type": "string",
-        "enum": [
-          "UNSET",
-          "DISABLED",
-          "ISTIO_MUTUAL_AND_PLAINTEXT",
-          "ISTIO_MUTUAL_ONLY"
         ]
       }
     }
