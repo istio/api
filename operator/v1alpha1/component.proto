@@ -113,7 +113,7 @@ message KubernetesResourcesSpec {
     repeated EnvVar env = 2;
     // k8s HorizontalPodAutoscaler settings.
     // https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-    k8s.io.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec hpa_spec = 3;
+    HorizontalPodAutoscalerSpec hpa_spec = 3;
     // k8s imagePullPolicy.
     // https://kubernetes.io/docs/concepts/containers/images/
     string image_pull_policy = 4;

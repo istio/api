@@ -136,7 +136,8 @@ message IstioOperatorSpec {
     string tag = 13;
     // Resource suffix is appended to all resources installed by each component.
     string resource_suffix = 14;
-    // Namespace to install control plane resources into. Required.
+    // Namespace to install control plane resources into. If unset, Istio will be installed into the same namespace
+    // as the IstioOperator CR.
     string namespace = 15;
 
     // Config used by control plane components internally.

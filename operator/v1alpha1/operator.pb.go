@@ -80,7 +80,8 @@ type IstioOperatorSpec struct {
 	Tag string `protobuf:"bytes,13,opt,name=tag,proto3" json:"tag,omitempty"`
 	// Resource suffix is appended to all resources installed by each component.
 	ResourceSuffix string `protobuf:"bytes,14,opt,name=resource_suffix,json=resourceSuffix,proto3" json:"resource_suffix,omitempty"`
-	// Namespace to install control plane resources into. Required.
+	// Namespace to install control plane resources into. If unset, Istio will be installed into the same namespace
+	// as the IstioOperator CR.
 	Namespace string `protobuf:"bytes,15,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	// Config used by control plane components internally.
 	MeshConfig *v1alpha1.MeshConfig `protobuf:"bytes,40,opt,name=mesh_config,json=meshConfig,proto3" json:"mesh_config,omitempty"`

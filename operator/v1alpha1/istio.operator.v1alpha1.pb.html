@@ -2,7 +2,7 @@
 title: istio.operator.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 52
+number_of_entries: 58
 ---
 <h2 id="Affinity">Affinity</h2>
 <section>
@@ -216,6 +216,48 @@ No
 <tr id="ConfigMapKeySelector-optional">
 <td><code>optional</code></td>
 <td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="CrossVersionObjectReference">CrossVersionObjectReference</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="CrossVersionObjectReference-kind">
+<td><code>kind</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CrossVersionObjectReference-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CrossVersionObjectReference-apiVersion">
+<td><code>apiVersion</code></td>
+<td><code>string</code></td>
 <td>
 </td>
 <td>
@@ -462,6 +504,57 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="ExternalMetricSource">ExternalMetricSource</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ExternalMetricSource-metricName">
+<td><code>metricName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExternalMetricSource-metricSelector">
+<td><code>metricSelector</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-apis-meta-v1-LabelSelector">LabelSelector</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExternalMetricSource-targetValue">
+<td><code>targetValue</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-api-resource-Quantity">Quantity</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExternalMetricSource-targetAverageValue">
+<td><code>targetAverageValue</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-api-resource-Quantity">Quantity</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="GatewaySpec">GatewaySpec</h2>
 <section>
 <p>Configuration for gateways.</p>
@@ -644,6 +737,57 @@ No
 <tr id="HTTPHeader-value">
 <td><code>value</code></td>
 <td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HorizontalPodAutoscalerSpec">HorizontalPodAutoscalerSpec</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HorizontalPodAutoscalerSpec-scaleTargetRef">
+<td><code>scaleTargetRef</code></td>
+<td><code><a href="#CrossVersionObjectReference">CrossVersionObjectReference</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HorizontalPodAutoscalerSpec-minReplicas">
+<td><code>minReplicas</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HorizontalPodAutoscalerSpec-maxReplicas">
+<td><code>maxReplicas</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HorizontalPodAutoscalerSpec-metrics">
+<td><code>metrics</code></td>
+<td><code><a href="#MetricSpec">MetricSpec[]</a></code></td>
 <td>
 </td>
 <td>
@@ -1006,7 +1150,8 @@ No
 <td><code>namespace</code></td>
 <td><code>string</code></td>
 <td>
-<p>Namespace to install control plane resources into. Required.</p>
+<p>Namespace to install control plane resources into. If unset, Istio will be installed into the same namespace
+as the IstioOperator CR.</p>
 
 </td>
 <td>
@@ -1221,7 +1366,7 @@ No
 </tr>
 <tr id="KubernetesResourcesSpec-hpa_spec">
 <td><code>hpaSpec</code></td>
-<td><code><a href="#k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec">HorizontalPodAutoscalerSpec</a></code></td>
+<td><code><a href="#HorizontalPodAutoscalerSpec">HorizontalPodAutoscalerSpec</a></code></td>
 <td>
 <p>k8s HorizontalPodAutoscaler settings.
 https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/</p>
@@ -1405,6 +1550,66 @@ No
 <tr id="LocalObjectReference-name">
 <td><code>name</code></td>
 <td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MetricSpec">MetricSpec</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MetricSpec-type">
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricSpec-object">
+<td><code>object</code></td>
+<td><code><a href="#ObjectMetricSource">ObjectMetricSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricSpec-pods">
+<td><code>pods</code></td>
+<td><code><a href="#PodsMetricSource">PodsMetricSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricSpec-resource">
+<td><code>resource</code></td>
+<td><code><a href="#ResourceMetricSource">ResourceMetricSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricSpec-external">
+<td><code>external</code></td>
+<td><code><a href="#ExternalMetricSource">ExternalMetricSource</a></code></td>
 <td>
 </td>
 <td>
@@ -1614,6 +1819,66 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="ObjectMetricSource">ObjectMetricSource</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ObjectMetricSource-target">
+<td><code>target</code></td>
+<td><code><a href="#CrossVersionObjectReference">CrossVersionObjectReference</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ObjectMetricSource-metricName">
+<td><code>metricName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ObjectMetricSource-targetValue">
+<td><code>targetValue</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-api-resource-Quantity">Quantity</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ObjectMetricSource-selector">
+<td><code>selector</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-apis-meta-v1-LabelSelector">LabelSelector</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ObjectMetricSource-averageValue">
+<td><code>averageValue</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-api-resource-Quantity">Quantity</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="PodAffinity">PodAffinity</h2>
 <section>
 <table class="message-fields">
@@ -1757,6 +2022,48 @@ No
 <tr id="PodDisruptionBudgetSpec-maxUnavailable">
 <td><code>maxUnavailable</code></td>
 <td><code>uint32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="PodsMetricSource">PodsMetricSource</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PodsMetricSource-metricName">
+<td><code>metricName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PodsMetricSource-targetAverageValue">
+<td><code>targetAverageValue</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-api-resource-Quantity">Quantity</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PodsMetricSource-selector">
+<td><code>selector</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-apis-meta-v1-LabelSelector">LabelSelector</a></code></td>
 <td>
 </td>
 <td>
@@ -1920,6 +2227,48 @@ No
 </tr>
 <tr id="ResourceFieldSelector-divisor">
 <td><code>divisor</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-api-resource-Quantity">Quantity</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ResourceMetricSource">ResourceMetricSource</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ResourceMetricSource-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ResourceMetricSource-targetAverageUtilization">
+<td><code>targetAverageUtilization</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ResourceMetricSource-targetAverageValue">
+<td><code>targetAverageValue</code></td>
 <td><code><a href="#k8s-io-apimachinery-pkg-api-resource-Quantity">Quantity</a></code></td>
 <td>
 </td>
@@ -2344,81 +2693,6 @@ No
 <td><code>podAffinityTerm</code></td>
 <td><code><a href="#PodAffinityTerm">PodAffinityTerm</a></code></td>
 <td>
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec">k8s.io.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec</h2>
-<section>
-<p>HorizontalPodAutoscalerSpec describes the desired functionality of the HorizontalPodAutoscaler.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec-scaleTargetRef">
-<td><code>scaleTargetRef</code></td>
-<td><code><a href="#k8s-io-api-autoscaling-v2beta1-CrossVersionObjectReference">CrossVersionObjectReference</a></code></td>
-<td>
-<p>scaleTargetRef points to the target resource to scale, and is used to the pods for which metrics
-should be collected, as well as to actually change the replica count.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec-minReplicas">
-<td><code>minReplicas</code></td>
-<td><code>int32</code></td>
-<td>
-<p>minReplicas is the lower limit for the number of replicas to which the autoscaler
-can scale down.  It defaults to 1 pod.  minReplicas is allowed to be 0 if the
-alpha feature gate HPAScaleToZero is enabled and at least one Object or External
-metric is configured.  Scaling is active as long as at least one metric value is
-available.
-+optional</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec-maxReplicas">
-<td><code>maxReplicas</code></td>
-<td><code>int32</code></td>
-<td>
-<p>maxReplicas is the upper limit for the number of replicas to which the autoscaler can scale up.
-It cannot be less that minReplicas.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec-metrics">
-<td><code>metrics</code></td>
-<td><code><a href="#k8s-io-api-autoscaling-v2beta1-MetricSpec">MetricSpec[]</a></code></td>
-<td>
-<p>metrics contains the specifications for which to use to calculate the
-desired replica count (the maximum replica count across all metrics will
-be used).  The desired replica count is calculated multiplying the
-ratio between the target value and the current value by the current
-number of pods.  Ergo, metrics used must decrease as the pod count is
-increased, and vice-versa.  See the individual metric source types for
-more information about how each type of metric must respond.
-+optional</p>
-
 </td>
 <td>
 No

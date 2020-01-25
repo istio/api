@@ -43146,7 +43146,7 @@
               {
                 "id": 3,
                 "name": "hpa_spec",
-                "type": "k8s.io.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec"
+                "type": "HorizontalPodAutoscalerSpec"
               },
               {
                 "id": 4,
@@ -43938,6 +43938,177 @@
                 "id": 1,
                 "name": "timeoutSeconds",
                 "type": "int32"
+              }
+            ]
+          },
+          {
+            "name": "HorizontalPodAutoscalerSpec",
+            "fields": [
+              {
+                "id": 1,
+                "name": "scaleTargetRef",
+                "type": "CrossVersionObjectReference"
+              },
+              {
+                "id": 2,
+                "name": "minReplicas",
+                "type": "int32"
+              },
+              {
+                "id": 3,
+                "name": "maxReplicas",
+                "type": "int32"
+              },
+              {
+                "id": 4,
+                "name": "metrics",
+                "type": "MetricSpec",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "CrossVersionObjectReference",
+            "fields": [
+              {
+                "id": 1,
+                "name": "kind",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "apiVersion",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "MetricSpec",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "object",
+                "type": "ObjectMetricSource"
+              },
+              {
+                "id": 3,
+                "name": "pods",
+                "type": "PodsMetricSource"
+              },
+              {
+                "id": 4,
+                "name": "resource",
+                "type": "ResourceMetricSource"
+              },
+              {
+                "id": 5,
+                "name": "external",
+                "type": "ExternalMetricSource"
+              }
+            ]
+          },
+          {
+            "name": "ObjectMetricSource",
+            "fields": [
+              {
+                "id": 1,
+                "name": "target",
+                "type": "CrossVersionObjectReference"
+              },
+              {
+                "id": 2,
+                "name": "metricName",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "targetValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              },
+              {
+                "id": 4,
+                "name": "selector",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
+              },
+              {
+                "id": 5,
+                "name": "averageValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              }
+            ]
+          },
+          {
+            "name": "PodsMetricSource",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metricName",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "targetAverageValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              },
+              {
+                "id": 3,
+                "name": "selector",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
+              }
+            ]
+          },
+          {
+            "name": "ResourceMetricSource",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "targetAverageUtilization",
+                "type": "int32"
+              },
+              {
+                "id": 3,
+                "name": "targetAverageValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              }
+            ]
+          },
+          {
+            "name": "ExternalMetricSource",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metricName",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "metricSelector",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
+              },
+              {
+                "id": 3,
+                "name": "targetValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              },
+              {
+                "id": 4,
+                "name": "targetAverageValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
               }
             ]
           },
