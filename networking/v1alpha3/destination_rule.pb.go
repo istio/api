@@ -1690,6 +1690,7 @@ type LocalityLoadBalancerSetting struct {
 	Failover []*LocalityLoadBalancerSetting_Failover `protobuf:"bytes,2,rep,name=failover,proto3" json:"failover,omitempty"`
 	// enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
 	// e.g. true means that turn on locality load balancing for this DestinationRule no matter what mesh wide settings is.
+	// $hide_from_docs
 	Enabled              *types.BoolValue `protobuf:"bytes,3,opt,name=enabled,proto3" json:"enabled,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_unrecognized     []byte           `json:"-"`

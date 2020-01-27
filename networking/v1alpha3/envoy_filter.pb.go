@@ -513,6 +513,7 @@ const (
 	// first in the list based on the presence of selected filter or not.
 	// This is specifically useful when you want your filter first in the
 	// list based on a match condition specified in Match clause.
+	// $hide_from_docs
 	EnvoyFilter_Patch_INSERT_FIRST EnvoyFilter_Patch_Operation = 6
 )
 

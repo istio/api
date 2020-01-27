@@ -649,6 +649,7 @@ message EnvoyFilter {
       // first in the list based on the presence of selected filter or not.
       // This is specifically useful when you want your filter first in the
       // list based on a match condition specified in Match clause.
+      // $hide_from_docs
       INSERT_FIRST = 6;
     }
 
