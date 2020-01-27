@@ -3989,6 +3989,29 @@ spec:
                               format: string
                               type: string
                           type: object
+                        withoutHeaders:
+                          additionalProperties:
+                            oneOf:
+                            - required:
+                              - exact
+                            - required:
+                              - prefix
+                            - required:
+                              - regex
+                            properties:
+                              exact:
+                                format: string
+                                type: string
+                              prefix:
+                                format: string
+                                type: string
+                              regex:
+                                format: string
+                                type: string
+                            type: object
+                          description: withoutHeader has the same syntax with the
+                            header, but has opposite meaning.
+                          type: object
                       type: object
                     type: array
                   mirror:
