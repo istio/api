@@ -724,6 +724,11 @@ message HTTPMatchRequest {
   // withoutHeader has the same syntax with the header, but has opposite meaning.
   // If a header is matched with a matching rule among withoutHeader, the traffic becomes not matched one.
   map<string, StringMatch> without_headers = 12;
+
+  // Source namespace constraining the applicability of a rule to workloads in that namespace.
+  // If the VirtualService has a list of gateways specified in the top-level `gateways` field,
+  // it must include the reserved gateway `mesh` for this field to be applicable.
+  string source_namespace = 13;
 }
 
 // Each routing rule is associated with one or more service versions (see
@@ -849,6 +854,11 @@ message L4MatchAttributes {
   // in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
   // match is independent of sourceLabels.
   repeated string gateways = 5;
+
+  // Source namespace constraining the applicability of a rule to workloads in that namespace.
+  // If the VirtualService has a list of gateways specified in the top-level `gateways` field,
+  // it must include the reserved gateway `mesh` for this field to be applicable.
+  string source_namespace = 6;
 }
 
 // TLS connection match attributes.
@@ -882,6 +892,11 @@ message TLSMatchAttributes {
   // in the top-level `gateways` field of the VirtualService (if any) are overridden. The gateway
   // match is independent of sourceLabels.
   repeated string gateways = 6;
+
+  // Source namespace constraining the applicability of a rule to workloads in that namespace.
+  // If the VirtualService has a list of gateways specified in the top-level `gateways` field,
+  // it must include the reserved gateway `mesh` for this field to be applicable.
+  string source_namespace = 7;
 }
 
 // HTTPRedirect can be used to send a 301 redirect response to the caller,

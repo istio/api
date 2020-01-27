@@ -3957,6 +3957,11 @@ spec:
                             format: string
                             type: string
                           type: object
+                        sourceNamespace:
+                          description: Source namespace constraining the applicability
+                            of a rule to workloads in that namespace.
+                          format: string
+                          type: string
                         uri:
                           oneOf:
                           - required:
@@ -4182,6 +4187,11 @@ spec:
                             format: string
                             type: string
                           type: object
+                        sourceNamespace:
+                          description: Source namespace constraining the applicability
+                            of a rule to workloads in that namespace.
+                          format: string
+                          type: string
                         sourceSubnet:
                           description: IPv4 or IPv6 ip address of source with optional
                             subnet.
@@ -4255,6 +4265,11 @@ spec:
                             format: string
                             type: string
                           type: object
+                        sourceNamespace:
+                          description: Source namespace constraining the applicability
+                            of a rule to workloads in that namespace.
+                          format: string
+                          type: string
                       type: object
                     type: array
                   route:
