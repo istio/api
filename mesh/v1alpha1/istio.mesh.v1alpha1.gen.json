@@ -224,6 +224,9 @@
             "items": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.Certificate"
             }
+          },
+          "thriftConfig": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ThriftConfig"
           }
         }
       },
@@ -419,13 +422,6 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode": {
-        "type": "string",
-        "enum": [
-          "REGISTRY_ONLY",
-          "ALLOW_ANY"
-        ]
-      },
       "istio.mesh.v1alpha1.MeshConfig.ThriftConfig": {
         "type": "object",
         "properties": {
@@ -439,6 +435,13 @@
             "type": "string"
           }
         }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode": {
+        "type": "string",
+        "enum": [
+          "REGISTRY_ONLY",
+          "ALLOW_ANY"
+        ]
       },
       "istio.mesh.v1alpha1.Resource": {
         "description": "Resource describes the source of configuration",
