@@ -243,13 +243,6 @@
           "ignoreUriCase": {
             "description": "Flag to specify whether the URI matching should be case-insensitive.",
             "type": "boolean"
-          },
-          "withoutHeaders": {
-            "description": "withoutHeader has the same syntax with the header, but has opposite meaning. If a header is matched with a matching rule among withoutHeader, the traffic becomes not matched one.",
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/istio.networking.v1alpha3.StringMatch"
-            }
           }
         }
       },
