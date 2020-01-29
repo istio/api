@@ -5467,13 +5467,31 @@ spec:
           description: PeerAuthentication defines how traffic will be tunneled (or
             not) to the sidecar.
           properties:
-            mode:
-              description: Defines the mode of peer authentication.
-              enum:
-              - PERMISSIVE
-              - STRICT
-              - DISABLE
-              type: string
+            mtls:
+              description: mTLS setting for every port on workload, unless it is specified
+                by port_level_mtls.
+              properties:
+                mode:
+                  description: Defines the mode of peer authentication.
+                  enum:
+                  - PERMISSIVE
+                  - STRICT
+                  - DISABLE
+                  type: string
+              type: object
+            portLevelMtls:
+              additionalProperties:
+                properties:
+                  mode:
+                    description: Defines the mode of peer authentication.
+                    enum:
+                    - PERMISSIVE
+                    - STRICT
+                    - DISABLE
+                    type: string
+                type: object
+              description: Port specific mTLS setting.
+              type: object
             selector:
               description: The selector determines the workloads to apply the ChannelAuthentication
                 on.

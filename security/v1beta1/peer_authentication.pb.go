@@ -23,35 +23,35 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-type PeerAuthentication_Mode int32
+type PeerAuthentication_MutualTLS_Mode int32
 
 const (
 	// Connection can be either plaintext or mTLS tunnel.
-	PeerAuthentication_PERMISSIVE PeerAuthentication_Mode = 0
+	PeerAuthentication_MutualTLS_PERMISSIVE PeerAuthentication_MutualTLS_Mode = 0
 	// Connection is in mTLS tunnel (TLS with client cert must be presented).
-	PeerAuthentication_STRICT PeerAuthentication_Mode = 1
+	PeerAuthentication_MutualTLS_STRICT PeerAuthentication_MutualTLS_Mode = 1
 	// Connection is not tunneled.
-	PeerAuthentication_DISABLE PeerAuthentication_Mode = 2
+	PeerAuthentication_MutualTLS_DISABLE PeerAuthentication_MutualTLS_Mode = 2
 )
 
-var PeerAuthentication_Mode_name = map[int32]string{
+var PeerAuthentication_MutualTLS_Mode_name = map[int32]string{
 	0: "PERMISSIVE",
 	1: "STRICT",
 	2: "DISABLE",
 }
 
-var PeerAuthentication_Mode_value = map[string]int32{
+var PeerAuthentication_MutualTLS_Mode_value = map[string]int32{
 	"PERMISSIVE": 0,
 	"STRICT":     1,
 	"DISABLE":    2,
 }
 
-func (x PeerAuthentication_Mode) String() string {
-	return proto.EnumName(PeerAuthentication_Mode_name, int32(x))
+func (x PeerAuthentication_MutualTLS_Mode) String() string {
+	return proto.EnumName(PeerAuthentication_MutualTLS_Mode_name, int32(x))
 }
 
-func (PeerAuthentication_Mode) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_59c7062c50455f33, []int{0, 0}
+func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_59c7062c50455f33, []int{0, 0, 0}
 }
 
 // PeerAuthentication defines how traffic will be tunneled (or not) to the sidecar.
@@ -66,7 +66,8 @@ func (PeerAuthentication_Mode) EnumDescriptor() ([]byte, []int) {
 //   name: default
 //   namespace: foo
 // spec:
-//   mode: STRICT
+//   mtls:
+//     mode: STRICT
 // ```
 // Policies to allow both mTLS & plaintext traffic for all workloads under namespace `foo`, but
 // require mTLS for workload `finance`.
@@ -77,7 +78,8 @@ func (PeerAuthentication_Mode) EnumDescriptor() ([]byte, []int) {
 //   name: default
 //   namespace: foo
 // spec:
-//   mode: PERMISSIVE
+//   mtls:
+//     mode: PERMISSIVE
 // ---
 // apiVersion: security.istio.io/v1beta1
 // kind: PeerAuthentication
@@ -88,7 +90,26 @@ func (PeerAuthentication_Mode) EnumDescriptor() ([]byte, []int) {
 //   selector:
 //     matchLabels:
 //       app: finance
-//   mode: STRICT
+//   mtls:
+//     mode: STRICT
+// ```
+// Policy to allow mTLS strict for all workloads, but leave port 8080 to
+// plaintext:
+// ```
+// apiVersion: security.istio.io/v1beta1
+// kind: PeerAuthentication
+// metadata:
+//   name: default
+//   namespace: foo
+// spec:
+//   selector:
+//     matchLabels:
+//       app: finance
+//   mtls:
+//     mode: STRICT
+//   portLevelMtls:
+//     8080:
+//       mode: DISABLE
 // ```
 //
 // <!-- crd generation tags
@@ -112,11 +133,14 @@ type PeerAuthentication struct {
 	// The selector determines the workloads to apply the ChannelAuthentication on.
 	// If not set, the policy will be applied to all workloads in the same namespace as the policy.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
-	// Defines the mode of peer authentication.
-	Mode                 PeerAuthentication_Mode `protobuf:"varint,2,opt,name=mode,proto3,enum=istio.security.v1beta1.PeerAuthentication_Mode" json:"mode,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
-	XXX_unrecognized     []byte                  `json:"-"`
-	XXX_sizecache        int32                   `json:"-"`
+	// mTLS setting for every port on workload, unless it is specified by port_level_mtls.
+	// If not set, inherit from parent.
+	Mtls *PeerAuthentication_MutualTLS `protobuf:"bytes,2,opt,name=mtls,proto3" json:"mtls,omitempty"`
+	// Port specific mTLS setting.
+	PortLevelMtls        map[uint32]*PeerAuthentication_MutualTLS `protobuf:"bytes,3,rep,name=port_level_mtls,json=portLevelMtls,proto3" json:"port_level_mtls,omitempty" protobuf_key:"varint,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	XXX_NoUnkeyedLiteral struct{}                                 `json:"-"`
+	XXX_unrecognized     []byte                                   `json:"-"`
+	XXX_sizecache        int32                                    `json:"-"`
 }
 
 func (m *PeerAuthentication) Reset()         { *m = PeerAuthentication{} }
@@ -159,16 +183,73 @@ func (m *PeerAuthentication) GetSelector() *v1beta1.WorkloadSelector {
 	return nil
 }
 
-func (m *PeerAuthentication) GetMode() PeerAuthentication_Mode {
+func (m *PeerAuthentication) GetMtls() *PeerAuthentication_MutualTLS {
+	if m != nil {
+		return m.Mtls
+	}
+	return nil
+}
+
+func (m *PeerAuthentication) GetPortLevelMtls() map[uint32]*PeerAuthentication_MutualTLS {
+	if m != nil {
+		return m.PortLevelMtls
+	}
+	return nil
+}
+
+type PeerAuthentication_MutualTLS struct {
+	// Defines the mode of peer authentication.
+	Mode                 PeerAuthentication_MutualTLS_Mode `protobuf:"varint,1,opt,name=mode,proto3,enum=istio.security.v1beta1.PeerAuthentication_MutualTLS_Mode" json:"mode,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                          `json:"-"`
+	XXX_unrecognized     []byte                            `json:"-"`
+	XXX_sizecache        int32                             `json:"-"`
+}
+
+func (m *PeerAuthentication_MutualTLS) Reset()         { *m = PeerAuthentication_MutualTLS{} }
+func (m *PeerAuthentication_MutualTLS) String() string { return proto.CompactTextString(m) }
+func (*PeerAuthentication_MutualTLS) ProtoMessage()    {}
+func (*PeerAuthentication_MutualTLS) Descriptor() ([]byte, []int) {
+	return fileDescriptor_59c7062c50455f33, []int{0, 0}
+}
+func (m *PeerAuthentication_MutualTLS) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PeerAuthentication_MutualTLS) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_PeerAuthentication_MutualTLS.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *PeerAuthentication_MutualTLS) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PeerAuthentication_MutualTLS.Merge(m, src)
+}
+func (m *PeerAuthentication_MutualTLS) XXX_Size() int {
+	return m.Size()
+}
+func (m *PeerAuthentication_MutualTLS) XXX_DiscardUnknown() {
+	xxx_messageInfo_PeerAuthentication_MutualTLS.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PeerAuthentication_MutualTLS proto.InternalMessageInfo
+
+func (m *PeerAuthentication_MutualTLS) GetMode() PeerAuthentication_MutualTLS_Mode {
 	if m != nil {
 		return m.Mode
 	}
-	return PeerAuthentication_PERMISSIVE
+	return PeerAuthentication_MutualTLS_PERMISSIVE
 }
 
 func init() {
-	proto.RegisterEnum("istio.security.v1beta1.PeerAuthentication_Mode", PeerAuthentication_Mode_name, PeerAuthentication_Mode_value)
+	proto.RegisterEnum("istio.security.v1beta1.PeerAuthentication_MutualTLS_Mode", PeerAuthentication_MutualTLS_Mode_name, PeerAuthentication_MutualTLS_Mode_value)
 	proto.RegisterType((*PeerAuthentication)(nil), "istio.security.v1beta1.PeerAuthentication")
+	proto.RegisterMapType((map[uint32]*PeerAuthentication_MutualTLS)(nil), "istio.security.v1beta1.PeerAuthentication.PortLevelMtlsEntry")
+	proto.RegisterType((*PeerAuthentication_MutualTLS)(nil), "istio.security.v1beta1.PeerAuthentication.MutualTLS")
 }
 
 func init() {
@@ -176,24 +257,31 @@ func init() {
 }
 
 var fileDescriptor_59c7062c50455f33 = []byte{
-	// 259 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xd2, 0x2a, 0x4e, 0x4d, 0x2e,
-	0x2d, 0xca, 0x2c, 0xa9, 0xd4, 0x2f, 0x33, 0x4c, 0x4a, 0x2d, 0x49, 0x34, 0xd4, 0x2f, 0x48, 0x4d,
-	0x2d, 0x8a, 0x4f, 0x2c, 0x2d, 0xc9, 0x48, 0xcd, 0x2b, 0xc9, 0x4c, 0x4e, 0x2c, 0xc9, 0xcc, 0xcf,
-	0xd3, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x12, 0xcb, 0x2c, 0x2e, 0xc9, 0xcc, 0xd7, 0x83, 0xe9,
-	0xd0, 0x83, 0xea, 0x90, 0x92, 0x2e, 0xa9, 0x2c, 0x48, 0x85, 0xeb, 0x2f, 0x4e, 0xcd, 0x49, 0x4d,
-	0x2e, 0xc9, 0x2f, 0x82, 0x68, 0x52, 0x3a, 0xc3, 0xc8, 0x25, 0x14, 0x90, 0x9a, 0x5a, 0xe4, 0x88,
-	0x62, 0xa2, 0x90, 0x03, 0x17, 0x07, 0x4c, 0xa1, 0x04, 0xa3, 0x02, 0xa3, 0x06, 0xb7, 0x91, 0x8a,
-	0x1e, 0xc4, 0x78, 0x90, 0x61, 0x30, 0xa3, 0xf5, 0xc2, 0xf3, 0x8b, 0xb2, 0x73, 0xf2, 0x13, 0x53,
-	0x82, 0xa1, 0x6a, 0x83, 0xe0, 0xba, 0x84, 0x9c, 0xb9, 0x58, 0x72, 0xf3, 0x53, 0x52, 0x25, 0x98,
-	0x14, 0x18, 0x35, 0xf8, 0x8c, 0xf4, 0xf5, 0xb0, 0x3b, 0x4e, 0x0f, 0xd3, 0x6e, 0x3d, 0xdf, 0xfc,
-	0x94, 0xd4, 0x20, 0xb0, 0x66, 0x25, 0x7d, 0x2e, 0x16, 0x10, 0x4f, 0x88, 0x8f, 0x8b, 0x2b, 0xc0,
-	0x35, 0xc8, 0xd7, 0x33, 0x38, 0xd8, 0x33, 0xcc, 0x55, 0x80, 0x41, 0x88, 0x8b, 0x8b, 0x2d, 0x38,
-	0x24, 0xc8, 0xd3, 0x39, 0x44, 0x80, 0x51, 0x88, 0x9b, 0x8b, 0xdd, 0xc5, 0x33, 0xd8, 0xd1, 0xc9,
-	0xc7, 0x55, 0x80, 0xc9, 0x49, 0xfb, 0xc4, 0x23, 0x39, 0xc6, 0x0b, 0x8f, 0xe4, 0x18, 0x1f, 0x3c,
-	0x92, 0x63, 0x8c, 0x92, 0x85, 0x58, 0x9a, 0x99, 0xaf, 0x9f, 0x58, 0x90, 0xa9, 0x8f, 0x1e, 0x94,
-	0x49, 0x6c, 0xe0, 0x20, 0x30, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0x87, 0xce, 0xbf, 0x28, 0x65,
-	0x01, 0x00, 0x00,
+	// 370 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x92, 0x41, 0x6b, 0xe2, 0x40,
+	0x14, 0xc7, 0x77, 0x34, 0xeb, 0xee, 0x3e, 0xd1, 0x0d, 0x73, 0x58, 0xc4, 0x65, 0x45, 0x64, 0x0f,
+	0xb2, 0x0b, 0x13, 0xb4, 0x3d, 0xb4, 0x85, 0x42, 0xb5, 0x0d, 0x34, 0xc5, 0x80, 0x24, 0xd2, 0x42,
+	0x2f, 0x12, 0xf5, 0x41, 0x83, 0xa3, 0x13, 0x26, 0x93, 0x40, 0x3e, 0x43, 0xe9, 0xf7, 0xea, 0xb1,
+	0x1f, 0xa1, 0xf8, 0x49, 0x4a, 0x12, 0x95, 0xb6, 0xf6, 0xd2, 0xf6, 0x36, 0x33, 0xbc, 0xdf, 0xef,
+	0xfd, 0xe7, 0xf1, 0xe0, 0x5f, 0x88, 0xd3, 0x48, 0xfa, 0x2a, 0x31, 0xe2, 0xce, 0x04, 0x95, 0xd7,
+	0x31, 0x02, 0x44, 0x39, 0xf6, 0x22, 0x75, 0x83, 0x4b, 0xe5, 0x4f, 0x3d, 0xe5, 0x8b, 0x25, 0x0b,
+	0xa4, 0x50, 0x82, 0xfe, 0xf2, 0x43, 0xe5, 0x0b, 0xb6, 0x21, 0xd8, 0x9a, 0xa8, 0xff, 0x56, 0x49,
+	0x80, 0x5b, 0x3e, 0x44, 0x8e, 0x53, 0x25, 0x64, 0x0e, 0xb5, 0xee, 0x34, 0xa0, 0x43, 0x44, 0xd9,
+	0x7b, 0x61, 0xa4, 0x27, 0xf0, 0x7d, 0x53, 0x58, 0x23, 0x4d, 0xd2, 0x2e, 0x77, 0xff, 0xb2, 0x5c,
+	0x9f, 0xca, 0x36, 0x6a, 0x76, 0x25, 0xe4, 0x9c, 0x0b, 0x6f, 0xe6, 0xae, 0x6b, 0x9d, 0x2d, 0x45,
+	0xcf, 0x41, 0x5b, 0x28, 0x1e, 0xd6, 0x0a, 0x19, 0xbd, 0xcf, 0xde, 0x0e, 0xc7, 0x76, 0x7b, 0x33,
+	0x3b, 0x52, 0x91, 0xc7, 0x47, 0x03, 0xd7, 0xc9, 0x0c, 0x14, 0xe1, 0x67, 0x20, 0xa4, 0x1a, 0x73,
+	0x8c, 0x91, 0x8f, 0x33, 0x69, 0xb1, 0x59, 0x6c, 0x97, 0xbb, 0xc7, 0xef, 0x90, 0x0e, 0x85, 0x54,
+	0x83, 0x54, 0x60, 0x2b, 0x1e, 0x9a, 0x4b, 0x25, 0x13, 0xa7, 0x12, 0x3c, 0x7f, 0xab, 0xdf, 0x12,
+	0xf8, 0xb1, 0x6d, 0x4d, 0x6d, 0xd0, 0x16, 0x62, 0x86, 0xd9, 0xe7, 0xab, 0xdd, 0xc3, 0x8f, 0xc4,
+	0x67, 0xb6, 0x98, 0xa1, 0x93, 0x69, 0x5a, 0x06, 0x68, 0xe9, 0x8d, 0x56, 0x01, 0x86, 0xa6, 0x63,
+	0x5b, 0xae, 0x6b, 0x5d, 0x9a, 0xfa, 0x17, 0x0a, 0x50, 0x72, 0x47, 0x8e, 0x75, 0x3a, 0xd2, 0x09,
+	0x2d, 0xc3, 0xb7, 0x33, 0xcb, 0xed, 0xf5, 0x07, 0xa6, 0x5e, 0xa8, 0xc7, 0x40, 0x77, 0x23, 0x53,
+	0x1d, 0x8a, 0x73, 0x4c, 0xb2, 0x50, 0x15, 0x27, 0x3d, 0xd2, 0x0b, 0xf8, 0x1a, 0x7b, 0x3c, 0xc2,
+	0x4f, 0xcd, 0x39, 0x57, 0x1c, 0x15, 0x0e, 0x48, 0xff, 0xff, 0xfd, 0xaa, 0x41, 0x1e, 0x56, 0x0d,
+	0xf2, 0xb8, 0x6a, 0x90, 0xeb, 0x3f, 0xb9, 0xcd, 0x17, 0x86, 0x17, 0xf8, 0xc6, 0xeb, 0x5d, 0x9c,
+	0x94, 0xb2, 0x1d, 0xda, 0x7b, 0x0a, 0x00, 0x00, 0xff, 0xff, 0x92, 0xa9, 0x5d, 0xe3, 0xa6, 0x02,
+	0x00, 0x00,
 }
 
 func (m *PeerAuthentication) Marshal() (dAtA []byte, err error) {
@@ -220,10 +308,41 @@ func (m *PeerAuthentication) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	if m.Mode != 0 {
-		i = encodeVarintPeerAuthentication(dAtA, i, uint64(m.Mode))
+	if len(m.PortLevelMtls) > 0 {
+		for k := range m.PortLevelMtls {
+			v := m.PortLevelMtls[k]
+			baseI := i
+			if v != nil {
+				{
+					size, err := v.MarshalToSizedBuffer(dAtA[:i])
+					if err != nil {
+						return 0, err
+					}
+					i -= size
+					i = encodeVarintPeerAuthentication(dAtA, i, uint64(size))
+				}
+				i--
+				dAtA[i] = 0x12
+			}
+			i = encodeVarintPeerAuthentication(dAtA, i, uint64(k))
+			i--
+			dAtA[i] = 0x8
+			i = encodeVarintPeerAuthentication(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if m.Mtls != nil {
+		{
+			size, err := m.Mtls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPeerAuthentication(dAtA, i, uint64(size))
+		}
 		i--
-		dAtA[i] = 0x10
+		dAtA[i] = 0x12
 	}
 	if m.Selector != nil {
 		{
@@ -236,6 +355,38 @@ func (m *PeerAuthentication) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *PeerAuthentication_MutualTLS) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PeerAuthentication_MutualTLS) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PeerAuthentication_MutualTLS) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.Mode != 0 {
+		i = encodeVarintPeerAuthentication(dAtA, i, uint64(m.Mode))
+		i--
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -261,6 +412,35 @@ func (m *PeerAuthentication) Size() (n int) {
 		l = m.Selector.Size()
 		n += 1 + l + sovPeerAuthentication(uint64(l))
 	}
+	if m.Mtls != nil {
+		l = m.Mtls.Size()
+		n += 1 + l + sovPeerAuthentication(uint64(l))
+	}
+	if len(m.PortLevelMtls) > 0 {
+		for k, v := range m.PortLevelMtls {
+			_ = k
+			_ = v
+			l = 0
+			if v != nil {
+				l = v.Size()
+				l += 1 + sovPeerAuthentication(uint64(l))
+			}
+			mapEntrySize := 1 + sovPeerAuthentication(uint64(k)) + l
+			n += mapEntrySize + 1 + sovPeerAuthentication(uint64(mapEntrySize))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *PeerAuthentication_MutualTLS) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
 	if m.Mode != 0 {
 		n += 1 + sovPeerAuthentication(uint64(m.Mode))
 	}
@@ -342,6 +522,211 @@ func (m *PeerAuthentication) Unmarshal(dAtA []byte) error {
 			}
 			iNdEx = postIndex
 		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Mtls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPeerAuthentication
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPeerAuthentication
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPeerAuthentication
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Mtls == nil {
+				m.Mtls = &PeerAuthentication_MutualTLS{}
+			}
+			if err := m.Mtls.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PortLevelMtls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPeerAuthentication
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPeerAuthentication
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPeerAuthentication
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.PortLevelMtls == nil {
+				m.PortLevelMtls = make(map[uint32]*PeerAuthentication_MutualTLS)
+			}
+			var mapkey uint32
+			var mapvalue *PeerAuthentication_MutualTLS
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPeerAuthentication
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPeerAuthentication
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						mapkey |= uint32(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+				} else if fieldNum == 2 {
+					var mapmsglen int
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPeerAuthentication
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						mapmsglen |= int(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					if mapmsglen < 0 {
+						return ErrInvalidLengthPeerAuthentication
+					}
+					postmsgIndex := iNdEx + mapmsglen
+					if postmsgIndex < 0 {
+						return ErrInvalidLengthPeerAuthentication
+					}
+					if postmsgIndex > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = &PeerAuthentication_MutualTLS{}
+					if err := mapvalue.Unmarshal(dAtA[iNdEx:postmsgIndex]); err != nil {
+						return err
+					}
+					iNdEx = postmsgIndex
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipPeerAuthentication(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthPeerAuthentication
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.PortLevelMtls[mapkey] = mapvalue
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPeerAuthentication(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPeerAuthentication
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPeerAuthentication
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PeerAuthentication_MutualTLS) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPeerAuthentication
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MutualTLS: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MutualTLS: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Mode", wireType)
 			}
@@ -355,7 +740,7 @@ func (m *PeerAuthentication) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Mode |= PeerAuthentication_Mode(b&0x7F) << shift
+				m.Mode |= PeerAuthentication_MutualTLS_Mode(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

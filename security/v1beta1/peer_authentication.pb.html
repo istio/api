@@ -2,7 +2,7 @@
 title: istio.security.v1beta1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 2
+number_of_entries: 3
 ---
 <h2 id="PeerAuthentication">PeerAuthentication</h2>
 <section>
@@ -18,7 +18,8 @@ metadata:
   name: default
   namespace: foo
 spec:
-  mode: STRICT
+  mtls:
+    mode: STRICT
 </code></pre>
 
 <p>Policies to allow both mTLS &amp; plaintext traffic for all workloads under namespace <code>foo</code>, but
@@ -30,7 +31,8 @@ metadata:
   name: default
   namespace: foo
 spec:
-  mode: PERMISSIVE
+  mtls:
+    mode: PERMISSIVE
 ---
 apiVersion: security.istio.io/v1beta1
 kind: PeerAuthentication
@@ -41,7 +43,27 @@ spec:
   selector:
     matchLabels:
       app: finance
-  mode: STRICT
+  mtls:
+    mode: STRICT
+</code></pre>
+
+<p>Policy to allow mTLS strict for all workloads, but leave port 8080 to
+plaintext:</p>
+
+<pre><code>apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: foo
+spec:
+  selector:
+    matchLabels:
+      app: finance
+  mtls:
+    mode: STRICT
+  portLevelMtls:
+    8080:
+      mode: DISABLE
 </code></pre>
 
 <table class="message-fields">
@@ -66,9 +88,47 @@ If not set, the policy will be applied to all workloads in the same namespace as
 No
 </td>
 </tr>
-<tr id="PeerAuthentication-mode">
+<tr id="PeerAuthentication-mtls">
+<td><code>mtls</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/security/authorization-policy.html#PeerAuthentication-MutualTLS">MutualTLS</a></code></td>
+<td>
+<p>mTLS setting for every port on workload, unless it is specified by port<em>level</em>mtls.
+If not set, inherit from parent.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PeerAuthentication-port_level_mtls">
+<td><code>portLevelMtls</code></td>
+<td><code>map&lt;uint32,&nbsp;<a href="https://istio.io/docs/reference/config/security/authorization-policy.html#PeerAuthentication-MutualTLS">MutualTLS</a>&gt;</code></td>
+<td>
+<p>Port specific mTLS setting.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="PeerAuthentication-MutualTLS">PeerAuthentication.MutualTLS</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PeerAuthentication-MutualTLS-mode">
 <td><code>mode</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/security/authorization-policy.html#PeerAuthentication-Mode">Mode</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/security/authorization-policy.html#PeerAuthentication-MutualTLS-Mode">Mode</a></code></td>
 <td>
 <p>Defines the mode of peer authentication.</p>
 
@@ -80,7 +140,7 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="PeerAuthentication-Mode">PeerAuthentication.Mode</h2>
+<h2 id="PeerAuthentication-MutualTLS-Mode">PeerAuthentication.MutualTLS.Mode</h2>
 <section>
 <table class="enum-values">
 <thead>
@@ -90,21 +150,21 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="PeerAuthentication-Mode-PERMISSIVE">
+<tr id="PeerAuthentication-MutualTLS-Mode-PERMISSIVE">
 <td><code>PERMISSIVE</code></td>
 <td>
 <p>Connection can be either plaintext or mTLS tunnel.</p>
 
 </td>
 </tr>
-<tr id="PeerAuthentication-Mode-STRICT">
+<tr id="PeerAuthentication-MutualTLS-Mode-STRICT">
 <td><code>STRICT</code></td>
 <td>
 <p>Connection is in mTLS tunnel (TLS with client cert must be presented).</p>
 
 </td>
 </tr>
-<tr id="PeerAuthentication-Mode-DISABLE">
+<tr id="PeerAuthentication-MutualTLS-Mode-DISABLE">
 <td><code>DISABLE</code></td>
 <td>
 <p>Connection is not tunneled.</p>

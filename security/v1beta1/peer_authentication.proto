@@ -37,7 +37,8 @@ option go_package="istio.io/api/security/v1beta1";
 //   name: default
 //   namespace: foo
 // spec:
-//   mode: STRICT
+//   mtls:
+//     mode: STRICT
 // ```
 // Policies to allow both mTLS & plaintext traffic for all workloads under namespace `foo`, but
 // require mTLS for workload `finance`.
@@ -48,7 +49,8 @@ option go_package="istio.io/api/security/v1beta1";
 //   name: default
 //   namespace: foo
 // spec:
-//   mode: PERMISSIVE
+//   mtls:
+//     mode: PERMISSIVE
 // ---
 // apiVersion: security.istio.io/v1beta1
 // kind: PeerAuthentication
@@ -59,7 +61,26 @@ option go_package="istio.io/api/security/v1beta1";
 //   selector:
 //     matchLabels:
 //       app: finance
-//   mode: STRICT
+//   mtls:
+//     mode: STRICT
+// ```
+// Policy to allow mTLS strict for all workloads, but leave port 8080 to
+// plaintext:
+// ```
+// apiVersion: security.istio.io/v1beta1
+// kind: PeerAuthentication
+// metadata:
+//   name: default
+//   namespace: foo
+// spec:
+//   selector:
+//     matchLabels:
+//       app: finance
+//   mtls:
+//     mode: STRICT
+//   portLevelMtls:
+//     8080:
+//       mode: DISABLE
 // ```
 //
 // <!-- crd generation tags
@@ -84,17 +105,26 @@ message PeerAuthentication {
   // If not set, the policy will be applied to all workloads in the same namespace as the policy.
   istio.type.v1beta1.WorkloadSelector selector = 1;
 
-  enum Mode {
-    // Connection can be either plaintext or mTLS tunnel.
-    PERMISSIVE = 0;
+  message MutualTLS {
+    enum Mode {
+      // Connection can be either plaintext or mTLS tunnel.
+      PERMISSIVE = 0;
 
-    // Connection is in mTLS tunnel (TLS with client cert must be presented).
-    STRICT = 1;
+      // Connection is in mTLS tunnel (TLS with client cert must be presented).
+      STRICT = 1;
 
-    // Connection is not tunneled.
-    DISABLE = 2;
+      // Connection is not tunneled.
+      DISABLE = 2;
+    }
+
+    // Defines the mode of peer authentication.
+    Mode mode = 1;
   }
 
-  // Defines the mode of peer authentication.
-  Mode mode = 2;
+  // mTLS setting for every port on workload, unless it is specified by port_level_mtls. 
+  // If not set, inherit from parent.
+  MutualTLS mtls = 2;
+
+  // Port specific mTLS setting.
+  map<uint32, MutualTLS> port_level_mtls = 3;
 }

@@ -28,6 +28,17 @@ func (this *PeerAuthentication) UnmarshalJSON(b []byte) error {
 	return PeerAuthenticationUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for PeerAuthentication_MutualTLS
+func (this *PeerAuthentication_MutualTLS) MarshalJSON() ([]byte, error) {
+	str, err := PeerAuthenticationMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for PeerAuthentication_MutualTLS
+func (this *PeerAuthentication_MutualTLS) UnmarshalJSON(b []byte) error {
+	return PeerAuthenticationUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 var (
 	PeerAuthenticationMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
 	PeerAuthenticationUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
