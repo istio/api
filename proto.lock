@@ -46082,16 +46082,6 @@
                 "type": "MutualTLS"
               }
             ],
-            "maps": [
-              {
-                "key_type": "uint32",
-                "field": {
-                  "id": 3,
-                  "name": "port_level_mtls",
-                  "type": "MutualTLS"
-                }
-              }
-            ],
             "messages": [
               {
                 "name": "MutualTLS",

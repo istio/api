@@ -47,25 +47,6 @@ spec:
     mode: STRICT
 </code></pre>
 
-<p>Policy to allow mTLS strict for all workloads, but leave port 8080 to
-plaintext:</p>
-
-<pre><code>apiVersion: security.istio.io/v1beta1
-kind: PeerAuthentication
-metadata:
-  name: default
-  namespace: foo
-spec:
-  selector:
-    matchLabels:
-      app: finance
-  mtls:
-    mode: STRICT
-  portLevelMtls:
-    8080:
-      mode: DISABLE
-</code></pre>
-
 <table class="message-fields">
 <thead>
 <tr>
@@ -92,19 +73,7 @@ No
 <td><code>mtls</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/security/authorization-policy.html#PeerAuthentication-MutualTLS">MutualTLS</a></code></td>
 <td>
-<p>mTLS setting for every port on workload, unless it is specified by port<em>level</em>mtls.
-If not set, inherit from parent.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="PeerAuthentication-port_level_mtls">
-<td><code>portLevelMtls</code></td>
-<td><code>map&lt;uint32,&nbsp;<a href="https://istio.io/docs/reference/config/security/authorization-policy.html#PeerAuthentication-MutualTLS">MutualTLS</a>&gt;</code></td>
-<td>
-<p>Port specific mTLS setting.</p>
+<p>Mutual TLS settings for workload. If not set, inherit from parent.</p>
 
 </td>
 <td>
@@ -116,6 +85,8 @@ No
 </section>
 <h2 id="PeerAuthentication-MutualTLS">PeerAuthentication.MutualTLS</h2>
 <section>
+<p>Mutual TLS settings.</p>
+
 <table class="message-fields">
 <thead>
 <tr>

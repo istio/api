@@ -5468,8 +5468,7 @@ spec:
             not) to the sidecar.
           properties:
             mtls:
-              description: mTLS setting for every port on workload, unless it is specified
-                by port_level_mtls.
+              description: Mutual TLS settings for workload.
               properties:
                 mode:
                   description: Defines the mode of peer authentication.
@@ -5478,19 +5477,6 @@ spec:
                   - STRICT
                   - DISABLE
                   type: string
-              type: object
-            portLevelMtls:
-              additionalProperties:
-                properties:
-                  mode:
-                    description: Defines the mode of peer authentication.
-                    enum:
-                    - PERMISSIVE
-                    - STRICT
-                    - DISABLE
-                    type: string
-                type: object
-              description: Port specific mTLS setting.
               type: object
             selector:
               description: The selector determines the workloads to apply the ChannelAuthentication

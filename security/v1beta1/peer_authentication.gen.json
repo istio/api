@@ -15,17 +15,11 @@
           },
           "mtls": {
             "$ref": "#/components/schemas/istio.security.v1beta1.PeerAuthentication.MutualTLS"
-          },
-          "portLevelMtls": {
-            "description": "Port specific mTLS setting.",
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/istio.security.v1beta1.PeerAuthentication.MutualTLS"
-            }
           }
         }
       },
       "istio.security.v1beta1.PeerAuthentication.MutualTLS": {
+        "description": "Mutual TLS settings.",
         "type": "object",
         "properties": {
           "mode": {
