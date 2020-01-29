@@ -40609,14 +40609,6 @@
                   "name": "query_params",
                   "type": "StringMatch"
                 }
-              },
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 12,
-                  "name": "without_headers",
-                  "type": "StringMatch"
-                }
               }
             ]
           },
@@ -43289,9 +43281,6 @@
         "imports": [
           {
             "path": "google/protobuf/any.proto"
-          },
-          {
-            "path": "k8s.io/api/core/v1/generated.proto"
           },
           {
             "path": "k8s.io/api/core/v1/generated.proto"
