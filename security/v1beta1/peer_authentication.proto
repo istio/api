@@ -93,7 +93,7 @@ message PeerAuthentication {
       // Connection can be either plaintext or mTLS tunnel.
       PERMISSIVE = 0;
 
-      // Connection is in mTLS tunnel (TLS with client cert must be presented).
+      // Connection is an mTLS tunnel (TLS with client cert must be presented).
       STRICT = 1;
 
       // Connection is not tunneled.

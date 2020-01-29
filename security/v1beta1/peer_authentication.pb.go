@@ -28,7 +28,7 @@ type PeerAuthentication_MutualTLS_Mode int32
 const (
 	// Connection can be either plaintext or mTLS tunnel.
 	PeerAuthentication_MutualTLS_PERMISSIVE PeerAuthentication_MutualTLS_Mode = 0
-	// Connection is in mTLS tunnel (TLS with client cert must be presented).
+	// Connection is an mTLS tunnel (TLS with client cert must be presented).
 	PeerAuthentication_MutualTLS_STRICT PeerAuthentication_MutualTLS_Mode = 1
 	// Connection is not tunneled.
 	PeerAuthentication_MutualTLS_DISABLE PeerAuthentication_MutualTLS_Mode = 2
