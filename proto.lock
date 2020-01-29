@@ -4484,6 +4484,11 @@
                 "name": "gateways",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 10,
+                "name": "ignore_uri_case",
+                "type": "bool"
               }
             ],
             "maps": [
