@@ -115,7 +115,7 @@ type PeerAuthentication struct {
 	// The selector determines the workloads to apply the ChannelAuthentication on.
 	// If not set, the policy will be applied to all workloads in the same namespace as the policy.
 	Selector *v1beta1.WorkloadSelector `protobuf:"bytes,1,opt,name=selector,proto3" json:"selector,omitempty"`
-	// Mutual TLS settings for workload. If not set, inherit from parent.
+	// Mutual TLS settings for workload.
 	Mtls                 *PeerAuthentication_MutualTLS `protobuf:"bytes,2,opt,name=mtls,proto3" json:"mtls,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                      `json:"-"`
 	XXX_unrecognized     []byte                        `json:"-"`
@@ -171,7 +171,7 @@ func (m *PeerAuthentication) GetMtls() *PeerAuthentication_MutualTLS {
 
 // Mutual TLS settings.
 type PeerAuthentication_MutualTLS struct {
-	// Defines the mode of peer authentication.
+	// Defines the mTLS mode used for peer authentication.
 	Mode                 PeerAuthentication_MutualTLS_Mode `protobuf:"varint,1,opt,name=mode,proto3,enum=istio.security.v1beta1.PeerAuthentication_MutualTLS_Mode" json:"mode,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                          `json:"-"`
 	XXX_unrecognized     []byte                            `json:"-"`

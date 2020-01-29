@@ -100,10 +100,10 @@ message PeerAuthentication {
       DISABLE = 2;
     }
 
-    // Defines the mode of peer authentication.
+    // Defines the mTLS mode used for peer authentication.
     Mode mode = 1;
   }
 
-  // Mutual TLS settings for workload. If not set, inherit from parent.
+  // Mutual TLS settings for workload.
   MutualTLS mtls = 2;
 }

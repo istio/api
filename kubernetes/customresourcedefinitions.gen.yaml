@@ -5471,7 +5471,7 @@ spec:
               description: Mutual TLS settings for workload.
               properties:
                 mode:
-                  description: Defines the mode of peer authentication.
+                  description: Defines the mTLS mode used for peer authentication.
                   enum:
                   - PERMISSIVE
                   - STRICT
