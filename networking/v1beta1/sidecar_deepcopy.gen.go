@@ -36,12 +36,10 @@
 //
 // The example below declares a global default `Sidecar` configuration
 // in the root namespace called `istio-config`, that configures
-// sidecars in all namespaces to accept connections from both
-// authenticated peers (i.e. those with sidecars using Istio mutual
-// TLS for authentication) as well as unauthenticated ones (those
-// without sidecars), and allow egress traffic only to other workloads
-// in the same namespace as well as to services in the `istio-system`
-// namespace.
+// sidecars in all namespaces to accept both plaintext and Istio
+// mutual TLS traffic, and allow egress traffic only to other
+// workloads in the same namespace as well as to services in the
+// `istio-system` namespace.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
@@ -51,7 +49,8 @@
 //   namespace: istio-config
 // spec:
 //   inboundTrafficPolicy:
-//     istioPeerAuthentcation: OPTIONAL
+//     tls:
+//       mode: ISTIO_MUTUAL_AND_PLAINTEXT
 //   egress:
 //   - hosts:
 //     - "./*"
@@ -61,9 +60,9 @@
 // The example below declares a `Sidecar` configuration in the
 // `prod-us1` namespace that overrides the global default defined
 // above, and configures the sidecars in the namespace to only accept
-// connections from peers authenticated using Istio mutual TLS and
-// allow egress traffic to public services in the `prod-us1`,
-// `prod-apis`, and the `istio-system` namespaces.
+// Istio mutual TLS traffic and allow egress traffic to public
+// services in the `prod-us1`, `prod-apis`, and the `istio-system`
+// namespaces.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
@@ -73,7 +72,8 @@
 //   namespace: prod-us1
 // spec:
 //   inboundTrafficPolicy:
-//     istioPeerAuthentication: REQUIRED
+//     tls:
+//       mode: ISTIO_MUTUAL
 //   egress:
 //   - hosts:
 //     - "prod-us1/*"
@@ -110,19 +110,17 @@
 //       number: 9080
 //       protocol: HTTP
 //       name: somename
-//     trafficPolicy:
-//       istioPeerAuthentication: DISABLE
+//     tls:
+//       mode: DISABLE # allow plaintext on 9080
 //     defaultEndpoint: unix:///var/run/someuds.sock
 //   - port:
 //       number: 9443
 //       protocol: HTTPS
 //       name: httpsport
-//     trafficPolicy:
-//       istioPeerAuthentication: DISABLE
-//       tls:
-//         mode: SIMPLE # overrides namespace default
-//         serverCertificate: /etc/certs/servercert.pem
-//         privateKey: /etc/certs/privatekey.pem
+//     tls:
+//       mode: SIMPLE # overrides namespace default
+//       serverCertificate: /etc/certs/servercert.pem
+//       privateKey: /etc/certs/privatekey.pem
 //     defaultEndpoint: unix:///var/run/someuds.sock
 //   egress:
 //   - port:
@@ -173,11 +171,10 @@
 // externally hosted MySQL service at `mysql.foo.com:3306`.
 //
 // ** NOTE 1**: Since the ingress listener for port 9080 does not
-// override the `istioPeerAuthentication`, the default istio peer
-// authentication policy defined by the namespace-wide sidecar,
-// i.e. REQUIRED, will be applied to port 80. Clients connecting to
-// this port are expected to be other sidecars in the mesh, initiating
-// Istio mutual TLS connection.
+// override the TLS mode, the default inbound traffic policy defined
+// by the namespace-wide sidecar, i.e. ISTIO_MUTUAL, will be
+// applied to port 80. Clients connecting to this port are expected to
+// be other sidecars in the mesh, initiating Istio mutual TLS connection.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
@@ -257,8 +254,8 @@
 //       name: somename
 //     defaultEndpoint: 127.0.0.1:8080
 //     captureMode: NONE
-//     trafficPolicy:
-//       istioPeerAuthentication: DISABLE # allow plaintext on 80 from non Istio peers.
+//     tls:
+//       mode: DISABLE # allow plaintext on 80
 //   egress:
 //     # use the system detected defaults
 //     # sets up configuration to handle outbound traffic to services

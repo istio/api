@@ -102,7 +102,7 @@
             }
           },
           "httpsRedirect": {
-            "description": "If set to true, the load balancer will send a 301 redirect for all http connections, asking the clients to use HTTPS. Not applicable in Sidecar inbound traffic policy context.",
+            "description": "If set to true, the load balancer will send a 301 redirect for all http connections, asking the clients to use HTTPS. Not applicable in Sidecar API.",
             "type": "boolean"
           },
           "serverCertificate": {
@@ -155,7 +155,9 @@
           "SIMPLE",
           "MUTUAL",
           "AUTO_PASSTHROUGH",
-          "ISTIO_MUTUAL"
+          "ISTIO_MUTUAL",
+          "ISTIO_MUTUAL_AND_PLAINTEXT",
+          "DISABLE"
         ]
       },
       "istio.networking.v1beta1.Server.TLSOptions.TLSProtocol": {

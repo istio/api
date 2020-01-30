@@ -3301,6 +3301,8 @@ spec:
                         - MUTUAL
                         - AUTO_PASSTHROUGH
                         - ISTIO_MUTUAL
+                        - ISTIO_MUTUAL_AND_PLAINTEXT
+                        - DISABLE
                         type: string
                       privateKey:
                         description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
@@ -3554,13 +3556,6 @@ spec:
               type: array
             inboundTrafficPolicy:
               properties:
-                istioPeerAuthentication:
-                  enum:
-                  - UNSET
-                  - DISABLE
-                  - OPTIONAL
-                  - REQUIRED
-                  type: string
                 tls:
                   properties:
                     caCertificates:
@@ -3604,6 +3599,8 @@ spec:
                       - MUTUAL
                       - AUTO_PASSTHROUGH
                       - ISTIO_MUTUAL
+                      - ISTIO_MUTUAL_AND_PLAINTEXT
+                      - DISABLE
                       type: string
                     privateKey:
                       description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
@@ -3704,6 +3701,8 @@ spec:
                         - MUTUAL
                         - AUTO_PASSTHROUGH
                         - ISTIO_MUTUAL
+                        - ISTIO_MUTUAL_AND_PLAINTEXT
+                        - DISABLE
                         type: string
                       privateKey:
                         description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.

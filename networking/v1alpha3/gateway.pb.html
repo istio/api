@@ -428,7 +428,7 @@ No
 <td>
 <p>If set to true, the load balancer will send a 301 redirect for
 all http connections, asking the clients to use HTTPS. Not
-applicable in Sidecar inbound traffic policy context.</p>
+applicable in Sidecar API.</p>
 
 </td>
 <td>
@@ -693,7 +693,7 @@ between services in disparate L3 networks that otherwise do
 not have direct connectivity between their respective
 endpoints. Use of this mode assumes that both the source and
 the destination are using Istio mTLS to secure traffic. Not
-applicable in Sidecar&rsquo;s inbound traffic policy.</p>
+applicable in Sidecar API.</p>
 
 </td>
 </tr>
@@ -701,12 +701,27 @@ applicable in Sidecar&rsquo;s inbound traffic policy.</p>
 <td><code>ISTIO_MUTUAL</code></td>
 <td>
 <p>Secure connections from the downstream using mutual TLS by
-presenting server certificates for authentication. Compared
+presenting server certificates for authentication.  Compared
 to Mutual mode, this mode uses certificates, representing
 gateway workload identity, generated automatically by Istio
 for mTLS authentication. When this mode is used, all other
-fields in <code>TLSOptions</code> should be empty. Not applicable in a
-sidecar&rsquo;s inbound traffic policy.</p>
+fields in <code>TLSOptions</code> should be empty.</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-TLSmode-ISTIO_MUTUAL_AND_PLAINTEXT">
+<td><code>ISTIO_MUTUAL_AND_PLAINTEXT</code></td>
+<td>
+<p>Similar to ISTIO_MUTUAL mode but allows both Istio Mutual TLS
+and plaintext on the same port. Applicable only in the
+Sidecar API.</p>
+
+</td>
+</tr>
+<tr id="Server-TLSOptions-TLSmode-DISABLE">
+<td><code>DISABLE</code></td>
+<td>
+<p>Disable TLS on the port. Applicable only in Sidecar API.</p>
 
 </td>
 </tr>

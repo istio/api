@@ -58,12 +58,10 @@ import "networking/v1alpha3/gateway.proto";
 //
 // The example below declares a global default `Sidecar` configuration
 // in the root namespace called `istio-config`, that configures
-// sidecars in all namespaces to accept connections from both
-// authenticated peers (i.e. those with sidecars using Istio mutual
-// TLS for authentication) as well as unauthenticated ones (those
-// without sidecars), and allow egress traffic only to other workloads
-// in the same namespace as well as to services in the `istio-system`
-// namespace.
+// sidecars in all namespaces to accept both plaintext and Istio
+// mutual TLS traffic, and allow egress traffic only to other
+// workloads in the same namespace as well as to services in the
+// `istio-system` namespace.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -73,7 +71,8 @@ import "networking/v1alpha3/gateway.proto";
 //   namespace: istio-config
 // spec:
 //   inboundTrafficPolicy:
-//     istioPeerAuthentcation: OPTIONAL
+//     tls:
+//       mode: ISTIO_MUTUAL_AND_PLAINTEXT
 //   egress:
 //   - hosts:
 //     - "./*"
@@ -83,9 +82,9 @@ import "networking/v1alpha3/gateway.proto";
 // The example below declares a `Sidecar` configuration in the
 // `prod-us1` namespace that overrides the global default defined
 // above, and configures the sidecars in the namespace to only accept
-// connections from peers authenticated using Istio mutual TLS and
-// allow egress traffic to public services in the `prod-us1`,
-// `prod-apis`, and the `istio-system` namespaces.
+// Istio mutual TLS traffic and allow egress traffic to public
+// services in the `prod-us1`, `prod-apis`, and the `istio-system`
+// namespaces.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -95,7 +94,8 @@ import "networking/v1alpha3/gateway.proto";
 //   namespace: prod-us1
 // spec:
 //   inboundTrafficPolicy:
-//     istioPeerAuthentication: REQUIRED
+//     tls:
+//       mode: ISTIO_MUTUAL
 //   egress:
 //   - hosts:
 //     - "prod-us1/*"
@@ -132,19 +132,17 @@ import "networking/v1alpha3/gateway.proto";
 //       number: 9080
 //       protocol: HTTP
 //       name: somename
-//     trafficPolicy:
-//       istioPeerAuthentication: DISABLE
+//     tls:
+//       mode: DISABLE # allow plaintext on 9080
 //     defaultEndpoint: unix:///var/run/someuds.sock
 //   - port:
 //       number: 9443
 //       protocol: HTTPS
 //       name: httpsport
-//     trafficPolicy:
-//       istioPeerAuthentication: DISABLE
-//       tls:
-//         mode: SIMPLE # overrides namespace default
-//         serverCertificate: /etc/certs/servercert.pem
-//         privateKey: /etc/certs/privatekey.pem
+//     tls:
+//       mode: SIMPLE # overrides namespace default
+//       serverCertificate: /etc/certs/servercert.pem
+//       privateKey: /etc/certs/privatekey.pem
 //     defaultEndpoint: unix:///var/run/someuds.sock
 //   egress:
 //   - port:
@@ -195,11 +193,10 @@ import "networking/v1alpha3/gateway.proto";
 // externally hosted MySQL service at `mysql.foo.com:3306`.
 //
 // ** NOTE 1**: Since the ingress listener for port 9080 does not
-// override the `istioPeerAuthentication`, the default istio peer
-// authentication policy defined by the namespace-wide sidecar,
-// i.e. REQUIRED, will be applied to port 80. Clients connecting to
-// this port are expected to be other sidecars in the mesh, initiating
-// Istio mutual TLS connection.
+// override the TLS mode, the default inbound traffic policy defined
+// by the namespace-wide sidecar, i.e. ISTIO_MUTUAL, will be
+// applied to port 80. Clients connecting to this port are expected to
+// be other sidecars in the mesh, initiating Istio mutual TLS connection.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -279,8 +276,8 @@ import "networking/v1alpha3/gateway.proto";
 //       name: somename
 //     defaultEndpoint: 127.0.0.1:8080
 //     captureMode: NONE
-//     trafficPolicy:
-//       istioPeerAuthentication: DISABLE # allow plaintext on 80 from non Istio peers.
+//     tls:
+//       mode: DISABLE # allow plaintext on 80
 //   egress:
 //     # use the system detected defaults
 //     # sets up configuration to handle outbound traffic to services
@@ -528,72 +525,46 @@ enum CaptureMode {
 }
 
 // `InboundTrafficPolicy` sets the default behavior of the sidecar for
-// authenticating inbound traffic to the application.
+// authenticating inbound traffic to the application using Istio
+// mutual TLS authentication.
 //
 // ** NOTE 1**: InboundTrafficPolicy property, if not specified, is
 // inherited as follows:
 //
-// 1. Ingress listener inherits the property, if not set, from the
-// workload-level transport security property.
-//
-// 2. A workload-specific Sidecar inherits the property, if not set,
+// 1. A workload-specific Sidecar inherits the policy, if not set,
 // from a namespace-wide Sidecar if present.
 //
 // 2. The namespace-wide Sidecar (i.e. the one without a workload
-// selector) inherts the property, if not set, from the global default
+// selector) inherts the policy, if not set, from the global default
 // sidecar defined in the [root
 // namespace](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig)
 // if present.
 //
-// ** NOTE 2**: All sidecars default to using Istio mutual TLS based
-// peer authentication when initiating an outbound connection to other
+// ** NOTE 2**: An ingress listener with TLS options overrides the
+// inbound traffic policy for that port.
+//
+// ** NOTE 3**: All sidecars default to using Istio mutual TLS
+// authentication when initiating an outbound connection to other
 // sidecars in the mesh (the presence of a sidecar is determined by
 // the existence of `security.istio.io/tlsMode: istio` label on the
 // pod or the VM). If a workload specific Sidecar is defined
 // (i.e. with the `workloadSelector`) and the inbound traffic policy
-// or the ingress listener disables peer authentication on a specific
-// port, DestinationRule for the associated service must be specified
-// to ensure that other client sidecars connecting to this sidecar use
-// the appropriate TLS mode for their outbound connections. _No action
-// is necessary if the peer authentication mode is disabled using a
-// namespace-wide or global default Sidecar_.
+// or the ingress listener disables Istio mutual TLS mode on a
+// specific port or sets its value to anything other than ISTIO_MUTUAL
+// or ISTIO_MUTUAL_AND_PLAINTEXT, DestinationRule for the associated
+// service must be specified to ensure that other client sidecars
+// connecting to this sidecar use the appropriate TLS mode for their
+// outbound connections. _No action is necessary if the TLS mode is
+// disabled using a namespace-wide or global default Sidecar_.
 //
-// ** NOTE 3**: InboundTrafficPolicy settings for
-// `istioPeerAuthentication` take precedance over the deprecated API
+// ** NOTE 3**: InboundTrafficPolicy settings for TLS mode take
+// precedance over the deprecated API
 // `authentication.istio.io/v1alpha1` that allowed STRICT and
 // PERMISSIVE mutual TLS modes. However, if InboundTrafficPolicy is
 // not present, existing authentication policy for TLS mode specified
 // using the above API will apply.
 message InboundTrafficPolicy {
-  enum IstioPeerAuthentication {
-    // Inherits from the parent.
-    UNSET = 0;
-    // Treat all traffic as traffic coming from endpoints without
-    // sidecars, i.e. they could be plain text or using custom TLS
-    // certificates. Use this mode when defining custom TLS
-    // certificates for TLS termination at the sidecar.
-    DISABLE = 1;
-    // Allow traffic from both sidecars (using Istio mutual TLS based
-    // authentication) as well as non-sidecar endpoints. Traffic from
-    // non-sidecar endpoints will be forwarded as is, with no TLS
-    // termination.
-    OPTIONAL = 2;
-    // Allow only traffic from sidecars or endpoints using Istio
-    // mutual TLS based authentication.
-    REQUIRED = 3;
-  };
-
-  // Determines the method to use to authenticate the remote
-  // endpoint. To enable secure communications between all VMs and
-  // pods, this should be set to REQUIRED or OPTIONAL. When set to
-  // disabled, the sidecar would not verify the identity of the remote
-  // endpoint. It can still provide transport level security by
-  // terminating the application's TLS traffic using certificates
-  // provided in the `tls` option below.
-  IstioPeerAuthentication istio_peer_authentication = 1;
-
   // TLS to be applied to inbound traffic on all auto detected ingress
-  // ports as well as explicitly declared ingress ports, if the
-  // `istioPeerAuthentication` is set to `DISABLE`.
-  Server.TLSOptions tls = 2;
+  // ports as well as explicitly declared ingress ports.
+  Server.TLSOptions tls = 1;
 }
