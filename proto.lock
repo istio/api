@@ -46054,7 +46054,7 @@
             "name": "MutualTLS.Mode",
             "enum_fields": [
               {
-                "name": "INVALID"
+                "name": "UNSET"
               },
               {
                 "name": "PERMISSIVE",

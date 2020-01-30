@@ -37,7 +37,7 @@
       "istio.security.v1beta1.PeerAuthentication.MutualTLS.Mode": {
         "type": "string",
         "enum": [
-          "INVALID",
+          "UNSET",
           "PERMISSIVE",
           "STRICT",
           "DISABLE"

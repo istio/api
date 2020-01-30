@@ -94,6 +94,8 @@ option go_package="istio.io/api/security/v1beta1";
 //   selector:
 //     matchLabels:
 //       app: finance
+//   mtls:
+//     mode: UNSET
 //   portLevelMtls:
 //     8080:
 //       mode: DISABLE
@@ -124,7 +126,8 @@ message PeerAuthentication {
   // Mutual TLS settings.
   message MutualTLS {
     enum Mode {
-      INVALID = 0;
+      // Inherit from parent.
+      UNSET = 0;
 
       // Connection can be either plaintext or mTLS tunnel.
       PERMISSIVE = 1;

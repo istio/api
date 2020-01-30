@@ -78,6 +78,8 @@ spec:
   selector:
     matchLabels:
       app: finance
+  mtls:
+    mode: UNSET
   portLevelMtls:
     8080:
       mode: DISABLE
@@ -168,9 +170,11 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="PeerAuthentication-MutualTLS-Mode-INVALID">
-<td><code>INVALID</code></td>
+<tr id="PeerAuthentication-MutualTLS-Mode-UNSET">
+<td><code>UNSET</code></td>
 <td>
+<p>Inherit from parent.</p>
+
 </td>
 </tr>
 <tr id="PeerAuthentication-MutualTLS-Mode-PERMISSIVE">

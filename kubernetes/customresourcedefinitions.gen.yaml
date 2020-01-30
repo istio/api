@@ -5473,7 +5473,7 @@ spec:
                 mode:
                   description: Defines the mTLS mode used for peer authentication.
                   enum:
-                  - INVALID
+                  - UNSET
                   - PERMISSIVE
                   - STRICT
                   - DISABLE
@@ -5485,7 +5485,7 @@ spec:
                   mode:
                     description: Defines the mTLS mode used for peer authentication.
                     enum:
-                    - INVALID
+                    - UNSET
                     - PERMISSIVE
                     - STRICT
                     - DISABLE
