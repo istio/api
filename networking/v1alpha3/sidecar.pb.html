@@ -625,13 +625,14 @@ connections. Format should be <code>127.0.0.1:PORT</code> or <code>unix:///path/
 Yes
 </td>
 </tr>
-<tr id="IstioIngressListener-traffic_policy">
-<td><code>trafficPolicy</code></td>
-<td><code><a href="#InboundTrafficPolicy">InboundTrafficPolicy</a></code></td>
+<tr id="IstioIngressListener-tls">
+<td><code>tls</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/gateway.html#Server-TLSOptions">TLSOptions</a></code></td>
 <td>
-<p>Settings that determine how the peer should be authenticated, as
-well as settings to terminate application level TLS using user
-specified certificates.</p>
+<p>Set of TLS related options that allow a listener to terminate
+SIMPLE or MUTUAL TLS or ISTIO_MUTUAL TLS connections at the
+sidecar. If not specified, the connection may be subject to TLS
+authentication based on the InboundTrafficPolicy.</p>
 
 </td>
 <td>
