@@ -117,6 +117,13 @@ EXAMPLES
     ```
 */
 
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=install.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
+
 // IstioOperatorSpec defines the desired installed state of Istio components.
 // The spec is a used to define a customization of the default profile values that are supplied with each Istio release.
 // Because the spec is a customization API, specifying an empty IstioOperatorSpec results in a default Istio
