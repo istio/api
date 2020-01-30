@@ -114,6 +114,22 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 //     8080:
 //       mode: DISABLE
 // ```
+// Policy to inherite mTLS mode from namespace (or mesh) settings, and overwrite
+// settings for port 8080
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: PeerAuthentication
+// metadata:
+//   name: default
+//   namespace: foo
+// spec:
+//   selector:
+//     matchLabels:
+//       app: finance
+//   portLevelMtls:
+//     8080:
+//       mode: DISABLE
+// ```
 //
 // <!-- crd generation tags
 // +cue-gen:PeerAuthentication:groupName:security.istio.io
