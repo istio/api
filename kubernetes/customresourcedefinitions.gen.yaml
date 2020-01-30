@@ -5473,10 +5473,25 @@ spec:
                 mode:
                   description: Defines the mTLS mode used for peer authentication.
                   enum:
+                  - INVALID
                   - PERMISSIVE
                   - STRICT
                   - DISABLE
                   type: string
+              type: object
+            portLevelMtls:
+              additionalProperties:
+                properties:
+                  mode:
+                    description: Defines the mTLS mode used for peer authentication.
+                    enum:
+                    - INVALID
+                    - PERMISSIVE
+                    - STRICT
+                    - DISABLE
+                    type: string
+                type: object
+              description: Port specific mutual TLS settings.
               type: object
             selector:
               description: The selector determines the workloads to apply the ChannelAuthentication

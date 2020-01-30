@@ -64,6 +64,24 @@ option go_package="istio.io/api/security/v1beta1";
 //   mtls:
 //     mode: STRICT
 // ```
+// Policy to allow mTLS strict for all workloads, but leave port 8080 to
+// plaintext:
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: PeerAuthentication
+// metadata:
+//   name: default
+//   namespace: foo
+// spec:
+//   selector:
+//     matchLabels:
+//       app: finance
+//   mtls:
+//     mode: STRICT
+//   portLevelMtls:
+//     8080:
+//       mode: DISABLE
+// ```
 //
 // <!-- crd generation tags
 // +cue-gen:PeerAuthentication:groupName:security.istio.io
@@ -90,20 +108,25 @@ message PeerAuthentication {
   // Mutual TLS settings.
   message MutualTLS {
     enum Mode {
+      INVALID = 0;
+
       // Connection can be either plaintext or mTLS tunnel.
-      PERMISSIVE = 0;
+      PERMISSIVE = 1;
 
       // Connection is an mTLS tunnel (TLS with client cert must be presented).
-      STRICT = 1;
+      STRICT = 2;
 
       // Connection is not tunneled.
-      DISABLE = 2;
+      DISABLE = 3;
     }
 
     // Defines the mTLS mode used for peer authentication.
     Mode mode = 1;
   }
 
-  // Mutual TLS settings for workload.
+  // Mutual TLS settings for workload. If not defined, inherit from parent.
   MutualTLS mtls = 2;
+
+  // Port specific mutual TLS settings.
+  map<uint32, MutualTLS> port_level_mtls = 3;
 }

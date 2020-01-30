@@ -47,6 +47,25 @@ spec:
     mode: STRICT
 </code></pre>
 
+<p>Policy to allow mTLS strict for all workloads, but leave port 8080 to
+plaintext:</p>
+
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: foo
+spec:
+  selector:
+    matchLabels:
+      app: finance
+  mtls:
+    mode: STRICT
+  portLevelMtls:
+    8080:
+      mode: DISABLE
+</code></pre>
+
 <table class="message-fields">
 <thead>
 <tr>
@@ -73,7 +92,18 @@ No
 <td><code>mtls</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/security/authorization-policy.html#PeerAuthentication-MutualTLS">MutualTLS</a></code></td>
 <td>
-<p>Mutual TLS settings for workload.</p>
+<p>Mutual TLS settings for workload. If not defined, inherit from parent.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PeerAuthentication-port_level_mtls">
+<td><code>portLevelMtls</code></td>
+<td><code>map&lt;uint32,&nbsp;<a href="https://istio.io/docs/reference/config/security/authorization-policy.html#PeerAuthentication-MutualTLS">MutualTLS</a>&gt;</code></td>
+<td>
+<p>Port specific mutual TLS settings.</p>
 
 </td>
 <td>
@@ -121,6 +151,11 @@ No
 </tr>
 </thead>
 <tbody>
+<tr id="PeerAuthentication-MutualTLS-Mode-INVALID">
+<td><code>INVALID</code></td>
+<td>
+</td>
+</tr>
 <tr id="PeerAuthentication-MutualTLS-Mode-PERMISSIVE">
 <td><code>PERMISSIVE</code></td>
 <td>

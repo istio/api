@@ -46054,15 +46054,19 @@
             "name": "MutualTLS.Mode",
             "enum_fields": [
               {
-                "name": "PERMISSIVE"
+                "name": "INVALID"
               },
               {
-                "name": "STRICT",
+                "name": "PERMISSIVE",
                 "integer": 1
               },
               {
-                "name": "DISABLE",
+                "name": "STRICT",
                 "integer": 2
+              },
+              {
+                "name": "DISABLE",
+                "integer": 3
               }
             ]
           }
@@ -46080,6 +46084,16 @@
                 "id": 2,
                 "name": "mtls",
                 "type": "MutualTLS"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "uint32",
+                "field": {
+                  "id": 3,
+                  "name": "port_level_mtls",
+                  "type": "MutualTLS"
+                }
               }
             ],
             "messages": [
