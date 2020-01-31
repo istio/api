@@ -3301,8 +3301,6 @@ spec:
                         - MUTUAL
                         - AUTO_PASSTHROUGH
                         - ISTIO_MUTUAL
-                        - ISTIO_MUTUAL_AND_PLAINTEXT
-                        - DISABLE
                         type: string
                       privateKey:
                         description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
@@ -3554,79 +3552,6 @@ spec:
                     type: object
                 type: object
               type: array
-            inboundTrafficPolicy:
-              properties:
-                tls:
-                  properties:
-                    caCertificates:
-                      description: REQUIRED if mode is `MUTUAL`.
-                      format: string
-                      type: string
-                    cipherSuites:
-                      description: 'Optional: If specified, only support the specified
-                        cipher list.'
-                      items:
-                        format: string
-                        type: string
-                      type: array
-                    credentialName:
-                      format: string
-                      type: string
-                    httpsRedirect:
-                      type: boolean
-                    maxProtocolVersion:
-                      description: 'Optional: Maximum TLS protocol version.'
-                      enum:
-                      - TLS_AUTO
-                      - TLSV1_0
-                      - TLSV1_1
-                      - TLSV1_2
-                      - TLSV1_3
-                      type: string
-                    minProtocolVersion:
-                      description: 'Optional: Minimum TLS protocol version.'
-                      enum:
-                      - TLS_AUTO
-                      - TLSV1_0
-                      - TLSV1_1
-                      - TLSV1_2
-                      - TLSV1_3
-                      type: string
-                    mode:
-                      enum:
-                      - PASSTHROUGH
-                      - SIMPLE
-                      - MUTUAL
-                      - AUTO_PASSTHROUGH
-                      - ISTIO_MUTUAL
-                      - ISTIO_MUTUAL_AND_PLAINTEXT
-                      - DISABLE
-                      type: string
-                    privateKey:
-                      description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
-                      format: string
-                      type: string
-                    serverCertificate:
-                      description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.
-                      format: string
-                      type: string
-                    subjectAltNames:
-                      items:
-                        format: string
-                        type: string
-                      type: array
-                    verifyCertificateHash:
-                      items:
-                        format: string
-                        type: string
-                      type: array
-                    verifyCertificateSpki:
-                      items:
-                        format: string
-                        type: string
-                      type: array
-                  type: object
-              type: object
             ingress:
               items:
                 properties:
@@ -3701,8 +3626,6 @@ spec:
                         - MUTUAL
                         - AUTO_PASSTHROUGH
                         - ISTIO_MUTUAL
-                        - ISTIO_MUTUAL_AND_PLAINTEXT
-                        - DISABLE
                         type: string
                       privateKey:
                         description: REQUIRED if mode is `SIMPLE` or `MUTUAL`.

@@ -36,8 +36,7 @@
 //
 // The example below declares a global default `Sidecar` configuration
 // in the root namespace called `istio-config`, that configures
-// sidecars in all namespaces to accept both plaintext and Istio
-// mutual TLS traffic, and allow egress traffic only to other
+// sidecars in all namespaces to allow egress traffic only to other
 // workloads in the same namespace as well as to services in the
 // `istio-system` namespace.
 //
@@ -48,9 +47,6 @@
 //   name: default
 //   namespace: istio-config
 // spec:
-//   inboundTrafficPolicy:
-//     tls:
-//       mode: ISTIO_MUTUAL_AND_PLAINTEXT
 //   egress:
 //   - hosts:
 //     - "./*"
@@ -59,10 +55,9 @@
 //
 // The example below declares a `Sidecar` configuration in the
 // `prod-us1` namespace that overrides the global default defined
-// above, and configures the sidecars in the namespace to only accept
-// Istio mutual TLS traffic and allow egress traffic to public
-// services in the `prod-us1`, `prod-apis`, and the `istio-system`
-// namespaces.
+// above, and configures the sidecars in the namespace to allow egress
+// traffic to public services in the `prod-us1`, `prod-apis`, and the
+// `istio-system` namespaces.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
@@ -71,9 +66,6 @@
 //   name: default
 //   namespace: prod-us1
 // spec:
-//   inboundTrafficPolicy:
-//     tls:
-//       mode: ISTIO_MUTUAL
 //   egress:
 //   - hosts:
 //     - "prod-us1/*"
@@ -81,19 +73,21 @@
 //     - "istio-system/*"
 // ```
 //
-// The following example declares a `Sidecar`
-// configuration in the `prod-us1` namespace for all pods with labels
-// `app: ratings` belonging to the `ratings.prod-us1` service.
-// The workload accepts inbound HTTP traffic on port 9080 without any
-// authentication, and HTTPS traffic on port 9443 with one-way TLS
-// termination using custom certificates. _The TLS settings for these
-// two ports override the namespace-wide defaults for Istio mutual TLS
-// defined previously. Any other auto-generated listener for this
-// workload will still obey the namespace-wide defaults_. The traffic
-// is then forwarded to the attached workload instance listening on a
-// Unix domain socket. In the egress direction, in addition to the
-// `istio-system` namespace, the sidecar proxies only HTTP traffic
-// bound for port 9080 for services in the `prod-us1` namespace.
+// The following example declares a `Sidecar` configuration in the
+// `prod-us1` namespace for all pods with labels `app: ratings`
+// belonging to the `ratings.prod-us1` service.  The workload accepts
+// inbound HTTP traffic on port 9080 without any authentication, and
+// HTTPS traffic on port 9443 with one-way TLS termination using
+// custom certificates. _To accomplish custom TLS termination on this
+// workload, the `PeerAuthentication` security policy must be declared
+// to disable Istio mutual TLS on these two ports. Any other
+// auto-generated listener for this workload will still obey the
+// mutual TLS termination requirements set forth in the
+// PeerAuthentication policy_. The traffic is then forwarded to the
+// attached workload instance listening on a Unix domain socket. In
+// the egress direction, in addition to the `istio-system` namespace,
+// the sidecar proxies only HTTP traffic bound for port 9080 for
+// services in the `prod-us1` namespace.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
@@ -110,8 +104,6 @@
 //       number: 9080
 //       protocol: HTTP
 //       name: somename
-//     tls:
-//       mode: DISABLE # allow plaintext on 9080
 //     defaultEndpoint: unix:///var/run/someuds.sock
 //   - port:
 //       number: 9443
@@ -131,6 +123,28 @@
 //     - "prod-us1/*"
 //   - hosts:
 //     - "istio-system/*"
+// ```
+//
+// and the associated PeerAuthentication security policy to ensure
+// that mutual TLS based authentication is not configured for ports
+// 9080 and 9443:
+//
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: PeerAuthentication
+// metadata:
+//   name: ratings-istio-mtls-exception
+//   namespace: prod-us1
+// spec:
+//   selector:
+//     matchLabels:
+//       app: ratings
+//   # other ports inherit the settings from namespace-wide policy.
+//   portLevelMtls:
+//     9080:
+//       mode: DISABLE
+//     9443:
+//       mode: DISABLE
 // ```
 //
 // and the associated DestinationRule to ensure that the clients use
@@ -157,24 +171,20 @@
 //        caCertificates: /etc/certs/ca-certs.pem
 // ```
 //
-// If the workload is deployed without IPTables-based traffic capture, the
-// `Sidecar` configuration is the only way to configure the ports on the proxy
-// attached to the workload instance. The following example declares a `Sidecar`
-// configuration in the `prod-us1` namespace for all pods with labels
-// `app: productpage` belonging to the `productpage.prod-us1` service. Assuming
-// that these pods are deployed without IPtable rules (i.e. the `istio-init`
-// container) and the proxy metadata `ISTIO_META_INTERCEPTION_MODE` is set to
-// `NONE`, the specification, below, allows such pods to receive HTTP traffic
-// on port 9080 and forward it to the application listening on
-// `127.0.0.1:8080`. It also allows the application to communicate with a
-// backing MySQL database on `127.0.0.1:3306`, that then gets proxied to the
-// externally hosted MySQL service at `mysql.foo.com:3306`.
-//
-// ** NOTE 1**: Since the ingress listener for port 9080 does not
-// override the TLS mode, the default inbound traffic policy defined
-// by the namespace-wide sidecar, i.e. ISTIO_MUTUAL, will be
-// applied to port 80. Clients connecting to this port are expected to
-// be other sidecars in the mesh, initiating Istio mutual TLS connection.
+// If the workload is deployed without IPTables-based traffic capture,
+// the `Sidecar` configuration is the only way to configure the ports
+// on the proxy attached to the workload instance. The following
+// example declares a `Sidecar` configuration in the `prod-us1`
+// namespace for all pods with labels `app: productpage` belonging to
+// the `productpage.prod-us1` service. Assuming that these pods are
+// deployed without IPtable rules (i.e. the `istio-init` container)
+// and the proxy metadata `ISTIO_META_INTERCEPTION_MODE` is set to
+// `NONE`, the specification, below, allows such pods to receive HTTP
+// traffic on port 9080 (wrapped inside Istio mutual TLS) and forward
+// it to the application listening on `127.0.0.1:8080`. It also allows
+// the application to communicate with a backing MySQL database on
+// `127.0.0.1:3306`, that then gets proxied to the externally hosted
+// MySQL service at `mysql.foo.com:3306`.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
@@ -254,8 +264,6 @@
 //       name: somename
 //     defaultEndpoint: 127.0.0.1:8080
 //     captureMode: NONE
-//     tls:
-//       mode: DISABLE # allow plaintext on 80
 //   egress:
 //     # use the system detected defaults
 //     # sets up configuration to handle outbound traffic to services
@@ -401,16 +409,9 @@ type Sidecar struct {
 	// inherits the system detected defaults from the namespace-wide or
 	// the global default Sidecar.
 	OutboundTrafficPolicy *OutboundTrafficPolicy `protobuf:"bytes,4,opt,name=outbound_traffic_policy,json=outboundTrafficPolicy,proto3" json:"outbound_traffic_policy,omitempty"`
-	// Configuration for the inbound traffic policy, specifically Istio
-	// mutual TLS based authentication for inbound connections to the
-	// sidecar. Applies to all inbound traffic. Ingress listeners with
-	// valid TLS options can override this setting for a given port. If
-	// not specified, inherits the system detected defaults from the
-	// namespace-wide or the global default Sidecar.
-	InboundTrafficPolicy *InboundTrafficPolicy `protobuf:"bytes,5,opt,name=inbound_traffic_policy,json=inboundTrafficPolicy,proto3" json:"inbound_traffic_policy,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
-	XXX_unrecognized     []byte                `json:"-"`
-	XXX_sizecache        int32                 `json:"-"`
+	XXX_NoUnkeyedLiteral  struct{}               `json:"-"`
+	XXX_unrecognized      []byte                 `json:"-"`
+	XXX_sizecache         int32                  `json:"-"`
 }
 
 func (m *Sidecar) Reset()         { *m = Sidecar{} }
@@ -474,13 +475,6 @@ func (m *Sidecar) GetOutboundTrafficPolicy() *OutboundTrafficPolicy {
 	return nil
 }
 
-func (m *Sidecar) GetInboundTrafficPolicy() *InboundTrafficPolicy {
-	if m != nil {
-		return m.InboundTrafficPolicy
-	}
-	return nil
-}
-
 // `IstioIngressListener` specifies the properties of an inbound
 // traffic listener on the sidecar proxy attached to a workload instance.
 type IstioIngressListener struct {
@@ -503,9 +497,9 @@ type IstioIngressListener struct {
 	// connections. Format should be `127.0.0.1:PORT` or `unix:///path/to/socket`
 	DefaultEndpoint string `protobuf:"bytes,4,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
 	// Set of TLS related options that allow a listener to terminate
-	// SIMPLE or MUTUAL TLS or ISTIO_MUTUAL TLS connections at the
-	// sidecar. If not specified, the connection may be subject to TLS
-	// authentication based on the InboundTrafficPolicy.
+	// SIMPLE or MUTUAL TLS connections at the sidecar. If not
+	// specified, the connection may be subject to TLS authentication
+	// based on the PeerAuthentication security policy.
 	Tls                  *Server_TLSOptions `protobuf:"bytes,5,opt,name=tls,proto3" json:"tls,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
 	XXX_unrecognized     []byte             `json:"-"`
@@ -838,94 +832,6 @@ func (m *OutboundTrafficPolicy) GetMode() OutboundTrafficPolicy_Mode {
 	return OutboundTrafficPolicy_REGISTRY_ONLY
 }
 
-// `InboundTrafficPolicy` sets the default behavior of the sidecar for
-// authenticating inbound traffic to the application using Istio
-// mutual TLS authentication.
-//
-// ** NOTE 1**: InboundTrafficPolicy property, if not specified, is
-// inherited as follows:
-//
-// 1. A workload-specific Sidecar inherits the policy, if not set,
-// from a namespace-wide Sidecar if present.
-//
-// 2. The namespace-wide Sidecar (i.e. the one without a workload
-// selector) inherts the policy, if not set, from the global default
-// sidecar defined in the [root
-// namespace](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig)
-// if present.
-//
-// ** NOTE 2**: An ingress listener with TLS options overrides the
-// inbound traffic policy for that port.
-//
-// ** NOTE 3**: All sidecars default to using Istio mutual TLS
-// authentication when initiating an outbound connection to other
-// sidecars in the mesh (the presence of a sidecar is determined by
-// the existence of `security.istio.io/tlsMode: istio` label on the
-// pod or the VM). If a workload specific Sidecar is defined
-// (i.e. with the `workloadSelector`) and the inbound traffic policy
-// or the ingress listener disables Istio mutual TLS mode on a
-// specific port or sets its value to anything other than ISTIO_MUTUAL
-// or ISTIO_MUTUAL_AND_PLAINTEXT, DestinationRule for the associated
-// service must be specified to ensure that other client sidecars
-// connecting to this sidecar use the appropriate TLS mode for their
-// outbound connections. _No action is necessary if the TLS mode is
-// disabled using a namespace-wide or global default Sidecar_.
-//
-// ** NOTE 3**: InboundTrafficPolicy settings for TLS mode take
-// precedance over the deprecated API
-// `authentication.istio.io/v1alpha1` that allowed STRICT and
-// PERMISSIVE mutual TLS modes. However, if InboundTrafficPolicy is
-// not present, existing authentication policy for TLS mode specified
-// using the above API will apply.
-type InboundTrafficPolicy struct {
-	// TLS to be applied to inbound traffic on all auto detected ingress
-	// ports as well as explicitly declared ingress ports.
-	Tls                  *Server_TLSOptions `protobuf:"bytes,1,opt,name=tls,proto3" json:"tls,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
-	XXX_unrecognized     []byte             `json:"-"`
-	XXX_sizecache        int32              `json:"-"`
-}
-
-func (m *InboundTrafficPolicy) Reset()         { *m = InboundTrafficPolicy{} }
-func (m *InboundTrafficPolicy) String() string { return proto.CompactTextString(m) }
-func (*InboundTrafficPolicy) ProtoMessage()    {}
-func (*InboundTrafficPolicy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e7023408fb338e10, []int{5}
-}
-func (m *InboundTrafficPolicy) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *InboundTrafficPolicy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_InboundTrafficPolicy.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *InboundTrafficPolicy) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_InboundTrafficPolicy.Merge(m, src)
-}
-func (m *InboundTrafficPolicy) XXX_Size() int {
-	return m.Size()
-}
-func (m *InboundTrafficPolicy) XXX_DiscardUnknown() {
-	xxx_messageInfo_InboundTrafficPolicy.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_InboundTrafficPolicy proto.InternalMessageInfo
-
-func (m *InboundTrafficPolicy) GetTls() *Server_TLSOptions {
-	if m != nil {
-		return m.Tls
-	}
-	return nil
-}
-
 func init() {
 	proto.RegisterEnum("istio.networking.v1beta1.CaptureMode", CaptureMode_name, CaptureMode_value)
 	proto.RegisterEnum("istio.networking.v1beta1.OutboundTrafficPolicy_Mode", OutboundTrafficPolicy_Mode_name, OutboundTrafficPolicy_Mode_value)
@@ -935,54 +841,52 @@ func init() {
 	proto.RegisterType((*WorkloadSelector)(nil), "istio.networking.v1beta1.WorkloadSelector")
 	proto.RegisterMapType((map[string]string)(nil), "istio.networking.v1beta1.WorkloadSelector.LabelsEntry")
 	proto.RegisterType((*OutboundTrafficPolicy)(nil), "istio.networking.v1beta1.OutboundTrafficPolicy")
-	proto.RegisterType((*InboundTrafficPolicy)(nil), "istio.networking.v1beta1.InboundTrafficPolicy")
 }
 
 func init() { proto.RegisterFile("networking/v1beta1/sidecar.proto", fileDescriptor_e7023408fb338e10) }
 
 var fileDescriptor_e7023408fb338e10 = []byte{
-	// 653 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x54, 0xcb, 0x6e, 0xd3, 0x40,
-	0x14, 0xed, 0xc4, 0xee, 0x23, 0x37, 0x2d, 0xb8, 0x43, 0x0a, 0xa6, 0x8b, 0x34, 0xb2, 0x84, 0x14,
-	0x15, 0xd5, 0x51, 0x03, 0xe2, 0x25, 0xb1, 0x48, 0xc1, 0xd0, 0x48, 0x26, 0xa9, 0xec, 0x54, 0x55,
-	0xd9, 0x58, 0x4e, 0x3c, 0x49, 0x47, 0x35, 0x1e, 0x6b, 0x3c, 0x49, 0x95, 0x6f, 0xe0, 0x17, 0x58,
-	0xf1, 0x29, 0x5d, 0xb1, 0xe4, 0x13, 0xaa, 0x7e, 0x09, 0xca, 0xd8, 0x51, 0x4b, 0x71, 0x80, 0xb2,
-	0x60, 0xe7, 0xb9, 0xf7, 0x9e, 0x73, 0xc6, 0x67, 0xe6, 0x0c, 0x54, 0x23, 0x22, 0xce, 0x18, 0x3f,
-	0xa5, 0xd1, 0xb0, 0x3e, 0xde, 0xed, 0x11, 0xe1, 0xef, 0xd6, 0x13, 0x1a, 0x90, 0xbe, 0xcf, 0xcd,
-	0x98, 0x33, 0xc1, 0xb0, 0x4e, 0x13, 0x41, 0x99, 0x79, 0x35, 0x67, 0x66, 0x73, 0x9b, 0x5b, 0x43,
-	0xc6, 0x86, 0x21, 0xa9, 0xfb, 0x31, 0xad, 0x0f, 0x28, 0x09, 0x03, 0xaf, 0x47, 0x4e, 0xfc, 0x31,
-	0x65, 0x19, 0x74, 0x33, 0x8f, 0x7c, 0xe8, 0x0b, 0x72, 0xe6, 0x4f, 0xd2, 0x09, 0xe3, 0x5c, 0x81,
-	0x65, 0x37, 0x95, 0xc3, 0x47, 0xb0, 0x3e, 0x1d, 0x0e, 0x99, 0x1f, 0x78, 0x09, 0x09, 0x49, 0x5f,
-	0x30, 0xae, 0xa3, 0x2a, 0xaa, 0x95, 0x1a, 0xdb, 0xe6, 0xbc, 0x4d, 0x98, 0x47, 0x19, 0xc4, 0xcd,
-	0x10, 0x8e, 0x76, 0x76, 0xa3, 0x82, 0xf7, 0x61, 0x99, 0x46, 0x43, 0x4e, 0x92, 0x44, 0x2f, 0x54,
-	0x95, 0x5a, 0xa9, 0x61, 0xce, 0xa7, 0x6b, 0x4d, 0x1b, 0xad, 0x74, 0xda, 0xa6, 0x89, 0x20, 0x11,
-	0xe1, 0xce, 0x0c, 0x8e, 0x2d, 0x58, 0x22, 0x29, 0x91, 0x22, 0x89, 0x76, 0xfe, 0x40, 0x64, 0xfd,
-	0xcc, 0x93, 0x81, 0xf1, 0x10, 0x1e, 0xb0, 0x91, 0xe8, 0xb1, 0x51, 0x14, 0x78, 0x82, 0xfb, 0x83,
-	0x01, 0xed, 0x7b, 0x31, 0x0b, 0x69, 0x7f, 0xa2, 0xab, 0xf2, 0x7f, 0xeb, 0xf3, 0x79, 0x3b, 0x19,
-	0xb0, 0x9b, 0xe2, 0x0e, 0x24, 0xcc, 0xd9, 0x60, 0x79, 0x65, 0x1c, 0xc0, 0x7d, 0x1a, 0xe5, 0xea,
-	0x2c, 0x4a, 0x9d, 0xdf, 0x19, 0x11, 0xe5, 0xc8, 0x94, 0x69, 0x4e, 0xd5, 0xf8, 0x52, 0x80, 0x72,
-	0x9e, 0x6f, 0xf8, 0x39, 0xa8, 0x31, 0xe3, 0x22, 0x3b, 0xc4, 0xca, 0x7c, 0xb1, 0x03, 0xc6, 0xc5,
-	0x9e, 0x72, 0xd1, 0x2c, 0x38, 0x12, 0x80, 0x31, 0xa8, 0x3d, 0x1a, 0x05, 0x7a, 0xa1, 0x8a, 0x6a,
-	0x45, 0x47, 0x7e, 0xe3, 0x7d, 0x58, 0xed, 0xfb, 0xb1, 0x18, 0x71, 0xe2, 0x7d, 0x62, 0x01, 0xd1,
-	0x95, 0x2a, 0xaa, 0xdd, 0x69, 0x3c, 0x9a, 0x4f, 0xfa, 0x26, 0x9d, 0xfe, 0xc0, 0x02, 0xe2, 0x94,
-	0xfa, 0x57, 0x0b, 0x6c, 0x82, 0x16, 0x90, 0x81, 0x3f, 0x0a, 0x85, 0x47, 0xa2, 0x20, 0x66, 0x34,
-	0x12, 0xd2, 0xf7, 0x62, 0xba, 0x85, 0xbb, 0x59, 0xd3, 0xca, 0x7a, 0xf8, 0x35, 0x28, 0x22, 0x4c,
-	0x32, 0xcb, 0x1e, 0xcf, 0x17, 0x74, 0x09, 0x1f, 0x13, 0x6e, 0x76, 0x6d, 0xb7, 0x13, 0x0b, 0xca,
-	0xa2, 0xc4, 0x99, 0xe2, 0x8c, 0x73, 0x04, 0xf7, 0x72, 0x6e, 0x03, 0x6e, 0xdc, 0xc6, 0x9d, 0xff,
-	0x62, 0xcc, 0x43, 0x58, 0x3c, 0x61, 0x89, 0x48, 0x74, 0xb5, 0xaa, 0xcc, 0xdc, 0x48, 0x2b, 0xc6,
-	0x57, 0x04, 0xda, 0xcd, 0xa8, 0x61, 0x17, 0x96, 0x42, 0xbf, 0x47, 0xc2, 0x44, 0x47, 0x32, 0x0e,
-	0xcf, 0xfe, 0x3e, 0xa6, 0xa6, 0x2d, 0x81, 0x56, 0x24, 0xf8, 0x24, 0x15, 0xca, 0xa8, 0x36, 0x5f,
-	0x42, 0xe9, 0x5a, 0x0f, 0x6b, 0xa0, 0x9c, 0x92, 0x89, 0x34, 0xa9, 0xe8, 0x4c, 0x3f, 0x71, 0x19,
-	0x16, 0xc7, 0x7e, 0x38, 0x22, 0x99, 0x09, 0xe9, 0xe2, 0x55, 0xe1, 0x05, 0x32, 0x3e, 0x23, 0xd8,
-	0xc8, 0xcd, 0x07, 0xde, 0x07, 0x55, 0x7a, 0x83, 0xa4, 0x37, 0x4f, 0x6f, 0x19, 0x2f, 0x53, 0x5a,
-	0x25, 0x19, 0x8c, 0x1a, 0xa8, 0xd2, 0xab, 0x75, 0x58, 0x73, 0xac, 0xf7, 0x2d, 0xb7, 0xeb, 0x1c,
-	0x7b, 0x9d, 0xb6, 0x7d, 0xac, 0x2d, 0xe0, 0x35, 0x28, 0x36, 0x6d, 0xbb, 0x73, 0xe4, 0x35, 0xdb,
-	0xc7, 0x1a, 0x32, 0x0e, 0xa1, 0x9c, 0x17, 0xa2, 0xd9, 0x75, 0x42, 0xff, 0x76, 0x9d, 0xb6, 0x1b,
-	0x50, 0xba, 0x76, 0x80, 0xb8, 0x04, 0xcb, 0x6f, 0xad, 0x77, 0xcd, 0x43, 0xbb, 0xab, 0x2d, 0xe0,
-	0x55, 0x58, 0x69, 0x1d, 0x74, 0x9b, 0x7b, 0xb6, 0xe5, 0x6a, 0x08, 0xaf, 0x80, 0xda, 0xee, 0xb4,
-	0x2d, 0xad, 0xb0, 0xb7, 0xf3, 0xed, 0xb2, 0x82, 0xbe, 0x5f, 0x56, 0xd0, 0xc5, 0x65, 0x05, 0x7d,
-	0xdc, 0x4a, 0x25, 0x29, 0x93, 0x2f, 0xf7, 0xaf, 0x6f, 0x74, 0x6f, 0x49, 0x3e, 0xce, 0x4f, 0x7e,
-	0x04, 0x00, 0x00, 0xff, 0xff, 0x03, 0xe6, 0x82, 0xe3, 0x1d, 0x06, 0x00, 0x00,
+	// 626 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x94, 0x4f, 0x6f, 0xd3, 0x30,
+	0x18, 0xc6, 0xe7, 0x24, 0xfb, 0xd3, 0xb7, 0x1b, 0x64, 0x66, 0x13, 0x61, 0x87, 0xae, 0xaa, 0x84,
+	0x54, 0x0d, 0x2d, 0xd5, 0x0a, 0xe2, 0x9f, 0xc4, 0xa1, 0x83, 0xc0, 0x2a, 0x85, 0x76, 0x4a, 0x8a,
+	0xa6, 0x71, 0x89, 0xdc, 0xc6, 0xed, 0xac, 0x85, 0x38, 0x72, 0xdc, 0x4e, 0xfd, 0x0c, 0x7c, 0x05,
+	0x4e, 0x7c, 0x14, 0x4e, 0x1c, 0xf9, 0x00, 0x1c, 0xa6, 0x7d, 0x12, 0x54, 0x27, 0xd3, 0xc6, 0x68,
+	0x04, 0xbb, 0x70, 0x8b, 0xfd, 0x3e, 0xcf, 0xf3, 0xda, 0xbf, 0xd8, 0x86, 0x6a, 0x4c, 0xe5, 0x19,
+	0x17, 0xa7, 0x2c, 0x1e, 0x35, 0x26, 0x7b, 0x7d, 0x2a, 0xc9, 0x5e, 0x23, 0x65, 0x21, 0x1d, 0x10,
+	0x61, 0x27, 0x82, 0x4b, 0x8e, 0x2d, 0x96, 0x4a, 0xc6, 0xed, 0x2b, 0x9d, 0x9d, 0xeb, 0xb6, 0xb6,
+	0x47, 0x9c, 0x8f, 0x22, 0xda, 0x20, 0x09, 0x6b, 0x0c, 0x19, 0x8d, 0xc2, 0xa0, 0x4f, 0x4f, 0xc8,
+	0x84, 0xf1, 0xdc, 0xba, 0x35, 0x2f, 0x7c, 0x44, 0x24, 0x3d, 0x23, 0xd3, 0x4c, 0x51, 0xfb, 0xa9,
+	0xc1, 0xb2, 0x9f, 0xb5, 0xc3, 0x47, 0xb0, 0x3e, 0x13, 0x47, 0x9c, 0x84, 0x41, 0x4a, 0x23, 0x3a,
+	0x90, 0x5c, 0x58, 0xa8, 0x8a, 0xea, 0xe5, 0xe6, 0x8e, 0x5d, 0xb4, 0x08, 0xfb, 0x28, 0xb7, 0xf8,
+	0xb9, 0xc3, 0x33, 0xcf, 0x6e, 0xcc, 0xe0, 0x03, 0x58, 0x66, 0xf1, 0x48, 0xd0, 0x34, 0xb5, 0xb4,
+	0xaa, 0x5e, 0x2f, 0x37, 0xed, 0xe2, 0xb8, 0xf6, 0xac, 0xd0, 0xce, 0xd4, 0x2e, 0x4b, 0x25, 0x8d,
+	0xa9, 0xf0, 0x2e, 0xed, 0xd8, 0x81, 0x25, 0x9a, 0x05, 0xe9, 0x2a, 0x68, 0xf7, 0x2f, 0x41, 0xce,
+	0xef, 0x39, 0xb9, 0x19, 0x8f, 0xe0, 0x3e, 0x1f, 0xcb, 0x3e, 0x1f, 0xc7, 0x61, 0x20, 0x05, 0x19,
+	0x0e, 0xd9, 0x20, 0x48, 0x78, 0xc4, 0x06, 0x53, 0xcb, 0x50, 0xfb, 0x6d, 0x14, 0xe7, 0x76, 0x73,
+	0x63, 0x2f, 0xf3, 0x1d, 0x2a, 0x9b, 0xb7, 0xc9, 0xe7, 0x4d, 0xd7, 0xbe, 0x68, 0xb0, 0x31, 0x6f,
+	0x47, 0xf8, 0x19, 0x18, 0x09, 0x17, 0x32, 0xc7, 0x5b, 0x29, 0x6e, 0x77, 0xc8, 0x85, 0xdc, 0xd7,
+	0xcf, 0x5b, 0x9a, 0xa7, 0x0c, 0x18, 0x83, 0xd1, 0x67, 0x71, 0x68, 0x69, 0x55, 0x54, 0x2f, 0x79,
+	0xea, 0x1b, 0x1f, 0xc0, 0xea, 0x80, 0x24, 0x72, 0x2c, 0x68, 0xf0, 0x89, 0x87, 0xd4, 0xd2, 0xab,
+	0xa8, 0x7e, 0xa7, 0xf9, 0xb0, 0x38, 0xf4, 0x75, 0xa6, 0x7e, 0xcf, 0x43, 0xea, 0x95, 0x07, 0x57,
+	0x03, 0x6c, 0x83, 0x19, 0xd2, 0x21, 0x19, 0x47, 0x32, 0xa0, 0x71, 0x98, 0x70, 0x16, 0x4b, 0x45,
+	0xa4, 0x94, 0x2d, 0xe1, 0x6e, 0x5e, 0x74, 0xf2, 0x1a, 0x7e, 0x05, 0xba, 0x8c, 0x52, 0x6b, 0x51,
+	0xed, 0xe2, 0x51, 0x71, 0x43, 0x9f, 0x8a, 0x09, 0x15, 0x76, 0xcf, 0xf5, 0xbb, 0x89, 0x64, 0x3c,
+	0x4e, 0xbd, 0x99, 0xaf, 0xf6, 0x0d, 0xc1, 0xbd, 0x39, 0xff, 0x09, 0x37, 0x6f, 0x43, 0xe7, 0xbf,
+	0x80, 0x79, 0x00, 0x8b, 0x27, 0x3c, 0x95, 0xa9, 0x65, 0x54, 0xf5, 0x4b, 0x1a, 0xd9, 0x4c, 0xed,
+	0x2b, 0x02, 0xf3, 0xe6, 0x25, 0xc0, 0x3e, 0x2c, 0x45, 0xa4, 0x4f, 0xa3, 0xd4, 0x42, 0xea, 0xa0,
+	0x3e, 0xfd, 0xf7, 0x0b, 0x64, 0xbb, 0xca, 0xe8, 0xc4, 0x52, 0x4c, 0xb3, 0x46, 0x79, 0xd4, 0xd6,
+	0x0b, 0x28, 0x5f, 0xab, 0x61, 0x13, 0xf4, 0x53, 0x3a, 0x55, 0x90, 0x4a, 0xde, 0xec, 0x13, 0x6f,
+	0xc0, 0xe2, 0x84, 0x44, 0x63, 0x9a, 0x43, 0xc8, 0x06, 0x2f, 0xb5, 0xe7, 0xa8, 0xf6, 0x19, 0xc1,
+	0xe6, 0xdc, 0x93, 0x8b, 0x0f, 0xc0, 0x50, 0x6c, 0x90, 0x62, 0xf3, 0xe4, 0x96, 0x07, 0xdf, 0x56,
+	0xa8, 0x54, 0x42, 0xad, 0x0e, 0x86, 0x62, 0xb5, 0x0e, 0x6b, 0x9e, 0xf3, 0xae, 0xed, 0xf7, 0xbc,
+	0xe3, 0xa0, 0xdb, 0x71, 0x8f, 0xcd, 0x05, 0xbc, 0x06, 0xa5, 0x96, 0xeb, 0x76, 0x8f, 0x82, 0x56,
+	0xe7, 0xd8, 0x44, 0x3b, 0x4d, 0x28, 0x5f, 0x23, 0x8d, 0xcb, 0xb0, 0xfc, 0xc6, 0x79, 0xdb, 0xfa,
+	0xe0, 0xf6, 0xcc, 0x05, 0xbc, 0x0a, 0x2b, 0xed, 0xc3, 0x5e, 0x6b, 0xdf, 0x75, 0x7c, 0x13, 0xe1,
+	0x15, 0x30, 0x3a, 0xdd, 0x8e, 0x63, 0x6a, 0xfb, 0xbb, 0xdf, 0x2f, 0x2a, 0xe8, 0xc7, 0x45, 0x05,
+	0x9d, 0x5f, 0x54, 0xd0, 0xc7, 0xed, 0x6c, 0x99, 0x8c, 0xab, 0xc7, 0xef, 0xcf, 0x67, 0xae, 0xbf,
+	0xa4, 0xde, 0xb7, 0xc7, 0xbf, 0x02, 0x00, 0x00, 0xff, 0xff, 0x37, 0xc7, 0x3e, 0x80, 0x60, 0x05,
+	0x00, 0x00,
 }
 
 func (m *Sidecar) Marshal() (dAtA []byte, err error) {
@@ -1008,18 +912,6 @@ func (m *Sidecar) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.XXX_unrecognized != nil {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if m.InboundTrafficPolicy != nil {
-		{
-			size, err := m.InboundTrafficPolicy.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintSidecar(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
 	}
 	if m.OutboundTrafficPolicy != nil {
 		{
@@ -1284,45 +1176,6 @@ func (m *OutboundTrafficPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *InboundTrafficPolicy) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *InboundTrafficPolicy) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *InboundTrafficPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if m.Tls != nil {
-		{
-			size, err := m.Tls.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintSidecar(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
 func encodeVarintSidecar(dAtA []byte, offset int, v uint64) int {
 	offset -= sovSidecar(v)
 	base := offset
@@ -1358,10 +1211,6 @@ func (m *Sidecar) Size() (n int) {
 	}
 	if m.OutboundTrafficPolicy != nil {
 		l = m.OutboundTrafficPolicy.Size()
-		n += 1 + l + sovSidecar(uint64(l))
-	}
-	if m.InboundTrafficPolicy != nil {
-		l = m.InboundTrafficPolicy.Size()
 		n += 1 + l + sovSidecar(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
@@ -1458,22 +1307,6 @@ func (m *OutboundTrafficPolicy) Size() (n int) {
 	_ = l
 	if m.Mode != 0 {
 		n += 1 + sovSidecar(uint64(m.Mode))
-	}
-	if m.XXX_unrecognized != nil {
-		n += len(m.XXX_unrecognized)
-	}
-	return n
-}
-
-func (m *InboundTrafficPolicy) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Tls != nil {
-		l = m.Tls.Size()
-		n += 1 + l + sovSidecar(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -1653,42 +1486,6 @@ func (m *Sidecar) Unmarshal(dAtA []byte) error {
 				m.OutboundTrafficPolicy = &OutboundTrafficPolicy{}
 			}
 			if err := m.OutboundTrafficPolicy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field InboundTrafficPolicy", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowSidecar
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthSidecar
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthSidecar
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.InboundTrafficPolicy == nil {
-				m.InboundTrafficPolicy = &InboundTrafficPolicy{}
-			}
-			if err := m.InboundTrafficPolicy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2328,96 +2125,6 @@ func (m *OutboundTrafficPolicy) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipSidecar(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthSidecar
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthSidecar
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *InboundTrafficPolicy) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowSidecar
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: InboundTrafficPolicy: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: InboundTrafficPolicy: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Tls", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowSidecar
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthSidecar
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthSidecar
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Tls == nil {
-				m.Tls = &Server_TLSOptions{}
-			}
-			if err := m.Tls.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipSidecar(dAtA[iNdEx:])

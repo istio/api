@@ -118,9 +118,7 @@
           "SIMPLE",
           "MUTUAL",
           "AUTO_PASSTHROUGH",
-          "ISTIO_MUTUAL",
-          "ISTIO_MUTUAL_AND_PLAINTEXT",
-          "DISABLE"
+          "ISTIO_MUTUAL"
         ]
       },
       "istio.networking.v1alpha3.Server.TLSOptions.TLSProtocol": {
@@ -157,9 +155,6 @@
           },
           "outboundTrafficPolicy": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.OutboundTrafficPolicy"
-          },
-          "inboundTrafficPolicy": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.InboundTrafficPolicy"
           }
         }
       },
@@ -219,15 +214,6 @@
         "properties": {
           "mode": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.OutboundTrafficPolicy.Mode"
-          }
-        }
-      },
-      "istio.networking.v1alpha3.InboundTrafficPolicy": {
-        "description": "`InboundTrafficPolicy` sets the default behavior of the sidecar for authenticating inbound traffic to the application using Istio mutual TLS authentication.",
-        "type": "object",
-        "properties": {
-          "tls": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.Server.TLSOptions"
           }
         }
       },

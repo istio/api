@@ -375,14 +375,6 @@ message Server {
       // for mTLS authentication. When this mode is used, all other
       // fields in `TLSOptions` should be empty.
       ISTIO_MUTUAL = 4;
-
-      // Similar to ISTIO_MUTUAL mode but allows both Istio Mutual TLS
-      // and plaintext on the same port. Applicable only in the
-      // Sidecar API.
-      ISTIO_MUTUAL_AND_PLAINTEXT = 5;
-
-      // Disable TLS on the port. Applicable only in Sidecar API.
-      DISABLE = 6;
     };
 
     // Optional: Indicates whether connections to this port should be
