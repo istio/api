@@ -445,6 +445,7 @@ func (m *TrafficPolicy) GetPortLevelSettings() []*TrafficPolicy_PortTrafficPolic
 type TrafficPolicy_PortTrafficPolicy struct {
 	// Specifies the number of a port on the destination service
 	// on which this policy is being applied.
+	//
 	Port *PortSelector `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
 	// Settings controlling the load balancer algorithms.
 	LoadBalancer *LoadBalancerSettings `protobuf:"bytes,2,opt,name=load_balancer,json=loadBalancer,proto3" json:"load_balancer,omitempty"`
