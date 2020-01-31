@@ -44,6 +44,8 @@
 // be rewritten to /newcatalog and sent to pods with label "version: v2".
 //
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
@@ -71,11 +73,45 @@
 //         host: reviews.prod.svc.cluster.local
 //         subset: v1
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: reviews-route
+// spec:
+//   hosts:
+//   - reviews.prod.svc.cluster.local
+//   http:
+//   - name: "reviews-v2-routes"
+//     match:
+//     - uri:
+//         prefix: "/wpcatalog"
+//     - uri:
+//         prefix: "/consumercatalog"
+//     rewrite:
+//       uri: "/newcatalog"
+//     route:
+//     - destination:
+//         host: reviews.prod.svc.cluster.local
+//         subset: v2
+//   - name: "reviews-v1-route"
+//     route:
+//     - destination:
+//         host: reviews.prod.svc.cluster.local
+//         subset: v1
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // A subset/version of a route destination is identified with a reference
 // to a named service subset which must be declared in a corresponding
 // `DestinationRule`.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: DestinationRule
@@ -91,6 +127,26 @@
 //     labels:
 //       version: v2
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: DestinationRule
+// metadata:
+//   name: reviews-destination
+// spec:
+//   host: reviews.prod.svc.cluster.local
+//   subsets:
+//   - name: v1
+//     labels:
+//       version: v1
+//   - name: v2
+//     labels:
+//       version: v2
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 
 package v1alpha3
@@ -322,6 +378,8 @@ func (m *VirtualService) GetExportTo() []string {
 // of the reviews service with label "version: v1" (i.e., subset v1), and
 // some to subset v2, in a Kubernetes environment.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
@@ -348,9 +406,42 @@ func (m *VirtualService) GetExportTo() []string {
 //         host: reviews # interpreted as reviews.foo.svc.cluster.local
 //         subset: v1
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: reviews-route
+//   namespace: foo
+// spec:
+//   hosts:
+//   - reviews # interpreted as reviews.foo.svc.cluster.local
+//   http:
+//   - match:
+//     - uri:
+//         prefix: "/wpcatalog"
+//     - uri:
+//         prefix: "/consumercatalog"
+//     rewrite:
+//       uri: "/newcatalog"
+//     route:
+//     - destination:
+//         host: reviews # interpreted as reviews.foo.svc.cluster.local
+//         subset: v2
+//   - route:
+//     - destination:
+//         host: reviews # interpreted as reviews.foo.svc.cluster.local
+//         subset: v1
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // And the associated DestinationRule
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: DestinationRule
@@ -367,6 +458,27 @@ func (m *VirtualService) GetExportTo() []string {
 //     labels:
 //       version: v2
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: DestinationRule
+// metadata:
+//   name: reviews-destination
+//   namespace: foo
+// spec:
+//   host: reviews # interpreted as reviews.foo.svc.cluster.local
+//   subsets:
+//   - name: v1
+//     labels:
+//       version: v1
+//   - name: v2
+//     labels:
+//       version: v2
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The following VirtualService sets a timeout of 5s for all calls to
 // productpage.prod.svc.cluster.local service in Kubernetes. Notice that
@@ -378,6 +490,8 @@ func (m *VirtualService) GetExportTo() []string {
 // productpage.prod.svc.cluster.local. Therefore the rule's namespace does
 // not have an impact in resolving the name of the productpage service.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
@@ -393,6 +507,26 @@ func (m *VirtualService) GetExportTo() []string {
 //     - destination:
 //         host: productpage.prod.svc.cluster.local
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: my-productpage-rule
+//   namespace: istio-system
+// spec:
+//   hosts:
+//   - productpage.prod.svc.cluster.local # ignores rule namespace
+//   http:
+//   - timeout: 5s
+//     route:
+//     - destination:
+//         host: productpage.prod.svc.cluster.local
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // To control routing for traffic bound to services outside the mesh, external
 // services must first be added to Istio's internal service registry using the
@@ -400,6 +534,8 @@ func (m *VirtualService) GetExportTo() []string {
 // bound to these external services. For example, the following rules define a
 // Service for wikipedia.org and set a timeout of 5s for HTTP requests.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: ServiceEntry
@@ -428,6 +564,40 @@ func (m *VirtualService) GetExportTo() []string {
 //     - destination:
 //         host: wikipedia.org
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: ServiceEntry
+// metadata:
+//   name: external-svc-wikipedia
+// spec:
+//   hosts:
+//   - wikipedia.org
+//   location: MESH_EXTERNAL
+//   ports:
+//   - number: 80
+//     name: example-http
+//     protocol: HTTP
+//   resolution: DNS
+//
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: my-wiki-rule
+// spec:
+//   hosts:
+//   - wikipedia.org
+//   http:
+//   - timeout: 5s
+//     route:
+//     - destination:
+//         host: wikipedia.org
+// ```
+// {{</tab>}}
+// {{</tabset>}}
+//
 type Destination struct {
 	// The name of a service from the service registry. Service
 	// names are looked up from the platform's service registry (e.g.,
@@ -696,41 +866,6 @@ func (m *HTTPRoute) GetHeaders() *Headers {
 	return nil
 }
 
-// Message headers can be manipulated when Envoy forwards requests to,
-// or responses from, a destination service. Header manipulation rules can
-// be specified for a specific route destination or for all destinations.
-// The following VirtualService adds a `test` header with the value `true`
-// to requests that are routed to any `reviews` service destination.
-// It also romoves the `foo` response header, but only from responses
-// coming from the `v1` subset (version) of the `reviews` service.
-//
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: VirtualService
-// metadata:
-//   name: reviews-route
-// spec:
-//   hosts:
-//   - reviews.prod.svc.cluster.local
-//   http:
-//   - headers:
-//       request:
-//         set:
-//           test: true
-//     route:
-//     - destination:
-//         host: reviews.prod.svc.cluster.local
-//         subset: v2
-//       weight: 25
-//     - destination:
-//         host: reviews.prod.svc.cluster.local
-//         subset: v1
-//       headers:
-//         response:
-//           remove:
-//           - foo
-//       weight: 75
-// ```
 type Headers struct {
 	// Header manipulation rules to apply before forwarding a request
 	// to the destination service
@@ -863,6 +998,8 @@ func (m *Headers_HeaderOperations) GetRemove() []string {
 // traffic arriving at port 443 of gateway called "mygateway" to internal
 // services in the mesh based on the SNI value.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
@@ -889,6 +1026,37 @@ func (m *Headers_HeaderOperations) GetRemove() []string {
 //     - destination:
 //         host: reviews.prod.svc.cluster.local
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: bookinfo-sni
+// spec:
+//   hosts:
+//   - "*.bookinfo.com"
+//   gateways:
+//   - mygateway
+//   tls:
+//   - match:
+//     - port: 443
+//       sniHosts:
+//       - login.bookinfo.com
+//     route:
+//     - destination:
+//         host: login.prod.svc.cluster.local
+//   - match:
+//     - port: 443
+//       sniHosts:
+//       - reviews.bookinfo.com
+//     route:
+//     - destination:
+//         host: reviews.prod.svc.cluster.local
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 type TLSRoute struct {
 	// Match conditions to be satisfied for the rule to be
 	// activated. All conditions inside a single match block have AND
@@ -953,6 +1121,8 @@ func (m *TLSRoute) GetRoute() []*RouteDestination {
 // following routing rule forwards traffic arriving at port 27017 for
 // mongo.prod.svc.cluster.local to another Mongo server on port 5555.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
@@ -970,6 +1140,28 @@ func (m *TLSRoute) GetRoute() []*RouteDestination {
 //         port:
 //           number: 5555
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: bookinfo-Mongo
+// spec:
+//   hosts:
+//   - mongo.prod.svc.cluster.local
+//   tcp:
+//   - match:
+//     - port: 27017
+//     route:
+//     - destination:
+//         host: mongo.backup.svc.cluster.local
+//         port:
+//           number: 5555
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 type TCPRoute struct {
 	// Match conditions to be satisfied for the rule to be
 	// activated. All conditions inside a single match block have AND
@@ -1036,6 +1228,8 @@ func (m *TCPRoute) GetRoute() []*RouteDestination {
 // starts with /ratings/v2/ and the request contains a custom `end-user` header
 // with value `jason`.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
@@ -1056,6 +1250,31 @@ func (m *TCPRoute) GetRoute() []*RouteDestination {
 //     - destination:
 //         host: ratings.prod.svc.cluster.local
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: ratings-route
+// spec:
+//   hosts:
+//   - ratings.prod.svc.cluster.local
+//   http:
+//   - match:
+//     - headers:
+//         end-user:
+//           exact: jason
+//       uri:
+//         prefix: "/ratings/v2/"
+//       ignoreUriCase: true
+//     route:
+//     - destination:
+//         host: ratings.prod.svc.cluster.local
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // HTTPMatchRequest CANNOT be empty.
 type HTTPMatchRequest struct {
@@ -1271,6 +1490,8 @@ func (m *HTTPMatchRequest) GetIgnoreUriCase() bool {
 // instances with the "v2" tag and the remaining traffic (i.e., 75%) to
 // "v1".
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
@@ -1290,9 +1511,35 @@ func (m *HTTPMatchRequest) GetIgnoreUriCase() bool {
 //         subset: v1
 //       weight: 75
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: reviews-route
+// spec:
+//   hosts:
+//   - reviews.prod.svc.cluster.local
+//   http:
+//   - route:
+//     - destination:
+//         host: reviews.prod.svc.cluster.local
+//         subset: v2
+//       weight: 25
+//     - destination:
+//         host: reviews.prod.svc.cluster.local
+//         subset: v1
+//       weight: 75
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // And the associated DestinationRule
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: DestinationRule
@@ -1308,11 +1555,33 @@ func (m *HTTPMatchRequest) GetIgnoreUriCase() bool {
 //     labels:
 //       version: v2
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: DestinationRule
+// metadata:
+//   name: reviews-destination
+// spec:
+//   host: reviews.prod.svc.cluster.local
+//   subsets:
+//   - name: v1
+//     labels:
+//       version: v1
+//   - name: v2
+//     labels:
+//       version: v2
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // Traffic can also be split across two entirely different services without
 // having to define new subsets. For example, the following rule forwards 25% of
 // traffic to reviews.com to dev.reviews.com
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
@@ -1330,6 +1599,29 @@ func (m *HTTPMatchRequest) GetIgnoreUriCase() bool {
 //         host: reviews.com
 //       weight: 75
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: reviews-route-two-domains
+// spec:
+//   hosts:
+//   - reviews.com
+//   http:
+//   - route:
+//     - destination:
+//         host: dev.reviews.com
+//       weight: 25
+//     - destination:
+//         host: reviews.com
+//       weight: 75
+// ```
+// {{</tab>}}
+// {{</tabset>}}
+//
 type HTTPRouteDestination struct {
 	// Destination uniquely identifies the instances of a service
 	// to which the request/connection should be forwarded to.
@@ -1660,6 +1952,8 @@ func (m *TLSMatchAttributes) GetGateways() []string {
 // requests for /v1/getProductRatings API on the ratings service to
 // /v1/bookRatings provided by the bookratings service.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
@@ -1677,6 +1971,29 @@ func (m *TLSMatchAttributes) GetGateways() []string {
 //       authority: newratings.default.svc.cluster.local
 //   ...
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: ratings-route
+// spec:
+//   hosts:
+//   - ratings.prod.svc.cluster.local
+//   http:
+//   - match:
+//     - uri:
+//         exact: /v1/getProductRatings
+//     redirect:
+//       uri: /v1/bookRatings
+//       authority: newratings.default.svc.cluster.local
+//   ...
+// ```
+// {{</tab>}}
+// {{</tabset>}}
+//
 type HTTPRedirect struct {
 	// On a redirect, overwrite the Path portion of the URL with this
 	// value. Note that the entire path will be replaced, irrespective of the
@@ -1753,6 +2070,8 @@ func (m *HTTPRedirect) GetRedirectCode() uint32 {
 // demonstrates how to rewrite the URL prefix for api call (/ratings) to
 // ratings service before making the actual API call.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
@@ -1772,6 +2091,30 @@ func (m *HTTPRedirect) GetRedirectCode() uint32 {
 //         host: ratings.prod.svc.cluster.local
 //         subset: v1
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: ratings-route
+// spec:
+//   hosts:
+//   - ratings.prod.svc.cluster.local
+//   http:
+//   - match:
+//     - uri:
+//         prefix: /ratings
+//     rewrite:
+//       uri: /v1/bookRatings
+//     route:
+//     - destination:
+//         host: ratings.prod.svc.cluster.local
+//         subset: v1
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 type HTTPRewrite struct {
 	// rewrite the path (or the prefix) portion of the URI with this
@@ -1939,6 +2282,8 @@ func (*StringMatch) XXX_OneofWrappers() []interface{} {
 // example, the following rule sets the maximum number of retries to 3 when
 // calling ratings:v1 service, with a 2s timeout per retry attempt.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
@@ -1957,6 +2302,29 @@ func (*StringMatch) XXX_OneofWrappers() []interface{} {
 //       perTryTimeout: 2s
 //       retryOn: gateway-error,connect-failure,refused-stream
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: ratings-route
+// spec:
+//   hosts:
+//   - ratings.prod.svc.cluster.local
+//   http:
+//   - route:
+//     - destination:
+//         host: ratings.prod.svc.cluster.local
+//         subset: v1
+//     retries:
+//       attempts: 3
+//       perTryTimeout: 2s
+//       retryOn: gateway-error,connect-failure,refused-stream
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 type HTTPRetry struct {
 	// Number of retries for a given request. The interval
@@ -2038,6 +2406,8 @@ func (m *HTTPRetry) GetRetryOn() string {
 // `Access-Control-Allow-Credentials` header to false. In addition, it only
 // exposes `X-Foo-bar` header and sets an expiry period of 1 day.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
@@ -2062,6 +2432,35 @@ func (m *HTTPRetry) GetRetryOn() string {
 //       - X-Foo-Bar
 //       maxAge: "24h"
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: ratings-route
+// spec:
+//   hosts:
+//   - ratings.prod.svc.cluster.local
+//   http:
+//   - route:
+//     - destination:
+//         host: ratings.prod.svc.cluster.local
+//         subset: v1
+//     corsPolicy:
+//       allowOrigin:
+//       - example.com
+//       allowMethods:
+//       - POST
+//       - GET
+//       allowCredentials: false
+//       allowHeaders:
+//       - X-Foo-Bar
+//       maxAge: "24h"
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 type CorsPolicy struct {
 	// The list of origins that are allowed to perform CORS requests. The
@@ -2249,6 +2648,8 @@ func (m *HTTPFaultInjection) GetAbort() *HTTPFaultInjection_Abort {
 // in 1 out of every 1000 requests to the "v1" version of the "reviews"
 // service from all pods with label env: prod
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
@@ -2271,6 +2672,33 @@ func (m *HTTPFaultInjection) GetAbort() *HTTPFaultInjection_Abort {
 //           value: 0.1
 //         fixedDelay: 5s
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: reviews-route
+// spec:
+//   hosts:
+//   - reviews.prod.svc.cluster.local
+//   http:
+//   - match:
+//     - sourceLabels:
+//         env: prod
+//     route:
+//     - destination:
+//         host: reviews.prod.svc.cluster.local
+//         subset: v1
+//     fault:
+//       delay:
+//         percentage:
+//           value: 0.1
+//         fixedDelay: 5s
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The _fixedDelay_ field is used to indicate the amount of delay in seconds.
 // The optional _percentage_ field can be used to only delay a certain
@@ -2388,6 +2816,8 @@ func (*HTTPFaultInjection_Delay) XXX_OneofWrappers() []interface{} {
 // pre-specified error code. The following example will return an HTTP 400
 // error code for 1 out of every 1000 requests to the "ratings" service "v1".
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
@@ -2407,6 +2837,30 @@ func (*HTTPFaultInjection_Delay) XXX_OneofWrappers() []interface{} {
 //           value: 0.1
 //         httpStatus: 400
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: ratings-route
+// spec:
+//   hosts:
+//   - ratings.prod.svc.cluster.local
+//   http:
+//   - route:
+//     - destination:
+//         host: ratings.prod.svc.cluster.local
+//         subset: v1
+//     fault:
+//       abort:
+//         percentage:
+//           value: 0.1
+//         httpStatus: 400
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The _httpStatus_ field is used to indicate the HTTP status code to
 // return to the caller. The optional _percentage_ field can be used to only
