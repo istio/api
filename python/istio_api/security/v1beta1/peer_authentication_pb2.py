@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.security.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\035istio.io/api/security/v1beta1'),
-  serialized_pb=_b('\n*security/v1beta1/peer_authentication.proto\x12\x16istio.security.v1beta1\x1a\x1btype/v1beta1/selector.proto\"\xe7\x03\n\x12PeerAuthentication\x12\x36\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\x12\x42\n\x04mtls\x18\x02 \x01(\x0b\x32\x34.istio.security.v1beta1.PeerAuthentication.MutualTLS\x12V\n\x0fport_level_mtls\x18\x03 \x03(\x0b\x32=.istio.security.v1beta1.PeerAuthentication.PortLevelMtlsEntry\x1a\x90\x01\n\tMutualTLS\x12G\n\x04mode\x18\x01 \x01(\x0e\x32\x39.istio.security.v1beta1.PeerAuthentication.MutualTLS.Mode\":\n\x04Mode\x12\t\n\x05UNSET\x10\x00\x12\x0e\n\nPERMISSIVE\x10\x01\x12\n\n\x06STRICT\x10\x02\x12\x0b\n\x07\x44ISABLE\x10\x03\x1aj\n\x12PortLevelMtlsEntry\x12\x0b\n\x03key\x18\x01 \x01(\r\x12\x43\n\x05value\x18\x02 \x01(\x0b\x32\x34.istio.security.v1beta1.PeerAuthentication.MutualTLS:\x02\x38\x01\x42\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
+  serialized_pb=_b('\n*security/v1beta1/peer_authentication.proto\x12\x16istio.security.v1beta1\x1a\x1btype/v1beta1/selector.proto\"\xe7\x03\n\x12PeerAuthentication\x12\x36\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\x12\x42\n\x04mtls\x18\x02 \x01(\x0b\x32\x34.istio.security.v1beta1.PeerAuthentication.MutualTLS\x12V\n\x0fport_level_mtls\x18\x03 \x03(\x0b\x32=.istio.security.v1beta1.PeerAuthentication.PortLevelMtlsEntry\x1a\x90\x01\n\tMutualTLS\x12G\n\x04mode\x18\x01 \x01(\x0e\x32\x39.istio.security.v1beta1.PeerAuthentication.MutualTLS.Mode\":\n\x04Mode\x12\t\n\x05UNSET\x10\x00\x12\x0b\n\x07\x44ISABLE\x10\x01\x12\x0e\n\nPERMISSIVE\x10\x02\x12\n\n\x06STRICT\x10\x03\x1aj\n\x12PortLevelMtlsEntry\x12\x0b\n\x03key\x18\x01 \x01(\r\x12\x43\n\x05value\x18\x02 \x01(\x0b\x32\x34.istio.security.v1beta1.PeerAuthentication.MutualTLS:\x02\x38\x01\x42\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
   ,
   dependencies=[type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
 
@@ -38,15 +38,15 @@ _PEERAUTHENTICATION_MUTUALTLS_MODE = _descriptor.EnumDescriptor(
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='PERMISSIVE', index=1, number=1,
+      name='DISABLE', index=1, number=1,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='STRICT', index=2, number=2,
+      name='PERMISSIVE', index=2, number=2,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='DISABLE', index=3, number=3,
+      name='STRICT', index=3, number=3,
       serialized_options=None,
       type=None),
   ],

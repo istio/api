@@ -22,6 +22,8 @@ spec:
     mode: STRICT
 </code></pre>
 
+<p>For mesh level, put the policy in root-namespace according to your Istio installation.</p>
+
 <p>Policies to allow both mTLS &amp; plaintext traffic for all workloads under namespace <code>foo</code>, but
 require mTLS for workload <code>finance</code>.</p>
 
@@ -173,7 +175,14 @@ No
 <tr id="PeerAuthentication-MutualTLS-Mode-UNSET">
 <td><code>UNSET</code></td>
 <td>
-<p>Inherit from parent.</p>
+<p>Inherit from parent, if has one. Otherwise treated as PERMISSIVE.</p>
+
+</td>
+</tr>
+<tr id="PeerAuthentication-MutualTLS-Mode-DISABLE">
+<td><code>DISABLE</code></td>
+<td>
+<p>Connection is not tunneled.</p>
 
 </td>
 </tr>
@@ -188,13 +197,6 @@ No
 <td><code>STRICT</code></td>
 <td>
 <p>Connection is an mTLS tunnel (TLS with client cert must be presented).</p>
-
-</td>
-</tr>
-<tr id="PeerAuthentication-MutualTLS-Mode-DISABLE">
-<td><code>DISABLE</code></td>
-<td>
-<p>Connection is not tunneled.</p>
 
 </td>
 </tr>

@@ -38,9 +38,9 @@
         "type": "string",
         "enum": [
           "UNSET",
+          "DISABLE",
           "PERMISSIVE",
-          "STRICT",
-          "DISABLE"
+          "STRICT"
         ]
       },
       "istio.type.v1beta1.WorkloadSelector": {

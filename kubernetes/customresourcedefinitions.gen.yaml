@@ -5474,9 +5474,9 @@ spec:
                   description: Defines the mTLS mode used for peer authentication.
                   enum:
                   - UNSET
+                  - DISABLE
                   - PERMISSIVE
                   - STRICT
-                  - DISABLE
                   type: string
               type: object
             portLevelMtls:
@@ -5486,9 +5486,9 @@ spec:
                     description: Defines the mTLS mode used for peer authentication.
                     enum:
                     - UNSET
+                    - DISABLE
                     - PERMISSIVE
                     - STRICT
-                    - DISABLE
                     type: string
                 type: object
               description: Port specific mutual TLS settings.

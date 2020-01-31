@@ -1,4 +1,4 @@
-// Copyright 2019 Istio Authors
+// Copyright 2020 Istio Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -40,6 +40,8 @@ option go_package="istio.io/api/security/v1beta1";
 //   mtls:
 //     mode: STRICT
 // ```
+// For mesh level, put the policy in root-namespace according to your Istio installation.
+//
 // Policies to allow both mTLS & plaintext traffic for all workloads under namespace `foo`, but
 // require mTLS for workload `finance`.
 // ```yaml
@@ -126,17 +128,17 @@ message PeerAuthentication {
   // Mutual TLS settings.
   message MutualTLS {
     enum Mode {
-      // Inherit from parent.
+      // Inherit from parent, if has one. Otherwise treated as PERMISSIVE.
       UNSET = 0;
 
+      // Connection is not tunneled.
+      DISABLE = 1;
+
       // Connection can be either plaintext or mTLS tunnel.
-      PERMISSIVE = 1;
+      PERMISSIVE = 2;
 
       // Connection is an mTLS tunnel (TLS with client cert must be presented).
-      STRICT = 2;
-
-      // Connection is not tunneled.
-      DISABLE = 3;
+      STRICT = 3;
     }
 
     // Defines the mTLS mode used for peer authentication.
