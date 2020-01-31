@@ -29,11 +29,14 @@ workload instance, preference will be given to the resource with a
 <code>workloadSelector</code> that selects this workload instance, over a <code>Sidecar</code> configuration
 without any <code>workloadSelector</code>.</p>
 
-<p><strong>NOTE 1</strong>: <em><em>Each namespace can have only one <code>Sidecar</code> configuration without any
-<code>workloadSelector</code></em></em>. The behavior of the system is undefined if more
-than one selector-less <code>Sidecar</code> configurations exist in a given namespace. The
-behavior of the system is undefined if two or more <code>Sidecar</code> configurations
-with a <code>workloadSelector</code> select the same workload instance.</p>
+<p><strong>NOTE 1</strong>: <em><em>Each namespace can have only one <code>Sidecar</code>
+configuration without any <code>workloadSelector</code></em> that specifies the
+default for all pods in that namespace</em>. It is recommended to use
+the name <code>default</code> for the namespace-wide sidecar. The behavior of
+the system is undefined if more than one selector-less <code>Sidecar</code>
+configurations exist in a given namespace. The behavior of the
+system is undefined if two or more <code>Sidecar</code> configurations with a
+<code>workloadSelector</code> select the same workload instance.</p>
 
 <p><strong>NOTE 2</strong>: <em><em>A <code>Sidecar</code> configuration in the <code>MeshConfig</code>
 <a href="https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig">root namespace</a>

@@ -22,11 +22,14 @@
 // `workloadSelector` that selects this workload instance, over a `Sidecar` configuration
 // without any `workloadSelector`.
 //
-// **NOTE 1**: *_Each namespace can have only one `Sidecar` configuration without any
-// `workloadSelector`_*. The behavior of the system is undefined if more
-// than one selector-less `Sidecar` configurations exist in a given namespace. The
-// behavior of the system is undefined if two or more `Sidecar` configurations
-// with a `workloadSelector` select the same workload instance.
+// **NOTE 1**: *_Each namespace can have only one `Sidecar`
+// configuration without any `workloadSelector`_ that specifies the
+// default for all pods in that namespace*. It is recommended to use
+// the name `default` for the namespace-wide sidecar. The behavior of
+// the system is undefined if more than one selector-less `Sidecar`
+// configurations exist in a given namespace. The behavior of the
+// system is undefined if two or more `Sidecar` configurations with a
+// `workloadSelector` select the same workload instance.
 //
 // **NOTE 2**: *_A `Sidecar` configuration in the `MeshConfig`
 // [root namespace](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig)
