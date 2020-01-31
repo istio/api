@@ -190,6 +190,7 @@ message TrafficPolicy {
   message PortTrafficPolicy {
     // Specifies the number of a port on the destination service
     // on which this policy is being applied.
+    //
     PortSelector port = 1;
 
     // Settings controlling the load balancer algorithms.
