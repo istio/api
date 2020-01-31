@@ -46057,15 +46057,15 @@
                 "name": "UNSET"
               },
               {
-                "name": "PERMISSIVE",
+                "name": "DISABLE",
                 "integer": 1
               },
               {
-                "name": "STRICT",
+                "name": "PERMISSIVE",
                 "integer": 2
               },
               {
-                "name": "DISABLE",
+                "name": "STRICT",
                 "integer": 3
               }
             ]
