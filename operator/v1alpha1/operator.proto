@@ -134,11 +134,18 @@ message IstioOperatorSpec {
     string hub = 12;
     // Version tag for docker images e.g. 1.0.6
     string tag = 13;
+
+    // $hide_from_docs
     // Resource suffix is appended to all resources installed by each component.
-    string resource_suffix = 14;
+    // Never implemented; replaced by revision.
+    string resource_suffix = 14 [deprecated = true];
     // Namespace to install control plane resources into. If unset, Istio will be installed into the same namespace
     // as the IstioOperator CR.
     string namespace = 15;
+
+    // Identify the revision this installation is associated with.
+    // This option is currently experimental.
+    string revision = 16;
 
     // Config used by control plane components internally.
     istio.mesh.v1alpha1.MeshConfig mesh_config = 40;
