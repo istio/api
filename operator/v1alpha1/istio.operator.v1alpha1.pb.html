@@ -991,12 +991,24 @@ No
 No
 </td>
 </tr>
-<tr id="IstioOperatorSpec-resource_suffix">
-<td><code>resourceSuffix</code></td>
+<tr id="IstioOperatorSpec-namespace">
+<td><code>namespace</code></td>
 <td><code>string</code></td>
 <td>
-<p>Resource suffix is appended to all resources installed by each component. Used in upgrade scenarios where two
-Istio control planes must exist in the same namespace.</p>
+<p>Namespace to install control plane resources into. If unset, Istio will be installed into the same namespace
+as the IstioOperator CR.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="IstioOperatorSpec-revision">
+<td><code>revision</code></td>
+<td><code>string</code></td>
+<td>
+<p>Identify the revision this installation is associated with.
+This option is currently experimental.</p>
 
 </td>
 <td>
