@@ -250,6 +250,11 @@
             "additionalProperties": {
               "$ref": "#/components/schemas/istio.networking.v1beta1.StringMatch"
             }
+          },
+          "sourceNamespace": {
+            "description": "Source namespace constraining the applicability of a rule to workloads in that namespace. If the VirtualService has a list of gateways specified in the top-level `gateways` field, it must include the reserved gateway `mesh` for this field to be applicable.",
+            "type": "string",
+            "format": "string"
           }
         }
       },
@@ -469,6 +474,11 @@
               "format": "string"
             }
           },
+          "sourceNamespace": {
+            "description": "Source namespace constraining the applicability of a rule to workloads in that namespace. If the VirtualService has a list of gateways specified in the top-level `gateways` field, it must include the reserved gateway `mesh` for this field to be applicable.",
+            "type": "string",
+            "format": "string"
+          },
           "destinationSubnets": {
             "description": "IPv4 or IPv6 ip addresses of destination with optional subnet. E.g., a.b.c.d/xx form or just a.b.c.d.",
             "type": "array",
@@ -524,6 +534,11 @@
               "type": "string",
               "format": "string"
             }
+          },
+          "sourceNamespace": {
+            "description": "Source namespace constraining the applicability of a rule to workloads in that namespace. If the VirtualService has a list of gateways specified in the top-level `gateways` field, it must include the reserved gateway `mesh` for this field to be applicable.",
+            "type": "string",
+            "format": "string"
           },
           "destinationSubnets": {
             "description": "IPv4 or IPv6 ip addresses of destination with optional subnet. E.g., a.b.c.d/xx form or just a.b.c.d.",
