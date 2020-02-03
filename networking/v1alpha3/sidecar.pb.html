@@ -65,13 +65,6 @@ spec:
     - &quot;istio-system/*&quot;
 </code></pre>
 
-<<<<<<< HEAD
-<p>The example below declares a <code>Sidecar</code> configuration in the
-<code>prod-us1</code> namespace that overrides the global default defined
-above, and configures the sidecars in the namespace to allow egress
-traffic to public services in the <code>prod-us1</code>, <code>prod-apis</code>, and the
-<code>istio-system</code> namespaces.</p>
-=======
 <p>{{</tab>}}</p>
 
 <p>{{<tab name="v1beta1" category-value="v1beta1">}}</p>
@@ -91,12 +84,11 @@ spec:
 <p>{{</tab>}}
 {{</tabset>}}</p>
 
-<p>The example below declares a <code>Sidecar</code> configuration in the <code>prod-us1</code>
-namespace that overrides the global default defined above, and
-configures the sidecars in the namespace to allow egress traffic to
-public services in the <code>prod-us1</code>, <code>prod-apis</code>, and the <code>istio-system</code>
-namespaces.</p>
->>>>>>> 7b905a0a6e49d33d97dd9d20e836900ce8fcfd68
+<p>The example below declares a <code>Sidecar</code> configuration in the
+<code>prod-us1</code> namespace that overrides the global default defined
+above, and configures the sidecars in the namespace to allow egress
+traffic to public services in the <code>prod-us1</code>, <code>prod-apis</code>, and the
+<code>istio-system</code> namespaces.</p>
 
 <p>{{<tabset category-name="example">}}
 {{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
@@ -114,23 +106,6 @@ spec:
     - &quot;istio-system/*&quot;
 </code></pre>
 
-<<<<<<< HEAD
-<p>The following example declares a <code>Sidecar</code> configuration in the
-<code>prod-us1</code> namespace for all pods with labels <code>app: ratings</code>
-belonging to the <code>ratings.prod-us1</code> service.  The workload accepts
-inbound HTTP traffic on port 9080 without any authentication, and
-HTTPS traffic on port 9443 with one-way TLS termination using
-custom certificates. <em>To accomplish custom TLS termination on this
-workload, the <code>PeerAuthentication</code> security policy must be declared
-to disable Istio mutual TLS on these two ports. Any other
-auto-generated listener for this workload will still obey the
-mutual TLS termination requirements set forth in the
-PeerAuthentication policy</em>. The traffic is then forwarded to the
-attached workload instance listening on a Unix domain socket. In
-the egress direction, in addition to the <code>istio-system</code> namespace,
-the sidecar proxies only HTTP traffic bound for port 9080 for
-services in the <code>prod-us1</code> namespace.</p>
-=======
 <p>{{</tab>}}</p>
 
 <p>{{<tab name="v1beta1" category-value="v1beta1">}}</p>
@@ -151,13 +126,21 @@ spec:
 <p>{{</tab>}}
 {{</tabset>}}</p>
 
-<p>The example below declares a <code>Sidecar</code> configuration in the <code>prod-us1</code> namespace
-that accepts inbound HTTP traffic on port 9080 and forwards
-it to the attached workload instance listening on a Unix domain socket. In the
-egress direction, in addition to the <code>istio-system</code> namespace, the sidecar
-proxies only HTTP traffic bound for port 9080 for services in the
-<code>prod-us1</code> namespace.</p>
->>>>>>> 7b905a0a6e49d33d97dd9d20e836900ce8fcfd68
+<p>The following example declares a <code>Sidecar</code> configuration in the
+<code>prod-us1</code> namespace for all pods with labels <code>app: ratings</code>
+belonging to the <code>ratings.prod-us1</code> service.  The workload accepts
+inbound HTTP traffic on port 9080 without any authentication, and
+HTTPS traffic on port 9443 with one-way TLS termination using
+custom certificates. <em>To accomplish custom TLS termination on this
+workload, the <code>PeerAuthentication</code> security policy must be declared
+to disable Istio mutual TLS on these two ports. Any other
+auto-generated listener for this workload will still obey the
+mutual TLS termination requirements set forth in the
+PeerAuthentication policy</em>. The traffic is then forwarded to the
+attached workload instance listening on a Unix domain socket. In
+the egress direction, in addition to the <code>istio-system</code> namespace,
+the sidecar proxies only HTTP traffic bound for port 9080 for
+services in the <code>prod-us1</code> namespace.</p>
 
 <p>{{<tabset category-name="example">}}
 {{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
@@ -197,7 +180,36 @@ spec:
     - &quot;istio-system/*&quot;
 </code></pre>
 
-<<<<<<< HEAD
+<p>{{</tab>}}</p>
+
+<p>{{<tab name="v1beta1" category-value="v1beta1">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1beta1
+kind: Sidecar
+metadata:
+  name: default
+  namespace: prod-us1
+spec:
+  ingress:
+  - port:
+      number: 9080
+      protocol: HTTP
+      name: somename
+    defaultEndpoint: unix:///var/run/someuds.sock
+  egress:
+  - port:
+      number: 9080
+      protocol: HTTP
+      name: egresshttp
+    hosts:
+    - &quot;prod-us1/*&quot;
+  - hosts:
+    - &quot;istio-system/*&quot;
+</code></pre>
+
+<p>{{</tab>}}
+{{</tabset>}}</p>
+
 <p>and the associated PeerAuthentication security policy to ensure
 that mutual TLS based authentication is not configured for ports
 9080 and 9443:</p>
@@ -256,50 +268,6 @@ it to the application listening on <code>127.0.0.1:8080</code>. It also allows
 the application to communicate with a backing MySQL database on
 <code>127.0.0.1:3306</code>, that then gets proxied to the externally hosted
 MySQL service at <code>mysql.foo.com:3306</code>.</p>
-=======
-<p>{{</tab>}}</p>
-
-<p>{{<tab name="v1beta1" category-value="v1beta1">}}</p>
-
-<pre><code class="language-yaml">apiVersion: networking.istio.io/v1beta1
-kind: Sidecar
-metadata:
-  name: default
-  namespace: prod-us1
-spec:
-  ingress:
-  - port:
-      number: 9080
-      protocol: HTTP
-      name: somename
-    defaultEndpoint: unix:///var/run/someuds.sock
-  egress:
-  - port:
-      number: 9080
-      protocol: HTTP
-      name: egresshttp
-    hosts:
-    - &quot;prod-us1/*&quot;
-  - hosts:
-    - &quot;istio-system/*&quot;
-</code></pre>
-
-<p>{{</tab>}}
-{{</tabset>}}</p>
-
-<p>If the workload is deployed without IPTables-based traffic capture, the
-<code>Sidecar</code> configuration is the only way to configure the ports on the proxy
-attached to the workload instance. The following example declares a <code>Sidecar</code>
-configuration in the <code>prod-us1</code> namespace for all pods with labels
-<code>app: productpage</code> belonging to the <code>productpage.prod-us1</code> service. Assuming
-that these pods are deployed without IPtable rules (i.e. the <code>istio-init</code>
-container) and the proxy metadata <code>ISTIO_META_INTERCEPTION_MODE</code> is set to
-<code>NONE</code>, the specification, below, allows such pods to receive HTTP traffic
-on port 9080 and forward it to the application listening on
-<code>127.0.0.1:8080</code>. It also allows the application to communicate with a
-backing MySQL database on <code>127.0.0.1:3306</code>, that then gets proxied to the
-externally hosted MySQL service at <code>mysql.foo.com:3306</code>.</p>
->>>>>>> 7b905a0a6e49d33d97dd9d20e836900ce8fcfd68
 
 <p>{{<tabset category-name="example">}}
 {{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
