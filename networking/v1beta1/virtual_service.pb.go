@@ -122,7 +122,6 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // <!-- crd generation tags
 // +cue-gen:VirtualService:groupName:networking.istio.io
 // +cue-gen:VirtualService:version:v1beta1
-// +cue-gen:VirtualService:storageVersion
 // +cue-gen:VirtualService:annotations:helm.sh/resource-policy=keep
 // +cue-gen:VirtualService:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:VirtualService:subresource:status
