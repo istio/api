@@ -490,6 +490,9 @@ message LoadBalancerSettings {
 
       // Hash based on the source IP address.
       bool use_source_ip = 3;
+
+      // Hash based on a specific HTTP query parameter.
+      string http_query_parameter_name = 5;
     };
 
     // The minimum number of virtual nodes to use for the hash

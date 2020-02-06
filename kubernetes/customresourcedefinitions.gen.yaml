@@ -2065,6 +2065,8 @@ spec:
                                 - httpCookie
                               - required:
                                 - useSourceIp
+                              - required:
+                                - httpQueryParameterName
                           required:
                           - consistentHash
                         properties:
@@ -2087,6 +2089,10 @@ spec:
                                 type: object
                               httpHeaderName:
                                 description: Hash based on a specific HTTP header.
+                                format: string
+                                type: string
+                              httpQueryParameterName:
+                                description: Hash based on a specific HTTP query parameter.
                                 format: string
                                 type: string
                               minimumRingSize:
@@ -2251,6 +2257,8 @@ spec:
                                       - httpCookie
                                     - required:
                                       - useSourceIp
+                                    - required:
+                                      - httpQueryParameterName
                                 required:
                                 - consistentHash
                               properties:
@@ -2273,6 +2281,11 @@ spec:
                                       type: object
                                     httpHeaderName:
                                       description: Hash based on a specific HTTP header.
+                                      format: string
+                                      type: string
+                                    httpQueryParameterName:
+                                      description: Hash based on a specific HTTP query
+                                        parameter.
                                       format: string
                                       type: string
                                     minimumRingSize:
@@ -2508,6 +2521,8 @@ spec:
                           - httpCookie
                         - required:
                           - useSourceIp
+                        - required:
+                          - httpQueryParameterName
                     required:
                     - consistentHash
                   properties:
@@ -2530,6 +2545,10 @@ spec:
                           type: object
                         httpHeaderName:
                           description: Hash based on a specific HTTP header.
+                          format: string
+                          type: string
+                        httpQueryParameterName:
+                          description: Hash based on a specific HTTP query parameter.
                           format: string
                           type: string
                         minimumRingSize:
@@ -2691,6 +2710,8 @@ spec:
                                 - httpCookie
                               - required:
                                 - useSourceIp
+                              - required:
+                                - httpQueryParameterName
                           required:
                           - consistentHash
                         properties:
@@ -2713,6 +2734,10 @@ spec:
                                 type: object
                               httpHeaderName:
                                 description: Hash based on a specific HTTP header.
+                                format: string
+                                type: string
+                              httpQueryParameterName:
+                                description: Hash based on a specific HTTP query parameter.
                                 format: string
                                 type: string
                               minimumRingSize:
