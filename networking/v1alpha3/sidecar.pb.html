@@ -164,7 +164,7 @@ spec:
       number: 9443
       protocol: HTTPS
       name: httpsport
-    tls:
+    inboundTls:
       mode: SIMPLE # overrides namespace default
       serverCertificate: /etc/certs/servercert.pem
       privateKey: /etc/certs/privatekey.pem
@@ -203,7 +203,7 @@ spec:
       number: 9443
       protocol: HTTPS
       name: httpsport
-    tls:
+    inboundTls:
       mode: SIMPLE # overrides namespace default
       serverCertificate: /etc/certs/servercert.pem
       privateKey: /etc/certs/privatekey.pem
@@ -719,14 +719,14 @@ connections. Format should be <code>127.0.0.1:PORT</code> or <code>unix:///path/
 Yes
 </td>
 </tr>
-<tr id="IstioIngressListener-tls">
-<td><code>tls</code></td>
+<tr id="IstioIngressListener-inbound_tls">
+<td><code>inboundTls</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/networking/gateway.html#Server-TLSOptions">TLSOptions</a></code></td>
 <td>
-<p>Set of TLS related options that allow a listener to terminate
-SIMPLE or MUTUAL TLS connections at the sidecar. If not
-specified, the connection may be subject to TLS authentication
-based on the PeerAuthentication security policy.</p>
+<p>Overrides Sidecar level <code>inboundTls</code> settings. Has same
+restrictions as the Sidecar level inboundTls,
+i.e. PeerAuthentication policy takes precedance unless explicitly
+disabled.</p>
 
 </td>
 <td>
@@ -887,6 +887,23 @@ sidecars to route any unknown traffic originating from the
 application to its requested destination. If not specified,
 inherits the system detected defaults from the namespace-wide or
 the global default Sidecar.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Sidecar-inbound_tls">
+<td><code>inboundTls</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/gateway.html#Server-TLSOptions">TLSOptions</a></code></td>
+<td>
+<p>Set of TLS related options that allow a listener to terminate
+SIMPLE or MUTUAL TLS connections at the
+sidecar. <code>PeerAuthentication</code> policy&rsquo;s settings take precedance
+over custom TLS settings for the workload. When the
+PeerAuthentication policy disables mTLS tunneling for one or more
+ports in the workload, the TLS settings specified here will be
+applied.</p>
 
 </td>
 <td>

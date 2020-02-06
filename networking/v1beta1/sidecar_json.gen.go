@@ -112,7 +112,7 @@
 //       number: 9443
 //       protocol: HTTPS
 //       name: httpsport
-//     tls:
+//     inboundTls:
 //       mode: SIMPLE # overrides namespace default
 //       serverCertificate: /etc/certs/servercert.pem
 //       privateKey: /etc/certs/privatekey.pem

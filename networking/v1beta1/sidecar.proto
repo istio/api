@@ -134,7 +134,7 @@ import "networking/v1beta1/gateway.proto";
 //       number: 9443
 //       protocol: HTTPS
 //       name: httpsport
-//     tls:
+//     inboundTls:
 //       mode: SIMPLE # overrides namespace default
 //       serverCertificate: /etc/certs/servercert.pem
 //       privateKey: /etc/certs/privatekey.pem
@@ -352,6 +352,15 @@ message Sidecar {
   // inherits the system detected defaults from the namespace-wide or
   // the global default Sidecar.
   OutboundTrafficPolicy outbound_traffic_policy = 4;
+
+  // Set of TLS related options that allow a listener to terminate
+  // SIMPLE or MUTUAL TLS connections at the
+  // sidecar. `PeerAuthentication` policy's settings take precedance
+  // over custom TLS settings for the workload. When the
+  // PeerAuthentication policy disables mTLS tunneling for one or more
+  // ports in the workload, the TLS settings specified here will be
+  // applied.
+  Server.TLSOptions inbound_tls = 5;
 }
 
 // `IstioIngressListener` specifies the properties of an inbound
@@ -379,11 +388,11 @@ message IstioIngressListener {
   // connections. Format should be `127.0.0.1:PORT` or `unix:///path/to/socket`
   string default_endpoint = 4 [(google.api.field_behavior) = REQUIRED];
 
-  // Set of TLS related options that allow a listener to terminate
-  // SIMPLE or MUTUAL TLS connections at the sidecar. If not
-  // specified, the connection may be subject to TLS authentication
-  // based on the PeerAuthentication security policy.
-  Server.TLSOptions tls = 5;
+  // Overrides Sidecar level `inboundTls` settings. Has same
+  // restrictions as the Sidecar level inboundTls,
+  // i.e. PeerAuthentication policy takes precedance unless explicitly
+  // disabled.
+  Server.TLSOptions inbound_tls = 5;
 }
 
 // `IstioEgressListener` specifies the properties of an outbound traffic

@@ -155,6 +155,9 @@
           },
           "outboundTrafficPolicy": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.OutboundTrafficPolicy"
+          },
+          "inboundTls": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Server.TLSOptions"
           }
         }
       },
@@ -162,9 +165,6 @@
         "description": "`IstioIngressListener` specifies the properties of an inbound traffic listener on the sidecar proxy attached to a workload instance.",
         "type": "object",
         "properties": {
-          "tls": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.Server.TLSOptions"
-          },
           "port": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Port"
           },
@@ -177,6 +177,9 @@
             "description": "The loopback IP endpoint or Unix domain socket to which traffic should be forwarded to. This configuration can be used to redirect traffic arriving at the bind `IP:Port` on the sidecar to a `localhost:port` or Unix domain socket where the application workload instance is listening for connections. Format should be `127.0.0.1:PORT` or `unix:///path/to/socket`",
             "type": "string",
             "format": "string"
+          },
+          "inboundTls": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Server.TLSOptions"
           },
           "captureMode": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.CaptureMode"
