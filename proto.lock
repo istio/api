@@ -38745,6 +38745,11 @@
                     "type": "bool"
                   },
                   {
+                    "id": 5,
+                    "name": "http_query_parameter_name",
+                    "type": "string"
+                  },
+                  {
                     "id": 4,
                     "name": "minimum_ring_size",
                     "type": "uint64"
@@ -40583,6 +40588,11 @@
                 "id": 10,
                 "name": "ignore_uri_case",
                 "type": "bool"
+              },
+              {
+                "id": 13,
+                "name": "source_namespace",
+                "type": "string"
               }
             ],
             "maps": [
@@ -40607,6 +40617,14 @@
                 "field": {
                   "id": 9,
                   "name": "query_params",
+                  "type": "StringMatch"
+                }
+              },
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 12,
+                  "name": "without_headers",
                   "type": "StringMatch"
                 }
               }
@@ -40695,6 +40713,11 @@
                 "name": "gateways",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 6,
+                "name": "source_namespace",
+                "type": "string"
               }
             ],
             "maps": [
@@ -40739,6 +40762,11 @@
                 "name": "gateways",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "source_namespace",
+                "type": "string"
               }
             ],
             "maps": [
@@ -41256,6 +41284,11 @@
                     "id": 3,
                     "name": "use_source_ip",
                     "type": "bool"
+                  },
+                  {
+                    "id": 5,
+                    "name": "http_query_parameter_name",
+                    "type": "string"
                   },
                   {
                     "id": 4,
@@ -42483,6 +42516,11 @@
                 "id": 10,
                 "name": "ignore_uri_case",
                 "type": "bool"
+              },
+              {
+                "id": 13,
+                "name": "source_namespace",
+                "type": "string"
               }
             ],
             "maps": [
@@ -42507,6 +42545,14 @@
                 "field": {
                   "id": 9,
                   "name": "query_params",
+                  "type": "StringMatch"
+                }
+              },
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 12,
+                  "name": "without_headers",
                   "type": "StringMatch"
                 }
               }
@@ -42595,6 +42641,11 @@
                 "name": "gateways",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 6,
+                "name": "source_namespace",
+                "type": "string"
               }
             ],
             "maps": [
@@ -42639,6 +42690,11 @@
                 "name": "gateways",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "source_namespace",
+                "type": "string"
               }
             ],
             "maps": [
@@ -44188,11 +44244,22 @@
               {
                 "id": 14,
                 "name": "resource_suffix",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 15,
                 "name": "namespace",
+                "type": "string"
+              },
+              {
+                "id": 16,
+                "name": "revision",
                 "type": "string"
               },
               {
