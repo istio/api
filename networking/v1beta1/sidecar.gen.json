@@ -119,6 +119,15 @@
         "properties": {
           "mode": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.OutboundTrafficPolicy.Mode"
+          },
+          "egressProxyHost": {
+            "description": "The hostname of the proxy to which the traffic should be forwarded to. The hostname should be in the namespace/fqdn format, corresponding to a service in the mesh. Traffic to the proxy from the sidecar will automatically use Istio mutual TLS. This field is applicable only when the mode is set to ALLOW_ANY_VIA_PROXY. If omitted, defaults to istio-egressgateway.istio-system.svc.cluster.local when applicable.",
+            "type": "string",
+            "format": "string"
+          },
+          "egressProxyPort": {
+            "description": "The port to which the traffic should be forwarded to. Defaults to 15443 if omitted.",
+            "type": "integer"
           }
         }
       },
@@ -135,7 +144,8 @@
         "type": "string",
         "enum": [
           "REGISTRY_ONLY",
-          "ALLOW_ANY"
+          "ALLOW_ANY",
+          "ALLOW_ANY_VIA_PROXY"
         ]
       }
     }
