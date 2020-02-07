@@ -237,6 +237,16 @@ Istio supports to control its behavior.
 				
 					<tr>
 				
+					<td><code>sidecar.istio.io/httpAdminEndpoint</code></td>
+					<td>[Pod]</td>
+					<td>Specifies whether or not using TCP loopback address as Envoy admin endpoint. UDS path will be used if it's set to false.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
 					<td><code>sidecar.istio.io/inject</code></td>
 					<td>[Pod]</td>
 					<td>Specifies whether or not an Envoy sidecar should be automatically injected into the workload.</td>

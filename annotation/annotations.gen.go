@@ -315,6 +315,16 @@ var (
 		  Resources: []ResourceTypes{ Pod, },
         }
 	
+		SidecarHttpAdminEndpoint = Instance {
+          Name: "sidecar.istio.io/httpAdminEndpoint",
+          Description: "Specifies whether or not using TCP loopback address as "+
+                        "Envoy admin endpoint. UDS path will be used if it's set "+
+                        "to false.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
+        }
+	
 		SidecarInject = Instance {
           Name: "sidecar.istio.io/inject",
           Description: "Specifies whether or not an Envoy sidecar should be "+
@@ -533,6 +543,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarControlPlaneAuthPolicy,
 		&SidecarDiscoveryAddress,
 		&SidecarEnableCoreDump,
+		&SidecarHttpAdminEndpoint,
 		&SidecarInject,
 		&SidecarInterceptionMode,
 		&SidecarLogLevel,
