@@ -73,7 +73,7 @@ type IstioOperatorSpec struct {
 	Profile string `protobuf:"bytes,10,opt,name=profile,proto3" json:"profile,omitempty"`
 	// Path for the install package. e.g.
 	//     - /tmp/istio-installer/nightly (local file path)
-	InstallPackagePath string `protobuf:"bytes,11,opt,name=install_package_path,json=installPackagePath,proto3" json:"install_package_path,omitempty"`
+	InstallPackagePath string `protobuf:"bytes,11,opt,name=install_package_path,json=installPackagePath,proto3" json:"installPackagePath,omitempty"`
 	// Root for docker image paths e.g. docker.io/istio
 	Hub string `protobuf:"bytes,12,opt,name=hub,proto3" json:"hub,omitempty"`
 	// Version tag for docker images e.g. 1.0.6
@@ -81,7 +81,7 @@ type IstioOperatorSpec struct {
 	// $hide_from_docs
 	// Resource suffix is appended to all resources installed by each component.
 	// Never implemented; replaced by revision.
-	ResourceSuffix string `protobuf:"bytes,14,opt,name=resource_suffix,json=resourceSuffix,proto3" json:"resource_suffix,omitempty"` // Deprecated: Do not use.
+	ResourceSuffix string `protobuf:"bytes,14,opt,name=resource_suffix,json=resourceSuffix,proto3" json:"resourceSuffix,omitempty"` // Deprecated: Do not use.
 	// Namespace to install control plane resources into. If unset, Istio will be installed into the same namespace
 	// as the IstioOperator CR.
 	Namespace string `protobuf:"bytes,15,opt,name=namespace,proto3" json:"namespace,omitempty"`
@@ -89,19 +89,19 @@ type IstioOperatorSpec struct {
 	// This option is currently experimental.
 	Revision string `protobuf:"bytes,16,opt,name=revision,proto3" json:"revision,omitempty"`
 	// Config used by control plane components internally.
-	MeshConfig *v1alpha1.MeshConfig `protobuf:"bytes,40,opt,name=mesh_config,json=meshConfig,proto3" json:"mesh_config,omitempty"`
+	MeshConfig *v1alpha1.MeshConfig `protobuf:"bytes,40,opt,name=mesh_config,json=meshConfig,proto3" json:"meshConfig,omitempty"`
 	// Kubernetes resource settings, enablement and component-specific settings that are not internal to the
 	// component.
 	Components *IstioComponentSetSpec `protobuf:"bytes,50,opt,name=components,proto3" json:"components,omitempty"`
 	// Extra addon components which are not explicitly specified above.
-	AddonComponents map[string]*ExternalComponentSpec `protobuf:"bytes,51,rep,name=addon_components,json=addonComponents,proto3" json:"addon_components,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	AddonComponents map[string]*ExternalComponentSpec `protobuf:"bytes,51,rep,name=addon_components,json=addonComponents,proto3" json:"addonComponents,omitempty" protobufKey:"bytes,1,opt,name=key,proto3" protobufVal:"bytes,2,opt,name=value,proto3"`
 	// Overrides for default values.yaml. This is a validated pass-through to Helm templates.
 	// See the Helm installation options for schema details: https://istio.io/docs/reference/config/installation-options/.
 	// Anything that is available in IstioOperatorSpec should be set above rather than using the passthrough. This
 	// includes Kubernetes resource settings for components in KubernetesResourcesSpec.
 	Values map[string]interface{} `protobuf:"bytes,100,opt,name=values,proto3" json:"values,omitempty"`
 	// Unvalidated overrides for default values.yaml. Used for custom templates where new parameters are added.
-	UnvalidatedValues    map[string]interface{} `protobuf:"bytes,101,opt,name=unvalidated_values,json=unvalidatedValues,proto3" json:"unvalidated_values,omitempty"`
+	UnvalidatedValues    map[string]interface{} `protobuf:"bytes,101,opt,name=unvalidated_values,json=unvalidatedValues,proto3" json:"unvalidatedValues,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
 	XXX_unrecognized     []byte                   `json:"-"`
 	XXX_sizecache        int32                    `json:"-"`
@@ -216,7 +216,7 @@ type InstallStatus struct {
 	// - If any component is in ERROR state, overall status is ERROR.
 	Status InstallStatus_Status `protobuf:"varint,1,opt,name=status,proto3,enum=istio.operator.v1alpha1.InstallStatus_Status" json:"status,omitempty"`
 	// Individual status of each component controlled by the operator. The map key is the name of the component.
-	ComponentStatus      map[string]*InstallStatus_VersionStatus `protobuf:"bytes,2,rep,name=component_status,json=componentStatus,proto3" json:"component_status,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	ComponentStatus      map[string]*InstallStatus_VersionStatus `protobuf:"bytes,2,rep,name=component_status,json=componentStatus,proto3" json:"componentStatus,omitempty" protobufKey:"bytes,1,opt,name=key,proto3" protobufVal:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}                                `json:"-"`
 	XXX_unrecognized     []byte                                  `json:"-"`
 	XXX_sizecache        int32                                   `json:"-"`
@@ -265,7 +265,7 @@ func (m *InstallStatus) GetComponentStatus() map[string]*InstallStatus_VersionSt
 type InstallStatus_VersionStatus struct {
 	Version              string               `protobuf:"bytes,1,opt,name=version,proto3" json:"version,omitempty"`
 	Status               InstallStatus_Status `protobuf:"varint,2,opt,name=status,proto3,enum=istio.operator.v1alpha1.InstallStatus_Status" json:"status,omitempty"`
-	StatusString         string               `protobuf:"bytes,3,opt,name=status_string,json=statusString,proto3" json:"status_string,omitempty"`
+	StatusString         string               `protobuf:"bytes,3,opt,name=status_string,json=statusString,proto3" json:"statusString,omitempty"`
 	Error                string               `protobuf:"bytes,4,opt,name=error,proto3" json:"error,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
 	XXX_unrecognized     []byte               `json:"-"`

@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"regexp"
 	"strings"
 	"unicode"
 )
@@ -51,8 +52,9 @@ are generated for this type.
 */
 
 const (
-	goTypeToken  = "// GOTYPE:"
-	goFieldToken = "// GOFIELD:"
+	goTypeToken          = "// GOTYPE:"
+	goFieldToken         = "// GOFIELD:"
+	goFieldJsonTagPrefix = "json:"
 )
 
 var (
@@ -123,7 +125,17 @@ func main() {
 
 			tmp = append(tmp, lines[i+1])
 			i += 2
-
+		case strings.Contains(l, "json") && strings.Contains(l, "_"):
+			lv := strings.Split(l, goFieldJsonTagPrefix)
+			if len(lv) == 2 && strings.Contains(lv[1], "_") {
+				jsonTag := lv[1]
+				rgx := regexp.MustCompile("_[a-z]")
+				lv[1] = rgx.ReplaceAllStringFunc(jsonTag, func(m string) string {
+					return strings.ToUpper(strings.TrimPrefix(m, "_"))
+				})
+			}
+			tmp = append(tmp, strings.Join(lv, goFieldJsonTagPrefix))
+			i++
 		default:
 			tmp = append(tmp, l)
 			i++

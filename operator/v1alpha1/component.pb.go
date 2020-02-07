@@ -27,15 +27,15 @@ type IstioComponentSetSpec struct {
 	Base                 *BaseComponentSpec `protobuf:"bytes,29,opt,name=base,proto3" json:"base,omitempty"`
 	Pilot                *ComponentSpec     `protobuf:"bytes,30,opt,name=pilot,proto3" json:"pilot,omitempty"`
 	Proxy                *ComponentSpec     `protobuf:"bytes,31,opt,name=proxy,proto3" json:"proxy,omitempty"`
-	SidecarInjector      *ComponentSpec     `protobuf:"bytes,32,opt,name=sidecar_injector,json=sidecarInjector,proto3" json:"sidecar_injector,omitempty"`
+	SidecarInjector      *ComponentSpec     `protobuf:"bytes,32,opt,name=sidecar_injector,json=sidecarInjector,proto3" json:"sidecarInjector,omitempty"`
 	Policy               *ComponentSpec     `protobuf:"bytes,33,opt,name=policy,proto3" json:"policy,omitempty"`
 	Telemetry            *ComponentSpec     `protobuf:"bytes,34,opt,name=telemetry,proto3" json:"telemetry,omitempty"`
 	Citadel              *ComponentSpec     `protobuf:"bytes,35,opt,name=citadel,proto3" json:"citadel,omitempty"`
-	NodeAgent            *ComponentSpec     `protobuf:"bytes,36,opt,name=node_agent,json=nodeAgent,proto3" json:"node_agent,omitempty"`
+	NodeAgent            *ComponentSpec     `protobuf:"bytes,36,opt,name=node_agent,json=nodeAgent,proto3" json:"nodeAgent,omitempty"`
 	Galley               *ComponentSpec     `protobuf:"bytes,37,opt,name=galley,proto3" json:"galley,omitempty"`
 	Cni                  *ComponentSpec     `protobuf:"bytes,38,opt,name=cni,proto3" json:"cni,omitempty"`
-	IngressGateways      []*GatewaySpec     `protobuf:"bytes,40,rep,name=ingress_gateways,json=ingressGateways,proto3" json:"ingress_gateways,omitempty"`
-	EgressGateways       []*GatewaySpec     `protobuf:"bytes,41,rep,name=egress_gateways,json=egressGateways,proto3" json:"egress_gateways,omitempty"`
+	IngressGateways      []*GatewaySpec     `protobuf:"bytes,40,rep,name=ingress_gateways,json=ingressGateways,proto3" json:"ingressGateways,omitempty"`
+	EgressGateways       []*GatewaySpec     `protobuf:"bytes,41,rep,name=egress_gateways,json=egressGateways,proto3" json:"egressGateways,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
 	XXX_unrecognized     []byte             `json:"-"`
 	XXX_sizecache        int32              `json:"-"`
@@ -268,7 +268,7 @@ type ExternalComponentSpec struct {
 	// Arbitrary install time configuration for the component.
 	Spec interface{} `protobuf:"bytes,10,opt,name=spec,proto3" json:"spec,omitempty"`
 	// Chart path for addon components.
-	ChartPath string `protobuf:"bytes,30,opt,name=chart_path,json=chartPath,proto3" json:"chart_path,omitempty"`
+	ChartPath string `protobuf:"bytes,30,opt,name=chart_path,json=chartPath,proto3" json:"chartPath,omitempty"`
 	// Optional schema to validate spec against.
 	Schema *any.Any `protobuf:"bytes,35,opt,name=schema,proto3" json:"schema,omitempty"`
 	// Kubernetes resource spec.
@@ -342,7 +342,7 @@ type GatewaySpec struct {
 	// Name for the gateway.
 	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	// Labels for the gateway.
-	Label map[string]string `protobuf:"bytes,4,rep,name=label,proto3" json:"label,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Label map[string]string `protobuf:"bytes,4,rep,name=label,proto3" json:"label,omitempty" protobufKey:"bytes,1,opt,name=key,proto3" protobufVal:"bytes,2,opt,name=value,proto3"`
 	// Hub for the component (overrides top level hub setting).
 	Hub string `protobuf:"bytes,10,opt,name=hub,proto3" json:"hub,omitempty"`
 	// Tag for the component (overrides top level tag setting).
@@ -432,29 +432,29 @@ type KubernetesResourcesSpec struct {
 	Env []*EnvVar `protobuf:"bytes,2,rep,name=env,proto3" json:"env,omitempty"`
 	// k8s HorizontalPodAutoscaler settings.
 	// https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-	HpaSpec *HorizontalPodAutoscalerSpec `protobuf:"bytes,3,opt,name=hpa_spec,json=hpaSpec,proto3" json:"hpa_spec,omitempty"`
+	HpaSpec *HorizontalPodAutoscalerSpec `protobuf:"bytes,3,opt,name=hpa_spec,json=hpaSpec,proto3" json:"hpaSpec,omitempty"`
 	// k8s imagePullPolicy.
 	// https://kubernetes.io/docs/concepts/containers/images/
-	ImagePullPolicy string `protobuf:"bytes,4,opt,name=image_pull_policy,json=imagePullPolicy,proto3" json:"image_pull_policy,omitempty"`
+	ImagePullPolicy string `protobuf:"bytes,4,opt,name=image_pull_policy,json=imagePullPolicy,proto3" json:"imagePullPolicy,omitempty"`
 	// k8s nodeSelector.
 	// https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
-	NodeSelector map[string]string `protobuf:"bytes,5,rep,name=node_selector,json=nodeSelector,proto3" json:"node_selector,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	NodeSelector map[string]string `protobuf:"bytes,5,rep,name=node_selector,json=nodeSelector,proto3" json:"nodeSelector,omitempty" protobufKey:"bytes,1,opt,name=key,proto3" protobufVal:"bytes,2,opt,name=value,proto3"`
 	// k8s PodDisruptionBudget settings.
 	// https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#how-disruption-budgets-work
-	PodDisruptionBudget *PodDisruptionBudgetSpec `protobuf:"bytes,6,opt,name=pod_disruption_budget,json=podDisruptionBudget,proto3" json:"pod_disruption_budget,omitempty"`
+	PodDisruptionBudget *PodDisruptionBudgetSpec `protobuf:"bytes,6,opt,name=pod_disruption_budget,json=podDisruptionBudget,proto3" json:"podDisruptionBudget,omitempty"`
 	// k8s pod annotations.
 	// https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-	PodAnnotations map[string]string `protobuf:"bytes,7,rep,name=pod_annotations,json=podAnnotations,proto3" json:"pod_annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	PodAnnotations map[string]string `protobuf:"bytes,7,rep,name=pod_annotations,json=podAnnotations,proto3" json:"podAnnotations,omitempty" protobufKey:"bytes,1,opt,name=key,proto3" protobufVal:"bytes,2,opt,name=value,proto3"`
 	// k8s priority_class_name. Default for all resources unless overridden.
 	// https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
-	PriorityClassName string `protobuf:"bytes,8,opt,name=priority_class_name,json=priorityClassName,proto3" json:"priority_class_name,omitempty"`
+	PriorityClassName string `protobuf:"bytes,8,opt,name=priority_class_name,json=priorityClassName,proto3" json:"priorityClassName,omitempty"`
 	// k8s readinessProbe settings.
 	// https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
 	// k8s.io.api.core.v1.Probe readiness_probe = 9;
-	ReadinessProbe *ReadinessProbe `protobuf:"bytes,9,opt,name=readiness_probe,json=readinessProbe,proto3" json:"readiness_probe,omitempty"`
+	ReadinessProbe *ReadinessProbe `protobuf:"bytes,9,opt,name=readiness_probe,json=readinessProbe,proto3" json:"readinessProbe,omitempty"`
 	// k8s Deployment replicas setting.
 	// https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
-	ReplicaCount uint32 `protobuf:"varint,10,opt,name=replica_count,json=replicaCount,proto3" json:"replica_count,omitempty"`
+	ReplicaCount uint32 `protobuf:"varint,10,opt,name=replica_count,json=replicaCount,proto3" json:"replicaCount,omitempty"`
 	// k8s resources settings.
 	// https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container
 	Resources *Resources `protobuf:"bytes,11,opt,name=resources,proto3" json:"resources,omitempty"`
@@ -469,7 +469,7 @@ type KubernetesResourcesSpec struct {
 	Tolerations []*v1.Toleration `protobuf:"bytes,14,rep,name=tolerations,proto3" json:"tolerations,omitempty"`
 	// k8s service annotations.
 	// https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-	ServiceAnnotations map[string]string `protobuf:"bytes,15,rep,name=service_annotations,json=serviceAnnotations,proto3" json:"service_annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	ServiceAnnotations map[string]string `protobuf:"bytes,15,rep,name=service_annotations,json=serviceAnnotations,proto3" json:"serviceAnnotations,omitempty" protobufKey:"bytes,1,opt,name=key,proto3" protobufVal:"bytes,2,opt,name=value,proto3"`
 	// Overlays for k8s resources in rendered manifests.
 	Overlays             []*K8SObjectOverlay `protobuf:"bytes,100,rep,name=overlays,proto3" json:"overlays,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
@@ -617,7 +617,7 @@ func (m *KubernetesResourcesSpec) GetOverlays() []*K8SObjectOverlay {
 // Patch for an existing k8s resource.
 type K8SObjectOverlay struct {
 	// Resource API version.
-	ApiVersion string `protobuf:"bytes,1,opt,name=api_version,json=apiVersion,proto3" json:"api_version,omitempty"`
+	ApiVersion string `protobuf:"bytes,1,opt,name=api_version,json=apiVersion,proto3" json:"apiVersion,omitempty"`
 	// Resource kind.
 	Kind string `protobuf:"bytes,2,opt,name=kind,proto3" json:"kind,omitempty"`
 	// Name of resource.
