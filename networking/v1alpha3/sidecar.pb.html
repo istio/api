@@ -639,6 +639,36 @@ services can be monitored.</p>
 No
 </td>
 </tr>
+<tr id="OutboundTrafficPolicy-egress_gateway_host">
+<td><code>egressGatewayHost</code></td>
+<td><code>string</code></td>
+<td>
+<p>The hostname of the egress gateway to which the traffic should be
+forwarded to. The hostname should be in the namespace/fqdn
+format, corresponding to a gateway service in the mesh. Traffic
+to the egress gateway from the sidecar will automatically use
+Istio mutual TLS. This field is applicable only when the mode is
+set to ALLOW<em>ANY</em>VIA<em>EGRESS</em>GATEWAY. If omitted, defaults to
+istio-egressgateway.istio-system.svc.cluster.local when
+applicable.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="OutboundTrafficPolicy-egress_gateway_port">
+<td><code>egressGatewayPort</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>The port to which the traffic should be forwarded to. Defaults to
+15443 if omitted.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -665,6 +695,15 @@ service registry as well as those defined through <code>ServiceEntry</code> conf
 <td>
 <p>Outbound traffic to unknown destinations will be allowed, in case
 there are no services or <code>ServiceEntry</code> configurations for the destination port.</p>
+
+</td>
+</tr>
+<tr id="OutboundTrafficPolicy-Mode-ALLOW_ANY_VIA_EGRESS_GATWEAY">
+<td><code>ALLOW_ANY_VIA_EGRESS_GATWEAY</code></td>
+<td>
+<p>Outbound traffic to unknown destinations will be captured and
+forwarded to the specified egress gateway. Applicable only for
+HTTP and TLS traffic.</p>
 
 </td>
 </tr>
