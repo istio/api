@@ -3601,18 +3601,22 @@ spec:
             outboundTrafficPolicy:
               description: This allows to configure the outbound traffic policy.
               properties:
-                egressProxyHost:
-                  format: string
-                  type: string
-                egressProxyPort:
-                  description: The port to which the traffic should be forwarded to.
-                  type: integer
                 mode:
                   enum:
                   - REGISTRY_ONLY
                   - ALLOW_ANY
                   - ALLOW_ANY_VIA_PROXY
                   type: string
+                proxy:
+                  properties:
+                    host:
+                      format: string
+                      type: string
+                    port:
+                      description: The port to which the traffic should be forwarded
+                        to.
+                      type: integer
+                  type: object
               type: object
             workloadSelector:
               properties:

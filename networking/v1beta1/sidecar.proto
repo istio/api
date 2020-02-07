@@ -415,19 +415,24 @@ message OutboundTrafficPolicy {
   }
   Mode mode = 1;
 
-  // The hostname of the proxy to which the traffic should be
-  // forwarded to. The hostname should be in the namespace/fqdn
-  // format, corresponding to a service in the mesh. Traffic to the
-  // proxy from the sidecar will automatically use Istio mutual
-  // TLS. This field is applicable only when the mode is set to
-  // ALLOW_ANY_VIA_PROXY. If omitted, defaults to
-  // istio-egressgateway.istio-system.svc.cluster.local when
-  // applicable.
-  string egress_proxy_host = 2;
+  message Proxy {
+    // The hostname of the proxy to which the traffic should be
+    // forwarded to. The hostname should be in the namespace/fqdn
+    // format, corresponding to a service in the mesh. Traffic to the
+    // proxy from the sidecar will automatically use Istio mutual
+    // TLS.
+    string host = 1;
+    // The port to which the traffic should be forwarded to. Defaults to
+    // 15443 if omitted.
+    uint32 port = 2;
+  }
 
-  // The port to which the traffic should be forwarded to. Defaults to
-  // 15443 if omitted.
-  uint32 egress_proxy_port = 3;
+  // Specifies the details of the proxy through which unknown traffic
+  // should be sent. This field is applicable only when the mode is
+  // set to ALLOW_ANY_VIA_PROXY. If omitted, defaults to
+  // istio-egressgateway.istio-system.svc.cluster.local:15443 when
+  // applicable.
+  Proxy proxy = 2;
 }
 
 

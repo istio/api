@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.Sidecar
 aliases: [/docs/reference/config/networking/v1alpha3/sidecar]
-number_of_entries: 7
+number_of_entries: 8
 ---
 <p><code>Sidecar</code> describes the configuration of the sidecar proxy that mediates
 inbound and outbound communication to the workload instance it is attached to. By
@@ -639,30 +639,15 @@ services can be monitored.</p>
 No
 </td>
 </tr>
-<tr id="OutboundTrafficPolicy-egress_proxy_host">
-<td><code>egressProxyHost</code></td>
-<td><code>string</code></td>
+<tr id="OutboundTrafficPolicy-proxy">
+<td><code>proxy</code></td>
+<td><code><a href="#OutboundTrafficPolicy-Proxy">Proxy</a></code></td>
 <td>
-<p>The hostname of the proxy to which the traffic should be
-forwarded to. The hostname should be in the namespace/fqdn
-format, corresponding to a service in the mesh. Traffic to the
-proxy from the sidecar will automatically use Istio mutual
-TLS. This field is applicable only when the mode is set to
-ALLOW<em>ANY</em>VIA_PROXY. If omitted, defaults to
-istio-egressgateway.istio-system.svc.cluster.local when
+<p>Specifies the details of the proxy through which unknown traffic
+should be sent. This field is applicable only when the mode is
+set to ALLOW<em>ANY</em>VIA_PROXY. If omitted, defaults to
+istio-egressgateway.istio-system.svc.cluster.local:15443 when
 applicable.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="OutboundTrafficPolicy-egress_proxy_port">
-<td><code>egressProxyPort</code></td>
-<td><code>uint32</code></td>
-<td>
-<p>The port to which the traffic should be forwarded to. Defaults to
-15443 if omitted.</p>
 
 </td>
 <td>
@@ -705,6 +690,48 @@ there are no services or <code>ServiceEntry</code> configurations for the destin
 forwarded to the specified proxy. Applicable only for HTTP and
 TLS traffic.</p>
 
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="OutboundTrafficPolicy-Proxy">OutboundTrafficPolicy.Proxy</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="OutboundTrafficPolicy-Proxy-host">
+<td><code>host</code></td>
+<td><code>string</code></td>
+<td>
+<p>The hostname of the proxy to which the traffic should be
+forwarded to. The hostname should be in the namespace/fqdn
+format, corresponding to a service in the mesh. Traffic to the
+proxy from the sidecar will automatically use Istio mutual
+TLS.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="OutboundTrafficPolicy-Proxy-port">
+<td><code>port</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>The port to which the traffic should be forwarded to. Defaults to
+15443 if omitted.</p>
+
+</td>
+<td>
+No
 </td>
 </tr>
 </tbody>
