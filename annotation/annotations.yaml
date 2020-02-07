@@ -188,9 +188,9 @@ annotations:
     hidden: false
     resources:
       - Pod
-  - name: sidecar.istio.io/httpAdminEndpoint
+  - name: sidecar.istio.io/adminEndpointOnUDS
     description: Specifies whether or not using TCP loopback address as Envoy admin endpoint.
-      UDS path will be used if it's set to false.
+      Unix domain socket will be used if it's set to false.
     deprecated: false
     hidden: false
     resources:

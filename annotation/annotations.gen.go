@@ -269,6 +269,16 @@ var (
 		  Resources: []ResourceTypes{ Pod, },
         }
 	
+		SidecarAdminEndpointOnUDS = Instance {
+          Name: "sidecar.istio.io/adminEndpointOnUDS",
+          Description: "Specifies whether or not using TCP loopback address as "+
+                        "Envoy admin endpoint. Unix domain socket will be used if "+
+                        "it's set to false.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
+        }
+	
 		SidecarBootstrapOverride = Instance {
           Name: "sidecar.istio.io/bootstrapOverride",
           Description: "Specifies an alternative Envoy bootstrap configuration "+
@@ -310,16 +320,6 @@ var (
           Name: "sidecar.istio.io/enableCoreDump",
           Description: "Specifies whether or not an Envoy sidecar should enable "+
                         "core dump.",
-          Hidden: false,
-          Deprecated: false,
-		  Resources: []ResourceTypes{ Pod, },
-        }
-	
-		SidecarHttpAdminEndpoint = Instance {
-          Name: "sidecar.istio.io/httpAdminEndpoint",
-          Description: "Specifies whether or not using TCP loopback address as "+
-                        "Envoy admin endpoint. UDS path will be used if it's set "+
-                        "to false.",
           Hidden: false,
           Deprecated: false,
 		  Resources: []ResourceTypes{ Pod, },
@@ -538,12 +538,12 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarStatusReadinessInitialDelaySeconds,
 		&SidecarStatusReadinessPeriodSeconds,
 		&SecurityAutoMTLS,
+		&SidecarAdminEndpointOnUDS,
 		&SidecarBootstrapOverride,
 		&SidecarComponentLogLevel,
 		&SidecarControlPlaneAuthPolicy,
 		&SidecarDiscoveryAddress,
 		&SidecarEnableCoreDump,
-		&SidecarHttpAdminEndpoint,
 		&SidecarInject,
 		&SidecarInterceptionMode,
 		&SidecarLogLevel,

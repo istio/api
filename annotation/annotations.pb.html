@@ -187,6 +187,16 @@ Istio supports to control its behavior.
 				
 					<tr>
 				
+					<td><code>sidecar.istio.io/adminEndpointOnUDS</code></td>
+					<td>[Pod]</td>
+					<td>Specifies whether or not using TCP loopback address as Envoy admin endpoint. Unix domain socket will be used if it's set to false.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
 					<td><code>sidecar.istio.io/bootstrapOverride</code></td>
 					<td>[Pod]</td>
 					<td>Specifies an alternative Envoy bootstrap configuration file.</td>
@@ -230,16 +240,6 @@ Istio supports to control its behavior.
 					<td><code>sidecar.istio.io/enableCoreDump</code></td>
 					<td>[Pod]</td>
 					<td>Specifies whether or not an Envoy sidecar should enable core dump.</td>
-				</tr>
-			
-		
-			
-				
-					<tr>
-				
-					<td><code>sidecar.istio.io/httpAdminEndpoint</code></td>
-					<td>[Pod]</td>
-					<td>Specifies whether or not using TCP loopback address as Envoy admin endpoint. UDS path will be used if it's set to false.</td>
 				</tr>
 			
 		
