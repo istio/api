@@ -54,7 +54,7 @@ are generated for this type.
 const (
 	goTypeToken          = "// GOTYPE:"
 	goFieldToken         = "// GOFIELD:"
-	goFieldJsonTagPrefix = "json:"
+	goFieldJSONTagPrefix = "json:"
 )
 
 var (
@@ -125,7 +125,7 @@ func main() {
 
 			tmp = append(tmp, lines[i+1])
 			i += 2
-		case strings.Contains(l, goFieldJsonTagPrefix) && strings.Contains(l, "_"):
+		case strings.Contains(l, goFieldJSONTagPrefix) && strings.Contains(l, "_"):
 			rgx := regexp.MustCompile(`json\:"[a-z|0-9]+_[a-z|0-9]+,`)
 			l = rgx.ReplaceAllStringFunc(l, func(m string) string {
 				lvs := strings.Split(m, "_")
