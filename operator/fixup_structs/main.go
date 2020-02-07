@@ -125,16 +125,18 @@ func main() {
 
 			tmp = append(tmp, lines[i+1])
 			i += 2
-		case strings.Contains(l, "json") && strings.Contains(l, "_"):
-			lv := strings.Split(l, goFieldJsonTagPrefix)
-			if len(lv) == 2 && strings.Contains(lv[1], "_") {
-				jsonTag := lv[1]
-				rgx := regexp.MustCompile("_[a-z]")
-				lv[1] = rgx.ReplaceAllStringFunc(jsonTag, func(m string) string {
-					return strings.ToUpper(strings.TrimPrefix(m, "_"))
-				})
-			}
-			tmp = append(tmp, strings.Join(lv, goFieldJsonTagPrefix))
+		case strings.Contains(l, goFieldJsonTagPrefix) && strings.Contains(l, "_"):
+			rgx := regexp.MustCompile(`json\:"[a-z|0-9]+_[a-z|0-9]+,`)
+			l = rgx.ReplaceAllStringFunc(l, func(m string) string {
+				lvs := strings.Split(m, "_")
+				for i, v := range lvs {
+					if i > 0 {
+						lvs[i] = strings.Title(v)
+					}
+				}
+				return strings.Join(lvs, "")
+			})
+			tmp = append(tmp, l)
 			i++
 		default:
 			tmp = append(tmp, l)

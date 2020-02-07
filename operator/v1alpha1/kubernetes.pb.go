@@ -25,8 +25,8 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 // Mirrors k8s.io.api.core.v1.ResourceRequirements for unmarshaling.
 type Resources struct {
-	Limits               map[string]string `protobuf:"bytes,1,rep,name=limits,proto3" json:"limits,omitempty" protobufKey:"bytes,1,opt,name=key,proto3" protobufVal:"bytes,2,opt,name=value,proto3"`
-	Requests             map[string]string `protobuf:"bytes,2,rep,name=requests,proto3" json:"requests,omitempty" protobufKey:"bytes,1,opt,name=key,proto3" protobufVal:"bytes,2,opt,name=value,proto3"`
+	Limits               map[string]string `protobuf:"bytes,1,rep,name=limits,proto3" json:"limits,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Requests             map[string]string `protobuf:"bytes,2,rep,name=requests,proto3" json:"requests,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
 	XXX_sizecache        int32             `json:"-"`
@@ -1409,7 +1409,7 @@ func (m *LocalObjectReference) GetName() string {
 
 type ServiceSpec struct {
 	Ports                    []*ServicePort         `protobuf:"bytes,1,rep,name=ports,proto3" json:"ports,omitempty"`
-	Selector                 map[string]string      `protobuf:"bytes,2,rep,name=selector,proto3" json:"selector,omitempty" protobufKey:"bytes,1,opt,name=key,proto3" protobufVal:"bytes,2,opt,name=value,proto3"`
+	Selector                 map[string]string      `protobuf:"bytes,2,rep,name=selector,proto3" json:"selector,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	ClusterIP                string                 `protobuf:"bytes,3,opt,name=clusterIP,proto3" json:"clusterIP,omitempty"`
 	Type                     string                 `protobuf:"bytes,4,opt,name=type,proto3" json:"type,omitempty"`
 	ExternalIPs              []string               `protobuf:"bytes,5,rep,name=externalIPs,proto3" json:"externalIPs,omitempty"`

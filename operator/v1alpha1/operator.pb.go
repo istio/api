@@ -73,7 +73,7 @@ type IstioOperatorSpec struct {
 	Profile string `protobuf:"bytes,10,opt,name=profile,proto3" json:"profile,omitempty"`
 	// Path for the install package. e.g.
 	//     - /tmp/istio-installer/nightly (local file path)
-	InstallPackagePath string `protobuf:"bytes,11,opt,name=install_package_path,json=installPackagePath,proto3" json:"installPackagePath,omitempty"`
+	InstallPackagePath string `protobuf:"bytes,11,opt,name=install_package_path,json=installPackagePath,proto3" json:"install_package_path,omitempty"`
 	// Root for docker image paths e.g. docker.io/istio
 	Hub string `protobuf:"bytes,12,opt,name=hub,proto3" json:"hub,omitempty"`
 	// Version tag for docker images e.g. 1.0.6
@@ -94,7 +94,7 @@ type IstioOperatorSpec struct {
 	// component.
 	Components *IstioComponentSetSpec `protobuf:"bytes,50,opt,name=components,proto3" json:"components,omitempty"`
 	// Extra addon components which are not explicitly specified above.
-	AddonComponents map[string]*ExternalComponentSpec `protobuf:"bytes,51,rep,name=addon_components,json=addonComponents,proto3" json:"addonComponents,omitempty" protobufKey:"bytes,1,opt,name=key,proto3" protobufVal:"bytes,2,opt,name=value,proto3"`
+	AddonComponents map[string]*ExternalComponentSpec `protobuf:"bytes,51,rep,name=addon_components,json=addonComponents,proto3" json:"addonComponents,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Overrides for default values.yaml. This is a validated pass-through to Helm templates.
 	// See the Helm installation options for schema details: https://istio.io/docs/reference/config/installation-options/.
 	// Anything that is available in IstioOperatorSpec should be set above rather than using the passthrough. This
@@ -216,7 +216,7 @@ type InstallStatus struct {
 	// - If any component is in ERROR state, overall status is ERROR.
 	Status InstallStatus_Status `protobuf:"varint,1,opt,name=status,proto3,enum=istio.operator.v1alpha1.InstallStatus_Status" json:"status,omitempty"`
 	// Individual status of each component controlled by the operator. The map key is the name of the component.
-	ComponentStatus      map[string]*InstallStatus_VersionStatus `protobuf:"bytes,2,rep,name=component_status,json=componentStatus,proto3" json:"componentStatus,omitempty" protobufKey:"bytes,1,opt,name=key,proto3" protobufVal:"bytes,2,opt,name=value,proto3"`
+	ComponentStatus      map[string]*InstallStatus_VersionStatus `protobuf:"bytes,2,rep,name=component_status,json=componentStatus,proto3" json:"componentStatus,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}                                `json:"-"`
 	XXX_unrecognized     []byte                                  `json:"-"`
 	XXX_sizecache        int32                                   `json:"-"`
