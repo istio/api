@@ -146,7 +146,8 @@ message IstioOperatorSpec {
     // Root for docker image paths e.g. docker.io/istio
     string hub = 12;
     // Version tag for docker images e.g. 1.0.6
-    string tag = 13;
+    TypeInterface2 tag = 13;
+
     // $hide_from_docs
     // Resource suffix is appended to all resources installed by each component.
     // Never implemented; replaced by revision.
@@ -215,3 +216,6 @@ message InstallStatus {
 // This is required because synthetic type definition has file rather than package scope.
 // GOTYPE: map[string]interface{}
 message TypeMapStringInterface2 {}
+
+// GOTYPE: interface{}
+message TypeInterface2 {}
