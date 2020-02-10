@@ -771,7 +771,7 @@
         }
       },
       "istio.networking.v1alpha3.TLSSettings": {
-        "description": "Use the tls_settings to specify the tls mode to use. If the remote service uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS mode as `ISTIO_MUTUAL`.",
+        "description": "Use the `tls_settings` to specify the TLS mode to use. If the remote service uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS mode as `ISTIO_MUTUAL`.",
         "type": "object",
         "properties": {
           "mode": {

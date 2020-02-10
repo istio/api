@@ -825,7 +825,7 @@ type RemoteService struct {
 	// receiver, metrics receiver, etc.). Can be IP address or a fully
 	// qualified DNS name.
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	// Use the tls_settings to specify the tls mode to use. If the remote service
+	// Use the `tls_settings` to specify the TLS mode to use. If the remote service
 	// uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
 	// mode as `ISTIO_MUTUAL`.
 	TlsSettings *v1alpha3.TLSSettings `protobuf:"bytes,2,opt,name=tls_settings,json=tlsSettings,proto3" json:"tls_settings,omitempty"`
