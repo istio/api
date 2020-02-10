@@ -43014,7 +43014,7 @@
               {
                 "id": 11,
                 "name": "tag",
-                "type": "string"
+                "type": "TypeInterface"
               },
               {
                 "id": 30,
@@ -43089,7 +43089,7 @@
               {
                 "id": 11,
                 "name": "tag",
-                "type": "string"
+                "type": "TypeInterface"
               },
               {
                 "id": 50,
@@ -43994,7 +43994,7 @@
               {
                 "id": 13,
                 "name": "tag",
-                "type": "string"
+                "type": "TypeInterface2"
               },
               {
                 "id": 14,
@@ -44082,6 +44082,9 @@
           },
           {
             "name": "TypeMapStringInterface2"
+          },
+          {
+            "name": "TypeInterface2"
           }
         ],
         "imports": [

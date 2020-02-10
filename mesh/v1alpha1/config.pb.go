@@ -292,14 +292,17 @@ type MeshConfig struct {
 	DefaultConfig *ProxyConfig `protobuf:"bytes,14,opt,name=default_config,json=defaultConfig,proto3" json:"default_config,omitempty"`
 	// $hide_from_docs
 	MixerAddress string `protobuf:"bytes,16,opt,name=mixer_address,json=mixerAddress,proto3" json:"mixer_address,omitempty"` // Deprecated: Do not use.
-	// Set the default behavior of the sidecar for handling outbound traffic
-	// from the application.  If your application uses one or more external
-	// services that are not known apriori, setting the policy to ALLOW_ANY
-	// will cause the sidecars to route any unknown traffic originating from
-	// the application to its requested destination.  Users are strongly
-	// encouraged to use ServiceEntries to explicitly declare any external
-	// dependencies, instead of using allow_any, so that traffic to these
-	// services can be monitored.
+	// Set the default behavior of the sidecar for handling outbound
+	// traffic from the application.  If your application uses one or
+	// more external services that are not known apriori, setting the
+	// policy to ALLOW_ANY will cause the sidecars to route any unknown
+	// traffic originating from the application to its requested
+	// destination.  Users are strongly encouraged to use ServiceEntries
+	// to explicitly declare any external dependencies, instead of using
+	// allow_any, so that traffic to these services can be
+	// monitored. Can be overridden at a Sidecar level by setting the
+	// OutboundTrafficPolicy in the [Sidecar
+	// API](https://istio.io/docs/reference/config/networking/sidecar/#OutboundTrafficPolicy).
 	OutboundTrafficPolicy *MeshConfig_OutboundTrafficPolicy `protobuf:"bytes,17,opt,name=outbound_traffic_policy,json=outboundTrafficPolicy,proto3" json:"outbound_traffic_policy,omitempty"`
 	// Enables client side policy checks.
 	EnableClientSidePolicyCheck bool `protobuf:"varint,19,opt,name=enable_client_side_policy_check,json=enableClientSidePolicyCheck,proto3" json:"enable_client_side_policy_check,omitempty"`
