@@ -349,14 +349,14 @@ func (this *OutboundTrafficPolicy) UnmarshalJSON(b []byte) error {
 	return SidecarUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for OutboundTrafficPolicy_Proxy
-func (this *OutboundTrafficPolicy_Proxy) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for OutboundTrafficPolicy_EgressProxy
+func (this *OutboundTrafficPolicy_EgressProxy) MarshalJSON() ([]byte, error) {
 	str, err := SidecarMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for OutboundTrafficPolicy_Proxy
-func (this *OutboundTrafficPolicy_Proxy) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for OutboundTrafficPolicy_EgressProxy
+func (this *OutboundTrafficPolicy_EgressProxy) UnmarshalJSON(b []byte) error {
 	return SidecarUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

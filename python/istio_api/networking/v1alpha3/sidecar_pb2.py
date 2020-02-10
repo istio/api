@@ -16,6 +16,7 @@ _sym_db = _symbol_database.Default()
 
 from google.api import field_behavior_pb2 as google_dot_api_dot_field__behavior__pb2
 from networking.v1alpha3 import gateway_pb2 as networking_dot_v1alpha3_dot_gateway__pb2
+from networking.v1alpha3 import destination_rule_pb2 as networking_dot_v1alpha3_dot_destination__rule__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -23,9 +24,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.networking.v1alpha3',
   syntax='proto3',
   serialized_options=_b('Z istio.io/api/networking/v1alpha3'),
-  serialized_pb=_b('\n!networking/v1alpha3/sidecar.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a!networking/v1alpha3/gateway.proto\"\xe9\x02\n\x07Sidecar\x12\x46\n\x11workload_selector\x18\x01 \x01(\x0b\x32+.istio.networking.v1alpha3.WorkloadSelector\x12@\n\x07ingress\x18\x02 \x03(\x0b\x32/.istio.networking.v1alpha3.IstioIngressListener\x12>\n\x06\x65gress\x18\x03 \x03(\x0b\x32..istio.networking.v1alpha3.IstioEgressListener\x12Q\n\x17outbound_traffic_policy\x18\x04 \x01(\x0b\x32\x30.istio.networking.v1alpha3.OutboundTrafficPolicy\x12\x41\n\x0binbound_tls\x18\x05 \x01(\x0b\x32,.istio.networking.v1alpha3.Server.TLSOptions\"\xf8\x01\n\x14IstioIngressListener\x12\x32\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.PortB\x03\xe0\x41\x02\x12\x0c\n\x04\x62ind\x18\x02 \x01(\t\x12<\n\x0c\x63\x61pture_mode\x18\x03 \x01(\x0e\x32&.istio.networking.v1alpha3.CaptureMode\x12\x1d\n\x10\x64\x65\x66\x61ult_endpoint\x18\x04 \x01(\tB\x03\xe0\x41\x02\x12\x41\n\x0binbound_tls\x18\x05 \x01(\x0b\x32,.istio.networking.v1alpha3.Server.TLSOptions\"\xa4\x01\n\x13IstioEgressListener\x12-\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.Port\x12\x0c\n\x04\x62ind\x18\x02 \x01(\t\x12<\n\x0c\x63\x61pture_mode\x18\x03 \x01(\x0e\x32&.istio.networking.v1alpha3.CaptureMode\x12\x12\n\x05hosts\x18\x04 \x03(\tB\x03\xe0\x41\x02\"\x8f\x01\n\x10WorkloadSelector\x12L\n\x06labels\x18\x01 \x03(\x0b\x32\x37.istio.networking.v1alpha3.WorkloadSelector.LabelsEntryB\x03\xe0\x41\x02\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8b\x02\n\x15OutboundTrafficPolicy\x12\x43\n\x04mode\x18\x01 \x01(\x0e\x32\x35.istio.networking.v1alpha3.OutboundTrafficPolicy.Mode\x12\x45\n\x05proxy\x18\x02 \x01(\x0b\x32\x36.istio.networking.v1alpha3.OutboundTrafficPolicy.Proxy\x1a#\n\x05Proxy\x12\x0c\n\x04host\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\r\"A\n\x04Mode\x12\x11\n\rREGISTRY_ONLY\x10\x00\x12\r\n\tALLOW_ANY\x10\x01\x12\x17\n\x13\x41LLOW_ANY_VIA_PROXY\x10\x02*2\n\x0b\x43\x61ptureMode\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x00\x12\x0c\n\x08IPTABLES\x10\x01\x12\x08\n\x04NONE\x10\x02\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
+  serialized_pb=_b('\n!networking/v1alpha3/sidecar.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a!networking/v1alpha3/gateway.proto\x1a*networking/v1alpha3/destination_rule.proto\"\xe9\x02\n\x07Sidecar\x12\x46\n\x11workload_selector\x18\x01 \x01(\x0b\x32+.istio.networking.v1alpha3.WorkloadSelector\x12@\n\x07ingress\x18\x02 \x03(\x0b\x32/.istio.networking.v1alpha3.IstioIngressListener\x12>\n\x06\x65gress\x18\x03 \x03(\x0b\x32..istio.networking.v1alpha3.IstioEgressListener\x12Q\n\x17outbound_traffic_policy\x18\x04 \x01(\x0b\x32\x30.istio.networking.v1alpha3.OutboundTrafficPolicy\x12\x41\n\x0binbound_tls\x18\x05 \x01(\x0b\x32,.istio.networking.v1alpha3.Server.TLSOptions\"\xf8\x01\n\x14IstioIngressListener\x12\x32\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.PortB\x03\xe0\x41\x02\x12\x0c\n\x04\x62ind\x18\x02 \x01(\t\x12<\n\x0c\x63\x61pture_mode\x18\x03 \x01(\x0e\x32&.istio.networking.v1alpha3.CaptureMode\x12\x1d\n\x10\x64\x65\x66\x61ult_endpoint\x18\x04 \x01(\tB\x03\xe0\x41\x02\x12\x41\n\x0binbound_tls\x18\x05 \x01(\x0b\x32,.istio.networking.v1alpha3.Server.TLSOptions\"\xa4\x01\n\x13IstioEgressListener\x12-\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.Port\x12\x0c\n\x04\x62ind\x18\x02 \x01(\t\x12<\n\x0c\x63\x61pture_mode\x18\x03 \x01(\x0e\x32&.istio.networking.v1alpha3.CaptureMode\x12\x12\n\x05hosts\x18\x04 \x03(\tB\x03\xe0\x41\x02\"\x8f\x01\n\x10WorkloadSelector\x12L\n\x06labels\x18\x01 \x03(\x0b\x32\x37.istio.networking.v1alpha3.WorkloadSelector.LabelsEntryB\x03\xe0\x41\x02\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xc3\x02\n\x15OutboundTrafficPolicy\x12\x43\n\x04mode\x18\x01 \x01(\x0e\x32\x35.istio.networking.v1alpha3.OutboundTrafficPolicy.Mode\x12R\n\x0c\x65gress_proxy\x18\x02 \x01(\x0b\x32<.istio.networking.v1alpha3.OutboundTrafficPolicy.EgressProxy\x1ag\n\x0b\x45gressProxy\x12\x0c\n\x04host\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\r\x12<\n\x0ctls_settings\x18\x03 \x01(\x0b\x32&.istio.networking.v1alpha3.TLSSettings\"(\n\x04Mode\x12\x11\n\rREGISTRY_ONLY\x10\x00\x12\r\n\tALLOW_ANY\x10\x01*2\n\x0b\x43\x61ptureMode\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x00\x12\x0c\n\x08IPTABLES\x10\x01\x12\x08\n\x04NONE\x10\x02\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
   ,
-  dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_gateway__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_gateway__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_destination__rule__pb2.DESCRIPTOR,])
 
 _CAPTUREMODE = _descriptor.EnumDescriptor(
   name='CaptureMode',
@@ -48,8 +49,8 @@ _CAPTUREMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1330,
-  serialized_end=1380,
+  serialized_start=1430,
+  serialized_end=1480,
 )
 _sym_db.RegisterEnumDescriptor(_CAPTUREMODE)
 
@@ -73,15 +74,11 @@ _OUTBOUNDTRAFFICPOLICY_MODE = _descriptor.EnumDescriptor(
       name='ALLOW_ANY', index=1, number=1,
       serialized_options=None,
       type=None),
-    _descriptor.EnumValueDescriptor(
-      name='ALLOW_ANY_VIA_PROXY', index=2, number=2,
-      serialized_options=None,
-      type=None),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1263,
-  serialized_end=1328,
+  serialized_start=1388,
+  serialized_end=1428,
 )
 _sym_db.RegisterEnumDescriptor(_OUTBOUNDTRAFFICPOLICY_MODE)
 
@@ -140,8 +137,8 @@ _SIDECAR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=133,
-  serialized_end=494,
+  serialized_start=177,
+  serialized_end=538,
 )
 
 
@@ -199,8 +196,8 @@ _ISTIOINGRESSLISTENER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=497,
-  serialized_end=745,
+  serialized_start=541,
+  serialized_end=789,
 )
 
 
@@ -251,8 +248,8 @@ _ISTIOEGRESSLISTENER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=748,
-  serialized_end=912,
+  serialized_start=792,
+  serialized_end=956,
 )
 
 
@@ -289,8 +286,8 @@ _WORKLOADSELECTOR_LABELSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1013,
-  serialized_end=1058,
+  serialized_start=1057,
+  serialized_end=1102,
 )
 
 _WORKLOADSELECTOR = _descriptor.Descriptor(
@@ -319,29 +316,36 @@ _WORKLOADSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=915,
-  serialized_end=1058,
+  serialized_start=959,
+  serialized_end=1102,
 )
 
 
-_OUTBOUNDTRAFFICPOLICY_PROXY = _descriptor.Descriptor(
-  name='Proxy',
-  full_name='istio.networking.v1alpha3.OutboundTrafficPolicy.Proxy',
+_OUTBOUNDTRAFFICPOLICY_EGRESSPROXY = _descriptor.Descriptor(
+  name='EgressProxy',
+  full_name='istio.networking.v1alpha3.OutboundTrafficPolicy.EgressProxy',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='host', full_name='istio.networking.v1alpha3.OutboundTrafficPolicy.Proxy.host', index=0,
+      name='host', full_name='istio.networking.v1alpha3.OutboundTrafficPolicy.EgressProxy.host', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='port', full_name='istio.networking.v1alpha3.OutboundTrafficPolicy.Proxy.port', index=1,
+      name='port', full_name='istio.networking.v1alpha3.OutboundTrafficPolicy.EgressProxy.port', index=1,
       number=2, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='tls_settings', full_name='istio.networking.v1alpha3.OutboundTrafficPolicy.EgressProxy.tls_settings', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -357,8 +361,8 @@ _OUTBOUNDTRAFFICPOLICY_PROXY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1226,
-  serialized_end=1261,
+  serialized_start=1283,
+  serialized_end=1386,
 )
 
 _OUTBOUNDTRAFFICPOLICY = _descriptor.Descriptor(
@@ -376,7 +380,7 @@ _OUTBOUNDTRAFFICPOLICY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='proxy', full_name='istio.networking.v1alpha3.OutboundTrafficPolicy.proxy', index=1,
+      name='egress_proxy', full_name='istio.networking.v1alpha3.OutboundTrafficPolicy.egress_proxy', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -385,7 +389,7 @@ _OUTBOUNDTRAFFICPOLICY = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_OUTBOUNDTRAFFICPOLICY_PROXY, ],
+  nested_types=[_OUTBOUNDTRAFFICPOLICY_EGRESSPROXY, ],
   enum_types=[
     _OUTBOUNDTRAFFICPOLICY_MODE,
   ],
@@ -395,8 +399,8 @@ _OUTBOUNDTRAFFICPOLICY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1061,
-  serialized_end=1328,
+  serialized_start=1105,
+  serialized_end=1428,
 )
 
 _SIDECAR.fields_by_name['workload_selector'].message_type = _WORKLOADSELECTOR
@@ -411,9 +415,10 @@ _ISTIOEGRESSLISTENER.fields_by_name['port'].message_type = networking_dot_v1alph
 _ISTIOEGRESSLISTENER.fields_by_name['capture_mode'].enum_type = _CAPTUREMODE
 _WORKLOADSELECTOR_LABELSENTRY.containing_type = _WORKLOADSELECTOR
 _WORKLOADSELECTOR.fields_by_name['labels'].message_type = _WORKLOADSELECTOR_LABELSENTRY
-_OUTBOUNDTRAFFICPOLICY_PROXY.containing_type = _OUTBOUNDTRAFFICPOLICY
+_OUTBOUNDTRAFFICPOLICY_EGRESSPROXY.fields_by_name['tls_settings'].message_type = networking_dot_v1alpha3_dot_destination__rule__pb2._TLSSETTINGS
+_OUTBOUNDTRAFFICPOLICY_EGRESSPROXY.containing_type = _OUTBOUNDTRAFFICPOLICY
 _OUTBOUNDTRAFFICPOLICY.fields_by_name['mode'].enum_type = _OUTBOUNDTRAFFICPOLICY_MODE
-_OUTBOUNDTRAFFICPOLICY.fields_by_name['proxy'].message_type = _OUTBOUNDTRAFFICPOLICY_PROXY
+_OUTBOUNDTRAFFICPOLICY.fields_by_name['egress_proxy'].message_type = _OUTBOUNDTRAFFICPOLICY_EGRESSPROXY
 _OUTBOUNDTRAFFICPOLICY_MODE.containing_type = _OUTBOUNDTRAFFICPOLICY
 DESCRIPTOR.message_types_by_name['Sidecar'] = _SIDECAR
 DESCRIPTOR.message_types_by_name['IstioIngressListener'] = _ISTIOINGRESSLISTENER
@@ -461,10 +466,10 @@ _sym_db.RegisterMessage(WorkloadSelector.LabelsEntry)
 
 OutboundTrafficPolicy = _reflection.GeneratedProtocolMessageType('OutboundTrafficPolicy', (_message.Message,), {
 
-  'Proxy' : _reflection.GeneratedProtocolMessageType('Proxy', (_message.Message,), {
-    'DESCRIPTOR' : _OUTBOUNDTRAFFICPOLICY_PROXY,
+  'EgressProxy' : _reflection.GeneratedProtocolMessageType('EgressProxy', (_message.Message,), {
+    'DESCRIPTOR' : _OUTBOUNDTRAFFICPOLICY_EGRESSPROXY,
     '__module__' : 'networking.v1alpha3.sidecar_pb2'
-    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.OutboundTrafficPolicy.Proxy)
+    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.OutboundTrafficPolicy.EgressProxy)
     })
   ,
   'DESCRIPTOR' : _OUTBOUNDTRAFFICPOLICY,
@@ -472,7 +477,7 @@ OutboundTrafficPolicy = _reflection.GeneratedProtocolMessageType('OutboundTraffi
   # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.OutboundTrafficPolicy)
   })
 _sym_db.RegisterMessage(OutboundTrafficPolicy)
-_sym_db.RegisterMessage(OutboundTrafficPolicy.Proxy)
+_sym_db.RegisterMessage(OutboundTrafficPolicy.EgressProxy)
 
 
 DESCRIPTOR._options = None

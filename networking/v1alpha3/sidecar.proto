@@ -16,6 +16,7 @@ syntax = "proto3";
 
 import "google/api/field_behavior.proto";
 import "networking/v1alpha3/gateway.proto";
+import "networking/v1alpha3/destination_rule.proto";
 
 // $schema: istio.networking.v1alpha3.Sidecar
 // $title: Sidecar
@@ -714,32 +715,36 @@ message OutboundTrafficPolicy {
     // Outbound traffic to unknown destinations will be allowed, in case
     // there are no services or `ServiceEntry` configurations for the destination port.
     ALLOW_ANY = 1;
-
-    // Outbound traffic to unknown destinations will be captured and
-    // forwarded to the specified proxy. Applicable only for HTTP and
-    // TLS traffic.
-    ALLOW_ANY_VIA_PROXY = 2;
   }
   Mode mode = 1;
 
-  message Proxy {
-    // The hostname of the proxy to which the traffic should be
-    // forwarded to. The hostname should be in the namespace/fqdn
-    // format, corresponding to a service in the mesh. Traffic to the
-    // proxy from the sidecar will automatically use Istio mutual
-    // TLS.
+  // $hide_from_docs
+  message EgressProxy {
+    // REQUIRED: The hostname of the proxy to which the unknown
+    // traffic should be forwarded to. If the hostname is in the
+    // namespace/fqdn format, it will be assumed to be a service in
+    // the mesh and Envoy will load balance the traffic to one of the
+    // endpoints of the service. If the hostname is simply a FQDN
+    // corresponding to a service outside the mesh, Envoy will resolve
+    // the host using DNS and forward the traffic to the IP address
+    // returned by the DNS.
     string host = 1;
-    // The port to which the traffic should be forwarded to. Defaults to
-    // 15443 if omitted.
+    // REQUIRED: The port to which the traffic should be forwarded to.
     uint32 port = 2;
+
+    // Use the tls_settings to specify the tls mode to use when
+    // talking to the egress proxy. If the egress proxy is an Envoy
+    // gateway managed by Pilot, specify the TLS mode as ISTIO_MUTUAL.
+    istio.networking.v1alpha3.TLSSettings tls_settings = 3;
   }
 
-  // Specifies the details of the proxy through which unknown traffic
-  // should be sent. This field is applicable only when the mode is
-  // set to ALLOW_ANY_VIA_PROXY. If omitted, defaults to
-  // istio-egressgateway.istio-system.svc.cluster.local:15443 when
-  // applicable.
-  Proxy proxy = 2;
+  // Specifies the details of the egress proxy to which unknown
+  // traffic should be forwarded to from the sidecar. Valid only if
+  // the mode is set to ALLOW_ANY. If not specified when the mode is
+  // ALLOW_ANY, the sidecar will send the unknown traffic directly to
+  // the IP requested by the application.
+  // $hide_from_docs
+  EgressProxy egress_proxy = 2;
 }
 
 
