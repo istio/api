@@ -237,7 +237,7 @@ message RemoteService {
   // qualified DNS name.
   string address = 1;
 
-  // Use the tls_settings to specify the tls mode to use. If the remote service
+  // Use the `tls_settings` to specify the TLS mode to use. If the remote service
   // uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
   // mode as `ISTIO_MUTUAL`.
   istio.networking.v1alpha3.TLSSettings tls_settings = 2;
