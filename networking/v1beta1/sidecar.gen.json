@@ -6,52 +6,15 @@
   },
   "components": {
     "schemas": {
-      "istio.networking.v1beta1.TLSSettings": {
-        "description": "SSL/TLS related settings for upstream connections. See Envoy's [TLS context](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/auth/cert.proto.html) for more details. These settings are common to both HTTP and TCP upstreams.",
+      "istio.networking.v1beta1.PortSelector": {
+        "description": "PortSelector specifies the number of a port to be used for matching or selection for final routing.",
         "type": "object",
         "properties": {
-          "mode": {
-            "$ref": "#/components/schemas/istio.networking.v1beta1.TLSSettings.TLSmode"
-          },
-          "clientCertificate": {
-            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client-side TLS certificate to use. Should be empty if mode is `ISTIO_MUTUAL`.",
-            "type": "string",
-            "format": "string"
-          },
-          "privateKey": {
-            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client's private key. Should be empty if mode is `ISTIO_MUTUAL`.",
-            "type": "string",
-            "format": "string"
-          },
-          "caCertificates": {
-            "description": "OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate. If omitted, the proxy will not verify the server's certificate. Should be empty if mode is `ISTIO_MUTUAL`.",
-            "type": "string",
-            "format": "string"
-          },
-          "subjectAltNames": {
-            "description": "A list of alternate names to verify the subject identity in the certificate. If specified, the proxy will verify that the server certificate's subject alt name matches one of the specified values. If specified, this list overrides the value of subject_alt_names from the ServiceEntry.",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "sni": {
-            "description": "SNI string to present to the server during TLS handshake.",
-            "type": "string",
-            "format": "string"
+          "number": {
+            "description": "Valid port number",
+            "type": "integer"
           }
         }
-      },
-      "istio.networking.v1beta1.TLSSettings.TLSmode": {
-        "description": "TLS connection mode",
-        "type": "string",
-        "enum": [
-          "DISABLE",
-          "SIMPLE",
-          "MUTUAL",
-          "ISTIO_MUTUAL"
-        ]
       },
       "istio.networking.v1beta1.Port": {
         "description": "Port describes the properties of a specific port of a service.",
@@ -266,7 +229,7 @@
             "$ref": "#/components/schemas/istio.networking.v1beta1.OutboundTrafficPolicy.Mode"
           },
           "egressProxy": {
-            "$ref": "#/components/schemas/istio.networking.v1beta1.OutboundTrafficPolicy.EgressProxy"
+            "$ref": "#/components/schemas/istio.networking.v1beta1.Destination"
           }
         }
       },
@@ -286,20 +249,22 @@
           "ALLOW_ANY"
         ]
       },
-      "istio.networking.v1beta1.OutboundTrafficPolicy.EgressProxy": {
+      "istio.networking.v1beta1.Destination": {
+        "description": "Destination indicates the network addressable service to which the request/connection will be sent after processing a routing rule. The destination.host should unambiguously refer to a service in the service registry. Istio's service registry is composed of all the services found in the platform's service registry (e.g., Kubernetes services, Consul services), as well as services declared through the [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry) resource.",
         "type": "object",
         "properties": {
           "host": {
-            "description": "REQUIRED: The hostname of the proxy to which the unknown traffic should be forwarded to. If the hostname is in the namespace/fqdn format, it will be assumed to be a service in the mesh and Envoy will load balance the traffic to one of the endpoints of the service. If the hostname is simply a FQDN corresponding to a service outside the mesh, Envoy will resolve the host using DNS and forward the traffic to the IP address returned by the DNS.",
+            "description": "The name of a service from the service registry. Service names are looked up from the platform's service registry (e.g., Kubernetes services, Consul services, etc.) and from the hosts declared by [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry). Traffic forwarded to destinations that are not found in either of the two, will be dropped.",
             "type": "string",
             "format": "string"
           },
           "port": {
-            "description": "REQUIRED: The port to which the traffic should be forwarded to.",
-            "type": "integer"
+            "$ref": "#/components/schemas/istio.networking.v1beta1.PortSelector"
           },
-          "tlsSettings": {
-            "$ref": "#/components/schemas/istio.networking.v1beta1.TLSSettings"
+          "subset": {
+            "description": "The name of a subset within the service. Applicable only to services within the mesh. The subset must be defined in a corresponding DestinationRule.",
+            "type": "string",
+            "format": "string"
           }
         }
       }

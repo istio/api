@@ -16,7 +16,7 @@ syntax = "proto3";
 
 import "google/api/field_behavior.proto";
 import "networking/v1alpha3/gateway.proto";
-import "networking/v1alpha3/destination_rule.proto";
+import "networking/v1alpha3/virtual_service.proto";
 
 // $schema: istio.networking.v1alpha3.Sidecar
 // $title: Sidecar
@@ -691,22 +691,6 @@ message WorkloadSelector {
 // encouraged to use `ServiceEntry` configurations to explicitly declare any external
 // dependencies, instead of using `ALLOW_ANY`, so that traffic to these
 // services can be monitored.
-//
-// ** NOTE **: OutboundTrafficPolicy property, if not specified, is
-// inherited as follows:
-//
-// 1. A workload-specific Sidecar inherits the policy, if not set,
-// from a namespace-wide Sidecar if present.
-//
-// 2. The namespace-wide Sidecar (i.e. the one without a workload
-// selector) inherts the policy, if not set, from the global default
-// sidecar defined in the [root
-// namespace](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig)
-// if present.
-//
-// 3. The global sidecar inherits the policy, if not specified, from
-// the [OutboundTrafficPolicy in the
-// MeshConfig](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig-OutboundTrafficPolicy).
 message OutboundTrafficPolicy {
   enum Mode {
     // Outbound traffic will be restricted to services defined in the
@@ -718,33 +702,21 @@ message OutboundTrafficPolicy {
   }
   Mode mode = 1;
 
-  // $hide_from_docs
-  message EgressProxy {
-    // REQUIRED: The hostname of the proxy to which the unknown
-    // traffic should be forwarded to. If the hostname is in the
-    // namespace/fqdn format, it will be assumed to be a service in
-    // the mesh and Envoy will load balance the traffic to one of the
-    // endpoints of the service. If the hostname is simply a FQDN
-    // corresponding to a service outside the mesh, Envoy will resolve
-    // the host using DNS and forward the traffic to the IP address
-    // returned by the DNS.
-    string host = 1;
-    // REQUIRED: The port to which the traffic should be forwarded to.
-    uint32 port = 2;
-
-    // Use the tls_settings to specify the tls mode to use when
-    // talking to the egress proxy. If the egress proxy is an Envoy
-    // gateway managed by Pilot, specify the TLS mode as ISTIO_MUTUAL.
-    istio.networking.v1alpha3.TLSSettings tls_settings = 3;
-  }
-
   // Specifies the details of the egress proxy to which unknown
   // traffic should be forwarded to from the sidecar. Valid only if
   // the mode is set to ALLOW_ANY. If not specified when the mode is
   // ALLOW_ANY, the sidecar will send the unknown traffic directly to
   // the IP requested by the application.
+  //
+  // ** NOTE 1**: The specified egress host must be imported in the
+  // egress section for the traffic forwarding to work.
+  //
+  // ** NOTE 2**: An Envoy based egress gateway is unlikely to be able
+  // to handle plain text TCP connections forwarded from the sidecar.
+  // Envoy's dynamic forward proxy can handle only HTTP and TLS
+  // connections.
   // $hide_from_docs
-  EgressProxy egress_proxy = 2;
+  istio.networking.v1alpha3.Destination egress_proxy = 2;
 }
 
 
