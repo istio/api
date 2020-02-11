@@ -40155,18 +40155,17 @@
                 "id": 3,
                 "name": "egress",
                 "type": "IstioEgressListener",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "is_repeated": true
               },
               {
                 "id": 4,
                 "name": "outbound_traffic_policy",
                 "type": "OutboundTrafficPolicy"
+              },
+              {
+                "id": 5,
+                "name": "inbound_tls",
+                "type": "Server.TLSOptions"
               }
             ]
           },
@@ -40204,6 +40203,11 @@
                     "value": "REQUIRED"
                   }
                 ]
+              },
+              {
+                "id": 5,
+                "name": "inbound_tls",
+                "type": "Server.TLSOptions"
               }
             ]
           },
@@ -40864,6 +40868,11 @@
                 "id": 3,
                 "name": "retry_on",
                 "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "retry_remote_localities",
+                "type": "google.protobuf.BoolValue"
               }
             ]
           },
@@ -42083,18 +42092,17 @@
                 "id": 3,
                 "name": "egress",
                 "type": "IstioEgressListener",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "is_repeated": true
               },
               {
                 "id": 4,
                 "name": "outbound_traffic_policy",
                 "type": "OutboundTrafficPolicy"
+              },
+              {
+                "id": 5,
+                "name": "inbound_tls",
+                "type": "Server.TLSOptions"
               }
             ]
           },
@@ -42132,6 +42140,11 @@
                     "value": "REQUIRED"
                   }
                 ]
+              },
+              {
+                "id": 5,
+                "name": "inbound_tls",
+                "type": "Server.TLSOptions"
               }
             ]
           },
