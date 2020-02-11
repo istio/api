@@ -3738,6 +3738,23 @@ spec:
             outboundTrafficPolicy:
               description: Configuration for the outbound traffic policy.
               properties:
+                egressProxy:
+                  properties:
+                    host:
+                      description: The name of a service from the service registry.
+                      format: string
+                      type: string
+                    port:
+                      description: Specifies the port on the host that is being addressed.
+                      properties:
+                        number:
+                          type: integer
+                      type: object
+                    subset:
+                      description: The name of a subset within the service.
+                      format: string
+                      type: string
+                  type: object
                 mode:
                   enum:
                   - REGISTRY_ONLY

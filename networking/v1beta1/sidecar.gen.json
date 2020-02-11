@@ -6,6 +6,16 @@
   },
   "components": {
     "schemas": {
+      "istio.networking.v1beta1.PortSelector": {
+        "description": "PortSelector specifies the number of a port to be used for matching or selection for final routing.",
+        "type": "object",
+        "properties": {
+          "number": {
+            "description": "Valid port number",
+            "type": "integer"
+          }
+        }
+      },
       "istio.networking.v1beta1.Port": {
         "description": "Port describes the properties of a specific port of a service.",
         "type": "object",
@@ -217,6 +227,9 @@
         "properties": {
           "mode": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.OutboundTrafficPolicy.Mode"
+          },
+          "egressProxy": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.Destination"
           }
         }
       },
@@ -235,6 +248,25 @@
           "REGISTRY_ONLY",
           "ALLOW_ANY"
         ]
+      },
+      "istio.networking.v1beta1.Destination": {
+        "description": "Destination indicates the network addressable service to which the request/connection will be sent after processing a routing rule. The destination.host should unambiguously refer to a service in the service registry. Istio's service registry is composed of all the services found in the platform's service registry (e.g., Kubernetes services, Consul services), as well as services declared through the [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry) resource.",
+        "type": "object",
+        "properties": {
+          "host": {
+            "description": "The name of a service from the service registry. Service names are looked up from the platform's service registry (e.g., Kubernetes services, Consul services, etc.) and from the hosts declared by [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry). Traffic forwarded to destinations that are not found in either of the two, will be dropped.",
+            "type": "string",
+            "format": "string"
+          },
+          "port": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.PortSelector"
+          },
+          "subset": {
+            "description": "The name of a subset within the service. Applicable only to services within the mesh. The subset must be defined in a corresponding DestinationRule.",
+            "type": "string",
+            "format": "string"
+          }
+        }
       }
     }
   }

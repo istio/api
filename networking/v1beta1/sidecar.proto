@@ -16,6 +16,7 @@ syntax = "proto3";
 
 import "google/api/field_behavior.proto";
 import "networking/v1beta1/gateway.proto";
+import "networking/v1beta1/virtual_service.proto";
 
 // $schema: istio.networking.v1beta1.Sidecar
 // $title: Sidecar
@@ -491,22 +492,6 @@ message WorkloadSelector {
 // encouraged to use `ServiceEntry` configurations to explicitly declare any external
 // dependencies, instead of using `ALLOW_ANY`, so that traffic to these
 // services can be monitored.
-//
-// ** NOTE **: OutboundTrafficPolicy property, if not specified, is
-// inherited as follows:
-//
-// 1. A workload-specific Sidecar inherits the policy, if not set,
-// from a namespace-wide Sidecar if present.
-//
-// 2. The namespace-wide Sidecar (i.e. the one without a workload
-// selector) inherts the policy, if not set, from the global default
-// sidecar defined in the [root
-// namespace](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig)
-// if present.
-//
-// 3. The global sidecar inherits the policy, if not specified, from
-// the [OutboundTrafficPolicy in the
-// MeshConfig](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig-OutboundTrafficPolicy).
 message OutboundTrafficPolicy {
   enum Mode {
     // Outbound traffic will be restricted to services defined in the
@@ -517,6 +502,22 @@ message OutboundTrafficPolicy {
     ALLOW_ANY = 1;
   }
   Mode mode = 1;
+
+  // Specifies the details of the egress proxy to which unknown
+  // traffic should be forwarded to from the sidecar. Valid only if
+  // the mode is set to ALLOW_ANY. If not specified when the mode is
+  // ALLOW_ANY, the sidecar will send the unknown traffic directly to
+  // the IP requested by the application.
+  //
+  // ** NOTE 1**: The specified egress host must be imported in the
+  // egress section for the traffic forwarding to work.
+  //
+  // ** NOTE 2**: An Envoy based egress gateway is unlikely to be able
+  // to handle plain text TCP connections forwarded from the sidecar.
+  // Envoy's dynamic forward proxy can handle only HTTP and TLS
+  // connections.
+  // $hide_from_docs
+  istio.networking.v1beta1.Destination egress_proxy = 2;
 }
 
 

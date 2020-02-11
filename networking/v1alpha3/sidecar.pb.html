@@ -748,24 +748,6 @@ encouraged to use <code>ServiceEntry</code> configurations to explicitly declare
 dependencies, instead of using <code>ALLOW_ANY</code>, so that traffic to these
 services can be monitored.</p>
 
-<p>** NOTE **: OutboundTrafficPolicy property, if not specified, is
-inherited as follows:</p>
-
-<ol>
-<li><p>A workload-specific Sidecar inherits the policy, if not set,
-from a namespace-wide Sidecar if present.</p></li>
-
-<li><p>The namespace-wide Sidecar (i.e. the one without a workload
-selector) inherts the policy, if not set, from the global default
-sidecar defined in the <a href="https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig">root
-namespace</a>
-if present.</p></li>
-
-<li><p>The global sidecar inherits the policy, if not specified, from
-the <a href="https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig-OutboundTrafficPolicy">OutboundTrafficPolicy in the
-MeshConfig</a>.</p></li>
-</ol>
-
 <table class="message-fields">
 <thead>
 <tr>
