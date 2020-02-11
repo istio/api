@@ -212,7 +212,7 @@ operator_v1alpha1_k8s_gos := \
 
 $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons) $(operator_v1alpha1_k8s_gos): $(operator_v1alpha1_protos)
 	@$(protolock) status
-	@$(protoc) $(go_plugin) $(protoc_gen_docs_plugin)$(operator_v1alpha1_path) $(protoc_gen_python_plugin) $^
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(operator_v1alpha1_path) $(protoc_gen_python_plugin) $^
 	@$(protoc) $(protoc_gen_k8s_support_plugins) $(operator_v1alpha1_path)/operator.proto
 	@cp -r /tmp/istio.io/api/operator/* operator
 	@sed -i -E '/MarshalJSON is a custom marshaler for TypeMapStringInterface2/,+10d' $(operator_v1alpha1_path)/operator_json.gen.go
