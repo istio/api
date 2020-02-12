@@ -13,6 +13,28 @@
 // applications over HTTPS. The sidecar inspects the SNI value in the
 // ClientHello message to route to the appropriate external service.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: external-svc-https
+// spec:
+//   hosts:
+//   - api.dropboxapi.com
+//   - www.googleapis.com
+//   - api.facebook.com
+//   location: MESH_EXTERNAL
+//   ports:
+//   - number: 443
+//     name: https
+//     protocol: TLS
+//   resolution: DNS
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
@@ -30,12 +52,39 @@
 //     protocol: TLS
 //   resolution: DNS
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The following configuration adds a set of MongoDB instances running on
 // unmanaged VMs to Istio's registry, so that these services can be treated
 // as any other service in the mesh. The associated DestinationRule is used
 // to initiate mTLS connections to the database instances.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: external-svc-mongocluster
+// spec:
+//   hosts:
+//   - mymongodb.somedomain # not used
+//   addresses:
+//   - 192.192.192.192/24 # VIPs
+//   ports:
+//   - number: 27018
+//     name: mongodb
+//     protocol: MONGO
+//   location: MESH_INTERNAL
+//   resolution: STATIC
+//   endpoints:
+//   - address: 2.2.2.2
+//   - address: 3.3.3.3
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
@@ -56,9 +105,30 @@
 //   - address: 2.2.2.2
 //   - address: 3.3.3.3
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // and the associated DestinationRule
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: mtls-mongocluster
+// spec:
+//   host: mymongodb.somedomain
+//   trafficPolicy:
+//     tls:
+//       mode: MUTUAL
+//       clientCertificate: /etc/certs/myclientcert.pem
+//       privateKey: /etc/certs/client_private_key.pem
+//       caCertificates: /etc/certs/rootcacerts.pem
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
@@ -73,11 +143,34 @@
 //       privateKey: /etc/certs/client_private_key.pem
 //       caCertificates: /etc/certs/rootcacerts.pem
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The following example uses a combination of service entry and TLS
 // routing in a virtual service to steer traffic based on the SNI value to
 // an internal egress firewall.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: external-svc-redirect
+// spec:
+//   hosts:
+//   - wikipedia.org
+//   - "*.wikipedia.org"
+//   location: MESH_EXTERNAL
+//   ports:
+//   - number: 443
+//     name: https
+//     protocol: TLS
+//   resolution: NONE
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
@@ -94,9 +187,34 @@
 //     protocol: TLS
 //   resolution: NONE
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // And the associated VirtualService to route based on the SNI value.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: tls-routing
+// spec:
+//   hosts:
+//   - wikipedia.org
+//   - "*.wikipedia.org"
+//   tls:
+//   - match:
+//     - sniHosts:
+//       - wikipedia.org
+//       - "*.wikipedia.org"
+//     route:
+//     - destination:
+//         host: internal-egress-firewall.ns1.svc.cluster.local
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
@@ -115,6 +233,8 @@
 //     - destination:
 //         host: internal-egress-firewall.ns1.svc.cluster.local
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The virtual service with TLS match serves to override the default SNI
 // match. In the absence of a virtual service, traffic will be forwarded to
@@ -128,6 +248,29 @@
 // current namespace, represented by ".", so that it cannot be used by other
 // namespaces.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: external-svc-httpbin
+//   namespace : egress
+// spec:
+//   hosts:
+//   - httpbin.com
+//   exportTo:
+//   - "."
+//   location: MESH_EXTERNAL
+//   ports:
+//   - number: 80
+//     name: http
+//     protocol: HTTP
+//   resolution: DNS
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
@@ -146,9 +289,33 @@
 //     protocol: HTTP
 //   resolution: DNS
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // Define a gateway to handle all egress traffic.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: Gateway
+// metadata:
+//  name: istio-egressgateway
+//  namespace: istio-system
+// spec:
+//  selector:
+//    istio: egressgateway
+//  servers:
+//  - port:
+//      number: 80
+//      name: http
+//      protocol: HTTP
+//    hosts:
+//    - "*"
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: Gateway
@@ -166,6 +333,8 @@
 //    hosts:
 //    - "*"
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // And the associated `VirtualService` to route from the sidecar to the
 // gateway service (`istio-egressgateway.istio-system.svc.cluster.local`), as
@@ -174,6 +343,41 @@
 // through the gateway to the external service. Forcing traffic to go through
 // a managed middle proxy like this is a common practice.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: gateway-routing
+//   namespace: egress
+// spec:
+//   hosts:
+//   - httpbin.com
+//   exportTo:
+//   - "*"
+//   gateways:
+//   - mesh
+//   - istio-egressgateway
+//   http:
+//   - match:
+//     - port: 80
+//       gateways:
+//       - mesh
+//     route:
+//     - destination:
+//         host: istio-egressgateway.istio-system.svc.cluster.local
+//   - match:
+//     - port: 80
+//       gateways:
+//       - istio-egressgateway
+//     route:
+//     - destination:
+//         host: httpbin.com
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
@@ -204,12 +408,34 @@
 //     - destination:
 //         host: httpbin.com
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The following example demonstrates the use of wildcards in the hosts for
 // external services. If the connection has to be routed to the IP address
 // requested by the application (i.e. application resolves DNS and attempts
 // to connect to a specific IP), the discovery mode must be set to `NONE`.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: external-svc-wildcard-example
+// spec:
+//   hosts:
+//   - "*.bar.com"
+//   location: MESH_EXTERNAL
+//   ports:
+//   - number: 80
+//     name: http
+//     protocol: HTTP
+//   resolution: NONE
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
@@ -225,11 +451,35 @@
 //     protocol: HTTP
 //   resolution: NONE
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The following example demonstrates a service that is available via a
 // Unix Domain Socket on the host of the client. The resolution must be
 // set to STATIC to use Unix address endpoints.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: unix-domain-socket-example
+// spec:
+//   hosts:
+//   - "example.unix.local"
+//   location: MESH_EXTERNAL
+//   ports:
+//   - number: 80
+//     name: http
+//     protocol: HTTP
+//   resolution: STATIC
+//   endpoints:
+//   - address: unix:///var/run/example/socket
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
@@ -247,6 +497,8 @@
 //   endpoints:
 //   - address: unix:///var/run/example/socket
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // For HTTP-based services, it is possible to create a `VirtualService`
 // backed by multiple DNS addressable endpoints. In such a scenario, the
@@ -256,6 +508,36 @@
 // service called foo.bar.com backed by three domains: us.foo.bar.com:8080,
 // uk.foo.bar.com:9080, and in.foo.bar.com:7080
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: external-svc-dns
+// spec:
+//   hosts:
+//   - foo.bar.com
+//   location: MESH_EXTERNAL
+//   ports:
+//   - number: 80
+//     name: http
+//     protocol: HTTP
+//   resolution: DNS
+//   endpoints:
+//   - address: us.foo.bar.com
+//     ports:
+//       https: 8080
+//   - address: uk.foo.bar.com
+//     ports:
+//       https: 9080
+//   - address: in.foo.bar.com
+//     ports:
+//       https: 7080
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
@@ -281,6 +563,8 @@
 //     ports:
 //       https: 7080
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // With `HTTP_PROXY=http://localhost/`, calls from the application to
 // `http://foo.bar.com` will be load balanced across the three domains
@@ -291,6 +575,32 @@
 // containing a subject alternate name
 // whose format conforms to the [SPIFFE standard](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md):
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: httpbin
+//   namespace : httpbin-ns
+// spec:
+//   hosts:
+//   - httpbin.com
+//   location: MESH_INTERNAL
+//   ports:
+//   - number: 80
+//     name: http
+//     protocol: HTTP
+//   resolution: STATIC
+//   endpoints:
+//   - address: 2.2.2.2
+//   - address: 3.3.3.3
+//   subjectAltNames:
+//   - "spiffe://cluster.local/ns/httpbin-ns/sa/httpbin-service-account"
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: ServiceEntry
@@ -312,6 +622,8 @@
 //   subjectAltNames:
 //   - "spiffe://cluster.local/ns/httpbin-ns/sa/httpbin-service-account"
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 
 package v1beta1
@@ -431,7 +743,6 @@ func (ServiceEntry_Resolution) EnumDescriptor() ([]byte, []int) {
 // <!-- crd generation tags
 // +cue-gen:ServiceEntry:groupName:networking.istio.io
 // +cue-gen:ServiceEntry:version:v1beta1
-// +cue-gen:ServiceEntry:storageVersion
 // +cue-gen:ServiceEntry:annotations:helm.sh/resource-policy=keep
 // +cue-gen:ServiceEntry:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:ServiceEntry:subresource:status
