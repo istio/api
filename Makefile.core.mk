@@ -220,6 +220,7 @@ $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_p
 	@cp -r /tmp/istio.io/api/operator/* operator
 	@sed -i -E '/MarshalJSON is a custom marshaler for TypeMapStringInterface2/,+10d' $(operator_v1alpha1_path)/operator_json.gen.go
 	@sed -i -E '/MarshalJSON is a custom marshaler for TypeInterface2/,+10d' $(operator_v1alpha1_path)/operator_json.gen.go
+	@sed -i 's/gogo/golang/g' $(operator_v1alpha1_path)/operator_json.gen.go
 	@go run $(repo_dir)/operator/fixup_structs/main.go -f $(operator_v1alpha1_path)/component.pb.go
 	@go run $(repo_dir)/operator/fixup_structs/main.go -f $(operator_v1alpha1_path)/kubernetes.pb.go
 	@go run $(repo_dir)/operator/fixup_structs/main.go -f $(operator_v1alpha1_path)/operator.pb.go
