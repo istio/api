@@ -637,14 +637,15 @@ type Operation struct {
 	// Optional. A list of negative match of ports.
 	NotPorts []string `protobuf:"bytes,6,rep,name=not_ports,json=notPorts,proto3" json:"not_ports,omitempty"`
 	// Optional. A list of methods, which matches to the "request.method" attribute.
-	// For gRPC service, this should be the fully-qualified name in the form of
-	// "/package.service/method"
+	// For gRPC service, this will always be "POST".
 	//
-	// If not set, any method is allowed. Must be used only with HTTP or gRPC.
+	// If not set, any method is allowed. Must be used only with HTTP.
 	Methods []string `protobuf:"bytes,3,rep,name=methods,proto3" json:"methods,omitempty"`
 	// Optional. A list of negative match of methods.
 	NotMethods []string `protobuf:"bytes,7,rep,name=not_methods,json=notMethods,proto3" json:"not_methods,omitempty"`
 	// Optional. A list of paths, which matches to the "request.url_path" attribute.
+	// For gRPC service, this will be the fully-qualified name in the form of
+	// "/package.service/method".
 	//
 	// If not set, any path is allowed. Must be used only with HTTP.
 	Paths []string `protobuf:"bytes,4,rep,name=paths,proto3" json:"paths,omitempty"`

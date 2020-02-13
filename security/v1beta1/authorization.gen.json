@@ -212,7 +212,7 @@
             }
           },
           "methods": {
-            "description": "Optional. A list of methods, which matches to the \"request.method\" attribute. For gRPC service, this should be the fully-qualified name in the form of \"/package.service/method\"",
+            "description": "Optional. A list of methods, which matches to the \"request.method\" attribute. For gRPC service, this will always be \"POST\".",
             "type": "array",
             "items": {
               "type": "string",
@@ -228,7 +228,7 @@
             }
           },
           "paths": {
-            "description": "Optional. A list of paths, which matches to the \"request.url_path\" attribute.",
+            "description": "Optional. A list of paths, which matches to the \"request.url_path\" attribute. For gRPC service, this will be the fully-qualified name in the form of \"/package.service/method\".",
             "type": "array",
             "items": {
               "type": "string",

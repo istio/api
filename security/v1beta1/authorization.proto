@@ -343,16 +343,17 @@ message Operation {
   repeated string not_ports = 6;
 
   // Optional. A list of methods, which matches to the "request.method" attribute.
-  // For gRPC service, this should be the fully-qualified name in the form of
-  // "/package.service/method"
+  // For gRPC service, this will always be "POST".
   //
-  // If not set, any method is allowed. Must be used only with HTTP or gRPC.
+  // If not set, any method is allowed. Must be used only with HTTP.
   repeated string methods = 3;
 
   // Optional. A list of negative match of methods.
   repeated string not_methods = 7;
 
   // Optional. A list of paths, which matches to the "request.url_path" attribute.
+  // For gRPC service, this will be the fully-qualified name in the form of
+  // "/package.service/method".
   //
   // If not set, any path is allowed. Must be used only with HTTP.
   repeated string paths = 4;
