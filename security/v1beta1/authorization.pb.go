@@ -498,12 +498,13 @@ type Operation struct {
 	// If not set, any port is allowed.
 	Ports []string `protobuf:"bytes,2,rep,name=ports,proto3" json:"ports,omitempty"`
 	// Optional. A list of methods, which matches to the "request.method" attribute.
-	// For gRPC service, this should be the fully-qualified name in the form of
-	// "/package.service/method"
+	// For gRPC service, this will always be "POST".
 	//
-	// If not set, any method is allowed. Must be used only with HTTP or gRPC.
+	// If not set, any method is allowed. Must be used only with HTTP.
 	Methods []string `protobuf:"bytes,3,rep,name=methods,proto3" json:"methods,omitempty"`
 	// Optional. A list of paths, which matches to the "request.url_path" attribute.
+	// For gRPC service, this will be the fully-qualified name in the form of
+	// "/package.service/method".
 	//
 	// If not set, any path is allowed. Must be used only with HTTP.
 	Paths                []string `protobuf:"bytes,4,rep,name=paths,proto3" json:"paths,omitempty"`
