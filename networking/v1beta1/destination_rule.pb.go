@@ -8,6 +8,22 @@
 // balancing pool. For example, a simple load balancing policy for the
 // ratings service would look as follows:
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: bookinfo-ratings
+// spec:
+//   host: ratings.prod.svc.cluster.local
+//   trafficPolicy:
+//     loadBalancer:
+//       simple: LEAST_CONN
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
@@ -19,6 +35,8 @@
 //     loadBalancer:
 //       simple: LEAST_CONN
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // Version specific policies can be specified by defining a named
 // `subset` and overriding the settings specified at the service level. The
@@ -26,6 +44,29 @@
 // going to a subset named testversion that is composed of endpoints (e.g.,
 // pods) with labels (version:v3).
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: bookinfo-ratings
+// spec:
+//   host: ratings.prod.svc.cluster.local
+//   trafficPolicy:
+//     loadBalancer:
+//       simple: LEAST_CONN
+//   subsets:
+//   - name: testversion
+//     labels:
+//       version: v3
+//     trafficPolicy:
+//       loadBalancer:
+//         simple: ROUND_ROBIN
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
@@ -44,6 +85,8 @@
 //       loadBalancer:
 //         simple: ROUND_ROBIN
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // **Note:** Policies specified for subsets will not take effect until
 // a route rule explicitly sends traffic to this subset.
@@ -53,6 +96,29 @@
 // traffic to port 80, while uses a round robin load balancing setting for
 // traffic to the port 9080.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: bookinfo-ratings-port
+// spec:
+//   host: ratings.prod.svc.cluster.local
+//   trafficPolicy: # Apply to all ports
+//     portLevelSettings:
+//     - port:
+//         number: 80
+//       loadBalancer:
+//         simple: LEAST_CONN
+//     - port:
+//         number: 9080
+//       loadBalancer:
+//         simple: ROUND_ROBIN
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
@@ -71,6 +137,9 @@
 //       loadBalancer:
 //         simple: ROUND_ROBIN
 // ```
+// {{</tab>}}
+// {{</tabset>}}
+//
 
 package v1beta1
 
@@ -224,7 +293,6 @@ func (TLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
 // <!-- crd generation tags
 // +cue-gen:DestinationRule:groupName:networking.istio.io
 // +cue-gen:DestinationRule:version:v1beta1
-// +cue-gen:DestinationRule:storageVersion
 // +cue-gen:DestinationRule:annotations:helm.sh/resource-policy=keep
 // +cue-gen:DestinationRule:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
 // +cue-gen:DestinationRule:subresource:status
@@ -537,6 +605,29 @@ func (m *TrafficPolicy_PortTrafficPolicy) GetTls() *TLSSettings {
 // subset named testversion that is composed of endpoints (e.g., pods) with
 // labels (version:v3).
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: bookinfo-ratings
+// spec:
+//   host: ratings.prod.svc.cluster.local
+//   trafficPolicy:
+//     loadBalancer:
+//       simple: LEAST_CONN
+//   subsets:
+//   - name: testversion
+//     labels:
+//       version: v3
+//     trafficPolicy:
+//       loadBalancer:
+//         simple: ROUND_ROBIN
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
@@ -555,6 +646,8 @@ func (m *TrafficPolicy_PortTrafficPolicy) GetTls() *TLSSettings {
 //       loadBalancer:
 //         simple: ROUND_ROBIN
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // **Note:** Policies specified for subsets will not take effect until
 // a route rule explicitly sends traffic to this subset.
@@ -643,6 +736,22 @@ func (m *Subset) GetTrafficPolicy() *TrafficPolicy {
 // For example, the following rule uses a round robin load balancing policy
 // for all traffic going to the ratings service.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: bookinfo-ratings
+// spec:
+//   host: ratings.prod.svc.cluster.local
+//   trafficPolicy:
+//     loadBalancer:
+//       simple: ROUND_ROBIN
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
@@ -654,11 +763,32 @@ func (m *Subset) GetTrafficPolicy() *TrafficPolicy {
 //     loadBalancer:
 //       simple: ROUND_ROBIN
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The following example sets up sticky sessions for the ratings service
 // hashing-based load balancer for the same ratings service using the
 // the User cookie as the hash key.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+//  apiVersion: networking.istio.io/v1alpha3
+//  kind: DestinationRule
+//  metadata:
+//    name: bookinfo-ratings
+//  spec:
+//    host: ratings.prod.svc.cluster.local
+//    trafficPolicy:
+//      loadBalancer:
+//        consistentHash:
+//          httpCookie:
+//            name: user
+//            ttl: 0s
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 //  apiVersion: networking.istio.io/v1beta1
 //  kind: DestinationRule
@@ -673,6 +803,8 @@ func (m *Subset) GetTrafficPolicy() *TrafficPolicy {
 //            name: user
 //            ttl: 0s
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 type LoadBalancerSettings struct {
 	// Upstream load balancing policy.
@@ -995,6 +1127,27 @@ func (m *LoadBalancerSettings_ConsistentHashLB_HTTPCookie) GetTtl() *time.Durati
 // For example, the following rule sets a limit of 100 connections to redis
 // service called myredissrv with a connect timeout of 30ms
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: bookinfo-redis
+// spec:
+//   host: myredissrv.prod.svc.cluster.local
+//   trafficPolicy:
+//     connectionPool:
+//       tcp:
+//         maxConnections: 100
+//         connectTimeout: 30ms
+//         tcpKeepalive:
+//           time: 7200s
+//           interval: 75s
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
@@ -1011,6 +1164,9 @@ func (m *LoadBalancerSettings_ConsistentHashLB_HTTPCookie) GetTtl() *time.Durati
 //           time: 7200s
 //           interval: 75s
 // ```
+// {{</tab>}}
+// {{</tabset>}}
+//
 type ConnectionPoolSettings struct {
 	// Settings common to both HTTP and TCP upstream connections.
 	Tcp *ConnectionPoolSettings_TCPSettings `protobuf:"bytes,1,opt,name=tcp,proto3" json:"tcp,omitempty"`
@@ -1327,6 +1483,30 @@ func (m *ConnectionPoolSettings_HTTPSettings) GetH2UpgradePolicy() ConnectionPoo
 // hosts to be scanned every 5 mins so that any host that fails 7 consecutive
 // times with a 502, 503, or 504 error code will be ejected for 15 minutes.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: reviews-cb-policy
+// spec:
+//   host: reviews.prod.svc.cluster.local
+//   trafficPolicy:
+//     connectionPool:
+//       tcp:
+//         maxConnections: 100
+//       http:
+//         http2MaxRequests: 1000
+//         maxRequestsPerConnection: 10
+//     outlierDetection:
+//       consecutiveErrors: 7
+//       interval: 5m
+//       baseEjectionTime: 15m
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
@@ -1346,6 +1526,9 @@ func (m *ConnectionPoolSettings_HTTPSettings) GetH2UpgradePolicy() ConnectionPoo
 //       interval: 5m
 //       baseEjectionTime: 15m
 // ```
+// {{</tab>}}
+// {{</tabset>}}
+//
 type OutlierDetection struct {
 	// Number of errors before a host is ejected from the connection
 	// pool. Defaults to 5. When the upstream host is accessed over HTTP, a
@@ -1496,6 +1679,25 @@ func (m *OutlierDetection) GetMinHealthPercent() int32 {
 // For example, the following rule configures a client to use mutual TLS
 // for connections to upstream database cluster.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: db-mtls
+// spec:
+//   host: mydbserver.prod.svc.cluster.local
+//   trafficPolicy:
+//     tls:
+//       mode: MUTUAL
+//       clientCertificate: /etc/certs/myclientcert.pem
+//       privateKey: /etc/certs/client_private_key.pem
+//       caCertificates: /etc/certs/rootcacerts.pem
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
@@ -1510,10 +1712,28 @@ func (m *OutlierDetection) GetMinHealthPercent() int32 {
 //       privateKey: /etc/certs/client_private_key.pem
 //       caCertificates: /etc/certs/rootcacerts.pem
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The following rule configures a client to use TLS when talking to a
 // foreign service whose domain matches *.foo.com.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: tls-foo
+// spec:
+//   host: "*.foo.com"
+//   trafficPolicy:
+//     tls:
+//       mode: SIMPLE
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
@@ -1525,10 +1745,28 @@ func (m *OutlierDetection) GetMinHealthPercent() int32 {
 //     tls:
 //       mode: SIMPLE
 // ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The following rule configures a client to use Istio mutual TLS when talking
 // to rating services.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: DestinationRule
+// metadata:
+//   name: ratings-istio-mtls
+// spec:
+//   host: ratings.prod.svc.cluster.local
+//   trafficPolicy:
+//     tls:
+//       mode: ISTIO_MUTUAL
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1beta1
 // kind: DestinationRule
@@ -1540,6 +1778,9 @@ func (m *OutlierDetection) GetMinHealthPercent() int32 {
 //     tls:
 //       mode: ISTIO_MUTUAL
 // ```
+// {{</tab>}}
+// {{</tabset>}}
+//
 type TLSSettings struct {
 	// Indicates whether connections to this port should be secured
 	// using TLS. The value of this field determines how TLS is enforced.
