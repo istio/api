@@ -61,7 +61,7 @@
         ]
       },
       "istio.authentication.v1alpha1.MutualTls": {
-        "description": "TLS authentication params.",
+        "description": "Deprecated. Please use security/v1beta1/PeerAuthentication instead. TLS authentication params.",
         "type": "object",
         "properties": {
           "allowTls": {
@@ -155,7 +155,7 @@
         }
       },
       "istio.authentication.v1alpha1.PeerAuthenticationMethod": {
-        "description": "PeerAuthenticationMethod defines one particular type of authentication. Only mTLS is supported at the moment. The type can be progammatically determine by checking the type of the \"params\" field.",
+        "description": "Deprecated. Please use security/v1beta1/PeerAuthentication instead. PeerAuthenticationMethod defines one particular type of authentication. Only mTLS is supported at the moment. The type can be progammatically determine by checking the type of the \"params\" field.",
         "type": "object",
         "oneOf": [
           {
@@ -211,7 +211,7 @@
             "deprecated": true
           },
           "peers": {
-            "description": "List of authentication methods that can be used for peer authentication. They will be evaluated in order; the first validate one will be used to set peer identity (source.user) and other peer attributes. If none of these methods pass, request will be rejected with authentication failed error (401). Leave the list empty if peer authentication is not required",
+            "description": "Deprecated. Please use security/v1beta1/PeerAuthentication instead. List of authentication methods that can be used for peer authentication. They will be evaluated in order; the first validate one will be used to set peer identity (source.user) and other peer attributes. If none of these methods pass, request will be rejected with authentication failed error (401). Leave the list empty if peer authentication is not required",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.authentication.v1alpha1.PeerAuthenticationMethod"
