@@ -477,7 +477,7 @@ message LoadBalancerSettings {
       // Path to set for the cookie.
       string path = 2;
       // Lifetime of the cookie.
-      google.protobuf.Duration ttl = 3 [(google.api.field_behavior) = REQUIRED, (gogoproto.stdduration) = true];
+      google.protobuf.Duration ttl = 3 [(google.api.field_behavior) = REQUIRED];
     };
 
     // The hash key to use.
