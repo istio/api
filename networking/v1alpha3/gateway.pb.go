@@ -14,6 +14,8 @@
 // on these ports, it is the responsibility of the user to ensure that
 // external traffic to these ports are allowed into the mesh.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: Gateway
@@ -66,6 +68,63 @@
 //     hosts:
 //     - "*"
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: Gateway
+// metadata:
+//   name: my-gateway
+//   namespace: some-config-namespace
+// spec:
+//   selector:
+//     app: my-gateway-controller
+//   servers:
+//   - port:
+//       number: 80
+//       name: http
+//       protocol: HTTP
+//     hosts:
+//     - uk.bookinfo.com
+//     - eu.bookinfo.com
+//     tls:
+//       httpsRedirect: true # sends 301 redirect for http requests
+//   - port:
+//       number: 443
+//       name: https-443
+//       protocol: HTTPS
+//     hosts:
+//     - uk.bookinfo.com
+//     - eu.bookinfo.com
+//     tls:
+//       mode: SIMPLE # enables HTTPS on this port
+//       serverCertificate: /etc/certs/servercert.pem
+//       privateKey: /etc/certs/privatekey.pem
+//   - port:
+//       number: 9443
+//       name: https-9443
+//       protocol: HTTPS
+//     hosts:
+//     - "bookinfo-namespace/*.bookinfo.com"
+//     tls:
+//       mode: SIMPLE # enables HTTPS on this port
+//       credentialName: bookinfo-secret # fetches certs from Kubernetes secret
+//   - port:
+//       number: 9080
+//       name: http-wildcard
+//       protocol: HTTP
+//     hosts:
+//     - "*"
+//   - port:
+//       number: 2379 # to expose internal service via external port 2379
+//       name: mongo
+//       protocol: MONGO
+//     hosts:
+//     - "*"
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The Gateway specification above describes the L4-L6 properties of a load
 // balancer. A `VirtualService` can then be bound to a gateway to control
@@ -82,6 +141,8 @@
 // applicable across ports 443, 9080. Note that `http://uk.bookinfo.com`
 // gets redirected to `https://uk.bookinfo.com` (i.e. 80 redirects to 443).
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
@@ -119,12 +180,56 @@
 //         host: reviews.qa.svc.cluster.local
 //       weight: 20
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: bookinfo-rule
+//   namespace: bookinfo-namespace
+// spec:
+//   hosts:
+//   - reviews.prod.svc.cluster.local
+//   - uk.bookinfo.com
+//   - eu.bookinfo.com
+//   gateways:
+//   - some-config-namespace/my-gateway
+//   - mesh # applies to all the sidecars in the mesh
+//   http:
+//   - match:
+//     - headers:
+//         cookie:
+//           exact: "user=dev-123"
+//     route:
+//     - destination:
+//         port:
+//           number: 7777
+//         host: reviews.qa.svc.cluster.local
+//   - match:
+//     - uri:
+//         prefix: /reviews/
+//     route:
+//     - destination:
+//         port:
+//           number: 9080 # can be omitted if it's the only port for reviews
+//         host: reviews.prod.svc.cluster.local
+//       weight: 80
+//     - destination:
+//         host: reviews.qa.svc.cluster.local
+//       weight: 20
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The following VirtualService forwards traffic arriving at (external)
 // port 27017 to internal Mongo server on port 5555. This rule is not
 // applicable internally in the mesh as the gateway list omits the
 // reserved name `mesh`.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
@@ -146,6 +251,32 @@
 //         port:
 //           number: 5555
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: bookinfo-Mongo
+//   namespace: bookinfo-namespace
+// spec:
+//   hosts:
+//   - mongosvr.prod.svc.cluster.local # name of internal Mongo service
+//   gateways:
+//   - some-config-namespace/my-gateway # can omit the namespace if gateway is in same
+//                                        namespace as virtual service.
+//   tcp:
+//   - match:
+//     - port: 27017
+//     route:
+//     - destination:
+//         host: mongo.prod.svc.cluster.local
+//         port:
+//           number: 5555
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // It is possible to restrict the set of virtual services that can bind to
 // a gateway server using the namespace/hostname syntax in the hosts field.
@@ -153,6 +284,8 @@
 // namespace to bind to it, while restricting only the virtual service with
 // foo.bar.com host in the ns2 namespace to bind to it.
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: Gateway
@@ -171,6 +304,29 @@
 //     - "ns1/*"
 //     - "ns2/foo.bar.com"
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: Gateway
+// metadata:
+//   name: my-gateway
+//   namespace: some-config-namespace
+// spec:
+//   selector:
+//     app: my-gateway-controller
+//   servers:
+//   - port:
+//       number: 80
+//       name: http
+//       protocol: HTTP
+//     hosts:
+//     - "ns1/*"
+//     - "ns2/foo.bar.com"
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 
 package v1alpha3
@@ -199,32 +355,36 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type Server_TLSOptions_TLSmode int32
 
 const (
-	// The SNI string presented by the client will be used as the match
-	// criterion in a VirtualService TLS route to determine the
-	// destination service from the service registry.
+	// The SNI string presented by the client will be used as the
+	// match criterion in a VirtualService TLS route to determine
+	// the destination service from the service registry. On a
+	// sidecar, TLS traffic will be forwarded as is to the default
+	// endpoint defined in the Ingress Listener.
 	Server_TLSOptions_PASSTHROUGH Server_TLSOptions_TLSmode = 0
 	// Secure connections with standard TLS semantics.
 	Server_TLSOptions_SIMPLE Server_TLSOptions_TLSmode = 1
-	// Secure connections to the downstream using mutual TLS by presenting
-	// server certificates for authentication.
+	// Secure connections to the downstream using mutual TLS by
+	// presenting server certificates for authentication.
 	Server_TLSOptions_MUTUAL Server_TLSOptions_TLSmode = 2
-	// Similar to the passthrough mode, except servers with this TLS mode
-	// do not require an associated VirtualService to map from the SNI
-	// value to service in the registry. The destination details such as
-	// the service/subset/port are encoded in the SNI value. The proxy
-	// will forward to the upstream (Envoy) cluster (a group of
-	// endpoints) specified by the SNI value. This server is typically
-	// used to provide connectivity between services in disparate L3
-	// networks that otherwise do not have direct connectivity between
-	// their respective endpoints. Use of this mode assumes that both the
-	// source and the destination are using Istio mTLS to secure traffic.
+	// Similar to the passthrough mode, except servers with this TLS
+	// mode do not require an associated VirtualService to map from
+	// the SNI value to service in the registry. The destination
+	// details such as the service/subset/port are encoded in the
+	// SNI value. The proxy will forward to the upstream (Envoy)
+	// cluster (a group of endpoints) specified by the SNI
+	// value. This server is typically used to provide connectivity
+	// between services in disparate L3 networks that otherwise do
+	// not have direct connectivity between their respective
+	// endpoints. Use of this mode assumes that both the source and
+	// the destination are using Istio mTLS to secure traffic. Not
+	// applicable in Sidecar API.
 	Server_TLSOptions_AUTO_PASSTHROUGH Server_TLSOptions_TLSmode = 3
-	// Secure connections from the downstream using mutual TLS by presenting
-	// server certificates for authentication.
-	// Compared to Mutual mode, this mode uses certificates, representing
-	// gateway workload identity, generated automatically by Istio for
-	// mTLS authentication. When this mode is used, all other fields in
-	// `TLSOptions` should be empty.
+	// Secure connections from the downstream using mutual TLS by
+	// presenting server certificates for authentication.  Compared
+	// to Mutual mode, this mode uses certificates, representing
+	// gateway workload identity, generated automatically by Istio
+	// for mTLS authentication. When this mode is used, all other
+	// fields in `TLSOptions` should be empty.
 	Server_TLSOptions_ISTIO_MUTUAL Server_TLSOptions_TLSmode = 4
 )
 
@@ -376,6 +536,8 @@ func (m *Gateway) GetSelector() map[string]string {
 // `Server` describes the properties of the proxy on a given load balancer
 // port. For example,
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: Gateway
@@ -392,9 +554,32 @@ func (m *Gateway) GetSelector() map[string]string {
 //     hosts:
 //     - "*"
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: Gateway
+// metadata:
+//   name: my-ingress
+// spec:
+//   selector:
+//     app: my-ingress-gateway
+//   servers:
+//   - port:
+//       number: 80
+//       name: http2
+//       protocol: HTTP2
+//     hosts:
+//     - "*"
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // Another example
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: Gateway
@@ -411,9 +596,32 @@ func (m *Gateway) GetSelector() map[string]string {
 //     hosts:
 //     - "*"
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: Gateway
+// metadata:
+//   name: my-tcp-ingress
+// spec:
+//   selector:
+//     app: my-tcp-ingress-gateway
+//   servers:
+//   - port:
+//       number: 27018
+//       name: mongo
+//       protocol: MONGO
+//     hosts:
+//     - "*"
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 //
 // The following is an example of TLS configuration for port 443
 //
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: Gateway
@@ -434,6 +642,32 @@ func (m *Gateway) GetSelector() map[string]string {
 //       serverCertificate: /etc/certs/server.pem
 //       privateKey: /etc/certs/privatekey.pem
 // ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: Gateway
+// metadata:
+//   name: my-tls-ingress
+// spec:
+//   selector:
+//     app: my-tls-ingress-gateway
+//   servers:
+//   - port:
+//       number: 443
+//       name: https
+//       protocol: HTTPS
+//     hosts:
+//     - "*"
+//     tls:
+//       mode: SIMPLE
+//       serverCertificate: /etc/certs/server.pem
+//       privateKey: /etc/certs/privatekey.pem
+// ```
+// {{</tab>}}
+// {{</tabset>}}
+//
 type Server struct {
 	// The Port on which the proxy should listen for incoming
 	// connections.
@@ -481,6 +715,8 @@ type Server struct {
 	// The loopback IP endpoint or Unix domain socket to which traffic should
 	// be forwarded to by default. Format should be `127.0.0.1:PORT` or
 	// `unix:///path/to/socket` or `unix://@foobar` (Linux abstract namespace).
+	// NOT IMPLEMENTED.
+	// $hide_from_docs
 	DefaultEndpoint      string   `protobuf:"bytes,5,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -556,8 +792,9 @@ func (m *Server) GetDefaultEndpoint() string {
 }
 
 type Server_TLSOptions struct {
-	// If set to true, the load balancer will send a 301 redirect for all
-	// http connections, asking the clients to use HTTPS.
+	// If set to true, the load balancer will send a 301 redirect for
+	// all http connections, asking the clients to use HTTPS. Not
+	// applicable in Sidecar API.
 	HttpsRedirect bool `protobuf:"varint,1,opt,name=https_redirect,json=httpsRedirect,proto3" json:"https_redirect,omitempty"`
 	// Optional: Indicates whether connections to this port should be
 	// secured using TLS. The value of this field determines how TLS is
@@ -576,18 +813,18 @@ type Server_TLSOptions struct {
 	// The credentialName stands for a unique identifier that can be used
 	// to identify the serverCertificate and the privateKey. The
 	// credentialName appended with suffix "-cacert" is used to identify
-	// the CaCertificates associated with this server. Gateway workloads
+	// the CaCertificates associated with this server. Proxies
 	// capable of fetching credentials from a remote credential store such
 	// as Kubernetes secrets, will be configured to retrieve the
 	// serverCertificate and the privateKey using credentialName, instead
 	// of using the file system paths specified above. If using mutual TLS,
-	// gateway workload instances will retrieve the CaCertificates using
+	// proxy instances will retrieve the CaCertificates using
 	// credentialName-cacert. The semantics of the name are platform
 	// dependent.  In Kubernetes, the default Istio supplied credential
 	// server expects the credentialName to match the name of the
 	// Kubernetes secret that holds the server certificate, the private
 	// key, and the CA certificate (if using mutual TLS). Set the
-	// `ISTIO_META_USER_SDS` metadata variable in the gateway's proxy to
+	// `ISTIO_META_USER_SDS` metadata variable in the proxy to
 	// enable the dynamic credential fetching feature.
 	CredentialName string `protobuf:"bytes,10,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
 	// A list of alternate names to verify the subject identity in the

@@ -204,7 +204,7 @@ message ServicePort {
   string name = 1;
   string protocol = 2;
   int32 port = 3;
-  k8s.io.apimachinery.pkg.util.intstr.IntOrString targetPort = 4;
+  TypeIntOrStringForPB targetPort = 4;
   int32 nodePort = 5;
 }
 message SessionAffinityConfig {
@@ -213,12 +213,53 @@ message SessionAffinityConfig {
 message ClientIPConfig {
   int32 timeoutSeconds = 1;
 }
-message Toleration {
-  string key = 1;
-  string operator = 2;
-  string value = 3;
-  string effect = 4;
-  int64 tolerationSeconds = 5;
+
+message HorizontalPodAutoscalerSpec {
+    CrossVersionObjectReference scaleTargetRef = 1;
+    int32 minReplicas = 2;
+    int32 maxReplicas = 3;
+    repeated MetricSpec metrics = 4;
+}
+
+message CrossVersionObjectReference {
+    string kind = 1;
+    string name = 2;
+    string apiVersion = 3;
+}
+
+message MetricSpec {
+    string type = 1;
+    ObjectMetricSource object = 2;
+    PodsMetricSource pods = 3;
+    ResourceMetricSource resource = 4;
+    ExternalMetricSource external = 5;
+}
+
+message ObjectMetricSource {
+    CrossVersionObjectReference target = 1;
+    string metricName = 2;
+    k8s.io.apimachinery.pkg.api.resource.Quantity targetValue = 3;
+    k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 4;
+    k8s.io.apimachinery.pkg.api.resource.Quantity averageValue = 5;
+}
+
+message PodsMetricSource {
+    string metricName = 1;
+    k8s.io.apimachinery.pkg.api.resource.Quantity targetAverageValue = 2;
+    k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 3;
+}
+
+message ResourceMetricSource {
+    string name = 1;
+    int32 targetAverageUtilization = 2;
+    k8s.io.apimachinery.pkg.api.resource.Quantity targetAverageValue = 3;
+}
+
+message ExternalMetricSource {
+    string metricName = 1;
+    k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector metricSelector = 2;
+    k8s.io.apimachinery.pkg.api.resource.Quantity targetValue = 3;
+    k8s.io.apimachinery.pkg.api.resource.Quantity targetAverageValue = 4;
 }
 
 // GOTYPE: *IntOrStringForPB

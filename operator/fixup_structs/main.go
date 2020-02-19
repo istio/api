@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"regexp"
 	"strings"
 	"unicode"
 )
@@ -51,8 +52,9 @@ are generated for this type.
 */
 
 const (
-	goTypeToken  = "// GOTYPE:"
-	goFieldToken = "// GOFIELD:"
+	goTypeToken          = "// GOTYPE:"
+	goFieldToken         = "// GOFIELD:"
+	goFieldJSONTagPrefix = "json:"
 )
 
 var (
@@ -70,20 +72,22 @@ var (
 	}
 )
 
+//nolint: gocognit
 func main() {
 	var filePath string
+
 	flag.StringVar(&filePath, "f", "", "path to input file")
 	flag.Parse()
 
 	if filePath == "" {
 		fmt.Println("-f flag is required.")
-		os.Exit(1)
+		os.Exit(1) //nolint: gomnd
 	}
 
 	lines, err := getFileLines(filePath)
 	if err != nil {
 		fmt.Println(err)
-		os.Exit(1)
+		os.Exit(1) //nolint: gomnd
 	}
 
 	subs := make(map[string]string)
@@ -104,21 +108,36 @@ func main() {
 			// We expect the format to be "type MarkerType struct {"
 			if len(nlv) != 4 || nlv[0] != "type" || nlv[2] != "struct" || nlv[3] != "{" {
 				fmt.Printf("Bad GOTYPE target: %s\n", nl)
-				os.Exit(1)
+				os.Exit(1) //nolint: gomnd
 			}
 			// Subs maps a marker type to a real type.
 			st := "*" + strings.TrimSpace(nlv[1])
 			subs[st] = strings.TrimSpace(v)
+
 			if strings.Contains(l, "_ ") {
 				anonymous[st] = true
 				subs[st] = strings.ReplaceAll(subs[st], "_ ", "")
 			}
+
 			for !strings.HasPrefix(lines[i], "var xxx_messageInfo_") {
 				i++
 			}
+
 			tmp = append(tmp, lines[i+1])
 			i += 2
-
+		case strings.Contains(l, goFieldJSONTagPrefix) && strings.Contains(l, "_"):
+			rgx := regexp.MustCompile(`json\:"[a-z|0-9]+_[a-z|0-9]+,`)
+			l = rgx.ReplaceAllStringFunc(l, func(m string) string {
+				lvs := strings.Split(m, "_")
+				for i, v := range lvs {
+					if i > 0 {
+						lvs[i] = strings.Title(v)
+					}
+				}
+				return strings.Join(lvs, "")
+			})
+			tmp = append(tmp, l)
+			i++
 		default:
 			tmp = append(tmp, l)
 			i++
@@ -126,15 +145,19 @@ func main() {
 	}
 
 	skipFunc := false
+
 	for _, l := range tmp {
 		skip := false
+
 		if skipFunc && strings.HasPrefix(l, "}") {
 			skipFunc = false
 			continue
 		}
+
 		if skipFunc {
 			continue
 		}
+
 		for k, v := range subs {
 			if strings.Contains(l, k) {
 				// Remove registration calls for marker structs.
@@ -154,6 +177,7 @@ func main() {
 				}
 			}
 		}
+
 		if !skip && !skipFunc {
 			out = append(out, l)
 		}
@@ -166,9 +190,10 @@ func main() {
 	}
 
 	fmt.Printf("Writing to output file %s\n", filePath)
+
 	if err := ioutil.WriteFile(filePath, []byte(strings.Join(out, "\n")), 0644); err != nil {
 		fmt.Println(err)
-		os.Exit(1)
+		os.Exit(1) //nolint: gomnd
 	}
 }
 
@@ -182,6 +207,7 @@ func removeName(l string) string {
 			break
 		}
 	}
+
 	for i, c := range l[i1:] {
 		if !unicode.IsLetter(c) {
 			i2 = i
@@ -199,8 +225,10 @@ func patch(lines []string) (output []string) {
 		for oldv, newv := range replaceMapping {
 			line = strings.ReplaceAll(line, oldv, newv)
 		}
+
 		output = append(output, line)
 	}
+
 	return output
 }
 
@@ -211,8 +239,10 @@ func patchValues(lines []string) (output []string) {
 		for oldv, newv := range valuesNameMapping {
 			line = strings.ReplaceAll(line, oldv, newv)
 		}
+
 		output = append(output, line)
 	}
+
 	return output
 }
 

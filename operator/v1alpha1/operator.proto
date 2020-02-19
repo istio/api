@@ -17,6 +17,11 @@ syntax = "proto3";
 import "mesh/v1alpha1/config.proto";
 import "operator/v1alpha1/component.proto";
 
+// $title: IstioOperator Options
+// $description: Configuration affecting Istio control plane installation version and shape.
+// $location: https://istio.io/docs/reference/config/istio.operator.v1alpha1.html
+// $weight: 20
+
 package istio.operator.v1alpha1;
 
 option go_package="istio.io/api/operator/v1alpha1";
@@ -117,6 +122,13 @@ EXAMPLES
     ```
 */
 
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=install.istio.io/v1alpha1
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
+
 // IstioOperatorSpec defines the desired installed state of Istio components.
 // The spec is a used to define a customization of the default profile values that are supplied with each Istio release.
 // Because the spec is a customization API, specifying an empty IstioOperatorSpec results in a default Istio
@@ -133,10 +145,19 @@ message IstioOperatorSpec {
     // Root for docker image paths e.g. docker.io/istio
     string hub = 12;
     // Version tag for docker images e.g. 1.0.6
-    string tag = 13;
-    // Resource suffix is appended to all resources installed by each component. Used in upgrade scenarios where two
-    // Istio control planes must exist in the same namespace.
-    string resource_suffix = 14;
+    TypeInterface2 tag = 13;
+
+    // $hide_from_docs
+    // Resource suffix is appended to all resources installed by each component.
+    // Never implemented; replaced by revision.
+    string resource_suffix = 14 [deprecated = true];
+    // Namespace to install control plane resources into. If unset, Istio will be installed into the same namespace
+    // as the IstioOperator CR.
+    string namespace = 15;
+
+    // Identify the revision this installation is associated with.
+    // This option is currently experimental.
+    string revision = 16;
 
     // Config used by control plane components internally.
     istio.mesh.v1alpha1.MeshConfig mesh_config = 40;
@@ -194,3 +215,6 @@ message InstallStatus {
 // This is required because synthetic type definition has file rather than package scope.
 // GOTYPE: map[string]interface{}
 message TypeMapStringInterface2 {}
+
+// GOTYPE: interface{}
+message TypeInterface2 {}

@@ -2,7 +2,8 @@
 title: istio.operator.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 53
+weight: 20
+number_of_entries: 59
 ---
 <h2 id="Affinity">Affinity</h2>
 <section>
@@ -149,7 +150,7 @@ No
 </tr>
 <tr id="ComponentSpec-tag">
 <td><code>tag</code></td>
-<td><code>string</code></td>
+<td><code><a href="#TypeInterface">TypeInterface</a></code></td>
 <td>
 <p>Tag for the component (overrides top level tag setting).</p>
 
@@ -216,6 +217,48 @@ No
 <tr id="ConfigMapKeySelector-optional">
 <td><code>optional</code></td>
 <td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="CrossVersionObjectReference">CrossVersionObjectReference</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="CrossVersionObjectReference-kind">
+<td><code>kind</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CrossVersionObjectReference-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="CrossVersionObjectReference-apiVersion">
+<td><code>apiVersion</code></td>
+<td><code>string</code></td>
 <td>
 </td>
 <td>
@@ -462,6 +505,57 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="ExternalMetricSource">ExternalMetricSource</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ExternalMetricSource-metricName">
+<td><code>metricName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExternalMetricSource-metricSelector">
+<td><code>metricSelector</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-apis-meta-v1-LabelSelector">LabelSelector</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExternalMetricSource-targetValue">
+<td><code>targetValue</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-api-resource-Quantity">Quantity</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExternalMetricSource-targetAverageValue">
+<td><code>targetAverageValue</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-api-resource-Quantity">Quantity</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="GatewaySpec">GatewaySpec</h2>
 <section>
 <p>Configuration for gateways.</p>
@@ -533,7 +627,7 @@ No
 </tr>
 <tr id="GatewaySpec-tag">
 <td><code>tag</code></td>
-<td><code>string</code></td>
+<td><code><a href="#TypeInterface">TypeInterface</a></code></td>
 <td>
 <p>Tag for the component (overrides top level tag setting).</p>
 
@@ -653,6 +747,57 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="HorizontalPodAutoscalerSpec">HorizontalPodAutoscalerSpec</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HorizontalPodAutoscalerSpec-scaleTargetRef">
+<td><code>scaleTargetRef</code></td>
+<td><code><a href="#CrossVersionObjectReference">CrossVersionObjectReference</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HorizontalPodAutoscalerSpec-minReplicas">
+<td><code>minReplicas</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HorizontalPodAutoscalerSpec-maxReplicas">
+<td><code>maxReplicas</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HorizontalPodAutoscalerSpec-metrics">
+<td><code>metrics</code></td>
+<td><code><a href="#MetricSpec">MetricSpec[]</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="InstallStatus">InstallStatus</h2>
 <section>
 <p>Observed state of IstioOperator</p>
@@ -669,7 +814,7 @@ No
 <tbody>
 <tr id="InstallStatus-status">
 <td><code>status</code></td>
-<td><code><a href="#InstallStatus-Status">Status</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/istio.operator.v1alpha1.html#InstallStatus-Status">Status</a></code></td>
 <td>
 <p>Overall status of all components controlled by the operator.
 - If all components have status NONE, overall status is NONE.
@@ -686,7 +831,7 @@ No
 </tr>
 <tr id="InstallStatus-component_status">
 <td><code>componentStatus</code></td>
-<td><code>map&lt;string,&nbsp;<a href="#InstallStatus-VersionStatus">VersionStatus</a>&gt;</code></td>
+<td><code>map&lt;string,&nbsp;<a href="https://istio.io/docs/reference/config/istio.operator.v1alpha1.html#InstallStatus-VersionStatus">VersionStatus</a>&gt;</code></td>
 <td>
 <p>Individual status of each component controlled by the operator. The map key is the name of the component.</p>
 
@@ -773,7 +918,7 @@ No
 </tr>
 <tr id="InstallStatus-VersionStatus-status">
 <td><code>status</code></td>
-<td><code><a href="#InstallStatus-Status">Status</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/istio.operator.v1alpha1.html#InstallStatus-Status">Status</a></code></td>
 <td>
 </td>
 <td>
@@ -982,7 +1127,7 @@ No
 </tr>
 <tr id="IstioOperatorSpec-tag">
 <td><code>tag</code></td>
-<td><code>string</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/istio.operator.v1alpha1.html#TypeInterface2">TypeInterface2</a></code></td>
 <td>
 <p>Version tag for docker images e.g. 1.0.6</p>
 
@@ -991,12 +1136,24 @@ No
 No
 </td>
 </tr>
-<tr id="IstioOperatorSpec-resource_suffix">
-<td><code>resourceSuffix</code></td>
+<tr id="IstioOperatorSpec-namespace">
+<td><code>namespace</code></td>
 <td><code>string</code></td>
 <td>
-<p>Resource suffix is appended to all resources installed by each component. Used in upgrade scenarios where two
-Istio control planes must exist in the same namespace.</p>
+<p>Namespace to install control plane resources into. If unset, Istio will be installed into the same namespace
+as the IstioOperator CR.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="IstioOperatorSpec-revision">
+<td><code>revision</code></td>
+<td><code>string</code></td>
+<td>
+<p>Identify the revision this installation is associated with.
+This option is currently experimental.</p>
 
 </td>
 <td>
@@ -1039,7 +1196,7 @@ No
 </tr>
 <tr id="IstioOperatorSpec-values">
 <td><code>values</code></td>
-<td><code><a href="#TypeMapStringInterface2">TypeMapStringInterface2</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/istio.operator.v1alpha1.html#TypeMapStringInterface2">TypeMapStringInterface2</a></code></td>
 <td>
 <p>Overrides for default values.yaml. This is a validated pass-through to Helm templates.
 See the Helm installation options for schema details: https://istio.io/docs/reference/config/installation-options/.
@@ -1053,7 +1210,7 @@ No
 </tr>
 <tr id="IstioOperatorSpec-unvalidated_values">
 <td><code>unvalidatedValues</code></td>
-<td><code><a href="#TypeMapStringInterface2">TypeMapStringInterface2</a></code></td>
+<td><code><a href="https://istio.io/docs/reference/config/istio.operator.v1alpha1.html#TypeMapStringInterface2">TypeMapStringInterface2</a></code></td>
 <td>
 <p>Unvalidated overrides for default values.yaml. Used for custom templates where new parameters are added.</p>
 
@@ -1211,7 +1368,7 @@ No
 </tr>
 <tr id="KubernetesResourcesSpec-hpa_spec">
 <td><code>hpaSpec</code></td>
-<td><code><a href="#k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec">HorizontalPodAutoscalerSpec</a></code></td>
+<td><code><a href="#HorizontalPodAutoscalerSpec">HorizontalPodAutoscalerSpec</a></code></td>
 <td>
 <p>k8s HorizontalPodAutoscaler settings.
 https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/</p>
@@ -1344,7 +1501,7 @@ No
 </tr>
 <tr id="KubernetesResourcesSpec-tolerations">
 <td><code>tolerations</code></td>
-<td><code><a href="#Toleration">Toleration</a></code></td>
+<td><code><a href="#k8s-io-api-core-v1-Toleration">Toleration[]</a></code></td>
 <td>
 <p>k8s toleration
 https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/</p>
@@ -1395,6 +1552,66 @@ No
 <tr id="LocalObjectReference-name">
 <td><code>name</code></td>
 <td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MetricSpec">MetricSpec</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MetricSpec-type">
+<td><code>type</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricSpec-object">
+<td><code>object</code></td>
+<td><code><a href="#ObjectMetricSource">ObjectMetricSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricSpec-pods">
+<td><code>pods</code></td>
+<td><code><a href="#PodsMetricSource">PodsMetricSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricSpec-resource">
+<td><code>resource</code></td>
+<td><code><a href="#ResourceMetricSource">ResourceMetricSource</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MetricSpec-external">
+<td><code>external</code></td>
+<td><code><a href="#ExternalMetricSource">ExternalMetricSource</a></code></td>
 <td>
 </td>
 <td>
@@ -1604,6 +1821,66 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="ObjectMetricSource">ObjectMetricSource</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ObjectMetricSource-target">
+<td><code>target</code></td>
+<td><code><a href="#CrossVersionObjectReference">CrossVersionObjectReference</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ObjectMetricSource-metricName">
+<td><code>metricName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ObjectMetricSource-targetValue">
+<td><code>targetValue</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-api-resource-Quantity">Quantity</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ObjectMetricSource-selector">
+<td><code>selector</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-apis-meta-v1-LabelSelector">LabelSelector</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ObjectMetricSource-averageValue">
+<td><code>averageValue</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-api-resource-Quantity">Quantity</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="PodAffinity">PodAffinity</h2>
 <section>
 <table class="message-fields">
@@ -1747,6 +2024,48 @@ No
 <tr id="PodDisruptionBudgetSpec-maxUnavailable">
 <td><code>maxUnavailable</code></td>
 <td><code>uint32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="PodsMetricSource">PodsMetricSource</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PodsMetricSource-metricName">
+<td><code>metricName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PodsMetricSource-targetAverageValue">
+<td><code>targetAverageValue</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-api-resource-Quantity">Quantity</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="PodsMetricSource-selector">
+<td><code>selector</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-apis-meta-v1-LabelSelector">LabelSelector</a></code></td>
 <td>
 </td>
 <td>
@@ -1920,6 +2239,48 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="ResourceMetricSource">ResourceMetricSource</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ResourceMetricSource-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ResourceMetricSource-targetAverageUtilization">
+<td><code>targetAverageUtilization</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ResourceMetricSource-targetAverageValue">
+<td><code>targetAverageValue</code></td>
+<td><code><a href="#k8s-io-apimachinery-pkg-api-resource-Quantity">Quantity</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="Resources">Resources</h2>
 <section>
 <p>Mirrors k8s.io.api.core.v1.ResourceRequirements for unmarshaling.</p>
@@ -2073,7 +2434,7 @@ No
 </tr>
 <tr id="ServicePort-targetPort">
 <td><code>targetPort</code></td>
-<td><code><a href="#k8s-io-apimachinery-pkg-util-intstr-IntOrString">IntOrString</a></code></td>
+<td><code><a href="#TypeIntOrStringForPB">TypeIntOrStringForPB</a></code></td>
 <td>
 </td>
 <td>
@@ -2283,66 +2644,6 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="Toleration">Toleration</h2>
-<section>
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Toleration-key">
-<td><code>key</code></td>
-<td><code>string</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Toleration-operator">
-<td><code>operator</code></td>
-<td><code>string</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Toleration-value">
-<td><code>value</code></td>
-<td><code>string</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Toleration-effect">
-<td><code>effect</code></td>
-<td><code>string</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Toleration-tolerationSeconds">
-<td><code>tolerationSeconds</code></td>
-<td><code>int64</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="TypeBoolValueForPB">TypeBoolValueForPB</h2>
 <section>
 <p>GOTYPE: *BoolValueForPB</p>
@@ -2355,18 +2656,23 @@ No
 </section>
 <h2 id="TypeInterface">TypeInterface</h2>
 <section>
-<p>GOTYPE: interface&lbrace;}</p>
+<p>GOTYPE: interface{}</p>
+
+</section>
+<h2 id="TypeInterface2">TypeInterface2</h2>
+<section>
+<p>GOTYPE: interface{}</p>
 
 </section>
 <h2 id="TypeMapStringInterface">TypeMapStringInterface</h2>
 <section>
-<p>GOTYPE: map[string]interface&lbrace;}</p>
+<p>GOTYPE: map[string]interface{}</p>
 
 </section>
 <h2 id="TypeMapStringInterface2">TypeMapStringInterface2</h2>
 <section>
 <p>This is required because synthetic type definition has file rather than package scope.
-GOTYPE: map[string]interface&lbrace;}</p>
+GOTYPE: map[string]interface{}</p>
 
 </section>
 <h2 id="WeightedPodAffinityTerm">WeightedPodAffinityTerm</h2>
@@ -2402,9 +2708,10 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec">k8s.io.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec</h2>
+<h2 id="k8s-io-api-core-v1-Toleration">k8s.io.api.core.v1.Toleration</h2>
 <section>
-<p>HorizontalPodAutoscalerSpec describes the desired functionality of the HorizontalPodAutoscaler.</p>
+<p>The pod this Toleration is attached to tolerates any taint that matches
+the triple &lt;key,value,effect&gt; using the matching operator &lt;operator&gt;.</p>
 
 <table class="message-fields">
 <thead>
@@ -2416,27 +2723,12 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec-scaleTargetRef">
-<td><code>scaleTargetRef</code></td>
-<td><code><a href="#k8s-io-api-autoscaling-v2beta1-CrossVersionObjectReference">CrossVersionObjectReference</a></code></td>
+<tr id="k8s-io-api-core-v1-Toleration-key">
+<td><code>key</code></td>
+<td><code>string</code></td>
 <td>
-<p>scaleTargetRef points to the target resource to scale, and is used to the pods for which metrics
-should be collected, as well as to actually change the replica count.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec-minReplicas">
-<td><code>minReplicas</code></td>
-<td><code>int32</code></td>
-<td>
-<p>minReplicas is the lower limit for the number of replicas to which the autoscaler
-can scale down.  It defaults to 1 pod.  minReplicas is allowed to be 0 if the
-alpha feature gate HPAScaleToZero is enabled and at least one Object or External
-metric is configured.  Scaling is active as long as at least one metric value is
-available.
+<p>Key is the taint key that the toleration applies to. Empty means match all taint keys.
+If the key is empty, operator must be Exists; this combination means to match all values and all keys.
 +optional</p>
 
 </td>
@@ -2444,29 +2736,55 @@ available.
 No
 </td>
 </tr>
-<tr id="k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec-maxReplicas">
-<td><code>maxReplicas</code></td>
-<td><code>int32</code></td>
+<tr id="k8s-io-api-core-v1-Toleration-operator">
+<td><code>operator</code></td>
+<td><code>string</code></td>
 <td>
-<p>maxReplicas is the upper limit for the number of replicas to which the autoscaler can scale up.
-It cannot be less that minReplicas.</p>
+<p>Operator represents a key&rsquo;s relationship to the value.
+Valid operators are Exists and Equal. Defaults to Equal.
+Exists is equivalent to wildcard for value, so that a pod can
+tolerate all taints of a particular category.
++optional</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec-metrics">
-<td><code>metrics</code></td>
-<td><code><a href="#k8s-io-api-autoscaling-v2beta1-MetricSpec">MetricSpec[]</a></code></td>
+<tr id="k8s-io-api-core-v1-Toleration-value">
+<td><code>value</code></td>
+<td><code>string</code></td>
 <td>
-<p>metrics contains the specifications for which to use to calculate the
-desired replica count (the maximum replica count across all metrics will
-be used).  The desired replica count is calculated multiplying the
-ratio between the target value and the current value by the current
-number of pods.  Ergo, metrics used must decrease as the pod count is
-increased, and vice-versa.  See the individual metric source types for
-more information about how each type of metric must respond.
+<p>Value is the taint value the toleration matches to.
+If the operator is Exists, the value should be empty, otherwise just a regular string.
++optional</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="k8s-io-api-core-v1-Toleration-effect">
+<td><code>effect</code></td>
+<td><code>string</code></td>
+<td>
+<p>Effect indicates the taint effect to match. Empty means match all taint effects.
+When specified, allowed values are NoSchedule, PreferNoSchedule and NoExecute.
++optional</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="k8s-io-api-core-v1-Toleration-tolerationSeconds">
+<td><code>tolerationSeconds</code></td>
+<td><code>int64</code></td>
+<td>
+<p>TolerationSeconds represents the period of time the toleration (which must be
+of effect NoExecute, otherwise this field is ignored) tolerates the taint. By default,
+it is not set, which means tolerate the taint forever (do not evict). Zero and
+negative values will be treated as 0 (evict immediately) by the system.
 +optional</p>
 
 </td>
@@ -2580,7 +2898,7 @@ label selector matches no objects.</p>
 <td><code>matchLabels</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>matchLabels is a map of &lbrace;key,value} pairs. A single &lbrace;key,value} in the matchLabels
+<p>matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
 map is equivalent to an element of matchExpressions, whose key field is &ldquo;key&rdquo;, the
 operator is &ldquo;In&rdquo;, and the values array contains only &ldquo;value&rdquo;. The requirements are ANDed.
 +optional</p>
@@ -2597,58 +2915,6 @@ No
 <p>matchExpressions is a list of label selector requirements. The requirements are ANDed.
 +optional</p>
 
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="k8s-io-apimachinery-pkg-util-intstr-IntOrString">k8s.io.apimachinery.pkg.util.intstr.IntOrString</h2>
-<section>
-<p>IntOrString is a type that can hold an int32 or a string.  When used in
-JSON or YAML marshalling and unmarshalling, it produces or consumes the
-inner type.  This allows you to have, for example, a JSON field that can
-accept a name or number.
-TODO: Rename to Int32OrString</p>
-
-<p>+protobuf=true
-+protobuf.options.(gogoproto.goproto_stringer)=false
-+k8s:openapi-gen=true</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="k8s-io-apimachinery-pkg-util-intstr-IntOrString-type">
-<td><code>type</code></td>
-<td><code>int64</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="k8s-io-apimachinery-pkg-util-intstr-IntOrString-intVal">
-<td><code>intVal</code></td>
-<td><code>int32</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="k8s-io-apimachinery-pkg-util-intstr-IntOrString-strVal">
-<td><code>strVal</code></td>
-<td><code>string</code></td>
-<td>
 </td>
 <td>
 No

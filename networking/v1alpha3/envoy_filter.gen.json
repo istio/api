@@ -403,7 +403,8 @@
           "ADD",
           "REMOVE",
           "INSERT_BEFORE",
-          "INSERT_AFTER"
+          "INSERT_AFTER",
+          "INSERT_FIRST"
         ]
       },
       "istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch": {

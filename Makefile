@@ -53,12 +53,14 @@ else
 endif
 
 export TARGET_OUT ?= $(shell pwd)/out/$(TARGET_OS)_$(TARGET_ARCH)
+export TARGET_OUT_LINUX ?= $(shell pwd)/out/linux_amd64
 
 ifeq ($(BUILD_WITH_CONTAINER),1)
 export TARGET_OUT = /work/out/$(TARGET_OS)_$(TARGET_ARCH)
+export TARGET_OUT_LINUX = /work/out/linux_amd64
 CONTAINER_CLI ?= docker
 DOCKER_SOCKET_MOUNT ?= -v /var/run/docker.sock:/var/run/docker.sock
-IMG ?= gcr.io/istio-testing/build-tools:master-2019-12-15T16-17-48
+IMG ?= gcr.io/istio-testing/build-tools:master-2020-01-30T23-36-53
 UID = $(shell id -u)
 GID = `grep docker /etc/group | cut -f3 -d:`
 PWD = $(shell pwd)
@@ -87,7 +89,7 @@ endif
 
 ifneq (,$(wildcard $(HOME)/.kube))
 $(info Using local Kubernetes configuration $(HOME)/.kube)
-CONDITIONAL_HOST_MOUNTS+=--mount type=bind,source="$(HOME)/.kube",destination="/home/.kube",readonly
+CONDITIONAL_HOST_MOUNTS+=--mount type=bind,source="$(HOME)/.kube",destination="/home/.kube"
 endif
 
 ENV_VARS:=
@@ -104,6 +106,7 @@ RUN = $(CONTAINER_CLI) run -t -i --sig-proxy=true -u $(UID):$(GID) --rm \
 	-e TARGET_ARCH="$(TARGET_ARCH)" \
 	-e TARGET_OS="$(TARGET_OS)" \
 	-e TARGET_OUT="$(TARGET_OUT)" \
+	-e TARGET_OUT_LINUX="$(TARGET_OUT_LINUX)" \
 	-e USER="${USER}" \
 	$(ENV_VARS) \
 	-v /etc/passwd:/etc/passwd:ro \

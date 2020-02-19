@@ -122,7 +122,7 @@ metadata:
  name: policy
  namespace: foo
 spec:
-  &lbrace;}
+  {}
 </code></pre>
 
 <p>The following authorization policy applies to workloads containing label
@@ -153,7 +153,7 @@ metadata:
  name: deny-all
  namespace: foo
 spec:
-  &lbrace;}
+  {}
 </code></pre>
 
 <p>The following authorization policy allows all requests to workloads in namespace
@@ -166,7 +166,7 @@ metadata:
  namespace: foo
 spec:
  rules:
- - &lbrace;}
+ - {}
 </code></pre>
 
 <table class="message-fields">
@@ -379,10 +379,9 @@ No
 <td><code>string[]</code></td>
 <td>
 <p>Optional. A list of methods, which matches to the &ldquo;request.method&rdquo; attribute.
-For gRPC service, this should be the fully-qualified name in the form of
-&ldquo;/package.service/method&rdquo;</p>
+For gRPC service, this will always be &ldquo;POST&rdquo;.</p>
 
-<p>If not set, any method is allowed. Must be used only with HTTP or gRPC.</p>
+<p>If not set, any method is allowed. Must be used only with HTTP.</p>
 
 </td>
 <td>
@@ -404,7 +403,9 @@ No
 <td><code>paths</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Optional. A list of paths, which matches to the &ldquo;request.url_path&rdquo; attribute.</p>
+<p>Optional. A list of paths, which matches to the &ldquo;request.url_path&rdquo; attribute.
+For gRPC service, this will be the fully-qualified name in the form of
+&ldquo;/package.service/method&rdquo;.</p>
 
 <p>If not set, any path is allowed. Must be used only with HTTP.</p>
 

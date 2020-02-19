@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 23
+number_of_entries: 24
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -53,14 +53,14 @@ policy.</p>
 <section>
 <p>Certificate configures the provision of a certificate and its key.
 Example 1: key and cert stored in a secret
-&lbrace; secretName: galley-cert
+{ secretName: galley-cert
   secretNamespace: istio-system
   dnsNames:
     - galley.istio-system.svc
     - galley.mydomain.com
 }
 Example 2: key and cert stored in a directory
-&lbrace; dnsNames:
+{ dnsNames:
     - pilot.istio-system
     - pilot.istio-system.svc
     - pilot.mydomain.com
@@ -295,7 +295,8 @@ the first bits of data. For server first protocols like MySQL,
 MongoDB, etc., Envoy will timeout on the protocol detection after
 the specified period, defaulting to non mTLS plain TCP
 traffic. Set this field to tweak the period that Envoy will wait
-for the client to send the first bits of data. (MUST BE &gt;=1ms)</p>
+for the client to send the first bits of data. (MUST BE &gt;=1ms or
+0s to disable)</p>
 
 </td>
 <td>
@@ -428,14 +429,17 @@ No
 <td><code>outboundTrafficPolicy</code></td>
 <td><code><a href="#MeshConfig-OutboundTrafficPolicy">OutboundTrafficPolicy</a></code></td>
 <td>
-<p>Set the default behavior of the sidecar for handling outbound traffic
-from the application.  If your application uses one or more external
-services that are not known apriori, setting the policy to ALLOW<em>ANY
-will cause the sidecars to route any unknown traffic originating from
-the application to its requested destination.  Users are strongly
-encouraged to use ServiceEntries to explicitly declare any external
-dependencies, instead of using allow</em>any, so that traffic to these
-services can be monitored.</p>
+<p>Set the default behavior of the sidecar for handling outbound
+traffic from the application.  If your application uses one or
+more external services that are not known apriori, setting the
+policy to ALLOW<em>ANY will cause the sidecars to route any unknown
+traffic originating from the application to its requested
+destination.  Users are strongly encouraged to use ServiceEntries
+to explicitly declare any external dependencies, instead of using
+allow</em>any, so that traffic to these services can be
+monitored. Can be overridden at a Sidecar level by setting the
+OutboundTrafficPolicy in the <a href="https://istio.io/docs/reference/config/networking/sidecar/#OutboundTrafficPolicy">Sidecar
+API</a>.</p>
 
 </td>
 <td>
@@ -747,6 +751,17 @@ No
 No
 </td>
 </tr>
+<tr id="MeshConfig-thrift_config">
+<td><code>thriftConfig</code></td>
+<td><code><a href="#MeshConfig-ThriftConfig">ThriftConfig</a></code></td>
+<td>
+<p>Set configuration for Thrift protocol</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -892,6 +907,45 @@ service registry as well as those defined through ServiceEntries</p>
 <p>outbound traffic to unknown destinations will be allowed, in case
 there are no services or ServiceEntries for the destination port</p>
 
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ThriftConfig">MeshConfig.ThriftConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ThriftConfig-rate_limit_url">
+<td><code>rateLimitUrl</code></td>
+<td><code>string</code></td>
+<td>
+<p>Specify thrift rate limit service URL. If pilot has thrift protocol support enabled,
+this will enable the rate limit service for destinations that have matching rate
+limit configurations.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-ThriftConfig-rate_limit_timeout">
+<td><code>rateLimitTimeout</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>Specify thrift rate limit service timeout, in milliseconds. Default is 50ms</p>
+
+</td>
+<td>
+No
 </td>
 </tr>
 </tbody>

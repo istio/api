@@ -90,7 +90,8 @@ message MeshConfig {
   // MongoDB, etc., Envoy will timeout on the protocol detection after
   // the specified period, defaulting to non mTLS plain TCP
   // traffic. Set this field to tweak the period that Envoy will wait
-  // for the client to send the first bits of data. (MUST BE >=1ms)
+  // for the client to send the first bits of data. (MUST BE >=1ms or 
+  // 0s to disable)
   google.protobuf.Duration protocol_detection_timeout = 42;
 
   // If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
@@ -191,14 +192,17 @@ message MeshConfig {
     Mode mode = 1;
   }
 
-  // Set the default behavior of the sidecar for handling outbound traffic
-  // from the application.  If your application uses one or more external
-  // services that are not known apriori, setting the policy to ALLOW_ANY
-  // will cause the sidecars to route any unknown traffic originating from
-  // the application to its requested destination.  Users are strongly
-  // encouraged to use ServiceEntries to explicitly declare any external
-  // dependencies, instead of using allow_any, so that traffic to these
-  // services can be monitored.
+  // Set the default behavior of the sidecar for handling outbound
+  // traffic from the application.  If your application uses one or
+  // more external services that are not known apriori, setting the
+  // policy to ALLOW_ANY will cause the sidecars to route any unknown
+  // traffic originating from the application to its requested
+  // destination.  Users are strongly encouraged to use ServiceEntries
+  // to explicitly declare any external dependencies, instead of using
+  // allow_any, so that traffic to these services can be
+  // monitored. Can be overridden at a Sidecar level by setting the
+  // OutboundTrafficPolicy in the [Sidecar
+  // API](https://istio.io/docs/reference/config/networking/sidecar/#OutboundTrafficPolicy).
   OutboundTrafficPolicy outbound_traffic_policy = 17;
 
   reserved 18;
@@ -387,8 +391,21 @@ message MeshConfig {
   // Configure the provision of certificates.
   repeated Certificate certificates = 47;
 
+  message ThriftConfig {
+    // Specify thrift rate limit service URL. If pilot has thrift protocol support enabled,
+    // this will enable the rate limit service for destinations that have matching rate
+    // limit configurations.
+    string rate_limit_url = 1;
+
+    // Specify thrift rate limit service timeout, in milliseconds. Default is 50ms
+    google.protobuf.Duration rate_limit_timeout = 2;
+  }
+
+  // Set configuration for Thrift protocol
+  ThriftConfig thrift_config = 49;
+
   // $hide_from_docs
-  // Next available field number: 49
+  // Next available field number: 50
 }
 
 // Resource describes the source of configuration

@@ -16,6 +16,25 @@
           }
         }
       },
+      "istio.networking.v1alpha3.Destination": {
+        "description": "Destination indicates the network addressable service to which the request/connection will be sent after processing a routing rule. The destination.host should unambiguously refer to a service in the service registry. Istio's service registry is composed of all the services found in the platform's service registry (e.g., Kubernetes services, Consul services), as well as services declared through the [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry) resource.",
+        "type": "object",
+        "properties": {
+          "host": {
+            "description": "The name of a service from the service registry. Service names are looked up from the platform's service registry (e.g., Kubernetes services, Consul services, etc.) and from the hosts declared by [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry). Traffic forwarded to destinations that are not found in either of the two, will be dropped.",
+            "type": "string",
+            "format": "string"
+          },
+          "port": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.PortSelector"
+          },
+          "subset": {
+            "description": "The name of a subset within the service. Applicable only to services within the mesh. The subset must be defined in a corresponding DestinationRule.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
       "istio.networking.v1alpha3.VirtualService": {
         "description": "Configuration affecting traffic routing.",
         "type": "object",
@@ -166,25 +185,6 @@
           }
         }
       },
-      "istio.networking.v1alpha3.Destination": {
-        "description": "Destination indicates the network addressable service to which the request/connection will be sent after processing a routing rule. The destination.host should unambiguously refer to a service in the service registry. Istio's service registry is composed of all the services found in the platform's service registry (e.g., Kubernetes services, Consul services), as well as services declared through the [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry) resource.",
-        "type": "object",
-        "properties": {
-          "host": {
-            "description": "The name of a service from the service registry. Service names are looked up from the platform's service registry (e.g., Kubernetes services, Consul services, etc.) and from the hosts declared by [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry). Traffic forwarded to destinations that are not found in either of the two, will be dropped.",
-            "type": "string",
-            "format": "string"
-          },
-          "port": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.PortSelector"
-          },
-          "subset": {
-            "description": "The name of a subset within the service. Applicable only to services within the mesh. The subset must be defined in a corresponding DestinationRule.",
-            "type": "string",
-            "format": "string"
-          }
-        }
-      },
       "istio.networking.v1alpha3.HTTPMatchRequest": {
         "description": "HttpMatchRequest specifies a set of criterion to be met in order for the rule to be applied to the HTTP request. For example, the following restricts the rule to match only requests where the URL path starts with /ratings/v2/ and the request contains a custom `end-user` header with value `jason`.",
         "type": "object",
@@ -243,6 +243,18 @@
           "ignoreUriCase": {
             "description": "Flag to specify whether the URI matching should be case-insensitive.",
             "type": "boolean"
+          },
+          "withoutHeaders": {
+            "description": "withoutHeader has the same syntax with the header, but has opposite meaning. If a header is matched with a matching rule among withoutHeader, the traffic becomes not matched one.",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.StringMatch"
+            }
+          },
+          "sourceNamespace": {
+            "description": "Source namespace constraining the applicability of a rule to workloads in that namespace. If the VirtualService has a list of gateways specified in the top-level `gateways` field, it must include the reserved gateway `mesh` for this field to be applicable.",
+            "type": "string",
+            "format": "string"
           }
         }
       },
@@ -316,6 +328,11 @@
             "description": "Specifies the conditions under which retry takes place. One or more policies can be specified using a ‘,’ delimited list. See the [retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on) and [gRPC retry policies](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on) for more details.",
             "type": "string",
             "format": "string"
+          },
+          "retryRemoteLocalities": {
+            "description": "Flag to specify whether the retries should retry to other localities. See the [retry plugin configuration](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_connection_management#retry-plugin-configuration) for more details.",
+            "type": "boolean",
+            "nullable": true
           }
         }
       },
@@ -397,7 +414,6 @@
         }
       },
       "istio.networking.v1alpha3.Headers": {
-        "description": "Message headers can be manipulated when Envoy forwards requests to, or responses from, a destination service. Header manipulation rules can be specified for a specific route destination or for all destinations. The following VirtualService adds a `test` header with the value `true` to requests that are routed to any `reviews` service destination. It also romoves the `foo` response header, but only from responses coming from the `v1` subset (version) of the `reviews` service.",
         "type": "object",
         "properties": {
           "response": {
@@ -462,6 +478,11 @@
               "format": "string"
             }
           },
+          "sourceNamespace": {
+            "description": "Source namespace constraining the applicability of a rule to workloads in that namespace. If the VirtualService has a list of gateways specified in the top-level `gateways` field, it must include the reserved gateway `mesh` for this field to be applicable.",
+            "type": "string",
+            "format": "string"
+          },
           "destinationSubnets": {
             "description": "IPv4 or IPv6 ip addresses of destination with optional subnet. E.g., a.b.c.d/xx form or just a.b.c.d.",
             "type": "array",
@@ -517,6 +538,11 @@
               "type": "string",
               "format": "string"
             }
+          },
+          "sourceNamespace": {
+            "description": "Source namespace constraining the applicability of a rule to workloads in that namespace. If the VirtualService has a list of gateways specified in the top-level `gateways` field, it must include the reserved gateway `mesh` for this field to be applicable.",
+            "type": "string",
+            "format": "string"
           },
           "destinationSubnets": {
             "description": "IPv4 or IPv6 ip addresses of destination with optional subnet. E.g., a.b.c.d/xx form or just a.b.c.d.",

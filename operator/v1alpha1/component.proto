@@ -15,7 +15,7 @@
 syntax = "proto3";
 
 import "google/protobuf/any.proto";
-import "k8s.io/api/autoscaling/v2beta1/generated.proto";
+import "k8s.io/api/core/v1/generated.proto";
 import "operator/v1alpha1/kubernetes.proto";
 
 package istio.operator.v1alpha1;
@@ -54,7 +54,7 @@ message ComponentSpec {
     // Hub for the component (overrides top level hub setting).
     string hub = 10;
     // Tag for the component (overrides top level tag setting).
-    string tag = 11;
+    TypeInterface tag = 11;
 
     // Arbitrary install time configuration for the component.
     TypeInterface spec = 30;
@@ -96,7 +96,7 @@ message GatewaySpec {
     // Hub for the component (overrides top level hub setting).
     string hub = 10;
     // Tag for the component (overrides top level tag setting).
-    string tag = 11;
+    TypeInterface tag = 11;
 
     // Kubernetes resource spec.
     KubernetesResourcesSpec k8s = 50;
@@ -112,7 +112,7 @@ message KubernetesResourcesSpec {
     repeated EnvVar env = 2;
     // k8s HorizontalPodAutoscaler settings.
     // https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-    k8s.io.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec hpa_spec = 3;
+    HorizontalPodAutoscalerSpec hpa_spec = 3;
     // k8s imagePullPolicy.
     // https://kubernetes.io/docs/concepts/containers/images/
     string image_pull_policy = 4;
@@ -146,7 +146,7 @@ message KubernetesResourcesSpec {
     DeploymentStrategy strategy = 13;
     // k8s toleration
     // https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-    Toleration tolerations = 14;
+    repeated k8s.io.api.core.v1.Toleration tolerations = 14;
     // k8s service annotations.
     // https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     map<string, string> service_annotations = 15;
