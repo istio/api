@@ -42813,6 +42813,11 @@
                 "id": 3,
                 "name": "retry_on",
                 "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "retry_remote_localities",
+                "type": "google.protobuf.BoolValue"
               }
             ]
           },
@@ -44347,11 +44352,6 @@
                     "id": 2,
                     "name": "status",
                     "type": "Status"
-                  },
-                  {
-                    "id": 3,
-                    "name": "status_string",
-                    "type": "string"
                   },
                   {
                     "id": 4,
