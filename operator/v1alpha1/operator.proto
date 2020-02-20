@@ -197,7 +197,6 @@ message InstallStatus {
     message VersionStatus {
         string version = 1;
         Status status = 2;
-        string status_string = 3;
         string error = 4;
     }
     // Overall status of all components controlled by the operator.
