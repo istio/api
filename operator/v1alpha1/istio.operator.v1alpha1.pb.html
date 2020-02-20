@@ -1,10 +1,14 @@
 ---
-title: istio.operator.v1alpha1
+title: IstioOperator Options
+description: Configuration affecting Istio control plane installation version and shape.
+location: https://istio.io/docs/reference/config/istio.operator.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
 number_of_entries: 59
 ---
+<p>Configuration affecting Istio control plane installation version and shape.</p>
+
 <h2 id="Affinity">Affinity</h2>
 <section>
 <p>Mirrors k8s.io.api.core.v1.</p>
@@ -814,7 +818,7 @@ No
 <tbody>
 <tr id="InstallStatus-status">
 <td><code>status</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/istio.operator.v1alpha1.html#InstallStatus-Status">Status</a></code></td>
+<td><code><a href="#InstallStatus-Status">Status</a></code></td>
 <td>
 <p>Overall status of all components controlled by the operator.
 - If all components have status NONE, overall status is NONE.
@@ -831,7 +835,7 @@ No
 </tr>
 <tr id="InstallStatus-component_status">
 <td><code>componentStatus</code></td>
-<td><code>map&lt;string,&nbsp;<a href="https://istio.io/docs/reference/config/istio.operator.v1alpha1.html#InstallStatus-VersionStatus">VersionStatus</a>&gt;</code></td>
+<td><code>map&lt;string,&nbsp;<a href="#InstallStatus-VersionStatus">VersionStatus</a>&gt;</code></td>
 <td>
 <p>Individual status of each component controlled by the operator. The map key is the name of the component.</p>
 
@@ -918,7 +922,7 @@ No
 </tr>
 <tr id="InstallStatus-VersionStatus-status">
 <td><code>status</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/istio.operator.v1alpha1.html#InstallStatus-Status">Status</a></code></td>
+<td><code><a href="#InstallStatus-Status">Status</a></code></td>
 <td>
 </td>
 <td>
@@ -1118,7 +1122,7 @@ No
 </tr>
 <tr id="IstioOperatorSpec-tag">
 <td><code>tag</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/istio.operator.v1alpha1.html#TypeInterface2">TypeInterface2</a></code></td>
+<td><code><a href="#TypeInterface2">TypeInterface2</a></code></td>
 <td>
 <p>Version tag for docker images e.g. 1.0.6</p>
 
@@ -1187,7 +1191,7 @@ No
 </tr>
 <tr id="IstioOperatorSpec-values">
 <td><code>values</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/istio.operator.v1alpha1.html#TypeMapStringInterface2">TypeMapStringInterface2</a></code></td>
+<td><code><a href="#TypeMapStringInterface2">TypeMapStringInterface2</a></code></td>
 <td>
 <p>Overrides for default values.yaml. This is a validated pass-through to Helm templates.
 See the Helm installation options for schema details: https://istio.io/docs/reference/config/installation-options/.
@@ -1201,7 +1205,7 @@ No
 </tr>
 <tr id="IstioOperatorSpec-unvalidated_values">
 <td><code>unvalidatedValues</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/istio.operator.v1alpha1.html#TypeMapStringInterface2">TypeMapStringInterface2</a></code></td>
+<td><code><a href="#TypeMapStringInterface2">TypeMapStringInterface2</a></code></td>
 <td>
 <p>Unvalidated overrides for default values.yaml. Used for custom templates where new parameters are added.</p>
 
