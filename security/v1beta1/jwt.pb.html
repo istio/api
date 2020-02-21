@@ -1,7 +1,11 @@
 ---
-title: istio.security.v1beta1
+title: JWTRule
+description: Configuration to validate JWT.
+location: https://istio.io/docs/reference/config/security/jwt.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
+schema: istio.security.v1beta1.JWTRule
+aliases: [/docs/reference/config/security/v1beta1/jwt]
 number_of_entries: 2
 ---
 <h2 id="JWTHeader">JWTHeader</h2>
@@ -161,7 +165,7 @@ No
 </tr>
 <tr id="JWTRule-from_headers">
 <td><code>fromHeaders</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/security/authorization-policy.html#JWTHeader">JWTHeader[]</a></code></td>
+<td><code><a href="#JWTHeader">JWTHeader[]</a></code></td>
 <td>
 <p>List of header locations from which JWT is expected. For example, below is the location spec
 if JWT is expected to be found in <code>x-jwt-assertion</code> header, and have &ldquo;Bearer &rdquo; prefix:</p>
