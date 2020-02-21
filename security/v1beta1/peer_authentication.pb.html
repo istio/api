@@ -1,7 +1,11 @@
 ---
-title: istio.security.v1beta1
+title: PeerAuthentication
+description: Peer authentication configuration for workloads.
+location: https://istio.io/docs/reference/config/security/peer_authentication.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
+schema: istio.security.v1beta1.PeerAuthentication
+aliases: [/docs/reference/config/security/v1beta1/peer_authentication]
 number_of_entries: 3
 ---
 <h2 id="PeerAuthentication">PeerAuthentication</h2>
@@ -111,7 +115,7 @@ No
 </tr>
 <tr id="PeerAuthentication-mtls">
 <td><code>mtls</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/security/authorization-policy.html#PeerAuthentication-MutualTLS">MutualTLS</a></code></td>
+<td><code><a href="#PeerAuthentication-MutualTLS">MutualTLS</a></code></td>
 <td>
 <p>Mutual TLS settings for workload. If not defined, inherit from parent.</p>
 
@@ -122,7 +126,7 @@ No
 </tr>
 <tr id="PeerAuthentication-port_level_mtls">
 <td><code>portLevelMtls</code></td>
-<td><code>map&lt;uint32,&nbsp;<a href="https://istio.io/docs/reference/config/security/authorization-policy.html#PeerAuthentication-MutualTLS">MutualTLS</a>&gt;</code></td>
+<td><code>map&lt;uint32,&nbsp;<a href="#PeerAuthentication-MutualTLS">MutualTLS</a>&gt;</code></td>
 <td>
 <p>Port specific mutual TLS settings.</p>
 
@@ -150,7 +154,7 @@ No
 <tbody>
 <tr id="PeerAuthentication-MutualTLS-mode">
 <td><code>mode</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/security/authorization-policy.html#PeerAuthentication-MutualTLS-Mode">Mode</a></code></td>
+<td><code><a href="#PeerAuthentication-MutualTLS-Mode">Mode</a></code></td>
 <td>
 <p>Defines the mTLS mode used for peer authentication.</p>
 
