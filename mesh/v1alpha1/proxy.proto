@@ -229,6 +229,18 @@ message ProxyConfig {
   // Additional env variables for the proxy.
   // Names starting with ISTIO_META_ will be included in the generated bootstrap and sent to the XDS server.
   map<string,string> proxy_metadata = 24;
+
+  // Configuration for the STS (Security Token Service) server use by the proxy.
+  STS sts = 25;
+
+  // Port on which the agent should listen for administrative commands such as readiness probe.
+  int32 status_port = 26;
+}
+
+message STS {
+  // The service port used by Security Token Service (STS) server to handle token exchange requests.
+  // Setting this port to a non-zero value enables STS server.
+  string service_port = 1;
 }
 
 message RemoteService {

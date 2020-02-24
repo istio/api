@@ -363,6 +363,14 @@
               "type": "string",
               "format": "string"
             }
+          },
+          "sts": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.STS"
+          },
+          "statusPort": {
+            "description": "Port on which the agent should listen for administrative commands such as readiness probe.",
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -724,6 +732,16 @@
           },
           "tlsSettings": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSSettings"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.STS": {
+        "type": "object",
+        "properties": {
+          "servicePort": {
+            "description": "The service port used by Security Token Service (STS) server to handle token exchange requests. Setting this port to a non-zero value enables STS server.",
+            "type": "string",
+            "format": "string"
           }
         }
       },
