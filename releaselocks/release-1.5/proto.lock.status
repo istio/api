@@ -1,1 +1,6 @@
+CONFLICT: "HTTPGetAction" field: "port" has a different type: TypeInterface_kubernetes, previously TypeIntOrStringForPB [operator/v1alpha1/kubernetes.proto]
 CONFLICT: "KubernetesResourcesSpec" field: "hpa_spec" has a different type: HorizontalPodAutoscalerSpec, previously k8s.io.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec [operator/v1alpha1/component.proto]
+CONFLICT: "RollingUpdateDeployment" field: "maxSurge" has a different type: TypeInterface_kubernetes, previously TypeIntOrStringForPB [operator/v1alpha1/kubernetes.proto]
+CONFLICT: "RollingUpdateDeployment" field: "maxUnavailable" has a different type: TypeInterface_kubernetes, previously TypeIntOrStringForPB [operator/v1alpha1/kubernetes.proto]
+CONFLICT: "ServicePort" field: "targetPort" has a different type: TypeInterface_kubernetes, previously TypeIntOrStringForPB [operator/v1alpha1/kubernetes.proto]
+CONFLICT: "TCPSocketAction" field: "port" has a different type: TypeInterface_kubernetes, previously TypeIntOrStringForPB [operator/v1alpha1/kubernetes.proto]
