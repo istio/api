@@ -43644,7 +43644,7 @@
               {
                 "id": 2,
                 "name": "port",
-                "type": "TypeIntOrStringForPB"
+                "type": "TypeInterface_kubernetes"
               },
               {
                 "id": 3,
@@ -43685,7 +43685,7 @@
               {
                 "id": 1,
                 "name": "port",
-                "type": "TypeIntOrStringForPB"
+                "type": "TypeInterface_kubernetes"
               },
               {
                 "id": 2,
@@ -43735,12 +43735,12 @@
               {
                 "id": 1,
                 "name": "maxUnavailable",
-                "type": "TypeIntOrStringForPB"
+                "type": "TypeInterface_kubernetes"
               },
               {
                 "id": 2,
                 "name": "maxSurge",
-                "type": "TypeIntOrStringForPB"
+                "type": "TypeInterface_kubernetes"
               }
             ]
           },
@@ -43988,7 +43988,7 @@
               {
                 "id": 4,
                 "name": "targetPort",
-                "type": "TypeIntOrStringForPB"
+                "type": "TypeInterface_kubernetes"
               },
               {
                 "id": 5,
@@ -44154,7 +44154,7 @@
               {
                 "id": 2,
                 "name": "targetAverageUtilization",
-                "type": "int32"
+                "type": "TypeInterface_kubernetes"
               },
               {
                 "id": 3,
@@ -44190,6 +44190,9 @@
           },
           {
             "name": "TypeIntOrStringForPB"
+          },
+          {
+            "name": "TypeInterface_kubernetes"
           }
         ],
         "imports": [
