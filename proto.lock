@@ -12890,13 +12890,7 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings",
-                        "aggregated": [
-                          {
-                            "name": "get",
-                            "value": "/v1/services/{service_name}/config"
-                          }
-                        ]
+                        "name": "additional_bindings"
                       }
                     ]
                   }
@@ -36095,6 +36089,11 @@
                 "name": "certificates",
                 "type": "Certificate",
                 "is_repeated": true
+              },
+              {
+                "id": 49,
+                "name": "thrift_config",
+                "type": "ThriftConfig"
               }
             ],
             "reserved_ids": [
@@ -36109,6 +36108,21 @@
                     "id": 1,
                     "name": "mode",
                     "type": "Mode"
+                  }
+                ]
+              },
+              {
+                "name": "ThriftConfig",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "rate_limit_url",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "rate_limit_timeout",
+                    "type": "google.protobuf.Duration"
                   }
                 ]
               }
@@ -39228,6 +39242,10 @@
               {
                 "name": "INSERT_AFTER",
                 "integer": 5
+              },
+              {
+                "name": "INSERT_FIRST",
+                "integer": 6
               }
             ]
           }
@@ -43268,6 +43286,9 @@
             "path": "k8s.io/api/autoscaling/v2beta1/generated.proto"
           },
           {
+            "path": "k8s.io/api/core/v1/generated.proto"
+          },
+          {
             "path": "operator/v1alpha1/kubernetes.proto"
           }
         ],
@@ -43544,7 +43565,7 @@
               {
                 "id": 2,
                 "name": "port",
-                "type": "TypeIntOrStringForPB"
+                "type": "TypeInterface_kubernetes"
               },
               {
                 "id": 3,
@@ -43585,7 +43606,7 @@
               {
                 "id": 1,
                 "name": "port",
-                "type": "TypeIntOrStringForPB"
+                "type": "TypeInterface_kubernetes"
               },
               {
                 "id": 2,
@@ -43635,12 +43656,12 @@
               {
                 "id": 1,
                 "name": "maxUnavailable",
-                "type": "TypeIntOrStringForPB"
+                "type": "TypeInterface_kubernetes"
               },
               {
                 "id": 2,
                 "name": "maxSurge",
-                "type": "TypeIntOrStringForPB"
+                "type": "TypeInterface_kubernetes"
               }
             ]
           },
@@ -43888,7 +43909,7 @@
               {
                 "id": 4,
                 "name": "targetPort",
-                "type": "TypeIntOrStringForPB"
+                "type": "TypeInterface_kubernetes"
               },
               {
                 "id": 5,
@@ -43918,7 +43939,181 @@
             ]
           },
           {
+            "name": "HorizontalPodAutoscalerSpec",
+            "fields": [
+              {
+                "id": 1,
+                "name": "scaleTargetRef",
+                "type": "CrossVersionObjectReference"
+              },
+              {
+                "id": 2,
+                "name": "minReplicas",
+                "type": "int32"
+              },
+              {
+                "id": 3,
+                "name": "maxReplicas",
+                "type": "int32"
+              },
+              {
+                "id": 4,
+                "name": "metrics",
+                "type": "MetricSpec",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "CrossVersionObjectReference",
+            "fields": [
+              {
+                "id": 1,
+                "name": "kind",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "apiVersion",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "MetricSpec",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "object",
+                "type": "ObjectMetricSource"
+              },
+              {
+                "id": 3,
+                "name": "pods",
+                "type": "PodsMetricSource"
+              },
+              {
+                "id": 4,
+                "name": "resource",
+                "type": "ResourceMetricSource"
+              },
+              {
+                "id": 5,
+                "name": "external",
+                "type": "ExternalMetricSource"
+              }
+            ]
+          },
+          {
+            "name": "ObjectMetricSource",
+            "fields": [
+              {
+                "id": 1,
+                "name": "target",
+                "type": "CrossVersionObjectReference"
+              },
+              {
+                "id": 2,
+                "name": "metricName",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "targetValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              },
+              {
+                "id": 4,
+                "name": "selector",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
+              },
+              {
+                "id": 5,
+                "name": "averageValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              }
+            ]
+          },
+          {
+            "name": "PodsMetricSource",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metricName",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "targetAverageValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              },
+              {
+                "id": 3,
+                "name": "selector",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
+              }
+            ]
+          },
+          {
+            "name": "ResourceMetricSource",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "targetAverageUtilization",
+                "type": "TypeInterface_kubernetes"
+              },
+              {
+                "id": 3,
+                "name": "targetAverageValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              }
+            ]
+          },
+          {
+            "name": "ExternalMetricSource",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metricName",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "metricSelector",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
+              },
+              {
+                "id": 3,
+                "name": "targetValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              },
+              {
+                "id": 4,
+                "name": "targetAverageValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              }
+            ]
+          },
+          {
             "name": "TypeIntOrStringForPB"
+          },
+          {
+            "name": "TypeInterface_kubernetes"
           }
         ],
         "imports": [
@@ -43999,6 +44194,22 @@
               {
                 "id": 14,
                 "name": "resource_suffix",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
+              },
+              {
+                "id": 15,
+                "name": "namespace",
+                "type": "string"
+              },
+              {
+                "id": 16,
+                "name": "revision",
                 "type": "string"
               },
               {
