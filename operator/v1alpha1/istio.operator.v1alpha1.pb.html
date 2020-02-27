@@ -2,7 +2,7 @@
 title: istio.operator.v1alpha1
 layout: protoc-gen-docs
 generator: protoc-gen-docs
-number_of_entries: 60
+number_of_entries: 59
 ---
 <h2 id="Affinity">Affinity</h2>
 <section>
@@ -1367,7 +1367,7 @@ No
 </tr>
 <tr id="KubernetesResourcesSpec-hpa_spec">
 <td><code>hpaSpec</code></td>
-<td><code><a href="#k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec">HorizontalPodAutoscalerSpec</a></code></td>
+<td><code><a href="#HorizontalPodAutoscalerSpec">HorizontalPodAutoscalerSpec</a></code></td>
 <td>
 <p>k8s HorizontalPodAutoscaler settings.
 https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/</p>
@@ -2699,81 +2699,6 @@ No
 <td><code>podAffinityTerm</code></td>
 <td><code><a href="#PodAffinityTerm">PodAffinityTerm</a></code></td>
 <td>
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec">k8s.io.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec</h2>
-<section>
-<p>HorizontalPodAutoscalerSpec describes the desired functionality of the HorizontalPodAutoscaler.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec-scaleTargetRef">
-<td><code>scaleTargetRef</code></td>
-<td><code><a href="#k8s-io-api-autoscaling-v2beta1-CrossVersionObjectReference">CrossVersionObjectReference</a></code></td>
-<td>
-<p>scaleTargetRef points to the target resource to scale, and is used to the pods for which metrics
-should be collected, as well as to actually change the replica count.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec-minReplicas">
-<td><code>minReplicas</code></td>
-<td><code>int32</code></td>
-<td>
-<p>minReplicas is the lower limit for the number of replicas to which the autoscaler
-can scale down.  It defaults to 1 pod.  minReplicas is allowed to be 0 if the
-alpha feature gate HPAScaleToZero is enabled and at least one Object or External
-metric is configured.  Scaling is active as long as at least one metric value is
-available.
-+optional</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec-maxReplicas">
-<td><code>maxReplicas</code></td>
-<td><code>int32</code></td>
-<td>
-<p>maxReplicas is the upper limit for the number of replicas to which the autoscaler can scale up.
-It cannot be less that minReplicas.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="k8s-io-api-autoscaling-v2beta1-HorizontalPodAutoscalerSpec-metrics">
-<td><code>metrics</code></td>
-<td><code><a href="#k8s-io-api-autoscaling-v2beta1-MetricSpec">MetricSpec[]</a></code></td>
-<td>
-<p>metrics contains the specifications for which to use to calculate the
-desired replica count (the maximum replica count across all metrics will
-be used).  The desired replica count is calculated multiplying the
-ratio between the target value and the current value by the current
-number of pods.  Ergo, metrics used must decrease as the pod count is
-increased, and vice-versa.  See the individual metric source types for
-more information about how each type of metric must respond.
-+optional</p>
-
 </td>
 <td>
 No

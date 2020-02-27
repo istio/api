@@ -43143,7 +43143,7 @@
               {
                 "id": 3,
                 "name": "hpa_spec",
-                "type": "k8s.io.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec"
+                "type": "HorizontalPodAutoscalerSpec"
               },
               {
                 "id": 4,
