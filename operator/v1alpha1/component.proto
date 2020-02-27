@@ -15,7 +15,6 @@
 syntax = "proto3";
 
 import "google/protobuf/any.proto";
-import "k8s.io/api/autoscaling/v2beta1/generated.proto";
 import "k8s.io/api/core/v1/generated.proto";
 import "operator/v1alpha1/kubernetes.proto";
 
