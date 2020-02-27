@@ -200,6 +200,8 @@ func (*StringMatch) XXX_OneofWrappers() []interface{} {
 	}
 }
 
+// $hide_from_docs
+// Deprecated. Please use security/v1beta1/PeerAuthentication instead.
 // TLS authentication params.
 type MutualTls struct {
 	// Deprecated. Please use mode = PERMISSIVE instead.
@@ -529,6 +531,8 @@ func (m *Jwt_TriggerRule) GetIncludedPaths() []*StringMatch {
 	return nil
 }
 
+// $hide_from_docs
+// Deprecated. Please use security/v1beta1/PeerAuthentication instead.
 // PeerAuthenticationMethod defines one particular type of authentication. Only mTLS is supported
 // at the moment.
 // The type can be progammatically determine by checking the type of the
@@ -783,6 +787,8 @@ type Policy struct {
 	// List rules to select workloads that the policy should be applied on.
 	// If empty, policy will be used on all workloads in the same namespace.
 	Targets []*TargetSelector `protobuf:"bytes,1,rep,name=targets,proto3" json:"targets,omitempty"` // Deprecated: Do not use.
+	// $hide_from_docs
+	// Deprecated. Please use security/v1beta1/PeerAuthentication instead.
 	// List of authentication methods that can be used for peer authentication.
 	// They will be evaluated in order; the first validate one will be used to
 	// set peer identity (source.user) and other peer attributes. If none of
