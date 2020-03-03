@@ -685,7 +685,8 @@ No
 <td><code>inboundClusterStatName</code></td>
 <td><code>string</code></td>
 <td>
-<p>Name to be used while emitting statistics for inbound clusters.
+<p>Name to be used while emitting statistics for inbound clusters. The same pattern is used while computing stat prefix for
+network filters like TCP and Redis.
 By default, Istio emits statistics with the pattern <code>inbound|&lt;port&gt;|&lt;port-name&gt;|&lt;service-FQDN&gt;</code>.
 For example <code>inbound|7443|grpc-reviews|reviews.prod.svc.cluster.local</code>. This can be used to override that pattern.</p>
 
@@ -714,7 +715,8 @@ No
 <td><code>outboundClusterStatName</code></td>
 <td><code>string</code></td>
 <td>
-<p>Name to be used while emitting statistics for outbound clusters.
+<p>Name to be used while emitting statistics for outbound clusters. The same pattern is used while computing stat prefix for
+network filters like TCP and Redis.
 By default, Istio emits statistics with the pattern <code>outbound|&lt;port&gt;|&lt;subsetname&gt;|&lt;service-FQDN&gt;</code>.
 For example <code>outbound|8080|v2|reviews.prod.svc.cluster.local</code>. This can be used to override that pattern.</p>
 

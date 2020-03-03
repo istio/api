@@ -353,7 +353,8 @@ message MeshConfig {
   // It can be enabled by destination using the destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy override.
   H2UpgradePolicy h2_upgrade_policy = 41;
 
-  // Name to be used while emitting statistics for inbound clusters.
+  // Name to be used while emitting statistics for inbound clusters. The same pattern is used while computing stat prefix for
+  // network filters like TCP and Redis.
   // By default, Istio emits statistics with the pattern `inbound|<port>|<port-name>|<service-FQDN>`.
   // For example `inbound|7443|grpc-reviews|reviews.prod.svc.cluster.local`. This can be used to override that pattern.
   //
@@ -370,7 +371,8 @@ message MeshConfig {
   // - `%SERVICE%` will use reviews.prod as the stats name.
   string inbound_cluster_stat_name = 44;
 
-  // Name to be used while emitting statistics for outbound clusters.
+  // Name to be used while emitting statistics for outbound clusters. The same pattern is used while computing stat prefix for
+  // network filters like TCP and Redis.
   // By default, Istio emits statistics with the pattern `outbound|<port>|<subsetname>|<service-FQDN>`.
   // For example `outbound|8080|v2|reviews.prod.svc.cluster.local`. This can be used to override that pattern.
   //
