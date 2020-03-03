@@ -131,7 +131,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // +cue-gen:RequestAuthentication:labels:app=istio-pilot,chart=istio,istio=security,heritage=Tiller,release=istio
 // +cue-gen:RequestAuthentication:subresource:status
 // +cue-gen:RequestAuthentication:scope:Namespaced
-// +cue-gen:RequestAuthentication:resource:categories=istio-io,security-istio-io
+// +cue-gen:RequestAuthentication:resource:categories=istio-io,security-istio-io,shortNames=ra
 // -->
 //
 // <!-- go code generation tags

@@ -144,7 +144,7 @@ func (PeerAuthentication_MutualTLS_Mode) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:PeerAuthentication:labels:app=istio-pilot,chart=istio,istio=security,heritage=Tiller,release=istio
 // +cue-gen:PeerAuthentication:subresource:status
 // +cue-gen:PeerAuthentication:scope:Namespaced
-// +cue-gen:PeerAuthentication:resource:categories=istio-io,security-istio-io
+// +cue-gen:PeerAuthentication:resource:categories=istio-io,security-istio-io,shortNames=pa
 // -->
 //
 // <!-- go code generation tags
