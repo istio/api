@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 25
+number_of_entries: 24
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -1427,17 +1427,6 @@ for details about Envoy&rsquo;s Metrics Service API.</p>
 No
 </td>
 </tr>
-<tr id="ProxyConfig-sts">
-<td><code>sts</code></td>
-<td><code><a href="#STS">STS</a></code></td>
-<td>
-<p>Configuration for the STS (Security Token Service) server use by the proxy.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="ProxyConfig-status_port">
 <td><code>statusPort</code></td>
 <td><code>int32</code></td>
@@ -1607,33 +1596,6 @@ No
 <td><code>string</code></td>
 <td>
 <p>Path of k8s service account JWT path.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="STS">STS</h2>
-<section>
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="STS-port">
-<td><code>port</code></td>
-<td><code>int32</code></td>
-<td>
-<p>The service port used by Security Token Service (STS) server to handle token exchange requests.
-Setting this port to a non-zero value enables STS server.</p>
 
 </td>
 <td>

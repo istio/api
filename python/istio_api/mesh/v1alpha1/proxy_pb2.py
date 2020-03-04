@@ -24,7 +24,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.mesh.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\032istio.io/api/mesh/v1alpha1'),
-  serialized_pb=_b('\n\x19mesh/v1alpha1/proxy.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a*networking/v1alpha3/destination_rule.proto\"\xf2\x04\n\x07Tracing\x12\x35\n\x06zipkin\x18\x01 \x01(\x0b\x32#.istio.mesh.v1alpha1.Tracing.ZipkinH\x00\x12;\n\tlightstep\x18\x02 \x01(\x0b\x32&.istio.mesh.v1alpha1.Tracing.LightstepH\x00\x12\x37\n\x07\x64\x61tadog\x18\x03 \x01(\x0b\x32$.istio.mesh.v1alpha1.Tracing.DatadogH\x00\x12?\n\x0bstackdriver\x18\x04 \x01(\x0b\x32(.istio.mesh.v1alpha1.Tracing.StackdriverH\x00\x1a\x19\n\x06Zipkin\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x1aW\n\tLightstep\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x14\n\x0c\x61\x63\x63\x65ss_token\x18\x02 \x01(\t\x12\x0e\n\x06secure\x18\x03 \x01(\x08\x12\x13\n\x0b\x63\x61\x63\x65rt_path\x18\x04 \x01(\t\x1a\x1a\n\x07\x44\x61tadog\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x1a\xde\x01\n\x0bStackdriver\x12\r\n\x05\x64\x65\x62ug\x18\x01 \x01(\x08\x12=\n\x18max_number_of_attributes\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12>\n\x19max_number_of_annotations\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x41\n\x1cmax_number_of_message_events\x18\x04 \x01(\x0b\x32\x1b.google.protobuf.Int64ValueB\x08\n\x06tracer\"/\n\x03SDS\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x17\n\x0fk8s_sa_jwt_path\x18\x02 \x01(\t\"\xd3\t\n\x0bProxyConfig\x12\x13\n\x0b\x63onfig_path\x18\x01 \x01(\t\x12\x13\n\x0b\x62inary_path\x18\x02 \x01(\t\x12\x17\n\x0fservice_cluster\x18\x03 \x01(\t\x12\x31\n\x0e\x64rain_duration\x18\x04 \x01(\x0b\x32\x19.google.protobuf.Duration\x12;\n\x18parent_shutdown_duration\x18\x05 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x19\n\x11\x64iscovery_address\x18\x06 \x01(\t\x12>\n\x17\x64iscovery_refresh_delay\x18\x07 \x01(\x0b\x32\x19.google.protobuf.DurationB\x02\x18\x01\x12\x1a\n\x0ezipkin_address\x18\x08 \x01(\tB\x02\x18\x01\x12\x32\n\x0f\x63onnect_timeout\x18\t \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x1a\n\x12statsd_udp_address\x18\n \x01(\t\x12)\n\x1d\x65nvoy_metrics_service_address\x18\x14 \x01(\tB\x02\x18\x01\x12\x18\n\x10proxy_admin_port\x18\x0b \x01(\x05\x12\x1d\n\x11\x61vailability_zone\x18\x0c \x01(\tB\x02\x18\x01\x12L\n\x19\x63ontrol_plane_auth_policy\x18\r \x01(\x0e\x32).istio.mesh.v1alpha1.AuthenticationPolicy\x12\x1a\n\x12\x63ustom_config_file\x18\x0e \x01(\t\x12\x18\n\x10stat_name_length\x18\x0f \x01(\x05\x12\x13\n\x0b\x63oncurrency\x18\x10 \x01(\x05\x12%\n\x1dproxy_bootstrap_template_path\x18\x11 \x01(\t\x12S\n\x11interception_mode\x18\x12 \x01(\x0e\x32\x38.istio.mesh.v1alpha1.ProxyConfig.InboundInterceptionMode\x12-\n\x07tracing\x18\x13 \x01(\x0b\x32\x1c.istio.mesh.v1alpha1.Tracing\x12%\n\x03sds\x18\x15 \x01(\x0b\x32\x18.istio.mesh.v1alpha1.SDS\x12\x44\n\x18\x65nvoy_access_log_service\x18\x16 \x01(\x0b\x32\".istio.mesh.v1alpha1.RemoteService\x12\x41\n\x15\x65nvoy_metrics_service\x18\x17 \x01(\x0b\x32\".istio.mesh.v1alpha1.RemoteService\x12K\n\x0eproxy_metadata\x18\x18 \x03(\x0b\x32\x33.istio.mesh.v1alpha1.ProxyConfig.ProxyMetadataEntry\x12%\n\x03sts\x18\x19 \x01(\x0b\x32\x18.istio.mesh.v1alpha1.STS\x12\x13\n\x0bstatus_port\x18\x1a \x01(\x05\x1a\x34\n\x12ProxyMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"3\n\x17InboundInterceptionMode\x12\x0c\n\x08REDIRECT\x10\x00\x12\n\n\x06TPROXY\x10\x01\"\x13\n\x03STS\x12\x0c\n\x04port\x18\x01 \x01(\x05\"\xc1\x01\n\rRemoteService\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12<\n\x0ctls_settings\x18\x02 \x01(\x0b\x32&.istio.networking.v1alpha3.TLSSettings\x12\x61\n\rtcp_keepalive\x18\x03 \x01(\x0b\x32J.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive*>\n\x14\x41uthenticationPolicy\x12\x08\n\x04NONE\x10\x00\x12\x0e\n\nMUTUAL_TLS\x10\x01\x12\x0c\n\x07INHERIT\x10\xe8\x07\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x19mesh/v1alpha1/proxy.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a*networking/v1alpha3/destination_rule.proto\"\xf2\x04\n\x07Tracing\x12\x35\n\x06zipkin\x18\x01 \x01(\x0b\x32#.istio.mesh.v1alpha1.Tracing.ZipkinH\x00\x12;\n\tlightstep\x18\x02 \x01(\x0b\x32&.istio.mesh.v1alpha1.Tracing.LightstepH\x00\x12\x37\n\x07\x64\x61tadog\x18\x03 \x01(\x0b\x32$.istio.mesh.v1alpha1.Tracing.DatadogH\x00\x12?\n\x0bstackdriver\x18\x04 \x01(\x0b\x32(.istio.mesh.v1alpha1.Tracing.StackdriverH\x00\x1a\x19\n\x06Zipkin\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x1aW\n\tLightstep\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x14\n\x0c\x61\x63\x63\x65ss_token\x18\x02 \x01(\t\x12\x0e\n\x06secure\x18\x03 \x01(\x08\x12\x13\n\x0b\x63\x61\x63\x65rt_path\x18\x04 \x01(\t\x1a\x1a\n\x07\x44\x61tadog\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x1a\xde\x01\n\x0bStackdriver\x12\r\n\x05\x64\x65\x62ug\x18\x01 \x01(\x08\x12=\n\x18max_number_of_attributes\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12>\n\x19max_number_of_annotations\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x41\n\x1cmax_number_of_message_events\x18\x04 \x01(\x0b\x32\x1b.google.protobuf.Int64ValueB\x08\n\x06tracer\"/\n\x03SDS\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x17\n\x0fk8s_sa_jwt_path\x18\x02 \x01(\t\"\xac\t\n\x0bProxyConfig\x12\x13\n\x0b\x63onfig_path\x18\x01 \x01(\t\x12\x13\n\x0b\x62inary_path\x18\x02 \x01(\t\x12\x17\n\x0fservice_cluster\x18\x03 \x01(\t\x12\x31\n\x0e\x64rain_duration\x18\x04 \x01(\x0b\x32\x19.google.protobuf.Duration\x12;\n\x18parent_shutdown_duration\x18\x05 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x19\n\x11\x64iscovery_address\x18\x06 \x01(\t\x12>\n\x17\x64iscovery_refresh_delay\x18\x07 \x01(\x0b\x32\x19.google.protobuf.DurationB\x02\x18\x01\x12\x1a\n\x0ezipkin_address\x18\x08 \x01(\tB\x02\x18\x01\x12\x32\n\x0f\x63onnect_timeout\x18\t \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x1a\n\x12statsd_udp_address\x18\n \x01(\t\x12)\n\x1d\x65nvoy_metrics_service_address\x18\x14 \x01(\tB\x02\x18\x01\x12\x18\n\x10proxy_admin_port\x18\x0b \x01(\x05\x12\x1d\n\x11\x61vailability_zone\x18\x0c \x01(\tB\x02\x18\x01\x12L\n\x19\x63ontrol_plane_auth_policy\x18\r \x01(\x0e\x32).istio.mesh.v1alpha1.AuthenticationPolicy\x12\x1a\n\x12\x63ustom_config_file\x18\x0e \x01(\t\x12\x18\n\x10stat_name_length\x18\x0f \x01(\x05\x12\x13\n\x0b\x63oncurrency\x18\x10 \x01(\x05\x12%\n\x1dproxy_bootstrap_template_path\x18\x11 \x01(\t\x12S\n\x11interception_mode\x18\x12 \x01(\x0e\x32\x38.istio.mesh.v1alpha1.ProxyConfig.InboundInterceptionMode\x12-\n\x07tracing\x18\x13 \x01(\x0b\x32\x1c.istio.mesh.v1alpha1.Tracing\x12%\n\x03sds\x18\x15 \x01(\x0b\x32\x18.istio.mesh.v1alpha1.SDS\x12\x44\n\x18\x65nvoy_access_log_service\x18\x16 \x01(\x0b\x32\".istio.mesh.v1alpha1.RemoteService\x12\x41\n\x15\x65nvoy_metrics_service\x18\x17 \x01(\x0b\x32\".istio.mesh.v1alpha1.RemoteService\x12K\n\x0eproxy_metadata\x18\x18 \x03(\x0b\x32\x33.istio.mesh.v1alpha1.ProxyConfig.ProxyMetadataEntry\x12\x13\n\x0bstatus_port\x18\x1a \x01(\x05\x1a\x34\n\x12ProxyMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"3\n\x17InboundInterceptionMode\x12\x0c\n\x08REDIRECT\x10\x00\x12\n\n\x06TPROXY\x10\x01\"\xc1\x01\n\rRemoteService\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12<\n\x0ctls_settings\x18\x02 \x01(\x0b\x32&.istio.networking.v1alpha3.TLSSettings\x12\x61\n\rtcp_keepalive\x18\x03 \x01(\x0b\x32J.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive*>\n\x14\x41uthenticationPolicy\x12\x08\n\x04NONE\x10\x00\x12\x0e\n\nMUTUAL_TLS\x10\x01\x12\x0c\n\x07INHERIT\x10\xe8\x07\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_destination__rule__pb2.DESCRIPTOR,])
 
@@ -49,8 +49,8 @@ _AUTHENTICATIONPOLICY = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2291,
-  serialized_end=2353,
+  serialized_start=2231,
+  serialized_end=2293,
 )
 _sym_db.RegisterEnumDescriptor(_AUTHENTICATIONPOLICY)
 
@@ -77,8 +77,8 @@ _PROXYCONFIG_INBOUNDINTERCEPTIONMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2021,
-  serialized_end=2072,
+  serialized_start=1982,
+  serialized_end=2033,
 )
 _sym_db.RegisterEnumDescriptor(_PROXYCONFIG_INBOUNDINTERCEPTIONMODE)
 
@@ -371,8 +371,8 @@ _PROXYCONFIG_PROXYMETADATAENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1967,
-  serialized_end=2019,
+  serialized_start=1928,
+  serialized_end=1980,
 )
 
 _PROXYCONFIG = _descriptor.Descriptor(
@@ -551,14 +551,7 @@ _PROXYCONFIG = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sts', full_name='istio.mesh.v1alpha1.ProxyConfig.sts', index=24,
-      number=25, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='status_port', full_name='istio.mesh.v1alpha1.ProxyConfig.status_port', index=25,
+      name='status_port', full_name='istio.mesh.v1alpha1.ProxyConfig.status_port', index=24,
       number=26, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -578,38 +571,7 @@ _PROXYCONFIG = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=837,
-  serialized_end=2072,
-)
-
-
-_STS = _descriptor.Descriptor(
-  name='STS',
-  full_name='istio.mesh.v1alpha1.STS',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='port', full_name='istio.mesh.v1alpha1.STS.port', index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2074,
-  serialized_end=2093,
+  serialized_end=2033,
 )
 
 
@@ -653,8 +615,8 @@ _REMOTESERVICE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2096,
-  serialized_end=2289,
+  serialized_start=2036,
+  serialized_end=2229,
 )
 
 _TRACING_ZIPKIN.containing_type = _TRACING
@@ -692,14 +654,12 @@ _PROXYCONFIG.fields_by_name['sds'].message_type = _SDS
 _PROXYCONFIG.fields_by_name['envoy_access_log_service'].message_type = _REMOTESERVICE
 _PROXYCONFIG.fields_by_name['envoy_metrics_service'].message_type = _REMOTESERVICE
 _PROXYCONFIG.fields_by_name['proxy_metadata'].message_type = _PROXYCONFIG_PROXYMETADATAENTRY
-_PROXYCONFIG.fields_by_name['sts'].message_type = _STS
 _PROXYCONFIG_INBOUNDINTERCEPTIONMODE.containing_type = _PROXYCONFIG
 _REMOTESERVICE.fields_by_name['tls_settings'].message_type = networking_dot_v1alpha3_dot_destination__rule__pb2._TLSSETTINGS
 _REMOTESERVICE.fields_by_name['tcp_keepalive'].message_type = networking_dot_v1alpha3_dot_destination__rule__pb2._CONNECTIONPOOLSETTINGS_TCPSETTINGS_TCPKEEPALIVE
 DESCRIPTOR.message_types_by_name['Tracing'] = _TRACING
 DESCRIPTOR.message_types_by_name['SDS'] = _SDS
 DESCRIPTOR.message_types_by_name['ProxyConfig'] = _PROXYCONFIG
-DESCRIPTOR.message_types_by_name['STS'] = _STS
 DESCRIPTOR.message_types_by_name['RemoteService'] = _REMOTESERVICE
 DESCRIPTOR.enum_types_by_name['AuthenticationPolicy'] = _AUTHENTICATIONPOLICY
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -764,13 +724,6 @@ ProxyConfig = _reflection.GeneratedProtocolMessageType('ProxyConfig', (_message.
   })
 _sym_db.RegisterMessage(ProxyConfig)
 _sym_db.RegisterMessage(ProxyConfig.ProxyMetadataEntry)
-
-STS = _reflection.GeneratedProtocolMessageType('STS', (_message.Message,), {
-  'DESCRIPTOR' : _STS,
-  '__module__' : 'mesh.v1alpha1.proxy_pb2'
-  # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.STS)
-  })
-_sym_db.RegisterMessage(STS)
 
 RemoteService = _reflection.GeneratedProtocolMessageType('RemoteService', (_message.Message,), {
   'DESCRIPTOR' : _REMOTESERVICE,
