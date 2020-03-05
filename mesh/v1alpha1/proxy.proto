@@ -229,6 +229,9 @@ message ProxyConfig {
   // Additional env variables for the proxy.
   // Names starting with ISTIO_META_ will be included in the generated bootstrap and sent to the XDS server.
   map<string,string> proxy_metadata = 24;
+
+  // Port on which the agent should listen for administrative commands such as readiness probe.
+  int32 status_port = 26;
 }
 
 message RemoteService {

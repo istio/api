@@ -363,6 +363,11 @@
               "type": "string",
               "format": "string"
             }
+          },
+          "statusPort": {
+            "description": "Port on which the agent should listen for administrative commands such as readiness probe.",
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
