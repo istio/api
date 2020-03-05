@@ -15,15 +15,15 @@ syntax = "proto3";
 
 import "type/v1beta1/selector.proto";
 
-package istio.security.v1beta1;
-
-option go_package="istio.io/api/security/v1beta1";
-
 // $schema: istio.security.v1beta1.PeerAuthentication
 // $title: PeerAuthentication
 // $description: Peer authentication configuration for workloads.
 // $location: https://istio.io/docs/reference/config/security/peer_authentication.html
 // $aliases: [/docs/reference/config/security/v1beta1/peer_authentication]
+
+package istio.security.v1beta1;
+
+option go_package="istio.io/api/security/v1beta1";
 
 // PeerAuthentication defines how traffic will be tunneled (or not) to the sidecar.
 //
