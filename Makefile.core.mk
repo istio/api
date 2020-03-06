@@ -206,20 +206,26 @@ operator_v1alpha1_pb_pythons := $(patsubst $(operator_v1alpha1_path)/%.proto,$(p
 operator_v1alpha1_pb_doc := $(operator_v1alpha1_path)/istio.operator.v1alpha1.pb.html
 operator_v1alpha1_openapi := $(operator_v1alpha1_path)/istio.operator.v1alpha1.gen.json
 
-$(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons): $(operator_v1alpha1_protos)
+operator_v1alpha1_k8s_gos := \
+	$(patsubst $(operator_v1alpha1_path)/%.proto,$(operator_v1alpha1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(operator_v1alpha1_protos))) \
+	$(patsubst $(operator_v1alpha1_path)/%.proto,$(operator_v1alpha1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(operator_v1alpha1_protos)))
+
+$(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons) $(operator_v1alpha1_k8s_gos): $(operator_v1alpha1_protos)
 	@$(protolock) status
 	@$(protoc) $(go_plugin) $(protoc_gen_docs_plugin)$(operator_v1alpha1_path) $(protoc_gen_python_plugin) $^
+	@$(protoc) $(protoc_gen_k8s_support_plugins) $(operator_v1alpha1_path)/operator.proto
 	@cp -r /tmp/istio.io/api/operator/* operator
+	@sed -i -E '/MarshalJSON is a custom marshaler for TypeMapStringInterface2/,+10d' $(operator_v1alpha1_path)/operator_json.gen.go
 	@go run $(repo_dir)/operator/fixup_structs/main.go -f $(operator_v1alpha1_path)/component.pb.go
 	@go run $(repo_dir)/operator/fixup_structs/main.go -f $(operator_v1alpha1_path)/kubernetes.pb.go
 	@go run $(repo_dir)/operator/fixup_structs/main.go -f $(operator_v1alpha1_path)/operator.pb.go
 	@sed -i 's|<key,value,effect>|\&lt\;key,value,effect\&gt\;|g' $(operator_v1alpha1_path)/istio.operator.v1alpha1.pb.html
 	@sed -i 's|<operator>|\&lt\;operator\&gt\;|g' $(operator_v1alpha1_path)/istio.operator.v1alpha1.pb.html
 
-generate-operator: $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons)
+generate-operator: $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons) $(operator_v1alpha1_k8s_gos)
 
 clean-operator:
-	@rm -fr $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons)
+	@rm -fr $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons) $(operator_v1alpha1_k8s_gos)
 
 #####################
 # policy/...
