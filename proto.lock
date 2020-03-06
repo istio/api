@@ -43283,9 +43283,6 @@
             "path": "google/protobuf/any.proto"
           },
           {
-            "path": "k8s.io/api/autoscaling/v2beta1/generated.proto"
-          },
-          {
             "path": "k8s.io/api/core/v1/generated.proto"
           },
           {
