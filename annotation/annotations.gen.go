@@ -426,6 +426,19 @@ var (
 		  Resources: []ResourceTypes{ Pod, },
         }
 	
+		SidecarTrafficBindPodIPPorts = Instance {
+          Name: "traffic.sidecar.istio.io/bindPodIPPorts",
+          Description: "A Comma separated list of inbound ports for which are "+
+                        "binding to pod IP only. By default, Envoy will redirect "+
+                        "inbound traffic to 127.0.0.1:${port}, if the port is only "+
+                        "bind to pod IP instead of 127.0.0.1, this annotation "+
+                        "should be addressed to redirect 127.0.0.1:${port} to "+
+                        "${podIP}:${port}.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
+        }
+	
 		SidecarTrafficExcludeInboundPorts = Instance {
           Name: "traffic.sidecar.istio.io/excludeInboundPorts",
           Description: "A comma separated list of inbound ports to be excluded "+
@@ -530,6 +543,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarUserVolume,
 		&SidecarUserVolumeMount,
 		&SidecarStatusPort,
+		&SidecarTrafficBindPodIPPorts,
 		&SidecarTrafficExcludeInboundPorts,
 		&SidecarTrafficExcludeOutboundIPRanges,
 		&SidecarTrafficExcludeOutboundPorts,

@@ -391,6 +391,16 @@ Istio supports to control its behavior.
 				
 					<tr>
 				
+					<td><code>traffic.sidecar.istio.io/bindPodIPPorts</code></td>
+					<td>[Pod]</td>
+					<td>A Comma separated list of inbound ports for which are binding to pod IP only. By default, Envoy will redirect inbound traffic to 127.0.0.1:${port}, if the port is only bind to pod IP instead of 127.0.0.1, this annotation should be addressed to redirect 127.0.0.1:${port} to ${podIP}:${port}.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
 					<td><code>traffic.sidecar.istio.io/excludeInboundPorts</code></td>
 					<td>[Pod]</td>
 					<td>A comma separated list of inbound ports to be excluded from redirection to Envoy. Only applies when all inbound traffic (i.e. '*') is being redirected.</td>

@@ -335,3 +335,12 @@ annotations:
     hidden: false
     resources:
       - Any
+  - name: traffic.sidecar.istio.io/bindPodIPPorts
+    description: A Comma separated list of inbound ports for which are binding to pod IP only.
+      By default, Envoy will redirect inbound traffic to 127.0.0.1:${port}, if the port is only bind to
+      pod IP instead of 127.0.0.1, this annotation should be addressed to redirect 127.0.0.1:${port} to
+      ${podIP}:${port}.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
