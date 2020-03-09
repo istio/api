@@ -37,3 +37,6 @@ genbin/
 /vendor
 
 .htmlproofer
+
+# Contains the built artifacts
+out/
