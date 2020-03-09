@@ -1,0 +1,102 @@
+// Copyright 2018 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "google/api/field_behavior.proto";
+import "networking/v1alpha3/gateway.proto";
+
+
+// $schema: istio.networking.v1alpha3.WorkloadEntry
+// $title: Workload Entry
+// $description: Configuration affecting workload  entry.
+
+// `WorkloadEntry` enables adding additional workloads into Istio's internal
+// service registry, so that auto-discovered services in the mesh can
+// access/route to these manually specified workload. A workload entry
+// describes the properties of a workload.
+//
+// The following example declares a  workloadEntry running on both 1.2.3.4 and 1.2.3.5.
+// expose ports on 27018
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: WorkloadEntry
+// metadata:
+//   name: myvm
+//   labels:
+//      app: myapp
+//      version: v1
+// spec:
+//   serviceAccountName: vmtest
+//   ports:
+//   - number: 27018
+//     name: mongodb
+//     protocol: MONGO
+//   endpoints:
+//     - addresses:
+//       - 1.2.3.4
+//       - 1.2.3.5
+// ```
+//
+// The following example declares a workloadEntry running on  1.2.3.4
+// and expose ports on 27018 and 8888
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: WorkloadEntry
+// metadata:
+//   name: myvm
+//   labels:
+//      app: myapp
+//      version: v1
+// spec:
+//   serviceAccountName: vmtest
+//   ports:
+//   - number: 27018
+//     name: mongodb
+//     protocol: MONGO
+//   - number: 8888
+//     name: tcp-vm
+//     protocol: tcp
+//   endpoints:
+//     - addresses:
+//       - 1.2.3.4
+// ```
+//
+
+package istio.networking.v1alpha3;
+
+option go_package = "istio.io/api/networking/v1alpha3";
+
+
+message WorkloadEntry {
+
+  string serviceAccountName = 1 [(google.api.field_behavior) = REQUIRED];
+  // One or more labels associated with the workloadEntry.
+  map<string, string> labels = 2;
+
+  // The ports associated with the workloadEntry.
+  repeated Port ports = 3;
+
+  // One or more endpoints associated with the workloadEntry.
+  repeated Endpoint endpoints = 4 [(google.api.field_behavior) = REQUIRED];
+
+  };
+
+  message Endpoint {
+
+    repeated string addresses = 1 [(google.api.field_behavior) = REQUIRED];
+
+  };

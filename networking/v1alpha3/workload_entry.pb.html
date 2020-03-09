@@ -1,0 +1,89 @@
+---
+title: Workload Entry
+description: Configuration affecting workload  entry.
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+schema: istio.networking.v1alpha3.WorkloadEntry
+number_of_entries: 2
+---
+<h2 id="Endpoint">Endpoint</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Endpoint-addresses">
+<td><code>addresses</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+Yes
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="WorkloadEntry">WorkloadEntry</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="WorkloadEntry-serviceAccountName">
+<td><code>serviceAccountName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr id="WorkloadEntry-labels">
+<td><code>labels</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>One or more labels associated with the workloadEntry.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WorkloadEntry-ports">
+<td><code>ports</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/gateway.html#Port">Port[]</a></code></td>
+<td>
+<p>The ports associated with the workloadEntry.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WorkloadEntry-endpoints">
+<td><code>endpoints</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/gateway.html#Endpoint">Endpoint[]</a></code></td>
+<td>
+<p>One or more endpoints associated with the workloadEntry.</p>
+
+</td>
+<td>
+Yes
+</td>
+</tr>
+</tbody>
+</table>
+</section>
