@@ -99,7 +99,8 @@ import "networking/v1alpha3/sidecar.proto";
 //         name: "envoy.http_connection_manager"
 //         typed_config:
 //           "@type": "type.googleapis.com/envoy.config.filter.network.http_connection_manager.v2.HttpConnectionManager"
-//           idle_timeout: 30s
+//           common_http_protocol_options:
+//             idle_timeout: 30s
 //```
 //
 // The following example enables Envoy's Lua filter for all inbound
@@ -197,7 +198,8 @@ import "networking/v1alpha3/sidecar.proto";
 //     patch:
 //       operation: MERGE
 //       value:
-//         idle_timeout: 30s
+//         common_http_protocol_options:
+//           idle_timeout: 30s
 //         xff_num_trusted_hops: 5
 //```
 //
