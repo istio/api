@@ -189,6 +189,9 @@ $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons): $(m
 	@$(protolock) status
 	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(mesh_v1alpha1_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/mesh/* mesh
+	@go run $(repo_dir)/operator/fixup_structs/main.go -f $(mesh_v1alpha1_path)/config.pb.go
+	@go run $(repo_dir)/operator/fixup_structs/main.go -f $(mesh_v1alpha1_path)/network.pb.go
+	@go run $(repo_dir)/operator/fixup_structs/main.go -f $(mesh_v1alpha1_path)/proxy.pb.go
 
 generate-mesh: $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons)
 
