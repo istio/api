@@ -1,6 +1,6 @@
 ---
 title: Workload Entry
-description: Configuration affecting workload  entry.
+description: Configuration of a workload entry.
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.WorkloadEntry
@@ -22,6 +22,9 @@ number_of_entries: 2
 <td><code>addresses</code></td>
 <td><code>string[]</code></td>
 <td>
+<p>The endpoint addresses associated with the workloadEntry. Could be a DNS
+name as well as IP address</p>
+
 </td>
 <td>
 Yes
@@ -42,24 +45,15 @@ Yes
 </tr>
 </thead>
 <tbody>
-<tr id="WorkloadEntry-serviceAccountName">
+<tr id="WorkloadEntry-service_account_name">
 <td><code>serviceAccountName</code></td>
 <td><code>string</code></td>
 <td>
-</td>
-<td>
-Yes
-</td>
-</tr>
-<tr id="WorkloadEntry-labels">
-<td><code>labels</code></td>
-<td><code>map&lt;string,&nbsp;string&gt;</code></td>
-<td>
-<p>One or more labels associated with the workloadEntry.</p>
+<p>Identity information for this workloadEntry</p>
 
 </td>
 <td>
-No
+Yes
 </td>
 </tr>
 <tr id="WorkloadEntry-ports">
@@ -77,7 +71,7 @@ No
 <td><code>endpoints</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/networking/gateway.html#Endpoint">Endpoint[]</a></code></td>
 <td>
-<p>One or more endpoints associated with the workloadEntry.</p>
+<p>One or more endpoints associated with the service.</p>
 
 </td>
 <td>

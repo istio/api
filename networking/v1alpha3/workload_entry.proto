@@ -1,4 +1,4 @@
-// Copyright 2018 Istio Authors
+// Copyright 2020 Istio Authors
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -20,15 +20,15 @@ import "networking/v1alpha3/gateway.proto";
 
 // $schema: istio.networking.v1alpha3.WorkloadEntry
 // $title: Workload Entry
-// $description: Configuration affecting workload  entry.
+// $description: Configuration of a workload entry.
 
 // `WorkloadEntry` enables adding additional workloads into Istio's internal
 // service registry, so that auto-discovered services in the mesh can
-// access/route to these manually specified workload. A workload entry
-// describes the properties of a workload.
+// route to these workloads. A workload entry. A workload entry
+// describes the properties of a workload such as its identity and endpoints.
 //
-// The following example declares a  workloadEntry running on both 1.2.3.4 and 1.2.3.5.
-// expose ports on 27018
+// The following example declares a workloadEntry running on both 1.2.3.4 and 1.2.3.5.
+// Both endpoints expose port 27018.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -50,7 +50,7 @@ import "networking/v1alpha3/gateway.proto";
 //       - 1.2.3.5
 // ```
 //
-// The following example declares a workloadEntry running on  1.2.3.4
+// The following example declares a workloadEntry running on 1.2.3.4
 // and expose ports on 27018 and 8888
 //
 // ```yaml
@@ -75,28 +75,98 @@ import "networking/v1alpha3/gateway.proto";
 //       - 1.2.3.4
 // ```
 //
+// The following example declares a workloadEntry running with dual IP stack on 1.2.3.4 and 1.2.3.5
+// and expose ports on 27018 and 8888
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: WorkloadEntry
+// metadata:
+//   name: myvm
+//   labels:
+//      app: myapp
+//      version: v1
+// spec:
+//   serviceAccountName: vmtest
+//   ports:
+//   - number: 27018
+//     name: mongodb
+//     protocol: MONGO
+//   - number: 8888
+//     name: tcp-vm
+//     protocol: tcp
+//   endpoints:
+//     - addresses:
+//       - 1.2.3.4,1.2.3.5
+// ```
+//
+// The following example declares a workloadEntry running with DNS name httpbin.testcompany.com
+// and expose ports on 27018 and 8888
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: WorkloadEntry
+// metadata:
+//   name: myvm
+//   labels:
+//      app: myapp
+//      version: v1
+// spec:
+//   serviceAccountName: vmtest
+//   ports:
+//   - number: 27018
+//     name: mongodb
+//     protocol: MONGO
+//   - number: 8888
+//     name: tcp-vm
+//     protocol: tcp
+//   endpoints:
+//     - addresses:
+//       - httpbin.testcompany.com
+// ```
+//
 
 package istio.networking.v1alpha3;
 
 option go_package = "istio.io/api/networking/v1alpha3";
 
+// <!-- crd generation tags
+// +cue-gen:WorkloadEntry:groupName:networking.istio.io
+// +cue-gen:WorkloadEntry:version:v1alpha3
+// +cue-gen:WorkloadEntry:annotations:helm.sh/resource-policy=keep
+// +cue-gen:WorkloadEntry:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:WorkloadEntry:subresource:status
+// +cue-gen:WorkloadEntry:scope:Namespaced
+// +cue-gen:WorkloadEntry:resource:categories=istio-io,networking-istio-io
+// -->
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
 
 message WorkloadEntry {
 
-  string serviceAccountName = 1 [(google.api.field_behavior) = REQUIRED];
-  // One or more labels associated with the workloadEntry.
-  map<string, string> labels = 2;
+  // Identity information for this workloadEntry
+  string service_account_name = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The ports associated with the workloadEntry.
   repeated Port ports = 3;
 
-  // One or more endpoints associated with the workloadEntry.
+  // One or more endpoints associated with the service.
   repeated Endpoint endpoints = 4 [(google.api.field_behavior) = REQUIRED];
 
   };
 
   message Endpoint {
 
+    // The endpoint addresses associated with the workloadEntry. Could be a DNS
+    // name as well as IP address
     repeated string addresses = 1 [(google.api.field_behavior) = REQUIRED];
 
   };
+
+
+
