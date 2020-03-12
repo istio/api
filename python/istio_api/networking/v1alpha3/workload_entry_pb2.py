@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.networking.v1alpha3',
   syntax='proto3',
   serialized_options=_b('Z istio.io/api/networking/v1alpha3'),
-  serialized_pb=_b('\n(networking/v1alpha3/workload_entry.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a!networking/v1alpha3/gateway.proto\"\x9f\x01\n\rWorkloadEntry\x12!\n\x14service_account_name\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12.\n\x05ports\x18\x03 \x03(\x0b\x32\x1f.istio.networking.v1alpha3.Port\x12;\n\tendpoints\x18\x04 \x03(\x0b\x32#.istio.networking.v1alpha3.EndpointB\x03\xe0\x41\x02\"\"\n\x08\x45ndpoint\x12\x16\n\taddresses\x18\x01 \x03(\tB\x03\xe0\x41\x02\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
+  serialized_pb=_b('\n(networking/v1alpha3/workload_entry.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a!networking/v1alpha3/gateway.proto\"\x9f\x01\n\rWorkloadEntry\x12!\n\x14service_account_name\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12.\n\x05ports\x18\x03 \x03(\x0b\x32\x1f.istio.networking.v1alpha3.Port\x12;\n\tendpoints\x18\x04 \x03(\x0b\x32#.istio.networking.v1alpha3.EndpointB\x03\xe0\x41\x02\"\x98\x01\n\x08\x45ndpoint\x12\x16\n\taddresses\x18\x01 \x03(\tB\x03\xe0\x41\x02\x12\x43\n\x08topology\x18\x02 \x03(\x0b\x32\x31.istio.networking.v1alpha3.Endpoint.TopologyEntry\x1a/\n\rTopologyEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_gateway__pb2.DESCRIPTOR,])
 
@@ -74,6 +74,43 @@ _WORKLOADENTRY = _descriptor.Descriptor(
 )
 
 
+_ENDPOINT_TOPOLOGYENTRY = _descriptor.Descriptor(
+  name='TopologyEntry',
+  full_name='istio.networking.v1alpha3.Endpoint.TopologyEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.networking.v1alpha3.Endpoint.TopologyEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.networking.v1alpha3.Endpoint.TopologyEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=407,
+  serialized_end=454,
+)
+
 _ENDPOINT = _descriptor.Descriptor(
   name='Endpoint',
   full_name='istio.networking.v1alpha3.Endpoint',
@@ -88,10 +125,17 @@ _ENDPOINT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=_b('\340A\002'), file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='topology', full_name='istio.networking.v1alpha3.Endpoint.topology', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
-  nested_types=[],
+  nested_types=[_ENDPOINT_TOPOLOGYENTRY, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -100,12 +144,14 @@ _ENDPOINT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=301,
-  serialized_end=335,
+  serialized_start=302,
+  serialized_end=454,
 )
 
 _WORKLOADENTRY.fields_by_name['ports'].message_type = networking_dot_v1alpha3_dot_gateway__pb2._PORT
 _WORKLOADENTRY.fields_by_name['endpoints'].message_type = _ENDPOINT
+_ENDPOINT_TOPOLOGYENTRY.containing_type = _ENDPOINT
+_ENDPOINT.fields_by_name['topology'].message_type = _ENDPOINT_TOPOLOGYENTRY
 DESCRIPTOR.message_types_by_name['WorkloadEntry'] = _WORKLOADENTRY
 DESCRIPTOR.message_types_by_name['Endpoint'] = _ENDPOINT
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -118,15 +164,24 @@ WorkloadEntry = _reflection.GeneratedProtocolMessageType('WorkloadEntry', (_mess
 _sym_db.RegisterMessage(WorkloadEntry)
 
 Endpoint = _reflection.GeneratedProtocolMessageType('Endpoint', (_message.Message,), {
+
+  'TopologyEntry' : _reflection.GeneratedProtocolMessageType('TopologyEntry', (_message.Message,), {
+    'DESCRIPTOR' : _ENDPOINT_TOPOLOGYENTRY,
+    '__module__' : 'networking.v1alpha3.workload_entry_pb2'
+    # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.Endpoint.TopologyEntry)
+    })
+  ,
   'DESCRIPTOR' : _ENDPOINT,
   '__module__' : 'networking.v1alpha3.workload_entry_pb2'
   # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.Endpoint)
   })
 _sym_db.RegisterMessage(Endpoint)
+_sym_db.RegisterMessage(Endpoint.TopologyEntry)
 
 
 DESCRIPTOR._options = None
 _WORKLOADENTRY.fields_by_name['service_account_name']._options = None
 _WORKLOADENTRY.fields_by_name['endpoints']._options = None
+_ENDPOINT_TOPOLOGYENTRY._options = None
 _ENDPOINT.fields_by_name['addresses']._options = None
 # @@protoc_insertion_point(module_scope)
