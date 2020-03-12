@@ -71,7 +71,7 @@ var (
 		goFieldToken: "",
 	}
 
-	regexJSONTag = regexp.MustCompile(`json\:"[a-z|0-9|_]+,`)
+	regexJSONTag        = regexp.MustCompile(`json\:"[a-z|0-9|_]+,`)
 	regexJSONTagIllegal = regexp.MustCompile(`json\:"_`)
 )
 
