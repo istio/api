@@ -70,6 +70,9 @@ var (
 		"github.com/gogo/protobuf/protobuf/google/protobuf": "github.com/gogo/protobuf/types",
 		goFieldToken: "",
 	}
+
+	regexJSONTag        = regexp.MustCompile(`json\:"[a-z|0-9|_]+,`)
+	regexJSONTagIllegal = regexp.MustCompile(`json\:"_`)
 )
 
 func main() {
@@ -121,8 +124,11 @@ func main() {
 			tmp = append(tmp, lines[i+1])
 			i += 2
 		case strings.Contains(l, goFieldJSONTagPrefix) && strings.Contains(l, "_"):
-			rgx := regexp.MustCompile(`json\:"[a-z|0-9]+_[a-z|0-9]+,`)
-			l = rgx.ReplaceAllStringFunc(l, func(m string) string {
+			if regexJSONTagIllegal.MatchString(l) {
+				fmt.Printf("Illegal leading _ in json field tag: %s\n", l)
+				os.Exit(1) //nolint: gomnd
+			}
+			l = regexJSONTag.ReplaceAllStringFunc(l, func(m string) string {
 				lvs := strings.Split(m, "_")
 				for i, v := range lvs {
 					if i > 0 {

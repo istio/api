@@ -75,7 +75,7 @@ type IstioOperatorSpec struct {
 	Profile string `protobuf:"bytes,10,opt,name=profile,proto3" json:"profile,omitempty"`
 	// Path for the install package. e.g.
 	//     - /tmp/istio-installer/nightly (local file path)
-	InstallPackagePath string `protobuf:"bytes,11,opt,name=install_package_path,json=installPackagePath,proto3" json:"install_package_path,omitempty"`
+	InstallPackagePath string `protobuf:"bytes,11,opt,name=install_package_path,json=installPackagePath,proto3" json:"installPackagePath,omitempty"`
 	// Root for docker image paths e.g. docker.io/istio
 	Hub string `protobuf:"bytes,12,opt,name=hub,proto3" json:"hub,omitempty"`
 	// Version tag for docker images e.g. 1.0.6

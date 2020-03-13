@@ -435,19 +435,19 @@ type KubernetesResourcesSpec struct {
 	HpaSpec *HorizontalPodAutoscalerSpec `protobuf:"bytes,3,opt,name=hpa_spec,json=hpaSpec,proto3" json:"hpaSpec,omitempty"`
 	// k8s imagePullPolicy.
 	// https://kubernetes.io/docs/concepts/containers/images/
-	ImagePullPolicy string `protobuf:"bytes,4,opt,name=image_pull_policy,json=imagePullPolicy,proto3" json:"image_pull_policy,omitempty"`
+	ImagePullPolicy string `protobuf:"bytes,4,opt,name=image_pull_policy,json=imagePullPolicy,proto3" json:"imagePullPolicy,omitempty"`
 	// k8s nodeSelector.
 	// https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
 	NodeSelector map[string]string `protobuf:"bytes,5,rep,name=node_selector,json=nodeSelector,proto3" json:"nodeSelector,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// k8s PodDisruptionBudget settings.
 	// https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#how-disruption-budgets-work
-	PodDisruptionBudget *PodDisruptionBudgetSpec `protobuf:"bytes,6,opt,name=pod_disruption_budget,json=podDisruptionBudget,proto3" json:"pod_disruption_budget,omitempty"`
+	PodDisruptionBudget *PodDisruptionBudgetSpec `protobuf:"bytes,6,opt,name=pod_disruption_budget,json=podDisruptionBudget,proto3" json:"podDisruptionBudget,omitempty"`
 	// k8s pod annotations.
 	// https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 	PodAnnotations map[string]string `protobuf:"bytes,7,rep,name=pod_annotations,json=podAnnotations,proto3" json:"podAnnotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// k8s priority_class_name. Default for all resources unless overridden.
 	// https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
-	PriorityClassName string `protobuf:"bytes,8,opt,name=priority_class_name,json=priorityClassName,proto3" json:"priority_class_name,omitempty"`
+	PriorityClassName string `protobuf:"bytes,8,opt,name=priority_class_name,json=priorityClassName,proto3" json:"priorityClassName,omitempty"`
 	// k8s readinessProbe settings.
 	// https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
 	// k8s.io.api.core.v1.Probe readiness_probe = 9;
