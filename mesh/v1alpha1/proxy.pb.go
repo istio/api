@@ -394,15 +394,15 @@ type Tracing_Stackdriver struct {
 	// The global default max number of attributes per span.
 	// default is 200.
 	// $hide_from_docs
-	MaxNumberOfAttributes *types.Int64Value `protobuf:"bytes,2,opt,name=max_number_of_attributes,json=maxNumberOfAttributes,proto3" json:"max_number_of_attributes,omitempty"`
+	MaxNumberOfAttributes *types.Int64Value `protobuf:"bytes,2,opt,name=max_number_of_attributes,json=maxNumberOfAttributes,proto3" json:"maxNumberOfAttributes,omitempty"`
 	// The global default max number of annotation events per span.
 	// default is 200.
 	// $hide_from_docs
-	MaxNumberOfAnnotations *types.Int64Value `protobuf:"bytes,3,opt,name=max_number_of_annotations,json=maxNumberOfAnnotations,proto3" json:"max_number_of_annotations,omitempty"`
+	MaxNumberOfAnnotations *types.Int64Value `protobuf:"bytes,3,opt,name=max_number_of_annotations,json=maxNumberOfAnnotations,proto3" json:"maxNumberOfAnnotations,omitempty"`
 	// The global default max number of message events per span.
 	// default is 200.
 	// $hide_from_docs
-	MaxNumberOfMessageEvents *types.Int64Value `protobuf:"bytes,4,opt,name=max_number_of_message_events,json=maxNumberOfMessageEvents,proto3" json:"max_number_of_message_events,omitempty"`
+	MaxNumberOfMessageEvents *types.Int64Value `protobuf:"bytes,4,opt,name=max_number_of_message_events,json=maxNumberOfMessageEvents,proto3" json:"maxNumberOfMessageEvents,omitempty"`
 	XXX_NoUnkeyedLiteral     struct{}          `json:"-"`
 	XXX_unrecognized         []byte            `json:"-"`
 	XXX_sizecache            int32             `json:"-"`
@@ -476,7 +476,7 @@ type SDS struct {
 	// True if SDS is enabled.
 	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
 	// Path of k8s service account JWT path.
-	K8SSaJwtPath         string   `protobuf:"bytes,2,opt,name=k8s_sa_jwt_path,json=k8sSaJwtPath,proto3" json:"k8s_sa_jwt_path,omitempty"`
+	K8SSaJwtPath         string   `protobuf:"bytes,2,opt,name=k8s_sa_jwt_path,json=k8sSaJwtPath,proto3" json:"k8sSaJwtPath,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -556,41 +556,41 @@ type ProxyConfig struct {
 	// The time in seconds that Envoy will wait before shutting down the
 	// parent process during a hot restart. MUST be >=1s (e.g., _1s/1m/1h_).
 	// MUST BE greater than _drain_duration_ parameter.
-	ParentShutdownDuration *types.Duration `protobuf:"bytes,5,opt,name=parent_shutdown_duration,json=parentShutdownDuration,proto3" json:"parent_shutdown_duration,omitempty"`
+	ParentShutdownDuration *types.Duration `protobuf:"bytes,5,opt,name=parent_shutdown_duration,json=parentShutdownDuration,proto3" json:"parentShutdownDuration,omitempty"`
 	// Address of the discovery service exposing xDS with mTLS connection.
 	// The inject configuration may override this value.
 	DiscoveryAddress string `protobuf:"bytes,6,opt,name=discovery_address,json=discoveryAddress,proto3" json:"discoveryAddress,omitempty"`
 	// $hide_from_docs
-	DiscoveryRefreshDelay *types.Duration `protobuf:"bytes,7,opt,name=discovery_refresh_delay,json=discoveryRefreshDelay,proto3" json:"discovery_refresh_delay,omitempty"` // Deprecated: Do not use.
+	DiscoveryRefreshDelay *types.Duration `protobuf:"bytes,7,opt,name=discovery_refresh_delay,json=discoveryRefreshDelay,proto3" json:"discoveryRefreshDelay,omitempty"` // Deprecated: Do not use.
 	// Address of the Zipkin service (e.g. _zipkin:9411_).
 	// DEPRECATED: Use [tracing][istio.mesh.v1alpha1.ProxyConfig.tracing] instead.
 	ZipkinAddress string `protobuf:"bytes,8,opt,name=zipkin_address,json=zipkinAddress,proto3" json:"zipkinAddress,omitempty"` // Deprecated: Do not use.
 	// Connection timeout used by Envoy for supporting services. (MUST BE >=1ms)
 	ConnectTimeout *types.Duration `protobuf:"bytes,9,opt,name=connect_timeout,json=connectTimeout,proto3" json:"connectTimeout,omitempty"`
 	// IP Address and Port of a statsd UDP listener (e.g. _10.75.241.127:9125_).
-	StatsdUdpAddress string `protobuf:"bytes,10,opt,name=statsd_udp_address,json=statsdUdpAddress,proto3" json:"statsd_udp_address,omitempty"`
+	StatsdUdpAddress string `protobuf:"bytes,10,opt,name=statsd_udp_address,json=statsdUdpAddress,proto3" json:"statsdUdpAddress,omitempty"`
 	// $hide_from_docs
-	EnvoyMetricsServiceAddress string `protobuf:"bytes,20,opt,name=envoy_metrics_service_address,json=envoyMetricsServiceAddress,proto3" json:"envoy_metrics_service_address,omitempty"` // Deprecated: Do not use.
+	EnvoyMetricsServiceAddress string `protobuf:"bytes,20,opt,name=envoy_metrics_service_address,json=envoyMetricsServiceAddress,proto3" json:"envoyMetricsServiceAddress,omitempty"` // Deprecated: Do not use.
 	// Port on which Envoy should listen for administrative commands.
-	ProxyAdminPort int32 `protobuf:"varint,11,opt,name=proxy_admin_port,json=proxyAdminPort,proto3" json:"proxy_admin_port,omitempty"`
+	ProxyAdminPort int32 `protobuf:"varint,11,opt,name=proxy_admin_port,json=proxyAdminPort,proto3" json:"proxyAdminPort,omitempty"`
 	// $hide_from_docs
 	AvailabilityZone string `protobuf:"bytes,12,opt,name=availability_zone,json=availabilityZone,proto3" json:"availabilityZone,omitempty"` // Deprecated: Do not use.
 	// Authentication policy defines the global switch to control authentication
 	// for Envoy-to-Envoy communication for istio components Mixer and Pilot.
-	ControlPlaneAuthPolicy AuthenticationPolicy `protobuf:"varint,13,opt,name=control_plane_auth_policy,json=controlPlaneAuthPolicy,proto3,enum=istio.mesh.v1alpha1.AuthenticationPolicy" json:"control_plane_auth_policy,omitempty"`
+	ControlPlaneAuthPolicy AuthenticationPolicy `protobuf:"varint,13,opt,name=control_plane_auth_policy,json=controlPlaneAuthPolicy,proto3,enum=istio.mesh.v1alpha1.AuthenticationPolicy" json:"controlPlaneAuthPolicy,omitempty"`
 	// File path of custom proxy configuration, currently used by proxies
 	// in front of Mixer and Pilot.
-	CustomConfigFile string `protobuf:"bytes,14,opt,name=custom_config_file,json=customConfigFile,proto3" json:"custom_config_file,omitempty"`
+	CustomConfigFile string `protobuf:"bytes,14,opt,name=custom_config_file,json=customConfigFile,proto3" json:"customConfigFile,omitempty"`
 	// Maximum length of name field in Envoy's metrics. The length of the name field
 	// is determined by the length of a name field in a service and the set of labels that
 	// comprise a particular version of the service. The default value is set to 189 characters.
 	// Envoy's internal metrics take up 67 characters, for a total of 256 character name per metric.
 	// Increase the value of this field if you find that the metrics from Envoys are truncated.
-	StatNameLength int32 `protobuf:"varint,15,opt,name=stat_name_length,json=statNameLength,proto3" json:"stat_name_length,omitempty"`
+	StatNameLength int32 `protobuf:"varint,15,opt,name=stat_name_length,json=statNameLength,proto3" json:"statNameLength,omitempty"`
 	// The number of worker threads to run. Default value is number of cores on the machine.
 	Concurrency int32 `protobuf:"varint,16,opt,name=concurrency,proto3" json:"concurrency,omitempty"`
 	// Path to the proxy bootstrap template file
-	ProxyBootstrapTemplatePath string `protobuf:"bytes,17,opt,name=proxy_bootstrap_template_path,json=proxyBootstrapTemplatePath,proto3" json:"proxy_bootstrap_template_path,omitempty"`
+	ProxyBootstrapTemplatePath string `protobuf:"bytes,17,opt,name=proxy_bootstrap_template_path,json=proxyBootstrapTemplatePath,proto3" json:"proxyBootstrapTemplatePath,omitempty"`
 	// The mode used to redirect inbound traffic to Envoy.
 	InterceptionMode ProxyConfig_InboundInterceptionMode `protobuf:"varint,18,opt,name=interception_mode,json=interceptionMode,proto3,enum=istio.mesh.v1alpha1.ProxyConfig_InboundInterceptionMode" json:"interceptionMode,omitempty"`
 	// Tracing configuration to be used by the proxy.
@@ -601,11 +601,11 @@ type ProxyConfig struct {
 	// sent. (e.g. accesslog-service:15000). See [Access Log
 	// Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto)
 	// for details about Envoy's gRPC Access Log Service API.
-	EnvoyAccessLogService *RemoteService `protobuf:"bytes,22,opt,name=envoy_access_log_service,json=envoyAccessLogService,proto3" json:"envoy_access_log_service,omitempty"`
+	EnvoyAccessLogService *RemoteService `protobuf:"bytes,22,opt,name=envoy_access_log_service,json=envoyAccessLogService,proto3" json:"envoyAccessLogService,omitempty"`
 	// Address of the Envoy Metrics Service implementation (e.g. metrics-service:15000).
 	// See [Metric Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/metrics/v2/metrics_service.proto)
 	// for details about Envoy's Metrics Service API.
-	EnvoyMetricsService *RemoteService `protobuf:"bytes,23,opt,name=envoy_metrics_service,json=envoyMetricsService,proto3" json:"envoy_metrics_service,omitempty"`
+	EnvoyMetricsService *RemoteService `protobuf:"bytes,23,opt,name=envoy_metrics_service,json=envoyMetricsService,proto3" json:"envoyMetricsService,omitempty"`
 	// $hide_from_docs
 	// Additional env variables for the proxy.
 	// Names starting with ISTIO_META_ will be included in the generated bootstrap and sent to the XDS server.
