@@ -217,30 +217,30 @@ type MeshConfig struct {
 	//
 	// NOTE: Omitting mixerCheckServer while specifying mixerReportServer is
 	// equivalent to setting disablePolicyChecks to true.
-	MixerCheckServer string `protobuf:"bytes,1,opt,name=mixer_check_server,json=mixerCheckServer,proto3" json:"mixer_check_server,omitempty"`
+	MixerCheckServer string `protobuf:"bytes,1,opt,name=mixer_check_server,json=mixerCheckServer,proto3" json:"mixerCheckServer,omitempty"`
 	// Address of the server that will be used by the proxies for policy report
 	// calls.
-	MixerReportServer string `protobuf:"bytes,2,opt,name=mixer_report_server,json=mixerReportServer,proto3" json:"mixer_report_server,omitempty"`
+	MixerReportServer string `protobuf:"bytes,2,opt,name=mixer_report_server,json=mixerReportServer,proto3" json:"mixerReportServer,omitempty"`
 	// Disable policy checks by the Mixer service. Default
 	// is false, i.e. Mixer policy check is enabled by default.
-	DisablePolicyChecks bool `protobuf:"varint,3,opt,name=disable_policy_checks,json=disablePolicyChecks,proto3" json:"disable_policy_checks,omitempty"`
+	DisablePolicyChecks bool `protobuf:"varint,3,opt,name=disable_policy_checks,json=disablePolicyChecks,proto3" json:"disablePolicyChecks,omitempty"`
 	// $hide_from_docs
 	// Disable telemetry reporting by the Mixer service for HTTP traffic.
 	// Default is false (telemetry reporting via Mixer is enabled).
 	// This option provides a transition path for Istio extensibility v2.
-	DisableMixerHttpReports bool `protobuf:"varint,48,opt,name=disable_mixer_http_reports,json=disableMixerHttpReports,proto3" json:"disable_mixer_http_reports,omitempty"`
+	DisableMixerHttpReports bool `protobuf:"varint,48,opt,name=disable_mixer_http_reports,json=disableMixerHttpReports,proto3" json:"disableMixerHttpReports,omitempty"`
 	// Allow all traffic in cases when the Mixer policy service cannot be reached.
 	// Default is false which means the traffic is denied when the client is unable
 	// to connect to Mixer.
-	PolicyCheckFailOpen bool `protobuf:"varint,25,opt,name=policy_check_fail_open,json=policyCheckFailOpen,proto3" json:"policy_check_fail_open,omitempty"`
+	PolicyCheckFailOpen bool `protobuf:"varint,25,opt,name=policy_check_fail_open,json=policyCheckFailOpen,proto3" json:"policyCheckFailOpen,omitempty"`
 	// Enable session affinity for Envoy Mixer reports so that calls from a proxy will
 	// always target the same Mixer instance.
-	SidecarToTelemetrySessionAffinity bool `protobuf:"varint,30,opt,name=sidecar_to_telemetry_session_affinity,json=sidecarToTelemetrySessionAffinity,proto3" json:"sidecar_to_telemetry_session_affinity,omitempty"`
+	SidecarToTelemetrySessionAffinity bool `protobuf:"varint,30,opt,name=sidecar_to_telemetry_session_affinity,json=sidecarToTelemetrySessionAffinity,proto3" json:"sidecarToTelemetrySessionAffinity,omitempty"`
 	// Port on which Envoy should listen for incoming connections from
 	// other services.
-	ProxyListenPort int32 `protobuf:"varint,4,opt,name=proxy_listen_port,json=proxyListenPort,proto3" json:"proxy_listen_port,omitempty"`
+	ProxyListenPort int32 `protobuf:"varint,4,opt,name=proxy_listen_port,json=proxyListenPort,proto3" json:"proxyListenPort,omitempty"`
 	// Port on which Envoy should listen for HTTP PROXY requests if set.
-	ProxyHttpPort int32 `protobuf:"varint,5,opt,name=proxy_http_port,json=proxyHttpPort,proto3" json:"proxy_http_port,omitempty"`
+	ProxyHttpPort int32 `protobuf:"varint,5,opt,name=proxy_http_port,json=proxyHttpPort,proto3" json:"proxyHttpPort,omitempty"`
 	// Connection timeout used by Envoy. (MUST BE >=1ms)
 	ConnectTimeout *types.Duration `protobuf:"bytes,6,opt,name=connect_timeout,json=connectTimeout,proto3" json:"connectTimeout,omitempty"`
 	// Automatic protocol detection uses a set of heuristics to
@@ -253,7 +253,7 @@ type MeshConfig struct {
 	// traffic. Set this field to tweak the period that Envoy will wait
 	// for the client to send the first bits of data. (MUST BE >=1ms or
 	// 0s to disable)
-	ProtocolDetectionTimeout *types.Duration `protobuf:"bytes,42,opt,name=protocol_detection_timeout,json=protocolDetectionTimeout,proto3" json:"protocol_detection_timeout,omitempty"`
+	ProtocolDetectionTimeout *types.Duration `protobuf:"bytes,42,opt,name=protocol_detection_timeout,json=protocolDetectionTimeout,proto3" json:"protocolDetectionTimeout,omitempty"`
 	// If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
 	TcpKeepalive *v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,28,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcpKeepalive,omitempty"`
 	// Class of ingress resources to be processed by Istio ingress
@@ -263,27 +263,27 @@ type MeshConfig struct {
 	// Name of theKubernetes service used for the istio ingress controller.
 	IngressService string `protobuf:"bytes,8,opt,name=ingress_service,json=ingressService,proto3" json:"ingressService,omitempty"`
 	// Defines whether to use Istio ingress controller for annotated or all ingress resources.
-	IngressControllerMode MeshConfig_IngressControllerMode `protobuf:"varint,9,opt,name=ingress_controller_mode,json=ingressControllerMode,proto3,enum=istio.mesh.v1alpha1.MeshConfig_IngressControllerMode" json:"ingress_controller_mode,omitempty"`
+	IngressControllerMode MeshConfig_IngressControllerMode `protobuf:"varint,9,opt,name=ingress_controller_mode,json=ingressControllerMode,proto3,enum=istio.mesh.v1alpha1.MeshConfig_IngressControllerMode" json:"ingressControllerMode,omitempty"`
 	// $hide_from_docs
 	AuthPolicy MeshConfig_AuthPolicy `protobuf:"varint,10,opt,name=auth_policy,json=authPolicy,proto3,enum=istio.mesh.v1alpha1.MeshConfig_AuthPolicy" json:"authPolicy,omitempty"` // Deprecated: Do not use.
 	// $hide_from_docs
-	RdsRefreshDelay *types.Duration `protobuf:"bytes,11,opt,name=rds_refresh_delay,json=rdsRefreshDelay,proto3" json:"rds_refresh_delay,omitempty"` // Deprecated: Do not use.
+	RdsRefreshDelay *types.Duration `protobuf:"bytes,11,opt,name=rds_refresh_delay,json=rdsRefreshDelay,proto3" json:"rdsRefreshDelay,omitempty"` // Deprecated: Do not use.
 	// Flag to control generation of trace spans and request IDs.
 	// Requires a trace span collector defined in the proxy configuration.
 	EnableTracing bool `protobuf:"varint,12,opt,name=enable_tracing,json=enableTracing,proto3" json:"enableTracing,omitempty"`
 	// File address for the proxy access log (e.g. /dev/stdout).
 	// Empty value disables access logging.
-	AccessLogFile string `protobuf:"bytes,13,opt,name=access_log_file,json=accessLogFile,proto3" json:"access_log_file,omitempty"`
+	AccessLogFile string `protobuf:"bytes,13,opt,name=access_log_file,json=accessLogFile,proto3" json:"accessLogFile,omitempty"`
 	// Format for the proxy access log
 	// Empty value results in proxy's default access log format
-	AccessLogFormat string `protobuf:"bytes,24,opt,name=access_log_format,json=accessLogFormat,proto3" json:"access_log_format,omitempty"`
+	AccessLogFormat string `protobuf:"bytes,24,opt,name=access_log_format,json=accessLogFormat,proto3" json:"accessLogFormat,omitempty"`
 	// Encoding for the proxy access log (text or json).
 	// Default value is text.
-	AccessLogEncoding MeshConfig_AccessLogEncoding `protobuf:"varint,27,opt,name=access_log_encoding,json=accessLogEncoding,proto3,enum=istio.mesh.v1alpha1.MeshConfig_AccessLogEncoding" json:"access_log_encoding,omitempty"`
+	AccessLogEncoding MeshConfig_AccessLogEncoding `protobuf:"varint,27,opt,name=access_log_encoding,json=accessLogEncoding,proto3,enum=istio.mesh.v1alpha1.MeshConfig_AccessLogEncoding" json:"accessLogEncoding,omitempty"`
 	// This flag enables Envoy's gRPC Access Log Service.
 	// See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto)
 	// for details about Envoy's gRPC Access Log Service API.
-	EnableEnvoyAccessLogService bool `protobuf:"varint,40,opt,name=enable_envoy_access_log_service,json=enableEnvoyAccessLogService,proto3" json:"enable_envoy_access_log_service,omitempty"`
+	EnableEnvoyAccessLogService bool `protobuf:"varint,40,opt,name=enable_envoy_access_log_service,json=enableEnvoyAccessLogService,proto3" json:"enableEnvoyAccessLogService,omitempty"`
 	// Default proxy config used by the proxy injection mechanism operating in the mesh
 	// (e.g. Kubernetes admission controller)
 	// In case of Kubernetes, the proxy config is applied once during the injection process,
@@ -300,16 +300,16 @@ type MeshConfig struct {
 	// encouraged to use ServiceEntries to explicitly declare any external
 	// dependencies, instead of using allow_any, so that traffic to these
 	// services can be monitored.
-	OutboundTrafficPolicy *MeshConfig_OutboundTrafficPolicy `protobuf:"bytes,17,opt,name=outbound_traffic_policy,json=outboundTrafficPolicy,proto3" json:"outbound_traffic_policy,omitempty"`
+	OutboundTrafficPolicy *MeshConfig_OutboundTrafficPolicy `protobuf:"bytes,17,opt,name=outbound_traffic_policy,json=outboundTrafficPolicy,proto3" json:"outboundTrafficPolicy,omitempty"`
 	// Enables client side policy checks.
-	EnableClientSidePolicyCheck bool `protobuf:"varint,19,opt,name=enable_client_side_policy_check,json=enableClientSidePolicyCheck,proto3" json:"enable_client_side_policy_check,omitempty"`
+	EnableClientSidePolicyCheck bool `protobuf:"varint,19,opt,name=enable_client_side_policy_check,json=enableClientSidePolicyCheck,proto3" json:"enableClientSidePolicyCheck,omitempty"`
 	// $hide_from_docs
 	// Unix Domain Socket through which Envoy communicates with NodeAgent SDS to get key/cert for mTLS.
 	// Use secret-mount files instead of SDS if set to empty.
 	// @deprecated - istio agent will detect and send the path to envoy.
-	SdsUdsPath string `protobuf:"bytes,20,opt,name=sds_uds_path,json=sdsUdsPath,proto3" json:"sds_uds_path,omitempty"` // Deprecated: Do not use.
+	SdsUdsPath string `protobuf:"bytes,20,opt,name=sds_uds_path,json=sdsUdsPath,proto3" json:"sdsUdsPath,omitempty"` // Deprecated: Do not use.
 	// $hide_from_docs
-	SdsRefreshDelay *types.Duration `protobuf:"bytes,21,opt,name=sds_refresh_delay,json=sdsRefreshDelay,proto3" json:"sds_refresh_delay,omitempty"` // Deprecated: Do not use.
+	SdsRefreshDelay *types.Duration `protobuf:"bytes,21,opt,name=sds_refresh_delay,json=sdsRefreshDelay,proto3" json:"sdsRefreshDelay,omitempty"` // Deprecated: Do not use.
 	// ConfigSource describes a source of configuration data for networking
 	// rules, and other Istio configuration artifacts. Multiple data sources
 	// can be configured for a single control plane.
@@ -325,14 +325,14 @@ type MeshConfig struct {
 	// If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use
 	// mutual TLS when server sides are capable of accepting mutual TLS traffic.
 	// If service DestinationRule exists and has TLSSettings specified, that is always used instead.
-	EnableAutoMtls *types.BoolValue `protobuf:"bytes,43,opt,name=enable_auto_mtls,json=enableAutoMtls,proto3" json:"enable_auto_mtls,omitempty"`
+	EnableAutoMtls *types.BoolValue `protobuf:"bytes,43,opt,name=enable_auto_mtls,json=enableAutoMtls,proto3" json:"enableAutoMtls,omitempty"`
 	// $hide_from_docs
 	// This flag is used by secret discovery service(SDS).
 	// If set to true ([prerequisite](https://kubernetes.io/docs/concepts/storage/volumes/#projected)), Istio will inject volumes mount
 	// for Kubernetes service account trustworthy JWT(which is available with Kubernetes 1.12 or higher), so that the Kubernetes API server
 	// mounts Kubernetes service account trustworthy JWT to the Envoy container, which will be used to request key/cert eventually.
 	// This isn't supported for non-Kubernetes cases.
-	EnableSdsTokenMount bool `protobuf:"varint,23,opt,name=enable_sds_token_mount,json=enableSdsTokenMount,proto3" json:"enable_sds_token_mount,omitempty"`
+	EnableSdsTokenMount bool `protobuf:"varint,23,opt,name=enable_sds_token_mount,json=enableSdsTokenMount,proto3" json:"enableSdsTokenMount,omitempty"`
 	// $hide_from_docs
 	// This flag is used by secret discovery service(SDS).
 	// If set to true, Envoy will fetch a normal Kubernetes service account JWT from '/var/run/secrets/kubernetes.io/serviceaccount/token'
@@ -340,7 +340,7 @@ type MeshConfig struct {
 	// and pass to sds server, which will be used to request key/cert eventually.
 	// If both enable_sds_token_mount and sds_use_k8s_sa_jwt are set to true, enable_sds_token_mount(trustworthy jwt) takes precedence.
 	// This isn't supported for non-k8s case.
-	SdsUseK8SSaJwt bool `protobuf:"varint,29,opt,name=sds_use_k8s_sa_jwt,json=sdsUseK8sSaJwt,proto3" json:"sds_use_k8s_sa_jwt,omitempty"`
+	SdsUseK8SSaJwt bool `protobuf:"varint,29,opt,name=sds_use_k8s_sa_jwt,json=sdsUseK8sSaJwt,proto3" json:"sdsUseK8sSaJwt,omitempty"`
 	// The trust domain corresponds to the trust root of a system.
 	// Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)
 	TrustDomain string `protobuf:"bytes,26,opt,name=trust_domain,json=trustDomain,proto3" json:"trustDomain,omitempty"`
@@ -352,7 +352,7 @@ type MeshConfig struct {
 	// ```
 	// Any service with the identity `td1/ns/foo/sa/a-service-account`, `td2/ns/foo/sa/a-service-account`,
 	// or `td3/ns/foo/sa/a-service-account` will be treated the same in the Istio mesh.
-	TrustDomainAliases []string `protobuf:"bytes,46,rep,name=trust_domain_aliases,json=trustDomainAliases,proto3" json:"trust_domain_aliases,omitempty"`
+	TrustDomainAliases []string `protobuf:"bytes,46,rep,name=trust_domain_aliases,json=trustDomainAliases,proto3" json:"trustDomainAliases,omitempty"`
 	// The default value for the ServiceEntry.export_to field and services
 	// imported through container registry integrations, e.g. this applies to
 	// Kubernetes Service resources. The value is a list of namespace names and
@@ -377,19 +377,19 @@ type MeshConfig struct {
 	//
 	// For further discussion see the reference documentation for ServiceEntry,
 	// Sidecar, and Gateway.
-	DefaultServiceExportTo []string `protobuf:"bytes,31,rep,name=default_service_export_to,json=defaultServiceExportTo,proto3" json:"default_service_export_to,omitempty"`
+	DefaultServiceExportTo []string `protobuf:"bytes,31,rep,name=default_service_export_to,json=defaultServiceExportTo,proto3" json:"defaultServiceExportTo,omitempty"`
 	// The default value for the VirtualService.export_to field. Has the same
 	// syntax as 'default_service_export_to'.
 	//
 	// If not set the system will use "*" as the default value which implies that
 	// virtual services are exported to all namespaces
-	DefaultVirtualServiceExportTo []string `protobuf:"bytes,32,rep,name=default_virtual_service_export_to,json=defaultVirtualServiceExportTo,proto3" json:"default_virtual_service_export_to,omitempty"`
+	DefaultVirtualServiceExportTo []string `protobuf:"bytes,32,rep,name=default_virtual_service_export_to,json=defaultVirtualServiceExportTo,proto3" json:"defaultVirtualServiceExportTo,omitempty"`
 	// The default value for the DestinationRule.export_to field. Has the same
 	// syntax as 'default_service_export_to'.
 	//
 	// If not set the system will use "*" as the default value which implies that
 	// destination rules are exported to all namespaces
-	DefaultDestinationRuleExportTo []string `protobuf:"bytes,33,rep,name=default_destination_rule_export_to,json=defaultDestinationRuleExportTo,proto3" json:"default_destination_rule_export_to,omitempty"`
+	DefaultDestinationRuleExportTo []string `protobuf:"bytes,33,rep,name=default_destination_rule_export_to,json=defaultDestinationRuleExportTo,proto3" json:"defaultDestinationRuleExportTo,omitempty"`
 	// The namespace to treat as the administrative root namespace for
 	// Istio configuration. When processing a leaf namespace Istio will search for
 	// declarations in that namespace first and if none are found it will
@@ -400,26 +400,26 @@ type MeshConfig struct {
 	// type.
 	RootNamespace string `protobuf:"bytes,34,opt,name=root_namespace,json=rootNamespace,proto3" json:"rootNamespace,omitempty"`
 	// Locality based load balancing distribution or failover settings.
-	LocalityLbSetting *v1alpha3.LocalityLoadBalancerSetting `protobuf:"bytes,35,opt,name=locality_lb_setting,json=localityLbSetting,proto3" json:"locality_lb_setting,omitempty"`
+	LocalityLbSetting *v1alpha3.LocalityLoadBalancerSetting `protobuf:"bytes,35,opt,name=locality_lb_setting,json=localityLbSetting,proto3" json:"localityLbSetting,omitempty"`
 	// Configures DNS refresh rate for Envoy clusters of type STRICT_DNS
-	DnsRefreshRate *types.Duration `protobuf:"bytes,36,opt,name=dns_refresh_rate,json=dnsRefreshRate,proto3" json:"dns_refresh_rate,omitempty"`
+	DnsRefreshRate *types.Duration `protobuf:"bytes,36,opt,name=dns_refresh_rate,json=dnsRefreshRate,proto3" json:"dnsRefreshRate,omitempty"`
 	// The flag to disable report batch.
-	DisableReportBatch bool `protobuf:"varint,37,opt,name=disable_report_batch,json=disableReportBatch,proto3" json:"disable_report_batch,omitempty"`
+	DisableReportBatch bool `protobuf:"varint,37,opt,name=disable_report_batch,json=disableReportBatch,proto3" json:"disableReportBatch,omitempty"`
 	// When disable_report_batch is false, this value specifies the maximum number
 	// of requests that are batched in report. If left unspecified, the default value
 	// of report_batch_max_entries == 0 will use the hardcoded defaults of
 	// istio::mixerclient::ReportOptions.
-	ReportBatchMaxEntries uint32 `protobuf:"varint,38,opt,name=report_batch_max_entries,json=reportBatchMaxEntries,proto3" json:"report_batch_max_entries,omitempty"`
+	ReportBatchMaxEntries uint32 `protobuf:"varint,38,opt,name=report_batch_max_entries,json=reportBatchMaxEntries,proto3" json:"reportBatchMaxEntries,omitempty"`
 	// When disable_report_batch is false, this value specifies the maximum elapsed
 	// time a batched report will be sent after a user request is processed. If left
 	// unspecified, the default report_batch_max_time == 0 will use the hardcoded
 	// defaults of istio::mixerclient::ReportOptions.
-	ReportBatchMaxTime *types.Duration `protobuf:"bytes,39,opt,name=report_batch_max_time,json=reportBatchMaxTime,proto3" json:"report_batch_max_time,omitempty"`
+	ReportBatchMaxTime *types.Duration `protobuf:"bytes,39,opt,name=report_batch_max_time,json=reportBatchMaxTime,proto3" json:"reportBatchMaxTime,omitempty"`
 	// Specify if http1.1 connections should be upgraded to http2 by default.
 	// if sidecar is installed on all pods in the mesh, then this should be set to UPGRADE.
 	// If one or more services or namespaces do not have sidecar(s), then this should be set to DO_NOT_UPGRADE.
 	// It can be enabled by destination using the destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy override.
-	H2UpgradePolicy MeshConfig_H2UpgradePolicy `protobuf:"varint,41,opt,name=h2_upgrade_policy,json=h2UpgradePolicy,proto3,enum=istio.mesh.v1alpha1.MeshConfig_H2UpgradePolicy" json:"h2_upgrade_policy,omitempty"`
+	H2UpgradePolicy MeshConfig_H2UpgradePolicy `protobuf:"varint,41,opt,name=h2_upgrade_policy,json=h2UpgradePolicy,proto3,enum=istio.mesh.v1alpha1.MeshConfig_H2UpgradePolicy" json:"h2UpgradePolicy,omitempty"`
 	// Name to be used while emitting statistics for inbound clusters.
 	// By default, Istio emits statistics with the pattern `inbound|<port>|<port-name>|<service-FQDN>`.
 	// For example `inbound|7443|grpc-reviews|reviews.prod.svc.cluster.local`. This can be used to override that pattern.
@@ -435,7 +435,7 @@ type MeshConfig struct {
 	//
 	// - `%SERVICE_FQDN%_%SERVICE_PORT%` will use reviews.prod.svc.cluster.local_7443 as the stats name.
 	// - `%SERVICE%` will use reviews.prod as the stats name.
-	InboundClusterStatName string `protobuf:"bytes,44,opt,name=inbound_cluster_stat_name,json=inboundClusterStatName,proto3" json:"inbound_cluster_stat_name,omitempty"`
+	InboundClusterStatName string `protobuf:"bytes,44,opt,name=inbound_cluster_stat_name,json=inboundClusterStatName,proto3" json:"inboundClusterStatName,omitempty"`
 	// Name to be used while emitting statistics for outbound clusters.
 	// By default, Istio emits statistics with the pattern `outbound|<port>|<subsetname>|<service-FQDN>`.
 	// For example `outbound|8080|v2|reviews.prod.svc.cluster.local`. This can be used to override that pattern.
@@ -452,7 +452,7 @@ type MeshConfig struct {
 	//
 	// - `%SERVICE_FQDN%_%SERVICE_PORT%` will use reviews.prod.svc.cluster.local_7443 as the stats name.
 	// - `%SERVICE%` will use reviews.prod as the stats name.
-	OutboundClusterStatName string `protobuf:"bytes,45,opt,name=outbound_cluster_stat_name,json=outboundClusterStatName,proto3" json:"outbound_cluster_stat_name,omitempty"`
+	OutboundClusterStatName string `protobuf:"bytes,45,opt,name=outbound_cluster_stat_name,json=outboundClusterStatName,proto3" json:"outboundClusterStatName,omitempty"`
 	// Configure the provision of certificates.
 	Certificates []*Certificate `protobuf:"bytes,47,rep,name=certificates,proto3" json:"certificates,omitempty"`
 	// Set configuration for Thrift protocol
@@ -880,9 +880,9 @@ type MeshConfig_ThriftConfig struct {
 	// Specify thrift rate limit service URL. If pilot has thrift protocol support enabled,
 	// this will enable the rate limit service for destinations that have matching rate
 	// limit configurations.
-	RateLimitUrl string `protobuf:"bytes,1,opt,name=rate_limit_url,json=rateLimitUrl,proto3" json:"rate_limit_url,omitempty"`
+	RateLimitUrl string `protobuf:"bytes,1,opt,name=rate_limit_url,json=rateLimitUrl,proto3" json:"rateLimitUrl,omitempty"`
 	// Specify thrift rate limit service timeout, in milliseconds. Default is 50ms
-	RateLimitTimeout     *types.Duration `protobuf:"bytes,2,opt,name=rate_limit_timeout,json=rateLimitTimeout,proto3" json:"rate_limit_timeout,omitempty"`
+	RateLimitTimeout     *types.Duration `protobuf:"bytes,2,opt,name=rate_limit_timeout,json=rateLimitTimeout,proto3" json:"rateLimitTimeout,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_unrecognized     []byte          `json:"-"`
 	XXX_sizecache        int32           `json:"-"`
