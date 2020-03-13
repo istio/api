@@ -160,14 +160,7 @@ message HTTPAPISpecPattern {
     //
     string uri_template = 3;
 
-    // EXPERIMENTAL:
-    //
-    // ecmascript style regex-based match as defined by
-    // [EDCA-262](http://en.cppreference.com/w/cpp/regex/ecmascript). For
-    // example,
-    //
-    //     "^/pets/(.*?)?"
-    //
+    // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax)
     string regex = 4;
   }
 }

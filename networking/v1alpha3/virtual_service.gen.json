@@ -593,7 +593,7 @@
             ],
             "properties": {
               "regex": {
-                "description": "ECMAscript style regex-based match",
+                "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
                 "type": "string",
                 "format": "string"
               }
