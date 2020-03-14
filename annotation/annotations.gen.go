@@ -11,7 +11,6 @@ const (
     Ingress
     Pod
     Service
-    ServiceEntry
 )
 
 func (r ResourceTypes) String() string {
@@ -24,8 +23,6 @@ func (r ResourceTypes) String() string {
 		return "Pod"
 	case 4:
 		return "Service"
-	case 5:
-		return "ServiceEntry"
 	}
 	return "Unknown"
 }
@@ -129,46 +126,28 @@ var (
 		  Resources: []ResourceTypes{ Ingress, },
         }
 	
-		AlphaNetworkingEndpointsVersion = Instance {
-          Name: "networking.alpha.istio.io/endpointsVersion",
-          Description: "Added to synthetic ServiceEntry resources to provide the "+
-                        "raw resource version from the most recent Kubernetes "+
-                        "endpoints update (if available). NOTE This API is Alpha "+
-                        "and has no stability guarantees.",
-          Hidden: true,
-          Deprecated: false,
-		  Resources: []ResourceTypes{ ServiceEntry, },
-        }
-	
-		AlphaNetworkingNotReadyEndpoints = Instance {
-          Name: "networking.alpha.istio.io/notReadyEndpoints",
-          Description: "Added to synthetic ServiceEntry resources to provide the "+
-                        "'NotReadyAddresses' from the Kubernetes Endpoints "+
-                        "resource. The value is a comma-separated list of IP:port. "+
-                        "NOTE This API is Alpha and has no stability guarantees.",
-          Hidden: true,
-          Deprecated: false,
-		  Resources: []ResourceTypes{ ServiceEntry, },
-        }
-	
-		AlphaNetworkingServiceVersion = Instance {
-          Name: "networking.alpha.istio.io/serviceVersion",
-          Description: "Added to synthetic ServiceEntry resources to provide the "+
-                        "raw resource version from the most recent Kubernetes "+
-                        "service update. This will always be available for "+
-                        "synthetic service entries. NOTE This API is Alpha and has "+
-                        "no stability guarantees.",
-          Hidden: true,
-          Deprecated: false,
-		  Resources: []ResourceTypes{ ServiceEntry, },
-        }
-	
 		NetworkingExportTo = Instance {
           Name: "networking.istio.io/exportTo",
           Description: "Specifies the namespaces to which this service should be "+
                         "exported to. A value of '*' indicates it is reachable "+
                         "within the mesh '.' indicates it is reachable within its "+
                         "namespace.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Service, },
+        }
+	
+		NetworkingGatewayClass = Instance {
+          Name: "networking.istio.io/gatewayClass",
+          Description: "Specifies the type of gateway. Valid values are "+
+                        "'ingress', 'egress', and 'midtier'. Use 'ingress' class "+
+                        "for gateways that receive traffic from outside the "+
+                        "cluster and forward to services inside the cluster. Use "+
+                        "'egress' class for gateways that receive traffic from "+
+                        "services inside the mesh and forward to external services "+
+                        "outside the mesh. Use 'midtier' class for gateways that "+
+                        "receive traffic from services within the cluster and "+
+                        "forward to other services in the same cluster.",
           Hidden: false,
           Deprecated: false,
 		  Resources: []ResourceTypes{ Service, },
@@ -514,10 +493,8 @@ func AllResourceAnnotations() []*Instance {
 		&OperatorInstallOwnerGeneration,
 		&OperatorInstallVersion,
 		&IoKubernetesIngressClass,
-		&AlphaNetworkingEndpointsVersion,
-		&AlphaNetworkingNotReadyEndpoints,
-		&AlphaNetworkingServiceVersion,
 		&NetworkingExportTo,
+		&NetworkingGatewayClass,
 		&PolicyCheck,
 		&PolicyCheckBaseRetryWaitTime,
 		&PolicyCheckMaxRetryWaitTime,
@@ -562,6 +539,5 @@ func AllResourceTypes() []string {
 		"Ingress",
 		"Pod",
 		"Service",
-		"ServiceEntry",
 	}
 }

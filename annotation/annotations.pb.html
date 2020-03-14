@@ -76,18 +76,22 @@ Istio supports to control its behavior.
 			
 		
 			
-		
-			
-		
-			
-		
-			
 				
 					<tr>
 				
 					<td><code>networking.istio.io/exportTo</code></td>
 					<td>[Service]</td>
 					<td>Specifies the namespaces to which this service should be exported to. A value of '*' indicates it is reachable within the mesh '.' indicates it is reachable within its namespace.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
+					<td><code>networking.istio.io/gatewayClass</code></td>
+					<td>[Service]</td>
+					<td>Specifies the type of gateway. Valid values are 'ingress', 'egress', and 'midtier'. Use 'ingress' class for gateways that receive traffic from outside the cluster and forward to services inside the cluster. Use 'egress' class for gateways that receive traffic from services inside the mesh and forward to external services outside the mesh. Use 'midtier' class for gateways that receive traffic from services within the cluster and forward to other services in the same cluster.</td>
 				</tr>
 			
 		
