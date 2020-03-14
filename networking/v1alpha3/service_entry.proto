@@ -826,8 +826,18 @@ message ServiceEntry {
     uint32 weight = 6;
   };
 
-  // One or more endpoints associated with the service.
+  // One or more endpoints associated with the service. Only one of
+  // `endpoints` or `workloadSelector` can be specified.
   repeated Endpoint endpoints = 6;
+
+  // Applicable only for MESH_INTERNAL services. If VM workloads are
+  // defined separately using the WorkloadEntry resource, use the
+  // workloadSelector to select the set of workloads that belong to
+  // the service described by this ServiceEntry. Only one of
+  // `endpoints` or `workloadSelector` can be specified. The
+  // WorkloadEntry object representing the VMs should be defined in
+  // the same namespace as the ServiceEntry.
+  WorkloadSelector endpoint_selector = 9;
 
   // A list of namespaces to which this service is exported. Exporting a service
   // allows it to be used by sidecars, gateways and virtual services defined in
@@ -850,10 +860,12 @@ message ServiceEntry {
   // "." or "*" (i.e., the current namespace or all namespaces).
   repeated string export_to = 7;
 
-  // The list of subject alternate names allowed for workload instances that
-  // implement this service. This information is used to enforce
-  // [secure-naming](https://istio.io/docs/concepts/security/#secure-naming).
-  // If specified, the proxy will verify that the server
-  // certificate's subject alternate name matches one of the specified values.
+  // If specified, the proxy will verify that the server certificate's
+  // subject alternate name matches one of the specified values.
+  //
+  // NOTE: When using the workloadEntry with workloadSelectors, the
+  // service account specified in the workloadEntry will also be used
+  // to derive the additional subject alternate names that should be
+  // verified.
   repeated string subject_alt_names = 8;
 }

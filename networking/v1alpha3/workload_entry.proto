@@ -1,0 +1,181 @@
+// Copyright 2018 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "google/api/field_behavior.proto";
+import "networking/v1alpha3/gateway.proto";
+
+// $schema: istio.networking.v1alpha3.WorkloadEntry
+// $title: Workload Entry
+// $description: Configuration affecting VMs onboarded into the mesh.
+// $location: https://istio.io/docs/reference/config/networking/workload-entry.html
+// $aliases: [/docs/reference/config/networking/v1alpha3/workload-entry]
+
+// `WorkloadEntry` enables operators to describe the properties of
+// non-Kubernetes workloads such as VMs and bare metal servers as they
+// are onboarded into the mesh. A `WorkloadEntry` must be accompanied
+// by an Istio `ServiceEntry` that selects the workloads and provides
+// the service definition for a `MESH_INTERNAL` service (hostnames,
+// port properties, etc.). A `ServiceEntry` object can select multiple
+// workload entries based on the workload selector.
+//
+// The following example declares a workload entry representing a pool
+// of VMs for the `details.bookinfo.com` service. These VMs have
+// sidecars installed and bootstrapped using the `details-legacy`
+// service account. The sidecars receive HTTP traffic on port 80
+// (wrapped in istio mutual TLS) and forward it to the application on
+// the localhost on the same port.
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: WorkloadEntry
+// metadata:
+//   name: details-svc
+// spec:
+//   # use of the service account indicates that these workloads
+//   # have sidecar proxies bootstrapped with the trustworthy JWT
+//   # token from this service account. Pods with sidecars will
+//   # automatically communicate with the workload using istio mutual TLS.
+//   serviceAccount: details-legacy
+//   endpoints:
+//   - address: 2.2.2.2
+//     labels:
+//       app: details-legacy
+//       instance-id: vm1
+//   - address: 3.3.3.3
+//     labels:
+//       app: details-legacy
+//       instance-id: vm1
+// ```
+// {{</tab>}}
+//
+// and the associated service entry
+//
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: details-svc
+// spec:
+//   hosts:
+//   - details.bookinfo.com
+//   location: MESH_INTERNAL
+//   ports:
+//   - number: 80
+//     name: http
+//     protocol: HTTP
+//   resolution: STATIC
+//   workloadSelector:
+//     labels:
+//       app: details-legacy
+// ```
+// {{</tab>}}
+// {{</tabset>}}
+//
+//
+// The following example declares the same set of VM workloads using
+// their fully qualified DNS names. The service entry's resolution
+// mode should be changed to DNS to indicate that the client-side
+// sidecars should dynamically resolve the DNS name at runtime before
+// forwarding the request.
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: WorkloadEntry
+// metadata:
+//   name: details-svc
+// spec:
+//   # use of the service account indicates that these workloads
+//   # have sidecar proxies bootstrapped with the trustworthy JWT
+//   # token from this service account. Pods with sidecars will
+//   # automatically communicate with the workload using istio mutual TLS.
+//   serviceAccount: details-legacy
+//   endpoints:
+//   - address: vm1.vpc01.corp.net
+//     labels:
+//       app: details-legacy
+//       instance-id: vm1
+//     # ports if not specified will be the same as service ports
+//   - address: vm2.vpc01.corp.net
+//     labels:
+//       app: details-legacy
+//       instance-id: vm1
+// ```
+// {{</tab>}}
+//
+// and the associated service entry
+//
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: ServiceEntry
+// metadata:
+//   name: details-svc
+// spec:
+//   hosts:
+//   - details.bookinfo.com
+//   location: MESH_INTERNAL
+//   ports:
+//   - number: 80
+//     name: http
+//     protocol: HTTP
+//   resolution: DNS
+//   workloadSelector:
+//     labels:
+//       app: details-legacy
+// ```
+// {{</tab>}}
+// {{</tabset>}}
+//
+//
+package istio.networking.v1alpha3;
+
+option go_package = "istio.io/api/networking/v1alpha3";
+
+// WorkloadEntry enables specifyign the properties of non-Kubernetes workloads such as VMs and bare metal services that can be referred to by service entries.
+//
+// <!-- crd generation tags
+// +cue-gen:WorkloadEntry:groupName:networking.istio.io
+// +cue-gen:WorkloadEntry:version:v1alpha3
+// +cue-gen:WorkloadEntry:storageVersion
+// +cue-gen:WorkloadEntry:annotations:helm.sh/resource-policy=keep
+// +cue-gen:WorkloadEntry:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
+// +cue-gen:WorkloadEntry:subresource:status
+// +cue-gen:WorkloadEntry:scope:Namespaced
+// +cue-gen:WorkloadEntry:resource:categories=istio-io,networking-istio-io,shortNames=se,plural=workloadentries
+// +cue-gen:WorkloadEntry:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
+// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
+// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// -->
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
+message WorkloadEntry {
+  // The service account associated with the workloads if sidecars are present in the workload.
+  string service_account = 1;
+
+  // A set of endpoints describing properties of the workloads. 
+  repeated ServiceEntry.Endpoint endpoints = 2 [(google.api.field_behavior) = REQUIRED];
+}
