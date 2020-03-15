@@ -810,22 +810,13 @@ type Server_TLSOptions struct {
 	// certificate authority certificates to use in verifying a presented
 	// client side certificate.
 	CaCertificates string `protobuf:"bytes,5,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
-	// The credentialName stands for a unique identifier that can be used
-	// to identify the serverCertificate and the privateKey. The
-	// credentialName appended with suffix "-cacert" is used to identify
-	// the CaCertificates associated with this server. Proxies
-	// capable of fetching credentials from a remote credential store such
-	// as Kubernetes secrets, will be configured to retrieve the
-	// serverCertificate and the privateKey using credentialName, instead
-	// of using the file system paths specified above. If using mutual TLS,
-	// proxy instances will retrieve the CaCertificates using
-	// credentialName-cacert. The semantics of the name are platform
-	// dependent.  In Kubernetes, the default Istio supplied credential
-	// server expects the credentialName to match the name of the
-	// Kubernetes secret that holds the server certificate, the private
-	// key, and the CA certificate (if using mutual TLS). Set the
-	// `ISTIO_META_USER_SDS` metadata variable in the proxy to
-	// enable the dynamic credential fetching feature.
+	// For gateways running on Kubernetes, the name of the secret that
+	// holds the TLS certs including the CA certificates. Applicable
+	// only on Kubernetes. The secret (of type `generic`) should
+	// contain the following keys and values: `key: <privateKey>`,
+	// `cert: <serverCert>`, `cacert: <CACertificate>`. Set the
+	// `ISTIO_META_USER_SDS` metadata variable in the proxy to enable
+	// the dynamic credential fetching feature.
 	CredentialName string `protobuf:"bytes,10,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
 	// A list of alternate names to verify the subject identity in the
 	// certificate presented by the client.
