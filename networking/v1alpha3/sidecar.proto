@@ -17,6 +17,7 @@ syntax = "proto3";
 import "google/api/field_behavior.proto";
 import "networking/v1alpha3/gateway.proto";
 import "networking/v1alpha3/virtual_service.proto";
+import "networking/v1alpha3/destination_rule.proto";
 
 // $schema: istio.networking.v1alpha3.Sidecar
 // $title: Sidecar
@@ -561,7 +562,9 @@ message Sidecar {
   // PeerAuthentication policy disables mTLS tunneling for one or more
   // ports in the workload, the TLS settings specified here will be
   // applied.
-  Server.TLSOptions inbound_tls = 5;
+  ServerTLSSettings inbound_tls = 5;
+
+  Localhost localhost = 6;
 }
 
 // `IstioIngressListener` specifies the properties of an inbound
@@ -593,7 +596,14 @@ message IstioIngressListener {
   // restrictions as the Sidecar level inboundTls,
   // i.e. PeerAuthentication policy takes precedance unless explicitly
   // disabled.
-  Server.TLSOptions inbound_tls = 5;
+  ServerTLSSettings inbound_tls = 5;
+
+  // TLS settings to be used by the sidecar (client) when forwarding
+  // traffic to the user's process (server) on the
+  // localhost. Overrides the `localhost` level `clientTls` settings.
+  //
+  // **NOTE**: DISABLE, SIMPLE and MUTUAL are the only valid TLS modes.
+  ClientTLSSettings localhost_client_tls = 6;
 }
 
 // `IstioEgressListener` specifies the properties of an outbound traffic
@@ -661,6 +671,17 @@ message IstioEgressListener {
   // `istio-system` namespace. This requirement is temporary and will be removed
   // in a future Istio release.
   repeated string hosts = 4 [(google.api.field_behavior) = REQUIRED];
+
+  // TLS settings to be used by the sidecar (server) when receiving
+  // traffic from the user's process (client) on the
+  // localhost. Overrides the `localhost` level `serverTls` settings.
+  //
+  // **NOTE**: SIMPLE and MUTUAL are the only valid TLS
+  // modes. `httpsRedirect` and `credentialName` (for fetching
+  // certificates from Kubernetes secrets) are not valid. All
+  // certificates must be mounted as files inside the sidecar
+  // container.
+  ServerTLSSettings localhost_server_tls = 5;
 }
 
 // `WorkloadSelector` specifies the criteria used to determine if the `Gateway`,
@@ -736,4 +757,84 @@ enum CaptureMode {
   // to ensure that the listener port is not in use by other processes on
   // the host.
   NONE = 2;
+}
+
+// `Localhost` describes the sidecar settings related to the
+// communication between the user's services and the sidecar on a
+// Kubernetes Pod or a VM. These settings apply by default to all
+// ingress and egress listeners in a sidecar unless overridden.
+//
+// The following example configures the sidecars on pods of the
+// reviews service to use TLS for traffic to/from the sidecar to the
+// user's process in the same pod, assuming the appropriate
+// certificates are mounted in the sidecar.
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: Sidecar
+// metadata:
+//   name: reviews-localhost-tls
+//   namespace: prod-us1
+// spec:
+//   workloadSelector:
+//     labels:
+//       app: reviews
+//   localhost:
+//     clientTls:
+//       mode: SIMPLE
+//       caCertificates: /etc/legacy/ca.pem
+//     serverTls:
+//       mode: SIMPLE
+//       serverCertificate: /etc/legacy/server.pem
+//       privateKey: /etc/legacy/private.pem
+//   egress:
+//   - hosts:
+//     - "./"
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: Sidecar
+// metadata:
+//   name: reviews-localhost-tls
+//   namespace: prod-us1
+// spec:
+//   workloadSelector:
+//     labels:
+//       app: reviews
+//   localhost:
+//     clientTls:
+//       mode: SIMPLE
+//       caCertificates: /etc/legacy/ca.pem
+//     serverTls:
+//       mode: SIMPLE
+//       serverCertificate: /etc/legacy/server.pem
+//       privateKey: /etc/legacy/private.pem
+//   egress:
+//   - hosts:
+//     - "./"
+// ```
+// {{</tab>}}
+// {{</tabset>}}
+//
+message Localhost {
+  // TLS settings to be used by the sidecar (client) when
+  // forwarding traffic to the user's process (server) on the localhost.
+  //
+  // **NOTE**: DISABLE, SIMPLE and MUTUAL are the only valid TLS modes.
+  ClientTLSSettings client_tls = 1;
+
+  // TLS settings to be used by the sidecar (server) when receiving
+  // traffic from the user's process (client) on the localhost.
+  //
+  // **NOTE**: SIMPLE and MUTUAL are the only valid TLS
+  // modes. `httpsRedirect` and `credentialName` (for fetching
+  // certificates from Kubernetes secrets) are not valid. All
+  // certificates must be mounted as files inside the sidecar
+  // container.
+  ServerTLSSettings server_tls = 2;
 }

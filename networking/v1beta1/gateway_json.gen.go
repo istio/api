@@ -367,17 +367,6 @@ func (this *Server) UnmarshalJSON(b []byte) error {
 	return GatewayUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for Server_TLSOptions
-func (this *Server_TLSOptions) MarshalJSON() ([]byte, error) {
-	str, err := GatewayMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for Server_TLSOptions
-func (this *Server_TLSOptions) UnmarshalJSON(b []byte) error {
-	return GatewayUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
 // MarshalJSON is a custom marshaler for Port
 func (this *Port) MarshalJSON() ([]byte, error) {
 	str, err := GatewayMarshaler.MarshalToString(this)
@@ -386,6 +375,17 @@ func (this *Port) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for Port
 func (this *Port) UnmarshalJSON(b []byte) error {
+	return GatewayUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ServerTLSSettings
+func (this *ServerTLSSettings) MarshalJSON() ([]byte, error) {
+	str, err := GatewayMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ServerTLSSettings
+func (this *ServerTLSSettings) UnmarshalJSON(b []byte) error {
 	return GatewayUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

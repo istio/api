@@ -6,6 +6,43 @@
   },
   "components": {
     "schemas": {
+      "istio.networking.v1beta1.ClientTLSSettings": {
+        "description": "SSL/TLS related settings for upstream connections. See Envoy's [TLS context](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/auth/cert.proto.html) for more details. These settings are common to both HTTP and TCP upstreams.",
+        "type": "object",
+        "properties": {
+          "mode": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ClientTLSSettings.TLSmode"
+          },
+          "clientCertificate": {
+            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client-side TLS certificate to use. Should be empty if mode is `ISTIO_MUTUAL`.",
+            "type": "string",
+            "format": "string"
+          },
+          "privateKey": {
+            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client's private key. Should be empty if mode is `ISTIO_MUTUAL`.",
+            "type": "string",
+            "format": "string"
+          },
+          "caCertificates": {
+            "description": "OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate. If omitted, the proxy will not verify the server's certificate. Should be empty if mode is `ISTIO_MUTUAL`.",
+            "type": "string",
+            "format": "string"
+          },
+          "subjectAltNames": {
+            "description": "A list of alternate names to verify the subject identity in the certificate. If specified, the proxy will verify that the server certificate's subject alt name matches one of the specified values. If specified, this list overrides the value of subject_alt_names from the ServiceEntry.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "sni": {
+            "description": "SNI string to present to the server during TLS handshake.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
       "istio.networking.v1beta1.PortSelector": {
         "description": "PortSelector specifies the number of a port to be used for matching or selection for final routing.",
         "type": "object",
@@ -15,6 +52,16 @@
             "type": "integer"
           }
         }
+      },
+      "istio.networking.v1beta1.ClientTLSSettings.TLSmode": {
+        "description": "TLS connection mode",
+        "type": "string",
+        "enum": [
+          "DISABLE",
+          "SIMPLE",
+          "MUTUAL",
+          "ISTIO_MUTUAL"
+        ]
       },
       "istio.networking.v1beta1.Port": {
         "description": "Port describes the properties of a specific port of a service.",
@@ -36,11 +83,11 @@
           }
         }
       },
-      "istio.networking.v1beta1.Server.TLSOptions": {
+      "istio.networking.v1beta1.ServerTLSSettings": {
         "type": "object",
         "properties": {
           "mode": {
-            "$ref": "#/components/schemas/istio.networking.v1beta1.Server.TLSOptions.TLSmode"
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ServerTLSSettings.TLSmode"
           },
           "privateKey": {
             "description": "REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file holding the server's private key.",
@@ -91,10 +138,10 @@
             }
           },
           "minProtocolVersion": {
-            "$ref": "#/components/schemas/istio.networking.v1beta1.Server.TLSOptions.TLSProtocol"
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ServerTLSSettings.TLSProtocol"
           },
           "maxProtocolVersion": {
-            "$ref": "#/components/schemas/istio.networking.v1beta1.Server.TLSOptions.TLSProtocol"
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ServerTLSSettings.TLSProtocol"
           },
           "cipherSuites": {
             "description": "Optional: If specified, only support the specified cipher list. Otherwise default to the default cipher list supported by Envoy.",
@@ -106,7 +153,7 @@
           }
         }
       },
-      "istio.networking.v1beta1.Server.TLSOptions.TLSmode": {
+      "istio.networking.v1beta1.ServerTLSSettings.TLSmode": {
         "description": "TLS modes enforced by the proxy",
         "type": "string",
         "enum": [
@@ -117,7 +164,7 @@
           "ISTIO_MUTUAL"
         ]
       },
-      "istio.networking.v1beta1.Server.TLSOptions.TLSProtocol": {
+      "istio.networking.v1beta1.ServerTLSSettings.TLSProtocol": {
         "description": "TLS protocol versions.",
         "type": "string",
         "enum": [
@@ -153,7 +200,10 @@
             "$ref": "#/components/schemas/istio.networking.v1beta1.OutboundTrafficPolicy"
           },
           "inboundTls": {
-            "$ref": "#/components/schemas/istio.networking.v1beta1.Server.TLSOptions"
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ServerTLSSettings"
+          },
+          "localhost": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.Localhost"
           }
         }
       },
@@ -189,10 +239,13 @@
             "format": "string"
           },
           "inboundTls": {
-            "$ref": "#/components/schemas/istio.networking.v1beta1.Server.TLSOptions"
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ServerTLSSettings"
           },
           "captureMode": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.CaptureMode"
+          },
+          "localhostClientTls": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ClientTLSSettings"
           }
         }
       },
@@ -218,6 +271,9 @@
           },
           "captureMode": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.CaptureMode"
+          },
+          "localhostServerTls": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ServerTLSSettings"
           }
         }
       },
@@ -230,6 +286,18 @@
           },
           "egressProxy": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.Destination"
+          }
+        }
+      },
+      "istio.networking.v1beta1.Localhost": {
+        "description": "`Localhost` describes the sidecar settings related to the communication between the user's services and the sidecar on a Kubernetes Pod or a VM. These settings apply by default to all ingress and egress listeners in a sidecar unless overridden.",
+        "type": "object",
+        "properties": {
+          "clientTls": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ClientTLSSettings"
+          },
+          "serverTls": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ServerTLSSettings"
           }
         }
       },

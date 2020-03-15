@@ -49,7 +49,7 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.OutlierDetection"
           },
           "tls": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSSettings"
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
           },
           "portLevelSettings": {
             "description": "Traffic policies specific to individual ports. Note that port level settings will override the destination-level settings. Traffic settings specified at the destination-level will not be inherited when overridden by port-level settings, i.e. default values will be applied to fields omitted in port-level traffic policies.",
@@ -166,12 +166,12 @@
           }
         }
       },
-      "istio.networking.v1alpha3.TLSSettings": {
+      "istio.networking.v1alpha3.ClientTLSSettings": {
         "description": "SSL/TLS related settings for upstream connections. See Envoy's [TLS context](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/auth/cert.proto.html) for more details. These settings are common to both HTTP and TCP upstreams.",
         "type": "object",
         "properties": {
           "mode": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSSettings.TLSmode"
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings.TLSmode"
           },
           "clientCertificate": {
             "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client-side TLS certificate to use. Should be empty if mode is `ISTIO_MUTUAL`.",
@@ -217,7 +217,7 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.OutlierDetection"
           },
           "tls": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSSettings"
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
           },
           "port": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.PortSelector"
@@ -434,7 +434,7 @@
           "UPGRADE"
         ]
       },
-      "istio.networking.v1alpha3.TLSSettings.TLSmode": {
+      "istio.networking.v1alpha3.ClientTLSSettings.TLSmode": {
         "description": "TLS connection mode",
         "type": "string",
         "enum": [

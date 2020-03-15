@@ -138,7 +138,7 @@
             }
           },
           "enableAutoMtls": {
-            "description": "This flag is used to enable mutual TLS automatically for service to service communication within the mesh, default false. If set to true, and a given service does not have a corresponding DestinationRule configured, or its DestinationRule does not have TLSSettings specified, Istio configures client side TLS configuration appropriately. More specifically, If the upstream authentication policy is in STRICT mode, use Istio provisioned certificate for mutual TLS to connect to upstream. If upstream service is in plain text mode, use plain text. If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use mutual TLS when server sides are capable of accepting mutual TLS traffic. If service DestinationRule exists and has TLSSettings specified, that is always used instead.",
+            "description": "This flag is used to enable mutual TLS automatically for service to service communication within the mesh, default false. If set to true, and a given service does not have a corresponding DestinationRule configured, or its DestinationRule does not have ClientTLSSettings specified, Istio configures client side TLS configuration appropriately. More specifically, If the upstream authentication policy is in STRICT mode, use Istio provisioned certificate for mutual TLS to connect to upstream. If upstream service is in plain text mode, use plain text. If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use mutual TLS when server sides are capable of accepting mutual TLS traffic. If service DestinationRule exists and has ClientTLSSettings specified, that is always used instead.",
             "type": "boolean",
             "nullable": true
           },
@@ -389,7 +389,7 @@
             "format": "string"
           },
           "tlsSettings": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSSettings"
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
           },
           "subscribedResources": {
             "description": "Describes the source of configuration, if nothing is specified default is MCP",
@@ -728,7 +728,44 @@
             "format": "string"
           },
           "tlsSettings": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSSettings"
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.ClientTLSSettings": {
+        "description": "Use the tls_settings to specify the tls mode to use. If the remote service uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS mode as `ISTIO_MUTUAL`.",
+        "type": "object",
+        "properties": {
+          "mode": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings.TLSmode"
+          },
+          "clientCertificate": {
+            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client-side TLS certificate to use. Should be empty if mode is `ISTIO_MUTUAL`.",
+            "type": "string",
+            "format": "string"
+          },
+          "privateKey": {
+            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client's private key. Should be empty if mode is `ISTIO_MUTUAL`.",
+            "type": "string",
+            "format": "string"
+          },
+          "caCertificates": {
+            "description": "OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate. If omitted, the proxy will not verify the server's certificate. Should be empty if mode is `ISTIO_MUTUAL`.",
+            "type": "string",
+            "format": "string"
+          },
+          "subjectAltNames": {
+            "description": "A list of alternate names to verify the subject identity in the certificate. If specified, the proxy will verify that the server certificate's subject alt name matches one of the specified values. If specified, this list overrides the value of subject_alt_names from the ServiceEntry.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "sni": {
+            "description": "SNI string to present to the server during TLS handshake.",
+            "type": "string",
+            "format": "string"
           }
         }
       },
@@ -775,42 +812,15 @@
           }
         }
       },
-      "istio.networking.v1alpha3.TLSSettings": {
-        "description": "Use the tls_settings to specify the tls mode to use. If the remote service uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS mode as `ISTIO_MUTUAL`.",
-        "type": "object",
-        "properties": {
-          "mode": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSSettings.TLSmode"
-          },
-          "clientCertificate": {
-            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client-side TLS certificate to use. Should be empty if mode is `ISTIO_MUTUAL`.",
-            "type": "string",
-            "format": "string"
-          },
-          "privateKey": {
-            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client's private key. Should be empty if mode is `ISTIO_MUTUAL`.",
-            "type": "string",
-            "format": "string"
-          },
-          "caCertificates": {
-            "description": "OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate. If omitted, the proxy will not verify the server's certificate. Should be empty if mode is `ISTIO_MUTUAL`.",
-            "type": "string",
-            "format": "string"
-          },
-          "subjectAltNames": {
-            "description": "A list of alternate names to verify the subject identity in the certificate. If specified, the proxy will verify that the server certificate's subject alt name matches one of the specified values. If specified, this list overrides the value of subject_alt_names from the ServiceEntry.",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "sni": {
-            "description": "SNI string to present to the server during TLS handshake.",
-            "type": "string",
-            "format": "string"
-          }
-        }
+      "istio.networking.v1alpha3.ClientTLSSettings.TLSmode": {
+        "description": "Indicates whether connections to this port should be secured using TLS. The value of this field determines how TLS is enforced.",
+        "type": "string",
+        "enum": [
+          "DISABLE",
+          "SIMPLE",
+          "MUTUAL",
+          "ISTIO_MUTUAL"
+        ]
       },
       "istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute": {
         "type": "object",
@@ -843,16 +853,6 @@
             "format": "string"
           }
         }
-      },
-      "istio.networking.v1alpha3.TLSSettings.TLSmode": {
-        "description": "Indicates whether connections to this port should be secured using TLS. The value of this field determines how TLS is enforced.",
-        "type": "string",
-        "enum": [
-          "DISABLE",
-          "SIMPLE",
-          "MUTUAL",
-          "ISTIO_MUTUAL"
-        ]
       }
     }
   }

@@ -153,6 +153,262 @@ spec:
 <p>{{</tab>}}
 {{</tabset>}}</p>
 
+<h2 id="ClientTLSSettings">ClientTLSSettings</h2>
+<section>
+<p>SSL/TLS related settings for upstream connections. See Envoy&rsquo;s <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/auth/cert.proto.html">TLS
+context</a>
+for more details. These settings are common to both HTTP and TCP upstreams.</p>
+
+<p>For example, the following rule configures a client to use mutual TLS
+for connections to upstream database cluster.</p>
+
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: db-mtls
+spec:
+  host: mydbserver.prod.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: MUTUAL
+      clientCertificate: /etc/certs/myclientcert.pem
+      privateKey: /etc/certs/client_private_key.pem
+      caCertificates: /etc/certs/rootcacerts.pem
+</code></pre>
+
+<p>{{</tab>}}</p>
+
+<p>{{<tab name="v1beta1" category-value="v1beta1">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: db-mtls
+spec:
+  host: mydbserver.prod.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: MUTUAL
+      clientCertificate: /etc/certs/myclientcert.pem
+      privateKey: /etc/certs/client_private_key.pem
+      caCertificates: /etc/certs/rootcacerts.pem
+</code></pre>
+
+<p>{{</tab>}}
+{{</tabset>}}</p>
+
+<p>The following rule configures a client to use TLS when talking to a
+foreign service whose domain matches *.foo.com.</p>
+
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: tls-foo
+spec:
+  host: &quot;*.foo.com&quot;
+  trafficPolicy:
+    tls:
+      mode: SIMPLE
+</code></pre>
+
+<p>{{</tab>}}</p>
+
+<p>{{<tab name="v1beta1" category-value="v1beta1">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: tls-foo
+spec:
+  host: &quot;*.foo.com&quot;
+  trafficPolicy:
+    tls:
+      mode: SIMPLE
+</code></pre>
+
+<p>{{</tab>}}
+{{</tabset>}}</p>
+
+<p>The following rule configures a client to use Istio mutual TLS when talking
+to rating services.</p>
+
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: ratings-istio-mtls
+spec:
+  host: ratings.prod.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+</code></pre>
+
+<p>{{</tab>}}</p>
+
+<p>{{<tab name="v1beta1" category-value="v1beta1">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: ratings-istio-mtls
+spec:
+  host: ratings.prod.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+</code></pre>
+
+<p>{{</tab>}}
+{{</tabset>}}</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ClientTLSSettings-mode">
+<td><code>mode</code></td>
+<td><code><a href="#ClientTLSSettings-TLSmode">TLSmode</a></code></td>
+<td>
+<p>Indicates whether connections to this port should be secured
+using TLS. The value of this field determines how TLS is enforced.</p>
+
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr id="ClientTLSSettings-client_certificate">
+<td><code>clientCertificate</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED if mode is <code>MUTUAL</code>. The path to the file holding the
+client-side TLS certificate to use.
+Should be empty if mode is <code>ISTIO_MUTUAL</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ClientTLSSettings-private_key">
+<td><code>privateKey</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED if mode is <code>MUTUAL</code>. The path to the file holding the
+client&rsquo;s private key.
+Should be empty if mode is <code>ISTIO_MUTUAL</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ClientTLSSettings-ca_certificates">
+<td><code>caCertificates</code></td>
+<td><code>string</code></td>
+<td>
+<p>OPTIONAL: The path to the file containing certificate authority
+certificates to use in verifying a presented server certificate. If
+omitted, the proxy will not verify the server&rsquo;s certificate.
+Should be empty if mode is <code>ISTIO_MUTUAL</code>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ClientTLSSettings-subject_alt_names">
+<td><code>subjectAltNames</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>A list of alternate names to verify the subject identity in the
+certificate. If specified, the proxy will verify that the server
+certificate&rsquo;s subject alt name matches one of the specified values.
+If specified, this list overrides the value of subject<em>alt</em>names
+from the ServiceEntry.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ClientTLSSettings-sni">
+<td><code>sni</code></td>
+<td><code>string</code></td>
+<td>
+<p>SNI string to present to the server during TLS handshake.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ClientTLSSettings-TLSmode">ClientTLSSettings.TLSmode</h2>
+<section>
+<p>TLS connection mode</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ClientTLSSettings-TLSmode-DISABLE">
+<td><code>DISABLE</code></td>
+<td>
+<p>Do not setup a TLS connection to the upstream endpoint.</p>
+
+</td>
+</tr>
+<tr id="ClientTLSSettings-TLSmode-SIMPLE">
+<td><code>SIMPLE</code></td>
+<td>
+<p>Originate a TLS connection to the upstream endpoint.</p>
+
+</td>
+</tr>
+<tr id="ClientTLSSettings-TLSmode-MUTUAL">
+<td><code>MUTUAL</code></td>
+<td>
+<p>Secure connections to the upstream using mutual TLS by presenting
+client certificates for authentication.</p>
+
+</td>
+</tr>
+<tr id="ClientTLSSettings-TLSmode-ISTIO_MUTUAL">
+<td><code>ISTIO_MUTUAL</code></td>
+<td>
+<p>Secure connections to the upstream using mutual TLS by presenting
+client certificates for authentication.
+Compared to Mutual mode, this mode uses certificates generated
+automatically by Istio for mTLS authentication. When this mode is
+used, all other fields in <code>ClientTLSSettings</code> should be empty.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="ConnectionPoolSettings">ConnectionPoolSettings</h2>
 <section>
 <p>Connection pool settings for an upstream host. The settings apply to
@@ -1317,7 +1573,7 @@ a route rule explicitly sends traffic to this subset.</p>
 <p>One or more labels are typically required to identify the subset destination,
 however, when the corresponding DestinationRule represents a host that
 supports multiple SNI hosts (e.g., an egress gateway), a subset without labels
-may be meaningful. In this case a traffic policy with <a href="#TLSSettings">TLSSettings</a>
+may be meaningful. In this case a traffic policy with <a href="#ClientTLSSettings">ClientTLSSettings</a>
 can be used to identify a specific SNI host corresponding to the named subset.</p>
 
 <table class="message-fields">
@@ -1366,262 +1622,6 @@ specified at the DestinationRule level.</p>
 </td>
 <td>
 No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="TLSSettings">TLSSettings</h2>
-<section>
-<p>SSL/TLS related settings for upstream connections. See Envoy&rsquo;s <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/auth/cert.proto.html">TLS
-context</a>
-for more details. These settings are common to both HTTP and TCP upstreams.</p>
-
-<p>For example, the following rule configures a client to use mutual TLS
-for connections to upstream database cluster.</p>
-
-<p>{{<tabset category-name="example">}}
-{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
-
-<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
-kind: DestinationRule
-metadata:
-  name: db-mtls
-spec:
-  host: mydbserver.prod.svc.cluster.local
-  trafficPolicy:
-    tls:
-      mode: MUTUAL
-      clientCertificate: /etc/certs/myclientcert.pem
-      privateKey: /etc/certs/client_private_key.pem
-      caCertificates: /etc/certs/rootcacerts.pem
-</code></pre>
-
-<p>{{</tab>}}</p>
-
-<p>{{<tab name="v1beta1" category-value="v1beta1">}}</p>
-
-<pre><code class="language-yaml">apiVersion: networking.istio.io/v1beta1
-kind: DestinationRule
-metadata:
-  name: db-mtls
-spec:
-  host: mydbserver.prod.svc.cluster.local
-  trafficPolicy:
-    tls:
-      mode: MUTUAL
-      clientCertificate: /etc/certs/myclientcert.pem
-      privateKey: /etc/certs/client_private_key.pem
-      caCertificates: /etc/certs/rootcacerts.pem
-</code></pre>
-
-<p>{{</tab>}}
-{{</tabset>}}</p>
-
-<p>The following rule configures a client to use TLS when talking to a
-foreign service whose domain matches *.foo.com.</p>
-
-<p>{{<tabset category-name="example">}}
-{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
-
-<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
-kind: DestinationRule
-metadata:
-  name: tls-foo
-spec:
-  host: &quot;*.foo.com&quot;
-  trafficPolicy:
-    tls:
-      mode: SIMPLE
-</code></pre>
-
-<p>{{</tab>}}</p>
-
-<p>{{<tab name="v1beta1" category-value="v1beta1">}}</p>
-
-<pre><code class="language-yaml">apiVersion: networking.istio.io/v1beta1
-kind: DestinationRule
-metadata:
-  name: tls-foo
-spec:
-  host: &quot;*.foo.com&quot;
-  trafficPolicy:
-    tls:
-      mode: SIMPLE
-</code></pre>
-
-<p>{{</tab>}}
-{{</tabset>}}</p>
-
-<p>The following rule configures a client to use Istio mutual TLS when talking
-to rating services.</p>
-
-<p>{{<tabset category-name="example">}}
-{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
-
-<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
-kind: DestinationRule
-metadata:
-  name: ratings-istio-mtls
-spec:
-  host: ratings.prod.svc.cluster.local
-  trafficPolicy:
-    tls:
-      mode: ISTIO_MUTUAL
-</code></pre>
-
-<p>{{</tab>}}</p>
-
-<p>{{<tab name="v1beta1" category-value="v1beta1">}}</p>
-
-<pre><code class="language-yaml">apiVersion: networking.istio.io/v1beta1
-kind: DestinationRule
-metadata:
-  name: ratings-istio-mtls
-spec:
-  host: ratings.prod.svc.cluster.local
-  trafficPolicy:
-    tls:
-      mode: ISTIO_MUTUAL
-</code></pre>
-
-<p>{{</tab>}}
-{{</tabset>}}</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="TLSSettings-mode">
-<td><code>mode</code></td>
-<td><code><a href="#TLSSettings-TLSmode">TLSmode</a></code></td>
-<td>
-<p>Indicates whether connections to this port should be secured
-using TLS. The value of this field determines how TLS is enforced.</p>
-
-</td>
-<td>
-Yes
-</td>
-</tr>
-<tr id="TLSSettings-client_certificate">
-<td><code>clientCertificate</code></td>
-<td><code>string</code></td>
-<td>
-<p>REQUIRED if mode is <code>MUTUAL</code>. The path to the file holding the
-client-side TLS certificate to use.
-Should be empty if mode is <code>ISTIO_MUTUAL</code>.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="TLSSettings-private_key">
-<td><code>privateKey</code></td>
-<td><code>string</code></td>
-<td>
-<p>REQUIRED if mode is <code>MUTUAL</code>. The path to the file holding the
-client&rsquo;s private key.
-Should be empty if mode is <code>ISTIO_MUTUAL</code>.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="TLSSettings-ca_certificates">
-<td><code>caCertificates</code></td>
-<td><code>string</code></td>
-<td>
-<p>OPTIONAL: The path to the file containing certificate authority
-certificates to use in verifying a presented server certificate. If
-omitted, the proxy will not verify the server&rsquo;s certificate.
-Should be empty if mode is <code>ISTIO_MUTUAL</code>.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="TLSSettings-subject_alt_names">
-<td><code>subjectAltNames</code></td>
-<td><code>string[]</code></td>
-<td>
-<p>A list of alternate names to verify the subject identity in the
-certificate. If specified, the proxy will verify that the server
-certificate&rsquo;s subject alt name matches one of the specified values.
-If specified, this list overrides the value of subject<em>alt</em>names
-from the ServiceEntry.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="TLSSettings-sni">
-<td><code>sni</code></td>
-<td><code>string</code></td>
-<td>
-<p>SNI string to present to the server during TLS handshake.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="TLSSettings-TLSmode">TLSSettings.TLSmode</h2>
-<section>
-<p>TLS connection mode</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="TLSSettings-TLSmode-DISABLE">
-<td><code>DISABLE</code></td>
-<td>
-<p>Do not setup a TLS connection to the upstream endpoint.</p>
-
-</td>
-</tr>
-<tr id="TLSSettings-TLSmode-SIMPLE">
-<td><code>SIMPLE</code></td>
-<td>
-<p>Originate a TLS connection to the upstream endpoint.</p>
-
-</td>
-</tr>
-<tr id="TLSSettings-TLSmode-MUTUAL">
-<td><code>MUTUAL</code></td>
-<td>
-<p>Secure connections to the upstream using mutual TLS by presenting
-client certificates for authentication.</p>
-
-</td>
-</tr>
-<tr id="TLSSettings-TLSmode-ISTIO_MUTUAL">
-<td><code>ISTIO_MUTUAL</code></td>
-<td>
-<p>Secure connections to the upstream using mutual TLS by presenting
-client certificates for authentication.
-Compared to Mutual mode, this mode uses certificates generated
-automatically by Istio for mTLS authentication. When this mode is
-used, all other fields in <code>TLSSettings</code> should be empty.</p>
-
 </td>
 </tr>
 </tbody>
@@ -1677,7 +1677,7 @@ No
 </tr>
 <tr id="TrafficPolicy-tls">
 <td><code>tls</code></td>
-<td><code><a href="#TLSSettings">TLSSettings</a></code></td>
+<td><code><a href="#ClientTLSSettings">ClientTLSSettings</a></code></td>
 <td>
 <p>TLS related settings for connections to the upstream service.</p>
 
@@ -1765,7 +1765,7 @@ No
 </tr>
 <tr id="TrafficPolicy-PortTrafficPolicy-tls">
 <td><code>tls</code></td>
-<td><code><a href="#TLSSettings">TLSSettings</a></code></td>
+<td><code><a href="#ClientTLSSettings">ClientTLSSettings</a></code></td>
 <td>
 <p>TLS related settings for connections to the upstream service.</p>
 
