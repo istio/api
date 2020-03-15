@@ -38,32 +38,6 @@ annotations:
     hidden: true
     resources:
       - Pod
-  - name: networking.alpha.istio.io/serviceVersion
-    description: Added to synthetic ServiceEntry resources to provide the raw resource
-      version from the most recent Kubernetes service update. This will always be available for
-      synthetic service entries.
-      NOTE This API is Alpha and has no stability guarantees.
-    deprecated: false
-    hidden: true
-    resources:
-      - ServiceEntry
-  - name: networking.alpha.istio.io/endpointsVersion
-    description: Added to synthetic ServiceEntry resources to provide the raw resource
-      version from the most recent Kubernetes endpoints update (if available).
-      NOTE This API is Alpha and has no stability guarantees.
-    deprecated: false
-    hidden: true
-    resources:
-      - ServiceEntry
-  - name: networking.alpha.istio.io/notReadyEndpoints
-    description: Added to synthetic ServiceEntry resources to provide the
-      'NotReadyAddresses' from the Kubernetes Endpoints resource. The value is a
-      comma-separated list of IP:port.
-      NOTE This API is Alpha and has no stability guarantees.
-    deprecated: false
-    hidden: true
-    resources:
-      - ServiceEntry
   - name: networking.istio.io/exportTo
     description: Specifies the namespaces to which this service should be exported to.
       A value of '*' indicates it is reachable within the mesh '.' indicates it is
@@ -72,9 +46,11 @@ annotations:
     hidden: false
     resources:
       - Service
-  - name: security.istio.io/autoMTLS
-    description: Determines whether the client proxy uses auto mTLS. This overrides the mesh
-      default specified in MeshConfig.enable_auto_mtls.
+  - name: security.istio.io/tlsMode
+    description: Specifies the TLS mode supported by a sidecar proxy. Valid values are 'istio', 'disabled'.
+      When injecting sidecars into Pods, the sidecar injector will set the value of this label to 'istio' indicating
+      that the sidecar is capable of supporting mTLS. Clients will opportunistically use this label to determine whether
+      or not to secure the the traffic to this workload using Istio mutual TLS.
     hidden: true
     deprecated: false
     resources:
