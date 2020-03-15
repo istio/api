@@ -1397,7 +1397,7 @@ message StringMatch {
     // prefix-based match
     string prefix = 2;
 
-    // ECMAscript style regex-based match
+    // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
     string regex = 3;
   }
 }
