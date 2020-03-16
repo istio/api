@@ -100,12 +100,7 @@ gen: \
 	generate-authn \
 	generate-security \
 	generate-envoy \
-	generate-policy \
-	generate-annotations \
-	generate-openapi-schema \
-	generate-openapi-crd \
-	tidy-go \
-	mirror-licenses \
+	generate-policy
 
 gen-check: clean gen check-clean-repo
 
