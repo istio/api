@@ -357,9 +357,7 @@ type Server_TLSOptions_TLSmode int32
 const (
 	// The SNI string presented by the client will be used as the
 	// match criterion in a VirtualService TLS route to determine
-	// the destination service from the service registry. On a
-	// sidecar, TLS traffic will be forwarded as is to the default
-	// endpoint defined in the Ingress Listener.
+	// the destination service from the service registry.
 	Server_TLSOptions_PASSTHROUGH Server_TLSOptions_TLSmode = 0
 	// Secure connections with standard TLS semantics.
 	Server_TLSOptions_SIMPLE Server_TLSOptions_TLSmode = 1
@@ -376,8 +374,7 @@ const (
 	// between services in disparate L3 networks that otherwise do
 	// not have direct connectivity between their respective
 	// endpoints. Use of this mode assumes that both the source and
-	// the destination are using Istio mTLS to secure traffic. Not
-	// applicable in Sidecar API.
+	// the destination are using Istio mTLS to secure traffic.
 	Server_TLSOptions_AUTO_PASSTHROUGH Server_TLSOptions_TLSmode = 3
 	// Secure connections from the downstream using mutual TLS by
 	// presenting server certificates for authentication.  Compared
@@ -793,8 +790,7 @@ func (m *Server) GetDefaultEndpoint() string {
 
 type Server_TLSOptions struct {
 	// If set to true, the load balancer will send a 301 redirect for
-	// all http connections, asking the clients to use HTTPS. Not
-	// applicable in Sidecar API.
+	// all http connections, asking the clients to use HTTPS.
 	HttpsRedirect bool `protobuf:"varint,1,opt,name=https_redirect,json=httpsRedirect,proto3" json:"https_redirect,omitempty"`
 	// Optional: Indicates whether connections to this port should be
 	// secured using TLS. The value of this field determines how TLS is
