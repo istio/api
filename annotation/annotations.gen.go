@@ -230,8 +230,8 @@ var (
                         "value of this label to 'istio' indicating that the "+
                         "sidecar is capable of supporting mTLS. Clients will "+
                         "opportunistically use this label to determine whether or "+
-                        "not to secure the the traffic to this workload using "+
-                        "Istio mutual TLS.",
+                        "not to secure the traffic to this workload using Istio "+
+                        "mutual TLS.",
           Hidden: true,
           Deprecated: false,
 		  Resources: []ResourceTypes{ Pod, },
