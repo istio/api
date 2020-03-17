@@ -677,8 +677,7 @@ No
 <td><code>bool</code></td>
 <td>
 <p>If set to true, the load balancer will send a 301 redirect for
-all http connections, asking the clients to use HTTPS. Not
-applicable in Sidecar API.</p>
+all http connections, asking the clients to use HTTPS.</p>
 
 </td>
 <td>
@@ -908,9 +907,7 @@ No
 <td>
 <p>The SNI string presented by the client will be used as the
 match criterion in a VirtualService TLS route to determine
-the destination service from the service registry. On a
-sidecar, TLS traffic will be forwarded as is to the default
-endpoint defined in the Ingress Listener.</p>
+the destination service from the service registry.</p>
 
 </td>
 </tr>
@@ -942,8 +939,7 @@ value. This server is typically used to provide connectivity
 between services in disparate L3 networks that otherwise do
 not have direct connectivity between their respective
 endpoints. Use of this mode assumes that both the source and
-the destination are using Istio mTLS to secure traffic. Not
-applicable in Sidecar API.</p>
+the destination are using Istio mTLS to secure traffic.</p>
 
 </td>
 </tr>
