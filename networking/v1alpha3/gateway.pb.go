@@ -812,11 +812,11 @@ type Server_TLSOptions struct {
 	CaCertificates string `protobuf:"bytes,5,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
 	// For gateways running on Kubernetes, the name of the secret that
 	// holds the TLS certs including the CA certificates. Applicable
-	// only on Kubernetes. The secret (of type `generic`) should
-	// contain the following keys and values: `key: <privateKey>`,
-	// `cert: <serverCert>`, `cacert: <CACertificate>`. Set the
-	// `ISTIO_META_USER_SDS` metadata variable in the proxy to enable
-	// the dynamic credential fetching feature.
+	// only on Kubernetes, and only if the dynamic credential fetching
+	// feature is enabled in the proxy by setting
+	// `ISTIO_META_USER_SDS` metadata variable.  The secret (of type
+	// `generic`) should contain the following keys and values: `key:
+	// <privateKey>`, `cert: <serverCert>`, `cacert: <CACertificate>`.
 	CredentialName string `protobuf:"bytes,10,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
 	// A list of alternate names to verify the subject identity in the
 	// certificate presented by the client.
