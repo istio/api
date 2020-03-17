@@ -142,18 +142,11 @@ import "networking/v1alpha3/destination_rule.proto";
 // The following example declares a `Sidecar` configuration in the
 // `prod-us1` namespace for all pods with labels `app: ratings`
 // belonging to the `ratings.prod-us1` service.  The workload accepts
-// inbound HTTP traffic on port 9080 without any authentication, and
-// HTTPS traffic on port 9443 with one-way TLS termination using
-// custom certificates. _To accomplish custom TLS termination on this
-// workload, the `PeerAuthentication` security policy must be declared
-// to disable Istio mutual TLS on these two ports. Any other
-// auto-generated listener for this workload will still obey the
-// mutual TLS termination requirements set forth in the
-// PeerAuthentication policy_. The traffic is then forwarded to the
-// attached workload instance listening on a Unix domain socket. In
-// the egress direction, in addition to the `istio-system` namespace,
-// the sidecar proxies only HTTP traffic bound for port 9080 for
-// services in the `prod-us1` namespace.
+// inbound HTTP traffic on port 9080. The traffic is then forwarded to
+// the attached workload instance listening on a Unix domain
+// socket. In the egress direction, in addition to the `istio-system`
+// namespace, the sidecar proxies only HTTP traffic bound for port
+// 9080 for services in the `prod-us1` namespace.
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
@@ -172,15 +165,6 @@ import "networking/v1alpha3/destination_rule.proto";
 //       number: 9080
 //       protocol: HTTP
 //       name: somename
-//     defaultEndpoint: unix:///var/run/someuds.sock
-//   - port:
-//       number: 9443
-//       protocol: HTTPS
-//       name: httpsport
-//     inboundTls:
-//       mode: SIMPLE # overrides namespace default
-//       serverCertificate: /etc/certs/servercert.pem
-//       privateKey: /etc/certs/privatekey.pem
 //     defaultEndpoint: unix:///var/run/someuds.sock
 //   egress:
 //   - port:
@@ -211,15 +195,6 @@ import "networking/v1alpha3/destination_rule.proto";
 //       protocol: HTTP
 //       name: somename
 //     defaultEndpoint: unix:///var/run/someuds.sock
-//   - port:
-//       number: 9443
-//       protocol: HTTPS
-//       name: httpsport
-//     inboundTls:
-//       mode: SIMPLE # overrides namespace default
-//       serverCertificate: /etc/certs/servercert.pem
-//       privateKey: /etc/certs/privatekey.pem
-//     defaultEndpoint: unix:///var/run/someuds.sock
 //   egress:
 //   - port:
 //       number: 9080
@@ -229,80 +204,6 @@ import "networking/v1alpha3/destination_rule.proto";
 //     - "prod-us1/*"
 //   - hosts:
 //     - "istio-system/*"
-// ```
-// {{</tab>}}
-// {{</tabset>}}
-//
-// and the associated PeerAuthentication security policy to ensure
-// that mutual TLS based authentication is not configured for ports
-// 9080 and 9443:
-//
-// ```yaml
-// apiVersion: security.istio.io/v1beta1
-// kind: PeerAuthentication
-// metadata:
-//   name: ratings-istio-mtls-exception
-//   namespace: prod-us1
-// spec:
-//   selector:
-//     matchLabels:
-//       app: ratings
-//   # other ports inherit the settings from namespace-wide policy.
-//   portLevelMtls:
-//     9080:
-//       mode: DISABLE
-//     9443:
-//       mode: DISABLE
-// ```
-// 
-// and the associated DestinationRule to ensure that the clients use
-// the appropriate TLS settings:
-//
-// {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: DestinationRule
-// metadata:
-//   name: ratings-istio-mtls-exception
-//   namespace: prod-us1
-// spec:
-//   host: ratings.prod-us1.svc.cluster.local
-//   trafficPolicy:
-//    portLevelSettings:
-//    - port:
-//        number: 9080
-//      tls:
-//        mode: DISABLE
-//    - port:
-//        number: 9443
-//      tls:
-//        mode: SIMPLE
-//        caCertificates: /etc/certs/ca-certs.pem
-// ```
-//
-// {{</tab>}}
-//
-// {{<tab name="v1beta1" category-value="v1beta1">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1beta1
-// kind: DestinationRule
-// metadata:
-//   name: ratings-istio-mtls-exception
-//   namespace: prod-us1
-// spec:
-//   host: ratings.prod-us1.svc.cluster.local
-//   trafficPolicy:
-//    portLevelSettings:
-//    - port:
-//        number: 9080
-//      tls:
-//        mode: DISABLE
-//    - port:
-//        number: 9443
-//      tls:
-//        mode: SIMPLE
-//        caCertificates: /etc/certs/ca-certs.pem
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -555,15 +456,10 @@ message Sidecar {
   // the global default Sidecar.
   OutboundTrafficPolicy outbound_traffic_policy = 4;
 
-  // Set of TLS related options that allow a listener to terminate
-  // SIMPLE or MUTUAL TLS connections at the
-  // sidecar. `PeerAuthentication` policy's settings take precedance
-  // over custom TLS settings for the workload. When the
-  // PeerAuthentication policy disables mTLS tunneling for one or more
-  // ports in the workload, the TLS settings specified here will be
-  // applied.
-  ServerTLSSettings inbound_tls = 5;
-
+  // `Localhost` describes the sidecar settings related to the
+  // communication between the user's services and the sidecar on a
+  // Kubernetes Pod or a VM. These settings apply by default to all
+  // ingress and egress listeners in a sidecar unless overridden.
   Localhost localhost = 6;
 }
 
@@ -591,12 +487,6 @@ message IstioIngressListener {
   // or Unix domain socket where the application workload instance is listening for
   // connections. Format should be `127.0.0.1:PORT` or `unix:///path/to/socket`
   string default_endpoint = 4 [(google.api.field_behavior) = REQUIRED];
-
-  // Overrides Sidecar level `inboundTls` settings. Has same
-  // restrictions as the Sidecar level inboundTls,
-  // i.e. PeerAuthentication policy takes precedance unless explicitly
-  // disabled.
-  ServerTLSSettings inbound_tls = 5;
 
   // TLS settings to be used by the sidecar (client) when forwarding
   // traffic to the user's process (server) on the

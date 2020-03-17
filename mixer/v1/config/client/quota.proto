@@ -107,11 +107,14 @@ message QuotaRule {
 // case-sensitive.
 message StringMatch {
   oneof match_type {
+
     // exact string match
     string exact = 1;
+
     // prefix-based match
     string prefix = 2;
-    // ECMAscript style regex-based match
+
+    // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
     string regex = 3;
   }
 }

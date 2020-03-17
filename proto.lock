@@ -40162,11 +40162,6 @@
                 "type": "OutboundTrafficPolicy"
               },
               {
-                "id": 5,
-                "name": "inbound_tls",
-                "type": "ServerTLSSettings"
-              },
-              {
                 "id": 6,
                 "name": "localhost",
                 "type": "Localhost"
@@ -40207,11 +40202,6 @@
                     "value": "REQUIRED"
                   }
                 ]
-              },
-              {
-                "id": 5,
-                "name": "inbound_tls",
-                "type": "ServerTLSSettings"
               },
               {
                 "id": 6,
@@ -42134,11 +42124,6 @@
                 "type": "OutboundTrafficPolicy"
               },
               {
-                "id": 5,
-                "name": "inbound_tls",
-                "type": "ServerTLSSettings"
-              },
-              {
                 "id": 6,
                 "name": "localhost",
                 "type": "Localhost"
@@ -42179,11 +42164,6 @@
                     "value": "REQUIRED"
                   }
                 ]
-              },
-              {
-                "id": 5,
-                "name": "inbound_tls",
-                "type": "ServerTLSSettings"
               },
               {
                 "id": 6,

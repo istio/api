@@ -62,7 +62,7 @@
                 "$ref": "#/components/schemas/istio.mixer.v1.Attributes"
               },
               "regex": {
-                "description": "EXPERIMENTAL: ecmascript style regex-based match as defined by [EDCA-262](http://en.cppreference.com/w/cpp/regex/ecmascript). For example,",
+                "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax)",
                 "type": "string",
                 "format": "string"
               },
@@ -453,7 +453,7 @@
             ],
             "properties": {
               "regex": {
-                "description": "ECMAscript style regex-based match",
+                "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
                 "type": "string",
                 "format": "string"
               }

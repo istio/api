@@ -357,9 +357,7 @@ type ServerTLSSettings_TLSmode int32
 const (
 	// The SNI string presented by the client will be used as the
 	// match criterion in a VirtualService TLS route to determine
-	// the destination service from the service registry. On a
-	// sidecar, TLS traffic will be forwarded as is to the default
-	// endpoint defined in the Ingress Listener.
+	// the destination service from the service registry.
 	ServerTLSSettings_PASSTHROUGH ServerTLSSettings_TLSmode = 0
 	// Secure connections with standard TLS semantics.
 	ServerTLSSettings_SIMPLE ServerTLSSettings_TLSmode = 1
@@ -376,15 +374,14 @@ const (
 	// between services in disparate L3 networks that otherwise do
 	// not have direct connectivity between their respective
 	// endpoints. Use of this mode assumes that both the source and
-	// the destination are using Istio mTLS to secure traffic. Not
-	// applicable in Sidecar API.
+	// the destination are using Istio mTLS to secure traffic.
 	ServerTLSSettings_AUTO_PASSTHROUGH ServerTLSSettings_TLSmode = 3
 	// Secure connections from the downstream using mutual TLS by
 	// presenting server certificates for authentication.  Compared
 	// to Mutual mode, this mode uses certificates, representing
 	// gateway workload identity, generated automatically by Istio
 	// for mTLS authentication. When this mode is used, all other
-	// fields in `ServerTLSSettings` should be empty.
+	// fields in `TLSOptions` should be empty.
 	ServerTLSSettings_ISTIO_MUTUAL ServerTLSSettings_TLSmode = 4
 )
 
@@ -863,8 +860,7 @@ func (m *Port) GetName() string {
 
 type ServerTLSSettings struct {
 	// If set to true, the load balancer will send a 301 redirect for
-	// all http connections, asking the clients to use HTTPS. Not
-	// applicable in Sidecar API.
+	// all http connections, asking the clients to use HTTPS.
 	HttpsRedirect bool `protobuf:"varint,1,opt,name=https_redirect,json=httpsRedirect,proto3" json:"https_redirect,omitempty"`
 	// Optional: Indicates whether connections to this port should be
 	// secured using TLS. The value of this field determines how TLS is
@@ -880,22 +876,13 @@ type ServerTLSSettings struct {
 	// certificate authority certificates to use in verifying a presented
 	// client side certificate.
 	CaCertificates string `protobuf:"bytes,5,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
-	// The credentialName stands for a unique identifier that can be used
-	// to identify the serverCertificate and the privateKey. The
-	// credentialName appended with suffix "-cacert" is used to identify
-	// the CaCertificates associated with this server. Proxies
-	// capable of fetching credentials from a remote credential store such
-	// as Kubernetes secrets, will be configured to retrieve the
-	// serverCertificate and the privateKey using credentialName, instead
-	// of using the file system paths specified above. If using mutual TLS,
-	// proxy instances will retrieve the CaCertificates using
-	// credentialName-cacert. The semantics of the name are platform
-	// dependent.  In Kubernetes, the default Istio supplied credential
-	// server expects the credentialName to match the name of the
-	// Kubernetes secret that holds the server certificate, the private
-	// key, and the CA certificate (if using mutual TLS). Set the
-	// `ISTIO_META_USER_SDS` metadata variable in the proxy to
-	// enable the dynamic credential fetching feature.
+	// For gateways running on Kubernetes, the name of the secret that
+	// holds the TLS certs including the CA certificates. Applicable
+	// only on Kubernetes, and only if the dynamic credential fetching
+	// feature is enabled in the proxy by setting
+	// `ISTIO_META_USER_SDS` metadata variable.  The secret (of type
+	// `generic`) should contain the following keys and values: `key:
+	// <privateKey>`, `cert: <serverCert>`, `cacert: <CACertificate>`.
 	CredentialName string `protobuf:"bytes,10,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
 	// A list of alternate names to verify the subject identity in the
 	// certificate presented by the client.
