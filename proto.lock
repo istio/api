@@ -36595,6 +36595,11 @@
                 "id": 23,
                 "name": "envoy_metrics_service",
                 "type": "RemoteService"
+              },
+              {
+                "id": 26,
+                "name": "status_port",
+                "type": "int32"
               }
             ],
             "maps": [
@@ -40157,11 +40162,6 @@
                 "id": 4,
                 "name": "outbound_traffic_policy",
                 "type": "OutboundTrafficPolicy"
-              },
-              {
-                "id": 5,
-                "name": "inbound_tls",
-                "type": "Server.TLSOptions"
               }
             ]
           },
@@ -40199,11 +40199,6 @@
                     "value": "REQUIRED"
                   }
                 ]
-              },
-              {
-                "id": 5,
-                "name": "inbound_tls",
-                "type": "Server.TLSOptions"
               }
             ]
           },
@@ -42098,11 +42093,6 @@
                 "id": 4,
                 "name": "outbound_traffic_policy",
                 "type": "OutboundTrafficPolicy"
-              },
-              {
-                "id": 5,
-                "name": "inbound_tls",
-                "type": "Server.TLSOptions"
               }
             ]
           },
@@ -42140,11 +42130,6 @@
                     "value": "REQUIRED"
                   }
                 ]
-              },
-              {
-                "id": 5,
-                "name": "inbound_tls",
-                "type": "Server.TLSOptions"
               }
             ]
           },

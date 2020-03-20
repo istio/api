@@ -41,8 +41,7 @@ message StringMatch {
     // suffix-based match.
     string suffix = 3;
 
-    // ECMAscript style regex-based match as defined by [EDCA-262](http://en.cppreference.com/w/cpp/regex/ecmascript).
-    // Example: "^/pets/(.*?)?"
+    // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
     string regex = 4;
   }
 }
