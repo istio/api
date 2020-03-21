@@ -8,13 +8,21 @@ schema: istio.networking.v1alpha3.ServiceEntry
 aliases: [/docs/reference/config/networking/v1alpha3/service-entry]
 number_of_entries: 4
 ---
-<p><code>ServiceEntry</code> enables adding additional entries into Istio&rsquo;s internal
-service registry, so that auto-discovered services in the mesh can
-access/route to these manually specified services. A service entry
-describes the properties of a service (DNS name, VIPs, ports, protocols,
-endpoints). These services could be external to the mesh (e.g., web
-APIs) or mesh-internal services that are not part of the platform&rsquo;s
-service registry (e.g., a set of VMs talking to services in Kubernetes).</p>
+<p><code>ServiceEntry</code> enables adding additional entries into Istio&rsquo;s
+internal service registry, so that auto-discovered services in the
+mesh can access/route to these manually specified services. A
+service entry describes the properties of a service (DNS name,
+VIPs, ports, protocols, endpoints). These services could be
+external to the mesh (e.g., web APIs) or mesh-internal services
+that are not part of the platform&rsquo;s service registry (e.g., a set
+of VMs talking to services in Kubernetes). In addition, the
+endpoints of a service entry can also be dynamically selected by
+using the <code>workloadSelector</code> field. These endpoints can be VM
+workloads declared using the <code>WorkloadEntry</code> object or Kubernetes
+pods. The ability to select both pods and VMs under a single
+service allows for migration of services from VMs to Kubernetes
+without having to change the existing DNS names associated with the
+services.</p>
 
 <p>The following example declares a few external APIs accessed by internal
 applications over HTTPS. The sidecar inspects the SNI value in the
@@ -656,6 +664,219 @@ spec:
 <p>{{</tab>}}
 {{</tabset>}}</p>
 
+<p>The following example demonstrates the use of <code>ServiceEntry</code> with a
+<code>workloadSelector</code> to handle the migration of a service
+<code>details.bookinfo.com</code> from VMs to Kubernetes. The service has two
+VM-based instances with sidecars as well as a set of Kubernetes
+pods managed by a standard deployment object. Consumers of this
+service in the mesh will be automatically load balanced across the
+VMs and Kubernetes.  VM for the <code>details.bookinfo.com</code>
+service. This VM has sidecar installed and bootstrapped using the
+<code>details-legacy</code> service account. The sidecar receives HTTP traffic
+on port 80 (wrapped in istio mutual TLS) and forwards it to the
+application on the localhost on the same port.</p>
+
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: WorkloadEntry
+metadata:
+  name: details-vm-1
+spec:
+  serviceAccount: details
+  address: 2.2.2.2
+  labels:
+    app: details
+    instance-id: vm1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: WorkloadEntry
+metadata:
+  name: details-vm-2
+spec:
+  serviceAccount: details
+  address: 3.3.3.3
+  labels:
+    app: details
+    instance-id: vm2
+</code></pre>
+
+<p>{{</tab>}}</p>
+
+<p>{{<tab name="v1beta1" category-value="v1beta1">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1beta1
+kind: WorkloadEntry
+metadata:
+  name: details-vm-1
+spec:
+  serviceAccount: details
+  address: 2.2.2.2
+  labels:
+    app: details
+    instance-id: vm1
+---
+apiVersion: networking.istio.io/v1beta1
+kind: WorkloadEntry
+metadata:
+  name: details-vm-2
+spec:
+  serviceAccount: details
+  address: 3.3.3.3
+  labels:
+    app: details
+    instance-id: vm2
+</code></pre>
+
+<p>{{</tab>}}
+{{</tabset>}}</p>
+
+<p>Assuming there is also a Kubernetes deployment with pod labels
+<code>app: details</code> using the same service account <code>details</code>, the
+following service entry declares a service spanning both VMs and
+Kubernetes:</p>
+
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: details-svc
+spec:
+  hosts:
+  - details.bookinfo.com
+  location: MESH_INTERNAL
+  ports:
+  - number: 80
+    name: http
+    protocol: HTTP
+  resolution: STATIC
+  workloadSelector:
+    labels:
+      app: details
+</code></pre>
+
+<p>{{</tab>}}</p>
+
+<p>{{<tab name="v1beta1" category-value="v1beta1">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: details-svc
+spec:
+  hosts:
+  - details.bookinfo.com
+  location: MESH_INTERNAL
+  ports:
+  - number: 80
+    name: http
+    protocol: HTTP
+  resolution: STATIC
+  workloadSelector:
+    labels:
+      app: details
+</code></pre>
+
+<p>{{</tab>}}
+{{</tabset>}}</p>
+
+<h2 id="ServiceEntry-Location">ServiceEntry.Location</h2>
+<section>
+<p>Location specifies whether the service is part of Istio mesh or
+outside the mesh.  Location determines the behavior of several
+features, such as service-to-service mTLS authentication, policy
+enforcement, etc. When communicating with services outside the mesh,
+Istio&rsquo;s mTLS authentication is disabled, and policy enforcement is
+performed on the client-side as opposed to server-side.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ServiceEntry-Location-MESH_EXTERNAL">
+<td><code>MESH_EXTERNAL</code></td>
+<td>
+<p>Signifies that the service is external to the mesh. Typically used
+to indicate external services consumed through APIs.</p>
+
+</td>
+</tr>
+<tr id="ServiceEntry-Location-MESH_INTERNAL">
+<td><code>MESH_INTERNAL</code></td>
+<td>
+<p>Signifies that the service is part of the mesh. Typically used to
+indicate services added explicitly as part of expanding the service
+mesh to include unmanaged infrastructure (e.g., VMs added to a
+Kubernetes based service mesh).</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ServiceEntry-Resolution">ServiceEntry.Resolution</h2>
+<section>
+<p>Resolution determines how the proxy will resolve the IP addresses of
+the network endpoints associated with the service, so that it can
+route to one of them. The resolution mode specified here has no impact
+on how the application resolves the IP address associated with the
+service. The application may still have to use DNS to resolve the
+service to an IP so that the outbound traffic can be captured by the
+Proxy. Alternatively, for HTTP services, the application could
+directly communicate with the proxy (e.g., by setting HTTP_PROXY) to
+talk to these services.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ServiceEntry-Resolution-NONE">
+<td><code>NONE</code></td>
+<td>
+<p>Assume that incoming connections have already been resolved (to a
+specific destination IP address). Such connections are typically
+routed via the proxy using mechanisms such as IP table REDIRECT/
+eBPF. After performing any routing related transformations, the
+proxy will forward the connection to the IP address to which the
+connection was bound.</p>
+
+</td>
+</tr>
+<tr id="ServiceEntry-Resolution-STATIC">
+<td><code>STATIC</code></td>
+<td>
+<p>Use the static IP addresses specified in endpoints (see below) as the
+backing instances associated with the service.</p>
+
+</td>
+</tr>
+<tr id="ServiceEntry-Resolution-DNS">
+<td><code>DNS</code></td>
+<td>
+<p>Attempt to resolve the IP address by querying the ambient DNS,
+during request processing. If no endpoints are specified, the proxy
+will resolve the DNS address specified in the hosts field, if
+wildcards are not used. If endpoints are specified, the DNS
+addresses specified in the endpoints will be resolved to determine
+the destination IP address.  DNS resolution cannot be used with Unix
+domain socket endpoints.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="ServiceEntry">ServiceEntry</h2>
 <section>
 <p>ServiceEntry enables adding additional entries into Istio&rsquo;s internal
@@ -685,9 +906,23 @@ name with wildcard prefix.</p>
 will be matched against the hosts field.</li>
 </ol>
 
-<p>Note that when resolution is set to type DNS
-and no endpoints are specified, the host field will be used as the DNS name
-of the endpoint to route traffic to.</p>
+<p><strong>NOTE 1:</strong> When resolution is set to type DNS and no endpoints
+are specified, the host field will be used as the DNS name of the
+endpoint to route traffic to.</p>
+
+<p><strong>NOTE 2:</strong> If the hostname matches with the name of a service
+from another service registry such as Kubernetes that also
+supplies its own set of endpoints, the ServiceEntry will be
+treated as a decorator of the existing Kubernetes
+service. Properties in the service entry will be added to the
+Kubernetes service if applicable. Currently, the only the
+following additional properties will be considered by <code>istiod</code>:</p>
+
+<ol>
+<li>subjectAltNames: In addition to verifying the SANs of the
+service accounts associated with the pods of the service, the
+SANs specified here will also be verified.</li>
+</ol>
 
 </td>
 <td>
@@ -761,7 +996,24 @@ Yes
 <td><code>endpoints</code></td>
 <td><code><a href="#ServiceEntry-Endpoint">Endpoint[]</a></code></td>
 <td>
-<p>One or more endpoints associated with the service.</p>
+<p>One or more endpoints associated with the service. Only one of
+<code>endpoints</code> or <code>workloadSelector</code> can be specified.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ServiceEntry-workload_selector">
+<td><code>workloadSelector</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/sidecar.html#WorkloadSelector">WorkloadSelector</a></code></td>
+<td>
+<p>Applicable only for MESH_INTERNAL services. Only one of
+<code>endpoints</code> or <code>workloadSelector</code> can be specified. Selects one
+or more Kubernetes pods or VM workloads (specified using
+<code>WorkloadEntry</code>) based on their labels. The <code>WorkloadEntry</code> object
+representing the VMs should be defined in the same namespace as
+the ServiceEntry.</p>
 
 </td>
 <td>
@@ -801,11 +1053,13 @@ No
 <td><code>subjectAltNames</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>The list of subject alternate names allowed for workload instances that
-implement this service. This information is used to enforce
-<a href="https://istio.io/docs/concepts/security/#secure-naming">secure-naming</a>.
-If specified, the proxy will verify that the server
-certificate&rsquo;s subject alternate name matches one of the specified values.</p>
+<p>If specified, the proxy will verify that the server certificate&rsquo;s
+subject alternate name matches one of the specified values.</p>
+
+<p>NOTE: When using the workloadEntry with workloadSelectors, the
+service account specified in the workloadEntry will also be used
+to derive the additional subject alternate names that should be
+verified.</p>
 
 </td>
 <td>
@@ -925,98 +1179,18 @@ with higher weights will receive proportionally higher traffic.</p>
 No
 </td>
 </tr>
-</tbody>
-</table>
-</section>
-<h2 id="ServiceEntry-Location">ServiceEntry.Location</h2>
-<section>
-<p>Location specifies whether the service is part of Istio mesh or
-outside the mesh.  Location determines the behavior of several
-features, such as service-to-service mTLS authentication, policy
-enforcement, etc. When communicating with services outside the mesh,
-Istio&rsquo;s mTLS authentication is disabled, and policy enforcement is
-performed on the client-side as opposed to server-side.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="ServiceEntry-Location-MESH_EXTERNAL">
-<td><code>MESH_EXTERNAL</code></td>
+<tr id="ServiceEntry-Endpoint-service_account">
+<td><code>serviceAccount</code></td>
+<td><code>string</code></td>
 <td>
-<p>Signifies that the service is external to the mesh. Typically used
-to indicate external services consumed through APIs.</p>
+<p>The service account associated with the workload if a sidecar
+is present in the workload. The service account must be present
+in the same namespace as the configuration ( WorkloadEntry or a
+ServiceEntry)</p>
 
 </td>
-</tr>
-<tr id="ServiceEntry-Location-MESH_INTERNAL">
-<td><code>MESH_INTERNAL</code></td>
 <td>
-<p>Signifies that the service is part of the mesh. Typically used to
-indicate services added explicitly as part of expanding the service
-mesh to include unmanaged infrastructure (e.g., VMs added to a
-Kubernetes based service mesh).</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="ServiceEntry-Resolution">ServiceEntry.Resolution</h2>
-<section>
-<p>Resolution determines how the proxy will resolve the IP addresses of
-the network endpoints associated with the service, so that it can
-route to one of them. The resolution mode specified here has no impact
-on how the application resolves the IP address associated with the
-service. The application may still have to use DNS to resolve the
-service to an IP so that the outbound traffic can be captured by the
-Proxy. Alternatively, for HTTP services, the application could
-directly communicate with the proxy (e.g., by setting HTTP_PROXY) to
-talk to these services.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="ServiceEntry-Resolution-NONE">
-<td><code>NONE</code></td>
-<td>
-<p>Assume that incoming connections have already been resolved (to a
-specific destination IP address). Such connections are typically
-routed via the proxy using mechanisms such as IP table REDIRECT/
-eBPF. After performing any routing related transformations, the
-proxy will forward the connection to the IP address to which the
-connection was bound.</p>
-
-</td>
-</tr>
-<tr id="ServiceEntry-Resolution-STATIC">
-<td><code>STATIC</code></td>
-<td>
-<p>Use the static IP addresses specified in endpoints (see below) as the
-backing instances associated with the service.</p>
-
-</td>
-</tr>
-<tr id="ServiceEntry-Resolution-DNS">
-<td><code>DNS</code></td>
-<td>
-<p>Attempt to resolve the IP address by querying the ambient DNS,
-during request processing. If no endpoints are specified, the proxy
-will resolve the DNS address specified in the hosts field, if
-wildcards are not used. If endpoints are specified, the DNS
-addresses specified in the endpoints will be resolved to determine
-the destination IP address.  DNS resolution cannot be used with Unix
-domain socket endpoints.</p>
-
+No
 </td>
 </tr>
 </tbody>

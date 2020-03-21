@@ -1,0 +1,10 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Configuration affecting VMs onboarded into the mesh.",
+    "version": "v1alpha3"
+  },
+  "components": {
+    "schemas": {}
+  }
+}

@@ -3403,6 +3403,9 @@ spec:
                       type: integer
                     description: Set of ports associated with the endpoint.
                     type: object
+                  serviceAccount:
+                    format: string
+                    type: string
                   weight:
                     description: The load balancing weight associated with the endpoint.
                     type: integer
@@ -3454,6 +3457,15 @@ spec:
                 format: string
                 type: string
               type: array
+            workloadSelector:
+              description: Applicable only for MESH_INTERNAL services.
+              properties:
+                labels:
+                  additionalProperties:
+                    format: string
+                    type: string
+                  type: object
+              type: object
           type: object
       type: object
   versions:
