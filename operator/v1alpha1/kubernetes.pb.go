@@ -697,7 +697,7 @@ func (m *ExecAction) GetCommand() []string {
 // Mirrors k8s.io.api.core.v1.HTTPGetAction for unmarshaling.
 type HTTPGetAction struct {
 	Path                 string                   `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
-	Port                 interface{} `protobuf:"bytes,2,opt,name=port,proto3" json:"port,omitempty"`
+	Port                 *TypeInterfaceKubernetes `protobuf:"bytes,2,opt,name=port,proto3" json:"port,omitempty"`
 	Host                 string                   `protobuf:"bytes,3,opt,name=host,proto3" json:"host,omitempty"`
 	Scheme               string                   `protobuf:"bytes,4,opt,name=scheme,proto3" json:"scheme,omitempty"`
 	HttpHeaders          []*HTTPHeader            `protobuf:"bytes,5,rep,name=httpHeaders,proto3" json:"httpHeaders,omitempty"`
@@ -738,6 +738,12 @@ func (m *HTTPGetAction) GetPath() string {
 	return ""
 }
 
+func (m *HTTPGetAction) GetPort() *TypeInterfaceKubernetes {
+	if m != nil {
+		return m.Port
+	}
+	return nil
+}
 
 func (m *HTTPGetAction) GetHost() string {
 	if m != nil {
@@ -810,7 +816,7 @@ func (m *HTTPHeader) GetValue() string {
 
 // Mirrors k8s.io.api.core.v1.TCPSocketAction for unmarshaling.
 type TCPSocketAction struct {
-	Port                 interface{} `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
+	Port                 *TypeInterfaceKubernetes `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
 	Host                 string                   `protobuf:"bytes,2,opt,name=host,proto3" json:"host,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
 	XXX_unrecognized     []byte                   `json:"-"`
@@ -842,6 +848,12 @@ func (m *TCPSocketAction) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_TCPSocketAction proto.InternalMessageInfo
 
+func (m *TCPSocketAction) GetPort() *TypeInterfaceKubernetes {
+	if m != nil {
+		return m.Port
+	}
+	return nil
+}
 
 func (m *TCPSocketAction) GetHost() string {
 	if m != nil {
@@ -956,8 +968,8 @@ func (m *DeploymentStrategy) GetRollingUpdate() *RollingUpdateDeployment {
 
 // Mirrors k8s.io.api.apps.v1.RollingUpdateDeployment for unmarshaling.
 type RollingUpdateDeployment struct {
-	MaxUnavailable       interface{} `protobuf:"bytes,1,opt,name=maxUnavailable,proto3" json:"maxUnavailable,omitempty"`
-	MaxSurge             interface{} `protobuf:"bytes,2,opt,name=maxSurge,proto3" json:"maxSurge,omitempty"`
+	MaxUnavailable       *TypeInterfaceKubernetes `protobuf:"bytes,1,opt,name=maxUnavailable,proto3" json:"maxUnavailable,omitempty"`
+	MaxSurge             *TypeInterfaceKubernetes `protobuf:"bytes,2,opt,name=maxSurge,proto3" json:"maxSurge,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
 	XXX_unrecognized     []byte                   `json:"-"`
 	XXX_sizecache        int32                    `json:"-"`
@@ -988,7 +1000,19 @@ func (m *RollingUpdateDeployment) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_RollingUpdateDeployment proto.InternalMessageInfo
 
+func (m *RollingUpdateDeployment) GetMaxUnavailable() *TypeInterfaceKubernetes {
+	if m != nil {
+		return m.MaxUnavailable
+	}
+	return nil
+}
 
+func (m *RollingUpdateDeployment) GetMaxSurge() *TypeInterfaceKubernetes {
+	if m != nil {
+		return m.MaxSurge
+	}
+	return nil
+}
 
 type ObjectMeta struct {
 	// From k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta.
@@ -1546,7 +1570,7 @@ type ServicePort struct {
 	Name                 string                   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Protocol             string                   `protobuf:"bytes,2,opt,name=protocol,proto3" json:"protocol,omitempty"`
 	Port                 int32                    `protobuf:"varint,3,opt,name=port,proto3" json:"port,omitempty"`
-	TargetPort           interface{} `protobuf:"bytes,4,opt,name=targetPort,proto3" json:"targetPort,omitempty"`
+	TargetPort           *TypeInterfaceKubernetes `protobuf:"bytes,4,opt,name=targetPort,proto3" json:"targetPort,omitempty"`
 	NodePort             int32                    `protobuf:"varint,5,opt,name=nodePort,proto3" json:"nodePort,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
 	XXX_unrecognized     []byte                   `json:"-"`
@@ -1599,6 +1623,12 @@ func (m *ServicePort) GetPort() int32 {
 	return 0
 }
 
+func (m *ServicePort) GetTargetPort() *TypeInterfaceKubernetes {
+	if m != nil {
+		return m.TargetPort
+	}
+	return nil
+}
 
 func (m *ServicePort) GetNodePort() int32 {
 	if m != nil {
@@ -2002,7 +2032,7 @@ func (m *PodsMetricSource) GetSelector() *v1.LabelSelector {
 
 type ResourceMetricSource struct {
 	Name                     string                   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	TargetAverageUtilization interface{} `protobuf:"bytes,2,opt,name=targetAverageUtilization,proto3" json:"targetAverageUtilization,omitempty"`
+	TargetAverageUtilization *TypeInterfaceKubernetes `protobuf:"bytes,2,opt,name=targetAverageUtilization,proto3" json:"targetAverageUtilization,omitempty"`
 	TargetAverageValue       *resource.Quantity       `protobuf:"bytes,3,opt,name=targetAverageValue,proto3" json:"targetAverageValue,omitempty"`
 	XXX_NoUnkeyedLiteral     struct{}                 `json:"-"`
 	XXX_unrecognized         []byte                   `json:"-"`
@@ -2041,6 +2071,12 @@ func (m *ResourceMetricSource) GetName() string {
 	return ""
 }
 
+func (m *ResourceMetricSource) GetTargetAverageUtilization() *TypeInterfaceKubernetes {
+	if m != nil {
+		return m.TargetAverageUtilization
+	}
+	return nil
+}
 
 func (m *ResourceMetricSource) GetTargetAverageValue() *resource.Quantity {
 	if m != nil {
@@ -2112,7 +2148,69 @@ func (m *ExternalMetricSource) GetTargetAverageValue() *resource.Quantity {
 	return nil
 }
 
+// GOTYPE: *IntOrStringForPB
+type TypeIntOrStringForPB struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
 
+func (m *TypeIntOrStringForPB) Reset()         { *m = TypeIntOrStringForPB{} }
+func (m *TypeIntOrStringForPB) String() string { return proto.CompactTextString(m) }
+func (*TypeIntOrStringForPB) ProtoMessage()    {}
+func (*TypeIntOrStringForPB) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b13c6c8501de3a11, []int{38}
+}
+
+func (m *TypeIntOrStringForPB) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_TypeIntOrStringForPB.Unmarshal(m, b)
+}
+func (m *TypeIntOrStringForPB) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_TypeIntOrStringForPB.Marshal(b, m, deterministic)
+}
+func (m *TypeIntOrStringForPB) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TypeIntOrStringForPB.Merge(m, src)
+}
+func (m *TypeIntOrStringForPB) XXX_Size() int {
+	return xxx_messageInfo_TypeIntOrStringForPB.Size(m)
+}
+func (m *TypeIntOrStringForPB) XXX_DiscardUnknown() {
+	xxx_messageInfo_TypeIntOrStringForPB.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TypeIntOrStringForPB proto.InternalMessageInfo
+
+// GOTYPE: interface{}
+type TypeInterfaceKubernetes struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *TypeInterfaceKubernetes) Reset()         { *m = TypeInterfaceKubernetes{} }
+func (m *TypeInterfaceKubernetes) String() string { return proto.CompactTextString(m) }
+func (*TypeInterfaceKubernetes) ProtoMessage()    {}
+func (*TypeInterfaceKubernetes) Descriptor() ([]byte, []int) {
+	return fileDescriptor_b13c6c8501de3a11, []int{39}
+}
+
+func (m *TypeInterfaceKubernetes) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_TypeInterfaceKubernetes.Unmarshal(m, b)
+}
+func (m *TypeInterfaceKubernetes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_TypeInterfaceKubernetes.Marshal(b, m, deterministic)
+}
+func (m *TypeInterfaceKubernetes) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TypeInterfaceKubernetes.Merge(m, src)
+}
+func (m *TypeInterfaceKubernetes) XXX_Size() int {
+	return xxx_messageInfo_TypeInterfaceKubernetes.Size(m)
+}
+func (m *TypeInterfaceKubernetes) XXX_DiscardUnknown() {
+	xxx_messageInfo_TypeInterfaceKubernetes.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TypeInterfaceKubernetes proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterType((*Resources)(nil), "istio.operator.v1alpha1.Resources")
@@ -2156,6 +2254,8 @@ func init() {
 	proto.RegisterType((*PodsMetricSource)(nil), "istio.operator.v1alpha1.PodsMetricSource")
 	proto.RegisterType((*ResourceMetricSource)(nil), "istio.operator.v1alpha1.ResourceMetricSource")
 	proto.RegisterType((*ExternalMetricSource)(nil), "istio.operator.v1alpha1.ExternalMetricSource")
+	proto.RegisterType((*TypeIntOrStringForPB)(nil), "istio.operator.v1alpha1.TypeIntOrStringForPB")
+	proto.RegisterType((*TypeInterfaceKubernetes)(nil), "istio.operator.v1alpha1.TypeInterface_kubernetes")
 }
 
 func init() { proto.RegisterFile("operator/v1alpha1/kubernetes.proto", fileDescriptor_b13c6c8501de3a11) }
