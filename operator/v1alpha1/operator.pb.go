@@ -75,15 +75,15 @@ type IstioOperatorSpec struct {
 	Profile string `protobuf:"bytes,10,opt,name=profile,proto3" json:"profile,omitempty"`
 	// Path for the install package. e.g.
 	//     - /tmp/istio-installer/nightly (local file path)
-	InstallPackagePath string `protobuf:"bytes,11,opt,name=install_package_path,json=installPackagePath,proto3" json:"install_package_path,omitempty"`
+	InstallPackagePath string `protobuf:"bytes,11,opt,name=install_package_path,json=installPackagePath,proto3" json:"installPackagePath,omitempty"`
 	// Root for docker image paths e.g. docker.io/istio
 	Hub string `protobuf:"bytes,12,opt,name=hub,proto3" json:"hub,omitempty"`
 	// Version tag for docker images e.g. 1.0.6
-	Tag *TypeInterface2 `protobuf:"bytes,13,opt,name=tag,proto3" json:"tag,omitempty"`
+	Tag interface{} `protobuf:"bytes,13,opt,name=tag,proto3" json:"tag,omitempty"`
 	// $hide_from_docs
 	// Resource suffix is appended to all resources installed by each component.
 	// Never implemented; replaced by revision.
-	ResourceSuffix string `protobuf:"bytes,14,opt,name=resource_suffix,json=resourceSuffix,proto3" json:"resource_suffix,omitempty"` // Deprecated: Do not use.
+	ResourceSuffix string `protobuf:"bytes,14,opt,name=resource_suffix,json=resourceSuffix,proto3" json:"resourceSuffix,omitempty"` // Deprecated: Do not use.
 	// Namespace to install control plane resources into. If unset, Istio will be installed into the same namespace
 	// as the IstioOperator CR.
 	Namespace string `protobuf:"bytes,15,opt,name=namespace,proto3" json:"namespace,omitempty"`
@@ -91,19 +91,19 @@ type IstioOperatorSpec struct {
 	// This option is currently experimental.
 	Revision string `protobuf:"bytes,16,opt,name=revision,proto3" json:"revision,omitempty"`
 	// Config used by control plane components internally.
-	MeshConfig *v1alpha1.MeshConfig `protobuf:"bytes,40,opt,name=mesh_config,json=meshConfig,proto3" json:"mesh_config,omitempty"`
+	MeshConfig *v1alpha1.MeshConfig `protobuf:"bytes,40,opt,name=mesh_config,json=meshConfig,proto3" json:"meshConfig,omitempty"`
 	// Kubernetes resource settings, enablement and component-specific settings that are not internal to the
 	// component.
 	Components *IstioComponentSetSpec `protobuf:"bytes,50,opt,name=components,proto3" json:"components,omitempty"`
 	// Extra addon components which are not explicitly specified above.
-	AddonComponents map[string]*ExternalComponentSpec `protobuf:"bytes,51,rep,name=addon_components,json=addonComponents,proto3" json:"addon_components,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	AddonComponents map[string]*ExternalComponentSpec `protobuf:"bytes,51,rep,name=addon_components,json=addonComponents,proto3" json:"addonComponents,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Overrides for default values.yaml. This is a validated pass-through to Helm templates.
 	// See the Helm installation options for schema details: https://istio.io/docs/reference/config/installation-options/.
 	// Anything that is available in IstioOperatorSpec should be set above rather than using the passthrough. This
 	// includes Kubernetes resource settings for components in KubernetesResourcesSpec.
-	Values *TypeMapStringInterface2 `protobuf:"bytes,100,opt,name=values,proto3" json:"values,omitempty"`
+	Values map[string]interface{} `protobuf:"bytes,100,opt,name=values,proto3" json:"values,omitempty"`
 	// Unvalidated overrides for default values.yaml. Used for custom templates where new parameters are added.
-	UnvalidatedValues    *TypeMapStringInterface2 `protobuf:"bytes,101,opt,name=unvalidated_values,json=unvalidatedValues,proto3" json:"unvalidated_values,omitempty"`
+	UnvalidatedValues    map[string]interface{} `protobuf:"bytes,101,opt,name=unvalidated_values,json=unvalidatedValues,proto3" json:"unvalidatedValues,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
 	XXX_unrecognized     []byte                   `json:"-"`
 	XXX_sizecache        int32                    `json:"-"`
@@ -155,12 +155,6 @@ func (m *IstioOperatorSpec) GetHub() string {
 	return ""
 }
 
-func (m *IstioOperatorSpec) GetTag() *TypeInterface2 {
-	if m != nil {
-		return m.Tag
-	}
-	return nil
-}
 
 // Deprecated: Do not use.
 func (m *IstioOperatorSpec) GetResourceSuffix() string {
@@ -205,19 +199,7 @@ func (m *IstioOperatorSpec) GetAddonComponents() map[string]*ExternalComponentSp
 	return nil
 }
 
-func (m *IstioOperatorSpec) GetValues() *TypeMapStringInterface2 {
-	if m != nil {
-		return m.Values
-	}
-	return nil
-}
 
-func (m *IstioOperatorSpec) GetUnvalidatedValues() *TypeMapStringInterface2 {
-	if m != nil {
-		return m.UnvalidatedValues
-	}
-	return nil
-}
 
 // Observed state of IstioOperator
 type InstallStatus struct {
@@ -230,7 +212,7 @@ type InstallStatus struct {
 	// - If any component is in ERROR state, overall status is ERROR.
 	Status InstallStatus_Status `protobuf:"varint,1,opt,name=status,proto3,enum=istio.operator.v1alpha1.InstallStatus_Status" json:"status,omitempty"`
 	// Individual status of each component controlled by the operator. The map key is the name of the component.
-	ComponentStatus      map[string]*InstallStatus_VersionStatus `protobuf:"bytes,2,rep,name=component_status,json=componentStatus,proto3" json:"component_status,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	ComponentStatus      map[string]*InstallStatus_VersionStatus `protobuf:"bytes,2,rep,name=component_status,json=componentStatus,proto3" json:"componentStatus,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}                                `json:"-"`
 	XXX_unrecognized     []byte                                  `json:"-"`
 	XXX_sizecache        int32                                   `json:"-"`
@@ -332,69 +314,7 @@ func (m *InstallStatus_VersionStatus) GetError() string {
 }
 
 // This is required because synthetic type definition has file rather than package scope.
-// GOTYPE: map[string]interface{}
-type TypeMapStringInterface2 struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
 
-func (m *TypeMapStringInterface2) Reset()         { *m = TypeMapStringInterface2{} }
-func (m *TypeMapStringInterface2) String() string { return proto.CompactTextString(m) }
-func (*TypeMapStringInterface2) ProtoMessage()    {}
-func (*TypeMapStringInterface2) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8023ebf2dcfea843, []int{2}
-}
-
-func (m *TypeMapStringInterface2) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_TypeMapStringInterface2.Unmarshal(m, b)
-}
-func (m *TypeMapStringInterface2) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_TypeMapStringInterface2.Marshal(b, m, deterministic)
-}
-func (m *TypeMapStringInterface2) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TypeMapStringInterface2.Merge(m, src)
-}
-func (m *TypeMapStringInterface2) XXX_Size() int {
-	return xxx_messageInfo_TypeMapStringInterface2.Size(m)
-}
-func (m *TypeMapStringInterface2) XXX_DiscardUnknown() {
-	xxx_messageInfo_TypeMapStringInterface2.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_TypeMapStringInterface2 proto.InternalMessageInfo
-
-// GOTYPE: interface{}
-type TypeInterface2 struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *TypeInterface2) Reset()         { *m = TypeInterface2{} }
-func (m *TypeInterface2) String() string { return proto.CompactTextString(m) }
-func (*TypeInterface2) ProtoMessage()    {}
-func (*TypeInterface2) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8023ebf2dcfea843, []int{3}
-}
-
-func (m *TypeInterface2) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_TypeInterface2.Unmarshal(m, b)
-}
-func (m *TypeInterface2) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_TypeInterface2.Marshal(b, m, deterministic)
-}
-func (m *TypeInterface2) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TypeInterface2.Merge(m, src)
-}
-func (m *TypeInterface2) XXX_Size() int {
-	return xxx_messageInfo_TypeInterface2.Size(m)
-}
-func (m *TypeInterface2) XXX_DiscardUnknown() {
-	xxx_messageInfo_TypeInterface2.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_TypeInterface2 proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterEnum("istio.operator.v1alpha1.InstallStatus_Status", InstallStatus_Status_name, InstallStatus_Status_value)
@@ -403,8 +323,6 @@ func init() {
 	proto.RegisterType((*InstallStatus)(nil), "istio.operator.v1alpha1.InstallStatus")
 	proto.RegisterMapType((map[string]*InstallStatus_VersionStatus)(nil), "istio.operator.v1alpha1.InstallStatus.ComponentStatusEntry")
 	proto.RegisterType((*InstallStatus_VersionStatus)(nil), "istio.operator.v1alpha1.InstallStatus.VersionStatus")
-	proto.RegisterType((*TypeMapStringInterface2)(nil), "istio.operator.v1alpha1.TypeMapStringInterface2")
-	proto.RegisterType((*TypeInterface2)(nil), "istio.operator.v1alpha1.TypeInterface2")
 }
 
 func init() { proto.RegisterFile("operator/v1alpha1/operator.proto", fileDescriptor_8023ebf2dcfea843) }
