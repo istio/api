@@ -17,11 +17,11 @@ syntax = "proto3";
 import "google/api/field_behavior.proto";
 import "networking/v1alpha3/gateway.proto";
 
-// $schema: istio.networking.v1alpha3.WorkloadEntry
+// $schema: istio.networking.v1beta1.WorkloadEntry
 // $title: Workload Entry
 // $description: Configuration affecting VMs onboarded into the mesh.
 // $location: https://istio.io/docs/reference/config/networking/workload-entry.html
-// $aliases: [/docs/reference/config/networking/v1alpha3/workload-entry]
+// $aliases: [/docs/reference/config/networking/v1beta1/workload-entry]
 
 // `WorkloadEntry` enables operators to describe the properties of a
 // single non-Kubernetes workload such as a VM or a bare metal server
@@ -236,7 +236,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //
 // <!-- crd generation tags
 // +cue-gen:WorkloadEntry:groupName:networking.istio.io
-// +cue-gen:WorkloadEntry:version:v1alpha3
+// +cue-gen:WorkloadEntry:version:v1beta1
 // +cue-gen:WorkloadEntry:storageVersion
 // +cue-gen:WorkloadEntry:annotations:helm.sh/resource-policy=keep
 // +cue-gen:WorkloadEntry:labels:app=istio-pilot,chart=istio,heritage=Tiller,release=istio
@@ -251,7 +251,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 //
 // <!-- go code generation tags
 // +kubetype-gen
-// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +kubetype-gen:groupVersion=networking.istio.io/v1beta1
 // +genclient
 // +k8s:deepcopy-gen=true
 // -->
