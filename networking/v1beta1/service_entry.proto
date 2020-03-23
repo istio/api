@@ -959,7 +959,7 @@ message ServiceEntry {
     // The load balancing weight associated with the endpoint. Endpoints
     // with higher weights will receive proportionally higher traffic.
     uint32 weight = 6;
- 
+
     // The service account associated with the workload if a sidecar
     // is present in the workload. The service account must be present
     // in the same namespace as the configuration ( WorkloadEntry or a
@@ -967,7 +967,8 @@ message ServiceEntry {
     string service_account = 7;
   };
 
-  // One or more endpoints associated with the service.
+  // One or more endpoints associated with the service. Only one of
+  // `endpoints` or `workloadSelector` can be specified.
   repeated Endpoint endpoints = 6;
 
   // Applicable only for MESH_INTERNAL services. Only one of
@@ -999,10 +1000,12 @@ message ServiceEntry {
   // "." or "*" (i.e., the current namespace or all namespaces).
   repeated string export_to = 7;
 
-  // The list of subject alternate names allowed for workload instances that
-  // implement this service. This information is used to enforce
-  // [secure-naming](https://istio.io/docs/concepts/security/#secure-naming).
-  // If specified, the proxy will verify that the server
-  // certificate's subject alternate name matches one of the specified values.
+  // If specified, the proxy will verify that the server certificate's
+  // subject alternate name matches one of the specified values.
+  //
+  // NOTE: When using the workloadEntry with workloadSelectors, the
+  // service account specified in the workloadEntry will also be used
+  // to derive the additional subject alternate names that should be
+  // verified.
   repeated string subject_alt_names = 8;
 }

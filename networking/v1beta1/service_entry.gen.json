@@ -39,7 +39,7 @@
             }
           },
           "subjectAltNames": {
-            "description": "The list of subject alternate names allowed for workload instances that implement this service. This information is used to enforce [secure-naming](https://istio.io/docs/concepts/security/#secure-naming). If specified, the proxy will verify that the server certificate's subject alternate name matches one of the specified values.",
+            "description": "If specified, the proxy will verify that the server certificate's subject alternate name matches one of the specified values.",
             "type": "array",
             "items": {
               "type": "string",
@@ -76,7 +76,7 @@
             "$ref": "#/components/schemas/istio.networking.v1beta1.ServiceEntry.Resolution"
           },
           "endpoints": {
-            "description": "One or more endpoints associated with the service.",
+            "description": "One or more endpoints associated with the service. Only one of `endpoints` or `workloadSelector` can be specified.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.networking.v1beta1.ServiceEntry.Endpoint"

@@ -940,7 +940,8 @@ type ServiceEntry struct {
 	// accompanying IP addresses. In such cases, traffic to any IP on
 	// said port will be allowed (i.e. `0.0.0.0:<port>`).
 	Resolution ServiceEntry_Resolution `protobuf:"varint,5,opt,name=resolution,proto3,enum=istio.networking.v1beta1.ServiceEntry_Resolution" json:"resolution,omitempty"`
-	// One or more endpoints associated with the service.
+	// One or more endpoints associated with the service. Only one of
+	// `endpoints` or `workloadSelector` can be specified.
 	Endpoints []*ServiceEntry_Endpoint `protobuf:"bytes,6,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
 	// Applicable only for MESH_INTERNAL services. Only one of
 	// `endpoints` or `workloadSelector` can be specified. Selects one
@@ -969,11 +970,13 @@ type ServiceEntry struct {
 	// NOTE: in the current release, the `exportTo` value is restricted to
 	// "." or "*" (i.e., the current namespace or all namespaces).
 	ExportTo []string `protobuf:"bytes,7,rep,name=export_to,json=exportTo,proto3" json:"export_to,omitempty"`
-	// The list of subject alternate names allowed for workload instances that
-	// implement this service. This information is used to enforce
-	// [secure-naming](https://istio.io/docs/concepts/security/#secure-naming).
-	// If specified, the proxy will verify that the server
-	// certificate's subject alternate name matches one of the specified values.
+	// If specified, the proxy will verify that the server certificate's
+	// subject alternate name matches one of the specified values.
+	//
+	// NOTE: When using the workloadEntry with workloadSelectors, the
+	// service account specified in the workloadEntry will also be used
+	// to derive the additional subject alternate names that should be
+	// verified.
 	SubjectAltNames      []string `protobuf:"bytes,8,rep,name=subject_alt_names,json=subjectAltNames,proto3" json:"subject_alt_names,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
