@@ -106,22 +106,25 @@ message MeshConfig {
   string ingress_service = 8;
 
   enum IngressControllerMode {
+    // Unspecified Istio ingress controller.
+    UNSPECIFIED = 0;
+
     // Disables Istio ingress controller.
-    OFF = 0;
+    OFF = 1;
 
     // Istio ingress controller will act on ingress resources that do not
     // contain any annotation or whose annotations match the value
     // specified in the ingress_class parameter described earlier. Use this
     // mode if Istio ingress controller will be the default ingress
     // controller for the entireKubernetes cluster.
-    DEFAULT = 1;
+    DEFAULT = 2;
 
     // Istio ingress controller will only act on ingress resources whose
     // annotations match the value specified in the ingress_class parameter
     // described earlier. Use this mode if Istio ingress controller will be
     // a secondary ingress controller (e.g., in addition to a
     // cloud-provided ingress controller).
-    STRICT = 2;
+    STRICT = 3;
   }
 
   // Defines whether to use Istio ingress controller for annotated or all ingress resources.
