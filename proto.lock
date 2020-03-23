@@ -35745,15 +35745,19 @@
             "name": "MeshConfig.IngressControllerMode",
             "enum_fields": [
               {
-                "name": "OFF"
+                "name": "UNSPECIFIED"
               },
               {
-                "name": "DEFAULT",
+                "name": "OFF",
                 "integer": 1
               },
               {
-                "name": "STRICT",
+                "name": "DEFAULT",
                 "integer": 2
+              },
+              {
+                "name": "STRICT",
+                "integer": 3
               }
             ]
           },
