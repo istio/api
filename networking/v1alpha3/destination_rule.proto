@@ -592,7 +592,8 @@ message ConnectionPoolSettings {
     // Maximum number of HTTP1 /TCP connections to a destination host. Default 2^32-1.
     int32 max_connections = 1;
 
-    // TCP connection timeout.
+    // TCP connection timeout. format:
+    // 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
     google.protobuf.Duration connect_timeout = 2;
 
     // If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
