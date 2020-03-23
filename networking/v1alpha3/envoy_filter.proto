@@ -583,8 +583,8 @@ message EnvoyFilter {
     Patch patch = 3;
   }
 
-  reserved 1;
-  reserved 2;
+  reserved 1, 2;
+  reserved "filters", "workload_labels";
 
   // Criteria used to select the specific set of pods/VMs on which
   // this patch configuration should be applied. If omitted, the set

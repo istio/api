@@ -39214,6 +39214,10 @@
               1,
               2
             ],
+            "reserved_names": [
+              "filters",
+              "workload_labels"
+            ],
             "messages": [
               {
                 "name": "ProxyMatch",
