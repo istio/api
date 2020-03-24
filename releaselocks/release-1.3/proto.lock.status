@@ -39,3 +39,4 @@ CONFLICT: "MeshConfig.IngressControllerMode" field: "OFF" integer: 1 has an upda
 CONFLICT: "MeshConfig.IngressControllerMode" field: "STRICT" has a different integer: 3, previously 2 [mesh/v1alpha1/config.proto]
 CONFLICT: "MeshConfig.IngressControllerMode" field: "UNSPECIFIED" integer: 0 has an updated name, previously "OFF" [mesh/v1alpha1/config.proto]
 CONFLICT: "Quota" field: "charge" has a different type: int32, previously int64 [mixer/v1/config/client/quota.proto]
+CONFLICT: "ServiceEntry" field: "endpoints" has a different type: WorkloadEntry, previously Endpoint [networking/v1alpha3/service_entry.proto]
