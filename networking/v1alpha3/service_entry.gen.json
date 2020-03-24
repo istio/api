@@ -113,17 +113,17 @@
               "format": "string"
             }
           },
-          "address": {
-            "description": "Address associated with the network endpoint without the port. Domain names can be used if and only if the resolution is set to DNS, and must be fully-qualified without wildcards. Use the form unix:///absolute/path/to/socket for Unix domain socket endpoints.",
-            "type": "string",
-            "format": "string"
-          },
           "ports": {
             "description": "Set of ports associated with the endpoint. The ports must be associated with a port name that was declared as part of the service. Do not use for `unix://` addresses.",
             "type": "object",
             "additionalProperties": {
               "type": "integer"
             }
+          },
+          "address": {
+            "description": "Address associated with the network endpoint without the port. Domain names can be used if and only if the resolution is set to DNS, and must be fully-qualified without wildcards. Use the form unix:///absolute/path/to/socket for Unix domain socket endpoints.",
+            "type": "string",
+            "format": "string"
           },
           "network": {
             "description": "Network enables Istio to group endpoints resident in the same L3 domain/network. All endpoints in the same network are assumed to be directly reachable from one another. When endpoints in different networks cannot reach each other directly, an Istio Gateway can be used to establish connectivity (usually using the `AUTO_PASSTHROUGH` mode in a Gateway Server). This is an advanced configuration used typically for spanning an Istio mesh over multiple clusters.",
