@@ -35745,15 +35745,19 @@
             "name": "MeshConfig.IngressControllerMode",
             "enum_fields": [
               {
-                "name": "OFF"
+                "name": "UNSPECIFIED"
               },
               {
-                "name": "DEFAULT",
+                "name": "OFF",
                 "integer": 1
               },
               {
-                "name": "STRICT",
+                "name": "DEFAULT",
                 "integer": 2
+              },
+              {
+                "name": "STRICT",
+                "integer": 3
               }
             ]
           },
@@ -39072,78 +39076,6 @@
       "def": {
         "enums": [
           {
-            "name": "DeprecatedListenerMatch.ListenerType",
-            "enum_fields": [
-              {
-                "name": "ANY"
-              },
-              {
-                "name": "SIDECAR_INBOUND",
-                "integer": 1
-              },
-              {
-                "name": "SIDECAR_OUTBOUND",
-                "integer": 2
-              },
-              {
-                "name": "GATEWAY",
-                "integer": 3
-              }
-            ]
-          },
-          {
-            "name": "DeprecatedListenerMatch.ListenerProtocol",
-            "enum_fields": [
-              {
-                "name": "ALL"
-              },
-              {
-                "name": "HTTP",
-                "integer": 1
-              },
-              {
-                "name": "TCP",
-                "integer": 2
-              }
-            ]
-          },
-          {
-            "name": "InsertPosition.Index",
-            "enum_fields": [
-              {
-                "name": "FIRST"
-              },
-              {
-                "name": "LAST",
-                "integer": 1
-              },
-              {
-                "name": "BEFORE",
-                "integer": 2
-              },
-              {
-                "name": "AFTER",
-                "integer": 3
-              }
-            ]
-          },
-          {
-            "name": "Filter.FilterType",
-            "enum_fields": [
-              {
-                "name": "INVALID"
-              },
-              {
-                "name": "HTTP",
-                "integer": 1
-              },
-              {
-                "name": "NETWORK",
-                "integer": 2
-              }
-            ]
-          },
-          {
             "name": "EnvoyFilter.ApplyTo",
             "enum_fields": [
               {
@@ -39261,18 +39193,6 @@
             "name": "EnvoyFilter",
             "fields": [
               {
-                "id": 2,
-                "name": "filters",
-                "type": "Filter",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
                 "id": 3,
                 "name": "workload_selector",
                 "type": "WorkloadSelector"
@@ -39290,117 +39210,15 @@
                 ]
               }
             ],
-            "maps": [
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 1,
-                  "name": "workload_labels",
-                  "type": "string",
-                  "options": [
-                    {
-                      "name": "deprecated",
-                      "value": "true"
-                    }
-                  ]
-                }
-              }
+            "reserved_ids": [
+              1,
+              2
+            ],
+            "reserved_names": [
+              "filters",
+              "workload_labels"
             ],
             "messages": [
-              {
-                "name": "DeprecatedListenerMatch",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "port_number",
-                    "type": "uint32"
-                  },
-                  {
-                    "id": 2,
-                    "name": "port_name_prefix",
-                    "type": "string"
-                  },
-                  {
-                    "id": 3,
-                    "name": "listener_type",
-                    "type": "ListenerType"
-                  },
-                  {
-                    "id": 4,
-                    "name": "listener_protocol",
-                    "type": "ListenerProtocol"
-                  },
-                  {
-                    "id": 5,
-                    "name": "address",
-                    "type": "string",
-                    "is_repeated": true
-                  }
-                ]
-              },
-              {
-                "name": "InsertPosition",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "index",
-                    "type": "Index"
-                  },
-                  {
-                    "id": 2,
-                    "name": "relative_to",
-                    "type": "string"
-                  }
-                ]
-              },
-              {
-                "name": "Filter",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "listener_match",
-                    "type": "DeprecatedListenerMatch"
-                  },
-                  {
-                    "id": 2,
-                    "name": "insert_position",
-                    "type": "InsertPosition"
-                  },
-                  {
-                    "id": 3,
-                    "name": "filter_type",
-                    "type": "FilterType",
-                    "options": [
-                      {
-                        "name": "(google.api.field_behavior)",
-                        "value": "REQUIRED"
-                      }
-                    ]
-                  },
-                  {
-                    "id": 4,
-                    "name": "filter_name",
-                    "type": "string",
-                    "options": [
-                      {
-                        "name": "(google.api.field_behavior)",
-                        "value": "REQUIRED"
-                      }
-                    ]
-                  },
-                  {
-                    "id": 5,
-                    "name": "filter_config",
-                    "type": "google.protobuf.Struct",
-                    "options": [
-                      {
-                        "name": "(google.api.field_behavior)",
-                        "value": "REQUIRED"
-                      }
-                    ]
-                  }
-                ]
-              },
               {
                 "name": "ProxyMatch",
                 "fields": [

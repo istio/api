@@ -233,6 +233,7 @@
       "istio.mesh.v1alpha1.MeshConfig.IngressControllerMode": {
         "type": "string",
         "enum": [
+          "UNSPECIFIED",
           "OFF",
           "DEFAULT",
           "STRICT"
