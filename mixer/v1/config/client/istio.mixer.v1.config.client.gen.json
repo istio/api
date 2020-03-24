@@ -32,20 +32,52 @@
       "istio.mixer.v1.config.client.HTTPAPISpecPattern": {
         "description": "HTTPAPISpecPattern defines a single pattern to match against incoming HTTP requests. The per-pattern list of attributes is generated if both the http_method and uri_template match. In addition, the top-level list of attributes in the HTTPAPISpec is also generated.",
         "type": "object",
+        "properties": {
+          "attributes": {
+            "$ref": "#/components/schemas/istio.mixer.v1.Attributes"
+          },
+          "httpMethod": {
+            "description": "HTTP request method to match against as defined by [rfc7231](https://tools.ietf.org/html/rfc7231#page-21). For example: GET, HEAD, POST, PUT, DELETE.",
+            "type": "string",
+            "format": "string"
+          }
+        },
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "uriTemplate"
+                  ],
+                  "properties": {
+                    "uriTemplate": {
+                      "description": "URI template to match against as defined by [rfc6570](https://tools.ietf.org/html/rfc6570). For example, the following are valid URI templates: /pets /pets/{id} /dictionary/{term:1}/{term} /search{?q*,lang}",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "regex"
+                  ],
+                  "properties": {
+                    "regex": {
+                      "description": "EXPERIMENTAL: ecmascript style regex-based match as defined by [EDCA-262](http://en.cppreference.com/w/cpp/regex/ecmascript). For example,",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "uriTemplate"
             ],
             "properties": {
-              "attributes": {
-                "$ref": "#/components/schemas/istio.mixer.v1.Attributes"
-              },
-              "httpMethod": {
-                "description": "HTTP request method to match against as defined by [rfc7231](https://tools.ietf.org/html/rfc7231#page-21). For example: GET, HEAD, POST, PUT, DELETE.",
-                "type": "string",
-                "format": "string"
-              },
               "uriTemplate": {
                 "description": "URI template to match against as defined by [rfc6570](https://tools.ietf.org/html/rfc6570). For example, the following are valid URI templates: /pets /pets/{id} /dictionary/{term:1}/{term} /search{?q*,lang}",
                 "type": "string",
@@ -58,16 +90,8 @@
               "regex"
             ],
             "properties": {
-              "attributes": {
-                "$ref": "#/components/schemas/istio.mixer.v1.Attributes"
-              },
               "regex": {
                 "description": "EXPERIMENTAL: ecmascript style regex-based match as defined by [EDCA-262](http://en.cppreference.com/w/cpp/regex/ecmascript). For example,",
-                "type": "string",
-                "format": "string"
-              },
-              "httpMethod": {
-                "description": "HTTP request method to match against as defined by [rfc7231](https://tools.ietf.org/html/rfc7231#page-21). For example: GET, HEAD, POST, PUT, DELETE.",
                 "type": "string",
                 "format": "string"
               }
@@ -79,6 +103,48 @@
         "description": "APIKey defines the explicit configuration for generating the `request.api_key` attribute from HTTP requests.",
         "type": "object",
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "query"
+                  ],
+                  "properties": {
+                    "query": {
+                      "description": "API Key is sent as a query parameter. `query` represents the query string parameter name.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "header"
+                  ],
+                  "properties": {
+                    "header": {
+                      "description": "API key is sent in a request header. `header` represents the header name.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "cookie"
+                  ],
+                  "properties": {
+                    "cookie": {
+                      "description": "API key is sent in a [cookie](https://swagger.io/docs/specification/authentication/cookie-authentication),",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "query"
@@ -424,6 +490,48 @@
         "type": "object",
         "oneOf": [
           {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "exact"
+                  ],
+                  "properties": {
+                    "exact": {
+                      "description": "exact string match",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "prefix"
+                  ],
+                  "properties": {
+                    "prefix": {
+                      "description": "prefix-based match",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "regex"
+                  ],
+                  "properties": {
+                    "regex": {
+                      "description": "ECMAscript style regex-based match",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
             "required": [
               "exact"
             ],
@@ -513,6 +621,104 @@
       "istio.mixer.v1.Attributes.AttributeValue": {
         "type": "object",
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "stringValue"
+                  ],
+                  "properties": {
+                    "stringValue": {
+                      "description": "Used for values of type STRING, DNS_NAME, EMAIL_ADDRESS, and URI",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "int64Value"
+                  ],
+                  "properties": {
+                    "int64Value": {
+                      "description": "Used for values of type INT64",
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "doubleValue"
+                  ],
+                  "properties": {
+                    "doubleValue": {
+                      "description": "Used for values of type DOUBLE",
+                      "type": "number",
+                      "format": "double"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "boolValue"
+                  ],
+                  "properties": {
+                    "boolValue": {
+                      "description": "Used for values of type BOOL",
+                      "type": "boolean"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "bytesValue"
+                  ],
+                  "properties": {
+                    "bytesValue": {
+                      "description": "Used for values of type BYTES",
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "timestampValue"
+                  ],
+                  "properties": {
+                    "timestampValue": {
+                      "description": "Used for values of type TIMESTAMP",
+                      "type": "string",
+                      "format": "dateTime"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "durationValue"
+                  ],
+                  "properties": {
+                    "durationValue": {
+                      "description": "Used for values of type DURATION",
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "stringMapValue"
+                  ],
+                  "properties": {
+                    "stringMapValue": {
+                      "$ref": "#/components/schemas/istio.mixer.v1.Attributes.StringMap"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "stringValue"

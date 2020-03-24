@@ -410,18 +410,56 @@
       "istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch": {
         "description": "One or more match conditions to be met before a patch is applied to the generated configuration for a given proxy.",
         "type": "object",
+        "properties": {
+          "context": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.PatchContext"
+          },
+          "proxy": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.ProxyMatch"
+          }
+        },
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "listener"
+                  ],
+                  "properties": {
+                    "listener": {
+                      "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.ListenerMatch"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "routeConfiguration"
+                  ],
+                  "properties": {
+                    "routeConfiguration": {
+                      "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "cluster"
+                  ],
+                  "properties": {
+                    "cluster": {
+                      "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.ClusterMatch"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "listener"
             ],
             "properties": {
-              "context": {
-                "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.PatchContext"
-              },
-              "proxy": {
-                "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.ProxyMatch"
-              },
               "listener": {
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.ListenerMatch"
               }
@@ -432,12 +470,6 @@
               "routeConfiguration"
             ],
             "properties": {
-              "context": {
-                "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.PatchContext"
-              },
-              "proxy": {
-                "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.ProxyMatch"
-              },
               "routeConfiguration": {
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.RouteConfigurationMatch"
               }
@@ -448,12 +480,6 @@
               "cluster"
             ],
             "properties": {
-              "context": {
-                "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.PatchContext"
-              },
-              "proxy": {
-                "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.ProxyMatch"
-              },
               "cluster": {
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.ClusterMatch"
               }

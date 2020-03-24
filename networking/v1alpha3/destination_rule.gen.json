@@ -85,15 +85,43 @@
       "istio.networking.v1alpha3.LoadBalancerSettings": {
         "description": "Load balancing policies to apply for a specific destination. See Envoy's load balancing [documentation](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancing) for more details.",
         "type": "object",
+        "properties": {
+          "localityLbSetting": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.LocalityLoadBalancerSetting"
+          }
+        },
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "simple"
+                  ],
+                  "properties": {
+                    "simple": {
+                      "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.SimpleLB"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "consistentHash"
+                  ],
+                  "properties": {
+                    "consistentHash": {
+                      "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "simple"
             ],
             "properties": {
-              "localityLbSetting": {
-                "$ref": "#/components/schemas/istio.networking.v1alpha3.LocalityLoadBalancerSetting"
-              },
               "simple": {
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.SimpleLB"
               }
@@ -104,9 +132,6 @@
               "consistentHash"
             ],
             "properties": {
-              "localityLbSetting": {
-                "$ref": "#/components/schemas/istio.networking.v1alpha3.LocalityLoadBalancerSetting"
-              },
               "consistentHash": {
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB"
               }
@@ -272,16 +297,57 @@
       "istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB": {
         "description": "Consistent Hash-based load balancing can be used to provide soft session affinity based on HTTP headers, cookies or other properties. This load balancing policy is applicable only for HTTP connections. The affinity to a particular destination host will be lost when one or more hosts are added/removed from the destination service.",
         "type": "object",
+        "properties": {
+          "minimumRingSize": {
+            "description": "The minimum number of virtual nodes to use for the hash ring. Defaults to 1024. Larger ring sizes result in more granular load distributions. If the number of hosts in the load balancing pool is larger than the ring size, each host will be assigned a single virtual node.",
+            "type": "integer"
+          }
+        },
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "httpHeaderName"
+                  ],
+                  "properties": {
+                    "httpHeaderName": {
+                      "description": "Hash based on a specific HTTP header.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "httpCookie"
+                  ],
+                  "properties": {
+                    "httpCookie": {
+                      "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "useSourceIp"
+                  ],
+                  "properties": {
+                    "useSourceIp": {
+                      "description": "Hash based on the source IP address.",
+                      "type": "boolean"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "httpHeaderName"
             ],
             "properties": {
-              "minimumRingSize": {
-                "description": "The minimum number of virtual nodes to use for the hash ring. Defaults to 1024. Larger ring sizes result in more granular load distributions. If the number of hosts in the load balancing pool is larger than the ring size, each host will be assigned a single virtual node.",
-                "type": "integer"
-              },
               "httpHeaderName": {
                 "description": "Hash based on a specific HTTP header.",
                 "type": "string",
@@ -294,10 +360,6 @@
               "httpCookie"
             ],
             "properties": {
-              "minimumRingSize": {
-                "description": "The minimum number of virtual nodes to use for the hash ring. Defaults to 1024. Larger ring sizes result in more granular load distributions. If the number of hosts in the load balancing pool is larger than the ring size, each host will be assigned a single virtual node.",
-                "type": "integer"
-              },
               "httpCookie": {
                 "$ref": "#/components/schemas/istio.networking.v1alpha3.LoadBalancerSettings.ConsistentHashLB.HTTPCookie"
               }
@@ -308,10 +370,6 @@
               "useSourceIp"
             ],
             "properties": {
-              "minimumRingSize": {
-                "description": "The minimum number of virtual nodes to use for the hash ring. Defaults to 1024. Larger ring sizes result in more granular load distributions. If the number of hosts in the load balancing pool is larger than the ring size, each host will be assigned a single virtual node.",
-                "type": "integer"
-              },
               "useSourceIp": {
                 "description": "Hash based on the source IP address.",
                 "type": "boolean"
