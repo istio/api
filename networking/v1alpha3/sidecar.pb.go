@@ -515,8 +515,10 @@ type Sidecar struct {
 	OutboundTrafficPolicy *OutboundTrafficPolicy `protobuf:"bytes,4,opt,name=outbound_traffic_policy,json=outboundTrafficPolicy,proto3" json:"outbound_traffic_policy,omitempty"`
 	// `Localhost` describes the sidecar settings related to the
 	// communication between the user's services and the sidecar on a
-	// Kubernetes Pod or a VM. These settings apply by default to all
-	// ingress and egress listeners in a sidecar unless overridden.
+	// Kubernetes Pod or a VM. These settings apply by to all ingress
+	// and egress listeners in a sidecar unless overridden. There are no
+	// built in defaults for this setting. If not specified, the
+	// features will be disabled.
 	Localhost            *Localhost `protobuf:"bytes,6,opt,name=localhost,proto3" json:"localhost,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
 	XXX_unrecognized     []byte     `json:"-"`
