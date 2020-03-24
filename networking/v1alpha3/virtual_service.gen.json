@@ -262,16 +262,16 @@
         "description": "Each routing rule is associated with one or more service versions (see glossary in beginning of document). Weights associated with the version determine the proportion of traffic it receives. For example, the following rule will route 25% of traffic for the \"reviews\" service to instances with the \"v2\" tag and the remaining traffic (i.e., 75%) to \"v1\".",
         "type": "object",
         "properties": {
-          "weight": {
-            "description": "The proportion of traffic to be forwarded to the service version. (0-100). Sum of weights across destinations SHOULD BE == 100. If there is only one destination in a rule, the weight value is assumed to be 100.",
-            "type": "integer",
-            "format": "int32"
-          },
           "headers": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Headers"
           },
           "destination": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Destination"
+          },
+          "weight": {
+            "description": "The proportion of traffic to be forwarded to the service version. (0-100). Sum of weights across destinations SHOULD BE == 100. If there is only one destination in a rule, the weight value is assumed to be 100.",
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -505,13 +505,13 @@
         "description": "L4 routing rule weighted destination.",
         "type": "object",
         "properties": {
+          "destination": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Destination"
+          },
           "weight": {
             "description": "The proportion of traffic to be forwarded to the service version. If there is only one destination in a rule, all traffic will be routed to it irrespective of the weight.",
             "type": "integer",
             "format": "int32"
-          },
-          "destination": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.Destination"
           }
         }
       },

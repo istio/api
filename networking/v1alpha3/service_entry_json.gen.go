@@ -775,17 +775,6 @@ func (this *ServiceEntry) UnmarshalJSON(b []byte) error {
 	return ServiceEntryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for ServiceEntry_Endpoint
-func (this *ServiceEntry_Endpoint) MarshalJSON() ([]byte, error) {
-	str, err := ServiceEntryMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for ServiceEntry_Endpoint
-func (this *ServiceEntry_Endpoint) UnmarshalJSON(b []byte) error {
-	return ServiceEntryUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
 var (
 	ServiceEntryMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
 	ServiceEntryUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}

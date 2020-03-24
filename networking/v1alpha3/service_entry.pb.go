@@ -943,7 +943,7 @@ type ServiceEntry struct {
 	Resolution ServiceEntry_Resolution `protobuf:"varint,5,opt,name=resolution,proto3,enum=istio.networking.v1alpha3.ServiceEntry_Resolution" json:"resolution,omitempty"`
 	// One or more endpoints associated with the service. Only one of
 	// `endpoints` or `workloadSelector` can be specified.
-	Endpoints []*ServiceEntry_Endpoint `protobuf:"bytes,6,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
+	Endpoints []*WorkloadEntry `protobuf:"bytes,6,rep,name=endpoints,proto3" json:"endpoints,omitempty"`
 	// Applicable only for MESH_INTERNAL services. Only one of
 	// `endpoints` or `workloadSelector` can be specified. Selects one
 	// or more Kubernetes pods or VM workloads (specified using
@@ -1052,7 +1052,7 @@ func (m *ServiceEntry) GetResolution() ServiceEntry_Resolution {
 	return ServiceEntry_NONE
 }
 
-func (m *ServiceEntry) GetEndpoints() []*ServiceEntry_Endpoint {
+func (m *ServiceEntry) GetEndpoints() []*WorkloadEntry {
 	if m != nil {
 		return m.Endpoints
 	}
@@ -1080,149 +1080,10 @@ func (m *ServiceEntry) GetSubjectAltNames() []string {
 	return nil
 }
 
-// Endpoint defines a network address (IP or hostname) associated with
-// the mesh service.
-type ServiceEntry_Endpoint struct {
-	// Address associated with the network endpoint without the
-	// port.  Domain names can be used if and only if the resolution is set
-	// to DNS, and must be fully-qualified without wildcards. Use the form
-	// unix:///absolute/path/to/socket for Unix domain socket endpoints.
-	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	// Set of ports associated with the endpoint. The ports must be
-	// associated with a port name that was declared as part of the
-	// service. Do not use for `unix://` addresses.
-	Ports map[string]uint32 `protobuf:"bytes,2,rep,name=ports,proto3" json:"ports,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"varint,2,opt,name=value,proto3"`
-	// One or more labels associated with the endpoint.
-	Labels map[string]string `protobuf:"bytes,3,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// Network enables Istio to group endpoints resident in the same L3
-	// domain/network. All endpoints in the same network are assumed to be
-	// directly reachable from one another. When endpoints in different
-	// networks cannot reach each other directly, an Istio Gateway can be
-	// used to establish connectivity (usually using the
-	// `AUTO_PASSTHROUGH` mode in a Gateway Server). This is
-	// an advanced configuration used typically for spanning an Istio mesh
-	// over multiple clusters.
-	Network string `protobuf:"bytes,4,opt,name=network,proto3" json:"network,omitempty"`
-	// The locality associated with the endpoint. A locality corresponds
-	// to a failure domain (e.g., country/region/zone). Arbitrary failure
-	// domain hierarchies can be represented by separating each
-	// encapsulating failure domain by /. For example, the locality of an
-	// an endpoint in US, in US-East-1 region, within availability zone
-	// az-1, in data center rack r11 can be represented as
-	// us/us-east-1/az-1/r11. Istio will configure the sidecar to route to
-	// endpoints within the same locality as the sidecar. If none of the
-	// endpoints in the locality are available, endpoints parent locality
-	// (but within the same network ID) will be chosen. For example, if
-	// there are two endpoints in same network (networkID "n1"), say e1
-	// with locality us/us-east-1/az-1/r11 and e2 with locality
-	// us/us-east-1/az-2/r12, a sidecar from us/us-east-1/az-1/r11 locality
-	// will prefer e1 from the same locality over e2 from a different
-	// locality. Endpoint e2 could be the IP associated with a gateway
-	// (that bridges networks n1 and n2), or the IP associated with a
-	// standard service endpoint.
-	Locality string `protobuf:"bytes,5,opt,name=locality,proto3" json:"locality,omitempty"`
-	// The load balancing weight associated with the endpoint. Endpoints
-	// with higher weights will receive proportionally higher traffic.
-	Weight uint32 `protobuf:"varint,6,opt,name=weight,proto3" json:"weight,omitempty"`
-	// The service account associated with the workload if a sidecar
-	// is present in the workload. The service account must be present
-	// in the same namespace as the configuration ( WorkloadEntry or a
-	// ServiceEntry)
-	ServiceAccount       string   `protobuf:"bytes,7,opt,name=service_account,json=serviceAccount,proto3" json:"service_account,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *ServiceEntry_Endpoint) Reset()         { *m = ServiceEntry_Endpoint{} }
-func (m *ServiceEntry_Endpoint) String() string { return proto.CompactTextString(m) }
-func (*ServiceEntry_Endpoint) ProtoMessage()    {}
-func (*ServiceEntry_Endpoint) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9220e0fa673c4bf8, []int{0, 0}
-}
-func (m *ServiceEntry_Endpoint) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ServiceEntry_Endpoint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ServiceEntry_Endpoint.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *ServiceEntry_Endpoint) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ServiceEntry_Endpoint.Merge(m, src)
-}
-func (m *ServiceEntry_Endpoint) XXX_Size() int {
-	return m.Size()
-}
-func (m *ServiceEntry_Endpoint) XXX_DiscardUnknown() {
-	xxx_messageInfo_ServiceEntry_Endpoint.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ServiceEntry_Endpoint proto.InternalMessageInfo
-
-func (m *ServiceEntry_Endpoint) GetAddress() string {
-	if m != nil {
-		return m.Address
-	}
-	return ""
-}
-
-func (m *ServiceEntry_Endpoint) GetPorts() map[string]uint32 {
-	if m != nil {
-		return m.Ports
-	}
-	return nil
-}
-
-func (m *ServiceEntry_Endpoint) GetLabels() map[string]string {
-	if m != nil {
-		return m.Labels
-	}
-	return nil
-}
-
-func (m *ServiceEntry_Endpoint) GetNetwork() string {
-	if m != nil {
-		return m.Network
-	}
-	return ""
-}
-
-func (m *ServiceEntry_Endpoint) GetLocality() string {
-	if m != nil {
-		return m.Locality
-	}
-	return ""
-}
-
-func (m *ServiceEntry_Endpoint) GetWeight() uint32 {
-	if m != nil {
-		return m.Weight
-	}
-	return 0
-}
-
-func (m *ServiceEntry_Endpoint) GetServiceAccount() string {
-	if m != nil {
-		return m.ServiceAccount
-	}
-	return ""
-}
-
 func init() {
 	proto.RegisterEnum("istio.networking.v1alpha3.ServiceEntry_Location", ServiceEntry_Location_name, ServiceEntry_Location_value)
 	proto.RegisterEnum("istio.networking.v1alpha3.ServiceEntry_Resolution", ServiceEntry_Resolution_name, ServiceEntry_Resolution_value)
 	proto.RegisterType((*ServiceEntry)(nil), "istio.networking.v1alpha3.ServiceEntry")
-	proto.RegisterType((*ServiceEntry_Endpoint)(nil), "istio.networking.v1alpha3.ServiceEntry.Endpoint")
-	proto.RegisterMapType((map[string]string)(nil), "istio.networking.v1alpha3.ServiceEntry.Endpoint.LabelsEntry")
-	proto.RegisterMapType((map[string]uint32)(nil), "istio.networking.v1alpha3.ServiceEntry.Endpoint.PortsEntry")
 }
 
 func init() {
@@ -1230,46 +1091,37 @@ func init() {
 }
 
 var fileDescriptor_9220e0fa673c4bf8 = []byte{
-	// 618 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0x41, 0x6f, 0xd3, 0x30,
-	0x14, 0x5e, 0xda, 0xb5, 0x4d, 0xde, 0xd8, 0xd6, 0x59, 0x08, 0x79, 0x05, 0xb6, 0xb0, 0xcb, 0x2a,
-	0x26, 0xa5, 0xa3, 0xbb, 0x8c, 0xc1, 0xa5, 0x83, 0x4a, 0x4c, 0x2a, 0x01, 0xd2, 0x4a, 0x9b, 0xb8,
-	0x44, 0x6e, 0x6a, 0x5a, 0x33, 0x13, 0x57, 0xb1, 0xdb, 0xd2, 0x1f, 0x07, 0x67, 0x8e, 0xfc, 0x84,
-	0x69, 0xbf, 0x04, 0xd5, 0x71, 0xda, 0x0a, 0x8d, 0xb1, 0xdd, 0xf2, 0x3e, 0xbf, 0xef, 0xcb, 0x7b,
-	0xcf, 0x9f, 0x1f, 0xec, 0xc7, 0x54, 0x4d, 0x44, 0x72, 0xc9, 0xe2, 0x7e, 0x6d, 0xfc, 0x82, 0xf0,
-	0xe1, 0x80, 0x1c, 0xd5, 0x24, 0x4d, 0xc6, 0x2c, 0xa2, 0x21, 0x8d, 0x55, 0x32, 0xf5, 0x86, 0x89,
-	0x50, 0x02, 0x6d, 0x33, 0xa9, 0x98, 0xf0, 0x16, 0xe9, 0x5e, 0x96, 0x5e, 0xd9, 0xed, 0x0b, 0xd1,
-	0xe7, 0xb4, 0x46, 0x86, 0xac, 0xf6, 0x85, 0x51, 0xde, 0x0b, 0xbb, 0x74, 0x40, 0xc6, 0x4c, 0x24,
-	0x29, 0xb7, 0xf2, 0xec, 0xa6, 0x9f, 0xf4, 0x89, 0xa2, 0x13, 0x32, 0xbd, 0x2d, 0x45, 0xb2, 0x1e,
-	0x8d, 0x88, 0x51, 0xd9, 0xfb, 0x61, 0xc3, 0x83, 0x76, 0x5a, 0x59, 0x73, 0x56, 0x18, 0xda, 0x86,
-	0xc2, 0x40, 0x48, 0x25, 0xb1, 0xe5, 0xe6, 0xab, 0xce, 0x69, 0xfe, 0xaa, 0x91, 0x0b, 0x52, 0x04,
-	0x3d, 0x01, 0x87, 0xf4, 0x7a, 0x09, 0x95, 0x92, 0x4a, 0x9c, 0x9b, 0x1d, 0x07, 0x0b, 0x00, 0x9d,
-	0x40, 0x61, 0x28, 0x12, 0x25, 0x71, 0xde, 0xcd, 0x57, 0xd7, 0xea, 0xbb, 0xde, 0x3f, 0x7b, 0xf3,
-	0x3e, 0x8a, 0x44, 0x19, 0x65, 0x4d, 0x41, 0x2d, 0xb0, 0xb9, 0x88, 0x88, 0x62, 0x22, 0xc6, 0xab,
-	0xae, 0x55, 0xdd, 0xa8, 0x1f, 0xde, 0x42, 0x5f, 0xae, 0xd7, 0x6b, 0x19, 0x5e, 0x30, 0x57, 0x40,
-	0xe7, 0x00, 0x09, 0x95, 0x82, 0x8f, 0xb4, 0x5e, 0x41, 0xeb, 0xd5, 0xef, 0xaa, 0x17, 0xcc, 0x99,
-	0x69, 0x85, 0x4b, 0x52, 0xc8, 0x07, 0x87, 0xc6, 0xbd, 0xa1, 0x60, 0xb1, 0x92, 0xb8, 0xa8, 0xdb,
-	0xbc, 0x73, 0x9d, 0x4d, 0x43, 0x0c, 0x16, 0x12, 0xe8, 0x02, 0xb6, 0x66, 0x24, 0x2e, 0x48, 0x2f,
-	0x94, 0x94, 0xd3, 0x48, 0x89, 0x04, 0x3b, 0xae, 0x55, 0x5d, 0xab, 0x1f, 0xdc, 0xa2, 0x7b, 0x6e,
-	0x38, 0x6d, 0x43, 0x09, 0xca, 0x93, 0xbf, 0x10, 0xf4, 0x18, 0x1c, 0xfa, 0x7d, 0x36, 0xdb, 0x50,
-	0x09, 0x5c, 0xd2, 0x57, 0x65, 0xa7, 0x40, 0x47, 0xa0, 0xe7, 0xb0, 0x25, 0x47, 0xdd, 0xaf, 0x34,
-	0x52, 0x21, 0xe1, 0x2a, 0x8c, 0xc9, 0x37, 0x2a, 0xb1, 0xad, 0x93, 0x36, 0xcd, 0x41, 0x83, 0x2b,
-	0x7f, 0x06, 0x57, 0x7e, 0xe6, 0xc1, 0xce, 0x4a, 0x47, 0x4f, 0xa1, 0x64, 0xee, 0x1b, 0x5b, 0xae,
-	0x95, 0xb9, 0x23, 0xc3, 0xd0, 0xa7, 0xcc, 0x01, 0x39, 0x3d, 0x9a, 0x57, 0xf7, 0x1d, 0x8d, 0xf6,
-	0x85, 0xd4, 0x58, 0x66, 0x8c, 0x0e, 0x14, 0x39, 0xe9, 0x52, 0x9e, 0xb9, 0xea, 0xf5, 0xbd, 0x35,
-	0x5b, 0x9a, 0x9e, 0x8a, 0x1a, 0x2d, 0x84, 0xa1, 0x64, 0x04, 0xb4, 0xdb, 0x9c, 0x20, 0x0b, 0x51,
-	0x25, 0x35, 0x22, 0x67, 0x6a, 0xaa, 0x8d, 0xe3, 0x04, 0xf3, 0x18, 0x3d, 0x82, 0xe2, 0x84, 0xb2,
-	0xfe, 0x40, 0xe1, 0xa2, 0x6b, 0x55, 0xd7, 0x03, 0x13, 0xa1, 0x7d, 0xd8, 0xcc, 0xde, 0x36, 0x89,
-	0x22, 0x31, 0x8a, 0x15, 0x2e, 0x69, 0xea, 0x86, 0x81, 0x1b, 0x29, 0x5a, 0x39, 0x06, 0x58, 0x74,
-	0x88, 0xca, 0x90, 0xbf, 0xa4, 0xd3, 0x74, 0x90, 0xc1, 0xec, 0x13, 0x3d, 0x84, 0xc2, 0x98, 0xf0,
-	0x11, 0xc5, 0x39, 0xad, 0x9f, 0x06, 0x27, 0xb9, 0x63, 0xab, 0xf2, 0x12, 0xd6, 0x96, 0xfa, 0xf8,
-	0x1f, 0xd5, 0x59, 0xa2, 0xee, 0x1d, 0x82, 0x9d, 0x3d, 0x11, 0xb4, 0x05, 0xeb, 0xef, 0x9b, 0xed,
-	0x77, 0x61, 0xf3, 0xa2, 0xd3, 0x0c, 0xfc, 0x46, 0xab, 0xbc, 0x32, 0x87, 0xce, 0x7c, 0x03, 0x59,
-	0x7b, 0x07, 0x00, 0x8b, 0x47, 0x80, 0x6c, 0x58, 0xf5, 0x3f, 0xf8, 0xcd, 0xf2, 0x0a, 0x02, 0x28,
-	0xb6, 0x3b, 0x8d, 0xce, 0xd9, 0x9b, 0xb2, 0x85, 0x4a, 0x90, 0x7f, 0xeb, 0xb7, 0xcb, 0xb9, 0x53,
-	0xef, 0xd7, 0xf5, 0x8e, 0xf5, 0xfb, 0x7a, 0xc7, 0xba, 0xba, 0xde, 0xb1, 0x3e, 0xbb, 0xe9, 0xed,
-	0x30, 0xa1, 0xd7, 0xd6, 0x0d, 0xdb, 0xa7, 0x5b, 0xd4, 0x6b, 0xe7, 0xe8, 0x4f, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0x35, 0x6b, 0x65, 0x8c, 0x23, 0x05, 0x00, 0x00,
+	// 469 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x93, 0xcb, 0x6e, 0xd3, 0x40,
+	0x14, 0x86, 0xeb, 0xdc, 0x1a, 0x9f, 0x72, 0x71, 0x66, 0xe5, 0x16, 0x94, 0x9a, 0x6c, 0xb0, 0xa8,
+	0xe4, 0x94, 0x74, 0xc7, 0x2e, 0x05, 0x23, 0x2a, 0x05, 0x83, 0xec, 0x48, 0xad, 0xd8, 0x58, 0x13,
+	0x7b, 0x48, 0x06, 0x8c, 0x8f, 0x35, 0x33, 0x4d, 0xe8, 0x1b, 0xb2, 0xe4, 0x11, 0xaa, 0x3c, 0x03,
+	0x0f, 0x80, 0x7c, 0xc9, 0x45, 0x28, 0x44, 0xdd, 0xfe, 0xf3, 0xff, 0x9f, 0xcf, 0xf9, 0x67, 0x0c,
+	0x2f, 0x53, 0xa6, 0x16, 0x28, 0xbe, 0xf3, 0x74, 0xda, 0x9f, 0xbf, 0xa6, 0x49, 0x36, 0xa3, 0x17,
+	0x7d, 0xc9, 0xc4, 0x9c, 0x47, 0x2c, 0x64, 0xa9, 0x12, 0x77, 0x4e, 0x26, 0x50, 0x21, 0x39, 0xe6,
+	0x52, 0x71, 0x74, 0x36, 0x76, 0x67, 0x65, 0x3f, 0x39, 0x9d, 0x22, 0x4e, 0x13, 0xd6, 0xa7, 0x19,
+	0xef, 0x7f, 0xe5, 0x2c, 0x89, 0xc3, 0x09, 0x9b, 0xd1, 0x39, 0x47, 0x51, 0x66, 0x4f, 0x5e, 0xec,
+	0xfa, 0xc8, 0x94, 0x2a, 0xb6, 0xa0, 0x77, 0xfb, 0x2c, 0x92, 0xc7, 0x2c, 0xa2, 0x2b, 0x8a, 0xbd,
+	0xcb, 0x92, 0x0b, 0x09, 0xd2, 0x78, 0x7b, 0xd6, 0xde, 0x9f, 0x06, 0x3c, 0x0a, 0xca, 0x1d, 0xdc,
+	0x5c, 0x26, 0xc7, 0xd0, 0x9c, 0xa1, 0x54, 0xd2, 0xd4, 0xac, 0xba, 0xad, 0x5f, 0xd6, 0xef, 0x87,
+	0x35, 0xbf, 0x54, 0xc8, 0x73, 0xd0, 0x69, 0x1c, 0x0b, 0x26, 0x25, 0x93, 0x66, 0x2d, 0x3f, 0xf6,
+	0x37, 0x02, 0x79, 0x03, 0xcd, 0x0c, 0x85, 0x92, 0x66, 0xdd, 0xaa, 0xdb, 0x47, 0x83, 0x53, 0xe7,
+	0xbf, 0x2d, 0x38, 0x9f, 0x51, 0xa8, 0x8a, 0x5c, 0x44, 0xc8, 0x08, 0xda, 0x09, 0x46, 0x54, 0x71,
+	0x4c, 0xcd, 0x86, 0xa5, 0xd9, 0x4f, 0x06, 0xe7, 0x7b, 0xe2, 0xdb, 0xf3, 0x3a, 0xa3, 0x2a, 0xe7,
+	0xaf, 0x09, 0xe4, 0x1a, 0x40, 0x30, 0x89, 0xc9, 0x6d, 0xc1, 0x6b, 0x16, 0xbc, 0xc1, 0x43, 0x79,
+	0xfe, 0x3a, 0x59, 0x4e, 0xb8, 0x85, 0x22, 0xef, 0x41, 0x67, 0x69, 0x9c, 0x21, 0x4f, 0x95, 0x34,
+	0x5b, 0xc5, 0x9a, 0xf6, 0x1e, 0xee, 0x75, 0x55, 0x78, 0x01, 0xf6, 0x37, 0x51, 0x72, 0x03, 0x9d,
+	0xf5, 0x65, 0x48, 0x96, 0xb0, 0x48, 0xa1, 0x30, 0x75, 0x4b, 0xb3, 0x8f, 0x06, 0x67, 0x0f, 0xe0,
+	0x05, 0x55, 0xc4, 0x37, 0x16, 0xff, 0x28, 0xe4, 0x19, 0xe8, 0xec, 0x67, 0xde, 0x69, 0xa8, 0xd0,
+	0x3c, 0x2c, 0xae, 0xa8, 0x5d, 0x0a, 0x63, 0x24, 0xaf, 0xa0, 0x23, 0x6f, 0x27, 0xdf, 0x58, 0xa4,
+	0x42, 0x9a, 0xa8, 0x30, 0xa5, 0x3f, 0x98, 0x34, 0xdb, 0x85, 0xe9, 0x69, 0x75, 0x30, 0x4c, 0x94,
+	0x97, 0xcb, 0xbd, 0x73, 0x68, 0xaf, 0x9a, 0x25, 0x1d, 0x78, 0xfc, 0xd1, 0x0d, 0x3e, 0x84, 0xee,
+	0xcd, 0xd8, 0xf5, 0xbd, 0xe1, 0xc8, 0x38, 0x58, 0x4b, 0x57, 0x5e, 0x25, 0x69, 0xbd, 0x33, 0x80,
+	0x4d, 0x77, 0xa4, 0x0d, 0x0d, 0xef, 0x93, 0xe7, 0x1a, 0x07, 0x04, 0xa0, 0x15, 0x8c, 0x87, 0xe3,
+	0xab, 0xb7, 0x86, 0x46, 0x0e, 0xa1, 0xfe, 0xce, 0x0b, 0x8c, 0xda, 0xa5, 0xf3, 0x6b, 0xd9, 0xd5,
+	0x7e, 0x2f, 0xbb, 0xda, 0xfd, 0xb2, 0xab, 0x7d, 0xb1, 0xca, 0x9d, 0x39, 0x16, 0xff, 0xc5, 0x8e,
+	0xb7, 0x3b, 0x69, 0x15, 0xaf, 0xf5, 0xe2, 0x6f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x2c, 0xdf, 0x82,
+	0x4a, 0x84, 0x03, 0x00, 0x00,
 }
 
 func (m *ServiceEntry) Marshal() (dAtA []byte, err error) {
@@ -1385,102 +1237,6 @@ func (m *ServiceEntry) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *ServiceEntry_Endpoint) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ServiceEntry_Endpoint) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ServiceEntry_Endpoint) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if len(m.ServiceAccount) > 0 {
-		i -= len(m.ServiceAccount)
-		copy(dAtA[i:], m.ServiceAccount)
-		i = encodeVarintServiceEntry(dAtA, i, uint64(len(m.ServiceAccount)))
-		i--
-		dAtA[i] = 0x3a
-	}
-	if m.Weight != 0 {
-		i = encodeVarintServiceEntry(dAtA, i, uint64(m.Weight))
-		i--
-		dAtA[i] = 0x30
-	}
-	if len(m.Locality) > 0 {
-		i -= len(m.Locality)
-		copy(dAtA[i:], m.Locality)
-		i = encodeVarintServiceEntry(dAtA, i, uint64(len(m.Locality)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.Network) > 0 {
-		i -= len(m.Network)
-		copy(dAtA[i:], m.Network)
-		i = encodeVarintServiceEntry(dAtA, i, uint64(len(m.Network)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.Labels) > 0 {
-		for k := range m.Labels {
-			v := m.Labels[k]
-			baseI := i
-			i -= len(v)
-			copy(dAtA[i:], v)
-			i = encodeVarintServiceEntry(dAtA, i, uint64(len(v)))
-			i--
-			dAtA[i] = 0x12
-			i -= len(k)
-			copy(dAtA[i:], k)
-			i = encodeVarintServiceEntry(dAtA, i, uint64(len(k)))
-			i--
-			dAtA[i] = 0xa
-			i = encodeVarintServiceEntry(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0x1a
-		}
-	}
-	if len(m.Ports) > 0 {
-		for k := range m.Ports {
-			v := m.Ports[k]
-			baseI := i
-			i = encodeVarintServiceEntry(dAtA, i, uint64(v))
-			i--
-			dAtA[i] = 0x10
-			i -= len(k)
-			copy(dAtA[i:], k)
-			i = encodeVarintServiceEntry(dAtA, i, uint64(len(k)))
-			i--
-			dAtA[i] = 0xa
-			i = encodeVarintServiceEntry(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if len(m.Address) > 0 {
-		i -= len(m.Address)
-		copy(dAtA[i:], m.Address)
-		i = encodeVarintServiceEntry(dAtA, i, uint64(len(m.Address)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
 func encodeVarintServiceEntry(dAtA []byte, offset int, v uint64) int {
 	offset -= sovServiceEntry(v)
 	base := offset
@@ -1542,53 +1298,6 @@ func (m *ServiceEntry) Size() (n int) {
 	}
 	if m.WorkloadSelector != nil {
 		l = m.WorkloadSelector.Size()
-		n += 1 + l + sovServiceEntry(uint64(l))
-	}
-	if m.XXX_unrecognized != nil {
-		n += len(m.XXX_unrecognized)
-	}
-	return n
-}
-
-func (m *ServiceEntry_Endpoint) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Address)
-	if l > 0 {
-		n += 1 + l + sovServiceEntry(uint64(l))
-	}
-	if len(m.Ports) > 0 {
-		for k, v := range m.Ports {
-			_ = k
-			_ = v
-			mapEntrySize := 1 + len(k) + sovServiceEntry(uint64(len(k))) + 1 + sovServiceEntry(uint64(v))
-			n += mapEntrySize + 1 + sovServiceEntry(uint64(mapEntrySize))
-		}
-	}
-	if len(m.Labels) > 0 {
-		for k, v := range m.Labels {
-			_ = k
-			_ = v
-			mapEntrySize := 1 + len(k) + sovServiceEntry(uint64(len(k))) + 1 + len(v) + sovServiceEntry(uint64(len(v)))
-			n += mapEntrySize + 1 + sovServiceEntry(uint64(mapEntrySize))
-		}
-	}
-	l = len(m.Network)
-	if l > 0 {
-		n += 1 + l + sovServiceEntry(uint64(l))
-	}
-	l = len(m.Locality)
-	if l > 0 {
-		n += 1 + l + sovServiceEntry(uint64(l))
-	}
-	if m.Weight != 0 {
-		n += 1 + sovServiceEntry(uint64(m.Weight))
-	}
-	l = len(m.ServiceAccount)
-	if l > 0 {
 		n += 1 + l + sovServiceEntry(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
@@ -1797,7 +1506,7 @@ func (m *ServiceEntry) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Endpoints = append(m.Endpoints, &ServiceEntry_Endpoint{})
+			m.Endpoints = append(m.Endpoints, &WorkloadEntry{})
 			if err := m.Endpoints[len(m.Endpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1901,447 +1610,6 @@ func (m *ServiceEntry) Unmarshal(dAtA []byte) error {
 			if err := m.WorkloadSelector.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipServiceEntry(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthServiceEntry
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthServiceEntry
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ServiceEntry_Endpoint) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowServiceEntry
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Endpoint: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Endpoint: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowServiceEntry
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthServiceEntry
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthServiceEntry
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Address = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Ports", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowServiceEntry
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthServiceEntry
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthServiceEntry
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Ports == nil {
-				m.Ports = make(map[string]uint32)
-			}
-			var mapkey string
-			var mapvalue uint32
-			for iNdEx < postIndex {
-				entryPreIndex := iNdEx
-				var wire uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowServiceEntry
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					wire |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				fieldNum := int32(wire >> 3)
-				if fieldNum == 1 {
-					var stringLenmapkey uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowServiceEntry
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapkey |= uint64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapkey := int(stringLenmapkey)
-					if intStringLenmapkey < 0 {
-						return ErrInvalidLengthServiceEntry
-					}
-					postStringIndexmapkey := iNdEx + intStringLenmapkey
-					if postStringIndexmapkey < 0 {
-						return ErrInvalidLengthServiceEntry
-					}
-					if postStringIndexmapkey > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
-					iNdEx = postStringIndexmapkey
-				} else if fieldNum == 2 {
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowServiceEntry
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						mapvalue |= uint32(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-				} else {
-					iNdEx = entryPreIndex
-					skippy, err := skipServiceEntry(dAtA[iNdEx:])
-					if err != nil {
-						return err
-					}
-					if skippy < 0 {
-						return ErrInvalidLengthServiceEntry
-					}
-					if (iNdEx + skippy) > postIndex {
-						return io.ErrUnexpectedEOF
-					}
-					iNdEx += skippy
-				}
-			}
-			m.Ports[mapkey] = mapvalue
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Labels", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowServiceEntry
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthServiceEntry
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthServiceEntry
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Labels == nil {
-				m.Labels = make(map[string]string)
-			}
-			var mapkey string
-			var mapvalue string
-			for iNdEx < postIndex {
-				entryPreIndex := iNdEx
-				var wire uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowServiceEntry
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					wire |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				fieldNum := int32(wire >> 3)
-				if fieldNum == 1 {
-					var stringLenmapkey uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowServiceEntry
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapkey |= uint64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapkey := int(stringLenmapkey)
-					if intStringLenmapkey < 0 {
-						return ErrInvalidLengthServiceEntry
-					}
-					postStringIndexmapkey := iNdEx + intStringLenmapkey
-					if postStringIndexmapkey < 0 {
-						return ErrInvalidLengthServiceEntry
-					}
-					if postStringIndexmapkey > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
-					iNdEx = postStringIndexmapkey
-				} else if fieldNum == 2 {
-					var stringLenmapvalue uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowServiceEntry
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapvalue |= uint64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapvalue := int(stringLenmapvalue)
-					if intStringLenmapvalue < 0 {
-						return ErrInvalidLengthServiceEntry
-					}
-					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
-					if postStringIndexmapvalue < 0 {
-						return ErrInvalidLengthServiceEntry
-					}
-					if postStringIndexmapvalue > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
-					iNdEx = postStringIndexmapvalue
-				} else {
-					iNdEx = entryPreIndex
-					skippy, err := skipServiceEntry(dAtA[iNdEx:])
-					if err != nil {
-						return err
-					}
-					if skippy < 0 {
-						return ErrInvalidLengthServiceEntry
-					}
-					if (iNdEx + skippy) > postIndex {
-						return io.ErrUnexpectedEOF
-					}
-					iNdEx += skippy
-				}
-			}
-			m.Labels[mapkey] = mapvalue
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Network", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowServiceEntry
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthServiceEntry
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthServiceEntry
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Network = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Locality", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowServiceEntry
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthServiceEntry
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthServiceEntry
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Locality = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 6:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Weight", wireType)
-			}
-			m.Weight = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowServiceEntry
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Weight |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServiceAccount", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowServiceEntry
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthServiceEntry
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthServiceEntry
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ServiceAccount = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
