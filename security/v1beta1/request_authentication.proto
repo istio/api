@@ -39,8 +39,8 @@ option go_package="istio.io/api/security/v1beta1";
 // apiVersion: security.istio.io/v1beta1
 // kind: RequestAuthentication
 // metadata:
-//  name: httpbin
-//  namespace: foo
+//   name: httpbin
+//   namespace: foo
 // spec:
 //   selector:
 //     matchLabels:
@@ -52,16 +52,16 @@ option go_package="istio.io/api/security/v1beta1";
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
-//  name: httpbin
-//  namespace: foo
+//   name: httpbin
+//   namespace: foo
 // spec:
-//  selector:
-//    matchLabels:
-//      app: httpbin
-//  rules:
-//  - from:
-//    - source:
-//        requestPrincipals: ["*"]
+//   selector:
+//     matchLabels:
+//       app: httpbin
+//   rules:
+//   - from:
+//     - source:
+//         requestPrincipals: ["*"]
 // ```
 //
 // - The next example shows how to set a different JWT requirement for a different `host`. The `RequestAuthentication`
@@ -71,8 +71,8 @@ option go_package="istio.io/api/security/v1beta1";
 // apiVersion: security.istio.io/v1beta1
 // kind: RequestAuthentication
 // metadata:
-//  name: httpbin
-//  namespace: foo
+//   name: httpbin
+//   namespace: foo
 // spec:
 //   selector:
 //     matchLabels:
@@ -84,12 +84,12 @@ option go_package="istio.io/api/security/v1beta1";
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
-//  name: httpbin
-//  namespace: foo
+//   name: httpbin
+//   namespace: foo
 // spec:
-//  selector:
-//    matchLabels:
-//      app: httpbin
+//   selector:
+//     matchLabels:
+//       app: httpbin
 //  rules:
 //  - from:
 //    - source:
@@ -111,12 +111,12 @@ option go_package="istio.io/api/security/v1beta1";
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
-//  name: httpbin
-//  namespace: foo
+//   name: httpbin
+//   namespace: foo
 // spec:
-//  selector:
-//    matchLabels:
-//      app: httpbin
+//   selector:
+//     matchLabels:
+//       app: httpbin
 //  rules:
 //  - from:
 //    - source:
