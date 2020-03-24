@@ -11,6 +11,60 @@
         "type": "object",
         "oneOf": [
           {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "exact"
+                  ],
+                  "properties": {
+                    "exact": {
+                      "description": "exact string match.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "prefix"
+                  ],
+                  "properties": {
+                    "prefix": {
+                      "description": "prefix-based match.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "suffix"
+                  ],
+                  "properties": {
+                    "suffix": {
+                      "description": "suffix-based match.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "regex"
+                  ],
+                  "properties": {
+                    "regex": {
+                      "description": "ECMAscript style regex-based match as defined by [EDCA-262](http://en.cppreference.com/w/cpp/regex/ecmascript). Example: \"^/pets/(.*?)?\"",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
             "required": [
               "exact"
             ],
@@ -159,6 +213,33 @@
         "type": "object",
         "oneOf": [
           {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "mtls"
+                  ],
+                  "properties": {
+                    "mtls": {
+                      "$ref": "#/components/schemas/istio.authentication.v1alpha1.MutualTls"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "jwt"
+                  ],
+                  "properties": {
+                    "jwt": {
+                      "$ref": "#/components/schemas/istio.authentication.v1alpha1.Jwt",
+                      "deprecated": true
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
             "required": [
               "mtls"
             ],
@@ -263,6 +344,35 @@
         "description": "Deprecated. Only support mesh and namespace level policy in the future. PortSelector specifies the name or number of a port to be used for matching targets for authentication policy. This is copied from networking API to avoid dependency.",
         "type": "object",
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "number"
+                  ],
+                  "properties": {
+                    "number": {
+                      "description": "Valid port number",
+                      "type": "integer"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "name"
+                  ],
+                  "properties": {
+                    "name": {
+                      "description": "Port name",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "number"

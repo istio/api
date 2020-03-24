@@ -538,6 +538,48 @@
         "type": "object",
         "oneOf": [
           {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "exact"
+                  ],
+                  "properties": {
+                    "exact": {
+                      "description": "exact string match",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "prefix"
+                  ],
+                  "properties": {
+                    "prefix": {
+                      "description": "prefix-based match",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "regex"
+                  ],
+                  "properties": {
+                    "regex": {
+                      "description": "ECMAscript style regex-based match",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
             "required": [
               "exact"
             ],
@@ -578,21 +620,50 @@
       "istio.networking.v1beta1.HTTPFaultInjection.Delay": {
         "description": "Delay specification is used to inject latency into the request forwarding path. The following example will introduce a 5 second delay in 1 out of every 1000 requests to the \"v1\" version of the \"reviews\" service from all pods with label env: prod",
         "type": "object",
+        "properties": {
+          "percent": {
+            "description": "Percentage of requests on which the delay will be injected (0-100). Use of integer `percent` value is deprecated. Use the double `percentage` field instead.",
+            "type": "integer",
+            "format": "int32",
+            "deprecated": true
+          },
+          "percentage": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.Percent"
+          }
+        },
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "fixedDelay"
+                  ],
+                  "properties": {
+                    "fixedDelay": {
+                      "description": "Add a fixed delay before forwarding the request. Format: 1h/1m/1s/1ms. MUST be \u003e=1ms.",
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "exponentialDelay"
+                  ],
+                  "properties": {
+                    "exponentialDelay": {
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "fixedDelay"
             ],
             "properties": {
-              "percent": {
-                "description": "Percentage of requests on which the delay will be injected (0-100). Use of integer `percent` value is deprecated. Use the double `percentage` field instead.",
-                "type": "integer",
-                "format": "int32",
-                "deprecated": true
-              },
-              "percentage": {
-                "$ref": "#/components/schemas/istio.networking.v1beta1.Percent"
-              },
               "fixedDelay": {
                 "description": "Add a fixed delay before forwarding the request. Format: 1h/1m/1s/1ms. MUST be \u003e=1ms.",
                 "type": "string"
@@ -604,15 +675,6 @@
               "exponentialDelay"
             ],
             "properties": {
-              "percent": {
-                "description": "Percentage of requests on which the delay will be injected (0-100). Use of integer `percent` value is deprecated. Use the double `percentage` field instead.",
-                "type": "integer",
-                "format": "int32",
-                "deprecated": true
-              },
-              "percentage": {
-                "$ref": "#/components/schemas/istio.networking.v1beta1.Percent"
-              },
               "exponentialDelay": {
                 "type": "string"
               }
@@ -623,15 +685,57 @@
       "istio.networking.v1beta1.HTTPFaultInjection.Abort": {
         "description": "Abort specification is used to prematurely abort a request with a pre-specified error code. The following example will return an HTTP 400 error code for 1 out of every 1000 requests to the \"ratings\" service \"v1\".",
         "type": "object",
+        "properties": {
+          "percentage": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.Percent"
+          }
+        },
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "httpStatus"
+                  ],
+                  "properties": {
+                    "httpStatus": {
+                      "description": "HTTP status code to use to abort the Http request.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "grpcStatus"
+                  ],
+                  "properties": {
+                    "grpcStatus": {
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "http2Error"
+                  ],
+                  "properties": {
+                    "http2Error": {
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "httpStatus"
             ],
             "properties": {
-              "percentage": {
-                "$ref": "#/components/schemas/istio.networking.v1beta1.Percent"
-              },
               "httpStatus": {
                 "description": "HTTP status code to use to abort the Http request.",
                 "type": "integer",
@@ -644,9 +748,6 @@
               "grpcStatus"
             ],
             "properties": {
-              "percentage": {
-                "$ref": "#/components/schemas/istio.networking.v1beta1.Percent"
-              },
               "grpcStatus": {
                 "type": "string",
                 "format": "string"
@@ -658,9 +759,6 @@
               "http2Error"
             ],
             "properties": {
-              "percentage": {
-                "$ref": "#/components/schemas/istio.networking.v1beta1.Percent"
-              },
               "http2Error": {
                 "type": "string",
                 "format": "string"
