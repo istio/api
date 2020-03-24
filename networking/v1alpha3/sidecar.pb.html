@@ -397,76 +397,6 @@ spec:
 <p>{{</tab>}}
 {{</tabset>}}</p>
 
-<h2 id="OutboundTrafficPolicy-Mode">OutboundTrafficPolicy.Mode</h2>
-<section>
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="OutboundTrafficPolicy-Mode-REGISTRY_ONLY">
-<td><code>REGISTRY_ONLY</code></td>
-<td>
-<p>Outbound traffic will be restricted to services defined in the
-service registry as well as those defined through <code>ServiceEntry</code> configurations.</p>
-
-</td>
-</tr>
-<tr id="OutboundTrafficPolicy-Mode-ALLOW_ANY">
-<td><code>ALLOW_ANY</code></td>
-<td>
-<p>Outbound traffic to unknown destinations will be allowed, in case
-there are no services or <code>ServiceEntry</code> configurations for the destination port.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="CaptureMode">CaptureMode</h2>
-<section>
-<p><code>CaptureMode</code> describes how traffic to a listener is expected to be
-captured. Applicable only when the listener is bound to an IP.</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="CaptureMode-DEFAULT">
-<td><code>DEFAULT</code></td>
-<td>
-<p>The default capture mode defined by the environment.</p>
-
-</td>
-</tr>
-<tr id="CaptureMode-IPTABLES">
-<td><code>IPTABLES</code></td>
-<td>
-<p>Capture traffic using IPtables redirection.</p>
-
-</td>
-</tr>
-<tr id="CaptureMode-NONE">
-<td><code>NONE</code></td>
-<td>
-<p>No traffic capture. When used in an egress listener, the application is
-expected to explicitly communicate with the listener port or Unix
-domain socket. When used in an ingress listener, care needs to be taken
-to ensure that the listener port is not in use by other processes on
-the host.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="Sidecar">Sidecar</h2>
 <section>
 <p><code>Sidecar</code> describes the configuration of the sidecar proxy that mediates
@@ -797,6 +727,76 @@ services can be monitored.</p>
 </td>
 <td>
 No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="OutboundTrafficPolicy-Mode">OutboundTrafficPolicy.Mode</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="OutboundTrafficPolicy-Mode-REGISTRY_ONLY">
+<td><code>REGISTRY_ONLY</code></td>
+<td>
+<p>Outbound traffic will be restricted to services defined in the
+service registry as well as those defined through <code>ServiceEntry</code> configurations.</p>
+
+</td>
+</tr>
+<tr id="OutboundTrafficPolicy-Mode-ALLOW_ANY">
+<td><code>ALLOW_ANY</code></td>
+<td>
+<p>Outbound traffic to unknown destinations will be allowed, in case
+there are no services or <code>ServiceEntry</code> configurations for the destination port.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="CaptureMode">CaptureMode</h2>
+<section>
+<p><code>CaptureMode</code> describes how traffic to a listener is expected to be
+captured. Applicable only when the listener is bound to an IP.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="CaptureMode-DEFAULT">
+<td><code>DEFAULT</code></td>
+<td>
+<p>The default capture mode defined by the environment.</p>
+
+</td>
+</tr>
+<tr id="CaptureMode-IPTABLES">
+<td><code>IPTABLES</code></td>
+<td>
+<p>Capture traffic using IPtables redirection.</p>
+
+</td>
+</tr>
+<tr id="CaptureMode-NONE">
+<td><code>NONE</code></td>
+<td>
+<p>No traffic capture. When used in an egress listener, the application is
+expected to explicitly communicate with the listener port or Unix
+domain socket. When used in an ingress listener, care needs to be taken
+to ensure that the listener port is not in use by other processes on
+the host.</p>
+
 </td>
 </tr>
 </tbody>

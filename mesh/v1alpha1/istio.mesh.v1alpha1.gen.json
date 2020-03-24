@@ -481,6 +481,36 @@
         "type": "object",
         "oneOf": [
           {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "fromCidr"
+                  ],
+                  "properties": {
+                    "fromCidr": {
+                      "description": "A CIDR range for the set of endpoints in this network. The CIDR ranges for endpoints from different networks must not overlap.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "fromRegistry"
+                  ],
+                  "properties": {
+                    "fromRegistry": {
+                      "description": "Add all endpoints from the specified registry into this network. The names of the registries should correspond to the kubeconfig file name inside the secret that was used to configure the registry (Kubernetes multicluster) or supplied by MCP server.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
             "required": [
               "fromCidr"
             ],
@@ -509,21 +539,53 @@
       "istio.mesh.v1alpha1.Network.IstioNetworkGateway": {
         "description": "The gateway associated with this network. Traffic from remote networks will arrive at the specified gateway:port. All incoming traffic must use mTLS.",
         "type": "object",
+        "properties": {
+          "port": {
+            "description": "The port associated with the gateway.",
+            "type": "integer"
+          },
+          "locality": {
+            "description": "The locality associated with an explicitly specified gateway (i.e. ip)",
+            "type": "string",
+            "format": "string"
+          }
+        },
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "registryServiceName"
+                  ],
+                  "properties": {
+                    "registryServiceName": {
+                      "description": "A fully qualified domain name of the gateway service. Pilot will lookup the service from the service registries in the network and obtain the endpoint IPs of the gateway from the service registry. Note that while the service name is a fully qualified domain name, it need not be resolvable outside the orchestration platform for the registry. e.g., this could be istio-ingressgateway.istio-system.svc.cluster.local.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "address"
+                  ],
+                  "properties": {
+                    "address": {
+                      "description": "IP address or externally resolvable DNS address associated with the gateway.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "registryServiceName"
             ],
             "properties": {
-              "port": {
-                "description": "The port associated with the gateway.",
-                "type": "integer"
-              },
-              "locality": {
-                "description": "The locality associated with an explicitly specified gateway (i.e. ip)",
-                "type": "string",
-                "format": "string"
-              },
               "registryServiceName": {
                 "description": "A fully qualified domain name of the gateway service. Pilot will lookup the service from the service registries in the network and obtain the endpoint IPs of the gateway from the service registry. Note that while the service name is a fully qualified domain name, it need not be resolvable outside the orchestration platform for the registry. e.g., this could be istio-ingressgateway.istio-system.svc.cluster.local.",
                 "type": "string",
@@ -536,17 +598,8 @@
               "address"
             ],
             "properties": {
-              "port": {
-                "description": "The port associated with the gateway.",
-                "type": "integer"
-              },
               "address": {
                 "description": "IP address or externally resolvable DNS address associated with the gateway.",
-                "type": "string",
-                "format": "string"
-              },
-              "locality": {
-                "description": "The locality associated with an explicitly specified gateway (i.e. ip)",
                 "type": "string",
                 "format": "string"
               }
@@ -580,6 +633,52 @@
         "description": "Tracing defines configuration for the tracing performed by Envoy instances.",
         "type": "object",
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "zipkin"
+                  ],
+                  "properties": {
+                    "zipkin": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Zipkin"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "lightstep"
+                  ],
+                  "properties": {
+                    "lightstep": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Lightstep"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "datadog"
+                  ],
+                  "properties": {
+                    "datadog": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Datadog"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "stackdriver"
+                  ],
+                  "properties": {
+                    "stackdriver": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Stackdriver"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "zipkin"
