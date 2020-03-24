@@ -16,6 +16,252 @@
           }
         }
       },
+      "istio.policy.v1beta1.Value": {
+        "description": "An instance field of type Value denotes that the expression for the field is of dynamic type and can evaluate to any [ValueType][istio.policy.v1beta1.ValueType] enum values. For example, when authoring an instance configuration for a template that has a field `data` of type `istio.policy.v1beta1.Value`, both of the following expressions are valid `data: source.ip | ip(\"0.0.0.0\")`, `data: request.id | \"\"`; the resulting type is either ValueType.IP_ADDRESS or ValueType.STRING for the two cases respectively.",
+        "type": "object",
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "stringValue"
+                  ],
+                  "properties": {
+                    "stringValue": {
+                      "description": "Used for values of type STRING",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "int64Value"
+                  ],
+                  "properties": {
+                    "int64Value": {
+                      "description": "Used for values of type INT64",
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "doubleValue"
+                  ],
+                  "properties": {
+                    "doubleValue": {
+                      "description": "Used for values of type DOUBLE",
+                      "type": "number",
+                      "format": "double"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "boolValue"
+                  ],
+                  "properties": {
+                    "boolValue": {
+                      "description": "Used for values of type BOOL",
+                      "type": "boolean"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "ipAddressValue"
+                  ],
+                  "properties": {
+                    "ipAddressValue": {
+                      "$ref": "#/components/schemas/istio.policy.v1beta1.IPAddress"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "timestampValue"
+                  ],
+                  "properties": {
+                    "timestampValue": {
+                      "$ref": "#/components/schemas/istio.policy.v1beta1.TimeStamp"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "durationValue"
+                  ],
+                  "properties": {
+                    "durationValue": {
+                      "$ref": "#/components/schemas/istio.policy.v1beta1.Duration"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "emailAddressValue"
+                  ],
+                  "properties": {
+                    "emailAddressValue": {
+                      "$ref": "#/components/schemas/istio.policy.v1beta1.EmailAddress"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "dnsNameValue"
+                  ],
+                  "properties": {
+                    "dnsNameValue": {
+                      "$ref": "#/components/schemas/istio.policy.v1beta1.DNSName"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "uriValue"
+                  ],
+                  "properties": {
+                    "uriValue": {
+                      "$ref": "#/components/schemas/istio.policy.v1beta1.Uri"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "stringMapValue"
+                  ],
+                  "properties": {
+                    "stringMapValue": {
+                      "$ref": "#/components/schemas/istio.policy.v1beta1.StringMap"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "stringValue"
+            ],
+            "properties": {
+              "stringValue": {
+                "description": "Used for values of type STRING",
+                "type": "string",
+                "format": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "int64Value"
+            ],
+            "properties": {
+              "int64Value": {
+                "description": "Used for values of type INT64",
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          {
+            "required": [
+              "doubleValue"
+            ],
+            "properties": {
+              "doubleValue": {
+                "description": "Used for values of type DOUBLE",
+                "type": "number",
+                "format": "double"
+              }
+            }
+          },
+          {
+            "required": [
+              "boolValue"
+            ],
+            "properties": {
+              "boolValue": {
+                "description": "Used for values of type BOOL",
+                "type": "boolean"
+              }
+            }
+          },
+          {
+            "required": [
+              "ipAddressValue"
+            ],
+            "properties": {
+              "ipAddressValue": {
+                "$ref": "#/components/schemas/istio.policy.v1beta1.IPAddress"
+              }
+            }
+          },
+          {
+            "required": [
+              "timestampValue"
+            ],
+            "properties": {
+              "timestampValue": {
+                "$ref": "#/components/schemas/istio.policy.v1beta1.TimeStamp"
+              }
+            }
+          },
+          {
+            "required": [
+              "durationValue"
+            ],
+            "properties": {
+              "durationValue": {
+                "$ref": "#/components/schemas/istio.policy.v1beta1.Duration"
+              }
+            }
+          },
+          {
+            "required": [
+              "emailAddressValue"
+            ],
+            "properties": {
+              "emailAddressValue": {
+                "$ref": "#/components/schemas/istio.policy.v1beta1.EmailAddress"
+              }
+            }
+          },
+          {
+            "required": [
+              "dnsNameValue"
+            ],
+            "properties": {
+              "dnsNameValue": {
+                "$ref": "#/components/schemas/istio.policy.v1beta1.DNSName"
+              }
+            }
+          },
+          {
+            "required": [
+              "uriValue"
+            ],
+            "properties": {
+              "uriValue": {
+                "$ref": "#/components/schemas/istio.policy.v1beta1.Uri"
+              }
+            }
+          },
+          {
+            "required": [
+              "stringMapValue"
+            ],
+            "properties": {
+              "stringMapValue": {
+                "$ref": "#/components/schemas/istio.policy.v1beta1.StringMap"
+              }
+            }
+          }
+        ]
+      },
       "istio.policy.v1beta1.AttributeManifest": {
         "description": "AttributeManifest describes a set of Attributes produced by some component of an Istio deployment.",
         "type": "object",
@@ -257,6 +503,32 @@
         "type": "object",
         "oneOf": [
           {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "tls"
+                  ],
+                  "properties": {
+                    "tls": {
+                      "$ref": "#/components/schemas/istio.policy.v1beta1.Tls"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "mutual"
+                  ],
+                  "properties": {
+                    "mutual": {
+                      "$ref": "#/components/schemas/istio.policy.v1beta1.Mutual"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
             "required": [
               "tls"
             ],
@@ -356,6 +628,34 @@
           {
             "oneOf": [
               {
+                "not": {
+                  "anyOf": [
+                    {
+                      "required": [
+                        "tokenPath"
+                      ],
+                      "properties": {
+                        "tokenPath": {
+                          "description": "The path to the file holding the auth token (password, jwt token, api key, etc).",
+                          "type": "string",
+                          "format": "string"
+                        }
+                      }
+                    },
+                    {
+                      "required": [
+                        "oauth"
+                      ],
+                      "properties": {
+                        "oauth": {
+                          "$ref": "#/components/schemas/istio.policy.v1beta1.OAuth"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
                 "required": [
                   "tokenPath"
                 ],
@@ -381,6 +681,34 @@
           },
           {
             "oneOf": [
+              {
+                "not": {
+                  "anyOf": [
+                    {
+                      "required": [
+                        "authHeader"
+                      ],
+                      "properties": {
+                        "authHeader": {
+                          "$ref": "#/components/schemas/istio.policy.v1beta1.Tls.AuthHeader"
+                        }
+                      }
+                    },
+                    {
+                      "required": [
+                        "customHeader"
+                      ],
+                      "properties": {
+                        "customHeader": {
+                          "description": "Customized header key to hold access token, e.g. x-api-key. Token will be passed as what it is.",
+                          "type": "string",
+                          "format": "string"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
               {
                 "required": [
                   "authHeader"
@@ -561,129 +889,6 @@
           "LoopDetected",
           "NotExtended",
           "NetworkAuthenticationRequired"
-        ]
-      },
-      "istio.policy.v1beta1.Value": {
-        "description": "An instance field of type Value denotes that the expression for the field is of dynamic type and can evaluate to any [ValueType][istio.policy.v1beta1.ValueType] enum values. For example, when authoring an instance configuration for a template that has a field `data` of type `istio.policy.v1beta1.Value`, both of the following expressions are valid `data: source.ip | ip(\"0.0.0.0\")`, `data: request.id | \"\"`; the resulting type is either ValueType.IP_ADDRESS or ValueType.STRING for the two cases respectively.",
-        "type": "object",
-        "oneOf": [
-          {
-            "required": [
-              "stringValue"
-            ],
-            "properties": {
-              "stringValue": {
-                "description": "Used for values of type STRING",
-                "type": "string",
-                "format": "string"
-              }
-            }
-          },
-          {
-            "required": [
-              "int64Value"
-            ],
-            "properties": {
-              "int64Value": {
-                "description": "Used for values of type INT64",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          },
-          {
-            "required": [
-              "doubleValue"
-            ],
-            "properties": {
-              "doubleValue": {
-                "description": "Used for values of type DOUBLE",
-                "type": "number",
-                "format": "double"
-              }
-            }
-          },
-          {
-            "required": [
-              "boolValue"
-            ],
-            "properties": {
-              "boolValue": {
-                "description": "Used for values of type BOOL",
-                "type": "boolean"
-              }
-            }
-          },
-          {
-            "required": [
-              "ipAddressValue"
-            ],
-            "properties": {
-              "ipAddressValue": {
-                "$ref": "#/components/schemas/istio.policy.v1beta1.IPAddress"
-              }
-            }
-          },
-          {
-            "required": [
-              "timestampValue"
-            ],
-            "properties": {
-              "timestampValue": {
-                "$ref": "#/components/schemas/istio.policy.v1beta1.TimeStamp"
-              }
-            }
-          },
-          {
-            "required": [
-              "durationValue"
-            ],
-            "properties": {
-              "durationValue": {
-                "$ref": "#/components/schemas/istio.policy.v1beta1.Duration"
-              }
-            }
-          },
-          {
-            "required": [
-              "emailAddressValue"
-            ],
-            "properties": {
-              "emailAddressValue": {
-                "$ref": "#/components/schemas/istio.policy.v1beta1.EmailAddress"
-              }
-            }
-          },
-          {
-            "required": [
-              "dnsNameValue"
-            ],
-            "properties": {
-              "dnsNameValue": {
-                "$ref": "#/components/schemas/istio.policy.v1beta1.DNSName"
-              }
-            }
-          },
-          {
-            "required": [
-              "uriValue"
-            ],
-            "properties": {
-              "uriValue": {
-                "$ref": "#/components/schemas/istio.policy.v1beta1.Uri"
-              }
-            }
-          },
-          {
-            "required": [
-              "stringMapValue"
-            ],
-            "properties": {
-              "stringMapValue": {
-                "$ref": "#/components/schemas/istio.policy.v1beta1.StringMap"
-              }
-            }
-          }
         ]
       },
       "istio.policy.v1beta1.IPAddress": {
