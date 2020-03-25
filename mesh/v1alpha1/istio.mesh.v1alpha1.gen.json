@@ -257,10 +257,6 @@
         "description": "ProxyConfig defines variables for individual Envoy instances.",
         "type": "object",
         "properties": {
-          "connectTimeout": {
-            "description": "Connection timeout used by Envoy for supporting services. (MUST BE \u003e=1ms)",
-            "type": "string"
-          },
           "configPath": {
             "description": "Path to the generated configuration file directory. Proxy agent generates the actual configuration and stores it in this directory.",
             "type": "string",
