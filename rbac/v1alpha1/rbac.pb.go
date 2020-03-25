@@ -125,6 +125,7 @@ func (EnforcementMode) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_3462954d26c055c0, []int{0}
 }
 
+// $hide_from_docs
 type RbacConfig_Mode int32
 
 const (
@@ -163,6 +164,7 @@ func (RbacConfig_Mode) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_3462954d26c055c0, []int{5, 0}
 }
 
+// $hide_from_docs
 // ServiceRole specification contains a list of access rules (permissions).
 //
 // <!-- crd generation tags
@@ -230,6 +232,7 @@ func (m *ServiceRole) GetRules() []*AccessRule {
 	return nil
 }
 
+// $hide_from_docs
 // AccessRule defines a permission to access a list of services.
 type AccessRule struct {
 	// A list of service names.
@@ -390,6 +393,7 @@ func (m *AccessRule) GetConstraints() []*AccessRule_Constraint {
 	return nil
 }
 
+// $hide_from_docs
 // Definition of a custom constraint. The supported keys are listed in the "constraint and properties" page.
 type AccessRule_Constraint struct {
 	// Key of the constraint.
@@ -451,6 +455,7 @@ func (m *AccessRule_Constraint) GetValues() []string {
 	return nil
 }
 
+// $hide_from_docs
 // ServiceRoleBinding assigns a ServiceRole to a list of subjects.
 //
 // <!-- crd generation tags
@@ -594,6 +599,7 @@ func (m *ServiceRoleBinding) GetRole() string {
 	return ""
 }
 
+// $hide_from_docs
 // Subject defines an identity. The identity is either a user or identified by a set of `properties`.
 // The supported keys in `properties` are listed in "constraint and properties" page.
 type Subject struct {
@@ -750,6 +756,7 @@ func (m *Subject) GetProperties() map[string]string {
 	return nil
 }
 
+// $hide_from_docs
 // RoleRef refers to a role object.
 type RoleRef struct {
 	// The type of the role being referenced.
@@ -810,6 +817,7 @@ func (m *RoleRef) GetName() string {
 	return ""
 }
 
+// $hide_from_docs
 // RbacConfig implements the ClusterRbacConfig Custom Resource Definition for controlling Istio RBAC behavior.
 // The ClusterRbacConfig Custom Resource is a singleton where only one ClusterRbacConfig should be created
 // globally in the mesh and the namespace should be the same to other Istio components, which usually is `istio-system`.
@@ -942,6 +950,7 @@ func (m *RbacConfig) GetEnforcementMode() EnforcementMode {
 	return EnforcementMode_ENFORCED
 }
 
+// $hide_from_docs
 // Target defines a list of services or namespaces.
 type RbacConfig_Target struct {
 	// A list of services.

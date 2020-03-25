@@ -56,6 +56,7 @@ func (PrincipalBinding) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_30ec3f7cef93301a, []int{0}
 }
 
+// $hide_from_docs
 // Defines the acceptable connection TLS mode.
 type MutualTls_Mode int32
 
@@ -538,6 +539,8 @@ func (m *Jwt_TriggerRule) GetIncludedPaths() []*StringMatch {
 // The type can be progammatically determine by checking the type of the
 // "params" field.
 type PeerAuthenticationMethod struct {
+	// $hide_from_docs
+	//
 	// Types that are valid to be assigned to Params:
 	//	*PeerAuthenticationMethod_Mtls
 	//	*PeerAuthenticationMethod_Jwt
@@ -679,6 +682,7 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 	return nil
 }
 
+// $hide_from_docs
 // Policy defines what authentication methods can be accepted on workload(s),
 // and if authenticated, which method/certificate will set the request principal
 // (i.e request.auth.principal attribute).
