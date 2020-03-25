@@ -417,8 +417,17 @@ message MeshConfig {
   // "kube-system" will be cluster-local.
   repeated string cluster_local_namespaces = 50;
 
+  // If enabled, Istio agent will aggregate metrics exposed by the application with metrics from Envoy
+  // and Istio agent. The sidecar injection will replace prometheus.io annotations present on the pod
+  // and redirect them towards Istio agent, which will then handle the aggregation of metrics.
+  // If your prometheus is not setup to scrape based on prometheus.io/scrape, prometheus.io/port, and
+  // prometheus.io/path annotations, you may need to disable this.
+  // If you application exposes the same metrics as Envoy, this may cause issues. In this case, it is recommended
+  // to disable aggregation on that deployment with the `prometheus.istio.io/aggregate: "false"` annotation.
+  google.protobuf.BoolValue enable_prometheus_aggregation = 51;
+
   // $hide_from_docs
-  // Next available field number: 51
+  // Next available field number: 52
 }
 
 // Resource describes the source of configuration

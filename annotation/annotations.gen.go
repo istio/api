@@ -184,6 +184,15 @@ var (
 		  Resources: []ResourceTypes{ Pod, },
         }
 	
+		PrometheusAggregate = Instance {
+          Name: "prometheus.istio.io/aggregate",
+          Description: "Specifies if Prometheus metric aggregation will be "+
+                        "enabled for this workload.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
+        }
+	
 		SidecarStatusReadinessApplicationPorts = Instance {
           Name: "readiness.status.sidecar.istio.io/applicationPorts",
           Description: "Specifies the list of ports exposed by the application "+
@@ -504,6 +513,7 @@ func AllResourceAnnotations() []*Instance {
 		&PolicyCheckMaxRetryWaitTime,
 		&PolicyCheckRetries,
 		&PolicyLang,
+		&PrometheusAggregate,
 		&SidecarStatusReadinessApplicationPorts,
 		&SidecarStatusReadinessFailureThreshold,
 		&SidecarStatusReadinessInitialDelaySeconds,

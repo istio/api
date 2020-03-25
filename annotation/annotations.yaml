@@ -13,6 +13,13 @@
 #   limitations under the License.
 
 annotations:
+  - name: prometheus.istio.io/aggregate
+    variableName: PrometheusAggregate
+    description: Specifies if Prometheus metric aggregation will be enabled for this workload.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
   - name: alpha.istio.io/kubernetes-serviceaccounts
     variableName: AlphaKubernetesServiceAccounts
     description: Specifies the Kubernetes service accounts that are allowed to run this
