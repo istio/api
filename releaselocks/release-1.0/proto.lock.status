@@ -150,6 +150,7 @@ CONFLICT: "RouteDirective" ID: "2" has been removed, but is not reserved [mixer/
 CONFLICT: "RouteDirective" ID: "3" has been removed, but is not reserved [mixer/v1/check.proto]
 CONFLICT: "RouteDirective" ID: "4" has been removed, but is not reserved [mixer/v1/check.proto]
 CONFLICT: "Server" field: "tls" has a different type: ServerTLSSettings, previously TLSOptions [networking/v1alpha3/gateway.proto]
+CONFLICT: "ServiceEntry" field: "endpoints" has a different type: WorkloadEntry, previously Endpoint [networking/v1alpha3/service_entry.proto]
 CONFLICT: "TCPRoute" field: "route" has a different type: RouteDestination, previously DestinationWeight [networking/v1alpha3/virtual_service.proto]
 CONFLICT: "TLSOptions.TLSmode" field: "MUTUAL" has been removed, but is not reserved [networking/v1alpha3/gateway.proto]
 CONFLICT: "TLSOptions.TLSmode" field: "PASSTHROUGH" has been removed, but is not reserved [networking/v1alpha3/gateway.proto]

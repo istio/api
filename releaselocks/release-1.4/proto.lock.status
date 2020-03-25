@@ -40,6 +40,7 @@ CONFLICT: "MeshConfig.IngressControllerMode" field: "STRICT" has a different int
 CONFLICT: "MeshConfig.IngressControllerMode" field: "UNSPECIFIED" integer: 0 has an updated name, previously "OFF" [mesh/v1alpha1/config.proto]
 CONFLICT: "RemoteService" field: "tls_settings" has a different type: istio.networking.v1alpha3.ClientTLSSettings, previously istio.networking.v1alpha3.TLSSettings [mesh/v1alpha1/proxy.proto]
 CONFLICT: "Server" field: "tls" has a different type: ServerTLSSettings, previously TLSOptions [networking/v1alpha3/gateway.proto]
+CONFLICT: "ServiceEntry" field: "endpoints" has a different type: WorkloadEntry, previously Endpoint [networking/v1alpha3/service_entry.proto]
 CONFLICT: "TLSOptions.TLSmode" field: "AUTO_PASSTHROUGH" has been removed, but is not reserved [networking/v1alpha3/gateway.proto]
 CONFLICT: "TLSOptions.TLSmode" field: "ISTIO_MUTUAL" has been removed, but is not reserved [networking/v1alpha3/gateway.proto]
 CONFLICT: "TLSOptions.TLSmode" field: "MUTUAL" has been removed, but is not reserved [networking/v1alpha3/gateway.proto]

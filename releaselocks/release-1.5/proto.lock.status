@@ -40,6 +40,8 @@ CONFLICT: "RollingUpdateDeployment" field: "maxSurge" has a different type: Type
 CONFLICT: "RollingUpdateDeployment" field: "maxUnavailable" has a different type: TypeInterface_kubernetes, previously TypeIntOrStringForPB [operator/v1alpha1/kubernetes.proto]
 CONFLICT: "Server" field: "tls" has a different type: ServerTLSSettings, previously TLSOptions [networking/v1alpha3/gateway.proto]
 CONFLICT: "Server" field: "tls" has a different type: ServerTLSSettings, previously TLSOptions [networking/v1beta1/gateway.proto]
+CONFLICT: "ServiceEntry" field: "endpoints" has a different type: WorkloadEntry, previously Endpoint [networking/v1alpha3/service_entry.proto]
+CONFLICT: "ServiceEntry" field: "endpoints" has a different type: WorkloadEntry, previously Endpoint [networking/v1beta1/service_entry.proto]
 CONFLICT: "ServicePort" field: "targetPort" has a different type: TypeInterface_kubernetes, previously TypeIntOrStringForPB [operator/v1alpha1/kubernetes.proto]
 CONFLICT: "TCPSocketAction" field: "port" has a different type: TypeInterface_kubernetes, previously TypeIntOrStringForPB [operator/v1alpha1/kubernetes.proto]
 CONFLICT: "TLSOptions.TLSmode" field: "AUTO_PASSTHROUGH" has been removed, but is not reserved [networking/v1alpha3/gateway.proto]

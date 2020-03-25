@@ -39832,8 +39832,13 @@
               {
                 "id": 6,
                 "name": "endpoints",
-                "type": "Endpoint",
+                "type": "WorkloadEntry",
                 "is_repeated": true
+              },
+              {
+                "id": 9,
+                "name": "workload_selector",
+                "type": "WorkloadSelector"
               },
               {
                 "id": 7,
@@ -39847,57 +39852,6 @@
                 "type": "string",
                 "is_repeated": true
               }
-            ],
-            "messages": [
-              {
-                "name": "Endpoint",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "address",
-                    "type": "string",
-                    "options": [
-                      {
-                        "name": "(google.api.field_behavior)",
-                        "value": "REQUIRED"
-                      }
-                    ]
-                  },
-                  {
-                    "id": 4,
-                    "name": "network",
-                    "type": "string"
-                  },
-                  {
-                    "id": 5,
-                    "name": "locality",
-                    "type": "string"
-                  },
-                  {
-                    "id": 6,
-                    "name": "weight",
-                    "type": "uint32"
-                  }
-                ],
-                "maps": [
-                  {
-                    "key_type": "string",
-                    "field": {
-                      "id": 2,
-                      "name": "ports",
-                      "type": "uint32"
-                    }
-                  },
-                  {
-                    "key_type": "string",
-                    "field": {
-                      "id": 3,
-                      "name": "labels",
-                      "type": "string"
-                    }
-                  }
-                ]
-              }
             ]
           }
         ],
@@ -39907,6 +39861,12 @@
           },
           {
             "path": "networking/v1alpha3/gateway.proto"
+          },
+          {
+            "path": "networking/v1alpha3/sidecar.proto"
+          },
+          {
+            "path": "networking/v1alpha3/workload_entry.proto"
           }
         ],
         "package": {
@@ -40916,6 +40876,81 @@
       }
     },
     {
+      "protopath": "networking:/:v1alpha3:/:workload_entry.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "WorkloadEntry",
+            "fields": [
+              {
+                "id": 1,
+                "name": "address",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "name": "network",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "locality",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "weight",
+                "type": "uint32"
+              },
+              {
+                "id": 7,
+                "name": "service_account",
+                "type": "string"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 2,
+                  "name": "ports",
+                  "type": "uint32"
+                }
+              },
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 3,
+                  "name": "labels",
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/api/field_behavior.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.networking.v1alpha3"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1alpha3"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "networking:/:v1beta1:/:destination_rule.proto",
       "def": {
         "enums": [
@@ -41794,8 +41829,13 @@
               {
                 "id": 6,
                 "name": "endpoints",
-                "type": "Endpoint",
+                "type": "WorkloadEntry",
                 "is_repeated": true
+              },
+              {
+                "id": 9,
+                "name": "workload_selector",
+                "type": "WorkloadSelector"
               },
               {
                 "id": 7,
@@ -41809,57 +41849,6 @@
                 "type": "string",
                 "is_repeated": true
               }
-            ],
-            "messages": [
-              {
-                "name": "Endpoint",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "address",
-                    "type": "string",
-                    "options": [
-                      {
-                        "name": "(google.api.field_behavior)",
-                        "value": "REQUIRED"
-                      }
-                    ]
-                  },
-                  {
-                    "id": 4,
-                    "name": "network",
-                    "type": "string"
-                  },
-                  {
-                    "id": 5,
-                    "name": "locality",
-                    "type": "string"
-                  },
-                  {
-                    "id": 6,
-                    "name": "weight",
-                    "type": "uint32"
-                  }
-                ],
-                "maps": [
-                  {
-                    "key_type": "string",
-                    "field": {
-                      "id": 2,
-                      "name": "ports",
-                      "type": "uint32"
-                    }
-                  },
-                  {
-                    "key_type": "string",
-                    "field": {
-                      "id": 3,
-                      "name": "labels",
-                      "type": "string"
-                    }
-                  }
-                ]
-              }
             ]
           }
         ],
@@ -41869,6 +41858,12 @@
           },
           {
             "path": "networking/v1beta1/gateway.proto"
+          },
+          {
+            "path": "networking/v1beta1/sidecar.proto"
+          },
+          {
+            "path": "networking/v1beta1/workload_entry.proto"
           }
         ],
         "package": {
@@ -42864,6 +42859,81 @@
           },
           {
             "path": "google/protobuf/wrappers.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.networking.v1beta1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1beta1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "networking:/:v1beta1:/:workload_entry.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "WorkloadEntry",
+            "fields": [
+              {
+                "id": 1,
+                "name": "address",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "name": "network",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "locality",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "weight",
+                "type": "uint32"
+              },
+              {
+                "id": 7,
+                "name": "service_account",
+                "type": "string"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 2,
+                  "name": "ports",
+                  "type": "uint32"
+                }
+              },
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 3,
+                  "name": "labels",
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/api/field_behavior.proto"
           }
         ],
         "package": {

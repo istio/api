@@ -36,8 +36,8 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // apiVersion: security.istio.io/v1beta1
 // kind: RequestAuthentication
 // metadata:
-//  name: httpbin
-//  namespace: foo
+//   name: httpbin
+//   namespace: foo
 // spec:
 //   selector:
 //     matchLabels:
@@ -49,16 +49,16 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
-//  name: httpbin
-//  namespace: foo
+//   name: httpbin
+//   namespace: foo
 // spec:
-//  selector:
-//    matchLabels:
-//      app: httpbin
-//  rules:
-//  - from:
-//    - source:
-//        requestPrincipals: ["*"]
+//   selector:
+//     matchLabels:
+//       app: httpbin
+//   rules:
+//   - from:
+//     - source:
+//         requestPrincipals: ["*"]
 // ```
 //
 // - The next example shows how to set a different JWT requirement for a different `host`. The `RequestAuthentication`
@@ -68,8 +68,8 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // apiVersion: security.istio.io/v1beta1
 // kind: RequestAuthentication
 // metadata:
-//  name: httpbin
-//  namespace: foo
+//   name: httpbin
+//   namespace: foo
 // spec:
 //   selector:
 //     matchLabels:
@@ -81,12 +81,12 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
-//  name: httpbin
-//  namespace: foo
+//   name: httpbin
+//   namespace: foo
 // spec:
-//  selector:
-//    matchLabels:
-//      app: httpbin
+//   selector:
+//     matchLabels:
+//       app: httpbin
 //  rules:
 //  - from:
 //    - source:
@@ -108,12 +108,12 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
-//  name: httpbin
-//  namespace: foo
+//   name: httpbin
+//   namespace: foo
 // spec:
-//  selector:
-//    matchLabels:
-//      app: httpbin
+//   selector:
+//     matchLabels:
+//       app: httpbin
 //  rules:
 //  - from:
 //    - source:
