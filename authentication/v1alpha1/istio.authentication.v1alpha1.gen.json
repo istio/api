@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Authentication policy for Istio services.",
+    "title": "",
     "version": "v1alpha1"
   },
   "components": {

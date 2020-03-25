@@ -27,8 +27,7 @@ spec:
     openAPIV3Schema:
       properties:
         spec:
-          description: 'Authentication policy for Istio services. See more details
-            at: https://istio.io/docs/reference/config/security/istio.authentication.v1alpha1.html'
+          description: 'See more details at:'
           properties:
             originIsOptional:
               description: Deprecated.
@@ -908,8 +907,7 @@ spec:
     openAPIV3Schema:
       properties:
         spec:
-          description: 'Authentication policy for Istio services. See more details
-            at: https://istio.io/docs/reference/config/security/istio.authentication.v1alpha1.html'
+          description: 'See more details at:'
           properties:
             originIsOptional:
               description: Deprecated.
