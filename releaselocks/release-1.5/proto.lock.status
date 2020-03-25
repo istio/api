@@ -36,5 +36,7 @@ CONFLICT: "MeshConfig.IngressControllerMode" field: "STRICT" has a different int
 CONFLICT: "MeshConfig.IngressControllerMode" field: "UNSPECIFIED" integer: 0 has an updated name, previously "OFF" [mesh/v1alpha1/config.proto]
 CONFLICT: "RollingUpdateDeployment" field: "maxSurge" has a different type: TypeInterface_kubernetes, previously TypeIntOrStringForPB [operator/v1alpha1/kubernetes.proto]
 CONFLICT: "RollingUpdateDeployment" field: "maxUnavailable" has a different type: TypeInterface_kubernetes, previously TypeIntOrStringForPB [operator/v1alpha1/kubernetes.proto]
+CONFLICT: "ServiceEntry" field: "endpoints" has a different type: WorkloadEntry, previously Endpoint [networking/v1alpha3/service_entry.proto]
+CONFLICT: "ServiceEntry" field: "endpoints" has a different type: WorkloadEntry, previously Endpoint [networking/v1beta1/service_entry.proto]
 CONFLICT: "ServicePort" field: "targetPort" has a different type: TypeInterface_kubernetes, previously TypeIntOrStringForPB [operator/v1alpha1/kubernetes.proto]
 CONFLICT: "TCPSocketAction" field: "port" has a different type: TypeInterface_kubernetes, previously TypeIntOrStringForPB [operator/v1alpha1/kubernetes.proto]

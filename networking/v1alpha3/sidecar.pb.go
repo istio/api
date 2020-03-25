@@ -794,16 +794,18 @@ func (m *IstioEgressListener) GetHosts() []string {
 	return nil
 }
 
-// `WorkloadSelector` specifies the criteria used to determine if the `Gateway`,
-// `Sidecar`, or `EnvoyFilter` configuration can be applied to a proxy. The matching criteria
-// includes the metadata associated with a proxy, workload instance info such as
-// labels attached to the pod/VM, or any other info that the proxy provides
-// to Istio during the initial handshake. If multiple conditions are
-// specified, all conditions need to match in order for the workload instance to be
-// selected. Currently, only label based selection mechanism is supported.
+// `WorkloadSelector` specifies the criteria used to determine if the
+// `Gateway`, `Sidecar`, or `EnvoyFilter` or `ServiceEntry`
+// configuration can be applied to a proxy. The matching criteria
+// includes the metadata associated with a proxy, workload instance
+// info such as labels attached to the pod/VM, or any other info that
+// the proxy provides to Istio during the initial handshake. If
+// multiple conditions are specified, all conditions need to match in
+// order for the workload instance to be selected. Currently, only
+// label based selection mechanism is supported.
 type WorkloadSelector struct {
 	// One or more labels that indicate a specific set of pods/VMs
-	// on which this `Sidecar` configuration should be applied. The scope of
+	// on which the configuration should be applied. The scope of
 	// label search is restricted to the configuration namespace in which the
 	// the resource is present.
 	Labels               map[string]string `protobuf:"bytes,1,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
