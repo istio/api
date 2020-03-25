@@ -104,8 +104,20 @@ annotations:
     hidden: false
     resources:
       - Pod
+  - name: sidecar.istio.io/proxyCPULimit
+    description: Specifies the CPU limit for the Envoy sidecar.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
   - name: sidecar.istio.io/proxyMemory
     description: Specifies the requested memory setting for the Envoy sidecar.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+  - name: sidecar.istio.io/proxyMemoryLimit
+    description: Specifies the memory limit for the Envoy sidecar.
     deprecated: false
     hidden: false
     resources:
