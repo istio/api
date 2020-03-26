@@ -230,14 +230,14 @@ message MeshConfig {
   // This flag is used to enable mutual TLS automatically for service to service communication
   // within the mesh, default false.
   // If set to true, and a given service does not have a corresponding DestinationRule configured,
-  // or its DestinationRule does not have TLSSettings specified, Istio configures client side
+  // or its DestinationRule does not have ClientTLSSettings specified, Istio configures client side
   // TLS configuration appropriately. More specifically,
   // If the upstream authentication policy is in STRICT mode, use Istio provisioned certificate
   // for mutual TLS to connect to upstream.
   // If upstream service is in plain text mode, use plain text.
   // If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use
   // mutual TLS when server sides are capable of accepting mutual TLS traffic.
-  // If service DestinationRule exists and has TLSSettings specified, that is always used instead.
+  // If service DestinationRule exists and has ClientTLSSettings specified, that is always used instead.
   google.protobuf.BoolValue enable_auto_mtls = 43;
 
   // $hide_from_docs
@@ -432,7 +432,7 @@ message ConfigSource {
  // Use the tls_settings to specify the tls mode to use. If the MCP server
  // uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
  // mode as ISTIO_MUTUAL.
- istio.networking.v1alpha3.TLSSettings tls_settings = 2;
+ istio.networking.v1alpha3.ClientTLSSettings tls_settings = 2;
  // Describes the source of configuration, if nothing is specified default is MCP
  repeated Resource subscribed_resources = 3;
 }

@@ -36143,7 +36143,7 @@
               {
                 "id": 2,
                 "name": "tls_settings",
-                "type": "istio.networking.v1alpha3.TLSSettings"
+                "type": "istio.networking.v1alpha3.ClientTLSSettings"
               },
               {
                 "id": 3,
@@ -36628,7 +36628,7 @@
               {
                 "id": 2,
                 "name": "tls_settings",
-                "type": "istio.networking.v1alpha3.TLSSettings"
+                "type": "istio.networking.v1alpha3.ClientTLSSettings"
               },
               {
                 "id": 3,
@@ -38567,7 +38567,7 @@
             ]
           },
           {
-            "name": "TLSSettings.TLSmode",
+            "name": "ClientTLSSettings.TLSmode",
             "enum_fields": [
               {
                 "name": "DISABLE"
@@ -38642,7 +38642,7 @@
               {
                 "id": 4,
                 "name": "tls",
-                "type": "TLSSettings"
+                "type": "ClientTLSSettings"
               },
               {
                 "id": 5,
@@ -38678,7 +38678,7 @@
                   {
                     "id": 5,
                     "name": "tls",
-                    "type": "TLSSettings"
+                    "type": "ClientTLSSettings"
                   }
                 ]
               }
@@ -38942,7 +38942,7 @@
             ]
           },
           {
-            "name": "TLSSettings",
+            "name": "ClientTLSSettings",
             "fields": [
               {
                 "id": 1,
@@ -39503,7 +39503,7 @@
       "def": {
         "enums": [
           {
-            "name": "TLSOptions.TLSmode",
+            "name": "ServerTLSSettings.TLSmode",
             "enum_fields": [
               {
                 "name": "PASSTHROUGH"
@@ -39527,7 +39527,7 @@
             ]
           },
           {
-            "name": "TLSOptions.TLSProtocol",
+            "name": "ServerTLSSettings.TLSProtocol",
             "enum_fields": [
               {
                 "name": "TLS_AUTO"
@@ -39619,83 +39619,12 @@
               {
                 "id": 3,
                 "name": "tls",
-                "type": "TLSOptions"
+                "type": "ServerTLSSettings"
               },
               {
                 "id": 5,
                 "name": "default_endpoint",
                 "type": "string"
-              }
-            ],
-            "messages": [
-              {
-                "name": "TLSOptions",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "https_redirect",
-                    "type": "bool"
-                  },
-                  {
-                    "id": 2,
-                    "name": "mode",
-                    "type": "TLSmode"
-                  },
-                  {
-                    "id": 3,
-                    "name": "server_certificate",
-                    "type": "string"
-                  },
-                  {
-                    "id": 4,
-                    "name": "private_key",
-                    "type": "string"
-                  },
-                  {
-                    "id": 5,
-                    "name": "ca_certificates",
-                    "type": "string"
-                  },
-                  {
-                    "id": 10,
-                    "name": "credential_name",
-                    "type": "string"
-                  },
-                  {
-                    "id": 6,
-                    "name": "subject_alt_names",
-                    "type": "string",
-                    "is_repeated": true
-                  },
-                  {
-                    "id": 11,
-                    "name": "verify_certificate_spki",
-                    "type": "string",
-                    "is_repeated": true
-                  },
-                  {
-                    "id": 12,
-                    "name": "verify_certificate_hash",
-                    "type": "string",
-                    "is_repeated": true
-                  },
-                  {
-                    "id": 7,
-                    "name": "min_protocol_version",
-                    "type": "TLSProtocol"
-                  },
-                  {
-                    "id": 8,
-                    "name": "max_protocol_version",
-                    "type": "TLSProtocol"
-                  },
-                  {
-                    "id": 9,
-                    "name": "cipher_suites",
-                    "type": "string",
-                    "is_repeated": true
-                  }
-                ]
               }
             ]
           },
@@ -39728,6 +39657,75 @@
                 "id": 3,
                 "name": "name",
                 "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "ServerTLSSettings",
+            "fields": [
+              {
+                "id": 1,
+                "name": "https_redirect",
+                "type": "bool"
+              },
+              {
+                "id": 2,
+                "name": "mode",
+                "type": "TLSmode"
+              },
+              {
+                "id": 3,
+                "name": "server_certificate",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "private_key",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "ca_certificates",
+                "type": "string"
+              },
+              {
+                "id": 10,
+                "name": "credential_name",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "subject_alt_names",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 11,
+                "name": "verify_certificate_spki",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 12,
+                "name": "verify_certificate_hash",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "min_protocol_version",
+                "type": "TLSProtocol"
+              },
+              {
+                "id": 8,
+                "name": "max_protocol_version",
+                "type": "TLSProtocol"
+              },
+              {
+                "id": 9,
+                "name": "cipher_suites",
+                "type": "string",
+                "is_repeated": true
               }
             ]
           }
@@ -39940,6 +39938,11 @@
                 "id": 4,
                 "name": "outbound_traffic_policy",
                 "type": "OutboundTrafficPolicy"
+              },
+              {
+                "id": 6,
+                "name": "localhost",
+                "type": "Localhost"
               }
             ]
           },
@@ -39977,6 +39980,11 @@
                     "value": "REQUIRED"
                   }
                 ]
+              },
+              {
+                "id": 6,
+                "name": "localhost_client_tls",
+                "type": "ClientTLSSettings"
               }
             ]
           },
@@ -40009,6 +40017,11 @@
                     "value": "REQUIRED"
                   }
                 ]
+              },
+              {
+                "id": 5,
+                "name": "localhost_server_tls",
+                "type": "ServerTLSSettings"
               }
             ]
           },
@@ -40045,6 +40058,21 @@
                 "type": "istio.networking.v1alpha3.Destination"
               }
             ]
+          },
+          {
+            "name": "Localhost",
+            "fields": [
+              {
+                "id": 1,
+                "name": "client_tls",
+                "type": "ClientTLSSettings"
+              },
+              {
+                "id": 2,
+                "name": "server_tls",
+                "type": "ServerTLSSettings"
+              }
+            ]
           }
         ],
         "imports": [
@@ -40056,6 +40084,9 @@
           },
           {
             "path": "networking/v1alpha3/virtual_service.proto"
+          },
+          {
+            "path": "networking/v1alpha3/destination_rule.proto"
           }
         ],
         "package": {
@@ -40960,7 +40991,7 @@
             ]
           },
           {
-            "name": "TLSSettings.TLSmode",
+            "name": "ClientTLSSettings.TLSmode",
             "enum_fields": [
               {
                 "name": "DISABLE"
@@ -41035,7 +41066,7 @@
               {
                 "id": 4,
                 "name": "tls",
-                "type": "TLSSettings"
+                "type": "ClientTLSSettings"
               },
               {
                 "id": 5,
@@ -41071,7 +41102,7 @@
                   {
                     "id": 5,
                     "name": "tls",
-                    "type": "TLSSettings"
+                    "type": "ClientTLSSettings"
                   }
                 ]
               }
@@ -41335,7 +41366,7 @@
             ]
           },
           {
-            "name": "TLSSettings",
+            "name": "ClientTLSSettings",
             "fields": [
               {
                 "id": 1,
@@ -41469,7 +41500,7 @@
       "def": {
         "enums": [
           {
-            "name": "TLSOptions.TLSmode",
+            "name": "ServerTLSSettings.TLSmode",
             "enum_fields": [
               {
                 "name": "PASSTHROUGH"
@@ -41493,7 +41524,7 @@
             ]
           },
           {
-            "name": "TLSOptions.TLSProtocol",
+            "name": "ServerTLSSettings.TLSProtocol",
             "enum_fields": [
               {
                 "name": "TLS_AUTO"
@@ -41585,83 +41616,12 @@
               {
                 "id": 3,
                 "name": "tls",
-                "type": "TLSOptions"
+                "type": "ServerTLSSettings"
               },
               {
                 "id": 5,
                 "name": "default_endpoint",
                 "type": "string"
-              }
-            ],
-            "messages": [
-              {
-                "name": "TLSOptions",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "https_redirect",
-                    "type": "bool"
-                  },
-                  {
-                    "id": 2,
-                    "name": "mode",
-                    "type": "TLSmode"
-                  },
-                  {
-                    "id": 3,
-                    "name": "server_certificate",
-                    "type": "string"
-                  },
-                  {
-                    "id": 4,
-                    "name": "private_key",
-                    "type": "string"
-                  },
-                  {
-                    "id": 5,
-                    "name": "ca_certificates",
-                    "type": "string"
-                  },
-                  {
-                    "id": 10,
-                    "name": "credential_name",
-                    "type": "string"
-                  },
-                  {
-                    "id": 6,
-                    "name": "subject_alt_names",
-                    "type": "string",
-                    "is_repeated": true
-                  },
-                  {
-                    "id": 11,
-                    "name": "verify_certificate_spki",
-                    "type": "string",
-                    "is_repeated": true
-                  },
-                  {
-                    "id": 12,
-                    "name": "verify_certificate_hash",
-                    "type": "string",
-                    "is_repeated": true
-                  },
-                  {
-                    "id": 7,
-                    "name": "min_protocol_version",
-                    "type": "TLSProtocol"
-                  },
-                  {
-                    "id": 8,
-                    "name": "max_protocol_version",
-                    "type": "TLSProtocol"
-                  },
-                  {
-                    "id": 9,
-                    "name": "cipher_suites",
-                    "type": "string",
-                    "is_repeated": true
-                  }
-                ]
               }
             ]
           },
@@ -41694,6 +41654,75 @@
                 "id": 3,
                 "name": "name",
                 "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "ServerTLSSettings",
+            "fields": [
+              {
+                "id": 1,
+                "name": "https_redirect",
+                "type": "bool"
+              },
+              {
+                "id": 2,
+                "name": "mode",
+                "type": "TLSmode"
+              },
+              {
+                "id": 3,
+                "name": "server_certificate",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "private_key",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "ca_certificates",
+                "type": "string"
+              },
+              {
+                "id": 10,
+                "name": "credential_name",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "subject_alt_names",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 11,
+                "name": "verify_certificate_spki",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 12,
+                "name": "verify_certificate_hash",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "min_protocol_version",
+                "type": "TLSProtocol"
+              },
+              {
+                "id": 8,
+                "name": "max_protocol_version",
+                "type": "TLSProtocol"
+              },
+              {
+                "id": 9,
+                "name": "cipher_suites",
+                "type": "string",
+                "is_repeated": true
               }
             ]
           }
@@ -41906,6 +41935,11 @@
                 "id": 4,
                 "name": "outbound_traffic_policy",
                 "type": "OutboundTrafficPolicy"
+              },
+              {
+                "id": 6,
+                "name": "localhost",
+                "type": "Localhost"
               }
             ]
           },
@@ -41943,6 +41977,11 @@
                     "value": "REQUIRED"
                   }
                 ]
+              },
+              {
+                "id": 6,
+                "name": "localhost_client_tls",
+                "type": "ClientTLSSettings"
               }
             ]
           },
@@ -41975,6 +42014,11 @@
                     "value": "REQUIRED"
                   }
                 ]
+              },
+              {
+                "id": 5,
+                "name": "localhost_server_tls",
+                "type": "ServerTLSSettings"
               }
             ]
           },
@@ -42011,6 +42055,21 @@
                 "type": "istio.networking.v1beta1.Destination"
               }
             ]
+          },
+          {
+            "name": "Localhost",
+            "fields": [
+              {
+                "id": 1,
+                "name": "client_tls",
+                "type": "ClientTLSSettings"
+              },
+              {
+                "id": 2,
+                "name": "server_tls",
+                "type": "ServerTLSSettings"
+              }
+            ]
           }
         ],
         "imports": [
@@ -42022,6 +42081,9 @@
           },
           {
             "path": "networking/v1beta1/virtual_service.proto"
+          },
+          {
+            "path": "networking/v1beta1/destination_rule.proto"
           }
         ],
         "package": {

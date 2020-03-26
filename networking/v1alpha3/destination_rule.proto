@@ -253,7 +253,7 @@ message TrafficPolicy {
   OutlierDetection outlier_detection = 3;
 
   // TLS related settings for connections to the upstream service.
-  TLSSettings tls = 4;
+  ClientTLSSettings tls = 4;
 
   // Traffic policies that apply to specific ports of the service
   message PortTrafficPolicy {
@@ -272,7 +272,7 @@ message TrafficPolicy {
     OutlierDetection outlier_detection = 4;
 
     // TLS related settings for connections to the upstream service.
-    TLSSettings tls = 5;
+    ClientTLSSettings tls = 5;
   }
 
   // Traffic policies specific to individual ports. Note that port level
@@ -342,7 +342,7 @@ message TrafficPolicy {
 // One or more labels are typically required to identify the subset destination,
 // however, when the corresponding DestinationRule represents a host that
 // supports multiple SNI hosts (e.g., an egress gateway), a subset without labels
-// may be meaningful. In this case a traffic policy with [TLSSettings](#TLSSettings)
+// may be meaningful. In this case a traffic policy with [ClientTLSSettings](#ClientTLSSettings)
 // can be used to identify a specific SNI host corresponding to the named subset.
 message Subset {
   // Name of the subset. The service name and the subset name can
@@ -877,7 +877,7 @@ message OutlierDetection {
 // {{</tab>}}
 // {{</tabset>}}
 //
-message TLSSettings {
+message ClientTLSSettings {
   // TLS connection mode
   enum TLSmode {
     // Do not setup a TLS connection to the upstream endpoint.
@@ -894,7 +894,7 @@ message TLSSettings {
     // client certificates for authentication.
     // Compared to Mutual mode, this mode uses certificates generated
     // automatically by Istio for mTLS authentication. When this mode is
-    // used, all other fields in `TLSSettings` should be empty.
+    // used, all other fields in `ClientTLSSettings` should be empty.
     ISTIO_MUTUAL = 3;
   };
 

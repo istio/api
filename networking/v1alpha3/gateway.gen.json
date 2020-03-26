@@ -32,7 +32,7 @@
         "type": "object",
         "properties": {
           "tls": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.Server.TLSOptions"
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ServerTLSSettings"
           },
           "port": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Port"
@@ -77,11 +77,11 @@
           }
         }
       },
-      "istio.networking.v1alpha3.Server.TLSOptions": {
+      "istio.networking.v1alpha3.ServerTLSSettings": {
         "type": "object",
         "properties": {
           "mode": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.Server.TLSOptions.TLSmode"
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ServerTLSSettings.TLSmode"
           },
           "privateKey": {
             "description": "REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file holding the server's private key.",
@@ -132,10 +132,10 @@
             }
           },
           "minProtocolVersion": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.Server.TLSOptions.TLSProtocol"
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ServerTLSSettings.TLSProtocol"
           },
           "maxProtocolVersion": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.Server.TLSOptions.TLSProtocol"
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ServerTLSSettings.TLSProtocol"
           },
           "cipherSuites": {
             "description": "Optional: If specified, only support the specified cipher list. Otherwise default to the default cipher list supported by Envoy.",
@@ -147,7 +147,7 @@
           }
         }
       },
-      "istio.networking.v1alpha3.Server.TLSOptions.TLSmode": {
+      "istio.networking.v1alpha3.ServerTLSSettings.TLSmode": {
         "description": "TLS modes enforced by the proxy",
         "type": "string",
         "enum": [
@@ -158,7 +158,7 @@
           "ISTIO_MUTUAL"
         ]
       },
-      "istio.networking.v1alpha3.Server.TLSOptions.TLSProtocol": {
+      "istio.networking.v1alpha3.ServerTLSSettings.TLSProtocol": {
         "description": "TLS protocol versions.",
         "type": "string",
         "enum": [
