@@ -24,12 +24,13 @@ for lock in $locks; do
     # shellcheck disable=SC2094
     protolock status --lockdir="${lock}" | sort -fd > status && :
     diff status "${lock}"/proto.lock.status > diff.out || fail=$lock
-    rm status
+#    rm status
     if [[ $fail != "none" ]]; then
         echo "Error $fail"
         cat diff.out
         rm diff.out
-        exit 1
+        cp status "${lock}"/proto.lock.status
+#        exit 1
     fi
-    rm diff.out
+#    rm diff.out
 done

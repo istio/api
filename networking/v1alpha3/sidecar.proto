@@ -457,8 +457,8 @@ message Sidecar {
   OutboundTrafficPolicy outbound_traffic_policy = 4;
 
   // `Localhost` describes the sidecar settings related to the
-  // communication between the user's services and the sidecar on a
-  // Kubernetes Pod or a VM. These settings apply by to all ingress
+  // communication between the sidecar and the workload it is attached to
+  // in a Kubernetes Pod or a VM. These settings apply to all ingress
   // and egress listeners in a sidecar unless overridden. There are no
   // built in defaults for this setting. If not specified, the
   // features will be disabled.
@@ -491,7 +491,7 @@ message IstioIngressListener {
   string default_endpoint = 4 [(google.api.field_behavior) = REQUIRED];
 
   // TLS settings to be used by the sidecar (client) when forwarding
-  // traffic to the user's process (server) on the
+  // traffic from the sidecar to the workload (server) on the
   // localhost. Overrides the `localhost` level `clientTls` settings.
   //
   // **NOTE**: DISABLE, SIMPLE and MUTUAL are the only valid TLS modes.
@@ -565,7 +565,7 @@ message IstioEgressListener {
   repeated string hosts = 4 [(google.api.field_behavior) = REQUIRED];
 
   // TLS settings to be used by the sidecar (server) when receiving
-  // traffic from the user's process (client) on the
+  // traffic from the workload (client) on the
   // localhost. Overrides the `localhost` level `serverTls` settings.
   //
   // **NOTE**: SIMPLE and MUTUAL are the only valid TLS
@@ -654,13 +654,13 @@ enum CaptureMode {
 }
 
 // `Localhost` describes the sidecar settings related to the
-// communication between the user's services and the sidecar on a
-// Kubernetes Pod or a VM. These settings apply by default to all
+// communication between the sidecar and the workload it is attached
+// to in a Kubernetes Pod or a VM. These settings apply by default to all
 // ingress and egress listeners in a sidecar unless overridden.
 //
 // The following example configures the sidecars on pods of the
 // reviews service to use TLS for traffic to/from the sidecar to the
-// user's process in the same pod, assuming the appropriate
+// workload in the same pod, assuming the appropriate
 // certificates are mounted in the sidecar.
 //
 // {{<tabset category-name="example">}}
@@ -716,14 +716,15 @@ enum CaptureMode {
 // {{</tabset>}}
 //
 message Localhost {
-  // TLS settings to be used by the sidecar (client) when
-  // forwarding traffic to the user's process (server) on the localhost.
+  // TLS settings to be used by the sidecar (client) when forwarding
+  // traffic from the sidecar to the workload it is attached to
+  // (server) on the localhost.
   //
   // **NOTE**: DISABLE, SIMPLE and MUTUAL are the only valid TLS modes.
   ClientTLSSettings client_tls = 1;
 
   // TLS settings to be used by the sidecar (server) when receiving
-  // traffic from the user's process (client) on the localhost.
+  // traffic from the workload (client) on the localhost.
   //
   // **NOTE**: SIMPLE and MUTUAL are the only valid TLS
   // modes. `httpsRedirect` and `credentialName` (for fetching

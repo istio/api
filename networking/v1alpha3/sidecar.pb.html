@@ -478,8 +478,8 @@ No
 <td><code><a href="#Localhost">Localhost</a></code></td>
 <td>
 <p><code>Localhost</code> describes the sidecar settings related to the
-communication between the user&rsquo;s services and the sidecar on a
-Kubernetes Pod or a VM. These settings apply by to all ingress
+communication between the sidecar and the workload it is attached to
+in a Kubernetes Pod or a VM. These settings apply to all ingress
 and egress listeners in a sidecar unless overridden. There are no
 built in defaults for this setting. If not specified, the
 features will be disabled.</p>
@@ -566,7 +566,7 @@ Yes
 <td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ClientTLSSettings">ClientTLSSettings</a></code></td>
 <td>
 <p>TLS settings to be used by the sidecar (client) when forwarding
-traffic to the user&rsquo;s process (server) on the
+traffic from the sidecar to the workload (server) on the
 localhost. Overrides the <code>localhost</code> level <code>clientTls</code> settings.</p>
 
 <p><strong>NOTE</strong>: DISABLE, SIMPLE and MUTUAL are the only valid TLS modes.</p>
@@ -694,7 +694,7 @@ Yes
 <td><code><a href="https://istio.io/docs/reference/config/networking/gateway.html#ServerTLSSettings">ServerTLSSettings</a></code></td>
 <td>
 <p>TLS settings to be used by the sidecar (server) when receiving
-traffic from the user&rsquo;s process (client) on the
+traffic from the workload (client) on the
 localhost. Overrides the <code>localhost</code> level <code>serverTls</code> settings.</p>
 
 <p><strong>NOTE</strong>: SIMPLE and MUTUAL are the only valid TLS
@@ -787,13 +787,13 @@ No
 <h2 id="Localhost">Localhost</h2>
 <section>
 <p><code>Localhost</code> describes the sidecar settings related to the
-communication between the user&rsquo;s services and the sidecar on a
-Kubernetes Pod or a VM. These settings apply by default to all
+communication between the sidecar and the workload it is attached
+to in a Kubernetes Pod or a VM. These settings apply by default to all
 ingress and egress listeners in a sidecar unless overridden.</p>
 
 <p>The following example configures the sidecars on pods of the
 reviews service to use TLS for traffic to/from the sidecar to the
-user&rsquo;s process in the same pod, assuming the appropriate
+workload in the same pod, assuming the appropriate
 certificates are mounted in the sidecar.</p>
 
 <p>{{<tabset category-name="example">}}
@@ -864,8 +864,9 @@ spec:
 <td><code>clientTls</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ClientTLSSettings">ClientTLSSettings</a></code></td>
 <td>
-<p>TLS settings to be used by the sidecar (client) when
-forwarding traffic to the user&rsquo;s process (server) on the localhost.</p>
+<p>TLS settings to be used by the sidecar (client) when forwarding
+traffic from the sidecar to the workload it is attached to
+(server) on the localhost.</p>
 
 <p><strong>NOTE</strong>: DISABLE, SIMPLE and MUTUAL are the only valid TLS modes.</p>
 
@@ -879,7 +880,7 @@ No
 <td><code><a href="https://istio.io/docs/reference/config/networking/gateway.html#ServerTLSSettings">ServerTLSSettings</a></code></td>
 <td>
 <p>TLS settings to be used by the sidecar (server) when receiving
-traffic from the user&rsquo;s process (client) on the localhost.</p>
+traffic from the workload (client) on the localhost.</p>
 
 <p><strong>NOTE</strong>: SIMPLE and MUTUAL are the only valid TLS
 modes. <code>httpsRedirect</code> and <code>credentialName</code> (for fetching

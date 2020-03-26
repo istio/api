@@ -513,8 +513,8 @@ type Sidecar struct {
 	// the global default Sidecar.
 	OutboundTrafficPolicy *OutboundTrafficPolicy `protobuf:"bytes,4,opt,name=outbound_traffic_policy,json=outboundTrafficPolicy,proto3" json:"outbound_traffic_policy,omitempty"`
 	// `Localhost` describes the sidecar settings related to the
-	// communication between the user's services and the sidecar on a
-	// Kubernetes Pod or a VM. These settings apply by to all ingress
+	// communication between the sidecar and the workload it is attached to
+	// in a Kubernetes Pod or a VM. These settings apply to all ingress
 	// and egress listeners in a sidecar unless overridden. There are no
 	// built in defaults for this setting. If not specified, the
 	// features will be disabled.
@@ -614,7 +614,7 @@ type IstioIngressListener struct {
 	// connections. Format should be `127.0.0.1:PORT` or `unix:///path/to/socket`
 	DefaultEndpoint string `protobuf:"bytes,4,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
 	// TLS settings to be used by the sidecar (client) when forwarding
-	// traffic to the user's process (server) on the
+	// traffic from the sidecar to the workload (server) on the
 	// localhost. Overrides the `localhost` level `clientTls` settings.
 	//
 	// **NOTE**: DISABLE, SIMPLE and MUTUAL are the only valid TLS modes.
@@ -755,7 +755,7 @@ type IstioEgressListener struct {
 	// in a future Istio release.
 	Hosts []string `protobuf:"bytes,4,rep,name=hosts,proto3" json:"hosts,omitempty"`
 	// TLS settings to be used by the sidecar (server) when receiving
-	// traffic from the user's process (client) on the
+	// traffic from the workload (client) on the
 	// localhost. Overrides the `localhost` level `serverTls` settings.
 	//
 	// **NOTE**: SIMPLE and MUTUAL are the only valid TLS
@@ -974,13 +974,13 @@ func (m *OutboundTrafficPolicy) GetEgressProxy() *Destination {
 }
 
 // `Localhost` describes the sidecar settings related to the
-// communication between the user's services and the sidecar on a
-// Kubernetes Pod or a VM. These settings apply by default to all
+// communication between the sidecar and the workload it is attached
+// to in a Kubernetes Pod or a VM. These settings apply by default to all
 // ingress and egress listeners in a sidecar unless overridden.
 //
 // The following example configures the sidecars on pods of the
 // reviews service to use TLS for traffic to/from the sidecar to the
-// user's process in the same pod, assuming the appropriate
+// workload in the same pod, assuming the appropriate
 // certificates are mounted in the sidecar.
 //
 // {{<tabset category-name="example">}}
@@ -1036,13 +1036,14 @@ func (m *OutboundTrafficPolicy) GetEgressProxy() *Destination {
 // {{</tabset>}}
 //
 type Localhost struct {
-	// TLS settings to be used by the sidecar (client) when
-	// forwarding traffic to the user's process (server) on the localhost.
+	// TLS settings to be used by the sidecar (client) when forwarding
+	// traffic from the sidecar to the workload it is attached to
+	// (server) on the localhost.
 	//
 	// **NOTE**: DISABLE, SIMPLE and MUTUAL are the only valid TLS modes.
 	ClientTls *ClientTLSSettings `protobuf:"bytes,1,opt,name=client_tls,json=clientTls,proto3" json:"client_tls,omitempty"`
 	// TLS settings to be used by the sidecar (server) when receiving
-	// traffic from the user's process (client) on the localhost.
+	// traffic from the workload (client) on the localhost.
 	//
 	// **NOTE**: SIMPLE and MUTUAL are the only valid TLS
 	// modes. `httpsRedirect` and `credentialName` (for fetching

@@ -284,7 +284,7 @@
         }
       },
       "istio.networking.v1beta1.Localhost": {
-        "description": "`Localhost` describes the sidecar settings related to the communication between the user's services and the sidecar on a Kubernetes Pod or a VM. These settings apply by default to all ingress and egress listeners in a sidecar unless overridden.",
+        "description": "`Localhost` describes the sidecar settings related to the communication between the sidecar and the workload it is attached to in a Kubernetes Pod or a VM. These settings apply by default to all ingress and egress listeners in a sidecar unless overridden.",
         "type": "object",
         "properties": {
           "clientTls": {
