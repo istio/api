@@ -156,8 +156,8 @@ message ProxyConfig {
   // DEPRECATED: Use [tracing][istio.mesh.v1alpha1.ProxyConfig.tracing] instead.
   string zipkin_address = 8 [deprecated=true];
 
-  // Connection timeout used by Envoy for supporting services. (MUST BE >=1ms)
-  google.protobuf.Duration connect_timeout = 9;
+  reserved "connect_timeout";
+  reserved 9;
 
   // IP Address and Port of a statsd UDP listener (e.g. _10.75.241.127:9125_).
   string statsd_udp_address = 10;
