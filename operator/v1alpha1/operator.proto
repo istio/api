@@ -200,6 +200,11 @@ message InstallStatus {
         Status status = 2;
         string error = 4;
     }
+    // AddonComponentStatus is aggregated status for addon components.
+    message AddonComponentStatus {
+      map<string, VersionStatus> component_status = 2;
+    }
+
     // Overall status of all components controlled by the operator.
     // - If all components have status NONE, overall status is NONE.
     // - If all components are HEALTHY, overall status is HEALTHY.
@@ -210,6 +215,9 @@ message InstallStatus {
     Status status = 1;
     // Individual status of each component controlled by the operator. The map key is the name of the component.
     map<string, VersionStatus> component_status = 2;
+
+    // Individual status of each addon component controlled by the operator. The map key is the name of the addon component.
+    AddonComponentStatus addon_component_status = 3;
 }
 
 // This is required because synthetic type definition has file rather than package scope.

@@ -36514,11 +36514,6 @@
                 ]
               },
               {
-                "id": 9,
-                "name": "connect_timeout",
-                "type": "google.protobuf.Duration"
-              },
-              {
                 "id": 10,
                 "name": "statsd_udp_address",
                 "type": "string"
@@ -36615,6 +36610,12 @@
                   "type": "string"
                 }
               }
+            ],
+            "reserved_ids": [
+              9
+            ],
+            "reserved_names": [
+              "connect_timeout"
             ]
           },
           {
@@ -44265,6 +44266,11 @@
                 "id": 1,
                 "name": "status",
                 "type": "Status"
+              },
+              {
+                "id": 3,
+                "name": "addon_component_status",
+                "type": "AddonComponentStatus"
               }
             ],
             "maps": [
@@ -44295,6 +44301,19 @@
                     "id": 4,
                     "name": "error",
                     "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "AddonComponentStatus",
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 2,
+                      "name": "component_status",
+                      "type": "VersionStatus"
+                    }
                   }
                 ]
               }

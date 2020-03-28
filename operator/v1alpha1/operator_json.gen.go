@@ -52,6 +52,17 @@ func (this *InstallStatus_VersionStatus) UnmarshalJSON(b []byte) error {
 	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for InstallStatus_AddonComponentStatus
+func (this *InstallStatus_AddonComponentStatus) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for InstallStatus_AddonComponentStatus
+func (this *InstallStatus_AddonComponentStatus) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 var (
 	OperatorMarshaler   = &github_com_golang_protobuf_jsonpb.Marshaler{}
 	OperatorUnmarshaler = &github_com_golang_protobuf_jsonpb.Unmarshaler{}

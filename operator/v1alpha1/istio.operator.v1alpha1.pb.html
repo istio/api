@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.operator.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 60
+number_of_entries: 61
 ---
 <p>Configuration affecting Istio control plane installation version and shape.</p>
 
@@ -2815,6 +2815,17 @@ No
 No
 </td>
 </tr>
+<tr id="InstallStatus-addon_component_status">
+<td><code>addonComponentStatus</code></td>
+<td><code><a href="#InstallStatus-AddonComponentStatus">AddonComponentStatus</a></code></td>
+<td>
+<p>Individual status of each addon component controlled by the operator. The map key is the name of the addon component.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -2864,6 +2875,32 @@ No
 <tr id="InstallStatus-VersionStatus-error">
 <td><code>error</code></td>
 <td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="InstallStatus-AddonComponentStatus">InstallStatus.AddonComponentStatus</h2>
+<section>
+<p>AddonComponentStatus is aggregated status for addon components.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="InstallStatus-AddonComponentStatus-component_status">
+<td><code>componentStatus</code></td>
+<td><code>map&lt;string,&nbsp;<a href="#InstallStatus-VersionStatus">VersionStatus</a>&gt;</code></td>
 <td>
 </td>
 <td>
