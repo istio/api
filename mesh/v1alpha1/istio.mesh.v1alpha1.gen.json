@@ -227,6 +227,14 @@
           },
           "thriftConfig": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ThriftConfig"
+          },
+          "clusterLocalNamespaces": {
+            "description": "Set the namespaces whose services will be considered local to the cluster. Cluster local services will not be exported to and will, therefore, not be accessible by workloads residing in other clusters. A common use case is the Kube API Server, where workloads expect to always reach the in-cluster server. By default, the namespace \"kube-system\" will be cluster-local.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
           }
         }
       },

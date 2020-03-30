@@ -410,7 +410,15 @@ message MeshConfig {
   ThriftConfig thrift_config = 49;
 
   // $hide_from_docs
-  // Next available field number: 50
+  // Set the namespaces whose services will be considered local to the cluster. Cluster
+  // local services will not be exported to and will, therefore, not be accessible by
+  // workloads residing in other clusters. A common use case is the Kube API Server, where
+  // workloads expect to always reach the in-cluster server. By default, the namespace
+  // "kube-system" will be cluster-local.
+  repeated string cluster_local_namespaces = 50;
+
+  // $hide_from_docs
+  // Next available field number: 51
 }
 
 // Resource describes the source of configuration
