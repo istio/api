@@ -235,6 +235,11 @@
               "type": "string",
               "format": "string"
             }
+          },
+          "enablePrometheusAggregation": {
+            "description": "If enabled, Istio agent will aggregate metrics exposed by the application with metrics from Envoy and Istio agent. The sidecar injection will replace prometheus.io annotations present on the pod and redirect them towards Istio agent, which will then handle the aggregation of metrics. If your prometheus is not setup to scrape based on prometheus.io/scrape, prometheus.io/port, and prometheus.io/path annotations, you may need to disable this. If you application exposes the same metrics as Envoy, this may cause issues. In this case, it is recommended to disable aggregation on that deployment with the `prometheus.istio.io/aggregate: \"false\"` annotation.",
+            "type": "boolean",
+            "nullable": true
           }
         }
       },
