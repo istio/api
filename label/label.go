@@ -25,4 +25,16 @@ const (
 
 	// IstioCanonicalServiceRevision is the name of label for the Istio Canonical Service revision for a workload instance.
 	IstioCanonicalServiceRevision = "service.istio.io/canonical-revision"
+
+	// IoIstioRev is the Istio control plane revision associated with the resource; e.g. "canary"
+	IstioRev = "istio.io/rev"
+
+	// IstioOperatorComponent is the Istio operator component name of the resource, e.g. "Pilot"
+	IstioOperatorComponent = "operator.istio.io/component"
+
+	// IstioOperatorManaged is "Reconcile" if the Istio operator will reconcile the resource.
+	IstioOperatorManaged = "operator.istio.io/managed"
+
+	// IstioOperatorVersion is the Istio operator version that installed the resource, e.g. "1.6.0"
+	IstioOperatorVersion = "operator.istio.io/version"
 )
