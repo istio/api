@@ -13,9 +13,10 @@
 #   limitations under the License.
 
 annotations:
-  - name: prometheus.istio.io/aggregate
-    variableName: PrometheusAggregate
-    description: Specifies if Prometheus metric aggregation will be enabled for this workload.
+  - name: prometheus.istio.io/merge-metrics
+    variableName: PrometheusMergeMetrics
+    description: Specifies if application Prometheus metric will be merged with Envoy metrics
+      for this workload.
     deprecated: false
     hidden: false
     resources:

@@ -184,10 +184,10 @@ var (
 		  Resources: []ResourceTypes{ Pod, },
         }
 	
-		PrometheusAggregate = Instance {
+		PrometheusMergeMetrics = Instance {
           Name: "prometheus.istio.io/merge-metrics",
-          Description: "Specifies if application Prometheus metric will be "+
-                        "merged with Envoy metrics for this workload.",
+          Description: "Specifies if application Prometheus metric will be merged "+
+                        "with Envoy metrics for this workload.",
           Hidden: false,
           Deprecated: false,
 		  Resources: []ResourceTypes{ Pod, },
@@ -513,7 +513,7 @@ func AllResourceAnnotations() []*Instance {
 		&PolicyCheckMaxRetryWaitTime,
 		&PolicyCheckRetries,
 		&PolicyLang,
-		&PrometheusAggregate,
+		&PrometheusMergeMetrics,
 		&SidecarStatusReadinessApplicationPorts,
 		&SidecarStatusReadinessFailureThreshold,
 		&SidecarStatusReadinessInitialDelaySeconds,
