@@ -117,15 +117,6 @@ var (
 		  Resources: []ResourceTypes{ Any, },
         }
 	
-		IoIstioRev = Instance {
-          Name: "istio.io/rev",
-          Description: "The Istio control plane revision associated with the "+
-                        "resource",
-          Hidden: false,
-          Deprecated: false,
-		  Resources: []ResourceTypes{ Any, },
-        }
-	
 		IoKubernetesIngressClass = Instance {
           Name: "kubernetes.io/ingress.class",
           Description: "Annotation on an Ingress resources denoting the class of "+
@@ -506,7 +497,6 @@ func AllResourceAnnotations() []*Instance {
 		&OperatorInstallChartOwner,
 		&OperatorInstallOwnerGeneration,
 		&OperatorInstallVersion,
-		&IoIstioRev,
 		&IoKubernetesIngressClass,
 		&NetworkingExportTo,
 		&PolicyCheck,

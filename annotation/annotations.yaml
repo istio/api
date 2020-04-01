@@ -335,10 +335,3 @@ annotations:
     hidden: false
     resources:
       - Any
-  - name: istio.io/rev
-    description: The Istio control plane revision associated with the resource
-    deprecated: false
-    hidden: false
-    resources:
-      # TODO change this to Service, Pod, Namespace when that combination is supported; https://github.com/istio/api/issues/1360
-      - Any
