@@ -185,9 +185,9 @@ var (
         }
 	
 		PrometheusAggregate = Instance {
-          Name: "prometheus.istio.io/aggregate",
-          Description: "Specifies if Prometheus metric aggregation will be "+
-                        "enabled for this workload.",
+          Name: "prometheus.istio.io/merge-metrics",
+          Description: "Specifies if application Prometheus metric will be "+
+                        "merged with Envoy metrics for this workload.",
           Hidden: false,
           Deprecated: false,
 		  Resources: []ResourceTypes{ Pod, },
