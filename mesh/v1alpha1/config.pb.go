@@ -481,6 +481,7 @@ type MeshConfig struct {
 	// If you are running a separately managed Envoy with an Istio sidecar, this may cause issues, as the metrics will collide.
 	// In this case, it is recommended to disable aggregation on that deployment with the
 	// `prometheus.istio.io/merge-metrics: "false"` annotation.
+	// If not specified, this will be enabled by default.
 	EnablePrometheusMerge *types.BoolValue `protobuf:"bytes,51,opt,name=enable_prometheus_merge,json=enablePrometheusMerge,proto3" json:"enablePrometheusMerge,omitempty"`
 	XXX_NoUnkeyedLiteral  struct{}         `json:"-"`
 	XXX_unrecognized      []byte           `json:"-"`

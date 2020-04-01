@@ -1179,7 +1179,8 @@ This releases on the annotations prometheus.io/scrape, prometheus.io/port, and
 prometheus.io/path annotations.
 If you are running a separately managed Envoy with an Istio sidecar, this may cause issues, as the metrics will collide.
 In this case, it is recommended to disable aggregation on that deployment with the
-<code>prometheus.istio.io/merge-metrics: &quot;false&quot;</code> annotation.</p>
+<code>prometheus.istio.io/merge-metrics: &quot;false&quot;</code> annotation.
+If not specified, this will be enabled by default.</p>
 
 </td>
 <td>

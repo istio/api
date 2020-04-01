@@ -425,6 +425,7 @@ message MeshConfig {
   // If you are running a separately managed Envoy with an Istio sidecar, this may cause issues, as the metrics will collide.
   // In this case, it is recommended to disable aggregation on that deployment with the
   // `prometheus.istio.io/merge-metrics: "false"` annotation.
+  // If not specified, this will be enabled by default.
   google.protobuf.BoolValue enable_prometheus_merge = 51;
 
   // $hide_from_docs
