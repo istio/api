@@ -229,7 +229,9 @@ message VirtualService {
   // the mesh, i.e., those found in the service registry, must always be
   // referred to using their alphanumeric names. IP addresses are allowed
   // only for services defined via the Gateway.
-  repeated string hosts = 1 [(google.api.field_behavior) = REQUIRED];
+  //
+  // *Note*: It must be empty for a delegate VirtualService.
+  repeated string hosts = 1;
 
   // The names of gateways and sidecars that should apply these routes.
   // Gateways in other namespaces may be referred to by
@@ -583,6 +585,16 @@ message HTTPRoute {
   // send a HTTP 301 redirect to a different URI or Authority.
   HTTPRedirect redirect = 3;
 
+  // Delegate is used to specify the particular VirtualService which
+  // can be used to define delegate HTTPRoute.
+  // It can be set only when `Route` and `Redirect` are empty, and the route rules of the
+  // delegate VirtualService will be merged with that in the current one.
+  // **NOTE**:
+  //    1. Only one level delegation is supported.
+  //    2. The delegate's HTTPMatchRequest must be a strict subset of the root's,
+  //       otherwise there is a conflict and the HTTPRoute will not take effect.
+  Delegate delegate = 20;
+
   // Rewrite HTTP URIs and Authority headers. Rewrite cannot be used with
   // Redirect primitive. Rewrite will be performed before forwarding.
   HTTPRewrite rewrite = 4;
@@ -629,7 +641,80 @@ message HTTPRoute {
 
   // Header manipulation rules
   Headers headers = 16;
+
+  // $hide_from_docs
+  // Next available field number: 21
 }
+
+
+// Describes the delegate VirtualService.
+// The following routing rules forward the traffic to `/productpage` by a delegate VirtualService named `productpage`,
+// forward the traffic to `/reviews` by a delegate VirtualService named `reviews`.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: bookinfo
+// spec:
+//   hosts:
+//   - "bookinfo.com"
+//   gateways:
+//   - mygateway
+//   http:
+//   - match:
+//     - uri:
+//         prefix: "/productpage"
+//     delegate:
+//        name: productpage
+//        namespace: nsA
+//   - match:
+//     - uri:
+//         prefix: "/reviews"
+//     delegate:
+//         name: reviews
+//         namespace: nsB
+// ```
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: productpage
+//   namespace: nsA
+// spec:
+//   http:
+//   - match:
+//      - uri:
+//         prefix: "/productpage/v1/"
+//     route:
+//     - destination:
+//         host: productpage-v1.nsA.svc.cluster.local
+//   - route:
+//     - destination:
+//         host: productpage.nsA.svc.cluster.local
+// ```
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: reviews
+//   namespace: nsB
+// spec:
+//   http:
+//   - route:
+//     - destination:
+//         host: reviews.nsB.svc.cluster.local
+// ```
+message Delegate {
+  // Name specifies the name of the delegate VirtualService.
+  string name = 1;
+  // Namespace specifies the namespace where the delegate VirtualService resides.
+  // By default, it is same to the root's.
+  string namespace = 2;
+}
+
 
 // Message headers can be manipulated when Envoy forwards requests to,
 // or responses from, a destination service. Header manipulation rules can
@@ -907,6 +992,7 @@ message TCPRoute {
 // {{</tabset>}}
 //
 // HTTPMatchRequest CANNOT be empty.
+// **Note:** No regex string match can be set when delegate VirtualService is specified.
 message HTTPMatchRequest {
   // The name assigned to a match. The match's name will be
   // concatenated with the parent route's name and will be logged in
