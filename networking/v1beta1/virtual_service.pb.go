@@ -711,7 +711,7 @@ type HTTPRoute struct {
 	// It can be set only when `Route` and `Redirect` are empty, and the route rules of the
 	// delegate VirtualService will be merged with that in the current one.
 	// **NOTE**:
-	//    1. Only one tier of delegate can be set.
+	//    1. Only one level delegation is supported.
 	//    2. The delegate's HTTPMatchRequest must be a strict subset of the root's,
 	//       otherwise there is a conflict and the HTTPRoute will not take effect.
 	Delegate *Delegate `protobuf:"bytes,20,opt,name=delegate,proto3" json:"delegate,omitempty"`

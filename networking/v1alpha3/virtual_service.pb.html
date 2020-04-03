@@ -703,7 +703,7 @@ can be used to define delegate HTTPRoute.
 It can be set only when <code>Route</code> and <code>Redirect</code> are empty, and the route rules of the
 delegate VirtualService will be merged with that in the current one.
 <strong>NOTE</strong>:
-   1. Only one tier of delegate is supported.
+   1. Only one level delegation is supported.
    2. The delegate&rsquo;s HTTPMatchRequest must be a strict subset of the root&rsquo;s,
       otherwise there is a conflict and the HTTPRoute will not take effect.</p>
 
