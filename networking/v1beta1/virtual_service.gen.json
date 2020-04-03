@@ -112,6 +112,9 @@
           "redirect": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPRedirect"
           },
+          "delegate": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.Delegate"
+          },
           "rewrite": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPRewrite"
           },
@@ -292,6 +295,22 @@
           "redirectCode": {
             "description": "On a redirect, Specifies the HTTP status code to use in the redirect response. The default response code is MOVED_PERMANENTLY (301).",
             "type": "integer"
+          }
+        }
+      },
+      "istio.networking.v1beta1.Delegate": {
+        "description": "Describes the delegate VirtualService. The following routing rules forward the traffic to `/productpage` by a delegate VirtualService named `productpage`, forward the traffic to `/reviews` by a delegate VirtualService named `reviews`.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name specifies the name of the delegate VirtualService.",
+            "type": "string",
+            "format": "string"
+          },
+          "namespace": {
+            "description": "Namespace specifies the namespace where the delegate VirtualService resides. By default, it is same to the root's.",
+            "type": "string",
+            "format": "string"
           }
         }
       },
