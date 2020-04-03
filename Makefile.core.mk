@@ -184,19 +184,24 @@ mesh_v1alpha1_pb_gos := $(mesh_v1alpha1_protos:.proto=.pb.go)
 mesh_v1alpha1_pb_pythons := $(patsubst $(mesh_v1alpha1_path)/%.proto,$(python_output_path)/$(mesh_v1alpha1_path)/%_pb2.py,$(mesh_v1alpha1_protos))
 mesh_v1alpha1_pb_doc := $(mesh_v1alpha1_path)/istio.mesh.v1alpha1.pb.html
 mesh_v1alpha1_openapi := $(mesh_v1alpha1_path)/istio.mesh.v1alpha1.gen.json
+mesh_v1alpha1_k8s_gos := \
+	$(patsubst $(mesh_v1alpha1_path)/%.proto,$(mesh_v1alpha1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(mesh_v1alpha1_protos))) \
+	$(patsubst $(mesh_v1alpha1_path)/%.proto,$(mesh_v1alpha1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(mesh_v1alpha1_protos)))
 
-$(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons): $(mesh_v1alpha1_protos)
+$(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons) $(mesh_v1alpha1_k8s_gos): $(mesh_v1alpha1_protos)
 	@$(protolock) status
 	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(mesh_v1alpha1_path) $(protoc_gen_python_plugin) $^
+	@$(protoc) $(protoc_gen_k8s_support_plugins) $(mesh_v1alpha1_path)/config.proto
 	@cp -r /tmp/istio.io/api/mesh/* mesh
+	@sed -i -E '/MarshalJSON is a custom marshaler for TypeMapStringInterface2/,+10d' $(mesh_v1alpha1_path)/config_json.gen.go
 	@go run $(repo_dir)/operator/fixup_structs/main.go -f $(mesh_v1alpha1_path)/config.pb.go
 	@go run $(repo_dir)/operator/fixup_structs/main.go -f $(mesh_v1alpha1_path)/network.pb.go
 	@go run $(repo_dir)/operator/fixup_structs/main.go -f $(mesh_v1alpha1_path)/proxy.pb.go
 
-generate-mesh: $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons)
+generate-mesh: $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons) $(mesh_v1alpha1_k8s_gos)
 
 clean-mesh:
-	@rm -fr $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons)
+	@rm -fr $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons) $(mesh_v1alpha1_k8s_gos)
 
 #####################
 # operator/...
