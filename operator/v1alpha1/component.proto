@@ -26,17 +26,15 @@ option go_package="istio.io/api/operator/v1alpha1";
 message IstioComponentSetSpec {
     BaseComponentSpec base = 29;
     ComponentSpec pilot = 30;
-    ComponentSpec proxy = 31;
-    ComponentSpec sidecar_injector = 32;
     ComponentSpec policy = 33;
     ComponentSpec telemetry = 34;
-    ComponentSpec citadel = 35;
-    ComponentSpec node_agent = 36;
-    ComponentSpec galley = 37;
     ComponentSpec cni = 38;
 
     repeated GatewaySpec ingress_gateways = 40;
     repeated GatewaySpec egress_gateways = 41;
+
+    reserved 31, 32, 35, 36, 37;
+    reserved "citadel", "galley", "node_agent", "proxy", "sidecar_injector";
 }
 
 // Configuration for base component.
