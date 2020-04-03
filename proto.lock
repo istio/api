@@ -36098,6 +36098,12 @@
                 "id": 49,
                 "name": "thrift_config",
                 "type": "ThriftConfig"
+              },
+              {
+                "id": 50,
+                "name": "cluster_local_namespaces",
+                "type": "string",
+                "is_repeated": true
               }
             ],
             "reserved_ids": [
@@ -36514,11 +36520,6 @@
                 ]
               },
               {
-                "id": 9,
-                "name": "connect_timeout",
-                "type": "google.protobuf.Duration"
-              },
-              {
                 "id": 10,
                 "name": "statsd_udp_address",
                 "type": "string"
@@ -36615,6 +36616,12 @@
                   "type": "string"
                 }
               }
+            ],
+            "reserved_ids": [
+              9
+            ],
+            "reserved_names": [
+              "connect_timeout"
             ]
           },
           {
@@ -40111,13 +40118,7 @@
                 "id": 1,
                 "name": "hosts",
                 "type": "string",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "is_repeated": true
               },
               {
                 "id": 2,
@@ -40203,6 +40204,11 @@
                 "type": "HTTPRedirect"
               },
               {
+                "id": 20,
+                "name": "delegate",
+                "type": "Delegate"
+              },
+              {
                 "id": 4,
                 "name": "rewrite",
                 "type": "HTTPRewrite"
@@ -40269,6 +40275,21 @@
               "append_response_headers",
               "remove_request_headers",
               "append_request_headers"
+            ]
+          },
+          {
+            "name": "Delegate",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "namespace",
+                "type": "string"
+              }
             ]
           },
           {
@@ -42108,13 +42129,7 @@
                 "id": 1,
                 "name": "hosts",
                 "type": "string",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "is_repeated": true
               },
               {
                 "id": 2,
@@ -42200,6 +42215,11 @@
                 "type": "HTTPRedirect"
               },
               {
+                "id": 20,
+                "name": "delegate",
+                "type": "Delegate"
+              },
+              {
                 "id": 4,
                 "name": "rewrite",
                 "type": "HTTPRewrite"
@@ -42266,6 +42286,21 @@
               "append_response_headers",
               "remove_request_headers",
               "append_request_headers"
+            ]
+          },
+          {
+            "name": "Delegate",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "namespace",
+                "type": "string"
+              }
             ]
           },
           {
