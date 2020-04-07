@@ -1173,10 +1173,10 @@ No
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
 <p>If enabled, Istio agent will merge metrics exposed by the application with metrics from Envoy
-and Istio agent. The sidecar injection will replace prometheus.io annotations present on the pod
+and Istio agent. The sidecar injection will replace <code>prometheus.io</code> annotations present on the pod
 and redirect them towards Istio agent, which will then merge metrics of from the application with Istio metrics.
-This releases on the annotations prometheus.io/scrape, prometheus.io/port, and
-prometheus.io/path annotations.
+This relies on the annotations <code>prometheus.io/scrape</code>, <code>prometheus.io/port</code>, and
+<code>prometheus.io/path</code> annotations.
 If you are running a separately managed Envoy with an Istio sidecar, this may cause issues, as the metrics will collide.
 In this case, it is recommended to disable aggregation on that deployment with the
 <code>prometheus.istio.io/merge-metrics: &quot;false&quot;</code> annotation.

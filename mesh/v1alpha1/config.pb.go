@@ -474,10 +474,10 @@ type MeshConfig struct {
 	// "kube-system" will be cluster-local.
 	ClusterLocalNamespaces []string `protobuf:"bytes,50,rep,name=cluster_local_namespaces,json=clusterLocalNamespaces,proto3" json:"clusterLocalNamespaces,omitempty"`
 	// If enabled, Istio agent will merge metrics exposed by the application with metrics from Envoy
-	// and Istio agent. The sidecar injection will replace prometheus.io annotations present on the pod
+	// and Istio agent. The sidecar injection will replace `prometheus.io` annotations present on the pod
 	// and redirect them towards Istio agent, which will then merge metrics of from the application with Istio metrics.
-	// This releases on the annotations prometheus.io/scrape, prometheus.io/port, and
-	// prometheus.io/path annotations.
+	// This relies on the annotations `prometheus.io/scrape`, `prometheus.io/port`, and
+	// `prometheus.io/path` annotations.
 	// If you are running a separately managed Envoy with an Istio sidecar, this may cause issues, as the metrics will collide.
 	// In this case, it is recommended to disable aggregation on that deployment with the
 	// `prometheus.istio.io/merge-metrics: "false"` annotation.
