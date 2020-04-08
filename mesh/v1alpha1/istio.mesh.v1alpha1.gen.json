@@ -240,6 +240,13 @@
             "description": "If enabled, Istio agent will merge metrics exposed by the application with metrics from Envoy and Istio agent. The sidecar injection will replace `prometheus.io` annotations present on the pod and redirect them towards Istio agent, which will then merge metrics of from the application with Istio metrics. This relies on the annotations `prometheus.io/scrape`, `prometheus.io/port`, and `prometheus.io/path` annotations. If you are running a separately managed Envoy with an Istio sidecar, this may cause issues, as the metrics will collide. In this case, it is recommended to disable aggregation on that deployment with the `prometheus.istio.io/merge-metrics: \"false\"` annotation. If not specified, this will be enabled by default.",
             "type": "boolean",
             "nullable": true
+          },
+          "customTags": {
+            "description": "Specify mesh-wide custom tags to be added to each tracing span for each sidecar that is deployed.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.CustomTags"
+            }
           }
         }
       },
@@ -451,12 +458,134 @@
           }
         }
       },
+      "istio.mesh.v1alpha1.MeshConfig.CustomTags": {
+        "description": "Describes custom tags for the active span.",
+        "type": "object",
+        "properties": {
+          "tag": {
+            "description": "Used to populate the tag name.",
+            "type": "string",
+            "format": "string"
+          }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "literal"
+                  ],
+                  "properties": {
+                    "literal": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.Literal"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "environment"
+                  ],
+                  "properties": {
+                    "environment": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.Environment"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "header"
+                  ],
+                  "properties": {
+                    "header": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.Header"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "literal"
+            ],
+            "properties": {
+              "literal": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.Literal"
+              }
+            }
+          },
+          {
+            "required": [
+              "environment"
+            ],
+            "properties": {
+              "environment": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.Environment"
+              }
+            }
+          },
+          {
+            "required": [
+              "header"
+            ],
+            "properties": {
+              "header": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.Header"
+              }
+            }
+          }
+        ]
+      },
       "istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode": {
         "type": "string",
         "enum": [
           "REGISTRY_ONLY",
           "ALLOW_ANY"
         ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.Literal": {
+        "description": "Literal type custom tag with static value for the tag value.",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Static literal value to populate the tag value.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.Environment": {
+        "description": "Environment type custom tag with environment name and default value.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Environment variable name to obtain the value to populate the tag value.",
+            "type": "string",
+            "format": "string"
+          },
+          "defaultValue": {
+            "description": "When the environment variable is not found, the tag value will be populated with this default value if specified, otherwise no tag will be populated.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.Header": {
+        "description": "Header type custom tag with header name and default value.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Header name to obtain the value to populate the tag value.",
+            "type": "string",
+            "format": "string"
+          },
+          "defaultValue": {
+            "description": "When the header does not exist, the tag value will be populated with this default value if specified, otherwise no tag will be populated.",
+            "type": "string",
+            "format": "string"
+          }
+        }
       },
       "istio.mesh.v1alpha1.Resource": {
         "description": "Resource describes the source of configuration",
