@@ -428,8 +428,12 @@ message MeshConfig {
   // If not specified, this will be enabled by default.
   google.protobuf.BoolValue enable_prometheus_merge = 51;
 
+  // Default list of stat tags to extract for the in-proxy telemetry. The value is injected into each pod as
+  // `sidecar.istio.io/extraStatTags` annotation if it is not already present in the pod.
+  repeated string extra_stat_tags = 52;
+
   // $hide_from_docs
-  // Next available field number: 52
+  // Next available field number: 53
 }
 
 // Resource describes the source of configuration

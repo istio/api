@@ -1187,6 +1187,18 @@ If not specified, this will be enabled by default.</p>
 No
 </td>
 </tr>
+<tr id="MeshConfig-extra_stat_tags">
+<td><code>extraStatTags</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Default list of stat tags to extract for the in-proxy telemetry. The value is injected into each pod as
+<code>sidecar.istio.io/extraStatTags</code> annotation if it is not already present in the pod.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
