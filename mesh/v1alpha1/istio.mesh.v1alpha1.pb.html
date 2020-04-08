@@ -67,6 +67,18 @@ No
 No
 </td>
 </tr>
+<tr id="Tracing-custom_tags">
+<td><code>customTags</code></td>
+<td><code>map&lt;string,&nbsp;<a href="#Tracing-CustomTag">CustomTag</a>&gt;</code></td>
+<td>
+<p>Specify mesh-wide custom tags to be added to each tracing span
+for each sidecar that is deployed.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -561,6 +573,171 @@ See <a href="https://github.com/census-instrumentation/opencensus-proto/blob/mas
 </tr>
 </thead>
 <tbody>
+</tbody>
+</table>
+</section>
+<h2 id="Tracing-CustomTag">Tracing.CustomTag</h2>
+<section>
+<p>Describes custom tags for the active span.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Tracing-CustomTag-literal" class="oneof oneof-start">
+<td><code>literal</code></td>
+<td><code><a href="#Tracing-Literal">Literal (oneof)</a></code></td>
+<td>
+<p>The custom tag&rsquo;s value is the specified literal.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Tracing-CustomTag-environment" class="oneof">
+<td><code>environment</code></td>
+<td><code><a href="#Tracing-Environment">Environment (oneof)</a></code></td>
+<td>
+<p>The custom tag&rsquo;s value should be populated from an environmental
+variable</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Tracing-CustomTag-header" class="oneof">
+<td><code>header</code></td>
+<td><code><a href="#Tracing-RequestHeader">RequestHeader (oneof)</a></code></td>
+<td>
+<p>The custom tag&rsquo;s value is populated by an http header from
+an incoming request.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Tracing-Literal">Tracing.Literal</h2>
+<section>
+<p>Literal type represents a static value.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Tracing-Literal-value">
+<td><code>value</code></td>
+<td><code>string</code></td>
+<td>
+<p>Static literal value used to populate the tag value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Tracing-Environment">Tracing.Environment</h2>
+<section>
+<p>Environment type represents the proxy&rsquo;s environment to populate
+tag values from</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Tracing-Environment-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Environment variable used to populate the tag&rsquo;s value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Tracing-Environment-default_value">
+<td><code>defaultValue</code></td>
+<td><code>string</code></td>
+<td>
+<p>When the environment variable is not found,
+the tag&rsquo;s value will be populated with this default value if specified,
+otherwise the tag will not be populated.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Tracing-RequestHeader">Tracing.RequestHeader</h2>
+<section>
+<p>RequestHeader type represents the http header to grab the value from
+and populate the tag value, as well as a default if the header does not
+exist</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Tracing-RequestHeader-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>HTTP header name used to obtain the value from to populate the tag value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Tracing-RequestHeader-default_value">
+<td><code>defaultValue</code></td>
+<td><code>string</code></td>
+<td>
+<p>When the incoming http header does not exist,
+the tag value will be populated with this default value if specified,
+otherwise tag will not be populated.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1187,18 +1364,6 @@ If not specified, this will be enabled by default.</p>
 No
 </td>
 </tr>
-<tr id="MeshConfig-custom_tags">
-<td><code>customTags</code></td>
-<td><code><a href="#MeshConfig-CustomTags">CustomTags[]</a></code></td>
-<td>
-<p>Specify mesh-wide custom tags to be added to each tracing span
-for each sidecar that is deployed.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 </tbody>
 </table>
 </section>
@@ -1367,177 +1532,6 @@ No
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>Specify thrift rate limit service timeout, in milliseconds. Default is 50ms</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="MeshConfig-CustomTags">MeshConfig.CustomTags</h2>
-<section>
-<p>Describes custom tags for the active span.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="MeshConfig-CustomTags-tag">
-<td><code>tag</code></td>
-<td><code>string</code></td>
-<td>
-<p>Used to populate the tag name.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-CustomTags-literal" class="oneof oneof-start">
-<td><code>literal</code></td>
-<td><code><a href="#MeshConfig-Literal">Literal (oneof)</a></code></td>
-<td>
-<p>A literal custom tag.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-CustomTags-environment" class="oneof">
-<td><code>environment</code></td>
-<td><code><a href="#MeshConfig-Environment">Environment (oneof)</a></code></td>
-<td>
-<p>An environment custom tag.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-CustomTags-header" class="oneof">
-<td><code>header</code></td>
-<td><code><a href="#MeshConfig-Header">Header (oneof)</a></code></td>
-<td>
-<p>A request header custom tag.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="MeshConfig-Literal">MeshConfig.Literal</h2>
-<section>
-<p>Literal type custom tag with static value for the tag value.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="MeshConfig-Literal-value">
-<td><code>value</code></td>
-<td><code>string</code></td>
-<td>
-<p>Static literal value to populate the tag value.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="MeshConfig-Environment">MeshConfig.Environment</h2>
-<section>
-<p>Environment type custom tag with environment name and default value.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="MeshConfig-Environment-name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>Environment variable name to obtain the value to populate the tag value.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-Environment-default_value">
-<td><code>defaultValue</code></td>
-<td><code>string</code></td>
-<td>
-<p>When the environment variable is not found,
-the tag value will be populated with this default value if specified,
-otherwise no tag will be populated.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="MeshConfig-Header">MeshConfig.Header</h2>
-<section>
-<p>Header type custom tag with header name and default value.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="MeshConfig-Header-name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>Header name to obtain the value to populate the tag value.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-Header-default_value">
-<td><code>defaultValue</code></td>
-<td><code>string</code></td>
-<td>
-<p>When the header does not exist,
-the tag value will be populated with this default value if specified,
-otherwise no tag will be populated.</p>
 
 </td>
 <td>
