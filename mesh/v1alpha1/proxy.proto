@@ -161,8 +161,14 @@ message Tracing {
   // $hide_from_docs
   map<string, CustomTag> custom_tags = 5;
 
+  // Configures the maximum length of the request path to extract and include in the
+  // HttpUrl tag. Used to truncate length request paths to meet the needs of tracing
+  // backend. If not set, then a length of 256 will be used.
   // $hide_from_docs
-  // Next available field number: 6
+  uint32 max_path_tag_length = 6;
+
+  // $hide_from_docs
+  // Next available field number: 7
 
 }
 
