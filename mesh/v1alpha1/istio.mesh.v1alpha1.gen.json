@@ -643,7 +643,7 @@
         "type": "object",
         "properties": {
           "customTags": {
-            "description": "Specify mesh-wide custom tags to be added to each tracing span for each sidecar that is deployed.",
+            "description": "Configures the custom tags to be added to active span by all proxies (i.e. sidecars and gateways). The key represents the name of the tag. Ex: ```yaml custom_tags: new_tag_name: header: name: custom-http-header-name default_value: defaulted-value-from-custom-header ```",
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.CustomTag"
@@ -740,7 +740,7 @@
         ]
       },
       "istio.mesh.v1alpha1.Tracing.CustomTag": {
-        "description": "Describes custom tags for the active span.",
+        "description": "Configure custom tags that will added to any active span. Tags can be generated via literals, environment variables or an incoming request header.",
         "type": "object",
         "oneOf": [
           {
@@ -895,11 +895,11 @@
         }
       },
       "istio.mesh.v1alpha1.Tracing.Environment": {
-        "description": "Environment type represents the proxy's environment to populate tag values from",
+        "description": "Environment is the proxy's environment variable to be used for populating the custom span tag.",
         "type": "object",
         "properties": {
           "name": {
-            "description": "Environment variable used to populate the tag's value.",
+            "description": "Name of the environment variable",
             "type": "string",
             "format": "string"
           },
@@ -911,7 +911,7 @@
         }
       },
       "istio.mesh.v1alpha1.Tracing.RequestHeader": {
-        "description": "RequestHeader type represents the http header to grab the value from and populate the tag value, as well as a default if the header does not exist",
+        "description": "RequestHeader is the HTTP request header which will be used to populate the span tag. A default value can be configured if the header does not exist.",
         "type": "object",
         "properties": {
           "name": {
@@ -920,7 +920,7 @@
             "format": "string"
           },
           "defaultValue": {
-            "description": "When the incoming http header does not exist, the tag value will be populated with this default value if specified, otherwise tag will not be populated.",
+            "description": "Default value to be used for the tag when the named HTTP header does not exist. The tag will be skipped if no default value is provided.",
             "type": "string",
             "format": "string"
           }

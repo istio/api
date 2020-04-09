@@ -104,8 +104,17 @@ type Tracing struct {
 	//	*Tracing_Datadog_
 	//	*Tracing_Stackdriver_
 	Tracer isTracing_Tracer `protobuf_oneof:"tracer"`
-	// Specify mesh-wide custom tags to be added to each tracing span
-	// for each sidecar that is deployed.
+	// Configures the custom tags to be added to active span by all proxies (i.e. sidecars
+	// and gateways).
+	// The key represents the name of the tag.
+	// Ex:
+	// ```yaml
+	// custom_tags:
+	//   new_tag_name:
+	//     header:
+	//       name: custom-http-header-name
+	//       default_value: defaulted-value-from-custom-header
+	// ```
 	CustomTags           map[string]*Tracing_CustomTag `protobuf:"bytes,5,rep,name=custom_tags,json=customTags,proto3" json:"customTags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}                      `json:"-"`
 	XXX_unrecognized     []byte                        `json:"-"`
@@ -479,7 +488,8 @@ func (m *Tracing_Stackdriver) GetMaxNumberOfMessageEvents() *types.Int64Value {
 	return nil
 }
 
-// Describes custom tags for the active span.
+// Configure custom tags that will added to any active span.
+// Tags can be generated via literals, environment variables or an incoming request header.
 type Tracing_CustomTag struct {
 	// Specify how to populate the value in a custom tag
 	//
@@ -632,10 +642,9 @@ func (m *Tracing_Literal) GetValue() string {
 	return ""
 }
 
-// Environment type represents the proxy's environment to populate
-// tag values from
+// Environment is the proxy's environment variable to be used for populating the custom span tag.
 type Tracing_Environment struct {
-	// Environment variable used to populate the tag's value.
+	// Name of the environment variable
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// When the environment variable is not found,
 	// the tag's value will be populated with this default value if specified,
@@ -693,15 +702,13 @@ func (m *Tracing_Environment) GetDefaultValue() string {
 	return ""
 }
 
-// RequestHeader type represents the http header to grab the value from
-// and populate the tag value, as well as a default if the header does not
-// exist
+// RequestHeader is the HTTP request header which will be used to populate the span tag.
+// A default value can be configured if the header does not exist.
 type Tracing_RequestHeader struct {
 	// HTTP header name used to obtain the value from to populate the tag value.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// When the incoming http header does not exist,
-	// the tag value will be populated with this default value if specified,
-	// otherwise tag will not be populated.
+	// Default value to be used for the tag when the named HTTP header does not exist.
+	// The tag will be skipped if no default value is provided.
 	DefaultValue         string   `protobuf:"bytes,2,opt,name=default_value,json=defaultValue,proto3" json:"defaultValue,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
