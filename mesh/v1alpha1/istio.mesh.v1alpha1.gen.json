@@ -648,6 +648,10 @@
             "additionalProperties": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.CustomTag"
             }
+          },
+          "maxPathTagLength": {
+            "description": "Configures the maximum length of the request path to extract and include in the HttpUrl tag. Used to truncate length request paths to meet the needs of tracing backend. If not set, then a length of 256 will be used. $hide_from_docs",
+            "type": "integer"
           }
         },
         "oneOf": [
