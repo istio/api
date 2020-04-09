@@ -899,7 +899,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "description": "Name of the environment variable",
+            "description": "Name of the environment variable used to populate the tag's value",
             "type": "string",
             "format": "string"
           },

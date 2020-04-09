@@ -644,7 +644,7 @@ func (m *Tracing_Literal) GetValue() string {
 
 // Environment is the proxy's environment variable to be used for populating the custom span tag.
 type Tracing_Environment struct {
-	// Name of the environment variable
+	// Name of the environment variable used to populate the tag's value
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// When the environment variable is not found,
 	// the tag's value will be populated with this default value if specified,
