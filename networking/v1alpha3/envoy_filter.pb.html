@@ -94,62 +94,34 @@ requires a special cluster definition in envoy. The cluster is also
 added to the sidecar as part of this configuration.</p>
 
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
   name: reviews-lua
   namespace: bookinfo
 spec:
-  workloadSelector:
-    labels:
-      app: reviews
-  configPatches:
-    # The first patch adds the lua filter to the listener/http connection manager
-  - applyTo: HTTP_FILTER
-    match:
-      context: SIDECAR_INBOUND
-      listener:
-        portNumber: 8080
-        filterChain:
-          filter:
-            name: &quot;envoy.http_connection_manager&quot;
-            subFilter:
-              name: &quot;envoy.router&quot;
-    patch:
-      operation: INSERT_BEFORE
-      value: # lua filter specification
-       name: envoy.lua
-       typed_config:
-         &quot;@type&quot;: &quot;type.googleapis.com/envoy.config.filter.http.lua.v2.Lua&quot;
-         inlineCode: |
-           function envoy_on_request(request_handle)
-             -- Make an HTTP call to an upstream host with the following headers, body, and timeout.
-             local headers, body = request_handle:httpCall(
-              &quot;lua_cluster&quot;,
-              {
-               [&quot;:method&quot;] = &quot;POST&quot;,
-               [&quot;:path&quot;] = &quot;/acl&quot;,
-               [&quot;:authority&quot;] = &quot;internal.org.net&quot;
-              },
-             &quot;authorize call&quot;,
-             5000)
-           end
-  # The second patch adds the cluster that is referenced by the lua code
-  # cds match is omitted as a new cluster is being added
-  - applyTo: CLUSTER
-    match:
-      context: SIDECAR_OUTBOUND
-    patch:
-      operation: ADD
-      value: # cluster specification
-        name: &quot;lua_cluster&quot;
-        type: STRICT_DNS
-        connect_timeout: 0.5s
-        lb_policy: ROUND_ROBIN
-        hosts:
-        - socket_address:
-            protocol: TCP
-            address: &quot;internal.org.net&quot;
-            port_value: 8888
+  workloadLabels:
+    app: reviews
+  filters:
+  - listenerMatch:
+      listenerType: SIDECAR_INBOUND
+      portNumber: 8080
+    filterName: envoy.lua
+    filterType: HTTP
+    filterConfig:
+      inlineCode: |
+         function envoy_on_request(request_handle)
+           -- Make an HTTP call to an upstream host with the following headers, body, and timeout.
+           local headers, body = request_handle:httpCall(
+            "lua_cluster",
+            {
+             [":method"] = "POST",
+             [":path"] = "/acl",
+             [":authority"] = "internal.org.net"
+            },
+           "authorize call",
+           5000)
+         end
 
 </code></pre>
 
