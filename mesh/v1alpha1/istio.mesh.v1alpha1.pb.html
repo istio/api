@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 28
+number_of_entries: 24
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -61,27 +61,6 @@ No
 <td><code><a href="#Tracing-Stackdriver">Stackdriver (oneof)</a></code></td>
 <td>
 <p>Use a Stackdriver tracer.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Tracing-custom_tags">
-<td><code>customTags</code></td>
-<td><code>map&lt;string,&nbsp;<a href="#Tracing-CustomTag">CustomTag</a>&gt;</code></td>
-<td>
-<p>Configures the custom tags to be added to active span by all proxies (i.e. sidecars
-and gateways).
-The key represents the name of the tag.
-Ex:</p>
-
-<pre><code class="language-yaml">custom_tags:
-  new_tag_name:
-    header:
-      name: custom-http-header-name
-      default_value: defaulted-value-from-custom-header
-</code></pre>
 
 </td>
 <td>
@@ -582,169 +561,6 @@ See <a href="https://github.com/census-instrumentation/opencensus-proto/blob/mas
 </tr>
 </thead>
 <tbody>
-</tbody>
-</table>
-</section>
-<h2 id="Tracing-CustomTag">Tracing.CustomTag</h2>
-<section>
-<p>Configure custom tags that will added to any active span.
-Tags can be generated via literals, environment variables or an incoming request header.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Tracing-CustomTag-literal" class="oneof oneof-start">
-<td><code>literal</code></td>
-<td><code><a href="#Tracing-Literal">Literal (oneof)</a></code></td>
-<td>
-<p>The custom tag&rsquo;s value is the specified literal.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Tracing-CustomTag-environment" class="oneof">
-<td><code>environment</code></td>
-<td><code><a href="#Tracing-Environment">Environment (oneof)</a></code></td>
-<td>
-<p>The custom tag&rsquo;s value should be populated from an environmental
-variable</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Tracing-CustomTag-header" class="oneof">
-<td><code>header</code></td>
-<td><code><a href="#Tracing-RequestHeader">RequestHeader (oneof)</a></code></td>
-<td>
-<p>The custom tag&rsquo;s value is populated by an http header from
-an incoming request.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="Tracing-Literal">Tracing.Literal</h2>
-<section>
-<p>Literal type represents a static value.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Tracing-Literal-value">
-<td><code>value</code></td>
-<td><code>string</code></td>
-<td>
-<p>Static literal value used to populate the tag value.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="Tracing-Environment">Tracing.Environment</h2>
-<section>
-<p>Environment is the proxy&rsquo;s environment variable to be used for populating the custom span tag.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Tracing-Environment-name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>Name of the environment variable used to populate the tag&rsquo;s value</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Tracing-Environment-default_value">
-<td><code>defaultValue</code></td>
-<td><code>string</code></td>
-<td>
-<p>When the environment variable is not found,
-the tag&rsquo;s value will be populated with this default value if specified,
-otherwise the tag will not be populated.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="Tracing-RequestHeader">Tracing.RequestHeader</h2>
-<section>
-<p>RequestHeader is the HTTP request header which will be used to populate the span tag.
-A default value can be configured if the header does not exist.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="Tracing-RequestHeader-name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>HTTP header name used to obtain the value from to populate the tag value.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="Tracing-RequestHeader-default_value">
-<td><code>defaultValue</code></td>
-<td><code>string</code></td>
-<td>
-<p>Default value to be used for the tag when the named HTTP header does not exist.
-The tag will be skipped if no default value is provided.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 </tbody>
 </table>
 </section>

@@ -643,7 +643,7 @@
         "type": "object",
         "properties": {
           "customTags": {
-            "description": "Configures the custom tags to be added to active span by all proxies (i.e. sidecars and gateways). The key represents the name of the tag. Ex: ```yaml custom_tags: new_tag_name: header: name: custom-http-header-name default_value: defaulted-value-from-custom-header ```",
+            "description": "Configures the custom tags to be added to active span by all proxies (i.e. sidecars and gateways). The key represents the name of the tag. Ex: ```yaml custom_tags: new_tag_name: header: name: custom-http-header-name default_value: defaulted-value-from-custom-header ``` $hide_from_docs",
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.CustomTag"
@@ -740,7 +740,7 @@
         ]
       },
       "istio.mesh.v1alpha1.Tracing.CustomTag": {
-        "description": "Configure custom tags that will added to any active span. Tags can be generated via literals, environment variables or an incoming request header.",
+        "description": "Configure custom tags that will added to any active span. Tags can be generated via literals, environment variables or an incoming request header. $hide_from_docs",
         "type": "object",
         "oneOf": [
           {
@@ -884,7 +884,7 @@
         }
       },
       "istio.mesh.v1alpha1.Tracing.Literal": {
-        "description": "Literal type represents a static value.",
+        "description": "Literal type represents a static value. $hide_from_docs",
         "type": "object",
         "properties": {
           "value": {
@@ -895,7 +895,7 @@
         }
       },
       "istio.mesh.v1alpha1.Tracing.Environment": {
-        "description": "Environment is the proxy's environment variable to be used for populating the custom span tag.",
+        "description": "Environment is the proxy's environment variable to be used for populating the custom span tag. $hide_from_docs",
         "type": "object",
         "properties": {
           "name": {
@@ -911,7 +911,7 @@
         }
       },
       "istio.mesh.v1alpha1.Tracing.RequestHeader": {
-        "description": "RequestHeader is the HTTP request header which will be used to populate the span tag. A default value can be configured if the header does not exist.",
+        "description": "RequestHeader is the HTTP request header which will be used to populate the span tag. A default value can be configured if the header does not exist. $hide_from_docs",
         "type": "object",
         "properties": {
           "name": {

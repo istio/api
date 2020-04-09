@@ -115,6 +115,7 @@ type Tracing struct {
 	//       name: custom-http-header-name
 	//       default_value: defaulted-value-from-custom-header
 	// ```
+	// $hide_from_docs
 	CustomTags           map[string]*Tracing_CustomTag `protobuf:"bytes,5,rep,name=custom_tags,json=customTags,proto3" json:"customTags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}                      `json:"-"`
 	XXX_unrecognized     []byte                        `json:"-"`
@@ -490,6 +491,7 @@ func (m *Tracing_Stackdriver) GetMaxNumberOfMessageEvents() *types.Int64Value {
 
 // Configure custom tags that will added to any active span.
 // Tags can be generated via literals, environment variables or an incoming request header.
+// $hide_from_docs
 type Tracing_CustomTag struct {
 	// Specify how to populate the value in a custom tag
 	//
@@ -594,6 +596,7 @@ func (*Tracing_CustomTag) XXX_OneofWrappers() []interface{} {
 }
 
 // Literal type represents a static value.
+// $hide_from_docs
 type Tracing_Literal struct {
 	// Static literal value used to populate the tag value.
 	Value                string   `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
@@ -643,6 +646,7 @@ func (m *Tracing_Literal) GetValue() string {
 }
 
 // Environment is the proxy's environment variable to be used for populating the custom span tag.
+// $hide_from_docs
 type Tracing_Environment struct {
 	// Name of the environment variable used to populate the tag's value
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
@@ -704,6 +708,7 @@ func (m *Tracing_Environment) GetDefaultValue() string {
 
 // RequestHeader is the HTTP request header which will be used to populate the span tag.
 // A default value can be configured if the header does not exist.
+// $hide_from_docs
 type Tracing_RequestHeader struct {
 	// HTTP header name used to obtain the value from to populate the tag value.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
