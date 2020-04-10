@@ -653,18 +653,8 @@
             "description": "Configures the maximum length of the request path to extract and include in the HttpUrl tag. Used to truncate length request paths to meet the needs of tracing backend. If not set, then a length of 256 will be used. $hide_from_docs",
             "type": "integer"
           },
-          "clientSampling": {
-            "description": "The percentage (0.0 - 100.0) of requests manged by the HTTP connection manager that will be force traced if the x-client-trace-id header is set. Default is 100. $hide_from_docs",
-            "type": "number",
-            "format": "double"
-          },
-          "randomSampling": {
+          "sampling": {
             "description": "The percentage of requests (0.0 - 100.0) that will be randomly selected for trace generation, if not requested by the client or not forced. Default is 100. $hide_from_docs",
-            "type": "number",
-            "format": "double"
-          },
-          "overallSampling": {
-            "description": "The percentage or requests (0.0 - 100.0) that will be traced after all other sampling checks have been applied. This functions as the upper limit on the total configured sampling rate. Default is 100. $hide_from_docs",
             "type": "number",
             "format": "double"
           }
