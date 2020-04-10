@@ -167,24 +167,13 @@ message Tracing {
   // $hide_from_docs
   uint32 max_path_tag_length = 6;
 
-  // The percentage (0.0 - 100.0) of requests manged by the HTTP connection manager
-  // that will be force traced if the x-client-trace-id header is set. Default is 100.
-  // $hide_from_docs
-  double client_sampling = 7;
-
   // The percentage of requests (0.0 - 100.0) that will be randomly selected for trace generation,
   // if not requested by the client or not forced. Default is 100.
   // $hide_from_docs
-  double random_sampling = 8;
-
-  // The percentage or requests (0.0 - 100.0) that will be traced after all other
-  // sampling checks have been applied. This functions as the upper limit on the
-  // total configured sampling rate. Default is 100.
-  // $hide_from_docs
-  double overall_sampling = 9;
+  double sampling = 7;
 
   // $hide_from_docs
-  // Next available field number: 10
+  // Next available field number: 8
 
 }
 
