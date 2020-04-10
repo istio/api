@@ -100,7 +100,7 @@ message Tracing {
     Stackdriver stackdriver = 4;
   }
 
-  // Configure custom tags that will added to any active span.
+  // Configure custom tags that will be added to any active span.
   // Tags can be generated via literals, environment variables or an incoming request header.
   // $hide_from_docs
   message CustomTag {

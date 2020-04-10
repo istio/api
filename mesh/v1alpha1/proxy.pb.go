@@ -501,7 +501,7 @@ func (m *Tracing_Stackdriver) GetMaxNumberOfMessageEvents() *types.Int64Value {
 	return nil
 }
 
-// Configure custom tags that will added to any active span.
+// Configure custom tags that will be added to any active span.
 // Tags can be generated via literals, environment variables or an incoming request header.
 // $hide_from_docs
 type Tracing_CustomTag struct {
