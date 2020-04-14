@@ -36101,8 +36101,8 @@
               },
               {
                 "id": 50,
-                "name": "cluster_local_namespaces",
-                "type": "string",
+                "name": "service_settings",
+                "type": "ServiceSettings",
                 "is_repeated": true
               },
               {
@@ -36138,6 +36138,34 @@
                     "id": 2,
                     "name": "rate_limit_timeout",
                     "type": "google.protobuf.Duration"
+                  }
+                ]
+              },
+              {
+                "name": "ServiceSettings",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "settings",
+                    "type": "Settings"
+                  },
+                  {
+                    "id": 2,
+                    "name": "hosts",
+                    "type": "string",
+                    "is_repeated": true
+                  }
+                ],
+                "messages": [
+                  {
+                    "name": "Settings",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "cluster_local",
+                        "type": "bool"
+                      }
+                    ]
                   }
                 ]
               }
@@ -36379,6 +36407,26 @@
                 "id": 4,
                 "name": "stackdriver",
                 "type": "Stackdriver"
+              },
+              {
+                "id": 6,
+                "name": "max_path_tag_length",
+                "type": "uint32"
+              },
+              {
+                "id": 7,
+                "name": "sampling",
+                "type": "double"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 5,
+                  "name": "custom_tags",
+                  "type": "CustomTag"
+                }
               }
             ],
             "messages": [
@@ -36449,6 +36497,66 @@
                     "id": 4,
                     "name": "max_number_of_message_events",
                     "type": "google.protobuf.Int64Value"
+                  }
+                ]
+              },
+              {
+                "name": "CustomTag",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "literal",
+                    "type": "Literal"
+                  },
+                  {
+                    "id": 2,
+                    "name": "environment",
+                    "type": "Environment"
+                  },
+                  {
+                    "id": 3,
+                    "name": "header",
+                    "type": "RequestHeader"
+                  }
+                ]
+              },
+              {
+                "name": "Literal",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "value",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "Environment",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "default_value",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "RequestHeader",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "default_value",
+                    "type": "string"
                   }
                 ]
               }
@@ -39668,7 +39776,13 @@
               {
                 "id": 3,
                 "name": "name",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               }
             ]
           },
@@ -41679,7 +41793,13 @@
               {
                 "id": 3,
                 "name": "name",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               }
             ]
           },
@@ -44348,9 +44468,6 @@
           }
         ],
         "imports": [
-          {
-            "path": "mesh/v1alpha1/config.proto"
-          },
           {
             "path": "operator/v1alpha1/component.proto"
           }

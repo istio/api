@@ -228,12 +228,11 @@
           "thriftConfig": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ThriftConfig"
           },
-          "clusterLocalNamespaces": {
-            "description": "Set the namespaces whose services will be considered local to the cluster. Cluster local services will not be exported to and will, therefore, not be accessible by workloads residing in other clusters. A common use case is the Kube API Server, where workloads expect to always reach the in-cluster server. By default, the namespace \"kube-system\" will be cluster-local.",
+          "serviceSettings": {
+            "description": "Settings to be applied to select services.",
             "type": "array",
             "items": {
-              "type": "string",
-              "format": "string"
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ServiceSettings"
             }
           },
           "enablePrometheusMerge": {
@@ -451,12 +450,39 @@
           }
         }
       },
+      "istio.mesh.v1alpha1.MeshConfig.ServiceSettings": {
+        "description": "Settings to be applied to select services.",
+        "type": "object",
+        "properties": {
+          "hosts": {
+            "description": "The services to which the Settings should be applied. Services are selected using the hostname matching rules used by DestinationRule.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "settings": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ServiceSettings.Settings"
+          }
+        }
+      },
       "istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode": {
         "type": "string",
         "enum": [
           "REGISTRY_ONLY",
           "ALLOW_ANY"
         ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ServiceSettings.Settings": {
+        "description": "Settings for the selected services.",
+        "type": "object",
+        "properties": {
+          "clusterLocal": {
+            "description": "If true, specifies that the client and service endpoints must reside in the same cluster. By default, in multi-cluster deployments, the Istio control plane assumes all service endpoints to be reachable from any client in any of the clusters which are part of the mesh. This configuration option limits the set of service endpoints visible to a client to be cluster scoped.",
+            "type": "boolean"
+          }
+        }
       },
       "istio.mesh.v1alpha1.Resource": {
         "description": "Resource describes the source of configuration",
