@@ -36104,6 +36104,11 @@
                 "name": "cluster_local_namespaces",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 51,
+                "name": "enable_prometheus_merge",
+                "type": "google.protobuf.BoolValue"
               }
             ],
             "reserved_ids": [
@@ -44264,7 +44269,7 @@
               {
                 "id": 40,
                 "name": "mesh_config",
-                "type": "istio.mesh.v1alpha1.MeshConfig"
+                "type": "TypeMapStringInterface2"
               },
               {
                 "id": 50,
