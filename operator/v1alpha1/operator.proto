@@ -161,7 +161,7 @@ message IstioOperatorSpec {
     string revision = 16;
 
     // Config used by control plane components internally.
-    istio.mesh.v1alpha1.MeshConfig mesh_config = 40;
+    TypeMapStringInterface2 mesh_config = 40;
 
     // Kubernetes resource settings, enablement and component-specific settings that are not internal to the
     // component.
