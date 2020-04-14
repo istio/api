@@ -356,6 +356,22 @@ message MeshConfig {
   // It can be enabled by destination using the destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy override.
   H2UpgradePolicy h2_upgrade_policy = 41;
 
+  // Name to be used while emitting statistics for inbound clusters.
+  // $hide_from_docs
+  enum inboundClusterStatName {
+    // Will be substituted with name of the service.
+    SERVICE = 0;
+
+    // Will be substituted with FQDN of the service.
+    SERVICE_FQDN = 1;
+
+    // Will be substituted with port of the service.
+    SERVICE_PORT = 2;
+
+    // Will be substituted with port name of the service.
+    SERVICE_PORT_NAME = 3;
+  }
+
   // Name to be used while emitting statistics for inbound clusters. The same pattern is used while computing stat prefix for
   // network filters like TCP and Redis.
   // By default, Istio emits statistics with the pattern `inbound|<port>|<port-name>|<service-FQDN>`.
@@ -373,6 +389,15 @@ message MeshConfig {
   // - `%SERVICE_FQDN%_%SERVICE_PORT%` will use reviews.prod.svc.cluster.local_7443 as the stats name.
   // - `%SERVICE%` will use reviews.prod as the stats name.
   string inbound_cluster_stat_name = 44;
+
+  // Name to be used while emitting statistics for outbound clusters.
+  // $hide_from_docs
+  enum outboundClusterStatName {
+    // It also consist of following names (excluded to avoid name collision in enum)
+    // SERVICE, SERVICE_FQDN, SERVICE_PORT, SERVICE_PORT_NAME
+    // Will be substituted with subset.
+    SUBSET_NAME = 0;
+  }
 
   // Name to be used while emitting statistics for outbound clusters. The same pattern is used while computing stat prefix for
   // network filters like TCP and Redis.

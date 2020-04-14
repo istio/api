@@ -485,6 +485,23 @@
           "ALLOW_ANY"
         ]
       },
+      "istio.mesh.v1alpha1.MeshConfig.inboundClusterStatName": {
+        "description": "Name to be used while emitting statistics for inbound clusters. $hide_from_docs",
+        "type": "string",
+        "enum": [
+          "SERVICE",
+          "SERVICE_FQDN",
+          "SERVICE_PORT",
+          "SERVICE_PORT_NAME"
+        ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.outboundClusterStatName": {
+        "description": "Name to be used while emitting statistics for outbound clusters. $hide_from_docs",
+        "type": "string",
+        "enum": [
+          "SUBSET_NAME"
+        ]
+      },
       "istio.mesh.v1alpha1.MeshConfig.ServiceSettings.Settings": {
         "description": "Settings for the selected services.",
         "type": "object",
