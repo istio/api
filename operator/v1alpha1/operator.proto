@@ -24,7 +24,6 @@ package istio.operator.v1alpha1;
 
 option go_package="istio.io/api/operator/v1alpha1";
 
-import "mesh/v1alpha1/config.proto";
 import "operator/v1alpha1/component.proto";
 
 /*
