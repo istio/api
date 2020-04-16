@@ -10,7 +10,6 @@ import (
 	fmt "fmt"
 	github_com_golang_protobuf_jsonpb "github.com/golang/protobuf/jsonpb"
 	proto "github.com/golang/protobuf/proto"
-	_ "istio.io/api/mesh/v1alpha1"
 	math "math"
 )
 

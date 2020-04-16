@@ -13,7 +13,6 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from mesh.v1alpha1 import config_pb2 as mesh_dot_v1alpha1_dot_config__pb2
 from operator.v1alpha1 import component_pb2 as operator_dot_v1alpha1_dot_component__pb2
 
 
@@ -22,9 +21,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.operator.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\036istio.io/api/operator/v1alpha1'),
-  serialized_pb=_b('\n operator/v1alpha1/operator.proto\x12\x17istio.operator.v1alpha1\x1a\x1amesh/v1alpha1/config.proto\x1a!operator/v1alpha1/component.proto\"\x94\x05\n\x11IstioOperatorSpec\x12\x0f\n\x07profile\x18\n \x01(\t\x12\x1c\n\x14install_package_path\x18\x0b \x01(\t\x12\x0b\n\x03hub\x18\x0c \x01(\t\x12\x34\n\x03tag\x18\r \x01(\x0b\x32\'.istio.operator.v1alpha1.TypeInterface2\x12\x1b\n\x0fresource_suffix\x18\x0e \x01(\tB\x02\x18\x01\x12\x11\n\tnamespace\x18\x0f \x01(\t\x12\x10\n\x08revision\x18\x10 \x01(\t\x12\x34\n\x0bmesh_config\x18( \x01(\x0b\x32\x1f.istio.mesh.v1alpha1.MeshConfig\x12\x42\n\ncomponents\x18\x32 \x01(\x0b\x32..istio.operator.v1alpha1.IstioComponentSetSpec\x12Y\n\x10\x61\x64\x64on_components\x18\x33 \x03(\x0b\x32?.istio.operator.v1alpha1.IstioOperatorSpec.AddonComponentsEntry\x12@\n\x06values\x18\x64 \x01(\x0b\x32\x30.istio.operator.v1alpha1.TypeMapStringInterface2\x12L\n\x12unvalidated_values\x18\x65 \x01(\x0b\x32\x30.istio.operator.v1alpha1.TypeMapStringInterface2\x1a\x66\n\x14\x41\x64\x64onComponentsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12=\n\x05value\x18\x02 \x01(\x0b\x32..istio.operator.v1alpha1.ExternalComponentSpec:\x02\x38\x01\"\xce\x03\n\rInstallStatus\x12=\n\x06status\x18\x01 \x01(\x0e\x32-.istio.operator.v1alpha1.InstallStatus.Status\x12U\n\x10\x63omponent_status\x18\x02 \x03(\x0b\x32;.istio.operator.v1alpha1.InstallStatus.ComponentStatusEntry\x1an\n\rVersionStatus\x12\x0f\n\x07version\x18\x01 \x01(\t\x12=\n\x06status\x18\x02 \x01(\x0e\x32-.istio.operator.v1alpha1.InstallStatus.Status\x12\r\n\x05\x65rror\x18\x04 \x01(\t\x1al\n\x14\x43omponentStatusEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x43\n\x05value\x18\x02 \x01(\x0b\x32\x34.istio.operator.v1alpha1.InstallStatus.VersionStatus:\x02\x38\x01\"I\n\x06Status\x12\x08\n\x04NONE\x10\x00\x12\x0c\n\x08UPDATING\x10\x01\x12\x0f\n\x0bRECONCILING\x10\x02\x12\x0b\n\x07HEALTHY\x10\x03\x12\t\n\x05\x45RROR\x10\x04\"\x19\n\x17TypeMapStringInterface2\"\x10\n\x0eTypeInterface2B Z\x1eistio.io/api/operator/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n operator/v1alpha1/operator.proto\x12\x17istio.operator.v1alpha1\x1a!operator/v1alpha1/component.proto\"\xa5\x05\n\x11IstioOperatorSpec\x12\x0f\n\x07profile\x18\n \x01(\t\x12\x1c\n\x14install_package_path\x18\x0b \x01(\t\x12\x0b\n\x03hub\x18\x0c \x01(\t\x12\x34\n\x03tag\x18\r \x01(\x0b\x32\'.istio.operator.v1alpha1.TypeInterface2\x12\x1b\n\x0fresource_suffix\x18\x0e \x01(\tB\x02\x18\x01\x12\x11\n\tnamespace\x18\x0f \x01(\t\x12\x10\n\x08revision\x18\x10 \x01(\t\x12\x45\n\x0bmesh_config\x18( \x01(\x0b\x32\x30.istio.operator.v1alpha1.TypeMapStringInterface2\x12\x42\n\ncomponents\x18\x32 \x01(\x0b\x32..istio.operator.v1alpha1.IstioComponentSetSpec\x12Y\n\x10\x61\x64\x64on_components\x18\x33 \x03(\x0b\x32?.istio.operator.v1alpha1.IstioOperatorSpec.AddonComponentsEntry\x12@\n\x06values\x18\x64 \x01(\x0b\x32\x30.istio.operator.v1alpha1.TypeMapStringInterface2\x12L\n\x12unvalidated_values\x18\x65 \x01(\x0b\x32\x30.istio.operator.v1alpha1.TypeMapStringInterface2\x1a\x66\n\x14\x41\x64\x64onComponentsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12=\n\x05value\x18\x02 \x01(\x0b\x32..istio.operator.v1alpha1.ExternalComponentSpec:\x02\x38\x01\"\xce\x03\n\rInstallStatus\x12=\n\x06status\x18\x01 \x01(\x0e\x32-.istio.operator.v1alpha1.InstallStatus.Status\x12U\n\x10\x63omponent_status\x18\x02 \x03(\x0b\x32;.istio.operator.v1alpha1.InstallStatus.ComponentStatusEntry\x1an\n\rVersionStatus\x12\x0f\n\x07version\x18\x01 \x01(\t\x12=\n\x06status\x18\x02 \x01(\x0e\x32-.istio.operator.v1alpha1.InstallStatus.Status\x12\r\n\x05\x65rror\x18\x04 \x01(\t\x1al\n\x14\x43omponentStatusEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x43\n\x05value\x18\x02 \x01(\x0b\x32\x34.istio.operator.v1alpha1.InstallStatus.VersionStatus:\x02\x38\x01\"I\n\x06Status\x12\x08\n\x04NONE\x10\x00\x12\x0c\n\x08UPDATING\x10\x01\x12\x0f\n\x0bRECONCILING\x10\x02\x12\x0b\n\x07HEALTHY\x10\x03\x12\t\n\x05\x45RROR\x10\x04\"\x19\n\x17TypeMapStringInterface2\"\x10\n\x0eTypeInterface2B Z\x1eistio.io/api/operator/v1alpha1b\x06proto3')
   ,
-  dependencies=[mesh_dot_v1alpha1_dot_config__pb2.DESCRIPTOR,operator_dot_v1alpha1_dot_component__pb2.DESCRIPTOR,])
+  dependencies=[operator_dot_v1alpha1_dot_component__pb2.DESCRIPTOR,])
 
 
 
@@ -57,8 +56,8 @@ _INSTALLSTATUS_STATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1177,
-  serialized_end=1250,
+  serialized_start=1166,
+  serialized_end=1239,
 )
 _sym_db.RegisterEnumDescriptor(_INSTALLSTATUS_STATUS)
 
@@ -96,8 +95,8 @@ _ISTIOOPERATORSPEC_ADDONCOMPONENTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=683,
-  serialized_end=785,
+  serialized_start=672,
+  serialized_end=774,
 )
 
 _ISTIOOPERATORSPEC = _descriptor.Descriptor(
@@ -203,8 +202,8 @@ _ISTIOOPERATORSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=125,
-  serialized_end=785,
+  serialized_start=97,
+  serialized_end=774,
 )
 
 
@@ -248,8 +247,8 @@ _INSTALLSTATUS_VERSIONSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=955,
-  serialized_end=1065,
+  serialized_start=944,
+  serialized_end=1054,
 )
 
 _INSTALLSTATUS_COMPONENTSTATUSENTRY = _descriptor.Descriptor(
@@ -285,8 +284,8 @@ _INSTALLSTATUS_COMPONENTSTATUSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1067,
-  serialized_end=1175,
+  serialized_start=1056,
+  serialized_end=1164,
 )
 
 _INSTALLSTATUS = _descriptor.Descriptor(
@@ -323,8 +322,8 @@ _INSTALLSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=788,
-  serialized_end=1250,
+  serialized_start=777,
+  serialized_end=1239,
 )
 
 
@@ -347,8 +346,8 @@ _TYPEMAPSTRINGINTERFACE2 = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1252,
-  serialized_end=1277,
+  serialized_start=1241,
+  serialized_end=1266,
 )
 
 
@@ -371,14 +370,14 @@ _TYPEINTERFACE2 = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1279,
-  serialized_end=1295,
+  serialized_start=1268,
+  serialized_end=1284,
 )
 
 _ISTIOOPERATORSPEC_ADDONCOMPONENTSENTRY.fields_by_name['value'].message_type = operator_dot_v1alpha1_dot_component__pb2._EXTERNALCOMPONENTSPEC
 _ISTIOOPERATORSPEC_ADDONCOMPONENTSENTRY.containing_type = _ISTIOOPERATORSPEC
 _ISTIOOPERATORSPEC.fields_by_name['tag'].message_type = _TYPEINTERFACE2
-_ISTIOOPERATORSPEC.fields_by_name['mesh_config'].message_type = mesh_dot_v1alpha1_dot_config__pb2._MESHCONFIG
+_ISTIOOPERATORSPEC.fields_by_name['mesh_config'].message_type = _TYPEMAPSTRINGINTERFACE2
 _ISTIOOPERATORSPEC.fields_by_name['components'].message_type = operator_dot_v1alpha1_dot_component__pb2._ISTIOCOMPONENTSETSPEC
 _ISTIOOPERATORSPEC.fields_by_name['addon_components'].message_type = _ISTIOOPERATORSPEC_ADDONCOMPONENTSENTRY
 _ISTIOOPERATORSPEC.fields_by_name['values'].message_type = _TYPEMAPSTRINGINTERFACE2
