@@ -28,6 +28,7 @@ CONFLICT: "InsertPosition.Index" integer: "0" has been removed, but is not reser
 CONFLICT: "InsertPosition.Index" integer: "1" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
 CONFLICT: "InsertPosition.Index" integer: "2" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
 CONFLICT: "InsertPosition.Index" integer: "3" has been removed, but is not reserved [networking/v1alpha3/envoy_filter.proto]
+CONFLICT: "IstioOperatorSpec" field: "mesh_config" has a different type: TypeMapStringInterface2, previously istio.mesh.v1alpha1.MeshConfig [operator/v1alpha1/operator.proto]
 CONFLICT: "KubernetesResourcesSpec" field: "hpa_spec" has a different type: HorizontalPodAutoscalerSpec, previously k8s.io.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec [operator/v1alpha1/component.proto]
 CONFLICT: "MeshConfig.IngressControllerMode" field: "DEFAULT" has a different integer: 2, previously 1 [mesh/v1alpha1/config.proto]
 CONFLICT: "MeshConfig.IngressControllerMode" field: "DEFAULT" integer: 2 has an updated name, previously "STRICT" [mesh/v1alpha1/config.proto]
