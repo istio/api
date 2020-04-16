@@ -52,7 +52,7 @@ var (
           Description: "Specifies the non-Kubernetes service accounts that are "+
                         "allowed to run this service. NOTE This API is Alpha and "+
                         "has no stability guarantees.",
-          Hidden: false,
+          Hidden: true,
           Deprecated: false,
 		  Resources: []ResourceTypes{ Service, },
         }
@@ -61,7 +61,7 @@ var (
           Name: "alpha.istio.io/identity",
           Description: "Identity for the workload. NOTE This API is Alpha and has "+
                         "no stability guarantees.",
-          Hidden: false,
+          Hidden: true,
           Deprecated: false,
 		  Resources: []ResourceTypes{ Pod, },
         }
@@ -71,7 +71,7 @@ var (
           Description: "Specifies the Kubernetes service accounts that are "+
                         "allowed to run this service on the VMs. NOTE This API is "+
                         "Alpha and has no stability guarantees.",
-          Hidden: false,
+          Hidden: true,
           Deprecated: false,
 		  Resources: []ResourceTypes{ Service, },
         }
@@ -141,7 +141,7 @@ var (
           Name: "networking.istio.io/gatewayNodeSelector",
           Description: "This is a service-level annotation for gateway services "+
                         "on Kubernetes of type NodePort. The annotation value is a "+
-                        "json map of node labels (e.g., "{'key':'value'}" ) that "+
+                        "json map of node labels (e.g., {'key':'value'} ) that "+
                         "select specific nodes in a cluster. In mesh expansion "+
                         "setups, VMs will use the node IPs from these selected "+
                         "nodes to route to this gateway service, instead of using "+
