@@ -400,7 +400,9 @@ func init() {
 	proto.RegisterType((*QuotaSpecBinding_QuotaSpecReference)(nil), "istio.mixer.v1.config.client.QuotaSpecBinding.QuotaSpecReference")
 }
 
-func init() { proto.RegisterFile("mixer/v1/config/client/quota.proto", fileDescriptor_81777b5d047af315) }
+func init() {
+	proto.RegisterFile("mixer/v1/config/client/quota.proto", fileDescriptor_81777b5d047af315)
+}
 
 var fileDescriptor_81777b5d047af315 = []byte{
 	// 569 bytes of a gzipped FileDescriptorProto

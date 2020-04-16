@@ -588,7 +588,7 @@ message Port {
   string protocol = 2 [(google.api.field_behavior) = REQUIRED];
 
   // Label assigned to the port.
-  string name = 3;
+  string name = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
 message ServerTLSSettings {
