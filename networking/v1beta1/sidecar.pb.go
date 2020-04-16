@@ -518,6 +518,7 @@ type Sidecar struct {
 	// and egress listeners in a sidecar unless overridden. There are no
 	// built in defaults for this setting. If not specified, the
 	// features will be disabled.
+	// $hide_from_docs
 	Localhost            *Localhost `protobuf:"bytes,6,opt,name=localhost,proto3" json:"localhost,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
 	XXX_unrecognized     []byte     `json:"-"`
@@ -618,6 +619,7 @@ type IstioIngressListener struct {
 	// localhost. Overrides the `localhost` level `clientTls` settings.
 	//
 	// **NOTE**: DISABLE, SIMPLE and MUTUAL are the only valid TLS modes.
+	// $hide_from_docs
 	LocalhostClientTls   *ClientTLSSettings `protobuf:"bytes,6,opt,name=localhost_client_tls,json=localhostClientTls,proto3" json:"localhost_client_tls,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
 	XXX_unrecognized     []byte             `json:"-"`
@@ -763,6 +765,7 @@ type IstioEgressListener struct {
 	// certificates from Kubernetes secrets) are not valid. All
 	// certificates must be mounted as files inside the sidecar
 	// container.
+	// $hide_from_docs
 	LocalhostServerTls   *ServerTLSSettings `protobuf:"bytes,5,opt,name=localhost_server_tls,json=localhostServerTls,proto3" json:"localhost_server_tls,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
 	XXX_unrecognized     []byte             `json:"-"`
@@ -919,7 +922,6 @@ type OutboundTrafficPolicy struct {
 	// to handle plain text TCP connections forwarded from the sidecar.
 	// Envoy's dynamic forward proxy can handle only HTTP and TLS
 	// connections.
-	// $hide_from_docs
 	EgressProxy          *Destination `protobuf:"bytes,2,opt,name=egress_proxy,json=egressProxy,proto3" json:"egress_proxy,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
 	XXX_unrecognized     []byte       `json:"-"`
@@ -1035,12 +1037,14 @@ func (m *OutboundTrafficPolicy) GetEgressProxy() *Destination {
 // {{</tab>}}
 // {{</tabset>}}
 //
+// $hide_from_docs
 type Localhost struct {
 	// TLS settings to be used by the sidecar (client) when forwarding
 	// traffic from the sidecar to the workload it is attached to
 	// (server) on the localhost.
 	//
 	// **NOTE**: DISABLE, SIMPLE and MUTUAL are the only valid TLS modes.
+	// $hide_from_docs
 	ClientTls *ClientTLSSettings `protobuf:"bytes,1,opt,name=client_tls,json=clientTls,proto3" json:"client_tls,omitempty"`
 	// TLS settings to be used by the sidecar (server) when receiving
 	// traffic from the workload (client) on the localhost.
@@ -1050,6 +1054,7 @@ type Localhost struct {
 	// certificates from Kubernetes secrets) are not valid. All
 	// certificates must be mounted as files inside the sidecar
 	// container.
+	// $hide_from_docs
 	ServerTls            *ServerTLSSettings `protobuf:"bytes,2,opt,name=server_tls,json=serverTls,proto3" json:"server_tls,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
 	XXX_unrecognized     []byte             `json:"-"`

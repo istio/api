@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 24
+number_of_entries: 26
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -1187,6 +1187,21 @@ If not specified, this will be enabled by default.</p>
 No
 </td>
 </tr>
+<tr id="MeshConfig-nodeport_gateway_ip_selection">
+<td><code>nodeportGatewayIpSelection</code></td>
+<td><code><a href="#MeshConfig-NodePortGatewayIPSelection">NodePortGatewayIPSelection</a></code></td>
+<td>
+<p>In very large clusters using NodePort type gateways, allowing a
+VM to route to the gateway via any node in the cluster may not be
+preferable. In such scenarios, this configuration specifies
+global defaults that determine the specific set of nodes that
+should be used for routing to any NodePort type gateway.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1364,6 +1379,47 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="MeshConfig-NodePortGatewayIPSelection">MeshConfig.NodePortGatewayIPSelection</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-NodePortGatewayIPSelection-node_selection_mode">
+<td><code>nodeSelectionMode</code></td>
+<td><code><a href="#MeshConfig-NodePortGatewayIPSelection-Mode">Mode</a></code></td>
+<td>
+<p>Determines how node IPs will be selected for gateways of NodePort type.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-NodePortGatewayIPSelection-node_labels">
+<td><code>nodeLabels</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>When the mode is CUSTOM, use the nodeLabels to select a
+specific set of nodes whose node IPs should be used for
+Gateways. Note that <code>networking.istio.io/gatewayNodeSelector</code>
+annotation can be used to further refine the set of nodes that
+should be used for a particular gateway service.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="Network">Network</h2>
 <section>
 <p>Network provides information about the endpoints in a routable L3
@@ -1503,14 +1559,14 @@ ranges for endpoints from different networks must not overlap.</p>
 No
 </td>
 </tr>
-<tr id="Network-NetworkEndpoints-from_registry" class="oneof">
-<td><code>fromRegistry</code></td>
+<tr id="Network-NetworkEndpoints-from_cluster" class="oneof">
+<td><code>fromCluster</code></td>
 <td><code>string (oneof)</code></td>
 <td>
-<p>Add all endpoints from the specified registry into this network.
-The names of the registries should correspond to the kubeconfig file name
-inside the secret that was used to configure the registry (Kubernetes
-multicluster) or supplied by MCP server.</p>
+<p>Add all endpoints from the specified cluster into this network.
+In a multicluster setup, the names of the clusters should
+correspond to the kubeconfig file name inside the secret that
+was used to configure the cluster (Kubernetes multicluster).</p>
 
 </td>
 <td>
@@ -1687,6 +1743,47 @@ service registry as well as those defined through ServiceEntries</p>
 <td>
 <p>outbound traffic to unknown destinations will be allowed, in case
 there are no services or ServiceEntries for the destination port</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-NodePortGatewayIPSelection-Mode">MeshConfig.NodePortGatewayIPSelection.Mode</h2>
+<section>
+<p>A shortcut for specifying how to select the node IPs for nodeport Gateways.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-NodePortGatewayIPSelection-Mode-DISALLOW_NODE_IPS">
+<td><code>DISALLOW_NODE_IPS</code></td>
+<td>
+<p>Nodeport gateway services will not be routable automatically from other clusters.
+Note: you can still explicitly specify one or more gateway node IPs in the mesh networks.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-NodePortGatewayIPSelection-Mode-USE_ANY_NODE_IP">
+<td><code>USE_ANY_NODE_IP</code></td>
+<td>
+<p>Use any node IP in the cluster for routing to nodeport
+gateway services. Note that
+<code>networking.istio.io/gatewayNodeSelector</code> annotation can be
+used to further refine the set of nodes that should be used
+for a particular gateway service.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-NodePortGatewayIPSelection-Mode-USE_NODES_WITH_LABEL">
+<td><code>USE_NODES_WITH_LABEL</code></td>
+<td>
+<p>Use only nodes selected by the specified label selector.</p>
 
 </td>
 </tr>

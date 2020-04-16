@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.mesh.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\032istio.io/api/mesh/v1alpha1'),
-  serialized_pb=_b('\n\x1bmesh/v1alpha1/network.proto\x12\x13istio.mesh.v1alpha1\x1a\x1fgoogle/api/field_behavior.proto\"\xd7\x02\n\x07Network\x12\x45\n\tendpoints\x18\x02 \x03(\x0b\x32-.istio.mesh.v1alpha1.Network.NetworkEndpointsB\x03\xe0\x41\x02\x12G\n\x08gateways\x18\x03 \x03(\x0b\x32\x30.istio.mesh.v1alpha1.Network.IstioNetworkGatewayB\x03\xe0\x41\x02\x1a\x46\n\x10NetworkEndpoints\x12\x13\n\tfrom_cidr\x18\x01 \x01(\tH\x00\x12\x17\n\rfrom_registry\x18\x02 \x01(\tH\x00\x42\x04\n\x02ne\x1at\n\x13IstioNetworkGateway\x12\x1f\n\x15registry_service_name\x18\x01 \x01(\tH\x00\x12\x11\n\x07\x61\x64\x64ress\x18\x02 \x01(\tH\x00\x12\x11\n\x04port\x18\x03 \x01(\rB\x03\xe0\x41\x02\x12\x10\n\x08locality\x18\x04 \x01(\tB\x04\n\x02gw\"\xa5\x01\n\x0cMeshNetworks\x12\x46\n\x08networks\x18\x01 \x03(\x0b\x32/.istio.mesh.v1alpha1.MeshNetworks.NetworksEntryB\x03\xe0\x41\x02\x1aM\n\rNetworksEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12+\n\x05value\x18\x02 \x01(\x0b\x32\x1c.istio.mesh.v1alpha1.Network:\x02\x38\x01\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x1bmesh/v1alpha1/network.proto\x12\x13istio.mesh.v1alpha1\x1a\x1fgoogle/api/field_behavior.proto\"\xf3\x02\n\x07Network\x12\x45\n\tendpoints\x18\x02 \x03(\x0b\x32-.istio.mesh.v1alpha1.Network.NetworkEndpointsB\x03\xe0\x41\x02\x12G\n\x08gateways\x18\x03 \x03(\x0b\x32\x30.istio.mesh.v1alpha1.Network.IstioNetworkGatewayB\x03\xe0\x41\x02\x1a\x62\n\x10NetworkEndpoints\x12\x13\n\tfrom_cidr\x18\x01 \x01(\tH\x00\x12\x1b\n\rfrom_registry\x18\x02 \x01(\tB\x02\x18\x01H\x00\x12\x16\n\x0c\x66rom_cluster\x18\x03 \x01(\tH\x00\x42\x04\n\x02ne\x1at\n\x13IstioNetworkGateway\x12\x1f\n\x15registry_service_name\x18\x01 \x01(\tH\x00\x12\x11\n\x07\x61\x64\x64ress\x18\x02 \x01(\tH\x00\x12\x11\n\x04port\x18\x03 \x01(\rB\x03\xe0\x41\x02\x12\x10\n\x08locality\x18\x04 \x01(\tB\x04\n\x02gw\"\xa5\x01\n\x0cMeshNetworks\x12\x46\n\x08networks\x18\x01 \x03(\x0b\x32/.istio.mesh.v1alpha1.MeshNetworks.NetworksEntryB\x03\xe0\x41\x02\x1aM\n\rNetworksEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12+\n\x05value\x18\x02 \x01(\x0b\x32\x1c.istio.mesh.v1alpha1.Network:\x02\x38\x01\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,])
 
@@ -48,6 +48,13 @@ _NETWORK_NETWORKENDPOINTS = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
+      serialized_options=_b('\030\001'), file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='from_cluster', full_name='istio.mesh.v1alpha1.Network.NetworkEndpoints.from_cluster', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
@@ -65,7 +72,7 @@ _NETWORK_NETWORKENDPOINTS = _descriptor.Descriptor(
       index=0, containing_type=None, fields=[]),
   ],
   serialized_start=241,
-  serialized_end=311,
+  serialized_end=339,
 )
 
 _NETWORK_ISTIONETWORKGATEWAY = _descriptor.Descriptor(
@@ -118,8 +125,8 @@ _NETWORK_ISTIONETWORKGATEWAY = _descriptor.Descriptor(
       name='gw', full_name='istio.mesh.v1alpha1.Network.IstioNetworkGateway.gw',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=313,
-  serialized_end=429,
+  serialized_start=341,
+  serialized_end=457,
 )
 
 _NETWORK = _descriptor.Descriptor(
@@ -156,7 +163,7 @@ _NETWORK = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=86,
-  serialized_end=429,
+  serialized_end=457,
 )
 
 
@@ -193,8 +200,8 @@ _MESHNETWORKS_NETWORKSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=520,
-  serialized_end=597,
+  serialized_start=548,
+  serialized_end=625,
 )
 
 _MESHNETWORKS = _descriptor.Descriptor(
@@ -223,8 +230,8 @@ _MESHNETWORKS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=432,
-  serialized_end=597,
+  serialized_start=460,
+  serialized_end=625,
 )
 
 _NETWORK_NETWORKENDPOINTS.containing_type = _NETWORK
@@ -234,6 +241,9 @@ _NETWORK_NETWORKENDPOINTS.fields_by_name['from_cidr'].containing_oneof = _NETWOR
 _NETWORK_NETWORKENDPOINTS.oneofs_by_name['ne'].fields.append(
   _NETWORK_NETWORKENDPOINTS.fields_by_name['from_registry'])
 _NETWORK_NETWORKENDPOINTS.fields_by_name['from_registry'].containing_oneof = _NETWORK_NETWORKENDPOINTS.oneofs_by_name['ne']
+_NETWORK_NETWORKENDPOINTS.oneofs_by_name['ne'].fields.append(
+  _NETWORK_NETWORKENDPOINTS.fields_by_name['from_cluster'])
+_NETWORK_NETWORKENDPOINTS.fields_by_name['from_cluster'].containing_oneof = _NETWORK_NETWORKENDPOINTS.oneofs_by_name['ne']
 _NETWORK_ISTIONETWORKGATEWAY.containing_type = _NETWORK
 _NETWORK_ISTIONETWORKGATEWAY.oneofs_by_name['gw'].fields.append(
   _NETWORK_ISTIONETWORKGATEWAY.fields_by_name['registry_service_name'])
@@ -290,6 +300,7 @@ _sym_db.RegisterMessage(MeshNetworks.NetworksEntry)
 
 
 DESCRIPTOR._options = None
+_NETWORK_NETWORKENDPOINTS.fields_by_name['from_registry']._options = None
 _NETWORK_ISTIONETWORKGATEWAY.fields_by_name['port']._options = None
 _NETWORK.fields_by_name['endpoints']._options = None
 _NETWORK.fields_by_name['gateways']._options = None

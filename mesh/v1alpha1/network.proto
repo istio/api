@@ -52,11 +52,14 @@ message Network {
     // ranges for endpoints from different networks must not overlap.
     string from_cidr = 1;
 
-    // Add all endpoints from the specified registry into this network.
-    // The names of the registries should correspond to the kubeconfig file name
-    // inside the secret that was used to configure the registry (Kubernetes
-    // multicluster) or supplied by MCP server.
-    string from_registry = 2;
+    // $hide_from_docs
+    string from_registry = 2 [deprecated=true];
+
+    // Add all endpoints from the specified cluster into this network.
+    // In a multicluster setup, the names of the clusters should
+    // correspond to the kubeconfig file name inside the secret that
+    // was used to configure the cluster (Kubernetes multicluster).
+    string from_cluster = 3;
     }
   }
 

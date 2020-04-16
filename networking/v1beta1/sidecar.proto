@@ -461,6 +461,7 @@ message Sidecar {
   // and egress listeners in a sidecar unless overridden. There are no
   // built in defaults for this setting. If not specified, the
   // features will be disabled.
+  // $hide_from_docs
   Localhost localhost = 6;
 }
 
@@ -494,6 +495,7 @@ message IstioIngressListener {
   // localhost. Overrides the `localhost` level `clientTls` settings.
   //
   // **NOTE**: DISABLE, SIMPLE and MUTUAL are the only valid TLS modes.
+  // $hide_from_docs
   ClientTLSSettings localhost_client_tls = 6;
 }
 
@@ -572,6 +574,7 @@ message IstioEgressListener {
   // certificates from Kubernetes secrets) are not valid. All
   // certificates must be mounted as files inside the sidecar
   // container.
+  // $hide_from_docs
   ServerTLSSettings localhost_server_tls = 5;
 }
 
@@ -628,7 +631,6 @@ message OutboundTrafficPolicy {
   // to handle plain text TCP connections forwarded from the sidecar.
   // Envoy's dynamic forward proxy can handle only HTTP and TLS
   // connections.
-  // $hide_from_docs
   istio.networking.v1beta1.Destination egress_proxy = 2;
 }
 
@@ -712,12 +714,14 @@ enum CaptureMode {
 // {{</tab>}}
 // {{</tabset>}}
 //
+// $hide_from_docs
 message Localhost {
   // TLS settings to be used by the sidecar (client) when forwarding
   // traffic from the sidecar to the workload it is attached to
   // (server) on the localhost.
   //
   // **NOTE**: DISABLE, SIMPLE and MUTUAL are the only valid TLS modes.
+  // $hide_from_docs
   ClientTLSSettings client_tls = 1;
 
   // TLS settings to be used by the sidecar (server) when receiving
@@ -728,5 +732,6 @@ message Localhost {
   // certificates from Kubernetes secrets) are not valid. All
   // certificates must be mounted as files inside the sidecar
   // container.
+  // $hide_from_docs
   ServerTLSSettings server_tls = 2;
 }
