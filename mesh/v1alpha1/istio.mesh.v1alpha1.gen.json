@@ -240,9 +240,6 @@
             "description": "If enabled, Istio agent will merge metrics exposed by the application with metrics from Envoy and Istio agent. The sidecar injection will replace `prometheus.io` annotations present on the pod and redirect them towards Istio agent, which will then merge metrics of from the application with Istio metrics. This relies on the annotations `prometheus.io/scrape`, `prometheus.io/port`, and `prometheus.io/path` annotations. If you are running a separately managed Envoy with an Istio sidecar, this may cause issues, as the metrics will collide. In this case, it is recommended to disable aggregation on that deployment with the `prometheus.istio.io/merge-metrics: \"false\"` annotation. If not specified, this will be enabled by default.",
             "type": "boolean",
             "nullable": true
-          },
-          "nodeportGatewayIpSelection": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.NodePortGatewayIPSelection"
           }
         }
       },
@@ -454,36 +451,11 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.MeshConfig.NodePortGatewayIPSelection": {
-        "type": "object",
-        "properties": {
-          "nodeSelectionMode": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.NodePortGatewayIPSelection.Mode"
-          },
-          "nodeLabels": {
-            "description": "When the mode is CUSTOM, use the nodeLabels to select a specific set of nodes whose node IPs should be used for Gateways. Note that `networking.istio.io/gatewayNodeSelector` annotation can be used to further refine the set of nodes that should be used for a particular gateway service.",
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "format": "string"
-            }
-          }
-        }
-      },
       "istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode": {
         "type": "string",
         "enum": [
           "REGISTRY_ONLY",
           "ALLOW_ANY"
-        ]
-      },
-      "istio.mesh.v1alpha1.MeshConfig.NodePortGatewayIPSelection.Mode": {
-        "description": "A shortcut for specifying how to select the node IPs for nodeport Gateways.",
-        "type": "string",
-        "enum": [
-          "DISALLOW_NODE_IPS",
-          "USE_ANY_NODE_IP",
-          "USE_NODES_WITH_LABEL"
         ]
       },
       "istio.mesh.v1alpha1.Resource": {
@@ -538,19 +510,7 @@
                   ],
                   "properties": {
                     "fromRegistry": {
-                      "type": "string",
-                      "format": "string",
-                      "deprecated": true
-                    }
-                  }
-                },
-                {
-                  "required": [
-                    "fromCluster"
-                  ],
-                  "properties": {
-                    "fromCluster": {
-                      "description": "Add all endpoints from the specified cluster into this network. In a multicluster setup, the names of the clusters should correspond to the kubeconfig file name inside the secret that was used to configure the cluster (Kubernetes multicluster).",
+                      "description": "Add all endpoints from the specified registry into this network. The names of the registries should correspond to the kubeconfig file name inside the secret that was used to configure the registry (Kubernetes multicluster) or supplied by MCP server.",
                       "type": "string",
                       "format": "string"
                     }
@@ -577,19 +537,7 @@
             ],
             "properties": {
               "fromRegistry": {
-                "type": "string",
-                "format": "string",
-                "deprecated": true
-              }
-            }
-          },
-          {
-            "required": [
-              "fromCluster"
-            ],
-            "properties": {
-              "fromCluster": {
-                "description": "Add all endpoints from the specified cluster into this network. In a multicluster setup, the names of the clusters should correspond to the kubeconfig file name inside the secret that was used to configure the cluster (Kubernetes multicluster).",
+                "description": "Add all endpoints from the specified registry into this network. The names of the registries should correspond to the kubeconfig file name inside the secret that was used to configure the registry (Kubernetes multicluster) or supplied by MCP server.",
                 "type": "string",
                 "format": "string"
               }

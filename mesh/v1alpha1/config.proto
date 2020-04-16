@@ -428,42 +428,8 @@ message MeshConfig {
   // If not specified, this will be enabled by default.
   google.protobuf.BoolValue enable_prometheus_merge = 51;
 
-  message NodePortGatewayIPSelection {
-    // A shortcut for specifying how to select the node IPs for nodeport Gateways.
-    enum Mode {
-      // Nodeport gateway services will not be routable automatically from other clusters.
-      // Note: you can still explicitly specify one or more gateway node IPs in the mesh networks.
-      DISALLOW_NODE_IPS = 0;
-      // Use any node IP in the cluster for routing to nodeport
-      // gateway services. Note that
-      // `networking.istio.io/gatewayNodeSelector` annotation can be
-      // used to further refine the set of nodes that should be used
-      // for a particular gateway service.
-      USE_ANY_NODE_IP = 1;
-      // Use only nodes selected by the specified label selector.
-      USE_NODES_WITH_LABEL = 2;
-    }
-
-    // Determines how node IPs will be selected for gateways of NodePort type.
-    Mode node_selection_mode = 1;
-
-    // When the mode is CUSTOM, use the nodeLabels to select a
-    // specific set of nodes whose node IPs should be used for
-    // Gateways. Note that `networking.istio.io/gatewayNodeSelector`
-    // annotation can be used to further refine the set of nodes that
-    // should be used for a particular gateway service.
-    map<string, string> node_labels = 2;
-  }
-
-  // In very large clusters using NodePort type gateways, allowing a
-  // VM to route to the gateway via any node in the cluster may not be
-  // preferable. In such scenarios, this configuration specifies
-  // global defaults that determine the specific set of nodes that
-  // should be used for routing to any NodePort type gateway.
-  NodePortGatewayIPSelection nodeport_gateway_ip_selection = 52;
-
   // $hide_from_docs
-  // Next available field number: 53
+  // Next available field number: 52
 }
 
 // Resource describes the source of configuration
