@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.networking.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\037istio.io/api/networking/v1beta1'),
-  serialized_pb=_b('\n networking/v1beta1/gateway.proto\x12\x18istio.networking.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\"\xba\x01\n\x07Gateway\x12\x36\n\x07servers\x18\x01 \x03(\x0b\x32 .istio.networking.v1beta1.ServerB\x03\xe0\x41\x02\x12\x46\n\x08selector\x18\x02 \x03(\x0b\x32/.istio.networking.v1beta1.Gateway.SelectorEntryB\x03\xe0\x41\x02\x1a/\n\rSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xcd\x06\n\x06Server\x12\x31\n\x04port\x18\x01 \x01(\x0b\x32\x1e.istio.networking.v1beta1.PortB\x03\xe0\x41\x02\x12\x0c\n\x04\x62ind\x18\x04 \x01(\t\x12\x12\n\x05hosts\x18\x02 \x03(\tB\x03\xe0\x41\x02\x12\x38\n\x03tls\x18\x03 \x01(\x0b\x32+.istio.networking.v1beta1.Server.TLSOptions\x12\x18\n\x10\x64\x65\x66\x61ult_endpoint\x18\x05 \x01(\t\x1a\x99\x05\n\nTLSOptions\x12\x16\n\x0ehttps_redirect\x18\x01 \x01(\x08\x12\x41\n\x04mode\x18\x02 \x01(\x0e\x32\x33.istio.networking.v1beta1.Server.TLSOptions.TLSmode\x12\x1a\n\x12server_certificate\x18\x03 \x01(\t\x12\x13\n\x0bprivate_key\x18\x04 \x01(\t\x12\x17\n\x0f\x63\x61_certificates\x18\x05 \x01(\t\x12\x17\n\x0f\x63redential_name\x18\n \x01(\t\x12\x19\n\x11subject_alt_names\x18\x06 \x03(\t\x12\x1f\n\x17verify_certificate_spki\x18\x0b \x03(\t\x12\x1f\n\x17verify_certificate_hash\x18\x0c \x03(\t\x12U\n\x14min_protocol_version\x18\x07 \x01(\x0e\x32\x37.istio.networking.v1beta1.Server.TLSOptions.TLSProtocol\x12U\n\x14max_protocol_version\x18\x08 \x01(\x0e\x32\x37.istio.networking.v1beta1.Server.TLSOptions.TLSProtocol\x12\x15\n\rcipher_suites\x18\t \x03(\t\"Z\n\x07TLSmode\x12\x0f\n\x0bPASSTHROUGH\x10\x00\x12\n\n\x06SIMPLE\x10\x01\x12\n\n\x06MUTUAL\x10\x02\x12\x14\n\x10\x41UTO_PASSTHROUGH\x10\x03\x12\x10\n\x0cISTIO_MUTUAL\x10\x04\"O\n\x0bTLSProtocol\x12\x0c\n\x08TLS_AUTO\x10\x00\x12\x0b\n\x07TLSV1_0\x10\x01\x12\x0b\n\x07TLSV1_1\x10\x02\x12\x0b\n\x07TLSV1_2\x10\x03\x12\x0b\n\x07TLSV1_3\x10\x04\"@\n\x04Port\x12\x13\n\x06number\x18\x01 \x01(\rB\x03\xe0\x41\x02\x12\x15\n\x08protocol\x18\x02 \x01(\tB\x03\xe0\x41\x02\x12\x0c\n\x04name\x18\x03 \x01(\tB!Z\x1fistio.io/api/networking/v1beta1b\x06proto3')
+  serialized_pb=_b('\n networking/v1beta1/gateway.proto\x12\x18istio.networking.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\"\xba\x01\n\x07Gateway\x12\x36\n\x07servers\x18\x01 \x03(\x0b\x32 .istio.networking.v1beta1.ServerB\x03\xe0\x41\x02\x12\x46\n\x08selector\x18\x02 \x03(\x0b\x32/.istio.networking.v1beta1.Gateway.SelectorEntryB\x03\xe0\x41\x02\x1a/\n\rSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xcd\x06\n\x06Server\x12\x31\n\x04port\x18\x01 \x01(\x0b\x32\x1e.istio.networking.v1beta1.PortB\x03\xe0\x41\x02\x12\x0c\n\x04\x62ind\x18\x04 \x01(\t\x12\x12\n\x05hosts\x18\x02 \x03(\tB\x03\xe0\x41\x02\x12\x38\n\x03tls\x18\x03 \x01(\x0b\x32+.istio.networking.v1beta1.Server.TLSOptions\x12\x18\n\x10\x64\x65\x66\x61ult_endpoint\x18\x05 \x01(\t\x1a\x99\x05\n\nTLSOptions\x12\x16\n\x0ehttps_redirect\x18\x01 \x01(\x08\x12\x41\n\x04mode\x18\x02 \x01(\x0e\x32\x33.istio.networking.v1beta1.Server.TLSOptions.TLSmode\x12\x1a\n\x12server_certificate\x18\x03 \x01(\t\x12\x13\n\x0bprivate_key\x18\x04 \x01(\t\x12\x17\n\x0f\x63\x61_certificates\x18\x05 \x01(\t\x12\x17\n\x0f\x63redential_name\x18\n \x01(\t\x12\x19\n\x11subject_alt_names\x18\x06 \x03(\t\x12\x1f\n\x17verify_certificate_spki\x18\x0b \x03(\t\x12\x1f\n\x17verify_certificate_hash\x18\x0c \x03(\t\x12U\n\x14min_protocol_version\x18\x07 \x01(\x0e\x32\x37.istio.networking.v1beta1.Server.TLSOptions.TLSProtocol\x12U\n\x14max_protocol_version\x18\x08 \x01(\x0e\x32\x37.istio.networking.v1beta1.Server.TLSOptions.TLSProtocol\x12\x15\n\rcipher_suites\x18\t \x03(\t\"Z\n\x07TLSmode\x12\x0f\n\x0bPASSTHROUGH\x10\x00\x12\n\n\x06SIMPLE\x10\x01\x12\n\n\x06MUTUAL\x10\x02\x12\x14\n\x10\x41UTO_PASSTHROUGH\x10\x03\x12\x10\n\x0cISTIO_MUTUAL\x10\x04\"O\n\x0bTLSProtocol\x12\x0c\n\x08TLS_AUTO\x10\x00\x12\x0b\n\x07TLSV1_0\x10\x01\x12\x0b\n\x07TLSV1_1\x10\x02\x12\x0b\n\x07TLSV1_2\x10\x03\x12\x0b\n\x07TLSV1_3\x10\x04\"E\n\x04Port\x12\x13\n\x06number\x18\x01 \x01(\rB\x03\xe0\x41\x02\x12\x15\n\x08protocol\x18\x02 \x01(\tB\x03\xe0\x41\x02\x12\x11\n\x04name\x18\x03 \x01(\tB\x03\xe0\x41\x02\x42!Z\x1fistio.io/api/networking/v1beta1b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,])
 
@@ -366,7 +366,7 @@ _PORT = _descriptor.Descriptor(
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
+      serialized_options=_b('\340A\002'), file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -380,7 +380,7 @@ _PORT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=1132,
-  serialized_end=1196,
+  serialized_end=1201,
 )
 
 _GATEWAY_SELECTORENTRY.containing_type = _GATEWAY
@@ -445,4 +445,5 @@ _SERVER.fields_by_name['port']._options = None
 _SERVER.fields_by_name['hosts']._options = None
 _PORT.fields_by_name['number']._options = None
 _PORT.fields_by_name['protocol']._options = None
+_PORT.fields_by_name['name']._options = None
 # @@protoc_insertion_point(module_scope)

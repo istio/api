@@ -135,7 +135,8 @@
 //   hosts:
 //   - mongosvr.prod.svc.cluster.local # name of internal Mongo service
 //   gateways:
-//   - some-config-namespace/my-gateway # can omit the namespace if gateway is in same
+//   - some-config-namespace/my-gateway # can omit the namespace if gateway is
+//   in same
 //                                        namespace as virtual service.
 //   tcp:
 //   - match:
