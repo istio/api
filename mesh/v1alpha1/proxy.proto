@@ -99,6 +99,82 @@ message Tracing {
     // Use a Stackdriver tracer.
     Stackdriver stackdriver = 4;
   }
+
+  // Configure custom tags that will be added to any active span.
+  // Tags can be generated via literals, environment variables or an incoming request header.
+  // $hide_from_docs
+  message CustomTag {
+    // Specify how to populate the value in a custom tag
+    oneof type {
+      // The custom tag's value is the specified literal.
+      Literal literal = 1;
+      // The custom tag's value should be populated from an environmental
+      // variable
+      Environment environment = 2;
+      // The custom tag's value is populated by an http header from
+      // an incoming request.
+      RequestHeader header = 3;
+    }
+  }
+
+  // Literal type represents a static value.
+  // $hide_from_docs
+  message Literal {
+    // Static literal value used to populate the tag value.
+    string value = 1;
+  }
+
+  // Environment is the proxy's environment variable to be used for populating the custom span tag.
+  // $hide_from_docs
+  message Environment {
+    // Name of the environment variable used to populate the tag's value
+    string name = 1;
+    // When the environment variable is not found,
+    // the tag's value will be populated with this default value if specified,
+    // otherwise the tag will not be populated.
+    string default_value = 2;
+  }
+
+  // RequestHeader is the HTTP request header which will be used to populate the span tag.
+  // A default value can be configured if the header does not exist.
+  // $hide_from_docs
+  message RequestHeader {
+    // HTTP header name used to obtain the value from to populate the tag value.
+    string name = 1;
+
+    // Default value to be used for the tag when the named HTTP header does not exist.
+    // The tag will be skipped if no default value is provided.
+    string default_value = 2;
+  }
+
+  // Configures the custom tags to be added to active span by all proxies (i.e. sidecars
+  // and gateways).
+  // The key represents the name of the tag.
+  // Ex:
+  // ```yaml
+  // custom_tags:
+  //   new_tag_name:
+  //     header:
+  //       name: custom-http-header-name
+  //       default_value: defaulted-value-from-custom-header
+  // ```
+  // $hide_from_docs
+  map<string, CustomTag> custom_tags = 5;
+
+  // Configures the maximum length of the request path to extract and include in the
+  // HttpUrl tag. Used to truncate length request paths to meet the needs of tracing
+  // backend. If not set, then a length of 256 will be used.
+  // $hide_from_docs
+  uint32 max_path_tag_length = 6;
+
+  // The percentage of requests (0.0 - 100.0) that will be randomly selected for trace generation,
+  // if not requested by the client or not forced. Default is 100.
+  // $hide_from_docs
+  double sampling = 7;
+
+  // $hide_from_docs
+  // Next available field number: 8
+
 }
 
 // SDS defines secret discovery service(SDS) configuration to be used by the proxy.

@@ -641,6 +641,24 @@
       "istio.mesh.v1alpha1.Tracing": {
         "description": "Tracing defines configuration for the tracing performed by Envoy instances.",
         "type": "object",
+        "properties": {
+          "customTags": {
+            "description": "Configures the custom tags to be added to active span by all proxies (i.e. sidecars and gateways). The key represents the name of the tag. Ex: ```yaml custom_tags: new_tag_name: header: name: custom-http-header-name default_value: defaulted-value-from-custom-header ``` $hide_from_docs",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.CustomTag"
+            }
+          },
+          "maxPathTagLength": {
+            "description": "Configures the maximum length of the request path to extract and include in the HttpUrl tag. Used to truncate length request paths to meet the needs of tracing backend. If not set, then a length of 256 will be used. $hide_from_docs",
+            "type": "integer"
+          },
+          "sampling": {
+            "description": "The percentage of requests (0.0 - 100.0) that will be randomly selected for trace generation, if not requested by the client or not forced. Default is 100. $hide_from_docs",
+            "type": "number",
+            "format": "double"
+          }
+        },
         "oneOf": [
           {
             "not": {
@@ -730,6 +748,78 @@
           }
         ]
       },
+      "istio.mesh.v1alpha1.Tracing.CustomTag": {
+        "description": "Configure custom tags that will be added to any active span. Tags can be generated via literals, environment variables or an incoming request header. $hide_from_docs",
+        "type": "object",
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "literal"
+                  ],
+                  "properties": {
+                    "literal": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Literal"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "environment"
+                  ],
+                  "properties": {
+                    "environment": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Environment"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "header"
+                  ],
+                  "properties": {
+                    "header": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.RequestHeader"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "literal"
+            ],
+            "properties": {
+              "literal": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Literal"
+              }
+            }
+          },
+          {
+            "required": [
+              "environment"
+            ],
+            "properties": {
+              "environment": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Environment"
+              }
+            }
+          },
+          {
+            "required": [
+              "header"
+            ],
+            "properties": {
+              "header": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.RequestHeader"
+              }
+            }
+          }
+        ]
+      },
       "istio.mesh.v1alpha1.Tracing.Zipkin": {
         "description": "Zipkin defines configuration for a Zipkin tracer.",
         "type": "object",
@@ -799,6 +889,49 @@
             "description": "The global default max number of message events per span. default is 200. $hide_from_docs",
             "type": "integer",
             "nullable": true
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.Tracing.Literal": {
+        "description": "Literal type represents a static value. $hide_from_docs",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Static literal value used to populate the tag value.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.Tracing.Environment": {
+        "description": "Environment is the proxy's environment variable to be used for populating the custom span tag. $hide_from_docs",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the environment variable used to populate the tag's value",
+            "type": "string",
+            "format": "string"
+          },
+          "defaultValue": {
+            "description": "When the environment variable is not found, the tag's value will be populated with this default value if specified, otherwise the tag will not be populated.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.Tracing.RequestHeader": {
+        "description": "RequestHeader is the HTTP request header which will be used to populate the span tag. A default value can be configured if the header does not exist. $hide_from_docs",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "HTTP header name used to obtain the value from to populate the tag value.",
+            "type": "string",
+            "format": "string"
+          },
+          "defaultValue": {
+            "description": "Default value to be used for the tag when the named HTTP header does not exist. The tag will be skipped if no default value is provided.",
+            "type": "string",
+            "format": "string"
           }
         }
       },
