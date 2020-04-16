@@ -432,7 +432,7 @@
             "format": "int32"
           },
           "connectTimeout": {
-            "description": "TCP connection timeout.",
+            "description": "TCP connection timeout. format: 1h/1m/1s/1ms. MUST BE \u003e=1ms. Default is 10s.",
             "type": "string"
           },
           "tcpKeepalive": {

@@ -295,11 +295,14 @@ func (ClientTLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:DestinationRule:subresource:status
 // +cue-gen:DestinationRule:scope:Namespaced
 // +cue-gen:DestinationRule:resource:categories=istio-io,networking-istio-io,shortNames=dr
-// +cue-gen:DestinationRule:printerColumn:name=Host,type=string,JSONPath=.spec.host,description="The name of a service from the service registry"
-// +cue-gen:DestinationRule:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
-// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
-// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
-// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// +cue-gen:DestinationRule:printerColumn:name=Host,type=string,JSONPath=.spec.host,description="The
+// name of a service from the service registry"
+// +cue-gen:DestinationRule:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp
+// is a timestamp representing the server time when this object was created. It
+// is not guaranteed to be set in happens-before order across separate
+// operations. Clients may not set this value. It is represented in RFC3339 form
+// and is in UTC. Populated by the system. Read-only. Null for lists. More info:
+// https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // -->
 //
 // <!-- go code generation tags
@@ -312,8 +315,10 @@ type DestinationRule struct {
 	// The name of a service from the service registry. Service
 	// names are looked up from the platform's service registry (e.g.,
 	// Kubernetes services, Consul services, etc.) and from the hosts
-	// declared by [ServiceEntries](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry). Rules defined for
-	// services that do not exist in the service registry will be ignored.
+	// declared by
+	// [ServiceEntries](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry).
+	// Rules defined for services that do not exist in the service registry will
+	// be ignored.
 	//
 	// *Note for Kubernetes users*: When short names are used (e.g. "reviews"
 	// instead of "reviews.default.svc.cluster.local"), Istio will interpret
@@ -344,8 +349,8 @@ type DestinationRule struct {
 	// namespaces by default.
 	//
 	// The value "." is reserved and defines an export to the same namespace that
-	// the destination rule is declared in. Similarly, the value "*" is reserved and
-	// defines an export to all namespaces.
+	// the destination rule is declared in. Similarly, the value "*" is reserved
+	// and defines an export to all namespaces.
 	//
 	// NOTE: in the current release, the `exportTo` value is restricted to
 	// "." or "*" (i.e., the current namespace or all namespaces).
@@ -423,7 +428,8 @@ type TrafficPolicy struct {
 	LoadBalancer *LoadBalancerSettings `protobuf:"bytes,1,opt,name=load_balancer,json=loadBalancer,proto3" json:"load_balancer,omitempty"`
 	// Settings controlling the volume of connections to an upstream service
 	ConnectionPool *ConnectionPoolSettings `protobuf:"bytes,2,opt,name=connection_pool,json=connectionPool,proto3" json:"connection_pool,omitempty"`
-	// Settings controlling eviction of unhealthy hosts from the load balancing pool
+	// Settings controlling eviction of unhealthy hosts from the load balancing
+	// pool
 	OutlierDetection *OutlierDetection `protobuf:"bytes,3,opt,name=outlier_detection,json=outlierDetection,proto3" json:"outlier_detection,omitempty"`
 	// TLS related settings for connections to the upstream service.
 	Tls *ClientTLSSettings `protobuf:"bytes,4,opt,name=tls,proto3" json:"tls,omitempty"`
@@ -516,7 +522,8 @@ type TrafficPolicy_PortTrafficPolicy struct {
 	LoadBalancer *LoadBalancerSettings `protobuf:"bytes,2,opt,name=load_balancer,json=loadBalancer,proto3" json:"load_balancer,omitempty"`
 	// Settings controlling the volume of connections to an upstream service
 	ConnectionPool *ConnectionPoolSettings `protobuf:"bytes,3,opt,name=connection_pool,json=connectionPool,proto3" json:"connection_pool,omitempty"`
-	// Settings controlling eviction of unhealthy hosts from the load balancing pool
+	// Settings controlling eviction of unhealthy hosts from the load balancing
+	// pool
 	OutlierDetection *OutlierDetection `protobuf:"bytes,4,opt,name=outlier_detection,json=outlierDetection,proto3" json:"outlier_detection,omitempty"`
 	// TLS related settings for connections to the upstream service.
 	Tls                  *ClientTLSSettings `protobuf:"bytes,5,opt,name=tls,proto3" json:"tls,omitempty"`
@@ -595,12 +602,13 @@ func (m *TrafficPolicy_PortTrafficPolicy) GetTls() *ClientTLSSettings {
 
 // A subset of endpoints of a service. Subsets can be used for scenarios
 // like A/B testing, or routing to a specific version of a service. Refer
-// to [VirtualService](https://istio.io/docs/reference/config/networking/virtual-service/#VirtualService) documentation for examples of using
-// subsets in these scenarios. In addition, traffic policies defined at the
-// service-level can be overridden at a subset-level. The following rule
-// uses a round robin load balancing policy for all traffic going to a
-// subset named testversion that is composed of endpoints (e.g., pods) with
-// labels (version:v3).
+// to
+// [VirtualService](https://istio.io/docs/reference/config/networking/virtual-service/#VirtualService)
+// documentation for examples of using subsets in these scenarios. In addition,
+// traffic policies defined at the service-level can be overridden at a
+// subset-level. The following rule uses a round robin load balancing policy for
+// all traffic going to a subset named testversion that is composed of endpoints
+// (e.g., pods) with labels (version:v3).
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
@@ -651,9 +659,10 @@ func (m *TrafficPolicy_PortTrafficPolicy) GetTls() *ClientTLSSettings {
 //
 // One or more labels are typically required to identify the subset destination,
 // however, when the corresponding DestinationRule represents a host that
-// supports multiple SNI hosts (e.g., an egress gateway), a subset without labels
-// may be meaningful. In this case a traffic policy with [ClientTLSSettings](#ClientTLSSettings)
-// can be used to identify a specific SNI host corresponding to the named subset.
+// supports multiple SNI hosts (e.g., an egress gateway), a subset without
+// labels may be meaningful. In this case a traffic policy with
+// [ClientTLSSettings](#ClientTLSSettings) can be used to identify a specific
+// SNI host corresponding to the named subset.
 type Subset struct {
 	// Name of the subset. The service name and the subset name can
 	// be used for traffic splitting in a route rule.
@@ -810,8 +819,9 @@ type LoadBalancerSettings struct {
 	//	*LoadBalancerSettings_Simple
 	//	*LoadBalancerSettings_ConsistentHash
 	LbPolicy isLoadBalancerSettings_LbPolicy `protobuf_oneof:"lb_policy"`
-	// Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
-	// between this object and the object one in MeshConfig
+	// Locality load balancer settings, this will override mesh wide settings in
+	// entirety, meaning no merging would be performed between this object and the
+	// object one in MeshConfig
 	LocalityLbSetting    *LocalityLoadBalancerSetting `protobuf:"bytes,3,opt,name=locality_lb_setting,json=localityLbSetting,proto3" json:"locality_lb_setting,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                     `json:"-"`
 	XXX_unrecognized     []byte                       `json:"-"`
@@ -1223,9 +1233,11 @@ func (m *ConnectionPoolSettings) GetHttp() *ConnectionPoolSettings_HTTPSettings 
 
 // Settings common to both HTTP and TCP upstream connections.
 type ConnectionPoolSettings_TCPSettings struct {
-	// Maximum number of HTTP1 /TCP connections to a destination host. Default 2^32-1.
+	// Maximum number of HTTP1 /TCP connections to a destination host. Default
+	// 2^32-1.
 	MaxConnections int32 `protobuf:"varint,1,opt,name=max_connections,json=maxConnections,proto3" json:"max_connections,omitempty"`
-	// TCP connection timeout.
+	// TCP connection timeout. format:
+	// 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
 	ConnectTimeout *types.Duration `protobuf:"bytes,2,opt,name=connect_timeout,json=connectTimeout,proto3" json:"connect_timeout,omitempty"`
 	// If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
 	TcpKeepalive         *ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,3,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcp_keepalive,omitempty"`
@@ -1291,8 +1303,8 @@ func (m *ConnectionPoolSettings_TCPSettings) GetTcpKeepalive() *ConnectionPoolSe
 // TCP keepalive.
 type ConnectionPoolSettings_TCPSettings_TcpKeepalive struct {
 	// Maximum number of keepalive probes to send without response before
-	// deciding the connection is dead. Default is to use the OS level configuration
-	// (unless overridden, Linux defaults to 9.)
+	// deciding the connection is dead. Default is to use the OS level
+	// configuration (unless overridden, Linux defaults to 9.)
 	Probes uint32 `protobuf:"varint,1,opt,name=probes,proto3" json:"probes,omitempty"`
 	// The time duration a connection needs to be idle before keep-alive
 	// probes start being sent. Default is to use the OS level configuration
@@ -1378,11 +1390,15 @@ type ConnectionPoolSettings_HTTPSettings struct {
 	// Maximum number of retries that can be outstanding to all hosts in a
 	// cluster at a given time. Defaults to 2^32-1.
 	MaxRetries int32 `protobuf:"varint,4,opt,name=max_retries,json=maxRetries,proto3" json:"max_retries,omitempty"`
-	// The idle timeout for upstream connection pool connections. The idle timeout is defined as the period in which there are no active requests.
-	// If not set, the default is 1 hour. When the idle timeout is reached the connection will be closed.
-	// Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive. Applies to both HTTP1.1 and HTTP2 connections.
+	// The idle timeout for upstream connection pool connections. The idle
+	// timeout is defined as the period in which there are no active requests.
+	// If not set, the default is 1 hour. When the idle timeout is reached the
+	// connection will be closed. Note that request based timeouts mean that
+	// HTTP/2 PINGs will not keep the connection alive. Applies to both HTTP1.1
+	// and HTTP2 connections.
 	IdleTimeout *types.Duration `protobuf:"bytes,5,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"`
-	// Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+	// Specify if http1.1 connection should be upgraded to http2 for the
+	// associated destination.
 	H2UpgradePolicy      ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy `protobuf:"varint,6,opt,name=h2_upgrade_policy,json=h2UpgradePolicy,proto3,enum=istio.networking.v1beta1.ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy" json:"h2_upgrade_policy,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                                            `json:"-"`
 	XXX_unrecognized     []byte                                              `json:"-"`
@@ -1576,10 +1592,10 @@ type OutlierDetection struct {
 	// Outlier detection will be enabled as long as the associated load balancing
 	// pool has at least min_health_percent hosts in healthy mode. When the
 	// percentage of healthy hosts in the load balancing pool drops below this
-	// threshold, outlier detection will be disabled and the proxy will load balance
-	// across all hosts in the pool (healthy and unhealthy). The threshold can be
-	// disabled by setting it to 0%. The default is 0% as it's not typically
-	// applicable in k8s environments with few pods per service.
+	// threshold, outlier detection will be disabled and the proxy will load
+	// balance across all hosts in the pool (healthy and unhealthy). The threshold
+	// can be disabled by setting it to 0%. The default is 0% as it's not
+	// typically applicable in k8s environments with few pods per service.
 	MinHealthPercent     int32    `protobuf:"varint,5,opt,name=min_health_percent,json=minHealthPercent,proto3" json:"min_health_percent,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -1888,7 +1904,8 @@ func (m *ClientTLSSettings) GetSni() string {
 // traffic originates and where it will terminate. These localities are
 // specified using arbitrary labels that designate a hierarchy of localities in
 // {region}/{zone}/{sub-zone} form. For additional detail refer to
-// [Locality Weight](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)
+// [Locality
+// Weight](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)
 // The following example shows how to setup locality weights mesh-wide.
 //
 // Given a mesh with workloads and their service deployed to "us-west/zone1/*"
@@ -1932,17 +1949,22 @@ func (m *ClientTLSSettings) GetSni() string {
 // Locality load balancing settings.
 type LocalityLoadBalancerSetting struct {
 	// Optional: only one of distribute or failover can be set.
-	// Explicitly specify loadbalancing weight across different zones and geographical locations.
-	// Refer to [Locality weighted load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)
-	// If empty, the locality weight is set according to the endpoints number within it.
+	// Explicitly specify loadbalancing weight across different zones and
+	// geographical locations. Refer to [Locality weighted load
+	// balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)
+	// If empty, the locality weight is set according to the endpoints number
+	// within it.
 	Distribute []*LocalityLoadBalancerSetting_Distribute `protobuf:"bytes,1,rep,name=distribute,proto3" json:"distribute,omitempty"`
 	// Optional: only failover or distribute can be set.
-	// Explicitly specify the region traffic will land on when endpoints in local region becomes unhealthy.
-	// Should be used together with OutlierDetection to detect unhealthy endpoints.
-	// Note: if no OutlierDetection specified, this will not take effect.
+	// Explicitly specify the region traffic will land on when endpoints in local
+	// region becomes unhealthy. Should be used together with OutlierDetection to
+	// detect unhealthy endpoints. Note: if no OutlierDetection specified, this
+	// will not take effect.
 	Failover []*LocalityLoadBalancerSetting_Failover `protobuf:"bytes,2,rep,name=failover,proto3" json:"failover,omitempty"`
-	// enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
-	// e.g. true means that turn on locality load balancing for this DestinationRule no matter what mesh wide settings is.
+	// enable locality load balancing, this is DestinationRule-level and will
+	// override mesh wide settings in entirety. e.g. true means that turn on
+	// locality load balancing for this DestinationRule no matter what mesh wide
+	// settings is.
 	Enabled              *types.BoolValue `protobuf:"bytes,3,opt,name=enabled,proto3" json:"enabled,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_unrecognized     []byte           `json:"-"`

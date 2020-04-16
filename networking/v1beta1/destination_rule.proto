@@ -22,7 +22,8 @@ import "gogoproto/gogo.proto";
 // $schema: istio.networking.v1beta1.DestinationRule
 // $title: Destination Rule
 // $description: Configuration affecting load balancing, outlier detection, etc.
-// $location: https://istio.io/docs/reference/config/networking/destination-rule.html
+// $location:
+// https://istio.io/docs/reference/config/networking/destination-rule.html
 // $aliases: [/docs/reference/config/networking/v1beta1/destination-rule]
 
 // `DestinationRule` defines policies that apply to traffic intended for a
@@ -179,11 +180,14 @@ option go_package = "istio.io/api/networking/v1beta1";
 // +cue-gen:DestinationRule:subresource:status
 // +cue-gen:DestinationRule:scope:Namespaced
 // +cue-gen:DestinationRule:resource:categories=istio-io,networking-istio-io,shortNames=dr
-// +cue-gen:DestinationRule:printerColumn:name=Host,type=string,JSONPath=.spec.host,description="The name of a service from the service registry"
-// +cue-gen:DestinationRule:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp 
-// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. 
-// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
-// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// +cue-gen:DestinationRule:printerColumn:name=Host,type=string,JSONPath=.spec.host,description="The
+// name of a service from the service registry"
+// +cue-gen:DestinationRule:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp
+// is a timestamp representing the server time when this object was created. It
+// is not guaranteed to be set in happens-before order across separate
+// operations. Clients may not set this value. It is represented in RFC3339 form
+// and is in UTC. Populated by the system. Read-only. Null for lists. More info:
+// https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // -->
 //
 // <!-- go code generation tags
@@ -196,8 +200,10 @@ message DestinationRule {
   // The name of a service from the service registry. Service
   // names are looked up from the platform's service registry (e.g.,
   // Kubernetes services, Consul services, etc.) and from the hosts
-  // declared by [ServiceEntries](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry). Rules defined for
-  // services that do not exist in the service registry will be ignored.
+  // declared by
+  // [ServiceEntries](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry).
+  // Rules defined for services that do not exist in the service registry will
+  // be ignored.
   //
   // *Note for Kubernetes users*: When short names are used (e.g. "reviews"
   // instead of "reviews.default.svc.cluster.local"), Istio will interpret
@@ -231,8 +237,8 @@ message DestinationRule {
   // namespaces by default.
   //
   // The value "." is reserved and defines an export to the same namespace that
-  // the destination rule is declared in. Similarly, the value "*" is reserved and
-  // defines an export to all namespaces.
+  // the destination rule is declared in. Similarly, the value "*" is reserved
+  // and defines an export to all namespaces.
   //
   // NOTE: in the current release, the `exportTo` value is restricted to
   // "." or "*" (i.e., the current namespace or all namespaces).
@@ -248,7 +254,8 @@ message TrafficPolicy {
   // Settings controlling the volume of connections to an upstream service
   ConnectionPoolSettings connection_pool = 2;
 
-  // Settings controlling eviction of unhealthy hosts from the load balancing pool
+  // Settings controlling eviction of unhealthy hosts from the load balancing
+  // pool
   OutlierDetection outlier_detection = 3;
 
   // TLS related settings for connections to the upstream service.
@@ -267,7 +274,8 @@ message TrafficPolicy {
     // Settings controlling the volume of connections to an upstream service
     ConnectionPoolSettings connection_pool = 3;
 
-    // Settings controlling eviction of unhealthy hosts from the load balancing pool
+    // Settings controlling eviction of unhealthy hosts from the load balancing
+    // pool
     OutlierDetection outlier_detection = 4;
 
     // TLS related settings for connections to the upstream service.
@@ -284,12 +292,13 @@ message TrafficPolicy {
 
 // A subset of endpoints of a service. Subsets can be used for scenarios
 // like A/B testing, or routing to a specific version of a service. Refer
-// to [VirtualService](https://istio.io/docs/reference/config/networking/virtual-service/#VirtualService) documentation for examples of using
-// subsets in these scenarios. In addition, traffic policies defined at the
-// service-level can be overridden at a subset-level. The following rule
-// uses a round robin load balancing policy for all traffic going to a
-// subset named testversion that is composed of endpoints (e.g., pods) with
-// labels (version:v3).
+// to
+// [VirtualService](https://istio.io/docs/reference/config/networking/virtual-service/#VirtualService)
+// documentation for examples of using subsets in these scenarios. In addition,
+// traffic policies defined at the service-level can be overridden at a
+// subset-level. The following rule uses a round robin load balancing policy for
+// all traffic going to a subset named testversion that is composed of endpoints
+// (e.g., pods) with labels (version:v3).
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
@@ -340,9 +349,10 @@ message TrafficPolicy {
 //
 // One or more labels are typically required to identify the subset destination,
 // however, when the corresponding DestinationRule represents a host that
-// supports multiple SNI hosts (e.g., an egress gateway), a subset without labels
-// may be meaningful. In this case a traffic policy with [ClientTLSSettings](#ClientTLSSettings)
-// can be used to identify a specific SNI host corresponding to the named subset.
+// supports multiple SNI hosts (e.g., an egress gateway), a subset without
+// labels may be meaningful. In this case a traffic policy with
+// [ClientTLSSettings](#ClientTLSSettings) can be used to identify a specific
+// SNI host corresponding to the named subset.
 message Subset {
   // Name of the subset. The service name and the subset name can
   // be used for traffic splitting in a route rule.
@@ -513,8 +523,9 @@ message LoadBalancerSettings {
     ConsistentHashLB consistent_hash = 2;
   }
 
-  // Locality load balancer settings, this will override mesh wide settings in entirety, meaning no merging would be performed
-  // between this object and the object one in MeshConfig
+  // Locality load balancer settings, this will override mesh wide settings in
+  // entirety, meaning no merging would be performed between this object and the
+  // object one in MeshConfig
   LocalityLoadBalancerSetting locality_lb_setting = 3;
 }
 
@@ -573,8 +584,8 @@ message ConnectionPoolSettings {
     // TCP keepalive.
     message TcpKeepalive {
       // Maximum number of keepalive probes to send without response before
-      // deciding the connection is dead. Default is to use the OS level configuration
-      // (unless overridden, Linux defaults to 9.)
+      // deciding the connection is dead. Default is to use the OS level
+      // configuration (unless overridden, Linux defaults to 9.)
       uint32 probes = 1;
 
       // The time duration a connection needs to be idle before keep-alive
@@ -588,10 +599,12 @@ message ConnectionPoolSettings {
       google.protobuf.Duration interval = 3;
     };
 
-    // Maximum number of HTTP1 /TCP connections to a destination host. Default 2^32-1.
+    // Maximum number of HTTP1 /TCP connections to a destination host. Default
+    // 2^32-1.
     int32 max_connections = 1;
 
-    // TCP connection timeout.
+    // TCP connection timeout. format:
+    // 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
     google.protobuf.Duration connect_timeout = 2;
 
     // If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
@@ -615,9 +628,12 @@ message ConnectionPoolSettings {
     // cluster at a given time. Defaults to 2^32-1.
     int32 max_retries = 4;
 
-    // The idle timeout for upstream connection pool connections. The idle timeout is defined as the period in which there are no active requests.
-    // If not set, the default is 1 hour. When the idle timeout is reached the connection will be closed.
-    // Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive. Applies to both HTTP1.1 and HTTP2 connections.
+    // The idle timeout for upstream connection pool connections. The idle
+    // timeout is defined as the period in which there are no active requests.
+    // If not set, the default is 1 hour. When the idle timeout is reached the
+    // connection will be closed. Note that request based timeouts mean that
+    // HTTP/2 PINGs will not keep the connection alive. Applies to both HTTP1.1
+    // and HTTP2 connections.
     google.protobuf.Duration idle_timeout = 5;
 
     // Policy for upgrading http1.1 connections to http2.
@@ -631,7 +647,8 @@ message ConnectionPoolSettings {
       // This opt-in option overrides the default.
       UPGRADE = 2;
     };
-    // Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+    // Specify if http1.1 connection should be upgraded to http2 for the
+    // associated destination.
     H2UpgradePolicy h2_upgrade_policy = 6;
   };
 
@@ -710,7 +727,7 @@ message OutlierDetection {
   // is accessed over an opaque TCP connection, connect timeouts and
   // connection error/failure events qualify as an error.
   // $hide_from_docs
-  int32 consecutive_errors = 1 [deprecated=true];
+  int32 consecutive_errors = 1 [deprecated = true];
 
   // Number of gateway errors before a host is ejected from the connection pool.
   // When the upstream host is accessed over HTTP, a 502, 503, or 504 return
@@ -759,10 +776,10 @@ message OutlierDetection {
   // Outlier detection will be enabled as long as the associated load balancing
   // pool has at least min_health_percent hosts in healthy mode. When the
   // percentage of healthy hosts in the load balancing pool drops below this
-  // threshold, outlier detection will be disabled and the proxy will load balance
-  // across all hosts in the pool (healthy and unhealthy). The threshold can be
-  // disabled by setting it to 0%. The default is 0% as it's not typically
-  // applicable in k8s environments with few pods per service.
+  // threshold, outlier detection will be disabled and the proxy will load
+  // balance across all hosts in the pool (healthy and unhealthy). The threshold
+  // can be disabled by setting it to 0%. The default is 0% as it's not
+  // typically applicable in k8s environments with few pods per service.
   int32 min_health_percent = 5;
 }
 
@@ -932,7 +949,8 @@ message ClientTLSSettings {
 // traffic originates and where it will terminate. These localities are
 // specified using arbitrary labels that designate a hierarchy of localities in
 // {region}/{zone}/{sub-zone} form. For additional detail refer to
-// [Locality Weight](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)
+// [Locality
+// Weight](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)
 // The following example shows how to setup locality weights mesh-wide.
 //
 // Given a mesh with workloads and their service deployed to "us-west/zone1/*"
@@ -974,53 +992,58 @@ message ClientTLSSettings {
 //      to: us-east
 // ```
 // Locality load balancing settings.
-message LocalityLoadBalancerSetting{
-    // Describes how traffic originating in the 'from' zone or sub-zone is
-    // distributed over a set of 'to' zones. Syntax for specifying a zone is
-    // {region}/{zone}/{sub-zone} and terminal wildcards are allowed on any
-    // segment of the specification. Examples:
-    // * - matches all localities
-    // us-west/* - all zones and sub-zones within the us-west region
-    // us-west/zone-1/* - all sub-zones within us-west/zone-1
-    message Distribute{
-        // Originating locality, '/' separated, e.g. 'region/zone/sub_zone'.
-        string from = 1;
+message LocalityLoadBalancerSetting {
+  // Describes how traffic originating in the 'from' zone or sub-zone is
+  // distributed over a set of 'to' zones. Syntax for specifying a zone is
+  // {region}/{zone}/{sub-zone} and terminal wildcards are allowed on any
+  // segment of the specification. Examples:
+  // * - matches all localities
+  // us-west/* - all zones and sub-zones within the us-west region
+  // us-west/zone-1/* - all sub-zones within us-west/zone-1
+  message Distribute {
+    // Originating locality, '/' separated, e.g. 'region/zone/sub_zone'.
+    string from = 1;
 
-        // Map of upstream localities to traffic distribution weights. The sum of
-        // all weights should be == 100. Any locality not assigned a weight will
-        // receive no traffic.
-        map<string, uint32> to = 2;
-    };
+    // Map of upstream localities to traffic distribution weights. The sum of
+    // all weights should be == 100. Any locality not assigned a weight will
+    // receive no traffic.
+    map<string, uint32> to = 2;
+  };
 
-    // Specify the traffic failover policy across regions. Since zone and sub-zone
-    // failover is supported by default this only needs to be specified for
-    // regions when the operator needs to constrain traffic failover so that
-    // the default behavior of failing over to any endpoint globally does not
-    // apply. This is useful when failing over traffic across regions would not
-    // improve service health or may need to be restricted for other reasons
-    // like regulatory controls.
-    message Failover{
-        // Originating region.
-        string from = 1;
+  // Specify the traffic failover policy across regions. Since zone and sub-zone
+  // failover is supported by default this only needs to be specified for
+  // regions when the operator needs to constrain traffic failover so that
+  // the default behavior of failing over to any endpoint globally does not
+  // apply. This is useful when failing over traffic across regions would not
+  // improve service health or may need to be restricted for other reasons
+  // like regulatory controls.
+  message Failover {
+    // Originating region.
+    string from = 1;
 
-        // Destination region the traffic will fail over to when endpoints in
-        // the 'from' region becomes unhealthy.
-        string to = 2;
-    };
+    // Destination region the traffic will fail over to when endpoints in
+    // the 'from' region becomes unhealthy.
+    string to = 2;
+  };
 
-    // Optional: only one of distribute or failover can be set.
-    // Explicitly specify loadbalancing weight across different zones and geographical locations.
-    // Refer to [Locality weighted load balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)
-    // If empty, the locality weight is set according to the endpoints number within it.
-    repeated Distribute distribute = 1;
+  // Optional: only one of distribute or failover can be set.
+  // Explicitly specify loadbalancing weight across different zones and
+  // geographical locations. Refer to [Locality weighted load
+  // balancing](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/locality_weight)
+  // If empty, the locality weight is set according to the endpoints number
+  // within it.
+  repeated Distribute distribute = 1;
 
-    // Optional: only failover or distribute can be set.
-    // Explicitly specify the region traffic will land on when endpoints in local region becomes unhealthy.
-    // Should be used together with OutlierDetection to detect unhealthy endpoints.
-    // Note: if no OutlierDetection specified, this will not take effect.
-    repeated Failover failover = 2;
+  // Optional: only failover or distribute can be set.
+  // Explicitly specify the region traffic will land on when endpoints in local
+  // region becomes unhealthy. Should be used together with OutlierDetection to
+  // detect unhealthy endpoints. Note: if no OutlierDetection specified, this
+  // will not take effect.
+  repeated Failover failover = 2;
 
-    // enable locality load balancing, this is DestinationRule-level and will override mesh wide settings in entirety.
-    // e.g. true means that turn on locality load balancing for this DestinationRule no matter what mesh wide settings is.
-    google.protobuf.BoolValue enabled = 3;
+  // enable locality load balancing, this is DestinationRule-level and will
+  // override mesh wide settings in entirety. e.g. true means that turn on
+  // locality load balancing for this DestinationRule no matter what mesh wide
+  // settings is.
+  google.protobuf.BoolValue enabled = 3;
 }
