@@ -2158,7 +2158,9 @@ func init() {
 	proto.RegisterType((*ExternalMetricSource)(nil), "istio.operator.v1alpha1.ExternalMetricSource")
 }
 
-func init() { proto.RegisterFile("operator/v1alpha1/kubernetes.proto", fileDescriptor_b13c6c8501de3a11) }
+func init() {
+	proto.RegisterFile("operator/v1alpha1/kubernetes.proto", fileDescriptor_b13c6c8501de3a11)
+}
 
 var fileDescriptor_b13c6c8501de3a11 = []byte{
 	// 2190 bytes of a gzipped FileDescriptorProto

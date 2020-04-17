@@ -8,7 +8,6 @@ package v1alpha1
 import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
-	_ "istio.io/api/mesh/v1alpha1"
 	math "math"
 )
 
