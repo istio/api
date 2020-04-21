@@ -934,6 +934,8 @@ type ProxyConfig struct {
 	StatusPort int32 `protobuf:"varint,26,opt,name=status_port,json=statusPort,proto3" json:"statusPort,omitempty"`
 	// An additional list of tags to extract from the in-proxy Istio telemetry. These extra tags can be
 	// added by configuring the telemetry extension. Each additional tag needs to be present in this list.
+	// Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
+	// and exposed as Prometheus metrics.
 	ExtraStatTags        []string `protobuf:"bytes,27,rep,name=extra_stat_tags,json=extraStatTags,proto3" json:"extraStatTags,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
