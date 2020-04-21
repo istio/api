@@ -754,38 +754,6 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 //         - exact: /health_check
 //   principalBinding: USE_ORIGIN
 // ```
-//
-// <!-- crd generation tags
-// +cue-gen:Policy:groupName:authentication.istio.io
-// +cue-gen:Policy:version:v1alpha1
-// +cue-gen:Policy:storageVersion
-// +cue-gen:Policy:annotations:helm.sh/resource-policy=keep
-// +cue-gen:Policy:labels:app=istio-citadel,chart=istio,heritage=Tiller,release=istio
-// +cue-gen:Policy:subresource:status
-// +cue-gen:Policy:scope:Namespaced
-// +cue-gen:Policy:resource:categories=istio-io,authentication-istio-io,plural=policies
-// -->
-//
-// <!-- crd generation tags
-// +cue-gen:MeshPolicy:groupName:authentication.istio.io
-// +cue-gen:MeshPolicy:version:v1alpha1
-// +cue-gen:MeshPolicy:storageVersion
-// +cue-gen:MeshPolicy:annotations:helm.sh/resource-policy=keep
-// +cue-gen:MeshPolicy:labels:app=istio-citadel,chart=istio,heritage=Tiller,release=istio
-// +cue-gen:MeshPolicy:subresource:status
-// +cue-gen:MeshPolicy:scope:Cluster
-// +cue-gen:MeshPolicy:resource:categories=istio-io,authentication-istio-io,plural=meshpolicies
-// -->
-//
-// <!-- go code generation tags
-// +kubetype-gen
-// +kubetype-gen:groupVersion=authentication.istio.io/v1alpha1
-// +kubetype-gen:kubeType=Policy
-// +kubetype-gen:kubeType=MeshPolicy
-// +kubetype-gen:MeshPolicy:tag=genclient:nonNamespaced
-// +genclient
-// +k8s:deepcopy-gen=true
-// -->
 type Policy struct {
 	// Deprecated. Only mesh-level and namespace-level policies are supported.
 	// List rules to select workloads that the policy should be applied on.
