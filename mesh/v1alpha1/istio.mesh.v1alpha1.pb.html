@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 24
+number_of_entries: 25
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -1355,6 +1355,52 @@ No
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>Specify thrift rate limit service timeout, in milliseconds. Default is 50ms</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-ServiceSettings-Settings">MeshConfig.ServiceSettings.Settings</h2>
+<section>
+<p>Settings for the selected services.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-ServiceSettings-Settings-cluster_local">
+<td><code>clusterLocal</code></td>
+<td><code>bool</code></td>
+<td>
+<p>If true, specifies that the client and service endpoints must reside in the same cluster.
+By default, in multi-cluster deployments, the Istio control plane assumes all service
+endpoints to be reachable from any client in any of the clusters which are part of the
+mesh. This configuration option limits the set of service endpoints visible to a client
+to be cluster scoped.</p>
+
+<p>There are some common scenarios when this can be useful:</p>
+
+<ul>
+<li>A service (or group of services) is inherently local to the cluster and has local storage
+for that cluster. For example, the kube-system namespace (e.g. the Kube API Server).</li>
+<li>A mesh administrator wants to slowly migrate services to Istio. They might start by first
+having services cluster-local and then slowly transition them to mesh-wide. They could do
+this service-by-service (e.g. mysvc.myns.svc.cluster.local) or as a group
+(e.g. *.myns.svc.cluster.local).</li>
+</ul>
+
+<p>By default, Istio will consider all services in the kube-system namespace to be cluster-local,
+unless explicitly overridden here.</p>
 
 </td>
 <td>

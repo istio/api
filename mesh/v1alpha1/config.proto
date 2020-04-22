@@ -410,12 +410,43 @@ message MeshConfig {
   ThriftConfig thrift_config = 49;
 
   // $hide_from_docs
-  // Set the namespaces whose services will be considered local to the cluster. Cluster
-  // local services will not be exported to and will, therefore, not be accessible by
-  // workloads residing in other clusters. A common use case is the Kube API Server, where
-  // workloads expect to always reach the in-cluster server. By default, the namespace
-  // "kube-system" will be cluster-local.
-  repeated string cluster_local_namespaces = 50;
+  // Settings to be applied to select services.
+  message ServiceSettings {
+    // Settings for the selected services.
+    message Settings {
+      // If true, specifies that the client and service endpoints must reside in the same cluster.
+      // By default, in multi-cluster deployments, the Istio control plane assumes all service
+      // endpoints to be reachable from any client in any of the clusters which are part of the
+      // mesh. This configuration option limits the set of service endpoints visible to a client
+      // to be cluster scoped.
+      //
+      // There are some common scenarios when this can be useful:
+      //
+      //   - A service (or group of services) is inherently local to the cluster and has local storage
+      //     for that cluster. For example, the kube-system namespace (e.g. the Kube API Server).
+      //   - A mesh administrator wants to slowly migrate services to Istio. They might start by first
+      //     having services cluster-local and then slowly transition them to mesh-wide. They could do
+      //     this service-by-service (e.g. mysvc.myns.svc.cluster.local) or as a group
+      //     (e.g. *.myns.svc.cluster.local).
+      //
+      // By default, Istio will consider all services in the kube-system namespace to be cluster-local,
+      // unless explicitly overridden here.
+      bool cluster_local = 1;
+    }
+
+    // The settings to apply to the selected services.
+    Settings settings = 1;
+
+    // The services to which the Settings should be applied. Services are selected using the hostname
+    // matching rules used by DestinationRule.
+    //
+    // For example: foo.bar.svc.cluster.local, *.baz.svc.cluster.local
+    repeated string hosts = 2;
+  }
+
+  // $hide_from_docs
+  // Settings to be applied to select services.
+  repeated ServiceSettings service_settings = 50;
 
   // If enabled, Istio agent will merge metrics exposed by the application with metrics from Envoy
   // and Istio agent. The sidecar injection will replace `prometheus.io` annotations present on the pod
