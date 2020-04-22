@@ -411,6 +411,18 @@ message MeshConfig {
 
   // $hide_from_docs
   // Settings to be applied to select services.
+  //
+  // For example, the following configures all services in namespace "foo" as well as the
+  // "bar" service in namespace "baz" to be considered cluster-local:
+  //
+  // ```yaml
+  // serviceSettings:
+  //   - settings:
+  //       cluster_local: true
+  //     hosts:
+  //       - "*.foo.svc.cluster.local"
+  //       - "bar.baz.svc.cluster.local"
+  // ```
   message ServiceSettings {
     // Settings for the selected services.
     message Settings {

@@ -973,6 +973,18 @@ func (m *MeshConfig_ThriftConfig) GetRateLimitTimeout() *types.Duration {
 
 // $hide_from_docs
 // Settings to be applied to select services.
+//
+// For example, the following configures all services in namespace "foo" as well as the
+// "bar" service in namespace "baz" to be considered cluster-local:
+//
+// ```yaml
+// serviceSettings:
+//   - settings:
+//       cluster_local: true
+//     hosts:
+//       - "*.foo.svc.cluster.local"
+//       - "bar.baz.svc.cluster.local"
+// ```
 type MeshConfig_ServiceSettings struct {
 	// The settings to apply to the selected services.
 	Settings *MeshConfig_ServiceSettings_Settings `protobuf:"bytes,1,opt,name=settings,proto3" json:"settings,omitempty"`
