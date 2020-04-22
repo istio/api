@@ -377,6 +377,14 @@
             "description": "Port on which the agent should listen for administrative commands such as readiness probe.",
             "type": "integer",
             "format": "int32"
+          },
+          "extraStatTags": {
+            "description": "An additional list of tags to extract from the in-proxy Istio telemetry. These extra tags can be added by configuring the telemetry extension. Each additional tag needs to be present in this list. Extra tags emitted by the telemetry extensions must be listed here so that they can be processed and exposed as Prometheus metrics.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
           }
         }
       },

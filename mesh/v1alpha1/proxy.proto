@@ -308,6 +308,12 @@ message ProxyConfig {
 
   // Port on which the agent should listen for administrative commands such as readiness probe.
   int32 status_port = 26;
+
+  // An additional list of tags to extract from the in-proxy Istio telemetry. These extra tags can be
+  // added by configuring the telemetry extension. Each additional tag needs to be present in this list.
+  // Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
+  // and exposed as Prometheus metrics.
+  repeated string extra_stat_tags = 27;
 }
 
 message RemoteService {

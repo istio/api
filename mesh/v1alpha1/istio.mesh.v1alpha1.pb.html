@@ -362,6 +362,20 @@ No
 No
 </td>
 </tr>
+<tr id="ProxyConfig-extra_stat_tags">
+<td><code>extraStatTags</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>An additional list of tags to extract from the in-proxy Istio telemetry. These extra tags can be
+added by configuring the telemetry extension. Each additional tag needs to be present in this list.
+Extra tags emitted by the telemetry extensions must be listed here so that they can be processed
+and exposed as Prometheus metrics.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="ProxyConfig-zipkin_address" class="deprecated ">
 <td><code>zipkinAddress</code></td>
 <td><code>string</code></td>
