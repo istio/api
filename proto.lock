@@ -36372,6 +36372,30 @@
             ]
           },
           {
+            "name": "Topology.ForwardClientCertDetails",
+            "enum_fields": [
+              {
+                "name": "SANITIZE"
+              },
+              {
+                "name": "FORWARD_ONLY",
+                "integer": 1
+              },
+              {
+                "name": "APPEND_FORWARD",
+                "integer": 2
+              },
+              {
+                "name": "SANITIZE_SET",
+                "integer": 3
+              },
+              {
+                "name": "ALWAYS_FORWARD_ONLY",
+                "integer": 4
+              }
+            ]
+          },
+          {
             "name": "ProxyConfig.InboundInterceptionMode",
             "enum_fields": [
               {
@@ -36417,6 +36441,11 @@
                 "id": 7,
                 "name": "sampling",
                 "type": "double"
+              },
+              {
+                "id": 8,
+                "name": "tls_settings",
+                "type": "istio.networking.v1alpha3.ClientTLSSettings"
               }
             ],
             "maps": [
@@ -36451,16 +36480,6 @@
                   {
                     "id": 2,
                     "name": "access_token",
-                    "type": "string"
-                  },
-                  {
-                    "id": 3,
-                    "name": "secure",
-                    "type": "bool"
-                  },
-                  {
-                    "id": 4,
-                    "name": "cacert_path",
                     "type": "string"
                   }
                 ]
@@ -36574,6 +36593,21 @@
                 "id": 2,
                 "name": "k8s_sa_jwt_path",
                 "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "Topology",
+            "fields": [
+              {
+                "id": 1,
+                "name": "num_trusted_proxies",
+                "type": "uint32"
+              },
+              {
+                "id": 2,
+                "name": "forward_client_cert_details",
+                "type": "ForwardClientCertDetails"
               }
             ]
           },
@@ -36718,6 +36752,17 @@
                 "id": 26,
                 "name": "status_port",
                 "type": "int32"
+              },
+              {
+                "id": 27,
+                "name": "extra_stat_tags",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 28,
+                "name": "gateway_topology",
+                "type": "Topology"
               }
             ],
             "maps": [
