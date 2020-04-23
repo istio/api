@@ -64,6 +64,8 @@ func (AuthenticationPolicy) EnumDescriptor() ([]byte, []int) {
 // $hide_from_docs
 // ForwardClientCertDetails controls how the x-forwarded-client-cert (XFCC)
 // header is handled by the gateway proxy.
+// See [Envoy XFCC](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/filter/network/http_connection_manager/v2/http_connection_manager.proto#envoy-api-enum-config-filter-network-http-connection-manager-v2-httpconnectionmanager-forwardclientcertdetails)
+// header handling for more details.
 type Topology_ForwardClientCertDetails int32
 
 const (
@@ -916,6 +918,8 @@ type Topology struct {
 	// X-Envoy-External-Address header to the trusted client address before
 	// forwarding it to the upstream services in the cluster.
 	// The default value of num_trusted_proxies is 0.
+	// See [Envoy XFF] (https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#config-http-conn-man-headers-x-forwarded-for)
+	// header handling for more details.
 	NumTrustedProxies uint32 `protobuf:"varint,1,opt,name=num_trusted_proxies,json=numTrustedProxies,proto3" json:"numTrustedProxies,omitempty"`
 	// $hide_from_docs
 	// Configures how the gateway proxy handles x-forwarded-client-cert (XFCC)
