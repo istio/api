@@ -385,6 +385,9 @@
               "type": "string",
               "format": "string"
             }
+          },
+          "gatewayTopology": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.Topology"
           }
         }
       },
@@ -983,6 +986,30 @@
             "format": "string"
           }
         }
+      },
+      "istio.mesh.v1alpha1.Topology": {
+        "description": "Topology describes the configuration for relative location of a proxy with respect to intermediate trusted proxies and the client. These settings control how the client attributes are retrieved from the incoming traffic by the gateway proxy and propagated to the upstream services in the cluster.",
+        "type": "object",
+        "properties": {
+          "numTrustedProxies": {
+            "description": "Number of trusted proxies deployed in front of the Istio gateway proxy. When this option is set to value N greater than zero, the trusted client address is assumed to be the Nth address from the right end of the X-Forwarded-For (XFF) header from the incoming request. If the X-Forwarded-For (XFF) header is missing or has fewer than N addresses, the gateway proxy falls back to using the immediate downstream connection's source address as the trusted client address. Note that the gateway proxy will append the downstream connection's source address to the X-Forwarded-For (XFF) address and set the X-Envoy-External-Address header to the trusted client address before forwarding it to the upstream services in the cluster. The default value of num_trusted_proxies is 0. See [Envoy XFF] (https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#config-http-conn-man-headers-x-forwarded-for) header handling for more details.",
+            "type": "integer"
+          },
+          "forwardClientCertDetails": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.Topology.ForwardClientCertDetails"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.Topology.ForwardClientCertDetails": {
+        "description": "ForwardClientCertDetails controls how the x-forwarded-client-cert (XFCC) header is handled by the gateway proxy. See [Envoy XFCC](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/filter/network/http_connection_manager/v2/http_connection_manager.proto#envoy-api-enum-config-filter-network-http-connection-manager-v2-httpconnectionmanager-forwardclientcertdetails) header handling for more details.",
+        "type": "string",
+        "enum": [
+          "SANITIZE",
+          "FORWARD_ONLY",
+          "APPEND_FORWARD",
+          "SANITIZE_SET",
+          "ALWAYS_FORWARD_ONLY"
+        ]
       },
       "istio.mesh.v1alpha1.ProxyConfig.InboundInterceptionMode": {
         "description": "The mode used to redirect inbound traffic to Envoy. This setting has no effect on outbound traffic: iptables REDIRECT is always used for outbound connections.",
