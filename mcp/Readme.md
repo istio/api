@@ -4,7 +4,7 @@
 
 This folder contains the proto buffers for the Mesh Configuration
 Protocol (MCP). MCP is based on
-[XDS](https://github.com/envoyproxy/data-plane-api/blob/master/xds_protocol.rst#streaming-grpc-subscriptions)
+[XDS](https://github.com/envoyproxy/data-plane-api/blob/release-1.6/xds_protocol.rst#streaming-grpc-subscriptions)
 and maintains conceptual alignment with it, despite the specific
 service and proto definitions being different.
 
@@ -43,7 +43,7 @@ initiates the connection and opens the grpc stream.
 MCP is the mechanism of transport whereby Pilot and Mixer can be
 configured by a manager component. MCP defines a common per-resource
 metadata format and resource specific contents is defined elsewhere
-(e.g. <https://github.com/istio/api/tree/master/networking/v1alpha3>).
+(e.g. <https://github.com/istio/api/tree/release-1.6/networking/v1alpha3>).
 
 ### Collections
 
