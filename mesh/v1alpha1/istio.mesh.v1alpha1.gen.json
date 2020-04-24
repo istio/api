@@ -679,6 +679,9 @@
         "description": "Tracing defines configuration for the tracing performed by Envoy instances.",
         "type": "object",
         "properties": {
+          "tlsSettings": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
+          },
           "customTags": {
             "description": "Configures the custom tags to be added to active span by all proxies (i.e. sidecars and gateways). The key represents the name of the tag. Ex: ```yaml custom_tags: new_tag_name: header: name: custom-http-header-name default_value: defaulted-value-from-custom-header ``` $hide_from_docs",
             "type": "object",
@@ -879,15 +882,6 @@
           },
           "accessToken": {
             "description": "The LightStep access token.",
-            "type": "string",
-            "format": "string"
-          },
-          "secure": {
-            "description": "True if a secure connection should be used when communicating with the pool.",
-            "type": "boolean"
-          },
-          "cacertPath": {
-            "description": "Path to the trusted cacert used to authenticate the pool.",
             "type": "string",
             "format": "string"
           }

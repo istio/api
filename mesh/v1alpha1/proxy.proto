@@ -54,12 +54,6 @@ message Tracing {
 
     // The LightStep access token.
     string access_token = 2;
-
-    // True if a secure connection should be used when communicating with the pool.
-    bool secure = 3;
-
-    // Path to the trusted cacert used to authenticate the pool.
-    string cacert_path = 4;
   }
 
   // Datadog defines configuration for a Datadog tracer.
@@ -172,8 +166,14 @@ message Tracing {
   // $hide_from_docs
   double sampling = 7;
 
+
+  // Use the tls_settings to specify the tls mode to use. If the remote tracing service
+  // uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
+  // mode as `ISTIO_MUTUAL`.
+  istio.networking.v1alpha3.ClientTLSSettings tls_settings = 8;
+
   // $hide_from_docs
-  // Next available field number: 8
+  // Next available field number: 9
 
 }
 

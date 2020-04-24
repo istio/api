@@ -36417,6 +36417,11 @@
                 "id": 7,
                 "name": "sampling",
                 "type": "double"
+              },
+              {
+                "id": 8,
+                "name": "tls_settings",
+                "type": "istio.networking.v1alpha3.ClientTLSSettings"
               }
             ],
             "maps": [
@@ -36451,16 +36456,6 @@
                   {
                     "id": 2,
                     "name": "access_token",
-                    "type": "string"
-                  },
-                  {
-                    "id": 3,
-                    "name": "secure",
-                    "type": "bool"
-                  },
-                  {
-                    "id": 4,
-                    "name": "cacert_path",
                     "type": "string"
                   }
                 ]
