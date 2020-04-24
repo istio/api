@@ -884,10 +884,6 @@
             "description": "The LightStep access token.",
             "type": "string",
             "format": "string"
-          },
-          "secure": {
-            "description": "True if a secure connection should be used when communicating with the pool.",
-            "type": "boolean"
           }
         }
       },
