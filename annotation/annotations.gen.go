@@ -117,6 +117,16 @@ var (
 		  Resources: []ResourceTypes{ Any, },
         }
 	
+		IoIstioProxyConfig = Instance {
+          Name: "istio.io/proxyConfig",
+          Description: "Overrides for the proxy configuration for this specific "+
+                        "proxy. Available options can be found at "+
+                        "https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#ProxyConfig.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
+        }
+	
 		IoKubernetesIngressClass = Instance {
           Name: "kubernetes.io/ingress.class",
           Description: "Annotation on an Ingress resources denoting the class of "+
@@ -506,6 +516,7 @@ func AllResourceAnnotations() []*Instance {
 		&OperatorInstallChartOwner,
 		&OperatorInstallOwnerGeneration,
 		&OperatorInstallVersion,
+		&IoIstioProxyConfig,
 		&IoKubernetesIngressClass,
 		&NetworkingExportTo,
 		&PolicyCheck,
