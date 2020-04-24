@@ -43,7 +43,7 @@ initiates the connection and opens the grpc stream.
 MCP is the mechanism of transport whereby Pilot and Mixer can be
 configured by a manager component. MCP defines a common per-resource
 metadata format and resource specific contents is defined elsewhere
-(e.g. <https://github.com/istio/api/tree/master/networking/v1alpha3>).
+(e.g. <https://github.com/istio/api/tree/release-1.6/networking/v1alpha3>).
 
 ### Collections
 

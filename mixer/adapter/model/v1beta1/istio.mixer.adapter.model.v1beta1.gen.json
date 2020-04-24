@@ -63,7 +63,7 @@
             "format": "string"
           },
           "sessionBased": {
-            "description": "True if backend has implemented the [InfrastructureBackend](https://github.com/istio/api/blob/master/mixer/adapter/model/v1beta1/infrastructure_backend.proto) service; false otherwise.",
+            "description": "True if backend has implemented the [InfrastructureBackend](https://github.com/istio/api/blob/release-1.6/mixer/adapter/model/v1beta1/infrastructure_backend.proto) service; false otherwise.",
             "type": "boolean"
           }
         }
