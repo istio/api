@@ -36372,30 +36372,6 @@
             ]
           },
           {
-            "name": "Topology.ForwardClientCertDetails",
-            "enum_fields": [
-              {
-                "name": "SANITIZE"
-              },
-              {
-                "name": "FORWARD_ONLY",
-                "integer": 1
-              },
-              {
-                "name": "APPEND_FORWARD",
-                "integer": 2
-              },
-              {
-                "name": "SANITIZE_SET",
-                "integer": 3
-              },
-              {
-                "name": "ALWAYS_FORWARD_ONLY",
-                "integer": 4
-              }
-            ]
-          },
-          {
             "name": "ProxyConfig.InboundInterceptionMode",
             "enum_fields": [
               {
@@ -36597,21 +36573,6 @@
             ]
           },
           {
-            "name": "Topology",
-            "fields": [
-              {
-                "id": 1,
-                "name": "num_trusted_proxies",
-                "type": "uint32"
-              },
-              {
-                "id": 2,
-                "name": "forward_client_cert_details",
-                "type": "ForwardClientCertDetails"
-              }
-            ]
-          },
-          {
             "name": "ProxyConfig",
             "fields": [
               {
@@ -36752,17 +36713,6 @@
                 "id": 26,
                 "name": "status_port",
                 "type": "int32"
-              },
-              {
-                "id": 27,
-                "name": "extra_stat_tags",
-                "type": "string",
-                "is_repeated": true
-              },
-              {
-                "id": 28,
-                "name": "gateway_topology",
-                "type": "Topology"
               }
             ],
             "maps": [
