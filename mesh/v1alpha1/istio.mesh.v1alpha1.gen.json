@@ -998,6 +998,7 @@
         "description": "ForwardClientCertDetails controls how the x-forwarded-client-cert (XFCC) header is handled by the gateway proxy. See [Envoy XFCC](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/filter/network/http_connection_manager/v2/http_connection_manager.proto#envoy-api-enum-config-filter-network-http-connection-manager-v2-httpconnectionmanager-forwardclientcertdetails) header handling for more details.",
         "type": "string",
         "enum": [
+          "UNDEFINED",
           "SANITIZE",
           "FORWARD_ONLY",
           "APPEND_FORWARD",
