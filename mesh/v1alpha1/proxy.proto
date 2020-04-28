@@ -47,12 +47,12 @@ message Tracing {
     string address = 1;
   }
 
-  // Defines configuration for a LightStep tracer.
+  // Defines configuration for a Lightstep tracer.
   message Lightstep {
-    // Address of the LightStep Satellite pool.
+    // Address of the Lightstep Satellite pool.
     string address = 1;
 
-    // The LightStep access token.
+    // The Lightstep access token.
     string access_token = 2;
   }
 
@@ -86,7 +86,7 @@ message Tracing {
   oneof tracer {
     // Use a Zipkin tracer.
     Zipkin zipkin = 1;
-    // Use a LightStep tracer.
+    // Use a Lightstep tracer.
     Lightstep lightstep = 2;
     // Use a Datadog tracer.
     Datadog datadog = 3;

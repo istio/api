@@ -367,11 +367,11 @@ func (m *Tracing_Zipkin) GetAddress() string {
 	return ""
 }
 
-// Defines configuration for a LightStep tracer.
+// Defines configuration for a Lightstep tracer.
 type Tracing_Lightstep struct {
-	// Address of the LightStep Satellite pool.
+	// Address of the Lightstep Satellite pool.
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	// The LightStep access token.
+	// The Lightstep access token.
 	AccessToken          string   `protobuf:"bytes,2,opt,name=access_token,json=accessToken,proto3" json:"accessToken,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
