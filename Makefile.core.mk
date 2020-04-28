@@ -335,6 +335,8 @@ networking_v1beta1_path := networking/v1beta1
 networking_v1beta1_protos := $(wildcard $(networking_v1beta1_path)/*.proto)
 networking_v1beta1_pb_gos := $(networking_v1beta1_protos:.proto=.pb.go)
 networking_v1beta1_pb_pythons := $(patsubst $(networking_v1beta1_path)/%.proto,$(python_output_path)/$(networking_v1beta1_path)/%_pb2.py,$(networking_v1beta1_protos))
+# v1beta1 docs are not generated as v1beta1 has the same fields as v1alpha3. Thus the target here is only for `make clean` purpose.
+networking_v1beta1_pb_docs := $(networking_v1beta1_protos:.proto=.pb.html) 
 networking_v1beta1_openapi := $(networking_v1beta1_protos:.proto=.gen.json)
 networking_v1beta1_k8s_gos := \
 	$(patsubst $(networking_v1beta1_path)/%.proto,$(networking_v1beta1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(networking_v1beta1_protos))) \
@@ -349,7 +351,7 @@ generate-networking: $(networking_v1alpha3_pb_gos) $(networking_v1alpha3_pb_docs
 
 clean-networking:
 	@rm -fr $(networking_v1alpha3_pb_gos) $(networking_v1alpha3_pb_docs) $(networking_v1alpha3_pb_pythons) $(networking_v1alpha3_k8s_gos) \
-	$(networking_v1beta1_pb_gos) $(networking_v1beta1_pb_pythons) $(networking_v1beta1_k8s_gos)
+	$(networking_v1beta1_pb_gos) $(networking_v1beta1_pb_docs) $(networking_v1beta1_pb_pythons) $(networking_v1beta1_k8s_gos)
 
 #####################
 # rbac/...
