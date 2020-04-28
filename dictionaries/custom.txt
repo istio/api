@@ -14,7 +14,7 @@ jitter
 JSON
 JWT
 Kubernetes
-LightStep
+Lightstep
 MCP
 multicluster
 NACK
