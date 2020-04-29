@@ -872,16 +872,16 @@
         }
       },
       "istio.mesh.v1alpha1.Tracing.Lightstep": {
-        "description": "Defines configuration for a LightStep tracer.",
+        "description": "Defines configuration for a Lightstep tracer.",
         "type": "object",
         "properties": {
           "address": {
-            "description": "Address of the LightStep Satellite pool.",
+            "description": "Address of the Lightstep Satellite pool.",
             "type": "string",
             "format": "string"
           },
           "accessToken": {
-            "description": "The LightStep access token.",
+            "description": "The Lightstep access token.",
             "type": "string",
             "format": "string"
           }
