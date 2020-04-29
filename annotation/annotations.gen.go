@@ -117,16 +117,6 @@ var (
 		  Resources: []ResourceTypes{ Any, },
         }
 	
-		IoIstioProxyConfig = Instance {
-          Name: "istio.io/proxyConfig",
-          Description: "Overrides for the proxy configuration for this specific "+
-                        "proxy. Available options can be found at "+
-                        "https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#ProxyConfig.",
-          Hidden: false,
-          Deprecated: false,
-		  Resources: []ResourceTypes{ Pod, },
-        }
-	
 		IoKubernetesIngressClass = Instance {
           Name: "kubernetes.io/ingress.class",
           Description: "Annotation on an Ingress resources denoting the class of "+
@@ -198,6 +188,16 @@ var (
           Name: "prometheus.istio.io/merge-metrics",
           Description: "Specifies if application Prometheus metric will be merged "+
                         "with Envoy metrics for this workload.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
+        }
+	
+		ProxyConfig = Instance {
+          Name: "proxy.istio.io/config",
+          Description: "Overrides for the proxy configuration for this specific "+
+                        "proxy. Available options can be found at "+
+                        "https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#ProxyConfig.",
           Hidden: false,
           Deprecated: false,
 		  Resources: []ResourceTypes{ Pod, },
@@ -516,7 +516,6 @@ func AllResourceAnnotations() []*Instance {
 		&OperatorInstallChartOwner,
 		&OperatorInstallOwnerGeneration,
 		&OperatorInstallVersion,
-		&IoIstioProxyConfig,
 		&IoKubernetesIngressClass,
 		&NetworkingExportTo,
 		&PolicyCheck,
@@ -525,6 +524,7 @@ func AllResourceAnnotations() []*Instance {
 		&PolicyCheckRetries,
 		&PolicyLang,
 		&PrometheusMergeMetrics,
+		&ProxyConfig,
 		&SidecarStatusReadinessApplicationPorts,
 		&SidecarStatusReadinessFailureThreshold,
 		&SidecarStatusReadinessInitialDelaySeconds,
