@@ -343,3 +343,10 @@ annotations:
     hidden: false
     resources:
       - Any
+  - name: proxy.istio.io/config
+    description: Overrides for the proxy configuration for this specific proxy. Available options
+      can be found at https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#ProxyConfig.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod

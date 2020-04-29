@@ -193,6 +193,16 @@ var (
 		  Resources: []ResourceTypes{ Pod, },
         }
 	
+		ProxyConfig = Instance {
+          Name: "proxy.istio.io/config",
+          Description: "Overrides for the proxy configuration for this specific "+
+                        "proxy. Available options can be found at "+
+                        "https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#ProxyConfig.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
+        }
+	
 		SidecarStatusReadinessApplicationPorts = Instance {
           Name: "readiness.status.sidecar.istio.io/applicationPorts",
           Description: "Specifies the list of ports exposed by the application "+
@@ -514,6 +524,7 @@ func AllResourceAnnotations() []*Instance {
 		&PolicyCheckRetries,
 		&PolicyLang,
 		&PrometheusMergeMetrics,
+		&ProxyConfig,
 		&SidecarStatusReadinessApplicationPorts,
 		&SidecarStatusReadinessFailureThreshold,
 		&SidecarStatusReadinessInitialDelaySeconds,
