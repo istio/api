@@ -462,7 +462,8 @@ type MeshConfig struct {
 	// - `%SERVICE_FQDN%_%SERVICE_PORT%` will use reviews.prod.svc.cluster.local_7443 as the stats name.
 	// - `%SERVICE%` will use reviews.prod as the stats name.
 	OutboundClusterStatName string `protobuf:"bytes,45,opt,name=outbound_cluster_stat_name,json=outboundClusterStatName,proto3" json:"outboundClusterStatName,omitempty"`
-	// Configure the provision of certificates.
+	// Configure the provision of certificates. This is used by Istiod certificate signing
+	// feature.
 	Certificates []*Certificate `protobuf:"bytes,47,rep,name=certificates,proto3" json:"certificates,omitempty"`
 	// Set configuration for Thrift protocol
 	ThriftConfig *MeshConfig_ThriftConfig `protobuf:"bytes,49,opt,name=thrift_config,json=thriftConfig,proto3" json:"thriftConfig,omitempty"`
@@ -1183,7 +1184,11 @@ func (m *ConfigSource) GetSubscribedResources() []Resource {
 	return nil
 }
 
-// Certificate configures the provision of a certificate and its key.
+// Certificate configures the provision of a certificate.
+//
+// Starting with Istio 1.6 certificates are no longer saved as
+// secrets.
+//
 // Example 1: key and cert stored in a secret
 // { secretName: galley-cert
 //   secretNamespace: istio-system
@@ -1198,10 +1203,11 @@ func (m *ConfigSource) GetSubscribedResources() []Resource {
 //     - pilot.mydomain.com
 // }
 type Certificate struct {
-	// Name of the secret the certificate and its key will be stored into.
+	// Deprecated. Name of the secret the certificate and its key will be stored into.
 	// If it is empty, it will not be stored into a secret.
 	// Instead, the certificate and its key will be stored into a hard-coded directory.
 	SecretName string `protobuf:"bytes,1,opt,name=secret_name,json=secretName,proto3" json:"secretName,omitempty"`
+
 	// The DNS names for the certificate. A certificate may contain
 	// multiple DNS names.
 	DnsNames             []string `protobuf:"bytes,2,rep,name=dns_names,json=dnsNames,proto3" json:"dnsNames,omitempty"`
