@@ -393,7 +393,18 @@ message MeshConfig {
   // - `%SERVICE%` will use reviews.prod as the stats name.
   string outbound_cluster_stat_name = 45;
 
-  // Configure the provision of certificates.
+  // Configure the provision of certificates by Istiod, if certificate management
+  // is enabled in the current revision.
+  // Users may use external certificate management, or enable only specific
+  // Istiod revisions to handle certificates - for example only a subset of clusters,
+  // or a subset of revisions.
+  //
+  // Istiod can also delegate to other CA - like K8S. In such cases the config
+  // is used as a filter, but ultimate decision rests with the primary CA.
+  // When delegation happens, Istiod may use its own credentials and permissions
+  // when authenticating to the external CA - so user will still need to use
+  // the Istiod configuration to limit the certificates that workloads can retrieve.
+  //
   repeated Certificate certificates = 47;
 
   message ThriftConfig {
@@ -506,8 +517,8 @@ message ConfigSource {
 // CSR signing service and to specify what identities are allowed
 // in the CSR.
 //
-// Starting with Istio 1.6 certificates are no longer saved as
-// secrets.
+// Starting with release 1.6, Istio-generated certificates are no longer saved
+// as secrets.
 //
 // Example 1: Configure DNS certificate content for Istiod
 // {
@@ -531,6 +542,29 @@ message ConfigSource {
 //     namespaces:
 //     - bookinfo
 // }
+//
+// Example 4: Provision certificate for a tenant or Istiod revision.
+// The Istiod instance will use a separate SA without RBAC permissions to
+// read the master CA. The istiod revision signing CSRs may run in an isolated,
+// more trusted cluster or in a separate namespace.
+//
+// {
+//     principal: istiod-service-account-staging.istio-system-staging
+//     dnsNames:
+//        - istiod-staging.istio-system-staging
+//        - istiod-staging.istio-staging.example.com
+// }
+//
+// Example 5: Provisioning certificate for an Istio Gateway dispatching
+// requests to multiple revisions or tenants:
+//
+// {
+//     principal: istio-ingressgateway-service-account
+//     dnsNames:
+//        - istiod.istio-system.svc
+//        - xds.example.com
+// }
+//
 message Certificate {
   // Deprecated. All requests will use the istiod signing interface.
   // Name of the secret the certificate and its key will be stored into.
@@ -545,16 +579,27 @@ message Certificate {
   // from the certificate, if present in the CSR.
   repeated string dns_names = 2;
 
-  // This is the identity of the caller of the signing service.
-  // For example it can be a SPIFFE identity, if Istio certificates
-  // are used for authentication, or the principal in a JWT token of
-  // OIDC is used. It can also be a k8s identity, if K8S tokens are used.
-  // Treated as an opaque string.
+  // This is the opaque identity of the CSR requester. Istiod must be
+  // configured to authenticate the caller using mTLS, JWT tokens or
+  // other plugins.
+  //
+  // The format matches the identity provided by the auth plugin - for
+  // example a SPIFFE URI for mTLS, or the principal in a JWT token of
+  // OIDC is used, or a k8s identity, if K8S tokens are used.
+  //
+  // Treated as an opaque string in matching a request.
   string principal = 3;
 
+  // List of URI SANs allowed in the CSR request.
+  // This is primarily used for explicit SPIFFE identities.
+  repeated string uri_SANs = 4;
+
   // List of allowed namespaces for issuing SPIFFE CSRs.
+  //
   // This allows a CI/CD or admin to provision certificates for
   // a set of managed namespaces, or a managed VM to use istio-agent
   // to retrieve certificates in its own namespace.
-  repeated string namespaces = 4;
+  repeated string namespaces = 5;
+
+
 }
