@@ -594,13 +594,18 @@ message Certificate {
   // OIDC is used, or a k8s identity, if K8S tokens are used.
   //
   // Treated as an opaque string in matching a request.
+  //
+  // If a Gateway or Istiod instance is requesting certificates, this is the
+  // service account running the Istiod or Gateway deployment.
   string principal = 3;
 
   // List of URI SANs allowed in the CSR request.
   // This is primarily used for explicit SPIFFE identities.
   repeated string uri_SANs = 4;
 
-  // List of allowed namespaces for issuing SPIFFE CSRs.
+  // List of allowed namespaces for issuing SPIFFE CSRs. A CI/CD, admin
+  // or Istiod tenant instance may be restricted to only specific
+  // namespaces where they're allowed to provision identity.
   //
   // This allows a CI/CD or admin to provision certificates for
   // a set of managed namespaces, or a managed VM to use istio-agent
