@@ -512,13 +512,19 @@ message ConfigSource {
 
 
 
-// Certificate configures the provision of a certificate.
-// It allows the admin to specify the identity of the caller of the
-// CSR signing service and to specify what identities are allowed
-// in the CSR.
+// Certificate configures Istiod's certificate signing feature.
+//
+// Requests to Istiod are authenticated using mTLS, JWT or an authentication
+// plugin. The authenticated principal determines what is allowed in the
+// CSR request.
 //
 // Starting with release 1.6, Istio-generated certificates are no longer saved
-// as secrets.
+// as secrets, but served using SDS to Envoy.
+//
+// This is an internal config for Istiod when acting as a CA - it is not
+// a general API for certificate issuance nor a general purpose RBAC system.
+// The features are intentionally kept to the minimum set of features required
+// for Istio operation - external CAs should be used for more advanced features.
 //
 // Example 1: Configure DNS certificate content for Istiod
 // {
