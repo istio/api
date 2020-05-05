@@ -79,6 +79,7 @@ option (gogoproto.stable_marshaler_all) = true;
 // +cue-gen:QuotaSpec:subresource:status
 // +cue-gen:QuotaSpec:scope:Namespaced
 // +cue-gen:QuotaSpec:resource:categories=istio-io,apim-istio-io
+// +cue-gen:QuotaSpec:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -156,6 +157,7 @@ message Quota {
 // +cue-gen:QuotaSpecBinding:subresource:status
 // +cue-gen:QuotaSpecBinding:scope:Namespaced
 // +cue-gen:QuotaSpecBinding:resource:categories=istio-io,apim-istio-io
+// +cue-gen:QuotaSpecBinding:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags

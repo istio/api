@@ -127,6 +127,7 @@ func (Tls_AuthHeader) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:attributemanifest:subresource:status
 // +cue-gen:attributemanifest:scope:Namespaced
 // +cue-gen:attributemanifest:resource:categories=istio-io,policy-istio-io
+// +cue-gen:attributemanifest:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -331,6 +332,7 @@ func (m *AttributeManifest_AttributeInfo) GetValueType() ValueType {
 // +cue-gen:rule:subresource:status
 // +cue-gen:rule:scope:Namespaced
 // +cue-gen:rule:resource:categories=istio-io,policy-istio-io
+// +cue-gen:rule:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -622,6 +624,7 @@ func (m *Action) GetName() string {
 // +cue-gen:instance:subresource:status
 // +cue-gen:instance:scope:Namespaced
 // +cue-gen:instance:resource:categories=istio-io,policy-istio-io
+// +cue-gen:instance:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -799,6 +802,7 @@ func (m *Instance) GetAttributeBindings() map[string]string {
 // +cue-gen:handler:subresource:status
 // +cue-gen:handler:scope:Namespaced
 // +cue-gen:handler:resource:categories=istio-io,policy-istio-io
+// +cue-gen:handler:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags

@@ -176,6 +176,7 @@ func (RbacConfig_Mode) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:ServiceRole:subresource:status
 // +cue-gen:ServiceRole:scope:Namespaced
 // +cue-gen:ServiceRole:resource:categories=istio-io,rbac-istio-io
+// +cue-gen:ServiceRole:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -472,6 +473,7 @@ func (m *AccessRule_Constraint) GetValues() []string {
 // representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
 // Clients may not set this value. It is represented in RFC3339 form and is in UTC.
 // Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
+// +cue-gen:ServiceRoleBinding:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -846,6 +848,7 @@ func (m *RoleRef) GetName() string {
 // +cue-gen:RbacConfig:subresource:status
 // +cue-gen:RbacConfig:scope:Namespaced
 // +cue-gen:RbacConfig:resource:categories=istio-io,rbac-istio-io
+// +cue-gen:RbacConfig:preserveUnknownFields:false
 // -->
 //
 // <!-- crd generation tags
@@ -857,6 +860,7 @@ func (m *RoleRef) GetName() string {
 // +cue-gen:ClusterRbacConfig:subresource:status
 // +cue-gen:ClusterRbacConfig:scope:Cluster
 // +cue-gen:ClusterRbacConfig:resource:categories=istio-io,rbac-istio-io
+// +cue-gen:ClusterRbacConfig:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags

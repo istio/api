@@ -39,6 +39,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // +cue-gen:QuotaSpec:subresource:status
 // +cue-gen:QuotaSpec:scope:Namespaced
 // +cue-gen:QuotaSpec:resource:categories=istio-io,apim-istio-io
+// +cue-gen:QuotaSpec:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -305,6 +306,7 @@ var xxx_messageInfo_Quota proto.InternalMessageInfo
 // +cue-gen:QuotaSpecBinding:subresource:status
 // +cue-gen:QuotaSpecBinding:scope:Namespaced
 // +cue-gen:QuotaSpecBinding:resource:categories=istio-io,apim-istio-io
+// +cue-gen:QuotaSpecBinding:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
