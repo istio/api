@@ -461,6 +461,7 @@ func (ServerTLSSettings_TLSProtocol) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:Gateway:subresource:status
 // +cue-gen:Gateway:scope:Namespaced
 // +cue-gen:Gateway:resource:categories=istio-io,networking-istio-io,shortNames=gw
+// +cue-gen:Gateway:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags

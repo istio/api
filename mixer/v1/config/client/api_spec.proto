@@ -95,6 +95,7 @@ option (gogoproto.stable_marshaler_all) = true;
 // +cue-gen:HTTPAPISpec:subresource:status
 // +cue-gen:HTTPAPISpec:scope:Namespaced
 // +cue-gen:HTTPAPISpec:resource:categories=istio-io,apim-istio-io
+// +cue-gen:HTTPAPISpec:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -254,6 +255,7 @@ message HTTPAPISpecReference {
 // +cue-gen:HTTPAPISpecBinding:subresource:status
 // +cue-gen:HTTPAPISpecBinding:scope:Namespaced
 // +cue-gen:HTTPAPISpecBinding:resource:categories=istio-io,apim-istio-io
+// +cue-gen:HTTPAPISpecBinding:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
