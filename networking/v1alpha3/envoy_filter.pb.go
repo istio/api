@@ -426,6 +426,7 @@ func (EnvoyFilter_Patch_Operation) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:EnvoyFilter:subresource:status
 // +cue-gen:EnvoyFilter:scope:Namespaced
 // +cue-gen:EnvoyFilter:resource:categories=istio-io,networking-istio-io
+// +cue-gen:EnvoyFilter:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
