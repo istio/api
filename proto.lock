@@ -36372,6 +36372,34 @@
             ]
           },
           {
+            "name": "Topology.ForwardClientCertDetails",
+            "enum_fields": [
+              {
+                "name": "UNDEFINED"
+              },
+              {
+                "name": "SANITIZE",
+                "integer": 1
+              },
+              {
+                "name": "FORWARD_ONLY",
+                "integer": 2
+              },
+              {
+                "name": "APPEND_FORWARD",
+                "integer": 3
+              },
+              {
+                "name": "SANITIZE_SET",
+                "integer": 4
+              },
+              {
+                "name": "ALWAYS_FORWARD_ONLY",
+                "integer": 5
+              }
+            ]
+          },
+          {
             "name": "ProxyConfig.InboundInterceptionMode",
             "enum_fields": [
               {
@@ -36573,6 +36601,21 @@
             ]
           },
           {
+            "name": "Topology",
+            "fields": [
+              {
+                "id": 1,
+                "name": "num_trusted_proxies",
+                "type": "uint32"
+              },
+              {
+                "id": 2,
+                "name": "forward_client_cert_details",
+                "type": "ForwardClientCertDetails"
+              }
+            ]
+          },
+          {
             "name": "ProxyConfig",
             "fields": [
               {
@@ -36677,7 +36720,7 @@
               {
                 "id": 16,
                 "name": "concurrency",
-                "type": "int32"
+                "type": "google.protobuf.Int32Value"
               },
               {
                 "id": 17,
@@ -36713,6 +36756,17 @@
                 "id": 26,
                 "name": "status_port",
                 "type": "int32"
+              },
+              {
+                "id": 27,
+                "name": "extra_stat_tags",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 28,
+                "name": "gateway_topology",
+                "type": "Topology"
               }
             ],
             "maps": [
@@ -43120,16 +43174,6 @@
                 "type": "ComponentSpec"
               },
               {
-                "id": 31,
-                "name": "proxy",
-                "type": "ComponentSpec"
-              },
-              {
-                "id": 32,
-                "name": "sidecar_injector",
-                "type": "ComponentSpec"
-              },
-              {
                 "id": 33,
                 "name": "policy",
                 "type": "ComponentSpec"
@@ -43137,21 +43181,6 @@
               {
                 "id": 34,
                 "name": "telemetry",
-                "type": "ComponentSpec"
-              },
-              {
-                "id": 35,
-                "name": "citadel",
-                "type": "ComponentSpec"
-              },
-              {
-                "id": 36,
-                "name": "node_agent",
-                "type": "ComponentSpec"
-              },
-              {
-                "id": 37,
-                "name": "galley",
                 "type": "ComponentSpec"
               },
               {
@@ -43171,6 +43200,20 @@
                 "type": "GatewaySpec",
                 "is_repeated": true
               }
+            ],
+            "reserved_ids": [
+              31,
+              32,
+              35,
+              36,
+              37
+            ],
+            "reserved_names": [
+              "citadel",
+              "galley",
+              "node_agent",
+              "proxy",
+              "sidecar_injector"
             ]
           },
           {
