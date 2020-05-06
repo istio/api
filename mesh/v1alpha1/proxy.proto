@@ -319,8 +319,10 @@ message ProxyConfig {
   // Increase the value of this field if you find that the metrics from Envoys are truncated.
   int32 stat_name_length = 15;
 
-  // The number of worker threads to run. Default value is number of cores on the machine.
-  int32 concurrency = 16;
+  // The number of worker threads to run.
+  // If unset, this will be automatically determined based on CPU requests/limits.
+  // If set to 0, all cores on the machine will be used.
+  google.protobuf.Int32Value concurrency = 16;
 
   // Path to the proxy bootstrap template file
   string proxy_bootstrap_template_path = 17;

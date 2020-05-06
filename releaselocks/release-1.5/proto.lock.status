@@ -36,6 +36,7 @@ CONFLICT: "MeshConfig.IngressControllerMode" field: "OFF" has a different intege
 CONFLICT: "MeshConfig.IngressControllerMode" field: "OFF" integer: 1 has an updated name, previously "DEFAULT" [mesh/v1alpha1/config.proto]
 CONFLICT: "MeshConfig.IngressControllerMode" field: "STRICT" has a different integer: 3, previously 2 [mesh/v1alpha1/config.proto]
 CONFLICT: "MeshConfig.IngressControllerMode" field: "UNSPECIFIED" integer: 0 has an updated name, previously "OFF" [mesh/v1alpha1/config.proto]
+CONFLICT: "ProxyConfig" field: "concurrency" has a different type: google.protobuf.Int32Value, previously int32 [mesh/v1alpha1/proxy.proto]
 CONFLICT: "RemoteService" field: "tls_settings" has a different type: istio.networking.v1alpha3.ClientTLSSettings, previously istio.networking.v1alpha3.TLSSettings [mesh/v1alpha1/proxy.proto]
 CONFLICT: "RollingUpdateDeployment" field: "maxSurge" has a different type: TypeInterface_kubernetes, previously TypeIntOrStringForPB [operator/v1alpha1/kubernetes.proto]
 CONFLICT: "RollingUpdateDeployment" field: "maxUnavailable" has a different type: TypeInterface_kubernetes, previously TypeIntOrStringForPB [operator/v1alpha1/kubernetes.proto]

@@ -341,9 +341,9 @@
             "format": "int32"
           },
           "concurrency": {
-            "description": "The number of worker threads to run. Default value is number of cores on the machine.",
+            "description": "The number of worker threads to run. If unset, this will be automatically determined based on CPU requests/limits. If set to 0, all cores on the machine will be used.",
             "type": "integer",
-            "format": "int32"
+            "nullable": true
           },
           "proxyBootstrapTemplatePath": {
             "description": "Path to the proxy bootstrap template file",
