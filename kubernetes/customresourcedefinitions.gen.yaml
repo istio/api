@@ -3564,7 +3564,6 @@ spec:
     listKind: handlerList
     plural: handlers
     singular: handler
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
@@ -3772,7 +3771,6 @@ spec:
     listKind: instanceList
     plural: instances
     singular: instance
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
