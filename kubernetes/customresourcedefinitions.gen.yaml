@@ -1696,7 +1696,6 @@ spec:
     listKind: EnvoyFilterList
     plural: envoyfilters
     singular: envoyfilter
-  preserveUnknownFields: false
   scope: Namespaced
   subresources:
     status: {}
