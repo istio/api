@@ -384,8 +384,8 @@ message ProxyConfig {
   Topology gateway_topology = 28;
 
   // The amount of time allowed for connections to complete on proxy shutdown.
-	// On receiving SIGTERM or SIGINT, istio-agent tells the active Envoy to start draining,
-	// preventing any new connections and allowing existing connections to complete. It then
+  // On receiving SIGTERM or SIGINT, istio-agent tells the active Envoy to start draining,
+  // preventing any new connections and allowing existing connections to complete. It then
   // sleeps for the termination_drain_duration and then kills any remaining active Envoy processes.
   // If not set, a default of 5s will be applied.
   google.protobuf.Duration  termination_drain_duration = 29;
@@ -394,6 +394,11 @@ message ProxyConfig {
   // All control planes running in the same service mesh should specify the same mesh ID.
   // Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.
   int32 mesh_id = 30;
+
+  // The cluster domain suffix used for services within the mesh. K8s allows this to be customized,
+  // see https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/.
+  // Defaults to the Kubernetes default "cluster.local".
+  string cluster_domain = 31;
 }
 
 message RemoteService {

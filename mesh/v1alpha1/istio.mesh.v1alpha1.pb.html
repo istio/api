@@ -419,6 +419,19 @@ Mesh ID is used to label telemetry reports for cases where telemetry from multip
 No
 </td>
 </tr>
+<tr id="ProxyConfig-cluster_domain">
+<td><code>clusterDomain</code></td>
+<td><code>string</code></td>
+<td>
+<p>The cluster domain suffix used for services within the mesh. K8s allows this to be customized,
+see https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/.
+Defaults to the Kubernetes default &ldquo;cluster.local&rdquo;.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="ProxyConfig-zipkin_address" class="deprecated ">
 <td><code>zipkinAddress</code></td>
 <td><code>string</code></td>

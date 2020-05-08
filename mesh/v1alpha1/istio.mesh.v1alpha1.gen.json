@@ -411,6 +411,11 @@
             "description": "The unique identifier for the [service mesh](https://istio.io/latest/docs/reference/glossary/#service-mesh) All control planes running in the same service mesh should specify the same mesh ID. Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.",
             "type": "integer",
             "format": "int32"
+          },
+          "clusterDomain": {
+            "description": "The cluster domain suffix used for services within the mesh. K8s allows this to be customized, see https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/. Defaults to the Kubernetes default \"cluster.local\".",
+            "type": "string",
+            "format": "string"
           }
         }
       },
