@@ -15,7 +15,6 @@ lint:
       files:
         - operator/v1alpha1/component.proto
         - operator/v1alpha1/kubernetes.proto
-        - rbac/v1alpha1/rbac.proto
     - id: ENUM_FIELD_NAMES_UPPER_SNAKE_CASE
       files:
         - networking/v1alpha3/gateway.proto

@@ -98,7 +98,6 @@ gen: \
 	generate-operator \
 	generate-mixer \
 	generate-networking \
-	generate-rbac \
 	generate-authn \
 	generate-security \
 	generate-envoy \
@@ -354,30 +353,6 @@ clean-networking:
 	$(networking_v1beta1_pb_gos) $(networking_v1beta1_pb_docs) $(networking_v1beta1_pb_pythons) $(networking_v1beta1_k8s_gos)
 
 #####################
-# rbac/...
-#####################
-
-rbac_v1alpha1_path := rbac/v1alpha1
-rbac_v1alpha1_protos := $(wildcard $(rbac_v1alpha1_path)/*.proto)
-rbac_v1alpha1_pb_gos := $(rbac_v1alpha1_protos:.proto=.pb.go)
-rbac_v1alpha1_pb_pythons := $(patsubst $(rbac_v1alpha1_path)/%.proto,$(python_output_path)/$(rbac_v1alpha1_path)/%_pb2.py,$(rbac_v1alpha1_protos))
-rbac_v1alpha1_pb_doc := $(rbac_v1alpha1_path)/istio.rbac.v1alpha1.pb.html
-rbac_v1alpha1_openapi := $(rbac_v1alpha1_path)/istio.rbac.v1alpha1.gen.json
-rbac_v1alpha1_k8s_gos := \
-	$(patsubst $(rbac_v1alpha1_path)/%.proto,$(rbac_v1alpha1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(rbac_v1alpha1_protos))) \
-	$(patsubst $(rbac_v1alpha1_path)/%.proto,$(rbac_v1alpha1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(rbac_v1alpha1_protos)))
-
-$(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc) $(rbac_v1alpha1_pb_pythons) $(rbac_v1alpha1_k8s_gos): $(rbac_v1alpha1_protos)
-	@$(protolock) status
-	@$(protoc) $(gogofast_plugin) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin)$(rbac_v1alpha1_path) $(protoc_gen_python_plugin) $^
-	@cp -r /tmp/istio.io/api/rbac/* rbac
-
-generate-rbac: $(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc) $(rbac_v1alpha1_protos) $(rbac_v1alpha1_k8s_gos)
-
-clean-rbac:
-	@rm -fr $(rbac_v1alpha1_pb_gos) $(rbac_v1alpha1_pb_doc) $(rbac_v1alpha1_pb_pythons) $(rbac_v1alpha1_k8s_gos)
-
-#####################
 # authentication/...
 #####################
 
@@ -499,7 +474,6 @@ all_protos := \
 	$(mixer_adapter_model_v1beta1_protos) \
 	$(networking_v1alpha3_protos) \
 	$(networking_v1beta1_protos) \
-	$(rbac_v1alpha1_protos) \
 	$(authn_v1alpha1_protos) \
 	$(security_v1beta1_protos) \
 	$(type_v1beta1_protos)
@@ -515,7 +489,6 @@ all_openapi := \
 	$(mixer_adapter_model_v1beta1_openapi) \
 	$(networking_v1alpha3_openapi) \
 	$(networking_v1beta1_openapi) \
-	$(rbac_v1alpha1_openapi) \
 	$(authn_v1alpha1_openapi) \
 	$(security_v1beta1_openapi) \
 	$(type_v1beta1_openapi)
@@ -550,7 +523,6 @@ clean: \
 	clean-operator \
 	clean-mixer \
 	clean-networking \
-	clean-rbac \
 	clean-authn \
 	clean-envoy \
 	clean-policy \
