@@ -118,18 +118,11 @@
 // The following example declares a `Sidecar` configuration in the
 // `prod-us1` namespace for all pods with labels `app: ratings`
 // belonging to the `ratings.prod-us1` service.  The workload accepts
-// inbound HTTP traffic on port 9080 without any authentication, and
-// HTTPS traffic on port 9443 with one-way TLS termination using
-// custom certificates. _To accomplish custom TLS termination on this
-// workload, the `PeerAuthentication` security policy must be declared
-// to disable Istio mutual TLS on these two ports. Any other
-// auto-generated listener for this workload will still obey the
-// mutual TLS termination requirements set forth in the
-// PeerAuthentication policy_. The traffic is then forwarded to the
-// attached workload instance listening on a Unix domain socket. In
-// the egress direction, in addition to the `istio-system` namespace,
-// the sidecar proxies only HTTP traffic bound for port 9080 for
-// services in the `prod-us1` namespace.
+// inbound HTTP traffic on port 9080. The traffic is then forwarded to
+// the attached workload instance listening on a Unix domain
+// socket. In the egress direction, in addition to the `istio-system`
+// namespace, the sidecar proxies only HTTP traffic bound for port
+// 9080 for services in the `prod-us1` namespace.
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
@@ -148,15 +141,6 @@
 //       number: 9080
 //       protocol: HTTP
 //       name: somename
-//     defaultEndpoint: unix:///var/run/someuds.sock
-//   - port:
-//       number: 9443
-//       protocol: HTTPS
-//       name: httpsport
-//     inboundTls:
-//       mode: SIMPLE # overrides namespace default
-//       serverCertificate: /etc/certs/servercert.pem
-//       privateKey: /etc/certs/privatekey.pem
 //     defaultEndpoint: unix:///var/run/someuds.sock
 //   egress:
 //   - port:
@@ -187,15 +171,6 @@
 //       protocol: HTTP
 //       name: somename
 //     defaultEndpoint: unix:///var/run/someuds.sock
-//   - port:
-//       number: 9443
-//       protocol: HTTPS
-//       name: httpsport
-//     inboundTls:
-//       mode: SIMPLE # overrides namespace default
-//       serverCertificate: /etc/certs/servercert.pem
-//       privateKey: /etc/certs/privatekey.pem
-//     defaultEndpoint: unix:///var/run/someuds.sock
 //   egress:
 //   - port:
 //       number: 9080
@@ -205,80 +180,6 @@
 //     - "prod-us1/*"
 //   - hosts:
 //     - "istio-system/*"
-// ```
-// {{</tab>}}
-// {{</tabset>}}
-//
-// and the associated PeerAuthentication security policy to ensure
-// that mutual TLS based authentication is not configured for ports
-// 9080 and 9443:
-//
-// ```yaml
-// apiVersion: security.istio.io/v1beta1
-// kind: PeerAuthentication
-// metadata:
-//   name: ratings-istio-mtls-exception
-//   namespace: prod-us1
-// spec:
-//   selector:
-//     matchLabels:
-//       app: ratings
-//   # other ports inherit the settings from namespace-wide policy.
-//   portLevelMtls:
-//     9080:
-//       mode: DISABLE
-//     9443:
-//       mode: DISABLE
-// ```
-//
-// and the associated DestinationRule to ensure that the clients use
-// the appropriate TLS settings:
-//
-// {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: DestinationRule
-// metadata:
-//   name: ratings-istio-mtls-exception
-//   namespace: prod-us1
-// spec:
-//   host: ratings.prod-us1.svc.cluster.local
-//   trafficPolicy:
-//    portLevelSettings:
-//    - port:
-//        number: 9080
-//      tls:
-//        mode: DISABLE
-//    - port:
-//        number: 9443
-//      tls:
-//        mode: SIMPLE
-//        caCertificates: /etc/certs/ca-certs.pem
-// ```
-//
-// {{</tab>}}
-//
-// {{<tab name="v1beta1" category-value="v1beta1">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1beta1
-// kind: DestinationRule
-// metadata:
-//   name: ratings-istio-mtls-exception
-//   namespace: prod-us1
-// spec:
-//   host: ratings.prod-us1.svc.cluster.local
-//   trafficPolicy:
-//    portLevelSettings:
-//    - port:
-//        number: 9080
-//      tls:
-//        mode: DISABLE
-//    - port:
-//        number: 9443
-//      tls:
-//        mode: SIMPLE
-//        caCertificates: /etc/certs/ca-certs.pem
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -546,6 +447,17 @@ func (this *OutboundTrafficPolicy) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for OutboundTrafficPolicy
 func (this *OutboundTrafficPolicy) UnmarshalJSON(b []byte) error {
+	return SidecarUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for Localhost
+func (this *Localhost) MarshalJSON() ([]byte, error) {
+	str, err := SidecarMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for Localhost
+func (this *Localhost) UnmarshalJSON(b []byte) error {
 	return SidecarUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

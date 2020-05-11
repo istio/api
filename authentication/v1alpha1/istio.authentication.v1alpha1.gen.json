@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Authentication policy for Istio services.",
+    "title": "",
     "version": "v1alpha1"
   },
   "components": {
@@ -10,6 +10,60 @@
         "description": "Describes how to match a given string. Match is case-sensitive.",
         "type": "object",
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "exact"
+                  ],
+                  "properties": {
+                    "exact": {
+                      "description": "exact string match.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "prefix"
+                  ],
+                  "properties": {
+                    "prefix": {
+                      "description": "prefix-based match.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "suffix"
+                  ],
+                  "properties": {
+                    "suffix": {
+                      "description": "suffix-based match.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "regex"
+                  ],
+                  "properties": {
+                    "regex": {
+                      "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "exact"
@@ -52,7 +106,7 @@
             ],
             "properties": {
               "regex": {
-                "description": "ECMAscript style regex-based match as defined by [EDCA-262](http://en.cppreference.com/w/cpp/regex/ecmascript). Example: \"^/pets/(.*?)?\"",
+                "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
                 "type": "string",
                 "format": "string"
               }
@@ -61,7 +115,7 @@
         ]
       },
       "istio.authentication.v1alpha1.MutualTls": {
-        "description": "TLS authentication params.",
+        "description": "Deprecated. Please use security/v1beta1/PeerAuthentication instead. TLS authentication params.",
         "type": "object",
         "properties": {
           "allowTls": {
@@ -155,9 +209,36 @@
         }
       },
       "istio.authentication.v1alpha1.PeerAuthenticationMethod": {
-        "description": "PeerAuthenticationMethod defines one particular type of authentication. Only mTLS is supported at the moment. The type can be progammatically determine by checking the type of the \"params\" field.",
+        "description": "Deprecated. Please use security/v1beta1/PeerAuthentication instead. PeerAuthenticationMethod defines one particular type of authentication. Only mTLS is supported at the moment. The type can be progammatically determine by checking the type of the \"params\" field.",
         "type": "object",
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "mtls"
+                  ],
+                  "properties": {
+                    "mtls": {
+                      "$ref": "#/components/schemas/istio.authentication.v1alpha1.MutualTls"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "jwt"
+                  ],
+                  "properties": {
+                    "jwt": {
+                      "$ref": "#/components/schemas/istio.authentication.v1alpha1.Jwt",
+                      "deprecated": true
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "mtls"
@@ -211,7 +292,7 @@
             "deprecated": true
           },
           "peers": {
-            "description": "List of authentication methods that can be used for peer authentication. They will be evaluated in order; the first validate one will be used to set peer identity (source.user) and other peer attributes. If none of these methods pass, request will be rejected with authentication failed error (401). Leave the list empty if peer authentication is not required",
+            "description": "Deprecated. Please use security/v1beta1/PeerAuthentication instead. List of authentication methods that can be used for peer authentication. They will be evaluated in order; the first validate one will be used to set peer identity (source.user) and other peer attributes. If none of these methods pass, request will be rejected with authentication failed error (401). Leave the list empty if peer authentication is not required",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/istio.authentication.v1alpha1.PeerAuthenticationMethod"
@@ -263,6 +344,35 @@
         "description": "Deprecated. Only support mesh and namespace level policy in the future. PortSelector specifies the name or number of a port to be used for matching targets for authentication policy. This is copied from networking API to avoid dependency.",
         "type": "object",
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "number"
+                  ],
+                  "properties": {
+                    "number": {
+                      "description": "Valid port number",
+                      "type": "integer"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "name"
+                  ],
+                  "properties": {
+                    "name": {
+                      "description": "Port name",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "number"

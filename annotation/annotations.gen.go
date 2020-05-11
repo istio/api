@@ -11,7 +11,6 @@ const (
     Ingress
     Pod
     Service
-    ServiceEntry
 )
 
 func (r ResourceTypes) String() string {
@@ -24,8 +23,6 @@ func (r ResourceTypes) String() string {
 		return "Pod"
 	case 4:
 		return "Service"
-	case 5:
-		return "ServiceEntry"
 	}
 	return "Unknown"
 }
@@ -129,40 +126,6 @@ var (
 		  Resources: []ResourceTypes{ Ingress, },
         }
 	
-		AlphaNetworkingEndpointsVersion = Instance {
-          Name: "networking.alpha.istio.io/endpointsVersion",
-          Description: "Added to synthetic ServiceEntry resources to provide the "+
-                        "raw resource version from the most recent Kubernetes "+
-                        "endpoints update (if available). NOTE This API is Alpha "+
-                        "and has no stability guarantees.",
-          Hidden: true,
-          Deprecated: false,
-		  Resources: []ResourceTypes{ ServiceEntry, },
-        }
-	
-		AlphaNetworkingNotReadyEndpoints = Instance {
-          Name: "networking.alpha.istio.io/notReadyEndpoints",
-          Description: "Added to synthetic ServiceEntry resources to provide the "+
-                        "'NotReadyAddresses' from the Kubernetes Endpoints "+
-                        "resource. The value is a comma-separated list of IP:port. "+
-                        "NOTE This API is Alpha and has no stability guarantees.",
-          Hidden: true,
-          Deprecated: false,
-		  Resources: []ResourceTypes{ ServiceEntry, },
-        }
-	
-		AlphaNetworkingServiceVersion = Instance {
-          Name: "networking.alpha.istio.io/serviceVersion",
-          Description: "Added to synthetic ServiceEntry resources to provide the "+
-                        "raw resource version from the most recent Kubernetes "+
-                        "service update. This will always be available for "+
-                        "synthetic service entries. NOTE This API is Alpha and has "+
-                        "no stability guarantees.",
-          Hidden: true,
-          Deprecated: false,
-		  Resources: []ResourceTypes{ ServiceEntry, },
-        }
-	
 		NetworkingExportTo = Instance {
           Name: "networking.istio.io/exportTo",
           Description: "Specifies the namespaces to which this service should be "+
@@ -221,6 +184,25 @@ var (
 		  Resources: []ResourceTypes{ Pod, },
         }
 	
+		PrometheusMergeMetrics = Instance {
+          Name: "prometheus.istio.io/merge-metrics",
+          Description: "Specifies if application Prometheus metric will be merged "+
+                        "with Envoy metrics for this workload.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
+        }
+	
+		ProxyConfig = Instance {
+          Name: "proxy.istio.io/config",
+          Description: "Overrides for the proxy configuration for this specific "+
+                        "proxy. Available options can be found at "+
+                        "https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#ProxyConfig.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
+        }
+	
 		SidecarStatusReadinessApplicationPorts = Instance {
           Name: "readiness.status.sidecar.istio.io/applicationPorts",
           Description: "Specifies the list of ports exposed by the application "+
@@ -259,11 +241,16 @@ var (
 		  Resources: []ResourceTypes{ Pod, },
         }
 	
-		SecurityAutoMTLS = Instance {
-          Name: "security.istio.io/autoMTLS",
-          Description: "Determines whether the client proxy uses auto mTLS. This "+
-                        "overrides the mesh default specified in "+
-                        "MeshConfig.enable_auto_mtls.",
+		SecurityTlsMode = Instance {
+          Name: "security.istio.io/tlsMode",
+          Description: "Specifies the TLS mode supported by a sidecar proxy. "+
+                        "Valid values are 'istio', 'disabled'. When injecting "+
+                        "sidecars into Pods, the sidecar injector will set the "+
+                        "value of this label to 'istio' indicating that the "+
+                        "sidecar is capable of supporting mTLS. Clients will "+
+                        "opportunistically use this label to determine whether or "+
+                        "not to secure the traffic to this workload using Istio "+
+                        "mutual TLS.",
           Hidden: true,
           Deprecated: false,
 		  Resources: []ResourceTypes{ Pod, },
@@ -350,6 +337,14 @@ var (
 		  Resources: []ResourceTypes{ Pod, },
         }
 	
+		SidecarProxyCPULimit = Instance {
+          Name: "sidecar.istio.io/proxyCPULimit",
+          Description: "Specifies the CPU limit for the Envoy sidecar.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
+        }
+	
 		SidecarProxyImage = Instance {
           Name: "sidecar.istio.io/proxyImage",
           Description: "Specifies the Docker image to be used by the Envoy "+
@@ -363,6 +358,14 @@ var (
           Name: "sidecar.istio.io/proxyMemory",
           Description: "Specifies the requested memory setting for the Envoy "+
                         "sidecar.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
+        }
+	
+		SidecarProxyMemoryLimit = Instance {
+          Name: "sidecar.istio.io/proxyMemoryLimit",
+          Description: "Specifies the memory limit for the Envoy sidecar.",
           Hidden: false,
           Deprecated: false,
 		  Resources: []ResourceTypes{ Pod, },
@@ -514,20 +517,19 @@ func AllResourceAnnotations() []*Instance {
 		&OperatorInstallOwnerGeneration,
 		&OperatorInstallVersion,
 		&IoKubernetesIngressClass,
-		&AlphaNetworkingEndpointsVersion,
-		&AlphaNetworkingNotReadyEndpoints,
-		&AlphaNetworkingServiceVersion,
 		&NetworkingExportTo,
 		&PolicyCheck,
 		&PolicyCheckBaseRetryWaitTime,
 		&PolicyCheckMaxRetryWaitTime,
 		&PolicyCheckRetries,
 		&PolicyLang,
+		&PrometheusMergeMetrics,
+		&ProxyConfig,
 		&SidecarStatusReadinessApplicationPorts,
 		&SidecarStatusReadinessFailureThreshold,
 		&SidecarStatusReadinessInitialDelaySeconds,
 		&SidecarStatusReadinessPeriodSeconds,
-		&SecurityAutoMTLS,
+		&SecurityTlsMode,
 		&SidecarBootstrapOverride,
 		&SidecarComponentLogLevel,
 		&SidecarControlPlaneAuthPolicy,
@@ -537,8 +539,10 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarInterceptionMode,
 		&SidecarLogLevel,
 		&SidecarProxyCPU,
+		&SidecarProxyCPULimit,
 		&SidecarProxyImage,
 		&SidecarProxyMemory,
+		&SidecarProxyMemoryLimit,
 		&SidecarRewriteAppHTTPProbers,
 		&SidecarStatsInclusionPrefixes,
 		&SidecarStatsInclusionRegexps,
@@ -562,6 +566,5 @@ func AllResourceTypes() []string {
 		"Ingress",
 		"Pod",
 		"Service",
-		"ServiceEntry",
 	}
 }

@@ -291,14 +291,14 @@ func (this *OutlierDetection) UnmarshalJSON(b []byte) error {
 	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for TLSSettings
-func (this *TLSSettings) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for ClientTLSSettings
+func (this *ClientTLSSettings) MarshalJSON() ([]byte, error) {
 	str, err := DestinationRuleMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for TLSSettings
-func (this *TLSSettings) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for ClientTLSSettings
+func (this *ClientTLSSettings) UnmarshalJSON(b []byte) error {
 	return DestinationRuleUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

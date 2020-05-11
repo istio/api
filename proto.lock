@@ -35745,15 +35745,19 @@
             "name": "MeshConfig.IngressControllerMode",
             "enum_fields": [
               {
-                "name": "OFF"
+                "name": "UNSPECIFIED"
               },
               {
-                "name": "DEFAULT",
+                "name": "OFF",
                 "integer": 1
               },
               {
-                "name": "STRICT",
+                "name": "DEFAULT",
                 "integer": 2
+              },
+              {
+                "name": "STRICT",
+                "integer": 3
               }
             ]
           },
@@ -36094,6 +36098,17 @@
                 "id": 49,
                 "name": "thrift_config",
                 "type": "ThriftConfig"
+              },
+              {
+                "id": 50,
+                "name": "service_settings",
+                "type": "ServiceSettings",
+                "is_repeated": true
+              },
+              {
+                "id": 51,
+                "name": "enable_prometheus_merge",
+                "type": "google.protobuf.BoolValue"
               }
             ],
             "reserved_ids": [
@@ -36125,6 +36140,34 @@
                     "type": "google.protobuf.Duration"
                   }
                 ]
+              },
+              {
+                "name": "ServiceSettings",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "settings",
+                    "type": "Settings"
+                  },
+                  {
+                    "id": 2,
+                    "name": "hosts",
+                    "type": "string",
+                    "is_repeated": true
+                  }
+                ],
+                "messages": [
+                  {
+                    "name": "Settings",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "cluster_local",
+                        "type": "bool"
+                      }
+                    ]
+                  }
+                ]
               }
             ]
           },
@@ -36139,7 +36182,7 @@
               {
                 "id": 2,
                 "name": "tls_settings",
-                "type": "istio.networking.v1alpha3.TLSSettings"
+                "type": "istio.networking.v1alpha3.ClientTLSSettings"
               },
               {
                 "id": 3,
@@ -36329,6 +36372,34 @@
             ]
           },
           {
+            "name": "Topology.ForwardClientCertDetails",
+            "enum_fields": [
+              {
+                "name": "UNDEFINED"
+              },
+              {
+                "name": "SANITIZE",
+                "integer": 1
+              },
+              {
+                "name": "FORWARD_ONLY",
+                "integer": 2
+              },
+              {
+                "name": "APPEND_FORWARD",
+                "integer": 3
+              },
+              {
+                "name": "SANITIZE_SET",
+                "integer": 4
+              },
+              {
+                "name": "ALWAYS_FORWARD_ONLY",
+                "integer": 5
+              }
+            ]
+          },
+          {
             "name": "ProxyConfig.InboundInterceptionMode",
             "enum_fields": [
               {
@@ -36364,6 +36435,31 @@
                 "id": 4,
                 "name": "stackdriver",
                 "type": "Stackdriver"
+              },
+              {
+                "id": 6,
+                "name": "max_path_tag_length",
+                "type": "uint32"
+              },
+              {
+                "id": 7,
+                "name": "sampling",
+                "type": "double"
+              },
+              {
+                "id": 8,
+                "name": "tls_settings",
+                "type": "istio.networking.v1alpha3.ClientTLSSettings"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 5,
+                  "name": "custom_tags",
+                  "type": "CustomTag"
+                }
               }
             ],
             "messages": [
@@ -36388,16 +36484,6 @@
                   {
                     "id": 2,
                     "name": "access_token",
-                    "type": "string"
-                  },
-                  {
-                    "id": 3,
-                    "name": "secure",
-                    "type": "bool"
-                  },
-                  {
-                    "id": 4,
-                    "name": "cacert_path",
                     "type": "string"
                   }
                 ]
@@ -36436,6 +36522,66 @@
                     "type": "google.protobuf.Int64Value"
                   }
                 ]
+              },
+              {
+                "name": "CustomTag",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "literal",
+                    "type": "Literal"
+                  },
+                  {
+                    "id": 2,
+                    "name": "environment",
+                    "type": "Environment"
+                  },
+                  {
+                    "id": 3,
+                    "name": "header",
+                    "type": "RequestHeader"
+                  }
+                ]
+              },
+              {
+                "name": "Literal",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "value",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "Environment",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "default_value",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "RequestHeader",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "default_value",
+                    "type": "string"
+                  }
+                ]
               }
             ]
           },
@@ -36451,6 +36597,21 @@
                 "id": 2,
                 "name": "k8s_sa_jwt_path",
                 "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "Topology",
+            "fields": [
+              {
+                "id": 1,
+                "name": "num_trusted_proxies",
+                "type": "uint32"
+              },
+              {
+                "id": 2,
+                "name": "forward_client_cert_details",
+                "type": "ForwardClientCertDetails"
               }
             ]
           },
@@ -36510,11 +36671,6 @@
                 ]
               },
               {
-                "id": 9,
-                "name": "connect_timeout",
-                "type": "google.protobuf.Duration"
-              },
-              {
                 "id": 10,
                 "name": "statsd_udp_address",
                 "type": "string"
@@ -36564,7 +36720,7 @@
               {
                 "id": 16,
                 "name": "concurrency",
-                "type": "int32"
+                "type": "google.protobuf.Int32Value"
               },
               {
                 "id": 17,
@@ -36595,6 +36751,22 @@
                 "id": 23,
                 "name": "envoy_metrics_service",
                 "type": "RemoteService"
+              },
+              {
+                "id": 26,
+                "name": "status_port",
+                "type": "int32"
+              },
+              {
+                "id": 27,
+                "name": "extra_stat_tags",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 28,
+                "name": "gateway_topology",
+                "type": "Topology"
               }
             ],
             "maps": [
@@ -36606,6 +36778,12 @@
                   "type": "string"
                 }
               }
+            ],
+            "reserved_ids": [
+              9
+            ],
+            "reserved_names": [
+              "connect_timeout"
             ]
           },
           {
@@ -36619,7 +36797,7 @@
               {
                 "id": 2,
                 "name": "tls_settings",
-                "type": "istio.networking.v1alpha3.TLSSettings"
+                "type": "istio.networking.v1alpha3.ClientTLSSettings"
               },
               {
                 "id": 3,
@@ -38558,7 +38736,7 @@
             ]
           },
           {
-            "name": "TLSSettings.TLSmode",
+            "name": "ClientTLSSettings.TLSmode",
             "enum_fields": [
               {
                 "name": "DISABLE"
@@ -38633,7 +38811,7 @@
               {
                 "id": 4,
                 "name": "tls",
-                "type": "TLSSettings"
+                "type": "ClientTLSSettings"
               },
               {
                 "id": 5,
@@ -38669,7 +38847,7 @@
                   {
                     "id": 5,
                     "name": "tls",
-                    "type": "TLSSettings"
+                    "type": "ClientTLSSettings"
                   }
                 ]
               }
@@ -38933,7 +39111,7 @@
             ]
           },
           {
-            "name": "TLSSettings",
+            "name": "ClientTLSSettings",
             "fields": [
               {
                 "id": 1,
@@ -39067,78 +39245,6 @@
       "def": {
         "enums": [
           {
-            "name": "DeprecatedListenerMatch.ListenerType",
-            "enum_fields": [
-              {
-                "name": "ANY"
-              },
-              {
-                "name": "SIDECAR_INBOUND",
-                "integer": 1
-              },
-              {
-                "name": "SIDECAR_OUTBOUND",
-                "integer": 2
-              },
-              {
-                "name": "GATEWAY",
-                "integer": 3
-              }
-            ]
-          },
-          {
-            "name": "DeprecatedListenerMatch.ListenerProtocol",
-            "enum_fields": [
-              {
-                "name": "ALL"
-              },
-              {
-                "name": "HTTP",
-                "integer": 1
-              },
-              {
-                "name": "TCP",
-                "integer": 2
-              }
-            ]
-          },
-          {
-            "name": "InsertPosition.Index",
-            "enum_fields": [
-              {
-                "name": "FIRST"
-              },
-              {
-                "name": "LAST",
-                "integer": 1
-              },
-              {
-                "name": "BEFORE",
-                "integer": 2
-              },
-              {
-                "name": "AFTER",
-                "integer": 3
-              }
-            ]
-          },
-          {
-            "name": "Filter.FilterType",
-            "enum_fields": [
-              {
-                "name": "INVALID"
-              },
-              {
-                "name": "HTTP",
-                "integer": 1
-              },
-              {
-                "name": "NETWORK",
-                "integer": 2
-              }
-            ]
-          },
-          {
             "name": "EnvoyFilter.ApplyTo",
             "enum_fields": [
               {
@@ -39256,18 +39362,6 @@
             "name": "EnvoyFilter",
             "fields": [
               {
-                "id": 2,
-                "name": "filters",
-                "type": "Filter",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
                 "id": 3,
                 "name": "workload_selector",
                 "type": "WorkloadSelector"
@@ -39285,117 +39379,15 @@
                 ]
               }
             ],
-            "maps": [
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 1,
-                  "name": "workload_labels",
-                  "type": "string",
-                  "options": [
-                    {
-                      "name": "deprecated",
-                      "value": "true"
-                    }
-                  ]
-                }
-              }
+            "reserved_ids": [
+              1,
+              2
+            ],
+            "reserved_names": [
+              "filters",
+              "workload_labels"
             ],
             "messages": [
-              {
-                "name": "DeprecatedListenerMatch",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "port_number",
-                    "type": "uint32"
-                  },
-                  {
-                    "id": 2,
-                    "name": "port_name_prefix",
-                    "type": "string"
-                  },
-                  {
-                    "id": 3,
-                    "name": "listener_type",
-                    "type": "ListenerType"
-                  },
-                  {
-                    "id": 4,
-                    "name": "listener_protocol",
-                    "type": "ListenerProtocol"
-                  },
-                  {
-                    "id": 5,
-                    "name": "address",
-                    "type": "string",
-                    "is_repeated": true
-                  }
-                ]
-              },
-              {
-                "name": "InsertPosition",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "index",
-                    "type": "Index"
-                  },
-                  {
-                    "id": 2,
-                    "name": "relative_to",
-                    "type": "string"
-                  }
-                ]
-              },
-              {
-                "name": "Filter",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "listener_match",
-                    "type": "DeprecatedListenerMatch"
-                  },
-                  {
-                    "id": 2,
-                    "name": "insert_position",
-                    "type": "InsertPosition"
-                  },
-                  {
-                    "id": 3,
-                    "name": "filter_type",
-                    "type": "FilterType",
-                    "options": [
-                      {
-                        "name": "(google.api.field_behavior)",
-                        "value": "REQUIRED"
-                      }
-                    ]
-                  },
-                  {
-                    "id": 4,
-                    "name": "filter_name",
-                    "type": "string",
-                    "options": [
-                      {
-                        "name": "(google.api.field_behavior)",
-                        "value": "REQUIRED"
-                      }
-                    ]
-                  },
-                  {
-                    "id": 5,
-                    "name": "filter_config",
-                    "type": "google.protobuf.Struct",
-                    "options": [
-                      {
-                        "name": "(google.api.field_behavior)",
-                        "value": "REQUIRED"
-                      }
-                    ]
-                  }
-                ]
-              },
               {
                 "name": "ProxyMatch",
                 "fields": [
@@ -39680,7 +39672,7 @@
       "def": {
         "enums": [
           {
-            "name": "TLSOptions.TLSmode",
+            "name": "ServerTLSSettings.TLSmode",
             "enum_fields": [
               {
                 "name": "PASSTHROUGH"
@@ -39704,7 +39696,7 @@
             ]
           },
           {
-            "name": "TLSOptions.TLSProtocol",
+            "name": "ServerTLSSettings.TLSProtocol",
             "enum_fields": [
               {
                 "name": "TLS_AUTO"
@@ -39796,83 +39788,12 @@
               {
                 "id": 3,
                 "name": "tls",
-                "type": "TLSOptions"
+                "type": "ServerTLSSettings"
               },
               {
                 "id": 5,
                 "name": "default_endpoint",
                 "type": "string"
-              }
-            ],
-            "messages": [
-              {
-                "name": "TLSOptions",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "https_redirect",
-                    "type": "bool"
-                  },
-                  {
-                    "id": 2,
-                    "name": "mode",
-                    "type": "TLSmode"
-                  },
-                  {
-                    "id": 3,
-                    "name": "server_certificate",
-                    "type": "string"
-                  },
-                  {
-                    "id": 4,
-                    "name": "private_key",
-                    "type": "string"
-                  },
-                  {
-                    "id": 5,
-                    "name": "ca_certificates",
-                    "type": "string"
-                  },
-                  {
-                    "id": 10,
-                    "name": "credential_name",
-                    "type": "string"
-                  },
-                  {
-                    "id": 6,
-                    "name": "subject_alt_names",
-                    "type": "string",
-                    "is_repeated": true
-                  },
-                  {
-                    "id": 11,
-                    "name": "verify_certificate_spki",
-                    "type": "string",
-                    "is_repeated": true
-                  },
-                  {
-                    "id": 12,
-                    "name": "verify_certificate_hash",
-                    "type": "string",
-                    "is_repeated": true
-                  },
-                  {
-                    "id": 7,
-                    "name": "min_protocol_version",
-                    "type": "TLSProtocol"
-                  },
-                  {
-                    "id": 8,
-                    "name": "max_protocol_version",
-                    "type": "TLSProtocol"
-                  },
-                  {
-                    "id": 9,
-                    "name": "cipher_suites",
-                    "type": "string",
-                    "is_repeated": true
-                  }
-                ]
               }
             ]
           },
@@ -39904,7 +39825,82 @@
               {
                 "id": 3,
                 "name": "name",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "ServerTLSSettings",
+            "fields": [
+              {
+                "id": 1,
+                "name": "https_redirect",
+                "type": "bool"
+              },
+              {
+                "id": 2,
+                "name": "mode",
+                "type": "TLSmode"
+              },
+              {
+                "id": 3,
+                "name": "server_certificate",
                 "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "private_key",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "ca_certificates",
+                "type": "string"
+              },
+              {
+                "id": 10,
+                "name": "credential_name",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "subject_alt_names",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 11,
+                "name": "verify_certificate_spki",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 12,
+                "name": "verify_certificate_hash",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "min_protocol_version",
+                "type": "TLSProtocol"
+              },
+              {
+                "id": 8,
+                "name": "max_protocol_version",
+                "type": "TLSProtocol"
+              },
+              {
+                "id": 9,
+                "name": "cipher_suites",
+                "type": "string",
+                "is_repeated": true
               }
             ]
           }
@@ -40011,8 +40007,13 @@
               {
                 "id": 6,
                 "name": "endpoints",
-                "type": "Endpoint",
+                "type": "WorkloadEntry",
                 "is_repeated": true
+              },
+              {
+                "id": 9,
+                "name": "workload_selector",
+                "type": "WorkloadSelector"
               },
               {
                 "id": 7,
@@ -40026,57 +40027,6 @@
                 "type": "string",
                 "is_repeated": true
               }
-            ],
-            "messages": [
-              {
-                "name": "Endpoint",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "address",
-                    "type": "string",
-                    "options": [
-                      {
-                        "name": "(google.api.field_behavior)",
-                        "value": "REQUIRED"
-                      }
-                    ]
-                  },
-                  {
-                    "id": 4,
-                    "name": "network",
-                    "type": "string"
-                  },
-                  {
-                    "id": 5,
-                    "name": "locality",
-                    "type": "string"
-                  },
-                  {
-                    "id": 6,
-                    "name": "weight",
-                    "type": "uint32"
-                  }
-                ],
-                "maps": [
-                  {
-                    "key_type": "string",
-                    "field": {
-                      "id": 2,
-                      "name": "ports",
-                      "type": "uint32"
-                    }
-                  },
-                  {
-                    "key_type": "string",
-                    "field": {
-                      "id": 3,
-                      "name": "labels",
-                      "type": "string"
-                    }
-                  }
-                ]
-              }
             ]
           }
         ],
@@ -40086,6 +40036,12 @@
           },
           {
             "path": "networking/v1alpha3/gateway.proto"
+          },
+          {
+            "path": "networking/v1alpha3/sidecar.proto"
+          },
+          {
+            "path": "networking/v1alpha3/workload_entry.proto"
           }
         ],
         "package": {
@@ -40159,9 +40115,9 @@
                 "type": "OutboundTrafficPolicy"
               },
               {
-                "id": 5,
-                "name": "inbound_tls",
-                "type": "Server.TLSOptions"
+                "id": 6,
+                "name": "localhost",
+                "type": "Localhost"
               }
             ]
           },
@@ -40201,9 +40157,9 @@
                 ]
               },
               {
-                "id": 5,
-                "name": "inbound_tls",
-                "type": "Server.TLSOptions"
+                "id": 6,
+                "name": "localhost_client_tls",
+                "type": "ClientTLSSettings"
               }
             ]
           },
@@ -40236,6 +40192,11 @@
                     "value": "REQUIRED"
                   }
                 ]
+              },
+              {
+                "id": 5,
+                "name": "localhost_server_tls",
+                "type": "ServerTLSSettings"
               }
             ]
           },
@@ -40272,6 +40233,21 @@
                 "type": "istio.networking.v1alpha3.Destination"
               }
             ]
+          },
+          {
+            "name": "Localhost",
+            "fields": [
+              {
+                "id": 1,
+                "name": "client_tls",
+                "type": "ClientTLSSettings"
+              },
+              {
+                "id": 2,
+                "name": "server_tls",
+                "type": "ServerTLSSettings"
+              }
+            ]
           }
         ],
         "imports": [
@@ -40283,6 +40259,9 @@
           },
           {
             "path": "networking/v1alpha3/virtual_service.proto"
+          },
+          {
+            "path": "networking/v1alpha3/destination_rule.proto"
           }
         ],
         "package": {
@@ -40307,13 +40286,7 @@
                 "id": 1,
                 "name": "hosts",
                 "type": "string",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "is_repeated": true
               },
               {
                 "id": 2,
@@ -40399,6 +40372,11 @@
                 "type": "HTTPRedirect"
               },
               {
+                "id": 20,
+                "name": "delegate",
+                "type": "Delegate"
+              },
+              {
                 "id": 4,
                 "name": "rewrite",
                 "type": "HTTPRewrite"
@@ -40465,6 +40443,21 @@
               "append_response_headers",
               "remove_request_headers",
               "append_request_headers"
+            ]
+          },
+          {
+            "name": "Delegate",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "namespace",
+                "type": "string"
+              }
             ]
           },
           {
@@ -41072,6 +41065,81 @@
       }
     },
     {
+      "protopath": "networking:/:v1alpha3:/:workload_entry.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "WorkloadEntry",
+            "fields": [
+              {
+                "id": 1,
+                "name": "address",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "name": "network",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "locality",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "weight",
+                "type": "uint32"
+              },
+              {
+                "id": 7,
+                "name": "service_account",
+                "type": "string"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 2,
+                  "name": "ports",
+                  "type": "uint32"
+                }
+              },
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 3,
+                  "name": "labels",
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/api/field_behavior.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.networking.v1alpha3"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1alpha3"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "networking:/:v1beta1:/:destination_rule.proto",
       "def": {
         "enums": [
@@ -41112,7 +41180,7 @@
             ]
           },
           {
-            "name": "TLSSettings.TLSmode",
+            "name": "ClientTLSSettings.TLSmode",
             "enum_fields": [
               {
                 "name": "DISABLE"
@@ -41187,7 +41255,7 @@
               {
                 "id": 4,
                 "name": "tls",
-                "type": "TLSSettings"
+                "type": "ClientTLSSettings"
               },
               {
                 "id": 5,
@@ -41223,7 +41291,7 @@
                   {
                     "id": 5,
                     "name": "tls",
-                    "type": "TLSSettings"
+                    "type": "ClientTLSSettings"
                   }
                 ]
               }
@@ -41487,7 +41555,7 @@
             ]
           },
           {
-            "name": "TLSSettings",
+            "name": "ClientTLSSettings",
             "fields": [
               {
                 "id": 1,
@@ -41621,7 +41689,7 @@
       "def": {
         "enums": [
           {
-            "name": "TLSOptions.TLSmode",
+            "name": "ServerTLSSettings.TLSmode",
             "enum_fields": [
               {
                 "name": "PASSTHROUGH"
@@ -41645,7 +41713,7 @@
             ]
           },
           {
-            "name": "TLSOptions.TLSProtocol",
+            "name": "ServerTLSSettings.TLSProtocol",
             "enum_fields": [
               {
                 "name": "TLS_AUTO"
@@ -41737,83 +41805,12 @@
               {
                 "id": 3,
                 "name": "tls",
-                "type": "TLSOptions"
+                "type": "ServerTLSSettings"
               },
               {
                 "id": 5,
                 "name": "default_endpoint",
                 "type": "string"
-              }
-            ],
-            "messages": [
-              {
-                "name": "TLSOptions",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "https_redirect",
-                    "type": "bool"
-                  },
-                  {
-                    "id": 2,
-                    "name": "mode",
-                    "type": "TLSmode"
-                  },
-                  {
-                    "id": 3,
-                    "name": "server_certificate",
-                    "type": "string"
-                  },
-                  {
-                    "id": 4,
-                    "name": "private_key",
-                    "type": "string"
-                  },
-                  {
-                    "id": 5,
-                    "name": "ca_certificates",
-                    "type": "string"
-                  },
-                  {
-                    "id": 10,
-                    "name": "credential_name",
-                    "type": "string"
-                  },
-                  {
-                    "id": 6,
-                    "name": "subject_alt_names",
-                    "type": "string",
-                    "is_repeated": true
-                  },
-                  {
-                    "id": 11,
-                    "name": "verify_certificate_spki",
-                    "type": "string",
-                    "is_repeated": true
-                  },
-                  {
-                    "id": 12,
-                    "name": "verify_certificate_hash",
-                    "type": "string",
-                    "is_repeated": true
-                  },
-                  {
-                    "id": 7,
-                    "name": "min_protocol_version",
-                    "type": "TLSProtocol"
-                  },
-                  {
-                    "id": 8,
-                    "name": "max_protocol_version",
-                    "type": "TLSProtocol"
-                  },
-                  {
-                    "id": 9,
-                    "name": "cipher_suites",
-                    "type": "string",
-                    "is_repeated": true
-                  }
-                ]
               }
             ]
           },
@@ -41845,7 +41842,82 @@
               {
                 "id": 3,
                 "name": "name",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "ServerTLSSettings",
+            "fields": [
+              {
+                "id": 1,
+                "name": "https_redirect",
+                "type": "bool"
+              },
+              {
+                "id": 2,
+                "name": "mode",
+                "type": "TLSmode"
+              },
+              {
+                "id": 3,
+                "name": "server_certificate",
                 "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "private_key",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "ca_certificates",
+                "type": "string"
+              },
+              {
+                "id": 10,
+                "name": "credential_name",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "subject_alt_names",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 11,
+                "name": "verify_certificate_spki",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 12,
+                "name": "verify_certificate_hash",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 7,
+                "name": "min_protocol_version",
+                "type": "TLSProtocol"
+              },
+              {
+                "id": 8,
+                "name": "max_protocol_version",
+                "type": "TLSProtocol"
+              },
+              {
+                "id": 9,
+                "name": "cipher_suites",
+                "type": "string",
+                "is_repeated": true
               }
             ]
           }
@@ -41952,8 +42024,13 @@
               {
                 "id": 6,
                 "name": "endpoints",
-                "type": "Endpoint",
+                "type": "WorkloadEntry",
                 "is_repeated": true
+              },
+              {
+                "id": 9,
+                "name": "workload_selector",
+                "type": "WorkloadSelector"
               },
               {
                 "id": 7,
@@ -41967,57 +42044,6 @@
                 "type": "string",
                 "is_repeated": true
               }
-            ],
-            "messages": [
-              {
-                "name": "Endpoint",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "address",
-                    "type": "string",
-                    "options": [
-                      {
-                        "name": "(google.api.field_behavior)",
-                        "value": "REQUIRED"
-                      }
-                    ]
-                  },
-                  {
-                    "id": 4,
-                    "name": "network",
-                    "type": "string"
-                  },
-                  {
-                    "id": 5,
-                    "name": "locality",
-                    "type": "string"
-                  },
-                  {
-                    "id": 6,
-                    "name": "weight",
-                    "type": "uint32"
-                  }
-                ],
-                "maps": [
-                  {
-                    "key_type": "string",
-                    "field": {
-                      "id": 2,
-                      "name": "ports",
-                      "type": "uint32"
-                    }
-                  },
-                  {
-                    "key_type": "string",
-                    "field": {
-                      "id": 3,
-                      "name": "labels",
-                      "type": "string"
-                    }
-                  }
-                ]
-              }
             ]
           }
         ],
@@ -42027,6 +42053,12 @@
           },
           {
             "path": "networking/v1beta1/gateway.proto"
+          },
+          {
+            "path": "networking/v1beta1/sidecar.proto"
+          },
+          {
+            "path": "networking/v1beta1/workload_entry.proto"
           }
         ],
         "package": {
@@ -42100,9 +42132,9 @@
                 "type": "OutboundTrafficPolicy"
               },
               {
-                "id": 5,
-                "name": "inbound_tls",
-                "type": "Server.TLSOptions"
+                "id": 6,
+                "name": "localhost",
+                "type": "Localhost"
               }
             ]
           },
@@ -42142,9 +42174,9 @@
                 ]
               },
               {
-                "id": 5,
-                "name": "inbound_tls",
-                "type": "Server.TLSOptions"
+                "id": 6,
+                "name": "localhost_client_tls",
+                "type": "ClientTLSSettings"
               }
             ]
           },
@@ -42177,6 +42209,11 @@
                     "value": "REQUIRED"
                   }
                 ]
+              },
+              {
+                "id": 5,
+                "name": "localhost_server_tls",
+                "type": "ServerTLSSettings"
               }
             ]
           },
@@ -42213,6 +42250,21 @@
                 "type": "istio.networking.v1beta1.Destination"
               }
             ]
+          },
+          {
+            "name": "Localhost",
+            "fields": [
+              {
+                "id": 1,
+                "name": "client_tls",
+                "type": "ClientTLSSettings"
+              },
+              {
+                "id": 2,
+                "name": "server_tls",
+                "type": "ServerTLSSettings"
+              }
+            ]
           }
         ],
         "imports": [
@@ -42224,6 +42276,9 @@
           },
           {
             "path": "networking/v1beta1/virtual_service.proto"
+          },
+          {
+            "path": "networking/v1beta1/destination_rule.proto"
           }
         ],
         "package": {
@@ -42248,13 +42303,7 @@
                 "id": 1,
                 "name": "hosts",
                 "type": "string",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(google.api.field_behavior)",
-                    "value": "REQUIRED"
-                  }
-                ]
+                "is_repeated": true
               },
               {
                 "id": 2,
@@ -42340,6 +42389,11 @@
                 "type": "HTTPRedirect"
               },
               {
+                "id": 20,
+                "name": "delegate",
+                "type": "Delegate"
+              },
+              {
                 "id": 4,
                 "name": "rewrite",
                 "type": "HTTPRewrite"
@@ -42406,6 +42460,21 @@
               "append_response_headers",
               "remove_request_headers",
               "append_request_headers"
+            ]
+          },
+          {
+            "name": "Delegate",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "namespace",
+                "type": "string"
+              }
             ]
           },
           {
@@ -42813,6 +42882,11 @@
                 "id": 3,
                 "name": "retry_on",
                 "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "retry_remote_localities",
+                "type": "google.protobuf.BoolValue"
               }
             ]
           },
@@ -43008,6 +43082,81 @@
       }
     },
     {
+      "protopath": "networking:/:v1beta1:/:workload_entry.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "WorkloadEntry",
+            "fields": [
+              {
+                "id": 1,
+                "name": "address",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "name": "network",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "locality",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "weight",
+                "type": "uint32"
+              },
+              {
+                "id": 7,
+                "name": "service_account",
+                "type": "string"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 2,
+                  "name": "ports",
+                  "type": "uint32"
+                }
+              },
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 3,
+                  "name": "labels",
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/api/field_behavior.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.networking.v1beta1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1beta1"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "operator:/:v1alpha1:/:component.proto",
       "def": {
         "messages": [
@@ -43025,16 +43174,6 @@
                 "type": "ComponentSpec"
               },
               {
-                "id": 31,
-                "name": "proxy",
-                "type": "ComponentSpec"
-              },
-              {
-                "id": 32,
-                "name": "sidecar_injector",
-                "type": "ComponentSpec"
-              },
-              {
                 "id": 33,
                 "name": "policy",
                 "type": "ComponentSpec"
@@ -43042,21 +43181,6 @@
               {
                 "id": 34,
                 "name": "telemetry",
-                "type": "ComponentSpec"
-              },
-              {
-                "id": 35,
-                "name": "citadel",
-                "type": "ComponentSpec"
-              },
-              {
-                "id": 36,
-                "name": "node_agent",
-                "type": "ComponentSpec"
-              },
-              {
-                "id": 37,
-                "name": "galley",
                 "type": "ComponentSpec"
               },
               {
@@ -43076,6 +43200,20 @@
                 "type": "GatewaySpec",
                 "is_repeated": true
               }
+            ],
+            "reserved_ids": [
+              31,
+              32,
+              35,
+              36,
+              37
+            ],
+            "reserved_names": [
+              "citadel",
+              "galley",
+              "node_agent",
+              "proxy",
+              "sidecar_injector"
             ]
           },
           {
@@ -43639,7 +43777,7 @@
               {
                 "id": 2,
                 "name": "port",
-                "type": "TypeIntOrStringForPB"
+                "type": "TypeInterface_kubernetes"
               },
               {
                 "id": 3,
@@ -43680,7 +43818,7 @@
               {
                 "id": 1,
                 "name": "port",
-                "type": "TypeIntOrStringForPB"
+                "type": "TypeInterface_kubernetes"
               },
               {
                 "id": 2,
@@ -43730,12 +43868,12 @@
               {
                 "id": 1,
                 "name": "maxUnavailable",
-                "type": "TypeIntOrStringForPB"
+                "type": "TypeInterface_kubernetes"
               },
               {
                 "id": 2,
                 "name": "maxSurge",
-                "type": "TypeIntOrStringForPB"
+                "type": "TypeInterface_kubernetes"
               }
             ]
           },
@@ -43983,7 +44121,7 @@
               {
                 "id": 4,
                 "name": "targetPort",
-                "type": "TypeIntOrStringForPB"
+                "type": "TypeInterface_kubernetes"
               },
               {
                 "id": 5,
@@ -44149,7 +44287,7 @@
               {
                 "id": 2,
                 "name": "targetAverageUtilization",
-                "type": "int32"
+                "type": "TypeInterface_kubernetes"
               },
               {
                 "id": 3,
@@ -44185,6 +44323,9 @@
           },
           {
             "name": "TypeIntOrStringForPB"
+          },
+          {
+            "name": "TypeInterface_kubernetes"
           }
         ],
         "imports": [
@@ -44286,7 +44427,7 @@
               {
                 "id": 40,
                 "name": "mesh_config",
-                "type": "istio.mesh.v1alpha1.MeshConfig"
+                "type": "TypeMapStringInterface2"
               },
               {
                 "id": 50,
@@ -44349,11 +44490,6 @@
                     "type": "Status"
                   },
                   {
-                    "id": 3,
-                    "name": "status_string",
-                    "type": "string"
-                  },
-                  {
                     "id": 4,
                     "name": "error",
                     "type": "string"
@@ -44370,9 +44506,6 @@
           }
         ],
         "imports": [
-          {
-            "path": "mesh/v1alpha1/config.proto"
-          },
           {
             "path": "operator/v1alpha1/component.proto"
           }

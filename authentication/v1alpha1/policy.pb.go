@@ -56,6 +56,7 @@ func (PrincipalBinding) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_30ec3f7cef93301a, []int{0}
 }
 
+// $hide_from_docs
 // Defines the acceptable connection TLS mode.
 type MutualTls_Mode int32
 
@@ -200,6 +201,8 @@ func (*StringMatch) XXX_OneofWrappers() []interface{} {
 	}
 }
 
+// $hide_from_docs
+// Deprecated. Please use security/v1beta1/PeerAuthentication instead.
 // TLS authentication params.
 type MutualTls struct {
 	// Deprecated. Please use mode = PERMISSIVE instead.
@@ -529,11 +532,15 @@ func (m *Jwt_TriggerRule) GetIncludedPaths() []*StringMatch {
 	return nil
 }
 
+// $hide_from_docs
+// Deprecated. Please use security/v1beta1/PeerAuthentication instead.
 // PeerAuthenticationMethod defines one particular type of authentication. Only mTLS is supported
 // at the moment.
 // The type can be progammatically determine by checking the type of the
 // "params" field.
 type PeerAuthenticationMethod struct {
+	// $hide_from_docs
+	//
 	// Types that are valid to be assigned to Params:
 	//	*PeerAuthenticationMethod_Mtls
 	//	*PeerAuthenticationMethod_Jwt
@@ -675,6 +682,7 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 	return nil
 }
 
+// $hide_from_docs
 // Policy defines what authentication methods can be accepted on workload(s),
 // and if authenticated, which method/certificate will set the request principal
 // (i.e request.auth.principal attribute).
@@ -746,43 +754,13 @@ func (m *OriginAuthenticationMethod) GetJwt() *Jwt {
 //         - exact: /health_check
 //   principalBinding: USE_ORIGIN
 // ```
-//
-// <!-- crd generation tags
-// +cue-gen:Policy:groupName:authentication.istio.io
-// +cue-gen:Policy:version:v1alpha1
-// +cue-gen:Policy:storageVersion
-// +cue-gen:Policy:annotations:helm.sh/resource-policy=keep
-// +cue-gen:Policy:labels:app=istio-citadel,chart=istio,heritage=Tiller,release=istio
-// +cue-gen:Policy:subresource:status
-// +cue-gen:Policy:scope:Namespaced
-// +cue-gen:Policy:resource:categories=istio-io,authentication-istio-io,plural=policies
-// -->
-//
-// <!-- crd generation tags
-// +cue-gen:MeshPolicy:groupName:authentication.istio.io
-// +cue-gen:MeshPolicy:version:v1alpha1
-// +cue-gen:MeshPolicy:storageVersion
-// +cue-gen:MeshPolicy:annotations:helm.sh/resource-policy=keep
-// +cue-gen:MeshPolicy:labels:app=istio-citadel,chart=istio,heritage=Tiller,release=istio
-// +cue-gen:MeshPolicy:subresource:status
-// +cue-gen:MeshPolicy:scope:Cluster
-// +cue-gen:MeshPolicy:resource:categories=istio-io,authentication-istio-io,plural=meshpolicies
-// -->
-//
-// <!-- go code generation tags
-// +kubetype-gen
-// +kubetype-gen:groupVersion=authentication.istio.io/v1alpha1
-// +kubetype-gen:kubeType=Policy
-// +kubetype-gen:kubeType=MeshPolicy
-// +kubetype-gen:MeshPolicy:tag=genclient:nonNamespaced
-// +genclient
-// +k8s:deepcopy-gen=true
-// -->
 type Policy struct {
 	// Deprecated. Only mesh-level and namespace-level policies are supported.
 	// List rules to select workloads that the policy should be applied on.
 	// If empty, policy will be used on all workloads in the same namespace.
 	Targets []*TargetSelector `protobuf:"bytes,1,rep,name=targets,proto3" json:"targets,omitempty"` // Deprecated: Do not use.
+	// $hide_from_docs
+	// Deprecated. Please use security/v1beta1/PeerAuthentication instead.
 	// List of authentication methods that can be used for peer authentication.
 	// They will be evaluated in order; the first validate one will be used to
 	// set peer identity (source.user) and other peer attributes. If none of

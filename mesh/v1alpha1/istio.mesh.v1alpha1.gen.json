@@ -138,7 +138,7 @@
             }
           },
           "enableAutoMtls": {
-            "description": "This flag is used to enable mutual TLS automatically for service to service communication within the mesh, default false. If set to true, and a given service does not have a corresponding DestinationRule configured, or its DestinationRule does not have TLSSettings specified, Istio configures client side TLS configuration appropriately. More specifically, If the upstream authentication policy is in STRICT mode, use Istio provisioned certificate for mutual TLS to connect to upstream. If upstream service is in plain text mode, use plain text. If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use mutual TLS when server sides are capable of accepting mutual TLS traffic. If service DestinationRule exists and has TLSSettings specified, that is always used instead.",
+            "description": "This flag is used to enable mutual TLS automatically for service to service communication within the mesh, default false. If set to true, and a given service does not have a corresponding DestinationRule configured, or its DestinationRule does not have ClientTLSSettings specified, Istio configures client side TLS configuration appropriately. More specifically, If the upstream authentication policy is in STRICT mode, use Istio provisioned certificate for mutual TLS to connect to upstream. If upstream service is in plain text mode, use plain text. If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use mutual TLS when server sides are capable of accepting mutual TLS traffic. If service DestinationRule exists and has ClientTLSSettings specified, that is always used instead.",
             "type": "boolean",
             "nullable": true
           },
@@ -209,12 +209,12 @@
             "type": "string"
           },
           "inboundClusterStatName": {
-            "description": "Name to be used while emitting statistics for inbound clusters. By default, Istio emits statistics with the pattern `inbound|\u003cport\u003e|\u003cport-name\u003e|\u003cservice-FQDN\u003e`. For example `inbound|7443|grpc-reviews|reviews.prod.svc.cluster.local`. This can be used to override that pattern.",
+            "description": "Name to be used while emitting statistics for inbound clusters. The same pattern is used while computing stat prefix for network filters like TCP and Redis. By default, Istio emits statistics with the pattern `inbound|\u003cport\u003e|\u003cport-name\u003e|\u003cservice-FQDN\u003e`. For example `inbound|7443|grpc-reviews|reviews.prod.svc.cluster.local`. This can be used to override that pattern.",
             "type": "string",
             "format": "string"
           },
           "outboundClusterStatName": {
-            "description": "Name to be used while emitting statistics for outbound clusters. By default, Istio emits statistics with the pattern `outbound|\u003cport\u003e|\u003csubsetname\u003e|\u003cservice-FQDN\u003e`. For example `outbound|8080|v2|reviews.prod.svc.cluster.local`. This can be used to override that pattern.",
+            "description": "Name to be used while emitting statistics for outbound clusters. The same pattern is used while computing stat prefix for network filters like TCP and Redis. By default, Istio emits statistics with the pattern `outbound|\u003cport\u003e|\u003csubsetname\u003e|\u003cservice-FQDN\u003e`. For example `outbound|8080|v2|reviews.prod.svc.cluster.local`. This can be used to override that pattern.",
             "type": "string",
             "format": "string"
           },
@@ -227,12 +227,25 @@
           },
           "thriftConfig": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ThriftConfig"
+          },
+          "serviceSettings": {
+            "description": "Settings to be applied to select services.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ServiceSettings"
+            }
+          },
+          "enablePrometheusMerge": {
+            "description": "If enabled, Istio agent will merge metrics exposed by the application with metrics from Envoy and Istio agent. The sidecar injection will replace `prometheus.io` annotations present on the pod and redirect them towards Istio agent, which will then merge metrics of from the application with Istio metrics. This relies on the annotations `prometheus.io/scrape`, `prometheus.io/port`, and `prometheus.io/path` annotations. If you are running a separately managed Envoy with an Istio sidecar, this may cause issues, as the metrics will collide. In this case, it is recommended to disable aggregation on that deployment with the `prometheus.istio.io/merge-metrics: \"false\"` annotation. If not specified, this will be enabled by default.",
+            "type": "boolean",
+            "nullable": true
           }
         }
       },
       "istio.mesh.v1alpha1.MeshConfig.IngressControllerMode": {
         "type": "string",
         "enum": [
+          "UNSPECIFIED",
           "OFF",
           "DEFAULT",
           "STRICT"
@@ -256,10 +269,6 @@
         "description": "ProxyConfig defines variables for individual Envoy instances.",
         "type": "object",
         "properties": {
-          "connectTimeout": {
-            "description": "Connection timeout used by Envoy for supporting services. (MUST BE \u003e=1ms)",
-            "type": "string"
-          },
           "configPath": {
             "description": "Path to the generated configuration file directory. Proxy agent generates the actual configuration and stores it in this directory.",
             "type": "string",
@@ -332,9 +341,9 @@
             "format": "int32"
           },
           "concurrency": {
-            "description": "The number of worker threads to run. Default value is number of cores on the machine.",
+            "description": "The number of worker threads to run. If unset, this will be automatically determined based on CPU requests/limits. If set to 0, all cores on the machine will be used.",
             "type": "integer",
-            "format": "int32"
+            "nullable": true
           },
           "proxyBootstrapTemplatePath": {
             "description": "Path to the proxy bootstrap template file",
@@ -363,6 +372,22 @@
               "type": "string",
               "format": "string"
             }
+          },
+          "statusPort": {
+            "description": "Port on which the agent should listen for administrative commands such as readiness probe.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "extraStatTags": {
+            "description": "An additional list of tags to extract from the in-proxy Istio telemetry. These extra tags can be added by configuring the telemetry extension. Each additional tag needs to be present in this list. Extra tags emitted by the telemetry extensions must be listed here so that they can be processed and exposed as Prometheus metrics.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "gatewayTopology": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.Topology"
           }
         }
       },
@@ -384,7 +409,7 @@
             "format": "string"
           },
           "tlsSettings": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSSettings"
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
           },
           "subscribedResources": {
             "description": "Describes the source of configuration, if nothing is specified default is MCP",
@@ -436,12 +461,39 @@
           }
         }
       },
+      "istio.mesh.v1alpha1.MeshConfig.ServiceSettings": {
+        "description": "Settings to be applied to select services.",
+        "type": "object",
+        "properties": {
+          "hosts": {
+            "description": "The services to which the Settings should be applied. Services are selected using the hostname matching rules used by DestinationRule.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "settings": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ServiceSettings.Settings"
+          }
+        }
+      },
       "istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode": {
         "type": "string",
         "enum": [
           "REGISTRY_ONLY",
           "ALLOW_ANY"
         ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ServiceSettings.Settings": {
+        "description": "Settings for the selected services.",
+        "type": "object",
+        "properties": {
+          "clusterLocal": {
+            "description": "If true, specifies that the client and service endpoints must reside in the same cluster. By default, in multi-cluster deployments, the Istio control plane assumes all service endpoints to be reachable from any client in any of the clusters which are part of the mesh. This configuration option limits the set of service endpoints visible to a client to be cluster scoped.",
+            "type": "boolean"
+          }
+        }
       },
       "istio.mesh.v1alpha1.Resource": {
         "description": "Resource describes the source of configuration",
@@ -475,6 +527,36 @@
         "type": "object",
         "oneOf": [
           {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "fromCidr"
+                  ],
+                  "properties": {
+                    "fromCidr": {
+                      "description": "A CIDR range for the set of endpoints in this network. The CIDR ranges for endpoints from different networks must not overlap.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "fromRegistry"
+                  ],
+                  "properties": {
+                    "fromRegistry": {
+                      "description": "Add all endpoints from the specified registry into this network. The names of the registries should correspond to the kubeconfig file name inside the secret that was used to configure the registry (Kubernetes multicluster) or supplied by MCP server.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
             "required": [
               "fromCidr"
             ],
@@ -503,21 +585,53 @@
       "istio.mesh.v1alpha1.Network.IstioNetworkGateway": {
         "description": "The gateway associated with this network. Traffic from remote networks will arrive at the specified gateway:port. All incoming traffic must use mTLS.",
         "type": "object",
+        "properties": {
+          "port": {
+            "description": "The port associated with the gateway.",
+            "type": "integer"
+          },
+          "locality": {
+            "description": "The locality associated with an explicitly specified gateway (i.e. ip)",
+            "type": "string",
+            "format": "string"
+          }
+        },
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "registryServiceName"
+                  ],
+                  "properties": {
+                    "registryServiceName": {
+                      "description": "A fully qualified domain name of the gateway service. Pilot will lookup the service from the service registries in the network and obtain the endpoint IPs of the gateway from the service registry. Note that while the service name is a fully qualified domain name, it need not be resolvable outside the orchestration platform for the registry. e.g., this could be istio-ingressgateway.istio-system.svc.cluster.local.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "address"
+                  ],
+                  "properties": {
+                    "address": {
+                      "description": "IP address or externally resolvable DNS address associated with the gateway.",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "registryServiceName"
             ],
             "properties": {
-              "port": {
-                "description": "The port associated with the gateway.",
-                "type": "integer"
-              },
-              "locality": {
-                "description": "The locality associated with an explicitly specified gateway (i.e. ip)",
-                "type": "string",
-                "format": "string"
-              },
               "registryServiceName": {
                 "description": "A fully qualified domain name of the gateway service. Pilot will lookup the service from the service registries in the network and obtain the endpoint IPs of the gateway from the service registry. Note that while the service name is a fully qualified domain name, it need not be resolvable outside the orchestration platform for the registry. e.g., this could be istio-ingressgateway.istio-system.svc.cluster.local.",
                 "type": "string",
@@ -530,17 +644,8 @@
               "address"
             ],
             "properties": {
-              "port": {
-                "description": "The port associated with the gateway.",
-                "type": "integer"
-              },
               "address": {
                 "description": "IP address or externally resolvable DNS address associated with the gateway.",
-                "type": "string",
-                "format": "string"
-              },
-              "locality": {
-                "description": "The locality associated with an explicitly specified gateway (i.e. ip)",
                 "type": "string",
                 "format": "string"
               }
@@ -573,7 +678,74 @@
       "istio.mesh.v1alpha1.Tracing": {
         "description": "Tracing defines configuration for the tracing performed by Envoy instances.",
         "type": "object",
+        "properties": {
+          "tlsSettings": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
+          },
+          "customTags": {
+            "description": "Configures the custom tags to be added to active span by all proxies (i.e. sidecars and gateways). The key represents the name of the tag. Ex: ```yaml custom_tags: new_tag_name: header: name: custom-http-header-name default_value: defaulted-value-from-custom-header ``` $hide_from_docs",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.CustomTag"
+            }
+          },
+          "maxPathTagLength": {
+            "description": "Configures the maximum length of the request path to extract and include in the HttpUrl tag. Used to truncate length request paths to meet the needs of tracing backend. If not set, then a length of 256 will be used. $hide_from_docs",
+            "type": "integer"
+          },
+          "sampling": {
+            "description": "The percentage of requests (0.0 - 100.0) that will be randomly selected for trace generation, if not requested by the client or not forced. Default is 100. $hide_from_docs",
+            "type": "number",
+            "format": "double"
+          }
+        },
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "zipkin"
+                  ],
+                  "properties": {
+                    "zipkin": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Zipkin"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "lightstep"
+                  ],
+                  "properties": {
+                    "lightstep": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Lightstep"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "datadog"
+                  ],
+                  "properties": {
+                    "datadog": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Datadog"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "stackdriver"
+                  ],
+                  "properties": {
+                    "stackdriver": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Stackdriver"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "zipkin"
@@ -616,6 +788,78 @@
           }
         ]
       },
+      "istio.mesh.v1alpha1.Tracing.CustomTag": {
+        "description": "Configure custom tags that will be added to any active span. Tags can be generated via literals, environment variables or an incoming request header. $hide_from_docs",
+        "type": "object",
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "literal"
+                  ],
+                  "properties": {
+                    "literal": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Literal"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "environment"
+                  ],
+                  "properties": {
+                    "environment": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Environment"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "header"
+                  ],
+                  "properties": {
+                    "header": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.RequestHeader"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "literal"
+            ],
+            "properties": {
+              "literal": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Literal"
+              }
+            }
+          },
+          {
+            "required": [
+              "environment"
+            ],
+            "properties": {
+              "environment": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Environment"
+              }
+            }
+          },
+          {
+            "required": [
+              "header"
+            ],
+            "properties": {
+              "header": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.RequestHeader"
+              }
+            }
+          }
+        ]
+      },
       "istio.mesh.v1alpha1.Tracing.Zipkin": {
         "description": "Zipkin defines configuration for a Zipkin tracer.",
         "type": "object",
@@ -628,25 +872,16 @@
         }
       },
       "istio.mesh.v1alpha1.Tracing.Lightstep": {
-        "description": "Defines configuration for a LightStep tracer.",
+        "description": "Defines configuration for a Lightstep tracer.",
         "type": "object",
         "properties": {
           "address": {
-            "description": "Address of the LightStep Satellite pool.",
+            "description": "Address of the Lightstep Satellite pool.",
             "type": "string",
             "format": "string"
           },
           "accessToken": {
-            "description": "The LightStep access token.",
-            "type": "string",
-            "format": "string"
-          },
-          "secure": {
-            "description": "True if a secure connection should be used when communicating with the pool.",
-            "type": "boolean"
-          },
-          "cacertPath": {
-            "description": "Path to the trusted cacert used to authenticate the pool.",
+            "description": "The Lightstep access token.",
             "type": "string",
             "format": "string"
           }
@@ -688,6 +923,49 @@
           }
         }
       },
+      "istio.mesh.v1alpha1.Tracing.Literal": {
+        "description": "Literal type represents a static value. $hide_from_docs",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Static literal value used to populate the tag value.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.Tracing.Environment": {
+        "description": "Environment is the proxy's environment variable to be used for populating the custom span tag. $hide_from_docs",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the environment variable used to populate the tag's value",
+            "type": "string",
+            "format": "string"
+          },
+          "defaultValue": {
+            "description": "When the environment variable is not found, the tag's value will be populated with this default value if specified, otherwise the tag will not be populated.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.Tracing.RequestHeader": {
+        "description": "RequestHeader is the HTTP request header which will be used to populate the span tag. A default value can be configured if the header does not exist. $hide_from_docs",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "HTTP header name used to obtain the value from to populate the tag value.",
+            "type": "string",
+            "format": "string"
+          },
+          "defaultValue": {
+            "description": "Default value to be used for the tag when the named HTTP header does not exist. The tag will be skipped if no default value is provided.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
       "istio.mesh.v1alpha1.SDS": {
         "description": "SDS defines secret discovery service(SDS) configuration to be used by the proxy. For workload, its values are set in sidecar injector(passed as arguments to istio-proxy container). For pilot/mixer, it's passed as arguments to istio-proxy container in pilot/mixer deployment yaml files directly.",
         "type": "object",
@@ -702,6 +980,31 @@
             "format": "string"
           }
         }
+      },
+      "istio.mesh.v1alpha1.Topology": {
+        "description": "Topology describes the configuration for relative location of a proxy with respect to intermediate trusted proxies and the client. These settings control how the client attributes are retrieved from the incoming traffic by the gateway proxy and propagated to the upstream services in the cluster.",
+        "type": "object",
+        "properties": {
+          "numTrustedProxies": {
+            "description": "Number of trusted proxies deployed in front of the Istio gateway proxy. When this option is set to value N greater than zero, the trusted client address is assumed to be the Nth address from the right end of the X-Forwarded-For (XFF) header from the incoming request. If the X-Forwarded-For (XFF) header is missing or has fewer than N addresses, the gateway proxy falls back to using the immediate downstream connection's source address as the trusted client address. Note that the gateway proxy will append the downstream connection's source address to the X-Forwarded-For (XFF) address and set the X-Envoy-External-Address header to the trusted client address before forwarding it to the upstream services in the cluster. The default value of num_trusted_proxies is 0. See [Envoy XFF] (https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/headers#config-http-conn-man-headers-x-forwarded-for) header handling for more details.",
+            "type": "integer"
+          },
+          "forwardClientCertDetails": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.Topology.ForwardClientCertDetails"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.Topology.ForwardClientCertDetails": {
+        "description": "ForwardClientCertDetails controls how the x-forwarded-client-cert (XFCC) header is handled by the gateway proxy. See [Envoy XFCC](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/filter/network/http_connection_manager/v2/http_connection_manager.proto#envoy-api-enum-config-filter-network-http-connection-manager-v2-httpconnectionmanager-forwardclientcertdetails) header handling for more details.",
+        "type": "string",
+        "enum": [
+          "UNDEFINED",
+          "SANITIZE",
+          "FORWARD_ONLY",
+          "APPEND_FORWARD",
+          "SANITIZE_SET",
+          "ALWAYS_FORWARD_ONLY"
+        ]
       },
       "istio.mesh.v1alpha1.ProxyConfig.InboundInterceptionMode": {
         "description": "The mode used to redirect inbound traffic to Envoy. This setting has no effect on outbound traffic: iptables REDIRECT is always used for outbound connections.",
@@ -723,7 +1026,44 @@
             "format": "string"
           },
           "tlsSettings": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSSettings"
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.ClientTLSSettings": {
+        "description": "Use the tls_settings to specify the tls mode to use. If the remote service uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS mode as `ISTIO_MUTUAL`.",
+        "type": "object",
+        "properties": {
+          "mode": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings.TLSmode"
+          },
+          "clientCertificate": {
+            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client-side TLS certificate to use. Should be empty if mode is `ISTIO_MUTUAL`.",
+            "type": "string",
+            "format": "string"
+          },
+          "privateKey": {
+            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client's private key. Should be empty if mode is `ISTIO_MUTUAL`.",
+            "type": "string",
+            "format": "string"
+          },
+          "caCertificates": {
+            "description": "OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate. If omitted, the proxy will not verify the server's certificate. Should be empty if mode is `ISTIO_MUTUAL`.",
+            "type": "string",
+            "format": "string"
+          },
+          "subjectAltNames": {
+            "description": "A list of alternate names to verify the subject identity in the certificate. If specified, the proxy will verify that the server certificate's subject alt name matches one of the specified values. If specified, this list overrides the value of subject_alt_names from the ServiceEntry.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "sni": {
+            "description": "SNI string to present to the server during TLS handshake.",
+            "type": "string",
+            "format": "string"
           }
         }
       },
@@ -770,42 +1110,15 @@
           }
         }
       },
-      "istio.networking.v1alpha3.TLSSettings": {
-        "description": "Use the tls_settings to specify the tls mode to use. If the remote service uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS mode as `ISTIO_MUTUAL`.",
-        "type": "object",
-        "properties": {
-          "mode": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.TLSSettings.TLSmode"
-          },
-          "clientCertificate": {
-            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client-side TLS certificate to use. Should be empty if mode is `ISTIO_MUTUAL`.",
-            "type": "string",
-            "format": "string"
-          },
-          "privateKey": {
-            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client's private key. Should be empty if mode is `ISTIO_MUTUAL`.",
-            "type": "string",
-            "format": "string"
-          },
-          "caCertificates": {
-            "description": "OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate. If omitted, the proxy will not verify the server's certificate. Should be empty if mode is `ISTIO_MUTUAL`.",
-            "type": "string",
-            "format": "string"
-          },
-          "subjectAltNames": {
-            "description": "A list of alternate names to verify the subject identity in the certificate. If specified, the proxy will verify that the server certificate's subject alt name matches one of the specified values. If specified, this list overrides the value of subject_alt_names from the ServiceEntry.",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "sni": {
-            "description": "SNI string to present to the server during TLS handshake.",
-            "type": "string",
-            "format": "string"
-          }
-        }
+      "istio.networking.v1alpha3.ClientTLSSettings.TLSmode": {
+        "description": "Indicates whether connections to this port should be secured using TLS. The value of this field determines how TLS is enforced.",
+        "type": "string",
+        "enum": [
+          "DISABLE",
+          "SIMPLE",
+          "MUTUAL",
+          "ISTIO_MUTUAL"
+        ]
       },
       "istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute": {
         "type": "object",
@@ -838,16 +1151,6 @@
             "format": "string"
           }
         }
-      },
-      "istio.networking.v1alpha3.TLSSettings.TLSmode": {
-        "description": "Indicates whether connections to this port should be secured using TLS. The value of this field determines how TLS is enforced.",
-        "type": "string",
-        "enum": [
-          "DISABLE",
-          "SIMPLE",
-          "MUTUAL",
-          "ISTIO_MUTUAL"
-        ]
       }
     }
   }

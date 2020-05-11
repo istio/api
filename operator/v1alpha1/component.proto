@@ -26,17 +26,15 @@ option go_package="istio.io/api/operator/v1alpha1";
 message IstioComponentSetSpec {
     BaseComponentSpec base = 29;
     ComponentSpec pilot = 30;
-    ComponentSpec proxy = 31;
-    ComponentSpec sidecar_injector = 32;
     ComponentSpec policy = 33;
     ComponentSpec telemetry = 34;
-    ComponentSpec citadel = 35;
-    ComponentSpec node_agent = 36;
-    ComponentSpec galley = 37;
     ComponentSpec cni = 38;
 
     repeated GatewaySpec ingress_gateways = 40;
     repeated GatewaySpec egress_gateways = 41;
+
+    reserved 31, 32, 35, 36, 37;
+    reserved "citadel", "galley", "node_agent", "proxy", "sidecar_injector";
 }
 
 // Configuration for base component.
@@ -105,50 +103,50 @@ message GatewaySpec {
 // KubernetesResourcesConfig is a common set of k8s resource configs for components.
 message KubernetesResourcesSpec {
     // k8s affinity.
-    // https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    // [https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity)
     Affinity affinity = 1;
     // Deployment environment variables.
-    // https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
+    // [https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
     repeated EnvVar env = 2;
     // k8s HorizontalPodAutoscaler settings.
-    // https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+    // [https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
     HorizontalPodAutoscalerSpec hpa_spec = 3;
     // k8s imagePullPolicy.
-    // https://kubernetes.io/docs/concepts/containers/images/
+    // [https://kubernetes.io/docs/concepts/containers/images/](https://kubernetes.io/docs/concepts/containers/images/)
     string image_pull_policy = 4;
     // k8s nodeSelector.
-    // https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+    // [https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector)
     map<string, string> node_selector = 5;
     // k8s PodDisruptionBudget settings.
-    // https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#how-disruption-budgets-work
+    // [https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#how-disruption-budgets-work](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#how-disruption-budgets-work)
     PodDisruptionBudgetSpec pod_disruption_budget = 6;
     // k8s pod annotations.
-    // https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    // [https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
     map<string, string> pod_annotations = 7;
     // k8s priority_class_name. Default for all resources unless overridden.
-    // https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+    // [https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass](https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass)
     string priority_class_name = 8;
     // k8s readinessProbe settings.
-    // https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+    // [https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/)
     // k8s.io.api.core.v1.Probe readiness_probe = 9;
     ReadinessProbe readiness_probe = 9;
     // k8s Deployment replicas setting.
-    // https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+    // [https://kubernetes.io/docs/concepts/workloads/controllers/deployment/](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
     uint32 replica_count = 10;
     // k8s resources settings.
-    // https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container
+    // [https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container)
     Resources resources = 11;
     // k8s Service settings.
-    // https://kubernetes.io/docs/concepts/services-networking/service/
+    // [https://kubernetes.io/docs/concepts/services-networking/service/](https://kubernetes.io/docs/concepts/services-networking/service/)
     ServiceSpec service = 12;
     // k8s deployment strategy.
-    // https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+    // [https://kubernetes.io/docs/concepts/workloads/controllers/deployment/](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
     DeploymentStrategy strategy = 13;
     // k8s toleration
-    // https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    // [https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)
     repeated k8s.io.api.core.v1.Toleration tolerations = 14;
     // k8s service annotations.
-    // https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    // [https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
     map<string, string> service_annotations = 15;
 
     // Overlays for k8s resources in rendered manifests.

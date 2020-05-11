@@ -79,6 +79,7 @@ option (gogoproto.stable_marshaler_all) = true;
 // +cue-gen:QuotaSpec:subresource:status
 // +cue-gen:QuotaSpec:scope:Namespaced
 // +cue-gen:QuotaSpec:resource:categories=istio-io,apim-istio-io
+// +cue-gen:QuotaSpec:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -107,11 +108,14 @@ message QuotaRule {
 // case-sensitive.
 message StringMatch {
   oneof match_type {
+
     // exact string match
     string exact = 1;
+
     // prefix-based match
     string prefix = 2;
-    // ECMAscript style regex-based match
+
+    // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
     string regex = 3;
   }
 }
@@ -153,6 +157,7 @@ message Quota {
 // +cue-gen:QuotaSpecBinding:subresource:status
 // +cue-gen:QuotaSpecBinding:scope:Namespaced
 // +cue-gen:QuotaSpecBinding:resource:categories=istio-io,apim-istio-io
+// +cue-gen:QuotaSpecBinding:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags

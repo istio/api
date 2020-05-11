@@ -95,6 +95,7 @@ option (gogoproto.stable_marshaler_all) = true;
 // +cue-gen:HTTPAPISpec:subresource:status
 // +cue-gen:HTTPAPISpec:scope:Namespaced
 // +cue-gen:HTTPAPISpec:resource:categories=istio-io,apim-istio-io
+// +cue-gen:HTTPAPISpec:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -160,14 +161,7 @@ message HTTPAPISpecPattern {
     //
     string uri_template = 3;
 
-    // EXPERIMENTAL:
-    //
-    // ecmascript style regex-based match as defined by
-    // [EDCA-262](http://en.cppreference.com/w/cpp/regex/ecmascript). For
-    // example,
-    //
-    //     "^/pets/(.*?)?"
-    //
+    // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax)
     string regex = 4;
   }
 }
@@ -261,6 +255,7 @@ message HTTPAPISpecReference {
 // +cue-gen:HTTPAPISpecBinding:subresource:status
 // +cue-gen:HTTPAPISpecBinding:scope:Namespaced
 // +cue-gen:HTTPAPISpecBinding:resource:categories=istio-io,apim-istio-io
+// +cue-gen:HTTPAPISpecBinding:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags

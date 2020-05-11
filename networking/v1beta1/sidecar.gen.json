@@ -6,6 +6,43 @@
   },
   "components": {
     "schemas": {
+      "istio.networking.v1beta1.ClientTLSSettings": {
+        "description": "SSL/TLS related settings for upstream connections. See Envoy's [TLS context](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/auth/cert.proto.html) for more details. These settings are common to both HTTP and TCP upstreams.",
+        "type": "object",
+        "properties": {
+          "mode": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ClientTLSSettings.TLSmode"
+          },
+          "clientCertificate": {
+            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client-side TLS certificate to use. Should be empty if mode is `ISTIO_MUTUAL`.",
+            "type": "string",
+            "format": "string"
+          },
+          "privateKey": {
+            "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client's private key. Should be empty if mode is `ISTIO_MUTUAL`.",
+            "type": "string",
+            "format": "string"
+          },
+          "caCertificates": {
+            "description": "OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate. If omitted, the proxy will not verify the server's certificate. Should be empty if mode is `ISTIO_MUTUAL`.",
+            "type": "string",
+            "format": "string"
+          },
+          "subjectAltNames": {
+            "description": "A list of alternate names to verify the subject identity in the certificate. If specified, the proxy will verify that the server certificate's subject alt name matches one of the specified values. If specified, this list overrides the value of subject_alt_names from the ServiceEntry.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "sni": {
+            "description": "SNI string to present to the server during TLS handshake.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
       "istio.networking.v1beta1.PortSelector": {
         "description": "PortSelector specifies the number of a port to be used for matching or selection for final routing.",
         "type": "object",
@@ -16,18 +53,28 @@
           }
         }
       },
+      "istio.networking.v1beta1.ClientTLSSettings.TLSmode": {
+        "description": "TLS connection mode",
+        "type": "string",
+        "enum": [
+          "DISABLE",
+          "SIMPLE",
+          "MUTUAL",
+          "ISTIO_MUTUAL"
+        ]
+      },
       "istio.networking.v1beta1.Port": {
         "description": "Port describes the properties of a specific port of a service.",
         "type": "object",
         "properties": {
+          "number": {
+            "description": "A valid non-negative integer port number.",
+            "type": "integer"
+          },
           "name": {
             "description": "Label assigned to the port.",
             "type": "string",
             "format": "string"
-          },
-          "number": {
-            "description": "A valid non-negative integer port number.",
-            "type": "integer"
           },
           "protocol": {
             "description": "The protocol exposed on the port. MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS. TLS implies the connection will be routed based on the SNI header to the destination without terminating the TLS connection.",
@@ -36,11 +83,11 @@
           }
         }
       },
-      "istio.networking.v1beta1.Server.TLSOptions": {
+      "istio.networking.v1beta1.ServerTLSSettings": {
         "type": "object",
         "properties": {
           "mode": {
-            "$ref": "#/components/schemas/istio.networking.v1beta1.Server.TLSOptions.TLSmode"
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ServerTLSSettings.TLSmode"
           },
           "privateKey": {
             "description": "REQUIRED if mode is `SIMPLE` or `MUTUAL`. The path to the file holding the server's private key.",
@@ -61,7 +108,7 @@
             }
           },
           "httpsRedirect": {
-            "description": "If set to true, the load balancer will send a 301 redirect for all http connections, asking the clients to use HTTPS. Not applicable in Sidecar API.",
+            "description": "If set to true, the load balancer will send a 301 redirect for all http connections, asking the clients to use HTTPS.",
             "type": "boolean"
           },
           "serverCertificate": {
@@ -70,7 +117,7 @@
             "format": "string"
           },
           "credentialName": {
-            "description": "The credentialName stands for a unique identifier that can be used to identify the serverCertificate and the privateKey. The credentialName appended with suffix \"-cacert\" is used to identify the CaCertificates associated with this server. Proxies capable of fetching credentials from a remote credential store such as Kubernetes secrets, will be configured to retrieve the serverCertificate and the privateKey using credentialName, instead of using the file system paths specified above. If using mutual TLS, proxy instances will retrieve the CaCertificates using credentialName-cacert. The semantics of the name are platform dependent. In Kubernetes, the default Istio supplied credential server expects the credentialName to match the name of the Kubernetes secret that holds the server certificate, the private key, and the CA certificate (if using mutual TLS). Set the `ISTIO_META_USER_SDS` metadata variable in the proxy to enable the dynamic credential fetching feature.",
+            "description": "For gateways running on Kubernetes, the name of the secret that holds the TLS certs including the CA certificates. Applicable only on Kubernetes, and only if the dynamic credential fetching feature is enabled in the proxy by setting `ISTIO_META_USER_SDS` metadata variable. The secret (of type `generic`) should contain the following keys and values: `key: \u003cprivateKey\u003e`, `cert: \u003cserverCert\u003e`, `cacert: \u003cCACertificate\u003e`.",
             "type": "string",
             "format": "string"
           },
@@ -91,10 +138,10 @@
             }
           },
           "minProtocolVersion": {
-            "$ref": "#/components/schemas/istio.networking.v1beta1.Server.TLSOptions.TLSProtocol"
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ServerTLSSettings.TLSProtocol"
           },
           "maxProtocolVersion": {
-            "$ref": "#/components/schemas/istio.networking.v1beta1.Server.TLSOptions.TLSProtocol"
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ServerTLSSettings.TLSProtocol"
           },
           "cipherSuites": {
             "description": "Optional: If specified, only support the specified cipher list. Otherwise default to the default cipher list supported by Envoy.",
@@ -106,7 +153,7 @@
           }
         }
       },
-      "istio.networking.v1beta1.Server.TLSOptions.TLSmode": {
+      "istio.networking.v1beta1.ServerTLSSettings.TLSmode": {
         "description": "TLS modes enforced by the proxy",
         "type": "string",
         "enum": [
@@ -117,7 +164,7 @@
           "ISTIO_MUTUAL"
         ]
       },
-      "istio.networking.v1beta1.Server.TLSOptions.TLSProtocol": {
+      "istio.networking.v1beta1.ServerTLSSettings.TLSProtocol": {
         "description": "TLS protocol versions.",
         "type": "string",
         "enum": [
@@ -127,6 +174,20 @@
           "TLSV1_2",
           "TLSV1_3"
         ]
+      },
+      "istio.networking.v1beta1.WorkloadSelector": {
+        "description": "`WorkloadSelector` specifies the criteria used to determine if the `Gateway`, `Sidecar`, or `EnvoyFilter` configuration can be applied to a proxy. The matching criteria includes the metadata associated with a proxy, workload instance info such as labels attached to the pod/VM, or any other info that the proxy provides to Istio during the initial handshake. If multiple conditions are specified, all conditions need to match in order for the workload instance to be selected. Currently, only label based selection mechanism is supported.",
+        "type": "object",
+        "properties": {
+          "labels": {
+            "description": "One or more labels that indicate a specific set of pods/VMs on which this `Sidecar` configuration should be applied. The scope of label search is restricted to the configuration namespace in which the the resource is present.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        }
       },
       "istio.networking.v1beta1.Sidecar": {
         "description": "`Sidecar` describes the configuration of the sidecar proxy that mediates inbound and outbound communication of the workload instance to which it is attached.",
@@ -152,22 +213,8 @@
           "outboundTrafficPolicy": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.OutboundTrafficPolicy"
           },
-          "inboundTls": {
-            "$ref": "#/components/schemas/istio.networking.v1beta1.Server.TLSOptions"
-          }
-        }
-      },
-      "istio.networking.v1beta1.WorkloadSelector": {
-        "description": "`WorkloadSelector` specifies the criteria used to determine if the `Gateway`, `Sidecar`, or `EnvoyFilter` configuration can be applied to a proxy. The matching criteria includes the metadata associated with a proxy, workload instance info such as labels attached to the pod/VM, or any other info that the proxy provides to Istio during the initial handshake. If multiple conditions are specified, all conditions need to match in order for the workload instance to be selected. Currently, only label based selection mechanism is supported.",
-        "type": "object",
-        "properties": {
-          "labels": {
-            "description": "One or more labels that indicate a specific set of pods/VMs on which this `Sidecar` configuration should be applied. The scope of label search is restricted to the configuration namespace in which the the resource is present.",
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "format": "string"
-            }
+          "localhost": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.Localhost"
           }
         }
       },
@@ -188,11 +235,11 @@
             "type": "string",
             "format": "string"
           },
-          "inboundTls": {
-            "$ref": "#/components/schemas/istio.networking.v1beta1.Server.TLSOptions"
-          },
           "captureMode": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.CaptureMode"
+          },
+          "localhostClientTls": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ClientTLSSettings"
           }
         }
       },
@@ -218,6 +265,9 @@
           },
           "captureMode": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.CaptureMode"
+          },
+          "localhostServerTls": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ServerTLSSettings"
           }
         }
       },
@@ -230,6 +280,18 @@
           },
           "egressProxy": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.Destination"
+          }
+        }
+      },
+      "istio.networking.v1beta1.Localhost": {
+        "description": "`Localhost` describes the sidecar settings related to the communication between the sidecar and the workload it is attached to in a Kubernetes Pod or a VM. These settings apply by default to all ingress and egress listeners in a sidecar unless overridden.",
+        "type": "object",
+        "properties": {
+          "clientTls": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ClientTLSSettings"
+          },
+          "serverTls": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.ServerTLSSettings"
           }
         }
       },

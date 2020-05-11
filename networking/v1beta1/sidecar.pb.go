@@ -118,18 +118,11 @@
 // The following example declares a `Sidecar` configuration in the
 // `prod-us1` namespace for all pods with labels `app: ratings`
 // belonging to the `ratings.prod-us1` service.  The workload accepts
-// inbound HTTP traffic on port 9080 without any authentication, and
-// HTTPS traffic on port 9443 with one-way TLS termination using
-// custom certificates. _To accomplish custom TLS termination on this
-// workload, the `PeerAuthentication` security policy must be declared
-// to disable Istio mutual TLS on these two ports. Any other
-// auto-generated listener for this workload will still obey the
-// mutual TLS termination requirements set forth in the
-// PeerAuthentication policy_. The traffic is then forwarded to the
-// attached workload instance listening on a Unix domain socket. In
-// the egress direction, in addition to the `istio-system` namespace,
-// the sidecar proxies only HTTP traffic bound for port 9080 for
-// services in the `prod-us1` namespace.
+// inbound HTTP traffic on port 9080. The traffic is then forwarded to
+// the attached workload instance listening on a Unix domain
+// socket. In the egress direction, in addition to the `istio-system`
+// namespace, the sidecar proxies only HTTP traffic bound for port
+// 9080 for services in the `prod-us1` namespace.
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
@@ -148,15 +141,6 @@
 //       number: 9080
 //       protocol: HTTP
 //       name: somename
-//     defaultEndpoint: unix:///var/run/someuds.sock
-//   - port:
-//       number: 9443
-//       protocol: HTTPS
-//       name: httpsport
-//     inboundTls:
-//       mode: SIMPLE # overrides namespace default
-//       serverCertificate: /etc/certs/servercert.pem
-//       privateKey: /etc/certs/privatekey.pem
 //     defaultEndpoint: unix:///var/run/someuds.sock
 //   egress:
 //   - port:
@@ -187,15 +171,6 @@
 //       protocol: HTTP
 //       name: somename
 //     defaultEndpoint: unix:///var/run/someuds.sock
-//   - port:
-//       number: 9443
-//       protocol: HTTPS
-//       name: httpsport
-//     inboundTls:
-//       mode: SIMPLE # overrides namespace default
-//       serverCertificate: /etc/certs/servercert.pem
-//       privateKey: /etc/certs/privatekey.pem
-//     defaultEndpoint: unix:///var/run/someuds.sock
 //   egress:
 //   - port:
 //       number: 9080
@@ -205,80 +180,6 @@
 //     - "prod-us1/*"
 //   - hosts:
 //     - "istio-system/*"
-// ```
-// {{</tab>}}
-// {{</tabset>}}
-//
-// and the associated PeerAuthentication security policy to ensure
-// that mutual TLS based authentication is not configured for ports
-// 9080 and 9443:
-//
-// ```yaml
-// apiVersion: security.istio.io/v1beta1
-// kind: PeerAuthentication
-// metadata:
-//   name: ratings-istio-mtls-exception
-//   namespace: prod-us1
-// spec:
-//   selector:
-//     matchLabels:
-//       app: ratings
-//   # other ports inherit the settings from namespace-wide policy.
-//   portLevelMtls:
-//     9080:
-//       mode: DISABLE
-//     9443:
-//       mode: DISABLE
-// ```
-//
-// and the associated DestinationRule to ensure that the clients use
-// the appropriate TLS settings:
-//
-// {{<tabset category-name="example">}}
-// {{<tab name="v1alpha3" category-value="v1alpha3">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: DestinationRule
-// metadata:
-//   name: ratings-istio-mtls-exception
-//   namespace: prod-us1
-// spec:
-//   host: ratings.prod-us1.svc.cluster.local
-//   trafficPolicy:
-//    portLevelSettings:
-//    - port:
-//        number: 9080
-//      tls:
-//        mode: DISABLE
-//    - port:
-//        number: 9443
-//      tls:
-//        mode: SIMPLE
-//        caCertificates: /etc/certs/ca-certs.pem
-// ```
-//
-// {{</tab>}}
-//
-// {{<tab name="v1beta1" category-value="v1beta1">}}
-// ```yaml
-// apiVersion: networking.istio.io/v1beta1
-// kind: DestinationRule
-// metadata:
-//   name: ratings-istio-mtls-exception
-//   namespace: prod-us1
-// spec:
-//   host: ratings.prod-us1.svc.cluster.local
-//   trafficPolicy:
-//    portLevelSettings:
-//    - port:
-//        number: 9080
-//      tls:
-//        mode: DISABLE
-//    - port:
-//        number: 9443
-//      tls:
-//        mode: SIMPLE
-//        caCertificates: /etc/certs/ca-certs.pem
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -578,6 +479,7 @@ func (OutboundTrafficPolicy_Mode) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:Sidecar:subresource:status
 // +cue-gen:Sidecar:scope:Namespaced
 // +cue-gen:Sidecar:resource:categories=istio-io,networking-istio-io
+// +cue-gen:Sidecar:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -611,17 +513,16 @@ type Sidecar struct {
 	// inherits the system detected defaults from the namespace-wide or
 	// the global default Sidecar.
 	OutboundTrafficPolicy *OutboundTrafficPolicy `protobuf:"bytes,4,opt,name=outbound_traffic_policy,json=outboundTrafficPolicy,proto3" json:"outbound_traffic_policy,omitempty"`
-	// Set of TLS related options that allow a listener to terminate
-	// SIMPLE or MUTUAL TLS connections at the
-	// sidecar. `PeerAuthentication` policy's settings take precedance
-	// over custom TLS settings for the workload. When the
-	// PeerAuthentication policy disables mTLS tunneling for one or more
-	// ports in the workload, the TLS settings specified here will be
-	// applied.
-	InboundTls           *Server_TLSOptions `protobuf:"bytes,5,opt,name=inbound_tls,json=inboundTls,proto3" json:"inbound_tls,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
-	XXX_unrecognized     []byte             `json:"-"`
-	XXX_sizecache        int32              `json:"-"`
+	// `Localhost` describes the sidecar settings related to the
+	// communication between the sidecar and the workload it is attached to
+	// in a Kubernetes Pod or a VM. These settings apply to all ingress
+	// and egress listeners in a sidecar unless overridden. There are no
+	// built in defaults for this setting. If not specified, the
+	// features will be disabled.
+	Localhost            *Localhost `protobuf:"bytes,6,opt,name=localhost,proto3" json:"localhost,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
 }
 
 func (m *Sidecar) Reset()         { *m = Sidecar{} }
@@ -685,9 +586,9 @@ func (m *Sidecar) GetOutboundTrafficPolicy() *OutboundTrafficPolicy {
 	return nil
 }
 
-func (m *Sidecar) GetInboundTls() *Server_TLSOptions {
+func (m *Sidecar) GetLocalhost() *Localhost {
 	if m != nil {
-		return m.InboundTls
+		return m.Localhost
 	}
 	return nil
 }
@@ -713,11 +614,12 @@ type IstioIngressListener struct {
 	// or Unix domain socket where the application workload instance is listening for
 	// connections. Format should be `127.0.0.1:PORT` or `unix:///path/to/socket`
 	DefaultEndpoint string `protobuf:"bytes,4,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
-	// Overrides Sidecar level `inboundTls` settings. Has same
-	// restrictions as the Sidecar level inboundTls,
-	// i.e. PeerAuthentication policy takes precedance unless explicitly
-	// disabled.
-	InboundTls           *Server_TLSOptions `protobuf:"bytes,5,opt,name=inbound_tls,json=inboundTls,proto3" json:"inbound_tls,omitempty"`
+	// TLS settings to be used by the sidecar (client) when forwarding
+	// traffic from the sidecar to the workload (server) on the
+	// localhost. Overrides the `localhost` level `clientTls` settings.
+	//
+	// **NOTE**: DISABLE, SIMPLE and MUTUAL are the only valid TLS modes.
+	LocalhostClientTls   *ClientTLSSettings `protobuf:"bytes,6,opt,name=localhost_client_tls,json=localhostClientTls,proto3" json:"localhost_client_tls,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
 	XXX_unrecognized     []byte             `json:"-"`
 	XXX_sizecache        int32              `json:"-"`
@@ -784,9 +686,9 @@ func (m *IstioIngressListener) GetDefaultEndpoint() string {
 	return ""
 }
 
-func (m *IstioIngressListener) GetInboundTls() *Server_TLSOptions {
+func (m *IstioIngressListener) GetLocalhostClientTls() *ClientTLSSettings {
 	if m != nil {
-		return m.InboundTls
+		return m.LocalhostClientTls
 	}
 	return nil
 }
@@ -852,10 +754,20 @@ type IstioEgressListener struct {
 	// policy is enabled, or add `istio-system/*` to allow all services in the
 	// `istio-system` namespace. This requirement is temporary and will be removed
 	// in a future Istio release.
-	Hosts                []string `protobuf:"bytes,4,rep,name=hosts,proto3" json:"hosts,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Hosts []string `protobuf:"bytes,4,rep,name=hosts,proto3" json:"hosts,omitempty"`
+	// TLS settings to be used by the sidecar (server) when receiving
+	// traffic from the workload (client) on the
+	// localhost. Overrides the `localhost` level `serverTls` settings.
+	//
+	// **NOTE**: SIMPLE and MUTUAL are the only valid TLS
+	// modes. `httpsRedirect` and `credentialName` (for fetching
+	// certificates from Kubernetes secrets) are not valid. All
+	// certificates must be mounted as files inside the sidecar
+	// container.
+	LocalhostServerTls   *ServerTLSSettings `protobuf:"bytes,5,opt,name=localhost_server_tls,json=localhostServerTls,proto3" json:"localhost_server_tls,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
 }
 
 func (m *IstioEgressListener) Reset()         { *m = IstioEgressListener{} }
@@ -915,6 +827,13 @@ func (m *IstioEgressListener) GetCaptureMode() CaptureMode {
 func (m *IstioEgressListener) GetHosts() []string {
 	if m != nil {
 		return m.Hosts
+	}
+	return nil
+}
+
+func (m *IstioEgressListener) GetLocalhostServerTls() *ServerTLSSettings {
+	if m != nil {
+		return m.LocalhostServerTls
 	}
 	return nil
 }
@@ -1055,6 +974,136 @@ func (m *OutboundTrafficPolicy) GetEgressProxy() *Destination {
 	return nil
 }
 
+// `Localhost` describes the sidecar settings related to the
+// communication between the sidecar and the workload it is attached
+// to in a Kubernetes Pod or a VM. These settings apply by default to all
+// ingress and egress listeners in a sidecar unless overridden.
+//
+// The following example configures the sidecars on pods of the
+// reviews service to use TLS for traffic to/from the sidecar to the
+// workload in the same pod, assuming the appropriate
+// certificates are mounted in the sidecar.
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: Sidecar
+// metadata:
+//   name: reviews-localhost-tls
+//   namespace: prod-us1
+// spec:
+//   workloadSelector:
+//     labels:
+//       app: reviews
+//   localhost:
+//     clientTls:
+//       mode: SIMPLE
+//       caCertificates: /etc/legacy/ca.pem
+//     serverTls:
+//       mode: SIMPLE
+//       serverCertificate: /etc/legacy/server.pem
+//       privateKey: /etc/legacy/private.pem
+//   egress:
+//   - hosts:
+//     - "./"
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: Sidecar
+// metadata:
+//   name: reviews-localhost-tls
+//   namespace: prod-us1
+// spec:
+//   workloadSelector:
+//     labels:
+//       app: reviews
+//   localhost:
+//     clientTls:
+//       mode: SIMPLE
+//       caCertificates: /etc/legacy/ca.pem
+//     serverTls:
+//       mode: SIMPLE
+//       serverCertificate: /etc/legacy/server.pem
+//       privateKey: /etc/legacy/private.pem
+//   egress:
+//   - hosts:
+//     - "./"
+// ```
+// {{</tab>}}
+// {{</tabset>}}
+//
+type Localhost struct {
+	// TLS settings to be used by the sidecar (client) when forwarding
+	// traffic from the sidecar to the workload it is attached to
+	// (server) on the localhost.
+	//
+	// **NOTE**: DISABLE, SIMPLE and MUTUAL are the only valid TLS modes.
+	ClientTls *ClientTLSSettings `protobuf:"bytes,1,opt,name=client_tls,json=clientTls,proto3" json:"client_tls,omitempty"`
+	// TLS settings to be used by the sidecar (server) when receiving
+	// traffic from the workload (client) on the localhost.
+	//
+	// **NOTE**: SIMPLE and MUTUAL are the only valid TLS
+	// modes. `httpsRedirect` and `credentialName` (for fetching
+	// certificates from Kubernetes secrets) are not valid. All
+	// certificates must be mounted as files inside the sidecar
+	// container.
+	ServerTls            *ServerTLSSettings `protobuf:"bytes,2,opt,name=server_tls,json=serverTls,proto3" json:"server_tls,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
+}
+
+func (m *Localhost) Reset()         { *m = Localhost{} }
+func (m *Localhost) String() string { return proto.CompactTextString(m) }
+func (*Localhost) ProtoMessage()    {}
+func (*Localhost) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e7023408fb338e10, []int{5}
+}
+func (m *Localhost) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Localhost) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Localhost.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Localhost) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Localhost.Merge(m, src)
+}
+func (m *Localhost) XXX_Size() int {
+	return m.Size()
+}
+func (m *Localhost) XXX_DiscardUnknown() {
+	xxx_messageInfo_Localhost.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Localhost proto.InternalMessageInfo
+
+func (m *Localhost) GetClientTls() *ClientTLSSettings {
+	if m != nil {
+		return m.ClientTls
+	}
+	return nil
+}
+
+func (m *Localhost) GetServerTls() *ServerTLSSettings {
+	if m != nil {
+		return m.ServerTls
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterEnum("istio.networking.v1beta1.CaptureMode", CaptureMode_name, CaptureMode_value)
 	proto.RegisterEnum("istio.networking.v1beta1.OutboundTrafficPolicy_Mode", OutboundTrafficPolicy_Mode_name, OutboundTrafficPolicy_Mode_value)
@@ -1064,55 +1113,61 @@ func init() {
 	proto.RegisterType((*WorkloadSelector)(nil), "istio.networking.v1beta1.WorkloadSelector")
 	proto.RegisterMapType((map[string]string)(nil), "istio.networking.v1beta1.WorkloadSelector.LabelsEntry")
 	proto.RegisterType((*OutboundTrafficPolicy)(nil), "istio.networking.v1beta1.OutboundTrafficPolicy")
+	proto.RegisterType((*Localhost)(nil), "istio.networking.v1beta1.Localhost")
 }
 
 func init() { proto.RegisterFile("networking/v1beta1/sidecar.proto", fileDescriptor_e7023408fb338e10) }
 
 var fileDescriptor_e7023408fb338e10 = []byte{
-	// 675 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x94, 0xcd, 0x6e, 0xd3, 0x4e,
-	0x14, 0xc5, 0x3b, 0x49, 0xfa, 0x91, 0xeb, 0xf6, 0xff, 0x77, 0x87, 0x56, 0x98, 0x2e, 0xd2, 0x28,
-	0x12, 0x52, 0x54, 0x54, 0x47, 0x0d, 0x88, 0xaf, 0x5d, 0x4a, 0x0d, 0x8d, 0x64, 0x92, 0xc8, 0x09,
-	0xaa, 0xca, 0xc6, 0x72, 0xec, 0x49, 0x3a, 0xaa, 0xf1, 0x58, 0x33, 0x93, 0x94, 0xbc, 0x0e, 0x4b,
-	0x78, 0x0b, 0x56, 0x2c, 0xd9, 0xb0, 0xaf, 0xfa, 0x24, 0x28, 0xe3, 0xa9, 0x5a, 0x4a, 0x02, 0x54,
-	0x42, 0xec, 0xec, 0xb9, 0xe7, 0x1c, 0x5f, 0xff, 0x66, 0xee, 0x40, 0x39, 0x21, 0xf2, 0x8c, 0xf1,
-	0x53, 0x9a, 0x0c, 0x6b, 0xe3, 0xbd, 0x3e, 0x91, 0xc1, 0x5e, 0x4d, 0xd0, 0x88, 0x84, 0x01, 0xb7,
-	0x53, 0xce, 0x24, 0xc3, 0x16, 0x15, 0x92, 0x32, 0xfb, 0x4a, 0x67, 0x6b, 0xdd, 0xd6, 0xf6, 0x90,
-	0xb1, 0x61, 0x4c, 0x6a, 0x41, 0x4a, 0x6b, 0x03, 0x4a, 0xe2, 0xc8, 0xef, 0x93, 0x93, 0x60, 0x4c,
-	0x99, 0xb6, 0x6e, 0xcd, 0x0a, 0x1f, 0x06, 0x92, 0x9c, 0x05, 0x13, 0xad, 0xa8, 0xce, 0x50, 0x8c,
-	0x29, 0x97, 0xa3, 0x20, 0xf6, 0x05, 0xe1, 0x63, 0x1a, 0x92, 0x4c, 0x59, 0xf9, 0x98, 0x87, 0xe5,
-	0x6e, 0xd6, 0x18, 0x3e, 0x82, 0xf5, 0xa9, 0x29, 0x66, 0x41, 0xe4, 0x0b, 0x12, 0x93, 0x50, 0x32,
-	0x6e, 0xa1, 0x32, 0xaa, 0x1a, 0xf5, 0x1d, 0x7b, 0x5e, 0xbb, 0xf6, 0x91, 0xb6, 0x74, 0xb5, 0xc3,
-	0x33, 0xcf, 0x6e, 0xac, 0xe0, 0x43, 0x58, 0xa6, 0xc9, 0x90, 0x13, 0x21, 0xac, 0x5c, 0x39, 0x5f,
-	0x35, 0xea, 0xf6, 0xfc, 0xb8, 0xe6, 0xb4, 0xd0, 0xcc, 0xd4, 0x2e, 0x15, 0x92, 0x24, 0x84, 0x7b,
-	0x97, 0x76, 0xec, 0xc0, 0x12, 0xc9, 0x82, 0xf2, 0x2a, 0x68, 0xf7, 0x37, 0x41, 0xce, 0x8f, 0x39,
-	0xda, 0x8c, 0x87, 0x70, 0x97, 0x8d, 0x64, 0x9f, 0x8d, 0x92, 0xc8, 0x97, 0x3c, 0x18, 0x0c, 0x68,
-	0xe8, 0xa7, 0x2c, 0xa6, 0xe1, 0xc4, 0x2a, 0xa8, 0xff, 0xad, 0xcd, 0xcf, 0x6d, 0x6b, 0x63, 0x2f,
-	0xf3, 0x75, 0x94, 0xcd, 0xdb, 0x64, 0xb3, 0x96, 0xb1, 0x0b, 0x06, 0x4d, 0xf4, 0x77, 0x62, 0x61,
-	0x2d, 0xaa, 0xf0, 0x07, 0xf3, 0xc3, 0xbb, 0x84, 0x8f, 0x09, 0xb7, 0x7b, 0x6e, 0xb7, 0x9d, 0x4a,
-	0xca, 0x12, 0xe1, 0x81, 0xf6, 0xf7, 0x62, 0x51, 0xf9, 0x94, 0x83, 0x8d, 0x59, 0x7c, 0xf0, 0x13,
-	0x28, 0xa4, 0x8c, 0x4b, 0xbd, 0x59, 0xa5, 0xf9, 0xf9, 0x1d, 0xc6, 0xe5, 0x7e, 0xfe, 0xbc, 0x91,
-	0xf3, 0x94, 0x01, 0x63, 0x28, 0xf4, 0x69, 0x12, 0x59, 0xb9, 0x32, 0xaa, 0x16, 0x3d, 0xf5, 0x8c,
-	0x0f, 0x61, 0x35, 0x0c, 0x52, 0x39, 0xe2, 0xc4, 0x7f, 0xc7, 0x22, 0x62, 0xe5, 0xcb, 0xa8, 0xfa,
-	0x5f, 0xfd, 0xfe, 0xfc, 0xd0, 0x17, 0x99, 0xfa, 0x35, 0x8b, 0x88, 0x67, 0x84, 0x57, 0x2f, 0xd8,
-	0x06, 0x33, 0x22, 0x83, 0x60, 0x14, 0x4b, 0x9f, 0x24, 0x51, 0xca, 0x68, 0x22, 0x15, 0xdf, 0x62,
-	0xd6, 0xc2, 0xff, 0xba, 0xe8, 0xe8, 0xda, 0x5f, 0xa6, 0xf5, 0x19, 0xc1, 0x9d, 0x19, 0x87, 0x00,
-	0xd7, 0x6f, 0x03, 0xeb, 0x9f, 0x70, 0xba, 0x07, 0x8b, 0x27, 0x4c, 0x48, 0x61, 0x15, 0xca, 0xf9,
-	0x4b, 0x38, 0xd9, 0x4a, 0xe5, 0x03, 0x02, 0xf3, 0xe6, 0x84, 0xe1, 0x2e, 0x2c, 0xc5, 0x41, 0x9f,
-	0xc4, 0xc2, 0x42, 0x6a, 0x0a, 0x1e, 0xff, 0xf9, 0x74, 0xda, 0xae, 0x32, 0x3a, 0x89, 0xe4, 0x93,
-	0xec, 0x43, 0x3a, 0x6a, 0xeb, 0x19, 0x18, 0xd7, 0x6a, 0xd8, 0x84, 0xfc, 0x29, 0x99, 0x28, 0x48,
-	0x45, 0x6f, 0xfa, 0x88, 0x37, 0x60, 0x71, 0x1c, 0xc4, 0x23, 0xa2, 0x21, 0x64, 0x2f, 0xcf, 0x73,
-	0x4f, 0x51, 0xe5, 0x1b, 0x82, 0xcd, 0x99, 0x63, 0x81, 0x0f, 0xa1, 0xa0, 0xd8, 0x20, 0xc5, 0xe6,
-	0xd1, 0x2d, 0xa7, 0xca, 0x56, 0xa8, 0x54, 0xc2, 0x94, 0x76, 0x36, 0xbc, 0x7e, 0xca, 0xd9, 0xfb,
-	0x89, 0x6a, 0xc2, 0xf8, 0x15, 0xed, 0x03, 0x22, 0x24, 0x4d, 0x82, 0xe9, 0xb9, 0xf0, 0x8c, 0xcc,
-	0xda, 0x99, 0x3a, 0x2b, 0x55, 0x28, 0x28, 0xea, 0xeb, 0xb0, 0xe6, 0x39, 0xaf, 0x9a, 0xdd, 0x9e,
-	0x77, 0xec, 0xb7, 0x5b, 0xee, 0xb1, 0xb9, 0x80, 0xd7, 0xa0, 0xd8, 0x70, 0xdd, 0xf6, 0x91, 0xdf,
-	0x68, 0x1d, 0x9b, 0x68, 0xa7, 0x0e, 0xc6, 0xb5, 0x3d, 0xc3, 0x06, 0x2c, 0x1f, 0x38, 0x2f, 0x1b,
-	0x6f, 0xdc, 0x9e, 0xb9, 0x80, 0x57, 0x61, 0xa5, 0xd9, 0xe9, 0x35, 0xf6, 0x5d, 0xa7, 0x6b, 0x22,
-	0xbc, 0x02, 0x85, 0x56, 0xbb, 0xe5, 0x98, 0xb9, 0xfd, 0xdd, 0x2f, 0x17, 0x25, 0xf4, 0xf5, 0xa2,
-	0x84, 0xce, 0x2f, 0x4a, 0xe8, 0xed, 0x76, 0xd6, 0x1e, 0x65, 0xea, 0x36, 0xff, 0xf9, 0x56, 0xee,
-	0x2f, 0xa9, 0x6b, 0xf8, 0xe1, 0xf7, 0x00, 0x00, 0x00, 0xff, 0xff, 0xeb, 0x73, 0x3b, 0xe1, 0x31,
-	0x06, 0x00, 0x00,
+	// 765 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x55, 0xdd, 0x8e, 0xdb, 0x44,
+	0x14, 0xee, 0x38, 0xd9, 0xdd, 0xfa, 0xb8, 0x05, 0x77, 0xd8, 0x0a, 0xb3, 0x17, 0xdb, 0x28, 0x08,
+	0x29, 0x14, 0xd5, 0x51, 0x03, 0xe2, 0xef, 0x2e, 0x4b, 0x0d, 0xbb, 0xc8, 0x6c, 0x22, 0x3b, 0x68,
+	0xb5, 0x48, 0xc8, 0x72, 0xec, 0x49, 0x3a, 0xea, 0xe0, 0x89, 0x66, 0x26, 0x59, 0xf2, 0x34, 0x08,
+	0x78, 0x0d, 0x1e, 0x80, 0x4b, 0x6e, 0xb8, 0xaf, 0xf6, 0x49, 0x90, 0xc7, 0x93, 0x4d, 0x5a, 0x9c,
+	0x2e, 0xb9, 0xe1, 0xce, 0x33, 0xe7, 0xfb, 0x3e, 0xcf, 0xf9, 0xce, 0x39, 0x33, 0xd0, 0x2a, 0x88,
+	0xba, 0xe2, 0xe2, 0x05, 0x2d, 0xa6, 0xdd, 0xc5, 0xd3, 0x31, 0x51, 0xe9, 0xd3, 0xae, 0xa4, 0x39,
+	0xc9, 0x52, 0xe1, 0xcf, 0x04, 0x57, 0x1c, 0x7b, 0x54, 0x2a, 0xca, 0xfd, 0x35, 0xce, 0x37, 0xb8,
+	0xa3, 0x47, 0x53, 0xce, 0xa7, 0x8c, 0x74, 0xd3, 0x19, 0xed, 0x4e, 0x28, 0x61, 0x79, 0x32, 0x26,
+	0xcf, 0xd3, 0x05, 0xe5, 0x86, 0x7a, 0x54, 0x27, 0x3e, 0x4d, 0x15, 0xb9, 0x4a, 0x97, 0x06, 0xd1,
+	0xa9, 0x41, 0x2c, 0xa8, 0x50, 0xf3, 0x94, 0x25, 0x92, 0x88, 0x05, 0xcd, 0x88, 0x41, 0x7e, 0x58,
+	0x83, 0xcc, 0x89, 0x54, 0xb4, 0x48, 0x15, 0xe5, 0x45, 0x22, 0xe6, 0xcc, 0x40, 0xdb, 0xbf, 0x34,
+	0xe0, 0x20, 0xae, 0x72, 0xc0, 0x17, 0xf0, 0xa0, 0x64, 0x31, 0x9e, 0xe6, 0x89, 0x24, 0x8c, 0x64,
+	0x8a, 0x0b, 0x0f, 0xb5, 0x50, 0xc7, 0xe9, 0x3d, 0xf6, 0xb7, 0x65, 0xe6, 0x5f, 0x18, 0x4a, 0x6c,
+	0x18, 0x91, 0x7b, 0xf5, 0xda, 0x0e, 0x3e, 0x85, 0x03, 0x5a, 0x4c, 0x05, 0x91, 0xd2, 0xb3, 0x5a,
+	0x8d, 0x8e, 0xd3, 0xf3, 0xb7, 0xcb, 0x9d, 0x95, 0x81, 0xb3, 0x0a, 0x1d, 0x52, 0xa9, 0x48, 0x41,
+	0x44, 0xb4, 0xa2, 0xe3, 0x00, 0xf6, 0x49, 0x25, 0xd4, 0xd0, 0x42, 0x4f, 0x6e, 0x11, 0x0a, 0x5e,
+	0xd5, 0x31, 0x64, 0x3c, 0x85, 0x77, 0xf9, 0x5c, 0x8d, 0xf9, 0xbc, 0xc8, 0x13, 0x25, 0xd2, 0xc9,
+	0x84, 0x66, 0xc9, 0x8c, 0x33, 0x9a, 0x2d, 0xbd, 0xa6, 0xce, 0xb7, 0xbb, 0x5d, 0x77, 0x60, 0x88,
+	0xa3, 0x8a, 0x37, 0xd4, 0xb4, 0xe8, 0x21, 0xaf, 0xdb, 0xc6, 0x7d, 0xb0, 0x19, 0xcf, 0x52, 0xf6,
+	0x9c, 0x4b, 0xe5, 0xed, 0x6b, 0xe9, 0xf7, 0xb7, 0x4b, 0x87, 0x2b, 0x68, 0xb4, 0x66, 0xb5, 0xff,
+	0xb0, 0xe0, 0xb0, 0xce, 0x14, 0xfc, 0x19, 0x34, 0x67, 0x5c, 0x28, 0x53, 0xa1, 0xe3, 0xed, 0xb2,
+	0x43, 0x2e, 0xd4, 0x49, 0xe3, 0x65, 0xdf, 0x8a, 0x34, 0x01, 0x63, 0x68, 0x8e, 0x69, 0x91, 0x7b,
+	0x56, 0x0b, 0x75, 0xec, 0x48, 0x7f, 0xe3, 0x53, 0xb8, 0x97, 0xa5, 0x33, 0x35, 0x17, 0x24, 0xf9,
+	0x89, 0xe7, 0xc4, 0x6b, 0xb4, 0x50, 0xe7, 0xad, 0xde, 0x07, 0xdb, 0x45, 0xbf, 0xaa, 0xd0, 0xdf,
+	0xf1, 0x9c, 0x44, 0x4e, 0xb6, 0x5e, 0x60, 0x1f, 0xdc, 0x9c, 0x4c, 0xd2, 0x39, 0x53, 0x09, 0x29,
+	0xf2, 0x19, 0xa7, 0x85, 0xd2, 0xa6, 0xda, 0xd5, 0x11, 0xde, 0x36, 0xc1, 0xc0, 0xc4, 0xf0, 0x8f,
+	0x70, 0x78, 0x93, 0x6c, 0x92, 0x31, 0x4a, 0x0a, 0x95, 0x28, 0x26, 0x8d, 0x5b, 0x1f, 0xbd, 0xe1,
+	0x04, 0x1a, 0x3b, 0x0a, 0xe3, 0x98, 0x28, 0x45, 0x8b, 0xa9, 0x8c, 0xf0, 0x8d, 0x90, 0x89, 0x31,
+	0xd9, 0xfe, 0xd5, 0x82, 0x77, 0x6a, 0x5a, 0x01, 0xf7, 0x76, 0x71, 0xef, 0x7f, 0x31, 0xee, 0x3d,
+	0xd8, 0x2b, 0x8f, 0x2e, 0xbd, 0x66, 0xab, 0xb1, 0x72, 0xab, 0xda, 0x79, 0xd5, 0xa3, 0x72, 0xd6,
+	0x89, 0xd0, 0x1e, 0xed, 0xdd, 0xe6, 0x51, 0xac, 0xb1, 0xf5, 0x1e, 0x99, 0x18, 0x93, 0xed, 0xdf,
+	0x10, 0xb8, 0xaf, 0x8f, 0x31, 0x8e, 0x61, 0x9f, 0xa5, 0x63, 0xc2, 0xa4, 0x87, 0xf4, 0xa8, 0x7d,
+	0xfa, 0xdf, 0xaf, 0x00, 0x3f, 0xd4, 0xc4, 0xa0, 0x50, 0x62, 0x59, 0xe5, 0x61, 0xa4, 0x8e, 0xbe,
+	0x00, 0x67, 0x23, 0x86, 0x5d, 0x68, 0xbc, 0x20, 0x4b, 0x5d, 0x03, 0x3b, 0x2a, 0x3f, 0xf1, 0x21,
+	0xec, 0x2d, 0x52, 0x36, 0x27, 0xc6, 0xe3, 0x6a, 0xf1, 0xa5, 0xf5, 0x39, 0x6a, 0xff, 0x8d, 0xe0,
+	0x61, 0xed, 0xec, 0xe1, 0x53, 0x68, 0x6a, 0xeb, 0x91, 0xb6, 0xfe, 0x93, 0x1d, 0x47, 0xd7, 0xd7,
+	0x95, 0xd0, 0x0a, 0x65, 0x31, 0xab, 0x1b, 0x22, 0x99, 0x09, 0xfe, 0xf3, 0x52, 0x1f, 0xc2, 0x79,
+	0x53, 0x31, 0x9f, 0xad, 0x6f, 0xd5, 0xc8, 0xa9, 0xa8, 0xc3, 0x92, 0xd9, 0xee, 0x40, 0x53, 0x17,
+	0xf5, 0x01, 0xdc, 0x8f, 0x82, 0x6f, 0xce, 0xe2, 0x51, 0x74, 0x99, 0x0c, 0xce, 0xc3, 0x4b, 0xf7,
+	0x0e, 0xbe, 0x0f, 0x76, 0x3f, 0x0c, 0x07, 0x17, 0x49, 0xff, 0xfc, 0xd2, 0x45, 0xed, 0xdf, 0x11,
+	0xd8, 0x37, 0x83, 0x8f, 0xbf, 0x05, 0xd8, 0x98, 0x01, 0xb4, 0xfb, 0x0c, 0xd8, 0xd9, 0xaa, 0xf5,
+	0x4b, 0xad, 0x8d, 0x5e, 0xb1, 0x76, 0xef, 0x15, 0x5b, 0xae, 0x5a, 0xe4, 0x71, 0x0f, 0x9c, 0x8d,
+	0xc6, 0xc5, 0x0e, 0x1c, 0x3c, 0x0b, 0xbe, 0xee, 0x7f, 0x1f, 0x8e, 0xdc, 0x3b, 0xf8, 0x1e, 0xdc,
+	0x3d, 0x1b, 0x8e, 0xfa, 0x27, 0x61, 0x10, 0xbb, 0x08, 0xdf, 0x85, 0xe6, 0xf9, 0xe0, 0x3c, 0x70,
+	0xad, 0x93, 0x27, 0x7f, 0x5e, 0x1f, 0xa3, 0xbf, 0xae, 0x8f, 0xd1, 0xcb, 0xeb, 0x63, 0xf4, 0xc3,
+	0xa3, 0xea, 0xc7, 0x94, 0xeb, 0x37, 0xf0, 0xdf, 0x2f, 0xd4, 0x78, 0x5f, 0xbf, 0x48, 0x1f, 0xff,
+	0x13, 0x00, 0x00, 0xff, 0xff, 0x95, 0xb2, 0xa7, 0x1d, 0x67, 0x07, 0x00, 0x00,
 }
 
 func (m *Sidecar) Marshal() (dAtA []byte, err error) {
@@ -1139,9 +1194,9 @@ func (m *Sidecar) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	if m.InboundTls != nil {
+	if m.Localhost != nil {
 		{
-			size, err := m.InboundTls.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.Localhost.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1149,7 +1204,7 @@ func (m *Sidecar) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i = encodeVarintSidecar(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x32
 	}
 	if m.OutboundTrafficPolicy != nil {
 		{
@@ -1230,9 +1285,9 @@ func (m *IstioIngressListener) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	if m.InboundTls != nil {
+	if m.LocalhostClientTls != nil {
 		{
-			size, err := m.InboundTls.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.LocalhostClientTls.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1240,7 +1295,7 @@ func (m *IstioIngressListener) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i = encodeVarintSidecar(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x32
 	}
 	if len(m.DefaultEndpoint) > 0 {
 		i -= len(m.DefaultEndpoint)
@@ -1299,6 +1354,18 @@ func (m *IstioEgressListener) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.XXX_unrecognized != nil {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.LocalhostServerTls != nil {
+		{
+			size, err := m.LocalhostServerTls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintSidecar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
 	}
 	if len(m.Hosts) > 0 {
 		for iNdEx := len(m.Hosts) - 1; iNdEx >= 0; iNdEx-- {
@@ -1426,6 +1493,57 @@ func (m *OutboundTrafficPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *Localhost) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Localhost) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Localhost) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.ServerTls != nil {
+		{
+			size, err := m.ServerTls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintSidecar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.ClientTls != nil {
+		{
+			size, err := m.ClientTls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintSidecar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintSidecar(dAtA []byte, offset int, v uint64) int {
 	offset -= sovSidecar(v)
 	base := offset
@@ -1463,8 +1581,8 @@ func (m *Sidecar) Size() (n int) {
 		l = m.OutboundTrafficPolicy.Size()
 		n += 1 + l + sovSidecar(uint64(l))
 	}
-	if m.InboundTls != nil {
-		l = m.InboundTls.Size()
+	if m.Localhost != nil {
+		l = m.Localhost.Size()
 		n += 1 + l + sovSidecar(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
@@ -1494,8 +1612,8 @@ func (m *IstioIngressListener) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovSidecar(uint64(l))
 	}
-	if m.InboundTls != nil {
-		l = m.InboundTls.Size()
+	if m.LocalhostClientTls != nil {
+		l = m.LocalhostClientTls.Size()
 		n += 1 + l + sovSidecar(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
@@ -1526,6 +1644,10 @@ func (m *IstioEgressListener) Size() (n int) {
 			l = len(s)
 			n += 1 + l + sovSidecar(uint64(l))
 		}
+	}
+	if m.LocalhostServerTls != nil {
+		l = m.LocalhostServerTls.Size()
+		n += 1 + l + sovSidecar(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -1564,6 +1686,26 @@ func (m *OutboundTrafficPolicy) Size() (n int) {
 	}
 	if m.EgressProxy != nil {
 		l = m.EgressProxy.Size()
+		n += 1 + l + sovSidecar(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Localhost) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ClientTls != nil {
+		l = m.ClientTls.Size()
+		n += 1 + l + sovSidecar(uint64(l))
+	}
+	if m.ServerTls != nil {
+		l = m.ServerTls.Size()
 		n += 1 + l + sovSidecar(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
@@ -1747,9 +1889,9 @@ func (m *Sidecar) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 5:
+		case 6:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field InboundTls", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Localhost", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1776,10 +1918,10 @@ func (m *Sidecar) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.InboundTls == nil {
-				m.InboundTls = &Server_TLSOptions{}
+			if m.Localhost == nil {
+				m.Localhost = &Localhost{}
 			}
-			if err := m.InboundTls.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Localhost.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1956,9 +2098,9 @@ func (m *IstioIngressListener) Unmarshal(dAtA []byte) error {
 			}
 			m.DefaultEndpoint = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 5:
+		case 6:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field InboundTls", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field LocalhostClientTls", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1985,10 +2127,10 @@ func (m *IstioIngressListener) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.InboundTls == nil {
-				m.InboundTls = &Server_TLSOptions{}
+			if m.LocalhostClientTls == nil {
+				m.LocalhostClientTls = &ClientTLSSettings{}
 			}
-			if err := m.InboundTls.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.LocalhostClientTls.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2164,6 +2306,42 @@ func (m *IstioEgressListener) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Hosts = append(m.Hosts, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LocalhostServerTls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSidecar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSidecar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthSidecar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.LocalhostServerTls == nil {
+				m.LocalhostServerTls = &ServerTLSSettings{}
+			}
+			if err := m.LocalhostServerTls.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2452,6 +2630,132 @@ func (m *OutboundTrafficPolicy) Unmarshal(dAtA []byte) error {
 				m.EgressProxy = &Destination{}
 			}
 			if err := m.EgressProxy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipSidecar(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthSidecar
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthSidecar
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Localhost) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowSidecar
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Localhost: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Localhost: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientTls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSidecar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSidecar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthSidecar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ClientTls == nil {
+				m.ClientTls = &ClientTLSSettings{}
+			}
+			if err := m.ClientTls.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServerTls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSidecar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSidecar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthSidecar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ServerTls == nil {
+				m.ServerTls = &ServerTLSSettings{}
+			}
+			if err := m.ServerTls.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

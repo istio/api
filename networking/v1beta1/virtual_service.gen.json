@@ -112,6 +112,9 @@
           "redirect": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPRedirect"
           },
+          "delegate": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.Delegate"
+          },
           "rewrite": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPRewrite"
           },
@@ -262,16 +265,16 @@
         "description": "Each routing rule is associated with one or more service versions (see glossary in beginning of document). Weights associated with the version determine the proportion of traffic it receives. For example, the following rule will route 25% of traffic for the \"reviews\" service to instances with the \"v2\" tag and the remaining traffic (i.e., 75%) to \"v1\".",
         "type": "object",
         "properties": {
-          "weight": {
-            "description": "The proportion of traffic to be forwarded to the service version. (0-100). Sum of weights across destinations SHOULD BE == 100. If there is only one destination in a rule, the weight value is assumed to be 100.",
-            "type": "integer",
-            "format": "int32"
-          },
           "headers": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.Headers"
           },
           "destination": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.Destination"
+          },
+          "weight": {
+            "description": "The proportion of traffic to be forwarded to the service version. (0-100). Sum of weights across destinations SHOULD BE == 100. If there is only one destination in a rule, the weight value is assumed to be 100.",
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -292,6 +295,22 @@
           "redirectCode": {
             "description": "On a redirect, Specifies the HTTP status code to use in the redirect response. The default response code is MOVED_PERMANENTLY (301).",
             "type": "integer"
+          }
+        }
+      },
+      "istio.networking.v1beta1.Delegate": {
+        "description": "Describes the delegate VirtualService. The following routing rules forward the traffic to `/productpage` by a delegate VirtualService named `productpage`, forward the traffic to `/reviews` by a delegate VirtualService named `reviews`.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name specifies the name of the delegate VirtualService.",
+            "type": "string",
+            "format": "string"
+          },
+          "namespace": {
+            "description": "Namespace specifies the namespace where the delegate VirtualService resides. By default, it is same to the root's.",
+            "type": "string",
+            "format": "string"
           }
         }
       },
@@ -505,13 +524,13 @@
         "description": "L4 routing rule weighted destination.",
         "type": "object",
         "properties": {
+          "destination": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.Destination"
+          },
           "weight": {
             "description": "The proportion of traffic to be forwarded to the service version. If there is only one destination in a rule, all traffic will be routed to it irrespective of the weight.",
             "type": "integer",
             "format": "int32"
-          },
-          "destination": {
-            "$ref": "#/components/schemas/istio.networking.v1beta1.Destination"
           }
         }
       },
@@ -564,6 +583,48 @@
         "type": "object",
         "oneOf": [
           {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "exact"
+                  ],
+                  "properties": {
+                    "exact": {
+                      "description": "exact string match",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "prefix"
+                  ],
+                  "properties": {
+                    "prefix": {
+                      "description": "prefix-based match",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "regex"
+                  ],
+                  "properties": {
+                    "regex": {
+                      "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
             "required": [
               "exact"
             ],
@@ -593,7 +654,7 @@
             ],
             "properties": {
               "regex": {
-                "description": "ECMAscript style regex-based match",
+                "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
                 "type": "string",
                 "format": "string"
               }
@@ -604,21 +665,50 @@
       "istio.networking.v1beta1.HTTPFaultInjection.Delay": {
         "description": "Delay specification is used to inject latency into the request forwarding path. The following example will introduce a 5 second delay in 1 out of every 1000 requests to the \"v1\" version of the \"reviews\" service from all pods with label env: prod",
         "type": "object",
+        "properties": {
+          "percent": {
+            "description": "Percentage of requests on which the delay will be injected (0-100). Use of integer `percent` value is deprecated. Use the double `percentage` field instead.",
+            "type": "integer",
+            "format": "int32",
+            "deprecated": true
+          },
+          "percentage": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.Percent"
+          }
+        },
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "fixedDelay"
+                  ],
+                  "properties": {
+                    "fixedDelay": {
+                      "description": "Add a fixed delay before forwarding the request. Format: 1h/1m/1s/1ms. MUST be \u003e=1ms.",
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "exponentialDelay"
+                  ],
+                  "properties": {
+                    "exponentialDelay": {
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "fixedDelay"
             ],
             "properties": {
-              "percent": {
-                "description": "Percentage of requests on which the delay will be injected (0-100). Use of integer `percent` value is deprecated. Use the double `percentage` field instead.",
-                "type": "integer",
-                "format": "int32",
-                "deprecated": true
-              },
-              "percentage": {
-                "$ref": "#/components/schemas/istio.networking.v1beta1.Percent"
-              },
               "fixedDelay": {
                 "description": "Add a fixed delay before forwarding the request. Format: 1h/1m/1s/1ms. MUST be \u003e=1ms.",
                 "type": "string"
@@ -630,15 +720,6 @@
               "exponentialDelay"
             ],
             "properties": {
-              "percent": {
-                "description": "Percentage of requests on which the delay will be injected (0-100). Use of integer `percent` value is deprecated. Use the double `percentage` field instead.",
-                "type": "integer",
-                "format": "int32",
-                "deprecated": true
-              },
-              "percentage": {
-                "$ref": "#/components/schemas/istio.networking.v1beta1.Percent"
-              },
               "exponentialDelay": {
                 "type": "string"
               }
@@ -649,15 +730,57 @@
       "istio.networking.v1beta1.HTTPFaultInjection.Abort": {
         "description": "Abort specification is used to prematurely abort a request with a pre-specified error code. The following example will return an HTTP 400 error code for 1 out of every 1000 requests to the \"ratings\" service \"v1\".",
         "type": "object",
+        "properties": {
+          "percentage": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.Percent"
+          }
+        },
         "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "httpStatus"
+                  ],
+                  "properties": {
+                    "httpStatus": {
+                      "description": "HTTP status code to use to abort the Http request.",
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "grpcStatus"
+                  ],
+                  "properties": {
+                    "grpcStatus": {
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "http2Error"
+                  ],
+                  "properties": {
+                    "http2Error": {
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
           {
             "required": [
               "httpStatus"
             ],
             "properties": {
-              "percentage": {
-                "$ref": "#/components/schemas/istio.networking.v1beta1.Percent"
-              },
               "httpStatus": {
                 "description": "HTTP status code to use to abort the Http request.",
                 "type": "integer",
@@ -670,9 +793,6 @@
               "grpcStatus"
             ],
             "properties": {
-              "percentage": {
-                "$ref": "#/components/schemas/istio.networking.v1beta1.Percent"
-              },
               "grpcStatus": {
                 "type": "string",
                 "format": "string"
@@ -684,9 +804,6 @@
               "http2Error"
             ],
             "properties": {
-              "percentage": {
-                "$ref": "#/components/schemas/istio.networking.v1beta1.Percent"
-              },
               "http2Error": {
                 "type": "string",
                 "format": "string"

@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "",
+    "title": "Configuration to validate JWT.",
     "version": "v1beta1"
   },
   "components": {

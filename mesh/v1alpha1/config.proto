@@ -106,22 +106,25 @@ message MeshConfig {
   string ingress_service = 8;
 
   enum IngressControllerMode {
+    // Unspecified Istio ingress controller.
+    UNSPECIFIED = 0;
+
     // Disables Istio ingress controller.
-    OFF = 0;
+    OFF = 1;
 
     // Istio ingress controller will act on ingress resources that do not
     // contain any annotation or whose annotations match the value
     // specified in the ingress_class parameter described earlier. Use this
     // mode if Istio ingress controller will be the default ingress
     // controller for the entireKubernetes cluster.
-    DEFAULT = 1;
+    DEFAULT = 2;
 
     // Istio ingress controller will only act on ingress resources whose
     // annotations match the value specified in the ingress_class parameter
     // described earlier. Use this mode if Istio ingress controller will be
     // a secondary ingress controller (e.g., in addition to a
     // cloud-provided ingress controller).
-    STRICT = 2;
+    STRICT = 3;
   }
 
   // Defines whether to use Istio ingress controller for annotated or all ingress resources.
@@ -227,14 +230,14 @@ message MeshConfig {
   // This flag is used to enable mutual TLS automatically for service to service communication
   // within the mesh, default false.
   // If set to true, and a given service does not have a corresponding DestinationRule configured,
-  // or its DestinationRule does not have TLSSettings specified, Istio configures client side
+  // or its DestinationRule does not have ClientTLSSettings specified, Istio configures client side
   // TLS configuration appropriately. More specifically,
   // If the upstream authentication policy is in STRICT mode, use Istio provisioned certificate
   // for mutual TLS to connect to upstream.
   // If upstream service is in plain text mode, use plain text.
   // If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use
   // mutual TLS when server sides are capable of accepting mutual TLS traffic.
-  // If service DestinationRule exists and has TLSSettings specified, that is always used instead.
+  // If service DestinationRule exists and has ClientTLSSettings specified, that is always used instead.
   google.protobuf.BoolValue enable_auto_mtls = 43;
 
   // $hide_from_docs
@@ -353,7 +356,8 @@ message MeshConfig {
   // It can be enabled by destination using the destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy override.
   H2UpgradePolicy h2_upgrade_policy = 41;
 
-  // Name to be used while emitting statistics for inbound clusters.
+  // Name to be used while emitting statistics for inbound clusters. The same pattern is used while computing stat prefix for
+  // network filters like TCP and Redis.
   // By default, Istio emits statistics with the pattern `inbound|<port>|<port-name>|<service-FQDN>`.
   // For example `inbound|7443|grpc-reviews|reviews.prod.svc.cluster.local`. This can be used to override that pattern.
   //
@@ -370,7 +374,8 @@ message MeshConfig {
   // - `%SERVICE%` will use reviews.prod as the stats name.
   string inbound_cluster_stat_name = 44;
 
-  // Name to be used while emitting statistics for outbound clusters.
+  // Name to be used while emitting statistics for outbound clusters. The same pattern is used while computing stat prefix for
+  // network filters like TCP and Redis.
   // By default, Istio emits statistics with the pattern `outbound|<port>|<subsetname>|<service-FQDN>`.
   // For example `outbound|8080|v2|reviews.prod.svc.cluster.local`. This can be used to override that pattern.
   //
@@ -405,7 +410,69 @@ message MeshConfig {
   ThriftConfig thrift_config = 49;
 
   // $hide_from_docs
-  // Next available field number: 50
+  // Settings to be applied to select services.
+  //
+  // For example, the following configures all services in namespace "foo" as well as the
+  // "bar" service in namespace "baz" to be considered cluster-local:
+  //
+  // ```yaml
+  // serviceSettings:
+  //   - settings:
+  //       cluster_local: true
+  //     hosts:
+  //       - "*.foo.svc.cluster.local"
+  //       - "bar.baz.svc.cluster.local"
+  // ```
+  message ServiceSettings {
+    // Settings for the selected services.
+    message Settings {
+      // If true, specifies that the client and service endpoints must reside in the same cluster.
+      // By default, in multi-cluster deployments, the Istio control plane assumes all service
+      // endpoints to be reachable from any client in any of the clusters which are part of the
+      // mesh. This configuration option limits the set of service endpoints visible to a client
+      // to be cluster scoped.
+      //
+      // There are some common scenarios when this can be useful:
+      //
+      //   - A service (or group of services) is inherently local to the cluster and has local storage
+      //     for that cluster. For example, the kube-system namespace (e.g. the Kube API Server).
+      //   - A mesh administrator wants to slowly migrate services to Istio. They might start by first
+      //     having services cluster-local and then slowly transition them to mesh-wide. They could do
+      //     this service-by-service (e.g. mysvc.myns.svc.cluster.local) or as a group
+      //     (e.g. *.myns.svc.cluster.local).
+      //
+      // By default, Istio will consider all services in the kube-system namespace to be cluster-local,
+      // unless explicitly overridden here.
+      bool cluster_local = 1;
+    }
+
+    // The settings to apply to the selected services.
+    Settings settings = 1;
+
+    // The services to which the Settings should be applied. Services are selected using the hostname
+    // matching rules used by DestinationRule.
+    //
+    // For example: foo.bar.svc.cluster.local, *.baz.svc.cluster.local
+    repeated string hosts = 2;
+  }
+
+  // $hide_from_docs
+  // Settings to be applied to select services.
+  repeated ServiceSettings service_settings = 50;
+
+  // If enabled, Istio agent will merge metrics exposed by the application with metrics from Envoy
+  // and Istio agent. The sidecar injection will replace `prometheus.io` annotations present on the pod
+  // and redirect them towards Istio agent, which will then merge metrics of from the application with Istio metrics.
+  // This relies on the annotations `prometheus.io/scrape`, `prometheus.io/port`, and
+  // `prometheus.io/path` annotations.
+  // If you are running a separately managed Envoy with an Istio sidecar, this may cause issues, as the metrics will collide.
+  // In this case, it is recommended to disable aggregation on that deployment with the
+  // `prometheus.istio.io/merge-metrics: "false"` annotation.
+  // If not specified, this will be enabled by default.
+  google.protobuf.BoolValue enable_prometheus_merge = 51;
+
+  // $hide_from_docs
+  // Next available field number: 52
 }
 
 // Resource describes the source of configuration
@@ -427,7 +494,7 @@ message ConfigSource {
  // Use the tls_settings to specify the tls mode to use. If the MCP server
  // uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
  // mode as ISTIO_MUTUAL.
- istio.networking.v1alpha3.TLSSettings tls_settings = 2;
+ istio.networking.v1alpha3.ClientTLSSettings tls_settings = 2;
  // Describes the source of configuration, if nothing is specified default is MCP
  repeated Resource subscribed_resources = 3;
 }

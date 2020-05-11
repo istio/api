@@ -16,15 +16,15 @@ syntax = "proto3";
 import "type/v1beta1/selector.proto";
 import "security/v1beta1/jwt.proto";
 
-package istio.security.v1beta1;
-
-option go_package="istio.io/api/security/v1beta1";
-
 // $schema: istio.security.v1beta1.RequestAuthentication
 // $title: RequestAuthentication
 // $description: Request authentication configuration for workloads.
 // $location: https://istio.io/docs/reference/config/security/request_authentication.html
 // $aliases: [/docs/reference/config/security/v1beta1/request_authentication]
+
+package istio.security.v1beta1;
+
+option go_package="istio.io/api/security/v1beta1";
 
 // RequestAuthentication defines what request authentication methods are supported by a workload.
 // If will reject a request if the request contains invalid authentication information, based on the
@@ -39,8 +39,8 @@ option go_package="istio.io/api/security/v1beta1";
 // apiVersion: security.istio.io/v1beta1
 // kind: RequestAuthentication
 // metadata:
-//  name: httpbin
-//  namespace: foo
+//   name: httpbin
+//   namespace: foo
 // spec:
 //   selector:
 //     matchLabels:
@@ -52,27 +52,28 @@ option go_package="istio.io/api/security/v1beta1";
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
-//  name: httpbin
-//  namespace: foo
+//   name: httpbin
+//   namespace: foo
 // spec:
-//  selector:
-//    matchLabels:
-//      app: httpbin
-//  rules:
-//  - from:
-//    - source:
-//        requestPrincipals: ["*"]
+//   selector:
+//     matchLabels:
+//       app: httpbin
+//   rules:
+//   - from:
+//     - source:
+//         requestPrincipals: ["*"]
 // ```
 //
 // - The next example shows how to set a different JWT requirement for a different `host`. The `RequestAuthentication`
 // declares it can accpet JWTs issuer by either `issuer-foo` or `issuer-bar` (the public key set is implicitly
 // set from the OpenID Connect spec).
+//
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
 // kind: RequestAuthentication
 // metadata:
-//  name: httpbin
-//  namespace: foo
+//   name: httpbin
+//   namespace: foo
 // spec:
 //   selector:
 //     matchLabels:
@@ -84,12 +85,12 @@ option go_package="istio.io/api/security/v1beta1";
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
-//  name: httpbin
-//  namespace: foo
+//   name: httpbin
+//   namespace: foo
 // spec:
-//  selector:
-//    matchLabels:
-//      app: httpbin
+//   selector:
+//     matchLabels:
+//       app: httpbin
 //  rules:
 //  - from:
 //    - source:
@@ -111,12 +112,12 @@ option go_package="istio.io/api/security/v1beta1";
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
 // metadata:
-//  name: httpbin
-//  namespace: foo
+//   name: httpbin
+//   namespace: foo
 // spec:
-//  selector:
-//    matchLabels:
-//      app: httpbin
+//   selector:
+//     matchLabels:
+//       app: httpbin
 //  rules:
 //  - from:
 //    - source:
@@ -134,7 +135,8 @@ option go_package="istio.io/api/security/v1beta1";
 // +cue-gen:RequestAuthentication:labels:app=istio-pilot,chart=istio,istio=security,heritage=Tiller,release=istio
 // +cue-gen:RequestAuthentication:subresource:status
 // +cue-gen:RequestAuthentication:scope:Namespaced
-// +cue-gen:RequestAuthentication:resource:categories=istio-io,security-istio-io
+// +cue-gen:RequestAuthentication:resource:categories=istio-io,security-istio-io,shortNames=ra
+// +cue-gen:RequestAuthentication:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags

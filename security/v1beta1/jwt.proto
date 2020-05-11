@@ -15,15 +15,15 @@ syntax = "proto3";
 
 import "google/api/field_behavior.proto";
 
-package istio.security.v1beta1;
-
-option go_package="istio.io/api/security/v1beta1";
-
 // $schema: istio.security.v1beta1.JWTRule
 // $title: JWTRule
 // $description: Configuration to validate JWT.
 // $location: https://istio.io/docs/reference/config/security/jwt.html
 // $aliases: [/docs/reference/config/security/v1beta1/jwt]
+
+package istio.security.v1beta1;
+
+option go_package="istio.io/api/security/v1beta1";
 
 // JSON Web Token (JWT) token format for authentication as defined by
 // [RFC 7519](https://tools.ietf.org/html/rfc7519). See [OAuth 2.0](https://tools.ietf.org/html/rfc6749) and

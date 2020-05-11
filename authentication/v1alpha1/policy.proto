@@ -15,11 +15,6 @@
 syntax = "proto3";
 
 // $schema: istio.authentication.v1alpha1.Policy
-// $title: Authentication Policy
-// $description: Authentication policy for Istio services.
-// $location: https://istio.io/docs/reference/config/security/istio.authentication.v1alpha1.html
-// $weight: 10
-// $aliases: [/docs/reference/config/istio.authentication.v1alpha1]
 
 // This package defines user-facing authentication policy.
 package istio.authentication.v1alpha1;
@@ -41,14 +36,16 @@ message StringMatch {
     // suffix-based match.
     string suffix = 3;
 
-    // ECMAscript style regex-based match as defined by [EDCA-262](http://en.cppreference.com/w/cpp/regex/ecmascript).
-    // Example: "^/pets/(.*?)?"
+    // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
     string regex = 4;
   }
 }
 
+// $hide_from_docs
+// Deprecated. Please use security/v1beta1/PeerAuthentication instead.
 // TLS authentication params.
 message MutualTls {
+  // $hide_from_docs
   // Defines the acceptable connection TLS mode.
   enum Mode {
     // Client cert must be presented, connection is in TLS.
@@ -223,11 +220,14 @@ message Jwt {
   // Next available field number: 11
 }
 
+// $hide_from_docs
+// Deprecated. Please use security/v1beta1/PeerAuthentication instead.
 // PeerAuthenticationMethod defines one particular type of authentication. Only mTLS is supported
 // at the moment.
 // The type can be progammatically determine by checking the type of the
 // "params" field.
 message PeerAuthenticationMethod {
+  // $hide_from_docs
   oneof params {
     // Set if mTLS is used.
     MutualTls mtls = 1;
@@ -261,6 +261,7 @@ enum PrincipalBinding {
   USE_ORIGIN = 1;
 }
 
+// $hide_from_docs
 // Policy defines what authentication methods can be accepted on workload(s),
 // and if authenticated, which method/certificate will set the request principal
 // (i.e request.auth.principal attribute).
@@ -332,44 +333,14 @@ enum PrincipalBinding {
 //         - exact: /health_check
 //   principalBinding: USE_ORIGIN
 // ```
-//
-// <!-- crd generation tags
-// +cue-gen:Policy:groupName:authentication.istio.io
-// +cue-gen:Policy:version:v1alpha1
-// +cue-gen:Policy:storageVersion
-// +cue-gen:Policy:annotations:helm.sh/resource-policy=keep
-// +cue-gen:Policy:labels:app=istio-citadel,chart=istio,heritage=Tiller,release=istio
-// +cue-gen:Policy:subresource:status
-// +cue-gen:Policy:scope:Namespaced
-// +cue-gen:Policy:resource:categories=istio-io,authentication-istio-io,plural=policies
-// -->
-//
-// <!-- crd generation tags
-// +cue-gen:MeshPolicy:groupName:authentication.istio.io
-// +cue-gen:MeshPolicy:version:v1alpha1
-// +cue-gen:MeshPolicy:storageVersion
-// +cue-gen:MeshPolicy:annotations:helm.sh/resource-policy=keep
-// +cue-gen:MeshPolicy:labels:app=istio-citadel,chart=istio,heritage=Tiller,release=istio
-// +cue-gen:MeshPolicy:subresource:status
-// +cue-gen:MeshPolicy:scope:Cluster
-// +cue-gen:MeshPolicy:resource:categories=istio-io,authentication-istio-io,plural=meshpolicies
-// -->
-//
-// <!-- go code generation tags
-// +kubetype-gen
-// +kubetype-gen:groupVersion=authentication.istio.io/v1alpha1
-// +kubetype-gen:kubeType=Policy
-// +kubetype-gen:kubeType=MeshPolicy
-// +kubetype-gen:MeshPolicy:tag=genclient:nonNamespaced
-// +genclient
-// +k8s:deepcopy-gen=true
-// -->
 message Policy {
   // Deprecated. Only mesh-level and namespace-level policies are supported.
   // List rules to select workloads that the policy should be applied on.
   // If empty, policy will be used on all workloads in the same namespace.
   repeated TargetSelector targets = 1 [deprecated=true];
 
+  // $hide_from_docs
+  // Deprecated. Please use security/v1beta1/PeerAuthentication instead.
   // List of authentication methods that can be used for peer authentication.
   // They will be evaluated in order; the first validate one will be used to
   // set peer identity (source.user) and other peer attributes. If none of

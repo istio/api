@@ -6,18 +6,32 @@
   },
   "components": {
     "schemas": {
+      "istio.networking.v1alpha3.WorkloadSelector": {
+        "description": "`WorkloadSelector` specifies the criteria used to determine if the `Gateway`, `Sidecar`, or `EnvoyFilter` or `ServiceEntry` configuration can be applied to a proxy. The matching criteria includes the metadata associated with a proxy, workload instance info such as labels attached to the pod/VM, or any other info that the proxy provides to Istio during the initial handshake. If multiple conditions are specified, all conditions need to match in order for the workload instance to be selected. Currently, only label based selection mechanism is supported.",
+        "type": "object",
+        "properties": {
+          "labels": {
+            "description": "One or more labels that indicate a specific set of pods/VMs on which the configuration should be applied. The scope of label search is restricted to the configuration namespace in which the the resource is present.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        }
+      },
       "istio.networking.v1alpha3.Port": {
         "description": "Port describes the properties of a specific port of a service.",
         "type": "object",
         "properties": {
+          "number": {
+            "description": "A valid non-negative integer port number.",
+            "type": "integer"
+          },
           "name": {
             "description": "Label assigned to the port.",
             "type": "string",
             "format": "string"
-          },
-          "number": {
-            "description": "A valid non-negative integer port number.",
-            "type": "integer"
           },
           "protocol": {
             "description": "The protocol exposed on the port. MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS. TLS implies the connection will be routed based on the SNI header to the destination without terminating the TLS connection.",
@@ -39,12 +53,15 @@
             }
           },
           "subjectAltNames": {
-            "description": "The list of subject alternate names allowed for workload instances that implement this service. This information is used to enforce [secure-naming](https://istio.io/docs/concepts/security/#secure-naming). If specified, the proxy will verify that the server certificate's subject alternate name matches one of the specified values.",
+            "description": "If specified, the proxy will verify that the server certificate's subject alternate name matches one of the specified values.",
             "type": "array",
             "items": {
               "type": "string",
               "format": "string"
             }
+          },
+          "workloadSelector": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.WorkloadSelector"
           },
           "hosts": {
             "description": "The hosts associated with the ServiceEntry. Could be a DNS name with wildcard prefix.",
@@ -76,10 +93,10 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.ServiceEntry.Resolution"
           },
           "endpoints": {
-            "description": "One or more endpoints associated with the service.",
+            "description": "One or more endpoints associated with the service. Only one of `endpoints` or `workloadSelector` can be specified.",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/istio.networking.v1alpha3.ServiceEntry.Endpoint"
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.WorkloadEntry"
             }
           }
         }
@@ -101,8 +118,8 @@
           "DNS"
         ]
       },
-      "istio.networking.v1alpha3.ServiceEntry.Endpoint": {
-        "description": "Endpoint defines a network address (IP or hostname) associated with the mesh service.",
+      "istio.networking.v1alpha3.WorkloadEntry": {
+        "description": "WorkloadEntry enables specifying the properties of a single non-Kubernetes workload such a VM or a bare metal services that can be referred to by service entries.",
         "type": "object",
         "properties": {
           "labels": {
@@ -113,17 +130,21 @@
               "format": "string"
             }
           },
-          "address": {
-            "description": "Address associated with the network endpoint without the port. Domain names can be used if and only if the resolution is set to DNS, and must be fully-qualified without wildcards. Use the form unix:///absolute/path/to/socket for Unix domain socket endpoints.",
-            "type": "string",
-            "format": "string"
-          },
           "ports": {
             "description": "Set of ports associated with the endpoint. The ports must be associated with a port name that was declared as part of the service. Do not use for `unix://` addresses.",
             "type": "object",
             "additionalProperties": {
               "type": "integer"
             }
+          },
+          "weight": {
+            "description": "The load balancing weight associated with the endpoint. Endpoints with higher weights will receive proportionally higher traffic.",
+            "type": "integer"
+          },
+          "address": {
+            "description": "Address associated with the network endpoint without the port. Domain names can be used if and only if the resolution is set to DNS, and must be fully-qualified without wildcards. Use the form unix:///absolute/path/to/socket for Unix domain socket endpoints.",
+            "type": "string",
+            "format": "string"
           },
           "network": {
             "description": "Network enables Istio to group endpoints resident in the same L3 domain/network. All endpoints in the same network are assumed to be directly reachable from one another. When endpoints in different networks cannot reach each other directly, an Istio Gateway can be used to establish connectivity (usually using the `AUTO_PASSTHROUGH` mode in a Gateway Server). This is an advanced configuration used typically for spanning an Istio mesh over multiple clusters.",
@@ -135,9 +156,10 @@
             "type": "string",
             "format": "string"
           },
-          "weight": {
-            "description": "The load balancing weight associated with the endpoint. Endpoints with higher weights will receive proportionally higher traffic.",
-            "type": "integer"
+          "serviceAccount": {
+            "description": "The service account associated with the workload if a sidecar is present in the workload. The service account must be present in the same namespace as the configuration ( WorkloadEntry or a ServiceEntry)",
+            "type": "string",
+            "format": "string"
           }
         }
       }

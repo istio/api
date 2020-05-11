@@ -76,7 +76,8 @@
 //         name: "envoy.http_connection_manager"
 //         typed_config:
 //           "@type": "type.googleapis.com/envoy.config.filter.network.http_connection_manager.v2.HttpConnectionManager"
-//           idle_timeout: 30s
+//           common_http_protocol_options:
+//             idle_timeout: 30s
 //```
 //
 // The following example enables Envoy's Lua filter for all inbound
@@ -113,7 +114,7 @@
 //       value: # lua filter specification
 //        name: envoy.lua
 //        typed_config:
-//           "@type": "type.googleapis.com/envoy.config.filter.http.lua.v2.Lua"
+//          "@type": "type.googleapis.com/envoy.config.filter.http.lua.v2.Lua"
 //          inlineCode: |
 //            function envoy_on_request(request_handle)
 //              -- Make an HTTP call to an upstream host with the following headers, body, and timeout.
@@ -174,7 +175,8 @@
 //     patch:
 //       operation: MERGE
 //       value:
-//         idle_timeout: 30s
+//         common_http_protocol_options:
+//           idle_timeout: 30s
 //         xff_num_trusted_hops: 5
 //```
 //
