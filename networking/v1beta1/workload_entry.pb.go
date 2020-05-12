@@ -3,7 +3,7 @@
 
 // `WorkloadEntry` enables operators to describe the properties of a
 // single non-Kubernetes workload such as a VM or a bare metal server
-// as it is are onboarded into the mesh. A `WorkloadEntry` must be
+// as it is onboarded into the mesh. A `WorkloadEntry` must be
 // accompanied by an Istio `ServiceEntry` that selects the workload
 // through the appropriate labels and provides the service definition
 // for a `MESH_INTERNAL` service (hostnames, port properties, etc.). A
