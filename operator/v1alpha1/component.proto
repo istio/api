@@ -29,6 +29,7 @@ message IstioComponentSetSpec {
     ComponentSpec policy = 33;
     ComponentSpec telemetry = 34;
     ComponentSpec cni = 38;
+    ComponentSpec istiod_remote = 39;
 
     repeated GatewaySpec ingress_gateways = 40;
     repeated GatewaySpec egress_gateways = 41;
