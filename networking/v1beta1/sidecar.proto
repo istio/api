@@ -456,6 +456,7 @@ message Sidecar {
   // the global default Sidecar.
   OutboundTrafficPolicy outbound_traffic_policy = 4;
 
+  // $hide_from_docs
   // `Localhost` describes the sidecar settings related to the
   // communication between the sidecar and the workload it is attached to
   // in a Kubernetes Pod or a VM. These settings apply to all ingress
@@ -490,6 +491,7 @@ message IstioIngressListener {
   // connections. Format should be `127.0.0.1:PORT` or `unix:///path/to/socket`
   string default_endpoint = 4 [(google.api.field_behavior) = REQUIRED];
 
+  // $hide_from_docs
   // TLS settings to be used by the sidecar (client) when forwarding
   // traffic from the sidecar to the workload (server) on the
   // localhost. Overrides the `localhost` level `clientTls` settings.
@@ -564,6 +566,7 @@ message IstioEgressListener {
   // in a future Istio release.
   repeated string hosts = 4 [(google.api.field_behavior) = REQUIRED];
 
+  // $hide_from_docs
   // TLS settings to be used by the sidecar (server) when receiving
   // traffic from the workload (client) on the
   // localhost. Overrides the `localhost` level `serverTls` settings.
@@ -651,6 +654,7 @@ enum CaptureMode {
   NONE = 2;
 }
 
+// $hide_from_docs
 // `Localhost` describes the sidecar settings related to the
 // communication between the sidecar and the workload it is attached
 // to in a Kubernetes Pod or a VM. These settings apply by default to all
