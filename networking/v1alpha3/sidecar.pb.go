@@ -514,6 +514,7 @@ type Sidecar struct {
 	// inherits the system detected defaults from the namespace-wide or
 	// the global default Sidecar.
 	OutboundTrafficPolicy *OutboundTrafficPolicy `protobuf:"bytes,4,opt,name=outbound_traffic_policy,json=outboundTrafficPolicy,proto3" json:"outbound_traffic_policy,omitempty"`
+	// $hide_from_docs
 	// `Localhost` describes the sidecar settings related to the
 	// communication between the sidecar and the workload it is attached to
 	// in a Kubernetes Pod or a VM. These settings apply to all ingress
@@ -615,6 +616,7 @@ type IstioIngressListener struct {
 	// or Unix domain socket where the application workload instance is listening for
 	// connections. Format should be `127.0.0.1:PORT` or `unix:///path/to/socket`
 	DefaultEndpoint string `protobuf:"bytes,4,opt,name=default_endpoint,json=defaultEndpoint,proto3" json:"default_endpoint,omitempty"`
+	// $hide_from_docs
 	// TLS settings to be used by the sidecar (client) when forwarding
 	// traffic from the sidecar to the workload (server) on the
 	// localhost. Overrides the `localhost` level `clientTls` settings.
@@ -756,6 +758,7 @@ type IstioEgressListener struct {
 	// `istio-system` namespace. This requirement is temporary and will be removed
 	// in a future Istio release.
 	Hosts []string `protobuf:"bytes,4,rep,name=hosts,proto3" json:"hosts,omitempty"`
+	// $hide_from_docs
 	// TLS settings to be used by the sidecar (server) when receiving
 	// traffic from the workload (client) on the
 	// localhost. Overrides the `localhost` level `serverTls` settings.
@@ -977,6 +980,7 @@ func (m *OutboundTrafficPolicy) GetEgressProxy() *Destination {
 	return nil
 }
 
+// $hide_from_docs
 // `Localhost` describes the sidecar settings related to the
 // communication between the sidecar and the workload it is attached
 // to in a Kubernetes Pod or a VM. These settings apply by default to all
