@@ -43189,6 +43189,11 @@
                 "type": "ComponentSpec"
               },
               {
+                "id": 39,
+                "name": "istiod_remote",
+                "type": "ComponentSpec"
+              },
+              {
                 "id": 40,
                 "name": "ingress_gateways",
                 "type": "GatewaySpec",
