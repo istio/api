@@ -112,10 +112,10 @@
 //     patch:
 //       operation: INSERT_BEFORE
 //       value: # lua filter specification
-//        name: envoy.lua
-//        typed_config:
-//          "@type": "type.googleapis.com/envoy.config.filter.http.lua.v2.Lua"
-//          inlineCode: |
+//         name: envoy.lua
+//         typed_config:
+//           "@type": "type.googleapis.com/envoy.config.filter.http.lua.v2.Lua"
+//           inlineCode: |
 //            function envoy_on_request(request_handle)
 //              -- Make an HTTP call to an upstream host with the following headers, body, and timeout.
 //              local headers, body = request_handle:httpCall(
