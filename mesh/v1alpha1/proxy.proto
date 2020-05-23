@@ -337,6 +337,11 @@ message ProxyConfig {
     // filtering and manipulation. This mode also configures the sidecar to run with the
     // CAP_NET_ADMIN capability, which is required to use TPROXY.
     TPROXY = 1;
+
+    // NONE mode disables iptables capture. Envoy will use explicit configurations from Sidecar.
+    // Outbound traffic can use HTTP_PROXY for HTTP, or explicit localhost ports that forward
+    // to the outbound destinations.
+    NONE = 2;
   }
 
   // The mode used to redirect inbound traffic to Envoy.
