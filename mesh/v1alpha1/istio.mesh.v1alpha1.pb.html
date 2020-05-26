@@ -760,6 +760,20 @@ No
 No
 </td>
 </tr>
+<tr id="MeshConfig-ingress_selector">
+<td><code>ingressSelector</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>Defines which gateway to use as the Ingress controller. This field corresponds to
+the Gateway.selector field, meaning these labels will be matched against pod labels.
+For example, <code>istio: ingressgateway</code> will select the default IngressGateway - this is also the
+default behavior if not specified.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="MeshConfig-enable_tracing">
 <td><code>enableTracing</code></td>
 <td><code>bool</code></td>
