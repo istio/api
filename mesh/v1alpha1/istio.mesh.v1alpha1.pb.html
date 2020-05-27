@@ -762,12 +762,12 @@ No
 </tr>
 <tr id="MeshConfig-ingress_selector">
 <td><code>ingressSelector</code></td>
-<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td><code>string</code></td>
 <td>
-<p>Defines which gateway to use as the Ingress controller. This field corresponds to
-the Gateway.selector field, meaning these labels will be matched against pod labels.
-For example, <code>istio: ingressgateway</code> will select the default IngressGateway - this is also the
-default behavior if not specified.</p>
+<p>Defines which gateway deployment to use as the Ingress controller. This field corresponds to
+the Gateway.selector field, and will be set as <code>istio: INGRESS_SELECTOR</code>.
+By default, <code>ingressgateway</code> is used, which will select the default IngressGateway as it has the
+<code>istio: ingressgateway</code> labels.</p>
 
 </td>
 <td>

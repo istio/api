@@ -80,12 +80,9 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.IngressControllerMode"
           },
           "ingressSelector": {
-            "description": "Defines which gateway to use as the Ingress controller. This field corresponds to the Gateway.selector field, meaning these labels will be matched against pod labels. For example, `istio: ingressgateway` will select the default IngressGateway - this is also the default behavior if not specified.",
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "format": "string"
-            }
+            "description": "Defines which gateway deployment to use as the Ingress controller. This field corresponds to the Gateway.selector field, and will be set as `istio: INGRESS_SELECTOR`. By default, `ingressgateway` is used, which will select the default IngressGateway as it has the `istio: ingressgateway` labels.",
+            "type": "string",
+            "format": "string"
           },
           "authPolicy": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.AuthPolicy",
