@@ -130,11 +130,11 @@ message MeshConfig {
   // Defines whether to use Istio ingress controller for annotated or all ingress resources.
   IngressControllerMode ingress_controller_mode = 9;
 
-  // Defines which gateway to use as the Ingress controller. This field corresponds to
-  // the Gateway.selector field, meaning these labels will be matched against pod labels.
-  // For example, `istio: ingressgateway` will select the default IngressGateway - this is also the
-  // default behavior if not specified.
-  map<string, string> ingress_selector = 52;
+  // Defines which gateway deployment to use as the Ingress controller. This field corresponds to
+  // the Gateway.selector field, and will be set as `istio: INGRESS_SELECTOR`.
+  // By default, `ingressgateway` is used, which will select the default IngressGateway as it has the
+  // `istio: ingressgateway` labels.
+  string ingress_selector = 52;
 
   // $hide_from_docs
   enum AuthPolicy {
