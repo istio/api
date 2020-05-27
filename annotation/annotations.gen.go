@@ -496,6 +496,16 @@ var (
 		  Resources: []ResourceTypes{ Pod, },
         }
 	
+		SidecarTrafficIncludeOutboundPorts = Instance {
+          Name: "traffic.sidecar.istio.io/includeOutboundPorts",
+          Description: "A comma separated list of outbound ports for which "+
+                        "traffic is to be redirected to Envoy, regardless of the "+
+                        "destination IP.",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
+        }
+	
 		SidecarTrafficKubevirtInterfaces = Instance {
           Name: "traffic.sidecar.istio.io/kubevirtInterfaces",
           Description: "A comma separated list of virtual interfaces whose "+
@@ -556,6 +566,7 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarTrafficExcludeOutboundPorts,
 		&SidecarTrafficIncludeInboundPorts,
 		&SidecarTrafficIncludeOutboundIPRanges,
+		&SidecarTrafficIncludeOutboundPorts,
 		&SidecarTrafficKubevirtInterfaces,
 	}
 }
