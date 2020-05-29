@@ -742,7 +742,7 @@ No
 <td><code>ingressService</code></td>
 <td><code>string</code></td>
 <td>
-<p>Name of theKubernetes service used for the istio ingress controller.</p>
+<p>Name of the Kubernetes service used for the istio ingress controller.</p>
 
 </td>
 <td>
@@ -767,7 +767,8 @@ No
 <p>Defines which gateway deployment to use as the Ingress controller. This field corresponds to
 the Gateway.selector field, and will be set as <code>istio: INGRESS_SELECTOR</code>.
 By default, <code>ingressgateway</code> is used, which will select the default IngressGateway as it has the
-<code>istio: ingressgateway</code> labels.</p>
+<code>istio: ingressgateway</code> labels.
+It is recommended that this is the same value as ingress_service.</p>
 
 </td>
 <td>

@@ -264,7 +264,7 @@ type MeshConfig struct {
 	// controller. This corresponds to the value of
 	// "kubernetes.io/ingress.class" annotation.
 	IngressClass string `protobuf:"bytes,7,opt,name=ingress_class,json=ingressClass,proto3" json:"ingressClass,omitempty"`
-	// Name of theKubernetes service used for the istio ingress controller.
+	// Name of the Kubernetes service used for the istio ingress controller.
 	IngressService string `protobuf:"bytes,8,opt,name=ingress_service,json=ingressService,proto3" json:"ingressService,omitempty"`
 	// Defines whether to use Istio ingress controller for annotated or all ingress resources.
 	IngressControllerMode MeshConfig_IngressControllerMode `protobuf:"varint,9,opt,name=ingress_controller_mode,json=ingressControllerMode,proto3,enum=istio.mesh.v1alpha1.MeshConfig_IngressControllerMode" json:"ingressControllerMode,omitempty"`
@@ -272,6 +272,7 @@ type MeshConfig struct {
 	// the Gateway.selector field, and will be set as `istio: INGRESS_SELECTOR`.
 	// By default, `ingressgateway` is used, which will select the default IngressGateway as it has the
 	// `istio: ingressgateway` labels.
+	// It is recommended that this is the same value as ingress_service.
 	IngressSelector string `protobuf:"bytes,52,opt,name=ingress_selector,json=ingressSelector,proto3" json:"ingressSelector,omitempty"`
 	// $hide_from_docs
 	AuthPolicy MeshConfig_AuthPolicy `protobuf:"varint,10,opt,name=auth_policy,json=authPolicy,proto3,enum=istio.mesh.v1alpha1.MeshConfig_AuthPolicy" json:"authPolicy,omitempty"` // Deprecated: Do not use.
