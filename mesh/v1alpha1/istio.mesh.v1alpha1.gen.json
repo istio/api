@@ -72,12 +72,17 @@
             "format": "string"
           },
           "ingressService": {
-            "description": "Name of theKubernetes service used for the istio ingress controller.",
+            "description": "Name of the Kubernetes service used for the istio ingress controller.",
             "type": "string",
             "format": "string"
           },
           "ingressControllerMode": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.IngressControllerMode"
+          },
+          "ingressSelector": {
+            "description": "Defines which gateway deployment to use as the Ingress controller. This field corresponds to the Gateway.selector field, and will be set as `istio: INGRESS_SELECTOR`. By default, `ingressgateway` is used, which will select the default IngressGateway as it has the `istio: ingressgateway` labels. It is recommended that this is the same value as ingress_service.",
+            "type": "string",
+            "format": "string"
           },
           "authPolicy": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.AuthPolicy",

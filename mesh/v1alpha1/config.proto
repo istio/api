@@ -102,7 +102,7 @@ message MeshConfig {
   // "kubernetes.io/ingress.class" annotation.
   string ingress_class = 7;
 
-  // Name of theKubernetes service used for the istio ingress controller.
+  // Name of the Kubernetes service used for the istio ingress controller.
   string ingress_service = 8;
 
   enum IngressControllerMode {
@@ -129,6 +129,13 @@ message MeshConfig {
 
   // Defines whether to use Istio ingress controller for annotated or all ingress resources.
   IngressControllerMode ingress_controller_mode = 9;
+
+  // Defines which gateway deployment to use as the Ingress controller. This field corresponds to
+  // the Gateway.selector field, and will be set as `istio: INGRESS_SELECTOR`.
+  // By default, `ingressgateway` is used, which will select the default IngressGateway as it has the
+  // `istio: ingressgateway` labels.
+  // It is recommended that this is the same value as ingress_service.
+  string ingress_selector = 52;
 
   // $hide_from_docs
   enum AuthPolicy {
@@ -472,7 +479,7 @@ message MeshConfig {
   google.protobuf.BoolValue enable_prometheus_merge = 51;
 
   // $hide_from_docs
-  // Next available field number: 52
+  // Next available field number: 53
 }
 
 // Resource describes the source of configuration
