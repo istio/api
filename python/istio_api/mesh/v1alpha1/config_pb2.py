@@ -25,7 +25,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.mesh.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\032istio.io/api/mesh/v1alpha1'),
-  serialized_pb=_b('\n\x1amesh/v1alpha1/config.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x19mesh/v1alpha1/proxy.proto\x1a*networking/v1alpha3/destination_rule.proto\"\xde\x16\n\nMeshConfig\x12\x1a\n\x12mixer_check_server\x18\x01 \x01(\t\x12\x1b\n\x13mixer_report_server\x18\x02 \x01(\t\x12\x1d\n\x15\x64isable_policy_checks\x18\x03 \x01(\x08\x12\"\n\x1a\x64isable_mixer_http_reports\x18\x30 \x01(\x08\x12\x1e\n\x16policy_check_fail_open\x18\x19 \x01(\x08\x12-\n%sidecar_to_telemetry_session_affinity\x18\x1e \x01(\x08\x12\x19\n\x11proxy_listen_port\x18\x04 \x01(\x05\x12\x17\n\x0fproxy_http_port\x18\x05 \x01(\x05\x12\x32\n\x0f\x63onnect_timeout\x18\x06 \x01(\x0b\x32\x19.google.protobuf.Duration\x12=\n\x1aprotocol_detection_timeout\x18* \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x61\n\rtcp_keepalive\x18\x1c \x01(\x0b\x32J.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive\x12\x15\n\ringress_class\x18\x07 \x01(\t\x12\x17\n\x0fingress_service\x18\x08 \x01(\t\x12V\n\x17ingress_controller_mode\x18\t \x01(\x0e\x32\x35.istio.mesh.v1alpha1.MeshConfig.IngressControllerMode\x12\x43\n\x0b\x61uth_policy\x18\n \x01(\x0e\x32*.istio.mesh.v1alpha1.MeshConfig.AuthPolicyB\x02\x18\x01\x12\x38\n\x11rds_refresh_delay\x18\x0b \x01(\x0b\x32\x19.google.protobuf.DurationB\x02\x18\x01\x12\x16\n\x0e\x65nable_tracing\x18\x0c \x01(\x08\x12\x17\n\x0f\x61\x63\x63\x65ss_log_file\x18\r \x01(\t\x12\x19\n\x11\x61\x63\x63\x65ss_log_format\x18\x18 \x01(\t\x12N\n\x13\x61\x63\x63\x65ss_log_encoding\x18\x1b \x01(\x0e\x32\x31.istio.mesh.v1alpha1.MeshConfig.AccessLogEncoding\x12\'\n\x1f\x65nable_envoy_access_log_service\x18( \x01(\x08\x12\x38\n\x0e\x64\x65\x66\x61ult_config\x18\x0e \x01(\x0b\x32 .istio.mesh.v1alpha1.ProxyConfig\x12\x19\n\rmixer_address\x18\x10 \x01(\tB\x02\x18\x01\x12V\n\x17outbound_traffic_policy\x18\x11 \x01(\x0b\x32\x35.istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy\x12\'\n\x1f\x65nable_client_side_policy_check\x18\x13 \x01(\x08\x12\x18\n\x0csds_uds_path\x18\x14 \x01(\tB\x02\x18\x01\x12\x38\n\x11sds_refresh_delay\x18\x15 \x01(\x0b\x32\x19.google.protobuf.DurationB\x02\x18\x01\x12\x39\n\x0e\x63onfig_sources\x18\x16 \x03(\x0b\x32!.istio.mesh.v1alpha1.ConfigSource\x12\x34\n\x10\x65nable_auto_mtls\x18+ \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x1e\n\x16\x65nable_sds_token_mount\x18\x17 \x01(\x08\x12\x1a\n\x12sds_use_k8s_sa_jwt\x18\x1d \x01(\x08\x12\x14\n\x0ctrust_domain\x18\x1a \x01(\t\x12\x1c\n\x14trust_domain_aliases\x18. \x03(\t\x12!\n\x19\x64\x65\x66\x61ult_service_export_to\x18\x1f \x03(\t\x12)\n!default_virtual_service_export_to\x18  \x03(\t\x12*\n\"default_destination_rule_export_to\x18! \x03(\t\x12\x16\n\x0eroot_namespace\x18\" \x01(\t\x12S\n\x13locality_lb_setting\x18# \x01(\x0b\x32\x36.istio.networking.v1alpha3.LocalityLoadBalancerSetting\x12\x33\n\x10\x64ns_refresh_rate\x18$ \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x1c\n\x14\x64isable_report_batch\x18% \x01(\x08\x12 \n\x18report_batch_max_entries\x18& \x01(\r\x12\x38\n\x15report_batch_max_time\x18\' \x01(\x0b\x32\x19.google.protobuf.Duration\x12J\n\x11h2_upgrade_policy\x18) \x01(\x0e\x32/.istio.mesh.v1alpha1.MeshConfig.H2UpgradePolicy\x12!\n\x19inbound_cluster_stat_name\x18, \x01(\t\x12\"\n\x1aoutbound_cluster_stat_name\x18- \x01(\t\x12\x36\n\x0c\x63\x65rtificates\x18/ \x03(\x0b\x32 .istio.mesh.v1alpha1.Certificate\x12\x43\n\rthrift_config\x18\x31 \x01(\x0b\x32,.istio.mesh.v1alpha1.MeshConfig.ThriftConfig\x12I\n\x10service_settings\x18\x32 \x03(\x0b\x32/.istio.mesh.v1alpha1.MeshConfig.ServiceSettings\x12;\n\x17\x65nable_prometheus_merge\x18\x33 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x1a\xa7\x01\n\x15OutboundTrafficPolicy\x12H\n\x04mode\x18\x01 \x01(\x0e\x32:.istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode\"D\n\x04Mode\x12\x11\n\rREGISTRY_ONLY\x10\x00\x12\r\n\tALLOW_ANY\x10\x01\"\x04\x08\x02\x10\x02*\x14VIRTUAL_SERVICE_ONLY\x1a]\n\x0cThriftConfig\x12\x16\n\x0erate_limit_url\x18\x01 \x01(\t\x12\x35\n\x12rate_limit_timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\x1a\x8f\x01\n\x0fServiceSettings\x12J\n\x08settings\x18\x01 \x01(\x0b\x32\x38.istio.mesh.v1alpha1.MeshConfig.ServiceSettings.Settings\x12\r\n\x05hosts\x18\x02 \x03(\t\x1a!\n\x08Settings\x12\x15\n\rcluster_local\x18\x01 \x01(\x08\"J\n\x15IngressControllerMode\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x07\n\x03OFF\x10\x01\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x02\x12\n\n\x06STRICT\x10\x03\"&\n\nAuthPolicy\x12\x08\n\x04NONE\x10\x00\x12\x0e\n\nMUTUAL_TLS\x10\x01\"\'\n\x11\x41\x63\x63\x65ssLogEncoding\x12\x08\n\x04TEXT\x10\x00\x12\x08\n\x04JSON\x10\x01\"2\n\x0fH2UpgradePolicy\x12\x12\n\x0e\x44O_NOT_UPGRADE\x10\x00\x12\x0b\n\x07UPGRADE\x10\x01J\x04\x08\x0f\x10\x10J\x04\x08\x12\x10\x13\"\xa0\x01\n\x0c\x43onfigSource\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x42\n\x0ctls_settings\x18\x02 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettings\x12;\n\x14subscribed_resources\x18\x03 \x03(\x0e\x32\x1d.istio.mesh.v1alpha1.Resource\"5\n\x0b\x43\x65rtificate\x12\x13\n\x0bsecret_name\x18\x01 \x01(\t\x12\x11\n\tdns_names\x18\x02 \x03(\t* \n\x08Resource\x12\x14\n\x10SERVICE_REGISTRY\x10\x00\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x1amesh/v1alpha1/config.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x19mesh/v1alpha1/proxy.proto\x1a*networking/v1alpha3/destination_rule.proto\"\xf8\x16\n\nMeshConfig\x12\x1a\n\x12mixer_check_server\x18\x01 \x01(\t\x12\x1b\n\x13mixer_report_server\x18\x02 \x01(\t\x12\x1d\n\x15\x64isable_policy_checks\x18\x03 \x01(\x08\x12\"\n\x1a\x64isable_mixer_http_reports\x18\x30 \x01(\x08\x12\x1e\n\x16policy_check_fail_open\x18\x19 \x01(\x08\x12-\n%sidecar_to_telemetry_session_affinity\x18\x1e \x01(\x08\x12\x19\n\x11proxy_listen_port\x18\x04 \x01(\x05\x12\x17\n\x0fproxy_http_port\x18\x05 \x01(\x05\x12\x32\n\x0f\x63onnect_timeout\x18\x06 \x01(\x0b\x32\x19.google.protobuf.Duration\x12=\n\x1aprotocol_detection_timeout\x18* \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x61\n\rtcp_keepalive\x18\x1c \x01(\x0b\x32J.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive\x12\x15\n\ringress_class\x18\x07 \x01(\t\x12\x17\n\x0fingress_service\x18\x08 \x01(\t\x12V\n\x17ingress_controller_mode\x18\t \x01(\x0e\x32\x35.istio.mesh.v1alpha1.MeshConfig.IngressControllerMode\x12\x18\n\x10ingress_selector\x18\x34 \x01(\t\x12\x43\n\x0b\x61uth_policy\x18\n \x01(\x0e\x32*.istio.mesh.v1alpha1.MeshConfig.AuthPolicyB\x02\x18\x01\x12\x38\n\x11rds_refresh_delay\x18\x0b \x01(\x0b\x32\x19.google.protobuf.DurationB\x02\x18\x01\x12\x16\n\x0e\x65nable_tracing\x18\x0c \x01(\x08\x12\x17\n\x0f\x61\x63\x63\x65ss_log_file\x18\r \x01(\t\x12\x19\n\x11\x61\x63\x63\x65ss_log_format\x18\x18 \x01(\t\x12N\n\x13\x61\x63\x63\x65ss_log_encoding\x18\x1b \x01(\x0e\x32\x31.istio.mesh.v1alpha1.MeshConfig.AccessLogEncoding\x12\'\n\x1f\x65nable_envoy_access_log_service\x18( \x01(\x08\x12\x38\n\x0e\x64\x65\x66\x61ult_config\x18\x0e \x01(\x0b\x32 .istio.mesh.v1alpha1.ProxyConfig\x12\x19\n\rmixer_address\x18\x10 \x01(\tB\x02\x18\x01\x12V\n\x17outbound_traffic_policy\x18\x11 \x01(\x0b\x32\x35.istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy\x12\'\n\x1f\x65nable_client_side_policy_check\x18\x13 \x01(\x08\x12\x18\n\x0csds_uds_path\x18\x14 \x01(\tB\x02\x18\x01\x12\x38\n\x11sds_refresh_delay\x18\x15 \x01(\x0b\x32\x19.google.protobuf.DurationB\x02\x18\x01\x12\x39\n\x0e\x63onfig_sources\x18\x16 \x03(\x0b\x32!.istio.mesh.v1alpha1.ConfigSource\x12\x34\n\x10\x65nable_auto_mtls\x18+ \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x1e\n\x16\x65nable_sds_token_mount\x18\x17 \x01(\x08\x12\x1a\n\x12sds_use_k8s_sa_jwt\x18\x1d \x01(\x08\x12\x14\n\x0ctrust_domain\x18\x1a \x01(\t\x12\x1c\n\x14trust_domain_aliases\x18. \x03(\t\x12!\n\x19\x64\x65\x66\x61ult_service_export_to\x18\x1f \x03(\t\x12)\n!default_virtual_service_export_to\x18  \x03(\t\x12*\n\"default_destination_rule_export_to\x18! \x03(\t\x12\x16\n\x0eroot_namespace\x18\" \x01(\t\x12S\n\x13locality_lb_setting\x18# \x01(\x0b\x32\x36.istio.networking.v1alpha3.LocalityLoadBalancerSetting\x12\x33\n\x10\x64ns_refresh_rate\x18$ \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x1c\n\x14\x64isable_report_batch\x18% \x01(\x08\x12 \n\x18report_batch_max_entries\x18& \x01(\r\x12\x38\n\x15report_batch_max_time\x18\' \x01(\x0b\x32\x19.google.protobuf.Duration\x12J\n\x11h2_upgrade_policy\x18) \x01(\x0e\x32/.istio.mesh.v1alpha1.MeshConfig.H2UpgradePolicy\x12!\n\x19inbound_cluster_stat_name\x18, \x01(\t\x12\"\n\x1aoutbound_cluster_stat_name\x18- \x01(\t\x12\x36\n\x0c\x63\x65rtificates\x18/ \x03(\x0b\x32 .istio.mesh.v1alpha1.Certificate\x12\x43\n\rthrift_config\x18\x31 \x01(\x0b\x32,.istio.mesh.v1alpha1.MeshConfig.ThriftConfig\x12I\n\x10service_settings\x18\x32 \x03(\x0b\x32/.istio.mesh.v1alpha1.MeshConfig.ServiceSettings\x12;\n\x17\x65nable_prometheus_merge\x18\x33 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x1a\xa7\x01\n\x15OutboundTrafficPolicy\x12H\n\x04mode\x18\x01 \x01(\x0e\x32:.istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode\"D\n\x04Mode\x12\x11\n\rREGISTRY_ONLY\x10\x00\x12\r\n\tALLOW_ANY\x10\x01\"\x04\x08\x02\x10\x02*\x14VIRTUAL_SERVICE_ONLY\x1a]\n\x0cThriftConfig\x12\x16\n\x0erate_limit_url\x18\x01 \x01(\t\x12\x35\n\x12rate_limit_timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\x1a\x8f\x01\n\x0fServiceSettings\x12J\n\x08settings\x18\x01 \x01(\x0b\x32\x38.istio.mesh.v1alpha1.MeshConfig.ServiceSettings.Settings\x12\r\n\x05hosts\x18\x02 \x03(\t\x1a!\n\x08Settings\x12\x15\n\rcluster_local\x18\x01 \x01(\x08\"J\n\x15IngressControllerMode\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x07\n\x03OFF\x10\x01\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x02\x12\n\n\x06STRICT\x10\x03\"&\n\nAuthPolicy\x12\x08\n\x04NONE\x10\x00\x12\x0e\n\nMUTUAL_TLS\x10\x01\"\'\n\x11\x41\x63\x63\x65ssLogEncoding\x12\x08\n\x04TEXT\x10\x00\x12\x08\n\x04JSON\x10\x01\"2\n\x0fH2UpgradePolicy\x12\x12\n\x0e\x44O_NOT_UPGRADE\x10\x00\x12\x0b\n\x07UPGRADE\x10\x01J\x04\x08\x0f\x10\x10J\x04\x08\x12\x10\x13\"\xa0\x01\n\x0c\x43onfigSource\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x42\n\x0ctls_settings\x18\x02 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettings\x12;\n\x14subscribed_resources\x18\x03 \x03(\x0e\x32\x1d.istio.mesh.v1alpha1.Resource\"5\n\x0b\x43\x65rtificate\x12\x13\n\x0bsecret_name\x18\x01 \x01(\t\x12\x11\n\tdns_names\x18\x02 \x03(\t* \n\x08Resource\x12\x14\n\x10SERVICE_REGISTRY\x10\x00\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,mesh_dot_v1alpha1_dot_proxy__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_destination__rule__pb2.DESCRIPTOR,])
 
@@ -42,8 +42,8 @@ _RESOURCE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3317,
-  serialized_end=3349,
+  serialized_start=3343,
+  serialized_end=3375,
 )
 _sym_db.RegisterEnumDescriptor(_RESOURCE)
 
@@ -68,8 +68,8 @@ _MESHCONFIG_OUTBOUNDTRAFFICPOLICY_MODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2567,
-  serialized_end=2635,
+  serialized_start=2593,
+  serialized_end=2661,
 )
 _sym_db.RegisterEnumDescriptor(_MESHCONFIG_OUTBOUNDTRAFFICPOLICY_MODE)
 
@@ -98,8 +98,8 @@ _MESHCONFIG_INGRESSCONTROLLERMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2878,
-  serialized_end=2952,
+  serialized_start=2904,
+  serialized_end=2978,
 )
 _sym_db.RegisterEnumDescriptor(_MESHCONFIG_INGRESSCONTROLLERMODE)
 
@@ -120,8 +120,8 @@ _MESHCONFIG_AUTHPOLICY = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2954,
-  serialized_end=2992,
+  serialized_start=2980,
+  serialized_end=3018,
 )
 _sym_db.RegisterEnumDescriptor(_MESHCONFIG_AUTHPOLICY)
 
@@ -142,8 +142,8 @@ _MESHCONFIG_ACCESSLOGENCODING = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2994,
-  serialized_end=3033,
+  serialized_start=3020,
+  serialized_end=3059,
 )
 _sym_db.RegisterEnumDescriptor(_MESHCONFIG_ACCESSLOGENCODING)
 
@@ -164,8 +164,8 @@ _MESHCONFIG_H2UPGRADEPOLICY = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3035,
-  serialized_end=3085,
+  serialized_start=3061,
+  serialized_end=3111,
 )
 _sym_db.RegisterEnumDescriptor(_MESHCONFIG_H2UPGRADEPOLICY)
 
@@ -197,8 +197,8 @@ _MESHCONFIG_OUTBOUNDTRAFFICPOLICY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2468,
-  serialized_end=2635,
+  serialized_start=2494,
+  serialized_end=2661,
 )
 
 _MESHCONFIG_THRIFTCONFIG = _descriptor.Descriptor(
@@ -234,8 +234,8 @@ _MESHCONFIG_THRIFTCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2637,
-  serialized_end=2730,
+  serialized_start=2663,
+  serialized_end=2756,
 )
 
 _MESHCONFIG_SERVICESETTINGS_SETTINGS = _descriptor.Descriptor(
@@ -264,8 +264,8 @@ _MESHCONFIG_SERVICESETTINGS_SETTINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2843,
-  serialized_end=2876,
+  serialized_start=2869,
+  serialized_end=2902,
 )
 
 _MESHCONFIG_SERVICESETTINGS = _descriptor.Descriptor(
@@ -301,8 +301,8 @@ _MESHCONFIG_SERVICESETTINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2733,
-  serialized_end=2876,
+  serialized_start=2759,
+  serialized_end=2902,
 )
 
 _MESHCONFIG = _descriptor.Descriptor(
@@ -411,245 +411,252 @@ _MESHCONFIG = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='auth_policy', full_name='istio.mesh.v1alpha1.MeshConfig.auth_policy', index=14,
+      name='ingress_selector', full_name='istio.mesh.v1alpha1.MeshConfig.ingress_selector', index=14,
+      number=52, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='auth_policy', full_name='istio.mesh.v1alpha1.MeshConfig.auth_policy', index=15,
       number=10, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=_b('\030\001'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='rds_refresh_delay', full_name='istio.mesh.v1alpha1.MeshConfig.rds_refresh_delay', index=15,
+      name='rds_refresh_delay', full_name='istio.mesh.v1alpha1.MeshConfig.rds_refresh_delay', index=16,
       number=11, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=_b('\030\001'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='enable_tracing', full_name='istio.mesh.v1alpha1.MeshConfig.enable_tracing', index=16,
+      name='enable_tracing', full_name='istio.mesh.v1alpha1.MeshConfig.enable_tracing', index=17,
       number=12, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='access_log_file', full_name='istio.mesh.v1alpha1.MeshConfig.access_log_file', index=17,
+      name='access_log_file', full_name='istio.mesh.v1alpha1.MeshConfig.access_log_file', index=18,
       number=13, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='access_log_format', full_name='istio.mesh.v1alpha1.MeshConfig.access_log_format', index=18,
+      name='access_log_format', full_name='istio.mesh.v1alpha1.MeshConfig.access_log_format', index=19,
       number=24, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='access_log_encoding', full_name='istio.mesh.v1alpha1.MeshConfig.access_log_encoding', index=19,
+      name='access_log_encoding', full_name='istio.mesh.v1alpha1.MeshConfig.access_log_encoding', index=20,
       number=27, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='enable_envoy_access_log_service', full_name='istio.mesh.v1alpha1.MeshConfig.enable_envoy_access_log_service', index=20,
+      name='enable_envoy_access_log_service', full_name='istio.mesh.v1alpha1.MeshConfig.enable_envoy_access_log_service', index=21,
       number=40, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='default_config', full_name='istio.mesh.v1alpha1.MeshConfig.default_config', index=21,
+      name='default_config', full_name='istio.mesh.v1alpha1.MeshConfig.default_config', index=22,
       number=14, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='mixer_address', full_name='istio.mesh.v1alpha1.MeshConfig.mixer_address', index=22,
+      name='mixer_address', full_name='istio.mesh.v1alpha1.MeshConfig.mixer_address', index=23,
       number=16, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=_b('\030\001'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='outbound_traffic_policy', full_name='istio.mesh.v1alpha1.MeshConfig.outbound_traffic_policy', index=23,
+      name='outbound_traffic_policy', full_name='istio.mesh.v1alpha1.MeshConfig.outbound_traffic_policy', index=24,
       number=17, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='enable_client_side_policy_check', full_name='istio.mesh.v1alpha1.MeshConfig.enable_client_side_policy_check', index=24,
+      name='enable_client_side_policy_check', full_name='istio.mesh.v1alpha1.MeshConfig.enable_client_side_policy_check', index=25,
       number=19, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sds_uds_path', full_name='istio.mesh.v1alpha1.MeshConfig.sds_uds_path', index=25,
+      name='sds_uds_path', full_name='istio.mesh.v1alpha1.MeshConfig.sds_uds_path', index=26,
       number=20, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=_b('\030\001'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sds_refresh_delay', full_name='istio.mesh.v1alpha1.MeshConfig.sds_refresh_delay', index=26,
+      name='sds_refresh_delay', full_name='istio.mesh.v1alpha1.MeshConfig.sds_refresh_delay', index=27,
       number=21, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=_b('\030\001'), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='config_sources', full_name='istio.mesh.v1alpha1.MeshConfig.config_sources', index=27,
+      name='config_sources', full_name='istio.mesh.v1alpha1.MeshConfig.config_sources', index=28,
       number=22, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='enable_auto_mtls', full_name='istio.mesh.v1alpha1.MeshConfig.enable_auto_mtls', index=28,
+      name='enable_auto_mtls', full_name='istio.mesh.v1alpha1.MeshConfig.enable_auto_mtls', index=29,
       number=43, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='enable_sds_token_mount', full_name='istio.mesh.v1alpha1.MeshConfig.enable_sds_token_mount', index=29,
+      name='enable_sds_token_mount', full_name='istio.mesh.v1alpha1.MeshConfig.enable_sds_token_mount', index=30,
       number=23, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sds_use_k8s_sa_jwt', full_name='istio.mesh.v1alpha1.MeshConfig.sds_use_k8s_sa_jwt', index=30,
+      name='sds_use_k8s_sa_jwt', full_name='istio.mesh.v1alpha1.MeshConfig.sds_use_k8s_sa_jwt', index=31,
       number=29, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='trust_domain', full_name='istio.mesh.v1alpha1.MeshConfig.trust_domain', index=31,
+      name='trust_domain', full_name='istio.mesh.v1alpha1.MeshConfig.trust_domain', index=32,
       number=26, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='trust_domain_aliases', full_name='istio.mesh.v1alpha1.MeshConfig.trust_domain_aliases', index=32,
+      name='trust_domain_aliases', full_name='istio.mesh.v1alpha1.MeshConfig.trust_domain_aliases', index=33,
       number=46, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='default_service_export_to', full_name='istio.mesh.v1alpha1.MeshConfig.default_service_export_to', index=33,
+      name='default_service_export_to', full_name='istio.mesh.v1alpha1.MeshConfig.default_service_export_to', index=34,
       number=31, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='default_virtual_service_export_to', full_name='istio.mesh.v1alpha1.MeshConfig.default_virtual_service_export_to', index=34,
+      name='default_virtual_service_export_to', full_name='istio.mesh.v1alpha1.MeshConfig.default_virtual_service_export_to', index=35,
       number=32, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='default_destination_rule_export_to', full_name='istio.mesh.v1alpha1.MeshConfig.default_destination_rule_export_to', index=35,
+      name='default_destination_rule_export_to', full_name='istio.mesh.v1alpha1.MeshConfig.default_destination_rule_export_to', index=36,
       number=33, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='root_namespace', full_name='istio.mesh.v1alpha1.MeshConfig.root_namespace', index=36,
+      name='root_namespace', full_name='istio.mesh.v1alpha1.MeshConfig.root_namespace', index=37,
       number=34, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='locality_lb_setting', full_name='istio.mesh.v1alpha1.MeshConfig.locality_lb_setting', index=37,
+      name='locality_lb_setting', full_name='istio.mesh.v1alpha1.MeshConfig.locality_lb_setting', index=38,
       number=35, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='dns_refresh_rate', full_name='istio.mesh.v1alpha1.MeshConfig.dns_refresh_rate', index=38,
+      name='dns_refresh_rate', full_name='istio.mesh.v1alpha1.MeshConfig.dns_refresh_rate', index=39,
       number=36, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='disable_report_batch', full_name='istio.mesh.v1alpha1.MeshConfig.disable_report_batch', index=39,
+      name='disable_report_batch', full_name='istio.mesh.v1alpha1.MeshConfig.disable_report_batch', index=40,
       number=37, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='report_batch_max_entries', full_name='istio.mesh.v1alpha1.MeshConfig.report_batch_max_entries', index=40,
+      name='report_batch_max_entries', full_name='istio.mesh.v1alpha1.MeshConfig.report_batch_max_entries', index=41,
       number=38, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='report_batch_max_time', full_name='istio.mesh.v1alpha1.MeshConfig.report_batch_max_time', index=41,
+      name='report_batch_max_time', full_name='istio.mesh.v1alpha1.MeshConfig.report_batch_max_time', index=42,
       number=39, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='h2_upgrade_policy', full_name='istio.mesh.v1alpha1.MeshConfig.h2_upgrade_policy', index=42,
+      name='h2_upgrade_policy', full_name='istio.mesh.v1alpha1.MeshConfig.h2_upgrade_policy', index=43,
       number=41, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='inbound_cluster_stat_name', full_name='istio.mesh.v1alpha1.MeshConfig.inbound_cluster_stat_name', index=43,
+      name='inbound_cluster_stat_name', full_name='istio.mesh.v1alpha1.MeshConfig.inbound_cluster_stat_name', index=44,
       number=44, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='outbound_cluster_stat_name', full_name='istio.mesh.v1alpha1.MeshConfig.outbound_cluster_stat_name', index=44,
+      name='outbound_cluster_stat_name', full_name='istio.mesh.v1alpha1.MeshConfig.outbound_cluster_stat_name', index=45,
       number=45, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='certificates', full_name='istio.mesh.v1alpha1.MeshConfig.certificates', index=45,
+      name='certificates', full_name='istio.mesh.v1alpha1.MeshConfig.certificates', index=46,
       number=47, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='thrift_config', full_name='istio.mesh.v1alpha1.MeshConfig.thrift_config', index=46,
+      name='thrift_config', full_name='istio.mesh.v1alpha1.MeshConfig.thrift_config', index=47,
       number=49, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='service_settings', full_name='istio.mesh.v1alpha1.MeshConfig.service_settings', index=47,
+      name='service_settings', full_name='istio.mesh.v1alpha1.MeshConfig.service_settings', index=48,
       number=50, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='enable_prometheus_merge', full_name='istio.mesh.v1alpha1.MeshConfig.enable_prometheus_merge', index=48,
+      name='enable_prometheus_merge', full_name='istio.mesh.v1alpha1.MeshConfig.enable_prometheus_merge', index=49,
       number=51, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -672,7 +679,7 @@ _MESHCONFIG = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=187,
-  serialized_end=3097,
+  serialized_end=3123,
 )
 
 
@@ -716,8 +723,8 @@ _CONFIGSOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3100,
-  serialized_end=3260,
+  serialized_start=3126,
+  serialized_end=3286,
 )
 
 
@@ -754,8 +761,8 @@ _CERTIFICATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3262,
-  serialized_end=3315,
+  serialized_start=3288,
+  serialized_end=3341,
 )
 
 _MESHCONFIG_OUTBOUNDTRAFFICPOLICY.fields_by_name['mode'].enum_type = _MESHCONFIG_OUTBOUNDTRAFFICPOLICY_MODE
