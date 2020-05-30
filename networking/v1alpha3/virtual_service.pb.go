@@ -2615,8 +2615,8 @@ func (m *HTTPRetry) GetRetryRemoteLocalities() *types.BoolValue {
 //         host: ratings.prod.svc.cluster.local
 //         subset: v1
 //     corsPolicy:
-//       allowOrigin:
-//       - example.com
+//       allowOrigins:
+//       - exact: https://example.com
 //       allowMethods:
 //       - POST
 //       - GET
@@ -2642,8 +2642,8 @@ func (m *HTTPRetry) GetRetryRemoteLocalities() *types.BoolValue {
 //         host: ratings.prod.svc.cluster.local
 //         subset: v1
 //     corsPolicy:
-//       allowOrigin:
-//       - example.com
+//       allowOrigins:
+//       - exact: https://example.com
 //       allowMethods:
 //       - POST
 //       - GET

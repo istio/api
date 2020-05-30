@@ -1582,8 +1582,8 @@ message HTTPRetry {
 //         host: ratings.prod.svc.cluster.local
 //         subset: v1
 //     corsPolicy:
-//       allowOrigin:
-//       - example.com
+//       allowOrigins:
+//       - exact: https://example.com
 //       allowMethods:
 //       - POST
 //       - GET
@@ -1609,8 +1609,8 @@ message HTTPRetry {
 //         host: ratings.prod.svc.cluster.local
 //         subset: v1
 //     corsPolicy:
-//       allowOrigin:
-//       - example.com
+//       allowOrigins:
+//       - exact: https://example.com
 //       allowMethods:
 //       - POST
 //       - GET
