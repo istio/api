@@ -1,7 +1,7 @@
 {
   "definitions": [
     {
-      "protopath": "analysis:/:v1alpha1:/:message.proto",
+      "protopath": "analysis:/:v1beta1:/:message.proto",
       "def": {
         "enums": [
           {
@@ -149,12 +149,12 @@
           }
         ],
         "package": {
-          "name": "istio.analysis.v1alpha1"
+          "name": "istio.analysis.v1beta1"
         },
         "options": [
           {
             "name": "go_package",
-            "value": "istio.io/api/analysis/v1alpha1"
+            "value": "istio.io/api/analysis/v1beta1"
           }
         ]
       }
