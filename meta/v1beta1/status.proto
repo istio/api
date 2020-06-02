@@ -53,11 +53,11 @@ message IstioCondition {
 
   // Last time we probed the condition.
   // +optional
-  k8s.io.apimachinery.pkg.apis.meta.v1.Time lastProbeTime = 3;
+  k8s.io.apimachinery.pkg.apis.meta.v1.Time last_probe_time = 3;
 
   // Last time the condition transitioned from one status to another.
   // +optional
-  k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 4;
+  k8s.io.apimachinery.pkg.apis.meta.v1.Time last_transition_time = 4;
 
   // Unique, one-word, CamelCase reason for the condition's last transition.
   // +optional
