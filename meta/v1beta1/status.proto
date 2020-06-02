@@ -40,7 +40,7 @@ message IstioStatus {
   // +optional
   // +patchMergeKey=type
   // +patchStrategy=merge
-  repeated analysis.v1beta1.AnalysisMessageBase validationMessages = 2;
+  repeated analysis.v1beta1.AnalysisMessageBase validation_messages = 2;
 }
 
 message IstioCondition {

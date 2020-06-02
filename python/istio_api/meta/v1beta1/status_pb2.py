@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.meta.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\031istio.io/api/meta/v1beta1'),
-  serialized_pb=_b('\n\x19meta/v1beta1/status.proto\x12\x12istio.meta.v1beta1\x1a\x1e\x61nalysis/v1beta1/message.proto\x1a\x34k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto\x1a\x1fgoogle/api/field_behavior.proto\"\x8e\x01\n\x0bIstioStatus\x12\x36\n\nconditions\x18\x01 \x03(\x0b\x32\".istio.meta.v1beta1.IstioCondition\x12G\n\x12validationMessages\x18\x02 \x03(\x0b\x32+.istio.analysis.v1beta1.AnalysisMessageBase\"\xda\x01\n\x0eIstioCondition\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0e\n\x06status\x18\x02 \x01(\t\x12\x41\n\rlastProbeTime\x18\x03 \x01(\x0b\x32*.k8s.io.apimachinery.pkg.apis.meta.v1.Time\x12\x46\n\x12lastTransitionTime\x18\x04 \x01(\x0b\x32*.k8s.io.apimachinery.pkg.apis.meta.v1.Time\x12\x0e\n\x06reason\x18\x05 \x01(\t\x12\x0f\n\x07message\x18\x06 \x01(\tB\x1bZ\x19istio.io/api/meta/v1beta1b\x06proto3')
+  serialized_pb=_b('\n\x19meta/v1beta1/status.proto\x12\x12istio.meta.v1beta1\x1a\x1e\x61nalysis/v1beta1/message.proto\x1a\x34k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto\x1a\x1fgoogle/api/field_behavior.proto\"\x8f\x01\n\x0bIstioStatus\x12\x36\n\nconditions\x18\x01 \x03(\x0b\x32\".istio.meta.v1beta1.IstioCondition\x12H\n\x13validation_messages\x18\x02 \x03(\x0b\x32+.istio.analysis.v1beta1.AnalysisMessageBase\"\xda\x01\n\x0eIstioCondition\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0e\n\x06status\x18\x02 \x01(\t\x12\x41\n\rlastProbeTime\x18\x03 \x01(\x0b\x32*.k8s.io.apimachinery.pkg.apis.meta.v1.Time\x12\x46\n\x12lastTransitionTime\x18\x04 \x01(\x0b\x32*.k8s.io.apimachinery.pkg.apis.meta.v1.Time\x12\x0e\n\x06reason\x18\x05 \x01(\t\x12\x0f\n\x07message\x18\x06 \x01(\tB\x1bZ\x19istio.io/api/meta/v1beta1b\x06proto3')
   ,
   dependencies=[analysis_dot_v1beta1_dot_message__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2.DESCRIPTOR,google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,])
 
@@ -45,7 +45,7 @@ _ISTIOSTATUS = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='validationMessages', full_name='istio.meta.v1beta1.IstioStatus.validationMessages', index=1,
+      name='validation_messages', full_name='istio.meta.v1beta1.IstioStatus.validation_messages', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -64,7 +64,7 @@ _ISTIOSTATUS = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=169,
-  serialized_end=311,
+  serialized_end=312,
 )
 
 
@@ -129,12 +129,12 @@ _ISTIOCONDITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=314,
-  serialized_end=532,
+  serialized_start=315,
+  serialized_end=533,
 )
 
 _ISTIOSTATUS.fields_by_name['conditions'].message_type = _ISTIOCONDITION
-_ISTIOSTATUS.fields_by_name['validationMessages'].message_type = analysis_dot_v1beta1_dot_message__pb2._ANALYSISMESSAGEBASE
+_ISTIOSTATUS.fields_by_name['validation_messages'].message_type = analysis_dot_v1beta1_dot_message__pb2._ANALYSISMESSAGEBASE
 _ISTIOCONDITION.fields_by_name['lastProbeTime'].message_type = k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2._TIME
 _ISTIOCONDITION.fields_by_name['lastTransitionTime'].message_type = k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2._TIME
 DESCRIPTOR.message_types_by_name['IstioStatus'] = _ISTIOSTATUS
