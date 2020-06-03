@@ -27,7 +27,7 @@
 // sequentially in order of creation time.  The behavior is undefined
 // if multiple EnvoyFilter configurations conflict with each other.
 //
-// **NOTE 3**: *_To apply an EnvoyFilter resource to all workloads
+// **NOTE 3**: To apply an EnvoyFilter resource to all workloads
 // (sidecars and gateways) in the system, define the resource in the
 // config [root
 // namespace](https://istio.io/docs/reference/config/istio.mesh.v1alpha1/#MeshConfig),
