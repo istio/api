@@ -489,6 +489,7 @@ type MeshConfig struct {
 	// On receiving SIGTERM or SIGINT, istio-agent tells the active Envoy to start draining,
 	// preventing any new connections and allowing existing connections to complete. It then
 	// sleeps for the termination_drain_duration and then kills any remaining active Envoy processes.
+	// If not set, a default of 5s will be applied.
 	TerminationDrainDuration *types.Duration `protobuf:"bytes,53,opt,name=termination_drain_duration,json=terminationDrainDuration,proto3" json:"terminationDrainDuration,omitempty"`
 	XXX_NoUnkeyedLiteral     struct{}        `json:"-"`
 	XXX_unrecognized         []byte          `json:"-"`
