@@ -61,90 +61,6 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="AnalysisMessageBase-Level">AnalysisMessageBase.Level</h2>
-<section>
-<p>The values here are chosen so that more severe messages get sorted higher,
-as well as leaving space in between to add more later</p>
-
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="AnalysisMessageBase-Level-UNKNOWN">
-<td><code>UNKNOWN</code></td>
-<td>
-<p>invalid, but included for proto compatibility for 0 values</p>
-
-</td>
-</tr>
-<tr id="AnalysisMessageBase-Level-ERROR">
-<td><code>ERROR</code></td>
-<td>
-</td>
-</tr>
-<tr id="AnalysisMessageBase-Level-WARNING">
-<td><code>WARNING</code></td>
-<td>
-</td>
-</tr>
-<tr id="AnalysisMessageBase-Level-INFO">
-<td><code>INFO</code></td>
-<td>
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="AnalysisMessageBase-Type">AnalysisMessageBase.Type</h2>
-<section>
-<p>A unique identifier for the type of message. Name is intended to be
-human-readable, code is intended to be machine readable. There should be a
-one-to-one mapping between name and code. (i.e. do not re-use names or
-codes between message types.) fhqwgads</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="AnalysisMessageBase-Type-name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>A human-readable name for the message type. e.g. &ldquo;InternalError&rdquo;,
-&ldquo;PodMissingProxy&rdquo;. This should be the same for all messages of the same type.
-Required.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="AnalysisMessageBase-Type-code">
-<td><code>code</code></td>
-<td><code>string</code></td>
-<td>
-<p>A 7 character code matching <code>^IST[0-9]&lbrace;4}$</code> intended to uniquely identify
-the message type. (e.g. &ldquo;IST0001&rdquo; is mapped to the &ldquo;InternalError&rdquo; message
-type.) 0000-0100 are reserved. Required.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="AnalysisMessageWeakSchema">AnalysisMessageWeakSchema</h2>
 <section>
 <p>AnalysisMessageWeakSchema is the set of information that&rsquo;s needed to define a
@@ -202,46 +118,6 @@ No
 <td><code><a href="#AnalysisMessageWeakSchema-ArgType">ArgType[]</a></code></td>
 <td>
 <p>A description of the arguments for a particular message type</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="AnalysisMessageWeakSchema-ArgType">AnalysisMessageWeakSchema.ArgType</h2>
-<section>
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="AnalysisMessageWeakSchema-ArgType-name">
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>
-<p>Required</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="AnalysisMessageWeakSchema-ArgType-go_type">
-<td><code>goType</code></td>
-<td><code>string</code></td>
-<td>
-<p>Required. Should be a golang type, used in code generation.
-Ideally this will change to a less language-pinned type before this gets
-out of alpha, but for compatibility with current istio/istio code it&rsquo;s
-go_type for now.</p>
 
 </td>
 <td>
@@ -346,6 +222,130 @@ No
 </td>
 <td>
 No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AnalysisMessageBase-Type">AnalysisMessageBase.Type</h2>
+<section>
+<p>A unique identifier for the type of message. Name is intended to be
+human-readable, code is intended to be machine readable. There should be a
+one-to-one mapping between name and code. (i.e. do not re-use names or
+codes between message types.) fhqwgads</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AnalysisMessageBase-Type-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>A human-readable name for the message type. e.g. &ldquo;InternalError&rdquo;,
+&ldquo;PodMissingProxy&rdquo;. This should be the same for all messages of the same type.
+Required.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AnalysisMessageBase-Type-code">
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>
+<p>A 7 character code matching <code>^IST[0-9]{4}$</code> intended to uniquely identify
+the message type. (e.g. &ldquo;IST0001&rdquo; is mapped to the &ldquo;InternalError&rdquo; message
+type.) 0000-0100 are reserved. Required.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AnalysisMessageWeakSchema-ArgType">AnalysisMessageWeakSchema.ArgType</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AnalysisMessageWeakSchema-ArgType-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Required</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AnalysisMessageWeakSchema-ArgType-go_type">
+<td><code>goType</code></td>
+<td><code>string</code></td>
+<td>
+<p>Required. Should be a golang type, used in code generation.
+Ideally this will change to a less language-pinned type before this gets
+out of alpha, but for compatibility with current istio/istio code it&rsquo;s
+go_type for now.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AnalysisMessageBase-Level">AnalysisMessageBase.Level</h2>
+<section>
+<p>The values here are chosen so that more severe messages get sorted higher,
+as well as leaving space in between to add more later</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AnalysisMessageBase-Level-UNKNOWN">
+<td><code>UNKNOWN</code></td>
+<td>
+<p>invalid, but included for proto compatibility for 0 values</p>
+
+</td>
+</tr>
+<tr id="AnalysisMessageBase-Level-ERROR">
+<td><code>ERROR</code></td>
+<td>
+</td>
+</tr>
+<tr id="AnalysisMessageBase-Level-WARNING">
+<td><code>WARNING</code></td>
+<td>
+</td>
+</tr>
+<tr id="AnalysisMessageBase-Level-INFO">
+<td><code>INFO</code></td>
+<td>
 </td>
 </tr>
 </tbody>

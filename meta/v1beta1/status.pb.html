@@ -7,6 +7,50 @@ generator: protoc-gen-docs
 hide_from_docs
 number_of_entries: 3
 ---
+<h2 id="IstioStatus">IstioStatus</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="IstioStatus-conditions">
+<td><code>conditions</code></td>
+<td><code><a href="#IstioCondition">IstioCondition[]</a></code></td>
+<td>
+<p>Current service state of pod.
+More info: https://istio.io/docs/reference/config/config-status/
++optional
++patchMergeKey=type
++patchStrategy=merge</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="IstioStatus-validation_messages">
+<td><code>validationMessages</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/istio.analysis.v1beta1.html#AnalysisMessageBase">AnalysisMessageBase[]</a></code></td>
+<td>
+<p>Includes any errors or warnings detected by Istio&rsquo;s analyzers.
++optional
++patchMergeKey=type
++patchStrategy=merge</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="IstioCondition">IstioCondition</h2>
 <section>
 <table class="message-fields">
@@ -84,50 +128,6 @@ No
 <td>
 <p>Human-readable message indicating details about last transition.
 +optional</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="IstioStatus">IstioStatus</h2>
-<section>
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="IstioStatus-conditions">
-<td><code>conditions</code></td>
-<td><code><a href="#IstioCondition">IstioCondition[]</a></code></td>
-<td>
-<p>Current service state of pod.
-More info: https://istio.io/docs/reference/config/config-status/
-+optional
-+patchMergeKey=type
-+patchStrategy=merge</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="IstioStatus-validation_messages">
-<td><code>validationMessages</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/istio.analysis.v1beta1.html#AnalysisMessageBase">AnalysisMessageBase[]</a></code></td>
-<td>
-<p>Includes any errors or warnings detected by Istio&rsquo;s analyzers.
-+optional
-+patchMergeKey=type
-+patchStrategy=merge</p>
 
 </td>
 <td>
