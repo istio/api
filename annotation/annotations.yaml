@@ -260,6 +260,13 @@ annotations:
     hidden: false
     resources:
       - Pod
+  - name: traffic.sidecar.istio.io/includeOutboundPorts
+    description: A comma separated list of outbound ports for which traffic is to be
+      redirected to Envoy, regardless of the destination IP.
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
   - name: traffic.sidecar.istio.io/excludeOutboundPorts
     description: A comma separated list of outbound ports to be excluded from redirection
       to Envoy.
