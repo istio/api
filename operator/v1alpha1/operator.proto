@@ -25,10 +25,8 @@ package istio.operator.v1alpha1;
 option go_package="istio.io/api/operator/v1alpha1";
 
 import "google/protobuf/any.proto";
-import "k8s.io/api/core/v1/generated.proto";
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 import "k8s.io/apimachinery/pkg/api/resource/generated.proto";
-import "k8s.io/apimachinery/pkg/util/intstr/generated.proto";
 
 /*
 IstioOperatorSpec is an API for managing an Istio control plane. It is used to define profiles that are included
@@ -338,7 +336,7 @@ message KubernetesResourcesSpec {
     DeploymentStrategy strategy = 13;
     // k8s toleration
     // [https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)
-    repeated k8s.io.api.core.v1.Toleration tolerations = 14;
+    repeated Toleration tolerations = 14;
     // k8s service annotations.
     // [https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
     map<string, string> service_annotations = 15;
@@ -636,6 +634,15 @@ message SessionAffinityConfig {
 message TCPSocketAction {
     TypeInterface port = 1;
     string host = 2;
+}
+
+// See k8s.io.api.core.v1.Toleration.
+message Toleration {
+    string key = 1;
+    string operator = 2;
+    string value = 3;
+    string effect = 4;
+    int64 tolerationSeconds = 5;
 }
 
 // See k8s.io.api.core.v1.WeightedPodAffinityTerm.

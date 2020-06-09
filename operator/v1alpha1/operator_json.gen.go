@@ -11,10 +11,8 @@ import (
 	github_com_golang_protobuf_jsonpb "github.com/golang/protobuf/jsonpb"
 	proto "github.com/golang/protobuf/proto"
 	_ "github.com/golang/protobuf/types"
-	_ "k8s.io/api/core/v1"
 	_ "k8s.io/apimachinery/pkg/api/resource"
 	_ "k8s.io/apimachinery/pkg/apis/meta/v1"
-	_ "k8s.io/apimachinery/pkg/util/intstr"
 	math "math"
 )
 
@@ -551,6 +549,17 @@ func (this *TCPSocketAction) UnmarshalJSON(b []byte) error {
 	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for Toleration
+func (this *Toleration) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for Toleration
+func (this *Toleration) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for WeightedPodAffinityTerm
 func (this *WeightedPodAffinityTerm) MarshalJSON() ([]byte, error) {
 	str, err := OperatorMarshaler.MarshalToString(this)
@@ -559,28 +568,6 @@ func (this *WeightedPodAffinityTerm) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for WeightedPodAffinityTerm
 func (this *WeightedPodAffinityTerm) UnmarshalJSON(b []byte) error {
-	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
-// MarshalJSON is a custom marshaler for TypeInterface
-func (this *TypeInterface) MarshalJSON() ([]byte, error) {
-	str, err := OperatorMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for TypeInterface
-func (this *TypeInterface) UnmarshalJSON(b []byte) error {
-	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
-// MarshalJSON is a custom marshaler for TypeMapStringInterface
-func (this *TypeMapStringInterface) MarshalJSON() ([]byte, error) {
-	str, err := OperatorMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for TypeMapStringInterface
-func (this *TypeMapStringInterface) UnmarshalJSON(b []byte) error {
 	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

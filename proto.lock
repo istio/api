@@ -43560,12 +43560,6 @@
                 "type": "DeploymentStrategy"
               },
               {
-                "id": 14,
-                "name": "tolerations",
-                "type": "k8s.io.api.core.v1.Toleration",
-                "is_repeated": true
-              },
-              {
                 "id": 100,
                 "name": "overlays",
                 "type": "K8sObjectOverlay",
