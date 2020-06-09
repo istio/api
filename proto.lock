@@ -35899,6 +35899,11 @@
                 "type": "IngressControllerMode"
               },
               {
+                "id": 52,
+                "name": "ingress_selector",
+                "type": "string"
+              },
+              {
                 "id": 10,
                 "name": "auth_policy",
                 "type": "AuthPolicy",
@@ -36109,6 +36114,11 @@
                 "id": 51,
                 "name": "enable_prometheus_merge",
                 "type": "google.protobuf.BoolValue"
+              },
+              {
+                "id": 53,
+                "name": "termination_drain_duration",
+                "type": "google.protobuf.Duration"
               }
             ],
             "reserved_ids": [
@@ -43157,9 +43167,153 @@
       }
     },
     {
-      "protopath": "operator:/:v1alpha1:/:component.proto",
+      "protopath": "operator:/:v1alpha1:/:operator.proto",
       "def": {
+        "enums": [
+          {
+            "name": "InstallStatus.Status",
+            "enum_fields": [
+              {
+                "name": "NONE"
+              },
+              {
+                "name": "UPDATING",
+                "integer": 1
+              },
+              {
+                "name": "RECONCILING",
+                "integer": 2
+              },
+              {
+                "name": "HEALTHY",
+                "integer": 3
+              },
+              {
+                "name": "ERROR",
+                "integer": 4
+              }
+            ]
+          }
+        ],
         "messages": [
+          {
+            "name": "IstioOperatorSpec",
+            "fields": [
+              {
+                "id": 10,
+                "name": "profile",
+                "type": "string"
+              },
+              {
+                "id": 11,
+                "name": "install_package_path",
+                "type": "string"
+              },
+              {
+                "id": 12,
+                "name": "hub",
+                "type": "string"
+              },
+              {
+                "id": 13,
+                "name": "tag",
+                "type": "TypeInterface"
+              },
+              {
+                "id": 14,
+                "name": "resource_suffix",
+                "type": "string",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
+              },
+              {
+                "id": 15,
+                "name": "namespace",
+                "type": "string"
+              },
+              {
+                "id": 16,
+                "name": "revision",
+                "type": "string"
+              },
+              {
+                "id": 40,
+                "name": "mesh_config",
+                "type": "TypeMapStringInterface"
+              },
+              {
+                "id": 50,
+                "name": "components",
+                "type": "IstioComponentSetSpec"
+              },
+              {
+                "id": 100,
+                "name": "values",
+                "type": "TypeMapStringInterface"
+              },
+              {
+                "id": 101,
+                "name": "unvalidated_values",
+                "type": "TypeMapStringInterface"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 51,
+                  "name": "addon_components",
+                  "type": "ExternalComponentSpec"
+                }
+              }
+            ]
+          },
+          {
+            "name": "InstallStatus",
+            "fields": [
+              {
+                "id": 1,
+                "name": "status",
+                "type": "Status"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 2,
+                  "name": "component_status",
+                  "type": "VersionStatus"
+                }
+              }
+            ],
+            "messages": [
+              {
+                "name": "VersionStatus",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "version",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "status",
+                    "type": "Status"
+                  },
+                  {
+                    "id": 4,
+                    "name": "error",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          },
           {
             "name": "IstioComponentSetSpec",
             "fields": [
@@ -43406,12 +43560,6 @@
                 "type": "DeploymentStrategy"
               },
               {
-                "id": 14,
-                "name": "tolerations",
-                "type": "k8s.io.api.core.v1.Toleration",
-                "is_repeated": true
-              },
-              {
                 "id": 100,
                 "name": "overlays",
                 "type": "K8sObjectOverlay",
@@ -43489,63 +43637,6 @@
             ]
           },
           {
-            "name": "TypeMapStringInterface"
-          },
-          {
-            "name": "TypeInterface"
-          },
-          {
-            "name": "TypeBoolValueForPB"
-          }
-        ],
-        "imports": [
-          {
-            "path": "google/protobuf/any.proto"
-          },
-          {
-            "path": "k8s.io/api/core/v1/generated.proto"
-          },
-          {
-            "path": "operator/v1alpha1/kubernetes.proto"
-          }
-        ],
-        "package": {
-          "name": "istio.operator.v1alpha1"
-        },
-        "options": [
-          {
-            "name": "go_package",
-            "value": "istio.io/api/operator/v1alpha1"
-          }
-        ]
-      }
-    },
-    {
-      "protopath": "operator:/:v1alpha1:/:kubernetes.proto",
-      "def": {
-        "messages": [
-          {
-            "name": "Resources",
-            "maps": [
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 1,
-                  "name": "limits",
-                  "type": "string"
-                }
-              },
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 2,
-                  "name": "requests",
-                  "type": "string"
-                }
-              }
-            ]
-          },
-          {
             "name": "Affinity",
             "fields": [
               {
@@ -43562,6 +43653,264 @@
                 "id": 3,
                 "name": "podAntiAffinity",
                 "type": "PodAntiAffinity"
+              }
+            ]
+          },
+          {
+            "name": "ConfigMapKeySelector",
+            "fields": [
+              {
+                "id": 1,
+                "name": "localObjectReference",
+                "type": "LocalObjectReference"
+              },
+              {
+                "id": 2,
+                "name": "key",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "optional",
+                "type": "bool"
+              }
+            ]
+          },
+          {
+            "name": "ClientIPConfig",
+            "fields": [
+              {
+                "id": 1,
+                "name": "timeoutSeconds",
+                "type": "int32"
+              }
+            ]
+          },
+          {
+            "name": "CrossVersionObjectReference",
+            "fields": [
+              {
+                "id": 1,
+                "name": "kind",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "apiVersion",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "DeploymentStrategy",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "rollingUpdate",
+                "type": "RollingUpdateDeployment"
+              }
+            ]
+          },
+          {
+            "name": "EnvVar",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "valueFrom",
+                "type": "EnvVarSource"
+              }
+            ]
+          },
+          {
+            "name": "EnvVarSource",
+            "fields": [
+              {
+                "id": 1,
+                "name": "fieldRef",
+                "type": "ObjectFieldSelector"
+              },
+              {
+                "id": 2,
+                "name": "resourceFieldRef",
+                "type": "ResourceFieldSelector"
+              },
+              {
+                "id": 3,
+                "name": "configMapKeyRef",
+                "type": "ConfigMapKeySelector"
+              },
+              {
+                "id": 4,
+                "name": "secretKeyRef",
+                "type": "SecretKeySelector"
+              }
+            ]
+          },
+          {
+            "name": "ExecAction",
+            "fields": [
+              {
+                "id": 1,
+                "name": "command",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "ExternalMetricSource",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metricName",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "metricSelector",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
+              },
+              {
+                "id": 3,
+                "name": "targetValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              },
+              {
+                "id": 4,
+                "name": "targetAverageValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              }
+            ]
+          },
+          {
+            "name": "HTTPGetAction",
+            "fields": [
+              {
+                "id": 1,
+                "name": "path",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "port",
+                "type": "TypeInterface"
+              },
+              {
+                "id": 3,
+                "name": "host",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "scheme",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "httpHeaders",
+                "type": "HTTPHeader",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "HTTPHeader",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "HorizontalPodAutoscalerSpec",
+            "fields": [
+              {
+                "id": 1,
+                "name": "scaleTargetRef",
+                "type": "CrossVersionObjectReference"
+              },
+              {
+                "id": 2,
+                "name": "minReplicas",
+                "type": "int32"
+              },
+              {
+                "id": 3,
+                "name": "maxReplicas",
+                "type": "int32"
+              },
+              {
+                "id": 4,
+                "name": "metrics",
+                "type": "MetricSpec",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "LocalObjectReference",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "MetricSpec",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "object",
+                "type": "ObjectMetricSource"
+              },
+              {
+                "id": 3,
+                "name": "pods",
+                "type": "PodsMetricSource"
+              },
+              {
+                "id": 4,
+                "name": "resource",
+                "type": "ResourceMetricSource"
+              },
+              {
+                "id": 5,
+                "name": "external",
+                "type": "ExternalMetricSource"
               }
             ]
           },
@@ -43631,6 +43980,66 @@
             ]
           },
           {
+            "name": "ObjectFieldSelector",
+            "fields": [
+              {
+                "id": 1,
+                "name": "apiVersion",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "fieldPath",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "ObjectMeta",
+            "fields": [
+              {
+                "id": 5,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "namespace",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "ObjectMetricSource",
+            "fields": [
+              {
+                "id": 1,
+                "name": "target",
+                "type": "CrossVersionObjectReference"
+              },
+              {
+                "id": 2,
+                "name": "metricName",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "targetValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              },
+              {
+                "id": 4,
+                "name": "selector",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
+              },
+              {
+                "id": 5,
+                "name": "averageValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              }
+            ]
+          },
+          {
             "name": "PodAffinity",
             "fields": [
               {
@@ -43686,17 +44095,42 @@
             ]
           },
           {
-            "name": "WeightedPodAffinityTerm",
+            "name": "PodDisruptionBudgetSpec",
             "fields": [
               {
                 "id": 1,
-                "name": "weight",
-                "type": "int32"
+                "name": "minAvailable",
+                "type": "uint32"
               },
               {
                 "id": 2,
-                "name": "podAffinityTerm",
-                "type": "PodAffinityTerm"
+                "name": "selector",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
+              },
+              {
+                "id": 3,
+                "name": "maxUnavailable",
+                "type": "uint32"
+              }
+            ]
+          },
+          {
+            "name": "PodsMetricSource",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metricName",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "targetAverageValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              },
+              {
+                "id": 3,
+                "name": "selector",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
               }
             ]
           },
@@ -43761,203 +44195,6 @@
             ]
           },
           {
-            "name": "ExecAction",
-            "fields": [
-              {
-                "id": 1,
-                "name": "command",
-                "type": "string",
-                "is_repeated": true
-              }
-            ]
-          },
-          {
-            "name": "HTTPGetAction",
-            "fields": [
-              {
-                "id": 1,
-                "name": "path",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "port",
-                "type": "TypeInterface_kubernetes"
-              },
-              {
-                "id": 3,
-                "name": "host",
-                "type": "string"
-              },
-              {
-                "id": 4,
-                "name": "scheme",
-                "type": "string"
-              },
-              {
-                "id": 5,
-                "name": "httpHeaders",
-                "type": "HTTPHeader",
-                "is_repeated": true
-              }
-            ]
-          },
-          {
-            "name": "HTTPHeader",
-            "fields": [
-              {
-                "id": 1,
-                "name": "name",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "value",
-                "type": "string"
-              }
-            ]
-          },
-          {
-            "name": "TCPSocketAction",
-            "fields": [
-              {
-                "id": 1,
-                "name": "port",
-                "type": "TypeInterface_kubernetes"
-              },
-              {
-                "id": 2,
-                "name": "host",
-                "type": "string"
-              }
-            ]
-          },
-          {
-            "name": "PodDisruptionBudgetSpec",
-            "fields": [
-              {
-                "id": 1,
-                "name": "minAvailable",
-                "type": "uint32"
-              },
-              {
-                "id": 2,
-                "name": "selector",
-                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
-              },
-              {
-                "id": 3,
-                "name": "maxUnavailable",
-                "type": "uint32"
-              }
-            ]
-          },
-          {
-            "name": "DeploymentStrategy",
-            "fields": [
-              {
-                "id": 1,
-                "name": "type",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "rollingUpdate",
-                "type": "RollingUpdateDeployment"
-              }
-            ]
-          },
-          {
-            "name": "RollingUpdateDeployment",
-            "fields": [
-              {
-                "id": 1,
-                "name": "maxUnavailable",
-                "type": "TypeInterface_kubernetes"
-              },
-              {
-                "id": 2,
-                "name": "maxSurge",
-                "type": "TypeInterface_kubernetes"
-              }
-            ]
-          },
-          {
-            "name": "ObjectMeta",
-            "fields": [
-              {
-                "id": 5,
-                "name": "name",
-                "type": "string"
-              },
-              {
-                "id": 6,
-                "name": "namespace",
-                "type": "string"
-              }
-            ]
-          },
-          {
-            "name": "EnvVar",
-            "fields": [
-              {
-                "id": 1,
-                "name": "name",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "value",
-                "type": "string"
-              },
-              {
-                "id": 3,
-                "name": "valueFrom",
-                "type": "EnvVarSource"
-              }
-            ]
-          },
-          {
-            "name": "EnvVarSource",
-            "fields": [
-              {
-                "id": 1,
-                "name": "fieldRef",
-                "type": "ObjectFieldSelector"
-              },
-              {
-                "id": 2,
-                "name": "resourceFieldRef",
-                "type": "ResourceFieldSelector"
-              },
-              {
-                "id": 3,
-                "name": "configMapKeyRef",
-                "type": "ConfigMapKeySelector"
-              },
-              {
-                "id": 4,
-                "name": "secretKeyRef",
-                "type": "SecretKeySelector"
-              }
-            ]
-          },
-          {
-            "name": "ObjectFieldSelector",
-            "fields": [
-              {
-                "id": 1,
-                "name": "apiVersion",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "fieldPath",
-                "type": "string"
-              }
-            ]
-          },
-          {
             "name": "ResourceFieldSelector",
             "fields": [
               {
@@ -43978,22 +44215,58 @@
             ]
           },
           {
-            "name": "ConfigMapKeySelector",
+            "name": "ResourceMetricSource",
             "fields": [
               {
                 "id": 1,
-                "name": "localObjectReference",
-                "type": "LocalObjectReference"
-              },
-              {
-                "id": 2,
-                "name": "key",
+                "name": "name",
                 "type": "string"
               },
               {
+                "id": 2,
+                "name": "targetAverageUtilization",
+                "type": "TypeInterface"
+              },
+              {
                 "id": 3,
-                "name": "optional",
-                "type": "bool"
+                "name": "targetAverageValue",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              }
+            ]
+          },
+          {
+            "name": "Resources",
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 1,
+                  "name": "limits",
+                  "type": "string"
+                }
+              },
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 2,
+                  "name": "requests",
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          {
+            "name": "RollingUpdateDeployment",
+            "fields": [
+              {
+                "id": 1,
+                "name": "maxUnavailable",
+                "type": "TypeInterface"
+              },
+              {
+                "id": 2,
+                "name": "maxSurge",
+                "type": "TypeInterface"
               }
             ]
           },
@@ -44014,16 +44287,6 @@
                 "id": 3,
                 "name": "optional",
                 "type": "bool"
-              }
-            ]
-          },
-          {
-            "name": "LocalObjectReference",
-            "fields": [
-              {
-                "id": 1,
-                "name": "name",
-                "type": "string"
               }
             ]
           },
@@ -44126,7 +44389,7 @@
               {
                 "id": 4,
                 "name": "targetPort",
-                "type": "TypeInterface_kubernetes"
+                "type": "TypeInterface"
               },
               {
                 "id": 5,
@@ -44146,194 +44409,55 @@
             ]
           },
           {
-            "name": "ClientIPConfig",
+            "name": "TCPSocketAction",
             "fields": [
               {
                 "id": 1,
-                "name": "timeoutSeconds",
-                "type": "int32"
+                "name": "port",
+                "type": "TypeInterface"
+              },
+              {
+                "id": 2,
+                "name": "host",
+                "type": "string"
               }
             ]
           },
           {
-            "name": "HorizontalPodAutoscalerSpec",
+            "name": "WeightedPodAffinityTerm",
             "fields": [
               {
                 "id": 1,
-                "name": "scaleTargetRef",
-                "type": "CrossVersionObjectReference"
-              },
-              {
-                "id": 2,
-                "name": "minReplicas",
-                "type": "int32"
-              },
-              {
-                "id": 3,
-                "name": "maxReplicas",
+                "name": "weight",
                 "type": "int32"
               },
               {
-                "id": 4,
-                "name": "metrics",
-                "type": "MetricSpec",
-                "is_repeated": true
+                "id": 2,
+                "name": "podAffinityTerm",
+                "type": "PodAffinityTerm"
               }
             ]
           },
           {
-            "name": "CrossVersionObjectReference",
-            "fields": [
-              {
-                "id": 1,
-                "name": "kind",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "name",
-                "type": "string"
-              },
-              {
-                "id": 3,
-                "name": "apiVersion",
-                "type": "string"
-              }
-            ]
+            "name": "TypeInterface"
           },
           {
-            "name": "MetricSpec",
-            "fields": [
-              {
-                "id": 1,
-                "name": "type",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "object",
-                "type": "ObjectMetricSource"
-              },
-              {
-                "id": 3,
-                "name": "pods",
-                "type": "PodsMetricSource"
-              },
-              {
-                "id": 4,
-                "name": "resource",
-                "type": "ResourceMetricSource"
-              },
-              {
-                "id": 5,
-                "name": "external",
-                "type": "ExternalMetricSource"
-              }
-            ]
-          },
-          {
-            "name": "ObjectMetricSource",
-            "fields": [
-              {
-                "id": 1,
-                "name": "target",
-                "type": "CrossVersionObjectReference"
-              },
-              {
-                "id": 2,
-                "name": "metricName",
-                "type": "string"
-              },
-              {
-                "id": 3,
-                "name": "targetValue",
-                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
-              },
-              {
-                "id": 4,
-                "name": "selector",
-                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
-              },
-              {
-                "id": 5,
-                "name": "averageValue",
-                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
-              }
-            ]
-          },
-          {
-            "name": "PodsMetricSource",
-            "fields": [
-              {
-                "id": 1,
-                "name": "metricName",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "targetAverageValue",
-                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
-              },
-              {
-                "id": 3,
-                "name": "selector",
-                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
-              }
-            ]
-          },
-          {
-            "name": "ResourceMetricSource",
-            "fields": [
-              {
-                "id": 1,
-                "name": "name",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "targetAverageUtilization",
-                "type": "TypeInterface_kubernetes"
-              },
-              {
-                "id": 3,
-                "name": "targetAverageValue",
-                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
-              }
-            ]
-          },
-          {
-            "name": "ExternalMetricSource",
-            "fields": [
-              {
-                "id": 1,
-                "name": "metricName",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "metricSelector",
-                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
-              },
-              {
-                "id": 3,
-                "name": "targetValue",
-                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
-              },
-              {
-                "id": 4,
-                "name": "targetAverageValue",
-                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
-              }
-            ]
+            "name": "TypeMapStringInterface"
           },
           {
             "name": "TypeIntOrStringForPB"
           },
           {
-            "name": "TypeInterface_kubernetes"
+            "name": "TypeBoolValueForPB"
           }
         ],
         "imports": [
+          {
+            "path": "google/protobuf/any.proto"
+          },
+          {
+            "path": "k8s.io/api/core/v1/generated.proto"
+          },
           {
             "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
           },
@@ -44342,177 +44466,6 @@
           },
           {
             "path": "k8s.io/apimachinery/pkg/util/intstr/generated.proto"
-          }
-        ],
-        "package": {
-          "name": "istio.operator.v1alpha1"
-        },
-        "options": [
-          {
-            "name": "go_package",
-            "value": "istio.io/api/operator/v1alpha1"
-          }
-        ]
-      }
-    },
-    {
-      "protopath": "operator:/:v1alpha1:/:operator.proto",
-      "def": {
-        "enums": [
-          {
-            "name": "InstallStatus.Status",
-            "enum_fields": [
-              {
-                "name": "NONE"
-              },
-              {
-                "name": "UPDATING",
-                "integer": 1
-              },
-              {
-                "name": "RECONCILING",
-                "integer": 2
-              },
-              {
-                "name": "HEALTHY",
-                "integer": 3
-              },
-              {
-                "name": "ERROR",
-                "integer": 4
-              }
-            ]
-          }
-        ],
-        "messages": [
-          {
-            "name": "IstioOperatorSpec",
-            "fields": [
-              {
-                "id": 10,
-                "name": "profile",
-                "type": "string"
-              },
-              {
-                "id": 11,
-                "name": "install_package_path",
-                "type": "string"
-              },
-              {
-                "id": 12,
-                "name": "hub",
-                "type": "string"
-              },
-              {
-                "id": 13,
-                "name": "tag",
-                "type": "TypeInterface2"
-              },
-              {
-                "id": 14,
-                "name": "resource_suffix",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 15,
-                "name": "namespace",
-                "type": "string"
-              },
-              {
-                "id": 16,
-                "name": "revision",
-                "type": "string"
-              },
-              {
-                "id": 40,
-                "name": "mesh_config",
-                "type": "TypeMapStringInterface2"
-              },
-              {
-                "id": 50,
-                "name": "components",
-                "type": "IstioComponentSetSpec"
-              },
-              {
-                "id": 100,
-                "name": "values",
-                "type": "TypeMapStringInterface2"
-              },
-              {
-                "id": 101,
-                "name": "unvalidated_values",
-                "type": "TypeMapStringInterface2"
-              }
-            ],
-            "maps": [
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 51,
-                  "name": "addon_components",
-                  "type": "ExternalComponentSpec"
-                }
-              }
-            ]
-          },
-          {
-            "name": "InstallStatus",
-            "fields": [
-              {
-                "id": 1,
-                "name": "status",
-                "type": "Status"
-              }
-            ],
-            "maps": [
-              {
-                "key_type": "string",
-                "field": {
-                  "id": 2,
-                  "name": "component_status",
-                  "type": "VersionStatus"
-                }
-              }
-            ],
-            "messages": [
-              {
-                "name": "VersionStatus",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "version",
-                    "type": "string"
-                  },
-                  {
-                    "id": 2,
-                    "name": "status",
-                    "type": "Status"
-                  },
-                  {
-                    "id": 4,
-                    "name": "error",
-                    "type": "string"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "name": "TypeMapStringInterface2"
-          },
-          {
-            "name": "TypeInterface2"
-          }
-        ],
-        "imports": [
-          {
-            "path": "operator/v1alpha1/component.proto"
           }
         ],
         "package": {
