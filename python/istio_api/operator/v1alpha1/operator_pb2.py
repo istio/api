@@ -13,7 +13,11 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from operator.v1alpha1 import component_pb2 as operator_dot_v1alpha1_dot_component__pb2
+from google.protobuf import any_pb2 as google_dot_protobuf_dot_any__pb2
+from k8s.io.api.core.v1 import generated_pb2 as k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2
+from k8s.io.apimachinery.pkg.apis.meta.v1 import generated_pb2 as k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2
+from k8s.io.apimachinery.pkg.api.resource import generated_pb2 as k8s_dot_io_dot_apimachinery_dot_pkg_dot_api_dot_resource_dot_generated__pb2
+from k8s.io.apimachinery.pkg.util.intstr import generated_pb2 as k8s_dot_io_dot_apimachinery_dot_pkg_dot_util_dot_intstr_dot_generated__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -21,9 +25,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.operator.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\036istio.io/api/operator/v1alpha1'),
-  serialized_pb=_b('\n operator/v1alpha1/operator.proto\x12\x17istio.operator.v1alpha1\x1a!operator/v1alpha1/component.proto\"\xa5\x05\n\x11IstioOperatorSpec\x12\x0f\n\x07profile\x18\n \x01(\t\x12\x1c\n\x14install_package_path\x18\x0b \x01(\t\x12\x0b\n\x03hub\x18\x0c \x01(\t\x12\x34\n\x03tag\x18\r \x01(\x0b\x32\'.istio.operator.v1alpha1.TypeInterface2\x12\x1b\n\x0fresource_suffix\x18\x0e \x01(\tB\x02\x18\x01\x12\x11\n\tnamespace\x18\x0f \x01(\t\x12\x10\n\x08revision\x18\x10 \x01(\t\x12\x45\n\x0bmesh_config\x18( \x01(\x0b\x32\x30.istio.operator.v1alpha1.TypeMapStringInterface2\x12\x42\n\ncomponents\x18\x32 \x01(\x0b\x32..istio.operator.v1alpha1.IstioComponentSetSpec\x12Y\n\x10\x61\x64\x64on_components\x18\x33 \x03(\x0b\x32?.istio.operator.v1alpha1.IstioOperatorSpec.AddonComponentsEntry\x12@\n\x06values\x18\x64 \x01(\x0b\x32\x30.istio.operator.v1alpha1.TypeMapStringInterface2\x12L\n\x12unvalidated_values\x18\x65 \x01(\x0b\x32\x30.istio.operator.v1alpha1.TypeMapStringInterface2\x1a\x66\n\x14\x41\x64\x64onComponentsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12=\n\x05value\x18\x02 \x01(\x0b\x32..istio.operator.v1alpha1.ExternalComponentSpec:\x02\x38\x01\"\xce\x03\n\rInstallStatus\x12=\n\x06status\x18\x01 \x01(\x0e\x32-.istio.operator.v1alpha1.InstallStatus.Status\x12U\n\x10\x63omponent_status\x18\x02 \x03(\x0b\x32;.istio.operator.v1alpha1.InstallStatus.ComponentStatusEntry\x1an\n\rVersionStatus\x12\x0f\n\x07version\x18\x01 \x01(\t\x12=\n\x06status\x18\x02 \x01(\x0e\x32-.istio.operator.v1alpha1.InstallStatus.Status\x12\r\n\x05\x65rror\x18\x04 \x01(\t\x1al\n\x14\x43omponentStatusEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x43\n\x05value\x18\x02 \x01(\x0b\x32\x34.istio.operator.v1alpha1.InstallStatus.VersionStatus:\x02\x38\x01\"I\n\x06Status\x12\x08\n\x04NONE\x10\x00\x12\x0c\n\x08UPDATING\x10\x01\x12\x0f\n\x0bRECONCILING\x10\x02\x12\x0b\n\x07HEALTHY\x10\x03\x12\t\n\x05\x45RROR\x10\x04\"\x19\n\x17TypeMapStringInterface2\"\x10\n\x0eTypeInterface2B Z\x1eistio.io/api/operator/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n operator/v1alpha1/operator.proto\x12\x17istio.operator.v1alpha1\x1a\x19google/protobuf/any.proto\x1a\"k8s.io/api/core/v1/generated.proto\x1a\x34k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto\x1a\x34k8s.io/apimachinery/pkg/api/resource/generated.proto\x1a\x33k8s.io/apimachinery/pkg/util/intstr/generated.proto\"\xa1\x05\n\x11IstioOperatorSpec\x12\x0f\n\x07profile\x18\n \x01(\t\x12\x1c\n\x14install_package_path\x18\x0b \x01(\t\x12\x0b\n\x03hub\x18\x0c \x01(\t\x12\x33\n\x03tag\x18\r \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12\x1b\n\x0fresource_suffix\x18\x0e \x01(\tB\x02\x18\x01\x12\x11\n\tnamespace\x18\x0f \x01(\t\x12\x10\n\x08revision\x18\x10 \x01(\t\x12\x44\n\x0bmesh_config\x18( \x01(\x0b\x32/.istio.operator.v1alpha1.TypeMapStringInterface\x12\x42\n\ncomponents\x18\x32 \x01(\x0b\x32..istio.operator.v1alpha1.IstioComponentSetSpec\x12Y\n\x10\x61\x64\x64on_components\x18\x33 \x03(\x0b\x32?.istio.operator.v1alpha1.IstioOperatorSpec.AddonComponentsEntry\x12?\n\x06values\x18\x64 \x01(\x0b\x32/.istio.operator.v1alpha1.TypeMapStringInterface\x12K\n\x12unvalidated_values\x18\x65 \x01(\x0b\x32/.istio.operator.v1alpha1.TypeMapStringInterface\x1a\x66\n\x14\x41\x64\x64onComponentsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12=\n\x05value\x18\x02 \x01(\x0b\x32..istio.operator.v1alpha1.ExternalComponentSpec:\x02\x38\x01\"\xce\x03\n\rInstallStatus\x12=\n\x06status\x18\x01 \x01(\x0e\x32-.istio.operator.v1alpha1.InstallStatus.Status\x12U\n\x10\x63omponent_status\x18\x02 \x03(\x0b\x32;.istio.operator.v1alpha1.InstallStatus.ComponentStatusEntry\x1an\n\rVersionStatus\x12\x0f\n\x07version\x18\x01 \x01(\t\x12=\n\x06status\x18\x02 \x01(\x0e\x32-.istio.operator.v1alpha1.InstallStatus.Status\x12\r\n\x05\x65rror\x18\x04 \x01(\t\x1al\n\x14\x43omponentStatusEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x43\n\x05value\x18\x02 \x01(\x0b\x32\x34.istio.operator.v1alpha1.InstallStatus.VersionStatus:\x02\x38\x01\"I\n\x06Status\x12\x08\n\x04NONE\x10\x00\x12\x0c\n\x08UPDATING\x10\x01\x12\x0f\n\x0bRECONCILING\x10\x02\x12\x0b\n\x07HEALTHY\x10\x03\x12\t\n\x05\x45RROR\x10\x04\"\xc2\x04\n\x15IstioComponentSetSpec\x12\x38\n\x04\x62\x61se\x18\x1d \x01(\x0b\x32*.istio.operator.v1alpha1.BaseComponentSpec\x12\x35\n\x05pilot\x18\x1e \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12\x36\n\x06policy\x18! \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12\x39\n\ttelemetry\x18\" \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12\x33\n\x03\x63ni\x18& \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12=\n\ristiod_remote\x18\' \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12>\n\x10ingress_gateways\x18( \x03(\x0b\x32$.istio.operator.v1alpha1.GatewaySpec\x12=\n\x0f\x65gress_gateways\x18) \x03(\x0b\x32$.istio.operator.v1alpha1.GatewaySpecJ\x04\x08\x1f\x10 J\x04\x08 \x10!J\x04\x08#\x10$J\x04\x08$\x10%J\x04\x08%\x10&R\x07\x63itadelR\x06galleyR\nnode_agentR\x05proxyR\x10sidecar_injector\"Q\n\x11\x42\x61seComponentSpec\x12<\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPB\"\x97\x02\n\rComponentSpec\x12<\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPB\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x0b\n\x03hub\x18\n \x01(\t\x12\x33\n\x03tag\x18\x0b \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12\x34\n\x04spec\x18\x1e \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12=\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpec\"\x97\x02\n\x15\x45xternalComponentSpec\x12<\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPB\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x34\n\x04spec\x18\n \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12\x12\n\nchart_path\x18\x1e \x01(\t\x12$\n\x06schema\x18# \x01(\x0b\x32\x14.google.protobuf.Any\x12=\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpec\"\xdb\x02\n\x0bGatewaySpec\x12<\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPB\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12>\n\x05label\x18\x04 \x03(\x0b\x32/.istio.operator.v1alpha1.GatewaySpec.LabelEntry\x12\x0b\n\x03hub\x18\n \x01(\t\x12\x33\n\x03tag\x18\x0b \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12=\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpec\x1a,\n\nLabelEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8d\t\n\x17KubernetesResourcesSpec\x12\x33\n\x08\x61\x66\x66inity\x18\x01 \x01(\x0b\x32!.istio.operator.v1alpha1.Affinity\x12,\n\x03\x65nv\x18\x02 \x03(\x0b\x32\x1f.istio.operator.v1alpha1.EnvVar\x12\x46\n\x08hpa_spec\x18\x03 \x01(\x0b\x32\x34.istio.operator.v1alpha1.HorizontalPodAutoscalerSpec\x12\x19\n\x11image_pull_policy\x18\x04 \x01(\t\x12Y\n\rnode_selector\x18\x05 \x03(\x0b\x32\x42.istio.operator.v1alpha1.KubernetesResourcesSpec.NodeSelectorEntry\x12O\n\x15pod_disruption_budget\x18\x06 \x01(\x0b\x32\x30.istio.operator.v1alpha1.PodDisruptionBudgetSpec\x12]\n\x0fpod_annotations\x18\x07 \x03(\x0b\x32\x44.istio.operator.v1alpha1.KubernetesResourcesSpec.PodAnnotationsEntry\x12\x1b\n\x13priority_class_name\x18\x08 \x01(\t\x12@\n\x0freadiness_probe\x18\t \x01(\x0b\x32\'.istio.operator.v1alpha1.ReadinessProbe\x12\x15\n\rreplica_count\x18\n \x01(\r\x12\x35\n\tresources\x18\x0b \x01(\x0b\x32\".istio.operator.v1alpha1.Resources\x12\x35\n\x07service\x18\x0c \x01(\x0b\x32$.istio.operator.v1alpha1.ServiceSpec\x12=\n\x08strategy\x18\r \x01(\x0b\x32+.istio.operator.v1alpha1.DeploymentStrategy\x12\x33\n\x0btolerations\x18\x0e \x03(\x0b\x32\x1e.k8s.io.api.core.v1.Toleration\x12\x65\n\x13service_annotations\x18\x0f \x03(\x0b\x32H.istio.operator.v1alpha1.KubernetesResourcesSpec.ServiceAnnotationsEntry\x12;\n\x08overlays\x18\x64 \x03(\x0b\x32).istio.operator.v1alpha1.K8sObjectOverlay\x1a\x33\n\x11NodeSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x35\n\x13PodAnnotationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x39\n\x17ServiceAnnotationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xdb\x01\n\x10K8sObjectOverlay\x12\x13\n\x0b\x61pi_version\x18\x01 \x01(\t\x12\x0c\n\x04kind\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x44\n\x07patches\x18\x04 \x03(\x0b\x32\x33.istio.operator.v1alpha1.K8sObjectOverlay.PathValue\x1aP\n\tPathValue\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x35\n\x05value\x18\x02 \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\"\xc5\x01\n\x08\x41\x66\x66inity\x12;\n\x0cnodeAffinity\x18\x01 \x01(\x0b\x32%.istio.operator.v1alpha1.NodeAffinity\x12\x39\n\x0bpodAffinity\x18\x02 \x01(\x0b\x32$.istio.operator.v1alpha1.PodAffinity\x12\x41\n\x0fpodAntiAffinity\x18\x03 \x01(\x0b\x32(.istio.operator.v1alpha1.PodAntiAffinity\"\x82\x01\n\x14\x43onfigMapKeySelector\x12K\n\x14localObjectReference\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReference\x12\x0b\n\x03key\x18\x02 \x01(\t\x12\x10\n\x08optional\x18\x03 \x01(\x08\"(\n\x0e\x43lientIPConfig\x12\x16\n\x0etimeoutSeconds\x18\x01 \x01(\x05\"M\n\x1b\x43rossVersionObjectReference\x12\x0c\n\x04kind\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x12\n\napiVersion\x18\x03 \x01(\t\"k\n\x12\x44\x65ploymentStrategy\x12\x0c\n\x04type\x18\x01 \x01(\t\x12G\n\rrollingUpdate\x18\x02 \x01(\x0b\x32\x30.istio.operator.v1alpha1.RollingUpdateDeployment\"_\n\x06\x45nvVar\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\x12\x38\n\tvalueFrom\x18\x03 \x01(\x0b\x32%.istio.operator.v1alpha1.EnvVarSource\"\xa2\x02\n\x0c\x45nvVarSource\x12>\n\x08\x66ieldRef\x18\x01 \x01(\x0b\x32,.istio.operator.v1alpha1.ObjectFieldSelector\x12H\n\x10resourceFieldRef\x18\x02 \x01(\x0b\x32..istio.operator.v1alpha1.ResourceFieldSelector\x12\x46\n\x0f\x63onfigMapKeyRef\x18\x03 \x01(\x0b\x32-.istio.operator.v1alpha1.ConfigMapKeySelector\x12@\n\x0csecretKeyRef\x18\x04 \x01(\x0b\x32*.istio.operator.v1alpha1.SecretKeySelector\"\x1d\n\nExecAction\x12\x0f\n\x07\x63ommand\x18\x01 \x03(\t\"\x88\x02\n\x14\x45xternalMetricSource\x12\x12\n\nmetricName\x18\x01 \x01(\t\x12K\n\x0emetricSelector\x18\x02 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector\x12\x43\n\x0btargetValue\x18\x03 \x01(\x0b\x32..k8s.io.apimachinery.pkg.api.resource.Quantity\x12J\n\x12targetAverageValue\x18\x04 \x01(\x0b\x32..k8s.io.apimachinery.pkg.api.resource.Quantity\"\xab\x01\n\rHTTPGetAction\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x34\n\x04port\x18\x02 \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12\x0c\n\x04host\x18\x03 \x01(\t\x12\x0e\n\x06scheme\x18\x04 \x01(\t\x12\x38\n\x0bhttpHeaders\x18\x05 \x03(\x0b\x32#.istio.operator.v1alpha1.HTTPHeader\")\n\nHTTPHeader\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"\xcb\x01\n\x1bHorizontalPodAutoscalerSpec\x12L\n\x0escaleTargetRef\x18\x01 \x01(\x0b\x32\x34.istio.operator.v1alpha1.CrossVersionObjectReference\x12\x13\n\x0bminReplicas\x18\x02 \x01(\x05\x12\x13\n\x0bmaxReplicas\x18\x03 \x01(\x05\x12\x34\n\x07metrics\x18\x04 \x03(\x0b\x32#.istio.operator.v1alpha1.MetricSpec\"$\n\x14LocalObjectReference\x12\x0c\n\x04name\x18\x01 \x01(\t\"\x92\x02\n\nMetricSpec\x12\x0c\n\x04type\x18\x01 \x01(\t\x12;\n\x06object\x18\x02 \x01(\x0b\x32+.istio.operator.v1alpha1.ObjectMetricSource\x12\x37\n\x04pods\x18\x03 \x01(\x0b\x32).istio.operator.v1alpha1.PodsMetricSource\x12?\n\x08resource\x18\x04 \x01(\x0b\x32-.istio.operator.v1alpha1.ResourceMetricSource\x12?\n\x08\x65xternal\x18\x05 \x01(\x0b\x32-.istio.operator.v1alpha1.ExternalMetricSource\"\xd8\x01\n\x0cNodeAffinity\x12]\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x01(\x0b\x32%.istio.operator.v1alpha1.NodeSelector\x12i\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.PreferredSchedulingTerm\"T\n\x0cNodeSelector\x12\x44\n\x11nodeSelectorTerms\x18\x01 \x03(\x0b\x32).istio.operator.v1alpha1.NodeSelectorTerm\"\xa5\x01\n\x10NodeSelectorTerm\x12J\n\x10matchExpressions\x18\x01 \x03(\x0b\x32\x30.istio.operator.v1alpha1.NodeSelectorRequirement\x12\x45\n\x0bmatchFields\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.NodeSelectorRequirement\"H\n\x17NodeSelectorRequirement\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x10\n\x08operator\x18\x02 \x01(\t\x12\x0e\n\x06values\x18\x03 \x03(\t\"<\n\x13ObjectFieldSelector\x12\x12\n\napiVersion\x18\x01 \x01(\t\x12\x11\n\tfieldPath\x18\x02 \x01(\t\"-\n\nObjectMeta\x12\x0c\n\x04name\x18\x05 \x01(\t\x12\x11\n\tnamespace\x18\x06 \x01(\t\"\xc0\x02\n\x12ObjectMetricSource\x12\x44\n\x06target\x18\x01 \x01(\x0b\x32\x34.istio.operator.v1alpha1.CrossVersionObjectReference\x12\x12\n\nmetricName\x18\x02 \x01(\t\x12\x43\n\x0btargetValue\x18\x03 \x01(\x0b\x32..k8s.io.apimachinery.pkg.api.resource.Quantity\x12\x45\n\x08selector\x18\x04 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector\x12\x44\n\x0c\x61verageValue\x18\x05 \x01(\x0b\x32..k8s.io.apimachinery.pkg.api.resource.Quantity\"\xda\x01\n\x0bPodAffinity\x12`\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x03(\x0b\x32(.istio.operator.v1alpha1.PodAffinityTerm\x12i\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.WeightedPodAffinityTerm\"\xde\x01\n\x0fPodAntiAffinity\x12`\n.requiredDuringSchedulingIgnoredDuringExecution\x18\x01 \x03(\x0b\x32(.istio.operator.v1alpha1.PodAffinityTerm\x12i\n/preferredDuringSchedulingIgnoredDuringExecution\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.WeightedPodAffinityTerm\"\x86\x01\n\x0fPodAffinityTerm\x12J\n\rlabelSelector\x18\x01 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector\x12\x12\n\nnamespaces\x18\x02 \x03(\t\x12\x13\n\x0btopologyKey\x18\x03 \x01(\t\"\x8e\x01\n\x17PodDisruptionBudgetSpec\x12\x14\n\x0cminAvailable\x18\x01 \x01(\r\x12\x45\n\x08selector\x18\x02 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector\x12\x16\n\x0emaxUnavailable\x18\x03 \x01(\r\"\xb9\x01\n\x10PodsMetricSource\x12\x12\n\nmetricName\x18\x01 \x01(\t\x12J\n\x12targetAverageValue\x18\x02 \x01(\x0b\x32..k8s.io.apimachinery.pkg.api.resource.Quantity\x12\x45\n\x08selector\x18\x03 \x01(\x0b\x32\x33.k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector\"h\n\x17PreferredSchedulingTerm\x12\x0e\n\x06weight\x18\x01 \x01(\x05\x12=\n\npreference\x18\x02 \x01(\x0b\x32).istio.operator.v1alpha1.NodeSelectorTerm\"\xb9\x02\n\x0eReadinessProbe\x12\x31\n\x04\x65xec\x18\x01 \x01(\x0b\x32#.istio.operator.v1alpha1.ExecAction\x12\x37\n\x07httpGet\x18\x02 \x01(\x0b\x32&.istio.operator.v1alpha1.HTTPGetAction\x12;\n\ttcpSocket\x18\x03 \x01(\x0b\x32(.istio.operator.v1alpha1.TCPSocketAction\x12\x1b\n\x13initialDelaySeconds\x18\x04 \x01(\x05\x12\x16\n\x0etimeoutSeconds\x18\x05 \x01(\x05\x12\x15\n\rperiodSeconds\x18\x06 \x01(\x05\x12\x18\n\x10successThreshold\x18\x07 \x01(\x05\x12\x18\n\x10\x66\x61ilureThreshold\x18\x08 \x01(\x05\"\x81\x01\n\x15ResourceFieldSelector\x12\x15\n\rcontainerName\x18\x01 \x01(\t\x12\x10\n\x08resource\x18\x02 \x01(\t\x12?\n\x07\x64ivisor\x18\x03 \x01(\x0b\x32..k8s.io.apimachinery.pkg.api.resource.Quantity\"\xba\x01\n\x14ResourceMetricSource\x12\x0c\n\x04name\x18\x01 \x01(\t\x12H\n\x18targetAverageUtilization\x18\x02 \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12J\n\x12targetAverageValue\x18\x03 \x01(\x0b\x32..k8s.io.apimachinery.pkg.api.resource.Quantity\"\xef\x01\n\tResources\x12>\n\x06limits\x18\x01 \x03(\x0b\x32..istio.operator.v1alpha1.Resources.LimitsEntry\x12\x42\n\x08requests\x18\x02 \x03(\x0b\x32\x30.istio.operator.v1alpha1.Resources.RequestsEntry\x1a-\n\x0bLimitsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a/\n\rRequestsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x93\x01\n\x17RollingUpdateDeployment\x12>\n\x0emaxUnavailable\x18\x01 \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12\x38\n\x08maxSurge\x18\x02 \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\"\x7f\n\x11SecretKeySelector\x12K\n\x14localObjectReference\x18\x01 \x01(\x0b\x32-.istio.operator.v1alpha1.LocalObjectReference\x12\x0b\n\x03key\x18\x02 \x01(\t\x12\x10\n\x08optional\x18\x03 \x01(\x08\"\x85\x04\n\x0bServiceSpec\x12\x33\n\x05ports\x18\x01 \x03(\x0b\x32$.istio.operator.v1alpha1.ServicePort\x12\x44\n\x08selector\x18\x02 \x03(\x0b\x32\x32.istio.operator.v1alpha1.ServiceSpec.SelectorEntry\x12\x11\n\tclusterIP\x18\x03 \x01(\t\x12\x0c\n\x04type\x18\x04 \x01(\t\x12\x13\n\x0b\x65xternalIPs\x18\x05 \x03(\t\x12\x17\n\x0fsessionAffinity\x18\x07 \x01(\t\x12\x16\n\x0eloadBalancerIP\x18\x08 \x01(\t\x12 \n\x18loadBalancerSourceRanges\x18\t \x03(\t\x12\x14\n\x0c\x65xternalName\x18\n \x01(\t\x12\x1d\n\x15\x65xternalTrafficPolicy\x18\x0b \x01(\t\x12\x1b\n\x13healthCheckNodePort\x18\x0c \x01(\x05\x12 \n\x18publishNotReadyAddresses\x18\r \x01(\x08\x12M\n\x15sessionAffinityConfig\x18\x0e \x01(\x0b\x32..istio.operator.v1alpha1.SessionAffinityConfig\x1a/\n\rSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x89\x01\n\x0bServicePort\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08protocol\x18\x02 \x01(\t\x12\x0c\n\x04port\x18\x03 \x01(\x05\x12:\n\ntargetPort\x18\x04 \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12\x10\n\x08nodePort\x18\x05 \x01(\x05\"R\n\x15SessionAffinityConfig\x12\x39\n\x08\x63lientIP\x18\x01 \x01(\x0b\x32\'.istio.operator.v1alpha1.ClientIPConfig\"U\n\x0fTCPSocketAction\x12\x34\n\x04port\x18\x01 \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12\x0c\n\x04host\x18\x02 \x01(\t\"l\n\x17WeightedPodAffinityTerm\x12\x0e\n\x06weight\x18\x01 \x01(\x05\x12\x41\n\x0fpodAffinityTerm\x18\x02 \x01(\x0b\x32(.istio.operator.v1alpha1.PodAffinityTerm\"\x0f\n\rTypeInterface\"\x18\n\x16TypeMapStringInterface\"\x16\n\x14TypeIntOrStringForPB\"\x14\n\x12TypeBoolValueForPBB Z\x1eistio.io/api/operator/v1alpha1b\x06proto3')
   ,
-  dependencies=[operator_dot_v1alpha1_dot_component__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_api_dot_resource_dot_generated__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_util_dot_intstr_dot_generated__pb2.DESCRIPTOR,])
 
 
 
@@ -56,8 +60,8 @@ _INSTALLSTATUS_STATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1166,
-  serialized_end=1239,
+  serialized_start=1351,
+  serialized_end=1424,
 )
 _sym_db.RegisterEnumDescriptor(_INSTALLSTATUS_STATUS)
 
@@ -95,8 +99,8 @@ _ISTIOOPERATORSPEC_ADDONCOMPONENTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=672,
-  serialized_end=774,
+  serialized_start=857,
+  serialized_end=959,
 )
 
 _ISTIOOPERATORSPEC = _descriptor.Descriptor(
@@ -202,8 +206,8 @@ _ISTIOOPERATORSPEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=97,
-  serialized_end=774,
+  serialized_start=286,
+  serialized_end=959,
 )
 
 
@@ -247,8 +251,8 @@ _INSTALLSTATUS_VERSIONSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=944,
-  serialized_end=1054,
+  serialized_start=1129,
+  serialized_end=1239,
 )
 
 _INSTALLSTATUS_COMPONENTSTATUSENTRY = _descriptor.Descriptor(
@@ -284,8 +288,8 @@ _INSTALLSTATUS_COMPONENTSTATUSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1056,
-  serialized_end=1164,
+  serialized_start=1241,
+  serialized_end=1349,
 )
 
 _INSTALLSTATUS = _descriptor.Descriptor(
@@ -322,14 +326,2545 @@ _INSTALLSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=777,
-  serialized_end=1239,
+  serialized_start=962,
+  serialized_end=1424,
 )
 
 
-_TYPEMAPSTRINGINTERFACE2 = _descriptor.Descriptor(
-  name='TypeMapStringInterface2',
-  full_name='istio.operator.v1alpha1.TypeMapStringInterface2',
+_ISTIOCOMPONENTSETSPEC = _descriptor.Descriptor(
+  name='IstioComponentSetSpec',
+  full_name='istio.operator.v1alpha1.IstioComponentSetSpec',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='base', full_name='istio.operator.v1alpha1.IstioComponentSetSpec.base', index=0,
+      number=29, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='pilot', full_name='istio.operator.v1alpha1.IstioComponentSetSpec.pilot', index=1,
+      number=30, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='policy', full_name='istio.operator.v1alpha1.IstioComponentSetSpec.policy', index=2,
+      number=33, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='telemetry', full_name='istio.operator.v1alpha1.IstioComponentSetSpec.telemetry', index=3,
+      number=34, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='cni', full_name='istio.operator.v1alpha1.IstioComponentSetSpec.cni', index=4,
+      number=38, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='istiod_remote', full_name='istio.operator.v1alpha1.IstioComponentSetSpec.istiod_remote', index=5,
+      number=39, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='ingress_gateways', full_name='istio.operator.v1alpha1.IstioComponentSetSpec.ingress_gateways', index=6,
+      number=40, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='egress_gateways', full_name='istio.operator.v1alpha1.IstioComponentSetSpec.egress_gateways', index=7,
+      number=41, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1427,
+  serialized_end=2005,
+)
+
+
+_BASECOMPONENTSPEC = _descriptor.Descriptor(
+  name='BaseComponentSpec',
+  full_name='istio.operator.v1alpha1.BaseComponentSpec',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='enabled', full_name='istio.operator.v1alpha1.BaseComponentSpec.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2007,
+  serialized_end=2088,
+)
+
+
+_COMPONENTSPEC = _descriptor.Descriptor(
+  name='ComponentSpec',
+  full_name='istio.operator.v1alpha1.ComponentSpec',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='enabled', full_name='istio.operator.v1alpha1.ComponentSpec.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='namespace', full_name='istio.operator.v1alpha1.ComponentSpec.namespace', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='hub', full_name='istio.operator.v1alpha1.ComponentSpec.hub', index=2,
+      number=10, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='tag', full_name='istio.operator.v1alpha1.ComponentSpec.tag', index=3,
+      number=11, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='spec', full_name='istio.operator.v1alpha1.ComponentSpec.spec', index=4,
+      number=30, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='k8s', full_name='istio.operator.v1alpha1.ComponentSpec.k8s', index=5,
+      number=50, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2091,
+  serialized_end=2370,
+)
+
+
+_EXTERNALCOMPONENTSPEC = _descriptor.Descriptor(
+  name='ExternalComponentSpec',
+  full_name='istio.operator.v1alpha1.ExternalComponentSpec',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='enabled', full_name='istio.operator.v1alpha1.ExternalComponentSpec.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='namespace', full_name='istio.operator.v1alpha1.ExternalComponentSpec.namespace', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='spec', full_name='istio.operator.v1alpha1.ExternalComponentSpec.spec', index=2,
+      number=10, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='chart_path', full_name='istio.operator.v1alpha1.ExternalComponentSpec.chart_path', index=3,
+      number=30, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='schema', full_name='istio.operator.v1alpha1.ExternalComponentSpec.schema', index=4,
+      number=35, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='k8s', full_name='istio.operator.v1alpha1.ExternalComponentSpec.k8s', index=5,
+      number=50, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2373,
+  serialized_end=2652,
+)
+
+
+_GATEWAYSPEC_LABELENTRY = _descriptor.Descriptor(
+  name='LabelEntry',
+  full_name='istio.operator.v1alpha1.GatewaySpec.LabelEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.operator.v1alpha1.GatewaySpec.LabelEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.operator.v1alpha1.GatewaySpec.LabelEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2958,
+  serialized_end=3002,
+)
+
+_GATEWAYSPEC = _descriptor.Descriptor(
+  name='GatewaySpec',
+  full_name='istio.operator.v1alpha1.GatewaySpec',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='enabled', full_name='istio.operator.v1alpha1.GatewaySpec.enabled', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='namespace', full_name='istio.operator.v1alpha1.GatewaySpec.namespace', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.operator.v1alpha1.GatewaySpec.name', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='label', full_name='istio.operator.v1alpha1.GatewaySpec.label', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='hub', full_name='istio.operator.v1alpha1.GatewaySpec.hub', index=4,
+      number=10, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='tag', full_name='istio.operator.v1alpha1.GatewaySpec.tag', index=5,
+      number=11, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='k8s', full_name='istio.operator.v1alpha1.GatewaySpec.k8s', index=6,
+      number=50, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_GATEWAYSPEC_LABELENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2655,
+  serialized_end=3002,
+)
+
+
+_KUBERNETESRESOURCESSPEC_NODESELECTORENTRY = _descriptor.Descriptor(
+  name='NodeSelectorEntry',
+  full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.NodeSelectorEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.NodeSelectorEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.NodeSelectorEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4005,
+  serialized_end=4056,
+)
+
+_KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY = _descriptor.Descriptor(
+  name='PodAnnotationsEntry',
+  full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.PodAnnotationsEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.PodAnnotationsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.PodAnnotationsEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4058,
+  serialized_end=4111,
+)
+
+_KUBERNETESRESOURCESSPEC_SERVICEANNOTATIONSENTRY = _descriptor.Descriptor(
+  name='ServiceAnnotationsEntry',
+  full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.ServiceAnnotationsEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.ServiceAnnotationsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.ServiceAnnotationsEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4113,
+  serialized_end=4170,
+)
+
+_KUBERNETESRESOURCESSPEC = _descriptor.Descriptor(
+  name='KubernetesResourcesSpec',
+  full_name='istio.operator.v1alpha1.KubernetesResourcesSpec',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='affinity', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.affinity', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='env', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.env', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='hpa_spec', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.hpa_spec', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='image_pull_policy', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.image_pull_policy', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='node_selector', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.node_selector', index=4,
+      number=5, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='pod_disruption_budget', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.pod_disruption_budget', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='pod_annotations', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.pod_annotations', index=6,
+      number=7, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='priority_class_name', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.priority_class_name', index=7,
+      number=8, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='readiness_probe', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.readiness_probe', index=8,
+      number=9, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='replica_count', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.replica_count', index=9,
+      number=10, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='resources', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.resources', index=10,
+      number=11, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='service', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.service', index=11,
+      number=12, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='strategy', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.strategy', index=12,
+      number=13, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='tolerations', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.tolerations', index=13,
+      number=14, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='service_annotations', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.service_annotations', index=14,
+      number=15, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='overlays', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.overlays', index=15,
+      number=100, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_KUBERNETESRESOURCESSPEC_NODESELECTORENTRY, _KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY, _KUBERNETESRESOURCESSPEC_SERVICEANNOTATIONSENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3005,
+  serialized_end=4170,
+)
+
+
+_K8SOBJECTOVERLAY_PATHVALUE = _descriptor.Descriptor(
+  name='PathValue',
+  full_name='istio.operator.v1alpha1.K8sObjectOverlay.PathValue',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='path', full_name='istio.operator.v1alpha1.K8sObjectOverlay.PathValue.path', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.operator.v1alpha1.K8sObjectOverlay.PathValue.value', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4312,
+  serialized_end=4392,
+)
+
+_K8SOBJECTOVERLAY = _descriptor.Descriptor(
+  name='K8sObjectOverlay',
+  full_name='istio.operator.v1alpha1.K8sObjectOverlay',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='api_version', full_name='istio.operator.v1alpha1.K8sObjectOverlay.api_version', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='kind', full_name='istio.operator.v1alpha1.K8sObjectOverlay.kind', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.operator.v1alpha1.K8sObjectOverlay.name', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='patches', full_name='istio.operator.v1alpha1.K8sObjectOverlay.patches', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_K8SOBJECTOVERLAY_PATHVALUE, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4173,
+  serialized_end=4392,
+)
+
+
+_AFFINITY = _descriptor.Descriptor(
+  name='Affinity',
+  full_name='istio.operator.v1alpha1.Affinity',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='nodeAffinity', full_name='istio.operator.v1alpha1.Affinity.nodeAffinity', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='podAffinity', full_name='istio.operator.v1alpha1.Affinity.podAffinity', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='podAntiAffinity', full_name='istio.operator.v1alpha1.Affinity.podAntiAffinity', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4395,
+  serialized_end=4592,
+)
+
+
+_CONFIGMAPKEYSELECTOR = _descriptor.Descriptor(
+  name='ConfigMapKeySelector',
+  full_name='istio.operator.v1alpha1.ConfigMapKeySelector',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='localObjectReference', full_name='istio.operator.v1alpha1.ConfigMapKeySelector.localObjectReference', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.operator.v1alpha1.ConfigMapKeySelector.key', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='optional', full_name='istio.operator.v1alpha1.ConfigMapKeySelector.optional', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4595,
+  serialized_end=4725,
+)
+
+
+_CLIENTIPCONFIG = _descriptor.Descriptor(
+  name='ClientIPConfig',
+  full_name='istio.operator.v1alpha1.ClientIPConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='timeoutSeconds', full_name='istio.operator.v1alpha1.ClientIPConfig.timeoutSeconds', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4727,
+  serialized_end=4767,
+)
+
+
+_CROSSVERSIONOBJECTREFERENCE = _descriptor.Descriptor(
+  name='CrossVersionObjectReference',
+  full_name='istio.operator.v1alpha1.CrossVersionObjectReference',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='kind', full_name='istio.operator.v1alpha1.CrossVersionObjectReference.kind', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.operator.v1alpha1.CrossVersionObjectReference.name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='apiVersion', full_name='istio.operator.v1alpha1.CrossVersionObjectReference.apiVersion', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4769,
+  serialized_end=4846,
+)
+
+
+_DEPLOYMENTSTRATEGY = _descriptor.Descriptor(
+  name='DeploymentStrategy',
+  full_name='istio.operator.v1alpha1.DeploymentStrategy',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='type', full_name='istio.operator.v1alpha1.DeploymentStrategy.type', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='rollingUpdate', full_name='istio.operator.v1alpha1.DeploymentStrategy.rollingUpdate', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4848,
+  serialized_end=4955,
+)
+
+
+_ENVVAR = _descriptor.Descriptor(
+  name='EnvVar',
+  full_name='istio.operator.v1alpha1.EnvVar',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.operator.v1alpha1.EnvVar.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.operator.v1alpha1.EnvVar.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='valueFrom', full_name='istio.operator.v1alpha1.EnvVar.valueFrom', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4957,
+  serialized_end=5052,
+)
+
+
+_ENVVARSOURCE = _descriptor.Descriptor(
+  name='EnvVarSource',
+  full_name='istio.operator.v1alpha1.EnvVarSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='fieldRef', full_name='istio.operator.v1alpha1.EnvVarSource.fieldRef', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='resourceFieldRef', full_name='istio.operator.v1alpha1.EnvVarSource.resourceFieldRef', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='configMapKeyRef', full_name='istio.operator.v1alpha1.EnvVarSource.configMapKeyRef', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='secretKeyRef', full_name='istio.operator.v1alpha1.EnvVarSource.secretKeyRef', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=5055,
+  serialized_end=5345,
+)
+
+
+_EXECACTION = _descriptor.Descriptor(
+  name='ExecAction',
+  full_name='istio.operator.v1alpha1.ExecAction',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='command', full_name='istio.operator.v1alpha1.ExecAction.command', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=5347,
+  serialized_end=5376,
+)
+
+
+_EXTERNALMETRICSOURCE = _descriptor.Descriptor(
+  name='ExternalMetricSource',
+  full_name='istio.operator.v1alpha1.ExternalMetricSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='metricName', full_name='istio.operator.v1alpha1.ExternalMetricSource.metricName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='metricSelector', full_name='istio.operator.v1alpha1.ExternalMetricSource.metricSelector', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='targetValue', full_name='istio.operator.v1alpha1.ExternalMetricSource.targetValue', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='targetAverageValue', full_name='istio.operator.v1alpha1.ExternalMetricSource.targetAverageValue', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=5379,
+  serialized_end=5643,
+)
+
+
+_HTTPGETACTION = _descriptor.Descriptor(
+  name='HTTPGetAction',
+  full_name='istio.operator.v1alpha1.HTTPGetAction',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='path', full_name='istio.operator.v1alpha1.HTTPGetAction.path', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='port', full_name='istio.operator.v1alpha1.HTTPGetAction.port', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='host', full_name='istio.operator.v1alpha1.HTTPGetAction.host', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='scheme', full_name='istio.operator.v1alpha1.HTTPGetAction.scheme', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='httpHeaders', full_name='istio.operator.v1alpha1.HTTPGetAction.httpHeaders', index=4,
+      number=5, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=5646,
+  serialized_end=5817,
+)
+
+
+_HTTPHEADER = _descriptor.Descriptor(
+  name='HTTPHeader',
+  full_name='istio.operator.v1alpha1.HTTPHeader',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.operator.v1alpha1.HTTPHeader.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.operator.v1alpha1.HTTPHeader.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=5819,
+  serialized_end=5860,
+)
+
+
+_HORIZONTALPODAUTOSCALERSPEC = _descriptor.Descriptor(
+  name='HorizontalPodAutoscalerSpec',
+  full_name='istio.operator.v1alpha1.HorizontalPodAutoscalerSpec',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='scaleTargetRef', full_name='istio.operator.v1alpha1.HorizontalPodAutoscalerSpec.scaleTargetRef', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='minReplicas', full_name='istio.operator.v1alpha1.HorizontalPodAutoscalerSpec.minReplicas', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='maxReplicas', full_name='istio.operator.v1alpha1.HorizontalPodAutoscalerSpec.maxReplicas', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='metrics', full_name='istio.operator.v1alpha1.HorizontalPodAutoscalerSpec.metrics', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=5863,
+  serialized_end=6066,
+)
+
+
+_LOCALOBJECTREFERENCE = _descriptor.Descriptor(
+  name='LocalObjectReference',
+  full_name='istio.operator.v1alpha1.LocalObjectReference',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.operator.v1alpha1.LocalObjectReference.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6068,
+  serialized_end=6104,
+)
+
+
+_METRICSPEC = _descriptor.Descriptor(
+  name='MetricSpec',
+  full_name='istio.operator.v1alpha1.MetricSpec',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='type', full_name='istio.operator.v1alpha1.MetricSpec.type', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='object', full_name='istio.operator.v1alpha1.MetricSpec.object', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='pods', full_name='istio.operator.v1alpha1.MetricSpec.pods', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='resource', full_name='istio.operator.v1alpha1.MetricSpec.resource', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='external', full_name='istio.operator.v1alpha1.MetricSpec.external', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6107,
+  serialized_end=6381,
+)
+
+
+_NODEAFFINITY = _descriptor.Descriptor(
+  name='NodeAffinity',
+  full_name='istio.operator.v1alpha1.NodeAffinity',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='requiredDuringSchedulingIgnoredDuringExecution', full_name='istio.operator.v1alpha1.NodeAffinity.requiredDuringSchedulingIgnoredDuringExecution', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='preferredDuringSchedulingIgnoredDuringExecution', full_name='istio.operator.v1alpha1.NodeAffinity.preferredDuringSchedulingIgnoredDuringExecution', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6384,
+  serialized_end=6600,
+)
+
+
+_NODESELECTOR = _descriptor.Descriptor(
+  name='NodeSelector',
+  full_name='istio.operator.v1alpha1.NodeSelector',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='nodeSelectorTerms', full_name='istio.operator.v1alpha1.NodeSelector.nodeSelectorTerms', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6602,
+  serialized_end=6686,
+)
+
+
+_NODESELECTORTERM = _descriptor.Descriptor(
+  name='NodeSelectorTerm',
+  full_name='istio.operator.v1alpha1.NodeSelectorTerm',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='matchExpressions', full_name='istio.operator.v1alpha1.NodeSelectorTerm.matchExpressions', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='matchFields', full_name='istio.operator.v1alpha1.NodeSelectorTerm.matchFields', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6689,
+  serialized_end=6854,
+)
+
+
+_NODESELECTORREQUIREMENT = _descriptor.Descriptor(
+  name='NodeSelectorRequirement',
+  full_name='istio.operator.v1alpha1.NodeSelectorRequirement',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.operator.v1alpha1.NodeSelectorRequirement.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='operator', full_name='istio.operator.v1alpha1.NodeSelectorRequirement.operator', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='values', full_name='istio.operator.v1alpha1.NodeSelectorRequirement.values', index=2,
+      number=3, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6856,
+  serialized_end=6928,
+)
+
+
+_OBJECTFIELDSELECTOR = _descriptor.Descriptor(
+  name='ObjectFieldSelector',
+  full_name='istio.operator.v1alpha1.ObjectFieldSelector',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='apiVersion', full_name='istio.operator.v1alpha1.ObjectFieldSelector.apiVersion', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fieldPath', full_name='istio.operator.v1alpha1.ObjectFieldSelector.fieldPath', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6930,
+  serialized_end=6990,
+)
+
+
+_OBJECTMETA = _descriptor.Descriptor(
+  name='ObjectMeta',
+  full_name='istio.operator.v1alpha1.ObjectMeta',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.operator.v1alpha1.ObjectMeta.name', index=0,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='namespace', full_name='istio.operator.v1alpha1.ObjectMeta.namespace', index=1,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6992,
+  serialized_end=7037,
+)
+
+
+_OBJECTMETRICSOURCE = _descriptor.Descriptor(
+  name='ObjectMetricSource',
+  full_name='istio.operator.v1alpha1.ObjectMetricSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='target', full_name='istio.operator.v1alpha1.ObjectMetricSource.target', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='metricName', full_name='istio.operator.v1alpha1.ObjectMetricSource.metricName', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='targetValue', full_name='istio.operator.v1alpha1.ObjectMetricSource.targetValue', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='selector', full_name='istio.operator.v1alpha1.ObjectMetricSource.selector', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='averageValue', full_name='istio.operator.v1alpha1.ObjectMetricSource.averageValue', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=7040,
+  serialized_end=7360,
+)
+
+
+_PODAFFINITY = _descriptor.Descriptor(
+  name='PodAffinity',
+  full_name='istio.operator.v1alpha1.PodAffinity',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='requiredDuringSchedulingIgnoredDuringExecution', full_name='istio.operator.v1alpha1.PodAffinity.requiredDuringSchedulingIgnoredDuringExecution', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='preferredDuringSchedulingIgnoredDuringExecution', full_name='istio.operator.v1alpha1.PodAffinity.preferredDuringSchedulingIgnoredDuringExecution', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=7363,
+  serialized_end=7581,
+)
+
+
+_PODANTIAFFINITY = _descriptor.Descriptor(
+  name='PodAntiAffinity',
+  full_name='istio.operator.v1alpha1.PodAntiAffinity',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='requiredDuringSchedulingIgnoredDuringExecution', full_name='istio.operator.v1alpha1.PodAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='preferredDuringSchedulingIgnoredDuringExecution', full_name='istio.operator.v1alpha1.PodAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=7584,
+  serialized_end=7806,
+)
+
+
+_PODAFFINITYTERM = _descriptor.Descriptor(
+  name='PodAffinityTerm',
+  full_name='istio.operator.v1alpha1.PodAffinityTerm',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='labelSelector', full_name='istio.operator.v1alpha1.PodAffinityTerm.labelSelector', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='namespaces', full_name='istio.operator.v1alpha1.PodAffinityTerm.namespaces', index=1,
+      number=2, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='topologyKey', full_name='istio.operator.v1alpha1.PodAffinityTerm.topologyKey', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=7809,
+  serialized_end=7943,
+)
+
+
+_PODDISRUPTIONBUDGETSPEC = _descriptor.Descriptor(
+  name='PodDisruptionBudgetSpec',
+  full_name='istio.operator.v1alpha1.PodDisruptionBudgetSpec',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='minAvailable', full_name='istio.operator.v1alpha1.PodDisruptionBudgetSpec.minAvailable', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='selector', full_name='istio.operator.v1alpha1.PodDisruptionBudgetSpec.selector', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='maxUnavailable', full_name='istio.operator.v1alpha1.PodDisruptionBudgetSpec.maxUnavailable', index=2,
+      number=3, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=7946,
+  serialized_end=8088,
+)
+
+
+_PODSMETRICSOURCE = _descriptor.Descriptor(
+  name='PodsMetricSource',
+  full_name='istio.operator.v1alpha1.PodsMetricSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='metricName', full_name='istio.operator.v1alpha1.PodsMetricSource.metricName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='targetAverageValue', full_name='istio.operator.v1alpha1.PodsMetricSource.targetAverageValue', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='selector', full_name='istio.operator.v1alpha1.PodsMetricSource.selector', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=8091,
+  serialized_end=8276,
+)
+
+
+_PREFERREDSCHEDULINGTERM = _descriptor.Descriptor(
+  name='PreferredSchedulingTerm',
+  full_name='istio.operator.v1alpha1.PreferredSchedulingTerm',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='weight', full_name='istio.operator.v1alpha1.PreferredSchedulingTerm.weight', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='preference', full_name='istio.operator.v1alpha1.PreferredSchedulingTerm.preference', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=8278,
+  serialized_end=8382,
+)
+
+
+_READINESSPROBE = _descriptor.Descriptor(
+  name='ReadinessProbe',
+  full_name='istio.operator.v1alpha1.ReadinessProbe',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='exec', full_name='istio.operator.v1alpha1.ReadinessProbe.exec', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='httpGet', full_name='istio.operator.v1alpha1.ReadinessProbe.httpGet', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='tcpSocket', full_name='istio.operator.v1alpha1.ReadinessProbe.tcpSocket', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='initialDelaySeconds', full_name='istio.operator.v1alpha1.ReadinessProbe.initialDelaySeconds', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='timeoutSeconds', full_name='istio.operator.v1alpha1.ReadinessProbe.timeoutSeconds', index=4,
+      number=5, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='periodSeconds', full_name='istio.operator.v1alpha1.ReadinessProbe.periodSeconds', index=5,
+      number=6, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='successThreshold', full_name='istio.operator.v1alpha1.ReadinessProbe.successThreshold', index=6,
+      number=7, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='failureThreshold', full_name='istio.operator.v1alpha1.ReadinessProbe.failureThreshold', index=7,
+      number=8, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=8385,
+  serialized_end=8698,
+)
+
+
+_RESOURCEFIELDSELECTOR = _descriptor.Descriptor(
+  name='ResourceFieldSelector',
+  full_name='istio.operator.v1alpha1.ResourceFieldSelector',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='containerName', full_name='istio.operator.v1alpha1.ResourceFieldSelector.containerName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='resource', full_name='istio.operator.v1alpha1.ResourceFieldSelector.resource', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='divisor', full_name='istio.operator.v1alpha1.ResourceFieldSelector.divisor', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=8701,
+  serialized_end=8830,
+)
+
+
+_RESOURCEMETRICSOURCE = _descriptor.Descriptor(
+  name='ResourceMetricSource',
+  full_name='istio.operator.v1alpha1.ResourceMetricSource',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.operator.v1alpha1.ResourceMetricSource.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='targetAverageUtilization', full_name='istio.operator.v1alpha1.ResourceMetricSource.targetAverageUtilization', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='targetAverageValue', full_name='istio.operator.v1alpha1.ResourceMetricSource.targetAverageValue', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=8833,
+  serialized_end=9019,
+)
+
+
+_RESOURCES_LIMITSENTRY = _descriptor.Descriptor(
+  name='LimitsEntry',
+  full_name='istio.operator.v1alpha1.Resources.LimitsEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.operator.v1alpha1.Resources.LimitsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.operator.v1alpha1.Resources.LimitsEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=9167,
+  serialized_end=9212,
+)
+
+_RESOURCES_REQUESTSENTRY = _descriptor.Descriptor(
+  name='RequestsEntry',
+  full_name='istio.operator.v1alpha1.Resources.RequestsEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.operator.v1alpha1.Resources.RequestsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.operator.v1alpha1.Resources.RequestsEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=9214,
+  serialized_end=9261,
+)
+
+_RESOURCES = _descriptor.Descriptor(
+  name='Resources',
+  full_name='istio.operator.v1alpha1.Resources',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='limits', full_name='istio.operator.v1alpha1.Resources.limits', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='requests', full_name='istio.operator.v1alpha1.Resources.requests', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_RESOURCES_LIMITSENTRY, _RESOURCES_REQUESTSENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=9022,
+  serialized_end=9261,
+)
+
+
+_ROLLINGUPDATEDEPLOYMENT = _descriptor.Descriptor(
+  name='RollingUpdateDeployment',
+  full_name='istio.operator.v1alpha1.RollingUpdateDeployment',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='maxUnavailable', full_name='istio.operator.v1alpha1.RollingUpdateDeployment.maxUnavailable', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='maxSurge', full_name='istio.operator.v1alpha1.RollingUpdateDeployment.maxSurge', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=9264,
+  serialized_end=9411,
+)
+
+
+_SECRETKEYSELECTOR = _descriptor.Descriptor(
+  name='SecretKeySelector',
+  full_name='istio.operator.v1alpha1.SecretKeySelector',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='localObjectReference', full_name='istio.operator.v1alpha1.SecretKeySelector.localObjectReference', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.operator.v1alpha1.SecretKeySelector.key', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='optional', full_name='istio.operator.v1alpha1.SecretKeySelector.optional', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=9413,
+  serialized_end=9540,
+)
+
+
+_SERVICESPEC_SELECTORENTRY = _descriptor.Descriptor(
+  name='SelectorEntry',
+  full_name='istio.operator.v1alpha1.ServiceSpec.SelectorEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='istio.operator.v1alpha1.ServiceSpec.SelectorEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.operator.v1alpha1.ServiceSpec.SelectorEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=10013,
+  serialized_end=10060,
+)
+
+_SERVICESPEC = _descriptor.Descriptor(
+  name='ServiceSpec',
+  full_name='istio.operator.v1alpha1.ServiceSpec',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='ports', full_name='istio.operator.v1alpha1.ServiceSpec.ports', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='selector', full_name='istio.operator.v1alpha1.ServiceSpec.selector', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='clusterIP', full_name='istio.operator.v1alpha1.ServiceSpec.clusterIP', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='type', full_name='istio.operator.v1alpha1.ServiceSpec.type', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='externalIPs', full_name='istio.operator.v1alpha1.ServiceSpec.externalIPs', index=4,
+      number=5, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='sessionAffinity', full_name='istio.operator.v1alpha1.ServiceSpec.sessionAffinity', index=5,
+      number=7, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='loadBalancerIP', full_name='istio.operator.v1alpha1.ServiceSpec.loadBalancerIP', index=6,
+      number=8, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='loadBalancerSourceRanges', full_name='istio.operator.v1alpha1.ServiceSpec.loadBalancerSourceRanges', index=7,
+      number=9, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='externalName', full_name='istio.operator.v1alpha1.ServiceSpec.externalName', index=8,
+      number=10, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='externalTrafficPolicy', full_name='istio.operator.v1alpha1.ServiceSpec.externalTrafficPolicy', index=9,
+      number=11, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='healthCheckNodePort', full_name='istio.operator.v1alpha1.ServiceSpec.healthCheckNodePort', index=10,
+      number=12, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='publishNotReadyAddresses', full_name='istio.operator.v1alpha1.ServiceSpec.publishNotReadyAddresses', index=11,
+      number=13, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='sessionAffinityConfig', full_name='istio.operator.v1alpha1.ServiceSpec.sessionAffinityConfig', index=12,
+      number=14, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_SERVICESPEC_SELECTORENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=9543,
+  serialized_end=10060,
+)
+
+
+_SERVICEPORT = _descriptor.Descriptor(
+  name='ServicePort',
+  full_name='istio.operator.v1alpha1.ServicePort',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.operator.v1alpha1.ServicePort.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='protocol', full_name='istio.operator.v1alpha1.ServicePort.protocol', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='port', full_name='istio.operator.v1alpha1.ServicePort.port', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='targetPort', full_name='istio.operator.v1alpha1.ServicePort.targetPort', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='nodePort', full_name='istio.operator.v1alpha1.ServicePort.nodePort', index=4,
+      number=5, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=10063,
+  serialized_end=10200,
+)
+
+
+_SESSIONAFFINITYCONFIG = _descriptor.Descriptor(
+  name='SessionAffinityConfig',
+  full_name='istio.operator.v1alpha1.SessionAffinityConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='clientIP', full_name='istio.operator.v1alpha1.SessionAffinityConfig.clientIP', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=10202,
+  serialized_end=10284,
+)
+
+
+_TCPSOCKETACTION = _descriptor.Descriptor(
+  name='TCPSocketAction',
+  full_name='istio.operator.v1alpha1.TCPSocketAction',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='port', full_name='istio.operator.v1alpha1.TCPSocketAction.port', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='host', full_name='istio.operator.v1alpha1.TCPSocketAction.host', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=10286,
+  serialized_end=10371,
+)
+
+
+_WEIGHTEDPODAFFINITYTERM = _descriptor.Descriptor(
+  name='WeightedPodAffinityTerm',
+  full_name='istio.operator.v1alpha1.WeightedPodAffinityTerm',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='weight', full_name='istio.operator.v1alpha1.WeightedPodAffinityTerm.weight', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='podAffinityTerm', full_name='istio.operator.v1alpha1.WeightedPodAffinityTerm.podAffinityTerm', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=10373,
+  serialized_end=10481,
+)
+
+
+_TYPEINTERFACE = _descriptor.Descriptor(
+  name='TypeInterface',
+  full_name='istio.operator.v1alpha1.TypeInterface',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -346,14 +2881,14 @@ _TYPEMAPSTRINGINTERFACE2 = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1241,
-  serialized_end=1266,
+  serialized_start=10483,
+  serialized_end=10498,
 )
 
 
-_TYPEINTERFACE2 = _descriptor.Descriptor(
-  name='TypeInterface2',
-  full_name='istio.operator.v1alpha1.TypeInterface2',
+_TYPEMAPSTRINGINTERFACE = _descriptor.Descriptor(
+  name='TypeMapStringInterface',
+  full_name='istio.operator.v1alpha1.TypeMapStringInterface',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -370,18 +2905,66 @@ _TYPEINTERFACE2 = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1268,
-  serialized_end=1284,
+  serialized_start=10500,
+  serialized_end=10524,
 )
 
-_ISTIOOPERATORSPEC_ADDONCOMPONENTSENTRY.fields_by_name['value'].message_type = operator_dot_v1alpha1_dot_component__pb2._EXTERNALCOMPONENTSPEC
+
+_TYPEINTORSTRINGFORPB = _descriptor.Descriptor(
+  name='TypeIntOrStringForPB',
+  full_name='istio.operator.v1alpha1.TypeIntOrStringForPB',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=10526,
+  serialized_end=10548,
+)
+
+
+_TYPEBOOLVALUEFORPB = _descriptor.Descriptor(
+  name='TypeBoolValueForPB',
+  full_name='istio.operator.v1alpha1.TypeBoolValueForPB',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=10550,
+  serialized_end=10570,
+)
+
+_ISTIOOPERATORSPEC_ADDONCOMPONENTSENTRY.fields_by_name['value'].message_type = _EXTERNALCOMPONENTSPEC
 _ISTIOOPERATORSPEC_ADDONCOMPONENTSENTRY.containing_type = _ISTIOOPERATORSPEC
-_ISTIOOPERATORSPEC.fields_by_name['tag'].message_type = _TYPEINTERFACE2
-_ISTIOOPERATORSPEC.fields_by_name['mesh_config'].message_type = _TYPEMAPSTRINGINTERFACE2
-_ISTIOOPERATORSPEC.fields_by_name['components'].message_type = operator_dot_v1alpha1_dot_component__pb2._ISTIOCOMPONENTSETSPEC
+_ISTIOOPERATORSPEC.fields_by_name['tag'].message_type = _TYPEINTERFACE
+_ISTIOOPERATORSPEC.fields_by_name['mesh_config'].message_type = _TYPEMAPSTRINGINTERFACE
+_ISTIOOPERATORSPEC.fields_by_name['components'].message_type = _ISTIOCOMPONENTSETSPEC
 _ISTIOOPERATORSPEC.fields_by_name['addon_components'].message_type = _ISTIOOPERATORSPEC_ADDONCOMPONENTSENTRY
-_ISTIOOPERATORSPEC.fields_by_name['values'].message_type = _TYPEMAPSTRINGINTERFACE2
-_ISTIOOPERATORSPEC.fields_by_name['unvalidated_values'].message_type = _TYPEMAPSTRINGINTERFACE2
+_ISTIOOPERATORSPEC.fields_by_name['values'].message_type = _TYPEMAPSTRINGINTERFACE
+_ISTIOOPERATORSPEC.fields_by_name['unvalidated_values'].message_type = _TYPEMAPSTRINGINTERFACE
 _INSTALLSTATUS_VERSIONSTATUS.fields_by_name['status'].enum_type = _INSTALLSTATUS_STATUS
 _INSTALLSTATUS_VERSIONSTATUS.containing_type = _INSTALLSTATUS
 _INSTALLSTATUS_COMPONENTSTATUSENTRY.fields_by_name['value'].message_type = _INSTALLSTATUS_VERSIONSTATUS
@@ -389,10 +2972,158 @@ _INSTALLSTATUS_COMPONENTSTATUSENTRY.containing_type = _INSTALLSTATUS
 _INSTALLSTATUS.fields_by_name['status'].enum_type = _INSTALLSTATUS_STATUS
 _INSTALLSTATUS.fields_by_name['component_status'].message_type = _INSTALLSTATUS_COMPONENTSTATUSENTRY
 _INSTALLSTATUS_STATUS.containing_type = _INSTALLSTATUS
+_ISTIOCOMPONENTSETSPEC.fields_by_name['base'].message_type = _BASECOMPONENTSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['pilot'].message_type = _COMPONENTSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['policy'].message_type = _COMPONENTSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['telemetry'].message_type = _COMPONENTSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['cni'].message_type = _COMPONENTSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['istiod_remote'].message_type = _COMPONENTSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['ingress_gateways'].message_type = _GATEWAYSPEC
+_ISTIOCOMPONENTSETSPEC.fields_by_name['egress_gateways'].message_type = _GATEWAYSPEC
+_BASECOMPONENTSPEC.fields_by_name['enabled'].message_type = _TYPEBOOLVALUEFORPB
+_COMPONENTSPEC.fields_by_name['enabled'].message_type = _TYPEBOOLVALUEFORPB
+_COMPONENTSPEC.fields_by_name['tag'].message_type = _TYPEINTERFACE
+_COMPONENTSPEC.fields_by_name['spec'].message_type = _TYPEINTERFACE
+_COMPONENTSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
+_EXTERNALCOMPONENTSPEC.fields_by_name['enabled'].message_type = _TYPEBOOLVALUEFORPB
+_EXTERNALCOMPONENTSPEC.fields_by_name['spec'].message_type = _TYPEINTERFACE
+_EXTERNALCOMPONENTSPEC.fields_by_name['schema'].message_type = google_dot_protobuf_dot_any__pb2._ANY
+_EXTERNALCOMPONENTSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
+_GATEWAYSPEC_LABELENTRY.containing_type = _GATEWAYSPEC
+_GATEWAYSPEC.fields_by_name['enabled'].message_type = _TYPEBOOLVALUEFORPB
+_GATEWAYSPEC.fields_by_name['label'].message_type = _GATEWAYSPEC_LABELENTRY
+_GATEWAYSPEC.fields_by_name['tag'].message_type = _TYPEINTERFACE
+_GATEWAYSPEC.fields_by_name['k8s'].message_type = _KUBERNETESRESOURCESSPEC
+_KUBERNETESRESOURCESSPEC_NODESELECTORENTRY.containing_type = _KUBERNETESRESOURCESSPEC
+_KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY.containing_type = _KUBERNETESRESOURCESSPEC
+_KUBERNETESRESOURCESSPEC_SERVICEANNOTATIONSENTRY.containing_type = _KUBERNETESRESOURCESSPEC
+_KUBERNETESRESOURCESSPEC.fields_by_name['affinity'].message_type = _AFFINITY
+_KUBERNETESRESOURCESSPEC.fields_by_name['env'].message_type = _ENVVAR
+_KUBERNETESRESOURCESSPEC.fields_by_name['hpa_spec'].message_type = _HORIZONTALPODAUTOSCALERSPEC
+_KUBERNETESRESOURCESSPEC.fields_by_name['node_selector'].message_type = _KUBERNETESRESOURCESSPEC_NODESELECTORENTRY
+_KUBERNETESRESOURCESSPEC.fields_by_name['pod_disruption_budget'].message_type = _PODDISRUPTIONBUDGETSPEC
+_KUBERNETESRESOURCESSPEC.fields_by_name['pod_annotations'].message_type = _KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY
+_KUBERNETESRESOURCESSPEC.fields_by_name['readiness_probe'].message_type = _READINESSPROBE
+_KUBERNETESRESOURCESSPEC.fields_by_name['resources'].message_type = _RESOURCES
+_KUBERNETESRESOURCESSPEC.fields_by_name['service'].message_type = _SERVICESPEC
+_KUBERNETESRESOURCESSPEC.fields_by_name['strategy'].message_type = _DEPLOYMENTSTRATEGY
+_KUBERNETESRESOURCESSPEC.fields_by_name['tolerations'].message_type = k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2._TOLERATION
+_KUBERNETESRESOURCESSPEC.fields_by_name['service_annotations'].message_type = _KUBERNETESRESOURCESSPEC_SERVICEANNOTATIONSENTRY
+_KUBERNETESRESOURCESSPEC.fields_by_name['overlays'].message_type = _K8SOBJECTOVERLAY
+_K8SOBJECTOVERLAY_PATHVALUE.fields_by_name['value'].message_type = _TYPEINTERFACE
+_K8SOBJECTOVERLAY_PATHVALUE.containing_type = _K8SOBJECTOVERLAY
+_K8SOBJECTOVERLAY.fields_by_name['patches'].message_type = _K8SOBJECTOVERLAY_PATHVALUE
+_AFFINITY.fields_by_name['nodeAffinity'].message_type = _NODEAFFINITY
+_AFFINITY.fields_by_name['podAffinity'].message_type = _PODAFFINITY
+_AFFINITY.fields_by_name['podAntiAffinity'].message_type = _PODANTIAFFINITY
+_CONFIGMAPKEYSELECTOR.fields_by_name['localObjectReference'].message_type = _LOCALOBJECTREFERENCE
+_DEPLOYMENTSTRATEGY.fields_by_name['rollingUpdate'].message_type = _ROLLINGUPDATEDEPLOYMENT
+_ENVVAR.fields_by_name['valueFrom'].message_type = _ENVVARSOURCE
+_ENVVARSOURCE.fields_by_name['fieldRef'].message_type = _OBJECTFIELDSELECTOR
+_ENVVARSOURCE.fields_by_name['resourceFieldRef'].message_type = _RESOURCEFIELDSELECTOR
+_ENVVARSOURCE.fields_by_name['configMapKeyRef'].message_type = _CONFIGMAPKEYSELECTOR
+_ENVVARSOURCE.fields_by_name['secretKeyRef'].message_type = _SECRETKEYSELECTOR
+_EXTERNALMETRICSOURCE.fields_by_name['metricSelector'].message_type = k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2._LABELSELECTOR
+_EXTERNALMETRICSOURCE.fields_by_name['targetValue'].message_type = k8s_dot_io_dot_apimachinery_dot_pkg_dot_api_dot_resource_dot_generated__pb2._QUANTITY
+_EXTERNALMETRICSOURCE.fields_by_name['targetAverageValue'].message_type = k8s_dot_io_dot_apimachinery_dot_pkg_dot_api_dot_resource_dot_generated__pb2._QUANTITY
+_HTTPGETACTION.fields_by_name['port'].message_type = _TYPEINTERFACE
+_HTTPGETACTION.fields_by_name['httpHeaders'].message_type = _HTTPHEADER
+_HORIZONTALPODAUTOSCALERSPEC.fields_by_name['scaleTargetRef'].message_type = _CROSSVERSIONOBJECTREFERENCE
+_HORIZONTALPODAUTOSCALERSPEC.fields_by_name['metrics'].message_type = _METRICSPEC
+_METRICSPEC.fields_by_name['object'].message_type = _OBJECTMETRICSOURCE
+_METRICSPEC.fields_by_name['pods'].message_type = _PODSMETRICSOURCE
+_METRICSPEC.fields_by_name['resource'].message_type = _RESOURCEMETRICSOURCE
+_METRICSPEC.fields_by_name['external'].message_type = _EXTERNALMETRICSOURCE
+_NODEAFFINITY.fields_by_name['requiredDuringSchedulingIgnoredDuringExecution'].message_type = _NODESELECTOR
+_NODEAFFINITY.fields_by_name['preferredDuringSchedulingIgnoredDuringExecution'].message_type = _PREFERREDSCHEDULINGTERM
+_NODESELECTOR.fields_by_name['nodeSelectorTerms'].message_type = _NODESELECTORTERM
+_NODESELECTORTERM.fields_by_name['matchExpressions'].message_type = _NODESELECTORREQUIREMENT
+_NODESELECTORTERM.fields_by_name['matchFields'].message_type = _NODESELECTORREQUIREMENT
+_OBJECTMETRICSOURCE.fields_by_name['target'].message_type = _CROSSVERSIONOBJECTREFERENCE
+_OBJECTMETRICSOURCE.fields_by_name['targetValue'].message_type = k8s_dot_io_dot_apimachinery_dot_pkg_dot_api_dot_resource_dot_generated__pb2._QUANTITY
+_OBJECTMETRICSOURCE.fields_by_name['selector'].message_type = k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2._LABELSELECTOR
+_OBJECTMETRICSOURCE.fields_by_name['averageValue'].message_type = k8s_dot_io_dot_apimachinery_dot_pkg_dot_api_dot_resource_dot_generated__pb2._QUANTITY
+_PODAFFINITY.fields_by_name['requiredDuringSchedulingIgnoredDuringExecution'].message_type = _PODAFFINITYTERM
+_PODAFFINITY.fields_by_name['preferredDuringSchedulingIgnoredDuringExecution'].message_type = _WEIGHTEDPODAFFINITYTERM
+_PODANTIAFFINITY.fields_by_name['requiredDuringSchedulingIgnoredDuringExecution'].message_type = _PODAFFINITYTERM
+_PODANTIAFFINITY.fields_by_name['preferredDuringSchedulingIgnoredDuringExecution'].message_type = _WEIGHTEDPODAFFINITYTERM
+_PODAFFINITYTERM.fields_by_name['labelSelector'].message_type = k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2._LABELSELECTOR
+_PODDISRUPTIONBUDGETSPEC.fields_by_name['selector'].message_type = k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2._LABELSELECTOR
+_PODSMETRICSOURCE.fields_by_name['targetAverageValue'].message_type = k8s_dot_io_dot_apimachinery_dot_pkg_dot_api_dot_resource_dot_generated__pb2._QUANTITY
+_PODSMETRICSOURCE.fields_by_name['selector'].message_type = k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2._LABELSELECTOR
+_PREFERREDSCHEDULINGTERM.fields_by_name['preference'].message_type = _NODESELECTORTERM
+_READINESSPROBE.fields_by_name['exec'].message_type = _EXECACTION
+_READINESSPROBE.fields_by_name['httpGet'].message_type = _HTTPGETACTION
+_READINESSPROBE.fields_by_name['tcpSocket'].message_type = _TCPSOCKETACTION
+_RESOURCEFIELDSELECTOR.fields_by_name['divisor'].message_type = k8s_dot_io_dot_apimachinery_dot_pkg_dot_api_dot_resource_dot_generated__pb2._QUANTITY
+_RESOURCEMETRICSOURCE.fields_by_name['targetAverageUtilization'].message_type = _TYPEINTERFACE
+_RESOURCEMETRICSOURCE.fields_by_name['targetAverageValue'].message_type = k8s_dot_io_dot_apimachinery_dot_pkg_dot_api_dot_resource_dot_generated__pb2._QUANTITY
+_RESOURCES_LIMITSENTRY.containing_type = _RESOURCES
+_RESOURCES_REQUESTSENTRY.containing_type = _RESOURCES
+_RESOURCES.fields_by_name['limits'].message_type = _RESOURCES_LIMITSENTRY
+_RESOURCES.fields_by_name['requests'].message_type = _RESOURCES_REQUESTSENTRY
+_ROLLINGUPDATEDEPLOYMENT.fields_by_name['maxUnavailable'].message_type = _TYPEINTERFACE
+_ROLLINGUPDATEDEPLOYMENT.fields_by_name['maxSurge'].message_type = _TYPEINTERFACE
+_SECRETKEYSELECTOR.fields_by_name['localObjectReference'].message_type = _LOCALOBJECTREFERENCE
+_SERVICESPEC_SELECTORENTRY.containing_type = _SERVICESPEC
+_SERVICESPEC.fields_by_name['ports'].message_type = _SERVICEPORT
+_SERVICESPEC.fields_by_name['selector'].message_type = _SERVICESPEC_SELECTORENTRY
+_SERVICESPEC.fields_by_name['sessionAffinityConfig'].message_type = _SESSIONAFFINITYCONFIG
+_SERVICEPORT.fields_by_name['targetPort'].message_type = _TYPEINTERFACE
+_SESSIONAFFINITYCONFIG.fields_by_name['clientIP'].message_type = _CLIENTIPCONFIG
+_TCPSOCKETACTION.fields_by_name['port'].message_type = _TYPEINTERFACE
+_WEIGHTEDPODAFFINITYTERM.fields_by_name['podAffinityTerm'].message_type = _PODAFFINITYTERM
 DESCRIPTOR.message_types_by_name['IstioOperatorSpec'] = _ISTIOOPERATORSPEC
 DESCRIPTOR.message_types_by_name['InstallStatus'] = _INSTALLSTATUS
-DESCRIPTOR.message_types_by_name['TypeMapStringInterface2'] = _TYPEMAPSTRINGINTERFACE2
-DESCRIPTOR.message_types_by_name['TypeInterface2'] = _TYPEINTERFACE2
+DESCRIPTOR.message_types_by_name['IstioComponentSetSpec'] = _ISTIOCOMPONENTSETSPEC
+DESCRIPTOR.message_types_by_name['BaseComponentSpec'] = _BASECOMPONENTSPEC
+DESCRIPTOR.message_types_by_name['ComponentSpec'] = _COMPONENTSPEC
+DESCRIPTOR.message_types_by_name['ExternalComponentSpec'] = _EXTERNALCOMPONENTSPEC
+DESCRIPTOR.message_types_by_name['GatewaySpec'] = _GATEWAYSPEC
+DESCRIPTOR.message_types_by_name['KubernetesResourcesSpec'] = _KUBERNETESRESOURCESSPEC
+DESCRIPTOR.message_types_by_name['K8sObjectOverlay'] = _K8SOBJECTOVERLAY
+DESCRIPTOR.message_types_by_name['Affinity'] = _AFFINITY
+DESCRIPTOR.message_types_by_name['ConfigMapKeySelector'] = _CONFIGMAPKEYSELECTOR
+DESCRIPTOR.message_types_by_name['ClientIPConfig'] = _CLIENTIPCONFIG
+DESCRIPTOR.message_types_by_name['CrossVersionObjectReference'] = _CROSSVERSIONOBJECTREFERENCE
+DESCRIPTOR.message_types_by_name['DeploymentStrategy'] = _DEPLOYMENTSTRATEGY
+DESCRIPTOR.message_types_by_name['EnvVar'] = _ENVVAR
+DESCRIPTOR.message_types_by_name['EnvVarSource'] = _ENVVARSOURCE
+DESCRIPTOR.message_types_by_name['ExecAction'] = _EXECACTION
+DESCRIPTOR.message_types_by_name['ExternalMetricSource'] = _EXTERNALMETRICSOURCE
+DESCRIPTOR.message_types_by_name['HTTPGetAction'] = _HTTPGETACTION
+DESCRIPTOR.message_types_by_name['HTTPHeader'] = _HTTPHEADER
+DESCRIPTOR.message_types_by_name['HorizontalPodAutoscalerSpec'] = _HORIZONTALPODAUTOSCALERSPEC
+DESCRIPTOR.message_types_by_name['LocalObjectReference'] = _LOCALOBJECTREFERENCE
+DESCRIPTOR.message_types_by_name['MetricSpec'] = _METRICSPEC
+DESCRIPTOR.message_types_by_name['NodeAffinity'] = _NODEAFFINITY
+DESCRIPTOR.message_types_by_name['NodeSelector'] = _NODESELECTOR
+DESCRIPTOR.message_types_by_name['NodeSelectorTerm'] = _NODESELECTORTERM
+DESCRIPTOR.message_types_by_name['NodeSelectorRequirement'] = _NODESELECTORREQUIREMENT
+DESCRIPTOR.message_types_by_name['ObjectFieldSelector'] = _OBJECTFIELDSELECTOR
+DESCRIPTOR.message_types_by_name['ObjectMeta'] = _OBJECTMETA
+DESCRIPTOR.message_types_by_name['ObjectMetricSource'] = _OBJECTMETRICSOURCE
+DESCRIPTOR.message_types_by_name['PodAffinity'] = _PODAFFINITY
+DESCRIPTOR.message_types_by_name['PodAntiAffinity'] = _PODANTIAFFINITY
+DESCRIPTOR.message_types_by_name['PodAffinityTerm'] = _PODAFFINITYTERM
+DESCRIPTOR.message_types_by_name['PodDisruptionBudgetSpec'] = _PODDISRUPTIONBUDGETSPEC
+DESCRIPTOR.message_types_by_name['PodsMetricSource'] = _PODSMETRICSOURCE
+DESCRIPTOR.message_types_by_name['PreferredSchedulingTerm'] = _PREFERREDSCHEDULINGTERM
+DESCRIPTOR.message_types_by_name['ReadinessProbe'] = _READINESSPROBE
+DESCRIPTOR.message_types_by_name['ResourceFieldSelector'] = _RESOURCEFIELDSELECTOR
+DESCRIPTOR.message_types_by_name['ResourceMetricSource'] = _RESOURCEMETRICSOURCE
+DESCRIPTOR.message_types_by_name['Resources'] = _RESOURCES
+DESCRIPTOR.message_types_by_name['RollingUpdateDeployment'] = _ROLLINGUPDATEDEPLOYMENT
+DESCRIPTOR.message_types_by_name['SecretKeySelector'] = _SECRETKEYSELECTOR
+DESCRIPTOR.message_types_by_name['ServiceSpec'] = _SERVICESPEC
+DESCRIPTOR.message_types_by_name['ServicePort'] = _SERVICEPORT
+DESCRIPTOR.message_types_by_name['SessionAffinityConfig'] = _SESSIONAFFINITYCONFIG
+DESCRIPTOR.message_types_by_name['TCPSocketAction'] = _TCPSOCKETACTION
+DESCRIPTOR.message_types_by_name['WeightedPodAffinityTerm'] = _WEIGHTEDPODAFFINITYTERM
+DESCRIPTOR.message_types_by_name['TypeInterface'] = _TYPEINTERFACE
+DESCRIPTOR.message_types_by_name['TypeMapStringInterface'] = _TYPEMAPSTRINGINTERFACE
+DESCRIPTOR.message_types_by_name['TypeIntOrStringForPB'] = _TYPEINTORSTRINGFORPB
+DESCRIPTOR.message_types_by_name['TypeBoolValueForPB'] = _TYPEBOOLVALUEFORPB
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 IstioOperatorSpec = _reflection.GeneratedProtocolMessageType('IstioOperatorSpec', (_message.Message,), {
@@ -433,23 +3164,423 @@ _sym_db.RegisterMessage(InstallStatus)
 _sym_db.RegisterMessage(InstallStatus.VersionStatus)
 _sym_db.RegisterMessage(InstallStatus.ComponentStatusEntry)
 
-TypeMapStringInterface2 = _reflection.GeneratedProtocolMessageType('TypeMapStringInterface2', (_message.Message,), {
-  'DESCRIPTOR' : _TYPEMAPSTRINGINTERFACE2,
+IstioComponentSetSpec = _reflection.GeneratedProtocolMessageType('IstioComponentSetSpec', (_message.Message,), {
+  'DESCRIPTOR' : _ISTIOCOMPONENTSETSPEC,
   '__module__' : 'operator.v1alpha1.operator_pb2'
-  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.TypeMapStringInterface2)
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.IstioComponentSetSpec)
   })
-_sym_db.RegisterMessage(TypeMapStringInterface2)
+_sym_db.RegisterMessage(IstioComponentSetSpec)
 
-TypeInterface2 = _reflection.GeneratedProtocolMessageType('TypeInterface2', (_message.Message,), {
-  'DESCRIPTOR' : _TYPEINTERFACE2,
+BaseComponentSpec = _reflection.GeneratedProtocolMessageType('BaseComponentSpec', (_message.Message,), {
+  'DESCRIPTOR' : _BASECOMPONENTSPEC,
   '__module__' : 'operator.v1alpha1.operator_pb2'
-  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.TypeInterface2)
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.BaseComponentSpec)
   })
-_sym_db.RegisterMessage(TypeInterface2)
+_sym_db.RegisterMessage(BaseComponentSpec)
+
+ComponentSpec = _reflection.GeneratedProtocolMessageType('ComponentSpec', (_message.Message,), {
+  'DESCRIPTOR' : _COMPONENTSPEC,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ComponentSpec)
+  })
+_sym_db.RegisterMessage(ComponentSpec)
+
+ExternalComponentSpec = _reflection.GeneratedProtocolMessageType('ExternalComponentSpec', (_message.Message,), {
+  'DESCRIPTOR' : _EXTERNALCOMPONENTSPEC,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ExternalComponentSpec)
+  })
+_sym_db.RegisterMessage(ExternalComponentSpec)
+
+GatewaySpec = _reflection.GeneratedProtocolMessageType('GatewaySpec', (_message.Message,), {
+
+  'LabelEntry' : _reflection.GeneratedProtocolMessageType('LabelEntry', (_message.Message,), {
+    'DESCRIPTOR' : _GATEWAYSPEC_LABELENTRY,
+    '__module__' : 'operator.v1alpha1.operator_pb2'
+    # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.GatewaySpec.LabelEntry)
+    })
+  ,
+  'DESCRIPTOR' : _GATEWAYSPEC,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.GatewaySpec)
+  })
+_sym_db.RegisterMessage(GatewaySpec)
+_sym_db.RegisterMessage(GatewaySpec.LabelEntry)
+
+KubernetesResourcesSpec = _reflection.GeneratedProtocolMessageType('KubernetesResourcesSpec', (_message.Message,), {
+
+  'NodeSelectorEntry' : _reflection.GeneratedProtocolMessageType('NodeSelectorEntry', (_message.Message,), {
+    'DESCRIPTOR' : _KUBERNETESRESOURCESSPEC_NODESELECTORENTRY,
+    '__module__' : 'operator.v1alpha1.operator_pb2'
+    # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.KubernetesResourcesSpec.NodeSelectorEntry)
+    })
+  ,
+
+  'PodAnnotationsEntry' : _reflection.GeneratedProtocolMessageType('PodAnnotationsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY,
+    '__module__' : 'operator.v1alpha1.operator_pb2'
+    # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.KubernetesResourcesSpec.PodAnnotationsEntry)
+    })
+  ,
+
+  'ServiceAnnotationsEntry' : _reflection.GeneratedProtocolMessageType('ServiceAnnotationsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _KUBERNETESRESOURCESSPEC_SERVICEANNOTATIONSENTRY,
+    '__module__' : 'operator.v1alpha1.operator_pb2'
+    # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.KubernetesResourcesSpec.ServiceAnnotationsEntry)
+    })
+  ,
+  'DESCRIPTOR' : _KUBERNETESRESOURCESSPEC,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.KubernetesResourcesSpec)
+  })
+_sym_db.RegisterMessage(KubernetesResourcesSpec)
+_sym_db.RegisterMessage(KubernetesResourcesSpec.NodeSelectorEntry)
+_sym_db.RegisterMessage(KubernetesResourcesSpec.PodAnnotationsEntry)
+_sym_db.RegisterMessage(KubernetesResourcesSpec.ServiceAnnotationsEntry)
+
+K8sObjectOverlay = _reflection.GeneratedProtocolMessageType('K8sObjectOverlay', (_message.Message,), {
+
+  'PathValue' : _reflection.GeneratedProtocolMessageType('PathValue', (_message.Message,), {
+    'DESCRIPTOR' : _K8SOBJECTOVERLAY_PATHVALUE,
+    '__module__' : 'operator.v1alpha1.operator_pb2'
+    # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.K8sObjectOverlay.PathValue)
+    })
+  ,
+  'DESCRIPTOR' : _K8SOBJECTOVERLAY,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.K8sObjectOverlay)
+  })
+_sym_db.RegisterMessage(K8sObjectOverlay)
+_sym_db.RegisterMessage(K8sObjectOverlay.PathValue)
+
+Affinity = _reflection.GeneratedProtocolMessageType('Affinity', (_message.Message,), {
+  'DESCRIPTOR' : _AFFINITY,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.Affinity)
+  })
+_sym_db.RegisterMessage(Affinity)
+
+ConfigMapKeySelector = _reflection.GeneratedProtocolMessageType('ConfigMapKeySelector', (_message.Message,), {
+  'DESCRIPTOR' : _CONFIGMAPKEYSELECTOR,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ConfigMapKeySelector)
+  })
+_sym_db.RegisterMessage(ConfigMapKeySelector)
+
+ClientIPConfig = _reflection.GeneratedProtocolMessageType('ClientIPConfig', (_message.Message,), {
+  'DESCRIPTOR' : _CLIENTIPCONFIG,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ClientIPConfig)
+  })
+_sym_db.RegisterMessage(ClientIPConfig)
+
+CrossVersionObjectReference = _reflection.GeneratedProtocolMessageType('CrossVersionObjectReference', (_message.Message,), {
+  'DESCRIPTOR' : _CROSSVERSIONOBJECTREFERENCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.CrossVersionObjectReference)
+  })
+_sym_db.RegisterMessage(CrossVersionObjectReference)
+
+DeploymentStrategy = _reflection.GeneratedProtocolMessageType('DeploymentStrategy', (_message.Message,), {
+  'DESCRIPTOR' : _DEPLOYMENTSTRATEGY,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.DeploymentStrategy)
+  })
+_sym_db.RegisterMessage(DeploymentStrategy)
+
+EnvVar = _reflection.GeneratedProtocolMessageType('EnvVar', (_message.Message,), {
+  'DESCRIPTOR' : _ENVVAR,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.EnvVar)
+  })
+_sym_db.RegisterMessage(EnvVar)
+
+EnvVarSource = _reflection.GeneratedProtocolMessageType('EnvVarSource', (_message.Message,), {
+  'DESCRIPTOR' : _ENVVARSOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.EnvVarSource)
+  })
+_sym_db.RegisterMessage(EnvVarSource)
+
+ExecAction = _reflection.GeneratedProtocolMessageType('ExecAction', (_message.Message,), {
+  'DESCRIPTOR' : _EXECACTION,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ExecAction)
+  })
+_sym_db.RegisterMessage(ExecAction)
+
+ExternalMetricSource = _reflection.GeneratedProtocolMessageType('ExternalMetricSource', (_message.Message,), {
+  'DESCRIPTOR' : _EXTERNALMETRICSOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ExternalMetricSource)
+  })
+_sym_db.RegisterMessage(ExternalMetricSource)
+
+HTTPGetAction = _reflection.GeneratedProtocolMessageType('HTTPGetAction', (_message.Message,), {
+  'DESCRIPTOR' : _HTTPGETACTION,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.HTTPGetAction)
+  })
+_sym_db.RegisterMessage(HTTPGetAction)
+
+HTTPHeader = _reflection.GeneratedProtocolMessageType('HTTPHeader', (_message.Message,), {
+  'DESCRIPTOR' : _HTTPHEADER,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.HTTPHeader)
+  })
+_sym_db.RegisterMessage(HTTPHeader)
+
+HorizontalPodAutoscalerSpec = _reflection.GeneratedProtocolMessageType('HorizontalPodAutoscalerSpec', (_message.Message,), {
+  'DESCRIPTOR' : _HORIZONTALPODAUTOSCALERSPEC,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.HorizontalPodAutoscalerSpec)
+  })
+_sym_db.RegisterMessage(HorizontalPodAutoscalerSpec)
+
+LocalObjectReference = _reflection.GeneratedProtocolMessageType('LocalObjectReference', (_message.Message,), {
+  'DESCRIPTOR' : _LOCALOBJECTREFERENCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.LocalObjectReference)
+  })
+_sym_db.RegisterMessage(LocalObjectReference)
+
+MetricSpec = _reflection.GeneratedProtocolMessageType('MetricSpec', (_message.Message,), {
+  'DESCRIPTOR' : _METRICSPEC,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.MetricSpec)
+  })
+_sym_db.RegisterMessage(MetricSpec)
+
+NodeAffinity = _reflection.GeneratedProtocolMessageType('NodeAffinity', (_message.Message,), {
+  'DESCRIPTOR' : _NODEAFFINITY,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.NodeAffinity)
+  })
+_sym_db.RegisterMessage(NodeAffinity)
+
+NodeSelector = _reflection.GeneratedProtocolMessageType('NodeSelector', (_message.Message,), {
+  'DESCRIPTOR' : _NODESELECTOR,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.NodeSelector)
+  })
+_sym_db.RegisterMessage(NodeSelector)
+
+NodeSelectorTerm = _reflection.GeneratedProtocolMessageType('NodeSelectorTerm', (_message.Message,), {
+  'DESCRIPTOR' : _NODESELECTORTERM,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.NodeSelectorTerm)
+  })
+_sym_db.RegisterMessage(NodeSelectorTerm)
+
+NodeSelectorRequirement = _reflection.GeneratedProtocolMessageType('NodeSelectorRequirement', (_message.Message,), {
+  'DESCRIPTOR' : _NODESELECTORREQUIREMENT,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.NodeSelectorRequirement)
+  })
+_sym_db.RegisterMessage(NodeSelectorRequirement)
+
+ObjectFieldSelector = _reflection.GeneratedProtocolMessageType('ObjectFieldSelector', (_message.Message,), {
+  'DESCRIPTOR' : _OBJECTFIELDSELECTOR,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ObjectFieldSelector)
+  })
+_sym_db.RegisterMessage(ObjectFieldSelector)
+
+ObjectMeta = _reflection.GeneratedProtocolMessageType('ObjectMeta', (_message.Message,), {
+  'DESCRIPTOR' : _OBJECTMETA,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ObjectMeta)
+  })
+_sym_db.RegisterMessage(ObjectMeta)
+
+ObjectMetricSource = _reflection.GeneratedProtocolMessageType('ObjectMetricSource', (_message.Message,), {
+  'DESCRIPTOR' : _OBJECTMETRICSOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ObjectMetricSource)
+  })
+_sym_db.RegisterMessage(ObjectMetricSource)
+
+PodAffinity = _reflection.GeneratedProtocolMessageType('PodAffinity', (_message.Message,), {
+  'DESCRIPTOR' : _PODAFFINITY,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.PodAffinity)
+  })
+_sym_db.RegisterMessage(PodAffinity)
+
+PodAntiAffinity = _reflection.GeneratedProtocolMessageType('PodAntiAffinity', (_message.Message,), {
+  'DESCRIPTOR' : _PODANTIAFFINITY,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.PodAntiAffinity)
+  })
+_sym_db.RegisterMessage(PodAntiAffinity)
+
+PodAffinityTerm = _reflection.GeneratedProtocolMessageType('PodAffinityTerm', (_message.Message,), {
+  'DESCRIPTOR' : _PODAFFINITYTERM,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.PodAffinityTerm)
+  })
+_sym_db.RegisterMessage(PodAffinityTerm)
+
+PodDisruptionBudgetSpec = _reflection.GeneratedProtocolMessageType('PodDisruptionBudgetSpec', (_message.Message,), {
+  'DESCRIPTOR' : _PODDISRUPTIONBUDGETSPEC,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.PodDisruptionBudgetSpec)
+  })
+_sym_db.RegisterMessage(PodDisruptionBudgetSpec)
+
+PodsMetricSource = _reflection.GeneratedProtocolMessageType('PodsMetricSource', (_message.Message,), {
+  'DESCRIPTOR' : _PODSMETRICSOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.PodsMetricSource)
+  })
+_sym_db.RegisterMessage(PodsMetricSource)
+
+PreferredSchedulingTerm = _reflection.GeneratedProtocolMessageType('PreferredSchedulingTerm', (_message.Message,), {
+  'DESCRIPTOR' : _PREFERREDSCHEDULINGTERM,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.PreferredSchedulingTerm)
+  })
+_sym_db.RegisterMessage(PreferredSchedulingTerm)
+
+ReadinessProbe = _reflection.GeneratedProtocolMessageType('ReadinessProbe', (_message.Message,), {
+  'DESCRIPTOR' : _READINESSPROBE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ReadinessProbe)
+  })
+_sym_db.RegisterMessage(ReadinessProbe)
+
+ResourceFieldSelector = _reflection.GeneratedProtocolMessageType('ResourceFieldSelector', (_message.Message,), {
+  'DESCRIPTOR' : _RESOURCEFIELDSELECTOR,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ResourceFieldSelector)
+  })
+_sym_db.RegisterMessage(ResourceFieldSelector)
+
+ResourceMetricSource = _reflection.GeneratedProtocolMessageType('ResourceMetricSource', (_message.Message,), {
+  'DESCRIPTOR' : _RESOURCEMETRICSOURCE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ResourceMetricSource)
+  })
+_sym_db.RegisterMessage(ResourceMetricSource)
+
+Resources = _reflection.GeneratedProtocolMessageType('Resources', (_message.Message,), {
+
+  'LimitsEntry' : _reflection.GeneratedProtocolMessageType('LimitsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _RESOURCES_LIMITSENTRY,
+    '__module__' : 'operator.v1alpha1.operator_pb2'
+    # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.Resources.LimitsEntry)
+    })
+  ,
+
+  'RequestsEntry' : _reflection.GeneratedProtocolMessageType('RequestsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _RESOURCES_REQUESTSENTRY,
+    '__module__' : 'operator.v1alpha1.operator_pb2'
+    # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.Resources.RequestsEntry)
+    })
+  ,
+  'DESCRIPTOR' : _RESOURCES,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.Resources)
+  })
+_sym_db.RegisterMessage(Resources)
+_sym_db.RegisterMessage(Resources.LimitsEntry)
+_sym_db.RegisterMessage(Resources.RequestsEntry)
+
+RollingUpdateDeployment = _reflection.GeneratedProtocolMessageType('RollingUpdateDeployment', (_message.Message,), {
+  'DESCRIPTOR' : _ROLLINGUPDATEDEPLOYMENT,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.RollingUpdateDeployment)
+  })
+_sym_db.RegisterMessage(RollingUpdateDeployment)
+
+SecretKeySelector = _reflection.GeneratedProtocolMessageType('SecretKeySelector', (_message.Message,), {
+  'DESCRIPTOR' : _SECRETKEYSELECTOR,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.SecretKeySelector)
+  })
+_sym_db.RegisterMessage(SecretKeySelector)
+
+ServiceSpec = _reflection.GeneratedProtocolMessageType('ServiceSpec', (_message.Message,), {
+
+  'SelectorEntry' : _reflection.GeneratedProtocolMessageType('SelectorEntry', (_message.Message,), {
+    'DESCRIPTOR' : _SERVICESPEC_SELECTORENTRY,
+    '__module__' : 'operator.v1alpha1.operator_pb2'
+    # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ServiceSpec.SelectorEntry)
+    })
+  ,
+  'DESCRIPTOR' : _SERVICESPEC,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ServiceSpec)
+  })
+_sym_db.RegisterMessage(ServiceSpec)
+_sym_db.RegisterMessage(ServiceSpec.SelectorEntry)
+
+ServicePort = _reflection.GeneratedProtocolMessageType('ServicePort', (_message.Message,), {
+  'DESCRIPTOR' : _SERVICEPORT,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.ServicePort)
+  })
+_sym_db.RegisterMessage(ServicePort)
+
+SessionAffinityConfig = _reflection.GeneratedProtocolMessageType('SessionAffinityConfig', (_message.Message,), {
+  'DESCRIPTOR' : _SESSIONAFFINITYCONFIG,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.SessionAffinityConfig)
+  })
+_sym_db.RegisterMessage(SessionAffinityConfig)
+
+TCPSocketAction = _reflection.GeneratedProtocolMessageType('TCPSocketAction', (_message.Message,), {
+  'DESCRIPTOR' : _TCPSOCKETACTION,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.TCPSocketAction)
+  })
+_sym_db.RegisterMessage(TCPSocketAction)
+
+WeightedPodAffinityTerm = _reflection.GeneratedProtocolMessageType('WeightedPodAffinityTerm', (_message.Message,), {
+  'DESCRIPTOR' : _WEIGHTEDPODAFFINITYTERM,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.WeightedPodAffinityTerm)
+  })
+_sym_db.RegisterMessage(WeightedPodAffinityTerm)
+
+TypeInterface = _reflection.GeneratedProtocolMessageType('TypeInterface', (_message.Message,), {
+  'DESCRIPTOR' : _TYPEINTERFACE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.TypeInterface)
+  })
+_sym_db.RegisterMessage(TypeInterface)
+
+TypeMapStringInterface = _reflection.GeneratedProtocolMessageType('TypeMapStringInterface', (_message.Message,), {
+  'DESCRIPTOR' : _TYPEMAPSTRINGINTERFACE,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.TypeMapStringInterface)
+  })
+_sym_db.RegisterMessage(TypeMapStringInterface)
+
+TypeIntOrStringForPB = _reflection.GeneratedProtocolMessageType('TypeIntOrStringForPB', (_message.Message,), {
+  'DESCRIPTOR' : _TYPEINTORSTRINGFORPB,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.TypeIntOrStringForPB)
+  })
+_sym_db.RegisterMessage(TypeIntOrStringForPB)
+
+TypeBoolValueForPB = _reflection.GeneratedProtocolMessageType('TypeBoolValueForPB', (_message.Message,), {
+  'DESCRIPTOR' : _TYPEBOOLVALUEFORPB,
+  '__module__' : 'operator.v1alpha1.operator_pb2'
+  # @@protoc_insertion_point(class_scope:istio.operator.v1alpha1.TypeBoolValueForPB)
+  })
+_sym_db.RegisterMessage(TypeBoolValueForPB)
 
 
 DESCRIPTOR._options = None
 _ISTIOOPERATORSPEC_ADDONCOMPONENTSENTRY._options = None
 _ISTIOOPERATORSPEC.fields_by_name['resource_suffix']._options = None
 _INSTALLSTATUS_COMPONENTSTATUSENTRY._options = None
+_GATEWAYSPEC_LABELENTRY._options = None
+_KUBERNETESRESOURCESSPEC_NODESELECTORENTRY._options = None
+_KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY._options = None
+_KUBERNETESRESOURCESSPEC_SERVICEANNOTATIONSENTRY._options = None
+_RESOURCES_LIMITSENTRY._options = None
+_RESOURCES_REQUESTSENTRY._options = None
+_SERVICESPEC_SELECTORENTRY._options = None
 # @@protoc_insertion_point(module_scope)

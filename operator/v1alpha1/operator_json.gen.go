@@ -10,6 +10,11 @@ import (
 	fmt "fmt"
 	github_com_golang_protobuf_jsonpb "github.com/golang/protobuf/jsonpb"
 	proto "github.com/golang/protobuf/proto"
+	_ "github.com/golang/protobuf/types"
+	_ "k8s.io/api/core/v1"
+	_ "k8s.io/apimachinery/pkg/api/resource"
+	_ "k8s.io/apimachinery/pkg/apis/meta/v1"
+	_ "k8s.io/apimachinery/pkg/util/intstr"
 	math "math"
 )
 
@@ -48,6 +53,556 @@ func (this *InstallStatus_VersionStatus) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for InstallStatus_VersionStatus
 func (this *InstallStatus_VersionStatus) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for IstioComponentSetSpec
+func (this *IstioComponentSetSpec) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for IstioComponentSetSpec
+func (this *IstioComponentSetSpec) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for BaseComponentSpec
+func (this *BaseComponentSpec) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for BaseComponentSpec
+func (this *BaseComponentSpec) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ComponentSpec
+func (this *ComponentSpec) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ComponentSpec
+func (this *ComponentSpec) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ExternalComponentSpec
+func (this *ExternalComponentSpec) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ExternalComponentSpec
+func (this *ExternalComponentSpec) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for GatewaySpec
+func (this *GatewaySpec) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for GatewaySpec
+func (this *GatewaySpec) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for KubernetesResourcesSpec
+func (this *KubernetesResourcesSpec) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for KubernetesResourcesSpec
+func (this *KubernetesResourcesSpec) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for K8SObjectOverlay
+func (this *K8SObjectOverlay) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for K8SObjectOverlay
+func (this *K8SObjectOverlay) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for K8SObjectOverlay_PathValue
+func (this *K8SObjectOverlay_PathValue) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for K8SObjectOverlay_PathValue
+func (this *K8SObjectOverlay_PathValue) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for Affinity
+func (this *Affinity) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for Affinity
+func (this *Affinity) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ConfigMapKeySelector
+func (this *ConfigMapKeySelector) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ConfigMapKeySelector
+func (this *ConfigMapKeySelector) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ClientIPConfig
+func (this *ClientIPConfig) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ClientIPConfig
+func (this *ClientIPConfig) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for CrossVersionObjectReference
+func (this *CrossVersionObjectReference) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for CrossVersionObjectReference
+func (this *CrossVersionObjectReference) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for DeploymentStrategy
+func (this *DeploymentStrategy) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for DeploymentStrategy
+func (this *DeploymentStrategy) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for EnvVar
+func (this *EnvVar) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for EnvVar
+func (this *EnvVar) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for EnvVarSource
+func (this *EnvVarSource) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for EnvVarSource
+func (this *EnvVarSource) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ExecAction
+func (this *ExecAction) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ExecAction
+func (this *ExecAction) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ExternalMetricSource
+func (this *ExternalMetricSource) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ExternalMetricSource
+func (this *ExternalMetricSource) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for HTTPGetAction
+func (this *HTTPGetAction) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for HTTPGetAction
+func (this *HTTPGetAction) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for HTTPHeader
+func (this *HTTPHeader) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for HTTPHeader
+func (this *HTTPHeader) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for HorizontalPodAutoscalerSpec
+func (this *HorizontalPodAutoscalerSpec) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for HorizontalPodAutoscalerSpec
+func (this *HorizontalPodAutoscalerSpec) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for LocalObjectReference
+func (this *LocalObjectReference) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for LocalObjectReference
+func (this *LocalObjectReference) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for MetricSpec
+func (this *MetricSpec) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for MetricSpec
+func (this *MetricSpec) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for NodeAffinity
+func (this *NodeAffinity) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for NodeAffinity
+func (this *NodeAffinity) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for NodeSelector
+func (this *NodeSelector) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for NodeSelector
+func (this *NodeSelector) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for NodeSelectorTerm
+func (this *NodeSelectorTerm) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for NodeSelectorTerm
+func (this *NodeSelectorTerm) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for NodeSelectorRequirement
+func (this *NodeSelectorRequirement) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for NodeSelectorRequirement
+func (this *NodeSelectorRequirement) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ObjectFieldSelector
+func (this *ObjectFieldSelector) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ObjectFieldSelector
+func (this *ObjectFieldSelector) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ObjectMeta
+func (this *ObjectMeta) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ObjectMeta
+func (this *ObjectMeta) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ObjectMetricSource
+func (this *ObjectMetricSource) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ObjectMetricSource
+func (this *ObjectMetricSource) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for PodAffinity
+func (this *PodAffinity) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for PodAffinity
+func (this *PodAffinity) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for PodAntiAffinity
+func (this *PodAntiAffinity) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for PodAntiAffinity
+func (this *PodAntiAffinity) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for PodAffinityTerm
+func (this *PodAffinityTerm) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for PodAffinityTerm
+func (this *PodAffinityTerm) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for PodDisruptionBudgetSpec
+func (this *PodDisruptionBudgetSpec) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for PodDisruptionBudgetSpec
+func (this *PodDisruptionBudgetSpec) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for PodsMetricSource
+func (this *PodsMetricSource) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for PodsMetricSource
+func (this *PodsMetricSource) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for PreferredSchedulingTerm
+func (this *PreferredSchedulingTerm) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for PreferredSchedulingTerm
+func (this *PreferredSchedulingTerm) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ReadinessProbe
+func (this *ReadinessProbe) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ReadinessProbe
+func (this *ReadinessProbe) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ResourceFieldSelector
+func (this *ResourceFieldSelector) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ResourceFieldSelector
+func (this *ResourceFieldSelector) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ResourceMetricSource
+func (this *ResourceMetricSource) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ResourceMetricSource
+func (this *ResourceMetricSource) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for Resources
+func (this *Resources) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for Resources
+func (this *Resources) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for RollingUpdateDeployment
+func (this *RollingUpdateDeployment) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for RollingUpdateDeployment
+func (this *RollingUpdateDeployment) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for SecretKeySelector
+func (this *SecretKeySelector) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for SecretKeySelector
+func (this *SecretKeySelector) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ServiceSpec
+func (this *ServiceSpec) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ServiceSpec
+func (this *ServiceSpec) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ServicePort
+func (this *ServicePort) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ServicePort
+func (this *ServicePort) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for SessionAffinityConfig
+func (this *SessionAffinityConfig) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for SessionAffinityConfig
+func (this *SessionAffinityConfig) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for TCPSocketAction
+func (this *TCPSocketAction) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for TCPSocketAction
+func (this *TCPSocketAction) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for WeightedPodAffinityTerm
+func (this *WeightedPodAffinityTerm) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for WeightedPodAffinityTerm
+func (this *WeightedPodAffinityTerm) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for TypeInterface
+func (this *TypeInterface) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for TypeInterface
+func (this *TypeInterface) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for TypeMapStringInterface
+func (this *TypeMapStringInterface) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for TypeMapStringInterface
+func (this *TypeMapStringInterface) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for TypeIntOrStringForPB
+func (this *TypeIntOrStringForPB) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for TypeIntOrStringForPB
+func (this *TypeIntOrStringForPB) UnmarshalJSON(b []byte) error {
+	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for TypeBoolValueForPB
+func (this *TypeBoolValueForPB) MarshalJSON() ([]byte, error) {
+	str, err := OperatorMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for TypeBoolValueForPB
+func (this *TypeBoolValueForPB) UnmarshalJSON(b []byte) error {
 	return OperatorUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

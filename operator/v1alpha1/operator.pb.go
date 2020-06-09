@@ -8,6 +8,11 @@ package v1alpha1
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
+	any "github.com/golang/protobuf/ptypes/any"
+	v1 "k8s.io/api/core/v1"
+	resource "k8s.io/apimachinery/pkg/api/resource"
+	v11 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	_ "k8s.io/apimachinery/pkg/util/intstr"
 	math "math"
 )
 
@@ -74,15 +79,15 @@ type IstioOperatorSpec struct {
 	Profile string `protobuf:"bytes,10,opt,name=profile,proto3" json:"profile,omitempty"`
 	// Path for the install package. e.g.
 	//     - /tmp/istio-installer/nightly (local file path)
-	InstallPackagePath string `protobuf:"bytes,11,opt,name=install_package_path,json=installPackagePath,proto3" json:"installPackagePath,omitempty"`
+	InstallPackagePath string `protobuf:"bytes,11,opt,name=install_package_path,json=installPackagePath,proto3" json:"install_package_path,omitempty"`
 	// Root for docker image paths e.g. docker.io/istio
 	Hub string `protobuf:"bytes,12,opt,name=hub,proto3" json:"hub,omitempty"`
 	// Version tag for docker images e.g. 1.0.6
-	Tag interface{} `protobuf:"bytes,13,opt,name=tag,proto3" json:"tag,omitempty"`
+	Tag *TypeInterface `protobuf:"bytes,13,opt,name=tag,proto3" json:"tag,omitempty"`
 	// $hide_from_docs
 	// Resource suffix is appended to all resources installed by each component.
 	// Never implemented; replaced by revision.
-	ResourceSuffix string `protobuf:"bytes,14,opt,name=resource_suffix,json=resourceSuffix,proto3" json:"resourceSuffix,omitempty"` // Deprecated: Do not use.
+	ResourceSuffix string `protobuf:"bytes,14,opt,name=resource_suffix,json=resourceSuffix,proto3" json:"resource_suffix,omitempty"` // Deprecated: Do not use.
 	// Namespace to install control plane resources into. If unset, Istio will be installed into the same namespace
 	// as the IstioOperator CR.
 	Namespace string `protobuf:"bytes,15,opt,name=namespace,proto3" json:"namespace,omitempty"`
@@ -90,22 +95,22 @@ type IstioOperatorSpec struct {
 	// This option is currently experimental.
 	Revision string `protobuf:"bytes,16,opt,name=revision,proto3" json:"revision,omitempty"`
 	// Config used by control plane components internally.
-	MeshConfig map[string]interface{} `protobuf:"bytes,40,opt,name=mesh_config,json=meshConfig,proto3" json:"meshConfig,omitempty"`
+	MeshConfig *TypeMapStringInterface `protobuf:"bytes,40,opt,name=mesh_config,json=meshConfig,proto3" json:"mesh_config,omitempty"`
 	// Kubernetes resource settings, enablement and component-specific settings that are not internal to the
 	// component.
 	Components *IstioComponentSetSpec `protobuf:"bytes,50,opt,name=components,proto3" json:"components,omitempty"`
 	// Extra addon components which are not explicitly specified above.
-	AddonComponents map[string]*ExternalComponentSpec `protobuf:"bytes,51,rep,name=addon_components,json=addonComponents,proto3" json:"addonComponents,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	AddonComponents map[string]*ExternalComponentSpec `protobuf:"bytes,51,rep,name=addon_components,json=addonComponents,proto3" json:"addon_components,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Overrides for default values.yaml. This is a validated pass-through to Helm templates.
 	// See the Helm installation options for schema details: https://istio.io/docs/reference/config/installation-options/.
 	// Anything that is available in IstioOperatorSpec should be set above rather than using the passthrough. This
 	// includes Kubernetes resource settings for components in KubernetesResourcesSpec.
-	Values map[string]interface{} `protobuf:"bytes,100,opt,name=values,proto3" json:"values,omitempty"`
+	Values *TypeMapStringInterface `protobuf:"bytes,100,opt,name=values,proto3" json:"values,omitempty"`
 	// Unvalidated overrides for default values.yaml. Used for custom templates where new parameters are added.
-	UnvalidatedValues    map[string]interface{} `protobuf:"bytes,101,opt,name=unvalidated_values,json=unvalidatedValues,proto3" json:"unvalidatedValues,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
-	XXX_unrecognized     []byte                   `json:"-"`
-	XXX_sizecache        int32                    `json:"-"`
+	UnvalidatedValues    *TypeMapStringInterface `protobuf:"bytes,101,opt,name=unvalidated_values,json=unvalidatedValues,proto3" json:"unvalidated_values,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
+	XXX_unrecognized     []byte                  `json:"-"`
+	XXX_sizecache        int32                   `json:"-"`
 }
 
 func (m *IstioOperatorSpec) Reset()         { *m = IstioOperatorSpec{} }
@@ -154,6 +159,12 @@ func (m *IstioOperatorSpec) GetHub() string {
 	return ""
 }
 
+func (m *IstioOperatorSpec) GetTag() *TypeInterface {
+	if m != nil {
+		return m.Tag
+	}
+	return nil
+}
 
 // Deprecated: Do not use.
 func (m *IstioOperatorSpec) GetResourceSuffix() string {
@@ -177,6 +188,12 @@ func (m *IstioOperatorSpec) GetRevision() string {
 	return ""
 }
 
+func (m *IstioOperatorSpec) GetMeshConfig() *TypeMapStringInterface {
+	if m != nil {
+		return m.MeshConfig
+	}
+	return nil
+}
 
 func (m *IstioOperatorSpec) GetComponents() *IstioComponentSetSpec {
 	if m != nil {
@@ -192,7 +209,19 @@ func (m *IstioOperatorSpec) GetAddonComponents() map[string]*ExternalComponentSp
 	return nil
 }
 
+func (m *IstioOperatorSpec) GetValues() *TypeMapStringInterface {
+	if m != nil {
+		return m.Values
+	}
+	return nil
+}
 
+func (m *IstioOperatorSpec) GetUnvalidatedValues() *TypeMapStringInterface {
+	if m != nil {
+		return m.UnvalidatedValues
+	}
+	return nil
+}
 
 // Observed state of IstioOperator
 type InstallStatus struct {
@@ -205,7 +234,7 @@ type InstallStatus struct {
 	// - If any component is in ERROR state, overall status is ERROR.
 	Status InstallStatus_Status `protobuf:"varint,1,opt,name=status,proto3,enum=istio.operator.v1alpha1.InstallStatus_Status" json:"status,omitempty"`
 	// Individual status of each component controlled by the operator. The map key is the name of the component.
-	ComponentStatus      map[string]*InstallStatus_VersionStatus `protobuf:"bytes,2,rep,name=component_status,json=componentStatus,proto3" json:"componentStatus,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	ComponentStatus      map[string]*InstallStatus_VersionStatus `protobuf:"bytes,2,rep,name=component_status,json=componentStatus,proto3" json:"component_status,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}                                `json:"-"`
 	XXX_unrecognized     []byte                                  `json:"-"`
 	XXX_sizecache        int32                                   `json:"-"`
@@ -306,8 +335,3010 @@ func (m *InstallStatus_VersionStatus) GetError() string {
 	return ""
 }
 
-// This is required because synthetic type definition has file rather than package scope.
+// IstioComponentSpec defines the desired installed state of Istio components.
+type IstioComponentSetSpec struct {
+	Base                 *BaseComponentSpec `protobuf:"bytes,29,opt,name=base,proto3" json:"base,omitempty"`
+	Pilot                *ComponentSpec     `protobuf:"bytes,30,opt,name=pilot,proto3" json:"pilot,omitempty"`
+	Policy               *ComponentSpec     `protobuf:"bytes,33,opt,name=policy,proto3" json:"policy,omitempty"`
+	Telemetry            *ComponentSpec     `protobuf:"bytes,34,opt,name=telemetry,proto3" json:"telemetry,omitempty"`
+	Cni                  *ComponentSpec     `protobuf:"bytes,38,opt,name=cni,proto3" json:"cni,omitempty"`
+	IstiodRemote         *ComponentSpec     `protobuf:"bytes,39,opt,name=istiod_remote,json=istiodRemote,proto3" json:"istiod_remote,omitempty"`
+	IngressGateways      []*GatewaySpec     `protobuf:"bytes,40,rep,name=ingress_gateways,json=ingressGateways,proto3" json:"ingress_gateways,omitempty"`
+	EgressGateways       []*GatewaySpec     `protobuf:"bytes,41,rep,name=egress_gateways,json=egressGateways,proto3" json:"egress_gateways,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
+}
 
+func (m *IstioComponentSetSpec) Reset()         { *m = IstioComponentSetSpec{} }
+func (m *IstioComponentSetSpec) String() string { return proto.CompactTextString(m) }
+func (*IstioComponentSetSpec) ProtoMessage()    {}
+func (*IstioComponentSetSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{2}
+}
+
+func (m *IstioComponentSetSpec) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_IstioComponentSetSpec.Unmarshal(m, b)
+}
+func (m *IstioComponentSetSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_IstioComponentSetSpec.Marshal(b, m, deterministic)
+}
+func (m *IstioComponentSetSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IstioComponentSetSpec.Merge(m, src)
+}
+func (m *IstioComponentSetSpec) XXX_Size() int {
+	return xxx_messageInfo_IstioComponentSetSpec.Size(m)
+}
+func (m *IstioComponentSetSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_IstioComponentSetSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IstioComponentSetSpec proto.InternalMessageInfo
+
+func (m *IstioComponentSetSpec) GetBase() *BaseComponentSpec {
+	if m != nil {
+		return m.Base
+	}
+	return nil
+}
+
+func (m *IstioComponentSetSpec) GetPilot() *ComponentSpec {
+	if m != nil {
+		return m.Pilot
+	}
+	return nil
+}
+
+func (m *IstioComponentSetSpec) GetPolicy() *ComponentSpec {
+	if m != nil {
+		return m.Policy
+	}
+	return nil
+}
+
+func (m *IstioComponentSetSpec) GetTelemetry() *ComponentSpec {
+	if m != nil {
+		return m.Telemetry
+	}
+	return nil
+}
+
+func (m *IstioComponentSetSpec) GetCni() *ComponentSpec {
+	if m != nil {
+		return m.Cni
+	}
+	return nil
+}
+
+func (m *IstioComponentSetSpec) GetIstiodRemote() *ComponentSpec {
+	if m != nil {
+		return m.IstiodRemote
+	}
+	return nil
+}
+
+func (m *IstioComponentSetSpec) GetIngressGateways() []*GatewaySpec {
+	if m != nil {
+		return m.IngressGateways
+	}
+	return nil
+}
+
+func (m *IstioComponentSetSpec) GetEgressGateways() []*GatewaySpec {
+	if m != nil {
+		return m.EgressGateways
+	}
+	return nil
+}
+
+// Configuration for base component.
+type BaseComponentSpec struct {
+	// Selects whether this component is installed.
+	Enabled              *TypeBoolValueForPB `protobuf:"bytes,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
+}
+
+func (m *BaseComponentSpec) Reset()         { *m = BaseComponentSpec{} }
+func (m *BaseComponentSpec) String() string { return proto.CompactTextString(m) }
+func (*BaseComponentSpec) ProtoMessage()    {}
+func (*BaseComponentSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{3}
+}
+
+func (m *BaseComponentSpec) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_BaseComponentSpec.Unmarshal(m, b)
+}
+func (m *BaseComponentSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_BaseComponentSpec.Marshal(b, m, deterministic)
+}
+func (m *BaseComponentSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BaseComponentSpec.Merge(m, src)
+}
+func (m *BaseComponentSpec) XXX_Size() int {
+	return xxx_messageInfo_BaseComponentSpec.Size(m)
+}
+func (m *BaseComponentSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_BaseComponentSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BaseComponentSpec proto.InternalMessageInfo
+
+func (m *BaseComponentSpec) GetEnabled() *TypeBoolValueForPB {
+	if m != nil {
+		return m.Enabled
+	}
+	return nil
+}
+
+// Configuration for internal components.
+type ComponentSpec struct {
+	// Selects whether this component is installed.
+	Enabled *TypeBoolValueForPB `protobuf:"bytes,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	// Namespace for the component.
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Hub for the component (overrides top level hub setting).
+	Hub string `protobuf:"bytes,10,opt,name=hub,proto3" json:"hub,omitempty"`
+	// Tag for the component (overrides top level tag setting).
+	Tag *TypeInterface `protobuf:"bytes,11,opt,name=tag,proto3" json:"tag,omitempty"`
+	// Arbitrary install time configuration for the component.
+	Spec *TypeInterface `protobuf:"bytes,30,opt,name=spec,proto3" json:"spec,omitempty"`
+	// Kubernetes resource spec.
+	K8S                  *KubernetesResourcesSpec `protobuf:"bytes,50,opt,name=k8s,proto3" json:"k8s,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
+	XXX_unrecognized     []byte                   `json:"-"`
+	XXX_sizecache        int32                    `json:"-"`
+}
+
+func (m *ComponentSpec) Reset()         { *m = ComponentSpec{} }
+func (m *ComponentSpec) String() string { return proto.CompactTextString(m) }
+func (*ComponentSpec) ProtoMessage()    {}
+func (*ComponentSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{4}
+}
+
+func (m *ComponentSpec) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ComponentSpec.Unmarshal(m, b)
+}
+func (m *ComponentSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ComponentSpec.Marshal(b, m, deterministic)
+}
+func (m *ComponentSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ComponentSpec.Merge(m, src)
+}
+func (m *ComponentSpec) XXX_Size() int {
+	return xxx_messageInfo_ComponentSpec.Size(m)
+}
+func (m *ComponentSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_ComponentSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ComponentSpec proto.InternalMessageInfo
+
+func (m *ComponentSpec) GetEnabled() *TypeBoolValueForPB {
+	if m != nil {
+		return m.Enabled
+	}
+	return nil
+}
+
+func (m *ComponentSpec) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *ComponentSpec) GetHub() string {
+	if m != nil {
+		return m.Hub
+	}
+	return ""
+}
+
+func (m *ComponentSpec) GetTag() *TypeInterface {
+	if m != nil {
+		return m.Tag
+	}
+	return nil
+}
+
+func (m *ComponentSpec) GetSpec() *TypeInterface {
+	if m != nil {
+		return m.Spec
+	}
+	return nil
+}
+
+func (m *ComponentSpec) GetK8S() *KubernetesResourcesSpec {
+	if m != nil {
+		return m.K8S
+	}
+	return nil
+}
+
+// Configuration for external components.
+type ExternalComponentSpec struct {
+	// Selects whether this component is installed.
+	Enabled *TypeBoolValueForPB `protobuf:"bytes,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	// Namespace for the component.
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Arbitrary install time configuration for the component.
+	Spec *TypeInterface `protobuf:"bytes,10,opt,name=spec,proto3" json:"spec,omitempty"`
+	// Chart path for addon components.
+	ChartPath string `protobuf:"bytes,30,opt,name=chart_path,json=chartPath,proto3" json:"chart_path,omitempty"`
+	// Optional schema to validate spec against.
+	Schema *any.Any `protobuf:"bytes,35,opt,name=schema,proto3" json:"schema,omitempty"`
+	// Kubernetes resource spec.
+	K8S                  *KubernetesResourcesSpec `protobuf:"bytes,50,opt,name=k8s,proto3" json:"k8s,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
+	XXX_unrecognized     []byte                   `json:"-"`
+	XXX_sizecache        int32                    `json:"-"`
+}
+
+func (m *ExternalComponentSpec) Reset()         { *m = ExternalComponentSpec{} }
+func (m *ExternalComponentSpec) String() string { return proto.CompactTextString(m) }
+func (*ExternalComponentSpec) ProtoMessage()    {}
+func (*ExternalComponentSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{5}
+}
+
+func (m *ExternalComponentSpec) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ExternalComponentSpec.Unmarshal(m, b)
+}
+func (m *ExternalComponentSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ExternalComponentSpec.Marshal(b, m, deterministic)
+}
+func (m *ExternalComponentSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ExternalComponentSpec.Merge(m, src)
+}
+func (m *ExternalComponentSpec) XXX_Size() int {
+	return xxx_messageInfo_ExternalComponentSpec.Size(m)
+}
+func (m *ExternalComponentSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_ExternalComponentSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ExternalComponentSpec proto.InternalMessageInfo
+
+func (m *ExternalComponentSpec) GetEnabled() *TypeBoolValueForPB {
+	if m != nil {
+		return m.Enabled
+	}
+	return nil
+}
+
+func (m *ExternalComponentSpec) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *ExternalComponentSpec) GetSpec() *TypeInterface {
+	if m != nil {
+		return m.Spec
+	}
+	return nil
+}
+
+func (m *ExternalComponentSpec) GetChartPath() string {
+	if m != nil {
+		return m.ChartPath
+	}
+	return ""
+}
+
+func (m *ExternalComponentSpec) GetSchema() *any.Any {
+	if m != nil {
+		return m.Schema
+	}
+	return nil
+}
+
+func (m *ExternalComponentSpec) GetK8S() *KubernetesResourcesSpec {
+	if m != nil {
+		return m.K8S
+	}
+	return nil
+}
+
+// Configuration for gateways.
+type GatewaySpec struct {
+	// Selects whether this gateway is installed.
+	Enabled *TypeBoolValueForPB `protobuf:"bytes,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	// Namespace for the gateway.
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Name for the gateway.
+	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	// Labels for the gateway.
+	Label map[string]string `protobuf:"bytes,4,rep,name=label,proto3" json:"label,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// Hub for the component (overrides top level hub setting).
+	Hub string `protobuf:"bytes,10,opt,name=hub,proto3" json:"hub,omitempty"`
+	// Tag for the component (overrides top level tag setting).
+	Tag *TypeInterface `protobuf:"bytes,11,opt,name=tag,proto3" json:"tag,omitempty"`
+	// Kubernetes resource spec.
+	K8S                  *KubernetesResourcesSpec `protobuf:"bytes,50,opt,name=k8s,proto3" json:"k8s,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
+	XXX_unrecognized     []byte                   `json:"-"`
+	XXX_sizecache        int32                    `json:"-"`
+}
+
+func (m *GatewaySpec) Reset()         { *m = GatewaySpec{} }
+func (m *GatewaySpec) String() string { return proto.CompactTextString(m) }
+func (*GatewaySpec) ProtoMessage()    {}
+func (*GatewaySpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{6}
+}
+
+func (m *GatewaySpec) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GatewaySpec.Unmarshal(m, b)
+}
+func (m *GatewaySpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GatewaySpec.Marshal(b, m, deterministic)
+}
+func (m *GatewaySpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GatewaySpec.Merge(m, src)
+}
+func (m *GatewaySpec) XXX_Size() int {
+	return xxx_messageInfo_GatewaySpec.Size(m)
+}
+func (m *GatewaySpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_GatewaySpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GatewaySpec proto.InternalMessageInfo
+
+func (m *GatewaySpec) GetEnabled() *TypeBoolValueForPB {
+	if m != nil {
+		return m.Enabled
+	}
+	return nil
+}
+
+func (m *GatewaySpec) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *GatewaySpec) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *GatewaySpec) GetLabel() map[string]string {
+	if m != nil {
+		return m.Label
+	}
+	return nil
+}
+
+func (m *GatewaySpec) GetHub() string {
+	if m != nil {
+		return m.Hub
+	}
+	return ""
+}
+
+func (m *GatewaySpec) GetTag() *TypeInterface {
+	if m != nil {
+		return m.Tag
+	}
+	return nil
+}
+
+func (m *GatewaySpec) GetK8S() *KubernetesResourcesSpec {
+	if m != nil {
+		return m.K8S
+	}
+	return nil
+}
+
+// KubernetesResourcesConfig is a common set of k8s resource configs for components.
+type KubernetesResourcesSpec struct {
+	// k8s affinity.
+	// [https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity)
+	Affinity *Affinity `protobuf:"bytes,1,opt,name=affinity,proto3" json:"affinity,omitempty"`
+	// Deployment environment variables.
+	// [https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
+	Env []*EnvVar `protobuf:"bytes,2,rep,name=env,proto3" json:"env,omitempty"`
+	// k8s HorizontalPodAutoscaler settings.
+	// [https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
+	HpaSpec *HorizontalPodAutoscalerSpec `protobuf:"bytes,3,opt,name=hpa_spec,json=hpaSpec,proto3" json:"hpa_spec,omitempty"`
+	// k8s imagePullPolicy.
+	// [https://kubernetes.io/docs/concepts/containers/images/](https://kubernetes.io/docs/concepts/containers/images/)
+	ImagePullPolicy string `protobuf:"bytes,4,opt,name=image_pull_policy,json=imagePullPolicy,proto3" json:"image_pull_policy,omitempty"`
+	// k8s nodeSelector.
+	// [https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector)
+	NodeSelector map[string]string `protobuf:"bytes,5,rep,name=node_selector,json=nodeSelector,proto3" json:"node_selector,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// k8s PodDisruptionBudget settings.
+	// [https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#how-disruption-budgets-work](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#how-disruption-budgets-work)
+	PodDisruptionBudget *PodDisruptionBudgetSpec `protobuf:"bytes,6,opt,name=pod_disruption_budget,json=podDisruptionBudget,proto3" json:"pod_disruption_budget,omitempty"`
+	// k8s pod annotations.
+	// [https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+	PodAnnotations map[string]string `protobuf:"bytes,7,rep,name=pod_annotations,json=podAnnotations,proto3" json:"pod_annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// k8s priority_class_name. Default for all resources unless overridden.
+	// [https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass](https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass)
+	PriorityClassName string `protobuf:"bytes,8,opt,name=priority_class_name,json=priorityClassName,proto3" json:"priority_class_name,omitempty"`
+	// k8s readinessProbe settings.
+	// [https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/)
+	// k8s.io.api.core.v1.Probe readiness_probe = 9;
+	ReadinessProbe *ReadinessProbe `protobuf:"bytes,9,opt,name=readiness_probe,json=readinessProbe,proto3" json:"readiness_probe,omitempty"`
+	// k8s Deployment replicas setting.
+	// [https://kubernetes.io/docs/concepts/workloads/controllers/deployment/](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
+	ReplicaCount uint32 `protobuf:"varint,10,opt,name=replica_count,json=replicaCount,proto3" json:"replica_count,omitempty"`
+	// k8s resources settings.
+	// [https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container)
+	Resources *Resources `protobuf:"bytes,11,opt,name=resources,proto3" json:"resources,omitempty"`
+	// k8s Service settings.
+	// [https://kubernetes.io/docs/concepts/services-networking/service/](https://kubernetes.io/docs/concepts/services-networking/service/)
+	Service *ServiceSpec `protobuf:"bytes,12,opt,name=service,proto3" json:"service,omitempty"`
+	// k8s deployment strategy.
+	// [https://kubernetes.io/docs/concepts/workloads/controllers/deployment/](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
+	Strategy *DeploymentStrategy `protobuf:"bytes,13,opt,name=strategy,proto3" json:"strategy,omitempty"`
+	// k8s toleration
+	// [https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)
+	Tolerations []*v1.Toleration `protobuf:"bytes,14,rep,name=tolerations,proto3" json:"tolerations,omitempty"`
+	// k8s service annotations.
+	// [https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+	ServiceAnnotations map[string]string `protobuf:"bytes,15,rep,name=service_annotations,json=serviceAnnotations,proto3" json:"service_annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// Overlays for k8s resources in rendered manifests.
+	Overlays             []*K8SObjectOverlay `protobuf:"bytes,100,rep,name=overlays,proto3" json:"overlays,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
+}
+
+func (m *KubernetesResourcesSpec) Reset()         { *m = KubernetesResourcesSpec{} }
+func (m *KubernetesResourcesSpec) String() string { return proto.CompactTextString(m) }
+func (*KubernetesResourcesSpec) ProtoMessage()    {}
+func (*KubernetesResourcesSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{7}
+}
+
+func (m *KubernetesResourcesSpec) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_KubernetesResourcesSpec.Unmarshal(m, b)
+}
+func (m *KubernetesResourcesSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_KubernetesResourcesSpec.Marshal(b, m, deterministic)
+}
+func (m *KubernetesResourcesSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_KubernetesResourcesSpec.Merge(m, src)
+}
+func (m *KubernetesResourcesSpec) XXX_Size() int {
+	return xxx_messageInfo_KubernetesResourcesSpec.Size(m)
+}
+func (m *KubernetesResourcesSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_KubernetesResourcesSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_KubernetesResourcesSpec proto.InternalMessageInfo
+
+func (m *KubernetesResourcesSpec) GetAffinity() *Affinity {
+	if m != nil {
+		return m.Affinity
+	}
+	return nil
+}
+
+func (m *KubernetesResourcesSpec) GetEnv() []*EnvVar {
+	if m != nil {
+		return m.Env
+	}
+	return nil
+}
+
+func (m *KubernetesResourcesSpec) GetHpaSpec() *HorizontalPodAutoscalerSpec {
+	if m != nil {
+		return m.HpaSpec
+	}
+	return nil
+}
+
+func (m *KubernetesResourcesSpec) GetImagePullPolicy() string {
+	if m != nil {
+		return m.ImagePullPolicy
+	}
+	return ""
+}
+
+func (m *KubernetesResourcesSpec) GetNodeSelector() map[string]string {
+	if m != nil {
+		return m.NodeSelector
+	}
+	return nil
+}
+
+func (m *KubernetesResourcesSpec) GetPodDisruptionBudget() *PodDisruptionBudgetSpec {
+	if m != nil {
+		return m.PodDisruptionBudget
+	}
+	return nil
+}
+
+func (m *KubernetesResourcesSpec) GetPodAnnotations() map[string]string {
+	if m != nil {
+		return m.PodAnnotations
+	}
+	return nil
+}
+
+func (m *KubernetesResourcesSpec) GetPriorityClassName() string {
+	if m != nil {
+		return m.PriorityClassName
+	}
+	return ""
+}
+
+func (m *KubernetesResourcesSpec) GetReadinessProbe() *ReadinessProbe {
+	if m != nil {
+		return m.ReadinessProbe
+	}
+	return nil
+}
+
+func (m *KubernetesResourcesSpec) GetReplicaCount() uint32 {
+	if m != nil {
+		return m.ReplicaCount
+	}
+	return 0
+}
+
+func (m *KubernetesResourcesSpec) GetResources() *Resources {
+	if m != nil {
+		return m.Resources
+	}
+	return nil
+}
+
+func (m *KubernetesResourcesSpec) GetService() *ServiceSpec {
+	if m != nil {
+		return m.Service
+	}
+	return nil
+}
+
+func (m *KubernetesResourcesSpec) GetStrategy() *DeploymentStrategy {
+	if m != nil {
+		return m.Strategy
+	}
+	return nil
+}
+
+func (m *KubernetesResourcesSpec) GetTolerations() []*v1.Toleration {
+	if m != nil {
+		return m.Tolerations
+	}
+	return nil
+}
+
+func (m *KubernetesResourcesSpec) GetServiceAnnotations() map[string]string {
+	if m != nil {
+		return m.ServiceAnnotations
+	}
+	return nil
+}
+
+func (m *KubernetesResourcesSpec) GetOverlays() []*K8SObjectOverlay {
+	if m != nil {
+		return m.Overlays
+	}
+	return nil
+}
+
+// Patch for an existing k8s resource.
+type K8SObjectOverlay struct {
+	// Resource API version.
+	ApiVersion string `protobuf:"bytes,1,opt,name=api_version,json=apiVersion,proto3" json:"api_version,omitempty"`
+	// Resource kind.
+	Kind string `protobuf:"bytes,2,opt,name=kind,proto3" json:"kind,omitempty"`
+	// Name of resource.
+	// Namespace is always the component namespace.
+	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	// List of patches to apply to resource.
+	Patches              []*K8SObjectOverlay_PathValue `protobuf:"bytes,4,rep,name=patches,proto3" json:"patches,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                      `json:"-"`
+	XXX_unrecognized     []byte                        `json:"-"`
+	XXX_sizecache        int32                         `json:"-"`
+}
+
+func (m *K8SObjectOverlay) Reset()         { *m = K8SObjectOverlay{} }
+func (m *K8SObjectOverlay) String() string { return proto.CompactTextString(m) }
+func (*K8SObjectOverlay) ProtoMessage()    {}
+func (*K8SObjectOverlay) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{8}
+}
+
+func (m *K8SObjectOverlay) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_K8SObjectOverlay.Unmarshal(m, b)
+}
+func (m *K8SObjectOverlay) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_K8SObjectOverlay.Marshal(b, m, deterministic)
+}
+func (m *K8SObjectOverlay) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_K8SObjectOverlay.Merge(m, src)
+}
+func (m *K8SObjectOverlay) XXX_Size() int {
+	return xxx_messageInfo_K8SObjectOverlay.Size(m)
+}
+func (m *K8SObjectOverlay) XXX_DiscardUnknown() {
+	xxx_messageInfo_K8SObjectOverlay.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_K8SObjectOverlay proto.InternalMessageInfo
+
+func (m *K8SObjectOverlay) GetApiVersion() string {
+	if m != nil {
+		return m.ApiVersion
+	}
+	return ""
+}
+
+func (m *K8SObjectOverlay) GetKind() string {
+	if m != nil {
+		return m.Kind
+	}
+	return ""
+}
+
+func (m *K8SObjectOverlay) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *K8SObjectOverlay) GetPatches() []*K8SObjectOverlay_PathValue {
+	if m != nil {
+		return m.Patches
+	}
+	return nil
+}
+
+type K8SObjectOverlay_PathValue struct {
+	// Path of the form a.[key1:value1].b.[:value2]
+	// Where [key1:value1] is a selector for a key-value pair to identify a list element and [:value] is a value
+	// selector to identify a list element in a leaf list.
+	// All path intermediate nodes must exist.
+	Path string `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
+	// Value to add, delete or replace.
+	// For add, the path should be a new leaf.
+	// For delete, value should be unset.
+	// For replace, path should reference an existing node.
+	// All values are strings but are converted into appropriate type based on schema.
+	Value                *TypeInterface `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
+}
+
+func (m *K8SObjectOverlay_PathValue) Reset()         { *m = K8SObjectOverlay_PathValue{} }
+func (m *K8SObjectOverlay_PathValue) String() string { return proto.CompactTextString(m) }
+func (*K8SObjectOverlay_PathValue) ProtoMessage()    {}
+func (*K8SObjectOverlay_PathValue) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{8, 0}
+}
+
+func (m *K8SObjectOverlay_PathValue) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_K8SObjectOverlay_PathValue.Unmarshal(m, b)
+}
+func (m *K8SObjectOverlay_PathValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_K8SObjectOverlay_PathValue.Marshal(b, m, deterministic)
+}
+func (m *K8SObjectOverlay_PathValue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_K8SObjectOverlay_PathValue.Merge(m, src)
+}
+func (m *K8SObjectOverlay_PathValue) XXX_Size() int {
+	return xxx_messageInfo_K8SObjectOverlay_PathValue.Size(m)
+}
+func (m *K8SObjectOverlay_PathValue) XXX_DiscardUnknown() {
+	xxx_messageInfo_K8SObjectOverlay_PathValue.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_K8SObjectOverlay_PathValue proto.InternalMessageInfo
+
+func (m *K8SObjectOverlay_PathValue) GetPath() string {
+	if m != nil {
+		return m.Path
+	}
+	return ""
+}
+
+func (m *K8SObjectOverlay_PathValue) GetValue() *TypeInterface {
+	if m != nil {
+		return m.Value
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.Affinity.
+type Affinity struct {
+	NodeAffinity         *NodeAffinity    `protobuf:"bytes,1,opt,name=nodeAffinity,proto3" json:"nodeAffinity,omitempty"`
+	PodAffinity          *PodAffinity     `protobuf:"bytes,2,opt,name=podAffinity,proto3" json:"podAffinity,omitempty"`
+	PodAntiAffinity      *PodAntiAffinity `protobuf:"bytes,3,opt,name=podAntiAffinity,proto3" json:"podAntiAffinity,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
+}
+
+func (m *Affinity) Reset()         { *m = Affinity{} }
+func (m *Affinity) String() string { return proto.CompactTextString(m) }
+func (*Affinity) ProtoMessage()    {}
+func (*Affinity) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{9}
+}
+
+func (m *Affinity) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Affinity.Unmarshal(m, b)
+}
+func (m *Affinity) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Affinity.Marshal(b, m, deterministic)
+}
+func (m *Affinity) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Affinity.Merge(m, src)
+}
+func (m *Affinity) XXX_Size() int {
+	return xxx_messageInfo_Affinity.Size(m)
+}
+func (m *Affinity) XXX_DiscardUnknown() {
+	xxx_messageInfo_Affinity.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Affinity proto.InternalMessageInfo
+
+func (m *Affinity) GetNodeAffinity() *NodeAffinity {
+	if m != nil {
+		return m.NodeAffinity
+	}
+	return nil
+}
+
+func (m *Affinity) GetPodAffinity() *PodAffinity {
+	if m != nil {
+		return m.PodAffinity
+	}
+	return nil
+}
+
+func (m *Affinity) GetPodAntiAffinity() *PodAntiAffinity {
+	if m != nil {
+		return m.PodAntiAffinity
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.ConfigMapKeySelector.
+type ConfigMapKeySelector struct {
+	LocalObjectReference *LocalObjectReference `protobuf:"bytes,1,opt,name=localObjectReference,proto3" json:"localObjectReference,omitempty"`
+	Key                  string                `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
+	Optional             bool                  `protobuf:"varint,3,opt,name=optional,proto3" json:"optional,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
+	XXX_unrecognized     []byte                `json:"-"`
+	XXX_sizecache        int32                 `json:"-"`
+}
+
+func (m *ConfigMapKeySelector) Reset()         { *m = ConfigMapKeySelector{} }
+func (m *ConfigMapKeySelector) String() string { return proto.CompactTextString(m) }
+func (*ConfigMapKeySelector) ProtoMessage()    {}
+func (*ConfigMapKeySelector) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{10}
+}
+
+func (m *ConfigMapKeySelector) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ConfigMapKeySelector.Unmarshal(m, b)
+}
+func (m *ConfigMapKeySelector) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ConfigMapKeySelector.Marshal(b, m, deterministic)
+}
+func (m *ConfigMapKeySelector) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ConfigMapKeySelector.Merge(m, src)
+}
+func (m *ConfigMapKeySelector) XXX_Size() int {
+	return xxx_messageInfo_ConfigMapKeySelector.Size(m)
+}
+func (m *ConfigMapKeySelector) XXX_DiscardUnknown() {
+	xxx_messageInfo_ConfigMapKeySelector.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ConfigMapKeySelector proto.InternalMessageInfo
+
+func (m *ConfigMapKeySelector) GetLocalObjectReference() *LocalObjectReference {
+	if m != nil {
+		return m.LocalObjectReference
+	}
+	return nil
+}
+
+func (m *ConfigMapKeySelector) GetKey() string {
+	if m != nil {
+		return m.Key
+	}
+	return ""
+}
+
+func (m *ConfigMapKeySelector) GetOptional() bool {
+	if m != nil {
+		return m.Optional
+	}
+	return false
+}
+
+// See k8s.io.api.core.v1.ClientIPConfig.
+type ClientIPConfig struct {
+	TimeoutSeconds       int32    `protobuf:"varint,1,opt,name=timeoutSeconds,proto3" json:"timeoutSeconds,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ClientIPConfig) Reset()         { *m = ClientIPConfig{} }
+func (m *ClientIPConfig) String() string { return proto.CompactTextString(m) }
+func (*ClientIPConfig) ProtoMessage()    {}
+func (*ClientIPConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{11}
+}
+
+func (m *ClientIPConfig) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ClientIPConfig.Unmarshal(m, b)
+}
+func (m *ClientIPConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ClientIPConfig.Marshal(b, m, deterministic)
+}
+func (m *ClientIPConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClientIPConfig.Merge(m, src)
+}
+func (m *ClientIPConfig) XXX_Size() int {
+	return xxx_messageInfo_ClientIPConfig.Size(m)
+}
+func (m *ClientIPConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_ClientIPConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ClientIPConfig proto.InternalMessageInfo
+
+func (m *ClientIPConfig) GetTimeoutSeconds() int32 {
+	if m != nil {
+		return m.TimeoutSeconds
+	}
+	return 0
+}
+
+// See k8s.io.api.autoscaling.v2beta2.CrossVersionObjectReference.
+type CrossVersionObjectReference struct {
+	Kind                 string   `protobuf:"bytes,1,opt,name=kind,proto3" json:"kind,omitempty"`
+	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	ApiVersion           string   `protobuf:"bytes,3,opt,name=apiVersion,proto3" json:"apiVersion,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CrossVersionObjectReference) Reset()         { *m = CrossVersionObjectReference{} }
+func (m *CrossVersionObjectReference) String() string { return proto.CompactTextString(m) }
+func (*CrossVersionObjectReference) ProtoMessage()    {}
+func (*CrossVersionObjectReference) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{12}
+}
+
+func (m *CrossVersionObjectReference) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CrossVersionObjectReference.Unmarshal(m, b)
+}
+func (m *CrossVersionObjectReference) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CrossVersionObjectReference.Marshal(b, m, deterministic)
+}
+func (m *CrossVersionObjectReference) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CrossVersionObjectReference.Merge(m, src)
+}
+func (m *CrossVersionObjectReference) XXX_Size() int {
+	return xxx_messageInfo_CrossVersionObjectReference.Size(m)
+}
+func (m *CrossVersionObjectReference) XXX_DiscardUnknown() {
+	xxx_messageInfo_CrossVersionObjectReference.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CrossVersionObjectReference proto.InternalMessageInfo
+
+func (m *CrossVersionObjectReference) GetKind() string {
+	if m != nil {
+		return m.Kind
+	}
+	return ""
+}
+
+func (m *CrossVersionObjectReference) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *CrossVersionObjectReference) GetApiVersion() string {
+	if m != nil {
+		return m.ApiVersion
+	}
+	return ""
+}
+
+// See k8s.io.api.apps.v1.DeploymentStrategy.
+type DeploymentStrategy struct {
+	Type                 string                   `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
+	RollingUpdate        *RollingUpdateDeployment `protobuf:"bytes,2,opt,name=rollingUpdate,proto3" json:"rollingUpdate,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
+	XXX_unrecognized     []byte                   `json:"-"`
+	XXX_sizecache        int32                    `json:"-"`
+}
+
+func (m *DeploymentStrategy) Reset()         { *m = DeploymentStrategy{} }
+func (m *DeploymentStrategy) String() string { return proto.CompactTextString(m) }
+func (*DeploymentStrategy) ProtoMessage()    {}
+func (*DeploymentStrategy) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{13}
+}
+
+func (m *DeploymentStrategy) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeploymentStrategy.Unmarshal(m, b)
+}
+func (m *DeploymentStrategy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeploymentStrategy.Marshal(b, m, deterministic)
+}
+func (m *DeploymentStrategy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeploymentStrategy.Merge(m, src)
+}
+func (m *DeploymentStrategy) XXX_Size() int {
+	return xxx_messageInfo_DeploymentStrategy.Size(m)
+}
+func (m *DeploymentStrategy) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeploymentStrategy.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeploymentStrategy proto.InternalMessageInfo
+
+func (m *DeploymentStrategy) GetType() string {
+	if m != nil {
+		return m.Type
+	}
+	return ""
+}
+
+func (m *DeploymentStrategy) GetRollingUpdate() *RollingUpdateDeployment {
+	if m != nil {
+		return m.RollingUpdate
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.EnvVar.
+type EnvVar struct {
+	Name                 string        `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Value                string        `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	ValueFrom            *EnvVarSource `protobuf:"bytes,3,opt,name=valueFrom,proto3" json:"valueFrom,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *EnvVar) Reset()         { *m = EnvVar{} }
+func (m *EnvVar) String() string { return proto.CompactTextString(m) }
+func (*EnvVar) ProtoMessage()    {}
+func (*EnvVar) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{14}
+}
+
+func (m *EnvVar) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_EnvVar.Unmarshal(m, b)
+}
+func (m *EnvVar) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_EnvVar.Marshal(b, m, deterministic)
+}
+func (m *EnvVar) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EnvVar.Merge(m, src)
+}
+func (m *EnvVar) XXX_Size() int {
+	return xxx_messageInfo_EnvVar.Size(m)
+}
+func (m *EnvVar) XXX_DiscardUnknown() {
+	xxx_messageInfo_EnvVar.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EnvVar proto.InternalMessageInfo
+
+func (m *EnvVar) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *EnvVar) GetValue() string {
+	if m != nil {
+		return m.Value
+	}
+	return ""
+}
+
+func (m *EnvVar) GetValueFrom() *EnvVarSource {
+	if m != nil {
+		return m.ValueFrom
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.EnvVarSource.
+type EnvVarSource struct {
+	FieldRef             *ObjectFieldSelector   `protobuf:"bytes,1,opt,name=fieldRef,proto3" json:"fieldRef,omitempty"`
+	ResourceFieldRef     *ResourceFieldSelector `protobuf:"bytes,2,opt,name=resourceFieldRef,proto3" json:"resourceFieldRef,omitempty"`
+	ConfigMapKeyRef      *ConfigMapKeySelector  `protobuf:"bytes,3,opt,name=configMapKeyRef,proto3" json:"configMapKeyRef,omitempty"`
+	SecretKeyRef         *SecretKeySelector     `protobuf:"bytes,4,opt,name=secretKeyRef,proto3" json:"secretKeyRef,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
+	XXX_unrecognized     []byte                 `json:"-"`
+	XXX_sizecache        int32                  `json:"-"`
+}
+
+func (m *EnvVarSource) Reset()         { *m = EnvVarSource{} }
+func (m *EnvVarSource) String() string { return proto.CompactTextString(m) }
+func (*EnvVarSource) ProtoMessage()    {}
+func (*EnvVarSource) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{15}
+}
+
+func (m *EnvVarSource) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_EnvVarSource.Unmarshal(m, b)
+}
+func (m *EnvVarSource) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_EnvVarSource.Marshal(b, m, deterministic)
+}
+func (m *EnvVarSource) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EnvVarSource.Merge(m, src)
+}
+func (m *EnvVarSource) XXX_Size() int {
+	return xxx_messageInfo_EnvVarSource.Size(m)
+}
+func (m *EnvVarSource) XXX_DiscardUnknown() {
+	xxx_messageInfo_EnvVarSource.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EnvVarSource proto.InternalMessageInfo
+
+func (m *EnvVarSource) GetFieldRef() *ObjectFieldSelector {
+	if m != nil {
+		return m.FieldRef
+	}
+	return nil
+}
+
+func (m *EnvVarSource) GetResourceFieldRef() *ResourceFieldSelector {
+	if m != nil {
+		return m.ResourceFieldRef
+	}
+	return nil
+}
+
+func (m *EnvVarSource) GetConfigMapKeyRef() *ConfigMapKeySelector {
+	if m != nil {
+		return m.ConfigMapKeyRef
+	}
+	return nil
+}
+
+func (m *EnvVarSource) GetSecretKeyRef() *SecretKeySelector {
+	if m != nil {
+		return m.SecretKeyRef
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.ExecAction.
+type ExecAction struct {
+	Command              []string `protobuf:"bytes,1,rep,name=command,proto3" json:"command,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ExecAction) Reset()         { *m = ExecAction{} }
+func (m *ExecAction) String() string { return proto.CompactTextString(m) }
+func (*ExecAction) ProtoMessage()    {}
+func (*ExecAction) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{16}
+}
+
+func (m *ExecAction) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ExecAction.Unmarshal(m, b)
+}
+func (m *ExecAction) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ExecAction.Marshal(b, m, deterministic)
+}
+func (m *ExecAction) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ExecAction.Merge(m, src)
+}
+func (m *ExecAction) XXX_Size() int {
+	return xxx_messageInfo_ExecAction.Size(m)
+}
+func (m *ExecAction) XXX_DiscardUnknown() {
+	xxx_messageInfo_ExecAction.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ExecAction proto.InternalMessageInfo
+
+func (m *ExecAction) GetCommand() []string {
+	if m != nil {
+		return m.Command
+	}
+	return nil
+}
+
+// See k8s.io.api.autoscaling.v2beta2.CrossVersionObjectReference.
+type ExternalMetricSource struct {
+	MetricName           string             `protobuf:"bytes,1,opt,name=metricName,proto3" json:"metricName,omitempty"`
+	MetricSelector       *v11.LabelSelector `protobuf:"bytes,2,opt,name=metricSelector,proto3" json:"metricSelector,omitempty"`
+	TargetValue          *resource.Quantity `protobuf:"bytes,3,opt,name=targetValue,proto3" json:"targetValue,omitempty"`
+	TargetAverageValue   *resource.Quantity `protobuf:"bytes,4,opt,name=targetAverageValue,proto3" json:"targetAverageValue,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
+}
+
+func (m *ExternalMetricSource) Reset()         { *m = ExternalMetricSource{} }
+func (m *ExternalMetricSource) String() string { return proto.CompactTextString(m) }
+func (*ExternalMetricSource) ProtoMessage()    {}
+func (*ExternalMetricSource) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{17}
+}
+
+func (m *ExternalMetricSource) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ExternalMetricSource.Unmarshal(m, b)
+}
+func (m *ExternalMetricSource) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ExternalMetricSource.Marshal(b, m, deterministic)
+}
+func (m *ExternalMetricSource) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ExternalMetricSource.Merge(m, src)
+}
+func (m *ExternalMetricSource) XXX_Size() int {
+	return xxx_messageInfo_ExternalMetricSource.Size(m)
+}
+func (m *ExternalMetricSource) XXX_DiscardUnknown() {
+	xxx_messageInfo_ExternalMetricSource.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ExternalMetricSource proto.InternalMessageInfo
+
+func (m *ExternalMetricSource) GetMetricName() string {
+	if m != nil {
+		return m.MetricName
+	}
+	return ""
+}
+
+func (m *ExternalMetricSource) GetMetricSelector() *v11.LabelSelector {
+	if m != nil {
+		return m.MetricSelector
+	}
+	return nil
+}
+
+func (m *ExternalMetricSource) GetTargetValue() *resource.Quantity {
+	if m != nil {
+		return m.TargetValue
+	}
+	return nil
+}
+
+func (m *ExternalMetricSource) GetTargetAverageValue() *resource.Quantity {
+	if m != nil {
+		return m.TargetAverageValue
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.HTTPGetAction.
+type HTTPGetAction struct {
+	Path                 string         `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
+	Port                 *TypeInterface `protobuf:"bytes,2,opt,name=port,proto3" json:"port,omitempty"`
+	Host                 string         `protobuf:"bytes,3,opt,name=host,proto3" json:"host,omitempty"`
+	Scheme               string         `protobuf:"bytes,4,opt,name=scheme,proto3" json:"scheme,omitempty"`
+	HttpHeaders          []*HTTPHeader  `protobuf:"bytes,5,rep,name=httpHeaders,proto3" json:"httpHeaders,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
+}
+
+func (m *HTTPGetAction) Reset()         { *m = HTTPGetAction{} }
+func (m *HTTPGetAction) String() string { return proto.CompactTextString(m) }
+func (*HTTPGetAction) ProtoMessage()    {}
+func (*HTTPGetAction) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{18}
+}
+
+func (m *HTTPGetAction) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_HTTPGetAction.Unmarshal(m, b)
+}
+func (m *HTTPGetAction) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_HTTPGetAction.Marshal(b, m, deterministic)
+}
+func (m *HTTPGetAction) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HTTPGetAction.Merge(m, src)
+}
+func (m *HTTPGetAction) XXX_Size() int {
+	return xxx_messageInfo_HTTPGetAction.Size(m)
+}
+func (m *HTTPGetAction) XXX_DiscardUnknown() {
+	xxx_messageInfo_HTTPGetAction.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HTTPGetAction proto.InternalMessageInfo
+
+func (m *HTTPGetAction) GetPath() string {
+	if m != nil {
+		return m.Path
+	}
+	return ""
+}
+
+func (m *HTTPGetAction) GetPort() *TypeInterface {
+	if m != nil {
+		return m.Port
+	}
+	return nil
+}
+
+func (m *HTTPGetAction) GetHost() string {
+	if m != nil {
+		return m.Host
+	}
+	return ""
+}
+
+func (m *HTTPGetAction) GetScheme() string {
+	if m != nil {
+		return m.Scheme
+	}
+	return ""
+}
+
+func (m *HTTPGetAction) GetHttpHeaders() []*HTTPHeader {
+	if m != nil {
+		return m.HttpHeaders
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.HTTPHeader.
+type HTTPHeader struct {
+	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Value                string   `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *HTTPHeader) Reset()         { *m = HTTPHeader{} }
+func (m *HTTPHeader) String() string { return proto.CompactTextString(m) }
+func (*HTTPHeader) ProtoMessage()    {}
+func (*HTTPHeader) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{19}
+}
+
+func (m *HTTPHeader) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_HTTPHeader.Unmarshal(m, b)
+}
+func (m *HTTPHeader) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_HTTPHeader.Marshal(b, m, deterministic)
+}
+func (m *HTTPHeader) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HTTPHeader.Merge(m, src)
+}
+func (m *HTTPHeader) XXX_Size() int {
+	return xxx_messageInfo_HTTPHeader.Size(m)
+}
+func (m *HTTPHeader) XXX_DiscardUnknown() {
+	xxx_messageInfo_HTTPHeader.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HTTPHeader proto.InternalMessageInfo
+
+func (m *HTTPHeader) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *HTTPHeader) GetValue() string {
+	if m != nil {
+		return m.Value
+	}
+	return ""
+}
+
+// See k8s.io.api.autoscaling.v2beta1.HorizontalPodAutoscalerSpec.
+type HorizontalPodAutoscalerSpec struct {
+	ScaleTargetRef       *CrossVersionObjectReference `protobuf:"bytes,1,opt,name=scaleTargetRef,proto3" json:"scaleTargetRef,omitempty"`
+	MinReplicas          int32                        `protobuf:"varint,2,opt,name=minReplicas,proto3" json:"minReplicas,omitempty"`
+	MaxReplicas          int32                        `protobuf:"varint,3,opt,name=maxReplicas,proto3" json:"maxReplicas,omitempty"`
+	Metrics              []*MetricSpec                `protobuf:"bytes,4,rep,name=metrics,proto3" json:"metrics,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                     `json:"-"`
+	XXX_unrecognized     []byte                       `json:"-"`
+	XXX_sizecache        int32                        `json:"-"`
+}
+
+func (m *HorizontalPodAutoscalerSpec) Reset()         { *m = HorizontalPodAutoscalerSpec{} }
+func (m *HorizontalPodAutoscalerSpec) String() string { return proto.CompactTextString(m) }
+func (*HorizontalPodAutoscalerSpec) ProtoMessage()    {}
+func (*HorizontalPodAutoscalerSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{20}
+}
+
+func (m *HorizontalPodAutoscalerSpec) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_HorizontalPodAutoscalerSpec.Unmarshal(m, b)
+}
+func (m *HorizontalPodAutoscalerSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_HorizontalPodAutoscalerSpec.Marshal(b, m, deterministic)
+}
+func (m *HorizontalPodAutoscalerSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HorizontalPodAutoscalerSpec.Merge(m, src)
+}
+func (m *HorizontalPodAutoscalerSpec) XXX_Size() int {
+	return xxx_messageInfo_HorizontalPodAutoscalerSpec.Size(m)
+}
+func (m *HorizontalPodAutoscalerSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_HorizontalPodAutoscalerSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HorizontalPodAutoscalerSpec proto.InternalMessageInfo
+
+func (m *HorizontalPodAutoscalerSpec) GetScaleTargetRef() *CrossVersionObjectReference {
+	if m != nil {
+		return m.ScaleTargetRef
+	}
+	return nil
+}
+
+func (m *HorizontalPodAutoscalerSpec) GetMinReplicas() int32 {
+	if m != nil {
+		return m.MinReplicas
+	}
+	return 0
+}
+
+func (m *HorizontalPodAutoscalerSpec) GetMaxReplicas() int32 {
+	if m != nil {
+		return m.MaxReplicas
+	}
+	return 0
+}
+
+func (m *HorizontalPodAutoscalerSpec) GetMetrics() []*MetricSpec {
+	if m != nil {
+		return m.Metrics
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.LocalObjectReference.
+type LocalObjectReference struct {
+	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *LocalObjectReference) Reset()         { *m = LocalObjectReference{} }
+func (m *LocalObjectReference) String() string { return proto.CompactTextString(m) }
+func (*LocalObjectReference) ProtoMessage()    {}
+func (*LocalObjectReference) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{21}
+}
+
+func (m *LocalObjectReference) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_LocalObjectReference.Unmarshal(m, b)
+}
+func (m *LocalObjectReference) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_LocalObjectReference.Marshal(b, m, deterministic)
+}
+func (m *LocalObjectReference) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LocalObjectReference.Merge(m, src)
+}
+func (m *LocalObjectReference) XXX_Size() int {
+	return xxx_messageInfo_LocalObjectReference.Size(m)
+}
+func (m *LocalObjectReference) XXX_DiscardUnknown() {
+	xxx_messageInfo_LocalObjectReference.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LocalObjectReference proto.InternalMessageInfo
+
+func (m *LocalObjectReference) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// See k8s.io.autoscaling.v2beta1.MetricSpec.
+type MetricSpec struct {
+	Type                 string                `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
+	Object               *ObjectMetricSource   `protobuf:"bytes,2,opt,name=object,proto3" json:"object,omitempty"`
+	Pods                 *PodsMetricSource     `protobuf:"bytes,3,opt,name=pods,proto3" json:"pods,omitempty"`
+	Resource             *ResourceMetricSource `protobuf:"bytes,4,opt,name=resource,proto3" json:"resource,omitempty"`
+	External             *ExternalMetricSource `protobuf:"bytes,5,opt,name=external,proto3" json:"external,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
+	XXX_unrecognized     []byte                `json:"-"`
+	XXX_sizecache        int32                 `json:"-"`
+}
+
+func (m *MetricSpec) Reset()         { *m = MetricSpec{} }
+func (m *MetricSpec) String() string { return proto.CompactTextString(m) }
+func (*MetricSpec) ProtoMessage()    {}
+func (*MetricSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{22}
+}
+
+func (m *MetricSpec) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_MetricSpec.Unmarshal(m, b)
+}
+func (m *MetricSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_MetricSpec.Marshal(b, m, deterministic)
+}
+func (m *MetricSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MetricSpec.Merge(m, src)
+}
+func (m *MetricSpec) XXX_Size() int {
+	return xxx_messageInfo_MetricSpec.Size(m)
+}
+func (m *MetricSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_MetricSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MetricSpec proto.InternalMessageInfo
+
+func (m *MetricSpec) GetType() string {
+	if m != nil {
+		return m.Type
+	}
+	return ""
+}
+
+func (m *MetricSpec) GetObject() *ObjectMetricSource {
+	if m != nil {
+		return m.Object
+	}
+	return nil
+}
+
+func (m *MetricSpec) GetPods() *PodsMetricSource {
+	if m != nil {
+		return m.Pods
+	}
+	return nil
+}
+
+func (m *MetricSpec) GetResource() *ResourceMetricSource {
+	if m != nil {
+		return m.Resource
+	}
+	return nil
+}
+
+func (m *MetricSpec) GetExternal() *ExternalMetricSource {
+	if m != nil {
+		return m.External
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.NodeAffinity.
+type NodeAffinity struct {
+	RequiredDuringSchedulingIgnoredDuringExecution  *NodeSelector              `protobuf:"bytes,1,opt,name=requiredDuringSchedulingIgnoredDuringExecution,proto3" json:"requiredDuringSchedulingIgnoredDuringExecution,omitempty"`
+	PreferredDuringSchedulingIgnoredDuringExecution []*PreferredSchedulingTerm `protobuf:"bytes,2,rep,name=preferredDuringSchedulingIgnoredDuringExecution,proto3" json:"preferredDuringSchedulingIgnoredDuringExecution,omitempty"`
+	XXX_NoUnkeyedLiteral                            struct{}                   `json:"-"`
+	XXX_unrecognized                                []byte                     `json:"-"`
+	XXX_sizecache                                   int32                      `json:"-"`
+}
+
+func (m *NodeAffinity) Reset()         { *m = NodeAffinity{} }
+func (m *NodeAffinity) String() string { return proto.CompactTextString(m) }
+func (*NodeAffinity) ProtoMessage()    {}
+func (*NodeAffinity) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{23}
+}
+
+func (m *NodeAffinity) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_NodeAffinity.Unmarshal(m, b)
+}
+func (m *NodeAffinity) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_NodeAffinity.Marshal(b, m, deterministic)
+}
+func (m *NodeAffinity) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NodeAffinity.Merge(m, src)
+}
+func (m *NodeAffinity) XXX_Size() int {
+	return xxx_messageInfo_NodeAffinity.Size(m)
+}
+func (m *NodeAffinity) XXX_DiscardUnknown() {
+	xxx_messageInfo_NodeAffinity.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NodeAffinity proto.InternalMessageInfo
+
+func (m *NodeAffinity) GetRequiredDuringSchedulingIgnoredDuringExecution() *NodeSelector {
+	if m != nil {
+		return m.RequiredDuringSchedulingIgnoredDuringExecution
+	}
+	return nil
+}
+
+func (m *NodeAffinity) GetPreferredDuringSchedulingIgnoredDuringExecution() []*PreferredSchedulingTerm {
+	if m != nil {
+		return m.PreferredDuringSchedulingIgnoredDuringExecution
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.NodeSelector.
+type NodeSelector struct {
+	NodeSelectorTerms    []*NodeSelectorTerm `protobuf:"bytes,1,rep,name=nodeSelectorTerms,proto3" json:"nodeSelectorTerms,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
+}
+
+func (m *NodeSelector) Reset()         { *m = NodeSelector{} }
+func (m *NodeSelector) String() string { return proto.CompactTextString(m) }
+func (*NodeSelector) ProtoMessage()    {}
+func (*NodeSelector) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{24}
+}
+
+func (m *NodeSelector) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_NodeSelector.Unmarshal(m, b)
+}
+func (m *NodeSelector) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_NodeSelector.Marshal(b, m, deterministic)
+}
+func (m *NodeSelector) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NodeSelector.Merge(m, src)
+}
+func (m *NodeSelector) XXX_Size() int {
+	return xxx_messageInfo_NodeSelector.Size(m)
+}
+func (m *NodeSelector) XXX_DiscardUnknown() {
+	xxx_messageInfo_NodeSelector.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NodeSelector proto.InternalMessageInfo
+
+func (m *NodeSelector) GetNodeSelectorTerms() []*NodeSelectorTerm {
+	if m != nil {
+		return m.NodeSelectorTerms
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.NodeSelectorTerm.
+type NodeSelectorTerm struct {
+	MatchExpressions     []*NodeSelectorRequirement `protobuf:"bytes,1,rep,name=matchExpressions,proto3" json:"matchExpressions,omitempty"`
+	MatchFields          []*NodeSelectorRequirement `protobuf:"bytes,2,rep,name=matchFields,proto3" json:"matchFields,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                   `json:"-"`
+	XXX_unrecognized     []byte                     `json:"-"`
+	XXX_sizecache        int32                      `json:"-"`
+}
+
+func (m *NodeSelectorTerm) Reset()         { *m = NodeSelectorTerm{} }
+func (m *NodeSelectorTerm) String() string { return proto.CompactTextString(m) }
+func (*NodeSelectorTerm) ProtoMessage()    {}
+func (*NodeSelectorTerm) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{25}
+}
+
+func (m *NodeSelectorTerm) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_NodeSelectorTerm.Unmarshal(m, b)
+}
+func (m *NodeSelectorTerm) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_NodeSelectorTerm.Marshal(b, m, deterministic)
+}
+func (m *NodeSelectorTerm) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NodeSelectorTerm.Merge(m, src)
+}
+func (m *NodeSelectorTerm) XXX_Size() int {
+	return xxx_messageInfo_NodeSelectorTerm.Size(m)
+}
+func (m *NodeSelectorTerm) XXX_DiscardUnknown() {
+	xxx_messageInfo_NodeSelectorTerm.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NodeSelectorTerm proto.InternalMessageInfo
+
+func (m *NodeSelectorTerm) GetMatchExpressions() []*NodeSelectorRequirement {
+	if m != nil {
+		return m.MatchExpressions
+	}
+	return nil
+}
+
+func (m *NodeSelectorTerm) GetMatchFields() []*NodeSelectorRequirement {
+	if m != nil {
+		return m.MatchFields
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.NodeSelectorRequirement.
+type NodeSelectorRequirement struct {
+	Key                  string   `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	Operator             string   `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator,omitempty"`
+	Values               []string `protobuf:"bytes,3,rep,name=values,proto3" json:"values,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *NodeSelectorRequirement) Reset()         { *m = NodeSelectorRequirement{} }
+func (m *NodeSelectorRequirement) String() string { return proto.CompactTextString(m) }
+func (*NodeSelectorRequirement) ProtoMessage()    {}
+func (*NodeSelectorRequirement) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{26}
+}
+
+func (m *NodeSelectorRequirement) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_NodeSelectorRequirement.Unmarshal(m, b)
+}
+func (m *NodeSelectorRequirement) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_NodeSelectorRequirement.Marshal(b, m, deterministic)
+}
+func (m *NodeSelectorRequirement) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NodeSelectorRequirement.Merge(m, src)
+}
+func (m *NodeSelectorRequirement) XXX_Size() int {
+	return xxx_messageInfo_NodeSelectorRequirement.Size(m)
+}
+func (m *NodeSelectorRequirement) XXX_DiscardUnknown() {
+	xxx_messageInfo_NodeSelectorRequirement.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NodeSelectorRequirement proto.InternalMessageInfo
+
+func (m *NodeSelectorRequirement) GetKey() string {
+	if m != nil {
+		return m.Key
+	}
+	return ""
+}
+
+func (m *NodeSelectorRequirement) GetOperator() string {
+	if m != nil {
+		return m.Operator
+	}
+	return ""
+}
+
+func (m *NodeSelectorRequirement) GetValues() []string {
+	if m != nil {
+		return m.Values
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.ObjectFieldSelector.
+type ObjectFieldSelector struct {
+	ApiVersion           string   `protobuf:"bytes,1,opt,name=apiVersion,proto3" json:"apiVersion,omitempty"`
+	FieldPath            string   `protobuf:"bytes,2,opt,name=fieldPath,proto3" json:"fieldPath,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ObjectFieldSelector) Reset()         { *m = ObjectFieldSelector{} }
+func (m *ObjectFieldSelector) String() string { return proto.CompactTextString(m) }
+func (*ObjectFieldSelector) ProtoMessage()    {}
+func (*ObjectFieldSelector) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{27}
+}
+
+func (m *ObjectFieldSelector) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ObjectFieldSelector.Unmarshal(m, b)
+}
+func (m *ObjectFieldSelector) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ObjectFieldSelector.Marshal(b, m, deterministic)
+}
+func (m *ObjectFieldSelector) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ObjectFieldSelector.Merge(m, src)
+}
+func (m *ObjectFieldSelector) XXX_Size() int {
+	return xxx_messageInfo_ObjectFieldSelector.Size(m)
+}
+func (m *ObjectFieldSelector) XXX_DiscardUnknown() {
+	xxx_messageInfo_ObjectFieldSelector.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ObjectFieldSelector proto.InternalMessageInfo
+
+func (m *ObjectFieldSelector) GetApiVersion() string {
+	if m != nil {
+		return m.ApiVersion
+	}
+	return ""
+}
+
+func (m *ObjectFieldSelector) GetFieldPath() string {
+	if m != nil {
+		return m.FieldPath
+	}
+	return ""
+}
+
+// From k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta.
+type ObjectMeta struct {
+	Name                 string   `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`
+	Namespace            string   `protobuf:"bytes,6,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ObjectMeta) Reset()         { *m = ObjectMeta{} }
+func (m *ObjectMeta) String() string { return proto.CompactTextString(m) }
+func (*ObjectMeta) ProtoMessage()    {}
+func (*ObjectMeta) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{28}
+}
+
+func (m *ObjectMeta) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ObjectMeta.Unmarshal(m, b)
+}
+func (m *ObjectMeta) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ObjectMeta.Marshal(b, m, deterministic)
+}
+func (m *ObjectMeta) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ObjectMeta.Merge(m, src)
+}
+func (m *ObjectMeta) XXX_Size() int {
+	return xxx_messageInfo_ObjectMeta.Size(m)
+}
+func (m *ObjectMeta) XXX_DiscardUnknown() {
+	xxx_messageInfo_ObjectMeta.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ObjectMeta proto.InternalMessageInfo
+
+func (m *ObjectMeta) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *ObjectMeta) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+// See k8s.io.autoscaling.v2beta1.ObjectMetricSource.
+type ObjectMetricSource struct {
+	Target               *CrossVersionObjectReference `protobuf:"bytes,1,opt,name=target,proto3" json:"target,omitempty"`
+	MetricName           string                       `protobuf:"bytes,2,opt,name=metricName,proto3" json:"metricName,omitempty"`
+	TargetValue          *resource.Quantity           `protobuf:"bytes,3,opt,name=targetValue,proto3" json:"targetValue,omitempty"`
+	Selector             *v11.LabelSelector           `protobuf:"bytes,4,opt,name=selector,proto3" json:"selector,omitempty"`
+	AverageValue         *resource.Quantity           `protobuf:"bytes,5,opt,name=averageValue,proto3" json:"averageValue,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                     `json:"-"`
+	XXX_unrecognized     []byte                       `json:"-"`
+	XXX_sizecache        int32                        `json:"-"`
+}
+
+func (m *ObjectMetricSource) Reset()         { *m = ObjectMetricSource{} }
+func (m *ObjectMetricSource) String() string { return proto.CompactTextString(m) }
+func (*ObjectMetricSource) ProtoMessage()    {}
+func (*ObjectMetricSource) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{29}
+}
+
+func (m *ObjectMetricSource) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ObjectMetricSource.Unmarshal(m, b)
+}
+func (m *ObjectMetricSource) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ObjectMetricSource.Marshal(b, m, deterministic)
+}
+func (m *ObjectMetricSource) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ObjectMetricSource.Merge(m, src)
+}
+func (m *ObjectMetricSource) XXX_Size() int {
+	return xxx_messageInfo_ObjectMetricSource.Size(m)
+}
+func (m *ObjectMetricSource) XXX_DiscardUnknown() {
+	xxx_messageInfo_ObjectMetricSource.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ObjectMetricSource proto.InternalMessageInfo
+
+func (m *ObjectMetricSource) GetTarget() *CrossVersionObjectReference {
+	if m != nil {
+		return m.Target
+	}
+	return nil
+}
+
+func (m *ObjectMetricSource) GetMetricName() string {
+	if m != nil {
+		return m.MetricName
+	}
+	return ""
+}
+
+func (m *ObjectMetricSource) GetTargetValue() *resource.Quantity {
+	if m != nil {
+		return m.TargetValue
+	}
+	return nil
+}
+
+func (m *ObjectMetricSource) GetSelector() *v11.LabelSelector {
+	if m != nil {
+		return m.Selector
+	}
+	return nil
+}
+
+func (m *ObjectMetricSource) GetAverageValue() *resource.Quantity {
+	if m != nil {
+		return m.AverageValue
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.PodAffinity.
+type PodAffinity struct {
+	RequiredDuringSchedulingIgnoredDuringExecution  []*PodAffinityTerm         `protobuf:"bytes,1,rep,name=requiredDuringSchedulingIgnoredDuringExecution,proto3" json:"requiredDuringSchedulingIgnoredDuringExecution,omitempty"`
+	PreferredDuringSchedulingIgnoredDuringExecution []*WeightedPodAffinityTerm `protobuf:"bytes,2,rep,name=preferredDuringSchedulingIgnoredDuringExecution,proto3" json:"preferredDuringSchedulingIgnoredDuringExecution,omitempty"`
+	XXX_NoUnkeyedLiteral                            struct{}                   `json:"-"`
+	XXX_unrecognized                                []byte                     `json:"-"`
+	XXX_sizecache                                   int32                      `json:"-"`
+}
+
+func (m *PodAffinity) Reset()         { *m = PodAffinity{} }
+func (m *PodAffinity) String() string { return proto.CompactTextString(m) }
+func (*PodAffinity) ProtoMessage()    {}
+func (*PodAffinity) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{30}
+}
+
+func (m *PodAffinity) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PodAffinity.Unmarshal(m, b)
+}
+func (m *PodAffinity) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PodAffinity.Marshal(b, m, deterministic)
+}
+func (m *PodAffinity) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PodAffinity.Merge(m, src)
+}
+func (m *PodAffinity) XXX_Size() int {
+	return xxx_messageInfo_PodAffinity.Size(m)
+}
+func (m *PodAffinity) XXX_DiscardUnknown() {
+	xxx_messageInfo_PodAffinity.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PodAffinity proto.InternalMessageInfo
+
+func (m *PodAffinity) GetRequiredDuringSchedulingIgnoredDuringExecution() []*PodAffinityTerm {
+	if m != nil {
+		return m.RequiredDuringSchedulingIgnoredDuringExecution
+	}
+	return nil
+}
+
+func (m *PodAffinity) GetPreferredDuringSchedulingIgnoredDuringExecution() []*WeightedPodAffinityTerm {
+	if m != nil {
+		return m.PreferredDuringSchedulingIgnoredDuringExecution
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.PodAntiAffinity.
+type PodAntiAffinity struct {
+	RequiredDuringSchedulingIgnoredDuringExecution  []*PodAffinityTerm         `protobuf:"bytes,1,rep,name=requiredDuringSchedulingIgnoredDuringExecution,proto3" json:"requiredDuringSchedulingIgnoredDuringExecution,omitempty"`
+	PreferredDuringSchedulingIgnoredDuringExecution []*WeightedPodAffinityTerm `protobuf:"bytes,2,rep,name=preferredDuringSchedulingIgnoredDuringExecution,proto3" json:"preferredDuringSchedulingIgnoredDuringExecution,omitempty"`
+	XXX_NoUnkeyedLiteral                            struct{}                   `json:"-"`
+	XXX_unrecognized                                []byte                     `json:"-"`
+	XXX_sizecache                                   int32                      `json:"-"`
+}
+
+func (m *PodAntiAffinity) Reset()         { *m = PodAntiAffinity{} }
+func (m *PodAntiAffinity) String() string { return proto.CompactTextString(m) }
+func (*PodAntiAffinity) ProtoMessage()    {}
+func (*PodAntiAffinity) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{31}
+}
+
+func (m *PodAntiAffinity) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PodAntiAffinity.Unmarshal(m, b)
+}
+func (m *PodAntiAffinity) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PodAntiAffinity.Marshal(b, m, deterministic)
+}
+func (m *PodAntiAffinity) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PodAntiAffinity.Merge(m, src)
+}
+func (m *PodAntiAffinity) XXX_Size() int {
+	return xxx_messageInfo_PodAntiAffinity.Size(m)
+}
+func (m *PodAntiAffinity) XXX_DiscardUnknown() {
+	xxx_messageInfo_PodAntiAffinity.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PodAntiAffinity proto.InternalMessageInfo
+
+func (m *PodAntiAffinity) GetRequiredDuringSchedulingIgnoredDuringExecution() []*PodAffinityTerm {
+	if m != nil {
+		return m.RequiredDuringSchedulingIgnoredDuringExecution
+	}
+	return nil
+}
+
+func (m *PodAntiAffinity) GetPreferredDuringSchedulingIgnoredDuringExecution() []*WeightedPodAffinityTerm {
+	if m != nil {
+		return m.PreferredDuringSchedulingIgnoredDuringExecution
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.PodAntiAffinity.
+type PodAffinityTerm struct {
+	LabelSelector        *v11.LabelSelector `protobuf:"bytes,1,opt,name=labelSelector,proto3" json:"labelSelector,omitempty"`
+	Namespaces           []string           `protobuf:"bytes,2,rep,name=namespaces,proto3" json:"namespaces,omitempty"`
+	TopologyKey          string             `protobuf:"bytes,3,opt,name=topologyKey,proto3" json:"topologyKey,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
+}
+
+func (m *PodAffinityTerm) Reset()         { *m = PodAffinityTerm{} }
+func (m *PodAffinityTerm) String() string { return proto.CompactTextString(m) }
+func (*PodAffinityTerm) ProtoMessage()    {}
+func (*PodAffinityTerm) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{32}
+}
+
+func (m *PodAffinityTerm) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PodAffinityTerm.Unmarshal(m, b)
+}
+func (m *PodAffinityTerm) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PodAffinityTerm.Marshal(b, m, deterministic)
+}
+func (m *PodAffinityTerm) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PodAffinityTerm.Merge(m, src)
+}
+func (m *PodAffinityTerm) XXX_Size() int {
+	return xxx_messageInfo_PodAffinityTerm.Size(m)
+}
+func (m *PodAffinityTerm) XXX_DiscardUnknown() {
+	xxx_messageInfo_PodAffinityTerm.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PodAffinityTerm proto.InternalMessageInfo
+
+func (m *PodAffinityTerm) GetLabelSelector() *v11.LabelSelector {
+	if m != nil {
+		return m.LabelSelector
+	}
+	return nil
+}
+
+func (m *PodAffinityTerm) GetNamespaces() []string {
+	if m != nil {
+		return m.Namespaces
+	}
+	return nil
+}
+
+func (m *PodAffinityTerm) GetTopologyKey() string {
+	if m != nil {
+		return m.TopologyKey
+	}
+	return ""
+}
+
+// See k8s.io.api.policy.v1beta1.PodDisruptionBudget.
+type PodDisruptionBudgetSpec struct {
+	MinAvailable         uint32             `protobuf:"varint,1,opt,name=minAvailable,proto3" json:"minAvailable,omitempty"`
+	Selector             *v11.LabelSelector `protobuf:"bytes,2,opt,name=selector,proto3" json:"selector,omitempty"`
+	MaxUnavailable       uint32             `protobuf:"varint,3,opt,name=maxUnavailable,proto3" json:"maxUnavailable,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
+}
+
+func (m *PodDisruptionBudgetSpec) Reset()         { *m = PodDisruptionBudgetSpec{} }
+func (m *PodDisruptionBudgetSpec) String() string { return proto.CompactTextString(m) }
+func (*PodDisruptionBudgetSpec) ProtoMessage()    {}
+func (*PodDisruptionBudgetSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{33}
+}
+
+func (m *PodDisruptionBudgetSpec) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PodDisruptionBudgetSpec.Unmarshal(m, b)
+}
+func (m *PodDisruptionBudgetSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PodDisruptionBudgetSpec.Marshal(b, m, deterministic)
+}
+func (m *PodDisruptionBudgetSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PodDisruptionBudgetSpec.Merge(m, src)
+}
+func (m *PodDisruptionBudgetSpec) XXX_Size() int {
+	return xxx_messageInfo_PodDisruptionBudgetSpec.Size(m)
+}
+func (m *PodDisruptionBudgetSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_PodDisruptionBudgetSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PodDisruptionBudgetSpec proto.InternalMessageInfo
+
+func (m *PodDisruptionBudgetSpec) GetMinAvailable() uint32 {
+	if m != nil {
+		return m.MinAvailable
+	}
+	return 0
+}
+
+func (m *PodDisruptionBudgetSpec) GetSelector() *v11.LabelSelector {
+	if m != nil {
+		return m.Selector
+	}
+	return nil
+}
+
+func (m *PodDisruptionBudgetSpec) GetMaxUnavailable() uint32 {
+	if m != nil {
+		return m.MaxUnavailable
+	}
+	return 0
+}
+
+// See k8s.io.api.core.v1.PodsMetricSource.
+type PodsMetricSource struct {
+	MetricName           string             `protobuf:"bytes,1,opt,name=metricName,proto3" json:"metricName,omitempty"`
+	TargetAverageValue   *resource.Quantity `protobuf:"bytes,2,opt,name=targetAverageValue,proto3" json:"targetAverageValue,omitempty"`
+	Selector             *v11.LabelSelector `protobuf:"bytes,3,opt,name=selector,proto3" json:"selector,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
+}
+
+func (m *PodsMetricSource) Reset()         { *m = PodsMetricSource{} }
+func (m *PodsMetricSource) String() string { return proto.CompactTextString(m) }
+func (*PodsMetricSource) ProtoMessage()    {}
+func (*PodsMetricSource) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{34}
+}
+
+func (m *PodsMetricSource) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PodsMetricSource.Unmarshal(m, b)
+}
+func (m *PodsMetricSource) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PodsMetricSource.Marshal(b, m, deterministic)
+}
+func (m *PodsMetricSource) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PodsMetricSource.Merge(m, src)
+}
+func (m *PodsMetricSource) XXX_Size() int {
+	return xxx_messageInfo_PodsMetricSource.Size(m)
+}
+func (m *PodsMetricSource) XXX_DiscardUnknown() {
+	xxx_messageInfo_PodsMetricSource.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PodsMetricSource proto.InternalMessageInfo
+
+func (m *PodsMetricSource) GetMetricName() string {
+	if m != nil {
+		return m.MetricName
+	}
+	return ""
+}
+
+func (m *PodsMetricSource) GetTargetAverageValue() *resource.Quantity {
+	if m != nil {
+		return m.TargetAverageValue
+	}
+	return nil
+}
+
+func (m *PodsMetricSource) GetSelector() *v11.LabelSelector {
+	if m != nil {
+		return m.Selector
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.PreferredSchedulingTerm.
+type PreferredSchedulingTerm struct {
+	Weight               int32             `protobuf:"varint,1,opt,name=weight,proto3" json:"weight,omitempty"`
+	Preference           *NodeSelectorTerm `protobuf:"bytes,2,opt,name=preference,proto3" json:"preference,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *PreferredSchedulingTerm) Reset()         { *m = PreferredSchedulingTerm{} }
+func (m *PreferredSchedulingTerm) String() string { return proto.CompactTextString(m) }
+func (*PreferredSchedulingTerm) ProtoMessage()    {}
+func (*PreferredSchedulingTerm) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{35}
+}
+
+func (m *PreferredSchedulingTerm) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PreferredSchedulingTerm.Unmarshal(m, b)
+}
+func (m *PreferredSchedulingTerm) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PreferredSchedulingTerm.Marshal(b, m, deterministic)
+}
+func (m *PreferredSchedulingTerm) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PreferredSchedulingTerm.Merge(m, src)
+}
+func (m *PreferredSchedulingTerm) XXX_Size() int {
+	return xxx_messageInfo_PreferredSchedulingTerm.Size(m)
+}
+func (m *PreferredSchedulingTerm) XXX_DiscardUnknown() {
+	xxx_messageInfo_PreferredSchedulingTerm.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PreferredSchedulingTerm proto.InternalMessageInfo
+
+func (m *PreferredSchedulingTerm) GetWeight() int32 {
+	if m != nil {
+		return m.Weight
+	}
+	return 0
+}
+
+func (m *PreferredSchedulingTerm) GetPreference() *NodeSelectorTerm {
+	if m != nil {
+		return m.Preference
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.ReadinessProbe.
+type ReadinessProbe struct {
+	Exec                 *ExecAction      `protobuf:"bytes,1,opt,name=exec,proto3" json:"exec,omitempty"`
+	HttpGet              *HTTPGetAction   `protobuf:"bytes,2,opt,name=httpGet,proto3" json:"httpGet,omitempty"`
+	TcpSocket            *TCPSocketAction `protobuf:"bytes,3,opt,name=tcpSocket,proto3" json:"tcpSocket,omitempty"`
+	InitialDelaySeconds  int32            `protobuf:"varint,4,opt,name=initialDelaySeconds,proto3" json:"initialDelaySeconds,omitempty"`
+	TimeoutSeconds       int32            `protobuf:"varint,5,opt,name=timeoutSeconds,proto3" json:"timeoutSeconds,omitempty"`
+	PeriodSeconds        int32            `protobuf:"varint,6,opt,name=periodSeconds,proto3" json:"periodSeconds,omitempty"`
+	SuccessThreshold     int32            `protobuf:"varint,7,opt,name=successThreshold,proto3" json:"successThreshold,omitempty"`
+	FailureThreshold     int32            `protobuf:"varint,8,opt,name=failureThreshold,proto3" json:"failureThreshold,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
+}
+
+func (m *ReadinessProbe) Reset()         { *m = ReadinessProbe{} }
+func (m *ReadinessProbe) String() string { return proto.CompactTextString(m) }
+func (*ReadinessProbe) ProtoMessage()    {}
+func (*ReadinessProbe) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{36}
+}
+
+func (m *ReadinessProbe) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ReadinessProbe.Unmarshal(m, b)
+}
+func (m *ReadinessProbe) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ReadinessProbe.Marshal(b, m, deterministic)
+}
+func (m *ReadinessProbe) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReadinessProbe.Merge(m, src)
+}
+func (m *ReadinessProbe) XXX_Size() int {
+	return xxx_messageInfo_ReadinessProbe.Size(m)
+}
+func (m *ReadinessProbe) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReadinessProbe.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReadinessProbe proto.InternalMessageInfo
+
+func (m *ReadinessProbe) GetExec() *ExecAction {
+	if m != nil {
+		return m.Exec
+	}
+	return nil
+}
+
+func (m *ReadinessProbe) GetHttpGet() *HTTPGetAction {
+	if m != nil {
+		return m.HttpGet
+	}
+	return nil
+}
+
+func (m *ReadinessProbe) GetTcpSocket() *TCPSocketAction {
+	if m != nil {
+		return m.TcpSocket
+	}
+	return nil
+}
+
+func (m *ReadinessProbe) GetInitialDelaySeconds() int32 {
+	if m != nil {
+		return m.InitialDelaySeconds
+	}
+	return 0
+}
+
+func (m *ReadinessProbe) GetTimeoutSeconds() int32 {
+	if m != nil {
+		return m.TimeoutSeconds
+	}
+	return 0
+}
+
+func (m *ReadinessProbe) GetPeriodSeconds() int32 {
+	if m != nil {
+		return m.PeriodSeconds
+	}
+	return 0
+}
+
+func (m *ReadinessProbe) GetSuccessThreshold() int32 {
+	if m != nil {
+		return m.SuccessThreshold
+	}
+	return 0
+}
+
+func (m *ReadinessProbe) GetFailureThreshold() int32 {
+	if m != nil {
+		return m.FailureThreshold
+	}
+	return 0
+}
+
+// See k8s.io.api.core.v1..
+type ResourceFieldSelector struct {
+	ContainerName        string             `protobuf:"bytes,1,opt,name=containerName,proto3" json:"containerName,omitempty"`
+	Resource             string             `protobuf:"bytes,2,opt,name=resource,proto3" json:"resource,omitempty"`
+	Divisor              *resource.Quantity `protobuf:"bytes,3,opt,name=divisor,proto3" json:"divisor,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
+}
+
+func (m *ResourceFieldSelector) Reset()         { *m = ResourceFieldSelector{} }
+func (m *ResourceFieldSelector) String() string { return proto.CompactTextString(m) }
+func (*ResourceFieldSelector) ProtoMessage()    {}
+func (*ResourceFieldSelector) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{37}
+}
+
+func (m *ResourceFieldSelector) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ResourceFieldSelector.Unmarshal(m, b)
+}
+func (m *ResourceFieldSelector) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ResourceFieldSelector.Marshal(b, m, deterministic)
+}
+func (m *ResourceFieldSelector) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ResourceFieldSelector.Merge(m, src)
+}
+func (m *ResourceFieldSelector) XXX_Size() int {
+	return xxx_messageInfo_ResourceFieldSelector.Size(m)
+}
+func (m *ResourceFieldSelector) XXX_DiscardUnknown() {
+	xxx_messageInfo_ResourceFieldSelector.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ResourceFieldSelector proto.InternalMessageInfo
+
+func (m *ResourceFieldSelector) GetContainerName() string {
+	if m != nil {
+		return m.ContainerName
+	}
+	return ""
+}
+
+func (m *ResourceFieldSelector) GetResource() string {
+	if m != nil {
+		return m.Resource
+	}
+	return ""
+}
+
+func (m *ResourceFieldSelector) GetDivisor() *resource.Quantity {
+	if m != nil {
+		return m.Divisor
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.ResourceMetricSource.
+type ResourceMetricSource struct {
+	Name                     string             `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	TargetAverageUtilization *TypeInterface     `protobuf:"bytes,2,opt,name=targetAverageUtilization,proto3" json:"targetAverageUtilization,omitempty"`
+	TargetAverageValue       *resource.Quantity `protobuf:"bytes,3,opt,name=targetAverageValue,proto3" json:"targetAverageValue,omitempty"`
+	XXX_NoUnkeyedLiteral     struct{}           `json:"-"`
+	XXX_unrecognized         []byte             `json:"-"`
+	XXX_sizecache            int32              `json:"-"`
+}
+
+func (m *ResourceMetricSource) Reset()         { *m = ResourceMetricSource{} }
+func (m *ResourceMetricSource) String() string { return proto.CompactTextString(m) }
+func (*ResourceMetricSource) ProtoMessage()    {}
+func (*ResourceMetricSource) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{38}
+}
+
+func (m *ResourceMetricSource) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ResourceMetricSource.Unmarshal(m, b)
+}
+func (m *ResourceMetricSource) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ResourceMetricSource.Marshal(b, m, deterministic)
+}
+func (m *ResourceMetricSource) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ResourceMetricSource.Merge(m, src)
+}
+func (m *ResourceMetricSource) XXX_Size() int {
+	return xxx_messageInfo_ResourceMetricSource.Size(m)
+}
+func (m *ResourceMetricSource) XXX_DiscardUnknown() {
+	xxx_messageInfo_ResourceMetricSource.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ResourceMetricSource proto.InternalMessageInfo
+
+func (m *ResourceMetricSource) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *ResourceMetricSource) GetTargetAverageUtilization() *TypeInterface {
+	if m != nil {
+		return m.TargetAverageUtilization
+	}
+	return nil
+}
+
+func (m *ResourceMetricSource) GetTargetAverageValue() *resource.Quantity {
+	if m != nil {
+		return m.TargetAverageValue
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.ResourceRequirements.
+type Resources struct {
+	Limits               map[string]string `protobuf:"bytes,1,rep,name=limits,proto3" json:"limits,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Requests             map[string]string `protobuf:"bytes,2,rep,name=requests,proto3" json:"requests,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *Resources) Reset()         { *m = Resources{} }
+func (m *Resources) String() string { return proto.CompactTextString(m) }
+func (*Resources) ProtoMessage()    {}
+func (*Resources) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{39}
+}
+
+func (m *Resources) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Resources.Unmarshal(m, b)
+}
+func (m *Resources) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Resources.Marshal(b, m, deterministic)
+}
+func (m *Resources) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Resources.Merge(m, src)
+}
+func (m *Resources) XXX_Size() int {
+	return xxx_messageInfo_Resources.Size(m)
+}
+func (m *Resources) XXX_DiscardUnknown() {
+	xxx_messageInfo_Resources.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Resources proto.InternalMessageInfo
+
+func (m *Resources) GetLimits() map[string]string {
+	if m != nil {
+		return m.Limits
+	}
+	return nil
+}
+
+func (m *Resources) GetRequests() map[string]string {
+	if m != nil {
+		return m.Requests
+	}
+	return nil
+}
+
+// See k8s.io.api.apps.v1.RollingUpdateDeployment.
+type RollingUpdateDeployment struct {
+	MaxUnavailable       *TypeInterface `protobuf:"bytes,1,opt,name=maxUnavailable,proto3" json:"maxUnavailable,omitempty"`
+	MaxSurge             *TypeInterface `protobuf:"bytes,2,opt,name=maxSurge,proto3" json:"maxSurge,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
+}
+
+func (m *RollingUpdateDeployment) Reset()         { *m = RollingUpdateDeployment{} }
+func (m *RollingUpdateDeployment) String() string { return proto.CompactTextString(m) }
+func (*RollingUpdateDeployment) ProtoMessage()    {}
+func (*RollingUpdateDeployment) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{40}
+}
+
+func (m *RollingUpdateDeployment) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_RollingUpdateDeployment.Unmarshal(m, b)
+}
+func (m *RollingUpdateDeployment) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_RollingUpdateDeployment.Marshal(b, m, deterministic)
+}
+func (m *RollingUpdateDeployment) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RollingUpdateDeployment.Merge(m, src)
+}
+func (m *RollingUpdateDeployment) XXX_Size() int {
+	return xxx_messageInfo_RollingUpdateDeployment.Size(m)
+}
+func (m *RollingUpdateDeployment) XXX_DiscardUnknown() {
+	xxx_messageInfo_RollingUpdateDeployment.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RollingUpdateDeployment proto.InternalMessageInfo
+
+func (m *RollingUpdateDeployment) GetMaxUnavailable() *TypeInterface {
+	if m != nil {
+		return m.MaxUnavailable
+	}
+	return nil
+}
+
+func (m *RollingUpdateDeployment) GetMaxSurge() *TypeInterface {
+	if m != nil {
+		return m.MaxSurge
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.SecretKeySelector.
+type SecretKeySelector struct {
+	LocalObjectReference *LocalObjectReference `protobuf:"bytes,1,opt,name=localObjectReference,proto3" json:"localObjectReference,omitempty"`
+	Key                  string                `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
+	Optional             bool                  `protobuf:"varint,3,opt,name=optional,proto3" json:"optional,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
+	XXX_unrecognized     []byte                `json:"-"`
+	XXX_sizecache        int32                 `json:"-"`
+}
+
+func (m *SecretKeySelector) Reset()         { *m = SecretKeySelector{} }
+func (m *SecretKeySelector) String() string { return proto.CompactTextString(m) }
+func (*SecretKeySelector) ProtoMessage()    {}
+func (*SecretKeySelector) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{41}
+}
+
+func (m *SecretKeySelector) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SecretKeySelector.Unmarshal(m, b)
+}
+func (m *SecretKeySelector) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SecretKeySelector.Marshal(b, m, deterministic)
+}
+func (m *SecretKeySelector) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SecretKeySelector.Merge(m, src)
+}
+func (m *SecretKeySelector) XXX_Size() int {
+	return xxx_messageInfo_SecretKeySelector.Size(m)
+}
+func (m *SecretKeySelector) XXX_DiscardUnknown() {
+	xxx_messageInfo_SecretKeySelector.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SecretKeySelector proto.InternalMessageInfo
+
+func (m *SecretKeySelector) GetLocalObjectReference() *LocalObjectReference {
+	if m != nil {
+		return m.LocalObjectReference
+	}
+	return nil
+}
+
+func (m *SecretKeySelector) GetKey() string {
+	if m != nil {
+		return m.Key
+	}
+	return ""
+}
+
+func (m *SecretKeySelector) GetOptional() bool {
+	if m != nil {
+		return m.Optional
+	}
+	return false
+}
+
+// See k8s.io.api.core.v1.ServiceSpec.
+type ServiceSpec struct {
+	Ports                    []*ServicePort         `protobuf:"bytes,1,rep,name=ports,proto3" json:"ports,omitempty"`
+	Selector                 map[string]string      `protobuf:"bytes,2,rep,name=selector,proto3" json:"selector,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	ClusterIP                string                 `protobuf:"bytes,3,opt,name=clusterIP,proto3" json:"clusterIP,omitempty"`
+	Type                     string                 `protobuf:"bytes,4,opt,name=type,proto3" json:"type,omitempty"`
+	ExternalIPs              []string               `protobuf:"bytes,5,rep,name=externalIPs,proto3" json:"externalIPs,omitempty"`
+	SessionAffinity          string                 `protobuf:"bytes,7,opt,name=sessionAffinity,proto3" json:"sessionAffinity,omitempty"`
+	LoadBalancerIP           string                 `protobuf:"bytes,8,opt,name=loadBalancerIP,proto3" json:"loadBalancerIP,omitempty"`
+	LoadBalancerSourceRanges []string               `protobuf:"bytes,9,rep,name=loadBalancerSourceRanges,proto3" json:"loadBalancerSourceRanges,omitempty"`
+	ExternalName             string                 `protobuf:"bytes,10,opt,name=externalName,proto3" json:"externalName,omitempty"`
+	ExternalTrafficPolicy    string                 `protobuf:"bytes,11,opt,name=externalTrafficPolicy,proto3" json:"externalTrafficPolicy,omitempty"`
+	HealthCheckNodePort      int32                  `protobuf:"varint,12,opt,name=healthCheckNodePort,proto3" json:"healthCheckNodePort,omitempty"`
+	PublishNotReadyAddresses bool                   `protobuf:"varint,13,opt,name=publishNotReadyAddresses,proto3" json:"publishNotReadyAddresses,omitempty"`
+	SessionAffinityConfig    *SessionAffinityConfig `protobuf:"bytes,14,opt,name=sessionAffinityConfig,proto3" json:"sessionAffinityConfig,omitempty"`
+	XXX_NoUnkeyedLiteral     struct{}               `json:"-"`
+	XXX_unrecognized         []byte                 `json:"-"`
+	XXX_sizecache            int32                  `json:"-"`
+}
+
+func (m *ServiceSpec) Reset()         { *m = ServiceSpec{} }
+func (m *ServiceSpec) String() string { return proto.CompactTextString(m) }
+func (*ServiceSpec) ProtoMessage()    {}
+func (*ServiceSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{42}
+}
+
+func (m *ServiceSpec) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ServiceSpec.Unmarshal(m, b)
+}
+func (m *ServiceSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ServiceSpec.Marshal(b, m, deterministic)
+}
+func (m *ServiceSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServiceSpec.Merge(m, src)
+}
+func (m *ServiceSpec) XXX_Size() int {
+	return xxx_messageInfo_ServiceSpec.Size(m)
+}
+func (m *ServiceSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_ServiceSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ServiceSpec proto.InternalMessageInfo
+
+func (m *ServiceSpec) GetPorts() []*ServicePort {
+	if m != nil {
+		return m.Ports
+	}
+	return nil
+}
+
+func (m *ServiceSpec) GetSelector() map[string]string {
+	if m != nil {
+		return m.Selector
+	}
+	return nil
+}
+
+func (m *ServiceSpec) GetClusterIP() string {
+	if m != nil {
+		return m.ClusterIP
+	}
+	return ""
+}
+
+func (m *ServiceSpec) GetType() string {
+	if m != nil {
+		return m.Type
+	}
+	return ""
+}
+
+func (m *ServiceSpec) GetExternalIPs() []string {
+	if m != nil {
+		return m.ExternalIPs
+	}
+	return nil
+}
+
+func (m *ServiceSpec) GetSessionAffinity() string {
+	if m != nil {
+		return m.SessionAffinity
+	}
+	return ""
+}
+
+func (m *ServiceSpec) GetLoadBalancerIP() string {
+	if m != nil {
+		return m.LoadBalancerIP
+	}
+	return ""
+}
+
+func (m *ServiceSpec) GetLoadBalancerSourceRanges() []string {
+	if m != nil {
+		return m.LoadBalancerSourceRanges
+	}
+	return nil
+}
+
+func (m *ServiceSpec) GetExternalName() string {
+	if m != nil {
+		return m.ExternalName
+	}
+	return ""
+}
+
+func (m *ServiceSpec) GetExternalTrafficPolicy() string {
+	if m != nil {
+		return m.ExternalTrafficPolicy
+	}
+	return ""
+}
+
+func (m *ServiceSpec) GetHealthCheckNodePort() int32 {
+	if m != nil {
+		return m.HealthCheckNodePort
+	}
+	return 0
+}
+
+func (m *ServiceSpec) GetPublishNotReadyAddresses() bool {
+	if m != nil {
+		return m.PublishNotReadyAddresses
+	}
+	return false
+}
+
+func (m *ServiceSpec) GetSessionAffinityConfig() *SessionAffinityConfig {
+	if m != nil {
+		return m.SessionAffinityConfig
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1..
+type ServicePort struct {
+	Name                 string         `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Protocol             string         `protobuf:"bytes,2,opt,name=protocol,proto3" json:"protocol,omitempty"`
+	Port                 int32          `protobuf:"varint,3,opt,name=port,proto3" json:"port,omitempty"`
+	TargetPort           *TypeInterface `protobuf:"bytes,4,opt,name=targetPort,proto3" json:"targetPort,omitempty"`
+	NodePort             int32          `protobuf:"varint,5,opt,name=nodePort,proto3" json:"nodePort,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
+}
+
+func (m *ServicePort) Reset()         { *m = ServicePort{} }
+func (m *ServicePort) String() string { return proto.CompactTextString(m) }
+func (*ServicePort) ProtoMessage()    {}
+func (*ServicePort) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{43}
+}
+
+func (m *ServicePort) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ServicePort.Unmarshal(m, b)
+}
+func (m *ServicePort) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ServicePort.Marshal(b, m, deterministic)
+}
+func (m *ServicePort) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServicePort.Merge(m, src)
+}
+func (m *ServicePort) XXX_Size() int {
+	return xxx_messageInfo_ServicePort.Size(m)
+}
+func (m *ServicePort) XXX_DiscardUnknown() {
+	xxx_messageInfo_ServicePort.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ServicePort proto.InternalMessageInfo
+
+func (m *ServicePort) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *ServicePort) GetProtocol() string {
+	if m != nil {
+		return m.Protocol
+	}
+	return ""
+}
+
+func (m *ServicePort) GetPort() int32 {
+	if m != nil {
+		return m.Port
+	}
+	return 0
+}
+
+func (m *ServicePort) GetTargetPort() *TypeInterface {
+	if m != nil {
+		return m.TargetPort
+	}
+	return nil
+}
+
+func (m *ServicePort) GetNodePort() int32 {
+	if m != nil {
+		return m.NodePort
+	}
+	return 0
+}
+
+// See k8s.io.api.core.v1.SessionAffinityConfig.
+type SessionAffinityConfig struct {
+	ClientIP             *ClientIPConfig `protobuf:"bytes,1,opt,name=clientIP,proto3" json:"clientIP,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+func (m *SessionAffinityConfig) Reset()         { *m = SessionAffinityConfig{} }
+func (m *SessionAffinityConfig) String() string { return proto.CompactTextString(m) }
+func (*SessionAffinityConfig) ProtoMessage()    {}
+func (*SessionAffinityConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{44}
+}
+
+func (m *SessionAffinityConfig) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SessionAffinityConfig.Unmarshal(m, b)
+}
+func (m *SessionAffinityConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SessionAffinityConfig.Marshal(b, m, deterministic)
+}
+func (m *SessionAffinityConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SessionAffinityConfig.Merge(m, src)
+}
+func (m *SessionAffinityConfig) XXX_Size() int {
+	return xxx_messageInfo_SessionAffinityConfig.Size(m)
+}
+func (m *SessionAffinityConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_SessionAffinityConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SessionAffinityConfig proto.InternalMessageInfo
+
+func (m *SessionAffinityConfig) GetClientIP() *ClientIPConfig {
+	if m != nil {
+		return m.ClientIP
+	}
+	return nil
+}
+
+// See k8s.io.api.core.v1.TCPSocketAction.
+type TCPSocketAction struct {
+	Port                 *TypeInterface `protobuf:"bytes,1,opt,name=port,proto3" json:"port,omitempty"`
+	Host                 string         `protobuf:"bytes,2,opt,name=host,proto3" json:"host,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
+}
+
+func (m *TCPSocketAction) Reset()         { *m = TCPSocketAction{} }
+func (m *TCPSocketAction) String() string { return proto.CompactTextString(m) }
+func (*TCPSocketAction) ProtoMessage()    {}
+func (*TCPSocketAction) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{45}
+}
+
+func (m *TCPSocketAction) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_TCPSocketAction.Unmarshal(m, b)
+}
+func (m *TCPSocketAction) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_TCPSocketAction.Marshal(b, m, deterministic)
+}
+func (m *TCPSocketAction) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TCPSocketAction.Merge(m, src)
+}
+func (m *TCPSocketAction) XXX_Size() int {
+	return xxx_messageInfo_TCPSocketAction.Size(m)
+}
+func (m *TCPSocketAction) XXX_DiscardUnknown() {
+	xxx_messageInfo_TCPSocketAction.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TCPSocketAction proto.InternalMessageInfo
+
+func (m *TCPSocketAction) GetPort() *TypeInterface {
+	if m != nil {
+		return m.Port
+	}
+	return nil
+}
+
+func (m *TCPSocketAction) GetHost() string {
+	if m != nil {
+		return m.Host
+	}
+	return ""
+}
+
+// See k8s.io.api.core.v1.WeightedPodAffinityTerm.
+type WeightedPodAffinityTerm struct {
+	Weight               int32            `protobuf:"varint,1,opt,name=weight,proto3" json:"weight,omitempty"`
+	PodAffinityTerm      *PodAffinityTerm `protobuf:"bytes,2,opt,name=podAffinityTerm,proto3" json:"podAffinityTerm,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
+}
+
+func (m *WeightedPodAffinityTerm) Reset()         { *m = WeightedPodAffinityTerm{} }
+func (m *WeightedPodAffinityTerm) String() string { return proto.CompactTextString(m) }
+func (*WeightedPodAffinityTerm) ProtoMessage()    {}
+func (*WeightedPodAffinityTerm) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{46}
+}
+
+func (m *WeightedPodAffinityTerm) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_WeightedPodAffinityTerm.Unmarshal(m, b)
+}
+func (m *WeightedPodAffinityTerm) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_WeightedPodAffinityTerm.Marshal(b, m, deterministic)
+}
+func (m *WeightedPodAffinityTerm) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WeightedPodAffinityTerm.Merge(m, src)
+}
+func (m *WeightedPodAffinityTerm) XXX_Size() int {
+	return xxx_messageInfo_WeightedPodAffinityTerm.Size(m)
+}
+func (m *WeightedPodAffinityTerm) XXX_DiscardUnknown() {
+	xxx_messageInfo_WeightedPodAffinityTerm.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_WeightedPodAffinityTerm proto.InternalMessageInfo
+
+func (m *WeightedPodAffinityTerm) GetWeight() int32 {
+	if m != nil {
+		return m.Weight
+	}
+	return 0
+}
+
+func (m *WeightedPodAffinityTerm) GetPodAffinityTerm() *PodAffinityTerm {
+	if m != nil {
+		return m.PodAffinityTerm
+	}
+	return nil
+}
+
+// Synthetic type for generating Go structs.
+// GOTYPE: interface{}
+type TypeInterface struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *TypeInterface) Reset()         { *m = TypeInterface{} }
+func (m *TypeInterface) String() string { return proto.CompactTextString(m) }
+func (*TypeInterface) ProtoMessage()    {}
+func (*TypeInterface) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{47}
+}
+
+func (m *TypeInterface) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_TypeInterface.Unmarshal(m, b)
+}
+func (m *TypeInterface) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_TypeInterface.Marshal(b, m, deterministic)
+}
+func (m *TypeInterface) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TypeInterface.Merge(m, src)
+}
+func (m *TypeInterface) XXX_Size() int {
+	return xxx_messageInfo_TypeInterface.Size(m)
+}
+func (m *TypeInterface) XXX_DiscardUnknown() {
+	xxx_messageInfo_TypeInterface.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TypeInterface proto.InternalMessageInfo
+
+// Synthetic type for generating Go structs.
+// GOTYPE: map[string]interface{}
+type TypeMapStringInterface struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *TypeMapStringInterface) Reset()         { *m = TypeMapStringInterface{} }
+func (m *TypeMapStringInterface) String() string { return proto.CompactTextString(m) }
+func (*TypeMapStringInterface) ProtoMessage()    {}
+func (*TypeMapStringInterface) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{48}
+}
+
+func (m *TypeMapStringInterface) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_TypeMapStringInterface.Unmarshal(m, b)
+}
+func (m *TypeMapStringInterface) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_TypeMapStringInterface.Marshal(b, m, deterministic)
+}
+func (m *TypeMapStringInterface) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TypeMapStringInterface.Merge(m, src)
+}
+func (m *TypeMapStringInterface) XXX_Size() int {
+	return xxx_messageInfo_TypeMapStringInterface.Size(m)
+}
+func (m *TypeMapStringInterface) XXX_DiscardUnknown() {
+	xxx_messageInfo_TypeMapStringInterface.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TypeMapStringInterface proto.InternalMessageInfo
+
+// Synthetic type for generating Go structs.
+// GOTYPE: *IntOrStringForPB
+type TypeIntOrStringForPB struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *TypeIntOrStringForPB) Reset()         { *m = TypeIntOrStringForPB{} }
+func (m *TypeIntOrStringForPB) String() string { return proto.CompactTextString(m) }
+func (*TypeIntOrStringForPB) ProtoMessage()    {}
+func (*TypeIntOrStringForPB) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{49}
+}
+
+func (m *TypeIntOrStringForPB) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_TypeIntOrStringForPB.Unmarshal(m, b)
+}
+func (m *TypeIntOrStringForPB) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_TypeIntOrStringForPB.Marshal(b, m, deterministic)
+}
+func (m *TypeIntOrStringForPB) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TypeIntOrStringForPB.Merge(m, src)
+}
+func (m *TypeIntOrStringForPB) XXX_Size() int {
+	return xxx_messageInfo_TypeIntOrStringForPB.Size(m)
+}
+func (m *TypeIntOrStringForPB) XXX_DiscardUnknown() {
+	xxx_messageInfo_TypeIntOrStringForPB.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TypeIntOrStringForPB proto.InternalMessageInfo
+
+// Synthetic type for generating Go structs.
+// GOTYPE: *BoolValueForPB
+type TypeBoolValueForPB struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *TypeBoolValueForPB) Reset()         { *m = TypeBoolValueForPB{} }
+func (m *TypeBoolValueForPB) String() string { return proto.CompactTextString(m) }
+func (*TypeBoolValueForPB) ProtoMessage()    {}
+func (*TypeBoolValueForPB) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8023ebf2dcfea843, []int{50}
+}
+
+func (m *TypeBoolValueForPB) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_TypeBoolValueForPB.Unmarshal(m, b)
+}
+func (m *TypeBoolValueForPB) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_TypeBoolValueForPB.Marshal(b, m, deterministic)
+}
+func (m *TypeBoolValueForPB) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TypeBoolValueForPB.Merge(m, src)
+}
+func (m *TypeBoolValueForPB) XXX_Size() int {
+	return xxx_messageInfo_TypeBoolValueForPB.Size(m)
+}
+func (m *TypeBoolValueForPB) XXX_DiscardUnknown() {
+	xxx_messageInfo_TypeBoolValueForPB.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TypeBoolValueForPB proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterEnum("istio.operator.v1alpha1.InstallStatus_Status", InstallStatus_Status_name, InstallStatus_Status_value)
@@ -316,51 +3347,289 @@ func init() {
 	proto.RegisterType((*InstallStatus)(nil), "istio.operator.v1alpha1.InstallStatus")
 	proto.RegisterMapType((map[string]*InstallStatus_VersionStatus)(nil), "istio.operator.v1alpha1.InstallStatus.ComponentStatusEntry")
 	proto.RegisterType((*InstallStatus_VersionStatus)(nil), "istio.operator.v1alpha1.InstallStatus.VersionStatus")
+	proto.RegisterType((*IstioComponentSetSpec)(nil), "istio.operator.v1alpha1.IstioComponentSetSpec")
+	proto.RegisterType((*BaseComponentSpec)(nil), "istio.operator.v1alpha1.BaseComponentSpec")
+	proto.RegisterType((*ComponentSpec)(nil), "istio.operator.v1alpha1.ComponentSpec")
+	proto.RegisterType((*ExternalComponentSpec)(nil), "istio.operator.v1alpha1.ExternalComponentSpec")
+	proto.RegisterType((*GatewaySpec)(nil), "istio.operator.v1alpha1.GatewaySpec")
+	proto.RegisterMapType((map[string]string)(nil), "istio.operator.v1alpha1.GatewaySpec.LabelEntry")
+	proto.RegisterType((*KubernetesResourcesSpec)(nil), "istio.operator.v1alpha1.KubernetesResourcesSpec")
+	proto.RegisterMapType((map[string]string)(nil), "istio.operator.v1alpha1.KubernetesResourcesSpec.NodeSelectorEntry")
+	proto.RegisterMapType((map[string]string)(nil), "istio.operator.v1alpha1.KubernetesResourcesSpec.PodAnnotationsEntry")
+	proto.RegisterMapType((map[string]string)(nil), "istio.operator.v1alpha1.KubernetesResourcesSpec.ServiceAnnotationsEntry")
+	proto.RegisterType((*K8SObjectOverlay)(nil), "istio.operator.v1alpha1.K8sObjectOverlay")
+	proto.RegisterType((*K8SObjectOverlay_PathValue)(nil), "istio.operator.v1alpha1.K8sObjectOverlay.PathValue")
+	proto.RegisterType((*Affinity)(nil), "istio.operator.v1alpha1.Affinity")
+	proto.RegisterType((*ConfigMapKeySelector)(nil), "istio.operator.v1alpha1.ConfigMapKeySelector")
+	proto.RegisterType((*ClientIPConfig)(nil), "istio.operator.v1alpha1.ClientIPConfig")
+	proto.RegisterType((*CrossVersionObjectReference)(nil), "istio.operator.v1alpha1.CrossVersionObjectReference")
+	proto.RegisterType((*DeploymentStrategy)(nil), "istio.operator.v1alpha1.DeploymentStrategy")
+	proto.RegisterType((*EnvVar)(nil), "istio.operator.v1alpha1.EnvVar")
+	proto.RegisterType((*EnvVarSource)(nil), "istio.operator.v1alpha1.EnvVarSource")
+	proto.RegisterType((*ExecAction)(nil), "istio.operator.v1alpha1.ExecAction")
+	proto.RegisterType((*ExternalMetricSource)(nil), "istio.operator.v1alpha1.ExternalMetricSource")
+	proto.RegisterType((*HTTPGetAction)(nil), "istio.operator.v1alpha1.HTTPGetAction")
+	proto.RegisterType((*HTTPHeader)(nil), "istio.operator.v1alpha1.HTTPHeader")
+	proto.RegisterType((*HorizontalPodAutoscalerSpec)(nil), "istio.operator.v1alpha1.HorizontalPodAutoscalerSpec")
+	proto.RegisterType((*LocalObjectReference)(nil), "istio.operator.v1alpha1.LocalObjectReference")
+	proto.RegisterType((*MetricSpec)(nil), "istio.operator.v1alpha1.MetricSpec")
+	proto.RegisterType((*NodeAffinity)(nil), "istio.operator.v1alpha1.NodeAffinity")
+	proto.RegisterType((*NodeSelector)(nil), "istio.operator.v1alpha1.NodeSelector")
+	proto.RegisterType((*NodeSelectorTerm)(nil), "istio.operator.v1alpha1.NodeSelectorTerm")
+	proto.RegisterType((*NodeSelectorRequirement)(nil), "istio.operator.v1alpha1.NodeSelectorRequirement")
+	proto.RegisterType((*ObjectFieldSelector)(nil), "istio.operator.v1alpha1.ObjectFieldSelector")
+	proto.RegisterType((*ObjectMeta)(nil), "istio.operator.v1alpha1.ObjectMeta")
+	proto.RegisterType((*ObjectMetricSource)(nil), "istio.operator.v1alpha1.ObjectMetricSource")
+	proto.RegisterType((*PodAffinity)(nil), "istio.operator.v1alpha1.PodAffinity")
+	proto.RegisterType((*PodAntiAffinity)(nil), "istio.operator.v1alpha1.PodAntiAffinity")
+	proto.RegisterType((*PodAffinityTerm)(nil), "istio.operator.v1alpha1.PodAffinityTerm")
+	proto.RegisterType((*PodDisruptionBudgetSpec)(nil), "istio.operator.v1alpha1.PodDisruptionBudgetSpec")
+	proto.RegisterType((*PodsMetricSource)(nil), "istio.operator.v1alpha1.PodsMetricSource")
+	proto.RegisterType((*PreferredSchedulingTerm)(nil), "istio.operator.v1alpha1.PreferredSchedulingTerm")
+	proto.RegisterType((*ReadinessProbe)(nil), "istio.operator.v1alpha1.ReadinessProbe")
+	proto.RegisterType((*ResourceFieldSelector)(nil), "istio.operator.v1alpha1.ResourceFieldSelector")
+	proto.RegisterType((*ResourceMetricSource)(nil), "istio.operator.v1alpha1.ResourceMetricSource")
+	proto.RegisterType((*Resources)(nil), "istio.operator.v1alpha1.Resources")
+	proto.RegisterMapType((map[string]string)(nil), "istio.operator.v1alpha1.Resources.LimitsEntry")
+	proto.RegisterMapType((map[string]string)(nil), "istio.operator.v1alpha1.Resources.RequestsEntry")
+	proto.RegisterType((*RollingUpdateDeployment)(nil), "istio.operator.v1alpha1.RollingUpdateDeployment")
+	proto.RegisterType((*SecretKeySelector)(nil), "istio.operator.v1alpha1.SecretKeySelector")
+	proto.RegisterType((*ServiceSpec)(nil), "istio.operator.v1alpha1.ServiceSpec")
+	proto.RegisterMapType((map[string]string)(nil), "istio.operator.v1alpha1.ServiceSpec.SelectorEntry")
+	proto.RegisterType((*ServicePort)(nil), "istio.operator.v1alpha1.ServicePort")
+	proto.RegisterType((*SessionAffinityConfig)(nil), "istio.operator.v1alpha1.SessionAffinityConfig")
+	proto.RegisterType((*TCPSocketAction)(nil), "istio.operator.v1alpha1.TCPSocketAction")
+	proto.RegisterType((*WeightedPodAffinityTerm)(nil), "istio.operator.v1alpha1.WeightedPodAffinityTerm")
+	proto.RegisterType((*TypeInterface)(nil), "istio.operator.v1alpha1.TypeInterface")
+	proto.RegisterType((*TypeMapStringInterface)(nil), "istio.operator.v1alpha1.TypeMapStringInterface")
+	proto.RegisterType((*TypeIntOrStringForPB)(nil), "istio.operator.v1alpha1.TypeIntOrStringForPB")
+	proto.RegisterType((*TypeBoolValueForPB)(nil), "istio.operator.v1alpha1.TypeBoolValueForPB")
 }
 
 func init() { proto.RegisterFile("operator/v1alpha1/operator.proto", fileDescriptor_8023ebf2dcfea843) }
 
 var fileDescriptor_8023ebf2dcfea843 = []byte{
-	// 646 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x94, 0xdd, 0x6e, 0xda, 0x30,
-	0x14, 0xc7, 0x17, 0xa0, 0xb4, 0x3d, 0xb4, 0x90, 0x5a, 0x48, 0xf5, 0xd0, 0x34, 0x31, 0x6e, 0x86,
-	0x34, 0x2d, 0xb4, 0x74, 0x17, 0xfb, 0xb8, 0x98, 0x5a, 0x1a, 0xad, 0x4c, 0x1d, 0x74, 0xa1, 0xab,
-	0xb4, 0xdd, 0x44, 0x6e, 0x30, 0x90, 0x35, 0x8d, 0x2d, 0xdb, 0xa0, 0xf2, 0x02, 0xbb, 0xda, 0x4b,
-	0xed, 0xcd, 0xa6, 0x38, 0x81, 0x06, 0x15, 0xba, 0xaa, 0xbb, 0x4a, 0xce, 0xd7, 0xcf, 0xe7, 0xf8,
-	0x7f, 0x64, 0xa8, 0x32, 0x4e, 0x05, 0x51, 0x4c, 0x34, 0x26, 0xfb, 0x24, 0xe0, 0x23, 0xb2, 0xdf,
-	0x98, 0x79, 0x2c, 0x2e, 0x98, 0x62, 0x68, 0xd7, 0x97, 0xca, 0x67, 0xd6, 0xdc, 0x3b, 0xcb, 0xab,
-	0xbc, 0xb8, 0x5b, 0xea, 0xb1, 0x6b, 0xce, 0x42, 0x1a, 0xaa, 0xb8, 0xb6, 0xf6, 0x27, 0x0f, 0x3b,
-	0xed, 0xa8, 0xbc, 0x9b, 0xa4, 0xf6, 0x38, 0xf5, 0x10, 0x86, 0x75, 0x2e, 0xd8, 0xc0, 0x0f, 0x28,
-	0x86, 0xaa, 0x51, 0xdf, 0x74, 0x66, 0x26, 0xda, 0x83, 0xb2, 0x1f, 0x4a, 0x45, 0x82, 0xc0, 0xe5,
-	0xc4, 0xbb, 0x22, 0x43, 0xea, 0x72, 0xa2, 0x46, 0xb8, 0xa0, 0xd3, 0x50, 0x12, 0x3b, 0x8b, 0x43,
-	0x67, 0x44, 0x8d, 0x90, 0x09, 0xd9, 0xd1, 0xf8, 0x12, 0x6f, 0xe9, 0x84, 0xe8, 0x17, 0xbd, 0x83,
-	0xac, 0x22, 0x43, 0xbc, 0x5d, 0x35, 0xea, 0x85, 0xe6, 0x4b, 0x6b, 0x45, 0xf7, 0xd6, 0xf9, 0x94,
-	0xd3, 0x76, 0xa8, 0xa8, 0x18, 0x10, 0x8f, 0x36, 0x9d, 0xa8, 0x06, 0xbd, 0x82, 0x92, 0xa0, 0x92,
-	0x8d, 0x85, 0x47, 0x5d, 0x39, 0x1e, 0x0c, 0xfc, 0x1b, 0x5c, 0x8c, 0xc0, 0x47, 0x19, 0x6c, 0x38,
-	0xc5, 0x59, 0xa8, 0xa7, 0x23, 0xe8, 0x19, 0x6c, 0x86, 0xe4, 0x9a, 0x4a, 0x4e, 0x3c, 0x8a, 0x4b,
-	0xfa, 0xfc, 0x5b, 0x07, 0xaa, 0xc0, 0x86, 0xa0, 0x13, 0x5f, 0xfa, 0x2c, 0xc4, 0xa6, 0x0e, 0xce,
-	0x6d, 0xf4, 0x15, 0x0a, 0xd7, 0x54, 0x8e, 0x5c, 0x8f, 0x85, 0x03, 0x7f, 0x88, 0xeb, 0xba, 0xd3,
-	0xbd, 0x7b, 0x3b, 0xfd, 0x42, 0x78, 0x4f, 0x09, 0x3f, 0x1c, 0xa6, 0x5a, 0x86, 0x08, 0xd2, 0xd2,
-	0x0c, 0xd4, 0x01, 0x98, 0xdf, 0xbd, 0xc4, 0x4d, 0x4d, 0xb4, 0x56, 0x12, 0xb5, 0x24, 0xad, 0x59,
-	0x7e, 0x8f, 0xaa, 0x48, 0x16, 0x27, 0x45, 0x40, 0x3f, 0xc1, 0x24, 0xfd, 0x3e, 0x0b, 0xdd, 0x14,
-	0xf5, 0xa0, 0x9a, 0xad, 0x17, 0x9a, 0x1f, 0xef, 0xa7, 0xa6, 0x85, 0xb6, 0x0e, 0x23, 0xc4, 0xfc,
-	0x1c, 0x69, 0x87, 0x4a, 0x4c, 0x9d, 0x12, 0x59, 0xf4, 0xa2, 0x13, 0xc8, 0x4f, 0x48, 0x30, 0xa6,
-	0x12, 0xf7, 0x1f, 0x79, 0x13, 0x49, 0x3d, 0x72, 0x01, 0x8d, 0xc3, 0x09, 0x09, 0xfc, 0x3e, 0x51,
-	0xb4, 0xef, 0x26, 0x54, 0xfa, 0x48, 0xea, 0x4e, 0x8a, 0x75, 0xa1, 0x51, 0x15, 0x01, 0xe5, 0x65,
-	0x33, 0x45, 0x5b, 0x78, 0x45, 0xa7, 0xd8, 0x88, 0xb7, 0xf0, 0x8a, 0x4e, 0xd1, 0x31, 0xac, 0xe9,
-	0xe3, 0x71, 0xe6, 0x1f, 0x5a, 0xd8, 0x37, 0x8a, 0x8a, 0x90, 0x04, 0xb7, 0x72, 0x44, 0x5a, 0xc4,
-	0xc5, 0xef, 0x33, 0x6f, 0x8d, 0xda, 0xef, 0x1c, 0x6c, 0xb7, 0xe3, 0xc5, 0xef, 0x29, 0xa2, 0xc6,
-	0x12, 0xd9, 0x90, 0x97, 0xfa, 0x4f, 0x1f, 0x58, 0x6c, 0xbe, 0x5e, 0x2d, 0x49, 0xba, 0xce, 0x8a,
-	0x3f, 0x4e, 0x52, 0x8c, 0x06, 0x60, 0xce, 0xd5, 0x75, 0x13, 0x60, 0x46, 0x6b, 0xfc, 0xe1, 0x81,
-	0xc0, 0xdb, 0x9e, 0xb5, 0x9d, 0xe8, 0xeb, 0x2d, 0x7a, 0x2b, 0xbf, 0x0c, 0xd8, 0xbe, 0xa0, 0x22,
-	0x5a, 0xfd, 0x64, 0x00, 0x0c, 0xeb, 0x93, 0xd8, 0x91, 0x5c, 0xd9, 0xcc, 0x4c, 0x8d, 0x96, 0xf9,
-	0x9f, 0xd1, 0xca, 0xb0, 0x46, 0x85, 0x60, 0x02, 0xe7, 0x34, 0x3e, 0x36, 0x2a, 0x37, 0x50, 0x5e,
-	0xd6, 0xf1, 0x12, 0xf5, 0x3e, 0x2f, 0xaa, 0xf7, 0xe6, 0x81, 0x5d, 0x2c, 0x4c, 0x99, 0xd6, 0xb0,
-	0x0d, 0xf9, 0x64, 0xf4, 0x0d, 0xc8, 0x75, 0xba, 0x1d, 0xdb, 0x7c, 0x82, 0xb6, 0x60, 0xe3, 0xdb,
-	0xd9, 0xf1, 0xe1, 0x79, 0xbb, 0xf3, 0xc9, 0x34, 0x50, 0x09, 0x0a, 0x8e, 0xdd, 0xea, 0x76, 0x5a,
-	0xed, 0xd3, 0xc8, 0x91, 0x41, 0x05, 0x58, 0x3f, 0xb1, 0x0f, 0x4f, 0xcf, 0x4f, 0xbe, 0x9b, 0x59,
-	0xb4, 0x09, 0x6b, 0xb6, 0xe3, 0x74, 0x1d, 0x33, 0x57, 0x7b, 0x0a, 0xbb, 0x2b, 0x16, 0xb6, 0x66,
-	0x42, 0x71, 0xf1, 0x55, 0x3b, 0xaa, 0xfe, 0x78, 0x1e, 0x77, 0xee, 0xb3, 0x06, 0xe1, 0x7e, 0xe3,
-	0xce, 0x8b, 0x7d, 0x99, 0xd7, 0x0f, 0xf5, 0xc1, 0xdf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x52, 0xcf,
-	0xea, 0xd6, 0x08, 0x06, 0x00, 0x00,
+	// 3548 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5b, 0x4d, 0x6c, 0x24, 0x49,
+	0x56, 0xa6, 0xfe, 0xec, 0xaa, 0x57, 0xfe, 0xa9, 0x8e, 0x76, 0x4f, 0x27, 0xde, 0xd9, 0x1e, 0x4f,
+	0xf6, 0x4c, 0x6f, 0xcf, 0xcc, 0x6e, 0x79, 0xba, 0x7b, 0x04, 0x4d, 0x2f, 0x33, 0x3b, 0xb6, 0xdb,
+	0xdd, 0xed, 0x9e, 0x6e, 0xbb, 0x08, 0x7b, 0x66, 0xb4, 0xc3, 0xb0, 0xa5, 0x70, 0x66, 0xb8, 0x2a,
+	0xd7, 0x59, 0x19, 0xb9, 0x19, 0x51, 0x1e, 0xd7, 0x8a, 0x03, 0x17, 0x40, 0x48, 0x20, 0x71, 0x02,
+	0xc1, 0x15, 0x24, 0x0e, 0x08, 0x6e, 0x70, 0x00, 0xad, 0x04, 0x12, 0x1c, 0xb8, 0x72, 0xe7, 0x84,
+	0xc4, 0x11, 0x89, 0x23, 0x17, 0x84, 0xe2, 0x27, 0xb3, 0x32, 0xab, 0x32, 0x5d, 0x2e, 0x4f, 0xb3,
+	0x9a, 0x03, 0x27, 0x57, 0xbc, 0x78, 0xef, 0x8b, 0xbf, 0x17, 0xef, 0x2f, 0xd2, 0xb0, 0xc1, 0x42,
+	0x1a, 0x11, 0xc1, 0xa2, 0xcd, 0xb3, 0x7b, 0xc4, 0x0f, 0xfb, 0xe4, 0xde, 0x66, 0x4c, 0x69, 0x87,
+	0x11, 0x13, 0x0c, 0xdd, 0xf4, 0xb8, 0xf0, 0x58, 0x3b, 0xa1, 0xc6, 0x7c, 0xeb, 0xbf, 0xd8, 0x63,
+	0xac, 0xe7, 0xd3, 0x4d, 0xc5, 0x76, 0x3c, 0x3c, 0xd9, 0x24, 0xc1, 0x48, 0xcb, 0xac, 0xdb, 0xa7,
+	0x0f, 0x79, 0xdb, 0x63, 0x9b, 0x24, 0xf4, 0x36, 0x1d, 0x16, 0xd1, 0xcd, 0xb3, 0x7b, 0x9b, 0x3d,
+	0x1a, 0x48, 0x04, 0xea, 0x1a, 0x9e, 0x0f, 0xc6, 0x3c, 0x03, 0xe2, 0xf4, 0xbd, 0x80, 0x46, 0xa3,
+	0xcd, 0xf0, 0xb4, 0x27, 0x09, 0x7c, 0x73, 0x40, 0x05, 0x99, 0x57, 0x6a, 0x33, 0xa2, 0x9c, 0x0d,
+	0x23, 0x87, 0x4e, 0x49, 0x3d, 0x28, 0x92, 0x1a, 0x0a, 0xcf, 0xdf, 0xf4, 0x02, 0xc1, 0x45, 0x34,
+	0x29, 0x64, 0xff, 0x6c, 0x01, 0xae, 0xed, 0xc9, 0xb5, 0x1f, 0x98, 0xa5, 0x1f, 0x86, 0xd4, 0x41,
+	0x16, 0x2c, 0x86, 0x11, 0x3b, 0xf1, 0x7c, 0x6a, 0xc1, 0x46, 0xe9, 0x6e, 0x03, 0xc7, 0x4d, 0xf4,
+	0x3e, 0xac, 0x79, 0x01, 0x17, 0xc4, 0xf7, 0xbb, 0x21, 0x71, 0x4e, 0x49, 0x8f, 0x76, 0x43, 0x22,
+	0xfa, 0x56, 0x53, 0xb1, 0x21, 0xd3, 0xd7, 0xd1, 0x5d, 0x1d, 0x22, 0xfa, 0xa8, 0x05, 0x95, 0xfe,
+	0xf0, 0xd8, 0x5a, 0x52, 0x0c, 0xf2, 0x27, 0x7a, 0x08, 0x15, 0x41, 0x7a, 0xd6, 0xf2, 0x46, 0xe9,
+	0x6e, 0xf3, 0xfe, 0x9d, 0x76, 0xc1, 0xd6, 0xb7, 0x8f, 0x46, 0x21, 0xdd, 0x0b, 0x04, 0x8d, 0x4e,
+	0x88, 0x43, 0xb1, 0x14, 0x41, 0xef, 0xc1, 0x6a, 0xbc, 0xfc, 0x2e, 0x1f, 0x9e, 0x9c, 0x78, 0xe7,
+	0xd6, 0x8a, 0xc4, 0xdd, 0x2e, 0x5b, 0x25, 0xbc, 0x12, 0x77, 0x1d, 0xaa, 0x1e, 0xf4, 0x3a, 0x34,
+	0x02, 0x32, 0xa0, 0x3c, 0x24, 0x0e, 0xb5, 0x56, 0xd5, 0xf0, 0x63, 0x02, 0x5a, 0x87, 0x7a, 0x44,
+	0xcf, 0x3c, 0xee, 0xb1, 0xc0, 0x6a, 0xa9, 0xce, 0xa4, 0x8d, 0x3a, 0xd0, 0x1c, 0x50, 0xde, 0xef,
+	0x3a, 0x2c, 0x38, 0xf1, 0x7a, 0xd6, 0x5d, 0x35, 0xd1, 0xcd, 0x0b, 0x27, 0xfa, 0x92, 0x84, 0x87,
+	0x22, 0xf2, 0x82, 0xde, 0x78, 0xc6, 0x20, 0x31, 0x76, 0x14, 0x04, 0xda, 0x07, 0x70, 0xd8, 0x20,
+	0x64, 0x01, 0x0d, 0x04, 0xb7, 0xee, 0x2b, 0xc0, 0x76, 0x21, 0xa0, 0x3a, 0x90, 0x9d, 0x98, 0xff,
+	0x90, 0x0a, 0x79, 0x28, 0x38, 0x85, 0x80, 0x7e, 0x0c, 0x2d, 0xe2, 0xba, 0x2c, 0xe8, 0xa6, 0x50,
+	0x1f, 0x6c, 0x54, 0xee, 0x36, 0xef, 0xff, 0xe0, 0x62, 0xd4, 0xf4, 0x31, 0xb7, 0xb7, 0x24, 0x44,
+	0x32, 0x0e, 0xdf, 0x0d, 0x44, 0x34, 0xc2, 0xab, 0x24, 0x4b, 0x45, 0x4f, 0x61, 0xe1, 0x8c, 0xf8,
+	0x43, 0xca, 0x2d, 0xf7, 0x6a, 0x1b, 0x61, 0xc4, 0xd1, 0x8f, 0x00, 0x0d, 0x83, 0x33, 0xe2, 0x7b,
+	0xae, 0x54, 0xc0, 0xae, 0x01, 0xa5, 0x57, 0x03, 0xbd, 0x96, 0x82, 0xfa, 0x4c, 0x21, 0xad, 0x47,
+	0xb0, 0x96, 0xb7, 0x22, 0xa9, 0x81, 0xa7, 0x74, 0x64, 0x95, 0xb4, 0x06, 0x9e, 0xd2, 0x11, 0x7a,
+	0x0c, 0x35, 0x35, 0xba, 0x55, 0x9e, 0x71, 0x12, 0xbb, 0xe7, 0x82, 0x46, 0x01, 0xf1, 0xc7, 0x87,
+	0x21, 0x4f, 0x42, 0x0b, 0x3f, 0x2a, 0x3f, 0x2c, 0xd9, 0xbf, 0x5f, 0x85, 0xe5, 0x3d, 0xad, 0xf4,
+	0x87, 0x82, 0x88, 0x21, 0x47, 0xbb, 0xb0, 0xc0, 0xd5, 0x2f, 0x35, 0xe0, 0xca, 0xfd, 0xef, 0x15,
+	0x1f, 0x48, 0x5a, 0xae, 0xad, 0xff, 0x60, 0x23, 0x8c, 0x4e, 0xa0, 0x95, 0x9c, 0x6d, 0xd7, 0x00,
+	0x96, 0xd5, 0x09, 0x7f, 0xff, 0x92, 0x80, 0xe3, 0x39, 0xab, 0xb6, 0x39, 0x5d, 0x27, 0x4b, 0x5d,
+	0xff, 0x9d, 0x12, 0x2c, 0x7f, 0x46, 0x23, 0xa9, 0xf7, 0x66, 0x01, 0x16, 0x2c, 0x9e, 0x69, 0x82,
+	0xd9, 0xb2, 0xb8, 0x99, 0x5a, 0x5a, 0xf9, 0xeb, 0x2c, 0x6d, 0x0d, 0x6a, 0x34, 0x8a, 0x58, 0x64,
+	0x55, 0x15, 0xbc, 0x6e, 0xac, 0x9f, 0xc3, 0x5a, 0xde, 0x8c, 0x73, 0x4e, 0xef, 0x79, 0xf6, 0xf4,
+	0x3e, 0xb8, 0xe4, 0x2c, 0x32, 0xab, 0x4c, 0x9f, 0xe1, 0x1e, 0x2c, 0x98, 0xa5, 0xd7, 0xa1, 0xba,
+	0x7f, 0xb0, 0xbf, 0xdb, 0xfa, 0x05, 0xb4, 0x04, 0xf5, 0x4f, 0x3b, 0x8f, 0xb7, 0x8e, 0xf6, 0xf6,
+	0x9f, 0xb6, 0x4a, 0x68, 0x15, 0x9a, 0x78, 0x77, 0xe7, 0x60, 0x7f, 0x67, 0xef, 0x85, 0x24, 0x94,
+	0x51, 0x13, 0x16, 0x9f, 0xed, 0x6e, 0xbd, 0x38, 0x7a, 0xf6, 0xc3, 0x56, 0x05, 0x35, 0xa0, 0xb6,
+	0x8b, 0xf1, 0x01, 0x6e, 0x55, 0xed, 0x3f, 0xaa, 0xc1, 0x8d, 0xdc, 0xdb, 0x8b, 0x3e, 0x82, 0xea,
+	0x31, 0xe1, 0xd4, 0xfa, 0xb6, 0x9a, 0xf3, 0xbb, 0x85, 0x73, 0xde, 0x26, 0x9c, 0x66, 0xb5, 0x4d,
+	0xc9, 0xa1, 0x5f, 0x85, 0x5a, 0xe8, 0xf9, 0x4c, 0x58, 0xb7, 0x66, 0x98, 0xcd, 0x09, 0x55, 0x55,
+	0x42, 0xe8, 0x23, 0x58, 0x08, 0x99, 0xef, 0x39, 0x23, 0xeb, 0xcd, 0xb9, 0xc4, 0x8d, 0x14, 0x7a,
+	0x0c, 0x0d, 0x41, 0x7d, 0x3a, 0xa0, 0x22, 0x1a, 0x59, 0xf6, 0x5c, 0x10, 0x63, 0x41, 0x69, 0xf8,
+	0x9d, 0xc0, 0xb3, 0xee, 0xcc, 0x25, 0x2f, 0x45, 0xd0, 0x27, 0xb0, 0xac, 0xb8, 0xdd, 0x6e, 0x44,
+	0x07, 0x4c, 0x50, 0xeb, 0x3b, 0x73, 0x61, 0x2c, 0x69, 0x61, 0xac, 0x64, 0xd1, 0x01, 0xb4, 0xbc,
+	0xa0, 0x17, 0x51, 0xce, 0xbb, 0x3d, 0x22, 0xe8, 0x57, 0x64, 0xc4, 0xad, 0xbb, 0xea, 0x6a, 0xbd,
+	0x55, 0x88, 0xf7, 0x54, 0x33, 0x2a, 0xb4, 0x55, 0x23, 0x6d, 0x68, 0x1c, 0xbd, 0x84, 0x55, 0x3a,
+	0x81, 0xf7, 0xce, 0x1c, 0x78, 0x2b, 0x34, 0x03, 0xf7, 0xbc, 0x5a, 0x7f, 0xa3, 0xb5, 0xf1, 0xbc,
+	0x5a, 0xdf, 0x68, 0xbd, 0xf9, 0xbc, 0x5a, 0xbf, 0xdd, 0x7a, 0xeb, 0x79, 0xb5, 0xfe, 0x56, 0xeb,
+	0xed, 0xe7, 0xd5, 0xfa, 0xdb, 0xad, 0x3b, 0x78, 0xd1, 0xf1, 0x04, 0x71, 0xa9, 0x8f, 0x17, 0x7a,
+	0xc4, 0xf7, 0xe9, 0x08, 0x43, 0xc0, 0x5c, 0xda, 0x25, 0x3d, 0x1a, 0x08, 0x5c, 0x0b, 0x23, 0x76,
+	0x3e, 0xc2, 0x2d, 0xee, 0xb9, 0xd4, 0x21, 0x51, 0xd7, 0x0b, 0x7e, 0x4c, 0x1d, 0xc1, 0x22, 0xfb,
+	0x0b, 0xb8, 0x36, 0xa5, 0x59, 0x68, 0x17, 0x16, 0x69, 0x40, 0x8e, 0x7d, 0xea, 0xaa, 0xeb, 0xd5,
+	0xbc, 0xff, 0xde, 0x85, 0x56, 0x78, 0x9b, 0x31, 0x5f, 0x99, 0xda, 0x27, 0x2c, 0xea, 0x6c, 0xe3,
+	0x58, 0xd6, 0xfe, 0x87, 0x32, 0x2c, 0xff, 0x5f, 0x00, 0x67, 0x3d, 0x78, 0x79, 0xd2, 0x83, 0x9b,
+	0xc0, 0x02, 0xa6, 0x02, 0x8b, 0xe6, 0xfc, 0x81, 0xc5, 0x23, 0xa8, 0xf2, 0x90, 0x3a, 0x33, 0x2f,
+	0x57, 0x56, 0x54, 0xc9, 0xa0, 0x6d, 0xa8, 0x9c, 0x3e, 0x8c, 0x9d, 0xfa, 0xfb, 0x85, 0xa2, 0x9f,
+	0x0c, 0x8f, 0x69, 0x14, 0x50, 0x41, 0x39, 0x36, 0x71, 0x0a, 0xd7, 0xfa, 0x7d, 0xfa, 0x90, 0xdb,
+	0xff, 0x52, 0x86, 0x1b, 0xb9, 0xbe, 0xe6, 0xe7, 0xb3, 0x95, 0xf1, 0xf2, 0xe1, 0x0a, 0xcb, 0xff,
+	0x36, 0x80, 0xd3, 0x27, 0x91, 0xd0, 0x71, 0xe0, 0x2d, 0x0d, 0xad, 0x28, 0x2a, 0xfc, 0xfb, 0x2e,
+	0x2c, 0x70, 0xa7, 0x4f, 0x07, 0xc4, 0xba, 0xad, 0xc0, 0xd7, 0xda, 0x3a, 0xa2, 0x6e, 0xc7, 0x11,
+	0x75, 0x7b, 0x2b, 0x18, 0x61, 0xc3, 0xf3, 0x4a, 0xf6, 0xf2, 0x8f, 0x2b, 0xd0, 0x4c, 0x5d, 0xaf,
+	0x9f, 0xcf, 0x0e, 0x22, 0xa8, 0xca, 0x86, 0x55, 0x51, 0x1d, 0xea, 0x37, 0xda, 0x85, 0x9a, 0x4f,
+	0x8e, 0xa9, 0x6f, 0x55, 0x95, 0x31, 0xd8, 0xbc, 0x8c, 0x31, 0x68, 0xbf, 0x90, 0x12, 0xda, 0x57,
+	0x6b, 0xe9, 0x57, 0xaa, 0xe7, 0xaf, 0x60, 0x7f, 0xd7, 0x1f, 0x02, 0x8c, 0x27, 0x99, 0xe3, 0x9e,
+	0xd7, 0xd2, 0xee, 0xb9, 0x91, 0x76, 0xb4, 0xbf, 0xdb, 0x84, 0x9b, 0x05, 0xd0, 0xe8, 0x43, 0xa8,
+	0x93, 0x93, 0x13, 0x2f, 0xf0, 0xc4, 0xc8, 0x1c, 0xd3, 0x9b, 0x85, 0xd3, 0xdb, 0x32, 0x8c, 0x38,
+	0x11, 0x41, 0xf7, 0xa0, 0x42, 0x83, 0x33, 0x13, 0x21, 0xbd, 0x51, 0x1c, 0xcf, 0x05, 0x67, 0x9f,
+	0x91, 0x08, 0x4b, 0x5e, 0x74, 0x00, 0xf5, 0x7e, 0x48, 0xba, 0x4a, 0xf1, 0x2b, 0x33, 0x22, 0x89,
+	0x67, 0x2c, 0xf2, 0x7e, 0xca, 0x02, 0x41, 0xfc, 0x0e, 0x73, 0xb7, 0x86, 0x82, 0x71, 0x87, 0xf8,
+	0x54, 0x45, 0xd1, 0x78, 0xb1, 0x1f, 0x12, 0xb5, 0x84, 0x77, 0xe1, 0x9a, 0x37, 0x50, 0x19, 0xd1,
+	0x50, 0xa6, 0x47, 0xda, 0xdf, 0xea, 0x18, 0x67, 0x55, 0x75, 0x74, 0x86, 0xbe, 0xdf, 0xd1, 0x0e,
+	0xb5, 0x07, 0xcb, 0xca, 0x6c, 0x73, 0xea, 0x2b, 0x03, 0x6d, 0xd5, 0xd4, 0xcc, 0xb7, 0xe7, 0x3d,
+	0x92, 0xf6, 0x3e, 0x73, 0xe9, 0xa1, 0x01, 0xd1, 0x6a, 0xb3, 0x14, 0xa4, 0x48, 0xc8, 0x85, 0x1b,
+	0x21, 0x73, 0xbb, 0xae, 0xc7, 0xa3, 0x61, 0x28, 0x3c, 0x16, 0x74, 0x8f, 0x87, 0x6e, 0x8f, 0x0a,
+	0x6b, 0x61, 0x86, 0x0e, 0x74, 0x98, 0xfb, 0x38, 0x11, 0xda, 0x56, 0x32, 0x6a, 0xb9, 0xd7, 0xc3,
+	0xe9, 0x0e, 0x34, 0x80, 0x55, 0x39, 0x0a, 0x09, 0x02, 0x26, 0x88, 0xa4, 0x73, 0x6b, 0x51, 0x2d,
+	0xe8, 0xf1, 0xdc, 0x0b, 0x92, 0x1b, 0x3c, 0x86, 0xd1, 0x4b, 0x5a, 0x09, 0x33, 0x44, 0xd4, 0x86,
+	0xeb, 0x61, 0xe4, 0xb1, 0xc8, 0x13, 0xa3, 0xae, 0xe3, 0x13, 0xce, 0xbb, 0xea, 0xf2, 0xd5, 0xd5,
+	0x5e, 0x5f, 0x8b, 0xbb, 0x76, 0x64, 0xcf, 0xbe, 0xbc, 0x89, 0x1d, 0x99, 0x37, 0x12, 0xd7, 0x0b,
+	0xa4, 0x8f, 0x0e, 0x23, 0x76, 0x4c, 0xad, 0x86, 0x5a, 0xfe, 0x77, 0x0a, 0xa7, 0x87, 0x63, 0xfe,
+	0x8e, 0x64, 0x97, 0xc9, 0x65, 0xba, 0x8d, 0x6e, 0xc3, 0x72, 0x44, 0x43, 0xdf, 0x73, 0x48, 0xd7,
+	0x61, 0xc3, 0x40, 0xa8, 0xeb, 0xb9, 0x8c, 0x97, 0x0c, 0x71, 0x47, 0xd2, 0xd0, 0xc7, 0xd0, 0x88,
+	0x73, 0x52, 0x6e, 0x6e, 0xab, 0x7d, 0xc1, 0x80, 0x86, 0x13, 0x8f, 0x85, 0xd0, 0x47, 0xb0, 0xc8,
+	0x69, 0x74, 0xe6, 0x39, 0x54, 0x25, 0xd0, 0x17, 0x45, 0x14, 0x87, 0x9a, 0x4f, 0xab, 0xa4, 0x11,
+	0x42, 0x4f, 0xa1, 0xce, 0x85, 0xcc, 0xf7, 0x7b, 0x23, 0x93, 0x6f, 0x17, 0x1b, 0xbf, 0xc7, 0x34,
+	0xf4, 0xd9, 0x68, 0xa0, 0xc2, 0x6f, 0x2d, 0x82, 0x13, 0x61, 0xf4, 0x31, 0x34, 0x05, 0xf3, 0xa5,
+	0x88, 0x3a, 0xdc, 0x15, 0x75, 0xb8, 0xb7, 0xda, 0xba, 0xe4, 0xd0, 0x26, 0xa1, 0xd7, 0x76, 0x58,
+	0x44, 0xdb, 0x67, 0xf7, 0xda, 0x47, 0x09, 0x1b, 0x4e, 0x8b, 0xa0, 0x11, 0x5c, 0x37, 0xb3, 0xca,
+	0xa8, 0xc9, 0xaa, 0x42, 0x7a, 0x36, 0xb7, 0x9a, 0x98, 0xe5, 0x4e, 0xa9, 0x0a, 0xe2, 0x53, 0x1d,
+	0x68, 0x17, 0xea, 0xec, 0x8c, 0x46, 0xbe, 0x0c, 0xcc, 0x5c, 0x35, 0xde, 0x3b, 0xc5, 0xe3, 0x3d,
+	0xe4, 0x07, 0xc7, 0x32, 0x68, 0x3a, 0xd0, 0x12, 0x38, 0x11, 0x5d, 0xff, 0x01, 0x5c, 0x9b, 0xba,
+	0x6d, 0xf3, 0xd8, 0xbf, 0xf5, 0x2d, 0xb8, 0x9e, 0xa3, 0xdd, 0x73, 0x41, 0xec, 0xc2, 0xcd, 0x82,
+	0x95, 0xcf, 0x65, 0x89, 0x7f, 0xaf, 0x0c, 0xad, 0xc9, 0x95, 0xa2, 0x37, 0xa0, 0x49, 0x42, 0xaf,
+	0x9b, 0x4d, 0xfe, 0x80, 0x84, 0x9e, 0xc9, 0x9c, 0xa4, 0x93, 0x3b, 0xf5, 0x02, 0xd7, 0xc0, 0xa9,
+	0xdf, 0xb9, 0x8e, 0xef, 0x25, 0x2c, 0x86, 0x44, 0x38, 0x7d, 0xca, 0x8d, 0xeb, 0x7b, 0x70, 0xe9,
+	0xed, 0x6e, 0xcb, 0xa0, 0x41, 0xb9, 0x5f, 0x1c, 0x63, 0xac, 0xff, 0x06, 0x34, 0x12, 0xaa, 0x1c,
+	0x4f, 0x05, 0x1a, 0x7a, 0x76, 0xea, 0xb7, 0xcc, 0x8d, 0xd2, 0x09, 0xe1, 0x65, 0x3d, 0xa2, 0x16,
+	0xb2, 0xff, 0xab, 0x04, 0xf5, 0xd8, 0xa3, 0xa0, 0x3d, 0x50, 0xe6, 0x73, 0x2b, 0xeb, 0x8a, 0xde,
+	0x2e, 0x44, 0xdc, 0x4f, 0x31, 0xe3, 0x8c, 0x28, 0x7a, 0x02, 0x4d, 0x69, 0xb6, 0x62, 0xa4, 0xf2,
+	0x8c, 0xfb, 0xdb, 0x19, 0xf3, 0xe2, 0xb4, 0x20, 0xc2, 0xca, 0xb6, 0x6e, 0x05, 0xc2, 0x4b, 0xb0,
+	0xb4, 0xbb, 0xba, 0x7b, 0x21, 0x56, 0x8a, 0x1f, 0x4f, 0x02, 0xd8, 0x7f, 0x51, 0x92, 0xd9, 0x76,
+	0x70, 0xe2, 0xf5, 0x5e, 0x92, 0xf0, 0x13, 0x3a, 0x4a, 0xdc, 0x05, 0x81, 0x35, 0x9f, 0x39, 0xc4,
+	0xd7, 0x87, 0x82, 0xe9, 0x09, 0x8d, 0x68, 0xe0, 0x50, 0xb3, 0x0f, 0xc5, 0x09, 0xff, 0x8b, 0x1c,
+	0x21, 0x9c, 0x0b, 0x15, 0xeb, 0x69, 0x79, 0xac, 0xa7, 0xeb, 0x50, 0x67, 0xca, 0x9b, 0x10, 0x5f,
+	0x2d, 0xad, 0x8e, 0x93, 0xb6, 0xfd, 0x10, 0x56, 0x76, 0x7c, 0x8f, 0x06, 0x62, 0xaf, 0x63, 0x6a,
+	0x69, 0x77, 0x60, 0x45, 0x78, 0x03, 0xca, 0x86, 0xe2, 0x90, 0x3a, 0x2c, 0x70, 0x75, 0xa1, 0xa5,
+	0x86, 0x27, 0xa8, 0x36, 0x85, 0x6f, 0xed, 0x44, 0x8c, 0x73, 0xa3, 0xbd, 0x93, 0xd3, 0x88, 0x95,
+	0xb9, 0x94, 0xa3, 0xcc, 0xe5, 0x94, 0x32, 0xdf, 0x82, 0xd4, 0x15, 0x30, 0x6a, 0x9e, 0xa2, 0xd8,
+	0xbf, 0x55, 0x02, 0x34, 0x6d, 0x3a, 0x25, 0x94, 0x18, 0x85, 0x34, 0x86, 0x97, 0xbf, 0xd1, 0x67,
+	0xb0, 0x1c, 0x31, 0xdf, 0xf7, 0x82, 0xde, 0xa7, 0xa1, 0x4b, 0x44, 0xac, 0xaf, 0xc5, 0x3e, 0x18,
+	0xa7, 0xb9, 0xc7, 0x83, 0xe0, 0x2c, 0x8c, 0xfd, 0x15, 0x2c, 0xe8, 0xc0, 0x26, 0x59, 0x40, 0x29,
+	0xb5, 0x80, 0x5c, 0x2b, 0x80, 0x76, 0xa0, 0xa1, 0x7e, 0x3c, 0x89, 0xd8, 0xc0, 0xe8, 0xd3, 0xdb,
+	0x33, 0xc2, 0xa6, 0x43, 0x65, 0x7e, 0xf1, 0x58, 0xce, 0xfe, 0xb7, 0x32, 0x2c, 0xa5, 0xfb, 0xd0,
+	0x33, 0xa8, 0x9f, 0x78, 0xd4, 0x77, 0x31, 0x3d, 0x31, 0x2a, 0xf3, 0xdd, 0x42, 0x50, 0x7d, 0x20,
+	0x4f, 0x24, 0x7b, 0xac, 0x7e, 0x38, 0x91, 0x46, 0x5f, 0x40, 0x2b, 0x76, 0x83, 0x4f, 0x62, 0xc4,
+	0x59, 0xd5, 0x3a, 0x9c, 0x16, 0x48, 0x30, 0xa7, 0x70, 0xd0, 0xe7, 0xb0, 0xea, 0xa4, 0x94, 0x5f,
+	0x42, 0x57, 0x66, 0xe8, 0x77, 0xde, 0x65, 0xc1, 0x93, 0x28, 0x68, 0x1f, 0x96, 0x38, 0x75, 0x22,
+	0x2a, 0x0c, 0x6a, 0x75, 0x46, 0xb1, 0xe7, 0x30, 0x66, 0x4e, 0x20, 0x33, 0xf2, 0xf6, 0x1d, 0x80,
+	0xdd, 0x73, 0xea, 0x6c, 0x39, 0xf2, 0x32, 0x20, 0x0b, 0x16, 0x1d, 0x36, 0x18, 0x10, 0xa5, 0xb4,
+	0x95, 0xbb, 0x0d, 0x1c, 0x37, 0xed, 0x7f, 0x2e, 0xc3, 0x5a, 0x9c, 0x3e, 0xbe, 0xa4, 0x22, 0xf2,
+	0x1c, 0x73, 0x1e, 0xb7, 0x00, 0x06, 0xaa, 0xbd, 0x3f, 0xd6, 0x8a, 0x14, 0x05, 0xfd, 0x3a, 0xac,
+	0xe8, 0x56, 0x3c, 0x01, 0xb3, 0xc7, 0x0f, 0x52, 0x9e, 0x3d, 0x79, 0x4c, 0x68, 0x87, 0xa7, 0x3d,
+	0x49, 0xe0, 0xed, 0x01, 0x15, 0x44, 0xfa, 0x7a, 0x95, 0x07, 0x24, 0x73, 0x9f, 0x80, 0x42, 0x1d,
+	0x68, 0x0a, 0x12, 0xf5, 0xa8, 0x50, 0x96, 0xdb, 0x6c, 0x71, 0xfb, 0x22, 0xe4, 0x76, 0x7c, 0x54,
+	0xed, 0x5f, 0x1b, 0x92, 0x40, 0x28, 0x53, 0x98, 0x82, 0x40, 0x3f, 0x02, 0xa4, 0x9b, 0x5b, 0x67,
+	0x34, 0x22, 0x3d, 0xaa, 0x81, 0xab, 0x57, 0x02, 0xce, 0x41, 0xb2, 0xff, 0xb5, 0x04, 0xcb, 0xcf,
+	0x8e, 0x8e, 0x3a, 0x4f, 0xa9, 0x30, 0x7b, 0x9e, 0xe7, 0x6e, 0x1e, 0x41, 0x35, 0x64, 0x91, 0x98,
+	0xd3, 0xdb, 0x28, 0x19, 0x89, 0xd7, 0x67, 0x5c, 0xc4, 0xee, 0x52, 0xfe, 0x46, 0xaf, 0x99, 0x14,
+	0x99, 0x9a, 0x64, 0xc1, 0xb4, 0xd0, 0x2e, 0x34, 0xfb, 0x42, 0x84, 0xcf, 0x28, 0x71, 0x69, 0xc4,
+	0x4d, 0x86, 0x70, 0xbb, 0x38, 0x47, 0x39, 0x3a, 0xea, 0x68, 0x5e, 0x9c, 0x96, 0xb3, 0x7f, 0x09,
+	0x60, 0xdc, 0x75, 0x79, 0x0b, 0x61, 0xff, 0x4f, 0x09, 0xbe, 0x75, 0x41, 0xde, 0x83, 0xbe, 0x84,
+	0x15, 0xd5, 0x3a, 0x52, 0xfb, 0x38, 0xbe, 0xf1, 0xc5, 0x59, 0xd4, 0x05, 0xe6, 0x18, 0x4f, 0x60,
+	0xa1, 0x0d, 0x68, 0x0e, 0xbc, 0x00, 0xeb, 0x70, 0x5a, 0x17, 0x9c, 0x6b, 0x38, 0x4d, 0x52, 0x1c,
+	0xe4, 0x3c, 0xe1, 0xa8, 0x18, 0x8e, 0x31, 0x09, 0x7d, 0x08, 0x8b, 0x5a, 0x25, 0xe3, 0x38, 0xa4,
+	0x78, 0xf3, 0xcc, 0xad, 0x51, 0xc1, 0xb3, 0x91, 0xb1, 0xdf, 0x85, 0xb5, 0x3c, 0xb7, 0x96, 0xb7,
+	0x85, 0xf6, 0xdf, 0x95, 0x01, 0xc6, 0x18, 0xb9, 0xd6, 0x7f, 0x07, 0x16, 0x98, 0x42, 0x32, 0x8a,
+	0xf3, 0xde, 0x0c, 0xcb, 0x98, 0xbe, 0xc8, 0xd8, 0x88, 0xa2, 0x0f, 0xa5, 0xee, 0xb9, 0xdc, 0x5c,
+	0xa6, 0x77, 0x2e, 0x8a, 0x00, 0x78, 0x06, 0x40, 0x89, 0xa1, 0x3d, 0xa8, 0xc7, 0x37, 0xc1, 0x5c,
+	0x9b, 0xef, 0xcd, 0xb4, 0xa6, 0x19, 0x98, 0x44, 0x5c, 0x42, 0x51, 0x63, 0x72, 0xac, 0xda, 0x0c,
+	0xa8, 0x3c, 0xdb, 0x84, 0x13, 0x71, 0xfb, 0xef, 0xcb, 0xb0, 0x94, 0x0e, 0xa4, 0xd0, 0x1f, 0x94,
+	0xa0, 0x1d, 0xd1, 0x9f, 0x0c, 0xbd, 0x88, 0xba, 0x8f, 0x87, 0x91, 0x17, 0xf4, 0x0e, 0x9d, 0x3e,
+	0x75, 0x87, 0xd2, 0xe7, 0xed, 0xf5, 0x02, 0x96, 0x90, 0xa5, 0x75, 0x1c, 0x8a, 0x38, 0x5a, 0x9d,
+	0x15, 0xa8, 0x25, 0x96, 0x6a, 0x4e, 0x70, 0xf4, 0xa7, 0x25, 0xd8, 0x0c, 0x23, 0xa9, 0x00, 0x97,
+	0x9f, 0x90, 0x2e, 0x45, 0x5c, 0x90, 0x5f, 0xc7, 0x78, 0x63, 0xa4, 0x23, 0x1a, 0x0d, 0xf0, 0xbc,
+	0x03, 0xd9, 0x3d, 0xbd, 0x79, 0x89, 0xd9, 0xfd, 0x1c, 0xae, 0xa5, 0x2b, 0x00, 0x12, 0x94, 0x2b,
+	0x87, 0x71, 0x91, 0xbe, 0xec, 0x4f, 0x48, 0xe0, 0x69, 0x0c, 0xfb, 0x9f, 0x4a, 0xd0, 0x9a, 0xe4,
+	0x43, 0x5f, 0x42, 0x6b, 0x20, 0xe3, 0xf4, 0xdd, 0xf3, 0x30, 0xa2, 0x9c, 0xab, 0x9c, 0xae, 0x34,
+	0x63, 0xe9, 0x99, 0xb3, 0xd0, 0x27, 0xa1, 0xc2, 0x9a, 0x29, 0x24, 0x84, 0xe5, 0x1d, 0x17, 0x4e,
+	0x5f, 0xb9, 0x6e, 0x3e, 0x73, 0x4f, 0x8b, 0x80, 0xd3, 0x20, 0x76, 0x17, 0x6e, 0x16, 0xf0, 0xe5,
+	0xa4, 0x50, 0x2a, 0x34, 0xd5, 0xc3, 0x18, 0xeb, 0x98, 0xb4, 0xa5, 0xdd, 0x36, 0x6f, 0x98, 0x15,
+	0xe5, 0x8e, 0x4d, 0xcb, 0x3e, 0x84, 0xeb, 0x39, 0xb1, 0xcd, 0x44, 0x20, 0x39, 0x9d, 0x5d, 0xbd,
+	0x0e, 0x0d, 0x15, 0xfd, 0xc8, 0x5c, 0x27, 0x2e, 0x30, 0x26, 0x04, 0xfb, 0x23, 0x80, 0xc4, 0x2c,
+	0x90, 0xc4, 0x04, 0xd5, 0x52, 0x56, 0x3c, 0x53, 0xa0, 0x5c, 0x98, 0x28, 0x50, 0xda, 0xff, 0x5d,
+	0x06, 0x34, 0x6d, 0x57, 0xd0, 0x0b, 0x58, 0xd0, 0x7e, 0xf0, 0x6b, 0x19, 0x6f, 0x83, 0x31, 0x11,
+	0x6e, 0x94, 0xa7, 0xc2, 0x8d, 0x57, 0x1f, 0x11, 0x1c, 0x40, 0x3d, 0x29, 0xa1, 0x55, 0xaf, 0x1e,
+	0xba, 0x24, 0x20, 0x08, 0xc3, 0x12, 0x49, 0x07, 0x17, 0xb5, 0x2b, 0xcd, 0x31, 0x83, 0x61, 0xff,
+	0xac, 0x0c, 0xcd, 0x54, 0x7a, 0x87, 0xfe, 0xf0, 0x2a, 0xe6, 0xad, 0x32, 0x33, 0xe3, 0x33, 0xf0,
+	0xea, 0xfa, 0x7e, 0x13, 0x2c, 0xdc, 0xe7, 0xd4, 0xeb, 0xf5, 0x05, 0x75, 0x27, 0xe7, 0x36, 0xb7,
+	0x85, 0xfb, 0xc7, 0x32, 0xac, 0x4e, 0xa4, 0xb4, 0xff, 0xbf, 0x87, 0x73, 0xee, 0xe1, 0x5f, 0x97,
+	0xf4, 0x1e, 0xa6, 0x40, 0xd0, 0x0f, 0x61, 0xd9, 0x4f, 0x5f, 0x03, 0x63, 0x03, 0xae, 0x74, 0x83,
+	0xb2, 0x48, 0xd2, 0x12, 0x24, 0xb6, 0x47, 0xdb, 0xed, 0x06, 0x4e, 0x51, 0x64, 0xf0, 0x26, 0x58,
+	0xc8, 0x7c, 0xd6, 0x1b, 0x7d, 0x42, 0x47, 0x26, 0x1c, 0x4e, 0x93, 0xec, 0xbf, 0x2d, 0xc1, 0xcd,
+	0x82, 0x1a, 0x34, 0xb2, 0x61, 0x69, 0xe0, 0x05, 0x5b, 0x67, 0xc4, 0xf3, 0xc9, 0xb1, 0xaf, 0xc3,
+	0xac, 0x65, 0x9c, 0xa1, 0x65, 0x2c, 0x43, 0xf9, 0x55, 0x58, 0x86, 0x3b, 0xb0, 0x32, 0x20, 0xe7,
+	0x9f, 0x06, 0x24, 0x19, 0xb6, 0xa2, 0x86, 0x9d, 0xa0, 0xda, 0xff, 0x5e, 0x82, 0xd6, 0x64, 0xf8,
+	0x35, 0x33, 0x11, 0xcb, 0xcf, 0x6c, 0xca, 0xaf, 0x2a, 0xb3, 0xc9, 0xec, 0x46, 0xe5, 0x15, 0xec,
+	0x86, 0xfd, 0x9b, 0x70, 0xb3, 0x20, 0x82, 0x91, 0x7e, 0xf1, 0x2b, 0xa5, 0xb6, 0xa6, 0x30, 0x63,
+	0x5a, 0x68, 0x0f, 0x40, 0x6b, 0xad, 0xaa, 0x28, 0x95, 0x67, 0x44, 0xb0, 0x53, 0x11, 0x49, 0x4a,
+	0xd8, 0xfe, 0xcb, 0x0a, 0xac, 0x64, 0x2b, 0xf4, 0xe8, 0x97, 0xa1, 0x4a, 0xcf, 0xa9, 0x63, 0x74,
+	0xf8, 0xf6, 0x05, 0xb1, 0x68, 0x9c, 0x50, 0x63, 0x25, 0x80, 0x3e, 0x86, 0x45, 0x99, 0x2e, 0x3d,
+	0xa5, 0xb3, 0x33, 0xba, 0x4c, 0x6e, 0x88, 0x63, 0x31, 0xf4, 0x04, 0x1a, 0xc2, 0x09, 0x0f, 0x99,
+	0x73, 0x4a, 0xc5, 0xcc, 0xda, 0xdc, 0xd1, 0x4e, 0x47, 0x73, 0x1a, 0x94, 0xb1, 0x28, 0x7a, 0x1f,
+	0xae, 0xcb, 0xcb, 0xe9, 0x11, 0xff, 0x31, 0xf5, 0xc9, 0x28, 0x2e, 0x6f, 0x55, 0xd5, 0x2e, 0xe6,
+	0x75, 0xe5, 0xd4, 0xc2, 0x6a, 0x79, 0xb5, 0x30, 0xf4, 0x16, 0x2c, 0x87, 0x34, 0xf2, 0x98, 0x1b,
+	0xb3, 0x2d, 0x28, 0xb6, 0x2c, 0x11, 0xbd, 0x0b, 0x2d, 0x3e, 0x74, 0x1c, 0xca, 0xf9, 0x51, 0x3f,
+	0xa2, 0xbc, 0xcf, 0x7c, 0xd7, 0x5a, 0x54, 0x8c, 0x53, 0x74, 0xc9, 0x7b, 0x42, 0x3c, 0x7f, 0x18,
+	0xd1, 0x31, 0x6f, 0x5d, 0xf3, 0x4e, 0xd2, 0xed, 0x3f, 0x2b, 0xc1, 0x8d, 0xdc, 0xda, 0x8c, 0x9c,
+	0x97, 0x23, 0xd3, 0x4b, 0xa9, 0x7c, 0xa9, 0x9b, 0x91, 0x25, 0xea, 0x6f, 0xf5, 0x4c, 0xd6, 0x52,
+	0x8e, 0xbf, 0xd5, 0xe3, 0x71, 0xc5, 0x69, 0xd1, 0xf5, 0xce, 0x3c, 0x9e, 0xe8, 0xf5, 0xbc, 0xb7,
+	0x25, 0x16, 0xb7, 0xff, 0xb3, 0x04, 0x6b, 0x79, 0x39, 0x4f, 0x6e, 0xca, 0x7c, 0x0c, 0x56, 0xe6,
+	0x96, 0x7d, 0x2a, 0x3c, 0xdf, 0xfb, 0x29, 0x31, 0x36, 0x7d, 0x9e, 0xba, 0x40, 0x21, 0x4e, 0x81,
+	0x4d, 0xa8, 0xbc, 0xb2, 0x6a, 0xc7, 0x9f, 0x94, 0xa1, 0x91, 0x3c, 0xaa, 0xa0, 0x27, 0xb0, 0xe0,
+	0x7b, 0x03, 0x4f, 0xc4, 0xe1, 0xfb, 0xec, 0x32, 0x1b, 0x6f, 0xbf, 0x50, 0x02, 0xfa, 0xe1, 0xc5,
+	0x48, 0xa3, 0x17, 0xf2, 0xb0, 0x7e, 0x32, 0xa4, 0x5c, 0xcc, 0x8e, 0xd7, 0xc7, 0x48, 0xd8, 0x88,
+	0x68, 0xac, 0x04, 0x61, 0xfd, 0x57, 0xa0, 0x99, 0x1a, 0x64, 0xae, 0xa7, 0x92, 0xef, 0xc3, 0x72,
+	0x06, 0x75, 0xae, 0x07, 0x92, 0xbf, 0x2a, 0xc1, 0xcd, 0x82, 0xea, 0x2b, 0xda, 0x9f, 0x72, 0x04,
+	0xa5, 0xb9, 0x4e, 0x7c, 0x42, 0x1a, 0x6d, 0x43, 0x7d, 0x40, 0xce, 0x0f, 0x87, 0x51, 0x6f, 0xde,
+	0x17, 0x8c, 0x44, 0xce, 0xfe, 0xf3, 0x12, 0x5c, 0x9b, 0xaa, 0x26, 0x7e, 0xf3, 0xaa, 0xf9, 0xff,
+	0x51, 0x83, 0x66, 0xea, 0xa1, 0x12, 0x3d, 0x82, 0x5a, 0xc8, 0xa2, 0x44, 0xe7, 0x66, 0xbe, 0x6e,
+	0x76, 0x58, 0x24, 0xb0, 0x16, 0x41, 0xfb, 0x19, 0x07, 0x2f, 0xc5, 0xef, 0x5f, 0xe6, 0x71, 0xb4,
+	0x9d, 0x7d, 0x2d, 0x1f, 0xfb, 0xf7, 0xd7, 0xa1, 0xe1, 0xf8, 0x43, 0x2e, 0x68, 0xb4, 0xd7, 0x31,
+	0x01, 0xc9, 0x98, 0x90, 0x54, 0x74, 0xaa, 0xa9, 0x8a, 0xce, 0x06, 0x34, 0xe3, 0x1a, 0xc6, 0x5e,
+	0x47, 0x17, 0xe8, 0x1a, 0x38, 0x4d, 0x42, 0x77, 0x61, 0x95, 0xeb, 0x5c, 0x36, 0x79, 0xbb, 0x59,
+	0xd4, 0x1f, 0x04, 0x4c, 0x90, 0xa5, 0x25, 0xf7, 0x19, 0x71, 0xb7, 0x89, 0x4f, 0x02, 0x47, 0x4d,
+	0x41, 0xbf, 0x66, 0x4f, 0x50, 0xd1, 0x23, 0xb0, 0xd2, 0x14, 0x53, 0x4b, 0x21, 0x41, 0x8f, 0x72,
+	0xab, 0xa1, 0x26, 0x50, 0xd8, 0x2f, 0xc3, 0xa6, 0x78, 0x72, 0xca, 0xd8, 0xea, 0x4f, 0x4a, 0x32,
+	0x34, 0xf4, 0x01, 0xdc, 0x88, 0xdb, 0x47, 0x11, 0x39, 0x39, 0xf1, 0x1c, 0xfd, 0xc5, 0x82, 0xf9,
+	0xc2, 0x3b, 0xbf, 0x53, 0x7a, 0xae, 0x3e, 0x25, 0xbe, 0xe8, 0xef, 0xf4, 0xa9, 0x73, 0x2a, 0x5d,
+	0xb7, 0x3c, 0x29, 0xf5, 0x66, 0x5d, 0xc3, 0x79, 0x5d, 0x72, 0x1d, 0xe1, 0xf0, 0xd8, 0xf7, 0x78,
+	0x7f, 0x9f, 0x09, 0xe9, 0xca, 0x47, 0x5b, 0xae, 0x2b, 0xf3, 0x7e, 0xca, 0xd5, 0x4b, 0x75, 0x1d,
+	0x17, 0xf6, 0x23, 0x17, 0x6e, 0x4c, 0x6c, 0x9f, 0x2e, 0xcf, 0xab, 0x8f, 0xc1, 0x2f, 0xb2, 0x5c,
+	0x87, 0x79, 0x52, 0x38, 0x1f, 0x4c, 0xda, 0x8f, 0x2b, 0x3f, 0xf5, 0xda, 0x7f, 0x53, 0x4a, 0x14,
+	0xbd, 0x63, 0xea, 0xbe, 0x53, 0x3e, 0x64, 0x1d, 0xea, 0xea, 0x23, 0x28, 0x87, 0xf9, 0xb1, 0x5b,
+	0x8b, 0xdb, 0xaa, 0xee, 0x2c, 0x77, 0x50, 0x57, 0x35, 0x75, 0xed, 0xf8, 0x09, 0x80, 0xb6, 0xe2,
+	0x6a, 0x6f, 0xab, 0x73, 0x59, 0x8a, 0x94, 0xa4, 0x1c, 0x37, 0x88, 0x4f, 0x48, 0x87, 0x0b, 0x49,
+	0xdb, 0xfe, 0x12, 0x6e, 0xe4, 0x6e, 0x12, 0xda, 0x81, 0xba, 0x63, 0xde, 0xe1, 0x8c, 0xf9, 0x28,
+	0xfe, 0x76, 0x22, 0xfb, 0x60, 0x87, 0x13, 0x41, 0x9b, 0xc0, 0xea, 0x44, 0xf8, 0x93, 0x14, 0xd3,
+	0x4b, 0x5f, 0xa3, 0x98, 0x5e, 0x1e, 0x17, 0xd3, 0xed, 0xdf, 0x2e, 0xc1, 0xcd, 0x82, 0xa4, 0xa9,
+	0x30, 0x30, 0x35, 0x2f, 0xac, 0x29, 0x56, 0x63, 0x87, 0x2f, 0x9f, 0x2b, 0x4e, 0x02, 0xd8, 0xab,
+	0xb0, 0x9c, 0x99, 0xb2, 0x6d, 0xc1, 0x6b, 0xf9, 0x9f, 0xb2, 0xdb, 0xaf, 0xc1, 0x9a, 0x61, 0x3d,
+	0x88, 0x74, 0x9f, 0xfa, 0xf4, 0xcc, 0x5e, 0x03, 0x34, 0xfd, 0x41, 0xda, 0xf6, 0xc6, 0x17, 0xb7,
+	0xf4, 0xa4, 0xcc, 0xbf, 0x9e, 0x4c, 0xfd, 0x6f, 0xcb, 0xf1, 0x82, 0xd2, 0xa2, 0x07, 0xff, 0x1b,
+	0x00, 0x00, 0xff, 0xff, 0x0c, 0x05, 0x9c, 0xc1, 0xf7, 0x32, 0x00, 0x00,
 }
