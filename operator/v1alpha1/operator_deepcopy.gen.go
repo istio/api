@@ -8,9 +8,6 @@ package v1alpha1
 import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
-	_ "github.com/gogo/protobuf/types"
-	_ "k8s.io/apimachinery/pkg/api/resource"
-	_ "k8s.io/apimachinery/pkg/apis/meta/v1"
 	math "math"
 )
 

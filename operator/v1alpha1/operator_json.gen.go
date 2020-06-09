@@ -10,9 +10,6 @@ import (
 	fmt "fmt"
 	github_com_golang_protobuf_jsonpb "github.com/golang/protobuf/jsonpb"
 	proto "github.com/golang/protobuf/proto"
-	_ "github.com/golang/protobuf/types"
-	_ "k8s.io/apimachinery/pkg/api/resource"
-	_ "k8s.io/apimachinery/pkg/apis/meta/v1"
 	math "math"
 )
 
