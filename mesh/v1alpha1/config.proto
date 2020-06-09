@@ -478,8 +478,15 @@ message MeshConfig {
   // If not specified, this will be enabled by default.
   google.protobuf.BoolValue enable_prometheus_merge = 51;
 
+  // The amount of time allowed for connections to complete on proxy shutdown.
+	// On receiving SIGTERM or SIGINT, istio-agent tells the active Envoy to start draining,
+	// preventing any new connections and allowing existing connections to complete. It then
+  // sleeps for the termination_drain_duration and then kills any remaining active Envoy processes.
+  // If not set, a default of 5s will be applied.
+  google.protobuf.Duration  termination_drain_duration = 53;
+
   // $hide_from_docs
-  // Next available field number: 53
+  // Next available field number: 54
 }
 
 // Resource describes the source of configuration

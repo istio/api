@@ -244,6 +244,10 @@
             "description": "If enabled, Istio agent will merge metrics exposed by the application with metrics from Envoy and Istio agent. The sidecar injection will replace `prometheus.io` annotations present on the pod and redirect them towards Istio agent, which will then merge metrics of from the application with Istio metrics. This relies on the annotations `prometheus.io/scrape`, `prometheus.io/port`, and `prometheus.io/path` annotations. If you are running a separately managed Envoy with an Istio sidecar, this may cause issues, as the metrics will collide. In this case, it is recommended to disable aggregation on that deployment with the `prometheus.istio.io/merge-metrics: \"false\"` annotation. If not specified, this will be enabled by default.",
             "type": "boolean",
             "nullable": true
+          },
+          "terminationDrainDuration": {
+            "description": "The amount of time allowed for connections to complete on proxy shutdown. On receiving SIGTERM or SIGINT, istio-agent tells the active Envoy to start draining, preventing any new connections and allowing existing connections to complete. It then sleeps for the termination_drain_duration and then kills any remaining active Envoy processes. If not set, a default of 5s will be applied.",
+            "type": "string"
           }
         }
       },
