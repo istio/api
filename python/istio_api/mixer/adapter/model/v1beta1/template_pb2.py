@@ -19,8 +19,8 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='mixer/adapter/model/v1beta1/template.proto',
   package='istio.mixer.adapter.model.v1beta1',
   syntax='proto3',
-  serialized_options=_b('Z(istio.io/api/mixer/adapter/model/v1beta1'),
-  serialized_pb=_b('\n*mixer/adapter/model/v1beta1/template.proto\x12!istio.mixer.adapter.model.v1beta1\"\x1e\n\x08Template\x12\x12\n\ndescriptor\x18\x01 \x01(\tB*Z(istio.io/api/mixer/adapter/model/v1beta1b\x06proto3')
+  serialized_options=_b('Z(istio.io/api/mixer/adapter/model/v1beta1\270\001\001'),
+  serialized_pb=_b('\n*mixer/adapter/model/v1beta1/template.proto\x12!istio.mixer.adapter.model.v1beta1\"\x1e\n\x08Template\x12\x12\n\ndescriptor\x18\x01 \x01(\tB-Z(istio.io/api/mixer/adapter/model/v1beta1\xb8\x01\x01\x62\x06proto3')
 )
 
 
