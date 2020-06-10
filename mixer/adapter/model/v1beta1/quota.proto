@@ -16,6 +16,7 @@ syntax = "proto3";
 
 package istio.mixer.adapter.model.v1beta1;
 
+option deprecated = true;
 option go_package="istio.io/api/mixer/adapter/model/v1beta1";
 
 import "gogoproto/gogo.proto";
