@@ -1,4 +1,4 @@
-module istio.io/api
+module github.com/davidraskin/api
 
 go 1.12
 
