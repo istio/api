@@ -35899,6 +35899,11 @@
                 "type": "IngressControllerMode"
               },
               {
+                "id": 52,
+                "name": "ingress_selector",
+                "type": "string"
+              },
+              {
                 "id": 10,
                 "name": "auth_policy",
                 "type": "AuthPolicy",
@@ -45593,6 +45598,10 @@
               {
                 "name": "DENY",
                 "integer": 1
+              },
+              {
+                "name": "LOG",
+                "integer": 2
               }
             ]
           }

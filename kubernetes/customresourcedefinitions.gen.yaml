@@ -4049,6 +4049,7 @@ spec:
               enum:
               - ALLOW
               - DENY
+              - LOG
               type: string
             rules:
               description: Optional.

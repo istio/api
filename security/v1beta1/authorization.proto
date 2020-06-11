@@ -221,6 +221,9 @@ message AuthorizationPolicy {
 
     // Deny a request if it matches any of the rules.
     DENY = 1;
+
+    // Log a request if it matches any of the rules.
+    LOG = 2;
   }
 
   // Optional. The action to take if the request is matched with the rules.
