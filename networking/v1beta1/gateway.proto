@@ -656,10 +656,15 @@ message ServerTLSSettings {
 
   // For gateways running on Kubernetes, the name of the secret that
   // holds the TLS certs including the CA certificates. Applicable
-  // only on Kubernetes. The secret (of type`generic`) should
-  // contain the following keys and values: `key:
+  // only on Kubernetes, and only if the dynamic credential fetching
+  // feature is enabled in the proxy by setting
+  // `ISTIO_META_USER_SDS` metadata variable.  The secret (of type
+  // `generic`) should contain the following keys and values: `key:
   // <privateKey>`, `cert: <serverCert>`, `cacert: <CACertificate>`.
-  // Secret of type tls is also supported.
+  // Secret of type tls for server certificates along with
+  // ca.crt key for CA certificates is also supported.
+  // Only one of server certificates and CA certificate
+  // or credentialName can be specified.
   string credential_name = 10;
 
   // A list of alternate names to verify the subject identity in the

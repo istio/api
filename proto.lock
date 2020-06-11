@@ -41599,6 +41599,11 @@
                 "type": "string"
               },
               {
+                "id": 7,
+                "name": "credential_name",
+                "type": "string"
+              },
+              {
                 "id": 5,
                 "name": "subject_alt_names",
                 "type": "string",
