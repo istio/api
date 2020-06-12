@@ -43382,6 +43382,11 @@
                 "id": 1,
                 "name": "enabled",
                 "type": "TypeBoolValueForPB"
+              },
+              {
+                "id": 50,
+                "name": "k8s",
+                "type": "KubernetesResourcesSpec"
               }
             ]
           },
@@ -43558,6 +43563,12 @@
                 "id": 13,
                 "name": "strategy",
                 "type": "DeploymentStrategy"
+              },
+              {
+                "id": 14,
+                "name": "tolerations",
+                "type": "Toleration",
+                "is_repeated": true
               },
               {
                 "id": 100,
@@ -44424,6 +44435,36 @@
             ]
           },
           {
+            "name": "Toleration",
+            "fields": [
+              {
+                "id": 1,
+                "name": "key",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "operator",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "value",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "effect",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "tolerationSeconds",
+                "type": "int64"
+              }
+            ]
+          },
+          {
             "name": "WeightedPodAffinityTerm",
             "fields": [
               {
@@ -44456,16 +44497,10 @@
             "path": "google/protobuf/any.proto"
           },
           {
-            "path": "k8s.io/api/core/v1/generated.proto"
-          },
-          {
             "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
           },
           {
             "path": "k8s.io/apimachinery/pkg/api/resource/generated.proto"
-          },
-          {
-            "path": "k8s.io/apimachinery/pkg/util/intstr/generated.proto"
           }
         ],
         "package": {
