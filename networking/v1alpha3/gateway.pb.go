@@ -883,6 +883,10 @@ type ServerTLSSettings struct {
 	// only on Kubernetes. The secret (of type`generic`) should
 	// contain the following keys and values: `key:
 	// <privateKey>`, `cert: <serverCert>`, `cacert: <CACertificate>`.
+	// Secret of type tls for server certificates along with
+	// ca.crt key for CA certificates is also supported.
+	// Only one of server certificates and CA certificate
+	// or credentialName can be specified.
 	CredentialName string `protobuf:"bytes,10,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
 	// A list of alternate names to verify the subject identity in the
 	// certificate presented by the client.

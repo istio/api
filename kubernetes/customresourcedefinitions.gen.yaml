@@ -1093,6 +1093,9 @@ spec:
                                   description: REQUIRED if mode is `MUTUAL`.
                                   format: string
                                   type: string
+                                credentialName:
+                                  format: string
+                                  type: string
                                 mode:
                                   enum:
                                   - DISABLE
@@ -1126,6 +1129,9 @@ spec:
                             type: string
                           clientCertificate:
                             description: REQUIRED if mode is `MUTUAL`.
+                            format: string
+                            type: string
+                          credentialName:
                             format: string
                             type: string
                           mode:
@@ -1618,6 +1624,9 @@ spec:
                             description: REQUIRED if mode is `MUTUAL`.
                             format: string
                             type: string
+                          credentialName:
+                            format: string
+                            type: string
                           mode:
                             enum:
                             - DISABLE
@@ -1651,6 +1660,9 @@ spec:
                       type: string
                     clientCertificate:
                       description: REQUIRED if mode is `MUTUAL`.
+                      format: string
+                      type: string
+                    credentialName:
                       format: string
                       type: string
                     mode:
@@ -2405,6 +2417,9 @@ spec:
                         description: REQUIRED if mode is `MUTUAL`.
                         format: string
                         type: string
+                      credentialName:
+                        format: string
+                        type: string
                       mode:
                         enum:
                         - DISABLE
@@ -2453,6 +2468,9 @@ spec:
                       type: string
                     clientCertificate:
                       description: REQUIRED if mode is `MUTUAL`.
+                      format: string
+                      type: string
+                    credentialName:
                       format: string
                       type: string
                     mode:

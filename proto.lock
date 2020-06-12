@@ -35831,32 +35831,68 @@
               {
                 "id": 1,
                 "name": "mixer_check_server",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 2,
                 "name": "mixer_report_server",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 3,
                 "name": "disable_policy_checks",
-                "type": "bool"
+                "type": "bool",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 48,
                 "name": "disable_mixer_http_reports",
-                "type": "bool"
+                "type": "bool",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 25,
                 "name": "policy_check_fail_open",
-                "type": "bool"
+                "type": "bool",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 30,
                 "name": "sidecar_to_telemetry_session_affinity",
-                "type": "bool"
+                "type": "bool",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 4,
@@ -36066,17 +36102,35 @@
               {
                 "id": 37,
                 "name": "disable_report_batch",
-                "type": "bool"
+                "type": "bool",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 38,
                 "name": "report_batch_max_entries",
-                "type": "uint32"
+                "type": "uint32",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 39,
                 "name": "report_batch_max_time",
-                "type": "google.protobuf.Duration"
+                "type": "google.protobuf.Duration",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "id": 41,
@@ -36896,6 +36950,10 @@
         },
         "options": [
           {
+            "name": "deprecated",
+            "value": "true"
+          },
+          {
             "name": "go_package",
             "value": "istio.io/api/mixer/adapter/model/v1beta1"
           },
@@ -37017,6 +37075,10 @@
         },
         "options": [
           {
+            "name": "deprecated",
+            "value": "true"
+          },
+          {
             "name": "go_package",
             "value": "istio.io/api/mixer/adapter/model/v1beta1"
           }
@@ -37120,17 +37182,35 @@
               {
                 "name": "Validate",
                 "in_type": "ValidateRequest",
-                "out_type": "ValidateResponse"
+                "out_type": "ValidateResponse",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "name": "CreateSession",
                 "in_type": "CreateSessionRequest",
-                "out_type": "CreateSessionResponse"
+                "out_type": "CreateSessionResponse",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "name": "CloseSession",
                 "in_type": "CloseSessionRequest",
-                "out_type": "CloseSessionResponse"
+                "out_type": "CloseSessionResponse",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               }
             ]
           }
@@ -37147,6 +37227,10 @@
           "name": "istio.mixer.adapter.model.v1beta1"
         },
         "options": [
+          {
+            "name": "deprecated",
+            "value": "true"
+          },
           {
             "name": "go_package",
             "value": "istio.io/api/mixer/adapter/model/v1beta1"
@@ -37272,6 +37356,10 @@
         },
         "options": [
           {
+            "name": "deprecated",
+            "value": "true"
+          },
+          {
             "name": "go_package",
             "value": "istio.io/api/mixer/adapter/model/v1beta1"
           },
@@ -37307,6 +37395,10 @@
           "name": "istio.mixer.adapter.model.v1beta1"
         },
         "options": [
+          {
+            "name": "deprecated",
+            "value": "true"
+          },
           {
             "name": "go_package",
             "value": "istio.io/api/mixer/adapter/model/v1beta1"
@@ -37345,6 +37437,10 @@
           "name": "istio.mixer.adapter.model.v1beta1"
         },
         "options": [
+          {
+            "name": "deprecated",
+            "value": "true"
+          },
           {
             "name": "go_package",
             "value": "istio.io/api/mixer/adapter/model/v1beta1"
@@ -37562,6 +37658,10 @@
         },
         "options": [
           {
+            "name": "deprecated",
+            "value": "true"
+          },
+          {
             "name": "go_package",
             "value": "istio.io/api/mixer/v1"
           },
@@ -37728,6 +37828,10 @@
           "name": "istio.mixer.v1.config.client"
         },
         "options": [
+          {
+            "name": "deprecated",
+            "value": "true"
+          },
           {
             "name": "go_package",
             "value": "istio.io/api/mixer/v1/config/client"
@@ -37989,6 +38093,10 @@
         },
         "options": [
           {
+            "name": "deprecated",
+            "value": "true"
+          },
+          {
             "name": "go_package",
             "value": "istio.io/api/mixer/v1/config/client"
           },
@@ -38160,6 +38268,10 @@
         },
         "options": [
           {
+            "name": "deprecated",
+            "value": "true"
+          },
+          {
             "name": "go_package",
             "value": "istio.io/api/mixer/v1/config/client"
           },
@@ -38231,6 +38343,10 @@
           "name": "istio.mixer.v1.config.client"
         },
         "options": [
+          {
+            "name": "deprecated",
+            "value": "true"
+          },
           {
             "name": "go_package",
             "value": "istio.io/api/mixer/v1/config/client"
@@ -38650,12 +38766,24 @@
               {
                 "name": "Check",
                 "in_type": "CheckRequest",
-                "out_type": "CheckResponse"
+                "out_type": "CheckResponse",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               },
               {
                 "name": "Report",
                 "in_type": "ReportRequest",
-                "out_type": "ReportResponse"
+                "out_type": "ReportResponse",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               }
             ]
           }
@@ -38678,6 +38806,10 @@
           "name": "istio.mixer.v1"
         },
         "options": [
+          {
+            "name": "deprecated",
+            "value": "true"
+          },
           {
             "name": "go_package",
             "value": "istio.io/api/mixer/v1"
@@ -39147,6 +39279,11 @@
               {
                 "id": 4,
                 "name": "ca_certificates",
+                "type": "string"
+              },
+              {
+                "id": 7,
+                "name": "credential_name",
                 "type": "string"
               },
               {
@@ -41591,6 +41728,11 @@
               {
                 "id": 4,
                 "name": "ca_certificates",
+                "type": "string"
+              },
+              {
+                "id": 7,
+                "name": "credential_name",
                 "type": "string"
               },
               {
@@ -45062,6 +45204,10 @@
         },
         "options": [
           {
+            "name": "deprecated",
+            "value": "true"
+          },
+          {
             "name": "go_package",
             "value": "istio.io/api/policy/v1beta1"
           }
@@ -45337,6 +45483,10 @@
         },
         "options": [
           {
+            "name": "deprecated",
+            "value": "true"
+          },
+          {
             "name": "go_package",
             "value": "istio.io/api/policy/v1beta1"
           }
@@ -45494,6 +45644,10 @@
         },
         "options": [
           {
+            "name": "deprecated",
+            "value": "true"
+          },
+          {
             "name": "go_package",
             "value": "istio.io/api/policy/v1beta1"
           }
@@ -45561,6 +45715,10 @@
           "name": "istio.policy.v1beta1"
         },
         "options": [
+          {
+            "name": "deprecated",
+            "value": "true"
+          },
           {
             "name": "go_package",
             "value": "istio.io/api/policy/v1beta1"
