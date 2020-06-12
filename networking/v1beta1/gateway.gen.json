@@ -54,6 +54,11 @@
             "description": "The loopback IP endpoint or Unix domain socket to which traffic should be forwarded to by default. Format should be `127.0.0.1:PORT` or `unix:///path/to/socket` or `unix://@foobar` (Linux abstract namespace). NOT IMPLEMENTED. $hide_from_docs",
             "type": "string",
             "format": "string"
+          },
+          "statsPrefix": {
+            "description": "An optional stat prefix to be applied while generating proxy statistics for the requests that flow via this server configuration.",
+            "type": "string",
+            "format": "string"
           }
         }
       },

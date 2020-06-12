@@ -1996,6 +1996,9 @@ spec:
                         format: string
                         type: string
                     type: object
+                  statsPrefix:
+                    format: string
+                    type: string
                   tls:
                     description: Set of TLS related options that govern the server's
                       behavior.
