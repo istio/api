@@ -579,9 +579,10 @@ message Server {
   // $hide_from_docs
   string default_endpoint = 5;
 
-  // An optional stat prefix to be applied while generating proxy statistics
-  // for the requests that flow via this server configuration.
-  string stats_prefix = 6;
+  // An optional name of the server, when set must be unique across all servers.
+  // This will be used for variety of purposes like prefixing stats generated with
+  // this name etc.
+  string name = 6;
 }
 
 // Port describes the properties of a specific port of a service.

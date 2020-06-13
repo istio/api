@@ -605,12 +605,13 @@ https, and the TLS modes to use.</p>
 No
 </td>
 </tr>
-<tr id="Server-stats_prefix">
-<td><code>statsPrefix</code></td>
+<tr id="Server-name">
+<td><code>name</code></td>
 <td><code>string</code></td>
 <td>
-<p>An optional stat prefix to be applied while generating proxy statistics
-for the requests that flow via this server configuration.</p>
+<p>An optional name of the server, when set must be unique across all servers.
+This will be used for variety of purposes like prefixing stats generated with
+this name etc.</p>
 
 </td>
 <td>

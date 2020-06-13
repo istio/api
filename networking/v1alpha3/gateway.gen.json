@@ -31,6 +31,11 @@
         "description": "`Server` describes the properties of the proxy on a given load balancer port. For example,",
         "type": "object",
         "properties": {
+          "name": {
+            "description": "An optional name of the server, when set must be unique across all servers. This will be used for variety of purposes like prefixing stats generated with this name etc.",
+            "type": "string",
+            "format": "string"
+          },
           "tls": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.ServerTLSSettings"
           },
@@ -52,11 +57,6 @@
           },
           "defaultEndpoint": {
             "description": "The loopback IP endpoint or Unix domain socket to which traffic should be forwarded to by default. Format should be `127.0.0.1:PORT` or `unix:///path/to/socket` or `unix://@foobar` (Linux abstract namespace). NOT IMPLEMENTED. $hide_from_docs",
-            "type": "string",
-            "format": "string"
-          },
-          "statsPrefix": {
-            "description": "An optional stat prefix to be applied while generating proxy statistics for the requests that flow via this server configuration.",
             "type": "string",
             "format": "string"
           }
