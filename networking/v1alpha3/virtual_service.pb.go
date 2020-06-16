@@ -1004,6 +1004,75 @@ func (m *Delegate) GetNamespace() string {
 	return ""
 }
 
+// Message headers can be manipulated when Envoy forwards requests to,
+// or responses from, a destination service. Header manipulation rules can
+// be specified for a specific route destination or for all destinations.
+// The following VirtualService adds a `test` header with the value `true`
+// to requests that are routed to any `reviews` service destination.
+// It also romoves the `foo` response header, but only from responses
+// coming from the `v1` subset (version) of the `reviews` service.
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: reviews-route
+// spec:
+//   hosts:
+//   - reviews.prod.svc.cluster.local
+//   http:
+//   - headers:
+//       request:
+//         set:
+//           test: true
+//     route:
+//     - destination:
+//         host: reviews.prod.svc.cluster.local
+//         subset: v2
+//       weight: 25
+//     - destination:
+//         host: reviews.prod.svc.cluster.local
+//         subset: v1
+//       headers:
+//         response:
+//           remove:
+//           - foo
+//       weight: 75
+// ```
+// {{</tab>}}
+//
+// {{<tab name="v1beta1" category-value="v1beta1">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1beta1
+// kind: VirtualService
+// metadata:
+//   name: reviews-route
+// spec:
+//   hosts:
+//   - reviews.prod.svc.cluster.local
+//   http:
+//   - headers:
+//       request:
+//         set:
+//           test: true
+//     route:
+//     - destination:
+//         host: reviews.prod.svc.cluster.local
+//         subset: v2
+//       weight: 25
+//     - destination:
+//         host: reviews.prod.svc.cluster.local
+//         subset: v1
+//       headers:
+//         response:
+//           remove:
+//           - foo
+//       weight: 75
+// ```
+// {{</tab>}}
+// {{</tabset>}}
 type Headers struct {
 	// Header manipulation rules to apply before forwarding a request
 	// to the destination service
