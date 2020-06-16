@@ -62,7 +62,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // ```
 //
 // - The next example shows how to set a different JWT requirement for a different `host`. The `RequestAuthentication`
-// declares it can accpet JWTs issuer by either `issuer-foo` or `issuer-bar` (the public key set is implicitly
+// declares it can accept JWTs issued by either `issuer-foo` or `issuer-bar` (the public key set is implicitly
 // set from the OpenID Connect spec).
 //
 // ```yaml
