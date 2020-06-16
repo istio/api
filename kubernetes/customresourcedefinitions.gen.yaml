@@ -1994,6 +1994,11 @@ spec:
                       format: string
                       type: string
                     type: array
+                  name:
+                    description: An optional name of the server, when set must be
+                      unique across all servers.
+                    format: string
+                    type: string
                   port:
                     properties:
                       name:

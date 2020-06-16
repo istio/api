@@ -31,6 +31,11 @@
         "description": "`Server` describes the properties of the proxy on a given load balancer port. For example,",
         "type": "object",
         "properties": {
+          "name": {
+            "description": "An optional name of the server, when set must be unique across all servers. This will be used for variety of purposes like prefixing stats generated with this name etc.",
+            "type": "string",
+            "format": "string"
+          },
           "tls": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.ServerTLSSettings"
           },

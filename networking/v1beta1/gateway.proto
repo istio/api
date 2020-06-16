@@ -578,6 +578,11 @@ message Server {
   // NOT IMPLEMENTED.
   // $hide_from_docs
   string default_endpoint = 5;
+
+  // An optional name of the server, when set must be unique across all servers.
+  // This will be used for variety of purposes like prefixing stats generated with
+  // this name etc.
+  string name = 6;
 }
 
 // Port describes the properties of a specific port of a service.
