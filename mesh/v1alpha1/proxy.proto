@@ -382,6 +382,13 @@ message ProxyConfig {
   // to all the gateways in the cluster unless overriden via annotations of the
   // gateway workloads.
   Topology gateway_topology = 28;
+
+  // The amount of time allowed for connections to complete on proxy shutdown.
+	// On receiving SIGTERM or SIGINT, istio-agent tells the active Envoy to start draining,
+	// preventing any new connections and allowing existing connections to complete. It then
+  // sleeps for the termination_drain_duration and then kills any remaining active Envoy processes.
+  // If not set, a default of 5s will be applied.
+  google.protobuf.Duration  termination_drain_duration = 29;
 }
 
 message RemoteService {
