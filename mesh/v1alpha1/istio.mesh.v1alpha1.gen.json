@@ -406,6 +406,11 @@
           "terminationDrainDuration": {
             "description": "The amount of time allowed for connections to complete on proxy shutdown. On receiving SIGTERM or SIGINT, istio-agent tells the active Envoy to start draining, preventing any new connections and allowing existing connections to complete. It then sleeps for the termination_drain_duration and then kills any remaining active Envoy processes. If not set, a default of 5s will be applied.",
             "type": "string"
+          },
+          "holdApplicationUntilProxyStarts": {
+            "description": "Ensures that the Proxy container becomes ready before the other containers are started",
+            "type": "boolean",
+            "nullable": true
           }
         }
       },
