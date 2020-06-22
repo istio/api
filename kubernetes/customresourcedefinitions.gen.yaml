@@ -2186,7 +2186,6 @@ spec:
                   ports:
                     additionalProperties:
                       type: integer
-                    description: Set of ports associated with the endpoint.
                     type: object
                   serviceAccount:
                     format: string
@@ -3506,7 +3505,6 @@ spec:
             ports:
               additionalProperties:
                 type: integer
-              description: Set of ports associated with the endpoint.
               type: object
             serviceAccount:
               format: string

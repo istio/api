@@ -135,11 +135,11 @@
             }
           },
           "ports": {
-            "description": "Set of ports associated with the endpoint. The ports must be associated with a port name that was declared as part of the service. Do not use for `unix://` addresses.",
             "type": "object",
             "additionalProperties": {
               "type": "integer"
-            }
+            },
+            "deprecated": true
           },
           "weight": {
             "description": "The load balancing weight associated with the endpoint. Endpoints with higher weights will receive proportionally higher traffic.",
