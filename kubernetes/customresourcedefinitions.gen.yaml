@@ -2012,6 +2012,8 @@ spec:
                         description: The protocol exposed on the port.
                         format: string
                         type: string
+                      targetPort:
+                        type: integer
                     type: object
                   tls:
                     description: Set of TLS related options that govern the server's
@@ -2226,6 +2228,8 @@ spec:
                     description: The protocol exposed on the port.
                     format: string
                     type: string
+                  targetPort:
+                    type: integer
                 type: object
               type: array
             resolution:
@@ -2394,6 +2398,8 @@ spec:
                         description: The protocol exposed on the port.
                         format: string
                         type: string
+                      targetPort:
+                        type: integer
                     type: object
                 type: object
               type: array
@@ -2461,6 +2467,8 @@ spec:
                         description: The protocol exposed on the port.
                         format: string
                         type: string
+                      targetPort:
+                        type: integer
                     type: object
                 type: object
               type: array
