@@ -302,6 +302,8 @@ message ProxyConfig {
   // Port on which Envoy should listen for administrative commands.
   int32 proxy_admin_port = 11;
 
+  int32 proxy_status_port = 36;
+
   // $hide_from_docs
   string availability_zone = 12 [deprecated=true];
 
@@ -341,8 +343,15 @@ message ProxyConfig {
     TPROXY = 1;
   }
 
+  enum InboundInterceptionTechnique {
+    PROXY_INIT = 0;
+    CNI = 1;
+  }
+
   // The mode used to redirect inbound traffic to Envoy.
   InboundInterceptionMode interception_mode = 18;
+
+  InboundInterceptionTechnique interception_technique = 30;
 
   // Tracing configuration to be used by the proxy.
   Tracing tracing = 19;
@@ -389,6 +398,28 @@ message ProxyConfig {
   // sleeps for the termination_drain_duration and then kills any remaining active Envoy processes.
   // If not set, a default of 5s will be applied.
   google.protobuf.Duration  termination_drain_duration = 29;
+
+  // Custom DNS config for the pod to resolve names of services in other
+  // clusters. Use this to add additional search domains, and other settings.
+  // see
+  // https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#dns-config
+  // This does not apply to gateway pods as they typically need a different
+  // set of DNS settings than the normal application pods (e.g., in
+  // multicluster scenarios).
+  repeated string pod_dns_search_namespaces = 31;
+
+  bool rewrite_app_http_probe = 32;
+
+  string proxy_init_image = 33;
+  string proxy_init_image_pull_policy = 39;
+
+  repeated string include_outbound_ip_ranges = 34;
+  repeated string exclude_outbound_ip_ranges = 35;
+
+  repeated string include_inbound_ports = 37;
+  repeated string exclude_inbound_ports = 38;
+  repeated string include_outbound_ports = 40;
+  repeated string exclude_outbound_ports = 41;
 }
 
 message RemoteService {

@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 25
+number_of_entries: 26
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -243,6 +243,15 @@ No
 No
 </td>
 </tr>
+<tr id="ProxyConfig-proxy_status_port">
+<td><code>proxyStatusPort</code></td>
+<td><code>int32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="ProxyConfig-control_plane_auth_policy">
 <td><code>controlPlaneAuthPolicy</code></td>
 <td><code><a href="#AuthenticationPolicy">AuthenticationPolicy</a></code></td>
@@ -312,6 +321,15 @@ No
 <td>
 <p>The mode used to redirect inbound traffic to Envoy.</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-interception_technique">
+<td><code>interceptionTechnique</code></td>
+<td><code><a href="#ProxyConfig-InboundInterceptionTechnique">InboundInterceptionTechnique</a></code></td>
+<td>
 </td>
 <td>
 No
@@ -401,6 +419,104 @@ preventing any new connections and allowing existing connections to complete. It
 sleeps for the termination<em>drain</em>duration and then kills any remaining active Envoy processes.
 If not set, a default of 5s will be applied.</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-pod_dns_search_namespaces">
+<td><code>podDnsSearchNamespaces</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Custom DNS config for the pod to resolve names of services in other
+clusters. Use this to add additional search domains, and other settings.
+see
+https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#dns-config
+This does not apply to gateway pods as they typically need a different
+set of DNS settings than the normal application pods (e.g., in
+multicluster scenarios).</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-rewrite_app_http_probe">
+<td><code>rewriteAppHttpProbe</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-proxy_init_image">
+<td><code>proxyInitImage</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-proxy_init_image_pull_policy">
+<td><code>proxyInitImagePullPolicy</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-include_outbound_ip_ranges">
+<td><code>includeOutboundIpRanges</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-exclude_outbound_ip_ranges">
+<td><code>excludeOutboundIpRanges</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-include_inbound_ports">
+<td><code>includeInboundPorts</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-exclude_inbound_ports">
+<td><code>excludeInboundPorts</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-include_outbound_ports">
+<td><code>includeOutboundPorts</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-exclude_outbound_ports">
+<td><code>excludeOutboundPorts</code></td>
+<td><code>string[]</code></td>
+<td>
 </td>
 <td>
 No
@@ -1702,6 +1818,29 @@ source and destination IP addresses and ports, so that they can be used for adva
 filtering and manipulation. This mode also configures the sidecar to run with the
 CAP<em>NET</em>ADMIN capability, which is required to use TPROXY.</p>
 
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProxyConfig-InboundInterceptionTechnique">ProxyConfig.InboundInterceptionTechnique</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyConfig-InboundInterceptionTechnique-PROXY_INIT">
+<td><code>PROXY_INIT</code></td>
+<td>
+</td>
+</tr>
+<tr id="ProxyConfig-InboundInterceptionTechnique-CNI">
+<td><code>CNI</code></td>
+<td>
 </td>
 </tr>
 </tbody>
