@@ -411,10 +411,8 @@ No
 <td><code>int32</code></td>
 <td>
 <p>The unique identifier for the <a href="https://istio.io/latest/docs/reference/glossary/#service-mesh">service mesh</a>
-All control planes running in the same service mesh should specify with the same mesh ID.
-There are several usages of mesh ID:
-Telemetry: mesh ID (if not specified use the value of the mesh&rsquo;s Trust Domain instead) will be included in
-labels on metrics and logs to allow aggregating telemetry from multiple control planes.</p>
+All control planes running in the same service mesh should specify the same mesh ID.
+Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.</p>
 
 </td>
 <td>
