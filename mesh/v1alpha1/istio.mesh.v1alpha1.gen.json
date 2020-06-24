@@ -406,6 +406,11 @@
           "terminationDrainDuration": {
             "description": "The amount of time allowed for connections to complete on proxy shutdown. On receiving SIGTERM or SIGINT, istio-agent tells the active Envoy to start draining, preventing any new connections and allowing existing connections to complete. It then sleeps for the termination_drain_duration and then kills any remaining active Envoy processes. If not set, a default of 5s will be applied.",
             "type": "string"
+          },
+          "meshId": {
+            "description": "The unique identifier for the [service mesh](https://istio.io/latest/docs/reference/glossary/#service-mesh) All control planes running in the same service mesh should specify with the same mesh ID. There are several usages of mesh ID: Telemetry: mesh ID (if not specified use the value of the mesh's Trust Domain instead) will be included in labels on metrics and logs to allow aggregating telemetry from multiple control planes.",
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
