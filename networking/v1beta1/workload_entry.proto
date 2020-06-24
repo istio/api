@@ -263,7 +263,12 @@ message WorkloadEntry {
   // unix:///absolute/path/to/socket for Unix domain socket endpoints.
   string address = 1 [(google.api.field_behavior) = REQUIRED];
 
-  map<string, uint32> ports = 2 [deprecated = true];
+  // Set of ports associated with the endpoint. If targetPort is not
+  // specified, the ports must be associated with a port name that was
+  // declared as part of the service. Do not use for `unix://`
+  // addresses. If targetPort is specified as a port name, the numeric
+  // target port is derived from the associated named port.
+  map<string, uint32> ports = 2;
 
   // One or more labels associated with the endpoint.
   map<string, string> labels = 3;
