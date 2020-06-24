@@ -19,11 +19,11 @@
             }
           },
           "ports": {
+            "description": "Set of ports associated with the endpoint. If targetPort is not specified, the ports must be associated with a port name that was declared as part of the service. Do not use for `unix://` addresses. If targetPort is specified as a port name, the numeric target port is derived from the associated named port.",
             "type": "object",
             "additionalProperties": {
               "type": "integer"
-            },
-            "deprecated": true
+            }
           },
           "weight": {
             "description": "The load balancing weight associated with the endpoint. Endpoints with higher weights will receive proportionally higher traffic.",

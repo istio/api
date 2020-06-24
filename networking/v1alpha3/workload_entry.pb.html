@@ -249,6 +249,21 @@ unix:///absolute/path/to/socket for Unix domain socket endpoints.</p>
 Yes
 </td>
 </tr>
+<tr id="WorkloadEntry-ports">
+<td><code>ports</code></td>
+<td><code>map&lt;string,&nbsp;uint32&gt;</code></td>
+<td>
+<p>Set of ports associated with the endpoint. If targetPort is not
+specified, the ports must be associated with a port name that was
+declared as part of the service. Do not use for <code>unix://</code>
+addresses. If targetPort is specified as a port name, the numeric
+target port is derived from the associated named port.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="WorkloadEntry-labels">
 <td><code>labels</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
@@ -326,15 +341,6 @@ is present in the workload. The service account must be present
 in the same namespace as the configuration ( WorkloadEntry or a
 ServiceEntry)</p>
 
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="WorkloadEntry-ports" class="deprecated ">
-<td><code>ports</code></td>
-<td><code>map&lt;string,&nbsp;uint32&gt;</code></td>
-<td>
 </td>
 <td>
 No

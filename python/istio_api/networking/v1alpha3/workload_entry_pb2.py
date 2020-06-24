@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.networking.v1alpha3',
   syntax='proto3',
   serialized_options=_b('Z istio.io/api/networking/v1alpha3'),
-  serialized_pb=_b('\n(networking/v1alpha3/workload_entry.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\"\xdc\x02\n\rWorkloadEntry\x12\x14\n\x07\x61\x64\x64ress\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x46\n\x05ports\x18\x02 \x03(\x0b\x32\x33.istio.networking.v1alpha3.WorkloadEntry.PortsEntryB\x02\x18\x01\x12\x44\n\x06labels\x18\x03 \x03(\x0b\x32\x34.istio.networking.v1alpha3.WorkloadEntry.LabelsEntry\x12\x0f\n\x07network\x18\x04 \x01(\t\x12\x10\n\x08locality\x18\x05 \x01(\t\x12\x0e\n\x06weight\x18\x06 \x01(\r\x12\x17\n\x0fservice_account\x18\x07 \x01(\t\x1a,\n\nPortsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\r:\x02\x38\x01\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
+  serialized_pb=_b('\n(networking/v1alpha3/workload_entry.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\"\xd8\x02\n\rWorkloadEntry\x12\x14\n\x07\x61\x64\x64ress\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x42\n\x05ports\x18\x02 \x03(\x0b\x32\x33.istio.networking.v1alpha3.WorkloadEntry.PortsEntry\x12\x44\n\x06labels\x18\x03 \x03(\x0b\x32\x34.istio.networking.v1alpha3.WorkloadEntry.LabelsEntry\x12\x0f\n\x07network\x18\x04 \x01(\t\x12\x10\n\x08locality\x18\x05 \x01(\t\x12\x0e\n\x06weight\x18\x06 \x01(\r\x12\x17\n\x0fservice_account\x18\x07 \x01(\t\x1a,\n\nPortsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\r:\x02\x38\x01\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,])
 
@@ -61,8 +61,8 @@ _WORKLOADENTRY_PORTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=362,
-  serialized_end=406,
+  serialized_start=358,
+  serialized_end=402,
 )
 
 _WORKLOADENTRY_LABELSENTRY = _descriptor.Descriptor(
@@ -98,8 +98,8 @@ _WORKLOADENTRY_LABELSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=408,
-  serialized_end=453,
+  serialized_start=404,
+  serialized_end=449,
 )
 
 _WORKLOADENTRY = _descriptor.Descriptor(
@@ -122,7 +122,7 @@ _WORKLOADENTRY = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=_b('\030\001'), file=DESCRIPTOR),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='labels', full_name='istio.networking.v1alpha3.WorkloadEntry.labels', index=2,
       number=3, type=11, cpp_type=10, label=3,
@@ -171,7 +171,7 @@ _WORKLOADENTRY = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=105,
-  serialized_end=453,
+  serialized_end=449,
 )
 
 _WORKLOADENTRY_PORTSENTRY.containing_type = _WORKLOADENTRY
@@ -209,5 +209,4 @@ DESCRIPTOR._options = None
 _WORKLOADENTRY_PORTSENTRY._options = None
 _WORKLOADENTRY_LABELSENTRY._options = None
 _WORKLOADENTRY.fields_by_name['address']._options = None
-_WORKLOADENTRY.fields_by_name['ports']._options = None
 # @@protoc_insertion_point(module_scope)

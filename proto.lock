@@ -39992,7 +39992,7 @@
               {
                 "id": 4,
                 "name": "target_port",
-                "type": "uint32"
+                "type": "string"
               }
             ]
           },
@@ -41270,13 +41270,7 @@
                 "field": {
                   "id": 2,
                   "name": "ports",
-                  "type": "uint32",
-                  "options": [
-                    {
-                      "name": "deprecated",
-                      "value": "true"
-                    }
-                  ]
+                  "type": "uint32"
                 }
               },
               {
@@ -42030,7 +42024,7 @@
               {
                 "id": 4,
                 "name": "target_port",
-                "type": "uint32"
+                "type": "string"
               }
             ]
           },
@@ -43308,13 +43302,7 @@
                 "field": {
                   "id": 2,
                   "name": "ports",
-                  "type": "uint32",
-                  "options": [
-                    {
-                      "name": "deprecated",
-                      "value": "true"
-                    }
-                  ]
+                  "type": "uint32"
                 }
               },
               {
