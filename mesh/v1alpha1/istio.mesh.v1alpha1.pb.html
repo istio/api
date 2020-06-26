@@ -406,6 +406,19 @@ If not set, a default of 5s will be applied.</p>
 No
 </td>
 </tr>
+<tr id="ProxyConfig-mesh_id">
+<td><code>meshId</code></td>
+<td><code>int32</code></td>
+<td>
+<p>The unique identifier for the <a href="https://istio.io/latest/docs/reference/glossary/#service-mesh">service mesh</a>
+All control planes running in the same service mesh should specify the same mesh ID.
+Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="ProxyConfig-zipkin_address" class="deprecated ">
 <td><code>zipkinAddress</code></td>
 <td><code>string</code></td>
