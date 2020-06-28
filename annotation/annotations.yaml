@@ -267,6 +267,26 @@ annotations:
     hidden: false
     resources:
       - Pod
+  - name: traffic.sidecar.istio.io/targetPort
+    description: The port where envoy listens for all TCP traffic
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+  - name: traffic.sidecar.istio.io/noRedirectUID
+    description: the UID of the user for which the redirection is not
+      applied. Typically, this is the UID of the proxy container
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
+  - name: traffic.sidecar.istio.io/noRedirectGID
+    description: the GID of the user for which the redirection is not applied.
+      Typically, this is the GID of the proxy container. Same default as UID
+    deprecated: false
+    hidden: false
+    resources:
+      - Pod
   - name: traffic.sidecar.istio.io/excludeOutboundPorts
     description: A comma separated list of outbound ports to be excluded from redirection
       to Envoy.

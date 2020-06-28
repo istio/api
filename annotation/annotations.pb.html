@@ -477,5 +477,35 @@ Istio supports to control its behavior.
 				</tr>
 			
 		
+			
+				
+					<tr>
+				
+					<td><code>traffic.sidecar.istio.io/noRedirectGID</code></td>
+					<td>[Pod]</td>
+					<td>the GID of the user for which the redirection is not applied. Typically, this is the GID of the proxy container. Same default as UID</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
+					<td><code>traffic.sidecar.istio.io/noRedirectUID</code></td>
+					<td>[Pod]</td>
+					<td>the UID of the user for which the redirection is not applied. Typically, this is the UID of the proxy container</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
+					<td><code>traffic.sidecar.istio.io/targetPort</code></td>
+					<td>[Pod]</td>
+					<td>The port where envoy listens for all TCP traffic</td>
+				</tr>
+			
+		
 	</tbody>
 </table>

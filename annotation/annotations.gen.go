@@ -515,6 +515,34 @@ var (
 		  Resources: []ResourceTypes{ Pod, },
         }
 	
+		SidecarTrafficNoRedirectGID = Instance {
+          Name: "traffic.sidecar.istio.io/noRedirectGID",
+          Description: "the GID of the user for which the redirection is not "+
+                        "applied. Typically, this is the GID of the proxy "+
+                        "container. Same default as UID",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
+        }
+	
+		SidecarTrafficNoRedirectUID = Instance {
+          Name: "traffic.sidecar.istio.io/noRedirectUID",
+          Description: "the UID of the user for which the redirection is not "+
+                        "applied. Typically, this is the UID of the proxy "+
+                        "container",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
+        }
+	
+		SidecarTrafficTargetPort = Instance {
+          Name: "traffic.sidecar.istio.io/targetPort",
+          Description: "The port where envoy listens for all TCP traffic",
+          Hidden: false,
+          Deprecated: false,
+		  Resources: []ResourceTypes{ Pod, },
+        }
+	
 )
 
 func AllResourceAnnotations() []*Instance {
@@ -568,6 +596,9 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarTrafficIncludeOutboundIPRanges,
 		&SidecarTrafficIncludeOutboundPorts,
 		&SidecarTrafficKubevirtInterfaces,
+		&SidecarTrafficNoRedirectGID,
+		&SidecarTrafficNoRedirectUID,
+		&SidecarTrafficTargetPort,
 	}
 }
 
