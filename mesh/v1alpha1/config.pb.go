@@ -328,7 +328,7 @@ type MeshConfig struct {
 	// can be configured for a single control plane.
 	ConfigSources []*ConfigSource `protobuf:"bytes,22,rep,name=config_sources,json=configSources,proto3" json:"configSources,omitempty"`
 	// This flag is used to enable mutual TLS automatically for service to service communication
-	// within the mesh, default false.
+	// within the mesh, default true.
 	// If set to true, and a given service does not have a corresponding DestinationRule configured,
 	// or its DestinationRule does not have ClientTLSSettings specified, Istio configures client side
 	// TLS configuration appropriately. More specifically,
