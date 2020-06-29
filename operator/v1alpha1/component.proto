@@ -44,6 +44,9 @@ message IstioComponentSetSpec {
 message BaseComponentSpec {
     // Selects whether this component is installed.
     TypeBoolValueForPB enabled = 1;
+
+    // Kubernetes resource spec.
+    KubernetesResourcesSpec k8s = 50;
 }
 
 // Configuration for internal components.
