@@ -30,6 +30,7 @@ prototool = prototool
 annotations_prep = annotations_prep
 htmlproofer = htmlproofer
 cue = cue-gen -paths=common-protos
+validate_crds = python3 $(repo_dir)/scripts/validate_crds.py
 
 go_plugin_prefix := --go_out=plugins=grpc,
 go_plugin := $(go_plugin_prefix):$(out_path)
@@ -105,6 +106,7 @@ gen: \
 	generate-annotations \
 	generate-openapi-schema \
 	generate-openapi-crd \
+	check-crds-schema-equality \
 	tidy-go \
 	mirror-licenses \
 
@@ -503,6 +505,10 @@ clean-openapi-schema:
 
 clean-openapi-crd:
 	@rm -f $(all_openapi_crd)
+
+# Some networking APIs need to have the same schema for their v1alpha3 and v1beta1 versions.
+check-crds-schema-equality:
+	@$(validate_crds) check_equal_schema --kinds VirtualService,DestinationRule,Gateway,Sidecar,ServiceEntry,WorkloadEntry --versions v1alpha3,v1beta1 --file $(repo_dir)/kubernetes/customresourcedefinitions.gen.yaml
 
 #####################
 # Cleanup

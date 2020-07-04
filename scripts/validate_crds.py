@@ -29,7 +29,7 @@ def equal_schema(args):
                     continue
                 kind = val["spec"]["names"]["kind"]
                 if kind in kinds:
-                    print("Checking schemas in " + kind + "...")
+                    print("Checking schema equality in " + kind + "...")
                     for version in val["spec"]["versions"]:
                         if version["name"] in versions:
                             try:
