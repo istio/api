@@ -30,6 +30,7 @@ prototool = prototool
 annotations_prep = annotations_prep
 htmlproofer = htmlproofer
 cue = cue-gen -paths=common-protos
+validate_crds = python3 $(repo_dir)/scripts/validate_crds.py
 
 go_plugin_prefix := --go_out=plugins=grpc,
 go_plugin := $(go_plugin_prefix):$(out_path)
@@ -214,7 +215,7 @@ operator_v1alpha1_k8s_gos := \
 
 $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons) $(operator_v1alpha1_k8s_gos): $(operator_v1alpha1_protos)
 	@$(protolock) status
-	@$(protoc) $(go_plugin) $(protoc_gen_docs_plugin)$(operator_v1alpha1_path) $(protoc_gen_python_plugin) $^
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin)$(operator_v1alpha1_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/operator/* operator
 	@go run $(repo_dir)/operator/fixup_structs/main.go -f $(operator_v1alpha1_path)/operator.pb.go
 	@sed -i 's|<key,value,effect>|\&lt\;key,value,effect\&gt\;|g' $(operator_v1alpha1_path)/istio.operator.v1alpha1.pb.html
@@ -493,6 +494,8 @@ $(all_openapi): $(all_protos)
 # The fields are added at the end to generate snake cases. This is a temporary solution to accommodate some wrong namings that currently exist.
 $(all_openapi_crd): $(all_protos)
 	@$(cue) -f=$(repo_dir)/cue.yaml --crd=true -snake=jwksUri,apiKeys,apiSpecs,includedPaths,jwtHeaders,triggerRules,excludedPaths,mirrorPercent
+	# Some networking APIs need to have the same schema for their v1alpha3 and v1beta1 versions.
+	@$(validate_crds) check_equal_schema --kinds VirtualService,DestinationRule,Gateway,Sidecar,ServiceEntry,WorkloadEntry --versions v1alpha3,v1beta1 --file $(all_openapi_crd)
 
 generate-openapi-schema: $(all_openapi)
 

@@ -544,7 +544,7 @@ func (m *Gateway) GetSelector() map[string]string {
 //   name: my-ingress
 // spec:
 //   selector:
-//     app: my-ingress-gateway
+//     app: my-ingressgateway
 //   servers:
 //   - port:
 //       number: 80
@@ -563,7 +563,7 @@ func (m *Gateway) GetSelector() map[string]string {
 //   name: my-ingress
 // spec:
 //   selector:
-//     app: my-ingress-gateway
+//     app: my-ingressgateway
 //   servers:
 //   - port:
 //       number: 80
@@ -586,7 +586,7 @@ func (m *Gateway) GetSelector() map[string]string {
 //   name: my-tcp-ingress
 // spec:
 //   selector:
-//     app: my-tcp-ingress-gateway
+//     app: my-tcp-ingressgateway
 //   servers:
 //   - port:
 //       number: 27018
@@ -605,7 +605,7 @@ func (m *Gateway) GetSelector() map[string]string {
 //   name: my-tcp-ingress
 // spec:
 //   selector:
-//     app: my-tcp-ingress-gateway
+//     app: my-tcp-ingressgateway
 //   servers:
 //   - port:
 //       number: 27018
@@ -628,7 +628,7 @@ func (m *Gateway) GetSelector() map[string]string {
 //   name: my-tls-ingress
 // spec:
 //   selector:
-//     app: my-tls-ingress-gateway
+//     app: my-tls-ingressgateway
 //   servers:
 //   - port:
 //       number: 443
@@ -651,7 +651,7 @@ func (m *Gateway) GetSelector() map[string]string {
 //   name: my-tls-ingress
 // spec:
 //   selector:
-//     app: my-tls-ingress-gateway
+//     app: my-tls-ingressgateway
 //   servers:
 //   - port:
 //       number: 443

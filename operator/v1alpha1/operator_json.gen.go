@@ -8,9 +8,10 @@ package v1alpha1
 import (
 	bytes "bytes"
 	fmt "fmt"
-	github_com_golang_protobuf_jsonpb "github.com/golang/protobuf/jsonpb"
-	proto "github.com/golang/protobuf/proto"
 	math "math"
+
+	github_com_golang_protobuf_jsonpb "github.com/gogo/protobuf/jsonpb"
+	proto "github.com/gogo/protobuf/proto"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.

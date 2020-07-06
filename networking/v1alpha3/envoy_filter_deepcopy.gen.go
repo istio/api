@@ -162,7 +162,7 @@
 // spec:
 //   workloadSelector:
 //     labels:
-//       istio: ingress-gateway
+//       istio: ingressgateway
 //   configPatches:
 //   - applyTo: NETWORK_FILTER # http connection manager is a filter in Envoy
 //     match:
