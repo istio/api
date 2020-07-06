@@ -253,11 +253,22 @@ Yes
 <td><code>ports</code></td>
 <td><code>map&lt;string,&nbsp;uint32&gt;</code></td>
 <td>
-<p>Set of ports associated with the endpoint. If targetPort is not
-specified, the ports must be associated with a port name that was
-declared as part of the service. Do not use for <code>unix://</code>
-addresses. If targetPort is specified as a port name, the numeric
-target port is derived from the associated named port.</p>
+<p>Set of ports associated with the endpoint. If omitted, and the
+targetPort is not specified as part of the service&rsquo;s port
+specification, traffic to a service port will be forwarded to one
+of the endpoints on the same port. If the targetPort is specified
+as part of the service&rsquo;s port specification, traffic to the
+service port will be forwarded to one of the endpoints on the
+specified <code>targetPort</code>. If the port map is specified (and
+targetPort is omitted), it must be a map of servicePortName to
+this endpoint&rsquo;s port, such that traffic to the service port will
+be forwarded to the endpoint port that maps to the service&rsquo;s
+portName.</p>
+
+<p><strong>NOTE 1:</strong> Do not use for <code>unix://</code> addresses.</p>
+
+<p><strong>NOTE 2:</strong> targetPort if specified takes precendence over the
+endpoint port map.</p>
 
 </td>
 <td>

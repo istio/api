@@ -260,11 +260,22 @@ type WorkloadEntry struct {
 	// to DNS, and must be fully-qualified without wildcards. Use the form
 	// unix:///absolute/path/to/socket for Unix domain socket endpoints.
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	// Set of ports associated with the endpoint. If targetPort is not
-	// specified, the ports must be associated with a port name that was
-	// declared as part of the service. Do not use for `unix://`
-	// addresses. If targetPort is specified as a port name, the numeric
-	// target port is derived from the associated named port.
+	// Set of ports associated with the endpoint. If omitted, and the
+	// targetPort is not specified as part of the service's port
+	// specification, traffic to a service port will be forwarded to one
+	// of the endpoints on the same port. If the targetPort is specified
+	// as part of the service's port specification, traffic to the
+	// service port will be forwarded to one of the endpoints on the
+	// specified `targetPort`. If the port map is specified (and
+	// targetPort is omitted), it must be a map of servicePortName to
+	// this endpoint's port, such that traffic to the service port will
+	// be forwarded to the endpoint port that maps to the service's
+	// portName.
+	//
+	// **NOTE 1:** Do not use for `unix://` addresses.
+	//
+	// **NOTE 2:** targetPort if specified takes precendence over the
+	// endpoint port map.
 	Ports map[string]uint32 `protobuf:"bytes,2,rep,name=ports,proto3" json:"ports,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"varint,2,opt,name=value,proto3"`
 	// One or more labels associated with the endpoint.
 	Labels map[string]string `protobuf:"bytes,3,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`

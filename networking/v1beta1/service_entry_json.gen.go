@@ -508,16 +508,13 @@
 // {{</tab>}}
 // {{</tabset>}}
 //
-// For HTTP-based services, it is possible to create a
-// `VirtualService` backed by multiple DNS addressable endpoints. In
-// such a scenario, the application can use the `HTTP_PROXY`
-// environment variable to transparently reroute API calls for the
-// `VirtualService` to a chosen backend. For example, the following
-// configuration creates a non-existent external service called
-// foo.bar.com exposed to clients over port 80 and backed by three
-// domains: us.foo.bar.com, uk.foo.bar.com, and in.foo.bar.com on
-// target port 8080 (i.e., traffic will be sent to
-// us.foo.bar.com:8080).
+// For HTTP-based services, it is possible to create a `VirtualService`
+// backed by multiple DNS addressable endpoints. In such a scenario, the
+// application can use the `HTTP_PROXY` environment variable to transparently
+// reroute API calls for the `VirtualService` to a chosen backend. For
+// example, the following configuration creates a non-existent external
+// service called foo.bar.com backed by three domains: us.foo.bar.com:8080,
+// uk.foo.bar.com:9080, and in.foo.bar.com:7080
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
@@ -534,12 +531,17 @@
 //   - number: 80
 //     name: http
 //     protocol: HTTP
-//     targetPort: 8080
 //   resolution: DNS
 //   endpoints:
 //   - address: us.foo.bar.com
+//     ports:
+//       http: 8080
 //   - address: uk.foo.bar.com
+//     ports:
+//       http: 9080
 //   - address: in.foo.bar.com
+//     ports:
+//       http: 7080
 // ```
 // {{</tab>}}
 //
@@ -557,12 +559,17 @@
 //   - number: 80
 //     name: http
 //     protocol: HTTP
-//     targetPort: 8080
 //   resolution: DNS
 //   endpoints:
 //   - address: us.foo.bar.com
+//     ports:
+//       http: 8080
 //   - address: uk.foo.bar.com
+//     ports:
+//       http: 9080
 //   - address: in.foo.bar.com
+//     ports:
+//       http: 7080
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -632,13 +639,11 @@
 // VM-based instances with sidecars as well as a set of Kubernetes
 // pods managed by a standard deployment object. Consumers of this
 // service in the mesh will be automatically load balanced across the
-// VMs and Kubernetes.  The VMs for the `details.bookinfo.com` service
-// have sidecar installed and bootstrapped using the `details-legacy`
-// service account. The service is exposed by the sidecar on port 80
-// to applications in the mesh. The HTTP traffic is then wrapped in
-// Istio mutual TLS and sent to sidecars on VMs or Kubernetes pods on
-// target port 8080, that in turn forward it to the application on
-// localhost on the same port.
+// VMs and Kubernetes.  VM for the `details.bookinfo.com`
+// service. This VM has sidecar installed and bootstrapped using the
+// `details-legacy` service account. The sidecar receives HTTP traffic
+// on port 80 (wrapped in istio mutual TLS) and forwards it to the
+// application on the localhost on the same port.
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
@@ -714,7 +719,6 @@
 //   - number: 80
 //     name: http
 //     protocol: HTTP
-//     targetPort: 8080
 //   resolution: STATIC
 //   workloadSelector:
 //     labels:
@@ -736,7 +740,6 @@
 //   - number: 80
 //     name: http
 //     protocol: HTTP
-//     targetPort: 8080
 //   resolution: STATIC
 //   workloadSelector:
 //     labels:
