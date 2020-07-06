@@ -997,10 +997,12 @@ type ProxyConfig struct {
 	ServiceCluster string `protobuf:"bytes,3,opt,name=service_cluster,json=serviceCluster,proto3" json:"serviceCluster,omitempty"`
 	// The time in seconds that Envoy will drain connections during a hot
 	// restart. MUST be >=1s (e.g., _1s/1m/1h_)
+	// Default drain duration is 45s.
 	DrainDuration *types.Duration `protobuf:"bytes,4,opt,name=drain_duration,json=drainDuration,proto3" json:"drainDuration,omitempty"`
 	// The time in seconds that Envoy will wait before shutting down the
 	// parent process during a hot restart. MUST be >=1s (e.g., _1s/1m/1h_).
 	// MUST BE greater than _drain_duration_ parameter.
+	// Default shutdown duration is 60s.
 	ParentShutdownDuration *types.Duration `protobuf:"bytes,5,opt,name=parent_shutdown_duration,json=parentShutdownDuration,proto3" json:"parentShutdownDuration,omitempty"`
 	// Address of the discovery service exposing xDS with mTLS connection.
 	// The inject configuration may override this value.
@@ -1015,11 +1017,13 @@ type ProxyConfig struct {
 	// $hide_from_docs
 	EnvoyMetricsServiceAddress string `protobuf:"bytes,20,opt,name=envoy_metrics_service_address,json=envoyMetricsServiceAddress,proto3" json:"envoyMetricsServiceAddress,omitempty"` // Deprecated: Do not use.
 	// Port on which Envoy should listen for administrative commands.
+	// Default port is 15000.
 	ProxyAdminPort int32 `protobuf:"varint,11,opt,name=proxy_admin_port,json=proxyAdminPort,proto3" json:"proxyAdminPort,omitempty"`
 	// $hide_from_docs
 	AvailabilityZone string `protobuf:"bytes,12,opt,name=availability_zone,json=availabilityZone,proto3" json:"availabilityZone,omitempty"` // Deprecated: Do not use.
 	// Authentication policy defines the global switch to control authentication
 	// for Envoy-to-Envoy communication for istio components Mixer and Pilot.
+	// Default is set to MUTUAL_TLS.
 	ControlPlaneAuthPolicy AuthenticationPolicy `protobuf:"varint,13,opt,name=control_plane_auth_policy,json=controlPlaneAuthPolicy,proto3,enum=istio.mesh.v1alpha1.AuthenticationPolicy" json:"controlPlaneAuthPolicy,omitempty"`
 	// File path of custom proxy configuration, currently used by proxies
 	// in front of Mixer and Pilot.
@@ -1033,6 +1037,7 @@ type ProxyConfig struct {
 	// The number of worker threads to run.
 	// If unset, this will be automatically determined based on CPU requests/limits.
 	// If set to 0, all cores on the machine will be used.
+	// Default is 2 worker threads.
 	Concurrency *types.Int32Value `protobuf:"bytes,16,opt,name=concurrency,proto3" json:"concurrency,omitempty"`
 	// Path to the proxy bootstrap template file
 	ProxyBootstrapTemplatePath string `protobuf:"bytes,17,opt,name=proxy_bootstrap_template_path,json=proxyBootstrapTemplatePath,proto3" json:"proxyBootstrapTemplatePath,omitempty"`
@@ -1056,6 +1061,7 @@ type ProxyConfig struct {
 	// Names starting with ISTIO_META_ will be included in the generated bootstrap and sent to the XDS server.
 	ProxyMetadata map[string]string `protobuf:"bytes,24,rep,name=proxy_metadata,json=proxyMetadata,proto3" json:"proxyMetadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Port on which the agent should listen for administrative commands such as readiness probe.
+	// Default is set to port 15020.
 	StatusPort int32 `protobuf:"varint,26,opt,name=status_port,json=statusPort,proto3" json:"statusPort,omitempty"`
 	// An additional list of tags to extract from the in-proxy Istio telemetry. These extra tags can be
 	// added by configuring the telemetry extension. Each additional tag needs to be present in this list.
