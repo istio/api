@@ -39992,7 +39992,7 @@
               {
                 "id": 4,
                 "name": "target_port",
-                "type": "string"
+                "type": "uint32"
               }
             ]
           },
@@ -42024,7 +42024,7 @@
               {
                 "id": 4,
                 "name": "target_port",
-                "type": "string"
+                "type": "uint32"
               }
             ]
           },

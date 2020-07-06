@@ -87,9 +87,8 @@
             "format": "string"
           },
           "targetPort": {
-            "description": "The port or port name on the endpoint where the traffic will be received. Applicable only when used with ServiceEntries.",
-            "type": "string",
-            "format": "string"
+            "description": "The port number on the endpoint where the traffic will be received. Applicable only when used with ServiceEntries.",
+            "type": "integer"
           }
         }
       },

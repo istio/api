@@ -2013,8 +2013,7 @@ spec:
                         format: string
                         type: string
                       targetPort:
-                        format: string
-                        type: string
+                        type: integer
                     type: object
                   tls:
                     description: Set of TLS related options that govern the server's
@@ -2230,8 +2229,7 @@ spec:
                     format: string
                     type: string
                   targetPort:
-                    format: string
-                    type: string
+                    type: integer
                 type: object
               type: array
             resolution:
@@ -2401,8 +2399,7 @@ spec:
                         format: string
                         type: string
                       targetPort:
-                        format: string
-                        type: string
+                        type: integer
                     type: object
                 type: object
               type: array
@@ -2471,8 +2468,7 @@ spec:
                         format: string
                         type: string
                       targetPort:
-                        format: string
-                        type: string
+                        type: integer
                     type: object
                 type: object
               type: array
