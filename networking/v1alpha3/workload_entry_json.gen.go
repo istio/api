@@ -19,10 +19,10 @@
 // The following example declares a workload entry representing a VM
 // for the `details.bookinfo.com` service. This VM has sidecar
 // installed and bootstrapped using the `details-legacy` service
-// account. The service is exposed by the sidecar on port 80 to
-// applications in the mesh. The HTTP traffic is then wrapped in Istio
-// mutual TLS and sent to sidecars on VMs on target port 8080, that in
-// turn forward it to the application on localhost on the same port.
+// account. The service is exposed on port 80 to applications in the
+// mesh. The HTTP traffic to this service is wrapped in Istio mutual
+// TLS and sent to sidecars on VMs on target port 8080, that in turn
+// forward it to the application on localhost on the same port.
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}

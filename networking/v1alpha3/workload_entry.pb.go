@@ -19,10 +19,10 @@
 // The following example declares a workload entry representing a VM
 // for the `details.bookinfo.com` service. This VM has sidecar
 // installed and bootstrapped using the `details-legacy` service
-// account. The service is exposed by the sidecar on port 80 to
-// applications in the mesh. The HTTP traffic is then wrapped in Istio
-// mutual TLS and sent to sidecars on VMs on target port 8080, that in
-// turn forward it to the application on localhost on the same port.
+// account. The service is exposed on port 80 to applications in the
+// mesh. The HTTP traffic to this service is wrapped in Istio mutual
+// TLS and sent to sidecars on VMs on target port 8080, that in turn
+// forward it to the application on localhost on the same port.
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
@@ -275,8 +275,7 @@ type WorkloadEntry struct {
 	//
 	// **NOTE 1:** Do not use for `unix://` addresses.
 	//
-	// **NOTE 2:** targetPort if specified takes precendence over the
-	// endpoint port map.
+	// **NOTE 2:** endpoint port map takes precedence over targetPort.
 	Ports map[string]uint32 `protobuf:"bytes,2,rep,name=ports,proto3" json:"ports,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"varint,2,opt,name=value,proto3"`
 	// One or more labels associated with the endpoint.
 	Labels map[string]string `protobuf:"bytes,3,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`

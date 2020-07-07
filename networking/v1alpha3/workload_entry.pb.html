@@ -26,10 +26,10 @@ updates the status of a pod.</p>
 <p>The following example declares a workload entry representing a VM
 for the <code>details.bookinfo.com</code> service. This VM has sidecar
 installed and bootstrapped using the <code>details-legacy</code> service
-account. The service is exposed by the sidecar on port 80 to
-applications in the mesh. The HTTP traffic is then wrapped in Istio
-mutual TLS and sent to sidecars on VMs on target port 8080, that in
-turn forward it to the application on localhost on the same port.</p>
+account. The service is exposed on port 80 to applications in the
+mesh. The HTTP traffic to this service is wrapped in Istio mutual
+TLS and sent to sidecars on VMs on target port 8080, that in turn
+forward it to the application on localhost on the same port.</p>
 
 <p>{{<tabset category-name="example">}}
 {{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
@@ -267,8 +267,7 @@ portName.</p>
 
 <p><strong>NOTE 1:</strong> Do not use for <code>unix://</code> addresses.</p>
 
-<p><strong>NOTE 2:</strong> targetPort if specified takes precendence over the
-endpoint port map.</p>
+<p><strong>NOTE 2:</strong> endpoint port map takes precedence over targetPort.</p>
 
 </td>
 <td>
