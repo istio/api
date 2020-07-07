@@ -189,7 +189,8 @@ No
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>The time in seconds that Envoy will drain connections during a hot
-restart. MUST be &gt;=1s (e.g., <em>1s/1m/1h</em>)</p>
+restart. MUST be &gt;=1s (e.g., <em>1s/1m/1h</em>)
+Default drain duration is 45s.</p>
 
 </td>
 <td>
@@ -202,7 +203,8 @@ No
 <td>
 <p>The time in seconds that Envoy will wait before shutting down the
 parent process during a hot restart. MUST be &gt;=1s (e.g., <em>1s/1m/1h</em>).
-MUST BE greater than <em>drain</em>duration_ parameter.</p>
+MUST BE greater than <em>drain</em>duration_ parameter.
+Default shutdown duration is 60s.</p>
 
 </td>
 <td>
@@ -236,7 +238,8 @@ No
 <td><code>proxyAdminPort</code></td>
 <td><code>int32</code></td>
 <td>
-<p>Port on which Envoy should listen for administrative commands.</p>
+<p>Port on which Envoy should listen for administrative commands.
+Default port is 15000.</p>
 
 </td>
 <td>
@@ -248,7 +251,8 @@ No
 <td><code><a href="#AuthenticationPolicy">AuthenticationPolicy</a></code></td>
 <td>
 <p>Authentication policy defines the global switch to control authentication
-for Envoy-to-Envoy communication for istio components Mixer and Pilot.</p>
+for Envoy-to-Envoy communication for istio components Mixer and Pilot.
+Default is set to MUTUAL_TLS.</p>
 
 </td>
 <td>
@@ -288,7 +292,8 @@ No
 <td>
 <p>The number of worker threads to run.
 If unset, this will be automatically determined based on CPU requests/limits.
-If set to 0, all cores on the machine will be used.</p>
+If set to 0, all cores on the machine will be used.
+Default is 2 worker threads.</p>
 
 </td>
 <td>
@@ -370,7 +375,8 @@ No
 <td><code>statusPort</code></td>
 <td><code>int32</code></td>
 <td>
-<p>Port on which the agent should listen for administrative commands such as readiness probe.</p>
+<p>Port on which the agent should listen for administrative commands such as readiness probe.
+Default is set to port 15020.</p>
 
 </td>
 <td>
@@ -626,7 +632,7 @@ tracing configuration).</p>
 <td><code>int32</code></td>
 <td>
 <p>Port on which Envoy should listen for incoming connections from
-other services.</p>
+other services. Default port is 15001.</p>
 
 </td>
 <td>
@@ -648,7 +654,8 @@ No
 <td><code>connectTimeout</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
-<p>Connection timeout used by Envoy. (MUST BE &gt;=1ms)</p>
+<p>Connection timeout used by Envoy. (MUST BE &gt;=1ms)
+Default timeout is 10s.</p>
 
 </td>
 <td>
@@ -664,11 +671,11 @@ determine whether the connection is using TLS or not (on the
 server side), as well as the application protocol being used
 (e.g., http vs tcp). These heuristics rely on the client sending
 the first bits of data. For server first protocols like MySQL,
-MongoDB, etc., Envoy will timeout on the protocol detection after
+MongoDB, etc. Envoy will timeout on the protocol detection after
 the specified period, defaulting to non mTLS plain TCP
 traffic. Set this field to tweak the period that Envoy will wait
 for the client to send the first bits of data. (MUST BE &gt;=1ms or
-0s to disable)</p>
+0s to disable). Default detection timeout is 5s.</p>
 
 </td>
 <td>
@@ -703,7 +710,8 @@ No
 <td><code>ingressService</code></td>
 <td><code>string</code></td>
 <td>
-<p>Name of the Kubernetes service used for the istio ingress controller.</p>
+<p>Name of the Kubernetes service used for the istio ingress controller.
+If no ingress controller is specified, the default value <code>istio-ingressgateway</code> is used.</p>
 
 </td>
 <td>
@@ -714,7 +722,8 @@ No
 <td><code>ingressControllerMode</code></td>
 <td><code><a href="#MeshConfig-IngressControllerMode">IngressControllerMode</a></code></td>
 <td>
-<p>Defines whether to use Istio ingress controller for annotated or all ingress resources.</p>
+<p>Defines whether to use Istio ingress controller for annotated or all ingress resources.
+Default mode is STRICT.</p>
 
 </td>
 <td>
@@ -790,7 +799,8 @@ No
 <td>
 <p>This flag enables Envoy&rsquo;s gRPC Access Log Service.
 See <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto">Access Log Service</a>
-for details about Envoy&rsquo;s gRPC Access Log Service API.</p>
+for details about Envoy&rsquo;s gRPC Access Log Service API.
+Default value is false.</p>
 
 </td>
 <td>
@@ -821,12 +831,13 @@ traffic from the application.  If your application uses one or
 more external services that are not known apriori, setting the
 policy to ALLOW<em>ANY will cause the sidecars to route any unknown
 traffic originating from the application to its requested
-destination.  Users are strongly encouraged to use ServiceEntries
+destination. Users are strongly encouraged to use ServiceEntries
 to explicitly declare any external dependencies, instead of using
 allow</em>any, so that traffic to these services can be
 monitored. Can be overridden at a Sidecar level by setting the
 OutboundTrafficPolicy in the <a href="https://istio.io/docs/reference/config/networking/sidecar/#OutboundTrafficPolicy">Sidecar
-API</a>.</p>
+API</a>.
+Default mode is ALLOW_ANY which means outbound traffic to unknown destinations will be allowed.</p>
 
 </td>
 <td>
@@ -1008,7 +1019,8 @@ No
 <td><code>dnsRefreshRate</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
-<p>Configures DNS refresh rate for Envoy clusters of type STRICT_DNS</p>
+<p>Configures DNS refresh rate for Envoy clusters of type STRICT_DNS
+Default refresh rate is 5s.</p>
 
 </td>
 <td>
@@ -1166,7 +1178,7 @@ No
 <td><code>bool</code></td>
 <td>
 <p>Disable policy checks by the Mixer service. Default
-is false, i.e. Mixer policy check is enabled by default.</p>
+is true, i.e. Mixer policy check is disabled by default.</p>
 
 </td>
 <td>
@@ -1191,7 +1203,7 @@ No
 <td><code>bool</code></td>
 <td>
 <p>Enable session affinity for Envoy Mixer reports so that calls from a proxy will
-always target the same Mixer instance.</p>
+always target the same Mixer instance. Default value is false.</p>
 
 </td>
 <td>
@@ -1216,7 +1228,7 @@ No
 <p>When disable<em>report</em>batch is false, this value specifies the maximum number
 of requests that are batched in report. If left unspecified, the default value
 of report<em>batch</em>max_entries == 0 will use the hardcoded defaults of
-istio::mixerclient::ReportOptions.</p>
+istio::mixerclient::ReportOptions. Default value is 100.</p>
 
 </td>
 <td>
@@ -1230,7 +1242,7 @@ No
 <p>When disable<em>report</em>batch is false, this value specifies the maximum elapsed
 time a batched report will be sent after a user request is processed. If left
 unspecified, the default report<em>batch</em>max_time == 0 will use the hardcoded
-defaults of istio::mixerclient::ReportOptions.</p>
+defaults of istio::mixerclient::ReportOptions. Default max time is 1s.</p>
 
 </td>
 <td>

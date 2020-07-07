@@ -272,11 +272,13 @@ message ProxyConfig {
 
   // The time in seconds that Envoy will drain connections during a hot
   // restart. MUST be >=1s (e.g., _1s/1m/1h_)
+  // Default drain duration is 45s.
   google.protobuf.Duration drain_duration = 4;
 
   // The time in seconds that Envoy will wait before shutting down the
   // parent process during a hot restart. MUST be >=1s (e.g., _1s/1m/1h_).
   // MUST BE greater than _drain_duration_ parameter.
+  // Default shutdown duration is 60s.
   google.protobuf.Duration parent_shutdown_duration = 5;
 
   // Address of the discovery service exposing xDS with mTLS connection.
@@ -300,6 +302,7 @@ message ProxyConfig {
   string envoy_metrics_service_address = 20 [deprecated=true];
 
   // Port on which Envoy should listen for administrative commands.
+  // Default port is 15000.
   int32 proxy_admin_port = 11;
 
   // $hide_from_docs
@@ -307,6 +310,7 @@ message ProxyConfig {
 
   // Authentication policy defines the global switch to control authentication
   // for Envoy-to-Envoy communication for istio components Mixer and Pilot.
+  // Default is set to MUTUAL_TLS.
   AuthenticationPolicy control_plane_auth_policy = 13;
   // File path of custom proxy configuration, currently used by proxies
   // in front of Mixer and Pilot.
@@ -322,6 +326,7 @@ message ProxyConfig {
   // The number of worker threads to run.
   // If unset, this will be automatically determined based on CPU requests/limits.
   // If set to 0, all cores on the machine will be used.
+  // Default is 2 worker threads.
   google.protobuf.Int32Value concurrency = 16;
 
   // Path to the proxy bootstrap template file
@@ -367,6 +372,7 @@ message ProxyConfig {
   map<string,string> proxy_metadata = 24;
 
   // Port on which the agent should listen for administrative commands such as readiness probe.
+  // Default is set to port 15020.
   int32 status_port = 26;
 
   // An additional list of tags to extract from the in-proxy Istio telemetry. These extra tags can be
