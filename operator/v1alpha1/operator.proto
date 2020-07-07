@@ -199,6 +199,9 @@ message InstallStatus {
         HEALTHY = 3;
         // Component is in an error state.
         ERROR = 4;
+        // Action is needed from user for reconciliation loop to proceed
+        // e.g. There are proxies still pointing to the control plane revision when try to remove IstioOperator CR.
+        PENDING = 5;
     }
     // VersionStatus is the status and version of a component.
     message VersionStatus {
