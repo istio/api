@@ -33,7 +33,7 @@ directories:
     - mode: perFile
   analysis/v1beta1:
     - mode: perFile
-  meta/v1beta1:
+  meta/v1alpha1:
     - mode: perFile
 
 

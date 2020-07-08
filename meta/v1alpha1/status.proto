@@ -13,7 +13,7 @@
 // limitations under the License.
 syntax = "proto3";
 
-import "analysis/v1beta1/message.proto";
+import "analysis/v1alpha1/message.proto";
 
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 
@@ -24,9 +24,9 @@ import "google/api/field_behavior.proto";
 // $description: Common status field for all istio collections.
 // $location: https://istio.io/docs/reference/config/meta/v1beta1/istio-status.html
 
-package istio.meta.v1beta1;
+package istio.meta.v1alpha1;
 
-option go_package="istio.io/api/meta/v1beta1";
+option go_package="istio.io/api/meta/v1alpha1";
 
 message IstioStatus {
   // Current service state of pod.
@@ -40,7 +40,7 @@ message IstioStatus {
   // +optional
   // +patchMergeKey=type
   // +patchStrategy=merge
-  repeated analysis.v1beta1.AnalysisMessageBase validation_messages = 2;
+  repeated analysis.v1alpha1.AnalysisMessageBase validation_messages = 2;
 }
 
 message IstioCondition {

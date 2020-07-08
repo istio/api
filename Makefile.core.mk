@@ -422,23 +422,23 @@ clean-analysis:
 # meta/...
 #####################
 
-meta_v1beta1_path := meta/v1beta1
-meta_v1beta1_protos := $(wildcard $(meta_v1beta1_path)/*.proto)
-meta_v1beta1_pb_gos := $(meta_v1beta1_protos:.proto=.pb.go)
-meta_v1beta1_pb_pythons := $(patsubst $(meta_v1beta1_path)/%.proto,$(python_output_path)/$(meta_v1beta1_path)/%_pb2.py,$(meta_v1beta1_protos))
-meta_v1beta1_pb_docs := $(meta_v1beta1_protos:.proto=.pb.html)
-meta_v1beta1_openapi := $(meta_v1beta1_protos:.proto=.gen.json)
+meta_v1alpha1_path := meta/v1alpha1
+meta_v1alpha1_protos := $(wildcard $(meta_v1alpha1_path)/*.proto)
+meta_v1alpha1_pb_gos := $(meta_v1alpha1_protos:.proto=.pb.go)
+meta_v1alpha1_pb_pythons := $(patsubst $(meta_v1alpha1_path)/%.proto,$(python_output_path)/$(meta_v1alpha1_path)/%_pb2.py,$(meta_v1alpha1_protos))
+meta_v1alpha1_pb_docs := $(meta_v1alpha1_protos:.proto=.pb.html)
+meta_v1alpha1_openapi := $(meta_v1alpha1_protos:.proto=.gen.json)
 
 
-$(meta_v1beta1_pb_gos) $(meta_v1beta1_pb_docs) $(meta_v1beta1_pb_pythons): $(meta_v1beta1_protos)
+$(meta_v1alpha1_pb_gos) $(meta_v1alpha1_pb_docs) $(meta_v1alpha1_pb_pythons): $(meta_v1alpha1_protos)
 	@$(protolock) status
-	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin_per_file)$(meta_v1beta1_path) $(protoc_gen_python_plugin) $^
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin_per_file)$(meta_v1alpha1_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/meta/* meta
 
-generate-meta: $(meta_v1beta1_pb_gos) $(meta_v1beta1_pb_docs) $(meta_v1beta1_pb_pythons)
+generate-meta: $(meta_v1alpha1_pb_gos) $(meta_v1alpha1_pb_docs) $(meta_v1alpha1_pb_pythons)
 
 clean-meta:
-	@rm -fr $(meta_v1beta1_pb_gos) $(meta_v1beta1_pb_docs)
+	@rm -fr $(meta_v1alpha1_pb_gos) $(meta_v1alpha1_pb_docs)
 
 #####################
 # envoy/...
@@ -515,7 +515,7 @@ all_protos := \
 	$(networking_v1beta1_protos) \
 	$(authn_v1alpha1_protos) \
 	$(security_v1beta1_protos) \
-	$(analysis_v1beta1_protos) \
+	$(analysis_v1alpha1_protos) \
 	$(meta_v1beta1_protos) \
 	$(type_v1beta1_protos)
 
@@ -533,7 +533,7 @@ all_openapi := \
 	$(authn_v1alpha1_openapi) \
 	$(security_v1beta1_openapi) \
 	$(analysis_v1beta1_openapi) \
-	$(meta_v1beta1_openapi) \
+	$(meta_v1alpha1_openapi) \
 	$(type_v1beta1_openapi)
 
 all_openapi_crd := kubernetes/customresourcedefinitions.gen.yaml
