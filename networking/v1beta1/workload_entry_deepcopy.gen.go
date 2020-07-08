@@ -16,12 +16,13 @@
 // workload along with other details, similar to how Kubernetes
 // updates the status of a pod.
 //
-// The following example declares a workload entry representing a
-// VM for the `details.bookinfo.com` service. This VM has
-// sidecar installed and bootstrapped using the `details-legacy`
-// service account. The sidecar receives HTTP traffic on port 80
-// (wrapped in istio mutual TLS) and forwards it to the application on
-// the localhost on the same port.
+// The following example declares a workload entry representing a VM
+// for the `details.bookinfo.com` service. This VM has sidecar
+// installed and bootstrapped using the `details-legacy` service
+// account. The service is exposed on port 80 to applications in the
+// mesh. The HTTP traffic to this service is wrapped in Istio mutual
+// TLS and sent to sidecars on VMs on target port 8080, that in turn
+// forward it to the application on localhost on the same port.
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
@@ -40,7 +41,6 @@
 //   labels:
 //     app: details-legacy
 //     instance-id: vm1
-//   # ports if not specified will be the same as service ports
 // ```
 // {{</tab>}}
 //
@@ -60,7 +60,6 @@
 //   labels:
 //     app: details-legacy
 //     instance-id: vm1
-//   # ports if not specified will be the same as service ports
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -82,6 +81,7 @@
 //   - number: 80
 //     name: http
 //     protocol: HTTP
+//     targetPort: 8080
 //   resolution: STATIC
 //   workloadSelector:
 //     labels:
@@ -103,6 +103,7 @@
 //   - number: 80
 //     name: http
 //     protocol: HTTP
+//     targetPort: 8080
 //   resolution: STATIC
 //   workloadSelector:
 //     labels:
@@ -135,7 +136,6 @@
 //   labels:
 //     app: details-legacy
 //     instance-id: vm1
-//   # ports if not specified will be the same as service ports
 // ```
 // {{</tab>}}
 //
@@ -155,7 +155,6 @@
 //   labels:
 //     app: details-legacy
 //     instance-id: vm1
-//   # ports if not specified will be the same as service ports
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -177,6 +176,7 @@
 //   - number: 80
 //     name: http
 //     protocol: HTTP
+//     targetPort: 8080
 //   resolution: DNS
 //   workloadSelector:
 //     labels:
@@ -198,6 +198,7 @@
 //   - number: 80
 //     name: http
 //     protocol: HTTP
+//     targetPort: 8080
 //   resolution: DNS
 //   workloadSelector:
 //     labels:

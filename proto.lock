@@ -36168,16 +36168,15 @@
                 "id": 51,
                 "name": "enable_prometheus_merge",
                 "type": "google.protobuf.BoolValue"
-              },
-              {
-                "id": 53,
-                "name": "termination_drain_duration",
-                "type": "google.protobuf.Duration"
               }
             ],
             "reserved_ids": [
               15,
-              18
+              18,
+              53
+            ],
+            "reserved_names": [
+              "termination_drain_duration"
             ],
             "messages": [
               {
@@ -36831,6 +36830,11 @@
                 "id": 28,
                 "name": "gateway_topology",
                 "type": "Topology"
+              },
+              {
+                "id": 29,
+                "name": "termination_drain_duration",
+                "type": "google.protobuf.Duration"
               }
             ],
             "maps": [
@@ -39941,6 +39945,11 @@
                 "id": 5,
                 "name": "default_endpoint",
                 "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "name",
+                "type": "string"
               }
             ]
           },
@@ -39979,6 +39988,11 @@
                     "value": "REQUIRED"
                   }
                 ]
+              },
+              {
+                "id": 4,
+                "name": "target_port",
+                "type": "uint32"
               }
             ]
           },
@@ -41963,6 +41977,11 @@
                 "id": 5,
                 "name": "default_endpoint",
                 "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "name",
+                "type": "string"
               }
             ]
           },
@@ -42001,6 +42020,11 @@
                     "value": "REQUIRED"
                   }
                 ]
+              },
+              {
+                "id": 4,
+                "name": "target_port",
+                "type": "uint32"
               }
             ]
           },
