@@ -43313,7 +43313,7 @@
       "def": {
         "enums": [
           {
-            "name": "InstallStatus.Status",
+            "name": "Status",
             "enum_fields": [
               {
                 "name": "NONE"
@@ -43333,6 +43333,10 @@
               {
                 "name": "ERROR",
                 "integer": 4
+              },
+              {
+                "name": "PENDING",
+                "integer": 5
               }
             ]
           }
@@ -43420,7 +43424,7 @@
               {
                 "id": 1,
                 "name": "status",
-                "type": "Status"
+                "type": "OverallStatus"
               }
             ],
             "maps": [
@@ -43453,6 +43457,21 @@
                     "type": "string"
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "name": "OverallStatus",
+            "fields": [
+              {
+                "id": 1,
+                "name": "status",
+                "type": "Status"
+              },
+              {
+                "id": 2,
+                "name": "message",
+                "type": "string"
               }
             ]
           },
@@ -44643,6 +44662,9 @@
           },
           {
             "path": "k8s.io/apimachinery/pkg/api/resource/generated.proto"
+          },
+          {
+            "path": "gogoproto/gogo.proto"
           }
         ],
         "package": {
@@ -44652,6 +44674,18 @@
           {
             "name": "go_package",
             "value": "istio.io/api/operator/v1alpha1"
+          },
+          {
+            "name": "(gogoproto.marshaler_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.unmarshaler_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.sizer_all)",
+            "value": "false"
           }
         ]
       }

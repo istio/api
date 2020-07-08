@@ -185,24 +185,26 @@ message IstioOperatorSpec {
     TypeMapStringInterface unvalidated_values = 101;
 }
 
+// Status describes the current state of a component.
+enum Status {
+    // Component is not present.
+    NONE = 0;
+    // Component is being updated to a different version.
+    UPDATING = 1;
+    // Controller has started but not yet completed reconciliation loop for the component.
+    RECONCILING = 2;
+    // Component is healthy.
+    HEALTHY = 3;
+    // Component is in an error state.
+    ERROR = 4;
+    // Overall status only and would not be set as a component status.
+    // Action is needed from user for reconciliation loop to proceed
+    // e.g. There are proxies still pointing to the control plane revision when try to remove IstioOperator CR.
+    PENDING = 5;
+}
+
 // Observed state of IstioOperator
 message InstallStatus {
-    // Status describes the current state of a component.
-    enum Status {
-        // Component is not present.
-        NONE = 0;
-        // Component is being updated to a different version.
-        UPDATING = 1;
-        // Controller has started but not yet completed reconciliation loop for the component.
-        RECONCILING = 2;
-        // Component is healthy.
-        HEALTHY = 3;
-        // Component is in an error state.
-        ERROR = 4;
-        // Action is needed from user for reconciliation loop to proceed
-        // e.g. There are proxies still pointing to the control plane revision when try to remove IstioOperator CR.
-        PENDING = 5;
-    }
     // VersionStatus is the status and version of a component.
     message VersionStatus {
         string version = 1;
@@ -210,15 +212,23 @@ message InstallStatus {
         string error = 4;
     }
     // Overall status of all components controlled by the operator.
+    OverallStatus status = 1;
+    // Individual status of each component controlled by the operator. The map key is the name of the component.
+    map<string, VersionStatus> component_status = 2;
+}
+
+// Overall status of all components.
+message OverallStatus {
     // - If all components have status NONE, overall status is NONE.
     // - If all components are HEALTHY, overall status is HEALTHY.
     // - If one or more components are RECONCILING and others are HEALTHY, overall status is RECONCILING.
     // - If one or more components are UPDATING and others are HEALTHY, overall status is UPDATING.
     // - If components are a mix of RECONCILING, UPDATING and HEALTHY, overall status is UPDATING.
     // - If any component is in ERROR state, overall status is ERROR.
+    // - If further action is needed for reconciliation to proceed, overall status is PENDING.
     Status status = 1;
-    // Individual status of each component controlled by the operator. The map key is the name of the component.
-    map<string, VersionStatus> component_status = 2;
+    // Optional message explains the reason and actions needed for the existing overall status.
+    string message =2;
 }
 
 // IstioComponentSpec defines the desired installed state of Istio components.
