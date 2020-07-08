@@ -31,7 +31,7 @@ directories:
     - mode: all
   security/v1beta1:
     - mode: perFile
-  analysis/v1beta1:
+  analysis/v1alpha1:
     - mode: perFile
   meta/v1alpha1:
     - mode: perFile
