@@ -261,17 +261,16 @@ type WorkloadEntry struct {
 	// to DNS, and must be fully-qualified without wildcards. Use the form
 	// unix:///absolute/path/to/socket for Unix domain socket endpoints.
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	// Set of ports associated with the endpoint. If omitted, and the
-	// targetPort is not specified as part of the service's port
-	// specification, traffic to a service port will be forwarded to one
-	// of the endpoints on the same port. If the targetPort is specified
-	// as part of the service's port specification, traffic to the
-	// service port will be forwarded to one of the endpoints on the
-	// specified `targetPort`. If the port map is specified (and
-	// targetPort is omitted), it must be a map of servicePortName to
-	// this endpoint's port, such that traffic to the service port will
-	// be forwarded to the endpoint port that maps to the service's
-	// portName.
+	// Set of ports associated with the endpoint. If the port map is
+	// specified, it must be a map of servicePortName to this endpoint's
+	// port, such that traffic to the service port will be forwarded to
+	// the endpoint port that maps to the service's portName. If
+	// omitted, and the targetPort is specified as part of the service's
+	// port specification, traffic to the service port will be forwarded
+	// to one of the endpoints on the specified `targetPort`. If both
+	// the targetPort and endpoint's port map are not specified, traffic
+	// to a service port will be forwarded to one of the endpoints on
+	// the same port.
 	//
 	// **NOTE 1:** Do not use for `unix://` addresses.
 	//
