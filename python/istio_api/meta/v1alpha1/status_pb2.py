@@ -22,8 +22,8 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='meta/v1alpha1/status.proto',
   package='istio.meta.v1alpha1',
   syntax='proto3',
-  serialized_options=_b('Z\031istio.io/api/meta/v1alpha1'),
-  serialized_pb=_b('\n\x19meta/v1alpha1/status.proto\x12\x12istio.meta.v1alpha1\x1a\x1e\x61nalysis/v1alpha1/message.proto\x1a\x34k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto\x1a\x1fgoogle/api/field_behavior.proto\"\x8f\x01\n\x0bIstioStatus\x12\x36\n\nconditions\x18\x01 \x03(\x0b\x32\".istio.meta.v1alpha1.IstioCondition\x12H\n\x13validation_messages\x18\x02 \x03(\x0b\x32+.istio.analysis.v1alpha1.AnalysisMessageBase\"\xde\x01\n\x0eIstioCondition\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0e\n\x06status\x18\x02 \x01(\t\x12\x43\n\x0flast_probe_time\x18\x03 \x01(\x0b\x32*.k8s.io.apimachinery.pkg.apis.meta.v1.Time\x12H\n\x14last_transition_time\x18\x04 \x01(\x0b\x32*.k8s.io.apimachinery.pkg.apis.meta.v1.Time\x12\x0e\n\x06reason\x18\x05 \x01(\t\x12\x0f\n\x07message\x18\x06 \x01(\tB\x1bZ\x19istio.io/api/meta/v1alpha1b\x06proto3')
+  serialized_options=_b('Z\032istio.io/api/meta/v1alpha1'),
+  serialized_pb=_b('\n\x1ameta/v1alpha1/status.proto\x12\x13istio.meta.v1alpha1\x1a\x1f\x61nalysis/v1alpha1/message.proto\x1a\x34k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto\x1a\x1fgoogle/api/field_behavior.proto\"\x91\x01\n\x0bIstioStatus\x12\x37\n\nconditions\x18\x01 \x03(\x0b\x32#.istio.meta.v1alpha1.IstioCondition\x12I\n\x13validation_messages\x18\x02 \x03(\x0b\x32,.istio.analysis.v1alpha1.AnalysisMessageBase\"\xde\x01\n\x0eIstioCondition\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0e\n\x06status\x18\x02 \x01(\t\x12\x43\n\x0flast_probe_time\x18\x03 \x01(\x0b\x32*.k8s.io.apimachinery.pkg.apis.meta.v1.Time\x12H\n\x14last_transition_time\x18\x04 \x01(\x0b\x32*.k8s.io.apimachinery.pkg.apis.meta.v1.Time\x12\x0e\n\x06reason\x18\x05 \x01(\t\x12\x0f\n\x07message\x18\x06 \x01(\tB\x1cZ\x1aistio.io/api/meta/v1alpha1b\x06proto3')
   ,
   dependencies=[analysis_dot_v1alpha1_dot_message__pb2.DESCRIPTOR,k8s_dot_io_dot_apimachinery_dot_pkg_dot_apis_dot_meta_dot_v1_dot_generated__pb2.DESCRIPTOR,google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,])
 
@@ -63,8 +63,8 @@ _ISTIOSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=169,
-  serialized_end=312,
+  serialized_start=172,
+  serialized_end=317,
 )
 
 
@@ -129,8 +129,8 @@ _ISTIOCONDITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=315,
-  serialized_end=537,
+  serialized_start=320,
+  serialized_end=542,
 )
 
 _ISTIOSTATUS.fields_by_name['conditions'].message_type = _ISTIOCONDITION

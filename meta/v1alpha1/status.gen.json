@@ -2,30 +2,30 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Common status field for all istio collections.",
-    "version": "v1beta1"
+    "version": "v1alpha1"
   },
   "components": {
     "schemas": {
-      "istio.meta.v1beta1.IstioStatus": {
+      "istio.meta.v1alpha1.IstioStatus": {
         "type": "object",
         "properties": {
           "conditions": {
             "description": "Current service state of pod. More info: https://istio.io/docs/reference/config/config-status/ +optional +patchMergeKey=type +patchStrategy=merge",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/istio.meta.v1beta1.IstioCondition"
+              "$ref": "#/components/schemas/istio.meta.v1alpha1.IstioCondition"
             }
           },
           "validationMessages": {
             "description": "Includes any errors or warnings detected by Istio's analyzers. +optional +patchMergeKey=type +patchStrategy=merge",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/istio.analysis.v1beta1.AnalysisMessageBase"
+              "$ref": "#/components/schemas/istio.analysis.v1alpha1.AnalysisMessageBase"
             }
           }
         }
       },
-      "istio.meta.v1beta1.IstioCondition": {
+      "istio.meta.v1alpha1.IstioCondition": {
         "type": "object",
         "properties": {
           "status": {
@@ -56,14 +56,14 @@
           }
         }
       },
-      "istio.analysis.v1beta1.AnalysisMessageBase": {
+      "istio.analysis.v1alpha1.AnalysisMessageBase": {
         "type": "object",
         "properties": {
           "type": {
-            "$ref": "#/components/schemas/istio.analysis.v1beta1.AnalysisMessageBase.Type"
+            "$ref": "#/components/schemas/istio.analysis.v1alpha1.AnalysisMessageBase.Type"
           },
           "level": {
-            "$ref": "#/components/schemas/istio.analysis.v1beta1.AnalysisMessageBase.Level"
+            "$ref": "#/components/schemas/istio.analysis.v1alpha1.AnalysisMessageBase.Level"
           },
           "documentationUrl": {
             "description": "A url pointing to the Istio documentation for this specific error type. Should be of the form `^http(s)?://(preliminary\\.)?istio.io/docs/reference/config/analysis/` Required.",
@@ -88,7 +88,7 @@
           }
         }
       },
-      "istio.analysis.v1beta1.AnalysisMessageBase.Level": {
+      "istio.analysis.v1alpha1.AnalysisMessageBase.Level": {
         "description": "Represents how severe a message is. Required.",
         "type": "string",
         "enum": [
@@ -98,7 +98,7 @@
           "INFO"
         ]
       },
-      "istio.analysis.v1beta1.AnalysisMessageBase.Type": {
+      "istio.analysis.v1alpha1.AnalysisMessageBase.Type": {
         "type": "object",
         "properties": {
           "name": {
