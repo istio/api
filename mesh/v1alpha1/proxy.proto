@@ -22,15 +22,15 @@ package istio.mesh.v1alpha1;
 
 option go_package="istio.io/api/mesh/v1alpha1";
 
-// AuthenticationPolicy defines authentication policy. It can be set for
+// AuthenticationPolicy defines authentication policy to be used by the proxy. It can be set for
 // different scopes (mesh, service …), and the most narrow scope with
 // non-INHERIT value will be used.
 // Mesh policy cannot be INHERIT.
 enum AuthenticationPolicy {
-  // Do not encrypt Envoy to Envoy traffic.
+  // Do not encrypt Envoy to Istiod traffic.
   NONE = 0;
 
-  // Envoy to Envoy traffic is wrapped into mutual TLS connections.
+  // Envoy to Istiod traffic is wrapped into mutual TLS connections.
   MUTUAL_TLS = 1;
 
   // Use the policy defined by the parent scope. Should not be used for mesh
@@ -309,7 +309,7 @@ message ProxyConfig {
   string availability_zone = 12 [deprecated=true];
 
   // Authentication policy defines the global switch to control authentication
-  // for Envoy-to-Envoy communication for istio components Mixer and Pilot.
+  // for Envoy-to-Istiod communication.
   // Default is set to MUTUAL_TLS.
   AuthenticationPolicy control_plane_auth_policy = 13;
   // File path of custom proxy configuration, currently used by proxies
