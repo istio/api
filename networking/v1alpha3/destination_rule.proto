@@ -923,7 +923,7 @@ message ClientTLSSettings {
   // client including the CA certificates. Can only be used
   // for traffic originating from Gateway proxy and is
   // applicable only on Kubernetes. Secret must exist in the
-  // same namespace with the proxy using the certificates.
+  // same namespace as the proxy using the certificates.
   // The secret (of type `generic`)should contain the
   // following keys and values: `key: <privateKey>`,
   // `cert: <serverCert>`, `cacert: <CACertificate>`.
