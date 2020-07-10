@@ -1021,9 +1021,10 @@ No
 <td><code>string</code></td>
 <td>
 <p>The name of the secret that holds the TLS certs for the
-client including the CA certificates. Applicable
-only on Kubernetes. Secret must exist in the same
-namespace with the proxy using the certificates.
+client including the CA certificates. Can only be used
+for traffic originating from Gateway proxy and is
+applicable only on Kubernetes. Secret must exist in the
+same namespace with the proxy using the certificates.
 The secret (of type <code>generic</code>)should contain the
 following keys and values: <code>key: &lt;privateKey&gt;</code>,
 <code>cert: &lt;serverCert&gt;</code>, <code>cacert: &lt;CACertificate&gt;</code>.
