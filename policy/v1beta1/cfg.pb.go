@@ -127,7 +127,6 @@ func (Tls_AuthHeader) EnumDescriptor() ([]byte, []int) {
 // +cue-gen:attributemanifest:subresource:status
 // +cue-gen:attributemanifest:scope:Namespaced
 // +cue-gen:attributemanifest:resource:categories=istio-io,policy-istio-io
-// +cue-gen:attributemanifest:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -332,7 +331,6 @@ func (m *AttributeManifest_AttributeInfo) GetValueType() ValueType {
 // +cue-gen:rule:subresource:status
 // +cue-gen:rule:scope:Namespaced
 // +cue-gen:rule:resource:categories=istio-io,policy-istio-io
-// +cue-gen:rule:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags

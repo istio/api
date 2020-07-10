@@ -93,7 +93,6 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // +cue-gen:HTTPAPISpec:subresource:status
 // +cue-gen:HTTPAPISpec:scope:Namespaced
 // +cue-gen:HTTPAPISpec:resource:categories=istio-io,apim-istio-io
-// +cue-gen:HTTPAPISpec:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -423,7 +422,6 @@ var xxx_messageInfo_HTTPAPISpecReference proto.InternalMessageInfo
 // +cue-gen:HTTPAPISpecBinding:subresource:status
 // +cue-gen:HTTPAPISpecBinding:scope:Namespaced
 // +cue-gen:HTTPAPISpecBinding:resource:categories=istio-io,apim-istio-io
-// +cue-gen:HTTPAPISpecBinding:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
