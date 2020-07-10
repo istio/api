@@ -1021,17 +1021,18 @@ No
 <td><code>string</code></td>
 <td>
 <p>The name of the secret that holds the TLS certs for the
-client including the CA certificates. Can only be used
-for traffic originating from the Gateway proxy and is
-applicable only on Kubernetes. The secret must exist in the
-same namespace as the proxy using the certificates.
+client including the CA certificates. Secret must exist in the
+same namespace with the proxy using the certificates.
 The secret (of type <code>generic</code>)should contain the
 following keys and values: <code>key: &lt;privateKey&gt;</code>,
 <code>cert: &lt;serverCert&gt;</code>, <code>cacert: &lt;CACertificate&gt;</code>.
 Secret of type tls for client certificates along with
 ca.crt key for CA certificates is also supported.
 Only one of client certificates and CA certificate
-or credentialName can be specified.</p>
+or credentialName can be specified.
+<code>This field is currently in alpha and is partially implemented.</code>
+Istio 1.7 implementation only supports it for Kubernetes
+secrets, used in Gateway.</p>
 
 </td>
 <td>

@@ -1797,9 +1797,7 @@ type ClientTLSSettings struct {
 	// Should be empty if mode is `ISTIO_MUTUAL`.
 	CaCertificates string `protobuf:"bytes,4,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
 	// The name of the secret that holds the TLS certs for the
-	// client including the CA certificates. Can only be used
-	// for traffic originating from Gateway proxy and is
-	// applicable only on Kubernetes. Secret must exist in the
+	// client including the CA certificates. Secret must exist in the
 	// same namespace with the proxy using the certificates.
 	// The secret (of type `generic`)should contain the
 	// following keys and values: `key: <privateKey>`,
@@ -1808,6 +1806,9 @@ type ClientTLSSettings struct {
 	// ca.crt key for CA certificates is also supported.
 	// Only one of client certificates and CA certificate
 	// or credentialName can be specified.
+	// `This field is currently in alpha and is partially implemented.`
+	// Istio 1.7 implementation only supports it for Kubernetes
+	// secrets, used in Gateway.
 	CredentialName string `protobuf:"bytes,7,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
 	// A list of alternate names to verify the subject identity in the
 	// certificate. If specified, the proxy will verify that the server
