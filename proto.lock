@@ -43313,7 +43313,7 @@
       "def": {
         "enums": [
           {
-            "name": "Status",
+            "name": "InstallStatus.Status",
             "enum_fields": [
               {
                 "name": "NONE"
@@ -43424,7 +43424,12 @@
               {
                 "id": 1,
                 "name": "status",
-                "type": "OverallStatus"
+                "type": "Status"
+              },
+              {
+                "id": 3,
+                "name": "message",
+                "type": "string"
               }
             ],
             "maps": [
@@ -43457,21 +43462,6 @@
                     "type": "string"
                   }
                 ]
-              }
-            ]
-          },
-          {
-            "name": "OverallStatus",
-            "fields": [
-              {
-                "id": 1,
-                "name": "status",
-                "type": "Status"
-              },
-              {
-                "id": 2,
-                "name": "message",
-                "type": "string"
               }
             ]
           },

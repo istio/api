@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.operator.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 58
+number_of_entries: 57
 ---
 <p>Configuration affecting Istio control plane installation version and shape.</p>
 
@@ -176,9 +176,27 @@ No
 <tbody>
 <tr id="InstallStatus-status">
 <td><code>status</code></td>
-<td><code><a href="#OverallStatus">OverallStatus</a></code></td>
+<td><code><a href="#InstallStatus-Status">Status</a></code></td>
 <td>
-<p>Overall status of all components controlled by the operator.</p>
+<p>Overall status of all components controlled by the operator.
+- If all components have status NONE, overall status is NONE.
+- If all components are HEALTHY, overall status is HEALTHY.
+- If one or more components are RECONCILING and others are HEALTHY, overall status is RECONCILING.
+- If one or more components are UPDATING and others are HEALTHY, overall status is UPDATING.
+- If components are a mix of RECONCILING, UPDATING and HEALTHY, overall status is UPDATING.
+- If any component is in ERROR state, overall status is ERROR.
+- If further action is needed for reconciliation to proceed, overall status is PENDING.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="InstallStatus-message">
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>
+<p>Optional message providing additional information about the existing overall status.</p>
 
 </td>
 <td>
@@ -190,53 +208,6 @@ No
 <td><code>map&lt;string,&nbsp;<a href="#InstallStatus-VersionStatus">VersionStatus</a>&gt;</code></td>
 <td>
 <p>Individual status of each component controlled by the operator. The map key is the name of the component.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="OverallStatus">OverallStatus</h2>
-<section>
-<p>Overall status of all components.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="OverallStatus-status">
-<td><code>status</code></td>
-<td><code><a href="#Status">Status</a></code></td>
-<td>
-<ul>
-<li>If all components have status NONE, overall status is NONE.</li>
-<li>If all components are HEALTHY, overall status is HEALTHY.</li>
-<li>If one or more components are RECONCILING and others are HEALTHY, overall status is RECONCILING.</li>
-<li>If one or more components are UPDATING and others are HEALTHY, overall status is UPDATING.</li>
-<li>If components are a mix of RECONCILING, UPDATING and HEALTHY, overall status is UPDATING.</li>
-<li>If any component is in ERROR state, overall status is ERROR.</li>
-<li>If further action is needed for reconciliation to proceed, overall status is PENDING.</li>
-</ul>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="OverallStatus-message">
-<td><code>message</code></td>
-<td><code>string</code></td>
-<td>
-<p>Optional message explains the reason and actions needed for the existing overall status.</p>
 
 </td>
 <td>
@@ -2715,7 +2686,7 @@ No
 </tr>
 <tr id="InstallStatus-VersionStatus-status">
 <td><code>status</code></td>
-<td><code><a href="#Status">Status</a></code></td>
+<td><code><a href="#InstallStatus-Status">Status</a></code></td>
 <td>
 </td>
 <td>
@@ -2906,7 +2877,7 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="Status">Status</h2>
+<h2 id="InstallStatus-Status">InstallStatus.Status</h2>
 <section>
 <p>Status describes the current state of a component.</p>
 
@@ -2918,47 +2889,47 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="Status-NONE">
+<tr id="InstallStatus-Status-NONE">
 <td><code>NONE</code></td>
 <td>
 <p>Component is not present.</p>
 
 </td>
 </tr>
-<tr id="Status-UPDATING">
+<tr id="InstallStatus-Status-UPDATING">
 <td><code>UPDATING</code></td>
 <td>
 <p>Component is being updated to a different version.</p>
 
 </td>
 </tr>
-<tr id="Status-RECONCILING">
+<tr id="InstallStatus-Status-RECONCILING">
 <td><code>RECONCILING</code></td>
 <td>
 <p>Controller has started but not yet completed reconciliation loop for the component.</p>
 
 </td>
 </tr>
-<tr id="Status-HEALTHY">
+<tr id="InstallStatus-Status-HEALTHY">
 <td><code>HEALTHY</code></td>
 <td>
 <p>Component is healthy.</p>
 
 </td>
 </tr>
-<tr id="Status-ERROR">
+<tr id="InstallStatus-Status-ERROR">
 <td><code>ERROR</code></td>
 <td>
 <p>Component is in an error state.</p>
 
 </td>
 </tr>
-<tr id="Status-PENDING">
+<tr id="InstallStatus-Status-PENDING">
 <td><code>PENDING</code></td>
 <td>
 <p>Overall status only and would not be set as a component status.
-Action is needed from user for reconciliation loop to proceed
-e.g. There are proxies still pointing to the control plane revision when try to remove IstioOperator CR.</p>
+Action is needed from the user for reconciliation to proceed
+e.g. There are proxies still pointing to the control plane revision when try to remove an IstioOperator CR.</p>
 
 </td>
 </tr>
