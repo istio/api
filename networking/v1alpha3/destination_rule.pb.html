@@ -1029,10 +1029,10 @@ following keys and values: <code>key: &lt;privateKey&gt;</code>,
 Secret of type tls for client certificates along with
 ca.crt key for CA certificates is also supported.
 Only one of client certificates and CA certificate
-or credentialName can be specified.
-<code>This field is currently in alpha and is partially implemented.</code>
-Istio 1.7 implementation only supports it for Kubernetes
-secrets, used in Gateway.</p>
+or credentialName can be specified.</p>
+
+<p><strong>NOTE:</strong> This field is currently applicable only at gateways.
+Sidecars will continue to use the certificate paths.</p>
 
 </td>
 <td>

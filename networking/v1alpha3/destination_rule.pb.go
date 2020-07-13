@@ -1808,9 +1808,9 @@ type ClientTLSSettings struct {
 	// ca.crt key for CA certificates is also supported.
 	// Only one of client certificates and CA certificate
 	// or credentialName can be specified.
-	// `This field is currently in alpha and is partially implemented.`
-	// Istio 1.7 implementation only supports it for Kubernetes
-	// secrets, used in Gateway.
+	//
+	// **NOTE:** This field is currently applicable only at gateways.
+	// Sidecars will continue to use the certificate paths.
 	CredentialName string `protobuf:"bytes,7,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
 	// A list of alternate names to verify the subject identity in the
 	// certificate. If specified, the proxy will verify that the server
