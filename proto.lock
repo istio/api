@@ -36835,6 +36835,11 @@
                 "id": 29,
                 "name": "termination_drain_duration",
                 "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 30,
+                "name": "mesh_id",
+                "type": "int32"
               }
             ],
             "maps": [
@@ -44667,6 +44672,9 @@
           },
           {
             "path": "k8s.io/apimachinery/pkg/api/resource/generated.proto"
+          },
+          {
+            "path": "gogoproto/gogo.proto"
           }
         ],
         "package": {
@@ -44676,6 +44684,18 @@
           {
             "name": "go_package",
             "value": "istio.io/api/operator/v1alpha1"
+          },
+          {
+            "name": "(gogoproto.marshaler_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.unmarshaler_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.sizer_all)",
+            "value": "false"
           }
         ]
       }

@@ -51,8 +51,8 @@
 //   - applyTo: NETWORK_FILTER
 //     match:
 //       context: SIDECAR_OUTBOUND # will match outbound listeners in all sidecars
+//       portNumber: 9307
 //       listener:
-//         portNumber: 9307
 //         filterChain:
 //           filter:
 //             name: "envoy.tcp_proxy"
@@ -102,8 +102,8 @@
 //   - applyTo: HTTP_FILTER
 //     match:
 //       context: SIDECAR_INBOUND
+//       portNumber: 8080
 //       listener:
-//         portNumber: 8080
 //         filterChain:
 //           filter:
 //             name: "envoy.http_connection_manager"
