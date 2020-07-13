@@ -38,7 +38,7 @@
 // protocol filter on all sidecars in the system, for outbound port
 // 9307. The filter should be added before the terminating tcp_proxy
 // filter to take effect. In addition, it sets a 30s idle timeout for
-// all HTTP connections in both gateays and sidecars.
+// all HTTP connections in both gateways and sidecars.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
