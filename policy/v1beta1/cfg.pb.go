@@ -1563,7 +1563,7 @@ type Mutual struct {
 	CaCertificates string `protobuf:"bytes,3,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
 	// Used to configure mixer mutual TLS client to supply server name for SNI.
 	// It is not used to verify the hostname of the peer certificate, since
-	// Istio verifies whitelisted SAN fields in mutual TLS.
+	// Istio verifies allowed SAN fields in mutual TLS.
 	ServerName string `protobuf:"bytes,4,opt,name=server_name,json=serverName,proto3" json:"server_name,omitempty"`
 }
 

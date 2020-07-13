@@ -2739,7 +2739,7 @@ type CorsPolicy struct {
 	// List of HTTP headers that can be used when requesting the
 	// resource. Serialized to Access-Control-Allow-Headers header.
 	AllowHeaders []string `protobuf:"bytes,3,rep,name=allow_headers,json=allowHeaders,proto3" json:"allow_headers,omitempty"`
-	// A white list of HTTP headers that the browsers are allowed to
+	// A list of HTTP headers that the browsers are allowed to
 	// access. Serialized into Access-Control-Expose-Headers header.
 	ExposeHeaders []string `protobuf:"bytes,4,rep,name=expose_headers,json=exposeHeaders,proto3" json:"expose_headers,omitempty"`
 	// Specifies how long the results of a preflight request can be

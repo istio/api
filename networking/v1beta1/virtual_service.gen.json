@@ -414,7 +414,7 @@
             }
           },
           "exposeHeaders": {
-            "description": "A white list of HTTP headers that the browsers are allowed to access. Serialized into Access-Control-Expose-Headers header.",
+            "description": "A list of HTTP headers that the browsers are allowed to access. Serialized into Access-Control-Expose-Headers header.",
             "type": "array",
             "items": {
               "type": "string",

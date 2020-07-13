@@ -37,7 +37,7 @@ option cc_enable_arenas = true;
 // - *Precondition Checking*. Enables callers to verify a number of preconditions
 // before responding to an incoming request from a service consumer.
 // Preconditions can include whether the service consumer is properly
-// authenticated, is on the service’s whitelist, passes ACL checks, and more.
+// authenticated, is on the service’s allowlist, passes ACL checks, and more.
 //
 // - *Quota Management*. Enables services to allocate and free quota on a number
 // of dimensions, Quotas are used as a relatively simple resource management tool
