@@ -101,6 +101,8 @@ gen: \
 	generate-networking \
 	generate-authn \
 	generate-security \
+	generate-analysis \
+	generate-meta \
 	generate-envoy \
 	generate-policy \
 	generate-annotations \
@@ -395,6 +397,50 @@ clean-security:
 	@rm -fr $(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons) $(security_v1beta1_k8s_gos)
 
 #####################
+# analysis/...
+#####################
+
+analysis_v1alpha1_path := analysis/v1alpha1
+analysis_v1alpha1_protos := $(wildcard $(analysis_v1alpha1_path)/*.proto)
+analysis_v1alpha1_pb_gos := $(analysis_v1alpha1_protos:.proto=.pb.go)
+analysis_v1alpha1_pb_pythons := $(patsubst $(analysis_v1alpha1_path)/%.proto,$(python_output_path)/$(analysis_v1alpha1_path)/%_pb2.py,$(analysis_v1alpha1_protos))
+analysis_v1alpha1_pb_docs := $(analysis_v1alpha1_protos:.proto=.pb.html)
+analysis_v1alpha1_openapi := $(analysis_v1alpha1_protos:.proto=.gen.json)
+
+
+$(analysis_v1alpha1_pb_gos) $(analysis_v1alpha1_pb_docs) $(analysis_v1alpha1_pb_pythons): $(analysis_v1alpha1_protos)
+	@$(protolock) status
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin_per_file)$(analysis_v1alpha1_path) $(protoc_gen_python_plugin) $^
+	@cp -r /tmp/istio.io/api/analysis/* analysis
+
+generate-analysis: $(analysis_v1alpha1_pb_gos) $(analysis_v1alpha1_pb_docs) $(analysis_v1alpha1_pb_pythons)
+
+clean-analysis:
+	@rm -fr $(analysis_v1alpha1_pb_gos) $(analysis_v1alpha1_pb_docs) $(analysis_v1alpha1_pb_pythons)
+
+#####################
+# meta/...
+#####################
+
+meta_v1alpha1_path := meta/v1alpha1
+meta_v1alpha1_protos := $(wildcard $(meta_v1alpha1_path)/*.proto)
+meta_v1alpha1_pb_gos := $(meta_v1alpha1_protos:.proto=.pb.go)
+meta_v1alpha1_pb_pythons := $(patsubst $(meta_v1alpha1_path)/%.proto,$(python_output_path)/$(meta_v1alpha1_path)/%_pb2.py,$(meta_v1alpha1_protos))
+meta_v1alpha1_pb_docs := $(meta_v1alpha1_protos:.proto=.pb.html)
+meta_v1alpha1_openapi := $(meta_v1alpha1_protos:.proto=.gen.json)
+
+
+$(meta_v1alpha1_pb_gos) $(meta_v1alpha1_pb_docs) $(meta_v1alpha1_pb_pythons): $(meta_v1alpha1_protos)
+	@$(protolock) status
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_docs_plugin_per_file)$(meta_v1alpha1_path) $(protoc_gen_python_plugin) $^
+	@cp -r /tmp/istio.io/api/meta/* meta
+
+generate-meta: $(meta_v1alpha1_pb_gos) $(meta_v1alpha1_pb_docs) $(meta_v1alpha1_pb_pythons)
+
+clean-meta:
+	@rm -fr $(meta_v1alpha1_pb_gos) $(meta_v1alpha1_pb_docs)
+
+#####################
 # envoy/...
 #####################
 
@@ -469,6 +515,8 @@ all_protos := \
 	$(networking_v1beta1_protos) \
 	$(authn_v1alpha1_protos) \
 	$(security_v1beta1_protos) \
+	$(analysis_v1alpha1_protos) \
+	$(meta_v1alpha1_protos) \
 	$(type_v1beta1_protos)
 
 all_openapi := \
@@ -484,6 +532,8 @@ all_openapi := \
 	$(networking_v1beta1_openapi) \
 	$(authn_v1alpha1_openapi) \
 	$(security_v1beta1_openapi) \
+	$(analysis_v1alpha1_openapi) \
+	$(meta_v1alpha1_openapi) \
 	$(type_v1beta1_openapi)
 
 all_openapi_crd := kubernetes/customresourcedefinitions.gen.yaml
@@ -524,6 +574,8 @@ clean: \
 	clean-annotations \
 	clean-openapi-schema \
 	clean-security \
+	clean-analysis \
+	clean-meta \
 	clean-type \
 	clean-openapi-crd
 

@@ -1,6 +1,165 @@
 {
   "definitions": [
     {
+      "protopath": "analysis:/:v1alpha1:/:message.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "AnalysisMessageBase.Level",
+            "enum_fields": [
+              {
+                "name": "UNKNOWN"
+              },
+              {
+                "name": "ERROR",
+                "integer": 3
+              },
+              {
+                "name": "WARNING",
+                "integer": 8
+              },
+              {
+                "name": "INFO",
+                "integer": 12
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "name": "AnalysisMessageBase",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "Type"
+              },
+              {
+                "id": 2,
+                "name": "level",
+                "type": "Level"
+              },
+              {
+                "id": 3,
+                "name": "documentation_url",
+                "type": "string"
+              }
+            ],
+            "messages": [
+              {
+                "name": "Type",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "code",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "AnalysisMessageWeakSchema",
+            "fields": [
+              {
+                "id": 1,
+                "name": "message_base",
+                "type": "AnalysisMessageBase"
+              },
+              {
+                "id": 2,
+                "name": "description",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "template",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "args",
+                "type": "ArgType",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "ArgType",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "go_type",
+                    "type": "string"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "GenericAnalysisMessage",
+            "fields": [
+              {
+                "id": 1,
+                "name": "message_base",
+                "type": "AnalysisMessageBase"
+              },
+              {
+                "id": 2,
+                "name": "args",
+                "type": "google.protobuf.Struct"
+              },
+              {
+                "id": 3,
+                "name": "resource_paths",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "InternalErrorAnalysisMessage",
+            "fields": [
+              {
+                "id": 1,
+                "name": "message_base",
+                "type": "AnalysisMessageBase"
+              },
+              {
+                "id": 2,
+                "name": "detail",
+                "type": "string"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/struct.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.analysis.v1alpha1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/analysis/v1alpha1"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "authentication:/:v1alpha1:/:policy.proto",
       "def": {
         "enums": [
@@ -36835,6 +36994,11 @@
                 "id": 29,
                 "name": "termination_drain_duration",
                 "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 30,
+                "name": "mesh_id",
+                "type": "int32"
               }
             ],
             "maps": [
@@ -36893,6 +37057,85 @@
           {
             "name": "go_package",
             "value": "istio.io/api/mesh/v1alpha1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "meta:/:v1alpha1:/:status.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "IstioStatus",
+            "fields": [
+              {
+                "id": 1,
+                "name": "conditions",
+                "type": "IstioCondition",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "validation_messages",
+                "type": "analysis.v1alpha1.AnalysisMessageBase",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "IstioCondition",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "status",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "last_probe_time",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.Time"
+              },
+              {
+                "id": 4,
+                "name": "last_transition_time",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.Time"
+              },
+              {
+                "id": 5,
+                "name": "reason",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "message",
+                "type": "string"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "analysis/v1alpha1/message.proto"
+          },
+          {
+            "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
+          },
+          {
+            "path": "google/api/field_behavior.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.meta.v1alpha1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/meta/v1alpha1"
           }
         ]
       }
@@ -44667,6 +44910,9 @@
           },
           {
             "path": "k8s.io/apimachinery/pkg/api/resource/generated.proto"
+          },
+          {
+            "path": "gogoproto/gogo.proto"
           }
         ],
         "package": {
@@ -44676,6 +44922,18 @@
           {
             "name": "go_package",
             "value": "istio.io/api/operator/v1alpha1"
+          },
+          {
+            "name": "(gogoproto.marshaler_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.unmarshaler_all)",
+            "value": "false"
+          },
+          {
+            "name": "(gogoproto.sizer_all)",
+            "value": "false"
           }
         ]
       }

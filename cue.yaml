@@ -31,6 +31,10 @@ directories:
     - mode: all
   security/v1beta1:
     - mode: perFile
+  analysis/v1alpha1:
+    - mode: perFile
+  meta/v1alpha1:
+    - mode: perFile
 
 
 # All is used when generating all types referenced in the above directories to
