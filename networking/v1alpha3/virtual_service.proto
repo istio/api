@@ -1640,7 +1640,7 @@ message CorsPolicy {
   // resource. Serialized to Access-Control-Allow-Headers header.
   repeated string allow_headers = 3;
 
-  // A white list of HTTP headers that the browsers are allowed to
+  // A list of HTTP headers that the browsers are allowed to
   // access. Serialized into Access-Control-Expose-Headers header.
   repeated string expose_headers = 4;
 
