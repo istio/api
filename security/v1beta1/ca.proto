@@ -1,0 +1,50 @@
+// Copyright Istio Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+import "google/protobuf/duration.proto";
+
+package istio.security.v1beta1;
+
+option go_package="istio.io/api/security/v1beta1";
+
+// Certificate request message.
+// The authentication should be based on
+// 1. bearer tokens carried in the side channel;
+// 2. Client-side certificate via Mutual TLS handshake.
+// Note: the server side may overwrite any requested certificate field based on its policies.
+message CertificateRequest {
+  // PEM-encoded certificate request.
+  // The public key in the CSR is used to generate the certificate,
+  // and other fields in the generated certificate may be overwritten by the CA.
+  string csr = 1;
+  // Optional: requested certificate validity period.
+  google.protobuf.Duration validity = 2;
+}
+
+// Certificate response message.
+message CertificateResponse {
+  // PEM-encoded certificate chain.
+  // The leaf cert is the first element, and the root cert is the last element.
+  repeated string certificate_chain = 1;
+}
+
+// Service for issuing certificates signed by the CA.
+service CertificateService {
+  // Returns a signed certificate or error based on the CertificateRequest, CA configurations and policies.
+  rpc CreateCertificate(CertificateRequest)
+    returns (CertificateResponse) {
+  }
+}

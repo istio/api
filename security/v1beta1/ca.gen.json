@@ -1,0 +1,40 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "",
+    "version": "v1beta1"
+  },
+  "components": {
+    "schemas": {
+      "istio.security.v1beta1.CertificateRequest": {
+        "description": "Certificate request message. The authentication should be based on 1. bearer tokens carried in the side channel; 2. Client-side certificate via Mutual TLS handshake. Note: the server side may overwrite any requested certificate field based on its policies.",
+        "type": "object",
+        "properties": {
+          "csr": {
+            "description": "PEM-encoded certificate request. The public key in the CSR is used to generate the certificate, and other fields in the generated certificate may be overwritten by the CA.",
+            "type": "string",
+            "format": "string"
+          },
+          "validity": {
+            "description": "Optional: requested certificate validity period.",
+            "type": "string"
+          }
+        }
+      },
+      "istio.security.v1beta1.CertificateResponse": {
+        "description": "Certificate response message.",
+        "type": "object",
+        "properties": {
+          "certificateChain": {
+            "description": "PEM-encoded certificate chain. The leaf cert is the first element, and the root cert is the last element.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
