@@ -1798,9 +1798,8 @@ type ClientTLSSettings struct {
 	// Should be empty if mode is `ISTIO_MUTUAL`.
 	CaCertificates string `protobuf:"bytes,4,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
 	// The name of the secret that holds the TLS certs for the
-	// client including the CA certificates. Applicable
-	// only on Kubernetes. Secret must exist in the same
-	// namespace with the proxy using the certificates.
+	// client including the CA certificates. Secret must exist in the
+	// same namespace with the proxy using the certificates.
 	// The secret (of type `generic`)should contain the
 	// following keys and values: `key: <privateKey>`,
 	// `cert: <serverCert>`, `cacert: <CACertificate>`.
@@ -1808,6 +1807,9 @@ type ClientTLSSettings struct {
 	// ca.crt key for CA certificates is also supported.
 	// Only one of client certificates and CA certificate
 	// or credentialName can be specified.
+	//
+	// **NOTE:** This field is currently applicable only at gateways.
+	// Sidecars will continue to use the certificate paths.
 	CredentialName string `protobuf:"bytes,7,opt,name=credential_name,json=credentialName,proto3" json:"credential_name,omitempty"`
 	// A list of alternate names to verify the subject identity in the
 	// certificate. If specified, the proxy will verify that the server
