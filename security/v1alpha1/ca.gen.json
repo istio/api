@@ -2,11 +2,11 @@
   "openapi": "3.0.0",
   "info": {
     "title": "",
-    "version": "v1beta1"
+    "version": "v1alpha1"
   },
   "components": {
     "schemas": {
-      "istio.security.v1beta1.IstioCertificateRequest": {
+      "istio.v1.auth.IstioCertificateRequest": {
         "description": "Certificate request message. The authentication should be based on 1. bearer tokens carried in the side channel; 2. Client-side certificate via Mutual TLS handshake. Note: the server side may overwrite any requested certificate field based on its policies.",
         "type": "object",
         "properties": {
@@ -27,7 +27,7 @@
           }
         }
       },
-      "istio.security.v1beta1.IstioCertificateResponse": {
+      "istio.v1.auth.IstioCertificateResponse": {
         "description": "Certificate response message.",
         "type": "object",
         "properties": {

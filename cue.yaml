@@ -29,6 +29,8 @@ directories:
     - mode: perFile
   policy/v1beta1:
     - mode: all
+  security/v1alpha1:
+    - mode: perFile
   security/v1beta1:
     - mode: perFile
   analysis/v1alpha1:

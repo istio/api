@@ -3,7 +3,7 @@
 
 // Keep this package for backward compatibility.
 
-package v1beta1
+package v1alpha1
 
 import (
 	fmt "fmt"
