@@ -13,39 +13,44 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from google.protobuf import duration_pb2 as google_dot_protobuf_dot_duration__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='security/v1beta1/ca.proto',
-  package='istio.security.v1beta1',
+  package='istio.v1.auth',
   syntax='proto3',
   serialized_options=_b('Z\035istio.io/api/security/v1beta1'),
-  serialized_pb=_b('\n\x19security/v1beta1/ca.proto\x12\x16istio.security.v1beta1\x1a\x1egoogle/protobuf/duration.proto\"N\n\x12\x43\x65rtificateRequest\x12\x0b\n\x03\x63sr\x18\x01 \x01(\t\x12+\n\x08validity\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\"0\n\x13\x43\x65rtificateResponse\x12\x19\n\x11\x63\x65rtificate_chain\x18\x01 \x03(\t2\x84\x01\n\x12\x43\x65rtificateService\x12n\n\x11\x43reateCertificate\x12*.istio.security.v1beta1.CertificateRequest\x1a+.istio.security.v1beta1.CertificateResponse\"\x00\x42\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
-  ,
-  dependencies=[google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,])
+  serialized_pb=_b('\n\x19security/v1beta1/ca.proto\x12\ristio.v1.auth\"U\n\x17IstioCertificateRequest\x12\x0b\n\x03\x63sr\x18\x01 \x01(\t\x12\x12\n\nsubject_id\x18\x02 \x01(\t\x12\x19\n\x11validity_duration\x18\x03 \x01(\x03\".\n\x18IstioCertificateResponse\x12\x12\n\ncert_chain\x18\x01 \x03(\t2\x81\x01\n\x17IstioCertificateService\x12\x66\n\x11\x43reateCertificate\x12&.istio.v1.auth.IstioCertificateRequest\x1a\'.istio.v1.auth.IstioCertificateResponse\"\x00\x42\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
+)
 
 
 
 
-_CERTIFICATEREQUEST = _descriptor.Descriptor(
-  name='CertificateRequest',
-  full_name='istio.security.v1beta1.CertificateRequest',
+_ISTIOCERTIFICATEREQUEST = _descriptor.Descriptor(
+  name='IstioCertificateRequest',
+  full_name='istio.v1.auth.IstioCertificateRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='csr', full_name='istio.security.v1beta1.CertificateRequest.csr', index=0,
+      name='csr', full_name='istio.v1.auth.IstioCertificateRequest.csr', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='validity', full_name='istio.security.v1beta1.CertificateRequest.validity', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='subject_id', full_name='istio.v1.auth.IstioCertificateRequest.subject_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='validity_duration', full_name='istio.v1.auth.IstioCertificateRequest.validity_duration', index=2,
+      number=3, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -61,20 +66,20 @@ _CERTIFICATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=85,
-  serialized_end=163,
+  serialized_start=44,
+  serialized_end=129,
 )
 
 
-_CERTIFICATERESPONSE = _descriptor.Descriptor(
-  name='CertificateResponse',
-  full_name='istio.security.v1beta1.CertificateResponse',
+_ISTIOCERTIFICATERESPONSE = _descriptor.Descriptor(
+  name='IstioCertificateResponse',
+  full_name='istio.v1.auth.IstioCertificateResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='certificate_chain', full_name='istio.security.v1beta1.CertificateResponse.certificate_chain', index=0,
+      name='cert_chain', full_name='istio.v1.auth.IstioCertificateResponse.cert_chain', index=0,
       number=1, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -92,53 +97,52 @@ _CERTIFICATERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=165,
-  serialized_end=213,
+  serialized_start=131,
+  serialized_end=177,
 )
 
-_CERTIFICATEREQUEST.fields_by_name['validity'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
-DESCRIPTOR.message_types_by_name['CertificateRequest'] = _CERTIFICATEREQUEST
-DESCRIPTOR.message_types_by_name['CertificateResponse'] = _CERTIFICATERESPONSE
+DESCRIPTOR.message_types_by_name['IstioCertificateRequest'] = _ISTIOCERTIFICATEREQUEST
+DESCRIPTOR.message_types_by_name['IstioCertificateResponse'] = _ISTIOCERTIFICATERESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-CertificateRequest = _reflection.GeneratedProtocolMessageType('CertificateRequest', (_message.Message,), {
-  'DESCRIPTOR' : _CERTIFICATEREQUEST,
+IstioCertificateRequest = _reflection.GeneratedProtocolMessageType('IstioCertificateRequest', (_message.Message,), {
+  'DESCRIPTOR' : _ISTIOCERTIFICATEREQUEST,
   '__module__' : 'security.v1beta1.ca_pb2'
-  # @@protoc_insertion_point(class_scope:istio.security.v1beta1.CertificateRequest)
+  # @@protoc_insertion_point(class_scope:istio.v1.auth.IstioCertificateRequest)
   })
-_sym_db.RegisterMessage(CertificateRequest)
+_sym_db.RegisterMessage(IstioCertificateRequest)
 
-CertificateResponse = _reflection.GeneratedProtocolMessageType('CertificateResponse', (_message.Message,), {
-  'DESCRIPTOR' : _CERTIFICATERESPONSE,
+IstioCertificateResponse = _reflection.GeneratedProtocolMessageType('IstioCertificateResponse', (_message.Message,), {
+  'DESCRIPTOR' : _ISTIOCERTIFICATERESPONSE,
   '__module__' : 'security.v1beta1.ca_pb2'
-  # @@protoc_insertion_point(class_scope:istio.security.v1beta1.CertificateResponse)
+  # @@protoc_insertion_point(class_scope:istio.v1.auth.IstioCertificateResponse)
   })
-_sym_db.RegisterMessage(CertificateResponse)
+_sym_db.RegisterMessage(IstioCertificateResponse)
 
 
 DESCRIPTOR._options = None
 
-_CERTIFICATESERVICE = _descriptor.ServiceDescriptor(
-  name='CertificateService',
-  full_name='istio.security.v1beta1.CertificateService',
+_ISTIOCERTIFICATESERVICE = _descriptor.ServiceDescriptor(
+  name='IstioCertificateService',
+  full_name='istio.v1.auth.IstioCertificateService',
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=216,
-  serialized_end=348,
+  serialized_start=180,
+  serialized_end=309,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateCertificate',
-    full_name='istio.security.v1beta1.CertificateService.CreateCertificate',
+    full_name='istio.v1.auth.IstioCertificateService.CreateCertificate',
     index=0,
     containing_service=None,
-    input_type=_CERTIFICATEREQUEST,
-    output_type=_CERTIFICATERESPONSE,
+    input_type=_ISTIOCERTIFICATEREQUEST,
+    output_type=_ISTIOCERTIFICATERESPONSE,
     serialized_options=None,
   ),
 ])
-_sym_db.RegisterServiceDescriptor(_CERTIFICATESERVICE)
+_sym_db.RegisterServiceDescriptor(_ISTIOCERTIFICATESERVICE)
 
-DESCRIPTOR.services_by_name['CertificateService'] = _CERTIFICATESERVICE
+DESCRIPTOR.services_by_name['IstioCertificateService'] = _ISTIOCERTIFICATESERVICE
 
 # @@protoc_insertion_point(module_scope)

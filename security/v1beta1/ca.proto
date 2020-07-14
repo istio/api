@@ -14,9 +14,7 @@
 
 syntax = "proto3";
 
-import "google/protobuf/duration.proto";
-
-package istio.security.v1beta1;
+package istio.v1.auth;
 
 option go_package="istio.io/api/security/v1beta1";
 
@@ -25,26 +23,28 @@ option go_package="istio.io/api/security/v1beta1";
 // 1. bearer tokens carried in the side channel;
 // 2. Client-side certificate via Mutual TLS handshake.
 // Note: the server side may overwrite any requested certificate field based on its policies.
-message CertificateRequest {
+message IstioCertificateRequest {
   // PEM-encoded certificate request.
   // The public key in the CSR is used to generate the certificate,
   // and other fields in the generated certificate may be overwritten by the CA.
   string csr = 1;
-  // Optional: requested certificate validity period.
-  google.protobuf.Duration validity = 2;
+  // Optional subject ID field.
+  string subject_id = 2;
+  // Optional: requested certificate validity period, in seconds.
+  int64 validity_duration = 3;
 }
 
 // Certificate response message.
-message CertificateResponse {
+message IstioCertificateResponse {
   // PEM-encoded certificate chain.
   // The leaf cert is the first element, and the root cert is the last element.
-  repeated string certificate_chain = 1;
+  repeated string cert_chain = 1;
 }
 
-// Service for issuing certificates signed by the CA.
-service CertificateService {
-  // Returns a signed certificate or error based on the CertificateRequest, CA configurations and policies.
-  rpc CreateCertificate(CertificateRequest)
-    returns (CertificateResponse) {
+// Service for managing certificates issued by the CA.
+service IstioCertificateService {
+  // Using provided CSR, returns a signed certificate.
+  rpc CreateCertificate(IstioCertificateRequest)
+      returns (IstioCertificateResponse) {
   }
 }

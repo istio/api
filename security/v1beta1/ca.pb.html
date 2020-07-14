@@ -1,21 +1,21 @@
 ---
-title: istio.security.v1beta1
+title: istio.v1.auth
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 number_of_entries: 3
 ---
 <h2 id="Services">Services</h2>
-<h3 id="CertificateService">CertificateService</h3>
+<h3 id="IstioCertificateService">IstioCertificateService</h3>
 <section>
-<p>Service for issuing certificates signed by the CA.</p>
+<p>Service for managing certificates issued by the CA.</p>
 
-<pre id="CertificateService-CreateCertificate"><code class="language-proto">rpc CreateCertificate(CertificateRequest) returns (CertificateResponse)
+<pre id="IstioCertificateService-CreateCertificate"><code class="language-proto">rpc CreateCertificate(IstioCertificateRequest) returns (IstioCertificateResponse)
 </code></pre>
-<p>Returns a signed certificate or error based on the CertificateRequest, CA configurations and policies.</p>
+<p>Using provided CSR, returns a signed certificate.</p>
 
 </section>
 <h2 id="Types">Types</h2>
-<h3 id="CertificateRequest">CertificateRequest</h3>
+<h3 id="IstioCertificateRequest">IstioCertificateRequest</h3>
 <section>
 <p>Certificate request message.
 The authentication should be based on
@@ -33,7 +33,7 @@ Note: the server side may overwrite any requested certificate field based on its
 </tr>
 </thead>
 <tbody>
-<tr id="CertificateRequest-csr">
+<tr id="IstioCertificateRequest-csr">
 <td><code>csr</code></td>
 <td><code>string</code></td>
 <td>
@@ -46,11 +46,22 @@ and other fields in the generated certificate may be overwritten by the CA.</p>
 No
 </td>
 </tr>
-<tr id="CertificateRequest-validity">
-<td><code>validity</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<tr id="IstioCertificateRequest-subject_id">
+<td><code>subjectId</code></td>
+<td><code>string</code></td>
 <td>
-<p>Optional: requested certificate validity period.</p>
+<p>Optional subject ID field.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="IstioCertificateRequest-validity_duration">
+<td><code>validityDuration</code></td>
+<td><code>int64</code></td>
+<td>
+<p>Optional: requested certificate validity period, in seconds.</p>
 
 </td>
 <td>
@@ -60,7 +71,7 @@ No
 </tbody>
 </table>
 </section>
-<h3 id="CertificateResponse">CertificateResponse</h3>
+<h3 id="IstioCertificateResponse">IstioCertificateResponse</h3>
 <section>
 <p>Certificate response message.</p>
 
@@ -74,8 +85,8 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="CertificateResponse-certificate_chain">
-<td><code>certificateChain</code></td>
+<tr id="IstioCertificateResponse-cert_chain">
+<td><code>certChain</code></td>
 <td><code>string[]</code></td>
 <td>
 <p>PEM-encoded certificate chain.

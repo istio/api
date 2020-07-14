@@ -8,7 +8,6 @@ import (
 	fmt "fmt"
 	github_com_gogo_protobuf_jsonpb "github.com/gogo/protobuf/jsonpb"
 	proto "github.com/gogo/protobuf/proto"
-	_ "github.com/gogo/protobuf/types"
 	math "math"
 )
 
@@ -17,25 +16,25 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-// MarshalJSON is a custom marshaler for CertificateRequest
-func (this *CertificateRequest) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for IstioCertificateRequest
+func (this *IstioCertificateRequest) MarshalJSON() ([]byte, error) {
 	str, err := CaMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for CertificateRequest
-func (this *CertificateRequest) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for IstioCertificateRequest
+func (this *IstioCertificateRequest) UnmarshalJSON(b []byte) error {
 	return CaUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for CertificateResponse
-func (this *CertificateResponse) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for IstioCertificateResponse
+func (this *IstioCertificateResponse) MarshalJSON() ([]byte, error) {
 	str, err := CaMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for CertificateResponse
-func (this *CertificateResponse) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for IstioCertificateResponse
+func (this *IstioCertificateResponse) UnmarshalJSON(b []byte) error {
 	return CaUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

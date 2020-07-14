@@ -6,7 +6,7 @@
   },
   "components": {
     "schemas": {
-      "istio.security.v1beta1.CertificateRequest": {
+      "istio.security.v1beta1.IstioCertificateRequest": {
         "description": "Certificate request message. The authentication should be based on 1. bearer tokens carried in the side channel; 2. Client-side certificate via Mutual TLS handshake. Note: the server side may overwrite any requested certificate field based on its policies.",
         "type": "object",
         "properties": {
@@ -15,17 +15,23 @@
             "type": "string",
             "format": "string"
           },
-          "validity": {
-            "description": "Optional: requested certificate validity period.",
-            "type": "string"
+          "subjectId": {
+            "description": "Optional subject ID field.",
+            "type": "string",
+            "format": "string"
+          },
+          "validityDuration": {
+            "description": "Optional: requested certificate validity period, in seconds.",
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
-      "istio.security.v1beta1.CertificateResponse": {
+      "istio.security.v1beta1.IstioCertificateResponse": {
         "description": "Certificate response message.",
         "type": "object",
         "properties": {
-          "certificateChain": {
+          "certChain": {
             "description": "PEM-encoded certificate chain. The leaf cert is the first element, and the root cert is the last element.",
             "type": "array",
             "items": {
