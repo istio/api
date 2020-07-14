@@ -375,6 +375,21 @@ clean-authn:
 # security/...
 #####################
 
+security_v1alpha1_path := security/v1alpha1
+security_v1alpha1_protos := $(wildcard $(security_v1alpha1_path)/*.proto)
+security_v1alpha1_pb_gos := $(security_v1alpha1_protos:.proto=.pb.go)
+security_v1alpha1_pb_pythons := $(patsubst $(security_v1alpha1_path)/%.proto,$(python_output_path)/$(security_v1alpha1_path)/%_pb2.py,$(security_v1alpha1_protos))
+security_v1alpha1_pb_docs := $(security_v1alpha1_protos:.proto=.pb.html)
+security_v1alpha1_openapi := $(security_v1alpha1_protos:.proto=.gen.json)
+security_v1alpha1_k8s_gos := \
+	$(patsubst $(security_v1alpha1_path)/%.proto,$(security_v1alpha1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(security_v1alpha1_protos))) \
+	$(patsubst $(security_v1alpha1_path)/%.proto,$(security_v1alpha1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(security_v1alpha1_protos)))
+
+$(security_v1alpha1_pb_gos) $(security_v1alpha1_pb_docs) $(security_v1alpha1_pb_pythons) $(security_v1alpha1_k8s_gos): $(security_v1alpha1_protos)
+	@$(protolock) status
+	@$(protoc) $(gogofast_plugin) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin_per_file)$(security_v1alpha1_path) $(protoc_gen_python_plugin) $^
+	@cp -r /tmp/istio.io/api/security/* security
+
 security_v1beta1_path := security/v1beta1
 security_v1beta1_protos := $(wildcard $(security_v1beta1_path)/*.proto)
 security_v1beta1_pb_gos := $(security_v1beta1_protos:.proto=.pb.go)
@@ -385,16 +400,15 @@ security_v1beta1_k8s_gos := \
 	$(patsubst $(security_v1beta1_path)/%.proto,$(security_v1beta1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(security_v1beta1_protos))) \
 	$(patsubst $(security_v1beta1_path)/%.proto,$(security_v1beta1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(security_v1beta1_protos)))
 
-
 $(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons) $(security_v1beta1_k8s_gos): $(security_v1beta1_protos)
 	@$(protolock) status
 	@$(protoc) $(gogofast_plugin) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin_per_file)$(security_v1beta1_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/security/* security
 
-generate-security: $(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons) $(security_v1beta1_k8s_gos)
+generate-security: $(security_v1alpha1_pb_gos) $(security_v1alpha1_pb_docs) $(security_v1alpha1_pb_pythons) $(security_v1alpha1_k8s_gos) $(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons) $(security_v1beta1_k8s_gos)
 
 clean-security:
-	@rm -fr $(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons) $(security_v1beta1_k8s_gos)
+	@rm -fr $(security_v1alpha1_pb_gos) $(security_v1alpha1_pb_docs) $(security_v1alpha1_pb_pythons) $(security_v1alpha1_k8s_gos) $(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons) $(security_v1beta1_k8s_gos)
 
 #####################
 # analysis/...
