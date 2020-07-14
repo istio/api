@@ -19,7 +19,6 @@ import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 
 import "google/api/field_behavior.proto";
 
-// $hide_from_docs
 // $title: Istio Status
 // $description: Common status field for all istio collections.
 // $location: https://istio.io/docs/reference/config/meta/v1beta1/istio-status.html
