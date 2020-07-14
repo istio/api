@@ -622,6 +622,7 @@ func (m *Action) GetName() string {
 // +cue-gen:instance:subresource:status
 // +cue-gen:instance:scope:Namespaced
 // +cue-gen:instance:resource:categories=istio-io,policy-istio-io
+// +cue-gen:instance:preserveUnknownFields:params
 // -->
 //
 // <!-- go code generation tags
@@ -799,6 +800,7 @@ func (m *Instance) GetAttributeBindings() map[string]string {
 // +cue-gen:handler:subresource:status
 // +cue-gen:handler:scope:Namespaced
 // +cue-gen:handler:resource:categories=istio-io,policy-istio-io
+// +cue-gen:handler:preserveUnknownFields:params
 // -->
 //
 // <!-- go code generation tags
