@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.v1.auth',
   syntax='proto3',
   serialized_options=_b('Z\036istio.io/api/security/v1alpha1'),
-  serialized_pb=_b('\n\x1asecurity/v1alpha1/ca.proto\x12\ristio.v1.auth\"U\n\x17IstioCertificateRequest\x12\x0b\n\x03\x63sr\x18\x01 \x01(\t\x12\x12\n\nsubject_id\x18\x02 \x01(\t\x12\x19\n\x11validity_duration\x18\x03 \x01(\x03\".\n\x18IstioCertificateResponse\x12\x12\n\ncert_chain\x18\x01 \x03(\t2\x81\x01\n\x17IstioCertificateService\x12\x66\n\x11\x43reateCertificate\x12&.istio.v1.auth.IstioCertificateRequest\x1a\'.istio.v1.auth.IstioCertificateResponse\"\x00\x42 Z\x1eistio.io/api/security/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x1asecurity/v1alpha1/ca.proto\x12\ristio.v1.auth\"A\n\x17IstioCertificateRequest\x12\x0b\n\x03\x63sr\x18\x01 \x01(\t\x12\x19\n\x11validity_duration\x18\x03 \x01(\x03\".\n\x18IstioCertificateResponse\x12\x12\n\ncert_chain\x18\x01 \x03(\t2\x81\x01\n\x17IstioCertificateService\x12\x66\n\x11\x43reateCertificate\x12&.istio.v1.auth.IstioCertificateRequest\x1a\'.istio.v1.auth.IstioCertificateResponse\"\x00\x42 Z\x1eistio.io/api/security/v1alpha1b\x06proto3')
 )
 
 
@@ -41,14 +41,7 @@ _ISTIOCERTIFICATEREQUEST = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='subject_id', full_name='istio.v1.auth.IstioCertificateRequest.subject_id', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='validity_duration', full_name='istio.v1.auth.IstioCertificateRequest.validity_duration', index=2,
+      name='validity_duration', full_name='istio.v1.auth.IstioCertificateRequest.validity_duration', index=1,
       number=3, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -67,7 +60,7 @@ _ISTIOCERTIFICATEREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=45,
-  serialized_end=130,
+  serialized_end=110,
 )
 
 
@@ -97,8 +90,8 @@ _ISTIOCERTIFICATERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=132,
-  serialized_end=178,
+  serialized_start=112,
+  serialized_end=158,
 )
 
 DESCRIPTOR.message_types_by_name['IstioCertificateRequest'] = _ISTIOCERTIFICATEREQUEST
@@ -128,8 +121,8 @@ _ISTIOCERTIFICATESERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=181,
-  serialized_end=310,
+  serialized_start=161,
+  serialized_end=290,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateCertificate',

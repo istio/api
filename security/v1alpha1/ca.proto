@@ -19,18 +19,17 @@ package istio.v1.auth;
 
 option go_package="istio.io/api/security/v1alpha1";
 
-// Certificate request message.
-// The authentication should be based on
-// 1. bearer tokens carried in the side channel;
+// Certificate request message. The authentication should be based on:
+// 1. Bearer tokens carried in the side channel;
 // 2. Client-side certificate via Mutual TLS handshake.
-// Note: the server side may overwrite any requested certificate field based on its policies.
+// Note: the service implementation is REQUIRED to verify the authenticated caller is authorize to
+// all SANs in the CSR. The server side may overwrite any requested certificate field based on its
+// policies.
 message IstioCertificateRequest {
   // PEM-encoded certificate request.
   // The public key in the CSR is used to generate the certificate,
   // and other fields in the generated certificate may be overwritten by the CA.
   string csr = 1;
-  // Optional subject ID field.
-  string subject_id = 2;
   // Optional: requested certificate validity period, in seconds.
   int64 validity_duration = 3;
 }
