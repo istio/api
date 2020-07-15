@@ -690,7 +690,7 @@
         }
       },
       "istio.mesh.v1alpha1.AuthenticationPolicy": {
-        "description": "AuthenticationPolicy defines authentication policy. It can be set for different scopes (mesh, service …), and the most narrow scope with non-INHERIT value will be used. Mesh policy cannot be INHERIT.",
+        "description": "AuthenticationPolicy defines how the proxy is authenticated when it connects to the control plane. It can be set for two different scopes, mesh-wide or set on a per-pod basis using the ProxyConfig annotation. Mesh policy cannot be INHERIT.",
         "type": "string",
         "enum": [
           "NONE",

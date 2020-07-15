@@ -25,16 +25,15 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// AuthenticationPolicy defines authentication policy. It can be set for
-// different scopes (mesh, service …), and the most narrow scope with
-// non-INHERIT value will be used.
+// AuthenticationPolicy defines how the proxy is authenticated when it connects to the control plane.
+// It can be set for two different scopes, mesh-wide or set on a per-pod basis using the ProxyConfig annotation.
 // Mesh policy cannot be INHERIT.
 type AuthenticationPolicy int32
 
 const (
-	// Do not encrypt Envoy to Envoy traffic.
+	// Do not encrypt proxy to control plane traffic.
 	AuthenticationPolicy_NONE AuthenticationPolicy = 0
-	// Envoy to Envoy traffic is wrapped into mutual TLS connections.
+	// Proxy to control plane traffic is wrapped into mutual TLS connections.
 	AuthenticationPolicy_MUTUAL_TLS AuthenticationPolicy = 1
 	// Use the policy defined by the parent scope. Should not be used for mesh
 	// policy.
@@ -1021,8 +1020,7 @@ type ProxyConfig struct {
 	ProxyAdminPort int32 `protobuf:"varint,11,opt,name=proxy_admin_port,json=proxyAdminPort,proto3" json:"proxyAdminPort,omitempty"`
 	// $hide_from_docs
 	AvailabilityZone string `protobuf:"bytes,12,opt,name=availability_zone,json=availabilityZone,proto3" json:"availabilityZone,omitempty"` // Deprecated: Do not use.
-	// Authentication policy defines the global switch to control authentication
-	// for Envoy-to-Envoy communication for istio components Mixer and Pilot.
+	// AuthenticationPolicy defines how the proxy is authenticated when it connects to the control plane.
 	// Default is set to MUTUAL_TLS.
 	ControlPlaneAuthPolicy AuthenticationPolicy `protobuf:"varint,13,opt,name=control_plane_auth_policy,json=controlPlaneAuthPolicy,proto3,enum=istio.mesh.v1alpha1.AuthenticationPolicy" json:"controlPlaneAuthPolicy,omitempty"`
 	// File path of custom proxy configuration, currently used by proxies
