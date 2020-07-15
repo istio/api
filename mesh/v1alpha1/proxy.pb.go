@@ -27,7 +27,6 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // AuthenticationPolicy defines how the proxy is authenticated when it connects to the control plane.
 // It can be set for two different scopes, mesh-wide or set on a per-pod basis using the ProxyConfig annotation.
-// and the most narrow scope with non-INHERIT value will be used.
 // Mesh policy cannot be INHERIT.
 type AuthenticationPolicy int32
 
