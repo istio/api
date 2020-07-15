@@ -40525,6 +40525,10 @@
                 "type": "OutboundTrafficPolicy"
               }
             ],
+            "reserved_ids": [
+              5,
+              6
+            ],
             "reserved_names": [
               "localhost"
             ]
@@ -40565,6 +40569,10 @@
                 ]
               }
             ],
+            "reserved_ids": [
+              5,
+              6
+            ],
             "reserved_names": [
               "localhost_client_tls"
             ]
@@ -40599,6 +40607,10 @@
                   }
                 ]
               }
+            ],
+            "reserved_ids": [
+              5,
+              6
             ],
             "reserved_names": [
               "localhost_server_tls"
@@ -42536,6 +42548,10 @@
                 "type": "OutboundTrafficPolicy"
               }
             ],
+            "reserved_ids": [
+              5,
+              6
+            ],
             "reserved_names": [
               "localhost"
             ]
@@ -42576,6 +42592,10 @@
                 ]
               }
             ],
+            "reserved_ids": [
+              5,
+              6
+            ],
             "reserved_names": [
               "localhost_client_tls"
             ]
@@ -42610,6 +42630,10 @@
                   }
                 ]
               }
+            ],
+            "reserved_ids": [
+              5,
+              6
             ],
             "reserved_names": [
               "localhost_server_tls"

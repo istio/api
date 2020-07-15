@@ -457,6 +457,7 @@ message Sidecar {
   OutboundTrafficPolicy outbound_traffic_policy = 4;
 
   reserved "localhost";
+  reserved 5, 6;
 }
 
 // `IstioIngressListener` specifies the properties of an inbound
@@ -485,6 +486,7 @@ message IstioIngressListener {
   string default_endpoint = 4 [(google.api.field_behavior) = REQUIRED];
 
   reserved "localhost_client_tls";
+  reserved 5, 6;
 }
 
 // `IstioEgressListener` specifies the properties of an outbound traffic
@@ -554,6 +556,7 @@ message IstioEgressListener {
   repeated string hosts = 4 [(google.api.field_behavior) = REQUIRED];
 
   reserved "localhost_server_tls";
+  reserved 5, 6;
 }
 
 // `WorkloadSelector` specifies the criteria used to determine if the

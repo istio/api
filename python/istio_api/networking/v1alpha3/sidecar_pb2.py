@@ -25,7 +25,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.networking.v1alpha3',
   syntax='proto3',
   serialized_options=_b('Z istio.io/api/networking/v1alpha3'),
-  serialized_pb=_b('\n!networking/v1alpha3/sidecar.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a!networking/v1alpha3/gateway.proto\x1a)networking/v1alpha3/virtual_service.proto\x1a*networking/v1alpha3/destination_rule.proto\"\xb1\x02\n\x07Sidecar\x12\x46\n\x11workload_selector\x18\x01 \x01(\x0b\x32+.istio.networking.v1alpha3.WorkloadSelector\x12@\n\x07ingress\x18\x02 \x03(\x0b\x32/.istio.networking.v1alpha3.IstioIngressListener\x12>\n\x06\x65gress\x18\x03 \x03(\x0b\x32..istio.networking.v1alpha3.IstioEgressListener\x12Q\n\x17outbound_traffic_policy\x18\x04 \x01(\x0b\x32\x30.istio.networking.v1alpha3.OutboundTrafficPolicyR\tlocalhost\"\xcb\x01\n\x14IstioIngressListener\x12\x32\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.PortB\x03\xe0\x41\x02\x12\x0c\n\x04\x62ind\x18\x02 \x01(\t\x12<\n\x0c\x63\x61pture_mode\x18\x03 \x01(\x0e\x32&.istio.networking.v1alpha3.CaptureMode\x12\x1d\n\x10\x64\x65\x66\x61ult_endpoint\x18\x04 \x01(\tB\x03\xe0\x41\x02R\x14localhost_client_tls\"\xba\x01\n\x13IstioEgressListener\x12-\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.Port\x12\x0c\n\x04\x62ind\x18\x02 \x01(\t\x12<\n\x0c\x63\x61pture_mode\x18\x03 \x01(\x0e\x32&.istio.networking.v1alpha3.CaptureMode\x12\x12\n\x05hosts\x18\x04 \x03(\tB\x03\xe0\x41\x02R\x14localhost_server_tls\"\x8f\x01\n\x10WorkloadSelector\x12L\n\x06labels\x18\x01 \x03(\x0b\x32\x37.istio.networking.v1alpha3.WorkloadSelector.LabelsEntryB\x03\xe0\x41\x02\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xc4\x01\n\x15OutboundTrafficPolicy\x12\x43\n\x04mode\x18\x01 \x01(\x0e\x32\x35.istio.networking.v1alpha3.OutboundTrafficPolicy.Mode\x12<\n\x0c\x65gress_proxy\x18\x02 \x01(\x0b\x32&.istio.networking.v1alpha3.Destination\"(\n\x04Mode\x12\x11\n\rREGISTRY_ONLY\x10\x00\x12\r\n\tALLOW_ANY\x10\x01*2\n\x0b\x43\x61ptureMode\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x00\x12\x0c\n\x08IPTABLES\x10\x01\x12\x08\n\x04NONE\x10\x02\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
+  serialized_pb=_b('\n!networking/v1alpha3/sidecar.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a!networking/v1alpha3/gateway.proto\x1a)networking/v1alpha3/virtual_service.proto\x1a*networking/v1alpha3/destination_rule.proto\"\xbd\x02\n\x07Sidecar\x12\x46\n\x11workload_selector\x18\x01 \x01(\x0b\x32+.istio.networking.v1alpha3.WorkloadSelector\x12@\n\x07ingress\x18\x02 \x03(\x0b\x32/.istio.networking.v1alpha3.IstioIngressListener\x12>\n\x06\x65gress\x18\x03 \x03(\x0b\x32..istio.networking.v1alpha3.IstioEgressListener\x12Q\n\x17outbound_traffic_policy\x18\x04 \x01(\x0b\x32\x30.istio.networking.v1alpha3.OutboundTrafficPolicyJ\x04\x08\x05\x10\x06J\x04\x08\x06\x10\x07R\tlocalhost\"\xd7\x01\n\x14IstioIngressListener\x12\x32\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.PortB\x03\xe0\x41\x02\x12\x0c\n\x04\x62ind\x18\x02 \x01(\t\x12<\n\x0c\x63\x61pture_mode\x18\x03 \x01(\x0e\x32&.istio.networking.v1alpha3.CaptureMode\x12\x1d\n\x10\x64\x65\x66\x61ult_endpoint\x18\x04 \x01(\tB\x03\xe0\x41\x02J\x04\x08\x05\x10\x06J\x04\x08\x06\x10\x07R\x14localhost_client_tls\"\xc6\x01\n\x13IstioEgressListener\x12-\n\x04port\x18\x01 \x01(\x0b\x32\x1f.istio.networking.v1alpha3.Port\x12\x0c\n\x04\x62ind\x18\x02 \x01(\t\x12<\n\x0c\x63\x61pture_mode\x18\x03 \x01(\x0e\x32&.istio.networking.v1alpha3.CaptureMode\x12\x12\n\x05hosts\x18\x04 \x03(\tB\x03\xe0\x41\x02J\x04\x08\x05\x10\x06J\x04\x08\x06\x10\x07R\x14localhost_server_tls\"\x8f\x01\n\x10WorkloadSelector\x12L\n\x06labels\x18\x01 \x03(\x0b\x32\x37.istio.networking.v1alpha3.WorkloadSelector.LabelsEntryB\x03\xe0\x41\x02\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xc4\x01\n\x15OutboundTrafficPolicy\x12\x43\n\x04mode\x18\x01 \x01(\x0e\x32\x35.istio.networking.v1alpha3.OutboundTrafficPolicy.Mode\x12<\n\x0c\x65gress_proxy\x18\x02 \x01(\x0b\x32&.istio.networking.v1alpha3.Destination\"(\n\x04Mode\x12\x11\n\rREGISTRY_ONLY\x10\x00\x12\r\n\tALLOW_ANY\x10\x01*2\n\x0b\x43\x61ptureMode\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x00\x12\x0c\n\x08IPTABLES\x10\x01\x12\x08\n\x04NONE\x10\x02\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_gateway__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_virtual__service__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_destination__rule__pb2.DESCRIPTOR,])
 
@@ -50,8 +50,8 @@ _CAPTUREMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1267,
-  serialized_end=1317,
+  serialized_start=1303,
+  serialized_end=1353,
 )
 _sym_db.RegisterEnumDescriptor(_CAPTUREMODE)
 
@@ -78,8 +78,8 @@ _OUTBOUNDTRAFFICPOLICY_MODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1225,
-  serialized_end=1265,
+  serialized_start=1261,
+  serialized_end=1301,
 )
 _sym_db.RegisterEnumDescriptor(_OUTBOUNDTRAFFICPOLICY_MODE)
 
@@ -132,7 +132,7 @@ _SIDECAR = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=220,
-  serialized_end=525,
+  serialized_end=537,
 )
 
 
@@ -183,8 +183,8 @@ _ISTIOINGRESSLISTENER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=528,
-  serialized_end=731,
+  serialized_start=540,
+  serialized_end=755,
 )
 
 
@@ -235,8 +235,8 @@ _ISTIOEGRESSLISTENER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=734,
-  serialized_end=920,
+  serialized_start=758,
+  serialized_end=956,
 )
 
 
@@ -273,8 +273,8 @@ _WORKLOADSELECTOR_LABELSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1021,
-  serialized_end=1066,
+  serialized_start=1057,
+  serialized_end=1102,
 )
 
 _WORKLOADSELECTOR = _descriptor.Descriptor(
@@ -303,8 +303,8 @@ _WORKLOADSELECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=923,
-  serialized_end=1066,
+  serialized_start=959,
+  serialized_end=1102,
 )
 
 
@@ -342,8 +342,8 @@ _OUTBOUNDTRAFFICPOLICY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1069,
-  serialized_end=1265,
+  serialized_start=1105,
+  serialized_end=1301,
 )
 
 _SIDECAR.fields_by_name['workload_selector'].message_type = _WORKLOADSELECTOR
