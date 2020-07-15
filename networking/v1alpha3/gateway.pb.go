@@ -474,9 +474,9 @@ type Gateway struct {
 	Servers []*Server `protobuf:"bytes,1,rep,name=servers,proto3" json:"servers,omitempty"`
 	// One or more labels that indicate a specific set of pods/VMs
 	// on which this gateway configuration should be applied.
-	// By default workloads are searched across namespaces based on labels selectors.
-	// This implies that a gateway resource in namespace foo can select pods in namespace
-	// bar based on labels.
+	// By default workloads are searched across all namespaces based on labels selectors.
+	// This implies that a gateway resource in namespace "foo" can select pods in
+	// the namespace "bar" based on labels.
 	// If PILOT_SCOPE_GATEWAY_TO_NAMESPACE environment variable in istiod is set
 	// to true, the scope of label search is restricted to the configuration
 	// namespace in which the the resource is present. In other words, the Gateway
