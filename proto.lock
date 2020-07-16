@@ -13049,7 +13049,13 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings"
+                        "name": "additional_bindings",
+                        "aggregated": [
+                          {
+                            "name": "get",
+                            "value": "/v1/services/{service_name}/config"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -40517,12 +40523,14 @@
                 "id": 4,
                 "name": "outbound_traffic_policy",
                 "type": "OutboundTrafficPolicy"
-              },
-              {
-                "id": 6,
-                "name": "localhost",
-                "type": "Localhost"
               }
+            ],
+            "reserved_ids": [
+              5,
+              6
+            ],
+            "reserved_names": [
+              "localhost"
             ]
           },
           {
@@ -40559,12 +40567,14 @@
                     "value": "REQUIRED"
                   }
                 ]
-              },
-              {
-                "id": 6,
-                "name": "localhost_client_tls",
-                "type": "ClientTLSSettings"
               }
+            ],
+            "reserved_ids": [
+              5,
+              6
+            ],
+            "reserved_names": [
+              "localhost_client_tls"
             ]
           },
           {
@@ -40596,12 +40606,14 @@
                     "value": "REQUIRED"
                   }
                 ]
-              },
-              {
-                "id": 5,
-                "name": "localhost_server_tls",
-                "type": "ServerTLSSettings"
               }
+            ],
+            "reserved_ids": [
+              5,
+              6
+            ],
+            "reserved_names": [
+              "localhost_server_tls"
             ]
           },
           {
@@ -40635,21 +40647,6 @@
                 "id": 2,
                 "name": "egress_proxy",
                 "type": "istio.networking.v1alpha3.Destination"
-              }
-            ]
-          },
-          {
-            "name": "Localhost",
-            "fields": [
-              {
-                "id": 1,
-                "name": "client_tls",
-                "type": "ClientTLSSettings"
-              },
-              {
-                "id": 2,
-                "name": "server_tls",
-                "type": "ServerTLSSettings"
               }
             ]
           }
@@ -42549,12 +42546,14 @@
                 "id": 4,
                 "name": "outbound_traffic_policy",
                 "type": "OutboundTrafficPolicy"
-              },
-              {
-                "id": 6,
-                "name": "localhost",
-                "type": "Localhost"
               }
+            ],
+            "reserved_ids": [
+              5,
+              6
+            ],
+            "reserved_names": [
+              "localhost"
             ]
           },
           {
@@ -42591,12 +42590,14 @@
                     "value": "REQUIRED"
                   }
                 ]
-              },
-              {
-                "id": 6,
-                "name": "localhost_client_tls",
-                "type": "ClientTLSSettings"
               }
+            ],
+            "reserved_ids": [
+              5,
+              6
+            ],
+            "reserved_names": [
+              "localhost_client_tls"
             ]
           },
           {
@@ -42628,12 +42629,14 @@
                     "value": "REQUIRED"
                   }
                 ]
-              },
-              {
-                "id": 5,
-                "name": "localhost_server_tls",
-                "type": "ServerTLSSettings"
               }
+            ],
+            "reserved_ids": [
+              5,
+              6
+            ],
+            "reserved_names": [
+              "localhost_server_tls"
             ]
           },
           {
@@ -42667,21 +42670,6 @@
                 "id": 2,
                 "name": "egress_proxy",
                 "type": "istio.networking.v1beta1.Destination"
-              }
-            ]
-          },
-          {
-            "name": "Localhost",
-            "fields": [
-              {
-                "id": 1,
-                "name": "client_tls",
-                "type": "ClientTLSSettings"
-              },
-              {
-                "id": 2,
-                "name": "server_tls",
-                "type": "ServerTLSSettings"
               }
             ]
           }
