@@ -474,10 +474,16 @@ type Gateway struct {
 	// A list of server specifications.
 	Servers []*Server `protobuf:"bytes,1,rep,name=servers,proto3" json:"servers,omitempty"`
 	// One or more labels that indicate a specific set of pods/VMs
-	// on which this gateway configuration should be applied. The scope of
-	// label search is restricted to the configuration namespace in which the
-	// the resource is present. In other words, the Gateway resource must
-	// reside in the same namespace as the gateway workload instance.
+	// on which this gateway configuration should be applied.
+	// By default workloads are searched across all namespaces based on label selectors.
+	// This implies that a gateway resource in the namespace "foo" can select pods in
+	// the namespace "bar" based on labels.
+	// This behavior can be controlled via the PILOT_SCOPE_GATEWAY_TO_NAMESPACE
+	// environment variable in istiod. If this variable is set
+	// to true, the scope of label search is restricted to the configuration
+	// namespace in which the the resource is present. In other words, the Gateway
+	// resource must reside in the same namespace as the gateway workload
+	// instance.
 	// If selector is nil, the Gateway will be applied to all workloads.
 	Selector             map[string]string `protobuf:"bytes,2,rep,name=selector,proto3" json:"selector,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
