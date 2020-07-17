@@ -394,7 +394,7 @@ message ProxyConfig {
   // If not set, a default of 5s will be applied.
   google.protobuf.Duration  termination_drain_duration = 29;
 
-  // The unique identifier for the [service mesh](https://istio.io/latest/docs/reference/glossary/#service-mesh)
+  // The unique identifier for the [service mesh](https://istio.io/docs/reference/glossary/#service-mesh)
   // All control planes running in the same service mesh should specify the same mesh ID.
   // Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.
   int32 mesh_id = 30;
