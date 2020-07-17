@@ -1079,7 +1079,7 @@ type ProxyConfig struct {
 	// sleeps for the termination_drain_duration and then kills any remaining active Envoy processes.
 	// If not set, a default of 5s will be applied.
 	TerminationDrainDuration *types.Duration `protobuf:"bytes,29,opt,name=termination_drain_duration,json=terminationDrainDuration,proto3" json:"terminationDrainDuration,omitempty"`
-	// The unique identifier for the [service mesh](https://istio.io/latest/docs/reference/glossary/#service-mesh)
+	// The unique identifier for the [service mesh](https://istio.io/docs/reference/glossary/#service-mesh)
 	// All control planes running in the same service mesh should specify the same mesh ID.
 	// Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.
 	MeshId               int32    `protobuf:"varint,30,opt,name=mesh_id,json=meshId,proto3" json:"meshId,omitempty"`
