@@ -28,11 +28,11 @@ option go_package = "istio.io/api/envoy/config/filter/http/authn/v2alpha2";
 // authentication policy on Envoy.
 message FilterConfig {
   // Filter configuration for RequestAuthentication, which supports Jwt authentication.
-  istio.security.v1beta1.request_authentication.RequestAuthentication request_authentication = 1;
+  istio.security.v1beta1.RequestAuthentication request_authentication = 1;
   
   // Filter configuration for PeerAuthentication, which supports 
   // mTLS authentication for sidecar to sidecar workload.
-  istio.security.v1beta1.peer_authentication.PeerAuthentication peer_authentication = 2;
+  istio.security.v1beta1.PeerAuthentication peer_authentication = 2;
 
   // Map from issuer to location of the payload that is emitted by Jwt filter.
   // This information is added by pilot when construct and add Jwt and
