@@ -37,7 +37,7 @@ message FilterConfig {
   // Map from issuer to location of the payload that is emitted by Jwt filter.
   // This information is added by pilot when construct and add Jwt and
   // authN filters.
-  map<string, string> jwt_output_payload_locations = 2;
+  map<string, string> jwt_output_payload_locations = 3;
 
   // Skips validating the peer's trust domain.
   // By default, the istio authn filter will reject the request if the peer and
@@ -46,5 +46,5 @@ message FilterConfig {
   // trust domains.
   // Note, the istio authn filter only validates the trust domain when mTLS is
   // used, In other words, this field has no effect for plaintext traffic.
-  bool skip_validate_trust_domain = 3;
+  bool skip_validate_trust_domain = 4;
 }
