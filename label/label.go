@@ -37,4 +37,8 @@ const (
 
 	// IstioOperatorVersion is the Istio operator version that installed the resource, e.g. "1.6.0"
 	IstioOperatorVersion = "operator.istio.io/version"
+
+	// TunnelType is the name of the label to service instance to determine whether support tunnel.
+	// The valid values are tunnel-none, tunnel-h2-http, tunnel-h2-full.
+	TunnelType = "traffic.istio.io/tunnelType"
 )
