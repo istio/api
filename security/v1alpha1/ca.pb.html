@@ -22,7 +22,8 @@ number_of_entries: 3
 2. Client-side certificate via Mutual TLS handshake.
 Note: the service implementation is REQUIRED to verify the authenticated caller is authorize to
 all SANs in the CSR. The server side may overwrite any requested certificate field based on its
-policies.</p>
+policies.
+Some metadata of pod are included in gRPC&rsquo;s metadata: PodName, PodNamespace, PodIP, TrustDomain, ClusterID</p>
 
 <table class="message-fields">
 <thead>

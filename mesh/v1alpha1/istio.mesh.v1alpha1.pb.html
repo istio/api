@@ -1142,6 +1142,20 @@ If not specified, this will be enabled by default.</p>
 No
 </td>
 </tr>
+<tr id="MeshConfig-upstream_ca_address">
+<td><code>upstreamCaAddress</code></td>
+<td><code>string</code></td>
+<td>
+<p>The address of upstream CA, which implements istio.io/api/security/v1alpha1/ca.proto
+If enabled, Instead of self-signing IstioAgent&rsquo;s CSR, Istio Discovery will forward the CSR to upstream CA server
+after the JWT is successfully checked (Authn &amp; Authz)
+This feature is disabled by default (empty value)</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="MeshConfig-mixer_check_server" class="deprecated ">
 <td><code>mixerCheckServer</code></td>
 <td><code>string</code></td>

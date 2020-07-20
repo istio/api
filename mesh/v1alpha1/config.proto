@@ -488,8 +488,14 @@ message MeshConfig {
   reserved 53;
   reserved "termination_drain_duration";
 
+  // The address of upstream CA, which implements istio.io/api/security/v1alpha1/ca.proto
+  // If enabled, Instead of self-signing IstioAgent's CSR, Istio Discovery will forward the CSR to upstream CA server 
+  // after the JWT is successfully checked (Authn & Authz)
+  // This feature is disabled by default (empty value)
+  string upstream_ca_address = 54;
+
   // $hide_from_docs
-  // Next available field number: 54
+  // Next available field number: 55
 }
 
 // Resource describes the source of configuration

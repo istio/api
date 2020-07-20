@@ -34,6 +34,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // Note: the service implementation is REQUIRED to verify the authenticated caller is authorize to
 // all SANs in the CSR. The server side may overwrite any requested certificate field based on its
 // policies.
+// Some metadata of pod are included in gRPC's metadata: PodName, PodNamespace, PodIP, TrustDomain, ClusterID
 type IstioCertificateRequest struct {
 	// PEM-encoded certificate request.
 	// The public key in the CSR is used to generate the certificate,
