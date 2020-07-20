@@ -199,6 +199,10 @@ message InstallStatus {
         HEALTHY = 3;
         // Component is in an error state.
         ERROR = 4;
+        // Overall status only and would not be set as a component status.
+        // Action is needed from the user for reconciliation to proceed
+        // e.g. There are proxies still pointing to the control plane revision when try to remove an IstioOperator CR.
+        ACTION_REQUIRED = 5;
     }
     // VersionStatus is the status and version of a component.
     message VersionStatus {
@@ -213,7 +217,10 @@ message InstallStatus {
     // - If one or more components are UPDATING and others are HEALTHY, overall status is UPDATING.
     // - If components are a mix of RECONCILING, UPDATING and HEALTHY, overall status is UPDATING.
     // - If any component is in ERROR state, overall status is ERROR.
+    // - If further action is needed for reconciliation to proceed, overall status is ACTION_REQUIRED.
     Status status = 1;
+    // Optional message providing additional information about the existing overall status.
+    string message = 3;
     // Individual status of each component controlled by the operator. The map key is the name of the component.
     map<string, VersionStatus> component_status = 2;
 }

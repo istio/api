@@ -43588,6 +43588,10 @@
               {
                 "name": "ERROR",
                 "integer": 4
+              },
+              {
+                "name": "ACTION_REQUIRED",
+                "integer": 5
               }
             ]
           }
@@ -43676,6 +43680,11 @@
                 "id": 1,
                 "name": "status",
                 "type": "Status"
+              },
+              {
+                "id": 3,
+                "name": "message",
+                "type": "string"
               }
             ],
             "maps": [
