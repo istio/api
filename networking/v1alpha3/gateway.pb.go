@@ -906,9 +906,11 @@ type ServerTLSSettings struct {
 	CaCertificates string `protobuf:"bytes,5,opt,name=ca_certificates,json=caCertificates,proto3" json:"ca_certificates,omitempty"`
 	// For gateways running on Kubernetes, the name of the secret that
 	// holds the TLS certs including the CA certificates. Applicable
-	// only on Kubernetes. The secret (of type`generic`) should
+	// only on Kubernetes. The secret (of type `generic`) should
 	// contain the following keys and values: `key:
-	// <privateKey>`, `cert: <serverCert>`, `cacert: <CACertificate>`.
+	// <privateKey>` and `cert: <serverCert>`. For mutual TLS,
+	// `cacert: <CACertificate>` can be provided in the same secret or
+	// a separate secret named `<secret>-cacert`.
 	// Secret of type tls for server certificates along with
 	// ca.crt key for CA certificates is also supported.
 	// Only one of server certificates and CA certificate
