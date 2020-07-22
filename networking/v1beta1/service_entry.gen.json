@@ -23,6 +23,10 @@
             "description": "The protocol exposed on the port. MUST BE one of HTTP|HTTPS|GRPC|HTTP2|MONGO|TCP|TLS. TLS implies the connection will be routed based on the SNI header to the destination without terminating the TLS connection.",
             "type": "string",
             "format": "string"
+          },
+          "targetPort": {
+            "description": "The port number on the endpoint where the traffic will be received. Applicable only when used with ServiceEntries.",
+            "type": "integer"
           }
         }
       },
@@ -117,7 +121,7 @@
             }
           },
           "ports": {
-            "description": "Set of ports associated with the endpoint. The ports must be associated with a port name that was declared as part of the service. Do not use for `unix://` addresses.",
+            "description": "Set of ports associated with the endpoint. If the port map is specified, it must be a map of servicePortName to this endpoint's port, such that traffic to the service port will be forwarded to the endpoint port that maps to the service's portName. If omitted, and the targetPort is specified as part of the service's port specification, traffic to the service port will be forwarded to one of the endpoints on the specified `targetPort`. If both the targetPort and endpoint's port map are not specified, traffic to a service port will be forwarded to one of the endpoints on the same port.",
             "type": "object",
             "additionalProperties": {
               "type": "integer"

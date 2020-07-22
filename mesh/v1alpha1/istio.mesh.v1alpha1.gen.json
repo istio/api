@@ -14,7 +14,7 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.LocalityLoadBalancerSetting"
           },
           "connectTimeout": {
-            "description": "Connection timeout used by Envoy. (MUST BE \u003e=1ms)",
+            "description": "Connection timeout used by Envoy. (MUST BE \u003e=1ms) Default timeout is 10s.",
             "type": "string"
           },
           "tcpKeepalive": {
@@ -29,31 +29,37 @@
           "mixerCheckServer": {
             "description": "Address of the server that will be used by the proxies for policy check calls. By using different names for mixerCheckServer and mixerReportServer, it is possible to have one set of Mixer servers handle policy check calls while another set of Mixer servers handle telemetry calls.",
             "type": "string",
-            "format": "string"
+            "format": "string",
+            "deprecated": true
           },
           "mixerReportServer": {
             "description": "Address of the server that will be used by the proxies for policy report calls.",
             "type": "string",
-            "format": "string"
+            "format": "string",
+            "deprecated": true
           },
           "disablePolicyChecks": {
-            "description": "Disable policy checks by the Mixer service. Default is false, i.e. Mixer policy check is enabled by default.",
-            "type": "boolean"
+            "description": "Disable policy checks by the Mixer service. Default is true, i.e. Mixer policy check is disabled by default.",
+            "type": "boolean",
+            "deprecated": true
           },
           "disableMixerHttpReports": {
-            "description": "Disable telemetry reporting by the Mixer service for HTTP traffic. Default is false (telemetry reporting via Mixer is enabled). This option provides a transition path for Istio extensibility v2.",
-            "type": "boolean"
+            "description": "Disable telemetry reporting by the Mixer service for HTTP traffic. Default is true (telemetry reporting via Mixer is disabled). This option provides a transition path for Istio extensibility v2.",
+            "type": "boolean",
+            "deprecated": true
           },
           "policyCheckFailOpen": {
             "description": "Allow all traffic in cases when the Mixer policy service cannot be reached. Default is false which means the traffic is denied when the client is unable to connect to Mixer.",
-            "type": "boolean"
+            "type": "boolean",
+            "deprecated": true
           },
           "sidecarToTelemetrySessionAffinity": {
-            "description": "Enable session affinity for Envoy Mixer reports so that calls from a proxy will always target the same Mixer instance.",
-            "type": "boolean"
+            "description": "Enable session affinity for Envoy Mixer reports so that calls from a proxy will always target the same Mixer instance. Default value is false.",
+            "type": "boolean",
+            "deprecated": true
           },
           "proxyListenPort": {
-            "description": "Port on which Envoy should listen for incoming connections from other services.",
+            "description": "Port on which Envoy should listen for incoming connections from other services. Default port is 15001.",
             "type": "integer",
             "format": "int32"
           },
@@ -63,7 +69,7 @@
             "format": "int32"
           },
           "protocolDetectionTimeout": {
-            "description": "Automatic protocol detection uses a set of heuristics to determine whether the connection is using TLS or not (on the server side), as well as the application protocol being used (e.g., http vs tcp). These heuristics rely on the client sending the first bits of data. For server first protocols like MySQL, MongoDB, etc., Envoy will timeout on the protocol detection after the specified period, defaulting to non mTLS plain TCP traffic. Set this field to tweak the period that Envoy will wait for the client to send the first bits of data. (MUST BE \u003e=1ms or 0s to disable)",
+            "description": "Automatic protocol detection uses a set of heuristics to determine whether the connection is using TLS or not (on the server side), as well as the application protocol being used (e.g., http vs tcp). These heuristics rely on the client sending the first bits of data. For server first protocols like MySQL, MongoDB, etc. Envoy will timeout on the protocol detection after the specified period, defaulting to non mTLS plain TCP traffic. Set this field to tweak the period that Envoy will wait for the client to send the first bits of data. (MUST BE \u003e=1ms or 0s to disable). Default detection timeout is 5s.",
             "type": "string"
           },
           "ingressClass": {
@@ -72,7 +78,7 @@
             "format": "string"
           },
           "ingressService": {
-            "description": "Name of the Kubernetes service used for the istio ingress controller.",
+            "description": "Name of the Kubernetes service used for the istio ingress controller. If no ingress controller is specified, the default value `istio-ingressgateway` is used.",
             "type": "string",
             "format": "string"
           },
@@ -110,7 +116,7 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.AccessLogEncoding"
           },
           "enableEnvoyAccessLogService": {
-            "description": "This flag enables Envoy's gRPC Access Log Service. See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto) for details about Envoy's gRPC Access Log Service API.",
+            "description": "This flag enables Envoy's gRPC Access Log Service. See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto) for details about Envoy's gRPC Access Log Service API. Default value is false.",
             "type": "boolean"
           },
           "defaultConfig": {
@@ -143,12 +149,12 @@
             }
           },
           "enableAutoMtls": {
-            "description": "This flag is used to enable mutual TLS automatically for service to service communication within the mesh, default false. If set to true, and a given service does not have a corresponding DestinationRule configured, or its DestinationRule does not have ClientTLSSettings specified, Istio configures client side TLS configuration appropriately. More specifically, If the upstream authentication policy is in STRICT mode, use Istio provisioned certificate for mutual TLS to connect to upstream. If upstream service is in plain text mode, use plain text. If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use mutual TLS when server sides are capable of accepting mutual TLS traffic. If service DestinationRule exists and has ClientTLSSettings specified, that is always used instead.",
+            "description": "This flag is used to enable mutual TLS automatically for service to service communication within the mesh, default true. If set to true, and a given service does not have a corresponding DestinationRule configured, or its DestinationRule does not have ClientTLSSettings specified, Istio configures client side TLS configuration appropriately. More specifically, If the upstream authentication policy is in STRICT mode, use Istio provisioned certificate for mutual TLS to connect to upstream. If upstream service is in plain text mode, use plain text. If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use mutual TLS when server sides are capable of accepting mutual TLS traffic. If service DestinationRule exists and has ClientTLSSettings specified, that is always used instead.",
             "type": "boolean",
             "nullable": true
           },
           "enableSdsTokenMount": {
-            "description": "This flag is used by secret discovery service(SDS). If set to true ([prerequisite](https://kubernetes.io/docs/concepts/storage/volumes/#projected)), Istio will inject volumes mount for Kubernetes service account trustworthy JWT(which is available with Kubernetes 1.12 or higher), so that the Kubernetes API server mounts Kubernetes service account trustworthy JWT to the Envoy container, which will be used to request key/cert eventually. This isn't supported for non-Kubernetes cases.",
+            "description": "This flag is used by secret discovery service(SDS). If set to true ([prerequisite](https://kubernetes.io/docs/concepts/storage/volumes/#projected)), Istio will inject volumes mount for Kubernetes service account trustworthy JWT(which is available with Kubernetes 1.12 or higher), so that the Kubernetes API server mounts Kubernetes service account trustworthy JWT to the Envoy container, which will be used to request key/cert eventually. This isn't supported for non-Kubernetes cases. Default value is set to false.",
             "type": "boolean"
           },
           "sdsUseK8sSaJwt": {
@@ -198,20 +204,23 @@
             "format": "string"
           },
           "dnsRefreshRate": {
-            "description": "Configures DNS refresh rate for Envoy clusters of type STRICT_DNS",
+            "description": "Configures DNS refresh rate for Envoy clusters of type STRICT_DNS Default refresh rate is 5s.",
             "type": "string"
           },
           "disableReportBatch": {
             "description": "The flag to disable report batch.",
-            "type": "boolean"
+            "type": "boolean",
+            "deprecated": true
           },
           "reportBatchMaxEntries": {
-            "description": "When disable_report_batch is false, this value specifies the maximum number of requests that are batched in report. If left unspecified, the default value of report_batch_max_entries == 0 will use the hardcoded defaults of istio::mixerclient::ReportOptions.",
-            "type": "integer"
+            "description": "When disable_report_batch is false, this value specifies the maximum number of requests that are batched in report. If left unspecified, the default value of report_batch_max_entries == 0 will use the hardcoded defaults of istio::mixerclient::ReportOptions. Default value is 100.",
+            "type": "integer",
+            "deprecated": true
           },
           "reportBatchMaxTime": {
-            "description": "When disable_report_batch is false, this value specifies the maximum elapsed time a batched report will be sent after a user request is processed. If left unspecified, the default report_batch_max_time == 0 will use the hardcoded defaults of istio::mixerclient::ReportOptions.",
-            "type": "string"
+            "description": "When disable_report_batch is false, this value specifies the maximum elapsed time a batched report will be sent after a user request is processed. If left unspecified, the default report_batch_max_time == 0 will use the hardcoded defaults of istio::mixerclient::ReportOptions. Default max time is 1s.",
+            "type": "string",
+            "deprecated": true
           },
           "inboundClusterStatName": {
             "description": "Name to be used while emitting statistics for inbound clusters. The same pattern is used while computing stat prefix for network filters like TCP and Redis. By default, Istio emits statistics with the pattern `inbound|\u003cport\u003e|\u003cport-name\u003e|\u003cservice-FQDN\u003e`. For example `inbound|7443|grpc-reviews|reviews.prod.svc.cluster.local`. This can be used to override that pattern.",
@@ -290,11 +299,11 @@
             "format": "string"
           },
           "drainDuration": {
-            "description": "The time in seconds that Envoy will drain connections during a hot restart. MUST be \u003e=1s (e.g., _1s/1m/1h_)",
+            "description": "The time in seconds that Envoy will drain connections during a hot restart. MUST be \u003e=1s (e.g., _1s/1m/1h_) Default drain duration is 45s.",
             "type": "string"
           },
           "parentShutdownDuration": {
-            "description": "The time in seconds that Envoy will wait before shutting down the parent process during a hot restart. MUST be \u003e=1s (e.g., _1s/1m/1h_). MUST BE greater than _drain_duration_ parameter.",
+            "description": "The time in seconds that Envoy will wait before shutting down the parent process during a hot restart. MUST be \u003e=1s (e.g., _1s/1m/1h_). MUST BE greater than _drain_duration_ parameter. Default shutdown duration is 60s.",
             "type": "string"
           },
           "discoveryAddress": {
@@ -323,7 +332,7 @@
             "deprecated": true
           },
           "proxyAdminPort": {
-            "description": "Port on which Envoy should listen for administrative commands.",
+            "description": "Port on which Envoy should listen for administrative commands. Default port is 15000.",
             "type": "integer",
             "format": "int32"
           },
@@ -346,7 +355,7 @@
             "format": "int32"
           },
           "concurrency": {
-            "description": "The number of worker threads to run. If unset, this will be automatically determined based on CPU requests/limits. If set to 0, all cores on the machine will be used.",
+            "description": "The number of worker threads to run. If unset, this will be automatically determined based on CPU requests/limits. If set to 0, all cores on the machine will be used. Default is 2 worker threads.",
             "type": "integer",
             "nullable": true
           },
@@ -379,7 +388,7 @@
             }
           },
           "statusPort": {
-            "description": "Port on which the agent should listen for administrative commands such as readiness probe.",
+            "description": "Port on which the agent should listen for administrative commands such as readiness probe. Default is set to port 15020.",
             "type": "integer",
             "format": "int32"
           },
@@ -393,6 +402,15 @@
           },
           "gatewayTopology": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.Topology"
+          },
+          "terminationDrainDuration": {
+            "description": "The amount of time allowed for connections to complete on proxy shutdown. On receiving SIGTERM or SIGINT, istio-agent tells the active Envoy to start draining, preventing any new connections and allowing existing connections to complete. It then sleeps for the termination_drain_duration and then kills any remaining active Envoy processes. If not set, a default of 5s will be applied.",
+            "type": "string"
+          },
+          "meshId": {
+            "description": "The unique identifier for the [service mesh](https://istio.io/docs/reference/glossary/#service-mesh) All control planes running in the same service mesh should specify the same mesh ID. Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.",
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -672,7 +690,7 @@
         }
       },
       "istio.mesh.v1alpha1.AuthenticationPolicy": {
-        "description": "AuthenticationPolicy defines authentication policy. It can be set for different scopes (mesh, service …), and the most narrow scope with non-INHERIT value will be used. Mesh policy cannot be INHERIT.",
+        "description": "AuthenticationPolicy defines how the proxy is authenticated when it connects to the control plane. It can be set for two different scopes, mesh-wide or set on a per-pod basis using the ProxyConfig annotation. Mesh policy cannot be INHERIT.",
         "type": "string",
         "enum": [
           "NONE",
@@ -1054,6 +1072,11 @@
           },
           "caCertificates": {
             "description": "OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate. If omitted, the proxy will not verify the server's certificate. Should be empty if mode is `ISTIO_MUTUAL`.",
+            "type": "string",
+            "format": "string"
+          },
+          "credentialName": {
+            "description": "The name of the secret that holds the TLS certs for the client including the CA certificates. Secret must exist in the same namespace with the proxy using the certificates. The secret (of type `generic`)should contain the following keys and values: `key: \u003cprivateKey\u003e`, `cert: \u003cserverCert\u003e`, `cacert: \u003cCACertificate\u003e`. Secret of type tls for client certificates along with ca.crt key for CA certificates is also supported. Only one of client certificates and CA certificate or credentialName can be specified.",
             "type": "string",
             "format": "string"
           },

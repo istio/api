@@ -20,8 +20,8 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='mixer/adapter/model/v1beta1/report.proto',
   package='istio.mixer.adapter.model.v1beta1',
   syntax='proto3',
-  serialized_options=_b('Z(istio.io/api/mixer/adapter/model/v1beta1\310\341\036\000\250\342\036\000\360\341\036\000'),
-  serialized_pb=_b('\n(mixer/adapter/model/v1beta1/report.proto\x12!istio.mixer.adapter.model.v1beta1\x1a\x14gogoproto/gogo.proto\"\x0e\n\x0cReportResultB6Z(istio.io/api/mixer/adapter/model/v1beta1\xc8\xe1\x1e\x00\xa8\xe2\x1e\x00\xf0\xe1\x1e\x00\x62\x06proto3')
+  serialized_options=_b('Z(istio.io/api/mixer/adapter/model/v1beta1\270\001\001\310\341\036\000\250\342\036\000\360\341\036\000'),
+  serialized_pb=_b('\n(mixer/adapter/model/v1beta1/report.proto\x12!istio.mixer.adapter.model.v1beta1\x1a\x14gogoproto/gogo.proto\"\x0e\n\x0cReportResultB9Z(istio.io/api/mixer/adapter/model/v1beta1\xb8\x01\x01\xc8\xe1\x1e\x00\xa8\xe2\x1e\x00\xf0\xe1\x1e\x00\x62\x06proto3')
   ,
   dependencies=[gogoproto_dot_gogo__pb2.DESCRIPTOR,])
 

@@ -16,6 +16,7 @@ syntax = "proto3";
 
 package istio.mixer.v1.config.client;
 
+option deprecated = true;
 option go_package="istio.io/api/mixer/v1/config/client";
 
 import "gogoproto/gogo.proto";
@@ -95,7 +96,6 @@ option (gogoproto.stable_marshaler_all) = true;
 // +cue-gen:HTTPAPISpec:subresource:status
 // +cue-gen:HTTPAPISpec:scope:Namespaced
 // +cue-gen:HTTPAPISpec:resource:categories=istio-io,apim-istio-io
-// +cue-gen:HTTPAPISpec:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -255,7 +255,6 @@ message HTTPAPISpecReference {
 // +cue-gen:HTTPAPISpecBinding:subresource:status
 // +cue-gen:HTTPAPISpecBinding:scope:Namespaced
 // +cue-gen:HTTPAPISpecBinding:resource:categories=istio-io,apim-istio-io
-// +cue-gen:HTTPAPISpecBinding:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags

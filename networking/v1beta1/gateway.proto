@@ -366,7 +366,6 @@ option go_package = "istio.io/api/networking/v1beta1";
 // +cue-gen:Gateway:subresource:status
 // +cue-gen:Gateway:scope:Namespaced
 // +cue-gen:Gateway:resource:categories=istio-io,networking-istio-io,shortNames=gw
-// +cue-gen:Gateway:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -380,10 +379,16 @@ message Gateway {
   repeated Server servers = 1 [(google.api.field_behavior) = REQUIRED];
 
   // One or more labels that indicate a specific set of pods/VMs
-  // on which this gateway configuration should be applied. The scope of
-  // label search is restricted to the configuration namespace in which the
-  // the resource is present. In other words, the Gateway resource must
-  // reside in the same namespace as the gateway workload instance.
+  // on which this gateway configuration should be applied.
+  // By default workloads are searched across all namespaces based on label selectors.
+  // This implies that a gateway resource in the namespace "foo" can select pods in
+  // the namespace "bar" based on labels.
+  // This behavior can be controlled via the PILOT_SCOPE_GATEWAY_TO_NAMESPACE
+  // environment variable in istiod. If this variable is set
+  // to true, the scope of label search is restricted to the configuration
+  // namespace in which the the resource is present. In other words, the Gateway
+  // resource must reside in the same namespace as the gateway workload
+  // instance.
   // If selector is nil, the Gateway will be applied to all workloads.
   map<string, string> selector = 2 [(google.api.field_behavior) = REQUIRED];
 }
@@ -400,7 +405,7 @@ message Gateway {
 //   name: my-ingress
 // spec:
 //   selector:
-//     app: my-ingress-gateway
+//     app: my-ingressgateway
 //   servers:
 //   - port:
 //       number: 80
@@ -419,7 +424,7 @@ message Gateway {
 //   name: my-ingress
 // spec:
 //   selector:
-//     app: my-ingress-gateway
+//     app: my-ingressgateway
 //   servers:
 //   - port:
 //       number: 80
@@ -442,7 +447,7 @@ message Gateway {
 //   name: my-tcp-ingress
 // spec:
 //   selector:
-//     app: my-tcp-ingress-gateway
+//     app: my-tcp-ingressgateway
 //   servers:
 //   - port:
 //       number: 27018
@@ -461,7 +466,7 @@ message Gateway {
 //   name: my-tcp-ingress
 // spec:
 //   selector:
-//     app: my-tcp-ingress-gateway
+//     app: my-tcp-ingressgateway
 //   servers:
 //   - port:
 //       number: 27018
@@ -484,7 +489,7 @@ message Gateway {
 //   name: my-tls-ingress
 // spec:
 //   selector:
-//     app: my-tls-ingress-gateway
+//     app: my-tls-ingressgateway
 //   servers:
 //   - port:
 //       number: 443
@@ -507,7 +512,7 @@ message Gateway {
 //   name: my-tls-ingress
 // spec:
 //   selector:
-//     app: my-tls-ingress-gateway
+//     app: my-tls-ingressgateway
 //   servers:
 //   - port:
 //       number: 443
@@ -578,6 +583,11 @@ message Server {
   // NOT IMPLEMENTED.
   // $hide_from_docs
   string default_endpoint = 5;
+
+  // An optional name of the server, when set must be unique across all servers.
+  // This will be used for variety of purposes like prefixing stats generated with
+  // this name etc.
+  string name = 6;
 }
 
 // Port describes the properties of a specific port of a service.
@@ -593,6 +603,10 @@ message Port {
 
   // Label assigned to the port.
   string name = 3 [(google.api.field_behavior) = REQUIRED];
+
+  // The port number on the endpoint where the traffic will be
+  // received. Applicable only when used with ServiceEntries.
+  uint32 target_port = 4;
 }
 
 message ServerTLSSettings {
@@ -660,7 +674,13 @@ message ServerTLSSettings {
   // feature is enabled in the proxy by setting
   // `ISTIO_META_USER_SDS` metadata variable.  The secret (of type
   // `generic`) should contain the following keys and values: `key:
-  // <privateKey>`, `cert: <serverCert>`, `cacert: <CACertificate>`.
+  // <privateKey>` and `cert: <serverCert>`. For mutual TLS, 
+  // `cacert: <CACertificate>` can be provided in the same secret or 
+  // a separate secret named `<secret>-cacert`.
+  // Secret of type tls for server certificates along with
+  // ca.crt key for CA certificates is also supported.
+  // Only one of server certificates and CA certificate
+  // or credentialName can be specified.
   string credential_name = 10;
 
   // A list of alternate names to verify the subject identity in the

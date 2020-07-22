@@ -21,8 +21,8 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='mixer/adapter/model/v1beta1/infrastructure_backend.proto',
   package='istio.mixer.adapter.model.v1beta1',
   syntax='proto3',
-  serialized_options=_b('Z(istio.io/api/mixer/adapter/model/v1beta1\200\001\001'),
-  serialized_pb=_b('\n8mixer/adapter/model/v1beta1/infrastructure_backend.proto\x12!istio.mixer.adapter.model.v1beta1\x1a\x19google/protobuf/any.proto\x1a\x17google/rpc/status.proto\"\xf4\x01\n\x14\x43reateSessionRequest\x12,\n\x0e\x61\x64\x61pter_config\x18\x01 \x01(\x0b\x32\x14.google.protobuf.Any\x12\x62\n\x0einferred_types\x18\x02 \x03(\x0b\x32J.istio.mixer.adapter.model.v1beta1.CreateSessionRequest.InferredTypesEntry\x1aJ\n\x12InferredTypesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any:\x02\x38\x01\"O\n\x15\x43reateSessionResponse\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12\"\n\x06status\x18\x02 \x01(\x0b\x32\x12.google.rpc.Status\"\xea\x01\n\x0fValidateRequest\x12,\n\x0e\x61\x64\x61pter_config\x18\x01 \x01(\x0b\x32\x14.google.protobuf.Any\x12]\n\x0einferred_types\x18\x02 \x03(\x0b\x32\x45.istio.mixer.adapter.model.v1beta1.ValidateRequest.InferredTypesEntry\x1aJ\n\x12InferredTypesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any:\x02\x38\x01\"6\n\x10ValidateResponse\x12\"\n\x06status\x18\x01 \x01(\x0b\x32\x12.google.rpc.Status\")\n\x13\x43loseSessionRequest\x12\x12\n\nsession_id\x18\x01 \x01(\t\":\n\x14\x43loseSessionResponse\x12\"\n\x06status\x18\x01 \x01(\x0b\x32\x12.google.rpc.Status2\x92\x03\n\x15InfrastructureBackend\x12s\n\x08Validate\x12\x32.istio.mixer.adapter.model.v1beta1.ValidateRequest\x1a\x33.istio.mixer.adapter.model.v1beta1.ValidateResponse\x12\x82\x01\n\rCreateSession\x12\x37.istio.mixer.adapter.model.v1beta1.CreateSessionRequest\x1a\x38.istio.mixer.adapter.model.v1beta1.CreateSessionResponse\x12\x7f\n\x0c\x43loseSession\x12\x36.istio.mixer.adapter.model.v1beta1.CloseSessionRequest\x1a\x37.istio.mixer.adapter.model.v1beta1.CloseSessionResponseB-Z(istio.io/api/mixer/adapter/model/v1beta1\x80\x01\x01\x62\x06proto3')
+  serialized_options=_b('Z(istio.io/api/mixer/adapter/model/v1beta1\200\001\001\270\001\001'),
+  serialized_pb=_b('\n8mixer/adapter/model/v1beta1/infrastructure_backend.proto\x12!istio.mixer.adapter.model.v1beta1\x1a\x19google/protobuf/any.proto\x1a\x17google/rpc/status.proto\"\xf4\x01\n\x14\x43reateSessionRequest\x12,\n\x0e\x61\x64\x61pter_config\x18\x01 \x01(\x0b\x32\x14.google.protobuf.Any\x12\x62\n\x0einferred_types\x18\x02 \x03(\x0b\x32J.istio.mixer.adapter.model.v1beta1.CreateSessionRequest.InferredTypesEntry\x1aJ\n\x12InferredTypesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any:\x02\x38\x01\"O\n\x15\x43reateSessionResponse\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12\"\n\x06status\x18\x02 \x01(\x0b\x32\x12.google.rpc.Status\"\xea\x01\n\x0fValidateRequest\x12,\n\x0e\x61\x64\x61pter_config\x18\x01 \x01(\x0b\x32\x14.google.protobuf.Any\x12]\n\x0einferred_types\x18\x02 \x03(\x0b\x32\x45.istio.mixer.adapter.model.v1beta1.ValidateRequest.InferredTypesEntry\x1aJ\n\x12InferredTypesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any:\x02\x38\x01\"6\n\x10ValidateResponse\x12\"\n\x06status\x18\x01 \x01(\x0b\x32\x12.google.rpc.Status\")\n\x13\x43loseSessionRequest\x12\x12\n\nsession_id\x18\x01 \x01(\t\":\n\x14\x43loseSessionResponse\x12\"\n\x06status\x18\x01 \x01(\x0b\x32\x12.google.rpc.Status2\xa2\x03\n\x15InfrastructureBackend\x12x\n\x08Validate\x12\x32.istio.mixer.adapter.model.v1beta1.ValidateRequest\x1a\x33.istio.mixer.adapter.model.v1beta1.ValidateResponse\"\x03\x88\x02\x01\x12\x87\x01\n\rCreateSession\x12\x37.istio.mixer.adapter.model.v1beta1.CreateSessionRequest\x1a\x38.istio.mixer.adapter.model.v1beta1.CreateSessionResponse\"\x03\x88\x02\x01\x12\x84\x01\n\x0c\x43loseSession\x12\x36.istio.mixer.adapter.model.v1beta1.CloseSessionRequest\x1a\x37.istio.mixer.adapter.model.v1beta1.CloseSessionResponse\"\x03\x88\x02\x01\x42\x30Z(istio.io/api/mixer/adapter/model/v1beta1\x80\x01\x01\xb8\x01\x01\x62\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,google_dot_rpc_dot_status__pb2.DESCRIPTOR,])
 
@@ -398,7 +398,7 @@ _INFRASTRUCTUREBACKEND = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   serialized_start=872,
-  serialized_end=1274,
+  serialized_end=1290,
   methods=[
   _descriptor.MethodDescriptor(
     name='Validate',
@@ -407,7 +407,7 @@ _INFRASTRUCTUREBACKEND = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_VALIDATEREQUEST,
     output_type=_VALIDATERESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\210\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='CreateSession',
@@ -416,7 +416,7 @@ _INFRASTRUCTUREBACKEND = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_CREATESESSIONREQUEST,
     output_type=_CREATESESSIONRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\210\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='CloseSession',
@@ -425,7 +425,7 @@ _INFRASTRUCTUREBACKEND = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_CLOSESESSIONREQUEST,
     output_type=_CLOSESESSIONRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\210\002\001'),
   ),
 ])
 _sym_db.RegisterServiceDescriptor(_INFRASTRUCTUREBACKEND)

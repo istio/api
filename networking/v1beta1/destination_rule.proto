@@ -184,7 +184,6 @@ option go_package = "istio.io/api/networking/v1beta1";
 // representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. 
 // Clients may not set this value. It is represented in RFC3339 form and is in UTC.
 // Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
-// +cue-gen:DestinationRule:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -916,6 +915,21 @@ message ClientTLSSettings {
   // omitted, the proxy will not verify the server's certificate.
   // Should be empty if mode is `ISTIO_MUTUAL`.
   string ca_certificates = 4;
+
+  // The name of the secret that holds the TLS certs for the
+  // client including the CA certificates. Secret must exist in the
+  // same namespace with the proxy using the certificates.
+  // The secret (of type `generic`)should contain the
+  // following keys and values: `key: <privateKey>`,
+  // `cert: <serverCert>`, `cacert: <CACertificate>`.
+  // Secret of type tls for client certificates along with
+  // ca.crt key for CA certificates is also supported.
+  // Only one of client certificates and CA certificate
+  // or credentialName can be specified.
+  //
+  // **NOTE:** This field is currently applicable only at gateways.
+  // Sidecars will continue to use the certificate paths.
+  string credential_name = 7;
 
   // A list of alternate names to verify the subject identity in the
   // certificate. If specified, the proxy will verify that the server

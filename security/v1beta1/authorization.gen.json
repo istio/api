@@ -58,7 +58,7 @@
         "enum": [
           "ALLOW",
           "DENY",
-          "LOG"
+          "AUDIT"
         ]
       },
       "istio.security.v1beta1.Rule.From": {

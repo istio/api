@@ -745,7 +745,7 @@
             "format": "string"
           },
           "serverName": {
-            "description": "Used to configure mixer mutual TLS client to supply server name for SNI. It is not used to verify the hostname of the peer certificate, since Istio verifies whitelisted SAN fields in mutual TLS.",
+            "description": "Used to configure mixer mutual TLS client to supply server name for SNI. It is not used to verify the hostname of the peer certificate, since Istio verifies allowed SAN fields in mutual TLS.",
             "type": "string",
             "format": "string"
           },

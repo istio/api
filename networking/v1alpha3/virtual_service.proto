@@ -193,7 +193,6 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. 
 // Clients may not set this value. It is represented in RFC3339 form and is in UTC.
 // Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
-// +cue-gen:VirtualService:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -786,7 +785,6 @@ message Delegate {
 // ```
 // {{</tab>}}
 // {{</tabset>}}
-
 message Headers {
   // Header manipulation rules to apply before forwarding a request
   // to the destination service
@@ -1642,7 +1640,7 @@ message CorsPolicy {
   // resource. Serialized to Access-Control-Allow-Headers header.
   repeated string allow_headers = 3;
 
-  // A white list of HTTP headers that the browsers are allowed to
+  // A list of HTTP headers that the browsers are allowed to
   // access. Serialized into Access-Control-Expose-Headers header.
   repeated string expose_headers = 4;
 

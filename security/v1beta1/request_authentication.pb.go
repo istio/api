@@ -62,7 +62,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // ```
 //
 // - The next example shows how to set a different JWT requirement for a different `host`. The `RequestAuthentication`
-// declares it can accpet JWTs issuer by either `issuer-foo` or `issuer-bar` (the public key set is implicitly
+// declares it can accept JWTs issued by either `issuer-foo` or `issuer-bar` (the public key set is implicitly
 // set from the OpenID Connect spec).
 //
 // ```yaml
@@ -133,7 +133,6 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // +cue-gen:RequestAuthentication:subresource:status
 // +cue-gen:RequestAuthentication:scope:Namespaced
 // +cue-gen:RequestAuthentication:resource:categories=istio-io,security-istio-io,shortNames=ra
-// +cue-gen:RequestAuthentication:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags

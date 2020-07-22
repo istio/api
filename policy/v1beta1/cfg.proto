@@ -22,6 +22,7 @@ import "policy/v1beta1/value_type.proto";
 
 package istio.policy.v1beta1;
 
+option deprecated = true;
 option go_package="istio.io/api/policy/v1beta1";
 
 // AttributeManifest describes a set of Attributes produced by some component
@@ -37,7 +38,6 @@ option go_package="istio.io/api/policy/v1beta1";
 // +cue-gen:attributemanifest:subresource:status
 // +cue-gen:attributemanifest:scope:Namespaced
 // +cue-gen:attributemanifest:resource:categories=istio-io,policy-istio-io
-// +cue-gen:attributemanifest:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -144,7 +144,6 @@ message AttributeManifest {
 // +cue-gen:rule:subresource:status
 // +cue-gen:rule:scope:Namespaced
 // +cue-gen:rule:resource:categories=istio-io,policy-istio-io
-// +cue-gen:rule:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags
@@ -284,6 +283,7 @@ message Action {
 // +cue-gen:instance:subresource:status
 // +cue-gen:instance:scope:Namespaced
 // +cue-gen:instance:resource:categories=istio-io,policy-istio-io
+// +cue-gen:instance:preserveUnknownFields:params
 // -->
 //
 // <!-- go code generation tags
@@ -398,6 +398,7 @@ message Instance {
 // +cue-gen:handler:subresource:status
 // +cue-gen:handler:scope:Namespaced
 // +cue-gen:handler:resource:categories=istio-io,policy-istio-io
+// +cue-gen:handler:preserveUnknownFields:params
 // -->
 //
 // <!-- go code generation tags
@@ -623,6 +624,6 @@ message Mutual {
 
   // Used to configure mixer mutual TLS client to supply server name for SNI.
   // It is not used to verify the hostname of the peer certificate, since
-  // Istio verifies whitelisted SAN fields in mutual TLS.
+  // Istio verifies allowed SAN fields in mutual TLS.
   string server_name = 4;
 }
