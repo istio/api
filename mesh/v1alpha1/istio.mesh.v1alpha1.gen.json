@@ -691,6 +691,16 @@
                       "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Stackdriver"
                     }
                   }
+                },
+                {
+                  "required": [
+                    "openCensus"
+                  ],
+                  "properties": {
+                    "openCensus": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.OpenCensus"
+                    }
+                  }
                 }
               ]
             }
@@ -732,6 +742,16 @@
             "properties": {
               "stackdriver": {
                 "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Stackdriver"
+              }
+            }
+          },
+          {
+            "required": [
+              "openCensus"
+            ],
+            "properties": {
+              "openCensus": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.OpenCensus"
               }
             }
           }
@@ -848,11 +868,41 @@
         }
       },
       "istio.mesh.v1alpha1.Tracing.Stackdriver": {
-        "description": "Stackdriver defines configuration for a Stackdriver tracer. See [Opencensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.",
+        "description": "Stackdriver defines configuration for a Stackdriver tracer. See [OpenCensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.",
         "type": "object",
         "properties": {
           "debug": {
             "description": "debug enables trace output to stdout. $hide_from_docs",
+            "type": "boolean"
+          },
+          "maxNumberOfAttributes": {
+            "description": "The global default max number of attributes per span. default is 200. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          },
+          "maxNumberOfAnnotations": {
+            "description": "The global default max number of annotation events per span. default is 200. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          },
+          "maxNumberOfMessageEvents": {
+            "description": "The global default max number of message events per span. default is 200. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.Tracing.OpenCensus": {
+        "description": "OpenCensus defines configuration for an OpenCensus tracer. See [OpenCensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.",
+        "type": "object",
+        "properties": {
+          "address": {
+            "description": "gRPC address for the OpenCensus Agent (e.g. dns://authority/host:port or unix:path). See [gRPC naming docs](https://github.com/grpc/grpc/blob/master/doc/naming.md) for details.",
+            "type": "string",
+            "format": "string"
+          },
+          "debug": {
+            "description": "debug enables trace output to stdout $hide_from_docs",
             "type": "boolean"
           },
           "maxNumberOfAttributes": {
