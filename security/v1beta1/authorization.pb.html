@@ -22,9 +22,23 @@ evaluated first. The evaluation is determined by the following rules:</p>
 <li>Deny the request.</li>
 </ol>
 
-<p>For example, the following authorization policy sets the <code>action</code> to &ldquo;ALLOW&rdquo;
-to create an allow policy. The default action is &ldquo;ALLOW&rdquo; but it is useful
-to be explicit in the policy.</p>
+<p>Istio Authorization Policy also supports the AUDIT action to decide whether to log requests.
+The decision can be read by telemetry plugins using the function getAuditPolicy
+defined <a href="https://github.com/istio/proxy/blob/master/extensions/common/context.h">here</a>.
+A call to getAuditPolicy will only return <code>true</code> in the following cases:</p>
+
+<ul>
+<li>There exists an AUDIT policy on the workload that matches the request</li>
+<li>There are no AUDIT policies on the workload</li>
+</ul>
+
+<p>AUDIT policies do not affect whether requests are allowed to the workload.
+Requests will be allowed or denied based on only ALLOW and DENY policies.</p>
+
+<p>Here is an example of Istio Authorization Policy:</p>
+
+<p>It sets the <code>action</code> to &ldquo;ALLOW&rdquo; to create an allow policy. The default action is &ldquo;ALLOW&rdquo;
+but it is useful to be explicit in the policy.</p>
 
 <p>It allows requests from:</p>
 
@@ -89,21 +103,40 @@ spec:
        methods: [&quot;POST&quot;]
 </code></pre>
 
-<p>Authorization Policy scope (target) is determined by &ldquo;metadata/namespace&rdquo; and
-an optional &ldquo;selector&rdquo;.</p>
-
-<ul>
-<li>&ldquo;metadata/namespace&rdquo; tells which namespace the policy applies. If set to root
-namespace, the policy applies to all namespaces in a mesh.</li>
-<li>workload &ldquo;selector&rdquo; can be used to further restrict where a policy applies.</li>
-</ul>
-
-<p>For example,</p>
-
-<p>The following authorization policy applies to workloads containing label
-&ldquo;app: httpbin&rdquo; in namespace bar.</p>
+<p>The following authorization policy sets the <code>action</code> to &ldquo;AUDIT&rdquo;. It will audit any GET requests to the path with the
+prefix &ldquo;/user/profile&rdquo;.</p>
 
 <pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  namespace: ns1
+  name: anyname
+spec:
+  selector:
+    matchLabels:
+      app: myapi
+  action: audit
+  rules:
+  - to:
+    - operation:
+        methods: [&quot;GET&quot;]
+        paths: [“/user/profile/*”]
+````
+
+Authorization Policy scope (target) is determined by &quot;metadata/namespace&quot; and
+an optional &quot;selector&quot;.
+
+- &quot;metadata/namespace&quot; tells which namespace the policy applies. If set to root
+namespace, the policy applies to all namespaces in a mesh.
+- workload &quot;selector&quot; can be used to further restrict where a policy applies.
+
+For example,
+
+The following authorization policy applies to workloads containing label
+&quot;app: httpbin&quot; in namespace bar.
+
+```yaml
+apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
  name: policy
@@ -677,7 +710,7 @@ No
 <tr id="AuthorizationPolicy-Action-LOG">
 <td><code>LOG</code></td>
 <td>
-<p>Log a request if it matches any of the rules.</p>
+<p>Audit a request if it matches any of the rules.</p>
 
 </td>
 </tr>

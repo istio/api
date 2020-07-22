@@ -12,9 +12,21 @@
 // 3. If any of the ALLOW policies match the request, allow the request.
 // 4. Deny the request.
 //
-// For example, the following authorization policy sets the `action` to "ALLOW"
-// to create an allow policy. The default action is "ALLOW" but it is useful
-// to be explicit in the policy.
+// Istio Authorization Policy also supports the AUDIT action to decide whether to log requests.
+// The decision can be read by telemetry plugins using the function getAuditPolicy
+// defined [here](https://github.com/istio/proxy/blob/master/extensions/common/context.h).
+// A call to getAuditPolicy will only return `true` in the following cases:
+//
+// - There exists an AUDIT policy on the workload that matches the request
+// - There are no AUDIT policies on the workload
+//
+// AUDIT policies do not affect whether requests are allowed to the workload.
+// Requests will be allowed or denied based on only ALLOW and DENY policies.
+//
+// Here is an example of Istio Authorization Policy:
+//
+// It sets the `action` to "ALLOW" to create an allow policy. The default action is "ALLOW"
+// but it is useful to be explicit in the policy.
 //
 // It allows requests from:
 //
@@ -76,6 +88,27 @@
 //    - operation:
 //        methods: ["POST"]
 // ```
+//
+// The following authorization policy sets the `action` to "AUDIT". It will audit any GET requests to the path with the
+// prefix "/user/profile".
+//
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//   namespace: ns1
+//   name: anyname
+// spec:
+//   selector:
+//     matchLabels:
+//       app: myapi
+//   action: audit
+//   rules:
+//   - to:
+//     - operation:
+//         methods: ["GET"]
+//         paths: [“/user/profile/*”]
+// ````
 //
 // Authorization Policy scope (target) is determined by "metadata/namespace" and
 // an optional "selector".
@@ -160,7 +193,7 @@ const (
 	AuthorizationPolicy_ALLOW AuthorizationPolicy_Action = 0
 	// Deny a request if it matches any of the rules.
 	AuthorizationPolicy_DENY AuthorizationPolicy_Action = 1
-	// Log a request if it matches any of the rules.
+	// Audit a request if it matches any of the rules.
 	AuthorizationPolicy_LOG AuthorizationPolicy_Action = 2
 )
 
