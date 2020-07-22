@@ -1,0 +1,89 @@
+// Copyright 2020 Istio Authors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+syntax = "proto3";
+
+import "google/api/field_behavior.proto";
+
+// $schema: istio.networking.v1alpha3.WorkloadGroup
+// $title: Workload Group
+// $description: Describes a collection VM workload instances.
+// $location: https://istio.io/docs/reference/config/networking/workload-group.html
+// $aliases: [/docs/reference/config/networking/v1alpha3/workload-group]
+
+// `WorkloadGroup` describes a collection of non-Kubernetes (VM) workload 
+// instances that will serve as identical applications. It provides a 
+// specification that the workload instances can use to bootstrap their 
+// proxies, including the metadata and identity.
+//
+// The following example declares a workload group representing a collection 
+// of VM workloads that will be registered under `details` in namespace
+// `bootstore`. The set of labels will be associated with each workload 
+// instance during the VM bootstrap process, and the workloads will expose the
+// ports 3550 and 8080 to Istio. The workload group will be under the network
+// `remote` and service account `default`.
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: WorkloadGroup
+// metadata:
+//   name: details
+//   namespace: bookstore
+// spec:
+//   labels:
+//     app.kubernetes.io/name: details-legacy
+//   network: remote
+//   ports:
+//     grpc: 3550
+//     http: 8080
+//   serviceAccount: default
+// ```
+// {{</tab>}}
+// {{</tabset>}}
+//
+package istio.networking.v1alpha3;
+
+option go_package = "istio.io/api/networking/v1alpha3";
+
+// WorkloadGroup enables specifying the properties of a single non-Kubernetes workload for VM bootstrap.
+//
+// <!-- crd generation tags
+// +cue-gen:WorkloadGroup:groupName:networking.istio.io
+// +cue-gen:WorkloadGroup:version:v1alpha3
+// +cue-gen:WorkloadGroup:subresource:status
+// +cue-gen:WorkloadGroup:scope:Namespaced
+// +cue-gen:WorkloadGroup:resource:categories=istio-io,networking-istio-io,shortNames=wg,plural=workloadgroups
+// -->
+//
+// <!-- go code generation tags
+// +kubetype-gen
+// +kubetype-gen:groupVersion=networking.istio.io/v1alpha3
+// +genclient
+// +k8s:deepcopy-gen=true
+// -->
+message WorkloadGroup {
+  // Set of ports exposed by the workload instances in the group.
+  map<string, uint32> ports = 1;
+
+  // Lables to associate with each workload in the group.
+  map<string, string> labels = 2;
+
+  // Name of network for the workload group.
+  string network = 3;
+
+  // The service account associated with the workload instances.
+  string service_account = 4;
+};

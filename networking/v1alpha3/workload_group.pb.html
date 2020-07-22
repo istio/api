@@ -1,0 +1,104 @@
+---
+title: Workload Group
+description: Describes a collection VM workload instances.
+location: https://istio.io/docs/reference/config/networking/workload-group.html
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+schema: istio.networking.v1alpha3.WorkloadGroup
+aliases: [/docs/reference/config/networking/v1alpha3/workload-group]
+number_of_entries: 1
+---
+<p><code>WorkloadGroup</code> describes a collection of non-Kubernetes (VM) workload
+instances that will serve as identical applications. It provides a
+specification that the workload instances can use to bootstrap their
+proxies, including the metadata and identity.</p>
+
+<p>The following example declares a workload group representing a collection
+of VM workloads that will be registered under <code>details</code> in namespace
+<code>bootstore</code>. The set of labels will be associated with each workload
+instance during the VM bootstrap process, and the workloads will expose the
+ports 3550 and 8080 to Istio. The workload group will be under the network
+<code>remote</code> and service account <code>default</code>.</p>
+
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: WorkloadGroup
+metadata:
+  name: details
+  namespace: bookstore
+spec:
+  labels:
+    app.kubernetes.io/name: details-legacy
+  network: remote
+  ports:
+    grpc: 3550
+    http: 8080
+  serviceAccount: default
+</code></pre>
+
+<p>{{</tab>}}
+{{</tabset>}}</p>
+
+<h2 id="WorkloadGroup">WorkloadGroup</h2>
+<section>
+<p>WorkloadGroup enables specifying the properties of a single non-Kubernetes workload for VM bootstrap.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="WorkloadGroup-ports">
+<td><code>ports</code></td>
+<td><code>map&lt;string,&nbsp;uint32&gt;</code></td>
+<td>
+<p>Set of ports exposed by the workload instances in the group.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WorkloadGroup-labels">
+<td><code>labels</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>Lables to associate with each workload in the group.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WorkloadGroup-network">
+<td><code>network</code></td>
+<td><code>string</code></td>
+<td>
+<p>Name of network for the workload group.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="WorkloadGroup-service_account">
+<td><code>serviceAccount</code></td>
+<td><code>string</code></td>
+<td>
+<p>The service account associated with the workload instances.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>

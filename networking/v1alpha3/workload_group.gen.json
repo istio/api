@@ -1,0 +1,42 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Describes a collection VM workload instances.",
+    "version": "v1alpha3"
+  },
+  "components": {
+    "schemas": {
+      "istio.networking.v1alpha3.WorkloadGroup": {
+        "description": "WorkloadGroup enables specifying the properties of a single non-Kubernetes workload for VM bootstrap.",
+        "type": "object",
+        "properties": {
+          "labels": {
+            "description": "Lables to associate with each workload in the group.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "ports": {
+            "description": "Set of ports exposed by the workload instances in the group.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer"
+            }
+          },
+          "network": {
+            "description": "Name of network for the workload group.",
+            "type": "string",
+            "format": "string"
+          },
+          "serviceAccount": {
+            "description": "The service account associated with the workload instances.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      }
+    }
+  }
+}
