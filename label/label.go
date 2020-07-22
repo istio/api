@@ -26,7 +26,7 @@ const (
 	// IstioCanonicalServiceRevision is the name of label for the Istio Canonical Service revision for a workload instance.
 	IstioCanonicalServiceRevision = "service.istio.io/canonical-revision"
 
-	// IstioRev is the Istio control plane revision associated with the resource; e.g. "canary"
+	// IoIstioRev is the Istio control plane revision associated with the resource; e.g. "canary"
 	IstioRev = "istio.io/rev"
 
 	// IstioOperatorComponent is the Istio operator component name of the resource, e.g. "Pilot"
@@ -38,9 +38,4 @@ const (
 	// IstioOperatorVersion is the Istio operator version that installed the resource, e.g. "1.6.0"
 	IstioOperatorVersion = "operator.istio.io/version"
 
-	// IstioNetwork is the network name given to service instances used for providing cross-network EDS.
-	IstioNetwork = "topology.istio.io/network"
-
-	// IstioCluster is the cluster name where a service instance resides.
-	IstioCluster = "topology.istio.io/cluster"
 )

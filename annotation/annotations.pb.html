@@ -411,6 +411,26 @@ Istio supports to control its behavior.
 				
 					<tr>
 				
+					<td><code>topology.istio.io/cluster</code></td>
+					<td>[Pod]</td>
+					<td>Specifies the cluster name that the pod belongs to. Will be automatically set during injection based on configuration values if not explicitly set.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
+					<td><code>topology.istio.io/network</code></td>
+					<td>[Pod]</td>
+					<td>Specifies the network as defined in meshNetworks that the pod belongs to. Will be automatically set during injection based on configuration values if not explicitly set.</td>
+				</tr>
+			
+		
+			
+				
+					<tr>
+				
 					<td><code>traffic.sidecar.istio.io/excludeInboundPorts</code></td>
 					<td>[Pod]</td>
 					<td>A comma separated list of inbound ports to be excluded from redirection to Envoy. Only applies when all inbound traffic (i.e. '*') is being redirected.</td>
