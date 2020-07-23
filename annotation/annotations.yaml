@@ -54,20 +54,6 @@ annotations:
     hidden: false
     resources:
       - Service
-  - name: topology.istio.io/network
-    description: Specifies the network as defined in meshNetworks that the pod belongs to. Will be automatically
-      set during injection based on configuration values if not explicitly set.
-    deprecated: false
-    hidden: false
-    resources:
-      - Pod
-  - name: topology.istio.io/cluster
-    description: Specifies the cluster name that the pod belongs to. Will be automatically
-      set during injection based on configuration values if not explicitly set.
-    deprecated: false
-    hidden: false
-    resources:
-      - Pod
   - name: security.istio.io/tlsMode
     description: Specifies the TLS mode supported by a sidecar proxy. Valid values are 'istio', 'disabled'.
       When injecting sidecars into Pods, the sidecar injector will set the value of this label to 'istio' indicating

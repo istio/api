@@ -529,31 +529,6 @@ var (
 		},
 	}
 
-	TopologyCluster = Instance {
-		Name: "topology.istio.io/cluster",
-		Description: "Specifies the cluster name that the pod belongs to. Will "+
-                        "be automatically set during injection based on "+
-                        "configuration values if not explicitly set.",
-		Hidden: false,
-		Deprecated: false,
-		Resources: []ResourceTypes{
-			Pod,
-		},
-	}
-
-	TopologyNetwork = Instance {
-		Name: "topology.istio.io/network",
-		Description: "Specifies the network as defined in meshNetworks that the "+
-                        "pod belongs to. Will be automatically set during "+
-                        "injection based on configuration values if not explicitly "+
-                        "set.",
-		Hidden: false,
-		Deprecated: false,
-		Resources: []ResourceTypes{
-			Pod,
-		},
-	}
-
 	SidecarTrafficExcludeInboundPorts = Instance {
 		Name: "traffic.sidecar.istio.io/excludeInboundPorts",
 		Description: "A comma separated list of inbound ports to be excluded "+
@@ -684,8 +659,6 @@ func AllResourceAnnotations() []*Instance {
 		&SidecarUserVolume,
 		&SidecarUserVolumeMount,
 		&SidecarStatusPort,
-		&TopologyCluster,
-		&TopologyNetwork,
 		&SidecarTrafficExcludeInboundPorts,
 		&SidecarTrafficExcludeOutboundIPRanges,
 		&SidecarTrafficExcludeOutboundPorts,
