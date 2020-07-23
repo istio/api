@@ -16,19 +16,10 @@ directories:
       title: This package defines the common, core types used by the Mesh Configuration Protocol.
   mesh/v1alpha1:
     - mode: all
-  mixer/adapter/model/v1beta1:
-    - mode: all
-  mixer/v1/config/client:
-    - mode: all
-  mixer/v1:
-    - mode: all
-      title: This package defines the Mixer API that the sidecar proxy uses to perform precondition checks, manage quotas, and report telemetry.
   networking/v1alpha3:
     - mode: perFile
   networking/v1beta1:
     - mode: perFile
-  policy/v1beta1:
-    - mode: all
   security/v1alpha1:
     - mode: perFile
   security/v1beta1:

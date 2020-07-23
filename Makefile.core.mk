@@ -97,14 +97,12 @@ gen: \
 	generate-mcp \
 	generate-mesh \
 	generate-operator \
-	generate-mixer \
 	generate-networking \
 	generate-authn \
 	generate-security \
 	generate-analysis \
 	generate-meta \
 	generate-envoy \
-	generate-policy \
 	generate-annotations \
 	generate-openapi-schema \
 	generate-openapi-crd \
@@ -227,84 +225,6 @@ generate-operator: $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(ope
 
 clean-operator:
 	@rm -fr $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons) $(operator_v1alpha1_k8s_gos)
-
-#####################
-# policy/...
-#####################
-
-policy_v1beta1_path := policy/v1beta1
-policy_v1beta1_protos := $(wildcard $(policy_v1beta1_path)/*.proto)
-policy_v1beta1_pb_gos := $(policy_v1beta1_protos:.proto=.pb.go)
-policy_v1beta1_pb_pythons := $(patsubst $(policy_v1beta1_path)/%.proto,$(python_output_path)/$(policy_v1beta1_path)/%_pb2.py,$(policy_v1beta1_protos))
-policy_v1beta1_pb_doc := $(policy_v1beta1_path)/istio.policy.v1beta1.pb.html
-policy_v1beta1_openapi := $(policy_v1beta1_path)/istio.policy.v1beta1.gen.json
-policy_v1beta1_k8s_gos := \
-	$(patsubst $(policy_v1beta1_path)/%.proto,$(policy_v1beta1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(policy_v1beta1_protos))) \
-	$(patsubst $(policy_v1beta1_path)/%.proto,$(policy_v1beta1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(policy_v1beta1_protos)))
-
-$(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc) $(policy_v1beta1_pb_pythons) $(policy_v1beta1_k8s_gos): $(policy_v1beta1_protos)
-	@$(protolock) status
-	@$(protoc) $(gogoslick_plugin) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin)$(policy_v1beta1_path) $(protoc_gen_python_plugin) $^
-	@cp -r /tmp/istio.io/api/policy/* policy
-
-generate-policy: $(policy_v1beta1_pb_gos) $(policy_v1beta1_pb_doc) $(policy_v1beta1_pb_pythons) $(policy_v1beta1_k8s_gos)
-
-clean-policy:
-	@rm -fr $(policy_v1beta1_pb_gos) policy/v1beta1/fixed_cfg.pb.go $(policy_v1beta1_pb_doc) $(policy_v1beta1_pb_pythons) $(policy_v1beta1_k8s_gos)
-
-#####################
-# mixer/...
-#####################
-
-mixer_v1_path := mixer/v1
-mixer_v1_protos :=  $(wildcard $(mixer_v1_path)/*.proto)
-mixer_v1_pb_gos := $(mixer_v1_protos:.proto=.pb.go)
-mixer_v1_pb_pythons := $(patsubst $(mixer_v1_path)/%.proto,$(python_output_path)/$(mixer_v1_path)/%_pb2.py,$(mixer_v1_protos))
-mixer_v1_openapi := $(mixer_v1_path)/istio.mixer.v1.gen.json
-mixer_v1_k8s_gos := \
-	$(patsubst $(mixer_v1_path)/%.proto,$(mixer_v1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(mixer_v1_protos))) \
-	$(patsubst $(mixer_v1_path)/%.proto,$(mixer_v1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(mixer_v1_protos)))
-
-mixer_config_client_path := mixer/v1/config/client
-mixer_config_client_protos := $(wildcard $(mixer_config_client_path)/*.proto)
-mixer_config_client_pb_gos := $(mixer_config_client_protos:.proto=.pb.go)
-mixer_config_client_pb_pythons := $(patsubst $(mixer_config_client_path)/%.proto,$(python_output_path)/$(mixer_client_config_path)/%_pb2.py,$(mixer_client_config_protos))
-mixer_config_client_pb_doc := $(mixer_config_client_path)/istio.mixer.v1.config.client.pb.html
-mixer_config_client_openapi := $(mixer_config_client_path)/istio.mixer.v1.config.client.gen.json
-mixer_config_client_k8s_gos := \
-	$(patsubst $(mixer_config_client_path)/%.proto,$(mixer_config_client_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(mixer_config_client_protos))) \
-	$(patsubst $(mixer_config_client_path)/%.proto,$(mixer_config_client_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(mixer_config_client_protos)))
-
-mixer_adapter_model_v1beta1_path := mixer/adapter/model/v1beta1
-mixer_adapter_model_v1beta1_protos := $(wildcard $(mixer_adapter_model_v1beta1_path)/*.proto)
-mixer_adapter_model_v1beta1_pb_gos := $(mixer_adapter_model_v1beta1_protos:.proto=.pb.go)
-mixer_adapter_model_v1beta1_pb_pythons := $(patsubst $(mixer_adapter_model_v1beta1_path)/%.proto,$(python_output_path)/$(mixer_client_config_path)/%_pb2.py,$(mixer_client_config_protos))
-mixer_adapter_model_v1beta1_openapi := $(mixer_adapter_model_v1beta1_path)/istio.mixer.adapter.model.v1beta1.gen.json
-
-$(mixer_v1_pb_gos) $(mixer_v1_pb_pythons) $(mixer_v1_k8s_gos): $(mixer_v1_protos)
-	@$(protolock) status
-	@$(protoc) $(gogoslick_plugin) $(protoc_gen_k8s_support_plugins) $(protoc_gen_python_plugin) $^
-	@cp -r /tmp/istio.io/api/mixer/* mixer
-
-$(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc) $(mixer_config_client_pb_pythons) $(mixer_config_client_k8s_gos): $(mixer_config_client_protos)
-	@$(protolock) status
-	@$(protoc) $(gogoslick_plugin) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin)$(mixer_config_client_path) $(protoc_gen_python_plugin) $^
-	@cp -r /tmp/istio.io/api/mixer/* mixer
-
-$(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_pythons): $(mixer_adapter_model_v1beta1_protos)
-	@$(protolock) status
-	@$(protoc) $(gogoslick_plugin) $(protoc_gen_python_plugin)  $^
-	@cp -r /tmp/istio.io/api/mixer/* mixer
-
-generate-mixer: \
-	$(mixer_v1_pb_gos) $(mixer_v1_pb_pythons) $(mixer_v1_k8s_gos) \
-	$(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc) $(mixer_config_client_pb_pythons) $(mixer_config_client_k8s_gos) \
-	$(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_pythons)
-
-clean-mixer:
-	@rm -fr $(mixer_v1_pb_gos) $(mixer_v1_pb_pythons) $(mixer_v1_k8s_gos)
-	@rm -fr $(mixer_config_client_pb_gos) $(mixer_config_client_pb_doc) $(mixer_config_client_pb_pythons) $(mixer_config_client_k8s_gos)
-	@rm -fr $(mixer_adapter_model_v1beta1_pb_gos) $(mixer_adapter_model_v1beta1_pb_pythons)
 
 #####################
 # networking/...
@@ -525,10 +445,6 @@ all_protos := \
 	$(mcp_v1alpha1_protos) \
 	$(mesh_v1alpha1_protos) \
 	$(operator_v1alpha1_protos) \
-	$(policy_v1beta1_protos) \
-	$(mixer_v1_protos) \
-	$(mixer_config_client_protos) \
-	$(mixer_adapter_model_v1beta1_protos) \
 	$(networking_v1alpha3_protos) \
 	$(networking_v1beta1_protos) \
 	$(authn_v1alpha1_protos) \
@@ -542,10 +458,6 @@ all_openapi := \
 	$(mcp_v1alpha1_openapi) \
 	$(mesh_v1alpha1_openapi) \
 	$(operator_v1alpha1_openapi) \
-	$(policy_v1beta1_openapi) \
-	$(mixer_v1_openapi) \
-	$(mixer_config_client_openapi) \
-	$(mixer_adapter_model_v1beta1_openapi) \
 	$(networking_v1alpha3_openapi) \
 	$(networking_v1beta1_openapi) \
 	$(authn_v1alpha1_openapi) \
@@ -584,11 +496,9 @@ clean: \
 	clean-mcp \
 	clean-mesh \
 	clean-operator \
-	clean-mixer \
 	clean-networking \
 	clean-authn \
 	clean-envoy \
-	clean-policy \
 	clean-annotations \
 	clean-openapi-schema \
 	clean-security \
