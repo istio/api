@@ -1,6 +1,6 @@
 ---
 title: Workload Group
-description: Describes a collection VM workload instances.
+description: Describes a collection of workload instances.
 location: https://istio.io/docs/reference/config/networking/workload-group.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
@@ -8,15 +8,14 @@ schema: istio.networking.v1alpha3.WorkloadGroup
 aliases: [/docs/reference/config/networking/v1alpha3/workload-group]
 number_of_entries: 1
 ---
-<p><code>WorkloadGroup</code> describes a collection of non-Kubernetes (VM) workload
-instances that will serve as identical applications. It provides a
-specification that the workload instances can use to bootstrap their
-proxies, including the metadata and identity.</p>
+<p><code>WorkloadGroup</code> describes a collection of non-Kubernetes workload instances.
+It provides a specification that the workload instances can use to bootstrap
+their proxies, including the metadata and identity.</p>
 
 <p>The following example declares a workload group representing a collection
-of VM workloads that will be registered under <code>details</code> in namespace
-<code>bootstore</code>. The set of labels will be associated with each workload
-instance during the VM bootstrap process, and the workloads will expose the
+of workloads that will be registered under <code>details</code> in namespace
+<code>bookstore</code>. The set of labels will be associated with each workload
+instance during the bootstrap process, and the workloads will expose the
 ports 3550 and 8080 to Istio. The workload group will be under the network
 <code>remote</code> and service account <code>default</code>.</p>
 
@@ -43,7 +42,7 @@ spec:
 
 <h2 id="WorkloadGroup">WorkloadGroup</h2>
 <section>
-<p>WorkloadGroup enables specifying the properties of a single non-Kubernetes workload for VM bootstrap.</p>
+<p>WorkloadGroup enables specifying the properties of a single non-Kubernetes workload for bootstrap.</p>
 
 <table class="message-fields">
 <thead>

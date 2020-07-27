@@ -1,13 +1,13 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Describes a collection VM workload instances.",
+    "title": "Describes a collection of workload instances.",
     "version": "v1alpha3"
   },
   "components": {
     "schemas": {
       "istio.networking.v1alpha3.WorkloadGroup": {
-        "description": "WorkloadGroup enables specifying the properties of a single non-Kubernetes workload for VM bootstrap.",
+        "description": "WorkloadGroup enables specifying the properties of a single non-Kubernetes workload for bootstrap.",
         "type": "object",
         "properties": {
           "labels": {

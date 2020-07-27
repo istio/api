@@ -18,19 +18,18 @@ import "google/api/field_behavior.proto";
 
 // $schema: istio.networking.v1alpha3.WorkloadGroup
 // $title: Workload Group
-// $description: Describes a collection VM workload instances.
+// $description: Describes a collection of workload instances.
 // $location: https://istio.io/docs/reference/config/networking/workload-group.html
 // $aliases: [/docs/reference/config/networking/v1alpha3/workload-group]
 
-// `WorkloadGroup` describes a collection of non-Kubernetes (VM) workload 
-// instances that will serve as identical applications. It provides a 
-// specification that the workload instances can use to bootstrap their 
-// proxies, including the metadata and identity.
+// `WorkloadGroup` describes a collection of non-Kubernetes workload instances.
+// It provides a specification that the workload instances can use to bootstrap 
+// their proxies, including the metadata and identity.
 //
 // The following example declares a workload group representing a collection 
-// of VM workloads that will be registered under `details` in namespace
-// `bootstore`. The set of labels will be associated with each workload 
-// instance during the VM bootstrap process, and the workloads will expose the
+// of workloads that will be registered under `details` in namespace
+// `bookstore`. The set of labels will be associated with each workload 
+// instance during the bootstrap process, and the workloads will expose the
 // ports 3550 and 8080 to Istio. The workload group will be under the network
 // `remote` and service account `default`.
 //
@@ -58,14 +57,19 @@ package istio.networking.v1alpha3;
 
 option go_package = "istio.io/api/networking/v1alpha3";
 
-// WorkloadGroup enables specifying the properties of a single non-Kubernetes workload for VM bootstrap.
+// WorkloadGroup enables specifying the properties of a single non-Kubernetes workload for bootstrap.
 //
 // <!-- crd generation tags
 // +cue-gen:WorkloadGroup:groupName:networking.istio.io
 // +cue-gen:WorkloadGroup:version:v1alpha3
+// +cue-gen:WorkloadGroup:storageVersion
 // +cue-gen:WorkloadGroup:subresource:status
 // +cue-gen:WorkloadGroup:scope:Namespaced
 // +cue-gen:WorkloadGroup:resource:categories=istio-io,networking-istio-io,shortNames=wg,plural=workloadgroups
+// +cue-gen:WorkloadGroup:printerColumn:name=Age,type=date,JSONPath=.metadata.creationTimestamp,description="CreationTimestamp is a timestamp
+// representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations.
+// Clients may not set this value. It is represented in RFC3339 form and is in UTC.
+// Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
 // -->
 //
 // <!-- go code generation tags
