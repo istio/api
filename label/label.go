@@ -40,7 +40,4 @@ const (
 
 	// IstioNetwork is the network name given to service instances used for providing cross-network EDS.
 	IstioNetwork = "topology.istio.io/network"
-
-	// IstioCluster is the cluster name where a service instance resides.
-	IstioCluster = "topology.istio.io/cluster"
 )
