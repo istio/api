@@ -131,12 +131,6 @@
             "description": "Enables client side policy checks.",
             "type": "boolean"
           },
-          "sdsUdsPath": {
-            "description": "Unix Domain Socket through which Envoy communicates with NodeAgent SDS to get key/cert for mTLS. Use secret-mount files instead of SDS if set to empty. @deprecated - istio agent will detect and send the path to envoy.",
-            "type": "string",
-            "format": "string",
-            "deprecated": true
-          },
           "sdsRefreshDelay": {
             "type": "string",
             "deprecated": true

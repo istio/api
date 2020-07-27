@@ -36172,17 +36172,6 @@
                 "type": "bool"
               },
               {
-                "id": 20,
-                "name": "sds_uds_path",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
                 "id": 21,
                 "name": "sds_refresh_delay",
                 "type": "google.protobuf.Duration",
@@ -36332,9 +36321,11 @@
             "reserved_ids": [
               15,
               18,
+              20,
               53
             ],
             "reserved_names": [
+              "sds_uds_path",
               "termination_drain_duration"
             ],
             "messages": [
