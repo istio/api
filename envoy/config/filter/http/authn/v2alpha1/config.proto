@@ -20,7 +20,6 @@ import "authentication/v1alpha1/policy.proto";
 
 package istio.envoy.config.filter.http.authn.v2alpha1;
 
-
 option go_package = "istio.io/api/envoy/config/filter/http/authn/v2alpha1";
 
 // FilterConfig is the config for Istio-specific filter that is used to enforce
@@ -41,5 +40,14 @@ message FilterConfig {
   // trust domains.
   // Note, the istio authn filter only validates the trust domain when mTLS is
   // used, In other words, this field has no effect for plaintext traffic.
+  // TODO(incfly): deprecate this after allowed_trust_domains is shipped.
   bool skip_validate_trust_domain = 3;
+
+  // allowed_trust_domains contains a list of trust domains the authn
+  // filter should validate against. When configured, only requests with a
+  // peer from one of the allowed trust domain will be admitted.
+  // An empty list means all trust domains are allowed.
+  // When this field is set, the skip_validate_trust_domain field is ignored.
+  // This field has no effect for plaintext traffic.
+  repeated string allowed_trust_domains = 4;
 }

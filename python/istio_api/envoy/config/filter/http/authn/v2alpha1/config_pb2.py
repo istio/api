@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.envoy.config.filter.http.authn.v2alpha1',
   syntax='proto3',
   serialized_options=_b('Z4istio.io/api/envoy/config/filter/http/authn/v2alpha1'),
-  serialized_pb=_b('\n4envoy/config/filter/http/authn/v2alpha1/config.proto\x12-istio.envoy.config.filter.http.authn.v2alpha1\x1a$authentication/v1alpha1/policy.proto\"\xae\x02\n\x0c\x46ilterConfig\x12\x35\n\x06policy\x18\x01 \x01(\x0b\x32%.istio.authentication.v1alpha1.Policy\x12\x80\x01\n\x1cjwt_output_payload_locations\x18\x02 \x03(\x0b\x32Z.istio.envoy.config.filter.http.authn.v2alpha1.FilterConfig.JwtOutputPayloadLocationsEntry\x12\"\n\x1askip_validate_trust_domain\x18\x03 \x01(\x08\x1a@\n\x1eJwtOutputPayloadLocationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\x36Z4istio.io/api/envoy/config/filter/http/authn/v2alpha1b\x06proto3')
+  serialized_pb=_b('\n4envoy/config/filter/http/authn/v2alpha1/config.proto\x12-istio.envoy.config.filter.http.authn.v2alpha1\x1a$authentication/v1alpha1/policy.proto\"\xcd\x02\n\x0c\x46ilterConfig\x12\x35\n\x06policy\x18\x01 \x01(\x0b\x32%.istio.authentication.v1alpha1.Policy\x12\x80\x01\n\x1cjwt_output_payload_locations\x18\x02 \x03(\x0b\x32Z.istio.envoy.config.filter.http.authn.v2alpha1.FilterConfig.JwtOutputPayloadLocationsEntry\x12\"\n\x1askip_validate_trust_domain\x18\x03 \x01(\x08\x12\x1d\n\x15\x61llowed_trust_domains\x18\x04 \x03(\t\x1a@\n\x1eJwtOutputPayloadLocationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\x36Z4istio.io/api/envoy/config/filter/http/authn/v2alpha1b\x06proto3')
   ,
   dependencies=[authentication_dot_v1alpha1_dot_policy__pb2.DESCRIPTOR,])
 
@@ -61,8 +61,8 @@ _FILTERCONFIG_JWTOUTPUTPAYLOADLOCATIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=380,
-  serialized_end=444,
+  serialized_start=411,
+  serialized_end=475,
 )
 
 _FILTERCONFIG = _descriptor.Descriptor(
@@ -93,6 +93,13 @@ _FILTERCONFIG = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='allowed_trust_domains', full_name='istio.envoy.config.filter.http.authn.v2alpha1.FilterConfig.allowed_trust_domains', index=3,
+      number=4, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -106,7 +113,7 @@ _FILTERCONFIG = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=142,
-  serialized_end=444,
+  serialized_end=475,
 )
 
 _FILTERCONFIG_JWTOUTPUTPAYLOADLOCATIONSENTRY.containing_type = _FILTERCONFIG
