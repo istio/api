@@ -44,10 +44,10 @@ message FilterConfig {
   bool skip_validate_trust_domain = 3;
 
   // allowed_trust_domains contains a list of trust domains the authn
-  // filter should validate against. When configured, only the request with a
-  // peer from one of the trust domain can be allowed.
-  // An empty list means no verification on this regard.
-  // When this field is set, skip_validate_trust_domain field is ignored.
+  // filter should validate against. When configured, only requests with a
+  // peer from one of the allowed trust domain will be admitted.
+  // An empty list means all trust domains are allowed.
+  // When this field is set, the skip_validate_trust_domain field is ignored.
   // This field has no effect for plaintext traffic.
   repeated string allowed_trust_domains = 4;
 }
