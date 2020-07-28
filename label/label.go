@@ -26,7 +26,7 @@ const (
 	// IstioCanonicalServiceRevision is the name of label for the Istio Canonical Service revision for a workload instance.
 	IstioCanonicalServiceRevision = "service.istio.io/canonical-revision"
 
-	// IoIstioRev is the Istio control plane revision associated with the resource; e.g. "canary"
+	// IstioRev is the Istio control plane revision associated with the resource; e.g. "canary"
 	IstioRev = "istio.io/rev"
 
 	// IstioOperatorComponent is the Istio operator component name of the resource, e.g. "Pilot"
@@ -37,4 +37,11 @@ const (
 
 	// IstioOperatorVersion is the Istio operator version that installed the resource, e.g. "1.6.0"
 	IstioOperatorVersion = "operator.istio.io/version"
+
+	// IstioNetwork enables Istio to group endpoints resident in the same L3 domain/network.
+	// All endpoints in the same network are assumed to be directly reachable from one another.
+	// When endpoints in different networks cannot reach each other directly, an Istio Gateway can
+	// be used to establish connectivity (usually using the AUTO_PASSTHROUGH mode in a  Gateway Server).
+	// This is an advanced configuration used typically for spanning an Istio mesh over multiple clusters.
+	IstioNetwork = "topology.istio.io/network"
 )
