@@ -996,15 +996,18 @@ message LocalityLoadBalancerSetting{
     // distributed over a set of 'to' zones. Syntax for specifying a zone is
     // {region}/{zone}/{sub-zone} and terminal wildcards are allowed on any
     // segment of the specification. Examples:
-    // * - matches all localities
-    // us-west/* - all zones and sub-zones within the us-west region
-    // us-west/zone-1/* - all sub-zones within us-west/zone-1
+    //
+    // `*` - matches all localities
+    //
+    // `us-west/*` - all zones and sub-zones within the us-west region
+    //
+    // `us-west/zone-1/*` - all sub-zones within us-west/zone-1
     message Distribute{
         // Originating locality, '/' separated, e.g. 'region/zone/sub_zone'.
         string from = 1;
 
         // Map of upstream localities to traffic distribution weights. The sum of
-        // all weights should be == 100. Any locality not assigned a weight will
+        // all weights should be 100. Any locality not present will
         // receive no traffic.
         map<string, uint32> to = 2;
     };
