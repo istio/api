@@ -35259,6 +35259,12 @@
                 "id": 3,
                 "name": "skip_validate_trust_domain",
                 "type": "bool"
+              },
+              {
+                "id": 4,
+                "name": "allowed_trust_domains",
+                "type": "string",
+                "is_repeated": true
               }
             ],
             "maps": [
@@ -35988,72 +35994,6 @@
             "name": "MeshConfig",
             "fields": [
               {
-                "id": 1,
-                "name": "mixer_check_server",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 2,
-                "name": "mixer_report_server",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 3,
-                "name": "disable_policy_checks",
-                "type": "bool",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 48,
-                "name": "disable_mixer_http_reports",
-                "type": "bool",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 25,
-                "name": "policy_check_fail_open",
-                "type": "bool",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 30,
-                "name": "sidecar_to_telemetry_session_affinity",
-                "type": "bool",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
                 "id": 4,
                 "name": "proxy_listen_port",
                 "type": "int32"
@@ -36151,25 +36091,9 @@
                 "type": "ProxyConfig"
               },
               {
-                "id": 16,
-                "name": "mixer_address",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
                 "id": 17,
                 "name": "outbound_traffic_policy",
                 "type": "OutboundTrafficPolicy"
-              },
-              {
-                "id": 19,
-                "name": "enable_client_side_policy_check",
-                "type": "bool"
               },
               {
                 "id": 22,
@@ -36227,39 +36151,6 @@
                 "type": "google.protobuf.Duration"
               },
               {
-                "id": 37,
-                "name": "disable_report_batch",
-                "type": "bool",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 38,
-                "name": "report_batch_max_entries",
-                "type": "uint32",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 39,
-                "name": "report_batch_max_time",
-                "type": "google.protobuf.Duration",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
                 "id": 41,
                 "name": "h2_upgrade_policy",
                 "type": "H2UpgradePolicy"
@@ -36298,19 +36189,41 @@
               }
             ],
             "reserved_ids": [
+              1,
+              2,
+              3,
+              48,
+              25,
+              30,
               15,
+              16,
               18,
+              19,
               20,
               21,
               23,
               29,
+              37,
+              38,
+              39,
               53
             ],
             "reserved_names": [
+              "mixer_check_server",
+              "mixer_report_server",
+              "disable_policy_checks",
+              "disable_mixer_http_reports",
+              "policy_check_fail_open",
+              "sidecar_to_telemetry_session_affinity",
+              "mixer_address",
+              "enable_client_side_policy_check",
               "sds_uds_path",
               "sds_refresh_delay",
               "enable_sds_token_mount",
               "sds_use_k8s_sa_jwt",
+              "disable_report_batch",
+              "report_batch_max_entries",
+              "report_batch_max_time",
               "termination_drain_duration"
             ],
             "messages": [

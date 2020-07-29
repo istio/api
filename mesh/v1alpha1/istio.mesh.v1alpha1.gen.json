@@ -26,38 +26,6 @@
           "outboundTrafficPolicy": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy"
           },
-          "mixerCheckServer": {
-            "description": "Address of the server that will be used by the proxies for policy check calls. By using different names for mixerCheckServer and mixerReportServer, it is possible to have one set of Mixer servers handle policy check calls while another set of Mixer servers handle telemetry calls.",
-            "type": "string",
-            "format": "string",
-            "deprecated": true
-          },
-          "mixerReportServer": {
-            "description": "Address of the server that will be used by the proxies for policy report calls.",
-            "type": "string",
-            "format": "string",
-            "deprecated": true
-          },
-          "disablePolicyChecks": {
-            "description": "Disable policy checks by the Mixer service. Default is true, i.e. Mixer policy check is disabled by default.",
-            "type": "boolean",
-            "deprecated": true
-          },
-          "disableMixerHttpReports": {
-            "description": "Disable telemetry reporting by the Mixer service for HTTP traffic. Default is true (telemetry reporting via Mixer is disabled). This option provides a transition path for Istio extensibility v2.",
-            "type": "boolean",
-            "deprecated": true
-          },
-          "policyCheckFailOpen": {
-            "description": "Allow all traffic in cases when the Mixer policy service cannot be reached. Default is false which means the traffic is denied when the client is unable to connect to Mixer.",
-            "type": "boolean",
-            "deprecated": true
-          },
-          "sidecarToTelemetrySessionAffinity": {
-            "description": "Enable session affinity for Envoy Mixer reports so that calls from a proxy will always target the same Mixer instance. Default value is false.",
-            "type": "boolean",
-            "deprecated": true
-          },
           "proxyListenPort": {
             "description": "Port on which Envoy should listen for incoming connections from other services. Default port is 15001.",
             "type": "integer",
@@ -122,15 +90,6 @@
           "defaultConfig": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig"
           },
-          "mixerAddress": {
-            "type": "string",
-            "format": "string",
-            "deprecated": true
-          },
-          "enableClientSidePolicyCheck": {
-            "description": "Enables client side policy checks.",
-            "type": "boolean"
-          },
           "configSources": {
             "description": "ConfigSource describes a source of configuration data for networking rules, and other Istio configuration artifacts. Multiple data sources can be configured for a single control plane.",
             "type": "array",
@@ -188,21 +147,6 @@
           "dnsRefreshRate": {
             "description": "Configures DNS refresh rate for Envoy clusters of type STRICT_DNS Default refresh rate is 5s.",
             "type": "string"
-          },
-          "disableReportBatch": {
-            "description": "The flag to disable report batch.",
-            "type": "boolean",
-            "deprecated": true
-          },
-          "reportBatchMaxEntries": {
-            "description": "When disable_report_batch is false, this value specifies the maximum number of requests that are batched in report. If left unspecified, the default value of report_batch_max_entries == 0 will use the hardcoded defaults of istio::mixerclient::ReportOptions. Default value is 100.",
-            "type": "integer",
-            "deprecated": true
-          },
-          "reportBatchMaxTime": {
-            "description": "When disable_report_batch is false, this value specifies the maximum elapsed time a batched report will be sent after a user request is processed. If left unspecified, the default report_batch_max_time == 0 will use the hardcoded defaults of istio::mixerclient::ReportOptions. Default max time is 1s.",
-            "type": "string",
-            "deprecated": true
           },
           "inboundClusterStatName": {
             "description": "Name to be used while emitting statistics for inbound clusters. The same pattern is used while computing stat prefix for network filters like TCP and Redis. By default, Istio emits statistics with the pattern `inbound|\u003cport\u003e|\u003cport-name\u003e|\u003cservice-FQDN\u003e`. For example `inbound|7443|grpc-reviews|reviews.prod.svc.cluster.local`. This can be used to override that pattern.",

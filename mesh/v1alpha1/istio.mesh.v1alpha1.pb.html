@@ -843,17 +843,6 @@ Default mode is ALLOW_ANY which means outbound traffic to unknown destinations w
 No
 </td>
 </tr>
-<tr id="MeshConfig-enable_client_side_policy_check">
-<td><code>enableClientSidePolicyCheck</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Enables client side policy checks.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="MeshConfig-config_sources">
 <td><code>configSources</code></td>
 <td><code><a href="#ConfigSource">ConfigSource[]</a></code></td>
@@ -1136,112 +1125,6 @@ If you are running a separately managed Envoy with an Istio sidecar, this may ca
 In this case, it is recommended to disable aggregation on that deployment with the
 <code>prometheus.istio.io/merge-metrics: &quot;false&quot;</code> annotation.
 If not specified, this will be enabled by default.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-mixer_check_server" class="deprecated ">
-<td><code>mixerCheckServer</code></td>
-<td><code>string</code></td>
-<td>
-<p>Address of the server that will be used by the proxies for policy
-check calls. By using different names for mixerCheckServer and
-mixerReportServer, it is possible to have one set of Mixer servers handle
-policy check calls while another set of Mixer servers handle telemetry
-calls.</p>
-
-<p>NOTE: Omitting mixerCheckServer while specifying mixerReportServer is
-equivalent to setting disablePolicyChecks to true.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-mixer_report_server" class="deprecated ">
-<td><code>mixerReportServer</code></td>
-<td><code>string</code></td>
-<td>
-<p>Address of the server that will be used by the proxies for policy report
-calls.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-disable_policy_checks" class="deprecated ">
-<td><code>disablePolicyChecks</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Disable policy checks by the Mixer service. Default
-is true, i.e. Mixer policy check is disabled by default.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-policy_check_fail_open" class="deprecated ">
-<td><code>policyCheckFailOpen</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Allow all traffic in cases when the Mixer policy service cannot be reached.
-Default is false which means the traffic is denied when the client is unable
-to connect to Mixer.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-sidecar_to_telemetry_session_affinity" class="deprecated ">
-<td><code>sidecarToTelemetrySessionAffinity</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Enable session affinity for Envoy Mixer reports so that calls from a proxy will
-always target the same Mixer instance. Default value is false.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-disable_report_batch" class="deprecated ">
-<td><code>disableReportBatch</code></td>
-<td><code>bool</code></td>
-<td>
-<p>The flag to disable report batch.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-report_batch_max_entries" class="deprecated ">
-<td><code>reportBatchMaxEntries</code></td>
-<td><code>uint32</code></td>
-<td>
-<p>When disable<em>report</em>batch is false, this value specifies the maximum number
-of requests that are batched in report. If left unspecified, the default value
-of report<em>batch</em>max_entries == 0 will use the hardcoded defaults of
-istio::mixerclient::ReportOptions. Default value is 100.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-report_batch_max_time" class="deprecated ">
-<td><code>reportBatchMaxTime</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
-<td>
-<p>When disable<em>report</em>batch is false, this value specifies the maximum elapsed
-time a batched report will be sent after a user request is processed. If left
-unspecified, the default report<em>batch</em>max_time == 0 will use the hardcoded
-defaults of istio::mixerclient::ReportOptions. Default max time is 1s.</p>
 
 </td>
 <td>
