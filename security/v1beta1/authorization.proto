@@ -34,16 +34,16 @@ import "type/v1beta1/selector.proto";
 // 3. If any of the ALLOW policies match the request, allow the request.
 // 4. Deny the request.
 //
-// Istio Authorization Policy also supports the AUDIT action to decide whether to log requests. 
-// The decision can be read by telemetry plugins using the function getAuditPolicy
-// defined [here](https://github.com/istio/proxy/blob/master/extensions/common/context.h).
-// A call to getAuditPolicy will only return `true` in the following cases:
+// Istio Authorization Policy also supports the AUDIT action to decide whether to log requests.
+// Telemetry v2 access logging plugins can be set to abide by the audit decision.
+// Currently this is supported by the [Stackdriver](https://istio.io/latest/docs/reference/config/proxy_extensions/stackdriver/) plugin.
+// A request will be audited in the following cases:
 //
 // - There exists an AUDIT policy on the workload that matches the request
 // - There are no AUDIT policies on the workload
 // 
 // AUDIT policies do not affect whether requests are allowed to the workload.
-// Requests will be allowed or denied based on only ALLOW and DENY policies. 
+// Requests will be allowed or denied based on only ALLOW and DENY policies.
 // 
 // Here is an example of Istio Authorization Policy:
 //
@@ -256,6 +256,10 @@ message AuthorizationPolicy {
 
     // Audit a request if it matches any of the rules.
     AUDIT = 2;
+
+    // $hide_from_docs
+    // Audit policy decisions can be read by telemetry plugins using the function getAuditPolicy
+    // defined [here](https://github.com/istio/proxy/blob/master/extensions/common/context.h).
   }
 
   // Optional. The action to take if the request is matched with the rules.

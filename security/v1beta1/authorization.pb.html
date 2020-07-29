@@ -23,9 +23,9 @@ evaluated first. The evaluation is determined by the following rules:</p>
 </ol>
 
 <p>Istio Authorization Policy also supports the AUDIT action to decide whether to log requests.
-The decision can be read by telemetry plugins using the function getAuditPolicy
-defined <a href="https://github.com/istio/proxy/blob/master/extensions/common/context.h">here</a>.
-A call to getAuditPolicy will only return <code>true</code> in the following cases:</p>
+Telemetry v2 access logging plugins can be set to abide by the audit decision.
+Currently this is supported by the <a href="https://istio.io/latest/docs/reference/config/proxy_extensions/stackdriver/">Stackdriver</a> plugin.
+A request will be audited in the following cases:</p>
 
 <ul>
 <li>There exists an AUDIT policy on the workload that matches the request</li>
