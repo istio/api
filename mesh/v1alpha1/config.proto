@@ -39,38 +39,18 @@ option go_package="istio.io/api/mesh/v1alpha1";
 // and replaced with several individual configuration types (for example,
 // tracing configuration).
 message MeshConfig {
-  // Address of the server that will be used by the proxies for policy
-  // check calls. By using different names for mixerCheckServer and
-  // mixerReportServer, it is possible to have one set of Mixer servers handle
-  // policy check calls while another set of Mixer servers handle telemetry
-  // calls.
-  //
-  // NOTE: Omitting mixerCheckServer while specifying mixerReportServer is
-  // equivalent to setting disablePolicyChecks to true.
-  string mixer_check_server = 1 [deprecated=true];
-
-  // Address of the server that will be used by the proxies for policy report
-  // calls.
-  string mixer_report_server = 2 [deprecated=true];
-
-  // Disable policy checks by the Mixer service. Default
-  // is true, i.e. Mixer policy check is disabled by default.
-  bool disable_policy_checks = 3 [deprecated=true];
-
-  // $hide_from_docs
-  // Disable telemetry reporting by the Mixer service for HTTP traffic.
-  // Default is true (telemetry reporting via Mixer is disabled).
-  // This option provides a transition path for Istio extensibility v2.
-  bool disable_mixer_http_reports = 48 [deprecated=true];
-
-  // Allow all traffic in cases when the Mixer policy service cannot be reached.
-  // Default is false which means the traffic is denied when the client is unable
-  // to connect to Mixer.
-  bool policy_check_fail_open = 25 [deprecated=true];
-
-  // Enable session affinity for Envoy Mixer reports so that calls from a proxy will
-  // always target the same Mixer instance. Default value is false.
-  bool sidecar_to_telemetry_session_affinity = 30 [deprecated=true];
+  reserved 1;
+  reserved "mixer_check_server";
+  reserved 2;
+  reserved "mixer_report_server";
+  reserved 3;
+  reserved "disable_policy_checks";
+  reserved 48;
+  reserved "disable_mixer_http_reports";
+  reserved 25;
+  reserved "policy_check_fail_open";
+  reserved 30;
+  reserved "sidecar_to_telemetry_session_affinity";
 
   // Port on which Envoy should listen for incoming connections from
   // other services. Default port is 15001.
@@ -188,8 +168,8 @@ message MeshConfig {
 
   reserved 15;
 
-  // $hide_from_docs
-  string mixer_address = 16 [deprecated=true];
+  reserved 16;
+  reserved "mixer_address";
 
   message OutboundTrafficPolicy {
     enum Mode {
@@ -222,8 +202,8 @@ message MeshConfig {
 
   reserved 18;
 
-  // Enables client side policy checks.
-  bool enable_client_side_policy_check = 19;
+  reserved 19;
+  reserved "enable_client_side_policy_check";
 
   reserved 20;
   reserved "sds_uds_path";
@@ -327,20 +307,14 @@ message MeshConfig {
   // Default refresh rate is 5s.
   google.protobuf.Duration dns_refresh_rate = 36;
 
-  // The flag to disable report batch.
-  bool disable_report_batch = 37 [deprecated=true];
+  reserved 37;
+  reserved "disable_report_batch";
 
-  // When disable_report_batch is false, this value specifies the maximum number
-  // of requests that are batched in report. If left unspecified, the default value
-  // of report_batch_max_entries == 0 will use the hardcoded defaults of
-  // istio::mixerclient::ReportOptions. Default value is 100.
-  uint32 report_batch_max_entries = 38 [deprecated=true];
+  reserved 38;
+  reserved "report_batch_max_entries";
 
-  // When disable_report_batch is false, this value specifies the maximum elapsed
-  // time a batched report will be sent after a user request is processed. If left
-  // unspecified, the default report_batch_max_time == 0 will use the hardcoded
-  // defaults of istio::mixerclient::ReportOptions. Default max time is 1s.
-  google.protobuf.Duration report_batch_max_time = 39 [deprecated=true];
+  reserved 39;
+  reserved "report_batch_max_time";
 
   // Default Policy for upgrading http1.1 connections to http2.
   enum H2UpgradePolicy {
