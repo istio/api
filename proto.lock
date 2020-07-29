@@ -36172,28 +36172,6 @@
                 "type": "bool"
               },
               {
-                "id": 20,
-                "name": "sds_uds_path",
-                "type": "string",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
-                "id": 21,
-                "name": "sds_refresh_delay",
-                "type": "google.protobuf.Duration",
-                "options": [
-                  {
-                    "name": "deprecated",
-                    "value": "true"
-                  }
-                ]
-              },
-              {
                 "id": 22,
                 "name": "config_sources",
                 "type": "ConfigSource",
@@ -36203,16 +36181,6 @@
                 "id": 43,
                 "name": "enable_auto_mtls",
                 "type": "google.protobuf.BoolValue"
-              },
-              {
-                "id": 23,
-                "name": "enable_sds_token_mount",
-                "type": "bool"
-              },
-              {
-                "id": 29,
-                "name": "sds_use_k8s_sa_jwt",
-                "type": "bool"
               },
               {
                 "id": 26,
@@ -36332,9 +36300,17 @@
             "reserved_ids": [
               15,
               18,
+              20,
+              21,
+              23,
+              29,
               53
             ],
             "reserved_names": [
+              "sds_uds_path",
+              "sds_refresh_delay",
+              "enable_sds_token_mount",
+              "sds_use_k8s_sa_jwt",
               "termination_drain_duration"
             ],
             "messages": [

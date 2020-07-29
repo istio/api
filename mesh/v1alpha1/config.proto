@@ -225,14 +225,11 @@ message MeshConfig {
   // Enables client side policy checks.
   bool enable_client_side_policy_check = 19;
 
-  // $hide_from_docs
-  // Unix Domain Socket through which Envoy communicates with NodeAgent SDS to get key/cert for mTLS.
-  // Use secret-mount files instead of SDS if set to empty.
-  // @deprecated - istio agent will detect and send the path to envoy.
-  string sds_uds_path = 20 [deprecated=true];
+  reserved 20;
+  reserved "sds_uds_path";
 
-  // $hide_from_docs
-  google.protobuf.Duration sds_refresh_delay = 21 [deprecated=true];
+  reserved 21;
+  reserved "sds_refresh_delay";
 
   // ConfigSource describes a source of configuration data for networking
   // rules, and other Istio configuration artifacts. Multiple data sources
@@ -252,23 +249,12 @@ message MeshConfig {
   // If service DestinationRule exists and has ClientTLSSettings specified, that is always used instead.
   google.protobuf.BoolValue enable_auto_mtls = 43;
 
-  // $hide_from_docs
-  // This flag is used by secret discovery service(SDS).
-  // If set to true ([prerequisite](https://kubernetes.io/docs/concepts/storage/volumes/#projected)), Istio will inject volumes mount
-  // for Kubernetes service account trustworthy JWT(which is available with Kubernetes 1.12 or higher), so that the Kubernetes API server
-  // mounts Kubernetes service account trustworthy JWT to the Envoy container, which will be used to request key/cert eventually.
-  // This isn't supported for non-Kubernetes cases.
-  // Default value is set to false.
-  bool enable_sds_token_mount = 23;
 
-  // $hide_from_docs
-  // This flag is used by secret discovery service(SDS).
-  // If set to true, Envoy will fetch a normal Kubernetes service account JWT from '/var/run/secrets/kubernetes.io/serviceaccount/token'
-  // (https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-the-api-from-a-pod)
-  // and pass to sds server, which will be used to request key/cert eventually.
-  // If both enable_sds_token_mount and sds_use_k8s_sa_jwt are set to true, enable_sds_token_mount(trustworthy jwt) takes precedence.
-  // This isn't supported for non-k8s case.
-  bool sds_use_k8s_sa_jwt = 29;
+  reserved 23;
+  reserved "enable_sds_token_mount";
+
+  reserved 29;
+  reserved "sds_use_k8s_sa_jwt";
 
   // The trust domain corresponds to the trust root of a system.
   // Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)
