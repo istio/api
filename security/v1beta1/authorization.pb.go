@@ -16,10 +16,10 @@
 // AUDIT policies do not affect whether requests are allowed or denied to the workload.
 // Requests will be allowed or denied based solely on ALLOW and DENY policies.
 //
-// Telemetry v2 access logging plugins can be set to abide by the audit decision.
-// Currently AUDIT is supported by the [Stackdriver](https://istio.io/latest/docs/reference/config/proxy_extensions/stackdriver/) plugin.
-// A request will be audited if there is an AUDIT policy on the workload that matches the request, and there is a telemetry plugin on the workload that supports auditing.
-// If there are no supporting plugins enabled, the request will not be audited.
+// A request will be internally marked that it should be audited if there is an AUDIT policy on the workload that matches the request.
+// A separate plugin must be configured and enabled to actually fulfill the audit decision and complete the audit behavior.
+// The request will not be audited if there are no such supporting plugins enabled.
+// Currently, the only supported plugin is the [Telemetry v2 Stackdriver](https://istio.io/latest/docs/reference/config/proxy_extensions/stackdriver/) plugin.
 //
 // Here is an example of Istio Authorization Policy:
 //
