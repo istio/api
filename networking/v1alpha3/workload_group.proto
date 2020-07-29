@@ -14,7 +14,8 @@
 
 syntax = "proto3";
 
-import "google/api/field_behavior.proto";
+import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
+import "networking/v1alpha3/workload_entry.proto";
 
 // $schema: istio.networking.v1alpha3.WorkloadGroup
 // $title: Workload Group
@@ -27,11 +28,10 @@ import "google/api/field_behavior.proto";
 // their proxies, including the metadata and identity.
 //
 // The following example declares a workload group representing a collection 
-// of workloads that will be registered under `details` in namespace
-// `bookstore`. The set of labels will be associated with each workload 
+// of workloads that will be registered under `checkoutservice` in namespace
+// `hipster`. The set of labels will be associated with each workload 
 // instance during the bootstrap process, and the workloads will expose the
-// ports 3550 and 8080 to Istio. The workload group will be under the network
-// `remote` and service account `default`.
+// ports 3550 and 8080 to Istio and use and service account `default`.
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
@@ -39,16 +39,19 @@ import "google/api/field_behavior.proto";
 // apiVersion: networking.istio.io/v1alpha3
 // kind: WorkloadGroup
 // metadata:
-//   name: details
-//   namespace: bookstore
+//   name: checkoutservice
+//   namespace: hipster
 // spec:
-//   labels:
-//     app.kubernetes.io/name: details-legacy
-//   network: remote
-//   ports:
-//     grpc: 3550
-//     http: 8080
-//   serviceAccount: default
+//   template:
+//     metadata:
+//       labels:
+//         app.kubernetes.io/name: checkoutservice
+//         app.kubernetes.io/version: "1.3.4"
+//     spec:
+//       ports:
+//         grpc: 3550
+//         http: 8080
+//       serviceAccount: default
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -79,15 +82,15 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // +k8s:deepcopy-gen=true
 // -->
 message WorkloadGroup {
-  // Set of ports exposed by the workload instances in the group.
-  map<string, uint32> ports = 1;
+  // Template to be used for the generation of WorkloadEntry resources that belong
+  // to this WorkloadGroup
+  WorkloadEntryTemplate template = 1;
+}
 
-  // Lables to associate with each workload in the group.
-  map<string, string> labels = 2;
+message WorkloadEntryTemplate {
+  // Metadata that will be used for all corresponding WorkloadEntries.
+  k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
 
-  // Name of network for the workload group.
-  string network = 3;
-
-  // The service account associated with the workload instances.
-  string service_account = 4;
-};
+  // Describes the WorkloadEntry resources that will be created.
+  WorkloadEntry spec = 2;
+}

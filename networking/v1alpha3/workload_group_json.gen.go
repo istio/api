@@ -6,11 +6,10 @@
 // their proxies, including the metadata and identity.
 //
 // The following example declares a workload group representing a collection
-// of workloads that will be registered under `details` in namespace
-// `bookstore`. The set of labels will be associated with each workload
+// of workloads that will be registered under `checkoutservice` in namespace
+// `hipster`. The set of labels will be associated with each workload
 // instance during the bootstrap process, and the workloads will expose the
-// ports 3550 and 8080 to Istio. The workload group will be under the network
-// `remote` and service account `default`.
+// ports 3550 and 8080 to Istio and use and service account `default`.
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
@@ -18,16 +17,19 @@
 // apiVersion: networking.istio.io/v1alpha3
 // kind: WorkloadGroup
 // metadata:
-//   name: details
-//   namespace: bookstore
+//   name: checkoutservice
+//   namespace: hipster
 // spec:
-//   labels:
-//     app.kubernetes.io/name: details-legacy
-//   network: remote
-//   ports:
-//     grpc: 3550
-//     http: 8080
-//   serviceAccount: default
+//   template:
+//     metadata:
+//       labels:
+//         app.kubernetes.io/name: checkoutservice
+//         app.kubernetes.io/version: "1.3.4"
+//     spec:
+//       ports:
+//         grpc: 3550
+//         http: 8080
+//       serviceAccount: default
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -40,7 +42,7 @@ import (
 	fmt "fmt"
 	github_com_gogo_protobuf_jsonpb "github.com/gogo/protobuf/jsonpb"
 	proto "github.com/gogo/protobuf/proto"
-	_ "istio.io/gogo-genproto/googleapis/google/api"
+	_ "k8s.io/apimachinery/pkg/apis/meta/v1"
 	math "math"
 )
 
@@ -57,6 +59,17 @@ func (this *WorkloadGroup) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for WorkloadGroup
 func (this *WorkloadGroup) UnmarshalJSON(b []byte) error {
+	return WorkloadGroupUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for WorkloadEntryTemplate
+func (this *WorkloadEntryTemplate) MarshalJSON() ([]byte, error) {
+	str, err := WorkloadGroupMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for WorkloadEntryTemplate
+func (this *WorkloadEntryTemplate) UnmarshalJSON(b []byte) error {
 	return WorkloadGroupUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

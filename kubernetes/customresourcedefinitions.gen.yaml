@@ -4931,8 +4931,6 @@ spec:
                   properties:
                     match:
                       items:
-<<<<<<< HEAD
-=======
                         properties:
                           destinationSubnets:
                             description: IPv4 or IPv6 ip addresses of destination
@@ -5188,383 +5186,199 @@ spec:
             description: 'Describes a collection of workload instances. See more details
               at: https://istio.io/docs/reference/config/networking/workload-group.html'
             properties:
-              labels:
-                additionalProperties:
-                  format: string
-                  type: string
-                description: Lables to associate with each workload in the group.
-                type: object
-              network:
-                description: Name of network for the workload group.
-                format: string
-                type: string
-              ports:
-                additionalProperties:
-                  type: integer
-                description: Set of ports exposed by the workload instances in the
-                  group.
-                type: object
-              serviceAccount:
-                description: The service account associated with the workload instances.
-                format: string
-                type: string
-            type: object
-          status:
-            type: object
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
-
----
-apiVersion: apiextensions.k8s.io/v1
-kind: CustomResourceDefinition
-metadata:
-  annotations:
-    "helm.sh/resource-policy": keep
-  labels:
-    app: mixer
-    chart: istio
-    heritage: Tiller
-    istio: core
-    package: istio.io.mixer
-    release: istio
-  name: attributemanifests.config.istio.io
-spec:
-  group: config.istio.io
-  names:
-    categories:
-    - istio-io
-    - policy-istio-io
-    kind: attributemanifest
-    listKind: attributemanifestList
-    plural: attributemanifests
-    singular: attributemanifest
-  scope: Namespaced
-  versions:
-  - name: v1alpha2
-    schema:
-      openAPIV3Schema:
-        properties:
-          spec:
-            description: 'Describes the rules used to configure Mixer''s policy and
-              telemetry features. See more details at: https://istio.io/docs/reference/config/policy-and-telemetry/istio.policy.v1beta1.html'
-            properties:
-              attributes:
-                additionalProperties:
-                  properties:
-                    description:
-                      description: A human-readable description of the attribute's
-                        purpose.
-                      format: string
-                      type: string
-                    valueType:
-                      description: The type of data carried by this attribute.
-                      enum:
-                      - VALUE_TYPE_UNSPECIFIED
-                      - STRING
-                      - INT64
-                      - DOUBLE
-                      - BOOL
-                      - TIMESTAMP
-                      - IP_ADDRESS
-                      - EMAIL_ADDRESS
-                      - URI
-                      - DNS_NAME
-                      - DURATION
-                      - STRING_MAP
-                      type: string
-                  type: object
-                description: The set of attributes this Istio component will be responsible
-                  for producing at runtime.
-                type: object
-              name:
-                description: Name of the component producing these attributes.
-                format: string
-                type: string
-              revision:
-                description: The revision of this document.
-                format: string
-                type: string
-            type: object
-          status:
-            type: object
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
-
----
-apiVersion: apiextensions.k8s.io/v1
-kind: CustomResourceDefinition
-metadata:
-  annotations:
-    "helm.sh/resource-policy": keep
-  labels:
-    app: mixer
-    chart: istio
-    heritage: Tiller
-    istio: mixer-handler
-    package: handler
-    release: istio
-  name: handlers.config.istio.io
-spec:
-  group: config.istio.io
-  names:
-    categories:
-    - istio-io
-    - policy-istio-io
-    kind: handler
-    listKind: handlerList
-    plural: handlers
-    singular: handler
-  scope: Namespaced
-  versions:
-  - name: v1alpha2
-    schema:
-      openAPIV3Schema:
-        properties:
-          spec:
-            description: Handler allows the operator to configure a specific adapter
-              implementation.
-            properties:
-              adapter:
-                description: The name of a specific adapter implementation.
-                format: string
-                type: string
-              compiledAdapter:
-                description: The name of the compiled in adapter this handler instantiates.
-                format: string
-                type: string
-              connection:
-                description: Information on how to connect to the out-of-process adapter.
+              template:
                 properties:
-                  address:
-                    description: The address of the backend.
-                    format: string
-                    type: string
-                  authentication:
-                    description: Auth config for the connection to the backend.
-                    oneOf:
-                    - not:
-                        anyOf:
-                        - properties:
-                            tls:
-                              allOf:
-                              - oneOf:
-                                - not:
-                                    anyOf:
-                                    - required:
-                                      - tokenPath
-                                    - required:
-                                      - oauth
-                                - required:
-                                  - tokenPath
-                                - required:
-                                  - oauth
-                              - oneOf:
-                                - not:
-                                    anyOf:
-                                    - required:
-                                      - authHeader
-                                    - required:
-                                      - customHeader
-                                - required:
-                                  - authHeader
-                                - required:
-                                  - customHeader
-                          required:
-                          - tls
-                        - required:
-                          - mutual
-                    - properties:
-                        tls:
-                          allOf:
-                          - oneOf:
-                            - not:
-                                anyOf:
-                                - required:
-                                  - tokenPath
-                                - required:
-                                  - oauth
-                            - required:
-                              - tokenPath
-                            - required:
-                              - oauth
-                          - oneOf:
-                            - not:
-                                anyOf:
-                                - required:
-                                  - authHeader
-                                - required:
-                                  - customHeader
-                            - required:
-                              - authHeader
-                            - required:
-                              - customHeader
-                      required:
-                      - tls
-                    - required:
-                      - mutual
+                  metadata:
+                    description: Metadata that will be used for all corresponding
+                      WorkloadEntries.
                     properties:
-                      mutual:
->>>>>>> f5b44f4... add storage version, timestamp
-                        properties:
-                          destinationSubnets:
-                            description: IPv4 or IPv6 ip addresses of destination
-                              with optional subnet.
-                            items:
-                              format: string
-                              type: string
-                            type: array
-                          gateways:
-                            description: Names of gateways where the rule should be
-                              applied.
-                            items:
-                              format: string
-                              type: string
-                            type: array
-                          port:
-                            description: Specifies the port on the host that is being
-                              addressed.
-                            type: integer
-                          sniHosts:
-                            description: SNI (server name indicator) to match on.
-                            items:
-                              format: string
-                              type: string
-                            type: array
-                          sourceLabels:
-                            additionalProperties:
-                              format: string
-                              type: string
-                            type: object
-                          sourceNamespace:
-                            description: Source namespace constraining the applicability
-                              of a rule to workloads in that namespace.
-                            format: string
-                            type: string
+                      annotations:
+                        additionalProperties:
+                          format: string
+                          type: string
                         type: object
-                      type: array
-                    route:
-                      description: The destination to which the connection should
-                        be forwarded to.
-                      items:
+                      clusterName:
+                        description: The name of the cluster which the object belongs
+                          to.
+                        format: string
+                        type: string
+                      creationTimestamp:
                         properties:
-                          destination:
-                            properties:
-                              host:
-                                description: The name of a service from the service
-                                  registry.
-                                format: string
-                                type: string
-                              port:
-                                description: Specifies the port on the host that is
-                                  being addressed.
-                                properties:
-                                  number:
-                                    type: integer
-                                type: object
-                              subset:
-                                description: The name of a subset within the service.
-                                format: string
-                                type: string
-                            type: object
-                          weight:
+                          nanos:
+                            description: Non-negative fractions of a second at nanosecond
+                              resolution.
                             format: int32
                             type: integer
+                          seconds:
+                            format: int64
+                            type: integer
                         type: object
-                      type: array
-                  type: object
-                type: array
-            type: object
-          status:
-            type: object
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: true
-    storage: false
-    subresources:
-      status: {}
-
----
-apiVersion: apiextensions.k8s.io/v1
-kind: CustomResourceDefinition
-metadata:
-  annotations:
-    "helm.sh/resource-policy": keep
-  labels:
-    app: istio-pilot
-    chart: istio
-    heritage: Tiller
-    release: istio
-  name: workloadentries.networking.istio.io
-spec:
-  group: networking.istio.io
-  names:
-    categories:
-    - istio-io
-    - networking-istio-io
-    kind: WorkloadEntry
-    listKind: WorkloadEntryList
-    plural: workloadentries
-    shortNames:
-    - we
-    singular: workloadentry
-  scope: Namespaced
-  versions:
-  - additionalPrinterColumns:
-    - description: 'CreationTimestamp is a timestamp representing the server time
-        when this object was created. It is not guaranteed to be set in happens-before
-        order across separate operations. Clients may not set this value. It is represented
-        in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for
-        lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
-      jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    - description: Address associated with the network endpoint.
-      jsonPath: .spec.address
-      name: Address
-      type: string
-    name: v1alpha3
-    schema:
-      openAPIV3Schema:
-        properties:
-          spec:
-            description: 'Configuration affecting VMs onboarded into the mesh. See
-              more details at: https://istio.io/docs/reference/config/networking/workload-entry.html'
-            properties:
-              address:
-                format: string
-                type: string
-              labels:
-                additionalProperties:
-                  format: string
-                  type: string
-                description: One or more labels associated with the endpoint.
+                      deletionGracePeriodSeconds:
+                        format: int64
+                        type: integer
+                      deletionTimestamp:
+                        description: DeletionTimestamp is RFC 3339 date and time at
+                          which this resource will be deleted.
+                        properties:
+                          nanos:
+                            description: Non-negative fractions of a second at nanosecond
+                              resolution.
+                            format: int32
+                            type: integer
+                          seconds:
+                            format: int64
+                            type: integer
+                        type: object
+                      finalizers:
+                        description: Must be empty before the object is deleted from
+                          the registry.
+                        items:
+                          format: string
+                          type: string
+                        type: array
+                      generateName:
+                        format: string
+                        type: string
+                      generation:
+                        description: A sequence number representing a specific generation
+                          of the desired state.
+                        format: int64
+                        type: integer
+                      labels:
+                        additionalProperties:
+                          format: string
+                          type: string
+                        type: object
+                      managedFields:
+                        items:
+                          properties:
+                            apiVersion:
+                              format: string
+                              type: string
+                            fieldsType:
+                              description: FieldsType is the discriminator for the
+                                different fields format and version.
+                              format: string
+                              type: string
+                            fieldsV1:
+                              description: FieldsV1 holds the first JSON version format
+                                as described in the "FieldsV1" type.
+                              properties:
+                                Raw:
+                                  description: Raw is the underlying serialization
+                                    of this object.
+                                  format: binary
+                                  type: string
+                              type: object
+                            manager:
+                              description: Manager is an identifier of the workflow
+                                managing these fields.
+                              format: string
+                              type: string
+                            operation:
+                              description: Operation is the type of operation which
+                                lead to this ManagedFieldsEntry being created.
+                              format: string
+                              type: string
+                            time:
+                              description: Time is timestamp of when these fields
+                                were set.
+                              properties:
+                                nanos:
+                                  description: Non-negative fractions of a second
+                                    at nanosecond resolution.
+                                  format: int32
+                                  type: integer
+                                seconds:
+                                  format: int64
+                                  type: integer
+                              type: object
+                          type: object
+                        type: array
+                      name:
+                        description: Name must be unique within a namespace.
+                        format: string
+                        type: string
+                      namespace:
+                        description: Namespace defines the space within each name
+                          must be unique.
+                        format: string
+                        type: string
+                      ownerReferences:
+                        description: List of objects depended by this object.
+                        items:
+                          properties:
+                            apiVersion:
+                              description: API version of the referent.
+                              format: string
+                              type: string
+                            blockOwnerDeletion:
+                              type: boolean
+                            controller:
+                              description: If true, this reference points to the managing
+                                controller.
+                              type: boolean
+                            kind:
+                              description: Kind of the referent.
+                              format: string
+                              type: string
+                            name:
+                              description: Name of the referent.
+                              format: string
+                              type: string
+                            uid:
+                              description: UID of the referent.
+                              format: string
+                              type: string
+                          type: object
+                        type: array
+                      resourceVersion:
+                        format: string
+                        type: string
+                      selfLink:
+                        description: SelfLink is a URL representing this object.
+                        format: string
+                        type: string
+                      uid:
+                        description: UID is the unique in time and space value for
+                          this object.
+                        format: string
+                        type: string
+                    type: object
+                  spec:
+                    description: Describes the WorkloadEntry resources that will be
+                      created.
+                    properties:
+                      address:
+                        format: string
+                        type: string
+                      labels:
+                        additionalProperties:
+                          format: string
+                          type: string
+                        description: One or more labels associated with the endpoint.
+                        type: object
+                      locality:
+                        description: The locality associated with the endpoint.
+                        format: string
+                        type: string
+                      network:
+                        format: string
+                        type: string
+                      ports:
+                        additionalProperties:
+                          type: integer
+                        description: Set of ports associated with the endpoint.
+                        type: object
+                      serviceAccount:
+                        format: string
+                        type: string
+                      weight:
+                        description: The load balancing weight associated with the
+                          endpoint.
+                        type: integer
+                    type: object
                 type: object
-              locality:
-                description: The locality associated with the endpoint.
-                format: string
-                type: string
-              network:
-                format: string
-                type: string
-              ports:
-                additionalProperties:
-                  type: integer
-                description: Set of ports associated with the endpoint.
-                type: object
-              serviceAccount:
-                format: string
-                type: string
-              weight:
-                description: The load balancing weight associated with the endpoint.
-                type: integer
             type: object
           status:
             type: object
@@ -5572,63 +5386,6 @@ spec:
         type: object
     served: true
     storage: true
-    subresources:
-      status: {}
-  - additionalPrinterColumns:
-    - description: 'CreationTimestamp is a timestamp representing the server time
-        when this object was created. It is not guaranteed to be set in happens-before
-        order across separate operations. Clients may not set this value. It is represented
-        in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for
-        lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
-      jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    - description: Address associated with the network endpoint.
-      jsonPath: .spec.address
-      name: Address
-      type: string
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        properties:
-          spec:
-            description: 'Configuration affecting VMs onboarded into the mesh. See
-              more details at: https://istio.io/docs/reference/config/networking/workload-entry.html'
-            properties:
-              address:
-                format: string
-                type: string
-              labels:
-                additionalProperties:
-                  format: string
-                  type: string
-                description: One or more labels associated with the endpoint.
-                type: object
-              locality:
-                description: The locality associated with the endpoint.
-                format: string
-                type: string
-              network:
-                format: string
-                type: string
-              ports:
-                additionalProperties:
-                  type: integer
-                description: Set of ports associated with the endpoint.
-                type: object
-              serviceAccount:
-                format: string
-                type: string
-              weight:
-                description: The load balancing weight associated with the endpoint.
-                type: integer
-            type: object
-          status:
-            type: object
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: true
-    storage: false
     subresources:
       status: {}
 

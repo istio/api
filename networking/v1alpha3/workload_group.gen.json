@@ -6,12 +6,12 @@
   },
   "components": {
     "schemas": {
-      "istio.networking.v1alpha3.WorkloadGroup": {
-        "description": "WorkloadGroup enables specifying the properties of a single non-Kubernetes workload for bootstrap.",
+      "istio.networking.v1alpha3.WorkloadEntry": {
+        "description": "WorkloadEntry enables specifying the properties of a single non-Kubernetes workload such a VM or a bare metal services that can be referred to by service entries.",
         "type": "object",
         "properties": {
           "labels": {
-            "description": "Lables to associate with each workload in the group.",
+            "description": "One or more labels associated with the endpoint.",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -19,21 +19,241 @@
             }
           },
           "ports": {
-            "description": "Set of ports exposed by the workload instances in the group.",
+            "description": "Set of ports associated with the endpoint. If the port map is specified, it must be a map of servicePortName to this endpoint's port, such that traffic to the service port will be forwarded to the endpoint port that maps to the service's portName. If omitted, and the targetPort is specified as part of the service's port specification, traffic to the service port will be forwarded to one of the endpoints on the specified `targetPort`. If both the targetPort and endpoint's port map are not specified, traffic to a service port will be forwarded to one of the endpoints on the same port.",
             "type": "object",
             "additionalProperties": {
               "type": "integer"
             }
           },
+          "weight": {
+            "description": "The load balancing weight associated with the endpoint. Endpoints with higher weights will receive proportionally higher traffic.",
+            "type": "integer"
+          },
+          "address": {
+            "description": "Address associated with the network endpoint without the port. Domain names can be used if and only if the resolution is set to DNS, and must be fully-qualified without wildcards. Use the form unix:///absolute/path/to/socket for Unix domain socket endpoints.",
+            "type": "string",
+            "format": "string"
+          },
           "network": {
-            "description": "Name of network for the workload group.",
+            "description": "Network enables Istio to group endpoints resident in the same L3 domain/network. All endpoints in the same network are assumed to be directly reachable from one another. When endpoints in different networks cannot reach each other directly, an Istio Gateway can be used to establish connectivity (usually using the `AUTO_PASSTHROUGH` mode in a Gateway Server). This is an advanced configuration used typically for spanning an Istio mesh over multiple clusters.",
+            "type": "string",
+            "format": "string"
+          },
+          "locality": {
+            "description": "The locality associated with the endpoint. A locality corresponds to a failure domain (e.g., country/region/zone). Arbitrary failure domain hierarchies can be represented by separating each encapsulating failure domain by /. For example, the locality of an an endpoint in US, in US-East-1 region, within availability zone az-1, in data center rack r11 can be represented as us/us-east-1/az-1/r11. Istio will configure the sidecar to route to endpoints within the same locality as the sidecar. If none of the endpoints in the locality are available, endpoints parent locality (but within the same network ID) will be chosen. For example, if there are two endpoints in same network (networkID \"n1\"), say e1 with locality us/us-east-1/az-1/r11 and e2 with locality us/us-east-1/az-2/r12, a sidecar from us/us-east-1/az-1/r11 locality will prefer e1 from the same locality over e2 from a different locality. Endpoint e2 could be the IP associated with a gateway (that bridges networks n1 and n2), or the IP associated with a standard service endpoint.",
             "type": "string",
             "format": "string"
           },
           "serviceAccount": {
-            "description": "The service account associated with the workload instances.",
+            "description": "The service account associated with the workload if a sidecar is present in the workload. The service account must be present in the same namespace as the configuration ( WorkloadEntry or a ServiceEntry)",
             "type": "string",
             "format": "string"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.WorkloadGroup": {
+        "description": "WorkloadGroup enables specifying the properties of a single non-Kubernetes workload for bootstrap.",
+        "type": "object",
+        "properties": {
+          "template": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.WorkloadEntryTemplate"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.WorkloadEntryTemplate": {
+        "type": "object",
+        "properties": {
+          "metadata": {
+            "$ref": "#/components/schemas/k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+          },
+          "spec": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.WorkloadEntry"
+          }
+        }
+      },
+      "k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta": {
+        "description": "Metadata that will be used for all corresponding WorkloadEntries.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name must be unique within a namespace. Is required when creating resources, although some resources may allow a client to request the generation of an appropriate name automatically. Name is primarily intended for creation idempotence and configuration definition. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names +optional",
+            "type": "string",
+            "format": "string"
+          },
+          "labels": {
+            "description": "Map of string keys and values that can be used to organize and categorize (scope and select) objects. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels +optional",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "namespace": {
+            "description": "Namespace defines the space within each name must be unique. An empty namespace is equivalent to the \"default\" namespace, but \"default\" is the canonical representation. Not all objects are required to be scoped to a namespace - the value of this field for those objects will be empty.",
+            "type": "string",
+            "format": "string"
+          },
+          "resourceVersion": {
+            "description": "An opaque value that represents the internal version of this object that can be used by clients to determine when objects have changed. May be used for optimistic concurrency, change detection, and the watch operation on a resource or set of resources. Clients must treat these values as opaque and passed unmodified back to the server. They may only be valid for a particular resource or set of resources.",
+            "type": "string",
+            "format": "string"
+          },
+          "selfLink": {
+            "description": "SelfLink is a URL representing this object. Populated by the system. Read-only.",
+            "type": "string",
+            "format": "string"
+          },
+          "generateName": {
+            "description": "GenerateName is an optional prefix, used by the server, to generate a unique name ONLY IF the Name field has not been provided. If this field is used, the name returned to the client will be different than the name passed. This value will also be combined with a unique suffix. The provided value has the same validation rules as the Name field, and may be truncated by the length of the suffix required to make the value unique on the server.",
+            "type": "string",
+            "format": "string"
+          },
+          "uid": {
+            "description": "UID is the unique in time and space value for this object. It is typically generated by the server on successful creation of a resource and is not allowed to change on PUT operations.",
+            "type": "string",
+            "format": "string"
+          },
+          "generation": {
+            "description": "A sequence number representing a specific generation of the desired state. Populated by the system. Read-only. +optional",
+            "type": "integer",
+            "format": "int64"
+          },
+          "creationTimestamp": {
+            "$ref": "#/components/schemas/k8s.io.apimachinery.pkg.apis.meta.v1.Time"
+          },
+          "deletionTimestamp": {
+            "$ref": "#/components/schemas/k8s.io.apimachinery.pkg.apis.meta.v1.Time"
+          },
+          "deletionGracePeriodSeconds": {
+            "description": "Number of seconds allowed for this object to gracefully terminate before it will be removed from the system. Only set when deletionTimestamp is also set. May only be shortened. Read-only. +optional",
+            "type": "integer",
+            "format": "int64"
+          },
+          "annotations": {
+            "description": "Annotations is an unstructured key value map stored with a resource that may be set by external tools to store and retrieve arbitrary metadata. They are not queryable and should be preserved when modifying objects. More info: http://kubernetes.io/docs/user-guide/annotations +optional",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "ownerReferences": {
+            "description": "List of objects depended by this object. If ALL objects in the list have been deleted, this object will be garbage collected. If this object is managed by a controller, then an entry in this list will point to this controller, with the controller field set to true. There cannot be more than one managing controller. +optional +patchMergeKey=uid +patchStrategy=merge",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/k8s.io.apimachinery.pkg.apis.meta.v1.OwnerReference"
+            }
+          },
+          "finalizers": {
+            "description": "Must be empty before the object is deleted from the registry. Each entry is an identifier for the responsible component that will remove the entry from the list. If the deletionTimestamp of the object is non-nil, entries in this list can only be removed. +optional +patchStrategy=merge",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "clusterName": {
+            "description": "The name of the cluster which the object belongs to. This is used to distinguish resources with same name and namespace in different clusters. This field is not set anywhere right now and apiserver is going to ignore it if set in create or update request. +optional",
+            "type": "string",
+            "format": "string"
+          },
+          "managedFields": {
+            "description": "ManagedFields maps workflow-id and version to the set of fields that are managed by that workflow. This is mostly for internal housekeeping, and users typically shouldn't need to set or understand this field. A workflow can be the user's name, a controller's name, or the name of a specific apply path like \"ci-cd\". The set of fields is always in the version that the workflow used when modifying the object.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/k8s.io.apimachinery.pkg.apis.meta.v1.ManagedFieldsEntry"
+            }
+          }
+        }
+      },
+      "k8s.io.apimachinery.pkg.apis.meta.v1.ManagedFieldsEntry": {
+        "type": "object",
+        "properties": {
+          "time": {
+            "$ref": "#/components/schemas/k8s.io.apimachinery.pkg.apis.meta.v1.Time"
+          },
+          "operation": {
+            "description": "Operation is the type of operation which lead to this ManagedFieldsEntry being created. The only valid values for this field are 'Apply' and 'Update'.",
+            "type": "string",
+            "format": "string"
+          },
+          "apiVersion": {
+            "description": "APIVersion defines the version of this resource that this field set applies to. The format is \"group/version\" just like the top-level APIVersion field. It is necessary to track the version of a field set because it cannot be automatically converted.",
+            "type": "string",
+            "format": "string"
+          },
+          "manager": {
+            "description": "Manager is an identifier of the workflow managing these fields.",
+            "type": "string",
+            "format": "string"
+          },
+          "fieldsType": {
+            "description": "FieldsType is the discriminator for the different fields format and version. There is currently only one possible value: \"FieldsV1\"",
+            "type": "string",
+            "format": "string"
+          },
+          "fieldsV1": {
+            "$ref": "#/components/schemas/k8s.io.apimachinery.pkg.apis.meta.v1.FieldsV1"
+          }
+        }
+      },
+      "k8s.io.apimachinery.pkg.apis.meta.v1.OwnerReference": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names",
+            "type": "string",
+            "format": "string"
+          },
+          "apiVersion": {
+            "description": "API version of the referent.",
+            "type": "string",
+            "format": "string"
+          },
+          "kind": {
+            "description": "Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds",
+            "type": "string",
+            "format": "string"
+          },
+          "uid": {
+            "description": "UID of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#uids",
+            "type": "string",
+            "format": "string"
+          },
+          "controller": {
+            "description": "If true, this reference points to the managing controller. +optional",
+            "type": "boolean"
+          },
+          "blockOwnerDeletion": {
+            "description": "If true, AND if the owner has the \"foregroundDeletion\" finalizer, then the owner cannot be deleted from the key-value store until this reference is removed. Defaults to false. To set this field, a user needs \"delete\" permission of the owner, otherwise 422 (Unprocessable Entity) will be returned. +optional",
+            "type": "boolean"
+          }
+        }
+      },
+      "k8s.io.apimachinery.pkg.apis.meta.v1.Time": {
+        "description": "DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This field is set by the server when a graceful deletion is requested by the user, and is not directly settable by a client. The resource is expected to be deleted (no longer visible from resource lists, and not reachable by name) after the time in this field, once the finalizers list is empty. As long as the finalizers list contains items, deletion is blocked. Once the deletionTimestamp is set, this value may not be unset or be set further into the future, although it may be shortened or the resource may be deleted prior to this time. For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react by sending a graceful termination signal to the containers in the pod. After that 30 seconds, the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup, remove the pod from the API. In the presence of network partitions, this object may still exist after this timestamp, until an administrator or automated process can determine the resource is fully terminated. If not set, graceful deletion of the object has not been requested.",
+        "type": "object",
+        "properties": {
+          "seconds": {
+            "description": "Represents seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive.",
+            "type": "integer",
+            "format": "int64"
+          },
+          "nanos": {
+            "description": "Non-negative fractions of a second at nanosecond resolution. Negative second values with fractions must still have non-negative nanos values that count forward in time. Must be from 0 to 999,999,999 inclusive. This field may be limited in precision depending on context.",
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "k8s.io.apimachinery.pkg.apis.meta.v1.FieldsV1": {
+        "description": "FieldsV1 holds the first JSON version format as described in the \"FieldsV1\" type. +optional",
+        "type": "object",
+        "properties": {
+          "Raw": {
+            "description": "Raw is the underlying serialization of this object.",
+            "type": "string",
+            "format": "binary"
           }
         }
       }

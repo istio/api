@@ -6,11 +6,10 @@
 // their proxies, including the metadata and identity.
 //
 // The following example declares a workload group representing a collection
-// of workloads that will be registered under `details` in namespace
-// `bookstore`. The set of labels will be associated with each workload
+// of workloads that will be registered under `checkoutservice` in namespace
+// `hipster`. The set of labels will be associated with each workload
 // instance during the bootstrap process, and the workloads will expose the
-// ports 3550 and 8080 to Istio. The workload group will be under the network
-// `remote` and service account `default`.
+// ports 3550 and 8080 to Istio and use and service account `default`.
 //
 // {{<tabset category-name="example">}}
 // {{<tab name="v1alpha3" category-value="v1alpha3">}}
@@ -18,16 +17,19 @@
 // apiVersion: networking.istio.io/v1alpha3
 // kind: WorkloadGroup
 // metadata:
-//   name: details
-//   namespace: bookstore
+//   name: checkoutservice
+//   namespace: hipster
 // spec:
-//   labels:
-//     app.kubernetes.io/name: details-legacy
-//   network: remote
-//   ports:
-//     grpc: 3550
-//     http: 8080
-//   serviceAccount: default
+//   template:
+//     metadata:
+//       labels:
+//         app.kubernetes.io/name: checkoutservice
+//         app.kubernetes.io/version: "1.3.4"
+//     spec:
+//       ports:
+//         grpc: 3550
+//         http: 8080
+//       serviceAccount: default
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -39,7 +41,7 @@ import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
 	io "io"
-	_ "istio.io/gogo-genproto/googleapis/google/api"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	math "math"
 	math_bits "math/bits"
 )
@@ -77,17 +79,12 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // +k8s:deepcopy-gen=true
 // -->
 type WorkloadGroup struct {
-	// Set of ports exposed by the workload instances in the group.
-	Ports map[string]uint32 `protobuf:"bytes,1,rep,name=ports,proto3" json:"ports,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"varint,2,opt,name=value,proto3"`
-	// Lables to associate with each workload in the group.
-	Labels map[string]string `protobuf:"bytes,2,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// Name of network for the workload group.
-	Network string `protobuf:"bytes,3,opt,name=network,proto3" json:"network,omitempty"`
-	// The service account associated with the workload instances.
-	ServiceAccount       string   `protobuf:"bytes,4,opt,name=service_account,json=serviceAccount,proto3" json:"service_account,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	// Template to be used for the generation of WorkloadEntry resources that belong
+	// to this WorkloadGroup
+	Template             *WorkloadEntryTemplate `protobuf:"bytes,1,opt,name=template,proto3" json:"template,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
+	XXX_unrecognized     []byte                 `json:"-"`
+	XXX_sizecache        int32                  `json:"-"`
 }
 
 func (m *WorkloadGroup) Reset()         { *m = WorkloadGroup{} }
@@ -123,38 +120,73 @@ func (m *WorkloadGroup) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_WorkloadGroup proto.InternalMessageInfo
 
-func (m *WorkloadGroup) GetPorts() map[string]uint32 {
+func (m *WorkloadGroup) GetTemplate() *WorkloadEntryTemplate {
 	if m != nil {
-		return m.Ports
+		return m.Template
 	}
 	return nil
 }
 
-func (m *WorkloadGroup) GetLabels() map[string]string {
+type WorkloadEntryTemplate struct {
+	// Metadata that will be used for all corresponding WorkloadEntries.
+	Metadata *v1.ObjectMeta `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// Describes the WorkloadEntry resources that will be created.
+	Spec                 *WorkloadEntry `protobuf:"bytes,2,opt,name=spec,proto3" json:"spec,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
+}
+
+func (m *WorkloadEntryTemplate) Reset()         { *m = WorkloadEntryTemplate{} }
+func (m *WorkloadEntryTemplate) String() string { return proto.CompactTextString(m) }
+func (*WorkloadEntryTemplate) ProtoMessage()    {}
+func (*WorkloadEntryTemplate) Descriptor() ([]byte, []int) {
+	return fileDescriptor_621fb79d92a8ed09, []int{1}
+}
+func (m *WorkloadEntryTemplate) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *WorkloadEntryTemplate) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_WorkloadEntryTemplate.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *WorkloadEntryTemplate) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WorkloadEntryTemplate.Merge(m, src)
+}
+func (m *WorkloadEntryTemplate) XXX_Size() int {
+	return m.Size()
+}
+func (m *WorkloadEntryTemplate) XXX_DiscardUnknown() {
+	xxx_messageInfo_WorkloadEntryTemplate.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_WorkloadEntryTemplate proto.InternalMessageInfo
+
+func (m *WorkloadEntryTemplate) GetMetadata() *v1.ObjectMeta {
 	if m != nil {
-		return m.Labels
+		return m.Metadata
 	}
 	return nil
 }
 
-func (m *WorkloadGroup) GetNetwork() string {
+func (m *WorkloadEntryTemplate) GetSpec() *WorkloadEntry {
 	if m != nil {
-		return m.Network
+		return m.Spec
 	}
-	return ""
-}
-
-func (m *WorkloadGroup) GetServiceAccount() string {
-	if m != nil {
-		return m.ServiceAccount
-	}
-	return ""
+	return nil
 }
 
 func init() {
 	proto.RegisterType((*WorkloadGroup)(nil), "istio.networking.v1alpha3.WorkloadGroup")
-	proto.RegisterMapType((map[string]string)(nil), "istio.networking.v1alpha3.WorkloadGroup.LabelsEntry")
-	proto.RegisterMapType((map[string]uint32)(nil), "istio.networking.v1alpha3.WorkloadGroup.PortsEntry")
+	proto.RegisterType((*WorkloadEntryTemplate)(nil), "istio.networking.v1alpha3.WorkloadEntryTemplate")
 }
 
 func init() {
@@ -162,26 +194,25 @@ func init() {
 }
 
 var fileDescriptor_621fb79d92a8ed09 = []byte{
-	// 302 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x91, 0x41, 0x4b, 0xf3, 0x30,
-	0x18, 0xc7, 0x49, 0xf7, 0x6e, 0x2f, 0xcb, 0x98, 0x4a, 0xf0, 0x10, 0x77, 0x98, 0xc5, 0x8b, 0x3d,
-	0xa5, 0xe8, 0x3c, 0x4c, 0x6f, 0x0a, 0x22, 0xc2, 0x0e, 0xb2, 0x8b, 0xe0, 0xa5, 0xa4, 0x5d, 0xec,
-	0xc2, 0x42, 0x9f, 0x92, 0xa6, 0x95, 0x7d, 0x43, 0x8f, 0x7e, 0x84, 0xd1, 0x4f, 0x22, 0x4d, 0x3a,
-	0x36, 0x41, 0xd1, 0x5b, 0x9e, 0x87, 0xff, 0xef, 0xc7, 0x43, 0xfe, 0x38, 0xc8, 0x84, 0x79, 0x03,
-	0xbd, 0x92, 0x59, 0x1a, 0x56, 0x17, 0x5c, 0xe5, 0x4b, 0x3e, 0x09, 0x9b, 0x85, 0x02, 0xbe, 0x88,
-	0x52, 0x0d, 0x65, 0xce, 0x72, 0x0d, 0x06, 0xc8, 0x89, 0x2c, 0x8c, 0x04, 0xb6, 0xcb, 0xb3, 0x6d,
-	0x7e, 0x74, 0x9a, 0x02, 0xa4, 0x4a, 0x84, 0x3c, 0x97, 0xe1, 0xab, 0x14, 0x6a, 0x11, 0xc5, 0x62,
-	0xc9, 0x2b, 0x09, 0xda, 0xb1, 0x67, 0x1b, 0x0f, 0x0f, 0x9f, 0x5b, 0xe9, 0x43, 0xe3, 0x24, 0x8f,
-	0xb8, 0x9b, 0x83, 0x36, 0x05, 0x45, 0x7e, 0x27, 0x18, 0x5c, 0x4e, 0xd8, 0x8f, 0x76, 0xf6, 0x05,
-	0x64, 0x4f, 0x0d, 0x75, 0x9f, 0x19, 0xbd, 0x9e, 0x3b, 0x03, 0x99, 0xe1, 0x9e, 0xe2, 0xb1, 0x50,
-	0x05, 0xf5, 0xac, 0xeb, 0xea, 0xcf, 0xae, 0x99, 0xc5, 0x9c, 0xac, 0x75, 0x10, 0x8a, 0xff, 0xb7,
-	0x20, 0xed, 0xf8, 0x28, 0xe8, 0xcf, 0xb7, 0x23, 0x39, 0xc7, 0x87, 0x85, 0xd0, 0x95, 0x4c, 0x44,
-	0xc4, 0x93, 0x04, 0xca, 0xcc, 0xd0, 0x7f, 0x36, 0x71, 0xd0, 0xae, 0x6f, 0xdd, 0x76, 0x34, 0xc5,
-	0x78, 0x77, 0x25, 0x39, 0xc2, 0x9d, 0x95, 0x58, 0x53, 0x64, 0xa3, 0xcd, 0x93, 0x1c, 0xe3, 0x6e,
-	0xc5, 0x55, 0x29, 0xa8, 0xe7, 0xa3, 0x60, 0x38, 0x77, 0xc3, 0x8d, 0x37, 0x45, 0xa3, 0x6b, 0x3c,
-	0xd8, 0xbb, 0xe9, 0x37, 0xb4, 0xbf, 0x87, 0xde, 0xb1, 0xf7, 0x7a, 0x8c, 0x3e, 0xea, 0x31, 0xda,
-	0xd4, 0x63, 0xf4, 0xe2, 0xbb, 0x2f, 0x90, 0x60, 0x3b, 0xf9, 0xa6, 0xe3, 0xb8, 0x67, 0x9b, 0x99,
-	0x7c, 0x06, 0x00, 0x00, 0xff, 0xff, 0x69, 0x2c, 0x7b, 0x6c, 0x01, 0x02, 0x00, 0x00,
+	// 278 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x90, 0x4f, 0x4b, 0xc3, 0x40,
+	0x10, 0xc5, 0x59, 0x11, 0x91, 0x88, 0x97, 0x80, 0x50, 0x7b, 0x08, 0xa5, 0xa7, 0x9c, 0x66, 0x8d,
+	0xf5, 0xe0, 0xc1, 0x93, 0x20, 0x5e, 0x14, 0x21, 0x08, 0x82, 0x20, 0x32, 0x4d, 0x86, 0x74, 0xcd,
+	0x9f, 0x5d, 0x36, 0x63, 0xa4, 0x9f, 0xc7, 0x2f, 0xe3, 0xd1, 0x8f, 0x20, 0xf9, 0x24, 0xb2, 0x49,
+	0x1b, 0x3d, 0x54, 0xe9, 0xf5, 0xf1, 0xde, 0x6f, 0xde, 0x3c, 0x2f, 0xac, 0x88, 0xdf, 0xb4, 0xcd,
+	0x55, 0x95, 0xc9, 0x26, 0xc2, 0xc2, 0x2c, 0x70, 0x26, 0x9d, 0x50, 0x68, 0x4c, 0x9f, 0x33, 0xab,
+	0x5f, 0x0d, 0x18, 0xab, 0x59, 0xfb, 0xc7, 0xaa, 0x66, 0xa5, 0xe1, 0xc7, 0x0f, 0x6b, 0xff, 0xf8,
+	0x2c, 0x3f, 0xaf, 0x41, 0x69, 0x89, 0x46, 0x95, 0x98, 0x2c, 0x54, 0x45, 0x76, 0x29, 0x4d, 0x9e,
+	0x39, 0xa1, 0x96, 0x25, 0x31, 0xca, 0x26, 0x92, 0x19, 0x55, 0x64, 0x91, 0x29, 0xed, 0x81, 0xe3,
+	0xff, 0x4f, 0x53, 0xc5, 0x76, 0xd9, 0x3b, 0xa7, 0x4f, 0xde, 0xe1, 0xc3, 0x4a, 0xbf, 0x76, 0x8d,
+	0xfc, 0x1b, 0x6f, 0x9f, 0xa9, 0x34, 0x05, 0x32, 0x8d, 0xc4, 0x44, 0x84, 0x07, 0xa7, 0x27, 0xf0,
+	0x67, 0x3d, 0x58, 0x67, 0xaf, 0x1c, 0xf2, 0x7e, 0x95, 0x8b, 0x07, 0xc2, 0xf4, 0x5d, 0x78, 0x47,
+	0x1b, 0x3d, 0xee, 0x8e, 0x6b, 0x9f, 0x22, 0xe3, 0x70, 0xa7, 0xff, 0x15, 0x7e, 0xff, 0x0a, 0x26,
+	0xcf, 0x9c, 0x50, 0x83, 0x73, 0x43, 0x13, 0xc1, 0xdd, 0xfc, 0x85, 0x12, 0xbe, 0x25, 0xc6, 0x78,
+	0x20, 0xf8, 0x17, 0xde, 0x6e, 0x6d, 0x28, 0x19, 0xed, 0x74, 0xa4, 0x70, 0xdb, 0xc6, 0x71, 0x97,
+	0xba, 0x84, 0x8f, 0x36, 0x10, 0x9f, 0x6d, 0x20, 0xbe, 0xda, 0x40, 0x3c, 0x4e, 0xfa, 0x70, 0x3f,
+	0xba, 0xdc, 0xb0, 0xe4, 0x7c, 0xaf, 0xdb, 0x6e, 0xf6, 0x1d, 0x00, 0x00, 0xff, 0xff, 0xb3, 0x6c,
+	0xb0, 0x2e, 0xe2, 0x01, 0x00, 0x00,
 }
 
 func (m *WorkloadGroup) Marshal() (dAtA []byte, err error) {
@@ -208,55 +239,68 @@ func (m *WorkloadGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	if len(m.ServiceAccount) > 0 {
-		i -= len(m.ServiceAccount)
-		copy(dAtA[i:], m.ServiceAccount)
-		i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(m.ServiceAccount)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.Network) > 0 {
-		i -= len(m.Network)
-		copy(dAtA[i:], m.Network)
-		i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(m.Network)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Labels) > 0 {
-		for k := range m.Labels {
-			v := m.Labels[k]
-			baseI := i
-			i -= len(v)
-			copy(dAtA[i:], v)
-			i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(v)))
-			i--
-			dAtA[i] = 0x12
-			i -= len(k)
-			copy(dAtA[i:], k)
-			i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(k)))
-			i--
-			dAtA[i] = 0xa
-			i = encodeVarintWorkloadGroup(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0x12
+	if m.Template != nil {
+		{
+			size, err := m.Template.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintWorkloadGroup(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0xa
 	}
-	if len(m.Ports) > 0 {
-		for k := range m.Ports {
-			v := m.Ports[k]
-			baseI := i
-			i = encodeVarintWorkloadGroup(dAtA, i, uint64(v))
-			i--
-			dAtA[i] = 0x10
-			i -= len(k)
-			copy(dAtA[i:], k)
-			i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(k)))
-			i--
-			dAtA[i] = 0xa
-			i = encodeVarintWorkloadGroup(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *WorkloadEntryTemplate) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *WorkloadEntryTemplate) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *WorkloadEntryTemplate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.Spec != nil {
+		{
+			size, err := m.Spec.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintWorkloadGroup(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Metadata != nil {
+		{
+			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintWorkloadGroup(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -278,28 +322,28 @@ func (m *WorkloadGroup) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if len(m.Ports) > 0 {
-		for k, v := range m.Ports {
-			_ = k
-			_ = v
-			mapEntrySize := 1 + len(k) + sovWorkloadGroup(uint64(len(k))) + 1 + sovWorkloadGroup(uint64(v))
-			n += mapEntrySize + 1 + sovWorkloadGroup(uint64(mapEntrySize))
-		}
-	}
-	if len(m.Labels) > 0 {
-		for k, v := range m.Labels {
-			_ = k
-			_ = v
-			mapEntrySize := 1 + len(k) + sovWorkloadGroup(uint64(len(k))) + 1 + len(v) + sovWorkloadGroup(uint64(len(v)))
-			n += mapEntrySize + 1 + sovWorkloadGroup(uint64(mapEntrySize))
-		}
-	}
-	l = len(m.Network)
-	if l > 0 {
+	if m.Template != nil {
+		l = m.Template.Size()
 		n += 1 + l + sovWorkloadGroup(uint64(l))
 	}
-	l = len(m.ServiceAccount)
-	if l > 0 {
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *WorkloadEntryTemplate) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovWorkloadGroup(uint64(l))
+	}
+	if m.Spec != nil {
+		l = m.Spec.Size()
 		n += 1 + l + sovWorkloadGroup(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
@@ -345,7 +389,7 @@ func (m *WorkloadGroup) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Ports", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Template", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -372,93 +416,106 @@ func (m *WorkloadGroup) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Ports == nil {
-				m.Ports = make(map[string]uint32)
+			if m.Template == nil {
+				m.Template = &WorkloadEntryTemplate{}
 			}
-			var mapkey string
-			var mapvalue uint32
-			for iNdEx < postIndex {
-				entryPreIndex := iNdEx
-				var wire uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowWorkloadGroup
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					wire |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
+			if err := m.Template.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipWorkloadGroup(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *WorkloadEntryTemplate) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowWorkloadGroup
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: WorkloadEntryTemplate: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: WorkloadEntryTemplate: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
 				}
-				fieldNum := int32(wire >> 3)
-				if fieldNum == 1 {
-					var stringLenmapkey uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowWorkloadGroup
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapkey |= uint64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapkey := int(stringLenmapkey)
-					if intStringLenmapkey < 0 {
-						return ErrInvalidLengthWorkloadGroup
-					}
-					postStringIndexmapkey := iNdEx + intStringLenmapkey
-					if postStringIndexmapkey < 0 {
-						return ErrInvalidLengthWorkloadGroup
-					}
-					if postStringIndexmapkey > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
-					iNdEx = postStringIndexmapkey
-				} else if fieldNum == 2 {
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowWorkloadGroup
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						mapvalue |= uint32(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-				} else {
-					iNdEx = entryPreIndex
-					skippy, err := skipWorkloadGroup(dAtA[iNdEx:])
-					if err != nil {
-						return err
-					}
-					if skippy < 0 {
-						return ErrInvalidLengthWorkloadGroup
-					}
-					if (iNdEx + skippy) > postIndex {
-						return io.ErrUnexpectedEOF
-					}
-					iNdEx += skippy
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
 				}
 			}
-			m.Ports[mapkey] = mapvalue
+			if msglen < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &v1.ObjectMeta{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Labels", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Spec", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -485,167 +542,12 @@ func (m *WorkloadGroup) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Labels == nil {
-				m.Labels = make(map[string]string)
+			if m.Spec == nil {
+				m.Spec = &WorkloadEntry{}
 			}
-			var mapkey string
-			var mapvalue string
-			for iNdEx < postIndex {
-				entryPreIndex := iNdEx
-				var wire uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowWorkloadGroup
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					wire |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				fieldNum := int32(wire >> 3)
-				if fieldNum == 1 {
-					var stringLenmapkey uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowWorkloadGroup
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapkey |= uint64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapkey := int(stringLenmapkey)
-					if intStringLenmapkey < 0 {
-						return ErrInvalidLengthWorkloadGroup
-					}
-					postStringIndexmapkey := iNdEx + intStringLenmapkey
-					if postStringIndexmapkey < 0 {
-						return ErrInvalidLengthWorkloadGroup
-					}
-					if postStringIndexmapkey > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
-					iNdEx = postStringIndexmapkey
-				} else if fieldNum == 2 {
-					var stringLenmapvalue uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowWorkloadGroup
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapvalue |= uint64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapvalue := int(stringLenmapvalue)
-					if intStringLenmapvalue < 0 {
-						return ErrInvalidLengthWorkloadGroup
-					}
-					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
-					if postStringIndexmapvalue < 0 {
-						return ErrInvalidLengthWorkloadGroup
-					}
-					if postStringIndexmapvalue > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
-					iNdEx = postStringIndexmapvalue
-				} else {
-					iNdEx = entryPreIndex
-					skippy, err := skipWorkloadGroup(dAtA[iNdEx:])
-					if err != nil {
-						return err
-					}
-					if skippy < 0 {
-						return ErrInvalidLengthWorkloadGroup
-					}
-					if (iNdEx + skippy) > postIndex {
-						return io.ErrUnexpectedEOF
-					}
-					iNdEx += skippy
-				}
+			if err := m.Spec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
 			}
-			m.Labels[mapkey] = mapvalue
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Network", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowWorkloadGroup
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthWorkloadGroup
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthWorkloadGroup
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Network = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServiceAccount", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowWorkloadGroup
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthWorkloadGroup
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthWorkloadGroup
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ServiceAccount = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
