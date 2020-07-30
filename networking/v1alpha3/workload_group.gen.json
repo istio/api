@@ -52,7 +52,7 @@
         }
       },
       "istio.networking.v1alpha3.WorkloadGroup": {
-        "description": "WorkloadGroup enables specifying the properties of a single non-Kubernetes workload for bootstrap.",
+        "description": "`WorkloadGroup` enables specifying the properties of a single workload for bootstrap.",
         "type": "object",
         "properties": {
           "template": {
@@ -61,6 +61,7 @@
         }
       },
       "istio.networking.v1alpha3.WorkloadEntryTemplate": {
+        "description": "`WorkloadEntryTemplate` describes the data a `WorkloadGroup` should have when created from a template.",
         "type": "object",
         "properties": {
           "metadata": {

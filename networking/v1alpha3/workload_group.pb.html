@@ -8,7 +8,7 @@ schema: istio.networking.v1alpha3.WorkloadGroup
 aliases: [/docs/reference/config/networking/v1alpha3/workload-group]
 number_of_entries: 3
 ---
-<p><code>WorkloadGroup</code> describes a collection of non-Kubernetes workload instances.
+<p><code>WorkloadGroup</code> describes a collection of workload instances.
 It provides a specification that the workload instances can use to bootstrap
 their proxies, including the metadata and identity.</p>
 
@@ -44,7 +44,7 @@ spec:
 
 <h2 id="WorkloadGroup">WorkloadGroup</h2>
 <section>
-<p>WorkloadGroup enables specifying the properties of a single non-Kubernetes workload for bootstrap.</p>
+<p><code>WorkloadGroup</code> enables specifying the properties of a single workload for bootstrap.</p>
 
 <table class="message-fields">
 <thead>
@@ -73,6 +73,8 @@ No
 </section>
 <h2 id="WorkloadEntryTemplate">WorkloadEntryTemplate</h2>
 <section>
+<p><code>WorkloadEntryTemplate</code> describes the data a <code>WorkloadGroup</code> should have when created from a template.</p>
+
 <table class="message-fields">
 <thead>
 <tr>
