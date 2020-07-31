@@ -2030,14 +2030,17 @@ func (m *LocalityLoadBalancerSetting) GetEnabled() *types.BoolValue {
 // distributed over a set of 'to' zones. Syntax for specifying a zone is
 // {region}/{zone}/{sub-zone} and terminal wildcards are allowed on any
 // segment of the specification. Examples:
-// * - matches all localities
-// us-west/* - all zones and sub-zones within the us-west region
-// us-west/zone-1/* - all sub-zones within us-west/zone-1
+//
+// `*` - matches all localities
+//
+// `us-west/*` - all zones and sub-zones within the us-west region
+//
+// `us-west/zone-1/*` - all sub-zones within us-west/zone-1
 type LocalityLoadBalancerSetting_Distribute struct {
 	// Originating locality, '/' separated, e.g. 'region/zone/sub_zone'.
 	From string `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
 	// Map of upstream localities to traffic distribution weights. The sum of
-	// all weights should be == 100. Any locality not assigned a weight will
+	// all weights should be 100. Any locality not present will
 	// receive no traffic.
 	To                   map[string]uint32 `protobuf:"bytes,2,rep,name=to,proto3" json:"to,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"varint,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`

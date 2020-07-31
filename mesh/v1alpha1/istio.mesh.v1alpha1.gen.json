@@ -1083,7 +1083,7 @@
             "format": "string"
           },
           "to": {
-            "description": "Map of upstream localities to traffic distribution weights. The sum of all weights should be == 100. Any locality not assigned a weight will receive no traffic.",
+            "description": "Map of upstream localities to traffic distribution weights. The sum of all weights should be 100. Any locality not present will receive no traffic.",
             "type": "object",
             "additionalProperties": {
               "type": "integer"
