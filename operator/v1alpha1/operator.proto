@@ -26,7 +26,6 @@ option go_package="istio.io/api/operator/v1alpha1";
 
 import "google/protobuf/any.proto";
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
-import "k8s.io/apimachinery/pkg/api/resource/generated.proto";
 import "gogoproto/gogo.proto";
 
 option (gogoproto.marshaler_all) = false;
