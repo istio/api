@@ -273,6 +273,10 @@
           "value": {
             "description": "The JSON config of the object being patched. This will be merged using json merge semantics with the existing proto in the path.",
             "type": "object"
+          },
+          "shouldOverride": {
+            "description": "A `should_override` patch is used to provide filter ordering with optional default values. A later MERGE or REPLACE operation should override the contents of the configuration or the operation is a NOOP. This allows for an empty or a partial configuration to be specified in the config root namespace which is elided from the final output unless overridden by a subsequent operation.",
+            "type": "boolean"
           }
         }
       },
@@ -286,7 +290,8 @@
           "REMOVE",
           "INSERT_BEFORE",
           "INSERT_AFTER",
-          "INSERT_FIRST"
+          "INSERT_FIRST",
+          "REPLACE"
         ]
       },
       "istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch": {

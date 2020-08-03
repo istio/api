@@ -533,6 +533,23 @@ json merge semantics with the existing proto in the path.</p>
 No
 </td>
 </tr>
+<tr id="EnvoyFilter-Patch-should_override">
+<td><code>shouldOverride</code></td>
+<td><code>bool</code></td>
+<td>
+<p>A <code>should_override</code> patch is used to provide filter ordering with
+optional default values. A later MERGE or REPLACE operation
+should override the contents of the configuration or the
+operation is a NOOP. This allows for an empty or a partial
+configuration to be specified in the config root namespace which
+is elided from the final output unless overridden by a
+subsequent operation.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1047,6 +1064,22 @@ order of the element in the array does not matter. Insert
 first in the list based on the presence of selected filter or not.
 This is specifically useful when you want your filter first in the
 list based on a match condition specified in Match clause.</p>
+
+</td>
+</tr>
+<tr id="EnvoyFilter-Patch-Operation-REPLACE">
+<td><code>REPLACE</code></td>
+<td>
+<p>Replace contents of a named filter object with new contents.
+Replace should be used when you do not need to or cannot use
+json merge semantics.
+A typical use case for REPLACE is when an EnvoyFilter in the
+config root namespace specifies the order of filters but you want
+a completely different configuration for a specific filter.
+Since JSON merge cannot remove elements, REPLACE operation should
+be used. REPLACE operation is only valid for HTTP<em>FILTER and
+NETWORK</em>FILTER. If the named filter is not found, this operation
+has no effect.</p>
 
 </td>
 </tr>

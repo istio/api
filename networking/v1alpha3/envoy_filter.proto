@@ -1,4 +1,4 @@
-// Copyright 2018 Istio Authors
+// Copyright Istio Authors
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -533,6 +533,18 @@ message EnvoyFilter {
       // This is specifically useful when you want your filter first in the
       // list based on a match condition specified in Match clause.
       INSERT_FIRST = 6;
+
+      // Replace contents of a named filter object with new contents.
+      // Replace should be used when you do not need to or cannot use
+      // json merge semantics.
+      // A typical use case for REPLACE is when an EnvoyFilter in the
+      // config root namespace specifies the order of filters but you want
+      // a completely different configuration for a specific filter.
+      // Since JSON merge cannot remove elements, REPLACE operation should
+      // be used. REPLACE operation is only valid for HTTP_FILTER and
+      // NETWORK_FILTER. If the named filter is not found, this operation
+      // has no effect.
+      REPLACE = 7;
     }
 
     // Determines how the patch should be applied.
@@ -541,6 +553,15 @@ message EnvoyFilter {
     // The JSON config of the object being patched. This will be merged using
     // json merge semantics with the existing proto in the path.
     google.protobuf.Struct value = 2;
+
+    // A `should_override` patch is used to provide filter ordering with
+    // optional default values. A later MERGE or REPLACE operation
+    // should override the contents of the configuration or the
+    // operation is a NOOP. This allows for an empty or a partial
+    // configuration to be specified in the config root namespace which
+    // is elided from the final output unless overridden by a
+    // subsequent operation.
+    bool should_override = 3;
   };
 
   // One or more match conditions to be met before a patch is applied

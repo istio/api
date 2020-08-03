@@ -2515,7 +2515,10 @@ spec:
                           - INSERT_BEFORE
                           - INSERT_AFTER
                           - INSERT_FIRST
+                          - REPLACE
                           type: string
+                        shouldOverride:
+                          type: boolean
                         value:
                           description: The JSON config of the object being patched.
                           type: object
