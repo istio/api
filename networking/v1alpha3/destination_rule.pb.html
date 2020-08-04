@@ -976,6 +976,20 @@ using TLS. The value of this field determines how TLS is enforced.</p>
 Yes
 </td>
 </tr>
+<tr id="ClientTLSSettings-insecure_skip_verify">
+<td><code>insecureSkipVerify</code></td>
+<td><code>bool</code></td>
+<td>
+<p>If set to true, client will not verify server-side TLS certificates or SAN
+during TLS handshake when the TLS mode is set to SIMPLE or MUTUAL and
+CaCertificates or SubjectAltNames is empty. By default client will fallback
+to use system CA certificates to validate server identity.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="ClientTLSSettings-client_certificate">
 <td><code>clientCertificate</code></td>
 <td><code>string</code></td>

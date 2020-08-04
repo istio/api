@@ -900,6 +900,12 @@ message ClientTLSSettings {
   // using TLS. The value of this field determines how TLS is enforced.
   TLSmode mode = 1 [(google.api.field_behavior) = REQUIRED];
 
+  // If set to true, client will not verify server-side TLS certificates or SAN
+  // during TLS handshake when the TLS mode is set to SIMPLE or MUTUAL and
+  // CaCertificates or SubjectAltNames is empty. By default client will fallback
+  // to use system CA certificates to validate server identity.
+  bool insecure_skip_verify = 8;
+
   // REQUIRED if mode is `MUTUAL`. The path to the file holding the
   // client-side TLS certificate to use.
   // Should be empty if mode is `ISTIO_MUTUAL`.
