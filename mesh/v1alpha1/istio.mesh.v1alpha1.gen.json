@@ -694,11 +694,11 @@
                 },
                 {
                   "required": [
-                    "openCensus"
+                    "openCensusAgent"
                   ],
                   "properties": {
-                    "openCensus": {
-                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.OpenCensus"
+                    "openCensusAgent": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.OpenCensusAgent"
                     }
                   }
                 }
@@ -747,11 +747,11 @@
           },
           {
             "required": [
-              "openCensus"
+              "openCensusAgent"
             ],
             "properties": {
-              "openCensus": {
-                "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.OpenCensus"
+              "openCensusAgent": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.OpenCensusAgent"
               }
             }
           }
@@ -892,12 +892,19 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.Tracing.OpenCensus": {
-        "description": "OpenCensus defines configuration for an OpenCensus tracer. See [OpenCensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.",
+      "istio.mesh.v1alpha1.Tracing.OpenCensusAgent": {
+        "description": "OpenCensusAgent defines configuration for an OpenCensus tracer writing to an OpenCensus agent backend. See [OpenCensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.",
         "type": "object",
         "properties": {
+          "context": {
+            "description": "Specifies the set of context propagation headers used for distributed tracing. Default is `[\"W3C_TRACE_CONTEXT\"]`. If multiple values are specified, the proxy will attempt to read each header for each request and will write all headers.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.OpenCensusAgent.TraceContext"
+            }
+          },
           "address": {
-            "description": "gRPC address for the OpenCensus Agent (e.g. dns://authority/host:port or unix:path). See [gRPC naming docs](https://github.com/grpc/grpc/blob/master/doc/naming.md) for details.",
+            "description": "gRPC address for the OpenCensus agent (e.g. dns://authority/host:port or unix:path). See [gRPC naming docs](https://github.com/grpc/grpc/blob/master/doc/naming.md) for details.",
             "type": "string",
             "format": "string"
           },
@@ -921,6 +928,17 @@
             "nullable": true
           }
         }
+      },
+      "istio.mesh.v1alpha1.Tracing.OpenCensusAgent.TraceContext": {
+        "description": "TraceContext selects the context propagation headers used for distributed tracing.",
+        "type": "string",
+        "enum": [
+          "UNSPECIFIED",
+          "W3C_TRACE_CONTEXT",
+          "GRPC_BIN",
+          "CLOUD_TRACE_CONTEXT",
+          "B3"
+        ]
       },
       "istio.mesh.v1alpha1.Tracing.Literal": {
         "description": "Literal type represents a static value. $hide_from_docs",
