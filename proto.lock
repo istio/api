@@ -36887,7 +36887,7 @@
               {
                 "id": 30,
                 "name": "mesh_id",
-                "type": "int32"
+                "type": "string"
               }
             ],
             "maps": [
