@@ -26,7 +26,6 @@ option go_package="istio.io/api/operator/v1alpha1";
 
 import "google/protobuf/any.proto";
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
-import "k8s.io/apimachinery/pkg/api/resource/generated.proto";
 import "gogoproto/gogo.proto";
 
 option (gogoproto.marshaler_all) = false;
@@ -444,14 +443,14 @@ message ExecAction {
 message ExternalMetricSource {
     string metricName = 1;
     k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector metricSelector = 2;
-    k8s.io.apimachinery.pkg.api.resource.Quantity targetValue = 3;
-    k8s.io.apimachinery.pkg.api.resource.Quantity targetAverageValue = 4;
+    TypeIntOrStringForPB targetValue = 3;
+    TypeIntOrStringForPB targetAverageValue = 4;
 }
 
 // See k8s.io.api.core.v1.HTTPGetAction.
 message HTTPGetAction {
     string path = 1;
-    TypeInterface port = 2;
+    TypeIntOrStringForPB port = 2;
     string host = 3;
     string scheme = 4;
     repeated HTTPHeader httpHeaders = 5;
@@ -525,9 +524,9 @@ message ObjectMeta {
 message ObjectMetricSource {
     CrossVersionObjectReference target = 1;
     string metricName = 2;
-    k8s.io.apimachinery.pkg.api.resource.Quantity targetValue = 3;
+    TypeIntOrStringForPB targetValue = 3;
     k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 4;
-    k8s.io.apimachinery.pkg.api.resource.Quantity averageValue = 5;
+    TypeIntOrStringForPB averageValue = 5;
 }
 
 // See k8s.io.api.core.v1.PodAffinity.
@@ -559,7 +558,7 @@ message PodDisruptionBudgetSpec {
 // See k8s.io.api.core.v1.PodsMetricSource.
 message PodsMetricSource {
     string metricName = 1;
-    k8s.io.apimachinery.pkg.api.resource.Quantity targetAverageValue = 2;
+    TypeIntOrStringForPB targetAverageValue = 2;
     k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 3;
 }
 
@@ -585,14 +584,14 @@ message ReadinessProbe {
 message ResourceFieldSelector {
     string containerName = 1;
     string resource = 2;
-    k8s.io.apimachinery.pkg.api.resource.Quantity divisor = 3;
+    TypeIntOrStringForPB divisor = 3;
 }
 
 // See k8s.io.api.core.v1.ResourceMetricSource.
 message ResourceMetricSource {
     string name = 1;
-    TypeInterface targetAverageUtilization = 2;
-    k8s.io.apimachinery.pkg.api.resource.Quantity targetAverageValue = 3;
+    int32 targetAverageUtilization = 2;
+    TypeIntOrStringForPB targetAverageValue = 3;
 }
 
 // See k8s.io.api.core.v1.ResourceRequirements.
@@ -603,8 +602,8 @@ message Resources {
 
 // See k8s.io.api.apps.v1.RollingUpdateDeployment.
 message RollingUpdateDeployment {
-    TypeInterface maxUnavailable = 1;
-    TypeInterface maxSurge = 2;
+    TypeIntOrStringForPB maxUnavailable = 1;
+    TypeIntOrStringForPB maxSurge = 2;
 }
 
 // See k8s.io.api.core.v1.SecretKeySelector.
@@ -636,7 +635,7 @@ message ServicePort {
     string name = 1;
     string protocol = 2;
     int32 port = 3;
-    TypeInterface targetPort = 4;
+    TypeIntOrStringForPB targetPort = 4;
     int32 nodePort = 5;
 }
 
@@ -647,7 +646,7 @@ message SessionAffinityConfig {
 
 // See k8s.io.api.core.v1.TCPSocketAction.
 message TCPSocketAction {
-    TypeInterface port = 1;
+    TypeIntOrStringForPB port = 1;
     string host = 2;
 }
 

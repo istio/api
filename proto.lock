@@ -44210,12 +44210,12 @@
               {
                 "id": 3,
                 "name": "targetValue",
-                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+                "type": "TypeIntOrStringForPB"
               },
               {
                 "id": 4,
                 "name": "targetAverageValue",
-                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+                "type": "TypeIntOrStringForPB"
               }
             ]
           },
@@ -44230,7 +44230,7 @@
               {
                 "id": 2,
                 "name": "port",
-                "type": "TypeInterface"
+                "type": "TypeIntOrStringForPB"
               },
               {
                 "id": 3,
@@ -44442,7 +44442,7 @@
               {
                 "id": 3,
                 "name": "targetValue",
-                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+                "type": "TypeIntOrStringForPB"
               },
               {
                 "id": 4,
@@ -44452,7 +44452,7 @@
               {
                 "id": 5,
                 "name": "averageValue",
-                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+                "type": "TypeIntOrStringForPB"
               }
             ]
           },
@@ -44542,7 +44542,7 @@
               {
                 "id": 2,
                 "name": "targetAverageValue",
-                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+                "type": "TypeIntOrStringForPB"
               },
               {
                 "id": 3,
@@ -44627,7 +44627,7 @@
               {
                 "id": 3,
                 "name": "divisor",
-                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+                "type": "TypeIntOrStringForPB"
               }
             ]
           },
@@ -44642,12 +44642,12 @@
               {
                 "id": 2,
                 "name": "targetAverageUtilization",
-                "type": "TypeInterface"
+                "type": "int32"
               },
               {
                 "id": 3,
                 "name": "targetAverageValue",
-                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+                "type": "TypeIntOrStringForPB"
               }
             ]
           },
@@ -44678,12 +44678,12 @@
               {
                 "id": 1,
                 "name": "maxUnavailable",
-                "type": "TypeInterface"
+                "type": "TypeIntOrStringForPB"
               },
               {
                 "id": 2,
                 "name": "maxSurge",
-                "type": "TypeInterface"
+                "type": "TypeIntOrStringForPB"
               }
             ]
           },
@@ -44806,7 +44806,7 @@
               {
                 "id": 4,
                 "name": "targetPort",
-                "type": "TypeInterface"
+                "type": "TypeIntOrStringForPB"
               },
               {
                 "id": 5,
@@ -44831,7 +44831,7 @@
               {
                 "id": 1,
                 "name": "port",
-                "type": "TypeInterface"
+                "type": "TypeIntOrStringForPB"
               },
               {
                 "id": 2,
@@ -44904,9 +44904,6 @@
           },
           {
             "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
-          },
-          {
-            "path": "k8s.io/apimachinery/pkg/api/resource/generated.proto"
           },
           {
             "path": "gogoproto/gogo.proto"
@@ -46001,6 +45998,60 @@
           {
             "name": "go_package",
             "value": "istio.io/api/policy/v1beta1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "security:/:v1alpha1:/:ca.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "IstioCertificateRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "csr",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "validity_duration",
+                "type": "int64"
+              }
+            ]
+          },
+          {
+            "name": "IstioCertificateResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "cert_chain",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          }
+        ],
+        "services": [
+          {
+            "name": "IstioCertificateService",
+            "rpcs": [
+              {
+                "name": "CreateCertificate",
+                "in_type": "IstioCertificateRequest",
+                "out_type": "IstioCertificateResponse"
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "istio.v1.auth"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/security/v1alpha1"
           }
         ]
       }
