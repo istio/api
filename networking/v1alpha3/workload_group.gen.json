@@ -52,7 +52,7 @@
         }
       },
       "istio.networking.v1alpha3.WorkloadGroup": {
-        "description": "`WorkloadGroup` enables specifying the properties of a single workload for bootstrap.",
+        "description": "`WorkloadGroup` enables specifying the properties of a single workload for bootstrap and provides a template for `WorkloadEntry`, similar to the relationship between `Deployment` and `Pod`. `WorkloadGroup` has no relationship to `ServiceEntry` and says nothing about a service or host.",
         "type": "object",
         "properties": {
           "template": {
