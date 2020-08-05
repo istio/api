@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"encoding/json"
+	"strconv"
 
 	"github.com/gogo/protobuf/jsonpb"
 	protobuf "github.com/gogo/protobuf/types"
@@ -37,6 +38,11 @@ func (intstrpb *IntOrStringForPB) MarshalJSONPB(_ *jsonpb.Marshaler) ([]byte, er
 
 // UnmarshalJSONPB implements the jsonpb.JSONPBUnmarshaler interface.
 func (intstrpb *IntOrStringForPB) UnmarshalJSONPB(_ *jsonpb.Unmarshaler, value []byte) error {
+	// If its a string that isnt wrapped in quotes add them to appease kubernetes unmarshal
+	if _, err := strconv.Atoi(string(value)); err != nil && len(value) > 0 && value[0] != '"' {
+		value = append([]byte{'"'}, value...)
+		value = append(value, '"')
+	}
 	return intstrpb.UnmarshalJSON(value)
 }
 
