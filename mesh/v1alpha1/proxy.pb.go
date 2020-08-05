@@ -536,7 +536,9 @@ func (m *Tracing_Datadog) GetAddress() string {
 }
 
 // Stackdriver defines configuration for a Stackdriver tracer.
-// See [OpenCensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.
+// See [Envoy's OpenCensus trace configuration](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/trace/v3/opencensus.proto)
+// and
+// [OpenCensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.
 type Tracing_Stackdriver struct {
 	// debug enables trace output to stdout.
 	// $hide_from_docs
@@ -621,6 +623,8 @@ func (m *Tracing_Stackdriver) GetMaxNumberOfMessageEvents() *types.Int64Value {
 
 // OpenCensusAgent defines configuration for an OpenCensus tracer writing to
 // an OpenCensus agent backend. See
+// [Envoy's OpenCensus trace configuration](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/trace/v3/opencensus.proto)
+// and
 // [OpenCensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto)
 // for details.
 type Tracing_OpenCensusAgent struct {

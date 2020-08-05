@@ -868,7 +868,7 @@
         }
       },
       "istio.mesh.v1alpha1.Tracing.Stackdriver": {
-        "description": "Stackdriver defines configuration for a Stackdriver tracer. See [OpenCensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.",
+        "description": "Stackdriver defines configuration for a Stackdriver tracer. See [Envoy's OpenCensus trace configuration](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/trace/v3/opencensus.proto) and [OpenCensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.",
         "type": "object",
         "properties": {
           "debug": {
@@ -893,7 +893,7 @@
         }
       },
       "istio.mesh.v1alpha1.Tracing.OpenCensusAgent": {
-        "description": "OpenCensusAgent defines configuration for an OpenCensus tracer writing to an OpenCensus agent backend. See [OpenCensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.",
+        "description": "OpenCensusAgent defines configuration for an OpenCensus tracer writing to an OpenCensus agent backend. See [Envoy's OpenCensus trace configuration](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/trace/v3/opencensus.proto) and [OpenCensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.",
         "type": "object",
         "properties": {
           "context": {
