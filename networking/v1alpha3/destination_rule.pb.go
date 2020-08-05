@@ -1784,10 +1784,13 @@ type ClientTLSSettings struct {
 	// Indicates whether connections to this port should be secured
 	// using TLS. The value of this field determines how TLS is enforced.
 	Mode ClientTLSSettings_TLSmode `protobuf:"varint,1,opt,name=mode,proto3,enum=istio.networking.v1alpha3.ClientTLSSettings_TLSmode" json:"mode,omitempty"`
-	// If set to true, client will not verify server-side TLS certificates or SAN
-	// during TLS handshake when the TLS mode is set to SIMPLE or MUTUAL and
-	// CaCertificates or SubjectAltNames is empty. By default client will fallback
-	// to use system CA certificates to validate server identity.
+	// If set to true, client-side proxy will not verify that the presented peer TLS certificates
+	// is signed by a trusted CA or that the requested host is listed in the SAN field of
+	// the certificate during TLS handshake. By default client-side proxy will fallback to use
+	// system CA certificates to verify the certificate and validate the SAN if either of CaCertificates
+	// or SubjectAltNames fields are empty. If InsecureSkipVerify is set to true and CaCertificates
+	// and SubjectAltNames fields are both not empty, client-side proxy will use those CaCertificates
+	// and SubjectAltNames to verify presented peer TLS certificates during TLS handshake.
 	InsecureSkipVerify bool `protobuf:"varint,8,opt,name=insecure_skip_verify,json=insecureSkipVerify,proto3" json:"insecure_skip_verify,omitempty"`
 	// REQUIRED if mode is `MUTUAL`. The path to the file holding the
 	// client-side TLS certificate to use.
