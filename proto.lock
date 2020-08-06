@@ -13049,13 +13049,7 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings",
-                        "aggregated": [
-                          {
-                            "name": "get",
-                            "value": "/v1/services/{service_name}/config"
-                          }
-                        ]
+                        "name": "additional_bindings"
                       }
                     ]
                   }
@@ -42851,9 +42845,6 @@
             "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
           },
           {
-            "path": "k8s.io/apimachinery/pkg/api/resource/generated.proto"
-          },
-          {
             "path": "gogoproto/gogo.proto"
           }
         ],
@@ -42896,6 +42887,11 @@
                 "id": 3,
                 "name": "validity_duration",
                 "type": "int64"
+              },
+              {
+                "id": 4,
+                "name": "metadata",
+                "type": "google.protobuf.Struct"
               }
             ]
           },
@@ -42921,6 +42917,11 @@
                 "out_type": "IstioCertificateResponse"
               }
             ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/struct.proto"
           }
         ],
         "package": {
