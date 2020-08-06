@@ -52,7 +52,7 @@
         }
       },
       "istio.networking.v1alpha3.WorkloadGroup": {
-        "description": "`WorkloadGroup` enables specifying the properties of a single workload for bootstrap and provides a template for `WorkloadEntry`, similar to the relationship between `Deployment` and `Pod`. `WorkloadGroup` has no relationship to `ServiceEntry` and says nothing about a service or host.",
+        "description": "`WorkloadGroup` enables specifying the properties of a single workload for bootstrap and provides a template for `WorkloadEntry`, similar to the relationship between `Deployment` and `Pod`. `WorkloadGroup` has no relationship to resources which control service registry like `ServiceEntry` and as such doesn't configure host name for these workloads.",
         "type": "object",
         "properties": {
           "template": {
@@ -61,7 +61,7 @@
         }
       },
       "istio.networking.v1alpha3.WorkloadEntryTemplate": {
-        "description": "`WorkloadEntryTemplate` describes the data a `WorkloadGroup` should have when created from a template.",
+        "description": "`WorkloadEntryTemplate` is the underlying workload template that is associated with the workload group. A `WorkloadGroup` can have more than one `WorkloadEntry`.",
         "type": "object",
         "properties": {
           "metadata": {

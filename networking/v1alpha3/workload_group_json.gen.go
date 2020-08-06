@@ -4,15 +4,13 @@
 // `WorkloadGroup` describes a collection of workload instances.
 // It provides a specification that the workload instances can use to bootstrap
 // their proxies, including the metadata and identity. It is only intended to
-// be used with non-k8s workloads, and is meant to mimic the existing sidecar
-// injection and deployment specification model used for k8s workloads to
-// bootstrap Istio proxies.
-//
-// For hybrid workloads with both VMs and k8s pods, use the existing `DeploymentSpec` for bootstrap purposes.
+// be used with non-k8s workloads like Virtual Machines, and is meant to mimic
+// the existing sidecar injection and deployment specification model used for
+// Kubernetes workloads to bootstrap Istio proxies.
 //
 // The following example declares a workload group representing a collection
-// of workloads that will be registered under `checkoutservice` in namespace
-// `hipster`. The set of labels will be associated with each workload
+// of workloads that will be registered under `reviews` in namespace
+// `bookinfo`. The set of labels will be associated with each workload
 // instance during the bootstrap process, and the workloads will expose the
 // ports 3550 and 8080 to Istio and use and service account `default`.
 // `app.kubernetes.io/version` is just an arbitrary example of a label.
@@ -23,13 +21,13 @@
 // apiVersion: networking.istio.io/v1alpha3
 // kind: WorkloadGroup
 // metadata:
-//   name: checkoutservice
-//   namespace: hipster
+//   name: reviews
+//   namespace: bookinfo
 // spec:
 //   template:
 //     metadata:
 //       labels:
-//         app.kubernetes.io/name: checkoutservice
+//         app.kubernetes.io/name: reviews
 //         app.kubernetes.io/version: "1.3.4"
 //     spec:
 //       ports:

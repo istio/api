@@ -26,15 +26,13 @@ import "networking/v1alpha3/workload_entry.proto";
 // `WorkloadGroup` describes a collection of workload instances.
 // It provides a specification that the workload instances can use to bootstrap 
 // their proxies, including the metadata and identity. It is only intended to 
-// be used with non-k8s workloads, and is meant to mimic the existing sidecar
-// injection and deployment specification model used for k8s workloads to 
-// bootstrap Istio proxies.
-//
-// For hybrid workloads with both VMs and k8s pods, use the existing `DeploymentSpec` for bootstrap purposes.
+// be used with non-k8s workloads like Virtual Machines, and is meant to mimic 
+// the existing sidecar injection and deployment specification model used for 
+// Kubernetes workloads to bootstrap Istio proxies.
 //
 // The following example declares a workload group representing a collection 
-// of workloads that will be registered under `checkoutservice` in namespace
-// `hipster`. The set of labels will be associated with each workload 
+// of workloads that will be registered under `reviews` in namespace
+// `bookinfo`. The set of labels will be associated with each workload 
 // instance during the bootstrap process, and the workloads will expose the
 // ports 3550 and 8080 to Istio and use and service account `default`.
 // `app.kubernetes.io/version` is just an arbitrary example of a label.
@@ -45,13 +43,13 @@ import "networking/v1alpha3/workload_entry.proto";
 // apiVersion: networking.istio.io/v1alpha3
 // kind: WorkloadGroup
 // metadata:
-//   name: checkoutservice
-//   namespace: hipster
+//   name: reviews
+//   namespace: bookinfo
 // spec:
 //   template:
 //     metadata:
 //       labels:
-//         app.kubernetes.io/name: checkoutservice
+//         app.kubernetes.io/name: reviews
 //         app.kubernetes.io/version: "1.3.4"
 //     spec:
 //       ports:
@@ -68,7 +66,8 @@ option go_package = "istio.io/api/networking/v1alpha3";
 
 // `WorkloadGroup` enables specifying the properties of a single workload for bootstrap and
 // provides a template for `WorkloadEntry`, similar to the relationship between `Deployment` and `Pod`. 
-// `WorkloadGroup` has no relationship to `ServiceEntry` and says nothing about a service or host.
+// `WorkloadGroup` has no relationship to resources which control service registry like `ServiceEntry` 
+// and as such doesn't configure host name for these workloads.
 //
 // <!-- crd generation tags
 // +cue-gen:WorkloadGroup:groupName:networking.istio.io
@@ -95,7 +94,8 @@ message WorkloadGroup {
   WorkloadEntryTemplate template = 1;
 }
 
-// `WorkloadEntryTemplate` describes the data a `WorkloadGroup` should have when created from a template.
+// `WorkloadEntryTemplate` is the underlying workload template that is associated with the workload group.
+// A `WorkloadGroup` can have more than one `WorkloadEntry`.
 message WorkloadEntryTemplate {
   // Metadata that will be used for all corresponding WorkloadEntries.
   k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;

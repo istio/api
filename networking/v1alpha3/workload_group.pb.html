@@ -11,15 +11,13 @@ number_of_entries: 3
 <p><code>WorkloadGroup</code> describes a collection of workload instances.
 It provides a specification that the workload instances can use to bootstrap
 their proxies, including the metadata and identity. It is only intended to
-be used with non-k8s workloads, and is meant to mimic the existing sidecar
-injection and deployment specification model used for k8s workloads to
-bootstrap Istio proxies.</p>
-
-<p>For hybrid workloads with both VMs and k8s pods, use the existing <code>DeploymentSpec</code> for bootstrap purposes.</p>
+be used with non-k8s workloads like Virtual Machines, and is meant to mimic
+the existing sidecar injection and deployment specification model used for
+Kubernetes workloads to bootstrap Istio proxies.</p>
 
 <p>The following example declares a workload group representing a collection
-of workloads that will be registered under <code>checkoutservice</code> in namespace
-<code>hipster</code>. The set of labels will be associated with each workload
+of workloads that will be registered under <code>reviews</code> in namespace
+<code>bookinfo</code>. The set of labels will be associated with each workload
 instance during the bootstrap process, and the workloads will expose the
 ports 3550 and 8080 to Istio and use and service account <code>default</code>.
 <code>app.kubernetes.io/version</code> is just an arbitrary example of a label.</p>
@@ -30,13 +28,13 @@ ports 3550 and 8080 to Istio and use and service account <code>default</code>.
 <pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
 kind: WorkloadGroup
 metadata:
-  name: checkoutservice
-  namespace: hipster
+  name: reviews
+  namespace: bookinfo
 spec:
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: checkoutservice
+        app.kubernetes.io/name: reviews
         app.kubernetes.io/version: &quot;1.3.4&quot;
     spec:
       ports:
@@ -52,7 +50,8 @@ spec:
 <section>
 <p><code>WorkloadGroup</code> enables specifying the properties of a single workload for bootstrap and
 provides a template for <code>WorkloadEntry</code>, similar to the relationship between <code>Deployment</code> and <code>Pod</code>.
-<code>WorkloadGroup</code> has no relationship to <code>ServiceEntry</code> and says nothing about a service or host.</p>
+<code>WorkloadGroup</code> has no relationship to resources which control service registry like <code>ServiceEntry</code>
+and as such doesn&rsquo;t configure host name for these workloads.</p>
 
 <table class="message-fields">
 <thead>
@@ -81,7 +80,8 @@ No
 </section>
 <h2 id="WorkloadEntryTemplate">WorkloadEntryTemplate</h2>
 <section>
-<p><code>WorkloadEntryTemplate</code> describes the data a <code>WorkloadGroup</code> should have when created from a template.</p>
+<p><code>WorkloadEntryTemplate</code> is the underlying workload template that is associated with the workload group.
+A <code>WorkloadGroup</code> can have more than one <code>WorkloadEntry</code>.</p>
 
 <table class="message-fields">
 <thead>
