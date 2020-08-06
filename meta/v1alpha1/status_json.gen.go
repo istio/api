@@ -8,9 +8,9 @@ import (
 	fmt "fmt"
 	github_com_gogo_protobuf_jsonpb "github.com/gogo/protobuf/jsonpb"
 	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/gogo/protobuf/types"
 	_ "istio.io/api/analysis/v1alpha1"
 	_ "istio.io/gogo-genproto/googleapis/google/api"
-	_ "k8s.io/apimachinery/pkg/apis/meta/v1"
 	math "math"
 )
 

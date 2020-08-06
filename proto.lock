@@ -13049,13 +13049,7 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings",
-                        "aggregated": [
-                          {
-                            "name": "get",
-                            "value": "/v1/services/{service_name}/config"
-                          }
-                        ]
+                        "name": "additional_bindings"
                       }
                     ]
                   }
@@ -36993,12 +36987,12 @@
               {
                 "id": 3,
                 "name": "last_probe_time",
-                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.Time"
+                "type": "google.protobuf.Timestamp"
               },
               {
                 "id": 4,
                 "name": "last_transition_time",
-                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.Time"
+                "type": "google.protobuf.Timestamp"
               },
               {
                 "id": 5,
@@ -37018,7 +37012,7 @@
             "path": "analysis/v1alpha1/message.proto"
           },
           {
-            "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
+            "path": "google/protobuf/timestamp.proto"
           },
           {
             "path": "google/api/field_behavior.proto"
@@ -42849,9 +42843,6 @@
           },
           {
             "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
-          },
-          {
-            "path": "k8s.io/apimachinery/pkg/api/resource/generated.proto"
           },
           {
             "path": "gogoproto/gogo.proto"

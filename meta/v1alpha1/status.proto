@@ -15,7 +15,7 @@ syntax = "proto3";
 
 import "analysis/v1alpha1/message.proto";
 
-import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
+import "google/protobuf/timestamp.proto";
 
 import "google/api/field_behavior.proto";
 
@@ -52,11 +52,11 @@ message IstioCondition {
 
   // Last time we probed the condition.
   // +optional
-  k8s.io.apimachinery.pkg.apis.meta.v1.Time last_probe_time = 3;
+  google.protobuf.Timestamp last_probe_time = 3;
 
   // Last time the condition transitioned from one status to another.
   // +optional
-  k8s.io.apimachinery.pkg.apis.meta.v1.Time last_transition_time = 4;
+  google.protobuf.Timestamp last_transition_time = 4;
 
   // Unique, one-word, CamelCase reason for the condition's last transition.
   // +optional
