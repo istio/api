@@ -13,6 +13,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
+from google.protobuf import struct_pb2 as google_dot_protobuf_dot_struct__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -20,8 +21,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.v1.auth',
   syntax='proto3',
   serialized_options=_b('Z\036istio.io/api/security/v1alpha1'),
-  serialized_pb=_b('\n\x1asecurity/v1alpha1/ca.proto\x12\ristio.v1.auth\"A\n\x17IstioCertificateRequest\x12\x0b\n\x03\x63sr\x18\x01 \x01(\t\x12\x19\n\x11validity_duration\x18\x03 \x01(\x03\".\n\x18IstioCertificateResponse\x12\x12\n\ncert_chain\x18\x01 \x03(\t2\x81\x01\n\x17IstioCertificateService\x12\x66\n\x11\x43reateCertificate\x12&.istio.v1.auth.IstioCertificateRequest\x1a\'.istio.v1.auth.IstioCertificateResponse\"\x00\x42 Z\x1eistio.io/api/security/v1alpha1b\x06proto3')
-)
+  serialized_pb=_b('\n\x1asecurity/v1alpha1/ca.proto\x12\ristio.v1.auth\x1a\x1cgoogle/protobuf/struct.proto\"l\n\x17IstioCertificateRequest\x12\x0b\n\x03\x63sr\x18\x01 \x01(\t\x12\x19\n\x11validity_duration\x18\x03 \x01(\x03\x12)\n\x08metadata\x18\x04 \x01(\x0b\x32\x17.google.protobuf.Struct\".\n\x18IstioCertificateResponse\x12\x12\n\ncert_chain\x18\x01 \x03(\t2\x81\x01\n\x17IstioCertificateService\x12\x66\n\x11\x43reateCertificate\x12&.istio.v1.auth.IstioCertificateRequest\x1a\'.istio.v1.auth.IstioCertificateResponse\"\x00\x42 Z\x1eistio.io/api/security/v1alpha1b\x06proto3')
+  ,
+  dependencies=[google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,])
 
 
 
@@ -47,6 +49,13 @@ _ISTIOCERTIFICATEREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='metadata', full_name='istio.v1.auth.IstioCertificateRequest.metadata', index=2,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -59,8 +68,8 @@ _ISTIOCERTIFICATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=45,
-  serialized_end=110,
+  serialized_start=75,
+  serialized_end=183,
 )
 
 
@@ -90,10 +99,11 @@ _ISTIOCERTIFICATERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=112,
-  serialized_end=158,
+  serialized_start=185,
+  serialized_end=231,
 )
 
+_ISTIOCERTIFICATEREQUEST.fields_by_name['metadata'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
 DESCRIPTOR.message_types_by_name['IstioCertificateRequest'] = _ISTIOCERTIFICATEREQUEST
 DESCRIPTOR.message_types_by_name['IstioCertificateResponse'] = _ISTIOCERTIFICATERESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -121,8 +131,8 @@ _ISTIOCERTIFICATESERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=161,
-  serialized_end=290,
+  serialized_start=234,
+  serialized_end=363,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateCertificate',
