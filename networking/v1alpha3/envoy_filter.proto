@@ -203,6 +203,66 @@ import "networking/v1alpha3/sidecar.proto";
 //         xff_num_trusted_hops: 5
 //```
 //
+// The following example inserts an optional filter for OpenApi processing
+// in the config root namespace and only instantiates the filter for
+// a specific workload by providing workload bound configuration.
+// Note that you do not need to specify order when overriding configuration.
+// `istio.openapi` filter calculates `request.operation` which is used by the
+// `istio.stats` filter therefore the order is important.
+//
+// Create a placeholder for istio.openapi before istio.stats.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
+// metadata:
+//   name: openapi
+//   namespace: istio-system
+// spec:
+//   configPatches:
+//   - applyTo: HTTP_FILTER
+//     match:
+//       context: SIDECAR_INBOUND
+//         filterChain:
+//           filter:
+//             name: "envoy.http_connection_manager" # can be elided
+//             subFilter:
+//               name: "istio.stats"
+//     patch:
+//       operation: INSERT_BEFORE
+//       use_if_overriden: true # allows for incomplete specification.
+//       value: # partial filter specification, only name is required.
+//         name: istio.openapi
+// ```
+//
+// Provide full configuration for istio.openapi in the workload namespace.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
+// metadata:
+//   name: mysvc-openapi
+//   namespace: myns
+// spec:
+//   workloadSelector:
+//     labels:
+//       app: mysvc
+//   configPatches:
+//   - applyTo: HTTP_FILTER
+//     match:
+//       context: SIDECAR_INBOUND
+//         filterChain:
+//           filter:
+//             name: "envoy.http_connection_manager" # can be elided
+//             subFilter:
+//               name: "istio.openapi" # replacing previous placeholder by name.
+//     patch:
+//       operation: REPLACE
+//       value:
+//         name: istio.openapi
+//         # Full configuration must be specified here.
+// ```
+//
 package istio.networking.v1alpha3;
 
 option go_package = "istio.io/api/networking/v1alpha3";
@@ -554,14 +614,19 @@ message EnvoyFilter {
     // json merge semantics with the existing proto in the path.
     google.protobuf.Struct value = 2;
 
-    // A `should_override` patch is used to provide filter ordering with
-    // optional default values. A later MERGE or REPLACE operation
-    // should override the contents of the configuration or the
-    // operation is a NOOP. This allows for an empty or a partial
-    // configuration to be specified in the config root namespace which
-    // is elided from the final output unless overridden by a
-    // subsequent operation.
-    bool should_override = 3;
+    // A `use_if_overridden` patch can partially specify a named filter
+    // configuration. The patch value may be empty apart from the filter name.
+    // The patch only has effect if a subsequent MERGE or REPLACE patch
+    // operates on the same named filter.
+    // A `use_if_overridden` patch in the config root namespace can be used
+    // to specify filter order without specifying full configuration.
+    // An example is an optional OpenApiSpec filter that populates request
+    // operations. An EnvoyFilter in the config root namespace can insert
+    // the OpenApiSpec filter in the correct spot before the stats filter.
+    // Since every service may not have an OpenApiSpec, a workload specific
+    // EnvoyFilter will provide configuration for the filter using a REPLACE
+    // patch, without specifying an order.
+    bool use_if_overridden = 3;
   };
 
   // One or more match conditions to be met before a patch is applied
