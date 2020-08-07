@@ -33,26 +33,30 @@
             "type": "string",
             "format": "string"
           },
-          "message": {
-            "description": "Human-readable message indicating details about last transition. +optional",
-            "type": "string",
-            "format": "string"
-          },
-          "reason": {
-            "description": "Unique, one-word, CamelCase reason for the condition's last transition. +optional",
-            "type": "string",
-            "format": "string"
-          },
           "type": {
             "description": "Type is the type of the condition.",
             "type": "string",
             "format": "string"
           },
           "lastProbeTime": {
-            "$ref": "#/components/schemas/k8s.io.apimachinery.pkg.apis.meta.v1.Time"
+            "description": "Last time we probed the condition. +optional",
+            "type": "string",
+            "format": "dateTime"
           },
           "lastTransitionTime": {
-            "$ref": "#/components/schemas/k8s.io.apimachinery.pkg.apis.meta.v1.Time"
+            "description": "Last time the condition transitioned from one status to another. +optional",
+            "type": "string",
+            "format": "dateTime"
+          },
+          "reason": {
+            "description": "Unique, one-word, CamelCase reason for the condition's last transition. +optional",
+            "type": "string",
+            "format": "string"
+          },
+          "message": {
+            "description": "Human-readable message indicating details about last transition. +optional",
+            "type": "string",
+            "format": "string"
           }
         }
       },
@@ -69,22 +73,6 @@
             "description": "A url pointing to the Istio documentation for this specific error type. Should be of the form `^http(s)?://(preliminary\\.)?istio.io/docs/reference/config/analysis/` Required.",
             "type": "string",
             "format": "string"
-          }
-        }
-      },
-      "k8s.io.apimachinery.pkg.apis.meta.v1.Time": {
-        "description": "Last time the condition transitioned from one status to another. +optional",
-        "type": "object",
-        "properties": {
-          "seconds": {
-            "description": "Represents seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z inclusive.",
-            "type": "integer",
-            "format": "int64"
-          },
-          "nanos": {
-            "description": "Non-negative fractions of a second at nanosecond resolution. Negative second values with fractions must still have non-negative nanos values that count forward in time. Must be from 0 to 999,999,999 inclusive. This field may be limited in precision depending on context.",
-            "type": "integer",
-            "format": "int32"
           }
         }
       },
