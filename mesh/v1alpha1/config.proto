@@ -448,11 +448,11 @@ message MeshConfig {
   reserved 53;
   reserved "termination_drain_duration";
 
-  // If EnableInsecureSkipVerifyDestinationRule is set to true and either CaCertificates
+  // If EnableInsecureSkipClientVerify is set to true and either CaCertificates
   // or SubjectAltNames fields in DestinationRule are empty, client-side proxy will not
   // verify presented peer TLS certificates during TLS handshake.
   // Default value is false.
-  bool enable_insecure_skip_verify_destinationrule = 54;
+  bool enable_insecure_skip_client_verify = 54;
 
   // $hide_from_docs
   // Next available field number: 55

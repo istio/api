@@ -36189,7 +36189,7 @@
               },
               {
                 "id": 54,
-                "name": "enable_insecure_skip_verify_destinationrule",
+                "name": "enable_insecure_skip_client_verify",
                 "type": "bool"
               }
             ],
