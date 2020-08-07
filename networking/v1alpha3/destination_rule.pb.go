@@ -287,9 +287,43 @@ func (ClientTLSSettings_TLSmode) EnumDescriptor() ([]byte, []int) {
 type ClientTLSSettings_InsecureCertificateValidationAtClient int32
 
 const (
+	// $hide_from_docs
+	// UNKNOWN_CLIENT_VERIFY field is not set
 	ClientTLSSettings_UNKNOWN_CLIENT_VERIFY ClientTLSSettings_InsecureCertificateValidationAtClient = 0
-	ClientTLSSettings_ENABLED               ClientTLSSettings_InsecureCertificateValidationAtClient = 1
-	ClientTLSSettings_DISABLED              ClientTLSSettings_InsecureCertificateValidationAtClient = 2
+	// If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side
+	// proxy will not verify either peer attribute during TLS handshake.
+	//
+	// If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side
+	// proxy will verify CA signature with CaCertificates and SubjectAltNames with SAN in
+	// presented server certificate during TLS handshake.
+	//
+	// If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side
+	// proxy will verify CA signature with CaCertificates but will not verify any SAN in the presented
+	// server certificate during TLS handshake.
+	//
+	// If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side
+	// proxy will not verify CA signature but will verify SubjectAltNames matches SAN in the
+	//presented server certificate during TLS handshake.
+	ClientTLSSettings_ENABLED ClientTLSSettings_InsecureCertificateValidationAtClient = 1
+	// DISABLED implies client-side proxy will verify CA signature with default System CA bundle
+	// and ensure SAN matches the host in DestinationRule.
+	//
+	// If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side
+	// proxy will verify CA signature with default System CA bundle and SAN matches the host
+	// in DestinationRule.
+	//
+	// If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side proxy
+	// will verify CA signature with CaCertificates and SubjectAltNames with SAN in presented server
+	// certificate during TLS handshake.
+	//
+	// If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side
+	// proxy will verify CA signature with CaCertificates but will verify the SAN in the presented
+	// server certificate matches the host in DestinationRule during TLS handshake.
+	//
+	// If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side
+	// proxy will verify CA signature ith default System CA bundle but will verify SubjectAltNames
+	// matches SAN in the presented server certificate during TLS handshake.
+	ClientTLSSettings_DISABLED ClientTLSSettings_InsecureCertificateValidationAtClient = 2
 )
 
 var ClientTLSSettings_InsecureCertificateValidationAtClient_name = map[int32]string{
@@ -1812,40 +1846,11 @@ type ClientTLSSettings struct {
 	// Indicates whether connections to this port should be secured
 	// using TLS. The value of this field determines how TLS is enforced.
 	Mode ClientTLSSettings_TLSmode `protobuf:"varint,1,opt,name=mode,proto3,enum=istio.networking.v1alpha3.ClientTLSSettings_TLSmode" json:"mode,omitempty"`
-	// If InsecureSkipClientVerify is set to `ENABLED`:
-	// If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side proxy will not
-	// verify either peer attribute during TLS handshake.
-	//
-	// If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side proxy will verify
-	// CA signature with CaCertificates and SubjectAltNames with SAN in presented server certificate during TLS
-	// handshake.
-	//
-	// If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side proxy will
-	// verify CA signature with CaCertificates but will not verify any SAN in the presented server certificate
-	// during TLS handshake.
-	//
-	// If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side proxy will
-	// not verify CA signature but will verify SubjectAltNames matches SAN in the presented server certificate
-	// during TLS handshake.
-	//
-	// If InsecureSkipClientVerify is set to `DISABLED`:
-	// If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side proxy will
-	// verify CA signature with default System CA bundle and SAN matches the host in DestinationRule.
-	//
-	// If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side proxy will verify
-	// CA signature with CaCertificates and SubjectAltNames with SAN in presented server certificate during TLS
-	// handshake.
-	//
-	// If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side proxy will
-	// verify CA signature with CaCertificates but will verify the SAN in the presented server certificate
-	// matches the host in DestinationRule during TLS handshake.
-	//
-	// If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side proxy will
-	// verify CA signature ith default System CA bundle  but will verify SubjectAltNames matches SAN in the
-	// presented server certificate during TLS handshake.
-	//
-	// By default, InsecureSkipClientVerify is DISABLED. `InsecureSkipVerify` at DestinationRule level overrides
-	// the global mesh config behavior.
+	// InsecureSkipVerify sets the mesh global default for peer certificate validation
+	// at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL) origination
+	// modes are used. This setting can be overridden at the host level via DestinationRule API.
+	// By default, InsecureSkipVerify is DISABLED. `InsecureSkipVerify` at DestinationRule level
+	// overrides the global mesh config behavior.
 	InsecureSkipVerify ClientTLSSettings_InsecureCertificateValidationAtClient `protobuf:"varint,8,opt,name=insecure_skip_verify,json=insecureSkipVerify,proto3,enum=istio.networking.v1alpha3.ClientTLSSettings_InsecureCertificateValidationAtClient" json:"insecure_skip_verify,omitempty"`
 	// REQUIRED if mode is `MUTUAL`. The path to the file holding the
 	// client-side TLS certificate to use.

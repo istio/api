@@ -1141,7 +1141,7 @@
         }
       },
       "istio.networking.v1alpha3.ClientTLSSettings.InsecureCertificateValidationAtClient": {
-        "description": "If InsecureSkipClientVerify is set to `ENABLED`: If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side proxy will not verify either peer attribute during TLS handshake.",
+        "description": "InsecureSkipVerify sets the mesh global default for peer certificate validation at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL) origination modes are used. This setting can be overridden at the host level via DestinationRule API. By default, InsecureSkipVerify is DISABLED. `InsecureSkipVerify` at DestinationRule level overrides the global mesh config behavior.",
         "type": "string",
         "enum": [
           "UNKNOWN_CLIENT_VERIFY",
