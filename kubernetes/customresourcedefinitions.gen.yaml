@@ -2517,7 +2517,7 @@ spec:
                           - INSERT_FIRST
                           - REPLACE
                           type: string
-                        shouldOverride:
+                        useIfOverridden:
                           type: boolean
                         value:
                           description: The JSON config of the object being patched.

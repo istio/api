@@ -274,8 +274,8 @@
             "description": "The JSON config of the object being patched. This will be merged using json merge semantics with the existing proto in the path.",
             "type": "object"
           },
-          "shouldOverride": {
-            "description": "A `should_override` patch is used to provide filter ordering with optional default values. A later MERGE or REPLACE operation should override the contents of the configuration or the operation is a NOOP. This allows for an empty or a partial configuration to be specified in the config root namespace which is elided from the final output unless overridden by a subsequent operation.",
+          "useIfOverridden": {
+            "description": "A `use_if_overridden` patch can partially specify a named filter configuration. The patch value may be empty apart from the filter name. The patch only has effect if a subsequent MERGE or REPLACE patch operates on the same named filter. A `use_if_overridden` patch in the config root namespace can be used to specify filter order without specifying full configuration. An example is an optional OpenApiSpec filter that populates request operations. An EnvoyFilter in the config root namespace can insert the OpenApiSpec filter in the correct spot before the stats filter. Since every service may not have an OpenApiSpec, a workload specific EnvoyFilter will provide configuration for the filter using a REPLACE patch, without specifying an order.",
             "type": "boolean"
           }
         }

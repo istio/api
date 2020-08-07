@@ -180,6 +180,66 @@
 //         xff_num_trusted_hops: 5
 //```
 //
+// The following example inserts an optional filter for OpenApi processing
+// in the config root namespace and only instantiates the filter for
+// a specific workload by providing workload bound configuration.
+// Note that you do not need to specify order when overriding configuration.
+// `istio.openapi` filter calculates `request.operation` which is used by the
+// `istio.stats` filter therefore the order is important.
+//
+// Create a placeholder for istio.openapi before istio.stats.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
+// metadata:
+//   name: openapi
+//   namespace: istio-system
+// spec:
+//   configPatches:
+//   - applyTo: HTTP_FILTER
+//     match:
+//       context: SIDECAR_INBOUND
+//         filterChain:
+//           filter:
+//             name: "envoy.http_connection_manager" # can be elided
+//             subFilter:
+//               name: "istio.stats"
+//     patch:
+//       operation: INSERT_BEFORE
+//       use_if_overriden: true # allows for incomplete specification.
+//       value: # partial filter specification, only name is required.
+//         name: istio.openapi
+// ```
+//
+// Provide full configuration for istio.openapi in the workload namespace.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
+// metadata:
+//   name: mysvc-openapi
+//   namespace: myns
+// spec:
+//   workloadSelector:
+//     labels:
+//       app: mysvc
+//   configPatches:
+//   - applyTo: HTTP_FILTER
+//     match:
+//       context: SIDECAR_INBOUND
+//         filterChain:
+//           filter:
+//             name: "envoy.http_connection_manager" # can be elided
+//             subFilter:
+//               name: "istio.openapi" # replacing previous placeholder by name.
+//     patch:
+//       operation: REPLACE
+//       value:
+//         name: istio.openapi
+//         # Full configuration must be specified here.
+// ```
+//
 
 package v1alpha3
 

@@ -184,6 +184,64 @@ spec:
         xff_num_trusted_hops: 5
 </code></pre>
 
+<p>The following example inserts an optional filter for OpenApi processing
+in the config root namespace and only instantiates the filter for
+a specific workload by providing workload bound configuration.
+Note that you do not need to specify order when overriding configuration.
+<code>istio.openapi</code> filter calculates <code>request.operation</code> which is used by the
+<code>istio.stats</code> filter therefore the order is important.</p>
+
+<p>Create a placeholder for istio.openapi before istio.stats.</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: openapi
+  namespace: istio-system
+spec:
+  configPatches:
+  - applyTo: HTTP_FILTER
+    match:
+      context: SIDECAR_INBOUND
+        filterChain:
+          filter:
+            name: &quot;envoy.http_connection_manager&quot; # can be elided
+            subFilter:
+              name: &quot;istio.stats&quot;
+    patch:
+      operation: INSERT_BEFORE
+      use_if_overriden: true # allows for incomplete specification.
+      value: # partial filter specification, only name is required.
+        name: istio.openapi
+</code></pre>
+
+<p>Provide full configuration for istio.openapi in the workload namespace.</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: mysvc-openapi
+  namespace: myns
+spec:
+  workloadSelector:
+    labels:
+      app: mysvc
+  configPatches:
+  - applyTo: HTTP_FILTER
+    match:
+      context: SIDECAR_INBOUND
+        filterChain:
+          filter:
+            name: &quot;envoy.http_connection_manager&quot; # can be elided
+            subFilter:
+              name: &quot;istio.openapi&quot; # replacing previous placeholder by name.
+    patch:
+      operation: REPLACE
+      value:
+        name: istio.openapi
+        # Full configuration must be specified here.
+</code></pre>
+
 <h2 id="EnvoyFilter">EnvoyFilter</h2>
 <section>
 <p>EnvoyFilter provides a mechanism to customize the Envoy configuration
@@ -533,17 +591,22 @@ json merge semantics with the existing proto in the path.</p>
 No
 </td>
 </tr>
-<tr id="EnvoyFilter-Patch-should_override">
-<td><code>shouldOverride</code></td>
+<tr id="EnvoyFilter-Patch-use_if_overridden">
+<td><code>useIfOverridden</code></td>
 <td><code>bool</code></td>
 <td>
-<p>A <code>should_override</code> patch is used to provide filter ordering with
-optional default values. A later MERGE or REPLACE operation
-should override the contents of the configuration or the
-operation is a NOOP. This allows for an empty or a partial
-configuration to be specified in the config root namespace which
-is elided from the final output unless overridden by a
-subsequent operation.</p>
+<p>A <code>use_if_overridden</code> patch can partially specify a named filter
+configuration. The patch value may be empty apart from the filter name.
+The patch only has effect if a subsequent MERGE or REPLACE patch
+operates on the same named filter.
+A <code>use_if_overridden</code> patch in the config root namespace can be used
+to specify filter order without specifying full configuration.
+An example is an optional OpenApiSpec filter that populates request
+operations. An EnvoyFilter in the config root namespace can insert
+the OpenApiSpec filter in the correct spot before the stats filter.
+Since every service may not have an OpenApiSpec, a workload specific
+EnvoyFilter will provide configuration for the filter using a REPLACE
+patch, without specifying an order.</p>
 
 </td>
 <td>
