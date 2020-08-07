@@ -177,9 +177,41 @@ func (MeshConfig_H2UpgradePolicy) EnumDescriptor() ([]byte, []int) {
 type MeshConfig_InsecureCertificateValidationAtClient int32
 
 const (
+	// $hide_from_docs
+	// UNKNOWN_CLIENT_VERIFY field is not set
 	MeshConfig_UNKNOWN_CLIENT_VERIFY MeshConfig_InsecureCertificateValidationAtClient = 0
-	MeshConfig_ENABLED               MeshConfig_InsecureCertificateValidationAtClient = 1
-	MeshConfig_DISABLED              MeshConfig_InsecureCertificateValidationAtClient = 2
+	// For a particular host the following logic is used when DestinationRule are configured.
+	// If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side
+	// proxy will not verify either peer attribute during TLS handshake.
+	//
+	// If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side
+	// proxy will verify CA signature with CaCertificates and SubjectAltNames with SAN in
+	// presented server certificate during TLS handshake.
+	//
+	// If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side
+	// proxy will verify CA signature with CaCertificates but will not verify any SAN in the presented
+	// server certificateduring TLS handshake.
+	//
+	// If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side
+	// proxy will not verify CA signature but will verify SubjectAltNames matches SAN in the
+	//presented server certificate during TLS handshake.
+	MeshConfig_ENABLED MeshConfig_InsecureCertificateValidationAtClient = 1
+	// If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side
+	// proxy will verify CA signature with default System CA bundle and SAN matches the host
+	// in DestinationRule.
+	//
+	// If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side proxy
+	// will verify CA signature with CaCertificates and SubjectAltNames with SAN in presented server
+	// certificate during TLS handshake.
+	//
+	// If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side
+	// proxy will verify CA signature with CaCertificates but will verify the SAN in the presented
+	// server certificate matches the host in DestinationRule during TLS handshake.
+	//
+	// If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side
+	// proxy will verify CA signature ith default System CA bundle but will verify SubjectAltNames
+	// matches SAN in the presented server certificate during TLS handshake.
+	MeshConfig_DISABLED MeshConfig_InsecureCertificateValidationAtClient = 2
 )
 
 var MeshConfig_InsecureCertificateValidationAtClient_name = map[int32]string{
@@ -454,40 +486,10 @@ type MeshConfig struct {
 	// `prometheus.istio.io/merge-metrics: "false"` annotation.
 	// If not specified, this will be enabled by default.
 	EnablePrometheusMerge *types.BoolValue `protobuf:"bytes,51,opt,name=enable_prometheus_merge,json=enablePrometheusMerge,proto3" json:"enablePrometheusMerge,omitempty"`
-	// If InsecureSkipClientVerify is set to `ENABLED`:
-	// If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side proxy will not
-	// verify either peer attribute during TLS handshake.
-	//
-	// If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side proxy will verify
-	// CA signature with CaCertificates and SubjectAltNames with SAN in presented server certificate during TLS
-	// handshake.
-	//
-	// If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side proxy will
-	// verify CA signature with CaCertificates but will not verify any SAN in the presented server certificate
-	// during TLS handshake.
-	//
-	// If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side proxy will
-	// not verify CA signature but will verify SubjectAltNames matches SAN in the presented server certificate
-	// during TLS handshake.
-	//
-	// If InsecureSkipClientVerify is set to `DISABLED`:
-	// If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side proxy will
-	// verify CA signature with default System CA bundle and SAN matches the host in DestinationRule.
-	//
-	// If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side proxy will verify
-	// CA signature with CaCertificates and SubjectAltNames with SAN in presented server certificate during TLS
-	// handshake.
-	//
-	// If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side proxy will
-	// verify CA signature with CaCertificates but will verify the SAN in the presented server certificate
-	// matches the host in DestinationRule during TLS handshake.
-	//
-	// If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side proxy will
-	// verify CA signature ith default System CA bundle  but will verify SubjectAltNames matches SAN in the
-	// presented server certificate during TLS handshake.
-	//
-	// By default, InsecureSkipClientVerify is DISABLED. `InsecureSkipVerify` at DestinationRule level overrides
-	// this behavior.
+	// InsecureSkipClientVerify sets the mesh global default for peer certificate validation
+	// at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL) origination
+	// modes are used. This setting can be overridden at the host level via DestinationRule API.
+	// By default, InsecureSkipClientVerify is DISABLED.
 	InsecureSkipClientVerify MeshConfig_InsecureCertificateValidationAtClient `protobuf:"varint,54,opt,name=insecure_skip_client_verify,json=insecureSkipClientVerify,proto3,enum=istio.mesh.v1alpha1.MeshConfig_InsecureCertificateValidationAtClient" json:"insecureSkipClientVerify,omitempty"`
 	XXX_NoUnkeyedLiteral     struct{}                                         `json:"-"`
 	XXX_unrecognized         []byte                                           `json:"-"`
