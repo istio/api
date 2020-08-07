@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 20
+number_of_entries: 21
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -978,15 +978,42 @@ Yes
 </tr>
 <tr id="ClientTLSSettings-insecure_skip_verify">
 <td><code>insecureSkipVerify</code></td>
-<td><code>bool</code></td>
+<td><code><a href="#ClientTLSSettings-InsecureCertificateValidationAtClient">InsecureCertificateValidationAtClient</a></code></td>
 <td>
-<p>If set to true, client-side proxy will not verify that the presented peer TLS certificates
-is signed by a trusted CA or that the requested host is listed in the SAN field of
-the certificate during TLS handshake. By default client-side proxy will fallback to use
-system CA certificates to verify the certificate and validate the SAN if either of CaCertificates
-or SubjectAltNames fields are empty. If InsecureSkipVerify is set to true and CaCertificates
-and SubjectAltNames fields are both not empty, client-side proxy will use those CaCertificates
-and SubjectAltNames to verify presented peer TLS certificates during TLS handshake.</p>
+<p>If InsecureSkipClientVerify is set to <code>ENABLED</code>:
+If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side proxy will not
+verify either peer attribute during TLS handshake.</p>
+
+<p>If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side proxy will verify
+CA signature with CaCertificates and SubjectAltNames with SAN in presented server certificate during TLS
+handshake.</p>
+
+<p>If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side proxy will
+verify CA signature with CaCertificates but will not verify any SAN in the presented server certificate
+during TLS handshake.</p>
+
+<p>If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side proxy will
+not verify CA signature but will verify SubjectAltNames matches SAN in the presented server certificate
+during TLS handshake.</p>
+
+<p>If InsecureSkipClientVerify is set to <code>DISABLED</code>:
+If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side proxy will
+verify CA signature with default System CA bundle and SAN matches the host in DestinationRule.</p>
+
+<p>If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side proxy will verify
+CA signature with CaCertificates and SubjectAltNames with SAN in presented server certificate during TLS
+handshake.</p>
+
+<p>If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side proxy will
+verify CA signature with CaCertificates but will verify the SAN in the presented server certificate
+matches the host in DestinationRule during TLS handshake.</p>
+
+<p>If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side proxy will
+verify CA signature ith default System CA bundle  but will verify SubjectAltNames matches SAN in the
+presented server certificate during TLS handshake.</p>
+
+<p>By default, InsecureSkipClientVerify is DISABLED. <code>InsecureSkipVerify</code> at DestinationRule level overrides
+the global mesh config behavior.</p>
 
 </td>
 <td>
@@ -1846,6 +1873,34 @@ Compared to Mutual mode, this mode uses certificates generated
 automatically by Istio for mTLS authentication. When this mode is
 used, all other fields in <code>ClientTLSSettings</code> should be empty.</p>
 
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ClientTLSSettings-InsecureCertificateValidationAtClient">ClientTLSSettings.InsecureCertificateValidationAtClient</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ClientTLSSettings-InsecureCertificateValidationAtClient-UNKNOWN_CLIENT_VERIFY">
+<td><code>UNKNOWN_CLIENT_VERIFY</code></td>
+<td>
+</td>
+</tr>
+<tr id="ClientTLSSettings-InsecureCertificateValidationAtClient-ENABLED">
+<td><code>ENABLED</code></td>
+<td>
+</td>
+</tr>
+<tr id="ClientTLSSettings-InsecureCertificateValidationAtClient-DISABLED">
+<td><code>DISABLED</code></td>
+<td>
 </td>
 </tr>
 </tbody>

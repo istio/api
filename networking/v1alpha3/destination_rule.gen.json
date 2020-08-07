@@ -199,8 +199,7 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings.TLSmode"
           },
           "insecureSkipVerify": {
-            "description": "If set to true, client-side proxy will not verify that the presented peer TLS certificates is signed by a trusted CA or that the requested host is listed in the SAN field of the certificate during TLS handshake. By default client-side proxy will fallback to use system CA certificates to verify the certificate and validate the SAN if either of CaCertificates or SubjectAltNames fields are empty. If InsecureSkipVerify is set to true and CaCertificates and SubjectAltNames fields are both not empty, client-side proxy will use those CaCertificates and SubjectAltNames to verify presented peer TLS certificates during TLS handshake.",
-            "type": "boolean"
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings.InsecureCertificateValidationAtClient"
           },
           "clientCertificate": {
             "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client-side TLS certificate to use. Should be empty if mode is `ISTIO_MUTUAL`.",
@@ -517,6 +516,14 @@
           "SIMPLE",
           "MUTUAL",
           "ISTIO_MUTUAL"
+        ]
+      },
+      "istio.networking.v1alpha3.ClientTLSSettings.InsecureCertificateValidationAtClient": {
+        "type": "string",
+        "enum": [
+          "UNKNOWN_CLIENT_VERIFY",
+          "ENABLED",
+          "DISABLED"
         ]
       },
       "istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute": {

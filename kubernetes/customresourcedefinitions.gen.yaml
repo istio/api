@@ -554,7 +554,11 @@ spec:
                                     format: string
                                     type: string
                                   insecureSkipVerify:
-                                    type: boolean
+                                    enum:
+                                    - UNKNOWN_CLIENT_VERIFY
+                                    - ENABLED
+                                    - DISABLED
+                                    type: string
                                   mode:
                                     enum:
                                     - DISABLE
@@ -594,7 +598,11 @@ spec:
                               format: string
                               type: string
                             insecureSkipVerify:
-                              type: boolean
+                              enum:
+                              - UNKNOWN_CLIENT_VERIFY
+                              - ENABLED
+                              - DISABLED
+                              type: string
                             mode:
                               enum:
                               - DISABLE
@@ -1098,7 +1106,11 @@ spec:
                               format: string
                               type: string
                             insecureSkipVerify:
-                              type: boolean
+                              enum:
+                              - UNKNOWN_CLIENT_VERIFY
+                              - ENABLED
+                              - DISABLED
+                              type: string
                             mode:
                               enum:
                               - DISABLE
@@ -1138,7 +1150,11 @@ spec:
                         format: string
                         type: string
                       insecureSkipVerify:
-                        type: boolean
+                        enum:
+                        - UNKNOWN_CLIENT_VERIFY
+                        - ENABLED
+                        - DISABLED
+                        type: string
                       mode:
                         enum:
                         - DISABLE
@@ -1701,7 +1717,11 @@ spec:
                                     format: string
                                     type: string
                                   insecureSkipVerify:
-                                    type: boolean
+                                    enum:
+                                    - UNKNOWN_CLIENT_VERIFY
+                                    - ENABLED
+                                    - DISABLED
+                                    type: string
                                   mode:
                                     enum:
                                     - DISABLE
@@ -1741,7 +1761,11 @@ spec:
                               format: string
                               type: string
                             insecureSkipVerify:
-                              type: boolean
+                              enum:
+                              - UNKNOWN_CLIENT_VERIFY
+                              - ENABLED
+                              - DISABLED
+                              type: string
                             mode:
                               enum:
                               - DISABLE
@@ -2245,7 +2269,11 @@ spec:
                               format: string
                               type: string
                             insecureSkipVerify:
-                              type: boolean
+                              enum:
+                              - UNKNOWN_CLIENT_VERIFY
+                              - ENABLED
+                              - DISABLED
+                              type: string
                             mode:
                               enum:
                               - DISABLE
@@ -2285,7 +2313,11 @@ spec:
                         format: string
                         type: string
                       insecureSkipVerify:
-                        type: boolean
+                        enum:
+                        - UNKNOWN_CLIENT_VERIFY
+                        - ENABLED
+                        - DISABLED
+                        type: string
                       mode:
                         enum:
                         - DISABLE
