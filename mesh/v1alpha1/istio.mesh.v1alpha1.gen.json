@@ -180,8 +180,8 @@
             "type": "boolean",
             "nullable": true
           },
-          "disableSystemCaFallbackDestinationrule": {
-            "description": "If DisableSystemCaFallbackDestinationRule is set to true and either CaCertificates or SubjectAltNames fields in DestinationRule are empty, client-side proxy will not verify presented peer TLS certificates during TLS handshake. Default value is false.",
+          "enableInsecureSkipVerifyDestinationrule": {
+            "description": "If EnableInsecureSkipVerifyDestinationRule is set to true and either CaCertificates or SubjectAltNames fields in DestinationRule are empty, client-side proxy will not verify presented peer TLS certificates during TLS handshake. Default value is false.",
             "type": "boolean"
           }
         }

@@ -36189,7 +36189,7 @@
               },
               {
                 "id": 54,
-                "name": "disable_system_ca_fallback_destinationrule",
+                "name": "enable_insecure_skip_verify_destinationrule",
                 "type": "bool"
               }
             ],
