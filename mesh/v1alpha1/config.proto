@@ -448,8 +448,14 @@ message MeshConfig {
   reserved 53;
   reserved "termination_drain_duration";
 
+  // If DisableSystemCaFallbackDestinationRule is set to true and either CaCertificates
+  // or SubjectAltNames fields in DestinationRule are empty, client-side proxy will not
+  // verify presented peer TLS certificates during TLS handshake.
+  // Default value is false.
+  bool disable_system_ca_fallback_destinationrule = 54;
+
   // $hide_from_docs
-  // Next available field number: 54
+  // Next available field number: 55
 }
 
 // Resource describes the source of configuration

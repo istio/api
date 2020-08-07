@@ -179,6 +179,10 @@
             "description": "If enabled, Istio agent will merge metrics exposed by the application with metrics from Envoy and Istio agent. The sidecar injection will replace `prometheus.io` annotations present on the pod and redirect them towards Istio agent, which will then merge metrics of from the application with Istio metrics. This relies on the annotations `prometheus.io/scrape`, `prometheus.io/port`, and `prometheus.io/path` annotations. If you are running a separately managed Envoy with an Istio sidecar, this may cause issues, as the metrics will collide. In this case, it is recommended to disable aggregation on that deployment with the `prometheus.istio.io/merge-metrics: \"false\"` annotation. If not specified, this will be enabled by default.",
             "type": "boolean",
             "nullable": true
+          },
+          "disableSystemCaFallbackDestinationrule": {
+            "description": "If DisableSystemCaFallbackDestinationRule is set to true and either CaCertificates or SubjectAltNames fields in DestinationRule are empty, client-side proxy will not verify presented peer TLS certificates during TLS handshake. Default value is false.",
+            "type": "boolean"
           }
         }
       },

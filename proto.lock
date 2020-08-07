@@ -36186,6 +36186,11 @@
                 "id": 51,
                 "name": "enable_prometheus_merge",
                 "type": "google.protobuf.BoolValue"
+              },
+              {
+                "id": 54,
+                "name": "disable_system_ca_fallback_destinationrule",
+                "type": "bool"
               }
             ],
             "reserved_ids": [

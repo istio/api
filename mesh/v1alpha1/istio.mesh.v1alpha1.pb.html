@@ -1131,6 +1131,20 @@ If not specified, this will be enabled by default.</p>
 No
 </td>
 </tr>
+<tr id="MeshConfig-disable_system_ca_fallback_destinationrule">
+<td><code>disableSystemCaFallbackDestinationrule</code></td>
+<td><code>bool</code></td>
+<td>
+<p>If DisableSystemCaFallbackDestinationRule is set to true and either CaCertificates
+or SubjectAltNames fields in DestinationRule are empty, client-side proxy will not
+verify presented peer TLS certificates during TLS handshake.
+Default value is false.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
