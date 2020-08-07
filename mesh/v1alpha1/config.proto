@@ -448,11 +448,47 @@ message MeshConfig {
   reserved 53;
   reserved "termination_drain_duration";
 
-  // If EnableInsecureSkipClientVerify is set to true and either CaCertificates
-  // or SubjectAltNames fields in DestinationRule are empty, client-side proxy will not
-  // verify presented peer TLS certificates during TLS handshake.
-  // Default value is false.
-  bool enable_insecure_skip_client_verify = 54;
+  enum InsecureCertificateValidationAtClient {
+    UNKNOWN_CLIENT_VERIFY = 0;
+    ENABLED = 1;
+    DISABLED = 2;
+  }
+
+  // If InsecureSkipClientVerify is set to `ENABLED`:
+  // If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side proxy will not
+  // verify either peer attribute during TLS handshake.
+  //
+  // If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side proxy will verify
+  // CA signature with CaCertificates and SubjectAltNames with SAN in presented server certificate during TLS
+  // handshake.
+  //
+  // If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side proxy will
+  // verify CA signature with CaCertificates but will not verify any SAN in the presented server certificate
+  // during TLS handshake.
+  //
+  // If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side proxy will
+  // not verify CA signature but will verify SubjectAltNames matches SAN in the presented server certificate
+  // during TLS handshake.
+  //
+  // If InsecureSkipClientVerify is set to `DISABLED`:
+  // If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side proxy will
+  // verify CA signature with default System CA bundle and SAN matches the host in DestinationRule.
+  //
+  // If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side proxy will verify
+  // CA signature with CaCertificates and SubjectAltNames with SAN in presented server certificate during TLS
+  // handshake.
+  //
+  // If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side proxy will
+  // verify CA signature with CaCertificates but will verify the SAN in the presented server certificate
+  // matches the host in DestinationRule during TLS handshake.
+  //
+  // If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side proxy will
+  // verify CA signature ith default System CA bundle  but will verify SubjectAltNames matches SAN in the
+  // presented server certificate during TLS handshake.
+  //
+  // By default, InsecureSkipClientVerify is DISABLED. `InsecureSkipVerify` at DestinationRule level overrides
+  // this behavior.
+  InsecureCertificateValidationAtClient insecure_skip_client_verify = 54;
 
   // $hide_from_docs
   // Next available field number: 55

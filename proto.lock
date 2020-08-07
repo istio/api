@@ -35981,6 +35981,22 @@
             ]
           },
           {
+            "name": "MeshConfig.InsecureCertificateValidationAtClient",
+            "enum_fields": [
+              {
+                "name": "UNKNOWN_CLIENT_VERIFY"
+              },
+              {
+                "name": "ENABLED",
+                "integer": 1
+              },
+              {
+                "name": "DISABLED",
+                "integer": 2
+              }
+            ]
+          },
+          {
             "name": "Resource",
             "enum_fields": [
               {
@@ -36189,8 +36205,8 @@
               },
               {
                 "id": 54,
-                "name": "enable_insecure_skip_client_verify",
-                "type": "bool"
+                "name": "insecure_skip_client_verify",
+                "type": "InsecureCertificateValidationAtClient"
               }
             ],
             "reserved_ids": [

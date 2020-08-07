@@ -180,9 +180,8 @@
             "type": "boolean",
             "nullable": true
           },
-          "enableInsecureSkipClientVerify": {
-            "description": "If EnableInsecureSkipClientVerify is set to true and either CaCertificates or SubjectAltNames fields in DestinationRule are empty, client-side proxy will not verify presented peer TLS certificates during TLS handshake. Default value is false.",
-            "type": "boolean"
+          "insecureSkipClientVerify": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.InsecureCertificateValidationAtClient"
           }
         }
       },
@@ -430,6 +429,14 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ServiceSettings.Settings"
           }
         }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.InsecureCertificateValidationAtClient": {
+        "type": "string",
+        "enum": [
+          "UNKNOWN_CLIENT_VERIFY",
+          "ENABLED",
+          "DISABLED"
+        ]
       },
       "istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode": {
         "type": "string",
