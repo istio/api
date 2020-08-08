@@ -691,6 +691,16 @@
                       "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Stackdriver"
                     }
                   }
+                },
+                {
+                  "required": [
+                    "openCensusAgent"
+                  ],
+                  "properties": {
+                    "openCensusAgent": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.OpenCensusAgent"
+                    }
+                  }
                 }
               ]
             }
@@ -732,6 +742,16 @@
             "properties": {
               "stackdriver": {
                 "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.Stackdriver"
+              }
+            }
+          },
+          {
+            "required": [
+              "openCensusAgent"
+            ],
+            "properties": {
+              "openCensusAgent": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.OpenCensusAgent"
               }
             }
           }
@@ -848,7 +868,7 @@
         }
       },
       "istio.mesh.v1alpha1.Tracing.Stackdriver": {
-        "description": "Stackdriver defines configuration for a Stackdriver tracer. See [Opencensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.",
+        "description": "Stackdriver defines configuration for a Stackdriver tracer. See [Envoy's OpenCensus trace configuration](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/trace/v3/opencensus.proto) and [OpenCensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.",
         "type": "object",
         "properties": {
           "debug": {
@@ -871,6 +891,54 @@
             "nullable": true
           }
         }
+      },
+      "istio.mesh.v1alpha1.Tracing.OpenCensusAgent": {
+        "description": "OpenCensusAgent defines configuration for an OpenCensus tracer writing to an OpenCensus agent backend. See [Envoy's OpenCensus trace configuration](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/trace/v3/opencensus.proto) and [OpenCensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.",
+        "type": "object",
+        "properties": {
+          "context": {
+            "description": "Specifies the set of context propagation headers used for distributed tracing. Default is `[\"W3C_TRACE_CONTEXT\"]`. If multiple values are specified, the proxy will attempt to read each header for each request and will write all headers.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.Tracing.OpenCensusAgent.TraceContext"
+            }
+          },
+          "address": {
+            "description": "gRPC address for the OpenCensus agent (e.g. dns://authority/host:port or unix:path). See [gRPC naming docs](https://github.com/grpc/grpc/blob/master/doc/naming.md) for details.",
+            "type": "string",
+            "format": "string"
+          },
+          "debug": {
+            "description": "debug enables trace output to stdout $hide_from_docs",
+            "type": "boolean"
+          },
+          "maxNumberOfAttributes": {
+            "description": "The global default max number of attributes per span. default is 200. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          },
+          "maxNumberOfAnnotations": {
+            "description": "The global default max number of annotation events per span. default is 200. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          },
+          "maxNumberOfMessageEvents": {
+            "description": "The global default max number of message events per span. default is 200. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.Tracing.OpenCensusAgent.TraceContext": {
+        "description": "TraceContext selects the context propagation headers used for distributed tracing.",
+        "type": "string",
+        "enum": [
+          "UNSPECIFIED",
+          "W3C_TRACE_CONTEXT",
+          "GRPC_BIN",
+          "CLOUD_TRACE_CONTEXT",
+          "B3"
+        ]
       },
       "istio.mesh.v1alpha1.Tracing.Literal": {
         "description": "Literal type represents a static value. $hide_from_docs",

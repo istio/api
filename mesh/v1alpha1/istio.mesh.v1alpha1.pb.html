@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 25
+number_of_entries: 27
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -61,6 +61,17 @@ No
 <td><code><a href="#Tracing-Stackdriver">Stackdriver (oneof)</a></code></td>
 <td>
 <p>Use a Stackdriver tracer.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Tracing-open_census_agent" class="oneof">
+<td><code>openCensusAgent</code></td>
+<td><code><a href="#Tracing-OpenCensusAgent">OpenCensusAgent (oneof)</a></code></td>
+<td>
+<p>Use an OpenCensus tracer exporting to an OpenCensus agent.</p>
 
 </td>
 <td>
@@ -589,7 +600,9 @@ No
 <h2 id="Tracing-Stackdriver">Tracing.Stackdriver</h2>
 <section>
 <p>Stackdriver defines configuration for a Stackdriver tracer.
-See <a href="https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto">Opencensus trace config</a> for details.</p>
+See <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/trace/v3/opencensus.proto">Envoy&rsquo;s OpenCensus trace configuration</a>
+and
+<a href="https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto">OpenCensus trace config</a> for details.</p>
 
 <table class="message-fields">
 <thead>
@@ -601,6 +614,56 @@ See <a href="https://github.com/census-instrumentation/opencensus-proto/blob/mas
 </tr>
 </thead>
 <tbody>
+</tbody>
+</table>
+</section>
+<h2 id="Tracing-OpenCensusAgent">Tracing.OpenCensusAgent</h2>
+<section>
+<p>OpenCensusAgent defines configuration for an OpenCensus tracer writing to
+an OpenCensus agent backend. See
+<a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/trace/v3/opencensus.proto">Envoy&rsquo;s OpenCensus trace configuration</a>
+and
+<a href="https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto">OpenCensus trace config</a>
+for details.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Tracing-OpenCensusAgent-address">
+<td><code>address</code></td>
+<td><code>string</code></td>
+<td>
+<p>gRPC address for the OpenCensus agent (e.g. dns://authority/host:port or
+unix:path). See <a href="https://github.com/grpc/grpc/blob/master/doc/naming.md">gRPC naming
+docs</a> for
+details.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Tracing-OpenCensusAgent-context">
+<td><code>context</code></td>
+<td><code><a href="#Tracing-OpenCensusAgent-TraceContext">TraceContext[]</a></code></td>
+<td>
+<p>Specifies the set of context propagation headers used for distributed
+tracing. Default is <code>[&quot;W3C_TRACE_CONTEXT&quot;]</code>. If multiple values are specified,
+the proxy will attempt to read each header for each request and will
+write all headers.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1574,6 +1637,56 @@ Yes
 </td>
 <td>
 No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Tracing-OpenCensusAgent-TraceContext">Tracing.OpenCensusAgent.TraceContext</h2>
+<section>
+<p>TraceContext selects the context propagation headers used for
+distributed tracing.</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Tracing-OpenCensusAgent-TraceContext-W3C_TRACE_CONTEXT">
+<td><code>W3C_TRACE_CONTEXT</code></td>
+<td>
+<p>Use W3C Trace Context propagation using the <code>traceparent</code> HTTP header.
+See the
+<a href="https://www.w3.org/TR/trace-context/">Trace Context documentation</a> for details.</p>
+
+</td>
+</tr>
+<tr id="Tracing-OpenCensusAgent-TraceContext-GRPC_BIN">
+<td><code>GRPC_BIN</code></td>
+<td>
+<p>Use gRPC binary context propagation using the <code>grpc-trace-bin</code> http header.</p>
+
+</td>
+</tr>
+<tr id="Tracing-OpenCensusAgent-TraceContext-CLOUD_TRACE_CONTEXT">
+<td><code>CLOUD_TRACE_CONTEXT</code></td>
+<td>
+<p>Use Cloud Trace context propagation using the
+<code>X-Cloud-Trace-Context</code> http header.</p>
+
+</td>
+</tr>
+<tr id="Tracing-OpenCensusAgent-TraceContext-B3">
+<td><code>B3</code></td>
+<td>
+<p>Use multi-header B3 context propagation using the <code>X-B3-TraceId</code>,
+<code>X-B3-SpanId</code>, and <code>X-B3-Sampled</code> HTTP headers. See
+<a href="https://github.com/openzipkin/b3-propagation">B3 header propagation README</a>
+for details.</p>
+
 </td>
 </tr>
 </tbody>
