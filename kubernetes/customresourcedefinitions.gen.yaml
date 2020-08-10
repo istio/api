@@ -2505,6 +2505,16 @@ spec:
                     patch:
                       description: The patch to apply along with the operation.
                       properties:
+                        filterClass:
+                          enum:
+                          - UNSPECIFIED
+                          - PRE_AUTHN
+                          - POST_AUTHN
+                          - PRE_AUTHZ
+                          - POST_AUTHZ
+                          - PRE_STATS
+                          - POST_STATS
+                          type: string
                         operation:
                           description: Determines how the patch should be applied.
                           enum:
@@ -2517,8 +2527,6 @@ spec:
                           - INSERT_FIRST
                           - REPLACE
                           type: string
-                        useIfOverridden:
-                          type: boolean
                         value:
                           description: The JSON config of the object being patched.
                           type: object

@@ -271,12 +271,11 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.Patch.Operation"
           },
           "value": {
-            "description": "The JSON config of the object being patched. This will be merged using json merge semantics with the existing proto in the path.",
+            "description": "The JSON config of the object being patched. This will be merged using proto merge semantics with the existing proto in the path.",
             "type": "object"
           },
-          "useIfOverridden": {
-            "description": "A `use_if_overridden` patch can partially specify a named filter configuration. The patch value may be empty apart from the filter name. The patch only has effect if a subsequent MERGE or REPLACE patch operates on the same named filter. A `use_if_overridden` patch in the config root namespace can be used to specify filter order without specifying full configuration. An example is an optional OpenApiSpec filter that populates request operations. An EnvoyFilter in the config root namespace can insert the OpenApiSpec filter in the correct spot before the stats filter. Since every service may not have an OpenApiSpec, a workload specific EnvoyFilter will provide configuration for the filter using a REPLACE patch, without specifying an order.",
-            "type": "boolean"
+          "filterClass": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass"
           }
         }
       },
@@ -292,6 +291,19 @@
           "INSERT_AFTER",
           "INSERT_FIRST",
           "REPLACE"
+        ]
+      },
+      "istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass": {
+        "description": "FILTER_CLASS determines the filter insertion point in the filter chain relative to the filters implicitly inserted by the control plane. It is used in conjuction with the ADD operation. This is the preferred insertion mechanism for adding filters over the INSERT_* operations since those operations rely on potentially unstable filter names. Filter ordering is important if your filter depends on or affects the functioning of a another filter in the filter chain. Within a filter class, filters are inserted in the order of processing.",
+        "type": "string",
+        "enum": [
+          "UNSPECIFIED",
+          "PRE_AUTHN",
+          "POST_AUTHN",
+          "PRE_AUTHZ",
+          "POST_AUTHZ",
+          "PRE_STATS",
+          "POST_STATS"
         ]
       },
       "istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch": {
