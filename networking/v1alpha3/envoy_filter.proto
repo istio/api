@@ -127,15 +127,11 @@ import "networking/v1alpha3/sidecar.proto";
 //       context: SIDECAR_INBOUND
 //       listener:
 //         portNumber: 8080
-//         filterChain:
-//           filter:
-//             name: "envoy.http_connection_manager"
-//             subFilter:
-//               name: "envoy.router"
 //     patch:
-//       operation: INSERT_BEFORE
+//       operation: ADD
 //       value: # lua filter specification
-//         name: envoy.lua
+//         name: acme.lua.myfilter # The free form name is used to identify a filter instance.
+//                                 # typed_config."@type" identifies it as a lua filter.
 //         typed_config:
 //           "@type": "type.googleapis.com/envoy.config.filter.http.lua.v2.Lua"
 //           inlineCode: |
@@ -203,39 +199,10 @@ import "networking/v1alpha3/sidecar.proto";
 //         xff_num_trusted_hops: 5
 //```
 //
-// The following example inserts an optional filter for OpenApi processing
-// in the config root namespace and only instantiates the filter for
-// a specific workload by providing workload bound configuration.
-// Note that you do not need to specify order when overriding configuration.
-// `istio.openapi` filter calculates `request.operation` which is used by the
-// `istio.stats` filter therefore the order is important.
+// The following example inserts an OpenApi processing filter
+// that produces `request.operation` filter attribute which is consumed
+// by the istio stats fiter. `filterClass: PRE_STATS` encodes this dependency.
 //
-// Create a placeholder for istio.openapi before istio.stats.
-//
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: EnvoyFilter
-// metadata:
-//   name: openapi
-//   namespace: istio-system
-// spec:
-//   configPatches:
-//   - applyTo: HTTP_FILTER
-//     match:
-//       context: SIDECAR_INBOUND
-//         filterChain:
-//           filter:
-//             name: "envoy.http_connection_manager" # can be elided
-//             subFilter:
-//               name: "istio.stats"
-//     patch:
-//       operation: INSERT_BEFORE
-//       use_if_overriden: true # allows for incomplete specification.
-//       value: # partial filter specification, only name is required.
-//         name: istio.openapi
-// ```
-//
-// Provide full configuration for istio.openapi in the workload namespace.
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
@@ -251,18 +218,70 @@ import "networking/v1alpha3/sidecar.proto";
 //   - applyTo: HTTP_FILTER
 //     match:
 //       context: SIDECAR_INBOUND
-//         filterChain:
-//           filter:
-//             name: "envoy.http_connection_manager" # can be elided
-//             subFilter:
-//               name: "istio.openapi" # replacing previous placeholder by name.
 //     patch:
-//       operation: REPLACE
+//       operation: ADD
+//       filterClass: PRE_STATS
 //       value:
 //         name: istio.openapi
 //         # Full configuration must be specified here.
 // ```
 //
+// The following example inserts an http ext_authz filter in the `myns` namespace.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
+// metadata:
+//   name: myns-ext-authz
+//   namespace: myns
+// spec:
+//   configPatches:
+//   - applyTo: HTTP_FILTER
+//     match:
+//       context: SIDECAR_INBOUND
+//     patch:
+//       operation: ADD
+//       filterClass: POST_AUTHZ # Apply this filter after Istio authz.
+//       value:
+//         name: acme.ext_authz
+//         typed_config:
+//           "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthz
+//           grpc_service:
+//             envoy_grpc:
+//               cluster_name: acme-ext-authz
+//               initial_metadata:
+//               - key: foo
+//                 value: myauth.acme # required by local ext auth server.
+// ```
+//
+// A workload in the `myns` namespace needs to access a different ext_auth server
+// that does not accept initial metadata. Since proto merge cannot remove fields, the
+// following configuration uses the `REPLACE` operation. If you do not need to inherit
+// fields, REPLACE is preferred over MERGE.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
+// metadata:
+//   name: myns-ext-authz
+//   namespace: myns
+// spec:
+//   configPatches:
+//   - applyTo: HTTP_FILTER
+//     match:
+//       context: SIDECAR_INBOUND
+//     patch:
+//       operation: REPLACE
+//       filterClass: POST_AUTHZ # Apply this filter after Istio authz.
+//       value:
+//         name: acme.ext_authz
+//         typed_config:
+//           "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthz
+//           grpc_service:
+//             envoy_grpc:
+//               cluster_name: acme-ext-authz-alt
+// ```
+/
 package istio.networking.v1alpha3;
 
 option go_package = "istio.io/api/networking/v1alpha3";
@@ -551,7 +570,7 @@ message EnvoyFilter {
       INVALID = 0;
 
       // Merge the provided config with the generated config using
-      // json merge semantics.
+      // proto merge semantics.
       MERGE = 1;
 
       // Add the provided config to an existing list (of listeners,
@@ -596,12 +615,8 @@ message EnvoyFilter {
 
       // Replace contents of a named filter object with new contents.
       // Replace should be used when you do not need to or cannot use
-      // json merge semantics.
-      // A typical use case for REPLACE is when an EnvoyFilter in the
-      // config root namespace specifies the order of filters but you want
-      // a completely different configuration for a specific filter.
-      // Since JSON merge cannot remove elements, REPLACE operation should
-      // be used. REPLACE operation is only valid for HTTP_FILTER and
+      // proto merge semantics.
+      // REPLACE operation is only valid for HTTP_FILTER and
       // NETWORK_FILTER. If the named filter is not found, this operation
       // has no effect.
       REPLACE = 7;
@@ -611,22 +626,42 @@ message EnvoyFilter {
     Operation operation = 1;
 
     // The JSON config of the object being patched. This will be merged using
-    // json merge semantics with the existing proto in the path.
+    // proto merge semantics with the existing proto in the path.
     google.protobuf.Struct value = 2;
 
-    // A `use_if_overridden` patch can partially specify a named filter
-    // configuration. The patch value may be empty apart from the filter name.
-    // The patch only has effect if a subsequent MERGE or REPLACE patch
-    // operates on the same named filter.
-    // A `use_if_overridden` patch in the config root namespace can be used
-    // to specify filter order without specifying full configuration.
-    // An example is an optional OpenApiSpec filter that populates request
-    // operations. An EnvoyFilter in the config root namespace can insert
-    // the OpenApiSpec filter in the correct spot before the stats filter.
-    // Since every service may not have an OpenApiSpec, a workload specific
-    // EnvoyFilter will provide configuration for the filter using a REPLACE
-    // patch, without specifying an order.
-    bool use_if_overridden = 3;
+    // FILTER_CLASS determines the filter insertion point in the filter chain
+    // relative to the filters implicitly inserted by the control plane.
+    // It is used in conjuction with the ADD operation.
+    // This is the preferred insertion mechanism for adding filters over
+    // the INSERT_* operations since those operations rely on potentially unstable
+    // filter names.
+    // Filter ordering is important if your filter depends on or affects the
+    // functioning of a another filter in the filter chain.
+    // Within a filter class, filters are inserted in the order of processing.
+    enum FilterClass {
+      // For backwards compatiblity, control plane decides where to insert.
+      UNSPECIFIED = 0;
+
+      // Insert filter before authentication filters inserted by the controlplane.
+      PRE_AUTHN = 1;
+
+      // Insert filter after authentication filters inserted by the controlplane.
+      POST_AUTHN = 2;
+
+      // Insert filter before authorization filters inserted by the controlplane.
+      PRE_AUTHZ = 3;
+
+      // Insert filter after authorization filters inserted by the controlplane.
+      POST_AUTHZ = 4;
+
+      // Insert filter before stats filters inserted by the controlplane.
+      PRE_STATS = 5;
+
+      // Insert filter after stats filters inserted by the controlplane.
+      POST_STATS = 6;
+    };
+
+    FilterClass filter_class = 3;
   };
 
   // One or more match conditions to be met before a patch is applied
