@@ -19,6 +19,10 @@
             "description": "Optional: requested certificate validity period, in seconds.",
             "type": "integer",
             "format": "int64"
+          },
+          "metadata": {
+            "description": "Optional: Opaque metadata provided by the XDS node to Istio. Supported metadata: WorkloadName, WorkloadIP, ClusterID",
+            "type": "object"
           }
         }
       },

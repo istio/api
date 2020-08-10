@@ -10,6 +10,7 @@ import (
 	fmt "fmt"
 	github_com_gogo_protobuf_jsonpb "github.com/gogo/protobuf/jsonpb"
 	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/gogo/protobuf/types"
 	math "math"
 )
 

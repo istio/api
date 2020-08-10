@@ -42887,6 +42887,11 @@
                 "id": 3,
                 "name": "validity_duration",
                 "type": "int64"
+              },
+              {
+                "id": 4,
+                "name": "metadata",
+                "type": "google.protobuf.Struct"
               }
             ]
           },
@@ -42912,6 +42917,11 @@
                 "out_type": "IstioCertificateResponse"
               }
             ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/struct.proto"
           }
         ],
         "package": {

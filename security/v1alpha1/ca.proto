@@ -14,6 +14,8 @@
 
 syntax = "proto3";
 
+import "google/protobuf/struct.proto";
+
 // Keep this package for backward compatibility.
 package istio.v1.auth;
 
@@ -32,6 +34,11 @@ message IstioCertificateRequest {
   string csr = 1;
   // Optional: requested certificate validity period, in seconds.
   int64 validity_duration = 3;
+
+  // $hide_from_docs
+  // Optional: Opaque metadata provided by the XDS node to Istio.
+  // Supported metadata: WorkloadName, WorkloadIP, ClusterID
+  google.protobuf.Struct metadata = 4;
 }
 
 // Certificate response message.
