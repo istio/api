@@ -673,10 +673,10 @@ message PodSecurityContext {
     SELinuxOptions seLinuxOptions = 1;
     int64 runAsUser = 2;
     bool runAsNonRoot = 3;
-    int64 supplementalGroups = 4;
+    repeated int64 supplementalGroups = 4;
     int64 fsGroup = 5;
     int64 runAsGroup = 6;
-    Sysctl sysctls = 7;
+    repeated Sysctl sysctls = 7;
     WindowsSecurityContextOptions windowsOptions = 8;
     string fsGroupChangePolicy = 9;
     SeccompProfile seccompProfile = 10;

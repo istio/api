@@ -13049,7 +13049,13 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings"
+                        "name": "additional_bindings",
+                        "aggregated": [
+                          {
+                            "name": "get",
+                            "value": "/v1/services/{service_name}/config"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -42915,7 +42921,8 @@
               {
                 "id": 4,
                 "name": "supplementalGroups",
-                "type": "int64"
+                "type": "int64",
+                "is_repeated": true
               },
               {
                 "id": 5,
@@ -42930,7 +42937,8 @@
               {
                 "id": 7,
                 "name": "sysctls",
-                "type": "Sysctl"
+                "type": "Sysctl",
+                "is_repeated": true
               },
               {
                 "id": 8,
