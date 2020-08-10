@@ -24,7 +24,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.mesh.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\032istio.io/api/mesh/v1alpha1'),
-  serialized_pb=_b('\n\x19mesh/v1alpha1/proxy.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a*networking/v1alpha3/destination_rule.proto\"\xb0\t\n\x07Tracing\x12\x35\n\x06zipkin\x18\x01 \x01(\x0b\x32#.istio.mesh.v1alpha1.Tracing.ZipkinH\x00\x12;\n\tlightstep\x18\x02 \x01(\x0b\x32&.istio.mesh.v1alpha1.Tracing.LightstepH\x00\x12\x37\n\x07\x64\x61tadog\x18\x03 \x01(\x0b\x32$.istio.mesh.v1alpha1.Tracing.DatadogH\x00\x12?\n\x0bstackdriver\x18\x04 \x01(\x0b\x32(.istio.mesh.v1alpha1.Tracing.StackdriverH\x00\x12\x41\n\x0b\x63ustom_tags\x18\x05 \x03(\x0b\x32,.istio.mesh.v1alpha1.Tracing.CustomTagsEntry\x12\x1b\n\x13max_path_tag_length\x18\x06 \x01(\r\x12\x10\n\x08sampling\x18\x07 \x01(\x01\x12\x42\n\x0ctls_settings\x18\x08 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettings\x1a\x19\n\x06Zipkin\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x1a\x32\n\tLightstep\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x14\n\x0c\x61\x63\x63\x65ss_token\x18\x02 \x01(\t\x1a\x1a\n\x07\x44\x61tadog\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x1a\xde\x01\n\x0bStackdriver\x12\r\n\x05\x64\x65\x62ug\x18\x01 \x01(\x08\x12=\n\x18max_number_of_attributes\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12>\n\x19max_number_of_annotations\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x41\n\x1cmax_number_of_message_events\x18\x04 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x1a\xcb\x01\n\tCustomTag\x12\x37\n\x07literal\x18\x01 \x01(\x0b\x32$.istio.mesh.v1alpha1.Tracing.LiteralH\x00\x12?\n\x0b\x65nvironment\x18\x02 \x01(\x0b\x32(.istio.mesh.v1alpha1.Tracing.EnvironmentH\x00\x12<\n\x06header\x18\x03 \x01(\x0b\x32*.istio.mesh.v1alpha1.Tracing.RequestHeaderH\x00\x42\x06\n\x04type\x1a\x18\n\x07Literal\x12\r\n\x05value\x18\x01 \x01(\t\x1a\x32\n\x0b\x45nvironment\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rdefault_value\x18\x02 \x01(\t\x1a\x34\n\rRequestHeader\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rdefault_value\x18\x02 \x01(\t\x1aY\n\x0f\x43ustomTagsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x35\n\x05value\x18\x02 \x01(\x0b\x32&.istio.mesh.v1alpha1.Tracing.CustomTag:\x02\x38\x01\x42\x08\n\x06tracer\"/\n\x03SDS\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x17\n\x0fk8s_sa_jwt_path\x18\x02 \x01(\t\"\x8f\x02\n\x08Topology\x12\x1b\n\x13num_trusted_proxies\x18\x01 \x01(\r\x12[\n\x1b\x66orward_client_cert_details\x18\x02 \x01(\x0e\x32\x36.istio.mesh.v1alpha1.Topology.ForwardClientCertDetails\"\x88\x01\n\x18\x46orwardClientCertDetails\x12\r\n\tUNDEFINED\x10\x00\x12\x0c\n\x08SANITIZE\x10\x01\x12\x10\n\x0c\x46ORWARD_ONLY\x10\x02\x12\x12\n\x0e\x41PPEND_FORWARD\x10\x03\x12\x10\n\x0cSANITIZE_SET\x10\x04\x12\x17\n\x13\x41LWAYS_FORWARD_ONLY\x10\x05\"\xce\n\n\x0bProxyConfig\x12\x13\n\x0b\x63onfig_path\x18\x01 \x01(\t\x12\x13\n\x0b\x62inary_path\x18\x02 \x01(\t\x12\x17\n\x0fservice_cluster\x18\x03 \x01(\t\x12\x31\n\x0e\x64rain_duration\x18\x04 \x01(\x0b\x32\x19.google.protobuf.Duration\x12;\n\x18parent_shutdown_duration\x18\x05 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x19\n\x11\x64iscovery_address\x18\x06 \x01(\t\x12>\n\x17\x64iscovery_refresh_delay\x18\x07 \x01(\x0b\x32\x19.google.protobuf.DurationB\x02\x18\x01\x12\x1a\n\x0ezipkin_address\x18\x08 \x01(\tB\x02\x18\x01\x12\x1a\n\x12statsd_udp_address\x18\n \x01(\t\x12)\n\x1d\x65nvoy_metrics_service_address\x18\x14 \x01(\tB\x02\x18\x01\x12\x18\n\x10proxy_admin_port\x18\x0b \x01(\x05\x12\x1d\n\x11\x61vailability_zone\x18\x0c \x01(\tB\x02\x18\x01\x12L\n\x19\x63ontrol_plane_auth_policy\x18\r \x01(\x0e\x32).istio.mesh.v1alpha1.AuthenticationPolicy\x12\x1a\n\x12\x63ustom_config_file\x18\x0e \x01(\t\x12\x18\n\x10stat_name_length\x18\x0f \x01(\x05\x12\x30\n\x0b\x63oncurrency\x18\x10 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x12%\n\x1dproxy_bootstrap_template_path\x18\x11 \x01(\t\x12S\n\x11interception_mode\x18\x12 \x01(\x0e\x32\x38.istio.mesh.v1alpha1.ProxyConfig.InboundInterceptionMode\x12-\n\x07tracing\x18\x13 \x01(\x0b\x32\x1c.istio.mesh.v1alpha1.Tracing\x12%\n\x03sds\x18\x15 \x01(\x0b\x32\x18.istio.mesh.v1alpha1.SDS\x12\x44\n\x18\x65nvoy_access_log_service\x18\x16 \x01(\x0b\x32\".istio.mesh.v1alpha1.RemoteService\x12\x41\n\x15\x65nvoy_metrics_service\x18\x17 \x01(\x0b\x32\".istio.mesh.v1alpha1.RemoteService\x12K\n\x0eproxy_metadata\x18\x18 \x03(\x0b\x32\x33.istio.mesh.v1alpha1.ProxyConfig.ProxyMetadataEntry\x12\x13\n\x0bstatus_port\x18\x1a \x01(\x05\x12\x17\n\x0f\x65xtra_stat_tags\x18\x1b \x03(\t\x12\x37\n\x10gateway_topology\x18\x1c \x01(\x0b\x32\x1d.istio.mesh.v1alpha1.Topology\x12=\n\x1atermination_drain_duration\x18\x1d \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x0f\n\x07mesh_id\x18\x1e \x01(\t\x1a\x34\n\x12ProxyMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"3\n\x17InboundInterceptionMode\x12\x0c\n\x08REDIRECT\x10\x00\x12\n\n\x06TPROXY\x10\x01J\x04\x08\t\x10\nR\x0f\x63onnect_timeout\"\xc7\x01\n\rRemoteService\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x42\n\x0ctls_settings\x18\x02 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettings\x12\x61\n\rtcp_keepalive\x18\x03 \x01(\x0b\x32J.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive*>\n\x14\x41uthenticationPolicy\x12\x08\n\x04NONE\x10\x00\x12\x0e\n\nMUTUAL_TLS\x10\x01\x12\x0c\n\x07INHERIT\x10\xe8\x07\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x19mesh/v1alpha1/proxy.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a*networking/v1alpha3/destination_rule.proto\"\xa4\r\n\x07Tracing\x12\x35\n\x06zipkin\x18\x01 \x01(\x0b\x32#.istio.mesh.v1alpha1.Tracing.ZipkinH\x00\x12;\n\tlightstep\x18\x02 \x01(\x0b\x32&.istio.mesh.v1alpha1.Tracing.LightstepH\x00\x12\x37\n\x07\x64\x61tadog\x18\x03 \x01(\x0b\x32$.istio.mesh.v1alpha1.Tracing.DatadogH\x00\x12?\n\x0bstackdriver\x18\x04 \x01(\x0b\x32(.istio.mesh.v1alpha1.Tracing.StackdriverH\x00\x12I\n\x11open_census_agent\x18\t \x01(\x0b\x32,.istio.mesh.v1alpha1.Tracing.OpenCensusAgentH\x00\x12\x41\n\x0b\x63ustom_tags\x18\x05 \x03(\x0b\x32,.istio.mesh.v1alpha1.Tracing.CustomTagsEntry\x12\x1b\n\x13max_path_tag_length\x18\x06 \x01(\r\x12\x10\n\x08sampling\x18\x07 \x01(\x01\x12\x42\n\x0ctls_settings\x18\x08 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettings\x1a\x19\n\x06Zipkin\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x1a\x32\n\tLightstep\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x14\n\x0c\x61\x63\x63\x65ss_token\x18\x02 \x01(\t\x1a\x1a\n\x07\x44\x61tadog\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x1a\xde\x01\n\x0bStackdriver\x12\r\n\x05\x64\x65\x62ug\x18\x01 \x01(\x08\x12=\n\x18max_number_of_attributes\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12>\n\x19max_number_of_annotations\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x41\n\x1cmax_number_of_message_events\x18\x04 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x1a\xa6\x03\n\x0fOpenCensusAgent\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12J\n\x07\x63ontext\x18\x02 \x03(\x0e\x32\x39.istio.mesh.v1alpha1.Tracing.OpenCensusAgent.TraceContext\x12\r\n\x05\x64\x65\x62ug\x18\x03 \x01(\x08\x12=\n\x18max_number_of_attributes\x18\x04 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12>\n\x19max_number_of_annotations\x18\x05 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x41\n\x1cmax_number_of_message_events\x18\x06 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\"e\n\x0cTraceContext\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x15\n\x11W3C_TRACE_CONTEXT\x10\x01\x12\x0c\n\x08GRPC_BIN\x10\x02\x12\x17\n\x13\x43LOUD_TRACE_CONTEXT\x10\x03\x12\x06\n\x02\x42\x33\x10\x04\x1a\xcb\x01\n\tCustomTag\x12\x37\n\x07literal\x18\x01 \x01(\x0b\x32$.istio.mesh.v1alpha1.Tracing.LiteralH\x00\x12?\n\x0b\x65nvironment\x18\x02 \x01(\x0b\x32(.istio.mesh.v1alpha1.Tracing.EnvironmentH\x00\x12<\n\x06header\x18\x03 \x01(\x0b\x32*.istio.mesh.v1alpha1.Tracing.RequestHeaderH\x00\x42\x06\n\x04type\x1a\x18\n\x07Literal\x12\r\n\x05value\x18\x01 \x01(\t\x1a\x32\n\x0b\x45nvironment\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rdefault_value\x18\x02 \x01(\t\x1a\x34\n\rRequestHeader\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rdefault_value\x18\x02 \x01(\t\x1aY\n\x0f\x43ustomTagsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x35\n\x05value\x18\x02 \x01(\x0b\x32&.istio.mesh.v1alpha1.Tracing.CustomTag:\x02\x38\x01\x42\x08\n\x06tracer\"/\n\x03SDS\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x17\n\x0fk8s_sa_jwt_path\x18\x02 \x01(\t\"\x8f\x02\n\x08Topology\x12\x1b\n\x13num_trusted_proxies\x18\x01 \x01(\r\x12[\n\x1b\x66orward_client_cert_details\x18\x02 \x01(\x0e\x32\x36.istio.mesh.v1alpha1.Topology.ForwardClientCertDetails\"\x88\x01\n\x18\x46orwardClientCertDetails\x12\r\n\tUNDEFINED\x10\x00\x12\x0c\n\x08SANITIZE\x10\x01\x12\x10\n\x0c\x46ORWARD_ONLY\x10\x02\x12\x12\n\x0e\x41PPEND_FORWARD\x10\x03\x12\x10\n\x0cSANITIZE_SET\x10\x04\x12\x17\n\x13\x41LWAYS_FORWARD_ONLY\x10\x05\"\xce\n\n\x0bProxyConfig\x12\x13\n\x0b\x63onfig_path\x18\x01 \x01(\t\x12\x13\n\x0b\x62inary_path\x18\x02 \x01(\t\x12\x17\n\x0fservice_cluster\x18\x03 \x01(\t\x12\x31\n\x0e\x64rain_duration\x18\x04 \x01(\x0b\x32\x19.google.protobuf.Duration\x12;\n\x18parent_shutdown_duration\x18\x05 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x19\n\x11\x64iscovery_address\x18\x06 \x01(\t\x12>\n\x17\x64iscovery_refresh_delay\x18\x07 \x01(\x0b\x32\x19.google.protobuf.DurationB\x02\x18\x01\x12\x1a\n\x0ezipkin_address\x18\x08 \x01(\tB\x02\x18\x01\x12\x1a\n\x12statsd_udp_address\x18\n \x01(\t\x12)\n\x1d\x65nvoy_metrics_service_address\x18\x14 \x01(\tB\x02\x18\x01\x12\x18\n\x10proxy_admin_port\x18\x0b \x01(\x05\x12\x1d\n\x11\x61vailability_zone\x18\x0c \x01(\tB\x02\x18\x01\x12L\n\x19\x63ontrol_plane_auth_policy\x18\r \x01(\x0e\x32).istio.mesh.v1alpha1.AuthenticationPolicy\x12\x1a\n\x12\x63ustom_config_file\x18\x0e \x01(\t\x12\x18\n\x10stat_name_length\x18\x0f \x01(\x05\x12\x30\n\x0b\x63oncurrency\x18\x10 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x12%\n\x1dproxy_bootstrap_template_path\x18\x11 \x01(\t\x12S\n\x11interception_mode\x18\x12 \x01(\x0e\x32\x38.istio.mesh.v1alpha1.ProxyConfig.InboundInterceptionMode\x12-\n\x07tracing\x18\x13 \x01(\x0b\x32\x1c.istio.mesh.v1alpha1.Tracing\x12%\n\x03sds\x18\x15 \x01(\x0b\x32\x18.istio.mesh.v1alpha1.SDS\x12\x44\n\x18\x65nvoy_access_log_service\x18\x16 \x01(\x0b\x32\".istio.mesh.v1alpha1.RemoteService\x12\x41\n\x15\x65nvoy_metrics_service\x18\x17 \x01(\x0b\x32\".istio.mesh.v1alpha1.RemoteService\x12K\n\x0eproxy_metadata\x18\x18 \x03(\x0b\x32\x33.istio.mesh.v1alpha1.ProxyConfig.ProxyMetadataEntry\x12\x13\n\x0bstatus_port\x18\x1a \x01(\x05\x12\x17\n\x0f\x65xtra_stat_tags\x18\x1b \x03(\t\x12\x37\n\x10gateway_topology\x18\x1c \x01(\x0b\x32\x1d.istio.mesh.v1alpha1.Topology\x12=\n\x1atermination_drain_duration\x18\x1d \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x0f\n\x07mesh_id\x18\x1e \x01(\t\x1a\x34\n\x12ProxyMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"3\n\x17InboundInterceptionMode\x12\x0c\n\x08REDIRECT\x10\x00\x12\n\n\x06TPROXY\x10\x01J\x04\x08\t\x10\nR\x0f\x63onnect_timeout\"\xc7\x01\n\rRemoteService\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x42\n\x0ctls_settings\x18\x02 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettings\x12\x61\n\rtcp_keepalive\x18\x03 \x01(\x0b\x32J.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive*>\n\x14\x41uthenticationPolicy\x12\x08\n\x04NONE\x10\x00\x12\x0e\n\nMUTUAL_TLS\x10\x01\x12\x0c\n\x07INHERIT\x10\xe8\x07\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_destination__rule__pb2.DESCRIPTOR,])
 
@@ -49,8 +49,8 @@ _AUTHENTICATIONPOLICY = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3247,
-  serialized_end=3309,
+  serialized_start=3747,
+  serialized_end=3809,
 )
 _sym_db.RegisterEnumDescriptor(_AUTHENTICATIONPOLICY)
 
@@ -59,6 +59,40 @@ NONE = 0
 MUTUAL_TLS = 1
 INHERIT = 1000
 
+
+_TRACING_OPENCENSUSAGENT_TRACECONTEXT = _descriptor.EnumDescriptor(
+  name='TraceContext',
+  full_name='istio.mesh.v1alpha1.Tracing.OpenCensusAgent.TraceContext',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='UNSPECIFIED', index=0, number=0,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='W3C_TRACE_CONTEXT', index=1, number=1,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='GRPC_BIN', index=2, number=2,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='CLOUD_TRACE_CONTEXT', index=3, number=3,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='B3', index=4, number=4,
+      serialized_options=None,
+      type=None),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=1319,
+  serialized_end=1420,
+)
+_sym_db.RegisterEnumDescriptor(_TRACING_OPENCENSUSAGENT_TRACECONTEXT)
 
 _TOPOLOGY_FORWARDCLIENTCERTDETAILS = _descriptor.EnumDescriptor(
   name='ForwardClientCertDetails',
@@ -93,8 +127,8 @@ _TOPOLOGY_FORWARDCLIENTCERTDETAILS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1546,
-  serialized_end=1682,
+  serialized_start=2046,
+  serialized_end=2182,
 )
 _sym_db.RegisterEnumDescriptor(_TOPOLOGY_FORWARDCLIENTCERTDETAILS)
 
@@ -115,8 +149,8 @@ _PROXYCONFIG_INBOUNDINTERCEPTIONMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2969,
-  serialized_end=3020,
+  serialized_start=3469,
+  serialized_end=3520,
 )
 _sym_db.RegisterEnumDescriptor(_PROXYCONFIG_INBOUNDINTERCEPTIONMODE)
 
@@ -147,8 +181,8 @@ _TRACING_ZIPKIN = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=590,
-  serialized_end=615,
+  serialized_start=665,
+  serialized_end=690,
 )
 
 _TRACING_LIGHTSTEP = _descriptor.Descriptor(
@@ -184,8 +218,8 @@ _TRACING_LIGHTSTEP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=617,
-  serialized_end=667,
+  serialized_start=692,
+  serialized_end=742,
 )
 
 _TRACING_DATADOG = _descriptor.Descriptor(
@@ -214,8 +248,8 @@ _TRACING_DATADOG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=669,
-  serialized_end=695,
+  serialized_start=744,
+  serialized_end=770,
 )
 
 _TRACING_STACKDRIVER = _descriptor.Descriptor(
@@ -265,8 +299,74 @@ _TRACING_STACKDRIVER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=698,
-  serialized_end=920,
+  serialized_start=773,
+  serialized_end=995,
+)
+
+_TRACING_OPENCENSUSAGENT = _descriptor.Descriptor(
+  name='OpenCensusAgent',
+  full_name='istio.mesh.v1alpha1.Tracing.OpenCensusAgent',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='address', full_name='istio.mesh.v1alpha1.Tracing.OpenCensusAgent.address', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='context', full_name='istio.mesh.v1alpha1.Tracing.OpenCensusAgent.context', index=1,
+      number=2, type=14, cpp_type=8, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='debug', full_name='istio.mesh.v1alpha1.Tracing.OpenCensusAgent.debug', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='max_number_of_attributes', full_name='istio.mesh.v1alpha1.Tracing.OpenCensusAgent.max_number_of_attributes', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='max_number_of_annotations', full_name='istio.mesh.v1alpha1.Tracing.OpenCensusAgent.max_number_of_annotations', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='max_number_of_message_events', full_name='istio.mesh.v1alpha1.Tracing.OpenCensusAgent.max_number_of_message_events', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _TRACING_OPENCENSUSAGENT_TRACECONTEXT,
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=998,
+  serialized_end=1420,
 )
 
 _TRACING_CUSTOMTAG = _descriptor.Descriptor(
@@ -312,8 +412,8 @@ _TRACING_CUSTOMTAG = _descriptor.Descriptor(
       name='type', full_name='istio.mesh.v1alpha1.Tracing.CustomTag.type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=923,
-  serialized_end=1126,
+  serialized_start=1423,
+  serialized_end=1626,
 )
 
 _TRACING_LITERAL = _descriptor.Descriptor(
@@ -342,8 +442,8 @@ _TRACING_LITERAL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1128,
-  serialized_end=1152,
+  serialized_start=1628,
+  serialized_end=1652,
 )
 
 _TRACING_ENVIRONMENT = _descriptor.Descriptor(
@@ -379,8 +479,8 @@ _TRACING_ENVIRONMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1154,
-  serialized_end=1204,
+  serialized_start=1654,
+  serialized_end=1704,
 )
 
 _TRACING_REQUESTHEADER = _descriptor.Descriptor(
@@ -416,8 +516,8 @@ _TRACING_REQUESTHEADER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1206,
-  serialized_end=1258,
+  serialized_start=1706,
+  serialized_end=1758,
 )
 
 _TRACING_CUSTOMTAGSENTRY = _descriptor.Descriptor(
@@ -453,8 +553,8 @@ _TRACING_CUSTOMTAGSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1260,
-  serialized_end=1349,
+  serialized_start=1760,
+  serialized_end=1849,
 )
 
 _TRACING = _descriptor.Descriptor(
@@ -493,28 +593,35 @@ _TRACING = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='custom_tags', full_name='istio.mesh.v1alpha1.Tracing.custom_tags', index=4,
+      name='open_census_agent', full_name='istio.mesh.v1alpha1.Tracing.open_census_agent', index=4,
+      number=9, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='custom_tags', full_name='istio.mesh.v1alpha1.Tracing.custom_tags', index=5,
       number=5, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='max_path_tag_length', full_name='istio.mesh.v1alpha1.Tracing.max_path_tag_length', index=5,
+      name='max_path_tag_length', full_name='istio.mesh.v1alpha1.Tracing.max_path_tag_length', index=6,
       number=6, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sampling', full_name='istio.mesh.v1alpha1.Tracing.sampling', index=6,
+      name='sampling', full_name='istio.mesh.v1alpha1.Tracing.sampling', index=7,
       number=7, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='tls_settings', full_name='istio.mesh.v1alpha1.Tracing.tls_settings', index=7,
+      name='tls_settings', full_name='istio.mesh.v1alpha1.Tracing.tls_settings', index=8,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -523,7 +630,7 @@ _TRACING = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_TRACING_ZIPKIN, _TRACING_LIGHTSTEP, _TRACING_DATADOG, _TRACING_STACKDRIVER, _TRACING_CUSTOMTAG, _TRACING_LITERAL, _TRACING_ENVIRONMENT, _TRACING_REQUESTHEADER, _TRACING_CUSTOMTAGSENTRY, ],
+  nested_types=[_TRACING_ZIPKIN, _TRACING_LIGHTSTEP, _TRACING_DATADOG, _TRACING_STACKDRIVER, _TRACING_OPENCENSUSAGENT, _TRACING_CUSTOMTAG, _TRACING_LITERAL, _TRACING_ENVIRONMENT, _TRACING_REQUESTHEADER, _TRACING_CUSTOMTAGSENTRY, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -536,7 +643,7 @@ _TRACING = _descriptor.Descriptor(
       index=0, containing_type=None, fields=[]),
   ],
   serialized_start=159,
-  serialized_end=1359,
+  serialized_end=1859,
 )
 
 
@@ -573,8 +680,8 @@ _SDS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1361,
-  serialized_end=1408,
+  serialized_start=1861,
+  serialized_end=1908,
 )
 
 
@@ -612,8 +719,8 @@ _TOPOLOGY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1411,
-  serialized_end=1682,
+  serialized_start=1911,
+  serialized_end=2182,
 )
 
 
@@ -650,8 +757,8 @@ _PROXYCONFIG_PROXYMETADATAENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2915,
-  serialized_end=2967,
+  serialized_start=3415,
+  serialized_end=3467,
 )
 
 _PROXYCONFIG = _descriptor.Descriptor(
@@ -870,8 +977,8 @@ _PROXYCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1685,
-  serialized_end=3043,
+  serialized_start=2185,
+  serialized_end=3543,
 )
 
 
@@ -915,8 +1022,8 @@ _REMOTESERVICE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3046,
-  serialized_end=3245,
+  serialized_start=3546,
+  serialized_end=3745,
 )
 
 _TRACING_ZIPKIN.containing_type = _TRACING
@@ -926,6 +1033,12 @@ _TRACING_STACKDRIVER.fields_by_name['max_number_of_attributes'].message_type = g
 _TRACING_STACKDRIVER.fields_by_name['max_number_of_annotations'].message_type = google_dot_protobuf_dot_wrappers__pb2._INT64VALUE
 _TRACING_STACKDRIVER.fields_by_name['max_number_of_message_events'].message_type = google_dot_protobuf_dot_wrappers__pb2._INT64VALUE
 _TRACING_STACKDRIVER.containing_type = _TRACING
+_TRACING_OPENCENSUSAGENT.fields_by_name['context'].enum_type = _TRACING_OPENCENSUSAGENT_TRACECONTEXT
+_TRACING_OPENCENSUSAGENT.fields_by_name['max_number_of_attributes'].message_type = google_dot_protobuf_dot_wrappers__pb2._INT64VALUE
+_TRACING_OPENCENSUSAGENT.fields_by_name['max_number_of_annotations'].message_type = google_dot_protobuf_dot_wrappers__pb2._INT64VALUE
+_TRACING_OPENCENSUSAGENT.fields_by_name['max_number_of_message_events'].message_type = google_dot_protobuf_dot_wrappers__pb2._INT64VALUE
+_TRACING_OPENCENSUSAGENT.containing_type = _TRACING
+_TRACING_OPENCENSUSAGENT_TRACECONTEXT.containing_type = _TRACING_OPENCENSUSAGENT
 _TRACING_CUSTOMTAG.fields_by_name['literal'].message_type = _TRACING_LITERAL
 _TRACING_CUSTOMTAG.fields_by_name['environment'].message_type = _TRACING_ENVIRONMENT
 _TRACING_CUSTOMTAG.fields_by_name['header'].message_type = _TRACING_REQUESTHEADER
@@ -948,6 +1061,7 @@ _TRACING.fields_by_name['zipkin'].message_type = _TRACING_ZIPKIN
 _TRACING.fields_by_name['lightstep'].message_type = _TRACING_LIGHTSTEP
 _TRACING.fields_by_name['datadog'].message_type = _TRACING_DATADOG
 _TRACING.fields_by_name['stackdriver'].message_type = _TRACING_STACKDRIVER
+_TRACING.fields_by_name['open_census_agent'].message_type = _TRACING_OPENCENSUSAGENT
 _TRACING.fields_by_name['custom_tags'].message_type = _TRACING_CUSTOMTAGSENTRY
 _TRACING.fields_by_name['tls_settings'].message_type = networking_dot_v1alpha3_dot_destination__rule__pb2._CLIENTTLSSETTINGS
 _TRACING.oneofs_by_name['tracer'].fields.append(
@@ -962,6 +1076,9 @@ _TRACING.fields_by_name['datadog'].containing_oneof = _TRACING.oneofs_by_name['t
 _TRACING.oneofs_by_name['tracer'].fields.append(
   _TRACING.fields_by_name['stackdriver'])
 _TRACING.fields_by_name['stackdriver'].containing_oneof = _TRACING.oneofs_by_name['tracer']
+_TRACING.oneofs_by_name['tracer'].fields.append(
+  _TRACING.fields_by_name['open_census_agent'])
+_TRACING.fields_by_name['open_census_agent'].containing_oneof = _TRACING.oneofs_by_name['tracer']
 _TOPOLOGY.fields_by_name['forward_client_cert_details'].enum_type = _TOPOLOGY_FORWARDCLIENTCERTDETAILS
 _TOPOLOGY_FORWARDCLIENTCERTDETAILS.containing_type = _TOPOLOGY
 _PROXYCONFIG_PROXYMETADATAENTRY.containing_type = _PROXYCONFIG
@@ -1019,6 +1136,13 @@ Tracing = _reflection.GeneratedProtocolMessageType('Tracing', (_message.Message,
     })
   ,
 
+  'OpenCensusAgent' : _reflection.GeneratedProtocolMessageType('OpenCensusAgent', (_message.Message,), {
+    'DESCRIPTOR' : _TRACING_OPENCENSUSAGENT,
+    '__module__' : 'mesh.v1alpha1.proxy_pb2'
+    # @@protoc_insertion_point(class_scope:istio.mesh.v1alpha1.Tracing.OpenCensusAgent)
+    })
+  ,
+
   'CustomTag' : _reflection.GeneratedProtocolMessageType('CustomTag', (_message.Message,), {
     'DESCRIPTOR' : _TRACING_CUSTOMTAG,
     '__module__' : 'mesh.v1alpha1.proxy_pb2'
@@ -1062,6 +1186,7 @@ _sym_db.RegisterMessage(Tracing.Zipkin)
 _sym_db.RegisterMessage(Tracing.Lightstep)
 _sym_db.RegisterMessage(Tracing.Datadog)
 _sym_db.RegisterMessage(Tracing.Stackdriver)
+_sym_db.RegisterMessage(Tracing.OpenCensusAgent)
 _sym_db.RegisterMessage(Tracing.CustomTag)
 _sym_db.RegisterMessage(Tracing.Literal)
 _sym_db.RegisterMessage(Tracing.Environment)

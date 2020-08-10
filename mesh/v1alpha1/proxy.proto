@@ -62,7 +62,9 @@ message Tracing {
   }
 
   // Stackdriver defines configuration for a Stackdriver tracer.
-  // See [Opencensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.
+  // See [Envoy's OpenCensus trace configuration](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/trace/v3/opencensus.proto)
+  // and
+  // [OpenCensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto) for details.
   message Stackdriver {
     // debug enables trace output to stdout.
     // $hide_from_docs
@@ -81,6 +83,65 @@ message Tracing {
     google.protobuf.Int64Value max_number_of_message_events = 4;
   }
 
+  // OpenCensusAgent defines configuration for an OpenCensus tracer writing to
+  // an OpenCensus agent backend. See
+  // [Envoy's OpenCensus trace configuration](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/trace/v3/opencensus.proto)
+  // and
+  // [OpenCensus trace config](https://github.com/census-instrumentation/opencensus-proto/blob/master/src/opencensus/proto/trace/v1/trace_config.proto)
+  // for details.
+  message OpenCensusAgent {
+    // TraceContext selects the context propagation headers used for
+    // distributed tracing.
+    enum TraceContext {
+      // $hide_from_docs
+      // Unspecified context. Should not be used for now, but added to reserve
+      // the 0 enum value if TraceContext is used outside of a repeated field.
+      UNSPECIFIED = 0;
+      // Use W3C Trace Context propagation using the `traceparent` HTTP header.
+      // See the
+      // [Trace Context documentation](https://www.w3.org/TR/trace-context/) for details.
+      W3C_TRACE_CONTEXT = 1;
+      // Use gRPC binary context propagation using the `grpc-trace-bin` http header.
+      GRPC_BIN = 2;
+      // Use Cloud Trace context propagation using the
+      // `X-Cloud-Trace-Context` http header.
+      CLOUD_TRACE_CONTEXT = 3;
+      // Use multi-header B3 context propagation using the `X-B3-TraceId`,
+      // `X-B3-SpanId`, and `X-B3-Sampled` HTTP headers. See
+      // [B3 header propagation README](https://github.com/openzipkin/b3-propagation)
+      // for details.
+      B3 = 4;
+    }
+
+    // gRPC address for the OpenCensus agent (e.g. dns://authority/host:port or
+    // unix:path). See [gRPC naming
+    // docs](https://github.com/grpc/grpc/blob/master/doc/naming.md) for
+    // details.
+    string address = 1;
+
+    // Specifies the set of context propagation headers used for distributed
+    // tracing. Default is `["W3C_TRACE_CONTEXT"]`. If multiple values are specified,
+    // the proxy will attempt to read each header for each request and will
+    // write all headers.
+    repeated TraceContext context = 2;
+
+    // debug enables trace output to stdout
+    // $hide_from_docs
+    bool debug = 3;
+    // The global default max number of attributes per span.
+    // default is 200.
+    // $hide_from_docs
+    google.protobuf.Int64Value max_number_of_attributes = 4;
+    // The global default max number of annotation events per span.
+    // default is 200.
+    // $hide_from_docs
+    google.protobuf.Int64Value max_number_of_annotations = 5;
+    // The global default max number of message events per span.
+    // default is 200.
+    // $hide_from_docs
+    google.protobuf.Int64Value max_number_of_message_events = 6;
+  }
+
   // The tracer implementation to be used by Envoy.
   oneof tracer {
     // Use a Zipkin tracer.
@@ -91,6 +152,8 @@ message Tracing {
     Datadog datadog = 3;
     // Use a Stackdriver tracer.
     Stackdriver stackdriver = 4;
+    // Use an OpenCensus tracer exporting to an OpenCensus agent.
+    OpenCensusAgent open_census_agent = 9;
   }
 
   // Configure custom tags that will be added to any active span.
@@ -172,7 +235,7 @@ message Tracing {
   istio.networking.v1alpha3.ClientTLSSettings tls_settings = 8;
 
   // $hide_from_docs
-  // Next available field number: 9
+  // Next available field number: 10
 
 }
 
