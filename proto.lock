@@ -35981,22 +35981,6 @@
             ]
           },
           {
-            "name": "MeshConfig.InsecureCertificateValidationAtClient",
-            "enum_fields": [
-              {
-                "name": "UNKNOWN_CLIENT_VERIFY"
-              },
-              {
-                "name": "ENABLED",
-                "integer": 1
-              },
-              {
-                "name": "DISABLED",
-                "integer": 2
-              }
-            ]
-          },
-          {
             "name": "Resource",
             "enum_fields": [
               {
@@ -36202,11 +36186,6 @@
                 "id": 51,
                 "name": "enable_prometheus_merge",
                 "type": "google.protobuf.BoolValue"
-              },
-              {
-                "id": 54,
-                "name": "insecure_skip_client_verify",
-                "type": "InsecureCertificateValidationAtClient"
               }
             ],
             "reserved_ids": [
