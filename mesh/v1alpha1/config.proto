@@ -448,12 +448,12 @@ message MeshConfig {
   reserved 53;
   reserved "termination_drain_duration";
 
-  // VerifyExternalServerCertsUsingSystemCa sets the mesh global default for peer certificate validation
+  // VerifyCertificateAtClient sets the mesh global default for peer certificate validation
   // at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL) origination
   // modes are used. This setting can be overridden at the host level via DestinationRule API.
   // By default, VerifyExternalServerCertsUsingSystemCa is true.
   //
-  // When VerifyExternalServerCertsUsingSystemCa is set to false, certificate and SAN
+  // When VerifyCertificateAtClient is set to false, certificate and SAN
   // validation at the client-side proxy is skipped unless overridden by DestinationRule.
   //
   // For a particular host the following logic is used when DestinationRule are configured.
@@ -472,7 +472,7 @@ message MeshConfig {
   // proxy will not verify CA signature but will verify SubjectAltNames matches SAN in the
   //presented server certificate during TLS handshake.
 
-  // When VerifyExternalServerCertsUsingSystemCa is set to true, client-side proxy will verify CA signature
+  // When VerifyCertificateAtClient is set to true, client-side proxy will verify CA signature
   // with default System CA bundle and ensure SAN matches the host in DestinationRule.
   //
   // For a particular host the following logic is used when DestinationRule are configured.
@@ -491,7 +491,7 @@ message MeshConfig {
   // If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side
   // proxy will verify CA signature ith default System CA bundle but will verify SubjectAltNames
   // matches SAN in the presented server certificate during TLS handshake.
-  google.protobuf.BoolValue verify_external_server_certs_using_system_ca = 54;
+  google.protobuf.BoolValue verify_certificate_at_client = 54;
 
   // $hide_from_docs
   // Next available field number: 55

@@ -180,8 +180,8 @@
             "type": "boolean",
             "nullable": true
           },
-          "verifyExternalServerCertsUsingSystemCa": {
-            "description": "When VerifyExternalServerCertsUsingSystemCa is set to true, client-side proxy will verify CA signature with default System CA bundle and ensure SAN matches the host in DestinationRule.",
+          "verifyCertificateAtClient": {
+            "description": "When VerifyCertificateAtClient is set to true, client-side proxy will verify CA signature with default System CA bundle and ensure SAN matches the host in DestinationRule.",
             "type": "boolean",
             "nullable": true
           }

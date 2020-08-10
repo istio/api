@@ -1194,11 +1194,11 @@ If not specified, this will be enabled by default.</p>
 No
 </td>
 </tr>
-<tr id="MeshConfig-verify_external_server_certs_using_system_ca">
-<td><code>verifyExternalServerCertsUsingSystemCa</code></td>
+<tr id="MeshConfig-verify_certificate_at_client">
+<td><code>verifyCertificateAtClient</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
-<p>When VerifyExternalServerCertsUsingSystemCa is set to true, client-side proxy will verify CA signature
+<p>When VerifyCertificateAtClient is set to true, client-side proxy will verify CA signature
 with default System CA bundle and ensure SAN matches the host in DestinationRule.</p>
 
 <p>For a particular host the following logic is used when DestinationRule are configured.

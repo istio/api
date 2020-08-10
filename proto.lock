@@ -36189,7 +36189,7 @@
               },
               {
                 "id": 54,
-                "name": "verify_external_server_certs_using_system_ca",
+                "name": "verify_certificate_at_client",
                 "type": "google.protobuf.BoolValue"
               }
             ],
