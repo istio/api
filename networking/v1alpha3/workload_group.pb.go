@@ -11,8 +11,8 @@
 // The following example declares a workload group representing a collection
 // of workloads that will be registered under `reviews` in namespace
 // `bookinfo`. The set of labels will be associated with each workload
-// instance during the bootstrap process, and the workloads will expose the
-// ports 3550 and 8080 to Istio and use and service account `default`.
+// instance during the bootstrap process, and the ports 3550 and 8080
+// will be associated with the workload group and use service account `default`.
 // `app.kubernetes.io/version` is just an arbitrary example of a label.
 //
 // {{<tabset category-name="example">}}
@@ -45,7 +45,7 @@ import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
 	io "io"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	_ "istio.io/gogo-genproto/googleapis/google/api"
 	math "math"
 	math_bits "math/bits"
 )
@@ -62,7 +62,8 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // `WorkloadGroup` enables specifying the properties of a single workload for bootstrap and
-// provides a template for `WorkloadEntry`, similar to the relationship between `Deployment` and `Pod`.
+// provides a template for `WorkloadEntry`, similar to how `Deployment` specifies properties
+// of workloads via `Pod` templates.
 // `WorkloadGroup` has no relationship to resources which control service registry like `ServiceEntry`
 // and as such doesn't configure host name for these workloads.
 //
@@ -135,12 +136,13 @@ func (m *WorkloadGroup) GetTemplate() *WorkloadEntryTemplate {
 }
 
 // `WorkloadEntryTemplate` is the underlying workload template that is associated with the workload group.
+// The `address` and `labels` fields in `template` are invalid for a `WorkloadEntryTemplate`.
 // A `WorkloadGroup` can have more than one `WorkloadEntry`.
 type WorkloadEntryTemplate struct {
 	// Metadata that will be used for all corresponding WorkloadEntries.
-	Metadata *v1.ObjectMeta `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	Metadata *ObjectMeta `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	// Describes the WorkloadEntry resources that will be created.
-	Spec                 *WorkloadEntry `protobuf:"bytes,2,opt,name=spec,proto3" json:"spec,omitempty"`
+	Template             *WorkloadEntry `protobuf:"bytes,2,opt,name=template,proto3" json:"template,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
 	XXX_unrecognized     []byte         `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
@@ -179,16 +181,88 @@ func (m *WorkloadEntryTemplate) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_WorkloadEntryTemplate proto.InternalMessageInfo
 
-func (m *WorkloadEntryTemplate) GetMetadata() *v1.ObjectMeta {
+func (m *WorkloadEntryTemplate) GetMetadata() *ObjectMeta {
 	if m != nil {
 		return m.Metadata
 	}
 	return nil
 }
 
-func (m *WorkloadEntryTemplate) GetSpec() *WorkloadEntry {
+func (m *WorkloadEntryTemplate) GetTemplate() *WorkloadEntry {
 	if m != nil {
-		return m.Spec
+		return m.Template
+	}
+	return nil
+}
+
+// From k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta.
+type ObjectMeta struct {
+	Name                 string            `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Namespace            string            `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Labels               map[string]string `protobuf:"bytes,3,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Annotations          map[string]string `protobuf:"bytes,4,rep,name=annotations,proto3" json:"annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *ObjectMeta) Reset()         { *m = ObjectMeta{} }
+func (m *ObjectMeta) String() string { return proto.CompactTextString(m) }
+func (*ObjectMeta) ProtoMessage()    {}
+func (*ObjectMeta) Descriptor() ([]byte, []int) {
+	return fileDescriptor_621fb79d92a8ed09, []int{2}
+}
+func (m *ObjectMeta) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ObjectMeta) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ObjectMeta.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ObjectMeta) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ObjectMeta.Merge(m, src)
+}
+func (m *ObjectMeta) XXX_Size() int {
+	return m.Size()
+}
+func (m *ObjectMeta) XXX_DiscardUnknown() {
+	xxx_messageInfo_ObjectMeta.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ObjectMeta proto.InternalMessageInfo
+
+func (m *ObjectMeta) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *ObjectMeta) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *ObjectMeta) GetLabels() map[string]string {
+	if m != nil {
+		return m.Labels
+	}
+	return nil
+}
+
+func (m *ObjectMeta) GetAnnotations() map[string]string {
+	if m != nil {
+		return m.Annotations
 	}
 	return nil
 }
@@ -196,6 +270,9 @@ func (m *WorkloadEntryTemplate) GetSpec() *WorkloadEntry {
 func init() {
 	proto.RegisterType((*WorkloadGroup)(nil), "istio.networking.v1alpha3.WorkloadGroup")
 	proto.RegisterType((*WorkloadEntryTemplate)(nil), "istio.networking.v1alpha3.WorkloadEntryTemplate")
+	proto.RegisterType((*ObjectMeta)(nil), "istio.networking.v1alpha3.ObjectMeta")
+	proto.RegisterMapType((map[string]string)(nil), "istio.networking.v1alpha3.ObjectMeta.AnnotationsEntry")
+	proto.RegisterMapType((map[string]string)(nil), "istio.networking.v1alpha3.ObjectMeta.LabelsEntry")
 }
 
 func init() {
@@ -203,25 +280,31 @@ func init() {
 }
 
 var fileDescriptor_621fb79d92a8ed09 = []byte{
-	// 278 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x90, 0x4f, 0x4b, 0xc3, 0x40,
-	0x10, 0xc5, 0x59, 0x11, 0x91, 0x88, 0x97, 0x80, 0x50, 0x7b, 0x08, 0xa5, 0xa7, 0x9c, 0x66, 0x8d,
-	0xf5, 0xe0, 0xc1, 0x93, 0x20, 0x5e, 0x14, 0x21, 0x08, 0x82, 0x20, 0x32, 0x4d, 0x86, 0x74, 0xcd,
-	0x9f, 0x5d, 0x36, 0x63, 0xa4, 0x9f, 0xc7, 0x2f, 0xe3, 0xd1, 0x8f, 0x20, 0xf9, 0x24, 0xb2, 0x49,
-	0x1b, 0x3d, 0x54, 0xe9, 0xf5, 0xf1, 0xde, 0x6f, 0xde, 0x3c, 0x2f, 0xac, 0x88, 0xdf, 0xb4, 0xcd,
-	0x55, 0x95, 0xc9, 0x26, 0xc2, 0xc2, 0x2c, 0x70, 0x26, 0x9d, 0x50, 0x68, 0x4c, 0x9f, 0x33, 0xab,
-	0x5f, 0x0d, 0x18, 0xab, 0x59, 0xfb, 0xc7, 0xaa, 0x66, 0xa5, 0xe1, 0xc7, 0x0f, 0x6b, 0xff, 0xf8,
-	0x2c, 0x3f, 0xaf, 0x41, 0x69, 0x89, 0x46, 0x95, 0x98, 0x2c, 0x54, 0x45, 0x76, 0x29, 0x4d, 0x9e,
-	0x39, 0xa1, 0x96, 0x25, 0x31, 0xca, 0x26, 0x92, 0x19, 0x55, 0x64, 0x91, 0x29, 0xed, 0x81, 0xe3,
-	0xff, 0x4f, 0x53, 0xc5, 0x76, 0xd9, 0x3b, 0xa7, 0x4f, 0xde, 0xe1, 0xc3, 0x4a, 0xbf, 0x76, 0x8d,
-	0xfc, 0x1b, 0x6f, 0x9f, 0xa9, 0x34, 0x05, 0x32, 0x8d, 0xc4, 0x44, 0x84, 0x07, 0xa7, 0x27, 0xf0,
-	0x67, 0x3d, 0x58, 0x67, 0xaf, 0x1c, 0xf2, 0x7e, 0x95, 0x8b, 0x07, 0xc2, 0xf4, 0x5d, 0x78, 0x47,
-	0x1b, 0x3d, 0xee, 0x8e, 0x6b, 0x9f, 0x22, 0xe3, 0x70, 0xa7, 0xff, 0x15, 0x7e, 0xff, 0x0a, 0x26,
-	0xcf, 0x9c, 0x50, 0x83, 0x73, 0x43, 0x13, 0xc1, 0xdd, 0xfc, 0x85, 0x12, 0xbe, 0x25, 0xc6, 0x78,
-	0x20, 0xf8, 0x17, 0xde, 0x6e, 0x6d, 0x28, 0x19, 0xed, 0x74, 0xa4, 0x70, 0xdb, 0xc6, 0x71, 0x97,
-	0xba, 0x84, 0x8f, 0x36, 0x10, 0x9f, 0x6d, 0x20, 0xbe, 0xda, 0x40, 0x3c, 0x4e, 0xfa, 0x70, 0x3f,
-	0xba, 0xdc, 0xb0, 0xe4, 0x7c, 0xaf, 0xdb, 0x6e, 0xf6, 0x1d, 0x00, 0x00, 0xff, 0xff, 0xb3, 0x6c,
-	0xb0, 0x2e, 0xe2, 0x01, 0x00, 0x00,
+	// 382 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0xc1, 0x4a, 0xeb, 0x40,
+	0x14, 0x86, 0x49, 0xd2, 0x5b, 0xda, 0x09, 0x17, 0xca, 0x70, 0x2f, 0xb7, 0x37, 0x8b, 0x5a, 0x0b,
+	0x42, 0x56, 0x89, 0x6d, 0x41, 0xd4, 0x85, 0xd0, 0xa2, 0x88, 0x50, 0x11, 0x82, 0xa0, 0x08, 0x52,
+	0x4e, 0xda, 0x31, 0x1d, 0x3b, 0xcd, 0x84, 0x64, 0x5a, 0xe9, 0xdb, 0xf8, 0x38, 0x2e, 0x7d, 0x84,
+	0xd2, 0x95, 0x8f, 0x21, 0xc9, 0xa4, 0x4d, 0x90, 0x5a, 0xea, 0x2a, 0xc9, 0xc9, 0xf9, 0xbf, 0xff,
+	0xff, 0xe1, 0x20, 0xd3, 0x27, 0xe2, 0x85, 0x87, 0x63, 0xea, 0x7b, 0xf6, 0xac, 0x09, 0x2c, 0x18,
+	0x41, 0xdb, 0x8e, 0x07, 0x8c, 0xc3, 0xb0, 0xef, 0x85, 0x7c, 0x1a, 0x58, 0x41, 0xc8, 0x05, 0xc7,
+	0xff, 0x69, 0x24, 0x28, 0xb7, 0xb2, 0x7d, 0x6b, 0xb5, 0x6f, 0xec, 0x79, 0x9c, 0x7b, 0x8c, 0xd8,
+	0x10, 0x50, 0xfb, 0x89, 0x12, 0x36, 0xec, 0xbb, 0x64, 0x04, 0x33, 0xca, 0x43, 0xa9, 0x35, 0xb6,
+	0xbb, 0x10, 0x5f, 0x84, 0x73, 0xb9, 0xd9, 0x78, 0x44, 0xbf, 0xef, 0xd2, 0xf9, 0x65, 0x6c, 0x8e,
+	0x7b, 0xa8, 0x24, 0xc8, 0x24, 0x60, 0x20, 0x48, 0x55, 0xa9, 0x2b, 0xa6, 0xde, 0x3a, 0xb4, 0xbe,
+	0x4d, 0x62, 0xad, 0xb4, 0x17, 0x31, 0xf2, 0x36, 0xd5, 0x39, 0x6b, 0x42, 0xe3, 0x55, 0x41, 0x7f,
+	0x37, 0xee, 0xe0, 0x0e, 0x2a, 0x4d, 0x88, 0x80, 0x21, 0x08, 0x48, 0x7d, 0x0e, 0xb6, 0xf8, 0xdc,
+	0xb8, 0xcf, 0x64, 0x20, 0xae, 0x89, 0x00, 0x67, 0x2d, 0xc3, 0xe7, 0xb9, 0xa8, 0x6a, 0x82, 0x30,
+	0x77, 0x8d, 0x9a, 0x8b, 0xf8, 0xa1, 0x22, 0x94, 0xe1, 0xf1, 0x3f, 0x54, 0xf0, 0x61, 0x22, 0xbb,
+	0x97, 0xbb, 0xda, 0xa2, 0xa3, 0x3a, 0xc9, 0x00, 0xef, 0xa3, 0x72, 0xfc, 0x8c, 0x02, 0x18, 0x48,
+	0xbb, 0xf4, 0x6f, 0x36, 0xc5, 0x57, 0xa8, 0xc8, 0xc0, 0x25, 0x2c, 0xaa, 0x6a, 0x75, 0xcd, 0xd4,
+	0x5b, 0xcd, 0x9d, 0x1a, 0x59, 0xbd, 0x44, 0x23, 0x73, 0xa5, 0x00, 0x7c, 0x8f, 0x74, 0xf0, 0x7d,
+	0x2e, 0x40, 0x50, 0xee, 0x47, 0xd5, 0x42, 0xc2, 0x3b, 0xda, 0x8d, 0xd7, 0xc9, 0x84, 0x12, 0x9a,
+	0x47, 0x19, 0x27, 0x48, 0xcf, 0x19, 0xe2, 0x0a, 0xd2, 0xc6, 0x64, 0x2e, 0xeb, 0x3a, 0xf1, 0x2b,
+	0xfe, 0x83, 0x7e, 0xcd, 0x80, 0x4d, 0xd3, 0x92, 0x8e, 0xfc, 0x38, 0x55, 0x8f, 0x15, 0xe3, 0x0c,
+	0x55, 0xbe, 0xb2, 0x7f, 0xa2, 0xef, 0x5a, 0x6f, 0xcb, 0x9a, 0xf2, 0xbe, 0xac, 0x29, 0x8b, 0x65,
+	0x4d, 0x79, 0xa8, 0xcb, 0x32, 0x94, 0x27, 0x77, 0xbc, 0xe1, 0x62, 0xdd, 0x62, 0x72, 0xa3, 0xed,
+	0xcf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x47, 0xbe, 0x92, 0xf8, 0x35, 0x03, 0x00, 0x00,
 }
 
 func (m *WorkloadGroup) Marshal() (dAtA []byte, err error) {
@@ -287,9 +370,9 @@ func (m *WorkloadEntryTemplate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	if m.Spec != nil {
+	if m.Template != nil {
 		{
-			size, err := m.Spec.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.Template.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -308,6 +391,85 @@ func (m *WorkloadEntryTemplate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i -= size
 			i = encodeVarintWorkloadGroup(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ObjectMeta) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ObjectMeta) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ObjectMeta) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.Annotations) > 0 {
+		for k := range m.Annotations {
+			v := m.Annotations[k]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(k)
+			copy(dAtA[i:], k)
+			i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(k)))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintWorkloadGroup(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.Labels) > 0 {
+		for k := range m.Labels {
+			v := m.Labels[k]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(k)
+			copy(dAtA[i:], k)
+			i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(k)))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintWorkloadGroup(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(m.Name)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -351,9 +513,45 @@ func (m *WorkloadEntryTemplate) Size() (n int) {
 		l = m.Metadata.Size()
 		n += 1 + l + sovWorkloadGroup(uint64(l))
 	}
-	if m.Spec != nil {
-		l = m.Spec.Size()
+	if m.Template != nil {
+		l = m.Template.Size()
 		n += 1 + l + sovWorkloadGroup(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *ObjectMeta) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovWorkloadGroup(uint64(l))
+	}
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovWorkloadGroup(uint64(l))
+	}
+	if len(m.Labels) > 0 {
+		for k, v := range m.Labels {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovWorkloadGroup(uint64(len(k))) + 1 + len(v) + sovWorkloadGroup(uint64(len(v)))
+			n += mapEntrySize + 1 + sovWorkloadGroup(uint64(mapEntrySize))
+		}
+	}
+	if len(m.Annotations) > 0 {
+		for k, v := range m.Annotations {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovWorkloadGroup(uint64(len(k))) + 1 + len(v) + sovWorkloadGroup(uint64(len(v)))
+			n += mapEntrySize + 1 + sovWorkloadGroup(uint64(mapEntrySize))
+		}
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -516,7 +714,7 @@ func (m *WorkloadEntryTemplate) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Metadata == nil {
-				m.Metadata = &v1.ObjectMeta{}
+				m.Metadata = &ObjectMeta{}
 			}
 			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -524,7 +722,7 @@ func (m *WorkloadEntryTemplate) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Spec", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Template", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -551,12 +749,384 @@ func (m *WorkloadEntryTemplate) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Spec == nil {
-				m.Spec = &WorkloadEntry{}
+			if m.Template == nil {
+				m.Template = &WorkloadEntry{}
 			}
-			if err := m.Spec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Template.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipWorkloadGroup(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ObjectMeta) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowWorkloadGroup
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ObjectMeta: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ObjectMeta: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Labels", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Labels == nil {
+				m.Labels = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowWorkloadGroup
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowWorkloadGroup
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthWorkloadGroup
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthWorkloadGroup
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowWorkloadGroup
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthWorkloadGroup
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthWorkloadGroup
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipWorkloadGroup(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthWorkloadGroup
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Labels[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Annotations", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Annotations == nil {
+				m.Annotations = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowWorkloadGroup
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowWorkloadGroup
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthWorkloadGroup
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthWorkloadGroup
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowWorkloadGroup
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthWorkloadGroup
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthWorkloadGroup
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipWorkloadGroup(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthWorkloadGroup
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Annotations[mapkey] = mapvalue
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

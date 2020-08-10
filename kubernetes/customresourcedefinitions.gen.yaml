@@ -5197,155 +5197,19 @@ spec:
                           format: string
                           type: string
                         type: object
-                      clusterName:
-                        description: The name of the cluster which the object belongs
-                          to.
-                        format: string
-                        type: string
-                      creationTimestamp:
-                        properties:
-                          nanos:
-                            description: Non-negative fractions of a second at nanosecond
-                              resolution.
-                            format: int32
-                            type: integer
-                          seconds:
-                            format: int64
-                            type: integer
-                        type: object
-                      deletionGracePeriodSeconds:
-                        format: int64
-                        type: integer
-                      deletionTimestamp:
-                        description: DeletionTimestamp is RFC 3339 date and time at
-                          which this resource will be deleted.
-                        properties:
-                          nanos:
-                            description: Non-negative fractions of a second at nanosecond
-                              resolution.
-                            format: int32
-                            type: integer
-                          seconds:
-                            format: int64
-                            type: integer
-                        type: object
-                      finalizers:
-                        description: Must be empty before the object is deleted from
-                          the registry.
-                        items:
-                          format: string
-                          type: string
-                        type: array
-                      generateName:
-                        format: string
-                        type: string
-                      generation:
-                        description: A sequence number representing a specific generation
-                          of the desired state.
-                        format: int64
-                        type: integer
                       labels:
                         additionalProperties:
                           format: string
                           type: string
                         type: object
-                      managedFields:
-                        items:
-                          properties:
-                            apiVersion:
-                              format: string
-                              type: string
-                            fieldsType:
-                              description: FieldsType is the discriminator for the
-                                different fields format and version.
-                              format: string
-                              type: string
-                            fieldsV1:
-                              description: FieldsV1 holds the first JSON version format
-                                as described in the "FieldsV1" type.
-                              properties:
-                                Raw:
-                                  description: Raw is the underlying serialization
-                                    of this object.
-                                  format: binary
-                                  type: string
-                              type: object
-                            manager:
-                              description: Manager is an identifier of the workflow
-                                managing these fields.
-                              format: string
-                              type: string
-                            operation:
-                              description: Operation is the type of operation which
-                                lead to this ManagedFieldsEntry being created.
-                              format: string
-                              type: string
-                            time:
-                              description: Time is timestamp of when these fields
-                                were set.
-                              properties:
-                                nanos:
-                                  description: Non-negative fractions of a second
-                                    at nanosecond resolution.
-                                  format: int32
-                                  type: integer
-                                seconds:
-                                  format: int64
-                                  type: integer
-                              type: object
-                          type: object
-                        type: array
                       name:
-                        description: Name must be unique within a namespace.
                         format: string
                         type: string
                       namespace:
-                        description: Namespace defines the space within each name
-                          must be unique.
-                        format: string
-                        type: string
-                      ownerReferences:
-                        description: List of objects depended by this object.
-                        items:
-                          properties:
-                            apiVersion:
-                              description: API version of the referent.
-                              format: string
-                              type: string
-                            blockOwnerDeletion:
-                              type: boolean
-                            controller:
-                              description: If true, this reference points to the managing
-                                controller.
-                              type: boolean
-                            kind:
-                              description: Kind of the referent.
-                              format: string
-                              type: string
-                            name:
-                              description: Name of the referent.
-                              format: string
-                              type: string
-                            uid:
-                              description: UID of the referent.
-                              format: string
-                              type: string
-                          type: object
-                        type: array
-                      resourceVersion:
-                        format: string
-                        type: string
-                      selfLink:
-                        description: SelfLink is a URL representing this object.
-                        format: string
-                        type: string
-                      uid:
-                        description: UID is the unique in time and space value for
-                          this object.
                         format: string
                         type: string
                     type: object
-                  spec:
+                  template:
                     description: Describes the WorkloadEntry resources that will be
                       created.
                     properties:

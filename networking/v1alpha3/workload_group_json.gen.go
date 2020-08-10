@@ -11,8 +11,8 @@
 // The following example declares a workload group representing a collection
 // of workloads that will be registered under `reviews` in namespace
 // `bookinfo`. The set of labels will be associated with each workload
-// instance during the bootstrap process, and the workloads will expose the
-// ports 3550 and 8080 to Istio and use and service account `default`.
+// instance during the bootstrap process, and the ports 3550 and 8080
+// will be associated with the workload group and use service account `default`.
 // `app.kubernetes.io/version` is just an arbitrary example of a label.
 //
 // {{<tabset category-name="example">}}
@@ -46,7 +46,7 @@ import (
 	fmt "fmt"
 	github_com_gogo_protobuf_jsonpb "github.com/gogo/protobuf/jsonpb"
 	proto "github.com/gogo/protobuf/proto"
-	_ "k8s.io/apimachinery/pkg/apis/meta/v1"
+	_ "istio.io/gogo-genproto/googleapis/google/api"
 	math "math"
 )
 
@@ -74,6 +74,17 @@ func (this *WorkloadEntryTemplate) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for WorkloadEntryTemplate
 func (this *WorkloadEntryTemplate) UnmarshalJSON(b []byte) error {
+	return WorkloadGroupUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for ObjectMeta
+func (this *ObjectMeta) MarshalJSON() ([]byte, error) {
+	str, err := WorkloadGroupMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for ObjectMeta
+func (this *ObjectMeta) UnmarshalJSON(b []byte) error {
 	return WorkloadGroupUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

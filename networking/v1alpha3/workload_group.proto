@@ -14,7 +14,7 @@
 
 syntax = "proto3";
 
-import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
+import "google/api/field_behavior.proto";
 import "networking/v1alpha3/workload_entry.proto";
 
 // $schema: istio.networking.v1alpha3.WorkloadGroup
@@ -33,8 +33,8 @@ import "networking/v1alpha3/workload_entry.proto";
 // The following example declares a workload group representing a collection 
 // of workloads that will be registered under `reviews` in namespace
 // `bookinfo`. The set of labels will be associated with each workload 
-// instance during the bootstrap process, and the workloads will expose the
-// ports 3550 and 8080 to Istio and use and service account `default`.
+// instance during the bootstrap process, and the ports 3550 and 8080
+// will be associated with the workload group and use service account `default`.
 // `app.kubernetes.io/version` is just an arbitrary example of a label.
 //
 // {{<tabset category-name="example">}}
@@ -65,7 +65,8 @@ package istio.networking.v1alpha3;
 option go_package = "istio.io/api/networking/v1alpha3";
 
 // `WorkloadGroup` enables specifying the properties of a single workload for bootstrap and
-// provides a template for `WorkloadEntry`, similar to the relationship between `Deployment` and `Pod`. 
+// provides a template for `WorkloadEntry`, similar to how `Deployment` specifies properties
+// of workloads via `Pod` templates. 
 // `WorkloadGroup` has no relationship to resources which control service registry like `ServiceEntry` 
 // and as such doesn't configure host name for these workloads.
 //
@@ -95,11 +96,20 @@ message WorkloadGroup {
 }
 
 // `WorkloadEntryTemplate` is the underlying workload template that is associated with the workload group.
+// The `address` and `labels` fields in `template` are invalid for a `WorkloadEntryTemplate`.
 // A `WorkloadGroup` can have more than one `WorkloadEntry`.
 message WorkloadEntryTemplate {
   // Metadata that will be used for all corresponding WorkloadEntries.
-  k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+  ObjectMeta metadata = 1;
 
   // Describes the WorkloadEntry resources that will be created.
-  WorkloadEntry spec = 2;
+  WorkloadEntry template = 2;
+}
+
+// From k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta.
+message ObjectMeta {
+    string name = 1 [(google.api.field_behavior) = REQUIRED];
+    string namespace = 2 [(google.api.field_behavior) = REQUIRED];
+    map<string, string> labels = 3;
+    map<string, string> annotations = 4;
 }
