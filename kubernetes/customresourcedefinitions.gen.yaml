@@ -553,12 +553,6 @@ spec:
                                   credentialName:
                                     format: string
                                     type: string
-                                  insecureSkipVerify:
-                                    enum:
-                                    - UNKNOWN_CLIENT_VERIFY
-                                    - ENABLED
-                                    - DISABLED
-                                    type: string
                                   mode:
                                     enum:
                                     - DISABLE
@@ -580,6 +574,9 @@ spec:
                                       format: string
                                       type: string
                                     type: array
+                                  validateServerCertificate:
+                                    nullable: true
+                                    type: boolean
                                 type: object
                             type: object
                           type: array
@@ -596,12 +593,6 @@ spec:
                               type: string
                             credentialName:
                               format: string
-                              type: string
-                            insecureSkipVerify:
-                              enum:
-                              - UNKNOWN_CLIENT_VERIFY
-                              - ENABLED
-                              - DISABLED
                               type: string
                             mode:
                               enum:
@@ -624,6 +615,9 @@ spec:
                                 format: string
                                 type: string
                               type: array
+                            validateServerCertificate:
+                              nullable: true
+                              type: boolean
                           type: object
                       type: object
                   type: object
@@ -1105,12 +1099,6 @@ spec:
                             credentialName:
                               format: string
                               type: string
-                            insecureSkipVerify:
-                              enum:
-                              - UNKNOWN_CLIENT_VERIFY
-                              - ENABLED
-                              - DISABLED
-                              type: string
                             mode:
                               enum:
                               - DISABLE
@@ -1132,6 +1120,9 @@ spec:
                                 format: string
                                 type: string
                               type: array
+                            validateServerCertificate:
+                              nullable: true
+                              type: boolean
                           type: object
                       type: object
                     type: array
@@ -1148,12 +1139,6 @@ spec:
                         type: string
                       credentialName:
                         format: string
-                        type: string
-                      insecureSkipVerify:
-                        enum:
-                        - UNKNOWN_CLIENT_VERIFY
-                        - ENABLED
-                        - DISABLED
                         type: string
                       mode:
                         enum:
@@ -1176,6 +1161,9 @@ spec:
                           format: string
                           type: string
                         type: array
+                      validateServerCertificate:
+                        nullable: true
+                        type: boolean
                     type: object
                 type: object
             type: object

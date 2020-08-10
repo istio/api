@@ -900,47 +900,48 @@ message ClientTLSSettings {
   // using TLS. The value of this field determines how TLS is enforced.
   TLSmode mode = 1 [(google.api.field_behavior) = REQUIRED];
 
-  enum InsecureCertificateValidationAtClient {
-    UNKNOWN_CLIENT_VERIFY = 0;
-    ENABLED = 1;
-    DISABLED = 2;
-  }
-
-  // If InsecureSkipClientVerify is set to `ENABLED`:
-  // If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side proxy will not
-  // verify either peer attribute during TLS handshake.
+  // ValidateServerCertificate decide how the presented peer certificate during TLS handshake
+  // at the client-side proxy is validated when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL)
+  // origination modes are used. This setting overrides the mesh global default.
+  // By default, ValidateServerCertificate is true.
   //
-  // If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side proxy will verify
-  // CA signature with CaCertificates and SubjectAltNames with SAN in presented server certificate during TLS
-  // handshake.
+  // When ValidateServerCertificate is set to false, certificate and SAN
+  // validation at the client-side proxy is skipped.
   //
-  // If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side proxy will
-  // verify CA signature with CaCertificates but will not verify any SAN in the presented server certificate
-  // during TLS handshake.
+  // If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side
+  // proxy will not verify either peer attribute during TLS handshake.
   //
-  // If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side proxy will
-  // not verify CA signature but will verify SubjectAltNames matches SAN in the presented server certificate
-  // during TLS handshake.
-  //
-  // If InsecureSkipClientVerify is set to `DISABLED`:
-  // If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side proxy will
-  // verify CA signature with default System CA bundle and SAN matches the host in DestinationRule.
-  //
-  // If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side proxy will verify
-  // CA signature with CaCertificates and SubjectAltNames with SAN in presented server certificate during TLS
-  // handshake.
-  //
-  // If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side proxy will
-  // verify CA signature with CaCertificates but will verify the SAN in the presented server certificate
-  // matches the host in DestinationRule during TLS handshake.
-  //
-  // If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side proxy will
-  // verify CA signature ith default System CA bundle  but will verify SubjectAltNames matches SAN in the
+  // If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side
+  // proxy will verify CA signature with CaCertificates and SubjectAltNames with SAN in
   // presented server certificate during TLS handshake.
   //
-  // By default, InsecureSkipClientVerify is DISABLED. `InsecureSkipVerify` at DestinationRule level overrides
-  // the global mesh config behavior.
-  InsecureCertificateValidationAtClient insecure_skip_verify = 8;
+  // If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side
+  // proxy will verify CA signature with CaCertificates but will not verify any SAN in the presented
+  // server certificate during TLS handshake.
+  //
+  // If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side
+  // proxy will not verify CA signature but will verify SubjectAltNames matches SAN in the
+  // presented server certificate during TLS handshake.
+  //
+  // When ValidateServerCertificate is set to true, client-side proxy will verify CA signature
+  // with default System CA bundle and ensure SAN matches the host in DestinationRule.
+  //
+  // If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side
+  // proxy will verify CA signature with default System CA bundle and SAN matches the host
+  // in DestinationRule.
+  //
+  // If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side proxy
+  // will verify CA signature with CaCertificates and SubjectAltNames with SAN in presented server
+  // certificate during TLS handshake.
+  //
+  // If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side
+  // proxy will verify CA signature with CaCertificates but will verify the SAN in the presented
+  // server certificate matches the host in DestinationRule during TLS handshake.
+  //
+  // If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side
+  // proxy will verify CA signature ith default System CA bundle but will verify SubjectAltNames
+  // matches SAN in the presented server certificate during TLS handshake.
+  google.protobuf.BoolValue validate_server_certificate = 8;
 
   // REQUIRED if mode is `MUTUAL`. The path to the file holding the
   // client-side TLS certificate to use.

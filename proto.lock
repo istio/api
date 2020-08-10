@@ -37535,6 +37535,11 @@
                 ]
               },
               {
+                "id": 8,
+                "name": "validate_server_certificate",
+                "type": "google.protobuf.BoolValue"
+              },
+              {
                 "id": 2,
                 "name": "client_certificate",
                 "type": "string"
@@ -39983,6 +39988,11 @@
                     "value": "REQUIRED"
                   }
                 ]
+              },
+              {
+                "id": 8,
+                "name": "validate_server_certificate",
+                "type": "google.protobuf.BoolValue"
               },
               {
                 "id": 2,

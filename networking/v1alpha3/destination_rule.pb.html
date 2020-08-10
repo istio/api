@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.DestinationRule
 aliases: [/docs/reference/config/networking/v1alpha3/destination-rule]
-number_of_entries: 21
+number_of_entries: 20
 ---
 <p><code>DestinationRule</code> defines policies that apply to traffic intended for a
 service after routing has occurred. These rules specify configuration
@@ -976,15 +976,51 @@ using TLS. The value of this field determines how TLS is enforced.</p>
 Yes
 </td>
 </tr>
-<tr id="ClientTLSSettings-insecure_skip_verify">
-<td><code>insecureSkipVerify</code></td>
-<td><code><a href="#ClientTLSSettings-InsecureCertificateValidationAtClient">InsecureCertificateValidationAtClient</a></code></td>
+<tr id="ClientTLSSettings-validate_server_certificate">
+<td><code>validateServerCertificate</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
-<p>InsecureSkipVerify sets the mesh global default for peer certificate validation
-at the client-side proxy when <code>SIMPLE</code> TLS or <code>MUTUAL</code> TLS (non ISTIO_MUTUAL) origination
-modes are used. This setting can be overridden at the host level via DestinationRule API.
-By default, InsecureSkipVerify is DISABLED. <code>InsecureSkipVerify</code> at DestinationRule level
-overrides the global mesh config behavior.</p>
+<p>ValidateServerCertificate decide how the presented peer certificate during TLS handshake
+at the client-side proxy is validated when <code>SIMPLE</code> TLS or <code>MUTUAL</code> TLS (non ISTIO_MUTUAL)
+origination modes are used. This setting overrides the mesh global default.
+By default, ValidateServerCertificate is true.</p>
+
+<p>When ValidateServerCertificate is set to false, certificate and SAN
+validation at the client-side proxy is skipped.</p>
+
+<p>If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side
+proxy will not verify either peer attribute during TLS handshake.</p>
+
+<p>If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side
+proxy will verify CA signature with CaCertificates and SubjectAltNames with SAN in
+presented server certificate during TLS handshake.</p>
+
+<p>If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side
+proxy will verify CA signature with CaCertificates but will not verify any SAN in the presented
+server certificate during TLS handshake.</p>
+
+<p>If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side
+proxy will not verify CA signature but will verify SubjectAltNames matches SAN in the
+presented server certificate during TLS handshake.</p>
+
+<p>When ValidateServerCertificate is set to true, client-side proxy will verify CA signature
+with default System CA bundle and ensure SAN matches the host in DestinationRule.</p>
+
+<p>If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side
+proxy will verify CA signature with default System CA bundle and SAN matches the host
+in DestinationRule.</p>
+
+<p>If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side proxy
+will verify CA signature with CaCertificates and SubjectAltNames with SAN in presented server
+certificate during TLS handshake.</p>
+
+<p>If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side
+proxy will verify CA signature with CaCertificates but will verify the SAN in the presented
+server certificate matches the host in DestinationRule during TLS handshake.</p>
+
+<p>If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side
+proxy will verify CA signature ith default System CA bundle but will verify SubjectAltNames
+matches SAN in the presented server certificate during TLS handshake.</p>
 
 </td>
 <td>
@@ -1843,63 +1879,6 @@ client certificates for authentication.
 Compared to Mutual mode, this mode uses certificates generated
 automatically by Istio for mTLS authentication. When this mode is
 used, all other fields in <code>ClientTLSSettings</code> should be empty.</p>
-
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="ClientTLSSettings-InsecureCertificateValidationAtClient">ClientTLSSettings.InsecureCertificateValidationAtClient</h2>
-<section>
-<table class="enum-values">
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr id="ClientTLSSettings-InsecureCertificateValidationAtClient-ENABLED">
-<td><code>ENABLED</code></td>
-<td>
-<p>If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side
-proxy will not verify either peer attribute during TLS handshake.</p>
-
-<p>If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side
-proxy will verify CA signature with CaCertificates and SubjectAltNames with SAN in
-presented server certificate during TLS handshake.</p>
-
-<p>If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side
-proxy will verify CA signature with CaCertificates but will not verify any SAN in the presented
-server certificate during TLS handshake.</p>
-
-<p>If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side
-proxy will not verify CA signature but will verify SubjectAltNames matches SAN in the
-presented server certificate during TLS handshake.</p>
-
-</td>
-</tr>
-<tr id="ClientTLSSettings-InsecureCertificateValidationAtClient-DISABLED">
-<td><code>DISABLED</code></td>
-<td>
-<p>DISABLED implies client-side proxy will verify CA signature with default System CA bundle
-and ensure SAN matches the host in DestinationRule.</p>
-
-<p>If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side
-proxy will verify CA signature with default System CA bundle and SAN matches the host
-in DestinationRule.</p>
-
-<p>If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side proxy
-will verify CA signature with CaCertificates and SubjectAltNames with SAN in presented server
-certificate during TLS handshake.</p>
-
-<p>If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side
-proxy will verify CA signature with CaCertificates but will verify the SAN in the presented
-server certificate matches the host in DestinationRule during TLS handshake.</p>
-
-<p>If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side
-proxy will verify CA signature ith default System CA bundle but will verify SubjectAltNames
-matches SAN in the presented server certificate during TLS handshake.</p>
 
 </td>
 </tr>

@@ -1059,8 +1059,10 @@
           "mode": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings.TLSmode"
           },
-          "insecureSkipVerify": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings.InsecureCertificateValidationAtClient"
+          "validateServerCertificate": {
+            "description": "ValidateServerCertificate decide how the presented peer certificate during TLS handshake at the client-side proxy is validated when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL) origination modes are used. This setting overrides the mesh global default. By default, ValidateServerCertificate is true.",
+            "type": "boolean",
+            "nullable": true
           },
           "clientCertificate": {
             "description": "REQUIRED if mode is `MUTUAL`. The path to the file holding the client-side TLS certificate to use. Should be empty if mode is `ISTIO_MUTUAL`.",
@@ -1139,15 +1141,6 @@
             "nullable": true
           }
         }
-      },
-      "istio.networking.v1alpha3.ClientTLSSettings.InsecureCertificateValidationAtClient": {
-        "description": "InsecureSkipVerify sets the mesh global default for peer certificate validation at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL) origination modes are used. This setting can be overridden at the host level via DestinationRule API. By default, InsecureSkipVerify is DISABLED. `InsecureSkipVerify` at DestinationRule level overrides the global mesh config behavior.",
-        "type": "string",
-        "enum": [
-          "UNKNOWN_CLIENT_VERIFY",
-          "ENABLED",
-          "DISABLED"
-        ]
       },
       "istio.networking.v1alpha3.ClientTLSSettings.TLSmode": {
         "description": "Indicates whether connections to this port should be secured using TLS. The value of this field determines how TLS is enforced.",
