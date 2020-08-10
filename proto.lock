@@ -36186,6 +36186,11 @@
                 "id": 51,
                 "name": "enable_prometheus_merge",
                 "type": "google.protobuf.BoolValue"
+              },
+              {
+                "id": 54,
+                "name": "verify_external_server_certs_using_system_ca",
+                "type": "google.protobuf.BoolValue"
               }
             ],
             "reserved_ids": [
@@ -36483,6 +36488,30 @@
             ]
           },
           {
+            "name": "OpenCensusAgent.TraceContext",
+            "enum_fields": [
+              {
+                "name": "UNSPECIFIED"
+              },
+              {
+                "name": "W3C_TRACE_CONTEXT",
+                "integer": 1
+              },
+              {
+                "name": "GRPC_BIN",
+                "integer": 2
+              },
+              {
+                "name": "CLOUD_TRACE_CONTEXT",
+                "integer": 3
+              },
+              {
+                "name": "B3",
+                "integer": 4
+              }
+            ]
+          },
+          {
             "name": "Topology.ForwardClientCertDetails",
             "enum_fields": [
               {
@@ -36546,6 +36575,11 @@
                 "id": 4,
                 "name": "stackdriver",
                 "type": "Stackdriver"
+              },
+              {
+                "id": 9,
+                "name": "open_census_agent",
+                "type": "OpenCensusAgent"
               },
               {
                 "id": 6,
@@ -36629,6 +36663,42 @@
                   },
                   {
                     "id": 4,
+                    "name": "max_number_of_message_events",
+                    "type": "google.protobuf.Int64Value"
+                  }
+                ]
+              },
+              {
+                "name": "OpenCensusAgent",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "address",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "context",
+                    "type": "TraceContext",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 3,
+                    "name": "debug",
+                    "type": "bool"
+                  },
+                  {
+                    "id": 4,
+                    "name": "max_number_of_attributes",
+                    "type": "google.protobuf.Int64Value"
+                  },
+                  {
+                    "id": 5,
+                    "name": "max_number_of_annotations",
+                    "type": "google.protobuf.Int64Value"
+                  },
+                  {
+                    "id": 6,
                     "name": "max_number_of_message_events",
                     "type": "google.protobuf.Int64Value"
                   }
