@@ -430,8 +430,9 @@ type MeshConfig struct {
 	// with default System CA bundle and ensure SAN matches the host in DestinationRule.
 	//
 	// For SAN, client-side proxy will exact match host in DestinationRule as well as one level
-	// wildcard for the specified host. For example, if host in DestinationRule is x.y.com, client-side
-	// proxy will match either x.y.com or *.y.com for the SAN in the presented server certificate.
+	// wildcard if the specified host in DestinationRule doesn't contain a wildcard.
+	// For example, if the host in DestinationRule is x.y.com, client-side proxy will
+	// match either x.y.com or *.y.com for the SAN in the presented server certificate.
 	// For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
 	// if host is *.x.y.com, client-side proxy will verify the presented server certificate SAN matches
 	// .x.y.com suffix.
