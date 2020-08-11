@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.WorkloadGroup
 aliases: [/docs/reference/config/networking/v1alpha3/workload-group]
-number_of_entries: 3
+number_of_entries: 2
 ---
 <p><code>WorkloadGroup</code> describes a collection of workload instances.
 It provides a specification that the workload instances can use to bootstrap
@@ -31,16 +31,15 @@ metadata:
   name: reviews
   namespace: bookinfo
 spec:
+  metadata:
+    labels:
+      app.kubernetes.io/name: reviews
+      app.kubernetes.io/version: &quot;1.3.4&quot;
   template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: reviews
-        app.kubernetes.io/version: &quot;1.3.4&quot;
-    template:
-      ports:
-        grpc: 3550
-        http: 8080
-      serviceAccount: default
+    ports:
+      grpc: 3550
+      http: 8080
+    serviceAccount: default
 </code></pre>
 
 <p>{{</tab>}}
@@ -50,7 +49,7 @@ spec:
 <section>
 <p><code>WorkloadGroup</code> enables specifying the properties of a single workload for bootstrap and
 provides a template for <code>WorkloadEntry</code>, similar to how <code>Deployment</code> specifies properties
-of workloads via <code>Pod</code> templates.
+of workloads via <code>Pod</code> templates. A <code>WorkloadGroup</code> can have more than one <code>WorkloadEntry</code>.
 <code>WorkloadGroup</code> has no relationship to resources which control service registry like <code>ServiceEntry</code>
 and as such doesn&rsquo;t configure host name for these workloads.</p>
 
@@ -64,52 +63,23 @@ and as such doesn&rsquo;t configure host name for these workloads.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="WorkloadGroup-template">
-<td><code>template</code></td>
-<td><code><a href="#WorkloadEntryTemplate">WorkloadEntryTemplate</a></code></td>
-<td>
-<p>Template to be used for the generation of WorkloadEntry resources that belong
-to this WorkloadGroup</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="WorkloadEntryTemplate">WorkloadEntryTemplate</h2>
-<section>
-<p><code>WorkloadEntryTemplate</code> is the underlying workload template that is associated with the workload group.
-A <code>WorkloadGroup</code> can have more than one <code>WorkloadEntry</code>.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="WorkloadEntryTemplate-metadata">
+<tr id="WorkloadGroup-metadata">
 <td><code>metadata</code></td>
 <td><code><a href="#ObjectMeta">ObjectMeta</a></code></td>
 <td>
-<p>Metadata that will be used for all corresponding WorkloadEntries.</p>
+<p>Metadata that will be used for all corresponding <code>WorkloadEntries</code>.
+The labels and annotations in <code>metadata</code> can differ from those in <code>template</code>.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="WorkloadEntryTemplate-template">
+<tr id="WorkloadGroup-template">
 <td><code>template</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/networking/workload-entry.html#WorkloadEntry">WorkloadEntry</a></code></td>
 <td>
-<p>Describes the WorkloadEntry resources that will be created.
+<p>Template to be used for the generation of <code>WorkloadEntry</code> resources that belong to this <code>WorkloadGroup</code>.
 Please note that <code>address</code> and <code>labels</code> fields should not be set in the template. The <code>serviceAccount</code>
 field MUST be specified. The workload identities (mTLS certificates) will be bootstrapped using the
 specified service account&rsquo;s token. Workload entries in this group will be in the same namespace as the
@@ -125,7 +95,7 @@ Yes
 </section>
 <h2 id="ObjectMeta">ObjectMeta</h2>
 <section>
-<p>From k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta.</p>
+<p><code>ObjectMeta</code> describes metadata associated with a <code>WorkloadGroup</code>.</p>
 
 <table class="message-fields">
 <thead>
@@ -141,6 +111,8 @@ Yes
 <td><code>labels</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
+<p>Labels to associate with the workload group</p>
+
 </td>
 <td>
 No
@@ -150,6 +122,8 @@ No
 <td><code>annotations</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
+<p>Annotations to associate with the workload group.</p>
+
 </td>
 <td>
 No

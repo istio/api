@@ -5186,56 +5186,50 @@ spec:
             description: 'Describes a collection of workload instances. See more details
               at: https://istio.io/docs/reference/config/networking/workload-group.html'
             properties:
+              metadata:
+                description: Metadata that will be used for all corresponding `WorkloadEntries`.
+                properties:
+                  annotations:
+                    additionalProperties:
+                      format: string
+                      type: string
+                    description: Annotations to associate with the workload group.
+                    type: object
+                  labels:
+                    additionalProperties:
+                      format: string
+                      type: string
+                    type: object
+                type: object
               template:
                 properties:
-                  metadata:
-                    description: Metadata that will be used for all corresponding
-                      WorkloadEntries.
-                    properties:
-                      annotations:
-                        additionalProperties:
-                          format: string
-                          type: string
-                        type: object
-                      labels:
-                        additionalProperties:
-                          format: string
-                          type: string
-                        type: object
+                  address:
+                    format: string
+                    type: string
+                  labels:
+                    additionalProperties:
+                      format: string
+                      type: string
+                    description: One or more labels associated with the endpoint.
                     type: object
-                  template:
-                    description: Describes the WorkloadEntry resources that will be
-                      created.
-                    properties:
-                      address:
-                        format: string
-                        type: string
-                      labels:
-                        additionalProperties:
-                          format: string
-                          type: string
-                        description: One or more labels associated with the endpoint.
-                        type: object
-                      locality:
-                        description: The locality associated with the endpoint.
-                        format: string
-                        type: string
-                      network:
-                        format: string
-                        type: string
-                      ports:
-                        additionalProperties:
-                          type: integer
-                        description: Set of ports associated with the endpoint.
-                        type: object
-                      serviceAccount:
-                        format: string
-                        type: string
-                      weight:
-                        description: The load balancing weight associated with the
-                          endpoint.
-                        type: integer
+                  locality:
+                    description: The locality associated with the endpoint.
+                    format: string
+                    type: string
+                  network:
+                    format: string
+                    type: string
+                  ports:
+                    additionalProperties:
+                      type: integer
+                    description: Set of ports associated with the endpoint.
                     type: object
+                  serviceAccount:
+                    format: string
+                    type: string
+                  weight:
+                    description: The load balancing weight associated with the endpoint.
+                    type: integer
                 type: object
             type: object
           status:

@@ -24,16 +24,15 @@
 //   name: reviews
 //   namespace: bookinfo
 // spec:
+//   metadata:
+//     labels:
+//       app.kubernetes.io/name: reviews
+//       app.kubernetes.io/version: "1.3.4"
 //   template:
-//     metadata:
-//       labels:
-//         app.kubernetes.io/name: reviews
-//         app.kubernetes.io/version: "1.3.4"
-//     template:
-//       ports:
-//         grpc: 3550
-//         http: 8080
-//       serviceAccount: default
+//     ports:
+//       grpc: 3550
+//       http: 8080
+//     serviceAccount: default
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -63,7 +62,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // `WorkloadGroup` enables specifying the properties of a single workload for bootstrap and
 // provides a template for `WorkloadEntry`, similar to how `Deployment` specifies properties
-// of workloads via `Pod` templates.
+// of workloads via `Pod` templates. A `WorkloadGroup` can have more than one `WorkloadEntry`.
 // `WorkloadGroup` has no relationship to resources which control service registry like `ServiceEntry`
 // and as such doesn't configure host name for these workloads.
 //
@@ -87,12 +86,18 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // +k8s:deepcopy-gen=true
 // -->
 type WorkloadGroup struct {
-	// Template to be used for the generation of WorkloadEntry resources that belong
-	// to this WorkloadGroup
-	Template             *WorkloadEntryTemplate `protobuf:"bytes,1,opt,name=template,proto3" json:"template,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
-	XXX_unrecognized     []byte                 `json:"-"`
-	XXX_sizecache        int32                  `json:"-"`
+	// Metadata that will be used for all corresponding `WorkloadEntries`.
+	// The labels and annotations in `metadata` can differ from those in `template`.
+	Metadata *ObjectMeta `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// Template to be used for the generation of `WorkloadEntry` resources that belong to this `WorkloadGroup`.
+	// Please note that `address` and `labels` fields should not be set in the template. The `serviceAccount`
+	// field MUST be specified. The workload identities (mTLS certificates) will be bootstrapped using the
+	// specified service account's token. Workload entries in this group will be in the same namespace as the
+	// workload group, and inherit the labels, and annotations from the group object.
+	Template             *WorkloadEntry `protobuf:"bytes,2,opt,name=template,proto3" json:"template,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
 }
 
 func (m *WorkloadGroup) Reset()         { *m = WorkloadGroup{} }
@@ -128,79 +133,25 @@ func (m *WorkloadGroup) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_WorkloadGroup proto.InternalMessageInfo
 
-func (m *WorkloadGroup) GetTemplate() *WorkloadEntryTemplate {
-	if m != nil {
-		return m.Template
-	}
-	return nil
-}
-
-// `WorkloadEntryTemplate` is the underlying workload template that is associated with the workload group.
-// A `WorkloadGroup` can have more than one `WorkloadEntry`.
-type WorkloadEntryTemplate struct {
-	// Metadata that will be used for all corresponding WorkloadEntries.
-	Metadata *ObjectMeta `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
-	// Describes the WorkloadEntry resources that will be created.
-	// Please note that `address` and `labels` fields should not be set in the template. The `serviceAccount`
-	// field MUST be specified. The workload identities (mTLS certificates) will be bootstrapped using the
-	// specified service account's token. Workload entries in this group will be in the same namespace as the
-	// workload group, and inherit the labels, and annotations from the group object.
-	Template             *WorkloadEntry `protobuf:"bytes,2,opt,name=template,proto3" json:"template,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_unrecognized     []byte         `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
-}
-
-func (m *WorkloadEntryTemplate) Reset()         { *m = WorkloadEntryTemplate{} }
-func (m *WorkloadEntryTemplate) String() string { return proto.CompactTextString(m) }
-func (*WorkloadEntryTemplate) ProtoMessage()    {}
-func (*WorkloadEntryTemplate) Descriptor() ([]byte, []int) {
-	return fileDescriptor_621fb79d92a8ed09, []int{1}
-}
-func (m *WorkloadEntryTemplate) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *WorkloadEntryTemplate) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_WorkloadEntryTemplate.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *WorkloadEntryTemplate) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_WorkloadEntryTemplate.Merge(m, src)
-}
-func (m *WorkloadEntryTemplate) XXX_Size() int {
-	return m.Size()
-}
-func (m *WorkloadEntryTemplate) XXX_DiscardUnknown() {
-	xxx_messageInfo_WorkloadEntryTemplate.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_WorkloadEntryTemplate proto.InternalMessageInfo
-
-func (m *WorkloadEntryTemplate) GetMetadata() *ObjectMeta {
+func (m *WorkloadGroup) GetMetadata() *ObjectMeta {
 	if m != nil {
 		return m.Metadata
 	}
 	return nil
 }
 
-func (m *WorkloadEntryTemplate) GetTemplate() *WorkloadEntry {
+func (m *WorkloadGroup) GetTemplate() *WorkloadEntry {
 	if m != nil {
 		return m.Template
 	}
 	return nil
 }
 
-// From k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta.
+// `ObjectMeta` describes metadata associated with a `WorkloadGroup`.
 type ObjectMeta struct {
-	Labels               map[string]string `protobuf:"bytes,1,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// Labels to associate with the workload group
+	Labels map[string]string `protobuf:"bytes,1,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// Annotations to associate with the workload group.
 	Annotations          map[string]string `protobuf:"bytes,2,rep,name=annotations,proto3" json:"annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
@@ -211,7 +162,7 @@ func (m *ObjectMeta) Reset()         { *m = ObjectMeta{} }
 func (m *ObjectMeta) String() string { return proto.CompactTextString(m) }
 func (*ObjectMeta) ProtoMessage()    {}
 func (*ObjectMeta) Descriptor() ([]byte, []int) {
-	return fileDescriptor_621fb79d92a8ed09, []int{2}
+	return fileDescriptor_621fb79d92a8ed09, []int{1}
 }
 func (m *ObjectMeta) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -256,7 +207,6 @@ func (m *ObjectMeta) GetAnnotations() map[string]string {
 
 func init() {
 	proto.RegisterType((*WorkloadGroup)(nil), "istio.networking.v1alpha3.WorkloadGroup")
-	proto.RegisterType((*WorkloadEntryTemplate)(nil), "istio.networking.v1alpha3.WorkloadEntryTemplate")
 	proto.RegisterType((*ObjectMeta)(nil), "istio.networking.v1alpha3.ObjectMeta")
 	proto.RegisterMapType((map[string]string)(nil), "istio.networking.v1alpha3.ObjectMeta.AnnotationsEntry")
 	proto.RegisterMapType((map[string]string)(nil), "istio.networking.v1alpha3.ObjectMeta.LabelsEntry")
@@ -267,30 +217,29 @@ func init() {
 }
 
 var fileDescriptor_621fb79d92a8ed09 = []byte{
-	// 356 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0xd1, 0x4a, 0x02, 0x41,
-	0x14, 0x86, 0x99, 0x95, 0x44, 0x67, 0x09, 0x64, 0x28, 0xb0, 0xbd, 0x30, 0x11, 0x82, 0xbd, 0x9a,
-	0x4d, 0x85, 0xa8, 0x2e, 0x02, 0x85, 0x08, 0xc1, 0x08, 0x96, 0xa0, 0x08, 0x42, 0xce, 0xe6, 0xb4,
-	0x4e, 0x8e, 0x3b, 0xcb, 0x3a, 0x1a, 0x3e, 0x50, 0x77, 0x3d, 0x48, 0x97, 0x3d, 0x82, 0xf8, 0x24,
-	0xb1, 0xb3, 0xab, 0x2e, 0x61, 0x62, 0x77, 0xbb, 0x87, 0xff, 0xff, 0xfe, 0x7f, 0x0e, 0x07, 0xdb,
-	0x01, 0x53, 0xef, 0x32, 0x1a, 0xf2, 0xc0, 0x77, 0xa6, 0x75, 0x10, 0xe1, 0x00, 0x9a, 0x4e, 0x3c,
-	0x10, 0x12, 0xfa, 0x3d, 0x3f, 0x92, 0x93, 0x90, 0x86, 0x91, 0x54, 0x92, 0x1c, 0xf1, 0xb1, 0xe2,
-	0x92, 0xae, 0xf5, 0x74, 0xa9, 0xb7, 0x8e, 0x7d, 0x29, 0x7d, 0xc1, 0x1c, 0x08, 0xb9, 0xf3, 0xca,
-	0x99, 0xe8, 0xf7, 0x3c, 0x36, 0x80, 0x29, 0x97, 0x51, 0xe2, 0xb5, 0xb6, 0xa7, 0xb0, 0x40, 0x45,
-	0xb3, 0x44, 0x59, 0x7b, 0xc6, 0xfb, 0x0f, 0xe9, 0xfc, 0x26, 0x0e, 0x27, 0x5d, 0x5c, 0x50, 0x6c,
-	0x14, 0x0a, 0x50, 0xac, 0x8c, 0xaa, 0xc8, 0x36, 0x1b, 0xa7, 0xf4, 0xcf, 0x26, 0x74, 0xe9, 0xbd,
-	0x8e, 0x91, 0xf7, 0xa9, 0xcf, 0x5d, 0x11, 0x6a, 0x1f, 0x08, 0x1f, 0x6e, 0xd4, 0x90, 0x16, 0x2e,
-	0x8c, 0x98, 0x82, 0x3e, 0x28, 0x48, 0x73, 0x4e, 0xb6, 0xe4, 0xdc, 0x79, 0x6f, 0xec, 0x45, 0xdd,
-	0x32, 0x05, 0xee, 0xca, 0x46, 0x3a, 0x99, 0xaa, 0x86, 0x46, 0xd8, 0xbb, 0x56, 0x6d, 0xe7, 0xe6,
-	0x2d, 0x23, 0xd3, 0xf3, 0xd3, 0xc0, 0x78, 0x9d, 0x41, 0x3a, 0x38, 0x2f, 0xc0, 0x63, 0x62, 0x5c,
-	0x46, 0xd5, 0x9c, 0x6d, 0x36, 0xea, 0x3b, 0x55, 0xa3, 0x5d, 0xed, 0xd1, 0x01, 0x6e, 0x0a, 0x20,
-	0x8f, 0xd8, 0x84, 0x20, 0x90, 0x0a, 0x14, 0x97, 0xc1, 0xb8, 0x6c, 0x68, 0xde, 0xd9, 0x6e, 0xbc,
-	0xd6, 0xda, 0x98, 0x40, 0xb3, 0x28, 0xeb, 0x02, 0x9b, 0x99, 0x40, 0x52, 0xc2, 0xb9, 0x21, 0x9b,
-	0xe9, 0x5d, 0x16, 0xdd, 0xf8, 0x93, 0x1c, 0xe0, 0xbd, 0x29, 0x88, 0x49, 0xb2, 0x9c, 0xa2, 0x9b,
-	0xfc, 0x5c, 0x1a, 0xe7, 0xc8, 0xba, 0xc2, 0xa5, 0xdf, 0xec, 0xff, 0xf8, 0xdb, 0xf4, 0x6b, 0x51,
-	0x41, 0xdf, 0x8b, 0x0a, 0x9a, 0x2f, 0x2a, 0xe8, 0xa9, 0x9a, 0x3c, 0x86, 0x4b, 0x7d, 0x90, 0x1b,
-	0x4e, 0xcf, 0xcb, 0xeb, 0x63, 0x6b, 0xfe, 0x04, 0x00, 0x00, 0xff, 0xff, 0x8c, 0x5f, 0x21, 0x35,
-	0xfe, 0x02, 0x00, 0x00,
+	// 339 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0xcf, 0x4a, 0xc3, 0x40,
+	0x10, 0x87, 0xd9, 0x14, 0x4b, 0xbb, 0x41, 0x28, 0x8b, 0x87, 0x98, 0x43, 0x2d, 0x05, 0x21, 0xa7,
+	0x0d, 0x6d, 0x41, 0xd4, 0x83, 0xd0, 0x82, 0x48, 0x41, 0x11, 0x72, 0x51, 0xbc, 0x94, 0x89, 0x5d,
+	0xd3, 0xb5, 0xdb, 0x6c, 0x48, 0xa7, 0x95, 0x3e, 0x8c, 0x6f, 0xe0, 0x83, 0x78, 0xf4, 0x11, 0x4a,
+	0x9f, 0x44, 0xb2, 0xe9, 0x3f, 0x44, 0x4b, 0xbd, 0x25, 0xbb, 0xf3, 0xfb, 0xbe, 0xd9, 0x61, 0xa8,
+	0x17, 0x0b, 0x7c, 0xd3, 0xe9, 0x50, 0xc6, 0x91, 0x3f, 0x6d, 0x80, 0x4a, 0x06, 0xd0, 0xf2, 0xb3,
+	0x03, 0xa5, 0xa1, 0xdf, 0x8b, 0x52, 0x3d, 0x49, 0x78, 0x92, 0x6a, 0xd4, 0xec, 0x58, 0x8e, 0x51,
+	0x6a, 0xbe, 0xa9, 0xe7, 0xab, 0x7a, 0xf7, 0x24, 0xd2, 0x3a, 0x52, 0xc2, 0x87, 0x44, 0xfa, 0x2f,
+	0x52, 0xa8, 0x7e, 0x2f, 0x14, 0x03, 0x98, 0x4a, 0x9d, 0xe6, 0x59, 0x77, 0xb7, 0x45, 0xc4, 0x98,
+	0xce, 0xf2, 0xca, 0xfa, 0x3b, 0xa1, 0x87, 0x0f, 0xcb, 0x8b, 0x9b, 0xcc, 0xce, 0xda, 0xb4, 0x34,
+	0x12, 0x08, 0x7d, 0x40, 0x70, 0x48, 0x8d, 0x78, 0x76, 0xf3, 0x94, 0xff, 0xd9, 0x0a, 0xbf, 0x0f,
+	0x5f, 0xc5, 0x33, 0xde, 0x09, 0x84, 0x60, 0x1d, 0x63, 0x5d, 0x5a, 0x42, 0x31, 0x4a, 0x14, 0xa0,
+	0x70, 0x2c, 0x83, 0xf0, 0x76, 0x20, 0x56, 0xfa, 0xeb, 0xac, 0xad, 0x4e, 0x61, 0xde, 0xb6, 0x82,
+	0x75, 0xbc, 0xfe, 0x61, 0x51, 0xba, 0x71, 0xb0, 0x2e, 0x2d, 0x2a, 0x08, 0x85, 0x1a, 0x3b, 0xa4,
+	0x56, 0xf0, 0xec, 0x66, 0x63, 0xaf, 0xd6, 0xf8, 0xad, 0xc9, 0x18, 0x41, 0xb0, 0x04, 0xb0, 0x47,
+	0x6a, 0x43, 0x1c, 0x6b, 0x04, 0x94, 0x3a, 0x1e, 0x3b, 0x96, 0xe1, 0x9d, 0xed, 0xc7, 0x6b, 0x6f,
+	0x82, 0x39, 0x74, 0x1b, 0xe5, 0x5e, 0x50, 0x7b, 0x4b, 0xc8, 0x2a, 0xb4, 0x30, 0x14, 0x33, 0x33,
+	0xcb, 0x72, 0x90, 0x7d, 0xb2, 0x23, 0x7a, 0x30, 0x05, 0x35, 0xc9, 0x87, 0x53, 0x0e, 0xf2, 0x9f,
+	0x4b, 0xeb, 0x9c, 0xb8, 0x57, 0xb4, 0xf2, 0x93, 0xfd, 0x9f, 0x7c, 0x87, 0x7f, 0x2e, 0xaa, 0xe4,
+	0x6b, 0x51, 0x25, 0xf3, 0x45, 0x95, 0x3c, 0xd5, 0xf2, 0xc7, 0x48, 0x6d, 0x36, 0xe5, 0x97, 0x9d,
+	0x08, 0x8b, 0x66, 0x0b, 0x5a, 0xdf, 0x01, 0x00, 0x00, 0xff, 0xff, 0xac, 0x9a, 0xea, 0xe8, 0x97,
+	0x02, 0x00, 0x00,
 }
 
 func (m *WorkloadGroup) Marshal() (dAtA []byte, err error) {
@@ -309,45 +258,6 @@ func (m *WorkloadGroup) MarshalTo(dAtA []byte) (int, error) {
 }
 
 func (m *WorkloadGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if m.Template != nil {
-		{
-			size, err := m.Template.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintWorkloadGroup(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *WorkloadEntryTemplate) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *WorkloadEntryTemplate) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *WorkloadEntryTemplate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -465,22 +375,6 @@ func (m *WorkloadGroup) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Template != nil {
-		l = m.Template.Size()
-		n += 1 + l + sovWorkloadGroup(uint64(l))
-	}
-	if m.XXX_unrecognized != nil {
-		n += len(m.XXX_unrecognized)
-	}
-	return n
-}
-
-func (m *WorkloadEntryTemplate) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
 	if m.Metadata != nil {
 		l = m.Metadata.Size()
 		n += 1 + l + sovWorkloadGroup(uint64(l))
@@ -556,96 +450,6 @@ func (m *WorkloadGroup) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: WorkloadGroup: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Template", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowWorkloadGroup
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthWorkloadGroup
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthWorkloadGroup
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Template == nil {
-				m.Template = &WorkloadEntryTemplate{}
-			}
-			if err := m.Template.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipWorkloadGroup(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthWorkloadGroup
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthWorkloadGroup
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *WorkloadEntryTemplate) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowWorkloadGroup
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: WorkloadEntryTemplate: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: WorkloadEntryTemplate: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:

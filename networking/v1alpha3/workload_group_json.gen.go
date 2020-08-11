@@ -24,16 +24,15 @@
 //   name: reviews
 //   namespace: bookinfo
 // spec:
+//   metadata:
+//     labels:
+//       app.kubernetes.io/name: reviews
+//       app.kubernetes.io/version: "1.3.4"
 //   template:
-//     metadata:
-//       labels:
-//         app.kubernetes.io/name: reviews
-//         app.kubernetes.io/version: "1.3.4"
-//     template:
-//       ports:
-//         grpc: 3550
-//         http: 8080
-//       serviceAccount: default
+//     ports:
+//       grpc: 3550
+//       http: 8080
+//     serviceAccount: default
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -63,17 +62,6 @@ func (this *WorkloadGroup) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for WorkloadGroup
 func (this *WorkloadGroup) UnmarshalJSON(b []byte) error {
-	return WorkloadGroupUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
-// MarshalJSON is a custom marshaler for WorkloadEntryTemplate
-func (this *WorkloadEntryTemplate) MarshalJSON() ([]byte, error) {
-	str, err := WorkloadGroupMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for WorkloadEntryTemplate
-func (this *WorkloadEntryTemplate) UnmarshalJSON(b []byte) error {
 	return WorkloadGroupUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

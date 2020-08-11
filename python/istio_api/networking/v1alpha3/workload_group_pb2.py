@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.networking.v1alpha3',
   syntax='proto3',
   serialized_options=_b('Z istio.io/api/networking/v1alpha3'),
-  serialized_pb=_b('\n(networking/v1alpha3/workload_group.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a(networking/v1alpha3/workload_entry.proto\"S\n\rWorkloadGroup\x12\x42\n\x08template\x18\x01 \x01(\x0b\x32\x30.istio.networking.v1alpha3.WorkloadEntryTemplate\"\x91\x01\n\x15WorkloadEntryTemplate\x12\x37\n\x08metadata\x18\x01 \x01(\x0b\x32%.istio.networking.v1alpha3.ObjectMeta\x12?\n\x08template\x18\x02 \x01(\x0b\x32(.istio.networking.v1alpha3.WorkloadEntryB\x03\xe0\x41\x02\"\xff\x01\n\nObjectMeta\x12\x41\n\x06labels\x18\x01 \x03(\x0b\x32\x31.istio.networking.v1alpha3.ObjectMeta.LabelsEntry\x12K\n\x0b\x61nnotations\x18\x02 \x03(\x0b\x32\x36.istio.networking.v1alpha3.ObjectMeta.AnnotationsEntry\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x32\n\x10\x41nnotationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
+  serialized_pb=_b('\n(networking/v1alpha3/workload_group.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a(networking/v1alpha3/workload_entry.proto\"\x89\x01\n\rWorkloadGroup\x12\x37\n\x08metadata\x18\x01 \x01(\x0b\x32%.istio.networking.v1alpha3.ObjectMeta\x12?\n\x08template\x18\x02 \x01(\x0b\x32(.istio.networking.v1alpha3.WorkloadEntryB\x03\xe0\x41\x02\"\xff\x01\n\nObjectMeta\x12\x41\n\x06labels\x18\x01 \x03(\x0b\x32\x31.istio.networking.v1alpha3.ObjectMeta.LabelsEntry\x12K\n\x0b\x61nnotations\x18\x02 \x03(\x0b\x32\x36.istio.networking.v1alpha3.ObjectMeta.AnnotationsEntry\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x32\n\x10\x41nnotationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_workload__entry__pb2.DESCRIPTOR,])
 
@@ -37,45 +37,14 @@ _WORKLOADGROUP = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='template', full_name='istio.networking.v1alpha3.WorkloadGroup.template', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=146,
-  serialized_end=229,
-)
-
-
-_WORKLOADENTRYTEMPLATE = _descriptor.Descriptor(
-  name='WorkloadEntryTemplate',
-  full_name='istio.networking.v1alpha3.WorkloadEntryTemplate',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='metadata', full_name='istio.networking.v1alpha3.WorkloadEntryTemplate.metadata', index=0,
+      name='metadata', full_name='istio.networking.v1alpha3.WorkloadGroup.metadata', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='template', full_name='istio.networking.v1alpha3.WorkloadEntryTemplate.template', index=1,
+      name='template', full_name='istio.networking.v1alpha3.WorkloadGroup.template', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -93,8 +62,8 @@ _WORKLOADENTRYTEMPLATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=232,
-  serialized_end=377,
+  serialized_start=147,
+  serialized_end=284,
 )
 
 
@@ -131,8 +100,8 @@ _OBJECTMETA_LABELSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=538,
-  serialized_end=583,
+  serialized_start=445,
+  serialized_end=490,
 )
 
 _OBJECTMETA_ANNOTATIONSENTRY = _descriptor.Descriptor(
@@ -168,8 +137,8 @@ _OBJECTMETA_ANNOTATIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=585,
-  serialized_end=635,
+  serialized_start=492,
+  serialized_end=542,
 )
 
 _OBJECTMETA = _descriptor.Descriptor(
@@ -205,19 +174,17 @@ _OBJECTMETA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=380,
-  serialized_end=635,
+  serialized_start=287,
+  serialized_end=542,
 )
 
-_WORKLOADGROUP.fields_by_name['template'].message_type = _WORKLOADENTRYTEMPLATE
-_WORKLOADENTRYTEMPLATE.fields_by_name['metadata'].message_type = _OBJECTMETA
-_WORKLOADENTRYTEMPLATE.fields_by_name['template'].message_type = networking_dot_v1alpha3_dot_workload__entry__pb2._WORKLOADENTRY
+_WORKLOADGROUP.fields_by_name['metadata'].message_type = _OBJECTMETA
+_WORKLOADGROUP.fields_by_name['template'].message_type = networking_dot_v1alpha3_dot_workload__entry__pb2._WORKLOADENTRY
 _OBJECTMETA_LABELSENTRY.containing_type = _OBJECTMETA
 _OBJECTMETA_ANNOTATIONSENTRY.containing_type = _OBJECTMETA
 _OBJECTMETA.fields_by_name['labels'].message_type = _OBJECTMETA_LABELSENTRY
 _OBJECTMETA.fields_by_name['annotations'].message_type = _OBJECTMETA_ANNOTATIONSENTRY
 DESCRIPTOR.message_types_by_name['WorkloadGroup'] = _WORKLOADGROUP
-DESCRIPTOR.message_types_by_name['WorkloadEntryTemplate'] = _WORKLOADENTRYTEMPLATE
 DESCRIPTOR.message_types_by_name['ObjectMeta'] = _OBJECTMETA
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -227,13 +194,6 @@ WorkloadGroup = _reflection.GeneratedProtocolMessageType('WorkloadGroup', (_mess
   # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.WorkloadGroup)
   })
 _sym_db.RegisterMessage(WorkloadGroup)
-
-WorkloadEntryTemplate = _reflection.GeneratedProtocolMessageType('WorkloadEntryTemplate', (_message.Message,), {
-  'DESCRIPTOR' : _WORKLOADENTRYTEMPLATE,
-  '__module__' : 'networking.v1alpha3.workload_group_pb2'
-  # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.WorkloadEntryTemplate)
-  })
-_sym_db.RegisterMessage(WorkloadEntryTemplate)
 
 ObjectMeta = _reflection.GeneratedProtocolMessageType('ObjectMeta', (_message.Message,), {
 
@@ -260,7 +220,7 @@ _sym_db.RegisterMessage(ObjectMeta.AnnotationsEntry)
 
 
 DESCRIPTOR._options = None
-_WORKLOADENTRYTEMPLATE.fields_by_name['template']._options = None
+_WORKLOADGROUP.fields_by_name['template']._options = None
 _OBJECTMETA_LABELSENTRY._options = None
 _OBJECTMETA_ANNOTATIONSENTRY._options = None
 # @@protoc_insertion_point(module_scope)

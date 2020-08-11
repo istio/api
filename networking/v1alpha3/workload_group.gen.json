@@ -52,16 +52,7 @@
         }
       },
       "istio.networking.v1alpha3.WorkloadGroup": {
-        "description": "`WorkloadGroup` enables specifying the properties of a single workload for bootstrap and provides a template for `WorkloadEntry`, similar to how `Deployment` specifies properties of workloads via `Pod` templates. `WorkloadGroup` has no relationship to resources which control service registry like `ServiceEntry` and as such doesn't configure host name for these workloads.",
-        "type": "object",
-        "properties": {
-          "template": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.WorkloadEntryTemplate"
-          }
-        }
-      },
-      "istio.networking.v1alpha3.WorkloadEntryTemplate": {
-        "description": "`WorkloadEntryTemplate` is the underlying workload template that is associated with the workload group. A `WorkloadGroup` can have more than one `WorkloadEntry`.",
+        "description": "`WorkloadGroup` enables specifying the properties of a single workload for bootstrap and provides a template for `WorkloadEntry`, similar to how `Deployment` specifies properties of workloads via `Pod` templates. A `WorkloadGroup` can have more than one `WorkloadEntry`. `WorkloadGroup` has no relationship to resources which control service registry like `ServiceEntry` and as such doesn't configure host name for these workloads.",
         "type": "object",
         "properties": {
           "metadata": {
@@ -73,10 +64,11 @@
         }
       },
       "istio.networking.v1alpha3.ObjectMeta": {
-        "description": "From k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta.",
+        "description": "`ObjectMeta` describes metadata associated with a `WorkloadGroup`.",
         "type": "object",
         "properties": {
           "labels": {
+            "description": "Labels to associate with the workload group",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -84,6 +76,7 @@
             }
           },
           "annotations": {
+            "description": "Annotations to associate with the workload group.",
             "type": "object",
             "additionalProperties": {
               "type": "string",
