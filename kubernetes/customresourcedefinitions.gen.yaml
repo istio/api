@@ -5202,12 +5202,6 @@ spec:
                           format: string
                           type: string
                         type: object
-                      name:
-                        format: string
-                        type: string
-                      namespace:
-                        format: string
-                        type: string
                     type: object
                   template:
                     description: Describes the WorkloadEntry resources that will be

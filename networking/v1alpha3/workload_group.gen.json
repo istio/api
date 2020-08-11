@@ -61,7 +61,7 @@
         }
       },
       "istio.networking.v1alpha3.WorkloadEntryTemplate": {
-        "description": "`WorkloadEntryTemplate` is the underlying workload template that is associated with the workload group. The `address` and `labels` fields in `template` are invalid for a `WorkloadEntryTemplate`. A `WorkloadGroup` can have more than one `WorkloadEntry`.",
+        "description": "`WorkloadEntryTemplate` is the underlying workload template that is associated with the workload group. A `WorkloadGroup` can have more than one `WorkloadEntry`.",
         "type": "object",
         "properties": {
           "metadata": {
@@ -76,20 +76,12 @@
         "description": "From k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta.",
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "format": "string"
-          },
           "labels": {
             "type": "object",
             "additionalProperties": {
               "type": "string",
               "format": "string"
             }
-          },
-          "namespace": {
-            "type": "string",
-            "format": "string"
           },
           "annotations": {
             "type": "object",

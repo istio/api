@@ -29,7 +29,7 @@
 //       labels:
 //         app.kubernetes.io/name: reviews
 //         app.kubernetes.io/version: "1.3.4"
-//     spec:
+//     template:
 //       ports:
 //         grpc: 3550
 //         http: 8080

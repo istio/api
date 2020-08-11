@@ -51,7 +51,7 @@ import "networking/v1alpha3/workload_entry.proto";
 //       labels:
 //         app.kubernetes.io/name: reviews
 //         app.kubernetes.io/version: "1.3.4"
-//     spec:
+//     template:
 //       ports:
 //         grpc: 3550
 //         http: 8080
@@ -96,20 +96,21 @@ message WorkloadGroup {
 }
 
 // `WorkloadEntryTemplate` is the underlying workload template that is associated with the workload group.
-// The `address` and `labels` fields in `template` are invalid for a `WorkloadEntryTemplate`.
 // A `WorkloadGroup` can have more than one `WorkloadEntry`.
 message WorkloadEntryTemplate {
   // Metadata that will be used for all corresponding WorkloadEntries.
   ObjectMeta metadata = 1;
 
   // Describes the WorkloadEntry resources that will be created.
-  WorkloadEntry template = 2;
+  // Please note that `address` and `labels` fields should not be set in the template. The `serviceAccount`
+  // field MUST be specified. The workload identities (mTLS certificates) will be bootstrapped using the 
+  // specified service account's token. Workload entries in this group will be in the same namespace as the
+  // workload group, and inherit the labels, and annotations from the group object.
+  WorkloadEntry template = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 // From k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta.
 message ObjectMeta {
-    string name = 1 [(google.api.field_behavior) = REQUIRED];
-    string namespace = 2 [(google.api.field_behavior) = REQUIRED];
-    map<string, string> labels = 3;
-    map<string, string> annotations = 4;
+    map<string, string> labels = 1;
+    map<string, string> annotations = 2;
 }
