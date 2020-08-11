@@ -5202,6 +5202,8 @@ spec:
                     type: object
                 type: object
               template:
+                description: Template to be used for the generation of `WorkloadEntry`
+                  resources that belong to this `WorkloadGroup`.
                 properties:
                   address:
                     format: string
