@@ -429,7 +429,16 @@ type MeshConfig struct {
 	// When VerifyCertificateAtClient is set to true, client-side proxy will verify CA signature
 	// with default System CA bundle and ensure SAN matches the host in DestinationRule.
 	//
-	// For a particular host the following logic is used when DestinationRule are configured.
+	// For SAN, client-side proxy will exact match host in DestinationRule as well as one level
+	// wildcard for the specified host. For example, if host in DestinationRule is x.y.com, client-side
+	// proxy will match either x.y.com or *.y.com for the SAN in the presented server certificate.
+	// For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
+	// if host is *.x.y.com, client-side proxy will verify the presented server certificate SAN matches
+	// .x.y.com suffix.
+	//
+	// For a particular host the following logic is used when DestinationRule are configured
+	// to control TLS settings in conjugation with global setting.
+	//
 	// If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side
 	// proxy will verify CA signature with default System CA bundle and SAN matches the host
 	// in DestinationRule.
