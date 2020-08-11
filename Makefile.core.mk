@@ -474,8 +474,10 @@ $(all_openapi): $(all_protos)
 # The fields are added at the end to generate snake cases. This is a temporary solution to accommodate some wrong namings that currently exist.
 $(all_openapi_crd): $(all_protos)
 	@$(cue) -f=$(repo_dir)/cue.yaml --crd=true -snake=jwksUri,apiKeys,apiSpecs,includedPaths,jwtHeaders,triggerRules,excludedPaths,mirrorPercent
+ifeq ($(VERIFY_CRDS_SCHEMA),1)
 	# Some networking APIs need to have the same schema for their v1alpha3 and v1beta1 versions.
 	@$(validate_crds) check_equal_schema --kinds VirtualService,DestinationRule,Gateway,Sidecar,ServiceEntry,WorkloadEntry --versions v1alpha3,v1beta1 --file $(all_openapi_crd)
+endif
 
 generate-openapi-schema: $(all_openapi)
 
