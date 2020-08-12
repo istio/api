@@ -426,8 +426,18 @@ type MeshConfig struct {
 	// `prometheus.istio.io/merge-metrics: "false"` annotation.
 	// If not specified, this will be enabled by default.
 	EnablePrometheusMerge *types.BoolValue `protobuf:"bytes,51,opt,name=enable_prometheus_merge,json=enablePrometheusMerge,proto3" json:"enablePrometheusMerge,omitempty"`
-	// When VerifyCertificateAtClient is set to true, client-side proxy will verify CA signature
-	// with default System CA bundle and ensure SAN matches the host in DestinationRule.
+	// VerifyCertificateAtClient sets the mesh global default for peer certificate validation
+	// at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL) origination
+	// modes are used. This setting can be overridden at the host level via DestinationRule API.
+	// By default, VerifyCertificateAtClient is true.
+	//
+	// CaCertificates: If set, proxy verifies CA signature based on given CaCertificates. If unset,
+	// and VerifyCertificateAtClient is true, proxy uses default System CA bundle. If unset and
+	// VerifyCertificateAtClient is false, proxy will not verify the CA.
+	//
+	// SubjectAltNames: If set, proxy verifies subject alt names are present in the SAN. If unset,
+	// and VerifyCertificateAtClient is true, proxy uses host in destination rule to verify the SANs.
+	// If unset, and VerifyCertificateAtClient is false, proxy does not verify SANs.
 	//
 	// For SAN, client-side proxy will exact match host in DestinationRule as well as one level
 	// wildcard if the specified host in DestinationRule doesn't contain a wildcard.
@@ -436,25 +446,6 @@ type MeshConfig struct {
 	// For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
 	// if host is *.x.y.com, client-side proxy will verify the presented server certificate SAN matches
 	// .x.y.com suffix.
-	//
-	// For a particular host the following logic is used when DestinationRule are configured
-	// to control TLS settings in conjugation with global setting.
-	//
-	// If both CaCertificates and SubjectAltNames fields are empty in DestinationRule, client-side
-	// proxy will verify CA signature with default System CA bundle and SAN matches the host
-	// in DestinationRule.
-	//
-	// If both CaCertificates and SubjectAltNames are non empty in DestinationRule, client-side proxy
-	// will verify CA signature with CaCertificates and SubjectAltNames with SAN in presented server
-	// certificate during TLS handshake.
-	//
-	// If CaCertificates is non empty and SubjectAltNames is empty in DestinationRule, client-side
-	// proxy will verify CA signature with CaCertificates but will verify the SAN in the presented
-	// server certificate matches the host in DestinationRule during TLS handshake.
-	//
-	// If CaCertificates is empty and SubjectAltNames is non empty in DestinationRule, client-side
-	// proxy will verify CA signature ith default System CA bundle but will verify SubjectAltNames
-	// matches SAN in the presented server certificate during TLS handshake.
 	VerifyCertificateAtClient *types.BoolValue `protobuf:"bytes,54,opt,name=verify_certificate_at_client,json=verifyCertificateAtClient,proto3" json:"verifyCertificateAtClient,omitempty"`
 	XXX_NoUnkeyedLiteral      struct{}         `json:"-"`
 	XXX_unrecognized          []byte           `json:"-"`

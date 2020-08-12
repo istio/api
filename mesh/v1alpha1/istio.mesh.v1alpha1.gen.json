@@ -181,7 +181,7 @@
             "nullable": true
           },
           "verifyCertificateAtClient": {
-            "description": "When VerifyCertificateAtClient is set to true, client-side proxy will verify CA signature with default System CA bundle and ensure SAN matches the host in DestinationRule.",
+            "description": "VerifyCertificateAtClient sets the mesh global default for peer certificate validation at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL) origination modes are used. This setting can be overridden at the host level via DestinationRule API. By default, VerifyCertificateAtClient is true.",
             "type": "boolean",
             "nullable": true
           }
