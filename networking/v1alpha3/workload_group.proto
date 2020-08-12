@@ -90,22 +90,23 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // -->
 message WorkloadGroup {
   // Metadata that will be used for all corresponding `WorkloadEntries`.
-  // The labels and annotations in `metadata` can differ from those in `template`.
+  // User labels for a workload group should be set here in `metadata` rather than in `template`.
   ObjectMeta metadata = 1;
 
   // Template to be used for the generation of `WorkloadEntry` resources that belong to this `WorkloadGroup`.
-  // Please note that `address` and `labels` fields should not be set in the template. The `serviceAccount`
-  // field MUST be specified. The workload identities (mTLS certificates) will be bootstrapped using the 
+  // Please note that `address` and `labels` fields should not be set in the template, and an empty `serviceAccount`
+  // should default to `default`. The workload identities (mTLS certificates) will be bootstrapped using the
   // specified service account's token. Workload entries in this group will be in the same namespace as the
-  // workload group, and inherit the labels, and annotations from the group object.
+  // workload group, and inherit the labels and annotations from the above `metadata` field.
   WorkloadEntry template = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
-// `ObjectMeta` describes metadata associated with a `WorkloadGroup`.
+// `ObjectMeta` describes metadata that will be attached to a `WorkloadEntry`.
+// It is a subset of the supported Kubernetes metadata.
 message ObjectMeta {
-    // Labels to associate with the workload group
+    // Labels to attach
     map<string, string> labels = 1;
 
-    // Annotations to associate with the workload group.
+    // Annotations to attach
     map<string, string> annotations = 2;
 }

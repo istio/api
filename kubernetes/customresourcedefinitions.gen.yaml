@@ -5193,7 +5193,6 @@ spec:
                     additionalProperties:
                       format: string
                       type: string
-                    description: Annotations to associate with the workload group.
                     type: object
                   labels:
                     additionalProperties:

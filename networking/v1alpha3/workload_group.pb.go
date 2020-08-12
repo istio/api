@@ -87,13 +87,13 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // -->
 type WorkloadGroup struct {
 	// Metadata that will be used for all corresponding `WorkloadEntries`.
-	// The labels and annotations in `metadata` can differ from those in `template`.
+	// User labels for a workload group should be set here in `metadata` rather than in `template`.
 	Metadata *ObjectMeta `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	// Template to be used for the generation of `WorkloadEntry` resources that belong to this `WorkloadGroup`.
-	// Please note that `address` and `labels` fields should not be set in the template. The `serviceAccount`
-	// field MUST be specified. The workload identities (mTLS certificates) will be bootstrapped using the
+	// Please note that `address` and `labels` fields should not be set in the template, and an empty `serviceAccount`
+	// should default to `default`. The workload identities (mTLS certificates) will be bootstrapped using the
 	// specified service account's token. Workload entries in this group will be in the same namespace as the
-	// workload group, and inherit the labels, and annotations from the group object.
+	// workload group, and inherit the labels and annotations from the above `metadata` field.
 	Template             *WorkloadEntry `protobuf:"bytes,2,opt,name=template,proto3" json:"template,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
 	XXX_unrecognized     []byte         `json:"-"`
@@ -147,11 +147,12 @@ func (m *WorkloadGroup) GetTemplate() *WorkloadEntry {
 	return nil
 }
 
-// `ObjectMeta` describes metadata associated with a `WorkloadGroup`.
+// `ObjectMeta` describes metadata that will be attached to a `WorkloadEntry`.
+// It is a subset of the supported Kubernetes metadata.
 type ObjectMeta struct {
-	// Labels to associate with the workload group
+	// Labels to attach
 	Labels map[string]string `protobuf:"bytes,1,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// Annotations to associate with the workload group.
+	// Annotations to attach
 	Annotations          map[string]string `protobuf:"bytes,2,rep,name=annotations,proto3" json:"annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`

@@ -68,7 +68,7 @@ and as such doesn&rsquo;t configure host name for these workloads.</p>
 <td><code><a href="#ObjectMeta">ObjectMeta</a></code></td>
 <td>
 <p>Metadata that will be used for all corresponding <code>WorkloadEntries</code>.
-The labels and annotations in <code>metadata</code> can differ from those in <code>template</code>.</p>
+User labels for a workload group should be set here in <code>metadata</code> rather than in <code>template</code>.</p>
 
 </td>
 <td>
@@ -80,10 +80,10 @@ No
 <td><code><a href="https://istio.io/docs/reference/config/networking/workload-entry.html#WorkloadEntry">WorkloadEntry</a></code></td>
 <td>
 <p>Template to be used for the generation of <code>WorkloadEntry</code> resources that belong to this <code>WorkloadGroup</code>.
-Please note that <code>address</code> and <code>labels</code> fields should not be set in the template. The <code>serviceAccount</code>
-field MUST be specified. The workload identities (mTLS certificates) will be bootstrapped using the
+Please note that <code>address</code> and <code>labels</code> fields should not be set in the template, and an empty <code>serviceAccount</code>
+should default to <code>default</code>. The workload identities (mTLS certificates) will be bootstrapped using the
 specified service account&rsquo;s token. Workload entries in this group will be in the same namespace as the
-workload group, and inherit the labels, and annotations from the group object.</p>
+workload group, and inherit the labels and annotations from the above <code>metadata</code> field.</p>
 
 </td>
 <td>
@@ -95,7 +95,8 @@ Yes
 </section>
 <h2 id="ObjectMeta">ObjectMeta</h2>
 <section>
-<p><code>ObjectMeta</code> describes metadata associated with a <code>WorkloadGroup</code>.</p>
+<p><code>ObjectMeta</code> describes metadata that will be attached to a <code>WorkloadEntry</code>.
+It is a subset of the supported Kubernetes metadata.</p>
 
 <table class="message-fields">
 <thead>
@@ -111,7 +112,7 @@ Yes
 <td><code>labels</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>Labels to associate with the workload group</p>
+<p>Labels to attach</p>
 
 </td>
 <td>
@@ -122,7 +123,7 @@ No
 <td><code>annotations</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
-<p>Annotations to associate with the workload group.</p>
+<p>Annotations to attach</p>
 
 </td>
 <td>

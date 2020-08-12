@@ -64,11 +64,11 @@
         }
       },
       "istio.networking.v1alpha3.ObjectMeta": {
-        "description": "`ObjectMeta` describes metadata associated with a `WorkloadGroup`.",
+        "description": "`ObjectMeta` describes metadata that will be attached to a `WorkloadEntry`. It is a subset of the supported Kubernetes metadata.",
         "type": "object",
         "properties": {
           "labels": {
-            "description": "Labels to associate with the workload group",
+            "description": "Labels to attach",
             "type": "object",
             "additionalProperties": {
               "type": "string",
@@ -76,7 +76,7 @@
             }
           },
           "annotations": {
-            "description": "Annotations to associate with the workload group.",
+            "description": "Annotations to attach",
             "type": "object",
             "additionalProperties": {
               "type": "string",
