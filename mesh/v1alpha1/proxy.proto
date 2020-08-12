@@ -461,6 +461,31 @@ message ProxyConfig {
   // All control planes running in the same service mesh should specify the same mesh ID.
   // Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.
   string mesh_id = 30;
+
+  // TLS protocol versions.
+  enum TLSProtocol {
+    // Automatically choose the optimal TLS version.
+    TLS_AUTO = 0;
+
+    // TLS version 1.0
+    TLSV1_0 = 1;
+
+    // TLS version 1.1
+    TLSV1_1 = 2;
+
+    // TLS version 1.2
+    TLSV1_2 = 3;
+
+    // TLS version 1.3
+    TLSV1_3 = 4;
+  }
+
+  // Default minimum TLS protocol version. This is overridden by a minimum protocol version set
+  // in a more specific resource (e.g. Gateways).
+  TLSProtocol min_protocol_version = 31;
+
+  reserved "max_protocol_version";
+  reserved 32;
 }
 
 message RemoteService {

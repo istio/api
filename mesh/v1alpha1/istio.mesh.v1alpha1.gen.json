@@ -209,6 +209,9 @@
         "description": "ProxyConfig defines variables for individual Envoy instances.",
         "type": "object",
         "properties": {
+          "minProtocolVersion": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.TLSProtocol"
+          },
           "configPath": {
             "description": "Path to the generated configuration file directory. Proxy agent generates the actual configuration and stores it in this directory.",
             "type": "string",
@@ -1046,6 +1049,17 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
           }
         }
+      },
+      "istio.mesh.v1alpha1.ProxyConfig.TLSProtocol": {
+        "description": "TLS protocol versions.",
+        "type": "string",
+        "enum": [
+          "TLS_AUTO",
+          "TLSV1_0",
+          "TLSV1_1",
+          "TLSV1_2",
+          "TLSV1_3"
+        ]
       },
       "istio.networking.v1alpha3.ClientTLSSettings": {
         "description": "Use the tls_settings to specify the tls mode to use. If the remote service uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS mode as `ISTIO_MUTUAL`.",
