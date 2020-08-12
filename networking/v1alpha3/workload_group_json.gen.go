@@ -65,14 +65,14 @@ func (this *WorkloadGroup) UnmarshalJSON(b []byte) error {
 	return WorkloadGroupUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for ObjectMeta
-func (this *ObjectMeta) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for WorkloadGroup_ObjectMeta
+func (this *WorkloadGroup_ObjectMeta) MarshalJSON() ([]byte, error) {
 	str, err := WorkloadGroupMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for ObjectMeta
-func (this *ObjectMeta) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for WorkloadGroup_ObjectMeta
+func (this *WorkloadGroup_ObjectMeta) UnmarshalJSON(b []byte) error {
 	return WorkloadGroupUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

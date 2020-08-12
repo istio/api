@@ -56,14 +56,14 @@
         "type": "object",
         "properties": {
           "metadata": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.ObjectMeta"
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.WorkloadGroup.ObjectMeta"
           },
           "template": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.WorkloadEntry"
           }
         }
       },
-      "istio.networking.v1alpha3.ObjectMeta": {
+      "istio.networking.v1alpha3.WorkloadGroup.ObjectMeta": {
         "description": "`ObjectMeta` describes metadata that will be attached to a `WorkloadEntry`. It is a subset of the supported Kubernetes metadata.",
         "type": "object",
         "properties": {

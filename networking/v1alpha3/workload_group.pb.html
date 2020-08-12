@@ -65,7 +65,7 @@ and as such doesn&rsquo;t configure host name for these workloads.</p>
 <tbody>
 <tr id="WorkloadGroup-metadata">
 <td><code>metadata</code></td>
-<td><code><a href="#ObjectMeta">ObjectMeta</a></code></td>
+<td><code><a href="#WorkloadGroup-ObjectMeta">ObjectMeta</a></code></td>
 <td>
 <p>Metadata that will be used for all corresponding <code>WorkloadEntries</code>.
 User labels for a workload group should be set here in <code>metadata</code> rather than in <code>template</code>.</p>
@@ -93,7 +93,7 @@ Yes
 </tbody>
 </table>
 </section>
-<h2 id="ObjectMeta">ObjectMeta</h2>
+<h2 id="WorkloadGroup-ObjectMeta">WorkloadGroup.ObjectMeta</h2>
 <section>
 <p><code>ObjectMeta</code> describes metadata that will be attached to a <code>WorkloadEntry</code>.
 It is a subset of the supported Kubernetes metadata.</p>
@@ -108,7 +108,7 @@ It is a subset of the supported Kubernetes metadata.</p>
 </tr>
 </thead>
 <tbody>
-<tr id="ObjectMeta-labels">
+<tr id="WorkloadGroup-ObjectMeta-labels">
 <td><code>labels</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
@@ -119,7 +119,7 @@ It is a subset of the supported Kubernetes metadata.</p>
 No
 </td>
 </tr>
-<tr id="ObjectMeta-annotations">
+<tr id="WorkloadGroup-ObjectMeta-annotations">
 <td><code>annotations</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>

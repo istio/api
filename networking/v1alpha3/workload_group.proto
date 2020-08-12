@@ -99,14 +99,14 @@ message WorkloadGroup {
   // specified service account's token. Workload entries in this group will be in the same namespace as the
   // workload group, and inherit the labels and annotations from the above `metadata` field.
   WorkloadEntry template = 2 [(google.api.field_behavior) = REQUIRED];
-}
 
-// `ObjectMeta` describes metadata that will be attached to a `WorkloadEntry`.
-// It is a subset of the supported Kubernetes metadata.
-message ObjectMeta {
-    // Labels to attach
-    map<string, string> labels = 1;
+  // `ObjectMeta` describes metadata that will be attached to a `WorkloadEntry`.
+  // It is a subset of the supported Kubernetes metadata.
+  message ObjectMeta {
+      // Labels to attach
+      map<string, string> labels = 1;
 
-    // Annotations to attach
-    map<string, string> annotations = 2;
+      // Annotations to attach
+      map<string, string> annotations = 2;
+  }
 }
