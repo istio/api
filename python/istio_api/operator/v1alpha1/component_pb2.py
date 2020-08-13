@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.operator.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\036istio.io/api/operator/v1alpha1'),
-  serialized_pb=_b('\n!operator/v1alpha1/component.proto\x12\x17istio.operator.v1alpha1\x1a\x19google/protobuf/any.proto\x1a\"k8s.io/api/core/v1/generated.proto\x1a\"operator/v1alpha1/kubernetes.proto\"\x94\x06\n\x15IstioComponentSetSpec\x12\x38\n\x04\x62\x61se\x18\x1d \x01(\x0b\x32*.istio.operator.v1alpha1.BaseComponentSpec\x12\x35\n\x05pilot\x18\x1e \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12\x35\n\x05proxy\x18\x1f \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12@\n\x10sidecar_injector\x18  \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12\x36\n\x06policy\x18! \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12\x39\n\ttelemetry\x18\" \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12\x37\n\x07\x63itadel\x18# \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12:\n\nnode_agent\x18$ \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12\x36\n\x06galley\x18% \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12\x33\n\x03\x63ni\x18& \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12=\n\ristiod_remote\x18\' \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12>\n\x10ingress_gateways\x18( \x03(\x0b\x32$.istio.operator.v1alpha1.GatewaySpec\x12=\n\x0f\x65gress_gateways\x18) \x03(\x0b\x32$.istio.operator.v1alpha1.GatewaySpec\"\x90\x01\n\x11\x42\x61seComponentSpec\x12<\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPB\x12=\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpec\"\x97\x02\n\rComponentSpec\x12<\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPB\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x0b\n\x03hub\x18\n \x01(\t\x12\x33\n\x03tag\x18\x0b \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12\x34\n\x04spec\x18\x1e \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12=\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpec\"\x97\x02\n\x15\x45xternalComponentSpec\x12<\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPB\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x34\n\x04spec\x18\n \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12\x12\n\nchart_path\x18\x1e \x01(\t\x12$\n\x06schema\x18# \x01(\x0b\x32\x14.google.protobuf.Any\x12=\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpec\"\xdb\x02\n\x0bGatewaySpec\x12<\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPB\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12>\n\x05label\x18\x04 \x03(\x0b\x32/.istio.operator.v1alpha1.GatewaySpec.LabelEntry\x12\x0b\n\x03hub\x18\n \x01(\t\x12\x33\n\x03tag\x18\x0b \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12=\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpec\x1a,\n\nLabelEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8d\t\n\x17KubernetesResourcesSpec\x12\x33\n\x08\x61\x66\x66inity\x18\x01 \x01(\x0b\x32!.istio.operator.v1alpha1.Affinity\x12,\n\x03\x65nv\x18\x02 \x03(\x0b\x32\x1f.istio.operator.v1alpha1.EnvVar\x12\x46\n\x08hpa_spec\x18\x03 \x01(\x0b\x32\x34.istio.operator.v1alpha1.HorizontalPodAutoscalerSpec\x12\x19\n\x11image_pull_policy\x18\x04 \x01(\t\x12Y\n\rnode_selector\x18\x05 \x03(\x0b\x32\x42.istio.operator.v1alpha1.KubernetesResourcesSpec.NodeSelectorEntry\x12O\n\x15pod_disruption_budget\x18\x06 \x01(\x0b\x32\x30.istio.operator.v1alpha1.PodDisruptionBudgetSpec\x12]\n\x0fpod_annotations\x18\x07 \x03(\x0b\x32\x44.istio.operator.v1alpha1.KubernetesResourcesSpec.PodAnnotationsEntry\x12\x1b\n\x13priority_class_name\x18\x08 \x01(\t\x12@\n\x0freadiness_probe\x18\t \x01(\x0b\x32\'.istio.operator.v1alpha1.ReadinessProbe\x12\x15\n\rreplica_count\x18\n \x01(\r\x12\x35\n\tresources\x18\x0b \x01(\x0b\x32\".istio.operator.v1alpha1.Resources\x12\x35\n\x07service\x18\x0c \x01(\x0b\x32$.istio.operator.v1alpha1.ServiceSpec\x12=\n\x08strategy\x18\r \x01(\x0b\x32+.istio.operator.v1alpha1.DeploymentStrategy\x12\x33\n\x0btolerations\x18\x0e \x03(\x0b\x32\x1e.k8s.io.api.core.v1.Toleration\x12\x65\n\x13service_annotations\x18\x0f \x03(\x0b\x32H.istio.operator.v1alpha1.KubernetesResourcesSpec.ServiceAnnotationsEntry\x12;\n\x08overlays\x18\x64 \x03(\x0b\x32).istio.operator.v1alpha1.K8sObjectOverlay\x1a\x33\n\x11NodeSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x35\n\x13PodAnnotationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x39\n\x17ServiceAnnotationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xdb\x01\n\x10K8sObjectOverlay\x12\x13\n\x0b\x61pi_version\x18\x01 \x01(\t\x12\x0c\n\x04kind\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x44\n\x07patches\x18\x04 \x03(\x0b\x32\x33.istio.operator.v1alpha1.K8sObjectOverlay.PathValue\x1aP\n\tPathValue\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x35\n\x05value\x18\x02 \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\"\x18\n\x16TypeMapStringInterface\"\x0f\n\rTypeInterface\"\x14\n\x12TypeBoolValueForPBB Z\x1eistio.io/api/operator/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n!operator/v1alpha1/component.proto\x12\x17istio.operator.v1alpha1\x1a\x19google/protobuf/any.proto\x1a\"k8s.io/api/core/v1/generated.proto\x1a\"operator/v1alpha1/kubernetes.proto\"\x94\x06\n\x15IstioComponentSetSpec\x12\x38\n\x04\x62\x61se\x18\x1d \x01(\x0b\x32*.istio.operator.v1alpha1.BaseComponentSpec\x12\x35\n\x05pilot\x18\x1e \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12\x35\n\x05proxy\x18\x1f \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12@\n\x10sidecar_injector\x18  \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12\x36\n\x06policy\x18! \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12\x39\n\ttelemetry\x18\" \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12\x37\n\x07\x63itadel\x18# \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12:\n\nnode_agent\x18$ \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12\x36\n\x06galley\x18% \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12\x33\n\x03\x63ni\x18& \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12=\n\ristiod_remote\x18\' \x01(\x0b\x32&.istio.operator.v1alpha1.ComponentSpec\x12>\n\x10ingress_gateways\x18( \x03(\x0b\x32$.istio.operator.v1alpha1.GatewaySpec\x12=\n\x0f\x65gress_gateways\x18) \x03(\x0b\x32$.istio.operator.v1alpha1.GatewaySpec\"\x90\x01\n\x11\x42\x61seComponentSpec\x12<\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPB\x12=\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpec\"\x97\x02\n\rComponentSpec\x12<\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPB\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x0b\n\x03hub\x18\n \x01(\t\x12\x33\n\x03tag\x18\x0b \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12\x34\n\x04spec\x18\x1e \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12=\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpec\"\x97\x02\n\x15\x45xternalComponentSpec\x12<\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPB\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x34\n\x04spec\x18\n \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12\x12\n\nchart_path\x18\x1e \x01(\t\x12$\n\x06schema\x18# \x01(\x0b\x32\x14.google.protobuf.Any\x12=\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpec\"\xdb\x02\n\x0bGatewaySpec\x12<\n\x07\x65nabled\x18\x01 \x01(\x0b\x32+.istio.operator.v1alpha1.TypeBoolValueForPB\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12>\n\x05label\x18\x04 \x03(\x0b\x32/.istio.operator.v1alpha1.GatewaySpec.LabelEntry\x12\x0b\n\x03hub\x18\n \x01(\t\x12\x33\n\x03tag\x18\x0b \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\x12=\n\x03k8s\x18\x32 \x01(\x0b\x32\x30.istio.operator.v1alpha1.KubernetesResourcesSpec\x1a,\n\nLabelEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xd3\t\n\x17KubernetesResourcesSpec\x12\x33\n\x08\x61\x66\x66inity\x18\x01 \x01(\x0b\x32!.istio.operator.v1alpha1.Affinity\x12,\n\x03\x65nv\x18\x02 \x03(\x0b\x32\x1f.istio.operator.v1alpha1.EnvVar\x12\x46\n\x08hpa_spec\x18\x03 \x01(\x0b\x32\x34.istio.operator.v1alpha1.HorizontalPodAutoscalerSpec\x12\x19\n\x11image_pull_policy\x18\x04 \x01(\t\x12Y\n\rnode_selector\x18\x05 \x03(\x0b\x32\x42.istio.operator.v1alpha1.KubernetesResourcesSpec.NodeSelectorEntry\x12O\n\x15pod_disruption_budget\x18\x06 \x01(\x0b\x32\x30.istio.operator.v1alpha1.PodDisruptionBudgetSpec\x12]\n\x0fpod_annotations\x18\x07 \x03(\x0b\x32\x44.istio.operator.v1alpha1.KubernetesResourcesSpec.PodAnnotationsEntry\x12\x1b\n\x13priority_class_name\x18\x08 \x01(\t\x12@\n\x0freadiness_probe\x18\t \x01(\x0b\x32\'.istio.operator.v1alpha1.ReadinessProbe\x12\x15\n\rreplica_count\x18\n \x01(\r\x12\x35\n\tresources\x18\x0b \x01(\x0b\x32\".istio.operator.v1alpha1.Resources\x12\x35\n\x07service\x18\x0c \x01(\x0b\x32$.istio.operator.v1alpha1.ServiceSpec\x12=\n\x08strategy\x18\r \x01(\x0b\x32+.istio.operator.v1alpha1.DeploymentStrategy\x12\x33\n\x0btolerations\x18\x0e \x03(\x0b\x32\x1e.k8s.io.api.core.v1.Toleration\x12\x65\n\x13service_annotations\x18\x0f \x03(\x0b\x32H.istio.operator.v1alpha1.KubernetesResourcesSpec.ServiceAnnotationsEntry\x12\x44\n\x0fsecurityContext\x18\x10 \x01(\x0b\x32+.istio.operator.v1alpha1.PodSecurityContext\x12;\n\x08overlays\x18\x64 \x03(\x0b\x32).istio.operator.v1alpha1.K8sObjectOverlay\x1a\x33\n\x11NodeSelectorEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x35\n\x13PodAnnotationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x39\n\x17ServiceAnnotationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xdb\x01\n\x10K8sObjectOverlay\x12\x13\n\x0b\x61pi_version\x18\x01 \x01(\t\x12\x0c\n\x04kind\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x44\n\x07patches\x18\x04 \x03(\x0b\x32\x33.istio.operator.v1alpha1.K8sObjectOverlay.PathValue\x1aP\n\tPathValue\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x35\n\x05value\x18\x02 \x01(\x0b\x32&.istio.operator.v1alpha1.TypeInterface\"\x18\n\x16TypeMapStringInterface\"\x0f\n\rTypeInterface\"\x14\n\x12TypeBoolValueForPBB Z\x1eistio.io/api/operator/v1alpha1b\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2.DESCRIPTOR,operator_dot_v1alpha1_dot_kubernetes__pb2.DESCRIPTOR,])
 
@@ -458,8 +458,8 @@ _KUBERNETESRESOURCESSPEC_NODESELECTORENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3014,
-  serialized_end=3065,
+  serialized_start=3084,
+  serialized_end=3135,
 )
 
 _KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY = _descriptor.Descriptor(
@@ -495,8 +495,8 @@ _KUBERNETESRESOURCESSPEC_PODANNOTATIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3067,
-  serialized_end=3120,
+  serialized_start=3137,
+  serialized_end=3190,
 )
 
 _KUBERNETESRESOURCESSPEC_SERVICEANNOTATIONSENTRY = _descriptor.Descriptor(
@@ -532,8 +532,8 @@ _KUBERNETESRESOURCESSPEC_SERVICEANNOTATIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3122,
-  serialized_end=3179,
+  serialized_start=3192,
+  serialized_end=3249,
 )
 
 _KUBERNETESRESOURCESSPEC = _descriptor.Descriptor(
@@ -649,7 +649,14 @@ _KUBERNETESRESOURCESSPEC = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='overlays', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.overlays', index=15,
+      name='securityContext', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.securityContext', index=15,
+      number=16, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='overlays', full_name='istio.operator.v1alpha1.KubernetesResourcesSpec.overlays', index=16,
       number=100, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -668,7 +675,7 @@ _KUBERNETESRESOURCESSPEC = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=2014,
-  serialized_end=3179,
+  serialized_end=3249,
 )
 
 
@@ -705,8 +712,8 @@ _K8SOBJECTOVERLAY_PATHVALUE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3321,
-  serialized_end=3401,
+  serialized_start=3391,
+  serialized_end=3471,
 )
 
 _K8SOBJECTOVERLAY = _descriptor.Descriptor(
@@ -756,8 +763,8 @@ _K8SOBJECTOVERLAY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3182,
-  serialized_end=3401,
+  serialized_start=3252,
+  serialized_end=3471,
 )
 
 
@@ -780,8 +787,8 @@ _TYPEMAPSTRINGINTERFACE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3403,
-  serialized_end=3427,
+  serialized_start=3473,
+  serialized_end=3497,
 )
 
 
@@ -804,8 +811,8 @@ _TYPEINTERFACE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3429,
-  serialized_end=3444,
+  serialized_start=3499,
+  serialized_end=3514,
 )
 
 
@@ -828,8 +835,8 @@ _TYPEBOOLVALUEFORPB = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3446,
-  serialized_end=3466,
+  serialized_start=3516,
+  serialized_end=3536,
 )
 
 _ISTIOCOMPONENTSETSPEC.fields_by_name['base'].message_type = _BASECOMPONENTSPEC
@@ -875,6 +882,7 @@ _KUBERNETESRESOURCESSPEC.fields_by_name['service'].message_type = operator_dot_v
 _KUBERNETESRESOURCESSPEC.fields_by_name['strategy'].message_type = operator_dot_v1alpha1_dot_kubernetes__pb2._DEPLOYMENTSTRATEGY
 _KUBERNETESRESOURCESSPEC.fields_by_name['tolerations'].message_type = k8s_dot_io_dot_api_dot_core_dot_v1_dot_generated__pb2._TOLERATION
 _KUBERNETESRESOURCESSPEC.fields_by_name['service_annotations'].message_type = _KUBERNETESRESOURCESSPEC_SERVICEANNOTATIONSENTRY
+_KUBERNETESRESOURCESSPEC.fields_by_name['securityContext'].message_type = operator_dot_v1alpha1_dot_kubernetes__pb2._PODSECURITYCONTEXT
 _KUBERNETESRESOURCESSPEC.fields_by_name['overlays'].message_type = _K8SOBJECTOVERLAY
 _K8SOBJECTOVERLAY_PATHVALUE.fields_by_name['value'].message_type = _TYPEINTERFACE
 _K8SOBJECTOVERLAY_PATHVALUE.containing_type = _K8SOBJECTOVERLAY

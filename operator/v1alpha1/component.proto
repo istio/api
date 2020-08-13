@@ -154,6 +154,9 @@ message KubernetesResourcesSpec {
     // k8s service annotations.
     // [https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
     map<string, string> service_annotations = 15;
+    // k8s pod security context
+    // [https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)
+    PodSecurityContext securityContext = 16;
 
     // Overlays for k8s resources in rendered manifests.
     repeated K8sObjectOverlay overlays = 100;
