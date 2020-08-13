@@ -13049,7 +13049,13 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings"
+                        "name": "additional_bindings",
+                        "aggregated": [
+                          {
+                            "name": "get",
+                            "value": "/v1/services/{service_name}/config"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -36483,6 +36489,30 @@
             ]
           },
           {
+            "name": "OpenCensusAgent.TraceContext",
+            "enum_fields": [
+              {
+                "name": "UNSPECIFIED"
+              },
+              {
+                "name": "W3C_TRACE_CONTEXT",
+                "integer": 1
+              },
+              {
+                "name": "GRPC_BIN",
+                "integer": 2
+              },
+              {
+                "name": "CLOUD_TRACE_CONTEXT",
+                "integer": 3
+              },
+              {
+                "name": "B3",
+                "integer": 4
+              }
+            ]
+          },
+          {
             "name": "Topology.ForwardClientCertDetails",
             "enum_fields": [
               {
@@ -36546,6 +36576,11 @@
                 "id": 4,
                 "name": "stackdriver",
                 "type": "Stackdriver"
+              },
+              {
+                "id": 9,
+                "name": "open_census_agent",
+                "type": "OpenCensusAgent"
               },
               {
                 "id": 6,
@@ -36629,6 +36664,42 @@
                   },
                   {
                     "id": 4,
+                    "name": "max_number_of_message_events",
+                    "type": "google.protobuf.Int64Value"
+                  }
+                ]
+              },
+              {
+                "name": "OpenCensusAgent",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "address",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "context",
+                    "type": "TraceContext",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 3,
+                    "name": "debug",
+                    "type": "bool"
+                  },
+                  {
+                    "id": 4,
+                    "name": "max_number_of_attributes",
+                    "type": "google.protobuf.Int64Value"
+                  },
+                  {
+                    "id": 5,
+                    "name": "max_number_of_annotations",
+                    "type": "google.protobuf.Int64Value"
+                  },
+                  {
+                    "id": 6,
                     "name": "max_number_of_message_events",
                     "type": "google.protobuf.Int64Value"
                   }
@@ -41916,6 +41987,11 @@
                 "is_repeated": true
               },
               {
+                "id": 16,
+                "name": "securityContext",
+                "type": "PodSecurityContext"
+              },
+              {
                 "id": 100,
                 "name": "overlays",
                 "type": "K8sObjectOverlay",
@@ -42821,6 +42897,138 @@
                 "id": 2,
                 "name": "podAffinityTerm",
                 "type": "PodAffinityTerm"
+              }
+            ]
+          },
+          {
+            "name": "PodSecurityContext",
+            "fields": [
+              {
+                "id": 1,
+                "name": "seLinuxOptions",
+                "type": "SELinuxOptions"
+              },
+              {
+                "id": 2,
+                "name": "runAsUser",
+                "type": "int64"
+              },
+              {
+                "id": 3,
+                "name": "runAsNonRoot",
+                "type": "bool"
+              },
+              {
+                "id": 4,
+                "name": "supplementalGroups",
+                "type": "int64",
+                "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "fsGroup",
+                "type": "int64"
+              },
+              {
+                "id": 6,
+                "name": "runAsGroup",
+                "type": "int64"
+              },
+              {
+                "id": 7,
+                "name": "sysctls",
+                "type": "Sysctl",
+                "is_repeated": true
+              },
+              {
+                "id": 8,
+                "name": "windowsOptions",
+                "type": "WindowsSecurityContextOptions"
+              },
+              {
+                "id": 9,
+                "name": "fsGroupChangePolicy",
+                "type": "string"
+              },
+              {
+                "id": 10,
+                "name": "seccompProfile",
+                "type": "SeccompProfile"
+              }
+            ]
+          },
+          {
+            "name": "SELinuxOptions",
+            "fields": [
+              {
+                "id": 1,
+                "name": "user",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "role",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "level",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "Sysctl",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "WindowsSecurityContextOptions",
+            "fields": [
+              {
+                "id": 1,
+                "name": "gmsaCredentialSpecName",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "gmsaCredentialSpec",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "runAsUserName",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "SeccompProfile",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "localhostProfile",
+                "type": "string"
               }
             ]
           },

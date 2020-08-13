@@ -354,6 +354,9 @@ message KubernetesResourcesSpec {
     // k8s service annotations.
     // [https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
     map<string, string> service_annotations = 15;
+    // k8s pod security context
+    // [https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)
+    PodSecurityContext securityContext = 16;
 
     // Overlays for k8s resources in rendered manifests.
     repeated K8sObjectOverlay overlays = 100;
@@ -663,6 +666,47 @@ message Toleration {
 message WeightedPodAffinityTerm {
     int32 weight = 1;
     PodAffinityTerm podAffinityTerm = 2;
+}
+
+// See k8s.io.api.core.v1.PodSecurityContext.
+message PodSecurityContext {
+    SELinuxOptions seLinuxOptions = 1;
+    int64 runAsUser = 2;
+    bool runAsNonRoot = 3;
+    repeated int64 supplementalGroups = 4;
+    int64 fsGroup = 5;
+    int64 runAsGroup = 6;
+    repeated Sysctl sysctls = 7;
+    WindowsSecurityContextOptions windowsOptions = 8;
+    string fsGroupChangePolicy = 9;
+    SeccompProfile seccompProfile = 10;
+}
+
+// See k8s.io.api.core.v1.SELinuxOptions.
+message SELinuxOptions {
+    string user = 1;
+    string role = 2;
+    string type = 3;
+    string level = 4;
+}
+
+// See k8s.io.api.core.v1.Sysctl.
+message Sysctl {
+    string name = 1;
+    string value = 2;
+}
+
+// See k8s.io.api.core.v1.WindowsSecurityContextOptions.
+message WindowsSecurityContextOptions {
+    string gmsaCredentialSpecName = 1;
+    string gmsaCredentialSpec = 2;
+    string runAsUserName = 3;
+}
+
+// See k8s.io.api.core.v1.SeccompProfile.
+message SeccompProfile {
+    string type = 1;
+    string localhostProfile = 2;
 }
 
 // Synthetic type for generating Go structs.
