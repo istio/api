@@ -35899,6 +35899,11 @@
                 "type": "IngressControllerMode"
               },
               {
+                "id": 52,
+                "name": "ingress_selector",
+                "type": "string"
+              },
+              {
                 "id": 10,
                 "name": "auth_policy",
                 "type": "AuthPolicy",
@@ -36372,6 +36377,34 @@
             ]
           },
           {
+            "name": "Topology.ForwardClientCertDetails",
+            "enum_fields": [
+              {
+                "name": "UNDEFINED"
+              },
+              {
+                "name": "SANITIZE",
+                "integer": 1
+              },
+              {
+                "name": "FORWARD_ONLY",
+                "integer": 2
+              },
+              {
+                "name": "APPEND_FORWARD",
+                "integer": 3
+              },
+              {
+                "name": "SANITIZE_SET",
+                "integer": 4
+              },
+              {
+                "name": "ALWAYS_FORWARD_ONLY",
+                "integer": 5
+              }
+            ]
+          },
+          {
             "name": "ProxyConfig.InboundInterceptionMode",
             "enum_fields": [
               {
@@ -36573,6 +36606,21 @@
             ]
           },
           {
+            "name": "Topology",
+            "fields": [
+              {
+                "id": 1,
+                "name": "num_trusted_proxies",
+                "type": "uint32"
+              },
+              {
+                "id": 2,
+                "name": "forward_client_cert_details",
+                "type": "ForwardClientCertDetails"
+              }
+            ]
+          },
+          {
             "name": "ProxyConfig",
             "fields": [
               {
@@ -36713,6 +36761,17 @@
                 "id": 26,
                 "name": "status_port",
                 "type": "int32"
+              },
+              {
+                "id": 27,
+                "name": "extra_stat_tags",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 28,
+                "name": "gateway_topology",
+                "type": "Topology"
               }
             ],
             "maps": [
@@ -43160,6 +43219,11 @@
                 "type": "ComponentSpec"
               },
               {
+                "id": 39,
+                "name": "istiod_remote",
+                "type": "ComponentSpec"
+              },
+              {
                 "id": 40,
                 "name": "ingress_gateways",
                 "type": "GatewaySpec",
@@ -43180,6 +43244,11 @@
                 "id": 1,
                 "name": "enabled",
                 "type": "TypeBoolValueForPB"
+              },
+              {
+                "id": 50,
+                "name": "k8s",
+                "type": "KubernetesResourcesSpec"
               }
             ]
           },
@@ -43362,6 +43431,11 @@
                 "name": "tolerations",
                 "type": "k8s.io.api.core.v1.Toleration",
                 "is_repeated": true
+              },
+              {
+                "id": 16,
+                "name": "securityContext",
+                "type": "PodSecurityContext"
               },
               {
                 "id": 100,
@@ -44275,6 +44349,138 @@
                 "id": 4,
                 "name": "targetAverageValue",
                 "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              }
+            ]
+          },
+          {
+            "name": "PodSecurityContext",
+            "fields": [
+              {
+                "id": 1,
+                "name": "seLinuxOptions",
+                "type": "SELinuxOptions"
+              },
+              {
+                "id": 2,
+                "name": "runAsUser",
+                "type": "int64"
+              },
+              {
+                "id": 3,
+                "name": "runAsNonRoot",
+                "type": "bool"
+              },
+              {
+                "id": 4,
+                "name": "supplementalGroups",
+                "type": "int64",
+                "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "fsGroup",
+                "type": "int64"
+              },
+              {
+                "id": 6,
+                "name": "runAsGroup",
+                "type": "int64"
+              },
+              {
+                "id": 7,
+                "name": "sysctls",
+                "type": "Sysctl",
+                "is_repeated": true
+              },
+              {
+                "id": 8,
+                "name": "windowsOptions",
+                "type": "WindowsSecurityContextOptions"
+              },
+              {
+                "id": 9,
+                "name": "fsGroupChangePolicy",
+                "type": "string"
+              },
+              {
+                "id": 10,
+                "name": "seccompProfile",
+                "type": "SeccompProfile"
+              }
+            ]
+          },
+          {
+            "name": "SELinuxOptions",
+            "fields": [
+              {
+                "id": 1,
+                "name": "user",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "role",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "level",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "Sysctl",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "WindowsSecurityContextOptions",
+            "fields": [
+              {
+                "id": 1,
+                "name": "gmsaCredentialSpecName",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "gmsaCredentialSpec",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "runAsUserName",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "SeccompProfile",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "localhostProfile",
+                "type": "string"
               }
             ]
           },
