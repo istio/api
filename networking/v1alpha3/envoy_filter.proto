@@ -129,7 +129,7 @@ import "networking/v1alpha3/sidecar.proto";
 //         portNumber: 8080
 //     patch:
 //       operation: ADD
-//       filterClass: AUTHZ # This filter will run *after* Istio authz filter.
+//       filterClass: AUTHZ # This filter will run *after* the Istio authz filter.
 //       value: # lua filter specification
 //         name: acme.lua.myfilter # The free form name is used to identify a filter instance.
 //                                 # typed_config."@type" identifies it as a lua filter.
