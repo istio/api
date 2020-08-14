@@ -294,16 +294,13 @@
         ]
       },
       "istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass": {
-        "description": "FILTER_CLASS determines the filter insertion point in the filter chain relative to the filters implicitly inserted by the control plane. It is used in conjuction with the ADD operation. This is the preferred insertion mechanism for adding filters over the INSERT_* operations since those operations rely on potentially unstable filter names. Filter ordering is important if your filter depends on or affects the functioning of a another filter in the filter chain. Within a filter class, filters are inserted in the order of processing.",
+        "description": "FilterClass determines the filter insertion point in the filter chain relative to the filters implicitly inserted by the control plane. It is used in conjuction with the ADD operation. This is the preferred insertion mechanism for adding filters over the INSERT_* operations since those operations rely on potentially unstable filter names. Filter ordering is important if your filter depends on or affects the functioning of a another filter in the filter chain. Within a filter class, filters are inserted in the order of processing.",
         "type": "string",
         "enum": [
           "UNSPECIFIED",
-          "PRE_AUTHN",
-          "POST_AUTHN",
-          "PRE_AUTHZ",
-          "POST_AUTHZ",
-          "PRE_STATS",
-          "POST_STATS"
+          "AUTHN",
+          "AUTHZ",
+          "STATS"
         ]
       },
       "istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch": {

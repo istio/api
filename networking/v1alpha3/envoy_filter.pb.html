@@ -361,6 +361,8 @@ No
 <td><code>filterClass</code></td>
 <td><code><a href="#EnvoyFilter-Patch-FilterClass">FilterClass</a></code></td>
 <td>
+<p>Determines the filter insertion order.</p>
+
 </td>
 <td>
 No
@@ -819,7 +821,8 @@ configuration.</p>
 <td><code>MERGE</code></td>
 <td>
 <p>Merge the provided config with the generated config using
-proto merge semantics.</p>
+proto merge semantics. If you are specifying config in its
+entirity, use REPLACE instead.</p>
 
 </td>
 </tr>
@@ -886,9 +889,7 @@ list based on a match condition specified in Match clause.</p>
 <tr id="EnvoyFilter-Patch-Operation-REPLACE">
 <td><code>REPLACE</code></td>
 <td>
-<p>Replace contents of a named filter object with new contents.
-Replace should be used when you do not need to or cannot use
-proto merge semantics.
+<p>Replace contents of a named filter with new contents.
 REPLACE operation is only valid for HTTP<em>FILTER and
 NETWORK</em>FILTER. If the named filter is not found, this operation
 has no effect.</p>
@@ -900,11 +901,11 @@ has no effect.</p>
 </section>
 <h2 id="EnvoyFilter-Patch-FilterClass">EnvoyFilter.Patch.FilterClass</h2>
 <section>
-<p>FILTER<em>CLASS determines the filter insertion point in the filter chain
+<p>FilterClass determines the filter insertion point in the filter chain
 relative to the filters implicitly inserted by the control plane.
 It is used in conjuction with the ADD operation.
 This is the preferred insertion mechanism for adding filters over
-the INSERT</em>* operations since those operations rely on potentially unstable
+the INSERT_* operations since those operations rely on potentially unstable
 filter names.
 Filter ordering is important if your filter depends on or affects the
 functioning of a another filter in the filter chain.
@@ -921,49 +922,29 @@ Within a filter class, filters are inserted in the order of processing.</p>
 <tr id="EnvoyFilter-Patch-FilterClass-UNSPECIFIED">
 <td><code>UNSPECIFIED</code></td>
 <td>
-<p>For backwards compatiblity, control plane decides where to insert.</p>
+<p>Control plane decides where to insert the filter.
+Do not specify FilterClass if the filter is independent of others.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilter-Patch-FilterClass-PRE_AUTHN">
-<td><code>PRE_AUTHN</code></td>
+<tr id="EnvoyFilter-Patch-FilterClass-AUTHN">
+<td><code>AUTHN</code></td>
 <td>
-<p>Insert filter before authentication filters inserted by the controlplane.</p>
+<p>Insert filter after Istio authentication filters.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilter-Patch-FilterClass-POST_AUTHN">
-<td><code>POST_AUTHN</code></td>
+<tr id="EnvoyFilter-Patch-FilterClass-AUTHZ">
+<td><code>AUTHZ</code></td>
 <td>
-<p>Insert filter after authentication filters inserted by the controlplane.</p>
+<p>Insert filter after Istio authorization filters.</p>
 
 </td>
 </tr>
-<tr id="EnvoyFilter-Patch-FilterClass-PRE_AUTHZ">
-<td><code>PRE_AUTHZ</code></td>
+<tr id="EnvoyFilter-Patch-FilterClass-STATS">
+<td><code>STATS</code></td>
 <td>
-<p>Insert filter before authorization filters inserted by the controlplane.</p>
-
-</td>
-</tr>
-<tr id="EnvoyFilter-Patch-FilterClass-POST_AUTHZ">
-<td><code>POST_AUTHZ</code></td>
-<td>
-<p>Insert filter after authorization filters inserted by the controlplane.</p>
-
-</td>
-</tr>
-<tr id="EnvoyFilter-Patch-FilterClass-PRE_STATS">
-<td><code>PRE_STATS</code></td>
-<td>
-<p>Insert filter before stats filters inserted by the controlplane.</p>
-
-</td>
-</tr>
-<tr id="EnvoyFilter-Patch-FilterClass-POST_STATS">
-<td><code>POST_STATS</code></td>
-<td>
-<p>Insert filter after stats filters inserted by the controlplane.</p>
+<p>Insert filter before Istio stats filters.</p>
 
 </td>
 </tr>

@@ -2506,14 +2506,12 @@ spec:
                       description: The patch to apply along with the operation.
                       properties:
                         filterClass:
+                          description: Determines the filter insertion order.
                           enum:
                           - UNSPECIFIED
-                          - PRE_AUTHN
-                          - POST_AUTHN
-                          - PRE_AUTHZ
-                          - POST_AUTHZ
-                          - PRE_STATS
-                          - POST_STATS
+                          - AUTHN
+                          - AUTHZ
+                          - STATS
                           type: string
                         operation:
                           description: Determines how the patch should be applied.

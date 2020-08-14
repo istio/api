@@ -129,6 +129,7 @@ import "networking/v1alpha3/sidecar.proto";
 //         portNumber: 8080
 //     patch:
 //       operation: ADD
+//       filterClass: AUTHZ # This filter will run *after* Istio authz filter.
 //       value: # lua filter specification
 //         name: acme.lua.myfilter # The free form name is used to identify a filter instance.
 //                                 # typed_config."@type" identifies it as a lua filter.
@@ -199,31 +200,51 @@ import "networking/v1alpha3/sidecar.proto";
 //         xff_num_trusted_hops: 5
 //```
 //
-// The following example inserts an OpenApi processing filter
-// that produces `request.operation` filter attribute which is consumed
-// by the istio stats fiter. `filterClass: PRE_STATS` encodes this dependency.
+// The following example inserts an attributegen filter
+// that produces `istio_operationId` attribute which is consumed
+// by the istio.stats fiter. `filterClass: STATS` encodes this dependency.
 //
 //
 // ```yaml
 // apiVersion: networking.istio.io/v1alpha3
 // kind: EnvoyFilter
 // metadata:
-//   name: mysvc-openapi
+//   name: reviews-request-operation
 //   namespace: myns
 // spec:
 //   workloadSelector:
 //     labels:
-//       app: mysvc
+//       app: reviews
 //   configPatches:
 //   - applyTo: HTTP_FILTER
 //     match:
 //       context: SIDECAR_INBOUND
 //     patch:
 //       operation: ADD
-//       filterClass: PRE_STATS
+//       filterClass: STATS # This filter will run *before* the Istio stats filter.
 //       value:
-//         name: istio.openapi
-//         # Full configuration must be specified here.
+//         name: istio.request_operation
+//         typed_config:
+//          "@type": type.googleapis.com/udpa.type.v1.TypedStruct
+//          type_url: type.googleapis.com/envoy.extensions.filters.http.wasm.v3.Wasm
+//          value:
+//            config:
+//              configuration: |
+//                {
+//                  "attributes": [
+//                    {
+//                      "output_attribute": "istio_operationId",
+//                      "match": [
+//                        {
+//                          "value": "ListReviews",
+//                          "condition": "request.url_path == '/reviews' && request.method == 'GET'"
+//                        }]
+//                    }]
+//                }
+//              vm_config:
+//                runtime: envoy.wasm.runtime.null
+//                code:
+//                  local: { inline_string: "envoy.wasm.attributegen" }
 // ```
 //
 // The following example inserts an http ext_authz filter in the `myns` namespace.
@@ -241,7 +262,7 @@ import "networking/v1alpha3/sidecar.proto";
 //       context: SIDECAR_INBOUND
 //     patch:
 //       operation: ADD
-//       filterClass: POST_AUTHZ # Apply this filter after Istio authz.
+//       filterClass: AUTHZ # This filter will run *after* the Istio authz filter.
 //       value:
 //         name: acme.ext_authz
 //         typed_config:
@@ -263,16 +284,18 @@ import "networking/v1alpha3/sidecar.proto";
 // apiVersion: networking.istio.io/v1alpha3
 // kind: EnvoyFilter
 // metadata:
-//   name: myns-ext-authz
+//   name: mysvc-ext-authz
 //   namespace: myns
 // spec:
+//   workloadSelector:
+//     labels:
+//       app: mysvc
 //   configPatches:
 //   - applyTo: HTTP_FILTER
 //     match:
 //       context: SIDECAR_INBOUND
 //     patch:
 //       operation: REPLACE
-//       filterClass: POST_AUTHZ # Apply this filter after Istio authz.
 //       value:
 //         name: acme.ext_authz
 //         typed_config:
@@ -570,7 +593,8 @@ message EnvoyFilter {
       INVALID = 0;
 
       // Merge the provided config with the generated config using
-      // proto merge semantics.
+      // proto merge semantics. If you are specifying config in its
+      // entirity, use REPLACE instead.
       MERGE = 1;
 
       // Add the provided config to an existing list (of listeners,
@@ -613,9 +637,7 @@ message EnvoyFilter {
       // list based on a match condition specified in Match clause.
       INSERT_FIRST = 6;
 
-      // Replace contents of a named filter object with new contents.
-      // Replace should be used when you do not need to or cannot use
-      // proto merge semantics.
+      // Replace contents of a named filter with new contents.
       // REPLACE operation is only valid for HTTP_FILTER and
       // NETWORK_FILTER. If the named filter is not found, this operation
       // has no effect.
@@ -629,7 +651,7 @@ message EnvoyFilter {
     // proto merge semantics with the existing proto in the path.
     google.protobuf.Struct value = 2;
 
-    // FILTER_CLASS determines the filter insertion point in the filter chain
+    // FilterClass determines the filter insertion point in the filter chain
     // relative to the filters implicitly inserted by the control plane.
     // It is used in conjuction with the ADD operation.
     // This is the preferred insertion mechanism for adding filters over
@@ -639,28 +661,21 @@ message EnvoyFilter {
     // functioning of a another filter in the filter chain.
     // Within a filter class, filters are inserted in the order of processing.
     enum FilterClass {
-      // For backwards compatiblity, control plane decides where to insert.
+      // Control plane decides where to insert the filter.
+      // Do not specify FilterClass if the filter is independent of others.
       UNSPECIFIED = 0;
 
-      // Insert filter before authentication filters inserted by the controlplane.
-      PRE_AUTHN = 1;
+      // Insert filter after Istio authentication filters.
+      AUTHN = 1;
 
-      // Insert filter after authentication filters inserted by the controlplane.
-      POST_AUTHN = 2;
+      // Insert filter after Istio authorization filters.
+      AUTHZ = 2;
 
-      // Insert filter before authorization filters inserted by the controlplane.
-      PRE_AUTHZ = 3;
-
-      // Insert filter after authorization filters inserted by the controlplane.
-      POST_AUTHZ = 4;
-
-      // Insert filter before stats filters inserted by the controlplane.
-      PRE_STATS = 5;
-
-      // Insert filter after stats filters inserted by the controlplane.
-      POST_STATS = 6;
+      // Insert filter before Istio stats filters.
+      STATS = 3;
     };
 
+    // Determines the filter insertion order.
     FilterClass filter_class = 3;
   };
 
