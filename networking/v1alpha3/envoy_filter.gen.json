@@ -271,8 +271,11 @@
             "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.Patch.Operation"
           },
           "value": {
-            "description": "The JSON config of the object being patched. This will be merged using json merge semantics with the existing proto in the path.",
+            "description": "The JSON config of the object being patched. This will be merged using proto merge semantics with the existing proto in the path.",
             "type": "object"
+          },
+          "filterClass": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass"
           }
         }
       },
@@ -286,7 +289,18 @@
           "REMOVE",
           "INSERT_BEFORE",
           "INSERT_AFTER",
-          "INSERT_FIRST"
+          "INSERT_FIRST",
+          "REPLACE"
+        ]
+      },
+      "istio.networking.v1alpha3.EnvoyFilter.Patch.FilterClass": {
+        "description": "FilterClass determines the filter insertion point in the filter chain relative to the filters implicitly inserted by the control plane. It is used in conjuction with the ADD operation. This is the preferred insertion mechanism for adding filters over the INSERT_* operations since those operations rely on potentially unstable filter names. Filter ordering is important if your filter depends on or affects the functioning of a another filter in the filter chain. Within a filter class, filters are inserted in the order of processing.",
+        "type": "string",
+        "enum": [
+          "UNSPECIFIED",
+          "AUTHN",
+          "AUTHZ",
+          "STATS"
         ]
       },
       "istio.networking.v1alpha3.EnvoyFilter.EnvoyConfigObjectMatch": {

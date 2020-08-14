@@ -1,4 +1,4 @@
-// Copyright 2018 Istio Authors
+// Copyright Istio Authors
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -127,15 +127,12 @@ import "networking/v1alpha3/sidecar.proto";
 //       context: SIDECAR_INBOUND
 //       listener:
 //         portNumber: 8080
-//         filterChain:
-//           filter:
-//             name: "envoy.http_connection_manager"
-//             subFilter:
-//               name: "envoy.router"
 //     patch:
-//       operation: INSERT_BEFORE
+//       operation: ADD
+//       filterClass: AUTHZ # This filter will run *after* the Istio authz filter.
 //       value: # lua filter specification
-//         name: envoy.lua
+//         name: acme.lua.myfilter # The free form name is used to identify a filter instance.
+//                                 # typed_config."@type" identifies it as a lua filter.
 //         typed_config:
 //           "@type": "type.googleapis.com/envoy.config.filter.http.lua.v2.Lua"
 //           inlineCode: |
@@ -203,6 +200,111 @@ import "networking/v1alpha3/sidecar.proto";
 //         xff_num_trusted_hops: 5
 //```
 //
+// The following example inserts an attributegen filter
+// that produces `istio_operationId` attribute which is consumed
+// by the istio.stats fiter. `filterClass: STATS` encodes this dependency.
+//
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
+// metadata:
+//   name: reviews-request-operation
+//   namespace: myns
+// spec:
+//   workloadSelector:
+//     labels:
+//       app: reviews
+//   configPatches:
+//   - applyTo: HTTP_FILTER
+//     match:
+//       context: SIDECAR_INBOUND
+//     patch:
+//       operation: ADD
+//       filterClass: STATS # This filter will run *before* the Istio stats filter.
+//       value:
+//         name: istio.request_operation
+//         typed_config:
+//          "@type": type.googleapis.com/udpa.type.v1.TypedStruct
+//          type_url: type.googleapis.com/envoy.extensions.filters.http.wasm.v3.Wasm
+//          value:
+//            config:
+//              configuration: |
+//                {
+//                  "attributes": [
+//                    {
+//                      "output_attribute": "istio_operationId",
+//                      "match": [
+//                        {
+//                          "value": "ListReviews",
+//                          "condition": "request.url_path == '/reviews' && request.method == 'GET'"
+//                        }]
+//                    }]
+//                }
+//              vm_config:
+//                runtime: envoy.wasm.runtime.null
+//                code:
+//                  local: { inline_string: "envoy.wasm.attributegen" }
+// ```
+//
+// The following example inserts an http ext_authz filter in the `myns` namespace.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
+// metadata:
+//   name: myns-ext-authz
+//   namespace: myns
+// spec:
+//   configPatches:
+//   - applyTo: HTTP_FILTER
+//     match:
+//       context: SIDECAR_INBOUND
+//     patch:
+//       operation: ADD
+//       filterClass: AUTHZ # This filter will run *after* the Istio authz filter.
+//       value:
+//         name: acme.ext_authz
+//         typed_config:
+//           "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthz
+//           grpc_service:
+//             envoy_grpc:
+//               cluster_name: acme-ext-authz
+//               initial_metadata:
+//               - key: foo
+//                 value: myauth.acme # required by local ext auth server.
+// ```
+//
+// A workload in the `myns` namespace needs to access a different ext_auth server
+// that does not accept initial metadata. Since proto merge cannot remove fields, the
+// following configuration uses the `REPLACE` operation. If you do not need to inherit
+// fields, REPLACE is preferred over MERGE.
+//
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
+// metadata:
+//   name: mysvc-ext-authz
+//   namespace: myns
+// spec:
+//   workloadSelector:
+//     labels:
+//       app: mysvc
+//   configPatches:
+//   - applyTo: HTTP_FILTER
+//     match:
+//       context: SIDECAR_INBOUND
+//     patch:
+//       operation: REPLACE
+//       value:
+//         name: acme.ext_authz
+//         typed_config:
+//           "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthz
+//           grpc_service:
+//             envoy_grpc:
+//               cluster_name: acme-ext-authz-alt
+// ```
+
 package istio.networking.v1alpha3;
 
 option go_package = "istio.io/api/networking/v1alpha3";
@@ -491,7 +593,8 @@ message EnvoyFilter {
       INVALID = 0;
 
       // Merge the provided config with the generated config using
-      // json merge semantics.
+      // proto merge semantics. If you are specifying config in its
+      // entirity, use REPLACE instead.
       MERGE = 1;
 
       // Add the provided config to an existing list (of listeners,
@@ -533,14 +636,47 @@ message EnvoyFilter {
       // This is specifically useful when you want your filter first in the
       // list based on a match condition specified in Match clause.
       INSERT_FIRST = 6;
+
+      // Replace contents of a named filter with new contents.
+      // REPLACE operation is only valid for HTTP_FILTER and
+      // NETWORK_FILTER. If the named filter is not found, this operation
+      // has no effect.
+      REPLACE = 7;
     }
 
     // Determines how the patch should be applied.
     Operation operation = 1;
 
     // The JSON config of the object being patched. This will be merged using
-    // json merge semantics with the existing proto in the path.
+    // proto merge semantics with the existing proto in the path.
     google.protobuf.Struct value = 2;
+
+    // FilterClass determines the filter insertion point in the filter chain
+    // relative to the filters implicitly inserted by the control plane.
+    // It is used in conjuction with the ADD operation.
+    // This is the preferred insertion mechanism for adding filters over
+    // the INSERT_* operations since those operations rely on potentially unstable
+    // filter names.
+    // Filter ordering is important if your filter depends on or affects the
+    // functioning of a another filter in the filter chain.
+    // Within a filter class, filters are inserted in the order of processing.
+    enum FilterClass {
+      // Control plane decides where to insert the filter.
+      // Do not specify FilterClass if the filter is independent of others.
+      UNSPECIFIED = 0;
+
+      // Insert filter after Istio authentication filters.
+      AUTHN = 1;
+
+      // Insert filter after Istio authorization filters.
+      AUTHZ = 2;
+
+      // Insert filter before Istio stats filters.
+      STATS = 3;
+    };
+
+    // Determines the filter insertion order.
+    FilterClass filter_class = 3;
   };
 
   // One or more match conditions to be met before a patch is applied
