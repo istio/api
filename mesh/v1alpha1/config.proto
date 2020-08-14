@@ -448,8 +448,30 @@ message MeshConfig {
   reserved 53;
   reserved "termination_drain_duration";
 
+  // VerifyCertificateAtClient sets the mesh global default for peer certificate validation
+  // at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL) origination
+  // modes are used. This setting can be overridden at the host level via DestinationRule API.
+  // By default, VerifyCertificateAtClient is true.
+  //
+  // CaCertificates: If set, proxy verifies CA signature based on given CaCertificates. If unset,
+  // and VerifyCertificateAtClient is true, proxy uses default System CA bundle. If unset and
+  // VerifyCertificateAtClient is false, proxy will not verify the CA.
+  //
+  // SubjectAltNames: If set, proxy verifies subject alt names are present in the SAN. If unset,
+  // and VerifyCertificateAtClient is true, proxy uses host in destination rule to verify the SANs.
+  // If unset, and VerifyCertificateAtClient is false, proxy does not verify SANs.
+  //
+  // For SAN, client-side proxy will exact match host in DestinationRule as well as one level
+  // wildcard if the specified host in DestinationRule doesn't contain a wildcard.
+  // For example, if the host in DestinationRule is x.y.com, client-side proxy will
+  // match either x.y.com or *.y.com for the SAN in the presented server certificate.
+  // For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
+  // if host is *.x.y.com, client-side proxy will verify the presented server certificate SAN matches
+  // .x.y.com suffix.
+  google.protobuf.BoolValue verify_certificate_at_client = 54;
+
   // $hide_from_docs
-  // Next available field number: 54
+  // Next available field number: 55
 }
 
 // Resource describes the source of configuration
