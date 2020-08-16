@@ -435,6 +435,48 @@ Mesh ID is used to label telemetry reports for cases where telemetry from multip
 No
 </td>
 </tr>
+<tr id="ProxyConfig-stats_inclusion_prefixes">
+<td><code>statsInclusionPrefixes</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Prefix matcher for Envoy stats creation. To reduce memory and CPU
+overhead from envoy stats system, istio-proxy by default only create and
+expose a subset of envoy stats. This option is to include extra envoy stats
+with prefix match.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-stats_inclusion_suffixes">
+<td><code>statsInclusionSuffixes</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Suffix matcher for Envoy stats creation. To reduce memory and CPU
+overhead from envoy stats system, istio-proxy by default only create and
+expose a subset of envoy stats. This option is to include extra envoy stats
+with suffix match.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-stats_inclusion_regexps">
+<td><code>statsInclusionRegexps</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Regex matcher for Envoy stats creation. To reduce memory and CPU
+overhead from envoy stats system, istio-proxy by default only create
+expose a subset of envoy stats. This option is to include extra envoy stats
+with regex match.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="ProxyConfig-zipkin_address" class="deprecated ">
 <td><code>zipkinAddress</code></td>
 <td><code>string</code></td>

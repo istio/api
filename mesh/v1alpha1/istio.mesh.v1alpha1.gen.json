@@ -342,6 +342,30 @@
             "description": "The unique identifier for the [service mesh](https://istio.io/docs/reference/glossary/#service-mesh) All control planes running in the same service mesh should specify the same mesh ID. Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.",
             "type": "string",
             "format": "string"
+          },
+          "statsInclusionPrefixes": {
+            "description": "Prefix matcher for Envoy stats creation. To reduce memory and CPU overhead from envoy stats system, istio-proxy by default only create and expose a subset of envoy stats. This option is to include extra envoy stats with prefix match.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "statsInclusionSuffixes": {
+            "description": "Suffix matcher for Envoy stats creation. To reduce memory and CPU overhead from envoy stats system, istio-proxy by default only create and expose a subset of envoy stats. This option is to include extra envoy stats with suffix match.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "statsInclusionRegexps": {
+            "description": "Regex matcher for Envoy stats creation. To reduce memory and CPU overhead from envoy stats system, istio-proxy by default only create expose a subset of envoy stats. This option is to include extra envoy stats with regex match.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
           }
         }
       },
