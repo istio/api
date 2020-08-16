@@ -1269,7 +1269,7 @@ type ProxyConfig struct {
 	// expose a subset of envoy stats. This option is to include extra envoy stats
 	// with suffix match.
 	StatsInclusionSuffixes []string `protobuf:"bytes,32,rep,name=stats_inclusion_suffixes,json=statsInclusionSuffixes,proto3" json:"statsInclusionSuffixes,omitempty"`
-	// Regex matcher for Envoy stats creation. To reduce memory and CPU
+	// Regexp matcher for Envoy stats creation. To reduce memory and CPU
 	// overhead from envoy stats system, istio-proxy by default only create
 	// expose a subset of envoy stats. This option is to include extra envoy stats
 	// with regex match.

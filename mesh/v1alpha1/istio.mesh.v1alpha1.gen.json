@@ -360,7 +360,7 @@
             }
           },
           "statsInclusionRegexps": {
-            "description": "Regex matcher for Envoy stats creation. To reduce memory and CPU overhead from envoy stats system, istio-proxy by default only create expose a subset of envoy stats. This option is to include extra envoy stats with regex match.",
+            "description": "Regexp matcher for Envoy stats creation. To reduce memory and CPU overhead from envoy stats system, istio-proxy by default only create expose a subset of envoy stats. This option is to include extra envoy stats with regex match.",
             "type": "array",
             "items": {
               "type": "string",
