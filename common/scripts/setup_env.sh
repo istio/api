@@ -59,7 +59,9 @@ fi
 
 # Build image to use
 if [[ "${IMAGE_VERSION:-}" == "" ]]; then
-  export IMAGE_VERSION=master-2020-08-12T13-43-22
+  # TODO: Update with the new image when https://github.com/istio/tools/pull/1138 is merged
+  #export IMAGE_VERSION=master-2020-08-12T13-43-22
+  IMAGE_VERSION=master-2020-08-10T23-21-34
 fi
 if [[ "${IMAGE_NAME:-}" == "" ]]; then
   export IMAGE_NAME=build-tools
