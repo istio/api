@@ -78,7 +78,7 @@ import "networking/v1alpha3/sidecar.proto";
 //         portNumber: 9307
 //         filterChain:
 //           filter:
-//             name: "envoy.tcp_proxy"
+//             name: "envoy.filters.network.tcp_proxy"
 //     patch:
 //       operation: INSERT_BEFORE
 //       value:
@@ -92,13 +92,13 @@ import "networking/v1alpha3/sidecar.proto";
 //       listener:
 //         filterChain:
 //           filter:
-//             name: "envoy.http_connection_manager"
+//             name: "envoy.filters.network.http_connection_manager"
 //     patch:
 //       operation: MERGE
 //       value:
-//         name: "envoy.http_connection_manager"
+//         name: "envoy.filters.network.http_connection_manager"
 //         typed_config:
-//           "@type": "type.googleapis.com/envoy.config.filter.network.http_connection_manager.v2.HttpConnectionManager"
+//           "@type": "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager"
 //           common_http_protocol_options:
 //             idle_timeout: 30s
 //```
@@ -131,10 +131,9 @@ import "networking/v1alpha3/sidecar.proto";
 //       operation: ADD
 //       filterClass: AUTHZ # This filter will run *after* the Istio authz filter.
 //       value: # lua filter specification
-//         name: acme.lua.myfilter # The free form name is used to identify a filter instance.
-//                                 # typed_config."@type" identifies it as a lua filter.
+//         name: envoy.filters.http.lua
 //         typed_config:
-//           "@type": "type.googleapis.com/envoy.config.filter.http.lua.v2.Lua"
+//           "@type": "type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua"
 //           inlineCode: |
 //            function envoy_on_request(request_handle)
 //              -- Make an HTTP call to an upstream host with the following headers, body, and timeout.
@@ -191,7 +190,7 @@ import "networking/v1alpha3/sidecar.proto";
 //         filterChain:
 //           sni: app.example.com
 //           filter:
-//             name: "envoy.http_connection_manager"
+//             name: "envoy.filters.network.http_connection_manager"
 //     patch:
 //       operation: MERGE
 //       value:
@@ -264,7 +263,7 @@ import "networking/v1alpha3/sidecar.proto";
 //       operation: ADD
 //       filterClass: AUTHZ # This filter will run *after* the Istio authz filter.
 //       value:
-//         name: acme.ext_authz
+//         name: envoy.filters.http.ext_authz
 //         typed_config:
 //           "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthz
 //           grpc_service:
@@ -297,7 +296,7 @@ import "networking/v1alpha3/sidecar.proto";
 //     patch:
 //       operation: REPLACE
 //       value:
-//         name: acme.ext_authz
+//         name: envoy.filters.http.ext_authz
 //         typed_config:
 //           "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthz
 //           grpc_service:
@@ -536,7 +535,7 @@ message EnvoyFilter {
       string application_protocols = 4;
 
       // The name of a specific filter to apply the patch to. Set this
-      // to envoy.http_connection_manager to add a filter or apply a
+      // to envoy.filters.network.http_connection_manager to add a filter or apply a
       // patch to the HTTP connection manager.
       FilterMatch filter = 5;
     };
@@ -544,6 +543,8 @@ message EnvoyFilter {
     // Conditions to match a specific filter within a filter chain.
     message FilterMatch {
       // The filter name to match on.
+      // For standard Envoy filters, canonical filter names should be used.
+      // Refer to https://www.envoyproxy.io/docs/envoy/latest/version_history/v1.14.0#deprecated for canonical names.
       string name = 1;
       // The next level filter within this filter to match
       // upon. Typically used for HTTP Connection Manager filters and
@@ -553,8 +554,8 @@ message EnvoyFilter {
 
     // Conditions to match a specific filter within another
     // filter. This field is typically useful to match a HTTP filter
-    // inside the envoy.http_connection_manager network filter. This
-    // could also be applicable for thrift filters.
+    // inside the envoy.filters.network.http_connection_manager network filter. 
+    // This could also be applicable for thrift filters.
     message SubFilterMatch {
       // The filter name to match on.
       string name = 1;
@@ -707,7 +708,7 @@ message EnvoyFilter {
     // object based on applyTo.  For example, an applyTo with
     // HTTP_FILTER is expected to have a match condition on the
     // listeners, with a network filter selection on
-    // envoy.http_connection_manager and a sub filter selection on the
+    // envoy.filters.network.http_connection_manager and a sub filter selection on the
     // HTTP filter relative to which the insertion should be
     // performed. Similarly, an applyTo on CLUSTER should have a match
     // (if provided) on the cluster and not on a listener.

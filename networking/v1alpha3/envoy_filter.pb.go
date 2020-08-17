@@ -875,7 +875,7 @@ type EnvoyFilter_ListenerMatch_FilterChainMatch struct {
 	// Accepted values include: h2,http/1.1,http/1.0
 	ApplicationProtocols string `protobuf:"bytes,4,opt,name=application_protocols,json=applicationProtocols,proto3" json:"application_protocols,omitempty"`
 	// The name of a specific filter to apply the patch to. Set this
-	// to envoy.http_connection_manager to add a filter or apply a
+	// to envoy.filters.network.http_connection_manager to add a filter or apply a
 	// patch to the HTTP connection manager.
 	Filter               *EnvoyFilter_ListenerMatch_FilterMatch `protobuf:"bytes,5,opt,name=filter,proto3" json:"filter,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                               `json:"-"`
@@ -958,6 +958,8 @@ func (m *EnvoyFilter_ListenerMatch_FilterChainMatch) GetFilter() *EnvoyFilter_Li
 // Conditions to match a specific filter within a filter chain.
 type EnvoyFilter_ListenerMatch_FilterMatch struct {
 	// The filter name to match on.
+	// For standard Envoy filters, canonical filter names should be used.
+	// Refer to https://www.envoyproxy.io/docs/envoy/latest/version_history/v1.14.0#deprecated for canonical names.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// The next level filter within this filter to match
 	// upon. Typically used for HTTP Connection Manager filters and
@@ -1017,8 +1019,8 @@ func (m *EnvoyFilter_ListenerMatch_FilterMatch) GetSubFilter() *EnvoyFilter_List
 
 // Conditions to match a specific filter within another
 // filter. This field is typically useful to match a HTTP filter
-// inside the envoy.http_connection_manager network filter. This
-// could also be applicable for thrift filters.
+// inside the envoy.filters.network.http_connection_manager network filter.
+// This could also be applicable for thrift filters.
 type EnvoyFilter_ListenerMatch_SubFilterMatch struct {
 	// The filter name to match on.
 	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
@@ -1270,7 +1272,7 @@ type EnvoyFilter_EnvoyConfigObjectPatch struct {
 	// object based on applyTo.  For example, an applyTo with
 	// HTTP_FILTER is expected to have a match condition on the
 	// listeners, with a network filter selection on
-	// envoy.http_connection_manager and a sub filter selection on the
+	// envoy.filters.network.http_connection_manager and a sub filter selection on the
 	// HTTP filter relative to which the insertion should be
 	// performed. Similarly, an applyTo on CLUSTER should have a match
 	// (if provided) on the cluster and not on a listener.

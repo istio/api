@@ -469,7 +469,7 @@ applied.  The match is expected to select the appropriate
 object based on applyTo.  For example, an applyTo with
 HTTP<em>FILTER is expected to have a match condition on the
 listeners, with a network filter selection on
-envoy.http</em>connection_manager and a sub filter selection on the
+envoy.filters.network.http</em>connection_manager and a sub filter selection on the
 HTTP filter relative to which the insertion should be
 performed. Similarly, an applyTo on CLUSTER should have a match
 (if provided) on the cluster and not on a listener.</p>
@@ -673,7 +673,7 @@ No
 <td><code><a href="#EnvoyFilter-ListenerMatch-FilterMatch">FilterMatch</a></code></td>
 <td>
 <p>The name of a specific filter to apply the patch to. Set this
-to envoy.http<em>connection</em>manager to add a filter or apply a
+to envoy.filters.network.http<em>connection</em>manager to add a filter or apply a
 patch to the HTTP connection manager.</p>
 
 </td>
@@ -702,7 +702,9 @@ No
 <td><code>name</code></td>
 <td><code>string</code></td>
 <td>
-<p>The filter name to match on.</p>
+<p>The filter name to match on.
+For standard Envoy filters, canonical filter names should be used.
+Refer to https://www.envoyproxy.io/docs/envoy/latest/version_history/v1.14.0#deprecated for canonical names.</p>
 
 </td>
 <td>
@@ -729,8 +731,8 @@ No
 <section>
 <p>Conditions to match a specific filter within another
 filter. This field is typically useful to match a HTTP filter
-inside the envoy.http<em>connection</em>manager network filter. This
-could also be applicable for thrift filters.</p>
+inside the envoy.filters.network.http<em>connection</em>manager network filter.
+This could also be applicable for thrift filters.</p>
 
 <table class="message-fields">
 <thead>
