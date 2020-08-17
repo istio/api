@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 27
+number_of_entries: 28
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -435,42 +435,14 @@ Mesh ID is used to label telemetry reports for cases where telemetry from multip
 No
 </td>
 </tr>
-<tr id="ProxyConfig-stats_inclusion_prefixes">
-<td><code>statsInclusionPrefixes</code></td>
-<td><code>string[]</code></td>
+<tr id="ProxyConfig-envoy_stats_inclusion">
+<td><code>envoyStatsInclusion</code></td>
+<td><code><a href="#ProxyConfig-EnvoyStatsInclusion">EnvoyStatsInclusion</a></code></td>
 <td>
-<p>Prefix matcher for Envoy stats creation. To reduce memory and CPU
-overhead from envoy stats system, istio-proxy by default only create and
-expose a subset of envoy stats. This option is to include extra envoy stats
-with prefix match.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="ProxyConfig-stats_inclusion_suffixes">
-<td><code>statsInclusionSuffixes</code></td>
-<td><code>string[]</code></td>
-<td>
-<p>Suffix matcher for Envoy stats creation. To reduce memory and CPU
-overhead from envoy stats system, istio-proxy by default only create and
-expose a subset of envoy stats. This option is to include extra envoy stats
-with suffix match.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="ProxyConfig-stats_inclusion_regexps">
-<td><code>statsInclusionRegexps</code></td>
-<td><code>string[]</code></td>
-<td>
-<p>Regexp matcher for Envoy stats creation. To reduce memory and CPU
-overhead from envoy stats system, istio-proxy by default only create
-expose a subset of envoy stats. This option is to include extra envoy stats
-with regex match.</p>
+<p>Stats name inclusion matcher for Envoy stats creation. To reduce memory and
+CPU overhead from envoy stats system, istio-proxy by default only create
+and expose a subset of envoy stats. This option is to include extra envoy
+stats with prefix, regex, and regexps match.</p>
 
 </td>
 <td>
@@ -700,6 +672,56 @@ No
 tracing. Default is <code>[&quot;W3C_TRACE_CONTEXT&quot;]</code>. If multiple values are specified,
 the proxy will attempt to read each header for each request and will
 write all headers.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ProxyConfig-EnvoyStatsInclusion">ProxyConfig.EnvoyStatsInclusion</h2>
+<section>
+<p>Envoy stats name matchers for stats inclusion.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyConfig-EnvoyStatsInclusion-stats_inclusion_prefixes">
+<td><code>statsInclusionPrefixes</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Prefix matcher for Envoy stats creation.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-EnvoyStatsInclusion-stats_inclusion_suffixes">
+<td><code>statsInclusionSuffixes</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Suffix matcher for Envoy stats creation.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-EnvoyStatsInclusion-stats_inclusion_regexps">
+<td><code>statsInclusionRegexps</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Regexp matcher for Envoy stats creation.</p>
 
 </td>
 <td>
