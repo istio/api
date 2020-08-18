@@ -39,13 +39,13 @@ import "type/v1beta1/selector.proto";
 // Requests will be allowed or denied based solely on ALLOW and DENY policies.
 //
 // A request will be internally marked that it should be audited if there is an AUDIT policy on the workload that matches the request.
-// A separate plugin must be configured and enabled to actually fulfill the audit decision and complete the audit behavior. 
+// A separate plugin must be configured and enabled to actually fulfill the audit decision and complete the audit behavior.
 // The request will not be audited if there are no such supporting plugins enabled.
 // Currently, the only supported plugin is the [Telemetry v2 Stackdriver](https://istio.io/latest/docs/reference/config/proxy_extensions/stackdriver/) plugin.
-// 
+//
 // Here is an example of Istio Authorization Policy:
 //
-// It sets the `action` to "ALLOW" to create an allow policy. The default action is "ALLOW" 
+// It sets the `action` to "ALLOW" to create an allow policy. The default action is "ALLOW"
 // but it is useful to be explicit in the policy.
 //
 // It allows requests from:
@@ -109,9 +109,9 @@ import "type/v1beta1/selector.proto";
 //        methods: ["POST"]
 // ```
 //
-// The following authorization policy sets the `action` to "AUDIT". It will audit any GET requests to the path with the 
-// prefix "/user/profile". 
-// 
+// The following authorization policy sets the `action` to "AUDIT". It will audit any GET requests to the path with the
+// prefix "/user/profile".
+//
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
 // kind: AuthorizationPolicy
@@ -181,6 +181,15 @@ import "type/v1beta1/selector.proto";
 //    matchLabels:
 //      version: v1
 // ```
+//
+// When designing authorization policies, you can use the
+// `rootNamespace` option for default network behavior.
+// If you set `rootNamespace` in your `MeshConfig` resource, Istio defaults to
+// using authorization policies set in the root namespace when you create no
+// other policy in your namespace.
+//
+// This configuration is useful when configuring a deny-by-default network
+// behavior in your Istio service mesh.
 package istio.security.v1beta1;
 
 option go_package="istio.io/api/security/v1beta1";
