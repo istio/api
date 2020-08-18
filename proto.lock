@@ -13049,13 +13049,7 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings",
-                        "aggregated": [
-                          {
-                            "name": "get",
-                            "value": "/v1/services/{service_name}/config"
-                          }
-                        ]
+                        "name": "additional_bindings"
                       }
                     ]
                   }
@@ -37536,7 +37530,7 @@
               },
               {
                 "id": 8,
-                "name": "validate_server_certificate",
+                "name": "verify_certificate_at_client",
                 "type": "google.protobuf.BoolValue"
               },
               {
@@ -37773,6 +37767,30 @@
               {
                 "name": "INSERT_FIRST",
                 "integer": 6
+              },
+              {
+                "name": "REPLACE",
+                "integer": 7
+              }
+            ]
+          },
+          {
+            "name": "Patch.FilterClass",
+            "enum_fields": [
+              {
+                "name": "UNSPECIFIED"
+              },
+              {
+                "name": "AUTHN",
+                "integer": 1
+              },
+              {
+                "name": "AUTHZ",
+                "integer": 2
+              },
+              {
+                "name": "STATS",
+                "integer": 3
               }
             ]
           }
@@ -38009,6 +38027,11 @@
                     "id": 2,
                     "name": "value",
                     "type": "google.protobuf.Struct"
+                  },
+                  {
+                    "id": 3,
+                    "name": "filter_class",
+                    "type": "FilterClass"
                   }
                 ]
               },
@@ -39561,6 +39584,74 @@
       }
     },
     {
+      "protopath": "networking:/:v1alpha3:/:workload_group.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "WorkloadGroup",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "ObjectMeta"
+              },
+              {
+                "id": 2,
+                "name": "template",
+                "type": "WorkloadEntry",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              }
+            ],
+            "messages": [
+              {
+                "name": "ObjectMeta",
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 1,
+                      "name": "labels",
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 2,
+                      "name": "annotations",
+                      "type": "string"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/api/field_behavior.proto"
+          },
+          {
+            "path": "networking/v1alpha3/workload_entry.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.networking.v1alpha3"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1alpha3"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "networking:/:v1beta1:/:destination_rule.proto",
       "def": {
         "enums": [
@@ -39991,7 +40082,7 @@
               },
               {
                 "id": 8,
-                "name": "validate_server_certificate",
+                "name": "verify_certificate_at_client",
                 "type": "google.protobuf.BoolValue"
               },
               {

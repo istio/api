@@ -198,8 +198,8 @@
           "mode": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.ClientTLSSettings.TLSmode"
           },
-          "validateServerCertificate": {
-            "description": "ValidateServerCertificate decide how the presented peer certificate during TLS handshake at the client-side proxy is validated when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL) origination modes are used. This setting overrides the mesh global default. By default, ValidateServerCertificate is true.",
+          "verifyCertificateAtClient": {
+            "description": "VerifyCertificateAtClient sets default behavior for peer certificate validation at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL) origination modes are used. This setting overrides the global mesh default. By default, VerifyCertificateAtClient is true.",
             "type": "boolean",
             "nullable": true
           },
