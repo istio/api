@@ -435,14 +435,14 @@ Mesh ID is used to label telemetry reports for cases where telemetry from multip
 No
 </td>
 </tr>
-<tr id="ProxyConfig-envoy_stats_inclusion">
-<td><code>envoyStatsInclusion</code></td>
-<td><code><a href="#ProxyConfig-EnvoyStatsInclusion">EnvoyStatsInclusion</a></code></td>
+<tr id="ProxyConfig-proxy_stats_matcher">
+<td><code>proxyStatsMatcher</code></td>
+<td><code><a href="#ProxyConfig-ProxyStatsMatcher">ProxyStatsMatcher</a></code></td>
 <td>
-<p>Stats name inclusion matcher for Envoy stats creation. To reduce memory and
-CPU overhead from envoy stats system, istio-proxy by default only create
-and expose a subset of envoy stats. This option is to include extra envoy
-stats with prefix, regex, and regexps match.</p>
+<p>Stats name matcher for proxy stats creation. To reduce memory and
+CPU overhead from envoy stats system, istio proxy by default creates
+and exposes a subset of envoy stats. This option is to control creation of
+additional envoy stats with prefix, regex, and regexps match on stats name.</p>
 
 </td>
 <td>
@@ -681,9 +681,9 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="ProxyConfig-EnvoyStatsInclusion">ProxyConfig.EnvoyStatsInclusion</h2>
+<h2 id="ProxyConfig-ProxyStatsMatcher">ProxyConfig.ProxyStatsMatcher</h2>
 <section>
-<p>Envoy stats name matchers for stats inclusion.</p>
+<p>Proxy stats name creation matchers.</p>
 
 <table class="message-fields">
 <thead>
@@ -695,33 +695,33 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="ProxyConfig-EnvoyStatsInclusion-stats_inclusion_prefixes">
-<td><code>statsInclusionPrefixes</code></td>
+<tr id="ProxyConfig-ProxyStatsMatcher-inclusion_prefixes">
+<td><code>inclusionPrefixes</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Prefix matcher for Envoy stats creation.</p>
+<p>Proxy stats name prefix matcher for inclusion.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="ProxyConfig-EnvoyStatsInclusion-stats_inclusion_suffixes">
-<td><code>statsInclusionSuffixes</code></td>
+<tr id="ProxyConfig-ProxyStatsMatcher-inclusion_suffixes">
+<td><code>inclusionSuffixes</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Suffix matcher for Envoy stats creation.</p>
+<p>Proxy stats name suffix matcher for inclusion.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="ProxyConfig-EnvoyStatsInclusion-stats_inclusion_regexps">
-<td><code>statsInclusionRegexps</code></td>
+<tr id="ProxyConfig-ProxyStatsMatcher-inclusion_regexps">
+<td><code>inclusionRegexps</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Regexp matcher for Envoy stats creation.</p>
+<p>Proxy stats name regexps matcher for inclusion.</p>
 
 </td>
 <td>

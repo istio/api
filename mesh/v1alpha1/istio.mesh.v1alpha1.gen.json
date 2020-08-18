@@ -343,8 +343,8 @@
             "type": "string",
             "format": "string"
           },
-          "envoyStatsInclusion": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.EnvoyStatsInclusion"
+          "proxyStatsMatcher": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.ProxyStatsMatcher"
           }
         }
       },
@@ -1055,28 +1055,28 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.ProxyConfig.EnvoyStatsInclusion": {
-        "description": "Envoy stats name matchers for stats inclusion.",
+      "istio.mesh.v1alpha1.ProxyConfig.ProxyStatsMatcher": {
+        "description": "Proxy stats name creation matchers.",
         "type": "object",
         "properties": {
-          "statsInclusionPrefixes": {
-            "description": "Prefix matcher for Envoy stats creation.",
+          "inclusionPrefixes": {
+            "description": "Proxy stats name prefix matcher for inclusion.",
             "type": "array",
             "items": {
               "type": "string",
               "format": "string"
             }
           },
-          "statsInclusionSuffixes": {
-            "description": "Suffix matcher for Envoy stats creation.",
+          "inclusionSuffixes": {
+            "description": "Proxy stats name suffix matcher for inclusion.",
             "type": "array",
             "items": {
               "type": "string",
               "format": "string"
             }
           },
-          "statsInclusionRegexps": {
-            "description": "Regexp matcher for Envoy stats creation.",
+          "inclusionRegexps": {
+            "description": "Proxy stats name regexps matcher for inclusion.",
             "type": "array",
             "items": {
               "type": "string",
