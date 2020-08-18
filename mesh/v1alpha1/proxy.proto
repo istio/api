@@ -462,7 +462,7 @@ message ProxyConfig {
   // Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.
   string mesh_id = 30;
 
-  // Proxy stats name creation matchers.
+  // Proxy stats name matchers for stats creation.
   message ProxyStatsMatcher {
     // Proxy stats name prefix matcher for inclusion.
     repeated string inclusion_prefixes = 1;
@@ -474,7 +474,7 @@ message ProxyConfig {
     repeated string inclusion_regexps = 3;
   }
 
-  // Stats name matcher for proxy stats creation. To reduce memory and
+  // Proxy stats name matcher for stats creation. To reduce memory and
   // CPU overhead from envoy stats system, istio proxy by default creates
   // and exposes a subset of envoy stats. This option is to control creation of
   // additional envoy stats with prefix, regex, and regexps match on stats name.

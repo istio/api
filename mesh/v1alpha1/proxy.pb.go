@@ -1259,7 +1259,7 @@ type ProxyConfig struct {
 	// All control planes running in the same service mesh should specify the same mesh ID.
 	// Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.
 	MeshId string `protobuf:"bytes,30,opt,name=mesh_id,json=meshId,proto3" json:"meshId,omitempty"`
-	// Stats name matcher for proxy stats creation. To reduce memory and
+	// Proxy stats name matcher for stats creation. To reduce memory and
 	// CPU overhead from envoy stats system, istio proxy by default creates
 	// and exposes a subset of envoy stats. This option is to control creation of
 	// additional envoy stats with prefix, regex, and regexps match on stats name.
@@ -1509,7 +1509,7 @@ func (m *ProxyConfig) GetProxyStatsMatcher() *ProxyConfig_ProxyStatsMatcher {
 	return nil
 }
 
-// Proxy stats name creation matchers.
+// Proxy stats name matchers for stats creation.
 type ProxyConfig_ProxyStatsMatcher struct {
 	// Proxy stats name prefix matcher for inclusion.
 	InclusionPrefixes []string `protobuf:"bytes,1,rep,name=inclusion_prefixes,json=inclusionPrefixes,proto3" json:"inclusionPrefixes,omitempty"`

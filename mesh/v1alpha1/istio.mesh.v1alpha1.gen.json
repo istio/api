@@ -1056,7 +1056,7 @@
         }
       },
       "istio.mesh.v1alpha1.ProxyConfig.ProxyStatsMatcher": {
-        "description": "Proxy stats name creation matchers.",
+        "description": "Proxy stats name matchers for stats creation.",
         "type": "object",
         "properties": {
           "inclusionPrefixes": {
