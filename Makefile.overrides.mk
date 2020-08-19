@@ -14,3 +14,8 @@
 
 # this repo is on the container plan by default
 BUILD_WITH_CONTAINER ?= 1
+
+
+# if enabled, will verify that schema definitions match between versions (ie. v1alpha3 & v1beta1).
+# only works with apiextensions.k8s.io/v1 kubernetes api (not with v1beta1)
+VERIFY_CRDS_SCHEMA ?= 0

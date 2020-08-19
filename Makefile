@@ -30,6 +30,8 @@ SHELL := /bin/bash
 # figure out all the tools you need in your environment to make that work.
 export BUILD_WITH_CONTAINER ?= 0
 
+export VERIFY_CRDS_SCHEMA ?= 0
+
 ifeq ($(BUILD_WITH_CONTAINER),1)
 
 # An export free of arugments in a Makefile places all variables in the Makefile into the
