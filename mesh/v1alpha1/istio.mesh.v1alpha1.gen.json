@@ -912,25 +912,6 @@
             "description": "gRPC address for the OpenCensus agent (e.g. dns://authority/host:port or unix:path). See [gRPC naming docs](https://github.com/grpc/grpc/blob/master/doc/naming.md) for details.",
             "type": "string",
             "format": "string"
-          },
-          "debug": {
-            "description": "debug enables trace output to stdout $hide_from_docs",
-            "type": "boolean"
-          },
-          "maxNumberOfAttributes": {
-            "description": "The global default max number of attributes per span. default is 200. $hide_from_docs",
-            "type": "integer",
-            "nullable": true
-          },
-          "maxNumberOfAnnotations": {
-            "description": "The global default max number of annotation events per span. default is 200. $hide_from_docs",
-            "type": "integer",
-            "nullable": true
-          },
-          "maxNumberOfMessageEvents": {
-            "description": "The global default max number of message events per span. default is 200. $hide_from_docs",
-            "type": "integer",
-            "nullable": true
           }
         }
       },

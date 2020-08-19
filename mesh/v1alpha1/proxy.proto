@@ -124,22 +124,6 @@ message Tracing {
     // the proxy will attempt to read each header for each request and will
     // write all headers.
     repeated TraceContext context = 2;
-
-    // debug enables trace output to stdout
-    // $hide_from_docs
-    bool debug = 3;
-    // The global default max number of attributes per span.
-    // default is 200.
-    // $hide_from_docs
-    google.protobuf.Int64Value max_number_of_attributes = 4;
-    // The global default max number of annotation events per span.
-    // default is 200.
-    // $hide_from_docs
-    google.protobuf.Int64Value max_number_of_annotations = 5;
-    // The global default max number of message events per span.
-    // default is 200.
-    // $hide_from_docs
-    google.protobuf.Int64Value max_number_of_message_events = 6;
   }
 
   // The tracer implementation to be used by Envoy.
