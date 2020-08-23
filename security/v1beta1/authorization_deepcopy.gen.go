@@ -159,6 +159,15 @@
 //    matchLabels:
 //      version: v1
 // ```
+//
+// When designing authorization policies, you can use the
+// `rootNamespace` option for default network behavior.
+// If you set `rootNamespace` in your `MeshConfig` resource, Istio defaults to
+// using authorization policies set in the root namespace when you create no
+// other policy in your namespace.
+//
+// This configuration is useful when configuring a deny-by-default network
+// behavior in your Istio service mesh.
 
 package v1beta1
 

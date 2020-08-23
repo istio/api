@@ -169,6 +169,15 @@ spec:
      version: v1
 </code></pre>
 
+<p>When designing authorization policies, you can use the
+<code>rootNamespace</code> option for default network behavior.
+If you set <code>rootNamespace</code> in your <code>MeshConfig</code> resource, Istio defaults to
+using authorization policies set in the root namespace when you create no
+other policy in your namespace.</p>
+
+<p>This configuration is useful when configuring a deny-by-default network
+behavior in your Istio service mesh.</p>
+
 <h2 id="AuthorizationPolicy">AuthorizationPolicy</h2>
 <section>
 <p>AuthorizationPolicy enables access control on workloads.</p>
