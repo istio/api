@@ -334,7 +334,7 @@ package v1alpha3
 import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
-	_ "google/api/field_behavior.proto"
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	math "math"
 )
 

@@ -5,7 +5,7 @@ go 1.12
 require (
 	github.com/gogo/protobuf v1.3.1
 	github.com/golang/protobuf v1.3.5
-	google.golang.org/grpc v1.28.1 // indirect
-	istio.io/gogo-genproto v0.0.0-20190930162913-45029607206a // indirect
+	google.golang.org/genproto v0.0.0-20190819201941-24fa4b261c55
+	google.golang.org/grpc v1.28.1
 	k8s.io/apimachinery v0.18.1
 )

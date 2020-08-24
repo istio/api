@@ -6,7 +6,7 @@ package v1alpha1
 import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
-	_ "google/rpc/status.proto"
+	_ "google.golang.org/genproto/googleapis/rpc/status"
 	math "math"
 )
 

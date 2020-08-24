@@ -4,9 +4,11 @@
 package v1alpha1
 
 import (
+	context "context"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	status "google/rpc/status.proto"
+	status "google.golang.org/genproto/googleapis/rpc/status"
+	grpc "google.golang.org/grpc"
 	math "math"
 )
 
@@ -715,4 +717,391 @@ var fileDescriptor_0713683a7297bd65 = []byte{
 	0xe9, 0xfa, 0xeb, 0x7a, 0x04, 0xa6, 0xbc, 0x6d, 0xfb, 0xb4, 0x9d, 0xfd, 0x66, 0x3b, 0x5d, 0x0c,
 	0xbf, 0xd5, 0x1e, 0xfc, 0x08, 0x00, 0x00, 0xff, 0xff, 0x71, 0x91, 0xbe, 0x5c, 0x0f, 0x0a, 0x00,
 	0x00,
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// AggregatedMeshConfigServiceClient is the client API for AggregatedMeshConfigService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type AggregatedMeshConfigServiceClient interface {
+	// StreamAggregatedResources provides the ability to carefully
+	// sequence updates across multiple resource types. A single stream
+	// is used with multiple independent MeshConfigRequest /
+	// MeshConfigResponses sequences multiplexed via the type URL.
+	StreamAggregatedResources(ctx context.Context, opts ...grpc.CallOption) (AggregatedMeshConfigService_StreamAggregatedResourcesClient, error)
+	// IncrementalAggregatedResources provides the ability to incrementally
+	// update the resources on the client. This supports the goal of
+	// scalability of MCP resources.
+	IncrementalAggregatedResources(ctx context.Context, opts ...grpc.CallOption) (AggregatedMeshConfigService_IncrementalAggregatedResourcesClient, error)
+}
+
+type aggregatedMeshConfigServiceClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewAggregatedMeshConfigServiceClient(cc *grpc.ClientConn) AggregatedMeshConfigServiceClient {
+	return &aggregatedMeshConfigServiceClient{cc}
+}
+
+func (c *aggregatedMeshConfigServiceClient) StreamAggregatedResources(ctx context.Context, opts ...grpc.CallOption) (AggregatedMeshConfigService_StreamAggregatedResourcesClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_AggregatedMeshConfigService_serviceDesc.Streams[0], "/istio.mcp.v1alpha1.AggregatedMeshConfigService/StreamAggregatedResources", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &aggregatedMeshConfigServiceStreamAggregatedResourcesClient{stream}
+	return x, nil
+}
+
+type AggregatedMeshConfigService_StreamAggregatedResourcesClient interface {
+	Send(*MeshConfigRequest) error
+	Recv() (*MeshConfigResponse, error)
+	grpc.ClientStream
+}
+
+type aggregatedMeshConfigServiceStreamAggregatedResourcesClient struct {
+	grpc.ClientStream
+}
+
+func (x *aggregatedMeshConfigServiceStreamAggregatedResourcesClient) Send(m *MeshConfigRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *aggregatedMeshConfigServiceStreamAggregatedResourcesClient) Recv() (*MeshConfigResponse, error) {
+	m := new(MeshConfigResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *aggregatedMeshConfigServiceClient) IncrementalAggregatedResources(ctx context.Context, opts ...grpc.CallOption) (AggregatedMeshConfigService_IncrementalAggregatedResourcesClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_AggregatedMeshConfigService_serviceDesc.Streams[1], "/istio.mcp.v1alpha1.AggregatedMeshConfigService/IncrementalAggregatedResources", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &aggregatedMeshConfigServiceIncrementalAggregatedResourcesClient{stream}
+	return x, nil
+}
+
+type AggregatedMeshConfigService_IncrementalAggregatedResourcesClient interface {
+	Send(*IncrementalMeshConfigRequest) error
+	Recv() (*IncrementalMeshConfigResponse, error)
+	grpc.ClientStream
+}
+
+type aggregatedMeshConfigServiceIncrementalAggregatedResourcesClient struct {
+	grpc.ClientStream
+}
+
+func (x *aggregatedMeshConfigServiceIncrementalAggregatedResourcesClient) Send(m *IncrementalMeshConfigRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *aggregatedMeshConfigServiceIncrementalAggregatedResourcesClient) Recv() (*IncrementalMeshConfigResponse, error) {
+	m := new(IncrementalMeshConfigResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// AggregatedMeshConfigServiceServer is the server API for AggregatedMeshConfigService service.
+type AggregatedMeshConfigServiceServer interface {
+	// StreamAggregatedResources provides the ability to carefully
+	// sequence updates across multiple resource types. A single stream
+	// is used with multiple independent MeshConfigRequest /
+	// MeshConfigResponses sequences multiplexed via the type URL.
+	StreamAggregatedResources(AggregatedMeshConfigService_StreamAggregatedResourcesServer) error
+	// IncrementalAggregatedResources provides the ability to incrementally
+	// update the resources on the client. This supports the goal of
+	// scalability of MCP resources.
+	IncrementalAggregatedResources(AggregatedMeshConfigService_IncrementalAggregatedResourcesServer) error
+}
+
+func RegisterAggregatedMeshConfigServiceServer(s *grpc.Server, srv AggregatedMeshConfigServiceServer) {
+	s.RegisterService(&_AggregatedMeshConfigService_serviceDesc, srv)
+}
+
+func _AggregatedMeshConfigService_StreamAggregatedResources_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(AggregatedMeshConfigServiceServer).StreamAggregatedResources(&aggregatedMeshConfigServiceStreamAggregatedResourcesServer{stream})
+}
+
+type AggregatedMeshConfigService_StreamAggregatedResourcesServer interface {
+	Send(*MeshConfigResponse) error
+	Recv() (*MeshConfigRequest, error)
+	grpc.ServerStream
+}
+
+type aggregatedMeshConfigServiceStreamAggregatedResourcesServer struct {
+	grpc.ServerStream
+}
+
+func (x *aggregatedMeshConfigServiceStreamAggregatedResourcesServer) Send(m *MeshConfigResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *aggregatedMeshConfigServiceStreamAggregatedResourcesServer) Recv() (*MeshConfigRequest, error) {
+	m := new(MeshConfigRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _AggregatedMeshConfigService_IncrementalAggregatedResources_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(AggregatedMeshConfigServiceServer).IncrementalAggregatedResources(&aggregatedMeshConfigServiceIncrementalAggregatedResourcesServer{stream})
+}
+
+type AggregatedMeshConfigService_IncrementalAggregatedResourcesServer interface {
+	Send(*IncrementalMeshConfigResponse) error
+	Recv() (*IncrementalMeshConfigRequest, error)
+	grpc.ServerStream
+}
+
+type aggregatedMeshConfigServiceIncrementalAggregatedResourcesServer struct {
+	grpc.ServerStream
+}
+
+func (x *aggregatedMeshConfigServiceIncrementalAggregatedResourcesServer) Send(m *IncrementalMeshConfigResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *aggregatedMeshConfigServiceIncrementalAggregatedResourcesServer) Recv() (*IncrementalMeshConfigRequest, error) {
+	m := new(IncrementalMeshConfigRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+var _AggregatedMeshConfigService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "istio.mcp.v1alpha1.AggregatedMeshConfigService",
+	HandlerType: (*AggregatedMeshConfigServiceServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "StreamAggregatedResources",
+			Handler:       _AggregatedMeshConfigService_StreamAggregatedResources_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "IncrementalAggregatedResources",
+			Handler:       _AggregatedMeshConfigService_IncrementalAggregatedResources_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
+	Metadata: "mcp/v1alpha1/mcp.proto",
+}
+
+// ResourceSourceClient is the client API for ResourceSource service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type ResourceSourceClient interface {
+	// The sink, acting as gRPC client, establishes a new resource stream
+	// with the source. The sink sends RequestResources message to
+	// and receives Resources messages from the source.
+	EstablishResourceStream(ctx context.Context, opts ...grpc.CallOption) (ResourceSource_EstablishResourceStreamClient, error)
+}
+
+type resourceSourceClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewResourceSourceClient(cc *grpc.ClientConn) ResourceSourceClient {
+	return &resourceSourceClient{cc}
+}
+
+func (c *resourceSourceClient) EstablishResourceStream(ctx context.Context, opts ...grpc.CallOption) (ResourceSource_EstablishResourceStreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_ResourceSource_serviceDesc.Streams[0], "/istio.mcp.v1alpha1.ResourceSource/EstablishResourceStream", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &resourceSourceEstablishResourceStreamClient{stream}
+	return x, nil
+}
+
+type ResourceSource_EstablishResourceStreamClient interface {
+	Send(*RequestResources) error
+	Recv() (*Resources, error)
+	grpc.ClientStream
+}
+
+type resourceSourceEstablishResourceStreamClient struct {
+	grpc.ClientStream
+}
+
+func (x *resourceSourceEstablishResourceStreamClient) Send(m *RequestResources) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *resourceSourceEstablishResourceStreamClient) Recv() (*Resources, error) {
+	m := new(Resources)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// ResourceSourceServer is the server API for ResourceSource service.
+type ResourceSourceServer interface {
+	// The sink, acting as gRPC client, establishes a new resource stream
+	// with the source. The sink sends RequestResources message to
+	// and receives Resources messages from the source.
+	EstablishResourceStream(ResourceSource_EstablishResourceStreamServer) error
+}
+
+func RegisterResourceSourceServer(s *grpc.Server, srv ResourceSourceServer) {
+	s.RegisterService(&_ResourceSource_serviceDesc, srv)
+}
+
+func _ResourceSource_EstablishResourceStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(ResourceSourceServer).EstablishResourceStream(&resourceSourceEstablishResourceStreamServer{stream})
+}
+
+type ResourceSource_EstablishResourceStreamServer interface {
+	Send(*Resources) error
+	Recv() (*RequestResources, error)
+	grpc.ServerStream
+}
+
+type resourceSourceEstablishResourceStreamServer struct {
+	grpc.ServerStream
+}
+
+func (x *resourceSourceEstablishResourceStreamServer) Send(m *Resources) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *resourceSourceEstablishResourceStreamServer) Recv() (*RequestResources, error) {
+	m := new(RequestResources)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+var _ResourceSource_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "istio.mcp.v1alpha1.ResourceSource",
+	HandlerType: (*ResourceSourceServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "EstablishResourceStream",
+			Handler:       _ResourceSource_EstablishResourceStream_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
+	Metadata: "mcp/v1alpha1/mcp.proto",
+}
+
+// ResourceSinkClient is the client API for ResourceSink service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type ResourceSinkClient interface {
+	// The source, acting as gRPC client, establishes a new resource stream
+	// with the sink. The sink sends RequestResources message to and
+	// receives Resources messages from the source.
+	EstablishResourceStream(ctx context.Context, opts ...grpc.CallOption) (ResourceSink_EstablishResourceStreamClient, error)
+}
+
+type resourceSinkClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewResourceSinkClient(cc *grpc.ClientConn) ResourceSinkClient {
+	return &resourceSinkClient{cc}
+}
+
+func (c *resourceSinkClient) EstablishResourceStream(ctx context.Context, opts ...grpc.CallOption) (ResourceSink_EstablishResourceStreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_ResourceSink_serviceDesc.Streams[0], "/istio.mcp.v1alpha1.ResourceSink/EstablishResourceStream", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &resourceSinkEstablishResourceStreamClient{stream}
+	return x, nil
+}
+
+type ResourceSink_EstablishResourceStreamClient interface {
+	Send(*Resources) error
+	Recv() (*RequestResources, error)
+	grpc.ClientStream
+}
+
+type resourceSinkEstablishResourceStreamClient struct {
+	grpc.ClientStream
+}
+
+func (x *resourceSinkEstablishResourceStreamClient) Send(m *Resources) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *resourceSinkEstablishResourceStreamClient) Recv() (*RequestResources, error) {
+	m := new(RequestResources)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// ResourceSinkServer is the server API for ResourceSink service.
+type ResourceSinkServer interface {
+	// The source, acting as gRPC client, establishes a new resource stream
+	// with the sink. The sink sends RequestResources message to and
+	// receives Resources messages from the source.
+	EstablishResourceStream(ResourceSink_EstablishResourceStreamServer) error
+}
+
+func RegisterResourceSinkServer(s *grpc.Server, srv ResourceSinkServer) {
+	s.RegisterService(&_ResourceSink_serviceDesc, srv)
+}
+
+func _ResourceSink_EstablishResourceStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(ResourceSinkServer).EstablishResourceStream(&resourceSinkEstablishResourceStreamServer{stream})
+}
+
+type ResourceSink_EstablishResourceStreamServer interface {
+	Send(*RequestResources) error
+	Recv() (*Resources, error)
+	grpc.ServerStream
+}
+
+type resourceSinkEstablishResourceStreamServer struct {
+	grpc.ServerStream
+}
+
+func (x *resourceSinkEstablishResourceStreamServer) Send(m *RequestResources) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *resourceSinkEstablishResourceStreamServer) Recv() (*Resources, error) {
+	m := new(Resources)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+var _ResourceSink_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "istio.mcp.v1alpha1.ResourceSink",
+	HandlerType: (*ResourceSinkServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "EstablishResourceStream",
+			Handler:       _ResourceSink_EstablishResourceStream_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
+	Metadata: "mcp/v1alpha1/mcp.proto",
 }

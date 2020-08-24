@@ -146,9 +146,9 @@ package v1beta1
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	_ "google/api/field_behavior.proto"
-	duration "google/protobuf/duration.proto"
-	wrappers "google/protobuf/wrappers.proto"
+	duration "github.com/golang/protobuf/ptypes/duration"
+	wrappers "github.com/golang/protobuf/ptypes/wrappers"
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	math "math"
 )
 

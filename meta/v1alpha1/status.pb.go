@@ -6,8 +6,8 @@ package v1alpha1
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	_ "google/api/field_behavior.proto"
-	timestamp "google/protobuf/timestamp.proto"
+	timestamp "github.com/golang/protobuf/ptypes/timestamp"
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	v1alpha1 "istio.io/api/analysis/v1alpha1"
 	math "math"
 )

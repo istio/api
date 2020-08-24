@@ -8,7 +8,7 @@ package v1alpha1
 import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
-	_ "google/protobuf/any.proto"
+	_ "github.com/golang/protobuf/ptypes/any"
 	math "math"
 )
 

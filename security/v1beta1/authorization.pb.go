@@ -165,7 +165,7 @@ package v1beta1
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	_ "google/api/field_behavior.proto"
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	v1beta1 "istio.io/api/type/v1beta1"
 	math "math"
 )

@@ -8,8 +8,8 @@ import (
 	fmt "fmt"
 	github_com_gogo_protobuf_jsonpb "github.com/gogo/protobuf/jsonpb"
 	proto "github.com/gogo/protobuf/proto"
-	_ "google/api/field_behavior.proto"
-	_ "google/protobuf/timestamp.proto"
+	_ "github.com/golang/protobuf/ptypes/timestamp"
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	_ "istio.io/api/analysis/v1alpha1"
 	math "math"
 )

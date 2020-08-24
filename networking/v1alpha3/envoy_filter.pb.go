@@ -6,8 +6,8 @@ package v1alpha3
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	_ "google/api/field_behavior.proto"
-	_struct "google/protobuf/struct.proto"
+	_struct "github.com/golang/protobuf/ptypes/struct"
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	math "math"
 )
 

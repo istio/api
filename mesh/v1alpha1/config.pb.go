@@ -8,8 +8,8 @@ package v1alpha1
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	duration "google/protobuf/duration.proto"
-	wrappers "google/protobuf/wrappers.proto"
+	duration "github.com/golang/protobuf/ptypes/duration"
+	wrappers "github.com/golang/protobuf/ptypes/wrappers"
 	v1alpha3 "istio.io/api/networking/v1alpha3"
 	math "math"
 )

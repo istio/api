@@ -8,7 +8,7 @@ import (
 	fmt "fmt"
 	github_com_gogo_protobuf_jsonpb "github.com/gogo/protobuf/jsonpb"
 	proto "github.com/gogo/protobuf/proto"
-	_ "google/rpc/status.proto"
+	_ "google.golang.org/genproto/googleapis/rpc/status"
 	math "math"
 )
 
