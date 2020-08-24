@@ -203,7 +203,7 @@ operator_v1alpha1_path := operator/v1alpha1
 operator_v1alpha1_protos := $(wildcard $(operator_v1alpha1_path)/*.proto)
 operator_v1alpha1_pb_gos := $(operator_v1alpha1_protos:.proto=.pb.go)
 operator_v1alpha1_pb_pythons := $(patsubst $(operator_v1alpha1_path)/%.proto,$(python_output_path)/$(operator_v1alpha1_path)/%_pb2.py,$(operator_v1alpha1_protos))
-operator_v1alpha1_pb_doc := $(operator_v1alpha1_path:.proto=.pb.html)
+operator_v1alpha1_pb_doc := $(operator_v1alpha1_path)/istio.operator.v1alpha1.pb.html
 operator_v1alpha1_k8s_gos := \
 	$(patsubst $(operator_v1alpha1_path)/%.proto,$(operator_v1alpha1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(operator_v1alpha1_protos)))
 
@@ -219,7 +219,7 @@ $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_p
 generate-operator: $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons) $(operator_v1alpha1_k8s_gos)
 
 clean-operator:
-	@rm -fr $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons) $(operator_v1alpha1_k8s_gos)
+	rm -fr $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons) $(operator_v1alpha1_k8s_gos)
 
 #####################
 # networking/...
