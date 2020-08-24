@@ -6608,6 +6608,26 @@
             ]
           },
           {
+            "name": "JwtLocation",
+            "fields": [
+              {
+                "id": 1,
+                "name": "header",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "query",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "value_prefix",
+                "type": "string"
+              }
+            ]
+          },
+          {
             "name": "AuthProvider",
             "fields": [
               {
@@ -6634,6 +6654,12 @@
                 "id": 5,
                 "name": "authorization_url",
                 "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "jwt_locations",
+                "type": "JwtLocation",
+                "is_repeated": true
               }
             ]
           },
@@ -6759,6 +6785,16 @@
               {
                 "id": 7,
                 "name": "jwt_audience",
+                "type": "string"
+              },
+              {
+                "id": 8,
+                "name": "disable_auth",
+                "type": "bool"
+              },
+              {
+                "id": 9,
+                "name": "protocol",
                 "type": "string"
               }
             ]
@@ -7442,6 +7478,11 @@
                 "type": "string"
               },
               {
+                "id": 6,
+                "name": "service_root_url",
+                "type": "string"
+              },
+              {
                 "id": 2,
                 "name": "overview",
                 "type": "string"
@@ -7542,12 +7583,6 @@
                 ]
               },
               {
-                "id": 4,
-                "name": "features",
-                "type": "string",
-                "is_repeated": true
-              },
-              {
                 "id": 101,
                 "name": "target",
                 "type": "string"
@@ -7583,63 +7618,6 @@
           {
             "name": "objc_class_prefix",
             "value": "GAPI"
-          }
-        ]
-      }
-    },
-    {
-      "protopath": "common-protos:/:google:/:api:/:expr:/:v1alpha1:/:cel_service.proto",
-      "def": {
-        "services": [
-          {
-            "name": "CelService",
-            "rpcs": [
-              {
-                "name": "Parse",
-                "in_type": "ParseRequest",
-                "out_type": "ParseResponse"
-              },
-              {
-                "name": "Check",
-                "in_type": "CheckRequest",
-                "out_type": "CheckResponse"
-              },
-              {
-                "name": "Eval",
-                "in_type": "EvalRequest",
-                "out_type": "EvalResponse"
-              }
-            ]
-          }
-        ],
-        "imports": [
-          {
-            "path": "google/api/expr/v1alpha1/conformance_service.proto"
-          }
-        ],
-        "package": {
-          "name": "google.api.expr.v1alpha1"
-        },
-        "options": [
-          {
-            "name": "cc_enable_arenas",
-            "value": "true"
-          },
-          {
-            "name": "go_package",
-            "value": "google.golang.org/genproto/googleapis/api/expr/v1alpha1;expr"
-          },
-          {
-            "name": "java_multiple_files",
-            "value": "true"
-          },
-          {
-            "name": "java_outer_classname",
-            "value": "CelServiceProto"
-          },
-          {
-            "name": "java_package",
-            "value": "com.google.api.expr.v1alpha1"
           }
         ]
       }
@@ -8238,7 +8216,7 @@
           },
           {
             "name": "go_package",
-            "value": "google.golang.org/genproto/googleapis/api/expr/v1alpha1;expr"
+            "value": "google.golang.org/genproto/googleapis/api/expr/conformance/v1alpha1;confpb"
           },
           {
             "name": "java_multiple_files",
@@ -8748,6 +8726,14 @@
                   "id": 4,
                   "name": "positions",
                   "type": "int32"
+                }
+              },
+              {
+                "key_type": "int64",
+                "field": {
+                  "id": 5,
+                  "name": "macro_calls",
+                  "type": "Expr"
                 }
               }
             ]
@@ -10107,6 +10093,14 @@
                 "name": "LAUNCH_STAGE_UNSPECIFIED"
               },
               {
+                "name": "UNIMPLEMENTED",
+                "integer": 6
+              },
+              {
+                "name": "PRELAUNCH",
+                "integer": 7
+              },
+              {
                 "name": "EARLY_ACCESS",
                 "integer": 1
               },
@@ -10397,6 +10391,12 @@
                 "id": 12,
                 "name": "launch_stage",
                 "type": "LaunchStage"
+              },
+              {
+                "id": 13,
+                "name": "monitored_resource_types",
+                "type": "string",
+                "is_repeated": true
               }
             ],
             "messages": [
@@ -10839,6 +10839,17 @@
             ]
           },
           {
+            "name": "google.protobuf.FileOptions",
+            "fields": [
+              {
+                "id": 1053,
+                "name": "resource_definition",
+                "type": "google.api.ResourceDescriptor",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
             "name": "google.protobuf.MessageOptions",
             "fields": [
               {
@@ -10871,6 +10882,16 @@
                 "id": 4,
                 "name": "history",
                 "type": "History"
+              },
+              {
+                "id": 5,
+                "name": "plural",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "singular",
+                "type": "string"
               }
             ]
           },
@@ -11205,6 +11226,10 @@
                 "integer": 114
               },
               {
+                "name": "CONSUMER_INVALID",
+                "integer": 125
+              },
+              {
                 "name": "IP_ADDRESS_BLOCKED",
                 "integer": 109
               },
@@ -11233,6 +11258,10 @@
                 "integer": 113
               },
               {
+                "name": "INVALID_CREDENTIAL",
+                "integer": 123
+              },
+              {
                 "name": "NAMESPACE_LOOKUP_UNAVAILABLE",
                 "integer": 300
               },
@@ -11243,6 +11272,10 @@
               {
                 "name": "BILLING_STATUS_UNAVAILABLE",
                 "integer": 302
+              },
+              {
+                "name": "CLOUD_RESOURCE_MANAGER_BACKEND_UNAVAILABLE",
+                "integer": 305
               }
             ]
           }
@@ -11257,16 +11290,26 @@
                 "type": "Code"
               },
               {
+                "id": 4,
+                "name": "subject",
+                "type": "string"
+              },
+              {
                 "id": 2,
                 "name": "detail",
                 "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "status",
+                "type": "google.rpc.Status"
               }
             ]
           }
         ],
         "imports": [
           {
-            "path": "google/api/annotations.proto"
+            "path": "google/rpc/status.proto"
           }
         ],
         "package": {
@@ -11433,6 +11476,119 @@
       }
     },
     {
+      "protopath": "common-protos:/:google:/:api:/:servicecontrol:/:v1:/:http_request.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "HttpRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "request_method",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "request_url",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "request_size",
+                "type": "int64"
+              },
+              {
+                "id": 4,
+                "name": "status",
+                "type": "int32"
+              },
+              {
+                "id": 5,
+                "name": "response_size",
+                "type": "int64"
+              },
+              {
+                "id": 6,
+                "name": "user_agent",
+                "type": "string"
+              },
+              {
+                "id": 7,
+                "name": "remote_ip",
+                "type": "string"
+              },
+              {
+                "id": 13,
+                "name": "server_ip",
+                "type": "string"
+              },
+              {
+                "id": 8,
+                "name": "referer",
+                "type": "string"
+              },
+              {
+                "id": 14,
+                "name": "latency",
+                "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 11,
+                "name": "cache_lookup",
+                "type": "bool"
+              },
+              {
+                "id": 9,
+                "name": "cache_hit",
+                "type": "bool"
+              },
+              {
+                "id": 10,
+                "name": "cache_validated_with_origin_server",
+                "type": "bool"
+              },
+              {
+                "id": 12,
+                "name": "cache_fill_bytes",
+                "type": "int64"
+              },
+              {
+                "id": 15,
+                "name": "protocol",
+                "type": "string"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/duration.proto"
+          }
+        ],
+        "package": {
+          "name": "google.api.servicecontrol.v1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "google.golang.org/genproto/googleapis/api/servicecontrol/v1;servicecontrol"
+          },
+          {
+            "name": "java_multiple_files",
+            "value": "true"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "HttpRequestProto"
+          },
+          {
+            "name": "java_package",
+            "value": "com.google.api.servicecontrol.v1"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "common-protos:/:google:/:api:/:servicecontrol:/:v1:/:log_entry.proto",
       "def": {
         "messages": [
@@ -11455,6 +11611,16 @@
                 "type": "google.logging.type.LogSeverity"
               },
               {
+                "id": 14,
+                "name": "http_request",
+                "type": "HttpRequest"
+              },
+              {
+                "id": 15,
+                "name": "trace",
+                "type": "string"
+              },
+              {
                 "id": 4,
                 "name": "insert_id",
                 "type": "string"
@@ -11473,6 +11639,16 @@
                 "id": 6,
                 "name": "struct_payload",
                 "type": "google.protobuf.Struct"
+              },
+              {
+                "id": 16,
+                "name": "operation",
+                "type": "LogEntryOperation"
+              },
+              {
+                "id": 17,
+                "name": "source_location",
+                "type": "LogEntrySourceLocation"
               }
             ],
             "maps": [
@@ -11485,11 +11661,56 @@
                 }
               }
             ]
+          },
+          {
+            "name": "LogEntryOperation",
+            "fields": [
+              {
+                "id": 1,
+                "name": "id",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "producer",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "first",
+                "type": "bool"
+              },
+              {
+                "id": 4,
+                "name": "last",
+                "type": "bool"
+              }
+            ]
+          },
+          {
+            "name": "LogEntrySourceLocation",
+            "fields": [
+              {
+                "id": 1,
+                "name": "file",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "line",
+                "type": "int64"
+              },
+              {
+                "id": 3,
+                "name": "function",
+                "type": "string"
+              }
+            ]
           }
         ],
         "imports": [
           {
-            "path": "google/api/annotations.proto"
+            "path": "google/api/servicecontrol/v1/http_request.proto"
           },
           {
             "path": "google/logging/type/log_severity.proto"
@@ -11600,16 +11821,10 @@
         ],
         "imports": [
           {
-            "path": "google/api/annotations.proto"
-          },
-          {
             "path": "google/api/servicecontrol/v1/distribution.proto"
           },
           {
             "path": "google/protobuf/timestamp.proto"
-          },
-          {
-            "path": "google/type/money.proto"
           }
         ],
         "package": {
@@ -11701,6 +11916,12 @@
                 "id": 11,
                 "name": "importance",
                 "type": "Importance"
+              },
+              {
+                "id": 16,
+                "name": "extensions",
+                "type": "google.protobuf.Any",
+                "is_repeated": true
               }
             ],
             "maps": [
@@ -11717,13 +11938,13 @@
         ],
         "imports": [
           {
-            "path": "google/api/annotations.proto"
-          },
-          {
             "path": "google/api/servicecontrol/v1/log_entry.proto"
           },
           {
             "path": "google/api/servicecontrol/v1/metric_value.proto"
+          },
+          {
+            "path": "google/protobuf/any.proto"
           },
           {
             "path": "google/protobuf/timestamp.proto"
@@ -11777,6 +11998,14 @@
               {
                 "name": "CHECK_ONLY",
                 "integer": 3
+              },
+              {
+                "name": "QUERY_ONLY",
+                "integer": 4
+              },
+              {
+                "name": "ADJUST_ONLY",
+                "integer": 5
               }
             ]
           },
@@ -11952,6 +12181,9 @@
           },
           {
             "path": "google/api/servicecontrol/v1/metric_value.proto"
+          },
+          {
+            "path": "google/api/client.proto"
           }
         ],
         "package": {
@@ -11984,6 +12216,32 @@
     {
       "protopath": "common-protos:/:google:/:api:/:servicecontrol:/:v1:/:service_controller.proto",
       "def": {
+        "enums": [
+          {
+            "name": "ConsumerInfo.ConsumerType",
+            "enum_fields": [
+              {
+                "name": "CONSUMER_TYPE_UNSPECIFIED"
+              },
+              {
+                "name": "PROJECT",
+                "integer": 1
+              },
+              {
+                "name": "FOLDER",
+                "integer": 2
+              },
+              {
+                "name": "ORGANIZATION",
+                "integer": 3
+              },
+              {
+                "name": "SERVICE_SPECIFIC",
+                "integer": 4
+              }
+            ]
+          }
+        ],
         "messages": [
           {
             "name": "CheckRequest",
@@ -12014,11 +12272,6 @@
                 "type": "string"
               },
               {
-                "id": 11,
-                "name": "service_rollout_id",
-                "type": "string"
-              },
-              {
                 "id": 2,
                 "name": "check_errors",
                 "type": "CheckError",
@@ -12027,6 +12280,11 @@
               {
                 "id": 5,
                 "name": "service_config_id",
+                "type": "string"
+              },
+              {
+                "id": 11,
+                "name": "service_rollout_id",
                 "type": "string"
               },
               {
@@ -12040,6 +12298,12 @@
                 "name": "CheckInfo",
                 "fields": [
                   {
+                    "id": 1,
+                    "name": "unused_arguments",
+                    "type": "string",
+                    "is_repeated": true
+                  },
+                  {
                     "id": 2,
                     "name": "consumer_info",
                     "type": "ConsumerInfo"
@@ -12052,6 +12316,16 @@
                   {
                     "id": 1,
                     "name": "project_number",
+                    "type": "int64"
+                  },
+                  {
+                    "id": 2,
+                    "name": "type",
+                    "type": "ConsumerType"
+                  },
+                  {
+                    "id": 3,
+                    "name": "consumer_number",
                     "type": "int64"
                   }
                 ]
@@ -12176,7 +12450,13 @@
             "path": "google/api/servicecontrol/v1/operation.proto"
           },
           {
+            "path": "google/protobuf/timestamp.proto"
+          },
+          {
             "path": "google/rpc/status.proto"
+          },
+          {
+            "path": "google/api/client.proto"
           }
         ],
         "package": {
@@ -12458,7 +12738,13 @@
               {
                 "id": 1,
                 "name": "rollout_id",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "OPTIONAL"
+                  }
+                ]
               },
               {
                 "id": 2,
@@ -12519,7 +12805,13 @@
             "path": "google/api/config_change.proto"
           },
           {
+            "path": "google/api/field_behavior.proto"
+          },
+          {
             "path": "google/api/metric.proto"
+          },
+          {
+            "path": "google/api/quota.proto"
           },
           {
             "path": "google/api/service.proto"
@@ -12532,9 +12824,6 @@
           },
           {
             "path": "google/protobuf/field_mask.proto"
-          },
-          {
-            "path": "google/protobuf/struct.proto"
           },
           {
             "path": "google/protobuf/timestamp.proto"
@@ -12617,7 +12906,13 @@
               {
                 "id": 7,
                 "name": "consumer_id",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  }
+                ]
               }
             ]
           },
@@ -12643,7 +12938,13 @@
               {
                 "id": 1,
                 "name": "service_name",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               }
             ]
           },
@@ -12653,7 +12954,13 @@
               {
                 "id": 1,
                 "name": "service",
-                "type": "ManagedService"
+                "type": "ManagedService",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               }
             ]
           },
@@ -12663,7 +12970,13 @@
               {
                 "id": 1,
                 "name": "service_name",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               }
             ]
           },
@@ -12673,7 +12986,13 @@
               {
                 "id": 1,
                 "name": "service_name",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               }
             ]
           },
@@ -12693,12 +13012,24 @@
               {
                 "id": 1,
                 "name": "service_name",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               },
               {
                 "id": 2,
                 "name": "config_id",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               },
               {
                 "id": 3,
@@ -12713,7 +13044,13 @@
               {
                 "id": 1,
                 "name": "service_name",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               },
               {
                 "id": 2,
@@ -12749,12 +13086,24 @@
               {
                 "id": 1,
                 "name": "service_name",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               },
               {
                 "id": 2,
                 "name": "service_config",
-                "type": "google.api.Service"
+                "type": "google.api.Service",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               }
             ]
           },
@@ -12764,17 +13113,35 @@
               {
                 "id": 1,
                 "name": "service_name",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               },
               {
                 "id": 2,
                 "name": "config_source",
-                "type": "ConfigSource"
+                "type": "ConfigSource",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               },
               {
                 "id": 3,
                 "name": "validate_only",
-                "type": "bool"
+                "type": "bool",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "OPTIONAL"
+                  }
+                ]
               }
             ]
           },
@@ -12794,12 +13161,24 @@
               {
                 "id": 1,
                 "name": "service_name",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               },
               {
                 "id": 2,
                 "name": "rollout",
-                "type": "Rollout"
+                "type": "Rollout",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               }
             ]
           },
@@ -12809,7 +13188,13 @@
               {
                 "id": 1,
                 "name": "service_name",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               },
               {
                 "id": 2,
@@ -12824,7 +13209,13 @@
               {
                 "id": 4,
                 "name": "filter",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               }
             ]
           },
@@ -12850,12 +13241,24 @@
               {
                 "id": 1,
                 "name": "service_name",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               },
               {
                 "id": 2,
                 "name": "rollout_id",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               }
             ]
           },
@@ -12865,14 +13268,29 @@
               {
                 "id": 1,
                 "name": "service_name",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               },
               {
                 "id": 2,
                 "name": "consumer_id",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               }
             ]
+          },
+          {
+            "name": "EnableServiceResponse"
           },
           {
             "name": "DisableServiceRequest",
@@ -12880,14 +13298,29 @@
               {
                 "id": 1,
                 "name": "service_name",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               },
               {
                 "id": 2,
                 "name": "consumer_id",
-                "type": "string"
+                "type": "string",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               }
             ]
+          },
+          {
+            "name": "DisableServiceResponse"
           },
           {
             "name": "GenerateConfigReportRequest",
@@ -12895,12 +13328,24 @@
               {
                 "id": 1,
                 "name": "new_config",
-                "type": "google.protobuf.Any"
+                "type": "google.protobuf.Any",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
               },
               {
                 "id": 2,
                 "name": "old_config",
-                "type": "google.protobuf.Any"
+                "type": "google.protobuf.Any",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "OPTIONAL"
+                  }
+                ]
               }
             ]
           },
@@ -12949,6 +13394,10 @@
                         "value": "/v1/services"
                       }
                     ]
+                  },
+                  {
+                    "name": "(google.api.method_signature)",
+                    "value": "producer_project_id,consumer_id"
                   }
                 ]
               },
@@ -12965,6 +13414,10 @@
                         "value": "/v1/services/{service_name}"
                       }
                     ]
+                  },
+                  {
+                    "name": "(google.api.method_signature)",
+                    "value": "service_name"
                   }
                 ]
               },
@@ -12985,6 +13438,23 @@
                         "value": "service"
                       }
                     ]
+                  },
+                  {
+                    "name": "(google.api.method_signature)",
+                    "value": "service"
+                  },
+                  {
+                    "name": "(google.longrunning.operation_info)",
+                    "aggregated": [
+                      {
+                        "name": "response_type",
+                        "value": "google.api.servicemanagement.v1.ManagedService"
+                      },
+                      {
+                        "name": "metadata_type",
+                        "value": "google.api.servicemanagement.v1.OperationMetadata"
+                      }
+                    ]
                   }
                 ]
               },
@@ -12999,6 +13469,23 @@
                       {
                         "name": "delete",
                         "value": "/v1/services/{service_name}"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "(google.api.method_signature)",
+                    "value": "service_name"
+                  },
+                  {
+                    "name": "(google.longrunning.operation_info)",
+                    "aggregated": [
+                      {
+                        "name": "response_type",
+                        "value": "google.protobuf.Empty"
+                      },
+                      {
+                        "name": "metadata_type",
+                        "value": "google.api.servicemanagement.v1.OperationMetadata"
                       }
                     ]
                   }
@@ -13017,6 +13504,23 @@
                         "value": "/v1/services/{service_name}:undelete"
                       }
                     ]
+                  },
+                  {
+                    "name": "(google.api.method_signature)",
+                    "value": "service_name"
+                  },
+                  {
+                    "name": "(google.longrunning.operation_info)",
+                    "aggregated": [
+                      {
+                        "name": "response_type",
+                        "value": "google.api.servicemanagement.v1.UndeleteServiceResponse"
+                      },
+                      {
+                        "name": "metadata_type",
+                        "value": "google.api.servicemanagement.v1.OperationMetadata"
+                      }
+                    ]
                   }
                 ]
               },
@@ -13033,6 +13537,10 @@
                         "value": "/v1/services/{service_name}/configs"
                       }
                     ]
+                  },
+                  {
+                    "name": "(google.api.method_signature)",
+                    "value": "service_name"
                   }
                 ]
               },
@@ -13049,15 +13557,13 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings",
-                        "aggregated": [
-                          {
-                            "name": "get",
-                            "value": "/v1/services/{service_name}/config"
-                          }
-                        ]
+                        "name": "additional_bindings"
                       }
                     ]
+                  },
+                  {
+                    "name": "(google.api.method_signature)",
+                    "value": "service_name,config_id,view"
                   }
                 ]
               },
@@ -13078,6 +13584,10 @@
                         "value": "service_config"
                       }
                     ]
+                  },
+                  {
+                    "name": "(google.api.method_signature)",
+                    "value": "service_name,service_config"
                   }
                 ]
               },
@@ -13098,6 +13608,23 @@
                         "value": "*"
                       }
                     ]
+                  },
+                  {
+                    "name": "(google.api.method_signature)",
+                    "value": "service_name,config_source,validate_only"
+                  },
+                  {
+                    "name": "(google.longrunning.operation_info)",
+                    "aggregated": [
+                      {
+                        "name": "response_type",
+                        "value": "google.api.servicemanagement.v1.SubmitConfigSourceResponse"
+                      },
+                      {
+                        "name": "metadata_type",
+                        "value": "google.api.servicemanagement.v1.OperationMetadata"
+                      }
+                    ]
                   }
                 ]
               },
@@ -13114,6 +13641,10 @@
                         "value": "/v1/services/{service_name}/rollouts"
                       }
                     ]
+                  },
+                  {
+                    "name": "(google.api.method_signature)",
+                    "value": "service_name,filter"
                   }
                 ]
               },
@@ -13130,6 +13661,10 @@
                         "value": "/v1/services/{service_name}/rollouts/{rollout_id}"
                       }
                     ]
+                  },
+                  {
+                    "name": "(google.api.method_signature)",
+                    "value": "service_name,rollout_id"
                   }
                 ]
               },
@@ -13148,6 +13683,23 @@
                       {
                         "name": "body",
                         "value": "rollout"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "(google.api.method_signature)",
+                    "value": "service_name,rollout"
+                  },
+                  {
+                    "name": "(google.longrunning.operation_info)",
+                    "aggregated": [
+                      {
+                        "name": "response_type",
+                        "value": "google.api.servicemanagement.v1.Rollout"
+                      },
+                      {
+                        "name": "metadata_type",
+                        "value": "google.api.servicemanagement.v1.OperationMetadata"
                       }
                     ]
                   }
@@ -13170,6 +13722,10 @@
                         "value": "*"
                       }
                     ]
+                  },
+                  {
+                    "name": "(google.api.method_signature)",
+                    "value": "new_config,old_config"
                   }
                 ]
               },
@@ -13178,6 +13734,10 @@
                 "in_type": "EnableServiceRequest",
                 "out_type": "google.longrunning.Operation",
                 "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  },
                   {
                     "name": "(google.api.http)",
                     "aggregated": [
@@ -13190,6 +13750,23 @@
                         "value": "*"
                       }
                     ]
+                  },
+                  {
+                    "name": "(google.api.method_signature)",
+                    "value": "service_name,consumer_id"
+                  },
+                  {
+                    "name": "(google.longrunning.operation_info)",
+                    "aggregated": [
+                      {
+                        "name": "response_type",
+                        "value": "google.api.servicemanagement.v1.EnableServiceResponse"
+                      },
+                      {
+                        "name": "metadata_type",
+                        "value": "google.api.servicemanagement.v1.OperationMetadata"
+                      }
+                    ]
                   }
                 ]
               },
@@ -13198,6 +13775,10 @@
                 "in_type": "DisableServiceRequest",
                 "out_type": "google.longrunning.Operation",
                 "options": [
+                  {
+                    "name": "deprecated",
+                    "value": "true"
+                  },
                   {
                     "name": "(google.api.http)",
                     "aggregated": [
@@ -13210,6 +13791,23 @@
                         "value": "*"
                       }
                     ]
+                  },
+                  {
+                    "name": "(google.api.method_signature)",
+                    "value": "service_name,consumer_id"
+                  },
+                  {
+                    "name": "(google.longrunning.operation_info)",
+                    "aggregated": [
+                      {
+                        "name": "response_type",
+                        "value": "google.api.servicemanagement.v1.DisableServiceResponse"
+                      },
+                      {
+                        "name": "metadata_type",
+                        "value": "google.api.servicemanagement.v1.OperationMetadata"
+                      }
+                    ]
                   }
                 ]
               }
@@ -13219,6 +13817,12 @@
         "imports": [
           {
             "path": "google/api/annotations.proto"
+          },
+          {
+            "path": "google/api/client.proto"
+          },
+          {
+            "path": "google/api/field_behavior.proto"
           },
           {
             "path": "google/api/service.proto"
@@ -13234,9 +13838,6 @@
           },
           {
             "path": "google/protobuf/field_mask.proto"
-          },
-          {
-            "path": "google/protobuf/struct.proto"
           },
           {
             "path": "google/rpc/status.proto"
@@ -13675,6 +14276,20 @@
     {
       "protopath": "common-protos:/:google:/:protobuf:/:compiler:/:plugin.proto",
       "def": {
+        "enums": [
+          {
+            "name": "CodeGeneratorResponse.Feature",
+            "enum_fields": [
+              {
+                "name": "FEATURE_NONE"
+              },
+              {
+                "name": "FEATURE_PROTO3_OPTIONAL",
+                "integer": 1
+              }
+            ]
+          }
+        ],
         "messages": [
           {
             "name": "Version",
@@ -13735,6 +14350,11 @@
                 "id": 1,
                 "name": "error",
                 "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "supported_features",
+                "type": "uint64"
               },
               {
                 "id": 15,
@@ -14202,6 +14822,11 @@
                 "id": 8,
                 "name": "options",
                 "type": "FieldOptions"
+              },
+              {
+                "id": 17,
+                "name": "proto3_optional",
+                "type": "bool"
               }
             ]
           },
@@ -14482,7 +15107,7 @@
                 "options": [
                   {
                     "name": "default",
-                    "value": "false"
+                    "value": "true"
                   }
                 ]
               },
@@ -16819,6 +17444,319 @@
       }
     },
     {
+      "protopath": "common-protos:/:google:/:rpc:/:context:/:attribute_context.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "AttributeContext",
+            "fields": [
+              {
+                "id": 7,
+                "name": "origin",
+                "type": "Peer"
+              },
+              {
+                "id": 1,
+                "name": "source",
+                "type": "Peer"
+              },
+              {
+                "id": 2,
+                "name": "destination",
+                "type": "Peer"
+              },
+              {
+                "id": 3,
+                "name": "request",
+                "type": "Request"
+              },
+              {
+                "id": 4,
+                "name": "response",
+                "type": "Response"
+              },
+              {
+                "id": 5,
+                "name": "resource",
+                "type": "Resource"
+              },
+              {
+                "id": 6,
+                "name": "api",
+                "type": "Api"
+              },
+              {
+                "id": 8,
+                "name": "extensions",
+                "type": "google.protobuf.Any",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "Peer",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "ip",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "port",
+                    "type": "int64"
+                  },
+                  {
+                    "id": 7,
+                    "name": "principal",
+                    "type": "string"
+                  },
+                  {
+                    "id": 8,
+                    "name": "region_code",
+                    "type": "string"
+                  }
+                ],
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 6,
+                      "name": "labels",
+                      "type": "string"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "Api",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "service",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "operation",
+                    "type": "string"
+                  },
+                  {
+                    "id": 3,
+                    "name": "protocol",
+                    "type": "string"
+                  },
+                  {
+                    "id": 4,
+                    "name": "version",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "Auth",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "principal",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "audiences",
+                    "type": "string",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 3,
+                    "name": "presenter",
+                    "type": "string"
+                  },
+                  {
+                    "id": 4,
+                    "name": "claims",
+                    "type": "google.protobuf.Struct"
+                  },
+                  {
+                    "id": 5,
+                    "name": "access_levels",
+                    "type": "string",
+                    "is_repeated": true
+                  }
+                ]
+              },
+              {
+                "name": "Request",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "id",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "method",
+                    "type": "string"
+                  },
+                  {
+                    "id": 4,
+                    "name": "path",
+                    "type": "string"
+                  },
+                  {
+                    "id": 5,
+                    "name": "host",
+                    "type": "string"
+                  },
+                  {
+                    "id": 6,
+                    "name": "scheme",
+                    "type": "string"
+                  },
+                  {
+                    "id": 7,
+                    "name": "query",
+                    "type": "string"
+                  },
+                  {
+                    "id": 9,
+                    "name": "time",
+                    "type": "google.protobuf.Timestamp"
+                  },
+                  {
+                    "id": 10,
+                    "name": "size",
+                    "type": "int64"
+                  },
+                  {
+                    "id": 11,
+                    "name": "protocol",
+                    "type": "string"
+                  },
+                  {
+                    "id": 12,
+                    "name": "reason",
+                    "type": "string"
+                  },
+                  {
+                    "id": 13,
+                    "name": "auth",
+                    "type": "Auth"
+                  }
+                ],
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 3,
+                      "name": "headers",
+                      "type": "string"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "Response",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "code",
+                    "type": "int64"
+                  },
+                  {
+                    "id": 2,
+                    "name": "size",
+                    "type": "int64"
+                  },
+                  {
+                    "id": 4,
+                    "name": "time",
+                    "type": "google.protobuf.Timestamp"
+                  }
+                ],
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 3,
+                      "name": "headers",
+                      "type": "string"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "Resource",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "service",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "id": 3,
+                    "name": "type",
+                    "type": "string"
+                  }
+                ],
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 4,
+                      "name": "labels",
+                      "type": "string"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/any.proto"
+          },
+          {
+            "path": "google/protobuf/struct.proto"
+          },
+          {
+            "path": "google/protobuf/timestamp.proto"
+          }
+        ],
+        "package": {
+          "name": "google.rpc.context"
+        },
+        "options": [
+          {
+            "name": "cc_enable_arenas",
+            "value": "true"
+          },
+          {
+            "name": "go_package",
+            "value": "google.golang.org/genproto/googleapis/rpc/context/attribute_context;attribute_context"
+          },
+          {
+            "name": "java_multiple_files",
+            "value": "true"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "AttributeContextProto"
+          },
+          {
+            "name": "java_package",
+            "value": "com.google.rpc.context"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "common-protos:/:google:/:rpc:/:error_details.proto",
       "def": {
         "messages": [
@@ -16873,6 +17811,31 @@
                     "type": "string"
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "name": "ErrorInfo",
+            "fields": [
+              {
+                "id": 1,
+                "name": "reason",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "domain",
+                "type": "string"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 3,
+                  "name": "metadata",
+                  "type": "string"
+                }
               }
             ]
           },
@@ -17089,6 +18052,10 @@
         },
         "options": [
           {
+            "name": "cc_enable_arenas",
+            "value": "true"
+          },
+          {
             "name": "go_package",
             "value": "google.golang.org/genproto/googleapis/rpc/status;status"
           },
@@ -17289,6 +18256,112 @@
           {
             "name": "java_outer_classname",
             "value": "DateProto"
+          },
+          {
+            "name": "java_package",
+            "value": "com.google.type"
+          },
+          {
+            "name": "objc_class_prefix",
+            "value": "GTP"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "common-protos:/:google:/:type:/:datetime.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "DateTime",
+            "fields": [
+              {
+                "id": 1,
+                "name": "year",
+                "type": "int32"
+              },
+              {
+                "id": 2,
+                "name": "month",
+                "type": "int32"
+              },
+              {
+                "id": 3,
+                "name": "day",
+                "type": "int32"
+              },
+              {
+                "id": 4,
+                "name": "hours",
+                "type": "int32"
+              },
+              {
+                "id": 5,
+                "name": "minutes",
+                "type": "int32"
+              },
+              {
+                "id": 6,
+                "name": "seconds",
+                "type": "int32"
+              },
+              {
+                "id": 7,
+                "name": "nanos",
+                "type": "int32"
+              },
+              {
+                "id": 8,
+                "name": "utc_offset",
+                "type": "google.protobuf.Duration"
+              },
+              {
+                "id": 9,
+                "name": "time_zone",
+                "type": "TimeZone"
+              }
+            ]
+          },
+          {
+            "name": "TimeZone",
+            "fields": [
+              {
+                "id": 1,
+                "name": "id",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "version",
+                "type": "string"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/duration.proto"
+          }
+        ],
+        "package": {
+          "name": "google.type"
+        },
+        "options": [
+          {
+            "name": "cc_enable_arenas",
+            "value": "true"
+          },
+          {
+            "name": "go_package",
+            "value": "google.golang.org/genproto/googleapis/type/datetime;datetime"
+          },
+          {
+            "name": "java_multiple_files",
+            "value": "true"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "DateTimeProto"
           },
           {
             "name": "java_package",
@@ -17581,6 +18654,94 @@
       }
     },
     {
+      "protopath": "common-protos:/:google:/:type:/:month.proto",
+      "def": {
+        "enums": [
+          {
+            "name": "Month",
+            "enum_fields": [
+              {
+                "name": "MONTH_UNSPECIFIED"
+              },
+              {
+                "name": "JANUARY",
+                "integer": 1
+              },
+              {
+                "name": "FEBRUARY",
+                "integer": 2
+              },
+              {
+                "name": "MARCH",
+                "integer": 3
+              },
+              {
+                "name": "APRIL",
+                "integer": 4
+              },
+              {
+                "name": "MAY",
+                "integer": 5
+              },
+              {
+                "name": "JUNE",
+                "integer": 6
+              },
+              {
+                "name": "JULY",
+                "integer": 7
+              },
+              {
+                "name": "AUGUST",
+                "integer": 8
+              },
+              {
+                "name": "SEPTEMBER",
+                "integer": 9
+              },
+              {
+                "name": "OCTOBER",
+                "integer": 10
+              },
+              {
+                "name": "NOVEMBER",
+                "integer": 11
+              },
+              {
+                "name": "DECEMBER",
+                "integer": 12
+              }
+            ]
+          }
+        ],
+        "package": {
+          "name": "google.type"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "google.golang.org/genproto/googleapis/type/month;month"
+          },
+          {
+            "name": "java_multiple_files",
+            "value": "true"
+          },
+          {
+            "name": "java_outer_classname",
+            "value": "MonthProto"
+          },
+          {
+            "name": "java_package",
+            "value": "com.google.type"
+          },
+          {
+            "name": "objc_class_prefix",
+            "value": "GTP"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "common-protos:/:google:/:type:/:postal_address.proto",
       "def": {
         "messages": [
@@ -17651,6 +18812,10 @@
           "name": "google.type"
         },
         "options": [
+          {
+            "name": "cc_enable_arenas",
+            "value": "true"
+          },
           {
             "name": "go_package",
             "value": "google.golang.org/genproto/googleapis/type/postaladdress;postaladdress"
@@ -17797,6 +18962,137 @@
       }
     },
     {
+      "protopath": "common-protos:/:istio.io:/:extensions:/:field_rules.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "google.protobuf.FieldOptions",
+            "fields": [
+              {
+                "id": 1200,
+                "name": "rules",
+                "type": "FieldRules"
+              }
+            ]
+          },
+          {
+            "name": "FieldRules",
+            "fields": [
+              {
+                "id": 1,
+                "name": "float",
+                "type": "FloatRules"
+              },
+              {
+                "id": 2,
+                "name": "double",
+                "type": "DoubleRules"
+              },
+              {
+                "id": 3,
+                "name": "string",
+                "type": "StringRules"
+              },
+              {
+                "id": 4,
+                "name": "bool",
+                "type": "BoolRules"
+              },
+              {
+                "id": 5,
+                "name": "int32",
+                "type": "Int32Rules"
+              },
+              {
+                "id": 6,
+                "name": "int64",
+                "type": "Int64Rules"
+              }
+            ]
+          },
+          {
+            "name": "FloatRules",
+            "fields": [
+              {
+                "id": 1,
+                "name": "default",
+                "type": "float"
+              }
+            ]
+          },
+          {
+            "name": "DoubleRules",
+            "fields": [
+              {
+                "id": 1,
+                "name": "default",
+                "type": "double"
+              }
+            ]
+          },
+          {
+            "name": "StringRules",
+            "fields": [
+              {
+                "id": 1,
+                "name": "default",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "pattern",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "BoolRules",
+            "fields": [
+              {
+                "id": 1,
+                "name": "default",
+                "type": "bool"
+              }
+            ]
+          },
+          {
+            "name": "Int32Rules",
+            "fields": [
+              {
+                "id": 1,
+                "name": "default",
+                "type": "int32"
+              }
+            ]
+          },
+          {
+            "name": "Int64Rules",
+            "fields": [
+              {
+                "id": 1,
+                "name": "default",
+                "type": "int64"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/protobuf/descriptor.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.extensions"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/extensions"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "common-protos:/:k8s.io:/:api:/:admission:/:v1:/:generated.proto",
       "def": {
         "messages": [
@@ -17907,6 +19203,12 @@
                 "id": 5,
                 "name": "patchType",
                 "type": "string"
+              },
+              {
+                "id": 7,
+                "name": "warnings",
+                "type": "string",
+                "is_repeated": true
               }
             ],
             "maps": [
@@ -18072,6 +19374,12 @@
                 "id": 5,
                 "name": "patchType",
                 "type": "string"
+              },
+              {
+                "id": 7,
+                "name": "warnings",
+                "type": "string",
+                "is_repeated": true
               }
             ],
             "maps": [
@@ -20830,170 +22138,6 @@
       }
     },
     {
-      "protopath": "common-protos:/:k8s.io:/:api:/:auditregistration:/:v1alpha1:/:generated.proto",
-      "def": {
-        "messages": [
-          {
-            "name": "AuditSink",
-            "fields": [
-              {
-                "id": 1,
-                "name": "metadata",
-                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta"
-              },
-              {
-                "id": 2,
-                "name": "spec",
-                "type": "AuditSinkSpec"
-              }
-            ]
-          },
-          {
-            "name": "AuditSinkList",
-            "fields": [
-              {
-                "id": 1,
-                "name": "metadata",
-                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta"
-              },
-              {
-                "id": 2,
-                "name": "items",
-                "type": "AuditSink",
-                "is_repeated": true
-              }
-            ]
-          },
-          {
-            "name": "AuditSinkSpec",
-            "fields": [
-              {
-                "id": 1,
-                "name": "policy",
-                "type": "Policy"
-              },
-              {
-                "id": 2,
-                "name": "webhook",
-                "type": "Webhook"
-              }
-            ]
-          },
-          {
-            "name": "Policy",
-            "fields": [
-              {
-                "id": 1,
-                "name": "level",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "stages",
-                "type": "string",
-                "is_repeated": true
-              }
-            ]
-          },
-          {
-            "name": "ServiceReference",
-            "fields": [
-              {
-                "id": 1,
-                "name": "namespace",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "name",
-                "type": "string"
-              },
-              {
-                "id": 3,
-                "name": "path",
-                "type": "string"
-              },
-              {
-                "id": 4,
-                "name": "port",
-                "type": "int32"
-              }
-            ]
-          },
-          {
-            "name": "Webhook",
-            "fields": [
-              {
-                "id": 1,
-                "name": "throttle",
-                "type": "WebhookThrottleConfig"
-              },
-              {
-                "id": 2,
-                "name": "clientConfig",
-                "type": "WebhookClientConfig"
-              }
-            ]
-          },
-          {
-            "name": "WebhookClientConfig",
-            "fields": [
-              {
-                "id": 1,
-                "name": "url",
-                "type": "string"
-              },
-              {
-                "id": 2,
-                "name": "service",
-                "type": "ServiceReference"
-              },
-              {
-                "id": 3,
-                "name": "caBundle",
-                "type": "bytes"
-              }
-            ]
-          },
-          {
-            "name": "WebhookThrottleConfig",
-            "fields": [
-              {
-                "id": 1,
-                "name": "qps",
-                "type": "int64"
-              },
-              {
-                "id": 2,
-                "name": "burst",
-                "type": "int64"
-              }
-            ]
-          }
-        ],
-        "imports": [
-          {
-            "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
-          },
-          {
-            "path": "k8s.io/apimachinery/pkg/runtime/generated.proto"
-          },
-          {
-            "path": "k8s.io/apimachinery/pkg/runtime/schema/generated.proto"
-          }
-        ],
-        "package": {
-          "name": "k8s.io.api.auditregistration.v1alpha1"
-        },
-        "options": [
-          {
-            "name": "go_package",
-            "value": "v1alpha1"
-          }
-        ]
-      }
-    },
-    {
       "protopath": "common-protos:/:k8s.io:/:api:/:authentication:/:v1:/:generated.proto",
       "def": {
         "messages": [
@@ -22966,6 +24110,47 @@
             ]
           },
           {
+            "name": "HPAScalingPolicy",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "int32"
+              },
+              {
+                "id": 3,
+                "name": "periodSeconds",
+                "type": "int32"
+              }
+            ]
+          },
+          {
+            "name": "HPAScalingRules",
+            "fields": [
+              {
+                "id": 3,
+                "name": "stabilizationWindowSeconds",
+                "type": "int32"
+              },
+              {
+                "id": 1,
+                "name": "selectPolicy",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "policies",
+                "type": "HPAScalingPolicy",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
             "name": "HorizontalPodAutoscaler",
             "fields": [
               {
@@ -22982,6 +24167,21 @@
                 "id": 3,
                 "name": "status",
                 "type": "HorizontalPodAutoscalerStatus"
+              }
+            ]
+          },
+          {
+            "name": "HorizontalPodAutoscalerBehavior",
+            "fields": [
+              {
+                "id": 1,
+                "name": "scaleUp",
+                "type": "HPAScalingRules"
+              },
+              {
+                "id": 2,
+                "name": "scaleDown",
+                "type": "HPAScalingRules"
               }
             ]
           },
@@ -23054,6 +24254,11 @@
                 "name": "metrics",
                 "type": "MetricSpec",
                 "is_repeated": true
+              },
+              {
+                "id": 5,
+                "name": "behavior",
+                "type": "HorizontalPodAutoscalerBehavior"
               }
             ]
           },
@@ -23836,7 +25041,7 @@
       }
     },
     {
-      "protopath": "common-protos:/:k8s.io:/:api:/:certificates:/:v1beta1:/:generated.proto",
+      "protopath": "common-protos:/:k8s.io:/:api:/:certificates:/:v1:/:generated.proto",
       "def": {
         "messages": [
           {
@@ -23868,6 +25073,11 @@
                 "type": "string"
               },
               {
+                "id": 6,
+                "name": "status",
+                "type": "string"
+              },
+              {
                 "id": 2,
                 "name": "reason",
                 "type": "string"
@@ -23880,6 +25090,11 @@
               {
                 "id": 4,
                 "name": "lastUpdateTime",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.Time"
+              },
+              {
+                "id": 5,
+                "name": "lastTransitionTime",
                 "type": "k8s.io.apimachinery.pkg.apis.meta.v1.Time"
               }
             ]
@@ -23907,6 +25122,11 @@
                 "id": 1,
                 "name": "request",
                 "type": "bytes"
+              },
+              {
+                "id": 7,
+                "name": "signerName",
+                "type": "string"
               },
               {
                 "id": 5,
@@ -23971,6 +25191,184 @@
           }
         ],
         "imports": [
+          {
+            "path": "k8s.io/api/core/v1/generated.proto"
+          },
+          {
+            "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
+          },
+          {
+            "path": "k8s.io/apimachinery/pkg/runtime/generated.proto"
+          },
+          {
+            "path": "k8s.io/apimachinery/pkg/runtime/schema/generated.proto"
+          }
+        ],
+        "package": {
+          "name": "k8s.io.api.certificates.v1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "v1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "common-protos:/:k8s.io:/:api:/:certificates:/:v1beta1:/:generated.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "CertificateSigningRequest",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+              },
+              {
+                "id": 2,
+                "name": "spec",
+                "type": "CertificateSigningRequestSpec"
+              },
+              {
+                "id": 3,
+                "name": "status",
+                "type": "CertificateSigningRequestStatus"
+              }
+            ]
+          },
+          {
+            "name": "CertificateSigningRequestCondition",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "status",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "reason",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "message",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "lastUpdateTime",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.Time"
+              },
+              {
+                "id": 5,
+                "name": "lastTransitionTime",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.Time"
+              }
+            ]
+          },
+          {
+            "name": "CertificateSigningRequestList",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta"
+              },
+              {
+                "id": 2,
+                "name": "items",
+                "type": "CertificateSigningRequest",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "CertificateSigningRequestSpec",
+            "fields": [
+              {
+                "id": 1,
+                "name": "request",
+                "type": "bytes"
+              },
+              {
+                "id": 7,
+                "name": "signerName",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "usages",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "username",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "uid",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "groups",
+                "type": "string",
+                "is_repeated": true
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 6,
+                  "name": "extra",
+                  "type": "ExtraValue"
+                }
+              }
+            ]
+          },
+          {
+            "name": "CertificateSigningRequestStatus",
+            "fields": [
+              {
+                "id": 1,
+                "name": "conditions",
+                "type": "CertificateSigningRequestCondition",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "certificate",
+                "type": "bytes"
+              }
+            ]
+          },
+          {
+            "name": "ExtraValue",
+            "fields": [
+              {
+                "id": 1,
+                "name": "items",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "k8s.io/api/core/v1/generated.proto"
+          },
           {
             "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
           },
@@ -24641,6 +26039,11 @@
                 "id": 1,
                 "name": "metadata",
                 "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+              },
+              {
+                "id": 4,
+                "name": "immutable",
+                "type": "bool"
               }
             ],
             "maps": [
@@ -24866,6 +26269,11 @@
                 "type": "Probe"
               },
               {
+                "id": 22,
+                "name": "startupProbe",
+                "type": "Probe"
+              },
+              {
                 "id": 12,
                 "name": "lifecycle",
                 "type": "Lifecycle"
@@ -25080,6 +26488,11 @@
                 "id": 8,
                 "name": "containerID",
                 "type": "string"
+              },
+              {
+                "id": 9,
+                "name": "started",
+                "type": "bool"
               }
             ]
           },
@@ -25201,6 +26614,11 @@
               {
                 "id": 3,
                 "name": "protocol",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "appProtocol",
                 "type": "string"
               }
             ]
@@ -25416,6 +26834,11 @@
                 "type": "Probe"
               },
               {
+                "id": 22,
+                "name": "startupProbe",
+                "type": "Probe"
+              },
+              {
                 "id": 12,
                 "name": "lifecycle",
                 "type": "Lifecycle"
@@ -25470,6 +26893,21 @@
                 "name": "ephemeralContainers",
                 "type": "EphemeralContainer",
                 "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "EphemeralVolumeSource",
+            "fields": [
+              {
+                "id": 1,
+                "name": "volumeClaimTemplate",
+                "type": "PersistentVolumeClaimTemplate"
+              },
+              {
+                "id": 2,
+                "name": "readOnly",
+                "type": "bool"
               }
             ]
           },
@@ -25581,11 +27019,6 @@
                 "id": 2,
                 "name": "lastObservedTime",
                 "type": "k8s.io.apimachinery.pkg.apis.meta.v1.MicroTime"
-              },
-              {
-                "id": 3,
-                "name": "state",
-                "type": "string"
               }
             ]
           },
@@ -26278,6 +27711,36 @@
             ]
           },
           {
+            "name": "NamespaceCondition",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "status",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "lastTransitionTime",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.Time"
+              },
+              {
+                "id": 5,
+                "name": "reason",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "message",
+                "type": "string"
+              }
+            ]
+          },
+          {
             "name": "NamespaceList",
             "fields": [
               {
@@ -26311,6 +27774,12 @@
                 "id": 1,
                 "name": "phase",
                 "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "conditions",
+                "type": "NamespaceCondition",
+                "is_repeated": true
               }
             ]
           },
@@ -26923,6 +28392,21 @@
             ]
           },
           {
+            "name": "PersistentVolumeClaimTemplate",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+              },
+              {
+                "id": 2,
+                "name": "spec",
+                "type": "PersistentVolumeClaimSpec"
+              }
+            ]
+          },
+          {
             "name": "PersistentVolumeClaimVolumeSource",
             "fields": [
               {
@@ -27442,6 +28926,11 @@
                 "id": 8,
                 "name": "limitBytes",
                 "type": "int64"
+              },
+              {
+                "id": 9,
+                "name": "insecureSkipTLSVerifyBackend",
+                "type": "bool"
               }
             ]
           },
@@ -27520,6 +29009,16 @@
                 "name": "sysctls",
                 "type": "Sysctl",
                 "is_repeated": true
+              },
+              {
+                "id": 9,
+                "name": "fsGroupChangePolicy",
+                "type": "string"
+              },
+              {
+                "id": 10,
+                "name": "seccompProfile",
+                "type": "SeccompProfile"
               }
             ]
           },
@@ -27704,6 +29203,11 @@
                 "name": "topologySpreadConstraints",
                 "type": "TopologySpreadConstraint",
                 "is_repeated": true
+              },
+              {
+                "id": 35,
+                "name": "setHostnameAsFQDN",
+                "type": "bool"
               }
             ],
             "maps": [
@@ -28553,12 +30057,32 @@
             ]
           },
           {
+            "name": "SeccompProfile",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "localhostProfile",
+                "type": "string"
+              }
+            ]
+          },
+          {
             "name": "Secret",
             "fields": [
               {
                 "id": 1,
                 "name": "metadata",
                 "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+              },
+              {
+                "id": 5,
+                "name": "immutable",
+                "type": "bool"
               },
               {
                 "id": 3,
@@ -28750,6 +30274,11 @@
                 "id": 9,
                 "name": "procMount",
                 "type": "string"
+              },
+              {
+                "id": 11,
+                "name": "seccompProfile",
+                "type": "SeccompProfile"
               }
             ]
           },
@@ -28876,6 +30405,11 @@
                 "type": "string"
               },
               {
+                "id": 6,
+                "name": "appProtocol",
+                "type": "string"
+              },
+              {
                 "id": 3,
                 "name": "port",
                 "type": "int32"
@@ -28972,6 +30506,12 @@
                 "id": 15,
                 "name": "ipFamily",
                 "type": "string"
+              },
+              {
+                "id": 16,
+                "name": "topologyKeys",
+                "type": "string",
+                "is_repeated": true
               }
             ],
             "maps": [
@@ -29464,6 +31004,11 @@
                 "id": 28,
                 "name": "csi",
                 "type": "CSIVolumeSource"
+              },
+              {
+                "id": 29,
+                "name": "ephemeral",
+                "type": "EphemeralVolumeSource"
               }
             ]
           },
@@ -29623,6 +31168,11 @@
                 "id": 3,
                 "name": "port",
                 "type": "int32"
+              },
+              {
+                "id": 4,
+                "name": "appProtocol",
+                "type": "string"
               }
             ]
           },
@@ -29691,6 +31241,291 @@
           {
             "name": "go_package",
             "value": "v1alpha1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "common-protos:/:k8s.io:/:api:/:discovery:/:v1beta1:/:generated.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "Endpoint",
+            "fields": [
+              {
+                "id": 1,
+                "name": "addresses",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "conditions",
+                "type": "EndpointConditions"
+              },
+              {
+                "id": 3,
+                "name": "hostname",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "targetRef",
+                "type": "k8s.io.api.core.v1.ObjectReference"
+              }
+            ],
+            "maps": [
+              {
+                "key_type": "string",
+                "field": {
+                  "id": 5,
+                  "name": "topology",
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          {
+            "name": "EndpointConditions",
+            "fields": [
+              {
+                "id": 1,
+                "name": "ready",
+                "type": "bool"
+              }
+            ]
+          },
+          {
+            "name": "EndpointPort",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "protocol",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "port",
+                "type": "int32"
+              },
+              {
+                "id": 4,
+                "name": "appProtocol",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "EndpointSlice",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+              },
+              {
+                "id": 4,
+                "name": "addressType",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "endpoints",
+                "type": "Endpoint",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "ports",
+                "type": "EndpointPort",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "EndpointSliceList",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta"
+              },
+              {
+                "id": 2,
+                "name": "items",
+                "type": "EndpointSlice",
+                "is_repeated": true
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "k8s.io/api/core/v1/generated.proto"
+          },
+          {
+            "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
+          },
+          {
+            "path": "k8s.io/apimachinery/pkg/runtime/generated.proto"
+          },
+          {
+            "path": "k8s.io/apimachinery/pkg/runtime/schema/generated.proto"
+          }
+        ],
+        "package": {
+          "name": "k8s.io.api.discovery.v1beta1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "v1beta1"
+          }
+        ]
+      }
+    },
+    {
+      "protopath": "common-protos:/:k8s.io:/:api:/:events:/:v1:/:generated.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "Event",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+              },
+              {
+                "id": 2,
+                "name": "eventTime",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.MicroTime"
+              },
+              {
+                "id": 3,
+                "name": "series",
+                "type": "EventSeries"
+              },
+              {
+                "id": 4,
+                "name": "reportingController",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "reportingInstance",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "action",
+                "type": "string"
+              },
+              {
+                "id": 7,
+                "name": "reason",
+                "type": "string"
+              },
+              {
+                "id": 8,
+                "name": "regarding",
+                "type": "k8s.io.api.core.v1.ObjectReference"
+              },
+              {
+                "id": 9,
+                "name": "related",
+                "type": "k8s.io.api.core.v1.ObjectReference"
+              },
+              {
+                "id": 10,
+                "name": "note",
+                "type": "string"
+              },
+              {
+                "id": 11,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 12,
+                "name": "deprecatedSource",
+                "type": "k8s.io.api.core.v1.EventSource"
+              },
+              {
+                "id": 13,
+                "name": "deprecatedFirstTimestamp",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.Time"
+              },
+              {
+                "id": 14,
+                "name": "deprecatedLastTimestamp",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.Time"
+              },
+              {
+                "id": 15,
+                "name": "deprecatedCount",
+                "type": "int32"
+              }
+            ]
+          },
+          {
+            "name": "EventList",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta"
+              },
+              {
+                "id": 2,
+                "name": "items",
+                "type": "Event",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "EventSeries",
+            "fields": [
+              {
+                "id": 1,
+                "name": "count",
+                "type": "int32"
+              },
+              {
+                "id": 2,
+                "name": "lastObservedTime",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.MicroTime"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "k8s.io/api/core/v1/generated.proto"
+          },
+          {
+            "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
+          },
+          {
+            "path": "k8s.io/apimachinery/pkg/runtime/generated.proto"
+          },
+          {
+            "path": "k8s.io/apimachinery/pkg/runtime/schema/generated.proto"
+          }
+        ],
+        "package": {
+          "name": "k8s.io.api.events.v1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "v1"
           }
         ]
       }
@@ -29807,11 +31642,6 @@
                 "id": 2,
                 "name": "lastObservedTime",
                 "type": "k8s.io.apimachinery.pkg.apis.meta.v1.MicroTime"
-              },
-              {
-                "id": 3,
-                "name": "state",
-                "type": "string"
               }
             ]
           }
@@ -30284,6 +32114,11 @@
                 "type": "string"
               },
               {
+                "id": 3,
+                "name": "pathType",
+                "type": "string"
+              },
+              {
                 "id": 2,
                 "name": "backend",
                 "type": "IngressBackend"
@@ -30379,6 +32214,11 @@
                 "id": 2,
                 "name": "servicePort",
                 "type": "k8s.io.apimachinery.pkg.util.intstr.IntOrString"
+              },
+              {
+                "id": 3,
+                "name": "resource",
+                "type": "k8s.io.api.core.v1.TypedLocalObjectReference"
               }
             ]
           },
@@ -30426,6 +32266,11 @@
           {
             "name": "IngressSpec",
             "fields": [
+              {
+                "id": 4,
+                "name": "ingressClassName",
+                "type": "string"
+              },
               {
                 "id": 1,
                 "name": "backend",
@@ -30894,9 +32739,6 @@
             ]
           },
           {
-            "name": "ReplicationControllerDummy"
-          },
-          {
             "name": "RollbackConfig",
             "fields": [
               {
@@ -31095,6 +32937,432 @@
       }
     },
     {
+      "protopath": "common-protos:/:k8s.io:/:api:/:flowcontrol:/:v1alpha1:/:generated.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "FlowDistinguisherMethod",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "FlowSchema",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+              },
+              {
+                "id": 2,
+                "name": "spec",
+                "type": "FlowSchemaSpec"
+              },
+              {
+                "id": 3,
+                "name": "status",
+                "type": "FlowSchemaStatus"
+              }
+            ]
+          },
+          {
+            "name": "FlowSchemaCondition",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "status",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "lastTransitionTime",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.Time"
+              },
+              {
+                "id": 4,
+                "name": "reason",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "message",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "FlowSchemaList",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta"
+              },
+              {
+                "id": 2,
+                "name": "items",
+                "type": "FlowSchema",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "FlowSchemaSpec",
+            "fields": [
+              {
+                "id": 1,
+                "name": "priorityLevelConfiguration",
+                "type": "PriorityLevelConfigurationReference"
+              },
+              {
+                "id": 2,
+                "name": "matchingPrecedence",
+                "type": "int32"
+              },
+              {
+                "id": 3,
+                "name": "distinguisherMethod",
+                "type": "FlowDistinguisherMethod"
+              },
+              {
+                "id": 4,
+                "name": "rules",
+                "type": "PolicyRulesWithSubjects",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "FlowSchemaStatus",
+            "fields": [
+              {
+                "id": 1,
+                "name": "conditions",
+                "type": "FlowSchemaCondition",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "GroupSubject",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "LimitResponse",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "queuing",
+                "type": "QueuingConfiguration"
+              }
+            ]
+          },
+          {
+            "name": "LimitedPriorityLevelConfiguration",
+            "fields": [
+              {
+                "id": 1,
+                "name": "assuredConcurrencyShares",
+                "type": "int32"
+              },
+              {
+                "id": 2,
+                "name": "limitResponse",
+                "type": "LimitResponse"
+              }
+            ]
+          },
+          {
+            "name": "NonResourcePolicyRule",
+            "fields": [
+              {
+                "id": 1,
+                "name": "verbs",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 6,
+                "name": "nonResourceURLs",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "PolicyRulesWithSubjects",
+            "fields": [
+              {
+                "id": 1,
+                "name": "subjects",
+                "type": "Subject",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "resourceRules",
+                "type": "ResourcePolicyRule",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "nonResourceRules",
+                "type": "NonResourcePolicyRule",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "PriorityLevelConfiguration",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+              },
+              {
+                "id": 2,
+                "name": "spec",
+                "type": "PriorityLevelConfigurationSpec"
+              },
+              {
+                "id": 3,
+                "name": "status",
+                "type": "PriorityLevelConfigurationStatus"
+              }
+            ]
+          },
+          {
+            "name": "PriorityLevelConfigurationCondition",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "status",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "lastTransitionTime",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.Time"
+              },
+              {
+                "id": 4,
+                "name": "reason",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "message",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "PriorityLevelConfigurationList",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta"
+              },
+              {
+                "id": 2,
+                "name": "items",
+                "type": "PriorityLevelConfiguration",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "PriorityLevelConfigurationReference",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "PriorityLevelConfigurationSpec",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "limited",
+                "type": "LimitedPriorityLevelConfiguration"
+              }
+            ]
+          },
+          {
+            "name": "PriorityLevelConfigurationStatus",
+            "fields": [
+              {
+                "id": 1,
+                "name": "conditions",
+                "type": "PriorityLevelConfigurationCondition",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "QueuingConfiguration",
+            "fields": [
+              {
+                "id": 1,
+                "name": "queues",
+                "type": "int32"
+              },
+              {
+                "id": 2,
+                "name": "handSize",
+                "type": "int32"
+              },
+              {
+                "id": 3,
+                "name": "queueLengthLimit",
+                "type": "int32"
+              }
+            ]
+          },
+          {
+            "name": "ResourcePolicyRule",
+            "fields": [
+              {
+                "id": 1,
+                "name": "verbs",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "apiGroups",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "resources",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "clusterScope",
+                "type": "bool"
+              },
+              {
+                "id": 5,
+                "name": "namespaces",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "ServiceAccountSubject",
+            "fields": [
+              {
+                "id": 1,
+                "name": "namespace",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "name",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "Subject",
+            "fields": [
+              {
+                "id": 1,
+                "name": "kind",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "user",
+                "type": "UserSubject"
+              },
+              {
+                "id": 3,
+                "name": "group",
+                "type": "GroupSubject"
+              },
+              {
+                "id": 4,
+                "name": "serviceAccount",
+                "type": "ServiceAccountSubject"
+              }
+            ]
+          },
+          {
+            "name": "UserSubject",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
+          },
+          {
+            "path": "k8s.io/apimachinery/pkg/runtime/generated.proto"
+          },
+          {
+            "path": "k8s.io/apimachinery/pkg/runtime/schema/generated.proto"
+          }
+        ],
+        "package": {
+          "name": "k8s.io.api.flowcontrol.v1alpha1"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "v1alpha1"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "common-protos:/:k8s.io:/:api:/:imagepolicy:/:v1alpha1:/:generated.proto",
       "def": {
         "messages": [
@@ -31207,6 +33475,37 @@
       "def": {
         "messages": [
           {
+            "name": "HTTPIngressPath",
+            "fields": [
+              {
+                "id": 1,
+                "name": "path",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "pathType",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "backend",
+                "type": "IngressBackend"
+              }
+            ]
+          },
+          {
+            "name": "HTTPIngressRuleValue",
+            "fields": [
+              {
+                "id": 1,
+                "name": "paths",
+                "type": "HTTPIngressPath",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
             "name": "IPBlock",
             "fields": [
               {
@@ -31219,6 +33518,196 @@
                 "name": "except",
                 "type": "string",
                 "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "Ingress",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+              },
+              {
+                "id": 2,
+                "name": "spec",
+                "type": "IngressSpec"
+              },
+              {
+                "id": 3,
+                "name": "status",
+                "type": "IngressStatus"
+              }
+            ]
+          },
+          {
+            "name": "IngressBackend",
+            "fields": [
+              {
+                "id": 4,
+                "name": "service",
+                "type": "IngressServiceBackend"
+              },
+              {
+                "id": 3,
+                "name": "resource",
+                "type": "k8s.io.api.core.v1.TypedLocalObjectReference"
+              }
+            ]
+          },
+          {
+            "name": "IngressClass",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+              },
+              {
+                "id": 2,
+                "name": "spec",
+                "type": "IngressClassSpec"
+              }
+            ]
+          },
+          {
+            "name": "IngressClassList",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta"
+              },
+              {
+                "id": 2,
+                "name": "items",
+                "type": "IngressClass",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "IngressClassSpec",
+            "fields": [
+              {
+                "id": 1,
+                "name": "controller",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "parameters",
+                "type": "k8s.io.api.core.v1.TypedLocalObjectReference"
+              }
+            ]
+          },
+          {
+            "name": "IngressList",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta"
+              },
+              {
+                "id": 2,
+                "name": "items",
+                "type": "Ingress",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "IngressRule",
+            "fields": [
+              {
+                "id": 1,
+                "name": "host",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "ingressRuleValue",
+                "type": "IngressRuleValue"
+              }
+            ]
+          },
+          {
+            "name": "IngressRuleValue",
+            "fields": [
+              {
+                "id": 1,
+                "name": "http",
+                "type": "HTTPIngressRuleValue"
+              }
+            ]
+          },
+          {
+            "name": "IngressServiceBackend",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "port",
+                "type": "ServiceBackendPort"
+              }
+            ]
+          },
+          {
+            "name": "IngressSpec",
+            "fields": [
+              {
+                "id": 4,
+                "name": "ingressClassName",
+                "type": "string"
+              },
+              {
+                "id": 1,
+                "name": "defaultBackend",
+                "type": "IngressBackend"
+              },
+              {
+                "id": 2,
+                "name": "tls",
+                "type": "IngressTLS",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "rules",
+                "type": "IngressRule",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "IngressStatus",
+            "fields": [
+              {
+                "id": 1,
+                "name": "loadBalancer",
+                "type": "k8s.io.api.core.v1.LoadBalancerStatus"
+              }
+            ]
+          },
+          {
+            "name": "IngressTLS",
+            "fields": [
+              {
+                "id": 1,
+                "name": "hosts",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "secretName",
+                "type": "string"
               }
             ]
           },
@@ -31349,6 +33838,21 @@
                 "is_repeated": true
               }
             ]
+          },
+          {
+            "name": "ServiceBackendPort",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "number",
+                "type": "int32"
+              }
+            ]
           }
         ],
         "imports": [
@@ -31389,6 +33893,11 @@
               {
                 "id": 1,
                 "name": "path",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "pathType",
                 "type": "string"
               },
               {
@@ -31441,6 +33950,57 @@
                 "id": 2,
                 "name": "servicePort",
                 "type": "k8s.io.apimachinery.pkg.util.intstr.IntOrString"
+              },
+              {
+                "id": 3,
+                "name": "resource",
+                "type": "k8s.io.api.core.v1.TypedLocalObjectReference"
+              }
+            ]
+          },
+          {
+            "name": "IngressClass",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+              },
+              {
+                "id": 2,
+                "name": "spec",
+                "type": "IngressClassSpec"
+              }
+            ]
+          },
+          {
+            "name": "IngressClassList",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta"
+              },
+              {
+                "id": 2,
+                "name": "items",
+                "type": "IngressClass",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "IngressClassSpec",
+            "fields": [
+              {
+                "id": 1,
+                "name": "controller",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "parameters",
+                "type": "k8s.io.api.core.v1.TypedLocalObjectReference"
               }
             ]
           },
@@ -31488,6 +34048,11 @@
           {
             "name": "IngressSpec",
             "fields": [
+              {
+                "id": 4,
+                "name": "ingressClassName",
+                "type": "string"
+              },
               {
                 "id": 1,
                 "name": "backend",
@@ -33370,6 +35935,136 @@
       "def": {
         "messages": [
           {
+            "name": "CSIDriver",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+              },
+              {
+                "id": 2,
+                "name": "spec",
+                "type": "CSIDriverSpec"
+              }
+            ]
+          },
+          {
+            "name": "CSIDriverList",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta"
+              },
+              {
+                "id": 2,
+                "name": "items",
+                "type": "CSIDriver",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "CSIDriverSpec",
+            "fields": [
+              {
+                "id": 1,
+                "name": "attachRequired",
+                "type": "bool"
+              },
+              {
+                "id": 2,
+                "name": "podInfoOnMount",
+                "type": "bool"
+              },
+              {
+                "id": 3,
+                "name": "volumeLifecycleModes",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "storageCapacity",
+                "type": "bool"
+              },
+              {
+                "id": 5,
+                "name": "fsGroupPolicy",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "CSINode",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+              },
+              {
+                "id": 2,
+                "name": "spec",
+                "type": "CSINodeSpec"
+              }
+            ]
+          },
+          {
+            "name": "CSINodeDriver",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "nodeID",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "topologyKeys",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "allocatable",
+                "type": "VolumeNodeResources"
+              }
+            ]
+          },
+          {
+            "name": "CSINodeList",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta"
+              },
+              {
+                "id": 2,
+                "name": "items",
+                "type": "CSINode",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "CSINodeSpec",
+            "fields": [
+              {
+                "id": 1,
+                "name": "drivers",
+                "type": "CSINodeDriver",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
             "name": "StorageClass",
             "fields": [
               {
@@ -33552,6 +36247,16 @@
                 "type": "string"
               }
             ]
+          },
+          {
+            "name": "VolumeNodeResources",
+            "fields": [
+              {
+                "id": 1,
+                "name": "count",
+                "type": "int32"
+              }
+            ]
           }
         ],
         "imports": [
@@ -33583,6 +36288,47 @@
       "protopath": "common-protos:/:k8s.io:/:api:/:storage:/:v1alpha1:/:generated.proto",
       "def": {
         "messages": [
+          {
+            "name": "CSIStorageCapacity",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+              },
+              {
+                "id": 2,
+                "name": "nodeTopology",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector"
+              },
+              {
+                "id": 3,
+                "name": "storageClassName",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "capacity",
+                "type": "k8s.io.apimachinery.pkg.api.resource.Quantity"
+              }
+            ]
+          },
+          {
+            "name": "CSIStorageCapacityList",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta"
+              },
+              {
+                "id": 2,
+                "name": "items",
+                "type": "CSIStorageCapacity",
+                "is_repeated": true
+              }
+            ]
+          },
           {
             "name": "VolumeAttachment",
             "fields": [
@@ -33705,6 +36451,9 @@
             "path": "k8s.io/api/core/v1/generated.proto"
           },
           {
+            "path": "k8s.io/apimachinery/pkg/api/resource/generated.proto"
+          },
+          {
             "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
           },
           {
@@ -33778,6 +36527,16 @@
                 "name": "volumeLifecycleModes",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "storageCapacity",
+                "type": "bool"
+              },
+              {
+                "id": 5,
+                "name": "fsGroupPolicy",
+                "type": "string"
               }
             ]
           },
@@ -34228,6 +36987,41 @@
             ]
           },
           {
+            "name": "Condition",
+            "fields": [
+              {
+                "id": 1,
+                "name": "type",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "status",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "observedGeneration",
+                "type": "int64"
+              },
+              {
+                "id": 4,
+                "name": "lastTransitionTime",
+                "type": "Time"
+              },
+              {
+                "id": 5,
+                "name": "reason",
+                "type": "string"
+              },
+              {
+                "id": 6,
+                "name": "message",
+                "type": "string"
+              }
+            ]
+          },
+          {
             "name": "CreateOptions",
             "fields": [
               {
@@ -34528,6 +37322,11 @@
               {
                 "id": 4,
                 "name": "resourceVersion",
+                "type": "string"
+              },
+              {
+                "id": 10,
+                "name": "resourceVersionMatch",
                 "type": "string"
               },
               {
@@ -35053,9 +37852,6 @@
             "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
           },
           {
-            "path": "k8s.io/apimachinery/pkg/runtime/generated.proto"
-          },
-          {
             "path": "k8s.io/apimachinery/pkg/runtime/schema/generated.proto"
           }
         ],
@@ -35553,13 +38349,7 @@
                 "id": 2,
                 "name": "resources",
                 "type": "Resource",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(gogoproto.nullable)",
-                    "value": "false"
-                  }
-                ]
+                "is_repeated": true
               },
               {
                 "id": 3,
@@ -35620,13 +38410,7 @@
                 "id": 2,
                 "name": "resources",
                 "type": "Resource",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(gogoproto.nullable)",
-                    "value": "false"
-                  }
-                ]
+                "is_repeated": true
               },
               {
                 "id": 3,
@@ -35698,13 +38482,7 @@
                 "id": 3,
                 "name": "resources",
                 "type": "Resource",
-                "is_repeated": true,
-                "options": [
-                  {
-                    "name": "(gogoproto.nullable)",
-                    "value": "false"
-                  }
-                ]
+                "is_repeated": true
               },
               {
                 "id": 4,
@@ -35775,9 +38553,6 @@
             "path": "google/rpc/status.proto"
           },
           {
-            "path": "gogoproto/gogo.proto"
-          },
-          {
             "path": "mcp/v1alpha1/resource.proto"
           }
         ],
@@ -35788,10 +38563,6 @@
           {
             "name": "go_package",
             "value": "istio.io/api/mcp/v1alpha1"
-          },
-          {
-            "name": "(gogoproto.equal_all)",
-            "value": "true"
           }
         ]
       }
@@ -35841,9 +38612,6 @@
         ],
         "imports": [
           {
-            "path": "gogoproto/gogo.proto"
-          },
-          {
             "path": "google/protobuf/timestamp.proto"
           }
         ],
@@ -35854,10 +38622,6 @@
           {
             "name": "go_package",
             "value": "istio.io/api/mcp/v1alpha1"
-          },
-          {
-            "name": "(gogoproto.equal_all)",
-            "value": "true"
           }
         ]
       }
@@ -35887,9 +38651,6 @@
             "path": "google/protobuf/any.proto"
           },
           {
-            "path": "gogoproto/gogo.proto"
-          },
-          {
             "path": "mcp/v1alpha1/metadata.proto"
           }
         ],
@@ -35900,10 +38661,6 @@
           {
             "name": "go_package",
             "value": "istio.io/api/mcp/v1alpha1"
-          },
-          {
-            "name": "(gogoproto.equal_all)",
-            "value": "true"
           }
         ]
       }
@@ -36687,26 +39444,6 @@
                     "name": "context",
                     "type": "TraceContext",
                     "is_repeated": true
-                  },
-                  {
-                    "id": 3,
-                    "name": "debug",
-                    "type": "bool"
-                  },
-                  {
-                    "id": 4,
-                    "name": "max_number_of_attributes",
-                    "type": "google.protobuf.Int64Value"
-                  },
-                  {
-                    "id": 5,
-                    "name": "max_number_of_annotations",
-                    "type": "google.protobuf.Int64Value"
-                  },
-                  {
-                    "id": 6,
-                    "name": "max_number_of_message_events",
-                    "type": "google.protobuf.Int64Value"
                   }
                 ]
               },
@@ -37639,9 +40376,6 @@
           },
           {
             "path": "networking/v1alpha3/virtual_service.proto"
-          },
-          {
-            "path": "gogoproto/gogo.proto"
           }
         ],
         "package": {
@@ -37768,6 +40502,30 @@
               {
                 "name": "INSERT_FIRST",
                 "integer": 6
+              },
+              {
+                "name": "REPLACE",
+                "integer": 7
+              }
+            ]
+          },
+          {
+            "name": "Patch.FilterClass",
+            "enum_fields": [
+              {
+                "name": "UNSPECIFIED"
+              },
+              {
+                "name": "AUTHN",
+                "integer": 1
+              },
+              {
+                "name": "AUTHZ",
+                "integer": 2
+              },
+              {
+                "name": "STATS",
+                "integer": 3
               }
             ]
           }
@@ -38004,6 +40762,11 @@
                     "id": 2,
                     "name": "value",
                     "type": "google.protobuf.Struct"
+                  },
+                  {
+                    "id": 3,
+                    "name": "filter_class",
+                    "type": "FilterClass"
                   }
                 ]
               },
@@ -39556,6 +42319,74 @@
       }
     },
     {
+      "protopath": "networking:/:v1alpha3:/:workload_group.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "WorkloadGroup",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "ObjectMeta"
+              },
+              {
+                "id": 2,
+                "name": "template",
+                "type": "WorkloadEntry",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              }
+            ],
+            "messages": [
+              {
+                "name": "ObjectMeta",
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 1,
+                      "name": "labels",
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 2,
+                      "name": "annotations",
+                      "type": "string"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/api/field_behavior.proto"
+          },
+          {
+            "path": "networking/v1alpha3/workload_entry.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.networking.v1alpha3"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1alpha3"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "networking:/:v1beta1:/:destination_rule.proto",
       "def": {
         "enums": [
@@ -40089,9 +42920,6 @@
           },
           {
             "path": "networking/v1beta1/virtual_service.proto"
-          },
-          {
-            "path": "gogoproto/gogo.proto"
           }
         ],
         "package": {
@@ -43056,9 +45884,6 @@
           },
           {
             "path": "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto"
-          },
-          {
-            "path": "gogoproto/gogo.proto"
           }
         ],
         "package": {
@@ -43068,18 +45893,6 @@
           {
             "name": "go_package",
             "value": "istio.io/api/operator/v1alpha1"
-          },
-          {
-            "name": "(gogoproto.marshaler_all)",
-            "value": "false"
-          },
-          {
-            "name": "(gogoproto.unmarshaler_all)",
-            "value": "false"
-          },
-          {
-            "name": "(gogoproto.sizer_all)",
-            "value": "false"
           }
         ]
       }

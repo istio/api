@@ -51,7 +51,7 @@ protoc_gen_docs_plugin_per_file := --docs_out=warnings=true,dictionary=$(repo_di
 # protoc_gen_jsonshim
 ########################
 
-protoc_gen_k8s_support_plugins := --jsonshim_out=$(out_path) --deepcopy_out=$(out_path) --go_out=plugins=grpc:$(out_path)
+protoc_gen_k8s_support_plugins := --go_out=plugins=grpc:$(out_path)
 
 #####################
 # Generation Rules
@@ -112,15 +112,15 @@ type_v1beta1_k8s_gos := \
 	$(patsubst $(type_v1beta1_path)/%.proto,$(type_v1beta1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(type_v1beta1_protos))) \
 	$(patsubst $(type_v1beta1_path)/%.proto,$(type_v1beta1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(type_v1beta1_protos)))
 
-$(type_v1beta1_pb_gos) $(type_v1beta1_pb_doc) $(type_v1beta1_pb_pythons) $(type_v1beta1_k8s_gos): $(type_v1beta1_protos)
+$(type_v1beta1_pb_gos) $(type_v1beta1_pb_doc) $(type_v1beta1_pb_pythons): $(type_v1beta1_protos)
 	@$(protolock) status
 	@$(protoc) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin)$(type_v1beta1_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/type/* type
 
-generate-type: $(type_v1beta1_pb_gos) $(type_v1beta1_pb_doc) $(type_v1beta1_pb_pythons) $(type_v1beta1_k8s_gos)
+generate-type: $(type_v1beta1_pb_gos) $(type_v1beta1_pb_doc) $(type_v1beta1_pb_pythons)
 
 clean-type:
-	@rm -fr $(type_v1beta1_pb_gos) $(type_v1beta1_pb_docs) $(type_v1beta1_pb_pythons) $(type_v1beta1_k8s_gos)
+	@rm -fr $(type_v1beta1_pb_gos) $(type_v1beta1_pb_docs) $(type_v1beta1_pb_pythons)
 
 #####################
 # mcp/...
@@ -179,7 +179,7 @@ operator_v1alpha1_k8s_gos := \
 	$(patsubst $(operator_v1alpha1_path)/%.proto,$(operator_v1alpha1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(operator_v1alpha1_protos))) \
 	$(patsubst $(operator_v1alpha1_path)/%.proto,$(operator_v1alpha1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(operator_v1alpha1_protos)))
 
-$(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons) $(operator_v1alpha1_k8s_gos): $(operator_v1alpha1_protos)
+$(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons): $(operator_v1alpha1_protos)
 	@$(protolock) status
 	$(protoc) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin_per_file)$(operator_v1alpha1_path) $(protoc_gen_python_plugin) $^
 	cp -r /tmp/istio.io/api/operator/* operator
@@ -187,10 +187,10 @@ $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_p
 #	@sed -i 's|<key,value,effect>|\&lt\;key,value,effect\&gt\;|g' $(operator_v1alpha1_path)/istio.operator.pb.html
 #	@sed -i 's|<operator>|\&lt\;operator\&gt\;|g' $(operator_v1alpha1_path)/istio.operator.v1alpha1.pb.html
 
-generate-operator: $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons) $(operator_v1alpha1_k8s_gos)
+generate-operator: $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons)
 
 clean-operator:
-	rm -fr $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons) $(operator_v1alpha1_k8s_gos)
+	rm -fr $(operator_v1alpha1_pb_gos) $(operator_v1alpha1_pb_doc) $(operator_v1alpha1_pb_pythons)
 	@rm -fr $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons)
 
 #####################
@@ -207,7 +207,7 @@ networking_v1alpha3_k8s_gos := \
 	$(patsubst $(networking_v1alpha3_path)/%.proto,$(networking_v1alpha3_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(networking_v1alpha3_protos))) \
 	$(patsubst $(networking_v1alpha3_path)/%.proto,$(networking_v1alpha3_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(networking_v1alpha3_protos)))
 
-$(networking_v1alpha3_pb_gos) $(networking_v1alpha3_pb_pythons) $(networking_v1alpha3_k8s_gos): $(networking_v1alpha3_protos)
+$(networking_v1alpha3_pb_gos) $(networking_v1alpha3_pb_pythons): $(networking_v1alpha3_protos)
 	$(protolock) status
 	$(protoc) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin_per_file)$(networking_v1alpha3_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/networking/v1alpha3/* networking/v1alpha3
@@ -223,16 +223,16 @@ networking_v1beta1_k8s_gos := \
 	$(patsubst $(networking_v1beta1_path)/%.proto,$(networking_v1beta1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(networking_v1beta1_protos))) \
 	$(patsubst $(networking_v1beta1_path)/%.proto,$(networking_v1beta1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(networking_v1beta1_protos)))
 
-$(networking_v1beta1_pb_gos) $(networking_v1beta1_pb_pythons) $(networking_v1beta1_k8s_gos): $(networking_v1beta1_protos)
+$(networking_v1beta1_pb_gos) $(networking_v1beta1_pb_pythons): $(networking_v1beta1_protos)
 	$(protolock) status
 	$(protoc) $(protoc_gen_k8s_support_plugins) $(protoc_gen_python_plugin) $^
 	cp -r /tmp/istio.io/api/networking/v1beta1/* networking/v1beta1
 
-generate-networking: $(networking_v1alpha3_pb_gos) $(networking_v1alpha3_pb_pythons) $(networking_v1alpha3_k8s_gos) $(networking_v1beta1_pb_gos) $(networking_v1beta1_pb_pythons) $(networking_v1beta1_k8s_gos)
+generate-networking: $(networking_v1alpha3_pb_gos) $(networking_v1alpha3_pb_pythons) $(networking_v1beta1_pb_gos) $(networking_v1beta1_pb_pythons)
 
 clean-networking:
-	@rm -fr $(networking_v1alpha3_pb_gos) $(networking_v1alpha3_pb_docs) $(networking_v1alpha3_pb_pythons) $(networking_v1alpha3_k8s_gos) \
-	$(networking_v1beta1_pb_gos) $(networking_v1beta1_pb_docs) $(networking_v1beta1_pb_pythons) $(networking_v1beta1_k8s_gos)
+	@rm -fr $(networking_v1alpha3_pb_gos) $(networking_v1alpha3_pb_docs) $(networking_v1alpha3_pb_pythons)  \
+	$(networking_v1beta1_pb_gos) $(networking_v1beta1_pb_docs) $(networking_v1beta1_pb_pythons) 
 
 #####################
 # authentication/...
@@ -248,15 +248,15 @@ authn_v1alpha1_k8s_gos := \
 	$(patsubst $(authn_v1alpha1_path)/%.proto,$(authn_v1alpha1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(authn_v1alpha1_protos))) \
 	$(patsubst $(authn_v1alpha1_path)/%.proto,$(authn_v1alpha1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(authn_v1alpha1_protos)))
 
-$(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc) $(authn_v1alpha1_pb_pythons) $(authn_v1alpha1_k8s_gos): $(authn_v1alpha1_protos)
+$(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc) $(authn_v1alpha1_pb_pythons) : $(authn_v1alpha1_protos)
 	@$(protolock) status
 	@$(protoc) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin)$(authn_v1alpha1_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/authentication/* authentication
 
-generate-authn: $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc) $(authn_v1alpha1_pb_pythons) $(authn_v1alpha1_k8s_gos)
+generate-authn: $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc) $(authn_v1alpha1_pb_pythons)
 
 clean-authn:
-	@rm -fr $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc) $(authn_v1alpha1_pb_pythons) $(authn_v1alpha1_k8s_gos)
+	@rm -fr $(authn_v1alpha1_pb_gos) $(authn_v1alpha1_pb_doc) $(authn_v1alpha1_pb_pythons)
 
 #####################
 # security/...
@@ -272,7 +272,7 @@ security_v1alpha1_k8s_gos := \
 	$(patsubst $(security_v1alpha1_path)/%.proto,$(security_v1alpha1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(security_v1alpha1_protos))) \
 	$(patsubst $(security_v1alpha1_path)/%.proto,$(security_v1alpha1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(security_v1alpha1_protos)))
 
-$(security_v1alpha1_pb_gos) $(security_v1alpha1_pb_doc) $(security_v1alpha1_pb_pythons) $(security_v1alpha1_k8s_gos): $(security_v1alpha1_protos)
+$(security_v1alpha1_pb_gos) $(security_v1alpha1_pb_doc) $(security_v1alpha1_pb_pythons): $(security_v1alpha1_protos)
 	@$(protolock) status
 	@$(protoc) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin_per_file)$(security_v1alpha1_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/security/* security
@@ -287,16 +287,16 @@ security_v1beta1_k8s_gos := \
 	$(patsubst $(security_v1beta1_path)/%.proto,$(security_v1beta1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(security_v1beta1_protos))) \
 	$(patsubst $(security_v1beta1_path)/%.proto,$(security_v1beta1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(security_v1beta1_protos)))
 
-$(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons) $(security_v1beta1_k8s_gos): $(security_v1beta1_protos)
+$(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons): $(security_v1beta1_protos)
 	@$(protolock) status
 	@$(protoc) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin_per_file)$(security_v1beta1_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/security/* security
 
-generate-security: $(security_v1alpha1_pb_gos) $(security_v1alpha1_pb_doc) $(security_v1alpha3_pb_pythons) $(security_v1alpha1_k8s_gos) $(security_v1beta1_pb_gos) $(security_v1beeta1_pb_docs) $(security_v1beta1_pb_pythons) $(security_v1beta1_k8s_gos)
+generate-security: $(security_v1alpha1_pb_gos) $(security_v1alpha1_pb_doc) $(security_v1alpha3_pb_pythons) $(security_v1beta1_pb_gos) $(security_v1beeta1_pb_docs) $(security_v1beta1_pb_pythons)
 	
 clean-security:
-	@rm -fr $(security_v1alpha1_pb_gos) $(security_v1alpha1_pb_docs) $(security_v1alpha1_pb_pythons) $(security_v1alpha1_k8s_gos)
-	@rm -fr $(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons) $(security_v1beta1_k8s_gos)
+	@rm -fr $(security_v1alpha1_pb_gos) $(security_v1alpha1_pb_docs) $(security_v1alpha1_pb_pythons)
+	@rm -fr $(security_v1beta1_pb_gos) $(security_v1beta1_pb_docs) $(security_v1beta1_pb_pythons)
 
 #####################
 # analysis/...
@@ -312,15 +312,15 @@ analysis_v1alpha1_k8s_gos := \
 	$(patsubst $(analysis_v1alpha1_path)/%.proto,$(analysis_v1alpha1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(analysis_v1alpha1_protos))) \
 	$(patsubst $(analysis_v1alpha1_path)/%.proto,$(analysis_v1alpha1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(analysis_v1alpha1_protos)))
 
-$(analysis_v1alpha1_pb_gos) $(analysis_v1alpha1_pb_docs) $(analysis_v1alpha1_pb_pythons) $(analysis_v1alpha1_k8s_gos): $(analysis_v1alpha1_protos)
+$(analysis_v1alpha1_pb_gos) $(analysis_v1alpha1_pb_docs) $(analysis_v1alpha1_pb_pythons): $(analysis_v1alpha1_protos)
 	@$(protolock) status
 	@$(protoc) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin_per_file)$(analysis_v1alpha1_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/analysis/* analysis
 
-generate-analysis: $(analysis_v1alpha1_pb_gos) $(analysis_v1alpha1_pb_docs) $(analysis_v1alpha1_pb_pythons) $(analysis_v1alpha1_k8s_gos)
+generate-analysis: $(analysis_v1alpha1_pb_gos) $(analysis_v1alpha1_pb_docs) $(analysis_v1alpha1_pb_pythons) 
 
 clean-analysis:
-	@rm -fr $(analysis_v1alpha1_pb_gos) $(analysis_v1alpha1_pb_docs) $(analysis_v1alpha1_pb_pythons) $(analysis_v1alpha1_k8s_gos)
+	@rm -fr $(analysis_v1alpha1_pb_gos) $(analysis_v1alpha1_pb_docs) $(analysis_v1alpha1_pb_pythons)
 
 #####################
 # meta/...
@@ -336,15 +336,15 @@ meta_v1alpha1_k8s_gos := \
 	$(patsubst $(meta_v1alpha1_path)/%.proto,$(meta_v1alpha1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(meta_v1alpha1_protos))) \
 	$(patsubst $(meta_v1alpha1_path)/%.proto,$(meta_v1alpha1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(meta_v1alpha1_protos)))
 
-$(meta_v1alpha1_pb_gos) $(meta_v1alpha1_pb_docs) $(meta_v1alpha1_pb_pythons) $(meta_v1alpha1_k8s_gos): $(meta_v1alpha1_protos)
+$(meta_v1alpha1_pb_gos) $(meta_v1alpha1_pb_docs) $(meta_v1alpha1_pb_pythons): $(meta_v1alpha1_protos)
 	@$(protolock) status
 	@$(protoc) $(protoc_gen_k8s_support_plugins) $(protoc_gen_docs_plugin_per_file)$(meta_v1alpha1_path) $(protoc_gen_python_plugin) $^
 	@cp -r /tmp/istio.io/api/meta/* meta
 
-generate-meta: $(meta_v1alpha1_pb_gos) $(meta_v1alpha1_pb_docs) $(meta_v1alpha1_pb_pythons) $(meta_v1alpha1_k8s_gos)
+generate-meta: $(meta_v1alpha1_pb_gos) $(meta_v1alpha1_pb_docs) $(meta_v1alpha1_pb_pythons)
 
 clean-meta:
-	@rm -fr $(meta_v1alpha1_pb_gos) $(meta_v1alpha1_pb_docs) $(meta_v1alpha1_pb_pythons) $(meta_v1alpha1_k8s_gos)
+	@rm -fr $(meta_v1alpha1_pb_gos) $(meta_v1alpha1_pb_docs) $(meta_v1alpha1_pb_pythons)
 
 #####################
 # envoy/...
