@@ -26,11 +26,6 @@ option go_package="istio.io/api/operator/v1alpha1";
 
 import "google/protobuf/any.proto";
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
-import "gogoproto/gogo.proto";
-
-option (gogoproto.marshaler_all) = false;
-option (gogoproto.unmarshaler_all) = false;
-option (gogoproto.sizer_all) = false;
 
 /*
 IstioOperatorSpec is an API for managing an Istio control plane. It is used to define profiles that are included

@@ -17,11 +17,9 @@ syntax = "proto3";
 package istio.mcp.v1alpha1;
 
 import "google/rpc/status.proto";
-import "gogoproto/gogo.proto";
 import "mcp/v1alpha1/resource.proto";
 
 option go_package="istio.io/api/mcp/v1alpha1";
-option (gogoproto.equal_all) = true;
 
 // Identifies a specific MCP sink node instance. The node identifier is
 // presented to the resource source, which may use this identifier
@@ -79,7 +77,7 @@ message MeshConfigResponse {
 
   // The response resources wrapped in the common MCP *Resource*
   // message.
-  repeated Resource resources = 2 [(gogoproto.nullable) = false];
+  repeated Resource resources = 2;
 
   // Type URL for resources wrapped in the provided resources(s). This
   // must be consistent with the type_url in the wrapper messages if
@@ -151,7 +149,7 @@ message IncrementalMeshConfigResponse {
   // The response resources wrapped in the common MCP *Resource*
   // message. These are typed resources that match the type url in the
   // IncrementalMeshConfigRequest.
-  repeated Resource resources = 2 [(gogoproto.nullable) = false];
+  repeated Resource resources = 2;
 
   // Resources names of resources that have be deleted and to be
   // removed from the MCP Client.  Removed resources for missing
@@ -257,7 +255,7 @@ message Resources {
   //
   // When `incremental` is false, this contains the full set of resources for the
   // specified collection. This replaces any previously delivered resources.
-  repeated Resource resources = 3 [(gogoproto.nullable) = false];
+  repeated Resource resources = 3;
 
   // Names of resources that have been deleted and to be
   // removed from the MCP sink node. Removed resources for missing

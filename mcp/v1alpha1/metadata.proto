@@ -16,11 +16,9 @@ syntax = "proto3";
 
 package istio.mcp.v1alpha1;
 
-import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package="istio.io/api/mcp/v1alpha1";
-option (gogoproto.equal_all) = true;
 
 // Metadata information that all resources within the Mesh Configuration Protocol must have.
 message Metadata {
