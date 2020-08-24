@@ -338,7 +338,7 @@ import (
 	fmt "fmt"
 	github_com_gogo_protobuf_jsonpb "github.com/gogo/protobuf/jsonpb"
 	proto "github.com/gogo/protobuf/proto"
-	_ "istio.io/gogo-genproto/googleapis/google/api"
+	_ "google/api/field_behavior.proto"
 	math "math"
 )
 

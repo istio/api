@@ -1,0 +1,112 @@
+---
+title: istio.mcp.v1alpha1
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+number_of_entries: 1
+---
+<h2 id="Metadata">Metadata</h2>
+<section>
+<p>Metadata information that all resources within the Mesh Configuration Protocol must have.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Metadata-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>Fully qualified name of the resource. Unique in context of a collection.</p>
+
+<p>The fully qualified name consists of a directory and basename. The directory identifies
+the resources location in a resource hierarchy. The basename identifies the specific
+resource name within the context of that directory.</p>
+
+<p>The directory and basename are composed of one or more segments. Segments must be
+valid <a href="https://tools.ietf.org/html/rfc1123">DNS labels</a>. &ldquo;/&rdquo; is the delimiter between
+segments</p>
+
+<p>The rightmost segment is the basename. All segments to the
+left of the basename form the directory. Segments moving towards the left
+represent higher positions in the resource hierarchy, similar to reverse
+DNS notation. e.g.</p>
+
+<p>/<org>/<team>/<subteam>/<resource basename></p>
+
+<p>An empty directory indicates a resource that is located at the root of the
+hierarchy, e.g.</p>
+
+<p>/<globally scoped resource></p>
+
+<p>On Kubernetes the resource hierarchy is two-levels: namespaces and
+cluster-scoped (i.e. global).</p>
+
+<p>Namespace resources fully qualified name is of the form:</p>
+
+<p>&ldquo;<k8s namespace>/<k8s resource name>&rdquo;</p>
+
+<p>Cluster scoped resources are located at the root of the hierarchy and are of the form:</p>
+
+<p>&rdquo;/<k8s resource name>&ldquo;</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Metadata-create_time">
+<td><code>createTime</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#timestamp">Timestamp</a></code></td>
+<td>
+<p>The creation timestamp of the resource.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Metadata-version">
+<td><code>version</code></td>
+<td><code>string</code></td>
+<td>
+<p>Resource version. This is used to determine when resources change across
+resource updates. It should be treated as opaque by consumers/sinks.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Metadata-labels">
+<td><code>labels</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>Map of string keys and values that can be used to organize and categorize
+resources within a collection.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Metadata-annotations">
+<td><code>annotations</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>Map of string keys and values that can be used by source and sink to communicate
+arbitrary metadata about this resource.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>

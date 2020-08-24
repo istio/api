@@ -147,8 +147,9 @@ import (
 	fmt "fmt"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	_ "github.com/gogo/protobuf/types"
-	_ "istio.io/gogo-genproto/googleapis/google/api"
+	_ "google/api/field_behavior.proto"
+	_ "google/protobuf/duration.proto"
+	_ "google/protobuf/wrappers.proto"
 	math "math"
 )
 

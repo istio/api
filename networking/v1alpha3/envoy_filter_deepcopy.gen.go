@@ -6,8 +6,8 @@ package v1alpha3
 import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
-	_ "github.com/gogo/protobuf/types"
-	_ "istio.io/gogo-genproto/googleapis/google/api"
+	_ "google/api/field_behavior.proto"
+	_ "google/protobuf/struct.proto"
 	math "math"
 )
 
