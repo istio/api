@@ -5,7 +5,6 @@ package v1alpha1
 
 import (
 	fmt "fmt"
-	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	_ "google/protobuf/timestamp.proto"
 	math "math"

@@ -145,7 +145,6 @@ package v1beta1
 
 import (
 	fmt "fmt"
-	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	_ "google/api/field_behavior.proto"
 	_ "google/protobuf/duration.proto"

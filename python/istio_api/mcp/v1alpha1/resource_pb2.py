@@ -14,7 +14,6 @@ _sym_db = _symbol_database.Default()
 
 
 from google.protobuf import any_pb2 as google_dot_protobuf_dot_any__pb2
-from gogoproto import gogo_pb2 as gogoproto_dot_gogo__pb2
 from mcp.v1alpha1 import metadata_pb2 as mcp_dot_v1alpha1_dot_metadata__pb2
 
 
@@ -22,10 +21,10 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='mcp/v1alpha1/resource.proto',
   package='istio.mcp.v1alpha1',
   syntax='proto3',
-  serialized_options=_b('Z\031istio.io/api/mcp/v1alpha1\250\342\036\001'),
-  serialized_pb=_b('\n\x1bmcp/v1alpha1/resource.proto\x12\x12istio.mcp.v1alpha1\x1a\x19google/protobuf/any.proto\x1a\x14gogoproto/gogo.proto\x1a\x1bmcp/v1alpha1/metadata.proto\"^\n\x08Resource\x12.\n\x08metadata\x18\x01 \x01(\x0b\x32\x1c.istio.mcp.v1alpha1.Metadata\x12\"\n\x04\x62ody\x18\x02 \x01(\x0b\x32\x14.google.protobuf.AnyB\x1fZ\x19istio.io/api/mcp/v1alpha1\xa8\xe2\x1e\x01\x62\x06proto3')
+  serialized_options=_b('Z\031istio.io/api/mcp/v1alpha1'),
+  serialized_pb=_b('\n\x1bmcp/v1alpha1/resource.proto\x12\x12istio.mcp.v1alpha1\x1a\x19google/protobuf/any.proto\x1a\x1bmcp/v1alpha1/metadata.proto\"^\n\x08Resource\x12.\n\x08metadata\x18\x01 \x01(\x0b\x32\x1c.istio.mcp.v1alpha1.Metadata\x12\"\n\x04\x62ody\x18\x02 \x01(\x0b\x32\x14.google.protobuf.AnyB\x1bZ\x19istio.io/api/mcp/v1alpha1b\x06proto3')
   ,
-  dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,gogoproto_dot_gogo__pb2.DESCRIPTOR,mcp_dot_v1alpha1_dot_metadata__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,mcp_dot_v1alpha1_dot_metadata__pb2.DESCRIPTOR,])
 
 
 
@@ -63,8 +62,8 @@ _RESOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=129,
-  serialized_end=223,
+  serialized_start=107,
+  serialized_end=201,
 )
 
 _RESOURCE.fields_by_name['metadata'].message_type = mcp_dot_v1alpha1_dot_metadata__pb2._METADATA

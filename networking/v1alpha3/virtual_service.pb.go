@@ -701,13 +701,8 @@ type HTTPRoute struct {
 	// Rewrite HTTP URIs and Authority headers. Rewrite cannot be used with
 	// Redirect primitive. Rewrite will be performed before forwarding.
 	Rewrite *HTTPRewrite `protobuf:"bytes,4,opt,name=rewrite,proto3" json:"rewrite,omitempty"`
-<<<<<<< HEAD
 	// Timeout for HTTP requests, default is disabled.
-	Timeout *types.Duration `protobuf:"bytes,6,opt,name=timeout,proto3" json:"timeout,omitempty"`
-=======
-	// Timeout for HTTP requests.
 	Timeout *duration.Duration `protobuf:"bytes,6,opt,name=timeout,proto3" json:"timeout,omitempty"`
->>>>>>> WIP: Move API repository to protobuf from gogo
 	// Retry policy for HTTP requests.
 	Retries *HTTPRetry `protobuf:"bytes,7,opt,name=retries,proto3" json:"retries,omitempty"`
 	// Fault injection policy to apply on HTTP traffic at the client side.
