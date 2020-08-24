@@ -601,7 +601,7 @@ message HTTPRoute {
   reserved 5;
   reserved "websocket_upgrade";
 
-  // Timeout for HTTP requests.
+  // Timeout for HTTP requests, default is disabled.
   google.protobuf.Duration timeout = 6;
 
   // Retry policy for HTTP requests.
