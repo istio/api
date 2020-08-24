@@ -119,7 +119,7 @@
             "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPRewrite"
           },
           "timeout": {
-            "description": "Timeout for HTTP requests.",
+            "description": "Timeout for HTTP requests, default is disabled.",
             "type": "string"
           },
           "retries": {
