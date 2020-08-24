@@ -95,7 +95,7 @@ mirror-licenses: mod-download-go
 	@license-lint --mirror
 
 TMP := $(shell mktemp -d -u)
-UPDATE_BRANCH ?= "master"
+UPDATE_BRANCH ?= "gogo/purge"
 
 update-common:
 	@mkdir -p $(TMP)
@@ -106,12 +106,12 @@ update-common:
 	@rm -fr $(TMP)/common-files
 
 update-common-protos:
-	@mkdir -p $(TMP)
-	@git clone -q --depth 1 --single-branch --branch $(UPDATE_BRANCH) https://github.com/istio/common-files $(TMP)/common-files
-	@cd $(TMP)/common-files ; git rev-parse HEAD > common-protos/.commonfiles.sha
-	@rm -fr common-protos
-	@cp -a $(TMP)/common-files/common-protos $(shell pwd)
-	@rm -fr $(TMP)/common-files
+	mkdir -p $(TMP)
+	git clone -q --depth 1 --single-branch --branch $(UPDATE_BRANCH) https://github.com/sdake/common-files $(TMP)/common-files
+	cd $(TMP)/common-files ; git rev-parse HEAD > common-protos/.commonfiles.sha
+	rm -fr common-protos
+	cp -a $(TMP)/common-files/common-protos $(shell pwd)
+	rm -fr $(TMP)/common-files
 
 check-clean-repo:
 	@common/scripts/check_clean_repo.sh

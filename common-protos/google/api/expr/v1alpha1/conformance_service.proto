@@ -1,4 +1,4 @@
-// Copyright 2018 Google LLC.
+// Copyright 2020 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,7 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//
 
 syntax = "proto3";
 
@@ -23,7 +22,7 @@ import "google/api/expr/v1alpha1/syntax.proto";
 import "google/rpc/status.proto";
 
 option cc_enable_arenas = true;
-option go_package = "google.golang.org/genproto/googleapis/api/expr/v1alpha1;expr";
+option go_package = "google.golang.org/genproto/googleapis/api/expr/conformance/v1alpha1;confpb";
 option java_multiple_files = true;
 option java_outer_classname = "ConformanceServiceProto";
 option java_package = "com.google.api.expr.v1alpha1";
@@ -34,16 +33,20 @@ option java_package = "com.google.api.expr.v1alpha1";
 // a server for this API.  The API will be used for conformance testing
 // and other utilities.
 service ConformanceService {
+
   // Transforms CEL source text into a parsed representation.
-  rpc Parse(ParseRequest) returns (ParseResponse) {}
+  rpc Parse(ParseRequest) returns (ParseResponse) {
+  }
 
   // Runs static checks on a parsed CEL representation and return
   // an annotated representation, or a set of issues.
-  rpc Check(CheckRequest) returns (CheckResponse) {}
+  rpc Check(CheckRequest) returns (CheckResponse) {
+  }
 
   // Evaluates a parsed or annotation CEL representation given
   // values of external bindings.
-  rpc Eval(EvalRequest) returns (EvalResponse) {}
+  rpc Eval(EvalRequest) returns (EvalResponse) {
+  }
 }
 
 // Request message for the Parse method.
@@ -54,8 +57,7 @@ message ParseRequest {
   // Tag for version of CEL syntax, for future use.
   string syntax_version = 2;
 
-  // File or resource for source text, used in
-  // [SourceInfo][google.api.expr.v1alpha1.SourceInfo].
+  // File or resource for source text, used in [SourceInfo][google.api.expr.v1alpha1.SourceInfo].
   string source_location = 3;
 
   // Prevent macro expansion.  See "Macros" in Language Defiinition.
@@ -85,10 +87,9 @@ message CheckRequest {
   // Language Definition.
   string container = 3;
 
-  // If true, use only the declarations in
-  // [type_env][google.api.expr.v1alpha1.CheckRequest.type_env].  If false
-  // (default), add declarations for the standard definitions to the type
-  // environment.  See "Standard Definitions" in the Language Definition.
+  // If true, use only the declarations in [type_env][google.api.expr.v1alpha1.CheckRequest.type_env].  If false (default),
+  // add declarations for the standard definitions to the type environment.  See
+  // "Standard Definitions" in the Language Definition.
   bool no_std_env = 4;
 }
 
@@ -113,12 +114,10 @@ message EvalRequest {
   }
 
   // Bindings for the external variables.  The types SHOULD be compatible
-  // with the type environment in
-  // [CheckRequest][google.api.expr.v1alpha1.CheckRequest], if checked.
+  // with the type environment in [CheckRequest][google.api.expr.v1alpha1.CheckRequest], if checked.
   map<string, ExprValue> bindings = 3;
 
-  // SHOULD be the same container as used in
-  // [CheckRequest][google.api.expr.v1alpha1.CheckRequest], if checked.
+  // SHOULD be the same container as used in [CheckRequest][google.api.expr.v1alpha1.CheckRequest], if checked.
   string container = 4;
 }
 
@@ -128,9 +127,9 @@ message EvalResponse {
   ExprValue result = 1;
 
   // Any number of issues with [StatusDetails][] as the details.
-  // Note that CEL execution errors are reified into
-  // [ExprValue][google.api.expr.v1alpha1.ExprValue]. Nevertheless, we'll allow
-  // out-of-band issues to be raised, which also makes the replies more regular.
+  // Note that CEL execution errors are reified into [ExprValue][google.api.expr.v1alpha1.ExprValue].
+  // Nevertheless, we'll allow out-of-band issues to be raised,
+  // which also makes the replies more regular.
   repeated google.rpc.Status issues = 2;
 }
 
