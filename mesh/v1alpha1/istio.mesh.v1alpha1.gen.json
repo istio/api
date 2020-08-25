@@ -449,6 +449,10 @@
           "requestTimeout": {
             "description": "timeout for forward CSR requests from Istiod to External CA Default: 10s",
             "type": "string"
+          },
+          "istiodSide": {
+            "description": "Use istiod_side to specify CA Server integrate to Istiod side or Agent side Default: true",
+            "type": "boolean"
           }
         }
       },

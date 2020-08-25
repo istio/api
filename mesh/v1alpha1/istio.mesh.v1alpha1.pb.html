@@ -1430,7 +1430,11 @@ No
 <td><code>tlsSettings</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ClientTLSSettings">ClientTLSSettings</a></code></td>
 <td>
-<p>Use the tls_settings to specify the tls mode to use. If the CA certificates
+<p>Use the tls<em>settings to specify the tls mode to use.
+Regarding tls</em>settings:
+- DISABLE MODE is legitimate for the case Istiod is making the request via an Envoy sidecar.
+DISABLE MODE can also be used for testing
+- TLS MUTUAL MODE be on by default. If the CA certificates
 (cert bundle to verify the CA server&rsquo;s certificate) is omitted, Istiod will
 use the system root certs to verify the CA server&rsquo;s certificate.</p>
 
@@ -1445,6 +1449,18 @@ No
 <td>
 <p>timeout for forward CSR requests from Istiod to External CA
 Default: 10s</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-CA-istiod_side">
+<td><code>istiodSide</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Use istiod_side to specify CA Server integrate to Istiod side or Agent side
+Default: true</p>
 
 </td>
 <td>
