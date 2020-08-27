@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 27
+number_of_entries: 28
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -1392,6 +1392,75 @@ No
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>Specify thrift rate limit service timeout, in milliseconds. Default is 50ms</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-CA">MeshConfig.CA</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-CA-address">
+<td><code>address</code></td>
+<td><code>string</code></td>
+<td>
+<p>REQUIRED. Address of the CA server implementing the Istio CA gRPC API.
+Can be IP address or a fully qualified DNS name with port
+Eg: custom-ca.default.svc.cluster.local:8932, 192.168.23.2:9000</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-CA-tls_settings">
+<td><code>tlsSettings</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ClientTLSSettings">ClientTLSSettings</a></code></td>
+<td>
+<p>Use the tls<em>settings to specify the tls mode to use.
+Regarding tls</em>settings:
+- DISABLE MODE is legitimate for the case Istiod is making the request via an Envoy sidecar.
+DISABLE MODE can also be used for testing
+- TLS MUTUAL MODE be on by default. If the CA certificates
+(cert bundle to verify the CA server&rsquo;s certificate) is omitted, Istiod will
+use the system root certs to verify the CA server&rsquo;s certificate.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-CA-request_timeout">
+<td><code>requestTimeout</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>timeout for forward CSR requests from Istiod to External CA
+Default: 10s</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-CA-istiod_side">
+<td><code>istiodSide</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Use istiod_side to specify CA Server integrate to Istiod side or Agent side
+Default: true</p>
 
 </td>
 <td>

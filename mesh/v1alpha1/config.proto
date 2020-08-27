@@ -470,8 +470,33 @@ message MeshConfig {
   // .x.y.com suffix.
   google.protobuf.BoolValue verify_certificate_at_client = 54;
 
+  message CA {
+    // REQUIRED. Address of the CA server implementing the Istio CA gRPC API. 
+    // Can be IP address or a fully qualified DNS name with port
+    // Eg: custom-ca.default.svc.cluster.local:8932, 192.168.23.2:9000
+    string address = 1;
+    // Use the tls_settings to specify the tls mode to use. 
+    // Regarding tls_settings:
+    // - DISABLE MODE is legitimate for the case Istiod is making the request via an Envoy sidecar.
+    // DISABLE MODE can also be used for testing
+    // - TLS MUTUAL MODE be on by default. If the CA certificates 
+    // (cert bundle to verify the CA server's certificate) is omitted, Istiod will 
+    // use the system root certs to verify the CA server's certificate. 
+    istio.networking.v1alpha3.ClientTLSSettings tls_settings = 2;
+    // timeout for forward CSR requests from Istiod to External CA
+    // Default: 10s
+    google.protobuf.Duration request_timeout = 3;
+    // Use istiod_side to specify CA Server integrate to Istiod side or Agent side
+    // Default: true
+    bool istiod_side = 4;
+  }
   // $hide_from_docs
-  // Next available field number: 55
+  // If specified, Istiod will authorize and forward the CSRs from the workloads to the specified external CA
+  // using the Istio CA gRPC API.
+  CA ca = 55;
+
+  // $hide_from_docs
+  // Next available field number: 56
 }
 
 // Resource describes the source of configuration

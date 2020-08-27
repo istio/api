@@ -184,6 +184,9 @@
             "description": "VerifyCertificateAtClient sets the mesh global default for peer certificate validation at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL) origination modes are used. This setting can be overridden at the host level via DestinationRule API. By default, VerifyCertificateAtClient is true.",
             "type": "boolean",
             "nullable": true
+          },
+          "ca": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.CA"
           }
         }
       },
@@ -429,6 +432,27 @@
           },
           "settings": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ServiceSettings.Settings"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.CA": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "description": "REQUIRED. Address of the CA server implementing the Istio CA gRPC API. Can be IP address or a fully qualified DNS name with port Eg: custom-ca.default.svc.cluster.local:8932, 192.168.23.2:9000",
+            "type": "string",
+            "format": "string"
+          },
+          "tlsSettings": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
+          },
+          "requestTimeout": {
+            "description": "timeout for forward CSR requests from Istiod to External CA Default: 10s",
+            "type": "string"
+          },
+          "istiodSide": {
+            "description": "Use istiod_side to specify CA Server integrate to Istiod side or Agent side Default: true",
+            "type": "boolean"
           }
         }
       },
