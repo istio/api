@@ -4,6 +4,7 @@
 
 import sys
 _b=sys.version_info[0]<3 and (lambda x:x) or (lambda x:x.encode('latin1'))
+from google.protobuf.internal import enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
@@ -21,10 +22,40 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.networking.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\037istio.io/api/networking/v1beta1'),
-  serialized_pb=_b('\n\'networking/v1beta1/workload_entry.proto\x12\x18istio.networking.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\"\xd6\x02\n\rWorkloadEntry\x12\x14\n\x07\x61\x64\x64ress\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x41\n\x05ports\x18\x02 \x03(\x0b\x32\x32.istio.networking.v1beta1.WorkloadEntry.PortsEntry\x12\x43\n\x06labels\x18\x03 \x03(\x0b\x32\x33.istio.networking.v1beta1.WorkloadEntry.LabelsEntry\x12\x0f\n\x07network\x18\x04 \x01(\t\x12\x10\n\x08locality\x18\x05 \x01(\t\x12\x0e\n\x06weight\x18\x06 \x01(\r\x12\x17\n\x0fservice_account\x18\x07 \x01(\t\x1a,\n\nPortsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\r:\x02\x38\x01\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42!Z\x1fistio.io/api/networking/v1beta1b\x06proto3')
+  serialized_pb=_b('\n\'networking/v1beta1/workload_entry.proto\x12\x18istio.networking.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\"\x95\x03\n\rWorkloadEntry\x12\x14\n\x07\x61\x64\x64ress\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x41\n\x05ports\x18\x02 \x03(\x0b\x32\x32.istio.networking.v1beta1.WorkloadEntry.PortsEntry\x12\x43\n\x06labels\x18\x03 \x03(\x0b\x32\x33.istio.networking.v1beta1.WorkloadEntry.LabelsEntry\x12\x0f\n\x07network\x18\x04 \x01(\t\x12\x10\n\x08locality\x18\x05 \x01(\t\x12\x0e\n\x06weight\x18\x06 \x01(\r\x12\x17\n\x0fservice_account\x18\x07 \x01(\t\x12=\n\rhealth_status\x18\x08 \x01(\x0e\x32&.istio.networking.v1beta1.HealthStatus\x1a,\n\nPortsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\r:\x02\x38\x01\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01*;\n\x0cHealthStatus\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\r\n\tUNHEALTHY\x10\x01\x12\x0b\n\x07HEALTHY\x10\x02\x42!Z\x1fistio.io/api/networking/v1beta1b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,])
 
+_HEALTHSTATUS = _descriptor.EnumDescriptor(
+  name='HealthStatus',
+  full_name='istio.networking.v1beta1.HealthStatus',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='UNSPECIFIED', index=0, number=0,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='UNHEALTHY', index=1, number=1,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='HEALTHY', index=2, number=2,
+      serialized_options=None,
+      type=None),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=510,
+  serialized_end=569,
+)
+_sym_db.RegisterEnumDescriptor(_HEALTHSTATUS)
+
+HealthStatus = enum_type_wrapper.EnumTypeWrapper(_HEALTHSTATUS)
+UNSPECIFIED = 0
+UNHEALTHY = 1
+HEALTHY = 2
 
 
 
@@ -61,8 +92,8 @@ _WORKLOADENTRY_PORTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=354,
-  serialized_end=398,
+  serialized_start=417,
+  serialized_end=461,
 )
 
 _WORKLOADENTRY_LABELSENTRY = _descriptor.Descriptor(
@@ -98,8 +129,8 @@ _WORKLOADENTRY_LABELSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=400,
-  serialized_end=445,
+  serialized_start=463,
+  serialized_end=508,
 )
 
 _WORKLOADENTRY = _descriptor.Descriptor(
@@ -158,6 +189,13 @@ _WORKLOADENTRY = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='health_status', full_name='istio.networking.v1beta1.WorkloadEntry.health_status', index=7,
+      number=8, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -171,14 +209,16 @@ _WORKLOADENTRY = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=103,
-  serialized_end=445,
+  serialized_end=508,
 )
 
 _WORKLOADENTRY_PORTSENTRY.containing_type = _WORKLOADENTRY
 _WORKLOADENTRY_LABELSENTRY.containing_type = _WORKLOADENTRY
 _WORKLOADENTRY.fields_by_name['ports'].message_type = _WORKLOADENTRY_PORTSENTRY
 _WORKLOADENTRY.fields_by_name['labels'].message_type = _WORKLOADENTRY_LABELSENTRY
+_WORKLOADENTRY.fields_by_name['health_status'].enum_type = _HEALTHSTATUS
 DESCRIPTOR.message_types_by_name['WorkloadEntry'] = _WORKLOADENTRY
+DESCRIPTOR.enum_types_by_name['HealthStatus'] = _HEALTHSTATUS
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 WorkloadEntry = _reflection.GeneratedProtocolMessageType('WorkloadEntry', (_message.Message,), {

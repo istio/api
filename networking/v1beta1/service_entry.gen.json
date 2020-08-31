@@ -150,6 +150,9 @@
             "description": "The service account associated with the workload if a sidecar is present in the workload. The service account must be present in the same namespace as the configuration ( WorkloadEntry or a ServiceEntry)",
             "type": "string",
             "format": "string"
+          },
+          "healthStatus": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.HealthStatus"
           }
         }
       },
@@ -166,6 +169,15 @@
             }
           }
         }
+      },
+      "istio.networking.v1beta1.HealthStatus": {
+        "description": "HealthStatus is an enum specifying the health of a VM. Health is determined by istio-agent/envoy and the application itself.",
+        "type": "string",
+        "enum": [
+          "UNSPECIFIED",
+          "UNHEALTHY",
+          "HEALTHY"
+        ]
       }
     }
   }

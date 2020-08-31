@@ -1581,28 +1581,6 @@ metadata:
     release: istio
   name: serviceentries.networking.istio.io
 spec:
-  additionalPrinterColumns:
-  - JSONPath: .spec.hosts
-    description: The hosts associated with the ServiceEntry
-    name: Hosts
-    type: string
-  - JSONPath: .spec.location
-    description: Whether the service is external to the mesh or part of the mesh (MESH_EXTERNAL
-      or MESH_INTERNAL)
-    name: Location
-    type: string
-  - JSONPath: .spec.resolution
-    description: Service discovery mode for the hosts (NONE, STATIC, or DNS)
-    name: Resolution
-    type: string
-  - JSONPath: .metadata.creationTimestamp
-    description: 'CreationTimestamp is a timestamp representing the server time when
-      this object was created. It is not guaranteed to be set in happens-before order
-      across separate operations. Clients may not set this value. It is represented
-      in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for
-      lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
-    name: Age
-    type: date
   group: networking.istio.io
   names:
     categories:
@@ -1617,119 +1595,278 @@ spec:
   scope: Namespaced
   subresources:
     status: {}
-  validation:
-    openAPIV3Schema:
-      properties:
-        spec:
-          description: 'Configuration affecting service registry. See more details
-            at: https://istio.io/docs/reference/config/networking/service-entry.html'
-          properties:
-            addresses:
-              description: The virtual IP addresses associated with the service.
-              items:
-                format: string
+  versions:
+  - additionalPrinterColumns:
+    - JSONPath: .spec.hosts
+      description: The hosts associated with the ServiceEntry
+      name: Hosts
+      type: string
+    - JSONPath: .spec.location
+      description: Whether the service is external to the mesh or part of the mesh
+        (MESH_EXTERNAL or MESH_INTERNAL)
+      name: Location
+      type: string
+    - JSONPath: .spec.resolution
+      description: Service discovery mode for the hosts (NONE, STATIC, or DNS)
+      name: Resolution
+      type: string
+    - JSONPath: .metadata.creationTimestamp
+      description: 'CreationTimestamp is a timestamp representing the server time
+        when this object was created. It is not guaranteed to be set in happens-before
+        order across separate operations. Clients may not set this value. It is represented
+        in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for
+        lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
+      name: Age
+      type: date
+    name: v1alpha3
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            description: 'Configuration affecting service registry. See more details
+              at: https://istio.io/docs/reference/config/networking/service-entry.html'
+            properties:
+              addresses:
+                description: The virtual IP addresses associated with the service.
+                items:
+                  format: string
+                  type: string
+                type: array
+              endpoints:
+                description: One or more endpoints associated with the service.
+                items:
+                  properties:
+                    address:
+                      format: string
+                      type: string
+                    labels:
+                      additionalProperties:
+                        format: string
+                        type: string
+                      description: One or more labels associated with the endpoint.
+                      type: object
+                    locality:
+                      description: The locality associated with the endpoint.
+                      format: string
+                      type: string
+                    network:
+                      format: string
+                      type: string
+                    ports:
+                      additionalProperties:
+                        type: integer
+                      description: Set of ports associated with the endpoint.
+                      type: object
+                    serviceAccount:
+                      format: string
+                      type: string
+                    weight:
+                      description: The load balancing weight associated with the endpoint.
+                      type: integer
+                  type: object
+                type: array
+              exportTo:
+                description: A list of namespaces to which this service is exported.
+                items:
+                  format: string
+                  type: string
+                type: array
+              hosts:
+                description: The hosts associated with the ServiceEntry.
+                items:
+                  format: string
+                  type: string
+                type: array
+              location:
+                enum:
+                - MESH_EXTERNAL
+                - MESH_INTERNAL
                 type: string
-              type: array
-            endpoints:
-              description: One or more endpoints associated with the service.
-              items:
+              ports:
+                description: The ports associated with the external service.
+                items:
+                  properties:
+                    name:
+                      description: Label assigned to the port.
+                      format: string
+                      type: string
+                    number:
+                      description: A valid non-negative integer port number.
+                      type: integer
+                    protocol:
+                      description: The protocol exposed on the port.
+                      format: string
+                      type: string
+                    targetPort:
+                      type: integer
+                  type: object
+                type: array
+              resolution:
+                description: Service discovery mode for the hosts.
+                enum:
+                - NONE
+                - STATIC
+                - DNS
+                type: string
+              subjectAltNames:
+                items:
+                  format: string
+                  type: string
+                type: array
+              workloadSelector:
+                description: Applicable only for MESH_INTERNAL services.
                 properties:
-                  address:
-                    format: string
-                    type: string
                   labels:
                     additionalProperties:
                       format: string
                       type: string
-                    description: One or more labels associated with the endpoint.
                     type: object
-                  locality:
-                    description: The locality associated with the endpoint.
-                    format: string
-                    type: string
-                  network:
-                    format: string
-                    type: string
-                  ports:
-                    additionalProperties:
-                      type: integer
-                    description: Set of ports associated with the endpoint.
-                    type: object
-                  serviceAccount:
-                    format: string
-                    type: string
-                  weight:
-                    description: The load balancing weight associated with the endpoint.
-                    type: integer
                 type: object
-              type: array
-            exportTo:
-              description: A list of namespaces to which this service is exported.
-              items:
-                format: string
-                type: string
-              type: array
-            hosts:
-              description: The hosts associated with the ServiceEntry.
-              items:
-                format: string
-                type: string
-              type: array
-            location:
-              enum:
-              - MESH_EXTERNAL
-              - MESH_INTERNAL
-              type: string
-            ports:
-              description: The ports associated with the external service.
-              items:
-                properties:
-                  name:
-                    description: Label assigned to the port.
-                    format: string
-                    type: string
-                  number:
-                    description: A valid non-negative integer port number.
-                    type: integer
-                  protocol:
-                    description: The protocol exposed on the port.
-                    format: string
-                    type: string
-                  targetPort:
-                    type: integer
-                type: object
-              type: array
-            resolution:
-              description: Service discovery mode for the hosts.
-              enum:
-              - NONE
-              - STATIC
-              - DNS
-              type: string
-            subjectAltNames:
-              items:
-                format: string
-                type: string
-              type: array
-            workloadSelector:
-              description: Applicable only for MESH_INTERNAL services.
-              properties:
-                labels:
-                  additionalProperties:
-                    format: string
-                    type: string
-                  type: object
-              type: object
-          type: object
-        status:
-          type: object
-          x-kubernetes-preserve-unknown-fields: true
-      type: object
-  versions:
-  - name: v1alpha3
+            type: object
+          status:
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+        type: object
     served: true
     storage: true
-  - name: v1beta1
+  - additionalPrinterColumns:
+    - JSONPath: .spec.hosts
+      description: The hosts associated with the ServiceEntry
+      name: Hosts
+      type: string
+    - JSONPath: .spec.location
+      description: Whether the service is external to the mesh or part of the mesh
+        (MESH_EXTERNAL or MESH_INTERNAL)
+      name: Location
+      type: string
+    - JSONPath: .spec.resolution
+      description: Service discovery mode for the hosts (NONE, STATIC, or DNS)
+      name: Resolution
+      type: string
+    - JSONPath: .metadata.creationTimestamp
+      description: 'CreationTimestamp is a timestamp representing the server time
+        when this object was created. It is not guaranteed to be set in happens-before
+        order across separate operations. Clients may not set this value. It is represented
+        in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for
+        lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
+      name: Age
+      type: date
+    name: v1beta1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            description: 'Configuration affecting service registry. See more details
+              at: https://istio.io/docs/reference/config/networking/service-entry.html'
+            properties:
+              addresses:
+                description: The virtual IP addresses associated with the service.
+                items:
+                  format: string
+                  type: string
+                type: array
+              endpoints:
+                description: One or more endpoints associated with the service.
+                items:
+                  properties:
+                    address:
+                      format: string
+                      type: string
+                    healthStatus:
+                      description: Associated Health of the Workload.
+                      enum:
+                      - UNSPECIFIED
+                      - UNHEALTHY
+                      - HEALTHY
+                      type: string
+                    labels:
+                      additionalProperties:
+                        format: string
+                        type: string
+                      description: One or more labels associated with the endpoint.
+                      type: object
+                    locality:
+                      description: The locality associated with the endpoint.
+                      format: string
+                      type: string
+                    network:
+                      format: string
+                      type: string
+                    ports:
+                      additionalProperties:
+                        type: integer
+                      description: Set of ports associated with the endpoint.
+                      type: object
+                    serviceAccount:
+                      format: string
+                      type: string
+                    weight:
+                      description: The load balancing weight associated with the endpoint.
+                      type: integer
+                  type: object
+                type: array
+              exportTo:
+                description: A list of namespaces to which this service is exported.
+                items:
+                  format: string
+                  type: string
+                type: array
+              hosts:
+                description: The hosts associated with the ServiceEntry.
+                items:
+                  format: string
+                  type: string
+                type: array
+              location:
+                enum:
+                - MESH_EXTERNAL
+                - MESH_INTERNAL
+                type: string
+              ports:
+                description: The ports associated with the external service.
+                items:
+                  properties:
+                    name:
+                      description: Label assigned to the port.
+                      format: string
+                      type: string
+                    number:
+                      description: A valid non-negative integer port number.
+                      type: integer
+                    protocol:
+                      description: The protocol exposed on the port.
+                      format: string
+                      type: string
+                    targetPort:
+                      type: integer
+                  type: object
+                type: array
+              resolution:
+                description: Service discovery mode for the hosts.
+                enum:
+                - NONE
+                - STATIC
+                - DNS
+                type: string
+              subjectAltNames:
+                items:
+                  format: string
+                  type: string
+                type: array
+              workloadSelector:
+                description: Applicable only for MESH_INTERNAL services.
+                properties:
+                  labels:
+                    additionalProperties:
+                      format: string
+                      type: string
+                    type: object
+                type: object
+            type: object
+          status:
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+        type: object
     served: true
     storage: false
 
@@ -2714,19 +2851,6 @@ metadata:
     release: istio
   name: workloadentries.networking.istio.io
 spec:
-  additionalPrinterColumns:
-  - JSONPath: .metadata.creationTimestamp
-    description: 'CreationTimestamp is a timestamp representing the server time when
-      this object was created. It is not guaranteed to be set in happens-before order
-      across separate operations. Clients may not set this value. It is represented
-      in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for
-      lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
-    name: Age
-    type: date
-  - JSONPath: .spec.address
-    description: Address associated with the network endpoint.
-    name: Address
-    type: string
   group: networking.istio.io
   names:
     categories:
@@ -2741,50 +2865,122 @@ spec:
   scope: Namespaced
   subresources:
     status: {}
-  validation:
-    openAPIV3Schema:
-      properties:
-        spec:
-          description: 'Configuration affecting VMs onboarded into the mesh. See more
-            details at: https://istio.io/docs/reference/config/networking/workload-entry.html'
-          properties:
-            address:
-              format: string
-              type: string
-            labels:
-              additionalProperties:
+  versions:
+  - additionalPrinterColumns:
+    - JSONPath: .metadata.creationTimestamp
+      description: 'CreationTimestamp is a timestamp representing the server time
+        when this object was created. It is not guaranteed to be set in happens-before
+        order across separate operations. Clients may not set this value. It is represented
+        in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for
+        lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
+      name: Age
+      type: date
+    - JSONPath: .spec.address
+      description: Address associated with the network endpoint.
+      name: Address
+      type: string
+    name: v1alpha3
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            description: 'Configuration affecting VMs onboarded into the mesh. See
+              more details at: https://istio.io/docs/reference/config/networking/workload-entry.html'
+            properties:
+              address:
                 format: string
                 type: string
-              description: One or more labels associated with the endpoint.
-              type: object
-            locality:
-              description: The locality associated with the endpoint.
-              format: string
-              type: string
-            network:
-              format: string
-              type: string
-            ports:
-              additionalProperties:
+              labels:
+                additionalProperties:
+                  format: string
+                  type: string
+                description: One or more labels associated with the endpoint.
+                type: object
+              locality:
+                description: The locality associated with the endpoint.
+                format: string
+                type: string
+              network:
+                format: string
+                type: string
+              ports:
+                additionalProperties:
+                  type: integer
+                description: Set of ports associated with the endpoint.
+                type: object
+              serviceAccount:
+                format: string
+                type: string
+              weight:
+                description: The load balancing weight associated with the endpoint.
                 type: integer
-              description: Set of ports associated with the endpoint.
-              type: object
-            serviceAccount:
-              format: string
-              type: string
-            weight:
-              description: The load balancing weight associated with the endpoint.
-              type: integer
-          type: object
-        status:
-          type: object
-          x-kubernetes-preserve-unknown-fields: true
-      type: object
-  versions:
-  - name: v1alpha3
+            type: object
+          status:
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+        type: object
     served: true
     storage: true
-  - name: v1beta1
+  - additionalPrinterColumns:
+    - JSONPath: .metadata.creationTimestamp
+      description: 'CreationTimestamp is a timestamp representing the server time
+        when this object was created. It is not guaranteed to be set in happens-before
+        order across separate operations. Clients may not set this value. It is represented
+        in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for
+        lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
+      name: Age
+      type: date
+    - JSONPath: .spec.address
+      description: Address associated with the network endpoint.
+      name: Address
+      type: string
+    name: v1beta1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            description: 'Configuration affecting VMs onboarded into the mesh. See
+              more details at: https://istio.io/docs/reference/config/networking/workload-entry.html'
+            properties:
+              address:
+                format: string
+                type: string
+              healthStatus:
+                description: Associated Health of the Workload.
+                enum:
+                - UNSPECIFIED
+                - UNHEALTHY
+                - HEALTHY
+                type: string
+              labels:
+                additionalProperties:
+                  format: string
+                  type: string
+                description: One or more labels associated with the endpoint.
+                type: object
+              locality:
+                description: The locality associated with the endpoint.
+                format: string
+                type: string
+              network:
+                format: string
+                type: string
+              ports:
+                additionalProperties:
+                  type: integer
+                description: Set of ports associated with the endpoint.
+                type: object
+              serviceAccount:
+                format: string
+                type: string
+              weight:
+                description: The load balancing weight associated with the endpoint.
+                type: integer
+            type: object
+          status:
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+        type: object
     served: true
     storage: false
 
