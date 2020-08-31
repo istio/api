@@ -319,5 +319,22 @@ message WorkloadEntry {
   // in the same namespace as the configuration ( WorkloadEntry or a
   // ServiceEntry)
   string service_account = 7;
+
+  // Associated Health of the Workload.
+  // HealthStatus is only sent when the associated WorkloadEntry
+  // is registered with istiod. If HealthStatus is UNHEALTHY,
+  // the Workload is excluded from the EDS response.
+  HealthStatus health_status = 8;
 };
+
+// HealthStatus is an enum specifying the health of a VM. Health is
+//determined by istio-agent/envoy and the application itself.
+enum HealthStatus {
+  // UNSPECIFIED behaves like healthy - default enum value.
+  UNSPECIFIED = 0;
+  // UNHEALTHY means either istio-agent/envoy or the application is unhealthy.
+  UNHEALTHY = 1;
+  // HEALTHY means the workload is healthy.
+  HEALTHY = 2;
+}
 
