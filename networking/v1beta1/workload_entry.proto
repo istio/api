@@ -336,5 +336,5 @@ enum HealthStatus {
   UNHEALTHY = 1;
   // HEALTHY means the workload is healthy.
   HEALTHY = 2;
-}
+};
 
