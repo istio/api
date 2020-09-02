@@ -328,7 +328,8 @@ message WorkloadEntry {
 };
 
 // HealthStatus is an enum specifying the health of a VM. Health is
-//determined by istio-agent/envoy and the application itself.
+// determined by istio-agent/envoy and the application itself.
+// Health Checks are done locally by istio-agent.
 enum HealthStatus {
   // UNSPECIFIED behaves like healthy - default enum value.
   UNSPECIFIED = 0;
