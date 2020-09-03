@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.security.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\035istio.io/api/security/v1beta1'),
-  serialized_pb=_b('\n$security/v1beta1/authorization.proto\x12\x16istio.security.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1btype/v1beta1/selector.proto\"\xdd\x01\n\x13\x41uthorizationPolicy\x12\x36\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\x12+\n\x05rules\x18\x02 \x03(\x0b\x32\x1c.istio.security.v1beta1.Rule\x12\x42\n\x06\x61\x63tion\x18\x03 \x01(\x0e\x32\x32.istio.security.v1beta1.AuthorizationPolicy.Action\"\x1d\n\x06\x41\x63tion\x12\t\n\x05\x41LLOW\x10\x00\x12\x08\n\x04\x44\x45NY\x10\x01\"\x89\x02\n\x04Rule\x12/\n\x04\x66rom\x18\x01 \x03(\x0b\x32!.istio.security.v1beta1.Rule.From\x12+\n\x02to\x18\x02 \x03(\x0b\x32\x1f.istio.security.v1beta1.Rule.To\x12/\n\x04when\x18\x03 \x03(\x0b\x32!.istio.security.v1beta1.Condition\x1a\x36\n\x04\x46rom\x12.\n\x06source\x18\x01 \x01(\x0b\x32\x1e.istio.security.v1beta1.Source\x1a:\n\x02To\x12\x34\n\toperation\x18\x01 \x01(\x0b\x32!.istio.security.v1beta1.Operation\"\xc6\x01\n\x06Source\x12\x12\n\nprincipals\x18\x01 \x03(\t\x12\x16\n\x0enot_principals\x18\x05 \x03(\t\x12\x1a\n\x12request_principals\x18\x02 \x03(\t\x12\x1e\n\x16not_request_principals\x18\x06 \x03(\t\x12\x12\n\nnamespaces\x18\x03 \x03(\t\x12\x16\n\x0enot_namespaces\x18\x07 \x03(\t\x12\x11\n\tip_blocks\x18\x04 \x03(\t\x12\x15\n\rnot_ip_blocks\x18\x08 \x03(\t\"\x97\x01\n\tOperation\x12\r\n\x05hosts\x18\x01 \x03(\t\x12\x11\n\tnot_hosts\x18\x05 \x03(\t\x12\r\n\x05ports\x18\x02 \x03(\t\x12\x11\n\tnot_ports\x18\x06 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\x13\n\x0bnot_methods\x18\x07 \x03(\t\x12\r\n\x05paths\x18\x04 \x03(\t\x12\x11\n\tnot_paths\x18\x08 \x03(\t\"A\n\tCondition\x12\x10\n\x03key\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x0e\n\x06values\x18\x02 \x03(\t\x12\x12\n\nnot_values\x18\x03 \x03(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
+  serialized_pb=_b('\n$security/v1beta1/authorization.proto\x12\x16istio.security.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1btype/v1beta1/selector.proto\"\xe8\x01\n\x13\x41uthorizationPolicy\x12\x36\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\x12+\n\x05rules\x18\x02 \x03(\x0b\x32\x1c.istio.security.v1beta1.Rule\x12\x42\n\x06\x61\x63tion\x18\x03 \x01(\x0e\x32\x32.istio.security.v1beta1.AuthorizationPolicy.Action\"(\n\x06\x41\x63tion\x12\t\n\x05\x41LLOW\x10\x00\x12\x08\n\x04\x44\x45NY\x10\x01\x12\t\n\x05\x41UDIT\x10\x02\"\x89\x02\n\x04Rule\x12/\n\x04\x66rom\x18\x01 \x03(\x0b\x32!.istio.security.v1beta1.Rule.From\x12+\n\x02to\x18\x02 \x03(\x0b\x32\x1f.istio.security.v1beta1.Rule.To\x12/\n\x04when\x18\x03 \x03(\x0b\x32!.istio.security.v1beta1.Condition\x1a\x36\n\x04\x46rom\x12.\n\x06source\x18\x01 \x01(\x0b\x32\x1e.istio.security.v1beta1.Source\x1a:\n\x02To\x12\x34\n\toperation\x18\x01 \x01(\x0b\x32!.istio.security.v1beta1.Operation\"\xc6\x01\n\x06Source\x12\x12\n\nprincipals\x18\x01 \x03(\t\x12\x16\n\x0enot_principals\x18\x05 \x03(\t\x12\x1a\n\x12request_principals\x18\x02 \x03(\t\x12\x1e\n\x16not_request_principals\x18\x06 \x03(\t\x12\x12\n\nnamespaces\x18\x03 \x03(\t\x12\x16\n\x0enot_namespaces\x18\x07 \x03(\t\x12\x11\n\tip_blocks\x18\x04 \x03(\t\x12\x15\n\rnot_ip_blocks\x18\x08 \x03(\t\"\x97\x01\n\tOperation\x12\r\n\x05hosts\x18\x01 \x03(\t\x12\x11\n\tnot_hosts\x18\x05 \x03(\t\x12\r\n\x05ports\x18\x02 \x03(\t\x12\x11\n\tnot_ports\x18\x06 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\x13\n\x0bnot_methods\x18\x07 \x03(\t\x12\r\n\x05paths\x18\x04 \x03(\t\x12\x11\n\tnot_paths\x18\x08 \x03(\t\"A\n\tCondition\x12\x10\n\x03key\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x0e\n\x06values\x18\x02 \x03(\t\x12\x12\n\nnot_values\x18\x03 \x03(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
 
@@ -42,11 +42,15 @@ _AUTHORIZATIONPOLICY_ACTION = _descriptor.EnumDescriptor(
       name='DENY', index=1, number=1,
       serialized_options=None,
       type=None),
+    _descriptor.EnumValueDescriptor(
+      name='AUDIT', index=2, number=2,
+      serialized_options=None,
+      type=None),
   ],
   containing_type=None,
   serialized_options=None,
   serialized_start=319,
-  serialized_end=348,
+  serialized_end=359,
 )
 _sym_db.RegisterEnumDescriptor(_AUTHORIZATIONPOLICY_ACTION)
 
@@ -93,7 +97,7 @@ _AUTHORIZATIONPOLICY = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=127,
-  serialized_end=348,
+  serialized_end=359,
 )
 
 
@@ -123,8 +127,8 @@ _RULE_FROM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=502,
-  serialized_end=556,
+  serialized_start=513,
+  serialized_end=567,
 )
 
 _RULE_TO = _descriptor.Descriptor(
@@ -153,8 +157,8 @@ _RULE_TO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=558,
-  serialized_end=616,
+  serialized_start=569,
+  serialized_end=627,
 )
 
 _RULE = _descriptor.Descriptor(
@@ -197,8 +201,8 @@ _RULE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=351,
-  serialized_end=616,
+  serialized_start=362,
+  serialized_end=627,
 )
 
 
@@ -277,8 +281,8 @@ _SOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=619,
-  serialized_end=817,
+  serialized_start=630,
+  serialized_end=828,
 )
 
 
@@ -357,8 +361,8 @@ _OPERATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=820,
-  serialized_end=971,
+  serialized_start=831,
+  serialized_end=982,
 )
 
 
@@ -402,8 +406,8 @@ _CONDITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=973,
-  serialized_end=1038,
+  serialized_start=984,
+  serialized_end=1049,
 )
 
 _AUTHORIZATIONPOLICY.fields_by_name['selector'].message_type = type_dot_v1beta1_dot_selector__pb2._WORKLOADSELECTOR

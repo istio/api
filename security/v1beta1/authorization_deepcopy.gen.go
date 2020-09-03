@@ -12,9 +12,19 @@
 // 3. If any of the ALLOW policies match the request, allow the request.
 // 4. Deny the request.
 //
-// For example, the following authorization policy sets the `action` to "ALLOW"
-// to create an allow policy. The default action is "ALLOW" but it is useful
-// to be explicit in the policy.
+// Istio Authorization Policy also supports the AUDIT action to decide whether to log requests.
+// AUDIT policies do not affect whether requests are allowed or denied to the workload.
+// Requests will be allowed or denied based solely on ALLOW and DENY policies.
+//
+// A request will be internally marked that it should be audited if there is an AUDIT policy on the workload that matches the request.
+// A separate plugin must be configured and enabled to actually fulfill the audit decision and complete the audit behavior.
+// The request will not be audited if there are no such supporting plugins enabled.
+// Currently, the only supported plugin is the [Telemetry v2 Stackdriver](https://istio.io/latest/docs/reference/config/proxy_extensions/stackdriver/) plugin.
+//
+// Here is an example of Istio Authorization Policy:
+//
+// It sets the `action` to "ALLOW" to create an allow policy. The default action is "ALLOW"
+// but it is useful to be explicit in the policy.
 //
 // It allows requests from:
 //
@@ -76,6 +86,27 @@
 //    - operation:
 //        methods: ["POST"]
 // ```
+//
+// The following authorization policy sets the `action` to "AUDIT". It will audit any GET requests to the path with the
+// prefix "/user/profile".
+//
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//   namespace: ns1
+//   name: anyname
+// spec:
+//   selector:
+//     matchLabels:
+//       app: myapi
+//   action: audit
+//   rules:
+//   - to:
+//     - operation:
+//         methods: ["GET"]
+//         paths: [“/user/profile/*”]
+// ````
 //
 // Authorization Policy scope (target) is determined by "metadata/namespace" and
 // an optional "selector".
