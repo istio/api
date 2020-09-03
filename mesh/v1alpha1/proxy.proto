@@ -469,7 +469,7 @@ message RemoteService {
 
 message HealthCheckConfig {
 
-  // Number of seconds after the container has started before liveness probes are initiated.
+  // Number of seconds after the container has started before probes are initiated.
   int32 initial_delay_seconds = 2;
 
   // Number of seconds after which the probe times out.
