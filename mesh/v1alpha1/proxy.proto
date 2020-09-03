@@ -446,10 +446,10 @@ message ProxyConfig {
   // Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.
   string mesh_id = 30;
 
-  // VM Health Checking message. This health check config exactly mirrors the kubernetes
-  // readiness probe configuration both in schema and logic.
+  // VM Health Checking readiness probe. This health check config exactly mirrors the
+  // kubernetes readiness probe configuration both in schema and logic.
   // Only one health check method of 3 can be set at a time.
-  HealthCheckConfig health_check_config = 31;
+  ReadinessProbe readiness_probe = 31;
 }
 
 message RemoteService {
@@ -467,9 +467,9 @@ message RemoteService {
   istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive tcp_keepalive = 3;
 }
 
-message HealthCheckConfig {
+message ReadinessProbe {
 
-  // Number of seconds after the container has started before liveness probes are initiated.
+  // Number of seconds after the container has started before readiness probes are initiated.
   int32 initial_delay_seconds = 2;
 
   // Number of seconds after which the probe times out.
@@ -503,20 +503,36 @@ message HealthCheckConfig {
 }
 
 message HTTPHealthCheckConfig {
-  // path on localhost to perform an http get to.
+  // Path to access on the HTTP server.
   string path = 1;
-  // port on localhost on which the endpoint lives.
+
+  // port on which the endpoint lives.
   uint32 port = 2;
-  // http or https
-  string scheme = 3;
+
+  // Host name to connect to, defaults to the pod IP. You probably want to set
+  // "Host" in httpHeaders instead.
+  string host = 3;
+
+  // http or https, defaults to http
+  string scheme = 4;
+
   // headers the proxy will pass on to make the request.
-  map<string, string> http_headers = 4;
+  // allows repeated headers.
+  repeated HTTPHeader http_headers = 5;
+}
+
+message HTTPHeader {
+  // The header field name
+  string name = 1;
+
+  // The header field value
+  string value = 2;
 }
 
 message TCPHealthCheckConfig {
-  // ip of endpoint
+  // host to connect to, defaults to localhost
   string host = 1;
-  // port of endpoint
+  // port of host
   uint32 port = 2;
 }
 
