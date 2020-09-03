@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 28
+number_of_entries: 32
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -435,6 +435,19 @@ Mesh ID is used to label telemetry reports for cases where telemetry from multip
 No
 </td>
 </tr>
+<tr id="ProxyConfig-health_check_config">
+<td><code>healthCheckConfig</code></td>
+<td><code><a href="#HealthCheckConfig">HealthCheckConfig</a></code></td>
+<td>
+<p>VM Health Checking message. This health check config exactly mirrors the kubernetes
+readiness probe configuration both in schema and logic.
+Only one health check method of 3 can be set at a time.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 <tr id="ProxyConfig-zipkin_address" class="deprecated ">
 <td><code>zipkinAddress</code></td>
 <td><code>string</code></td>
@@ -493,6 +506,246 @@ No
 <td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ConnectionPoolSettings-TCPSettings-TcpKeepalive">TcpKeepalive</a></code></td>
 <td>
 <p>If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HealthCheckConfig">HealthCheckConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HealthCheckConfig-initial_delay">
+<td><code>initialDelay</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>Initial delay before probes start.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HealthCheckConfig-probe_timeout">
+<td><code>probeTimeout</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>Timeout for each probe. If a healthcheck times out,
+the vm is declared unhealthy.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HealthCheckConfig-probe_frequency">
+<td><code>probeFrequency</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+<p>Frequency of each healthcheck/probe.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HealthCheckConfig-success_threshold">
+<td><code>successThreshold</code></td>
+<td><code>int32</code></td>
+<td>
+<p>success_threshold is the amount of times a healthcheck
+needs to succeed before declared healthy.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HealthCheckConfig-failure_threshold">
+<td><code>failureThreshold</code></td>
+<td><code>int32</code></td>
+<td>
+<p>failure_threshold is the amount of times a healthcheck
+needs to fail before declared unhealthy.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HealthCheckConfig-http_healthcheck_config" class="oneof oneof-start">
+<td><code>httpHealthcheckConfig</code></td>
+<td><code><a href="#HTTPHealthCheckConfig">HTTPHealthCheckConfig (oneof)</a></code></td>
+<td>
+<p>an http get is performed to a given endpoint
+and the status/able to connect determines health.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HealthCheckConfig-tcp_healthcheck_config" class="oneof">
+<td><code>tcpHealthcheckConfig</code></td>
+<td><code><a href="#TCPHealthCheckConfig">TCPHealthCheckConfig (oneof)</a></code></td>
+<td>
+<p>health is determined by if the proxy is able to connect.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HealthCheckConfig-exec_healthcheck_config" class="oneof">
+<td><code>execHealthcheckConfig</code></td>
+<td><code><a href="#ExecHealthCheckConfig">ExecHealthCheckConfig (oneof)</a></code></td>
+<td>
+<p>health is determined by how the command that is executed exited.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HTTPHealthCheckConfig">HTTPHealthCheckConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HTTPHealthCheckConfig-path">
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>
+<p>path on localhost to perform an http get to.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPHealthCheckConfig-port">
+<td><code>port</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>port on localhost on which the endpoint lives.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPHealthCheckConfig-scheme">
+<td><code>scheme</code></td>
+<td><code>string</code></td>
+<td>
+<p>http or https</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPHealthCheckConfig-headers">
+<td><code>headers</code></td>
+<td><code>map&lt;string,&nbsp;string&gt;</code></td>
+<td>
+<p>headers the proxy will pass on to make the request.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="TCPHealthCheckConfig">TCPHealthCheckConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="TCPHealthCheckConfig-host">
+<td><code>host</code></td>
+<td><code>string</code></td>
+<td>
+<p>ip of endpoint</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="TCPHealthCheckConfig-port">
+<td><code>port</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>port of endpoint</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ExecHealthCheckConfig">ExecHealthCheckConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ExecHealthCheckConfig-executable_name">
+<td><code>executableName</code></td>
+<td><code>string</code></td>
+<td>
+<p>name of executable to run</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExecHealthCheckConfig-args">
+<td><code>args</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>arguments to pass</p>
 
 </td>
 <td>

@@ -345,6 +345,9 @@
             "description": "The unique identifier for the [service mesh](https://istio.io/docs/reference/glossary/#service-mesh) All control planes running in the same service mesh should specify the same mesh ID. Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.",
             "type": "string",
             "format": "string"
+          },
+          "healthCheckConfig": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.HealthCheckConfig"
           }
         }
       },
@@ -1054,6 +1057,161 @@
           },
           "tlsSettings": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.HealthCheckConfig": {
+        "description": "Users can only provide one configuration for healthchecks (tcp, http, exec), and this is expressed as a oneof. All of the other configuration values hold true for any of the healthcheck methods.",
+        "type": "object",
+        "properties": {
+          "initialDelay": {
+            "description": "Initial delay before probes start.",
+            "type": "string"
+          },
+          "probeTimeout": {
+            "description": "Timeout for each probe. If a healthcheck times out, the vm is declared unhealthy.",
+            "type": "string"
+          },
+          "probeFrequency": {
+            "description": "Frequency of each healthcheck/probe.",
+            "type": "string"
+          },
+          "successThreshold": {
+            "description": "success_threshold is the amount of times a healthcheck needs to succeed before declared healthy.",
+            "type": "integer",
+            "format": "int32"
+          },
+          "failureThreshold": {
+            "description": "failure_threshold is the amount of times a healthcheck needs to fail before declared unhealthy.",
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "httpHealthcheckConfig"
+                  ],
+                  "properties": {
+                    "httpHealthcheckConfig": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.HTTPHealthCheckConfig"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "tcpHealthcheckConfig"
+                  ],
+                  "properties": {
+                    "tcpHealthcheckConfig": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.TCPHealthCheckConfig"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "execHealthcheckConfig"
+                  ],
+                  "properties": {
+                    "execHealthcheckConfig": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.ExecHealthCheckConfig"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "httpHealthcheckConfig"
+            ],
+            "properties": {
+              "httpHealthcheckConfig": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.HTTPHealthCheckConfig"
+              }
+            }
+          },
+          {
+            "required": [
+              "tcpHealthcheckConfig"
+            ],
+            "properties": {
+              "tcpHealthcheckConfig": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.TCPHealthCheckConfig"
+              }
+            }
+          },
+          {
+            "required": [
+              "execHealthcheckConfig"
+            ],
+            "properties": {
+              "execHealthcheckConfig": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.ExecHealthCheckConfig"
+              }
+            }
+          }
+        ]
+      },
+      "istio.mesh.v1alpha1.HTTPHealthCheckConfig": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "description": "path on localhost to perform an http get to.",
+            "type": "string",
+            "format": "string"
+          },
+          "port": {
+            "description": "port on localhost on which the endpoint lives.",
+            "type": "integer"
+          },
+          "headers": {
+            "description": "headers the proxy will pass on to make the request.",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "scheme": {
+            "description": "http or https",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.TCPHealthCheckConfig": {
+        "type": "object",
+        "properties": {
+          "host": {
+            "description": "ip of endpoint",
+            "type": "string",
+            "format": "string"
+          },
+          "port": {
+            "description": "port of endpoint",
+            "type": "integer"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.ExecHealthCheckConfig": {
+        "type": "object",
+        "properties": {
+          "executableName": {
+            "description": "name of executable to run",
+            "type": "string",
+            "format": "string"
+          },
+          "args": {
+            "description": "arguments to pass",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
           }
         }
       },
