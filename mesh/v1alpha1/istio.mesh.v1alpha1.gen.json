@@ -346,8 +346,8 @@
             "type": "string",
             "format": "string"
           },
-          "healthCheckConfig": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.HealthCheckConfig"
+          "readinessProbe": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ReadinessProbe"
           }
         }
       },
@@ -1060,12 +1060,12 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.HealthCheckConfig": {
+      "istio.mesh.v1alpha1.ReadinessProbe": {
         "description": "Users can only provide one configuration for healthchecks (tcp, http, exec), and this is expressed as a oneof. All of the other configuration values hold true for any of the healthcheck methods.",
         "type": "object",
         "properties": {
           "initialDelaySeconds": {
-            "description": "Number of seconds after the container has started before liveness probes are initiated.",
+            "description": "Number of seconds after the container has started before readiness probes are initiated.",
             "type": "integer",
             "format": "int32"
           },
@@ -1163,25 +1163,29 @@
         "type": "object",
         "properties": {
           "path": {
-            "description": "path on localhost to perform an http get to.",
+            "description": "Path to access on the HTTP server.",
+            "type": "string",
+            "format": "string"
+          },
+          "host": {
+            "description": "Host name to connect to, defaults to the pod IP. You probably want to set \"Host\" in httpHeaders instead.",
             "type": "string",
             "format": "string"
           },
           "port": {
-            "description": "port on localhost on which the endpoint lives.",
+            "description": "port on which the endpoint lives.",
             "type": "integer"
           },
           "scheme": {
-            "description": "http or https",
+            "description": "http or https, defaults to http",
             "type": "string",
             "format": "string"
           },
           "httpHeaders": {
-            "description": "headers the proxy will pass on to make the request.",
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "format": "string"
+            "description": "headers the proxy will pass on to make the request. allows repeated headers.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.HTTPHeader"
             }
           }
         }
@@ -1190,12 +1194,12 @@
         "type": "object",
         "properties": {
           "host": {
-            "description": "ip of endpoint",
+            "description": "host to connect to, defaults to localhost",
             "type": "string",
             "format": "string"
           },
           "port": {
-            "description": "port of endpoint",
+            "description": "port of host",
             "type": "integer"
           }
         }
@@ -1210,6 +1214,21 @@
               "type": "string",
               "format": "string"
             }
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.HTTPHeader": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The header field name",
+            "type": "string",
+            "format": "string"
+          },
+          "value": {
+            "description": "The header field value",
+            "type": "string",
+            "format": "string"
           }
         }
       },
