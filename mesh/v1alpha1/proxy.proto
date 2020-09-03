@@ -445,6 +445,11 @@ message ProxyConfig {
   // All control planes running in the same service mesh should specify the same mesh ID.
   // Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.
   string mesh_id = 30;
+
+  // VM Health Checking message. This health check config exactly mirrors the kubernetes
+  // readiness probe configuration both in schema and logic.
+  // Only one health check method of 3 can be set at a time.
+  HealthCheckConfig health_check_config = 31;
 }
 
 message RemoteService {
@@ -460,4 +465,63 @@ message RemoteService {
 
   // If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
   istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive tcp_keepalive = 3;
+}
+
+message HealthCheckConfig {
+
+  // Initial delay before probes start.
+  google.protobuf.Duration initial_delay = 1;
+
+  // Timeout for each probe. If a healthcheck times out,
+  // the vm is declared unhealthy.
+  google.protobuf.Duration probe_timeout = 2;
+
+  // Frequency of each healthcheck/probe.
+  google.protobuf.Duration probe_frequency = 3;
+
+  // success_threshold is the amount of times a healthcheck
+  // needs to succeed before declared healthy.
+  int32 success_threshold = 4;
+
+  // failure_threshold is the amount of times a healthcheck
+  // needs to fail before declared unhealthy.
+  int32 failure_threshold = 5;
+
+  // Users can only provide one configuration for healthchecks (tcp, http, exec),
+  // and this is expressed as a oneof. All of the other configuration values
+  // hold true for any of the healthcheck methods.
+  oneof health_check_method {
+    // an http get is performed to a given endpoint
+    // and the status/able to connect determines health.
+    HTTPHealthCheckConfig http_healthcheck_config = 6;
+    // health is determined by if the proxy is able to connect.
+    TCPHealthCheckConfig tcp_healthcheck_config = 7;
+    // health is determined by how the command that is executed exited.
+    ExecHealthCheckConfig exec_healthcheck_config = 8;
+  }
+}
+
+message HTTPHealthCheckConfig {
+  // path on localhost to perform an http get to.
+  string path = 1;
+  // port on localhost on which the endpoint lives.
+  uint32 port = 2;
+  // http or https
+  string scheme = 3;
+  // headers the proxy will pass on to make the request.
+  map<string, string> headers = 4;
+}
+
+message TCPHealthCheckConfig {
+  // ip of endpoint
+  string host = 1;
+  // port of endpoint
+  uint32 port = 2;
+}
+
+message ExecHealthCheckConfig {
+  // name of executable to run
+  string executable_name = 1;
+  // arguments to pass
+  repeated string args = 2;
 }
