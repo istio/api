@@ -527,66 +527,67 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="HealthCheckConfig-initial_delay">
-<td><code>initialDelay</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<tr id="HealthCheckConfig-initialDelaySeconds">
+<td><code>initialDelaySeconds</code></td>
+<td><code>int32</code></td>
 <td>
-<p>Initial delay before probes start.</p>
+<p>Number of seconds after the container has started before liveness probes are initiated.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="HealthCheckConfig-probe_timeout">
-<td><code>probeTimeout</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<tr id="HealthCheckConfig-timeoutSeconds">
+<td><code>timeoutSeconds</code></td>
+<td><code>int32</code></td>
 <td>
-<p>Timeout for each probe. If a healthcheck times out,
-the vm is declared unhealthy.</p>
+<p>Number of seconds after which the probe times out.
+Defaults to 1 second. Minimum value is 1.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="HealthCheckConfig-probe_frequency">
-<td><code>probeFrequency</code></td>
-<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<tr id="HealthCheckConfig-periodSeconds">
+<td><code>periodSeconds</code></td>
+<td><code>int32</code></td>
 <td>
-<p>Frequency of each healthcheck/probe.</p>
+<p>How often (in seconds) to perform the probe.
+Default to 10 seconds. Minimum value is 1.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="HealthCheckConfig-success_threshold">
+<tr id="HealthCheckConfig-successThreshold">
 <td><code>successThreshold</code></td>
 <td><code>int32</code></td>
 <td>
-<p>success_threshold is the amount of times a healthcheck
-needs to succeed before declared healthy.</p>
+<p>Minimum consecutive successes for the probe to be considered successful after having failed.
+Defaults to 1.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="HealthCheckConfig-failure_threshold">
+<tr id="HealthCheckConfig-failureThreshold">
 <td><code>failureThreshold</code></td>
 <td><code>int32</code></td>
 <td>
-<p>failure_threshold is the amount of times a healthcheck
-needs to fail before declared unhealthy.</p>
+<p>Minimum consecutive failures for the probe to be considered failed after having succeeded.
+Defaults to 3.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="HealthCheckConfig-http_healthcheck_config" class="oneof oneof-start">
-<td><code>httpHealthcheckConfig</code></td>
+<tr id="HealthCheckConfig-httpGet" class="oneof oneof-start">
+<td><code>httpGet</code></td>
 <td><code><a href="#HTTPHealthCheckConfig">HTTPHealthCheckConfig (oneof)</a></code></td>
 <td>
 <p>an http get is performed to a given endpoint
@@ -597,8 +598,8 @@ and the status/able to connect determines health.</p>
 No
 </td>
 </tr>
-<tr id="HealthCheckConfig-tcp_healthcheck_config" class="oneof">
-<td><code>tcpHealthcheckConfig</code></td>
+<tr id="HealthCheckConfig-tcpSocket" class="oneof">
+<td><code>tcpSocket</code></td>
 <td><code><a href="#TCPHealthCheckConfig">TCPHealthCheckConfig (oneof)</a></code></td>
 <td>
 <p>health is determined by if the proxy is able to connect.</p>
@@ -608,8 +609,8 @@ No
 No
 </td>
 </tr>
-<tr id="HealthCheckConfig-exec_healthcheck_config" class="oneof">
-<td><code>execHealthcheckConfig</code></td>
+<tr id="HealthCheckConfig-exec" class="oneof">
+<td><code>exec</code></td>
 <td><code><a href="#ExecHealthCheckConfig">ExecHealthCheckConfig (oneof)</a></code></td>
 <td>
 <p>health is determined by how the command that is executed exited.</p>
@@ -667,8 +668,8 @@ No
 No
 </td>
 </tr>
-<tr id="HTTPHealthCheckConfig-headers">
-<td><code>headers</code></td>
+<tr id="HTTPHealthCheckConfig-httpHeaders">
+<td><code>httpHeaders</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>
 <p>headers the proxy will pass on to make the request.</p>
@@ -730,22 +731,11 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="ExecHealthCheckConfig-executable_name">
-<td><code>executableName</code></td>
-<td><code>string</code></td>
-<td>
-<p>name of executable to run</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="ExecHealthCheckConfig-args">
-<td><code>args</code></td>
+<tr id="ExecHealthCheckConfig-command">
+<td><code>command</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>arguments to pass</p>
+<p>command to run. Exit status of 0 is treated as live/healthy and non-zero is unhealthy.</p>
 
 </td>
 <td>
