@@ -520,8 +520,6 @@ message TCPHealthCheckConfig {
 }
 
 message ExecHealthCheckConfig {
-  // name of executable to run
-  string executable_name = 1;
-  // arguments to pass
-  repeated string args = 2;
+  // command to run
+  repeated string command = 1;
 }
