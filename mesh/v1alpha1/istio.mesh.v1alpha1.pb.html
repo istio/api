@@ -527,7 +527,7 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="HealthCheckConfig-initialDelaySeconds">
+<tr id="HealthCheckConfig-initial_delay_seconds">
 <td><code>initialDelaySeconds</code></td>
 <td><code>int32</code></td>
 <td>
@@ -538,7 +538,7 @@ No
 No
 </td>
 </tr>
-<tr id="HealthCheckConfig-timeoutSeconds">
+<tr id="HealthCheckConfig-timeout_seconds">
 <td><code>timeoutSeconds</code></td>
 <td><code>int32</code></td>
 <td>
@@ -550,7 +550,7 @@ Defaults to 1 second. Minimum value is 1.</p>
 No
 </td>
 </tr>
-<tr id="HealthCheckConfig-periodSeconds">
+<tr id="HealthCheckConfig-period_seconds">
 <td><code>periodSeconds</code></td>
 <td><code>int32</code></td>
 <td>
@@ -562,7 +562,7 @@ Default to 10 seconds. Minimum value is 1.</p>
 No
 </td>
 </tr>
-<tr id="HealthCheckConfig-successThreshold">
+<tr id="HealthCheckConfig-success_threshold">
 <td><code>successThreshold</code></td>
 <td><code>int32</code></td>
 <td>
@@ -574,7 +574,7 @@ Defaults to 1.</p>
 No
 </td>
 </tr>
-<tr id="HealthCheckConfig-failureThreshold">
+<tr id="HealthCheckConfig-failure_threshold">
 <td><code>failureThreshold</code></td>
 <td><code>int32</code></td>
 <td>
@@ -586,7 +586,7 @@ Defaults to 3.</p>
 No
 </td>
 </tr>
-<tr id="HealthCheckConfig-httpGet" class="oneof oneof-start">
+<tr id="HealthCheckConfig-http_get" class="oneof oneof-start">
 <td><code>httpGet</code></td>
 <td><code><a href="#HTTPHealthCheckConfig">HTTPHealthCheckConfig (oneof)</a></code></td>
 <td>
@@ -598,7 +598,7 @@ and the status/able to connect determines health.</p>
 No
 </td>
 </tr>
-<tr id="HealthCheckConfig-tcpSocket" class="oneof">
+<tr id="HealthCheckConfig-tcp_socket" class="oneof">
 <td><code>tcpSocket</code></td>
 <td><code><a href="#TCPHealthCheckConfig">TCPHealthCheckConfig (oneof)</a></code></td>
 <td>
@@ -668,7 +668,7 @@ No
 No
 </td>
 </tr>
-<tr id="HTTPHealthCheckConfig-httpHeaders">
+<tr id="HTTPHealthCheckConfig-http_headers">
 <td><code>httpHeaders</code></td>
 <td><code>map&lt;string,&nbsp;string&gt;</code></td>
 <td>

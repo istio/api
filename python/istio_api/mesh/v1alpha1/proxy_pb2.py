@@ -24,7 +24,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.mesh.v1alpha1',
   syntax='proto3',
   serialized_options=_b('Z\032istio.io/api/mesh/v1alpha1'),
-  serialized_pb=_b('\n\x19mesh/v1alpha1/proxy.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a*networking/v1alpha3/destination_rule.proto\"\xd3\x0b\n\x07Tracing\x12\x35\n\x06zipkin\x18\x01 \x01(\x0b\x32#.istio.mesh.v1alpha1.Tracing.ZipkinH\x00\x12;\n\tlightstep\x18\x02 \x01(\x0b\x32&.istio.mesh.v1alpha1.Tracing.LightstepH\x00\x12\x37\n\x07\x64\x61tadog\x18\x03 \x01(\x0b\x32$.istio.mesh.v1alpha1.Tracing.DatadogH\x00\x12?\n\x0bstackdriver\x18\x04 \x01(\x0b\x32(.istio.mesh.v1alpha1.Tracing.StackdriverH\x00\x12I\n\x11open_census_agent\x18\t \x01(\x0b\x32,.istio.mesh.v1alpha1.Tracing.OpenCensusAgentH\x00\x12\x41\n\x0b\x63ustom_tags\x18\x05 \x03(\x0b\x32,.istio.mesh.v1alpha1.Tracing.CustomTagsEntry\x12\x1b\n\x13max_path_tag_length\x18\x06 \x01(\r\x12\x10\n\x08sampling\x18\x07 \x01(\x01\x12\x42\n\x0ctls_settings\x18\x08 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettings\x1a\x19\n\x06Zipkin\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x1a\x32\n\tLightstep\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x14\n\x0c\x61\x63\x63\x65ss_token\x18\x02 \x01(\t\x1a\x1a\n\x07\x44\x61tadog\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x1a\xde\x01\n\x0bStackdriver\x12\r\n\x05\x64\x65\x62ug\x18\x01 \x01(\x08\x12=\n\x18max_number_of_attributes\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12>\n\x19max_number_of_annotations\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x41\n\x1cmax_number_of_message_events\x18\x04 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x1a\xd5\x01\n\x0fOpenCensusAgent\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12J\n\x07\x63ontext\x18\x02 \x03(\x0e\x32\x39.istio.mesh.v1alpha1.Tracing.OpenCensusAgent.TraceContext\"e\n\x0cTraceContext\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x15\n\x11W3C_TRACE_CONTEXT\x10\x01\x12\x0c\n\x08GRPC_BIN\x10\x02\x12\x17\n\x13\x43LOUD_TRACE_CONTEXT\x10\x03\x12\x06\n\x02\x42\x33\x10\x04\x1a\xcb\x01\n\tCustomTag\x12\x37\n\x07literal\x18\x01 \x01(\x0b\x32$.istio.mesh.v1alpha1.Tracing.LiteralH\x00\x12?\n\x0b\x65nvironment\x18\x02 \x01(\x0b\x32(.istio.mesh.v1alpha1.Tracing.EnvironmentH\x00\x12<\n\x06header\x18\x03 \x01(\x0b\x32*.istio.mesh.v1alpha1.Tracing.RequestHeaderH\x00\x42\x06\n\x04type\x1a\x18\n\x07Literal\x12\r\n\x05value\x18\x01 \x01(\t\x1a\x32\n\x0b\x45nvironment\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rdefault_value\x18\x02 \x01(\t\x1a\x34\n\rRequestHeader\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rdefault_value\x18\x02 \x01(\t\x1aY\n\x0f\x43ustomTagsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x35\n\x05value\x18\x02 \x01(\x0b\x32&.istio.mesh.v1alpha1.Tracing.CustomTag:\x02\x38\x01\x42\x08\n\x06tracer\"/\n\x03SDS\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x17\n\x0fk8s_sa_jwt_path\x18\x02 \x01(\t\"\x8f\x02\n\x08Topology\x12\x1b\n\x13num_trusted_proxies\x18\x01 \x01(\r\x12[\n\x1b\x66orward_client_cert_details\x18\x02 \x01(\x0e\x32\x36.istio.mesh.v1alpha1.Topology.ForwardClientCertDetails\"\x88\x01\n\x18\x46orwardClientCertDetails\x12\r\n\tUNDEFINED\x10\x00\x12\x0c\n\x08SANITIZE\x10\x01\x12\x10\n\x0c\x46ORWARD_ONLY\x10\x02\x12\x12\n\x0e\x41PPEND_FORWARD\x10\x03\x12\x10\n\x0cSANITIZE_SET\x10\x04\x12\x17\n\x13\x41LWAYS_FORWARD_ONLY\x10\x05\"\x93\x0b\n\x0bProxyConfig\x12\x13\n\x0b\x63onfig_path\x18\x01 \x01(\t\x12\x13\n\x0b\x62inary_path\x18\x02 \x01(\t\x12\x17\n\x0fservice_cluster\x18\x03 \x01(\t\x12\x31\n\x0e\x64rain_duration\x18\x04 \x01(\x0b\x32\x19.google.protobuf.Duration\x12;\n\x18parent_shutdown_duration\x18\x05 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x19\n\x11\x64iscovery_address\x18\x06 \x01(\t\x12>\n\x17\x64iscovery_refresh_delay\x18\x07 \x01(\x0b\x32\x19.google.protobuf.DurationB\x02\x18\x01\x12\x1a\n\x0ezipkin_address\x18\x08 \x01(\tB\x02\x18\x01\x12\x1a\n\x12statsd_udp_address\x18\n \x01(\t\x12)\n\x1d\x65nvoy_metrics_service_address\x18\x14 \x01(\tB\x02\x18\x01\x12\x18\n\x10proxy_admin_port\x18\x0b \x01(\x05\x12\x1d\n\x11\x61vailability_zone\x18\x0c \x01(\tB\x02\x18\x01\x12L\n\x19\x63ontrol_plane_auth_policy\x18\r \x01(\x0e\x32).istio.mesh.v1alpha1.AuthenticationPolicy\x12\x1a\n\x12\x63ustom_config_file\x18\x0e \x01(\t\x12\x18\n\x10stat_name_length\x18\x0f \x01(\x05\x12\x30\n\x0b\x63oncurrency\x18\x10 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x12%\n\x1dproxy_bootstrap_template_path\x18\x11 \x01(\t\x12S\n\x11interception_mode\x18\x12 \x01(\x0e\x32\x38.istio.mesh.v1alpha1.ProxyConfig.InboundInterceptionMode\x12-\n\x07tracing\x18\x13 \x01(\x0b\x32\x1c.istio.mesh.v1alpha1.Tracing\x12%\n\x03sds\x18\x15 \x01(\x0b\x32\x18.istio.mesh.v1alpha1.SDS\x12\x44\n\x18\x65nvoy_access_log_service\x18\x16 \x01(\x0b\x32\".istio.mesh.v1alpha1.RemoteService\x12\x41\n\x15\x65nvoy_metrics_service\x18\x17 \x01(\x0b\x32\".istio.mesh.v1alpha1.RemoteService\x12K\n\x0eproxy_metadata\x18\x18 \x03(\x0b\x32\x33.istio.mesh.v1alpha1.ProxyConfig.ProxyMetadataEntry\x12\x13\n\x0bstatus_port\x18\x1a \x01(\x05\x12\x17\n\x0f\x65xtra_stat_tags\x18\x1b \x03(\t\x12\x37\n\x10gateway_topology\x18\x1c \x01(\x0b\x32\x1d.istio.mesh.v1alpha1.Topology\x12=\n\x1atermination_drain_duration\x18\x1d \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x0f\n\x07mesh_id\x18\x1e \x01(\t\x12\x43\n\x13health_check_config\x18\x1f \x01(\x0b\x32&.istio.mesh.v1alpha1.HealthCheckConfig\x1a\x34\n\x12ProxyMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"3\n\x17InboundInterceptionMode\x12\x0c\n\x08REDIRECT\x10\x00\x12\n\n\x06TPROXY\x10\x01J\x04\x08\t\x10\nR\x0f\x63onnect_timeout\"\xc7\x01\n\rRemoteService\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x42\n\x0ctls_settings\x18\x02 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettings\x12\x61\n\rtcp_keepalive\x18\x03 \x01(\x0b\x32J.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive\"\xe5\x02\n\x11HealthCheckConfig\x12\x1b\n\x13initialDelaySeconds\x18\x02 \x01(\x05\x12\x16\n\x0etimeoutSeconds\x18\x03 \x01(\x05\x12\x15\n\rperiodSeconds\x18\x04 \x01(\x05\x12\x18\n\x10successThreshold\x18\x05 \x01(\x05\x12\x18\n\x10\x66\x61ilureThreshold\x18\x06 \x01(\x05\x12=\n\x07httpGet\x18\x07 \x01(\x0b\x32*.istio.mesh.v1alpha1.HTTPHealthCheckConfigH\x00\x12>\n\ttcpSocket\x18\x08 \x01(\x0b\x32).istio.mesh.v1alpha1.TCPHealthCheckConfigH\x00\x12:\n\x04\x65xec\x18\t \x01(\x0b\x32*.istio.mesh.v1alpha1.ExecHealthCheckConfigH\x00\x42\x15\n\x13health_check_method\"\xc9\x01\n\x15HTTPHealthCheckConfig\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\r\x12\x0e\n\x06scheme\x18\x03 \x01(\t\x12P\n\x0bhttpHeaders\x18\x04 \x03(\x0b\x32;.istio.mesh.v1alpha1.HTTPHealthCheckConfig.HttpHeadersEntry\x1a\x32\n\x10HttpHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"2\n\x14TCPHealthCheckConfig\x12\x0c\n\x04host\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\r\"(\n\x15\x45xecHealthCheckConfig\x12\x0f\n\x07\x63ommand\x18\x01 \x03(\t*>\n\x14\x41uthenticationPolicy\x12\x08\n\x04NONE\x10\x00\x12\x0e\n\nMUTUAL_TLS\x10\x01\x12\x0c\n\x07INHERIT\x10\xe8\x07\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
+  serialized_pb=_b('\n\x19mesh/v1alpha1/proxy.proto\x12\x13istio.mesh.v1alpha1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a*networking/v1alpha3/destination_rule.proto\"\xd3\x0b\n\x07Tracing\x12\x35\n\x06zipkin\x18\x01 \x01(\x0b\x32#.istio.mesh.v1alpha1.Tracing.ZipkinH\x00\x12;\n\tlightstep\x18\x02 \x01(\x0b\x32&.istio.mesh.v1alpha1.Tracing.LightstepH\x00\x12\x37\n\x07\x64\x61tadog\x18\x03 \x01(\x0b\x32$.istio.mesh.v1alpha1.Tracing.DatadogH\x00\x12?\n\x0bstackdriver\x18\x04 \x01(\x0b\x32(.istio.mesh.v1alpha1.Tracing.StackdriverH\x00\x12I\n\x11open_census_agent\x18\t \x01(\x0b\x32,.istio.mesh.v1alpha1.Tracing.OpenCensusAgentH\x00\x12\x41\n\x0b\x63ustom_tags\x18\x05 \x03(\x0b\x32,.istio.mesh.v1alpha1.Tracing.CustomTagsEntry\x12\x1b\n\x13max_path_tag_length\x18\x06 \x01(\r\x12\x10\n\x08sampling\x18\x07 \x01(\x01\x12\x42\n\x0ctls_settings\x18\x08 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettings\x1a\x19\n\x06Zipkin\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x1a\x32\n\tLightstep\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x14\n\x0c\x61\x63\x63\x65ss_token\x18\x02 \x01(\t\x1a\x1a\n\x07\x44\x61tadog\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x1a\xde\x01\n\x0bStackdriver\x12\r\n\x05\x64\x65\x62ug\x18\x01 \x01(\x08\x12=\n\x18max_number_of_attributes\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12>\n\x19max_number_of_annotations\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x12\x41\n\x1cmax_number_of_message_events\x18\x04 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\x1a\xd5\x01\n\x0fOpenCensusAgent\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12J\n\x07\x63ontext\x18\x02 \x03(\x0e\x32\x39.istio.mesh.v1alpha1.Tracing.OpenCensusAgent.TraceContext\"e\n\x0cTraceContext\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x15\n\x11W3C_TRACE_CONTEXT\x10\x01\x12\x0c\n\x08GRPC_BIN\x10\x02\x12\x17\n\x13\x43LOUD_TRACE_CONTEXT\x10\x03\x12\x06\n\x02\x42\x33\x10\x04\x1a\xcb\x01\n\tCustomTag\x12\x37\n\x07literal\x18\x01 \x01(\x0b\x32$.istio.mesh.v1alpha1.Tracing.LiteralH\x00\x12?\n\x0b\x65nvironment\x18\x02 \x01(\x0b\x32(.istio.mesh.v1alpha1.Tracing.EnvironmentH\x00\x12<\n\x06header\x18\x03 \x01(\x0b\x32*.istio.mesh.v1alpha1.Tracing.RequestHeaderH\x00\x42\x06\n\x04type\x1a\x18\n\x07Literal\x12\r\n\x05value\x18\x01 \x01(\t\x1a\x32\n\x0b\x45nvironment\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rdefault_value\x18\x02 \x01(\t\x1a\x34\n\rRequestHeader\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rdefault_value\x18\x02 \x01(\t\x1aY\n\x0f\x43ustomTagsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x35\n\x05value\x18\x02 \x01(\x0b\x32&.istio.mesh.v1alpha1.Tracing.CustomTag:\x02\x38\x01\x42\x08\n\x06tracer\"/\n\x03SDS\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x17\n\x0fk8s_sa_jwt_path\x18\x02 \x01(\t\"\x8f\x02\n\x08Topology\x12\x1b\n\x13num_trusted_proxies\x18\x01 \x01(\r\x12[\n\x1b\x66orward_client_cert_details\x18\x02 \x01(\x0e\x32\x36.istio.mesh.v1alpha1.Topology.ForwardClientCertDetails\"\x88\x01\n\x18\x46orwardClientCertDetails\x12\r\n\tUNDEFINED\x10\x00\x12\x0c\n\x08SANITIZE\x10\x01\x12\x10\n\x0c\x46ORWARD_ONLY\x10\x02\x12\x12\n\x0e\x41PPEND_FORWARD\x10\x03\x12\x10\n\x0cSANITIZE_SET\x10\x04\x12\x17\n\x13\x41LWAYS_FORWARD_ONLY\x10\x05\"\x93\x0b\n\x0bProxyConfig\x12\x13\n\x0b\x63onfig_path\x18\x01 \x01(\t\x12\x13\n\x0b\x62inary_path\x18\x02 \x01(\t\x12\x17\n\x0fservice_cluster\x18\x03 \x01(\t\x12\x31\n\x0e\x64rain_duration\x18\x04 \x01(\x0b\x32\x19.google.protobuf.Duration\x12;\n\x18parent_shutdown_duration\x18\x05 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x19\n\x11\x64iscovery_address\x18\x06 \x01(\t\x12>\n\x17\x64iscovery_refresh_delay\x18\x07 \x01(\x0b\x32\x19.google.protobuf.DurationB\x02\x18\x01\x12\x1a\n\x0ezipkin_address\x18\x08 \x01(\tB\x02\x18\x01\x12\x1a\n\x12statsd_udp_address\x18\n \x01(\t\x12)\n\x1d\x65nvoy_metrics_service_address\x18\x14 \x01(\tB\x02\x18\x01\x12\x18\n\x10proxy_admin_port\x18\x0b \x01(\x05\x12\x1d\n\x11\x61vailability_zone\x18\x0c \x01(\tB\x02\x18\x01\x12L\n\x19\x63ontrol_plane_auth_policy\x18\r \x01(\x0e\x32).istio.mesh.v1alpha1.AuthenticationPolicy\x12\x1a\n\x12\x63ustom_config_file\x18\x0e \x01(\t\x12\x18\n\x10stat_name_length\x18\x0f \x01(\x05\x12\x30\n\x0b\x63oncurrency\x18\x10 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x12%\n\x1dproxy_bootstrap_template_path\x18\x11 \x01(\t\x12S\n\x11interception_mode\x18\x12 \x01(\x0e\x32\x38.istio.mesh.v1alpha1.ProxyConfig.InboundInterceptionMode\x12-\n\x07tracing\x18\x13 \x01(\x0b\x32\x1c.istio.mesh.v1alpha1.Tracing\x12%\n\x03sds\x18\x15 \x01(\x0b\x32\x18.istio.mesh.v1alpha1.SDS\x12\x44\n\x18\x65nvoy_access_log_service\x18\x16 \x01(\x0b\x32\".istio.mesh.v1alpha1.RemoteService\x12\x41\n\x15\x65nvoy_metrics_service\x18\x17 \x01(\x0b\x32\".istio.mesh.v1alpha1.RemoteService\x12K\n\x0eproxy_metadata\x18\x18 \x03(\x0b\x32\x33.istio.mesh.v1alpha1.ProxyConfig.ProxyMetadataEntry\x12\x13\n\x0bstatus_port\x18\x1a \x01(\x05\x12\x17\n\x0f\x65xtra_stat_tags\x18\x1b \x03(\t\x12\x37\n\x10gateway_topology\x18\x1c \x01(\x0b\x32\x1d.istio.mesh.v1alpha1.Topology\x12=\n\x1atermination_drain_duration\x18\x1d \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x0f\n\x07mesh_id\x18\x1e \x01(\t\x12\x43\n\x13health_check_config\x18\x1f \x01(\x0b\x32&.istio.mesh.v1alpha1.HealthCheckConfig\x1a\x34\n\x12ProxyMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"3\n\x17InboundInterceptionMode\x12\x0c\n\x08REDIRECT\x10\x00\x12\n\n\x06TPROXY\x10\x01J\x04\x08\t\x10\nR\x0f\x63onnect_timeout\"\xc7\x01\n\rRemoteService\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x42\n\x0ctls_settings\x18\x02 \x01(\x0b\x32,.istio.networking.v1alpha3.ClientTLSSettings\x12\x61\n\rtcp_keepalive\x18\x03 \x01(\x0b\x32J.istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive\"\xed\x02\n\x11HealthCheckConfig\x12\x1d\n\x15initial_delay_seconds\x18\x02 \x01(\x05\x12\x17\n\x0ftimeout_seconds\x18\x03 \x01(\x05\x12\x16\n\x0eperiod_seconds\x18\x04 \x01(\x05\x12\x19\n\x11success_threshold\x18\x05 \x01(\x05\x12\x19\n\x11\x66\x61ilure_threshold\x18\x06 \x01(\x05\x12>\n\x08http_get\x18\x07 \x01(\x0b\x32*.istio.mesh.v1alpha1.HTTPHealthCheckConfigH\x00\x12?\n\ntcp_socket\x18\x08 \x01(\x0b\x32).istio.mesh.v1alpha1.TCPHealthCheckConfigH\x00\x12:\n\x04\x65xec\x18\t \x01(\x0b\x32*.istio.mesh.v1alpha1.ExecHealthCheckConfigH\x00\x42\x15\n\x13health_check_method\"\xca\x01\n\x15HTTPHealthCheckConfig\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\r\x12\x0e\n\x06scheme\x18\x03 \x01(\t\x12Q\n\x0chttp_headers\x18\x04 \x03(\x0b\x32;.istio.mesh.v1alpha1.HTTPHealthCheckConfig.HttpHeadersEntry\x1a\x32\n\x10HttpHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"2\n\x14TCPHealthCheckConfig\x12\x0c\n\x04host\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\r\"(\n\x15\x45xecHealthCheckConfig\x12\x0f\n\x07\x63ommand\x18\x01 \x03(\t*>\n\x14\x41uthenticationPolicy\x12\x08\n\x04NONE\x10\x00\x12\x0e\n\nMUTUAL_TLS\x10\x01\x12\x0c\n\x07INHERIT\x10\xe8\x07\x42\x1cZ\x1aistio.io/api/mesh/v1alpha1b\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_destination__rule__pb2.DESCRIPTOR,])
 
@@ -49,8 +49,8 @@ _AUTHENTICATIONPOLICY = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=4265,
-  serialized_end=4327,
+  serialized_start=4274,
+  serialized_end=4336,
 )
 _sym_db.RegisterEnumDescriptor(_AUTHENTICATIONPOLICY)
 
@@ -1014,49 +1014,49 @@ _HEALTHCHECKCONFIG = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='initialDelaySeconds', full_name='istio.mesh.v1alpha1.HealthCheckConfig.initialDelaySeconds', index=0,
+      name='initial_delay_seconds', full_name='istio.mesh.v1alpha1.HealthCheckConfig.initial_delay_seconds', index=0,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='timeoutSeconds', full_name='istio.mesh.v1alpha1.HealthCheckConfig.timeoutSeconds', index=1,
+      name='timeout_seconds', full_name='istio.mesh.v1alpha1.HealthCheckConfig.timeout_seconds', index=1,
       number=3, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='periodSeconds', full_name='istio.mesh.v1alpha1.HealthCheckConfig.periodSeconds', index=2,
+      name='period_seconds', full_name='istio.mesh.v1alpha1.HealthCheckConfig.period_seconds', index=2,
       number=4, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='successThreshold', full_name='istio.mesh.v1alpha1.HealthCheckConfig.successThreshold', index=3,
+      name='success_threshold', full_name='istio.mesh.v1alpha1.HealthCheckConfig.success_threshold', index=3,
       number=5, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='failureThreshold', full_name='istio.mesh.v1alpha1.HealthCheckConfig.failureThreshold', index=4,
+      name='failure_threshold', full_name='istio.mesh.v1alpha1.HealthCheckConfig.failure_threshold', index=4,
       number=6, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='httpGet', full_name='istio.mesh.v1alpha1.HealthCheckConfig.httpGet', index=5,
+      name='http_get', full_name='istio.mesh.v1alpha1.HealthCheckConfig.http_get', index=5,
       number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='tcpSocket', full_name='istio.mesh.v1alpha1.HealthCheckConfig.tcpSocket', index=6,
+      name='tcp_socket', full_name='istio.mesh.v1alpha1.HealthCheckConfig.tcp_socket', index=6,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -1085,7 +1085,7 @@ _HEALTHCHECKCONFIG = _descriptor.Descriptor(
       index=0, containing_type=None, fields=[]),
   ],
   serialized_start=3608,
-  serialized_end=3965,
+  serialized_end=3973,
 )
 
 
@@ -1122,8 +1122,8 @@ _HTTPHEALTHCHECKCONFIG_HTTPHEADERSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4119,
-  serialized_end=4169,
+  serialized_start=4128,
+  serialized_end=4178,
 )
 
 _HTTPHEALTHCHECKCONFIG = _descriptor.Descriptor(
@@ -1155,7 +1155,7 @@ _HTTPHEALTHCHECKCONFIG = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='httpHeaders', full_name='istio.mesh.v1alpha1.HTTPHealthCheckConfig.httpHeaders', index=3,
+      name='http_headers', full_name='istio.mesh.v1alpha1.HTTPHealthCheckConfig.http_headers', index=3,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -1173,8 +1173,8 @@ _HTTPHEALTHCHECKCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3968,
-  serialized_end=4169,
+  serialized_start=3976,
+  serialized_end=4178,
 )
 
 
@@ -1211,8 +1211,8 @@ _TCPHEALTHCHECKCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4171,
-  serialized_end=4221,
+  serialized_start=4180,
+  serialized_end=4230,
 )
 
 
@@ -1242,8 +1242,8 @@ _EXECHEALTHCHECKCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4223,
-  serialized_end=4263,
+  serialized_start=4232,
+  serialized_end=4272,
 )
 
 _TRACING_ZIPKIN.containing_type = _TRACING
@@ -1316,20 +1316,20 @@ _PROXYCONFIG.fields_by_name['health_check_config'].message_type = _HEALTHCHECKCO
 _PROXYCONFIG_INBOUNDINTERCEPTIONMODE.containing_type = _PROXYCONFIG
 _REMOTESERVICE.fields_by_name['tls_settings'].message_type = networking_dot_v1alpha3_dot_destination__rule__pb2._CLIENTTLSSETTINGS
 _REMOTESERVICE.fields_by_name['tcp_keepalive'].message_type = networking_dot_v1alpha3_dot_destination__rule__pb2._CONNECTIONPOOLSETTINGS_TCPSETTINGS_TCPKEEPALIVE
-_HEALTHCHECKCONFIG.fields_by_name['httpGet'].message_type = _HTTPHEALTHCHECKCONFIG
-_HEALTHCHECKCONFIG.fields_by_name['tcpSocket'].message_type = _TCPHEALTHCHECKCONFIG
+_HEALTHCHECKCONFIG.fields_by_name['http_get'].message_type = _HTTPHEALTHCHECKCONFIG
+_HEALTHCHECKCONFIG.fields_by_name['tcp_socket'].message_type = _TCPHEALTHCHECKCONFIG
 _HEALTHCHECKCONFIG.fields_by_name['exec'].message_type = _EXECHEALTHCHECKCONFIG
 _HEALTHCHECKCONFIG.oneofs_by_name['health_check_method'].fields.append(
-  _HEALTHCHECKCONFIG.fields_by_name['httpGet'])
-_HEALTHCHECKCONFIG.fields_by_name['httpGet'].containing_oneof = _HEALTHCHECKCONFIG.oneofs_by_name['health_check_method']
+  _HEALTHCHECKCONFIG.fields_by_name['http_get'])
+_HEALTHCHECKCONFIG.fields_by_name['http_get'].containing_oneof = _HEALTHCHECKCONFIG.oneofs_by_name['health_check_method']
 _HEALTHCHECKCONFIG.oneofs_by_name['health_check_method'].fields.append(
-  _HEALTHCHECKCONFIG.fields_by_name['tcpSocket'])
-_HEALTHCHECKCONFIG.fields_by_name['tcpSocket'].containing_oneof = _HEALTHCHECKCONFIG.oneofs_by_name['health_check_method']
+  _HEALTHCHECKCONFIG.fields_by_name['tcp_socket'])
+_HEALTHCHECKCONFIG.fields_by_name['tcp_socket'].containing_oneof = _HEALTHCHECKCONFIG.oneofs_by_name['health_check_method']
 _HEALTHCHECKCONFIG.oneofs_by_name['health_check_method'].fields.append(
   _HEALTHCHECKCONFIG.fields_by_name['exec'])
 _HEALTHCHECKCONFIG.fields_by_name['exec'].containing_oneof = _HEALTHCHECKCONFIG.oneofs_by_name['health_check_method']
 _HTTPHEALTHCHECKCONFIG_HTTPHEADERSENTRY.containing_type = _HTTPHEALTHCHECKCONFIG
-_HTTPHEALTHCHECKCONFIG.fields_by_name['httpHeaders'].message_type = _HTTPHEALTHCHECKCONFIG_HTTPHEADERSENTRY
+_HTTPHEALTHCHECKCONFIG.fields_by_name['http_headers'].message_type = _HTTPHEALTHCHECKCONFIG_HTTPHEADERSENTRY
 DESCRIPTOR.message_types_by_name['Tracing'] = _TRACING
 DESCRIPTOR.message_types_by_name['SDS'] = _SDS
 DESCRIPTOR.message_types_by_name['Topology'] = _TOPOLOGY
