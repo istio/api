@@ -105,7 +105,7 @@
 //   - to:
 //     - operation:
 //         methods: ["GET"]
-//         paths: [“/user/profile/*”]
+//         paths: ["/user/profile/*"]
 // ````
 //
 // Authorization Policy scope (target) is determined by "metadata/namespace" and
