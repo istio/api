@@ -469,23 +469,24 @@ message RemoteService {
 
 message HealthCheckConfig {
 
-  // Initial delay before probes start.
-  google.protobuf.Duration initial_delay = 1;
+  // Number of seconds after the container has started before liveness probes are initiated.
+  int32 initialDelaySeconds = 2;
 
-  // Timeout for each probe. If a healthcheck times out,
-  // the vm is declared unhealthy.
-  google.protobuf.Duration probe_timeout = 2;
+  // Number of seconds after which the probe times out.
+  // Defaults to 1 second. Minimum value is 1.
+  int32 timeoutSeconds = 3;
 
-  // Frequency of each healthcheck/probe.
-  google.protobuf.Duration probe_frequency = 3;
+  // How often (in seconds) to perform the probe.
+  // Default to 10 seconds. Minimum value is 1.
+  int32 periodSeconds = 4;
 
-  // success_threshold is the amount of times a healthcheck
-  // needs to succeed before declared healthy.
-  int32 success_threshold = 4;
+  // Minimum consecutive successes for the probe to be considered successful after having failed.
+  // Defaults to 1.
+  int32 successThreshold = 5;
 
-  // failure_threshold is the amount of times a healthcheck
-  // needs to fail before declared unhealthy.
-  int32 failure_threshold = 5;
+  // Minimum consecutive failures for the probe to be considered failed after having succeeded.
+  // Defaults to 3.
+  int32 failureThreshold = 6;
 
   // Users can only provide one configuration for healthchecks (tcp, http, exec),
   // and this is expressed as a oneof. All of the other configuration values
@@ -493,11 +494,11 @@ message HealthCheckConfig {
   oneof health_check_method {
     // an http get is performed to a given endpoint
     // and the status/able to connect determines health.
-    HTTPHealthCheckConfig http_healthcheck_config = 6;
+    HTTPHealthCheckConfig httpGet = 7;
     // health is determined by if the proxy is able to connect.
-    TCPHealthCheckConfig tcp_healthcheck_config = 7;
+    TCPHealthCheckConfig tcpSocket = 8;
     // health is determined by how the command that is executed exited.
-    ExecHealthCheckConfig exec_healthcheck_config = 8;
+    ExecHealthCheckConfig exec = 9;
   }
 }
 
@@ -509,7 +510,7 @@ message HTTPHealthCheckConfig {
   // http or https
   string scheme = 3;
   // headers the proxy will pass on to make the request.
-  map<string, string> headers = 4;
+  map<string, string> httpHeaders = 4;
 }
 
 message TCPHealthCheckConfig {
@@ -520,6 +521,6 @@ message TCPHealthCheckConfig {
 }
 
 message ExecHealthCheckConfig {
-  // command to run
+  // command to run. Exit status of 0 is treated as live/healthy and non-zero is unhealthy.
   repeated string command = 1;
 }
