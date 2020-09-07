@@ -475,6 +475,10 @@
           },
           "h2UpgradePolicy": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy"
+          },
+          "useClientProtocol": {
+            "description": "This is applicable for gateways and when set to true, gateway will initiate connection to backend with the protocol of the client when protocol sniffing is enabled at the backend.",
+            "type": "boolean"
           }
         }
       },

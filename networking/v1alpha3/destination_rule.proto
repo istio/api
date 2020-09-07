@@ -635,6 +635,10 @@ message ConnectionPoolSettings {
     };
     // Specify if http1.1 connection should be upgraded to http2 for the associated destination.
     H2UpgradePolicy h2_upgrade_policy = 6;
+
+    // This is applicable for gateways and when set to true, gateway will initiate connection to 
+    // backend with the protocol of the client when protocol sniffing is enabled at the backend.
+    bool use_client_protocol = 7;
   };
 
   // Settings common to both HTTP and TCP upstream connections.
