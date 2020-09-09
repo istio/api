@@ -477,7 +477,7 @@
             "$ref": "#/components/schemas/istio.networking.v1beta1.ConnectionPoolSettings.HTTPSettings.H2UpgradePolicy"
           },
           "useClientProtocol": {
-            "description": "This is applicable for gateways and when set to true, gateway will initiate connection to backend with the protocol of the client.",
+            "description": "If set to true, client protocol will be preserved while initiating connection to backend.",
             "type": "boolean"
           }
         }
