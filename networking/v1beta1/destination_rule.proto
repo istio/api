@@ -635,6 +635,8 @@ message ConnectionPoolSettings {
     H2UpgradePolicy h2_upgrade_policy = 6;
 
     // If set to true, client protocol will be preserved while initiating connection to backend.
+    // Note that when this is set to true, h2_upgrade_policy will be ineffective i.e. the client
+    // connections will not be upgraded to http2.
     bool use_client_protocol = 7;
   };
 

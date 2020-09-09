@@ -1385,6 +1385,8 @@ type ConnectionPoolSettings_HTTPSettings struct {
 	// Specify if http1.1 connection should be upgraded to http2 for the associated destination.
 	H2UpgradePolicy ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy `protobuf:"varint,6,opt,name=h2_upgrade_policy,json=h2UpgradePolicy,proto3,enum=istio.networking.v1beta1.ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy" json:"h2_upgrade_policy,omitempty"`
 	// If set to true, client protocol will be preserved while initiating connection to backend.
+	// Note that when this is set to true, h2_upgrade_policy will be ineffective i.e. the client
+	// connections will not be upgraded to http2.
 	UseClientProtocol    bool     `protobuf:"varint,7,opt,name=use_client_protocol,json=useClientProtocol,proto3" json:"use_client_protocol,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
