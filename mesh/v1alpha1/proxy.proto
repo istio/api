@@ -17,6 +17,7 @@ syntax = "proto3";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 import "networking/v1alpha3/destination_rule.proto";
+import "networking/v1alpha3/workload_group.proto";
 
 package istio.mesh.v1alpha1;
 
@@ -445,6 +446,11 @@ message ProxyConfig {
   // All control planes running in the same service mesh should specify the same mesh ID.
   // Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.
   string mesh_id = 30;
+
+  // VM Health Checking readiness probe. This health check config exactly mirrors the
+  // kubernetes readiness probe configuration both in schema and logic.
+  // Only one health check method of 3 can be set at a time.
+  istio.networking.v1alpha3.ReadinessProbe readiness_probe = 31;
 }
 
 message RemoteService {
