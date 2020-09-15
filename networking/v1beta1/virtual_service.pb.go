@@ -1332,7 +1332,7 @@ func (m *TLSRoute) GetRoute() []*RouteDestination {
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
 // metadata:
-//   name: bookinfo-Mongo
+//   name: bookinfo-mongo
 // spec:
 //   hosts:
 //   - mongo.prod.svc.cluster.local
@@ -1352,7 +1352,7 @@ func (m *TLSRoute) GetRoute() []*RouteDestination {
 // apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
-//   name: bookinfo-Mongo
+//   name: bookinfo-mongo
 // spec:
 //   hosts:
 //   - mongo.prod.svc.cluster.local
