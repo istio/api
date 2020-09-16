@@ -106,7 +106,7 @@ type IstioOperatorSpec struct {
 	// Extra addon components which are not explicitly specified above.
 	AddonComponents map[string]*ExternalComponentSpec `protobuf:"bytes,51,rep,name=addon_components,json=addonComponents,proto3" json:"addonComponents,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Overrides for default values.yaml. This is a validated pass-through to Helm templates.
-	// See the Helm installation options for schema details: https://istio.io/docs/reference/config/installation-options/.
+	// See the Helm installation options for schema details: https://istio.io/v1.5/docs/reference/config/installation-options/.
 	// Anything that is available in IstioOperatorSpec should be set above rather than using the passthrough. This
 	// includes Kubernetes resource settings for components in KubernetesResourcesSpec.
 	Values map[string]interface{} `protobuf:"bytes,100,opt,name=values,proto3" json:"values,omitempty"`
