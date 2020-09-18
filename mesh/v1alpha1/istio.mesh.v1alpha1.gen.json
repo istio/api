@@ -41,7 +41,7 @@
             "type": "string"
           },
           "ingressClass": {
-            "description": "Class of ingress resources to be processed by Istio ingress controller. This corresponds to the value of \"kubernetes.io/ingress.class\" annotation.",
+            "description": "Class of ingress resources to be processed by Istio ingress controller. This corresponds to the value of `kubernetes.io/ingress.class` annotation.",
             "type": "string",
             "format": "string"
           },
@@ -84,7 +84,7 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.AccessLogEncoding"
           },
           "enableEnvoyAccessLogService": {
-            "description": "This flag enables Envoy's gRPC Access Log Service. See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto) for details about Envoy's gRPC Access Log Service API. Default value is false.",
+            "description": "This flag enables Envoy's gRPC Access Log Service. See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto) for details about Envoy's gRPC Access Log Service API. Default value is `false`.",
             "type": "boolean"
           },
           "defaultConfig": {
@@ -98,7 +98,7 @@
             }
           },
           "enableAutoMtls": {
-            "description": "This flag is used to enable mutual TLS automatically for service to service communication within the mesh, default true. If set to true, and a given service does not have a corresponding DestinationRule configured, or its DestinationRule does not have ClientTLSSettings specified, Istio configures client side TLS configuration appropriately. More specifically, If the upstream authentication policy is in STRICT mode, use Istio provisioned certificate for mutual TLS to connect to upstream. If upstream service is in plain text mode, use plain text. If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use mutual TLS when server sides are capable of accepting mutual TLS traffic. If service DestinationRule exists and has ClientTLSSettings specified, that is always used instead.",
+            "description": "This flag is used to enable mutual `TLS` automatically for service to service communication within the mesh, default true. If set to true, and a given service does not have a corresponding `DestinationRule` configured, or its `DestinationRule` does not have ClientTLSSettings specified, Istio configures client side TLS configuration appropriately. More specifically, If the upstream authentication policy is in `STRICT` mode, use Istio provisioned certificate for mutual `TLS` to connect to upstream. If upstream service is in plain text mode, use plain text. If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use mutual `TLS` when server sides are capable of accepting mutual `TLS` traffic. If service `DestinationRule` exists and has `ClientTLSSettings` specified, that is always used instead.",
             "type": "boolean",
             "nullable": true
           },
@@ -116,7 +116,7 @@
             }
           },
           "defaultServiceExportTo": {
-            "description": "The default value for the ServiceEntry.export_to field and services imported through container registry integrations, e.g. this applies to Kubernetes Service resources. The value is a list of namespace names and reserved namespace aliases. The allowed namespace aliases are: * - All Namespaces . - Current Namespace ~ - No Namespace",
+            "description": "The default value for the ServiceEntry.export_to field and services imported through container registry integrations, e.g. this applies to Kubernetes Service resources. The value is a list of namespace names and reserved namespace aliases. The allowed namespace aliases are: ``` * - All Namespaces . - Current Namespace ~ - No Namespace ``` If not set the system will use \"*\" as the default value which implies that services are exported to all namespaces.",
             "type": "array",
             "items": {
               "type": "string",
@@ -124,7 +124,7 @@
             }
           },
           "defaultVirtualServiceExportTo": {
-            "description": "The default value for the VirtualService.export_to field. Has the same syntax as 'default_service_export_to'.",
+            "description": "The default value for the VirtualService.export_to field. Has the same syntax as `default_service_export_to`.",
             "type": "array",
             "items": {
               "type": "string",
@@ -132,7 +132,7 @@
             }
           },
           "defaultDestinationRuleExportTo": {
-            "description": "The default value for the DestinationRule.export_to field. Has the same syntax as 'default_service_export_to'.",
+            "description": "The default value for the `DestinationRule.export_to` field. Has the same syntax as `default_service_export_to`.",
             "type": "array",
             "items": {
               "type": "string",
@@ -145,7 +145,7 @@
             "format": "string"
           },
           "dnsRefreshRate": {
-            "description": "Configures DNS refresh rate for Envoy clusters of type STRICT_DNS Default refresh rate is 5s.",
+            "description": "Configures DNS refresh rate for Envoy clusters of type `STRICT_DNS` Default refresh rate is `5s`.",
             "type": "string"
           },
           "inboundClusterStatName": {
@@ -181,7 +181,7 @@
             "nullable": true
           },
           "verifyCertificateAtClient": {
-            "description": "VerifyCertificateAtClient sets the mesh global default for peer certificate validation at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL) origination modes are used. This setting can be overridden at the host level via DestinationRule API. By default, VerifyCertificateAtClient is true.",
+            "description": "`VerifyCertificateAtClient` sets the mesh global default for peer certificate validation at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination modes are used. This setting can be overridden at the host level via DestinationRule API. By default, `VerifyCertificateAtClient` is `true`.",
             "type": "boolean",
             "nullable": true
           },
@@ -389,7 +389,7 @@
         ]
       },
       "istio.mesh.v1alpha1.Certificate": {
-        "description": "Certificate configures the provision of a certificate and its key. Example 1: key and cert stored in a secret { secretName: galley-cert secretNamespace: istio-system dnsNames: - galley.istio-system.svc - galley.mydomain.com } Example 2: key and cert stored in a directory { dnsNames: - pilot.istio-system - pilot.istio-system.svc - pilot.mydomain.com }",
+        "description": "Certificate configures the provision of a certificate and its key. Example 1: key and cert stored in a secret ``` { secretName: galley-cert secretNamespace: istio-system dnsNames: - galley.istio-system.svc - galley.mydomain.com } ``` Example 2: key and cert stored in a directory ``` { dnsNames: - pilot.istio-system - pilot.istio-system.svc - pilot.mydomain.com } ```",
         "type": "object",
         "properties": {
           "secretName": {
@@ -416,7 +416,7 @@
             "format": "string"
           },
           "rateLimitTimeout": {
-            "description": "Specify thrift rate limit service timeout, in milliseconds. Default is 50ms",
+            "description": "Specify thrift rate limit service timeout, in milliseconds. Default is `50ms`",
             "type": "string"
           }
         }
