@@ -124,7 +124,9 @@ func (MeshConfig_AuthPolicy) EnumDescriptor() ([]byte, []int) {
 type MeshConfig_AccessLogEncoding int32
 
 const (
+	// text encoding for the proxy access log
 	MeshConfig_TEXT MeshConfig_AccessLogEncoding = 0
+	// json encoding for the proxy access log
 	MeshConfig_JSON MeshConfig_AccessLogEncoding = 1
 )
 
@@ -263,8 +265,8 @@ type MeshConfig struct {
 	// Format for the proxy access log
 	// Empty value results in proxy's default access log format
 	AccessLogFormat string `protobuf:"bytes,24,opt,name=access_log_format,json=accessLogFormat,proto3" json:"accessLogFormat,omitempty"`
-	// Encoding for the proxy access log (text or json).
-	// Default value is text.
+	// Encoding for the proxy access log (`TEXT` or `JSON`).
+	// Default value is `TEXT`.
 	AccessLogEncoding MeshConfig_AccessLogEncoding `protobuf:"varint,27,opt,name=access_log_encoding,json=accessLogEncoding,proto3,enum=istio.mesh.v1alpha1.MeshConfig_AccessLogEncoding" json:"accessLogEncoding,omitempty"`
 	// This flag enables Envoy's gRPC Access Log Service.
 	// See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto)

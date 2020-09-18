@@ -145,12 +145,15 @@ message MeshConfig {
   string access_log_format = 24;
 
   enum AccessLogEncoding {
+    // text encoding for the proxy access log
     TEXT = 0;
+
+    // json encoding for the proxy access log
     JSON = 1;
   }
 
-  // Encoding for the proxy access log (text or json).
-  // Default value is text.
+  // Encoding for the proxy access log (`TEXT` or `JSON`).
+  // Default value is `TEXT`.
   AccessLogEncoding access_log_encoding = 27;
 
   // This flag enables Envoy's gRPC Access Log Service.
