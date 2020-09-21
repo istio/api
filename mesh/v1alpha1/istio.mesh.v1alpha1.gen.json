@@ -228,16 +228,16 @@
             "format": "string"
           },
           "serviceCluster": {
-            "description": "Service cluster defines the name for the service_cluster that is shared by all Envoy instances. This setting corresponds to _--service-cluster_ flag in Envoy. In a typical Envoy deployment, the _service-cluster_ flag is used to identify the caller, for source-based routing scenarios.",
+            "description": "Service cluster defines the name for the `service_cluster` that is shared by all Envoy instances. This setting corresponds to `--service-cluster` flag in Envoy. In a typical Envoy deployment, the `service-cluster` flag is used to identify the caller, for source-based routing scenarios.",
             "type": "string",
             "format": "string"
           },
           "drainDuration": {
-            "description": "The time in seconds that Envoy will drain connections during a hot restart. MUST be \u003e=1s (e.g., _1s/1m/1h_) Default drain duration is 45s.",
+            "description": "The time in seconds that Envoy will drain connections during a hot restart. MUST be \u003e=1s (e.g., _1s/1m/1h_) Default drain duration is `45s`.",
             "type": "string"
           },
           "parentShutdownDuration": {
-            "description": "The time in seconds that Envoy will wait before shutting down the parent process during a hot restart. MUST be \u003e=1s (e.g., _1s/1m/1h_). MUST BE greater than _drain_duration_ parameter. Default shutdown duration is 60s.",
+            "description": "The time in seconds that Envoy will wait before shutting down the parent process during a hot restart. MUST be \u003e=1s (e.g., `1s/1m/1h`). MUST BE greater than `drain_duration` parameter. Default shutdown duration is `60s`.",
             "type": "string"
           },
           "discoveryAddress": {
@@ -256,7 +256,7 @@
             "deprecated": true
           },
           "statsdUdpAddress": {
-            "description": "IP Address and Port of a statsd UDP listener (e.g. _10.75.241.127:9125_).",
+            "description": "IP Address and Port of a statsd UDP listener (e.g. `10.75.241.127:9125`).",
             "type": "string",
             "format": "string"
           },
@@ -266,7 +266,7 @@
             "deprecated": true
           },
           "proxyAdminPort": {
-            "description": "Port on which Envoy should listen for administrative commands. Default port is 15000.",
+            "description": "Port on which Envoy should listen for administrative commands. Default port is `15000`.",
             "type": "integer",
             "format": "int32"
           },
@@ -322,7 +322,7 @@
             }
           },
           "statusPort": {
-            "description": "Port on which the agent should listen for administrative commands such as readiness probe. Default is set to port 15020.",
+            "description": "Port on which the agent should listen for administrative commands such as readiness probe. Default is set to port `15020`.",
             "type": "integer",
             "format": "int32"
           },
@@ -338,7 +338,7 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.Topology"
           },
           "terminationDrainDuration": {
-            "description": "The amount of time allowed for connections to complete on proxy shutdown. On receiving SIGTERM or SIGINT, istio-agent tells the active Envoy to start draining, preventing any new connections and allowing existing connections to complete. It then sleeps for the termination_drain_duration and then kills any remaining active Envoy processes. If not set, a default of 5s will be applied.",
+            "description": "The amount of time allowed for connections to complete on proxy shutdown. On receiving `SIGTERM` or `SIGINT`, `istio-agent` tells the active Envoy to start draining, preventing any new connections and allowing existing connections to complete. It then sleeps for the `termination_drain_duration` and then kills any remaining active Envoy processes. If not set, a default of `5s` will be applied.",
             "type": "string"
           },
           "meshId": {
@@ -1037,7 +1037,7 @@
         ]
       },
       "istio.mesh.v1alpha1.ProxyConfig.InboundInterceptionMode": {
-        "description": "The mode used to redirect inbound traffic to Envoy. This setting has no effect on outbound traffic: iptables REDIRECT is always used for outbound connections.",
+        "description": "The mode used to redirect inbound traffic to Envoy. This setting has no effect on outbound traffic: iptables `REDIRECT` is always used for outbound connections.",
         "type": "string",
         "enum": [
           "REDIRECT",
@@ -1061,7 +1061,7 @@
         }
       },
       "istio.networking.v1alpha3.ClientTLSSettings": {
-        "description": "Use the tls_settings to specify the tls mode to use. If the remote service uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS mode as `ISTIO_MUTUAL`.",
+        "description": "Use the `tls_settings` to specify the tls mode to use. If the remote service uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS mode as `ISTIO_MUTUAL`.",
         "type": "object",
         "properties": {
           "mode": {
@@ -1103,7 +1103,7 @@
         }
       },
       "istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive": {
-        "description": "If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.",
+        "description": "If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.",
         "type": "object",
         "properties": {
           "time": {

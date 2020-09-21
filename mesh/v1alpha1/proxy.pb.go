@@ -162,18 +162,18 @@ func (Topology_ForwardClientCertDetails) EnumDescriptor() ([]byte, []int) {
 }
 
 // The mode used to redirect inbound traffic to Envoy.
-// This setting has no effect on outbound traffic: iptables REDIRECT is always used for
+// This setting has no effect on outbound traffic: iptables `REDIRECT` is always used for
 // outbound connections.
 type ProxyConfig_InboundInterceptionMode int32
 
 const (
-	// The REDIRECT mode uses iptables REDIRECT to NAT and redirect to Envoy. This mode loses
+	// The `REDIRECT` mode uses iptables `REDIRECT` to `NAT` and redirect to Envoy. This mode loses
 	// source IP addresses during redirection.
 	ProxyConfig_REDIRECT ProxyConfig_InboundInterceptionMode = 0
-	// The TPROXY mode uses iptables TPROXY to redirect to Envoy. This mode preserves both the
+	// The `TPROXY` mode uses iptables `TPROXY` to redirect to Envoy. This mode preserves both the
 	// source and destination IP addresses and ports, so that they can be used for advanced
 	// filtering and manipulation. This mode also configures the sidecar to run with the
-	// CAP_NET_ADMIN capability, which is required to use TPROXY.
+	// `CAP_NET_ADMIN` capability, which is required to use `TPROXY`.
 	ProxyConfig_TPROXY ProxyConfig_InboundInterceptionMode = 1
 )
 
@@ -1113,28 +1113,28 @@ type ProxyConfig struct {
 	ConfigPath string `protobuf:"bytes,1,opt,name=config_path,json=configPath,proto3" json:"configPath,omitempty"`
 	// Path to the proxy binary
 	BinaryPath string `protobuf:"bytes,2,opt,name=binary_path,json=binaryPath,proto3" json:"binaryPath,omitempty"`
-	// Service cluster defines the name for the service_cluster that is
+	// Service cluster defines the name for the `service_cluster` that is
 	// shared by all Envoy instances. This setting corresponds to
-	// _--service-cluster_ flag in Envoy.  In a typical Envoy deployment, the
-	// _service-cluster_ flag is used to identify the caller, for
+	// `--service-cluster` flag in Envoy.  In a typical Envoy deployment, the
+	// `service-cluster` flag is used to identify the caller, for
 	// source-based routing scenarios.
 	//
-	// Since Istio does not assign a local service/service version to each
+	// Since Istio does not assign a local `service/service` version to each
 	// Envoy instance, the name is same for all of them.  However, the
 	// source/caller's identity (e.g., IP address) is encoded in the
-	// _--service-node_ flag when launching Envoy.  When the RDS service
-	// receives API calls from Envoy, it uses the value of the _service-node_
+	// `--service-node` flag when launching Envoy.  When the RDS service
+	// receives API calls from Envoy, it uses the value of the `service-node`
 	// flag to compute routes that are relative to the service instances
 	// located at that IP address.
 	ServiceCluster string `protobuf:"bytes,3,opt,name=service_cluster,json=serviceCluster,proto3" json:"serviceCluster,omitempty"`
 	// The time in seconds that Envoy will drain connections during a hot
 	// restart. MUST be >=1s (e.g., _1s/1m/1h_)
-	// Default drain duration is 45s.
+	// Default drain duration is `45s`.
 	DrainDuration *types.Duration `protobuf:"bytes,4,opt,name=drain_duration,json=drainDuration,proto3" json:"drainDuration,omitempty"`
 	// The time in seconds that Envoy will wait before shutting down the
-	// parent process during a hot restart. MUST be >=1s (e.g., _1s/1m/1h_).
-	// MUST BE greater than _drain_duration_ parameter.
-	// Default shutdown duration is 60s.
+	// parent process during a hot restart. MUST be >=1s (e.g., `1s/1m/1h`).
+	// MUST BE greater than `drain_duration` parameter.
+	// Default shutdown duration is `60s`.
 	ParentShutdownDuration *types.Duration `protobuf:"bytes,5,opt,name=parent_shutdown_duration,json=parentShutdownDuration,proto3" json:"parentShutdownDuration,omitempty"`
 	// Address of the discovery service exposing xDS with mTLS connection.
 	// The inject configuration may override this value.
@@ -1144,17 +1144,17 @@ type ProxyConfig struct {
 	// Address of the Zipkin service (e.g. _zipkin:9411_).
 	// DEPRECATED: Use [tracing][istio.mesh.v1alpha1.ProxyConfig.tracing] instead.
 	ZipkinAddress string `protobuf:"bytes,8,opt,name=zipkin_address,json=zipkinAddress,proto3" json:"zipkinAddress,omitempty"` // Deprecated: Do not use.
-	// IP Address and Port of a statsd UDP listener (e.g. _10.75.241.127:9125_).
+	// IP Address and Port of a statsd UDP listener (e.g. `10.75.241.127:9125`).
 	StatsdUdpAddress string `protobuf:"bytes,10,opt,name=statsd_udp_address,json=statsdUdpAddress,proto3" json:"statsdUdpAddress,omitempty"`
 	// $hide_from_docs
 	EnvoyMetricsServiceAddress string `protobuf:"bytes,20,opt,name=envoy_metrics_service_address,json=envoyMetricsServiceAddress,proto3" json:"envoyMetricsServiceAddress,omitempty"` // Deprecated: Do not use.
 	// Port on which Envoy should listen for administrative commands.
-	// Default port is 15000.
+	// Default port is `15000`.
 	ProxyAdminPort int32 `protobuf:"varint,11,opt,name=proxy_admin_port,json=proxyAdminPort,proto3" json:"proxyAdminPort,omitempty"`
 	// $hide_from_docs
 	AvailabilityZone string `protobuf:"bytes,12,opt,name=availability_zone,json=availabilityZone,proto3" json:"availabilityZone,omitempty"` // Deprecated: Do not use.
 	// AuthenticationPolicy defines how the proxy is authenticated when it connects to the control plane.
-	// Default is set to MUTUAL_TLS.
+	// Default is set to `MUTUAL_TLS`.
 	ControlPlaneAuthPolicy AuthenticationPolicy `protobuf:"varint,13,opt,name=control_plane_auth_policy,json=controlPlaneAuthPolicy,proto3,enum=istio.mesh.v1alpha1.AuthenticationPolicy" json:"controlPlaneAuthPolicy,omitempty"`
 	// File path of custom proxy configuration, currently used by proxies
 	// in front of Mixer and Pilot.
@@ -1176,14 +1176,14 @@ type ProxyConfig struct {
 	InterceptionMode ProxyConfig_InboundInterceptionMode `protobuf:"varint,18,opt,name=interception_mode,json=interceptionMode,proto3,enum=istio.mesh.v1alpha1.ProxyConfig_InboundInterceptionMode" json:"interceptionMode,omitempty"`
 	// Tracing configuration to be used by the proxy.
 	Tracing *Tracing `protobuf:"bytes,19,opt,name=tracing,proto3" json:"tracing,omitempty"`
-	// secret discovery service(SDS) configuration to be used by the proxy.
+	// Secret Discovery Service(SDS) configuration to be used by the proxy.
 	Sds *SDS `protobuf:"bytes,21,opt,name=sds,proto3" json:"sds,omitempty"`
 	// Address of the service to which access logs from Envoys should be
-	// sent. (e.g. accesslog-service:15000). See [Access Log
+	// sent. (e.g. `accesslog-service:15000`). See [Access Log
 	// Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto)
 	// for details about Envoy's gRPC Access Log Service API.
 	EnvoyAccessLogService *RemoteService `protobuf:"bytes,22,opt,name=envoy_access_log_service,json=envoyAccessLogService,proto3" json:"envoyAccessLogService,omitempty"`
-	// Address of the Envoy Metrics Service implementation (e.g. metrics-service:15000).
+	// Address of the Envoy Metrics Service implementation (e.g. `metrics-service:15000`).
 	// See [Metric Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/metrics/v2/metrics_service.proto)
 	// for details about Envoy's Metrics Service API.
 	EnvoyMetricsService *RemoteService `protobuf:"bytes,23,opt,name=envoy_metrics_service,json=envoyMetricsService,proto3" json:"envoyMetricsService,omitempty"`
@@ -1192,7 +1192,7 @@ type ProxyConfig struct {
 	// Names starting with ISTIO_META_ will be included in the generated bootstrap and sent to the XDS server.
 	ProxyMetadata map[string]string `protobuf:"bytes,24,rep,name=proxy_metadata,json=proxyMetadata,proto3" json:"proxyMetadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Port on which the agent should listen for administrative commands such as readiness probe.
-	// Default is set to port 15020.
+	// Default is set to port `15020`.
 	StatusPort int32 `protobuf:"varint,26,opt,name=status_port,json=statusPort,proto3" json:"statusPort,omitempty"`
 	// An additional list of tags to extract from the in-proxy Istio telemetry. These extra tags can be
 	// added by configuring the telemetry extension. Each additional tag needs to be present in this list.
@@ -1207,10 +1207,10 @@ type ProxyConfig struct {
 	// gateway workloads.
 	GatewayTopology *Topology `protobuf:"bytes,28,opt,name=gateway_topology,json=gatewayTopology,proto3" json:"gatewayTopology,omitempty"`
 	// The amount of time allowed for connections to complete on proxy shutdown.
-	// On receiving SIGTERM or SIGINT, istio-agent tells the active Envoy to start draining,
+	// On receiving `SIGTERM` or `SIGINT`, `istio-agent` tells the active Envoy to start draining,
 	// preventing any new connections and allowing existing connections to complete. It then
-	// sleeps for the termination_drain_duration and then kills any remaining active Envoy processes.
-	// If not set, a default of 5s will be applied.
+	// sleeps for the `termination_drain_duration` and then kills any remaining active Envoy processes.
+	// If not set, a default of `5s` will be applied.
 	TerminationDrainDuration *types.Duration `protobuf:"bytes,29,opt,name=termination_drain_duration,json=terminationDrainDuration,proto3" json:"terminationDrainDuration,omitempty"`
 	// The unique identifier for the [service mesh](https://istio.io/docs/reference/glossary/#service-mesh)
 	// All control planes running in the same service mesh should specify the same mesh ID.
@@ -1470,11 +1470,11 @@ type RemoteService struct {
 	// receiver, metrics receiver, etc.). Can be IP address or a fully
 	// qualified DNS name.
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	// Use the tls_settings to specify the tls mode to use. If the remote service
+	// Use the `tls_settings` to specify the tls mode to use. If the remote service
 	// uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
 	// mode as `ISTIO_MUTUAL`.
 	TlsSettings *v1alpha3.ClientTLSSettings `protobuf:"bytes,2,opt,name=tls_settings,json=tlsSettings,proto3" json:"tlsSettings,omitempty"`
-	// If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+	// If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.
 	TcpKeepalive         *v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,3,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcpKeepalive,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                                                  `json:"-"`
 	XXX_unrecognized     []byte                                                    `json:"-"`
