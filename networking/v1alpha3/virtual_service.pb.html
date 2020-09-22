@@ -2257,10 +2257,11 @@ spec:
 <td><code>attempts</code></td>
 <td><code>int32</code></td>
 <td>
-<p>Number of retries for a given request. The interval
-between retries will be determined automatically (25ms+). Actual
-number of retries attempted depends on the request <code>timeout</code> of the
-<a href="https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute">HTTP route</a>.</p>
+<p>Number of retries for a given request, default is 2. The interval
+between retries will be determined automatically (25ms+). When request
+<code>timeout</code> of the <a href="https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute">HTTP route</a>
+is configured, the actual number of retries attempted also depends on
+the specified request <code>timeout</code> value.</p>
 
 </td>
 <td>

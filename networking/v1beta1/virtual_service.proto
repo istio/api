@@ -1534,10 +1534,10 @@ message StringMatch {
 //
 message HTTPRetry {
   // Number of retries for a given request, default is 2. The interval
-  // between retries will be determined automatically (25ms+). Actual
-  // number of retries attempted depends on the request `timeout` of the
-  // [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute)
-  // which is disabled by default.
+  // between retries will be determined automatically (25ms+). When request 
+  // `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute) 
+  // is configured, the actual number of retries attempted also depends on
+  // the specified request `timeout` value.
   int32 attempts = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Timeout per retry attempt for a given request. format: 1h/1m/1s/1ms. MUST BE >=1ms.
