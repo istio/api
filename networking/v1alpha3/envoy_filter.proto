@@ -366,6 +366,9 @@ message EnvoyFilter {
 
     // Applies the patch to a cluster in a CDS output. Also used to add new clusters.
     CLUSTER = 8;
+
+    // Applies the patch to or adds an extension config in ECDS output.
+    EXTENSION_CONFIG = 9;
   };
 
   // PatchContext selects a class of configurations based on the

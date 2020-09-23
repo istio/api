@@ -63,7 +63,8 @@
           "ROUTE_CONFIGURATION",
           "VIRTUAL_HOST",
           "HTTP_ROUTE",
-          "CLUSTER"
+          "CLUSTER",
+          "EXTENSION_CONFIG"
         ]
       },
       "istio.networking.v1alpha3.EnvoyFilter.PatchContext": {
