@@ -1310,7 +1310,7 @@ spec:
                                 format: string
                                 type: string
                               transportProtocol:
-                                description: Applies only to SIDECAR_INBOUND context.
+                                description: Applies only to `SIDECAR_INBOUND` context.
                                 format: string
                                 type: string
                             type: object
@@ -1337,7 +1337,7 @@ spec:
                             type: string
                         type: object
                       routeConfiguration:
-                        description: Match on envoy HTTP route configuration attributes.
+                        description: Match on envoy `HTTP` route configuration attributes.
                         properties:
                           gateway:
                             format: string
@@ -1401,7 +1401,7 @@ spec:
                         - REPLACE
                         type: string
                       value:
-                        description: The JSON config of the object being patched.
+                        description: The `JSON` config of the object being patched.
                         type: object
                     type: object
                 type: object

@@ -24,7 +24,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// ApplyTo specifies where in the Envoy configuration, the given patch should be applied.
+// `ApplyTo` specifies where in the Envoy configuration, the given patch should be applied.
 type EnvoyFilter_ApplyTo int32
 
 const (
@@ -36,22 +36,22 @@ const (
 	// Applies the patch to the network filter chain, to modify an
 	// existing filter or add a new filter.
 	EnvoyFilter_NETWORK_FILTER EnvoyFilter_ApplyTo = 3
-	// Applies the patch to the HTTP filter chain in the http
+	// Applies the patch to the `HTTP` filter chain in the http
 	// connection manager, to modify an existing filter or add a new
 	// filter.
 	EnvoyFilter_HTTP_FILTER EnvoyFilter_ApplyTo = 4
 	// Applies the patch to the Route configuration (rds output)
-	// inside a HTTP connection manager. This does not apply to the
-	// virtual host. Currently, only MERGE operation is allowed on the
+	// inside a `HTTP` connection manager. This does not apply to the
+	// virtual host. Currently, only `MERGE` operation is allowed on the
 	// route configuration objects.
 	EnvoyFilter_ROUTE_CONFIGURATION EnvoyFilter_ApplyTo = 5
 	// Applies the patch to a virtual host inside a route configuration.
 	EnvoyFilter_VIRTUAL_HOST EnvoyFilter_ApplyTo = 6
 	// Applies the patch to a route object inside the matched virtual
-	// host in a route configuration. Currently, only MERGE operation
+	// host in a route configuration. Currently, only `MERGE` operation
 	// is allowed on the route objects.
 	EnvoyFilter_HTTP_ROUTE EnvoyFilter_ApplyTo = 7
-	// Applies the patch to a cluster in a CDS output. Also used to add new clusters.
+	// Applies the patch to a cluster in a `CDS` output. Also used to add new clusters.
 	EnvoyFilter_CLUSTER EnvoyFilter_ApplyTo = 8
 )
 
@@ -168,18 +168,18 @@ const (
 	EnvoyFilter_Patch_INVALID EnvoyFilter_Patch_Operation = 0
 	// Merge the provided config with the generated config using
 	// proto merge semantics. If you are specifying config in its
-	// entirity, use REPLACE instead.
+	// entirity, use `REPLACE` instead.
 	EnvoyFilter_Patch_MERGE EnvoyFilter_Patch_Operation = 1
 	// Add the provided config to an existing list (of listeners,
 	// clusters, virtual hosts, network filters, or http
-	// filters). This operation will be ignored when applyTo is set
-	// to ROUTE_CONFIGURATION, or HTTP_ROUTE.
+	// filters). This operation will be ignored when `applyTo` is set
+	// to `ROUTE_CONFIGURATION`, or `HTTP_ROUTE`.
 	EnvoyFilter_Patch_ADD EnvoyFilter_Patch_Operation = 2
 	// Remove the selected object from the list (of listeners,
 	// clusters, virtual hosts, network filters, or http
 	// filters). Does not require a value to be specified. This
-	// operation will be ignored when applyTo is set to
-	// ROUTE_CONFIGURATION, or HTTP_ROUTE.
+	// operation will be ignored when `applyTo` is set to
+	// `ROUTE_CONFIGURATION`, or `HTTP_ROUTE`.
 	EnvoyFilter_Patch_REMOVE EnvoyFilter_Patch_Operation = 3
 	// Insert operation on an array of named objects. This operation
 	// is typically useful only in the context of filters, where the
@@ -206,8 +206,8 @@ const (
 	// list based on a match condition specified in Match clause.
 	EnvoyFilter_Patch_INSERT_FIRST EnvoyFilter_Patch_Operation = 6
 	// Replace contents of a named filter with new contents.
-	// REPLACE operation is only valid for HTTP_FILTER and
-	// NETWORK_FILTER. If the named filter is not found, this operation
+	// `REPLACE` operation is only valid for `HTTP_FILTER` and
+	// `NETWORK_FILTER`. If the named filter is not found, this operation
 	// has no effect.
 	EnvoyFilter_Patch_REPLACE EnvoyFilter_Patch_Operation = 7
 )
@@ -244,9 +244,9 @@ func (EnvoyFilter_Patch_Operation) EnumDescriptor() ([]byte, []int) {
 
 // FilterClass determines the filter insertion point in the filter chain
 // relative to the filters implicitly inserted by the control plane.
-// It is used in conjuction with the ADD operation.
+// It is used in conjuction with the `ADD` operation.
 // This is the preferred insertion mechanism for adding filters over
-// the INSERT_* operations since those operations rely on potentially unstable
+// the `INSERT_*` operations since those operations rely on potentially unstable
 // filter names.
 // Filter ordering is important if your filter depends on or affects the
 // functioning of a another filter in the filter chain.
@@ -255,7 +255,7 @@ type EnvoyFilter_Patch_FilterClass int32
 
 const (
 	// Control plane decides where to insert the filter.
-	// Do not specify FilterClass if the filter is independent of others.
+	// Do not specify `FilterClass` if the filter is independent of others.
 	EnvoyFilter_Patch_UNSPECIFIED EnvoyFilter_Patch_FilterClass = 0
 	// Insert filter after Istio authentication filters.
 	EnvoyFilter_Patch_AUTHN EnvoyFilter_Patch_FilterClass = 1
@@ -312,9 +312,9 @@ type EnvoyFilter struct {
 	// Criteria used to select the specific set of pods/VMs on which
 	// this patch configuration should be applied. If omitted, the set
 	// of patches in this configuration will be applied to all workload
-	// instances in the same namespace.  If omitted, the EnvoyFilter
+	// instances in the same namespace.  If omitted, the `EnvoyFilter`
 	// patches will be applied to all workloads in the same
-	// namespace. If the EnvoyFilter is present in the config root
+	// namespace. If the `EnvoyFilter` is present in the config root
 	// namespace, it will be applied to all applicable workloads in any
 	// namespace.
 	WorkloadSelector *WorkloadSelector `protobuf:"bytes,3,opt,name=workload_selector,json=workloadSelector,proto3" json:"workload_selector,omitempty"`
@@ -377,9 +377,9 @@ type EnvoyFilter_ProxyMatch struct {
 	// A regular expression in golang regex format (RE2) that can be
 	// used to select proxies using a specific version of istio
 	// proxy. The Istio version for a given proxy is obtained from the
-	// node metadata field ISTIO_VERSION supplied by the proxy when
+	// node metadata field `ISTIO_VERSION` supplied by the proxy when
 	// connecting to Pilot. This value is embedded as an environment
-	// variable (ISTIO_META_ISTIO_VERSION) in the Istio proxy docker
+	// variable (`ISTIO_META_ISTIO_VERSION`) in the Istio proxy docker
 	// image. Custom proxy implementations should provide this metadata
 	// variable to take advantage of the Istio version check option.
 	ProxyVersion string `protobuf:"bytes,1,opt,name=proxy_version,json=proxyVersion,proto3" json:"proxy_version,omitempty"`
@@ -442,7 +442,7 @@ func (m *EnvoyFilter_ProxyMatch) GetMetadata() map[string]string {
 	return nil
 }
 
-// Conditions specified in ClusterMatch must be met for the patch
+// Conditions specified in `ClusterMatch` must be met for the patch
 // to be applied to a cluster.
 type EnvoyFilter_ClusterMatch struct {
 	// The service port for which this cluster was generated.  If
@@ -457,7 +457,7 @@ type EnvoyFilter_ClusterMatch struct {
 	// clusters for any subset of a service.
 	Subset string `protobuf:"bytes,3,opt,name=subset,proto3" json:"subset,omitempty"`
 	// The exact name of the cluster to match. To match a specific
-	// cluster by name, such as the internally generated "Passthrough"
+	// cluster by name, such as the internally generated `Passthrough`
 	// cluster, leave all fields in clusterMatch empty, except the
 	// name.
 	Name                 string   `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
@@ -538,11 +538,11 @@ type EnvoyFilter_RouteConfigurationMatch struct {
 	// Applicable only for GATEWAY context. The gateway server port
 	// name for which this route configuration was generated.
 	PortName string `protobuf:"bytes,2,opt,name=port_name,json=portName,proto3" json:"port_name,omitempty"`
-	// The Istio gateway config's namespace/name for which this route
+	// The Istio gateway config's `namespace/name` for which this route
 	// configuration was generated. Applies only if the context is
-	// GATEWAY. Should be in the namespace/name format. Use this field
-	// in conjunction with the portNumber and portName to accurately
-	// select the Envoy route configuration for a specific HTTPS
+	// `GATEWAY`. Should be in the namespace/name format. Use this field
+	// in conjunction with the `portNumber` and `portName` to accurately
+	// select the Envoy route configuration for a specific `HTTPS`
 	// server within a gateway config object.
 	Gateway string `protobuf:"bytes,3,opt,name=gateway,proto3" json:"gateway,omitempty"`
 	// Match a specific virtual host in a route configuration and
@@ -550,7 +550,7 @@ type EnvoyFilter_RouteConfigurationMatch struct {
 	Vhost *EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch `protobuf:"bytes,4,opt,name=vhost,proto3" json:"vhost,omitempty"`
 	// Route configuration name to match on. Can be used to match a
 	// specific route configuration by name, such as the internally
-	// generated "http_proxy" route configuration for all sidecars.
+	// generated `http_proxy` route configuration for all sidecars.
 	Name                 string   `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -628,8 +628,8 @@ func (m *EnvoyFilter_RouteConfigurationMatch) GetName() string {
 // Match a specific route inside a virtual host in a route configuration.
 type EnvoyFilter_RouteConfigurationMatch_RouteMatch struct {
 	// The Route objects generated by default are named as
-	// "default".  Route objects generated using a virtual service
-	// will carry the name used in the virtual service's HTTP
+	// `default`.  Route objects generated using a virtual service
+	// will carry the name used in the virtual service's `HTTP`
 	// routes.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// Match a route with specific action type.
@@ -693,7 +693,7 @@ func (m *EnvoyFilter_RouteConfigurationMatch_RouteMatch) GetAction() EnvoyFilter
 // Match a specific virtual host inside a route configuration.
 type EnvoyFilter_RouteConfigurationMatch_VirtualHostMatch struct {
 	// The VirtualHosts objects generated by Istio are named as
-	// host:port, where the host typically corresponds to the
+	// `host:port`, where the host typically corresponds to the
 	// VirtualService's host field or the hostname of a service in the
 	// registry.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
@@ -776,7 +776,7 @@ type EnvoyFilter_ListenerMatch struct {
 	// listener.
 	FilterChain *EnvoyFilter_ListenerMatch_FilterChainMatch `protobuf:"bytes,3,opt,name=filter_chain,json=filterChain,proto3" json:"filter_chain,omitempty"`
 	// Match a specific listener by its name. The listeners generated
-	// by Pilot are typically named as IP:Port.
+	// by Pilot are typically named as `IP:Port`.
 	Name                 string   `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -845,8 +845,8 @@ func (m *EnvoyFilter_ListenerMatch) GetName() string {
 }
 
 // For listeners with multiple filter chains (e.g., inbound
-// listeners on sidecars with permissive mTLS, gateway listeners
-// with multiple SNI matches), the filter chain match can be used
+// listeners on sidecars with permissive `mTLS`, gateway listeners
+// with multiple `SNI` matches), the filter chain match can be used
 // to select a specific filter chain to patch.
 type EnvoyFilter_ListenerMatch_FilterChainMatch struct {
 	// The name assigned to the filter chain.
@@ -855,11 +855,11 @@ type EnvoyFilter_ListenerMatch_FilterChainMatch struct {
 	// condition will evaluate to false if the filter chain has no
 	// sni match.
 	Sni string `protobuf:"bytes,2,opt,name=sni,proto3" json:"sni,omitempty"`
-	// Applies only to SIDECAR_INBOUND context. If non-empty, a
+	// Applies only to `SIDECAR_INBOUND` context. If non-empty, a
 	// transport protocol to consider when determining a filter
 	// chain match.  This value will be compared against the
 	// transport protocol of a new connection, when it's detected by
-	// the tls_inspector listener filter.
+	// the `tls_inspector` listener filter.
 	//
 	// Accepted values include:
 	//
@@ -870,13 +870,13 @@ type EnvoyFilter_ListenerMatch_FilterChainMatch struct {
 	// of application protocols to consider when determining a
 	// filter chain match.  This value will be compared against the
 	// application protocols of a new connection, when it's detected
-	// by one of the listener filters such as the http_inspector.
+	// by one of the listener filters such as the `http_inspector`.
 	//
-	// Accepted values include: h2,http/1.1,http/1.0
+	// Accepted values include: h2, http/1.1, http/1.0
 	ApplicationProtocols string `protobuf:"bytes,4,opt,name=application_protocols,json=applicationProtocols,proto3" json:"application_protocols,omitempty"`
 	// The name of a specific filter to apply the patch to. Set this
-	// to envoy.filters.network.http_connection_manager to add a filter or apply a
-	// patch to the HTTP connection manager.
+	// to `envoy.filters.network.http_connection_manager` to add a filter or apply a
+	// patch to the `HTTP` connection manager.
 	Filter               *EnvoyFilter_ListenerMatch_FilterMatch `protobuf:"bytes,5,opt,name=filter,proto3" json:"filter,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                               `json:"-"`
 	XXX_unrecognized     []byte                                 `json:"-"`
@@ -958,11 +958,11 @@ func (m *EnvoyFilter_ListenerMatch_FilterChainMatch) GetFilter() *EnvoyFilter_Li
 // Conditions to match a specific filter within a filter chain.
 type EnvoyFilter_ListenerMatch_FilterMatch struct {
 	// The filter name to match on.
-	// For standard Envoy filters, canonical filter names should be used.
-	// Refer to https://www.envoyproxy.io/docs/envoy/latest/version_history/v1.14.0#deprecated for canonical names.
+	// For standard Envoy filters, [canonical filter](https://www.envoyproxy.io/docs/envoy/latest/version_history/v1.14.0#deprecated)
+	// names should be used.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// The next level filter within this filter to match
-	// upon. Typically used for HTTP Connection Manager filters and
+	// upon. Typically used for `HTTP` Connection Manager filters and
 	// Thrift filters.
 	SubFilter            *EnvoyFilter_ListenerMatch_SubFilterMatch `protobuf:"bytes,2,opt,name=sub_filter,json=subFilter,proto3" json:"sub_filter,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                                  `json:"-"`
@@ -1018,8 +1018,8 @@ func (m *EnvoyFilter_ListenerMatch_FilterMatch) GetSubFilter() *EnvoyFilter_List
 }
 
 // Conditions to match a specific filter within another
-// filter. This field is typically useful to match a HTTP filter
-// inside the envoy.filters.network.http_connection_manager network filter.
+// filter. This field is typically useful to match a `HTTP` filter
+// inside the `envoy.filters.network.http_connection_manager` network filter.
 // This could also be applicable for thrift filters.
 type EnvoyFilter_ListenerMatch_SubFilterMatch struct {
 	// The filter name to match on.
@@ -1075,7 +1075,7 @@ func (m *EnvoyFilter_ListenerMatch_SubFilterMatch) GetName() string {
 type EnvoyFilter_Patch struct {
 	// Determines how the patch should be applied.
 	Operation EnvoyFilter_Patch_Operation `protobuf:"varint,1,opt,name=operation,proto3,enum=istio.networking.v1alpha3.EnvoyFilter_Patch_Operation" json:"operation,omitempty"`
-	// The JSON config of the object being patched. This will be merged using
+	// The `JSON` config of the object being patched. This will be merged using
 	// proto merge semantics with the existing proto in the path.
 	Value *types.Struct `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
 	// Determines the filter insertion order.
@@ -1270,11 +1270,11 @@ type EnvoyFilter_EnvoyConfigObjectPatch struct {
 	// Specifies where in the Envoy configuration, the patch should be
 	// applied.  The match is expected to select the appropriate
 	// object based on applyTo.  For example, an applyTo with
-	// HTTP_FILTER is expected to have a match condition on the
+	// `HTTP_FILTER` is expected to have a match condition on the
 	// listeners, with a network filter selection on
-	// envoy.filters.network.http_connection_manager and a sub filter selection on the
-	// HTTP filter relative to which the insertion should be
-	// performed. Similarly, an applyTo on CLUSTER should have a match
+	// `envoy.filters.network.http_connection_manager` and a sub filter selection on the
+	// `HTTP` filter relative to which the insertion should be
+	// performed. Similarly, an applyTo on `CLUSTER` should have a match
 	// (if provided) on the cluster and not on a listener.
 	ApplyTo EnvoyFilter_ApplyTo `protobuf:"varint,1,opt,name=apply_to,json=applyTo,proto3,enum=istio.networking.v1alpha3.EnvoyFilter_ApplyTo" json:"apply_to,omitempty"`
 	// Match on listener/route configuration/cluster.
