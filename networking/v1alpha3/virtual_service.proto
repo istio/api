@@ -1470,6 +1470,16 @@ message HTTPRewrite {
 
   // rewrite the Authority/Host header with this value.
   string authority = 2;
+
+  // uri_regex can be used for rewriting portions of path that match the
+  // pattern during forwarding the request
+  // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+  UriRegexRewrite uri_regex = 3;
+}
+
+message UriRegexRewrite {
+  string pattern = 1;
+  string substitution = 2;
 }
 
 // Describes how to match a given string in HTTP headers. Match is
