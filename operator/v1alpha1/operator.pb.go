@@ -209,15 +209,15 @@ func (m *IstioOperatorSpec) GetAddonComponents() map[string]*ExternalComponentSp
 // Observed state of IstioOperator
 type InstallStatus struct {
 	// Overall status of all components controlled by the operator.
-	// ```
-	// - If all components have status NONE, overall status is NONE.
-	// - If all components are HEALTHY, overall status is HEALTHY.
-	// - If one or more components are RECONCILING and others are HEALTHY, overall status is RECONCILING.
-	// - If one or more components are UPDATING and others are HEALTHY, overall status is UPDATING.
-	// - If components are a mix of RECONCILING, UPDATING and HEALTHY, overall status is UPDATING.
-	// - If any component is in ERROR state, overall status is ERROR.
-	// - If further action is needed for reconciliation to proceed, overall status is ACTION_REQUIRED.
-	// ```
+	//
+	// * If all components have status `NONE`, overall status is `NONE`.
+	// * If all components are `HEALTHY`, overall status is `HEALTHY`.
+	// * If one or more components are `RECONCILING` and others are `HEALTHY`, overall status is `RECONCILING`.
+	// * If one or more components are `UPDATING` and others are `HEALTHY`, overall status is `UPDATING`.
+	// * If components are a mix of `RECONCILING`, `UPDATING` and `HEALTHY`, overall status is `UPDATING`.
+	// * If any component is in `ERROR` state, overall status is `ERROR`.
+	// * If further action is needed for reconciliation to proceed, overall status is `ACTION_REQUIRED`.
+	//
 	Status InstallStatus_Status `protobuf:"varint,1,opt,name=status,proto3,enum=istio.operator.v1alpha1.InstallStatus_Status" json:"status,omitempty"`
 	// Optional message providing additional information about the existing overall status.
 	Message string `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`

@@ -187,14 +187,15 @@ No
 <td>
 <p>Overall status of all components controlled by the operator.</p>
 
-<pre><code>- If all components have status NONE, overall status is NONE.
-- If all components are HEALTHY, overall status is HEALTHY.
-- If one or more components are RECONCILING and others are HEALTHY, overall status is RECONCILING.
-- If one or more components are UPDATING and others are HEALTHY, overall status is UPDATING.
-- If components are a mix of RECONCILING, UPDATING and HEALTHY, overall status is UPDATING.
-- If any component is in ERROR state, overall status is ERROR.
-- If further action is needed for reconciliation to proceed, overall status is ACTION_REQUIRED.
-</code></pre>
+<ul>
+<li>If all components have status <code>NONE</code>, overall status is <code>NONE</code>.</li>
+<li>If all components are <code>HEALTHY</code>, overall status is <code>HEALTHY</code>.</li>
+<li>If one or more components are <code>RECONCILING</code> and others are <code>HEALTHY</code>, overall status is <code>RECONCILING</code>.</li>
+<li>If one or more components are <code>UPDATING</code> and others are <code>HEALTHY</code>, overall status is <code>UPDATING</code>.</li>
+<li>If components are a mix of <code>RECONCILING</code>, <code>UPDATING</code> and <code>HEALTHY</code>, overall status is <code>UPDATING</code>.</li>
+<li>If any component is in <code>ERROR</code> state, overall status is <code>ERROR</code>.</li>
+<li>If further action is needed for reconciliation to proceed, overall status is <code>ACTION_REQUIRED</code>.</li>
+</ul>
 
 </td>
 <td>
