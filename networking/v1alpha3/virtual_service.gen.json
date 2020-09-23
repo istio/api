@@ -327,6 +327,9 @@
             "description": "rewrite the Authority/Host header with this value.",
             "type": "string",
             "format": "string"
+          },
+          "uriRegex": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.UriRegexRewrite"
           }
         }
       },
@@ -662,6 +665,19 @@
             }
           }
         ]
+      },
+      "istio.networking.v1alpha3.UriRegexRewrite": {
+        "type": "object",
+        "properties": {
+          "pattern": {
+            "type": "string",
+            "format": "string"
+          },
+          "substitution": {
+            "type": "string",
+            "format": "string"
+          }
+        }
       },
       "istio.networking.v1alpha3.HTTPFaultInjection.Delay": {
         "description": "Delay specification is used to inject latency into the request forwarding path. The following example will introduce a 5 second delay in 1 out of every 1000 requests to the \"v1\" version of the \"reviews\" service from all pods with label env: prod",

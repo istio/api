@@ -2497,6 +2497,15 @@ spec:
                       uri:
                         format: string
                         type: string
+                      uriRegex:
+                        properties:
+                          pattern:
+                            format: string
+                            type: string
+                          substitution:
+                            format: string
+                            type: string
+                        type: object
                     type: object
                   route:
                     description: A HTTP rule can either redirect or forward (default)

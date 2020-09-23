@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.VirtualService
 aliases: [/docs/reference/config/networking/v1alpha3/virtual-service]
-number_of_entries: 24
+number_of_entries: 25
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -2132,6 +2132,52 @@ No
 <td>
 <p>rewrite the Authority/Host header with this value.</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPRewrite-uri_regex">
+<td><code>uriRegex</code></td>
+<td><code><a href="#UriRegexRewrite">UriRegexRewrite</a></code></td>
+<td>
+<p>uri_regex can be used for rewriting portions of path that match the
+pattern during forwarding the request
+RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="UriRegexRewrite">UriRegexRewrite</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="UriRegexRewrite-pattern">
+<td><code>pattern</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="UriRegexRewrite-substitution">
+<td><code>substitution</code></td>
+<td><code>string</code></td>
+<td>
 </td>
 <td>
 No
