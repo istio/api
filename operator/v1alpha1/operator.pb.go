@@ -77,16 +77,16 @@ func (InstallStatus_Status) EnumDescriptor() ([]byte, []int) {
 // component values.
 type IstioOperatorSpec struct {
 	// Path or name for the profile e.g.
-	// ```
-	// - minimal (looks in profiles dir for a file called minimal.yaml)
-	// - /tmp/istio/install/values/custom/custom-install.yaml (local file path)
-	// ```
+	//
+	// * minimal (looks in profiles dir for a file called minimal.yaml)
+	// * /tmp/istio/install/values/custom/custom-install.yaml (local file path)
+	//
 	// default profile is used if this field is unset.
 	Profile string `protobuf:"bytes,10,opt,name=profile,proto3" json:"profile,omitempty"`
 	// Path for the install package. e.g.
-	// ```
-	// - /tmp/istio-installer/nightly (local file path)
-	// ```
+	//
+	// * /tmp/istio-installer/nightly (local file path)
+	//
 	InstallPackagePath string `protobuf:"bytes,11,opt,name=install_package_path,json=installPackagePath,proto3" json:"installPackagePath,omitempty"`
 	// Root for docker image paths e.g. `docker.io/istio`
 	Hub string `protobuf:"bytes,12,opt,name=hub,proto3" json:"hub,omitempty"`

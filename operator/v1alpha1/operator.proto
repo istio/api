@@ -141,16 +141,16 @@ EXAMPLES
 // component values.
 message IstioOperatorSpec {
     // Path or name for the profile e.g.
-    // ```
-    // - minimal (looks in profiles dir for a file called minimal.yaml)
-    // - /tmp/istio/install/values/custom/custom-install.yaml (local file path)
-    // ```
+    //
+    // * minimal (looks in profiles dir for a file called minimal.yaml)
+    // * /tmp/istio/install/values/custom/custom-install.yaml (local file path)
+    //
     // default profile is used if this field is unset.
     string profile = 10;
     // Path for the install package. e.g.
-    // ```
-    // - /tmp/istio-installer/nightly (local file path)
-    // ```
+    //
+    // * /tmp/istio-installer/nightly (local file path)
+    //
     string install_package_path = 11;
     // Root for docker image paths e.g. `docker.io/istio`
     string hub = 12;
