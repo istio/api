@@ -346,9 +346,6 @@ type DestinationRule struct {
 	// The value "." is reserved and defines an export to the same namespace that
 	// the destination rule is declared in. Similarly, the value "*" is reserved and
 	// defines an export to all namespaces.
-	//
-	// NOTE: in the current release, the `exportTo` value is restricted to
-	// "." or "*" (i.e., the current namespace or all namespaces).
 	ExportTo             []string `protobuf:"bytes,4,rep,name=export_to,json=exportTo,proto3" json:"export_to,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
