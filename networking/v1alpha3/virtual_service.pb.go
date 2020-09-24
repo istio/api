@@ -3132,6 +3132,38 @@ func (*HTTPFaultInjection_Delay) XXX_OneofWrappers() []interface{} {
 // return to the caller. The optional _percentage_ field can be used to only
 // abort a certain percentage of requests. If not specified, all requests are
 // aborted.
+//
+// Abort specification is used to prematurely abort a request with a
+// pre-specified error code. The following example will return an gRPC ABORTED
+// error code for 1 out of every 1000 requests to the "ratings" service "v1".
+//
+// {{<tabset category-name="example">}}
+// {{<tab name="v1alpha3" category-value="v1alpha3">}}
+// ```yaml
+// apiVersion: networking.istio.io/v1alpha3
+// kind: VirtualService
+// metadata:
+//   name: ratings-route
+// spec:
+//   hosts:
+//   - ratings.prod.svc.cluster.local
+//   http:
+//   - route:
+//     - destination:
+//         host: ratings.prod.svc.cluster.local
+//         subset: v1
+//     fault:
+//       abort:
+//         percentage:
+//           value: 0.1
+//         grpcStatus: "ABORTED"
+// ```
+// {{</tab>}}
+//
+// The _grpcStatus_ field is used to indicate the gRPC status code to
+// return to the caller. The optional _percentage_ field can be used to only
+// abort a certain percentage of requests. If not specified, all requests are
+// aborted.
 type HTTPFaultInjection_Abort struct {
 	// Types that are valid to be assigned to ErrorType:
 	//	*HTTPFaultInjection_Abort_HttpStatus

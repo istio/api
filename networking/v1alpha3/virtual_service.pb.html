@@ -2793,6 +2793,39 @@ return to the caller. The optional <em>percentage</em> field can be used to only
 abort a certain percentage of requests. If not specified, all requests are
 aborted.</p>
 
+<p>Abort specification is used to prematurely abort a request with a
+pre-specified error code. The following example will return an gRPC ABORTED
+error code for 1 out of every 1000 requests to the &ldquo;ratings&rdquo; service &ldquo;v1&rdquo;.</p>
+
+<p>{{<tabset category-name="example">}}
+{{<tab name="v1alpha3" category-value="v1alpha3">}}</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings-route
+spec:
+  hosts:
+  - ratings.prod.svc.cluster.local
+  http:
+  - route:
+    - destination:
+        host: ratings.prod.svc.cluster.local
+        subset: v1
+    fault:
+      abort:
+        percentage:
+          value: 0.1
+        grpcStatus: &quot;ABORTED&quot;
+</code></pre>
+
+<p>{{</tab>}}</p>
+
+<p>The <em>grpcStatus</em> field is used to indicate the gRPC status code to
+return to the caller. The optional <em>percentage</em> field can be used to only
+abort a certain percentage of requests. If not specified, all requests are
+aborted.</p>
+
 <table class="message-fields">
 <thead>
 <tr>
@@ -2807,11 +2840,24 @@ aborted.</p>
 <td><code>httpStatus</code></td>
 <td><code>int32 (oneof)</code></td>
 <td>
-<p>HTTP status code to use to abort the Http request.</p>
+<p>HTTP status code to use to abort the Http request.
+Precisely one of http<em>status or grpc</em>status must be set.</p>
 
 </td>
 <td>
 Yes
+</td>
+</tr>
+<tr id="HTTPFaultInjection-Abort-grpc_status" class="oneof">
+<td><code>grpcStatus</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>gRPC status code to use to abort the gRPC request.
+Precisely one of http<em>status or grpc</em>status must be set.</p>
+
+</td>
+<td>
+No
 </td>
 </tr>
 <tr id="HTTPFaultInjection-Abort-percentage">

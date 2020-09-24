@@ -746,7 +746,7 @@
                   ],
                   "properties": {
                     "httpStatus": {
-                      "description": "HTTP status code to use to abort the Http request.",
+                      "description": "HTTP status code to use to abort the Http request. Precisely one of http_status or grpc_status must be set.",
                       "type": "integer",
                       "format": "int32"
                     }
@@ -758,6 +758,7 @@
                   ],
                   "properties": {
                     "grpcStatus": {
+                      "description": "gRPC status code to use to abort the gRPC request. Precisely one of http_status or grpc_status must be set.",
                       "type": "string",
                       "format": "string"
                     }
@@ -783,7 +784,7 @@
             ],
             "properties": {
               "httpStatus": {
-                "description": "HTTP status code to use to abort the Http request.",
+                "description": "HTTP status code to use to abort the Http request. Precisely one of http_status or grpc_status must be set.",
                 "type": "integer",
                 "format": "int32"
               }
@@ -795,6 +796,7 @@
             ],
             "properties": {
               "grpcStatus": {
+                "description": "gRPC status code to use to abort the gRPC request. Precisely one of http_status or grpc_status must be set.",
                 "type": "string",
                 "format": "string"
               }
