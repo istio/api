@@ -2091,7 +2091,6 @@ spec:
                             httpStatus:
                               description: HTTP status code to use to abort the Http
                                 request.
-                              format: int32
                               type: integer
                             percentage:
                               description: Percentage of requests to be aborted with
@@ -2283,94 +2282,6 @@ spec:
                             description: Specifies the ports on the host that is being
                               addressed.
                             type: integer
-                        type: object
-                      subset:
-                        description: The name of a subset within the service.
-                        format: string
-                        type: string
-                    type: object
-                  mirror_percent:
-                    description: Percentage of the traffic to be mirrored by the `mirror`
-                      field.
-                    nullable: true
-                    type: integer
-                  mirrorPercent:
-                    description: Percentage of the traffic to be mirrored by the `mirror`
-                      field.
-                    nullable: true
-                    type: integer
-                  mirrorPercentage:
-                    description: Percentage of the traffic to be mirrored by the `mirror`
-                      field.
-                    properties:
-                      value:
-                        format: double
-                        type: number
-                    type: object
-                  name:
-                    description: The name assigned to the route for debugging purposes.
-                    format: string
-                    type: string
-                  redirect:
-                    description: A HTTP rule can either redirect or forward (default)
-                      traffic.
-                    properties:
-                      authority:
-                        format: string
-                        type: string
-                      redirectCode:
-                        type: integer
-                      uri:
-                        format: string
-                        type: string
-                    type: object
-                  retries:
-                    description: Retry policy for HTTP requests.
-                    properties:
-                      attempts:
-                        description: Number of retries to be allowed for a given request.
-                        format: int32
-                        type: integer
-                      perTryTimeout:
-                        description: Timeout per retry attempt for a given request.
-                        type: string
-                      retryOn:
-                        description: Specifies the conditions under which retry takes
-                          place.
-                        format: string
-                        type: string
-                      retryRemoteLocalities:
-                        description: Flag to specify whether the retries should retry
-                          to other localities.
-                        nullable: true
-                        type: boolean
-                    type: object
-                  rewrite:
-                    description: Rewrite HTTP URIs and Authority headers.
-                    properties:
-                      authority:
-                        description: rewrite the Authority/Host header with this value.
-                        format: string
-                        type: string
-                      uri:
-                        format: string
-                        type: string
-                    type: object
-                  route:
-                    description: A HTTP rule can either redirect or forward (default)
-                      traffic.
-                    items:
-                      properties:
-                        destination:
-                          properties:
-                            host:
-                              description: The name of a service from the service
-                                registry.
-                              format: string
-                              type: string
-                            port:
-                              description: Specifies the port on the host that is
-                                being addressed.
                           queryParams:
                             additionalProperties:
                               oneOf:
@@ -2559,7 +2470,8 @@ spec:
                       description: Retry policy for HTTP requests.
                       properties:
                         attempts:
-                          description: Number of retries for a given request.
+                          description: Number of retries to be allowed for a given
+                            request.
                           format: int32
                           type: integer
                         perTryTimeout:
@@ -3349,7 +3261,8 @@ spec:
                       description: Retry policy for HTTP requests.
                       properties:
                         attempts:
-                          description: Number of retries for a given request.
+                          description: Number of retries to be allowed for a given
+                            request.
                           format: int32
                           type: integer
                         perTryTimeout:

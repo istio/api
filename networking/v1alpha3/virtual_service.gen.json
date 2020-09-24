@@ -747,8 +747,7 @@
                   "properties": {
                     "httpStatus": {
                       "description": "HTTP status code to use to abort the Http request. Precisely one of http_status or grpc_status must be set.",
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   }
                 },
@@ -785,8 +784,7 @@
             "properties": {
               "httpStatus": {
                 "description": "HTTP status code to use to abort the Http request. Precisely one of http_status or grpc_status must be set.",
-                "type": "integer",
-                "format": "int32"
+                "type": "integer"
               }
             }
           },

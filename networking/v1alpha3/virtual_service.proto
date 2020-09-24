@@ -1848,7 +1848,7 @@ message HTTPFaultInjection {
     oneof error_type {
       // HTTP status code to use to abort the Http request.
       // Precisely one of http_status or grpc_status must be set.
-      int32 http_status = 2 [(google.api.field_behavior) = REQUIRED];
+      uint32 http_status = 2;
 
       // gRPC status code to use to abort the gRPC request.
       // Precisely one of http_status or grpc_status must be set.
