@@ -316,13 +316,12 @@ import "networking/v1alpha3/sidecar.proto";
 //   configPatches:
 //   # The first patch defines a named Wasm extension and provides a URL to fetch Wasm binary from,
 //   # and the binary configuration. It should come before the next patch that applies it.
+//   # This resource is visible to all proxies in the namespace "myns".
 //   - applyTo: EXTENSION_CONFIG
-//     match:
-//       context: SIDECAR_INBOUND
 //     patch:
-//       operation: ADD
+//       operation: ADD # REPLACE is also supported, and would override a cluster level resource with the same name.
 //       value:
-//         name: my-wasm-extension
+//         name: myns/my-wasm-extension
 //         typed_config:
 //           "@type": type.googleapis.com/envoy.extensions.filters.http.wasm.v3.Wasm
 //           config:
@@ -344,7 +343,7 @@ import "networking/v1alpha3/sidecar.proto";
 //       operation: ADD
 //       filterClass: AUTHZ # This filter will run *after* the Istio authz filter.
 //       value:
-//         name: my-wasm-extension # This must match the name above
+//         name: myns/my-wasm-extension # This must match the name above
 //         config_discovery:
 //           config_source:
 //             api_config_source:
@@ -419,7 +418,8 @@ message EnvoyFilter {
     // Applies the patch to a cluster in a CDS output. Also used to add new clusters.
     CLUSTER = 8;
 
-    // Applies the patch to or adds an extension config in ECDS output.
+    // Applies the patch to or adds an extension config in ECDS output. Note that ECDS
+    // is only supported by HTTP filters.
     EXTENSION_CONFIG = 9;
   };
 

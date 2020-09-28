@@ -53,7 +53,8 @@ const (
 	EnvoyFilter_HTTP_ROUTE EnvoyFilter_ApplyTo = 7
 	// Applies the patch to a cluster in a CDS output. Also used to add new clusters.
 	EnvoyFilter_CLUSTER EnvoyFilter_ApplyTo = 8
-	// Applies the patch to or adds an extension config in ECDS output.
+	// Applies the patch to or adds an extension config in ECDS output. Note that ECDS
+	// is only supported by HTTP filters.
 	EnvoyFilter_EXTENSION_CONFIG EnvoyFilter_ApplyTo = 9
 )
 
