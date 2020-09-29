@@ -41,7 +41,7 @@ const (
 	InstallStatus_ERROR InstallStatus_Status = 4
 	// Overall status only and would not be set as a component status.
 	// Action is needed from the user for reconciliation to proceed
-	// e.g. There are proxies still pointing to the control plane revision when try to remove an IstioOperator CR.
+	// e.g. There are proxies still pointing to the control plane revision when try to remove an `IstioOperator` CR.
 	InstallStatus_ACTION_REQUIRED InstallStatus_Status = 5
 )
 
@@ -77,23 +77,27 @@ func (InstallStatus_Status) EnumDescriptor() ([]byte, []int) {
 // component values.
 type IstioOperatorSpec struct {
 	// Path or name for the profile e.g.
-	//     - minimal (looks in profiles dir for a file called minimal.yaml)
-	//     - /tmp/istio/install/values/custom/custom-install.yaml (local file path)
+	//
+	// * minimal (looks in profiles dir for a file called minimal.yaml)
+	// * /tmp/istio/install/values/custom/custom-install.yaml (local file path)
+	//
 	// default profile is used if this field is unset.
 	Profile string `protobuf:"bytes,10,opt,name=profile,proto3" json:"profile,omitempty"`
 	// Path for the install package. e.g.
-	//     - /tmp/istio-installer/nightly (local file path)
+	//
+	// * /tmp/istio-installer/nightly (local file path)
+	//
 	InstallPackagePath string `protobuf:"bytes,11,opt,name=install_package_path,json=installPackagePath,proto3" json:"installPackagePath,omitempty"`
-	// Root for docker image paths e.g. docker.io/istio
+	// Root for docker image paths e.g. `docker.io/istio`
 	Hub string `protobuf:"bytes,12,opt,name=hub,proto3" json:"hub,omitempty"`
-	// Version tag for docker images e.g. 1.0.6
+	// Version tag for docker images e.g. `1.7.2`
 	Tag interface{} `protobuf:"bytes,13,opt,name=tag,proto3" json:"tag,omitempty"`
 	// $hide_from_docs
 	// Resource suffix is appended to all resources installed by each component.
 	// Never implemented; replaced by revision.
 	ResourceSuffix string `protobuf:"bytes,14,opt,name=resource_suffix,json=resourceSuffix,proto3" json:"resourceSuffix,omitempty"` // Deprecated: Do not use.
 	// Namespace to install control plane resources into. If unset, Istio will be installed into the same namespace
-	// as the IstioOperator CR.
+	// as the `IstioOperator` CR.
 	Namespace string `protobuf:"bytes,15,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	// Identify the revision this installation is associated with.
 	// This option is currently experimental.
@@ -105,12 +109,12 @@ type IstioOperatorSpec struct {
 	Components *IstioComponentSetSpec `protobuf:"bytes,50,opt,name=components,proto3" json:"components,omitempty"`
 	// Extra addon components which are not explicitly specified above.
 	AddonComponents map[string]*ExternalComponentSpec `protobuf:"bytes,51,rep,name=addon_components,json=addonComponents,proto3" json:"addonComponents,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// Overrides for default values.yaml. This is a validated pass-through to Helm templates.
-	// See the Helm installation options for schema details: https://istio.io/v1.5/docs/reference/config/installation-options/.
-	// Anything that is available in IstioOperatorSpec should be set above rather than using the passthrough. This
-	// includes Kubernetes resource settings for components in KubernetesResourcesSpec.
+	// Overrides for default `values.yaml`. This is a validated pass-through to Helm templates.
+	// See the [Helm installation options](https://istio.io/v1.5/docs/reference/config/installation-options/) for schema details.
+	// Anything that is available in `IstioOperatorSpec` should be set above rather than using the passthrough. This
+	// includes Kubernetes resource settings for components in `KubernetesResourcesSpec`.
 	Values map[string]interface{} `protobuf:"bytes,100,opt,name=values,proto3" json:"values,omitempty"`
-	// Unvalidated overrides for default values.yaml. Used for custom templates where new parameters are added.
+	// Unvalidated overrides for default `values.yaml`. Used for custom templates where new parameters are added.
 	UnvalidatedValues    map[string]interface{} `protobuf:"bytes,101,opt,name=unvalidated_values,json=unvalidatedValues,proto3" json:"unvalidatedValues,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
 	XXX_unrecognized     []byte                  `json:"-"`
@@ -205,13 +209,15 @@ func (m *IstioOperatorSpec) GetAddonComponents() map[string]*ExternalComponentSp
 // Observed state of IstioOperator
 type InstallStatus struct {
 	// Overall status of all components controlled by the operator.
-	// - If all components have status NONE, overall status is NONE.
-	// - If all components are HEALTHY, overall status is HEALTHY.
-	// - If one or more components are RECONCILING and others are HEALTHY, overall status is RECONCILING.
-	// - If one or more components are UPDATING and others are HEALTHY, overall status is UPDATING.
-	// - If components are a mix of RECONCILING, UPDATING and HEALTHY, overall status is UPDATING.
-	// - If any component is in ERROR state, overall status is ERROR.
-	// - If further action is needed for reconciliation to proceed, overall status is ACTION_REQUIRED.
+	//
+	// * If all components have status `NONE`, overall status is `NONE`.
+	// * If all components are `HEALTHY`, overall status is `HEALTHY`.
+	// * If one or more components are `RECONCILING` and others are `HEALTHY`, overall status is `RECONCILING`.
+	// * If one or more components are `UPDATING` and others are `HEALTHY`, overall status is `UPDATING`.
+	// * If components are a mix of `RECONCILING`, `UPDATING` and `HEALTHY`, overall status is `UPDATING`.
+	// * If any component is in `ERROR` state, overall status is `ERROR`.
+	// * If further action is needed for reconciliation to proceed, overall status is `ACTION_REQUIRED`.
+	//
 	Status InstallStatus_Status `protobuf:"varint,1,opt,name=status,proto3,enum=istio.operator.v1alpha1.InstallStatus_Status" json:"status,omitempty"`
 	// Optional message providing additional information about the existing overall status.
 	Message string `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
