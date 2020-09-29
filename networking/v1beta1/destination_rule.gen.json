@@ -175,6 +175,30 @@
             "type": "integer",
             "nullable": true
           },
+          "enforcingConsecutive5xx": {
+            "description": "The % chance that a host will be actually ejected when an outlier status is detected through consecutive 5xx. This setting can be used to disable ejection or to ramp it up slowly. Defaults to 100. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          },
+          "enforcingConsecutiveGatewayFailure": {
+            "description": "The % chance that a host will be actually ejected when an outlier status is detected through consecutive gateway failures. This setting can be used to disable ejection or to ramp it up slowly. Defaults to 0. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          },
+          "splitExternalLocalOriginErrors": {
+            "description": "Determines whether to distinguish local origin failures from external errors. If set to true the following configuration parameters are taken into account: consecutive_local_origin_failure, enforcing_consecutive_local_origin_failure and enforcing_local_origin_success_rate. Defaults to false. $hide_from_docs",
+            "type": "boolean"
+          },
+          "consecutiveLocalOriginFailure": {
+            "description": "Number of consecutive locally originated failures before ejection occurs. Defaults to 5. Parameter takes effect only when split_external_local_origin_errors is set to true. $hide_from_docs",
+            "type": "integer",
+            "nullable": true
+          },
+          "enforcingConsecutiveLocalOriginFailure": {
+            "description": "The % chance that a host will be actually ejected when an outlier status is detected through consecutive locally originated failures. This setting can be used to disable ejection or to ramp it up slowly. Defaults to 100. Parameter takes effect only when split_external_local_origin_errors is set to true. $hide_from_doc",
+            "type": "integer",
+            "nullable": true
+          },
           "baseEjectionTime": {
             "description": "Minimum ejection duration. A host will remain ejected for a period equal to the product of minimum ejection duration and the number of times the host has been ejected. This technique allows the system to automatically increase the ejection period for unhealthy upstream servers. format: 1h/1m/1s/1ms. MUST BE \u003e=1ms. Default is 30s.",
             "type": "string"

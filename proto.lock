@@ -13049,13 +13049,7 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings",
-                        "aggregated": [
-                          {
-                            "name": "get",
-                            "value": "/v1/services/{service_name}/config"
-                          }
-                        ]
+                        "name": "additional_bindings"
                       }
                     ]
                   }
@@ -36197,6 +36191,11 @@
                 "id": 54,
                 "name": "verify_certificate_at_client",
                 "type": "google.protobuf.BoolValue"
+              },
+              {
+                "id": 55,
+                "name": "ca",
+                "type": "CA"
               }
             ],
             "reserved_ids": [
@@ -36288,6 +36287,31 @@
                         "type": "bool"
                       }
                     ]
+                  }
+                ]
+              },
+              {
+                "name": "CA",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "address",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "tls_settings",
+                    "type": "istio.networking.v1alpha3.ClientTLSSettings"
+                  },
+                  {
+                    "id": 3,
+                    "name": "request_timeout",
+                    "type": "google.protobuf.Duration"
+                  },
+                  {
+                    "id": 4,
+                    "name": "istiod_side",
+                    "type": "bool"
                   }
                 ]
               }
@@ -36687,26 +36711,6 @@
                     "name": "context",
                     "type": "TraceContext",
                     "is_repeated": true
-                  },
-                  {
-                    "id": 3,
-                    "name": "debug",
-                    "type": "bool"
-                  },
-                  {
-                    "id": 4,
-                    "name": "max_number_of_attributes",
-                    "type": "google.protobuf.Int64Value"
-                  },
-                  {
-                    "id": 5,
-                    "name": "max_number_of_annotations",
-                    "type": "google.protobuf.Int64Value"
-                  },
-                  {
-                    "id": 6,
-                    "name": "max_number_of_message_events",
-                    "type": "google.protobuf.Int64Value"
                   }
                 ]
               },
@@ -36964,6 +36968,11 @@
                 "id": 30,
                 "name": "mesh_id",
                 "type": "string"
+              },
+              {
+                "id": 31,
+                "name": "readiness_probe",
+                "type": "istio.networking.v1alpha3.ReadinessProbe"
               }
             ],
             "maps": [
@@ -37013,6 +37022,9 @@
           },
           {
             "path": "networking/v1alpha3/destination_rule.proto"
+          },
+          {
+            "path": "networking/v1alpha3/workload_group.proto"
           }
         ],
         "package": {
@@ -37469,6 +37481,11 @@
                     "id": 6,
                     "name": "h2_upgrade_policy",
                     "type": "H2UpgradePolicy"
+                  },
+                  {
+                    "id": 7,
+                    "name": "use_client_protocol",
+                    "type": "bool"
                   }
                 ]
               }
@@ -37768,6 +37785,30 @@
               {
                 "name": "INSERT_FIRST",
                 "integer": 6
+              },
+              {
+                "name": "REPLACE",
+                "integer": 7
+              }
+            ]
+          },
+          {
+            "name": "Patch.FilterClass",
+            "enum_fields": [
+              {
+                "name": "UNSPECIFIED"
+              },
+              {
+                "name": "AUTHN",
+                "integer": 1
+              },
+              {
+                "name": "AUTHZ",
+                "integer": 2
+              },
+              {
+                "name": "STATS",
+                "integer": 3
               }
             ]
           }
@@ -38004,6 +38045,11 @@
                     "id": 2,
                     "name": "value",
                     "type": "google.protobuf.Struct"
+                  },
+                  {
+                    "id": 3,
+                    "name": "filter_class",
+                    "type": "FilterClass"
                   }
                 ]
               },
@@ -39556,6 +39602,196 @@
       }
     },
     {
+      "protopath": "networking:/:v1alpha3:/:workload_group.proto",
+      "def": {
+        "messages": [
+          {
+            "name": "WorkloadGroup",
+            "fields": [
+              {
+                "id": 1,
+                "name": "metadata",
+                "type": "ObjectMeta"
+              },
+              {
+                "id": 2,
+                "name": "template",
+                "type": "WorkloadEntry",
+                "options": [
+                  {
+                    "name": "(google.api.field_behavior)",
+                    "value": "REQUIRED"
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "probe",
+                "type": "ReadinessProbe"
+              }
+            ],
+            "messages": [
+              {
+                "name": "ObjectMeta",
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 1,
+                      "name": "labels",
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 2,
+                      "name": "annotations",
+                      "type": "string"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "ReadinessProbe",
+            "fields": [
+              {
+                "id": 2,
+                "name": "initial_delay_seconds",
+                "type": "int32"
+              },
+              {
+                "id": 3,
+                "name": "timeout_seconds",
+                "type": "int32"
+              },
+              {
+                "id": 4,
+                "name": "period_seconds",
+                "type": "int32"
+              },
+              {
+                "id": 5,
+                "name": "success_threshold",
+                "type": "int32"
+              },
+              {
+                "id": 6,
+                "name": "failure_threshold",
+                "type": "int32"
+              },
+              {
+                "id": 7,
+                "name": "http_get",
+                "type": "HTTPHealthCheckConfig"
+              },
+              {
+                "id": 8,
+                "name": "tcp_socket",
+                "type": "TCPHealthCheckConfig"
+              },
+              {
+                "id": 9,
+                "name": "exec",
+                "type": "ExecHealthCheckConfig"
+              }
+            ]
+          },
+          {
+            "name": "HTTPHealthCheckConfig",
+            "fields": [
+              {
+                "id": 1,
+                "name": "path",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "port",
+                "type": "uint32"
+              },
+              {
+                "id": 3,
+                "name": "host",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "scheme",
+                "type": "string"
+              },
+              {
+                "id": 5,
+                "name": "http_headers",
+                "type": "HTTPHeader",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "HTTPHeader",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "value",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "TCPHealthCheckConfig",
+            "fields": [
+              {
+                "id": 1,
+                "name": "host",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "port",
+                "type": "uint32"
+              }
+            ]
+          },
+          {
+            "name": "ExecHealthCheckConfig",
+            "fields": [
+              {
+                "id": 1,
+                "name": "command",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          }
+        ],
+        "imports": [
+          {
+            "path": "google/api/field_behavior.proto"
+          },
+          {
+            "path": "networking/v1alpha3/workload_entry.proto"
+          }
+        ],
+        "package": {
+          "name": "istio.networking.v1alpha3"
+        },
+        "options": [
+          {
+            "name": "go_package",
+            "value": "istio.io/api/networking/v1alpha3"
+          }
+        ]
+      }
+    },
+    {
       "protopath": "networking:/:v1beta1:/:destination_rule.proto",
       "def": {
         "enums": [
@@ -39919,6 +40155,11 @@
                     "id": 6,
                     "name": "h2_upgrade_policy",
                     "type": "H2UpgradePolicy"
+                  },
+                  {
+                    "id": 7,
+                    "name": "use_client_protocol",
+                    "type": "bool"
                   }
                 ]
               }
@@ -39946,6 +40187,31 @@
               {
                 "id": 7,
                 "name": "consecutive_5xx_errors",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 8,
+                "name": "enforcing_consecutive_5xx",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 9,
+                "name": "enforcing_consecutive_gateway_failure",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 10,
+                "name": "split_external_local_origin_errors",
+                "type": "bool"
+              },
+              {
+                "id": 11,
+                "name": "consecutive_local_origin_failure",
+                "type": "google.protobuf.UInt32Value"
+              },
+              {
+                "id": 12,
+                "name": "enforcing_consecutive_local_origin_failure",
                 "type": "google.protobuf.UInt32Value"
               },
               {
@@ -41749,16 +42015,6 @@
                 "type": "ComponentSpec"
               },
               {
-                "id": 33,
-                "name": "policy",
-                "type": "ComponentSpec"
-              },
-              {
-                "id": 34,
-                "name": "telemetry",
-                "type": "ComponentSpec"
-              },
-              {
                 "id": 38,
                 "name": "cni",
                 "type": "ComponentSpec"
@@ -41784,12 +42040,16 @@
             "reserved_ids": [
               31,
               32,
+              33,
+              34,
               35,
               36,
               37
             ],
             "reserved_names": [
               "citadel",
+              "policy",
+              "telemetry",
               "galley",
               "node_agent",
               "proxy",
