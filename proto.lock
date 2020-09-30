@@ -13049,7 +13049,13 @@
                         "value": "/v1/services/{service_name}/configs/{config_id}"
                       },
                       {
-                        "name": "additional_bindings"
+                        "name": "additional_bindings",
+                        "aggregated": [
+                          {
+                            "name": "get",
+                            "value": "/v1/services/{service_name}/config"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -35981,6 +35987,18 @@
             ]
           },
           {
+            "name": "CA.IntegrationType",
+            "enum_fields": [
+              {
+                "name": "KUBERNETES"
+              },
+              {
+                "name": "GRPC",
+                "integer": 1
+              }
+            ]
+          },
+          {
             "name": "Resource",
             "enum_fields": [
               {
@@ -36083,6 +36101,11 @@
               {
                 "id": 40,
                 "name": "enable_envoy_access_log_service",
+                "type": "bool"
+              },
+              {
+                "id": 56,
+                "name": "disable_envoy_listener_log",
                 "type": "bool"
               },
               {
@@ -36309,9 +36332,31 @@
                     "type": "google.protobuf.Duration"
                   },
                   {
-                    "id": 4,
-                    "name": "istiod_side",
-                    "type": "bool"
+                    "id": 5,
+                    "name": "k8s_config",
+                    "type": "K8sCAConfig"
+                  },
+                  {
+                    "id": 6,
+                    "name": "type",
+                    "type": "IntegrationType"
+                  }
+                ],
+                "messages": [
+                  {
+                    "name": "K8sCAConfig",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "signer_name",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "ca_cert_path",
+                        "type": "string"
+                      }
+                    ]
                   }
                 ]
               }
@@ -36973,6 +37018,11 @@
                 "id": 31,
                 "name": "readiness_probe",
                 "type": "istio.networking.v1alpha3.ReadinessProbe"
+              },
+              {
+                "id": 32,
+                "name": "proxy_stats_matcher",
+                "type": "ProxyStatsMatcher"
               }
             ],
             "maps": [
@@ -36990,6 +37040,31 @@
             ],
             "reserved_names": [
               "connect_timeout"
+            ],
+            "messages": [
+              {
+                "name": "ProxyStatsMatcher",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "inclusion_prefixes",
+                    "type": "string",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "inclusion_suffixes",
+                    "type": "string",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 3,
+                    "name": "inclusion_regexps",
+                    "type": "string",
+                    "is_repeated": true
+                  }
+                ]
+              }
             ]
           },
           {

@@ -479,12 +479,22 @@ message MeshConfig {
   // ``.x.y.com` suffix.
   google.protobuf.BoolValue verify_certificate_at_client = 54;
 
+  // Configuration of CustomCA integrated with the Istiod
   message CA {
-    // REQUIRED. Address of the CA server implementing the Istio CA gRPC API. 
+    // Different Integration types for CA
+    enum IntegrationType {
+     // Integration with external CA’s plugged into K8s system
+      KUBERNETES = 0;
+      // Integration with external CA’s supporting the Istio CA gRPC API
+      GRPC = 1;
+    }
+
+    // Address of the CA server implementing the Istio CA gRPC API 
     // Can be IP address or a fully qualified DNS name with port
     // Eg: custom-ca.default.svc.cluster.local:8932, 192.168.23.2:9000
     string address = 1;
-    // Use the tls_settings to specify the tls mode to use. 
+    
+    // Tls settings to interact with external CA using gRPC
     // Regarding tls_settings:
     // - DISABLE MODE is legitimate for the case Istiod is making the request via an Envoy sidecar.
     // DISABLE MODE can also be used for testing
@@ -492,16 +502,33 @@ message MeshConfig {
     // (cert bundle to verify the CA server's certificate) is omitted, Istiod will 
     // use the system root certs to verify the CA server's certificate. 
     istio.networking.v1alpha3.ClientTLSSettings tls_settings = 2;
+    
     // timeout for forward CSR requests from Istiod to External CA
     // Default: 10s
     google.protobuf.Duration request_timeout = 3;
-    // Use istiod_side to specify CA Server integrate to Istiod side or Agent side
-    // Default: true
-    bool istiod_side = 4;
+
+    message K8sCAConfig {
+      // Refer to https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/
+      // for details regarding how signer_name is used by external CAs plugged into Kubernetes system
+      string signer_name = 1;
+
+      // Kubernetes external CA Certificate location
+      // A Kubernetes VolumeMount referencing a Kubernetes Configmap (external-ca-cert)
+      // is mounted into Istiod at this location. Users are expected to load the external CA certificate 
+      // into the configmap
+      string ca_cert_path = 2;
+    }
+
+    // Configs for integrating with Kubernetes External CA
+    // Required if type is Kubernetes
+    K8sCAConfig k8s_config = 5;
+
+    // REQUIRED: CA Integration Type
+    IntegrationType type = 6;
   }
-  // $hide_from_docs
+
   // If specified, Istiod will authorize and forward the CSRs from the workloads to the specified external CA
-  // using the Istio CA gRPC API.
+  // using the Istio CA gRPC API or using k8s CSR API.
   CA ca = 55;
 
   // $hide_from_docs

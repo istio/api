@@ -446,10 +446,11 @@
         }
       },
       "istio.mesh.v1alpha1.MeshConfig.CA": {
+        "description": "Configuration of CustomCA integrated with the Istiod",
         "type": "object",
         "properties": {
           "address": {
-            "description": "REQUIRED. Address of the CA server implementing the Istio CA gRPC API. Can be IP address or a fully qualified DNS name with port Eg: custom-ca.default.svc.cluster.local:8932, 192.168.23.2:9000",
+            "description": "Address of the CA server implementing the Istio CA gRPC API Can be IP address or a fully qualified DNS name with port Eg: custom-ca.default.svc.cluster.local:8932, 192.168.23.2:9000",
             "type": "string",
             "format": "string"
           },
@@ -460,9 +461,11 @@
             "description": "timeout for forward CSR requests from Istiod to External CA Default: 10s",
             "type": "string"
           },
-          "istiodSide": {
-            "description": "Use istiod_side to specify CA Server integrate to Istiod side or Agent side Default: true",
-            "type": "boolean"
+          "k8sConfig": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.CA.K8sCAConfig"
+          },
+          "type": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.CA.IntegrationType"
           }
         }
       },
@@ -482,6 +485,29 @@
             "type": "boolean"
           }
         }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.CA.K8sCAConfig": {
+        "type": "object",
+        "properties": {
+          "signerName": {
+            "description": "Refer to https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/ for details regarding how signer_name is used by external CAs plugged into Kubernetes system",
+            "type": "string",
+            "format": "string"
+          },
+          "caCertPath": {
+            "description": "Kubernetes external CA Certificate location A Kubernetes VolumeMount referencing a Kubernetes Configmap (external-ca-cert) is mounted into Istiod at this location. Users are expected to load the external CA certificate into the configmap",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.CA.IntegrationType": {
+        "description": "Different Integration types for CA",
+        "type": "string",
+        "enum": [
+          "KUBERNETES",
+          "GRPC"
+        ]
       },
       "istio.mesh.v1alpha1.Resource": {
         "description": "Resource describes the source of configuration",

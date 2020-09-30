@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 29
+number_of_entries: 31
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -1334,6 +1334,18 @@ if host is <code>*.x.y.com</code>, client-side proxy will verify the presented s
 No
 </td>
 </tr>
+<tr id="MeshConfig-ca">
+<td><code>ca</code></td>
+<td><code><a href="#MeshConfig-CA">CA</a></code></td>
+<td>
+<p>If specified, Istiod will authorize and forward the CSRs from the workloads to the specified external CA
+using the Istio CA gRPC API or using k8s CSR API.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1518,6 +1530,8 @@ No
 </section>
 <h2 id="MeshConfig-CA">MeshConfig.CA</h2>
 <section>
+<p>Configuration of CustomCA integrated with the Istiod</p>
+
 <table class="message-fields">
 <thead>
 <tr>
@@ -1532,7 +1546,7 @@ No
 <td><code>address</code></td>
 <td><code>string</code></td>
 <td>
-<p>REQUIRED. Address of the CA server implementing the Istio CA gRPC API.
+<p>Address of the CA server implementing the Istio CA gRPC API
 Can be IP address or a fully qualified DNS name with port
 Eg: custom-ca.default.svc.cluster.local:8932, 192.168.23.2:9000</p>
 
@@ -1545,8 +1559,8 @@ No
 <td><code>tlsSettings</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ClientTLSSettings">ClientTLSSettings</a></code></td>
 <td>
-<p>Use the tls<em>settings to specify the tls mode to use.
-Regarding tls</em>settings:
+<p>Tls settings to interact with external CA using gRPC
+Regarding tls_settings:
 - DISABLE MODE is legitimate for the case Istiod is making the request via an Envoy sidecar.
 DISABLE MODE can also be used for testing
 - TLS MUTUAL MODE be on by default. If the CA certificates
@@ -1570,12 +1584,23 @@ Default: 10s</p>
 No
 </td>
 </tr>
-<tr id="MeshConfig-CA-istiod_side">
-<td><code>istiodSide</code></td>
-<td><code>bool</code></td>
+<tr id="MeshConfig-CA-k8s_config">
+<td><code>k8sConfig</code></td>
+<td><code><a href="#MeshConfig-CA-K8sCAConfig">K8sCAConfig</a></code></td>
 <td>
-<p>Use istiod_side to specify CA Server integrate to Istiod side or Agent side
-Default: true</p>
+<p>Configs for integrating with Kubernetes External CA
+Required if type is Kubernetes</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-CA-type">
+<td><code>type</code></td>
+<td><code><a href="#MeshConfig-CA-IntegrationType">IntegrationType</a></code></td>
+<td>
+<p>REQUIRED: CA Integration Type</p>
 
 </td>
 <td>
@@ -1622,6 +1647,47 @@ this service-by-service (e.g. mysvc.myns.svc.cluster.local) or as a group
 
 <p>By default, Istio will consider all services in the kube-system namespace to be cluster-local,
 unless explicitly overridden here.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-CA-K8sCAConfig">MeshConfig.CA.K8sCAConfig</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-CA-K8sCAConfig-signer_name">
+<td><code>signerName</code></td>
+<td><code>string</code></td>
+<td>
+<p>Refer to https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/
+for details regarding how signer_name is used by external CAs plugged into Kubernetes system</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="MeshConfig-CA-K8sCAConfig-ca_cert_path">
+<td><code>caCertPath</code></td>
+<td><code>string</code></td>
+<td>
+<p>Kubernetes external CA Certificate location
+A Kubernetes VolumeMount referencing a Kubernetes Configmap (external-ca-cert)
+is mounted into Istiod at this location. Users are expected to load the external CA certificate
+into the configmap</p>
 
 </td>
 <td>
@@ -2003,6 +2069,35 @@ service registry as well as those defined through ServiceEntries</p>
 <td>
 <p>outbound traffic to unknown destinations will be allowed, in case
 there are no services or ServiceEntries for the destination port</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MeshConfig-CA-IntegrationType">MeshConfig.CA.IntegrationType</h2>
+<section>
+<p>Different Integration types for CA</p>
+
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-CA-IntegrationType-KUBERNETES">
+<td><code>KUBERNETES</code></td>
+<td>
+<p>Integration with external CA’s plugged into K8s system</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-CA-IntegrationType-GRPC">
+<td><code>GRPC</code></td>
+<td>
+<p>Integration with external CA’s supporting the Istio CA gRPC API</p>
 
 </td>
 </tr>
