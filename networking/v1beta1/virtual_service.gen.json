@@ -335,7 +335,7 @@
         "type": "object",
         "properties": {
           "attempts": {
-            "description": "Number of retries for a given request, default is 2. The interval between retries will be determined automatically (25ms+). When request `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute) is configured, the actual number of retries attempted also depends on the specified request `timeout` value.",
+            "description": "Number of retries for a given request, default is 2. The interval between retries will be determined automatically (25ms+). When request `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute) is configured, the actual number of retries attempted also depends on the specified request `timeout` and `per_try_timeout` values.",
             "type": "integer",
             "format": "int32"
           },
