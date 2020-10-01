@@ -2577,13 +2577,16 @@ func (*StringMatch) XXX_OneofWrappers() []interface{} {
 // {{</tabset>}}
 //
 type HTTPRetry struct {
-	// Number of retries for a given request, default is 2. The interval
+	// Number of retries to be attempted for a given request. The interval
 	// between retries will be determined automatically (25ms+). When request
 	// `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute)
-	// is configured, the actual number of retries attempted also depends on
+	// or `per_try_timeout` is configured, the actual number of retries attempted also depends on
 	// the specified request `timeout` and `per_try_timeout` values.
 	Attempts int32 `protobuf:"varint,1,opt,name=attempts,proto3" json:"attempts,omitempty"`
 	// Timeout per retry attempt for a given request. format: 1h/1m/1s/1ms. MUST BE >=1ms.
+	// Default is same value as request
+	// `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute),
+	// which means no timeout.
 	PerTryTimeout *types.Duration `protobuf:"bytes,2,opt,name=per_try_timeout,json=perTryTimeout,proto3" json:"per_try_timeout,omitempty"`
 	// Specifies the conditions under which retry takes place.
 	// One or more policies can be specified using a ‘,’ delimited list.
