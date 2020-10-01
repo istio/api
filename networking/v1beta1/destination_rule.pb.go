@@ -1375,9 +1375,13 @@ type ConnectionPoolSettings_HTTPSettings struct {
 	// Maximum number of retries that can be outstanding to all hosts in a
 	// cluster at a given time. Defaults to 2^32-1.
 	MaxRetries int32 `protobuf:"varint,4,opt,name=max_retries,json=maxRetries,proto3" json:"max_retries,omitempty"`
-	// The idle timeout for upstream connection pool connections. The idle timeout is defined as the period in which there are no active requests.
-	// If not set, the default is 1 hour. When the idle timeout is reached the connection will be closed.
-	// Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive. Applies to both HTTP1.1 and HTTP2 connections.
+	// The idle timeout for upstream connection pool connections. The idle timeout
+	// is defined as the period in which there are no active requests.
+	// If not set, the default is 1 hour. When the idle timeout is reached,
+	// the connection will be closed. If the connection is an HTTP/2
+	// connection a drain sequence will occur prior to closing the connection.
+	// Note that request based timeouts mean that HTTP/2 PINGs will not
+	// keep the connection alive. Applies to both HTTP1.1 and HTTP2 connections.
 	IdleTimeout *types.Duration `protobuf:"bytes,5,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"`
 	// Specify if http1.1 connection should be upgraded to http2 for the associated destination.
 	H2UpgradePolicy ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy `protobuf:"varint,6,opt,name=h2_upgrade_policy,json=h2UpgradePolicy,proto3,enum=istio.networking.v1beta1.ConnectionPoolSettings_HTTPSettings_H2UpgradePolicy" json:"h2_upgrade_policy,omitempty"`
