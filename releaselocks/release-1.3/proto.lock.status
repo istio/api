@@ -44,7 +44,7 @@ CONFLICT: "Authentication" field: "mutual" has been removed, but is not reserved
 CONFLICT: "Authentication" field: "tls" has been removed, but is not reserved [policy/v1beta1/cfg.proto]
 CONFLICT: "Authentication" ID: "1" has been removed, but is not reserved [policy/v1beta1/cfg.proto]
 CONFLICT: "Authentication" ID: "2" has been removed, but is not reserved [policy/v1beta1/cfg.proto]
-CONFLICT: "AuthorizationPolicy" field: "selector" has a different type: istio.type.v1beta1.WorkloadSelector, previously istio.networking.v1alpha3.WorkloadSelector [security/v1beta1/authorization.proto]
+CONFLICT: "AuthorizationPolicy" field: "selector" has a different type: istio.type.v1beta1.WorkloadSelector, previously istio.networking.v1alpha3.WorkloadSelector [security/v1beta1/authorization_policy.proto]
 CONFLICT: "CheckRequest" field: "attributes" has been removed, but is not reserved [mixer/v1/mixer.proto]
 CONFLICT: "CheckRequest" field: "deduplication_id" has been removed, but is not reserved [mixer/v1/mixer.proto]
 CONFLICT: "CheckRequest" field: "global_word_count" has been removed, but is not reserved [mixer/v1/mixer.proto]
