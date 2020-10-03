@@ -1,0 +1,626 @@
+---
+title: External Authorization
+description: Mirrored version of Envoy ext_authz filter v3 API.
+location: https://istio.io/docs/reference/config/security/ext-authz.html
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+number_of_entries: 15
+---
+<h2 id="ExtAuthz">ExtAuthz</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ExtAuthz-grpc_service" class="oneof oneof-start">
+<td><code>grpcService</code></td>
+<td><code><a href="#GrpcService">GrpcService (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExtAuthz-http_service" class="oneof">
+<td><code>httpService</code></td>
+<td><code><a href="#HttpService">HttpService (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExtAuthz-failure_mode_allow">
+<td><code>failureModeAllow</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExtAuthz-with_request_body">
+<td><code>withRequestBody</code></td>
+<td><code><a href="#BufferSettings">BufferSettings</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExtAuthz-clear_route_cache">
+<td><code>clearRouteCache</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExtAuthz-status_on_error">
+<td><code>statusOnError</code></td>
+<td><code><a href="#HttpStatus">HttpStatus</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExtAuthz-metadata_context_namespaces">
+<td><code>metadataContextNamespaces</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExtAuthz-include_peer_certificate">
+<td><code>includePeerCertificate</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ExtAuthz-stat_prefix">
+<td><code>statPrefix</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="GrpcService">GrpcService</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="GrpcService-envoy_grpc" class="oneof oneof-start">
+<td><code>envoyGrpc</code></td>
+<td><code><a href="#GrpcService-EnvoyGrpc">EnvoyGrpc (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GrpcService-timeout">
+<td><code>timeout</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GrpcService-initial_metadata">
+<td><code>initialMetadata</code></td>
+<td><code><a href="#HeaderValue">HeaderValue[]</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HttpUri">HttpUri</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HttpUri-uri">
+<td><code>uri</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HttpUri-cluster" class="oneof oneof-start">
+<td><code>cluster</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HttpUri-timeout">
+<td><code>timeout</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HttpService">HttpService</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HttpService-server_uri">
+<td><code>serverUri</code></td>
+<td><code><a href="#HttpUri">HttpUri</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HttpService-path_prefix">
+<td><code>pathPrefix</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HttpService-authorization_request">
+<td><code>authorizationRequest</code></td>
+<td><code><a href="#AuthorizationRequest">AuthorizationRequest</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HttpService-authorization_response">
+<td><code>authorizationResponse</code></td>
+<td><code><a href="#AuthorizationResponse">AuthorizationResponse</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="BufferSettings">BufferSettings</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="BufferSettings-max_request_bytes">
+<td><code>maxRequestBytes</code></td>
+<td><code>uint32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="BufferSettings-allow_partial_message">
+<td><code>allowPartialMessage</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="BufferSettings-pack_as_bytes">
+<td><code>packAsBytes</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AuthorizationRequest">AuthorizationRequest</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AuthorizationRequest-allowed_headers">
+<td><code>allowedHeaders</code></td>
+<td><code><a href="#ListStringMatcher">ListStringMatcher</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AuthorizationRequest-headers_to_add">
+<td><code>headersToAdd</code></td>
+<td><code><a href="#HeaderValue">HeaderValue[]</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HeaderValue">HeaderValue</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HeaderValue-key">
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HeaderValue-value">
+<td><code>value</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="AuthorizationResponse">AuthorizationResponse</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="AuthorizationResponse-allowed_upstream_headers">
+<td><code>allowedUpstreamHeaders</code></td>
+<td><code><a href="#ListStringMatcher">ListStringMatcher</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AuthorizationResponse-allowed_upstream_headers_to_append">
+<td><code>allowedUpstreamHeadersToAppend</code></td>
+<td><code><a href="#ListStringMatcher">ListStringMatcher</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="AuthorizationResponse-allowed_client_headers">
+<td><code>allowedClientHeaders</code></td>
+<td><code><a href="#ListStringMatcher">ListStringMatcher</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ListStringMatcher">ListStringMatcher</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ListStringMatcher-patterns">
+<td><code>patterns</code></td>
+<td><code><a href="#StringMatcher">StringMatcher[]</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="StringMatcher">StringMatcher</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="StringMatcher-exact" class="oneof oneof-start">
+<td><code>exact</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="StringMatcher-prefix" class="oneof">
+<td><code>prefix</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="StringMatcher-suffix" class="oneof">
+<td><code>suffix</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="StringMatcher-safe_regex" class="oneof">
+<td><code>safeRegex</code></td>
+<td><code><a href="#RegexMatcher">RegexMatcher (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="StringMatcher-contains" class="oneof">
+<td><code>contains</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="StringMatcher-ignore_case">
+<td><code>ignoreCase</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RegexMatcher">RegexMatcher</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RegexMatcher-google_re2" class="oneof oneof-start">
+<td><code>googleRe2</code></td>
+<td><code><a href="#RegexMatcher-GoogleRE2">GoogleRE2 (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RegexMatcher-regex">
+<td><code>regex</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HttpStatus">HttpStatus</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HttpStatus-code">
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="GrpcService-EnvoyGrpc">GrpcService.EnvoyGrpc</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="GrpcService-EnvoyGrpc-cluster_name">
+<td><code>clusterName</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="GrpcService-EnvoyGrpc-authority">
+<td><code>authority</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RegexMatcher-GoogleRE2">RegexMatcher.GoogleRE2</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RegexMatcher-GoogleRE2-max_program_size" class="deprecated ">
+<td><code>maxProgramSize</code></td>
+<td><code><a href="#google-protobuf-UInt32Value">UInt32Value</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="google-protobuf-UInt32Value">google.protobuf.UInt32Value</h2>
+<section>
+<p>Wrapper message for <code>uint32</code>.</p>
+
+<p>The JSON representation for <code>UInt32Value</code> is JSON number.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="google-protobuf-UInt32Value-value">
+<td><code>value</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>The uint32 value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>

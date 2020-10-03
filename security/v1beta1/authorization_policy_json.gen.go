@@ -159,6 +159,59 @@
 //    matchLabels:
 //      version: v1
 // ```
+//
+// The following authorization policy applies to ingress gateway to enable the external authorization for HTTP requests
+// if the request path has prefix "/data/".
+//
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//  name: ext-auth
+//  namespace: istio-system
+// spec:
+//  selector:
+//    matchLabels:
+//      app: istio-ingressgateway
+//  action: EXTERNAL
+//  external:
+//    http:
+//      server: "http://ext-authz.foo.svc.cluster.local:8000"
+//  rules:
+//  - to:
+//    - operation:
+//        # Conditionally trigger the check only when the path has prefix "/data/".
+//        paths: ["/data/*"]
+// ```
+//
+// The following authorization policy applies to ingress gateway to enable the external authorization for all HTTP
+// requests and fine-tune to set the check request timeout to 2 seconds and also append the X-foo header to it.
+//
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//  name: ext-auth
+//  namespace: istio-system
+// spec:
+//  selector:
+//    matchLabels:
+//      app: istio-ingressgateway
+//  action: EXTERNAL
+//  external:
+//    http:
+//      server: "http://ext-authz.foo.svc.cluster.local:8000"
+//      config:
+//        http_service:
+//          server_uri:
+//            timeout: 2s
+//        authorization_request:
+//          allowed_headers:
+//            patterns:
+//            - exact: X-foo
+//  rules:
+//  - {}
+// ```
 
 package v1beta1
 
@@ -185,6 +238,28 @@ func (this *AuthorizationPolicy) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for AuthorizationPolicy
 func (this *AuthorizationPolicy) UnmarshalJSON(b []byte) error {
+	return AuthorizationPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for External
+func (this *External) MarshalJSON() ([]byte, error) {
+	str, err := AuthorizationPolicyMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for External
+func (this *External) UnmarshalJSON(b []byte) error {
+	return AuthorizationPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for External_Config
+func (this *External_Config) MarshalJSON() ([]byte, error) {
+	str, err := AuthorizationPolicyMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for External_Config
+func (this *External_Config) UnmarshalJSON(b []byte) error {
 	return AuthorizationPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
@@ -256,5 +331,5 @@ func (this *Condition) UnmarshalJSON(b []byte) error {
 
 var (
 	AuthorizationPolicyMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	AuthorizationPolicyUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	AuthorizationPolicyUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

@@ -3022,6 +3022,13 @@ spec:
         spec:
           description: 'Configuration for access control on workloads. See more details
             at: https://istio.io/docs/reference/config/security/authorization-policy.html'
+          oneOf:
+          - not:
+              anyOf:
+              - required:
+                - external
+          - required:
+            - external
           properties:
             action:
               description: Optional.
@@ -3029,7 +3036,884 @@ spec:
               - ALLOW
               - DENY
               - AUDIT
+              - EXTERNAL
               type: string
+            external:
+              description: Configures where and how to talk to the external server.
+              properties:
+                http:
+                  properties:
+                    config:
+                      description: Supply a custom external authorization configuration
+                        if more fine-tuning is needed.
+                      oneOf:
+                      - not:
+                          anyOf:
+                          - properties:
+                              grpcService:
+                                oneOf:
+                                - not:
+                                    anyOf:
+                                    - required:
+                                      - envoyGrpc
+                                - required:
+                                  - envoyGrpc
+                            required:
+                            - grpcService
+                          - required:
+                            - httpService
+                      - properties:
+                          grpcService:
+                            oneOf:
+                            - not:
+                                anyOf:
+                                - required:
+                                  - envoyGrpc
+                            - required:
+                              - envoyGrpc
+                        required:
+                        - grpcService
+                      - required:
+                        - httpService
+                      properties:
+                        clearRouteCache:
+                          type: boolean
+                        failureModeAllow:
+                          type: boolean
+                        grpcService:
+                          properties:
+                            envoyGrpc:
+                              properties:
+                                authority:
+                                  format: string
+                                  type: string
+                                clusterName:
+                                  format: string
+                                  type: string
+                              type: object
+                            initialMetadata:
+                              items:
+                                properties:
+                                  key:
+                                    format: string
+                                    type: string
+                                  value:
+                                    format: string
+                                    type: string
+                                type: object
+                              type: array
+                            timeout:
+                              type: string
+                          type: object
+                        httpService:
+                          properties:
+                            authorizationRequest:
+                              properties:
+                                allowedHeaders:
+                                  properties:
+                                    patterns:
+                                      items:
+                                        oneOf:
+                                        - not:
+                                            anyOf:
+                                            - required:
+                                              - exact
+                                            - required:
+                                              - prefix
+                                            - required:
+                                              - suffix
+                                            - properties:
+                                                safeRegex:
+                                                  oneOf:
+                                                  - not:
+                                                      anyOf:
+                                                      - required:
+                                                        - googleRe2
+                                                  - required:
+                                                    - googleRe2
+                                              required:
+                                              - safeRegex
+                                            - required:
+                                              - contains
+                                        - required:
+                                          - exact
+                                        - required:
+                                          - prefix
+                                        - required:
+                                          - suffix
+                                        - properties:
+                                            safeRegex:
+                                              oneOf:
+                                              - not:
+                                                  anyOf:
+                                                  - required:
+                                                    - googleRe2
+                                              - required:
+                                                - googleRe2
+                                          required:
+                                          - safeRegex
+                                        - required:
+                                          - contains
+                                        properties:
+                                          contains:
+                                            format: string
+                                            type: string
+                                          exact:
+                                            format: string
+                                            type: string
+                                          ignoreCase:
+                                            type: boolean
+                                          prefix:
+                                            format: string
+                                            type: string
+                                          safeRegex:
+                                            properties:
+                                              googleRe2:
+                                                properties:
+                                                  maxProgramSize:
+                                                    nullable: true
+                                                    type: integer
+                                                type: object
+                                              regex:
+                                                format: string
+                                                type: string
+                                            type: object
+                                          suffix:
+                                            format: string
+                                            type: string
+                                        type: object
+                                      type: array
+                                  type: object
+                                headersToAdd:
+                                  items:
+                                    properties:
+                                      key:
+                                        format: string
+                                        type: string
+                                      value:
+                                        format: string
+                                        type: string
+                                    type: object
+                                  type: array
+                              type: object
+                            authorizationResponse:
+                              properties:
+                                allowedClientHeaders:
+                                  properties:
+                                    patterns:
+                                      items:
+                                        oneOf:
+                                        - not:
+                                            anyOf:
+                                            - required:
+                                              - exact
+                                            - required:
+                                              - prefix
+                                            - required:
+                                              - suffix
+                                            - properties:
+                                                safeRegex:
+                                                  oneOf:
+                                                  - not:
+                                                      anyOf:
+                                                      - required:
+                                                        - googleRe2
+                                                  - required:
+                                                    - googleRe2
+                                              required:
+                                              - safeRegex
+                                            - required:
+                                              - contains
+                                        - required:
+                                          - exact
+                                        - required:
+                                          - prefix
+                                        - required:
+                                          - suffix
+                                        - properties:
+                                            safeRegex:
+                                              oneOf:
+                                              - not:
+                                                  anyOf:
+                                                  - required:
+                                                    - googleRe2
+                                              - required:
+                                                - googleRe2
+                                          required:
+                                          - safeRegex
+                                        - required:
+                                          - contains
+                                        properties:
+                                          contains:
+                                            format: string
+                                            type: string
+                                          exact:
+                                            format: string
+                                            type: string
+                                          ignoreCase:
+                                            type: boolean
+                                          prefix:
+                                            format: string
+                                            type: string
+                                          safeRegex:
+                                            properties:
+                                              googleRe2:
+                                                properties:
+                                                  maxProgramSize:
+                                                    nullable: true
+                                                    type: integer
+                                                type: object
+                                              regex:
+                                                format: string
+                                                type: string
+                                            type: object
+                                          suffix:
+                                            format: string
+                                            type: string
+                                        type: object
+                                      type: array
+                                  type: object
+                                allowedUpstreamHeaders:
+                                  properties:
+                                    patterns:
+                                      items:
+                                        oneOf:
+                                        - not:
+                                            anyOf:
+                                            - required:
+                                              - exact
+                                            - required:
+                                              - prefix
+                                            - required:
+                                              - suffix
+                                            - properties:
+                                                safeRegex:
+                                                  oneOf:
+                                                  - not:
+                                                      anyOf:
+                                                      - required:
+                                                        - googleRe2
+                                                  - required:
+                                                    - googleRe2
+                                              required:
+                                              - safeRegex
+                                            - required:
+                                              - contains
+                                        - required:
+                                          - exact
+                                        - required:
+                                          - prefix
+                                        - required:
+                                          - suffix
+                                        - properties:
+                                            safeRegex:
+                                              oneOf:
+                                              - not:
+                                                  anyOf:
+                                                  - required:
+                                                    - googleRe2
+                                              - required:
+                                                - googleRe2
+                                          required:
+                                          - safeRegex
+                                        - required:
+                                          - contains
+                                        properties:
+                                          contains:
+                                            format: string
+                                            type: string
+                                          exact:
+                                            format: string
+                                            type: string
+                                          ignoreCase:
+                                            type: boolean
+                                          prefix:
+                                            format: string
+                                            type: string
+                                          safeRegex:
+                                            properties:
+                                              googleRe2:
+                                                properties:
+                                                  maxProgramSize:
+                                                    nullable: true
+                                                    type: integer
+                                                type: object
+                                              regex:
+                                                format: string
+                                                type: string
+                                            type: object
+                                          suffix:
+                                            format: string
+                                            type: string
+                                        type: object
+                                      type: array
+                                  type: object
+                                allowedUpstreamHeadersToAppend:
+                                  properties:
+                                    patterns:
+                                      items:
+                                        oneOf:
+                                        - not:
+                                            anyOf:
+                                            - required:
+                                              - exact
+                                            - required:
+                                              - prefix
+                                            - required:
+                                              - suffix
+                                            - properties:
+                                                safeRegex:
+                                                  oneOf:
+                                                  - not:
+                                                      anyOf:
+                                                      - required:
+                                                        - googleRe2
+                                                  - required:
+                                                    - googleRe2
+                                              required:
+                                              - safeRegex
+                                            - required:
+                                              - contains
+                                        - required:
+                                          - exact
+                                        - required:
+                                          - prefix
+                                        - required:
+                                          - suffix
+                                        - properties:
+                                            safeRegex:
+                                              oneOf:
+                                              - not:
+                                                  anyOf:
+                                                  - required:
+                                                    - googleRe2
+                                              - required:
+                                                - googleRe2
+                                          required:
+                                          - safeRegex
+                                        - required:
+                                          - contains
+                                        properties:
+                                          contains:
+                                            format: string
+                                            type: string
+                                          exact:
+                                            format: string
+                                            type: string
+                                          ignoreCase:
+                                            type: boolean
+                                          prefix:
+                                            format: string
+                                            type: string
+                                          safeRegex:
+                                            properties:
+                                              googleRe2:
+                                                properties:
+                                                  maxProgramSize:
+                                                    nullable: true
+                                                    type: integer
+                                                type: object
+                                              regex:
+                                                format: string
+                                                type: string
+                                            type: object
+                                          suffix:
+                                            format: string
+                                            type: string
+                                        type: object
+                                      type: array
+                                  type: object
+                              type: object
+                            pathPrefix:
+                              format: string
+                              type: string
+                            serverUri:
+                              oneOf:
+                              - not:
+                                  anyOf:
+                                  - required:
+                                    - cluster
+                              - required:
+                                - cluster
+                              properties:
+                                cluster:
+                                  format: string
+                                  type: string
+                                timeout:
+                                  type: string
+                                uri:
+                                  format: string
+                                  type: string
+                              type: object
+                          type: object
+                        includePeerCertificate:
+                          type: boolean
+                        metadataContextNamespaces:
+                          items:
+                            format: string
+                            type: string
+                          type: array
+                        statPrefix:
+                          format: string
+                          type: string
+                        statusOnError:
+                          properties:
+                            code:
+                              format: string
+                              type: string
+                          type: object
+                        withRequestBody:
+                          properties:
+                            allowPartialMessage:
+                              type: boolean
+                            maxRequestBytes:
+                              type: integer
+                            packAsBytes:
+                              type: boolean
+                          type: object
+                      type: object
+                    server:
+                      description: Supply the full URL of the external server.
+                      format: string
+                      type: string
+                  type: object
+                tcp:
+                  properties:
+                    config:
+                      description: Supply a custom external authorization configuration
+                        if more fine-tuning is needed.
+                      oneOf:
+                      - not:
+                          anyOf:
+                          - properties:
+                              grpcService:
+                                oneOf:
+                                - not:
+                                    anyOf:
+                                    - required:
+                                      - envoyGrpc
+                                - required:
+                                  - envoyGrpc
+                            required:
+                            - grpcService
+                          - required:
+                            - httpService
+                      - properties:
+                          grpcService:
+                            oneOf:
+                            - not:
+                                anyOf:
+                                - required:
+                                  - envoyGrpc
+                            - required:
+                              - envoyGrpc
+                        required:
+                        - grpcService
+                      - required:
+                        - httpService
+                      properties:
+                        clearRouteCache:
+                          type: boolean
+                        failureModeAllow:
+                          type: boolean
+                        grpcService:
+                          properties:
+                            envoyGrpc:
+                              properties:
+                                authority:
+                                  format: string
+                                  type: string
+                                clusterName:
+                                  format: string
+                                  type: string
+                              type: object
+                            initialMetadata:
+                              items:
+                                properties:
+                                  key:
+                                    format: string
+                                    type: string
+                                  value:
+                                    format: string
+                                    type: string
+                                type: object
+                              type: array
+                            timeout:
+                              type: string
+                          type: object
+                        httpService:
+                          properties:
+                            authorizationRequest:
+                              properties:
+                                allowedHeaders:
+                                  properties:
+                                    patterns:
+                                      items:
+                                        oneOf:
+                                        - not:
+                                            anyOf:
+                                            - required:
+                                              - exact
+                                            - required:
+                                              - prefix
+                                            - required:
+                                              - suffix
+                                            - properties:
+                                                safeRegex:
+                                                  oneOf:
+                                                  - not:
+                                                      anyOf:
+                                                      - required:
+                                                        - googleRe2
+                                                  - required:
+                                                    - googleRe2
+                                              required:
+                                              - safeRegex
+                                            - required:
+                                              - contains
+                                        - required:
+                                          - exact
+                                        - required:
+                                          - prefix
+                                        - required:
+                                          - suffix
+                                        - properties:
+                                            safeRegex:
+                                              oneOf:
+                                              - not:
+                                                  anyOf:
+                                                  - required:
+                                                    - googleRe2
+                                              - required:
+                                                - googleRe2
+                                          required:
+                                          - safeRegex
+                                        - required:
+                                          - contains
+                                        properties:
+                                          contains:
+                                            format: string
+                                            type: string
+                                          exact:
+                                            format: string
+                                            type: string
+                                          ignoreCase:
+                                            type: boolean
+                                          prefix:
+                                            format: string
+                                            type: string
+                                          safeRegex:
+                                            properties:
+                                              googleRe2:
+                                                properties:
+                                                  maxProgramSize:
+                                                    nullable: true
+                                                    type: integer
+                                                type: object
+                                              regex:
+                                                format: string
+                                                type: string
+                                            type: object
+                                          suffix:
+                                            format: string
+                                            type: string
+                                        type: object
+                                      type: array
+                                  type: object
+                                headersToAdd:
+                                  items:
+                                    properties:
+                                      key:
+                                        format: string
+                                        type: string
+                                      value:
+                                        format: string
+                                        type: string
+                                    type: object
+                                  type: array
+                              type: object
+                            authorizationResponse:
+                              properties:
+                                allowedClientHeaders:
+                                  properties:
+                                    patterns:
+                                      items:
+                                        oneOf:
+                                        - not:
+                                            anyOf:
+                                            - required:
+                                              - exact
+                                            - required:
+                                              - prefix
+                                            - required:
+                                              - suffix
+                                            - properties:
+                                                safeRegex:
+                                                  oneOf:
+                                                  - not:
+                                                      anyOf:
+                                                      - required:
+                                                        - googleRe2
+                                                  - required:
+                                                    - googleRe2
+                                              required:
+                                              - safeRegex
+                                            - required:
+                                              - contains
+                                        - required:
+                                          - exact
+                                        - required:
+                                          - prefix
+                                        - required:
+                                          - suffix
+                                        - properties:
+                                            safeRegex:
+                                              oneOf:
+                                              - not:
+                                                  anyOf:
+                                                  - required:
+                                                    - googleRe2
+                                              - required:
+                                                - googleRe2
+                                          required:
+                                          - safeRegex
+                                        - required:
+                                          - contains
+                                        properties:
+                                          contains:
+                                            format: string
+                                            type: string
+                                          exact:
+                                            format: string
+                                            type: string
+                                          ignoreCase:
+                                            type: boolean
+                                          prefix:
+                                            format: string
+                                            type: string
+                                          safeRegex:
+                                            properties:
+                                              googleRe2:
+                                                properties:
+                                                  maxProgramSize:
+                                                    nullable: true
+                                                    type: integer
+                                                type: object
+                                              regex:
+                                                format: string
+                                                type: string
+                                            type: object
+                                          suffix:
+                                            format: string
+                                            type: string
+                                        type: object
+                                      type: array
+                                  type: object
+                                allowedUpstreamHeaders:
+                                  properties:
+                                    patterns:
+                                      items:
+                                        oneOf:
+                                        - not:
+                                            anyOf:
+                                            - required:
+                                              - exact
+                                            - required:
+                                              - prefix
+                                            - required:
+                                              - suffix
+                                            - properties:
+                                                safeRegex:
+                                                  oneOf:
+                                                  - not:
+                                                      anyOf:
+                                                      - required:
+                                                        - googleRe2
+                                                  - required:
+                                                    - googleRe2
+                                              required:
+                                              - safeRegex
+                                            - required:
+                                              - contains
+                                        - required:
+                                          - exact
+                                        - required:
+                                          - prefix
+                                        - required:
+                                          - suffix
+                                        - properties:
+                                            safeRegex:
+                                              oneOf:
+                                              - not:
+                                                  anyOf:
+                                                  - required:
+                                                    - googleRe2
+                                              - required:
+                                                - googleRe2
+                                          required:
+                                          - safeRegex
+                                        - required:
+                                          - contains
+                                        properties:
+                                          contains:
+                                            format: string
+                                            type: string
+                                          exact:
+                                            format: string
+                                            type: string
+                                          ignoreCase:
+                                            type: boolean
+                                          prefix:
+                                            format: string
+                                            type: string
+                                          safeRegex:
+                                            properties:
+                                              googleRe2:
+                                                properties:
+                                                  maxProgramSize:
+                                                    nullable: true
+                                                    type: integer
+                                                type: object
+                                              regex:
+                                                format: string
+                                                type: string
+                                            type: object
+                                          suffix:
+                                            format: string
+                                            type: string
+                                        type: object
+                                      type: array
+                                  type: object
+                                allowedUpstreamHeadersToAppend:
+                                  properties:
+                                    patterns:
+                                      items:
+                                        oneOf:
+                                        - not:
+                                            anyOf:
+                                            - required:
+                                              - exact
+                                            - required:
+                                              - prefix
+                                            - required:
+                                              - suffix
+                                            - properties:
+                                                safeRegex:
+                                                  oneOf:
+                                                  - not:
+                                                      anyOf:
+                                                      - required:
+                                                        - googleRe2
+                                                  - required:
+                                                    - googleRe2
+                                              required:
+                                              - safeRegex
+                                            - required:
+                                              - contains
+                                        - required:
+                                          - exact
+                                        - required:
+                                          - prefix
+                                        - required:
+                                          - suffix
+                                        - properties:
+                                            safeRegex:
+                                              oneOf:
+                                              - not:
+                                                  anyOf:
+                                                  - required:
+                                                    - googleRe2
+                                              - required:
+                                                - googleRe2
+                                          required:
+                                          - safeRegex
+                                        - required:
+                                          - contains
+                                        properties:
+                                          contains:
+                                            format: string
+                                            type: string
+                                          exact:
+                                            format: string
+                                            type: string
+                                          ignoreCase:
+                                            type: boolean
+                                          prefix:
+                                            format: string
+                                            type: string
+                                          safeRegex:
+                                            properties:
+                                              googleRe2:
+                                                properties:
+                                                  maxProgramSize:
+                                                    nullable: true
+                                                    type: integer
+                                                type: object
+                                              regex:
+                                                format: string
+                                                type: string
+                                            type: object
+                                          suffix:
+                                            format: string
+                                            type: string
+                                        type: object
+                                      type: array
+                                  type: object
+                              type: object
+                            pathPrefix:
+                              format: string
+                              type: string
+                            serverUri:
+                              oneOf:
+                              - not:
+                                  anyOf:
+                                  - required:
+                                    - cluster
+                              - required:
+                                - cluster
+                              properties:
+                                cluster:
+                                  format: string
+                                  type: string
+                                timeout:
+                                  type: string
+                                uri:
+                                  format: string
+                                  type: string
+                              type: object
+                          type: object
+                        includePeerCertificate:
+                          type: boolean
+                        metadataContextNamespaces:
+                          items:
+                            format: string
+                            type: string
+                          type: array
+                        statPrefix:
+                          format: string
+                          type: string
+                        statusOnError:
+                          properties:
+                            code:
+                              format: string
+                              type: string
+                          type: object
+                        withRequestBody:
+                          properties:
+                            allowPartialMessage:
+                              type: boolean
+                            maxRequestBytes:
+                              type: integer
+                            packAsBytes:
+                              type: boolean
+                          type: object
+                      type: object
+                    server:
+                      description: Supply the full URL of the external server.
+                      format: string
+                      type: string
+                  type: object
+              type: object
             rules:
               description: Optional.
               items:
