@@ -3012,6 +3012,8 @@ spec:
     kind: AuthorizationPolicy
     listKind: AuthorizationPolicyList
     plural: authorizationpolicies
+    shortNames:
+    - ap
     singular: authorizationpolicy
   scope: Namespaced
   subresources:
