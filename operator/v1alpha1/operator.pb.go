@@ -75,6 +75,26 @@ func (InstallStatus_Status) EnumDescriptor() ([]byte, []int) {
 // The spec is a used to define a customization of the default profile values that are supplied with each Istio release.
 // Because the spec is a customization API, specifying an empty IstioOperatorSpec results in a default Istio
 // component values.
+//
+// ```
+// // Apply a default Istio installation
+// istioctl install
+//
+// // Use a different profile for installation
+// istioctl install --set profile=demo --skip-confirmation
+// istioctl install --set profile=minimal --set values.global.istioNamespace=istio-dev
+//
+// // Set custom HUB and TAG
+// istioctl install --set hub=gcr.io/istio-testing --set tag=latest
+//
+// // Enable Tracing
+// istioctl install --set meshConfig.enableTracing=true
+//
+// // Install multiple control plane revisions
+// istioctl install --set revision=canary
+// istioctl install --set revision=1-7-3
+// ```
+//
 type IstioOperatorSpec struct {
 	// Path or name for the profile e.g.
 	//
