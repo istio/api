@@ -147,5 +147,5 @@ func (this *ExecHealthCheckConfig) UnmarshalJSON(b []byte) error {
 
 var (
 	WorkloadGroupMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	WorkloadGroupUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	WorkloadGroupUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

@@ -256,5 +256,5 @@ func (this *Condition) UnmarshalJSON(b []byte) error {
 
 var (
 	AuthorizationPolicyMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	AuthorizationPolicyUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	AuthorizationPolicyUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )
