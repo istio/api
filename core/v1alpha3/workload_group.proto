@@ -15,7 +15,7 @@
 syntax = "proto3";
 
 import "google/api/field_behavior.proto";
-import "core/v1alpha3/workload_entry.proto";
+import "networking/v1alpha3/workload_entry.proto";
 
 // $schema: istio.core.v1alpha3.WorkloadGroup
 // $title: Workload Group
