@@ -13,6 +13,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
+from google.protobuf import duration_pb2 as google_dot_protobuf_dot_duration__pb2
 from google.api import field_behavior_pb2 as google_dot_api_dot_field__behavior__pb2
 from type.v1beta1 import selector_pb2 as type_dot_v1beta1_dot_selector__pb2
 
@@ -22,9 +23,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.security.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\035istio.io/api/security/v1beta1'),
-  serialized_pb=_b('\n+security/v1beta1/authorization_policy.proto\x12\x16istio.security.v1beta1\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1btype/v1beta1/selector.proto\"\xbd\x02\n\x13\x41uthorizationPolicy\x12\x36\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\x12+\n\x05rules\x18\x02 \x03(\x0b\x32\x1c.istio.security.v1beta1.Rule\x12\x42\n\x06\x61\x63tion\x18\x03 \x01(\x0e\x32\x32.istio.security.v1beta1.AuthorizationPolicy.Action\x12\x34\n\x08\x65xternal\x18\x04 \x01(\x0b\x32 .istio.security.v1beta1.ExternalH\x00\"6\n\x06\x41\x63tion\x12\t\n\x05\x41LLOW\x10\x00\x12\x08\n\x04\x44\x45NY\x10\x01\x12\t\n\x05\x41UDIT\x10\x02\x12\x0c\n\x08\x45XTERNAL\x10\x03\x42\x0f\n\raction_detail\"\x91\x01\n\x08\x45xternal\x12\x35\n\x04http\x18\x01 \x01(\x0b\x32\'.istio.security.v1beta1.External.Config\x12\x34\n\x03tcp\x18\x02 \x01(\x0b\x32\'.istio.security.v1beta1.External.Config\x1a\x18\n\x06\x43onfig\x12\x0e\n\x06server\x18\x01 \x01(\t\"\x89\x02\n\x04Rule\x12/\n\x04\x66rom\x18\x01 \x03(\x0b\x32!.istio.security.v1beta1.Rule.From\x12+\n\x02to\x18\x02 \x03(\x0b\x32\x1f.istio.security.v1beta1.Rule.To\x12/\n\x04when\x18\x03 \x03(\x0b\x32!.istio.security.v1beta1.Condition\x1a\x36\n\x04\x46rom\x12.\n\x06source\x18\x01 \x01(\x0b\x32\x1e.istio.security.v1beta1.Source\x1a:\n\x02To\x12\x34\n\toperation\x18\x01 \x01(\x0b\x32!.istio.security.v1beta1.Operation\"\xc6\x01\n\x06Source\x12\x12\n\nprincipals\x18\x01 \x03(\t\x12\x16\n\x0enot_principals\x18\x05 \x03(\t\x12\x1a\n\x12request_principals\x18\x02 \x03(\t\x12\x1e\n\x16not_request_principals\x18\x06 \x03(\t\x12\x12\n\nnamespaces\x18\x03 \x03(\t\x12\x16\n\x0enot_namespaces\x18\x07 \x03(\t\x12\x11\n\tip_blocks\x18\x04 \x03(\t\x12\x15\n\rnot_ip_blocks\x18\x08 \x03(\t\"\x97\x01\n\tOperation\x12\r\n\x05hosts\x18\x01 \x03(\t\x12\x11\n\tnot_hosts\x18\x05 \x03(\t\x12\r\n\x05ports\x18\x02 \x03(\t\x12\x11\n\tnot_ports\x18\x06 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\x13\n\x0bnot_methods\x18\x07 \x03(\t\x12\r\n\x05paths\x18\x04 \x03(\t\x12\x11\n\tnot_paths\x18\x08 \x03(\t\"A\n\tCondition\x12\x10\n\x03key\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x0e\n\x06values\x18\x02 \x03(\t\x12\x12\n\nnot_values\x18\x03 \x03(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
+  serialized_pb=_b('\n+security/v1beta1/authorization_policy.proto\x12\x16istio.security.v1beta1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1btype/v1beta1/selector.proto\"\xbd\x02\n\x13\x41uthorizationPolicy\x12\x36\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\x12+\n\x05rules\x18\x02 \x03(\x0b\x32\x1c.istio.security.v1beta1.Rule\x12\x42\n\x06\x61\x63tion\x18\x03 \x01(\x0e\x32\x32.istio.security.v1beta1.AuthorizationPolicy.Action\x12\x34\n\x08\x65xternal\x18\x04 \x01(\x0b\x32 .istio.security.v1beta1.ExternalH\x00\"6\n\x06\x41\x63tion\x12\t\n\x05\x41LLOW\x10\x00\x12\x08\n\x04\x44\x45NY\x10\x01\x12\t\n\x05\x41UDIT\x10\x02\x12\x0c\n\x08\x45XTERNAL\x10\x03\x42\x0f\n\raction_detail\"\xa0\x05\n\x08\x45xternal\x12\x39\n\x04http\x18\x01 \x01(\x0b\x32+.istio.security.v1beta1.External.HTTPConfig\x12\x37\n\x03tcp\x18\x02 \x01(\x0b\x32*.istio.security.v1beta1.External.TCPConfig\x1a\xb4\x03\n\nHTTPConfig\x12\x0e\n\x06server\x18\x01 \x01(\t\x12*\n\x07timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\x12_\n\x15\x61uthorization_request\x18\x03 \x01(\x0b\x32@.istio.security.v1beta1.External.HTTPConfig.AuthorizationRequest\x12\x61\n\x16\x61uthorization_response\x18\x04 \x01(\x0b\x32\x41.istio.security.v1beta1.External.HTTPConfig.AuthorizationResponse\x12 \n\x18include_peer_certificate\x18\x05 \x01(\x08\x1a/\n\x14\x41uthorizationRequest\x12\x17\n\x0f\x61llowed_headers\x18\x01 \x03(\t\x1aS\n\x15\x41uthorizationResponse\x12\x1b\n\x13\x66orward_to_upstream\x18\x01 \x03(\t\x12\x1d\n\x15\x66orward_to_downstream\x18\x02 \x03(\t\x1ai\n\tTCPConfig\x12\x0e\n\x06server\x18\x01 \x01(\t\x12*\n\x07timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\x12 \n\x18include_peer_certificate\x18\x03 \x01(\x08\"\x89\x02\n\x04Rule\x12/\n\x04\x66rom\x18\x01 \x03(\x0b\x32!.istio.security.v1beta1.Rule.From\x12+\n\x02to\x18\x02 \x03(\x0b\x32\x1f.istio.security.v1beta1.Rule.To\x12/\n\x04when\x18\x03 \x03(\x0b\x32!.istio.security.v1beta1.Condition\x1a\x36\n\x04\x46rom\x12.\n\x06source\x18\x01 \x01(\x0b\x32\x1e.istio.security.v1beta1.Source\x1a:\n\x02To\x12\x34\n\toperation\x18\x01 \x01(\x0b\x32!.istio.security.v1beta1.Operation\"\xc6\x01\n\x06Source\x12\x12\n\nprincipals\x18\x01 \x03(\t\x12\x16\n\x0enot_principals\x18\x05 \x03(\t\x12\x1a\n\x12request_principals\x18\x02 \x03(\t\x12\x1e\n\x16not_request_principals\x18\x06 \x03(\t\x12\x12\n\nnamespaces\x18\x03 \x03(\t\x12\x16\n\x0enot_namespaces\x18\x07 \x03(\t\x12\x11\n\tip_blocks\x18\x04 \x03(\t\x12\x15\n\rnot_ip_blocks\x18\x08 \x03(\t\"\x97\x01\n\tOperation\x12\r\n\x05hosts\x18\x01 \x03(\t\x12\x11\n\tnot_hosts\x18\x05 \x03(\t\x12\r\n\x05ports\x18\x02 \x03(\t\x12\x11\n\tnot_ports\x18\x06 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\x13\n\x0bnot_methods\x18\x07 \x03(\t\x12\r\n\x05paths\x18\x04 \x03(\t\x12\x11\n\tnot_paths\x18\x08 \x03(\t\"A\n\tCondition\x12\x10\n\x03key\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x0e\n\x06values\x18\x02 \x03(\t\x12\x12\n\nnot_values\x18\x03 \x03(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
   ,
-  dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
 
 
 
@@ -53,8 +54,8 @@ _AUTHORIZATIONPOLICY_ACTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=380,
-  serialized_end=434,
+  serialized_start=412,
+  serialized_end=466,
 )
 _sym_db.RegisterEnumDescriptor(_AUTHORIZATIONPOLICY_ACTION)
 
@@ -110,22 +111,22 @@ _AUTHORIZATIONPOLICY = _descriptor.Descriptor(
       name='action_detail', full_name='istio.security.v1beta1.AuthorizationPolicy.action_detail',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=134,
-  serialized_end=451,
+  serialized_start=166,
+  serialized_end=483,
 )
 
 
-_EXTERNAL_CONFIG = _descriptor.Descriptor(
-  name='Config',
-  full_name='istio.security.v1beta1.External.Config',
+_EXTERNAL_HTTPCONFIG_AUTHORIZATIONREQUEST = _descriptor.Descriptor(
+  name='AuthorizationRequest',
+  full_name='istio.security.v1beta1.External.HTTPConfig.AuthorizationRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='server', full_name='istio.security.v1beta1.External.Config.server', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      name='allowed_headers', full_name='istio.security.v1beta1.External.HTTPConfig.AuthorizationRequest.allowed_headers', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -141,8 +142,147 @@ _EXTERNAL_CONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=575,
-  serialized_end=599,
+  serialized_start=919,
+  serialized_end=966,
+)
+
+_EXTERNAL_HTTPCONFIG_AUTHORIZATIONRESPONSE = _descriptor.Descriptor(
+  name='AuthorizationResponse',
+  full_name='istio.security.v1beta1.External.HTTPConfig.AuthorizationResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='forward_to_upstream', full_name='istio.security.v1beta1.External.HTTPConfig.AuthorizationResponse.forward_to_upstream', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='forward_to_downstream', full_name='istio.security.v1beta1.External.HTTPConfig.AuthorizationResponse.forward_to_downstream', index=1,
+      number=2, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=968,
+  serialized_end=1051,
+)
+
+_EXTERNAL_HTTPCONFIG = _descriptor.Descriptor(
+  name='HTTPConfig',
+  full_name='istio.security.v1beta1.External.HTTPConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='server', full_name='istio.security.v1beta1.External.HTTPConfig.server', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='timeout', full_name='istio.security.v1beta1.External.HTTPConfig.timeout', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='authorization_request', full_name='istio.security.v1beta1.External.HTTPConfig.authorization_request', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='authorization_response', full_name='istio.security.v1beta1.External.HTTPConfig.authorization_response', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='include_peer_certificate', full_name='istio.security.v1beta1.External.HTTPConfig.include_peer_certificate', index=4,
+      number=5, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_EXTERNAL_HTTPCONFIG_AUTHORIZATIONREQUEST, _EXTERNAL_HTTPCONFIG_AUTHORIZATIONRESPONSE, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=615,
+  serialized_end=1051,
+)
+
+_EXTERNAL_TCPCONFIG = _descriptor.Descriptor(
+  name='TCPConfig',
+  full_name='istio.security.v1beta1.External.TCPConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='server', full_name='istio.security.v1beta1.External.TCPConfig.server', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='timeout', full_name='istio.security.v1beta1.External.TCPConfig.timeout', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='include_peer_certificate', full_name='istio.security.v1beta1.External.TCPConfig.include_peer_certificate', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1053,
+  serialized_end=1158,
 )
 
 _EXTERNAL = _descriptor.Descriptor(
@@ -169,7 +309,7 @@ _EXTERNAL = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_EXTERNAL_CONFIG, ],
+  nested_types=[_EXTERNAL_HTTPCONFIG, _EXTERNAL_TCPCONFIG, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -178,8 +318,8 @@ _EXTERNAL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=454,
-  serialized_end=599,
+  serialized_start=486,
+  serialized_end=1158,
 )
 
 
@@ -209,8 +349,8 @@ _RULE_FROM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=753,
-  serialized_end=807,
+  serialized_start=1312,
+  serialized_end=1366,
 )
 
 _RULE_TO = _descriptor.Descriptor(
@@ -239,8 +379,8 @@ _RULE_TO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=809,
-  serialized_end=867,
+  serialized_start=1368,
+  serialized_end=1426,
 )
 
 _RULE = _descriptor.Descriptor(
@@ -283,8 +423,8 @@ _RULE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=602,
-  serialized_end=867,
+  serialized_start=1161,
+  serialized_end=1426,
 )
 
 
@@ -363,8 +503,8 @@ _SOURCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=870,
-  serialized_end=1068,
+  serialized_start=1429,
+  serialized_end=1627,
 )
 
 
@@ -443,8 +583,8 @@ _OPERATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1071,
-  serialized_end=1222,
+  serialized_start=1630,
+  serialized_end=1781,
 )
 
 
@@ -488,8 +628,8 @@ _CONDITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1224,
-  serialized_end=1289,
+  serialized_start=1783,
+  serialized_end=1848,
 )
 
 _AUTHORIZATIONPOLICY.fields_by_name['selector'].message_type = type_dot_v1beta1_dot_selector__pb2._WORKLOADSELECTOR
@@ -500,9 +640,16 @@ _AUTHORIZATIONPOLICY_ACTION.containing_type = _AUTHORIZATIONPOLICY
 _AUTHORIZATIONPOLICY.oneofs_by_name['action_detail'].fields.append(
   _AUTHORIZATIONPOLICY.fields_by_name['external'])
 _AUTHORIZATIONPOLICY.fields_by_name['external'].containing_oneof = _AUTHORIZATIONPOLICY.oneofs_by_name['action_detail']
-_EXTERNAL_CONFIG.containing_type = _EXTERNAL
-_EXTERNAL.fields_by_name['http'].message_type = _EXTERNAL_CONFIG
-_EXTERNAL.fields_by_name['tcp'].message_type = _EXTERNAL_CONFIG
+_EXTERNAL_HTTPCONFIG_AUTHORIZATIONREQUEST.containing_type = _EXTERNAL_HTTPCONFIG
+_EXTERNAL_HTTPCONFIG_AUTHORIZATIONRESPONSE.containing_type = _EXTERNAL_HTTPCONFIG
+_EXTERNAL_HTTPCONFIG.fields_by_name['timeout'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
+_EXTERNAL_HTTPCONFIG.fields_by_name['authorization_request'].message_type = _EXTERNAL_HTTPCONFIG_AUTHORIZATIONREQUEST
+_EXTERNAL_HTTPCONFIG.fields_by_name['authorization_response'].message_type = _EXTERNAL_HTTPCONFIG_AUTHORIZATIONRESPONSE
+_EXTERNAL_HTTPCONFIG.containing_type = _EXTERNAL
+_EXTERNAL_TCPCONFIG.fields_by_name['timeout'].message_type = google_dot_protobuf_dot_duration__pb2._DURATION
+_EXTERNAL_TCPCONFIG.containing_type = _EXTERNAL
+_EXTERNAL.fields_by_name['http'].message_type = _EXTERNAL_HTTPCONFIG
+_EXTERNAL.fields_by_name['tcp'].message_type = _EXTERNAL_TCPCONFIG
 _RULE_FROM.fields_by_name['source'].message_type = _SOURCE
 _RULE_FROM.containing_type = _RULE
 _RULE_TO.fields_by_name['operation'].message_type = _OPERATION
@@ -527,10 +674,31 @@ _sym_db.RegisterMessage(AuthorizationPolicy)
 
 External = _reflection.GeneratedProtocolMessageType('External', (_message.Message,), {
 
-  'Config' : _reflection.GeneratedProtocolMessageType('Config', (_message.Message,), {
-    'DESCRIPTOR' : _EXTERNAL_CONFIG,
+  'HTTPConfig' : _reflection.GeneratedProtocolMessageType('HTTPConfig', (_message.Message,), {
+
+    'AuthorizationRequest' : _reflection.GeneratedProtocolMessageType('AuthorizationRequest', (_message.Message,), {
+      'DESCRIPTOR' : _EXTERNAL_HTTPCONFIG_AUTHORIZATIONREQUEST,
+      '__module__' : 'security.v1beta1.authorization_policy_pb2'
+      # @@protoc_insertion_point(class_scope:istio.security.v1beta1.External.HTTPConfig.AuthorizationRequest)
+      })
+    ,
+
+    'AuthorizationResponse' : _reflection.GeneratedProtocolMessageType('AuthorizationResponse', (_message.Message,), {
+      'DESCRIPTOR' : _EXTERNAL_HTTPCONFIG_AUTHORIZATIONRESPONSE,
+      '__module__' : 'security.v1beta1.authorization_policy_pb2'
+      # @@protoc_insertion_point(class_scope:istio.security.v1beta1.External.HTTPConfig.AuthorizationResponse)
+      })
+    ,
+    'DESCRIPTOR' : _EXTERNAL_HTTPCONFIG,
     '__module__' : 'security.v1beta1.authorization_policy_pb2'
-    # @@protoc_insertion_point(class_scope:istio.security.v1beta1.External.Config)
+    # @@protoc_insertion_point(class_scope:istio.security.v1beta1.External.HTTPConfig)
+    })
+  ,
+
+  'TCPConfig' : _reflection.GeneratedProtocolMessageType('TCPConfig', (_message.Message,), {
+    'DESCRIPTOR' : _EXTERNAL_TCPCONFIG,
+    '__module__' : 'security.v1beta1.authorization_policy_pb2'
+    # @@protoc_insertion_point(class_scope:istio.security.v1beta1.External.TCPConfig)
     })
   ,
   'DESCRIPTOR' : _EXTERNAL,
@@ -538,7 +706,10 @@ External = _reflection.GeneratedProtocolMessageType('External', (_message.Messag
   # @@protoc_insertion_point(class_scope:istio.security.v1beta1.External)
   })
 _sym_db.RegisterMessage(External)
-_sym_db.RegisterMessage(External.Config)
+_sym_db.RegisterMessage(External.HTTPConfig)
+_sym_db.RegisterMessage(External.HTTPConfig.AuthorizationRequest)
+_sym_db.RegisterMessage(External.HTTPConfig.AuthorizationResponse)
+_sym_db.RegisterMessage(External.TCPConfig)
 
 Rule = _reflection.GeneratedProtocolMessageType('Rule', (_message.Message,), {
 

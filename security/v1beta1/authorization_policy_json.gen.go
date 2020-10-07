@@ -180,12 +180,13 @@
 //    tcp:
 //      server: "grpc://ext-authz.foo.svc.cluster.local:9000"
 //  rules:
-//  # Empty rules to always trigger the check request.
+//  # Empty rules to always trigger the authorization request.
 //  - {}
 // ```
 //
 // The following authorization policy applies to ingress gateway to enable the external authorization for HTTP requests
-// if the request path has prefix "/data/".
+// if the request path has prefix "/data/", and customize the configuration to set the timeout to 2s and also include the
+// header with prefix "X-foo" in the authorization request.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -201,52 +202,14 @@
 //  external:
 //    http:
 //      server: "http://ext-authz.foo.svc.cluster.local:8000"
+//      timeout: 2s
+//      authorizationRequest:
+//        allowedHeaders: ["X-foo*"]
 //  rules:
-//  # Specify rules to conditionally trigger the check request only if the path has prefix "/data/".
+//  # Specify rules to conditionally trigger the authorization request only if the path has prefix "/data/".
 //  - to:
 //    - operation:
 //        paths: ["/data/*"]
-// ```
-//
-// The EXTERNAL action currently uses a default ext_authz configuration and you can customize it with EnvoyFilter.
-// For example, the following EnvoyFilter patches the default configuration to change timeout to 2s and also include the
-// extra "X-foo" header in the check request. We will further improve the user experience here by allowing to directly
-// customize the configurations right in the authorization policy so that you don't need the EnvoyFilter in
-// most use cases).
-//
-// ```yaml
-// apiVersion: networking.istio.io/v1alpha3
-// kind: EnvoyFilter
-// metadata:
-//   name: ext-authz
-//   namespace: istio-system
-// spec:
-//   workloadSelector:
-//     labels:
-//       app: istio-ingressgateway
-//   configPatches:
-//   - applyTo: HTTP_FILTER
-//     match:
-//       context: ANY
-//       listener:
-//         filterChain:
-//           filter:
-//             name: envoy.http_connection_manager
-//             subFilter:
-//               name: envoy.filters.http.ext_authz
-//     patch:
-//       operation: MERGE
-//       value:
-//         name: envoy.filters.http.ext_authz
-//         typed_config:
-//           '@type': type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthz
-//           http_service:
-//             server_uri:
-//               timeout: 2s
-//           authorization_request:
-//             allowed_headers:
-//               patterns:
-//               - exact: X-foo
 // ```
 
 package v1beta1
@@ -256,6 +219,7 @@ import (
 	fmt "fmt"
 	github_com_gogo_protobuf_jsonpb "github.com/gogo/protobuf/jsonpb"
 	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/gogo/protobuf/types"
 	_ "istio.io/api/type/v1beta1"
 	_ "istio.io/gogo-genproto/googleapis/google/api"
 	math "math"
@@ -288,14 +252,47 @@ func (this *External) UnmarshalJSON(b []byte) error {
 	return AuthorizationPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for External_Config
-func (this *External_Config) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for External_HTTPConfig
+func (this *External_HTTPConfig) MarshalJSON() ([]byte, error) {
 	str, err := AuthorizationPolicyMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for External_Config
-func (this *External_Config) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for External_HTTPConfig
+func (this *External_HTTPConfig) UnmarshalJSON(b []byte) error {
+	return AuthorizationPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for External_HTTPConfig_AuthorizationRequest
+func (this *External_HTTPConfig_AuthorizationRequest) MarshalJSON() ([]byte, error) {
+	str, err := AuthorizationPolicyMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for External_HTTPConfig_AuthorizationRequest
+func (this *External_HTTPConfig_AuthorizationRequest) UnmarshalJSON(b []byte) error {
+	return AuthorizationPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for External_HTTPConfig_AuthorizationResponse
+func (this *External_HTTPConfig_AuthorizationResponse) MarshalJSON() ([]byte, error) {
+	str, err := AuthorizationPolicyMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for External_HTTPConfig_AuthorizationResponse
+func (this *External_HTTPConfig_AuthorizationResponse) UnmarshalJSON(b []byte) error {
+	return AuthorizationPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for External_TCPConfig
+func (this *External_TCPConfig) MarshalJSON() ([]byte, error) {
+	str, err := AuthorizationPolicyMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for External_TCPConfig
+func (this *External_TCPConfig) UnmarshalJSON(b []byte) error {
 	return AuthorizationPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

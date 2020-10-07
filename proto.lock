@@ -43445,22 +43445,92 @@
               {
                 "id": 1,
                 "name": "http",
-                "type": "Config"
+                "type": "HTTPConfig"
               },
               {
                 "id": 2,
                 "name": "tcp",
-                "type": "Config"
+                "type": "TCPConfig"
               }
             ],
             "messages": [
               {
-                "name": "Config",
+                "name": "HTTPConfig",
                 "fields": [
                   {
                     "id": 1,
                     "name": "server",
                     "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "timeout",
+                    "type": "google.protobuf.Duration"
+                  },
+                  {
+                    "id": 3,
+                    "name": "authorization_request",
+                    "type": "AuthorizationRequest"
+                  },
+                  {
+                    "id": 4,
+                    "name": "authorization_response",
+                    "type": "AuthorizationResponse"
+                  },
+                  {
+                    "id": 5,
+                    "name": "include_peer_certificate",
+                    "type": "bool"
+                  }
+                ],
+                "messages": [
+                  {
+                    "name": "AuthorizationRequest",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "allowed_headers",
+                        "type": "string",
+                        "is_repeated": true
+                      }
+                    ]
+                  },
+                  {
+                    "name": "AuthorizationResponse",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "forward_to_upstream",
+                        "type": "string",
+                        "is_repeated": true
+                      },
+                      {
+                        "id": 2,
+                        "name": "forward_to_downstream",
+                        "type": "string",
+                        "is_repeated": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "TCPConfig",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "server",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "timeout",
+                    "type": "google.protobuf.Duration"
+                  },
+                  {
+                    "id": 3,
+                    "name": "include_peer_certificate",
+                    "type": "bool"
                   }
                 ]
               }
@@ -43647,6 +43717,9 @@
           }
         ],
         "imports": [
+          {
+            "path": "google/protobuf/duration.proto"
+          },
           {
             "path": "google/api/field_behavior.proto"
           },
