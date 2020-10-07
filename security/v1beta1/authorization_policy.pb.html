@@ -170,6 +170,29 @@ spec:
      version: v1
 </code></pre>
 
+<p>The following authorization policy applies to ingress gateway to enable the external authorization for all HTTP and
+TCP requests.</p>
+
+<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+ name: ext-auth
+ namespace: istio-system
+spec:
+ selector:
+   matchLabels:
+     app: istio-ingressgateway
+ action: EXTERNAL
+ external:
+   http:
+     server: &quot;grpc://ext-authz.foo.svc.cluster.local:9000&quot;
+   tcp:
+     server: &quot;grpc://ext-authz.foo.svc.cluster.local:9000&quot;
+ rules:
+ # Empty rules to always trigger the check request.
+ - {}
+</code></pre>
+
 <p>The following authorization policy applies to ingress gateway to enable the external authorization for HTTP requests
 if the request path has prefix &ldquo;/data/&rdquo;.</p>
 
@@ -187,38 +210,50 @@ spec:
    http:
      server: &quot;http://ext-authz.foo.svc.cluster.local:8000&quot;
  rules:
+ # Specify rules to conditionally trigger the check request only if the path has prefix &quot;/data/&quot;.
  - to:
    - operation:
-       # Conditionally trigger the check only when the path has prefix &quot;/data/&quot;.
        paths: [&quot;/data/*&quot;]
 </code></pre>
 
-<p>The following authorization policy applies to ingress gateway to enable the external authorization for all HTTP
-requests and fine-tune to set the check request timeout to 2 seconds and also append the X-foo header to it.</p>
+<p>The EXTERNAL action currently uses a default ext_authz configuration and you can customize it with EnvoyFilter.
+For example, the following EnvoyFilter patches the default configuration to change timeout to 2s and also include the
+extra &ldquo;X-foo&rdquo; header in the check request. We will further improve the user experience here by allowing to directly
+customize the configurations right in the authorization policy so that you don&rsquo;t need the EnvoyFilter in
+most use cases).</p>
 
-<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
-kind: AuthorizationPolicy
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
 metadata:
- name: ext-auth
- namespace: istio-system
+  name: ext-authz
+  namespace: istio-system
 spec:
- selector:
-   matchLabels:
-     app: istio-ingressgateway
- action: EXTERNAL
- external:
-   http:
-     server: &quot;http://ext-authz.foo.svc.cluster.local:8000&quot;
-     config:
-       http_service:
-         server_uri:
-           timeout: 2s
-       authorization_request:
-         allowed_headers:
-           patterns:
-           - exact: X-foo
- rules:
- - {}
+  workloadSelector:
+    labels:
+      app: istio-ingressgateway
+  configPatches:
+  - applyTo: HTTP_FILTER
+    match:
+      context: ANY
+      listener:
+        filterChain:
+          filter:
+            name: envoy.http_connection_manager
+            subFilter:
+              name: envoy.filters.http.ext_authz
+    patch:
+      operation: MERGE
+      value:
+        name: envoy.filters.http.ext_authz
+        typed_config:
+          '@type': type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthz
+          http_service:
+            server_uri:
+              timeout: 2s
+          authorization_request:
+            allowed_headers:
+              patterns:
+              - exact: X-foo
 </code></pre>
 
 <h2 id="AuthorizationPolicy">AuthorizationPolicy</h2>
@@ -303,7 +338,7 @@ No
 <td><code>external</code></td>
 <td><code><a href="#External">External (oneof)</a></code></td>
 <td>
-<p>Configures where and how to talk to the external server. Must be set only with EXTERNAL action.</p>
+<p>Configures how to talk to the external server. Must be set only with EXTERNAL action.</p>
 
 </td>
 <td>
@@ -729,7 +764,7 @@ No
 </section>
 <h2 id="External-Config">External.Config</h2>
 <section>
-<p>Config supplies detail configurations about where and how to talk to the external server.</p>
+<p>Config supplies detail configurations about how to talk to the external server.</p>
 
 <table class="message-fields">
 <thead>
@@ -745,30 +780,16 @@ No
 <td><code>server</code></td>
 <td><code>string</code></td>
 <td>
-<p>Supply the full URL of the external server. If specified, Istio will use it to smartly populate the external
-authorization configuration about where and how to talk to the external server.</p>
+<p>Supply the full URL of the external server that implements the Envoy ext_authz filter check request API.
+Istio will figure out the proper endpoint configuration based on the content of the URL:
+- The scheme (&ldquo;http://&rdquo;, &ldquo;https://&rdquo; or &ldquo;grpc://&rdquo;) will decide the protocol (HTTP or gRPC) of the check request;
+- The host will decide the internal cluster name of the target which could be either within or out of the mesh;</p>
 
-<p>Example values:
-&ldquo;http://ext-authz.foo.svc.cluster.local:8000/&rdquo; for HTTP server in the mesh.
-&ldquo;https://ext-authz.company.com/&rdquo; for HTTP server out of mesh.
-&ldquo;grpc://ext-authz.foo.svc.cluster.local:9000&rdquo; for gRPC server in the mesh.
-&ldquo;http://localhost:8001/&rdquo; for HTTP server along with the sidecar (inside the pod).</p>
-
-<p>At least one of the server and config must be set.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="External-Config-config">
-<td><code>config</code></td>
-<td><code><a href="https://istio.io/docs/reference/config/security/ext-authz.html#ExtAuthz">ExtAuthz</a></code></td>
-<td>
-<p>Supply a custom external authorization configuration if more fine-tuning is needed. If not specified, a default
-external authorization configuration will be used.</p>
-
-<p>At least one of the server and config must be set.</p>
+<p>Examples:
+- &ldquo;http://ext-authz.foo.svc.cluster.local:8000/&rdquo; for HTTP server on port 8000 in the mesh.
+- &ldquo;https://ext-authz.company.com/&rdquo; for HTTPS server on port 80 out of mesh.
+- &ldquo;grpc://ext-authz.foo.svc.cluster.local:9000&rdquo; for gRPC server on port 9000 in the mesh.
+- &ldquo;http://127.0.0.1:8001/&rdquo; for local HTTP server on port 8001 along with the Envoy sidecar.</p>
 
 </td>
 <td>
@@ -874,8 +895,8 @@ No
 sent to the external server and the response will decide whether or not the original request should be allowed
 or denied.</p>
 
-<p>The EXTERNAL action is evaluated before the ALLOW and DENY action and is currently implemented by the Envoy
-ext_authz filter.</p>
+<p>The EXTERNAL action is evaluated before the ALLOW and DENY action, implemented by the Envoy ext_authz filter, and
+is currently an experimental feature in Istio.</p>
 
 </td>
 </tr>

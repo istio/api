@@ -160,6 +160,30 @@
 //      version: v1
 // ```
 //
+// The following authorization policy applies to ingress gateway to enable the external authorization for all HTTP and
+// TCP requests.
+//
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//  name: ext-auth
+//  namespace: istio-system
+// spec:
+//  selector:
+//    matchLabels:
+//      app: istio-ingressgateway
+//  action: EXTERNAL
+//  external:
+//    http:
+//      server: "grpc://ext-authz.foo.svc.cluster.local:9000"
+//    tcp:
+//      server: "grpc://ext-authz.foo.svc.cluster.local:9000"
+//  rules:
+//  # Empty rules to always trigger the check request.
+//  - {}
+// ```
+//
 // The following authorization policy applies to ingress gateway to enable the external authorization for HTTP requests
 // if the request path has prefix "/data/".
 //
@@ -178,39 +202,51 @@
 //    http:
 //      server: "http://ext-authz.foo.svc.cluster.local:8000"
 //  rules:
+//  # Specify rules to conditionally trigger the check request only if the path has prefix "/data/".
 //  - to:
 //    - operation:
-//        # Conditionally trigger the check only when the path has prefix "/data/".
 //        paths: ["/data/*"]
 // ```
 //
-// The following authorization policy applies to ingress gateway to enable the external authorization for all HTTP
-// requests and fine-tune to set the check request timeout to 2 seconds and also append the X-foo header to it.
+// The EXTERNAL action currently uses a default ext_authz configuration and you can customize it with EnvoyFilter.
+// For example, the following EnvoyFilter patches the default configuration to change timeout to 2s and also include the
+// extra "X-foo" header in the check request. We will further improve the user experience here by allowing to directly
+// customize the configurations right in the authorization policy so that you don't need the EnvoyFilter in
+// most use cases).
 //
 // ```yaml
-// apiVersion: security.istio.io/v1beta1
-// kind: AuthorizationPolicy
+// apiVersion: networking.istio.io/v1alpha3
+// kind: EnvoyFilter
 // metadata:
-//  name: ext-auth
-//  namespace: istio-system
+//   name: ext-authz
+//   namespace: istio-system
 // spec:
-//  selector:
-//    matchLabels:
-//      app: istio-ingressgateway
-//  action: EXTERNAL
-//  external:
-//    http:
-//      server: "http://ext-authz.foo.svc.cluster.local:8000"
-//      config:
-//        http_service:
-//          server_uri:
-//            timeout: 2s
-//        authorization_request:
-//          allowed_headers:
-//            patterns:
-//            - exact: X-foo
-//  rules:
-//  - {}
+//   workloadSelector:
+//     labels:
+//       app: istio-ingressgateway
+//   configPatches:
+//   - applyTo: HTTP_FILTER
+//     match:
+//       context: ANY
+//       listener:
+//         filterChain:
+//           filter:
+//             name: envoy.http_connection_manager
+//             subFilter:
+//               name: envoy.filters.http.ext_authz
+//     patch:
+//       operation: MERGE
+//       value:
+//         name: envoy.filters.http.ext_authz
+//         typed_config:
+//           '@type': type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthz
+//           http_service:
+//             server_uri:
+//               timeout: 2s
+//           authorization_request:
+//             allowed_headers:
+//               patterns:
+//               - exact: X-foo
 // ```
 
 package v1beta1
