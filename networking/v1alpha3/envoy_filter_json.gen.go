@@ -163,5 +163,5 @@ func (this *EnvoyFilter_EnvoyConfigObjectPatch) UnmarshalJSON(b []byte) error {
 
 var (
 	EnvoyFilterMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	EnvoyFilterUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	EnvoyFilterUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

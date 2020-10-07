@@ -391,5 +391,5 @@ func (this *ServerTLSSettings) UnmarshalJSON(b []byte) error {
 
 var (
 	GatewayMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	GatewayUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	GatewayUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )
