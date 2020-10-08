@@ -314,7 +314,7 @@ No
 </section>
 <h2 id="External">External</h2>
 <section>
-<p>External supplies detail configurations of the EXTERNAL action.</p>
+<p>External supplies detailed configurations of the EXTERNAL action.</p>
 
 <table class="message-fields">
 <thead>
@@ -746,7 +746,7 @@ No
 <td><code>server</code></td>
 <td><code>string</code></td>
 <td>
-<p>Supply the full URL of the external server that implements the Envoy ext_authz filter check request API.
+<p>Supplies the full URL of the external server that implements the Envoy ext_authz filter check request API.
 Istio will figure out the proper endpoint configuration based on the content of the URL:
 - The scheme (&ldquo;http://&rdquo;, &ldquo;https://&rdquo; or &ldquo;grpc://&rdquo;) will decide the protocol (HTTP or gRPC) of the check request;
 - The host will decide the internal cluster name of the target which could be either within or out of the mesh;</p>
@@ -827,7 +827,7 @@ No
 <td><code>server</code></td>
 <td><code>string</code></td>
 <td>
-<p>Supply the full URL of the external server that implements the Envoy ext_authz filter authorization request API.
+<p>Supplies the full URL of the external server that implements the Envoy ext_authz filter authorization request API.
 Only gRPC protocol is supported on TCP filter chain.</p>
 
 <p>Examples:
@@ -1039,8 +1039,8 @@ No
 will be sent to the external server and the response will decide whether or not the original request should be
 allowed or denied.</p>
 
-<p>The EXTERNAL action is evaluated before the ALLOW and DENY action, implemented by the Envoy ext_authz filter, and
-is currently an experimental feature in Istio.</p>
+<p>The EXTERNAL action is evaluated before the ALLOW and DENY action, implemented by the Envoy ext_authz filter
+and is currently an <strong>experimental feature</strong> in Istio.</p>
 
 </td>
 </tr>

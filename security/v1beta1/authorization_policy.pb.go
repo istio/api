@@ -250,8 +250,8 @@ const (
 	// will be sent to the external server and the response will decide whether or not the original request should be
 	// allowed or denied.
 	//
-	// The EXTERNAL action is evaluated before the ALLOW and DENY action, implemented by the Envoy ext_authz filter, and
-	// is currently an experimental feature in Istio.
+	// The EXTERNAL action is evaluated before the ALLOW and DENY action, implemented by the Envoy ext_authz filter
+	// and is currently an **experimental feature** in Istio.
 	AuthorizationPolicy_EXTERNAL AuthorizationPolicy_Action = 3
 )
 
@@ -433,7 +433,7 @@ func (*AuthorizationPolicy) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-// External supplies detail configurations of the EXTERNAL action.
+// External supplies detailed configurations of the EXTERNAL action.
 type External struct {
 	// If specified, the external authorization will be applied to the HTTP filter chain, otherwise the HTTP filter chain
 	// will have no external authorization.
@@ -499,7 +499,7 @@ func (m *External) GetTcp() *External_TCPConfig {
 
 // HTTPConfig supplies detail configurations of the HTTP filter chain.
 type External_HTTPConfig struct {
-	// Supply the full URL of the external server that implements the Envoy ext_authz filter check request API.
+	// Supplies the full URL of the external server that implements the Envoy ext_authz filter check request API.
 	// Istio will figure out the proper endpoint configuration based on the content of the URL:
 	// - The scheme ("http://", "https://" or "grpc://") will decide the protocol (HTTP or gRPC) of the check request;
 	// - The host will decide the internal cluster name of the target which could be either within or out of the mesh;
@@ -718,7 +718,7 @@ func (m *External_HTTPConfig_AuthorizationResponse) GetForwardToDownstream() []s
 
 // TCPConfig supplies detail configurations of the TCP filter chain.
 type External_TCPConfig struct {
-	// Supply the full URL of the external server that implements the Envoy ext_authz filter authorization request API.
+	// Supplies the full URL of the external server that implements the Envoy ext_authz filter authorization request API.
 	// Only gRPC protocol is supported on TCP filter chain.
 	//
 	// Examples:

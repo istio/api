@@ -91,7 +91,7 @@
         ]
       },
       "istio.security.v1beta1.External": {
-        "description": "External supplies detail configurations of the EXTERNAL action.",
+        "description": "External supplies detailed configurations of the EXTERNAL action.",
         "type": "object",
         "properties": {
           "http": {
@@ -107,7 +107,7 @@
         "type": "object",
         "properties": {
           "server": {
-            "description": "Supply the full URL of the external server that implements the Envoy ext_authz filter check request API. Istio will figure out the proper endpoint configuration based on the content of the URL: - The scheme (\"http://\", \"https://\" or \"grpc://\") will decide the protocol (HTTP or gRPC) of the check request; - The host will decide the internal cluster name of the target which could be either within or out of the mesh;",
+            "description": "Supplies the full URL of the external server that implements the Envoy ext_authz filter check request API. Istio will figure out the proper endpoint configuration based on the content of the URL: - The scheme (\"http://\", \"https://\" or \"grpc://\") will decide the protocol (HTTP or gRPC) of the check request; - The host will decide the internal cluster name of the target which could be either within or out of the mesh;",
             "type": "string",
             "format": "string"
           },
@@ -132,7 +132,7 @@
         "type": "object",
         "properties": {
           "server": {
-            "description": "Supply the full URL of the external server that implements the Envoy ext_authz filter authorization request API. Only gRPC protocol is supported on TCP filter chain.",
+            "description": "Supplies the full URL of the external server that implements the Envoy ext_authz filter authorization request API. Only gRPC protocol is supported on TCP filter chain.",
             "type": "string",
             "format": "string"
           },

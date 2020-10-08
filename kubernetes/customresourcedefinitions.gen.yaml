@@ -3075,7 +3075,7 @@ spec:
                         the external authorization request.
                       type: boolean
                     server:
-                      description: Supply the full URL of the external server that
+                      description: Supplies the full URL of the external server that
                         implements the Envoy ext_authz filter check request API.
                       format: string
                       type: string
@@ -3091,7 +3091,7 @@ spec:
                         the external authorization request.
                       type: boolean
                     server:
-                      description: Supply the full URL of the external server that
+                      description: Supplies the full URL of the external server that
                         implements the Envoy ext_authz filter authorization request
                         API.
                       format: string
