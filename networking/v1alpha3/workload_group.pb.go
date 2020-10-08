@@ -33,6 +33,20 @@
 //       grpc: 3550
 //       http: 8080
 //     serviceAccount: default
+//   probe:
+//     initialDelaySeconds: 5
+//     timeoutSeconds: 3
+//     periodSeconds: 4
+//     successThreshold: 3
+//     failureThreshold: 3
+//     httpGet:
+//      path: /foo/bar
+//      host: 127.0.0.1
+//      port: 3100
+//      scheme: https
+//      httpHeaders:
+//      - name: Lit-Header
+//        value: Im-The-Best
 // ```
 // {{</tab>}}
 // {{</tabset>}}
@@ -94,10 +108,13 @@ type WorkloadGroup struct {
 	// should default to `default`. The workload identities (mTLS certificates) will be bootstrapped using the
 	// specified service account's token. Workload entries in this group will be in the same namespace as the
 	// workload group, and inherit the labels and annotations from the above `metadata` field.
-	Template             *WorkloadEntry `protobuf:"bytes,2,opt,name=template,proto3" json:"template,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_unrecognized     []byte         `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Template *WorkloadEntry `protobuf:"bytes,2,opt,name=template,proto3" json:"template,omitempty"`
+	// `ReadinessProbe` describes the configuration the user must provide for healthchecking on their workload.
+	// This configuration mirrors K8S in both syntax and logic for the most part.
+	Probe                *ReadinessProbe `protobuf:"bytes,3,opt,name=probe,proto3" json:"probe,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
 }
 
 func (m *WorkloadGroup) Reset()         { *m = WorkloadGroup{} }
@@ -143,6 +160,13 @@ func (m *WorkloadGroup) GetMetadata() *WorkloadGroup_ObjectMeta {
 func (m *WorkloadGroup) GetTemplate() *WorkloadEntry {
 	if m != nil {
 		return m.Template
+	}
+	return nil
+}
+
+func (m *WorkloadGroup) GetProbe() *ReadinessProbe {
+	if m != nil {
+		return m.Probe
 	}
 	return nil
 }
@@ -206,11 +230,418 @@ func (m *WorkloadGroup_ObjectMeta) GetAnnotations() map[string]string {
 	return nil
 }
 
+type ReadinessProbe struct {
+	// Number of seconds after the container has started before readiness probes are initiated.
+	InitialDelaySeconds int32 `protobuf:"varint,2,opt,name=initial_delay_seconds,json=initialDelaySeconds,proto3" json:"initial_delay_seconds,omitempty"`
+	// Number of seconds after which the probe times out.
+	// Defaults to 1 second. Minimum value is 1.
+	TimeoutSeconds int32 `protobuf:"varint,3,opt,name=timeout_seconds,json=timeoutSeconds,proto3" json:"timeout_seconds,omitempty"`
+	// How often (in seconds) to perform the probe.
+	// Default to 10 seconds. Minimum value is 1.
+	PeriodSeconds int32 `protobuf:"varint,4,opt,name=period_seconds,json=periodSeconds,proto3" json:"period_seconds,omitempty"`
+	// Minimum consecutive successes for the probe to be considered successful after having failed.
+	// Defaults to 1.
+	SuccessThreshold int32 `protobuf:"varint,5,opt,name=success_threshold,json=successThreshold,proto3" json:"success_threshold,omitempty"`
+	// Minimum consecutive failures for the probe to be considered failed after having succeeded.
+	// Defaults to 3.
+	FailureThreshold int32 `protobuf:"varint,6,opt,name=failure_threshold,json=failureThreshold,proto3" json:"failure_threshold,omitempty"`
+	// Users can only provide one configuration for healthchecks (tcp, http, exec),
+	// and this is expressed as a oneof. All of the other configuration values
+	// hold true for any of the healthcheck methods.
+	//
+	// Types that are valid to be assigned to HealthCheckMethod:
+	//	*ReadinessProbe_HttpGet
+	//	*ReadinessProbe_TcpSocket
+	//	*ReadinessProbe_Exec
+	HealthCheckMethod    isReadinessProbe_HealthCheckMethod `protobuf_oneof:"health_check_method"`
+	XXX_NoUnkeyedLiteral struct{}                           `json:"-"`
+	XXX_unrecognized     []byte                             `json:"-"`
+	XXX_sizecache        int32                              `json:"-"`
+}
+
+func (m *ReadinessProbe) Reset()         { *m = ReadinessProbe{} }
+func (m *ReadinessProbe) String() string { return proto.CompactTextString(m) }
+func (*ReadinessProbe) ProtoMessage()    {}
+func (*ReadinessProbe) Descriptor() ([]byte, []int) {
+	return fileDescriptor_621fb79d92a8ed09, []int{1}
+}
+func (m *ReadinessProbe) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReadinessProbe) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ReadinessProbe.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ReadinessProbe) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReadinessProbe.Merge(m, src)
+}
+func (m *ReadinessProbe) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReadinessProbe) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReadinessProbe.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReadinessProbe proto.InternalMessageInfo
+
+type isReadinessProbe_HealthCheckMethod interface {
+	isReadinessProbe_HealthCheckMethod()
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ReadinessProbe_HttpGet struct {
+	HttpGet *HTTPHealthCheckConfig `protobuf:"bytes,7,opt,name=http_get,json=httpGet,proto3,oneof"`
+}
+type ReadinessProbe_TcpSocket struct {
+	TcpSocket *TCPHealthCheckConfig `protobuf:"bytes,8,opt,name=tcp_socket,json=tcpSocket,proto3,oneof"`
+}
+type ReadinessProbe_Exec struct {
+	Exec *ExecHealthCheckConfig `protobuf:"bytes,9,opt,name=exec,proto3,oneof"`
+}
+
+func (*ReadinessProbe_HttpGet) isReadinessProbe_HealthCheckMethod()   {}
+func (*ReadinessProbe_TcpSocket) isReadinessProbe_HealthCheckMethod() {}
+func (*ReadinessProbe_Exec) isReadinessProbe_HealthCheckMethod()      {}
+
+func (m *ReadinessProbe) GetHealthCheckMethod() isReadinessProbe_HealthCheckMethod {
+	if m != nil {
+		return m.HealthCheckMethod
+	}
+	return nil
+}
+
+func (m *ReadinessProbe) GetInitialDelaySeconds() int32 {
+	if m != nil {
+		return m.InitialDelaySeconds
+	}
+	return 0
+}
+
+func (m *ReadinessProbe) GetTimeoutSeconds() int32 {
+	if m != nil {
+		return m.TimeoutSeconds
+	}
+	return 0
+}
+
+func (m *ReadinessProbe) GetPeriodSeconds() int32 {
+	if m != nil {
+		return m.PeriodSeconds
+	}
+	return 0
+}
+
+func (m *ReadinessProbe) GetSuccessThreshold() int32 {
+	if m != nil {
+		return m.SuccessThreshold
+	}
+	return 0
+}
+
+func (m *ReadinessProbe) GetFailureThreshold() int32 {
+	if m != nil {
+		return m.FailureThreshold
+	}
+	return 0
+}
+
+func (m *ReadinessProbe) GetHttpGet() *HTTPHealthCheckConfig {
+	if x, ok := m.GetHealthCheckMethod().(*ReadinessProbe_HttpGet); ok {
+		return x.HttpGet
+	}
+	return nil
+}
+
+func (m *ReadinessProbe) GetTcpSocket() *TCPHealthCheckConfig {
+	if x, ok := m.GetHealthCheckMethod().(*ReadinessProbe_TcpSocket); ok {
+		return x.TcpSocket
+	}
+	return nil
+}
+
+func (m *ReadinessProbe) GetExec() *ExecHealthCheckConfig {
+	if x, ok := m.GetHealthCheckMethod().(*ReadinessProbe_Exec); ok {
+		return x.Exec
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReadinessProbe) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ReadinessProbe_HttpGet)(nil),
+		(*ReadinessProbe_TcpSocket)(nil),
+		(*ReadinessProbe_Exec)(nil),
+	}
+}
+
+type HTTPHealthCheckConfig struct {
+	// Path to access on the HTTP server.
+	Path string `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
+	// port on which the endpoint lives.
+	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
+	// Host name to connect to, defaults to the pod IP. You probably want to set
+	// "Host" in httpHeaders instead.
+	Host string `protobuf:"bytes,3,opt,name=host,proto3" json:"host,omitempty"`
+	// http or https, defaults to http
+	Scheme string `protobuf:"bytes,4,opt,name=scheme,proto3" json:"scheme,omitempty"`
+	// headers the proxy will pass on to make the request.
+	// allows repeated headers.
+	HttpHeaders          []*HTTPHeader `protobuf:"bytes,5,rep,name=http_headers,json=httpHeaders,proto3" json:"http_headers,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *HTTPHealthCheckConfig) Reset()         { *m = HTTPHealthCheckConfig{} }
+func (m *HTTPHealthCheckConfig) String() string { return proto.CompactTextString(m) }
+func (*HTTPHealthCheckConfig) ProtoMessage()    {}
+func (*HTTPHealthCheckConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_621fb79d92a8ed09, []int{2}
+}
+func (m *HTTPHealthCheckConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *HTTPHealthCheckConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_HTTPHealthCheckConfig.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *HTTPHealthCheckConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HTTPHealthCheckConfig.Merge(m, src)
+}
+func (m *HTTPHealthCheckConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *HTTPHealthCheckConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_HTTPHealthCheckConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HTTPHealthCheckConfig proto.InternalMessageInfo
+
+func (m *HTTPHealthCheckConfig) GetPath() string {
+	if m != nil {
+		return m.Path
+	}
+	return ""
+}
+
+func (m *HTTPHealthCheckConfig) GetPort() uint32 {
+	if m != nil {
+		return m.Port
+	}
+	return 0
+}
+
+func (m *HTTPHealthCheckConfig) GetHost() string {
+	if m != nil {
+		return m.Host
+	}
+	return ""
+}
+
+func (m *HTTPHealthCheckConfig) GetScheme() string {
+	if m != nil {
+		return m.Scheme
+	}
+	return ""
+}
+
+func (m *HTTPHealthCheckConfig) GetHttpHeaders() []*HTTPHeader {
+	if m != nil {
+		return m.HttpHeaders
+	}
+	return nil
+}
+
+type HTTPHeader struct {
+	// The header field name
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// The header field value
+	Value                string   `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *HTTPHeader) Reset()         { *m = HTTPHeader{} }
+func (m *HTTPHeader) String() string { return proto.CompactTextString(m) }
+func (*HTTPHeader) ProtoMessage()    {}
+func (*HTTPHeader) Descriptor() ([]byte, []int) {
+	return fileDescriptor_621fb79d92a8ed09, []int{3}
+}
+func (m *HTTPHeader) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *HTTPHeader) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_HTTPHeader.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *HTTPHeader) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HTTPHeader.Merge(m, src)
+}
+func (m *HTTPHeader) XXX_Size() int {
+	return m.Size()
+}
+func (m *HTTPHeader) XXX_DiscardUnknown() {
+	xxx_messageInfo_HTTPHeader.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HTTPHeader proto.InternalMessageInfo
+
+func (m *HTTPHeader) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *HTTPHeader) GetValue() string {
+	if m != nil {
+		return m.Value
+	}
+	return ""
+}
+
+type TCPHealthCheckConfig struct {
+	// host to connect to, defaults to localhost
+	Host string `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
+	// port of host
+	Port                 uint32   `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *TCPHealthCheckConfig) Reset()         { *m = TCPHealthCheckConfig{} }
+func (m *TCPHealthCheckConfig) String() string { return proto.CompactTextString(m) }
+func (*TCPHealthCheckConfig) ProtoMessage()    {}
+func (*TCPHealthCheckConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_621fb79d92a8ed09, []int{4}
+}
+func (m *TCPHealthCheckConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TCPHealthCheckConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_TCPHealthCheckConfig.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *TCPHealthCheckConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TCPHealthCheckConfig.Merge(m, src)
+}
+func (m *TCPHealthCheckConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *TCPHealthCheckConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_TCPHealthCheckConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TCPHealthCheckConfig proto.InternalMessageInfo
+
+func (m *TCPHealthCheckConfig) GetHost() string {
+	if m != nil {
+		return m.Host
+	}
+	return ""
+}
+
+func (m *TCPHealthCheckConfig) GetPort() uint32 {
+	if m != nil {
+		return m.Port
+	}
+	return 0
+}
+
+type ExecHealthCheckConfig struct {
+	// command to run. Exit status of 0 is treated as live/healthy and non-zero is unhealthy.
+	Command              []string `protobuf:"bytes,1,rep,name=command,proto3" json:"command,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ExecHealthCheckConfig) Reset()         { *m = ExecHealthCheckConfig{} }
+func (m *ExecHealthCheckConfig) String() string { return proto.CompactTextString(m) }
+func (*ExecHealthCheckConfig) ProtoMessage()    {}
+func (*ExecHealthCheckConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_621fb79d92a8ed09, []int{5}
+}
+func (m *ExecHealthCheckConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ExecHealthCheckConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ExecHealthCheckConfig.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ExecHealthCheckConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ExecHealthCheckConfig.Merge(m, src)
+}
+func (m *ExecHealthCheckConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *ExecHealthCheckConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_ExecHealthCheckConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ExecHealthCheckConfig proto.InternalMessageInfo
+
+func (m *ExecHealthCheckConfig) GetCommand() []string {
+	if m != nil {
+		return m.Command
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*WorkloadGroup)(nil), "istio.networking.v1alpha3.WorkloadGroup")
 	proto.RegisterType((*WorkloadGroup_ObjectMeta)(nil), "istio.networking.v1alpha3.WorkloadGroup.ObjectMeta")
 	proto.RegisterMapType((map[string]string)(nil), "istio.networking.v1alpha3.WorkloadGroup.ObjectMeta.AnnotationsEntry")
 	proto.RegisterMapType((map[string]string)(nil), "istio.networking.v1alpha3.WorkloadGroup.ObjectMeta.LabelsEntry")
+	proto.RegisterType((*ReadinessProbe)(nil), "istio.networking.v1alpha3.ReadinessProbe")
+	proto.RegisterType((*HTTPHealthCheckConfig)(nil), "istio.networking.v1alpha3.HTTPHealthCheckConfig")
+	proto.RegisterType((*HTTPHeader)(nil), "istio.networking.v1alpha3.HTTPHeader")
+	proto.RegisterType((*TCPHealthCheckConfig)(nil), "istio.networking.v1alpha3.TCPHealthCheckConfig")
+	proto.RegisterType((*ExecHealthCheckConfig)(nil), "istio.networking.v1alpha3.ExecHealthCheckConfig")
 }
 
 func init() {
@@ -218,29 +649,51 @@ func init() {
 }
 
 var fileDescriptor_621fb79d92a8ed09 = []byte{
-	// 338 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x92, 0xc1, 0x4e, 0xf2, 0x40,
-	0x10, 0xc7, 0xb3, 0x6d, 0x3e, 0x02, 0xdb, 0x7c, 0x09, 0xd9, 0x78, 0xa8, 0x3d, 0x20, 0xf1, 0xd4,
-	0xd3, 0x36, 0xc2, 0x45, 0x3d, 0x68, 0x20, 0x1a, 0x63, 0xa2, 0x21, 0xe9, 0x85, 0xc4, 0x0b, 0x99,
-	0xca, 0x52, 0x56, 0x96, 0x6e, 0x53, 0x06, 0x0c, 0x6f, 0xc8, 0xd1, 0x47, 0x20, 0x3c, 0x84, 0x67,
-	0xd3, 0x2d, 0x02, 0x1a, 0x35, 0xca, 0xad, 0xdd, 0x9d, 0xff, 0xef, 0x37, 0x3b, 0x19, 0xea, 0x27,
-	0x02, 0x9f, 0x75, 0x36, 0x92, 0x49, 0x1c, 0xcc, 0x4e, 0x40, 0xa5, 0x43, 0x68, 0x06, 0xf9, 0x81,
-	0xd2, 0xd0, 0xef, 0xc5, 0x99, 0x9e, 0xa6, 0x3c, 0xcd, 0x34, 0x6a, 0x76, 0x28, 0x27, 0x28, 0x35,
-	0xdf, 0xd6, 0xf3, 0xf7, 0x7a, 0xef, 0x28, 0xd6, 0x3a, 0x56, 0x22, 0x80, 0x54, 0x06, 0x03, 0x29,
-	0x54, 0xbf, 0x17, 0x89, 0x21, 0xcc, 0xa4, 0xce, 0x8a, 0xac, 0xf7, 0xb3, 0x45, 0x24, 0x98, 0xcd,
-	0x8b, 0xca, 0xe3, 0x57, 0x9b, 0xfe, 0xef, 0xae, 0x2f, 0x6e, 0x72, 0x3b, 0xeb, 0xd0, 0xf2, 0x58,
-	0x20, 0xf4, 0x01, 0xc1, 0x25, 0x75, 0xe2, 0x3b, 0x8d, 0x26, 0xff, 0xb6, 0x15, 0xfe, 0x21, 0xcb,
-	0x3b, 0xd1, 0x93, 0x78, 0xc4, 0x7b, 0x81, 0x10, 0x6e, 0x20, 0xec, 0x96, 0x96, 0x51, 0x8c, 0x53,
-	0x05, 0x28, 0x5c, 0xcb, 0x00, 0xfd, 0x5f, 0x00, 0xaf, 0xf3, 0x26, 0xdb, 0xf6, 0xb2, 0x65, 0x85,
-	0x9b, 0xb8, 0xb7, 0xb0, 0x28, 0xdd, 0x3a, 0x58, 0x97, 0x96, 0x14, 0x44, 0x42, 0x4d, 0x5c, 0x52,
-	0xb7, 0x7d, 0xa7, 0x71, 0xb9, 0x47, 0xa3, 0xfc, 0xce, 0x10, 0x8c, 0x2e, 0x5c, 0xe3, 0xd8, 0x80,
-	0x3a, 0x90, 0x24, 0x1a, 0x01, 0xa5, 0x4e, 0x26, 0xae, 0x65, 0xe8, 0x57, 0xfb, 0xd0, 0x5b, 0x5b,
-	0x4c, 0xa1, 0xd8, 0x05, 0x7b, 0x67, 0xd4, 0xd9, 0xd1, 0xb3, 0x2a, 0xb5, 0x47, 0x62, 0x6e, 0xa6,
-	0x5e, 0x09, 0xf3, 0x4f, 0x76, 0x40, 0xff, 0xcd, 0x40, 0x4d, 0x8b, 0xc1, 0x55, 0xc2, 0xe2, 0xe7,
-	0xdc, 0x3a, 0x25, 0xde, 0x05, 0xad, 0x7e, 0x66, 0xff, 0x25, 0xdf, 0xe6, 0x8b, 0x55, 0x8d, 0xbc,
-	0xac, 0x6a, 0x64, 0xb9, 0xaa, 0x91, 0x87, 0x7a, 0xf1, 0x34, 0xa9, 0xcd, 0x4e, 0x7d, 0xb1, 0x3d,
-	0x51, 0xc9, 0xec, 0x4b, 0xf3, 0x2d, 0x00, 0x00, 0xff, 0xff, 0x0a, 0x8f, 0x0a, 0x2b, 0xc1, 0x02,
-	0x00, 0x00,
+	// 702 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x94, 0xdb, 0x4e, 0xdb, 0x4c,
+	0x10, 0xc7, 0x3f, 0xe7, 0x44, 0x3c, 0xf9, 0xe0, 0xe3, 0x5b, 0x48, 0xe5, 0xe6, 0x82, 0xa2, 0x48,
+	0xa8, 0xa9, 0x2a, 0x39, 0x05, 0xa4, 0xaa, 0xed, 0x05, 0x88, 0x53, 0x49, 0xa5, 0x22, 0x90, 0x89,
+	0x84, 0xd4, 0x1b, 0x6b, 0x63, 0x4f, 0xe2, 0x6d, 0x6c, 0xaf, 0xe5, 0xdd, 0x50, 0x78, 0xb0, 0xaa,
+	0xaf, 0xc0, 0x65, 0x1f, 0x01, 0xf1, 0x00, 0x7d, 0x86, 0xca, 0x6b, 0xe7, 0x40, 0xe5, 0x86, 0x96,
+	0xbb, 0xf1, 0xcc, 0x7f, 0x7e, 0x3b, 0x87, 0xf5, 0x42, 0x2b, 0x44, 0xf9, 0x85, 0xc7, 0x43, 0x16,
+	0x0e, 0xda, 0x97, 0x9b, 0xd4, 0x8f, 0x3c, 0xba, 0xdd, 0x4e, 0x1c, 0x3e, 0xa7, 0xae, 0x3d, 0x88,
+	0xf9, 0x28, 0x32, 0xa3, 0x98, 0x4b, 0x4e, 0x9e, 0x32, 0x21, 0x19, 0x37, 0xa7, 0x7a, 0x73, 0xac,
+	0x6f, 0x3c, 0x1b, 0x70, 0x3e, 0xf0, 0xb1, 0x4d, 0x23, 0xd6, 0xee, 0x33, 0xf4, 0x5d, 0xbb, 0x87,
+	0x1e, 0xbd, 0x64, 0x3c, 0x4e, 0x73, 0x1b, 0xf3, 0x4f, 0xc1, 0x50, 0xc6, 0xd7, 0xa9, 0xb2, 0xf9,
+	0xad, 0x04, 0x8b, 0x17, 0x59, 0xe0, 0x38, 0x39, 0x9d, 0x9c, 0x42, 0x35, 0x40, 0x49, 0x5d, 0x2a,
+	0xa9, 0xa1, 0xad, 0x6b, 0xad, 0xda, 0xd6, 0xb6, 0xf9, 0xdb, 0x52, 0xcc, 0x7b, 0xb9, 0xe6, 0x69,
+	0xef, 0x33, 0x3a, 0xf2, 0x04, 0x25, 0xb5, 0x26, 0x10, 0xf2, 0x01, 0xaa, 0x12, 0x83, 0xc8, 0xa7,
+	0x12, 0x8d, 0x82, 0x02, 0xb6, 0xfe, 0x00, 0x78, 0x94, 0x14, 0xb9, 0x5f, 0xbc, 0xdd, 0x2b, 0x58,
+	0x93, 0x74, 0xb2, 0x0b, 0xe5, 0x28, 0xe6, 0x3d, 0x34, 0x8a, 0x8a, 0xf3, 0x62, 0x0e, 0xc7, 0x42,
+	0xea, 0xb2, 0x10, 0x85, 0x38, 0x4b, 0x12, 0xac, 0x34, 0xaf, 0x71, 0x53, 0x00, 0x98, 0x16, 0x49,
+	0x2e, 0xa0, 0xe2, 0xd3, 0x1e, 0xfa, 0xc2, 0xd0, 0xd6, 0x8b, 0xad, 0xda, 0xd6, 0xee, 0x23, 0x3a,
+	0x35, 0x3f, 0x2a, 0x82, 0xaa, 0xd7, 0xca, 0x70, 0xa4, 0x0f, 0x35, 0x1a, 0x86, 0x5c, 0x52, 0xc9,
+	0x78, 0x28, 0x8c, 0x82, 0xa2, 0x1f, 0x3e, 0x86, 0xbe, 0x37, 0xc5, 0xa4, 0x47, 0xcc, 0x82, 0x1b,
+	0x6f, 0xa1, 0x36, 0x73, 0x3c, 0x59, 0x86, 0xe2, 0x10, 0xaf, 0xd5, 0xda, 0x74, 0x2b, 0x31, 0xc9,
+	0x2a, 0x94, 0x2f, 0xa9, 0x3f, 0x4a, 0x27, 0xaf, 0x5b, 0xe9, 0xc7, 0xbb, 0xc2, 0x1b, 0xad, 0xb1,
+	0x03, 0xcb, 0xbf, 0xb2, 0xff, 0x26, 0xbf, 0xf9, 0xa3, 0x08, 0x4b, 0xf7, 0x87, 0x4c, 0xb6, 0xa0,
+	0xce, 0x42, 0x26, 0x19, 0xf5, 0x6d, 0x17, 0x7d, 0x7a, 0x6d, 0x0b, 0x74, 0x78, 0xe8, 0x0a, 0x95,
+	0x5c, 0xb6, 0x56, 0xb2, 0xe0, 0x61, 0x12, 0x3b, 0x4f, 0x43, 0xe4, 0x39, 0xfc, 0x27, 0x59, 0x80,
+	0x7c, 0x24, 0x27, 0xea, 0xa2, 0x52, 0x2f, 0x65, 0xee, 0xb1, 0x70, 0x03, 0x96, 0x22, 0x8c, 0x19,
+	0x77, 0x27, 0xba, 0x92, 0xd2, 0x2d, 0xa6, 0xde, 0xb1, 0xec, 0x25, 0xfc, 0x2f, 0x46, 0x8e, 0x83,
+	0x42, 0xd8, 0xd2, 0x8b, 0x51, 0x78, 0xdc, 0x77, 0x8d, 0xb2, 0x52, 0x2e, 0x67, 0x81, 0xee, 0xd8,
+	0x9f, 0x88, 0xfb, 0x94, 0xf9, 0xa3, 0x18, 0x67, 0xc4, 0x95, 0x54, 0x9c, 0x05, 0xa6, 0xe2, 0x13,
+	0xa8, 0x7a, 0x52, 0x46, 0xf6, 0x00, 0xa5, 0xb1, 0xa0, 0xee, 0xdf, 0xab, 0x39, 0x0b, 0xed, 0x74,
+	0xbb, 0x67, 0x1d, 0xa4, 0xbe, 0xf4, 0x0e, 0x3c, 0x74, 0x86, 0x07, 0x3c, 0xec, 0xb3, 0x41, 0xe7,
+	0x1f, 0x6b, 0x21, 0x61, 0x1c, 0xa3, 0x24, 0x67, 0x00, 0xd2, 0x89, 0x6c, 0xc1, 0x9d, 0x21, 0x4a,
+	0xa3, 0xaa, 0x80, 0xed, 0x39, 0xc0, 0xee, 0x41, 0x2e, 0x4f, 0x97, 0x4e, 0x74, 0xae, 0x18, 0xe4,
+	0x3d, 0x94, 0xf0, 0x0a, 0x1d, 0x43, 0x7f, 0xb0, 0xb8, 0xa3, 0x2b, 0x74, 0xf2, 0x60, 0x2a, 0x7f,
+	0xbf, 0x0e, 0x2b, 0x9e, 0x0a, 0xda, 0x4e, 0x12, 0xb5, 0x03, 0x94, 0x1e, 0x77, 0x9b, 0x5f, 0x35,
+	0xa8, 0xe7, 0x76, 0x45, 0x08, 0x94, 0x22, 0x2a, 0xbd, 0xec, 0xde, 0x28, 0x5b, 0xf9, 0x78, 0x2c,
+	0xd5, 0xea, 0x17, 0x2d, 0x65, 0x27, 0x3e, 0x8f, 0x0b, 0xa9, 0x16, 0xac, 0x5b, 0xca, 0x26, 0x4f,
+	0xa0, 0x22, 0x1c, 0x0f, 0x03, 0x54, 0xeb, 0xd4, 0xad, 0xec, 0x8b, 0x74, 0xe0, 0x5f, 0x35, 0x6d,
+	0x0f, 0xa9, 0x8b, 0xb1, 0x30, 0xca, 0xea, 0x17, 0xda, 0x78, 0x78, 0xe2, 0x2e, 0xc6, 0x56, 0x2d,
+	0x49, 0x4d, 0x6d, 0xd1, 0x7c, 0x0d, 0x30, 0x0d, 0x25, 0x35, 0x84, 0x34, 0xc0, 0x71, 0xad, 0x89,
+	0x9d, 0x7f, 0xc9, 0x9b, 0x3b, 0xb0, 0x9a, 0x37, 0xf3, 0x49, 0x17, 0xda, 0x4c, 0x17, 0x39, 0xdd,
+	0x36, 0x37, 0xa1, 0x9e, 0x3b, 0x67, 0x62, 0xc0, 0x82, 0xc3, 0x83, 0x80, 0x86, 0xae, 0x7a, 0x76,
+	0x74, 0x6b, 0xfc, 0xb9, 0x6f, 0xde, 0xdc, 0xad, 0x69, 0xdf, 0xef, 0xd6, 0xb4, 0xdb, 0xbb, 0x35,
+	0xed, 0xd3, 0x7a, 0xda, 0x2b, 0xe3, 0xea, 0xa1, 0xcf, 0x79, 0xd2, 0x7b, 0x15, 0xf5, 0x88, 0x6f,
+	0xff, 0x0c, 0x00, 0x00, 0xff, 0xff, 0x03, 0x29, 0x6e, 0x40, 0x56, 0x06, 0x00, 0x00,
 }
 
 func (m *WorkloadGroup) Marshal() (dAtA []byte, err error) {
@@ -266,6 +719,18 @@ func (m *WorkloadGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.XXX_unrecognized != nil {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.Probe != nil {
+		{
+			size, err := m.Probe.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintWorkloadGroup(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
 	}
 	if m.Template != nil {
 		{
@@ -359,6 +824,310 @@ func (m *WorkloadGroup_ObjectMeta) MarshalToSizedBuffer(dAtA []byte) (int, error
 	return len(dAtA) - i, nil
 }
 
+func (m *ReadinessProbe) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ReadinessProbe) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReadinessProbe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.HealthCheckMethod != nil {
+		{
+			size := m.HealthCheckMethod.Size()
+			i -= size
+			if _, err := m.HealthCheckMethod.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.FailureThreshold != 0 {
+		i = encodeVarintWorkloadGroup(dAtA, i, uint64(m.FailureThreshold))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.SuccessThreshold != 0 {
+		i = encodeVarintWorkloadGroup(dAtA, i, uint64(m.SuccessThreshold))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.PeriodSeconds != 0 {
+		i = encodeVarintWorkloadGroup(dAtA, i, uint64(m.PeriodSeconds))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.TimeoutSeconds != 0 {
+		i = encodeVarintWorkloadGroup(dAtA, i, uint64(m.TimeoutSeconds))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.InitialDelaySeconds != 0 {
+		i = encodeVarintWorkloadGroup(dAtA, i, uint64(m.InitialDelaySeconds))
+		i--
+		dAtA[i] = 0x10
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ReadinessProbe_HttpGet) MarshalTo(dAtA []byte) (int, error) {
+	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+}
+
+func (m *ReadinessProbe_HttpGet) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.HttpGet != nil {
+		{
+			size, err := m.HttpGet.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintWorkloadGroup(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReadinessProbe_TcpSocket) MarshalTo(dAtA []byte) (int, error) {
+	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+}
+
+func (m *ReadinessProbe_TcpSocket) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.TcpSocket != nil {
+		{
+			size, err := m.TcpSocket.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintWorkloadGroup(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReadinessProbe_Exec) MarshalTo(dAtA []byte) (int, error) {
+	return m.MarshalToSizedBuffer(dAtA[:m.Size()])
+}
+
+func (m *ReadinessProbe_Exec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Exec != nil {
+		{
+			size, err := m.Exec.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintWorkloadGroup(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *HTTPHealthCheckConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *HTTPHealthCheckConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPHealthCheckConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.HttpHeaders) > 0 {
+		for iNdEx := len(m.HttpHeaders) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.HttpHeaders[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintWorkloadGroup(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.Scheme) > 0 {
+		i -= len(m.Scheme)
+		copy(dAtA[i:], m.Scheme)
+		i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(m.Scheme)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Host) > 0 {
+		i -= len(m.Host)
+		copy(dAtA[i:], m.Host)
+		i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(m.Host)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Port != 0 {
+		i = encodeVarintWorkloadGroup(dAtA, i, uint64(m.Port))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Path) > 0 {
+		i -= len(m.Path)
+		copy(dAtA[i:], m.Path)
+		i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(m.Path)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *HTTPHeader) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *HTTPHeader) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPHeader) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.Value) > 0 {
+		i -= len(m.Value)
+		copy(dAtA[i:], m.Value)
+		i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(m.Value)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *TCPHealthCheckConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TCPHealthCheckConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TCPHealthCheckConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.Port != 0 {
+		i = encodeVarintWorkloadGroup(dAtA, i, uint64(m.Port))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Host) > 0 {
+		i -= len(m.Host)
+		copy(dAtA[i:], m.Host)
+		i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(m.Host)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ExecHealthCheckConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ExecHealthCheckConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ExecHealthCheckConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.Command) > 0 {
+		for iNdEx := len(m.Command) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Command[iNdEx])
+			copy(dAtA[i:], m.Command[iNdEx])
+			i = encodeVarintWorkloadGroup(dAtA, i, uint64(len(m.Command[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintWorkloadGroup(dAtA []byte, offset int, v uint64) int {
 	offset -= sovWorkloadGroup(v)
 	base := offset
@@ -382,6 +1151,10 @@ func (m *WorkloadGroup) Size() (n int) {
 	}
 	if m.Template != nil {
 		l = m.Template.Size()
+		n += 1 + l + sovWorkloadGroup(uint64(l))
+	}
+	if m.Probe != nil {
+		l = m.Probe.Size()
 		n += 1 + l + sovWorkloadGroup(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
@@ -410,6 +1183,162 @@ func (m *WorkloadGroup_ObjectMeta) Size() (n int) {
 			_ = v
 			mapEntrySize := 1 + len(k) + sovWorkloadGroup(uint64(len(k))) + 1 + len(v) + sovWorkloadGroup(uint64(len(v)))
 			n += mapEntrySize + 1 + sovWorkloadGroup(uint64(mapEntrySize))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *ReadinessProbe) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.InitialDelaySeconds != 0 {
+		n += 1 + sovWorkloadGroup(uint64(m.InitialDelaySeconds))
+	}
+	if m.TimeoutSeconds != 0 {
+		n += 1 + sovWorkloadGroup(uint64(m.TimeoutSeconds))
+	}
+	if m.PeriodSeconds != 0 {
+		n += 1 + sovWorkloadGroup(uint64(m.PeriodSeconds))
+	}
+	if m.SuccessThreshold != 0 {
+		n += 1 + sovWorkloadGroup(uint64(m.SuccessThreshold))
+	}
+	if m.FailureThreshold != 0 {
+		n += 1 + sovWorkloadGroup(uint64(m.FailureThreshold))
+	}
+	if m.HealthCheckMethod != nil {
+		n += m.HealthCheckMethod.Size()
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *ReadinessProbe_HttpGet) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HttpGet != nil {
+		l = m.HttpGet.Size()
+		n += 1 + l + sovWorkloadGroup(uint64(l))
+	}
+	return n
+}
+func (m *ReadinessProbe_TcpSocket) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TcpSocket != nil {
+		l = m.TcpSocket.Size()
+		n += 1 + l + sovWorkloadGroup(uint64(l))
+	}
+	return n
+}
+func (m *ReadinessProbe_Exec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Exec != nil {
+		l = m.Exec.Size()
+		n += 1 + l + sovWorkloadGroup(uint64(l))
+	}
+	return n
+}
+func (m *HTTPHealthCheckConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Path)
+	if l > 0 {
+		n += 1 + l + sovWorkloadGroup(uint64(l))
+	}
+	if m.Port != 0 {
+		n += 1 + sovWorkloadGroup(uint64(m.Port))
+	}
+	l = len(m.Host)
+	if l > 0 {
+		n += 1 + l + sovWorkloadGroup(uint64(l))
+	}
+	l = len(m.Scheme)
+	if l > 0 {
+		n += 1 + l + sovWorkloadGroup(uint64(l))
+	}
+	if len(m.HttpHeaders) > 0 {
+		for _, e := range m.HttpHeaders {
+			l = e.Size()
+			n += 1 + l + sovWorkloadGroup(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *HTTPHeader) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovWorkloadGroup(uint64(l))
+	}
+	l = len(m.Value)
+	if l > 0 {
+		n += 1 + l + sovWorkloadGroup(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *TCPHealthCheckConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Host)
+	if l > 0 {
+		n += 1 + l + sovWorkloadGroup(uint64(l))
+	}
+	if m.Port != 0 {
+		n += 1 + sovWorkloadGroup(uint64(m.Port))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *ExecHealthCheckConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Command) > 0 {
+		for _, s := range m.Command {
+			l = len(s)
+			n += 1 + l + sovWorkloadGroup(uint64(l))
 		}
 	}
 	if m.XXX_unrecognized != nil {
@@ -522,6 +1451,42 @@ func (m *WorkloadGroup) Unmarshal(dAtA []byte) error {
 				m.Template = &WorkloadEntry{}
 			}
 			if err := m.Template.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Probe", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Probe == nil {
+				m.Probe = &ReadinessProbe{}
+			}
+			if err := m.Probe.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -832,6 +1797,772 @@ func (m *WorkloadGroup_ObjectMeta) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.Annotations[mapkey] = mapvalue
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipWorkloadGroup(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ReadinessProbe) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowWorkloadGroup
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ReadinessProbe: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ReadinessProbe: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InitialDelaySeconds", wireType)
+			}
+			m.InitialDelaySeconds = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.InitialDelaySeconds |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TimeoutSeconds", wireType)
+			}
+			m.TimeoutSeconds = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TimeoutSeconds |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PeriodSeconds", wireType)
+			}
+			m.PeriodSeconds = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PeriodSeconds |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SuccessThreshold", wireType)
+			}
+			m.SuccessThreshold = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.SuccessThreshold |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FailureThreshold", wireType)
+			}
+			m.FailureThreshold = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.FailureThreshold |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpGet", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &HTTPHealthCheckConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheckMethod = &ReadinessProbe_HttpGet{v}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TcpSocket", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &TCPHealthCheckConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheckMethod = &ReadinessProbe_TcpSocket{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Exec", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ExecHealthCheckConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheckMethod = &ReadinessProbe_Exec{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipWorkloadGroup(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *HTTPHealthCheckConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowWorkloadGroup
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: HTTPHealthCheckConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: HTTPHealthCheckConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Path = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
+			}
+			m.Port = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Port |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Host", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Host = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Scheme", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Scheme = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpHeaders", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.HttpHeaders = append(m.HttpHeaders, &HTTPHeader{})
+			if err := m.HttpHeaders[len(m.HttpHeaders)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipWorkloadGroup(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *HTTPHeader) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowWorkloadGroup
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: HTTPHeader: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: HTTPHeader: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Value = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipWorkloadGroup(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TCPHealthCheckConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowWorkloadGroup
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TCPHealthCheckConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TCPHealthCheckConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Host", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Host = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
+			}
+			m.Port = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Port |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipWorkloadGroup(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ExecHealthCheckConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowWorkloadGroup
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ExecHealthCheckConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ExecHealthCheckConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Command", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowWorkloadGroup
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthWorkloadGroup
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Command = append(m.Command, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.networking.v1alpha3',
   syntax='proto3',
   serialized_options=_b('Z istio.io/api/networking/v1alpha3'),
-  serialized_pb=_b('\n(networking/v1alpha3/workload_group.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a(networking/v1alpha3/workload_entry.proto\"\xb5\x03\n\rWorkloadGroup\x12\x45\n\x08metadata\x18\x01 \x01(\x0b\x32\x33.istio.networking.v1alpha3.WorkloadGroup.ObjectMeta\x12?\n\x08template\x18\x02 \x01(\x0b\x32(.istio.networking.v1alpha3.WorkloadEntryB\x03\xe0\x41\x02\x1a\x9b\x02\n\nObjectMeta\x12O\n\x06labels\x18\x01 \x03(\x0b\x32?.istio.networking.v1alpha3.WorkloadGroup.ObjectMeta.LabelsEntry\x12Y\n\x0b\x61nnotations\x18\x02 \x03(\x0b\x32\x44.istio.networking.v1alpha3.WorkloadGroup.ObjectMeta.AnnotationsEntry\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x32\n\x10\x41nnotationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\"Z istio.io/api/networking/v1alpha3b\x06proto3')
+  serialized_pb=_b('\n(networking/v1alpha3/workload_group.proto\x12\x19istio.networking.v1alpha3\x1a\x1fgoogle/api/field_behavior.proto\x1a(networking/v1alpha3/workload_entry.proto\"\xef\x03\n\rWorkloadGroup\x12\x45\n\x08metadata\x18\x01 \x01(\x0b\x32\x33.istio.networking.v1alpha3.WorkloadGroup.ObjectMeta\x12?\n\x08template\x18\x02 \x01(\x0b\x32(.istio.networking.v1alpha3.WorkloadEntryB\x03\xe0\x41\x02\x12\x38\n\x05probe\x18\x03 \x01(\x0b\x32).istio.networking.v1alpha3.ReadinessProbe\x1a\x9b\x02\n\nObjectMeta\x12O\n\x06labels\x18\x01 \x03(\x0b\x32?.istio.networking.v1alpha3.WorkloadGroup.ObjectMeta.LabelsEntry\x12Y\n\x0b\x61nnotations\x18\x02 \x03(\x0b\x32\x44.istio.networking.v1alpha3.WorkloadGroup.ObjectMeta.AnnotationsEntry\x1a-\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x32\n\x10\x41nnotationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xfc\x02\n\x0eReadinessProbe\x12\x1d\n\x15initial_delay_seconds\x18\x02 \x01(\x05\x12\x17\n\x0ftimeout_seconds\x18\x03 \x01(\x05\x12\x16\n\x0eperiod_seconds\x18\x04 \x01(\x05\x12\x19\n\x11success_threshold\x18\x05 \x01(\x05\x12\x19\n\x11\x66\x61ilure_threshold\x18\x06 \x01(\x05\x12\x44\n\x08http_get\x18\x07 \x01(\x0b\x32\x30.istio.networking.v1alpha3.HTTPHealthCheckConfigH\x00\x12\x45\n\ntcp_socket\x18\x08 \x01(\x0b\x32/.istio.networking.v1alpha3.TCPHealthCheckConfigH\x00\x12@\n\x04\x65xec\x18\t \x01(\x0b\x32\x30.istio.networking.v1alpha3.ExecHealthCheckConfigH\x00\x42\x15\n\x13health_check_method\"\x8e\x01\n\x15HTTPHealthCheckConfig\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\r\x12\x0c\n\x04host\x18\x03 \x01(\t\x12\x0e\n\x06scheme\x18\x04 \x01(\t\x12;\n\x0chttp_headers\x18\x05 \x03(\x0b\x32%.istio.networking.v1alpha3.HTTPHeader\")\n\nHTTPHeader\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"2\n\x14TCPHealthCheckConfig\x12\x0c\n\x04host\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\r\"(\n\x15\x45xecHealthCheckConfig\x12\x0f\n\x07\x63ommand\x18\x01 \x03(\tB\"Z istio.io/api/networking/v1alpha3b\x06proto3')
   ,
   dependencies=[google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,networking_dot_v1alpha3_dot_workload__entry__pb2.DESCRIPTOR,])
 
@@ -62,8 +62,8 @@ _WORKLOADGROUP_OBJECTMETA_LABELSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=487,
-  serialized_end=532,
+  serialized_start=545,
+  serialized_end=590,
 )
 
 _WORKLOADGROUP_OBJECTMETA_ANNOTATIONSENTRY = _descriptor.Descriptor(
@@ -99,8 +99,8 @@ _WORKLOADGROUP_OBJECTMETA_ANNOTATIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=534,
-  serialized_end=584,
+  serialized_start=592,
+  serialized_end=642,
 )
 
 _WORKLOADGROUP_OBJECTMETA = _descriptor.Descriptor(
@@ -136,8 +136,8 @@ _WORKLOADGROUP_OBJECTMETA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=301,
-  serialized_end=584,
+  serialized_start=359,
+  serialized_end=642,
 )
 
 _WORKLOADGROUP = _descriptor.Descriptor(
@@ -161,6 +161,13 @@ _WORKLOADGROUP = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=_b('\340A\002'), file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='probe', full_name='istio.networking.v1alpha3.WorkloadGroup.probe', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -174,7 +181,256 @@ _WORKLOADGROUP = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=147,
-  serialized_end=584,
+  serialized_end=642,
+)
+
+
+_READINESSPROBE = _descriptor.Descriptor(
+  name='ReadinessProbe',
+  full_name='istio.networking.v1alpha3.ReadinessProbe',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='initial_delay_seconds', full_name='istio.networking.v1alpha3.ReadinessProbe.initial_delay_seconds', index=0,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='timeout_seconds', full_name='istio.networking.v1alpha3.ReadinessProbe.timeout_seconds', index=1,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='period_seconds', full_name='istio.networking.v1alpha3.ReadinessProbe.period_seconds', index=2,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='success_threshold', full_name='istio.networking.v1alpha3.ReadinessProbe.success_threshold', index=3,
+      number=5, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='failure_threshold', full_name='istio.networking.v1alpha3.ReadinessProbe.failure_threshold', index=4,
+      number=6, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='http_get', full_name='istio.networking.v1alpha3.ReadinessProbe.http_get', index=5,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='tcp_socket', full_name='istio.networking.v1alpha3.ReadinessProbe.tcp_socket', index=6,
+      number=8, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='exec', full_name='istio.networking.v1alpha3.ReadinessProbe.exec', index=7,
+      number=9, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='health_check_method', full_name='istio.networking.v1alpha3.ReadinessProbe.health_check_method',
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=645,
+  serialized_end=1025,
+)
+
+
+_HTTPHEALTHCHECKCONFIG = _descriptor.Descriptor(
+  name='HTTPHealthCheckConfig',
+  full_name='istio.networking.v1alpha3.HTTPHealthCheckConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='path', full_name='istio.networking.v1alpha3.HTTPHealthCheckConfig.path', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='port', full_name='istio.networking.v1alpha3.HTTPHealthCheckConfig.port', index=1,
+      number=2, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='host', full_name='istio.networking.v1alpha3.HTTPHealthCheckConfig.host', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='scheme', full_name='istio.networking.v1alpha3.HTTPHealthCheckConfig.scheme', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='http_headers', full_name='istio.networking.v1alpha3.HTTPHealthCheckConfig.http_headers', index=4,
+      number=5, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1028,
+  serialized_end=1170,
+)
+
+
+_HTTPHEADER = _descriptor.Descriptor(
+  name='HTTPHeader',
+  full_name='istio.networking.v1alpha3.HTTPHeader',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='istio.networking.v1alpha3.HTTPHeader.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='istio.networking.v1alpha3.HTTPHeader.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1172,
+  serialized_end=1213,
+)
+
+
+_TCPHEALTHCHECKCONFIG = _descriptor.Descriptor(
+  name='TCPHealthCheckConfig',
+  full_name='istio.networking.v1alpha3.TCPHealthCheckConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='host', full_name='istio.networking.v1alpha3.TCPHealthCheckConfig.host', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='port', full_name='istio.networking.v1alpha3.TCPHealthCheckConfig.port', index=1,
+      number=2, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1215,
+  serialized_end=1265,
+)
+
+
+_EXECHEALTHCHECKCONFIG = _descriptor.Descriptor(
+  name='ExecHealthCheckConfig',
+  full_name='istio.networking.v1alpha3.ExecHealthCheckConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='command', full_name='istio.networking.v1alpha3.ExecHealthCheckConfig.command', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1267,
+  serialized_end=1307,
 )
 
 _WORKLOADGROUP_OBJECTMETA_LABELSENTRY.containing_type = _WORKLOADGROUP_OBJECTMETA
@@ -184,7 +440,26 @@ _WORKLOADGROUP_OBJECTMETA.fields_by_name['annotations'].message_type = _WORKLOAD
 _WORKLOADGROUP_OBJECTMETA.containing_type = _WORKLOADGROUP
 _WORKLOADGROUP.fields_by_name['metadata'].message_type = _WORKLOADGROUP_OBJECTMETA
 _WORKLOADGROUP.fields_by_name['template'].message_type = networking_dot_v1alpha3_dot_workload__entry__pb2._WORKLOADENTRY
+_WORKLOADGROUP.fields_by_name['probe'].message_type = _READINESSPROBE
+_READINESSPROBE.fields_by_name['http_get'].message_type = _HTTPHEALTHCHECKCONFIG
+_READINESSPROBE.fields_by_name['tcp_socket'].message_type = _TCPHEALTHCHECKCONFIG
+_READINESSPROBE.fields_by_name['exec'].message_type = _EXECHEALTHCHECKCONFIG
+_READINESSPROBE.oneofs_by_name['health_check_method'].fields.append(
+  _READINESSPROBE.fields_by_name['http_get'])
+_READINESSPROBE.fields_by_name['http_get'].containing_oneof = _READINESSPROBE.oneofs_by_name['health_check_method']
+_READINESSPROBE.oneofs_by_name['health_check_method'].fields.append(
+  _READINESSPROBE.fields_by_name['tcp_socket'])
+_READINESSPROBE.fields_by_name['tcp_socket'].containing_oneof = _READINESSPROBE.oneofs_by_name['health_check_method']
+_READINESSPROBE.oneofs_by_name['health_check_method'].fields.append(
+  _READINESSPROBE.fields_by_name['exec'])
+_READINESSPROBE.fields_by_name['exec'].containing_oneof = _READINESSPROBE.oneofs_by_name['health_check_method']
+_HTTPHEALTHCHECKCONFIG.fields_by_name['http_headers'].message_type = _HTTPHEADER
 DESCRIPTOR.message_types_by_name['WorkloadGroup'] = _WORKLOADGROUP
+DESCRIPTOR.message_types_by_name['ReadinessProbe'] = _READINESSPROBE
+DESCRIPTOR.message_types_by_name['HTTPHealthCheckConfig'] = _HTTPHEALTHCHECKCONFIG
+DESCRIPTOR.message_types_by_name['HTTPHeader'] = _HTTPHEADER
+DESCRIPTOR.message_types_by_name['TCPHealthCheckConfig'] = _TCPHEALTHCHECKCONFIG
+DESCRIPTOR.message_types_by_name['ExecHealthCheckConfig'] = _EXECHEALTHCHECKCONFIG
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 WorkloadGroup = _reflection.GeneratedProtocolMessageType('WorkloadGroup', (_message.Message,), {
@@ -217,6 +492,41 @@ _sym_db.RegisterMessage(WorkloadGroup)
 _sym_db.RegisterMessage(WorkloadGroup.ObjectMeta)
 _sym_db.RegisterMessage(WorkloadGroup.ObjectMeta.LabelsEntry)
 _sym_db.RegisterMessage(WorkloadGroup.ObjectMeta.AnnotationsEntry)
+
+ReadinessProbe = _reflection.GeneratedProtocolMessageType('ReadinessProbe', (_message.Message,), {
+  'DESCRIPTOR' : _READINESSPROBE,
+  '__module__' : 'networking.v1alpha3.workload_group_pb2'
+  # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.ReadinessProbe)
+  })
+_sym_db.RegisterMessage(ReadinessProbe)
+
+HTTPHealthCheckConfig = _reflection.GeneratedProtocolMessageType('HTTPHealthCheckConfig', (_message.Message,), {
+  'DESCRIPTOR' : _HTTPHEALTHCHECKCONFIG,
+  '__module__' : 'networking.v1alpha3.workload_group_pb2'
+  # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.HTTPHealthCheckConfig)
+  })
+_sym_db.RegisterMessage(HTTPHealthCheckConfig)
+
+HTTPHeader = _reflection.GeneratedProtocolMessageType('HTTPHeader', (_message.Message,), {
+  'DESCRIPTOR' : _HTTPHEADER,
+  '__module__' : 'networking.v1alpha3.workload_group_pb2'
+  # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.HTTPHeader)
+  })
+_sym_db.RegisterMessage(HTTPHeader)
+
+TCPHealthCheckConfig = _reflection.GeneratedProtocolMessageType('TCPHealthCheckConfig', (_message.Message,), {
+  'DESCRIPTOR' : _TCPHEALTHCHECKCONFIG,
+  '__module__' : 'networking.v1alpha3.workload_group_pb2'
+  # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.TCPHealthCheckConfig)
+  })
+_sym_db.RegisterMessage(TCPHealthCheckConfig)
+
+ExecHealthCheckConfig = _reflection.GeneratedProtocolMessageType('ExecHealthCheckConfig', (_message.Message,), {
+  'DESCRIPTOR' : _EXECHEALTHCHECKCONFIG,
+  '__module__' : 'networking.v1alpha3.workload_group_pb2'
+  # @@protoc_insertion_point(class_scope:istio.networking.v1alpha3.ExecHealthCheckConfig)
+  })
+_sym_db.RegisterMessage(ExecHealthCheckConfig)
 
 
 DESCRIPTOR._options = None

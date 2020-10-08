@@ -234,7 +234,7 @@
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
 // metadata:
-//   name: bookinfo-Mongo
+//   name: bookinfo-mongo
 //   namespace: bookinfo-namespace
 // spec:
 //   hosts:
@@ -259,7 +259,7 @@
 // apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
-//   name: bookinfo-Mongo
+//   name: bookinfo-mongo
 //   namespace: bookinfo-namespace
 // spec:
 //   hosts:
@@ -478,7 +478,7 @@ type Gateway struct {
 	// By default workloads are searched across all namespaces based on label selectors.
 	// This implies that a gateway resource in the namespace "foo" can select pods in
 	// the namespace "bar" based on labels.
-	// This behavior can be controlled via the PILOT_SCOPE_GATEWAY_TO_NAMESPACE
+	// This behavior can be controlled via the `PILOT_SCOPE_GATEWAY_TO_NAMESPACE`
 	// environment variable in istiod. If this variable is set
 	// to true, the scope of label search is restricted to the configuration
 	// namespace in which the the resource is present. In other words, the Gateway

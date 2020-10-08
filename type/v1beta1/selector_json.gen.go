@@ -30,5 +30,5 @@ func (this *WorkloadSelector) UnmarshalJSON(b []byte) error {
 
 var (
 	SelectorMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	SelectorUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	SelectorUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

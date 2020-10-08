@@ -275,9 +275,6 @@ type VirtualService struct {
 	// The value "." is reserved and defines an export to the same namespace that
 	// the virtual service is declared in. Similarly the value "*" is reserved and
 	// defines an export to all namespaces.
-	//
-	// NOTE: in the current release, the `exportTo` value is restricted to
-	// "." or "*" (i.e., the current namespace or all namespaces).
 	ExportTo             []string `protobuf:"bytes,6,rep,name=export_to,json=exportTo,proto3" json:"export_to,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -718,7 +715,7 @@ type HTTPRoute struct {
 	// Rewrite HTTP URIs and Authority headers. Rewrite cannot be used with
 	// Redirect primitive. Rewrite will be performed before forwarding.
 	Rewrite *HTTPRewrite `protobuf:"bytes,4,opt,name=rewrite,proto3" json:"rewrite,omitempty"`
-	// Timeout for HTTP requests.
+	// Timeout for HTTP requests, default is disabled.
 	Timeout *types.Duration `protobuf:"bytes,6,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	// Retry policy for HTTP requests.
 	Retries *HTTPRetry `protobuf:"bytes,7,opt,name=retries,proto3" json:"retries,omitempty"`
@@ -1332,7 +1329,7 @@ func (m *TLSRoute) GetRoute() []*RouteDestination {
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
 // metadata:
-//   name: bookinfo-Mongo
+//   name: bookinfo-mongo
 // spec:
 //   hosts:
 //   - mongo.prod.svc.cluster.local
@@ -1352,7 +1349,7 @@ func (m *TLSRoute) GetRoute() []*RouteDestination {
 // apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
-//   name: bookinfo-Mongo
+//   name: bookinfo-mongo
 // spec:
 //   hosts:
 //   - mongo.prod.svc.cluster.local
@@ -2577,12 +2574,16 @@ func (*StringMatch) XXX_OneofWrappers() []interface{} {
 // {{</tabset>}}
 //
 type HTTPRetry struct {
-	// Number of retries for a given request. The interval
-	// between retries will be determined automatically (25ms+). Actual
-	// number of retries attempted depends on the request `timeout` of the
-	// [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute).
+	// Number of retries to be allowed for a given request. The interval
+	// between retries will be determined automatically (25ms+). When request
+	// `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute)
+	// or `per_try_timeout` is configured, the actual number of retries attempted also depends on
+	// the specified request `timeout` and `per_try_timeout` values.
 	Attempts int32 `protobuf:"varint,1,opt,name=attempts,proto3" json:"attempts,omitempty"`
 	// Timeout per retry attempt for a given request. format: 1h/1m/1s/1ms. MUST BE >=1ms.
+	// Default is same value as request
+	// `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute),
+	// which means no timeout.
 	PerTryTimeout *types.Duration `protobuf:"bytes,2,opt,name=per_try_timeout,json=perTryTimeout,proto3" json:"per_try_timeout,omitempty"`
 	// Specifies the conditions under which retry takes place.
 	// One or more policies can be specified using a ‘,’ delimited list.

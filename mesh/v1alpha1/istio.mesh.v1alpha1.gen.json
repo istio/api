@@ -41,7 +41,7 @@
             "type": "string"
           },
           "ingressClass": {
-            "description": "Class of ingress resources to be processed by Istio ingress controller. This corresponds to the value of \"kubernetes.io/ingress.class\" annotation.",
+            "description": "Class of ingress resources to be processed by Istio ingress controller. This corresponds to the value of `kubernetes.io/ingress.class` annotation.",
             "type": "string",
             "format": "string"
           },
@@ -84,7 +84,7 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.AccessLogEncoding"
           },
           "enableEnvoyAccessLogService": {
-            "description": "This flag enables Envoy's gRPC Access Log Service. See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto) for details about Envoy's gRPC Access Log Service API. Default value is false.",
+            "description": "This flag enables Envoy's gRPC Access Log Service. See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto) for details about Envoy's gRPC Access Log Service API. Default value is `false`.",
             "type": "boolean"
           },
           "defaultConfig": {
@@ -98,7 +98,7 @@
             }
           },
           "enableAutoMtls": {
-            "description": "This flag is used to enable mutual TLS automatically for service to service communication within the mesh, default true. If set to true, and a given service does not have a corresponding DestinationRule configured, or its DestinationRule does not have ClientTLSSettings specified, Istio configures client side TLS configuration appropriately. More specifically, If the upstream authentication policy is in STRICT mode, use Istio provisioned certificate for mutual TLS to connect to upstream. If upstream service is in plain text mode, use plain text. If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use mutual TLS when server sides are capable of accepting mutual TLS traffic. If service DestinationRule exists and has ClientTLSSettings specified, that is always used instead.",
+            "description": "This flag is used to enable mutual `TLS` automatically for service to service communication within the mesh, default true. If set to true, and a given service does not have a corresponding `DestinationRule` configured, or its `DestinationRule` does not have ClientTLSSettings specified, Istio configures client side TLS configuration appropriately. More specifically, If the upstream authentication policy is in `STRICT` mode, use Istio provisioned certificate for mutual `TLS` to connect to upstream. If upstream service is in plain text mode, use plain text. If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use mutual `TLS` when server sides are capable of accepting mutual `TLS` traffic. If service `DestinationRule` exists and has `ClientTLSSettings` specified, that is always used instead.",
             "type": "boolean",
             "nullable": true
           },
@@ -116,7 +116,7 @@
             }
           },
           "defaultServiceExportTo": {
-            "description": "The default value for the ServiceEntry.export_to field and services imported through container registry integrations, e.g. this applies to Kubernetes Service resources. The value is a list of namespace names and reserved namespace aliases. The allowed namespace aliases are: * - All Namespaces . - Current Namespace ~ - No Namespace",
+            "description": "The default value for the ServiceEntry.export_to field and services imported through container registry integrations, e.g. this applies to Kubernetes Service resources. The value is a list of namespace names and reserved namespace aliases. The allowed namespace aliases are: ``` * - All Namespaces . - Current Namespace ~ - No Namespace ``` If not set the system will use \"*\" as the default value which implies that services are exported to all namespaces.",
             "type": "array",
             "items": {
               "type": "string",
@@ -124,7 +124,7 @@
             }
           },
           "defaultVirtualServiceExportTo": {
-            "description": "The default value for the VirtualService.export_to field. Has the same syntax as 'default_service_export_to'.",
+            "description": "The default value for the VirtualService.export_to field. Has the same syntax as `default_service_export_to`.",
             "type": "array",
             "items": {
               "type": "string",
@@ -132,7 +132,7 @@
             }
           },
           "defaultDestinationRuleExportTo": {
-            "description": "The default value for the DestinationRule.export_to field. Has the same syntax as 'default_service_export_to'.",
+            "description": "The default value for the `DestinationRule.export_to` field. Has the same syntax as `default_service_export_to`.",
             "type": "array",
             "items": {
               "type": "string",
@@ -145,7 +145,7 @@
             "format": "string"
           },
           "dnsRefreshRate": {
-            "description": "Configures DNS refresh rate for Envoy clusters of type STRICT_DNS Default refresh rate is 5s.",
+            "description": "Configures DNS refresh rate for Envoy clusters of type `STRICT_DNS` Default refresh rate is `5s`.",
             "type": "string"
           },
           "inboundClusterStatName": {
@@ -181,9 +181,12 @@
             "nullable": true
           },
           "verifyCertificateAtClient": {
-            "description": "VerifyCertificateAtClient sets the mesh global default for peer certificate validation at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL) origination modes are used. This setting can be overridden at the host level via DestinationRule API. By default, VerifyCertificateAtClient is true.",
+            "description": "`VerifyCertificateAtClient` sets the mesh global default for peer certificate validation at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination modes are used. This setting can be overridden at the host level via DestinationRule API. By default, `VerifyCertificateAtClient` is `true`.",
             "type": "boolean",
             "nullable": true
+          },
+          "ca": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.CA"
           }
         }
       },
@@ -225,16 +228,16 @@
             "format": "string"
           },
           "serviceCluster": {
-            "description": "Service cluster defines the name for the service_cluster that is shared by all Envoy instances. This setting corresponds to _--service-cluster_ flag in Envoy. In a typical Envoy deployment, the _service-cluster_ flag is used to identify the caller, for source-based routing scenarios.",
+            "description": "Service cluster defines the name for the `service_cluster` that is shared by all Envoy instances. This setting corresponds to `--service-cluster` flag in Envoy. In a typical Envoy deployment, the `service-cluster` flag is used to identify the caller, for source-based routing scenarios.",
             "type": "string",
             "format": "string"
           },
           "drainDuration": {
-            "description": "The time in seconds that Envoy will drain connections during a hot restart. MUST be \u003e=1s (e.g., _1s/1m/1h_) Default drain duration is 45s.",
+            "description": "The time in seconds that Envoy will drain connections during a hot restart. MUST be \u003e=1s (e.g., _1s/1m/1h_) Default drain duration is `45s`.",
             "type": "string"
           },
           "parentShutdownDuration": {
-            "description": "The time in seconds that Envoy will wait before shutting down the parent process during a hot restart. MUST be \u003e=1s (e.g., _1s/1m/1h_). MUST BE greater than _drain_duration_ parameter. Default shutdown duration is 60s.",
+            "description": "The time in seconds that Envoy will wait before shutting down the parent process during a hot restart. MUST be \u003e=1s (e.g., `1s/1m/1h`). MUST BE greater than `drain_duration` parameter. Default shutdown duration is `60s`.",
             "type": "string"
           },
           "discoveryAddress": {
@@ -253,7 +256,7 @@
             "deprecated": true
           },
           "statsdUdpAddress": {
-            "description": "IP Address and Port of a statsd UDP listener (e.g. _10.75.241.127:9125_).",
+            "description": "IP Address and Port of a statsd UDP listener (e.g. `10.75.241.127:9125`).",
             "type": "string",
             "format": "string"
           },
@@ -263,7 +266,7 @@
             "deprecated": true
           },
           "proxyAdminPort": {
-            "description": "Port on which Envoy should listen for administrative commands. Default port is 15000.",
+            "description": "Port on which Envoy should listen for administrative commands. Default port is `15000`.",
             "type": "integer",
             "format": "int32"
           },
@@ -319,7 +322,7 @@
             }
           },
           "statusPort": {
-            "description": "Port on which the agent should listen for administrative commands such as readiness probe. Default is set to port 15020.",
+            "description": "Port on which the agent should listen for administrative commands such as readiness probe. Default is set to port `15020`.",
             "type": "integer",
             "format": "int32"
           },
@@ -335,13 +338,16 @@
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.Topology"
           },
           "terminationDrainDuration": {
-            "description": "The amount of time allowed for connections to complete on proxy shutdown. On receiving SIGTERM or SIGINT, istio-agent tells the active Envoy to start draining, preventing any new connections and allowing existing connections to complete. It then sleeps for the termination_drain_duration and then kills any remaining active Envoy processes. If not set, a default of 5s will be applied.",
+            "description": "The amount of time allowed for connections to complete on proxy shutdown. On receiving `SIGTERM` or `SIGINT`, `istio-agent` tells the active Envoy to start draining, preventing any new connections and allowing existing connections to complete. It then sleeps for the `termination_drain_duration` and then kills any remaining active Envoy processes. If not set, a default of `5s` will be applied.",
             "type": "string"
           },
           "meshId": {
             "description": "The unique identifier for the [service mesh](https://istio.io/docs/reference/glossary/#service-mesh) All control planes running in the same service mesh should specify the same mesh ID. Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.",
             "type": "string",
             "format": "string"
+          },
+          "readinessProbe": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ReadinessProbe"
           },
           "proxyStatsMatcher": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.ProxyStatsMatcher"
@@ -386,7 +392,7 @@
         ]
       },
       "istio.mesh.v1alpha1.Certificate": {
-        "description": "Certificate configures the provision of a certificate and its key. Example 1: key and cert stored in a secret { secretName: galley-cert secretNamespace: istio-system dnsNames: - galley.istio-system.svc - galley.mydomain.com } Example 2: key and cert stored in a directory { dnsNames: - pilot.istio-system - pilot.istio-system.svc - pilot.mydomain.com }",
+        "description": "Certificate configures the provision of a certificate and its key. Example 1: key and cert stored in a secret ``` { secretName: galley-cert secretNamespace: istio-system dnsNames: - galley.istio-system.svc - galley.mydomain.com } ``` Example 2: key and cert stored in a directory ``` { dnsNames: - pilot.istio-system - pilot.istio-system.svc - pilot.mydomain.com } ```",
         "type": "object",
         "properties": {
           "secretName": {
@@ -413,7 +419,7 @@
             "format": "string"
           },
           "rateLimitTimeout": {
-            "description": "Specify thrift rate limit service timeout, in milliseconds. Default is 50ms",
+            "description": "Specify thrift rate limit service timeout, in milliseconds. Default is `50ms`",
             "type": "string"
           }
         }
@@ -432,6 +438,27 @@
           },
           "settings": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ServiceSettings.Settings"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.CA": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "description": "REQUIRED. Address of the CA server implementing the Istio CA gRPC API. Can be IP address or a fully qualified DNS name with port Eg: custom-ca.default.svc.cluster.local:8932, 192.168.23.2:9000",
+            "type": "string",
+            "format": "string"
+          },
+          "tlsSettings": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
+          },
+          "requestTimeout": {
+            "description": "timeout for forward CSR requests from Istiod to External CA Default: 10s",
+            "type": "string"
+          },
+          "istiodSide": {
+            "description": "Use istiod_side to specify CA Server integrate to Istiod side or Agent side Default: true",
+            "type": "boolean"
           }
         }
       },
@@ -915,25 +942,6 @@
             "description": "gRPC address for the OpenCensus agent (e.g. dns://authority/host:port or unix:path). See [gRPC naming docs](https://github.com/grpc/grpc/blob/master/doc/naming.md) for details.",
             "type": "string",
             "format": "string"
-          },
-          "debug": {
-            "description": "debug enables trace output to stdout $hide_from_docs",
-            "type": "boolean"
-          },
-          "maxNumberOfAttributes": {
-            "description": "The global default max number of attributes per span. default is 200. $hide_from_docs",
-            "type": "integer",
-            "nullable": true
-          },
-          "maxNumberOfAnnotations": {
-            "description": "The global default max number of annotation events per span. default is 200. $hide_from_docs",
-            "type": "integer",
-            "nullable": true
-          },
-          "maxNumberOfMessageEvents": {
-            "description": "The global default max number of message events per span. default is 200. $hide_from_docs",
-            "type": "integer",
-            "nullable": true
           }
         }
       },
@@ -1032,7 +1040,7 @@
         ]
       },
       "istio.mesh.v1alpha1.ProxyConfig.InboundInterceptionMode": {
-        "description": "The mode used to redirect inbound traffic to Envoy. This setting has no effect on outbound traffic: iptables REDIRECT is always used for outbound connections.",
+        "description": "The mode used to redirect inbound traffic to Envoy. This setting has no effect on outbound traffic: iptables `REDIRECT` is always used for outbound connections.",
         "type": "string",
         "enum": [
           "REDIRECT",
@@ -1086,7 +1094,7 @@
         }
       },
       "istio.networking.v1alpha3.ClientTLSSettings": {
-        "description": "Use the tls_settings to specify the tls mode to use. If the remote service uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS mode as `ISTIO_MUTUAL`.",
+        "description": "Use the `tls_settings` to specify the tls mode to use. If the remote service uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS mode as `ISTIO_MUTUAL`.",
         "type": "object",
         "properties": {
           "mode": {
@@ -1128,7 +1136,7 @@
         }
       },
       "istio.networking.v1alpha3.ConnectionPoolSettings.TCPSettings.TcpKeepalive": {
-        "description": "If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.",
+        "description": "If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.",
         "type": "object",
         "properties": {
           "time": {
@@ -1170,6 +1178,261 @@
           }
         }
       },
+      "istio.networking.v1alpha3.ReadinessProbe": {
+        "description": "VM Health Checking readiness probe. This health check config exactly mirrors the kubernetes readiness probe configuration both in schema and logic. Only one health check method of 3 can be set at a time.",
+        "type": "object",
+        "oneOf": [
+          {
+            "allOf": [
+              {
+                "properties": {
+                  "initialDelaySeconds": {
+                    "description": "Number of seconds after the container has started before readiness probes are initiated.",
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "timeoutSeconds": {
+                    "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1.",
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "periodSeconds": {
+                    "description": "How often (in seconds) to perform the probe. Default to 10 seconds. Minimum value is 1.",
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "successThreshold": {
+                    "description": "Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1.",
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "failureThreshold": {
+                    "description": "Minimum consecutive failures for the probe to be considered failed after having succeeded. Defaults to 3.",
+                    "type": "integer",
+                    "format": "int32"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "anyOf": [
+                    {
+                      "required": [
+                        "httpGet"
+                      ],
+                      "properties": {
+                        "initialDelaySeconds": {
+                          "description": "Number of seconds after the container has started before readiness probes are initiated.",
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "timeoutSeconds": {
+                          "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1.",
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "periodSeconds": {
+                          "description": "How often (in seconds) to perform the probe. Default to 10 seconds. Minimum value is 1.",
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "successThreshold": {
+                          "description": "Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1.",
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "failureThreshold": {
+                          "description": "Minimum consecutive failures for the probe to be considered failed after having succeeded. Defaults to 3.",
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "httpGet": {
+                          "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPHealthCheckConfig"
+                        }
+                      }
+                    },
+                    {
+                      "required": [
+                        "tcpSocket"
+                      ],
+                      "properties": {
+                        "initialDelaySeconds": {
+                          "description": "Number of seconds after the container has started before readiness probes are initiated.",
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "timeoutSeconds": {
+                          "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1.",
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "periodSeconds": {
+                          "description": "How often (in seconds) to perform the probe. Default to 10 seconds. Minimum value is 1.",
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "successThreshold": {
+                          "description": "Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1.",
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "failureThreshold": {
+                          "description": "Minimum consecutive failures for the probe to be considered failed after having succeeded. Defaults to 3.",
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "tcpSocket": {
+                          "$ref": "#/components/schemas/istio.networking.v1alpha3.TCPHealthCheckConfig"
+                        }
+                      }
+                    },
+                    {
+                      "required": [
+                        "exec"
+                      ],
+                      "properties": {
+                        "initialDelaySeconds": {
+                          "description": "Number of seconds after the container has started before readiness probes are initiated.",
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "timeoutSeconds": {
+                          "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1.",
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "periodSeconds": {
+                          "description": "How often (in seconds) to perform the probe. Default to 10 seconds. Minimum value is 1.",
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "successThreshold": {
+                          "description": "Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1.",
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "failureThreshold": {
+                          "description": "Minimum consecutive failures for the probe to be considered failed after having succeeded. Defaults to 3.",
+                          "type": "integer",
+                          "format": "int32"
+                        },
+                        "exec": {
+                          "$ref": "#/components/schemas/istio.networking.v1alpha3.ExecHealthCheckConfig"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "required": [
+              "httpGet"
+            ],
+            "properties": {
+              "initialDelaySeconds": {
+                "description": "Number of seconds after the container has started before readiness probes are initiated.",
+                "type": "integer",
+                "format": "int32"
+              },
+              "timeoutSeconds": {
+                "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1.",
+                "type": "integer",
+                "format": "int32"
+              },
+              "periodSeconds": {
+                "description": "How often (in seconds) to perform the probe. Default to 10 seconds. Minimum value is 1.",
+                "type": "integer",
+                "format": "int32"
+              },
+              "successThreshold": {
+                "description": "Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1.",
+                "type": "integer",
+                "format": "int32"
+              },
+              "failureThreshold": {
+                "description": "Minimum consecutive failures for the probe to be considered failed after having succeeded. Defaults to 3.",
+                "type": "integer",
+                "format": "int32"
+              },
+              "httpGet": {
+                "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPHealthCheckConfig"
+              }
+            }
+          },
+          {
+            "required": [
+              "tcpSocket"
+            ],
+            "properties": {
+              "initialDelaySeconds": {
+                "description": "Number of seconds after the container has started before readiness probes are initiated.",
+                "type": "integer",
+                "format": "int32"
+              },
+              "timeoutSeconds": {
+                "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1.",
+                "type": "integer",
+                "format": "int32"
+              },
+              "periodSeconds": {
+                "description": "How often (in seconds) to perform the probe. Default to 10 seconds. Minimum value is 1.",
+                "type": "integer",
+                "format": "int32"
+              },
+              "successThreshold": {
+                "description": "Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1.",
+                "type": "integer",
+                "format": "int32"
+              },
+              "failureThreshold": {
+                "description": "Minimum consecutive failures for the probe to be considered failed after having succeeded. Defaults to 3.",
+                "type": "integer",
+                "format": "int32"
+              },
+              "tcpSocket": {
+                "$ref": "#/components/schemas/istio.networking.v1alpha3.TCPHealthCheckConfig"
+              }
+            }
+          },
+          {
+            "required": [
+              "exec"
+            ],
+            "properties": {
+              "initialDelaySeconds": {
+                "description": "Number of seconds after the container has started before readiness probes are initiated.",
+                "type": "integer",
+                "format": "int32"
+              },
+              "timeoutSeconds": {
+                "description": "Number of seconds after which the probe times out. Defaults to 1 second. Minimum value is 1.",
+                "type": "integer",
+                "format": "int32"
+              },
+              "periodSeconds": {
+                "description": "How often (in seconds) to perform the probe. Default to 10 seconds. Minimum value is 1.",
+                "type": "integer",
+                "format": "int32"
+              },
+              "successThreshold": {
+                "description": "Minimum consecutive successes for the probe to be considered successful after having failed. Defaults to 1.",
+                "type": "integer",
+                "format": "int32"
+              },
+              "failureThreshold": {
+                "description": "Minimum consecutive failures for the probe to be considered failed after having succeeded. Defaults to 3.",
+                "type": "integer",
+                "format": "int32"
+              },
+              "exec": {
+                "$ref": "#/components/schemas/istio.networking.v1alpha3.ExecHealthCheckConfig"
+              }
+            }
+          }
+        ]
+      },
       "istio.networking.v1alpha3.ClientTLSSettings.TLSmode": {
         "description": "Indicates whether connections to this port should be secured using TLS. The value of this field determines how TLS is enforced.",
         "type": "string",
@@ -1179,6 +1442,52 @@
           "MUTUAL",
           "ISTIO_MUTUAL"
         ]
+      },
+      "istio.networking.v1alpha3.ExecHealthCheckConfig": {
+        "description": "health is determined by how the command that is executed exited.",
+        "type": "object",
+        "properties": {
+          "command": {
+            "description": "command to run. Exit status of 0 is treated as live/healthy and non-zero is unhealthy.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        }
+      },
+      "istio.networking.v1alpha3.HTTPHealthCheckConfig": {
+        "description": "an http get is performed to a given endpoint and the status/able to connect determines health.",
+        "type": "object",
+        "properties": {
+          "path": {
+            "description": "Path to access on the HTTP server.",
+            "type": "string",
+            "format": "string"
+          },
+          "host": {
+            "description": "Host name to connect to, defaults to the pod IP. You probably want to set \"Host\" in httpHeaders instead.",
+            "type": "string",
+            "format": "string"
+          },
+          "port": {
+            "description": "port on which the endpoint lives.",
+            "type": "integer"
+          },
+          "scheme": {
+            "description": "http or https, defaults to http",
+            "type": "string",
+            "format": "string"
+          },
+          "httpHeaders": {
+            "description": "headers the proxy will pass on to make the request. allows repeated headers.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPHeader"
+            }
+          }
+        }
       },
       "istio.networking.v1alpha3.LocalityLoadBalancerSetting.Distribute": {
         "type": "object",
@@ -1207,6 +1516,36 @@
           },
           "to": {
             "description": "Destination region the traffic will fail over to when endpoints in the 'from' region becomes unhealthy.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.TCPHealthCheckConfig": {
+        "description": "health is determined by if the proxy is able to connect.",
+        "type": "object",
+        "properties": {
+          "host": {
+            "description": "host to connect to, defaults to localhost",
+            "type": "string",
+            "format": "string"
+          },
+          "port": {
+            "description": "port of host",
+            "type": "integer"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.HTTPHeader": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The header field name",
+            "type": "string",
+            "format": "string"
+          },
+          "value": {
+            "description": "The header field value",
             "type": "string",
             "format": "string"
           }

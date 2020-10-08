@@ -282,9 +282,6 @@ message VirtualService {
   // The value "." is reserved and defines an export to the same namespace that
   // the virtual service is declared in. Similarly the value "*" is reserved and
   // defines an export to all namespaces.
-  //
-  // NOTE: in the current release, the `exportTo` value is restricted to
-  // "." or "*" (i.e., the current namespace or all namespaces).
   repeated string export_to = 6;
 }
 
@@ -601,7 +598,7 @@ message HTTPRoute {
   reserved 5;
   reserved "websocket_upgrade";
 
-  // Timeout for HTTP requests.
+  // Timeout for HTTP requests, default is disabled.
   google.protobuf.Duration timeout = 6;
 
   // Retry policy for HTTP requests.
@@ -887,7 +884,7 @@ message TLSRoute {
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
 // metadata:
-//   name: bookinfo-Mongo
+//   name: bookinfo-mongo
 // spec:
 //   hosts:
 //   - mongo.prod.svc.cluster.local
@@ -907,7 +904,7 @@ message TLSRoute {
 // apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
-//   name: bookinfo-Mongo
+//   name: bookinfo-mongo
 // spec:
 //   hosts:
 //   - mongo.prod.svc.cluster.local
@@ -1533,13 +1530,17 @@ message StringMatch {
 // {{</tabset>}}
 //
 message HTTPRetry {
-  // Number of retries for a given request. The interval
-  // between retries will be determined automatically (25ms+). Actual
-  // number of retries attempted depends on the request `timeout` of the
-  // [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute).
+  // Number of retries to be allowed for a given request. The interval
+  // between retries will be determined automatically (25ms+). When request 
+  // `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute) 
+  // or `per_try_timeout` is configured, the actual number of retries attempted also depends on
+  // the specified request `timeout` and `per_try_timeout` values.
   int32 attempts = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Timeout per retry attempt for a given request. format: 1h/1m/1s/1ms. MUST BE >=1ms.
+  // Default is same value as request 
+  // `timeout` of the [HTTP route](https://istio.io/docs/reference/config/networking/virtual-service/#HTTPRoute), 
+  // which means no timeout.
   google.protobuf.Duration per_try_timeout = 2;
 
   // Specifies the conditions under which retry takes place.

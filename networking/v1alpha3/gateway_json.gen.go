@@ -234,7 +234,7 @@
 // apiVersion: networking.istio.io/v1alpha3
 // kind: VirtualService
 // metadata:
-//   name: bookinfo-Mongo
+//   name: bookinfo-mongo
 //   namespace: bookinfo-namespace
 // spec:
 //   hosts:
@@ -258,7 +258,7 @@
 // apiVersion: networking.istio.io/v1beta1
 // kind: VirtualService
 // metadata:
-//   name: bookinfo-Mongo
+//   name: bookinfo-mongo
 //   namespace: bookinfo-namespace
 // spec:
 //   hosts:
@@ -391,5 +391,5 @@ func (this *ServerTLSSettings) UnmarshalJSON(b []byte) error {
 
 var (
 	GatewayMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	GatewayUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	GatewayUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )
