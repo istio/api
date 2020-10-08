@@ -13,6 +13,7 @@
 // limitations under the License.
 syntax = "proto3";
 
+import "google/protobuf/duration.proto";
 import "google/api/field_behavior.proto";
 import "type/v1beta1/selector.proto";
 
@@ -181,6 +182,58 @@ import "type/v1beta1/selector.proto";
 //    matchLabels:
 //      version: v1
 // ```
+//
+// The following authorization policy applies to ingress gateway to enable the external authorization for all HTTP and
+// TCP requests.
+//
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//  name: ext-auth
+//  namespace: istio-system
+// spec:
+//  selector:
+//    matchLabels:
+//      app: istio-ingressgateway
+//  action: EXTERNAL
+//  external:
+//    http:
+//      server: "grpc://ext-authz.foo.svc.cluster.local:9000"
+//    tcp:
+//      server: "grpc://ext-authz.foo.svc.cluster.local:9000"
+//  rules:
+//  # Empty rules to always trigger the authorization request.
+//  - {}
+// ```
+//
+// The following authorization policy applies to ingress gateway to enable the external authorization for HTTP requests
+// if the request path has prefix "/data/", and customize the configuration to set the timeout to 2s and also include the
+// header with prefix "X-foo" in the authorization request.
+//
+// ```yaml
+// apiVersion: security.istio.io/v1beta1
+// kind: AuthorizationPolicy
+// metadata:
+//  name: ext-auth
+//  namespace: istio-system
+// spec:
+//  selector:
+//    matchLabels:
+//      app: istio-ingressgateway
+//  action: EXTERNAL
+//  external:
+//    http:
+//      server: "http://ext-authz.foo.svc.cluster.local:8000"
+//      timeout: 2s
+//      authorizationRequest:
+//        allowedHeaders: ["X-foo*"]
+//  rules:
+//  # Specify rules to conditionally trigger the authorization request only if the path has prefix "/data/".
+//  - to:
+//    - operation:
+//        paths: ["/data/*"]
+// ```
 package istio.security.v1beta1;
 
 option go_package="istio.io/api/security/v1beta1";
@@ -258,10 +311,110 @@ message AuthorizationPolicy {
     // $hide_from_docs
     // Audit policy decisions can be read by telemetry plugins using the function getAuditPolicy
     // defined [here](https://github.com/istio/proxy/blob/master/extensions/common/context.h).
+
+    // External delegates the authorization decision to an external server out of Envoy. An extra authorization request
+    // will be sent to the external server and the response will decide whether or not the original request should be
+    // allowed or denied.
+    //
+    // The EXTERNAL action is evaluated before the ALLOW and DENY action, implemented by the Envoy ext_authz filter
+    // and is currently an **experimental feature** in Istio.
+    EXTERNAL = 3;
   }
 
   // Optional. The action to take if the request is matched with the rules.
   Action action = 3;
+
+  // action_detail specifies details of the corresponding action.
+  oneof action_detail {
+    // Configures how to talk to the external server. Must be set only with EXTERNAL action.
+    External external = 4;
+  }
+}
+
+// External supplies detailed configurations of the EXTERNAL action.
+message External {
+  // If specified, the external authorization will be applied to the HTTP filter chain, otherwise the HTTP filter chain
+  // will have no external authorization.
+  //
+  // At least one of http and tcp must be set.
+  HTTPConfig http = 1;
+
+  // If specified, the external authorization will be applied to the TCP filter chain, otherwise the TCP filter chain
+  // will have no external authorization.
+  //
+  // At least one of http and tcp must be set.
+  TCPConfig tcp = 2;
+
+  // HTTPConfig supplies detail configurations of the HTTP filter chain.
+  message HTTPConfig {
+    // Supplies the full URL of the external server that implements the Envoy ext_authz filter check request API.
+    // Istio will figure out the proper endpoint configuration based on the content of the URL:
+    // - The scheme ("http://", "https://" or "grpc://") will decide the protocol (HTTP or gRPC) of the check request;
+    // - The host will decide the internal cluster name of the target which could be either within or out of the mesh;
+    //
+    // Examples:
+    // - "http://ext-authz.foo.svc.cluster.local:8000/" for HTTP server on port 8000 in the mesh.
+    // - "https://ext-authz.company.com/" for HTTPS server on port 80 out of mesh.
+    // - "grpc://ext-authz.foo.svc.cluster.local:9000" for gRPC server on port 9000 in the mesh.
+    // - "http://127.0.0.1:8001/" for local HTTP server on port 8001 along with the Envoy sidecar.
+    string server = 1;
+
+    // Sets the maximum duration in milliseconds for connection to the external server (default is 200ms).
+    google.protobuf.Duration timeout = 2;
+
+    // Settings used for controlling authorization request metadata.
+    AuthorizationRequest authorization_request = 3;
+
+    // Settings used for controlling authorization response metadata.
+    AuthorizationResponse authorization_response = 4;
+
+    // Specifies if the peer certificate is included in the external authorization request.
+    bool include_peer_certificate = 5;
+
+    // AuthorizationRequest allows to customize the authorization request.
+    message AuthorizationRequest {
+      // Authorization request will include the client request headers that have a correspondent match.
+      //
+      // Note that in addition to the user's supplied matchers:
+      // 1. *Host*, *Method*, *Path* and *Content-Length* are automatically included to the list.
+      // 2. *Content-Length* will be set to 0 and the request to the authorization service will not have a message body.
+      repeated string allowed_headers = 1;
+    }
+
+    // AuthorizationResponse allows to customize the authorization response.
+    message AuthorizationResponse {
+      // When this is set, authorization response headers that have a correspondent match will be forwarded to the
+      // original backend (upstream).
+      //
+      // Note that coexistent headers will be overridden.
+      repeated string forward_to_upstream = 1;
+
+      // When this is set, authorization response headers that have a correspondent match will be forwarded to the
+      // original client (downstream).
+      //
+      // Note that when this list is *not* set, all the authorization response headers, except *Authority (Host)* will be in
+      // the response to the client. When a header is included in this list, *Path*, *Status*, *Content-Length*, *WWWAuthenticate*
+      // and *Location* are automatically added.
+      repeated string forward_to_downstream = 2;
+    }
+  }
+
+  // TCPConfig supplies detail configurations of the TCP filter chain.
+  message TCPConfig {
+    // Supplies the full URL of the external server that implements the Envoy ext_authz filter authorization request API.
+    // Only gRPC protocol is supported on TCP filter chain.
+    //
+    // Examples:
+    // - "grpc://ext-authz.foo.svc.cluster.local:9000" for gRPC server on port 9000 in the mesh.
+    // - "grpc://127.0.0.1:8001" for local gRPC server on port 8001 along with the Envoy sidecar.
+    string server = 1;
+
+    // Sets the maximum duration in milliseconds for connection to the external server (default is 200ms).
+    google.protobuf.Duration timeout = 2;
+
+    // Specifies if the peer certificate is included in the external authorization request.
+    bool include_peer_certificate = 3;
+  }
 }
 
 // Rule matches requests from a list of sources that perform a list of operations subject to a
