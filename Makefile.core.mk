@@ -104,7 +104,6 @@ gen: \
 	generate-meta \
 	generate-envoy \
 	generate-annotations \
-	generate-openapi-schema \
 	generate-openapi-crd \
 	tidy-go \
 	mirror-licenses \
@@ -120,7 +119,6 @@ core_v1alpha1_protos := $(wildcard $(core_v1alpha1_path)/*.proto)
 core_v1alpha1_pb_gos := $(core_v1alpha1_protos:.proto=.pb.go)
 core_v1alpha1_pb_pythons := $(patsubst $(core_v1alpha1_path)/%.proto,$(python_output_path)/$(core_v1alpha1_path)/%_pb2.py,$(core_v1alpha1_protos))
 core_v1alpha1_pb_docs := $(core_v1alpha1_protos:.proto=.pb.html)
-core_v1alpha1_openapi := $(core_v1alpha1_protos:.proto=.gen.json)
 
 $(core_v1alpha1_pb_gos) $(core_v1alpha1_pb_docs) $(core_v1alpha1_pb_pythons): $(core_v1alpha1_protos)
 	@$(protolock) status
@@ -141,7 +139,6 @@ type_v1beta1_protos := $(wildcard $(type_v1beta1_path)/*.proto)
 type_v1beta1_pb_gos := $(type_v1beta1_protos:.proto=.pb.go)
 type_v1beta1_pb_pythons := $(patsubst $(type_v1beta1_path)/%.proto,$(python_output_path)/$(type_v1beta1_path)/%_pb2.py,$(type_v1beta1_protos))
 type_v1beta1_pb_doc := $(type_v1beta1_path)/istio.type.v1beta1.pb.html
-type_v1beta1_openapi := $(type_v1beta1_protos:.proto=.gen.json)
 type_v1beta1_k8s_gos := \
 	$(patsubst $(type_v1beta1_path)/%.proto,$(type_v1beta1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(type_v1beta1_protos))) \
 	$(patsubst $(type_v1beta1_path)/%.proto,$(type_v1beta1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(type_v1beta1_protos)))
@@ -164,7 +161,6 @@ mcp_v1alpha1_path := mcp/v1alpha1
 mcp_v1alpha1_protos := $(wildcard $(mcp_v1alpha1_path)/*.proto)
 mcp_v1alpha1_pb_gos := $(mcp_v1alpha1_protos:.proto=.pb.go)
 mcp_v1alpha1_pb_pythons := $(patsubst $(mcp_v1alpha1_path)/%.proto,$(python_output_path)/$(mcp_v1alpha1_path)/%_pb2.py,$(mcp_v1alpha1_protos))
-mcp_v1alpha1_openapi := $(mcp_v1alpha1_path)/istio.mcp.v1alpha1.gen.json
 
 $(mcp_v1alpha1_pb_gos) $(mcp_v1alpha1_pb_pythons): $(mcp_v1alpha1_protos)
 	@$(protolock) status
@@ -185,7 +181,6 @@ mesh_v1alpha1_protos := $(wildcard $(mesh_v1alpha1_path)/*.proto)
 mesh_v1alpha1_pb_gos := $(mesh_v1alpha1_protos:.proto=.pb.go)
 mesh_v1alpha1_pb_pythons := $(patsubst $(mesh_v1alpha1_path)/%.proto,$(python_output_path)/$(mesh_v1alpha1_path)/%_pb2.py,$(mesh_v1alpha1_protos))
 mesh_v1alpha1_pb_doc := $(mesh_v1alpha1_path)/istio.mesh.v1alpha1.pb.html
-mesh_v1alpha1_openapi := $(mesh_v1alpha1_path)/istio.mesh.v1alpha1.gen.json
 
 $(mesh_v1alpha1_pb_gos) $(mesh_v1alpha1_pb_doc) $(mesh_v1alpha1_pb_pythons): $(mesh_v1alpha1_protos)
 	@$(protolock) status
@@ -235,7 +230,6 @@ networking_v1alpha3_protos := $(wildcard $(networking_v1alpha3_path)/*.proto)
 networking_v1alpha3_pb_gos := $(networking_v1alpha3_protos:.proto=.pb.go)
 networking_v1alpha3_pb_pythons := $(patsubst $(networking_v1alpha3_path)/%.proto,$(python_output_path)/$(networking_v1alpha3_path)/%_pb2.py,$(networking_v1alpha3_protos))
 networking_v1alpha3_pb_docs := $(networking_v1alpha3_protos:.proto=.pb.html)
-networking_v1alpha3_openapi := $(networking_v1alpha3_protos:.proto=.gen.json)
 networking_v1alpha3_k8s_gos := \
 	$(patsubst $(networking_v1alpha3_path)/%.proto,$(networking_v1alpha3_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(networking_v1alpha3_protos))) \
 	$(patsubst $(networking_v1alpha3_path)/%.proto,$(networking_v1alpha3_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(networking_v1alpha3_protos)))
@@ -251,7 +245,6 @@ networking_v1beta1_pb_gos := $(networking_v1beta1_protos:.proto=.pb.go)
 networking_v1beta1_pb_pythons := $(patsubst $(networking_v1beta1_path)/%.proto,$(python_output_path)/$(networking_v1beta1_path)/%_pb2.py,$(networking_v1beta1_protos))
 # v1beta1 docs are not generated as v1beta1 has the same fields as v1alpha3. Thus the target here is only for `make clean` purpose.
 networking_v1beta1_pb_docs := $(networking_v1beta1_protos:.proto=.pb.html)
-networking_v1beta1_openapi := $(networking_v1beta1_protos:.proto=.gen.json)
 networking_v1beta1_k8s_gos := \
 	$(patsubst $(networking_v1beta1_path)/%.proto,$(networking_v1beta1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(networking_v1beta1_protos))) \
 	$(patsubst $(networking_v1beta1_path)/%.proto,$(networking_v1beta1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(networking_v1beta1_protos)))
@@ -276,7 +269,6 @@ authn_v1alpha1_protos := $(wildcard $(authn_v1alpha1_path)/*.proto)
 authn_v1alpha1_pb_gos := $(authn_v1alpha1_protos:.proto=.pb.go)
 authn_v1alpha1_pb_pythons := $(patsubst $(authn_v1alpha1_path)/%.proto,$(python_output_path)/$(authn_v1alpha1_path)/%_pb2.py,$(authn_v1alpha1_protos))
 authn_v1alpha1_pb_doc := $(authn_v1alpha1_path)/istio.authentication.v1alpha1.pb.html
-authn_v1alpha1_openapi := $(authn_v1alpha1_path)/istio.authentication.v1alpha1.gen.json
 authn_v1alpha1_k8s_gos := \
 	$(patsubst $(authn_v1alpha1_path)/%.proto,$(authn_v1alpha1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(authn_v1alpha1_protos))) \
 	$(patsubst $(authn_v1alpha1_path)/%.proto,$(authn_v1alpha1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(authn_v1alpha1_protos)))
@@ -300,7 +292,6 @@ security_v1alpha1_protos := $(wildcard $(security_v1alpha1_path)/*.proto)
 security_v1alpha1_pb_gos := $(security_v1alpha1_protos:.proto=.pb.go)
 security_v1alpha1_pb_pythons := $(patsubst $(security_v1alpha1_path)/%.proto,$(python_output_path)/$(security_v1alpha1_path)/%_pb2.py,$(security_v1alpha1_protos))
 security_v1alpha1_pb_docs := $(security_v1alpha1_protos:.proto=.pb.html)
-security_v1alpha1_openapi := $(security_v1alpha1_protos:.proto=.gen.json)
 security_v1alpha1_k8s_gos := \
 	$(patsubst $(security_v1alpha1_path)/%.proto,$(security_v1alpha1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(security_v1alpha1_protos))) \
 	$(patsubst $(security_v1alpha1_path)/%.proto,$(security_v1alpha1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(security_v1alpha1_protos)))
@@ -315,7 +306,6 @@ security_v1beta1_protos := $(wildcard $(security_v1beta1_path)/*.proto)
 security_v1beta1_pb_gos := $(security_v1beta1_protos:.proto=.pb.go)
 security_v1beta1_pb_pythons := $(patsubst $(security_v1beta1_path)/%.proto,$(python_output_path)/$(security_v1beta1_path)/%_pb2.py,$(security_v1beta1_protos))
 security_v1beta1_pb_docs := $(security_v1beta1_protos:.proto=.pb.html)
-security_v1beta1_openapi := $(security_v1beta1_protos:.proto=.gen.json)
 security_v1beta1_k8s_gos := \
 	$(patsubst $(security_v1beta1_path)/%.proto,$(security_v1beta1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(security_v1beta1_protos))) \
 	$(patsubst $(security_v1beta1_path)/%.proto,$(security_v1beta1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(security_v1beta1_protos)))
@@ -339,7 +329,6 @@ analysis_v1alpha1_protos := $(wildcard $(analysis_v1alpha1_path)/*.proto)
 analysis_v1alpha1_pb_gos := $(analysis_v1alpha1_protos:.proto=.pb.go)
 analysis_v1alpha1_pb_pythons := $(patsubst $(analysis_v1alpha1_path)/%.proto,$(python_output_path)/$(analysis_v1alpha1_path)/%_pb2.py,$(analysis_v1alpha1_protos))
 analysis_v1alpha1_pb_docs := $(analysis_v1alpha1_protos:.proto=.pb.html)
-analysis_v1alpha1_openapi := $(analysis_v1alpha1_protos:.proto=.gen.json)
 analysis_v1alpha1_k8s_gos := \
 	$(patsubst $(analysis_v1alpha1_path)/%.proto,$(analysis_v1alpha1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(analysis_v1alpha1_protos))) \
 	$(patsubst $(analysis_v1alpha1_path)/%.proto,$(analysis_v1alpha1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(analysis_v1alpha1_protos)))
@@ -363,7 +352,6 @@ meta_v1alpha1_protos := $(wildcard $(meta_v1alpha1_path)/*.proto)
 meta_v1alpha1_pb_gos := $(meta_v1alpha1_protos:.proto=.pb.go)
 meta_v1alpha1_pb_pythons := $(patsubst $(meta_v1alpha1_path)/%.proto,$(python_output_path)/$(meta_v1alpha1_path)/%_pb2.py,$(meta_v1alpha1_protos))
 meta_v1alpha1_pb_docs := $(meta_v1alpha1_protos:.proto=.pb.html)
-meta_v1alpha1_openapi := $(meta_v1alpha1_protos:.proto=.gen.json)
 meta_v1alpha1_k8s_gos := \
 	$(patsubst $(meta_v1alpha1_path)/%.proto,$(meta_v1alpha1_path)/%_json.gen.go,$(shell grep -l "^ *oneof " $(meta_v1alpha1_protos))) \
 	$(patsubst $(meta_v1alpha1_path)/%.proto,$(meta_v1alpha1_path)/%_deepcopy.gen.go,$(shell grep -l "+kubetype-gen" $(meta_v1alpha1_protos)))
@@ -436,9 +424,9 @@ lint: lint-all
 
 fmt: format-python
 
-#####################
-# OpenAPI Schema
-#####################
+#######################
+# Kubernetes CRD Schema
+#######################
 
 all_protos := \
 	$(core_v1alpha1_protos) \
@@ -453,23 +441,7 @@ all_protos := \
 	$(meta_v1alpha1_protos) \
 	$(type_v1beta1_protos)
 
-all_openapi := \
-	$(core_v1alpha1_openapi) \
-	$(mcp_v1alpha1_openapi) \
-	$(mesh_v1alpha1_openapi) \
-	$(operator_v1alpha1_openapi) \
-	$(networking_v1alpha3_openapi) \
-	$(networking_v1beta1_openapi) \
-	$(authn_v1alpha1_openapi) \
-	$(security_v1beta1_openapi) \
-	$(analysis_v1alpha1_openapi) \
-	$(meta_v1alpha1_openapi) \
-	$(type_v1beta1_openapi)
-
 all_openapi_crd := kubernetes/customresourcedefinitions.gen.yaml
-
-$(all_openapi): $(all_protos)
-	@$(cue) -f=$(repo_dir)/cue.yaml
 
 # The fields are added at the end to generate snake cases. This is a temporary solution to accommodate some wrong namings that currently exist.
 $(all_openapi_crd): $(all_protos)
@@ -479,12 +451,7 @@ ifeq ($(VERIFY_CRDS_SCHEMA),1)
 	@$(validate_crds) check_equal_schema --kinds VirtualService,DestinationRule,Gateway,Sidecar,ServiceEntry,WorkloadEntry --versions v1alpha3,v1beta1 --file $(all_openapi_crd)
 endif
 
-generate-openapi-schema: $(all_openapi)
-
 generate-openapi-crd: $(all_openapi_crd)
-
-clean-openapi-schema:
-	@rm -fr $(all_openapi)
 
 clean-openapi-crd:
 	@rm -f $(all_openapi_crd)
@@ -502,7 +469,6 @@ clean: \
 	clean-authn \
 	clean-envoy \
 	clean-annotations \
-	clean-openapi-schema \
 	clean-security \
 	clean-analysis \
 	clean-meta \
