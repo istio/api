@@ -23,7 +23,35 @@
           "action": {
             "$ref": "#/components/schemas/istio.security.v1beta1.AuthorizationPolicy.Action"
           }
-        }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "external"
+                  ],
+                  "properties": {
+                    "external": {
+                      "$ref": "#/components/schemas/istio.security.v1beta1.External"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "external"
+            ],
+            "properties": {
+              "external": {
+                "$ref": "#/components/schemas/istio.security.v1beta1.External"
+              }
+            }
+          }
+        ]
       },
       "istio.security.v1beta1.Rule": {
         "description": "Rule matches requests from a list of sources that perform a list of operations subject to a list of conditions. A match occurs when at least one source, operation and condition matches the request. An empty rule is always matched.",
@@ -58,8 +86,101 @@
         "enum": [
           "ALLOW",
           "DENY",
-          "AUDIT"
+          "AUDIT",
+          "EXTERNAL"
         ]
+      },
+      "istio.security.v1beta1.External": {
+        "description": "External supplies detailed configurations of the EXTERNAL action.",
+        "type": "object",
+        "properties": {
+          "http": {
+            "$ref": "#/components/schemas/istio.security.v1beta1.External.HTTPConfig"
+          },
+          "tcp": {
+            "$ref": "#/components/schemas/istio.security.v1beta1.External.TCPConfig"
+          }
+        }
+      },
+      "istio.security.v1beta1.External.HTTPConfig": {
+        "description": "HTTPConfig supplies detail configurations of the HTTP filter chain.",
+        "type": "object",
+        "properties": {
+          "server": {
+            "description": "Supplies the full URL of the external server that implements the Envoy ext_authz filter check request API. Istio will figure out the proper endpoint configuration based on the content of the URL: - The scheme (\"http://\", \"https://\" or \"grpc://\") will decide the protocol (HTTP or gRPC) of the check request; - The host will decide the internal cluster name of the target which could be either within or out of the mesh;",
+            "type": "string",
+            "format": "string"
+          },
+          "timeout": {
+            "description": "Sets the maximum duration in milliseconds for connection to the external server (default is 200ms).",
+            "type": "string"
+          },
+          "authorizationRequest": {
+            "$ref": "#/components/schemas/istio.security.v1beta1.External.HTTPConfig.AuthorizationRequest"
+          },
+          "authorizationResponse": {
+            "$ref": "#/components/schemas/istio.security.v1beta1.External.HTTPConfig.AuthorizationResponse"
+          },
+          "includePeerCertificate": {
+            "description": "Specifies if the peer certificate is included in the external authorization request.",
+            "type": "boolean"
+          }
+        }
+      },
+      "istio.security.v1beta1.External.TCPConfig": {
+        "description": "TCPConfig supplies detail configurations of the TCP filter chain.",
+        "type": "object",
+        "properties": {
+          "server": {
+            "description": "Supplies the full URL of the external server that implements the Envoy ext_authz filter authorization request API. Only gRPC protocol is supported on TCP filter chain.",
+            "type": "string",
+            "format": "string"
+          },
+          "timeout": {
+            "description": "Sets the maximum duration in milliseconds for connection to the external server (default is 200ms).",
+            "type": "string"
+          },
+          "includePeerCertificate": {
+            "description": "Specifies if the peer certificate is included in the external authorization request.",
+            "type": "boolean"
+          }
+        }
+      },
+      "istio.security.v1beta1.External.HTTPConfig.AuthorizationRequest": {
+        "description": "AuthorizationRequest allows to customize the authorization request.",
+        "type": "object",
+        "properties": {
+          "allowedHeaders": {
+            "description": "Authorization request will include the client request headers that have a correspondent match.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        }
+      },
+      "istio.security.v1beta1.External.HTTPConfig.AuthorizationResponse": {
+        "description": "AuthorizationResponse allows to customize the authorization response.",
+        "type": "object",
+        "properties": {
+          "forwardToUpstream": {
+            "description": "When this is set, authorization response headers that have a correspondent match will be forwarded to the original backend (upstream).",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "forwardToDownstream": {
+            "description": "When this is set, authorization response headers that have a correspondent match will be forwarded to the original client (downstream).",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        }
       },
       "istio.security.v1beta1.Rule.From": {
         "description": "From includes a list or sources.",
