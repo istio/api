@@ -503,6 +503,16 @@ message Source {
 
   // Optional. A list of negative match of IP blocks.
   repeated string not_ip_blocks = 8;
+
+  // Optional. A list of IP blocks, which matches to the "remote.ip" attribute.
+  // Populated from X-Forwarded-For or proxy protocol.
+  // Single IP (e.g. "1.2.3.4") and CIDR (e.g. "1.2.3.0/24") are supported.
+  //
+  // If not set, any IP is allowed.
+  repeated string remote_ip_blocks = 9;
+
+  // Optional. A list of negative match of remote IP blocks.
+  repeated string not_remote_ip_blocks = 10;
 }
 
 // Operation specifies the operations of a request. Fields in the operation are
