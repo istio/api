@@ -75,5 +75,5 @@ func (this *StringMap) UnmarshalJSON(b []byte) error {
 
 var (
 	AttributesMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	AttributesUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	AttributesUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

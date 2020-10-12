@@ -777,5 +777,5 @@ func (this *ServiceEntry) UnmarshalJSON(b []byte) error {
 
 var (
 	ServiceEntryMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	ServiceEntryUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	ServiceEntryUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

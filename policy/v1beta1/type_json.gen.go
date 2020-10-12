@@ -109,5 +109,5 @@ func (this *Uri) UnmarshalJSON(b []byte) error {
 
 var (
 	TypeMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	TypeUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	TypeUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

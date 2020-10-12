@@ -197,5 +197,5 @@ func (this *Mutual) UnmarshalJSON(b []byte) error {
 
 var (
 	CfgMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	CfgUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	CfgUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

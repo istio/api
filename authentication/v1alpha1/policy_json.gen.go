@@ -120,5 +120,5 @@ func (this *PortSelector) UnmarshalJSON(b []byte) error {
 
 var (
 	PolicyMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	PolicyUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	PolicyUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )
