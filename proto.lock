@@ -36333,8 +36333,8 @@
                   },
                   {
                     "id": 5,
-                    "name": "k8s_config",
-                    "type": "K8sCAConfig"
+                    "name": "kubernetes_config",
+                    "type": "KubernetesCAConfig"
                   },
                   {
                     "id": 6,
@@ -36344,16 +36344,11 @@
                 ],
                 "messages": [
                   {
-                    "name": "K8sCAConfig",
+                    "name": "KubernetesCAConfig",
                     "fields": [
                       {
                         "id": 1,
                         "name": "signer_name",
-                        "type": "string"
-                      },
-                      {
-                        "id": 2,
-                        "name": "ca_cert_path",
                         "type": "string"
                       }
                     ]

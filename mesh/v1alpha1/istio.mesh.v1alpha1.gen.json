@@ -461,8 +461,8 @@
             "description": "timeout for forward CSR requests from Istiod to External CA Default: 10s",
             "type": "string"
           },
-          "k8sConfig": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.CA.K8sCAConfig"
+          "kubernetesConfig": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.CA.KubernetesCAConfig"
           },
           "type": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.CA.IntegrationType"
@@ -486,16 +486,11 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.MeshConfig.CA.K8sCAConfig": {
+      "istio.mesh.v1alpha1.MeshConfig.CA.KubernetesCAConfig": {
         "type": "object",
         "properties": {
           "signerName": {
             "description": "Refer to https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/ for details regarding how signer_name is used by external CAs plugged into Kubernetes system",
-            "type": "string",
-            "format": "string"
-          },
-          "caCertPath": {
-            "description": "Kubernetes external CA Certificate location A Kubernetes VolumeMount referencing a Kubernetes Configmap (external-ca-cert) is mounted into Istiod at this location. Users are expected to load the external CA certificate into the configmap",
             "type": "string",
             "format": "string"
           }

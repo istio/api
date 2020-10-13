@@ -1584,9 +1584,9 @@ Default: 10s</p>
 No
 </td>
 </tr>
-<tr id="MeshConfig-CA-k8s_config">
-<td><code>k8sConfig</code></td>
-<td><code><a href="#MeshConfig-CA-K8sCAConfig">K8sCAConfig</a></code></td>
+<tr id="MeshConfig-CA-kubernetes_config">
+<td><code>kubernetesConfig</code></td>
+<td><code><a href="#MeshConfig-CA-KubernetesCAConfig">KubernetesCAConfig</a></code></td>
 <td>
 <p>Configs for integrating with Kubernetes External CA
 Required if type is Kubernetes</p>
@@ -1656,7 +1656,7 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="MeshConfig-CA-K8sCAConfig">MeshConfig.CA.K8sCAConfig</h2>
+<h2 id="MeshConfig-CA-KubernetesCAConfig">MeshConfig.CA.KubernetesCAConfig</h2>
 <section>
 <table class="message-fields">
 <thead>
@@ -1668,26 +1668,12 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-CA-K8sCAConfig-signer_name">
+<tr id="MeshConfig-CA-KubernetesCAConfig-signer_name">
 <td><code>signerName</code></td>
 <td><code>string</code></td>
 <td>
 <p>Refer to https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/
 for details regarding how signer_name is used by external CAs plugged into Kubernetes system</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="MeshConfig-CA-K8sCAConfig-ca_cert_path">
-<td><code>caCertPath</code></td>
-<td><code>string</code></td>
-<td>
-<p>Kubernetes external CA Certificate location
-A Kubernetes VolumeMount referencing a Kubernetes Configmap (external-ca-cert)
-is mounted into Istiod at this location. Users are expected to load the external CA certificate
-into the configmap</p>
 
 </td>
 <td>
