@@ -145,5 +145,5 @@ func (this *ReportResponse) UnmarshalJSON(b []byte) error {
 
 var (
 	MixerMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	MixerUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	MixerUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

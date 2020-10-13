@@ -87,5 +87,5 @@ func (this *InternalErrorAnalysisMessage) UnmarshalJSON(b []byte) error {
 
 var (
 	MessageMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	MessageUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	MessageUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

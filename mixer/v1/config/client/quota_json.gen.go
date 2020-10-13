@@ -97,5 +97,5 @@ func (this *QuotaSpecBinding_QuotaSpecReference) UnmarshalJSON(b []byte) error {
 
 var (
 	QuotaMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	QuotaUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	QuotaUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

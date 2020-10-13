@@ -76,5 +76,5 @@ func (this *HTTPAPISpecBinding) UnmarshalJSON(b []byte) error {
 
 var (
 	ApiSpecMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	ApiSpecUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	ApiSpecUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )
