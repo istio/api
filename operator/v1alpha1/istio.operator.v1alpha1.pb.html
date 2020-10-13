@@ -16,22 +16,20 @@ The spec is a used to define a customization of the default profile values that 
 Because the spec is a customization API, specifying an empty IstioOperatorSpec results in a default Istio
 component values.</p>
 
-<pre><code>// Apply a default Istio installation
-istioctl install
-
-// Use a different profile for installation
-istioctl install --set profile=demo --skip-confirmation
-istioctl install --set profile=minimal --set values.global.istioNamespace=istio-dev
-
-// Set custom HUB and TAG
-istioctl install --set hub=gcr.io/istio-testing --set tag=latest
-
-// Enable Tracing
-istioctl install --set meshConfig.enableTracing=true
-
-// Install multiple control plane revisions
-istioctl install --set revision=canary
-istioctl install --set revision=1-7-3
+<pre><code class="language-yaml">apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+spec:
+  profile: default
+  hub: gcr.io/istio-testing
+  tag: latest
+  revision: 1-8-0
+  meshConfig:
+    accessLogFile: /dev/stdout
+    enableTracing: true
+  components:
+    egressGateways:
+    - name: istio-egressgateway
+      enabled: true
 </code></pre>
 
 <table class="message-fields">
