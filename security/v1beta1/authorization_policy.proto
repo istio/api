@@ -496,6 +496,7 @@ message Source {
   repeated string not_namespaces = 7;
 
   // Optional. A list of IP blocks, which matches to the "source.ip" attribute.
+  // Populated from the source address of the IP packet.
   // Single IP (e.g. "1.2.3.4") and CIDR (e.g. "1.2.3.0/24") are supported.
   //
   // If not set, any IP is allowed.
