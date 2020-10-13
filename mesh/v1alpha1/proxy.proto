@@ -455,13 +455,16 @@ message ProxyConfig {
 
   // Proxy stats name matchers for stats creation.
   message ProxyStatsMatcher {
-    // Proxy stats name prefix matcher for inclusion.
+    // Proxy stats name prefix matcher for inclusion. Note this is in addition
+    // to the minimum Envoy stats that Istio generates by default.
     repeated string inclusion_prefixes = 1;
 
-    // Proxy stats name suffix matcher for inclusion.
+    // Proxy stats name suffix matcher for inclusion. Note this is in addition
+    // to the minimum Envoy stats that Istio generates by default.
     repeated string inclusion_suffixes = 2;
 
-    // Proxy stats name regexps matcher for inclusion.
+    // Proxy stats name regexps matcher for inclusion. Note this is in addition
+    // to the minimum Envoy stats that Istio generates by default.
     repeated string inclusion_regexps = 3;
   }
 

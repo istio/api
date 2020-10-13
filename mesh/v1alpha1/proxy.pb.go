@@ -1479,11 +1479,14 @@ func (m *ProxyConfig) GetProxyStatsMatcher() *ProxyConfig_ProxyStatsMatcher {
 
 // Proxy stats name matchers for stats creation.
 type ProxyConfig_ProxyStatsMatcher struct {
-	// Proxy stats name prefix matcher for inclusion.
+	// Proxy stats name prefix matcher for inclusion. Note this is in addition
+	// to the minimum Envoy stats that Istio generates by default.
 	InclusionPrefixes []string `protobuf:"bytes,1,rep,name=inclusion_prefixes,json=inclusionPrefixes,proto3" json:"inclusionPrefixes,omitempty"`
-	// Proxy stats name suffix matcher for inclusion.
+	// Proxy stats name suffix matcher for inclusion. Note this is in addition
+	// to the minimum Envoy stats that Istio generates by default.
 	InclusionSuffixes []string `protobuf:"bytes,2,rep,name=inclusion_suffixes,json=inclusionSuffixes,proto3" json:"inclusionSuffixes,omitempty"`
-	// Proxy stats name regexps matcher for inclusion.
+	// Proxy stats name regexps matcher for inclusion. Note this is in addition
+	// to the minimum Envoy stats that Istio generates by default.
 	InclusionRegexps     []string `protobuf:"bytes,3,rep,name=inclusion_regexps,json=inclusionRegexps,proto3" json:"inclusionRegexps,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
