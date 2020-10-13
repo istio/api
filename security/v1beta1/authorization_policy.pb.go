@@ -1010,7 +1010,10 @@ type Source struct {
 	// Optional. A list of negative match of IP blocks.
 	NotIpBlocks []string `protobuf:"bytes,8,rep,name=not_ip_blocks,json=notIpBlocks,proto3" json:"not_ip_blocks,omitempty"`
 	// Optional. A list of IP blocks, which matches to the "remote.ip" attribute.
-	// Populated from X-Forwarded-For or proxy protocol.
+	// Populated from X-Forwarded-For header or proxy protocol.
+	// To make use of this field, you must configure the numTrustedProxies field of the gatewayTopology under the meshConfig
+	// when you install Istio or using an annotation on the ingress gateway.  See the documentation here:
+	// [Configuring Gateway Network Topology](https://istio.io/latest/docs/reference/config/security/authorization-policy/).
 	// Single IP (e.g. "1.2.3.4") and CIDR (e.g. "1.2.3.0/24") are supported.
 	//
 	// If not set, any IP is allowed.
