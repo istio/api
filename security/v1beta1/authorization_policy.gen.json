@@ -106,10 +106,8 @@
         "description": "HTTPConfig supplies detail configurations of the HTTP filter chain.",
         "type": "object",
         "properties": {
-          "server": {
-            "description": "Supplies the full URL of the external server that implements the Envoy ext_authz filter check request API. Istio will figure out the proper endpoint configuration based on the content of the URL: - The scheme (\"http://\", \"https://\" or \"grpc://\") will decide the protocol (HTTP or gRPC) of the check request; - The host will decide the internal cluster name of the target which could be either within or out of the mesh;",
-            "type": "string",
-            "format": "string"
+          "service": {
+            "$ref": "#/components/schemas/istio.security.v1beta1.External.Destination"
           },
           "timeout": {
             "description": "Sets the maximum duration in milliseconds for connection to the external server (default is 200ms).",
@@ -124,6 +122,11 @@
           "includePeerCertificate": {
             "description": "Specifies if the peer certificate is included in the external authorization request.",
             "type": "boolean"
+          },
+          "pathPrefix": {
+            "description": "Sets a prefix to the value of authorization request header *Path*.",
+            "type": "string",
+            "format": "string"
           }
         }
       },
@@ -131,10 +134,8 @@
         "description": "TCPConfig supplies detail configurations of the TCP filter chain.",
         "type": "object",
         "properties": {
-          "server": {
-            "description": "Supplies the full URL of the external server that implements the Envoy ext_authz filter authorization request API. Only gRPC protocol is supported on TCP filter chain.",
-            "type": "string",
-            "format": "string"
+          "service": {
+            "$ref": "#/components/schemas/istio.security.v1beta1.External.Destination"
           },
           "timeout": {
             "description": "Sets the maximum duration in milliseconds for connection to the external server (default is 200ms).",
@@ -143,6 +144,35 @@
           "includePeerCertificate": {
             "description": "Specifies if the peer certificate is included in the external authorization request.",
             "type": "boolean"
+          }
+        }
+      },
+      "istio.security.v1beta1.External.Destination": {
+        "description": "Destination indicates the network addressable service to which the request/connection will be sent after processing a routing rule. The destination.host should unambiguously refer to a service in the service registry. Istio's service registry is composed of all the services found in the platform's service registry (e.g., Kubernetes services, Consul services), as well as services declared through the [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry) resource.",
+        "type": "object",
+        "properties": {
+          "host": {
+            "description": "The name of a service from the service registry. Service names are looked up from the platform's service registry (e.g., Kubernetes services, Consul services, etc.) and from the hosts declared by [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry). Traffic forwarded to destinations that are not found in either of the two, will be dropped.",
+            "type": "string",
+            "format": "string"
+          },
+          "subset": {
+            "description": "The name of a subset within the service. Applicable only to services within the mesh. The subset must be defined in a corresponding DestinationRule.",
+            "type": "string",
+            "format": "string"
+          },
+          "port": {
+            "$ref": "#/components/schemas/istio.security.v1beta1.External.PortSelector"
+          }
+        }
+      },
+      "istio.security.v1beta1.External.PortSelector": {
+        "description": "PortSelector specifies the number of a port to be used for matching or selection for final routing.",
+        "type": "object",
+        "properties": {
+          "number": {
+            "description": "Valid port number",
+            "type": "integer"
           }
         }
       },

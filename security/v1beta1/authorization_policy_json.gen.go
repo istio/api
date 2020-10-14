@@ -3,18 +3,20 @@
 
 // Istio Authorization Policy enables access control on workloads in the mesh.
 //
-// Authorization policy supports both allow and deny policies. When allow and
-// deny policies are used for a workload at the same time, the deny policies are
-// evaluated first. The evaluation is determined by the following rules:
+// Authorization policy supports ALLOW, DENY and EXTERNAL actions for access control. When multiple policies are used on
+// the same workload at the same time, the evaluation order is external -> deny -> allow. The evaluation is determined
+// by the following rules:
 //
-// 1. If there are any DENY policies that match the request, deny the request.
-// 2. If there are no ALLOW policies for the workload, allow the request.
-// 3. If any of the ALLOW policies match the request, allow the request.
-// 4. Deny the request.
+// 1. If there are any EXTERNAL policies that match the request, trigger the external authorization request. The request
+//    might be denied by the external authorization response.
+// 2. If there are any DENY policies that match the request, deny the request.
+// 3. If there are no ALLOW policies for the workload, allow the request.
+// 4. If any of the ALLOW policies match the request, allow the request.
+// 5. Deny the request.
 //
 // Istio Authorization Policy also supports the AUDIT action to decide whether to log requests.
 // AUDIT policies do not affect whether requests are allowed or denied to the workload.
-// Requests will be allowed or denied based solely on ALLOW and DENY policies.
+// Requests will be allowed or denied based solely on ALLOW, DENY and EXTERNAL policies.
 //
 // A request will be internally marked that it should be audited if there is an AUDIT policy on the workload that matches the request.
 // A separate plugin must be configured and enabled to actually fulfill the audit decision and complete the audit behavior.
@@ -176,9 +178,15 @@
 //  action: EXTERNAL
 //  external:
 //    http:
-//      server: "grpc://ext-authz.foo.svc.cluster.local:9000"
+//      service:
+//        host: "ext-authz.foo.svc.cluster.local"
+//        port:
+//          number: 9080
 //    tcp:
-//      server: "grpc://ext-authz.foo.svc.cluster.local:9000"
+//      service:
+//        host: "ext-authz.foo.svc.cluster.local"
+//        port:
+//          number: 9080
 //  rules:
 //  # Empty rules to always trigger the authorization request.
 //  - {}
@@ -201,7 +209,10 @@
 //  action: EXTERNAL
 //  external:
 //    http:
-//      server: "http://ext-authz.foo.svc.cluster.local:8000"
+//      service:
+//        host: "ext-authz.foo.svc.cluster.local"
+//        port:
+//          number: 8080
 //      timeout: 2s
 //      authorizationRequest:
 //        allowedHeaders: ["X-foo*"]
@@ -249,6 +260,28 @@ func (this *External) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for External
 func (this *External) UnmarshalJSON(b []byte) error {
+	return AuthorizationPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for External_Destination
+func (this *External_Destination) MarshalJSON() ([]byte, error) {
+	str, err := AuthorizationPolicyMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for External_Destination
+func (this *External_Destination) UnmarshalJSON(b []byte) error {
+	return AuthorizationPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for External_PortSelector
+func (this *External_PortSelector) MarshalJSON() ([]byte, error) {
+	str, err := AuthorizationPolicyMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for External_PortSelector
+func (this *External_PortSelector) UnmarshalJSON(b []byte) error {
 	return AuthorizationPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

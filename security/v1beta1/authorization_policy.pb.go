@@ -3,18 +3,20 @@
 
 // Istio Authorization Policy enables access control on workloads in the mesh.
 //
-// Authorization policy supports both allow and deny policies. When allow and
-// deny policies are used for a workload at the same time, the deny policies are
-// evaluated first. The evaluation is determined by the following rules:
+// Authorization policy supports ALLOW, DENY and EXTERNAL actions for access control. When multiple policies are used on
+// the same workload at the same time, the evaluation order is external -> deny -> allow. The evaluation is determined
+// by the following rules:
 //
-// 1. If there are any DENY policies that match the request, deny the request.
-// 2. If there are no ALLOW policies for the workload, allow the request.
-// 3. If any of the ALLOW policies match the request, allow the request.
-// 4. Deny the request.
+// 1. If there are any EXTERNAL policies that match the request, trigger the external authorization request. The request
+//    might be denied by the external authorization response.
+// 2. If there are any DENY policies that match the request, deny the request.
+// 3. If there are no ALLOW policies for the workload, allow the request.
+// 4. If any of the ALLOW policies match the request, allow the request.
+// 5. Deny the request.
 //
 // Istio Authorization Policy also supports the AUDIT action to decide whether to log requests.
 // AUDIT policies do not affect whether requests are allowed or denied to the workload.
-// Requests will be allowed or denied based solely on ALLOW and DENY policies.
+// Requests will be allowed or denied based solely on ALLOW, DENY and EXTERNAL policies.
 //
 // A request will be internally marked that it should be audited if there is an AUDIT policy on the workload that matches the request.
 // A separate plugin must be configured and enabled to actually fulfill the audit decision and complete the audit behavior.
@@ -176,9 +178,15 @@
 //  action: EXTERNAL
 //  external:
 //    http:
-//      server: "grpc://ext-authz.foo.svc.cluster.local:9000"
+//      service:
+//        host: "ext-authz.foo.svc.cluster.local"
+//        port:
+//          number: 9080
 //    tcp:
-//      server: "grpc://ext-authz.foo.svc.cluster.local:9000"
+//      service:
+//        host: "ext-authz.foo.svc.cluster.local"
+//        port:
+//          number: 9080
 //  rules:
 //  # Empty rules to always trigger the authorization request.
 //  - {}
@@ -201,7 +209,10 @@
 //  action: EXTERNAL
 //  external:
 //    http:
-//      server: "http://ext-authz.foo.svc.cluster.local:8000"
+//      service:
+//        host: "ext-authz.foo.svc.cluster.local"
+//        port:
+//          number: 8080
 //      timeout: 2s
 //      authorizationRequest:
 //        allowedHeaders: ["X-foo*"]
@@ -497,19 +508,150 @@ func (m *External) GetTcp() *External_TCPConfig {
 	return nil
 }
 
+// Destination indicates the network addressable service to which the
+// request/connection will be sent after processing a routing rule. The
+// destination.host should unambiguously refer to a service in the service
+// registry. Istio's service registry is composed of all the services found
+// in the platform's service registry (e.g., Kubernetes services, Consul
+// services), as well as services declared through the
+// [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry) resource.
+type External_Destination struct {
+	// The name of a service from the service registry. Service
+	// names are looked up from the platform's service registry (e.g.,
+	// Kubernetes services, Consul services, etc.) and from the hosts
+	// declared by [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry). Traffic forwarded to
+	// destinations that are not found in either of the two, will be dropped.
+	//
+	// *Note for Kubernetes users*: When short names are used (e.g. "reviews"
+	// instead of "reviews.default.svc.cluster.local"), Istio will interpret
+	// the short name based on the namespace of the rule, not the service. A
+	// rule in the "default" namespace containing a host "reviews will be
+	// interpreted as "reviews.default.svc.cluster.local", irrespective of
+	// the actual namespace associated with the reviews service. To avoid
+	// potential misconfiguration, it is recommended to always use fully
+	// qualified domain names over short names.
+	Host string `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
+	// The name of a subset within the service. Applicable only to services
+	// within the mesh. The subset must be defined in a corresponding
+	// DestinationRule.
+	Subset string `protobuf:"bytes,2,opt,name=subset,proto3" json:"subset,omitempty"`
+	// Specifies the port on the host that is being addressed. If a service
+	// exposes only a single port it is not required to explicitly select the
+	// port.
+	Port                 *External_PortSelector `protobuf:"bytes,3,opt,name=port,proto3" json:"port,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
+	XXX_unrecognized     []byte                 `json:"-"`
+	XXX_sizecache        int32                  `json:"-"`
+}
+
+func (m *External_Destination) Reset()         { *m = External_Destination{} }
+func (m *External_Destination) String() string { return proto.CompactTextString(m) }
+func (*External_Destination) ProtoMessage()    {}
+func (*External_Destination) Descriptor() ([]byte, []int) {
+	return fileDescriptor_438e25379256bb35, []int{1, 0}
+}
+func (m *External_Destination) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *External_Destination) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_External_Destination.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *External_Destination) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_External_Destination.Merge(m, src)
+}
+func (m *External_Destination) XXX_Size() int {
+	return m.Size()
+}
+func (m *External_Destination) XXX_DiscardUnknown() {
+	xxx_messageInfo_External_Destination.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_External_Destination proto.InternalMessageInfo
+
+func (m *External_Destination) GetHost() string {
+	if m != nil {
+		return m.Host
+	}
+	return ""
+}
+
+func (m *External_Destination) GetSubset() string {
+	if m != nil {
+		return m.Subset
+	}
+	return ""
+}
+
+func (m *External_Destination) GetPort() *External_PortSelector {
+	if m != nil {
+		return m.Port
+	}
+	return nil
+}
+
+// PortSelector specifies the number of a port to be used for matching or selection for final routing.
+type External_PortSelector struct {
+	// Valid port number
+	Number               uint32   `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *External_PortSelector) Reset()         { *m = External_PortSelector{} }
+func (m *External_PortSelector) String() string { return proto.CompactTextString(m) }
+func (*External_PortSelector) ProtoMessage()    {}
+func (*External_PortSelector) Descriptor() ([]byte, []int) {
+	return fileDescriptor_438e25379256bb35, []int{1, 1}
+}
+func (m *External_PortSelector) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *External_PortSelector) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_External_PortSelector.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *External_PortSelector) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_External_PortSelector.Merge(m, src)
+}
+func (m *External_PortSelector) XXX_Size() int {
+	return m.Size()
+}
+func (m *External_PortSelector) XXX_DiscardUnknown() {
+	xxx_messageInfo_External_PortSelector.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_External_PortSelector proto.InternalMessageInfo
+
+func (m *External_PortSelector) GetNumber() uint32 {
+	if m != nil {
+		return m.Number
+	}
+	return 0
+}
+
 // HTTPConfig supplies detail configurations of the HTTP filter chain.
 type External_HTTPConfig struct {
-	// Supplies the full URL of the external server that implements the Envoy ext_authz filter check request API.
-	// Istio will figure out the proper endpoint configuration based on the content of the URL:
-	// - The scheme ("http://", "https://" or "grpc://") will decide the protocol (HTTP or gRPC) of the check request;
-	// - The host will decide the internal cluster name of the target which could be either within or out of the mesh;
-	//
-	// Examples:
-	// - "http://ext-authz.foo.svc.cluster.local:8000/" for HTTP server on port 8000 in the mesh.
-	// - "https://ext-authz.company.com/" for HTTPS server on port 80 out of mesh.
-	// - "grpc://ext-authz.foo.svc.cluster.local:9000" for gRPC server on port 9000 in the mesh.
-	// - "http://127.0.0.1:8001/" for local HTTP server on port 8001 along with the Envoy sidecar.
-	Server string `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
+	// Specifies the external authorization service that implements the Envoy ext_authz filter check request API.
+	// The port will be used to decide the protocol (HTTP or gRPC) for talking to the external authorization service.
+	Service *External_Destination `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
 	// Sets the maximum duration in milliseconds for connection to the external server (default is 200ms).
 	Timeout *types.Duration `protobuf:"bytes,2,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	// Settings used for controlling authorization request metadata.
@@ -517,17 +659,19 @@ type External_HTTPConfig struct {
 	// Settings used for controlling authorization response metadata.
 	AuthorizationResponse *External_HTTPConfig_AuthorizationResponse `protobuf:"bytes,4,opt,name=authorization_response,json=authorizationResponse,proto3" json:"authorization_response,omitempty"`
 	// Specifies if the peer certificate is included in the external authorization request.
-	IncludePeerCertificate bool     `protobuf:"varint,5,opt,name=include_peer_certificate,json=includePeerCertificate,proto3" json:"include_peer_certificate,omitempty"`
-	XXX_NoUnkeyedLiteral   struct{} `json:"-"`
-	XXX_unrecognized       []byte   `json:"-"`
-	XXX_sizecache          int32    `json:"-"`
+	IncludePeerCertificate bool `protobuf:"varint,5,opt,name=include_peer_certificate,json=includePeerCertificate,proto3" json:"include_peer_certificate,omitempty"`
+	// Sets a prefix to the value of authorization request header *Path*.
+	PathPrefix           string   `protobuf:"bytes,6,opt,name=path_prefix,json=pathPrefix,proto3" json:"path_prefix,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *External_HTTPConfig) Reset()         { *m = External_HTTPConfig{} }
 func (m *External_HTTPConfig) String() string { return proto.CompactTextString(m) }
 func (*External_HTTPConfig) ProtoMessage()    {}
 func (*External_HTTPConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_438e25379256bb35, []int{1, 0}
+	return fileDescriptor_438e25379256bb35, []int{1, 2}
 }
 func (m *External_HTTPConfig) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -556,11 +700,11 @@ func (m *External_HTTPConfig) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_External_HTTPConfig proto.InternalMessageInfo
 
-func (m *External_HTTPConfig) GetServer() string {
+func (m *External_HTTPConfig) GetService() *External_Destination {
 	if m != nil {
-		return m.Server
+		return m.Service
 	}
-	return ""
+	return nil
 }
 
 func (m *External_HTTPConfig) GetTimeout() *types.Duration {
@@ -591,6 +735,13 @@ func (m *External_HTTPConfig) GetIncludePeerCertificate() bool {
 	return false
 }
 
+func (m *External_HTTPConfig) GetPathPrefix() string {
+	if m != nil {
+		return m.PathPrefix
+	}
+	return ""
+}
+
 // AuthorizationRequest allows to customize the authorization request.
 type External_HTTPConfig_AuthorizationRequest struct {
 	// Authorization request will include the client request headers that have a correspondent match.
@@ -610,7 +761,7 @@ func (m *External_HTTPConfig_AuthorizationRequest) Reset() {
 func (m *External_HTTPConfig_AuthorizationRequest) String() string { return proto.CompactTextString(m) }
 func (*External_HTTPConfig_AuthorizationRequest) ProtoMessage()    {}
 func (*External_HTTPConfig_AuthorizationRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_438e25379256bb35, []int{1, 0, 0}
+	return fileDescriptor_438e25379256bb35, []int{1, 2, 0}
 }
 func (m *External_HTTPConfig_AuthorizationRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -673,7 +824,7 @@ func (m *External_HTTPConfig_AuthorizationResponse) String() string {
 }
 func (*External_HTTPConfig_AuthorizationResponse) ProtoMessage() {}
 func (*External_HTTPConfig_AuthorizationResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_438e25379256bb35, []int{1, 0, 1}
+	return fileDescriptor_438e25379256bb35, []int{1, 2, 1}
 }
 func (m *External_HTTPConfig_AuthorizationResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -718,13 +869,9 @@ func (m *External_HTTPConfig_AuthorizationResponse) GetForwardToDownstream() []s
 
 // TCPConfig supplies detail configurations of the TCP filter chain.
 type External_TCPConfig struct {
-	// Supplies the full URL of the external server that implements the Envoy ext_authz filter authorization request API.
+	// Specifies the external authorization service that implements the Envoy ext_authz filter check request API.
 	// Only gRPC protocol is supported on TCP filter chain.
-	//
-	// Examples:
-	// - "grpc://ext-authz.foo.svc.cluster.local:9000" for gRPC server on port 9000 in the mesh.
-	// - "grpc://127.0.0.1:8001" for local gRPC server on port 8001 along with the Envoy sidecar.
-	Server string `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
+	Service *External_Destination `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
 	// Sets the maximum duration in milliseconds for connection to the external server (default is 200ms).
 	Timeout *types.Duration `protobuf:"bytes,2,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	// Specifies if the peer certificate is included in the external authorization request.
@@ -738,7 +885,7 @@ func (m *External_TCPConfig) Reset()         { *m = External_TCPConfig{} }
 func (m *External_TCPConfig) String() string { return proto.CompactTextString(m) }
 func (*External_TCPConfig) ProtoMessage()    {}
 func (*External_TCPConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_438e25379256bb35, []int{1, 1}
+	return fileDescriptor_438e25379256bb35, []int{1, 3}
 }
 func (m *External_TCPConfig) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -767,11 +914,11 @@ func (m *External_TCPConfig) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_External_TCPConfig proto.InternalMessageInfo
 
-func (m *External_TCPConfig) GetServer() string {
+func (m *External_TCPConfig) GetService() *External_Destination {
 	if m != nil {
-		return m.Server
+		return m.Service
 	}
-	return ""
+	return nil
 }
 
 func (m *External_TCPConfig) GetTimeout() *types.Duration {
@@ -1309,6 +1456,8 @@ func init() {
 	proto.RegisterEnum("istio.security.v1beta1.AuthorizationPolicy_Action", AuthorizationPolicy_Action_name, AuthorizationPolicy_Action_value)
 	proto.RegisterType((*AuthorizationPolicy)(nil), "istio.security.v1beta1.AuthorizationPolicy")
 	proto.RegisterType((*External)(nil), "istio.security.v1beta1.External")
+	proto.RegisterType((*External_Destination)(nil), "istio.security.v1beta1.External.Destination")
+	proto.RegisterType((*External_PortSelector)(nil), "istio.security.v1beta1.External.PortSelector")
 	proto.RegisterType((*External_HTTPConfig)(nil), "istio.security.v1beta1.External.HTTPConfig")
 	proto.RegisterType((*External_HTTPConfig_AuthorizationRequest)(nil), "istio.security.v1beta1.External.HTTPConfig.AuthorizationRequest")
 	proto.RegisterType((*External_HTTPConfig_AuthorizationResponse)(nil), "istio.security.v1beta1.External.HTTPConfig.AuthorizationResponse")
@@ -1326,70 +1475,76 @@ func init() {
 }
 
 var fileDescriptor_438e25379256bb35 = []byte{
-	// 1001 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0xdf, 0x6e, 0xdc, 0xc4,
-	0x17, 0xae, 0xbd, 0x7f, 0xe2, 0x3d, 0xf9, 0x35, 0x4d, 0x27, 0x7f, 0xe4, 0xdf, 0x96, 0x6e, 0x96,
-	0x15, 0x88, 0x88, 0x08, 0xaf, 0xba, 0x85, 0x8a, 0x0b, 0xd4, 0x74, 0xf3, 0x07, 0xa5, 0x28, 0xa4,
-	0xd1, 0x74, 0x4b, 0x29, 0x37, 0xd6, 0xc4, 0x9e, 0xcd, 0x8e, 0xe2, 0xf5, 0x98, 0xf1, 0x38, 0x69,
-	0xe0, 0x2d, 0x78, 0x0e, 0x1e, 0x81, 0x2b, 0xae, 0xb8, 0xe4, 0x0d, 0x88, 0xc2, 0x8b, 0x20, 0xcf,
-	0x8c, 0xbd, 0xdb, 0xb2, 0xd9, 0x0a, 0xc1, 0xe5, 0x99, 0xef, 0xfb, 0xce, 0xf9, 0xce, 0x99, 0xe3,
-	0x91, 0x61, 0x2b, 0xa5, 0x41, 0x26, 0x98, 0xbc, 0xec, 0x9e, 0x3f, 0x38, 0xa1, 0x92, 0x3c, 0xe8,
-	0x92, 0x4c, 0x8e, 0xb8, 0x60, 0x3f, 0x10, 0xc9, 0x78, 0xec, 0x27, 0x3c, 0x62, 0xc1, 0xa5, 0x97,
-	0x08, 0x2e, 0x39, 0x5a, 0x67, 0xa9, 0x64, 0xdc, 0x2b, 0x24, 0x9e, 0x91, 0x34, 0x5b, 0xa7, 0x9c,
-	0x9f, 0x46, 0xb4, 0xab, 0x58, 0x27, 0xd9, 0xb0, 0x1b, 0x66, 0x42, 0xc9, 0xb5, 0xae, 0xb9, 0x61,
-	0x70, 0x92, 0xb0, 0xee, 0x90, 0xd1, 0x28, 0xf4, 0x4f, 0xe8, 0x88, 0x9c, 0x33, 0x2e, 0x0c, 0xe1,
-	0x9e, 0xbc, 0x4c, 0x68, 0xe9, 0x20, 0xa5, 0x11, 0x0d, 0x64, 0x01, 0x76, 0xae, 0x6c, 0x58, 0xe9,
-	0x4f, 0x9b, 0x3a, 0x56, 0x9e, 0xd0, 0x13, 0x70, 0x0a, 0xa6, 0x6b, 0xb5, 0xad, 0xcd, 0xc5, 0xde,
-	0x07, 0x9e, 0x36, 0x98, 0x67, 0x2b, 0xcc, 0x79, 0x2f, 0xb9, 0x38, 0x8b, 0x38, 0x09, 0x9f, 0x1b,
-	0x2e, 0x2e, 0x55, 0xa8, 0x07, 0x35, 0x91, 0x45, 0x34, 0x75, 0xed, 0x76, 0x65, 0x73, 0xb1, 0xf7,
-	0x9e, 0x37, 0xbb, 0x3f, 0x0f, 0x67, 0x11, 0xc5, 0x9a, 0x8a, 0xbe, 0x82, 0x3a, 0x09, 0x72, 0x17,
-	0x6e, 0xa5, 0x6d, 0x6d, 0x2e, 0xf5, 0x7a, 0x37, 0x89, 0x66, 0x58, 0xf6, 0xfa, 0x4a, 0x89, 0x4d,
-	0x06, 0xf4, 0x18, 0x1c, 0xfa, 0x5a, 0x52, 0x11, 0x93, 0xc8, 0xad, 0xaa, 0x0e, 0xda, 0x37, 0x65,
-	0xdb, 0x37, 0xbc, 0x83, 0x5b, 0xb8, 0xd4, 0x74, 0x1e, 0x41, 0x5d, 0x67, 0x44, 0x0d, 0xa8, 0xf5,
-	0x0f, 0x0f, 0x9f, 0xbd, 0x5c, 0xbe, 0x85, 0x1c, 0xa8, 0xee, 0xed, 0x1f, 0xbd, 0x5a, 0xb6, 0xd4,
-	0xe1, 0x8b, 0xbd, 0xa7, 0x83, 0x65, 0x1b, 0xfd, 0x0f, 0x9c, 0xfd, 0x6f, 0x07, 0xfb, 0xf8, 0xa8,
-	0x7f, 0xb8, 0x5c, 0xd9, 0xb9, 0x03, 0xb7, 0xb5, 0x03, 0x3f, 0xa4, 0x92, 0xb0, 0xa8, 0xf3, 0x67,
-	0x1d, 0x9c, 0xa2, 0x02, 0xda, 0x86, 0xea, 0x48, 0xca, 0xc4, 0xcc, 0x74, 0xeb, 0x5d, 0x8e, 0xbc,
-	0x83, 0xc1, 0xe0, 0x78, 0x97, 0xc7, 0x43, 0x76, 0x8a, 0x95, 0x10, 0x7d, 0x01, 0x15, 0x19, 0x24,
-	0xae, 0xad, 0xf4, 0x1f, 0xbf, 0x53, 0x3f, 0xd8, 0x2d, 0xe4, 0xb9, 0xac, 0xf9, 0x6b, 0x15, 0x60,
-	0x92, 0x12, 0xad, 0x43, 0x3d, 0xa5, 0xe2, 0x9c, 0xea, 0x3b, 0x6e, 0x60, 0x13, 0xa1, 0x87, 0xb0,
-	0x20, 0xd9, 0x98, 0xf2, 0x4c, 0x9a, 0x42, 0xff, 0xf7, 0xf4, 0x96, 0x79, 0xc5, 0x16, 0x7a, 0x7b,
-	0x66, 0x0b, 0x71, 0xc1, 0x44, 0x19, 0xac, 0xbd, 0xb9, 0xde, 0x82, 0x7e, 0x9f, 0xd1, 0x54, 0xaa,
-	0xbb, 0x5c, 0xec, 0x3d, 0xf9, 0x07, 0xbd, 0xbe, 0x79, 0xbf, 0x58, 0xe7, 0xc1, 0xab, 0x64, 0xc6,
-	0x29, 0x7a, 0x0d, 0xeb, 0x6f, 0x97, 0x4d, 0x13, 0x1e, 0xa7, 0xd4, 0xdc, 0x7a, 0xff, 0x5f, 0xd4,
-	0xd5, 0x89, 0xf0, 0x1a, 0x99, 0x75, 0x8c, 0x3e, 0x07, 0x97, 0xc5, 0x41, 0x94, 0x85, 0xd4, 0x4f,
-	0x28, 0x15, 0x7e, 0x40, 0x85, 0x64, 0x43, 0x16, 0x10, 0x49, 0xdd, 0x5a, 0xdb, 0xda, 0x74, 0xf0,
-	0xba, 0xc1, 0x8f, 0x29, 0x15, 0xbb, 0x13, 0xb4, 0xb9, 0x0d, 0xab, 0xb3, 0x3a, 0x44, 0x1f, 0xc1,
-	0x1d, 0x12, 0x45, 0xfc, 0x82, 0x86, 0xfe, 0x88, 0x92, 0x90, 0x8a, 0xd4, 0xb5, 0xda, 0x95, 0xcd,
-	0x06, 0x5e, 0x32, 0xc7, 0x07, 0xfa, 0xb4, 0xf9, 0x23, 0xac, 0xcd, 0xb4, 0x8a, 0x3c, 0x58, 0x19,
-	0x72, 0x71, 0x41, 0x44, 0xe8, 0x4b, 0xee, 0x67, 0x49, 0x2a, 0x05, 0x25, 0x63, 0x93, 0xe5, 0xae,
-	0x81, 0x06, 0xfc, 0x85, 0x01, 0x50, 0x0f, 0xd6, 0xa6, 0xf8, 0x21, 0xbf, 0x88, 0x8d, 0xc2, 0x56,
-	0x8a, 0x95, 0x52, 0xb1, 0x57, 0x42, 0xcd, 0x9f, 0x2c, 0x68, 0x94, 0x7b, 0xf5, 0xdf, 0xee, 0xd0,
-	0xbc, 0x91, 0x56, 0xe6, 0x8d, 0xb4, 0xf3, 0xb3, 0x0d, 0xd5, 0xfc, 0x29, 0x41, 0x9f, 0x41, 0x75,
-	0x28, 0xb8, 0x6e, 0x79, 0xb1, 0xf7, 0xfe, 0xbc, 0x67, 0xc7, 0xfb, 0x52, 0xf0, 0x31, 0x56, 0x74,
-	0xd4, 0x05, 0x5b, 0x72, 0xf3, 0x56, 0x6d, 0xcc, 0x15, 0x0d, 0x38, 0xb6, 0x25, 0xcf, 0xeb, 0x5c,
-	0x8c, 0x68, 0xfe, 0x52, 0xcd, 0xad, 0xb3, 0xcb, 0xe3, 0x90, 0xa9, 0x26, 0x15, 0xbd, 0xf9, 0x18,
-	0xaa, 0x79, 0x55, 0xf4, 0x08, 0xea, 0x29, 0xcf, 0x44, 0x40, 0xcd, 0x53, 0xd0, 0xba, 0x29, 0xc1,
-	0x73, 0xc5, 0xc2, 0x86, 0xdd, 0xdc, 0x07, 0x7b, 0xc0, 0xd1, 0x36, 0x34, 0x78, 0x42, 0xf5, 0xf4,
-	0x4c, 0x82, 0x1b, 0x1d, 0x3c, 0x2b, 0x88, 0x78, 0xa2, 0xe9, 0xfc, 0x62, 0x43, 0x5d, 0x67, 0x46,
-	0x2d, 0x80, 0x44, 0xb0, 0x38, 0x60, 0x09, 0x89, 0x8a, 0x7d, 0x9b, 0x3a, 0x41, 0x1f, 0xc2, 0x52,
-	0xcc, 0xa5, 0x3f, 0xc5, 0xa9, 0x29, 0xce, 0xed, 0x98, 0xcb, 0xe3, 0x09, 0xed, 0x13, 0x40, 0xe6,
-	0x83, 0x9f, 0xa6, 0xea, 0x35, 0xba, 0x6b, 0x90, 0x29, 0xfa, 0xa7, 0xb0, 0x9e, 0x67, 0x9d, 0x21,
-	0xa9, 0x2b, 0xc9, 0x6a, 0xcc, 0x25, 0xfe, 0x9b, 0xaa, 0x05, 0x10, 0x93, 0x31, 0x4d, 0x13, 0x12,
-	0xd0, 0x54, 0x8d, 0xbe, 0x81, 0xa7, 0x4e, 0x0a, 0xaf, 0x53, 0x9c, 0x85, 0xd2, 0xeb, 0xd1, 0x84,
-	0x76, 0x0f, 0x1a, 0x2c, 0xf1, 0x4f, 0x22, 0x1e, 0x9c, 0xa5, 0x6e, 0x55, 0x31, 0x1c, 0x96, 0xec,
-	0xa8, 0x18, 0x75, 0x20, 0x67, 0xfb, 0x13, 0x82, 0xa3, 0x08, 0x8b, 0x31, 0x97, 0x4f, 0x0d, 0xa7,
-	0xf3, 0x87, 0x05, 0x8d, 0x72, 0xae, 0x68, 0x15, 0x6a, 0x23, 0x9e, 0xca, 0x62, 0x78, 0x3a, 0xc8,
-	0x8b, 0xe4, 0x79, 0x34, 0xa2, 0x47, 0xe6, 0xc4, 0x5c, 0x1e, 0x28, 0x70, 0x15, 0x6a, 0x09, 0x17,
-	0xb2, 0x18, 0x90, 0x0e, 0x0a, 0x89, 0x46, 0xea, 0xa5, 0xe4, 0x58, 0x81, 0x2e, 0x2c, 0x8c, 0xa9,
-	0x1c, 0xf1, 0xb0, 0x68, 0xbc, 0x08, 0xd1, 0x06, 0xe4, 0xe6, 0xfc, 0x02, 0x5d, 0x30, 0x63, 0xe1,
-	0xf2, 0x6b, 0x43, 0xc8, 0xab, 0x11, 0x39, 0x2a, 0x7a, 0xd5, 0x41, 0x59, 0x4d, 0x21, 0xce, 0xa4,
-	0x5a, 0x1e, 0x77, 0x5e, 0x41, 0xa3, 0x5c, 0x5d, 0xb4, 0x06, 0x95, 0x33, 0x7a, 0xa9, 0x3f, 0xf0,
-	0x9d, 0xca, 0x55, 0xdf, 0xc6, 0x79, 0x9c, 0x7f, 0xfa, 0xe7, 0x24, 0xca, 0x68, 0xd1, 0x85, 0x89,
-	0xd0, 0x7d, 0xc8, 0x8b, 0xfb, 0x06, 0xd3, 0x66, 0xf3, 0x52, 0xdf, 0xa8, 0x83, 0x9d, 0xad, 0xdf,
-	0xae, 0x5b, 0xd6, 0xef, 0xd7, 0x2d, 0xeb, 0xea, 0xba, 0x65, 0x7d, 0x77, 0x5f, 0xaf, 0x2d, 0xe3,
-	0xea, 0x0f, 0xe6, 0xed, 0x3f, 0xa6, 0x93, 0xba, 0x7a, 0x2d, 0x1e, 0xfe, 0x15, 0x00, 0x00, 0xff,
-	0xff, 0xb3, 0x75, 0xe9, 0xb7, 0x4c, 0x09, 0x00, 0x00,
+	// 1096 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x56, 0x4b, 0x73, 0x1b, 0x45,
+	0x10, 0xce, 0xea, 0x65, 0xa9, 0x95, 0x87, 0x33, 0xb1, 0x8d, 0x50, 0x88, 0x2c, 0x54, 0x3c, 0x5c,
+	0x98, 0xac, 0x2a, 0x0a, 0xa4, 0x38, 0x50, 0x71, 0xe4, 0x47, 0xca, 0xa1, 0x8c, 0xa3, 0x9a, 0x28,
+	0x84, 0x70, 0xd9, 0x1a, 0xad, 0x46, 0xd6, 0x94, 0x57, 0x3b, 0xcb, 0xec, 0xac, 0x1f, 0x70, 0xe2,
+	0x1f, 0x50, 0xc5, 0xdf, 0xe0, 0x27, 0x70, 0xe2, 0xc4, 0x91, 0x7f, 0x80, 0xcb, 0xbf, 0x84, 0x9a,
+	0xc7, 0xae, 0x94, 0x20, 0xdb, 0x45, 0x71, 0xe0, 0xd8, 0xdd, 0xdf, 0xd7, 0x5f, 0x77, 0x6f, 0xcf,
+	0xcc, 0xc2, 0x7a, 0x4c, 0xfd, 0x44, 0x30, 0x79, 0xda, 0x3e, 0x7a, 0x30, 0xa0, 0x92, 0x3c, 0x68,
+	0x93, 0x44, 0x8e, 0xb9, 0x60, 0x3f, 0x10, 0xc9, 0x78, 0xe8, 0x45, 0x3c, 0x60, 0xfe, 0xa9, 0x1b,
+	0x09, 0x2e, 0x39, 0x5a, 0x61, 0xb1, 0x64, 0xdc, 0x4d, 0x29, 0xae, 0xa5, 0xd4, 0x1b, 0x07, 0x9c,
+	0x1f, 0x04, 0xb4, 0xad, 0x51, 0x83, 0x64, 0xd4, 0x1e, 0x26, 0x42, 0xd3, 0x0d, 0xaf, 0xbe, 0x6a,
+	0xe3, 0x24, 0x62, 0xed, 0x11, 0xa3, 0xc1, 0xd0, 0x1b, 0xd0, 0x31, 0x39, 0x62, 0x5c, 0x58, 0xc0,
+	0x5d, 0x79, 0x1a, 0xd1, 0xac, 0x82, 0x98, 0x06, 0xd4, 0x97, 0x69, 0xb0, 0x75, 0x96, 0x83, 0x3b,
+	0xdd, 0xd9, 0xa2, 0x7a, 0xba, 0x26, 0xf4, 0x04, 0xca, 0x29, 0xb2, 0xe6, 0x34, 0x9d, 0xb5, 0x6a,
+	0xe7, 0x03, 0xd7, 0x14, 0xa8, 0xb2, 0xa5, 0xc5, 0xb9, 0xaf, 0xb8, 0x38, 0x0c, 0x38, 0x19, 0xbe,
+	0xb0, 0x58, 0x9c, 0xb1, 0x50, 0x07, 0x8a, 0x22, 0x09, 0x68, 0x5c, 0xcb, 0x35, 0xf3, 0x6b, 0xd5,
+	0xce, 0x7b, 0xee, 0xfc, 0xfe, 0x5c, 0x9c, 0x04, 0x14, 0x1b, 0x28, 0xfa, 0x0a, 0x4a, 0xc4, 0x57,
+	0x55, 0xd4, 0xf2, 0x4d, 0x67, 0xed, 0x66, 0xa7, 0x73, 0x11, 0x69, 0x4e, 0xc9, 0x6e, 0x57, 0x33,
+	0xb1, 0xcd, 0x80, 0x1e, 0x43, 0x99, 0x9e, 0x48, 0x2a, 0x42, 0x12, 0xd4, 0x0a, 0xba, 0x83, 0xe6,
+	0x45, 0xd9, 0x76, 0x2c, 0x6e, 0xf7, 0x1a, 0xce, 0x38, 0xad, 0x47, 0x50, 0x32, 0x19, 0x51, 0x05,
+	0x8a, 0xdd, 0xbd, 0xbd, 0xe7, 0xaf, 0x16, 0xaf, 0xa1, 0x32, 0x14, 0xb6, 0x77, 0xf6, 0x5f, 0x2f,
+	0x3a, 0xda, 0xf9, 0x72, 0xfb, 0x59, 0x7f, 0x31, 0x87, 0xae, 0x43, 0x79, 0xe7, 0xdb, 0xfe, 0x0e,
+	0xde, 0xef, 0xee, 0x2d, 0xe6, 0x37, 0x6f, 0xc1, 0x0d, 0x53, 0x81, 0x37, 0xa4, 0x92, 0xb0, 0xa0,
+	0xf5, 0x73, 0x05, 0xca, 0xa9, 0x02, 0xda, 0x80, 0xc2, 0x58, 0xca, 0xc8, 0xce, 0x74, 0xfd, 0xaa,
+	0x8a, 0xdc, 0xdd, 0x7e, 0xbf, 0xb7, 0xc5, 0xc3, 0x11, 0x3b, 0xc0, 0x9a, 0x88, 0xbe, 0x84, 0xbc,
+	0xf4, 0xa3, 0x5a, 0x4e, 0xf3, 0x3f, 0xb9, 0x92, 0xdf, 0xdf, 0x4a, 0xe9, 0x8a, 0x56, 0xff, 0xc9,
+	0x81, 0xea, 0x36, 0x8d, 0x25, 0x0b, 0xf5, 0xe4, 0xd0, 0x3b, 0x50, 0x18, 0xf3, 0x58, 0xea, 0x72,
+	0x2a, 0x9b, 0xf9, 0xb3, 0x6e, 0x0e, 0x6b, 0x07, 0x5a, 0x81, 0x52, 0x9c, 0x0c, 0x62, 0x2a, 0xb5,
+	0x52, 0x05, 0x5b, 0x0b, 0x75, 0xa1, 0x10, 0x71, 0x21, 0xf5, 0xf7, 0xa9, 0x76, 0xee, 0x5f, 0xa9,
+	0xdf, 0xe3, 0x42, 0x66, 0xcb, 0xa1, 0xa9, 0xf5, 0x8f, 0xe0, 0xfa, 0xac, 0x57, 0x49, 0x85, 0xc9,
+	0x64, 0x40, 0xcd, 0xa2, 0xdd, 0xc0, 0xd6, 0xaa, 0xff, 0x52, 0x04, 0x98, 0xb6, 0x8f, 0x9e, 0xc2,
+	0x42, 0x4c, 0xc5, 0x11, 0xf3, 0xa9, 0x1d, 0xde, 0xa7, 0x57, 0x8a, 0xcf, 0x74, 0x8a, 0x53, 0x32,
+	0x7a, 0x08, 0x0b, 0x92, 0x4d, 0x28, 0x4f, 0xa4, 0x1d, 0xe2, 0xbb, 0xae, 0x39, 0x41, 0x6e, 0x7a,
+	0xc2, 0xdc, 0x6d, 0x7b, 0xc2, 0x70, 0x8a, 0x44, 0x09, 0x2c, 0xbf, 0x79, 0x74, 0x05, 0xfd, 0x3e,
+	0xa1, 0x71, 0x3a, 0x87, 0x27, 0xff, 0xe2, 0x3b, 0xbe, 0xb9, 0xbb, 0xd8, 0xe4, 0xc1, 0x4b, 0x64,
+	0x8e, 0x17, 0x9d, 0xc0, 0xca, 0xdb, 0xb2, 0x71, 0xc4, 0xc3, 0x98, 0xda, 0x8d, 0xee, 0xfe, 0x07,
+	0x5d, 0x93, 0x08, 0x2f, 0x93, 0x79, 0x6e, 0xf4, 0x05, 0xd4, 0x58, 0xe8, 0x07, 0xc9, 0x90, 0x7a,
+	0x11, 0xa5, 0xc2, 0xf3, 0xa9, 0x90, 0x6c, 0xc4, 0x7c, 0x22, 0x69, 0xad, 0xd8, 0x74, 0xd6, 0xca,
+	0x78, 0xc5, 0xc6, 0x7b, 0x94, 0x8a, 0xad, 0x69, 0x14, 0xad, 0x42, 0x35, 0x22, 0x72, 0xec, 0x45,
+	0x82, 0x8e, 0xd8, 0x49, 0xad, 0xa4, 0xd7, 0x07, 0x94, 0xab, 0xa7, 0x3d, 0xf5, 0x0d, 0x58, 0x9a,
+	0x37, 0x02, 0xf4, 0x31, 0xdc, 0x22, 0x41, 0xc0, 0x8f, 0xe9, 0xd0, 0x1b, 0x53, 0x32, 0xa4, 0x22,
+	0xae, 0x39, 0xcd, 0xfc, 0x5a, 0x05, 0xdf, 0xb4, 0xee, 0x5d, 0xe3, 0xad, 0xff, 0x08, 0xcb, 0x73,
+	0x7b, 0x41, 0x2e, 0xdc, 0x19, 0x71, 0x71, 0x4c, 0xc4, 0xd0, 0x93, 0xdc, 0x4b, 0xa2, 0x58, 0x0a,
+	0x4a, 0x26, 0x36, 0xcb, 0x6d, 0x1b, 0xea, 0xf3, 0x97, 0x36, 0x80, 0x3a, 0xb0, 0x3c, 0x83, 0x1f,
+	0xf2, 0xe3, 0xd0, 0x32, 0x72, 0x9a, 0x71, 0x27, 0x63, 0x6c, 0x67, 0xa1, 0xfa, 0xef, 0x0e, 0x54,
+	0xb2, 0x43, 0xf5, 0xff, 0x2e, 0xe5, 0x65, 0xdf, 0x28, 0x7f, 0xd9, 0x37, 0x6a, 0xfd, 0x9a, 0x83,
+	0x82, 0xba, 0x77, 0xd1, 0xe7, 0x50, 0x18, 0x09, 0x6e, 0x46, 0x54, 0xed, 0xbc, 0x7f, 0xd9, 0x1d,
+	0xed, 0x3e, 0x15, 0x7c, 0x82, 0x35, 0x1c, 0xb5, 0x21, 0x27, 0xb9, 0xbd, 0xd8, 0x57, 0x2f, 0x25,
+	0xf5, 0x39, 0xce, 0x49, 0xae, 0x74, 0x8e, 0xc7, 0x54, 0x5d, 0xeb, 0x97, 0xea, 0x6c, 0xf1, 0x70,
+	0xc8, 0x74, 0x93, 0x1a, 0x5e, 0x7f, 0x0c, 0x05, 0xa5, 0x8a, 0x1e, 0x41, 0x29, 0xe6, 0x89, 0xc8,
+	0xa6, 0xdc, 0xb8, 0x28, 0xc1, 0x0b, 0x8d, 0xc2, 0x16, 0x5d, 0xdf, 0x81, 0x5c, 0x9f, 0xa3, 0x0d,
+	0xa8, 0xf0, 0x88, 0x9a, 0xe9, 0xd9, 0x04, 0x17, 0x56, 0xf0, 0x3c, 0x05, 0xe2, 0x29, 0xa7, 0xf5,
+	0x5b, 0x0e, 0x4a, 0x26, 0x33, 0x6a, 0x00, 0x44, 0x82, 0x85, 0x3e, 0x8b, 0x48, 0x90, 0xee, 0xe7,
+	0x8c, 0x07, 0x7d, 0x08, 0x37, 0x43, 0x2e, 0xbd, 0x19, 0x4c, 0x51, 0x63, 0x6e, 0x84, 0x5c, 0xf6,
+	0xa6, 0xb0, 0xfb, 0x80, 0xec, 0x0d, 0x32, 0x0b, 0x35, 0x6b, 0x77, 0xdb, 0x46, 0x66, 0xe0, 0x9f,
+	0xc1, 0x8a, 0xca, 0x3a, 0x87, 0x52, 0xd2, 0x94, 0xa5, 0x90, 0x4b, 0xfc, 0x0f, 0x56, 0x03, 0x20,
+	0x24, 0x13, 0x1a, 0x47, 0xc4, 0xa7, 0xb1, 0x1e, 0x7d, 0x05, 0xcf, 0x78, 0xd2, 0x5a, 0x67, 0x30,
+	0x0b, 0x59, 0xad, 0xfb, 0x53, 0xd8, 0x5d, 0xa8, 0xb0, 0xc8, 0x1b, 0x04, 0xdc, 0x3f, 0x8c, 0x6b,
+	0x05, 0x8d, 0x28, 0xb3, 0x68, 0x53, 0xdb, 0xa8, 0x05, 0x0a, 0xed, 0x4d, 0x01, 0x65, 0x0d, 0xa8,
+	0x86, 0x5c, 0x3e, 0xb3, 0x98, 0xd6, 0x5f, 0x0e, 0x54, 0xb2, 0xb9, 0xa2, 0x25, 0x28, 0xaa, 0x17,
+	0x26, 0x1d, 0x9e, 0x31, 0x94, 0x88, 0xca, 0x63, 0x22, 0x66, 0x64, 0xe5, 0x90, 0xcb, 0x5d, 0x1d,
+	0x5c, 0x82, 0xa2, 0x7a, 0x39, 0xd2, 0x01, 0x19, 0x23, 0xa5, 0x98, 0x48, 0x29, 0xa3, 0xf4, 0x74,
+	0xb0, 0x06, 0x0b, 0x13, 0x2a, 0xc7, 0x7c, 0x98, 0x36, 0x9e, 0x9a, 0xea, 0x7e, 0x52, 0xb4, 0x34,
+	0xba, 0x60, 0xc7, 0xc2, 0xe5, 0xd7, 0x16, 0xa0, 0xd4, 0x88, 0x1c, 0xa7, 0xbd, 0x1a, 0x23, 0x53,
+	0xd3, 0x91, 0xf2, 0x54, 0x4d, 0xd9, 0xad, 0xd7, 0x50, 0xc9, 0x56, 0x17, 0x2d, 0x43, 0xfe, 0x90,
+	0x9e, 0xce, 0x3e, 0xa9, 0xca, 0x56, 0xcf, 0xdc, 0x11, 0x09, 0x12, 0x9a, 0x76, 0x61, 0x2d, 0x74,
+	0x0f, 0x94, 0xb8, 0x67, 0x63, 0xa6, 0x58, 0x25, 0xf5, 0x8d, 0x76, 0x6c, 0xae, 0xff, 0x71, 0xde,
+	0x70, 0xfe, 0x3c, 0x6f, 0x38, 0x67, 0xe7, 0x0d, 0xe7, 0xbb, 0x7b, 0x66, 0x6d, 0x19, 0xd7, 0xbf,
+	0x7b, 0x6f, 0xff, 0x5e, 0x0e, 0x4a, 0xfa, 0xb6, 0x78, 0xf8, 0x77, 0x00, 0x00, 0x00, 0xff, 0xff,
+	0xd2, 0x3c, 0xd8, 0x94, 0x79, 0x0a, 0x00, 0x00,
 }
 
 func (m *AuthorizationPolicy) Marshal() (dAtA []byte, err error) {
@@ -1530,6 +1685,91 @@ func (m *External) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *External_Destination) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *External_Destination) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *External_Destination) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.Port != nil {
+		{
+			size, err := m.Port.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAuthorizationPolicy(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Subset) > 0 {
+		i -= len(m.Subset)
+		copy(dAtA[i:], m.Subset)
+		i = encodeVarintAuthorizationPolicy(dAtA, i, uint64(len(m.Subset)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Host) > 0 {
+		i -= len(m.Host)
+		copy(dAtA[i:], m.Host)
+		i = encodeVarintAuthorizationPolicy(dAtA, i, uint64(len(m.Host)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *External_PortSelector) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *External_PortSelector) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *External_PortSelector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.Number != 0 {
+		i = encodeVarintAuthorizationPolicy(dAtA, i, uint64(m.Number))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *External_HTTPConfig) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1553,6 +1793,13 @@ func (m *External_HTTPConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.XXX_unrecognized != nil {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.PathPrefix) > 0 {
+		i -= len(m.PathPrefix)
+		copy(dAtA[i:], m.PathPrefix)
+		i = encodeVarintAuthorizationPolicy(dAtA, i, uint64(len(m.PathPrefix)))
+		i--
+		dAtA[i] = 0x32
 	}
 	if m.IncludePeerCertificate {
 		i--
@@ -1600,10 +1847,15 @@ func (m *External_HTTPConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x12
 	}
-	if len(m.Server) > 0 {
-		i -= len(m.Server)
-		copy(dAtA[i:], m.Server)
-		i = encodeVarintAuthorizationPolicy(dAtA, i, uint64(len(m.Server)))
+	if m.Service != nil {
+		{
+			size, err := m.Service.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAuthorizationPolicy(dAtA, i, uint64(size))
+		}
 		i--
 		dAtA[i] = 0xa
 	}
@@ -1737,10 +1989,15 @@ func (m *External_TCPConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x12
 	}
-	if len(m.Server) > 0 {
-		i -= len(m.Server)
-		copy(dAtA[i:], m.Server)
-		i = encodeVarintAuthorizationPolicy(dAtA, i, uint64(len(m.Server)))
+	if m.Service != nil {
+		{
+			size, err := m.Service.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintAuthorizationPolicy(dAtA, i, uint64(size))
+		}
 		i--
 		dAtA[i] = 0xa
 	}
@@ -2215,14 +2472,53 @@ func (m *External) Size() (n int) {
 	return n
 }
 
+func (m *External_Destination) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Host)
+	if l > 0 {
+		n += 1 + l + sovAuthorizationPolicy(uint64(l))
+	}
+	l = len(m.Subset)
+	if l > 0 {
+		n += 1 + l + sovAuthorizationPolicy(uint64(l))
+	}
+	if m.Port != nil {
+		l = m.Port.Size()
+		n += 1 + l + sovAuthorizationPolicy(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *External_PortSelector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Number != 0 {
+		n += 1 + sovAuthorizationPolicy(uint64(m.Number))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
 func (m *External_HTTPConfig) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.Server)
-	if l > 0 {
+	if m.Service != nil {
+		l = m.Service.Size()
 		n += 1 + l + sovAuthorizationPolicy(uint64(l))
 	}
 	if m.Timeout != nil {
@@ -2239,6 +2535,10 @@ func (m *External_HTTPConfig) Size() (n int) {
 	}
 	if m.IncludePeerCertificate {
 		n += 2
+	}
+	l = len(m.PathPrefix)
+	if l > 0 {
+		n += 1 + l + sovAuthorizationPolicy(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -2294,8 +2594,8 @@ func (m *External_TCPConfig) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.Server)
-	if l > 0 {
+	if m.Service != nil {
+		l = m.Service.Size()
 		n += 1 + l + sovAuthorizationPolicy(uint64(l))
 	}
 	if m.Timeout != nil {
@@ -2831,6 +3131,233 @@ func (m *External) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *External_Destination) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowAuthorizationPolicy
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Destination: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Destination: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Host", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuthorizationPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuthorizationPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuthorizationPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Host = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Subset", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuthorizationPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuthorizationPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuthorizationPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Subset = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuthorizationPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthAuthorizationPolicy
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuthorizationPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Port == nil {
+				m.Port = &External_PortSelector{}
+			}
+			if err := m.Port.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipAuthorizationPolicy(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthAuthorizationPolicy
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthAuthorizationPolicy
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *External_PortSelector) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowAuthorizationPolicy
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PortSelector: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PortSelector: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Number", wireType)
+			}
+			m.Number = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuthorizationPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Number |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipAuthorizationPolicy(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthAuthorizationPolicy
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthAuthorizationPolicy
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *External_HTTPConfig) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -2862,9 +3389,9 @@ func (m *External_HTTPConfig) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Server", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Service", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowAuthorizationPolicy
@@ -2874,23 +3401,27 @@ func (m *External_HTTPConfig) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthAuthorizationPolicy
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthAuthorizationPolicy
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Server = string(dAtA[iNdEx:postIndex])
+			if m.Service == nil {
+				m.Service = &External_Destination{}
+			}
+			if err := m.Service.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
@@ -3020,6 +3551,38 @@ func (m *External_HTTPConfig) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.IncludePeerCertificate = bool(v != 0)
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PathPrefix", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAuthorizationPolicy
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthAuthorizationPolicy
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthAuthorizationPolicy
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PathPrefix = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipAuthorizationPolicy(dAtA[iNdEx:])
@@ -3280,9 +3843,9 @@ func (m *External_TCPConfig) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Server", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Service", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowAuthorizationPolicy
@@ -3292,23 +3855,27 @@ func (m *External_TCPConfig) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthAuthorizationPolicy
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthAuthorizationPolicy
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Server = string(dAtA[iNdEx:postIndex])
+			if m.Service == nil {
+				m.Service = &External_Destination{}
+			}
+			if err := m.Service.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {

@@ -26,18 +26,20 @@ import "type/v1beta1/selector.proto";
 
 // Istio Authorization Policy enables access control on workloads in the mesh.
 //
-// Authorization policy supports both allow and deny policies. When allow and
-// deny policies are used for a workload at the same time, the deny policies are
-// evaluated first. The evaluation is determined by the following rules:
+// Authorization policy supports ALLOW, DENY and EXTERNAL actions for access control. When multiple policies are used on
+// the same workload at the same time, the evaluation order is external -> deny -> allow. The evaluation is determined
+// by the following rules:
 //
-// 1. If there are any DENY policies that match the request, deny the request.
-// 2. If there are no ALLOW policies for the workload, allow the request.
-// 3. If any of the ALLOW policies match the request, allow the request.
-// 4. Deny the request.
+// 1. If there are any EXTERNAL policies that match the request, trigger the external authorization request. The request
+//    might be denied by the external authorization response.
+// 2. If there are any DENY policies that match the request, deny the request.
+// 3. If there are no ALLOW policies for the workload, allow the request.
+// 4. If any of the ALLOW policies match the request, allow the request.
+// 5. Deny the request.
 //
 // Istio Authorization Policy also supports the AUDIT action to decide whether to log requests.
 // AUDIT policies do not affect whether requests are allowed or denied to the workload.
-// Requests will be allowed or denied based solely on ALLOW and DENY policies.
+// Requests will be allowed or denied based solely on ALLOW, DENY and EXTERNAL policies.
 //
 // A request will be internally marked that it should be audited if there is an AUDIT policy on the workload that matches the request.
 // A separate plugin must be configured and enabled to actually fulfill the audit decision and complete the audit behavior.
@@ -199,9 +201,15 @@ import "type/v1beta1/selector.proto";
 //  action: EXTERNAL
 //  external:
 //    http:
-//      server: "grpc://ext-authz.foo.svc.cluster.local:9000"
+//      service:
+//        host: "ext-authz.foo.svc.cluster.local"
+//        port:
+//          number: 9080
 //    tcp:
-//      server: "grpc://ext-authz.foo.svc.cluster.local:9000"
+//      service:
+//        host: "ext-authz.foo.svc.cluster.local"
+//        port:
+//          number: 9080
 //  rules:
 //  # Empty rules to always trigger the authorization request.
 //  - {}
@@ -224,7 +232,10 @@ import "type/v1beta1/selector.proto";
 //  action: EXTERNAL
 //  external:
 //    http:
-//      server: "http://ext-authz.foo.svc.cluster.local:8000"
+//      service:
+//        host: "ext-authz.foo.svc.cluster.local"
+//        port:
+//          number: 8080
 //      timeout: 2s
 //      authorizationRequest:
 //        allowedHeaders: ["X-foo*"]
@@ -345,19 +356,58 @@ message External {
   // At least one of http and tcp must be set.
   TCPConfig tcp = 2;
 
+  // $hide_from_docs
+  // The following Destination and PortSelector is copied from the virtual_service.proto, this is to workaround the error
+  // "v1beta1 redeclared as imported package name" during the open API scheme generation when using "istio.networking.v1beta1.Destination".
+  // It seems the underlying toolchain is not happy when two imported packages ("istio.networking.v1beta1.Destination" and "type/v1beta1/selector.proto")
+  // ends with the same name ("v1beta1").
+
+  // Destination indicates the network addressable service to which the
+  // request/connection will be sent after processing a routing rule. The
+  // destination.host should unambiguously refer to a service in the service
+  // registry. Istio's service registry is composed of all the services found
+  // in the platform's service registry (e.g., Kubernetes services, Consul
+  // services), as well as services declared through the
+  // [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry) resource.
+  message Destination {
+    // The name of a service from the service registry. Service
+    // names are looked up from the platform's service registry (e.g.,
+    // Kubernetes services, Consul services, etc.) and from the hosts
+    // declared by [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry). Traffic forwarded to
+    // destinations that are not found in either of the two, will be dropped.
+    //
+    // *Note for Kubernetes users*: When short names are used (e.g. "reviews"
+    // instead of "reviews.default.svc.cluster.local"), Istio will interpret
+    // the short name based on the namespace of the rule, not the service. A
+    // rule in the "default" namespace containing a host "reviews will be
+    // interpreted as "reviews.default.svc.cluster.local", irrespective of
+    // the actual namespace associated with the reviews service. To avoid
+    // potential misconfiguration, it is recommended to always use fully
+    // qualified domain names over short names.
+    string host = 1 [(google.api.field_behavior) = REQUIRED];
+
+    // The name of a subset within the service. Applicable only to services
+    // within the mesh. The subset must be defined in a corresponding
+    // DestinationRule.
+    string subset = 2;
+
+    // Specifies the port on the host that is being addressed. If a service
+    // exposes only a single port it is not required to explicitly select the
+    // port.
+    PortSelector port = 3;
+  }
+
+  // PortSelector specifies the number of a port to be used for matching or selection for final routing.
+  message PortSelector {
+    // Valid port number
+    uint32 number = 1;
+  }
+
   // HTTPConfig supplies detail configurations of the HTTP filter chain.
   message HTTPConfig {
-    // Supplies the full URL of the external server that implements the Envoy ext_authz filter check request API.
-    // Istio will figure out the proper endpoint configuration based on the content of the URL:
-    // - The scheme ("http://", "https://" or "grpc://") will decide the protocol (HTTP or gRPC) of the check request;
-    // - The host will decide the internal cluster name of the target which could be either within or out of the mesh;
-    //
-    // Examples:
-    // - "http://ext-authz.foo.svc.cluster.local:8000/" for HTTP server on port 8000 in the mesh.
-    // - "https://ext-authz.company.com/" for HTTPS server on port 80 out of mesh.
-    // - "grpc://ext-authz.foo.svc.cluster.local:9000" for gRPC server on port 9000 in the mesh.
-    // - "http://127.0.0.1:8001/" for local HTTP server on port 8001 along with the Envoy sidecar.
-    string server = 1;
+    // Specifies the external authorization service that implements the Envoy ext_authz filter check request API.
+    // The port will be used to decide the protocol (HTTP or gRPC) for talking to the external authorization service.
+    Destination service = 1;
 
     // Sets the maximum duration in milliseconds for connection to the external server (default is 200ms).
     google.protobuf.Duration timeout = 2;
@@ -370,6 +420,9 @@ message External {
 
     // Specifies if the peer certificate is included in the external authorization request.
     bool include_peer_certificate = 5;
+
+    // Sets a prefix to the value of authorization request header *Path*.
+    string path_prefix = 6;
 
     // AuthorizationRequest allows to customize the authorization request.
     message AuthorizationRequest {
@@ -401,13 +454,9 @@ message External {
 
   // TCPConfig supplies detail configurations of the TCP filter chain.
   message TCPConfig {
-    // Supplies the full URL of the external server that implements the Envoy ext_authz filter authorization request API.
+    // Specifies the external authorization service that implements the Envoy ext_authz filter check request API.
     // Only gRPC protocol is supported on TCP filter chain.
-    //
-    // Examples:
-    // - "grpc://ext-authz.foo.svc.cluster.local:9000" for gRPC server on port 9000 in the mesh.
-    // - "grpc://127.0.0.1:8001" for local gRPC server on port 8001 along with the Envoy sidecar.
-    string server = 1;
+    Destination service = 1;
 
     // Sets the maximum duration in milliseconds for connection to the external server (default is 200ms).
     google.protobuf.Duration timeout = 2;

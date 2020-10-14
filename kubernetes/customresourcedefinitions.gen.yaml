@@ -3074,11 +3074,31 @@ spec:
                       description: Specifies if the peer certificate is included in
                         the external authorization request.
                       type: boolean
-                    server:
-                      description: Supplies the full URL of the external server that
-                        implements the Envoy ext_authz filter check request API.
+                    pathPrefix:
+                      description: Sets a prefix to the value of authorization request
+                        header *Path*.
                       format: string
                       type: string
+                    service:
+                      description: Specifies the external authorization service that
+                        implements the Envoy ext_authz filter check request API.
+                      properties:
+                        host:
+                          description: The name of a service from the service registry.
+                          format: string
+                          type: string
+                        port:
+                          description: Specifies the port on the host that is being
+                            addressed.
+                          properties:
+                            number:
+                              type: integer
+                          type: object
+                        subset:
+                          description: The name of a subset within the service.
+                          format: string
+                          type: string
+                      type: object
                     timeout:
                       description: Sets the maximum duration in milliseconds for connection
                         to the external server (default is 200ms).
@@ -3090,12 +3110,26 @@ spec:
                       description: Specifies if the peer certificate is included in
                         the external authorization request.
                       type: boolean
-                    server:
-                      description: Supplies the full URL of the external server that
-                        implements the Envoy ext_authz filter authorization request
-                        API.
-                      format: string
-                      type: string
+                    service:
+                      description: Specifies the external authorization service that
+                        implements the Envoy ext_authz filter check request API.
+                      properties:
+                        host:
+                          description: The name of a service from the service registry.
+                          format: string
+                          type: string
+                        port:
+                          description: Specifies the port on the host that is being
+                            addressed.
+                          properties:
+                            number:
+                              type: integer
+                          type: object
+                        subset:
+                          description: The name of a subset within the service.
+                          format: string
+                          type: string
+                      type: object
                     timeout:
                       description: Sets the maximum duration in milliseconds for connection
                         to the external server (default is 200ms).

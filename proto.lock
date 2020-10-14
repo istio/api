@@ -43455,12 +43455,48 @@
             ],
             "messages": [
               {
+                "name": "Destination",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "host",
+                    "type": "string",
+                    "options": [
+                      {
+                        "name": "(google.api.field_behavior)",
+                        "value": "REQUIRED"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 2,
+                    "name": "subset",
+                    "type": "string"
+                  },
+                  {
+                    "id": 3,
+                    "name": "port",
+                    "type": "PortSelector"
+                  }
+                ]
+              },
+              {
+                "name": "PortSelector",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "number",
+                    "type": "uint32"
+                  }
+                ]
+              },
+              {
                 "name": "HTTPConfig",
                 "fields": [
                   {
                     "id": 1,
-                    "name": "server",
-                    "type": "string"
+                    "name": "service",
+                    "type": "Destination"
                   },
                   {
                     "id": 2,
@@ -43481,6 +43517,11 @@
                     "id": 5,
                     "name": "include_peer_certificate",
                     "type": "bool"
+                  },
+                  {
+                    "id": 6,
+                    "name": "path_prefix",
+                    "type": "string"
                   }
                 ],
                 "messages": [
@@ -43519,8 +43560,8 @@
                 "fields": [
                   {
                     "id": 1,
-                    "name": "server",
-                    "type": "string"
+                    "name": "service",
+                    "type": "Destination"
                   },
                   {
                     "id": 2,

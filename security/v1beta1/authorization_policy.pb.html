@@ -7,15 +7,17 @@ generator: protoc-gen-docs
 schema: istio.security.v1beta1.AuthorizationPolicy
 weight: 20
 aliases: [/docs/reference/config/authorization/authorization-policy]
-number_of_entries: 13
+number_of_entries: 15
 ---
 <p>Istio Authorization Policy enables access control on workloads in the mesh.</p>
 
-<p>Authorization policy supports both allow and deny policies. When allow and
-deny policies are used for a workload at the same time, the deny policies are
-evaluated first. The evaluation is determined by the following rules:</p>
+<p>Authorization policy supports ALLOW, DENY and EXTERNAL actions for access control. When multiple policies are used on
+the same workload at the same time, the evaluation order is external -&gt; deny -&gt; allow. The evaluation is determined
+by the following rules:</p>
 
 <ol>
+<li>If there are any EXTERNAL policies that match the request, trigger the external authorization request. The request
+might be denied by the external authorization response.</li>
 <li>If there are any DENY policies that match the request, deny the request.</li>
 <li>If there are no ALLOW policies for the workload, allow the request.</li>
 <li>If any of the ALLOW policies match the request, allow the request.</li>
@@ -24,7 +26,7 @@ evaluated first. The evaluation is determined by the following rules:</p>
 
 <p>Istio Authorization Policy also supports the AUDIT action to decide whether to log requests.
 AUDIT policies do not affect whether requests are allowed or denied to the workload.
-Requests will be allowed or denied based solely on ALLOW and DENY policies.</p>
+Requests will be allowed or denied based solely on ALLOW, DENY and EXTERNAL policies.</p>
 
 <p>A request will be internally marked that it should be audited if there is an AUDIT policy on the workload that matches the request.
 A separate plugin must be configured and enabled to actually fulfill the audit decision and complete the audit behavior.
@@ -185,9 +187,15 @@ spec:
  action: EXTERNAL
  external:
    http:
-     server: &quot;grpc://ext-authz.foo.svc.cluster.local:9000&quot;
+     service:
+       host: &quot;ext-authz.foo.svc.cluster.local&quot;
+       port:
+         number: 9080
    tcp:
-     server: &quot;grpc://ext-authz.foo.svc.cluster.local:9000&quot;
+     service:
+       host: &quot;ext-authz.foo.svc.cluster.local&quot;
+       port:
+         number: 9080
  rules:
  # Empty rules to always trigger the authorization request.
  - {}
@@ -209,7 +217,10 @@ spec:
  action: EXTERNAL
  external:
    http:
-     server: &quot;http://ext-authz.foo.svc.cluster.local:8000&quot;
+     service:
+       host: &quot;ext-authz.foo.svc.cluster.local&quot;
+       port:
+         number: 8080
      timeout: 2s
      authorizationRequest:
        allowedHeaders: [&quot;X-foo*&quot;]
@@ -728,6 +739,107 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="External-Destination">External.Destination</h2>
+<section>
+<p>Destination indicates the network addressable service to which the
+request/connection will be sent after processing a routing rule. The
+destination.host should unambiguously refer to a service in the service
+registry. Istio&rsquo;s service registry is composed of all the services found
+in the platform&rsquo;s service registry (e.g., Kubernetes services, Consul
+services), as well as services declared through the
+<a href="https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry">ServiceEntry</a> resource.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="External-Destination-host">
+<td><code>host</code></td>
+<td><code>string</code></td>
+<td>
+<p>The name of a service from the service registry. Service
+names are looked up from the platform&rsquo;s service registry (e.g.,
+Kubernetes services, Consul services, etc.) and from the hosts
+declared by <a href="https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry">ServiceEntry</a>. Traffic forwarded to
+destinations that are not found in either of the two, will be dropped.</p>
+
+<p><em>Note for Kubernetes users</em>: When short names are used (e.g. &ldquo;reviews&rdquo;
+instead of &ldquo;reviews.default.svc.cluster.local&rdquo;), Istio will interpret
+the short name based on the namespace of the rule, not the service. A
+rule in the &ldquo;default&rdquo; namespace containing a host &ldquo;reviews will be
+interpreted as &ldquo;reviews.default.svc.cluster.local&rdquo;, irrespective of
+the actual namespace associated with the reviews service. To avoid
+potential misconfiguration, it is recommended to always use fully
+qualified domain names over short names.</p>
+
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr id="External-Destination-subset">
+<td><code>subset</code></td>
+<td><code>string</code></td>
+<td>
+<p>The name of a subset within the service. Applicable only to services
+within the mesh. The subset must be defined in a corresponding
+DestinationRule.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="External-Destination-port">
+<td><code>port</code></td>
+<td><code><a href="#External-PortSelector">PortSelector</a></code></td>
+<td>
+<p>Specifies the port on the host that is being addressed. If a service
+exposes only a single port it is not required to explicitly select the
+port.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="External-PortSelector">External.PortSelector</h2>
+<section>
+<p>PortSelector specifies the number of a port to be used for matching or selection for final routing.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="External-PortSelector-number">
+<td><code>number</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Valid port number</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="External-HTTPConfig">External.HTTPConfig</h2>
 <section>
 <p>HTTPConfig supplies detail configurations of the HTTP filter chain.</p>
@@ -742,20 +854,12 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="External-HTTPConfig-server">
-<td><code>server</code></td>
-<td><code>string</code></td>
+<tr id="External-HTTPConfig-service">
+<td><code>service</code></td>
+<td><code><a href="#External-Destination">Destination</a></code></td>
 <td>
-<p>Supplies the full URL of the external server that implements the Envoy ext_authz filter check request API.
-Istio will figure out the proper endpoint configuration based on the content of the URL:
-- The scheme (&ldquo;http://&rdquo;, &ldquo;https://&rdquo; or &ldquo;grpc://&rdquo;) will decide the protocol (HTTP or gRPC) of the check request;
-- The host will decide the internal cluster name of the target which could be either within or out of the mesh;</p>
-
-<p>Examples:
-- &ldquo;http://ext-authz.foo.svc.cluster.local:8000/&rdquo; for HTTP server on port 8000 in the mesh.
-- &ldquo;https://ext-authz.company.com/&rdquo; for HTTPS server on port 80 out of mesh.
-- &ldquo;grpc://ext-authz.foo.svc.cluster.local:9000&rdquo; for gRPC server on port 9000 in the mesh.
-- &ldquo;http://127.0.0.1:8001/&rdquo; for local HTTP server on port 8001 along with the Envoy sidecar.</p>
+<p>Specifies the external authorization service that implements the Envoy ext_authz filter check request API.
+The port will be used to decide the protocol (HTTP or gRPC) for talking to the external authorization service.</p>
 
 </td>
 <td>
@@ -806,6 +910,17 @@ No
 No
 </td>
 </tr>
+<tr id="External-HTTPConfig-path_prefix">
+<td><code>pathPrefix</code></td>
+<td><code>string</code></td>
+<td>
+<p>Sets a prefix to the value of authorization request header <em>Path</em>.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -823,16 +938,12 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="External-TCPConfig-server">
-<td><code>server</code></td>
-<td><code>string</code></td>
+<tr id="External-TCPConfig-service">
+<td><code>service</code></td>
+<td><code><a href="#External-Destination">Destination</a></code></td>
 <td>
-<p>Supplies the full URL of the external server that implements the Envoy ext_authz filter authorization request API.
+<p>Specifies the external authorization service that implements the Envoy ext_authz filter check request API.
 Only gRPC protocol is supported on TCP filter chain.</p>
-
-<p>Examples:
-- &ldquo;grpc://ext-authz.foo.svc.cluster.local:9000&rdquo; for gRPC server on port 9000 in the mesh.
-- &ldquo;grpc://127.0.0.1:8001&rdquo; for local gRPC server on port 8001 along with the Envoy sidecar.</p>
 
 </td>
 <td>
