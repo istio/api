@@ -103,7 +103,7 @@
         }
       },
       "istio.security.v1beta1.External.HTTPConfig": {
-        "description": "HTTPConfig supplies detail configurations of the HTTP filter chain.",
+        "description": "HTTPConfig supplies detail configurations of the HTTP traffic.",
         "type": "object",
         "properties": {
           "service": {
@@ -131,7 +131,7 @@
         }
       },
       "istio.security.v1beta1.External.TCPConfig": {
-        "description": "TCPConfig supplies detail configurations of the TCP filter chain.",
+        "description": "TCPConfig supplies detail configurations of the TCP traffic.",
         "type": "object",
         "properties": {
           "service": {
@@ -148,11 +148,11 @@
         }
       },
       "istio.security.v1beta1.External.Destination": {
-        "description": "Destination indicates the network addressable service to which the request/connection will be sent after processing a routing rule. The destination.host should unambiguously refer to a service in the service registry. Istio's service registry is composed of all the services found in the platform's service registry (e.g., Kubernetes services, Consul services), as well as services declared through the [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry) resource.",
+        "description": "Destination indicates the network addressable service to which the authorization request will be sent. The destination.host should unambiguously refer to a service in the service registry. Istio's service registry is composed of all the services found in the platform's service registry (e.g., Kubernetes services, Consul services), as well as services declared through the [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry) resource.",
         "type": "object",
         "properties": {
           "host": {
-            "description": "The name of a service from the service registry. Service names are looked up from the platform's service registry (e.g., Kubernetes services, Consul services, etc.) and from the hosts declared by [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry). Traffic forwarded to destinations that are not found in either of the two, will be dropped.",
+            "description": "The name of a service from the service registry. Service names are looked up from the platform's service registry (e.g., Kubernetes services, Consul services, etc.) and from the hosts declared by [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry). Traffic forwarded to destinations that are not found in either of the two, will be dropped and cause the authorization request to fail.",
             "type": "string",
             "format": "string"
           },
@@ -167,7 +167,7 @@
         }
       },
       "istio.security.v1beta1.External.PortSelector": {
-        "description": "PortSelector specifies the number of a port to be used for matching or selection for final routing.",
+        "description": "PortSelector specifies the number of a port to be used for sending the authorization check request.",
         "type": "object",
         "properties": {
           "number": {

@@ -341,8 +341,8 @@ No
 <td><code>http</code></td>
 <td><code><a href="#External-HTTPConfig">HTTPConfig</a></code></td>
 <td>
-<p>If specified, the external authorization will be applied to the HTTP filter chain, otherwise the HTTP filter chain
-will have no external authorization.</p>
+<p>If specified, the external authorization will be applied to the HTTP traffic, otherwise the HTTP traffic will have
+no external authorization.</p>
 
 <p>At least one of http and tcp must be set.</p>
 
@@ -355,7 +355,7 @@ No
 <td><code>tcp</code></td>
 <td><code><a href="#External-TCPConfig">TCPConfig</a></code></td>
 <td>
-<p>If specified, the external authorization will be applied to the TCP filter chain, otherwise the TCP filter chain
+<p>If specified, the external authorization will be applied to the TCP (non-HTTP) traffic, otherwise the TCP traffic
 will have no external authorization.</p>
 
 <p>At least one of http and tcp must be set.</p>
@@ -741,13 +741,11 @@ No
 </section>
 <h2 id="External-Destination">External.Destination</h2>
 <section>
-<p>Destination indicates the network addressable service to which the
-request/connection will be sent after processing a routing rule. The
-destination.host should unambiguously refer to a service in the service
-registry. Istio&rsquo;s service registry is composed of all the services found
-in the platform&rsquo;s service registry (e.g., Kubernetes services, Consul
-services), as well as services declared through the
-<a href="https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry">ServiceEntry</a> resource.</p>
+<p>Destination indicates the network addressable service to which the authorization request will be sent. The
+destination.host should unambiguously refer to a service in the service registry. Istio&rsquo;s service registry is
+composed of all the services found in the platform&rsquo;s service registry (e.g., Kubernetes services, Consul
+services), as well as services declared through the <a href="https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry">ServiceEntry</a>
+resource.</p>
 
 <table class="message-fields">
 <thead>
@@ -767,7 +765,7 @@ services), as well as services declared through the
 names are looked up from the platform&rsquo;s service registry (e.g.,
 Kubernetes services, Consul services, etc.) and from the hosts
 declared by <a href="https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry">ServiceEntry</a>. Traffic forwarded to
-destinations that are not found in either of the two, will be dropped.</p>
+destinations that are not found in either of the two, will be dropped and cause the authorization request to fail.</p>
 
 <p><em>Note for Kubernetes users</em>: When short names are used (e.g. &ldquo;reviews&rdquo;
 instead of &ldquo;reviews.default.svc.cluster.local&rdquo;), Istio will interpret
@@ -814,7 +812,7 @@ No
 </section>
 <h2 id="External-PortSelector">External.PortSelector</h2>
 <section>
-<p>PortSelector specifies the number of a port to be used for matching or selection for final routing.</p>
+<p>PortSelector specifies the number of a port to be used for sending the authorization check request.</p>
 
 <table class="message-fields">
 <thead>
@@ -842,7 +840,7 @@ No
 </section>
 <h2 id="External-HTTPConfig">External.HTTPConfig</h2>
 <section>
-<p>HTTPConfig supplies detail configurations of the HTTP filter chain.</p>
+<p>HTTPConfig supplies detail configurations of the HTTP traffic.</p>
 
 <table class="message-fields">
 <thead>
@@ -926,7 +924,7 @@ No
 </section>
 <h2 id="External-TCPConfig">External.TCPConfig</h2>
 <section>
-<p>TCPConfig supplies detail configurations of the TCP filter chain.</p>
+<p>TCPConfig supplies detail configurations of the TCP traffic.</p>
 
 <table class="message-fields">
 <thead>
@@ -943,7 +941,7 @@ No
 <td><code><a href="#External-Destination">Destination</a></code></td>
 <td>
 <p>Specifies the external authorization service that implements the Envoy ext_authz filter check request API.
-Only gRPC protocol is supported on TCP filter chain.</p>
+Note: Only gRPC protocol is supported for TCP traffic.</p>
 
 </td>
 <td>

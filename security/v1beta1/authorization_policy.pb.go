@@ -446,12 +446,12 @@ func (*AuthorizationPolicy) XXX_OneofWrappers() []interface{} {
 
 // External supplies detailed configurations of the EXTERNAL action.
 type External struct {
-	// If specified, the external authorization will be applied to the HTTP filter chain, otherwise the HTTP filter chain
-	// will have no external authorization.
+	// If specified, the external authorization will be applied to the HTTP traffic, otherwise the HTTP traffic will have
+	// no external authorization.
 	//
 	// At least one of http and tcp must be set.
 	Http *External_HTTPConfig `protobuf:"bytes,1,opt,name=http,proto3" json:"http,omitempty"`
-	// If specified, the external authorization will be applied to the TCP filter chain, otherwise the TCP filter chain
+	// If specified, the external authorization will be applied to the TCP (non-HTTP) traffic, otherwise the TCP traffic
 	// will have no external authorization.
 	//
 	// At least one of http and tcp must be set.
@@ -508,19 +508,17 @@ func (m *External) GetTcp() *External_TCPConfig {
 	return nil
 }
 
-// Destination indicates the network addressable service to which the
-// request/connection will be sent after processing a routing rule. The
-// destination.host should unambiguously refer to a service in the service
-// registry. Istio's service registry is composed of all the services found
-// in the platform's service registry (e.g., Kubernetes services, Consul
-// services), as well as services declared through the
-// [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry) resource.
+// Destination indicates the network addressable service to which the authorization request will be sent. The
+// destination.host should unambiguously refer to a service in the service registry. Istio's service registry is
+// composed of all the services found in the platform's service registry (e.g., Kubernetes services, Consul
+// services), as well as services declared through the [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry)
+// resource.
 type External_Destination struct {
 	// The name of a service from the service registry. Service
 	// names are looked up from the platform's service registry (e.g.,
 	// Kubernetes services, Consul services, etc.) and from the hosts
 	// declared by [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry). Traffic forwarded to
-	// destinations that are not found in either of the two, will be dropped.
+	// destinations that are not found in either of the two, will be dropped and cause the authorization request to fail.
 	//
 	// *Note for Kubernetes users*: When short names are used (e.g. "reviews"
 	// instead of "reviews.default.svc.cluster.local"), Istio will interpret
@@ -598,7 +596,7 @@ func (m *External_Destination) GetPort() *External_PortSelector {
 	return nil
 }
 
-// PortSelector specifies the number of a port to be used for matching or selection for final routing.
+// PortSelector specifies the number of a port to be used for sending the authorization check request.
 type External_PortSelector struct {
 	// Valid port number
 	Number               uint32   `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
@@ -647,7 +645,7 @@ func (m *External_PortSelector) GetNumber() uint32 {
 	return 0
 }
 
-// HTTPConfig supplies detail configurations of the HTTP filter chain.
+// HTTPConfig supplies detail configurations of the HTTP traffic.
 type External_HTTPConfig struct {
 	// Specifies the external authorization service that implements the Envoy ext_authz filter check request API.
 	// The port will be used to decide the protocol (HTTP or gRPC) for talking to the external authorization service.
@@ -867,10 +865,10 @@ func (m *External_HTTPConfig_AuthorizationResponse) GetForwardToDownstream() []s
 	return nil
 }
 
-// TCPConfig supplies detail configurations of the TCP filter chain.
+// TCPConfig supplies detail configurations of the TCP traffic.
 type External_TCPConfig struct {
 	// Specifies the external authorization service that implements the Envoy ext_authz filter check request API.
-	// Only gRPC protocol is supported on TCP filter chain.
+	// Note: Only gRPC protocol is supported for TCP traffic.
 	Service *External_Destination `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
 	// Sets the maximum duration in milliseconds for connection to the external server (default is 200ms).
 	Timeout *types.Duration `protobuf:"bytes,2,opt,name=timeout,proto3" json:"timeout,omitempty"`

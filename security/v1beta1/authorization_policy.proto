@@ -344,13 +344,13 @@ message AuthorizationPolicy {
 
 // External supplies detailed configurations of the EXTERNAL action.
 message External {
-  // If specified, the external authorization will be applied to the HTTP filter chain, otherwise the HTTP filter chain
-  // will have no external authorization.
+  // If specified, the external authorization will be applied to the HTTP traffic, otherwise the HTTP traffic will have
+  // no external authorization.
   //
   // At least one of http and tcp must be set.
   HTTPConfig http = 1;
 
-  // If specified, the external authorization will be applied to the TCP filter chain, otherwise the TCP filter chain
+  // If specified, the external authorization will be applied to the TCP (non-HTTP) traffic, otherwise the TCP traffic
   // will have no external authorization.
   //
   // At least one of http and tcp must be set.
@@ -362,19 +362,17 @@ message External {
   // It seems the underlying toolchain is not happy when two imported packages ("istio.networking.v1beta1.Destination" and "type/v1beta1/selector.proto")
   // ends with the same name ("v1beta1").
 
-  // Destination indicates the network addressable service to which the
-  // request/connection will be sent after processing a routing rule. The
-  // destination.host should unambiguously refer to a service in the service
-  // registry. Istio's service registry is composed of all the services found
-  // in the platform's service registry (e.g., Kubernetes services, Consul
-  // services), as well as services declared through the
-  // [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry) resource.
+  // Destination indicates the network addressable service to which the authorization request will be sent. The
+  // destination.host should unambiguously refer to a service in the service registry. Istio's service registry is
+  // composed of all the services found in the platform's service registry (e.g., Kubernetes services, Consul
+  // services), as well as services declared through the [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry)
+  // resource.
   message Destination {
     // The name of a service from the service registry. Service
     // names are looked up from the platform's service registry (e.g.,
     // Kubernetes services, Consul services, etc.) and from the hosts
     // declared by [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry). Traffic forwarded to
-    // destinations that are not found in either of the two, will be dropped.
+    // destinations that are not found in either of the two, will be dropped and cause the authorization request to fail.
     //
     // *Note for Kubernetes users*: When short names are used (e.g. "reviews"
     // instead of "reviews.default.svc.cluster.local"), Istio will interpret
@@ -397,13 +395,13 @@ message External {
     PortSelector port = 3;
   }
 
-  // PortSelector specifies the number of a port to be used for matching or selection for final routing.
+  // PortSelector specifies the number of a port to be used for sending the authorization check request.
   message PortSelector {
     // Valid port number
     uint32 number = 1;
   }
 
-  // HTTPConfig supplies detail configurations of the HTTP filter chain.
+  // HTTPConfig supplies detail configurations of the HTTP traffic.
   message HTTPConfig {
     // Specifies the external authorization service that implements the Envoy ext_authz filter check request API.
     // The port will be used to decide the protocol (HTTP or gRPC) for talking to the external authorization service.
@@ -452,10 +450,10 @@ message External {
     }
   }
 
-  // TCPConfig supplies detail configurations of the TCP filter chain.
+  // TCPConfig supplies detail configurations of the TCP traffic.
   message TCPConfig {
     // Specifies the external authorization service that implements the Envoy ext_authz filter check request API.
-    // Only gRPC protocol is supported on TCP filter chain.
+    // Note: Only gRPC protocol is supported for TCP traffic.
     Destination service = 1;
 
     // Sets the maximum duration in milliseconds for connection to the external server (default is 200ms).
