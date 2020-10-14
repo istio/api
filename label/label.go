@@ -38,6 +38,9 @@ const (
 	// IstioOperatorVersion is the Istio operator version that installed the resource, e.g. "1.6.0"
 	IstioOperatorVersion = "operator.istio.io/version"
 
+	// IstioSubZone identifies the locality subzone of a workload.
+	IstioSubZone = "topology.istio.io/subzone"
+
 	// IstioNetwork enables Istio to group endpoints resident in the same L3 domain/network.
 	// All endpoints in the same network are assumed to be directly reachable from one another.
 	// When endpoints in different networks cannot reach each other directly, an Istio Gateway can
