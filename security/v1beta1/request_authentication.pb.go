@@ -121,7 +121,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 //        requestPrincipals: ["*"]
 //  - to:
 //    - operation:
-//        paths: ["/healthz]
+//        paths: ["/healthz"]
 // ```
 //
 // <!-- crd generation tags
