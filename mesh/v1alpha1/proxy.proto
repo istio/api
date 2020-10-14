@@ -451,6 +451,43 @@ message ProxyConfig {
   // kubernetes readiness probe configuration both in schema and logic.
   // Only one health check method of 3 can be set at a time.
   istio.networking.v1alpha3.ReadinessProbe readiness_probe = 31;
+
+  // Proxy stats name matchers for stats creation. Note this is in addition to
+  // the minimum Envoy stats that Istio generates by default.
+  message ProxyStatsMatcher {
+    // Proxy stats name prefix matcher for inclusion.
+    repeated string inclusion_prefixes = 1;
+
+    // Proxy stats name suffix matcher for inclusion.
+    repeated string inclusion_suffixes = 2;
+
+    // Proxy stats name regexps matcher for inclusion.
+    repeated string inclusion_regexps = 3;
+  }
+
+  // Proxy stats matcher defines configuration for reporting custom Envoy stats.
+  // To reduce memory and CPU overhead from Envoy stats system, Istio proxies by
+  // default create and expose only a subset of Envoy stats. This option is to
+  // control creation of additional Envoy stats with prefix, suffix, and regex
+  // expressions match on the name of the stats. This replaces the stats
+  // inclusion annotations
+  // (`sidecar.istio.io/statsInclusionPrefixes`,
+  // `sidecar.istio.io/statsInclusionRegexps`, and
+  // `sidecar.istio.io/statsInclusionSuffixes`). For example, to enable stats
+  // for circuit breaker, retry, and upstream connections, you can specify stats
+  // matcher as follow:
+  // ```yaml
+  // proxy_stats_matcher:
+  //   inclusion_regexps:
+  //     - .*circuit_breakers.*
+  //   inclusion_prefixes:
+  //     - upstream_rq_retry
+  //     - upstream_cx
+  // ```yaml
+  // Note including more Envoy stats might increase number of time series
+  // collected by prometheus significantly. Care needs to be taken on Prometheus
+  // resource provision and configuration to reduce cardinality.
+  ProxyStatsMatcher proxy_stats_matcher = 32;
 }
 
 message RemoteService {

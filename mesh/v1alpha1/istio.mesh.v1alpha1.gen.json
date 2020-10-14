@@ -348,6 +348,9 @@
           },
           "readinessProbe": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.ReadinessProbe"
+          },
+          "proxyStatsMatcher": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.ProxyStatsMatcher"
           }
         }
       },
@@ -1057,6 +1060,36 @@
           },
           "tlsSettings": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.ProxyConfig.ProxyStatsMatcher": {
+        "description": "Proxy stats name matchers for stats creation. Note this is in addition to the minimum Envoy stats that Istio generates by default.",
+        "type": "object",
+        "properties": {
+          "inclusionPrefixes": {
+            "description": "Proxy stats name prefix matcher for inclusion.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "inclusionSuffixes": {
+            "description": "Proxy stats name suffix matcher for inclusion.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "inclusionRegexps": {
+            "description": "Proxy stats name regexps matcher for inclusion.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
           }
         }
       },
