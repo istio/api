@@ -124,7 +124,7 @@ option go_package="istio.io/api/security/v1beta1";
 //        requestPrincipals: ["*"]
 //  - to:
 //    - operation:
-//        paths: ["/healthz]
+//        paths: ["/healthz"]
 // ```
 //
 // <!-- crd generation tags
