@@ -1224,6 +1224,20 @@ type ProxyConfig struct {
 	// CPU overhead from envoy stats system, istio proxy by default creates
 	// and exposes a subset of envoy stats. This option is to control creation of
 	// additional envoy stats with prefix, regex, and regexps match on stats name.
+	// This aims to replace the stats inclusion annotations
+	// (`sidecar.istio.io/statsInclusionPrefixes`,
+	// `sidecar.istio.io/statsInclusionRegexps`, and
+	// `sidecar.istio.io/statsInclusionSuffixes`). For example, to enable stats
+	// for circuit breaker, retry, and upstream connections, you can specify stats
+	// matcher as follow:
+	// ```yaml
+	// proxy_stats_matcher:
+	//   inclusion_regexps:
+	//     - .*circuit_breakers.*
+	//   inclusion_prefixes:
+	//     - upstream_rq_retry
+	//     - upstream_cx
+	// ```yaml
 	ProxyStatsMatcher    *ProxyConfig_ProxyStatsMatcher `protobuf:"bytes,32,opt,name=proxy_stats_matcher,json=proxyStatsMatcher,proto3" json:"proxyStatsMatcher,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                       `json:"-"`
 	XXX_unrecognized     []byte                         `json:"-"`
@@ -1477,16 +1491,14 @@ func (m *ProxyConfig) GetProxyStatsMatcher() *ProxyConfig_ProxyStatsMatcher {
 	return nil
 }
 
-// Proxy stats name matchers for stats creation.
+// Proxy stats name matchers for stats creation. Note this is in addition to
+// the minimum Envoy stats that Istio generates by default.
 type ProxyConfig_ProxyStatsMatcher struct {
-	// Proxy stats name prefix matcher for inclusion. Note this is in addition
-	// to the minimum Envoy stats that Istio generates by default.
+	// Proxy stats name prefix matcher for inclusion.
 	InclusionPrefixes []string `protobuf:"bytes,1,rep,name=inclusion_prefixes,json=inclusionPrefixes,proto3" json:"inclusionPrefixes,omitempty"`
-	// Proxy stats name suffix matcher for inclusion. Note this is in addition
-	// to the minimum Envoy stats that Istio generates by default.
+	// Proxy stats name suffix matcher for inclusion.
 	InclusionSuffixes []string `protobuf:"bytes,2,rep,name=inclusion_suffixes,json=inclusionSuffixes,proto3" json:"inclusionSuffixes,omitempty"`
-	// Proxy stats name regexps matcher for inclusion. Note this is in addition
-	// to the minimum Envoy stats that Istio generates by default.
+	// Proxy stats name regexps matcher for inclusion.
 	InclusionRegexps     []string `protobuf:"bytes,3,rep,name=inclusion_regexps,json=inclusionRegexps,proto3" json:"inclusionRegexps,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`

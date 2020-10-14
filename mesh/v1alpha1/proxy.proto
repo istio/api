@@ -452,19 +452,16 @@ message ProxyConfig {
   // Only one health check method of 3 can be set at a time.
   istio.networking.v1alpha3.ReadinessProbe readiness_probe = 31;
 
-
-  // Proxy stats name matchers for stats creation.
+  // Proxy stats name matchers for stats creation. Note this is in addition to
+  // the minimum Envoy stats that Istio generates by default.
   message ProxyStatsMatcher {
-    // Proxy stats name prefix matcher for inclusion. Note this is in addition
-    // to the minimum Envoy stats that Istio generates by default.
+    // Proxy stats name prefix matcher for inclusion.
     repeated string inclusion_prefixes = 1;
 
-    // Proxy stats name suffix matcher for inclusion. Note this is in addition
-    // to the minimum Envoy stats that Istio generates by default.
+    // Proxy stats name suffix matcher for inclusion.
     repeated string inclusion_suffixes = 2;
 
-    // Proxy stats name regexps matcher for inclusion. Note this is in addition
-    // to the minimum Envoy stats that Istio generates by default.
+    // Proxy stats name regexps matcher for inclusion.
     repeated string inclusion_regexps = 3;
   }
 
@@ -472,6 +469,20 @@ message ProxyConfig {
   // CPU overhead from envoy stats system, istio proxy by default creates
   // and exposes a subset of envoy stats. This option is to control creation of
   // additional envoy stats with prefix, regex, and regexps match on stats name.
+  // This aims to replace the stats inclusion annotations
+  // (`sidecar.istio.io/statsInclusionPrefixes`,
+  // `sidecar.istio.io/statsInclusionRegexps`, and
+  // `sidecar.istio.io/statsInclusionSuffixes`). For example, to enable stats
+  // for circuit breaker, retry, and upstream connections, you can specify stats
+  // matcher as follow:
+  // ```yaml
+  // proxy_stats_matcher:
+  //   inclusion_regexps:
+  //     - .*circuit_breakers.*
+  //   inclusion_prefixes:
+  //     - upstream_rq_retry
+  //     - upstream_cx
+  // ```yaml
   ProxyStatsMatcher proxy_stats_matcher = 32;
 }
 

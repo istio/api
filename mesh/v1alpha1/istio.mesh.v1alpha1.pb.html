@@ -455,7 +455,21 @@ No
 <p>Proxy stats name matcher for stats creation. To reduce memory and
 CPU overhead from envoy stats system, istio proxy by default creates
 and exposes a subset of envoy stats. This option is to control creation of
-additional envoy stats with prefix, regex, and regexps match on stats name.</p>
+additional envoy stats with prefix, regex, and regexps match on stats name.
+This aims to replace the stats inclusion annotations
+(<code>sidecar.istio.io/statsInclusionPrefixes</code>,
+<code>sidecar.istio.io/statsInclusionRegexps</code>, and
+<code>sidecar.istio.io/statsInclusionSuffixes</code>). For example, to enable stats
+for circuit breaker, retry, and upstream connections, you can specify stats
+matcher as follow:
+<code>yaml
+proxy_stats_matcher:
+  inclusion_regexps:
+    - .*circuit_breakers.*
+  inclusion_prefixes:
+    - upstream_rq_retry
+    - upstream_cx
+</code>yaml</p>
 
 </td>
 <td>
@@ -696,7 +710,8 @@ No
 </section>
 <h2 id="ProxyConfig-ProxyStatsMatcher">ProxyConfig.ProxyStatsMatcher</h2>
 <section>
-<p>Proxy stats name matchers for stats creation.</p>
+<p>Proxy stats name matchers for stats creation. Note this is in addition to
+the minimum Envoy stats that Istio generates by default.</p>
 
 <table class="message-fields">
 <thead>
@@ -712,8 +727,7 @@ No
 <td><code>inclusionPrefixes</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Proxy stats name prefix matcher for inclusion. Note this is in addition
-to the minimum Envoy stats that Istio generates by default.</p>
+<p>Proxy stats name prefix matcher for inclusion.</p>
 
 </td>
 <td>
@@ -724,8 +738,7 @@ No
 <td><code>inclusionSuffixes</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Proxy stats name suffix matcher for inclusion. Note this is in addition
-to the minimum Envoy stats that Istio generates by default.</p>
+<p>Proxy stats name suffix matcher for inclusion.</p>
 
 </td>
 <td>
@@ -736,8 +749,7 @@ No
 <td><code>inclusionRegexps</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>Proxy stats name regexps matcher for inclusion. Note this is in addition
-to the minimum Envoy stats that Istio generates by default.</p>
+<p>Proxy stats name regexps matcher for inclusion.</p>
 
 </td>
 <td>

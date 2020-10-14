@@ -1064,11 +1064,11 @@
         }
       },
       "istio.mesh.v1alpha1.ProxyConfig.ProxyStatsMatcher": {
-        "description": "Proxy stats name matchers for stats creation.",
+        "description": "Proxy stats name matchers for stats creation. Note this is in addition to the minimum Envoy stats that Istio generates by default.",
         "type": "object",
         "properties": {
           "inclusionPrefixes": {
-            "description": "Proxy stats name prefix matcher for inclusion. Note this is in addition to the minimum Envoy stats that Istio generates by default.",
+            "description": "Proxy stats name prefix matcher for inclusion.",
             "type": "array",
             "items": {
               "type": "string",
@@ -1076,7 +1076,7 @@
             }
           },
           "inclusionSuffixes": {
-            "description": "Proxy stats name suffix matcher for inclusion. Note this is in addition to the minimum Envoy stats that Istio generates by default.",
+            "description": "Proxy stats name suffix matcher for inclusion.",
             "type": "array",
             "items": {
               "type": "string",
@@ -1084,7 +1084,7 @@
             }
           },
           "inclusionRegexps": {
-            "description": "Proxy stats name regexps matcher for inclusion. Note this is in addition to the minimum Envoy stats that Istio generates by default.",
+            "description": "Proxy stats name regexps matcher for inclusion.",
             "type": "array",
             "items": {
               "type": "string",
