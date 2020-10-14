@@ -22,6 +22,11 @@
             "items": {
               "$ref": "#/components/schemas/istio.analysis.v1alpha1.AnalysisMessageBase"
             }
+          },
+          "observedGeneration": {
+            "description": "Resource Version which this status refers to ObservedGeneration reflects the generation of the most recently observed replication controller. +optional",
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
