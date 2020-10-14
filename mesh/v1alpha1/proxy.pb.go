@@ -1220,11 +1220,12 @@ type ProxyConfig struct {
 	// kubernetes readiness probe configuration both in schema and logic.
 	// Only one health check method of 3 can be set at a time.
 	ReadinessProbe *v1alpha3.ReadinessProbe `protobuf:"bytes,31,opt,name=readiness_probe,json=readinessProbe,proto3" json:"readinessProbe,omitempty"`
-	// Proxy stats name matcher for stats creation. To reduce memory and
-	// CPU overhead from envoy stats system, istio proxy by default creates
-	// and exposes a subset of envoy stats. This option is to control creation of
-	// additional envoy stats with prefix, regex, and regexps match on stats name.
-	// This aims to replace the stats inclusion annotations
+	// Proxy stats matcher defines configuration for reporting custom Envoy stats.
+	// To reduce memory and CPU overhead from Envoy stats system, Istio proxies by
+	// default create and expose only a subset of Envoy stats. This option is to
+	// control creation of additional Envoy stats with prefix, suffix, and regex
+	// expressions match on the name of the stats. This replaces the stats
+	// inclusion annotations
 	// (`sidecar.istio.io/statsInclusionPrefixes`,
 	// `sidecar.istio.io/statsInclusionRegexps`, and
 	// `sidecar.istio.io/statsInclusionSuffixes`). For example, to enable stats
@@ -1238,6 +1239,9 @@ type ProxyConfig struct {
 	//     - upstream_rq_retry
 	//     - upstream_cx
 	// ```yaml
+	// Note including more Envoy stats might increase number of time series
+	// collected by prometheus significantly. Care needs to be taken on Prometheus
+	// resource provision and configuration to reduce cardinality.
 	ProxyStatsMatcher    *ProxyConfig_ProxyStatsMatcher `protobuf:"bytes,32,opt,name=proxy_stats_matcher,json=proxyStatsMatcher,proto3" json:"proxyStatsMatcher,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                       `json:"-"`
 	XXX_unrecognized     []byte                         `json:"-"`

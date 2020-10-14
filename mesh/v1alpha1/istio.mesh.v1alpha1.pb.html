@@ -452,11 +452,12 @@ No
 <td><code>proxyStatsMatcher</code></td>
 <td><code><a href="#ProxyConfig-ProxyStatsMatcher">ProxyStatsMatcher</a></code></td>
 <td>
-<p>Proxy stats name matcher for stats creation. To reduce memory and
-CPU overhead from envoy stats system, istio proxy by default creates
-and exposes a subset of envoy stats. This option is to control creation of
-additional envoy stats with prefix, regex, and regexps match on stats name.
-This aims to replace the stats inclusion annotations
+<p>Proxy stats matcher defines configuration for reporting custom Envoy stats.
+To reduce memory and CPU overhead from Envoy stats system, Istio proxies by
+default create and expose only a subset of Envoy stats. This option is to
+control creation of additional Envoy stats with prefix, suffix, and regex
+expressions match on the name of the stats. This replaces the stats
+inclusion annotations
 (<code>sidecar.istio.io/statsInclusionPrefixes</code>,
 <code>sidecar.istio.io/statsInclusionRegexps</code>, and
 <code>sidecar.istio.io/statsInclusionSuffixes</code>). For example, to enable stats
@@ -469,7 +470,10 @@ proxy_stats_matcher:
   inclusion_prefixes:
     - upstream_rq_retry
     - upstream_cx
-</code>yaml</p>
+</code>yaml
+Note including more Envoy stats might increase number of time series
+collected by prometheus significantly. Care needs to be taken on Prometheus
+resource provision and configuration to reduce cardinality.</p>
 
 </td>
 <td>
