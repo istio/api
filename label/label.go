@@ -44,4 +44,9 @@ const (
 	// be used to establish connectivity (usually using the AUTO_PASSTHROUGH mode in a  Gateway Server).
 	// This is an advanced configuration used typically for spanning an Istio mesh over multiple clusters.
 	IstioNetwork = "topology.istio.io/network"
+
+	// IstioCluster is a workload label that indicates the name of the cluster that contains the
+	// workload. The label is added internally within the control plane to enable workload selection
+	// based on cluster.
+	IstioCluster = "topology.istio.io/cluster"
 )
