@@ -496,6 +496,7 @@ message Source {
   repeated string not_namespaces = 7;
 
   // Optional. A list of IP blocks, which matches to the "source.ip" attribute.
+  // Populated from the source address of the IP packet.
   // Single IP (e.g. "1.2.3.4") and CIDR (e.g. "1.2.3.0/24") are supported.
   //
   // If not set, any IP is allowed.
@@ -503,6 +504,19 @@ message Source {
 
   // Optional. A list of negative match of IP blocks.
   repeated string not_ip_blocks = 8;
+
+  // Optional. A list of IP blocks, which matches to the "remote.ip" attribute.
+  // Populated from X-Forwarded-For header or proxy protocol.
+  // To make use of this field, you must configure the numTrustedProxies field of the gatewayTopology under the meshConfig 
+  // when you install Istio or using an annotation on the ingress gateway.  See the documentation here:
+  // [Configuring Gateway Network Topology](https://istio.io/latest/docs/ops/configuration/traffic-management/network-topologies/).
+  // Single IP (e.g. "1.2.3.4") and CIDR (e.g. "1.2.3.0/24") are supported.
+  //
+  // If not set, any IP is allowed.
+  repeated string remote_ip_blocks = 9;
+
+  // Optional. A list of negative match of remote IP blocks.
+  repeated string not_remote_ip_blocks = 10;
 }
 
 // Operation specifies the operations of a request. Fields in the operation are

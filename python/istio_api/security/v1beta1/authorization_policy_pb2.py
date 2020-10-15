@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='istio.security.v1beta1',
   syntax='proto3',
   serialized_options=_b('Z\035istio.io/api/security/v1beta1'),
-  serialized_pb=_b('\n+security/v1beta1/authorization_policy.proto\x12\x16istio.security.v1beta1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1btype/v1beta1/selector.proto\"\xbd\x02\n\x13\x41uthorizationPolicy\x12\x36\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\x12+\n\x05rules\x18\x02 \x03(\x0b\x32\x1c.istio.security.v1beta1.Rule\x12\x42\n\x06\x61\x63tion\x18\x03 \x01(\x0e\x32\x32.istio.security.v1beta1.AuthorizationPolicy.Action\x12\x34\n\x08\x65xternal\x18\x04 \x01(\x0b\x32 .istio.security.v1beta1.ExternalH\x00\"6\n\x06\x41\x63tion\x12\t\n\x05\x41LLOW\x10\x00\x12\x08\n\x04\x44\x45NY\x10\x01\x12\t\n\x05\x41UDIT\x10\x02\x12\x0c\n\x08\x45XTERNAL\x10\x03\x42\x0f\n\raction_detail\"\xa0\x05\n\x08\x45xternal\x12\x39\n\x04http\x18\x01 \x01(\x0b\x32+.istio.security.v1beta1.External.HTTPConfig\x12\x37\n\x03tcp\x18\x02 \x01(\x0b\x32*.istio.security.v1beta1.External.TCPConfig\x1a\xb4\x03\n\nHTTPConfig\x12\x0e\n\x06server\x18\x01 \x01(\t\x12*\n\x07timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\x12_\n\x15\x61uthorization_request\x18\x03 \x01(\x0b\x32@.istio.security.v1beta1.External.HTTPConfig.AuthorizationRequest\x12\x61\n\x16\x61uthorization_response\x18\x04 \x01(\x0b\x32\x41.istio.security.v1beta1.External.HTTPConfig.AuthorizationResponse\x12 \n\x18include_peer_certificate\x18\x05 \x01(\x08\x1a/\n\x14\x41uthorizationRequest\x12\x17\n\x0f\x61llowed_headers\x18\x01 \x03(\t\x1aS\n\x15\x41uthorizationResponse\x12\x1b\n\x13\x66orward_to_upstream\x18\x01 \x03(\t\x12\x1d\n\x15\x66orward_to_downstream\x18\x02 \x03(\t\x1ai\n\tTCPConfig\x12\x0e\n\x06server\x18\x01 \x01(\t\x12*\n\x07timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\x12 \n\x18include_peer_certificate\x18\x03 \x01(\x08\"\x89\x02\n\x04Rule\x12/\n\x04\x66rom\x18\x01 \x03(\x0b\x32!.istio.security.v1beta1.Rule.From\x12+\n\x02to\x18\x02 \x03(\x0b\x32\x1f.istio.security.v1beta1.Rule.To\x12/\n\x04when\x18\x03 \x03(\x0b\x32!.istio.security.v1beta1.Condition\x1a\x36\n\x04\x46rom\x12.\n\x06source\x18\x01 \x01(\x0b\x32\x1e.istio.security.v1beta1.Source\x1a:\n\x02To\x12\x34\n\toperation\x18\x01 \x01(\x0b\x32!.istio.security.v1beta1.Operation\"\xc6\x01\n\x06Source\x12\x12\n\nprincipals\x18\x01 \x03(\t\x12\x16\n\x0enot_principals\x18\x05 \x03(\t\x12\x1a\n\x12request_principals\x18\x02 \x03(\t\x12\x1e\n\x16not_request_principals\x18\x06 \x03(\t\x12\x12\n\nnamespaces\x18\x03 \x03(\t\x12\x16\n\x0enot_namespaces\x18\x07 \x03(\t\x12\x11\n\tip_blocks\x18\x04 \x03(\t\x12\x15\n\rnot_ip_blocks\x18\x08 \x03(\t\"\x97\x01\n\tOperation\x12\r\n\x05hosts\x18\x01 \x03(\t\x12\x11\n\tnot_hosts\x18\x05 \x03(\t\x12\r\n\x05ports\x18\x02 \x03(\t\x12\x11\n\tnot_ports\x18\x06 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\x13\n\x0bnot_methods\x18\x07 \x03(\t\x12\r\n\x05paths\x18\x04 \x03(\t\x12\x11\n\tnot_paths\x18\x08 \x03(\t\"A\n\tCondition\x12\x10\n\x03key\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x0e\n\x06values\x18\x02 \x03(\t\x12\x12\n\nnot_values\x18\x03 \x03(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
+  serialized_pb=_b('\n+security/v1beta1/authorization_policy.proto\x12\x16istio.security.v1beta1\x1a\x1egoogle/protobuf/duration.proto\x1a\x1fgoogle/api/field_behavior.proto\x1a\x1btype/v1beta1/selector.proto\"\xbd\x02\n\x13\x41uthorizationPolicy\x12\x36\n\x08selector\x18\x01 \x01(\x0b\x32$.istio.type.v1beta1.WorkloadSelector\x12+\n\x05rules\x18\x02 \x03(\x0b\x32\x1c.istio.security.v1beta1.Rule\x12\x42\n\x06\x61\x63tion\x18\x03 \x01(\x0e\x32\x32.istio.security.v1beta1.AuthorizationPolicy.Action\x12\x34\n\x08\x65xternal\x18\x04 \x01(\x0b\x32 .istio.security.v1beta1.ExternalH\x00\"6\n\x06\x41\x63tion\x12\t\n\x05\x41LLOW\x10\x00\x12\x08\n\x04\x44\x45NY\x10\x01\x12\t\n\x05\x41UDIT\x10\x02\x12\x0c\n\x08\x45XTERNAL\x10\x03\x42\x0f\n\raction_detail\"\xa0\x05\n\x08\x45xternal\x12\x39\n\x04http\x18\x01 \x01(\x0b\x32+.istio.security.v1beta1.External.HTTPConfig\x12\x37\n\x03tcp\x18\x02 \x01(\x0b\x32*.istio.security.v1beta1.External.TCPConfig\x1a\xb4\x03\n\nHTTPConfig\x12\x0e\n\x06server\x18\x01 \x01(\t\x12*\n\x07timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\x12_\n\x15\x61uthorization_request\x18\x03 \x01(\x0b\x32@.istio.security.v1beta1.External.HTTPConfig.AuthorizationRequest\x12\x61\n\x16\x61uthorization_response\x18\x04 \x01(\x0b\x32\x41.istio.security.v1beta1.External.HTTPConfig.AuthorizationResponse\x12 \n\x18include_peer_certificate\x18\x05 \x01(\x08\x1a/\n\x14\x41uthorizationRequest\x12\x17\n\x0f\x61llowed_headers\x18\x01 \x03(\t\x1aS\n\x15\x41uthorizationResponse\x12\x1b\n\x13\x66orward_to_upstream\x18\x01 \x03(\t\x12\x1d\n\x15\x66orward_to_downstream\x18\x02 \x03(\t\x1ai\n\tTCPConfig\x12\x0e\n\x06server\x18\x01 \x01(\t\x12*\n\x07timeout\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\x12 \n\x18include_peer_certificate\x18\x03 \x01(\x08\"\x89\x02\n\x04Rule\x12/\n\x04\x66rom\x18\x01 \x03(\x0b\x32!.istio.security.v1beta1.Rule.From\x12+\n\x02to\x18\x02 \x03(\x0b\x32\x1f.istio.security.v1beta1.Rule.To\x12/\n\x04when\x18\x03 \x03(\x0b\x32!.istio.security.v1beta1.Condition\x1a\x36\n\x04\x46rom\x12.\n\x06source\x18\x01 \x01(\x0b\x32\x1e.istio.security.v1beta1.Source\x1a:\n\x02To\x12\x34\n\toperation\x18\x01 \x01(\x0b\x32!.istio.security.v1beta1.Operation\"\xfe\x01\n\x06Source\x12\x12\n\nprincipals\x18\x01 \x03(\t\x12\x16\n\x0enot_principals\x18\x05 \x03(\t\x12\x1a\n\x12request_principals\x18\x02 \x03(\t\x12\x1e\n\x16not_request_principals\x18\x06 \x03(\t\x12\x12\n\nnamespaces\x18\x03 \x03(\t\x12\x16\n\x0enot_namespaces\x18\x07 \x03(\t\x12\x11\n\tip_blocks\x18\x04 \x03(\t\x12\x15\n\rnot_ip_blocks\x18\x08 \x03(\t\x12\x18\n\x10remote_ip_blocks\x18\t \x03(\t\x12\x1c\n\x14not_remote_ip_blocks\x18\n \x03(\t\"\x97\x01\n\tOperation\x12\r\n\x05hosts\x18\x01 \x03(\t\x12\x11\n\tnot_hosts\x18\x05 \x03(\t\x12\r\n\x05ports\x18\x02 \x03(\t\x12\x11\n\tnot_ports\x18\x06 \x03(\t\x12\x0f\n\x07methods\x18\x03 \x03(\t\x12\x13\n\x0bnot_methods\x18\x07 \x03(\t\x12\r\n\x05paths\x18\x04 \x03(\t\x12\x11\n\tnot_paths\x18\x08 \x03(\t\"A\n\tCondition\x12\x10\n\x03key\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x0e\n\x06values\x18\x02 \x03(\t\x12\x12\n\nnot_values\x18\x03 \x03(\tB\x1fZ\x1distio.io/api/security/v1beta1b\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,type_dot_v1beta1_dot_selector__pb2.DESCRIPTOR,])
 
@@ -491,6 +491,20 @@ _SOURCE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='remote_ip_blocks', full_name='istio.security.v1beta1.Source.remote_ip_blocks', index=8,
+      number=9, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='not_remote_ip_blocks', full_name='istio.security.v1beta1.Source.not_remote_ip_blocks', index=9,
+      number=10, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -504,7 +518,7 @@ _SOURCE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=1429,
-  serialized_end=1627,
+  serialized_end=1683,
 )
 
 
@@ -583,8 +597,8 @@ _OPERATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1630,
-  serialized_end=1781,
+  serialized_start=1686,
+  serialized_end=1837,
 )
 
 
@@ -628,8 +642,8 @@ _CONDITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1783,
-  serialized_end=1848,
+  serialized_start=1839,
+  serialized_end=1904,
 )
 
 _AUTHORIZATIONPOLICY.fields_by_name['selector'].message_type = type_dot_v1beta1_dot_selector__pb2._WORKLOADSELECTOR

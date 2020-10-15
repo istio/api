@@ -527,6 +527,7 @@ No
 <td><code>string[]</code></td>
 <td>
 <p>Optional. A list of IP blocks, which matches to the &ldquo;source.ip&rdquo; attribute.
+Populated from the source address of the IP packet.
 Single IP (e.g. &ldquo;1.2.3.4&rdquo;) and CIDR (e.g. &ldquo;1.2.3.0/24&rdquo;) are supported.</p>
 
 <p>If not set, any IP is allowed.</p>
@@ -541,6 +542,35 @@ No
 <td><code>string[]</code></td>
 <td>
 <p>Optional. A list of negative match of IP blocks.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Source-remote_ip_blocks">
+<td><code>remoteIpBlocks</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Optional. A list of IP blocks, which matches to the &ldquo;remote.ip&rdquo; attribute.
+Populated from X-Forwarded-For header or proxy protocol.
+To make use of this field, you must configure the numTrustedProxies field of the gatewayTopology under the meshConfig
+when you install Istio or using an annotation on the ingress gateway.  See the documentation here:
+<a href="https://istio.io/latest/docs/ops/configuration/traffic-management/network-topologies/">Configuring Gateway Network Topology</a>.
+Single IP (e.g. &ldquo;1.2.3.4&rdquo;) and CIDR (e.g. &ldquo;1.2.3.0/24&rdquo;) are supported.</p>
+
+<p>If not set, any IP is allowed.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Source-not_remote_ip_blocks">
+<td><code>notRemoteIpBlocks</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Optional. A list of negative match of remote IP blocks.</p>
 
 </td>
 <td>

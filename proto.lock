@@ -43631,6 +43631,18 @@
                 "name": "not_ip_blocks",
                 "type": "string",
                 "is_repeated": true
+              },
+              {
+                "id": 9,
+                "name": "remote_ip_blocks",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 10,
+                "name": "not_remote_ip_blocks",
+                "type": "string",
+                "is_repeated": true
               }
             ]
           },
