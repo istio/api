@@ -1246,6 +1246,8 @@ type ProxyConfig struct {
 	// Boolean flag for enabling/disabling the holdApplicationUntilProxyStarts behavior.
 	// This feature adds hooks to delay application startup until the pod proxy
 	// is ready to accept traffic, mitigating some startup race conditions.
+	// Default value is 'false'. If users set the 'values.global' setting of the
+	// same name to 'true' this value will be ignored.
 	HoldApplicationUntilProxyStarts *types.BoolValue `protobuf:"bytes,33,opt,name=hold_application_until_proxy_starts,json=holdApplicationUntilProxyStarts,proto3" json:"holdApplicationUntilProxyStarts,omitempty"`
 	XXX_NoUnkeyedLiteral            struct{}         `json:"-"`
 	XXX_unrecognized                []byte           `json:"-"`
