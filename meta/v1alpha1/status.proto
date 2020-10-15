@@ -44,7 +44,7 @@ message IstioStatus {
   // Resource Version which this status refers to
   // ObservedGeneration reflects the generation of the most recently observed replication controller.
   // +optional
-  int64 observedGeneration = 3;
+  int64 observed_generation = 3;
 }
 
 message IstioCondition {

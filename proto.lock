@@ -37089,7 +37089,7 @@
               },
               {
                 "id": 3,
-                "name": "observedGeneration",
+                "name": "observed_generation",
                 "type": "int64"
               }
             ]
