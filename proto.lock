@@ -43449,8 +43449,13 @@
               },
               {
                 "id": 2,
-                "name": "tcp",
-                "type": "TCPConfig"
+                "name": "grpc",
+                "type": "GRPCConfig"
+              },
+              {
+                "id": 3,
+                "name": "include_peer_certificate",
+                "type": "bool"
               }
             ],
             "messages": [
@@ -43515,11 +43520,6 @@
                   },
                   {
                     "id": 5,
-                    "name": "include_peer_certificate",
-                    "type": "bool"
-                  },
-                  {
-                    "id": 6,
                     "name": "path_prefix",
                     "type": "string"
                   }
@@ -43556,7 +43556,7 @@
                 ]
               },
               {
-                "name": "TCPConfig",
+                "name": "GRPCConfig",
                 "fields": [
                   {
                     "id": 1,
@@ -43567,11 +43567,6 @@
                     "id": 2,
                     "name": "timeout",
                     "type": "google.protobuf.Duration"
-                  },
-                  {
-                    "id": 3,
-                    "name": "include_peer_certificate",
-                    "type": "bool"
                   }
                 ]
               }

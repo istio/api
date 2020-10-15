@@ -172,8 +172,8 @@ spec:
      version: v1
 </code></pre>
 
-<p>The following authorization policy applies to ingress gateway to enable the external authorization for all HTTP and
-TCP requests.</p>
+<p>The following authorization policy applies to ingress gateway to integrate with an external authorization server that
+implements the gRPC authorization check API.</p>
 
 <pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -186,12 +186,7 @@ spec:
      app: istio-ingressgateway
  action: EXTERNAL
  external:
-   http:
-     service:
-       host: &quot;ext-authz.foo.svc.cluster.local&quot;
-       port:
-         number: 9080
-   tcp:
+   grpc:
      service:
        host: &quot;ext-authz.foo.svc.cluster.local&quot;
        port:
@@ -201,9 +196,10 @@ spec:
  - {}
 </code></pre>
 
-<p>The following authorization policy applies to ingress gateway to enable the external authorization for HTTP requests
-if the request path has prefix &ldquo;/data/&rdquo;, and customize the configuration to set the timeout to 2s and also include the
-header with prefix &ldquo;X-foo&rdquo; in the authorization request.</p>
+<p>The following authorization policy applies to ingress gateway to enable the external authorization with an external
+authorization server that implements the HTTP authorization check API. The external check request is only made if the
+request path has prefix &ldquo;/data/&rdquo;. The connection timeout is set to 2s and the header with prefix &ldquo;X-foo&rdquo; will be included
+in the authorization check request.</p>
 
 <pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -341,24 +337,40 @@ No
 <td><code>http</code></td>
 <td><code><a href="#External-HTTPConfig">HTTPConfig</a></code></td>
 <td>
-<p>If specified, the external authorization will be applied to the HTTP traffic, otherwise the HTTP traffic will have
-no external authorization.</p>
+<p>Specifies to use the HTTP authorization check API to talk to the external authorization server.
+Note, the HTTP authorization check API can only be used with HTTP traffic.</p>
 
-<p>At least one of http and tcp must be set.</p>
+<p>At least one of http and grpc must be set.
+If only http field is set, the HTTP traffic will be enforced with HTTP API and there will be no external authorization
+enforced for TCP traffic.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="External-tcp">
-<td><code>tcp</code></td>
-<td><code><a href="#External-TCPConfig">TCPConfig</a></code></td>
+<tr id="External-grpc">
+<td><code>grpc</code></td>
+<td><code><a href="#External-GRPCConfig">GRPCConfig</a></code></td>
 <td>
-<p>If specified, the external authorization will be applied to the TCP (non-HTTP) traffic, otherwise the TCP traffic
-will have no external authorization.</p>
+<p>Specifies to use the gRPC authorization check API to talk to the external authorization server.
+Note, the gRPC authorization check API can be used with both HTTP and TCP (non-HTTP) traffic.</p>
 
-<p>At least one of http and tcp must be set.</p>
+<p>At least one of http and grpc must be set.
+If only grpc field is set, both HTTP and TCP (non-HTTP) traffic will be enforced with the gRPC API.
+Normally only one of http and grpc field is good enough but if both fields are set, the HTTP traffic will be enforced
+with the HTTP API and the TCP (non-HTTP) traffic will be enforced with the gRPC API.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="External-include_peer_certificate">
+<td><code>includePeerCertificate</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Specifies if the peer certificate is included in the authorization check request.</p>
 
 </td>
 <td>
@@ -840,7 +852,7 @@ No
 </section>
 <h2 id="External-HTTPConfig">External.HTTPConfig</h2>
 <section>
-<p>HTTPConfig supplies detail configurations of the HTTP traffic.</p>
+<p>HTTPConfig supplies detail configurations of the HTTP authorization check request.</p>
 
 <table class="message-fields">
 <thead>
@@ -856,8 +868,7 @@ No
 <td><code>service</code></td>
 <td><code><a href="#External-Destination">Destination</a></code></td>
 <td>
-<p>Specifies the external authorization service that implements the Envoy ext_authz filter check request API.
-The port will be used to decide the protocol (HTTP or gRPC) for talking to the external authorization service.</p>
+<p>Specifies the external authorization service that implements the Envoy ext_authz filter HTTP check request API.</p>
 
 </td>
 <td>
@@ -897,17 +908,6 @@ No
 No
 </td>
 </tr>
-<tr id="External-HTTPConfig-include_peer_certificate">
-<td><code>includePeerCertificate</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Specifies if the peer certificate is included in the external authorization request.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
 <tr id="External-HTTPConfig-path_prefix">
 <td><code>pathPrefix</code></td>
 <td><code>string</code></td>
@@ -922,9 +922,9 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="External-TCPConfig">External.TCPConfig</h2>
+<h2 id="External-GRPCConfig">External.GRPCConfig</h2>
 <section>
-<p>TCPConfig supplies detail configurations of the TCP traffic.</p>
+<p>GRPCConfig supplies detail configurations of the gRPC authorization check request.</p>
 
 <table class="message-fields">
 <thead>
@@ -936,34 +936,22 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="External-TCPConfig-service">
+<tr id="External-GRPCConfig-service">
 <td><code>service</code></td>
 <td><code><a href="#External-Destination">Destination</a></code></td>
 <td>
-<p>Specifies the external authorization service that implements the Envoy ext_authz filter check request API.
-Note: Only gRPC protocol is supported for TCP traffic.</p>
+<p>Specifies the external authorization service that implements the Envoy ext_authz filter gRPC check request API.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="External-TCPConfig-timeout">
+<tr id="External-GRPCConfig-timeout">
 <td><code>timeout</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>Sets the maximum duration in milliseconds for connection to the external server (default is 200ms).</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="External-TCPConfig-include_peer_certificate">
-<td><code>includePeerCertificate</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Specifies if the peer certificate is included in the external authorization request.</p>
 
 </td>
 <td>

@@ -3041,7 +3041,38 @@ spec:
             external:
               description: Configures how to talk to the external server.
               properties:
+                grpc:
+                  description: Specifies to use the gRPC authorization check API to
+                    talk to the external authorization server.
+                  properties:
+                    service:
+                      description: Specifies the external authorization service that
+                        implements the Envoy ext_authz filter gRPC check request API.
+                      properties:
+                        host:
+                          description: The name of a service from the service registry.
+                          format: string
+                          type: string
+                        port:
+                          description: Specifies the port on the host that is being
+                            addressed.
+                          properties:
+                            number:
+                              type: integer
+                          type: object
+                        subset:
+                          description: The name of a subset within the service.
+                          format: string
+                          type: string
+                      type: object
+                    timeout:
+                      description: Sets the maximum duration in milliseconds for connection
+                        to the external server (default is 200ms).
+                      type: string
+                  type: object
                 http:
+                  description: Specifies to use the HTTP authorization check API to
+                    talk to the external authorization server.
                   properties:
                     authorizationRequest:
                       description: Settings used for controlling authorization request
@@ -3070,10 +3101,6 @@ spec:
                             type: string
                           type: array
                       type: object
-                    includePeerCertificate:
-                      description: Specifies if the peer certificate is included in
-                        the external authorization request.
-                      type: boolean
                     pathPrefix:
                       description: Sets a prefix to the value of authorization request
                         header *Path*.
@@ -3081,7 +3108,7 @@ spec:
                       type: string
                     service:
                       description: Specifies the external authorization service that
-                        implements the Envoy ext_authz filter check request API.
+                        implements the Envoy ext_authz filter HTTP check request API.
                       properties:
                         host:
                           description: The name of a service from the service registry.
@@ -3104,37 +3131,10 @@ spec:
                         to the external server (default is 200ms).
                       type: string
                   type: object
-                tcp:
-                  properties:
-                    includePeerCertificate:
-                      description: Specifies if the peer certificate is included in
-                        the external authorization request.
-                      type: boolean
-                    service:
-                      description: Specifies the external authorization service that
-                        implements the Envoy ext_authz filter check request API.
-                      properties:
-                        host:
-                          description: The name of a service from the service registry.
-                          format: string
-                          type: string
-                        port:
-                          description: Specifies the port on the host that is being
-                            addressed.
-                          properties:
-                            number:
-                              type: integer
-                          type: object
-                        subset:
-                          description: The name of a subset within the service.
-                          format: string
-                          type: string
-                      type: object
-                    timeout:
-                      description: Sets the maximum duration in milliseconds for connection
-                        to the external server (default is 200ms).
-                      type: string
-                  type: object
+                includePeerCertificate:
+                  description: Specifies if the peer certificate is included in the
+                    authorization check request.
+                  type: boolean
               type: object
             rules:
               description: Optional.

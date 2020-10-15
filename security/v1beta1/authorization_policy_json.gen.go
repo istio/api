@@ -162,8 +162,8 @@
 //      version: v1
 // ```
 //
-// The following authorization policy applies to ingress gateway to enable the external authorization for all HTTP and
-// TCP requests.
+// The following authorization policy applies to ingress gateway to integrate with an external authorization server that
+// implements the gRPC authorization check API.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -177,12 +177,7 @@
 //      app: istio-ingressgateway
 //  action: EXTERNAL
 //  external:
-//    http:
-//      service:
-//        host: "ext-authz.foo.svc.cluster.local"
-//        port:
-//          number: 9080
-//    tcp:
+//    grpc:
 //      service:
 //        host: "ext-authz.foo.svc.cluster.local"
 //        port:
@@ -192,9 +187,10 @@
 //  - {}
 // ```
 //
-// The following authorization policy applies to ingress gateway to enable the external authorization for HTTP requests
-// if the request path has prefix "/data/", and customize the configuration to set the timeout to 2s and also include the
-// header with prefix "X-foo" in the authorization request.
+// The following authorization policy applies to ingress gateway to enable the external authorization with an external
+// authorization server that implements the HTTP authorization check API. The external check request is only made if the
+// request path has prefix "/data/". The connection timeout is set to 2s and the header with prefix "X-foo" will be included
+// in the authorization check request.
 //
 // ```yaml
 // apiVersion: security.istio.io/v1beta1
@@ -318,14 +314,14 @@ func (this *External_HTTPConfig_AuthorizationResponse) UnmarshalJSON(b []byte) e
 	return AuthorizationPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
-// MarshalJSON is a custom marshaler for External_TCPConfig
-func (this *External_TCPConfig) MarshalJSON() ([]byte, error) {
+// MarshalJSON is a custom marshaler for External_GRPCConfig
+func (this *External_GRPCConfig) MarshalJSON() ([]byte, error) {
 	str, err := AuthorizationPolicyMarshaler.MarshalToString(this)
 	return []byte(str), err
 }
 
-// UnmarshalJSON is a custom unmarshaler for External_TCPConfig
-func (this *External_TCPConfig) UnmarshalJSON(b []byte) error {
+// UnmarshalJSON is a custom unmarshaler for External_GRPCConfig
+func (this *External_GRPCConfig) UnmarshalJSON(b []byte) error {
 	return AuthorizationPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

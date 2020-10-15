@@ -97,13 +97,17 @@
           "http": {
             "$ref": "#/components/schemas/istio.security.v1beta1.External.HTTPConfig"
           },
-          "tcp": {
-            "$ref": "#/components/schemas/istio.security.v1beta1.External.TCPConfig"
+          "grpc": {
+            "$ref": "#/components/schemas/istio.security.v1beta1.External.GRPCConfig"
+          },
+          "includePeerCertificate": {
+            "description": "Specifies if the peer certificate is included in the authorization check request.",
+            "type": "boolean"
           }
         }
       },
       "istio.security.v1beta1.External.HTTPConfig": {
-        "description": "HTTPConfig supplies detail configurations of the HTTP traffic.",
+        "description": "HTTPConfig supplies detail configurations of the HTTP authorization check request.",
         "type": "object",
         "properties": {
           "service": {
@@ -119,10 +123,6 @@
           "authorizationResponse": {
             "$ref": "#/components/schemas/istio.security.v1beta1.External.HTTPConfig.AuthorizationResponse"
           },
-          "includePeerCertificate": {
-            "description": "Specifies if the peer certificate is included in the external authorization request.",
-            "type": "boolean"
-          },
           "pathPrefix": {
             "description": "Sets a prefix to the value of authorization request header *Path*.",
             "type": "string",
@@ -130,8 +130,8 @@
           }
         }
       },
-      "istio.security.v1beta1.External.TCPConfig": {
-        "description": "TCPConfig supplies detail configurations of the TCP traffic.",
+      "istio.security.v1beta1.External.GRPCConfig": {
+        "description": "GRPCConfig supplies detail configurations of the gRPC authorization check request.",
         "type": "object",
         "properties": {
           "service": {
@@ -140,10 +140,6 @@
           "timeout": {
             "description": "Sets the maximum duration in milliseconds for connection to the external server (default is 200ms).",
             "type": "string"
-          },
-          "includePeerCertificate": {
-            "description": "Specifies if the peer certificate is included in the external authorization request.",
-            "type": "boolean"
           }
         }
       },
