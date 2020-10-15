@@ -1354,7 +1354,9 @@ No
 <td>
 <p>Boolean flag for enabling/disabling the holdApplicationUntilProxyStarts behavior.
 This feature adds hooks to delay application startup until the pod proxy
-is ready to accept traffic, mitigating some startup race conditions.</p>
+is ready to accept traffic, mitigating some startup race conditions.
+Default value is &lsquo;false&rsquo;. If users set the &lsquo;values.global&rsquo; setting of the
+same name to &lsquo;true&rsquo; this value will be ignored.</p>
 
 </td>
 <td>
