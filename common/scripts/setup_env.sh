@@ -110,7 +110,7 @@ if [[ -f "${HOME}/.gitconfig" ]]; then
 fi
 
 # .netrc conditional host mount (needed for git commands inside container)
-if [[ -f "${HOME}/.gitconfig" ]]; then
+if [[ -f "${HOME}/.netrc" ]]; then
   CONDITIONAL_HOST_MOUNTS+="--mount type=bind,source=${HOME}/.netrc,destination=/home/.netrc,readonly "
 fi
 
