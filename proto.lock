@@ -36196,6 +36196,11 @@
                 "id": 55,
                 "name": "ca",
                 "type": "CA"
+              },
+              {
+                "id": 56,
+                "name": "external_auth",
+                "type": "ExternalAuth"
               }
             ],
             "reserved_ids": [
@@ -36312,6 +36317,54 @@
                     "id": 4,
                     "name": "istiod_side",
                     "type": "bool"
+                  }
+                ]
+              },
+              {
+                "name": "ExternalAuth",
+                "maps": [
+                  {
+                    "key_type": "string",
+                    "field": {
+                      "id": 1,
+                      "name": "servers",
+                      "type": "External"
+                    }
+                  }
+                ],
+                "messages": [
+                  {
+                    "name": "External",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "address",
+                        "type": "string"
+                      },
+                      {
+                        "id": 2,
+                        "name": "timeout",
+                        "type": "google.protobuf.Duration"
+                      },
+                      {
+                        "id": 3,
+                        "name": "include_headers",
+                        "type": "string",
+                        "is_repeated": true
+                      },
+                      {
+                        "id": 4,
+                        "name": "forward_to_upstream",
+                        "type": "string",
+                        "is_repeated": true
+                      },
+                      {
+                        "id": 5,
+                        "name": "forward_to_downstream",
+                        "type": "string",
+                        "is_repeated": true
+                      }
+                    ]
                   }
                 ]
               }
@@ -36973,6 +37026,11 @@
                 "id": 31,
                 "name": "readiness_probe",
                 "type": "istio.networking.v1alpha3.ReadinessProbe"
+              },
+              {
+                "id": 32,
+                "name": "proxy_stats_matcher",
+                "type": "ProxyStatsMatcher"
               }
             ],
             "maps": [
@@ -36990,6 +37048,31 @@
             ],
             "reserved_names": [
               "connect_timeout"
+            ],
+            "messages": [
+              {
+                "name": "ProxyStatsMatcher",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "inclusion_prefixes",
+                    "type": "string",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "inclusion_suffixes",
+                    "type": "string",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 3,
+                    "name": "inclusion_regexps",
+                    "type": "string",
+                    "is_repeated": true
+                  }
+                ]
+              }
             ]
           },
           {
@@ -43431,108 +43514,6 @@
                 "id": 3,
                 "name": "action",
                 "type": "Action"
-              },
-              {
-                "id": 4,
-                "name": "external",
-                "type": "External"
-              }
-            ]
-          },
-          {
-            "name": "External",
-            "fields": [
-              {
-                "id": 1,
-                "name": "http",
-                "type": "HTTPConfig"
-              },
-              {
-                "id": 2,
-                "name": "tcp",
-                "type": "TCPConfig"
-              }
-            ],
-            "messages": [
-              {
-                "name": "HTTPConfig",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "server",
-                    "type": "string"
-                  },
-                  {
-                    "id": 2,
-                    "name": "timeout",
-                    "type": "google.protobuf.Duration"
-                  },
-                  {
-                    "id": 3,
-                    "name": "authorization_request",
-                    "type": "AuthorizationRequest"
-                  },
-                  {
-                    "id": 4,
-                    "name": "authorization_response",
-                    "type": "AuthorizationResponse"
-                  },
-                  {
-                    "id": 5,
-                    "name": "include_peer_certificate",
-                    "type": "bool"
-                  }
-                ],
-                "messages": [
-                  {
-                    "name": "AuthorizationRequest",
-                    "fields": [
-                      {
-                        "id": 1,
-                        "name": "allowed_headers",
-                        "type": "string",
-                        "is_repeated": true
-                      }
-                    ]
-                  },
-                  {
-                    "name": "AuthorizationResponse",
-                    "fields": [
-                      {
-                        "id": 1,
-                        "name": "forward_to_upstream",
-                        "type": "string",
-                        "is_repeated": true
-                      },
-                      {
-                        "id": 2,
-                        "name": "forward_to_downstream",
-                        "type": "string",
-                        "is_repeated": true
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "name": "TCPConfig",
-                "fields": [
-                  {
-                    "id": 1,
-                    "name": "server",
-                    "type": "string"
-                  },
-                  {
-                    "id": 2,
-                    "name": "timeout",
-                    "type": "google.protobuf.Duration"
-                  },
-                  {
-                    "id": 3,
-                    "name": "include_peer_certificate",
-                    "type": "bool"
-                  }
-                ]
               }
             ]
           },

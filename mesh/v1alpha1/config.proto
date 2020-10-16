@@ -499,7 +499,53 @@ message MeshConfig {
   CA ca = 55;
 
   // $hide_from_docs
-  // Next available field number: 56
+  message ExternalAuth {
+    // $hide_from_docs
+    message External {
+      // REQUIRED. Address of the external server. The external authorization check request will be sent to the external
+      // server using either HTTP or gRPC protocol depending on the scheme. For gRPC, the service API is defined by
+      // the [Envoy ext_authz check request](https://github.com/envoyproxy/envoy/blob/9dce187eca9aa10e98c0ae81368c078384528801/api/envoy/service/auth/v3/external_auth.proto#L29-L34).
+      // e.g. "http://ext-authz.istio-system.svc.cluster.local:8000/", "https://ext-authz.my-company.com:9000" or "grpc://127.0.0.1:9000".
+      string address = 1;
+
+      // Sets the maximum duration in milliseconds for connection to the external server (default is 1s).
+      google.protobuf.Duration timeout = 2;
+
+      // Specifies the TLS mode to use when connecting to the external server.
+      istio.networking.v1alpha3.ClientTLSSettings tls_settings = 3;
+
+      // List of headers that should be included in the authorization check request to the external auth server.
+      // Note that in addition to the user's supplied headers:
+      // 1. *Host*, *Method*, *Path* and *Content-Length* are automatically included to the list.
+      // 2. *Content-Length* will be set to 0 and the request will not have a message body.
+      repeated string include_headers = 4;
+
+      // List of headers from the external server that should be added to the original request and forwarded to the
+      // upstream when the authorization check result is allowed (HTTP code 200).
+      // If not specified, the original request will not be modified and forwarded to backend as-is.
+      // Note, any existing headers will be overridden.
+      repeated string forward_to_upstream = 5;
+
+      // List of headers from the external server that should be forwarded to downstream when the authorization check result
+      // is not allowed (HTTP code other than 200).
+      // If not specified, all the authorization response headers, except *Authority (Host)* will be in the response to
+      // the downstream. When a header is included in this list, *Path*, *Status*, *Content-Length*, *WWWAuthenticate*
+      // and *Location* are automatically added.
+      repeated string forward_to_downstream = 6;
+    }
+
+    // $hide_from_docs
+    // Specifies the configuration of the external auth server. The key is the name of the external server and currently
+    // only 1 external server is allowed.
+    map<string, External> servers = 1;
+  }
+
+  // $hide_from_docs
+  // Specifies the configuration of the external auth server that will be used by the AuthorizationPolicy EXTERNAL action.
+  ExternalAuth external_auth = 56;
+
+  // $hide_from_docs
+  // Next available field number: 57
 }
 
 // Resource describes the source of configuration
