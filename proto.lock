@@ -35990,10 +35990,10 @@
             "name": "CA.IntegrationType",
             "enum_fields": [
               {
-                "name": "KUBERNETES"
+                "name": "ISTIOD_RA_KUBERNETES_API"
               },
               {
-                "name": "GRPC",
+                "name": "ISTIOD_RA_ISTIO_API",
                 "integer": 1
               }
             ]

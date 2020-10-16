@@ -479,14 +479,14 @@ message MeshConfig {
   // ``.x.y.com` suffix.
   google.protobuf.BoolValue verify_certificate_at_client = 54;
 
-  // Configuration of CustomCA integrated with the Istiod
+  // Configuration of Istiod Registration Authority to integrate with custom CA
   message CA {
     // Different Integration types for CA
     enum IntegrationType {
-     // Integration with external CA’s plugged into K8s system
-      KUBERNETES = 0;
-      // Integration with external CA’s supporting the Istio CA gRPC API
-      GRPC = 1;
+      // Istiod as RA, using K8s CSR API to talk to external CA
+      ISTIOD_RA_KUBERNETES_API = 0;
+      // Istiod as RA, using Istio CSR API to talk to external CA
+      ISTIOD_RA_ISTIO_API = 1;
     }
 
     // Address of the CA server implementing the Istio CA gRPC API 

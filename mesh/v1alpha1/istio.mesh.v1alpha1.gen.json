@@ -446,7 +446,7 @@
         }
       },
       "istio.mesh.v1alpha1.MeshConfig.CA": {
-        "description": "Configuration of CustomCA integrated with the Istiod",
+        "description": "Configuration of Istiod Registration Authority to integrate with custom CA",
         "type": "object",
         "properties": {
           "address": {
@@ -500,8 +500,8 @@
         "description": "Different Integration types for CA",
         "type": "string",
         "enum": [
-          "KUBERNETES",
-          "GRPC"
+          "ISTIOD_RA_KUBERNETES_API",
+          "ISTIOD_RA_ISTIO_API"
         ]
       },
       "istio.mesh.v1alpha1.Resource": {

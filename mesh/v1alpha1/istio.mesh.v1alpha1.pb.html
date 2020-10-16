@@ -1530,7 +1530,7 @@ No
 </section>
 <h2 id="MeshConfig-CA">MeshConfig.CA</h2>
 <section>
-<p>Configuration of CustomCA integrated with the Istiod</p>
+<p>Configuration of Istiod Registration Authority to integrate with custom CA</p>
 
 <table class="message-fields">
 <thead>
@@ -2073,17 +2073,17 @@ there are no services or ServiceEntries for the destination port</p>
 </tr>
 </thead>
 <tbody>
-<tr id="MeshConfig-CA-IntegrationType-KUBERNETES">
-<td><code>KUBERNETES</code></td>
+<tr id="MeshConfig-CA-IntegrationType-ISTIOD_RA_KUBERNETES_API">
+<td><code>ISTIOD_RA_KUBERNETES_API</code></td>
 <td>
-<p>Integration with external CA’s plugged into K8s system</p>
+<p>Istiod as RA, using K8s CSR API to talk to external CA</p>
 
 </td>
 </tr>
-<tr id="MeshConfig-CA-IntegrationType-GRPC">
-<td><code>GRPC</code></td>
+<tr id="MeshConfig-CA-IntegrationType-ISTIOD_RA_ISTIO_API">
+<td><code>ISTIOD_RA_ISTIO_API</code></td>
 <td>
-<p>Integration with external CA’s supporting the Istio CA gRPC API</p>
+<p>Istiod as RA, using Istio CSR API to talk to external CA</p>
 
 </td>
 </tr>
