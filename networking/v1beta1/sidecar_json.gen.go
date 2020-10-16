@@ -452,5 +452,5 @@ func (this *OutboundTrafficPolicy) UnmarshalJSON(b []byte) error {
 
 var (
 	SidecarMarshaler   = &github_com_gogo_protobuf_jsonpb.Marshaler{}
-	SidecarUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{}
+	SidecarUnmarshaler = &github_com_gogo_protobuf_jsonpb.Unmarshaler{AllowUnknownFields: true}
 )

@@ -76,7 +76,7 @@
         }
       },
       "istio.security.v1beta1.RequestAuthentication": {
-        "description": "RequestAuthentication defines what request authentication methods are supported by a workload. If will reject a request if the request contains invalid authentication information, based on the configured authentication rules. A request that does not contain any authentication credentials will be accepted but will not have any authenticated identity. To restrict access to authenticated requests only, this should be accompanied by an authorization rule. Examples: - Require JWT for all request for workloads that have label `app:httpbin`",
+        "description": "RequestAuthentication defines what request authentication methods are supported by a workload. It will reject a request if the request contains invalid authentication information, based on the configured authentication rules. A request that does not contain any authentication credentials will be accepted but will not have any authenticated identity. To restrict access to authenticated requests only, this should be accompanied by an authorization rule. Examples: - Require JWT for all request for workloads that have label `app:httpbin`",
         "type": "object",
         "properties": {
           "selector": {

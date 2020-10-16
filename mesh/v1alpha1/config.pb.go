@@ -124,7 +124,9 @@ func (MeshConfig_AuthPolicy) EnumDescriptor() ([]byte, []int) {
 type MeshConfig_AccessLogEncoding int32
 
 const (
+	// text encoding for the proxy access log
 	MeshConfig_TEXT MeshConfig_AccessLogEncoding = 0
+	// json encoding for the proxy access log
 	MeshConfig_JSON MeshConfig_AccessLogEncoding = 1
 )
 
@@ -232,17 +234,17 @@ type MeshConfig struct {
 	// for the client to send the first bits of data. (MUST BE >=1ms or
 	// 0s to disable). Default detection timeout is 5s.
 	ProtocolDetectionTimeout *types.Duration `protobuf:"bytes,42,opt,name=protocol_detection_timeout,json=protocolDetectionTimeout,proto3" json:"protocolDetectionTimeout,omitempty"`
-	// If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+	// If set then set `SO_KEEPALIVE` on the socket to enable TCP Keepalives.
 	TcpKeepalive *v1alpha3.ConnectionPoolSettings_TCPSettings_TcpKeepalive `protobuf:"bytes,28,opt,name=tcp_keepalive,json=tcpKeepalive,proto3" json:"tcpKeepalive,omitempty"`
 	// Class of ingress resources to be processed by Istio ingress
 	// controller. This corresponds to the value of
-	// "kubernetes.io/ingress.class" annotation.
+	// `kubernetes.io/ingress.class` annotation.
 	IngressClass string `protobuf:"bytes,7,opt,name=ingress_class,json=ingressClass,proto3" json:"ingressClass,omitempty"`
 	// Name of the Kubernetes service used for the istio ingress controller.
 	// If no ingress controller is specified, the default value `istio-ingressgateway` is used.
 	IngressService string `protobuf:"bytes,8,opt,name=ingress_service,json=ingressService,proto3" json:"ingressService,omitempty"`
 	// Defines whether to use Istio ingress controller for annotated or all ingress resources.
-	// Default mode is STRICT.
+	// Default mode is `STRICT`.
 	IngressControllerMode MeshConfig_IngressControllerMode `protobuf:"varint,9,opt,name=ingress_controller_mode,json=ingressControllerMode,proto3,enum=istio.mesh.v1alpha1.MeshConfig_IngressControllerMode" json:"ingressControllerMode,omitempty"`
 	// Defines which gateway deployment to use as the Ingress controller. This field corresponds to
 	// the Gateway.selector field, and will be set as `istio: INGRESS_SELECTOR`.
@@ -263,13 +265,13 @@ type MeshConfig struct {
 	// Format for the proxy access log
 	// Empty value results in proxy's default access log format
 	AccessLogFormat string `protobuf:"bytes,24,opt,name=access_log_format,json=accessLogFormat,proto3" json:"accessLogFormat,omitempty"`
-	// Encoding for the proxy access log (text or json).
-	// Default value is text.
+	// Encoding for the proxy access log (`TEXT` or `JSON`).
+	// Default value is `TEXT`.
 	AccessLogEncoding MeshConfig_AccessLogEncoding `protobuf:"varint,27,opt,name=access_log_encoding,json=accessLogEncoding,proto3,enum=istio.mesh.v1alpha1.MeshConfig_AccessLogEncoding" json:"accessLogEncoding,omitempty"`
 	// This flag enables Envoy's gRPC Access Log Service.
 	// See [Access Log Service](https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto)
 	// for details about Envoy's gRPC Access Log Service API.
-	// Default value is false.
+	// Default value is `false`.
 	EnableEnvoyAccessLogService bool `protobuf:"varint,40,opt,name=enable_envoy_access_log_service,json=enableEnvoyAccessLogService,proto3" json:"enableEnvoyAccessLogService,omitempty"`
 	// Default proxy config used by the proxy injection mechanism operating in the mesh
 	// (e.g. Kubernetes admission controller)
@@ -280,31 +282,31 @@ type MeshConfig struct {
 	// Set the default behavior of the sidecar for handling outbound
 	// traffic from the application.  If your application uses one or
 	// more external services that are not known apriori, setting the
-	// policy to ALLOW_ANY will cause the sidecars to route any unknown
+	// policy to `ALLOW_ANY` will cause the sidecars to route any unknown
 	// traffic originating from the application to its requested
 	// destination. Users are strongly encouraged to use ServiceEntries
 	// to explicitly declare any external dependencies, instead of using
-	// allow_any, so that traffic to these services can be
+	// `ALLOW_ANY`, so that traffic to these services can be
 	// monitored. Can be overridden at a Sidecar level by setting the
-	// OutboundTrafficPolicy in the [Sidecar
+	// `OutboundTrafficPolicy` in the [Sidecar
 	// API](https://istio.io/docs/reference/config/networking/sidecar/#OutboundTrafficPolicy).
-	// Default mode is ALLOW_ANY which means outbound traffic to unknown destinations will be allowed.
+	// Default mode is `ALLOW_ANY` which means outbound traffic to unknown destinations will be allowed.
 	OutboundTrafficPolicy *MeshConfig_OutboundTrafficPolicy `protobuf:"bytes,17,opt,name=outbound_traffic_policy,json=outboundTrafficPolicy,proto3" json:"outboundTrafficPolicy,omitempty"`
 	// ConfigSource describes a source of configuration data for networking
 	// rules, and other Istio configuration artifacts. Multiple data sources
 	// can be configured for a single control plane.
 	ConfigSources []*ConfigSource `protobuf:"bytes,22,rep,name=config_sources,json=configSources,proto3" json:"configSources,omitempty"`
-	// This flag is used to enable mutual TLS automatically for service to service communication
+	// This flag is used to enable mutual `TLS` automatically for service to service communication
 	// within the mesh, default true.
-	// If set to true, and a given service does not have a corresponding DestinationRule configured,
-	// or its DestinationRule does not have ClientTLSSettings specified, Istio configures client side
+	// If set to true, and a given service does not have a corresponding `DestinationRule` configured,
+	// or its `DestinationRule` does not have ClientTLSSettings specified, Istio configures client side
 	// TLS configuration appropriately. More specifically,
-	// If the upstream authentication policy is in STRICT mode, use Istio provisioned certificate
-	// for mutual TLS to connect to upstream.
+	// If the upstream authentication policy is in `STRICT` mode, use Istio provisioned certificate
+	// for mutual `TLS` to connect to upstream.
 	// If upstream service is in plain text mode, use plain text.
 	// If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use
-	// mutual TLS when server sides are capable of accepting mutual TLS traffic.
-	// If service DestinationRule exists and has ClientTLSSettings specified, that is always used instead.
+	// mutual `TLS` when server sides are capable of accepting mutual `TLS` traffic.
+	// If service `DestinationRule` exists and has `ClientTLSSettings` specified, that is always used instead.
 	EnableAutoMtls *types.BoolValue `protobuf:"bytes,43,opt,name=enable_auto_mtls,json=enableAutoMtls,proto3" json:"enableAutoMtls,omitempty"`
 	// The trust domain corresponds to the trust root of a system.
 	// Refer to [SPIFFE-ID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain)
@@ -322,35 +324,35 @@ type MeshConfig struct {
 	// imported through container registry integrations, e.g. this applies to
 	// Kubernetes Service resources. The value is a list of namespace names and
 	// reserved namespace aliases. The allowed namespace aliases are:
-	//
+	// ```
 	// * - All Namespaces
 	// . - Current Namespace
 	// ~ - No Namespace
-	//
+	// ```
 	// If not set the system will use "*" as the default value which implies that
 	// services are exported to all namespaces.
 	//
-	// 'All namespaces' is a reasonable default for implementations that don't
+	// `All namespaces` is a reasonable default for implementations that don't
 	// need to restrict access or visibility of services across namespace
 	// boundaries. If that requirement is present it is generally good practice to
-	// make the default 'Current namespace' so that services are only visible
+	// make the default `Current namespace` so that services are only visible
 	// within their own namespaces by default. Operators can then expand the
-	// visibility of services to other namespaces as needed. Use of 'No Namespace'
+	// visibility of services to other namespaces as needed. Use of `No Namespace`
 	// is expected to be rare but can have utility for deployments where
 	// dependency management needs to be precise even within the scope of a single
 	// namespace.
 	//
-	// For further discussion see the reference documentation for ServiceEntry,
-	// Sidecar, and Gateway.
+	// For further discussion see the reference documentation for `ServiceEntry`,
+	// `Sidecar`, and `Gateway`.
 	DefaultServiceExportTo []string `protobuf:"bytes,31,rep,name=default_service_export_to,json=defaultServiceExportTo,proto3" json:"defaultServiceExportTo,omitempty"`
 	// The default value for the VirtualService.export_to field. Has the same
-	// syntax as 'default_service_export_to'.
+	// syntax as `default_service_export_to`.
 	//
 	// If not set the system will use "*" as the default value which implies that
 	// virtual services are exported to all namespaces
 	DefaultVirtualServiceExportTo []string `protobuf:"bytes,32,rep,name=default_virtual_service_export_to,json=defaultVirtualServiceExportTo,proto3" json:"defaultVirtualServiceExportTo,omitempty"`
-	// The default value for the DestinationRule.export_to field. Has the same
-	// syntax as 'default_service_export_to'.
+	// The default value for the `DestinationRule.export_to` field. Has the same
+	// syntax as `default_service_export_to`.
 	//
 	// If not set the system will use "*" as the default value which implies that
 	// destination rules are exported to all namespaces
@@ -366,13 +368,13 @@ type MeshConfig struct {
 	RootNamespace string `protobuf:"bytes,34,opt,name=root_namespace,json=rootNamespace,proto3" json:"rootNamespace,omitempty"`
 	// Locality based load balancing distribution or failover settings.
 	LocalityLbSetting *v1alpha3.LocalityLoadBalancerSetting `protobuf:"bytes,35,opt,name=locality_lb_setting,json=localityLbSetting,proto3" json:"localityLbSetting,omitempty"`
-	// Configures DNS refresh rate for Envoy clusters of type STRICT_DNS
-	// Default refresh rate is 5s.
+	// Configures DNS refresh rate for Envoy clusters of type `STRICT_DNS`
+	// Default refresh rate is `5s`.
 	DnsRefreshRate *types.Duration `protobuf:"bytes,36,opt,name=dns_refresh_rate,json=dnsRefreshRate,proto3" json:"dnsRefreshRate,omitempty"`
 	// Specify if http1.1 connections should be upgraded to http2 by default.
-	// if sidecar is installed on all pods in the mesh, then this should be set to UPGRADE.
-	// If one or more services or namespaces do not have sidecar(s), then this should be set to DO_NOT_UPGRADE.
-	// It can be enabled by destination using the destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy override.
+	// if sidecar is installed on all pods in the mesh, then this should be set to `UPGRADE`.
+	// If one or more services or namespaces do not have sidecar(s), then this should be set to `DO_NOT_UPGRADE`.
+	// It can be enabled by destination using the `destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy` override.
 	H2UpgradePolicy MeshConfig_H2UpgradePolicy `protobuf:"varint,41,opt,name=h2_upgrade_policy,json=h2UpgradePolicy,proto3,enum=istio.mesh.v1alpha1.MeshConfig_H2UpgradePolicy" json:"h2UpgradePolicy,omitempty"`
 	// Name to be used while emitting statistics for inbound clusters. The same pattern is used while computing stat prefix for
 	// network filters like TCP and Redis.
@@ -406,7 +408,7 @@ type MeshConfig struct {
 	//
 	// Following are some examples of supported patterns for reviews:
 	//
-	// - `%SERVICE_FQDN%_%SERVICE_PORT%` will use reviews.prod.svc.cluster.local_7443 as the stats name.
+	// - `%SERVICE_FQDN%_%SERVICE_PORT%` will use `reviews.prod.svc.cluster.local_7443` as the stats name.
 	// - `%SERVICE%` will use reviews.prod as the stats name.
 	OutboundClusterStatName string `protobuf:"bytes,45,opt,name=outbound_cluster_stat_name,json=outboundClusterStatName,proto3" json:"outboundClusterStatName,omitempty"`
 	// Configure the provision of certificates.
@@ -426,26 +428,26 @@ type MeshConfig struct {
 	// `prometheus.istio.io/merge-metrics: "false"` annotation.
 	// If not specified, this will be enabled by default.
 	EnablePrometheusMerge *types.BoolValue `protobuf:"bytes,51,opt,name=enable_prometheus_merge,json=enablePrometheusMerge,proto3" json:"enablePrometheusMerge,omitempty"`
-	// VerifyCertificateAtClient sets the mesh global default for peer certificate validation
-	// at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non ISTIO_MUTUAL) origination
+	// `VerifyCertificateAtClient` sets the mesh global default for peer certificate validation
+	// at the client-side proxy when `SIMPLE` TLS or `MUTUAL` TLS (non `ISTIO_MUTUAL`) origination
 	// modes are used. This setting can be overridden at the host level via DestinationRule API.
-	// By default, VerifyCertificateAtClient is true.
+	// By default, `VerifyCertificateAtClient` is `true`.
 	//
-	// CaCertificates: If set, proxy verifies CA signature based on given CaCertificates. If unset,
+	// `CaCertificates`: If set, proxy verifies CA signature based on given CaCertificates. If unset,
 	// and VerifyCertificateAtClient is true, proxy uses default System CA bundle. If unset and
-	// VerifyCertificateAtClient is false, proxy will not verify the CA.
+	// `VerifyCertificateAtClient` is false, proxy will not verify the CA.
 	//
-	// SubjectAltNames: If set, proxy verifies subject alt names are present in the SAN. If unset,
-	// and VerifyCertificateAtClient is true, proxy uses host in destination rule to verify the SANs.
-	// If unset, and VerifyCertificateAtClient is false, proxy does not verify SANs.
+	// `SubjectAltNames`: If set, proxy verifies subject alt names are present in the SAN. If unset,
+	// and `VerifyCertificateAtClient` is true, proxy uses host in destination rule to verify the SANs.
+	// If unset, and `VerifyCertificateAtClient` is false, proxy does not verify SANs.
 	//
-	// For SAN, client-side proxy will exact match host in DestinationRule as well as one level
+	// For SAN, client-side proxy will exact match host in `DestinationRule` as well as one level
 	// wildcard if the specified host in DestinationRule doesn't contain a wildcard.
-	// For example, if the host in DestinationRule is x.y.com, client-side proxy will
-	// match either x.y.com or *.y.com for the SAN in the presented server certificate.
+	// For example, if the host in `DestinationRule` is `x.y.com`, client-side proxy will
+	// match either `x.y.com` or `*.y.com` for the SAN in the presented server certificate.
 	// For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
-	// if host is *.x.y.com, client-side proxy will verify the presented server certificate SAN matches
-	// .x.y.com suffix.
+	// if host is `*.x.y.com`, client-side proxy will verify the presented server certificate SAN matches
+	// ``.x.y.com` suffix.
 	VerifyCertificateAtClient *types.BoolValue `protobuf:"bytes,54,opt,name=verify_certificate_at_client,json=verifyCertificateAtClient,proto3" json:"verifyCertificateAtClient,omitempty"`
 	// $hide_from_docs
 	// If specified, Istiod will authorize and forward the CSRs from the workloads to the specified external CA
@@ -802,7 +804,7 @@ type MeshConfig_ThriftConfig struct {
 	// this will enable the rate limit service for destinations that have matching rate
 	// limit configurations.
 	RateLimitUrl string `protobuf:"bytes,1,opt,name=rate_limit_url,json=rateLimitUrl,proto3" json:"rateLimitUrl,omitempty"`
-	// Specify thrift rate limit service timeout, in milliseconds. Default is 50ms
+	// Specify thrift rate limit service timeout, in milliseconds. Default is `50ms`
 	RateLimitTimeout     *types.Duration `protobuf:"bytes,2,opt,name=rate_limit_timeout,json=rateLimitTimeout,proto3" json:"rateLimitTimeout,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_unrecognized     []byte          `json:"-"`
@@ -1090,7 +1092,7 @@ type ConfigSource struct {
 	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	// Use the tls_settings to specify the tls mode to use. If the MCP server
 	// uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
-	// mode as ISTIO_MUTUAL.
+	// mode as `ISTIO_MUTUAL`.
 	TlsSettings *v1alpha3.ClientTLSSettings `protobuf:"bytes,2,opt,name=tls_settings,json=tlsSettings,proto3" json:"tlsSettings,omitempty"`
 	// Describes the source of configuration, if nothing is specified default is MCP
 	SubscribedResources  []Resource `protobuf:"varint,3,rep,packed,name=subscribed_resources,json=subscribedResources,proto3,enum=istio.mesh.v1alpha1.Resource" json:"subscribedResources,omitempty"`
@@ -1155,18 +1157,22 @@ func (m *ConfigSource) GetSubscribedResources() []Resource {
 
 // Certificate configures the provision of a certificate and its key.
 // Example 1: key and cert stored in a secret
+// ```
 // { secretName: galley-cert
 //   secretNamespace: istio-system
 //   dnsNames:
 //     - galley.istio-system.svc
 //     - galley.mydomain.com
 // }
+// ```
 // Example 2: key and cert stored in a directory
+// ```
 // { dnsNames:
 //     - pilot.istio-system
 //     - pilot.istio-system.svc
 //     - pilot.mydomain.com
 // }
+// ```
 type Certificate struct {
 	// Name of the secret the certificate and its key will be stored into.
 	// If it is empty, it will not be stored into a secret.

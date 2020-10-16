@@ -59,14 +59,14 @@ fi
 
 # Build image to use
 if [[ "${IMAGE_VERSION:-}" == "" ]]; then
-  export IMAGE_VERSION=master-2020-09-02T23-35-59
+  export IMAGE_VERSION=master-2020-10-15T20-33-46
 fi
 if [[ "${IMAGE_NAME:-}" == "" ]]; then
   export IMAGE_NAME=build-tools
 fi
 
 export UID
-DOCKER_GID=$(grep '^docker:' /etc/group | cut -f3 -d:)
+DOCKER_GID="${DOCKER_GID:-$(grep '^docker:' /etc/group | cut -f3 -d:)}"
 export DOCKER_GID
 
 TIMEZONE=$(readlink "$readlink_flags" /etc/localtime | sed -e 's/^.*zoneinfo\///')
@@ -104,12 +104,24 @@ if [[ -d "${HOME}/.config/gcloud" ]]; then
   CONDITIONAL_HOST_MOUNTS+="--mount type=bind,source=${HOME}/.config/gcloud,destination=/config/.config/gcloud,readonly "
 fi
 
+# gitconfig conditional host mount (needed for git commands inside container)
+if [[ -f "${HOME}/.gitconfig" ]]; then
+  CONDITIONAL_HOST_MOUNTS+="--mount type=bind,source=${HOME}/.gitconfig,destination=/home/.gitconfig,readonly "
+fi
+
+# .netrc conditional host mount (needed for git commands inside container)
+if [[ -f "${HOME}/.netrc" ]]; then
+  CONDITIONAL_HOST_MOUNTS+="--mount type=bind,source=${HOME}/.netrc,destination=/home/.netrc,readonly "
+fi
+
+# echo ${CONDITIONAL_HOST_MOUNTS}
+
 # This function checks if the file exists. If it does, it creates a randomly named host location
 # for the file, adds it to the host KUBECONFIG, and creates a mount for it.
 add_KUBECONFIG_if_exists () {
   if [[ -f "$1" ]]; then
     kubeconfig_random="$(od -vAn -N4 -tx /dev/random | tr -d '[:space:]' | cut -c1-8)"
-    container_kubeconfig+="/home/${kubeconfig_random}:"
+    container_kubeconfig+="/config/${kubeconfig_random}:"
     CONDITIONAL_HOST_MOUNTS+="--mount type=bind,source=${1},destination=/config/${kubeconfig_random},readonly "
   fi
 }

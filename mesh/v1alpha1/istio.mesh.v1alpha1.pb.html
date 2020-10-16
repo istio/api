@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 28
+number_of_entries: 29
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -176,17 +176,17 @@ No
 <td><code>serviceCluster</code></td>
 <td><code>string</code></td>
 <td>
-<p>Service cluster defines the name for the service_cluster that is
+<p>Service cluster defines the name for the <code>service_cluster</code> that is
 shared by all Envoy instances. This setting corresponds to
-<em>&ndash;service-cluster</em> flag in Envoy.  In a typical Envoy deployment, the
-<em>service-cluster</em> flag is used to identify the caller, for
+<code>--service-cluster</code> flag in Envoy.  In a typical Envoy deployment, the
+<code>service-cluster</code> flag is used to identify the caller, for
 source-based routing scenarios.</p>
 
-<p>Since Istio does not assign a local service/service version to each
+<p>Since Istio does not assign a local <code>service/service</code> version to each
 Envoy instance, the name is same for all of them.  However, the
 source/caller&rsquo;s identity (e.g., IP address) is encoded in the
-<em>&ndash;service-node</em> flag when launching Envoy.  When the RDS service
-receives API calls from Envoy, it uses the value of the <em>service-node</em>
+<code>--service-node</code> flag when launching Envoy.  When the RDS service
+receives API calls from Envoy, it uses the value of the <code>service-node</code>
 flag to compute routes that are relative to the service instances
 located at that IP address.</p>
 
@@ -201,7 +201,7 @@ No
 <td>
 <p>The time in seconds that Envoy will drain connections during a hot
 restart. MUST be &gt;=1s (e.g., <em>1s/1m/1h</em>)
-Default drain duration is 45s.</p>
+Default drain duration is <code>45s</code>.</p>
 
 </td>
 <td>
@@ -213,9 +213,9 @@ No
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>The time in seconds that Envoy will wait before shutting down the
-parent process during a hot restart. MUST be &gt;=1s (e.g., <em>1s/1m/1h</em>).
-MUST BE greater than <em>drain</em>duration_ parameter.
-Default shutdown duration is 60s.</p>
+parent process during a hot restart. MUST be &gt;=1s (e.g., <code>1s/1m/1h</code>).
+MUST BE greater than <code>drain_duration</code> parameter.
+Default shutdown duration is <code>60s</code>.</p>
 
 </td>
 <td>
@@ -238,7 +238,7 @@ No
 <td><code>statsdUdpAddress</code></td>
 <td><code>string</code></td>
 <td>
-<p>IP Address and Port of a statsd UDP listener (e.g. <em>10.75.241.127:9125</em>).</p>
+<p>IP Address and Port of a statsd UDP listener (e.g. <code>10.75.241.127:9125</code>).</p>
 
 </td>
 <td>
@@ -250,7 +250,7 @@ No
 <td><code>int32</code></td>
 <td>
 <p>Port on which Envoy should listen for administrative commands.
-Default port is 15000.</p>
+Default port is <code>15000</code>.</p>
 
 </td>
 <td>
@@ -262,7 +262,7 @@ No
 <td><code><a href="#AuthenticationPolicy">AuthenticationPolicy</a></code></td>
 <td>
 <p>AuthenticationPolicy defines how the proxy is authenticated when it connects to the control plane.
-Default is set to MUTUAL_TLS.</p>
+Default is set to <code>MUTUAL_TLS</code>.</p>
 
 </td>
 <td>
@@ -347,7 +347,7 @@ No
 <td><code>sds</code></td>
 <td><code><a href="#SDS">SDS</a></code></td>
 <td>
-<p>secret discovery service(SDS) configuration to be used by the proxy.</p>
+<p>Secret Discovery Service(SDS) configuration to be used by the proxy.</p>
 
 </td>
 <td>
@@ -359,7 +359,7 @@ No
 <td><code><a href="#RemoteService">RemoteService</a></code></td>
 <td>
 <p>Address of the service to which access logs from Envoys should be
-sent. (e.g. accesslog-service:15000). See <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto">Access Log
+sent. (e.g. <code>accesslog-service:15000</code>). See <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto">Access Log
 Service</a>
 for details about Envoy&rsquo;s gRPC Access Log Service API.</p>
 
@@ -372,7 +372,7 @@ No
 <td><code>envoyMetricsService</code></td>
 <td><code><a href="#RemoteService">RemoteService</a></code></td>
 <td>
-<p>Address of the Envoy Metrics Service implementation (e.g. metrics-service:15000).
+<p>Address of the Envoy Metrics Service implementation (e.g. <code>metrics-service:15000</code>).
 See <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/metrics/v2/metrics_service.proto">Metric Service</a>
 for details about Envoy&rsquo;s Metrics Service API.</p>
 
@@ -386,7 +386,7 @@ No
 <td><code>int32</code></td>
 <td>
 <p>Port on which the agent should listen for administrative commands such as readiness probe.
-Default is set to port 15020.</p>
+Default is set to port <code>15020</code>.</p>
 
 </td>
 <td>
@@ -412,10 +412,10 @@ No
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
 <p>The amount of time allowed for connections to complete on proxy shutdown.
-On receiving SIGTERM or SIGINT, istio-agent tells the active Envoy to start draining,
+On receiving <code>SIGTERM</code> or <code>SIGINT</code>, <code>istio-agent</code> tells the active Envoy to start draining,
 preventing any new connections and allowing existing connections to complete. It then
-sleeps for the termination<em>drain</em>duration and then kills any remaining active Envoy processes.
-If not set, a default of 5s will be applied.</p>
+sleeps for the <code>termination_drain_duration</code> and then kills any remaining active Envoy processes.
+If not set, a default of <code>5s</code> will be applied.</p>
 
 </td>
 <td>
@@ -429,6 +429,51 @@ No
 <p>The unique identifier for the <a href="https://istio.io/docs/reference/glossary/#service-mesh">service mesh</a>
 All control planes running in the same service mesh should specify the same mesh ID.
 Mesh ID is used to label telemetry reports for cases where telemetry from multiple meshes is mixed together.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-readiness_probe">
+<td><code>readinessProbe</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/workload-group.html#ReadinessProbe">ReadinessProbe</a></code></td>
+<td>
+<p>VM Health Checking readiness probe. This health check config exactly mirrors the
+kubernetes readiness probe configuration both in schema and logic.
+Only one health check method of 3 can be set at a time.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-proxy_stats_matcher">
+<td><code>proxyStatsMatcher</code></td>
+<td><code><a href="#ProxyConfig-ProxyStatsMatcher">ProxyStatsMatcher</a></code></td>
+<td>
+<p>Proxy stats matcher defines configuration for reporting custom Envoy stats.
+To reduce memory and CPU overhead from Envoy stats system, Istio proxies by
+default create and expose only a subset of Envoy stats. This option is to
+control creation of additional Envoy stats with prefix, suffix, and regex
+expressions match on the name of the stats. This replaces the stats
+inclusion annotations
+(<code>sidecar.istio.io/statsInclusionPrefixes</code>,
+<code>sidecar.istio.io/statsInclusionRegexps</code>, and
+<code>sidecar.istio.io/statsInclusionSuffixes</code>). For example, to enable stats
+for circuit breaker, retry, and upstream connections, you can specify stats
+matcher as follow:
+<code>yaml
+proxy_stats_matcher:
+  inclusion_regexps:
+    - .*circuit_breakers.*
+  inclusion_prefixes:
+    - upstream_rq_retry
+    - upstream_cx
+</code>yaml
+Note including more Envoy stats might increase number of time series
+collected by prometheus significantly. Care needs to be taken on Prometheus
+resource provision and configuration to reduce cardinality.</p>
 
 </td>
 <td>
@@ -479,7 +524,7 @@ No
 <td><code>tlsSettings</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ClientTLSSettings">ClientTLSSettings</a></code></td>
 <td>
-<p>Use the tls_settings to specify the tls mode to use. If the remote service
+<p>Use the <code>tls_settings</code> to specify the tls mode to use. If the remote service
 uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
 mode as <code>ISTIO_MUTUAL</code>.</p>
 
@@ -492,7 +537,7 @@ No
 <td><code>tcpKeepalive</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ConnectionPoolSettings-TCPSettings-TcpKeepalive">TcpKeepalive</a></code></td>
 <td>
-<p>If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.</p>
+<p>If set then set <code>SO_KEEPALIVE</code> on the socket to enable TCP Keepalives.</p>
 
 </td>
 <td>
@@ -667,6 +712,57 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="ProxyConfig-ProxyStatsMatcher">ProxyConfig.ProxyStatsMatcher</h2>
+<section>
+<p>Proxy stats name matchers for stats creation. Note this is in addition to
+the minimum Envoy stats that Istio generates by default.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ProxyConfig-ProxyStatsMatcher-inclusion_prefixes">
+<td><code>inclusionPrefixes</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Proxy stats name prefix matcher for inclusion.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-ProxyStatsMatcher-inclusion_suffixes">
+<td><code>inclusionSuffixes</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Proxy stats name suffix matcher for inclusion.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ProxyConfig-ProxyStatsMatcher-inclusion_regexps">
+<td><code>inclusionRegexps</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Proxy stats name regexps matcher for inclusion.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="MeshConfig">MeshConfig</h2>
 <section>
 <p>MeshConfig defines mesh-wide variables shared by all Envoy instances in the
@@ -748,7 +844,7 @@ No
 <td><code>tcpKeepalive</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ConnectionPoolSettings-TCPSettings-TcpKeepalive">TcpKeepalive</a></code></td>
 <td>
-<p>If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.</p>
+<p>If set then set <code>SO_KEEPALIVE</code> on the socket to enable TCP Keepalives.</p>
 
 </td>
 <td>
@@ -761,7 +857,7 @@ No
 <td>
 <p>Class of ingress resources to be processed by Istio ingress
 controller. This corresponds to the value of
-&ldquo;kubernetes.io/ingress.class&rdquo; annotation.</p>
+<code>kubernetes.io/ingress.class</code> annotation.</p>
 
 </td>
 <td>
@@ -785,7 +881,7 @@ No
 <td><code><a href="#MeshConfig-IngressControllerMode">IngressControllerMode</a></code></td>
 <td>
 <p>Defines whether to use Istio ingress controller for annotated or all ingress resources.
-Default mode is STRICT.</p>
+Default mode is <code>STRICT</code>.</p>
 
 </td>
 <td>
@@ -847,8 +943,8 @@ No
 <td><code>accessLogEncoding</code></td>
 <td><code><a href="#MeshConfig-AccessLogEncoding">AccessLogEncoding</a></code></td>
 <td>
-<p>Encoding for the proxy access log (text or json).
-Default value is text.</p>
+<p>Encoding for the proxy access log (<code>TEXT</code> or <code>JSON</code>).
+Default value is <code>TEXT</code>.</p>
 
 </td>
 <td>
@@ -862,7 +958,7 @@ No
 <p>This flag enables Envoy&rsquo;s gRPC Access Log Service.
 See <a href="https://www.envoyproxy.io/docs/envoy/latest/api-v2/config/accesslog/v2/als.proto">Access Log Service</a>
 for details about Envoy&rsquo;s gRPC Access Log Service API.
-Default value is false.</p>
+Default value is <code>false</code>.</p>
 
 </td>
 <td>
@@ -891,15 +987,15 @@ No
 <p>Set the default behavior of the sidecar for handling outbound
 traffic from the application.  If your application uses one or
 more external services that are not known apriori, setting the
-policy to ALLOW<em>ANY will cause the sidecars to route any unknown
+policy to <code>ALLOW_ANY</code> will cause the sidecars to route any unknown
 traffic originating from the application to its requested
 destination. Users are strongly encouraged to use ServiceEntries
 to explicitly declare any external dependencies, instead of using
-allow</em>any, so that traffic to these services can be
+<code>ALLOW_ANY</code>, so that traffic to these services can be
 monitored. Can be overridden at a Sidecar level by setting the
-OutboundTrafficPolicy in the <a href="https://istio.io/docs/reference/config/networking/sidecar/#OutboundTrafficPolicy">Sidecar
+<code>OutboundTrafficPolicy</code> in the <a href="https://istio.io/docs/reference/config/networking/sidecar/#OutboundTrafficPolicy">Sidecar
 API</a>.
-Default mode is ALLOW_ANY which means outbound traffic to unknown destinations will be allowed.</p>
+Default mode is <code>ALLOW_ANY</code> which means outbound traffic to unknown destinations will be allowed.</p>
 
 </td>
 <td>
@@ -923,17 +1019,17 @@ No
 <td><code>enableAutoMtls</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
-<p>This flag is used to enable mutual TLS automatically for service to service communication
+<p>This flag is used to enable mutual <code>TLS</code> automatically for service to service communication
 within the mesh, default true.
-If set to true, and a given service does not have a corresponding DestinationRule configured,
-or its DestinationRule does not have ClientTLSSettings specified, Istio configures client side
+If set to true, and a given service does not have a corresponding <code>DestinationRule</code> configured,
+or its <code>DestinationRule</code> does not have ClientTLSSettings specified, Istio configures client side
 TLS configuration appropriately. More specifically,
-If the upstream authentication policy is in STRICT mode, use Istio provisioned certificate
-for mutual TLS to connect to upstream.
+If the upstream authentication policy is in <code>STRICT</code> mode, use Istio provisioned certificate
+for mutual <code>TLS</code> to connect to upstream.
 If upstream service is in plain text mode, use plain text.
 If the upstream authentication policy is in PERMISSIVE mode, Istio configures clients to use
-mutual TLS when server sides are capable of accepting mutual TLS traffic.
-If service DestinationRule exists and has ClientTLSSettings specified, that is always used instead.</p>
+mutual <code>TLS</code> when server sides are capable of accepting mutual <code>TLS</code> traffic.
+If service <code>DestinationRule</code> exists and has <code>ClientTLSSettings</code> specified, that is always used instead.</p>
 
 </td>
 <td>
@@ -980,27 +1076,26 @@ imported through container registry integrations, e.g. this applies to
 Kubernetes Service resources. The value is a list of namespace names and
 reserved namespace aliases. The allowed namespace aliases are:</p>
 
-<ul>
-<li>- All Namespaces
+<pre><code>* - All Namespaces
 . - Current Namespace
-~ - No Namespace</li>
-</ul>
+~ - No Namespace
+</code></pre>
 
 <p>If not set the system will use &ldquo;*&rdquo; as the default value which implies that
 services are exported to all namespaces.</p>
 
-<p>&lsquo;All namespaces&rsquo; is a reasonable default for implementations that don&rsquo;t
+<p><code>All namespaces</code> is a reasonable default for implementations that don&rsquo;t
 need to restrict access or visibility of services across namespace
 boundaries. If that requirement is present it is generally good practice to
-make the default &lsquo;Current namespace&rsquo; so that services are only visible
+make the default <code>Current namespace</code> so that services are only visible
 within their own namespaces by default. Operators can then expand the
-visibility of services to other namespaces as needed. Use of &lsquo;No Namespace&rsquo;
+visibility of services to other namespaces as needed. Use of <code>No Namespace</code>
 is expected to be rare but can have utility for deployments where
 dependency management needs to be precise even within the scope of a single
 namespace.</p>
 
-<p>For further discussion see the reference documentation for ServiceEntry,
-Sidecar, and Gateway.</p>
+<p>For further discussion see the reference documentation for <code>ServiceEntry</code>,
+<code>Sidecar</code>, and <code>Gateway</code>.</p>
 
 </td>
 <td>
@@ -1011,8 +1106,8 @@ No
 <td><code>defaultVirtualServiceExportTo</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>The default value for the VirtualService.export<em>to field. Has the same
-syntax as &lsquo;default</em>service<em>export</em>to&rsquo;.</p>
+<p>The default value for the VirtualService.export_to field. Has the same
+syntax as <code>default_service_export_to</code>.</p>
 
 <p>If not set the system will use &ldquo;*&rdquo; as the default value which implies that
 virtual services are exported to all namespaces</p>
@@ -1026,8 +1121,8 @@ No
 <td><code>defaultDestinationRuleExportTo</code></td>
 <td><code>string[]</code></td>
 <td>
-<p>The default value for the DestinationRule.export<em>to field. Has the same
-syntax as &lsquo;default</em>service<em>export</em>to&rsquo;.</p>
+<p>The default value for the <code>DestinationRule.export_to</code> field. Has the same
+syntax as <code>default_service_export_to</code>.</p>
 
 <p>If not set the system will use &ldquo;*&rdquo; as the default value which implies that
 destination rules are exported to all namespaces</p>
@@ -1070,8 +1165,8 @@ No
 <td><code>dnsRefreshRate</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
-<p>Configures DNS refresh rate for Envoy clusters of type STRICT_DNS
-Default refresh rate is 5s.</p>
+<p>Configures DNS refresh rate for Envoy clusters of type <code>STRICT_DNS</code>
+Default refresh rate is <code>5s</code>.</p>
 
 </td>
 <td>
@@ -1083,9 +1178,9 @@ No
 <td><code><a href="#MeshConfig-H2UpgradePolicy">H2UpgradePolicy</a></code></td>
 <td>
 <p>Specify if http1.1 connections should be upgraded to http2 by default.
-if sidecar is installed on all pods in the mesh, then this should be set to UPGRADE.
-If one or more services or namespaces do not have sidecar(s), then this should be set to DO<em>NOT</em>UPGRADE.
-It can be enabled by destination using the destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy override.</p>
+if sidecar is installed on all pods in the mesh, then this should be set to <code>UPGRADE</code>.
+If one or more services or namespaces do not have sidecar(s), then this should be set to <code>DO_NOT_UPGRADE</code>.
+It can be enabled by destination using the <code>destinationRule.trafficPolicy.connectionPool.http.h2UpgradePolicy</code> override.</p>
 
 </td>
 <td>
@@ -1144,7 +1239,7 @@ For example <code>outbound|8080|v2|reviews.prod.svc.cluster.local</code>. This c
 <p>Following are some examples of supported patterns for reviews:</p>
 
 <ul>
-<li><code>%SERVICE_FQDN%_%SERVICE_PORT%</code> will use reviews.prod.svc.cluster.local_7443 as the stats name.</li>
+<li><code>%SERVICE_FQDN%_%SERVICE_PORT%</code> will use <code>reviews.prod.svc.cluster.local_7443</code> as the stats name.</li>
 <li><code>%SERVICE%</code> will use reviews.prod as the stats name.</li>
 </ul>
 
@@ -1198,26 +1293,26 @@ No
 <td><code>verifyCertificateAtClient</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#boolvalue">BoolValue</a></code></td>
 <td>
-<p>VerifyCertificateAtClient sets the mesh global default for peer certificate validation
-at the client-side proxy when <code>SIMPLE</code> TLS or <code>MUTUAL</code> TLS (non ISTIO_MUTUAL) origination
+<p><code>VerifyCertificateAtClient</code> sets the mesh global default for peer certificate validation
+at the client-side proxy when <code>SIMPLE</code> TLS or <code>MUTUAL</code> TLS (non <code>ISTIO_MUTUAL</code>) origination
 modes are used. This setting can be overridden at the host level via DestinationRule API.
-By default, VerifyCertificateAtClient is true.</p>
+By default, <code>VerifyCertificateAtClient</code> is <code>true</code>.</p>
 
-<p>CaCertificates: If set, proxy verifies CA signature based on given CaCertificates. If unset,
+<p><code>CaCertificates</code>: If set, proxy verifies CA signature based on given CaCertificates. If unset,
 and VerifyCertificateAtClient is true, proxy uses default System CA bundle. If unset and
-VerifyCertificateAtClient is false, proxy will not verify the CA.</p>
+<code>VerifyCertificateAtClient</code> is false, proxy will not verify the CA.</p>
 
-<p>SubjectAltNames: If set, proxy verifies subject alt names are present in the SAN. If unset,
-and VerifyCertificateAtClient is true, proxy uses host in destination rule to verify the SANs.
-If unset, and VerifyCertificateAtClient is false, proxy does not verify SANs.</p>
+<p><code>SubjectAltNames</code>: If set, proxy verifies subject alt names are present in the SAN. If unset,
+and <code>VerifyCertificateAtClient</code> is true, proxy uses host in destination rule to verify the SANs.
+If unset, and <code>VerifyCertificateAtClient</code> is false, proxy does not verify SANs.</p>
 
-<p>For SAN, client-side proxy will exact match host in DestinationRule as well as one level
+<p>For SAN, client-side proxy will exact match host in <code>DestinationRule</code> as well as one level
 wildcard if the specified host in DestinationRule doesn&rsquo;t contain a wildcard.
-For example, if the host in DestinationRule is x.y.com, client-side proxy will
-match either x.y.com or *.y.com for the SAN in the presented server certificate.
+For example, if the host in <code>DestinationRule</code> is <code>x.y.com</code>, client-side proxy will
+match either <code>x.y.com</code> or <code>*.y.com</code> for the SAN in the presented server certificate.
 For wildcard host name in DestinationRule, client-side proxy will do a suffix match. For example,
-if host is *.x.y.com, client-side proxy will verify the presented server certificate SAN matches
-.x.y.com suffix.</p>
+if host is <code>*.x.y.com</code>, client-side proxy will verify the presented server certificate SAN matches
+`<code>.x.y.com</code> suffix.</p>
 
 </td>
 <td>
@@ -1260,9 +1355,9 @@ No
 <td><code>tlsSettings</code></td>
 <td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ClientTLSSettings">ClientTLSSettings</a></code></td>
 <td>
-<p>Use the tls<em>settings to specify the tls mode to use. If the MCP server
+<p>Use the tls_settings to specify the tls mode to use. If the MCP server
 uses Istio mutual TLS and shares the root CA with Pilot, specify the TLS
-mode as ISTIO</em>MUTUAL.</p>
+mode as <code>ISTIO_MUTUAL</code>.</p>
 
 </td>
 <td>
@@ -1286,19 +1381,24 @@ No
 <h2 id="Certificate">Certificate</h2>
 <section>
 <p>Certificate configures the provision of a certificate and its key.
-Example 1: key and cert stored in a secret
-{ secretName: galley-cert
+Example 1: key and cert stored in a secret</p>
+
+<pre><code>{ secretName: galley-cert
   secretNamespace: istio-system
   dnsNames:
     - galley.istio-system.svc
     - galley.mydomain.com
 }
-Example 2: key and cert stored in a directory
-{ dnsNames:
+</code></pre>
+
+<p>Example 2: key and cert stored in a directory</p>
+
+<pre><code>{ dnsNames:
     - pilot.istio-system
     - pilot.istio-system.svc
     - pilot.mydomain.com
-}</p>
+}
+</code></pre>
 
 <table class="message-fields">
 <thead>
@@ -1391,7 +1491,7 @@ No
 <td><code>rateLimitTimeout</code></td>
 <td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
 <td>
-<p>Specify thrift rate limit service timeout, in milliseconds. Default is 50ms</p>
+<p>Specify thrift rate limit service timeout, in milliseconds. Default is <code>50ms</code></p>
 
 </td>
 <td>
@@ -1794,7 +1894,7 @@ for details.</p>
 <h2 id="ProxyConfig-InboundInterceptionMode">ProxyConfig.InboundInterceptionMode</h2>
 <section>
 <p>The mode used to redirect inbound traffic to Envoy.
-This setting has no effect on outbound traffic: iptables REDIRECT is always used for
+This setting has no effect on outbound traffic: iptables <code>REDIRECT</code> is always used for
 outbound connections.</p>
 
 <table class="enum-values">
@@ -1808,7 +1908,7 @@ outbound connections.</p>
 <tr id="ProxyConfig-InboundInterceptionMode-REDIRECT">
 <td><code>REDIRECT</code></td>
 <td>
-<p>The REDIRECT mode uses iptables REDIRECT to NAT and redirect to Envoy. This mode loses
+<p>The <code>REDIRECT</code> mode uses iptables <code>REDIRECT</code> to <code>NAT</code> and redirect to Envoy. This mode loses
 source IP addresses during redirection.</p>
 
 </td>
@@ -1816,10 +1916,10 @@ source IP addresses during redirection.</p>
 <tr id="ProxyConfig-InboundInterceptionMode-TPROXY">
 <td><code>TPROXY</code></td>
 <td>
-<p>The TPROXY mode uses iptables TPROXY to redirect to Envoy. This mode preserves both the
+<p>The <code>TPROXY</code> mode uses iptables <code>TPROXY</code> to redirect to Envoy. This mode preserves both the
 source and destination IP addresses and ports, so that they can be used for advanced
 filtering and manipulation. This mode also configures the sidecar to run with the
-CAP<em>NET</em>ADMIN capability, which is required to use TPROXY.</p>
+<code>CAP_NET_ADMIN</code> capability, which is required to use <code>TPROXY</code>.</p>
 
 </td>
 </tr>
@@ -1956,11 +2056,15 @@ cloud-provided ingress controller).</p>
 <tr id="MeshConfig-AccessLogEncoding-TEXT">
 <td><code>TEXT</code></td>
 <td>
+<p>text encoding for the proxy access log</p>
+
 </td>
 </tr>
 <tr id="MeshConfig-AccessLogEncoding-JSON">
 <td><code>JSON</code></td>
 <td>
+<p>json encoding for the proxy access log</p>
+
 </td>
 </tr>
 </tbody>

@@ -38,10 +38,18 @@ const (
 	// IstioOperatorVersion is the Istio operator version that installed the resource, e.g. "1.6.0"
 	IstioOperatorVersion = "operator.istio.io/version"
 
+	// IstioSubZone identifies the locality subzone of a workload.
+	IstioSubZone = "topology.istio.io/subzone"
+
 	// IstioNetwork enables Istio to group endpoints resident in the same L3 domain/network.
 	// All endpoints in the same network are assumed to be directly reachable from one another.
 	// When endpoints in different networks cannot reach each other directly, an Istio Gateway can
 	// be used to establish connectivity (usually using the AUTO_PASSTHROUGH mode in a  Gateway Server).
 	// This is an advanced configuration used typically for spanning an Istio mesh over multiple clusters.
 	IstioNetwork = "topology.istio.io/network"
+
+	// IstioCluster is a workload label that indicates the name of the cluster that contains the
+	// workload. The label is added internally within the control plane to enable workload selection
+	// based on cluster.
+	IstioCluster = "topology.istio.io/cluster"
 )
