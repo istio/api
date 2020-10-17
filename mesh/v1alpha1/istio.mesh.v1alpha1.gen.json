@@ -88,7 +88,7 @@
             "type": "boolean"
           },
           "disableEnvoyListenerLog": {
-            "description": "This flag disables Envoy Listener logs. Istio Enables Envoy's listener access logs on \"NoRoute\" response flag. Default value is `false`.",
+            "description": "This flag disables Envoy Listener logs. See [Listener Access Log](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/listener/v3/listener.proto#envoy-v3-api-field-config-listener-v3-listener-access-log) Istio Enables Envoy's listener access logs on \"NoRoute\" response flag. Default value is `false`.",
             "type": "boolean"
           },
           "defaultConfig": {

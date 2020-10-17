@@ -274,6 +274,7 @@ type MeshConfig struct {
 	// Default value is `false`.
 	EnableEnvoyAccessLogService bool `protobuf:"varint,40,opt,name=enable_envoy_access_log_service,json=enableEnvoyAccessLogService,proto3" json:"enableEnvoyAccessLogService,omitempty"`
 	// This flag disables Envoy Listener logs.
+	// See [Listener Access Log](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/listener/v3/listener.proto#envoy-v3-api-field-config-listener-v3-listener-access-log)
 	// Istio Enables Envoy's listener access logs on "NoRoute" response flag.
 	// Default value is `false`.
 	DisableEnvoyListenerLog bool `protobuf:"varint,56,opt,name=disable_envoy_listener_log,json=disableEnvoyListenerLog,proto3" json:"disableEnvoyListenerLog,omitempty"`
