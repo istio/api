@@ -159,27 +159,6 @@
 //    matchLabels:
 //      version: v1
 // ```
-//
-// The following authorization policy applies to ingress gateway to enable the external authorization if the request
-// path has prefix "/admin/".
-//
-// ```yaml
-// apiVersion: security.istio.io/v1beta1
-// kind: AuthorizationPolicy
-// metadata:
-//  name: ext-auth
-//  namespace: istio-system
-// spec:
-//  selector:
-//    matchLabels:
-//      app: istio-ingressgateway
-//  action: EXTERNAL
-//  rules:
-//  # Specify rules to conditionally trigger the authorization request only if the path has prefix "/data/".
-//  - to:
-//    - operation:
-//        paths: ["/admin/*"]
-// ```
 
 package v1beta1
 
@@ -222,6 +201,27 @@ const (
 	// The EXTERNAL action is evaluated before the ALLOW and DENY action, implemented by the Envoy ext_authz filter
 	// and is currently an **experimental feature** in Istio.
 	// The configuration of the external server is specified in the `external_auth` field in the MeshConfig.
+	//
+	// The following authorization policy applies to ingress gateway to enable the external authorization if the request
+	// path has prefix "/admin/".
+	//
+	// ```yaml
+	// apiVersion: security.istio.io/v1beta1
+	// kind: AuthorizationPolicy
+	// metadata:
+	//  name: ext-auth
+	//  namespace: istio-system
+	// spec:
+	//  selector:
+	//    matchLabels:
+	//      app: istio-ingressgateway
+	//  action: EXTERNAL
+	//  rules:
+	//  # Specify rules to conditionally trigger the authorization request only if the path has prefix "/data/".
+	//  - to:
+	//    - operation:
+	//        paths: ["/admin/*"]
+	// ```
 	AuthorizationPolicy_EXTERNAL AuthorizationPolicy_Action = 3
 )
 

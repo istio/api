@@ -36199,8 +36199,9 @@
               },
               {
                 "id": 56,
-                "name": "external_auth",
-                "type": "ExternalAuth"
+                "name": "external_servers",
+                "type": "ExternalServer",
+                "is_repeated": true
               }
             ],
             "reserved_ids": [
@@ -36321,25 +36322,27 @@
                 ]
               },
               {
-                "name": "ExternalAuth",
-                "maps": [
+                "name": "ExternalServer",
+                "fields": [
                   {
-                    "key_type": "string",
-                    "field": {
-                      "id": 1,
-                      "name": "servers",
-                      "type": "External"
-                    }
+                    "id": 1,
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "id": 2,
+                    "name": "authz",
+                    "type": "Authz"
                   }
                 ],
                 "messages": [
                   {
-                    "name": "External",
+                    "name": "Authz",
                     "fields": [
                       {
                         "id": 1,
-                        "name": "address",
-                        "type": "string"
+                        "name": "service",
+                        "type": "istio.networking.v1alpha3.Destination"
                       },
                       {
                         "id": 2,
@@ -36348,21 +36351,46 @@
                       },
                       {
                         "id": 3,
-                        "name": "include_headers",
-                        "type": "string",
-                        "is_repeated": true
+                        "name": "http",
+                        "type": "HTTP"
                       },
                       {
                         "id": 4,
-                        "name": "forward_to_upstream",
-                        "type": "string",
-                        "is_repeated": true
+                        "name": "grpc",
+                        "type": "GRPC"
+                      }
+                    ],
+                    "messages": [
+                      {
+                        "name": "HTTP",
+                        "fields": [
+                          {
+                            "id": 1,
+                            "name": "path_prefix",
+                            "type": "string"
+                          },
+                          {
+                            "id": 2,
+                            "name": "include_headers",
+                            "type": "string",
+                            "is_repeated": true
+                          },
+                          {
+                            "id": 3,
+                            "name": "forward_to_upstream",
+                            "type": "string",
+                            "is_repeated": true
+                          },
+                          {
+                            "id": 4,
+                            "name": "forward_to_downstream",
+                            "type": "string",
+                            "is_repeated": true
+                          }
+                        ]
                       },
                       {
-                        "id": 5,
-                        "name": "forward_to_downstream",
-                        "type": "string",
-                        "is_repeated": true
+                        "name": "GRPC"
                       }
                     ]
                   }
@@ -36420,6 +36448,9 @@
           },
           {
             "path": "networking/v1alpha3/destination_rule.proto"
+          },
+          {
+            "path": "networking/v1alpha3/virtual_service.proto"
           }
         ],
         "package": {
@@ -43710,9 +43741,6 @@
           }
         ],
         "imports": [
-          {
-            "path": "google/protobuf/duration.proto"
-          },
           {
             "path": "google/api/field_behavior.proto"
           },

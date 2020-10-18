@@ -188,8 +188,12 @@
           "ca": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.CA"
           },
-          "externalAuth": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalAuth"
+          "externalServers": {
+            "description": "Defines a list of external servers that provide extra functionality to the mesh. The external servers are usually deployed and managed by the mesh administrator to extend Istio's functionality, for example, an external authorization server is used with the AuthorizationPolicy to integrate custom authorization system into Istio. Note, at most 1 external server is allowed for now.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer"
+            }
           }
         }
       },
@@ -465,17 +469,43 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.MeshConfig.ExternalAuth": {
+      "istio.mesh.v1alpha1.MeshConfig.ExternalServer": {
         "type": "object",
         "properties": {
-          "servers": {
-            "description": "Specifies the configuration of the external auth server. The key is the name of the external server and currently only 1 external server is allowed.",
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalAuth.External"
+          "name": {
+            "description": "REQUIRED. A unique name identifying the external server.",
+            "type": "string",
+            "format": "string"
+          }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "authz"
+                  ],
+                  "properties": {
+                    "authz": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "authz"
+            ],
+            "properties": {
+              "authz": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz"
+              }
             }
           }
-        }
+        ]
       },
       "istio.mesh.v1alpha1.MeshConfig.OutboundTrafficPolicy.Mode": {
         "type": "string",
@@ -494,20 +524,74 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.MeshConfig.ExternalAuth.External": {
+      "istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz": {
+        "description": "Authz supplies the detail configuration of the external authorization server.",
         "type": "object",
         "properties": {
+          "service": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Destination"
+          },
           "timeout": {
             "description": "Sets the maximum duration in milliseconds for connection to the external server (default is 1s).",
             "type": "string"
+          }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "http"
+                  ],
+                  "properties": {
+                    "http": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz.HTTP"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "grpc"
+                  ],
+                  "properties": {
+                    "grpc": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz.GRPC"
+                    }
+                  }
+                }
+              ]
+            }
           },
-          "address": {
-            "description": "REQUIRED. Address of the external server. The external authorization check request will be sent to the external server using either HTTP or gRPC protocol depending on the scheme. For gRPC, the service API is defined by the [Envoy ext_authz check request](https://github.com/envoyproxy/envoy/blob/9dce187eca9aa10e98c0ae81368c078384528801/api/envoy/service/auth/v3/external_auth.proto#L29-L34). e.g. \"http://ext-authz.istio-system.svc.cluster.local:8000/\", \"https://ext-authz.my-company.com:9000\" or \"grpc://127.0.0.1:9000\".",
+          {
+            "required": [
+              "http"
+            ],
+            "properties": {
+              "http": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz.HTTP"
+              }
+            }
+          },
+          {
+            "required": [
+              "grpc"
+            ],
+            "properties": {
+              "grpc": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz.GRPC"
+              }
+            }
+          }
+        ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz.HTTP": {
+        "type": "object",
+        "properties": {
+          "pathPrefix": {
+            "description": "Sets a prefix to the value of authorization request header *Path*.",
             "type": "string",
             "format": "string"
-          },
-          "tlsSettings": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.ClientTLSSettings"
           },
           "includeHeaders": {
             "description": "List of headers that should be included in the authorization check request to the external auth server. Note that in addition to the user's supplied headers: 1. *Host*, *Method*, *Path* and *Content-Length* are automatically included to the list. 2. *Content-Length* will be set to 0 and the request will not have a message body.",
@@ -534,6 +618,9 @@
             }
           }
         }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz.GRPC": {
+        "type": "object"
       },
       "istio.mesh.v1alpha1.Resource": {
         "description": "Resource describes the source of configuration",
@@ -1209,6 +1296,25 @@
           }
         }
       },
+      "istio.networking.v1alpha3.Destination": {
+        "description": "REQUIRED. Specifies the network addressable service to which the authorization check request should be sent. Note, the `service.port` must always be configured explicitly even if the service exposes only a single port.",
+        "type": "object",
+        "properties": {
+          "host": {
+            "description": "The name of a service from the service registry. Service names are looked up from the platform's service registry (e.g., Kubernetes services, Consul services, etc.) and from the hosts declared by [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry). Traffic forwarded to destinations that are not found in either of the two, will be dropped.",
+            "type": "string",
+            "format": "string"
+          },
+          "port": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.PortSelector"
+          },
+          "subset": {
+            "description": "The name of a subset within the service. Applicable only to services within the mesh. The subset must be defined in a corresponding DestinationRule.",
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
       "istio.networking.v1alpha3.LocalityLoadBalancerSetting": {
         "description": "Locality based load balancing distribution or failover settings.",
         "type": "object",
@@ -1574,6 +1680,16 @@
             "description": "Destination region the traffic will fail over to when endpoints in the 'from' region becomes unhealthy.",
             "type": "string",
             "format": "string"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.PortSelector": {
+        "description": "Specifies the port on the host that is being addressed. If a service exposes only a single port it is not required to explicitly select the port.",
+        "type": "object",
+        "properties": {
+          "number": {
+            "description": "Valid port number",
+            "type": "integer"
           }
         }
       },

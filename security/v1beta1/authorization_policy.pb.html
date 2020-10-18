@@ -170,26 +170,6 @@ spec:
      version: v1
 </code></pre>
 
-<p>The following authorization policy applies to ingress gateway to enable the external authorization if the request
-path has prefix &ldquo;/admin/&rdquo;.</p>
-
-<pre><code class="language-yaml">apiVersion: security.istio.io/v1beta1
-kind: AuthorizationPolicy
-metadata:
- name: ext-auth
- namespace: istio-system
-spec:
- selector:
-   matchLabels:
-     app: istio-ingressgateway
- action: EXTERNAL
- rules:
- # Specify rules to conditionally trigger the authorization request only if the path has prefix &quot;/data/&quot;.
- - to:
-   - operation:
-       paths: [&quot;/admin/*&quot;]
-</code></pre>
-
 <h2 id="AuthorizationPolicy">AuthorizationPolicy</h2>
 <section>
 <p>AuthorizationPolicy enables access control on workloads.</p>
