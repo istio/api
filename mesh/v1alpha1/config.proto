@@ -162,6 +162,12 @@ message MeshConfig {
   // Default value is `false`.
   bool enable_envoy_access_log_service = 40;
 
+  // This flag disables Envoy Listener logs.
+  // See [Listener Access Log](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/listener/v3/listener.proto#envoy-v3-api-field-config-listener-v3-listener-access-log)
+  // Istio Enables Envoy's listener access logs on "NoRoute" response flag.
+  // Default value is `false`.
+  bool disable_envoy_listener_log = 56;
+
   // Default proxy config used by the proxy injection mechanism operating in the mesh
   // (e.g. Kubernetes admission controller)
   // In case of Kubernetes, the proxy config is applied once during the injection process,
@@ -499,7 +505,7 @@ message MeshConfig {
   CA ca = 55;
 
   // $hide_from_docs
-  // Next available field number: 56
+  // Next available field number: 57
 }
 
 // Resource describes the source of configuration
