@@ -506,12 +506,12 @@ message MeshConfig {
 
     // REQUIRED. Specifies detail configurations of the external server.
     oneof config {
-      Authz authz = 2;
+      Authorization authorization = 2;
     }
 
     // $hide_from_docs
-    // Authz supplies the detail configuration of the external authorization server.
-    message Authz {
+    // Authorization supplies the detail configuration of the external authorization server.
+    message Authorization {
       // REQUIRED. Specifies the network addressable service to which the authorization check request should be sent.
       // Note, the `service.port` must always be configured explicitly even if the service exposes only a single port.
       istio.networking.v1alpha3.Destination service = 1;
@@ -525,34 +525,34 @@ message MeshConfig {
         string path_prefix = 1;
 
         // List of headers that should be included in the authorization check request to the external auth server.
-        // Note that in addition to the user's supplied headers:
+        // Note that in addition to the headers supplied by users:
         // 1. *Host*, *Method*, *Path* and *Content-Length* are automatically included to the list.
         // 2. *Content-Length* will be set to 0 and the request will not have a message body.
-        repeated string include_headers = 2;
+        repeated string include_headers_in_check = 2;
 
         // List of headers from the external server that should be added to the original request and forwarded to the
         // upstream when the authorization check result is allowed (HTTP code 200).
         // If not specified, the original request will not be modified and forwarded to backend as-is.
         // Note, any existing headers will be overridden.
-        repeated string forward_to_upstream = 3;
+        repeated string headers_to_upstream_on_allow = 3;
 
         // List of headers from the external server that should be forwarded to downstream when the authorization check result
         // is not allowed (HTTP code other than 200).
         // If not specified, all the authorization response headers, except *Authority (Host)* will be in the response to
         // the downstream. When a header is included in this list, *Path*, *Status*, *Content-Length*, *WWWAuthenticate*
         // and *Location* are automatically added.
-        repeated string forward_to_downstream = 4;
+        repeated string headers_to_downstream_on_deny = 4;
       }
 
       // $hide_from_docs
       message GRPC {}
 
-      // REQUIRED. Specifies the protocol used to talk to the external authorization server.
+      // REQUIRED. Specifies the API used to talk to the external authorization server.
       oneof external_authz_service_type {
-        // Send the authorization check request to the external server using HTTP protocol.
+        // Send the authorization check request to the external server using the HTTP API.
         HTTP http = 3;
 
-        // Send the authorization check request to the external server using gRPC protocol as defined by
+        // Send the authorization check request to the external server using the gRPC API as defined by
         // [Envoy ext_authz check request API](https://github.com/envoyproxy/envoy/blob/9dce187eca9aa10e98c0ae81368c078384528801/api/envoy/service/auth/v3/external_auth.proto#L29-L34).
         GRPC grpc = 4;
       }

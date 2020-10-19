@@ -484,11 +484,11 @@
               "anyOf": [
                 {
                   "required": [
-                    "authz"
+                    "authorization"
                   ],
                   "properties": {
-                    "authz": {
-                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz"
+                    "authorization": {
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authorization"
                     }
                   }
                 }
@@ -497,11 +497,11 @@
           },
           {
             "required": [
-              "authz"
+              "authorization"
             ],
             "properties": {
-              "authz": {
-                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz"
+              "authorization": {
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authorization"
               }
             }
           }
@@ -524,8 +524,8 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz": {
-        "description": "Authz supplies the detail configuration of the external authorization server.",
+      "istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authorization": {
+        "description": "Authorization supplies the detail configuration of the external authorization server.",
         "type": "object",
         "properties": {
           "service": {
@@ -546,7 +546,7 @@
                   ],
                   "properties": {
                     "http": {
-                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz.HTTP"
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authorization.HTTP"
                     }
                   }
                 },
@@ -556,7 +556,7 @@
                   ],
                   "properties": {
                     "grpc": {
-                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz.GRPC"
+                      "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authorization.GRPC"
                     }
                   }
                 }
@@ -569,7 +569,7 @@
             ],
             "properties": {
               "http": {
-                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz.HTTP"
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authorization.HTTP"
               }
             }
           },
@@ -579,13 +579,13 @@
             ],
             "properties": {
               "grpc": {
-                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz.GRPC"
+                "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authorization.GRPC"
               }
             }
           }
         ]
       },
-      "istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz.HTTP": {
+      "istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authorization.HTTP": {
         "type": "object",
         "properties": {
           "pathPrefix": {
@@ -593,15 +593,15 @@
             "type": "string",
             "format": "string"
           },
-          "includeHeaders": {
-            "description": "List of headers that should be included in the authorization check request to the external auth server. Note that in addition to the user's supplied headers: 1. *Host*, *Method*, *Path* and *Content-Length* are automatically included to the list. 2. *Content-Length* will be set to 0 and the request will not have a message body.",
+          "includeHeadersInCheck": {
+            "description": "List of headers that should be included in the authorization check request to the external auth server. Note that in addition to the headers supplied by users: 1. *Host*, *Method*, *Path* and *Content-Length* are automatically included to the list. 2. *Content-Length* will be set to 0 and the request will not have a message body.",
             "type": "array",
             "items": {
               "type": "string",
               "format": "string"
             }
           },
-          "forwardToUpstream": {
+          "headersToUpstreamOnAllow": {
             "description": "List of headers from the external server that should be added to the original request and forwarded to the upstream when the authorization check result is allowed (HTTP code 200). If not specified, the original request will not be modified and forwarded to backend as-is. Note, any existing headers will be overridden.",
             "type": "array",
             "items": {
@@ -609,7 +609,7 @@
               "format": "string"
             }
           },
-          "forwardToDownstream": {
+          "headersToDownstreamOnDeny": {
             "description": "List of headers from the external server that should be forwarded to downstream when the authorization check result is not allowed (HTTP code other than 200). If not specified, all the authorization response headers, except *Authority (Host)* will be in the response to the downstream. When a header is included in this list, *Path*, *Status*, *Content-Length*, *WWWAuthenticate* and *Location* are automatically added.",
             "type": "array",
             "items": {
@@ -619,7 +619,7 @@
           }
         }
       },
-      "istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authz.GRPC": {
+      "istio.mesh.v1alpha1.MeshConfig.ExternalServer.Authorization.GRPC": {
         "type": "object"
       },
       "istio.mesh.v1alpha1.Resource": {

@@ -36331,13 +36331,13 @@
                   },
                   {
                     "id": 2,
-                    "name": "authz",
-                    "type": "Authz"
+                    "name": "authorization",
+                    "type": "Authorization"
                   }
                 ],
                 "messages": [
                   {
-                    "name": "Authz",
+                    "name": "Authorization",
                     "fields": [
                       {
                         "id": 1,
@@ -36371,19 +36371,19 @@
                           },
                           {
                             "id": 2,
-                            "name": "include_headers",
+                            "name": "include_headers_in_check",
                             "type": "string",
                             "is_repeated": true
                           },
                           {
                             "id": 3,
-                            "name": "forward_to_upstream",
+                            "name": "headers_to_upstream_on_allow",
                             "type": "string",
                             "is_repeated": true
                           },
                           {
                             "id": 4,
-                            "name": "forward_to_downstream",
+                            "name": "headers_to_downstream_on_deny",
                             "type": "string",
                             "is_repeated": true
                           }
