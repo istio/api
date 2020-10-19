@@ -419,6 +419,7 @@ option go_package = "istio.io/api/networking/v1alpha3";
 // +cue-gen:Sidecar:subresource:status
 // +cue-gen:Sidecar:scope:Namespaced
 // +cue-gen:Sidecar:resource:categories=istio-io,networking-istio-io
+// +cue-gen:Sidecar:preserveUnknownFields:false
 // -->
 //
 // <!-- go code generation tags

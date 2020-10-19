@@ -36086,6 +36086,11 @@
                 "type": "bool"
               },
               {
+                "id": 56,
+                "name": "disable_envoy_listener_log",
+                "type": "bool"
+              },
+              {
                 "id": 14,
                 "name": "default_config",
                 "type": "ProxyConfig"
@@ -36198,7 +36203,7 @@
                 "type": "CA"
               },
               {
-                "id": 56,
+                "id": 57,
                 "name": "extension_services",
                 "type": "ExtensionService",
                 "is_repeated": true
