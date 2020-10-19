@@ -38,6 +38,8 @@ type IstioStatus struct {
 	// +patchStrategy=merge
 	ValidationMessages []*v1alpha1.AnalysisMessageBase `protobuf:"bytes,2,rep,name=validation_messages,json=validationMessages,proto3" json:"validation_messages,omitempty"`
 	// Resource Generation to which this status refers.
+	// When this value is not equal to the object's metadata generation, status calculation for the current generation
+	// is still in progress.
 	// +optional
 	ObservedGeneration   int64    `protobuf:"varint,3,opt,name=observed_generation,json=observedGeneration,proto3" json:"observed_generation,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`

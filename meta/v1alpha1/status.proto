@@ -42,6 +42,8 @@ message IstioStatus {
   repeated analysis.v1alpha1.AnalysisMessageBase validation_messages = 2;
 
   // Resource Generation to which this status refers.
+  // When this value is not equal to the object's metadata generation, status calculation for the current generation
+  // is still in progress.
   // +optional
   int64 observed_generation = 3;
 }

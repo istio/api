@@ -24,7 +24,7 @@
             }
           },
           "observedGeneration": {
-            "description": "Resource Generation to which this status refers. +optional",
+            "description": "Resource Generation to which this status refers. When this value is not equal to the object's metadata generation, status calculation for the current generation is still in progress. +optional",
             "type": "integer",
             "format": "int64"
           }
