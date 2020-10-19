@@ -41,8 +41,7 @@ message IstioStatus {
   // +patchStrategy=merge
   repeated analysis.v1alpha1.AnalysisMessageBase validation_messages = 2;
 
-  // Resource Version which this status refers to
-  // ObservedGeneration reflects the generation of the most recently observed replication controller.
+  // Resource Generation to which this status refers.
   // +optional
   int64 observed_generation = 3;
 }

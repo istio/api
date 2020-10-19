@@ -24,7 +24,7 @@
             }
           },
           "observedGeneration": {
-            "description": "Resource Version which this status refers to ObservedGeneration reflects the generation of the most recently observed replication controller. +optional",
+            "description": "Resource Generation to which this status refers. +optional",
             "type": "integer",
             "format": "int64"
           }

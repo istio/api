@@ -37,8 +37,7 @@ type IstioStatus struct {
 	// +patchMergeKey=type
 	// +patchStrategy=merge
 	ValidationMessages []*v1alpha1.AnalysisMessageBase `protobuf:"bytes,2,rep,name=validation_messages,json=validationMessages,proto3" json:"validation_messages,omitempty"`
-	// Resource Version which this status refers to
-	// ObservedGeneration reflects the generation of the most recently observed replication controller.
+	// Resource Generation to which this status refers.
 	// +optional
 	ObservedGeneration   int64    `protobuf:"varint,3,opt,name=observed_generation,json=observedGeneration,proto3" json:"observed_generation,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
