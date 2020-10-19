@@ -36199,8 +36199,8 @@
               },
               {
                 "id": 56,
-                "name": "external_servers",
-                "type": "ExternalServer",
+                "name": "extension_services",
+                "type": "ExtensionService",
                 "is_repeated": true
               }
             ],
@@ -36322,7 +36322,7 @@
                 ]
               },
               {
-                "name": "ExternalServer",
+                "name": "ExtensionService",
                 "fields": [
                   {
                     "id": 1,
@@ -43545,6 +43545,23 @@
                 "id": 3,
                 "name": "action",
                 "type": "Action"
+              },
+              {
+                "id": 4,
+                "name": "external",
+                "type": "External"
+              }
+            ],
+            "messages": [
+              {
+                "name": "External",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "service",
+                    "type": "string"
+                  }
+                ]
               }
             ]
           },

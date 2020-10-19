@@ -23,7 +23,35 @@
           "action": {
             "$ref": "#/components/schemas/istio.security.v1beta1.AuthorizationPolicy.Action"
           }
-        }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "external"
+                  ],
+                  "properties": {
+                    "external": {
+                      "$ref": "#/components/schemas/istio.security.v1beta1.AuthorizationPolicy.External"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "external"
+            ],
+            "properties": {
+              "external": {
+                "$ref": "#/components/schemas/istio.security.v1beta1.AuthorizationPolicy.External"
+              }
+            }
+          }
+        ]
       },
       "istio.security.v1beta1.Rule": {
         "description": "Rule matches requests from a list of sources that perform a list of operations subject to a list of conditions. A match occurs when at least one source, operation and condition matches the request. An empty rule is always matched.",
@@ -61,6 +89,16 @@
           "AUDIT",
           "EXTERNAL"
         ]
+      },
+      "istio.security.v1beta1.AuthorizationPolicy.External": {
+        "type": "object",
+        "properties": {
+          "service": {
+            "description": "Specifies the name of the external service to call. This is currently defined in the MeshConfig.",
+            "type": "string",
+            "format": "string"
+          }
+        }
       },
       "istio.security.v1beta1.Rule.From": {
         "description": "From includes a list or sources.",

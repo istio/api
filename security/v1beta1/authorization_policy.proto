@@ -266,10 +266,9 @@ message AuthorizationPolicy {
     //
     // The EXTERNAL action is evaluated before the ALLOW and DENY action, implemented by the Envoy ext_authz filter
     // and is currently an **experimental feature** in Istio.
-    // The configuration of the external server is specified in the `external_auth` field in the MeshConfig.
     //
-    // The following authorization policy applies to ingress gateway to enable the external authorization if the request
-    // path has prefix "/admin/".
+    // The following authorization policy applies to ingress gateway to call the external authorization service of name
+    // "default" (defined in MeshConfig) if the request path has prefix "/admin/".
     //
     // ```yaml
     // apiVersion: security.istio.io/v1beta1
@@ -282,8 +281,9 @@ message AuthorizationPolicy {
     //    matchLabels:
     //      app: istio-ingressgateway
     //  action: EXTERNAL
+    //  external:
+    //    service: "default"
     //  rules:
-    //  # Specify rules to conditionally trigger the authorization request only if the path has prefix "/data/".
     //  - to:
     //    - operation:
     //        paths: ["/admin/*"]
@@ -293,6 +293,18 @@ message AuthorizationPolicy {
 
   // Optional. The action to take if the request is matched with the rules.
   Action action = 3;
+
+  // $hide_from_docs
+  message External {
+    // Specifies the name of the external service to call. This is currently defined in the MeshConfig.
+    string service = 1;
+  }
+
+  // $hide_from_docs
+  oneof action_detail {
+    // Supplies configuration of the external service. Must be used only with EXTERNAL action.
+    External external = 4;
+  }
 }
 
 // Rule matches requests from a list of sources that perform a list of operations subject to a

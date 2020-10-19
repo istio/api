@@ -500,11 +500,11 @@ message MeshConfig {
   CA ca = 55;
 
   // $hide_from_docs
-  message ExternalServer {
-    // REQUIRED. A unique name identifying the external server.
+  message ExtensionService {
+    // REQUIRED. A unique name identifying the extension service.
     string name = 1;
 
-    // REQUIRED. Specifies detail configurations of the external server.
+    // REQUIRED. Specifies detail configurations of the extension service.
     oneof config {
       Authorization authorization = 2;
     }
@@ -522,6 +522,8 @@ message MeshConfig {
       // $hide_from_docs
       message HTTP {
         // Sets a prefix to the value of authorization request header *Path*.
+        // For example, setting this to "/check" for an original user request at path "/admin" will cause the
+        // authorization check request to be sent to the external server at the path "/check/admin" instead of "/admin".
         string path_prefix = 1;
 
         // List of headers that should be included in the authorization check request to the external auth server.
@@ -560,11 +562,11 @@ message MeshConfig {
   }
 
   // $hide_from_docs
-  // Defines a list of external servers that provide extra functionality to the mesh. The external servers are usually
+  // Defines a list of extension services that provide extra functionality to the mesh. The extension services are usually
   // deployed and managed by the mesh administrator to extend Istio's functionality, for example, an external authorization
-  // server is used with the AuthorizationPolicy to integrate custom authorization system into Istio.
-  // Note, at most 1 external server is allowed for now.
-  repeated ExternalServer external_servers = 56;
+  // service is used with the AuthorizationPolicy to integrate custom authorization system into Istio.
+  // Note, at most 1 extension service is allowed for now.
+  repeated ExtensionService extension_services = 56;
 
   // $hide_from_docs
   // Next available field number: 57

@@ -3022,6 +3022,13 @@ spec:
         spec:
           description: 'Configuration for access control on workloads. See more details
             at: https://istio.io/docs/reference/config/security/authorization-policy.html'
+          oneOf:
+          - not:
+              anyOf:
+              - required:
+                - external
+          - required:
+            - external
           properties:
             action:
               description: Optional.
@@ -3031,6 +3038,14 @@ spec:
               - AUDIT
               - EXTERNAL
               type: string
+            external:
+              description: Supplies configuration of the external service.
+              properties:
+                service:
+                  description: Specifies the name of the external service to call.
+                  format: string
+                  type: string
+              type: object
             rules:
               description: Optional.
               items:
