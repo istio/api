@@ -1211,6 +1211,8 @@ func (*MeshConfig_ExternalProvider) XXX_OneofWrappers() []interface{} {
 type MeshConfig_ExternalProvider_EnvoyExternalHttpAuthorizationProvider struct {
 	// REQUIRED. Specifies the network addressable service of the external authorizer that implements the Envoy ext_authz
 	// authorization check service using the HTTP API.
+	// Note, the `service.host` must be fully qualified domain name (e.g. "ext-authz.istio-system.svc.cluster.local") and
+	// not short name.
 	Service *v1alpha3.Destination `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
 	// Sets the maximum duration in milliseconds for connection to the external authorizer (default is 1s).
 	Timeout *types.Duration `protobuf:"bytes,2,opt,name=timeout,proto3" json:"timeout,omitempty"`
@@ -1324,6 +1326,8 @@ func (m *MeshConfig_ExternalProvider_EnvoyExternalHttpAuthorizationProvider) Get
 type MeshConfig_ExternalProvider_EnvoyExternalGrpcAuthorizationProvider struct {
 	// REQUIRED. Specifies the network addressable service of the external authorizer that implements the Envoy ext_authz
 	// authorization check service using the gRPC API.
+	// Note, the `service.host` must be fully qualified domain name (e.g. "ext-authz.istio-system.svc.cluster.local") and
+	// not short name.
 	Service *v1alpha3.Destination `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
 	// Sets the maximum duration in milliseconds for connection to the external authorizer (default is 1s).
 	Timeout              *types.Duration `protobuf:"bytes,2,opt,name=timeout,proto3" json:"timeout,omitempty"`

@@ -522,6 +522,8 @@ message MeshConfig {
     message EnvoyExternalHttpAuthorizationProvider {
       // REQUIRED. Specifies the network addressable service of the external authorizer that implements the Envoy ext_authz
       // authorization check service using the HTTP API.
+      // Note, the `service.host` must be fully qualified domain name (e.g. "ext-authz.istio-system.svc.cluster.local") and
+      // not short name.
       istio.networking.v1alpha3.Destination service = 1;
 
       // Sets the maximum duration in milliseconds for connection to the external authorizer (default is 1s).
@@ -558,6 +560,8 @@ message MeshConfig {
     message EnvoyExternalGrpcAuthorizationProvider {
       // REQUIRED. Specifies the network addressable service of the external authorizer that implements the Envoy ext_authz
       // authorization check service using the gRPC API.
+      // Note, the `service.host` must be fully qualified domain name (e.g. "ext-authz.istio-system.svc.cluster.local") and
+      // not short name.
       istio.networking.v1alpha3.Destination service = 1;
 
       // Sets the maximum duration in milliseconds for connection to the external authorizer (default is 1s).
