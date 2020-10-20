@@ -551,12 +551,8 @@
       "istio.mesh.v1alpha1.MeshConfig.ExternalProvider.EnvoyExternalHttpAuthorizationProvider": {
         "type": "object",
         "properties": {
-          "service": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.Destination"
-          },
-          "timeout": {
-            "description": "Sets the maximum duration in milliseconds for connection to the external authorizer (default is 1s).",
-            "type": "string"
+          "target": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalProvider.EnvoyExternalAuthorizationServer"
           },
           "pathPrefix": {
             "description": "Sets a prefix to the value of authorization request header *Path*. For example, setting this to \"/check\" for an original user request at path \"/admin\" will cause the authorization check request to be sent to the external server at the path \"/check/admin\" instead of \"/admin\".",
@@ -592,12 +588,25 @@
       "istio.mesh.v1alpha1.MeshConfig.ExternalProvider.EnvoyExternalGrpcAuthorizationProvider": {
         "type": "object",
         "properties": {
+          "target": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.ExternalProvider.EnvoyExternalAuthorizationServer"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MeshConfig.ExternalProvider.EnvoyExternalAuthorizationServer": {
+        "description": "EnvoyExternalAuthorizationServer supplies common configuration for Envoy ext_authz filter authorization check service of HTTP and gRPC API.",
+        "type": "object",
+        "properties": {
           "service": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.Destination"
           },
           "timeout": {
             "description": "Sets the maximum duration in milliseconds for connection to the external authorizer (default is 1s).",
             "type": "string"
+          },
+          "failOpen": {
+            "description": "If true, the user request will be allowed even if the communication with the external authorization service has failed, or if the external authorization service has returned a HTTP 5xx error.",
+            "type": "boolean"
           }
         }
       },
@@ -1276,7 +1285,7 @@
         }
       },
       "istio.networking.v1alpha3.Destination": {
-        "description": "REQUIRED. Specifies the network addressable service of the external authorizer that implements the Envoy ext_authz authorization check service using the gRPC API. Note, the `service.host` must be fully qualified domain name (e.g. \"ext-authz.istio-system.svc.cluster.local\") and not short name.",
+        "description": "REQUIRED. Specifies the network addressable service of the external authorizer that implements the Envoy ext_authz authorization check service. Note, the `service.host` must be fully qualified domain name (e.g. \"ext-authz.istio-system.svc.cluster.local\") and not short name.",
         "type": "object",
         "properties": {
           "host": {

@@ -519,9 +519,10 @@ message MeshConfig {
     }
 
     // $hide_from_docs
-    message EnvoyExternalHttpAuthorizationProvider {
+    // EnvoyExternalAuthorizationServer supplies common configuration for Envoy ext_authz filter authorization check service of HTTP and gRPC API.
+    message EnvoyExternalAuthorizationServer {
       // REQUIRED. Specifies the network addressable service of the external authorizer that implements the Envoy ext_authz
-      // authorization check service using the HTTP API.
+      // authorization check service.
       // Note, the `service.host` must be fully qualified domain name (e.g. "ext-authz.istio-system.svc.cluster.local") and
       // not short name.
       istio.networking.v1alpha3.Destination service = 1;
@@ -529,22 +530,32 @@ message MeshConfig {
       // Sets the maximum duration in milliseconds for connection to the external authorizer (default is 1s).
       google.protobuf.Duration timeout = 2;
 
+      // If true, the user request will be allowed even if the communication with the external authorization service has
+      // failed, or if the external authorization service has returned a HTTP 5xx error.
+      bool fail_open = 3;
+    }
+
+    // $hide_from_docs
+    message EnvoyExternalHttpAuthorizationProvider {
+      // REQUIRED. Specifies the Envoy external authorization server target.
+      EnvoyExternalAuthorizationServer target = 1;
+
       // Sets a prefix to the value of authorization request header *Path*.
       // For example, setting this to "/check" for an original user request at path "/admin" will cause the
       // authorization check request to be sent to the external server at the path "/check/admin" instead of "/admin".
-      string path_prefix = 3;
+      string path_prefix = 2;
 
       // List of headers that should be included in the authorization request sent to the external authorizer.
       // Note that in addition to the headers supplied by users:
       // 1. *Host*, *Method*, *Path* and *Content-Length* are automatically sent.
       // 2. *Content-Length* will be set to 0 and the request will not have a message body.
-      repeated string include_headers_in_check = 4;
+      repeated string include_headers_in_check = 3;
 
       // List of headers from the external server that should be added to the original request and forwarded to the
       // upstream when the authorization check result is allowed (HTTP code 200).
       // If not specified, the original request will not be modified and forwarded to backend as-is.
       // Note, any existing headers will be overridden.
-      repeated string headers_to_upstream_on_allow = 5;
+      repeated string headers_to_upstream_on_allow = 4;
 
       // List of headers from the external authorizer that should be forwarded to downstream when the authorization check result
       // is not allowed (HTTP code other than 200).
@@ -553,19 +564,13 @@ message MeshConfig {
       // When a header is included in this list, *Path*, *Status*, *Content-Length*, *WWWAuthenticate* and *Location* are
       // automatically added.
       // Note, the body from the external authorizer is always included in the response to downstream.
-      repeated string headers_to_downstream_on_deny = 6;
+      repeated string headers_to_downstream_on_deny = 5;
     }
 
     // $hide_from_docs
     message EnvoyExternalGrpcAuthorizationProvider {
-      // REQUIRED. Specifies the network addressable service of the external authorizer that implements the Envoy ext_authz
-      // authorization check service using the gRPC API.
-      // Note, the `service.host` must be fully qualified domain name (e.g. "ext-authz.istio-system.svc.cluster.local") and
-      // not short name.
-      istio.networking.v1alpha3.Destination service = 1;
-
-      // Sets the maximum duration in milliseconds for connection to the external authorizer (default is 1s).
-      google.protobuf.Duration timeout = 2;
+      // REQUIRED. Specifies the Envoy external authorization server target.
+      EnvoyExternalAuthorizationServer target = 1;
     }
   }
 

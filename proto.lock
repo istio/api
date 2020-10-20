@@ -36347,7 +36347,7 @@
                 ],
                 "messages": [
                   {
-                    "name": "EnvoyExternalHttpAuthorizationProvider",
+                    "name": "EnvoyExternalAuthorizationServer",
                     "fields": [
                       {
                         "id": 1,
@@ -36361,23 +36361,38 @@
                       },
                       {
                         "id": 3,
+                        "name": "fail_open",
+                        "type": "bool"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "EnvoyExternalHttpAuthorizationProvider",
+                    "fields": [
+                      {
+                        "id": 1,
+                        "name": "target",
+                        "type": "EnvoyExternalAuthorizationServer"
+                      },
+                      {
+                        "id": 2,
                         "name": "path_prefix",
                         "type": "string"
                       },
                       {
-                        "id": 4,
+                        "id": 3,
                         "name": "include_headers_in_check",
                         "type": "string",
                         "is_repeated": true
                       },
                       {
-                        "id": 5,
+                        "id": 4,
                         "name": "headers_to_upstream_on_allow",
                         "type": "string",
                         "is_repeated": true
                       },
                       {
-                        "id": 6,
+                        "id": 5,
                         "name": "headers_to_downstream_on_deny",
                         "type": "string",
                         "is_repeated": true
@@ -36389,13 +36404,8 @@
                     "fields": [
                       {
                         "id": 1,
-                        "name": "service",
-                        "type": "istio.networking.v1alpha3.Destination"
-                      },
-                      {
-                        "id": 2,
-                        "name": "timeout",
-                        "type": "google.protobuf.Duration"
+                        "name": "target",
+                        "type": "EnvoyExternalAuthorizationServer"
                       }
                     ]
                   }
