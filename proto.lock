@@ -36973,6 +36973,11 @@
                 "id": 31,
                 "name": "readiness_probe",
                 "type": "istio.networking.v1alpha3.ReadinessProbe"
+              },
+              {
+                "id": 32,
+                "name": "proxy_stats_matcher",
+                "type": "ProxyStatsMatcher"
               }
             ],
             "maps": [
@@ -36990,6 +36995,31 @@
             ],
             "reserved_names": [
               "connect_timeout"
+            ],
+            "messages": [
+              {
+                "name": "ProxyStatsMatcher",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "inclusion_prefixes",
+                    "type": "string",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "inclusion_suffixes",
+                    "type": "string",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 3,
+                    "name": "inclusion_regexps",
+                    "type": "string",
+                    "is_repeated": true
+                  }
+                ]
+              }
             ]
           },
           {
@@ -37056,6 +37086,11 @@
                 "name": "validation_messages",
                 "type": "analysis.v1alpha1.AnalysisMessageBase",
                 "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "observed_generation",
+                "type": "int64"
               }
             ]
           },
