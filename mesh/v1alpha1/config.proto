@@ -511,7 +511,7 @@ message MeshConfig {
     string name = 1;
 
     // REQUIRED. Specifies detailed configuration for the external provider.
-    oneof config {
+    oneof provider {
       // Configures an external authorizer that implements the Envoy ext_authz filter authorization check service using the HTTP API.
       EnvoyExternalHttpAuthorizationProvider envoy_ext_authz_http = 2;
       // Configures an external authorizer that implements the Envoy ext_authz filter authorization check service using the gRPC API.
