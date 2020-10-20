@@ -1232,13 +1232,13 @@ type ProxyConfig struct {
 	// for circuit breaker, retry, and upstream connections, you can specify stats
 	// matcher as follow:
 	// ```yaml
-	// proxy_stats_matcher:
-	//   inclusion_regexps:
+	// proxyStatsMatcher:
+	//   inclusionRegexps:
 	//     - .*circuit_breakers.*
-	//   inclusion_prefixes:
+	//   inclusionPrefixes:
 	//     - upstream_rq_retry
 	//     - upstream_cx
-	// ```yaml
+	// ```
 	// Note including more Envoy stats might increase number of time series
 	// collected by prometheus significantly. Care needs to be taken on Prometheus
 	// resource provision and configuration to reduce cardinality.
